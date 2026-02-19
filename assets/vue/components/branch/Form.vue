@@ -6,12 +6,16 @@
       :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.title.$error"
       :label="t('Title')"
+      :maxlength="250"
     />
 
     <BaseInputText
       id="item_description"
       v-model="v$.item.description.$model"
+      :error-text="v$.item.description.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.description.$error"
       :label="t('Description')"
+      :maxlength="2000"
     />
 
     <div class="mt-4">
@@ -49,13 +53,18 @@
         <BaseInputText
           id="item_branch_ip"
           v-model="v$.item.branchIp.$model"
+          :error-text="v$.item.branchIp.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.branchIp.$error"
           :label="t('IP address')"
+          :maxlength="40"
           :placeholder="t('IPv4 or IPv6')"
         />
 
         <BaseInputText
           id="item_latitude"
           v-model="v$.item.latitude.$model"
+          :error-text="v$.item.latitude.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.latitude.$error"
           :label="t('Latitude')"
           :placeholder="t('e.g. 48.8566')"
         />
@@ -63,6 +72,8 @@
         <BaseInputText
           id="item_longitude"
           v-model="v$.item.longitude.$model"
+          :error-text="v$.item.longitude.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.longitude.$error"
           :label="t('Longitude')"
           :placeholder="t('e.g. 2.3522')"
         />
@@ -91,20 +102,29 @@
         <BaseInputText
           id="item_admin_mail"
           v-model="v$.item.adminMail.$model"
+          :error-text="v$.item.adminMail.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.adminMail.$error"
           :label="t('Administrator e-mail')"
+          :maxlength="250"
           :placeholder="t('admin@example.com')"
         />
 
         <BaseInputText
           id="item_admin_name"
           v-model="v$.item.adminName.$model"
+          :error-text="v$.item.adminName.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.adminName.$error"
           :label="t('Administrator name')"
+          :maxlength="250"
         />
 
         <BaseInputText
           id="item_admin_phone"
           v-model="v$.item.adminPhone.$model"
+          :error-text="v$.item.adminPhone.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.adminPhone.$error"
           :label="t('Administrator phone number')"
+          :maxlength="40"
         />
 
         <template v-if="props.modelValue['@id']">
@@ -164,7 +184,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import { required, maxLength, email, decimal, integer, between } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import baseService from "../../services/baseService"
 
@@ -192,20 +212,25 @@ onMounted(async () => {
 
 const advancedFields = ["branchIp", "latitude", "longitude", "dwnSpeed", "upSpeed", "delay", "adminMail", "adminName", "adminPhone", "parent"]
 
+const phoneRegex = /^[\d\s+\-().]*$/
+
 const validations = {
   item: {
-    title: { required },
-    description: {},
+    title: { required, maxLength: maxLength(250) },
+    description: { maxLength: maxLength(2000) },
     parent: {},
-    branchIp: {},
-    latitude: {},
-    longitude: {},
-    dwnSpeed: {},
-    upSpeed: {},
-    delay: {},
-    adminMail: {},
-    adminName: {},
-    adminPhone: {},
+    branchIp: { maxLength: maxLength(40) },
+    latitude: { decimal, between: between(-90, 90) },
+    longitude: { decimal, between: between(-180, 180) },
+    dwnSpeed: { integer },
+    upSpeed: { integer },
+    delay: { integer },
+    adminMail: { email, maxLength: maxLength(250) },
+    adminName: { maxLength: maxLength(250) },
+    adminPhone: {
+      maxLength: maxLength(40),
+      phoneFormat: (value) => !value || phoneRegex.test(value),
+    },
   },
 }
 

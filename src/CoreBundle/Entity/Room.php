@@ -56,22 +56,28 @@ class Room
 
     #[Groups(['room:list', 'room:read', 'room:write'])]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
 
     #[Groups(['room:read', 'room:write'])]
+    #[Assert\Length(max: 2000)]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     #[Groups(['room:read', 'room:write'])]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(name: 'geolocation', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $geolocation = null;
 
     #[Groups(['room:read', 'room:write'])]
+    #[Assert\Length(max: 45)]
     #[ORM\Column(name: 'ip', type: 'string', length: 45, nullable: true, unique: false)]
     protected ?string $ip = null;
 
     #[Groups(['room:read', 'room:write'])]
+    #[Assert\Length(max: 6)]
+    #[Assert\Regex(pattern: '/^\/\d{1,3}$/', message: 'Must be in CIDR format (e.g. /24).')]
     #[ORM\Column(name: 'ip_mask', type: 'string', length: 6, nullable: true, unique: false)]
     protected ?string $ipMask = null;
 

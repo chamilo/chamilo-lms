@@ -21,6 +21,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * BranchSync.
@@ -69,22 +70,28 @@ class BranchSync
     protected string $uniqueId;
 
     #[Groups(['branch:list', 'branch:read', 'branch:write', 'room:list', 'room:read'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'title', type: 'string', length: 250)]
     protected string $title;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 2000)]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 40)]
     #[ORM\Column(name: 'branch_ip', type: 'string', length: 40, nullable: true, unique: false)]
     protected ?string $branchIp = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Range(min: -90, max: 90)]
     #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $latitude = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Range(min: -180, max: 180)]
     #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
     protected ?string $longitude = null;
 
@@ -101,14 +108,19 @@ class BranchSync
     protected ?int $delay = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Email]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'admin_mail', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminMail = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 250)]
     #[ORM\Column(name: 'admin_name', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminName = null;
 
     #[Groups(['branch:read', 'branch:write'])]
+    #[Assert\Length(max: 40)]
+    #[Assert\Regex(pattern: '/^[\d\s\+\-\(\)\.]*$/', message: 'Only digits, spaces, +, -, (, ), and . are allowed.')]
     #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 

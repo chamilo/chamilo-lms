@@ -6,12 +6,16 @@
       :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.title.$error"
       :label="t('Title')"
+      :maxlength="255"
     />
 
     <BaseInputText
       id="item_description"
       v-model="v$.item.description.$model"
+      :error-text="v$.item.description.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.description.$error"
       :label="t('Description')"
+      :maxlength="2000"
     />
 
     <BaseSelect
@@ -42,21 +46,30 @@
         <BaseInputText
           id="item_geolocation"
           v-model="v$.item.geolocation.$model"
+          :error-text="v$.item.geolocation.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.geolocation.$error"
           :label="t('Geolocation')"
+          :maxlength="255"
           :placeholder="t('Latitude, Longitude (e.g. 48.8566, 2.3522)')"
         />
 
         <BaseInputText
           id="item_ip"
           v-model="v$.item.ip.$model"
+          :error-text="v$.item.ip.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.ip.$error"
           :label="t('IP address')"
+          :maxlength="45"
           :placeholder="t('IPv4 or IPv6')"
         />
 
         <BaseInputText
           id="item_ip_mask"
           v-model="v$.item.ipMask.$model"
+          :error-text="v$.item.ipMask.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.ipMask.$error"
           :label="t('IP mask')"
+          :maxlength="6"
           :placeholder="t('e.g. /24')"
         />
       </div>
@@ -79,7 +92,7 @@ import { computed, onMounted, ref, watch, nextTick } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import { required, maxLength, helpers } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import baseService from "../../services/baseService"
 
@@ -106,14 +119,19 @@ onMounted(async () => {
   }
 })
 
+const ipMaskFormat = helpers.withMessage(
+  "Must be in CIDR format (e.g. /24)",
+  (value) => !value || /^\/\d{1,3}$/.test(value),
+)
+
 const validations = {
   item: {
-    title: { required },
-    description: {},
+    title: { required, maxLength: maxLength(255) },
+    description: { maxLength: maxLength(2000) },
     branch: { required },
-    geolocation: {},
-    ip: {},
-    ipMask: {},
+    geolocation: { maxLength: maxLength(255) },
+    ip: { maxLength: maxLength(45) },
+    ipMask: { maxLength: maxLength(6), ipMaskFormat },
   },
 }
 

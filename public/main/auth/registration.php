@@ -110,9 +110,8 @@ $markRequired = static function (FormValidator $form, string $name): void {
 
 /**
  * Registration settings (backward-compatible).
- * Note: We ALWAYS show the role selector (UI requirement),
- * but we still enforce platform rules (security) by disabling teacher role
- * when the setting is disabled, and forcing STUDENT on submit.
+ * Note: Role selector must be shown only when teacher self-registration is allowed.
+ * Security is still enforced on submit by forcing STUDENT when teacher self-registration is disabled.
  */
 $allowTeacherRegistrationRaw = api_get_setting('registration.allow_registration_as_teacher');
 if (null === $allowTeacherRegistrationRaw || '' === (string) $allowTeacherRegistrationRaw) {
@@ -148,8 +147,9 @@ if ('false' !== $allowedFieldsConfiguration) {
     $allowedFields['extra_fields'] = $extraFromConfig;
 }
 
-// UI requirement: always show role selector even if config removes it.
-if (!in_array('status', $allowedFields, true)) {
+// Show role selector only when teacher self-registration is allowed.
+// If disabled, we must NOT force 'status' into the allowed fields.
+if ($allowTeacherRegistration && !in_array('status', $allowedFields, true)) {
     $allowedFields[] = 'status';
 }
 
@@ -482,10 +482,10 @@ if (!empty($courseIdRedirect)) {
 if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('allow_registration')) {
     /**
      * ROLE SELECTOR (Learner / Teacher)
-     * UI: always shown (forced in allowed fields).
-     * Security: teacher option disabled if platform forbids it, and backend forces STUDENT on submit.
+     * UI: must be shown only when teacher self-registration is allowed.
+     * Security: backend forces STUDENT on submit when teacher self-registration is disabled.
      */
-    if (in_array('status', $allowedFields, true)) {
+    if ($allowTeacherRegistration && in_array('status', $allowedFields, true)) {
         $iconSize = defined('ICON_SIZE_MEDIUM') ? ICON_SIZE_MEDIUM : 28;
 
         $renderIcon = static function (ObjectIcon|string $icon) use ($iconSize): string {

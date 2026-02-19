@@ -54,7 +54,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Gedmo\Tree(type: 'nested')]
 class BranchSync
 {
-    #[Groups(['branch:list', 'branch:read'])]
+    #[Groups(['branch:list', 'branch:read', 'room:list', 'room:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -68,7 +68,7 @@ class BranchSync
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
-    #[Groups(['branch:list', 'branch:read', 'branch:write'])]
+    #[Groups(['branch:list', 'branch:read', 'branch:write', 'room:list', 'room:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 250)]
     protected string $title;
 

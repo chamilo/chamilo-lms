@@ -1518,5 +1518,6 @@
     "Time of last synchronization": "Time of last synchronization",
     "Last synchronization type": "Last synchronization type",
     "SSL public key": "SSL public key",
-    "Branch type": "Branch type"
+    "Branch type": "Branch type",
+    "Room": "Room"
 }

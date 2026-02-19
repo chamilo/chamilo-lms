@@ -32701,3 +32701,6 @@ msgstr "SSL public key"
 
 msgid "Branch type"
 msgstr "Branch type"
+
+msgid "Room"
+msgstr "Room"

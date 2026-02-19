@@ -32612,3 +32612,6 @@ msgstr ""
 
 msgid "Branch type"
 msgstr ""
+
+msgid "Room"
+msgstr ""

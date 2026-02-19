@@ -75,7 +75,7 @@ class Room
     #[ORM\Column(name: 'ip_mask', type: 'string', length: 6, nullable: true, unique: false)]
     protected ?string $ipMask = null;
 
-    #[Groups(['room:read', 'room:write'])]
+    #[Groups(['room:list', 'room:read', 'room:write'])]
     #[ORM\ManyToOne(targetEntity: BranchSync::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
     protected BranchSync $branch;

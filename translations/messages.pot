@@ -32532,6 +32532,9 @@ msgstr ""
 msgid "No rooms have been created yet"
 msgstr ""
 
+msgid "Courses linked to %s"
+msgstr ""
+
 msgid "No branches have been created yet"
 msgstr ""
 

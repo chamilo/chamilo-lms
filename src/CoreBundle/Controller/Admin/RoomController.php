@@ -44,4 +44,20 @@ class RoomController extends BaseController
 
         return $this->json($data);
     }
+
+    #[Route('/admin/rooms/{id}/courses', name: 'admin_room_courses', methods: ['GET'])]
+    public function courses(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $qb = $em->createQueryBuilder();
+        $qb->select('c.id, c.title, c.code')
+            ->from('Chamilo\CoreBundle\Entity\Course', 'c')
+            ->where('c.room = :roomId')
+            ->setParameter('roomId', $id)
+            ->orderBy('c.title', 'ASC')
+        ;
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        return $this->json($results);
+    }
 }

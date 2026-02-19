@@ -25,6 +25,10 @@ roomService.findAvailable = async (start, end) => {
   })
 }
 
+roomService.getCourses = async (id) => {
+  return baseService.get(`/admin/rooms/${id}/courses`)
+}
+
 roomService.exists = async () => {
   const { totalItems } = await baseService.getCollection("/api/rooms", { itemsPerPage: 1 })
   return totalItems > 0

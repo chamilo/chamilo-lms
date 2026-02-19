@@ -25,10 +25,19 @@
           {{ slotProps.data.branch?.title || "-" }}
         </template>
       </Column>
-      <Column
-        :header="t('Courses')"
-        field="courseCount"
-      />
+      <Column :header="t('Courses')">
+        <template #body="slotProps">
+          <a
+            v-if="slotProps.data.courseCount > 0"
+            href="#"
+            class="text-primary underline cursor-pointer"
+            @click.prevent="showCourses(slotProps.data)"
+          >
+            {{ slotProps.data.courseCount }}
+          </a>
+          <span v-else>0</span>
+        </template>
+      </Column>
       <Column :exportable="false">
         <template #body="slotProps">
           <div class="text-right space-x-2">
@@ -81,6 +90,41 @@
         />
       </template>
     </Dialog>
+
+    <Dialog
+      v-model:visible="coursesDialog"
+      :modal="true"
+      :style="{ width: '550px' }"
+      :header="coursesDialogTitle"
+    >
+      <div
+        v-if="isLoadingCourses"
+        class="text-center py-4"
+      >
+        <i class="mdi mdi-loading mdi-spin mdi-24px" />
+      </div>
+      <ul
+        v-else-if="coursesList.length > 0"
+        class="list-none p-0 m-0"
+      >
+        <li
+          v-for="course in coursesList"
+          :key="course.id"
+          class="py-2 border-b border-gray-100 last:border-0"
+        >
+          <router-link
+            :to="{ name: 'CourseHome', params: { id: course.id } }"
+            class="text-primary hover:underline"
+          >
+            {{ course.title }}
+            <span
+              v-if="course.code"
+              class="text-gray-400 text-sm ml-1"
+            >({{ course.code }})</span>
+          </router-link>
+        </li>
+      </ul>
+    </Dialog>
   </div>
 </template>
 
@@ -102,6 +146,10 @@ const items = ref([])
 const isLoading = ref(true)
 const deleteDialog = ref(false)
 const itemToDelete = ref(null)
+const coursesDialog = ref(false)
+const coursesDialogTitle = ref("")
+const coursesList = ref([])
+const isLoadingCourses = ref(false)
 
 async function loadItems() {
   isLoading.value = true
@@ -126,6 +174,20 @@ function goToOccupation(item) {
     name: "RoomOccupation",
     params: { id: item.id },
   })
+}
+
+async function showCourses(item) {
+  coursesDialogTitle.value = t("Courses linked to {0}", [item.title])
+  coursesList.value = []
+  coursesDialog.value = true
+  isLoadingCourses.value = true
+  try {
+    coursesList.value = await roomService.getCourses(item.id)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    isLoadingCourses.value = false
+  }
 }
 
 function confirmDelete(item) {

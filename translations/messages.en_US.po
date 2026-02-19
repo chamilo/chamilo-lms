@@ -32621,6 +32621,9 @@ msgstr "No available rooms found for this time range"
 msgid "No rooms have been created yet"
 msgstr "No rooms have been created yet"
 
+msgid "Courses linked to %s"
+msgstr "Courses linked to %s"
+
 msgid "No branches have been created yet"
 msgstr "No branches have been created yet"
 

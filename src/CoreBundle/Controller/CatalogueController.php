@@ -183,8 +183,19 @@ class CatalogueController extends AbstractController
 
         $allowed = array_map('strval', $settings['extra_fields_in_search_form'] ?? []);
 
+        if (empty($allowed)) {
+            return $this->json([]);
+        }
+
         $ef = new ExtraField('course');
-        $raw = $ef->get_all(['filter = ?' => 1, 'AND visible_to_self = ?' => 1], 'option_order');
+        $raw = $ef->get_all(
+            [
+                'filter = ?' => 1,
+                ' AND visible_to_self = ?' => 1,
+                ' AND variable IN (?'.str_repeat(', ?', count($allowed) - 1).')' => $allowed,
+            ],
+            'option_order'
+        );
 
         $mapped = array_map(function ($f) {
             $type = (int) $f['value_type'];
@@ -226,19 +237,17 @@ class CatalogueController extends AbstractController
             return $base;
         }, $raw);
 
-        if (!empty($allowed)) {
-            $byVar = [];
-            foreach ($mapped as $row) {
-                $byVar[$row['variable']] = $row;
-            }
-            $ordered = [];
-            foreach ($allowed as $var) {
-                if (isset($byVar[$var])) {
-                    $ordered[] = $byVar[$var];
-                }
-            }
-            $mapped = $ordered;
+        $byVar = [];
+        foreach ($mapped as $row) {
+            $byVar[$row['variable']] = $row;
         }
+        $ordered = [];
+        foreach ($allowed as $var) {
+            if (isset($byVar[$var])) {
+                $ordered[] = $byVar[$var];
+            }
+        }
+        $mapped = $ordered;
 
         return $this->json(array_values($mapped));
     }

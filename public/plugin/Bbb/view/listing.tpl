@@ -110,14 +110,27 @@
                         {% endif %}
                     </td>
                     <td class="px-4 py-2">
-                        {% if meeting.show_links.record  %}
-                            {% for link in meeting.show_links %}
-                                {% if link is not iterable  %}
-                                    {{ link }}
-                                {% endif %}
-                            {% endfor %}
+                        {# show_links can be an array/object (with record flag + links) OR a string message #}
+                        {% set showLinks = meeting.show_links|default(null) %}
+
+                        {% if showLinks is iterable %}
+                        {% if showLinks.record is defined and showLinks.record %}
+                        {% for key, link in showLinks %}
+                        {# avoid printing the record flag #}
+                        {% if key != 'record' and link is not iterable %}
+                        {{ link }}
+                        {% endif %}
+                        {% endfor %}
                         {% else %}
                         <span class="text-gray-400">{{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}</span>
+                        {% endif %}
+                        {% else %}
+                        {# if it's a string like "Pas d'enregistrement", print it safely #}
+                            {% if showLinks %}
+                                <span class="text-gray-400">{{ showLinks }}</span>
+                            {% else %}
+                                <span class="text-gray-400">{{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}</span>
+                            {% endif %}
                         {% endif %}
                     </td>
                     {% if allow_to_edit %}

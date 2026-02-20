@@ -19,36 +19,39 @@
 
     $().ready(function() {
         var funcNum = getUrlParam('CKEditorFuncNum');
-        var sessionId = {{session_id}};
+        var sessionId = {{ session_id }};
+        // Pattern matches Chamilo's document suffix format: __<sessionId>__<groupId>
+        // First captured group is always session ID, second is always group ID.
+        var suffixPattern = /__(\d+)__(\d+)(?:\.[^.]+)?$/;
         var elf = $('#elfinder').elfinder({
             url : '{{ _p.web_lib ~ 'elfinder/connectorAction.php?' }}{{ course_condition }}',  // connector URL (REQUIRED)
             getFileCallback : function(file) {
-                if (!file.name.includes("__0") || file.name.includes("__" + sessionId + "__")) {
-                    if (window.opener) {
-                        if (window.opener.CKEDITOR) {
-                            window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
-                        }
-
-                        if (window.opener.addImageToQuestion) {
-                            window.opener.addImageToQuestion(file.url, {{ question_id }});
-                        }
-                    }
-                    window.close();
+                var match = suffixPattern.exec(file.name);
+                if (match && parseInt(match[1]) !== 0 && parseInt(match[1]) !== sessionId) {
+                    return;
                 }
+                if (window.opener) {
+                    if (window.opener.CKEDITOR) {
+                        window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                    }
+
+                    if (window.opener.addImageToQuestion) {
+                        window.opener.addImageToQuestion(file.url, {{ question_id }});
+                    }
+                }
+
+                window.close();
             },
             startPathHash: 'l2_Lw', // Sets the course driver as default
             resizable: false,
             lang: '{{ elfinder_lang }}',
             handlers : {
-                sync : function (event, elfinderInstance) {
-                    let files = elfinderInstance.files();
-                    for (const key in files) {
-                        for (const subkey in files[key]) {
-                           if (subkey === "name") {
-                                 if (files[key][subkey].includes("__0") && !files[key][subkey].includes("__" + sessionId + "__")) {
-                                    $('#' + files[key].hash).hide();
-                                }
-                            }
+                sync : function(event, elfinderInstance) {
+                    var files = elfinderInstance.files();
+                    for (var key in files) {
+                        var match = suffixPattern.exec(files[key].name);
+                        if (match && parseInt(match[1]) !== 0 && parseInt(match[1]) !== sessionId) {
+                            $('#' + files[key].hash).hide();
                         }
                     }
                 }

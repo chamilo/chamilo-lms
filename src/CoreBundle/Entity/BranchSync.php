@@ -209,7 +209,7 @@ class BranchSync
         return $this->title;
     }
 
-    public function setBranchIp(string $branchIp): self
+    public function setBranchIp(?string $branchIp): self
     {
         $this->branchIp = $branchIp;
 
@@ -261,7 +261,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setDwnSpeed(int $dwnSpeed)
+    public function setDwnSpeed(?int $dwnSpeed)
     {
         $this->dwnSpeed = $dwnSpeed;
 
@@ -283,7 +283,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setUpSpeed(int $upSpeed)
+    public function setUpSpeed(?int $upSpeed)
     {
         $this->upSpeed = $upSpeed;
 
@@ -305,7 +305,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setDelay(int $delay)
+    public function setDelay(?int $delay)
     {
         $this->delay = $delay;
 
@@ -327,7 +327,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setAdminMail(string $adminMail)
+    public function setAdminMail(?string $adminMail)
     {
         $this->adminMail = $adminMail;
 
@@ -349,7 +349,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setAdminName(string $adminName)
+    public function setAdminName(?string $adminName)
     {
         $this->adminName = $adminName;
 
@@ -371,7 +371,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setAdminPhone(string $adminPhone)
+    public function setAdminPhone(?string $adminPhone)
     {
         $this->adminPhone = $adminPhone;
 
@@ -393,7 +393,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setLastSyncTransId(int $lastSyncTransId)
+    public function setLastSyncTransId(?int $lastSyncTransId)
     {
         $this->lastSyncTransId = $lastSyncTransId;
 
@@ -415,7 +415,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setLastSyncTransDate(DateTime $lastSyncTransDate)
+    public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
     {
         $this->lastSyncTransDate = $lastSyncTransDate;
 
@@ -427,7 +427,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setSslPubKey(string $sslPubKey)
+    public function setSslPubKey(?string $sslPubKey)
     {
         $this->sslPubKey = $sslPubKey;
 
@@ -449,7 +449,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setBranchType(string $branchType)
+    public function setBranchType(?string $branchType)
     {
         $this->branchType = $branchType;
 
@@ -481,7 +481,7 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setLastSyncType(string $lastSyncType)
+    public function setLastSyncType(?string $lastSyncType)
     {
         $this->lastSyncType = $lastSyncType;
 

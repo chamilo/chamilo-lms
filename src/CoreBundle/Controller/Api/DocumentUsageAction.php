@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,77 +15,114 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsController]
 final class DocumentUsageAction extends AbstractController
 {
-    /**
-     * Fallback quota (MB) when the course quota is empty or not set.
-     */
-    private const DEFAULT_QUOTA_MB = 100;
-
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly CDocumentRepository $documentRepository,
+        private readonly CourseHelper $courseHelper,
         private readonly TranslatorInterface $translator,
     ) {}
 
     public function __invoke($cid): JsonResponse
     {
         $courseId = (int) $cid;
-
         $course = $this->courseRepository->find($courseId);
+
         if (null === $course) {
             return new JsonResponse(['error' => 'Course not found'], 404);
         }
 
-        // Resolve quota in MB safely (avoid "($x * ...) ?? fallback").
-        $quotaMb = (int) ($course->getDiskQuota() ?? 0);
-        if ($quotaMb <= 0) {
-            $quotaMb = self::DEFAULT_QUOTA_MB;
-        }
+        $courseQuotaMb = (int) $this->courseHelper->resolveCourseStorageQuotaMbForCourse($course); // 0 => unlimited
+        $docsQuotaMb = (int) $this->courseHelper->resolveDocumentsToolQuotaMb(); // 0 => unlimited
 
-        $totalQuotaBytes = $quotaMb * 1024 * 1024;
+        $courseQuotaBytes = $courseQuotaMb > 0 ? $courseQuotaMb * 1024 * 1024 : 0;
+        $docsQuotaBytes = $docsQuotaMb > 0 ? $docsQuotaMb * 1024 * 1024 : 0;
 
-        // Compute usage using repository logic (deduplicated).
+        // Global course storage usage (all tools)
+        $courseStorageUsedBytes = (int) $this->documentRepository->getCourseStorageUsedBytes($course);
+
+        // Documents usage breakdown (deduplicated)
         $usage = $this->documentRepository->getDocumentUsageBreakdownByCourse($course);
-
         $bytesCourse = (int) ($usage['course'] ?? 0);
         $bytesSessions = (int) ($usage['sessions'] ?? 0);
         $bytesGroups = (int) ($usage['groups'] ?? 0);
 
-        $usedBytes = (int) ($usage['used'] ?? ($bytesCourse + $bytesSessions + $bytesGroups));
+        $docsUsedBytes = $bytesCourse + $bytesSessions;
+        $availableCourseBytes = $courseQuotaBytes > 0 ? max($courseQuotaBytes - $courseStorageUsedBytes, 0) : PHP_INT_MAX;
+        $availableDocsBytes = $docsQuotaBytes > 0 ? max($docsQuotaBytes - $docsUsedBytes, 0) : PHP_INT_MAX;
+        $availableBytes = min($availableCourseBytes, $availableDocsBytes);
 
-        // Keep the pie meaningful even when used > quota.
-        $denomBytes = max($totalQuotaBytes, $usedBytes, 1);
+        // Determine which quota is limiting (for percent)
+        $limiterQuotaBytes = 0;
+        $limiter = 'unlimited';
 
-        $availableBytes = max($totalQuotaBytes - $usedBytes, 0);
+        if ($availableBytes !== PHP_INT_MAX) {
+            if ($availableCourseBytes <= $availableDocsBytes) {
+                $limiter = 'course';
+                $limiterQuotaBytes = $courseQuotaBytes;
+            } else {
+                $limiter = 'documents';
+                $limiterQuotaBytes = $docsQuotaBytes;
+            }
+        }
+
+        $availablePercent = 100.0;
+        if ($limiterQuotaBytes > 0) {
+            $availablePercent = round(($availableBytes / $limiterQuotaBytes) * 100, 4);
+        }
+
+        $totalForChart = ($limiterQuotaBytes > 0) ? $limiterQuotaBytes : max($docsUsedBytes + max((int) $availableBytes, 0), 1);
+        $availableBytesForChart = ($availableBytes === PHP_INT_MAX) ? 0 : (int) $availableBytes;
 
         $labels = [];
         $data = [];
 
         if ($bytesCourse > 0) {
             $labels[] = $this->translator->trans('Course').' ('.$this->formatBytes($bytesCourse).')';
-            $data[] = $this->pct($bytesCourse, $denomBytes);
+            $data[] = $this->pct($bytesCourse, $totalForChart);
         }
 
         if ($bytesSessions > 0) {
             $labels[] = $this->translator->trans('Session').' ('.$this->formatBytes($bytesSessions).')';
-            $data[] = $this->pct($bytesSessions, $denomBytes);
+            $data[] = $this->pct($bytesSessions, $totalForChart);
         }
 
         if ($bytesGroups > 0) {
             $labels[] = $this->translator->trans('Group').' ('.$this->formatBytes($bytesGroups).')';
-            $data[] = $this->pct($bytesGroups, $denomBytes);
+            $data[] = $this->pct($bytesGroups, $totalForChart);
         }
 
-        $labels[] = \sprintf(
-            $this->translator->trans('Available space (%s)'),
-            $this->formatBytes($availableBytes)
+        $labels[] = sprintf(
+            (string) $this->translator->trans('Available space (%s)'),
+            $this->formatBytes($availableBytesForChart)
         );
-        $data[] = $this->pct($availableBytes, $denomBytes);
+        $data[] = $this->pct($availableBytesForChart, $totalForChart);
 
         return new JsonResponse([
             'datasets' => [
                 ['data' => $data],
             ],
             'labels' => $labels,
+            'quota' => [
+                'limiter' => $limiter, // 'course' | 'documents' | 'unlimited'
+
+                // Total quotas (null = unlimited)
+                'courseQuotaBytes' => $courseQuotaBytes > 0 ? $courseQuotaBytes : null,
+                'documentsQuotaBytes' => $docsQuotaBytes > 0 ? $docsQuotaBytes : null,
+
+                // Used
+                'courseStorageUsedBytes' => $courseStorageUsedBytes,
+                'documentsUsedBytes' => $docsUsedBytes,
+
+                // Remaining per quota (null = unlimited)
+                'availableCourseBytes' => ($availableCourseBytes === PHP_INT_MAX) ? null : (int) $availableCourseBytes,
+                'availableDocumentsBytes' => ($availableDocsBytes === PHP_INT_MAX) ? null : (int) $availableDocsBytes,
+
+                // Remaining actually applicable to uploads (min(course, documents))
+                'availableBytes' => ($availableBytes === PHP_INT_MAX) ? null : (int) $availableBytes,
+
+                // Percent of the LIMITING quota (for your <1% warning)
+                'availablePercent' => $availablePercent,
+            ],
         ]);
     }
 
@@ -99,12 +137,11 @@ final class DocumentUsageAction extends AbstractController
 
     private function formatBytes(int $bytes): string
     {
-        // Simple dependency-free formatter for API responses.
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $size = (float) max($bytes, 0);
         $i = 0;
 
-        $max = \count($units) - 1;
+        $max = count($units) - 1;
         while ($size >= 1024 && $i < $max) {
             $size /= 1024;
             $i++;

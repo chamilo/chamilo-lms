@@ -19,24 +19,40 @@
 
     $().ready(function() {
         var funcNum = getUrlParam('CKEditorFuncNum');
+        var sessionId = {{session_id}};
         var elf = $('#elfinder').elfinder({
             url : '{{ _p.web_lib ~ 'elfinder/connectorAction.php?' }}{{ course_condition }}',  // connector URL (REQUIRED)
             getFileCallback : function(file) {
-                if (window.opener) {
-                    if (window.opener.CKEDITOR) {
-                        window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
-                    }
+                if (!file.name.includes("__0") || file.name.includes("__" + sessionId + "__")) {
+                    if (window.opener) {
+                        if (window.opener.CKEDITOR) {
+                            window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                        }
 
-                    if (window.opener.addImageToQuestion) {
-                        window.opener.addImageToQuestion(file.url, {{ question_id }});
+                        if (window.opener.addImageToQuestion) {
+                            window.opener.addImageToQuestion(file.url, {{ question_id }});
+                        }
                     }
+                    window.close();
                 }
-
-                window.close();
             },
             startPathHash: 'l2_Lw', // Sets the course driver as default
             resizable: false,
-            lang: '{{ elfinder_lang }}'
+            lang: '{{ elfinder_lang }}',
+            handlers : {
+                sync : function (event, elfinderInstance) {
+                    let files = elfinderInstance.files();
+                    for (const key in files) {
+                        for (const subkey in files[key]) {
+                           if (subkey === "name") {
+                                 if (files[key][subkey].includes("__0") && !files[key][subkey].includes("__" + sessionId + "__")) {
+                                    $('#' + files[key].hash).hide();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }).elfinder('instance');
     });
 </script>

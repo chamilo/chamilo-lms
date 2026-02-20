@@ -46,14 +46,17 @@
             resizable: false,
             lang: '{{ elfinder_lang }}',
             handlers : {
-                sync : function(event, elfinderInstance) {
-                    var files = elfinderInstance.files();
-                    for (var key in files) {
-                        var match = suffixPattern.exec(files[key].name);
-                        if (match && parseInt(match[1]) !== 0 && parseInt(match[1]) !== sessionId) {
-                            $('#' + files[key].hash).hide();
+                open : function(event, elfinderInstance) {
+                    // Defer until after the CWD plugin has rendered the file list DOM
+                    setTimeout(function() {
+                        var files = elfinderInstance.files();
+                        for (var key in files) {
+                            var match = suffixPattern.exec(files[key].name);
+                            if (match && parseInt(match[1]) !== 0 && parseInt(match[1]) !== sessionId) {
+                                elfinderInstance.cwdHash2Elm(files[key].hash).hide();
+                            }
                         }
-                    }
+                    }, 0);
                 }
             }
         }).elfinder('instance');

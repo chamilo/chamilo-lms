@@ -21,6 +21,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Throwable;
 
 #[AsController]
 class VideoConferenceCallbackController
@@ -163,6 +164,7 @@ class VideoConferenceCallbackController
             if (!$isAuthenticated) {
                 // Security hardening: do not allow arbitrary attendance logging without signature.
                 $em->flush();
+
                 return new Response('OK (activity skipped: missing signature)', Response::HTTP_OK);
             }
 
@@ -182,6 +184,7 @@ class VideoConferenceCallbackController
                     ]);
                     if (null !== $existingAct) {
                         $em->flush();
+
                         return new Response('OK', Response::HTTP_OK);
                     }
                 }
@@ -304,7 +307,7 @@ class VideoConferenceCallbackController
             return false;
         }
 
-        $data = $tsHeader . "\n" . $rawBody;
+        $data = $tsHeader."\n".$rawBody;
         $expected = hash_hmac('sha256', $data, $kernelSecret);
 
         return hash_equals($expected, $sig);
@@ -314,7 +317,7 @@ class VideoConferenceCallbackController
     {
         try {
             return new DateTime($value);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
     }

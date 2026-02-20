@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Storage\Factory;
 
 use Aws\S3\S3Client;
 
+use const FILTER_VALIDATE_BOOLEAN;
+
 class AwsS3ClientFactory
 {
     /**

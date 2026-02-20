@@ -192,7 +192,7 @@ class CatalogueController extends AbstractController
             [
                 'filter = ?' => 1,
                 ' AND visible_to_self = ?' => 1,
-                ' AND variable IN (?'.str_repeat(', ?', count($allowed) - 1).')' => $allowed,
+                ' AND variable IN (?'.str_repeat(', ?', \count($allowed) - 1).')' => $allowed,
             ],
             'option_order'
         );

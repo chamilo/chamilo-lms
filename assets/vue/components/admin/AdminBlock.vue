@@ -47,7 +47,7 @@
           v-for="(item, index) in visibleItems"
           :key="index"
           :aria-label="t(item.label)"
-          :class="item.className"
+          :class="item.class"
           class="p-menuitem"
           role="menuitem"
         >
@@ -59,7 +59,7 @@
             >
               <span
                 class="p-menuitem-text"
-                v-text="item.label"
+                v-text="t(item.label)"
               />
             </BaseAppLink>
           </div>

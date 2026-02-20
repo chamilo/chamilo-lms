@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Doctrine\Orm\Extension\FilterExtension;
+use ApiPlatform\Doctrine\Orm\Extension\OrderExtension;
 use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryResultCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
@@ -24,38 +25,35 @@ use Doctrine\ORM\QueryBuilder;
  */
 readonly class StickyCourseStateProvider implements ProviderInterface
 {
+    private array $extensions;
+
     public function __construct(
-        private FilterExtension $filterExtension,
-        private PaginationExtension $paginationExtension,
+        FilterExtension $filterExtension,
+        OrderExtension $orderExtension,
+        PaginationExtension $paginationExtension,
         private CourseRepository $courseRepository,
         private AccessUrlHelper $accessUrlHelper,
-    ) {}
+    ) {
+        $this->extensions = [
+            $filterExtension,
+            $orderExtension,
+            $paginationExtension,
+        ];
+    }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $queryNameGenerator = new QueryNameGenerator();
         $queryBuilder = $this->createQueryBuilder($queryNameGenerator);
 
-        $this->filterExtension->applyToCollection(
-            $queryBuilder,
-            $queryNameGenerator,
-            Course::class,
-            $operation,
-            $context
-        );
+        foreach ($this->extensions as $extension) {
+            $extension->applyToCollection($queryBuilder, $queryNameGenerator, Course::class, $operation, $context);
 
-        $this->paginationExtension->applyToCollection(
-            $queryBuilder,
-            $queryNameGenerator,
-            Course::class,
-            $operation,
-            $context
-        );
-
-        if ($this->paginationExtension instanceof QueryResultCollectionExtensionInterface
-            && $this->paginationExtension->supportsResult(Course::class, $operation, $context)
-        ) {
-            return $this->paginationExtension->getResult($queryBuilder, Course::class, $operation, $context);
+            if ($extension instanceof QueryResultCollectionExtensionInterface
+                && $extension->supportsResult(Course::class, $operation, $context)
+            ) {
+                return $extension->getResult($queryBuilder, Course::class, $operation, $context);
+            }
         }
 
         return $queryBuilder->getQuery()->getResult();

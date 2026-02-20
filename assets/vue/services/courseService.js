@@ -188,15 +188,6 @@ export default {
   },
 
   /**
-   * Loads public catalogue courses filtered by access_url and usergroup rules.
-   * @returns {Promise<{items: Array}>}
-   */
-  listCatalogueCourses: async () => {
-    const response = await api.get("/catalogue/courses-list")
-    return response.data
-  },
-
-  /**
    *
    * @param {Object} params
    * @returns {Promise<{totalItems: number, items: (*&{userVote: null, extra_fields})[], nextPageParams: {page: number, itemsPerPage: number}|null}>}

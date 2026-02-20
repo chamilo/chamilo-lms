@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Admin;
-use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -17,7 +16,6 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 use Chamilo\CoreBundle\Repository\UserRelCourseVoteRepository;
@@ -39,7 +37,6 @@ class CatalogueController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly CourseRepository $courseRepository,
         private readonly SessionRepository $sessionRepository,
         private readonly UserRelCourseVoteRepository $courseVoteRepository,
     ) {}
@@ -61,50 +58,6 @@ class CatalogueController extends AbstractController
         $count = $courseAccessRepository->getCourseVisits($course, $session);
 
         return $this->json(['visits' => $count]);
-    }
-
-    #[Route('/courses-list', name: 'chamilo_core_catalogue_courses_list', methods: ['GET'])]
-    public function listCourses(): JsonResponse
-    {
-        $user = $this->userHelper->getCurrent();
-        $accessUrl = $this->accessUrlHelper->getCurrent();
-
-        $relRepo = $this->em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
-        $userGroupRepo = $this->em->getRepository(UsergroupRelUser::class);
-
-        $relations = $relRepo->findBy(['accessUrl' => $accessUrl]);
-
-        if (empty($relations)) {
-            $courses = $this->courseRepository->findAll();
-        } else {
-            $userGroups = $userGroupRepo->findBy(['user' => $user]);
-            $userGroupIds = array_map(fn ($ug) => $ug->getUsergroup()->getId(), $userGroups);
-
-            $visibleCourses = [];
-
-            foreach ($relations as $rel) {
-                $course = $rel->getCourse();
-                $usergroup = $rel->getUsergroup();
-
-                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
-                    $visibleCourses[$course->getId()] = $course;
-                }
-            }
-
-            $courses = array_values($visibleCourses);
-        }
-
-        $data = array_map(function (Course $course) {
-            return [
-                'id' => $course->getId(),
-                'code' => $course->getCode(),
-                'title' => $course->getTitle(),
-                'description' => $course->getDescription(),
-                'visibility' => $course->getVisibility(),
-            ];
-        }, $courses);
-
-        return $this->json($data);
     }
 
     #[Route('/sessions-list', name: 'chamilo_core_catalogue_sessions_list', methods: ['GET'])]

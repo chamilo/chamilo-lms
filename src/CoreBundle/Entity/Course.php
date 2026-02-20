@@ -99,14 +99,20 @@ use const SORT_NATURAL;
     normalizationContext: ['groups' => ['course:read']],
     denormalizationContext: ['groups' => ['course:write']],
 )]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact'])
+]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: ['id', 'title'])
+]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
 #[UniqueEntity('code')]
 #[UniqueEntity('visualCode')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact'])]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;

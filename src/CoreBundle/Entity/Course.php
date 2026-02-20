@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
+use Chamilo\CoreBundle\State\StickyCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use DateTime;
@@ -88,19 +89,32 @@ use const SORT_NATURAL;
             filters: [ExtraFieldFilter::class],
             provider: PublicCatalogueCourseStateProvider::class
         ),
+        new GetCollection(
+            uriTemplate: '/sticky_courses.{_format}',
+            paginationClientEnabled: true,
+            security: 'is_granted("IS_AUTHENTICATED")',
+            provider: StickyCourseStateProvider::class,
+        ),
     ],
     normalizationContext: ['groups' => ['course:read']],
     denormalizationContext: ['groups' => ['course:write']],
-    filters: ['course.sticky_boolean_filter'],
 )]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact']
+)
+]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: ['id', 'title']
+)
+]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
 #[UniqueEntity('code')]
 #[UniqueEntity('visualCode')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact'])]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;

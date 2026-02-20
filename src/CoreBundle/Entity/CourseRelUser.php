@@ -53,10 +53,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationClientEnabled: true,
     security: "is_granted('ROLE_USER')",
 )]
-#[ORM\Table(name: 'course_rel_user')]
-#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
-#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
-#[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -66,13 +62,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         'course' => 'exact',
     ]
 )]
-#[ApiFilter(PartialSearchOrFilter::class, properties: [
-    'user.username',
-    'user.firstname',
-    'user.lastname',
-    'course.title',
-    'course.code',
-])]
+#[ApiFilter(
+    PartialSearchOrFilter::class,
+    properties: [
+        'user.username',
+        'user.firstname',
+        'user.lastname',
+        'course.title',
+        'course.code',
+    ]
+)]
+#[ORM\Table(name: 'course_rel_user')]
+#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
+#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
+#[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 class CourseRelUser implements Stringable
 {
     use UserTrait;

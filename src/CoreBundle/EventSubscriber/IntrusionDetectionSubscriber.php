@@ -126,6 +126,23 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
     // Extensions that indicate a static asset request.
     private const STATIC_EXT_REGEX = '/\.(css|js|map|png|jpe?g|gif|svg|ico|woff2?|ttf|eot|pdf)(\?|$)/i';
 
+    /**
+     * Top-level directories that exist under public/main/ as of 2026-02-20.
+     * Used to recognise legitimate ?redirect= values pointing at legacy PHP scripts.
+     * This list can only shrink over time as legacy code is migrated to Symfony.
+     */
+    private const LEGACY_MAIN_DIRS = [
+        'admin', 'announcements', 'attendance', 'auth', 'calendar', 'chat',
+        'course_copy', 'course_description', 'course_home', 'course_info',
+        'course_progress', 'create_course', 'cron', 'dashboard', 'dropbox',
+        'exercise', 'extrafield', 'forum', 'gamification', 'glossary',
+        'gradebook', 'group', 'help', 'inc', 'install', 'link', 'lp',
+        'mail_template', 'my_space', 'notebook', 'notification_event',
+        'palettes', 'plagiarism', 'portfolio', 'search', 'session', 'skills',
+        'social', 'survey', 'template', 'ticket', 'tracking', 'upload',
+        'user', 'wiki', 'work',
+    ];
+
     public function __construct(
         #[Autowire(param: 'chamilo.ids.enabled')]
         private readonly bool $enabled,
@@ -177,7 +194,16 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
             if (\is_array($value)) {
                 continue; // Skip nested arrays
             }
-            $hit = $this->matchPatterns((string) $value, self::PARAM_PATTERNS);
+            $stringValue = (string) $value;
+            // A value that points to a known legacy /main/ PHP script (e.g. coming
+            // from a ?redirect= parameter after session expiry) is legitimate.
+            // URL query-string delimiters like &id= would otherwise produce
+            // false positives against the CmdInjection patterns, so we skip those
+            // patterns for these values while keeping SQLi, XSS and PathTraversal.
+            $patterns = $this->isLegacyMainRedirect($stringValue)
+                ? array_filter(self::PARAM_PATTERNS, static fn ($p) => 'CmdInjection' !== $p['type'])
+                : self::PARAM_PATTERNS;
+            $hit = $this->matchPatterns($stringValue, $patterns);
             if (null !== $hit) {
                 $this->handleHit($event, $ip, $uri, (string) $name, $hit['type'], $hit['match']);
                 if ($this->blockOnDetection) {
@@ -293,6 +319,33 @@ class IntrusionDetectionSubscriber implements EventSubscriberInterface
         // Remove server-fingerprinting headers if present
         $headers->remove('X-Powered-By');
         $headers->remove('Server');
+    }
+
+    /**
+     * Returns true when $value is a URL that points to a known legacy PHP script
+     * inside the /main/ tree (e.g. "/main/forum/index.php?cid=1&id=5").
+     *
+     * Such values appear legitimately in ?redirect= parameters when a user's
+     * session expires while they are on a legacy page.  The CmdInjection patterns
+     * would fire false positives on URL parameters like &id= because the
+     * URL query-string delimiter & looks like a shell metacharacter to those regexes.
+     *
+     * The regex is built lazily from LEGACY_MAIN_DIRS, which lists every top-level
+     * directory that existed under public/main/ on 2026-02-20.  Because legacy code
+     * is only removed, never added, the list will never need to grow.
+     */
+    private function isLegacyMainRedirect(string $value): bool
+    {
+        static $pattern = null;
+        if (null === $pattern) {
+            $dirs = implode('|', array_map('preg_quote', self::LEGACY_MAIN_DIRS, array_fill(0, \count(self::LEGACY_MAIN_DIRS), '/')));
+            // Query string: allow only typical URL-safe characters (%xx, =, &, +, -, _, ., ~, :, @, #).
+            // Explicitly excludes shell metacharacters (;  `  $  |  <  >) so a crafted value
+            // like "?cid=1; bash" does NOT bypass CmdInjection detection.
+            $pattern = '/^\/main\/(?:'.$dirs.')\/[a-zA-Z0-9_.\-\/]+\.php(?:\?[\w%=&+\-.,~:@#]*)?$/i';
+        }
+
+        return (bool) preg_match($pattern, $value);
     }
 
     private function isSkippable(string $uri): bool

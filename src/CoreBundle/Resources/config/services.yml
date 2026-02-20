@@ -97,11 +97,6 @@ services:
 
     Chamilo\CoreBundle\Tool\ToolChain: ~
 
-    course.sticky_boolean_filter:
-        parent: 'api_platform.doctrine.orm.boolean_filter'
-        arguments: [{'sticky': ~}]
-        tags: [{name: 'api_platform.filter', id: 'course.sticky_boolean_filter'}]
-
     session.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments:

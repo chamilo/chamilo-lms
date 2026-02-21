@@ -1615,6 +1615,13 @@ function reinit_updatable_vars_list() {
 function switch_item(current_item, next_item) {
     logit_lms("switch_item() called with current=" + olms.lms_item_id + " next=" + next_item, 2);
 
+    // Prevent double-click storms (creates request queues and long locks)
+    olms._lpSwitching = olms._lpSwitching || 0;
+    if (olms._lpSwitching === 1) {
+        logit_lms("switch_item(): ignored (switch already in progress).", 2);
+        return false;
+    }
+
     // Resolve target item id
     var targetItemId = next_item;
     if (next_item === "next") {
@@ -1622,25 +1629,11 @@ function switch_item(current_item, next_item) {
     } else if (next_item === "previous") {
         targetItemId = olms.lms_previous_item;
     }
-
     targetItemId = parseInt(targetItemId, 10);
 
-    // If runtime not initialized yet, just load the target in the iframe (no full reload).
-    if (Number(olms.lms_initialized) === 0) {
-        if (Number.isFinite(targetItemId) && targetItemId > 0) {
-            logit_lms("switch_item(): runtime not initialized yet; loading target in iframe (no full reload).", 1);
-            $("#content_id").attr("src", buildLpContentSrc(targetItemId));
-            return true;
-        }
-
-        logit_lms("switch_item(): invalid target while not initialized.", 1);
-        return false;
-    }
-
     var currentItemId = parseInt(olms.lms_item_id, 10);
-
     if (!Number.isFinite(targetItemId) || targetItemId <= 0) {
-        logit_lms("switch_item(): invalid target item id: " + targetItemId + " (next_item=" + next_item + ")", 1);
+        logit_lms("switch_item(): invalid target item id: " + targetItemId, 1);
         return false;
     }
     if (!Number.isFinite(currentItemId) || currentItemId <= 0) {
@@ -1648,26 +1641,47 @@ function switch_item(current_item, next_item) {
         return false;
     }
     if (currentItemId === targetItemId) {
-        logit_lms("switch_item(): ignoring switch to the same item id: " + targetItemId, 2);
+        logit_lms("switch_item(): same item, ignoring.", 2);
         return false;
     }
 
-    // Mark switching in progress (used by savedata() to decide what to save)
-    olms.switch_finished = 0;
-    olms.execute_stats = false;
-
-    // Keep markers coherent
-    olms.info_lms_item[0] = currentItemId;   // previous/current
-    olms.info_lms_item[1] = targetItemId;    // next
-
+    // Identify types
     var currentItemType = olms.lms_item_types["i" + currentItemId] || "";
+    var targetItemType = olms.lms_item_types["i" + targetItemId] || "";
 
-    // If status was set in a previous stage, keep it consistent
-    if (olms.statusSignalReceived == 0 && olms.lesson_status !== "not attempted") {
-        olms.statusSignalReceived = 1;
+    // Helper: set iframe src safely
+    function setIframeSrc(src) {
+        var $f = $("#content_id");
+        if (!$f.length) {
+            $f = $("#content_id_blank");
+        }
+        if (!$f.length) {
+            logit_lms("[LP] Content iframe not found.", 0);
+            return false;
+        }
+
+        // Release lock after iframe load (best-effort)
+        $f.off("load.lpSwitchDone").one("load.lpSwitchDone", function () {
+            olms._lpSwitching = 0;
+        });
+
+        $f.attr("src", src);
+        return true;
     }
 
-    // (1) Save current item
+    // Force-unlock safety
+    olms._lpSwitching = 1;
+    setTimeout(function () {
+        olms._lpSwitching = 0;
+    }, 15000);
+
+    // Mark switching in progress (savedata() uses this)
+    olms.switch_finished = 0;
+    olms.execute_stats = false;
+    olms.info_lms_item[0] = currentItemId;
+    olms.info_lms_item[1] = targetItemId;
+
+    // (1) Save current item (async for non-SCO to avoid blocking UI)
     if (currentItemType !== "sco") {
         xajax_save_item(
             olms.lms_lp_id,
@@ -1693,7 +1707,7 @@ function switch_item(current_item, next_item) {
             1
         );
     } else {
-        // For SCO, saving is async; we still proceed with switching.
+        // SCO save stays async (already)
         xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
@@ -1708,7 +1722,40 @@ function switch_item(current_item, next_item) {
         reinit_updatable_vars_list();
     }
 
-    // (2) Refresh runtime variables for the NEXT item (sync is critical here)
+    // (2) Fast path for NON-SCO: load iframe immediately, update TOC/progress in background
+    if (targetItemType !== "sco") {
+        // Optimistic UI update (instant feedback)
+        update_toc("unhighlight", currentItemId);
+        update_toc("highlight", targetItemId);
+
+        // Update local state immediately (navigation remains usable)
+        olms.lms_item_id = targetItemId;
+        olms.next_item = targetItemId;
+        olms.lms_initialized = 0;
+        olms.switch_finished = 1;
+
+        // Load content now (no waiting on XHR)
+        var mysrc = buildLpContentSrc(targetItemId);
+        setIframeSrc(mysrc);
+
+        // Background refresh of TOC/progress/runtime vars (JS returned will update olms + progress bar)
+        xajax_switch_item_toc(
+            olms.lms_lp_id,
+            olms.lms_user_id,
+            olms.lms_view_id,
+            currentItemId,
+            targetItemId
+        );
+
+        // Update nav buttons (best-effort; does not block)
+        if (typeof checkCurrentItemPosition === "function") {
+            try { checkCurrentItemPosition(targetItemId); } catch (e) {}
+        }
+
+        return true;
+    }
+
+    // (3) Strict path for SCO: keep the old behavior (runtime must be ready before SCO runs)
     xajax_switch_item_details_sync(
         olms.lms_lp_id,
         olms.lms_user_id,
@@ -1717,39 +1764,22 @@ function switch_item(current_item, next_item) {
         targetItemId
     );
 
-    // (3) Refresh TOC/progress (sync)
-    xajax_switch_item_toc(
-        olms.lms_lp_id,
-        olms.lms_user_id,
-        olms.lms_view_id,
-        currentItemId,
-        targetItemId
-    );
+    // Keep TOC update (can remain sync for SCO if you want absolute safety)
+    // We keep it sync here because SCO runtime is sensitive.
+    $.ajax({
+        type: "POST",
+        data: { lid: olms.lms_lp_id, uid: olms.lms_user_id, vid: olms.lms_view_id, iid: currentItemId, next: targetItemId },
+        url: "lp_ajax_switch_item_toc.php" + courseUrl,
+        dataType: "script",
+        async: false,
+        cache: false
+    });
 
-    // (4) Update parent titles (requires refreshed olms.lms_lp_item_parents)
-    updateItemParentNames();
+    var scoSrc = buildLpContentSrc(targetItemId);
+    setIframeSrc(scoSrc);
 
-    // (5) Load next content inside the iframe, preserving LP context
-    var mysrc = buildLpContentSrc(targetItemId);
-
-    <?php if ('fullscreen' === $oLP->mode) { ?>
-        var w = window.open("" + mysrc, "content_id", "toolbar=0,location=0,status=0,scrollbars=1,resizable=1");
-        if (w) {
-            w.onload = function () {
-                olms.info_lms_item[0] = currentItemId;
-            };
-            w.onunload = function () {
-                olms.info_lms_item[0] = currentItemId;
-            };
-        }
-    <?php } else { ?>
-        log_in_log("Loading " + mysrc + " in iframe", 2);
-        setContentFrameSrc(mysrc);
-    <?php } ?>
-
-    // (6) Update nav buttons visibility
     if (typeof checkCurrentItemPosition === "function") {
-        checkCurrentItemPosition(targetItemId);
+        try { checkCurrentItemPosition(targetItemId); } catch (e) {}
     }
 
     return true;
@@ -1914,41 +1944,42 @@ function xajax_save_item(
     statusSignalReceived,
     switchNext = 0,
     loadNav = 0
-) {
+    ) {
     var params = '';
-    if (typeof(finishSignalReceived) == 'undefined') {
+    if (typeof(finishSignalReceived) === 'undefined') {
         finishSignalReceived = 0;
     }
-
-    if (typeof(userNavigatesAway) == 'undefined') {
+    if (typeof(userNavigatesAway) === 'undefined') {
         userNavigatesAway = 0;
     }
-
-    if (typeof(statusSignalReceived) == 'undefined') {
+    if (typeof(statusSignalReceived) === 'undefined') {
         statusSignalReceived = 0;
     }
 
-    params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-    params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
-    params += '&status='+lesson_status+'&t='+session_time;
-    params += '&suspend='+suspend_data+'&loc='+lesson_location;
-    params += '&core_exit='+lms_item_core_exit;
-    params += '&session_id='+session_id;
-    params += '&course_id='+course_id;
-    params += '&finishSignalReceived='+finishSignalReceived;
-    params += '&userNavigatesAway='+userNavigatesAway;
-    params += '&statusSignalReceived='+statusSignalReceived;
-    params += '&switch_next='+switchNext;
-    params += '&load_nav='+loadNav;
+    params += 'lid=' + lms_lp_id + '&uid=' + lms_user_id + '&vid=' + lms_view_id;
+    params += '&iid=' + lms_item_id + '&s=' + score + '&max=' + max + '&min=' + min;
+    params += '&status=' + lesson_status + '&t=' + session_time;
+    params += '&suspend=' + suspend_data + '&loc=' + lesson_location;
+    params += '&core_exit=' + lms_item_core_exit;
+    params += '&session_id=' + session_id;
+    params += '&course_id=' + course_id;
+    params += '&finishSignalReceived=' + finishSignalReceived;
+    params += '&userNavigatesAway=' + userNavigatesAway;
+    params += '&statusSignalReceived=' + statusSignalReceived;
+    params += '&switch_next=' + switchNext;
+    params += '&load_nav=' + loadNav;
 
-    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'video' || item_type == 'asset') {
-        logit_lms('xajax_save_item with params:' + params, 3);
+    // IMPORTANT: Do not block the UI for Chamilo LP / assets.
+    if (olms.lms_lp_type === 1 || item_type === 'document' || item_type === 'video' || item_type === 'asset') {
+        logit_lms('xajax_save_item (async) with params:' + params, 3);
+
         return $.ajax({
-            type:"POST",
+            type: "POST",
             data: params,
             url: "lp_ajax_save_item.php" + courseUrl,
             dataType: "script",
-            async: false
+            async: true,
+            cache: false
         });
     }
 
@@ -2194,20 +2225,23 @@ function xajax_switch_item_details(lms_lp_id, lms_user_id, lms_view_id, lms_item
  */
 function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, next_item) {
     var params = {
-        'lid': lms_lp_id,
-        'uid': lms_user_id,
-        'vid': lms_view_id,
-        'iid': lms_item_id,
-        'next': next_item
+        lid: lms_lp_id,
+        uid: lms_user_id,
+        vid: lms_view_id,
+        iid: lms_item_id,
+        next: next_item
     };
-    logit_lms('xajax_switch_item_toc');
 
-    $.ajax({
+    logit_lms('xajax_switch_item_toc (async)', 3);
+
+    // IMPORTANT: Do not block UI; let the iframe load immediately.
+    return $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_switch_item_toc.php" + courseUrl,
         dataType: "script",
-        async: false
+        async: true,
+        cache: false
     });
 }
 

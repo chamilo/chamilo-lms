@@ -179,12 +179,8 @@
                 display: none !important;
                 flex-direction: row !important;
                 align-items: center !important;
-                gap: 8px !important;
+                gap: 4px !important;
                 padding: 0px !important;
-                border-radius: 12px !important;
-                border: 1px solid rgba(0,0,0,0.10) !important;
-                background: rgba(255,255,255,0.94) !important;
-                box-shadow: 0 10px 22px rgba(0,0,0,0.14) !important;
                 white-space: nowrap !important;
             }
             #btn-menu-float .circle.open {
@@ -734,34 +730,65 @@
                 + "&item_id=" + encodeURIComponent(String(itemId));
             }
 
-            // Iframe loading overlay (safe: does not cancel navigation)
+            // Iframe loading overlay (UX-friendly: delayed + minimum visible time)
             var $loader = $("#lp-iframe-loader");
             var $iframe = getLpIframe();
 
-            var loaderTimer = null;
-            var maxHideTimer = null;
+            var loaderShowDelayMs = 250;      // Do not show loader for very fast loads
+            var loaderMinVisibleMs = 250;     // Avoid flicker if it appears
+            var loaderShowTimer = null;
+            var loaderHideTimer = null;
+            var loaderVisibleSince = 0;
+            var loaderMaxHideTimer = null;
 
-            function showLoader(reason) {
+            function showLoaderNow(reason) {
               if (!$loader.length) return;
+              if ($loader.hasClass("is-visible")) return;
 
+              loaderVisibleSince = Date.now();
               $loader.addClass("is-visible").attr("aria-hidden", "false");
 
-              clearTimeout(maxHideTimer);
-              maxHideTimer = setTimeout(function () {
+              clearTimeout(loaderMaxHideTimer);
+              loaderMaxHideTimer = setTimeout(function () {
                 hideLoader("timeout");
               }, 15000);
             }
 
-            function hideLoader(reason) {
+            function scheduleShowLoader(reason) {
               if (!$loader.length) return;
-              console.info("LP: hide loader", reason || "");
-              $loader.removeClass("is-visible").attr("aria-hidden", "true");
-              clearTimeout(maxHideTimer);
+
+              clearTimeout(loaderShowTimer);
+              loaderShowTimer = setTimeout(function () {
+                showLoaderNow(reason || "delayed");
+              }, loaderShowDelayMs);
             }
 
-            // Show loader for the initial iframe load
+            function hideLoader(reason) {
+              if (!$loader.length) return;
+
+              clearTimeout(loaderShowTimer);
+              clearTimeout(loaderHideTimer);
+
+              if (!$loader.hasClass("is-visible")) {
+                clearTimeout(loaderMaxHideTimer);
+                return;
+              }
+
+              var elapsed = Date.now() - (loaderVisibleSince || 0);
+              if (elapsed < loaderMinVisibleMs) {
+                loaderHideTimer = setTimeout(function () {
+                  hideLoader(reason || "min-visible");
+                }, loaderMinVisibleMs - elapsed);
+                return;
+              }
+
+              $loader.removeClass("is-visible").attr("aria-hidden", "true");
+              clearTimeout(loaderMaxHideTimer);
+            }
+
+// Initial iframe load: delay the loader (no blink)
             if ($iframe.length) {
-              showLoader("initial");
+              scheduleShowLoader("initial");
               $iframe.off("load.lpLoader").on("load.lpLoader", function () {
                 syncCurrentItemFromIframe();
                 hideLoader("iframe load");
@@ -781,7 +808,7 @@
                   return;
                 }
 
-                // Only show loader when this looks like REAL navigation (prev/next/home/content links).
+                // Only show loader when this looks like real navigation.
                 var href = ($t.attr("href") || "");
                 var onclickValue = ($t.attr("onclick") || "");
 
@@ -801,10 +828,8 @@
                   return;
                 }
 
-                clearTimeout(loaderTimer);
-                loaderTimer = setTimeout(function () {
-                  showLoader("nav click");
-                }, 0);
+                // Delay loader so fast loads don't show anything.
+                scheduleShowLoader("nav click");
               }
             );
 

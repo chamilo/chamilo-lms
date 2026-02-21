@@ -132,36 +132,84 @@ $allowLpItemTip = ('false' === api_get_setting('lp.hide_accessibility_label_on_l
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = api_get_asset('qtip2/dist/jquery.qtip.js');
     $htmlHeadXtra[] = '<script>
-    $(function() {
-         $(".scorm_item_normal").qtip({
-            content: {
-                text: function(event, api) {
-                    var item = $(this);
-                    var itemId = $(this).attr("id");
-                    itemId = itemId.replace("toc_", "");
-                    var textToShow = "";
-                    $.ajax({
-                        type: "GET",
-                        url: "'.$ajaxUrl.'&item_id="+ itemId,
-                        async: false
-                    })
-                    .then(function(content) {
-                        if (content == 1) {
-                            textToShow = "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'";
-                            api.set("style.classes", "qtip-green qtip-shadow");
-                        } else {
-                            textToShow = content;
-                            api.set("style.classes", "qtip-red qtip-shadow");
-                        }
-                        api.set("content.text", textToShow);
-                        return textToShow;
-                    });
-                    return textToShow;
-                }
+        $(function() {
+            // Cache prerequisite checks per item to avoid repeated network calls on hover.
+            window.lpPrereqCache = window.lpPrereqCache || {};
+            window.lpPrereqInFlight = window.lpPrereqInFlight || {};
+
+            function getItemIdFromTocElement(el) {
+                var raw = $(el).attr("id") || "";
+                raw = raw.replace("toc_", "");
+                var n = parseInt(raw, 10);
+                return Number.isFinite(n) ? n : 0;
             }
+
+            function setTipStyle(api, ok) {
+                api.set("style.classes", ok ? "qtip-green qtip-shadow" : "qtip-red qtip-shadow");
+            }
+
+            function setTipText(api, text) {
+                api.set("content.text", text);
+                try { api.reposition(); } catch (e) {}
+            }
+
+            $(".scorm_item_normal").qtip({
+                content: {
+                    text: function(event, api) {
+                        var itemId = getItemIdFromTocElement(this);
+                        if (!itemId) {
+                            setTipStyle(api, false);
+                            return "Unable to check prerequisites.";
+                        }
+
+                        // Serve from cache if available.
+                        if (window.lpPrereqCache[itemId]) {
+                            setTipStyle(api, window.lpPrereqCache[itemId].ok);
+                            return window.lpPrereqCache[itemId].text;
+                        }
+
+                        // If a request is already in progress, just show a placeholder.
+                        if (window.lpPrereqInFlight[itemId]) {
+                            return "Loading…";
+                        }
+
+                        window.lpPrereqInFlight[itemId] = true;
+
+                        // Immediate placeholder (no UI freeze)
+                        setTipText(api, "Loading…");
+
+                        $.ajax({
+                            type: "GET",
+                            url: "'.$ajaxUrl.'&item_id=" + itemId,
+                            dataType: "text",
+                            async: true
+                        })
+                        .done(function(content) {
+                            var ok = (String(content) === "1");
+                            var text = ok
+                                ? "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'"
+                                : (content || "'.addslashes(get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.')).'");
+
+                            window.lpPrereqCache[itemId] = { ok: ok, text: text };
+                            setTipStyle(api, ok);
+                            setTipText(api, text);
+                        })
+                        .fail(function() {
+                            var text = "Unable to check prerequisites.";
+                            window.lpPrereqCache[itemId] = { ok: false, text: text };
+                            setTipStyle(api, false);
+                            setTipText(api, text);
+                        })
+                        .always(function() {
+                            delete window.lpPrereqInFlight[itemId];
+                        });
+
+                        return "Loading…";
+                    }
+                }
+            });
         });
-    });
-    </script>';
+        </script>';
 }
 
 if ('impress' === $lp->getDefaultViewMod()) {

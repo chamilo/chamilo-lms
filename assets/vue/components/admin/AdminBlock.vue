@@ -47,7 +47,7 @@
           v-for="(item, index) in visibleItems"
           :key="index"
           :aria-label="t(item.label)"
-          :class="item.className"
+          :class="item.class"
           class="p-menuitem"
           role="menuitem"
         >

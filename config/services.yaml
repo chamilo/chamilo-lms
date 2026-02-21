@@ -66,6 +66,13 @@ services:
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
         arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
+    Chamilo\CoreBundle\EventSubscriber\TranslatorFallbackLocaleSubscriber:
+      arguments:
+        $translator: '@translator.default'
+        $languageRepository: '@Chamilo\CoreBundle\Repository\LanguageRepository'
+      tags:
+        - { name: kernel.event_subscriber }
+
     stof_doctrine_extensions.tool.locale_synchronizer:
         class: Stof\DoctrineExtensionsBundle\Tool\LocaleSynchronizer
         arguments:

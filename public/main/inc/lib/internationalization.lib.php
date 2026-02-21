@@ -63,45 +63,60 @@ function get_lang(string $variable, ?string $locale = null): string
         return $variable;
     }
 
-    // Using symfony
-    $defaultDomain = 'messages';
+    $domain = 'messages';
 
-    // Check for locale fallbacks (in case no translation is available).
-    static $fallbacks = null;
-    $englishInQueue = (!empty($locale) && $locale === 'en_US');
-    if ($fallbacks === null) {
-        if (!empty($locale)) {
-            while (!empty($parent = SubLanguageManager::getParentLocale($locale))) {
-                $fallbacks[] = $parent;
-                if ($parent === 'en_US') {
-                    $englishInQueue = true;
-                }
-            }
-        }
-        // If there were no parent language, still consider en_US as global fallback
-        if (!$englishInQueue) {
-            $fallbacks[] = 'en_US';
+    // Resolve effective locale when legacy code calls get_lang() without locale.
+    $effectiveLocale = $locale;
+
+    if (empty($effectiveLocale)) {
+        // Symfony Request locale (only available when RequestStack is set).
+        $requestStack = Container::$container?->has('request_stack') ? Container::$container->get('request_stack') : null;
+        $request = $requestStack?->getCurrentRequest();
+        if ($request) {
+            $effectiveLocale = $request->getLocale();
         }
     }
-    // Test a basic translation to the current language.
-    $translation = $translator->trans(
-        $variable,
-        [],
-        $defaultDomain,
-        $locale
-    );
-    // If no translation was found, $translation is empty.
-    // Check fallbacks for a valid translation.
-    $i = 0;
-    while (empty($translation) && !empty($fallbacks[$i])) {
-        $fallback = $fallbacks[$i];
-        $translation = $translator->trans(
-            $variable,
-            [],
-            $defaultDomain,
-            $fallback
-        );
-        $i++;
+
+    if (empty($effectiveLocale)) {
+        $effectiveLocale = 'en_US';
+    }
+
+    // Build fallback chain per locale (sublanguage -> mother -> ... -> en_US).
+    static $fallbacksByLocale = [];
+    if (!isset($fallbacksByLocale[$effectiveLocale])) {
+        $fallbacks = [];
+        $visited = [];
+        $current = $effectiveLocale;
+        while (true) {
+            $parent = SubLanguageManager::getParentLocale($current);
+            if (empty($parent) || isset($visited[$parent])) {
+                break;
+            }
+            $visited[$parent] = true;
+            $fallbacks[] = $parent;
+            $current = $parent;
+        }
+
+        if ('en_US' !== $effectiveLocale && !in_array('en_US', $fallbacks, true)) {
+            $fallbacks[] = 'en_US';
+        }
+
+        $fallbacksByLocale[$effectiveLocale] = $fallbacks;
+    }
+
+    $fallbacks = $fallbacksByLocale[$effectiveLocale];
+
+    // Fallback strategy when catalogue is not accessible: compare against msgid.
+    $translation = $translator->trans($variable, [], $domain, $effectiveLocale);
+    if ($translation !== $variable) {
+        return $translation;
+    }
+
+    foreach ($fallbacks as $fb) {
+        $t = $translator->trans($variable, [], $domain, $fb);
+        if ($t !== $variable) {
+            return $t;
+        }
     }
 
     return $translation;

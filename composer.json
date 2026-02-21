@@ -231,15 +231,16 @@
     },
     "scripts": {
         "auto-scripts": {
-            "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "requirements-checker": "script"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "find var/cache -mindepth 1 -delete 2>/dev/null || true"
         ],
         "post-update-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "find var/cache -mindepth 1 -delete 2>/dev/null || true"
         ],
         "pre-install-cmd": [
             "Chamilo\\CoreBundle\\Component\\Composer\\ScriptHandler::deleteOldFilesFrom19x"

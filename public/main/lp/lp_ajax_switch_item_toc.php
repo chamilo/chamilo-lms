@@ -30,97 +30,75 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
 {
     $debug = 0;
     $return = '';
+
     if ($debug > 0) {
         error_log('In switch_item_toc('.$lpId.','.$userId.','.$viewId.','.$currentItem.','.$nextItem.')', 0);
     }
+
+    // Read LP from session (requires session), then release session lock early.
     $myLP = learnpath::getLpFromSession(api_get_course_int_id(), $lpId, $userId);
+
+    if (function_exists('session_write_close')) {
+        @session_write_close();
+    }
+
     $newItemId = 0;
     $oldItemId = 0;
+
     switch ($nextItem) {
         case 'next':
             $myLP->set_current_item($currentItem);
             $myLP->next();
             $newItemId = $myLP->get_current_item_id();
-            if ($debug > 1) {
-                error_log('In {next} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
-            }
             break;
         case 'previous':
             $myLP->set_current_item($currentItem);
             $myLP->previous();
             $newItemId = $myLP->get_current_item_id();
-            if ($debug > 1) {
-                error_log('In {previous} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
-            }
             break;
         case 'first':
             $myLP->set_current_item($currentItem);
             $myLP->first();
             $newItemId = $myLP->get_current_item_id();
-            if ($debug > 1) {
-                error_log('In {first} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
-            }
             break;
         case 'last':
+            $newItemId = $myLP->get_current_item_id();
             break;
         default:
-            // Should be filtered to check it's not hacked
             if ($nextItem == $currentItem) {
-                // If we're opening the same item again.
                 $myLP->items[$currentItem]->restart();
             } else {
                 $oldItemId = $currentItem;
             }
-            $newItemId = $nextItem;
+            $newItemId = (int) $nextItem;
             $myLP->set_current_item($newItemId);
-            if ($debug > 1) {
-                error_log('In {default} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
-            }
             break;
     }
+
     $myLP->start_current_item(true);
+
     if ($myLP->force_commit) {
         $myLP->save_current();
     }
+
     if (is_object($myLP->items[$newItemId])) {
         $myLPI = $myLP->items[$newItemId];
     } else {
-        if ($debug > 1) {
-            error_log('In switch_item_details - generating new item object', 0);
-        }
         $myLPI = new learnpathItem($newItemId);
         $myLPI->set_lp_view($viewId);
     }
-    /*
-     * now get what's needed by the SCORM API:
-     * -score
-     * -max
-     * -min
-     * -lesson_status
-     * -session_time
-     * -suspend_data
-     */
+
     $lessonStatus = $myLPI->get_status();
     $interactionsCount = $myLPI->get_interactions_count();
-    /**
-     * Interactions are not returned by switch_item at the moment, but please
-     * leave commented code to allow for the addition of these in the future.
-     */
-    /*
-    $interactionsString = '';
-    for ($i = 0; $i < $interactionsCount; $i++) {
-        $interactionsString .= ",[".$i.",'','','','','','','']";
-    }
-    if (!empty($interactionsString)) {
-        $interactionsString = substr($interactionsString, 1);
-    }
-    */
+
     $totalItems = $myLP->getTotalItemsCountWithoutDirs();
     $completedItems = $myLP->get_complete_items_count();
     $progressMode = $myLP->get_progress_bar_mode();
     $progressMode = ('' == $progressMode ? '%' : $progressMode);
+
     $nextItemId = $myLP->get_next_item_id();
     $previousItemId = $myLP->get_previous_item_id();
+
     $itemType = $myLPI->get_type();
     $lessonMode = $myLPI->get_lesson_mode();
     $credit = $myLPI->get_credit();
@@ -135,7 +113,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         "olms.lms_initialized=0;".
         "olms.lms_view_id=".$viewId.";".
         "olms.lms_user_id=".$userId.";".
-        "olms.next_item=".$newItemId.";".// This one is very important to replace possible literal strings.
+        "olms.next_item=".$newItemId.";".
         "olms.lms_next_item=".$nextItemId.";".
         "olms.lms_previous_item=".$previousItemId.";".
         "olms.lms_item_type = '".$itemType."';".
@@ -167,12 +145,14 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     }
 
     $myLP->set_error_msg('');
-    $myLP->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) {
-        error_log('prerequisites_match() returned '.htmlentities($myLP->error), 0);
+    $myLP->prerequisites_match($newItemId);
+
+    // Re-open session only to write the new state (keep lock time minimal).
+    if (session_status() === PHP_SESSION_NONE) {
+        @session_start();
     }
+
     Session::write('scorm_item_id', $newItemId);
-    Session::write('lpobject', serialize($myLP));
     Session::write('oLP', $myLP);
 
     return $return;

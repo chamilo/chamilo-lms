@@ -59,7 +59,7 @@
             >
               <span
                 class="p-menuitem-text"
-                v-text="t(item.label)"
+                v-text="item.label"
               />
             </BaseAppLink>
           </div>

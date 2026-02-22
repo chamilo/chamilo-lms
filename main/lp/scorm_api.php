@@ -49,6 +49,18 @@ $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 $userId = api_get_user_id();
 
+// Pre-load initialization data for the initial item via PHP so that
+// LMSInitialize() can skip its synchronous AJAX call on first load.
+require_once __DIR__.'/lp_initialize_item.inc.php';
+$initialItemId = $oItem->get_id();
+$initialItemViewId = $oLP->get_view(null, $userId) ?: 1;
+$initialItemScript = initialize_item(
+    $oLP->get_id(),
+    $userId,
+    $initialItemViewId,
+    $initialItemId
+);
+
 $extraParams = '';
 if (isset($oLP->lti_launch_id)) {
     $extraParams .= '&lti_launch_id='.Security::remove_XSS($oLP->lti_launch_id);
@@ -222,7 +234,13 @@ olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
-var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id+'<?php echo $extraParams; ?>';
+// Initialization data for the initial item, pre-loaded by PHP.
+// LMSInitialize() uses this to skip its synchronous AJAX call on first load.
+// For subsequent items (after navigation), LMSInitialize() still uses AJAX.
+var olmsPreloadedItemId = <?php echo (int) $initialItemId; ?>;
+<?php echo $initialItemScript; ?>
+
+var courseUrl ='?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id+'<?php echo $extraParams; ?>';
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**
@@ -299,24 +317,32 @@ function LMSInitialize() {
         //reinit the list of modified variables
         reinit_updatable_vars_list();
 
-        // Get LMS values for this item
-        var params = {
-            'lid': olms.lms_lp_id,
-            'uid': olms.lms_user_id,
-            'vid': olms.lms_view_id,
-            'iid': olms.lms_item_id
-        };
+        if (typeof olmsPreloadedItemId !== 'undefined' && olmsPreloadedItemId == olms.lms_item_id) {
+            // Initial item: initialization data was pre-loaded by PHP inline.
+            // No AJAX call needed; all olms.* variables are already set.
+            logit_scorm('LMSInitialize() using pre-loaded data for item ' + olms.lms_item_id);
+            olmsPreloadedItemId = undefined; // clear so subsequent items use AJAX
+            $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+        } else {
+            // Subsequent items (after navigation): fetch initialization data from server.
+            var params = {
+                'lid': olms.lms_lp_id,
+                'uid': olms.lms_user_id,
+                'vid': olms.lms_view_id,
+                'iid': olms.lms_item_id
+            };
 
-        $.ajax({
-            type: "POST",
-            url: "lp_ajax_initialize.php" + courseUrl,
-            data: params,
-            dataType: 'script',
-            async: false,
-            success:function(data) {
-                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
-            }
-        });
+            $.ajax({
+                type: "POST",
+                url: "lp_ajax_initialize.php" + courseUrl,
+                data: params,
+                dataType: 'script',
+                async: false,
+                success:function(data) {
+                    $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                }
+            });
+        }
 
         olms.lms_initialized = 1;
         olms.switch_finished = 1;

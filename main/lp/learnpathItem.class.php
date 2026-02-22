@@ -2390,8 +2390,7 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
+                                                        if ($quiz['exe_result'] >= $minScore
                                                         ) {
                                                             $returnstatus = true;
                                                         } else {

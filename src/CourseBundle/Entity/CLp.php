@@ -96,6 +96,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ),
             security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')",
+            validationContext: ['groups' => ['lp:write']],
             deserialize: false,
         ),
         new Post(
@@ -104,7 +105,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: LpReorderController::class,
             openapi: new Operation(
                 summary: 'Reorder learning paths within a course',
+                description: 'Sets the display order of all learning paths in a course by providing their IDs in the desired order.',
                 requestBody: new RequestBody(
+                    description: 'Ordered list of learning path IDs and the course context',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [

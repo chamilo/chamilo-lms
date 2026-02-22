@@ -14,6 +14,9 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
+use Chamilo\CoreBundle\Controller\Api\CreateCLpAction;
 use Chamilo\CoreBundle\Controller\Api\LpReorderController;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
@@ -69,9 +72,59 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(security: "is_granted('ROLE_USER')"),
         new Post(
+            controller: CreateCLpAction::class,
+            openapi: new Operation(
+                summary: 'Create a new learning path',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'title' => ['type' => 'string'],
+                                    'cid' => ['type' => 'integer', 'description' => 'Course identifier'],
+                                    'lpType' => ['type' => 'integer', 'description' => 'Type: 1=Chamilo LP, 2=SCORM, 3=AICC. Defaults to 1.', 'default' => 1],
+                                    'description' => ['type' => 'string', 'description' => 'Optional description'],
+                                    'sid' => ['type' => 'integer', 'description' => 'Session identifier (optional)'],
+                                    'gid' => ['type' => 'integer', 'description' => 'Group identifier (optional)'],
+                                    'visibility' => ['type' => 'integer', 'description' => '0=invisible, 1=visible. Defaults to 0.', 'default' => 0],
+                                ],
+                                'required' => ['title', 'cid'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')",
+            deserialize: false,
+        ),
+        new Post(
             uriTemplate: '/learning_paths/reorder',
             status: 204,
             controller: LpReorderController::class,
+            openapi: new Operation(
+                summary: 'Reorder learning paths within a course',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'courseId' => ['type' => 'integer', 'description' => 'Course identifier'],
+                                    'order' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'integer'],
+                                        'description' => 'Ordered list of learning path IDs',
+                                    ],
+                                    'sid' => ['type' => 'integer', 'description' => 'Session identifier (optional)'],
+                                    'categoryId' => ['type' => 'integer', 'description' => 'Category identifier to scope the reorder (optional)'],
+                                ],
+                                'required' => ['courseId', 'order'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')",
             read: false,
             deserialize: false,
@@ -107,7 +160,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[Assert\NotBlank]
     #[ORM\Column(name: 'lp_type', type: 'integer', nullable: false)]
     #[Groups(['lp:read', 'lp:write'])]
-    protected int $lpType;
+    protected int $lpType = self::LP_TYPE;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]

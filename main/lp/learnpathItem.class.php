@@ -2388,10 +2388,15 @@ class learnpathItem
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                     $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                    if (isset($minScore) && isset($minScore)) {
+                                                    if (isset($minScore) && is_numeric($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore
-                                                        ) {
+                                                        // Cap result at weighting so retroactive quiz reconfiguration
+                                                        // (increased point values) cannot inflate old exe_result above maxScore
+                                                        $weighting = (float) $quiz['exe_weighting'];
+                                                        $effectiveResult = ($weighting > 0) ? min((float) $quiz['exe_result'], $weighting) : (float) $quiz['exe_result'];
+                                                        $meetsMin = $effectiveResult >= (float) $minScore;
+                                                        $meetsMax = !isset($maxScore) || !is_numeric($maxScore) || $effectiveResult <= (float) $maxScore;
+                                                        if ($meetsMin && $meetsMax) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $explanation = sprintf(
@@ -2448,11 +2453,15 @@ class learnpathItem
                                                             $minScore = $masteryScoreAsMin;
                                                         }
                                                     }
-                                                    if (isset($minScore) && isset($minScore)) {
+                                                    if (isset($minScore) && is_numeric($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
-                                                        ) {
+                                                        // Cap result at weighting so retroactive quiz reconfiguration
+                                                        // (increased point values) cannot inflate old exe_result above maxScore
+                                                        $weighting = (float) $quiz['exe_weighting'];
+                                                        $effectiveResult = ($weighting > 0) ? min((float) $quiz['exe_result'], $weighting) : (float) $quiz['exe_result'];
+                                                        $meetsMin = $effectiveResult >= (float) $minScore;
+                                                        $meetsMax = !isset($maxScore) || !is_numeric($maxScore) || $effectiveResult <= (float) $maxScore;
+                                                        if ($meetsMin && $meetsMax) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {

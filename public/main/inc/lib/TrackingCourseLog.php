@@ -1354,4 +1354,19 @@ class TrackingCourseLog
 
         return $map[$title] ?? null;
     }
+
+    public static function getAdditionalProfileExtraFields(): array
+    {
+        $additionalProfileField = $_GET['additional_profile_field'] ?? [];
+
+        $additionalExtraFieldsInfo = [];
+
+        $objExtraField = new ExtraField('user');
+
+        foreach ($additionalProfileField as $fieldId) {
+            $additionalExtraFieldsInfo[$fieldId] = $objExtraField->getFieldInfoByFieldId($fieldId);
+        }
+
+        return $additionalExtraFieldsInfo;
+    }
 }

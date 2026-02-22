@@ -17,6 +17,69 @@ api_protect_admin_script();
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = $_REQUEST['report'] ?? '';
+
+// Duplicate users actions (disable/enable + unify)
+if ('duplicated_users' === $report && !empty($_REQUEST['dup_action'])) {
+    $dupAction = (string) $_REQUEST['dup_action'];
+
+    if (!Security::check_token('request')) {
+        Display::addFlash(Display::return_message(get_lang('Security issue detected'), 'error'));
+        header('Location: '.api_get_self().'?report=duplicated_users');
+        exit;
+    }
+    Security::clear_token();
+
+    $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+
+    if ($userId > 0 && $userId === (int) api_get_user_id()) {
+        Display::addFlash(Display::return_message('You cannot disable your own account from this screen.', 'warning'));
+        header('Location: '.api_get_self().'?'.http_build_query($_GET));
+        exit;
+    }
+
+    try {
+        if ('toggle_active' === $dupAction && $userId > 0) {
+            $newActive = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : 0;
+            Statistics::updateUserActiveStatus($userId, $newActive);
+
+            $msg = ($newActive === 1)
+                ? "User #{$userId} enabled. The account can log in again."
+                : "User #{$userId} disabled. This prevents login but does not delete the account.";
+
+            Display::addFlash(Display::return_message($msg, 'confirmation'));
+        }
+
+        if ('unify' === $dupAction) {
+            $keepId = isset($_REQUEST['keep_id']) ? (int) $_REQUEST['keep_id'] : 0;
+            $mergeId = isset($_REQUEST['merge_id']) ? (int) $_REQUEST['merge_id'] : 0;
+
+            if ($keepId > 0 && $mergeId > 0 && $keepId !== $mergeId) {
+                $ok = Statistics::unifyUsers($keepId, $mergeId);
+
+                if ($ok) {
+                    Display::addFlash(
+                        Display::return_message(
+                            "Unify completed: merged user #{$mergeId} into keep user #{$keepId}. The merged account was set to soft-deleted (active=-1) and removed from this report. You can permanently delete it later from the Users list.",
+                            'confirmation'
+                        )
+                    );
+                } else {
+                    Display::addFlash(Display::return_message('Unify failed or is not available in this platform build.', 'error'));
+                }
+            } else {
+                Display::addFlash(Display::return_message('Invalid unify request parameters.', 'error'));
+            }
+        }
+    } catch (\Throwable $e) {
+        Display::addFlash(Display::return_message('Action failed: '.$e->getMessage(), 'error'));
+    }
+
+    $params = $_GET;
+    unset($params['dup_action'], $params['user_id'], $params['active'], $params['keep_id'], $params['merge_id'], $params['sec_token']);
+    header('Location: '.api_get_self().'?'.http_build_query($params));
+    exit;
+}
+
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
@@ -438,6 +501,7 @@ $tools = [
         'report=users_online' => get_lang('Users online'),
         'report=new_user_registrations' => get_lang('New users registrations'),
         'report=subscription_by_day' => get_lang('Course/Session subscriptions by day'),
+        'report=duplicated_users' => get_lang('Duplicate users'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('Important activities'),
@@ -457,6 +521,164 @@ $tools = [
 $content = '';
 
 switch ($report) {
+    case 'duplicated_users':
+        $dupMode = (string) ($_REQUEST['dup_mode'] ?? 'name');
+        $allowedModes = ['name', 'email', 'extra'];
+        if (!in_array($dupMode, $allowedModes, true)) {
+            $dupMode = 'name';
+        }
+
+        $token = Security::get_token();
+
+        // Tabs
+        $baseTabParams = $_GET;
+        $baseTabParams['report'] = 'duplicated_users';
+        unset($baseTabParams['dup_mode']);
+
+        $tabClass = static function (string $mode, string $current): string {
+            return $mode === $current
+                ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
+                : 'text-gray-90 hover:bg-gray-15';
+        };
+
+        $buildTabUrl = static function (array $params): string {
+            return api_get_self().'?'.http_build_query($params);
+        };
+
+        $tabs = [
+            'name'  => get_lang('By name'),
+            'email' => get_lang('By email'),
+            'extra' => get_lang('By extra field'),
+        ];
+
+        $content .= '
+        <style>
+          .ch-dups-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+          .ch-dups-tabs a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+          .ch-dups-box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+          .ch-dups-box .formw{margin:0}
+          .ch-dups-note{margin:0 0 10px}
+          .ch-dups-actions a{white-space:nowrap}
+          .ch-dups-actions .btn{padding:4px 8px;border-radius:8px;font-size:12px}
+          .ch-dups-actions .btn + .btn{margin-left:6px}
+          .ch-dups-actions .btn-disabled{opacity:.45;pointer-events:none}
+          .ch-dups-help{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+          .ch-dups-help__title{font-weight:700;margin:0 0 8px;color:#2b3645}
+          .ch-dups-help__list{margin:0;padding-left:18px;color:#3b4757;font-size:13px}
+          .ch-dups-help__list li{margin:6px 0}
+          .ch-dups-help code{background:#f3f6fb;border:1px solid #e6edf5;border-radius:6px;padding:1px 6px}
+          .ch-dups-keep-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;}
+        </style>
+        ';
+
+        $content .= '<div class="ch-dups-tabs">';
+        foreach ($tabs as $mode => $label) {
+            $p = $baseTabParams;
+            $p['dup_mode'] = $mode;
+            $content .= '<a class="'.$tabClass($mode, $dupMode).'" href="'.htmlspecialchars($buildTabUrl($p), ENT_QUOTES).'">'
+                .htmlspecialchars((string) $label, ENT_QUOTES).'</a>';
+        }
+        $content .= '</div>';
+
+        // Additional profile extra fields selector (same feature as C1)
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $apf = $_GET['additional_profile_field'] ?? [];
+        if (!is_array($apf)) {
+            $apf = [$apf];
+        }
+
+        $baseForForms = [
+            'report' => 'duplicated_users',
+            'dup_mode' => $dupMode,
+        ];
+
+        // Extra field selector (only in extra mode)
+        $extraFieldId = isset($_REQUEST['extra_field_id']) ? (int) $_REQUEST['extra_field_id'] : 0;
+        $extraFieldFormHtml = '';
+
+        if ('extra' === $dupMode) {
+            $extraFieldObj = new ExtraField('user');
+            $allFields = $extraFieldObj->get_all();
+            $options = ['' => get_lang('Select an option')];
+
+            foreach ($allFields as $f) {
+                if (empty($f['id'])) {
+                    continue;
+                }
+                $label = $f['display_text'] ?? ($f['variable'] ?? ('Field #'.$f['id']));
+                $options[(int) $f['id']] = (string) $label;
+            }
+
+            $formExtra = new FormValidator('dup_extra_field', 'get', api_get_self());
+            $formExtra->addHidden('report', 'duplicated_users');
+            $formExtra->addHidden('dup_mode', 'extra');
+
+            foreach ($apf as $v) {
+                $formExtra->addHidden('additional_profile_field[]', (string) $v);
+            }
+
+            $formExtra->addSelect('extra_field_id', get_lang('Profile field'), $options, ['required' => true]);
+            $formExtra->addButtonSearch(get_lang('Search'));
+
+            if ($extraFieldId > 0) {
+                $formExtra->setDefaults(['extra_field_id' => $extraFieldId]);
+            }
+
+            $extraFieldFormHtml = $formExtra->returnForm();
+        }
+
+        // Info message
+        if ('name' === $dupMode) {
+            $content .= Display::return_message('This report only lists users that have the same firstname and lastname.', 'info');
+        } elseif ('email' === $dupMode) {
+            $content .= Display::return_message('This report only lists users that have the same e-mail address.', 'info');
+        } else {
+            $content .= Display::return_message('This report only lists users that share the same value for the selected profile field.', 'info');
+        }
+
+        // Help box (explains actions + soft-delete).
+        $helpTitle = 'How to use this report';
+        $helpHtml = '
+        <div class="ch-dups-help">
+          <div class="ch-dups-help__title">'.$helpTitle.'</div>
+          <ul class="ch-dups-help__list">
+            <li><strong>Keep account</strong>: The system automatically selects the <em>oldest</em> account in each duplicate group (earliest registration date, then lowest ID).</li>
+            <li><strong>Why is Unify disabled on one row?</strong> Because that row is the <em>Keep</em> account. Use <strong>Unify</strong> on the other rows in the same group.</li>
+            <li><strong>Disable / Enable</strong>: Only blocks or restores login. It does <em>not</em> delete the user and does <em>not</em> remove subscriptions.</li>
+            <li><strong>Unify</strong>: Moves subscriptions and related data into the Keep account. The merged account will be set to <code>soft-deleted</code> (<code>active = -1</code>) and will disappear from this report.</li>
+            <li><strong>Permanent deletion</strong>: Go to <strong>Administration → Users list</strong>, search the user ID or <code>merged_</code>, and delete the user there if needed.</li>
+          </ul>
+        </div>
+        ';
+        $content .= $helpHtml;
+
+        // “Add user profile field” selector (extra columns)
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self().'?'.http_build_query($baseForForms));
+        $content .= '<div class="ch-dups-box">'.$frmFields.$extraFieldFormHtml.'</div>';
+
+        // Build table
+        $table = Statistics::returnDuplicatedUsersTable(
+            $dupMode,
+            $additionalExtraFieldsInfo,
+            $extraFieldId,
+            (string) $token
+        );
+
+        // Export actions
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+            exit;
+        }
+
+        $content .= $table->return_table();
+        break;
     case 'subscription_by_day':
         $form = new FormValidator('subscription_by_day', 'get', api_get_self());
         $form->addDateRangePicker('daterange', get_lang('Date range'), true, [

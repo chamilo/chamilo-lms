@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 use Doctrine\DBAL\ParameterType;
 
 /**
@@ -2603,5 +2604,513 @@ class Statistics
         $out .= '<div class="my-6 h-px w-full bg-gray-25"></div>';
 
         return $out;
+    }
+
+    /**
+     * Builds the duplicate users report table.
+     *
+     * @param string $mode name|email|extra
+     * @param array  $additionalExtraFieldsInfo Fields selected via TrackingCourseLog “additional profile fields”
+     * @param int    $extraFieldId Only used when $mode=extra
+     * @param string $csrfToken Security::get_token() from index.php
+     */
+    public static function returnDuplicatedUsersTable(
+        string $mode,
+        array $additionalExtraFieldsInfo,
+        int $extraFieldId = 0,
+        string $csrfToken = ''
+    ): SortableTableFromArray {
+        if ('email' === $mode) {
+            $rows = self::getDuplicatedUsersByEmail($additionalExtraFieldsInfo, $csrfToken);
+        } elseif ('extra' === $mode) {
+            $rows = self::getDuplicatedUsersByExtraField($extraFieldId, $additionalExtraFieldsInfo, $csrfToken);
+        } else {
+            $rows = self::getDuplicatedUsersByName($additionalExtraFieldsInfo, $csrfToken);
+        }
+
+        $table = new SortableTableFromArray($rows);
+
+        $params = $_GET;
+        $params['report'] = 'duplicated_users';
+        $params['dup_mode'] = $mode;
+        if ($extraFieldId > 0) {
+            $params['extra_field_id'] = $extraFieldId;
+        }
+
+        $table->set_additional_parameters($params);
+
+        $col = 0;
+
+        $table->set_header($col++, get_lang('Id'));
+
+        if ('email' === $mode) {
+            $table->set_header($col++, get_lang('Email'));
+        }
+
+        if (api_is_western_name_order()) {
+            $table->set_header($col++, get_lang('First name'));
+            $table->set_header($col++, get_lang('Last name'));
+        } else {
+            $table->set_header($col++, get_lang('Last name'));
+            $table->set_header($col++, get_lang('First name'));
+        }
+
+        if ('name' === $mode || 'extra' === $mode) {
+            $table->set_header($col++, get_lang('Email'));
+        }
+
+        $table->set_header($col++, get_lang('Registration date'));
+        $table->set_header($col++, get_lang('First login in platform'));
+        $table->set_header($col++, get_lang('Latest login in platform'));
+        $table->set_header($col++, get_lang('Role'));
+        $table->set_header($col++, get_lang('Courses').' <small class="block">'.get_lang('Subscription count').'</small>');
+        $table->set_header($col++, get_lang('Sessions').' <small class="block">'.get_lang('Subscription count').'</small>');
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $table->set_header($col++, (string) ($fieldInfo['display_text'] ?? ($fieldInfo['variable'] ?? 'Extra field')));
+        }
+
+        $table->set_header($col++, get_lang('Active'));
+        $table->set_header($col++, get_lang('Actions'));
+
+        $table->actionButtons = [
+            'export_excel' => [
+                'label' => get_lang('Export to XLS'),
+                'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, false),
+            ],
+            'export_csv' => [
+                'label' => get_lang('Export as CSV'),
+                'icon' => Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, false),
+            ],
+        ];
+
+        return $table;
+    }
+
+    /**
+     * Update user active status.
+     */
+    public static function updateUserActiveStatus(int $userId, int $active): void
+    {
+        $userId = (int) $userId;
+        $active = (int) $active;
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        Database::query("UPDATE $userTable SET active = $active WHERE id = $userId");
+    }
+
+    /**
+     * Unify 2 users: keep $keepUserId, merge $mergeUserId into it.
+     */
+    public static function unifyUsers(int $keepUserId, int $mergeUserId): bool
+    {
+        $keepUserId = (int) $keepUserId;
+        $mergeUserId = (int) $mergeUserId;
+
+        if ($keepUserId <= 0 || $mergeUserId <= 0 || $keepUserId === $mergeUserId) {
+            return false;
+        }
+
+        $helper = Container::$container->get(UserMergeHelper::class);
+
+        return $helper->mergeUsers($keepUserId, $mergeUserId);
+    }
+
+    /**
+     * Duplicate users by firstname+lastname.
+     */
+    private static function getDuplicatedUsersByName(array $additionalExtraFieldsInfo, string $csrfToken): array
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $urlRelTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        [$joinUrl, $whereUrl] = self::getAccessUrlJoinAndWhere('u', 'url', $urlRelTable);
+
+        $sql = "
+            SELECT u.firstname, u.lastname, COUNT(*) AS c
+            FROM $userTable u
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+            $whereUrl
+            GROUP BY u.firstname, u.lastname
+            HAVING c > 1
+            ORDER BY u.lastname, u.firstname
+        ";
+
+        $res = Database::query($sql);
+        if (!$res || Database::num_rows($res) < 1) {
+            return [];
+        }
+
+        $out = [];
+        $extraValueObj = new ExtraFieldValue('user');
+
+        while ($dup = Database::fetch_assoc($res)) {
+            $firstname = Database::escape_string((string) $dup['firstname']);
+            $lastname  = Database::escape_string((string) $dup['lastname']);
+
+            $sub = "
+                SELECT u.id, u.firstname, u.lastname, u.email, u.created_at, u.status, u.active
+                FROM $userTable u
+                $joinUrl
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                $whereUrl
+                AND u.firstname = '$firstname'
+                AND u.lastname = '$lastname'
+                ORDER BY u.created_at ASC, u.id ASC
+            ";
+            $r2 = Database::query($sub);
+            if (!$r2 || Database::num_rows($r2) < 2) {
+                continue;
+            }
+
+            $users = Database::store_result($r2, 'ASSOC');
+            $keepId = (int) ($users[0]['id'] ?? 0);
+
+            foreach ($users as $u) {
+                $out[] = self::formatDuplicateUserRow($u, 'name', $keepId, $additionalExtraFieldsInfo, $extraValueObj, $csrfToken);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Duplicate users by email.
+     */
+    private static function getDuplicatedUsersByEmail(array $additionalExtraFieldsInfo, string $csrfToken): array
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $urlRelTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        [$joinUrl, $whereUrl] = self::getAccessUrlJoinAndWhere('u', 'url', $urlRelTable);
+
+        $sql = "
+            SELECT u.email, COUNT(*) AS c
+            FROM $userTable u
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+            $whereUrl
+            GROUP BY u.email
+            HAVING c > 1
+            ORDER BY u.email
+        ";
+
+        $res = Database::query($sql);
+        if (!$res || Database::num_rows($res) < 1) {
+            return [];
+        }
+
+        $out = [];
+        $extraValueObj = new ExtraFieldValue('user');
+
+        while ($dup = Database::fetch_assoc($res)) {
+            $email = Database::escape_string((string) $dup['email']);
+
+            if ('' === trim($email)) {
+                continue;
+            }
+
+            $sub = "
+                SELECT u.id, u.firstname, u.lastname, u.email, u.created_at, u.status, u.active
+                FROM $userTable u
+                $joinUrl
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                $whereUrl
+                AND u.email = '$email'
+                ORDER BY u.created_at ASC, u.id ASC
+            ";
+            $r2 = Database::query($sub);
+            if (!$r2 || Database::num_rows($r2) < 2) {
+                continue;
+            }
+
+            $users = Database::store_result($r2, 'ASSOC');
+            $keepId = (int) ($users[0]['id'] ?? 0);
+
+            foreach ($users as $u) {
+                $out[] = self::formatDuplicateUserRow($u, 'email', $keepId, $additionalExtraFieldsInfo, $extraValueObj, $csrfToken);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Duplicate users by extra field value.
+     */
+    private static function getDuplicatedUsersByExtraField(int $fieldId, array $additionalExtraFieldsInfo, string $csrfToken): array
+    {
+        $fieldId = (int) $fieldId;
+        if ($fieldId <= 0) {
+            return [];
+        }
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $urlRelTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $extraValueObj = new ExtraFieldValue('user');
+
+        $valuesTable = $extraValueObj->table;
+        $fieldTable  = $extraValueObj->table_handler_field;
+        $itemType    = (int) $extraValueObj->getExtraField()->getItemType();
+
+        [$joinUrl, $whereUrl] = self::getAccessUrlJoinAndWhere('u', 'url', $urlRelTable);
+
+        $sql = "
+            SELECT v.field_value AS v, COUNT(*) AS c
+            FROM $valuesTable v
+            INNER JOIN $fieldTable f ON f.id = v.field_id AND f.item_type = $itemType
+            INNER JOIN $userTable u ON u.id = v.item_id
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+            $whereUrl
+            AND v.field_id = $fieldId
+            AND v.field_value IS NOT NULL
+            AND v.field_value <> ''
+            GROUP BY v.field_value
+            HAVING c > 1
+            ORDER BY v.field_value
+        ";
+
+        $res = Database::query($sql);
+        if (!$res || Database::num_rows($res) < 1) {
+            return [];
+        }
+
+        $out = [];
+
+        while ($dup = Database::fetch_assoc($res)) {
+            $val = Database::escape_string((string) $dup['v']);
+            if ('' === trim($val)) {
+                continue;
+            }
+
+            $sub = "
+            SELECT u.id, u.firstname, u.lastname, u.email, u.created_at, u.status, u.active
+            FROM $userTable u
+            INNER JOIN $valuesTable v ON v.item_id = u.id AND v.field_id = $fieldId
+            INNER JOIN $fieldTable f ON f.id = v.field_id AND f.item_type = $itemType
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+            $whereUrl
+            AND v.field_value = '$val'
+            ORDER BY u.created_at ASC, u.id ASC
+        ";
+
+            $r2 = Database::query($sub);
+            if (!$r2 || Database::num_rows($r2) < 2) {
+                continue;
+            }
+
+            $users = Database::store_result($r2, 'ASSOC');
+            $keepId = (int) ($users[0]['id'] ?? 0);
+
+            foreach ($users as $u) {
+                $out[] = self::formatDuplicateUserRow($u, 'extra', $keepId, $additionalExtraFieldsInfo, $extraValueObj, $csrfToken);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Format a row for the duplicate users table.
+     */
+    private static function formatDuplicateUserRow(
+        array $u,
+        string $mode,
+        int $keepId,
+        array $additionalExtraFieldsInfo,
+        ExtraFieldValue $extraValueObj,
+        string $csrfToken
+    ): array {
+        $userId = (int) ($u['id'] ?? 0);
+        $active = (int) ($u['active'] ?? 0);
+        $status = (int) ($u['status'] ?? 0);
+
+        $first = (string) ($u['firstname'] ?? '');
+        $last  = (string) ($u['lastname'] ?? '');
+        $email = (string) ($u['email'] ?? '');
+        $createdAt = (string) ($u['created_at'] ?? '');
+
+        $createdAtLocal = $createdAt ? (string) api_get_local_time($createdAt) : '';
+        $firstLogin = Tracking::get_first_connection_date($userId, DATE_TIME_FORMAT_LONG) ?: '';
+        $lastLogin  = Tracking::get_last_connection_date($userId, true, false, DATE_TIME_FORMAT_LONG) ?: '';
+
+        $roleLabel = '';
+        $map = api_get_status_langvars();
+        if (is_array($map) && isset($map[$status])) {
+            $roleLabel = (string) $map[$status];
+        }
+
+        $coursesCount = (int) Tracking::count_course_per_student($userId);
+        $sessionsCount = (int) Tracking::countSessionsPerStudent($userId);
+
+        $isKeep = ($userId === $keepId && $keepId > 0);
+        $keepBadge = $isKeep
+            ? '<span class="ch-dups-keep-badge" title="This is the keep account. Unify the other accounts into this one.">KEEP</span> '
+            : '';
+
+        $idHtml = $keepBadge.Display::url(
+                (string) $userId,
+                api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+                [
+                    'class' => 'text-primary underline hover:text-primary/80',
+                    'target' => '_self',
+                    'rel' => 'noopener',
+                    'title' => 'Open user details',
+                ]
+            );
+
+        $row = [];
+        $row[] = $idHtml;
+
+        if ('email' === $mode) {
+            $row[] = $email;
+        }
+
+        if (api_is_western_name_order()) {
+            $row[] = $first;
+            $row[] = $last;
+        } else {
+            $row[] = $last;
+            $row[] = $first;
+        }
+
+        if ('name' === $mode || 'extra' === $mode) {
+            $row[] = $email;
+        }
+
+        $row[] = $createdAtLocal;
+        $row[] = $firstLogin;
+        $row[] = $lastLogin;
+        $row[] = $roleLabel;
+        $row[] = $coursesCount;
+        $row[] = $sessionsCount;
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $fid = (int) ($fieldInfo['id'] ?? 0);
+            if ($fid <= 0) {
+                $row[] = '';
+                continue;
+            }
+            $v = $extraValueObj->get_values_by_handler_and_field_id($userId, $fid, true);
+            $row[] = (string) ($v['field_value'] ?? ($v['value'] ?? ''));
+        }
+
+        $row[] = (1 === $active) ? get_lang('Active') : get_lang('Inactive');
+        $row[] = self::renderDuplicateUserActions($userId, $active, $keepId, $csrfToken);
+
+        return $row;
+    }
+
+    /**
+     * Render actions HTML for each row (Disable/Enable + Unify).
+     */
+    private static function renderDuplicateUserActions(int $userId, int $active, int $keepId, string $csrfToken): string
+    {
+        $base = api_get_self();
+        $paramsBase = $_GET;
+        $paramsBase['report'] = 'duplicated_users';
+
+        $sec = $csrfToken ?: Security::get_token();
+
+        $currentUserId = (int) api_get_user_id();
+        $isSelf = ($userId === $currentUserId);
+        $isKeep = ($userId === $keepId && $keepId > 0);
+
+        $btn = static function (
+            string $href,
+            string $label,
+            string $class,
+            string $confirm = '',
+            bool $disabled = false,
+            string $title = ''
+        ): string {
+            $h = htmlspecialchars($href, ENT_QUOTES, 'UTF-8');
+            $l = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+            $confirmAttr = '';
+            if ($confirm !== '') {
+                $c = htmlspecialchars($confirm, ENT_QUOTES, 'UTF-8');
+                $confirmAttr = ' onclick="return confirm(\''.$c.'\');"';
+            }
+
+            $titleAttr = $title !== ''
+                ? ' title="'.htmlspecialchars($title, ENT_QUOTES, 'UTF-8').'"'
+                : '';
+
+            if ($disabled) {
+                return '<a class="btn '.$class.' btn-disabled" href="#" aria-disabled="true"'.$titleAttr.'>'.$l.'</a>';
+            }
+
+            return '<a class="btn '.$class.'" href="'.$h.'"'.$confirmAttr.$titleAttr.'>'.$l.'</a>';
+        };
+
+        // Toggle active
+        $toggleParams = $paramsBase;
+        $toggleParams['dup_action'] = 'toggle_active';
+        $toggleParams['user_id'] = $userId;
+        $toggleParams['active'] = (1 === $active) ? 0 : 1;
+        $toggleParams['sec_token'] = $sec;
+
+        $toggleHref = $base.'?'.http_build_query($toggleParams);
+        $toggleLabel = (1 === $active) ? get_lang('Disable') : get_lang('Enable');
+        $toggleClass = (1 === $active) ? 'btn--danger' : 'btn--success';
+
+        $toggleConfirm = (1 === $active)
+            ? "Disable user #{$userId}?\\n\\nThis will prevent login but will not delete the account."
+            : "Enable user #{$userId}?\\n\\nThis will allow login again.";
+
+        $toggleTitle = $isSelf
+            ? 'You cannot change your own status from this screen.'
+            : 'Toggle login availability (does not delete the user).';
+
+        $toggleHtml = $btn($toggleHref, $toggleLabel, $toggleClass, $toggleConfirm, $isSelf, $toggleTitle);
+
+        // Unify
+        $unifyHtml = '';
+        if ($keepId > 0 && !$isKeep) {
+            $unifyParams = $paramsBase;
+            $unifyParams['dup_action'] = 'unify';
+            $unifyParams['keep_id'] = $keepId;
+            $unifyParams['merge_id'] = $userId;
+            $unifyParams['sec_token'] = $sec;
+
+            $unifyHref = $base.'?'.http_build_query($unifyParams);
+
+            $confirm = "Unify accounts?\\n\\nKeep: #{$keepId}\\nMerge: #{$userId}\\n\\nThis will move subscriptions and related data into the keep account.\\nThe merged account will be set to soft-deleted (active=-1) and will disappear from this report.\\n\\nYou can permanently delete the merged account later from the Users list.";
+
+            $unifyHtml = $btn($unifyHref, get_lang('Unify'), 'btn--plain', $confirm, false, 'Merge this account into the keep account.');
+        } else {
+            $title = ($keepId > 0 && $isKeep)
+                ? 'This is the keep account. Use Unify on the other rows in the same group.'
+                : 'Unify is not available for this row.';
+            // Make it explicit: show "Keep" instead of a confusing disabled Unify.
+            $unifyHtml = $btn('#', 'Keep', 'btn--plain', '', true, $title);
+        }
+
+        return '<div class="ch-dups-actions">'.$toggleHtml.$unifyHtml.'</div>';
+    }
+
+    /**
+     * Returns join/where snippets for multi-url filtering (when enabled).
+     */
+    private static function getAccessUrlJoinAndWhere(string $userAlias, string $urlAlias, string $urlRelTable): array
+    {
+        $accessUrlUtil = Container::getAccessUrlUtil();
+
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
+            $urlId = (int) $accessUrl->getId();
+
+            $join = " INNER JOIN $urlRelTable $urlAlias ON $urlAlias.user_id = $userAlias.id ";
+            $where = " AND $urlAlias.access_url_id = $urlId ";
+
+            return [$join, $where];
+        }
+
+        return ['', ''];
     }
 }

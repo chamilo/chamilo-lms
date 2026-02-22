@@ -8261,4 +8261,16 @@ class Tracking
         }
         return 0;
     }
+    public static function countSessionsPerStudent(int $userId): int
+    {
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = 'SELECT DISTINCT id
+            FROM '.$tblSessionUser.'
+            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
+
+        $rs = Database::query($sql);
+
+        return Database::num_rows($rs);
+    }
 }

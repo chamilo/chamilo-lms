@@ -164,7 +164,7 @@ function get_count_courses()
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             if (empty($sessionId)) {
-                $count = SessionManager::getAllCoursesFollowedByUser(
+                $countFromSessions = SessionManager::getAllCoursesFollowedByUser(
                     $userId,
                     null,
                     null,
@@ -174,6 +174,19 @@ function get_count_courses()
                     true,
                     $keyword
                 );
+                $countDirectCourses = CourseManager::getCoursesFollowedByUser(
+                    $userId,
+                    DRH,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true,
+                    null,
+                    0
+                );
+
+                $count = $countFromSessions + $countDirectCourses;
             } else {
                 $count = SessionManager::getCourseCountBySessionId(
                     $sessionId,
@@ -228,16 +241,55 @@ function get_courses($from, $limit, $column, $direction)
     $drhLoaded = false;
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
-            $courses = SessionManager::getAllCoursesFollowedByUser(
-                $userId,
-                $sessionId,
-                $from,
-                $limit,
-                $column,
-                $direction,
-                false,
-                $keyword
-            );
+            if (empty($sessionId)) {
+                $coursesFromSessions = SessionManager::getAllCoursesFollowedByUser(
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    $column,
+                    $direction,
+                    false,
+                    $keyword
+                );
+
+                $directCourses = CourseManager::getCoursesFollowedByUser(
+                    $userId,
+                    DRH,
+                    null,
+                    null,
+                    $column,
+                    $direction,
+                    false,
+                    null,
+                    0
+                );
+
+                $courses = $coursesFromSessions;
+                if (!empty($directCourses)) {
+                    foreach ($directCourses as $course) {
+                        $courseId = isset($course['real_id']) ? $course['real_id'] : $course['id'];
+                        if (!isset($courses[$courseId])) {
+                            $courses[$courseId] = $course;
+                        }
+                    }
+                }
+
+                if (!empty($courses)) {
+                    $courses = array_slice($courses, (int) $from, (int) $limit, true);
+                }
+            } else {
+                $courses = SessionManager::getAllCoursesFollowedByUser(
+                    $userId,
+                    $sessionId,
+                    $from,
+                    $limit,
+                    $column,
+                    $direction,
+                    false,
+                    $keyword
+                );
+            }
             $drhLoaded = true;
         }
     }

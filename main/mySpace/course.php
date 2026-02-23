@@ -164,29 +164,40 @@ function get_count_courses()
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             if (empty($sessionId)) {
-                $countFromSessions = SessionManager::getAllCoursesFollowedByUser(
+                // Fetch full rows from both sources so we can deduplicate before
+                // counting, ensuring the count matches exactly what get_courses()
+                // will display (a simple addition of two COUNT()s would double-count
+                // courses assigned to the DRH both directly and through a session).
+                $coursesFromSessions = SessionManager::getAllCoursesFollowedByUser(
                     $userId,
                     null,
                     null,
                     null,
                     null,
                     null,
-                    true,
+                    false,
                     $keyword
                 );
-                $countDirectCourses = CourseManager::getCoursesFollowedByUser(
+                $directCourses = CourseManager::getCoursesFollowedByUser(
                     $userId,
                     DRH,
                     null,
                     null,
                     null,
                     null,
-                    true,
-                    null,
+                    false,
+                    $keyword,
                     0
                 );
 
-                $count = $countFromSessions + $countDirectCourses;
+                $merged = $coursesFromSessions;
+                foreach ($directCourses as $course) {
+                    $courseId = isset($course['real_id']) ? $course['real_id'] : $course['id'];
+                    if (!isset($merged[$courseId])) {
+                        $merged[$courseId] = $course;
+                    }
+                }
+                $count = count($merged);
             } else {
                 $count = SessionManager::getCourseCountBySessionId(
                     $sessionId,
@@ -261,7 +272,7 @@ function get_courses($from, $limit, $column, $direction)
                     $column,
                     $direction,
                     false,
-                    null,
+                    $keyword,
                     0
                 );
 

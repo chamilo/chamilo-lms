@@ -195,7 +195,7 @@ $controller->tpl->assign('navigation_links', $controller->return_navigation_link
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('help_block', $controller->return_help());
 $controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
-if (!api_is_anonymous() && !api_user_is_login()) {
+if (!api_is_anonymous() && api_user_is_login()) {
     $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 }
 

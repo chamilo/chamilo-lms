@@ -324,24 +324,42 @@ function LMSInitialize() {
             olmsPreloadedItemId = undefined; // clear so subsequent items use AJAX
             $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
         } else {
-            // Subsequent items (after navigation): fetch initialization data from server.
-            var params = {
-                'lid': olms.lms_lp_id,
-                'uid': olms.lms_user_id,
-                'vid': olms.lms_view_id,
-                'iid': olms.lms_item_id
-            };
+            // Subsequent items (after navigation): use pre-fetched data if
+            // switch_item() had time to complete the fetch, otherwise fall
+            // back to synchronous AJAX (should be extremely rare in practice).
+            var nextItemId = parseInt(olms.lms_item_id, 10);
+            var cached = olmsInitDataCache[nextItemId];
 
-            $.ajax({
-                type: "POST",
-                url: "lp_ajax_initialize.php" + courseUrl,
-                data: params,
-                dataType: 'script',
-                async: false,
-                success:function(data) {
-                    $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+            if (cached && cached.resolved) {
+                logit_scorm('LMSInitialize() using pre-fetched data for item ' + nextItemId);
+                $.globalEval(cached.script);
+                delete olmsInitDataCache[nextItemId];
+                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+            } else {
+                // Pre-fetch either hasn't resolved yet or failed. This is the
+                // rare fallback path (sync AJAX, still deprecated but harmless
+                // as a safety net until pre-fetch covers all cases reliably).
+                if (cached) {
+                    logit_scorm('LMSInitialize() pre-fetch not ready for item ' + nextItemId + ', using sync AJAX fallback', 1);
+                    delete olmsInitDataCache[nextItemId];
                 }
-            });
+                var params = {
+                    'lid': olms.lms_lp_id,
+                    'uid': olms.lms_user_id,
+                    'vid': olms.lms_view_id,
+                    'iid': olms.lms_item_id
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "lp_ajax_initialize.php" + courseUrl,
+                    data: params,
+                    dataType: 'script',
+                    async: false,
+                    success: function(data) {
+                        $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                    }
+                });
+            }
         }
 
         olms.lms_initialized = 1;
@@ -1523,6 +1541,61 @@ function reinit_updatable_vars_list() {
 }
 
 /**
+ * Cache for pre-fetched item initialization data, keyed by numeric item ID.
+ * Each entry: {resolved: bool, script: string|null, failed: bool}
+ */
+var olmsInitDataCache = {};
+
+/**
+ * Start an async fetch of initialization data for the given item ID.
+ * Called from switch_item() as soon as the target item ID is known, so the
+ * data is ready (or very nearly so) by the time LMSInitialize() fires after
+ * the new content loads in the iframe.
+ * Falls back gracefully: if this fetch fails or hasn't resolved by the time
+ * LMSInitialize() is called, a synchronous AJAX call is used instead.
+ */
+function prefetchInitData(itemId) {
+    itemId = parseInt(itemId, 10);
+    if (!itemId || olmsInitDataCache[itemId]) {
+        return; // invalid ID, or already fetching/fetched for this item
+    }
+
+    var entry = {resolved: false, script: null, failed: false};
+    var body = 'lid=' + encodeURIComponent(olms.lms_lp_id) +
+               '&uid=' + encodeURIComponent(olms.lms_user_id) +
+               '&vid=' + encodeURIComponent(olms.lms_view_id) +
+               '&iid=' + encodeURIComponent(itemId);
+
+    if (typeof fetch === 'function') {
+        fetch('lp_ajax_initialize.php' + courseUrl, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: body
+        })
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            return response.text();
+        })
+        .then(function(script) {
+            entry.script = script;
+            entry.resolved = true;
+        })
+        .catch(function(err) {
+            entry.failed = true;
+            logit_lms('prefetchInitData() failed for item ' + itemId + ': ' + err, 1);
+        });
+    } else {
+        // fetch() not available (IE11); mark as failed so LMSInitialize()
+        // uses its synchronous AJAX fallback.
+        entry.failed = true;
+    }
+
+    olmsInitDataCache[itemId] = entry;
+}
+
+/**
  * Function that handles the saving of an item and switching from an item to another.
  * Once called, this function should be able to do the whole process of
  * (1) saving the current item,
@@ -1727,6 +1800,11 @@ function switch_item(current_item, next_item)
         default:
             break;
     }
+
+    // Start fetching init data for the next item now, in parallel with the
+    // iframe loading its content. By the time the SCO calls LMSInitialize(),
+    // the data will almost certainly already be available.
+    prefetchInitData(next_item);
 
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code + '&id_session=' + olms.lms_session_id;

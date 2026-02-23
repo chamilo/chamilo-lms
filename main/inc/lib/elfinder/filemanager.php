@@ -18,8 +18,10 @@ if (file_exists($file)) {
     $language = $iso;
 }
 $questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : 0;
+$sessionId = api_get_session_id();
 
 $template->assign('question_id', $questionId);
+$template->assign('session_id', $sessionId);
 $template->assign('elfinder_lang', $language);
 $template->assign('elfinder_translation_file', $includeFile);
 $template->display('default/javascript/editor/ckeditor/elfinder.tpl');

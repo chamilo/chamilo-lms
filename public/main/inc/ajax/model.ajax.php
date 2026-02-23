@@ -2665,8 +2665,8 @@ switch ($action) {
                 )) {
                     $actions = [
                         [
-                            'icon' => Display::getMdiIcon(ObjectIcon::USER_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
-                            'url' => 'overview?usergroup='.$group['id'].'&course='.$course_id,
+                            'icon' => Display::getMdiIcon(ActionIcon::VIEW_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
+                            'url' => api_get_path(WEB_PATH).'user/usergroup_overview?usergroup='.$group['id'].'&course='.$course_id,
                         ],
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),

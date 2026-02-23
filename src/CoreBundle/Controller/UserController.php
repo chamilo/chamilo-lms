@@ -23,7 +23,7 @@ use UserGroupModel;
 class UserController extends AbstractController
 {
     // #[Route(path: '/overview', name: 'overview_class', methods: ['GET'])]
-    #[Route(path: '/main/overview', name: 'overview_class', methods: ['GET'])]
+    #[Route(path: '/usergroup_overview', name: 'overview_class', methods: ['GET'])]
     public function overview(Request $request): Response
     {
         $usergroupId = $request->query->get('usergroup');
@@ -37,7 +37,7 @@ class UserController extends AbstractController
 
         $data = $usergroupLib->getUsersInAndOutOfCourse($usergroupId, $courseId);
 
-        return $this->render('@ChamiloCore/User/overview.html.twig', [
+        return $this->render('@ChamiloCore/User/usergroup_overview.html.twig', [
             'courseId' => $courseId,
             'courseName' => $courseName,
             'usergroupName' => $usergroup['title'],

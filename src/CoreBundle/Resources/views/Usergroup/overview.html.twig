@@ -9,23 +9,6 @@
         {%- block content %}
 
             <div>
-                <div class="app-breadcrumb">
-                    <nav class="p-breadcrumb p-component">
-                        <ol class="p-breadcrumb-list">
-                            <li class="p-menuitem">
-                                <a href="/main/admin/usergroups.php" class="p-menuitem-link">Classes</a>
-                            </li>
-                            /
-                            <li class="p-menuitem">
-                                {{ usergroupName }}
-                            </li>
-                            /
-                            <li class="p-menuitem">
-                                Overview
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
                 <a href="/main/admin/usergroups.php"
                    title="{{ 'Go back to the list of classes'|trans }}">
                     <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
@@ -49,9 +32,13 @@
 
             {% if (usersSubscribedToUsergroup|length + coursesSubscribedToUsergroup|length) > 0 %}
                 <div style="display: flex; margin: 20px 0;">
-                    <input style="height: 32px; width: 20vw" id="search-input" type="text"
+                    <input style="height: 32px; width: 20vw;" id="search-input" type="text"
                            placeholder="{{ 'Search'|trans }}">
-                    <i class="ch-tool-icon mdi mdi-text-search" style="font-size: 32px"></i>
+                    <span class="ch-tool-icon mdi mdi-text-search" style="font-size: 32px; color:grey"></span>
+                    <a href="javascript:void(0)" onclick="$('#search-input').val('');filterData('');">
+                        <span class="ch-tool-icon mdi mdi-close-box-outline" style="font-size: 32px">
+                        </span>
+                    </a>
                 </div>
             {% endif %}
 
@@ -82,15 +69,17 @@
     </section>
 
     <script>
-      document.getElementById("search-input").addEventListener("input", function(e) {
-        const searchTerm = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        const users = document.querySelectorAll(".user-display")
+        function filterData(e)
+        {
+            const searchTerm = e.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            const users = document.querySelectorAll(".user-display")
 
-        users.forEach(user => {
-          const text = user.textContent.split("(")[0].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-          user.style.display = text.includes(searchTerm) ? "" : "none"
-        })
-      })
+            users.forEach(user => {
+                const text = user.textContent.split("(")[0].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                user.style.display = text.includes(searchTerm) ? "" : "none"
+            })
+        }
+        document.getElementById("search-input").addEventListener("input", function(e) { filterData(e.target.value); } );
     </script>
 
 {% endblock %}

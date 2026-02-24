@@ -2386,13 +2386,17 @@ class learnpathItem
                                                     /** @var learnpathItem $myItemToCheck */
                                                     $myItemToCheck = $items[$refs_list[$this->get_id()]];
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
-                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+                                                    if (empty($minScore)) {
+                                                        // Try with mastery_score
+                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
+                                                        if (!empty($masteryScoreAsMin)) {
+                                                            $minScore = $masteryScoreAsMin;
+                                                        }
+                                                    }
 
-                                                    if (isset($minScore) && isset($minScore)) {
+                                                    if (!empty($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
-                                                        ) {
+                                                        if ($quiz['exe_result'] >= $minScore) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $explanation = sprintf(
@@ -2440,7 +2444,6 @@ class learnpathItem
                                                     /** @var learnpathItem $myItemToCheck */
                                                     $myItemToCheck = $items[$refs_list[$this->get_id()]];
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
-                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
                                                     if (empty($minScore)) {
                                                         // Try with mastery_score
@@ -2449,11 +2452,9 @@ class learnpathItem
                                                             $minScore = $masteryScoreAsMin;
                                                         }
                                                     }
-                                                    if (isset($minScore) && isset($minScore)) {
+                                                    if (!empty($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore &&
-                                                            $quiz['exe_result'] <= $maxScore
-                                                        ) {
+                                                        if ($quiz['exe_result'] >= $minScore) {
                                                             $returnstatus = true;
                                                             break;
                                                         } else {

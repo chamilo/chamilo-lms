@@ -8,6 +8,7 @@ use Chamilo\PluginBundle\XApi\Lrs\Util\InternalLogUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
+use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
@@ -28,6 +29,48 @@ use XApiPlugin;
  */
 class StatementsController extends BaseController
 {
+    public function get(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
+
+        $getStatementController = new StatementGetController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $getStatementController->getStatement($this->httpRequest);
+    }
+
+    public function head(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
+
+        $headStatementController = new StatementHeadController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $headStatementController->getStatement($this->httpRequest);
+    }
+
     /**
      * @var StatementRepository
      */
@@ -104,28 +147,39 @@ class StatementsController extends BaseController
 
     public function post(): Response
     {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $postStatementController = new StatementPostController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            )
+        );
+
         $content = $this->httpRequest->getContent();
 
         if (substr($content, 0, 1) !== '[') {
             $content = "[$content]";
         }
 
-        $statements = $this->serializerFactory
-            ->createStatementSerializer()
-            ->deserializeStatements($content)
-        ;
+        $statements = $this->deserializeStatements($content);
 
-        $postStatementController = new StatementPostController($this->statementRepository);
-
-        $response = $postStatementController->postStatements($this->httpRequest, $statements);
-
-        $this->saveLog(
-            json_decode($response->getContent(), false)
-        );
-
-        return $response;
+        return $postStatementController->postStatements($this->httpRequest, $statements);
     }
 
+    private function deserializeStatement(string $content = ''): Statement
+    {
+        $factory = new SerializerFactory(Serializer::createSerializer());
+
+        return $factory->createStatementSerializer()->deserializeStatement($content);
+    }
+
+    private function deserializeStatements(string $content = ''): array
+    {
+        $factory = new SerializerFactory(Serializer::createSerializer());
+
+        return $factory->createStatementSerializer()->deserializeStatements($content);
+    }
+  
     /**
      * @param array<string> $statementsId
      *

@@ -2396,6 +2396,7 @@ class learnpathItem
                                                 if (!empty($minScore)) {
                                                     // Taking min/max prerequisites values see BT#5776
                                                     if ($quiz['exe_result'] >= $minScore) {
+                                                        $this->prereq_alert = '';
                                                         $returnstatus = true;
                                                     } else {
                                                         $explanation = sprintf(
@@ -2410,6 +2411,7 @@ class learnpathItem
                                                     if ($quiz['exe_result'] >=
                                                         $items[$refs_list[$prereqs_string]]->get_mastery_score()
                                                     ) {
+                                                        $this->prereq_alert = '';
                                                         $returnstatus = true;
                                                     } else {
                                                         $explanation = sprintf(

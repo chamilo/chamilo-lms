@@ -32583,3 +32583,165 @@ msgstr "หากคุณไม่ได้ลงทะเบียนบัญ
 msgid "Current authentication method"
 msgstr "วิธีการรับรองตัวตนปัจจุบัน"
 
+msgid "Branches"
+msgstr "สาขา"
+
+msgid "Rooms"
+msgstr "ห้อง"
+
+msgid "Room availability finder"
+msgstr "เครื่องมือค้นหาความพร้อมใช้งานห้อง"
+
+msgid "New branch"
+msgstr "สาขาใหม่"
+
+msgid "New room"
+msgstr "ห้องใหม่"
+
+msgid "Branch"
+msgstr "สาขา"
+
+msgid "Default room"
+msgstr "ห้องเริ่มต้น"
+
+msgid "Room occupation: %s"
+msgstr "การใช้งานห้อง: %s"
+
+msgid "Find available rooms"
+msgstr "ค้นหาห้องที่ว่าง"
+
+msgid "Available rooms"
+msgstr "ห้องที่ว่าง"
+
+msgid "Occupied rooms"
+msgstr "ห้องที่ใช้งานอยู่"
+
+msgid "No available rooms found for this time range"
+msgstr "ไม่พบห้องว่างในช่วงเวลานี้"
+
+msgid "No rooms have been created yet"
+msgstr "ยังไม่มีการสร้างห้อง"
+
+msgid "Courses linked to %s"
+msgstr "คอร์สที่เชื่อมโยงกับ %s"
+
+msgid "No branches have been created yet"
+msgstr "ยังไม่มีการสร้างสาขา"
+
+msgid "Occupation"
+msgstr "การใช้งาน"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "ไม่สามารถลบสาขาที่มีห้องเชื่อมโยง"
+
+msgid "Cannot delete room with courses attached"
+msgstr "ไม่สามารถลบห้องที่มีคอร์สเชื่อมโยง"
+
+msgid "Conflicts"
+msgstr "ความขัดแย้ง"
+
+msgid "Geolocation"
+msgstr "Geolocation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "ละติจูด, ลองจิจูด (เช่น 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 หรือ IPv6"
+
+msgid "IP mask"
+msgstr "IP mask"
+
+msgid "e.g. /24"
+msgstr "เช่น /24"
+
+msgid "Parent branch"
+msgstr "สาขาแม่"
+
+msgid "Unique identifier"
+msgstr "รหัสระบุเฉพาะ"
+
+msgid "Latitude"
+msgstr "ละติจูด"
+
+msgid "e.g. 48.8566"
+msgstr "เช่น 48.8566"
+
+msgid "Longitude"
+msgstr "ลองจิจูด"
+
+msgid "e.g. 2.3522"
+msgstr "เช่น 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "ความเร็วในการดาวน์โหลด (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "ความเร็วในการอัปโหลด (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "ความล่าช้า (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "ชื่อผู้ดูแลระบบ"
+
+msgid "Administrator phone number"
+msgstr "หมายเลขโทรศัพท์ผู้ดูแลระบบ"
+
+msgid "ID of last synch transaction"
+msgstr "ID ของธุรกรรมซิงค์ล่าสุด"
+
+msgid "Time of last synchronization"
+msgstr "เวลาของการซิงโครไนซ์ล่าสุด"
+
+msgid "Last synchronization type"
+msgstr "ประเภทการซิงโครไนซ์ล่าสุด"
+
+msgid "SSL public key"
+msgstr "กุญแจสาธารณะ SSL"
+
+msgid "Branch type"
+msgstr "ประเภทสาขา"
+
+msgid "Room"
+msgstr "ห้อง"
+
+msgid "Simple IDS"
+msgstr "IDS ง่าย"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS ปัจจุบันถูกปิดใช้งาน ตั้งค่า IDS_ENABLED=true ในไฟล์ .env เพื่อเปิดใช้งานการสแกน"
+
+msgid "All event types"
+msgstr "ทุกรูปแบบเหตุการณ์"
+
+msgid "Events by day (last 7 days)"
+msgstr "เหตุการณ์ตามวัน (7 วันล่าสุด)"
+
+msgid "Events by type (last 30 days)"
+msgstr "เหตุการณ์ตามประเภท (30 วันล่าสุด)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP ที่โจมตีมากที่สุด (30 วันล่าสุด)"
+
+msgid "Flagged IDS events"
+msgstr "เหตุการณ์ IDS ที่ถูกทำเครื่องหมาย"
+
+msgid "No suspicious events detected."
+msgstr "ไม่พบเหตุการณ์น่าสงสัย"
+
+msgid "Detection type"
+msgstr "ประเภทการตรวจจับ"
+
+msgid "Parameter"
+msgstr "พารามิเตอร์"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (ปัจจุบัน)"
+

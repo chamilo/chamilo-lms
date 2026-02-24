@@ -101,6 +101,9 @@ module.exports = {
         caption: ["13px", "16px"],
         tiny: ["11px", "16px"],
       },
+      boxShadow: {
+        xl: "0 4px 12px 0 rgb(0, 0, 0, 0.2)",
+      },
     },
   },
   corePlugins: {

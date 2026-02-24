@@ -32647,3 +32647,165 @@ msgstr "このアカウントを登録していない場合は、このメール
 msgid "Current authentication method"
 msgstr "現在の認証方法"
 
+msgid "Branches"
+msgstr "支部"
+
+msgid "Rooms"
+msgstr "部屋"
+
+msgid "Room availability finder"
+msgstr "部屋の空き状況検索"
+
+msgid "New branch"
+msgstr "新規支部"
+
+msgid "New room"
+msgstr "新規部屋"
+
+msgid "Branch"
+msgstr "支部"
+
+msgid "Default room"
+msgstr "デフォルト部屋"
+
+msgid "Room occupation: %s"
+msgstr "部屋の使用状況: %s"
+
+msgid "Find available rooms"
+msgstr "空いている部屋を検索"
+
+msgid "Available rooms"
+msgstr "空いている部屋"
+
+msgid "Occupied rooms"
+msgstr "使用中の部屋"
+
+msgid "No available rooms found for this time range"
+msgstr "この時間帯に空いている部屋が見つかりません"
+
+msgid "No rooms have been created yet"
+msgstr "まだ部屋が作成されていません"
+
+msgid "Courses linked to %s"
+msgstr "%s にリンクされたコース"
+
+msgid "No branches have been created yet"
+msgstr "まだ支部が作成されていません"
+
+msgid "Occupation"
+msgstr "使用状況"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "部屋が関連付けられた支部は削除できません"
+
+msgid "Cannot delete room with courses attached"
+msgstr "コースが関連付けられた部屋は削除できません"
+
+msgid "Conflicts"
+msgstr "競合"
+
+msgid "Geolocation"
+msgstr "位置情報"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "緯度、経度 (例: 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 または IPv6"
+
+msgid "IP mask"
+msgstr "IP マスク"
+
+msgid "e.g. /24"
+msgstr "例: /24"
+
+msgid "Parent branch"
+msgstr "親支部"
+
+msgid "Unique identifier"
+msgstr "一意の識別子"
+
+msgid "Latitude"
+msgstr "緯度"
+
+msgid "e.g. 48.8566"
+msgstr "例: 48.8566"
+
+msgid "Longitude"
+msgstr "経度"
+
+msgid "e.g. 2.3522"
+msgstr "例: 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "ダウンロード速度 (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "アップロード速度 (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "遅延 (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "管理者名"
+
+msgid "Administrator phone number"
+msgstr "管理者の電話番号"
+
+msgid "ID of last synch transaction"
+msgstr "最終同期トランザクションのID"
+
+msgid "Time of last synchronization"
+msgstr "最終同期時刻"
+
+msgid "Last synchronization type"
+msgstr "最終同期タイプ"
+
+msgid "SSL public key"
+msgstr "SSL公開鍵"
+
+msgid "Branch type"
+msgstr "ブランチタイプ"
+
+msgid "Room"
+msgstr "部屋"
+
+msgid "Simple IDS"
+msgstr "シンプルIDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDSは現在無効です。.envでIDS_ENABLED=trueに設定してスキャンを有効にしてください。"
+
+msgid "All event types"
+msgstr "すべてのイベントタイプ"
+
+msgid "Events by day (last 7 days)"
+msgstr "日別イベント (過去7日間)"
+
+msgid "Events by type (last 30 days)"
+msgstr "タイプ別イベント (過去30日間)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "上位攻撃IP (過去30日間)"
+
+msgid "Flagged IDS events"
+msgstr "フラグ付きIDSイベント"
+
+msgid "No suspicious events detected."
+msgstr "不審なイベントは検出されませんでした。"
+
+msgid "Detection type"
+msgstr "検出タイプ"
+
+msgid "Parameter"
+msgstr "パラメータ"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (現在)"
+

@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifoldara,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -32576,4 +32576,166 @@ msgstr "Ukuba awubhalanga le akhawunti, ungayityeshela le imeyile. Akukho nto iy
 
 msgid "Current authentication method"
 msgstr "Indlela yangoku yokuqinisekisa ubuni"
+
+msgid "Branches"
+msgstr "Amaqanda"
+
+msgid "Rooms"
+msgstr "Amagumbi"
+
+msgid "Room availability finder"
+msgstr "Umfuni wokufumaneka kwamagumbi"
+
+msgid "New branch"
+msgstr "Iqanda elitsha"
+
+msgid "New room"
+msgstr "Igumbi elitsha"
+
+msgid "Branch"
+msgstr "Iqanda"
+
+msgid "Default room"
+msgstr "Igumbi elingcamango"
+
+msgid "Room occupation: %s"
+msgstr "Ukusebenziseka kwegumbi: %s"
+
+msgid "Find available rooms"
+msgstr "Fumana amagumbi akhoyo"
+
+msgid "Available rooms"
+msgstr "Amagumbi akhoyo"
+
+msgid "Occupied rooms"
+msgstr "Amagumbi axakekileyo"
+
+msgid "No available rooms found for this time range"
+msgstr "Akukho magumbi afumanekayo okuhlelo lwe xesha"
+
+msgid "No rooms have been created yet"
+msgstr "Akukho magumbi adalwe okwangoku"
+
+msgid "Courses linked to %s"
+msgstr "Izifundo ezinxulumene no %s"
+
+msgid "No branches have been created yet"
+msgstr "Akukho sebe ladalwe okwangoku"
+
+msgid "Occupation"
+msgstr "Ukuxakeka"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ayinakuvalwa isebe elinama gumbi ancamathelayo"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ayinakuvalwa igumbi elinezifundo ezincamathelayo"
+
+msgid "Conflicts"
+msgstr "Iingquzulwano"
+
+msgid "Geolocation"
+msgstr "Indawo yemo"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Ububanzi, Ubude (umz. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 okanye IPv6"
+
+msgid "IP mask"
+msgstr "Imaski ye-IP"
+
+msgid "e.g. /24"
+msgstr "umz. /24"
+
+msgid "Parent branch"
+msgstr "Isebe likamzali"
+
+msgid "Unique identifier"
+msgstr "Isazisi esiyodwa"
+
+msgid "Latitude"
+msgstr "Ububanzi"
+
+msgid "e.g. 48.8566"
+msgstr "umz. 48.8566"
+
+msgid "Longitude"
+msgstr "Ubude"
+
+msgid "e.g. 2.3522"
+msgstr "umz. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Isantya sokukhuphela (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Isantya sokulayisha (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Ukuc engiselwa (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Igama lomlawuli"
+
+msgid "Administrator phone number"
+msgstr "Inombolo yefowuni yomlawuli"
+
+msgid "ID of last synch transaction"
+msgstr "ID yentengiselwano yokugqibela yokuvavanya"
+
+msgid "Time of last synchronization"
+msgstr "Ixesha lokugqibela lokuvavanya"
+
+msgid "Last synchronization type"
+msgstr "Uhlobo lokugqibela lokuvavanya"
+
+msgid "SSL public key"
+msgstr "Isitshixo esiyi-SSL esasese"
+
+msgid "Branch type"
+msgstr "Uhlobo lwesebe"
+
+msgid "Room"
+msgstr "Igumbi"
+
+msgid "Simple IDS"
+msgstr "I-IDS elula"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "I-IDS ikhululekile ngoku. Misela IDS_ENABLED=true kwifayile yakho .env ukuze uvule ukuhlolisisa."
+
+msgid "All event types"
+msgstr " zonke iintlobo zevents"
+
+msgid "Events by day (last 7 days)"
+msgstr "Izehlo ngosuku (iintsuku ezili-7 ezidlulileyo)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Izehlo ngohlobo (iintsuku ezili-30 ezidlulileyo)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Ezinye ezona IP zihlaselayo (iintsuku 30 ezidlulileyo)"
+
+msgid "Flagged IDS events"
+msgstr "Izehlo ze-IDS ezibekiweyo"
+
+msgid "No suspicious events detected."
+msgstr "Akukho zehlo likhuseleko olufunyanwayo."
+
+msgid "Detection type"
+msgstr "Uhlobo lokubona"
+
+msgid "Parameter"
+msgstr "Ipamitha"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (ngoku)"
 

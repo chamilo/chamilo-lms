@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -38,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['message_tag:write'],
     ],
+    paginationClientEnabled: true,
     security: 'is_granted("ROLE_USER") or object.user == user'
 )]
 #[UniqueEntity(
@@ -50,7 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MessageTagRepository::class)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
-    properties: ['user' => 'exact', 'tag' => 'word_start']
+    properties: ['tag' => 'word_start']
 )]
 class MessageTag
 {

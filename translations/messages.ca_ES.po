@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mostra de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -32594,5 +32594,167 @@ msgid "If you did not register this account, you can ignore this e-mail. No acti
 msgstr "Si no has registrat aquest compte, pots ignorar aquest correu electrònic. No es prendrà cap acció."
 
 msgid "Current authentication method"
-msgstr ""
+msgstr "Mètode d'autenticació actual"
+
+msgid "Branches"
+msgstr "Delegacions"
+
+msgid "Rooms"
+msgstr "Aules"
+
+msgid "Room availability finder"
+msgstr "Buscador de disponibilitat d'aules"
+
+msgid "New branch"
+msgstr "Nova delegació"
+
+msgid "New room"
+msgstr "Nova aula"
+
+msgid "Branch"
+msgstr "Delegació"
+
+msgid "Default room"
+msgstr "Aula per defecte"
+
+msgid "Room occupation: %s"
+msgstr "Ocupació de l'aula: %s"
+
+msgid "Find available rooms"
+msgstr "Troba aules disponibles"
+
+msgid "Available rooms"
+msgstr "Aules disponibles"
+
+msgid "Occupied rooms"
+msgstr "Aules ocupades"
+
+msgid "No available rooms found for this time range"
+msgstr "No s'ha trobat cap aula disponible per a aquest interval de temps"
+
+msgid "No rooms have been created yet"
+msgstr "Encara no s'ha creat cap aula"
+
+msgid "Courses linked to %s"
+msgstr "Cursos vinculats a %s"
+
+msgid "No branches have been created yet"
+msgstr "Encara no s'ha creat cap delegació"
+
+msgid "Occupation"
+msgstr "Ocupació"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "No es pot eliminar la delegació amb aules associades"
+
+msgid "Cannot delete room with courses attached"
+msgstr "No es pot eliminar l'aula amb cursos associats"
+
+msgid "Conflicts"
+msgstr "Conflictes"
+
+msgid "Geolocation"
+msgstr "Geolocalització"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitud, Longitud (p. ex. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 o IPv6"
+
+msgid "IP mask"
+msgstr "Màscara IP"
+
+msgid "e.g. /24"
+msgstr "p. ex. /24"
+
+msgid "Parent branch"
+msgstr "Delegació pare"
+
+msgid "Unique identifier"
+msgstr "Identificador únic"
+
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "e.g. 48.8566"
+msgstr "p. ex. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitud"
+
+msgid "e.g. 2.3522"
+msgstr "p. ex. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Velocitat de baixada (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Velocitat de pujada (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Retard (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nom de l'administrador"
+
+msgid "Administrator phone number"
+msgstr "Número de telèfon de l'administrador"
+
+msgid "ID of last synch transaction"
+msgstr "ID de l'última transació de sincronització"
+
+msgid "Time of last synchronization"
+msgstr "Hora de l'última sincronització"
+
+msgid "Last synchronization type"
+msgstr "Tipus d'última sincronització"
+
+msgid "SSL public key"
+msgstr "Clau pública SSL"
+
+msgid "Branch type"
+msgstr "Tipus de branca"
+
+msgid "Room"
+msgstr "Sala"
+
+msgid "Simple IDS"
+msgstr "IDS simple"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS està desactivat actualment. Definiu IDS_ENABLED=true al vostre .env per activar l'escanejament."
+
+msgid "All event types"
+msgstr "Tots els tipus d'esdeveniments"
+
+msgid "Events by day (last 7 days)"
+msgstr "Esdeveniments per dia (últims 7 dies)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Esdeveniments per tipus (últims 30 dies)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Principals IP d'atac (últims 30 dies)"
+
+msgid "Flagged IDS events"
+msgstr "Esdeveniments IDS marcats"
+
+msgid "No suspicious events detected."
+msgstr "No s'ha detectat cap esdeveniment sospitós."
+
+msgid "Detection type"
+msgstr "Tipus de detecció"
+
+msgid "Parameter"
+msgstr "Paràmetre"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (actual)"
 

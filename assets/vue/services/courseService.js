@@ -120,16 +120,6 @@ export default {
   },
 
   /**
-   * Fetches available categories for courses.
-   * @returns {Promise<Array>} A list of available categories.
-   */
-  getCategories: async () => {
-    const response = await api.get(`/course/categories`)
-
-    return response.data
-  },
-
-  /**
    * Searches for templates based on a provided search term.
    * @param {string} searchTerm - The search term for the templates.
    * @returns {Promise<Array>} A list of templates matching the search term.
@@ -195,15 +185,6 @@ export default {
       console.error("Error fetching auto-launch LP ID:", error)
       return null
     }
-  },
-
-  /**
-   * Loads public catalogue courses filtered by access_url and usergroup rules.
-   * @returns {Promise<{items: Array}>}
-   */
-  listCatalogueCourses: async () => {
-    const response = await api.get("/catalogue/courses-list")
-    return response.data
   },
 
   /**
@@ -318,4 +299,12 @@ export default {
     })
     return data
   },
+}
+
+export async function getStickyCourses() {
+  const { items } = await baseService.getCollection("/api/sticky_courses", {
+    pagination: false,
+  })
+
+  return items
 }

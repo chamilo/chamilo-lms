@@ -8,13 +8,17 @@ import { calendarLocales } from "../../utils/calendarLocales"
 import { useLocale } from "../../composables/locale"
 import { usePrimeVue } from "primevue/config"
 import { useI18n } from "vue-i18n"
+import BaseButton from "./BaseButton.vue"
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
-const timepicketIncrement = Number(platformConfigStore.getSetting("platform.timepicker_increment"))
+/**
+ * @type {Number}
+ */
+const timepicketIncrement = platformConfigStore.getSetting("platform.timepicker_increment")
 
 const modelValue = defineModel({
-  type: [Date, Array, String, undefined, null],
+  type: [Date, Array, String, null],
   required: false,
   default: null,
 })
@@ -73,8 +77,8 @@ function getLocalePrefix(locale) {
   return typeof locale === "string" ? locale.split("_")[0] : defaultLang
 }
 
-function getDateFormat(locale) {
-  switch (locale) {
+const dateFormat = computed(() => {
+  switch (localePrefix.value) {
     case "en":
       return "mm/dd/yy"
     case "fr":
@@ -86,10 +90,6 @@ function getDateFormat(locale) {
     default:
       return "dd/mm/yy"
   }
-}
-
-const dateFormat = computed(() => {
-  return getDateFormat(localePrefix.value)
 })
 
 const selectedLocale = computed(() => calendarLocales[localePrefix.value] || calendarLocales.en)
@@ -160,7 +160,6 @@ const onCancelClick = () => {
         :date-format="dateFormat"
         :input-id="id"
         :invalid="isInvalid"
-        :locale="selectedLocale"
         :manual-input="allowManualInput"
         :selection-mode="type"
         :show-time="showTime"
@@ -175,20 +174,20 @@ const onCancelClick = () => {
           #footer
         >
           <div class="base-calendar-footer">
-            <button
-              type="button"
-              class="base-calendar-footer__button base-calendar-footer__button--secondary"
+            <BaseButton
+              :label="t('Cancel')"
+              icon="close"
+              size="small"
+              type="black"
               @click="onCancelClick"
-            >
-              {{ t("Cancel") }}
-            </button>
-            <button
-              type="button"
-              class="base-calendar-footer__button base-calendar-footer__button--primary"
+            />
+            <BaseButton
+              :label="t('Select')"
+              icon="confirm"
+              size="small"
+              type="secondary"
               @click="onApplyClick"
-            >
-              {{ t("OK") }}
-            </button>
+            />
           </div>
         </template>
       </DatePicker>
@@ -207,26 +206,3 @@ const onCancelClick = () => {
     </Message>
   </div>
 </template>
-<style scoped>
-.base-calendar-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem 0.75rem;
-}
-.base-calendar-footer__button {
-  border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.base-calendar-footer__button--secondary {
-  background-color: transparent;
-  border-color: var(--gray-40, #d4d4d4);
-}
-.base-calendar-footer__button--primary {
-  background-color: var(--primary-color, #0d9488);
-  color: #ffffff;
-}
-</style>

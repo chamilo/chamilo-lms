@@ -1,6 +1,6 @@
 <template>
   <h2
-    v-t="'Friends'"
+    v-text="t('Friends')"
     class="mr-auto"
   />
   <hr />

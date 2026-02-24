@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -32580,4 +32580,166 @@ msgstr "Jika anda tidak mendaftar akaun ini, anda boleh abaikan e-mel ini. Tiada
 
 msgid "Current authentication method"
 msgstr "Kaedah pengesahan semasa"
+
+msgid "Branches"
+msgstr "Cawangan"
+
+msgid "Rooms"
+msgstr "Bilik"
+
+msgid "Room availability finder"
+msgstr "Pencari ketersediaan bilik"
+
+msgid "New branch"
+msgstr "Cawangan baru"
+
+msgid "New room"
+msgstr "Bilik baru"
+
+msgid "Branch"
+msgstr "Cawangan"
+
+msgid "Default room"
+msgstr "Bilik lalai"
+
+msgid "Room occupation: %s"
+msgstr "Penggunaan bilik: %s"
+
+msgid "Find available rooms"
+msgstr "Cari bilik yang tersedia"
+
+msgid "Available rooms"
+msgstr "Bilik yang tersedia"
+
+msgid "Occupied rooms"
+msgstr "Bilik yang sedang digunakan"
+
+msgid "No available rooms found for this time range"
+msgstr "Tiada bilik yang tersedia ditemui untuk julat masa ini"
+
+msgid "No rooms have been created yet"
+msgstr "Tiada bilik yang telah dibuat lagi"
+
+msgid "Courses linked to %s"
+msgstr "Kursus yang dikaitkan dengan %s"
+
+msgid "No branches have been created yet"
+msgstr "Tiada cawangan yang telah dibuat lagi"
+
+msgid "Occupation"
+msgstr "Penggunaan"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Tidak boleh memadam cawangan dengan bilik yang dilampirkan"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Tidak boleh memadam bilik dengan kursus yang dilampirkan"
+
+msgid "Conflicts"
+msgstr "Konflik"
+
+msgid "Geolocation"
+msgstr "Geolokasi"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitud, Longitud (contohnya 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 atau IPv6"
+
+msgid "IP mask"
+msgstr "Topeng IP"
+
+msgid "e.g. /24"
+msgstr "contohnya /24"
+
+msgid "Parent branch"
+msgstr "Cawangan induk"
+
+msgid "Unique identifier"
+msgstr "Pengenal pasti unik"
+
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "e.g. 48.8566"
+msgstr "contohnya 48.8566"
+
+msgid "Longitude"
+msgstr "Longitud"
+
+msgid "e.g. 2.3522"
+msgstr "contohnya 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Kelajuan muat turun (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Kelajuan muat naik (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Lengah (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nama pentadbir"
+
+msgid "Administrator phone number"
+msgstr "Nombor telefon pentadbir"
+
+msgid "ID of last synch transaction"
+msgstr "ID transaksi penyegerakan terakhir"
+
+msgid "Time of last synchronization"
+msgstr "Masa penyegerakan terakhir"
+
+msgid "Last synchronization type"
+msgstr "Jenis penyegerakan terakhir"
+
+msgid "SSL public key"
+msgstr "Kunci awam SSL"
+
+msgid "Branch type"
+msgstr "Jenis cawangan"
+
+msgid "Room"
+msgstr "Bilik"
+
+msgid "Simple IDS"
+msgstr "IDS Ringkas"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS sedang dilumpuhkan. Tetapkan IDS_ENABLED=true dalam .env anda untuk mengaktifkan imbasan."
+
+msgid "All event types"
+msgstr "Semua jenis peristiwa"
+
+msgid "Events by day (last 7 days)"
+msgstr "Peristiwa mengikut hari (7 hari terakhir)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Peristiwa mengikut jenis (30 hari terakhir)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP serangan teratas (30 hari terakhir)"
+
+msgid "Flagged IDS events"
+msgstr "Peristiwa IDS yang ditandakan"
+
+msgid "No suspicious events detected."
+msgstr "Tiada peristiwa mencurigakan dikesan."
+
+msgid "Detection type"
+msgstr "Jenis kesan"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (semasa)"
 

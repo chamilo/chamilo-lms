@@ -4143,7 +4143,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Ejer"
@@ -32582,4 +32582,166 @@ msgstr "Hvis du ikke har registreret denne konto, kan du ignorere denne e-mail. 
 
 msgid "Current authentication method"
 msgstr "Nuværende godkendelsesmetode"
+
+msgid "Branches"
+msgstr "Afdelinger"
+
+msgid "Rooms"
+msgstr "Rum"
+
+msgid "Room availability finder"
+msgstr "Lokales tilgængelighedsfinder"
+
+msgid "New branch"
+msgstr "Ny filial"
+
+msgid "New room"
+msgstr "Nyt lokale"
+
+msgid "Branch"
+msgstr "Filial"
+
+msgid "Default room"
+msgstr "Standardlokale"
+
+msgid "Room occupation: %s"
+msgstr "Lokalebesættelse: %s"
+
+msgid "Find available rooms"
+msgstr "Find ledige lokaler"
+
+msgid "Available rooms"
+msgstr "Ledige lokaler"
+
+msgid "Occupied rooms"
+msgstr "Besatte lokaler"
+
+msgid "No available rooms found for this time range"
+msgstr "Ingen ledige lokaler fundet for dette tidsrum"
+
+msgid "No rooms have been created yet"
+msgstr "Ingen lokaler er oprettet endnu"
+
+msgid "Courses linked to %s"
+msgstr "Kurser knyttet til %s"
+
+msgid "No branches have been created yet"
+msgstr "Ingen filialer er oprettet endnu"
+
+msgid "Occupation"
+msgstr "Besættelse"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Kan ikke slette filial med tilknyttede lokaler"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Kan ikke slette lokale med tilknyttede kurser"
+
+msgid "Conflicts"
+msgstr "Konflikter"
+
+msgid "Geolocation"
+msgstr "Geolokation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Breddegrad, Længdegrad (f.eks. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 eller IPv6"
+
+msgid "IP mask"
+msgstr "IP-maske"
+
+msgid "e.g. /24"
+msgstr "f.eks. /24"
+
+msgid "Parent branch"
+msgstr "Overordnet filial"
+
+msgid "Unique identifier"
+msgstr "Unik identifikator"
+
+msgid "Latitude"
+msgstr "Breddegrad"
+
+msgid "e.g. 48.8566"
+msgstr "f.eks. 48.8566"
+
+msgid "Longitude"
+msgstr "Længdegrad"
+
+msgid "e.g. 2.3522"
+msgstr "f.eks. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Downloadhastighed (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Uploadhastighed (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Forsinkelse (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratornavn"
+
+msgid "Administrator phone number"
+msgstr "Administrator telefonnummer"
+
+msgid "ID of last synch transaction"
+msgstr "ID for sidste synkroniseringstransaktion"
+
+msgid "Time of last synchronization"
+msgstr "Tidspunkt for sidste synkronisering"
+
+msgid "Last synchronization type"
+msgstr "Sidste synkroniseringstype"
+
+msgid "SSL public key"
+msgstr "SSL-offentlig nøgle"
+
+msgid "Branch type"
+msgstr "Filialtype"
+
+msgid "Room"
+msgstr "Lokale"
+
+msgid "Simple IDS"
+msgstr "Simpel IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS er i øjeblikket deaktiveret. Sæt IDS_ENABLED=true i din .env for at aktivere scanning."
+
+msgid "All event types"
+msgstr "Alle begivenhedstyper"
+
+msgid "Events by day (last 7 days)"
+msgstr "Begivenheder pr. dag (sidste 7 dage)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Begivenheder pr. type (sidste 30 dage)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Top angribende IP-adresser (sidste 30 dage)"
+
+msgid "Flagged IDS events"
+msgstr "Flagget IDS-begivenheder"
+
+msgid "No suspicious events detected."
+msgstr "Ingen mistænkelige begivenheder opdaget."
+
+msgid "Detection type"
+msgstr "Detektionstype"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr ""
 

@@ -32575,5 +32575,167 @@ msgid "If you did not register this account, you can ignore this e-mail. No acti
 msgstr "Pokud jste tento účet neregistrovali, můžete tento e-mail ignorovat. Žádná akce nebude provedená."
 
 msgid "Current authentication method"
-msgstr ""
+msgstr "Aktuální metoda autentizace"
+
+msgid "Branches"
+msgstr "Pobočky"
+
+msgid "Rooms"
+msgstr "Místnosti"
+
+msgid "Room availability finder"
+msgstr "Hledání dostupných místností"
+
+msgid "New branch"
+msgstr "Nová pobočka"
+
+msgid "New room"
+msgstr "Nová místnost"
+
+msgid "Branch"
+msgstr "Pobočka"
+
+msgid "Default room"
+msgstr "Výchozí místnost"
+
+msgid "Room occupation: %s"
+msgstr "Obsazenost místnosti: %s"
+
+msgid "Find available rooms"
+msgstr "Najít dostupné místnosti"
+
+msgid "Available rooms"
+msgstr "Dostupné místnosti"
+
+msgid "Occupied rooms"
+msgstr "Obsazené místnosti"
+
+msgid "No available rooms found for this time range"
+msgstr "Nebyly nalezeny žádné dostupné místnosti pro tento časový rozsah"
+
+msgid "No rooms have been created yet"
+msgstr "Zatím nebyly vytvořeny žádné místnosti"
+
+msgid "Courses linked to %s"
+msgstr "Kurzy spojené s %s"
+
+msgid "No branches have been created yet"
+msgstr "Zatím nebyly vytvořeny žádné pobočky"
+
+msgid "Occupation"
+msgstr "Obsazenost"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nelze smazat pobočku s připojenými místnostmi"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nelze smazat místnost s připojenými kurzy"
+
+msgid "Conflicts"
+msgstr "Konflikty"
+
+msgid "Geolocation"
+msgstr "Geolokace"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Zeměpisná šířka, délka (např. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 nebo IPv6"
+
+msgid "IP mask"
+msgstr "IP maska"
+
+msgid "e.g. /24"
+msgstr "např. /24"
+
+msgid "Parent branch"
+msgstr "Nadřazená pobočka"
+
+msgid "Unique identifier"
+msgstr "Unikátní identifikátor"
+
+msgid "Latitude"
+msgstr "Zeměpisná šířka"
+
+msgid "e.g. 48.8566"
+msgstr "např. 48.8566"
+
+msgid "Longitude"
+msgstr "Zeměpisná délka"
+
+msgid "e.g. 2.3522"
+msgstr "např. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Rychlost stahování (kB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Rychlost nahrávání (kB/s)"
+
+msgid "Delay (ms)"
+msgstr "Zpoždění (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Jméno administrátora"
+
+msgid "Administrator phone number"
+msgstr "Telefonní číslo administrátora"
+
+msgid "ID of last synch transaction"
+msgstr "ID poslední synchronizační transakce"
+
+msgid "Time of last synchronization"
+msgstr "Čas poslední synchronizace"
+
+msgid "Last synchronization type"
+msgstr "Typ poslední synchronizace"
+
+msgid "SSL public key"
+msgstr "Veřejný SSL klíč"
+
+msgid "Branch type"
+msgstr "Typ pobočky"
+
+msgid "Room"
+msgstr "Místnost"
+
+msgid "Simple IDS"
+msgstr "Jednoduchý IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS je v současnosti vypnutý. Nastavte IDS_ENABLED=true ve svém .env souboru pro aktivaci skenování."
+
+msgid "All event types"
+msgstr "Všechny typy událostí"
+
+msgid "Events by day (last 7 days)"
+msgstr "Události podle dne (posledních 7 dní)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Události podle typu (posledních 30 dní)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Nejvíce útočící IP (posledních 30 dní)"
+
+msgid "Flagged IDS events"
+msgstr "Označené události IDS"
+
+msgid "No suspicious events detected."
+msgstr "Nebyly detekovány žádné podezřelé události."
+
+msgid "Detection type"
+msgstr "Typ detekce"
+
+msgid "Parameter"
+msgstr "Parametr"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (aktuální)"
 

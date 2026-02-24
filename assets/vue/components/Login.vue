@@ -62,7 +62,7 @@
           tabindex="4"
         />
         <label
-          v-t="'Remember me'"
+          v-text="t('Remember me')"
           for="remember_me"
         />
       </div>
@@ -76,7 +76,7 @@
 
         <a
           v-if="allowRegistration"
-          v-t="'Sign up'"
+          v-text="t('Sign up')"
           class="btn btn--primary-outline"
           href="/main/auth/registration.php"
           tabindex="3"
@@ -86,7 +86,7 @@
       <div class="field text-center">
         <a
           id="forgot"
-          v-t="'Forgot your password?'"
+          v-text="t('Forgot your password?')"
           class="field"
           href="/main/auth/lostPassword.php"
           tabindex="5"

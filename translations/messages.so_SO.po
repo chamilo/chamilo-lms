@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulaha tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -32576,4 +32576,166 @@ msgstr "Haddii aadan diiwaan gelin akoonkan, waad iska indhatiri kartaa emailkan
 
 msgid "Current authentication method"
 msgstr "Habka xaqiijinta hadda"
+
+msgid "Branches"
+msgstr "Laanaha"
+
+msgid "Rooms"
+msgstr "Qolalka"
+
+msgid "Room availability finder"
+msgstr "Helaha qolalka"
+
+msgid "New branch"
+msgstr "Laan cusub"
+
+msgid "New room"
+msgstr "Qol cusub"
+
+msgid "Branch"
+msgstr "Laan"
+
+msgid "Default room"
+msgstr "Qolka caadiga ah"
+
+msgid "Room occupation: %s"
+msgstr "Qolka la qabsaday: %s"
+
+msgid "Find available rooms"
+msgstr "Raadi qolalka heli kara"
+
+msgid "Available rooms"
+msgstr "Qolalka heli kara"
+
+msgid "Occupied rooms"
+msgstr "Qolalka la qabsaday"
+
+msgid "No available rooms found for this time range"
+msgstr "Ma jiraan qolal la heli karo muddadaan"
+
+msgid "No rooms have been created yet"
+msgstr "Qolal weli lama abuurin"
+
+msgid "Courses linked to %s"
+msgstr "Koorsooyinka ku xidhan %s"
+
+msgid "No branches have been created yet"
+msgstr "Laamaha weli lama abuurin"
+
+msgid "Occupation"
+msgstr "Qabsashada"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ma tirtiri karo laanta leh qolal ku xidhan"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ma tirtiri karo qolka leh koorsooyin ku xidhan"
+
+msgid "Conflicts"
+msgstr "Iska hor imaadka"
+
+msgid "Geolocation"
+msgstr "Goobta juqraafi"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitude, Longitude (tusaale 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ama IPv6"
+
+msgid "IP mask"
+msgstr "Mask IP"
+
+msgid "e.g. /24"
+msgstr "tusaale /24"
+
+msgid "Parent branch"
+msgstr "Laanta hooyada"
+
+msgid "Unique identifier"
+msgstr "Aqoonsiga gaarka ah"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "e.g. 48.8566"
+msgstr "tusaale 48.8566"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "e.g. 2.3522"
+msgstr "tusaale 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Xawaaraha soo dejinta (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Xawaaraha soo gudbinta (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Daahsoon (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Magaca maamulaha"
+
+msgid "Administrator phone number"
+msgstr "Lambarka taleefanka maamulaha"
+
+msgid "ID of last synch transaction"
+msgstr "ID-ga wax kala iibsiga isku-dhafka ugu dambeeyay"
+
+msgid "Time of last synchronization"
+msgstr "Waqtiga isku-dhafka ugu dambeeyay"
+
+msgid "Last synchronization type"
+msgstr "Nooca isku-dhafka ugu dambeeyay"
+
+msgid "SSL public key"
+msgstr "Fure SSL guud"
+
+msgid "Branch type"
+msgstr "Nooca laanta"
+
+msgid "Room"
+msgstr "Qol"
+
+msgid "Simple IDS"
+msgstr "IDS fudud"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS hadda waa la cabbiray. Ku dheji IDS_ENABLED=true faylka .env si aad u shaqeyso baaritaanka."
+
+msgid "All event types"
+msgstr "Dhammaan noocyada dhacdooyinka"
+
+msgid "Events by day (last 7 days)"
+msgstr "Dhacdooyinka maalmo (7tii maalma ee ugu dambeeyay)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Dhacdooyinka nooca (30ka maalmood ee ugu dambeeyay)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP-yada ugu sareeya ee weerarka (30ka maalmood ee ugu dambeeyay)"
+
+msgid "Flagged IDS events"
+msgstr "Dhacdooyinka IDS ee la calaamadeeyay"
+
+msgid "No suspicious events detected."
+msgstr "Ma jiraan dhacdooyin shaki leh oo la ogaaday."
+
+msgid "Detection type"
+msgstr "Nooca ogaashada"
+
+msgid "Parameter"
+msgstr "Xasuus-qor"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (current)"
 

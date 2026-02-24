@@ -41,19 +41,17 @@
     <main class="install-step-container col-span-3 md:col-span-2 row-span-2">
       <h1
         v-if="'new' === installerData.installType"
-        v-t="'New installation'"
+        v-text="t('New installation')"
         class="mb-4 text-center"
       />
       <h1
         v-else-if="'update' === installerData.installType"
-        v-t="{
-          path: 'Update from Chamilo ' + installerData.upgradeFromVersion.join(' | '),
-        }"
+        v-text="t('Update from Chamilo ' + installerData.upgradeFromVersion.join(' | '))"
         class="mb-4 text-center"
       />
       <h1
         v-else
-        v-t="'Chamilo installation wizard'"
+        v-text="t('Chamilo installation wizard')"
         class="mb-8 text-center"
       />
 

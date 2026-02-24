@@ -14660,7 +14660,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povoliť tlačidlo rozšírené, pokiaľ je editor WYSIWYG maximalizovaný"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Priamo prejdite do kurzu po prihlásení"
@@ -32594,5 +32594,167 @@ msgid "If you did not register this account, you can ignore this e-mail. No acti
 msgstr "Ak ste tento účet neregistrovali, môžete tento e-mail ignorovať. Žiadna akcia nebude vykonaná."
 
 msgid "Current authentication method"
-msgstr ""
+msgstr "Aktuálna metóda autentifikácie"
+
+msgid "Branches"
+msgstr "Pobočky"
+
+msgid "Rooms"
+msgstr "Miesta"
+
+msgid "Room availability finder"
+msgstr "Hľadanie dostupných miest"
+
+msgid "New branch"
+msgstr "Nová pobočka"
+
+msgid "New room"
+msgstr "Nové miesto"
+
+msgid "Branch"
+msgstr "Pobočka"
+
+msgid "Default room"
+msgstr "Predvolené miesto"
+
+msgid "Room occupation: %s"
+msgstr "Obsadenosť miesta: %s"
+
+msgid "Find available rooms"
+msgstr "Nájsť dostupné miesta"
+
+msgid "Available rooms"
+msgstr "Dostupné miesta"
+
+msgid "Occupied rooms"
+msgstr "Obsadené miesta"
+
+msgid "No available rooms found for this time range"
+msgstr "Žiadne dostupné miesta pre tento časový rozsah neboli nájdené"
+
+msgid "No rooms have been created yet"
+msgstr "Žiadne miesta ešte neboli vytvorené"
+
+msgid "Courses linked to %s"
+msgstr "Kurzy spojené s %s"
+
+msgid "No branches have been created yet"
+msgstr "Žiadne pobočky ešte neboli vytvorené"
+
+msgid "Occupation"
+msgstr "Obsadenosť"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nie je možné zmazať pobočku s priradenými miestami"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nie je možné zmazať miesto s priradenými kurzami"
+
+msgid "Conflicts"
+msgstr "Konflikty"
+
+msgid "Geolocation"
+msgstr "Geolokácia"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Zemepisná šírka, Zemepisná dĺžka (napr. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 alebo IPv6"
+
+msgid "IP mask"
+msgstr "IP maska"
+
+msgid "e.g. /24"
+msgstr "napr. /24"
+
+msgid "Parent branch"
+msgstr "Rodičovská pobočka"
+
+msgid "Unique identifier"
+msgstr "Jedinečný identifikátor"
+
+msgid "Latitude"
+msgstr "Zemepisná šírka"
+
+msgid "e.g. 48.8566"
+msgstr "napr. 48.8566"
+
+msgid "Longitude"
+msgstr "Zemepisná dĺžka"
+
+msgid "e.g. 2.3522"
+msgstr "napr. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Rýchlosť sťahovania (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Rýchlosť nahrávania (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Oneskorenie (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Meno administrátora"
+
+msgid "Administrator phone number"
+msgstr "Telefónne číslo administrátora"
+
+msgid "ID of last synch transaction"
+msgstr "ID poslednej synchronizačnej transakcie"
+
+msgid "Time of last synchronization"
+msgstr "Čas poslednej synchronizácie"
+
+msgid "Last synchronization type"
+msgstr "Typ poslednej synchronizácie"
+
+msgid "SSL public key"
+msgstr "SSL verejný kľúč"
+
+msgid "Branch type"
+msgstr "Typ pobočky"
+
+msgid "Room"
+msgstr "Miestnosť"
+
+msgid "Simple IDS"
+msgstr "Jednoduchý IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS je momentálne vypnuté. Nastavte IDS_ENABLED=true vo vašom .env súbore na aktiváciu skenovania."
+
+msgid "All event types"
+msgstr "Všetky typy udalostí"
+
+msgid "Events by day (last 7 days)"
+msgstr "Udalosti podľa dňa (posledných 7 dní)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Udalosti podľa typu (posledných 30 dní)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Najviac útočiace IP (posledných 30 dní)"
+
+msgid "Flagged IDS events"
+msgstr "Označené IDS udalosti"
+
+msgid "No suspicious events detected."
+msgstr "Žiadne podozrivé udalosti nezistené."
+
+msgid "Detection type"
+msgstr "Typ detekcie"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (aktuálny)"
 

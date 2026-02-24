@@ -1,0 +1,59 @@
+@use "../../abstracts/mixins" as m;
+
+.fc {
+
+  // reset
+
+  & .fc-button {
+    @include m.base-button();
+    @apply align-middle font-semibold text-base;
+  }
+
+  // theme
+
+  & .fc-button {
+    @apply bg-white border-black text-black;
+  }
+
+  & .fc-button:hover,
+  & .fc-button:focus {
+    @apply bg-gray-90 border-gray-90 text-white;
+  }
+
+  & .fc-button:disabled {
+    @apply bg-white border-black text-black opacity-60;
+  }
+
+  // "primary" coloring
+
+  & .fc-button-primary {
+    @apply bg-primary text-white border-primary;
+  }
+
+  & .fc-button-primary:hover,
+  & .fc-button-primary:focus {
+    @apply bg-primary-gradient border-primary shadow-none;
+  }
+
+  & .fc-button-primary:disabled {
+    @apply bg-primary text-white border-primary opacity-60;
+  }
+
+  & .fc-button-primary:not(:disabled):active,
+  & .fc-button-primary:not(:disabled).fc-button-active,
+  & .fc-button-primary:not(:disabled):active:focus,
+  & .fc-button-primary:not(:disabled).fc-button-active:focus {
+    @apply bg-primary-gradient border-primary shadow-none;
+  }
+
+  // icons within buttons
+
+  & .fc-button .fc-icon {
+    @apply font-normal text-2xl leading-none;
+
+    &::before {
+      vertical-align: bottom;
+    }
+  }
+
+}

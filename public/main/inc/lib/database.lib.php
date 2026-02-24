@@ -61,13 +61,31 @@ class Database
         self::$connection = $connection;
     }
 
+    public static function hasManager(): bool
+    {
+        return isset(self::$em);
+    }
+
+    public static function hasConnection(): bool
+    {
+        return isset(self::$connection);
+    }
+
     public static function getConnection(): Connection
     {
+        if (!isset(self::$connection)) {
+            throw new RuntimeException('Database connection is not initialized.');
+        }
+
         return self::$connection;
     }
 
     public static function getManager(): EntityManager
     {
+        if (!isset(self::$em)) {
+            throw new RuntimeException('Database manager is not initialized.');
+        }
+
         return self::$em;
     }
 

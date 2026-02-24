@@ -66,6 +66,13 @@ services:
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
         arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
+    Chamilo\CoreBundle\EventSubscriber\TranslatorFallbackLocaleSubscriber:
+      arguments:
+        $translator: '@translator.default'
+        $languageRepository: '@Chamilo\CoreBundle\Repository\LanguageRepository'
+      tags:
+        - { name: kernel.event_subscriber }
+
     stof_doctrine_extensions.tool.locale_synchronizer:
         class: Stof\DoctrineExtensionsBundle\Tool\LocaleSynchronizer
         arguments:
@@ -166,13 +173,14 @@ services:
 
     chamilo.storage.awss3_client:
         class: Aws\S3\S3Client
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AwsS3ClientFactory', 'create']
         arguments:
-            -
-                version: '%env(AWS_S3_STORAGE_VERSION)%'
-                region: '%env(AWS_S3_STORAGE_REGION)%'
-                credentials:
-                    key: '%env(AWS_S3_STORAGE_ACCESS_KEY)%'
-                    secret: '%env(AWS_S3_STORAGE_ACCESS_SECRET)%'
+            - '%env(AWS_S3_STORAGE_VERSION)%'
+            - '%env(AWS_S3_STORAGE_REGION)%'
+            - '%env(AWS_S3_STORAGE_ACCESS_KEY)%'
+            - '%env(AWS_S3_STORAGE_ACCESS_SECRET)%'
+            - '%env(default::AWS_S3_STORAGE_ENDPOINT)%'
+            - '%env(default::AWS_S3_USE_PATH_STYLE)%'
 
     Google\Cloud\Storage\StorageClient:
         arguments:

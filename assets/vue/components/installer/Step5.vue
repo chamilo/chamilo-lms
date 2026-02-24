@@ -7,7 +7,7 @@
 
     <div v-if="'update' === installerData.installType">
       <h3
-        v-t="'System'"
+        v-text="t('System')"
         class="mb-4"
       />
 
@@ -21,7 +21,7 @@
             type="text"
           />
           <label
-            v-t="'Chamilo URL'"
+            v-text="t('Chamilo URL')"
             for="loginForm"
           />
         </div>
@@ -37,7 +37,7 @@
             type="text"
           />
           <label
-            v-t="'Path'"
+            v-text="t('Path')"
             for="loginForm"
           />
         </div>
@@ -53,7 +53,7 @@
             type="text"
           />
           <label
-            v-t="'Path'"
+            v-text="t('Path')"
             for="loginForm"
           />
         </div>
@@ -62,7 +62,7 @@
 
     <div>
       <h3
-        v-t="'Administrator'"
+        v-text="t('Administrator')"
         class="mb-4"
       />
 
@@ -80,7 +80,7 @@
             type="text"
           />
           <label
-            v-t="'Administrator login'"
+            v-text="t('Administrator login')"
             for="loginForm"
           />
         </div>
@@ -111,12 +111,12 @@
             toggle-mask
           />
           <label
-            v-t="'Administrator password'"
+            v-text="t('Administrator password')"
             for="passForm"
           />
         </div>
         <small
-          v-t="'You may want to change this'"
+          v-text="t('You may want to change this')"
           class="text-error"
         />
       </div>
@@ -132,7 +132,7 @@
             type="text"
           />
           <label
-            v-t="'Administrator first name'"
+            v-text="t('Administrator first name')"
             for="adminFirstName"
           />
         </div>
@@ -148,7 +148,7 @@
             type="text"
           />
           <label
-            v-t="'Administrator last name'"
+            v-text="t('Administrator last name')"
             for="adminLastName"
           />
         </div>
@@ -165,7 +165,7 @@
             type="email"
           />
           <label
-            v-t="'Administrator e-mail'"
+            v-text="t('Administrator e-mail')"
             for="emailForm"
           />
         </div>
@@ -182,7 +182,7 @@
             type="text"
           />
           <label
-            v-t="'Administrator telephone'"
+            v-text="t('Administrator telephone')"
             for="adminPhoneForm"
           />
         </div>
@@ -191,7 +191,7 @@
 
     <div>
       <h3
-        v-t="'Portal'"
+        v-text="t('Portal')"
         class="mb-4"
       />
 
@@ -214,7 +214,7 @@
             type="text"
           />
           <label
-            v-t="'Language'"
+            v-text="t('Language')"
             for="language_form_list"
           />
           <input
@@ -239,7 +239,7 @@
             type="url"
           />
           <label
-            v-t="'Chamilo URL'"
+            v-text="t('Chamilo URL')"
             for="urlForm"
           />
         </div>
@@ -256,7 +256,7 @@
             type="text"
           />
           <label
-            v-t="'Your portal name'"
+            v-text="t('Your portal name')"
             for="campusForm"
           />
         </div>
@@ -273,7 +273,7 @@
             type="text"
           />
           <label
-            v-t="'Your company short name'"
+            v-text="t('Your company short name')"
             for="institutionForm"
           />
         </div>
@@ -290,13 +290,13 @@
             type="text"
           />
           <label
-            v-t="'URL of this company'"
+            v-text="t('URL of this company')"
             for="institutionUrlForm"
           />
         </div>
       </div>
 
-      <label v-t="'Encryption method'" />
+      <label v-text="t('Encryption method')" />
       <div
         v-if="'update' !== installerData.installType"
         class="formgroup-inline"
@@ -345,7 +345,7 @@
             value="none"
           />
           <label
-            v-t="'None'"
+            v-text="t('None')"
             for="encrypt_none"
           />
         </div>
@@ -362,7 +362,7 @@
         {{ installerData.stepData.encryptPassForm }}
       </div>
 
-      <label v-t="'Allow self-registration'" />
+      <label v-text="t('Allow self-registration')" />
       <div
         v-if="'update' !== installerData.installType"
         class="formgroup-inline"
@@ -375,7 +375,7 @@
             value="true"
           />
           <label
-            v-t="'Yes'"
+            v-text="t('Yes')"
             for="self_reg_yes"
           />
         </div>
@@ -387,7 +387,7 @@
             value="false"
           />
           <label
-            v-t="'No'"
+            v-text="t('No')"
             for="self_reg_no"
           />
         </div>
@@ -399,7 +399,7 @@
             value="approval"
           />
           <label
-            v-t="'After approval'"
+            v-text="t('After approval')"
             for="self_reg_approval"
           />
         </div>
@@ -412,19 +412,19 @@
         />
         <span
           v-if="'true' === installerData.stepData.allowSelfReg"
-          v-t="'Yes'"
+          v-text="t('Yes')"
         />
         <span
           v-else-if="'false' === installerData.stepData.allowSelfReg"
-          v-t="'No'"
+          v-text="t('No')"
         />
         <span
           v-else
-          v-t="'After approval'"
+          v-text="t('After approval')"
         />
       </div>
 
-      <label v-t="'Allow self-registration as a trainer'" />
+      <label v-text="t('Allow self-registration as a trainer')" />
       <div
         v-if="'update' !== installerData.installType"
         class="formgroup-inline"
@@ -437,7 +437,7 @@
             value="1"
           />
           <label
-            v-t="'Yes'"
+            v-text="t('Yes')"
             for="self_reg_prof_yes"
           />
         </div>
@@ -449,7 +449,7 @@
             value="0"
           />
           <label
-            v-t="'No'"
+            v-text="t('No')"
             for="self_reg_prof_no"
           />
         </div>
@@ -462,11 +462,11 @@
         />
         <span
           v-if="1 === installerData.stepData.allowSelfRegProf"
-          v-t="'Yes'"
+          v-text="t('Yes')"
         />
         <span
           v-else-if="0 === installerData.stepData.allowSelfRegProf"
-          v-t="'No'"
+          v-text="t('No')"
         />
       </div>
     </div>

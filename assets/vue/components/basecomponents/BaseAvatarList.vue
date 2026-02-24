@@ -22,8 +22,14 @@ const props = defineProps({
 })
 
 const { several, userList, plusText } = useAvatarList(props)
-
 const { t } = useI18n()
+
+function getUserRoleLabel(user) {
+  const role = user?.roleLabel ?? user?.role ?? ""
+  if (role && typeof role === "string") return role
+
+  return user?.username ?? ""
+}
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const { t } = useI18n()
       />
       <div class="avatar-info">
         <p v-text="user.fullName" />
-        <p v-text="user.username" />
+        <p v-text="getUserRoleLabel(user)" />
       </div>
     </li>
     <li v-if="several">

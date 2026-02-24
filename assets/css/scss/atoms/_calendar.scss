@@ -53,6 +53,10 @@
     @apply w-auto absolute bg-white shadow-xl rounded-lg border-none text-gray-90 mt-1 p-0
       before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
       after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
+
+    .base-calendar-footer {
+      @apply flex justify-end gap-4 px-4;
+    }
   }
 
   &-panel-inline {

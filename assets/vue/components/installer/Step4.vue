@@ -4,15 +4,19 @@
 
     <p
       v-if="'update' === installerData.installType"
-      v-t="
-        'The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!'
+      v-text="
+        t(
+          'The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!',
+        )
       "
       class="RequirementContent mb-4"
     />
     <p
       v-else
-      v-t="
-        'The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.'
+      v-text="
+        t(
+          'The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.',
+        )
       "
       class="RequirementContent mb-4"
     />
@@ -28,11 +32,11 @@
           type="text"
         />
         <label
-          v-t="'Database host'"
+          v-text="t('Database host')"
           for="dbHostForm"
         />
       </div>
-      <small v-t="'ex. localhost'" />
+      <small v-text="t('ex. localhost')" />
     </div>
 
     <div class="field">
@@ -46,11 +50,11 @@
           type="number"
         />
         <label
-          v-t="'Port'"
+          v-text="t('Port')"
           for="dbPortForm"
         />
       </div>
-      <small v-t="'ex. 3306'" />
+      <small v-text="t('ex. 3306')" />
     </div>
 
     <div class="field">
@@ -64,11 +68,11 @@
           type="text"
         />
         <label
-          v-t="'Database user'"
+          v-text="t('Database user')"
           for="dbUsernameForm"
         />
       </div>
-      <small v-t="'ex. root'" />
+      <small v-text="t('ex. root')" />
     </div>
 
     <div class="field">
@@ -82,12 +86,12 @@
           toggle-mask
         />
         <label
-          v-t="'Database Password'"
+          v-text="t('Database Password')"
           for="dbPassForm"
         />
       </div>
       <small
-        v-t="{ path: 'ex. {examplePassword}', args: { examplePassword: installerData.stepData.examplePassword } }"
+        v-text="t('ex. {examplePassword}', { examplePassword: installerData.stepData.examplePassword })"
       />
     </div>
 
@@ -102,7 +106,7 @@
           type="text"
         />
         <label
-          v-t="'Database name'"
+          v-text="t('Database name')"
           for="dbNameForm"
         />
       </div>
@@ -155,15 +159,15 @@
       <table>
         <tbody>
           <tr>
-            <td v-t="'Database host'" />
+            <td v-text="t('Database host')" />
             <td v-text="installerData.stepData.connParams.host" />
           </tr>
           <tr>
-            <td v-t="'Database port'" />
+            <td v-text="t('Database port')" />
             <td v-text="installerData.stepData.connParams.port" />
           </tr>
           <tr>
-            <td v-t="'Database driver'" />
+            <td v-text="t('Database driver')" />
             <td v-text="installerData.stepData.connParams.driver" />
           </tr>
         </tbody>
@@ -171,16 +175,16 @@
       <table v-if="'update' === installerData.installType">
         <tbody>
           <tr>
-            <td v-t="'CREATE TABLE works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('CREATE TABLE works')" />
+            <td v-text="t('OK')" />
           </tr>
           <tr>
-            <td v-t="'ALTER TABLE works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('ALTER TABLE works')" />
+            <td v-text="t('OK')" />
           </tr>
           <tr>
-            <td v-t="'DROP COLUMN works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('DROP COLUMN works')" />
+            <td v-text="t('OK')" />
           </tr>
         </tbody>
       </table>
@@ -196,7 +200,7 @@
           "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.",
         )
       }}
-      <code v-t="installerData.stepData.dbConnError" />
+      <code v-text="t(installerData.stepData.dbConnError)" />
     </Message>
 
     <hr />

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:bản quyền,, no:không bản quyền"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Dòng octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:bài tập,,      simulation:mô phỏng,,      questionnaire:bảng câu hỏi,,      diagram:sơ đồ,,      figure:hình vẽ,,      graph:đồ thị,,      index:chỉ mục,,      slide:slide,,      table:bảng,,      narrative text:văn bản kể chuyện,,      exam:kỳ thi,,      experiment:thí nghiệm,,      problem statement:đề bài,,      self assessment:tự đánh giá,,      lecture:bài giảng"
@@ -32582,4 +32582,166 @@ msgstr "Nếu bạn không đăng ký tài khoản này, bạn có thể bỏ qu
 
 msgid "Current authentication method"
 msgstr "Phương thức xác thực hiện tại"
+
+msgid "Branches"
+msgstr "Chi nhánh"
+
+msgid "Rooms"
+msgstr "Phòng học"
+
+msgid "Room availability finder"
+msgstr "Tìm kiếm phòng trống"
+
+msgid "New branch"
+msgstr "Chi nhánh mới"
+
+msgid "New room"
+msgstr "Phòng mới"
+
+msgid "Branch"
+msgstr "Chi nhánh"
+
+msgid "Default room"
+msgstr "Phòng mặc định"
+
+msgid "Room occupation: %s"
+msgstr "Phòng đang sử dụng: %s"
+
+msgid "Find available rooms"
+msgstr "Tìm phòng trống"
+
+msgid "Available rooms"
+msgstr "Phòng trống"
+
+msgid "Occupied rooms"
+msgstr "Phòng đang sử dụng"
+
+msgid "No available rooms found for this time range"
+msgstr "Không tìm thấy phòng trống cho khoảng thời gian này"
+
+msgid "No rooms have been created yet"
+msgstr "Chưa tạo phòng nào"
+
+msgid "Courses linked to %s"
+msgstr "Khóa học liên kết với %s"
+
+msgid "No branches have been created yet"
+msgstr "Chưa tạo chi nhánh nào"
+
+msgid "Occupation"
+msgstr "Tình trạng sử dụng"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Không thể xóa chi nhánh có phòng liên kết"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Không thể xóa phòng có khóa học liên kết"
+
+msgid "Conflicts"
+msgstr "Xung đột"
+
+msgid "Geolocation"
+msgstr "Vị trí địa lý"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Vĩ độ, Kinh độ (vd. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 hoặc IPv6"
+
+msgid "IP mask"
+msgstr "Mặt nạ IP"
+
+msgid "e.g. /24"
+msgstr "vd. /24"
+
+msgid "Parent branch"
+msgstr "Chi nhánh cha"
+
+msgid "Unique identifier"
+msgstr "Mã định danh duy nhất"
+
+msgid "Latitude"
+msgstr "Vĩ độ"
+
+msgid "e.g. 48.8566"
+msgstr "vd. 48.8566"
+
+msgid "Longitude"
+msgstr "Kinh độ"
+
+msgid "e.g. 2.3522"
+msgstr "vd. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Tốc độ tải xuống (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Tốc độ tải lên (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Độ trễ (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Tên quản trị viên"
+
+msgid "Administrator phone number"
+msgstr "Số điện thoại quản trị viên"
+
+msgid "ID of last synch transaction"
+msgstr "ID giao dịch đồng bộ cuối cùng"
+
+msgid "Time of last synchronization"
+msgstr "Thời gian đồng bộ cuối cùng"
+
+msgid "Last synchronization type"
+msgstr "Loại đồng bộ cuối cùng"
+
+msgid "SSL public key"
+msgstr "Khóa công khai SSL"
+
+msgid "Branch type"
+msgstr "Loại chi nhánh"
+
+msgid "Room"
+msgstr "Phòng"
+
+msgid "Simple IDS"
+msgstr "IDS đơn giản"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS hiện đang bị tắt. Đặt IDS_ENABLED=true trong tệp .env để kích hoạt quét."
+
+msgid "All event types"
+msgstr "Tất cả loại sự kiện"
+
+msgid "Events by day (last 7 days)"
+msgstr "Sự kiện theo ngày (7 ngày qua)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Sự kiện theo loại (30 ngày qua)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Top IP tấn công (30 ngày qua)"
+
+msgid "Flagged IDS events"
+msgstr "Sự kiện IDS bị gắn cờ"
+
+msgid "No suspicious events detected."
+msgstr "Không phát hiện sự kiện đáng ngờ."
+
+msgid "Detection type"
+msgstr "Loại phát hiện"
+
+msgid "Parameter"
+msgstr "Tham số"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (hiện tại)"
 

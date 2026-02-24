@@ -6,7 +6,7 @@
       @click="goBack"
     />
     <div class="field">
-      <h3 v-t="'Create assignment'" />
+      <h3 v-text="t('Create assignment')" />
     </div>
 
     <AssignmentsForm

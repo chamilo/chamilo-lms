@@ -1,16 +1,6 @@
 <template>
   <!-- Special / sticky courses -->
-  <div class="mb-8">
-    <StickyCourses />
-    <div
-      aria-hidden="true"
-      class="mt-8 flex items-center gap-4"
-    >
-      <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-      <div class="h-2 w-2 rounded-full bg-gray-300"></div>
-      <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-    </div>
-  </div>
+  <StickyCourses />
 
   <!-- Regular courses -->
   <div class="relative min-h-[300px]">
@@ -76,7 +66,6 @@ import Loading from "../../../components/Loading.vue"
 import { usePlatformConfig } from "../../../store/platformConfig"
 
 const ME_COURSES_ENDPOINT = "/api/me/courses"
-
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const { t } = useI18n()
@@ -84,50 +73,28 @@ const { t } = useI18n()
 const loading = ref(false)
 const isInitialLoaded = ref(false)
 
-const allCourses = ref([]) // loaded pages merged here
-const courses = ref([]) // visible slice for UI
+const allCourses = ref([])
+const courses = ref([])
 const isLoadingMore = ref(false)
 const lastCourseRef = ref(null)
 
 const observer = ref(null)
 let fetchAbort = null
 
-// Hybrid strategy:
-// - Server paging loads PAGE_SIZE items each time.
-// - Client-side chunking reveals gradually (visibleCount).
+// Server paging
 const PAGE_SIZE = 20
-const visibleCount = ref(PAGE_SIZE)
-
-// Server paging state
 const serverPage = ref(1)
 const serverHasMore = ref(true)
 const serverFetching = ref(false)
 const uniqueKeys = new Set()
-const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
-let sortScheduled = false
-const scheduleSort = () => {
-  if (sortScheduled) return
-  sortScheduled = true
 
-  const run = () => {
-    sortScheduled = false
-    allCourses.value.sort((a, b) => collator.compare(a?.title || "", b?.title || ""))
-    applyVisibleSlice()
-  }
-
-  if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-    window.requestIdleCallback(run, { timeout: 200 })
-  } else {
-    setTimeout(run, 0)
-  }
+const toBool = (v) => {
+  if (v === true) return true
+  if (v === false) return false
+  if (typeof v === "string") return v.trim().toLowerCase() === "true"
+  return false
 }
 
-const applyVisibleSlice = () => {
-  const n = Math.max(PAGE_SIZE, Number(visibleCount.value) || PAGE_SIZE)
-  courses.value = allCourses.value.slice(0, n)
-}
-
-const toBool = (v) => v === true || v === "true" || v === 1 || v === "1"
 const studentInfoFlags = computed(() => {
   const raw = platformConfigStore.getSetting("course.course_student_info")
   const defaults = { score: false, progress: false, certificate: false }
@@ -159,9 +126,10 @@ const studentInfoFlags = computed(() => {
 
   return defaults
 })
-computed(() => {
+
+const showAnyStudentInfo = computed(() => {
   const f = studentInfoFlags.value
-  return !!(f.progress || f.score || f.certificate)
+  return Boolean(f.progress || f.score || f.certificate)
 })
 
 function extractNumericId(value) {
@@ -199,12 +167,12 @@ const buildStudentInfoFromCru = (cru) => {
   const progress = Number(progressRaw)
   return {
     progress: Number.isFinite(progress) ? progress : 0,
-    score: typeof cru?.score === "number" ? cru.score : null,
-    bestScore: typeof cru?.bestScore === "number" ? cru.bestScore : null,
+    score: Number.isFinite(Number(cru?.score)) ? Number(cru.score) : null,
+    bestScore: Number.isFinite(Number(cru?.bestScore)) ? Number(cru.bestScore) : null,
     timeSpentSeconds: Number.isFinite(Number(cru?.timeSpentSeconds)) ? Number(cru.timeSpentSeconds) : null,
-    certificateAvailable: !!cru?.certificateAvailable,
-    completed: !!cru?.completed,
-    hasNewContent: !!cru?.hasNewContent,
+    certificateAvailable: toBool(cru?.certificateAvailable),
+    completed: toBool(cru?.completed),
+    hasNewContent: toBool(cru?.hasNewContent),
   }
 }
 
@@ -216,13 +184,18 @@ const buildMergedCourse = (cru) => {
   const sid = getSessionNumericId(cru)
   const studentInfo = buildStudentInfoFromCru(cru)
 
+  const teachersLite = Array.isArray(cru?.teachersLite)
+    ? cru.teachersLite
+    : Array.isArray(c?.teachersLite)
+      ? c.teachersLite
+      : []
+
   return {
     ...c,
+    teachersLite,
     session: cru?.session ?? c.session ?? null,
     sessionId: sid,
-
     studentInfo,
-
     hasNewContent: studentInfo.hasNewContent,
     completed: studentInfo.completed,
     certificateAvailable: studentInfo.certificateAvailable,
@@ -230,7 +203,6 @@ const buildMergedCourse = (cru) => {
     score: studentInfo.score,
     bestScore: studentInfo.bestScore,
     timeSpentSeconds: studentInfo.timeSpentSeconds,
-
     __key: `${cid || c._id || c.id}:${sid || 0}`,
   }
 }
@@ -256,7 +228,9 @@ const mergeCoursesFromProvider = (items, { reset = false } = {}) => {
 
   if (merged.length > 0) {
     allCourses.value = allCourses.value.concat(merged)
-    scheduleSort()
+    courses.value = allCourses.value
+  } else if (reset) {
+    courses.value = []
   }
 }
 
@@ -301,7 +275,8 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
   fetchAbort = new AbortController()
 
   try {
-    const resp = await fetch(buildPagedUrl(pageToLoad), {
+    const url = buildPagedUrl(pageToLoad)
+    const resp = await fetch(url, {
       method: "GET",
       credentials: "same-origin",
       headers: { Accept: "application/ld+json, application/json" },
@@ -316,12 +291,10 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
     const data = await resp.json()
     const items = normalizeCollection(data)
 
-    // If the server returns less than PAGE_SIZE, we assume no more pages.
     serverHasMore.value = Array.isArray(items) && items.length >= PAGE_SIZE
     serverPage.value = Math.max(1, Number(pageToLoad) || 1)
 
     mergeCoursesFromProvider(items, { reset })
-    applyVisibleSlice()
     await observeLast()
   } catch (e) {
     if (e?.name !== "AbortError") {
@@ -339,10 +312,8 @@ const loadMyCourses = async () => {
   loading.value = true
   isInitialLoaded.value = false
 
-  // Reset paging + visible slice
   serverPage.value = 1
   serverHasMore.value = true
-  visibleCount.value = PAGE_SIZE
   allCourses.value = []
   courses.value = []
   uniqueKeys.clear()
@@ -355,31 +326,16 @@ const loadMyCourses = async () => {
   }
 }
 
-const hasMoreVisible = computed(() => visibleCount.value < allCourses.value.length)
-
 const loadMoreCourses = async () => {
   if (isLoadingMore.value) return
+  if (!serverHasMore.value) return
+  if (serverFetching.value) return
 
   isLoadingMore.value = true
 
   try {
-    // First reveal already-loaded items (client-side)
-    if (hasMoreVisible.value) {
-      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
-      applyVisibleSlice()
-      await observeLast()
-      return
-    }
-
-    // If everything loaded is already visible, fetch next server page
-    if (serverHasMore.value && !serverFetching.value) {
-      const next = (Number(serverPage.value) || 1) + 1
-      await fetchServerPage(next)
-      // After fetching, reveal the newly added items too
-      visibleCount.value = Math.min(allCourses.value.length, (Number(visibleCount.value) || PAGE_SIZE) + PAGE_SIZE)
-      applyVisibleSlice()
-      await observeLast()
-    }
+    const next = (Number(serverPage.value) || 1) + 1
+    await fetchServerPage(next)
   } finally {
     window.setTimeout(() => {
       isLoadingMore.value = false
@@ -393,7 +349,6 @@ watch(
     allCourses.value = []
     courses.value = []
     uniqueKeys.clear()
-    visibleCount.value = PAGE_SIZE
     serverPage.value = 1
     serverHasMore.value = true
     isInitialLoaded.value = false
@@ -404,7 +359,7 @@ watch(
 watch(
   () => allCourses.value.length,
   async () => {
-    applyVisibleSlice()
+    courses.value = allCourses.value
     await observeLast()
   },
 )
@@ -413,7 +368,6 @@ onMounted(() => {
   allCourses.value = []
   courses.value = []
   uniqueKeys.clear()
-  visibleCount.value = PAGE_SIZE
   serverPage.value = 1
   serverHasMore.value = true
   isInitialLoaded.value = false

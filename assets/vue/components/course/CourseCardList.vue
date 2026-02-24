@@ -1,8 +1,10 @@
 <template>
   <CourseCard
     v-for="course in courses"
-    :key="course.id"
+    :key="course.__key || course.id || course['@id']"
     :course="course"
+    :session="course.session || null"
+    :session-id="Number(course.sessionId || 0)"
   />
 </template>
 

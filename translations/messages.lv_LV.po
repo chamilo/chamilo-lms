@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas piemērs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -32581,4 +32581,166 @@ msgstr "Ja jūs neizveidojāt šo kontu, varat ignorēt šo e-pastu. Nekādas da
 
 msgid "Current authentication method"
 msgstr "Pašreizējā autentifikācijas metode"
+
+msgid "Branches"
+msgstr "Filiales"
+
+msgid "Rooms"
+msgstr "Telpas"
+
+msgid "Room availability finder"
+msgstr "Brīvo telpu meklētājs"
+
+msgid "New branch"
+msgstr "Jauna filiāle"
+
+msgid "New room"
+msgstr "Jauna telpa"
+
+msgid "Branch"
+msgstr "Filiāle"
+
+msgid "Default room"
+msgstr "Noklusējuma telpa"
+
+msgid "Room occupation: %s"
+msgstr "Telpas noslodze: %s"
+
+msgid "Find available rooms"
+msgstr "Atrast brīvās telpas"
+
+msgid "Available rooms"
+msgstr "Brīvās telpas"
+
+msgid "Occupied rooms"
+msgstr "Aizņemtās telpas"
+
+msgid "No available rooms found for this time range"
+msgstr "Šim laika periodam nav atrastas brīvās telpas"
+
+msgid "No rooms have been created yet"
+msgstr "Vēl nav izveidotas telpas"
+
+msgid "Courses linked to %s"
+msgstr "Kursi, kas saistīti ar %s"
+
+msgid "No branches have been created yet"
+msgstr "Vēl nav izveidotas filiales"
+
+msgid "Occupation"
+msgstr "Noslodze"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nevar dzēst filiāli ar pievienotām telpām"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nevar dzēst telpu ar pievienotiem kursiem"
+
+msgid "Conflicts"
+msgstr "Konflikti"
+
+msgid "Geolocation"
+msgstr "Ģeolokācija"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Platums, garums (piem., 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 vai IPv6"
+
+msgid "IP mask"
+msgstr "IP maska"
+
+msgid "e.g. /24"
+msgstr "piem., /24"
+
+msgid "Parent branch"
+msgstr "Vecāku filiāle"
+
+msgid "Unique identifier"
+msgstr "Unikāls identifikators"
+
+msgid "Latitude"
+msgstr "Platums"
+
+msgid "e.g. 48.8566"
+msgstr "piem. 48.8566"
+
+msgid "Longitude"
+msgstr "Garums"
+
+msgid "e.g. 2.3522"
+msgstr "piem. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Lejupielādes ātrums (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Augšupielādes ātrums (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Aizkave (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratora vārds"
+
+msgid "Administrator phone number"
+msgstr "Administratora tālruņa numurs"
+
+msgid "ID of last synch transaction"
+msgstr "Pēdējās sinhronizācijas darījuma ID"
+
+msgid "Time of last synchronization"
+msgstr "Pēdējās sinhronizācijas laiks"
+
+msgid "Last synchronization type"
+msgstr "Pēdējās sinhronizācijas veids"
+
+msgid "SSL public key"
+msgstr "SSL publiskā atslēga"
+
+msgid "Branch type"
+msgstr "Filiāles tips"
+
+msgid "Room"
+msgstr "Telpa"
+
+msgid "Simple IDS"
+msgstr "Vienkāršs IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS pašlaik ir izslēgts. Iestatiet IDS_ENABLED=true savā .env, lai aktivizētu skenēšanu."
+
+msgid "All event types"
+msgstr "Visi notikumu tipi"
+
+msgid "Events by day (last 7 days)"
+msgstr "Notikumi pa dienām (pēdējās 7 dienas)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Notikumi pa tipiem (pēdējās 30 dienas)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Populārākās uzbrūkošās IP (pēdējās 30 dienas)"
+
+msgid "Flagged IDS events"
+msgstr "Atzīmētie IDS notikumi"
+
+msgid "No suspicious events detected."
+msgstr "Aizdomīgi notikumi nav konstatēti."
+
+msgid "Detection type"
+msgstr "Noteikšanas veids"
+
+msgid "Parameter"
+msgstr "Parametrs"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (pašreizējais)"
 

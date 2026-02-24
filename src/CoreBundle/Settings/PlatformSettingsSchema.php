@@ -53,7 +53,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'pdf_img_dpi' => '96',
                     'hosting_limit_users_per_course' => '0',
                     'generate_random_login' => 'false',
-                    'timepicker_increment' => '5',
+                    'timepicker_increment' => '15',
                     'user_status_show_options_enabled' => 'false',
                     'user_status_show_option' => '',
                     'platform_logo_url' => 'https://chamilo.org',

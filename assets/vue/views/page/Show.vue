@@ -15,34 +15,34 @@
       <div class="w-1/3">
         <dl class="grid grid-cols-2">
           <dt
-            v-t="'Author'"
+            v-text="t('Author')"
             class="font-semibold"
           />
           <dl v-text="item.creator.username" />
 
-          <dt v-t="'Language'" class="font-semibold" />
+          <dt v-text="t('Language')" class="font-semibold" />
           <dl>{{ languageLabel }}</dl>
 
           <dt
-            v-t="'Enabled'"
+            v-text="t('Enabled')"
             class="font-semibold"
           />
-          <dl v-t="item.enabled ? 'Yes' : 'No'" />
+          <dl v-text="t(item.enabled ? 'Yes' : 'No')" />
 
           <dt
-            v-t="'Category'"
+            v-text="t('Category')"
             class="font-semibold"
           />
           <dl v-text="item.category.title" />
 
           <dt
-            v-t="'Created at'"
+            v-text="t('Created at')"
             class="font-semibold"
           />
           <dl v-text="item.createdAt ? relativeDatetime(item.createdAt) : ''" />
 
           <dt
-            v-t="'Updated at'"
+            v-text="t('Updated at')"
             class="font-semibold"
           />
           <dl v-text="item.updatedAt ? relativeDatetime(item.updatedAt) : ''" />
@@ -56,6 +56,7 @@
 
 <script setup>
 import Loading from "../../components/Loading.vue"
+import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useConfirm } from "primevue/useconfirm"
 import { useRoute, useRouter } from "vue-router"
@@ -66,6 +67,7 @@ import pageService from "../../services/page"
 import { useNotification } from "../../composables/notification"
 import { useLocale } from "../../composables/locale"
 
+const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()
 
 const securityStore = useSecurityStore()

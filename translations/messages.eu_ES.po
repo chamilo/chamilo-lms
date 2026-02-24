@@ -32588,3 +32588,165 @@ msgstr "Kontu hau ez baduzu erregistratu, alde batera utzi dezakezu e-posta hau.
 msgid "Current authentication method"
 msgstr "Une metodorik egungo autentifikazioa"
 
+msgid "Branches"
+msgstr "Adarrak"
+
+msgid "Rooms"
+msgstr "Gelak"
+
+msgid "Room availability finder"
+msgstr "Gela libreen bilatzailea"
+
+msgid "New branch"
+msgstr "Adar berria"
+
+msgid "New room"
+msgstr "Gela berria"
+
+msgid "Branch"
+msgstr "Adarra"
+
+msgid "Default room"
+msgstr "Gela lehenetsia"
+
+msgid "Room occupation: %s"
+msgstr "Gelaren okupazioa: %s"
+
+msgid "Find available rooms"
+msgstr "Bilatu gelak libreak"
+
+msgid "Available rooms"
+msgstr "Gelak libreak"
+
+msgid "Occupied rooms"
+msgstr "Gelak okupatuak"
+
+msgid "No available rooms found for this time range"
+msgstr "Ez da aldi honetarako gelarik librea aurkitu"
+
+msgid "No rooms have been created yet"
+msgstr "Ez da gelarik sortu oraindik"
+
+msgid "Courses linked to %s"
+msgstr "%s-rako lotutako ikastaroak"
+
+msgid "No branches have been created yet"
+msgstr "Ez da adarririk sortu oraindik"
+
+msgid "Occupation"
+msgstr "Okupazioa"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ezin da gelak dituen adarra ezabatu"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ezin da ikastaroak dituen gela ezabatu"
+
+msgid "Conflicts"
+msgstr "Konfliktuak"
+
+msgid "Geolocation"
+msgstr "Geolokalkizazioa"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitude, Longitude (adib. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 edo IPv6"
+
+msgid "IP mask"
+msgstr "IP maskara"
+
+msgid "e.g. /24"
+msgstr "ad. ex. /24"
+
+msgid "Parent branch"
+msgstr "Goiburuko adarra"
+
+msgid "Unique identifier"
+msgstr "Bereizgarri bakarra"
+
+msgid "Latitude"
+msgstr "Latitudea"
+
+msgid "e.g. 48.8566"
+msgstr "ad. ex. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitudea"
+
+msgid "e.g. 2.3522"
+msgstr "ad. ex. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Deskarga abiadura (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Igorpen abiadura (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Atzerapena (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratzailearen izena"
+
+msgid "Administrator phone number"
+msgstr "Administratzailearen telefono zenbakia"
+
+msgid "ID of last synch transaction"
+msgstr "Azken sinkronizazio transaktaren ID"
+
+msgid "Time of last synchronization"
+msgstr "Azken sinkronizazioaren ordua"
+
+msgid "Last synchronization type"
+msgstr "Azken sinkronizazio mota"
+
+msgid "SSL public key"
+msgstr "SSL gako publikoa"
+
+msgid "Branch type"
+msgstr "Adarraren mota"
+
+msgid "Room"
+msgstr "Gelak"
+
+msgid "Simple IDS"
+msgstr "IDS sinplea"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS desgaituta dago une honetan. Ezarri IDS_ENABLED=egia zure .env fitxategian eskaneoa gaitzeko."
+
+msgid "All event types"
+msgstr "Ezaugarri guztiak"
+
+msgid "Events by day (last 7 days)"
+msgstr "Ezaugarriak egunero (azken 7 egunak)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Ezaugarriak motaren arabera (azken 30 egunak)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Eraso IP nagusiak (azken 30 egunak)"
+
+msgid "Flagged IDS events"
+msgstr "IDS ezaugarri seinalatuak"
+
+msgid "No suspicious events detected."
+msgstr "Ez da ezaugarri susmagarririk detektatu."
+
+msgid "Detection type"
+msgstr "Detekzio mota"
+
+msgid "Parameter"
+msgstr "Parametroa"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (une)"
+

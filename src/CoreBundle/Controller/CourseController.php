@@ -22,7 +22,6 @@ use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
-use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
@@ -73,6 +72,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use UserManager;
 
 /**
@@ -1023,37 +1023,6 @@ class CourseController extends ToolBaseController
         ]);
     }
 
-    #[Route('/categories', name: 'chamilo_core_course_form_lists')]
-    public function getCategories(
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper,
-        CourseCategoryRepository $courseCategoriesRepo
-    ): JsonResponse {
-        $allowBaseCourseCategory = 'true' === $settingsManager->getSetting('course.allow_base_course_category');
-        $accessUrlId = $accessUrlHelper->getCurrent()->getId();
-
-        $categories = $courseCategoriesRepo->findAllInAccessUrl(
-            $accessUrlId,
-            $allowBaseCourseCategory
-        );
-
-        $data = [];
-        $categoryToAvoid = '';
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            $categoryToAvoid = $settingsManager->getSetting('course.course_category_code_to_use_as_model');
-        }
-
-        foreach ($categories as $category) {
-            $categoryCode = $category->getCode();
-            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
-                continue;
-            }
-            $data[] = ['id' => $category->getId(), 'name' => $category->__toString()];
-        }
-
-        return new JsonResponse($data);
-    }
-
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,
@@ -1224,14 +1193,14 @@ class CourseController extends ToolBaseController
         $sessionId = (int) ($payload['sid'] ?? 0);
 
         $courseIds = $payload['courseIds'] ?? [];
-        if (!is_array($courseIds)) {
+        if (!\is_array($courseIds)) {
             $courseIds = [];
         }
 
         $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
         $courseIds = array_filter($courseIds, static fn (int $id) => $id > 0);
-        if (count($courseIds) > 300) {
-            $courseIds = array_slice($courseIds, 0, 300);
+        if (\count($courseIds) > 300) {
+            $courseIds = \array_slice($courseIds, 0, 300);
         }
 
         if (empty($courseIds)) {
@@ -1263,7 +1232,7 @@ class CourseController extends ToolBaseController
             if (0 === $sessionId) {
                 try {
                     $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     // Skip unauthorized courses without failing the whole batch.
                     continue;
                 }

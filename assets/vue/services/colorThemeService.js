@@ -1,66 +1,30 @@
 import baseService from "./baseService"
 
-const url = "/api/color_themes"
-
-// Normalize a ColorTheme object: parse variables if string and ensure an object
-function normalizeTheme(theme) {
-  if (!theme) return theme
-  if (typeof theme.variables === "string") {
-    try {
-      theme.variables = JSON.parse(theme.variables)
-    } catch {
-      /* noop */
-    }
-  }
-  if (!theme.variables || typeof theme.variables !== "object") {
-    theme.variables = {}
-  }
-  return theme
-}
-
 /**
  * List all color themes (works with API Platform/Hydra or plain arrays)
- * @returns {Promise<Array>}
+ * @returns {Promise<Object[]>}
  */
-async function list({ pagination = false } = {}) {
-  const qs = pagination === false ? "?pagination=false" : ""
-  const data = await baseService.getCollection(`${url}${qs}`)
-  const arr = Array.isArray(data?.items)
-    ? data.items
-    : Array.isArray(data?.["hydra:member"])
-      ? data["hydra:member"]
-      : Array.isArray(data)
-        ? data
-        : []
-  return arr.map(normalizeTheme)
+async function list() {
+  const { items } = await baseService.getCollection("/api/color_themes")
+
+  return items
 }
 
 /**
  * Themes associated with the current Access URL.
- * Always returns { items: [{ colorTheme, active }, ...] }
+ * @returns {Promise<Object[]>}
  */
 async function findAllByCurrentUrl() {
-  const data = await baseService.getCollection("/api/access_url_rel_color_themes?pagination=false")
-  const raw = Array.isArray(data?.items)
-    ? data.items
-    : Array.isArray(data?.["hydra:member"])
-      ? data["hydra:member"]
-      : Array.isArray(data)
-        ? data
-        : []
+  const { items } = await baseService.getCollection("/api/access_url_rel_color_themes")
 
-  const items = raw.map((r) => ({
-    colorTheme: normalizeTheme(r.colorTheme || r["color_theme"] || r),
-    active: !!(r.active ?? r.isActive ?? r["active"]),
-  }))
-  return { items }
+  return items
 }
 
 /**
  * Create a color theme
  */
 async function create({ title, colors }) {
-  return await baseService.post(url, {
+  return await baseService.post("/api/color_themes", {
     title,
     variables: colors,
   })

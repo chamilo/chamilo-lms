@@ -36,8 +36,9 @@ Chamilo offers a wide range of features, including:
 - Plugins for advanced features
 - Quizzes (20+ question types, random selection with categories, adaptative tests, time limits, co-creation with AI, proctoring tools integration, ...)
 - Roles and permissions management (beta)
+- Rooms and branches for in-person courses
 - SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats
-- Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, ...)
+- Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, IDS, ...)
 - Sessions management (re-use courses multiple times, add structure to long-term courses management chaos)
 - Skills management (create, edit, delete, assign to users, scale/levels of acquisition, ...)
 - Student profiles (edit personal data, change password, subscribe to push notifications, ...)
@@ -146,6 +147,16 @@ chown -R root: .env config/
 ~~~~
 
 Your Chamilo is ready to use!
+
+## Configuration
+
+Most configuration changes are made through the administration page inside Chamilo's web interface, but the database connection
+and other settings critical to the Symfony layer are located in the `.env` file at the root of Chamilo.
+
+Other core, Symfony-related, settings for advanced administration are located in the `config/packages/` folder (`*.yaml` files),
+but remember that these files are updated with each new version of Chamilo. Instead of modifying those directly, it is
+highly recommended to copy them into the `config/packages/prod/` folder and modifying them there (for your production 
+environment). This will improve maintainability through different Chamilo upgrades in the future.
 
 ## Documentation
 

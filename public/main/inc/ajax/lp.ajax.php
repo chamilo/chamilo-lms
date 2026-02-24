@@ -383,20 +383,28 @@ switch ($action) {
         /** @var learnpath $lp */
         $lp = Session::read('oLP');
         $itemId = isset($_GET['item_id']) ? (int) $_GET['item_id'] : 0;
+
         if (empty($lp) || empty($itemId)) {
             exit;
         }
+
+        // Release the session lock early so this request does not queue behind other LP requests.
+        if (function_exists('session_write_close')) {
+            @session_write_close();
+        }
+
         $result = $lp->prerequisites_match($itemId);
         if ($result) {
             echo '1';
-        } else {
-            if (!empty($lp->error)) {
-                echo $lp->error;
-            } else {
-                echo get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-            }
+            exit;
         }
-        $lp->error = '';
+
+        if (!empty($lp->error)) {
+            echo $lp->error;
+            exit;
+        }
+
+        echo get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
         exit;
     case 'add_lp_ai':
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

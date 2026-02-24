@@ -9,13 +9,13 @@
     />
 
     <p
-      v-t="'Here are the values you entered'"
+      v-text="t('Here are the values you entered')"
       class="RequirementContent mb-4"
     />
 
     <div>
       <h3
-        v-t="'Administrator'"
+        v-text="t('Administrator')"
         class="mb-4"
       />
 
@@ -24,7 +24,7 @@
         class="formgroup-inline"
       >
         <div
-          v-t="'Administrator login'"
+          v-text="t('Administrator login')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -38,7 +38,7 @@
         class="formgroup-inline items-center gap-2"
       >
         <div
-          v-t="'Administrator password'"
+          v-text="t('Administrator password')"
           class="field text-body-2 font-semibold"
         />
         <div class="field text-body-2 flex items-center">
@@ -52,14 +52,14 @@
           />
         </div>
         <div
-          v-t="'You may want to change this'"
+          v-text="t('You may want to change this')"
           class="field text-body-2 text-error"
         />
       </div>
 
       <div class="formgroup-inline">
         <div
-          v-t="'Administrator first name'"
+          v-text="t('Administrator first name')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -70,7 +70,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Administrator last name'"
+          v-text="t('Administrator last name')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -81,7 +81,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Administrator e-mail'"
+          v-text="t('Administrator e-mail')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -92,7 +92,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Administrator telephone'"
+          v-text="t('Administrator telephone')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -102,12 +102,12 @@
       </div>
 
       <div class="field">
-        <h3 v-t="'Portal'" />
+        <h3 v-text="t('Portal')" />
       </div>
 
       <div class="formgroup-inline">
         <div
-          v-t="'Your portal name'"
+          v-text="t('Your portal name')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -118,7 +118,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Main language'"
+          v-text="t('Main language')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -129,7 +129,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Allow self-registration'"
+          v-text="t('Allow self-registration')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -140,7 +140,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Your company short name'"
+          v-text="t('Your company short name')"
           class="field text-body-2font-semibold"
         />
         <div
@@ -151,7 +151,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'URL of this company'"
+          v-text="t('URL of this company')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -162,7 +162,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Encryption method'"
+          v-text="t('Encryption method')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -172,12 +172,12 @@
       </div>
 
       <div class="field">
-        <h3 v-t="'Database'" />
+        <h3 v-text="t('Database')" />
       </div>
 
       <div class="formgroup-inline">
         <div
-          v-t="'Database Host'"
+          v-text="t('Database Host')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -188,7 +188,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Port'"
+          v-text="t('Port')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -199,7 +199,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Database user'"
+          v-text="t('Database user')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -210,7 +210,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Database Password'"
+          v-text="t('Database Password')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -221,7 +221,7 @@
 
       <div class="formgroup-inline">
         <div
-          v-t="'Database name'"
+          v-text="t('Database name')"
           class="field text-body-2 font-semibold"
         />
         <div
@@ -286,12 +286,12 @@
   >
     <h2
       v-if="'update' !== installerData.installType"
-      v-t="'Step 7 - Installation process execution'"
+      v-text="t('Step 7 - Installation process execution')"
       class="RequirementHeading mb-8"
     />
     <h2
       v-else
-      v-t="'Step 7 - Update process execution'"
+      v-text="t('Step 7 - Update process execution')"
       class="RequirementHeading mb-8"
     />
 
@@ -301,7 +301,7 @@
       severity="success"
     >
       <p
-        v-t="'Please wait, this could take a while...'"
+        v-text="t('Please wait, this could take a while...')"
         class="mb-3"
       />
     </Message>
@@ -326,7 +326,7 @@
   >
     <div class="p-d-flex p-ai-center p-jc-center">
       <h3
-        v-t="'Migration completed successfully!'"
+        v-text="t('Migration completed successfully!')"
         class="mb-4"
       />
     </div>
@@ -350,7 +350,7 @@
   >
     <div class="p-d-flex p-ai-center p-jc-center">
       <h3
-        v-t="'Migration failed!'"
+        v-text="t('Migration failed!')"
         class="mb-4 text-error"
       />
     </div>

@@ -126,7 +126,7 @@ const emit = defineEmits(["searchProfile"])
 
     <p
       v-else
-      v-t="'No skill profile'"
+      v-text="t('No skill profile')"
     />
   </BaseCard>
 </template>

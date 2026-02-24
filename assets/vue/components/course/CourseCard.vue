@@ -1,13 +1,12 @@
 <template>
   <div class="relative isolate">
-    <Card class="course-card overflow-hidden !rounded-2xl !shadow-sm">
+    <Card class="course-card">
       <template #header>
-        <div class="relative aspect-video w-full bg-gray-100">
+        <div class="course-card__header">
           <img
             v-if="isLocked"
             :alt="courseTitle || 'Course illustration'"
             :src="imageUrl"
-            class="absolute inset-0 h-full w-full object-cover"
             loading="lazy"
             referrerpolicy="no-referrer"
           />
@@ -15,61 +14,75 @@
             v-else
             :to="courseHomeTo"
             aria-label="Open course"
-            class="absolute inset-0 block"
           >
             <img
               :alt="courseTitle || 'Course illustration'"
               :src="imageUrl"
-              class="h-full w-full object-cover"
               loading="lazy"
               referrerpolicy="no-referrer"
             />
           </BaseAppLink>
         </div>
+
+        <div
+          v-if="ui.categories.length > 0"
+          class="course-card__category-list"
+        >
+          <BaseTag
+            v-for="cat in ui.categories"
+            :key="cat"
+            :label="cat"
+            type="secondary"
+          />
+        </div>
       </template>
       <template #title>
-        <div class="flex items-start gap-3">
-          <div class="min-w-0 flex-1">
+        <div class="flex gap-2">
+          <div class="course-card__title">
             <div
               v-if="session"
-              class="session__title text-xs font-semibold text-gray-70"
-              v-text="session.title"
-            />
+              class="session"
+            >
+              <span
+                class="session__title"
+                v-text="session.title"
+              />
+            </div>
             <div v-if="isLocked">
-              <div class="text-sm font-semibold leading-snug text-gray-90 line-clamp-2">
-                {{ courseTitle }}
-                <span
-                  v-if="showCourseDuration && courseDurationSeconds"
-                  class="font-normal text-gray-70"
-                >
-                  ({{ (courseDurationSeconds / 60 / 60).toFixed(2) }} hours)
-                </span>
+              {{ courseTitle }}
+              <div
+                v-if="showCourseDuration && courseDurationSeconds"
+                class="text-gray-50 font-normal text-caption"
+              >
+                ({{ (courseDurationSeconds / 60 / 60).toFixed(2) }} hours)
               </div>
             </div>
+
             <BaseAppLink
               v-else
               :to="courseHomeTo"
-              class="block text-sm font-semibold leading-snug text-gray-90 hover:text-primary line-clamp-2"
             >
               {{ courseTitle }}
             </BaseAppLink>
             <div
               v-if="showSessionDisplayDate && sessionDisplayDate"
-              class="mt-1 text-xs text-gray-70"
-              v-text="sessionDisplayDate"
-            />
+              class="session"
+            >
+              <span
+                class="session__display-date"
+                v-text="sessionDisplayDate"
+              />
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <BaseButton
-              v-if="isLocked && hasRequirements"
-              class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
-              icon="shield-check"
-              onlyIcon
-              size="large"
-              type="black"
-              @click="openRequirementsModal"
-            />
-          </div>
+
+          <BaseButton
+            v-if="isLocked && hasRequirements"
+            :label="t('Requirements')"
+            icon="shield-check"
+            onlyIcon
+            type="black"
+            @click="openRequirementsModal"
+          />
         </div>
       </template>
       <template #content>
@@ -116,15 +129,6 @@
                 {{ ui.scoreLabel }}
               </span>
             </div>
-            <div
-              v-if="ui.bestScoreLabel"
-              class="flex items-center justify-between"
-            >
-              <span class="text-gray-70">{{ t("Best score") }}</span>
-              <span class="font-semibold text-gray-90">
-                {{ ui.bestScoreLabel }}
-              </span>
-            </div>
           </div>
           <!-- Certificate -->
           <div
@@ -149,28 +153,18 @@
       </template>
       <template #footer>
         <div class="flex flex-col gap-2">
+          <div
+            v-if="ui.showAnyStudentInfo"
+            class="mt-2 h-px w-full bg-gray-10"
+            aria-hidden="true"
+          ></div>
           <BaseAvatarList :users="teachers" />
           <div
             v-if="languageLabel"
             class="flex items-center gap-2 text-xs mt-4 font-semibold tracking-wide text-gray-50"
           >
-            <svg
-              class="h-4 w-4 text-gray-50"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
-              <path d="M3.6 9h16.8" />
-              <path d="M3.6 15h16.8" />
-              <path d="M12 3a15 15 0 010 18" />
-              <path d="M12 3a15 15 0 000 18" />
-            </svg>
-            <span>{{ languageLabel }}</span>
+            <BaseIcon icon="globe" />
+            {{ languageLabel }}
           </div>
         </div>
       </template>
@@ -201,47 +195,18 @@
         </svg>
         <span>{{ t("Certificate") }}</span>
       </div>
-      <!-- Categories -->
-      <div
-        v-if="ui.categories.length > 0"
-        class="absolute left-3 bottom-3 flex max-w-[80%] flex-wrap-reverse items-end gap-2 pointer-events-none"
-      >
-        <span
-          v-for="cat in ui.categories"
-          :key="cat"
-          class="inline-flex items-center rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white shadow-sm ring-1 ring-white/15 backdrop-blur"
-        >
-          {{ cat }}
-        </span>
-      </div>
+
       <!-- Notification (bell) -->
       <button
-        type="button"
-        class="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 backdrop-blur border border-white/60 shadow-sm hover:bg-white/90 pointer-events-auto"
-        aria-label="Notifications"
-        aria-haspopup="dialog"
         :aria-expanded="showNotifications ? 'true' : 'false'"
+        :aria-label="t('See notifications')"
+        aria-haspopup="dialog"
+        class="course-card__notification-button"
+        :class="{ 'course-card__notification-button--badge': ui.hasNewContent }"
+        type="button"
         @click.stop="toggleNotifications"
       >
-        <svg
-          class="h-5 w-5 text-gray-90"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 7h18s-3 0-3-7" />
-          <path d="M13.73 21a2 2 0 01-3.46 0" />
-        </svg>
-
-        <span
-          v-if="ui.hasNewContent"
-          class="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-danger ring-2 ring-white"
-          aria-hidden="true"
-        />
+        <BaseIcon icon="notification" />
       </button>
       <!-- Notifications popover -->
       <div
@@ -251,7 +216,7 @@
         aria-label="Notifications panel"
         @click.stop
       >
-        <div class="rounded-2xl bg-white shadow-lg ring-1 ring-black/10 overflow-hidden">
+        <div class="rounded-lg bg-white shadow-lg ring-1 ring-black/10 overflow-hidden">
           <div class="px-4 py-3 border-b border-gray-10">
             <div class="text-sm font-semibold text-gray-90">
               {{ t("Notifications") }}
@@ -266,7 +231,7 @@
               </span>
             </div>
           </div>
-          <!-- Body -->
+
           <div class="px-4 py-3">
             <div
               v-if="notificationsLoading"
@@ -347,10 +312,11 @@
               </div>
             </div>
           </div>
-          <!-- Footer -->
+
           <div class="px-4 py-3 flex items-center justify-end gap-2 border-t border-gray-10">
             <BaseButton
               :label="t('Close')"
+              icon="close"
               size="small"
               type="black"
               @click.stop="closeNotifications"
@@ -358,9 +324,8 @@
             <BaseButton
               v-if="!isLocked"
               :label="t('Open course')"
+              icon="link-external"
               size="small"
-              type="black"
-              class="!bg-primary !text-white hover:!bg-primary/90"
               @click.stop="goToCourse"
             />
           </div>
@@ -368,26 +333,14 @@
       </div>
       <div
         v-if="ui.showCompletedOverlay"
-        class="absolute inset-0 pointer-events-none"
+        class="course-card__completed-overlay"
         aria-hidden="true"
+        :aria-label="t('Course completed')"
       >
-        <div class="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/25"></div>
-
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="rounded-full bg-white/75 backdrop-blur p-5 shadow-sm ring-1 ring-primary/20">
-            <svg
-              class="h-12 w-12 text-primary"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-          </div>
-        </div>
+        <BaseIcon
+          icon="check"
+          size="custom"
+        />
       </div>
     </div>
 
@@ -411,6 +364,8 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseTag from "../basecomponents/BaseTag.vue"
 import { useUserSessionSubscription } from "../../composables/userPermissions"
 import { useLocale } from "../../composables/locale"
 import courseService from "../../services/courseService"
@@ -690,7 +645,6 @@ function extractNumericId(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value
 
   if (typeof value === "string") {
-    // Extract last number from strings like "/api/courses/123"
     const m = value.match(/(\d+)(?!.*\d)/)
     return m ? Number(m[1]) : 0
   }
@@ -710,7 +664,6 @@ const courseNumericId = computed(() => {
   return extractNumericId(props.course?.id ?? props.course?._id ?? props.course?.["@id"])
 })
 
-// Prefer numeric ID for routing when available.
 const courseRouteId = computed(() => {
   const n = Number(courseNumericId.value) || 0
   return n > 0 ? n : (props.course?._id ?? props.course?.id)
@@ -778,19 +731,45 @@ const sessionDurationText = computed(() => {
 
 const showCourseDuration = computed(() => toBool(platformConfigStore.getSetting("course.show_course_duration")))
 
+function normalizeTeacher(user, fallbackRoleKey) {
+  if (!user || typeof user !== "object") return null
+
+  const rawRole = (user.roleKey || user.roleLabel || fallbackRoleKey || "Teacher").toString().trim()
+
+  return {
+    ...user,
+    roleLabel: t(rawRole),
+  }
+}
+
 const teachers = computed(() => {
+  const fromLite = props.course?.teachersLite ?? props.course?.teachers_lite ?? null
+  if (Array.isArray(fromLite) && fromLite.length > 0) {
+    return fromLite.map((u) => normalizeTeacher(u, "Teacher")).filter(Boolean)
+  }
+
   const courseIri = props.course?.["@id"]
   if (props.session?.courseCoachesSubscriptions && courseIri) {
     return props.session.courseCoachesSubscriptions
       .filter((srcru) => srcru.course?.["@id"] === courseIri)
-      .map((srcru) => srcru.user)
+      .map((srcru) => normalizeTeacher(srcru.user, "Coach"))
+      .filter(Boolean)
   }
 
   if (props.course?.users?.edges) {
-    return props.course.users.edges.map((edge) => ({
-      id: edge.node.id,
-      ...edge.node.user,
-    }))
+    return props.course.users.edges
+      .map((edge) => {
+        const node = edge?.node ?? {}
+        const isTutor = Boolean(node?.isTutor ?? node?.tutor ?? false)
+        return normalizeTeacher(
+          {
+            id: node?.id,
+            ...node?.user,
+          },
+          isTutor ? "Coach" : "Teacher",
+        )
+      })
+      .filter(Boolean)
   }
 
   return []
@@ -806,12 +785,6 @@ const sessionDisplayDate = computed(() => {
   return parts.join(" — ")
 })
 
-/**
- * Requirements status (no more per-card /next-course calls on mount).
- * These fields must come from /me/courses provider:
- * - hasRequirements
- * - allowSubscription
- */
 const hasRequirements = computed(() => {
   const c = props.course || {}
   const v = c.hasRequirements ?? c.has_requirements ?? null

@@ -32577,3 +32577,165 @@ msgstr "Ti o kò ba ṣe ìforúkọ sílẹ̀ ìdí ìdàhùn yìí, o le kọ 
 msgid "Current authentication method"
 msgstr "Ọ̀nà ìdáwò lọ́wọ́ lọ́wọ́"
 
+msgid "Branches"
+msgstr ""
+
+msgid "Rooms"
+msgstr ""
+
+msgid "Room availability finder"
+msgstr ""
+
+msgid "New branch"
+msgstr ""
+
+msgid "New room"
+msgstr ""
+
+msgid "Branch"
+msgstr ""
+
+msgid "Default room"
+msgstr ""
+
+msgid "Room occupation: %s"
+msgstr ""
+
+msgid "Find available rooms"
+msgstr ""
+
+msgid "Available rooms"
+msgstr ""
+
+msgid "Occupied rooms"
+msgstr ""
+
+msgid "No available rooms found for this time range"
+msgstr ""
+
+msgid "No rooms have been created yet"
+msgstr ""
+
+msgid "Courses linked to %s"
+msgstr ""
+
+msgid "No branches have been created yet"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
+
+msgid "Cannot delete branch with rooms attached"
+msgstr ""
+
+msgid "Cannot delete room with courses attached"
+msgstr ""
+
+msgid "Conflicts"
+msgstr ""
+
+msgid "Geolocation"
+msgstr "Ipo Geo"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitude, Longitude (f.ẹ. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 tabi IPv6"
+
+msgid "IP mask"
+msgstr "Iboju IP"
+
+msgid "e.g. /24"
+msgstr "f.ẹ. /24"
+
+msgid "Parent branch"
+msgstr "Ẹka obi"
+
+msgid "Unique identifier"
+msgstr "Idanimọ alailẹgbẹ"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "e.g. 48.8566"
+msgstr "f.ẹ. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "e.g. 2.3522"
+msgstr "f.ẹ. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Iyara igbọwọ (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Iyara ikojọpọ (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Idaduro (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Orukọ Alakoso"
+
+msgid "Administrator phone number"
+msgstr "Nọmba foonu Alakoso"
+
+msgid "ID of last synch transaction"
+msgstr "ID ti idunadura amuṣiṣe ti o kẹhin"
+
+msgid "Time of last synchronization"
+msgstr "Akoko amuṣiṣe ti o kẹhin"
+
+msgid "Last synchronization type"
+msgstr "Iru amuṣiṣe ti o kẹhin"
+
+msgid "SSL public key"
+msgstr "Bọtini SSL ti gbogbo eniyan"
+
+msgid "Branch type"
+msgstr "Iru ẹka"
+
+msgid "Room"
+msgstr "Yara"
+
+msgid "Simple IDS"
+msgstr "IDS ti o rọrun"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS ti wa ni pipa lọwọlọwọ. Ṣeto IDS_ENABLED=true ni .env rẹ lati mu ṣiṣe ṣiṣe."
+
+msgid "All event types"
+msgstr "Gbogbo awọn iru iṣẹlẹ"
+
+msgid "Events by day (last 7 days)"
+msgstr "Awọn iṣẹlẹ nipasẹ ọjọ (ọjọ 7 ti o kẹhin)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Awọn iṣẹlẹ nipasẹ iru (ọjọ 30 ti o kẹhin)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Awọn IP ikọlu oke (ọjọ 30 ti o kẹhin)"
+
+msgid "Flagged IDS events"
+msgstr "Awọn iṣẹlẹ IDS ti a fi ami si"
+
+msgid "No suspicious events detected."
+msgstr "Ko si awọn iṣẹlẹ ifura ti a ṣe awari."
+
+msgid "Detection type"
+msgstr "Iru iṣawari"
+
+msgid "Parameter"
+msgstr "Paramita"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (lọwọlọwọ)"
+

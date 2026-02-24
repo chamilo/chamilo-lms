@@ -1,20 +1,28 @@
 const Encore = require("@symfony/webpack-encore")
 const dotenv = require("dotenv")
 const webpack = require("webpack")
+const fs = require("fs")
+const path = require("path")
 
-const env = dotenv.config()
+const env = dotenv.config({ quiet: true })
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev")
 }
 
+const isProd = Encore.isProduction()
+
 Encore.setOutputPath("public/build/")
   .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
-  .cleanupOutputBeforeBuild()
   .enableBuildNotifications()
 
-  .addEntry("legacy_app", "./assets/js/legacy/app.js")
+// Clean output only in production to speed up development builds.
+if (isProd) {
+  Encore.cleanupOutputBeforeBuild()
+}
+
+Encore.addEntry("legacy_app", "./assets/js/legacy/app.js")
   .addEntry("legacy_exercise", "./assets/js/legacy/exercise.js")
   .addEntry("legacy_free-jqgrid", "./assets/js/legacy/free-jqgrid.js")
   .addEntry("legacy_lp", "./assets/js/legacy/lp.js")
@@ -37,10 +45,9 @@ Encore.setOutputPath("public/build/")
   .addStyleEntry("css/scorm", "./assets/css/scorm.scss")
 
   .enableSingleRuntimeChunk()
-  .enableIntegrityHashes()
-  .enableSourceMaps(!Encore.isProduction())
+  .enableSourceMaps(!isProd)
 
-  // enables @babel/preset-env polyfills
+  // Enable @babel/preset-env polyfills.
   .configureBabel(() => {})
   .configureBabelPresetEnv((config) => {
     config.useBuiltIns = "usage"
@@ -115,7 +122,13 @@ Encore.setOutputPath("public/build/")
   .configureDevServerOptions((options) => {
     options.host = "0.0.0.0"
   })
-  .enableVersioning()
+
+// Enable production-only hashing features.
+// This keeps dev builds faster and avoids unnecessary hashed asset handling while developing.
+if (isProd) {
+  Encore.enableIntegrityHashes()
+  Encore.enableVersioning()
+}
 
 Encore.copyFiles({
   from: "./node_modules/mediaelement/build",
@@ -142,14 +155,18 @@ Encore.copyFiles({
   to: "libs/select2/js/[name].[ext]",
 })
 
-const fs = require("fs")
-const path = require("path")
 class CopyUnhashedAssetsPlugin {
   apply(compiler) {
-    compiler.hooks.afterEmit.tap("CopyUnhashedAssetsPlugin", (compilation) => {
+    compiler.hooks.afterEmit.tap("CopyUnhashedAssetsPlugin", () => {
       const buildPath = path.resolve(__dirname, "public/build")
+      const cssPath = path.join(buildPath, "css")
+      const qtipDistPath = path.join(buildPath, "libs/qtip2/dist")
 
-      // === COPY legacy_document.js without hash ===
+      if (!fs.existsSync(buildPath)) {
+        return
+      }
+
+      // Copy legacy_document.js without hash.
       const legacyDocumentFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^legacy_document\.[a-f0-9]+\.js$/)
       )
@@ -160,7 +177,7 @@ class CopyUnhashedAssetsPlugin {
         )
       }
 
-      // === COPY legacy_exercise.js without hash ===
+      // Copy legacy_exercise.js without hash.
       const legacyExerciseFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^legacy_exercise\.[a-f0-9]+\.js$/)
       )
@@ -171,19 +188,11 @@ class CopyUnhashedAssetsPlugin {
         )
       }
 
-      // === COPY runtime.js without hash ===
-      const runtimeFile = fs.readdirSync(buildPath).find((f) =>
-        f.match(/^runtime\.[a-f0-9]+\.js$/)
-      )
-      if (runtimeFile) {
-        fs.copyFileSync(
-          path.join(buildPath, runtimeFile),
-          path.join(buildPath, "runtime.js")
-        )
-      }
+      // Do not copy runtime.js without hash.
+      // A non-versioned runtime file can be cached and become desynchronized
+      // from hashed chunks, causing ChunkLoadError ("missing") at runtime.
 
-      // === COPY document.css without hash ===
-      const cssPath = path.join(buildPath, "css")
+      // Copy document.css without hash.
       if (fs.existsSync(cssPath)) {
         const documentCssFile = fs.readdirSync(cssPath).find((f) =>
           f.match(/^document\.[a-f0-9]+\.css$/)
@@ -194,6 +203,7 @@ class CopyUnhashedAssetsPlugin {
             path.join(cssPath, "document.css")
           )
         }
+
         const editorContentCssFile = fs.readdirSync(cssPath).find((f) =>
           f.match(/^editor_content\.[a-f0-9]+\.css$/)
         )
@@ -205,7 +215,7 @@ class CopyUnhashedAssetsPlugin {
         }
       }
 
-      // === COPY legacy_framereadyloader.js without hash ===
+      // Copy legacy_framereadyloader.js without hash.
       const frameReadyFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^legacy_framereadyloader\.[a-f0-9]+\.js$/)
       )
@@ -216,7 +226,7 @@ class CopyUnhashedAssetsPlugin {
         )
       }
 
-      // === COPY legacy_framereadyloader.css without hash ===
+      // Copy legacy_framereadyloader.css without hash.
       const frameReadyCssFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^legacy_framereadyloader\.[a-f0-9]+\.css$/)
       )
@@ -227,29 +237,30 @@ class CopyUnhashedAssetsPlugin {
         )
       }
 
-      // === COPY jquery.qtip.js without hash ===
-      const qtipFile = fs.readdirSync(buildPath + "/libs/qtip2/dist").find((f) =>
-        f.match(/^jquery\.qtip\.js$/)
-      )
-      if (qtipFile) {
-        fs.copyFileSync(
-          path.join(buildPath, "libs/qtip2/dist", qtipFile),
-          path.join(buildPath, "libs/qtip2/dist/jquery.qtip.js")
+      // Keep unhashed qTip assets for legacy direct references.
+      if (fs.existsSync(qtipDistPath)) {
+        const qtipFile = fs.readdirSync(qtipDistPath).find((f) =>
+          f.match(/^jquery\.qtip\.js$/)
         )
+        if (qtipFile) {
+          fs.copyFileSync(
+            path.join(qtipDistPath, qtipFile),
+            path.join(qtipDistPath, "jquery.qtip.js")
+          )
+        }
+
+        const qtipCssFile = fs.readdirSync(qtipDistPath).find((f) =>
+          f.match(/^jquery\.qtip\.css$/)
+        )
+        if (qtipCssFile) {
+          fs.copyFileSync(
+            path.join(qtipDistPath, qtipCssFile),
+            path.join(qtipDistPath, "jquery.qtip.css")
+          )
+        }
       }
 
-      // === COPY jquery.qtip.css without hash ===
-      const qtipCssFile = fs.readdirSync(buildPath + "/libs/qtip2/dist").find((f) =>
-        f.match(/^jquery\.qtip\.css$/)
-      )
-      if (qtipCssFile) {
-        fs.copyFileSync(
-          path.join(buildPath, "libs/qtip2/dist", qtipCssFile),
-          path.join(buildPath, "libs/qtip2/dist/jquery.qtip.css")
-        )
-      }
-
-      // === COPY glossary_auto.js without hash ===
+      // Copy glossary_auto.js without hash.
       const glossaryFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^glossary_auto\.[a-f0-9]+\.js$/)
       )
@@ -259,11 +270,23 @@ class CopyUnhashedAssetsPlugin {
           path.join(buildPath, "glossary_auto.js")
         )
       }
-
     })
   }
 }
 
 Encore.addPlugin(new CopyUnhashedAssetsPlugin())
+
 const config = Encore.getWebpackConfig()
+
+// Use explicit runtime/chunk global names to reduce collisions
+// when multiple bundles are loaded on the same page.
+config.output = config.output || {}
+config.output.uniqueName = "chamilo"
+config.output.chunkLoadingGlobal = "webpackChunkChamilo"
+
+// Enable persistent filesystem cache to speed up rebuilds.
+config.cache = {
+  type: "filesystem",
+}
+
 module.exports = config

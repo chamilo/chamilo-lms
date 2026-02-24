@@ -1,5 +1,5 @@
 @use "./tailwind" as *;
-@use "./scss" as *;
+@use "scss/index";
 
 @import '~cropper/dist/cropper.css';
 //@import "~flag-icons/sass/flag-icons.scss";

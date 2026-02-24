@@ -32577,3 +32577,165 @@ msgstr "Якщо ви не реєстрували цей обліковий за
 msgid "Current authentication method"
 msgstr "Поточний метод автентифікації"
 
+msgid "Branches"
+msgstr "Філії"
+
+msgid "Rooms"
+msgstr "Аудиторії"
+
+msgid "Room availability finder"
+msgstr "Пошук доступних аудиторій"
+
+msgid "New branch"
+msgstr "Нова філія"
+
+msgid "New room"
+msgstr "Нова аудиторія"
+
+msgid "Branch"
+msgstr "Філія"
+
+msgid "Default room"
+msgstr "Аудиторія за замовчуванням"
+
+msgid "Room occupation: %s"
+msgstr "Зайнятість аудиторії: %s"
+
+msgid "Find available rooms"
+msgstr "Знайти доступні аудиторії"
+
+msgid "Available rooms"
+msgstr "Доступні аудиторії"
+
+msgid "Occupied rooms"
+msgstr "Зайняті аудиторії"
+
+msgid "No available rooms found for this time range"
+msgstr "Доступних аудиторій для цього часового діапазону не знайдено"
+
+msgid "No rooms have been created yet"
+msgstr "Аудиторії ще не створено"
+
+msgid "Courses linked to %s"
+msgstr "Курси, пов’язані з %s"
+
+msgid "No branches have been created yet"
+msgstr "Філії ще не створено"
+
+msgid "Occupation"
+msgstr "Зайнятість"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Не можна видалити філію з прикріпленими аудиторіями"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Не можна видалити аудиторію з прикріпленими курсами"
+
+msgid "Conflicts"
+msgstr "Конфлікти"
+
+msgid "Geolocation"
+msgstr "Геолокація"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Широта, Довгота (наприклад, 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 або IPv6"
+
+msgid "IP mask"
+msgstr "Маска IP"
+
+msgid "e.g. /24"
+msgstr "наприклад, /24"
+
+msgid "Parent branch"
+msgstr "Батьківська філія"
+
+msgid "Unique identifier"
+msgstr "Унікальний ідентифікатор"
+
+msgid "Latitude"
+msgstr "Широта"
+
+msgid "e.g. 48.8566"
+msgstr "наприклад, 48.8566"
+
+msgid "Longitude"
+msgstr "Довгота"
+
+msgid "e.g. 2.3522"
+msgstr "наприклад, 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Швидкість завантаження (КБ/с)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Швидкість завантаження (КБ/с)"
+
+msgid "Delay (ms)"
+msgstr "Затримка (мс)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Ім'я адміністратора"
+
+msgid "Administrator phone number"
+msgstr "Номер телефону адміністратора"
+
+msgid "ID of last synch transaction"
+msgstr "ID останньої транзакції синхронізації"
+
+msgid "Time of last synchronization"
+msgstr "Час останньої синхронізації"
+
+msgid "Last synchronization type"
+msgstr "Тип останньої синхронізації"
+
+msgid "SSL public key"
+msgstr "Публічний ключ SSL"
+
+msgid "Branch type"
+msgstr "Тип філії"
+
+msgid "Room"
+msgstr "Кімната"
+
+msgid "Simple IDS"
+msgstr "Простий IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS зараз вимкнено. Встановіть IDS_ENABLED=true у вашому .env для активації сканування."
+
+msgid "All event types"
+msgstr "Усі типи подій"
+
+msgid "Events by day (last 7 days)"
+msgstr "Події за днем (останні 7 днів)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Події за типом (останні 30 днів)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Найактивніші IP-адреси атак (останні 30 днів)"
+
+msgid "Flagged IDS events"
+msgstr "Позначені події IDS"
+
+msgid "No suspicious events detected."
+msgstr "Підозрілих подій не виявлено."
+
+msgid "Detection type"
+msgstr "Тип виявлення"
+
+msgid "Parameter"
+msgstr "Параметр"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (поточний)"
+

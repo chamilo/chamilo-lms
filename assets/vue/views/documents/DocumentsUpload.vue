@@ -7,7 +7,17 @@
       @click="back"
     />
   </BaseToolbar>
+
   <div class="flex flex-col justify-start">
+    <!-- Quota warning banner (visible when threshold is reached) -->
+    <div
+      v-if="quotaWarningMessage"
+      class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+      role="alert"
+    >
+      {{ quotaWarningMessage }}
+    </div>
+
     <div class="mb-4">
       <Dashboard
         :plugins="['Webcam', 'ImageEditor']"
@@ -93,7 +103,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onBeforeUnmount, onMounted } from "vue"
+import { computed, ref, watch, onBeforeUnmount, onMounted, unref } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -115,6 +125,7 @@ import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdva
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import documentsService from "../../services/documents"
 
 const route = useRoute()
 const router = useRouter()
@@ -122,6 +133,11 @@ const { gid, sid, cid } = useCidReq()
 const { onCreated } = useUpload()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
+
+// Show warning earlier to make it easier to see.
+const LOW_QUOTA_THRESHOLD_PERCENT = 2
+// Avoid calling the quota endpoint too often while user selects files.
+const QUOTA_STALE_MS = 30_000
 
 const allowedFiletypes = ["file", "video", "certificate"]
 const filetypeQuery = route.query.filetype
@@ -139,7 +155,21 @@ const searchFields = ref([])
 const searchFieldValues = ref({})
 
 const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
-const resourceLinkList = ref(JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }]))
+
+// Banner warning
+const quotaWarningMessage = ref("")
+
+// Latest quota info (stored for client-side validation).
+const quotaInfo = ref({
+  availableBytes: null,
+  availablePercent: null,
+  fetchedAt: 0,
+})
+
+function toInt(value, fallback = 0) {
+  const n = Number(unref(value))
+  return Number.isFinite(n) ? n : fallback
+}
 
 function normalizeCode(code) {
   return String(code || "")
@@ -156,6 +186,82 @@ function buildSearchFieldMeta(values, fields) {
     meta[`searchFieldValues[${code}]`] = String(values?.[code] ?? "")
   }
   return meta
+}
+
+function buildResourceLinkList() {
+  return JSON.stringify([
+    {
+      gid: toInt(gid, 0),
+      sid: toInt(sid, 0),
+      cid: toInt(cid, 0),
+      visibility: RESOURCE_LINK_PUBLISHED,
+    },
+  ])
+}
+
+/**
+ * Refresh quota info using documentsService cache and update the banner.
+ */
+async function refreshQuota(force = false) {
+  const courseId = toInt(cid, 0)
+  if (!courseId) return null
+
+  const info = await documentsService.getQuotaUsage(courseId, {
+    sid: toInt(sid, 0),
+    gid: toInt(gid, 0),
+    force,
+    staleMs: QUOTA_STALE_MS,
+  })
+
+  quotaInfo.value = info || { availableBytes: null, availablePercent: null, fetchedAt: 0 }
+
+  const msg = documentsService.getQuotaWarningMessage(t, info, {
+    thresholdPercent: LOW_QUOTA_THRESHOLD_PERCENT,
+  })
+
+  quotaWarningMessage.value = msg
+
+  if (msg) {
+    uppy.info(msg, "warning", 9000)
+  }
+
+  return info
+}
+
+function getQueuedBytesExcluding(fileId) {
+  const files = uppy.getFiles?.() || []
+  let total = 0
+  for (const f of files) {
+    if (!f) continue
+    if (fileId && f.id === fileId) continue
+    total += Number(f.size || 0)
+  }
+  return total
+}
+
+async function enforceQuotaForFile(file) {
+  if (!file) return true
+
+  const info = await refreshQuota(false)
+  if (!info) return true // If quota can't be fetched, let backend decide.
+
+  const availableBytes = Number(info.availableBytes)
+  if (!Number.isFinite(availableBytes)) return true
+
+  const alreadyQueued = getQueuedBytesExcluding(file.id)
+  const wouldUse = alreadyQueued + Number(file.size || 0)
+
+  if (availableBytes <= 0 || wouldUse > availableBytes) {
+    uppy.info(documentsService.getQuotaUploadErrorMessage(t), "error", 9000)
+    try {
+      uppy.removeFile(file.id)
+    } catch {
+      // Ignore Uppy remove errors.
+    }
+    return false
+  }
+
+  return true
 }
 
 const uppy = new Uppy({ autoProceed: false })
@@ -186,26 +292,41 @@ const uppy = new Uppy({ autoProceed: false })
     getResponseError: (responseText, xhr) => {
       const status = xhr?.status
 
-      if (!responseText) {
+      // If server returns common quota statuses, always map to the quota message.
+      if (status === 507 || status === 413) {
+        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+      }
+
+      const msg = documentsService.extractApiErrorMessageFromText(responseText)
+
+      if (documentsService.isQuotaError(status, msg)) {
+        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+      }
+
+      if (!msg) {
         return new Error(`Upload failed (HTTP ${status ?? "unknown"}).`)
       }
 
-      try {
-        const json = JSON.parse(responseText)
-        const msg =
-          json.error ||
-          json.message ||
-          json.detail ||
-          json["hydra:description"] ||
-          (Array.isArray(json.violations) && json.violations.length ? json.violations[0].message : null)
-
-        return new Error(msg || `Upload failed (HTTP ${status ?? "unknown"}).`)
-      } catch {
-        return new Error(String(responseText))
-      }
+      return new Error(msg)
     },
   })
-  .on("upload-error", (_file, error) => {
+
+uppy.on("file-added", async (file) => {
+  // Validate quota before user starts uploading.
+  await enforceQuotaForFile(file)
+})
+
+uppy
+  .on("upload-error", async (file, error) => {
+    // If Uppy shows a generic network error but quota says it doesn't fit, show the real message.
+    const info = await refreshQuota(false)
+    const availableBytes = Number(info?.availableBytes)
+
+    if (file?.size && Number.isFinite(availableBytes) && file.size > availableBytes) {
+      uppy.info(documentsService.getQuotaUploadErrorMessage(t), "error", 9000)
+      return
+    }
+
     const msg = error?.message || "Upload failed."
     uppy.info(msg, "error", 9000)
   })
@@ -233,7 +354,7 @@ const uppy = new Uppy({ autoProceed: false })
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
-  resourceLinkList: resourceLinkList.value,
+  resourceLinkList: buildResourceLinkList(),
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
   indexDocumentContent: indexDocumentContent.value,
@@ -248,6 +369,9 @@ if (filetype === "certificate") {
 }
 
 onMounted(async () => {
+  // Load quota once on page entry so warnings can appear immediately.
+  await refreshQuota(true)
+
   if (!isSearchEnabled.value) return
 
   try {
@@ -307,7 +431,7 @@ watch(
 )
 
 function back() {
-  const queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
+  const queryParams = { cid: toInt(cid, 0), sid: toInt(sid, 0), gid: toInt(gid, 0), filetype, tab: route.query.tab }
   if (route.query.tab) {
     router.push({
       name: "FileManagerList",

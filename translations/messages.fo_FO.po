@@ -32577,3 +32577,165 @@ msgstr "Um tú ikki hevur gjørt upp hesa kontu, kanst tú forstøðga henda t-p
 msgid "Current authentication method"
 msgstr "Núverandi innlogingarháttur"
 
+msgid "Branches"
+msgstr ""
+
+msgid "Rooms"
+msgstr ""
+
+msgid "Room availability finder"
+msgstr ""
+
+msgid "New branch"
+msgstr ""
+
+msgid "New room"
+msgstr ""
+
+msgid "Branch"
+msgstr ""
+
+msgid "Default room"
+msgstr ""
+
+msgid "Room occupation: %s"
+msgstr ""
+
+msgid "Find available rooms"
+msgstr ""
+
+msgid "Available rooms"
+msgstr ""
+
+msgid "Occupied rooms"
+msgstr ""
+
+msgid "No available rooms found for this time range"
+msgstr ""
+
+msgid "No rooms have been created yet"
+msgstr ""
+
+msgid "Courses linked to %s"
+msgstr "Kursar stovnaðir við %s"
+
+msgid "No branches have been created yet"
+msgstr "Ongir greinar eru stovnaðar enn"
+
+msgid "Occupation"
+msgstr "Starv"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Kann ikki sletta grein við stovnum festum"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Kann ikki sletta stov við kursum festum"
+
+msgid "Conflicts"
+msgstr "Ágongdir"
+
+msgid "Geolocation"
+msgstr "Geostøða"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Breidd, longd (t.d. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ella IPv6"
+
+msgid "IP mask"
+msgstr "IP maska"
+
+msgid "e.g. /24"
+msgstr "t.d. /24"
+
+msgid "Parent branch"
+msgstr "Foreldagrein"
+
+msgid "Unique identifier"
+msgstr "Einastandandi kennitala"
+
+msgid "Latitude"
+msgstr "Breiddarstøða"
+
+msgid "e.g. 48.8566"
+msgstr "t.d. 48.8566"
+
+msgid "Longitude"
+msgstr "Longdarstøða"
+
+msgid "e.g. 2.3522"
+msgstr "t.d. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Niðurlagshastighet (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Uppgávuhastighet (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Förvjøðing (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Stjórnamaður navn"
+
+msgid "Administrator phone number"
+msgstr "Stjórnamaður telefonnumra"
+
+msgid "ID of last synch transaction"
+msgstr "ID hjá seinasta synkroniseringsviðgerð"
+
+msgid "Time of last synchronization"
+msgstr "Tíðspunkt hjá seinasta synkronisering"
+
+msgid "Last synchronization type"
+msgstr "Slag av seinasta synkronisering"
+
+msgid "SSL public key"
+msgstr "SSL almenur lykil"
+
+msgid "Branch type"
+msgstr "Greinarslag"
+
+msgid "Room"
+msgstr "Stovur"
+
+msgid "Simple IDS"
+msgstr "Einklært IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS er fyrrverandi óvirkin. Sett IDS_ENABLED=true í tíni .env til at virkja skanning."
+
+msgid "All event types"
+msgstr "Allir hendingshættir"
+
+msgid "Events by day (last 7 days)"
+msgstr "Hendingar eftir dagi (seinastu 7 dagar)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Hendingar eftir slag (seinastu 30 dagar)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Bestar angripandi IP-adressur (seinastu 30 dagar)"
+
+msgid "Flagged IDS events"
+msgstr "Merktar IDS-hendingar"
+
+msgid "No suspicious events detected."
+msgstr "Ongar grunsamligar hendingar funnar."
+
+msgid "Detection type"
+msgstr "Finnanar slag"
+
+msgid "Parameter"
+msgstr "Parametur"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (verandi)"
+

@@ -97,11 +97,6 @@ services:
 
     Chamilo\CoreBundle\Tool\ToolChain: ~
 
-    course.sticky_boolean_filter:
-        parent: 'api_platform.doctrine.orm.boolean_filter'
-        arguments: [{'sticky': ~}]
-        tags: [{name: 'api_platform.filter', id: 'course.sticky_boolean_filter'}]
-
     session.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments:
@@ -147,11 +142,6 @@ services:
     Chamilo\CoreBundle\AiProvider\DeepSeekAiProvider:
       factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
-
-    api_platform.graphql.executor:
-      class: Chamilo\CoreBundle\GraphQL\LoggingExecutor
-      arguments:
-        $logger: '@logger'
 
     Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository:
       arguments:

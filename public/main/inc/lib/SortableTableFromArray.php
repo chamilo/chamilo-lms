@@ -67,7 +67,15 @@ class SortableTableFromArray extends SortableTable
             $content = $this->table_data;
         }
 
-        return array_slice($content, $from, $this->per_page);
+        // Data is already paginated externally (DB query), so do not slice again.
+        if (!empty($this->handlePagination)) {
+            return $content;
+        }
+
+        $offset = max(0, (int) $from);
+        $length = null !== $perPage ? (int) $perPage : (int) $this->per_page;
+
+        return array_slice($content, $offset, $length);
     }
 
     /**

@@ -34667,64 +34667,64 @@ msgid "Admin responsibility & disclosures"
 msgstr ""
 
 msgid "This configuration page details each AI feature and its purpose. As a deployer, you should review them carefully and update your GDPR-compliant data privacy policies to reflect the options you enable. While most AI features do not directly share personal data with external systems, user prompts sent to AI may inadvertently include personal information. As a deployer, <strong>you are responsible</strong> for informing users of this risk. For transparency, future releases may show non-intrusive end-user tags indicating that certain content or feedback was generated with the help of AI."
-msgstr ""
+msgstr "ໜ້າການຕັ້ງຄ່ານີ້ລາຍລະອຽດລັກສະນະ AI ທຸກຢ່າງ ແລະ ຈຸດປະສົງຂອງມັນ. ໃນຖານະເປັນຜູ້ປະກາດ, ເຈົ້າຄວນກວດເບິ່ງມັນອີກຄັ້ງ ແລະ ອັບເດດນະໂຍບາຍຄວາມເປັນສ່ວນຕົວຂໍ້ມູນທີ່ປະຕິບັດຕາມ GDPR ເພື່ອສະແດງຕົວເລືອກທີ່ເຈົ້າເປີດໃຊ້. ເຖິງແຕ່ລັກສະນະ AI ສ່ວໃຫຍ່ບໍ່ໄດ້ແບ່ງປັນຂໍ້ມູນສ່ວນຕົວກັບລະບົບພາຍນອກໂດຍກົງ, ການສົ່ງຄຳຖາມຂອງຜູ້ໃຊ້ໄປກັບ AI ອາດຈະມີຂໍ້ມູນສ່ວນຕົວໂດຍບັງເອີນ. ໃນຖານະເປັນຜູ້ປະກາດ, <strong>ເຈົ້າມີຄວາມຮັບພັນທັງໝົດ</strong> ສຳລັບການແຈ້ງເຕືອນຜູ້ໃຊ້ກ່ຽວກັບຄວາມສ່ຽງນີ້. ເພື່ອຄວາມໂປ່ງໃສ, ການປ່ອຍລຸ້ນໃນອະນາຄົດອາດຈະສະແດງປ້າຍຜູ້ໃຊ້ທ້າຍຕອນທີ່ບໍ່ລົບກວນ ທີ່ບອກວ່າເນື້ອໃນ ຫຼື ຄຳເຫັນບາງຢ່າງໄດ້ຖືກສ້າງດ້ວຍການຊ່ວຍເຫຼືອຈາກ AI."
 
 msgid "Positioning"
-msgstr ""
+msgstr "ຕຳແໜ່ງ"
 
 msgid "Quiz"
-msgstr ""
+msgstr "ການທົດສອບ"
 
 msgid "Customcertificate"
-msgstr ""
+msgstr "ໃບຢັ້ງຢືນກຳນົດເອງ"
 
 msgid "Update profile"
-msgstr ""
+msgstr "ອັບເດດໂປຣໄຟລ໌"
 
 msgid "Enable learning path generator"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງປ່ອຍເສັ້ນທາງການຮຽນ"
 
 msgid "Enable exercise generator"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງປ່ອຍການອອກທົດສອບ"
 
 msgid "Enable open answers grader"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງຈັດການຄຳຕອບເປີດ"
 
 msgid "Enable tutor chatbot"
-msgstr ""
+msgstr "ເປີດໃຊ້ບອດສົນທະນາຄູ"
 
 msgid "Enable task grader"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງຈັດການກິດຈະການ"
 
 msgid "Enable content analyser"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງວິເຄາະເນື້ອໃນ"
 
 msgid "Enable image generator"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງປ່ອຍຮູບພາບ"
 
 msgid "Enable glossary terms generator"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງປ່ອຍຄຳສັ້ນຄຳແມ່ນພາສາ"
 
 msgid "Enable video generator"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງປ່ອຍວິດີໂອ"
 
 msgid "Enable course analyser"
-msgstr ""
+msgstr "ເປີດໃຊ້ເຄື່ອງວິເຄາະຄອສ"
 
 msgid "The operation '%s' is not supported."
-msgstr ""
+msgstr "ການເຄື່ອນໄຫວ '%s' ບໍ່ໄດ້ຮັບການສະໜັບສະໜຸນ."
 
 msgid "AI feedback on %s in course %s"
-msgstr ""
+msgstr "ຄຳເຫັນ AI ກ່ຽວກັບ %s ໃນຄອສ %s"
 
 msgid "Delete failed: missing course context or invalid question id."
-msgstr ""
+msgstr "ລຶບບໍ່ສຳເລັດ: ຂາດບໍລິບົດຄອສ ຫຼື ID ຄຳຖາມບໍ່ຖືກຕ້ອງ."
 
 msgid "AI Tutor"
-msgstr ""
+msgstr "ຄູ AI"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
-msgstr ""
+msgstr "ເຄື່ອງຂັດຂຶ້ນ APCu ຕ້ອງຖືກຕິດຕັ້ງ ແລະ ເປີດໃຊ້ເພື່ອໃຫ້ແພລັດຟອມໃຊ້ມັນໄດ້."
 
 msgid "Allowing OPCache memory_consumption to reach %sMB of RAM at least is recommended."
 msgstr "ແນະນຳໃຫ້ອະນຸຍາດໃຫ້ OPCache memory_consumption ເຖິງ %sMB ຂອງ RAM ຢ່າງນ້ອຍ"
@@ -34926,4 +34926,166 @@ msgstr "ຖ້າເຈົ້າບໍ່ໄດ້ລົງທະບຽນບັ
 
 msgid "Current authentication method"
 msgstr "ວິທີການຢັ້ງຕົວປະຈຳປີ"
+
+msgid "Branches"
+msgstr "ສາຂາ"
+
+msgid "Rooms"
+msgstr "ຫ້ອງ"
+
+msgid "Room availability finder"
+msgstr "ເຄື່ອງຊອກຫາຄວາມຖືກຕ້ອງຂອງຫ້ອງ"
+
+msgid "New branch"
+msgstr "ສາຂາໃໝ່"
+
+msgid "New room"
+msgstr "ຫ້ອງໃໝ່"
+
+msgid "Branch"
+msgstr "ສາຂາ"
+
+msgid "Default room"
+msgstr "ຫ້ອງດັ້ງເດີມ"
+
+msgid "Room occupation: %s"
+msgstr "ການໃຊ້ຫ້ອງ: %s"
+
+msgid "Find available rooms"
+msgstr "ຊອກຫາຫ້ອງທີ່ມີຢູ່"
+
+msgid "Available rooms"
+msgstr "ຫ້ອງທີ່ມີຢູ່"
+
+msgid "Occupied rooms"
+msgstr "ຫ້ອງທີ່ຖືກໃຊ້"
+
+msgid "No available rooms found for this time range"
+msgstr "ບໍ່ພົບຫ້ອງທີ່ມີຢູ່ສຳລັບເວລານີ້"
+
+msgid "No rooms have been created yet"
+msgstr "ຍັງບໍ່ມີການສ້າງຫ້ອງ"
+
+msgid "Courses linked to %s"
+msgstr "ຄອສທີ່ເຊື່ອມຕໍ່ກັບ %s"
+
+msgid "No branches have been created yet"
+msgstr "ຍັງບໍ່ມີການສ້າງສາຂາ"
+
+msgid "Occupation"
+msgstr "ການໃຊ້"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "ບໍ່ສາມາດລຶບສາຂາທີ່ມີຫ້ອງເຊື່ອມຕໍ່"
+
+msgid "Cannot delete room with courses attached"
+msgstr "ບໍ່ສາມາດລຶບຫ້ອງທີ່ມີຄອສເຊື່ອມຕໍ່"
+
+msgid "Conflicts"
+msgstr "ການຂັດແຍ່ງ"
+
+msgid "Geolocation"
+msgstr "ສະຖານທີ່ຕາມພື້ນຖານ"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "ດຳລົງ, ລະດູບົດ (ຕົວຢ່າງ 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ຫຼື IPv6"
+
+msgid "IP mask"
+msgstr "ຫມາດ IP"
+
+msgid "e.g. /24"
+msgstr "ຕົວຢ່າງ /24"
+
+msgid "Parent branch"
+msgstr "ສາຂາແມ່"
+
+msgid "Unique identifier"
+msgstr "ເລກລະຫັດທີ່ເປັນຈິງເດັ່ນດ່ວຍ"
+
+msgid "Latitude"
+msgstr "ດຳລົງ"
+
+msgid "e.g. 48.8566"
+msgstr "ຕົວຢ່າງ 48.8566"
+
+msgid "Longitude"
+msgstr "ລະດູບົດ"
+
+msgid "e.g. 2.3522"
+msgstr "ຕົວຢ່າງ 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "ອັດຕາການດາວໂຫຼດ (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "ອັດຕາການອັບໂຫຼດ (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "ການລ່າຊ້າ (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "ຊື່ຜູ້ຈັດການ"
+
+msgid "Administrator phone number"
+msgstr "ເບີໂທຜູ້ຈັດການ"
+
+msgid "ID of last synch transaction"
+msgstr "ID ຂອງການລະຫັດກຳໄລຄັ້ງສຸດທ້າຍ"
+
+msgid "Time of last synchronization"
+msgstr "ເວລາຂອງການຈັດລຳດັບຄັ້ງສຸດທ້າຍ"
+
+msgid "Last synchronization type"
+msgstr "ປະເພດການຈັດລຳດັບຄັ້ງສຸດທ້າຍ"
+
+msgid "SSL public key"
+msgstr "ກະຈິນລັບ SSL ສາທາລະນະ"
+
+msgid "Branch type"
+msgstr "ປະເພດສາຂາ"
+
+msgid "Room"
+msgstr "ຫ້ອງ"
+
+msgid "Simple IDS"
+msgstr "IDS ງ່າຍ"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS ຖືກປິດໃຊ້ງານເຖິງເວລານີ້. ຕັ້ງ IDS_ENABLED=true ໃນ .env ຂອງເຈົ້າເພື່ອເປີດການສະແດງລາຍການ."
+
+msgid "All event types"
+msgstr "ປະເພດເຫດການທັງໝົດ"
+
+msgid "Events by day (last 7 days)"
+msgstr "ເຫດການຕາມມື້ (7 ມື້ສຸດທ້າຍ)"
+
+msgid "Events by type (last 30 days)"
+msgstr "ເຫດການຕາມປະເພດ (30 ມື້ສຸດທ້າຯ)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP ທີ່ໂຈມຕີຫົວໜ້າ (30 ມື້ສຸດທ້າຯ)"
+
+msgid "Flagged IDS events"
+msgstr "ເຫດການ IDS ທີ່ຖືກປ່າຍແດ່ງ"
+
+msgid "No suspicious events detected."
+msgstr "ບໍ່ພົບເຫດການສົງໄສ."
+
+msgid "Detection type"
+msgstr "ປະເພດການຕິດຕາມ"
+
+msgid "Parameter"
+msgstr "ພາລາເມດເຕີ"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (ປະຈຸບັນ)"
 

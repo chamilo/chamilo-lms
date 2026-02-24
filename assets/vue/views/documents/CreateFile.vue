@@ -4,6 +4,15 @@
     :handle-reset="resetForm"
   />
 
+  <!-- Quota warning banner (always visible) -->
+  <div
+    v-if="quotaWarningMessage"
+    class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+    role="alert"
+  >
+    {{ quotaWarningMessage }}
+  </div>
+
   <div class="documents-layout">
     <div class="template-list-container">
       <TemplateList
@@ -76,6 +85,9 @@ import { usePlatformConfig } from "../../store/platformConfig"
 
 const servicePrefix = "Documents"
 
+// Show warning when remaining quota <= 2%
+const QUOTA_WARNING_THRESHOLD_PERCENT = 2
+
 export default {
   name: "DocumentsCreateFile",
   servicePrefix,
@@ -88,7 +100,6 @@ export default {
   },
   mixins: [CreateMixin],
 
-  // Read platform search setting once and expose as simple booleans
   setup() {
     const platformConfigStore = usePlatformConfig()
 
@@ -127,6 +138,9 @@ export default {
       isLoading: false,
       errors: {},
 
+      // Quota banner
+      quotaWarningMessage: "",
+
       // Certificate UI helpers
       certificateTags: [
         "((user_firstname))",
@@ -164,9 +178,43 @@ export default {
         visibility: RESOURCE_LINK_PUBLISHED,
       },
     ])
+
+    // Show quota warning early (avoid wasting time writing content)
+    this.showQuotaWarningIfNeeded()
   },
 
   methods: {
+    toInt(value, fallback = 0) {
+      const n = Number(value)
+      return Number.isFinite(n) ? n : fallback
+    },
+
+    async showQuotaWarningIfNeeded() {
+      const courseId = this.toInt(this.$route.query.cid, 0)
+      if (!courseId) return
+
+      const sid = this.toInt(this.$route.query.sid, 0)
+      const gid = this.toInt(this.$route.query.gid, 0)
+
+      try {
+        const msg = await documentsService.fetchQuotaWarningMessage(this.$t.bind(this), courseId, {
+          sid,
+          gid,
+          force: true,
+          thresholdPercent: QUOTA_WARNING_THRESHOLD_PERCENT,
+        })
+
+        if (msg) {
+          this.quotaWarningMessage = msg
+          if (typeof this.showMessage === "function") {
+            this.showMessage(msg)
+          }
+        }
+      } catch (e) {
+        console.error("[DocumentsCreateFile] Failed to show quota warning:", e)
+      }
+    },
+
     handleBack() {
       this.$router.back()
     },
@@ -221,7 +269,6 @@ export default {
      * otherwise falls back to execCommand("copy").
      */
     async writeToClipboard(text) {
-      // Modern API (secure context required)
       try {
         if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(text)
@@ -231,7 +278,6 @@ export default {
         console.warn("[Certificate] Clipboard API failed, using fallback:", e)
       }
 
-      // Fallback
       try {
         const textarea = document.createElement("textarea")
         textarea.value = text
@@ -255,13 +301,10 @@ export default {
 
     /**
      * Click on a tag: insert into editor (main behavior).
-     * Optionally also tries to copy, but insertion is the priority.
      */
     async insertCertificateTag(tag) {
-      const inserted = this.insertIntoEditor(tag)
-
-      // Optional: also try to copy (non-blocking UX)
-      const copied = await this.writeToClipboard(tag)
+      this.insertIntoEditor(tag)
+      await this.writeToClipboard(tag) // Non-blocking UX
     },
 
     /**
@@ -278,21 +321,65 @@ export default {
       }
     },
 
-    // ----------------------------
-    // Existing create logic
-    // ----------------------------
+    async readErrorMessageSafely(response) {
+      if (!response) return ""
 
+      try {
+        const data = await response.json()
+        const msg =
+          data?.error ||
+          data?.message ||
+          data?.detail ||
+          data?.["hydra:description"] ||
+          (Array.isArray(data?.violations) && data.violations.length ? data.violations[0].message : null)
+
+        return String(msg || "")
+      } catch {
+        try {
+          const txt = await response.text()
+          return String(txt || "")
+        } catch {
+          return ""
+        }
+      }
+    },
+
+    // ----------------------------
+    // Existing create logic (quota-aware)
+    // ----------------------------
     async createWithFormData(payload) {
       this.isLoading = true
       this.errors = {}
+
       try {
         const response = await documentsService.createWithFormData(payload)
+
+        if (!response || !response.ok) {
+          const status = response?.status
+          const msg = await this.readErrorMessageSafely(response)
+
+          if (documentsService.isQuotaError(status, msg)) {
+            const quotaMsg = documentsService.getQuotaUploadErrorMessage(this.$t.bind(this))
+            this.showMessage(quotaMsg)
+            this.errors = { error: quotaMsg }
+            return
+          }
+
+          const generic = msg || `Create failed (HTTP ${status ?? "unknown"}).`
+          this.showMessage(generic)
+          this.errors = { error: generic }
+          return
+        }
+
         const data = await response.json()
         console.log("[Documents] Create response:", data)
         this.onCreated(data)
       } catch (error) {
         console.error("[Documents] Create failed:", error)
-        this.errors = error.errors
+
+        const errMsg = this.$t("Error")
+        this.showMessage(errMsg)
+        this.errors = error?.errors || { error: errMsg }
       } finally {
         this.isLoading = false
       }

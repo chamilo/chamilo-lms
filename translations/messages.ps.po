@@ -24685,7 +24685,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: اوسنی ربع وار، ناتمام معلومات"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "پ%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -32576,4 +32576,166 @@ msgstr "که تاسو دا حساب نه وي ثبت کړی، تاسو کولی 
 
 msgid "Current authentication method"
 msgstr "اوسې مهال تصدیقي طريقې"
+
+msgid "Branches"
+msgstr "شاخې"
+
+msgid "Rooms"
+msgstr "خونې"
+
+msgid "Room availability finder"
+msgstr "د خونې شتون موندونکي"
+
+msgid "New branch"
+msgstr "نوه شاخه"
+
+msgid "New room"
+msgstr "نوه خونه"
+
+msgid "Branch"
+msgstr "شاخه"
+
+msgid "Default room"
+msgstr "مخکېښته خونه"
+
+msgid "Room occupation: %s"
+msgstr "د خونې اشغال: %s"
+
+msgid "Find available rooms"
+msgstr "د شته خونو موندل"
+
+msgid "Available rooms"
+msgstr "شته خونې"
+
+msgid "Occupied rooms"
+msgstr "اشغاله خونې"
+
+msgid "No available rooms found for this time range"
+msgstr "د دې وخت محدوده لپاره هیڅ شته خونې ونه موندل شوې"
+
+msgid "No rooms have been created yet"
+msgstr "په اوس کې هیڅ خونې جوړې شوې نه دي"
+
+msgid "Courses linked to %s"
+msgstr "د %s سره تړل شوي کورسونه"
+
+msgid "No branches have been created yet"
+msgstr "په اوس کې هیڅ شاخې جوړې شوې نه دي"
+
+msgid "Occupation"
+msgstr "اشغال"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "د تړل شوو خونو سره شاخه نشی ړنګیدلی"
+
+msgid "Cannot delete room with courses attached"
+msgstr "د تړل شوو کورسونو سره خونه نشی ړنګیدلی"
+
+msgid "Conflicts"
+msgstr "تعارضات"
+
+msgid "Geolocation"
+msgstr "جغرافیايي ځای"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "اوږدوالی، اوږدوالی (د بیلګې په توګه 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 یا IPv6"
+
+msgid "IP mask"
+msgstr "IP ماسک"
+
+msgid "e.g. /24"
+msgstr "د بیلګې په توګه /24"
+
+msgid "Parent branch"
+msgstr "مور شاخه"
+
+msgid "Unique identifier"
+msgstr "یوالي پیژندن"
+
+msgid "Latitude"
+msgstr "اوږدوالی"
+
+msgid "e.g. 48.8566"
+msgstr "د بیلګې په توګه 48.8566"
+
+msgid "Longitude"
+msgstr "اوږدوالی"
+
+msgid "e.g. 2.3522"
+msgstr "د بیلګې په توګه 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "ډاونلوډ سرعت (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "اپلوډ سرعت (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "ځنډ (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "د مدیر نوم"
+
+msgid "Administrator phone number"
+msgstr "د مدیر د ټلیفون شمېره"
+
+msgid "ID of last synch transaction"
+msgstr "د وروستي همغږۍ د معاملې ID"
+
+msgid "Time of last synchronization"
+msgstr "د وروستۍ همغږۍ وخت"
+
+msgid "Last synchronization type"
+msgstr "وروستۍ همغږۍ ډول"
+
+msgid "SSL public key"
+msgstr "SSL عمومي کلید"
+
+msgid "Branch type"
+msgstr "شاخه ډول"
+
+msgid "Room"
+msgstr "خونه"
+
+msgid "Simple IDS"
+msgstr "ساده IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS اوس غیر فعال دی. په خپل .env کې IDS_ENABLED=true ټاکئ ترڅو سکېن فعال شي."
+
+msgid "All event types"
+msgstr "ټول پېښو ډولونه"
+
+msgid "Events by day (last 7 days)"
+msgstr "پېښې د ورځې له مخې (وروستۍ ۷ ورځې)"
+
+msgid "Events by type (last 30 days)"
+msgstr "پېښې د ډول له مخې (وروستۍ ۳۰ ورځې)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "غوره برید کوونکي IP (وروستۍ ۳۰ ورځې)"
+
+msgid "Flagged IDS events"
+msgstr "نښه شوې IDS پېښې"
+
+msgid "No suspicious events detected."
+msgstr "هیڅ مشکوک پېښې موندل شوې نه دي."
+
+msgid "Detection type"
+msgstr "پېژندنه ډول"
+
+msgid "Parameter"
+msgstr "پارامتر"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (اوسنۍ)"
 

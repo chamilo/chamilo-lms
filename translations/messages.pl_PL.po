@@ -30518,7 +30518,7 @@ msgid "CREATE TABLE works"
 msgstr "TWORZĘ TABELĘ works"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE działa"
 
 msgid "DROP COLUMN works"
 msgstr "USUŃ KOLUMNĘ works"
@@ -32586,4 +32586,166 @@ msgstr "Jeśli nie rejestrowałeś tego konta, możesz zignorować tego e-maila.
 
 msgid "Current authentication method"
 msgstr "Aktualna metoda uwierzytelniania"
+
+msgid "Branches"
+msgstr "Oddziały"
+
+msgid "Rooms"
+msgstr "Sale"
+
+msgid "Room availability finder"
+msgstr "Wyszukiwarka dostępnych sal"
+
+msgid "New branch"
+msgstr "Nowy oddział"
+
+msgid "New room"
+msgstr "Nowa sala"
+
+msgid "Branch"
+msgstr "Oddział"
+
+msgid "Default room"
+msgstr "Domyślna sala"
+
+msgid "Room occupation: %s"
+msgstr "Zajęcie sali: %s"
+
+msgid "Find available rooms"
+msgstr "Znajdź dostępne sale"
+
+msgid "Available rooms"
+msgstr "Dostępne sale"
+
+msgid "Occupied rooms"
+msgstr "Zajęte sale"
+
+msgid "No available rooms found for this time range"
+msgstr "Nie znaleziono dostępnych sal w tym przedziale czasowym"
+
+msgid "No rooms have been created yet"
+msgstr "Nie utworzono jeszcze żadnych sal"
+
+msgid "Courses linked to %s"
+msgstr "Kursy powiązane z %s"
+
+msgid "No branches have been created yet"
+msgstr "Nie utworzono jeszcze żadnych oddziałów"
+
+msgid "Occupation"
+msgstr "Zajęcie"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nie można usunąć oddziału z przypisanymi salami"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nie można usunąć sali z przypisanymi kursami"
+
+msgid "Conflicts"
+msgstr "Konflikty"
+
+msgid "Geolocation"
+msgstr "Geolokalizacja"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Szerokość geograficzna, Długość geograficzna (np. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 lub IPv6"
+
+msgid "IP mask"
+msgstr "Maska IP"
+
+msgid "e.g. /24"
+msgstr "np. /24"
+
+msgid "Parent branch"
+msgstr "Oddział nadrzędny"
+
+msgid "Unique identifier"
+msgstr "Unikalny identyfikator"
+
+msgid "Latitude"
+msgstr "Szerokość geograficzna"
+
+msgid "e.g. 48.8566"
+msgstr "np. 48.8566"
+
+msgid "Longitude"
+msgstr "Długość geograficzna"
+
+msgid "e.g. 2.3522"
+msgstr "np. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Prędkość pobierania (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Prędkość wysyłania (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Opóźnienie (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nazwa administratora"
+
+msgid "Administrator phone number"
+msgstr "Numer telefonu administratora"
+
+msgid "ID of last synch transaction"
+msgstr "ID ostatniej transakcji synchronizacji"
+
+msgid "Time of last synchronization"
+msgstr "Czas ostatniej synchronizacji"
+
+msgid "Last synchronization type"
+msgstr "Typ ostatniej synchronizacji"
+
+msgid "SSL public key"
+msgstr "Klucz publiczny SSL"
+
+msgid "Branch type"
+msgstr "Typ oddziału"
+
+msgid "Room"
+msgstr "Sala"
+
+msgid "Simple IDS"
+msgstr "Prosty IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS jest obecnie wyłączony. Ustaw IDS_ENABLED=true w pliku .env, aby aktywować skanowanie."
+
+msgid "All event types"
+msgstr "Wszystkie typy zdarzeń"
+
+msgid "Events by day (last 7 days)"
+msgstr "Zdarzenia według dnia (ostatnie 7 dni)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Zdarzenia według typu (ostatnie 30 dni)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Najbardziej atakujące adresy IP (ostatnie 30 dni)"
+
+msgid "Flagged IDS events"
+msgstr "Zaznaczone zdarzenia IDS"
+
+msgid "No suspicious events detected."
+msgstr "Nie wykryto podejrzanych zdarzeń."
+
+msgid "Detection type"
+msgstr "Typ wykrycia"
+
+msgid "Parameter"
+msgstr "Parametr"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (bieżący)"
 

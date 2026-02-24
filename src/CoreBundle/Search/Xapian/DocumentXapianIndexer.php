@@ -60,20 +60,14 @@ final class DocumentXapianIndexer
         $resourceNode = $document->getResourceNode();
 
         if (!$this->isEnabled) {
-            error_log('[Xapian] indexDocument: search is disabled, skipping indexing');
-
             return null;
         }
 
         if (!$resourceNode instanceof ResourceNode) {
-            error_log('[Xapian] indexDocument: missing ResourceNode, skipping');
-
             return null;
         }
 
         if ('folder' === $document->getFiletype()) {
-            error_log('[Xapian] indexDocument: skipping folder document, resource_node_id='.$resourceNode->getId());
-
             return null;
         }
 

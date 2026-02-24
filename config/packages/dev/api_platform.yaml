@@ -1,0 +1,2 @@
+api_platform:
+    enable_entrypoint: true

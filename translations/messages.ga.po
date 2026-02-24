@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octad,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -32580,4 +32580,166 @@ msgstr "Mura ndearna tú an cuntas seo a chlárú, is féidir leat an r-phost se
 
 msgid "Current authentication method"
 msgstr "Modh fíordheimhnithe reatha"
+
+msgid "Branches"
+msgstr "Brainsí"
+
+msgid "Rooms"
+msgstr "Seomraí"
+
+msgid "Room availability finder"
+msgstr "Aimsitheoir infhaighteachta seomra"
+
+msgid "New branch"
+msgstr "Brainse nua"
+
+msgid "New room"
+msgstr "Seomra nua"
+
+msgid "Branch"
+msgstr "Brainse"
+
+msgid "Default room"
+msgstr "Seomra réamhshocraithe"
+
+msgid "Room occupation: %s"
+msgstr "Áitiú seomra: %s"
+
+msgid "Find available rooms"
+msgstr "Aimsigh seomraí atá ar fáil"
+
+msgid "Available rooms"
+msgstr "Seomraí ar fáil"
+
+msgid "Occupied rooms"
+msgstr "Seomraí áitiúite"
+
+msgid "No available rooms found for this time range"
+msgstr "Níor aimsíodh aon seomraí ar fáil don raon ama seo"
+
+msgid "No rooms have been created yet"
+msgstr "Níl aon seomraí cruthaithe go fóill"
+
+msgid "Courses linked to %s"
+msgstr "Cúrsaí nasctha le %s"
+
+msgid "No branches have been created yet"
+msgstr "Níl aon brainsí cruthaithe go fóill"
+
+msgid "Occupation"
+msgstr "Áitiú"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ní féidir brainse a scriosadh le seomraí ceangailte"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ní féidir seomra a scriosadh le cúrsaí ceangailte"
+
+msgid "Conflicts"
+msgstr "Coinbhleachtaí"
+
+msgid "Geolocation"
+msgstr "Geoáitiú"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Domhanleithad, Fad (m.sh. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 nó IPv6"
+
+msgid "IP mask"
+msgstr "Masc IP"
+
+msgid "e.g. /24"
+msgstr "m.sh. /24"
+
+msgid "Parent branch"
+msgstr "Máthairbhrainse"
+
+msgid "Unique identifier"
+msgstr "Aitheantóir uathúil"
+
+msgid "Latitude"
+msgstr "Domhanleithad"
+
+msgid "e.g. 48.8566"
+msgstr "m.sh. 48.8566"
+
+msgid "Longitude"
+msgstr "Fad"
+
+msgid "e.g. 2.3522"
+msgstr "m.sh. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Luas íoslódála (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Luas uaslódála (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Mótar (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Ainm an riarthóra"
+
+msgid "Administrator phone number"
+msgstr "Uimhir theileafóin an riarthóra"
+
+msgid "ID of last synch transaction"
+msgstr "ID an idirbhearta sioncrónaithe deireanaigh"
+
+msgid "Time of last synchronization"
+msgstr "Am na sioncrónaithe deireanaí"
+
+msgid "Last synchronization type"
+msgstr "Cineál na sioncrónaithe deireanaí"
+
+msgid "SSL public key"
+msgstr "Eochair phoiblí SSL"
+
+msgid "Branch type"
+msgstr "Cineál brainse"
+
+msgid "Room"
+msgstr "Seomra"
+
+msgid "Simple IDS"
+msgstr "IDS Simplí"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "Tá IDS díchumasaithe faoi láthair. Socraigh IDS_ENABLED=true i do .env chun scanadh a chur i ngníomh."
+
+msgid "All event types"
+msgstr "Gach cineál imeachta"
+
+msgid "Events by day (last 7 days)"
+msgstr "Imeachtaí de réir lae (7 lá anuas)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Imeachtaí de réir cineáil (30 lá anuas)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Príomh-IPanna ionsaithe (30 lá anuas)"
+
+msgid "Flagged IDS events"
+msgstr "Imeachtaí IDS faoi bhrat"
+
+msgid "No suspicious events detected."
+msgstr "Gan aon imeachtaí amhrasta aimsithe."
+
+msgid "Detection type"
+msgstr "Cineál braite"
+
+msgid "Parameter"
+msgstr "Paraiméadar"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (reatha)"
 

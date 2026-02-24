@@ -96,6 +96,16 @@
     />
 
     <AdminBlock
+      v-if="blockRooms"
+      :id="blockRooms.id"
+      v-model:extra-content="blockRooms.extraContent"
+      :editable="blockRooms.editable"
+      :items="blockRooms.items"
+      :title="t('Rooms')"
+      icon="room"
+    />
+
+    <AdminBlock
       v-if="blockSecurity"
       :id="blockSecurity.id"
       v-model:extra-content="blockSecurity.extraContent"
@@ -107,14 +117,13 @@
     />
 
     <AdminBlock
-      v-if="blockChamilo"
-      :id="blockChamilo.id"
-      v-model:extra-content="blockChamilo.extraContent"
-      :description="t('Learn more about Chamilo and its use, official references links')"
-      :editable="blockChamilo.editable"
-      :items="blockChamilo.items"
-      icon="promotion"
-      title="Chamilo.org"
+      v-if="blockPrivacy"
+      :id="blockPrivacy.id"
+      v-model:extra-content="blockPrivacy.extraContent"
+      :editable="blockPrivacy.editable"
+      :items="blockPrivacy.items"
+      :title="t('Personal data protection')"
+      icon="anonymous"
     />
 
     <AdminBlock
@@ -126,13 +135,14 @@
     />
 
     <AdminBlock
-      v-if="blockPrivacy"
-      :id="blockPrivacy.id"
-      v-model:extra-content="blockPrivacy.extraContent"
-      :editable="blockPrivacy.editable"
-      :items="blockPrivacy.items"
-      :title="t('Personal data protection')"
-      icon="anonymous"
+      v-if="blockChamilo"
+      :id="blockChamilo.id"
+      v-model:extra-content="blockChamilo.extraContent"
+      :description="t('Learn more about Chamilo and its use, official references links')"
+      :editable="blockChamilo.editable"
+      :items="blockChamilo.items"
+      icon="promotion"
+      title="Chamilo.org"
     />
 
     <!-- Small / secondary blocks: sent to the bottom -->
@@ -192,7 +202,7 @@
                 name="donotlistcampus"
               />
               <label
-                v-t="'Hide campus from public platforms list'"
+                v-text="t('Hide campus from public platforms list')"
                 for="checkbox"
               />
             </div>
@@ -249,7 +259,7 @@
         />
         <div
           v-else
-          v-t="'Disabled'"
+          v-text="t('Disabled')"
           class="block-admin-news__status"
         />
       </div>
@@ -294,6 +304,7 @@ const {
   blockSupportStatusEl,
   blockPlugins,
   blockHealthCheck,
+  blockRooms,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

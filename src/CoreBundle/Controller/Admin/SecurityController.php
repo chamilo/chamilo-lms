@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Helpers\IntrusionDetectionLogHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +19,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SecurityController extends BaseController
 {
     public function __construct(
-        private readonly TrackELoginRecordRepository $repo
+        private readonly TrackELoginRecordRepository $repo,
+        private readonly IntrusionDetectionLogHelper $idsLog,
+        #[Autowire(param: 'chamilo.ids.enabled')]
+        private readonly bool $idsEnabled,
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]
@@ -52,6 +57,41 @@ final class SecurityController extends BaseController
             'pageSize' => $list['pageSize'],
             'filters' => $filters,
             'stats' => $stats,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/simple-ids', name: 'admin_security_simple_ids', methods: ['GET'])]
+    public function simpleIds(Request $r): Response
+    {
+        $page = max(1, $r->query->getInt('page', 1));
+        $pageSize = min(100, max(1, $r->query->getInt('pageSize', 25)));
+        $filters = [
+            'ip' => trim((string) $r->query->get('ip', '')),
+            'type' => trim((string) $r->query->get('type', '')),
+            'from' => $r->query->get('from'),
+            'to' => $r->query->get('to'),
+        ];
+
+        $list = $this->idsLog->parseEvents($page, $pageSize, $filters);
+
+        $stats = [
+            'byDay' => $this->idsLog->getStatsByDay(7),
+            'byType' => $this->idsLog->getStatsByType(30),
+            'topIps' => $this->idsLog->getTopIps(30, 5),
+        ];
+
+        $knownTypes = $this->idsLog->getKnownTypes();
+
+        return $this->render('@ChamiloCore/Admin/Security/ids_events.html.twig', [
+            'items' => $list['items'],
+            'total' => $list['total'],
+            'page' => $list['page'],
+            'pageSize' => $list['pageSize'],
+            'filters' => $filters,
+            'stats' => $stats,
+            'knownTypes' => $knownTypes,
+            'idsEnabled' => $this->idsEnabled,
         ]);
     }
 }

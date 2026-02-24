@@ -32584,3 +32584,165 @@ msgstr "Если вы не регистрировали этот аккаунт,
 msgid "Current authentication method"
 msgstr "Текущийметодаутентификации"
 
+msgid "Branches"
+msgstr "Филиалы"
+
+msgid "Rooms"
+msgstr "Аудитории"
+
+msgid "Room availability finder"
+msgstr "Поиск доступных аудиторий"
+
+msgid "New branch"
+msgstr "Новый филиал"
+
+msgid "New room"
+msgstr "Новая аудитория"
+
+msgid "Branch"
+msgstr "Филиал"
+
+msgid "Default room"
+msgstr "Аудитория по умолчанию"
+
+msgid "Room occupation: %s"
+msgstr "Занятость аудитории: %s"
+
+msgid "Find available rooms"
+msgstr "Найти доступные аудитории"
+
+msgid "Available rooms"
+msgstr "Доступные аудитории"
+
+msgid "Occupied rooms"
+msgstr "Занятые аудитории"
+
+msgid "No available rooms found for this time range"
+msgstr "Доступные аудитории на этот временной интервал не найдены"
+
+msgid "No rooms have been created yet"
+msgstr "Аудитории ещё не созданы"
+
+msgid "Courses linked to %s"
+msgstr "Курсы, связанные с %s"
+
+msgid "No branches have been created yet"
+msgstr "Филиалы ещё не созданы"
+
+msgid "Occupation"
+msgstr "Занятость"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Нельзя удалить филиал с привязанными аудиториями"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Нельзя удалить аудиторию с привязанными курсами"
+
+msgid "Conflicts"
+msgstr "Конфликты"
+
+msgid "Geolocation"
+msgstr "Геолокация"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Широта, Долгота (например, 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 или IPv6"
+
+msgid "IP mask"
+msgstr "Маска IP"
+
+msgid "e.g. /24"
+msgstr "например, /24"
+
+msgid "Parent branch"
+msgstr "Родительский филиал"
+
+msgid "Unique identifier"
+msgstr "Уникальный идентификатор"
+
+msgid "Latitude"
+msgstr "Широта"
+
+msgid "e.g. 48.8566"
+msgstr "например, 48.8566"
+
+msgid "Longitude"
+msgstr "Долгота"
+
+msgid "e.g. 2.3522"
+msgstr "например, 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Скорость загрузки (КБ/с)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Скорость отправки (КБ/с)"
+
+msgid "Delay (ms)"
+msgstr "Задержка (мс)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Имя администратора"
+
+msgid "Administrator phone number"
+msgstr "Телефон администратора"
+
+msgid "ID of last synch transaction"
+msgstr "ID последней транзакции синхронизации"
+
+msgid "Time of last synchronization"
+msgstr "Время последней синхронизации"
+
+msgid "Last synchronization type"
+msgstr "Тип последней синхронизации"
+
+msgid "SSL public key"
+msgstr "Публичный SSL-ключ"
+
+msgid "Branch type"
+msgstr "Тип филиала"
+
+msgid "Room"
+msgstr "Аудитория"
+
+msgid "Simple IDS"
+msgstr "Простая IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS в настоящее время отключена. Установите IDS_ENABLED=true в вашем .env для активации сканирования."
+
+msgid "All event types"
+msgstr "Все типы событий"
+
+msgid "Events by day (last 7 days)"
+msgstr "События по дням (последние 7 дней)"
+
+msgid "Events by type (last 30 days)"
+msgstr "События по типам (последние 30 дней)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Топ атакующих IP (последние 30 дней)"
+
+msgid "Flagged IDS events"
+msgstr "Помеченные события IDS"
+
+msgid "No suspicious events detected."
+msgstr "Подозрительные события не обнаружены."
+
+msgid "Detection type"
+msgstr "Тип обнаружения"
+
+msgid "Parameter"
+msgstr "Параметр"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (текущий)"
+

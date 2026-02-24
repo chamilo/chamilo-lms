@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:opphavsrett,, nei:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okettstrøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øving:øving,,      simulering:simulering,,      spørreskjema:spørreskjema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      lysbilete:lysbilete,,      tabell:tabell,,      forteljande tekst:forteljande tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemstilling:problemstilling,,      sjølvoppgåve:sjølvoppgåve,,      forelesning:forelesning"
@@ -32580,4 +32580,166 @@ msgstr "Hvis du ikkje registrerte denne kontoen, kan du ignorere denne e-posten.
 
 msgid "Current authentication method"
 msgstr "Noverande autentiseringsmetode"
+
+msgid "Branches"
+msgstr "Avdelingar"
+
+msgid "Rooms"
+msgstr "Rom"
+
+msgid "Room availability finder"
+msgstr "Finn tilgjengelege rom"
+
+msgid "New branch"
+msgstr "Ny avdeling"
+
+msgid "New room"
+msgstr "Nytt rom"
+
+msgid "Branch"
+msgstr "Avdeling"
+
+msgid "Default room"
+msgstr "Standardrom"
+
+msgid "Room occupation: %s"
+msgstr "Romopptaking: %s"
+
+msgid "Find available rooms"
+msgstr "Finn tilgjengelege rom"
+
+msgid "Available rooms"
+msgstr "Tilgjengelege rom"
+
+msgid "Occupied rooms"
+msgstr "Opptekne rom"
+
+msgid "No available rooms found for this time range"
+msgstr "Ingen tilgjengelege rom funne for dette tidsrommet"
+
+msgid "No rooms have been created yet"
+msgstr "Ingen rom er oppretta enno"
+
+msgid "Courses linked to %s"
+msgstr "Kurs knytt til %s"
+
+msgid "No branches have been created yet"
+msgstr "Ingen avdelingar er oppretta enno"
+
+msgid "Occupation"
+msgstr "Opptaking"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Kan ikkje slette avdeling med rom tilknytte"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Kan ikkje slette rom med kurs tilknytte"
+
+msgid "Conflicts"
+msgstr "Konfliktar"
+
+msgid "Geolocation"
+msgstr "Geolokasjon"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Breddegrad, lengdegrad (t.d. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 eller IPv6"
+
+msgid "IP mask"
+msgstr "IP-maske"
+
+msgid "e.g. /24"
+msgstr "t.d. /24"
+
+msgid "Parent branch"
+msgstr "Overordnet gren"
+
+msgid "Unique identifier"
+msgstr "Unik identifikator"
+
+msgid "Latitude"
+msgstr "Breddegrad"
+
+msgid "e.g. 48.8566"
+msgstr "t.d. 48.8566"
+
+msgid "Longitude"
+msgstr "Lengdegrad"
+
+msgid "e.g. 2.3522"
+msgstr "t.d. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Nedlasting hastighet (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Opplasting hastighet (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Forsinkelse (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratornamn"
+
+msgid "Administrator phone number"
+msgstr "Administrator telefonnummer"
+
+msgid "ID of last synch transaction"
+msgstr "ID for siste synkroniseringstransaksjon"
+
+msgid "Time of last synchronization"
+msgstr "Tid for siste synkronisering"
+
+msgid "Last synchronization type"
+msgstr "Type for siste synkronisering"
+
+msgid "SSL public key"
+msgstr "SSL offentlig nøkkel"
+
+msgid "Branch type"
+msgstr "Gren type"
+
+msgid "Room"
+msgstr "Rom"
+
+msgid "Simple IDS"
+msgstr "Einaste IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS er for tida deaktivert. Sett IDS_ENABLED=true i .env-fila di for å aktivere skanning."
+
+msgid "All event types"
+msgstr "Alle hendingstypar"
+
+msgid "Events by day (last 7 days)"
+msgstr "Hendelser per dag (siste 7 dagar)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Hendelser per type (siste 30 dagar)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Topp angripande IP-adressar (siste 30 dagar)"
+
+msgid "Flagged IDS events"
+msgstr "Merka IDS-hendingar"
+
+msgid "No suspicious events detected."
+msgstr "Ingen mistenkelege hendingar oppdaga."
+
+msgid "Detection type"
+msgstr "Oppdagings type"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (noe)"
 

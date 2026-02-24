@@ -110,9 +110,8 @@ $markRequired = static function (FormValidator $form, string $name): void {
 
 /**
  * Registration settings (backward-compatible).
- * Note: We ALWAYS show the role selector (UI requirement),
- * but we still enforce platform rules (security) by disabling teacher role
- * when the setting is disabled, and forcing STUDENT on submit.
+ * Note: Role selector must be shown only when teacher self-registration is allowed.
+ * Security is still enforced on submit by forcing STUDENT when teacher self-registration is disabled.
  */
 $allowTeacherRegistrationRaw = api_get_setting('registration.allow_registration_as_teacher');
 if (null === $allowTeacherRegistrationRaw || '' === (string) $allowTeacherRegistrationRaw) {
@@ -148,8 +147,9 @@ if ('false' !== $allowedFieldsConfiguration) {
     $allowedFields['extra_fields'] = $extraFromConfig;
 }
 
-// UI requirement: always show role selector even if config removes it.
-if (!in_array('status', $allowedFields, true)) {
+// Show role selector only when teacher self-registration is allowed.
+// If disabled, we must NOT force 'status' into the allowed fields.
+if ($allowTeacherRegistration && !in_array('status', $allowedFields, true)) {
     $allowedFields[] = 'status';
 }
 
@@ -333,32 +333,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Form container
   form.classList.add('max-w-4xl','mx-auto','bg-white','rounded-2xl','border','border-gray-25','shadow-sm','p-6','md:p-8');
 
-  // Inputs / selects / textareas
-  const controls = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, textarea');
-  controls.forEach(el => {
-    // Skip hidden fields
-    if (el.type === 'hidden') return;
-
-    el.classList.add(
-      'w-full','rounded-xl','border','border-gray-25','bg-white',
-      'px-4','py-3','text-gray-90',
-      'focus:outline-none','focus:ring-2','focus:ring-gray-60','focus:border-gray-60'
-    );
-  });
-
-  // Labels
-  form.querySelectorAll('label').forEach(l => {
-    l.classList.add('text-sm','font-medium','text-gray-90');
-  });
-
   // Required markers often appear as <span class="form_required">*</span>
   form.querySelectorAll('.form_required').forEach(s => {
-    s.classList.add('text-red-60','font-semibold');
+    s.classList.add('text-danger','font-semibold');
   });
 
   // Error messages
   form.querySelectorAll('.form_error, .error').forEach(err => {
-    err.classList.add('text-red-60','text-sm','mt-1');
+    err.classList.add('text-danger','text-sm','mt-1');
   });
 
   // Improve spacing between rows (best-effort)
@@ -500,10 +482,10 @@ if (!empty($courseIdRedirect)) {
 if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('allow_registration')) {
     /**
      * ROLE SELECTOR (Learner / Teacher)
-     * UI: always shown (forced in allowed fields).
-     * Security: teacher option disabled if platform forbids it, and backend forces STUDENT on submit.
+     * UI: must be shown only when teacher self-registration is allowed.
+     * Security: backend forces STUDENT on submit when teacher self-registration is disabled.
      */
-    if (in_array('status', $allowedFields, true)) {
+    if ($allowTeacherRegistration && in_array('status', $allowedFields, true)) {
         $iconSize = defined('ICON_SIZE_MEDIUM') ? ICON_SIZE_MEDIUM : 28;
 
         $renderIcon = static function (ObjectIcon|string $icon) use ($iconSize): string {
@@ -530,7 +512,7 @@ if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('al
         // Title (with required asterisk) above cards.
         $form->addHtml('
             <div class="mb-3">
-                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-red-60">*</span></div>
+                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-danger">*</span></div>
             </div>
         ');
 
@@ -1173,11 +1155,6 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
     $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
-if ($extraConditions) {
-    $form->addCheckBox('extra_platformuseconditions', null, get_lang('Platform use conditions'));
-    $form->addRule('extra_platformuseconditions', get_lang('Required field'), 'required');
-}
-
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
@@ -1200,7 +1177,9 @@ if ($blockButton) {
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
 
-    ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+    if ('login' === api_get_setting('workflows.load_term_conditions_section')) {
+        ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+    }
 
     /**
      * Double validation must be controlled ONLY by:

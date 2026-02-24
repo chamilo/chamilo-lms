@@ -1,6 +1,7 @@
 <template>
   <form>
     <BaseInputText
+      id="event-title"
       v-model="item.title"
       :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.title.$invalid"
@@ -10,7 +11,6 @@
     <BaseCalendar
       id="calendar-id"
       v-model="dateRange"
-      :initial-value="[item.startDate, item.endDate]"
       :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
       :label="t('Date')"
       show-time
@@ -38,6 +38,18 @@
       />
     </div>
 
+    <BaseSelect
+      v-if="showRoomField && roomOptions.length > 0"
+      id="calendar-room"
+      v-model="item.room"
+      :label="t('Room')"
+      :options="roomOptions"
+      name="room"
+      option-label="name"
+      option-value="id"
+      :allow-clear="true"
+    />
+
     <CalendarInvitations v-model="item" />
 
     <CalendarRemindersEditor
@@ -50,19 +62,28 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted } from "vue"
+import { computed, ref, watch, onMounted, watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
+import roomService from "../../services/roomService"
+import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const route = useRoute()
+
+const roomOptions = ref([])
+const showRoomField = computed(() => {
+  const contextType = getContextTypeFromRoute()
+  return contextType !== "personal"
+})
 
 const props = defineProps({
   values: {
@@ -73,23 +94,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-  initialValues: {
-    type: Object,
-    default: () => ({}),
-  },
   isGlobal: Boolean,
 })
 
-function isNonEmptyObject(v) {
-  return v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length > 0
-}
-
-const item = computed(() => {
-  if (isNonEmptyObject(props.initialValues)) {
-    return props.initialValues
-  }
-  return props.values
-})
+const item = computed(() => props.values)
 
 const rules = computed(() => ({
   item: {
@@ -114,24 +122,22 @@ defineExpose({
   v$,
 })
 
-const dateRange = ref([null, null])
+const dateRange = ref([item.value?.startDate, item.value?.endDate])
+
+watchEffect(() => {
+  item.value.startDate = dateRange.value[0] ?? null
+  item.value.endDate = dateRange.value[1] ?? null
+})
 
 watch(
-  () => [item.value?.startDate, item.value?.endDate],
-  ([start, end]) => {
-    dateRange.value = [start ?? null, end ?? null]
+  () => item.value?.room,
+  (room) => {
+    if (room && typeof room === "object" && room["@id"]) {
+      item.value.room = room["@id"]
+    }
   },
   { immediate: true },
 )
-
-watch(dateRange, (newValue) => {
-  if (!Array.isArray(newValue)) {
-    return
-  }
-
-  item.value.startDate = newValue[0] ?? null
-  item.value.endDate = newValue[1] ?? null
-})
 
 function getContextTypeFromRoute() {
   if (route.query.type === "global") return "global"
@@ -194,8 +200,25 @@ function ensureValidColor() {
   item.value.color = getDefaultColorByType(type)
 }
 
-onMounted(() => {
+onMounted(async () => {
   ensureValidColor()
+
+  if (showRoomField.value) {
+    try {
+      const hasRooms = await roomService.exists()
+      if (hasRooms) {
+        const { items } = await baseService.getCollection("/api/rooms")
+        roomOptions.value = items.map((r) => {
+          const branch = r.branch
+          const branchTitle = branch && typeof branch === "object" ? branch.title : null
+          const label = branchTitle ? `${branchTitle} - ${r.title}` : r.title
+          return { name: label, id: r["@id"] }
+        })
+      }
+    } catch (e) {
+      console.error("Failed to load rooms", e)
+    }
+  }
 })
 
 watch(

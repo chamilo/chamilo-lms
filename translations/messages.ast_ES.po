@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -32582,4 +32582,166 @@ msgstr "Si nun rexistraste esta cuenta, pues ignorar este corréu. Nun se tomar�
 
 msgid "Current authentication method"
 msgstr "Métodu d'autenticación actual"
+
+msgid "Branches"
+msgstr "Sedes"
+
+msgid "Rooms"
+msgstr "Aulas"
+
+msgid "Room availability finder"
+msgstr "Buscador de disponibilidade d'aula"
+
+msgid "New branch"
+msgstr "Nuev sede"
+
+msgid "New room"
+msgstr "Nuev aula"
+
+msgid "Branch"
+msgstr "Sede"
+
+msgid "Default room"
+msgstr "Aula predeterminada"
+
+msgid "Room occupation: %s"
+msgstr "Ocupación d'aula: %s"
+
+msgid "Find available rooms"
+msgstr "Atopar aulas disponibles"
+
+msgid "Available rooms"
+msgstr "Aulas disponibles"
+
+msgid "Occupied rooms"
+msgstr "Aulas ocupadas"
+
+msgid "No available rooms found for this time range"
+msgstr "Nun se atoparon aulas disponibles pa esti intervalu de tiempu"
+
+msgid "No rooms have been created yet"
+msgstr "Encami nun s'crearon aulas encami"
+
+msgid "Courses linked to %s"
+msgstr "Cursos vinculaos a %s"
+
+msgid "No branches have been created yet"
+msgstr "Encami nun s'crearon sedes"
+
+msgid "Occupation"
+msgstr "Ocupación"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nun ye posible desaniciar sede con aulas vinculaes"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nun ye posible desaniciar aula con cursos vinculaos"
+
+msgid "Conflicts"
+msgstr "Conflictos"
+
+msgid "Geolocation"
+msgstr "Xeolocalización"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitú, Llonxitú (es. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 o IPv6"
+
+msgid "IP mask"
+msgstr "Máscara IP"
+
+msgid "e.g. /24"
+msgstr "es. /24"
+
+msgid "Parent branch"
+msgstr "Sede pai"
+
+msgid "Unique identifier"
+msgstr "Identificador únicu"
+
+msgid "Latitude"
+msgstr "Latitú"
+
+msgid "e.g. 48.8566"
+msgstr "es. 48.8566"
+
+msgid "Longitude"
+msgstr "Llonxitú"
+
+msgid "e.g. 2.3522"
+msgstr "es. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Velocidá de descarga (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Velocidá de càrrega (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Retardu (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nome del administrador"
+
+msgid "Administrator phone number"
+msgstr "Númberu de teléfono del administrador"
+
+msgid "ID of last synch transaction"
+msgstr "ID de la última transacción de sincronización"
+
+msgid "Time of last synchronization"
+msgstr "Hora de la última sincronización"
+
+msgid "Last synchronization type"
+msgstr "Triba de la última sincronización"
+
+msgid "SSL public key"
+msgstr "Clave pública SSL"
+
+msgid "Branch type"
+msgstr "Triba de rama"
+
+msgid "Room"
+msgstr "Sala"
+
+msgid "Simple IDS"
+msgstr "IDS simple"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "L'IDS ta desactivao actualmente. Estableza IDS_ENABLED=true nel to .env pa activar l'escritura."
+
+msgid "All event types"
+msgstr "Tolos tipus d'eventos"
+
+msgid "Events by day (last 7 days)"
+msgstr "Eventos por día (últimos 7 díes)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Eventos por tipu (últimos 30 díes)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IPs atacantes más frecuentes (últimos 30 díes)"
+
+msgid "Flagged IDS events"
+msgstr "Eventos IDS marcaos"
+
+msgid "No suspicious events detected."
+msgstr "Nun se detectaron eventos sospechosos."
+
+msgid "Detection type"
+msgstr "Tipu de detección"
+
+msgid "Parameter"
+msgstr "Parámetru"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (actual)"
 

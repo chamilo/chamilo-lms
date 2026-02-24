@@ -53,7 +53,7 @@ function addEmptyReminder() {
             option-value="value"
           />
           <div
-            v-t="'Before'"
+            v-text="t('Before')"
             class="p-inputgroup-addon"
           />
         </div>

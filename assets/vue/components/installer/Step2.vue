@@ -12,7 +12,7 @@
       tag="p"
     >
       <a
-        v-t="'Read the installation guide'"
+        v-text="t('Read the installation guide')"
         href="/main/documentation/installation_guide.html"
         target="_blank"
         rel="noopener noreferrer"
@@ -158,8 +158,10 @@
       v-text="t('Directory and files permissions')"
     />
     <p
-      v-t="
-        'Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).'
+      v-text="
+        t(
+          'Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).',
+        )
       "
       class="mb-4"
     />
@@ -246,7 +248,7 @@
     <div v-else>
       <div v-if="installerData.stepData.notWritable.length > 0">
         <strong
-          v-t="'Warning!'"
+          v-text="t('Warning!')"
           class="text-error"
         />
         <p class="text-error">

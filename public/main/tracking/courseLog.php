@@ -850,7 +850,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formExtraField->addButtonSearch(get_lang('Search'));
 
     $numberStudentsCompletedLP = 0;
-    $averageStudentsTestScore = 0;
+    $averageStudentsTestScore = 0.0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $userScoreList = [];
     $listStudentIds = [];
@@ -931,8 +931,8 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
-            $averageStudentTestScore = substr($userTracking[7], 0, -1);
-            $averageStudentsTestScore .= $averageStudentTestScore;
+            $averageStudentTestScore = (float) rtrim((string) $userTracking[7], " \t\n\r\0\x0B%");
+            $averageStudentsTestScore += $averageStudentTestScore;
 
             $reducedAverage = ('100' === $averageStudentTestScore) ? 9 : floor((float) $averageStudentTestScore / 10);
             if (isset($scoresDistribution[$reducedAverage])) {
@@ -962,7 +962,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         }
 
         uasort($userScoreList, 'sort_by_order');
-        $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        $averageStudentsTestScore = $nbStudents ? round($averageStudentsTestScore / $nbStudents) : 0;
 
         $colors = ChamiloHelper::getColorPalette(true, true, 10);
         $tpl->assign('chart_colors', json_encode($colors));

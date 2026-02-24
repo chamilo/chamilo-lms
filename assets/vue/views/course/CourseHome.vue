@@ -180,7 +180,7 @@
         v-if="isAllowedToEdit"
         class="section-header section-header--h6"
       >
-        <h6 v-t="'Tools'" />
+        <h6 v-text="t('Tools')" />
 
         <div class="ml-auto">
           <BaseToggleButton

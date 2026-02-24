@@ -32583,3 +32583,165 @@ msgstr "Om du inte registrerade detta konto kan du ignorera detta e-postmeddelan
 msgid "Current authentication method"
 msgstr "Nuvarande autentiseringsmetod"
 
+msgid "Branches"
+msgstr ""
+
+msgid "Rooms"
+msgstr ""
+
+msgid "Room availability finder"
+msgstr ""
+
+msgid "New branch"
+msgstr ""
+
+msgid "New room"
+msgstr ""
+
+msgid "Branch"
+msgstr ""
+
+msgid "Default room"
+msgstr ""
+
+msgid "Room occupation: %s"
+msgstr ""
+
+msgid "Find available rooms"
+msgstr ""
+
+msgid "Available rooms"
+msgstr ""
+
+msgid "Occupied rooms"
+msgstr ""
+
+msgid "No available rooms found for this time range"
+msgstr ""
+
+msgid "No rooms have been created yet"
+msgstr ""
+
+msgid "Courses linked to %s"
+msgstr ""
+
+msgid "No branches have been created yet"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
+
+msgid "Cannot delete branch with rooms attached"
+msgstr ""
+
+msgid "Cannot delete room with courses attached"
+msgstr ""
+
+msgid "Conflicts"
+msgstr ""
+
+msgid "Geolocation"
+msgstr ""
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr ""
+
+msgid "IPv4 or IPv6"
+msgstr ""
+
+msgid "IP mask"
+msgstr "IP-mask"
+
+msgid "e.g. /24"
+msgstr "t.ex. /24"
+
+msgid "Parent branch"
+msgstr "Överordnad gren"
+
+msgid "Unique identifier"
+msgstr "Unikt identifieringsnummer"
+
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "e.g. 48.8566"
+msgstr "t.ex. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitud"
+
+msgid "e.g. 2.3522"
+msgstr "t.ex. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Nedladdningshastighet (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Uppladdningshastighet (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Fördröjning (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratörsnamn"
+
+msgid "Administrator phone number"
+msgstr "Administratörens telefonnummer"
+
+msgid "ID of last synch transaction"
+msgstr "ID för senaste synkroniseringstransaktion"
+
+msgid "Time of last synchronization"
+msgstr "Tidpunkt för senaste synkronisering"
+
+msgid "Last synchronization type"
+msgstr "Typ av senaste synkronisering"
+
+msgid "SSL public key"
+msgstr "SSL-offentlig nyckel"
+
+msgid "Branch type"
+msgstr "Grenstyp"
+
+msgid "Room"
+msgstr "Rum"
+
+msgid "Simple IDS"
+msgstr "Enkel IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS är för närvarande inaktiverad. Sätt IDS_ENABLED=true i din .env för att aktivera skanning."
+
+msgid "All event types"
+msgstr "Alla händelsetyper"
+
+msgid "Events by day (last 7 days)"
+msgstr "Händelser per dag (senaste 7 dagarna)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Händelser per typ (senaste 30 dagarna)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Topp angripande IP-adresser (senaste 30 dagarna)"
+
+msgid "Flagged IDS events"
+msgstr "Markerade IDS-händelser"
+
+msgid "No suspicious events detected."
+msgstr "Inga misstänkta händelser upptäckta."
+
+msgid "Detection type"
+msgstr "Upptäcktstyp"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (nuvarande)"
+

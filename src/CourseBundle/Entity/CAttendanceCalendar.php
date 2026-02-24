@@ -10,7 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['attendance_calendar:read']],

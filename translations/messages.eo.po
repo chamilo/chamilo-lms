@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulon: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory;Dossiero,, application/msword:MsWord,, application/octet-stream:Okteto flugo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -32582,4 +32582,166 @@ msgstr "Se vi ne registris ĉi tiun konton, vi povas ignori ĉi tiun retmesaĝon
 
 msgid "Current authentication method"
 msgstr "Nuna metodo de aŭtentigo"
+
+msgid "Branches"
+msgstr "Filialoj"
+
+msgid "Rooms"
+msgstr "Ĉambroj"
+
+msgid "Room availability finder"
+msgstr "Serĉilo de disponeblaj ĉambroj"
+
+msgid "New branch"
+msgstr "Nova filialo"
+
+msgid "New room"
+msgstr "Nova ĉambro"
+
+msgid "Branch"
+msgstr "Filialo"
+
+msgid "Default room"
+msgstr "Defaŭlta ĉambro"
+
+msgid "Room occupation: %s"
+msgstr "Okupado de ĉambro: %s"
+
+msgid "Find available rooms"
+msgstr "Trovi disponeblajn ĉambrojn"
+
+msgid "Available rooms"
+msgstr "Disposeblaj ĉambroj"
+
+msgid "Occupied rooms"
+msgstr "Okupitaj ĉambroj"
+
+msgid "No available rooms found for this time range"
+msgstr "Neniu disponebla ĉambro trovita por tiu tempintervalo"
+
+msgid "No rooms have been created yet"
+msgstr "Neniu ĉambro estas kreita ankoraŭ"
+
+msgid "Courses linked to %s"
+msgstr "Kursoj ligitaj al %s"
+
+msgid "No branches have been created yet"
+msgstr "Neniu filialo estas kreita ankoraŭ"
+
+msgid "Occupation"
+msgstr "Okupado"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ne povas forigi filian kun ligitaj ĉambroj"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ne povas forigi ĉambron kun ligitaj kursoj"
+
+msgid "Conflicts"
+msgstr "Konfliktoj"
+
+msgid "Geolocation"
+msgstr "Geolokigo"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitudo, Longitudo (ekz. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 aŭ IPv6"
+
+msgid "IP mask"
+msgstr "IP masko"
+
+msgid "e.g. /24"
+msgstr "ekz. /24"
+
+msgid "Parent branch"
+msgstr "Patra branĉo"
+
+msgid "Unique identifier"
+msgstr "Unika identigilo"
+
+msgid "Latitude"
+msgstr "Latitudo"
+
+msgid "e.g. 48.8566"
+msgstr "ekz. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitudo"
+
+msgid "e.g. 2.3522"
+msgstr "ekz. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Elŝutvelo (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Alŝutvelo (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Malfruo (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nomo de administranto"
+
+msgid "Administrator phone number"
+msgstr "Telefonnumero de administranto"
+
+msgid "ID of last synch transaction"
+msgstr "ID de lasta sinkroniga transakcio"
+
+msgid "Time of last synchronization"
+msgstr "Tempo de lasta sinkronigo"
+
+msgid "Last synchronization type"
+msgstr "Tipo de lasta sinkronigo"
+
+msgid "SSL public key"
+msgstr "Publika ŝlosilo SSL"
+
+msgid "Branch type"
+msgstr "Tipo de branĉo"
+
+msgid "Room"
+msgstr "Ĉambro"
+
+msgid "Simple IDS"
+msgstr "Simpla IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS estas malsukcesigita. Starigu IDS_ENABLED=true en via .env por aktivigi skanadon."
+
+msgid "All event types"
+msgstr "Ĉiuj tipoj de eventoj"
+
+msgid "Events by day (last 7 days)"
+msgstr "Eventoj laŭ tago (lastaj 7 tagoj)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Eventoj laŭ tipo (lastaj 30 tagoj)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Plej atakantaj IP-oj (lastaj 30 tagoj)"
+
+msgid "Flagged IDS events"
+msgstr "Markitaj eventoj IDS"
+
+msgid "No suspicious events detected."
+msgstr "Neniu suspektita evento detektita."
+
+msgid "Detection type"
+msgstr "Tipo de detekto"
+
+msgid "Parameter"
+msgstr "Parametro"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (nuna)"
 

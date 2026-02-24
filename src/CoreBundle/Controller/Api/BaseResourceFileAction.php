@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use ZipArchive;
 
 class BaseResourceFileAction
@@ -272,6 +273,7 @@ class BaseResourceFileAction
 
                 if (empty($resourceLinkList)) {
                     $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+
                     throw new InvalidArgumentException($message);
                 }
             }
@@ -288,6 +290,7 @@ class BaseResourceFileAction
         $resource->setParentResourceNode($parentResourceNodeId);
 
         $uploadedFile = null;
+
         switch ($fileType) {
             case 'certificate':
             case 'file':
@@ -468,6 +471,7 @@ class BaseResourceFileAction
 
             if (empty($resourceLinkList) || !\is_array($resourceLinkList)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+
                 throw new InvalidArgumentException($message);
             }
         }
@@ -949,11 +953,8 @@ class BaseResourceFileAction
         foreach ($courses as $course) {
             try {
                 $courseHelper->assertCanStoreDocumentBytes($course, $deltaBytes);
-            } catch (\Throwable $e) {
-                throw new BadRequestHttpException(\sprintf(
-                    'Not enough space in course #%d.',
-                    (int) $course->getId()
-                ));
+            } catch (Throwable $e) {
+                throw new BadRequestHttpException(\sprintf('Not enough space in course #%d.', (int) $course->getId()));
             }
         }
     }

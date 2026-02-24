@@ -1,7 +1,7 @@
+@use "../abstracts/mixins" as m;
+
 .btn {
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition flex-none text-base
-    disabled:cursor-default;
-  padding: calc(0.5rem - 1px) calc(1rem - 1px);
+  @include m.base-button();
 
   .mdi {
     @apply text-base;
@@ -140,69 +140,9 @@
   }
 }
 
-$color_7: #ffffff;
-$color_15: #A855F7;
-$background-color_4: transparent;
-$border-color_4: transparent;
-$border-color_12: #9333EA;
-
-@mixin filled-style($color, $hoverColor) {
-  $textColor: 'white';
-
-  @if('warning' == $color) {
-    $textColor: 'gray-90';
-  }
-
-  @apply bg-#{$color} text-#{$textColor} border-#{$color};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @apply bg-#{$hoverColor};
-    }
-  }
-}
-
-@mixin outlined-style($color) {
-  @apply bg-white border-#{$color} text-#{$color};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if ('warning' == $color) {
-        @apply bg-#{$color} border-#{$color} text-gray-90;
-      } @else if('black' == $color) {
-        @apply bg-gray-90 border-gray-90 text-white;
-      } @else {
-        @apply bg-#{$color} border-#{$color} text-white;
-      }
-    }
-  }
-}
-
-@mixin text-style($color) {
-  @apply bg-white text-#{$color} border-transparent;
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if('black' == $color) {
-        @apply bg-support-1 text-primary;
-      } @else {
-        @apply bg-gray-10;
-      }
-    }
-  }
-}
-
 .p-button {
-  @include filled-style('primary', 'primary-gradient');
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition select-none border border-solid
-    disabled:cursor-default;
-  padding: calc(0.5rem - 1px) calc(1rem - 1px);
+  @include m.base-button();
+  @include m.button-filled-style('primary', 'primary-gradient');
 
   &:focus {
     @apply outline-none;
@@ -213,11 +153,11 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-outlined {
-    @include outlined-style('primary');
+    @include m.button-outlined-style('primary');
   }
 
   &.p-button-text {
-    @include text-style('primary');
+    @include m.button-text-style('primary');
   }
 
   &.p-button-raised {
@@ -281,189 +221,189 @@ $border-color_12: #9333EA;
 
 // secondary button
 .p-button.p-button-secondary {
-  @include filled-style('secondary', 'secondary-gradient');
+  @include m.button-filled-style('secondary', 'secondary-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('secondary');
+    @include m.button-outlined-style('secondary');
   }
 
   &.p-button-text {
-    @include text-style('secondary');
+    @include m.button-text-style('secondary');
   }
 }
 
 .p-buttonset.p-button-secondary {
   > .p-button {
-    @include filled-style('secondary', 'secondary-gradient');
+    @include m.button-filled-style('secondary', 'secondary-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('secondary');
+      @include m.button-outlined-style('secondary');
     }
 
     &.p-button-text {
-      @include text-style('secondary');
+      @include m.button-text-style('secondary');
     }
   }
 }
 
 // contrast button
 .p-button.p-button-contrast {
-  @include filled-style('gray-90', 'black');
+  @include m.button-filled-style('gray-90', 'black');
 
   &.p-button-outlined {
-    @include outlined-style('black');
+    @include m.button-outlined-style('black');
   }
 
   &.p-button-text {
-    @include text-style('black');
+    @include m.button-text-style('black');
   }
 }
 
 .p-buttonset.p-button-contrast {
   > .p-button {
-    @include filled-style('gray-90', 'black');
+    @include m.button-filled-style('gray-90', 'black');
 
     &.p-button-outlined {
-      @include outlined-style('black');
+      @include m.button-outlined-style('black');
     }
 
     &.p-button-text {
-      @include text-style('black');
+      @include m.button-text-style('black');
     }
   }
 }
 
 // info button
 .p-button.p-button-info {
-  @include filled-style('info', 'info-gradient');
+  @include m.button-filled-style('info', 'info-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('info');
+    @include m.button-outlined-style('info');
   }
 
   &.p-button-text {
-    @include text-style('info');
+    @include m.button-text-style('info');
   }
 }
 
 .p-buttonset.p-button-info {
   > .p-button {
-    @include filled-style('info', 'info-gradient');
+    @include m.button-filled-style('info', 'info-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('info');
+      @include m.button-outlined-style('info');
     }
 
     &.p-button-text {
-      @include text-style('info');
+      @include m.button-text-style('info');
     }
   }
 }
 
 // success button
 .p-button.p-button-success {
-  @include filled-style('success', 'success-gradient');
+  @include m.button-filled-style('success', 'success-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('success');
+    @include m.button-outlined-style('success');
   }
 
   &.p-button-text {
-    @include text-style('success');
+    @include m.button-text-style('success');
   }
 }
 
 .p-buttonset.p-button-success {
   > .p-button {
-    @include filled-style('success', 'success-gradient');
+    @include m.button-filled-style('success', 'success-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('success');
+      @include m.button-outlined-style('success');
     }
 
     &.p-button-text {
-      @include text-style('success');
+      @include m.button-text-style('success');
     }
   }
 }
 
 // warning button
 .p-button.p-button-warn {
-  @include filled-style('warning', 'warning-gradient');
+  @include m.button-filled-style('warning', 'warning-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('warning');
+    @include m.button-outlined-style('warning');
   }
 
   &.p-button-text {
-    @include text-style('warning');
+    @include m.button-text-style('warning');
   }
 }
 
 .p-buttonset.p-button-warn {
   > .p-button {
-    @include filled-style('warning', 'warning-gradient');
+    @include m.button-filled-style('warning', 'warning-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('warning');
+      @include m.button-outlined-style('warning');
     }
 
     &.p-button-text {
-      @include text-style('warning');
+      @include m.button-text-style('warning');
     }
   }
 }
 
 // help button
 .p-button.p-button-help {
-  @include filled-style('tertiary', 'tertiary-gradient');
+  @include m.button-filled-style('tertiary', 'tertiary-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('tertiary');
+    @include m.button-outlined-style('tertiary');
   }
 
   &.p-button-text {
-    @include text-style('tertiary');
+    @include m.button-text-style('tertiary');
   }
 }
 
 .p-buttonset.p-button-help {
   > .p-button {
-    @include filled-style('tertiary', 'tertiary-gradient');
+    @include m.button-filled-style('tertiary', 'tertiary-gradient');
   }
 
   > .p-button.p-button-outlined {
-    @include outlined-style('tertiary');
+    @include m.button-outlined-style('tertiary');
   }
 
   > .p-button.p-button-text {
-    @include text-style('tertiary');
+    @include m.button-text-style('tertiary');
   }
 }
 
 // danger button
 .p-button.p-button-danger {
-  @include filled-style('danger', 'danger-gradient');
+  @include m.button-filled-style('danger', 'danger-gradient');
 
   &.p-button-outlined {
-    @include outlined-style('danger');
+    @include m.button-outlined-style('danger');
   }
 
   &.p-button-text {
-    @include text-style('danger');
+    @include m.button-text-style('danger');
   }
 }
 
 .p-buttonset.p-button-danger {
   > .p-button {
-    @include filled-style('danger', 'danger-gradient');
+    @include m.button-filled-style('danger', 'danger-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('danger');
+      @include m.button-outlined-style('danger');
     }
 
     &.p-button-text {
-      @include text-style('danger');
+      @include m.button-text-style('danger');
     }
   }
 }

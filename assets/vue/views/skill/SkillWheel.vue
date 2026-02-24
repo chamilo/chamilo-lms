@@ -149,7 +149,7 @@ async function onSearchProfile(profile) {
           @click="onClickSearchProfileMatches"
         />
 
-        <p v-t="'Is this what you were looking for?'" />
+        <p v-text="t('Is this what you were looking for?')" />
 
         <BaseButton
           v-if="canUseProfiles"

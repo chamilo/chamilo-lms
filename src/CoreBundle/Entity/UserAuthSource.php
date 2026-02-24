@@ -30,7 +30,7 @@ class UserAuthSource
     private ?string $authentication = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?AccessUrl $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'authSources')]

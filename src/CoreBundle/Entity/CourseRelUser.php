@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -19,8 +20,8 @@ use Chamilo\CoreBundle\State\UserCourseSubscriptionsStateProvider;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -32,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')"),
         new GetCollection(
-            uriTemplate: '/me/courses',
+            uriTemplate: '/me/courses.{_format}',
             paginationEnabled: true,
             paginationItemsPerPage: 20,
             paginationClientEnabled: true,
@@ -53,10 +54,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationClientEnabled: true,
     security: "is_granted('ROLE_USER')",
 )]
-#[ORM\Table(name: 'course_rel_user')]
-#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
-#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
-#[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -66,11 +63,21 @@ use Symfony\Component\Validator\Constraints as Assert;
         'course' => 'exact',
     ]
 )]
-#[ApiFilter(PartialSearchOrFilter::class, properties: [
-    'user.username',
-    'user.firstname',
-    'user.lastname',
-])]
+#[ApiFilter(
+    PartialSearchOrFilter::class,
+    properties: [
+        'user.username',
+        'user.firstname',
+        'user.lastname',
+        'course.title',
+        'course.code',
+    ]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['cru.sort' => 'ASC', 'c.title' => 'ASC'])]
+#[ORM\Table(name: 'course_rel_user')]
+#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
+#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
+#[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 class CourseRelUser implements Stringable
 {
     use UserTrait;
@@ -160,6 +167,10 @@ class CourseRelUser implements Stringable
     #[ApiProperty(readable: true, writable: false)]
     #[Groups(['course_rel_user:read'])]
     private ?bool $allowSubscription = null;
+
+    #[ApiProperty(readable: true, writable: false)]
+    #[Groups(['course_rel_user:read', 'my_courses:read'])]
+    private array $teachersLite = [];
 
     public function __construct()
     {
@@ -397,5 +408,17 @@ class CourseRelUser implements Stringable
     public function setAllowSubscription(?bool $allowSubscription): void
     {
         $this->allowSubscription = $allowSubscription;
+    }
+
+    public function getTeachersLite(): array
+    {
+        return $this->teachersLite;
+    }
+
+    public function setTeachersLite(array $teachersLite): self
+    {
+        $this->teachersLite = $teachersLite;
+
+        return $this;
     }
 }

@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -32576,4 +32576,166 @@ msgstr "Ikiwa haukuandikisha akaunti hii, unaweza kupuuza barua pepe hii. Hakuna
 
 msgid "Current authentication method"
 msgstr "Njia ya sasa ya uthibitisho"
+
+msgid "Branches"
+msgstr "Tawi"
+
+msgid "Rooms"
+msgstr "Vyumba"
+
+msgid "Room availability finder"
+msgstr "Tafuta upatikanaji wa chumba"
+
+msgid "New branch"
+msgstr "Tawi jipya"
+
+msgid "New room"
+msgstr "Chumba kipya"
+
+msgid "Branch"
+msgstr "Tawi"
+
+msgid "Default room"
+msgstr "Chumba cha chaguo-msingi"
+
+msgid "Room occupation: %s"
+msgstr "Kushikwa kwa chumba: %s"
+
+msgid "Find available rooms"
+msgstr "Tafuta vyumba vinavyopatikana"
+
+msgid "Available rooms"
+msgstr "Vyumba vinavyopatikana"
+
+msgid "Occupied rooms"
+msgstr "Vyumba vilivyochukuliwa"
+
+msgid "No available rooms found for this time range"
+msgstr "Hakuna vyumba vinavyopatikana vilivyopatikana kwa kipindi hiki cha wakati"
+
+msgid "No rooms have been created yet"
+msgstr "Hakuna vyumba vilivyoundwa bado"
+
+msgid "Courses linked to %s"
+msgstr "Kozi zilizounganishwa na %s"
+
+msgid "No branches have been created yet"
+msgstr "Hakuna matawi yaliyoundwa bado"
+
+msgid "Occupation"
+msgstr "Ushirikishwaji"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Haiwezi kufuta tawi lenye vyumba lililounganishwa"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Haiwezi kufuta chumba chenye kozi zilizounganishwa"
+
+msgid "Conflicts"
+msgstr "Migongano"
+
+msgid "Geolocation"
+msgstr "Mahali pa kijiografia"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitudo, Utali wa kusini (mf. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 au IPv6"
+
+msgid "IP mask"
+msgstr "Kifuniko cha IP"
+
+msgid "e.g. /24"
+msgstr "mf. /24"
+
+msgid "Parent branch"
+msgstr "Tawi la mzazi"
+
+msgid "Unique identifier"
+msgstr "Kitambulisho cha kipekee"
+
+msgid "Latitude"
+msgstr "Latitudo"
+
+msgid "e.g. 48.8566"
+msgstr "mf. 48.8566"
+
+msgid "Longitude"
+msgstr "Utali wa kusini"
+
+msgid "e.g. 2.3522"
+msgstr "mf. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Kasi ya kupakua (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Kasi ya kupakia (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Ucheleweshaji (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Jina la msimamizi"
+
+msgid "Administrator phone number"
+msgstr "Nambari ya simu ya msimamizi"
+
+msgid "ID of last synch transaction"
+msgstr "Kitambulisho cha shughuli ya kusawazisha ya mwisho"
+
+msgid "Time of last synchronization"
+msgstr "Wakati wa kusawazisha kwa mwisho"
+
+msgid "Last synchronization type"
+msgstr "Aina ya kusawazisha kwa mwisho"
+
+msgid "SSL public key"
+msgstr "Ufunguo wa umma wa SSL"
+
+msgid "Branch type"
+msgstr "Aina ya tawi"
+
+msgid "Room"
+msgstr "Chumba"
+
+msgid "Simple IDS"
+msgstr "IDS rahisi"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS imelemazwa kwa sasa. Weka IDS_ENABLED=true katika .env yako ili kuwezesha skana."
+
+msgid "All event types"
+msgstr "Aina zote za matukio"
+
+msgid "Events by day (last 7 days)"
+msgstr "Matukio kwa siku (siku 7 zilizopita)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Matukio kwa aina (siku 30 zilizopita)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP zinazoshambulia za juu (siku 30 zilizopita)"
+
+msgid "Flagged IDS events"
+msgstr "Matukio ya IDS yaliyoangaliwa"
+
+msgid "No suspicious events detected."
+msgstr "Hakuna matukio ya kushukiwa yaliyogunduliwa."
+
+msgid "Detection type"
+msgstr "Aina ya ugunduzi"
+
+msgid "Parameter"
+msgstr "Kigeuza"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (sasa)"
 

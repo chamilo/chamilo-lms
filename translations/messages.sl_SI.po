@@ -32597,3 +32597,165 @@ msgstr "Če tega računa niste registrirali, lahko to e-poštno sporočilo prezr
 msgid "Current authentication method"
 msgstr "Trenutna metoda preverjanja pristnosti"
 
+msgid "Branches"
+msgstr "Filiale"
+
+msgid "Rooms"
+msgstr "Sobe"
+
+msgid "Room availability finder"
+msgstr "Iskalnik razpoložljivih sob"
+
+msgid "New branch"
+msgstr "Nova filiala"
+
+msgid "New room"
+msgstr "Nova soba"
+
+msgid "Branch"
+msgstr "Filiala"
+
+msgid "Default room"
+msgstr "Privzeta soba"
+
+msgid "Room occupation: %s"
+msgstr "Zasedenost sobe: %s"
+
+msgid "Find available rooms"
+msgstr "Najdi razpoložljive sobe"
+
+msgid "Available rooms"
+msgstr "Razpoložljive sobe"
+
+msgid "Occupied rooms"
+msgstr "Zasedene sobe"
+
+msgid "No available rooms found for this time range"
+msgstr "Ni najdenih razpoložljivih sob za ta časovni razpon"
+
+msgid "No rooms have been created yet"
+msgstr "Še niso bile ustvarjene nobene sobe"
+
+msgid "Courses linked to %s"
+msgstr "Tečaji povezani z %s"
+
+msgid "No branches have been created yet"
+msgstr "Še niso bile ustvarjene nobene filiale"
+
+msgid "Occupation"
+msgstr "Zasedenost"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Ni mogoče izbrisati filiale s pripetimi sobami"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Ni mogoče izbrisati sobe s pripetimi tečaji"
+
+msgid "Conflicts"
+msgstr "Konflikti"
+
+msgid "Geolocation"
+msgstr "Geolokacija"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Geografska širina, geografska dolžina (npr. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ali IPv6"
+
+msgid "IP mask"
+msgstr "Maska IP"
+
+msgid "e.g. /24"
+msgstr "npr. /24"
+
+msgid "Parent branch"
+msgstr "Nadrejena veja"
+
+msgid "Unique identifier"
+msgstr "Enolični identifikator"
+
+msgid "Latitude"
+msgstr "Geografska širina"
+
+msgid "e.g. 48.8566"
+msgstr "npr. 48.8566"
+
+msgid "Longitude"
+msgstr "Geografska dolžina"
+
+msgid "e.g. 2.3522"
+msgstr "npr. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Hitrost prenosa (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Hitrost nalaganja (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Z zakasnitvijo (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Ime administratorja"
+
+msgid "Administrator phone number"
+msgstr "Telefonska številka administratorja"
+
+msgid "ID of last synch transaction"
+msgstr "ID zadnje sinhronizacijske transakcije"
+
+msgid "Time of last synchronization"
+msgstr "Čas zadnje sinhronizacije"
+
+msgid "Last synchronization type"
+msgstr "Vrsta zadnje sinhronizacije"
+
+msgid "SSL public key"
+msgstr "Javni ključ SSL"
+
+msgid "Branch type"
+msgstr "Vrsta veje"
+
+msgid "Room"
+msgstr "Soba"
+
+msgid "Simple IDS"
+msgstr "Preprost IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS je trenutno onemogočen. Nastavite IDS_ENABLED=true v vaši .env datoteki za aktiviranje skeniranja."
+
+msgid "All event types"
+msgstr "Vse vrste dogodkov"
+
+msgid "Events by day (last 7 days)"
+msgstr "Dogodki po dnevu (zadnjih 7 dni)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Dogodki po vrsti (zadnjih 30 dni)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Najbolj napadalne IP naslove (zadnjih 30 dni)"
+
+msgid "Flagged IDS events"
+msgstr "Označeni dogodki IDS"
+
+msgid "No suspicious events detected."
+msgstr "Ni zaznanih sumljivih dogodkov."
+
+msgid "Detection type"
+msgstr "Vrsta zaznavanja"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (trenutno)"
+

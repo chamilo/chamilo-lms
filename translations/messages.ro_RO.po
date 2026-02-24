@@ -32597,3 +32597,165 @@ msgstr "Dacă nu ați înregistrat acest cont, puteți ignora acest e-mail. Nu v
 msgid "Current authentication method"
 msgstr "Metoda curentă de autentificare"
 
+msgid "Branches"
+msgstr "Filiale"
+
+msgid "Rooms"
+msgstr "Săli"
+
+msgid "Room availability finder"
+msgstr "Căutare disponibilitate săli"
+
+msgid "New branch"
+msgstr "Filială nouă"
+
+msgid "New room"
+msgstr "Sală nouă"
+
+msgid "Branch"
+msgstr "Filială"
+
+msgid "Default room"
+msgstr "Sală implicită"
+
+msgid "Room occupation: %s"
+msgstr "Ocupare sală: %s"
+
+msgid "Find available rooms"
+msgstr "Găsește săli disponibile"
+
+msgid "Available rooms"
+msgstr "Săli disponibile"
+
+msgid "Occupied rooms"
+msgstr "Săli ocupate"
+
+msgid "No available rooms found for this time range"
+msgstr "Nu s-au găsit săli disponibile pentru acest interval orar"
+
+msgid "No rooms have been created yet"
+msgstr "Nu au fost create încă săli"
+
+msgid "Courses linked to %s"
+msgstr "Cursuri legate de %s"
+
+msgid "No branches have been created yet"
+msgstr "Nu au fost create încă filiale"
+
+msgid "Occupation"
+msgstr "Ocupare"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nu se poate șterge filiala cu săli atașate"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nu se poate șterge sala cu cursuri atașate"
+
+msgid "Conflicts"
+msgstr "Conflict"
+
+msgid "Geolocation"
+msgstr "Geolocație"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitudine, Longitudine (ex. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 sau IPv6"
+
+msgid "IP mask"
+msgstr "Mască IP"
+
+msgid "e.g. /24"
+msgstr "ex. /24"
+
+msgid "Parent branch"
+msgstr "Filială părinte"
+
+msgid "Unique identifier"
+msgstr "Identificator unic"
+
+msgid "Latitude"
+msgstr "Latitudine"
+
+msgid "e.g. 48.8566"
+msgstr "ex. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitudine"
+
+msgid "e.g. 2.3522"
+msgstr "ex. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Viteză de descărcare (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Viteză de încărcare (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Întârziere (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nume administrator"
+
+msgid "Administrator phone number"
+msgstr "Număr de telefon administrator"
+
+msgid "ID of last synch transaction"
+msgstr "ID-ul ultimei tranzacții de sincronizare"
+
+msgid "Time of last synchronization"
+msgstr "Ora ultimei sincronizări"
+
+msgid "Last synchronization type"
+msgstr "Tipul ultimei sincronizări"
+
+msgid "SSL public key"
+msgstr "Cheie publică SSL"
+
+msgid "Branch type"
+msgstr "Tip ramură"
+
+msgid "Room"
+msgstr "Sală"
+
+msgid "Simple IDS"
+msgstr "IDS simplu"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS este în prezent dezactivat. Setați IDS_ENABLED=true în fișierul .env pentru a activa scanarea."
+
+msgid "All event types"
+msgstr "Toate tipurile de evenimente"
+
+msgid "Events by day (last 7 days)"
+msgstr "Evenimente pe zi (ultimele 7 zile)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Evenimente pe tip (ultimele 30 zile)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP-uri de atac principale (ultimele 30 zile)"
+
+msgid "Flagged IDS events"
+msgstr "Evenimente IDS semnalate"
+
+msgid "No suspicious events detected."
+msgstr "Nu au fost detectate evenimente suspecte."
+
+msgid "Detection type"
+msgstr "Tip detecție"
+
+msgid "Parameter"
+msgstr "Parametru"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (curent)"
+

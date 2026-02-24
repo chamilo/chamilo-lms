@@ -86,8 +86,8 @@ class ProfileType extends AbstractType
 
         // Core fields map (keys must align with settings keys)
         $fieldsMap = [
-            'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
-            'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Lastname'],
+            'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'First name'],
+            'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Last name'],
             'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official code'],
             'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'E-mail'],
             'picture' => ['field' => 'illustration', 'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],

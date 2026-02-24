@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -32580,4 +32580,166 @@ msgstr "Nëse nuk keni regjistruar këtë llogari, mund ta injoroni këtë email
 
 msgid "Current authentication method"
 msgstr "Metoda aktuale e autentikimit"
+
+msgid "Branches"
+msgstr "Degët"
+
+msgid "Rooms"
+msgstr "Dhomat"
+
+msgid "Room availability finder"
+msgstr "Gjetës disponibiliteti i dhomave"
+
+msgid "New branch"
+msgstr "Degë e re"
+
+msgid "New room"
+msgstr "Dhomë e re"
+
+msgid "Branch"
+msgstr "Degë"
+
+msgid "Default room"
+msgstr "Dhomë e paracaktuar"
+
+msgid "Room occupation: %s"
+msgstr "Okukimi i dhomës: %s"
+
+msgid "Find available rooms"
+msgstr "Gjej dhoma të disponueshme"
+
+msgid "Available rooms"
+msgstr "Dhoma të disponueshme"
+
+msgid "Occupied rooms"
+msgstr "Dhoma të zëna"
+
+msgid "No available rooms found for this time range"
+msgstr "Nuk u gjetën dhoma të disponueshme për këtë interval kohor"
+
+msgid "No rooms have been created yet"
+msgstr "Nuk është krijuar ende asnjë dhomë"
+
+msgid "Courses linked to %s"
+msgstr "Kursat e lidhura me %s"
+
+msgid "No branches have been created yet"
+msgstr "Nuk është krijuar ende asnjë degë"
+
+msgid "Occupation"
+msgstr "Okuupim"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nuk mund të fshihet degë me dhoma të bashkëlidhura"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nuk mund të fshihet dhomë me kurse të bashkëlidhura"
+
+msgid "Conflicts"
+msgstr "Konflikte"
+
+msgid "Geolocation"
+msgstr "Gjeolokacioni"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Gjerësi gjeografike, Gjatësi gjeografike (p.sh. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ose IPv6"
+
+msgid "IP mask"
+msgstr "Maskë IP"
+
+msgid "e.g. /24"
+msgstr "p.sh. /24"
+
+msgid "Parent branch"
+msgstr "Degë prind"
+
+msgid "Unique identifier"
+msgstr "Identifikues unik"
+
+msgid "Latitude"
+msgstr "Gjerësi gjeografike"
+
+msgid "e.g. 48.8566"
+msgstr "p.sh. 48.8566"
+
+msgid "Longitude"
+msgstr "Gjatësi gjeografike"
+
+msgid "e.g. 2.3522"
+msgstr "p.sh. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Shpejtësi shkarkimi (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Shpejtësi ngarkimi (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Vonesë (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Emri i administratorit"
+
+msgid "Administrator phone number"
+msgstr "Numri i telefonit të administratorit"
+
+msgid "ID of last synch transaction"
+msgstr "ID e transaksionit të fundit të sinkronizimit"
+
+msgid "Time of last synchronization"
+msgstr "Koha e sinkronizimit të fundit"
+
+msgid "Last synchronization type"
+msgstr "Lloji i sinkronizimit të fundit"
+
+msgid "SSL public key"
+msgstr "Çelës publik SSL"
+
+msgid "Branch type"
+msgstr "Lloji i degës"
+
+msgid "Room"
+msgstr "Dhomë"
+
+msgid "Simple IDS"
+msgstr "IDS e thjeshtë"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS është aktualisht i çaktivizuar. Vendosni IDS_ENABLED=true në .env tuaj për të aktivizuar skanimin."
+
+msgid "All event types"
+msgstr "Të gjitha llojet e ngjarjeve"
+
+msgid "Events by day (last 7 days)"
+msgstr "Ngjarje sipas ditës (7 ditët e fundit)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Ngjarje sipas llojit (30 ditët e fundit)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP-të kryesore sulmuese (30 ditët e fundit)"
+
+msgid "Flagged IDS events"
+msgstr "Ngjarje të shënuara IDS"
+
+msgid "No suspicious events detected."
+msgstr "Asnjë ngjarje e dyshimtë e zbuluar."
+
+msgid "Detection type"
+msgstr "Lloji i zbulimit"
+
+msgid "Parameter"
+msgstr "Parametër"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (aktual)"
 

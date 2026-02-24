@@ -19,7 +19,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(

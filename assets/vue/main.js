@@ -24,6 +24,8 @@ import toolIntroService from "./services/ctoolintro"
 import pageService from "./services/page"
 import sessionService from "./services/session"
 import socialPostService from "./services/socialpost"
+import branchService from "./services/branchService"
+import roomService from "./services/roomService"
 
 import makeCrudModule from "./store/modules/crud"
 import installHttpErrors from "./plugins/httpErrors"
@@ -171,6 +173,20 @@ store.registerModule(
   "socialpost",
   makeCrudModule({
     service: socialPostService,
+  }),
+)
+
+store.registerModule(
+  "branch",
+  makeCrudModule({
+    service: branchService,
+  }),
+)
+
+store.registerModule(
+  "room",
+  makeCrudModule({
+    service: roomService,
   }),
 )
 

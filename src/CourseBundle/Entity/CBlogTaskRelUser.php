@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Table(name: 'c_blog_task_rel_user')]
 #[ORM\UniqueConstraint(name: 'uniq_task_user_blog_date', columns: ['task_id', 'user_id', 'blog_id', 'target_date'])]

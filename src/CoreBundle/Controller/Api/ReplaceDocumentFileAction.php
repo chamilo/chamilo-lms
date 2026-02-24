@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Throwable;
 
 class ReplaceDocumentFileAction extends BaseResourceFileAction
 {
@@ -71,11 +72,8 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
             foreach ($courses as $course) {
                 try {
                     $courseHelper->assertCanStoreDocumentBytes($course, $deltaBytes);
-                } catch (\Throwable $e) {
-                    throw new BadRequestHttpException(\sprintf(
-                        'Not enough space in course #%d.',
-                        (int) $course->getId()
-                    ));
+                } catch (Throwable $e) {
+                    throw new BadRequestHttpException(\sprintf('Not enough space in course #%d.', (int) $course->getId()));
                 }
             }
         }

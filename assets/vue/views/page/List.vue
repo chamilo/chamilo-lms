@@ -51,11 +51,11 @@
       <template #body="slotProps">
         <span
           v-if="slotProps.data.enabled"
-          v-t="'Yes'"
+          v-text="t('Yes')"
         />
         <span
           v-else
-          v-t="'No'"
+          v-text="t('No')"
         />
       </template>
     </Column>
@@ -105,13 +105,13 @@
           required="true"
         />
         <label
-          v-t="'Name'"
+          v-text="t('Name')"
           for="title"
         />
       </div>
       <small
         v-if="submitted && !item.title"
-        v-t="'Title is required'"
+        v-text="t('Title is required')"
         class="p-error"
       />
     </div>
@@ -177,7 +177,7 @@
       />
       <span
         v-if="item"
-        v-t="'Are you sure you want to delete the selected items?'"
+        v-text="t('Are you sure you want to delete the selected items?')"
       />
     </div>
     <template #footer>

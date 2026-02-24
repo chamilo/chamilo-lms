@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempi formulis: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempi di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -32576,4 +32576,166 @@ msgstr "Se no tu âs registrât chest cont, puôt ignorâ chest e-mail. No si fa
 
 msgid "Current authentication method"
 msgstr "Metôd di autenticazion atuâl"
+
+msgid "Branches"
+msgstr "Brans"
+
+msgid "Rooms"
+msgstr "Salis"
+
+msgid "Room availability finder"
+msgstr "Buscadôr di disponibilitât des salis"
+
+msgid "New branch"
+msgstr "Gnove bran"
+
+msgid "New room"
+msgstr "Gnove sale"
+
+msgid "Branch"
+msgstr "Bran"
+
+msgid "Default room"
+msgstr "Sale predefinide"
+
+msgid "Room occupation: %s"
+msgstr "Ocupazion de sale: %s"
+
+msgid "Find available rooms"
+msgstr "Treie salis disponibis"
+
+msgid "Available rooms"
+msgstr "Salis disponibis"
+
+msgid "Occupied rooms"
+msgstr "Salis ocupadis"
+
+msgid "No available rooms found for this time range"
+msgstr "No je stât trovât gnul sale disponibil par cheste fasie orarie"
+
+msgid "No rooms have been created yet"
+msgstr "No je je fat gnule sale finore"
+
+msgid "Courses linked to %s"
+msgstr "Corsi coligâs a %s"
+
+msgid "No branches have been created yet"
+msgstr "No je je fat gnule brans finore"
+
+msgid "Occupation"
+msgstr "Ocupazion"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "No si pues jessâ la bran che al à salis coligâdis"
+
+msgid "Cannot delete room with courses attached"
+msgstr "No si pues jessâ la sale che e à curs coligât"
+
+msgid "Conflicts"
+msgstr "Conflits"
+
+msgid "Geolocation"
+msgstr "Geolocalizazion"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitûde, Longitûde (p. es. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 o IPv6"
+
+msgid "IP mask"
+msgstr "Màschere IP"
+
+msgid "e.g. /24"
+msgstr "p. es. /24"
+
+msgid "Parent branch"
+msgstr "Branc ram"
+
+msgid "Unique identifier"
+msgstr "Identificâtôr unich"
+
+msgid "Latitude"
+msgstr "Latitûde"
+
+msgid "e.g. 48.8566"
+msgstr "p. es. 48.8566"
+
+msgid "Longitude"
+msgstr "Longitûde"
+
+msgid "e.g. 2.3522"
+msgstr "p. es. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Vitesse di descargje (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Vitesse di cargje (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Ritard (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nume aministradôr"
+
+msgid "Administrator phone number"
+msgstr "Numar di telefon dal aministradôr"
+
+msgid "ID of last synch transaction"
+msgstr "ID de l'ultime transazion di sincronisazion"
+
+msgid "Time of last synchronization"
+msgstr "Ore de l'ultime sincronisazion"
+
+msgid "Last synchronization type"
+msgstr "Tipe de l'ultime sincronisazion"
+
+msgid "SSL public key"
+msgstr "Çjavû publich SSL"
+
+msgid "Branch type"
+msgstr "Tipe di branc"
+
+msgid "Room"
+msgstr "Stîe"
+
+msgid "Simple IDS"
+msgstr "IDS sempliç"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS al è displimit al moment. Impostâ IDS_ENABLED=true tal to .env par ativâ la scansioan."
+
+msgid "All event types"
+msgstr "Tuits i tipis di events"
+
+msgid "Events by day (last 7 days)"
+msgstr "Events par di (ultims 7 dîs)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Events par tipe (ultims 30 dîs)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IPs atacantis prinçipâls (ultims 30 dîs)"
+
+msgid "Flagged IDS events"
+msgstr "Events IDS señalâts"
+
+msgid "No suspicious events detected."
+msgstr "Nissun event sospitius rivât."
+
+msgid "Detection type"
+msgstr "Tipe di detecion"
+
+msgid "Parameter"
+msgstr "Parametar"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (corent)"
 

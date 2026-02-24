@@ -1,7 +1,9 @@
 <script setup>
+import { useI18n } from "vue-i18n"
 import { useCalendarReminders } from "../../composables/calendar/calendarReminders"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 
+const { t } = useI18n()
 const { decodeDateInterval } = useCalendarReminders()
 
 defineProps({
@@ -18,7 +20,7 @@ defineProps({
     class="reminders-info"
   >
     <h6
-      v-t="'Notification to remind the event'"
+      v-text="t('Notification to remind the event')"
       class="reminders-info__title"
     />
 

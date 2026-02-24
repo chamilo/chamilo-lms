@@ -18,12 +18,12 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class CourseRelUserExtension implements QueryCollectionExtensionInterface
+final readonly class CourseRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
-        private readonly Security $security,
-        private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly EntityManagerInterface $entityManager
+        private Security $security,
+        private AccessUrlHelper $accessUrlHelper,
+        private EntityManagerInterface $entityManager
     ) {}
 
     public function applyToCollection(
@@ -33,6 +33,19 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
+        if (CourseRelUser::class !== $resourceClass) {
+            return;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        // Need to be login to access the list.
+        if (null === $user = $this->security->getUser()) {
+            throw new AccessDeniedException('Access Denied.');
+        }
+
         if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
             $rootAlias = $queryBuilder->getRootAliases()[0];
@@ -60,44 +73,24 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
             }
         }
 
-        if (CourseRelUser::class === $resourceClass) {
-            if ('collection_query' === $operation?->getName()) {
-                $rootAlias = $queryBuilder->getRootAliases()[0];
-                $queryBuilder->leftJoin("$rootAlias.course", 'c');
-                $queryBuilder
-                    ->orderBy('c.title', 'ASC')
-                    ->addOrderBy("$rootAlias.sort", 'ASC')
-                    ->addOrderBy("$rootAlias.userCourseCat", 'ASC')
-                ;
+        if ('collection_query' === $operation?->getName()) {
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->leftJoin("$rootAlias.course", 'c');
+            $queryBuilder
+                ->orderBy('c.title', 'ASC')
+                ->addOrderBy("$rootAlias.sort", 'ASC')
+                ->addOrderBy("$rootAlias.userCourseCat", 'ASC')
+            ;
 
-                if (!$this->security->isGranted('ROLE_ADMIN')) {
-                    /** @var User|null $user */
-                    if (null === $user = $this->security->getUser()) {
-                        throw new AccessDeniedException('Access Denied.');
-                    }
-
-                    $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
-                    $queryBuilder->setParameter('current_user', $user->getId());
+            if (!$this->security->isGranted('ROLE_ADMIN')) {
+                /** @var User|null $user */
+                if (null === $user = $this->security->getUser()) {
+                    throw new AccessDeniedException('Access Denied.');
                 }
+
+                $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
+                $queryBuilder->setParameter('current_user', $user->getId());
             }
-        }
-
-        $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
-    {
-        if (CourseRelUser::class !== $resourceClass) {
-            return;
-        }
-
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        // Need to be login to access the list.
-        if (null === $user = $this->security->getUser()) {
-            throw new AccessDeniedException('Access Denied.');
         }
     }
 }

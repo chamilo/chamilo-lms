@@ -160,4 +160,7 @@ export const chamiloIconToClass = {
   "help": "mdi mdi-face-agent",
   "robot": "mdi mdi-robot",
   "compass": "mdi mdi-compass-outline",
+  "globe": "mdi mdi-web",
+  "notification": "mdi mdi-bell",
+  "room": "mdi mdi-seat",
 }

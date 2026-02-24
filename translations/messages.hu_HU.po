@@ -5596,7 +5596,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ha olyan LDAP szervert használ, amely nem támogatja vagy nem fogadja el a névtelen hozzáférést, töltse ki a következő mezőt a használandó felhasználói jelszóval."
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "LDAP import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Feliratkozott felhasználók értesítése e-mailben"
@@ -32375,7 +32375,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Törlés sikertelen: hiányzó kurzuskörnyezet vagy érvénytelen kérdés azonosító."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Az APCu kiterjesztés telepítve és engedélyezve kell legyen a platform használatához."
@@ -32580,4 +32580,166 @@ msgstr "Ha nem te regisztráltad ezt a fiókot, akkor figyelmen kívül hagyhato
 
 msgid "Current authentication method"
 msgstr "Jelenlegi hitelesítési mód"
+
+msgid "Branches"
+msgstr "Fiókok"
+
+msgid "Rooms"
+msgstr "Termek"
+
+msgid "Room availability finder"
+msgstr "Termek elérhetőség kereső"
+
+msgid "New branch"
+msgstr "Új fiók"
+
+msgid "New room"
+msgstr "Új terem"
+
+msgid "Branch"
+msgstr "Fiók"
+
+msgid "Default room"
+msgstr "Alapértelmezett terem"
+
+msgid "Room occupation: %s"
+msgstr "Terem foglaltsága: %s"
+
+msgid "Find available rooms"
+msgstr "Elérhető termek keresése"
+
+msgid "Available rooms"
+msgstr "Elérhető termek"
+
+msgid "Occupied rooms"
+msgstr "Foglalt termek"
+
+msgid "No available rooms found for this time range"
+msgstr "Nincs elérhető terem ebben az időtartamban"
+
+msgid "No rooms have been created yet"
+msgstr "Még nem hoztak létre termeket"
+
+msgid "Courses linked to %s"
+msgstr "%s-hoz kapcsolódó kurzusok"
+
+msgid "No branches have been created yet"
+msgstr "Még nem hoztak létre fiókot"
+
+msgid "Occupation"
+msgstr "Foglaltság"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Nem törölhető fiók, mert vannak hozzákapcsolt termek"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Nem törölhető terem, mert vannak hozzákapcsolt kurzusok"
+
+msgid "Conflicts"
+msgstr "Ütközések"
+
+msgid "Geolocation"
+msgstr "Földrajzi helyzet"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Szélesség, hosszúság (pl. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 vagy IPv6"
+
+msgid "IP mask"
+msgstr "IP maszk"
+
+msgid "e.g. /24"
+msgstr "pl. /24"
+
+msgid "Parent branch"
+msgstr "Szülő fiók"
+
+msgid "Unique identifier"
+msgstr "Egyedi azonosító"
+
+msgid "Latitude"
+msgstr "Szélesség"
+
+msgid "e.g. 48.8566"
+msgstr "pl. 48.8566"
+
+msgid "Longitude"
+msgstr "Hosszúság"
+
+msgid "e.g. 2.3522"
+msgstr "pl. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Letöltési sebesség (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Feltöltési sebesség (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Késleltetés (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Rendszergazdai név"
+
+msgid "Administrator phone number"
+msgstr "Rendszergazda telefonszám"
+
+msgid "ID of last synch transaction"
+msgstr "Utolsó szinkronizációs tranzakció azonosítója"
+
+msgid "Time of last synchronization"
+msgstr "Utolsó szinkronizáció ideje"
+
+msgid "Last synchronization type"
+msgstr "Utolsó szinkronizáció típusa"
+
+msgid "SSL public key"
+msgstr "SSL nyilvános kulcs"
+
+msgid "Branch type"
+msgstr "Filia típusa"
+
+msgid "Room"
+msgstr "Szoba"
+
+msgid "Simple IDS"
+msgstr "Egyszerű IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "Az IDS jelenleg ki van kapcsolva. Állítsa be IDS_ENABLED=true a .env fájlban a szkennelés aktiválásához."
+
+msgid "All event types"
+msgstr "Minden eseménytípus"
+
+msgid "Events by day (last 7 days)"
+msgstr "Események naponta (utolsó 7 nap)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Események típusonként (utolsó 30 nap)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Legtöbb támadó IP (utolsó 30 nap)"
+
+msgid "Flagged IDS events"
+msgstr "Megjelölt IDS események"
+
+msgid "No suspicious events detected."
+msgstr "Nincs gyanús esemény észlelve."
+
+msgid "Detection type"
+msgstr "Észlelési típus"
+
+msgid "Parameter"
+msgstr "Paraméter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (jelenlegi)"
 

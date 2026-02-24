@@ -32596,3 +32596,165 @@ msgstr "Se non rexistrou esta conta, pode ignorar este correo. Non se tomará ni
 msgid "Current authentication method"
 msgstr "Método de autenticación actual"
 
+msgid "Branches"
+msgstr "Sucursais"
+
+msgid "Rooms"
+msgstr "Salas"
+
+msgid "Room availability finder"
+msgstr "Buscador de dispoñibilidade de salas"
+
+msgid "New branch"
+msgstr "Nova sucursal"
+
+msgid "New room"
+msgstr "Nova sala"
+
+msgid "Branch"
+msgstr "Sucursal"
+
+msgid "Default room"
+msgstr "Sala predeterminada"
+
+msgid "Room occupation: %s"
+msgstr "Ocupación da sala: %s"
+
+msgid "Find available rooms"
+msgstr "Buscar salas dispoñibles"
+
+msgid "Available rooms"
+msgstr "Salas dispoñibles"
+
+msgid "Occupied rooms"
+msgstr "Salas ocupadas"
+
+msgid "No available rooms found for this time range"
+msgstr "Non se atoparon salas dispoñibles para este intervalo de tempo"
+
+msgid "No rooms have been created yet"
+msgstr "Aínda non se crearon salas"
+
+msgid "Courses linked to %s"
+msgstr "Cursos ligados a %s"
+
+msgid "No branches have been created yet"
+msgstr "Aínda non se crearon sucursais"
+
+msgid "Occupation"
+msgstr "Ocupación"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Non se pode eliminar a sucursal con salas asociadas"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Non se pode eliminar a sala con cursos asociados"
+
+msgid "Conflicts"
+msgstr "Conflitos"
+
+msgid "Geolocation"
+msgstr "Xeolocalización"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitude, Lonxitude (p. ex. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 ou IPv6"
+
+msgid "IP mask"
+msgstr "Máscara IP"
+
+msgid "e.g. /24"
+msgstr "p. ex. /24"
+
+msgid "Parent branch"
+msgstr "Sucursal superior"
+
+msgid "Unique identifier"
+msgstr "Identificador único"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "e.g. 48.8566"
+msgstr "p. ex. 48.8566"
+
+msgid "Longitude"
+msgstr "Lonxitude"
+
+msgid "e.g. 2.3522"
+msgstr "p. ex. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Velocidade de descarga (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Velocidade de subida (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Retardo (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nome do administrador"
+
+msgid "Administrator phone number"
+msgstr "Número de teléfono do administrador"
+
+msgid "ID of last synch transaction"
+msgstr "ID da última transacción de sincronización"
+
+msgid "Time of last synchronization"
+msgstr "Hora da última sincronización"
+
+msgid "Last synchronization type"
+msgstr "Tipo da última sincronización"
+
+msgid "SSL public key"
+msgstr "Chave pública SSL"
+
+msgid "Branch type"
+msgstr "Tipo de sucursal"
+
+msgid "Room"
+msgstr "Sala"
+
+msgid "Simple IDS"
+msgstr "IDS simple"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "O IDS está desactivado actualmente. Estabeleza IDS_ENABLED=true no teu ficheiro .env para activar o escaneo."
+
+msgid "All event types"
+msgstr "Todos os tipos de eventos"
+
+msgid "Events by day (last 7 days)"
+msgstr "Eventos por día (últimos 7 días)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Eventos por tipo (últimos 30 días)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IPs atacantes principais (últimos 30 días)"
+
+msgid "Flagged IDS events"
+msgstr "Eventos IDS sinalados"
+
+msgid "No suspicious events detected."
+msgstr "Non se detectaron eventos sospeitosos."
+
+msgid "Detection type"
+msgstr "Tipo de detección"
+
+msgid "Parameter"
+msgstr "Parámetro"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (actual)"
+

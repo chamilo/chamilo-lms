@@ -1,0 +1,57 @@
+@mixin base-button() {
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition select-none border border-solid
+    disabled:cursor-default;
+  padding: calc(0.5rem - 1px) calc(1rem - 1px);
+}
+
+@mixin button-filled-style($color, $hoverColor) {
+  $textColor: 'white';
+
+  @if ('warning' == $color) {
+    $textColor: 'gray-90';
+  }
+
+  @apply bg-#{$color} text-#{$textColor} border-#{$color};
+
+  &:enabled {
+    &:hover,
+    &:focus,
+    &:active {
+      @apply bg-#{$hoverColor};
+    }
+  }
+}
+
+@mixin button-outlined-style($color) {
+  @apply bg-white border-#{$color} text-#{$color};
+
+  &:enabled {
+    &:hover,
+    &:focus,
+    &:active {
+      @if ('warning' == $color) {
+        @apply bg-#{$color} border-#{$color} text-gray-90;
+      } @else if ('black' == $color) {
+        @apply bg-gray-90 border-gray-90 text-white;
+      } @else {
+        @apply bg-#{$color} border-#{$color} text-white;
+      }
+    }
+  }
+}
+
+@mixin button-text-style($color) {
+  @apply bg-white text-#{$color} border-transparent;
+
+  &:enabled {
+    &:hover,
+    &:focus,
+    &:active {
+      @if ('tertiary' == $color) {
+        @apply bg-support-1 text-primary;
+      } @else {
+        @apply bg-gray-10;
+      }
+    }
+  }
+}

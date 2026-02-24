@@ -34149,3 +34149,165 @@ msgstr "Falls Sie dieses Konto nicht registriert haben, können Sie diese E-Mail
 msgid "Current authentication method"
 msgstr "Aktuelle Authentifizierungsmethode"
 
+msgid "Branches"
+msgstr "Filialen"
+
+msgid "Rooms"
+msgstr "Räume"
+
+msgid "Room availability finder"
+msgstr "Raumsuchmaschine"
+
+msgid "New branch"
+msgstr "Neue Filiale"
+
+msgid "New room"
+msgstr "Neuer Raum"
+
+msgid "Branch"
+msgstr "Filiale"
+
+msgid "Default room"
+msgstr "Standardsaal"
+
+msgid "Room occupation: %s"
+msgstr "Raumnutzung: %s"
+
+msgid "Find available rooms"
+msgstr "Verfügbare Räume suchen"
+
+msgid "Available rooms"
+msgstr "Verfügbare Räume"
+
+msgid "Occupied rooms"
+msgstr "Belegte Räume"
+
+msgid "No available rooms found for this time range"
+msgstr "Keine verfügbaren Räume für diesen Zeitraum gefunden"
+
+msgid "No rooms have been created yet"
+msgstr "Es wurden noch keine Räume erstellt"
+
+msgid "Courses linked to %s"
+msgstr "Kurse verknüpft mit %s"
+
+msgid "No branches have been created yet"
+msgstr "Es wurden noch keine Filialen erstellt"
+
+msgid "Occupation"
+msgstr "Belegung"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Filiale mit zugehörigen Räumen kann nicht gelöscht werden"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Raum mit zugehörigen Kursen kann nicht gelöscht werden"
+
+msgid "Conflicts"
+msgstr "Konflikte"
+
+msgid "Geolocation"
+msgstr "Geolocation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Breitengrad, Längengrad (z. B. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 oder IPv6"
+
+msgid "IP mask"
+msgstr "IP-Maske"
+
+msgid "e.g. /24"
+msgstr "z. B. /24"
+
+msgid "Parent branch"
+msgstr "Übergeordnete Filiale"
+
+msgid "Unique identifier"
+msgstr "Eindeutiger Bezeichner"
+
+msgid "Latitude"
+msgstr "Breitengrad"
+
+msgid "e.g. 48.8566"
+msgstr "z. B. 48.8566"
+
+msgid "Longitude"
+msgstr "Längengrad"
+
+msgid "e.g. 2.3522"
+msgstr "z. B. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Downloadgeschwindigkeit (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Uploadgeschwindigkeit (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Verzögerung (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratorname"
+
+msgid "Administrator phone number"
+msgstr "Telefonnummer des Administrators"
+
+msgid "ID of last synch transaction"
+msgstr "ID der letzten Synchronisationstransaktion"
+
+msgid "Time of last synchronization"
+msgstr "Zeitpunkt der letzten Synchronisation"
+
+msgid "Last synchronization type"
+msgstr "Typ der letzten Synchronisation"
+
+msgid "SSL public key"
+msgstr "SSL-Öffentlicher Schlüssel"
+
+msgid "Branch type"
+msgstr "Filialtyp"
+
+msgid "Room"
+msgstr "Raum"
+
+msgid "Simple IDS"
+msgstr "Einfaches IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS ist derzeit deaktiviert. Setzen Sie IDS_ENABLED=true in Ihrer .env-Datei, um das Scannen zu aktivieren."
+
+msgid "All event types"
+msgstr "Alle Ereignistypen"
+
+msgid "Events by day (last 7 days)"
+msgstr "Ereignisse pro Tag (letzte 7 Tage)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Ereignisse nach Typ (letzte 30 Tage)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Top angreifende IPs (letzte 30 Tage)"
+
+msgid "Flagged IDS events"
+msgstr "Markierte IDS-Ereignisse"
+
+msgid "No suspicious events detected."
+msgstr "Keine verdächtigen Ereignisse erkannt."
+
+msgid "Detection type"
+msgstr "Erkennungstyp"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (aktuell)"
+

@@ -32577,3 +32577,165 @@ msgstr "اگر این حساب را ثبت نکرده‌اید، می‌توان
 msgid "Current authentication method"
 msgstr "روش احراز هویت کنونی"
 
+msgid "Branches"
+msgstr "شعبه‌ها"
+
+msgid "Rooms"
+msgstr "اتاق‌ها"
+
+msgid "Room availability finder"
+msgstr "جستجوی در دسترس بودن اتاق"
+
+msgid "New branch"
+msgstr "شعبه جدید"
+
+msgid "New room"
+msgstr "اتاق جدید"
+
+msgid "Branch"
+msgstr "شعبه"
+
+msgid "Default room"
+msgstr "اتاق پیش‌فرض"
+
+msgid "Room occupation: %s"
+msgstr "اشغال اتاق: %s"
+
+msgid "Find available rooms"
+msgstr "پیدا کردن اتاق‌های در دسترس"
+
+msgid "Available rooms"
+msgstr "اتاق‌های در دسترس"
+
+msgid "Occupied rooms"
+msgstr "اتاق‌های اشغال شده"
+
+msgid "No available rooms found for this time range"
+msgstr "هیچ اتاق در دسترسی برای این بازه زمانی یافت نشد"
+
+msgid "No rooms have been created yet"
+msgstr "هنوز هیچ اتاقی ایجاد نشده است"
+
+msgid "Courses linked to %s"
+msgstr "دوره‌های مرتبط با %s"
+
+msgid "No branches have been created yet"
+msgstr "هنوز هیچ شعبه‌ای ایجاد نشده است"
+
+msgid "Occupation"
+msgstr "اشغال"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "نمی‌توان شعبه‌ای که اتاق به آن متصل است را حذف کرد"
+
+msgid "Cannot delete room with courses attached"
+msgstr "نمی‌توان اتاقی که دوره به آن متصل است را حذف کرد"
+
+msgid "Conflicts"
+msgstr "تضادها"
+
+msgid "Geolocation"
+msgstr "موقعیت جغرافیایی"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "عرض جغرافیایی، طول جغرافیایی (مثال: 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 یا IPv6"
+
+msgid "IP mask"
+msgstr "ماسک IP"
+
+msgid "e.g. /24"
+msgstr "مثال: /24"
+
+msgid "Parent branch"
+msgstr "شعبه والد"
+
+msgid "Unique identifier"
+msgstr "شناسه یکتا"
+
+msgid "Latitude"
+msgstr "عرض جغرافیایی"
+
+msgid "e.g. 48.8566"
+msgstr "مثال: 48.8566"
+
+msgid "Longitude"
+msgstr "طول جغرافیایی"
+
+msgid "e.g. 2.3522"
+msgstr "مثال: 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "سرعت دانلود (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "سرعت آپلود (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "تأخیر (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "نام مدیر"
+
+msgid "Administrator phone number"
+msgstr "شماره تلفن مدیر"
+
+msgid "ID of last synch transaction"
+msgstr "شناسه آخرین تراکنش همگام‌سازی"
+
+msgid "Time of last synchronization"
+msgstr "زمان آخرین همگام‌سازی"
+
+msgid "Last synchronization type"
+msgstr "نوع آخرین همگام‌سازی"
+
+msgid "SSL public key"
+msgstr "کلید عمومی SSL"
+
+msgid "Branch type"
+msgstr "نوع شعبه"
+
+msgid "Room"
+msgstr "اتاق"
+
+msgid "Simple IDS"
+msgstr "IDS ساده"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS در حال حاضر غیرفعال است. IDS_ENABLED=true را در فایل .env خود تنظیم کنید تا اسکن فعال شود."
+
+msgid "All event types"
+msgstr "تمام انواع رویدادها"
+
+msgid "Events by day (last 7 days)"
+msgstr "رویدادها بر اساس روز (۷ روز گذشته)"
+
+msgid "Events by type (last 30 days)"
+msgstr "رویدادها بر اساس نوع (۳۰ روز گذشته)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "بالاترین IPهای حمله‌کننده (۳۰ روز گذشته)"
+
+msgid "Flagged IDS events"
+msgstr "رویدادهای علامت‌گذاری شده IDS"
+
+msgid "No suspicious events detected."
+msgstr "هیچ رویداد مشکوکی شناسایی نشد."
+
+msgid "Detection type"
+msgstr "نوع تشخیص"
+
+msgid "Parameter"
+msgstr "پارامتر"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (فعلی)"
+

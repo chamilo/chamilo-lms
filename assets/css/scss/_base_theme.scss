@@ -1,16 +1,6 @@
 // BASE CSS
 
-.xdebug-var-dump {
-  margin-top: 87px;
-}
-
 .table{
-  .row_selected {
-    background-color: $row-table-select;
-  }
-  th, td{
-    //padding: 12px 8px;
-  }
   .checkbox{
     margin-top: -1px;
     margin-bottom: 0;
@@ -35,121 +25,14 @@
       overflow: hidden;
       left: 0;
       pointer-events: none;
-      &:focus + .checkbox-material .check:after {
-        opacity: 0.2;
-      }
-      &:checked {
-        & + .checkbox-material .check {
-          background: #2196F3;
-        }
-        & + .checkbox-material .check:before {
-          color: #FFFFFF;
-          box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
-          animation: checkbox-on 0.3s forwards;
-        }
-      }
-    }
-    .checkbox-material {
-      vertical-align: middle;
-      position: relative;
-      top: 3px;
-      padding-right: 5px;
-      &:before{
-        display: block;
-        position: absolute;
-        left: 0;
-        content: "";
-        background-color: rgba(0, 0, 0, 0.84);
-        height: 20px;
-        width: 20px;
-        border-radius: 100%;
-        z-index: 1;
-        opacity: 0;
-        margin: 0;
-        transform: scale3d(2.3, 2.3, 1);
-        animation: rippleOn 500ms;
-      }
-      .check{
-        position: relative;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 1px solid rgba(0,0,0, .54);
-        overflow: hidden;
-        z-index: 1;
-        border-radius: 3px;
-        &:before{
-          position: absolute;
-          content: "";
-          transform: rotate(45deg);
-          display: block;
-          margin-top: -3px;
-          margin-left: 7px;
-          width: 0;
-          height: 0;
-          background: red;
-          box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0 inset;
-          animation: checkbox-off 0.3s forwards;
-        }
-      }
     }
   }
   .avatar-user{
     position: relative;
     display: block;
     width: 100%;
-    .is-admin{
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-    .is-active{
-      position: absolute;
-      left: 10px;
-      bottom: -10px;
-    }
     .avatar{
       border: 1px solid #cdcdcd;
     }
   }
-  .cut-email{
-    width:150px;
-    height:20px;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    overflow:hidden;
-    display: inline-block;
-    &:hover{
-      width: 100%;
-      white-space: initial;
-      overflow: visible;
-      cursor: pointer;
-      display: inline-block;
-    }
-  }
-  .toolbar-table{
-    display: inline-block;
-    width: 200px;
-    img{
-      border: 1px solid #cdcdcd;
-      background-color: #ffffff;
-      padding: 4px;
-      border-radius: 5px;
-      &:hover{
-       background-color:#cdcdcd;
-      }
-    }
-    .blackboard_hide{
-      display: none;
-    }
-  }
-  .th-header{
-    a{
-      //color: $grey-900;
-    }
-  }
-}
-
-.hidden {
-  display: none!important;
 }

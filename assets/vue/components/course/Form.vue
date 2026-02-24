@@ -44,6 +44,16 @@
         option-label="name"
         option-value="id"
       />
+      <BaseSelect
+        v-if="roomOptions.length > 0"
+        id="room-select"
+        v-model="courseRoom"
+        :label="t('Default room')"
+        :options="roomOptions"
+        name="room"
+        option-label="name"
+        option-value="id"
+      />
     </div>
     <!-- Form Footer -->
     <div class="form-footer">
@@ -72,6 +82,8 @@ import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
 import languageService from "../../services/languageService"
+import roomService from "../../services/roomService"
+import baseService from "../../services/baseService"
 import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 import { useI18n } from "vue-i18n"
 
@@ -94,6 +106,8 @@ const courseName = ref("")
 const courseCategory = ref([])
 const courseCode = ref("")
 const courseLanguage = ref(null)
+const courseRoom = ref(null)
+const roomOptions = ref([])
 const courseTemplate = ref(null)
 const showAdvancedSettings = ref(false)
 const router = useRouter()
@@ -174,6 +188,7 @@ const submitForm = () => {
     code: courseCode.value,
     language: courseLanguage.value,
     template: courseTemplate.value ? courseTemplate.value.value : null,
+    roomId: courseRoom.value || null,
     fillDemoContent: false,
   })
 }
@@ -212,8 +227,22 @@ onMounted(async () => {
     // Apply default language after options are loaded
     applyDefaultLanguageIfEmpty()
   } catch (error) {
-    // Keep messages in English
     console.error("Failed to load dropdown data", error)
+  }
+
+  try {
+    const hasRooms = await roomService.exists()
+    if (hasRooms) {
+      const { items } = await baseService.getCollection("/api/rooms")
+      roomOptions.value = items.map((r) => {
+        const branch = r.branch
+        const branchTitle = branch && typeof branch === "object" ? branch.title : null
+        const label = branchTitle ? `${branchTitle} - ${r.title}` : r.title
+        return { name: label, id: r["@id"] }
+      })
+    }
+  } catch (error) {
+    console.error("Failed to load rooms", error)
   }
 })
 const goBack = () => {

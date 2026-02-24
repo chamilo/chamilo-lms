@@ -2029,7 +2029,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":כן:זכויות יוצרים,, לא:ללא זכויות יוצרים"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:תיקייה,, application/msword:MsWord,, application/octet-stream:זרם אוקטט,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":תרגיל:תרגיל,,      סימולציה:סימולציה,,      שאלון:שאלון,,      דיאגרמה:דיאגרמה,,      איור:איור,,      גרף:גרף,,      אינדקס:אינדקס,,      שקופית:שקופית,,      טבלה:טבלה,,      טקסט נרטיבי:טקסט נרטיבי,,      מבחן:מבחן,,      ניסוי:ניסוי,,      ניסוח בעיה:ניסוח בעיה,,      הערכה עצמית:הערכה עצמית,,      הרצאה:הרצאה"
@@ -32593,4 +32593,166 @@ msgstr "אם לא נרשמת לחשבון זה, תוכל להתעלם מדוא\"
 
 msgid "Current authentication method"
 msgstr "שיטת אימות נוכחית"
+
+msgid "Branches"
+msgstr "סניפים"
+
+msgid "Rooms"
+msgstr "חדרים"
+
+msgid "Room availability finder"
+msgstr "מחפש זמינות חדרים"
+
+msgid "New branch"
+msgstr "סניף חדש"
+
+msgid "New room"
+msgstr "חדר חדש"
+
+msgid "Branch"
+msgstr "סניף"
+
+msgid "Default room"
+msgstr "חדר ברירת מחדל"
+
+msgid "Room occupation: %s"
+msgstr "כיבוש חדר: %s"
+
+msgid "Find available rooms"
+msgstr "מצא חדרים פנויים"
+
+msgid "Available rooms"
+msgstr "חדרים פנויים"
+
+msgid "Occupied rooms"
+msgstr "חדרים תפוסים"
+
+msgid "No available rooms found for this time range"
+msgstr "לא נמצאו חדרים פנויים לטווח הזמן הזה"
+
+msgid "No rooms have been created yet"
+msgstr "לא נוצרו חדרים עדיין"
+
+msgid "Courses linked to %s"
+msgstr "קורסים המקושרים ל־%s"
+
+msgid "No branches have been created yet"
+msgstr "לא נוצרו סניפים עדיין"
+
+msgid "Occupation"
+msgstr "כיבוש"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "לא ניתן למחוק סניף עם חדרים מחוברים"
+
+msgid "Cannot delete room with courses attached"
+msgstr "לא ניתן למחוק חדר עם קורסים מחוברים"
+
+msgid "Conflicts"
+msgstr "סתירות"
+
+msgid "Geolocation"
+msgstr "מיקום גיאוגרפי"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "קו רוחב, קו אורך (למשל 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 או IPv6"
+
+msgid "IP mask"
+msgstr "מסכת IP"
+
+msgid "e.g. /24"
+msgstr "למשל /24"
+
+msgid "Parent branch"
+msgstr "סניף אב"
+
+msgid "Unique identifier"
+msgstr "זיהוי ייחודי"
+
+msgid "Latitude"
+msgstr "קו רוחב"
+
+msgid "e.g. 48.8566"
+msgstr "למשל 48.8566"
+
+msgid "Longitude"
+msgstr "קו אורך"
+
+msgid "e.g. 2.3522"
+msgstr "למשל 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "מהירות הורדה (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "מהירות העלאה (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "עיכוב (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "שם מנהל המערכת"
+
+msgid "Administrator phone number"
+msgstr "מספר טלפון של מנהל המערכת"
+
+msgid "ID of last synch transaction"
+msgstr "מזהה עסקת הסנכרון האחרונה"
+
+msgid "Time of last synchronization"
+msgstr "זמן הסנכרון האחרון"
+
+msgid "Last synchronization type"
+msgstr "סוג הסנכרון האחרון"
+
+msgid "SSL public key"
+msgstr "מפתח SSL ציבורי"
+
+msgid "Branch type"
+msgstr "סוג סניף"
+
+msgid "Room"
+msgstr "חדר"
+
+msgid "Simple IDS"
+msgstr "IDS פשוט"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS מושבת כרגע. הגדר IDS_ENABLED=true בקובץ .env כדי להפעיל סריקה."
+
+msgid "All event types"
+msgstr "כל סוגי האירועים"
+
+msgid "Events by day (last 7 days)"
+msgstr "אירועים לפי יום (7 ימים אחרונים)"
+
+msgid "Events by type (last 30 days)"
+msgstr "אירועים לפי סוג (30 ימים אחרונים)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "כתובות IP תוקפות מובילות (30 ימים אחרונים)"
+
+msgid "Flagged IDS events"
+msgstr "אירועי IDS מסומנים"
+
+msgid "No suspicious events detected."
+msgstr "לא זוהו אירועים חשודים."
+
+msgid "Detection type"
+msgstr "סוג זיהוי"
+
+msgid "Parameter"
+msgstr "פרמטר"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (נוכחי)"
 

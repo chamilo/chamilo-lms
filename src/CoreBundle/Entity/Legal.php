@@ -13,7 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource]
 #[ApiFilter(SearchFilter::class, properties: [

@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 class CalendarEvent extends AbstractResource
@@ -56,6 +56,8 @@ class CalendarEvent extends AbstractResource
         public ?string $color = null,
         #[Groups(['calendar_event:read'])]
         public ?string $type = null,
+        #[Groups(['calendar_event:read'])]
+        public ?array $room = null,
     ) {}
 
     public function getType(): ?string

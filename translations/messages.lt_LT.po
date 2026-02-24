@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:aplankas,, application/msword:MsWord,, application/octet-stream:Okto stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Oktobinis srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -32581,4 +32581,166 @@ msgstr "Jei jūs neregistravote šios paskyros, galite nepaisyti šio el. laišk
 
 msgid "Current authentication method"
 msgstr "Dabartinis autentifikacijos metodas"
+
+msgid "Branches"
+msgstr "Filialai"
+
+msgid "Rooms"
+msgstr "Kambariai"
+
+msgid "Room availability finder"
+msgstr "Laisvų kambarių paieška"
+
+msgid "New branch"
+msgstr "Naujas filialas"
+
+msgid "New room"
+msgstr "Naujas kambarys"
+
+msgid "Branch"
+msgstr "Filialas"
+
+msgid "Default room"
+msgstr "Numatytasis kambarys"
+
+msgid "Room occupation: %s"
+msgstr "Kambario užimtumas: %s"
+
+msgid "Find available rooms"
+msgstr "Rasti laisvus kambarius"
+
+msgid "Available rooms"
+msgstr "Laisvi kambariai"
+
+msgid "Occupied rooms"
+msgstr "Užimti kambariai"
+
+msgid "No available rooms found for this time range"
+msgstr "Šiam laiko intervalui laisvų kambarių nerasta"
+
+msgid "No rooms have been created yet"
+msgstr "Dar nesukurta jokių kambarių"
+
+msgid "Courses linked to %s"
+msgstr "Su %s susieti kursai"
+
+msgid "No branches have been created yet"
+msgstr "Dar nesukurta jokių filialų"
+
+msgid "Occupation"
+msgstr "Užimtumas"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Negalima ištrinti filialo, prie kurio priskirti kambariai"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Negalima ištrinti kambario, prie kurio priskirti kursai"
+
+msgid "Conflicts"
+msgstr "Konfliktai"
+
+msgid "Geolocation"
+msgstr "Geolokacija"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Platuma, ilguma (pvz. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 arba IPv6"
+
+msgid "IP mask"
+msgstr "IP kaukė"
+
+msgid "e.g. /24"
+msgstr "pvz. /24"
+
+msgid "Parent branch"
+msgstr "Tėvinis filialas"
+
+msgid "Unique identifier"
+msgstr "Unikalus identifikatorius"
+
+msgid "Latitude"
+msgstr "Platuma"
+
+msgid "e.g. 48.8566"
+msgstr "pvz. 48.8566"
+
+msgid "Longitude"
+msgstr "Ilguma"
+
+msgid "e.g. 2.3522"
+msgstr "pvz. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Atsisiuntimo greitis (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Įkėlimo greitis (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Uždelsimas (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratoriaus vardas"
+
+msgid "Administrator phone number"
+msgstr "Administratoriaus telefono numeris"
+
+msgid "ID of last synch transaction"
+msgstr "Paskutinės sinchronizacijos operacijos ID"
+
+msgid "Time of last synchronization"
+msgstr "Paskutinės sinchronizacijos laikas"
+
+msgid "Last synchronization type"
+msgstr "Paskutinės sinchronizacijos tipas"
+
+msgid "SSL public key"
+msgstr "SSL viešasis raktas"
+
+msgid "Branch type"
+msgstr "Filialo tipas"
+
+msgid "Room"
+msgstr "Kambarys"
+
+msgid "Simple IDS"
+msgstr "Paprastas IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS šiuo metu išjungtas. Nustatykite IDS_ENABLED=true faile .env, kad įjungtumėte nuskaitymą."
+
+msgid "All event types"
+msgstr "Visi įvykių tipai"
+
+msgid "Events by day (last 7 days)"
+msgstr "Įvykiai pagal dieną (paskutinės 7 dienos)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Įvykiai pagal tipą (paskutinės 30 dienų)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Geriausi puolantys IP (paskutinės 30 dienų)"
+
+msgid "Flagged IDS events"
+msgstr "Pažymėti IDS įvykiai"
+
+msgid "No suspicious events detected."
+msgstr "Įtartinų įvykių nenustatyta."
+
+msgid "Detection type"
+msgstr "Aptikimo tipas"
+
+msgid "Parameter"
+msgstr "Parametras"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (dabartinis)"
 

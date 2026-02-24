@@ -126,7 +126,7 @@ defineExpose({ selectedUsers })
     <template #header>
       <div class="flex justify-between items-center gap-4">
         <span
-          v-t="'User list'"
+          v-text="t('User list')"
           class="mr-auto"
         />
         <BaseButton

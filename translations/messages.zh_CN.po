@@ -32583,3 +32583,165 @@ msgstr "如果您没有注册此账户，您可以忽略此电子邮件。不会
 msgid "Current authentication method"
 msgstr "当前认证方法"
 
+msgid "Branches"
+msgstr "分支机构"
+
+msgid "Rooms"
+msgstr "教室"
+
+msgid "Room availability finder"
+msgstr "教室可用性查找"
+
+msgid "New branch"
+msgstr "新建分支机构"
+
+msgid "New room"
+msgstr "新建教室"
+
+msgid "Branch"
+msgstr "分支机构"
+
+msgid "Default room"
+msgstr "默认教室"
+
+msgid "Room occupation: %s"
+msgstr "教室占用：%s"
+
+msgid "Find available rooms"
+msgstr "查找可用教室"
+
+msgid "Available rooms"
+msgstr "可用教室"
+
+msgid "Occupied rooms"
+msgstr "已占用教室"
+
+msgid "No available rooms found for this time range"
+msgstr "此时间范围内未找到可用教室"
+
+msgid "No rooms have been created yet"
+msgstr "尚未创建任何教室"
+
+msgid "Courses linked to %s"
+msgstr "链接到 %s 的课程"
+
+msgid "No branches have been created yet"
+msgstr "尚未创建任何分支机构"
+
+msgid "Occupation"
+msgstr "占用"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "无法删除附有教室的分支机构"
+
+msgid "Cannot delete room with courses attached"
+msgstr "无法删除附有课程的教室"
+
+msgid "Conflicts"
+msgstr "冲突"
+
+msgid "Geolocation"
+msgstr "地理位置"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "纬度，经度（例如 48.8566, 2.3522）"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 或 IPv6"
+
+msgid "IP mask"
+msgstr "IP 掩码"
+
+msgid "e.g. /24"
+msgstr "例如 /24"
+
+msgid "Parent branch"
+msgstr "父分支机构"
+
+msgid "Unique identifier"
+msgstr "唯一标识符"
+
+msgid "Latitude"
+msgstr "纬度"
+
+msgid "e.g. 48.8566"
+msgstr "例如 48.8566"
+
+msgid "Longitude"
+msgstr "经度"
+
+msgid "e.g. 2.3522"
+msgstr "例如 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "下载速度 (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "上传速度 (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "延迟 (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "管理员姓名"
+
+msgid "Administrator phone number"
+msgstr "管理员电话号码"
+
+msgid "ID of last synch transaction"
+msgstr "最后同步事务 ID"
+
+msgid "Time of last synchronization"
+msgstr "最后同步时间"
+
+msgid "Last synchronization type"
+msgstr "最后同步类型"
+
+msgid "SSL public key"
+msgstr "SSL 公钥"
+
+msgid "Branch type"
+msgstr "分支类型"
+
+msgid "Room"
+msgstr "房间"
+
+msgid "Simple IDS"
+msgstr "简单 IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS 当前已禁用。请在您的 .env 文件中设置 IDS_ENABLED=true 以激活扫描。"
+
+msgid "All event types"
+msgstr "所有事件类型"
+
+msgid "Events by day (last 7 days)"
+msgstr "按天的事件 (最近 7 天)"
+
+msgid "Events by type (last 30 days)"
+msgstr "按类型的事件 (最近 30 天)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "顶级攻击 IP (最近 30 天)"
+
+msgid "Flagged IDS events"
+msgstr "标记的 IDS 事件"
+
+msgid "No suspicious events detected."
+msgstr "未检测到可疑事件。"
+
+msgid "Detection type"
+msgstr "检测类型"
+
+msgid "Parameter"
+msgstr "参数"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (当前)"
+

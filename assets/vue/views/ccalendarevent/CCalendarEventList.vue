@@ -30,6 +30,7 @@
         />
         <BaseButton
           :label="item['@id'] ? t('Edit') : t('Add')"
+          icon="calendar-plus"
           type="secondary"
           @click="onCreateEventForm"
         />
@@ -96,23 +97,17 @@
         <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
           v-show="sessionState.sessionAsEvent.start"
-          v-t="{
-            path: 'From %s',
-            args: [abbreviatedDatetime(sessionState.sessionAsEvent.start)],
-          }"
+          v-text="t('From %s', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
         />
         <p
           v-show="sessionState.sessionAsEvent.end"
-          v-t="{
-            path: 'Until %s',
-            args: [abbreviatedDatetime(sessionState.sessionAsEvent.end)],
-          }"
+          v-text="t('Until %s', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
         />
       </div>
 
       <template #footer>
         <a
-          v-t="'Go to session'"
+          v-text="t('Go to session')"
           :href="sessionState.sessionAsEvent.url"
           class="btn btn--secondary"
         />
@@ -246,13 +241,17 @@ function defaultColorByContext(ctx) {
 }
 
 const showAddEventDialog = () => {
-  item.value = {}
-  item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
-  item.value["color"] = defaultColorByContext(currentContext.value)
+  item.value = {
+    startDate: new Date(),
+    endDate: new Date(),
+    parentResourceNode: securityStore.user.resourceNode["id"],
+    color: defaultColorByContext(currentContext.value),
+  }
 
   dialog.value = true
 }
 const timezone = getCurrentTimezone()
+
 const calendarOptions = ref({
   timeZone: timezone,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],

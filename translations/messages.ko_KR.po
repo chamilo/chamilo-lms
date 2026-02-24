@@ -32581,3 +32581,165 @@ msgstr "이 계정을 등록하지 않았다면 이 이메일을 무시하셔도
 msgid "Current authentication method"
 msgstr "현재 인증 방법"
 
+msgid "Branches"
+msgstr "지점"
+
+msgid "Rooms"
+msgstr "강의실"
+
+msgid "Room availability finder"
+msgstr "강의실 가용성 찾기"
+
+msgid "New branch"
+msgstr "새 지점"
+
+msgid "New room"
+msgstr "새 강의실"
+
+msgid "Branch"
+msgstr "지점"
+
+msgid "Default room"
+msgstr "기본 강의실"
+
+msgid "Room occupation: %s"
+msgstr "강의실 사용 중: %s"
+
+msgid "Find available rooms"
+msgstr "가용 강의실 찾기"
+
+msgid "Available rooms"
+msgstr "가용 강의실"
+
+msgid "Occupied rooms"
+msgstr "사용 중인 강의실"
+
+msgid "No available rooms found for this time range"
+msgstr "이 시간대에 가용한 강의실이 없습니다"
+
+msgid "No rooms have been created yet"
+msgstr "아직 강의실이 생성되지 않았습니다"
+
+msgid "Courses linked to %s"
+msgstr "%s에 연결된 강의"
+
+msgid "No branches have been created yet"
+msgstr "아직 지점이 생성되지 않았습니다"
+
+msgid "Occupation"
+msgstr "사용 현황"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "강의실이 연결된 지점은 삭제할 수 없습니다"
+
+msgid "Cannot delete room with courses attached"
+msgstr "강의가 연결된 강의실은 삭제할 수 없습니다"
+
+msgid "Conflicts"
+msgstr "충돌"
+
+msgid "Geolocation"
+msgstr "위치 정보"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "위도, 경도 (예: 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 또는 IPv6"
+
+msgid "IP mask"
+msgstr "IP 마스크"
+
+msgid "e.g. /24"
+msgstr "예: /24"
+
+msgid "Parent branch"
+msgstr "상위 지점"
+
+msgid "Unique identifier"
+msgstr "고유 식별자"
+
+msgid "Latitude"
+msgstr "위도"
+
+msgid "e.g. 48.8566"
+msgstr "예: 48.8566"
+
+msgid "Longitude"
+msgstr "경도"
+
+msgid "e.g. 2.3522"
+msgstr "예: 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "다운로드 속도 (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "업로드 속도 (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "지연 (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "관리자 이름"
+
+msgid "Administrator phone number"
+msgstr "관리자 전화번호"
+
+msgid "ID of last synch transaction"
+msgstr "마지막 동기화 거래 ID"
+
+msgid "Time of last synchronization"
+msgstr "마지막 동기화 시간"
+
+msgid "Last synchronization type"
+msgstr "마지막 동기화 유형"
+
+msgid "SSL public key"
+msgstr "SSL 공개 키"
+
+msgid "Branch type"
+msgstr "지점 유형"
+
+msgid "Room"
+msgstr "방"
+
+msgid "Simple IDS"
+msgstr "간단한 IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS가 현재 비활성화되어 있습니다. .env에서 IDS_ENABLED=true로 설정하여 스캐닝을 활성화하세요."
+
+msgid "All event types"
+msgstr "모든 이벤트 유형"
+
+msgid "Events by day (last 7 days)"
+msgstr "일별 이벤트 (지난 7일)"
+
+msgid "Events by type (last 30 days)"
+msgstr "유형별 이벤트 (지난 30일)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "상위 공격 IP (지난 30일)"
+
+msgid "Flagged IDS events"
+msgstr "플래그된 IDS 이벤트"
+
+msgid "No suspicious events detected."
+msgstr "의심스러운 이벤트가 감지되지 않았습니다."
+
+msgid "Detection type"
+msgstr "감지 유형"
+
+msgid "Parameter"
+msgstr "매개변수"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (현재)"
+

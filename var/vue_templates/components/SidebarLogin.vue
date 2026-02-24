@@ -77,7 +77,7 @@ function onSubmitLoginForm() {
           tabindex="4"
         />
         <label
-          v-t="'Remember me'"
+          v-text="t('Remember me')"
           for="binary"
         />
       </div>
@@ -91,7 +91,7 @@ function onSubmitLoginForm() {
 
         <a
           v-if="allowRegistration"
-          v-t="'Sign up'"
+          v-text="t('Sign up')"
           class="btn btn--primary-outline"
           href="/main/auth/registration.php"
           tabindex="3"
@@ -100,7 +100,7 @@ function onSubmitLoginForm() {
 
       <a
         id="forgot"
-        v-t="'Forgot your password?'"
+        v-text="t('Forgot your password?')"
         class="field"
         href="/main/auth/lostPassword.php"
         tabindex="5"

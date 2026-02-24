@@ -1,109 +1,91 @@
 @use "sass:meta";
-//@import 'base_theme';
+//@import "base_theme";
 //
 //// Tools
-//@import 'inbox';
-//@import 'install';
+//@import "inbox";
+//@import "install";
 
-@layer base {
-  body {
-    line-height: normal;
-  }
+@forward "settings/typography";
+@forward "settings/component";
 
-  hr {
-    @apply text-gray-30 my-6;
-  }
+@forward "atoms/form";
+@forward "atoms/autocomplete";
+@forward "atoms/avatar";
+@forward "atoms/buttons";
+@forward "atoms/calendar";
+@forward "atoms/checkbox";
+@forward "atoms/color_picker";
+@forward "atoms/divider";
+@forward "atoms/fieldset";
+@forward "atoms/float_label";
+@forward "atoms/inline_message";
+@forward "atoms/inputgroup";
+@forward "atoms/input_switch";
+@forward "atoms/input_text";
+@forward "atoms/input_number";
+@forward "atoms/messages";
+@forward "atoms/multiselect";
+@forward "atoms/overlay";
+@forward "atoms/password";
+@forward "atoms/platform_logo";
+@forward "atoms/progressbar";
+@forward "atoms/radio";
+@forward "atoms/rating";
+@forward "atoms/select";
+@forward "atoms/skeleton";
+@forward "atoms/tags";
+@forward "atoms/toast";
+@forward "atoms/wysiwyg";
 
-  .p-component {
-    font-size: 1rem;
-    font-weight: normal;
+@forward "molecules/chip";
+@forward "molecules/course_tool";
+@forward "molecules/empty_state";
+@forward "molecules/teacher_bar";
+@forward "molecules/toolbar";
+@forward "molecules/legacy_panel";
 
-    & * {
-      @apply box-border;
-    }
-  }
-}
+@forward "organisms/cards";
+@forward "organisms/course_card";
+@forward "organisms/datatable";
+@forward "organisms/dataview";
+@forward "organisms/external_logins";
+@forward "organisms/dialog";
+@forward "organisms/menu";
+@forward "organisms/sidebar";
+@forward "organisms/section_header";
+@forward "organisms/tables";
+@forward "organisms/install";
 
-@include meta.load-css("settings/typography");
-@include meta.load-css("settings/component");
+@forward "components/badges";
+//@import "announcement";
 
-@include meta.load-css("atoms/form");
-@include meta.load-css("atoms/autocomplete");
-@include meta.load-css("atoms/avatar");
-@include meta.load-css("atoms/buttons");
-@include meta.load-css("atoms/calendar");
-@include meta.load-css("atoms/checkbox");
-@include meta.load-css("atoms/color_picker");
-@include meta.load-css("atoms/divider");
-@include meta.load-css("atoms/fieldset");
-@include meta.load-css("atoms/float_label");
-@include meta.load-css("atoms/inline_message");
-@include meta.load-css("atoms/inputgroup");
-@include meta.load-css("atoms/input_switch");
-@include meta.load-css("atoms/input_text");
-@include meta.load-css("atoms/input_number");
-@include meta.load-css("atoms/messages");
-@include meta.load-css("atoms/multiselect");
-@include meta.load-css("atoms/overlay");
-@include meta.load-css("atoms/password");
-@include meta.load-css("atoms/platform_logo");
-@include meta.load-css("atoms/progressbar");
-@include meta.load-css("atoms/radio");
-@include meta.load-css("atoms/rating");
-@include meta.load-css("atoms/select");
-@include meta.load-css("atoms/skeleton");
-@include meta.load-css("atoms/tags");
-@include meta.load-css("atoms/toast");
-@include meta.load-css("atoms/wysiwyg");
+@forward "layout/topbar";
+@forward "layout/breadcrumb";
+@forward "layout/main_container";
 
-@include meta.load-css("molecules/chip");
-@include meta.load-css("molecules/course_tool");
-@include meta.load-css("molecules/empty_state");
-@include meta.load-css("molecules/teacher_bar");
-@include meta.load-css("molecules/toolbar");
-@include meta.load-css("molecules/legacy_panel");
+@forward "admin_index";
+@forward "calendar";
+@forward "course_home";
 
-@include meta.load-css("organisms/cards");
-@include meta.load-css("organisms/course_card");
-@include meta.load-css("organisms/datatable");
-@include meta.load-css("organisms/dataview");
-@include meta.load-css("organisms/external_logins");
-@include meta.load-css("organisms/dialog");
-@include meta.load-css("organisms/menu");
-@include meta.load-css("organisms/sidebar");
-@include meta.load-css("organisms/section_header");
-@include meta.load-css("organisms/tables");
-@include meta.load-css("organisms/install");
+@forward "documents";
 
-@include meta.load-css("components/badges");
-//@import 'announcement';
+@forward "login";
 
-@include meta.load-css("layout/topbar");
-@include meta.load-css("layout/breadcrumb");
-@include meta.load-css('layout/main_container');
+@forward "forums";
+@forward "exercise";
+@forward "catalog_course";
+@forward "catalog_session";
+//@import "jqueryui";
+@forward "lp";
+@forward "messages";
+@forward "userreluser";
+@forward "social";
+@forward "skill";
+@forward "survey";
+@forward "chat";
+@forward "blog";
+@forward "course_maintenance";
+@forward "reporting";
 
-@include meta.load-css("admin_index");
-@include meta.load-css("calendar");
-@include meta.load-css("course_home");
-
-@include meta.load-css("documents");
-
-@include meta.load-css('login');
-
-@include meta.load-css('forums');
-@include meta.load-css('exercise');
-@include meta.load-css('catalog_course');
-@include meta.load-css('catalog_session');
-//@import 'jqueryui';
-@include meta.load-css('lp');
-@include meta.load-css("messages");
-@include meta.load-css("userreluser");
-@include meta.load-css('social');
-@include meta.load-css('skill');
-@include meta.load-css('survey');
-@include meta.load-css('chat');
-@include meta.load-css('blog');
-@include meta.load-css('course_maintenance');
-@include meta.load-css('reporting');
-
-@include meta.load-css("libs/mediaelementjs/styles");
+@forward "libs/mediaelementjs/styles";
+@forward "libs/fullcalendar/index";

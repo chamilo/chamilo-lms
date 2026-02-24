@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Entity\Skill;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     shortName: 'Skill',

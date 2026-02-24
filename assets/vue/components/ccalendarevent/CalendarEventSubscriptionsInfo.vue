@@ -1,6 +1,9 @@
 <script setup>
+import { useI18n } from "vue-i18n"
 import ShowLinks from "../resource_links/ShowLinks.vue"
 import { subscriptionVisibility } from "../../constants/entity/ccalendarevent"
+
+const { t } = useI18n()
 
 defineProps({
   event: {
@@ -13,12 +16,12 @@ defineProps({
 <template>
   <div class="invitations-info">
     <h6
-      v-t="'Subscriptions'"
+      v-text="t('Subscriptions')"
       class="invitations-info__title"
     />
 
     <div class="invitations-info__item">
-      <p v-t="'Allow subscriptions'" />
+      <p v-text="t('Allow subscriptions')" />
       <p
         v-if="subscriptionVisibility.no === event.subscriptionVisibility"
         v-text="'No'"
@@ -41,7 +44,7 @@ defineProps({
       v-if="event.maxAttendees"
       class="invitations-info__item"
     >
-      <p v-t="'Maximum number of subscriptions'" />
+      <p v-text="t('Maximum number of subscriptions')" />
       <p v-text="event.maxAttendees" />
     </div>
 
@@ -49,7 +52,7 @@ defineProps({
       v-if="event.maxAttendees"
       class="invitations-info__item"
     >
-      <p v-t="'Subscriptions count'" />
+      <p v-text="t('Subscriptions count')" />
       <p v-text="event.resourceLinkListFromEntity.length" />
     </div>
 
@@ -57,7 +60,7 @@ defineProps({
       v-if="event.resourceLinkListFromEntity.length"
       class="invitations-info__item"
     >
-      <p v-t="'Subscribers'" />
+      <p v-text="t('Subscribers')" />
       <div>
         <ShowLinks
           :item="event"

@@ -6,7 +6,7 @@
       @click="goBack"
     />
 
-    <h3 v-t="'Edit assignment'" />
+    <h3 v-text="t('Edit assignment')" />
 
     <AssignmentsForm
       :default-assignment="assignment"

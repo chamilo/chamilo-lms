@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa rakina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -32582,4 +32582,166 @@ msgstr "Kay cuenta nisqata mañakunqanchu, kay e-mailta mana yuyarichunki. Manam
 
 msgid "Current authentication method"
 msgstr "Kunan hallpallaq hallpachisqa kamachiy"
+
+msgid "Branches"
+msgstr "Suyukuna"
+
+msgid "Rooms"
+msgstr "Kamarakuna"
+
+msgid "Room availability finder"
+msgstr "Kamara rakin finder"
+
+msgid "New branch"
+msgstr "Musuq suyu"
+
+msgid "New room"
+msgstr "Musuq kamara"
+
+msgid "Branch"
+msgstr "Suyu"
+
+msgid "Default room"
+msgstr "Kamara maqollan"
+
+msgid "Room occupation: %s"
+msgstr "Kamara suyachisqa: %s"
+
+msgid "Find available rooms"
+msgstr "Rakin kamarakuna rikunki"
+
+msgid "Available rooms"
+msgstr "Rakin kamarakuna"
+
+msgid "Occupied rooms"
+msgstr "Suyachisqa kamarakuna"
+
+msgid "No available rooms found for this time range"
+msgstr "Kay pacha ruraypi manam rakikunam kayninchikchu"
+
+msgid "No rooms have been created yet"
+msgstr "Manam kamarakunam yaratakunachu iskay"
+
+msgid "Courses linked to %s"
+msgstr "%s makiwan kawsasqa kursokuna"
+
+msgid "No branches have been created yet"
+msgstr "Manam suyukuna yaratakunachu iskay"
+
+msgid "Occupation"
+msgstr "Suyachisqa"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Kamara k'anchayuq suyuta manam hapiychunmanchu"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Kursokuna k'anchayuq kamaraqa manam hapiychunmanchu"
+
+msgid "Conflicts"
+msgstr "Q'ispikuna"
+
+msgid "Geolocation"
+msgstr "Geolocalización"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitud, Longitud (sutinchay: 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 o IPv6"
+
+msgid "IP mask"
+msgstr "IP máscara"
+
+msgid "e.g. /24"
+msgstr "sutinchay /24"
+
+msgid "Parent branch"
+msgstr "Puma suyu"
+
+msgid "Unique identifier"
+msgstr "Yachaykunaq identifíkador"
+
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "e.g. 48.8566"
+msgstr "jallp'a 48.8566"
+
+msgid "Longitude"
+msgstr "Hatun chaka (Longitud)"
+
+msgid "e.g. 2.3522"
+msgstr "jallp'a 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Yachachisqa hayku (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Kamachisqa hayku (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "P'utuy (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Kamachiq sutin"
+
+msgid "Administrator phone number"
+msgstr "Kamachiq telefonin"
+
+msgid "ID of last synch transaction"
+msgstr "Ñawpaq sinqronizakuy ID"
+
+msgid "Time of last synchronization"
+msgstr "Ñawpaq sinqronizakuy pacha"
+
+msgid "Last synchronization type"
+msgstr "Ñawpaq sinqronizakuy khalli"
+
+msgid "SSL public key"
+msgstr "SSL ñaqha llika"
+
+msgid "Branch type"
+msgstr "Llamk'a khalli"
+
+msgid "Room"
+msgstr "Kancha"
+
+msgid "Simple IDS"
+msgstr "Sarta IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS kunan kashpan mana llamkayuq. IDS_ENABLED=true ruraq .env-mi scan nisqapaq."
+
+msgid "All event types"
+msgstr "Tukuy willakuy khalli"
+
+msgid "Events by day (last 7 days)"
+msgstr "Willakuykuna p'unchaypi (ñawpaq 7 p'unchaykuna)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Willakuykuna khallipi (ñawpaq 30 p'unchaykuna)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Hatun hapiq IPkuna (ñawpaq 30 p'unchaykuna)"
+
+msgid "Flagged IDS events"
+msgstr "Q'illqasqa IDS willakuykuna"
+
+msgid "No suspicious events detected."
+msgstr "Mana willakuy atiyniyoq."
+
+msgid "Detection type"
+msgstr "Willakuy khalli"
+
+msgid "Parameter"
+msgstr "Paramitru"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (kunan)"
 

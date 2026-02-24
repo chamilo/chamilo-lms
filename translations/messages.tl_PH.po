@@ -8623,13 +8623,13 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d %b, %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %d %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%d %B %Y ng %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
@@ -9100,7 +9100,7 @@ msgid "File upload succeeded!"
 msgstr "Matagumpay na na-upload ang file!"
 
 msgid "CSV export"
-msgstr "CSV export"
+msgstr "I-export sa CSV"
 
 msgid "Personal area"
 msgstr "Personal na lugar"
@@ -9460,7 +9460,7 @@ msgid "Not yet begun"
 msgstr "Hindi pa nagsisimula"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Hindi wasto ang folder: Mangyaring lumikha ng folder na may pangalang images sa iyong tool ng mga dokumento upang ma-upload ang mga imahe sa folder na ito"
@@ -9544,7 +9544,7 @@ msgid "No administrator"
 msgstr "Walang tagapangasiwa"
 
 msgid "iCal export"
-msgstr "iCal export"
+msgstr "I-export sa iCal"
 
 msgid "Export in iCal format as public event"
 msgstr "I-export sa iCal format bilang pampublikong event"
@@ -18589,7 +18589,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%d %B %Y ng %H:%M"
 
 msgid "Enable legal terms"
 msgstr "Pagganahin ang mga legal na takda"
@@ -18955,10 +18955,10 @@ msgid "Sent at: %s"
 msgstr "Nipadala sa: %s"
 
 msgid "%b %d, %Y at %I:%M %p"
-msgstr "%b %d, %Y at %I:%M %p"
+msgstr "%d %b %Y ng %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%I:%M %p, %d %b %Y"
 
 msgid "Login to vote"
 msgstr "Mag-login upang bumoto"
@@ -23185,7 +23185,7 @@ msgid "Update session status"
 msgstr "I-update ang status ng sesyon"
 
 msgid "Custom list"
-msgstr "Custom list"
+msgstr "Custom na listahan"
 
 msgid "No status"
 msgstr "Walang status"
@@ -23371,7 +23371,7 @@ msgid "Users active in a test"
 msgstr "Mga gumagamit na aktibo sa pagsusulit"
 
 msgid "Selective display"
-msgstr "Selective display"
+msgstr "Selective na pagpapakita"
 
 msgid "This question, when located on a single survey page with a first multiple choice question, will only show if the first *option* of the first question is selected. For example, 'Did you go on holiday?' -> if answering the first option 'Yes', the selective display question will appear with a list of possible holiday locations to select from."
 msgstr "Ang katanungang ito, kapag matatagpuan sa isang solong pahina ng survey na may unang multiple choice question, ay ipapakita lamang kung ang unang *option* ng unang tanong ay napili. Halimbawa, 'Naglunsad ka ba ng bakasyon?' -> kung sasagutin ang unang opsyon 'Oo', lilitaw ang selective display question na may listahan ng posibleng lokasyon ng bakasyon upang piliin."
@@ -25633,7 +25633,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-enable ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch media"
+msgstr "I-activate ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch media"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -26578,7 +26578,7 @@ msgid "LDAP connection configuration"
 msgstr "Kombigurasyon ng koneksyon ng LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array na nagdedepina ng host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array na tumutukoy sa host at port para sa LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Itakda ang expiration date sa unang login"
@@ -26590,7 +26590,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na nagdedepina kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na tumutukoy kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -31636,10 +31636,10 @@ msgid "Show a tag on any content or feedback that has been generated or co-gener
 msgstr "Ipakita ang tag sa anumang content o feedback na nabuo o na-co-generate ng anumang sistema ng AI, na nagpapatunay sa user na ang content ay binuo gamit ang tulong ng ilang sistema ng AI. Ang mga detalye tungkol sa aling AI system ang ginamit sa anong kaso ay napanatili sa loob ng database para sa audit, ngunit hindi direktang accessible ng final user."
 
 msgid "JSON configuration for course catalog: link settings, filters, sort options, and more."
-msgstr "JSON configuration para sa course catalog: link settings, filters, sort options, at higit pa."
+msgstr "JSON na kumpigurasyon para sa katalog ng kurso: mga setting ng link, filter, opsyon sa pagkakasunod-sunod, at higit pa."
 
 msgid "Session Catalog Settings"
-msgstr "Session Catalog Settings"
+msgstr "Mga Setting ng Katalog ng Sesyon"
 
 msgid "JSON configuration for session catalog: filters and display options."
 msgstr "JSON configuration para sa session catalog: filters at display options."
@@ -31651,7 +31651,7 @@ msgid "Display course descriptions within the catalog listing."
 msgstr "I-display ang mga description ng course sa loob ng catalog listing."
 
 msgid "Published Courses Only"
-msgstr "Published Courses Only"
+msgstr "Mga Nalathalang Kurso Lamang"
 
 msgid "Limit the catalog to only courses marked as published."
 msgstr "Limitahan ang catalog sa mga course lamang na minarkahan bilang published."
@@ -31669,7 +31669,7 @@ msgid "Remove the public URL link from course cards."
 msgstr "Alisin ang public URL link mula sa mga course card."
 
 msgid "Only Selected Courses"
-msgstr "Only Selected Courses"
+msgstr "Mga Napiling Kurso Lamang"
 
 msgid "Show only manually selected courses in the catalog."
 msgstr "Ipakita lamang ang manually selected courses sa catalog."
@@ -31693,7 +31693,7 @@ msgid "Include both courses and sessions in catalog results."
 msgstr "Isama ang parehong courses at sessions sa catalog results."
 
 msgid "Auto Session Subscription"
-msgstr "Auto Session Subscription"
+msgstr "Awtomatikong Pag-subscribe sa Sesyon"
 
 msgid "Enable automatic subscription to sessions for users."
 msgstr "Paganahin ang awtomatikong subscription sa sessions para sa mga user."
@@ -31720,7 +31720,7 @@ msgid "This setting defines the extra user field key (e.g., \"company\") that wi
 msgstr "Itinatakdang ito ng extra user field key (hal., \"company\") na gagamitin upang maghanap ng mga user at upang i-define ang pangalan ng session kapag nagre-register ng mga estudyante mula sa /admin-dashboard/register."
 
 msgid "Glossary terms generator"
-msgstr "Glossary terms generator"
+msgstr "Generator ng mga termino ng Glossary"
 
 msgid "Allow teachers to ask for AI-generated glossary terms in their course. This will generate 20 terms based on the course title and the general description in the course description tool. If used more than once, it will exclude terms already present in that glossary (make sure content can be shared with the configured AI services)."
 msgstr "Payagan ang mga guro na humingi ng AI-generated glossary terms sa kanilang course. Ito ay magge-generate ng 20 terms batay sa course title at general description sa course description tool. Kung ginamit ng higit sa isang beses, ito ay mag-e-exclude ng mga terms na na present na sa glossary na iyon (siguraduhing ma-share ang content sa na-configure na AI services)."
@@ -31813,49 +31813,49 @@ msgid "This will delete files older than %minutes% minutes. Continue?"
 msgstr "Ito ay magbabura ng mga file na mas matanda kaysa %minutes% minuto. Magpatuloy?"
 
 msgid "The value must match exactly: %s"
-msgstr ""
+msgstr "Ang halaga ay dapat tumugma nang eksakto: %s"
 
 msgid "Repeat end date must be after start date."
-msgstr ""
+msgstr "Ang petsa ng pagtatapos ng pag-uulit ay dapat pagkatapos ng petsa ng simula."
 
 msgid "Index document content?"
-msgstr ""
+msgstr "Iindeks ang nilalaman ng dokumento?"
 
 msgid "Upload SVG logo to platform header"
-msgstr ""
+msgstr "Mag-upload ng SVG logo sa header ng platform"
 
 msgid "Upload PNG logo to platform header (%s)"
-msgstr ""
+msgstr "Mag-upload ng PNG logo sa header ng platform (%s)"
 
 msgid "Write something to %s"
-msgstr ""
+msgstr "Magsulat ng isang bagay sa %s"
 
 msgid "Preferred: SVG. PNG recommended width: %spx."
-msgstr ""
+msgstr "Pinipili: SVG. Rekomendadong lapad ng PNG: %spx."
 
 msgid "Upload PNG logo for e-mails (~%spx width)"
-msgstr ""
+msgstr "Mag-upload ng PNG logo para sa mga e-mail (~%spx lapad)"
 
 msgid "Header PNG must be ≤ %spx."
-msgstr ""
+msgstr "Ang Header PNG ay dapat ≤ %spx."
 
 msgid "Require specific file format"
-msgstr ""
+msgstr "Kailanganin ang tiyak na format ng file"
 
 msgid "Select allowed file formats"
-msgstr ""
+msgstr "Piliin ang pinapayagang format ng file"
 
 msgid "Custom extensions (separated by space)"
-msgstr ""
+msgstr "Mga custom na extension (pinaghiwalay ng espasyo)"
 
 msgid "Other extensions"
-msgstr ""
+msgstr "Ibang mga extension"
 
 msgid "My invitations"
-msgstr ""
+msgstr "Mga imbitasyon ko"
 
 msgid "Delete access"
-msgstr ""
+msgstr "Tanggalin ang access"
 
 msgid "Certificate tags"
 msgstr "Mga tag ng sertipiko"
@@ -32576,4 +32576,166 @@ msgstr "Kung hindi mo inirehistro ang account na ito, maaari mong balewalain ang
 
 msgid "Current authentication method"
 msgstr "Kasalukuyang pamamaraan ng pagpapatunay"
+
+msgid "Branches"
+msgstr "Mga Sangay"
+
+msgid "Rooms"
+msgstr "Mga Silid"
+
+msgid "Room availability finder"
+msgstr "Tagahanap ng availability ng silid"
+
+msgid "New branch"
+msgstr "Bagong sangay"
+
+msgid "New room"
+msgstr "Bagong silid"
+
+msgid "Branch"
+msgstr "Sangay"
+
+msgid "Default room"
+msgstr "Default na silid"
+
+msgid "Room occupation: %s"
+msgstr "Okupasyon ng silid: %s"
+
+msgid "Find available rooms"
+msgstr "Hanapin ang mga available na silid"
+
+msgid "Available rooms"
+msgstr "Mga available na silid"
+
+msgid "Occupied rooms"
+msgstr "Mga okupadong silid"
+
+msgid "No available rooms found for this time range"
+msgstr "Walang natagpuang available na silid para sa saklaw ng oras na ito"
+
+msgid "No rooms have been created yet"
+msgstr "Walang nilikhang silid pa"
+
+msgid "Courses linked to %s"
+msgstr "Mga kurso na naka-link sa %s"
+
+msgid "No branches have been created yet"
+msgstr "Walang nilikhang sangay pa"
+
+msgid "Occupation"
+msgstr "Okupasyon"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Hindi ma-delete ang sangay na may nakakabit na mga silid"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Hindi ma-delete ang silid na may nakakabit na mga kurso"
+
+msgid "Conflicts"
+msgstr "Mga salungatan"
+
+msgid "Geolocation"
+msgstr "Geolocation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Latitud, Longhitud (hal. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 o IPv6"
+
+msgid "IP mask"
+msgstr "Mask ng IP"
+
+msgid "e.g. /24"
+msgstr "hal. /24"
+
+msgid "Parent branch"
+msgstr "Magulang na sangay"
+
+msgid "Unique identifier"
+msgstr "Unikong tagapagkakilanlan"
+
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "e.g. 48.8566"
+msgstr "hal. 48.8566"
+
+msgid "Longitude"
+msgstr "Longhitud"
+
+msgid "e.g. 2.3522"
+msgstr "hal. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Bilang ng pag-download (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Bilang ng pag-upload (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Pagkaantala (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Pangalan ng administrador"
+
+msgid "Administrator phone number"
+msgstr "Numero ng telepono ng administrador"
+
+msgid "ID of last synch transaction"
+msgstr "ID ng huling transaksyon ng sinkronisasyon"
+
+msgid "Time of last synchronization"
+msgstr "Oras ng huling sinkronisasyon"
+
+msgid "Last synchronization type"
+msgstr "Uri ng huling sinkronisasyon"
+
+msgid "SSL public key"
+msgstr "Pampublikong susi ng SSL"
+
+msgid "Branch type"
+msgstr "Uri ng sangay"
+
+msgid "Room"
+msgstr "Silid"
+
+msgid "Simple IDS"
+msgstr "Simple IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "Ang IDS ay hindi kasalukuyang pinagana. Itakda ang IDS_ENABLED=true sa iyong .env upang i-activate ang scanning."
+
+msgid "All event types"
+msgstr "Lahat ng uri ng kaganapan"
+
+msgid "Events by day (last 7 days)"
+msgstr "Mga kaganapan bawat araw (huling 7 araw)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Mga kaganapan bawat uri (huling 30 araw)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Pinakamataas na umatake na IP (huling 30 araw)"
+
+msgid "Flagged IDS events"
+msgstr "Mga kaganapan ng IDS na nag-flag"
+
+msgid "No suspicious events detected."
+msgstr "Walang natukoy na mapanghusay na kaganapan."
+
+msgid "Detection type"
+msgstr "Uri ng pagtukoy"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (kasalukuyan)"
 

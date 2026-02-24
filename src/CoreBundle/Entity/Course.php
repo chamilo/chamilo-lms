@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
+use Chamilo\CoreBundle\State\StickyCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use DateTime;
@@ -32,9 +33,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
 
 #[ApiResource(
     types: ['https://schema.org/Course'],
@@ -85,19 +89,32 @@ use Symfony\Component\Validator\Constraints as Assert;
             filters: [ExtraFieldFilter::class],
             provider: PublicCatalogueCourseStateProvider::class
         ),
+        new GetCollection(
+            uriTemplate: '/sticky_courses.{_format}',
+            paginationClientEnabled: true,
+            security: 'is_granted("IS_AUTHENTICATED")',
+            provider: StickyCourseStateProvider::class,
+        ),
     ],
     normalizationContext: ['groups' => ['course:read']],
     denormalizationContext: ['groups' => ['course:write']],
-    filters: ['course.sticky_boolean_filter'],
 )]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact']
+)
+]
+#[ApiFilter(
+    filterClass: OrderFilter::class,
+    properties: ['id', 'title']
+)
+]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
 #[UniqueEntity('code')]
 #[UniqueEntity('visualCode')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'code' => 'partial', 'categories' => 'exact'])]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
 {
     public const CLOSED = 0;
@@ -169,7 +186,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups([
         'course:read',
         'user:read',
-        'course_rel_user:read',
     ])]
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: CourseRelUser::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
@@ -386,6 +402,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      */
     // protected $curriculumCategories;
 
+    #[Groups(['course:read', 'course:write'])]
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
@@ -969,7 +986,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->room;
     }
 
-    public function setRoom(Room $room): self
+    public function setRoom(?Room $room): self
     {
         $this->room = $room;
 
@@ -1266,19 +1283,19 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
                 continue;
             }
 
-            $title = \method_exists($category, 'getTitle')
+            $title = method_exists($category, 'getTitle')
                 ? (string) $category->getTitle()
                 : (string) $category;
 
-            $title = \trim(\strip_tags($title));
+            $title = trim(strip_tags($title));
 
             if ('' !== $title) {
                 $titles[] = $title;
             }
         }
 
-        $titles = \array_values(\array_unique($titles));
-        \sort($titles, \SORT_NATURAL | \SORT_FLAG_CASE);
+        $titles = array_values(array_unique($titles));
+        sort($titles, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $titles;
     }

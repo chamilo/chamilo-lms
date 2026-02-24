@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":evet:telif hakkı,, hayır:telif hakkı yok"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akış,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Klasör,, application/msword:MsWord,, application/octet-stream:Octet akışı,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":egzersiz:egzersiz,,      simülasyon:simülasyon,,      anket:anket,,      diyagram:diyagram,,      şekil:şekil,,      grafik:grafik,,      indeks:indeks,,      slayt:slayt,,      tablo:tablo,,      anlatı metni:anlatı metni,,      sınav:sınav,,      deney:deney,,      problem ifadesi:problem ifadesi,,      öz değerlendirme:öz değerlendirme,,      ders:ders"
@@ -32582,4 +32582,166 @@ msgstr "Bu hesabı siz kaydetmediyseniz, bu e-postayı yoksayabilirsiniz. Hiçbi
 
 msgid "Current authentication method"
 msgstr "Mevcut kimlik doğrulama yöntemi"
+
+msgid "Branches"
+msgstr "Şubeler"
+
+msgid "Rooms"
+msgstr "Odalar"
+
+msgid "Room availability finder"
+msgstr "Oda müsaitlik bulucu"
+
+msgid "New branch"
+msgstr "Yeni şube"
+
+msgid "New room"
+msgstr "Yeni oda"
+
+msgid "Branch"
+msgstr "Şube"
+
+msgid "Default room"
+msgstr "Varsayılan oda"
+
+msgid "Room occupation: %s"
+msgstr "Oda doluluk: %s"
+
+msgid "Find available rooms"
+msgstr "Müsait odaları bul"
+
+msgid "Available rooms"
+msgstr "Müsait odalar"
+
+msgid "Occupied rooms"
+msgstr "Dolu odalar"
+
+msgid "No available rooms found for this time range"
+msgstr "Bu zaman aralığı için müsait oda bulunamadı"
+
+msgid "No rooms have been created yet"
+msgstr "Henüz oda oluşturulmadı"
+
+msgid "Courses linked to %s"
+msgstr "%s ile bağlantılı kurslar"
+
+msgid "No branches have been created yet"
+msgstr "Henüz şube oluşturulmadı"
+
+msgid "Occupation"
+msgstr "Doluluk"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Oda bağlı şube silinemez"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Kurs bağlı oda silinemez"
+
+msgid "Conflicts"
+msgstr "Çakışmalar"
+
+msgid "Geolocation"
+msgstr "Coğrafi konum"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Enlem, Boylam (ör. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 veya IPv6"
+
+msgid "IP mask"
+msgstr "IP maskesi"
+
+msgid "e.g. /24"
+msgstr "ör. /24"
+
+msgid "Parent branch"
+msgstr "Ana şube"
+
+msgid "Unique identifier"
+msgstr "Benzersiz tanımlayıcı"
+
+msgid "Latitude"
+msgstr "Enlem"
+
+msgid "e.g. 48.8566"
+msgstr "ör. 48.8566"
+
+msgid "Longitude"
+msgstr "Boylam"
+
+msgid "e.g. 2.3522"
+msgstr "ör. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "İndirme hızı (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Yükleme hızı (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Gecikme (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Yönetici adı"
+
+msgid "Administrator phone number"
+msgstr "Yönetici telefon numarası"
+
+msgid "ID of last synch transaction"
+msgstr "Son senkronizasyon işleminin ID'si"
+
+msgid "Time of last synchronization"
+msgstr "Son senkronizasyon zamanı"
+
+msgid "Last synchronization type"
+msgstr "Son senkronizasyon türü"
+
+msgid "SSL public key"
+msgstr "SSL genel anahtarı"
+
+msgid "Branch type"
+msgstr "Şube türü"
+
+msgid "Room"
+msgstr "Oda"
+
+msgid "Simple IDS"
+msgstr "Basit IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS şu anda devre dışı. Tarama etkinleştirmek için .env dosyanızda IDS_ENABLED=true ayarlayın."
+
+msgid "All event types"
+msgstr "Tüm olay türleri"
+
+msgid "Events by day (last 7 days)"
+msgstr "Güne göre olaylar (son 7 gün)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Türe göre olaylar (son 30 gün)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "En çok saldıran IP'ler (son 30 gün)"
+
+msgid "Flagged IDS events"
+msgstr "İşaretlenmiş IDS olayları"
+
+msgid "No suspicious events detected."
+msgstr "Şüpheli olay algılanmadı."
+
+msgid "Detection type"
+msgstr "Algılama türü"
+
+msgid "Parameter"
+msgstr "Parametre"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (güncel)"
 

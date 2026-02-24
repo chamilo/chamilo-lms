@@ -32581,3 +32581,165 @@ msgstr "Jika Anda tidak mendaftarkan akun ini, Anda dapat mengabaikan email ini.
 msgid "Current authentication method"
 msgstr "Metode autentikasi saat ini"
 
+msgid "Branches"
+msgstr "Cabang"
+
+msgid "Rooms"
+msgstr "Ruangan"
+
+msgid "Room availability finder"
+msgstr "Pencari ketersediaan ruangan"
+
+msgid "New branch"
+msgstr "Cabang baru"
+
+msgid "New room"
+msgstr "Ruangan baru"
+
+msgid "Branch"
+msgstr "Cabang"
+
+msgid "Default room"
+msgstr "Ruangan default"
+
+msgid "Room occupation: %s"
+msgstr "Penggunaan ruangan: %s"
+
+msgid "Find available rooms"
+msgstr "Cari ruangan yang tersedia"
+
+msgid "Available rooms"
+msgstr "Ruangan tersedia"
+
+msgid "Occupied rooms"
+msgstr "Ruangan terpakai"
+
+msgid "No available rooms found for this time range"
+msgstr "Tidak ada ruangan yang tersedia untuk rentang waktu ini"
+
+msgid "No rooms have been created yet"
+msgstr "Belum ada ruangan yang dibuat"
+
+msgid "Courses linked to %s"
+msgstr "Kursus terkait dengan %s"
+
+msgid "No branches have been created yet"
+msgstr "Belum ada cabang yang dibuat"
+
+msgid "Occupation"
+msgstr "Okupansi"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Tidak dapat menghapus cabang dengan ruangan terlampir"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Tidak dapat menghapus ruangan dengan kursus terlampir"
+
+msgid "Conflicts"
+msgstr "Konflik"
+
+msgid "Geolocation"
+msgstr "Geolokasi"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Garis Lintang, Garis Bujur (mis. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 atau IPv6"
+
+msgid "IP mask"
+msgstr "Masker IP"
+
+msgid "e.g. /24"
+msgstr "mis. /24"
+
+msgid "Parent branch"
+msgstr "Cabang induk"
+
+msgid "Unique identifier"
+msgstr "Pengidentifikasi unik"
+
+msgid "Latitude"
+msgstr "Garis Lintang"
+
+msgid "e.g. 48.8566"
+msgstr "mis. 48.8566"
+
+msgid "Longitude"
+msgstr "Garis Bujur"
+
+msgid "e.g. 2.3522"
+msgstr "mis. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Kecepatan unduh (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Kecepatan unggah (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Penundaan (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Nama administrator"
+
+msgid "Administrator phone number"
+msgstr "Nomor telepon administrator"
+
+msgid "ID of last synch transaction"
+msgstr "ID transaksi sinkronisasi terakhir"
+
+msgid "Time of last synchronization"
+msgstr "Waktu sinkronisasi terakhir"
+
+msgid "Last synchronization type"
+msgstr "Jenis sinkronisasi terakhir"
+
+msgid "SSL public key"
+msgstr "Kunci publik SSL"
+
+msgid "Branch type"
+msgstr "Jenis cabang"
+
+msgid "Room"
+msgstr "Ruangan"
+
+msgid "Simple IDS"
+msgstr "IDS Sederhana"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS saat ini dinonaktifkan. Atur IDS_ENABLED=true di file .env Anda untuk mengaktifkan pemindaian."
+
+msgid "All event types"
+msgstr "Semua jenis peristiwa"
+
+msgid "Events by day (last 7 days)"
+msgstr "Peristiwa per hari (7 hari terakhir)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Peristiwa berdasarkan jenis (30 hari terakhir)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "IP penyerang teratas (30 hari terakhir)"
+
+msgid "Flagged IDS events"
+msgstr "Peristiwa IDS yang ditandai"
+
+msgid "No suspicious events detected."
+msgstr "Tidak ada peristiwa mencurigakan yang terdeteksi."
+
+msgid "Detection type"
+msgstr "Jenis deteksi"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (saat ini)"
+

@@ -1,6 +1,6 @@
 <template>
   <h2
-    v-t="'Add friends'"
+    v-text="t('Add friends')"
     class="mr-auto"
   />
   <hr />
@@ -15,7 +15,7 @@
   <div class="flex flex-row pt-2">
     <div class="w-full">
       <div
-        v-t="'Search'"
+        v-text="t('Search')"
         class="text-h4 q-mb-md"
       />
 

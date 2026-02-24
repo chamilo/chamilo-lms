@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -32582,4 +32582,166 @@ msgstr "Jos et rekisteröinyt tätä tiliä, voit jättää tämän sähköposti
 
 msgid "Current authentication method"
 msgstr "Nykyinen tunnistautumismenetelmä"
+
+msgid "Branches"
+msgstr "Toiminnot"
+
+msgid "Rooms"
+msgstr "Huoneet"
+
+msgid "Room availability finder"
+msgstr "Huoneiden saatavuuden etsijä"
+
+msgid "New branch"
+msgstr "Uusi toiminto"
+
+msgid "New room"
+msgstr "Uusi huone"
+
+msgid "Branch"
+msgstr "Toiminto"
+
+msgid "Default room"
+msgstr "Oletushuone"
+
+msgid "Room occupation: %s"
+msgstr "Huoneen käyttö: %s"
+
+msgid "Find available rooms"
+msgstr "Etsi vapaita huoneita"
+
+msgid "Available rooms"
+msgstr "Vapaat huoneet"
+
+msgid "Occupied rooms"
+msgstr "Varatut huoneet"
+
+msgid "No available rooms found for this time range"
+msgstr "Ei vapaita huoneita löydetty tältä aikaväliltä"
+
+msgid "No rooms have been created yet"
+msgstr "Yhtään huonetta ei ole vielä luotu"
+
+msgid "Courses linked to %s"
+msgstr "Kurssit, jotka on liitetty kohteeseen %s"
+
+msgid "No branches have been created yet"
+msgstr "Yhtään toimintoa ei ole vielä luotu"
+
+msgid "Occupation"
+msgstr "Käyttö"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Toimintoa, johon on liitetty huoneita, ei voi poistaa"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Huonetta, johon on liitetty kursseja, ei voi poistaa"
+
+msgid "Conflicts"
+msgstr "Ristiriidat"
+
+msgid "Geolocation"
+msgstr "Paikannus"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Leveysaste, pituusaste (esim. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 tai IPv6"
+
+msgid "IP mask"
+msgstr "IP-naamio"
+
+msgid "e.g. /24"
+msgstr "esim. /24"
+
+msgid "Parent branch"
+msgstr "Ylemmän tason toiminto"
+
+msgid "Unique identifier"
+msgstr "Yksilöllinen tunniste"
+
+msgid "Latitude"
+msgstr "Leveysaste"
+
+msgid "e.g. 48.8566"
+msgstr "esim. 48.8566"
+
+msgid "Longitude"
+msgstr "Pituusaste"
+
+msgid "e.g. 2.3522"
+msgstr "esim. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Latausnopeus (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Lähetysnopeus (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Viive (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Ylläpitäjän nimi"
+
+msgid "Administrator phone number"
+msgstr "Ylläpitäjän puhelinnumero"
+
+msgid "ID of last synch transaction"
+msgstr "Viimeisen synkronointitransaktion tunnus"
+
+msgid "Time of last synchronization"
+msgstr "Viimeisen synkronoinnin aika"
+
+msgid "Last synchronization type"
+msgstr "Viimeisen synkronoinnin tyyppi"
+
+msgid "SSL public key"
+msgstr "SSL-julkainen avain"
+
+msgid "Branch type"
+msgstr "Haaran tyyppi"
+
+msgid "Room"
+msgstr "Huone"
+
+msgid "Simple IDS"
+msgstr "Yksinkertainen IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS on tällä hetkellä pois käytöstä. Aseta IDS_ENABLED=true .env-tiedostoon skannauksen aktivoimiseksi."
+
+msgid "All event types"
+msgstr "Kaikki tapahtumatyypit"
+
+msgid "Events by day (last 7 days)"
+msgstr "Tapahtumat päivittäin (viimeiset 7 päivää)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Tapahtumat tyypin mukaan (viimeiset 30 päivää)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Huippukäyttäjä-IP:t (viimeiset 30 päivää)"
+
+msgid "Flagged IDS events"
+msgstr "Merkittyjä IDS-tapahtumia"
+
+msgid "No suspicious events detected."
+msgstr "Ei havaittuja epäilyttäviä tapahtumia."
+
+msgid "Detection type"
+msgstr "Tunnistus tyyppi"
+
+msgid "Parameter"
+msgstr "Parametri"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (nykyinen)"
 

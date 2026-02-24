@@ -172,10 +172,7 @@ if ($langParam !== null && $langParam !== '') {
 } elseif (ChamiloSession::has('install_language')) {
     $installationLanguage = ChamiloSession::read('install_language');
 } else {
-    $tempLanguage = $httpRequest->getPreferredLanguage();
-    if ($tempLanguage) {
-        $installationLanguage = $tempLanguage;
-    }
+    $installationLanguage = detectBrowserLanguage($httpRequest);
 }
 
 // Set translation
@@ -908,7 +905,6 @@ function getEncoreAssetFromManifest(string $assetName): ?string
     </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="<?php echo getEncoreAssetFromManifest('public/build/app.css'); ?>">
     <style>
         :root {
             --color-primary-base: 46 117 163;
@@ -945,7 +941,6 @@ function getEncoreAssetFromManifest(string $assetName): ?string
     </style>
     <link rel="stylesheet" href="<?php echo getEncoreAssetFromManifest('public/build/app.css'); ?>">
     <link rel="stylesheet" href="<?php echo getEncoreAssetFromManifest('public/build/vue.css'); ?>">
-    <script type="text/javascript" src="<?php echo getEncoreAssetFromManifest('public/build/legacy_app.js'); ?>"></script>
 </head>
 <body class="flex min-h-screen p-2 md:px-16 md:py-8 xl:px-32 xl:py-16 bg-gradient-to-br from-primary to-primary-gradient">
 <div id="app" class="m-auto"></div>

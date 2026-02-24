@@ -404,6 +404,8 @@ class FillBlanks extends Question
 
         // remove starting and ending space and &nbsp;
         $answer = api_preg_replace("/\xc2\xa0/", " ", $answer);
+        // remove invisible Unicode characters introduced by word processors
+        $answer = self::stripInvisibleChars($answer);
 
         // start and end separator
         $blankStartSeparator = self::getStartSeparator($form->getSubmitValue('select_separator'));
@@ -748,13 +750,13 @@ class FillBlanks extends Question
                     $listSeveral
                 );
                 //$studentAnswer = htmlspecialchars($studentAnswer);
-                $result = in_array($studentAnswer, $listSeveral);
+                $result = in_array(self::trimOption($studentAnswer), $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $correctAnswer = api_html_entity_decode($correctAnswer);
                 //$studentAnswer = htmlspecialchars($studentAnswer);
-                $result = $studentAnswer == self::trimOption($correctAnswer);
+                $result = self::trimOption($studentAnswer) == self::trimOption($correctAnswer);
                 break;
         }
 
@@ -1440,7 +1442,26 @@ class FillBlanks extends Question
     }
 
     /**
-     * Removes double spaces between words.
+     * Strips invisible/problematic Unicode characters introduced by word
+     * processors such as Microsoft Word.
+     * U+00A0 is normalised to a regular space; all others are removed.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    private static function stripInvisibleChars(string $text): string
+    {
+        $text = str_replace("\u{00A0}", ' ', $text); // Non-Breaking Space → space
+        return str_replace(
+            ["\u{00AD}", "\u{200B}", "\u{200C}", "\u{200D}", "\u{2060}", "\u{FEFF}"],
+            '',
+            $text
+        );
+    }
+
+    /**
+     * Strips invisible characters and normalises whitespace.
      *
      * @param string $text
      *
@@ -1449,17 +1470,8 @@ class FillBlanks extends Question
     private static function trimOption($text)
     {
         $text = trim($text);
-        
-        // Remove invisible Unicode characters that can cause comparison issues
-        // U+200B = ZERO WIDTH SPACE
-        // U+200C = ZERO WIDTH NON-JOINER
-        // U+200D = ZERO WIDTH JOINER
-        // U+FEFF = ZERO WIDTH NO-BREAK SPACE (BOM)
-        $text = str_replace("\u{200B}", '', $text);
-        $text = str_replace("\u{200C}", '', $text);
-        $text = str_replace("\u{200D}", '', $text);
-        $text = str_replace("\u{FEFF}", '', $text);
-        
-        return preg_replace("/\s+/", ' ', $text);
+        $text = self::stripInvisibleChars($text);
+
+        return preg_replace("/\s+/", ' ', trim($text));
     }
 }

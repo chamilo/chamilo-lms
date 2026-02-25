@@ -6,13 +6,13 @@ namespace Chamilo\CoreBundle\Component\Filesystem;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Driver\CourseDriver;
 use Chamilo\UserBundle\Entity\User;
-use MediaAlchemyst\Alchemyst;
 use Sunra\PhpSimple\HtmlDomParser;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Unoconv\Unoconv;
+
 
 /**
  * @todo use Gaufrette to manage course files (some day)
@@ -32,8 +32,8 @@ class Data
     private $converter;
 
     /**
-     * @param array     $paths
-     * @param Alchemyst $converter
+     * @param array       $paths
+     * @param string|null $converter Path to unoconv binary
      */
     public function __construct(
         $paths,
@@ -256,12 +256,14 @@ class Data
                 $fileName.'.'.$format,
                 $filePath
             );
-            /** @var \MediaAlchemyst\DriversContainer $drivers */
-            $drivers = $this->converter->getDrivers();
-            $unoconv = $drivers['unoconv'];
-            /** @var Unoconv $unoconv */
-            //$drivers = $this->converter->turnInto($filePath, $newFilePath);
-            $unoconv->transcode($filePath, $format, $newFilePath);
+            $process = new Process([
+                $this->converter,
+                '--format='.$format,
+                '--output='.$newFilePath,
+                $filePath,
+            ]);
+            $process->setTimeout(60);
+            $process->run();
             if ($this->fs->exists($newFilePath)) {
                 return $newFilePath;
             }

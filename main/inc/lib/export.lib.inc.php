@@ -6,10 +6,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Writer\ExcelWriter;
-use MediaAlchemyst\Alchemyst;
-use MediaAlchemyst\DriversContainer;
-use Neutron\TemporaryFilesystem\Manager;
-use Neutron\TemporaryFilesystem\TemporaryFilesystem;
+
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -377,17 +374,7 @@ class Export
             ];
             $connector = new Connector();
 
-            $drivers = new DriversContainer();
-            $drivers['configuration'] = [
-                'unoconv.binaries' => $unoconv,
-                'unoconv.timeout' => 60,
-            ];
-
-            $tempFilesystem = TemporaryFilesystem::create();
-            $manager = new Manager($tempFilesystem, $fs);
-            $alchemyst = new Alchemyst($drivers, $manager);
-
-            $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
+            $dataFileSystem = new Data($paths, $fs, $connector, $unoconv);
             $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
             $filePath = $dataFileSystem->putContentInTempFile(
                 $content,
@@ -395,24 +382,21 @@ class Export
                 'html'
             );
 
-            $try = true;
+            try {
+                $convertedFile = $dataFileSystem->transcode(
+                    $filePath,
+                    $format
+                );
 
-            while ($try) {
-                try {
-                    $convertedFile = $dataFileSystem->transcode(
-                        $filePath,
-                        $format
-                    );
-
-                    $try = false;
+                if ($convertedFile) {
                     DocumentManager::file_send_for_download(
                         $convertedFile,
                         false,
                         $name.'.'.$format
                     );
-                } catch (Exception $e) {
-                    // error_log($e->getMessage());
                 }
+            } catch (Exception $e) {
+                // error_log($e->getMessage());
             }
         }
     }

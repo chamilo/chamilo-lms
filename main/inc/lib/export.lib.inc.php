@@ -367,38 +367,45 @@ class Export
             return false;
         }
 
-        if (!empty($html)) {
-            $fs = new Filesystem();
-            $paths = [
-                'root_sys' => api_get_path(SYS_PATH),
-                'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
-            ];
-            $connector = new Connector();
+        if (empty($html)) {
+            return false;
+        }
 
-            $dataFileSystem = new Data($paths, $fs, $connector, $unoconv);
-            $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
-            $filePath = $dataFileSystem->putContentInTempFile(
-                $content,
-                api_replace_dangerous_char($name),
-                'html'
-            );
+        $fs = new Filesystem();
+        $paths = [
+            'root_sys' => api_get_path(SYS_PATH),
+            'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
+        ];
+        $connector = new Connector();
 
-            try {
-                $convertedFile = $dataFileSystem->transcode(
-                    $filePath,
-                    $format
+        $dataFileSystem = new Data($paths, $fs, $connector, $unoconv);
+        $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
+        // convertRelativeToAbsoluteUrl returns a simple_html_dom object; cast to string explicitly
+        $content = (string) $content;
+
+        $safeName = api_replace_dangerous_char($name);
+        $filePath = $dataFileSystem->putContentInTempFile($content, $safeName, 'html');
+
+        if (empty($filePath)) {
+            error_log("htmlToOdt: failed to create temp file for '$name'");
+
+            return false;
+        }
+
+        try {
+            $convertedFile = $dataFileSystem->transcode($filePath, $format);
+
+            if ($convertedFile) {
+                DocumentManager::file_send_for_download(
+                    $convertedFile,
+                    true,
+                    $name.'.'.$format
                 );
-
-                if ($convertedFile) {
-                    DocumentManager::file_send_for_download(
-                        $convertedFile,
-                        false,
-                        $name.'.'.$format
-                    );
-                }
-            } catch (Exception $e) {
-                // error_log($e->getMessage());
+            } else {
+                error_log("htmlToOdt: transcode failed for '$name'");
             }
+        } catch (Exception $e) {
+            error_log("htmlToOdt: exception during transcode for '$name': ".$e->getMessage());
         }
     }
 }

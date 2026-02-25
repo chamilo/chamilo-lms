@@ -2193,7 +2193,7 @@ class UserGroup extends Model
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
             if ($height > 0) {
-                $dimension = api_getimagesize($picture['file']);
+                $dimension = api_getimagesize($file);
                 $margin = ($height - $dimension['width']) / 2;
                 //@ todo the padding-top should not be here
             }

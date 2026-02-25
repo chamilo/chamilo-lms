@@ -6,13 +6,13 @@ namespace Chamilo\CoreBundle\Component\Filesystem;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Driver\CourseDriver;
 use Chamilo\UserBundle\Entity\User;
-use MediaAlchemyst\Alchemyst;
 use Sunra\PhpSimple\HtmlDomParser;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Unoconv\Unoconv;
+
 
 /**
  * @todo use Gaufrette to manage course files (some day)
@@ -32,8 +32,8 @@ class Data
     private $converter;
 
     /**
-     * @param array     $paths
-     * @param Alchemyst $converter
+     * @param array       $paths
+     * @param string|null $converter Path to unoconv binary
      */
     public function __construct(
         $paths,
@@ -207,6 +207,11 @@ class Data
         $courseDriver = $this->connector->getDriver('CourseDriver');
 
         $dom = HtmlDomParser::str_get_html($content);
+        if ($dom === false) {
+            error_log("convertRelativeToAbsoluteUrl: HtmlDomParser::str_get_html returned false (content too large or invalid?)");
+
+            return $content;
+        }
         /** @var \simple_html_dom_node $image */
         foreach ($dom->find('img') as $image) {
             $image->src = str_replace(
@@ -248,24 +253,47 @@ class Data
      */
     public function transcode($filePath, $format)
     {
-        if ($this->fs->exists($filePath)) {
-            $fileInfo = pathinfo($filePath);
-            $fileName = $fileInfo['filename'];
-            $newFilePath = str_replace(
-                $fileInfo['basename'],
-                $fileName.'.'.$format,
-                $filePath
-            );
-            /** @var \MediaAlchemyst\DriversContainer $drivers */
-            $drivers = $this->converter->getDrivers();
-            $unoconv = $drivers['unoconv'];
-            /** @var Unoconv $unoconv */
-            //$drivers = $this->converter->turnInto($filePath, $newFilePath);
-            $unoconv->transcode($filePath, $format, $newFilePath);
-            if ($this->fs->exists($newFilePath)) {
-                return $newFilePath;
-            }
+        if (empty($filePath)) {
+            return false;
         }
+
+        if (!$this->fs->exists($filePath)) {
+            error_log("transcode: input file does not exist: $filePath");
+
+            return false;
+        }
+
+        $fileInfo = pathinfo($filePath);
+        $fileName = $fileInfo['filename'];
+        $newFilePath = str_replace(
+            $fileInfo['basename'],
+            $fileName.'.'.$format,
+            $filePath
+        );
+
+        // LibreOffice (called by unoconv) needs a writable HOME to create its
+        // user profile (.cache/dconf, .config/libreoffice, etc.). The web server
+        // user's default HOME (/var/www) is typically not writable, so we
+        // override HOME and XDG_CACHE_HOME to the Chamilo cache directory.
+        $writableHome = rtrim($this->paths['path.temp'], '/');
+        $process = new Process([
+            $this->converter,
+            '--format='.$format,
+            '--output='.$newFilePath,
+            $filePath,
+        ]);
+        $process->setTimeout(60);
+        $process->setEnv([
+            'HOME' => $writableHome,
+            'XDG_CACHE_HOME' => $writableHome.'/.cache',
+        ]);
+        $process->run();
+
+        if ($this->fs->exists($newFilePath)) {
+            return $newFilePath;
+        }
+
+        error_log("transcode: unoconv failed (exit ".$process->getExitCode().") for $filePath: ".$process->getErrorOutput());
 
         return false;
     }

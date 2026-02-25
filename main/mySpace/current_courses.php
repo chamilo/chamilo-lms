@@ -211,12 +211,12 @@ $headers = [
 
 if (isset($_GET['export'])) {
     global $charset;
-    $spreadsheet = new PHPExcel();
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
     $spreadsheet->setActiveSheetIndex(0);
     $worksheet = $spreadsheet->getActiveSheet();
 
-    $line = 0;
-    $column = 0; //skip the first column (row titles)
+    $line = 1;
+    $column = 1;
 
     foreach ($headers as $header) {
         $worksheet->setCellValueByColumnAndRow($column, $line, $header);
@@ -224,7 +224,7 @@ if (isset($_GET['export'])) {
     }
     $line++;
     foreach ($array as $row) {
-        $column = 0;
+        $column = 1;
         foreach ($row as $item) {
             $worksheet->setCellValueByColumnAndRow(
                 $column,
@@ -238,7 +238,7 @@ if (isset($_GET['export'])) {
     $line++;
 
     $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-    $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
     $writer->save($file);
     DocumentManager::file_send_for_download($file, true, $filename);
     exit;

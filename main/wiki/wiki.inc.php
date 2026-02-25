@@ -6854,7 +6854,7 @@ class Wiki
                 self::getDiscuss($page);
                 break;
             case 'export_to_doc_file':
-                self::exportTo($_GET['id'], 'odt');
+                self::exportTo($_GET['id'], 'docx');
                 exit;
                 break;
             case 'category':
@@ -6888,7 +6888,17 @@ class Wiki
         $data = self::getWikiDataFromDb($id);
 
         if (isset($data['content']) && !empty($data['content'])) {
-            Export::htmlToOdt($data['content'], $data['reflink'], $format);
+            $toSlug = static function (string $str): string {
+                $str = mb_strtolower($str);
+                $str = preg_replace('/[^a-z0-9]+/', '-', $str);
+
+                return trim($str, '-');
+            };
+
+            $courseTitle = api_get_course_info()['name'] ?? '';
+            $fileName = $toSlug($courseTitle).'-wiki-'.$toSlug($data['reflink']);
+
+            Export::htmlToOdt($data['content'], $fileName, $format);
         }
 
         return false;

@@ -6,10 +6,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Writer\ExcelWriter;
-use MediaAlchemyst\Alchemyst;
-use MediaAlchemyst\DriversContainer;
-use Neutron\TemporaryFilesystem\Manager;
-use Neutron\TemporaryFilesystem\TemporaryFilesystem;
+
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -102,9 +99,8 @@ class Export
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
         $file = new \SplFileObject($filePath, 'w');
 
-        $excel = @new PHPExcel();
+        $excel = @new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
-        $type = 'Excel2007';
         $sheet = null;
         $row = 1;
         $prependHeaderRow = false;
@@ -125,7 +121,7 @@ class Export
                 $headers = array_keys($item);
 
                 for ($i = 0; $i < $count; $i++) {
-                    @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $headers[$i]);
+                    @$excel->getActiveSheet()->setCellValueByColumnAndRow($i + 1, $row, $headers[$i]);
                 }
                 $row++;
             }
@@ -136,9 +132,9 @@ class Export
                 if (false !== strpos($values[$i], '[comment]')) {
                     list($txtValue, $txtComment) = explode('[comment]', $values[$i]);
                 }
-                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $txtValue);
+                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i + 1, $row, $txtValue);
                 if (!empty($txtComment)) {
-                    $columnLetter = PHPExcel_Cell::stringFromColumnIndex($i);
+                    $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($i + 1);
                     $coordinate = $columnLetter.$row;
                     @$excel->getActiveSheet()->getComment($coordinate)->getText()->createTextRun($txtComment);
                 }
@@ -146,7 +142,7 @@ class Export
             $row++;
         }
 
-        $writer = \PHPExcel_IOFactory::createWriter($excel, $type);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
         $writer->save($file->getPathname());
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
 
@@ -370,51 +366,45 @@ class Export
             return false;
         }
 
-        if (!empty($html)) {
-            $fs = new Filesystem();
-            $paths = [
-                'root_sys' => api_get_path(SYS_PATH),
-                'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
-            ];
-            $connector = new Connector();
+        if (empty($html)) {
+            return false;
+        }
 
-            $drivers = new DriversContainer();
-            $drivers['configuration'] = [
-                'unoconv.binaries' => $unoconv,
-                'unoconv.timeout' => 60,
-            ];
+        $fs = new Filesystem();
+        $paths = [
+            'root_sys' => api_get_path(SYS_PATH),
+            'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
+        ];
+        $connector = new Connector();
 
-            $tempFilesystem = TemporaryFilesystem::create();
-            $manager = new Manager($tempFilesystem, $fs);
-            $alchemyst = new Alchemyst($drivers, $manager);
+        $dataFileSystem = new Data($paths, $fs, $connector, $unoconv);
+        $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
+        // convertRelativeToAbsoluteUrl returns a simple_html_dom object; cast to string explicitly
+        $content = (string) $content;
 
-            $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
-            $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
-            $filePath = $dataFileSystem->putContentInTempFile(
-                $content,
-                api_replace_dangerous_char($name),
-                'html'
-            );
+        $safeName = api_replace_dangerous_char($name);
+        $filePath = $dataFileSystem->putContentInTempFile($content, $safeName, 'html');
 
-            $try = true;
+        if (empty($filePath)) {
+            error_log("htmlToOdt: failed to create temp file for '$name'");
 
-            while ($try) {
-                try {
-                    $convertedFile = $dataFileSystem->transcode(
-                        $filePath,
-                        $format
-                    );
+            return false;
+        }
 
-                    $try = false;
-                    DocumentManager::file_send_for_download(
-                        $convertedFile,
-                        false,
-                        $name.'.'.$format
-                    );
-                } catch (Exception $e) {
-                    // error_log($e->getMessage());
-                }
+        try {
+            $convertedFile = $dataFileSystem->transcode($filePath, $format);
+
+            if ($convertedFile) {
+                DocumentManager::file_send_for_download(
+                    $convertedFile,
+                    true,
+                    $name.'.'.$format
+                );
+            } else {
+                error_log("htmlToOdt: transcode failed for '$name'");
             }
+        } catch (Exception $e) {
+            error_log("htmlToOdt: exception during transcode for '$name': ".$e->getMessage());
         }
     }
 }

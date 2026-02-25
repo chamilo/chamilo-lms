@@ -491,12 +491,12 @@ class ExerciseResult
             $filename = 'exercise_results_user_'.$user_id.'_'.$now.'.xlsx';
         }
 
-        $spreadsheet = new PHPExcel();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $line = 1; // Skip first line
-        $column = 0; //skip the first column (row titles)
+        $line = 1;
+        $column = 1;
 
         // check if exists column 'user'
         $with_column_user = false;
@@ -584,7 +584,7 @@ class ExerciseResult
         $line++;
 
         foreach ($this->results as $row) {
-            $column = 0;
+            $column = 1;
             if ($with_column_user) {
                 if (api_is_western_name_order()) {
                     $worksheet->setCellValueByColumnAndRow(
@@ -738,7 +738,7 @@ class ExerciseResult
         }
 
         $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->save($file);
         DocumentManager::file_send_for_download($file, true, $filename);
 

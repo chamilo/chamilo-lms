@@ -387,12 +387,12 @@ function export_complete_report_xls($filename, $array)
 {
     global $global, $filter_score;
 
-    $spreadsheet = new PHPExcel();
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
     $spreadsheet->setActiveSheetIndex(0);
     $worksheet = $spreadsheet->getActiveSheet();
 
     $line = 1;
-    $column = 0; //skip the first column (row titles)
+    $column = 1;
 
     if ($global) {
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Courses'));
@@ -412,7 +412,7 @@ function export_complete_report_xls($filename, $array)
 
         $line++;
         foreach ($array as $row) {
-            $column = 0;
+            $column = 1;
             foreach ($row as $item) {
                 $worksheet->setCellValueByColumnAndRow($column, $line, html_entity_decode(strip_tags($item)));
                 $column++;
@@ -421,33 +421,33 @@ function export_complete_report_xls($filename, $array)
         }
         $line++;
     } else {
-        $worksheet->setCellValueByColumnAndRow(0, $line, get_lang('Exercises'));
-        $worksheet->setCellValueByColumnAndRow(1, $line, get_lang('User'));
-        $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('Username'));
-        $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Percentage'));
-        $worksheet->setCellValueByColumnAndRow(4, $line, get_lang('Status'));
-        $worksheet->setCellValueByColumnAndRow(5, $line, get_lang('Attempts'));
+        $worksheet->setCellValueByColumnAndRow(1, $line, get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('User'));
+        $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Username'));
+        $worksheet->setCellValueByColumnAndRow(4, $line, get_lang('Percentage'));
+        $worksheet->setCellValueByColumnAndRow(5, $line, get_lang('Status'));
+        $worksheet->setCellValueByColumnAndRow(6, $line, get_lang('Attempts'));
         $line++;
 
         foreach ($array as $row) {
             $worksheet->setCellValueByColumnAndRow(
-                0,
+                1,
                 $line,
                 html_entity_decode(strip_tags($row['exercise']))
             );
 
             foreach ($row['users'] as $key => $user) {
                 $worksheet->setCellValueByColumnAndRow(
-                    1,
+                    2,
                     $line,
                     html_entity_decode(strip_tags($user))
                 );
                 $worksheet->setCellValueByColumnAndRow(
-                    2,
+                    3,
                     $line,
                     $row['usernames'][$key]
                 );
-                $column = 3;
+                $column = 4;
 
                 foreach ($row['results'][$key] as $result_item) {
                     $worksheet->setCellValueByColumnAndRow(
@@ -464,7 +464,7 @@ function export_complete_report_xls($filename, $array)
     }
 
     $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-    $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
     $writer->save($file);
     DocumentManager::file_send_for_download($file, true, $filename);
     exit;

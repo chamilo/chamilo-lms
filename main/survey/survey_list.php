@@ -354,7 +354,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $surveyList[] = $surveyData;
             }
 
-            @$spreadsheet = new PHPExcel();
+            @$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
             $counter = 0;
             foreach ($classes as $class) {
                 $classId = $class['id'];
@@ -368,16 +368,16 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $page = @$spreadsheet->createSheet($counter);
                 @$page->setTitle($class['name']);
-                $firstColumn = 3;
-                $column = 3;
-                $columnQuestion = 3;
+                $firstColumn = 4;
+                $column = 4;
+                $columnQuestion = 4;
                 @$page->setCellValueByColumnAndRow(
-                    0,
+                    1,
                     1,
                     $class['name']
                 );
 
-                $columnsWithData = [0, 1, 2];
+                $columnsWithData = [1, 2, 3];
                 $previousSurveyQuestionsCount = 0;
                 $skipThisClass = true;
                 foreach ($surveyList as $survey) {
@@ -402,7 +402,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $userId = $userInClass['id'];
                         $completeName = $userInClass['firstname'].' '.$userInClass['lastname'];
                         if (empty($previousSurveyQuestionsCount)) {
-                            $userColumn = 3;
+                            $userColumn = 4;
                         } else {
                             $userColumn = $previousSurveyQuestionsCount;
                         }
@@ -479,7 +479,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     }
 
                     if (empty($previousSurveyQuestionsCount)) {
-                        $previousSurveyQuestionsCount = 3;
+                        $previousSurveyQuestionsCount = 4;
                     }
 
                     //$previousSurveyQuestionsCount += $questionsInSurvey;
@@ -493,14 +493,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 trim(strip_tags(str_replace('{{student_full_name}}', '', $question['question'])))
                             );
                             // Add question title.
-                            $cell = @$page->setCellValueByColumnAndRow(
+                            @$page->setCellValueByColumnAndRow(
                                 $column,
                                 1,
-                                $questionTitle,
-                                true
+                                $questionTitle
                             );
+                            $cell = $page->getCellByColumnAndRow($column, 1);
                             $cell->getStyle()->getAlignment()->setHorizontal(
-                                PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
                             );
                             $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                             $firstCoordinate = $coordinate;
@@ -515,23 +515,21 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $userId = $userAnswer['user_id'];
                                 $title = $survey['group_title'].' - '.$userAnswer['complete_name'];
 
-                                $cell = @$page->setCellValueByColumnAndRow(
+                                @$page->setCellValueByColumnAndRow(
                                     $column,
                                     1,
-                                    $questionTitle,
-                                    true
+                                    $questionTitle
                                 );
 
                                 if ($debug) {
                                     $title = 's:'.$surveyId.' - q '.$question['question_id'].' prev:'.$previousSurveyQuestionsCount.' '.$userAnswer['lastname'];
                                 }
-                                $cell = @$page->setCellValueByColumnAndRow(
+                                @$page->setCellValueByColumnAndRow(
                                     $column,
                                     2,
-                                    $title,
-                                    true
+                                    $title
                                 );
-                                $cell->getStyle()->getAlignment()->setTextRotation(90);
+                                $page->getCellByColumnAndRow($column, 2)->getStyle()->getAlignment()->setTextRotation(90);
                                 $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(250);
 
                                 $lastColumn = $column;
@@ -555,7 +553,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 // Remove cols with no data.
                 $less = 0;
-                $index = 0;
+                $index = 1;
                 foreach ($page->getColumnIterator('A') as $col) {
                     if (!in_array($index, $columnsWithData)) {
                         if (!$debug) {
@@ -566,10 +564,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $index++;
                 }
 
-                $counterColumn = 2;
+                $counterColumn = 3;
                 $categories = [];
                 $letterList = [];
-                $highestRow = $page->getHighestRow(0); // Name list
+                $highestRow = $page->getHighestRow('A'); // Name list
                 // Sets $page->getColumnIterator('C')
                 $dimension = $page->getColumnDimension('C');
                 foreach ($page->getColumnIterator('C') as $col) {
@@ -612,14 +610,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
 
                 // Merge similar cols.
-                $counterColumn = 3;
+                $counterColumn = 4;
                 $oldValue = '';
                 $data = [];
                 foreach ($page->getColumnIterator('C') as $col) {
                     $index = $col->getColumnIndex();
                     $cell = $page->getCellByColumnAndRow($counterColumn, 1);
                     $cell->getStyle()->getAlignment()->setHorizontal(
-                        PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+                        \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
                     );
                     $coordinate = $page->getCellByColumnAndRow($counterColumn, 1)->getCoordinate();
                     $value = $cell->getValue();
@@ -644,7 +642,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $row = 3;
                 foreach ($usersInClass as $user) {
-                    $columnUser = 0;
+                    $columnUser = 1;
                     $lastname = $user['lastname'];
                     if ($debug) {
                         $lastname = $user['id'].': '.$user['lastname'];
@@ -671,21 +669,20 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         if (false === strpos($question['question'], '{{')) {
                             $questionTitle = strip_tags($question['question']);
                             $questionId = $question['question_id'];
-                            $firstColumn = 3;
-                            $column = 3;
-                            $columnQuestion = 3;
+                            $firstColumn = 4;
+                            $column = 4;
+                            $columnQuestion = 4;
                             foreach ($usersWithInvitation as $userAnswer) {
                                 $myUserId = $userAnswer['id'];
-                                $columnUser = 0;
-                                $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $questionTitle, true);
-                                $page->getColumnDimensionByColumn($cell->getColumn())->setAutoSize(0);
-                                $page->getColumnDimensionByColumn($cell->getColumn())->setWidth(50);
+                                $columnUser = 1;
+                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $questionTitle);
+                                $page->getColumnDimension('A')->setAutoSize(false);
+                                $page->getColumnDimension('A')->setWidth(50);
 
-                                $cell2 = @$page->setCellValueByColumnAndRow(
+                                @$page->setCellValueByColumnAndRow(
                                     $columnUser++,
                                     $row,
-                                    $survey['group_title'].' - '.$userAnswer['complete_name'],
-                                    true
+                                    $survey['group_title'].' - '.$userAnswer['complete_name']
                                 );
                                 $data = '';
                                 if (isset($survey['user_answers'][$myUserId]) &&
@@ -694,7 +691,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     $data = $survey['user_answers'][$myUserId][$survey['survey_id']][$questionId];
                                 }
                                 // Question answer.
-                                $cell = @$page->setCellValueByColumnAndRow($columnUser++, $row, $data, true);
+                                @$page->setCellValueByColumnAndRow($columnUser++, $row, $data);
                                 $row++;
                             }
                         } else {
@@ -706,7 +703,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
             $spreadsheet->setActiveSheetIndex(0);
             $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('report', true);
-            @$writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+            @$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
             @$writer->save($file);
 
             DocumentManager::file_send_for_download($file, true, get_lang('Report').'.xlsx');

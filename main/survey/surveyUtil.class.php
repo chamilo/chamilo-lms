@@ -2078,11 +2078,11 @@ class SurveyUtil
             return false;
         }
 
-        $spreadsheet = new PHPExcel();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
         $line = 1;
-        $column = 1; // Skip the first column (row titles)
+        $column = 2; // Skip the first column (row titles); was column 1 (0-indexed B) in PHPExcel
 
         // Show extra fields blank space (enough for extra fields on next line)
         // Show user fields section with a big th colspan that spans over all fields
@@ -2175,7 +2175,7 @@ class SurveyUtil
         }
 
         $line++;
-        $column = 1;
+        $column = 2;
         // Show extra field values
         if ($display_extra_user_fields && !$survey_data['anonymous']) {
             // Show the fields names for user fields
@@ -2274,7 +2274,7 @@ class SurveyUtil
 
         // Getting all the answers of the users
         $line++;
-        $column = 0;
+        $column = 1;
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
@@ -2302,7 +2302,7 @@ class SurveyUtil
                 }
                 $answers_of_user = [];
                 $line++;
-                $column = 0;
+                $column = 1;
             }
             if ($possible_answers_type[$row['question_id']] === 'open' ||
                 $possible_answers_type[$row['question_id']] === 'comment'
@@ -2332,7 +2332,7 @@ class SurveyUtil
         }
 
         $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->save($file);
 
         if ($returnFile) {

@@ -68,7 +68,7 @@
         "graphp/graphviz": "~0.2.0",
         "guzzlehttp/guzzle": "~6.0",
         "h5p/h5p-core": "*",
-        "imagine/imagine": "~1.3",
+
         "ircmaxell/password-compat": "~1.0.4",
         "jbroadway/urlify": "1.1.0-stable",
         "jeroendesloovere/vcard": "~1.7",
@@ -78,7 +78,7 @@
         "knplabs/gaufrette": "~0.3",
         "knplabs/knp-components": "~1.3",
         "league/csv": "~8.0",
-        "media-alchemyst/media-alchemyst": "~0.5",
+        "symfony/process": "~3.0|~4.0",
         "michelf/php-markdown": "~1.7",
         "monolog/monolog": "~1.0",
         "mpdf/mpdf": "^8.0",

@@ -4,7 +4,6 @@
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 /**
  * Class LtiTokenRequest.
@@ -95,7 +94,7 @@ class LtiTokenRequest
      */
     public function decodeJwt($clientAssertion)
     {
-        return JWT::decode($clientAssertion, new Key($this->tool->publicKey, 'RS256'));
+        return JWT::decode($clientAssertion, $this->tool->publicKey, ['RS256']);
     }
 
     /**

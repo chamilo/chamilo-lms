@@ -160,7 +160,7 @@ function lp_upload_quiz_action_handling()
     $questionTypeList = [];
     $answerList = [];
     $quizTitle = '';
-    $objPHPExcel = PHPExcel_IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
+    $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
     $objPHPExcel->setActiveSheetIndex(0);
     $worksheet = $objPHPExcel->getActiveSheet();
     $highestRow = $worksheet->getHighestRow(); // e.g. 10
@@ -171,9 +171,9 @@ function lp_upload_quiz_action_handling()
     $useCustomScore = isset($_POST['user_custom_score']) ? true : false;
 
     for ($row = 1; $row <= $highestRow; $row++) {
-        $cellTitleInfo = $worksheet->getCellByColumnAndRow(0, $row);
-        $cellDataInfo = $worksheet->getCellByColumnAndRow(1, $row);
-        $cellScoreInfo = $worksheet->getCellByColumnAndRow(2, $row);
+        $cellTitleInfo = $worksheet->getCellByColumnAndRow(1, $row);
+        $cellDataInfo = $worksheet->getCellByColumnAndRow(2, $row);
+        $cellScoreInfo = $worksheet->getCellByColumnAndRow(3, $row);
         $title = $cellTitleInfo->getValue();
 
         switch ($title) {
@@ -188,9 +188,9 @@ function lp_upload_quiz_action_handling()
                 $answerIndex = 0;
                 while ($continue) {
                     $answerRow++;
-                    $answerInfoTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
-                    $answerInfoData = $worksheet->getCellByColumnAndRow(1, $answerRow);
-                    $answerInfoExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
+                    $answerInfoTitle = $worksheet->getCellByColumnAndRow(1, $answerRow);
+                    $answerInfoData = $worksheet->getCellByColumnAndRow(2, $answerRow);
+                    $answerInfoExtra = $worksheet->getCellByColumnAndRow(3, $answerRow);
                     $answerInfoTitle = $answerInfoTitle->getValue();
                     if (strpos($answerInfoTitle, 'Answer') !== false) {
                         $answerList[$numberQuestions][$answerIndex]['data'] = $answerInfoData->getValue();
@@ -212,8 +212,8 @@ function lp_upload_quiz_action_handling()
                 $questionTypeIndex = 0;
                 while ($continue) {
                     $answerRow++;
-                    $questionTypeTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
-                    $questionTypeExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
+                    $questionTypeTitle = $worksheet->getCellByColumnAndRow(1, $answerRow);
+                    $questionTypeExtra = $worksheet->getCellByColumnAndRow(3, $answerRow);
                     $title = $questionTypeTitle->getValue();
                     if ($title === 'QuestionType') {
                         $questionTypeList[$numberQuestions] = $questionTypeExtra->getValue();

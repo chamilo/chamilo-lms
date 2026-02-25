@@ -213,12 +213,12 @@ class HotpotatoesExerciseResult
             $filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
         }
 
-        $spreadsheet = new PHPExcel();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $line = 0;
-        $column = 0; //skip the first column (row titles)
+        $line = 1;
+        $column = 1;
 
         // check if exists column 'user'
         $with_column_user = false;
@@ -335,7 +335,7 @@ class HotpotatoesExerciseResult
         $line++;
 
         foreach ($this->results as $row) {
-            $column = 0;
+            $column = 1;
 
             if ($with_column_user) {
                 $worksheet->setCellValueByColumnAndRow(
@@ -426,7 +426,7 @@ class HotpotatoesExerciseResult
         }
 
         $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
-        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->save($file);
         DocumentManager::file_send_for_download($file, true, $filename);
 

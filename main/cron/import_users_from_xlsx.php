@@ -30,10 +30,7 @@ $domain = 'example.com'; // Manually configured domain for generated emails
 
 // Include Chamilo bootstrap and necessary classes
 require_once __DIR__.'/../../main/inc/global.inc.php';
-// Include PHPExcel classes (assuming installed via Composer)
 require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
-require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
 // Command-line arguments parsing (without getopt)
 $proceed = false;
@@ -88,8 +85,8 @@ global $database;
 
 // Load XLSX file
 try {
-    $inputFileType = PHPExcel_IOFactory::identify($xlsxFile);
-    $reader = PHPExcel_IOFactory::createReader($inputFileType);
+    $inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($xlsxFile);
+    $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
     $phpExcel = $reader->load($xlsxFile);
     $worksheet = $phpExcel->getActiveSheet();
     $xlsxRows = $worksheet->toArray();
@@ -213,21 +210,21 @@ function createMissingFieldFile($filename, $rows, $columns)
         return;
     }
 
-    $phpExcel = new PHPExcel();
+    $phpExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
     $worksheet = $phpExcel->getActiveSheet();
 
     foreach ($columns as $colIndex => $column) {
-        $worksheet->setCellValueByColumnAndRow($colIndex, 1, $column);
+        $worksheet->setCellValueByColumnAndRow($colIndex + 1, 1, $column);
     }
 
     foreach ($rows as $rowIndex => $rowData) {
         foreach ($columns as $colIndex => $column) {
-            $worksheet->setCellValueByColumnAndRow($colIndex, $rowIndex + 2, $rowData[$column]);
+            $worksheet->setCellValueByColumnAndRow($colIndex + 1, $rowIndex + 2, $rowData[$column]);
         }
     }
 
     try {
-        $writer = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($phpExcel, 'Xlsx');
         $writer->save($filename);
         echo "Generated $filename with ".count($rows)." rows\n";
     } catch (Exception $e) {

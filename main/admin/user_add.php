@@ -278,30 +278,33 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 $hideNeverExpiresOpt = api_get_configuration_value('user_hide_never_expire_option');
 $lblExpiration = '';
 $defaultExpiration = 0;
-if ($hideNeverExpiresOpt) {
-    $lblExpiration = get_lang('ExpirationDate');
-    $defaultExpiration = 1;
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null
-    );
-} else {
-    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        [
-            'onchange' => 'javascript: enable_expiration_date();',
-        ]
-    );
-}
+$hideExpirationDate = api_get_configuration_value('user_hide_expiration_date_for_session_admin');
+if (!$hideExpirationDate || api_is_platform_admin()) {
+    if ($hideNeverExpiresOpt && !api_is_platform_admin()) {
+        $lblExpiration = get_lang('ExpirationDate');
+        $defaultExpiration = 1;
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null
+        );
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            [
+                'onchange' => 'javascript: enable_expiration_date();',
+            ]
+        );
+    }
 $form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
+}
 
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);

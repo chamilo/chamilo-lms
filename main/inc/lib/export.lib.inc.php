@@ -102,9 +102,8 @@ class Export
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
         $file = new \SplFileObject($filePath, 'w');
 
-        $excel = @new PHPExcel();
+        $excel = @new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 
-        $type = 'Excel2007';
         $sheet = null;
         $row = 1;
         $prependHeaderRow = false;
@@ -125,7 +124,7 @@ class Export
                 $headers = array_keys($item);
 
                 for ($i = 0; $i < $count; $i++) {
-                    @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $headers[$i]);
+                    @$excel->getActiveSheet()->setCellValueByColumnAndRow($i + 1, $row, $headers[$i]);
                 }
                 $row++;
             }
@@ -136,9 +135,9 @@ class Export
                 if (false !== strpos($values[$i], '[comment]')) {
                     list($txtValue, $txtComment) = explode('[comment]', $values[$i]);
                 }
-                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $txtValue);
+                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i + 1, $row, $txtValue);
                 if (!empty($txtComment)) {
-                    $columnLetter = PHPExcel_Cell::stringFromColumnIndex($i);
+                    $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($i + 1);
                     $coordinate = $columnLetter.$row;
                     @$excel->getActiveSheet()->getComment($coordinate)->getText()->createTextRun($txtComment);
                 }
@@ -146,7 +145,7 @@ class Export
             $row++;
         }
 
-        $writer = \PHPExcel_IOFactory::createWriter($excel, $type);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
         $writer->save($file->getPathname());
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
 

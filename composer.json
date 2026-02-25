@@ -93,7 +93,7 @@
         "php-xapi/repository-doctrine": "dev-master",
         "php-xapi/symfony-serializer": "2.1.0 as 2.0",
         "phpmailer/phpmailer": "~6.1",
-        "phpoffice/phpexcel": "~1.8",
+        "phpoffice/phpspreadsheet": "^1.28",
         "phpoffice/phpword": "~0.14",
         "phpseclib/phpseclib": "^2.0",
         "robrichards/xmlseclibs": "3.0.*",

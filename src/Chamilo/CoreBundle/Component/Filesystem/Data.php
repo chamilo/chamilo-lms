@@ -207,6 +207,11 @@ class Data
         $courseDriver = $this->connector->getDriver('CourseDriver');
 
         $dom = HtmlDomParser::str_get_html($content);
+        if ($dom === false) {
+            error_log("convertRelativeToAbsoluteUrl: HtmlDomParser::str_get_html returned false (content too large or invalid?)");
+
+            return $content;
+        }
         /** @var \simple_html_dom_node $image */
         foreach ($dom->find('img') as $image) {
             $image->src = str_replace(
@@ -248,26 +253,47 @@ class Data
      */
     public function transcode($filePath, $format)
     {
-        if ($this->fs->exists($filePath)) {
-            $fileInfo = pathinfo($filePath);
-            $fileName = $fileInfo['filename'];
-            $newFilePath = str_replace(
-                $fileInfo['basename'],
-                $fileName.'.'.$format,
-                $filePath
-            );
-            $process = new Process([
-                $this->converter,
-                '--format='.$format,
-                '--output='.$newFilePath,
-                $filePath,
-            ]);
-            $process->setTimeout(60);
-            $process->run();
-            if ($this->fs->exists($newFilePath)) {
-                return $newFilePath;
-            }
+        if (empty($filePath)) {
+            return false;
         }
+
+        if (!$this->fs->exists($filePath)) {
+            error_log("transcode: input file does not exist: $filePath");
+
+            return false;
+        }
+
+        $fileInfo = pathinfo($filePath);
+        $fileName = $fileInfo['filename'];
+        $newFilePath = str_replace(
+            $fileInfo['basename'],
+            $fileName.'.'.$format,
+            $filePath
+        );
+
+        // LibreOffice (called by unoconv) needs a writable HOME to create its
+        // user profile (.cache/dconf, .config/libreoffice, etc.). The web server
+        // user's default HOME (/var/www) is typically not writable, so we
+        // override HOME and XDG_CACHE_HOME to the Chamilo cache directory.
+        $writableHome = rtrim($this->paths['path.temp'], '/');
+        $process = new Process([
+            $this->converter,
+            '--format='.$format,
+            '--output='.$newFilePath,
+            $filePath,
+        ]);
+        $process->setTimeout(60);
+        $process->setEnv([
+            'HOME' => $writableHome,
+            'XDG_CACHE_HOME' => $writableHome.'/.cache',
+        ]);
+        $process->run();
+
+        if ($this->fs->exists($newFilePath)) {
+            return $newFilePath;
+        }
+
+        error_log("transcode: unoconv failed (exit ".$process->getExitCode().") for $filePath: ".$process->getErrorOutput());
 
         return false;
     }

@@ -3,6 +3,7 @@
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -47,7 +48,7 @@ try {
         throw new Exception('Consumer not valid');
     }
 
-    $decodedJwt = JWT::decode($jwt, $ltiTool->publicKey, ['RS256']);
+    $decodedJwt = JWT::decode($jwt, new Key($ltiTool->publicKey, 'RS256'));
 
     if (empty($decodedJwt->{'https://purl.imsglobal.org/spec/lti-dl/claim/content_items'})) {
         throw new Exception('Content items are missing');

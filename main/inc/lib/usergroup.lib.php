@@ -1909,15 +1909,24 @@ class UserGroup extends Model
             imagedestroy($dst);
         };
 
-        // big: widen to 200px, maintain aspect ratio
-        $bigHeight = $srcWidth > 0 ? (int) round($srcHeight * 200 / $srcWidth) : 200;
-        $saveResized(200, $bigHeight, $path.'big_'.$filename);
+        // Helper: compute dimensions to fit within $maxW x $maxH keeping aspect ratio
+        $fitDimensions = function ($maxW, $maxH) use ($srcWidth, $srcHeight) {
+            if ($srcWidth <= 0 || $srcHeight <= 0) {
+                return [$maxW, $maxH];
+            }
+            $scale = min($maxW / $srcWidth, $maxH / $srcHeight);
 
-        // medium: fixed 85x85
-        $saveResized(85, 85, $path.'medium_'.$filename);
+            return [(int) round($srcWidth * $scale), (int) round($srcHeight * $scale)];
+        };
 
-        // small: fixed 22x22
-        $saveResized(22, 22, $path.'small_'.$filename);
+        [$bigW, $bigH] = $fitDimensions(200, 200);
+        $saveResized($bigW, $bigH, $path.'big_'.$filename);
+
+        [$medW, $medH] = $fitDimensions(85, 85);
+        $saveResized($medW, $medH, $path.'medium_'.$filename);
+
+        [$smlW, $smlH] = $fitDimensions(22, 22);
+        $saveResized($smlW, $smlH, $path.'small_'.$filename);
 
         imagedestroy($srcImage);
 

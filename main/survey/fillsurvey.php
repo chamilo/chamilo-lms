@@ -252,8 +252,10 @@ if (empty($survey_data)) {
 // Checking time availability
 SurveyManager::checkTimeAvailability($survey_data);
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
+// Normalize to int to avoid strict type mismatch on PHP 8.3 (DB may return int, not string)
+$surveyType = (int) $survey_data['survey_type'];
 
-if ($survey_data['survey_type'] === '3') {
+if ($surveyType === 3) {
     header('Location: '.
         api_get_path(WEB_CODE_PATH).
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
@@ -267,7 +269,7 @@ if (!empty($survey_data['anonymous'])) {
 
 // Storing the answers
 if (count($_POST) > 0) {
-    if ($survey_data['survey_type'] === '0') {
+    if ($surveyType === 0) {
         $types = [];
         $required = [];
         // Getting all the types of the question
@@ -379,7 +381,7 @@ if (count($_POST) > 0) {
                 }
             }
         }
-    } elseif ($survey_data['survey_type'] === '1') {
+    } elseif ($surveyType === 1) {
         //conditional/personality-test type surveys
         // Getting all the types of the question (because of the special treatment of the score question type
         $shuffle = '';
@@ -740,7 +742,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
     }
 
     // If non-conditional survey
-    if ($survey_data['survey_type'] == '0') {
+    if ($surveyType === 0) {
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
@@ -877,7 +879,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 }
             }
         }
-    } elseif ('1' === $survey_data['survey_type']) {
+    } elseif ($surveyType === 1) {
         $my_survey_id = (int) $survey_invitation['survey_id'];
         $current_user = Database::escape_string($survey_invitation['user']);
 
@@ -1442,7 +1444,7 @@ if (isset($questions) && is_array($questions)) {
 }
 
 $form->addHtml('<div class="start-survey">');
-if ($survey_data['survey_type'] == '0') {
+if ($surveyType === 0) {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
         if ($show < $numberOfPages) {
@@ -1514,7 +1516,7 @@ if ($survey_data['survey_type'] == '0') {
             }
         }
     }
-} elseif ($survey_data['survey_type'] == '1') {
+} elseif ($surveyType === 1) {
     // Conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberOfPages = count($paged_questions);

@@ -217,16 +217,72 @@ class SectionExport
     }
 
     /**
+     * Normalize resource / LP item types for reliable comparison.
+     */
+    private function normalizeItemTypeForLpComparison(string $type): string
+    {
+        switch ($type) {
+            case 'student_publication':
+            case 'work':
+                return 'work';
+
+            case 'link':
+            case 'url':
+                return 'link';
+
+            case 'survey':
+            case 'feedback':
+                return 'survey';
+
+            default:
+                return $type;
+        }
+    }
+
+    /**
      * Check if an item is associated with any learnpath.
      */
     private function isItemInLearnpath(object $item, string $type): bool
     {
-        if (!empty($this->course->resources[RESOURCE_LEARNPATH])) {
-            foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
-                if (!empty($learnpath->items)) {
-                    foreach ($learnpath->items as $learnpathItem) {
-                        if ($learnpathItem['item_type'] === $type && $learnpathItem['path'] == $item->source_id) {
-                            return true;
+        if (empty($this->course->resources[RESOURCE_LEARNPATH])) {
+            return false;
+        }
+
+        $normalizedType = $this->normalizeItemTypeForLpComparison($type);
+        $itemSourceId = isset($item->source_id) ? (string) $item->source_id : '';
+
+        foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
+            if (empty($learnpath->items)) {
+                continue;
+            }
+
+            foreach ($learnpath->items as $learnpathItem) {
+                $lpType = isset($learnpathItem['item_type'])
+                    ? $this->normalizeItemTypeForLpComparison((string) $learnpathItem['item_type'])
+                    : '';
+
+                if ($lpType !== $normalizedType) {
+                    continue;
+                }
+
+                $lpPath = isset($learnpathItem['path']) ? (string) $learnpathItem['path'] : '';
+
+                // Classic numeric comparison (most LP items)
+                if ($itemSourceId !== '' && $lpPath === $itemSourceId) {
+                    return true;
+                }
+
+                // Extra fallback for documents if LP stores a path instead of numeric id
+                if ($normalizedType === 'document' && $itemSourceId !== '' && ctype_digit($itemSourceId)) {
+                    $doc = \DocumentManager::get_document_data_by_id((int) $itemSourceId, $this->course->code);
+                    if (!empty($doc['path'])) {
+                        $docPath = (string) $doc['path'];
+                        $candidates = array($docPath, 'document/'.$docPath, '/'.$docPath);
+
+                        foreach ($candidates as $candidate) {
+                            if ($lpPath === $candidate) {
+                                return true;
+                            }
                         }
                     }
                 }

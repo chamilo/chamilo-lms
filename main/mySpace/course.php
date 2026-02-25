@@ -162,26 +162,48 @@ function get_count_courses()
     $drhLoaded = false;
 
     if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
-            if (empty($sessionId)) {
-                $count = SessionManager::getAllCoursesFollowedByUser(
-                    $userId,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    true,
-                    $keyword
-                );
-            } else {
-                $count = SessionManager::getCourseCountBySessionId(
-                    $sessionId,
-                    $keyword
-                );
+        if (empty($sessionId)) {
+            // Fetch full rows from both sources so we can deduplicate before
+            // counting, ensuring the count matches exactly what get_courses()
+            // will display (a simple addition of two COUNT()s would double-count
+            // courses assigned to the DRH both directly and through a session).
+            $coursesFromSessions = SessionManager::getAllCoursesFollowedByUser(
+                $userId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                $keyword
+            );
+            $directCourses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                DRH,
+                null,
+                null,
+                null,
+                null,
+                false,
+                $keyword,
+                0
+            );
+
+            $merged = $coursesFromSessions;
+            foreach ($directCourses as $course) {
+                $courseId = isset($course['real_id']) ? $course['real_id'] : $course['id'];
+                if (!isset($merged[$courseId])) {
+                    $merged[$courseId] = $course;
+                }
             }
-            $drhLoaded = true;
+            $count = count($merged);
+        } else {
+            $count = SessionManager::getCourseCountBySessionId(
+                $sessionId,
+                $keyword
+            );
         }
+        $drhLoaded = true;
     }
 
     if ($drhLoaded == false) {
@@ -227,7 +249,44 @@ function get_courses($from, $limit, $column, $direction)
     $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
     if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+        if (empty($sessionId)) {
+            $coursesFromSessions = SessionManager::getAllCoursesFollowedByUser(
+                $userId,
+                null,
+                null,
+                null,
+                $column,
+                $direction,
+                false,
+                $keyword
+            );
+
+            $directCourses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                DRH,
+                null,
+                null,
+                $column,
+                $direction,
+                false,
+                $keyword,
+                0
+            );
+
+            $courses = $coursesFromSessions;
+            if (!empty($directCourses)) {
+                foreach ($directCourses as $course) {
+                    $courseId = isset($course['real_id']) ? $course['real_id'] : $course['id'];
+                    if (!isset($courses[$courseId])) {
+                        $courses[$courseId] = $course;
+                    }
+                }
+            }
+
+            if (!empty($courses)) {
+                $courses = array_slice($courses, (int) $from, (int) $limit, true);
+            }
+        } else {
             $courses = SessionManager::getAllCoursesFollowedByUser(
                 $userId,
                 $sessionId,
@@ -238,8 +297,8 @@ function get_courses($from, $limit, $column, $direction)
                 false,
                 $keyword
             );
-            $drhLoaded = true;
         }
+        $drhLoaded = true;
     }
 
     if ($drhLoaded == false) {

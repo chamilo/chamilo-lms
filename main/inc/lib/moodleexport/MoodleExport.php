@@ -75,9 +75,30 @@ class MoodleExport
         if (!empty($pageData['files'])) {
             $pageFiles = $pageData['files'];
         }
+
+        // Collect files for resource activities (LP FILE items)
+        $resourceFiles = [];
+        $resourceExport = new ResourceExport($this->course);
+
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'resource') {
+                continue;
+            }
+
+            $resourceData = $resourceExport->getData(
+                (int) $activity['id'],
+                (int) $activity['sectionid'],
+                (int) $activity['moduleid']
+            );
+
+            if (!empty($resourceData['files'])) {
+                $resourceFiles = array_merge($resourceFiles, $resourceData['files']);
+            }
+        }
+
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
-        $filesData['files'] = array_merge($filesData['files'], $pageFiles);
+        $filesData['files'] = array_merge($filesData['files'], $pageFiles, $resourceFiles);
         $fileExport->exportFiles($filesData, $tempDir);
 
         // Export sections of the course

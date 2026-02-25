@@ -306,6 +306,69 @@ function save_data(array $users, bool $sendMail = false, ?string $targetFolder =
                     ),
                     'info'
                 );
+                $userInfo = api_get_user_info($user_id);
+                $firstName = $user['FirstName'] ?? $userInfo['firstname'];
+                $lastName = $user['LastName'] ?? $userInfo['lastname'];
+                $userName = $user['UserName'] ?? $userInfo['username'];
+                $changePassMethod = 0;
+                $password = null;
+                $authSource = $userInfo['auth_source'];
+
+                if (isset($user['Password'])) {
+                    $changePassMethod = 2;
+                    $password = $user['Password'];
+                }
+
+                if (isset($user['AuthSource']) && $user['AuthSource'] != $authSource) {
+                    $authSource = $user['AuthSource'];
+                    $changePassMethod = 3;
+                }
+
+                $email = $user['Email'] ?? $userInfo['email'];
+                $status = $user['Status'] ?? $userInfo['status'];
+                $officialCode = $user['OfficialCode'] ?? $userInfo['official_code'];
+                $phone = $user['PhoneNumber'] ?? $userInfo['phone'];
+                $pictureUrl = $user['PictureUri'] ?? $userInfo['picture_uri'];
+                $expirationDate = $user['ExpiryDate'] ?? $userInfo['expiration_date'];
+                // Fix wrong date in DB for old users (sometimes would be expiration_date = '9999-12-31 ********') where it should be null
+                if (substr($expirationDate, 0, 4) === '9999') {
+                    $expirationDate = null;
+                }
+                $active = $userInfo['active'];
+                if (isset($user['Active'])) {
+                    $user['Active'] = (int) $user['Active'];
+                    if (-1 === $user['Active']) {
+                        $user['Active'] = 0;
+                    }
+                    $active = $user['Active'];
+                }
+
+                $creatorId = $userInfo['creator_id'];
+                $hrDeptId = $userInfo['hr_dept_id'];
+                $language = $user['Language'] ?? $userInfo['language'];
+
+                UserManager::update_user(
+                    $user_id,
+                    $firstName,
+                    $lastName,
+                    $userName,
+                    $password,
+                    $authSource,
+                    $email,
+                    $status,
+                    $officialCode,
+                    $phone,
+                    $pictureUrl,
+                    $expirationDate,
+                    $active,
+                    $creatorId,
+                    $hrDeptId,
+                    $extra,
+                    $language,
+                    '',
+                    false,
+                    $changePassMethod
+                );
             }
         }
 

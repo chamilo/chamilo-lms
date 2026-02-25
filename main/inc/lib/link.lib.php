@@ -1840,7 +1840,7 @@ class Link extends Model
             );
         }
 
-        $client = new Client(['defaults' => $defaults]);
+        $client = new Client($defaults);
 
         try {
             $responseIpv6 = $client->get($url);

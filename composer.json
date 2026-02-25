@@ -62,7 +62,7 @@
         "essence/essence": "2.6.1",
         "ezyang/htmlpurifier": "~4.9",
         "facebook/graph-sdk": "^5.7",
-        "firebase/php-jwt": "~5.0",
+        "firebase/php-jwt": "^6.0",
         "gedmo/doctrine-extensions": "~2.3",
         "graphp/algorithms": "~0.8.0",
         "graphp/graphviz": "~0.2.0",

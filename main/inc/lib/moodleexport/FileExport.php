@@ -168,12 +168,14 @@ class FileExport
      */
     private function createFileXmlEntry(array $file): string
     {
+        $itemId = isset($file['itemid']) ? (int) $file['itemid'] : 0;
+
         return '  <file id="'.$file['id'].'">'.PHP_EOL.
             '    <contenthash>'.htmlspecialchars($file['contenthash']).'</contenthash>'.PHP_EOL.
             '    <contextid>'.$file['contextid'].'</contextid>'.PHP_EOL.
             '    <component>'.htmlspecialchars($file['component']).'</component>'.PHP_EOL.
             '    <filearea>'.htmlspecialchars($file['filearea']).'</filearea>'.PHP_EOL.
-            '    <itemid>0</itemid>'.PHP_EOL.
+            '    <itemid>'.$itemId.'</itemid>'.PHP_EOL.
             '    <filepath>'.htmlspecialchars($file['filepath']).'</filepath>'.PHP_EOL.
             '    <filename>'.htmlspecialchars($file['filename']).'</filename>'.PHP_EOL.
             '    <userid>'.$file['userid'].'</userid>'.PHP_EOL.
@@ -206,10 +208,8 @@ class FileExport
         $fileData = $this->getFileData($document);
 
         // Rebuild the relative filepath so Moodle can recreate the Documents tree
-        $relDir = dirname($document->path);
-        $filepath = $this->ensureTrailingSlash(
-            $relDir === '.' ? '/' : '/'.$relDir.'/'
-        );
+        // without the internal Chamilo "document" prefix.
+        $filepath = $this->buildMoodleFilepathFromChamiloPath((string) $document->path);
 
         // Attach this file to the global "Documents" folder activity
         $fileData['filepath'] = $filepath;
@@ -221,6 +221,36 @@ class FileExport
         $filesData['files'][] = $fileData;
 
         return $filesData;
+    }
+
+    /**
+     * Build a Moodle filepath from a Chamilo document path.
+     * Example:
+     *   document/repertoire1/file.pdf   -> /repertoire1/
+     *   /document/repertoire1/file.pdf  -> /repertoire1/
+     *   /file.pdf                       -> /
+     */
+    private function buildMoodleFilepathFromChamiloPath(string $documentPath): string
+    {
+        $normalizedPath = $this->stripChamiloDocumentPrefix($documentPath);
+        $normalizedPath = ltrim(str_replace('\\', '/', $normalizedPath), '/');
+
+        $relDir = dirname($normalizedPath);
+
+        return $this->ensureTrailingSlash($relDir === '.' ? '/' : '/'.$relDir.'/');
+    }
+
+    /**
+     * Remove the internal Chamilo document prefix from a path.
+     */
+    private function stripChamiloDocumentPrefix(string $path): string
+    {
+        $path = str_replace('\\', '/', trim($path));
+
+        // Remove leading "/document/" or "document/" only once
+        $path = preg_replace('#^/?document/#', '', $path);
+
+        return $path;
     }
 
     /**
@@ -265,8 +295,7 @@ class FileExport
         $contenthash = hash('sha1', basename($file['path']));
         $mimetype = $this->getMimeType($file['path']);
         $filename = basename($file['path']);
-        $relDir = dirname($file['path']);
-        $filepath = $this->ensureTrailingSlash($relDir === '.' ? '/' : '/'.$relDir.'/');
+        $filepath = $this->buildMoodleFilepathFromChamiloPath((string) $file['path']);
 
         return [
             'id' => $file['id'],

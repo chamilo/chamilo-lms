@@ -513,26 +513,24 @@ class GDWrapper extends ImageWrapper
      */
     public function reencode(): void
     {
-        if ($this->image_validated) {
-            switch ($this->type) {
-                case 'jpeg':
-                case 'jpg':
-                    imagejpeg($this->bg, $this->path);
-                    break;
-
-                case 'png':
-                    imagepng($this->bg, $this->path);
-                    break;
-
-                case 'gif':
-                    imagegif($this->bg, $this->path);
-                    break;
-            }
-
+        if (!$this->image_validated) {
             return;
         }
 
-        throw new Exception;
+        switch ($this->type) {
+            case 'jpeg':
+            case 'jpg':
+                imagejpeg($this->bg, $this->path);
+                break;
+
+            case 'png':
+                imagepng($this->bg, $this->path);
+                break;
+
+            case 'gif':
+                imagegif($this->bg, $this->path);
+                break;
+        }
     }
 
     /**

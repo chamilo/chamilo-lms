@@ -1876,28 +1876,59 @@ class UserGroup extends Model
 
         // Storing the new photos in 4 versions with various sizes.
 
-        /*$image->resize(
-        // get original size and set width (widen) or height (heighten).
-        // width or height will be set maintaining aspect ratio.
-            $image->getSize()->widen( 700 )
-        );*/
+        $srcImage = imagecreatefromstring(file_get_contents($source_file));
+        if ($srcImage === false) {
+            return false;
+        }
 
-        // Usign the Imagine service
-        $imagine = new Imagine\Gd\Imagine();
-        $image = $imagine->open($source_file);
+        $srcWidth = imagesx($srcImage);
+        $srcHeight = imagesy($srcImage);
 
-        $options = [
-            'quality' => 90,
-        ];
+        // Closure: resizes $srcImage to $w x $h and saves to $dest
+        $saveResized = function ($w, $h, $dest) use ($srcImage, $srcWidth, $srcHeight, $extension) {
+            $dst = imagecreatetruecolor($w, $h);
+            if ($extension === 'png' || $extension === 'gif') {
+                imagealphablending($dst, false);
+                imagesavealpha($dst, true);
+                $transparent = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+                imagefilledrectangle($dst, 0, 0, $w, $h, $transparent);
+            }
+            imagecopyresampled($dst, $srcImage, 0, 0, 0, 0, $w, $h, $srcWidth, $srcHeight);
+            switch ($extension) {
+                case 'jpg':
+                case 'jpeg':
+                    imagejpeg($dst, $dest, 90);
+                    break;
+                case 'png':
+                    imagepng($dst, $dest, 1);
+                    break;
+                case 'gif':
+                    imagegif($dst, $dest);
+                    break;
+            }
+            imagedestroy($dst);
+        };
 
-        //$image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
-        $image->resize($image->getSize()->widen(200))->save($path.'big_'.$filename, $options);
+        // Helper: compute dimensions to fit within $maxW x $maxH keeping aspect ratio
+        $fitDimensions = function ($maxW, $maxH) use ($srcWidth, $srcHeight) {
+            if ($srcWidth <= 0 || $srcHeight <= 0) {
+                return [$maxW, $maxH];
+            }
+            $scale = min($maxW / $srcWidth, $maxH / $srcHeight);
 
-        $image = $imagine->open($source_file);
-        $image->resize(new Imagine\Image\Box(85, 85))->save($path.'medium_'.$filename, $options);
+            return [(int) round($srcWidth * $scale), (int) round($srcHeight * $scale)];
+        };
 
-        $image = $imagine->open($source_file);
-        $image->resize(new Imagine\Image\Box(22, 22))->save($path.'small_'.$filename);
+        [$bigW, $bigH] = $fitDimensions(200, 200);
+        $saveResized($bigW, $bigH, $path.'big_'.$filename);
+
+        [$medW, $medH] = $fitDimensions(85, 85);
+        $saveResized($medW, $medH, $path.'medium_'.$filename);
+
+        [$smlW, $smlH] = $fitDimensions(22, 22);
+        $saveResized($smlW, $smlH, $path.'small_'.$filename);
+
+        imagedestroy($srcImage);
 
         /*
         $small  = self::resize_picture($source_file, 22);
@@ -2171,7 +2202,7 @@ class UserGroup extends Model
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
             if ($height > 0) {
-                $dimension = api_getimagesize($picture['file']);
+                $dimension = api_getimagesize($file);
                 $margin = ($height - $dimension['width']) / 2;
                 //@ todo the padding-top should not be here
             }

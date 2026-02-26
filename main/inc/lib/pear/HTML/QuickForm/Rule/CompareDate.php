@@ -38,10 +38,8 @@ class HTML_QuickForm_Rule_CompareDate extends HTML_QuickForm_Rule
         if (!is_array($values[0]) && !is_array($values[1])) {
             return api_strtotime($values[0]) < api_strtotime($values[1]);
         } else {
-            $compareFn = create_function(
-                '$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );'
-            );
-            return $compareFn($values[0], $values[1]);
+            return mktime($values[0]['H'], $values[0]['i'], 0, $values[0]['M'], $values[0]['d'], $values[0]['Y'])
+                <= mktime($values[1]['H'], $values[1]['i'], 0, $values[1]['M'], $values[1]['d'], $values[1]['Y']);
         }
     }
 }

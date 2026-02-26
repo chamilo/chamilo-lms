@@ -188,7 +188,7 @@ class Text_CAPTCHA_Driver_Equation extends Text_CAPTCHA_Driver_Base
     {
         $equation = sprintf($operator, $one, $two);
 
-        $function = create_function('', 'return ' . $equation . ';');
+        $result = eval('return ' . $equation . ';');
 
         if ($this->_numbersToText) {
             $numberWords = new Numbers_Words();
@@ -198,7 +198,7 @@ class Text_CAPTCHA_Driver_Equation extends Text_CAPTCHA_Driver_Base
                 $numberWords->toWords($two, $this->_locale)
             );
         }
-        return array($equation, $function());
+        return array($equation, $result);
     }
 
     /**

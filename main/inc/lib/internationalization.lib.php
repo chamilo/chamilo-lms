@@ -1207,7 +1207,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
             break;
     }
 
-    return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
+    return mb_encode_numericentity($string, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
 }
 
 /**

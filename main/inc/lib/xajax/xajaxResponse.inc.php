@@ -535,9 +535,10 @@ class xajaxResponse
         if ($this->bOutputEntities) {
             // An adaptation for the Dokeos LMS, 22-AUG-2009.
             if (function_exists('api_convert_encoding')) {
-                $sData = call_user_func_array(
-                    'api_convert_encoding',
-                    array(&$sData, 'HTML-ENTITIES', $this->sEncoding)
+                $sData = mb_encode_numericentity(
+                    mb_convert_encoding($sData, 'UTF-8', $this->sEncoding),
+                    [0x80, 0x10FFFF, 0, 0x1FFFFF],
+                    'UTF-8'
                 );
             } //if (function_exists('mb_convert_encoding')) {
             elseif (function_exists('mb_convert_encoding')) {

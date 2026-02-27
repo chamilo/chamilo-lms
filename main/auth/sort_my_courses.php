@@ -56,6 +56,7 @@ if ($httpRequest->request->has('submit_change_course_category')) {
 // We edit course category
 if ($httpRequest->request->has('submit_edit_course_category')
     && $httpRequest->request->has('title_course_category')
+    && Security::check_token('post')
 ) {
     $titleCourseCategory = Security::remove_XSS($httpRequest->request->get('title_course_category'));
     $categoryId = Security::remove_XSS($httpRequest->request->get('category_id'));
@@ -130,6 +131,7 @@ switch ($action) {
             );
             $form->addText('title_course_category', get_lang('Name'));
             $form->addHidden('category_id', $categoryId);
+            $form->addHidden('sec_token', Security::get_token());
             $form->addButtonSave(get_lang('Edit'), 'submit_edit_course_category');
             $form->setDefaults(['title_course_category' => $categoryName]);
             $form->display();

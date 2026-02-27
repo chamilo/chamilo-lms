@@ -393,6 +393,12 @@ $url .= Display::url(
         ]
     )
 );
+$url .= Display::url(
+    Display::return_icon('excel.png', get_lang('Progress')),
+    $codePath.'session/session_student_progress.php?'.http_build_query([
+        'session_id' => $sessionId,
+    ])
+);
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);

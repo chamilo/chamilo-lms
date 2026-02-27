@@ -13332,7 +13332,7 @@ EOD;
     /**
      * Get the item of exercise type (evaluation type).
      *
-     * @return array The final evaluation. Otherwise return false
+     * @return learnpathItem The final evaluation. Otherwise return false
      */
     public function getFinalEvaluationItem()
     {
@@ -13345,7 +13345,7 @@ EOD;
             $exercises[] = $item;
         }
 
-        return array_pop($exercises);
+        return end($exercises);
     }
 
     /**

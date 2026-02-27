@@ -5071,7 +5071,8 @@ class Tracking
                 FROM $tbl_session_course sc
                 INNER JOIN $courseTable c
                 ON sc.c_id = c.id
-                WHERE session_id= $session_id";
+                WHERE session_id= $session_id
+                ORDER BY position ASC";
 
         $result = Database::query($sql);
 

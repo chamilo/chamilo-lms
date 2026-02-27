@@ -288,7 +288,7 @@ switch ($action) {
                 mkdir($syspath, api_get_permissions_for_new_directories(), true);
             }
             $webpath = UserManager::getUserPathById($userId, 'web').'my_files';
-            $fileUploadName = $fileUpload['name'];
+            $fileUploadName = disable_dangerous_file(api_replace_dangerous_char($fileUpload['name']));
             if (file_exists($syspath.$fileUploadName)) {
                 $extension = pathinfo($fileUploadName, PATHINFO_EXTENSION);
                 $fileName = pathinfo($fileUploadName, PATHINFO_FILENAME);

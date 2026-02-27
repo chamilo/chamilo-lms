@@ -338,6 +338,13 @@ try {
                 $restApi->getCourseExercises($fields)
             );
             break;
+        case Rest::GET_COURSE_GRADEBOOK:
+            Event::addEvent(LOG_WS.$action, 'course_id', $course);
+
+            $restResponse->setData(
+                $restApi->getCourseGradebook()
+            );
+            break;
         case Rest::SAVE_COURSE_NOTEBOOK:
             $title = !empty($_POST['title']) ? $_POST['title'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;

@@ -60,11 +60,14 @@ if ($httpRequest->request->has('submit_edit_course_category')
 ) {
     $titleCourseCategory = Security::remove_XSS($httpRequest->request->get('title_course_category'));
     $categoryId = Security::remove_XSS($httpRequest->request->get('category_id'));
-    $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
-    if ($result) {
-        Display::addFlash(
-            Display::return_message(get_lang('CourseCategoryEditStored'))
-        );
+    $categoryInfo = $auth->getUserCourseCategory($categoryId);
+    if ($categoryInfo) {
+        $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
+        if ($result) {
+            Display::addFlash(
+                Display::return_message(get_lang('CourseCategoryEditStored'))
+            );
+        }
     }
 
     header('Location: '.api_get_self());

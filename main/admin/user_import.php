@@ -309,7 +309,10 @@ function save_data(array $users, bool $sendMail = false, ?string $targetFolder =
                 $userInfo = api_get_user_info($user_id);
                 $firstName = $user['FirstName'] ?? $userInfo['firstname'];
                 $lastName = $user['LastName'] ?? $userInfo['lastname'];
-                $userName = $user['UserName'] ?? $userInfo['username'];
+                $userName = $userInfo['username'];
+                if (!empty($user['UserName'])) {
+                    $userName = $user['UserName'];
+                }
                 $changePassMethod = 0;
                 $password = null;
                 $authSource = $userInfo['auth_source'];

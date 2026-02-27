@@ -25,6 +25,7 @@ external tool.
 
 # Installation
 
+* Make sure PHP's [OpenSSL extension](https://www.php.net/manual/en/openssl.installation.php) is available on your server
 * Prepare your web server to allow to send cookies in all contexts, set the `SameSite` attribute to `None`
     * i.e. Apache configuration
 

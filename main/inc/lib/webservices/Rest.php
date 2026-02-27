@@ -4766,6 +4766,18 @@ class Rest extends WebService
      */
     public function getCourseGradebook(): array
     {
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+            $this->user->getId(),
+            api_get_course_info($this->course->getCode())
+        );
+
+        $isDrhOfSession = $this->session
+            && !empty(SessionManager::getSessionFollowedByDrh($this->user->getId(), $this->session->getId()));
+
+        if (!$isDrhOfCourse && !$isDrhOfSession) {
+            GradebookUtils::block_students();
+        }
+
         Event::event_access_tool(TOOL_GRADEBOOK);
 
         $cats = Category::load(

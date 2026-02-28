@@ -778,6 +778,7 @@ class FeatureContext extends MinkContext
 
         $element->click();
     }
+
     /**
      * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
      */
@@ -826,7 +827,7 @@ class FeatureContext extends MinkContext
         return true;
     }
 
-// php
+    // php
 
     /**
      * @When /^I zoom out to maximum$/
@@ -847,5 +848,4 @@ JS;
         $this->getSession()->wait(300);
         return true;
     }
-
 }

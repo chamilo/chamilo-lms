@@ -1,6 +1,6 @@
 name: Behat tests 🐞
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
     build:
@@ -10,182 +10,186 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: [ubuntu-latest]
-                php-versions: ['8.2', '8.3']
+                operating-system: [ ubuntu-latest ]
+                php-versions: [ '8.2', '8.3' ]
         steps:
-            - name: Checkout
-              uses: actions/checkout@v6
+            -   name: Checkout
+                uses: actions/checkout@v6
 
-            - name: Setup apache
-              run: |
-                sudo apt-get install software-properties-common
-                sudo add-apt-repository ppa:ondrej/php
-                sudo apt-get update
-                sudo apt-get install -y nodejs npm apache2 \
-                  php${{ matrix.php-versions }} \
-                  php${{ matrix.php-versions }}-common \
-                  php${{ matrix.php-versions }}-cli \
-                  php${{ matrix.php-versions }}-mysql \
-                  php${{ matrix.php-versions }}-bcmath \
-                  php${{ matrix.php-versions }}-curl \
-                  php${{ matrix.php-versions }}-gd \
-                  php${{ matrix.php-versions }}-intl \
-                  php${{ matrix.php-versions }}-ldap \
-                  php${{ matrix.php-versions }}-mbstring \
-                  php${{ matrix.php-versions }}-opcache \
-                  php${{ matrix.php-versions }}-soap \
-                  php${{ matrix.php-versions }}-xml \
-                  php${{ matrix.php-versions }}-zip \
-                  libapache2-mod-php${{ matrix.php-versions }}
-                sudo a2enmod rewrite actions
-                sudo a2dissite 000-default.conf
-                sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
-                sudo a2ensite 000-default.conf
-                sudo chmod 777 -R $HOME
-                cat /etc/apache2/sites-enabled/000-default.conf
-                sudo systemctl restart apache2
+            -   name: Setup apache
+                run: |
+                    sudo apt-get install software-properties-common
+                    sudo add-apt-repository ppa:ondrej/php
+                    sudo apt-get update
+                    sudo apt-get install -y nodejs npm apache2 \
+                      php${{ matrix.php-versions }} \
+                      php${{ matrix.php-versions }}-common \
+                      php${{ matrix.php-versions }}-cli \
+                      php${{ matrix.php-versions }}-mysql \
+                      php${{ matrix.php-versions }}-bcmath \
+                      php${{ matrix.php-versions }}-curl \
+                      php${{ matrix.php-versions }}-gd \
+                      php${{ matrix.php-versions }}-intl \
+                      php${{ matrix.php-versions }}-ldap \
+                      php${{ matrix.php-versions }}-mbstring \
+                      php${{ matrix.php-versions }}-opcache \
+                      php${{ matrix.php-versions }}-soap \
+                      php${{ matrix.php-versions }}-xml \
+                      php${{ matrix.php-versions }}-zip \
+                      libapache2-mod-php${{ matrix.php-versions }}
+                    sudo a2enmod rewrite actions
+                    sudo a2dissite 000-default.conf
+                    sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
+                    sudo a2ensite 000-default.conf
+                    sudo chmod 777 -R $HOME
+                    cat /etc/apache2/sites-enabled/000-default.conf
+                    sudo systemctl restart apache2
 
-            - name: Setup PHP, with composer and extensions
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: ${{ matrix.php-versions }}
-                  extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, opcache, soap, xml, zip
-                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, opcache, soap, xml, zip
+                    ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
 
-            - name: Get composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            - name: Install dependencies with composer
-              run: composer install --no-progress
+            -   name: Install dependencies with composer
+                run: composer install --no-progress
 
-            - name: Install assets
-              run: php bin/console assets:install
+            -   name: Install assets
+                run: php bin/console assets:install
 
-            - name: Install Yarn
-              run: |
-                  sudo npm i -g npm
-                  node --version
-                  npm --version
-                  sudo corepack enable
-                  yarn set version stable
-                  yarn --version
+            -   name: Install Yarn
+                run: |
+                    sudo npm i -g npm
+                    node --version
+                    npm --version
+                    sudo corepack enable
+                    yarn set version stable
+                    yarn --version
 
-            - name: Get yarn cache directory
-              id: yarn-cache-dir-path
-              run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+            -   name: Get yarn cache directory
+                id: yarn-cache-dir-path
+                run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Install JS dependencies
-              run: |
-                  yarn install
+            -   name: Install JS dependencies
+                run: |
+                    yarn install
 
-            - name: Yarn run encore
-              run: |
-                  yarn run encore production
+            -   name: Yarn run encore
+                run: |
+                    yarn run encore production
 
-            - name: Install chrome
-              uses: browser-actions/setup-chrome@v2
-              id: setup-chrome
+            -   name: Install chrome
+                uses: browser-actions/setup-chrome@v2
+                id: setup-chrome
 
-            - name: Start chrome
-              run: |
-                ${{ steps.setup-chrome.outputs.chrome-path }} --version
-                ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+            -   name: Start chrome
+                run: |
+                    ${{ steps.setup-chrome.outputs.chrome-path }} --version
+                    ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
             # https://github.com/marketplace/actions/setup-chromedriver
-            - name: Start chromedriver
-              uses: nanasess/setup-chromedriver@master
-              with:
-                  # Optional: do not specify to match Chrome's version
-                  chromedriver-version: '100.0.4896.60'
+            -   name: Start chromedriver
+                uses: nanasess/setup-chromedriver@master
+                with:
+                    # Optional: do not specify to match Chrome's version
+                    chromedriver-version: '100.0.4896.60'
 
-            - run: |
-                export DISPLAY=:99
-                chromedriver --url-base=/wd/hub &
-                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+            -   run: |
+                    export DISPLAY=:99
+                    chromedriver --url-base=/wd/hub &
+                    sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
-            - name: Set up JDK
-              uses: actions/setup-java@v5
-              with:
-                  distribution: 'temurin'
-                  java-version: '17'
+            -   name: Set up JDK
+                uses: actions/setup-java@v5
+                with:
+                    distribution: 'temurin'
+                    java-version: '17'
 
-            - name: Get Selenium
-              run: |
-                wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.1.0/selenium-server-4.1.3.jar --quiet
+            -   name: Get Selenium
+                run: |
+                    wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.1.0/selenium-server-4.1.3.jar --quiet
 
-            - name: Run Selenium
-              run: |
-                java -version
-                export DISPLAY=:99.0
-                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-4.1.3.jar standalone --log selenium.log > /dev/null &
+            -   name: Run Selenium
+                run: |
+                    java -version
+                    export DISPLAY=:99.0
+                    sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+                    java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-4.1.3.jar standalone --log selenium.log > /dev/null &
 
-            - name: Start mysql service
-              run: |
-                sudo /etc/init.d/mysql start
-                #sudo systemctl restart apache2
+            -   name: Start mysql service
+                run: |
+                    sudo /etc/init.d/mysql start
+                    #sudo systemctl restart apache2
 
-            - name: Check PHP settings
-              run: |
-                  php -ini
-                  php -v
-                  php -m
+            -   name: Check PHP settings
+                run: |
+                    php -ini
+                    php -v
+                    php -m
 
-            - name: Check chamilo
-              run: |
-                sudo chmod 777 -R ${{ github.workspace }}
-                curl http://localhost/main/install/index.php
-                tail /var/log/apache2/error.log
+            -   name: Check chamilo
+                run: |
+                    sudo chmod 777 -R ${{ github.workspace }}
+                    curl http://localhost/main/install/index.php
+                    tail /var/log/apache2/error.log
 
-            - name: Install chamilo
-              run: |
-                  cd tests/behat
-                  ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
-                  cd ..
-                  cd ..
-                  sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
-                  sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
-                  sudo php bin/console cache:clear
-                  sudo chmod -R 777 var
+            -   name: Install chamilo
+                run: |
+                    cd tests/behat
+                    ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
+                    cd ../..
+                    sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
+                    sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
+                    sudo php bin/console cache:clear
+                    sudo chmod -R 777 var
 
-            - name: Behat tests
-              run: |
-                  cd ${{ github.workspace }}/tests/behat
-                  ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/career.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/class.feature -vvv
-                  #../../vendor/behat/behat/bin/behat features/companyReports.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/course.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/courseCategory.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/profile.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
-                  # ../../vendor/behat/behat/bin/behat features/registration.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/skill.feature -vv
-                  ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/ticket.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolAttendance.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolDocument.feature -vvv
-                  # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolForum.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolLink.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolThematic.feature -vvv
-                  ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
+            -   name: Behat tests
+                run: |
+                    cd ${{ github.workspace }}/tests/behat
+                    BEHAT="../../vendor/behat/behat/bin/behat"
+                    $BEHAT features/actionUserLogin.feature -vvv
+                    $BEHAT features/adminFillUsers.feature -vvv
+                    $BEHAT features/adminSettings.feature -vv
+                    $BEHAT features/career.feature -vvv
+                    $BEHAT features/class.feature -vvv
+                    #$BEHAT features/companyReports.feature -vvv
+                    $BEHAT features/course.feature -vvv
+                    $BEHAT features/course_user_registration.feature -vv
+                    $BEHAT features/courseCategory.feature -vvv
+                    $BEHAT features/createUser.feature -vvv
+                    $BEHAT features/createUserViaCSV.feature -vv
+                    $BEHAT features/extraFieldUser.feature -vv
+                    $BEHAT features/profile.feature -vv
+                    $BEHAT features/promotion.feature -vv
+                    # $BEHAT features/registration.feature -vv
+                    $BEHAT features/sessionAccess.feature -vv
+                    $BEHAT features/sessionManagement.feature -vv
+                    $BEHAT features/skill.feature -vv
+                    $BEHAT features/socialGroup.feature -vvv
+                    $BEHAT features/systemAnnouncements.feature -vvv
+                    $BEHAT features/ticket.feature -vvv
+                    $BEHAT features/toolAgenda.feature -vvv
+                    $BEHAT features/toolAnnouncement.feature -vvv
+                    $BEHAT features/toolAttendance.feature -vvv
+                    $BEHAT features/toolDocument.feature -vvv
+                    # $BEHAT features/toolExercise.feature -vvv
+                    $BEHAT features/toolForum.feature -vvv
+                    $BEHAT features/toolGroup.feature -vvv
+                    $BEHAT features/toolLink.feature -vvv
+                    $BEHAT features/toolLp.feature -vvv
+                    $BEHAT features/toolThematic.feature -vvv
+                    $BEHAT features/toolWork.feature -vvv
 
-            - name: The job has failed
-              if: ${{ failure() }}
-              run: |
-                  cat selenium.log
+            -   name: Upload logs on failure
+                if: failure()
+                uses: actions/upload-artifact@v4
+                with:
+                    name: logs-php${{ matrix.php-versions }}
+                    path: |
+                        selenium.log
+                        /var/log/apache2/error.log

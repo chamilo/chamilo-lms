@@ -6,6 +6,7 @@ Feature: Settings update
   Scenario: Update 'profile' setting
     Given I am a platform administrator
     And I am on "/admin/settings/search_settings?keyword=changeable_options"
+    And wait for the page to be loaded
     And I select "Name" from "form_changeable_options"
     And I additionally select "E-mail" from "form_changeable_options"
     And I additionally select "Official code" from "form_changeable_options"
@@ -17,6 +18,7 @@ Feature: Settings update
   Scenario: Update 'allow_registration' setting
     Given I am a platform administrator
     And I am on "/admin/settings/search_settings?keyword=allow_registration"
+    And wait for the page to be loaded
     And I select "Yes" from "form_allow_registration"
     And I press "Save"
     And wait for the page to be loaded
@@ -25,6 +27,7 @@ Feature: Settings update
   Scenario: Update 'allow_group_categories' setting
     Given I am a platform administrator
     And I am on "/admin/settings/search_settings?keyword=allow_group_categories"
+    And wait for the page to be loaded
     And I select "Yes" from "form_allow_group_categories"
     And I press "Save"
     And wait for the page to be loaded

@@ -1445,14 +1445,11 @@ class FillBlanks extends Question
      * Strips invisible/problematic Unicode characters introduced by word
      * processors such as Microsoft Word.
      * U+00A0 is normalised to a regular space; all others are removed.
-     *
-     * @param string $text
-     *
-     * @return string
      */
     private static function stripInvisibleChars(string $text): string
     {
         $text = str_replace("\u{00A0}", ' ', $text); // Non-Breaking Space → space
+
         return str_replace(
             ["\u{00AD}", "\u{200B}", "\u{200C}", "\u{200D}", "\u{2060}", "\u{FEFF}"],
             '',

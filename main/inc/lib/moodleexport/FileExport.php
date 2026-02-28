@@ -228,7 +228,7 @@ class FileExport
      * Example:
      *   document/repertoire1/file.pdf   -> /repertoire1/
      *   /document/repertoire1/file.pdf  -> /repertoire1/
-     *   /file.pdf                       -> /
+     *   /file.pdf                       -> /.
      */
     private function buildMoodleFilepathFromChamiloPath(string $documentPath): string
     {

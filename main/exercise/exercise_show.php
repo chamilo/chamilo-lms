@@ -976,7 +976,7 @@ if ('export' === $action) {
 
     $includeOfficialCode = "";
     if (true === api_get_configuration_value('quiz_result_pdf_export_include_official_code_in_file_name')) {
-        $includeOfficialCode = $user_info['official_code'] . ' ';
+        $includeOfficialCode = $user_info['official_code'].' ';
     }
 
     $params = [

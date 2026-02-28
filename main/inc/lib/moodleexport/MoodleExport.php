@@ -489,12 +489,12 @@ class MoodleExport
         $activities = [];
         // "Documents" folder pseudo-activity (always in section 0)
         $activities[] = [
-            'id'         => ActivityExport::DOCS_MODULE_ID,
-            'sectionid'  => 0,
+            'id' => ActivityExport::DOCS_MODULE_ID,
+            'sectionid' => 0,
             'modulename' => 'folder',
-            'moduleid'   => ActivityExport::DOCS_MODULE_ID,
-            'title'      => 'Documents',
-            'order'      => 0,
+            'moduleid' => ActivityExport::DOCS_MODULE_ID,
+            'title' => 'Documents',
+            'order' => 0,
         ];
 
         // Build activities from LP items (one course module per LP item)
@@ -502,26 +502,26 @@ class MoodleExport
 
         // Sort by LP display_order to respect c_lp order
         usort($learnpaths, static function ($a, $b): int {
-            return (int)($a->display_order ?? 0) <=> (int)($b->display_order ?? 0);
+            return (int) ($a->display_order ?? 0) <=> (int) ($b->display_order ?? 0);
         });
 
         foreach ($learnpaths as $lp) {
             // Only "real" LPs
-            if ((int)($lp->lp_type ?? 0) !== 1) {
+            if ((int) ($lp->lp_type ?? 0) !== 1) {
                 continue;
             }
 
-            $sectionId = (int)($lp->source_id ?? 0);
+            $sectionId = (int) ($lp->source_id ?? 0);
             if ($sectionId <= 0 || empty($lp->items)) {
                 continue;
             }
 
             foreach ($lp->items as $it) {
-                $lpItemId = isset($it['id']) ? (int)$it['id'] : 0;
-                $itemType = (string)($it['item_type'] ?? '');
-                $path     = $it['path'] ?? null;
-                $title    = (string)($it['title'] ?? '');
-                $order    = isset($it['display_order']) ? (int)$it['display_order'] : 0;
+                $lpItemId = isset($it['id']) ? (int) $it['id'] : 0;
+                $itemType = (string) ($it['item_type'] ?? '');
+                $path = $it['path'] ?? null;
+                $title = (string) ($it['title'] ?? '');
+                $order = isset($it['display_order']) ? (int) $it['display_order'] : 0;
 
                 // Map LP item_type to Moodle modulename
                 $moduleName = null;
@@ -529,38 +529,38 @@ class MoodleExport
 
                 if ($itemType === 'quiz') {
                     $moduleName = 'quiz';
-                    $instanceId = is_numeric($path) ? (int)$path : null;
+                    $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ($itemType === 'link') {
                     $moduleName = 'url';
-                    $instanceId = is_numeric($path) ? (int)$path : null;
+                    $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ($itemType === 'student_publication') {
                     $moduleName = 'assign';
-                    $instanceId = is_numeric($path) ? (int)$path : null;
+                    $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ($itemType === 'survey') {
                     $moduleName = 'feedback';
-                    $instanceId = is_numeric($path) ? (int)$path : null;
+                    $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ($itemType === 'forum') {
                     $moduleName = 'forum';
-                    $instanceId = is_numeric($path) ? (int)$path : null;
+                    $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ($itemType === 'document') {
-                    $docId = is_numeric($path) ? (int)$path : 0;
+                    $docId = is_numeric($path) ? (int) $path : 0;
                     if ($docId > 0) {
                         $doc = \DocumentManager::get_document_data_by_id($docId, $this->course->code);
                         if (!empty($doc)) {
-                            $docPath = (string)($doc['path'] ?? '');
+                            $docPath = (string) ($doc['path'] ?? '');
                             $ext = strtolower(pathinfo($docPath, PATHINFO_EXTENSION));
 
                             if ($ext === 'html' || $ext === 'htm') {
                                 $moduleName = 'page';
                                 $instanceId = $docId;
                                 if ($title === '') {
-                                    $title = (string)($doc['title'] ?? '');
+                                    $title = (string) ($doc['title'] ?? '');
                                 }
                             } elseif (($doc['filetype'] ?? '') === 'file') {
                                 $moduleName = 'resource';
                                 $instanceId = $docId;
                                 if ($title === '') {
-                                    $title = (string)($doc['title'] ?? '');
+                                    $title = (string) ($doc['title'] ?? '');
                                 }
                             }
                         }
@@ -573,15 +573,15 @@ class MoodleExport
                 }
 
                 // Generic unique course module id per LP occurrence
-                $moduleId = $this->resolveLpModuleId($moduleName, $lpItemId, (int)$instanceId);
+                $moduleId = $this->resolveLpModuleId($moduleName, $lpItemId, (int) $instanceId);
 
                 $activities[] = [
-                    'id'         => (int)$instanceId,
-                    'sectionid'  => $sectionId,
+                    'id' => (int) $instanceId,
+                    'sectionid' => $sectionId,
                     'modulename' => $moduleName,
-                    'moduleid'   => $moduleId,
-                    'title'      => $title !== '' ? $title : $moduleName,
-                    'order'      => $order,
+                    'moduleid' => $moduleId,
+                    'title' => $title !== '' ? $title : $moduleName,
+                    'order' => $order,
                 ];
             }
         }
@@ -597,27 +597,27 @@ class MoodleExport
             }
 
             $activities[] = [
-                'id'         => (int)($ga['id'] ?? 0),
-                'sectionid'  => 0,
-                'modulename' => (string)($ga['modulename'] ?? ''),
-                'moduleid'   => (int)($ga['moduleid'] ?? 0),
-                'title'      => (string)($ga['name'] ?? ''),
-                'order'      => 0,
+                'id' => (int) ($ga['id'] ?? 0),
+                'sectionid' => 0,
+                'modulename' => (string) ($ga['modulename'] ?? ''),
+                'moduleid' => (int) ($ga['moduleid'] ?? 0),
+                'title' => (string) ($ga['name'] ?? ''),
+                'order' => 0,
             ];
         }
 
         // Sort activities per section by LP display_order
-        $grouped  = [];
+        $grouped = [];
         $seqBySec = [];
 
         foreach ($activities as $a) {
-            $sid = (int)($a['sectionid'] ?? 0);
+            $sid = (int) ($a['sectionid'] ?? 0);
             if (!isset($grouped[$sid])) {
                 $grouped[$sid] = [];
                 $seqBySec[$sid] = 0;
             }
 
-            $ord = (int)($a['order'] ?? 0);
+            $ord = (int) ($a['order'] ?? 0);
             if ($ord <= 0) {
                 $seqBySec[$sid]++;
                 $ord = 1000 + $seqBySec[$sid];
@@ -629,7 +629,7 @@ class MoodleExport
 
         $sorted = [];
         foreach ($grouped as $sid => $list) {
-            usort($list, static fn(array $x, array $y): int => $x['_sort'] <=> $y['_sort']);
+            usort($list, static fn (array $x, array $y): int => $x['_sort'] <=> $y['_sort']);
             foreach ($list as $x) {
                 unset($x['_sort'], $x['order']);
                 $sorted[] = $x;
@@ -667,10 +667,10 @@ class MoodleExport
             $sid = (int) ($a['sectionid'] ?? 0);
 
             $bySection[$sid][] = [
-                'id'        => (int) ($a['id'] ?? 0),
-                'moduleid'  => (int) ($a['moduleid'] ?? 0),
-                'modulename'=> (string) ($a['modulename'] ?? ''),
-                'name'      => (string) ($a['title'] ?? ''),
+                'id' => (int) ($a['id'] ?? 0),
+                'moduleid' => (int) ($a['moduleid'] ?? 0),
+                'modulename' => (string) ($a['modulename'] ?? ''),
+                'name' => (string) ($a['title'] ?? ''),
                 'sectionid' => $sid,
             ];
         }
@@ -972,7 +972,7 @@ class MoodleExport
 
     /**
      * Maps module name to item_type of c_lp_item.
-     * (c_lp_item.item_type: document, quiz, link, forum, student_publication, survey)
+     * (c_lp_item.item_type: document, quiz, link, forum, student_publication, survey).
      */
     private function mapToLpItemType(string $moduleOrItemType): string
     {
@@ -1005,10 +1005,11 @@ class MoodleExport
             }
             foreach ($lp->items as $it) {
                 $type = $this->mapToLpItemType($it['item_type']);
-                $rid  = (string) $it['path'];
+                $rid = (string) $it['path'];
                 $idx[$sid][$type][$rid] = $it['title'] ?? '';
             }
         }
+
         return $idx;
     }
 
@@ -1019,7 +1020,8 @@ class MoodleExport
             return $fallback;
         }
         $type = $this->mapToLpItemType($moduleName);
-        $rid  = (string) $resourceId;
+        $rid = (string) $resourceId;
+
         return $idx[$sectionId][$type][$rid] ?? $fallback;
     }
 

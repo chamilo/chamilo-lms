@@ -76,7 +76,6 @@ foreach ($Sessions as $row) {
     $sessionChoices[$row['id']] = $row['name'];
 }
 
-
 $sessionMultiSelect = $form->addElement(
     'advmultiselect',
     'session_id',

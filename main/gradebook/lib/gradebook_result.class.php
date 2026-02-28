@@ -80,7 +80,6 @@ class GradeBookResult
      * Exports the complete report as an XLS file.
      *
      * @param array $data
-     *
      */
     public function exportCompleteReportXLS($data)
     {

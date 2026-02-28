@@ -277,7 +277,7 @@ class SectionExport
                     $doc = \DocumentManager::get_document_data_by_id((int) $itemSourceId, $this->course->code);
                     if (!empty($doc['path'])) {
                         $docPath = (string) $doc['path'];
-                        $candidates = array($docPath, 'document/'.$docPath, '/'.$docPath);
+                        $candidates = [$docPath, 'document/'.$docPath, '/'.$docPath];
 
                         foreach ($candidates as $candidate) {
                             if ($lpPath === $candidate) {
@@ -296,7 +296,7 @@ class SectionExport
      * Add an activity to the activities list.
      * Generic approach: for any activity in a real section (LP sectionId > 0),
      * force a unique moduleid per LP item occurrence:
-     *   moduleid = 900000000 + lp_item_id
+     *   moduleid = 900000000 + lp_item_id.
      */
     private function addActivityToList(array $item, int $sectionId, array &$activities): void
     {
@@ -370,8 +370,8 @@ class SectionExport
 
         // Generic override: unique moduleid per LP occurrence (sectionId > 0)
         if (!empty($activityData) && $sectionId > 0) {
-            $lpItemId = isset($item['id']) ? (int)$item['id'] : 0;
-            $modName = (string)($activityData['modulename'] ?? '');
+            $lpItemId = isset($item['id']) ? (int) $item['id'] : 0;
+            $modName = (string) ($activityData['modulename'] ?? '');
 
             if ($lpItemId > 0 && !in_array($modName, ['folder', 'glossary'], true)) {
                 $activityData['moduleid'] = 900000000 + $lpItemId;

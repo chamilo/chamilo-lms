@@ -15,7 +15,6 @@
  * although it is not recommended to do so (for security reasons).
  */
 
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../inc/global.inc.php';

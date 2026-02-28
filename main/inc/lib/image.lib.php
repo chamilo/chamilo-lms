@@ -363,7 +363,7 @@ class ImagickWrapper extends ImageWrapper
                 $this->image->setImageFormat($this->type);
                 $this->image->writeImage($this->path);
             } catch (ImagickException $e) {
-                throw new Exception;
+                throw new Exception();
             }
 
             $this->image->clear();
@@ -371,7 +371,7 @@ class ImagickWrapper extends ImageWrapper
             return;
         }
 
-        throw new Exception;
+        throw new Exception();
     }
 }
 

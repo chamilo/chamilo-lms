@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
@@ -1870,7 +1869,7 @@ class Rest extends WebService
         $removeCampusId = $request->getBoolean('remove_campus_id_from_wanted_code');
         $language = $request->get('language');
 
-        if (!isset(Course::getStatusList()[$visibility] )) {
+        if (!isset(Course::getStatusList()[$visibility])) {
             throw new Exception(get_lang('VisibilityCannotBeChanged'));
         }
 
@@ -4663,55 +4662,6 @@ class Rest extends WebService
     }
 
     /**
-     * Generate an API key for webservices access for the given user ID.
-     */
-    protected static function generateApiKeyForUser(int $userId): string
-    {
-        UserManager::add_api_key($userId, self::SERVICE_NAME);
-
-        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
-
-        return current($apiKeys);
-    }
-
-    /**
-     * Encode the given parameters (structured array) in JSON format.
-     *
-     * @param array $additionalParams Optional
-     *
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge(
-            $additionalParams,
-            [
-                'api_key' => $this->apiKey,
-                'username' => $this->user->getUsername(),
-            ]
-        );
-
-        return json_encode($params);
-    }
-
-    /**
-     * Helper generating a query URL (to the current script) from an array of parameters
-     * (course, session, api_key and username) commonly used in webservice calls.
-     */
-    private function generateUrl(array $additionalParams = []): string
-    {
-        $queryParams = [
-            'course' => $this->course ? $this->course->getId() : null,
-            'session' => $this->session ? $this->session->getId() : null,
-            'api_key' => $this->apiKey,
-            'username' => $this->user->getUsername(),
-        ];
-
-        return api_get_self().'?'
-            .http_build_query(array_merge($queryParams, $additionalParams));
-    }
-
-    /**
      * @throws Exception
      */
     public function addSessionCourseCoaches(ParameterBag $request)
@@ -4792,7 +4742,7 @@ class Rest extends WebService
 
         $cats = array_filter(
             $cats,
-            fn($cat) => $cat->get_parent_id() == 0
+            fn ($cat) => $cat->get_parent_id() == 0
         );
 
         if (empty($cats)) {
@@ -4835,6 +4785,55 @@ class Rest extends WebService
             'headers' => $headers,
             'rows' => $rows,
         ];
+    }
+
+    /**
+     * Generate an API key for webservices access for the given user ID.
+     */
+    protected static function generateApiKeyForUser(int $userId): string
+    {
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return current($apiKeys);
+    }
+
+    /**
+     * Encode the given parameters (structured array) in JSON format.
+     *
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge(
+            $additionalParams,
+            [
+                'api_key' => $this->apiKey,
+                'username' => $this->user->getUsername(),
+            ]
+        );
+
+        return json_encode($params);
+    }
+
+    /**
+     * Helper generating a query URL (to the current script) from an array of parameters
+     * (course, session, api_key and username) commonly used in webservice calls.
+     */
+    private function generateUrl(array $additionalParams = []): string
+    {
+        $queryParams = [
+            'course' => $this->course ? $this->course->getId() : null,
+            'session' => $this->session ? $this->session->getId() : null,
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ];
+
+        return api_get_self().'?'
+            .http_build_query(array_merge($queryParams, $additionalParams));
     }
 
     private function formatGradebookHeaders(FlatViewDataGenerator $dataGen): array
@@ -4885,7 +4884,7 @@ class Rest extends WebService
 
         foreach ($dataGen->get_data() as $row) {
             array_shift($row);
-            $cleaned = array_map(static fn($v) => is_string($v) ? trim(strip_tags($v)) : $v, $row);
+            $cleaned = array_map(static fn ($v) => is_string($v) ? trim(strip_tags($v)) : $v, $row);
             $mapped = [];
 
             foreach ($keys as $i => $key) {

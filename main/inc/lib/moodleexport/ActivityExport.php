@@ -13,8 +13,8 @@ use Exception;
  */
 abstract class ActivityExport
 {
-    protected $course;
     public const DOCS_MODULE_ID = 0;
+    protected $course;
 
     public function __construct($course)
     {
@@ -302,6 +302,7 @@ abstract class ActivityExport
                 }
             }
         }
+
         return $fallback ?? '';
     }
 }

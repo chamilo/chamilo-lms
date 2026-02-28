@@ -12,10 +12,11 @@ Feature: Install portal
     Then I check "accept_licence"
     Then I press "license-next"
     Then I should see "Step 4 - Database settings"
+    Then wait for the page to be loaded when ready
     Then I fill in the following:
       | dbUsernameForm | root |
       | dbPassForm | root |
-      | dbNameForm | master |
+      | dbNameForm | chamilo |
     Then I press "Check database connection"
     Then wait for the page to be loaded when ready
     Then I press "step4"

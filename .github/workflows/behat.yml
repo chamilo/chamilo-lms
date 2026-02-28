@@ -21,44 +21,46 @@ jobs:
                 sudo apt-get install software-properties-common
                 sudo add-apt-repository ppa:ondrej/php
                 sudo apt-get update
-                sudo apt-get install nodejs npm apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
+                sudo apt-get install -y nodejs npm apache2 \
+                  php${{ matrix.php-versions }} \
+                  php${{ matrix.php-versions }}-common \
+                  php${{ matrix.php-versions }}-cli \
+                  php${{ matrix.php-versions }}-mysql \
+                  php${{ matrix.php-versions }}-bcmath \
+                  php${{ matrix.php-versions }}-curl \
+                  php${{ matrix.php-versions }}-gd \
+                  php${{ matrix.php-versions }}-intl \
+                  php${{ matrix.php-versions }}-ldap \
+                  php${{ matrix.php-versions }}-mbstring \
+                  php${{ matrix.php-versions }}-opcache \
+                  php${{ matrix.php-versions }}-soap \
+                  php${{ matrix.php-versions }}-xml \
+                  php${{ matrix.php-versions }}-zip \
+                  libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo a2dissite 000-default.conf
                 sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo a2ensite 000-default.conf
                 sudo chmod 777 -R $HOME
                 cat /etc/apache2/sites-enabled/000-default.conf
-                #sudo service apache2 restart
                 sudo systemctl restart apache2
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, mysql, opcache, soap, xml, zip
+                  extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, opcache, soap, xml, zip
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
 
             - name: Get composer cache directory
               id: composer-cache
               run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-#            - name: Cache composer dependencies
-#              uses: actions/cache@v2
-#              with:
-#                  path: ${{ steps.composer-cache.outputs.dir }}
-                  # Use composer.json for key, if composer.lock is not committed.
-                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-#                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-#                  restore-keys: ${{ runner.os }}-composer-
-
             - name: Install dependencies with composer
               run: composer install --no-progress
 
             - name: Install assets
               run: php bin/console assets:install
-
-#            - name: Generate fos_js_routes.json
-#              run: php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 
             - name: Install Yarn
               run: |
@@ -72,16 +74,6 @@ jobs:
             - name: Get yarn cache directory
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-#            - name: Cache yarn dependencies
-#              uses: actions/cache@v2
-#              id: yarn-cache
-#              with:
-#                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                  # Use composer.json for key, if composer.lock is not committed.
-                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-#                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-#                  restore-keys: ${{ runner.os }}-yarn-
 
             - name: Install JS dependencies
               run: |
@@ -142,9 +134,9 @@ jobs:
 
             - name: Check chamilo
               run: |
-                 sudo chmod 777 -R ${{ github.workspace }}
-                 curl http://localhost/main/install/index.php
-                 tail /var/log/apache2/error.log
+                sudo chmod 777 -R ${{ github.workspace }}
+                curl http://localhost/main/install/index.php
+                tail /var/log/apache2/error.log
 
             - name: Install chamilo
               run: |

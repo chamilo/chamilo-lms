@@ -4996,7 +4996,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
  *
  * @return array with all fields from c_item_property, empty array if not found or false if course could not be found
  */
-function api_get_last_item_property_info(int $courseId, string $tool, int $ref, int $sessionId = null, int $groupId = null): array
+function api_get_last_item_property_info(int $courseId, string $tool, int $ref, ?int $sessionId = null, ?int $groupId = null): array
 {
     $tool = Database::escape_string($tool);
     // Definition of tables.

@@ -678,7 +678,7 @@ class xajax
 					$sErrorResponse->addAlert("** Logging Error **\n\nxajax was unable to write to the error log file:\n" . $this->sLogFile);
 				}
 				else {
-					fwrite($fH, "** xajax Error Log - " . strftime("%b %e %Y %I:%M:%S %p") . " **" . $GLOBALS['xajaxErrorHandlerText'] . "\n\n\n");
+					fwrite($fH, "** xajax Error Log - " . date("M j Y g:i:s A") . " **" . $GLOBALS['xajaxErrorHandlerText'] . "\n\n\n");
 					fclose($fH);
 				}
 			}
@@ -1163,7 +1163,7 @@ function xajaxErrorHandler($errno, $errstr, $errfile, $errline)
 	else if ($errno == E_USER_ERROR) {
 		$errTypeStr = "USER FATAL ERROR";
 	}
-	else if ($errno == E_STRICT) {
+	else if (defined('E_STRICT') && $errno == E_STRICT) {
 		return;
 	}
 	else {

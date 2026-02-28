@@ -861,7 +861,7 @@ class nusoap_base
 			$sec = time();
 			$usec = 0;
 		}
-		return strftime('%Y-%m-%d %H:%M:%S', $sec) . '.' . sprintf('%06d', $usec);
+		return date('Y-m-d H:i:s', $sec) . '.' . sprintf('%06d', $usec);
 	}
 
 	/**

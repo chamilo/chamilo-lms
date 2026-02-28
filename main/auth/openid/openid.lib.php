@@ -165,7 +165,7 @@ function _openid_parse_message($message) {
  */
 function _openid_nonce() {
     // YYYY-MM-DDThh:mm:ssTZD UTC, plus some optional extra unique chars
-    return gmstrftime('%Y-%m-%dT%H:%M:%S%Z') .
+    return gmdate('Y-m-d\TH:i:sT') .
             chr(mt_rand(0, 25) + 65) .
             chr(mt_rand(0, 25) + 65) .
             chr(mt_rand(0, 25) + 65) .

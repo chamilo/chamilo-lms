@@ -179,7 +179,7 @@ final class CalendarMyStudentsScheduleAction
             )
             ->andWhere('scru.user = :user')
             ->andWhere('scru.status = :status')
-            ->setParameter('user', $user)
+            ->setParameter('user', $user->getId())
             ->setParameter('status', Session::COURSE_COACH)
         ;
 
@@ -196,8 +196,8 @@ final class CalendarMyStudentsScheduleAction
             ->andWhere('scru.user = :user')
             ->andWhere('scru.session = :session')
             ->andWhere('scru.status = :status')
-            ->setParameter('user', $user)
-            ->setParameter('session', $session)
+            ->setParameter('user', $user->getId())
+            ->setParameter('session', $session->getId())
             ->setParameter('status', Session::COURSE_COACH)
         ;
 
@@ -233,9 +233,9 @@ final class CalendarMyStudentsScheduleAction
             ->andWhere('rl.session = :session')
             ->andWhere('e.startDate IS NOT NULL')
             ->andWhere('(e.startDate < :end) AND (e.endDate IS NULL OR e.endDate > :start)')
-            ->setParameter('session', $session)
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
+            ->setParameter('session', $session->getId())
+            ->setParameter('start', $start->format('Y-m-d H:i:s'))
+            ->setParameter('end', $end->format('Y-m-d H:i:s'))
         ;
 
         /** @var array<int, mixed> $rows */
@@ -304,9 +304,9 @@ final class CalendarMyStudentsScheduleAction
             OR
             (a.expiresOn IS NULL AND a.endsOn IS NOT NULL AND a.endsOn >= :start AND a.endsOn < :end)
         )')
-            ->setParameter('session', $session)
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
+            ->setParameter('session', $session->getId())
+            ->setParameter('start', $start->format('Y-m-d H:i:s'))
+            ->setParameter('end', $end->format('Y-m-d H:i:s'))
         ;
 
         /** @var array<int, mixed> $rows */

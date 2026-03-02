@@ -50,6 +50,7 @@ use const PATHINFO_EXTENSION;
 class AiController extends AbstractController
 {
     private bool $debug = false;
+    private const ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
 
     public function __construct(
         private readonly AiProviderFactory $aiProviderFactory,
@@ -70,9 +71,27 @@ class AiController extends AbstractController
             return new JsonResponse(['providers' => []], 403);
         }
 
-        return new JsonResponse([
-            'providers' => array_values($this->aiProviderFactory->getProvidersForType('text')),
-        ]);
+        // Expected format from factory: ['openai' => 'openai (gpt-4o)', 'mistral' => 'mistral (mistral-large-latest)', ...]
+        $raw = $this->aiProviderFactory->getProvidersForType('text');
+
+        $providers = [];
+        foreach ($raw as $key => $label) {
+            // If it's a numeric array, fallback to value as both key+label.
+            if (is_int($key)) {
+                $providers[] = [
+                    'key' => (string) $label,
+                    'label' => (string) $label,
+                ];
+                continue;
+            }
+
+            $providers[] = [
+                'key' => (string) $key,
+                'label' => (string) $label,
+            ];
+        }
+
+        return new JsonResponse(['providers' => $providers]);
     }
 
     #[Route('/glossary_default_prompt', name: 'chamilo_core_ai_glossary_default_prompt', methods: ['GET'])]
@@ -147,7 +166,22 @@ class AiController extends AbstractController
         $n = (int) ($data['n'] ?? 15);
         $language = (string) ($data['language'] ?? 'en');
         $prompt = trim((string) ($data['prompt'] ?? ''));
-        $providerName = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
+        $providerName = null;
+
+        $providerRaw = $data['ai_provider'] ?? null;
+        if (\is_array($providerRaw)) {
+            // Front-end may send {key,label}
+            $providerName = isset($providerRaw['key']) ? trim((string) $providerRaw['key']) : null;
+            if (null === $providerName || '' === $providerName) {
+                $providerName = isset($providerRaw['name']) ? trim((string) $providerRaw['name']) : null;
+            }
+        } elseif (\is_string($providerRaw)) {
+            $providerName = trim($providerRaw);
+        }
+
+        if ('' === (string) $providerName) {
+            $providerName = null; // Use factory default
+        }
         $cid = (int) ($data['cid'] ?? 0);
         $toolName = trim((string) ($data['tool'] ?? 'glossary'));
 
@@ -231,15 +265,32 @@ class AiController extends AbstractController
     #[Route('/capabilities', name: 'chamilo_core_ai_capabilities', methods: ['GET'])]
     public function capabilities(): JsonResponse
     {
+        $typesText = $this->aiProviderFactory->getProvidersForType('text');
+        $typesImage = $this->aiProviderFactory->getProvidersForType('image');
+        $typesVideo = $this->aiProviderFactory->getProvidersForType('video');
+        $typesDocument = $this->aiProviderFactory->getProvidersForType('document');
+        $typesDocumentProcess = $this->aiProviderFactory->getProvidersForType('document_process');
+
         return new JsonResponse([
             'success' => true,
+
+            // Keep existing output (backward compatible)
             'types' => [
-                'text' => $this->aiProviderFactory->getProvidersForType('text'),
-                'image' => $this->aiProviderFactory->getProvidersForType('image'),
-                'video' => $this->aiProviderFactory->getProvidersForType('video'),
-                'document' => $this->aiProviderFactory->getProvidersForType('document'),
-                'document_process' => $this->aiProviderFactory->getProvidersForType('document_process'),
+                'text' => $typesText,
+                'image' => $typesImage,
+                'video' => $typesVideo,
+                'document' => $typesDocument,
+                'document_process' => $typesDocumentProcess,
             ],
+
+            'providers' => [
+                'text' => $this->normalizeProvidersForJson($typesText),
+                'image' => $this->normalizeProvidersForJson($typesImage),
+                'video' => $this->normalizeProvidersForJson($typesVideo),
+                'document' => $this->normalizeProvidersForJson($typesDocument),
+                'document_process' => $this->normalizeProvidersForJson($typesDocumentProcess),
+            ],
+
             'has' => [
                 'text' => $this->aiProviderFactory->hasProvidersForType('text'),
                 'image' => $this->aiProviderFactory->hasProvidersForType('image'),
@@ -248,6 +299,99 @@ class AiController extends AbstractController
                 'document_process' => $this->aiProviderFactory->hasProvidersForType('document_process'),
             ],
         ]);
+    }
+
+    #[Route('/generate_learnpath', name: 'chamilo_core_ai_generate_learnpath', methods: ['POST'])]
+    public function generateLearnPath(Request $request): JsonResponse
+    {
+        try {
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
+
+            $data = json_decode($request->getContent(), true);
+            if (!\is_array($data)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid JSON payload.',
+                ], 400);
+            }
+
+            $topic = trim((string) ($data['lp_name'] ?? ''));
+            $chaptersCount = (int) ($data['nro_items'] ?? 0);
+            $wordsCount = (int) ($data['words_count'] ?? 0);
+            $language = (string) ($data['language'] ?? 'en');
+            $addTests = (bool) ($data['add_tests'] ?? false);
+            $numQuestions = (int) ($data['nro_questions'] ?? 0);
+            $aiProvider = $data['ai_provider'] ?? null;
+
+            if ('' === $topic || $chaptersCount <= 0 || $wordsCount <= 0) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
+            }
+
+            if ($addTests) {
+                if ($numQuestions <= 0) {
+                    $numQuestions = 2;
+                }
+                if ($numQuestions > 5) {
+                    $numQuestions = 5;
+                }
+            }
+
+            $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+
+            if (!\is_object($provider) || !method_exists($provider, 'generateLearnPath')) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support learning path generation.',
+                ], 400);
+            }
+
+            $result = $provider->generateLearnPath($topic, $chaptersCount, $language, $wordsCount, $addTests, $numQuestions);
+
+            if (empty($result)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'AI request returned an empty response.',
+                ], 500);
+            }
+
+            if (\is_string($result) && str_starts_with($result, 'Error:')) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $result,
+                ], 500);
+            }
+
+            if (\is_array($result) && isset($result['success']) && false === (bool) $result['success']) {
+                $msg = isset($result['message']) ? (string) $result['message'] : 'Learning path generation failed.';
+
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $msg,
+                ], 500);
+            }
+
+            return new JsonResponse([
+                'success' => true,
+                'data' => $result,
+            ]);
+        } catch (Throwable $e) {
+            error_log('[AI][learnpath] Generation failed: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating the learning path.',
+            ], 500);
+        }
     }
 
     #[Route('/generate_aiken', name: 'chamilo_core_ai_generate_aiken', methods: ['POST'])]
@@ -313,6 +457,25 @@ class AiController extends AbstractController
         $questionId = $request->request->getInt('questionId', 0);
         $courseId = $request->request->getInt('courseId', 0);
 
+        // Optional provider selection (form-encoded)
+        $aiProvider = $request->request->get('ai_provider');
+
+        // Backward compatibility: allow JSON payload too
+        if (null === $aiProvider || '' === trim((string) $aiProvider)) {
+            $json = json_decode((string) $request->getContent(), true);
+            if (\is_array($json) && isset($json['ai_provider'])) {
+                $aiProvider = $json['ai_provider'];
+            }
+        }
+
+        // Normalize: empty string means "use default provider"
+        if (null !== $aiProvider) {
+            $aiProvider = trim((string) $aiProvider);
+            if ('' === $aiProvider) {
+                $aiProvider = null;
+            }
+        }
+
         if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
             return $this->json(['error' => 'Missing parameters'], 400);
         }
@@ -365,11 +528,46 @@ class AiController extends AbstractController
             $answerText
         );
 
-        $provider = $this->aiProviderFactory->getProvider(null, 'text');
-        $raw = trim((string) $provider->gradeOpenAnswer($prompt, 'open_answer_grade'));
+        try {
+            // When $aiProvider is null => factory should use the default provider
+            $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+        } catch (Throwable $e) {
+            error_log('[AI][open_answer_grade] Provider selection failed: '.$e->getMessage());
+
+            return $this->json([
+                'error' => 'AI provider is not supported or not configured.',
+            ], 500);
+        }
+
+        try {
+            $raw = trim((string) $provider->gradeOpenAnswer($prompt, 'open_answer_grade'));
+        } catch (Throwable $e) {
+            error_log('[AI][open_answer_grade] Provider call failed: '.$e->getMessage());
+
+            return $this->json([
+                'error' => 'AI request failed.',
+            ], 500);
+        }
 
         if ('' === $raw) {
             return $this->json(['error' => 'AI request failed'], 500);
+        }
+
+        // If provider returned an "Error:" string, do not treat it as a successful feedback.
+        if (str_starts_with($raw, 'Error:')) {
+            $msg = trim((string) preg_replace('/^Error:\s*/', '', $raw));
+
+            $status = 500;
+            $m = strtolower($msg);
+            if (str_contains($m, 'invalid api key') || str_contains($m, 'incorrect api key') || str_contains($m, 'unauthorized')) {
+                $status = 401;
+            } elseif (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+                $status = 429;
+            } elseif (str_contains($m, 'quota') || str_contains($m, 'insufficient_quota')) {
+                $status = 402;
+            }
+
+            return $this->json(['error' => $msg], $status);
         }
 
         if (str_contains($raw, "\n")) {
@@ -398,6 +596,7 @@ class AiController extends AbstractController
         return $this->json([
             'score' => $score,
             'feedback' => $feedback,
+            'provider_used' => $aiProvider ?? 'default',
         ]);
     }
 
@@ -571,57 +770,55 @@ class AiController extends AbstractController
             try {
                 $this->denyIfNotTeacher();
             } catch (AccessDeniedException $e) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Access denied.',
-                ], 403);
+                return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
             }
 
             $data = json_decode($request->getContent(), true);
             if (!\is_array($data)) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Invalid JSON payload.',
-                ], 400);
+                return new JsonResponse(['success' => false, 'text' => 'Invalid JSON payload.'], 400);
             }
 
             $n = (int) ($data['n'] ?? 1);
             $language = (string) ($data['language'] ?? 'en');
             $prompt = trim((string) ($data['prompt'] ?? ''));
             $toolName = trim((string) ($data['tool'] ?? 'document'));
-            $aiProvider = $data['ai_provider'] ?? null;
+            $aiProvider = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
+            $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : null;
+            if ('' === (string) $aiProvider) {
+                $aiProvider = null;
+            }
 
+            $cid = (int) ($data['cid'] ?? 0);
             $seconds = isset($data['seconds']) ? trim((string) $data['seconds']) : null;
             $size = isset($data['size']) ? trim((string) $data['size']) : null;
 
             if ($n <= 0 || '' === $prompt || '' === $toolName) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
-                ], 400);
+                return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters. Ensure all fields are filled correctly.'], 400);
             }
 
             $availableProviders = $this->aiProviderFactory->getProvidersForType('video');
             if (empty($availableProviders)) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'No AI providers available for video generation.',
-                ], 400);
+                return new JsonResponse(['success' => false, 'text' => 'No AI providers available for video generation.'], 400);
             }
 
             $explicitProvider = null;
-            if (null !== $aiProvider && '' !== (string) $aiProvider) {
-                $explicitProvider = (string) $aiProvider;
-
-                if (!\in_array($explicitProvider, $availableProviders, true)) {
-                    return new JsonResponse([
-                        'success' => false,
-                        'text' => 'Selected AI provider is not available for video generation.',
-                    ], 400);
+            if (null !== $aiProvider) {
+                if (!\in_array($aiProvider, $availableProviders, true)) {
+                    return new JsonResponse(['success' => false, 'text' => 'Selected AI provider is not available for video generation.'], 400);
                 }
+                $explicitProvider = $aiProvider;
             }
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
+
+            // Auto mode: try last known working provider first (per course).
+            if (!$explicitProvider) {
+                $active = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
+                if ('' !== $active && \in_array($active, $providersToTry, true)) {
+                    $providersToTry = array_values(array_unique(array_merge([$active], $providersToTry)));
+                }
+            }
+
             $errors = [];
             $providerUsed = null;
             $result = null;
@@ -632,7 +829,6 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
-
                         continue;
                     }
 
@@ -653,24 +849,25 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
-
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
-
                         continue;
                     }
 
                     $providerUsed = $providerName;
 
+                    if (!$explicitProvider) {
+                        $this->setActiveMediaProviderInSession($request, 'video', $cid, $providerUsed);
+                    }
+
                     break;
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
-
                     continue;
                 }
             }
@@ -682,15 +879,12 @@ class AiController extends AbstractController
                 foreach ($errors as $err) {
                     if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
-
                         break;
                     }
                 }
 
                 $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                    $explicitProvider
-                    ? 'Video generation failed for the selected provider.'
-                    : 'All video providers failed.'
+                $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
                 );
 
                 $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
@@ -703,6 +897,7 @@ class AiController extends AbstractController
                 ], $statusCode);
             }
 
+            // Normalize legacy string result.
             if (\is_string($result)) {
                 $raw = trim($result);
 
@@ -730,16 +925,11 @@ class AiController extends AbstractController
                     'text' => (string) ($normalized['url'] ?? $normalized['content'] ?? $normalized['id'] ?? ''),
                     'result' => $normalized,
                     'provider_used' => $providerUsed,
-                    'providers_tried' => $providersToTry,
-                    'errors' => $errors,
                 ]);
             }
 
             if (!\is_array($result)) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Provider returned an unsupported response type.',
-                ], 500);
+                return new JsonResponse(['success' => false, 'text' => 'Provider returned an unsupported response type.'], 500);
             }
 
             $result['is_base64'] = (bool) ($result['is_base64'] ?? false);
@@ -749,6 +939,7 @@ class AiController extends AbstractController
             $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
             $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
 
+            // Best-effort: inline a safe remote URL as base64, but do not fail if it cannot be fetched.
             if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
                 try {
                     $fetched = $this->fetchUrlAsBase64($url, 15 * 1024 * 1024);
@@ -775,10 +966,8 @@ class AiController extends AbstractController
                 'text' => $text,
                 'result' => $result,
                 'provider_used' => $providerUsed,
-                'providers_tried' => $providersToTry,
-                'errors' => $errors,
             ]);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             error_log('[AI][video] Video generation failed: '.$e->getMessage());
 
             return new JsonResponse([
@@ -795,35 +984,31 @@ class AiController extends AbstractController
             try {
                 $this->denyIfNotTeacher();
             } catch (AccessDeniedException $e) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Access denied.',
-                ], 403);
+                return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
             }
 
             $aiProvider = $request->query->get('ai_provider');
+            $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
+            if ('' === $aiProvider) {
+                // Best-effort fallback: use last working provider for video (course unknown here => generic key).
+                $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', 0);
+            }
+            if ('' === $aiProvider) {
+                $aiProvider = null; // Factory default.
+            }
 
             $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'video');
             if (!$aiService instanceof AiVideoProviderInterface) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Selected AI provider does not support video generation.',
-                ], 400);
+                return new JsonResponse(['success' => false, 'text' => 'Selected AI provider does not support video generation.'], 400);
             }
 
             if (!method_exists($aiService, 'getVideoJobStatus')) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'This AI provider does not expose a video job status method.',
-                ], 400);
+                return new JsonResponse(['success' => false, 'text' => 'This AI provider does not expose a video job status method.'], 400);
             }
 
             $job = $aiService->getVideoJobStatus($id);
             if (empty($job)) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Failed to fetch video job status.',
-                ], 500);
+                return new JsonResponse(['success' => false, 'text' => 'Failed to fetch video job status.'], 500);
             }
 
             $status = (string) ($job['status'] ?? '');
@@ -840,27 +1025,16 @@ class AiController extends AbstractController
                 'error' => '' !== $jobError ? $jobError : null,
             ];
 
-            if (\in_array($status, ['completed', 'succeeded', 'done'], true)) {
-                if (method_exists($aiService, 'getVideoJobContentAsBase64')) {
-                    $maxBytes = 15 * 1024 * 1024;
-                    $content = $aiService->getVideoJobContentAsBase64($id, $maxBytes);
+            if (\in_array($status, ['completed', 'succeeded', 'done'], true) && method_exists($aiService, 'getVideoJobContentAsBase64')) {
+                $content = $aiService->getVideoJobContentAsBase64($id, 15 * 1024 * 1024);
+                if (\is_array($content)) {
+                    $result['is_base64'] = (bool) ($content['is_base64'] ?? false);
+                    $result['content'] = $content['content'] ?? null;
+                    $result['url'] = $content['url'] ?? null;
+                    $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
 
-                    if (\is_array($content)) {
-                        $result['is_base64'] = (bool) ($content['is_base64'] ?? false);
-                        $result['content'] = $content['content'] ?? null;
-                        $result['url'] = $content['url'] ?? null;
-                        $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
-
-                        if (!empty($content['error'])) {
-                            $result['error'] = \is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
-
-                            return new JsonResponse([
-                                'success' => true,
-                                'text' => (string) $result['error'],
-                                'result' => $result,
-                                'provider_used' => $aiProvider,
-                            ]);
-                        }
+                    if (!empty($content['error'])) {
+                        $result['error'] = \is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
                     }
                 }
             }
@@ -869,9 +1043,9 @@ class AiController extends AbstractController
                 'success' => true,
                 'text' => '' !== $jobError ? $jobError : '',
                 'result' => $result,
-                'provider_used' => $aiProvider,
+                'provider_used' => \is_string($aiProvider) ? $aiProvider : '',
             ]);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             error_log('[AI][video] Video job status failed: '.$e->getMessage());
 
             return new JsonResponse([
@@ -880,6 +1054,7 @@ class AiController extends AbstractController
             ], 500);
         }
     }
+
     #[Route('/document_feedback', name: 'chamilo_core_ai_document_feedback', methods: ['POST'])]
     public function documentFeedback(Request $request): JsonResponse
     {
@@ -907,7 +1082,7 @@ class AiController extends AbstractController
         $gid = (int) ($data['gid'] ?? 0);
         $language = (string) ($data['language'] ?? 'en');
         $prompt = trim((string) ($data['prompt'] ?? ''));
-        $aiProvider = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
+        $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
@@ -1423,6 +1598,105 @@ class AiController extends AbstractController
         }
 
         return 500;
+    }
+
+    private function buildActiveMediaProviderSessionKey(string $type, int $courseId = 0): string
+    {
+        $t = strtolower(trim($type));
+        $cid = max(0, (int) $courseId);
+
+        // If cid is not provided, fall back to a generic key (still useful).
+        return $cid > 0
+            ? self::ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX.$t.'_'.$cid
+            : self::ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX.$t;
+    }
+
+    private function getActiveMediaProviderFromSession(Request $request, string $type, int $courseId = 0): string
+    {
+        try {
+            if (!$request->hasSession()) {
+                return '';
+            }
+
+            return (string) $request->getSession()->get($this->buildActiveMediaProviderSessionKey($type, $courseId), '');
+        } catch (Throwable) {
+            return '';
+        }
+    }
+
+    private function setActiveMediaProviderInSession(Request $request, string $type, int $courseId, string $provider): void
+    {
+        $provider = strtolower(trim($provider));
+        if ('' === $provider) {
+            return;
+        }
+
+        try {
+            if (!$request->hasSession()) {
+                return;
+            }
+
+            $request->getSession()->set($this->buildActiveMediaProviderSessionKey($type, $courseId), $provider);
+        } catch (Throwable) {
+            // Ignore session errors.
+        }
+    }
+
+    /**
+     * Normalize providers to a stable JSON format: [{key,label}, ...].
+     */
+    private function normalizeProvidersForJson(array $raw): array
+    {
+        $providers = [];
+
+        foreach ($raw as $key => $label) {
+            // Numeric array: ["openai", "mistral"]
+            if (\is_int($key)) {
+                $k = trim((string) $label);
+                if ('' === $k) {
+                    continue;
+                }
+                $providers[] = ['key' => $k, 'label' => $k];
+                continue;
+            }
+
+            $k = trim((string) $key);
+            if ('' === $k) {
+                continue;
+            }
+
+            $l = trim((string) $label);
+            if ('' === $l) {
+                $l = $k;
+            }
+
+            $providers[] = ['key' => $k, 'label' => $l];
+        }
+
+        return $providers;
+    }
+
+    /**
+     * Accept ai_provider as string or as {key,label}/{name}.
+     */
+    private function normalizeProviderNameFromPayload(mixed $raw): ?string
+    {
+        $provider = null;
+
+        if (\is_array($raw)) {
+            $provider = isset($raw['key']) ? trim((string) $raw['key']) : null;
+            if (null === $provider || '' === $provider) {
+                $provider = isset($raw['name']) ? trim((string) $raw['name']) : null;
+            }
+        } elseif (\is_string($raw)) {
+            $provider = trim($raw);
+        }
+
+        if (null === $provider || '' === $provider) {
+            return null;
+        }
+
+        return $provider;
     }
 
     private function debugLog(string $message): void

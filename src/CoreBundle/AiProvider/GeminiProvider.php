@@ -19,13 +19,13 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
 {
     private string $apiKey;
 
-    // Text
+    // Text defaults
     private string $textModel;
     private string $textUrlTemplate;
     private float $textTemperature;
     private int $textMaxOutputTokens;
 
-    // Document (fallbacks to text if missing)
+    // Document defaults
     private string $documentModel;
     private string $documentUrlTemplate;
     private float $documentTemperature;
@@ -66,6 +66,58 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
         $this->documentUrlTemplate = \is_array($docCfg) ? (string) ($docCfg['url'] ?? $this->textUrlTemplate) : $this->textUrlTemplate;
         $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
         $this->documentMaxOutputTokens = \is_array($docCfg) ? (int) ($docCfg['max_output_tokens'] ?? $this->textMaxOutputTokens) : $this->textMaxOutputTokens;
+    }
+
+    /**
+     * Chat-style entrypoint. Gemini is not OpenAI-chat compatible, so we convert the message list into a single prompt.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed>                           $options
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $prompt = $this->messagesToPrompt($messages);
+        if ('' === trim($prompt)) {
+            return 'Error: Empty chat messages.';
+        }
+
+        return $this->generateText($prompt, $options);
+    }
+
+    /**
+     * Prompt-style entrypoint used by TaskGrader text mode and other features.
+     *
+     * @param array<string,mixed> $options
+     */
+    public function generateText(string $prompt, array $options = []): string
+    {
+        $prompt = trim($prompt);
+        if ('' === $prompt) {
+            return 'Error: Empty prompt.';
+        }
+
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][Gemini][generateText] User not authenticated.');
+
+            return 'Error: User is not authenticated.';
+        }
+
+        $resolved = $this->resolveTextOptions($options);
+
+        $result = $this->requestGemini(
+            url: $resolved['url'],
+            temperature: $resolved['temperature'],
+            maxOutputTokens: $resolved['max_output_tokens'],
+            prompt: $prompt,
+            toolName: 'generateText'
+        );
+
+        if (null === $result || '' === trim($result)) {
+            return 'Error: Empty response from Gemini.';
+        }
+
+        return trim($result);
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -276,7 +328,6 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
 
             $generatedContent = (string) $data['candidates'][0]['content']['parts'][0]['text'];
 
-            // Gemini usually returns usageMetadata, not usage.prompt_tokens
             $usageMeta = $data['usageMetadata'] ?? [];
             $promptTokens = (int) ($usageMeta['promptTokenCount'] ?? 0);
             $completionTokens = (int) ($usageMeta['candidatesTokenCount'] ?? 0);
@@ -329,8 +380,71 @@ final class GeminiProvider implements AiProviderInterface, AiDocumentProviderInt
 
     private function buildUrl(string $template, string $model): string
     {
-        // If template expects %s, inject model; else keep as-is
         return str_contains($template, '%s') ? \sprintf($template, $model) : $template;
+    }
+
+    /**
+     * Convert message history into a single prompt for Gemini.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function messagesToPrompt(array $messages): string
+    {
+        $lines = [];
+
+        foreach ($messages as $m) {
+            if (!\is_array($m)) {
+                continue;
+            }
+
+            $role = isset($m['role']) ? trim((string) $m['role']) : '';
+            $content = isset($m['content']) ? trim((string) $m['content']) : '';
+
+            if ('' === $content) {
+                continue;
+            }
+
+            $role = strtolower($role);
+            if (!\in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+                $role = 'user';
+            }
+
+            $lines[] = strtoupper($role).': '.$content;
+        }
+
+        return trim(implode("\n", $lines));
+    }
+
+    /**
+     * Resolve per-request overrides for text/chat.
+     *
+     * @param array<string,mixed> $options
+     *
+     * @return array{url:string,temperature:float,max_output_tokens:int}
+     */
+    private function resolveTextOptions(array $options): array
+    {
+        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
+        $template = (string) (($options['url_template'] ?? null) ?? $this->textUrlTemplate);
+
+        // Allow direct "url" override too.
+        $url = isset($options['url']) ? (string) $options['url'] : $this->buildUrl($template, $model);
+
+        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+
+        // Accept either max_output_tokens or max_tokens
+        $max = $options['max_output_tokens'] ?? ($options['max_tokens'] ?? null);
+        $max = (int) (($max ?? null) ?? $this->textMaxOutputTokens);
+
+        if ($max <= 0) {
+            $max = $this->textMaxOutputTokens > 0 ? $this->textMaxOutputTokens : 1000;
+        }
+
+        return [
+            'url' => $url,
+            'temperature' => $temperature,
+            'max_output_tokens' => $max,
+        ];
     }
 
     private function getUserId(): ?int

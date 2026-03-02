@@ -2,20 +2,121 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Library for the import of Aiken format.
- *
- * @author claro team <cvs@claroline.net>
- * @author Guillaume Lederer <guillaume@claroline.net>
- * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
- */
-
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+
+/**
+ * Best-effort: fetch AiDisclosureHelper from Symfony container (legacy context).
+ */
+function aiken_get_ai_disclosure_helper(): ?AiDisclosureHelper
+{
+    try {
+        if (!class_exists(Container::class)) {
+            return null;
+        }
+
+        $container = Container::$container;
+        if (!$container) {
+            return null;
+        }
+
+        if (method_exists($container, 'has') && $container->has(AiDisclosureHelper::class)) {
+            $svc = $container->get(AiDisclosureHelper::class);
+
+            return $svc instanceof AiDisclosureHelper ? $svc : null;
+        }
+    } catch (Throwable) {
+        // Ignore container errors in legacy context.
+    }
+
+    return null;
+}
+
+/**
+ * Returns whether AI disclosure is enabled (best-effort).
+ */
+function aiken_is_ai_disclosure_enabled(): bool
+{
+    $helper = aiken_get_ai_disclosure_helper();
+    if (!$helper) {
+        return false;
+    }
+
+    try {
+        return $helper->isDisclosureEnabled();
+    } catch (Throwable) {
+        return false;
+    }
+}
+
+/**
+ * Adds a visible prefix to the question title.
+ * This makes the AI assistance visible in existing UI without template changes.
+ */
+function aiken_prefix_ai_title(string $title): string
+{
+    $title = (string) $title;
+    $prefix = '[AI-assisted] ';
+
+    if ('' === trim($title)) {
+        return $title;
+    }
+
+    if (str_starts_with($title, $prefix)) {
+        return $title;
+    }
+
+    return $prefix.$title;
+}
+
+/**
+ * Builds AI metadata from the generator/import request (if present).
+ *
+ * @return array<string,mixed>|null
+ */
+function aiken_build_ai_meta_from_request(?array $request): ?array
+{
+    if (!is_array($request) || empty($request)) {
+        return null;
+    }
+
+    // Hidden flag set by generator JS after a successful AI call.
+    $aiGenerated = isset($request['ai_generated']) && '1' === (string) $request['ai_generated'];
+    if (!$aiGenerated) {
+        return null;
+    }
+
+    $provider = '';
+    if (isset($request['ai_provider_used'])) {
+        $provider = trim((string) $request['ai_provider_used']);
+    }
+    if ('' === $provider && isset($request['ai_provider'])) {
+        $provider = trim((string) $request['ai_provider']);
+    }
+    if ('' === $provider) {
+        $provider = 'default';
+    }
+
+    $userId = (int) api_get_user_id();
+    $courseId = (int) api_get_course_int_id();
+    $sessionId = (int) api_get_session_id();
+
+    return [
+        'feature' => 'exercise_generator_aiken',
+        'mode' => 'generated',
+        'provider' => $provider,
+        'user_id' => $userId,
+        'course_id' => $courseId,
+        'session_id' => $sessionId,
+        'disclose' => aiken_is_ai_disclosure_enabled(),
+    ];
+}
 
 /**
  * This function displays the form for import of the zip file with qti2.
  *
- * @param   string  Report message to show in case of error
+ * @param string Report message to show in case of error
  */
 function aiken_display_form()
 {
@@ -93,7 +194,7 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
                 'weighting' => [],
                 'feedback' => '',
                 'description' => '',
-                'answer_tags' => []
+                'answer_tags' => [],
             ];
             $answersArray = [];
             $currentQuestion = &$exerciseInfo['question'][$questionIndex];
@@ -125,12 +226,12 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
     $totalQuestions = count($exerciseInfo['question']);
     $totalWeight = (int) ($exerciseInfo['total_weight'] ?? 20);
     foreach ($exerciseInfo['question'] as $key => $question) {
-        $exerciseInfo['question'][$key]['weighting'][0] = $totalWeight / $totalQuestions;
+        $exerciseInfo['question'][$key]['weighting'][0] = $totalWeight / max(1, $totalQuestions);
     }
 }
 
 /**
- * Imports an Aiken file or AI-generated text and creates an exercise in Chamilo 2.
+ * Imports an Aiken file or AI-generated text and creates an exercise in Chamilo.
  *
  * @param string|null $file Path to the Aiken file (optional)
  * @param array|null $request AI form data (optional)
@@ -143,6 +244,8 @@ function aiken_import_exercise(string $file = null, ?array $request = [])
     $fileIsSet = false;
     $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH) . 'aiken/';
     $uploadPath = 'aiken_' . api_get_unique_id();
+
+    $aiMeta = null;
 
     if ($file) {
         $fileIsSet = true;
@@ -164,26 +267,32 @@ function aiken_import_exercise(string $file = null, ?array $request = [])
             return $result;
         }
     } elseif (!empty($request)) {
-        $exerciseInfo['name'] = $request['quiz_name'];
-        $exerciseInfo['total_weight'] = !empty($_POST['ai_total_weight']) ? (int) ($_POST['ai_total_weight']) : (int) $request['nro_questions'];
+        $exerciseInfo['name'] = $request['quiz_name'] ?? '';
+        $exerciseInfo['total_weight'] = !empty($_POST['ai_total_weight']) ? (int) ($_POST['ai_total_weight']) : (int) ($request['nro_questions'] ?? 20);
         $exerciseInfo['question'] = [];
         $exerciseInfo['course_id'] = api_get_course_int_id();
-        setExerciseInfoFromAikenText($request['aiken_format'], $exerciseInfo);
+
+        setExerciseInfoFromAikenText($request['aiken_format'] ?? '', $exerciseInfo);
+
+        // Only AI generator import will have this flag set
+        $aiMeta = aiken_build_ai_meta_from_request($request);
     }
 
-    return create_exercise_from_aiken($exerciseInfo, $fileIsSet ? $baseWorkDir . $uploadPath : null);
+    return create_exercise_from_aiken($exerciseInfo, $fileIsSet ? $baseWorkDir . $uploadPath : null, $aiMeta);
 }
 
 /**
  * Creates an exercise from Aiken format data.
+ *
+ * @param array<string,mixed> $exerciseInfo
+ * @param array<string,mixed>|null $aiMeta
  */
-function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|false
+function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?array $aiMeta = null): int|false
 {
     if (empty($exerciseInfo)) {
         return false;
     }
 
-    // 1. Create a new exercise
     $exercise = new Exercise();
     $exercise->exercise = $exerciseInfo['name'];
     $exercise->save();
@@ -193,45 +302,86 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
         return false;
     }
 
-    // Database table references
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $courseId = api_get_course_int_id();
 
-    // 2. Iterate over each question in the parsed Aiken data
+    // AI audit for the exercise
+    if (is_array($aiMeta)) {
+        $helper = aiken_get_ai_disclosure_helper();
+        if ($helper) {
+            $helper->logAudit(
+                targetKey: 'exercise:'.$lastExerciseId,
+                userId: (int) ($aiMeta['user_id'] ?? 0),
+                meta: [
+                    'feature' => $aiMeta['feature'] ?? 'exercise_generator_aiken',
+                    'mode' => $aiMeta['mode'] ?? 'generated',
+                    'provider' => $aiMeta['provider'] ?? 'default',
+                    'scope' => 'exercise',
+                ],
+                courseId: (int) ($aiMeta['course_id'] ?? $courseId),
+                sessionId: (int) ($aiMeta['session_id'] ?? api_get_session_id())
+            );
+        }
+    }
+
     foreach ($exerciseInfo['question'] as $index => $questionData) {
         if (!isset($questionData['title'])) {
             continue;
         }
 
-        // 3. Create a new question
         $question = new Aiken2Question();
         $question->type = $questionData['type'];
         $question->setAnswer();
-        $question->updateTitle($questionData['title']);
+
+        $title = (string) $questionData['title'];
+
+        // Visible marker without UI changes
+        if (is_array($aiMeta) && !empty($aiMeta['disclose'])) {
+            $title = aiken_prefix_ai_title($title);
+        }
+
+        $question->updateTitle($title);
 
         if (isset($questionData['description'])) {
             $question->updateDescription($questionData['description']);
         }
 
-        // Determine question type
         $type = $question->selectType();
         $question->type = constant($type);
 
-        // Try to save the question
         try {
             $question->save($exercise);
             $lastQuestionId = $question->id;
 
             if (!$lastQuestionId) {
-                throw new Exception("Question ID is NULL after saving.");
+                throw new Exception('Question ID is NULL after saving.');
             }
         } catch (Exception $e) {
-            error_log("[ERROR] create_exercise_from_aiken: Error saving question '{$questionData['title']}' - " . $e->getMessage());
+            error_log("[ERROR] create_exercise_from_aiken: Error saving question '{$title}' - ".$e->getMessage());
             continue;
         }
 
-        // 4. Create answers for the question
+        // AI audit per created question
+        if (is_array($aiMeta)) {
+            $helper = aiken_get_ai_disclosure_helper();
+            if ($helper) {
+                $helper->logAudit(
+                    targetKey: 'question:'.$lastQuestionId,
+                    userId: (int) ($aiMeta['user_id'] ?? 0),
+                    meta: [
+                        'feature' => $aiMeta['feature'] ?? 'exercise_generator_aiken',
+                        'mode' => $aiMeta['mode'] ?? 'generated',
+                        'provider' => $aiMeta['provider'] ?? 'default',
+                        'scope' => 'question',
+                        'exercise_id' => $lastExerciseId,
+                    ],
+                    courseId: (int) ($aiMeta['course_id'] ?? $courseId),
+                    sessionId: (int) ($aiMeta['session_id'] ?? api_get_session_id())
+                );
+            }
+        }
+
         $answer = new Answer($lastQuestionId, $courseId, $exercise, false);
         $answer->new_nbrAnswers = count($questionData['answer']);
         $maxScore = 0;
@@ -243,14 +393,12 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
             $answer->new_position[$answerIndex] = $answerIndex;
             $answer->new_comment[$answerIndex] = '';
 
-            // Check if the answer is correct
             if (isset($questionData['correct_answers']) && in_array($answerIndex, $questionData['correct_answers'])) {
                 $answer->new_correct[$answerIndex] = 1;
                 if (isset($questionData['feedback'])) {
                     $answer->new_comment[$answerIndex] = $questionData['feedback'];
                 }
 
-                // Set answer weight (score)
                 if (isset($questionData['weighting'])) {
                     $answer->new_weighting[$answerIndex] = $questionData['weighting'][0];
                     $maxScore += $questionData['weighting'][0];
@@ -263,7 +411,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
                 $answer->new_weighting[$answerIndex] = $scoreFromFile;
             }
 
-            // Insert answer into database
             $params = [
                 'question_id' => $lastQuestionId,
                 'answer' => $answer->new_answer[$answerIndex],
@@ -278,14 +425,13 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
             $answerId = Database::insert($tableAnswer, $params);
 
             if (!$answerId) {
-                error_log("[ERROR] create_exercise_from_aiken: Failed to insert answer for question ID: $lastQuestionId");
+                error_log("[ERROR] create_exercise_from_aiken: Failed to insert answer for question ID: {$lastQuestionId}");
                 continue;
             }
 
             Database::update($tableAnswer, ['iid' => $answerId], ['iid = ?' => [$answerId]]);
         }
 
-        // Update question score
         if (!empty($scoreFromFile)) {
             $maxScore = $scoreFromFile;
         }
@@ -293,163 +439,11 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
         Database::update($tableQuestion, ['ponderation' => $maxScore], ['iid = ?' => [$lastQuestionId]]);
     }
 
-    // 5. Clean up temporary files if needed
     if ($workDir) {
         my_delete($workDir);
     }
 
     return $lastExerciseId;
-}
-
-/**
- * Parses an Aiken file and builds an array of exercise + questions to be
- * imported by the import_exercise() function.
- *
- * @param array $exercise_info The reference to the array in which to store the questions
- * @param string $file
- *
- * @return string|bool True on success, error message on error
- * @assert ('','','') === false
- */
-function aiken_parse_file(&$exercise_info, $file)
-{
-    if (!is_file($file)) {
-        return 'FileNotFound';
-    }
-
-    $text = file_get_contents($file);
-    $detect = mb_detect_encoding($text, 'ASCII', true);
-    if ('ASCII' === $detect) {
-        $data = explode("\n", $text);
-    } else {
-        $text = str_ireplace(["\x0D", "\r\n"], "\n", $text); // Removes ^M char from win files.
-        $data = explode("\n\n", $text);
-    }
-
-    $question_index = 0;
-    $answers_array = [];
-    foreach ($data as $line => $info) {
-        $info = trim($info);
-        if (empty($info)) {
-            continue;
-        }
-        //make sure it is transformed from iso-8859-1 to utf-8 if in that form
-        if (!mb_check_encoding($info, 'utf-8') && mb_check_encoding($info, 'iso-8859-1')) {
-            $info = utf8_encode($info);
-        }
-        $exercise_info['question'][$question_index]['type'] = 'MCUA';
-        if (preg_match('/^([A-Za-z])(\)|\.)\s(.*)/', $info, $matches)) {
-            //adding one of the possible answers
-            $exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
-            $answers_array[] = $matches[1];
-        } elseif (preg_match('/^ANSWER:\s?([A-Z])\s?/', $info, $matches)) {
-            //the correct answers
-            $correct_answer_index = array_search($matches[1], $answers_array);
-            $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
-            //weight for correct answer
-            $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
-            $next = $line + 1;
-
-            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
-                continue;
-            }
-
-            if (false !== strpos($data[$next], 'DESCRIPTION:')) {
-                continue;
-            }
-            // Check if next has score, otherwise loop too next question.
-            if (false === strpos($data[$next], 'SCORE:')) {
-                $answers_array = [];
-                $question_index++;
-                continue;
-            }
-        } elseif (preg_match('/^SCORE:\s?(.*)/', $info, $matches)) {
-            $exercise_info['question'][$question_index]['score'] = (float) $matches[1];
-            $answers_array = [];
-            $question_index++;
-            continue;
-        } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
-            $exercise_info['question'][$question_index]['description'] = $matches[1];
-            $next = $line + 1;
-
-            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
-                continue;
-            }
-            // Check if next has score, otherwise loop too next question.
-            if (false === strpos($data[$next], 'SCORE:')) {
-                $answers_array = [];
-                $question_index++;
-                continue;
-            }
-        } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
-            //Comment of correct answer
-            $exercise_info['question'][$question_index]['feedback'] = $matches[1];
-            $next = $line + 1;
-            // Check if next has score, otherwise loop too next question.
-            if (false === strpos($data[$next], 'SCORE:')) {
-                $answers_array = [];
-                $question_index++;
-                continue;
-            }
-        } elseif (preg_match('/^TEXTO_CORRECTA:\s?(.*)/', $info, $matches)) {
-            //Comment of correct answer (Spanish e-ducativa format)
-            $exercise_info['question'][$question_index]['feedback'] = $matches[1];
-        } elseif (preg_match('/^T:\s?(.*)/', $info, $matches)) {
-            //Question Title
-            $exercise_info['question'][$question_index]['title'] = $matches[1];
-        } elseif (preg_match('/^TAGS:\s?(.*)/', $info, $matches)) {
-            //TAGS for chamilo >= 1.10
-            $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } elseif (preg_match('/^ETIQUETAS:\s?(.*)/', $info, $matches)) {
-            //TAGS for chamilo >= 1.10 (Spanish e-ducativa format)
-            $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } else {
-            if (empty($exercise_info['question'][$question_index]['title'])) {
-                $exercise_info['question'][$question_index]['title'] = $info;
-            }
-        }
-    }
-
-    $total_questions = count($exercise_info['question']);
-    $total_weight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
-    foreach ($exercise_info['question'] as $key => $question) {
-        if (!isset($exercise_info['question'][$key]['weighting'])) {
-            continue;
-        }
-        $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
-    }
-
-    return true;
-}
-
-/**
- * Imports the zip file.
- *
- * @param array $array_file ($_FILES)
- */
-function aiken_import_file(array $array_file)
-{
-    $unzip = 0;
-    $process = process_uploaded_file($array_file, false);
-    if (preg_match('/\.(zip|txt)$/i', $array_file['name'])) {
-        // if it's a zip, allow zip upload
-        $unzip = 1;
-    }
-
-    if ($process && 1 == $unzip) {
-        $imported = aiken_import_exercise($array_file['name']);
-        if (is_numeric($imported) && !empty($imported)) {
-            Display::addFlash(Display::return_message(get_lang('Uploaded.')));
-
-            return $imported;
-        } else {
-            Display::addFlash(Display::return_message(get_lang($imported), 'error'));
-
-            return false;
-        }
-    }
-
-    return false;
 }
 
 /**
@@ -461,24 +455,19 @@ function generateAikenForm()
         return false;
     }
 
-    // Read providers config (recommended structure: provider -> text -> model/url/...)
     $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
     $rawProviders = json_decode($aiProvidersJson, true);
     $rawProviders = is_array($rawProviders) ? $rawProviders : [];
 
-    // Keep only providers that look text-capable (recommended: has "text" section)
     $availableApis = [];
     foreach ($rawProviders as $key => $cfg) {
         if (!is_array($cfg)) {
             continue;
         }
-
         if (isset($cfg['text']) && is_array($cfg['text'])) {
             $availableApis[$key] = $cfg;
             continue;
         }
-
-        // Backward compatibility: accept flat configs that still expose model/url at root
         if (isset($cfg['model']) || isset($cfg['url'])) {
             $availableApis[$key] = $cfg;
             continue;
@@ -487,11 +476,9 @@ function generateAikenForm()
 
     if (empty($availableApis)) {
         echo Display::return_message(get_lang('No AI text providers configured.'), 'warning');
-
         return false;
     }
 
-    // Build provider labels (show model if possible)
     $providerOptions = [];
     foreach ($availableApis as $key => $cfg) {
         $model = '';
@@ -515,10 +502,16 @@ function generateAikenForm()
     $form = new FormValidator(
         'aiken_generate',
         'post',
-        api_get_self()."?".api_get_cidreq(),
+        api_get_self().'?'.api_get_cidreq(),
         null
     );
+
     $form->addElement('header', get_lang('AI Questions Generator'));
+
+    // Hidden flags so the import step can log/tag as AI-generated.
+    $form->addElement('hidden', 'ai_generated', '0');
+    $form->addElement('hidden', 'ai_provider_used', '');
+    $form->addElement('hidden', 'ai_generation_ts', '');
 
     if ($hasSingleApi && null !== $configuredApi) {
         $form->addHtml(
@@ -527,16 +520,6 @@ function generateAikenForm()
             .'</div>'
         );
     }
-
-    $form->addHtml('<div class="alert alert-info">
-        <strong>'.get_lang('Aiken Format Example').'</strong><br>
-        What is the capital of France?<br>
-        A. Berlin<br>
-        B. Madrid<br>
-        C. Paris<br>
-        D. Rome<br>
-        ANSWER: C
-    </div>');
 
     $form->addElement('text', 'quiz_name', get_lang('Questions topic'));
     $form->addRule('quiz_name', get_lang('Required field'), 'required');
@@ -547,24 +530,19 @@ function generateAikenForm()
         'multiple_choice' => get_lang('Multiple answer'),
     ];
 
-    $form->addSelect(
-        'question_type',
-        get_lang('Question type'),
-        $options
-    );
+    $form->addSelect('question_type', get_lang('Question type'), $options);
 
     if (!$hasSingleApi) {
-        $form->addSelect(
-            'ai_provider',
-            get_lang('AI provider'),
-            $providerOptions
-        );
+        $form->addSelect('ai_provider', get_lang('AI provider'), $providerOptions);
     }
 
     $generateUrl = api_get_path(WEB_PATH).'ai/generate_aiken';
 
     $courseInfo = api_get_course_info();
-    $language = $courseInfo['language'];
+    $language = $courseInfo['language'] ?? 'en';
+
+    $courseId = (int) api_get_course_int_id();
+    $sessionId = (int) api_get_session_id();
 
     $form->addHtml('<script>
     $(function () {
@@ -581,30 +559,31 @@ function generateAikenForm()
         . (!$hasSingleApi
             ? 'var provider = $("[name=\'ai_provider\']").val();'
             : 'var provider = "'.addslashes((string) $configuredApi).'";'
-        ) .
-        'var isValid = true;
+        ) . '
+            var isValid = true;
 
-            // Remove previous error messages
             $(".error-message").remove();
 
-            // Validate quiz name
             if (quizName === "") {
                 $("[name=\'quiz_name\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('Required field').'</div>");
                 isValid = false;
             }
 
-            // Validate number of questions
             if (isNaN(nroQ) || nroQ <= 0) {
                 $("[name=\'nro_questions\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('Please enter a valid number of questions').'</div>");
                 isValid = false;
             }
 
             if (!isValid) {
-                return; // Stop execution if validation fails
+                return;
             }
 
             btnGenerate.attr("disabled", true);
             btnGenerate.text("'.get_lang('Please wait. This could take a while...').'");
+
+            $("input[name=\'ai_generated\']").val("0");
+            $("input[name=\'ai_provider_used\']").val("");
+            $("input[name=\'ai_generation_ts\']").val("");
 
             $("#textarea-aiken").text("");
             $("#aiken-area").hide();
@@ -614,7 +593,9 @@ function generateAikenForm()
                 "nro_questions": nroQ,
                 "question_type": qType,
                 "language": "'.addslashes((string) $language).'",
-                "ai_provider": provider
+                "ai_provider": provider,
+                "cid": '.(int) $courseId.',
+                "sid": '.(int) $sessionId.'
             });
 
             $.ajax({
@@ -625,19 +606,23 @@ function generateAikenForm()
                 dataType: "json",
                 success: function (data) {
                     btnGenerate.attr("disabled", false);
-                    btnGenerate.text("'.get_lang('Generate').'");
+                    btnGenerate.text("'.get_lang('Generate Aiken').'");
 
                     if (data.success) {
                         $("#aiken-area").show();
                         $("#textarea-aiken").text(data.text);
                         $("#textarea-aiken").focus();
+
+                        $("input[name=\'ai_generated\']").val("1");
+                        $("input[name=\'ai_provider_used\']").val(provider);
+                        $("input[name=\'ai_generation_ts\']").val(String(Date.now()));
                     } else {
                         alert("'.get_lang('An error occurred.').': " + data.text);
                     }
                 },
                 error: function (jqXHR) {
                     btnGenerate.attr("disabled", false);
-                    btnGenerate.text("'.get_lang('Generate').'");
+                    btnGenerate.text("'.get_lang('Generate Aiken').'");
 
                     try {
                         var response = JSON.parse(jqXHR.responseText);

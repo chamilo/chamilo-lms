@@ -203,7 +203,8 @@
           />
           <BaseButton
             v-if="showAiFeedbackButton(slotProps.data)"
-            :title="t('Get AI feedback')"
+            :disabled="aiFeedbackLoading"
+            :title="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
             icon="robot"
             size="small"
             type="secondary"
@@ -437,6 +438,8 @@
       @document-not-saved="recordedAudioNotSaved"
     />
   </BaseDialog>
+
+  <!-- AI feedback dialog -->
   <BaseDialogConfirmCancel
     v-model:is-visible="isAiFeedbackDialogVisible"
     :title="t('Get AI feedback')"
@@ -455,6 +458,38 @@
         </div>
       </div>
 
+      <!-- Provider selector (this is what you were missing in UI) -->
+      <div class="space-y-1">
+        <div class="text-sm font-semibold">AI provider</div>
+
+        <select
+          v-model="aiFeedbackProvider"
+          class="w-full rounded border border-gray-300 p-2 text-sm"
+          :disabled="aiFeedbackLoading || aiFeedbackSaving || aiFeedbackProviderOptions.length === 0"
+        >
+          <option
+            v-for="p in aiFeedbackProviderOptions"
+            :key="p.key"
+            :value="p.key"
+          >
+            {{ p.label }}
+          </option>
+        </select>
+
+        <div
+          v-if="aiFeedbackProviderOptions.length === 0"
+          class="text-xs text-red-600"
+        >
+          No compatible AI providers available for this file type.
+        </div>
+
+        <div class="text-xs opacity-70">
+          <span v-if="aiFeedbackMode === 'pdf'">Mode: PDF (document processing)</span>
+          <span v-else-if="aiFeedbackMode === 'txt'">Mode: TXT (text processing)</span>
+          <span v-else>Mode: unsupported</span>
+        </div>
+      </div>
+
       <div class="space-y-1">
         <div class="text-sm font-semibold">Prompt</div>
         <textarea
@@ -462,12 +497,14 @@
           class="w-full rounded border border-gray-300 p-2 text-sm"
           rows="4"
           placeholder="Write your question for the AI..."
+          :disabled="aiFeedbackLoading || aiFeedbackSaving"
         />
       </div>
 
       <div class="flex flex-row gap-2">
         <BaseButton
           v-if="aiFeedbackAnswer"
+          :disabled="aiFeedbackLoading || aiFeedbackSaving"
           :label="t('Copy answer to clipboard')"
           icon="copy"
           type="secondary"
@@ -475,7 +512,7 @@
         />
         <BaseButton
           v-if="aiFeedbackAnswer"
-          :disabled="aiFeedbackSaving"
+          :disabled="aiFeedbackSaving || aiFeedbackLoading"
           :label="aiFeedbackSaving ? t('In progress') : t('Save answer to my inbox')"
           icon="save"
           type="primary"
@@ -573,7 +610,7 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, onMounted, ref, unref, watch } from "vue"
+import { computed, nextTick, onMounted, ref, unref, watch } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
@@ -794,9 +831,9 @@ const canEdit = (item) => {
   if (!resourceLink) {
     return false
   }
-  const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
+  const isSessionDoc = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
-  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
+  return (isSessionDoc && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 const isSessionDocument = (item) => {
@@ -818,7 +855,6 @@ onMounted(async () => {
 
   // Set resource node.
   let nodeId = route.params.node
-
   if (isEmpty(nodeId)) {
     nodeId = route.query.node
   }
@@ -1155,9 +1191,9 @@ function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
   folderParams.id = item["@id"]
 
-  baseService
-    .put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {})
-    .then((data) => (item.resourceLinkListFromEntity = data.resourceLinkListFromEntity))
+  baseService.put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
+    item.resourceLinkListFromEntity = data.resourceLinkListFromEntity
+  })
 }
 
 function btnEditOnClick(item) {
@@ -1412,12 +1448,14 @@ async function replaceDocument() {
 
   const formData = new FormData()
   formData.append("file", selectedReplaceFile.value)
+
   try {
     await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
+
     notification.showSuccessNotification(t("File replaced"))
     isReplaceDialogVisible.value = false
     triggerTableLoad()
@@ -1549,12 +1587,53 @@ const submitTemplateForm = async () => {
 
 /**
  * -----------------------------------------
- * AI: capabilities + content analyzer dialog
+ * AI: capabilities + provider lists (selector in modal)
  * -----------------------------------------
  */
 const hasAiImage = ref(false)
 const hasAiVideo = ref(false)
 const hasAiDocumentProcess = ref(false)
+const hasAiTextForAnalyzer = ref(false)
+
+const aiTextProviders = ref([]) // [{ key, label }]
+const aiDocProcessProviders = ref([]) // [{ key, label }]
+
+function normalizeProviders(raw) {
+  if (!raw) return []
+
+  // Array: ["openai", ...] OR [{key,label}, ...]
+  if (Array.isArray(raw)) {
+    return raw
+      .map((p) => {
+        if (typeof p === "string") {
+          const s = p.trim()
+          return s ? { key: s, label: s } : null
+        }
+        if (p && typeof p === "object") {
+          const key = String(p.key ?? p.name ?? "").trim()
+          if (!key) return null
+          const label = String(p.label ?? key).trim()
+          return { key, label: label || key }
+        }
+        return null
+      })
+      .filter(Boolean)
+  }
+
+  // Map/object: { openai: "openai (gpt-4o)", ... }
+  if (raw && typeof raw === "object") {
+    return Object.entries(raw)
+      .map(([k, v]) => {
+        const key = String(k || "").trim()
+        if (!key) return null
+        const label = String(v ?? key).trim()
+        return { key, label: label || key }
+      })
+      .filter(Boolean)
+  }
+
+  return []
+}
 
 const showGenerateMediaButton = computed(() => {
   if (!isCurrentTeacher.value) return false
@@ -1571,6 +1650,9 @@ async function loadAiCapabilities() {
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
     return
   }
 
@@ -1579,33 +1661,53 @@ async function loadAiCapabilities() {
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
     return
   }
 
   try {
     const { data } = await axios.get("/ai/capabilities", {
-      params: {
-        cid: unref(cid),
-        sid: unref(sid),
-        gid: unref(gid),
-      },
+      params: { cid: unref(cid), sid: unref(sid), gid: unref(gid) },
       headers: { Accept: "application/json" },
     })
 
     console.warn("[AI] capabilities:", data)
 
+    const backendHasText = !!(data?.has?.text ?? data?.text)
     const backendHasImage = !!(data?.has?.image ?? data?.image)
     const backendHasVideo = !!(data?.has?.video ?? data?.video)
     const backendHasDocProcess = !!(data?.has?.document_process ?? data?.document_process)
 
     hasAiImage.value = imageGeneratorEnabled.value && backendHasImage
     hasAiVideo.value = videoGeneratorEnabled.value && backendHasVideo
-    hasAiDocumentProcess.value = contentAnalyzerEnabled.value && backendHasDocProcess
+
+    // document_process providers come from capabilities.types.document_process (often a map)
+    aiDocProcessProviders.value = normalizeProviders(data?.types?.document_process)
+
+    // text providers: prefer the explicit endpoint that already returns [{key,label}]
+    aiTextProviders.value = []
+    try {
+      const res = await axios.get("/ai/text_providers", { headers: { Accept: "application/json" } })
+      aiTextProviders.value = normalizeProviders(res?.data?.providers)
+    } catch (e) {
+      console.warn("[AI][Documents] Failed to load /ai/text_providers, fallback to capabilities:", e?.response || e)
+      aiTextProviders.value = normalizeProviders(data?.types?.text)
+    }
+
+    // Analyzer support depends on file mode + provider list availability.
+    hasAiDocumentProcess.value =
+      contentAnalyzerEnabled.value && backendHasDocProcess && aiDocProcessProviders.value.length > 0
+    hasAiTextForAnalyzer.value = contentAnalyzerEnabled.value && backendHasText && aiTextProviders.value.length > 0
   } catch (e) {
     console.error("[AI] Failed to load capabilities:", e?.response || e)
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
   }
 }
 
@@ -1617,22 +1719,28 @@ function goToGenerateMedia() {
   })
 }
 
-function isSupportedForAnalyzer(doc) {
+/**
+ * Detect analyzer mode from file (PDF vs TXT).
+ * This must match backend logic in /ai/document_feedback.
+ */
+function getAnalyzerMode(doc) {
   const rf = doc?.resourceNode?.firstResourceFile
   const mime = String(rf?.mimeType || "").toLowerCase()
   const name = String(rf?.originalName || doc?.title || "").toLowerCase()
 
   const isPdf = mime === "application/pdf" || name.endsWith(".pdf")
-  const isTxt = mime.startsWith("text/plain") || name.endsWith(".txt")
+  if (isPdf) return "pdf"
 
-  return isPdf || isTxt
+  const isTxt = mime.startsWith("text/plain") || name.endsWith(".txt")
+  if (isTxt) return "txt"
+
+  return ""
 }
 
 function showAiFeedbackButton(doc) {
   if (!isCurrentTeacher.value) return false
   if (!aiHelpersEnabled.value) return false
   if (!contentAnalyzerEnabled.value) return false
-  if (!hasAiDocumentProcess.value) return false
 
   // Only analyze items that have a real file attached.
   const rfId = doc?.resourceNode?.firstResourceFile?.id
@@ -1642,10 +1750,25 @@ function showAiFeedbackButton(doc) {
   const ft = String(doc?.filetype || "")
   if (!["file", "video", "certificate"].includes(ft)) return false
 
-  if (!isSupportedForAnalyzer(doc)) return false
-  return true
+  const mode = getAnalyzerMode(doc)
+  if (!mode) return false
+
+  // Mode-specific gating so the button appears only when providers exist.
+  if (mode === "pdf") {
+    return hasAiDocumentProcess.value && aiDocProcessProviders.value.length > 0
+  }
+  if (mode === "txt") {
+    return hasAiTextForAnalyzer.value && aiTextProviders.value.length > 0
+  }
+
+  return false
 }
 
+/**
+ * -----------------------------------------
+ * AI feedback modal state + provider selector
+ * -----------------------------------------
+ */
 const isAiFeedbackDialogVisible = ref(false)
 const aiFeedbackLoading = ref(false)
 const aiFeedbackSaving = ref(false)
@@ -1654,30 +1777,68 @@ const aiFeedbackAnswer = ref("")
 const aiFeedbackPrompt = ref("")
 const aiFeedbackDoc = ref(null)
 
+// Selected provider key (string). When null => backend default provider is used.
+const aiFeedbackProvider = ref(null)
+
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
-
-// Optional provider name (keep null to use backend default).
-const aiFeedbackProvider = ref(null)
 
 const aiFeedbackDocTitle = computed(() => {
   return String(aiFeedbackDoc.value?.title || aiFeedbackDoc.value?.resourceNode?.title || "").trim()
 })
 
-const aiFeedbackCourseTitle = course.value.title
+const aiFeedbackCourseTitle = computed(() => {
+  return String(course.value?.title || "").trim()
+})
+
+const aiFeedbackMode = computed(() => getAnalyzerMode(aiFeedbackDoc.value))
+
+const aiFeedbackProviderOptions = computed(() => {
+  if (aiFeedbackMode.value === "pdf") return aiDocProcessProviders.value
+  if (aiFeedbackMode.value === "txt") return aiTextProviders.value
+  return []
+})
 
 function openAiFeedback(doc) {
   aiFeedbackDoc.value = doc
   aiFeedbackError.value = ""
   aiFeedbackAnswer.value = ""
-  aiFeedbackProvider.value = null
 
-  // Default prompt can be changed by the teacher (spec: teacher confirms and provides a question).
+  // Default prompt can be changed by the teacher.
   aiFeedbackPrompt.value =
     "Please provide feedback on clarity, structure, and improvement suggestions. If needed, propose a revised version."
 
+  // Reset provider then set first available provider after DOM/computed updates.
+  aiFeedbackProvider.value = null
   isAiFeedbackDialogVisible.value = true
+
+  void nextTick(() => {
+    const opts = aiFeedbackProviderOptions.value || []
+    aiFeedbackProvider.value = opts?.[0]?.key ?? null
+  })
 }
+
+// If providers are loaded after dialog opens, make sure we have a valid selection.
+watch(
+  () => [isAiFeedbackDialogVisible.value, aiFeedbackProviderOptions.value],
+  () => {
+    if (!isAiFeedbackDialogVisible.value) return
+    const opts = aiFeedbackProviderOptions.value || []
+    if (!opts.length) return
+
+    const current = String(aiFeedbackProvider.value || "").trim()
+    if (!current) {
+      aiFeedbackProvider.value = opts[0].key
+      return
+    }
+
+    const exists = opts.some((p) => p.key === current)
+    if (!exists) {
+      aiFeedbackProvider.value = opts[0].key
+    }
+  },
+  { deep: true },
+)
 
 function closeAiFeedbackDialog() {
   isAiFeedbackDialogVisible.value = false
@@ -1691,10 +1852,19 @@ function closeAiFeedbackDialog() {
 }
 
 async function runAiFeedback() {
+  // Prevent double-click runs.
+  if (aiFeedbackLoading.value) return
+
   aiFeedbackError.value = ""
 
   if (!aiFeedbackDoc.value) {
     aiFeedbackError.value = "Missing selected document."
+    return
+  }
+
+  const mode = getAnalyzerMode(aiFeedbackDoc.value)
+  if (!mode) {
+    aiFeedbackError.value = "Unsupported file type. Only PDF and TXT are supported."
     return
   }
 
@@ -1707,6 +1877,21 @@ async function runAiFeedback() {
   if (!resourceFileId) {
     aiFeedbackError.value = "Missing resource file information for this document."
     return
+  }
+
+  // If we have options, require a valid selected provider.
+  const opts = aiFeedbackProviderOptions.value || []
+  if (opts.length > 0) {
+    const selected = String(aiFeedbackProvider.value || "").trim()
+    if (!selected) {
+      aiFeedbackError.value = "AI provider is required."
+      return
+    }
+    const exists = opts.some((p) => p.key === selected)
+    if (!exists) {
+      aiFeedbackError.value = "Selected AI provider is not available for this file type."
+      return
+    }
   }
 
   aiFeedbackLoading.value = true
@@ -1722,6 +1907,7 @@ async function runAiFeedback() {
       document_title: aiFeedbackDocTitle.value,
       prompt: aiFeedbackPrompt.value,
       language: String(locale?.value || "en"),
+      // Provider key or null => backend default provider.
       ai_provider: aiFeedbackProvider.value,
     }
 

@@ -55,7 +55,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             throw new RuntimeException('Grok API key is missing.');
         }
 
-        // TEXT config (required for AiProviderInterface usage)
+        // TEXT config (required)
         $textCfg = $providerConfig['text'] ?? null;
         if (!\is_array($textCfg)) {
             throw new RuntimeException('Grok configuration for text processing is missing.');
@@ -66,13 +66,12 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $this->textTemperature = (float) ($textCfg['temperature'] ?? 0.7);
         $this->textMaxTokens = (int) ($textCfg['max_tokens'] ?? 1000);
 
-        // IMAGE config (optional but required to support "image" type)
+        // IMAGE config (optional)
         $imageCfg = $providerConfig['image'] ?? null;
         if (\is_array($imageCfg)) {
             $this->imageApiUrl = (string) ($imageCfg['url'] ?? 'https://api.x.ai/v1/images/generations');
-            $this->imageModel = (string) ($imageCfg['model'] ?? 'grok-2-image');
+            $this->imageModel = (string) ($imageCfg['model'] ?? 'grok-imagine-image');
 
-            // Default options; can be overridden per-call via $options
             $this->imageDefaultOptions = [
                 'response_format' => (string) ($imageCfg['response_format'] ?? 'b64_json'),
                 'n' => (int) ($imageCfg['n'] ?? 1),
@@ -90,6 +89,113 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $this->documentModel = \is_array($docCfg) ? (string) ($docCfg['model'] ?? $this->textModel) : $this->textModel;
         $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
         $this->documentMaxTokens = \is_array($docCfg) ? (int) ($docCfg['max_tokens'] ?? $this->textMaxTokens) : $this->textMaxTokens;
+    }
+
+    /**
+     * Chat-style entrypoint.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed>                           $options
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][Grok][chat] User not authenticated.');
+
+            return 'Error: User is not authenticated.';
+        }
+
+        $normalized = $this->normalizeChatMessages($messages);
+        if (empty($normalized)) {
+            error_log('[AI][Grok][chat] Empty messages payload.');
+
+            return 'Error: Empty chat messages.';
+        }
+
+        $resolved = $this->resolveTextOptions($options);
+
+        $payload = $this->buildChatPayload(
+            url: $resolved['url'],
+            model: $resolved['model'],
+            messages: $normalized,
+            temperature: $resolved['temperature'],
+            maxTokens: $resolved['max_tokens'],
+            options: $options
+        );
+
+        try {
+            $response = $this->httpClient->request('POST', $resolved['url'], [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
+
+            $status = $response->getStatusCode();
+            $rawBody = $response->getContent(false);
+            $data = json_decode($rawBody, true);
+
+            if (200 !== $status || !\is_array($data)) {
+                error_log('[AI][Grok][chat] Invalid response (status='.$status.').');
+
+                return 'Error: Invalid response from Grok.';
+            }
+
+            if (isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'Grok returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'Grok returned an error response.';
+                error_log('[AI][Grok][chat] Error response: '.$msg);
+
+                return 'Error: '.$msg;
+            }
+
+            $generated = $this->extractTextContent($data);
+            if (null === $generated || '' === trim($generated)) {
+                error_log('[AI][Grok][chat] Empty content returned.');
+
+                return 'Error: Empty response from Grok.';
+            }
+
+            $usage = $this->extractUsage($data);
+
+            $this->logRequest(
+                $userId,
+                'chat',
+                $this->messagesForLog($normalized, 900),
+                $usage['prompt_tokens'],
+                $usage['completion_tokens'],
+                $usage['total_tokens'],
+                'grok'
+            );
+
+            return trim($generated);
+        } catch (Exception $e) {
+            error_log('[AI][Grok][chat] Exception: '.$e->getMessage());
+
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Prompt-style entrypoint used by TaskGrader text mode and other features.
+     *
+     * @param array<string,mixed> $options
+     */
+    public function generateText(string $prompt, array $options = []): string
+    {
+        $prompt = trim($prompt);
+        if ('' === $prompt) {
+            return 'Error: Empty prompt.';
+        }
+
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ];
+
+        return $this->chat($messages, $options);
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -220,8 +326,6 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
     public function generateDocument(string $prompt, string $toolName, ?array $options = []): ?string
     {
-        // Document generation is treated as structured text generation (Markdown/HTML/etc).
-        // The caller can decide how to convert it to a file (PDF, DOCX...) later.
         $format = isset($options['format']) ? (string) $options['format'] : '';
         if ('' !== $format) {
             $prompt .= "\n\nOutput format: {$format}.";
@@ -317,6 +421,15 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
         $merged = array_merge($this->imageDefaultOptions, $options);
 
+        // Support xAI SDK style option as well.
+        // Docs show `image_format="base64"` in SDK, and `response_format:"b64_json"` in raw HTTP examples.
+        if (!isset($merged['response_format']) && isset($merged['image_format'])) {
+            $imgFmt = (string) $merged['image_format'];
+            if ('base64' === $imgFmt) {
+                $merged['response_format'] = 'b64_json';
+            }
+        }
+
         // Normalize response_format values
         if (isset($merged['response_format'])) {
             $rf = (string) $merged['response_format'];
@@ -330,61 +443,214 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             'prompt' => $prompt,
         ], $merged);
 
-        try {
-            $response = $this->httpClient->request('POST', $this->imageApiUrl, [
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $payload,
-            ]);
+        $attempts = 3;
+        $delayMs = 400;
 
-            $status = $response->getStatusCode();
-            $rawBody = $response->getContent(false);
-            $data = json_decode($rawBody, true);
+        for ($i = 0; $i < $attempts; $i++) {
+            try {
+                $response = $this->httpClient->request('POST', $this->imageApiUrl, [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.$this->apiKey,
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        'User-Agent' => 'Chamilo/2 (Grok image)',
+                    ],
+                    'json' => $payload,
+                    'timeout' => 30,
+                    'max_duration' => 60,
+                ]);
 
-            if (200 !== $status || !\is_array($data)) {
-                error_log('[AI][Grok][Image] Invalid response (status='.$status.').');
+                $status = $response->getStatusCode();
+                $rawBody = $response->getContent(false);
+                $headers = $response->getHeaders(false);
+
+                $data = json_decode($rawBody, true);
+
+                if (200 !== $status || !\is_array($data)) {
+                    if (\in_array($status, [429, 503, 504], true) && $i < $attempts - 1) {
+                        usleep($delayMs * 1000);
+                        $delayMs *= 2;
+                        continue;
+                    }
+
+                    return null;
+                }
+
+                if (isset($data['error'])) {
+                    $msg = $data['error']['message'] ?? 'Grok returned an error response.';
+                    $msg = \is_string($msg) ? trim($msg) : 'Grok returned an error response.';
+                    error_log('[AI][Grok][Image] Error response: '.$msg);
+
+                    return null;
+                }
+
+                $this->logRequest($userId, $toolName, $prompt, 0, 0, 0, 'grok');
+
+                // Prefer base64 when available
+                if (isset($data['data'][0]['b64_json']) && \is_string($data['data'][0]['b64_json']) && '' !== trim($data['data'][0]['b64_json'])) {
+                    return [
+                        'content' => (string) $data['data'][0]['b64_json'],
+                        'is_base64' => true,
+                        // xAI commonly returns JPEG URLs; base64 response is the image bytes as well.
+                        'content_type' => 'image/jpeg',
+                        'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
+                    ];
+                }
+
+                // If API returns URL, download it here and return base64 to keep Chamilo pipeline stable.
+                if (isset($data['data'][0]['url']) && \is_string($data['data'][0]['url']) && '' !== trim($data['data'][0]['url'])) {
+                    $url = (string) $data['data'][0]['url'];
+
+                    $download = $this->downloadImageWithRetry($url);
+                    if (null === $download) {
+                        error_log('[AI][Grok][Image] Image URL download failed. url='.$url);
+
+                        return null;
+                    }
+
+                    return [
+                        'content' => base64_encode($download['bytes']),
+                        'is_base64' => true,
+                        'content_type' => $download['content_type'] ?: 'image/jpeg',
+                        'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
+                    ];
+                }
+
+                return null;
+            } catch (Exception $e) {
+                error_log('[AI][Grok][Image] Exception: '.$e->getMessage());
+
+                // Retry on transient network errors as well
+                if ($i < $attempts - 1) {
+                    usleep($delayMs * 1000);
+                    $delayMs *= 2;
+                    continue;
+                }
 
                 return null;
             }
-
-            // Log request (images usually have no usage)
-            $this->logRequest($userId, $toolName, $prompt, 0, 0, 0, 'grok');
-
-            // Prefer base64
-            if (isset($data['data'][0]['b64_json'])) {
-                return [
-                    'content' => (string) $data['data'][0]['b64_json'],
-                    'is_base64' => true,
-                    'content_type' => 'image/png',
-                    'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
-                ];
-            }
-
-            // URL fallback
-            if (isset($data['data'][0]['url'])) {
-                return [
-                    'url' => (string) $data['data'][0]['url'],
-                    'is_base64' => false,
-                    'content_type' => 'image/png',
-                    'revised_prompt' => $data['data'][0]['revised_prompt'] ?? null,
-                ];
-            }
-
-            error_log('[AI][Grok][Image] No usable image content found in response.');
-
-            return null;
-        } catch (Exception $e) {
-            error_log('[AI][Grok][Image] Exception: '.$e->getMessage());
-
-            return null;
         }
+
+        return null;
+    }
+
+    private function downloadImageWithRetry(string $url): ?array
+    {
+        $attempts = 3;
+        $delayMs = 400;
+
+        for ($i = 0; $i < $attempts; $i++) {
+            try {
+                $resp = $this->httpClient->request('GET', $url, [
+                    'headers' => [
+                        'Accept' => 'image/*',
+                        'User-Agent' => 'Chamilo/2 (Grok image download)',
+                    ],
+                    'timeout' => 30,
+                    'max_duration' => 60,
+                ]);
+
+                $status = $resp->getStatusCode();
+                $bytes = $resp->getContent(false);
+                $headers = $resp->getHeaders(false);
+
+                if ($status >= 200 && $status < 300 && '' !== $bytes) {
+                    return [
+                        'bytes' => $bytes,
+                        'content_type' => (string) ($headers['content-type'][0] ?? ''),
+                    ];
+                }
+
+                if (\in_array($status, [429, 503, 504], true) && $i < $attempts - 1) {
+                    usleep($delayMs * 1000);
+                    $delayMs *= 2;
+                    continue;
+                }
+
+                return null;
+            } catch (Exception $e) {
+                error_log('[AI][Grok][Image] Download exception: '.$e->getMessage());
+
+                if ($i < $attempts - 1) {
+                    usleep($delayMs * 1000);
+                    $delayMs *= 2;
+                    continue;
+                }
+
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private function preview(string $raw, int $max = 300): string
+    {
+        $s = trim($raw);
+        if ('' === $s) {
+            return '';
+        }
+
+        return mb_substr($s, 0, $max);
+    }
+
+    /**
+     * Build payload for chat-style calls with arbitrary message history.
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed>                           $options
+     */
+    private function buildChatPayload(
+        string $url,
+        string $model,
+        array $messages,
+        float $temperature,
+        int $maxTokens,
+        array $options
+    ): array {
+        // If using /responses endpoint
+        if ($this->isResponsesEndpoint($url)) {
+            $input = [];
+            foreach ($messages as $m) {
+                $input[] = [
+                    'role' => $m['role'],
+                    'content' => $m['content'],
+                ];
+            }
+
+            $payload = [
+                'model' => $model,
+                'input' => $input,
+                'temperature' => $temperature,
+                'max_output_tokens' => $maxTokens,
+            ];
+
+            return $payload;
+        }
+
+        $payload = [
+            'model' => $model,
+            'messages' => $messages,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
+
+        // Optional safe overrides
+        if (isset($options['top_p'])) {
+            $payload['top_p'] = (float) $options['top_p'];
+        }
+        if (isset($options['presence_penalty'])) {
+            $payload['presence_penalty'] = (float) $options['presence_penalty'];
+        }
+        if (isset($options['frequency_penalty'])) {
+            $payload['frequency_penalty'] = (float) $options['frequency_penalty'];
+        }
+
+        return $payload;
     }
 
     private function buildTextPayload(string $url, string $model, string $system, string $prompt, float $temperature, int $maxTokens): array
     {
-        // If using /responses endpoint
         if ($this->isResponsesEndpoint($url)) {
             return [
                 'model' => $model,
@@ -397,7 +663,6 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             ];
         }
 
-        // OpenAI-compatible /chat/completions (xAI supports legacy endpoint)
         return [
             'model' => $model,
             'messages' => [
@@ -411,22 +676,18 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
     private function extractTextContent(array $data): ?string
     {
-        // /responses style
         if (isset($data['output'][0]['content'][0]['text']) && \is_string($data['output'][0]['content'][0]['text'])) {
             return $data['output'][0]['content'][0]['text'];
         }
 
-        // Sometimes APIs return output_text
         if (isset($data['output_text']) && \is_string($data['output_text'])) {
             return $data['output_text'];
         }
 
-        // /chat/completions style
         if (isset($data['choices'][0]['message']['content']) && \is_string($data['choices'][0]['message']['content'])) {
             return $data['choices'][0]['message']['content'];
         }
 
-        // Some providers may return choices[0].text
         if (isset($data['choices'][0]['text']) && \is_string($data['choices'][0]['text'])) {
             return $data['choices'][0]['text'];
         }
@@ -436,7 +697,6 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
     private function extractUsage(array $data): array
     {
-        // Default usage
         $usage = [
             'prompt_tokens' => 0,
             'completion_tokens' => 0,
@@ -446,12 +706,10 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         if (isset($data['usage']) && \is_array($data['usage'])) {
             $u = $data['usage'];
 
-            // Common OpenAI-compatible keys
             $usage['prompt_tokens'] = (int) ($u['prompt_tokens'] ?? $usage['prompt_tokens']);
             $usage['completion_tokens'] = (int) ($u['completion_tokens'] ?? $usage['completion_tokens']);
             $usage['total_tokens'] = (int) ($u['total_tokens'] ?? $usage['total_tokens']);
 
-            // Some responses APIs use input_tokens/output_tokens
             if (isset($u['input_tokens'])) {
                 $usage['prompt_tokens'] = (int) $u['input_tokens'];
             }
@@ -507,5 +765,88 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
     private function isResponsesEndpoint(string $url): bool
     {
         return str_contains($url, '/responses');
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     *
+     * @return array<int, array{role:string,content:string}>
+     */
+    private function normalizeChatMessages(array $messages): array
+    {
+        $out = [];
+
+        foreach ($messages as $m) {
+            if (!\is_array($m)) {
+                continue;
+            }
+
+            $role = isset($m['role']) ? trim((string) $m['role']) : '';
+            $content = isset($m['content']) ? trim((string) $m['content']) : '';
+
+            if ('' === $role || '' === $content) {
+                continue;
+            }
+
+            $role = strtolower($role);
+            if (!\in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+                $role = 'user';
+            }
+
+            $out[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function messagesForLog(array $messages, int $maxChars = 900): string
+    {
+        $parts = [];
+        foreach ($messages as $m) {
+            $role = $m['role'] ?? 'user';
+            $content = trim((string) ($m['content'] ?? ''));
+
+            if ('' === $content) {
+                continue;
+            }
+
+            $parts[] = strtoupper((string) $role).': '.mb_substr($content, 0, 300);
+        }
+
+        $s = implode(' | ', $parts);
+
+        return mb_substr($s, 0, $maxChars);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     *
+     * @return array{url:string,model:string,temperature:float,max_tokens:int}
+     */
+    private function resolveTextOptions(array $options): array
+    {
+        $url = (string) (($options['url'] ?? null) ?? $this->textApiUrl);
+        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
+        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+
+        $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
+        $maxTokens = (int) (($maxTokens ?? null) ?? $this->textMaxTokens);
+
+        if ($maxTokens <= 0) {
+            $maxTokens = $this->textMaxTokens > 0 ? $this->textMaxTokens : 1000;
+        }
+
+        return [
+            'url' => $url,
+            'model' => $model,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
     }
 }

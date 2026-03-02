@@ -204,7 +204,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
             continue;
         }
 
-
         // 3. Create a new question
         $question = new Aiken2Question();
         $question->type = $questionData['type'];
@@ -227,7 +226,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
             if (!$lastQuestionId) {
                 throw new Exception("Question ID is NULL after saving.");
             }
-
         } catch (Exception $e) {
             error_log("[ERROR] create_exercise_from_aiken: Error saving question '{$questionData['title']}' - " . $e->getMessage());
             continue;
@@ -257,7 +255,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
                     $answer->new_weighting[$answerIndex] = $questionData['weighting'][0];
                     $maxScore += $questionData['weighting'][0];
                 }
-
             } else {
                 $answer->new_correct[$answerIndex] = 0;
             }
@@ -386,7 +383,6 @@ function aiken_parse_file(&$exercise_info, $file)
             }
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
-            $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
             $next = $line + 1;
             // Check if next has score, otherwise loop too next question.
@@ -397,46 +393,23 @@ function aiken_parse_file(&$exercise_info, $file)
             }
         } elseif (preg_match('/^TEXTO_CORRECTA:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer (Spanish e-ducativa format)
-            $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
         } elseif (preg_match('/^T:\s?(.*)/', $info, $matches)) {
             //Question Title
-            $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['title'] = $matches[1];
-        } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) {
+        } elseif (preg_match('/^TAGS:\s?(.*)/', $info, $matches)) {
             //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } elseif (preg_match('/^ETIQUETAS:\s?([A-Z])\s?/', $info, $matches)) {
+        } elseif (preg_match('/^ETIQUETAS:\s?(.*)/', $info, $matches)) {
             //TAGS for chamilo >= 1.10 (Spanish e-ducativa format)
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } elseif (empty($info)) {
-            /*if (empty($exercise_info['question'][$question_index]['title'])) {
-                $exercise_info['question'][$question_index]['title'] = $info;
-            }
-            //moving to next question (tolerate \r\n or just \n)
-            if (empty($exercise_info['question'][$question_index]['correct_answers'])) {
-                error_log('Aiken: Error in question index '.$question_index.': no correct answer defined');
-
-                return 'ExerciseAikenErrorNoCorrectAnswerDefined';
-            }
-            if (empty($exercise_info['question'][$question_index]['answer'])) {
-                error_log('Aiken: Error in question index '.$question_index.': no answer option given');
-
-                return 'ExerciseAikenErrorNoAnswerOptionGiven';
-            }
-            $question_index++;
-            //emptying answers array when moving to next question
-            $answers_array = [];
         } else {
             if (empty($exercise_info['question'][$question_index]['title'])) {
                 $exercise_info['question'][$question_index]['title'] = $info;
             }
-            /*$question_index++;
-            //emptying answers array when moving to next question
-            $answers_array = [];
-            $new_question = true;*/
         }
     }
+
     $total_questions = count($exercise_info['question']);
     $total_weight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
     foreach ($exercise_info['question'] as $key => $question) {
@@ -488,11 +461,56 @@ function generateAikenForm()
         return false;
     }
 
-    // Get AI providers configuration from settings
+    // Read providers config (recommended structure: provider -> text -> model/url/...)
     $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
-    $availableApis = json_decode($aiProvidersJson, true) ?? [];
-    $hasSingleApi = count($availableApis) === 1;
-    $configuredApi = $hasSingleApi ? array_key_first($availableApis) : null;
+    $rawProviders = json_decode($aiProvidersJson, true);
+    $rawProviders = is_array($rawProviders) ? $rawProviders : [];
+
+    // Keep only providers that look text-capable (recommended: has "text" section)
+    $availableApis = [];
+    foreach ($rawProviders as $key => $cfg) {
+        if (!is_array($cfg)) {
+            continue;
+        }
+
+        if (isset($cfg['text']) && is_array($cfg['text'])) {
+            $availableApis[$key] = $cfg;
+            continue;
+        }
+
+        // Backward compatibility: accept flat configs that still expose model/url at root
+        if (isset($cfg['model']) || isset($cfg['url'])) {
+            $availableApis[$key] = $cfg;
+            continue;
+        }
+    }
+
+    if (empty($availableApis)) {
+        echo Display::return_message(get_lang('No AI text providers configured.'), 'warning');
+
+        return false;
+    }
+
+    // Build provider labels (show model if possible)
+    $providerOptions = [];
+    foreach ($availableApis as $key => $cfg) {
+        $model = '';
+        if (isset($cfg['text']['model'])) {
+            $model = (string) $cfg['text']['model'];
+        } elseif (isset($cfg['model'])) {
+            $model = (string) $cfg['model'];
+        }
+
+        $label = $key;
+        if ('' !== trim($model)) {
+            $label .= ' ('.$model.')';
+        }
+
+        $providerOptions[$key] = $label;
+    }
+
+    $hasSingleApi = count($providerOptions) === 1;
+    $configuredApi = $hasSingleApi ? array_key_first($providerOptions) : null;
 
     $form = new FormValidator(
         'aiken_generate',
@@ -502,10 +520,12 @@ function generateAikenForm()
     );
     $form->addElement('header', get_lang('AI Questions Generator'));
 
-    if ($hasSingleApi) {
-        $apiName = $availableApis[$configuredApi]['model'] ?? $configuredApi;
-        $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-            .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+    if ($hasSingleApi && null !== $configuredApi) {
+        $form->addHtml(
+            '<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
+            .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($providerOptions[$configuredApi]).'</strong>')
+            .'</div>'
+        );
     }
 
     $form->addHtml('<div class="alert alert-info">
@@ -537,7 +557,7 @@ function generateAikenForm()
         $form->addSelect(
             'ai_provider',
             get_lang('AI provider'),
-            array_combine(array_keys($availableApis), array_keys($availableApis))
+            $providerOptions
         );
     }
 
@@ -545,6 +565,7 @@ function generateAikenForm()
 
     $courseInfo = api_get_course_info();
     $language = $courseInfo['language'];
+
     $form->addHtml('<script>
     $(function () {
         $("#aiken-area").hide();
@@ -557,7 +578,10 @@ function generateAikenForm()
             var quizName = $("[name=\'quiz_name\']").val().trim();
             var nroQ = parseInt($("[name=\'nro_questions\']").val());
             var qType = $("[name=\'question_type\']").val();'
-        . (!$hasSingleApi ? 'var provider = $("[name=\'ai_provider\']").val();' : 'var provider = "'.$configuredApi.'";') .
+        . (!$hasSingleApi
+            ? 'var provider = $("[name=\'ai_provider\']").val();'
+            : 'var provider = "'.addslashes((string) $configuredApi).'";'
+        ) .
         'var isValid = true;
 
             // Remove previous error messages
@@ -589,12 +613,12 @@ function generateAikenForm()
                 "quiz_name": quizName,
                 "nro_questions": nroQ,
                 "question_type": qType,
-                "language": "'.$language.'",
+                "language": "'.addslashes((string) $language).'",
                 "ai_provider": provider
             });
 
             $.ajax({
-                url: "'.$generateUrl.'",
+                url: "'.addslashes((string) $generateUrl).'",
                 type: "POST",
                 contentType: "application/json",
                 data: requestData,
@@ -611,7 +635,7 @@ function generateAikenForm()
                         alert("'.get_lang('An error occurred.').': " + data.text);
                     }
                 },
-                 error: function (jqXHR) {
+                error: function (jqXHR) {
                     btnGenerate.attr("disabled", false);
                     btnGenerate.text("'.get_lang('Generate').'");
 

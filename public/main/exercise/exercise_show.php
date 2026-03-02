@@ -1182,88 +1182,233 @@ if ('student_progress' == $origin) {
     <div id="aiSuggestionOverlay" class="hidden fixed inset-0 bg-black/50 z-50"></div>
     <div id="aiSuggestionModal" class="hidden fixed inset-0 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
-            <h2 class="text-xl font-semibold mb-4"><?= get_lang('AI suggestion') ?></h2>
+            <h2 class="text-xl font-semibold mb-4"><?php echo  get_lang('AI suggestion') ?></h2>
+
+            <!-- AI Provider selector -->
+            <div class="mb-4">
+                <label for="aiProviderSelect" class="font-semibold"><?php echo  get_lang('AI provider') ?>:</label>
+                <select
+                    id="aiProviderSelect"
+                    class="ml-2 border border-gray-200 rounded-md px-2 py-1"
+                >
+                    <option value=""><?php echo  get_lang('Default') ?></option>
+                </select>
+                <div id="aiProviderHint" class="text-body-3 text-gray-70 mt-2 hidden"></div>
+            </div>
+
             <p class="mb-2">
-                <strong><?= get_lang('Suggested score') ?>:</strong>
+                <strong><?php echo  get_lang('Suggested score') ?>:</strong>
                 <span id="aiScorePreview" class="ml-1"></span>
             </p>
-            <p class="mb-1"><strong><?= get_lang('Suggested feedback') ?>:</strong></p>
-            <div id="aiFeedbackPreview"
-                 class="border border-gray-200 p-4 rounded-md mb-6 max-h-60 overflow-y-auto text-body-2"
-                 style="white-space: pre-wrap;"></div>
+            <p class="mb-1"><strong><?php echo  get_lang('Suggested feedback') ?>:</strong></p>
+
+            <div
+                id="aiFeedbackPreview"
+                class="border border-gray-200 p-4 rounded-md mb-6 max-h-60 overflow-y-auto text-body-2"
+                style="white-space: pre-wrap;"
+            ></div>
+
             <div class="flex justify-end space-x-2">
-                <button id="aiCancelBtn"
-                        class="px-4 py-2 rounded-md bg-gray-10 text-gray-90 hover:bg-gray-15">
-                    <?= get_lang('Cancel') ?>
+                <button
+                    id="aiCancelBtn"
+                    class="px-4 py-2 rounded-md bg-gray-10 text-gray-90 hover:bg-gray-15"
+                >
+                    <?php echo  get_lang('Cancel') ?>
                 </button>
-                <button id="aiApplyBtn"
-                        class="px-4 py-2 rounded-md bg-primary hover:bg-primary/90 text-white">
-                    <?= get_lang('Apply suggestion') ?>
+                <button
+                    id="aiApplyBtn"
+                    class="px-4 py-2 rounded-md bg-primary hover:bg-primary/90 text-white"
+                >
+                    <?php echo get_lang('Apply suggestion') ?>
+                </button>
+                <button
+                    id="aiRegenerateBtn"
+                    class="px-4 py-2 rounded-md bg-gray-10 text-gray-90 hover:bg-gray-15"
+                >
+                    <?php echo get_lang('Regenerate') ?>
                 </button>
             </div>
         </div>
     </div>
     <script>
-        (function(){
+        (function () {
             const overlay = document.getElementById('aiSuggestionOverlay');
-            const modal   = document.getElementById('aiSuggestionModal');
-            let currentQid;
+            const modal = document.getElementById('aiSuggestionModal');
+            const providerSelect = document.getElementById('aiProviderSelect');
+            const providerHint = document.getElementById('aiProviderHint');
 
-            function showModal(){
-                // show overlay and modal
+            const STORAGE_KEY = 'chamilo.ai.open_answer.provider';
+
+            let currentQid = null;
+            let lastCtx = null; // { exeId, questionId, courseId }
+
+            function showModal() {
                 overlay.classList.remove('hidden');
                 modal.classList.remove('hidden');
             }
-            function hideModal(){
-                // hide overlay and modal
+
+            function hideModal() {
                 overlay.classList.add('hidden');
                 modal.classList.add('hidden');
             }
 
+            function setProviderHint(message) {
+                if (!providerHint) return;
+
+                if (!message) {
+                    providerHint.textContent = '';
+                    providerHint.classList.add('hidden');
+                    return;
+                }
+
+                providerHint.textContent = message;
+                providerHint.classList.remove('hidden');
+            }
+
+            async function loadProviders() {
+                if (!providerSelect) return;
+
+                setProviderHint('Loading AI providers...');
+
+                try {
+                    const res = await fetch('/ai/text_providers', {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!res.ok) {
+                        setProviderHint('Could not load providers. Using default provider.');
+                        return;
+                    }
+
+                    const data = await res.json();
+                    const providers = Array.isArray(data.providers) ? data.providers : [];
+
+                    // providers expected as: [{key:"mistral", label:"mistral (mistral-large-latest)"}, ...]
+                    providers.forEach(p => {
+                        if (!p || !p.key) return;
+
+                        const opt = document.createElement('option');
+                        opt.value = String(p.key); // IMPORTANT: value is provider key
+                        opt.textContent = String(p.label || p.key); // label shown to user
+                        providerSelect.appendChild(opt);
+                    });
+
+                    // Restore last selection
+                    let saved = '';
+                    try { saved = localStorage.getItem(STORAGE_KEY) || ''; } catch (e) {}
+
+                    if (saved) {
+                        const has = Array.from(providerSelect.options).some(o => o.value === saved);
+                        if (has) {
+                            providerSelect.value = saved;
+                        }
+                    }
+
+                    providerSelect.addEventListener('change', () => {
+                        try { localStorage.setItem(STORAGE_KEY, providerSelect.value || ''); } catch (e) {}
+                        setProviderHint(providerSelect.value ? ('Selected provider: ' + providerSelect.value) : '');
+                    });
+
+                    setProviderHint('');
+                } catch (e) {
+                    setProviderHint('Could not load providers. Using default provider.');
+                }
+            }
+
+            async function requestSuggestion(ctx) {
+                if (!ctx) return;
+
+                showModal();
+                setProviderHint('Requesting AI suggestion...');
+
+                // Clear previous preview
+                document.getElementById('aiScorePreview').textContent = '';
+                document.getElementById('aiFeedbackPreview').textContent = 'Loading...';
+
+                const params = new URLSearchParams({
+                    exeId: ctx.exeId,
+                    questionId: ctx.questionId,
+                    courseId: ctx.courseId
+                });
+
+                const chosenProviderKey = providerSelect ? (providerSelect.value || '') : '';
+                if (chosenProviderKey) {
+                    params.set('ai_provider', chosenProviderKey);
+                }
+
+                try {
+                    const res = await fetch('/ai/open_answer_grade', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params
+                    });
+
+                    const text = await res.text();
+                    let data = {};
+                    try { data = JSON.parse(text); } catch (e) {}
+
+                    if (!res.ok) {
+                        const msg = data.error || data.text || data.message || text || 'Unknown error';
+                        throw new Error(msg);
+                    }
+
+                    document.getElementById('aiScorePreview').textContent = data.score;
+                    document.getElementById('aiFeedbackPreview').textContent = data.feedback;
+
+                    if (data.provider_used) {
+                        setProviderHint('Provider used: ' + data.provider_used);
+                    } else {
+                        setProviderHint('');
+                    }
+                } catch (err) {
+                    const msg = (err && err.message) ? err.message : String(err);
+                    document.getElementById('aiScorePreview').textContent = '';
+                    document.getElementById('aiFeedbackPreview').textContent = msg;
+                    setProviderHint('Request failed. Change provider and click Regenerate.');
+                }
+            }
+
+            // Load providers on page load
+            loadProviders();
+
             document.querySelectorAll('.ai-grade-btn').forEach(btn => {
                 btn.addEventListener('click', async e => {
                     e.preventDefault();
+
                     currentQid = btn.dataset.questionId;
-                    btn.disabled = true;
-                    btn.textContent = 'Consulting AI…';
+                    lastCtx = {
+                        exeId: btn.dataset.exeId,
+                        questionId: currentQid,
+                        courseId: btn.dataset.courseId
+                    };
 
-                    try {
-                        const res = await fetch('/ai/open_answer_grade', {
-                            method: 'POST',
-                            headers: {'Content-Type':'application/x-www-form-urlencoded'},
-                            body: new URLSearchParams({
-                                exeId: btn.dataset.exeId,
-                                questionId: currentQid,
-                                courseId: btn.dataset.courseId
-                            })
-                        });
-                        const data = await res.json();
-                        if (!res.ok) throw new Error(data.error || 'Unknown error');
-
-                        // populate preview fields
-                        document.getElementById('aiScorePreview').textContent    = data.score;
-                        document.getElementById('aiFeedbackPreview').textContent = data.feedback;
-                        showModal();
-                    }
-                    catch(err) {
-                        alert('Error getting AI suggestion: ' + err.message);
-                    }
-                    finally {
-                        btn.disabled = false;
-                        btn.textContent = 'Suggest with AI';
-                    }
+                    await requestSuggestion(lastCtx);
                 });
             });
 
             document.getElementById('aiCancelBtn').addEventListener('click', hideModal);
-            document.getElementById('aiApplyBtn').addEventListener('click', () => {
-                // 1) Fill in the score
-                const scoreInput = document.getElementById('select_marks_' + currentQid);
-                if (scoreInput) scoreInput.value = document.getElementById('aiScorePreview').textContent;
+            overlay.addEventListener('click', hideModal);
 
-                // 2) Fill feedback into TinyMCE or textarea
+            const regenBtn = document.getElementById('aiRegenerateBtn');
+            if (regenBtn) {
+                regenBtn.addEventListener('click', () => requestSuggestion(lastCtx));
+            }
+
+            document.getElementById('aiApplyBtn').addEventListener('click', () => {
+                if (!currentQid) {
+                    hideModal();
+                    return;
+                }
+
+                const scoreInput = document.getElementById('select_marks_' + currentQid);
+                if (scoreInput) {
+                    scoreInput.value = document.getElementById('aiScorePreview').textContent;
+                }
+
                 const feedback = document.getElementById('aiFeedbackPreview').textContent;
                 const tiny = window.tinyMCE?.get('comments_' + currentQid);
+
                 if (tiny) {
                     tiny.setContent(feedback);
                 } else {
@@ -1271,10 +1416,7 @@ if ('student_progress' == $origin) {
                     if (ta) ta.value = feedback;
                 }
 
-                // 3) Expand the individual feedback block
                 showfck('fckdiv' + currentQid, 'marksName' + currentQid);
-
-                // 4) Hide the modal
                 hideModal();
             });
         })();

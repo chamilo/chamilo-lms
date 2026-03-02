@@ -7,28 +7,62 @@ use Chamilo\CoreBundle\Framework\Container;
 
 class LpAiHelper
 {
-    /**
-     * AiHelper constructor.
-     * Requires AI helpers to be enabled in the settings.
-     */
     public function __construct() {}
 
-    /**
-     * Get the form to generate Learning Path (LP) items using AI.
-     */
     public function aiHelperForm()
     {
         if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers') ||
             'true' !== api_get_course_setting('learning_path_generator')) {
+            return false;
+        }
+
+        $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
+        $rawProviders = json_decode($aiProvidersJson, true);
+        $rawProviders = is_array($rawProviders) ? $rawProviders : [];
+
+        $availableApis = [];
+        foreach ($rawProviders as $key => $cfg) {
+            if (!is_array($cfg)) {
+                continue;
+            }
+
+            if (isset($cfg['text']) && is_array($cfg['text'])) {
+                $availableApis[$key] = $cfg;
+                continue;
+            }
+
+            // Backward compatibility: accept flat configs
+            if (isset($cfg['model']) || isset($cfg['url'])) {
+                $availableApis[$key] = $cfg;
+                continue;
+            }
+        }
+
+        if (empty($availableApis)) {
+            echo Display::return_message(get_lang('No AI text providers configured.'), 'warning');
 
             return false;
         }
 
-        // Get AI providers from settings
-        $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
-        $availableApis = json_decode($aiProvidersJson, true) ?? [];
-        $hasSingleApi = count($availableApis) === 1;
-        $configuredApi = $hasSingleApi ? array_key_first($availableApis) : null;
+        $providerOptions = [];
+        foreach ($availableApis as $key => $cfg) {
+            $model = '';
+            if (isset($cfg['text']['model'])) {
+                $model = (string) $cfg['text']['model'];
+            } elseif (isset($cfg['model'])) {
+                $model = (string) $cfg['model'];
+            }
+
+            $label = $key;
+            if ('' !== trim($model)) {
+                $label .= ' ('.$model.')';
+            }
+
+            $providerOptions[$key] = $label;
+        }
+
+        $hasSingleApi = count($providerOptions) === 1;
+        $configuredApi = $hasSingleApi ? array_key_first($providerOptions) : null;
 
         $form = new FormValidator(
             'lp_ai_generate',
@@ -38,14 +72,14 @@ class LpAiHelper
         );
         $form->addElement('header', get_lang('AI generator'));
 
-        // Show the AI provider being used
-        if ($hasSingleApi) {
-            $apiName = $availableApis[$configuredApi]['model'] ?? $configuredApi;
-            $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-                .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+        if ($hasSingleApi && null !== $configuredApi) {
+            $form->addHtml(
+                '<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
+                .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($providerOptions[$configuredApi]).'</strong>')
+                .'</div>'
+            );
         }
 
-        // Input fields for LP generation
         $form->addElement('text', 'lp_name', get_lang('Topic'));
         $form->addRule('lp_name', get_lang('Required field'), 'required');
         $form->addElement('number', 'nro_items', get_lang('Number of items'));
@@ -53,7 +87,6 @@ class LpAiHelper
         $form->addElement('number', 'words_count', get_lang('Words count per page'));
         $form->addRule('words_count', get_lang('Required field'), 'required');
 
-        // Checkbox for adding quizzes
         $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('Add test after each page'), ['id' => 'add-lp-quiz']);
         $form->addHtml('<div id="lp-quiz-area">');
         $form->addElement('number', 'nro_questions', get_lang('Number of questions'));
@@ -61,24 +94,21 @@ class LpAiHelper
         $form->addHtml('</div>');
         $form->setDefaults(['nro_questions' => 2]);
 
-        // Allow provider selection if multiple are available
         if (!$hasSingleApi) {
             $form->addSelect(
                 'ai_provider',
                 get_lang('AI provider'),
-                array_combine(array_keys($availableApis), array_keys($availableApis))
+                $providerOptions
             );
         }
 
-        // API URLs
         $generateUrl = api_get_path(WEB_PATH).'ai/generate_learnpath';
         $courseInfo = api_get_course_info();
         $language = $courseInfo['language'];
         $courseCode = api_get_course_id();
-        $sessionId = api_get_session_id();
+
         $redirectSuccess = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&isStudentView=false&lp_id=';
 
-        // JavaScript to handle form submission
         $form->addHtml('<script>
         $(function () {
             $("#lp-quiz-area").hide();
@@ -95,9 +125,11 @@ class LpAiHelper
                 var nroItems = parseInt($("[name=\'nro_items\']").val());
                 var wordsCount = parseInt($("[name=\'words_count\']").val());
                 var addTests = $("#add-lp-quiz").is(":checked");
-                var nroQuestions = parseInt($("[name=\'nro_questions\']").val());
-                var provider = '.(!$hasSingleApi ? '$("[name=\'ai_provider\']").val()' : '"'.$configuredApi.'"').';
-
+                var nroQuestions = parseInt($("[name=\'nro_questions\']").val());'
+            .(!$hasSingleApi
+                ? 'var provider = $("[name=\'ai_provider\']").val();'
+                : 'var provider = "'.addslashes((string) $configuredApi).'";'
+            ).'
                 var isValid = true;
 
                 $(".error-message").remove();
@@ -132,15 +164,15 @@ class LpAiHelper
                     "lp_name": lpName,
                     "nro_items": nroItems,
                     "words_count": wordsCount,
-                    "language": "'.$language.'",
+                    "language": "'.addslashes((string) $language).'",
                     "add_tests": addTests,
                     "nro_questions": nroQuestions,
                     "ai_provider": provider,
-                    "course_code": "'.$courseCode.'",
+                    "course_code": "'.addslashes((string) $courseCode).'"
                 });
 
                 $.ajax({
-                    url: "'.$generateUrl.'",
+                    url: "'.addslashes((string) $generateUrl).'",
                     type: "POST",
                     contentType: "application/json",
                     data: requestData,
@@ -155,7 +187,7 @@ class LpAiHelper
                                 contentType: "application/json",
                                 data: JSON.stringify({
                                     "lp_data": data.data,
-                                    "course_code": "'.$courseCode.'"
+                                    "course_code": "'.addslashes((string) $courseCode).'"
                                 }),
                                 success: function (result) {
                                     try {
@@ -259,7 +291,7 @@ class LpAiHelper
                 $request = [
                     'quiz_name' => get_lang('Test') . ': ' . $quiz['title'],
                     'nro_questions' => count(explode("\n", trim($quiz['content']))),
-                    'course_id' => api_get_course_int_id($courseCode),
+                    'course_id' => api_get_course_int_id(),
                     'aiken_format' => trim($quiz['content']),
                 ];
 

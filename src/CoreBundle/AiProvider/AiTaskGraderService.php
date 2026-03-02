@@ -32,7 +32,10 @@ final class AiTaskGraderService
         private readonly string $kernelEnvironment = 'prod',
         #[Autowire('%kernel.debug%')]
         private readonly bool $kernelDebug = false,
-    ) {}
+    ) {
+        // Enable logs in debug environments by default.
+        $this->logEnabled = $this->kernelDebug || 'prod' !== strtolower($this->kernelEnvironment);
+    }
 
     /**
      * Grades an assignment submission using AI.
@@ -65,7 +68,6 @@ final class AiTaskGraderService
 
         $maxScore = (float) $assignment->getQualification();
         $hasMaxScore = $maxScore > 0;
-
         if (!$hasMaxScore) {
             $maxScore = 0.0;
         }
@@ -106,35 +108,64 @@ final class AiTaskGraderService
             'studentTextLen' => mb_strlen($studentText),
         ]);
 
+        // Create provider early (so "auto" can be provider-aware).
+        try {
+            $provider = $this->aiProviderFactory->create($providerName);
+        } catch (Throwable $e) {
+            $this->dbg('Failed to create provider', ['error' => $e->getMessage()]);
+
+            return $this->fail('Failed to initialize AI provider.', 500, 'text');
+        }
+
+        $supportsDocProcess = $provider instanceof AiDocumentProcessProviderInterface;
+
+        $this->dbg('Provider created', [
+            'providerClass' => \is_object($provider) ? $provider::class : \gettype($provider),
+            'supportsDocProcess' => $supportsDocProcess,
+        ]);
+
         $effectiveMode = $requestedMode;
+
+        // Decide effective mode using both file type and provider capability.
         if ('auto' === $effectiveMode) {
             if ($hasFile) {
-                $filename = (string) $fileMeta['filename'];
-                $mimeType = (string) $fileMeta['mimeType'];
+                $fn = (string) ($fileMeta['filename'] ?? '');
+                $mt = (string) ($fileMeta['mimeType'] ?? '');
 
-                if ($this->isPdfForDocumentProcess($filename, $mimeType)) {
+                if ($this->isPdfForDocumentProcess($fn, $mt) && $supportsDocProcess) {
                     $effectiveMode = 'document';
-                } elseif ($this->isDocxFile($filename, $mimeType)) {
-                    $effectiveMode = 'text';
-                } elseif ($this->isPlainTextFile($filename, $mimeType)) {
-                    $effectiveMode = 'text';
                 } else {
                     $effectiveMode = 'text';
                 }
             } else {
                 $effectiveMode = 'text';
             }
+        } elseif ('document' === $effectiveMode) {
+            if (!$hasFile) {
+                return $this->fail('No file attached to this submission. Please attach a PDF or switch to text mode.', 400, 'document');
+            }
+
+            $fn = (string) ($fileMeta['filename'] ?? '');
+            $mt = (string) ($fileMeta['mimeType'] ?? '');
+
+            if (!$this->isPdfForDocumentProcess($fn, $mt)) {
+                return $this->fail('Document mode only supports PDF. Please upload a PDF or switch to text mode.', 400, 'document');
+            }
+
+            if (!$supportsDocProcess) {
+                return $this->fail('Selected provider does not support document processing. Please switch to text mode or select a provider that supports document processing.', 400, 'document');
+            }
+
+            $effectiveMode = 'document';
+        } else {
+            // text
+            $effectiveMode = 'text';
         }
 
         $this->dbg('Effective mode chosen', [
             'effectiveMode' => $effectiveMode,
             'requestedMode' => $requestedMode,
         ]);
-
-        // If user forced document but there is no file, fail early.
-        if ('document' === $effectiveMode && !$hasFile) {
-            return $this->fail('No file attached to this submission. Please attach a PDF or switch to text mode.', 400, 'document');
-        }
 
         // If file is image, fail early (document_process does not support images in this feature).
         if ($hasFile && $this->isImageFile((string) $fileMeta['filename'], (string) $fileMeta['mimeType'])) {
@@ -165,7 +196,13 @@ final class AiTaskGraderService
                 'headHex' => bin2hex(substr($bytes, 0, 8)),
             ]);
 
+            // Global size guard for AI processing (both modes).
+            if (\strlen($bytes) > 12 * 1024 * 1024) {
+                return $this->fail('Document is too large for AI processing (max 12MB).', 400, $effectiveMode);
+            }
+
             if ('document' === $effectiveMode) {
+                // Safety: only PDF in document mode
                 if (!$this->isPdfForDocumentProcess($fn, $mt)) {
                     return $this->fail('Unsupported file type for document processing. Please upload a PDF.', 400, 'document');
                 }
@@ -178,11 +215,7 @@ final class AiTaskGraderService
                         'headAscii' => substr($bytes, 0, 16),
                         'headHex' => bin2hex(substr($bytes, 0, 16)),
                     ]);
-                    // Do not hard-fail: some systems prepend BOM/whitespace, but log it clearly.
-                }
-
-                if (\strlen($bytes) > 12 * 1024 * 1024) {
-                    return $this->fail('Document is too large for AI processing (max 12MB).', 400, 'document');
+                    // Do not hard-fail: some systems prepend BOM/whitespace.
                 }
 
                 // Optional local sanity check: does pdftotext extract anything?
@@ -193,7 +226,7 @@ final class AiTaskGraderService
 
                 $fileForDocument = [$fn, $mt, $bytes];
             } else {
-                // text mode: try to inline docx/txt content
+                // TEXT mode: inline content when possible.
                 if ($this->isDocxFile($fn, $mt)) {
                     $fileText = $this->extractDocxText($bytes);
                     $this->dbg('DOCX extracted', [
@@ -216,6 +249,21 @@ final class AiTaskGraderService
                     if ('' === trim($fileText) && '' === trim($studentText)) {
                         return $this->fail(
                             'Text file detected but it seems empty. Please upload a non-empty file or paste the text in the submission.',
+                            400,
+                            'text'
+                        );
+                    }
+                } elseif ($this->isPdfForDocumentProcess($fn, $mt)) {
+                    // Key feature: allow PDF grading with text-only providers by extracting PDF text locally.
+                    $fileText = $this->extractPdfText($bytes);
+                    $this->dbg('PDF extracted (text mode)', [
+                        'extractedLen' => mb_strlen($fileText),
+                        'pdftotextAvailable' => $this->commandExists('pdftotext'),
+                    ]);
+
+                    if ('' === trim($fileText) && '' === trim($studentText)) {
+                        return $this->fail(
+                            'PDF detected but no text could be extracted locally. Please paste the text in the submission or select a provider that supports document processing.',
                             400,
                             'text'
                         );
@@ -259,19 +307,8 @@ final class AiTaskGraderService
 
         // Call provider
         try {
-            $provider = $this->aiProviderFactory->create($providerName);
-        } catch (Throwable $e) {
-            $this->dbg('Failed to create provider', ['error' => $e->getMessage()]);
+            $raw = '';
 
-            return $this->fail('Failed to initialize AI provider.', 500, $effectiveMode);
-        }
-
-        $this->dbg('Provider created', [
-            'providerClass' => \is_object($provider) ? $provider::class : \gettype($provider),
-            'effectiveMode' => $effectiveMode,
-        ]);
-
-        try {
             if ('document' === $effectiveMode) {
                 if (!$provider instanceof AiDocumentProcessProviderInterface) {
                     return $this->fail('Selected provider does not support document processing.', 400, 'document');
@@ -301,13 +338,29 @@ final class AiTaskGraderService
                     options: $providerOptions
                 );
             } else {
-                if (!method_exists($provider, 'generateText')) {
+                // Preferred: generateText(prompt, options) if available.
+                if (method_exists($provider, 'generateText')) {
+                    /** @var callable $call */
+                    $call = [$provider, 'generateText'];
+                    $raw = (string) $call($finalPrompt, $providerOptions);
+                }
+                // Fallback: gradeOpenAnswer
+                elseif ($provider instanceof AiProviderInterface) {
+                    $raw = (string) ($provider->gradeOpenAnswer($finalPrompt, 'task_grader') ?? '');
+                }
+                // Optional: chat fallback
+                elseif (method_exists($provider, 'chat')) {
+                    $messages = [
+                        ['role' => 'system', 'content' => 'You are an assignment grader. Return plain text only.'],
+                        ['role' => 'user', 'content' => $finalPrompt],
+                    ];
+
+                    /** @var callable $call */
+                    $call = [$provider, 'chat'];
+                    $raw = (string) $call($messages, $providerOptions);
+                } else {
                     return $this->fail('Selected provider does not support text generation.', 400, 'text');
                 }
-
-                /** @var callable $call */
-                $call = [$provider, 'generateText'];
-                $raw = (string) $call($finalPrompt, $providerOptions);
             }
         } catch (Throwable $e) {
             $this->dbg('Provider exception', ['error' => $e->getMessage()]);
@@ -496,7 +549,6 @@ final class AiTaskGraderService
                 'mimeType' => $mimeType,
             ]);
 
-            // read() is OK for our size limits; for safety, we log lengths/hashes only.
             $bytes = (string) $this->resourceNodeRepository->getFileSystem()->read($pathKey);
 
             if ('' === $bytes) {
@@ -625,6 +677,49 @@ final class AiTaskGraderService
         return trim((string) $s);
     }
 
+    private function extractPdfText(string $pdfBytes): string
+    {
+        if ('' === $pdfBytes) {
+            return '';
+        }
+
+        if (!$this->commandExists('pdftotext')) {
+            return '';
+        }
+
+        $tmp = tempnam(sys_get_temp_dir(), 'chamilo_ai_pdf_');
+        if (false === $tmp || '' === $tmp) {
+            return '';
+        }
+
+        $tmpPdf = $tmp.'.pdf';
+        @rename($tmp, $tmpPdf);
+
+        try {
+            $written = @file_put_contents($tmpPdf, $pdfBytes);
+            if (!\is_int($written) || $written <= 0) {
+                return '';
+            }
+
+            $text = $this->runToStdout(['pdftotext', '-enc', 'UTF-8', $tmpPdf, '-'], 12);
+            $text = trim((string) $text);
+
+            if ('' === $text) {
+                return '';
+            }
+
+            // Normalize whitespace a bit
+            $text = preg_replace("/[ \t]+\n/", "\n", $text);
+            $text = preg_replace("/\n{3,}/", "\n\n", (string) $text);
+
+            return trim((string) $text);
+        } catch (Throwable) {
+            return '';
+        } finally {
+            @unlink($tmpPdf);
+        }
+    }
+
     private function safeTruncateText(string $s, int $maxChars = 12000): string
     {
         $s = trim($s);
@@ -656,6 +751,11 @@ final class AiTaskGraderService
 
     private function extractSuggestedScore(string $text, float $max): ?float
     {
+        // If max score is unknown/disabled, do not suggest a score.
+        if ($max <= 0) {
+            return null;
+        }
+
         if (preg_match('/\bSCORE\s*:\s*([0-9]+(?:[.,][0-9]+)?)\b/i', $text, $m)) {
             $v = (float) str_replace(',', '.', $m[1]);
             if (!is_finite($v)) {
@@ -712,7 +812,6 @@ final class AiTaskGraderService
 
     private function isDebugEnabled(): bool
     {
-        // Avoid reading $_ENV/$_SERVER directly. Use kernel parameters injected by Symfony.
         if ($this->kernelDebug) {
             return true;
         }
@@ -722,7 +821,6 @@ final class AiTaskGraderService
 
     /**
      * Local sanity checks to confirm the bytes represent a readable PDF with extractable text.
-     * This helps determine whether the issue is inside the provider pipeline or in the document itself.
      *
      * @return array<string,mixed>
      */
@@ -766,7 +864,6 @@ final class AiTaskGraderService
             }
 
             if ($result['pdftotextAvailable']) {
-                // Output to stdout using "-" output file
                 $text = $this->runToStdout(['pdftotext', '-enc', 'UTF-8', $tmpPdf, '-'], 12);
                 $result['pdftotextLen'] = mb_strlen(trim((string) $text));
             }

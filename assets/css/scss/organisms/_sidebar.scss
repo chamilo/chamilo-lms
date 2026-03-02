@@ -120,6 +120,7 @@
   .p-panelmenu-header-icon,
   .p-panelmenu-item-icon {
     // @apply text-gray-50;
+    @apply self-baseline;
   }
 
   .p-panelmenu-submenu-icon {
@@ -148,6 +149,7 @@
   }
 
   .p-panelmenu-content {
+    @apply sm:opacity-100 sm:visible sm:pointer-events-auto sm:transition-[max-height,opacity] sm:duration-150 sm:delay-150 sm:max-h-[1000px];
 
     .p-menuitem {
 
@@ -203,7 +205,7 @@
       }
 
       .p-panelmenu-content {
-        @apply sm:hidden;
+        @apply sm:opacity-0 sm:invisible sm:pointer-events-none sm:transition-[opacity,height] sm:duration-150 sm:delay-0 sm:max-h-0;
       }
 
       .p-panelmenu-header {

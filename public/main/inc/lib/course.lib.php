@@ -101,6 +101,8 @@ class CourseManager
 
                     return $course;
                 }
+            } else {
+                Session::write('error_message', get_lang('Sorry, but that course code already exists. Please choose another one.'));
             }
         }
 

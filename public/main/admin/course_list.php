@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CatalogueCourseRelAccessUrlRelUsergroupRepository;
+use ChamiloSession as Session;
+
 
 $cidReset = true;
 
@@ -24,6 +26,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $sessionId = $_GET['session_id'] ?? null;
+
+// if course code already exists
+// should be remplaced with Container::getSession()->getFlashBag(); when symfonisation
+if ($msg = Session::read('error_message')) {
+    Display::addFlash(Display::return_message($msg, 'error'));
+}
 
 /**
  * Get the number of courses which will be displayed.

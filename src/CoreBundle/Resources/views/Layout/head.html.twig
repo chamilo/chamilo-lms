@@ -41,6 +41,14 @@
     {% set profile_link = '' %}
     {% set message_link = '' %}
 
+    {# Global flag for the AI disclosure feature (used by legacy + Vue + Twig pages). #}
+    {% set ai_disclosure_raw = chamilo_settings_get('ai_helpers.disclose_ai_assistance')|default('')|trim|lower %}
+    {% set ai_disclosure_enabled = ai_disclosure_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
+
+    <script>
+      window.CH_AI_DISCLOSURE_ENABLED = {{ ai_disclosure_enabled ? 'true' : 'false' }};
+    </script>
+
     {%- block stylesheets %}
         {{ encore_entry_link_tags('legacy_free-jqgrid') }}
         {{ encore_entry_link_tags('legacy_app') }}

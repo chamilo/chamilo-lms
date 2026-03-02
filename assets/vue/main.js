@@ -56,6 +56,12 @@ import "primeicons/primeicons.css"
 import Alpine from "alpinejs"
 import { ENTRYPOINT } from "./config/entrypoint"
 
+// AI disclosure badge (load only when enabled).
+// This keeps Vue pages lightweight when the feature is disabled.
+if (window.CH_AI_DISCLOSURE_ENABLED === true) {
+  import("./../js/aiDisclosureBadge")
+}
+
 // @todo move in a file:
 store.registerModule(
   "course",

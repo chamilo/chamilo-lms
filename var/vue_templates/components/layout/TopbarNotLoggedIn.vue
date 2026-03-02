@@ -12,7 +12,9 @@ const menuItems = computed(() => [])
       <template #start>
         <PlatformLogo />
       </template>
-      <template #end />
+      <template #end>
+        <div class="app-topbar__end" />
+      </template>
     </Menubar>
   </div>
 </template>

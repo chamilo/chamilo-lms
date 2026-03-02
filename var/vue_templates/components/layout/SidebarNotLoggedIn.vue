@@ -158,7 +158,7 @@ watch(
     </div>
   </aside>
 
-  <Teleport to=".app-topbar .p-menubar-end">
+  <Teleport to=".app-topbar__end">
     <a
       class="app-sidebar__topbar-button item-button"
       tabindex="0"

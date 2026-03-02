@@ -30,23 +30,23 @@ final class Version20260301231900 extends AbstractMigrationChamilo
         $comment = 'Configuration data to connect with external AI services.';
 
         $count = (int) $this->connection->fetchOne(
-            "SELECT COUNT(*) FROM settings
+            'SELECT COUNT(*) FROM settings
               WHERE variable = ?
                 AND subkey IS NULL
-                AND access_url = 1",
+                AND access_url = 1',
             [$variable]
         );
 
         if ($count > 0) {
             // Do not touch selected_value to avoid wiping existing JSON configuration.
             $this->connection->executeStatement(
-                "UPDATE settings
+                'UPDATE settings
                     SET title = ?,
                         comment = ?,
                         category = ?
                   WHERE variable = ?
                     AND subkey IS NULL
-                    AND access_url = 1",
+                    AND access_url = 1',
                 [$title, $comment, $category, $variable]
             );
 
@@ -73,12 +73,14 @@ final class Version20260301231900 extends AbstractMigrationChamilo
         foreach ($aiTemplates as $t) {
             if (($t['variable'] ?? '') === $variable) {
                 $templateData = $t;
+
                 break;
             }
         }
 
         if (null === $templateData) {
             $this->write("Skipped template sync: template '{$variable}' not found in SettingsValueTemplateFixtures::getTemplatesGrouped()['aihelpers'].");
+
             return;
         }
 

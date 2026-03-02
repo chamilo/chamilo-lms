@@ -77,11 +77,12 @@ class AiController extends AbstractController
         $providers = [];
         foreach ($raw as $key => $label) {
             // If it's a numeric array, fallback to value as both key+label.
-            if (is_int($key)) {
+            if (\is_int($key)) {
                 $providers[] = [
                     'key' => (string) $label,
                     'label' => (string) $label,
                 ];
+
                 continue;
             }
 
@@ -829,6 +830,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
+
                         continue;
                     }
 
@@ -849,12 +851,14 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
@@ -868,6 +872,7 @@ class AiController extends AbstractController
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
+
                     continue;
                 }
             }
@@ -879,12 +884,13 @@ class AiController extends AbstractController
                 foreach ($errors as $err) {
                     if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
+
                         break;
                     }
                 }
 
                 $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
+                    $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
                 );
 
                 $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
@@ -1657,6 +1663,7 @@ class AiController extends AbstractController
                     continue;
                 }
                 $providers[] = ['key' => $k, 'label' => $k];
+
                 continue;
             }
 

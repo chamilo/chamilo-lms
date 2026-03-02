@@ -297,7 +297,7 @@ final class ThemeHelper
             }
 
             $components = preg_split('/\s*,\s*/', $line);
-            if (!is_array($components) || count($components) < 3) {
+            if (!\is_array($components) || \count($components) < 3) {
                 continue;
             }
 
@@ -322,7 +322,7 @@ final class ThemeHelper
                 }
                 $a = max(0.0, min(1.0, $a));
 
-                $palette[] = sprintf(
+                $palette[] = \sprintf(
                     'rgba(%d,%d,%d,%s)',
                     $r,
                     $g,
@@ -330,7 +330,7 @@ final class ThemeHelper
                     rtrim(rtrim((string) $a, '0'), '.')
                 );
             } else {
-                $palette[] = sprintf('%d,%d,%d,%s', $r, $g, $b, (string) $a);
+                $palette[] = \sprintf('%d,%d,%d,%s', $r, $g, $b, (string) $a);
             }
         }
 
@@ -352,13 +352,13 @@ final class ThemeHelper
             return $palette;
         }
 
-        $count = count($palette);
+        $count = \count($palette);
         if ($count <= 0) {
             return $palette;
         }
 
         if ($fillUpTo <= $count) {
-            return array_slice($palette, 0, $fillUpTo);
+            return \array_slice($palette, 0, $fillUpTo);
         }
 
         for ($i = $count; $i < $fillUpTo; $i++) {

@@ -470,6 +470,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                     if (\in_array($status, [429, 503, 504], true) && $i < $attempts - 1) {
                         usleep($delayMs * 1000);
                         $delayMs *= 2;
+
                         continue;
                     }
 
@@ -524,6 +525,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 if ($i < $attempts - 1) {
                     usleep($delayMs * 1000);
                     $delayMs *= 2;
+
                     continue;
                 }
 
@@ -564,6 +566,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 if (\in_array($status, [429, 503, 504], true) && $i < $attempts - 1) {
                     usleep($delayMs * 1000);
                     $delayMs *= 2;
+
                     continue;
                 }
 
@@ -574,6 +577,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 if ($i < $attempts - 1) {
                     usleep($delayMs * 1000);
                     $delayMs *= 2;
+
                     continue;
                 }
 
@@ -618,14 +622,12 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 ];
             }
 
-            $payload = [
+            return [
                 'model' => $model,
                 'input' => $input,
                 'temperature' => $temperature,
                 'max_output_tokens' => $maxTokens,
             ];
-
-            return $payload;
         }
 
         $payload = [

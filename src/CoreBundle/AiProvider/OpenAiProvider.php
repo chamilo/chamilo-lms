@@ -16,12 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
-class OpenAiProvider implements
-    AiProviderInterface,
-    AiImageProviderInterface,
-    AiVideoJobProviderInterface,
-    AiDocumentProviderInterface,
-    AiDocumentProcessProviderInterface
+class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoJobProviderInterface, AiDocumentProviderInterface, AiDocumentProcessProviderInterface
 {
     private array $providerConfig;
     private string $apiKey;
@@ -1069,7 +1064,7 @@ class OpenAiProvider implements
             $raw = (string) $response->getContent(false);
             $data = json_decode($raw, true);
 
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 error_log('[AI][OpenAI] Invalid JSON response (status='.$status.'): '.mb_substr($raw, 0, 1200));
 
                 return 'Error: Invalid JSON response from OpenAI.';
@@ -1077,7 +1072,7 @@ class OpenAiProvider implements
 
             if (isset($data['error'])) {
                 $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
-                $msg = is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
                 error_log('[AI][OpenAI] Error response (status='.$status.'): '.$msg);
 
                 return 'Error: '.$msg;
@@ -1091,13 +1086,13 @@ class OpenAiProvider implements
                 $generatedContent = $data['choices'][0]['message']['content'] ?? ($data['choices'][0]['text'] ?? null);
             }
 
-            if (!is_string($generatedContent) || '' === trim($generatedContent)) {
+            if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][OpenAI] Empty content returned (type='.$type.', status='.$status.'). Raw: '.mb_substr($raw, 0, 1200));
 
                 return 'Error: Empty response from OpenAI.';
             }
 
-            $usage = is_array($data['usage'] ?? null) ? $data['usage'] : [];
+            $usage = \is_array($data['usage'] ?? null) ? $data['usage'] : [];
 
             // Chat Completions usage
             $promptTokens = (int) ($usage['prompt_tokens'] ?? 0);

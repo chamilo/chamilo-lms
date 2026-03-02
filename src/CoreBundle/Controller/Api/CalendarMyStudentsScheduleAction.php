@@ -20,6 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Throwable;
 
 final class CalendarMyStudentsScheduleAction
 {
@@ -95,7 +96,7 @@ final class CalendarMyStudentsScheduleAction
 
         try {
             return new DateTimeImmutable($v);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -113,7 +114,8 @@ final class CalendarMyStudentsScheduleAction
         $followed = $this->sessionRepository
             ->getUserFollowedSessionsInAccessUrl($user, $accessUrl)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($followed as $s) {
             if ($s instanceof Session) {
@@ -178,12 +180,11 @@ final class CalendarMyStudentsScheduleAction
             ->andWhere('scru.user = :user')
             ->andWhere('scru.status = :status')
             ->setParameter('user', $user)
-            ->setParameter('status', Session::COURSE_COACH);
+            ->setParameter('status', Session::COURSE_COACH)
+        ;
 
         /** @var Session[] $sessions */
-        $sessions = $qb->getQuery()->getResult();
-
-        return $sessions;
+        return $qb->getQuery()->getResult();
     }
 
     private function isUserCourseCoachInSession(User $user, Session $session): bool
@@ -197,7 +198,8 @@ final class CalendarMyStudentsScheduleAction
             ->andWhere('scru.status = :status')
             ->setParameter('user', $user)
             ->setParameter('session', $session)
-            ->setParameter('status', Session::COURSE_COACH);
+            ->setParameter('status', Session::COURSE_COACH)
+        ;
 
         $count = (int) $qb->getQuery()->getSingleScalarResult();
 
@@ -233,7 +235,8 @@ final class CalendarMyStudentsScheduleAction
             ->andWhere('(e.startDate < :end) AND (e.endDate IS NULL OR e.endDate > :start)')
             ->setParameter('session', $session)
             ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->setParameter('end', $end)
+        ;
 
         /** @var array<int, mixed> $rows */
         $rows = $qb->getQuery()->getResult();
@@ -243,12 +246,12 @@ final class CalendarMyStudentsScheduleAction
 
         foreach ($rows as $row) {
             /** @var CCalendarEvent|null $e */
-            $e = is_array($row) ? ($row[0] ?? null) : $row;
+            $e = \is_array($row) ? ($row[0] ?? null) : $row;
             if (!$e instanceof CCalendarEvent) {
                 continue;
             }
 
-            $courseTitle = is_array($row) ? (($row['courseTitle'] ?? null) ?: null) : null;
+            $courseTitle = \is_array($row) ? (($row['courseTitle'] ?? null) ?: null) : null;
 
             $iid = (string) $e->getIid();
             $key = 'ce-'.$iid;
@@ -303,7 +306,8 @@ final class CalendarMyStudentsScheduleAction
         )')
             ->setParameter('session', $session)
             ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->setParameter('end', $end)
+        ;
 
         /** @var array<int, mixed> $rows */
         $rows = $qb->getQuery()->getResult();
@@ -312,12 +316,12 @@ final class CalendarMyStudentsScheduleAction
 
         foreach ($rows as $row) {
             /** @var CStudentPublication|null $p */
-            $p = is_array($row) ? ($row[0] ?? null) : $row;
+            $p = \is_array($row) ? ($row[0] ?? null) : $row;
             if (!$p instanceof CStudentPublication) {
                 continue;
             }
 
-            $courseTitle = is_array($row) ? (($row['courseTitle'] ?? null) ?: null) : null;
+            $courseTitle = \is_array($row) ? (($row['courseTitle'] ?? null) ?: null) : null;
 
             $assignment = $p->getAssignment();
             if (!$assignment) {

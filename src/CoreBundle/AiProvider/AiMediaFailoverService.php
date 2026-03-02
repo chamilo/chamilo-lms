@@ -313,6 +313,7 @@ final class AiMediaFailoverService
     private function normalizeTool(string $tool): string
     {
         $tool = strtolower(trim($tool));
+
         return '' !== $tool ? $tool : self::DEFAULT_TOOL;
     }
 
@@ -608,6 +609,7 @@ final class AiMediaFailoverService
     private function isErrorString(string $text): bool
     {
         $t = strtolower(trim($text));
+
         return str_starts_with($t, 'error:') || str_contains($t, 'invalid api key') || str_contains($t, 'incorrect api key');
     }
 
@@ -617,18 +619,21 @@ final class AiMediaFailoverService
         if (str_starts_with(strtolower($s), 'error:')) {
             $s = trim(substr($s, 6));
         }
+
         return '' !== $s ? $s : 'Provider returned an error.';
     }
 
     private function isTerminalVideoStatus(string $status): bool
     {
         $s = strtolower(trim($status));
+
         return \in_array($s, ['completed', 'succeeded', 'done', 'failed', 'canceled', 'cancelled', 'error'], true);
     }
 
     private function isSuccessVideoStatus(string $status): bool
     {
         $s = strtolower(trim($status));
+
         return \in_array($s, ['completed', 'succeeded', 'done'], true);
     }
 }

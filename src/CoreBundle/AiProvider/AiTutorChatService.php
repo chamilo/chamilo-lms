@@ -181,7 +181,7 @@ final class AiTutorChatService
             ->setCourse($course)
             ->setSession($session)
             ->setAiProvider($provider)
-            ;
+        ;
     }
 
     /**
@@ -1191,8 +1191,7 @@ final class AiTutorChatService
         // Avoid leaking secrets if a provider echoes them back.
         // Mask common token shapes: sk-..., api keys, bearer tokens.
         $text = preg_replace('/\bsk-[a-z0-9_-]{10,}\b/i', 'sk-***', $text) ?? $text;
-        $text = preg_replace('/\bbearer\s+[a-z0-9._-]{10,}\b/i', 'Bearer ***', $text) ?? $text;
 
-        return $text;
+        return preg_replace('/\bbearer\s+[a-z0-9._-]{10,}\b/i', 'Bearer ***', $text) ?? $text;
     }
 }

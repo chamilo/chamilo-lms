@@ -192,21 +192,6 @@
       @apply hidden
         sm:block sm:w-[88px];
 
-      overflow: visible;
-
-      &__container {
-        @apply sm:overflow-x-hidden;
-      }
-
-      &__panel {
-        @apply sm:overflow-x-hidden;
-      }
-
-      .p-panelmenu-content,
-      .p-panelmenu-submenu {
-        @apply sm:hidden;
-      }
-
       .p-panelmenu-header {
         > .p-panelmenu-header-content a {
           .p-submenu-icon {

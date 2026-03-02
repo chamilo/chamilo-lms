@@ -86,10 +86,10 @@
             >
               <option
                 v-for="p in providers"
-                :key="p"
-                :value="p"
+                :key="p.key"
+                :value="p.key"
               >
-                {{ p }}
+                {{ p.label }}
               </option>
             </select>
 
@@ -238,7 +238,7 @@ const securityStore = useSecurityStore()
 const platform = usePlatformConfig()
 
 const cidReqStore = useCidReqStore()
-const { course, session } = storeToRefs(cidReqStore)
+const { course } = storeToRefs(cidReqStore)
 
 const { cid, sid } = useCidReq()
 
@@ -251,8 +251,14 @@ const canEditGlossary = computed(() => {
 })
 
 const n = ref(15)
+
+/**
+ * Providers are normalized to:
+ * [{ key: "openai", label: "openai (gpt-4o)" }, ...]
+ */
 const providers = ref([])
-const aiProvider = ref("")
+const aiProvider = ref("") // Provider key only
+
 const prompt = ref("")
 const promptDirty = ref(false)
 
@@ -388,11 +394,27 @@ function parseGlossaryTerms(text) {
 async function loadProviders() {
   try {
     const res = await glossaryService.getTextProviders()
-    providers.value = res.providers || []
-    aiProvider.value = providers.value[0] || ""
+    const raw = res?.providers || []
+    providers.value = raw
+      .map((p) => {
+        if (typeof p === "string") {
+          const s = p.trim()
+          return s ? { key: s, label: s } : null
+        }
+        if (p && typeof p === "object") {
+          const key = String(p.key ?? p.name ?? "").trim()
+          if (!key) return null
+          const label = String(p.label ?? key).trim()
+          return { key, label }
+        }
+        return null
+      })
+      .filter(Boolean)
+    aiProvider.value = providers.value[0]?.key || ""
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error loading AI providers:", e)
+    console.error("[GlossaryGenerateTerms] Failed to load AI providers:", e)
     providers.value = []
+    aiProvider.value = ""
   }
 }
 
@@ -412,7 +434,7 @@ async function applyDefaultPrompt(force = false) {
       }
     }
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error loading default prompt:", e)
+    console.error("[GlossaryGenerateTerms] Failed to load default prompt:", e)
 
     if (force || !promptDirty.value) {
       const title = course.value?.title || course.value?.name || ""
@@ -445,14 +467,14 @@ async function runGeneration() {
       prompt: prompt.value,
       cid: route.query.cid,
       sid: route.query.sid,
-      ai_provider: aiProvider.value,
+      ai_provider: aiProvider.value, // Send provider key only
       tool: "glossary",
     })
 
     generatedText.value = res.text || ""
     notification.showSuccessNotification(t("Generate glossary terms"))
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error generating glossary terms:", e)
+    console.error("[GlossaryGenerateTerms] AI glossary generation failed:", e)
     notification.showErrorNotification("AI glossary generation failed.")
   } finally {
     isBusy.value = false

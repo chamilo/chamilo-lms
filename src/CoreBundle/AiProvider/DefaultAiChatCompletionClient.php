@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\AiProvider;
 
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Throwable;
 
 final class DefaultAiChatCompletionClient implements AiChatCompletionClientInterface
@@ -30,6 +31,9 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
 
     public function chatWithMeta(string $provider, array $messages, array $options = []): AiChatCompletionResult
     {
+        $throwOnError = (bool) ($options['throw_on_error'] ?? false);
+        unset($options['throw_on_error']);
+
         try {
             $providerInstance = $this->factory->getProvider($provider, 'text');
 
@@ -39,44 +43,136 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
                     'type' => \gettype($providerInstance),
                 ]);
 
+                if ($throwOnError) {
+                    throw new RuntimeException('Invalid provider instance.');
+                }
+
                 return new AiChatCompletionResult('AI is temporarily unavailable. Please try again later.', null);
             }
 
-            // If provider has a native chatWithMeta(), use it
+            // 1) Preferred: chatWithMeta()
             if (method_exists($providerInstance, 'chatWithMeta')) {
-                $r = $providerInstance->chatWithMeta($messages, $options);
-                if ($r instanceof AiChatCompletionResult) {
-                    return $r;
+                $raw = $providerInstance->chatWithMeta($messages, $options);
+                $res = $this->extractResult($provider, $raw);
+
+                if ($throwOnError) {
+                    $this->assertUsableOrThrow($provider, $res);
                 }
+
+                return $res;
             }
 
-            // Default: fallback to chat() and no conversation id
-            $text = '';
-
+            // 2) Next: chat()
             if (method_exists($providerInstance, 'chat')) {
-                $text = (string) $providerInstance->chat($messages, $options);
-            } elseif (method_exists($providerInstance, 'generateText')) {
-                $prompt = $this->messagesToPrompt($messages);
-                $text = (string) $providerInstance->generateText($prompt, $options);
-            } elseif (method_exists($providerInstance, 'generate')) {
-                $prompt = $this->messagesToPrompt($messages);
-                $text = (string) $providerInstance->generate($prompt, $options);
+                $raw = $providerInstance->chat($messages, $options);
+                $res = $this->extractResult($provider, $raw);
+
+                if ($throwOnError) {
+                    $this->assertUsableOrThrow($provider, $res);
+                }
+
+                return $res;
             }
 
-            $text = trim($text);
-            if ('' === $text) {
-                $text = 'I could not generate a response right now. Please try again.';
+            // 3) Universal fallback: generateText(prompt)
+            if (method_exists($providerInstance, 'generateText')) {
+                $prompt = $this->messagesToPrompt($messages);
+                $raw = $providerInstance->generateText($prompt, $options);
+                $res = $this->extractResult($provider, $raw);
+
+                if ($throwOnError) {
+                    $this->assertUsableOrThrow($provider, $res);
+                }
+
+                return $res;
             }
 
-            return new AiChatCompletionResult($text, null);
+            // 4) Legacy fallback: generate(prompt)
+            if (method_exists($providerInstance, 'generate')) {
+                $prompt = $this->messagesToPrompt($messages);
+                $raw = $providerInstance->generate($prompt, $options);
+                $res = $this->extractResult($provider, $raw);
+
+                if ($throwOnError) {
+                    $this->assertUsableOrThrow($provider, $res);
+                }
+
+                return $res;
+            }
+
+            $this->logger->warning('[AiTutorChat] Provider does not support chat or text generation', [
+                'provider' => $provider,
+                'class' => $providerInstance::class,
+            ]);
+
+            if ($throwOnError) {
+                throw new RuntimeException('Provider does not support chat or text generation.');
+            }
+
+            return new AiChatCompletionResult('AI is temporarily unavailable. Please try again later.', null);
         } catch (Throwable $e) {
             $this->logger->error('[AiTutorChat] Chat provider call failed', [
                 'provider' => $provider,
                 'error' => $e->getMessage(),
             ]);
 
+            if ($throwOnError) {
+                throw $e;
+            }
+
             return new AiChatCompletionResult('AI is temporarily unavailable. Please try again later.', null);
         }
+    }
+
+    private function assertUsableOrThrow(string $provider, AiChatCompletionResult $r): void
+    {
+        $text = trim((string) $r->text);
+
+        if ($this->looksLikeErrorResponseText($text)) {
+            $this->logger->warning('[AiTutorChat] Error-like response text detected', [
+                'provider' => $provider,
+                'preview' => mb_substr($text, 0, 180),
+            ]);
+
+            throw new RuntimeException('Provider returned an error-like response text.');
+        }
+    }
+
+    private function looksLikeErrorResponseText(string $text): bool
+    {
+        $t = strtolower(trim($text));
+
+        if ('' === $t) {
+            return true;
+        }
+
+        // Generic fallback
+        if (str_contains($t, 'ai is temporarily unavailable')) {
+            return true;
+        }
+
+        // Typical auth/config errors that some providers return as plain text
+        $needles = [
+            'incorrect api key',
+            'invalid api key',
+            'you can find your api key',
+            'error response:',
+            'invalid_api_key',
+            'unauthorized',
+            'forbidden',
+            'http 401',
+            'http 403',
+            'rate limit',
+            'quota',
+        ];
+
+        foreach ($needles as $n) {
+            if (str_contains($t, $n)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function extractResult(string $provider, mixed $raw): AiChatCompletionResult
@@ -129,7 +225,6 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
         // Strings
         $text = trim((string) $raw);
 
-        // If provider returned empty/unknown, fallback message
         if ('' === $text) {
             $this->logger->warning('[AiTutorChat] Provider returned empty response', [
                 'provider' => $provider,
@@ -160,7 +255,6 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
      */
     private function extractConversationIdFromArray(array $raw): ?string
     {
-        // Prefer explicit keys only (avoid picking generic "id" which might be message id).
         $cand = $raw['conversation_id'] ?? $raw['conversationId'] ?? $raw['previous_id'] ?? $raw['previousId'] ?? null;
 
         return $this->normalizeConvId($cand);
@@ -178,8 +272,6 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
     }
 
     /**
-     * Convert messages into a compact prompt for non-chat providers.
-     *
      * @param array<int, array{role:string,content:string}> $messages
      */
     private function messagesToPrompt(array $messages): string
@@ -187,7 +279,7 @@ final class DefaultAiChatCompletionClient implements AiChatCompletionClientInter
         $lines = [];
 
         foreach ($messages as $m) {
-            $role = $m['role'] ?? 'user';
+            $role = (string) ($m['role'] ?? 'user');
             $content = trim((string) ($m['content'] ?? ''));
 
             if ('' === $content) {

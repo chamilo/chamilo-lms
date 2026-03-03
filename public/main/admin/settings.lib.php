@@ -564,7 +564,7 @@ function handleSearch()
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('Fulltext search'));
 
-    $group = formGenerateElementsGroup($form, $values, 'search_enabled');
+    $group = formGenerateElementsGroup($form, 'search_enabled', $values);
 
     // SearchEnabledComment
     $form->addGroup(
@@ -589,8 +589,8 @@ function handleSearch()
         $values = api_get_settings_options('search_show_unlinked_results');
         $group = formGenerateElementsGroup(
             $form,
-            $values,
-            'search_show_unlinked_results'
+            'search_show_unlinked_results',
+            $values
         );
         $form->addGroup(
             $group,
@@ -1552,15 +1552,17 @@ function searchSetting($search)
 
     return $settings;
 }
+
 /**
- * Helper function to generates a form elements group.
+ * Helper function to generate a form elements group.
  *
- * @param object $form   The form where the elements group has to be added
- * @param array  $values Values to browse through
+ * @param FormValidator $form The form where the elements group has to be added
+ * @param string $elementName
+ * @param array $values Values to browse through
  *
  * @return array
  */
-function formGenerateElementsGroup($form, $values = [], $elementName)
+function formGenerateElementsGroup(FormValidator $form, string $elementName, array $values = []): array
 {
     $group = [];
     if (is_array($values)) {

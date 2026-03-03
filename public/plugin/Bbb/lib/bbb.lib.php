@@ -42,6 +42,7 @@ class Bbb
     private $groupId;
     private $maxUsersLimit;
     private $urlWithProtocol = '';
+    private string $table;
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings

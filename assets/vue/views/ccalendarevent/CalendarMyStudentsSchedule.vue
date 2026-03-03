@@ -80,6 +80,10 @@
           {{ details.title || "-" }}
         </div>
         <div class="text-gray-700">
+          <span class="font-semibold">{{ t("Course") }}:</span>
+          {{ details.courseTitle || "-" }}
+        </div>
+        <div class="text-gray-700">
           <span class="font-semibold">{{ t("From") }}:</span>
           {{ details.start || "-" }}
         </div>
@@ -198,13 +202,16 @@ watch(
 )
 
 const detailsVisible = ref(false)
-const details = ref({ title: "", start: "", end: "" })
+const details = ref({ title: "", start: "", end: "", courseTitle: "" })
 
 function openReadOnlyDetails(event) {
   const start = event?.start ? DateTime.fromJSDate(event.start).setZone(timezone).toFormat("yyyy-LL-dd HH:mm") : "-"
   const end = event?.end ? DateTime.fromJSDate(event.end).setZone(timezone).toFormat("yyyy-LL-dd HH:mm") : start
+  const courseTitle = event?.extendedProps?.courseTitle || ""
+
   details.value = {
     title: event?.title || "-",
+    courseTitle,
     start,
     end,
   }

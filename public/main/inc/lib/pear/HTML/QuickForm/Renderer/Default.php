@@ -347,7 +347,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         if (is_array($label)) {
             foreach ($label as $key => $text) {
                 $key  = is_int($key)? $key + 2: $key;
-                $html = str_replace("{label_{$key}}", $text, $html);
+                $html = str_replace("{label_{$key}}", (string) $text, $html);
                 $html = str_replace("<!-- BEGIN label_{$key} -->", '', $html);
                 $html = str_replace("<!-- END label_{$key} -->", '', $html);
             }

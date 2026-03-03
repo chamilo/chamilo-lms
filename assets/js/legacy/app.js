@@ -19,6 +19,7 @@ import "moment"
 //require('flatpickr');
 import "jquery-ui/dist/jquery-ui"
 import "./main"
+import "../aiDisclosureBadge"
 
 // Date time settings.
 import moment from "moment"

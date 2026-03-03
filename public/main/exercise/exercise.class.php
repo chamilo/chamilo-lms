@@ -2347,7 +2347,7 @@ class Exercise
                         ['value' => $itemId]
                     );
                 }
-                $form->addGroup($group, '', [get_lang('E-mail notifications')]);
+                $form->addGroup($group, null, [get_lang('E-mail notifications')]);
             }
 
             $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));

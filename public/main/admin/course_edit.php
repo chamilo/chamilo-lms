@@ -266,12 +266,12 @@ CourseManager::addVisibilityOptions($form);
 $group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[] = $form->createElement('radio', 'subscribe', null, get_lang('This function is only available to trainers'), 0);
-$form->addGroup($group, '', get_lang('Subscription'));
+$form->addGroup($group, null, get_lang('Subscription'));
 
 $group = [];
 $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscribe'), get_lang('Users are allowed to unsubscribe from this course'), 1);
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('Users are not allowed to unsubscribe from this course'), 0);
-$form->addGroup($group, '', get_lang('Unsubscribe'));
+$form->addGroup($group, null, get_lang('Unsubscribe'));
 
 $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang('MB')]);
 $form->addRule('disk_quota', get_lang('Required field'), 'required');

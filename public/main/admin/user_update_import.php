@@ -289,7 +289,7 @@ $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
     $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
 ];
-$form->addGroup($group, '', get_lang('Send mail to users'));
+$form->addGroup($group, null, get_lang('Send mail to users'));
 $defaults['sendMail'] = 0;
 
 if ($form->validate()) {

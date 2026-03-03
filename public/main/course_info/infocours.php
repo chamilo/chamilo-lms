@@ -103,7 +103,7 @@ $group = [
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
 ];
 
-$form->addGroup($group, '', [get_lang('Show course in user\'s language')]);
+$form->addGroup($group, null, [get_lang('Show course in user\'s language')]);
 
 $form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
@@ -238,7 +238,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
         ['id' => 'course_theme_id'],
         []
     );
-    $form->addGroup($group, '', [get_lang('Style sheets')]);
+    $form->addGroup($group, null, [get_lang('Style sheets')]);
 }
 
 $form->addElement('label', get_lang('Space available'), format_file_size(DocumentManager::get_course_quota()));

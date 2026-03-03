@@ -182,7 +182,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Registration')).' '.get_lang('Registration'),
     null,
     false
@@ -204,7 +204,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Documents')).' '.get_lang('Documents'),
     null,
     false
@@ -239,7 +239,7 @@ if ($allowDocumentGroupAccess) {
     ];
     $form->addGroup(
         $group,
-        '',
+        null,
         Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Document access')
         ).'<span>'.get_lang('Document access').'</span>',
         null,
@@ -264,7 +264,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments')).' '.get_lang('Assignments'),
     '',
     false
@@ -282,7 +282,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Agenda')).' '.get_lang('Agenda'),
     null,
     false
@@ -304,7 +304,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Announcements')).' '.get_lang('Announcements'),
     null,
     false
@@ -322,7 +322,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Group Forum')).' '.get_lang('Group Forum'),
     null,
     false
@@ -344,7 +344,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::WIKI, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Wiki')).' '.get_lang('Wiki'),
     null,
     false
@@ -361,7 +361,7 @@ $group = [
 ];
 $form->addGroup(
     $group,
-    '',
+    null,
     Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Chat')).' '.get_lang('Chat'),
     null,
     false

@@ -105,7 +105,7 @@ $group[] = $form->createElement(
     'CSV (<a href="example_class.csv" target="_blank" download>'.get_lang('Example CSV file').'</a>)',
     'csv'
 );
-$form->addGroup($group, '', get_lang('File type'), null);
+$form->addGroup($group, null, get_lang('File type'), null);
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {

@@ -6824,7 +6824,7 @@ class CourseManager
                 Course::HIDDEN
             );
         }
-        $form->addGroup($group, '', get_lang('Course access'));
+        $form->addGroup($group, null, get_lang('Course access'));
     }
 
     /**

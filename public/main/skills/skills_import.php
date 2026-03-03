@@ -228,7 +228,7 @@ $group[] = $form->createElement(
     'CSV (<a href="skill_example.csv" target="_blank" download>'.get_lang('Example CSV file').'</a>)',
     'csv'
 );
-$form->addGroup($group, '', get_lang('File type'));
+$form->addGroup($group, null, get_lang('File type'));
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;

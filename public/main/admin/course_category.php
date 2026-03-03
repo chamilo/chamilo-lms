@@ -189,7 +189,7 @@ if ('add' === $action || 'edit' === $action) {
             'FALSE'
         ),
     ];
-    $form->addGroup($group, null, get_lang('Allow adding courses in this category?'));
+    $form->addGroup($group, '', get_lang('Allow adding courses in this category?'));
     if ('add' === $action && !empty($categoryId)) {
         $form->addHidden('parent_id', $categoryId);
         $form->addLabel(get_lang('Parent category'), $parentInfo['title'].' ('.$parentInfo['code'].')');

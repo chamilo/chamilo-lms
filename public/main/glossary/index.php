@@ -283,7 +283,7 @@ switch ($action) {
             'XLS',
             'xls'
         );
-        $form->addGroup($group, '', get_lang('File type'), null);
+        $form->addGroup($group, null, get_lang('File type'), null);
         $form->addElement('checkbox', 'replace', null, get_lang('Delete all terms before import.'));
         $form->addElement('checkbox', 'update', null, get_lang('Update existing terms.'));
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');

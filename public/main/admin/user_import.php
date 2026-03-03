@@ -722,13 +722,13 @@ $group = [
     ),
 ];
 
-$form->addGroup($group, '', get_lang('File type'));
+$form->addGroup($group, null, get_lang('File type'));
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
     $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
 ];
-$form->addGroup($group, '', get_lang('Send a mail to users'));
+$form->addGroup($group, null, get_lang('Send a mail to users'));
 
 $form->addElement(
     'checkbox',

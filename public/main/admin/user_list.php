@@ -1309,7 +1309,7 @@ $form->addSelect(
 $active_group = [];
 $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
 $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
-$form->addGroup($active_group, '', get_lang('Account'), null, false);
+$form->addGroup($active_group, null, get_lang('Account'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('Check passwords too easy to guess'));
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 

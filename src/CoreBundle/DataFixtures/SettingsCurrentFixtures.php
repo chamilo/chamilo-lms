@@ -1819,6 +1819,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'allow_general_certificate',
                     'title' => 'Enable general certificate',
                     'comment' => 'A general certificate is a certificate grouping all the accomplishments by the user in the courses (s)he followed.',
+                    'selected_value' => 'false',
                 ],
                 [
                     'name' => 'hide_certificate_export_link',

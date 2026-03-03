@@ -63,33 +63,45 @@ if ($report === 'duplicated_users' && in_array($action, [
                     $userMergeHelper = Container::$container->get(UserMergeHelper::class);
 
                     if ($unifyUserId > 0) {
-                        $groupIds = Statistics::getDuplicateUserGroupUserIds($dupModeParam, $unifyUserId, $extraFieldId);
+                        try {
+                            $groupIds = Statistics::getDuplicateUserGroupUserIds($dupModeParam, $unifyUserId, $extraFieldId);
 
-                        if (count($groupIds) < 2) {
-                            Display::addFlash(Display::return_message(
-                                get_lang('No other duplicates found for this user.'),
-                                'warning',
-                                false
+                            if (count($groupIds) < 2) {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('No other duplicates found for this user.'),
+                                    'warning',
+                                    false
+                                ));
+                                break;
+                            }
+
+                            $mergeIds = array_values(array_filter(
+                                $groupIds,
+                                static fn (int $id): bool => $id !== $unifyUserId
                             ));
-                            break;
-                        }
 
-                        $mergeIds = array_values(array_filter($groupIds, static fn (int $id): bool => $id !== $unifyUserId));
+                            $mergedCount = $userMergeHelper->mergeUsersBatch($unifyUserId, $mergeIds, null, true);
 
-                        $mergedCount = $userMergeHelper->mergeUsersBatch($unifyUserId, $mergeIds);
+                            if ($mergedCount > 0) {
+                                $msg = sprintf(
+                                    get_lang('Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted.'),
+                                    (int) $mergedCount,
+                                    (int) $unifyUserId
+                                );
+                                Display::addFlash(Display::return_message($msg, 'confirmation', false));
+                            } else {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('No accounts were merged.'),
+                                    'warning',
+                                    false
+                                ));
+                            }
+                        } catch (\Throwable $e) {
+                            error_log('[DuplicateUsers] Unify group failed: '.$e->getMessage());
 
-                        if ($mergedCount > 0) {
-                            $msg = sprintf(
-                                get_lang('Users unified: merged %s account(s) into user #%s.'),
-                                (int) $mergedCount,
-                                (int) $unifyUserId
-                            );
-
-                            Display::addFlash(Display::return_message($msg, 'confirmation', false));
-                        } else {
                             Display::addFlash(Display::return_message(
-                                get_lang('No accounts were merged.'),
-                                'warning',
+                                get_lang('An error occurred while unifying users.'),
+                                'error',
                                 false
                             ));
                         }
@@ -105,12 +117,31 @@ if ($report === 'duplicated_users' && in_array($action, [
                         break;
                     }
 
-                    $ok = $userMergeHelper->mergeUsers($keepUserId, $mergeUserId);
+                    try {
+                        $ok = $userMergeHelper->mergeUsers($keepUserId, $mergeUserId, null, true);
 
-                    if ($ok) {
-                        Display::addFlash(Display::return_message(get_lang('Users unified'), 'confirmation', false));
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('An error occurred'), 'error', false));
+                        if ($ok) {
+                            $msg = sprintf(
+                                get_lang('Users unified: merged user #%s into user #%s. Merged account was permanently deleted.'),
+                                (int) $mergeUserId,
+                                (int) $keepUserId
+                            );
+                            Display::addFlash(Display::return_message($msg, 'confirmation', false));
+                        } else {
+                            Display::addFlash(Display::return_message(
+                                get_lang('An error occurred while unifying users.'),
+                                'error',
+                                false
+                            ));
+                        }
+                    } catch (\Throwable $e) {
+                        error_log('[DuplicateUsers] Legacy unify failed: '.$e->getMessage());
+
+                        Display::addFlash(Display::return_message(
+                            get_lang('An error occurred while unifying users.'),
+                            'error',
+                            false
+                        ));
                     }
                     break;
             }
@@ -618,38 +649,38 @@ switch ($report) {
         ];
 
         $content .= '
-        <style>
-          .ch-dups-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
-          .ch-dups-tabs a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
-          .ch-dups-box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
-          .ch-dups-box .formw{margin:0}
-          .ch-dups-note{margin:0 0 10px}
-          .ch-dups-actions{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
-          .ch-dups-actions .btn{border-radius:4px;font-weight:700}
-          .ch-dups-actions .btn-xs{padding:2px 8px;font-size:12px;line-height:1.2}
-          .ch-dups-actions .btn.disabled{opacity:.45;pointer-events:none}
-          .ch-dups-actions .ch-dups-icon svg{width:14px; height:14px;}
-          .ch-dups-actions .ch-dups-emoji{font-size:14px; line-height:1;}
-          .ch-dups-actions .ch-dups-btn-label{margin-left:6px;}
-          .ch-dups-help{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
-          .ch-dups-help__title{font-weight:700;margin:0 0 8px;color:#2b3645}
-          .ch-dups-help__list{margin:0;padding-left:18px;color:#3b4757;font-size:13px}
-          .ch-dups-help__list li{margin:6px 0}
-          .ch-dups-help code{background:#f3f6fb;border:1px solid #e6edf5;border-radius:6px;padding:1px 6px}
-          .ch-dups-keep-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;}
-          .ch-dups-groups{display:flex;flex-direction:column;gap:14px;margin-top:8px}
-          .ch-dups-group{border:1px solid #b7dff1;background:#f7fcff;border-radius:4px;overflow:hidden}
-          .ch-dups-group__head{background:#dff2fb;border-bottom:1px solid #b7dff1;padding:8px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-          .ch-dups-group__key{font-weight:700;color:#2b3645}
-          .ch-dups-group__badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#4aa3c7;color:#fff}
-          .ch-dups-group__body{padding:10px}
-          .ch-dups-group__table-wrap{overflow-x:auto}
-          .ch-dups-group__table{width:100%;border-collapse:collapse;background:#fff}
-          .ch-dups-group__table th,
-          .ch-dups-group__table td{border:1px solid #e5edf3;padding:8px 10px;vertical-align:top}
-          .ch-dups-group__table th{background:#f6f8fb;font-weight:700;white-space:nowrap}
-        </style>
-        ';
+    <style>
+      .ch-dups-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+      .ch-dups-tabs a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+      .ch-dups-box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+      .ch-dups-box .formw{margin:0}
+      .ch-dups-note{margin:0 0 10px}
+      .ch-dups-actions{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+      .ch-dups-actions .btn{border-radius:4px;font-weight:700}
+      .ch-dups-actions .btn-xs{padding:2px 8px;font-size:12px;line-height:1.2}
+      .ch-dups-actions .btn.disabled{opacity:.45;pointer-events:none}
+      .ch-dups-actions .ch-dups-icon svg{width:14px; height:14px;}
+      .ch-dups-actions .ch-dups-emoji{font-size:14px; line-height:1;}
+      .ch-dups-actions .ch-dups-btn-label{margin-left:6px;}
+      .ch-dups-help{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+      .ch-dups-help__title{font-weight:700;margin:0 0 8px;color:#2b3645}
+      .ch-dups-help__list{margin:0;padding-left:18px;color:#3b4757;font-size:13px}
+      .ch-dups-help__list li{margin:6px 0}
+      .ch-dups-help code{background:#f3f6fb;border:1px solid #e6edf5;border-radius:6px;padding:1px 6px}
+      .ch-dups-keep-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;}
+      .ch-dups-groups{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+      .ch-dups-group{border:1px solid #b7dff1;background:#f7fcff;border-radius:4px;overflow:hidden}
+      .ch-dups-group__head{background:#dff2fb;border-bottom:1px solid #b7dff1;padding:8px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+      .ch-dups-group__key{font-weight:700;color:#2b3645}
+      .ch-dups-group__badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#4aa3c7;color:#fff}
+      .ch-dups-group__body{padding:10px}
+      .ch-dups-group__table-wrap{overflow-x:auto}
+      .ch-dups-group__table{width:100%;border-collapse:collapse;background:#fff}
+      .ch-dups-group__table th,
+      .ch-dups-group__table td{border:1px solid #e5edf3;padding:8px 10px;vertical-align:top}
+      .ch-dups-group__table th{background:#f6f8fb;font-weight:700;white-space:nowrap}
+    </style>
+    ';
 
         $content .= '<div class="ch-dups-tabs">';
         foreach ($tabs as $mode => $label) {
@@ -732,9 +763,16 @@ switch ($report) {
         <div class="ch-dups-help">
           <div class="ch-dups-help__title">'.htmlspecialchars($helpTitle, ENT_QUOTES, 'UTF-8').'</div>
           <ul class="ch-dups-help__list">
-            <li><strong>'.get_lang('Disable / Enable').'</strong>: '.get_lang('Only blocks or restores login. It does not delete the user and does not remove subscriptions.').'</li>
-            <li><strong>'.get_lang('Unify').'</strong>: '.get_lang('Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be set to soft-deleted (active = -1) and will disappear from this report.').'</li>
-            <li><strong>'.get_lang('Permanent deletion').'</strong>: '.get_lang('Go to Administration → Users list, search the user ID or merged_, and delete the user there if needed.').'</li>
+            <li><strong>'.get_lang('Disable / Enable').'</strong>: '
+                .get_lang('Only blocks or restores login. It does not delete the user and does not remove subscriptions.')
+                .'</li>
+            <li><strong>'.get_lang('Unify').'</strong>: '
+                .'Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. '
+                .'Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone.'
+                .'</li>
+            <li><strong>Permanent deletion</strong>: '
+                .'Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually.'
+                .'</li>
           </ul>
         </div>
         ';
@@ -806,10 +844,7 @@ switch ($report) {
                     $groupValue = get_lang('Not available');
                 }
 
-                if (!isset($groups[$groupValue])) {
-                    $groups[$groupValue] = [];
-                }
-
+                $groups[$groupValue] ??= [];
                 $groups[$groupValue][] = $cells;
             }
 
@@ -872,7 +907,6 @@ switch ($report) {
             $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($extractText): string {
                 $first = $extractText($cells[1] ?? '');
                 $last  = $extractText($cells[2] ?? '');
-
                 return trim($first.' '.$last);
             });
         }
@@ -884,13 +918,14 @@ switch ($report) {
             });
         }
 
-        // extra: keep your current logic to detect the selected extra field column
+        // extra: group by the selected extra field value
+        // IMPORTANT: Do not match headers by "contains", because "tempoId" contains "Id" and would incorrectly match the Id column.
+        // The backend table builder places the selected extra field as the FIRST extra column right after "Sessions".
         if ('extra' === $dupMode && $extraFieldId > 0) {
             $normalizeHeader = static function (string $value): string {
                 $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 $value = mb_strtolower(trim($value), 'UTF-8');
                 $value = preg_replace('/\s+/u', ' ', $value);
-
                 return (string) $value;
             };
 
@@ -898,43 +933,69 @@ switch ($report) {
             $headerTmp = array_shift($rowsTmp);
             $headersTmp = is_array($headerTmp) ? array_values($headerTmp) : [];
 
-            $normalizedHeaders = [];
-            foreach ($headersTmp as $i => $h) {
-                $normalizedHeaders[$i] = $normalizeHeader((string) $h);
-            }
-
             $targetIndex = null;
-            $selectedLabelNorm = $normalizeHeader((string) $selectedExtraFieldLabel);
-            $selectedVarNorm = $normalizeHeader((string) $selectedExtraFieldVariable);
 
-            foreach ($normalizedHeaders as $i => $hn) {
-                if ('' !== $selectedLabelNorm && (
-                        $hn === $selectedLabelNorm ||
-                        str_contains($hn, $selectedLabelNorm) ||
-                        str_contains($selectedLabelNorm, $hn)
-                    )) {
-                    $targetIndex = $i;
-                    break;
-                }
-                if ('' !== $selectedVarNorm && str_contains($hn, $selectedVarNorm)) {
-                    $targetIndex = $i;
-                    break;
-                }
-            }
+            if (!empty($headersTmp)) {
+                // 1) Preferred: find the "Sessions" column and pick the next column (selected extra field).
+                $sessionsNorm = $normalizeHeader((string) get_lang('Sessions'));
+                $coursesNorm  = $normalizeHeader((string) get_lang('Courses'));
 
-            if (null === $targetIndex) {
-                foreach ($normalizedHeaders as $i => $hn) {
-                    if (str_contains($hn, 'extra field')) {
-                        $targetIndex = $i;
-                        break;
+                $sessionsIndex = null;
+                $coursesIndex = null;
+
+                foreach ($headersTmp as $i => $h) {
+                    $hn = $normalizeHeader((string) $h);
+                    if (null === $sessionsIndex && $hn === $sessionsNorm) {
+                        $sessionsIndex = (int) $i;
+                    }
+                    if (null === $coursesIndex && $hn === $coursesNorm) {
+                        $coursesIndex = (int) $i;
                     }
                 }
-            }
 
-            if (null !== $targetIndex) {
-                $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($targetIndex): string {
-                    return (string) ($cells[$targetIndex] ?? '');
-                });
+                if (null === $sessionsIndex && null !== $coursesIndex) {
+                    // Fallback: assume Sessions is right after Courses.
+                    $sessionsIndex = $coursesIndex + 1;
+                }
+
+                if (null !== $sessionsIndex) {
+                    $candidate = $sessionsIndex + 1;
+                    if (isset($headersTmp[$candidate])) {
+                        // Ensure we didn't land on "Active" or "Actions" (means no extra column exists).
+                        $candidateNorm = $normalizeHeader((string) $headersTmp[$candidate]);
+                        $activeNorm = $normalizeHeader((string) get_lang('Active'));
+                        $actionsNorm = $normalizeHeader((string) get_lang('Actions'));
+
+                        if ($candidateNorm !== $activeNorm && $candidateNorm !== $actionsNorm) {
+                            $targetIndex = $candidate;
+                        }
+                    }
+                }
+
+                // 2) Last resort: exact match by selected label/variable (no substring checks).
+                if (null === $targetIndex) {
+                    $selectedLabelNorm = $normalizeHeader((string) $selectedExtraFieldLabel);
+                    $selectedVarNorm   = $normalizeHeader((string) $selectedExtraFieldVariable);
+
+                    foreach ($headersTmp as $i => $h) {
+                        $hn = $normalizeHeader((string) $h);
+
+                        if ('' !== $selectedLabelNorm && $hn === $selectedLabelNorm) {
+                            $targetIndex = (int) $i;
+                            break;
+                        }
+                        if ('' !== $selectedVarNorm && $hn === $selectedVarNorm) {
+                            $targetIndex = (int) $i;
+                            break;
+                        }
+                    }
+                }
+
+                if (null !== $targetIndex) {
+                    $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($targetIndex): string {
+                        return (string) ($cells[$targetIndex] ?? '');
+                    });
+                }
             }
         }
 

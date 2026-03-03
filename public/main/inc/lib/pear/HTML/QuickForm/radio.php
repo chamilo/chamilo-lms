@@ -119,7 +119,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $this->_attributes['class'] = $extraClass;
         }
 
-        if (0 == strlen($this->_text)) {
+        if (empty($this->_text)) {
             $label = '';
         }
 

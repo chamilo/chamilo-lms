@@ -848,4 +848,11 @@ JS;
         $this->getSession()->wait(300);
         return true;
     }
+
+    public function visit($page): void
+    {
+        parent::visit($page);
+
+        $this->waitForThePageToBeLoaded();
+    }
 }

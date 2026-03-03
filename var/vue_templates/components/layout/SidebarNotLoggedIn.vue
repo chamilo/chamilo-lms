@@ -176,7 +176,7 @@ watch(
 
       &.app-sidebar--custom-template {
         :deep(.p-panelmenu-content) {
-          @apply sm:block;
+          @apply sm:opacity-100 sm:visible sm:pointer-events-auto sm:max-h-[1000px];
         }
       }
 

@@ -65,7 +65,7 @@ const menuItems = computed(() => {
   return items
 })
 
-const sidebarIsOpen = ref(false)
+const sidebarIsOpen = ref(true)
 
 watch(
   sidebarIsOpen,

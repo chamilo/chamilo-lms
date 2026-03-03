@@ -37,7 +37,17 @@ class UserController extends AbstractController
 
         $data = $usergroupLib->getUsersInAndOutOfCourse($usergroupId, $courseId);
 
+        $breadcrumb = json_encode([
+            ['name' => get_lang('My courses'),  'url' => '/courses'],
+            ['name' => $courseName,             'url' => '/course/'.$courseId.'/home'],
+            ['name' => get_lang('Users'),       'url' => '/main/user/user.php?cid='.$courseId],
+            ['name' => get_lang('Classes'),     'url' => '/main/user/class.php?cid='.$courseId],
+            ['name' => $usergroup['title'],     'url' => '#'],
+            ['name' => get_lang('Overview'),    'url' => ''],
+        ]);
+
         return $this->render('@ChamiloCore/User/usergroup_overview.html.twig', [
+            'legacy_breadcrumb' => $breadcrumb,
             'courseId' => $courseId,
             'courseName' => $courseName,
             'usergroupName' => $usergroup['title'],

@@ -65,14 +65,12 @@ const menuItems = computed(() => {
   return items
 })
 
-const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+const sidebarIsOpen = ref(false)
 
 watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
-
-    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
 
     appEl.classList.toggle("app--sidebar-inactive", !newValue)
   },

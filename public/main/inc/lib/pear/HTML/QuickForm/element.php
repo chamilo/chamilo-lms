@@ -364,6 +364,11 @@ class HTML_QuickForm_element extends HTML_Common
             return null;
         }
         $elementName = $this->getName();
+
+        if (empty($elementName)) {
+            return null;
+        }
+
         if (isset($values[$elementName])) {
             return $values[$elementName];
         } elseif (strpos($elementName, '[')) {

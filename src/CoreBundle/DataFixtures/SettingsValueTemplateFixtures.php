@@ -80,7 +80,8 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'question_manager' => false,
                         ],
                         'topbar' => [
-                            'topbar_certificate' => true,
+                            'topbar_my_certificates' => true,
+                            'topbar_my_custom_certificate' => false,
                             'topbar_skills' => true,
                         ],
                     ],
@@ -88,8 +89,27 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 [
                     'variable' => 'show_tabs_per_role',
                     'json_example' => [
-                        'SESSIONADMIN' => ['session_admin', 'my_courses'],
-                        'ADMIN' => ['platform_administration'],
+                        'SESSIONADMIN' => [
+                            'menu' => [
+                                'session_admin' => true,
+                                'my_courses' => true,
+                            ],
+                            'topbar' => [
+                                'topbar_my_certificates' => true,
+                                'topbar_my_custom_certificate' => false,
+                                'topbar_skills' => true,
+                            ],
+                        ],
+                        'ADMIN' => [
+                            'menu' => [
+                                'platform_administration' => true,
+                            ],
+                            'topbar' => [
+                                'topbar_my_certificates' => true,
+                                'topbar_my_custom_certificate' => false,
+                                'topbar_skills' => true,
+                            ],
+                        ],
                     ],
                 ],
                 [

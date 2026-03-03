@@ -33,7 +33,13 @@ const KNOWN_MENU_TABS = [
   "question_manager",
 ]
 
-const KNOWN_TOPBAR_TABS = ["topbar_certificate", "topbar_skills"]
+// Topbar keys (new + legacy alias)
+const KNOWN_TOPBAR_TABS = [
+  "topbar_certificate",
+  "topbar_my_certificates",
+  "topbar_my_custom_certificate",
+  "topbar_skills",
+]
 
 function safeParseJson(value, warnLabel) {
   if (!value || "string" !== typeof value) return null
@@ -49,17 +55,47 @@ function makeEmptyConfig() {
   return { menu: {}, topbar: {} }
 }
 
+/**
+ * Backward compatibility for topbar keys:
+ * - If legacy "topbar_certificate" exists, map it to the 2 new keys when missing.
+ * - Keep a "topbar_certificate" alias when only new keys exist (so old checks still work).
+ */
+function normalizeTopbarKeys(topbar) {
+  const out = topbar && "object" === typeof topbar ? { ...topbar } : {}
+
+  if (Object.prototype.hasOwnProperty.call(out, "topbar_certificate")) {
+    const enabled = out.topbar_certificate === true
+
+    if (!Object.prototype.hasOwnProperty.call(out, "topbar_my_certificates")) {
+      out.topbar_my_certificates = enabled
+    }
+    if (!Object.prototype.hasOwnProperty.call(out, "topbar_my_custom_certificate")) {
+      out.topbar_my_custom_certificate = enabled
+    }
+  } else {
+    const hasNewKeys =
+      Object.prototype.hasOwnProperty.call(out, "topbar_my_certificates") ||
+      Object.prototype.hasOwnProperty.call(out, "topbar_my_custom_certificate")
+
+    if (hasNewKeys && !Object.prototype.hasOwnProperty.call(out, "topbar_certificate")) {
+      out.topbar_certificate = out.topbar_my_certificates === true || out.topbar_my_custom_certificate === true
+    }
+  }
+
+  return out
+}
+
 function normalizeConfigObject(obj) {
   const cfg = makeEmptyConfig()
   if (!obj || "object" !== typeof obj) return cfg
 
   if (obj.menu && "object" === typeof obj.menu) cfg.menu = { ...obj.menu }
-  if (obj.topbar && "object" === typeof obj.topbar) cfg.topbar = { ...obj.topbar }
+  if (obj.topbar && "object" === typeof obj.topbar) cfg.topbar = normalizeTopbarKeys(obj.topbar)
 
   return cfg
 }
 
-// Legacy list semantics: only listed tabs are enabled, all known tabs are disabled.
+// only listed tabs are enabled, all known tabs are disabled.
 function configFromLegacyList(list) {
   const cfg = makeEmptyConfig()
 
@@ -69,9 +105,27 @@ function configFromLegacyList(list) {
   const arr = Array.isArray(list) ? list : []
   for (const key of arr) {
     if ("string" !== typeof key) continue
-    if (KNOWN_MENU_TABS.includes(key)) cfg.menu[key] = true
-    if (KNOWN_TOPBAR_TABS.includes(key)) cfg.topbar[key] = true
+
+    if (KNOWN_MENU_TABS.includes(key)) {
+      cfg.menu[key] = true
+      continue
+    }
+
+    // enable both new entries when legacy key is present
+    if ("topbar_certificate" === key) {
+      cfg.topbar.topbar_certificate = true
+      cfg.topbar.topbar_my_certificates = true
+      cfg.topbar.topbar_my_custom_certificate = true
+      continue
+    }
+
+    if (KNOWN_TOPBAR_TABS.includes(key)) {
+      cfg.topbar[key] = true
+    }
   }
+
+  // Ensure mapping/alias consistency even for legacy lists
+  cfg.topbar = normalizeTopbarKeys(cfg.topbar)
 
   return cfg
 }
@@ -87,8 +141,11 @@ function mergeConfig(baseCfg, overrideCfg) {
     for (const [k, v] of Object.entries(overrideCfg.menu)) out.menu[k] = v
   }
   if (overrideCfg?.topbar && "object" === typeof overrideCfg.topbar) {
-    for (const [k, v] of Object.entries(overrideCfg.topbar)) out.topbar[k] = v
+    const normalized = normalizeTopbarKeys(overrideCfg.topbar)
+    for (const [k, v] of Object.entries(normalized)) out.topbar[k] = v
   }
+
+  out.topbar = normalizeTopbarKeys(out.topbar)
 
   return out
 }

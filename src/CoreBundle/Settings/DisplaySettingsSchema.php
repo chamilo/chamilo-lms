@@ -35,7 +35,8 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         'MenuSessionAdmin' => 'session_admin',
         'MenuSearch' => 'search',
         'MenuQuestionManager' => 'question_manager',
-        'TopbarCertificate' => 'topbar_certificate',
+        'TopbarMyCertificates' => 'topbar_my_certificates',
+        'TopbarMyCustomCertificate' => 'topbar_my_custom_certificate',
         'TopbarSkills' => 'topbar_skills',
     ];
 
@@ -172,6 +173,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             $isTopbar = str_starts_with($label, 'Topbar') || str_starts_with($key, 'topbar_');
 
             if ($isTopbar) {
+                // Default topbar entries are enabled, except the custom certificate toggle.
                 $topbar[$key] = true;
 
                 continue;
@@ -180,6 +182,9 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             // Keep legacy default: videoconference + diagnostics disabled by default
             $menu[$key] = !\in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
         }
+
+        // Keep proposed behavior: "My custom certificate" is a separate toggle and is disabled by default.
+        $topbar['topbar_my_custom_certificate'] = false;
 
         return [
             'menu' => $menu,

@@ -11,6 +11,10 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const PREG_OFFSET_CAPTURE;
+
 /**
  * Handles disclosure of AI assistance without requiring DB schema changes.
  *
@@ -54,7 +58,7 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            return in_array($val, ['1', 'true', 'yes', 'on', 'enabled'], true);
+            return \in_array($val, ['1', 'true', 'yes', 'on', 'enabled'], true);
         }
 
         return false;
@@ -149,7 +153,8 @@ final class AiDisclosureHelper
 
         // If this looks like a full HTML doc, inject right after <body>.
         if (preg_match('#<body\b[^>]*>#i', $html, $m, PREG_OFFSET_CAPTURE)) {
-            $pos = $m[0][1] + strlen($m[0][0]);
+            $pos = $m[0][1] + \strlen($m[0][0]);
+
             return substr($html, 0, $pos)."\n".$tag."\n".substr($html, $pos);
         }
 
@@ -169,8 +174,8 @@ final class AiDisclosureHelper
         }
 
         // Split blocks by blank lines (Aiken standard).
-        $blocks = preg_split("/\R{2,}/", trim($aikenText));
-        if (!is_array($blocks) || empty($blocks)) {
+        $blocks = preg_split('/\\R{2,}/', trim($aikenText));
+        if (!\is_array($blocks) || empty($blocks)) {
             return $aikenText;
         }
 
@@ -181,9 +186,10 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            $lines = preg_split("/\R/", $block);
-            if (!is_array($lines) || empty($lines)) {
+            $lines = preg_split('/\\R/', $block);
+            if (!\is_array($lines) || empty($lines)) {
                 $out[] = $block;
+
                 continue;
             }
 
@@ -206,8 +212,8 @@ final class AiDisclosureHelper
             return $text;
         }
 
-        $blocks = preg_split("/\R{2,}/", trim($text));
-        if (!is_array($blocks) || empty($blocks)) {
+        $blocks = preg_split('/\\R{2,}/', trim($text));
+        if (!\is_array($blocks) || empty($blocks)) {
             return $text;
         }
 
@@ -218,9 +224,10 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            $lines = preg_split("/\R/", $block);
-            if (!is_array($lines) || empty($lines)) {
+            $lines = preg_split('/\\R/', $block);
+            if (!\is_array($lines) || empty($lines)) {
                 $out[] = $block;
+
                 continue;
             }
 
@@ -236,8 +243,7 @@ final class AiDisclosureHelper
      * Decorate a structured payload (arrays) by inserting a marker prefix only into specific keys.
      * This is designed for LearnPath generation payloads.
      *
-     * @param mixed $value
-     * @param array<int,string> $keys Keys that are considered "content" fields.
+     * @param array<int,string> $keys keys that are considered "content" fields
      */
     public function decorateStructuredPayload(
         mixed $value,
@@ -246,7 +252,7 @@ final class AiDisclosureHelper
     ): mixed {
         if (\is_array($value)) {
             foreach ($value as $k => $v) {
-                if (\is_string($k) && in_array($k, $keys, true)) {
+                if (\is_string($k) && \in_array($k, $keys, true)) {
                     if (\is_string($v) && '' !== trim($v)) {
                         // Prefer HTML tag injection if it's HTML.
                         if ($this->looksLikeHtmlFragment($v)) {
@@ -254,6 +260,7 @@ final class AiDisclosureHelper
                         } else {
                             $value[$k] = $this->prefixIfMissing($v, $prefix);
                         }
+
                         continue;
                     }
                 }
@@ -332,11 +339,11 @@ final class AiDisclosureHelper
     {
         // Legacy global helper (works in most Chamilo contexts).
         try {
-            if (function_exists('api_get_setting')) {
+            if (\function_exists('api_get_setting')) {
                 return api_get_setting($key);
             }
 
-            if (function_exists('api_get_configuration_value')) {
+            if (\function_exists('api_get_configuration_value')) {
                 return api_get_configuration_value($key);
             }
         } catch (Throwable) {

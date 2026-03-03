@@ -45,6 +45,7 @@ use const FILTER_SANITIZE_NUMBER_INT;
 use const FILTER_VALIDATE_IP;
 use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
+use const PHP_URL_QUERY;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/ai')]
@@ -79,11 +80,12 @@ class AiController extends AbstractController
         $providers = [];
         foreach ($raw as $key => $label) {
             // If it's a numeric array, fallback to value as both key+label.
-            if (is_int($key)) {
+            if (\is_int($key)) {
                 $providers[] = [
                     'key' => (string) $label,
                     'label' => (string) $label,
                 ];
+
                 continue;
             }
 
@@ -786,6 +788,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiImageProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement image generation interface.';
+
                         continue;
                     }
 
@@ -796,19 +799,23 @@ class AiController extends AbstractController
 
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
                     $providerUsed = $providerName;
+
                     break;
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
+
                     continue;
                 }
             }
@@ -979,6 +986,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
+
                         continue;
                     }
 
@@ -999,12 +1007,14 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
@@ -1018,6 +1028,7 @@ class AiController extends AbstractController
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
+
                     continue;
                 }
             }
@@ -1029,12 +1040,13 @@ class AiController extends AbstractController
                 foreach ($errors as $err) {
                     if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
+
                         break;
                     }
                 }
 
                 $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
+                    $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
                 );
 
                 $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
@@ -1320,6 +1332,7 @@ class AiController extends AbstractController
             $linkCourse = $link->getCourse();
             if ($linkCourse && (int) $linkCourse->getId() === $cid) {
                 $belongsToCourse = true;
+
                 break;
             }
         }
@@ -1901,6 +1914,7 @@ class AiController extends AbstractController
                     continue;
                 }
                 $providers[] = ['key' => $k, 'label' => $k];
+
                 continue;
             }
 
@@ -2023,7 +2037,7 @@ class AiController extends AbstractController
         }
 
         $q = parse_url($ref, PHP_URL_QUERY);
-        if (!is_string($q) || '' === trim($q)) {
+        if (!\is_string($q) || '' === trim($q)) {
             return ['cid' => 0, 'sid' => 0, 'gid' => 0];
         }
 
@@ -2072,9 +2086,9 @@ class AiController extends AbstractController
         if ('' !== $courseCode) {
             // Prefer legacy helper if available in this runtime.
             try {
-                if (function_exists('api_get_course_info')) {
+                if (\function_exists('api_get_course_info')) {
                     $info = api_get_course_info($courseCode);
-                    if (is_array($info) && !empty($info['real_id'])) {
+                    if (\is_array($info) && !empty($info['real_id'])) {
                         return (int) $info['real_id'];
                     }
                 }
@@ -2105,7 +2119,7 @@ class AiController extends AbstractController
 
         try {
             $info = api_get_course_info();
-            if (is_array($info) && !empty($info['real_id'])) {
+            if (\is_array($info) && !empty($info['real_id'])) {
                 return (int) $info['real_id'];
             }
         } catch (Throwable) {

@@ -110,6 +110,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
             $data = $this->decodeJsonLoose($raw);
             if (!\is_array($data)) {
                 $this->write(\sprintf('Skipping display.%s (id=%d, url=%d): invalid JSON.', $variable, $id, $accessUrl));
+
                 continue;
             }
 
@@ -118,11 +119,12 @@ final class Version20260302200700 extends AbstractMigrationChamilo
 
             if (!\is_string($json) || '' === $json) {
                 $this->write(\sprintf('Skipping display.%s (id=%d): failed to encode JSON.', $variable, $id));
+
                 continue;
             }
 
             $this->connection->executeStatement(
-                "UPDATE settings SET selected_value = :val WHERE id = :id",
+                'UPDATE settings SET selected_value = :val WHERE id = :id',
                 ['val' => $json, 'id' => $id]
             );
 
@@ -133,9 +135,9 @@ final class Version20260302200700 extends AbstractMigrationChamilo
     private function migrateTemplateJsonExample(string $variable, bool $forward): void
     {
         $row = $this->connection->fetchAssociative(
-            "SELECT id, json_example
+            'SELECT id, json_example
                FROM settings_value_template
-              WHERE variable = :var",
+              WHERE variable = :var',
             ['var' => $variable]
         );
 
@@ -171,7 +173,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
         }
 
         $this->connection->executeStatement(
-            "UPDATE settings_value_template SET json_example = :val WHERE id = :id",
+            'UPDATE settings_value_template SET json_example = :val WHERE id = :id',
             ['val' => $json, 'id' => $id]
         );
 
@@ -201,6 +203,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
             if ($this->isLegacyList($roleConfig)) {
                 $roleConfig = $this->configFromLegacyList($roleConfig);
                 $data[$role] = $this->migrateConfigNode($roleConfig, $forward);
+
                 continue;
             }
 
@@ -237,6 +240,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
 
             if (\in_array($key, self::$knownMenuTabs, true)) {
                 $menu[$key] = true;
+
                 continue;
             }
 
@@ -245,6 +249,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
                 $topbar['topbar_certificate'] = true;
                 $topbar['topbar_my_certificates'] = true;
                 $topbar['topbar_my_custom_certificate'] = true;
+
                 continue;
             }
 
@@ -255,7 +260,7 @@ final class Version20260302200700 extends AbstractMigrationChamilo
 
         // Ensure alias consistency if only new keys were set.
         if (!isset($topbar['topbar_certificate'])) {
-            $topbar['topbar_certificate'] = ($topbar['topbar_my_certificates'] === true || $topbar['topbar_my_custom_certificate'] === true);
+            $topbar['topbar_certificate'] = (true === $topbar['topbar_my_certificates'] || true === $topbar['topbar_my_custom_certificate']);
         }
 
         return [
@@ -276,13 +281,13 @@ final class Version20260302200700 extends AbstractMigrationChamilo
         if ($forward) {
             // Forward: topbar_certificate -> topbar_my_certificates + topbar_my_custom_certificate
             // Do not overwrite already-present new keys.
-            if (array_key_exists('topbar_certificate', $topbar)) {
-                $enabled = ($topbar['topbar_certificate'] === true);
+            if (\array_key_exists('topbar_certificate', $topbar)) {
+                $enabled = (true === $topbar['topbar_certificate']);
 
-                if (!array_key_exists('topbar_my_certificates', $topbar)) {
+                if (!\array_key_exists('topbar_my_certificates', $topbar)) {
                     $topbar['topbar_my_certificates'] = $enabled;
                 }
-                if (!array_key_exists('topbar_my_custom_certificate', $topbar)) {
+                if (!\array_key_exists('topbar_my_custom_certificate', $topbar)) {
                     $topbar['topbar_my_custom_certificate'] = $enabled;
                 }
 
@@ -290,9 +295,9 @@ final class Version20260302200700 extends AbstractMigrationChamilo
             }
         } else {
             // Rollback: rebuild old key, but only if it does not exist.
-            if (!array_key_exists('topbar_certificate', $topbar)) {
-                $myCertificates = array_key_exists('topbar_my_certificates', $topbar) && $topbar['topbar_my_certificates'] === true;
-                $myCustom = array_key_exists('topbar_my_custom_certificate', $topbar) && $topbar['topbar_my_custom_certificate'] === true;
+            if (!\array_key_exists('topbar_certificate', $topbar)) {
+                $myCertificates = \array_key_exists('topbar_my_certificates', $topbar) && true === $topbar['topbar_my_certificates'];
+                $myCustom = \array_key_exists('topbar_my_custom_certificate', $topbar) && true === $topbar['topbar_my_custom_certificate'];
 
                 $topbar['topbar_certificate'] = ($myCertificates || $myCustom);
 

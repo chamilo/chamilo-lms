@@ -37,21 +37,21 @@ final class UserMergeHelper
      *
      * @param bool|null $enableLogs optional override for this call only (default: null = keep current flag)
      */
-    public function mergeUsers(int $keepUserId, int $mergeUserId, ?bool $enableLogs = null): bool
+    public function mergeUsers(int $keepUserId, int $mergeUserId, ?bool $enableLogs = null, bool $hardDeleteMergedUser = false): bool
     {
         $keepUserId = (int) $keepUserId;
         $mergeUserId = (int) $mergeUserId;
 
-        // Per-call override (restored at the end to avoid side effects on shared service).
         $previousEnableLogs = $this->enableLogs;
         if (null !== $enableLogs) {
             $this->enableLogs = (bool) $enableLogs;
         }
 
         try {
-            $this->log(LogLevel::ERROR, 'mergeUsers() called.', [
+            $this->log(LogLevel::INFO, 'mergeUsers() called.', [
                 'keepUserId' => $keepUserId,
                 'mergeUserId' => $mergeUserId,
+                'hardDeleteMergedUser' => $hardDeleteMergedUser,
             ]);
 
             if ($keepUserId <= 0 || $mergeUserId <= 0 || $keepUserId === $mergeUserId) {
@@ -80,38 +80,21 @@ final class UserMergeHelper
                 return false;
             }
 
-            $this->log(LogLevel::ERROR, 'Users loaded.', [
-                'keepUserId' => (int) $keepUser->getId(),
-                'mergeUserId' => (int) $mergeUser->getId(),
-                'keepUsername' => (string) $keepUser->getUsername(),
-                'mergeUsername' => (string) $mergeUser->getUsername(),
-            ]);
-
             $conn = $this->em->getConnection();
             $conn->beginTransaction();
-            $this->log(LogLevel::ERROR, 'Transaction started.');
 
             try {
-                $this->log(LogLevel::ERROR, 'Step 1: mergeExtraFieldValues().');
                 $this->mergeExtraFieldValues($conn, $mergeUserId, $keepUserId);
-
-                $this->log(LogLevel::ERROR, 'Step 1: mergeExtraFieldTags().');
                 $this->mergeExtraFieldTags($conn, $mergeUserId, $keepUserId);
-
-                $this->log(LogLevel::ERROR, 'Step 2: reassignUserResourcesToTargetSQL().');
                 $this->reassignUserResourcesToTargetSQL($conn, $mergeUser, $keepUser);
-
-                $this->log(LogLevel::ERROR, 'Step 3: markUserAsMerged().');
                 $this->markUserAsMerged($conn, $mergeUserId, $keepUserId);
 
                 $conn->commit();
 
-                $this->log(LogLevel::ERROR, 'Transaction committed. Merge completed successfully.', [
+                $this->log(LogLevel::INFO, 'Merge committed.', [
                     'keepUserId' => $keepUserId,
                     'mergeUserId' => $mergeUserId,
                 ]);
-
-                return true;
             } catch (Throwable $e) {
                 $this->safeRollback($conn);
 
@@ -124,8 +107,13 @@ final class UserMergeHelper
 
                 throw $e;
             }
+
+            if ($hardDeleteMergedUser) {
+                $this->hardDeleteUserAfterMerge($mergeUserId);
+            }
+
+            return true;
         } finally {
-            // Restore flag (important when the service is reused in the same request).
             $this->enableLogs = $previousEnableLogs;
         }
     }
@@ -138,7 +126,7 @@ final class UserMergeHelper
      *
      * @return int Number of merged accounts
      */
-    public function mergeUsersBatch(int $keepUserId, array $mergeUserIds, ?bool $enableLogs = null): int
+    public function mergeUsersBatch(int $keepUserId, array $mergeUserIds, ?bool $enableLogs = null, bool $hardDeleteMergedUsers = false): int
     {
         $keepUserId = (int) $keepUserId;
 
@@ -152,7 +140,6 @@ final class UserMergeHelper
             return 0;
         }
 
-        // Per-call override (restored at the end to avoid side effects on shared service).
         $previousEnableLogs = $this->enableLogs;
         if (null !== $enableLogs) {
             $this->enableLogs = (bool) $enableLogs;
@@ -167,9 +154,10 @@ final class UserMergeHelper
                 return 0;
             }
 
-            $this->log(LogLevel::ERROR, 'Batch merge started.', [
+            $this->log(LogLevel::INFO, 'Batch merge started.', [
                 'keepUserId' => $keepUserId,
                 'mergeUserIds' => $mergeUserIds,
+                'hardDeleteMergedUsers' => $hardDeleteMergedUsers,
             ]);
 
             $conn = $this->em->getConnection();
@@ -185,11 +173,6 @@ final class UserMergeHelper
                         throw new RuntimeException(self::LOG_PREFIX." Batch merge: user #{$mergeUserId} not found.");
                     }
 
-                    $this->log(LogLevel::ERROR, 'Batch merge item start.', [
-                        'keepUserId' => $keepUserId,
-                        'mergeUserId' => $mergeUserId,
-                    ]);
-
                     $this->mergeExtraFieldValues($conn, $mergeUserId, $keepUserId);
                     $this->mergeExtraFieldTags($conn, $mergeUserId, $keepUserId);
                     $this->reassignUserResourcesToTargetSQL($conn, $mergeUser, $keepUser);
@@ -200,12 +183,10 @@ final class UserMergeHelper
 
                 $conn->commit();
 
-                $this->log(LogLevel::ERROR, 'Batch merge committed.', [
+                $this->log(LogLevel::INFO, 'Batch merge committed.', [
                     'keepUserId' => $keepUserId,
                     'mergedCount' => $mergedCount,
                 ]);
-
-                return $mergedCount;
             } catch (Throwable $e) {
                 $this->safeRollback($conn);
 
@@ -218,8 +199,48 @@ final class UserMergeHelper
 
                 throw $e;
             }
+
+            if ($hardDeleteMergedUsers && $mergedCount > 0) {
+                foreach ($mergeUserIds as $mergeUserId) {
+                    $this->hardDeleteUserAfterMerge((int) $mergeUserId);
+                }
+            }
+
+            return $mergedCount;
         } finally {
             $this->enableLogs = $previousEnableLogs;
+        }
+    }
+
+    private function hardDeleteUserAfterMerge(int $userId): bool
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0) {
+            return false;
+        }
+
+        /** @var User|null $user */
+        $user = $this->userRepository->find($userId);
+        if (!$user) {
+            $this->log(LogLevel::INFO, 'Hard delete skipped: user not found.', ['userId' => $userId]);
+
+            return true;
+        }
+
+        try {
+            $this->log(LogLevel::INFO, 'Hard delete started after merge.', ['userId' => $userId]);
+            $this->userRepository->deleteUser($user, true);
+            $this->log(LogLevel::INFO, 'Hard delete completed after merge.', ['userId' => $userId]);
+
+            return true;
+        } catch (Throwable $e) {
+            $this->log(LogLevel::ERROR, 'Hard delete failed after merge.', [
+                'userId' => $userId,
+                'message' => $e->getMessage(),
+                'class' => $e::class,
+            ]);
+
+            return false;
         }
     }
 

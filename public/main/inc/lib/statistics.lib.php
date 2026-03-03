@@ -2645,7 +2645,6 @@ class Statistics
             }
 
             $selectedExtraFieldInfo = Database::fetch_assoc($res) ?: null;
-
             if ($selectedExtraFieldInfo) {
                 $selectedExtraFieldLabel = (string) ($selectedExtraFieldInfo['display_text'] ?: $selectedExtraFieldInfo['variable']);
             }
@@ -2676,10 +2675,7 @@ class Statistics
             $extraFieldLabels[$fieldId] = $label;
         }
 
-        // Helper to build an empty table with the correct headers
-        $buildEmptyTable = function () use ($extraFieldIdsToLoad, $extraFieldLabels) {
-            $table = new SortableTableFromArray([], 0, 20);
-
+        $applyHeaders = static function (SortableTableFromArray $table) use ($extraFieldIdsToLoad, $extraFieldLabels): void {
             $col = 0;
             $table->set_header($col++, get_lang('Id'), false);
             $table->set_header($col++, get_lang('Firstname'), false);
@@ -2698,6 +2694,11 @@ class Statistics
 
             $table->set_header($col++, get_lang('Active'), false);
             $table->set_header($col++, get_lang('Actions'), false);
+        };
+
+        $buildEmptyTable = static function () use ($applyHeaders): SortableTableFromArray {
+            $table = new SortableTableFromArray([], 0, 20);
+            $applyHeaders($table);
 
             $table->set_form_actions([
                 'export_csv' => get_lang('Export as CSV'),
@@ -2707,7 +2708,7 @@ class Statistics
             return $table;
         };
 
-        // Build duplicate source query (only active != -1, exclude empty duplicate keys)
+        // Build duplicate source query (only active != softDeleted, exclude empty duplicate keys)
         $duplicateUsers = [];
         $sql = '';
 
@@ -2735,7 +2736,7 @@ class Statistics
                         LOWER(TRIM(COALESCE(lastname, ''))) AS d_lastname,
                         COUNT(*) AS qty
                     FROM $userTable
-                    WHERE active <> -1
+                    WHERE active <> ".USER_SOFT_DELETED."
                       AND (
                             TRIM(COALESCE(firstname, '')) <> ''
                          OR TRIM(COALESCE(lastname, '')) <> ''
@@ -2747,7 +2748,7 @@ class Statistics
                 ) d
                     ON d.d_firstname = LOWER(TRIM(COALESCE(u.firstname, '')))
                    AND d.d_lastname = LOWER(TRIM(COALESCE(u.lastname, '')))
-                WHERE u.active <> -1
+                WHERE u.active <> ".USER_SOFT_DELETED."
                 ORDER BY
                     duplicate_label ASC,
                     u.created_at ASC,
@@ -2776,13 +2777,13 @@ class Statistics
                         LOWER(TRIM(COALESCE(email, ''))) AS d_email,
                         COUNT(*) AS qty
                     FROM $userTable
-                    WHERE active <> -1
+                    WHERE active <> ".USER_SOFT_DELETED."
                       AND TRIM(COALESCE(email, '')) <> ''
                     GROUP BY LOWER(TRIM(COALESCE(email, '')))
                     HAVING COUNT(*) > 1
                 ) d
                     ON d.d_email = LOWER(TRIM(COALESCE(u.email, '')))
-                WHERE u.active <> -1
+                WHERE u.active <> ".USER_SOFT_DELETED."
                 ORDER BY
                     duplicate_label ASC,
                     u.created_at ASC,
@@ -2795,6 +2796,7 @@ class Statistics
                     $sql = '';
                     break;
                 }
+
                 $sql = "
                 SELECT
                     u.id,
@@ -2821,13 +2823,13 @@ class Statistics
                     INNER JOIN $userTable u2
                         ON u2.id = efv2.item_id
                     WHERE efv2.field_id = ".(int) $extraFieldId."
-                      AND u2.active <> -1
+                      AND u2.active <> ".USER_SOFT_DELETED."
                       AND TRIM(COALESCE(efv2.field_value, '')) <> ''
                     GROUP BY LOWER(TRIM(COALESCE(efv2.field_value, '')))
                     HAVING COUNT(*) > 1
                 ) d
                     ON d.d_value = LOWER(TRIM(COALESCE(efv.field_value, '')))
-                WHERE u.active <> -1
+                WHERE u.active <> ".USER_SOFT_DELETED."
                 ORDER BY
                     duplicate_label ASC,
                     u.created_at ASC,
@@ -2855,8 +2857,8 @@ class Statistics
         }
 
         // Collect user IDs
-        $userIds = array_map(static fn(array $r): int => (int) $r['id'], $duplicateUsers);
-        $userIds = array_values(array_unique($userIds));
+        $userIds = array_map(static fn (array $r): int => (int) $r['id'], $duplicateUsers);
+        $userIds = array_values(array_unique(array_filter($userIds, static fn (int $id): bool => $id > 0)));
 
         if (empty($userIds)) {
             return $buildEmptyTable();
@@ -2908,14 +2910,17 @@ class Statistics
             }
         }
 
-        // Group rows and select KEEP user (oldest registration date, then lowest ID)
+        // Group rows (group by the normalized duplicate key, not by user id)
         $groups = []; // [groupKey] => rows[]
         foreach ($duplicateUsers as $row) {
             $groupKey = self::buildDuplicateUsersGroupKey($row, $dupMode);
+            if (!isset($groups[$groupKey])) {
+                $groups[$groupKey] = [];
+            }
             $groups[$groupKey][] = $row;
         }
 
-        $keepUserIdByGroup = [];
+        // Sort users inside each group (oldest registration date, then lowest ID)
         foreach ($groups as $groupKey => $rows) {
             usort($rows, static function (array $a, array $b): int {
                 $da = (string) ($a['registration_date'] ?? '');
@@ -2936,19 +2941,18 @@ class Statistics
             });
 
             $groups[$groupKey] = $rows;
-            $keepUserIdByGroup[$groupKey] = (int) $rows[0]['id'];
         }
 
-        // Preserve grouped ordering in final flat dataset
+        // Flatten grouped ordering into one dataset (index.php will render grouped blocks).
         $rowsForTable = [];
         foreach ($groups as $groupKey => $rows) {
             foreach ($rows as $row) {
-                $userId = (int) $row['id'];
+                $userId = (int) ($row['id'] ?? 0);
+                $activeValue = (int) ($row['active'] ?? 0);
 
                 $courseCount = $courseCounts[$userId] ?? 0;
                 $sessionCount = $sessionCounts[$userId] ?? 0;
 
-                $activeValue = (int) ($row['active'] ?? 0);
                 $activeLabel = self::getDuplicateUserActiveLabel($activeValue);
                 $roleLabel = self::getDuplicateUserRoleLabel((int) ($row['status'] ?? 0));
 
@@ -2967,7 +2971,6 @@ class Statistics
                 $tableRow[] = (string) $courseCount;
                 $tableRow[] = (string) $sessionCount;
 
-                // Extra field columns (selected + additional)
                 foreach ($extraFieldIdsToLoad as $fid) {
                     $val = $extraValuesByUser[$userId][$fid] ?? '';
                     $tableRow[] = Security::remove_XSS($val);
@@ -2988,34 +2991,15 @@ class Statistics
             }
         }
 
-        // Build table
         $table = new SortableTableFromArray($rowsForTable, 0, 20);
+        $applyHeaders($table);
 
-        $col = 0;
-        $table->set_header($col++, get_lang('Id'), false);
-        $table->set_header($col++, get_lang('Firstname'), false);
-        $table->set_header($col++, get_lang('Lastname'), false);
-        $table->set_header($col++, get_lang('Email'), false);
-        $table->set_header($col++, get_lang('Registration date'), false);
-        $table->set_header($col++, get_lang('First login in platform'), false);
-        $table->set_header($col++, get_lang('Last login in platform'), false);
-        $table->set_header($col++, get_lang('Role'), false);
-        $table->set_header($col++, get_lang('Courses'), false);
-        $table->set_header($col++, get_lang('Sessions'), false);
-
-        foreach ($extraFieldIdsToLoad as $fid) {
-            $table->set_header($col++, $extraFieldLabels[$fid] ?? ('Extra field #'.$fid), false);
-        }
-
-        $table->set_header($col++, get_lang('Active'), false);
-        $table->set_header($col++, get_lang('Actions'), false);
-
-        // Export actions
         $table->set_form_actions([
             'export_csv' => get_lang('Export as CSV'),
             'export_excel' => get_lang('Export as XLS'),
         ]);
 
+        // IMPORTANT: Return the table object (index.php uses ->toArray() for export and grouping).
         return $table;
     }
 
@@ -3038,7 +3022,7 @@ class Statistics
             $baseParams['extra_field_id'] = $extraFieldId;
         }
 
-        // Preserve optional extra columns
+        // Preserve optional extra columns (can be array)
         if (isset($_GET['additional_profile_field'])) {
             $apf = $_GET['additional_profile_field'];
             if (!is_array($apf)) {
@@ -3060,7 +3044,7 @@ class Statistics
 
         $html = '<div class="ch-dups-actions">';
 
-        // Details (same button size as others)
+        // Details
         $detailsUrl = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId;
         $detailsTitle = (string) get_lang('Details');
         $html .= sprintf(
@@ -3109,8 +3093,8 @@ class Statistics
         $confirmParts = [
             sprintf((string) get_lang('Unify this duplicate group into user #%s?'), (string) $userId),
             (string) get_lang('This will merge all other accounts in the same group into this account.'),
-            (string) get_lang('Merged accounts will be set to soft-deleted (active=-1) and disappear from this report.'),
-            (string) get_lang('You can permanently delete merged accounts later from the Users list.'),
+            (string) get_lang('Merged accounts will be permanently deleted and will disappear from this report.'),
+            (string) get_lang('This action cannot be undone.'),
         ];
         $confirm = $escapeConfirm(trim(implode(' ', $confirmParts)));
 

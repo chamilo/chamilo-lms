@@ -174,7 +174,7 @@ final class AiDisclosureHelper
         }
 
         // Split blocks by blank lines (Aiken standard).
-        $blocks = preg_split('/\\R{2,}/', trim($aikenText));
+        $blocks = preg_split('/\R{2,}/', trim($aikenText));
         if (!\is_array($blocks) || empty($blocks)) {
             return $aikenText;
         }
@@ -186,7 +186,7 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            $lines = preg_split('/\\R/', $block);
+            $lines = preg_split('/\R/', $block);
             if (!\is_array($lines) || empty($lines)) {
                 $out[] = $block;
 
@@ -212,7 +212,7 @@ final class AiDisclosureHelper
             return $text;
         }
 
-        $blocks = preg_split('/\\R{2,}/', trim($text));
+        $blocks = preg_split('/\R{2,}/', trim($text));
         if (!\is_array($blocks) || empty($blocks)) {
             return $text;
         }
@@ -224,7 +224,7 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            $lines = preg_split('/\\R/', $block);
+            $lines = preg_split('/\R/', $block);
             if (!\is_array($lines) || empty($lines)) {
                 $out[] = $block;
 

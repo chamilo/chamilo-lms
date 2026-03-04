@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
+use const ENT_QUOTES;
+
 final class GeminiProvider implements AiProviderInterface, AiImageProviderInterface, AiDocumentProviderInterface, AiVideoJobProviderInterface
 {
     private array $providerConfig;
@@ -37,7 +39,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
     private string $imageModel = '';
     private string $imageUrlTemplate = '';
     private string $imageRequestFormat = ''; // 'generateContent' or 'predict'
-    /** @var array<int, string> */
+
+    /**
+     * @var array<int, string>
+     */
     private array $imageResponseModalities = ['IMAGE', 'TEXT'];
     private int $imageN = 1;
 
@@ -350,8 +355,6 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
      * Generate an image.
      *
      * @param ?array $options Provider-specific options
-     *
-     * @return array|string|null
      */
     public function generateImage(string $prompt, string $toolName, ?array $options = []): array|string|null
     {
@@ -538,6 +541,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         $err = $this->extractGeminiErrorMessage($data) ?? 'No inline image returned by Gemini generateContent.';
+
         return [
             'is_base64' => false,
             'content' => null,
@@ -605,6 +609,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         $err = $this->extractGeminiErrorMessage($data) ?? 'No base64 image returned by Imagen predict.';
+
         return [
             'is_base64' => false,
             'content' => null,
@@ -639,6 +644,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
             if (!\is_array($data)) {
                 error_log('[AI][Gemini] Invalid JSON response (status='.$status.'). Raw: '.mb_substr($raw, 0, 800));
+
                 return [];
             }
 
@@ -650,6 +656,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             return $data;
         } catch (Throwable $e) {
             error_log('[AI][Gemini] HTTP exception: '.$e->getMessage());
+
             return [];
         }
     }
@@ -663,6 +670,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
         if ('' === trim($this->videoModel) || '' === trim($this->videoUrlTemplate)) {
             error_log('[AI][Gemini][Video] Video is not configured for this provider.');
+
             return null;
         }
 
@@ -727,6 +735,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         $opName = isset($data['name']) ? trim((string) $data['name']) : '';
         if ('' === $opName) {
             $err = $this->extractGeminiErrorMessage($data) ?? 'Missing operation name for video generation.';
+
             return 'Error: '.$err;
         }
 
@@ -845,6 +854,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         $uri = $this->extractVeoVideoUri($raw);
         if ('' === $uri) {
             $err = $this->extractGeminiErrorMessage($raw) ?? 'Missing video URI in Veo operation response.';
+
             return [
                 'is_base64' => false,
                 'content' => null,
@@ -896,7 +906,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         $b64 = strtr($publicId, '-_', '+/');
-        $pad = strlen($b64) % 4;
+        $pad = \strlen($b64) % 4;
         if (0 !== $pad) {
             $b64 .= str_repeat('=', 4 - $pad);
         }
@@ -908,6 +918,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         $decoded = trim((string) $decoded);
+
         return '' !== $decoded ? $decoded : $publicId;
     }
 
@@ -1022,6 +1033,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 return trim($msg);
             }
         }
+
         return null;
     }
 

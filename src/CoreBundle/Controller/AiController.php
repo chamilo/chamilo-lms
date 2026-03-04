@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\AiProvider\AiDocumentProcessProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
+use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -935,22 +936,41 @@ class AiController extends AbstractController
             }
 
             $n = (int) ($data['n'] ?? 1);
+            if ($n <= 0) {
+                $n = 1;
+            }
+
             $language = (string) ($data['language'] ?? 'en');
             $prompt = trim((string) ($data['prompt'] ?? ''));
             $toolName = trim((string) ($data['tool'] ?? 'document'));
-            $aiProvider = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
-            $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : null;
+
+            $aiProvider = isset($data['ai_provider']) ? trim((string) $data['ai_provider']) : null;
             if ('' === (string) $aiProvider) {
                 $aiProvider = null;
             }
 
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
-            $seconds = isset($data['seconds']) ? trim((string) $data['seconds']) : null;
-            $size = isset($data['size']) ? trim((string) $data['size']) : null;
 
-            if ($n <= 0 || '' === $prompt || '' === $toolName) {
-                return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters. Ensure all fields are filled correctly.'], 400);
+            // Gemini requires durationSeconds to be a NUMBER (int).
+            $seconds = null;
+            if (isset($data['seconds'])) {
+                $secondsInt = (int) $data['seconds'];
+                if ($secondsInt > 0) {
+                    $seconds = $secondsInt;
+                }
+            }
+
+            $size = isset($data['size']) ? trim((string) $data['size']) : null;
+            if ('' === (string) $size) {
+                $size = null;
+            }
+
+            if ('' === $prompt || '' === $toolName) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
             }
 
             $availableProviders = $this->aiProviderFactory->getProvidersForType('video');
@@ -968,7 +988,6 @@ class AiController extends AbstractController
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
 
-            // Auto mode: try last known working provider first (per course).
             if (!$explicitProvider) {
                 $active = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
                 if ('' !== $active && \in_array($active, $providersToTry, true)) {
@@ -986,20 +1005,29 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
-
                         continue;
                     }
 
                     $options = [
                         'language' => $language,
-                        'n' => $n,
                     ];
 
-                    if (null !== $seconds && '' !== $seconds) {
-                        $options['seconds'] = $seconds;
+                    // Keep "n" for providers that support it, but NEVER send it to Gemini Veo.
+                    if ($n > 0) {
+                        $options['n'] = $n;
                     }
-                    if (null !== $size && '' !== $size) {
+
+                    if (null !== $seconds) {
+                        $options['seconds'] = $seconds; // int
+                    }
+
+                    if (null !== $size) {
                         $options['size'] = $size;
+                    }
+
+                    if ('gemini' === strtolower((string) $providerName)) {
+                        // Veo rejects numberOfVideos/candidateCount style options.
+                        unset($options['n']);
                     }
 
                     $result = $aiService->generateVideo($prompt, $toolName, $options);
@@ -1007,14 +1035,12 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
-
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
-
                         continue;
                     }
 
@@ -1028,7 +1054,6 @@ class AiController extends AbstractController
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
-
                     continue;
                 }
             }
@@ -1040,14 +1065,13 @@ class AiController extends AbstractController
                 foreach ($errors as $err) {
                     if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
-
                         break;
                     }
                 }
 
-                $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                    $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
-                );
+                $message = '' !== $firstError
+                    ? preg_replace('/^Error:\s*/', '', $firstError)
+                    : ($explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.');
 
                 $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
 
@@ -1064,7 +1088,6 @@ class AiController extends AbstractController
                 return new JsonResponse($payload, $statusCode);
             }
 
-            // Audit (provider details in DB only).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video:'.sha1($prompt.'|'.$toolName.'|'.$language.'|'.$n.'|'.(string) $seconds.'|'.(string) $size),
                 userId: $this->getCurrentUserId(),
@@ -1082,7 +1105,7 @@ class AiController extends AbstractController
                 sessionId: $sid > 0 ? $sid : api_get_session_id()
             );
 
-            // Normalize legacy string result.
+            // String result normalization (keep existing behavior)
             if (\is_string($result)) {
                 $raw = trim($result);
 
@@ -1105,18 +1128,12 @@ class AiController extends AbstractController
                     $normalized['id'] = $raw;
                 }
 
-                $payload = [
+                return new JsonResponse([
                     'success' => true,
                     'text' => (string) ($normalized['url'] ?? $normalized['content'] ?? $normalized['id'] ?? ''),
                     'result' => $normalized,
                     'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
-                ];
-
-                if ($this->shouldExposeProviderDetails()) {
-                    $payload['provider_used'] = $providerUsed;
-                }
-
-                return new JsonResponse($payload);
+                ]);
             }
 
             if (!\is_array($result)) {
@@ -1126,22 +1143,6 @@ class AiController extends AbstractController
             $result['is_base64'] = (bool) ($result['is_base64'] ?? false);
             $result['content_type'] = (string) ($result['content_type'] ?? 'video/mp4');
             $result['revised_prompt'] = $result['revised_prompt'] ?? null;
-
-            $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
-            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
-
-            // Best-effort: inline a safe remote URL as base64, but do not fail if it cannot be fetched.
-            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
-                try {
-                    $fetched = $this->fetchUrlAsBase64($url, 15 * 1024 * 1024);
-                    $result['content'] = $fetched['content'];
-                    $result['content_type'] = $fetched['content_type'];
-                    $result['is_base64'] = true;
-                    $result['url'] = null;
-                } catch (Throwable $e) {
-                    error_log('[AI][video] Failed to fetch video URL as base64: '.$e->getMessage());
-                }
-            }
 
             $text = '';
             if (isset($result['url']) && \is_string($result['url']) && '' !== trim($result['url'])) {
@@ -1184,23 +1185,38 @@ class AiController extends AbstractController
                 return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
             }
 
+            $cid = (int) $request->query->get('cid', 0);
+
             $aiProvider = $request->query->get('ai_provider');
             $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
+
             if ('' === $aiProvider) {
-                // Best-effort fallback: use last working provider for video (course unknown here => generic key).
-                $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', 0);
+                if ($cid > 0) {
+                    $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
+                }
+                if ('' === $aiProvider) {
+                    $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', 0);
+                }
             }
+
             if ('' === $aiProvider) {
-                $aiProvider = null; // Factory default.
+                $aiProvider = null; // Factory default
             }
 
             $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'video');
+
             if (!$aiService instanceof AiVideoProviderInterface) {
-                return new JsonResponse(['success' => false, 'text' => 'Selected AI provider does not support video generation.'], 400);
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support video generation.',
+                ], 400);
             }
 
-            if (!method_exists($aiService, 'getVideoJobStatus')) {
-                return new JsonResponse(['success' => false, 'text' => 'This AI provider does not expose a video job status method.'], 400);
+            if (!$aiService instanceof AiVideoJobProviderInterface) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'This AI provider does not expose a video job status method.',
+                ], 400);
             }
 
             $job = $aiService->getVideoJobStatus($id);
@@ -1222,8 +1238,14 @@ class AiController extends AbstractController
                 'error' => '' !== $jobError ? $jobError : null,
             ];
 
-            if (\in_array($status, ['completed', 'succeeded', 'done'], true) && method_exists($aiService, 'getVideoJobContentAsBase64')) {
-                $content = $aiService->getVideoJobContentAsBase64($id, 15 * 1024 * 1024);
+            if (\in_array($status, ['completed', 'succeeded', 'done'], true)) {
+                $maxBytes = 15 * 1024 * 1024;
+                $p = is_string($aiProvider) ? strtolower(trim($aiProvider)) : '';
+                if ('gemini' === $p) {
+                    $maxBytes = 80 * 1024 * 1024; // only Gemini
+                }
+
+                $content = $aiService->getVideoJobContentAsBase64($id, $maxBytes);
                 if (\is_array($content)) {
                     $result['is_base64'] = (bool) ($content['is_base64'] ?? false);
                     $result['content'] = $content['content'] ?? null;
@@ -1231,12 +1253,13 @@ class AiController extends AbstractController
                     $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
 
                     if (!empty($content['error'])) {
-                        $result['error'] = \is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
+                        $result['error'] = \is_string($content['error'])
+                            ? trim($content['error'])
+                            : (string) $content['error'];
                     }
                 }
             }
 
-            // Audit (job status polling).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video_job:'.trim((string) $id),
                 userId: $this->getCurrentUserId(),
@@ -1246,6 +1269,7 @@ class AiController extends AbstractController
                     'provider' => \is_string($aiProvider) && '' !== trim((string) $aiProvider) ? trim((string) $aiProvider) : 'default',
                     'job_id' => $id,
                     'status' => $status,
+                    'cid' => $cid,
                 ],
                 courseId: 0,
                 sessionId: api_get_session_id()

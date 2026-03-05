@@ -1149,6 +1149,12 @@ if (isset($questions) && is_array($questions)) {
 
                     break;
 
+                case 'multiplechoiceother':
+                case 'dropdown':
+                    $finalAnswer = current($userAnswer);
+
+                    break; 
+
                 default:
                     $finalAnswer = $userAnswer;
 

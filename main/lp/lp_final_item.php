@@ -68,7 +68,7 @@ $badgeLink = '';
 $finalItemTemplate = '';
 
 // Check prerequisites and total completion of the learning path
-$lp = new Learnpath($courseCode, $lpId, $userId);
+$lp = new learnpath($courseCode, $lpId, $userId);
 $count = $lp->getTotalItemsCountWithoutDirs();
 $excludeFailedStatus = !(true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'));
 $completed = $lp->get_complete_items_count($excludeFailedStatus);

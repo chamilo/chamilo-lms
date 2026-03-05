@@ -3630,7 +3630,7 @@ class learnpathItem
 
     public function isLpItemsCompleted()
     {
-        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+        $lp = new learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
         $count = $lp->getTotalItemsCountWithoutDirs([TOOL_LP_FINAL_ITEM]);
         $excludeFailedStatus = !(true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'));
         $completed = $lp->get_complete_items_count($excludeFailedStatus, [TOOL_LP_FINAL_ITEM]);
@@ -3641,7 +3641,7 @@ class learnpathItem
 
     public function getLpFinalItem()
     {
-        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+        $lp = new learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
 
         return $lp->getFinalItem();
     }

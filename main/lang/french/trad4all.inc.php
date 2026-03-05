@@ -9057,4 +9057,5 @@ $Unify = "Unifier";
 $AreYouSureToUnify = "Êtes-vous sûr d'unifier";
 $FinalUser = "Utilisateur final";
 $WillMergeNUsers = "Fusionnera {n} utilisateurs";
+$UserUnsubscribedFromOldSessionAsThereWasOnlyOneCourse = "Note: L'utilisateur a été désinscrit de la session d'origine étant donné qu'elle ne contenait que ce cours-là.";
 ?>

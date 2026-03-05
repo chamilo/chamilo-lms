@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Helpers;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraField;
+use ExtraFieldValue;
 use Security;
 use Throwable;
 
@@ -41,7 +43,9 @@ final class AiDisclosureHelper
 
     private ?bool $enabledCache = null;
 
-    /** @var array<string,bool> */
+    /**
+     * @var array<string,bool>
+     */
     private array $aiAssistedCache = [];
 
     public function __construct(
@@ -193,18 +197,18 @@ final class AiDisclosureHelper
         }
 
         try {
-            if (!class_exists(\ExtraField::class) || !class_exists(\ExtraFieldValue::class)) {
+            if (!class_exists(ExtraField::class) || !class_exists(ExtraFieldValue::class)) {
                 return;
             }
 
-            $ef = new \ExtraField($type);
+            $ef = new ExtraField($type);
             $fieldInfo = $ef->get_handler_field_info_by_field_variable(self::EXTRA_FIELD_VARIABLE_AI_ASSISTED);
 
             if (!$fieldInfo || empty($fieldInfo['id'])) {
                 $fieldId = $ef->save([
                     'display_text' => 'AI-assisted',
                     'variable' => self::EXTRA_FIELD_VARIABLE_AI_ASSISTED,
-                    'value_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
+                    'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
                     'visible_to_self' => 1,
                     'visible_to_others' => 1,
                     'changeable' => 1,
@@ -228,7 +232,7 @@ final class AiDisclosureHelper
                 return;
             }
 
-            $efv = new \ExtraFieldValue($type);
+            $efv = new ExtraFieldValue($type);
             $efv->save([
                 'field_id' => $fieldId,
                 'item_id' => $itemId,
@@ -239,7 +243,7 @@ final class AiDisclosureHelper
             // Keep in-memory cache coherent for this request.
             $k = $type.':'.$itemId;
             $this->aiAssistedCache[$k] = $enabled;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return;
         }
     }
@@ -335,19 +339,19 @@ final class AiDisclosureHelper
         }
 
         $k = $type.':'.$itemId;
-        if (array_key_exists($k, $this->aiAssistedCache)) {
+        if (\array_key_exists($k, $this->aiAssistedCache)) {
             return $this->aiAssistedCache[$k];
         }
 
         try {
-            $efv = new \ExtraFieldValue($type);
+            $efv = new ExtraFieldValue($type);
             $row = $efv->get_values_by_handler_and_field_variable($itemId, self::EXTRA_FIELD_VARIABLE_AI_ASSISTED);
 
-            $isAi = $row && (string) ($row['field_value'] ?? '') === '1';
+            $isAi = $row && '1' === (string) ($row['field_value'] ?? '');
             $this->aiAssistedCache[$k] = (bool) $isAi;
 
             return $this->aiAssistedCache[$k];
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $this->aiAssistedCache[$k] = false;
 
             return false;

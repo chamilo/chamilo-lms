@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use ChamiloSession as Session;
 
 /**
@@ -141,6 +143,12 @@ Question::displayTypeMenu($objExercise);
 
 echo '<div id="message"></div>';
 $token = Security::get_token();
+$aiDisclosureHelper = null;
+try {
+    $aiDisclosureHelper = Container::$container->get(AiDisclosureHelper::class);
+} catch (\Throwable) {
+    $aiDisclosureHelper = null;
+}
 //deletes a session when using don't know question type (ugly fix)
 Session::erase('less_answer');
 
@@ -255,11 +263,15 @@ if (isset($exerciseId) && $exerciseId > 0) {
                     $move = Display::getMdiIcon('cursor-move', 'moved', null, ICON_SIZE_MEDIUM);
                 }
 
+                $aiBadge = ($aiDisclosureHelper && $aiDisclosureHelper->shouldShowAiBadge('question', (int) $id))
+                    ? AiDisclosureHelper::renderAiBadgeHtml('prefix')
+                    : '';
+
                 // Question name
                 $questionName =
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">
-                        '.$move.' '.cut($title, 42).'
-                    </a>';
+                    '<a href="#" title="'.Security::remove_XSS($title).'">'
+                    .$move.' '.$aiBadge.cut($title, 42).
+                    '</a>';
 
                 $questionType = Display::return_icon(
                     $objQuestionTmp->getTypePicture(),

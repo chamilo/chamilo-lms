@@ -1,6 +1,11 @@
 <template>
   <BaseToolbar>
-    <BaseButton :label="t('Back')" icon="back" type="black" @click="router.back()" />
+    <BaseButton
+      :label="t('Back')"
+      icon="back"
+      type="black"
+      @click="router.back()"
+    />
   </BaseToolbar>
 
   <div class="p-4 space-y-4">
@@ -14,35 +19,72 @@
       }}
     </div>
 
-    <div v-if="isBooting" class="text-sm text-gray-600">{{ t("Loading...") }}</div>
+    <div
+      v-if="isBooting"
+      class="text-sm text-gray-600"
+    >
+      {{ t("Loading...") }}
+    </div>
 
-    <div v-else-if="!canEdit" class="p-3 rounded border border-gray-200 text-sm">
+    <div
+      v-else-if="!canEdit"
+      class="p-3 rounded border border-gray-200 text-sm"
+    >
       {{ t("You do not have permission to generate AI media in this course.") }}
     </div>
 
-    <div v-else-if="!aiHelpersEnabled" class="p-3 rounded border border-gray-200 text-sm">
+    <div
+      v-else-if="!aiHelpersEnabled"
+      class="p-3 rounded border border-gray-200 text-sm"
+    >
       {{ t("AI helpers are disabled at platform level.") }}
     </div>
 
-    <div v-else-if="!imageGeneratorEnabled && !videoGeneratorEnabled" class="p-3 rounded border border-gray-200 text-sm">
+    <div
+      v-else-if="!imageGeneratorEnabled && !videoGeneratorEnabled"
+      class="p-3 rounded border border-gray-200 text-sm"
+    >
       {{ t("AI media generation is disabled in course settings.") }}
     </div>
 
-    <div v-else-if="isLoadingCaps" class="text-sm text-gray-600">{{ t("Loading...") }}</div>
+    <div
+      v-else-if="isLoadingCaps"
+      class="text-sm text-gray-600"
+    >
+      {{ t("Loading...") }}
+    </div>
 
-    <div v-else-if="!canUseAnyType" class="p-3 rounded border border-gray-200 text-sm">
+    <div
+      v-else-if="!canUseAnyType"
+      class="p-3 rounded border border-gray-200 text-sm"
+    >
       {{ t("No AI media providers available.") }}
     </div>
 
-    <div v-else class="space-y-4">
+    <div
+      v-else
+      class="space-y-4"
+    >
       <!-- Type (image/video) -->
-      <div v-if="typeOptions.length > 1" class="space-y-1">
+      <div
+        v-if="typeOptions.length > 1"
+        class="space-y-1"
+      >
         <label class="font-semibold text-sm">{{ t("Type") }}</label>
-        <Dropdown v-model="selectedType" :options="typeOptions" optionLabel="label" optionValue="value" class="w-full" />
+        <Dropdown
+          v-model="selectedType"
+          :options="typeOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+        />
       </div>
 
       <!-- Provider -->
-      <div v-if="providerOptions.length > 1" class="space-y-1">
+      <div
+        v-if="providerOptions.length > 1"
+        class="space-y-1"
+      >
         <label class="font-semibold text-sm">{{ t("Provider") }}</label>
         <Dropdown
           v-model="selectedProvider"
@@ -70,8 +112,14 @@
       <!-- Name -->
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Filename") }}</label>
-        <InputText v-model="fileName" class="w-full" :placeholder="t('Example: generated_media')" />
-        <p class="text-xs text-gray-600">{{ t("The name is not added to the prompt; it is only used to save the file.") }}</p>
+        <InputText
+          v-model="fileName"
+          class="w-full"
+          :placeholder="t('Example: generated_media')"
+        />
+        <p class="text-xs text-gray-600">
+          {{ t("The name is not added to the prompt; it is only used to save the file.") }}
+        </p>
       </div>
 
       <!-- Prompt -->
@@ -86,7 +134,10 @@
       </div>
 
       <!-- Size (image only) -->
-      <div v-if="selectedType === 'image'" class="space-y-1">
+      <div
+        v-if="selectedType === 'image'"
+        class="space-y-1"
+      >
         <div class="flex items-center justify-between gap-2">
           <label class="font-semibold text-sm">{{ t("Size") }}</label>
 
@@ -104,8 +155,18 @@
         </div>
 
         <div class="flex gap-2">
-          <InputText v-model="widthInput" class="w-28" inputmode="numeric" :placeholder="t('Width')" />
-          <InputText v-model="heightInput" class="w-28" inputmode="numeric" :placeholder="t('Height')" />
+          <InputText
+            v-model="widthInput"
+            class="w-28"
+            inputmode="numeric"
+            :placeholder="t('Width')"
+          />
+          <InputText
+            v-model="heightInput"
+            class="w-28"
+            inputmode="numeric"
+            :placeholder="t('Height')"
+          />
         </div>
 
         <p class="text-xs text-gray-600">{{ t("Tip: click a preset to quickly set the size.") }}</p>
@@ -130,20 +191,32 @@
           @click="acceptAndSave"
         />
 
-        <span v-if="statusMessage" class="text-sm text-gray-700">{{ statusMessage }}</span>
+        <span
+          v-if="statusMessage"
+          class="text-sm text-gray-700"
+          >{{ statusMessage }}</span
+        >
       </div>
 
       <!-- Video job status -->
-      <div v-if="selectedType === 'video' && isPollingVideoJob" class="p-3 rounded border border-blue-200 bg-blue-50 text-sm">
+      <div
+        v-if="selectedType === 'video' && isPollingVideoJob"
+        class="p-3 rounded border border-blue-200 bg-blue-50 text-sm"
+      >
         <div class="font-semibold">{{ t("Video generation is in progress") }}</div>
         <div class="mt-1">
           {{ t("Job") }}: <code>{{ videoJobId }}</code>
-          <span v-if="videoJobStatus"> — {{ t("Status") }}: <strong>{{ videoJobStatus }}</strong></span>
+          <span v-if="videoJobStatus">
+            — {{ t("Status") }}: <strong>{{ videoJobStatus }}</strong></span
+          >
         </div>
       </div>
 
       <!-- Preview -->
-      <div v-if="previewUrl" class="space-y-2">
+      <div
+        v-if="previewUrl"
+        class="space-y-2"
+      >
         <h3 class="font-semibold">{{ t("Preview") }}</h3>
 
         <img
@@ -153,32 +226,66 @@
           alt="Generated preview"
         />
 
-        <video v-else :src="previewUrl" class="max-w-full rounded border border-gray-200" controls />
+        <video
+          v-else
+          :src="previewUrl"
+          class="max-w-full rounded border border-gray-200"
+          controls
+        />
       </div>
 
       <!-- Revised prompt -->
-      <div v-if="revisedPrompt" class="space-y-2">
+      <div
+        v-if="revisedPrompt"
+        class="space-y-2"
+      >
         <div class="flex items-center justify-between gap-2">
           <h3 class="font-semibold">{{ t("Modified prompt") }}</h3>
-          <BaseButton :label="t('Customize')" icon="edit" type="secondary" size="small" @click="applyRevisedPromptToPrompt" />
+          <BaseButton
+            :label="t('Customize')"
+            icon="edit"
+            type="secondary"
+            size="small"
+            @click="applyRevisedPromptToPrompt"
+          />
         </div>
 
-        <textarea :value="revisedPrompt" class="w-full border border-gray-300 rounded px-3 py-2 min-h-[120px] bg-gray-10" readonly />
+        <textarea
+          :value="revisedPrompt"
+          class="w-full border border-gray-300 rounded px-3 py-2 min-h-[120px] bg-gray-10"
+          readonly
+        />
       </div>
 
-      <div v-if="savedIri" class="p-3 rounded border border-green-200 bg-green-50 text-sm">
+      <div
+        v-if="savedIri"
+        class="p-3 rounded border border-green-200 bg-green-50 text-sm"
+      >
         <div class="font-semibold">{{ t("Saved in Documents") }}</div>
-        <div class="mt-1">{{ t("Document IRI") }}: <code>{{ savedIri }}</code></div>
+        <div class="mt-1">
+          {{ t("Document IRI") }}: <code>{{ savedIri }}</code>
+        </div>
         <div class="mt-3">
-          <BaseButton :label="t('Go to folder')" icon="folder-open" type="secondary" @click="goToFolder" />
+          <BaseButton
+            :label="t('Go to folder')"
+            icon="folder-open"
+            type="secondary"
+            @click="goToFolder"
+          />
         </div>
       </div>
 
-      <div v-if="providerUsed" class="text-xs text-gray-600">
+      <div
+        v-if="providerUsed"
+        class="text-xs text-gray-600"
+      >
         {{ t("Provider used") }}: <strong>{{ providerLabel(providerUsed) }}</strong>
       </div>
 
-      <div v-if="hasGeneratedResult && selectedType === 'video' && !canAccept && !isPollingVideoJob" class="p-3 rounded border border-yellow-200 bg-yellow-50 text-sm">
+      <div
+        v-if="hasGeneratedResult && selectedType === 'video' && !canAccept && !isPollingVideoJob"
+        class="p-3 rounded border border-yellow-200 bg-yellow-50 text-sm"
+      >
         <div class="font-semibold">{{ t("This video result cannot be saved yet") }}</div>
         <div class="mt-1">
           {{
@@ -301,7 +408,9 @@ const imageGeneratorEnabled = computed(() => String(courseSettingsStore?.getSett
 const videoGeneratorEnabled = computed(() => String(courseSettingsStore?.getSetting?.("video_generator")) === "true")
 
 function providerLabel(code) {
-  const c = String(code || "").toLowerCase().trim()
+  const c = String(code || "")
+    .toLowerCase()
+    .trim()
   const map = { openai: "OpenAI", deepseek: "DeepSeek", grok: "Grok", mistral: "Mistral", gemini: "Gemini" }
   return map[c] || c.toUpperCase()
 }
@@ -314,8 +423,12 @@ function normalizeProviderList(input) {
     .map((code) => ({ code, name: providerLabel(code) }))
 }
 
-const canUseImage = computed(() => canEdit.value && aiHelpersEnabled.value && imageGeneratorEnabled.value && hasImage.value)
-const canUseVideo = computed(() => canEdit.value && aiHelpersEnabled.value && videoGeneratorEnabled.value && hasVideo.value)
+const canUseImage = computed(
+  () => canEdit.value && aiHelpersEnabled.value && imageGeneratorEnabled.value && hasImage.value,
+)
+const canUseVideo = computed(
+  () => canEdit.value && aiHelpersEnabled.value && videoGeneratorEnabled.value && hasVideo.value,
+)
 const canUseAnyType = computed(() => canUseImage.value || canUseVideo.value)
 
 const typeOptions = computed(() => {
@@ -538,6 +651,9 @@ async function saveToDocuments(file) {
   formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
 
+  // Mark as AI-assisted (same request, no extra calls)
+  formData.append("ai_assisted", "1")
+
   const response = await axios.post("/api/documents", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   })
@@ -585,7 +701,8 @@ async function fetchFolders(nodeId = null) {
 
       const members = response.data?.["hydra:member"] || []
       for (const folder of members) {
-        const folderNodeId = normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
+        const folderNodeId =
+          normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
         if (!folderNodeId) continue
         const fullPath = `${current.path}/${folder.title}`.replace(/^\/+/, "")
         foldersList.push({ label: fullPath, value: folderNodeId })
@@ -661,12 +778,16 @@ async function pollVideoJobOnce(jobId, providerCode) {
 }
 
 function isTerminalVideoStatus(status) {
-  const s = String(status || "").toLowerCase().trim()
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
   return ["completed", "succeeded", "done", "failed", "canceled", "cancelled", "error"].includes(s)
 }
 
 function isSuccessVideoStatus(status) {
-  const s = String(status || "").toLowerCase().trim()
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
   return ["completed", "succeeded", "done"].includes(s)
 }
 
@@ -727,7 +848,9 @@ async function pollVideoJob(jobId, providerCode) {
           statusMessage.value = t("Video generated successfully. You can now save it.")
         } else if (!isBase64 && url) {
           previewUrl.value = url
-          statusMessage.value = t("Video generated successfully, but saving is disabled because the provider returned a URL.")
+          statusMessage.value = t(
+            "Video generated successfully, but saving is disabled because the provider returned a URL.",
+          )
         } else {
           statusMessage.value = t("Video generation completed, but no playable content was returned.")
         }
@@ -898,8 +1021,11 @@ async function acceptAndSave() {
 
     const savedDoc = await saveToDocuments(file)
 
-    const folderLabel = folders.value.find((f) => Number(f.value) === Number(selectedFolderId.value))?.label || t("Documents")
-    const savedTitle = String(savedDoc?.resourceNode?.title || savedDoc?.title || "").trim() || String(file.name).replace(/\.[^/.]+$/i, "")
+    const folderLabel =
+      folders.value.find((f) => Number(f.value) === Number(selectedFolderId.value))?.label || t("Documents")
+    const savedTitle =
+      String(savedDoc?.resourceNode?.title || savedDoc?.title || "").trim() ||
+      String(file.name).replace(/\.[^/.]+$/i, "")
     const savedPath = `${folderLabel}/${savedTitle}`.replace(/^\/+/, "")
 
     router.push({

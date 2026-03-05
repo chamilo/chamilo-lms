@@ -19,6 +19,24 @@
           :search-enabled="isSearchEnabled"
           @submit="onSendFormData"
         >
+          <!-- AI assisted flag (no extra calls; comes from serializer as ai_assisted_raw) -->
+          <div
+            v-if="isCurrentTeacher"
+            class="mt-4 flex items-center gap-2"
+          >
+            <input
+              id="ai-assisted-flag"
+              v-model="aiAssistedFlag"
+              type="checkbox"
+            />
+            <label
+              for="ai-assisted-flag"
+              class="text-sm"
+            >
+              AI-assisted
+            </label>
+          </div>
+
           <EditLinks
             v-model="item"
             :show-share-with-user="false"
@@ -96,7 +114,7 @@ const platformConfigStore = usePlatformConfig()
 const isSearchEnabled = computed(() => "false" !== platformConfigStore.getSetting("search.search_enabled"))
 
 export default {
-  name: "DocumentsUpdate",
+  name: "DocumentsUpdateFile",
   servicePrefix,
   components: {
     TemplateList,
@@ -117,7 +135,7 @@ export default {
     }
 
     onMounted(() => {
-      checkEditPermissions()
+      void checkEditPermissions()
     })
 
     return {
@@ -137,10 +155,11 @@ export default {
     return {
       templates: [],
       finalTags,
-      isAllowedToEdit: ref(false),
       filetype,
 
-      // Certificate tags (same list as CreateFile.vue)
+      // AI assisted flag (synced from item.ai_assisted_raw)
+      aiAssistedFlag: false,
+
       certificateTags: [
         "((user_firstname))",
         "((user_lastname))",
@@ -181,19 +200,38 @@ export default {
     canEditItem() {
       const resourceLink = this.item?.resourceLinkListFromEntity?.[0]
       const sidFromResourceLink = resourceLink?.session?.["@id"]
+
+      // Normalize sid: undefined -> 0
+      const sid = String(this.$route.query.sid ?? "0")
+
       return (
-        (sidFromResourceLink &&
-          sidFromResourceLink === `/api/sessions/${this.$route.query.sid}` &&
-          this.isAllowedToEdit) ||
+        (sidFromResourceLink && sidFromResourceLink === `/api/sessions/${sid}` && this.isAllowedToEdit) ||
         this.isCurrentTeacher
       )
     },
   },
+
+  watch: {
+    // Sync checkbox when item loads/changes
+    item: {
+      immediate: true,
+      handler(val) {
+        if (!val || typeof val !== "object") {
+          return
+        }
+
+        // Prefer ai_assisted_raw (true/false). Fallback to ai_assisted.
+        const raw = val.ai_assisted_raw ?? val.ai_assisted
+        this.aiAssistedFlag = raw === true || raw === 1 || raw === "1"
+      },
+    },
+  },
+
   mounted() {
     this.fetchTemplates()
     this.checkEditPermissions()
 
-    // Ensure container exists for advanced search fields (same idea as CreateFile.vue)
+    // Ensure container exists for advanced search fields
     if (this.item && typeof this.item === "object" && !this.item.searchFieldValues) {
       this.item.searchFieldValues = {}
     }
@@ -215,28 +253,34 @@ export default {
         })
     },
     addTemplateToEditor(templateContent) {
-      // Use DocumentsForm helper if available (keeps current editor state consistent)
+      // Keep editor behavior consistent
       if (this.$refs.updateForm && typeof this.$refs.updateForm.updateContent === "function") {
         this.$refs.updateForm.updateContent(templateContent)
         return
       }
 
-      // Fallback: update bound field
       this.item.contentFile = templateContent
     },
 
-    // ----------------------------
-    // Certificate tag helpers (same UX as CreateFile.vue)
-    // ----------------------------
+    // Wrap the mixin submit to include AI flag
+    onSendFormData() {
+      // Ensure the value is present in the submitted payload
+      if (this.item && typeof this.item === "object") {
+        this.item.ai_assisted_raw = this.aiAssistedFlag ? 1 : 0
+      }
 
-    /**
-     * Insert text into TinyMCE at cursor position (preferred).
-     * Fallback: append to item.contentFile.
-     */
+      // Delegate to UpdateMixin implementation
+      if (UpdateMixin?.methods?.onSendFormData) {
+        return UpdateMixin.methods.onSendFormData.call(this)
+      }
+
+      console.error("[Documents] UpdateMixin.onSendFormData is missing.")
+      return null
+    },
+
     insertIntoEditor(text) {
       try {
         if (window.tinymce) {
-          // BaseTinyEditor usually uses: editor-id="item_content"
           const editor = window.tinymce.get("item_content") || window.tinymce.activeEditor
           if (editor) {
             editor.focus()
@@ -248,18 +292,11 @@ export default {
         console.warn("[Certificate] Failed to insert into TinyMCE editor:", e)
       }
 
-      // Fallback (not cursor-aware but reliable)
       this.item.contentFile = String(this.item.contentFile || "") + text
       return false
     },
 
-    /**
-     * Copy text to clipboard.
-     * Uses modern Clipboard API when available (secure context),
-     * otherwise falls back to execCommand("copy").
-     */
     async writeToClipboard(text) {
-      // Modern API (secure context required)
       try {
         if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(text)
@@ -269,7 +306,6 @@ export default {
         console.warn("[Certificate] Clipboard API failed, using fallback:", e)
       }
 
-      // Fallback
       try {
         const textarea = document.createElement("textarea")
         textarea.value = text
@@ -291,20 +327,11 @@ export default {
       }
     },
 
-    /**
-     * Click on a tag: insert into editor (main behavior).
-     * Optionally also tries to copy, but insertion is the priority.
-     */
     async insertCertificateTag(tag) {
       this.insertIntoEditor(tag)
-
-      // Optional: also try to copy (non-blocking UX)
       await this.writeToClipboard(tag)
     },
 
-    /**
-     * Copy all tags to clipboard (button).
-     */
     async copyAllCertificateTags() {
       const text = this.certificateTags.join("\n")
       const ok = await this.writeToClipboard(text)
@@ -316,39 +343,14 @@ export default {
       }
     },
 
-    // Legacy helper kept (was used by old UI with v-html)
     getCertificateTags() {
       let finalTags = ""
-      const tags = [
-        "((user_firstname))",
-        "((user_lastname))",
-        "((user_username))",
-        "((gradebook_institution))",
-        "((gradebook_sitename))",
-        "((teacher_firstname))",
-        "((teacher_lastname))",
-        "((official_code))",
-        "((date_certificate))",
-        "((date_certificate_no_time))",
-        "((course_code))",
-        "((course_title))",
-        "((gradebook_grade))",
-        "((certificate_link))",
-        "((certificate_link_html))",
-        "((certificate_barcode))",
-        "((external_style))",
-        "((time_in_course))",
-        "((time_in_course_in_all_sessions))",
-        "((start_date_and_end_date))",
-        "((course_objectives))",
-      ]
-
-      for (const tag of tags) {
+      for (const tag of this.certificateTags) {
         finalTags += '<p class="m-0">' + tag + "</p>"
       }
-
       return finalTags
     },
+
     ...mapActions("documents", {
       createReset: "resetCreate",
       deleteItem: "del",

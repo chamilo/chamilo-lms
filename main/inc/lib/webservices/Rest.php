@@ -187,7 +187,7 @@ class Rest extends WebService
      *
      * @param int $userId
      */
-    private function __getConfiguredUsernameById(int $userId = null): string
+    private function __getConfiguredUsernameById(?int $userId = null): string
     {
         if (empty($userId)) {
             return '';

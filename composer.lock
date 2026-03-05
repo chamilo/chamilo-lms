@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebf7bde01bfcebab4657c81744e86a02",
+    "content-hash": "b0fd35c1210df18ddc28328806832be0",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",

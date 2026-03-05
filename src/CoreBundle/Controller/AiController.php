@@ -986,6 +986,7 @@ class AiController extends AbstractController
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
                         $errors[$providerName] = 'Provider does not implement video generation interface.';
+
                         continue;
                     }
 
@@ -1016,12 +1017,14 @@ class AiController extends AbstractController
                     if (empty($result)) {
                         $errors[$providerName] = 'Provider returned an empty response.';
                         $result = null;
+
                         continue;
                     }
 
                     if (\is_string($result) && str_starts_with($result, 'Error:')) {
                         $errors[$providerName] = $result;
                         $result = null;
+
                         continue;
                     }
 
@@ -1035,6 +1038,7 @@ class AiController extends AbstractController
                 } catch (Throwable $e) {
                     $errors[$providerName] = $e->getMessage();
                     $result = null;
+
                     continue;
                 }
             }
@@ -1046,6 +1050,7 @@ class AiController extends AbstractController
                 foreach ($errors as $err) {
                     if (\is_string($err) && '' !== trim($err)) {
                         $firstError = trim($err);
+
                         break;
                     }
                 }
@@ -1221,7 +1226,7 @@ class AiController extends AbstractController
 
             if (\in_array($status, ['completed', 'succeeded', 'done'], true)) {
                 $maxBytes = 15 * 1024 * 1024;
-                $p = is_string($aiProvider) ? strtolower(trim($aiProvider)) : '';
+                $p = \is_string($aiProvider) ? strtolower(trim($aiProvider)) : '';
                 if ('gemini' === $p) {
                     $maxBytes = 80 * 1024 * 1024; // only Gemini
                 }

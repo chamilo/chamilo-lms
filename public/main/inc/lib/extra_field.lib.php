@@ -129,6 +129,7 @@ class ExtraField extends Model
             'lp_item' => EntityExtraField::LP_ITEM_FIELD_TYPE,
             'skill' => EntityExtraField::SKILL_FIELD_TYPE,
             'work' => EntityExtraField::WORK_FIELD_TYPE,
+            'work_corrections_comment' => EntityExtraField::WORK_CORRECTIONS_COMMENT,
             'career' => EntityExtraField::CAREER_FIELD_TYPE,
             'user_certificate' => EntityExtraField::USER_CERTIFICATE,
             'survey' => EntityExtraField::SURVEY_FIELD_TYPE,
@@ -143,6 +144,7 @@ class ExtraField extends Model
             'message' =>  EntityExtraField::MESSAGE_TYPE,
             'document' => EntityExtraField::DOCUMENT_TYPE,
             'attendance_calendar' => EntityExtraField::ATTENDANCE_CALENDAR_TYPE,
+            'glossary' => EntityExtraField::GLOSSARY_TYPE,
         ];
     }
 
@@ -186,6 +188,8 @@ class ExtraField extends Model
             'message',
             'document',
             'attendance_calendar',
+            'glossary',
+            'work_corrections_comment',
         ];
 
         if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {

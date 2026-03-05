@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\AiProvider\AiDocumentProcessProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
+use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -268,11 +269,6 @@ class AiController extends AbstractController
                 sessionId: api_get_session_id()
             );
 
-            // Visible disclosure for glossary output (prefix first line of each term block).
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                $raw = $this->aiDisclosureHelper->injectDisclosurePrefixIntoGlossaryTermsText($raw, '[AI-assisted] ');
-            }
-
             return new JsonResponse([
                 'success' => true,
                 'text' => $raw,
@@ -416,7 +412,7 @@ class AiController extends AbstractController
                 meta: [
                     'feature' => 'learnpath_generator',
                     'mode' => 'generated',
-                    'provider' => \is_string($aiProvider) && '' !== trim($aiProvider) ? trim($aiProvider) : 'default',
+                    'provider' => \is_string($aiProvider) && '' !== trim((string) $aiProvider) ? trim((string) $aiProvider) : 'default',
                     'language' => $language,
                     'chapters' => $chaptersCount,
                     'words' => $wordsCount,
@@ -426,16 +422,6 @@ class AiController extends AbstractController
                 courseId: $cid > 0 ? $cid : 0,
                 sessionId: $sid > 0 ? $sid : api_get_session_id()
             );
-
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                // Add markers to known content fields (titles/contents) without touching unrelated strings.
-                // HTML strings get the inline tag; plain text gets "[AI-assisted] " prefix.
-                $result = $this->aiDisclosureHelper->decorateStructuredPayload(
-                    $result,
-                    ['lp_name', 'name', 'title', 'content', 'description', 'text'],
-                    '[AI-assisted] '
-                );
-            }
 
             return new JsonResponse([
                 'success' => true,
@@ -506,12 +492,6 @@ class AiController extends AbstractController
 
             $questionsText = trim((string) $questions);
 
-            // Visible disclosure for Aiken output (so imported questions keep the marker).
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                $questionsText = $this->aiDisclosureHelper->injectDisclosurePrefixIntoAikenText($questionsText, '[AI-assisted] ');
-            }
-
-            // Audit only (provider/model details stay in DB, not in response).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'course:'.$cid.':aiken:'.sha1($topic.'|'.$language.'|'.$nQ.'|'.$questionType),
                 userId: $this->getCurrentUserId(),
@@ -671,8 +651,10 @@ class AiController extends AbstractController
 
         $score = (int) filter_var($scoreLine, FILTER_SANITIZE_NUMBER_INT);
 
-        if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-            $feedback = $this->aiDisclosureHelper->prependDisclosureToPlainText((string) $feedback);
+        // After you have $exeId (track exercise id) and you are sure it's > 0.
+        if ($this->aiDisclosureHelper->isDisclosureEnabled() && $exeId > 0) {
+            // Store disclosure metadata in extra fields instead of altering feedback text.
+            $this->aiDisclosureHelper->markAiAssistedExtraField('track_exercise', (int) $exeId, true);
         }
 
         // Keep legacy TrackEDefault event for analytics/backward compatibility.
@@ -935,22 +917,41 @@ class AiController extends AbstractController
             }
 
             $n = (int) ($data['n'] ?? 1);
+            if ($n <= 0) {
+                $n = 1;
+            }
+
             $language = (string) ($data['language'] ?? 'en');
             $prompt = trim((string) ($data['prompt'] ?? ''));
             $toolName = trim((string) ($data['tool'] ?? 'document'));
-            $aiProvider = isset($data['ai_provider']) ? (string) $data['ai_provider'] : null;
-            $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : null;
+
+            $aiProvider = isset($data['ai_provider']) ? trim((string) $data['ai_provider']) : null;
             if ('' === (string) $aiProvider) {
                 $aiProvider = null;
             }
 
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
-            $seconds = isset($data['seconds']) ? trim((string) $data['seconds']) : null;
-            $size = isset($data['size']) ? trim((string) $data['size']) : null;
 
-            if ($n <= 0 || '' === $prompt || '' === $toolName) {
-                return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters. Ensure all fields are filled correctly.'], 400);
+            // Gemini requires durationSeconds to be a NUMBER (int).
+            $seconds = null;
+            if (isset($data['seconds'])) {
+                $secondsInt = (int) $data['seconds'];
+                if ($secondsInt > 0) {
+                    $seconds = $secondsInt;
+                }
+            }
+
+            $size = isset($data['size']) ? trim((string) $data['size']) : null;
+            if ('' === (string) $size) {
+                $size = null;
+            }
+
+            if ('' === $prompt || '' === $toolName) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
             }
 
             $availableProviders = $this->aiProviderFactory->getProvidersForType('video');
@@ -968,7 +969,6 @@ class AiController extends AbstractController
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
 
-            // Auto mode: try last known working provider first (per course).
             if (!$explicitProvider) {
                 $active = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
                 if ('' !== $active && \in_array($active, $providersToTry, true)) {
@@ -992,14 +992,24 @@ class AiController extends AbstractController
 
                     $options = [
                         'language' => $language,
-                        'n' => $n,
                     ];
 
-                    if (null !== $seconds && '' !== $seconds) {
-                        $options['seconds'] = $seconds;
+                    // Keep "n" for providers that support it, but NEVER send it to Gemini Veo.
+                    if ($n > 0) {
+                        $options['n'] = $n;
                     }
-                    if (null !== $size && '' !== $size) {
+
+                    if (null !== $seconds) {
+                        $options['seconds'] = $seconds; // int
+                    }
+
+                    if (null !== $size) {
                         $options['size'] = $size;
+                    }
+
+                    if ('gemini' === strtolower((string) $providerName)) {
+                        // Veo rejects numberOfVideos/candidateCount style options.
+                        unset($options['n']);
                     }
 
                     $result = $aiService->generateVideo($prompt, $toolName, $options);
@@ -1045,9 +1055,9 @@ class AiController extends AbstractController
                     }
                 }
 
-                $message = '' !== $firstError ? preg_replace('/^Error:\s*/', '', $firstError) : (
-                    $explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.'
-                );
+                $message = '' !== $firstError
+                    ? preg_replace('/^Error:\s*/', '', $firstError)
+                    : ($explicitProvider ? 'Video generation failed for the selected provider.' : 'All video providers failed.');
 
                 $statusCode = $this->mapVideoErrorToHttpStatus((string) $message);
 
@@ -1064,7 +1074,6 @@ class AiController extends AbstractController
                 return new JsonResponse($payload, $statusCode);
             }
 
-            // Audit (provider details in DB only).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video:'.sha1($prompt.'|'.$toolName.'|'.$language.'|'.$n.'|'.(string) $seconds.'|'.(string) $size),
                 userId: $this->getCurrentUserId(),
@@ -1082,7 +1091,7 @@ class AiController extends AbstractController
                 sessionId: $sid > 0 ? $sid : api_get_session_id()
             );
 
-            // Normalize legacy string result.
+            // String result normalization (keep existing behavior)
             if (\is_string($result)) {
                 $raw = trim($result);
 
@@ -1105,18 +1114,12 @@ class AiController extends AbstractController
                     $normalized['id'] = $raw;
                 }
 
-                $payload = [
+                return new JsonResponse([
                     'success' => true,
                     'text' => (string) ($normalized['url'] ?? $normalized['content'] ?? $normalized['id'] ?? ''),
                     'result' => $normalized,
                     'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
-                ];
-
-                if ($this->shouldExposeProviderDetails()) {
-                    $payload['provider_used'] = $providerUsed;
-                }
-
-                return new JsonResponse($payload);
+                ]);
             }
 
             if (!\is_array($result)) {
@@ -1126,22 +1129,6 @@ class AiController extends AbstractController
             $result['is_base64'] = (bool) ($result['is_base64'] ?? false);
             $result['content_type'] = (string) ($result['content_type'] ?? 'video/mp4');
             $result['revised_prompt'] = $result['revised_prompt'] ?? null;
-
-            $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
-            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
-
-            // Best-effort: inline a safe remote URL as base64, but do not fail if it cannot be fetched.
-            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
-                try {
-                    $fetched = $this->fetchUrlAsBase64($url, 15 * 1024 * 1024);
-                    $result['content'] = $fetched['content'];
-                    $result['content_type'] = $fetched['content_type'];
-                    $result['is_base64'] = true;
-                    $result['url'] = null;
-                } catch (Throwable $e) {
-                    error_log('[AI][video] Failed to fetch video URL as base64: '.$e->getMessage());
-                }
-            }
 
             $text = '';
             if (isset($result['url']) && \is_string($result['url']) && '' !== trim($result['url'])) {
@@ -1184,23 +1171,38 @@ class AiController extends AbstractController
                 return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
             }
 
+            $cid = (int) $request->query->get('cid', 0);
+
             $aiProvider = $request->query->get('ai_provider');
             $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
+
             if ('' === $aiProvider) {
-                // Best-effort fallback: use last working provider for video (course unknown here => generic key).
-                $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', 0);
+                if ($cid > 0) {
+                    $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
+                }
+                if ('' === $aiProvider) {
+                    $aiProvider = $this->getActiveMediaProviderFromSession($request, 'video', 0);
+                }
             }
+
             if ('' === $aiProvider) {
-                $aiProvider = null; // Factory default.
+                $aiProvider = null; // Factory default
             }
 
             $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'video');
+
             if (!$aiService instanceof AiVideoProviderInterface) {
-                return new JsonResponse(['success' => false, 'text' => 'Selected AI provider does not support video generation.'], 400);
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support video generation.',
+                ], 400);
             }
 
-            if (!method_exists($aiService, 'getVideoJobStatus')) {
-                return new JsonResponse(['success' => false, 'text' => 'This AI provider does not expose a video job status method.'], 400);
+            if (!$aiService instanceof AiVideoJobProviderInterface) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'This AI provider does not expose a video job status method.',
+                ], 400);
             }
 
             $job = $aiService->getVideoJobStatus($id);
@@ -1222,8 +1224,14 @@ class AiController extends AbstractController
                 'error' => '' !== $jobError ? $jobError : null,
             ];
 
-            if (\in_array($status, ['completed', 'succeeded', 'done'], true) && method_exists($aiService, 'getVideoJobContentAsBase64')) {
-                $content = $aiService->getVideoJobContentAsBase64($id, 15 * 1024 * 1024);
+            if (\in_array($status, ['completed', 'succeeded', 'done'], true)) {
+                $maxBytes = 15 * 1024 * 1024;
+                $p = \is_string($aiProvider) ? strtolower(trim($aiProvider)) : '';
+                if ('gemini' === $p) {
+                    $maxBytes = 80 * 1024 * 1024; // only Gemini
+                }
+
+                $content = $aiService->getVideoJobContentAsBase64($id, $maxBytes);
                 if (\is_array($content)) {
                     $result['is_base64'] = (bool) ($content['is_base64'] ?? false);
                     $result['content'] = $content['content'] ?? null;
@@ -1231,12 +1239,13 @@ class AiController extends AbstractController
                     $result['content_type'] = (string) ($content['content_type'] ?? 'video/mp4');
 
                     if (!empty($content['error'])) {
-                        $result['error'] = \is_string($content['error']) ? trim($content['error']) : (string) $content['error'];
+                        $result['error'] = \is_string($content['error'])
+                            ? trim($content['error'])
+                            : (string) $content['error'];
                     }
                 }
             }
 
-            // Audit (job status polling).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video_job:'.trim((string) $id),
                 userId: $this->getCurrentUserId(),
@@ -1246,6 +1255,7 @@ class AiController extends AbstractController
                     'provider' => \is_string($aiProvider) && '' !== trim((string) $aiProvider) ? trim((string) $aiProvider) : 'default',
                     'job_id' => $id,
                     'status' => $status,
+                    'cid' => $cid,
                 ],
                 courseId: 0,
                 sessionId: api_get_session_id()
@@ -1453,9 +1463,11 @@ class AiController extends AbstractController
                     return new JsonResponse(['success' => false, 'text' => '' !== $msg ? $msg : $result], $status);
                 }
 
-                // Disclosure label (visible) + audit record.
                 if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                    $result = $this->aiDisclosureHelper->prependDisclosureToPlainText($result);
+                    $nodeId = (int) $node->getId();
+                    if ($nodeId > 0) {
+                        $this->aiDisclosureHelper->markAiAssistedExtraField('document', $nodeId, true);
+                    }
                 }
 
                 $this->aiDisclosureHelper->logAudit(
@@ -1601,6 +1613,10 @@ class AiController extends AbstractController
                 false,
                 false
             );
+
+            if (null !== $messageId && $this->aiDisclosureHelper->isDisclosureEnabled()) {
+                $this->aiDisclosureHelper->markAiAssistedExtraField('message', (int) $messageId, true);
+            }
 
             if (null === $messageId) {
                 $this->debugLog('[AI][document_feedback][inbox] MessageHelper returned null (message not created).');

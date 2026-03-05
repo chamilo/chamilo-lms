@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
@@ -4261,6 +4263,30 @@ class learnpathItem
             }
 
             return $resultFromOtherSessions;
+        }
+    }
+
+    public function get_title_to_display(): string
+    {
+        $title = $this->get_title();
+        if ('' === trim($title)) {
+            return $title;
+        }
+
+        // Best-effort: legacy context
+        try {
+            if (!class_exists(Container::class) || !isset(Container::$container)) {
+                return $title;
+            }
+
+            $helper = Container::$container->get(AiDisclosureHelper::class);
+            if (!$helper instanceof AiDisclosureHelper) {
+                return $title;
+            }
+
+            return $helper->decorateTitleText($title, 'lp_item', (int) $this->get_id());
+        } catch (\Throwable) {
+            return $title;
         }
     }
 }

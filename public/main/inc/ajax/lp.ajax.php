@@ -420,10 +420,24 @@ switch ($action) {
             exit;
         }
 
+        $aiAssisted = isset($requestData['ai_assisted']) && (int) $requestData['ai_assisted'] === 1;
+        $aiProvider = null;
+        if (isset($requestData['ai_provider'])) {
+            $aiProvider = trim((string) $requestData['ai_provider']);
+            if ('' === $aiProvider) {
+                $aiProvider = null;
+            }
+        }
+
         require_once api_get_path(SYS_CODE_PATH).'lp/LpAiHelper.php';
 
         $aiHelper = new LpAiHelper();
-        $result = $aiHelper->createLearningPathFromAI($requestData['lp_data'], $requestData['course_code']);
+        $result = $aiHelper->createLearningPathFromAI(
+            $requestData['lp_data'],
+            (string) $requestData['course_code'],
+            $aiAssisted,
+            $aiProvider
+        );
 
         if (!isset($result['lp_id'])) {
             $result['success'] = false;

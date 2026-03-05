@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
@@ -30,13 +31,14 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         KernelInterface $kernel,
         TranslatorInterface $translator,
         MessageHelper $messageHelper,
-        Security $security
+        Security $security,
+        AiDisclosureHelper $aiDisclosureHelper
     ): CStudentPublicationComment {
         $fileExistsOption = $request->get('fileExistsOption', 'rename');
 
         $commentEntity = new CStudentPublicationComment();
 
-        $hasFile = $request->files->get('uploadFile');
+        $hasFile = (bool) $request->files->get('uploadFile');
         $hasComment = '' !== trim((string) $request->get('comment'));
 
         if ($hasFile || $hasComment) {
@@ -80,10 +82,6 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             $commentEntity->setPublication($submission);
             $commentEntity->setComment($commentText ?? '');
 
-            if (!empty($filename)) {
-                $commentEntity->setFile($filename);
-            }
-
             $em->persist($commentEntity);
         }
 
@@ -97,6 +95,18 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         $em->flush();
 
+        // Persist AI-assisted raw flag as an ExtraField (comment-level correction).
+        // Handler: work_corrections_comment (avoid collisions with correction files later).
+        $raw = $request->get('ai_assisted_raw', null);
+        if (null !== $raw && ($hasFile || $hasComment)) {
+            $iid = (int) ($commentEntity->getIid() ?? 0);
+            if ($iid > 0) {
+                $enabled = $this->normalizeBoolean($raw);
+                $aiDisclosureHelper->markAiAssistedExtraField('work_corrections_comment', $iid, $enabled);
+            }
+        }
+
+        // Existing mail logic (unchanged)
         if ($sendMail && $submission->getUser() instanceof User) {
             /** @var User $receiverUser */
             $receiverUser = $submission->getUser();
@@ -118,5 +128,11 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         }
 
         return $commentEntity;
+    }
+
+    private function normalizeBoolean(mixed $value): bool
+    {
+        $v = strtolower(trim((string) $value));
+        return \in_array($v, ['1', 'true', 'yes', 'on'], true);
     }
 }

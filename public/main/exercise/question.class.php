@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -115,6 +116,9 @@ abstract class Question
         ANNOTATION,
         // Do NOT include FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER, MEDIA_QUESTION, PAGE_BREAK, etc.
     ];
+
+    private static ?AiDisclosureHelper $aiDisclosureHelper = null;
+    private static bool $aiDisclosureHelperResolved = false;
 
     /**
      * constructor of the class.
@@ -299,10 +303,33 @@ abstract class Question
         $title .= $this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
-        return Display::div(
-            $title,
-            ['class' => 'question_title']
-        );
+        $ai = self::getAiDisclosureHelper();
+        if ($ai) {
+            // Student view: badge at the END (suffix)
+            $title = $ai->decorateTitle($title, 'question', (int) $this->iid, false);
+        }
+
+        return Display::div($title, ['class' => 'question_title']);
+    }
+
+    private static function getAiDisclosureHelper(): ?AiDisclosureHelper
+    {
+        if (self::$aiDisclosureHelperResolved) {
+            return self::$aiDisclosureHelper;
+        }
+
+        self::$aiDisclosureHelperResolved = true;
+
+        try {
+            $c = Container::$container ?? null;
+            if ($c) {
+                self::$aiDisclosureHelper = $c->get(AiDisclosureHelper::class);
+            }
+        } catch (\Throwable) {
+            self::$aiDisclosureHelper = null;
+        }
+
+        return self::$aiDisclosureHelper;
     }
 
     /**

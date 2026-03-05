@@ -11,6 +11,15 @@
           <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
             <div class="flex items-center gap-2">
               <span>{{ term.title }}</span>
+              <span
+                v-if="term.ai_assisted"
+                class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+                title="AI-assisted"
+                aria-label="AI-assisted"
+              >
+                <span aria-hidden="true">🤖</span>
+                <span class="font-semibold">AI</span>
+              </span>
               <BaseIcon
                 v-if="isAllowedToEdit && term.sessionId && term.sessionId === sid"
                 class="mr-8"

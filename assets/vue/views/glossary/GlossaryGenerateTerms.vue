@@ -510,6 +510,7 @@ async function importTerms() {
       resourceLinkList: resourceLinkList.value,
       sid: route.query.sid,
       cid: route.query.cid,
+      ai_assisted_raw: 1,
     }
 
     try {

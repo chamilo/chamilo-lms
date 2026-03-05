@@ -13,6 +13,24 @@
       :vuelidate-property="v$.description"
     />
 
+    <!-- AI-assisted toggle (raw extrafield) -->
+    <div
+      v-if="canShowAiToggle"
+      class="mt-2 flex items-center gap-2"
+    >
+      <input
+        id="ai-assisted-flag"
+        v-model="formData.ai_assisted_raw"
+        type="checkbox"
+      />
+      <label
+        for="ai-assisted-flag"
+        class="text-sm"
+      >
+        AI-assisted
+      </label>
+    </div>
+
     <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
@@ -33,7 +51,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -44,12 +62,15 @@ import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelida
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
 import { useCidReq } from "../../composables/cidReq"
+import { useSecurityStore } from "../../store/securityStore"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
 const { sid, cid } = useCidReq()
+const securityStore = useSecurityStore()
 
 const props = defineProps({
   termId: {
@@ -72,9 +93,18 @@ const resourceLinkList = ref(
   ]),
 )
 
+const isAllowedToEdit = ref(false)
+
+const canShowAiToggle = computed(() => {
+  const isAdmin = !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin)
+  const isTeacher = !!(securityStore.isCurrentTeacher || securityStore.isTeacher)
+  return isAdmin || isTeacher || isAllowedToEdit.value
+})
+
 const formData = reactive({
   title: "",
   description: "",
+  ai_assisted_raw: false,
 })
 const rules = {
   title: { required },
@@ -82,27 +112,58 @@ const rules = {
 }
 const v$ = useVuelidate(rules, formData)
 
-onMounted(() => {
-  fetchTerm()
+onMounted(async () => {
+  try {
+    isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  } catch (e) {
+    console.warn("[GlossaryForm] checkIsAllowedToEdit failed:", e)
+    isAllowedToEdit.value = false
+  }
+
+  console.log("[GlossaryForm] AI toggle flags:", {
+    isAllowedToEdit: isAllowedToEdit.value,
+    isCurrentTeacher: !!securityStore.isCurrentTeacher,
+    isTeacher: !!securityStore.isTeacher,
+    isAdmin: !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin),
+    canShowAiToggle: canShowAiToggle.value,
+  })
+
+  await fetchTerm()
 })
 
+function normalizeBoolean(value) {
+  const s = String(value ?? "")
+    .trim()
+    .toLowerCase()
+  return value === true || value === 1 || s === "1" || s === "true" || s === "yes" || s === "on"
+}
+
 const fetchTerm = async () => {
-  if (props.termId === null) {
+  if (!props.termId) {
     return
   }
   try {
     const glossary = await glossaryService.getGlossaryTerm(props.termId)
-    formData.title = glossary.title
-    formData.description = glossary.description
+
+    formData.title = glossary.title ?? ""
+    formData.description = glossary.description ?? ""
+
+    // Prefer stored raw value
+    if (typeof glossary.ai_assisted_raw !== "undefined") {
+      formData.ai_assisted_raw = normalizeBoolean(glossary.ai_assisted_raw)
+    } else if (typeof glossary.ai_assisted !== "undefined") {
+      formData.ai_assisted_raw = normalizeBoolean(glossary.ai_assisted)
+    } else {
+      formData.ai_assisted_raw = false
+    }
   } catch (error) {
-    console.error("Error glossary term:", error)
+    console.error("[GlossaryForm] Failed to fetch glossary term:", error)
     notification.showErrorNotification(t("Could not fetch glossary term"))
   }
 }
 
 const submitGlossaryForm = async () => {
   v$.value.$touch()
-
   if (v$.value.$invalid) {
     return
   }
@@ -114,6 +175,7 @@ const submitGlossaryForm = async () => {
     resourceLinkList: resourceLinkList.value,
     sid: route.query.sid,
     cid: route.query.cid,
+    ai_assisted_raw: formData.ai_assisted_raw ? 1 : 0,
   }
 
   try {
@@ -130,7 +192,7 @@ const submitGlossaryForm = async () => {
       query: route.query,
     })
   } catch (error) {
-    console.error("Error updating link:", error)
+    console.error("[GlossaryForm] Failed to save glossary term:", error)
     notification.showErrorNotification(t("Could not create glossary term"))
   }
 }

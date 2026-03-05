@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Helpers;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Security;
 use Throwable;
 
 use const JSON_UNESCAPED_SLASHES;
@@ -24,6 +25,7 @@ use const PREG_OFFSET_CAPTURE;
 final class AiDisclosureHelper
 {
     public const EVENT_TYPE_AUDIT = 'ai_disclosure_audit';
+    public const EXTRA_FIELD_VARIABLE_AI_ASSISTED = 'ai_assisted';
 
     // We keep these as constants so they can be searched easily in DB.
     public const VALUE_TYPE_TARGET_KEY = 'target_key';
@@ -37,6 +39,11 @@ final class AiDisclosureHelper
         'ai_helpers.disclose_ai_assistance',
     ];
 
+    private ?bool $enabledCache = null;
+
+    /** @var array<string,bool> */
+    private array $aiAssistedCache = [];
+
     public function __construct(
         private readonly EntityManagerInterface $em,
     ) {}
@@ -47,6 +54,10 @@ final class AiDisclosureHelper
      */
     public function isDisclosureEnabled(): bool
     {
+        if (null !== $this->enabledCache) {
+            return $this->enabledCache;
+        }
+
         foreach (self::SETTING_KEYS as $key) {
             $raw = $this->getSettingValue($key);
             if (null === $raw) {
@@ -58,8 +69,12 @@ final class AiDisclosureHelper
                 continue;
             }
 
-            return \in_array($val, ['1', 'true', 'yes', 'on', 'enabled'], true);
+            $this->enabledCache = \in_array($val, ['1', 'true', 'yes', 'on', 'enabled'], true);
+
+            return $this->enabledCache;
         }
+
+        $this->enabledCache = false;
 
         return false;
     }
@@ -163,115 +178,70 @@ final class AiDisclosureHelper
     }
 
     /**
-     * Injects a visible disclosure prefix into Aiken text (first line of each question block).
-     * This ensures the final imported question title carries the marker without UI/template changes.
-     */
-    public function injectDisclosurePrefixIntoAikenText(string $aikenText, string $prefix = self::DEFAULT_MARKER_PREFIX): string
-    {
-        $aikenText = (string) $aikenText;
-        if ('' === trim($aikenText)) {
-            return $aikenText;
-        }
-
-        // Split blocks by blank lines (Aiken standard).
-        $blocks = preg_split('/\R{2,}/', trim($aikenText));
-        if (!\is_array($blocks) || empty($blocks)) {
-            return $aikenText;
-        }
-
-        $out = [];
-        foreach ($blocks as $block) {
-            $block = trim((string) $block);
-            if ('' === $block) {
-                continue;
-            }
-
-            $lines = preg_split('/\R/', $block);
-            if (!\is_array($lines) || empty($lines)) {
-                $out[] = $block;
-
-                continue;
-            }
-
-            $lines = $this->prefixFirstMeaningfulLine($lines, $prefix);
-
-            $out[] = implode("\n", $lines);
-        }
-
-        return implode("\n\n", $out)."\n";
-    }
-
-    /**
-     * Injects a visible disclosure prefix into Glossary generator output.
-     * Assumption: blocks separated by blank line; first line is the term title.
-     */
-    public function injectDisclosurePrefixIntoGlossaryTermsText(string $text, string $prefix = self::DEFAULT_MARKER_PREFIX): string
-    {
-        $text = (string) $text;
-        if ('' === trim($text)) {
-            return $text;
-        }
-
-        $blocks = preg_split('/\R{2,}/', trim($text));
-        if (!\is_array($blocks) || empty($blocks)) {
-            return $text;
-        }
-
-        $out = [];
-        foreach ($blocks as $block) {
-            $block = trim((string) $block);
-            if ('' === $block) {
-                continue;
-            }
-
-            $lines = preg_split('/\R/', $block);
-            if (!\is_array($lines) || empty($lines)) {
-                $out[] = $block;
-
-                continue;
-            }
-
-            $lines = $this->prefixFirstMeaningfulLine($lines, $prefix);
-
-            $out[] = implode("\n", $lines);
-        }
-
-        return implode("\n\n", $out)."\n";
-    }
-
-    /**
-     * Decorate a structured payload (arrays) by inserting a marker prefix only into specific keys.
-     * This is designed for LearnPath generation payloads.
+     * Marks an item as AI-assisted using ExtraFields (without modifying stored content).
      *
-     * @param array<int,string> $keys keys that are considered "content" fields
+     * Best-effort:
+     * - Creates the extra field if missing (per handler type).
+     * - Upserts the value in TABLE_EXTRA_FIELD_VALUES.
+     * - Never blocks the main flow.
      */
-    public function decorateStructuredPayload(
-        mixed $value,
-        array $keys = ['lp_name', 'name', 'title', 'content', 'description', 'text'],
-        string $prefix = self::DEFAULT_MARKER_PREFIX
-    ): mixed {
-        if (\is_array($value)) {
-            foreach ($value as $k => $v) {
-                if (\is_string($k) && \in_array($k, $keys, true)) {
-                    if (\is_string($v) && '' !== trim($v)) {
-                        // Prefer HTML tag injection if it's HTML.
-                        if ($this->looksLikeHtmlFragment($v)) {
-                            $value[$k] = $this->injectDisclosureTagIntoHtml($v);
-                        } else {
-                            $value[$k] = $this->prefixIfMissing($v, $prefix);
-                        }
+    public function markAiAssistedExtraField(string $type, int $itemId, bool $enabled = true): void
+    {
+        $type = trim($type);
+        if ('' === $type || $itemId <= 0) {
+            return;
+        }
 
-                        continue;
-                    }
+        try {
+            if (!class_exists(\ExtraField::class) || !class_exists(\ExtraFieldValue::class)) {
+                return;
+            }
+
+            $ef = new \ExtraField($type);
+            $fieldInfo = $ef->get_handler_field_info_by_field_variable(self::EXTRA_FIELD_VARIABLE_AI_ASSISTED);
+
+            if (!$fieldInfo || empty($fieldInfo['id'])) {
+                $fieldId = $ef->save([
+                    'display_text' => 'AI-assisted',
+                    'variable' => self::EXTRA_FIELD_VARIABLE_AI_ASSISTED,
+                    'value_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
+                    'visible_to_self' => 1,
+                    'visible_to_others' => 1,
+                    'changeable' => 1,
+                    'filter' => 0,
+                    'field_order' => 0,
+                    'default_value' => 0,
+                ]);
+
+                if (!$fieldId) {
+                    return;
                 }
 
-                $value[$k] = $this->decorateStructuredPayload($v, $keys, $prefix);
+                $fieldInfo = $ef->get((int) $fieldId);
+                if (!$fieldInfo || empty($fieldInfo['id'])) {
+                    return;
+                }
             }
 
-            return $value;
-        }
+            $fieldId = (int) $fieldInfo['id'];
+            if ($fieldId <= 0) {
+                return;
+            }
 
-        return $value;
+            $efv = new \ExtraFieldValue($type);
+            $efv->save([
+                'field_id' => $fieldId,
+                'item_id' => $itemId,
+                'field_value' => $enabled ? 1 : 0,
+                'comment' => '',
+            ]);
+
+            // Keep in-memory cache coherent for this request.
+            $k = $type.':'.$itemId;
+            $this->aiAssistedCache[$k] = $enabled;
+        } catch (\Throwable) {
+            return;
+        }
     }
 
     private function prefixFirstMeaningfulLine(array $lines, string $prefix): array
@@ -351,5 +321,93 @@ final class AiDisclosureHelper
         }
 
         return null;
+    }
+
+    public function isAiAssistedExtraField(string $type, int $itemId): bool
+    {
+        if ($itemId <= 0) {
+            return false;
+        }
+
+        $type = trim($type);
+        if ('' === $type) {
+            return false;
+        }
+
+        $k = $type.':'.$itemId;
+        if (array_key_exists($k, $this->aiAssistedCache)) {
+            return $this->aiAssistedCache[$k];
+        }
+
+        try {
+            $efv = new \ExtraFieldValue($type);
+            $row = $efv->get_values_by_handler_and_field_variable($itemId, self::EXTRA_FIELD_VARIABLE_AI_ASSISTED);
+
+            $isAi = $row && (string) ($row['field_value'] ?? '') === '1';
+            $this->aiAssistedCache[$k] = (bool) $isAi;
+
+            return $this->aiAssistedCache[$k];
+        } catch (\Throwable) {
+            $this->aiAssistedCache[$k] = false;
+
+            return false;
+        }
+    }
+
+    public function shouldShowAiBadge(string $type, int $itemId): bool
+    {
+        return $this->isDisclosureEnabled() && $this->isAiAssistedExtraField($type, $itemId);
+    }
+
+    public static function renderAiBadgeHtml(string $position = 'suffix'): string
+    {
+        $tooltip = get_lang('Co-generated with AI');
+        $margin = ('prefix' === $position) ? 'margin-right:8px;' : 'margin-left:8px;';
+
+        return '<span'
+            .' title="'.Security::remove_XSS($tooltip).'"'
+            .' aria-label="'.Security::remove_XSS($tooltip).'"'
+            .' role="note"'
+            .' style="display:inline-flex;align-items:center;gap:6px;padding:2px 10px;'.$margin
+            .'border:1px solid #cbd5e1;border-radius:9999px;background:#f8fafc;color:#334155;'
+            .'font-size:12px;line-height:16px;white-space:nowrap;vertical-align:middle;cursor:help"'
+            .'>'
+            .'<span aria-hidden="true" style="font-size:12px;line-height:12px">🤖</span>'
+            .'<span style="font-weight:600;letter-spacing:.2px">AI</span>'
+            .'</span>';
+    }
+
+    public function decorateTitle(string $title, string $type, int $itemId, bool $prepend = false): string
+    {
+        if (!$this->shouldShowAiBadge($type, $itemId)) {
+            return $title;
+        }
+
+        $badge = self::renderAiBadgeHtml($prepend ? 'prefix' : 'suffix');
+
+        return $prepend ? ($badge.' '.$title) : ($title.$badge);
+    }
+
+    public function decorateTitleText(string $title, string $type, int $itemId): string
+    {
+        $title = (string) $title;
+        if ('' === trim($title)) {
+            return $title;
+        }
+
+        if (!$this->isDisclosureEnabled()) {
+            return $title;
+        }
+
+        if (!$this->isAiAssistedExtraField($type, $itemId)) {
+            return $title;
+        }
+
+        $prefix = self::DEFAULT_MARKER_PREFIX; // "[AI-assisted] "
+        if (str_starts_with($title, $prefix)) {
+            return $title;
+        }
+
+        return $prefix.$title;
     }
 }

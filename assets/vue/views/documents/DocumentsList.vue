@@ -138,6 +138,18 @@
             v-if="slotProps.data"
             :data="slotProps.data"
           />
+
+          <!-- AI badge at the end of the title -->
+          <span
+            v-if="slotProps.data?.ai_assisted"
+            class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+            title="AI-assisted"
+            aria-label="AI-assisted"
+          >
+            <span aria-hidden="true">🤖</span>
+            <span class="font-semibold">AI</span>
+          </span>
+
           <BaseIcon
             v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
             class="mr-8"

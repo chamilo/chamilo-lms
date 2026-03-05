@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -2498,7 +2499,7 @@ class learnpath
             // TODO: Change this link generation and use new function instead.
             $toc[] = [
                 'id' => $item_id,
-                'title' => $this->items[$item_id]->get_title(),
+                'title' => $this->items[$item_id]->get_title_to_display(),
                 'status' => $this->items[$item_id]->get_status(false),
                 'status_class' => self::getStatusCSSClassName($this->items[$item_id]->get_status(false)),
                 'level' => $this->items[$item_id]->get_level(),
@@ -2676,7 +2677,79 @@ class learnpath
             'decorate' => false,
         ];
 
-        return $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+        $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+
+        // AI disclosure: decorate LP item titles in the TOC tree (single place, array mode).
+        try {
+
+            $aiDisclosure = Container::$container->get(AiDisclosureHelper::class);
+            if ($aiDisclosure instanceof AiDisclosureHelper
+                && $aiDisclosure->isDisclosureEnabled()
+                && is_array($tree)
+                && !empty($tree)
+            ) {
+                // Gedmo Tree can use a custom children index; default is "__children".
+                $childrenIndex = '__children';
+                try {
+                    $childrenIndex = (string) $lpItemRepo->getChildrenIndex();
+                } catch (\Throwable) {
+                    $childrenIndex = '__children';
+                }
+
+                $decorateTree = static function (array &$nodes) use (&$decorateTree, $aiDisclosure, $childrenIndex): void {
+                    foreach ($nodes as &$node) {
+                        if (!is_array($node)) {
+                            continue;
+                        }
+
+                        // Extract item id (Gedmo array output may vary by mapping)
+                        $itemId = 0;
+                        foreach (['iid', 'id', 'iId'] as $k) {
+                            if (isset($node[$k])) {
+                                $itemId = (int) $node[$k];
+                                break;
+                            }
+                        }
+
+                        // Extract title key
+                        $titleKey = null;
+                        foreach (['title', 'name'] as $k) {
+                            if (array_key_exists($k, $node)) {
+                                $titleKey = $k;
+                                break;
+                            }
+                        }
+
+                        if ($itemId > 0 && $titleKey) {
+                            $rawTitle = (string) $node[$titleKey];
+                            if ($rawTitle !== '') {
+                                // Keep the original title text safe; badge is appended as HTML.
+                                $safeTitle = \Security::remove_XSS(strip_tags($rawTitle));
+
+                                $node[$titleKey] = $aiDisclosure->decorateTitle(
+                                    $safeTitle,
+                                    'lp_item',
+                                    $itemId,
+                                    false
+                                );
+                            }
+                        }
+
+                        // Recurse into children
+                        if (isset($node[$childrenIndex]) && is_array($node[$childrenIndex]) && !empty($node[$childrenIndex])) {
+                            $decorateTree($node[$childrenIndex]);
+                        }
+                    }
+                    unset($node);
+                };
+
+                $decorateTree($tree);
+            }
+        } catch (\Throwable) {
+            // Never block LP rendering because of AI disclosure decoration.
+        }
+
+        return $tree;
     }
 
     /**
@@ -4665,6 +4738,17 @@ class learnpath
         $downIcon = Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon', '', 16, get_lang('Down'));
         $previewImage = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', '', 16, get_lang('Preview'));
 
+        // AI disclosure helper (best-effort, never block LP builder rendering).
+        $aiDisclosure = null;
+        $aiEnabled = false;
+        try {
+            $aiDisclosure = Container::$container->get(AiDisclosureHelper::class);
+            $aiEnabled = ($aiDisclosure instanceof AiDisclosureHelper) && $aiDisclosure->isDisclosureEnabled();
+        } catch (\Throwable) {
+            $aiDisclosure = null;
+            $aiEnabled = false;
+        }
+
         $lpItemRepo = Container::getLpItemRepository();
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
 
@@ -4683,8 +4767,7 @@ class learnpath
             'rootClose' => function($tree) use ($noWrapper, $dropElement)  {
                 if ($tree[0]['lvl'] === 1) {
                     if ($dropElement) {
-                        //return Display::return_message(get_lang('Drag and drop an element here'));
-                        //return $this->getDropElementHtml();
+                        // drop area
                     }
                     if ($noWrapper) {
                         return '';
@@ -4701,19 +4784,31 @@ class learnpath
                 $extraAttr  = $isFinal ? ' data-fixed="final"' : '';
 
                 return '<li
-                    id="'.$id.'"
-                    data-id="'.$id.'"
-                    data-type="'.$type.'"
-                    '.$extraAttr.'
-                    class="flex flex-col list-group-item nested-'.$child['lvl'].$extraClass.'">';
+                id="'.$id.'"
+                data-id="'.$id.'"
+                data-type="'.$type.'"
+                '.$extraAttr.'
+                class="flex flex-col list-group-item nested-'.$child['lvl'].$extraClass.'">';
             },
             'childClose' => '',
-            'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
-                $fullTitle = $node['title'];
-                //$title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
-                $title = $fullTitle;
-                $itemId = $node['iid'];
-                $type = $node['itemType'];
+            'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon, $aiDisclosure, $aiEnabled) {
+                $itemId = (int) ($node['iid'] ?? 0);
+                $type = $node['itemType'] ?? '';
+
+                // Plain title for attributes (no HTML).
+                $titlePlain = Security::remove_XSS(strip_tags((string) ($node['title'] ?? '')));
+
+                // HTML title for UI (may include AI badge).
+                $titleHtml = $titlePlain;
+                if ($aiEnabled && $itemId > 0) {
+                    $titleHtml = $aiDisclosure->decorateTitle(
+                        $titlePlain,
+                        'lp_item',
+                        $itemId,
+                        false
+                    );
+                }
+
                 $lpId = $this->get_id();
 
                 $moveIcon = '';
@@ -4724,7 +4819,6 @@ class learnpath
                 }
 
                 $iconName = str_replace(' ', '', $type);
-                $icon = '';
                 switch ($iconName) {
                     case 'category':
                     case 'chapter':
@@ -4744,8 +4838,8 @@ class learnpath
                     [
                         'target' => '_blank',
                         'class' => 'btn btn--plain',
-                        'data-title' => $title,
-                        'title' => $title,
+                        'data-title' => $titlePlain,
+                        'title' => $titlePlain,
                     ]
                 );
                 $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
@@ -4757,59 +4851,42 @@ class learnpath
                 );
 
                 $editIcon = '<a
-                    href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
-                    class=""
-                    >';
+                href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
+                class=""
+                >';
                 $editIcon .= Display::getMdiIcon('pencil', 'ch-tool-icon', '', 16, get_lang('Edit section description/name'));
                 $editIcon .= '</a>';
-                $orderIcons = '';
-                /*if ('final_item' !== $type) {
-                    $orderIcons = Display::url(
-                        $upIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'up', 'data-id' => $itemId]
-                    );
-                    $orderIcons .= Display::url(
-                        $downIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'down', 'data-id' => $itemId]
-                    );
-                }*/
 
                 $deleteIcon = ' <a
-                    data-id = '.$itemId.'
-                    data-title = \''.addslashes($title).'\'
-                    href="javascript:void(0);"
-                    onclick="return deleteItem(this);"
-                    class="">';
+                data-id="'.$itemId.'"
+                data-title=\''.addslashes($titlePlain).'\'
+                href="javascript:void(0);"
+                onclick="return deleteItem(this);"
+                class="">';
                 $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete section'));
                 $deleteIcon .= '</a>';
                 $extra = '';
-
                 if ('dir' === $type && empty($node['__children'])) {
-                    $level = $node['lvl'] + 1;
+                    $level = (int) ($node['lvl'] ?? 0) + 1;
                     $extra = '<ul class="list-group nested-sortable">
-                                <li class="list-group-item list-group-item-empty nested-'.$level.'"></li>
-                              </ul>';
+                            <li class="list-group-item list-group-item-empty nested-'.$level.'"></li>
+                          </ul>';
                 }
 
                 $buttons = Display::tag(
                     'div',
-                    "<div class=\"btn-group btn-group-sm\">
-                                $editIcon
-                                $preRequisitesIcon
-                                $orderIcons
-                                $deleteIcon
-                               </div>",
+                    '<div class="btn-group btn-group-sm">
+                    '.$editIcon.'
+                    '.$preRequisitesIcon.'
+                    '.$deleteIcon.'
+                 </div>',
                     ['class' => 'btn-toolbar button_actions']
                 );
 
                 return
-                    "<div class='flex flex-row'> $moveIcon  $icon <span class='mx-1'>$title </span></div>
-                    $extra
-                    $buttons
-                    "
-                    ;
+                    "<div class='flex flex-row'> $moveIcon $icon <span class='mx-1'>$titleHtml</span></div>
+                 $extra
+                 $buttons";
             },
         ];
 

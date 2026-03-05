@@ -3,25 +3,40 @@
     v-model:visible="visible"
     modal
     :header="t('Comments')"
-    :style="{ width: '700px' }"
+    :style="{ width: '900px', maxWidth: '95vw' }"
     @hide="onHide"
   >
-    <div class="space-y-4">
-      <div class="bg-gray-10 p-3 rounded">
-        <h4 class="font-bold text-md">
+    <div class="space-y-5">
+      <!-- Assignment header -->
+      <div class="rounded-lg border bg-gray-10 p-4">
+        <h4 class="text-base font-semibold text-gray-900">
           {{ props.item.publicationParent?.title || t("Original assignment") }}
         </h4>
         <div
-          class="text-sm text-gray-700 prose max-w-none"
+          class="prose max-w-none text-sm text-gray-700 mt-2"
           v-html="safeParentDescription"
         />
       </div>
 
+      <!-- Student submission (text) -->
       <div
         v-if="flags.allowText && props.item.description"
-        class="bg-white border p-3 rounded"
+        class="rounded-lg border bg-white p-4"
       >
-        <h5 class="font-semibold text-sm">{{ t("Student's submission") }}</h5>
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <h5 class="text-sm font-semibold text-gray-900">
+            {{ t("Student's submission") }}
+          </h5>
+
+          <span
+            v-if="submissionHasFile"
+            class="inline-flex items-center gap-2 rounded-full border bg-gray-10 px-3 py-1 text-xs text-gray-700"
+            :title="submissionFilename"
+          >
+            <i class="pi pi-paperclip text-gray-600"></i>
+            <span class="truncate max-w-[280px]">{{ submissionFilename }}</span>
+          </span>
+        </div>
 
         <iframe
           v-if="isFullHtmlDocument"
@@ -32,7 +47,7 @@
 
         <div
           v-else-if="isHtmlFragment"
-          class="text-sm text-gray-50 prose max-w-none"
+          class="prose max-w-none text-sm text-gray-50"
           v-html="submissionHtmlSafe"
         />
 
@@ -46,12 +61,18 @@
       <!-- AI Task Grader -->
       <div
         v-if="canUseAiTaskGrader"
-        class="bg-white border rounded p-3 space-y-3"
+        class="rounded-lg border bg-white"
       >
-        <div class="flex items-center justify-between gap-2">
+        <!-- Header -->
+        <div class="flex items-center justify-between gap-3 border-b px-4 py-3">
           <div class="flex items-center gap-2">
-            <i class="mdi mdi-robot-outline text-gray-600 text-lg" />
-            <span class="font-semibold text-sm">{{ t("AI feedback") }}</span>
+            <i class="mdi mdi-robot-outline text-gray-700 text-lg" />
+            <div class="leading-tight">
+              <div class="text-sm font-semibold text-gray-900">{{ t("AI feedback") }}</div>
+              <div class="text-xs text-gray-500">
+                {{ t("AI can draft feedback and a suggested score before you send it.") }}
+              </div>
+            </div>
           </div>
 
           <Button
@@ -63,157 +84,199 @@
           />
         </div>
 
-        <!-- What AI will analyze -->
-        <div class="text-xs text-gray-600 space-y-1">
-          <div class="font-medium text-gray-700">What will be sent to the AI:</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Assignment title + instructions</li>
-            <li v-if="submissionHasText">Student submission (text)</li>
-            <li v-else>Student submission (text): none</li>
+        <!-- Body -->
+        <div class="p-4 space-y-4">
+          <!-- What will be sent -->
+          <div class="rounded-lg border bg-gray-10 p-3 text-xs text-gray-700">
+            <div class="flex items-center gap-2 font-medium text-gray-800 mb-2">
+              <i class="pi pi-info-circle text-gray-600"></i>
+              <span>{{ t("What will be sent to the AI") }}</span>
+            </div>
 
-            <li v-if="submissionHasFile">
-              Student attachment: <b>{{ submissionFilename }}</b>
-              <span v-if="submissionFileSupportedForAi"> (supported)</span>
-              <span v-else> (not supported for document analysis)</span>
-            </li>
-            <li v-else>Student attachment: none</li>
-          </ul>
-        </div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>{{ t("Assignment title + instructions") }}</li>
+              <li v-if="submissionHasText">{{ t("Student submission (text)") }}</li>
+              <li v-else>{{ t("Student submission (text): none") }}</li>
 
-        <!-- Warnings / guidance -->
-        <div
-          v-if="aiBlockingReason"
-          class="rounded border border-red-200 bg-red-50 p-2 text-xs text-red-800"
-        >
-          {{ aiBlockingReason }}
-        </div>
+              <li v-if="submissionHasFile">
+                {{ t("Student attachment") }}: <b>{{ submissionFilename }}</b>
+                <span v-if="submissionFileSupportedForAi"> ({{ t("supported") }})</span>
+                <span v-else>({{ t("not supported for document analysis") }})</span>
+              </li>
+              <li v-else>{{ t("Student attachment: none") }}</li>
+            </ul>
+          </div>
 
-        <div
-          v-else-if="aiWarning"
-          class="rounded border border-yellow-200 bg-yellow-50 p-2 text-xs text-yellow-900"
-        >
-          {{ aiWarning }}
-        </div>
+          <!-- Blocking / warning -->
+          <div
+            v-if="aiBlockingReason"
+            class="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-800"
+          >
+            {{ aiBlockingReason }}
+          </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div class="md:col-span-1">
-            <label class="block text-xs font-medium mb-1">AI provider</label>
-            <select
-              v-model="aiProvider"
-              class="w-full rounded border border-gray-300 px-3 py-2 text-sm"
-              :disabled="aiBusy || providers.length === 0"
-            >
-              <option
-                v-for="p in providers"
-                :key="p"
-                :value="p"
+          <div
+            v-else-if="aiWarning"
+            class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-900"
+          >
+            {{ aiWarning }}
+          </div>
+
+          <!-- Provider + Prompt -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-1">
+              <label class="block text-xs font-semibold text-gray-700 mb-1">{{ t("AI provider") }}</label>
+
+              <select
+                v-model="aiProvider"
+                class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
+                :disabled="aiBusy || providerOptions.length === 0"
               >
-                {{ p }}
-              </option>
-            </select>
-            <p
-              v-if="providers.length === 0"
-              class="text-xs text-red-600 mt-1"
-            >
-              No text AI providers available.
-            </p>
+                <option
+                  v-for="p in providerOptions"
+                  :key="p.key"
+                  :value="p.key"
+                >
+                  {{ p.label }}
+                </option>
+              </select>
+
+              <p
+                v-if="providerOptions.length === 0"
+                class="text-xs text-red-600 mt-1"
+              >
+                {{ t("No text AI providers available.") }}
+              </p>
+            </div>
+
+            <div class="md:col-span-2">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <label class="block text-xs font-semibold text-gray-700">
+                  {{ t("Prompt") }}
+                </label>
+
+                <span
+                  v-if="aiUsedMode"
+                  class="text-xs text-gray-500"
+                >
+                  {{ t("Mode") }}: <b class="text-gray-700">{{ aiUsedMode }}</b>
+                </span>
+              </div>
+
+              <Textarea
+                v-model="aiPrompt"
+                class="w-full"
+                rows="4"
+                :disabled="aiBusy"
+                @input="aiPromptDirty = true"
+              />
+
+              <div class="mt-1 flex flex-wrap items-center justify-between gap-2">
+                <p class="text-xs text-gray-500">
+                  {{ t("Tip") }}: {{ t("You can edit the prompt before asking for feedback.") }}
+                </p>
+
+                <p
+                  v-if="aiLastError"
+                  class="text-xs text-red-700"
+                >
+                  {{ aiLastError }}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div class="md:col-span-2">
-            <label class="block text-xs font-medium mb-1">
-              {{ t("Prompt") }}
-            </label>
+          <!-- Result -->
+          <div
+            v-if="aiFeedback"
+            class="rounded-lg border bg-white p-3 space-y-2"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <label class="text-xs font-semibold text-gray-700">
+                {{ t("Result (you can apply it to the comment)") }}
+              </label>
+
+              <span
+                v-if="aiSuggestedScore !== null"
+                class="inline-flex items-center gap-2 rounded-full border bg-gray-10 px-3 py-1 text-xs text-gray-700"
+              >
+                <span>{{ t("Suggested score") }}:</span>
+                <b class="text-gray-900">{{ aiSuggestedScore }}</b>
+              </span>
+            </div>
+
             <Textarea
-              v-model="aiPrompt"
-              class="w-full"
-              rows="3"
+              v-model="aiFeedback"
+              class="w-full resize-none"
+              rows="7"
               :disabled="aiBusy"
-              @input="aiPromptDirty = true"
             />
-            <p class="text-xs text-gray-500 mt-1">
-              {{ t("Tip") }}: {{ t("You can edit the prompt before asking for feedback.") }}
-            </p>
 
-            <div
-              v-if="aiUsedMode"
-              class="text-xs text-gray-600 mt-1"
-            >
-              Mode used: <b>{{ aiUsedMode }}</b>
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <Button
+                :label="t('Apply to comment')"
+                icon="pi pi-arrow-down"
+                class="p-button-sm"
+                :disabled="aiBusy || !aiFeedback.trim()"
+                @click="applyAiFeedbackToComment"
+              />
+
+              <Button
+                :label="t('Clear')"
+                icon="pi pi-times"
+                class="p-button-sm p-button-text"
+                :disabled="aiBusy"
+                @click="clearAiFeedback"
+              />
+
+              <Button
+                v-if="aiSuggestedScore !== null && !forceStudentView"
+                :label="t('Apply score')"
+                icon="pi pi-check"
+                class="p-button-sm p-button-secondary"
+                type="button"
+                :disabled="aiBusy"
+                @click.stop.prevent="applyAiScore"
+              />
             </div>
-
-            <div
-              v-if="aiLastError"
-              class="text-xs text-red-700 mt-1"
-            >
-              {{ aiLastError }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-if="aiFeedback"
-          class="space-y-2"
-        >
-          <label class="block text-xs font-medium">
-            {{ t("Result (you can apply it to the comment)") }}
-          </label>
-
-          <Textarea
-            v-model="aiFeedback"
-            class="w-full resize-none"
-            rows="6"
-            :disabled="aiBusy"
-          />
-
-          <div class="flex flex-wrap items-center gap-2">
-            <Button
-              :label="t('Apply to comment')"
-              icon="pi pi-arrow-down"
-              class="p-button-sm"
-              :disabled="aiBusy || !aiFeedback.trim()"
-              @click="applyAiFeedbackToComment"
-            />
-
-            <Button
-              :label="t('Clear')"
-              icon="pi pi-times"
-              class="p-button-sm p-button-text"
-              :disabled="aiBusy"
-              @click="clearAiFeedback"
-            />
-
-            <span
-              v-if="aiSuggestedScore !== null"
-              class="text-xs text-gray-600"
-            >
-              {{ t("Suggested score") }}: <b>{{ aiSuggestedScore }}</b>
-            </span>
-
-            <Button
-              v-if="aiSuggestedScore !== null && !forceStudentView"
-              :label="t('Apply score')"
-              icon="pi pi-check"
-              class="p-button-sm p-button-secondary"
-              type="button"
-              :disabled="aiBusy"
-              @click.stop.prevent="applyAiScore"
-            />
           </div>
         </div>
       </div>
 
-      <Textarea
-        id="assignment-comment"
-        v-model="comment"
-        :placeholder="t('Write your comment...')"
-        class="w-full"
-        rows="5"
-      />
+      <!-- Teacher comment -->
+      <div class="space-y-2">
+        <Textarea
+          id="assignment-comment"
+          v-model="comment"
+          :placeholder="t('Write your comment...')"
+          class="w-full"
+          rows="5"
+        />
 
+        <!-- AI-assisted flag for this correction (comment/file) -->
+        <div
+          v-if="canShowAiAssistedToggle"
+          class="flex flex-wrap items-center gap-2 rounded-lg border bg-gray-10 px-3 py-2"
+        >
+          <BaseCheckbox
+            id="ai-assisted-flag"
+            :modelValue="aiAssistedRaw"
+            :label="t('AI-assisted')"
+            name=""
+            @update:modelValue="onAiAssistedUserToggle"
+          />
+
+          <span class="text-xs text-gray-600">
+            {{ t("This decision is saved with the correction (ExtraField) and cannot be changed later.") }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Score -->
       <div class="flex flex-col gap-2">
         <label
           for="qualification"
-          class="text-sm font-medium"
+          class="text-sm font-medium text-gray-100"
         >
           {{ t("Score") }}
         </label>
@@ -241,24 +304,30 @@
         </template>
 
         <template v-else>
-          <span class="border p-2 rounded bg-gray-100 text-sm">
+          <span class="border p-2 rounded bg-gray-10 text-sm">
             {{ qualification ?? t("Not graded yet") }}
           </span>
         </template>
       </div>
 
+      <!-- Attach correction file -->
       <div class="flex flex-col gap-2">
-        <label>{{ t("Attach file (optional)") }}</label>
+        <label class="text-sm font-medium text-gray-900">
+          {{ t("Attach file (optional)") }}
+        </label>
+
         <input
           id="assignment-attach-correction"
           type="file"
           @change="handleFileUpload"
         />
-        <small class="text-xs text-gray-50">
-          Optional correction attachment (this is not the student's submission).
+
+        <small class="text-xs text-gray-600">
+          {{ t("Optional correction attachment (this is not the student's submission).") }}
         </small>
       </div>
 
+      <!-- Send mail -->
       <div class="flex items-center gap-2">
         <BaseCheckbox
           v-if="props.flags.allowText"
@@ -269,7 +338,8 @@
         />
       </div>
 
-      <div class="flex justify-end gap-2">
+      <!-- Actions -->
+      <div class="flex justify-end gap-2 pt-1">
         <Button
           :label="t('Cancel')"
           class="p-button-text"
@@ -284,6 +354,8 @@
         />
       </div>
     </div>
+
+    <!-- Comments history -->
     <div
       v-if="comments.length"
       class="mt-6 border-t pt-4 space-y-4 max-h-[300px] overflow-auto"
@@ -294,25 +366,38 @@
         class="bg-gray-10 border rounded p-3 space-y-2"
       >
         <div class="flex justify-between items-center">
-          <span class="font-semibold text-sm">
-            {{ commentItem.user?.fullName || commentItem.user?.fullname || "Unknown User" }}
-          </span>
-          <span class="text-gray-50 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-sm">
+              {{ commentItem.user?.fullName || commentItem.user?.fullname || "Unknown User" }}
+            </span>
+
+            <span
+              v-if="commentItem.ai_assisted"
+              class="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-10 px-2 py-0.5 text-xs text-gray-700"
+              :title="t('AI-assisted')"
+            >
+              <span aria-hidden="true">🤖</span>
+              <span>{{ t("AI") }}</span>
+            </span>
+          </div>
+
+          <span class="text-gray-500 text-xs">
             {{ relativeDatetime(commentItem.sentAt) }}
           </span>
         </div>
-        <p class="text-gray-90 whitespace-pre-line text-sm">
+
+        <p class="text-gray-900 whitespace-pre-line text-sm">
           {{ commentItem.comment }}
         </p>
         <div
           v-if="commentItem.file && commentItem.downloadUrl"
           class="flex items-center gap-1 text-sm"
         >
-          <i class="pi pi-paperclip text-gray-50"></i>
+          <i class="pi pi-paperclip text-gray-600"></i>
           <a
             :href="commentItem.downloadUrl"
             target="_blank"
-            class="text-blue-50 underline break-all"
+            class="text-blue-600 underline break-all"
           >
             {{ commentItem.file }}
           </a>
@@ -337,7 +422,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import InputNumber from "primevue/inputnumber"
 import DOMPurify from "dompurify"
 
-// Settings gating (same style as glossary)
+// Settings gating
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useCidReqStore } from "../../store/cidReq"
@@ -363,7 +448,7 @@ const selectedFile = ref(null)
 const qualification = ref(null)
 const submitting = ref(false)
 const route = useRoute()
-const parentResourceNodeId = parseInt(route.params.node)
+const parentResourceNodeId = parseInt(route.params.node ?? "0", 10)
 const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
 const isStudentView = route.query.isStudentView === "true"
@@ -371,8 +456,24 @@ const forceStudentView = !isEditor || isStudentView
 
 const { relativeDatetime } = useFormatDate()
 const comments = ref([])
+const aiAssistedRaw = ref(false)
+const aiAssistedDirty = ref(false)
+const canShowAiAssistedToggle = computed(() => !forceStudentView)
 
-// Sanitize rich HTML content before rendering it with v-html / srcdoc.
+function onAiAssistedUserToggle(val) {
+  aiAssistedDirty.value = true
+  aiAssistedRaw.value = !!val
+}
+
+function autoMarkAiAssisted() {
+  if (!aiAssistedDirty.value) {
+    aiAssistedRaw.value = true
+  }
+}
+
+// ----------------------------
+// Sanitization helpers
+// ----------------------------
 const sanitizeHtml = (html, options = {}) => {
   return DOMPurify.sanitize(html ?? "", {
     ADD_ATTR: ["target", "rel"],
@@ -384,9 +485,9 @@ const safeParentDescription = computed(() => {
   return sanitizeHtml(props.item?.publicationParent?.description ?? "")
 })
 
-// ----------------------------------
+// ----------------------------
 // Submission rendering helpers
-// ----------------------------------
+// ----------------------------
 const submissionRaw = computed(() => String(props.item?.description || ""))
 
 const isFullHtmlDocument = computed(() => {
@@ -403,7 +504,6 @@ const submissionSrcDoc = computed(() => submissionRaw.value || "")
 const submissionHtml = computed(() => submissionRaw.value || "")
 const submissionText = computed(() => submissionRaw.value || "")
 
-// Sanitized variants for rendering.
 const submissionSrcDocSafe = computed(() => {
   return sanitizeHtml(submissionSrcDoc.value || "", { WHOLE_DOCUMENT: true })
 })
@@ -412,11 +512,9 @@ const submissionHtmlSafe = computed(() => {
   return sanitizeHtml(submissionHtml.value || "")
 })
 
-// ----------------------------------
+// ----------------------------
 // Student attachment detection (best-effort)
-// ----------------------------------
-// NOTE: Different APIs can expose the filename differently. We try common fields.
-// Keep this defensive to avoid breaking existing behavior.
+// ----------------------------
 const submissionFilename = computed(() => {
   const v =
     props.item?.title ||
@@ -443,18 +541,16 @@ const submissionHasText = computed(() => {
   return typeof txt === "string" && txt.trim().length > 0
 })
 
-// Keep this list aligned with backend isSupportedForDocumentProcess().
-// We intentionally keep it short in UI for clarity.
+// Keep this list aligned with backend document support.
 const AI_SUPPORTED_DOC_EXTS = ["pdf", "txt", "md", "markdown", "html", "htm", "json", "xml", "yaml", "yml", "csv"]
-
 const AI_IMAGE_EXTS = ["jpg", "jpeg", "png", "gif", "webp", "bmp", "tif", "tiff"]
 
 const submissionFileIsImage = computed(() => AI_IMAGE_EXTS.includes(submissionExt.value))
 const submissionFileSupportedForAi = computed(() => AI_SUPPORTED_DOC_EXTS.includes(submissionExt.value))
 
-// ----------------------------------
+// ----------------------------
 // Score helpers
-// ----------------------------------
+// ----------------------------
 const primeLocale = computed(() => {
   const l = String(locale.value || "en").toLowerCase()
   if (l.startsWith("fr")) return "fr-FR"
@@ -469,7 +565,6 @@ const maxQualification = computed(() => {
 
   const n = Number(raw)
   if (!Number.isFinite(n) || n <= 0) return null
-
   return n
 })
 
@@ -478,23 +573,22 @@ const maxHelpText = computed(() => {
   return `${t("Max score")}: ${maxQualification.value}`
 })
 
-// ----------------------------------
+// ----------------------------
 // AI Task Grader state
-// ----------------------------------
+// ----------------------------
 const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 
 const providers = ref([])
-const aiProvider = ref("")
+const aiProvider = ref("") // provider key
 const aiPrompt = ref("")
 const aiPromptDirty = ref(false)
 const aiFeedback = ref("")
 const aiSuggestedScore = ref(null)
 const aiBusy = ref(false)
 
-// Extra UI/debug helpers (do not affect existing logic)
 const aiUsedMode = ref("") // "text" | "document" (from backend response)
 const aiLastError = ref("") // last backend/provider error message
 
@@ -511,10 +605,26 @@ const canUseAiTaskGrader = computed(() => {
   return !!(!forceStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
 
+// Normalize providers from API:
+// - Old format: ["openai", "mistral"]
+// - New format: [{key,label}, ...]
+const providerOptions = computed(() => {
+  const raw = Array.isArray(providers.value) ? providers.value : []
+  return raw
+    .map((p) => {
+      if (typeof p === "string") {
+        const s = p.trim()
+        return s ? { key: s, label: s } : null
+      }
+      const key = String(p?.key || p?.name || p?.id || "").trim()
+      const label = String(p?.label || p?.name || p?.key || key).trim()
+      if (!key) return null
+      return { key, label: label || key }
+    })
+    .filter(Boolean)
+})
+
 const aiBlockingReason = computed(() => {
-  // Block generation if there is nothing usable for AI:
-  // - No text submission
-  // - And file exists but is not supported for document processing (images, docx, etc.)
   if (!canUseAiTaskGrader.value) return ""
 
   const hasText = submissionHasText.value
@@ -539,7 +649,6 @@ const aiBlockingReason = computed(() => {
 const aiWarning = computed(() => {
   if (!canUseAiTaskGrader.value) return ""
 
-  // Non-blocking warnings
   if (submissionHasFile.value && submissionFileSupportedForAi.value) {
     return "Tip: PDF works best for document analysis. Text files are accepted but may provide less context than a well-formatted PDF."
   }
@@ -554,7 +663,7 @@ const aiWarning = computed(() => {
 const aiCanGenerate = computed(() => {
   if (!canUseAiTaskGrader.value) return false
   if (aiBusy.value) return false
-  if (providers.value.length === 0) return false
+  if (providerOptions.value.length === 0) return false
   if (!aiProvider.value) return false
   if (!aiPrompt.value.trim()) return false
   if (aiBlockingReason.value) return false
@@ -564,7 +673,6 @@ const aiCanGenerate = computed(() => {
 async function loadCourseSettingsIfPossible() {
   const courseId = course.value?.id
   const sessionId = session.value?.id
-
   if (!courseId) return
 
   try {
@@ -578,7 +686,7 @@ async function loadAiProviders() {
   try {
     const res = await cStudentPublicationService.getAiTextProviders()
     providers.value = res?.providers || []
-    aiProvider.value = providers.value[0] || ""
+    aiProvider.value = providerOptions.value[0]?.key || ""
   } catch (err) {
     console.warn("[Assignments][AI] Failed to load providers", err)
     providers.value = []
@@ -607,7 +715,7 @@ async function loadDefaultAiPrompt() {
 async function runAiTaskGrader() {
   if (!canUseAiTaskGrader.value || aiBusy.value) return
 
-  // Front-end safety check (backend still validates)
+  // Front-end safety check (backend still validates).
   if (aiBlockingReason.value) {
     notification.showErrorNotification(aiBlockingReason.value)
     return
@@ -637,6 +745,9 @@ async function runAiTaskGrader() {
     aiSuggestedScore.value = res.suggestedScore ?? null
     aiUsedMode.value = String(res.mode || "").trim()
 
+    // Auto-mark only if user did not manually change the checkbox.
+    autoMarkAiAssisted()
+
     notification.showSuccessNotification(t("Generate"))
   } catch (err) {
     console.warn("[Assignments][AI] Task grader request failed", err)
@@ -651,6 +762,9 @@ function applyAiFeedbackToComment() {
   const txt = aiFeedback.value.trim()
   if (!txt) return
   comment.value = txt
+
+  // Auto-mark only if user did not manually change the checkbox.
+  autoMarkAiAssisted()
 }
 
 function applyAiScore() {
@@ -669,7 +783,10 @@ function applyAiScore() {
   qualification.value = v
   notification.showSuccessNotification(t("Score updated successfully"))
 
-  // Focus the score input (best effort)
+  // Auto-mark only if user did not manually change the checkbox.
+  autoMarkAiAssisted()
+
+  // Focus the score input (best effort).
   requestAnimationFrame(() => {
     const el = document.getElementById("qualification")
     el?.scrollIntoView?.({ behavior: "smooth", block: "center" })
@@ -684,24 +801,29 @@ function clearAiFeedback() {
   aiLastError.value = ""
 }
 
-// ----------------------------------
+// ----------------------------
 // Modal lifecycle
-// ----------------------------------
+// ----------------------------
 watch(
   () => props.modelValue,
   async (newVal) => {
     visible.value = newVal
-
     if (!newVal) return
 
     comment.value = ""
     sendMail.value = false
     selectedFile.value = null
+
+    // Reset AI-related state each time the modal opens.
     aiFeedback.value = ""
     aiSuggestedScore.value = null
     aiUsedMode.value = ""
     aiLastError.value = ""
     aiPromptDirty.value = false
+
+    // Reset AI-assisted decision for this new correction.
+    aiAssistedRaw.value = false
+    aiAssistedDirty.value = false
 
     qualification.value =
       props.item?.qualification === null || props.item?.qualification === undefined || props.item?.qualification === ""
@@ -710,7 +832,7 @@ watch(
 
     comments.value = await cStudentPublicationService.loadComments(props.item.iid)
 
-    // Load settings/providers/prompt only when the modal opens
+    // Load settings/providers/prompt only when the modal opens.
     await loadCourseSettingsIfPossible()
 
     if (canUseAiTaskGrader.value) {
@@ -794,6 +916,8 @@ async function submit() {
     if (hasComment) {
       formData.append("comment", trimmed)
     }
+
+    formData.append("ai_assisted_raw", aiAssistedRaw.value ? "1" : "0")
 
     await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, sendMail.value)
 

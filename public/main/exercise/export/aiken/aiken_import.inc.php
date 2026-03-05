@@ -296,10 +296,18 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
     $exercise = new Exercise();
     $exercise->exercise = $exerciseInfo['name'];
     $exercise->save();
-    $lastExerciseId = $exercise->getId();
+    $lastExerciseId = $exercise->iId;
 
     if (!$lastExerciseId) {
         return false;
+    }
+
+    // Mark exercise as AI-assisted using extra fields (do NOT alter stored titles/text).
+    if (is_array($aiMeta) && !empty($aiMeta['disclose'])) {
+        $helper = aiken_get_ai_disclosure_helper();
+        if ($helper) {
+            $helper->markAiAssistedExtraField('exercise', (int) $lastExerciseId, true);
+        }
     }
 
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -335,12 +343,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
         $question->setAnswer();
 
         $title = (string) $questionData['title'];
-
-        // Visible marker without UI changes
-        if (is_array($aiMeta) && !empty($aiMeta['disclose'])) {
-            $title = aiken_prefix_ai_title($title);
-        }
-
         $question->updateTitle($title);
 
         if (isset($questionData['description'])) {
@@ -362,7 +364,16 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
             continue;
         }
 
-        // AI audit per created question
+        // Mark question as AI-assisted using extra fields (do NOT alter stored titles/text).
+        if (is_array($aiMeta) && !empty($aiMeta['disclose'])) {
+            $helper = aiken_get_ai_disclosure_helper();
+            if ($helper) {
+                $helper->markAiAssistedExtraField('question', (int) $lastQuestionId, true);
+            }
+        }
+
+        // Create answers for the question
+        // AI audit per created question (kept as-is)
         if (is_array($aiMeta)) {
             $helper = aiken_get_ai_disclosure_helper();
             if ($helper) {
@@ -385,10 +396,10 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
         $answer = new Answer($lastQuestionId, $courseId, $exercise, false);
         $answer->new_nbrAnswers = count($questionData['answer']);
         $maxScore = 0;
-        $scoreFromFile = $questionData['score'] ?? 0;
+        $scoreFromFile = 0;
 
-        foreach ($questionData['answer'] as $key => $answerData) {
-            $answerIndex = $key + 1;
+        foreach ($questionData['answer'] as $answerIndex => $answerData) {
+            $answerIndex = (int) $answerIndex;
             $answer->new_answer[$answerIndex] = $answerData['value'];
             $answer->new_position[$answerIndex] = $answerIndex;
             $answer->new_comment[$answerIndex] = '';
@@ -402,12 +413,17 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
                 if (isset($questionData['weighting'])) {
                     $answer->new_weighting[$answerIndex] = $questionData['weighting'][0];
                     $maxScore += $questionData['weighting'][0];
+                } else {
+                    $answer->new_weighting[$answerIndex] = 1;
+                    $maxScore += 1;
                 }
             } else {
                 $answer->new_correct[$answerIndex] = 0;
+                $answer->new_weighting[$answerIndex] = 0;
             }
 
-            if (!empty($scoreFromFile) && $answer->new_correct[$answerIndex]) {
+            if (isset($questionData['score'])) {
+                $scoreFromFile = (float) $questionData['score'];
                 $answer->new_weighting[$answerIndex] = $scoreFromFile;
             }
 
@@ -416,7 +432,7 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
                 'answer' => $answer->new_answer[$answerIndex],
                 'correct' => $answer->new_correct[$answerIndex],
                 'comment' => $answer->new_comment[$answerIndex],
-                'ponderation' => $answer->new_weighting[$answerIndex] ?? 0,
+                'ponderation' => $answer->new_weighting[$answerIndex],
                 'position' => $answer->new_position[$answerIndex],
                 'hotspot_coordinates' => '',
                 'hotspot_type' => '',

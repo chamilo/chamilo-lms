@@ -133,6 +133,11 @@ class LearnPathItemForm
             $form->setDefault('description', $itemDescription);
         }
 
+        // LP item extra fields (e.g., AI disclosure toggle)
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $itemId);
+        }
         $form->addHidden('id', $itemId);
         $form->addHidden('type', $itemType);
         $form->addHidden('post_time', time());

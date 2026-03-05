@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent="$emit('submit')">
     <!-- Title -->
     <BaseInputTextWithVuelidate
       id="item_title"
@@ -26,7 +26,7 @@
       v-model="showAdvancedSettings"
     >
       <div class="flex flex-row mb-2">
-        <label class="font-semibold w-40"> {{ $t("Options") }}: </label>
+        <label class="font-semibold w-40">{{ $t("Options") }}:</label>
         <BaseCheckbox
           id="indexDocumentContent"
           v-model="item.indexDocumentContent"
@@ -65,13 +65,14 @@
       </div>
     </BaseAdvancedSettingsButton>
 
+    <!-- Extra blocks injected by parent -->
     <slot></slot>
 
     <BaseButton
       type="primary"
       icon="save"
       :label="$t('Save')"
-      @click="$emit('submit')"
+      @click.prevent="$emit('submit')"
     />
   </form>
 </template>
@@ -119,10 +120,7 @@ export default {
     return {
       contentFile: this.initialValues ? this.initialValues.contentFile : "",
       showAdvancedSettings: false,
-
-      // [{ id, code, title }]
       searchFields: [],
-      // Guard to avoid reloading values multiple times
       searchValuesLoaded: false,
     }
   },
@@ -140,7 +138,6 @@ export default {
       this.item.searchFieldValues = {}
     }
 
-    // Default checkbox value (safe)
     if (undefined === this.item.indexDocumentContent) {
       this.item.indexDocumentContent = true
     }
@@ -166,25 +163,17 @@ export default {
       return Number.isFinite(n) ? n : null
     },
     getResourceNodeId() {
-      // Try the most common shapes
       const rn = this.item?.resourceNode
-
       if (!rn) return null
       if ("number" === typeof rn) return rn
       if ("string" === typeof rn) return this.extractIdFromIri(rn)
-
-      // object
       if (rn.id) return Number(rn.id)
       if (rn["@id"]) return this.extractIdFromIri(rn["@id"])
-
       return null
     },
     async loadSearchEngineFields() {
       try {
-        const response = await fetch(ENTRYPOINT + "search_engine_fields", {
-          credentials: "same-origin",
-        })
-
+        const response = await fetch(ENTRYPOINT + "search_engine_fields", { credentials: "same-origin" })
         if (!response.ok) {
           console.error("[Search] Failed to load search engine fields:", response.status)
           return
@@ -192,26 +181,19 @@ export default {
 
         const json = await response.json()
         const rawFields = Array.isArray(json) ? json : json["hydra:member"] || []
-
         if (!Array.isArray(rawFields)) {
           console.error("[Search] Unexpected search engine fields payload:", json)
           return
         }
 
         this.searchFields = rawFields
-          .map((f) => ({
-            id: f.id,
-            code: this.normalizeCode(f.code),
-            title: f.title,
-          }))
+          .map((f) => ({ id: f.id, code: this.normalizeCode(f.code), title: f.title }))
           .filter((f) => f.code)
 
-        // Init missing keys + migrate numeric keys (old style) once
         for (const field of this.searchFields) {
           const code = field.code
           if (!code) continue
 
-          // Migration: numeric key -> code key (only if present)
           if (this.item.searchFieldValues[field.id] && !this.item.searchFieldValues[code]) {
             this.item.searchFieldValues[code] = this.item.searchFieldValues[field.id]
             delete this.item.searchFieldValues[field.id]
@@ -225,9 +207,7 @@ export default {
         console.error("[Search] Failed to fetch search engine fields:", e)
       }
     },
-
     async fetchFieldValues(resourceNodeId) {
-      // Preferred: filter by resourceNode IRI (requires ApiPlatform SearchFilter)
       const iri = `/api/resource_nodes/${resourceNodeId}`
 
       const tryUrls = [
@@ -258,50 +238,32 @@ export default {
 
       return []
     },
-
     async loadSearchEngineFieldValuesForEdit() {
       if (this.searchValuesLoaded) return
 
       const resourceNodeId = this.getResourceNodeId()
-      if (!resourceNodeId) {
-        // Create mode has no resourceNode yet
-        return
-      }
+      if (!resourceNodeId) return
 
       const items = await this.fetchFieldValues(resourceNodeId)
-      if (!items.length) {
-        // Not fatal: it just means "no values found" or API filter not enabled
-        return
-      }
+      if (!items.length) return
 
-      // Build map fieldId -> code using loaded searchFields
       const fieldIdToCode = new Map(this.searchFields.map((f) => [Number(f.id), f.code]))
 
       for (const v of items) {
-        // v.field can be an IRI or an object; handle both
         let fieldId = null
 
         if (v.field) {
-          if ("string" === typeof v.field) {
-            fieldId = this.extractIdFromIri(v.field)
-          } else if (v.field["@id"]) {
-            fieldId = this.extractIdFromIri(v.field["@id"])
-          } else if (v.field.id) {
-            fieldId = Number(v.field.id)
-          }
+          if ("string" === typeof v.field) fieldId = this.extractIdFromIri(v.field)
+          else if (v.field["@id"]) fieldId = this.extractIdFromIri(v.field["@id"])
+          else if (v.field.id) fieldId = Number(v.field.id)
         }
 
-        // Some APIs might expose field_id directly
-        if (!fieldId && v.field_id) {
-          fieldId = Number(v.field_id)
-        }
-
+        if (!fieldId && v.field_id) fieldId = Number(v.field_id)
         if (!fieldId) continue
 
         const code = fieldIdToCode.get(Number(fieldId))
         if (!code) continue
 
-        // Fill form with stored values
         this.item.searchFieldValues[code] = String(v.value ?? "")
       }
 
@@ -309,7 +271,7 @@ export default {
       console.log("[Search] Loaded search field values for resourceNodeId=", resourceNodeId)
     },
 
-    // Existing methods kept intact
+    // Existing methods kept
     browser(callback, value, meta) {
       let nodeId = this.$route.params["node"]
       let folderParams = this.$route.query
@@ -320,17 +282,12 @@ export default {
       })
       url = url.fullPath
 
-      if (meta.filetype === "image") {
-        url = url + "&type=images"
-      } else {
-        url = url + "&type=files"
-      }
+      if (meta.filetype === "image") url = url + "&type=images"
+      else url = url + "&type=files"
 
       window.addEventListener("message", function (event) {
         const data = event.data
-        if (data.url) {
-          callback(data.url)
-        }
+        if (data.url) callback(data.url)
       })
 
       tinymce.activeEditor.windowManager.openUrl(
@@ -340,15 +297,9 @@ export default {
             let url = fm.convAbsUrl(file.url)
             const info = file.name + " (" + fm.formatSize(file.size) + ")"
 
-            if (meta.filetype === "file") {
-              callback(url, { text: info, title: info })
-            }
-            if (meta.filetype === "image") {
-              callback(url, { alt: info })
-            }
-            if (meta.filetype === "media") {
-              callback(url)
-            }
+            if (meta.filetype === "file") callback(url, { text: info, title: info })
+            if (meta.filetype === "image") callback(url, { alt: info })
+            if (meta.filetype === "media") callback(url)
           },
         },
       )

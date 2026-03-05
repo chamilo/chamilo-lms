@@ -269,11 +269,6 @@ class AiController extends AbstractController
                 sessionId: api_get_session_id()
             );
 
-            // Visible disclosure for glossary output (prefix first line of each term block).
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                $raw = $this->aiDisclosureHelper->injectDisclosurePrefixIntoGlossaryTermsText($raw, '[AI-assisted] ');
-            }
-
             return new JsonResponse([
                 'success' => true,
                 'text' => $raw,
@@ -417,7 +412,7 @@ class AiController extends AbstractController
                 meta: [
                     'feature' => 'learnpath_generator',
                     'mode' => 'generated',
-                    'provider' => \is_string($aiProvider) && '' !== trim($aiProvider) ? trim($aiProvider) : 'default',
+                    'provider' => \is_string($aiProvider) && '' !== trim((string) $aiProvider) ? trim((string) $aiProvider) : 'default',
                     'language' => $language,
                     'chapters' => $chaptersCount,
                     'words' => $wordsCount,
@@ -427,16 +422,6 @@ class AiController extends AbstractController
                 courseId: $cid > 0 ? $cid : 0,
                 sessionId: $sid > 0 ? $sid : api_get_session_id()
             );
-
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                // Add markers to known content fields (titles/contents) without touching unrelated strings.
-                // HTML strings get the inline tag; plain text gets "[AI-assisted] " prefix.
-                $result = $this->aiDisclosureHelper->decorateStructuredPayload(
-                    $result,
-                    ['lp_name', 'name', 'title', 'content', 'description', 'text'],
-                    '[AI-assisted] '
-                );
-            }
 
             return new JsonResponse([
                 'success' => true,
@@ -507,12 +492,6 @@ class AiController extends AbstractController
 
             $questionsText = trim((string) $questions);
 
-            // Visible disclosure for Aiken output (so imported questions keep the marker).
-            if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                $questionsText = $this->aiDisclosureHelper->injectDisclosurePrefixIntoAikenText($questionsText, '[AI-assisted] ');
-            }
-
-            // Audit only (provider/model details stay in DB, not in response).
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'course:'.$cid.':aiken:'.sha1($topic.'|'.$language.'|'.$nQ.'|'.$questionType),
                 userId: $this->getCurrentUserId(),
@@ -672,8 +651,10 @@ class AiController extends AbstractController
 
         $score = (int) filter_var($scoreLine, FILTER_SANITIZE_NUMBER_INT);
 
-        if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-            $feedback = $this->aiDisclosureHelper->prependDisclosureToPlainText((string) $feedback);
+        // After you have $exeId (track exercise id) and you are sure it's > 0.
+        if ($this->aiDisclosureHelper->isDisclosureEnabled() && $exeId > 0) {
+            // Store disclosure metadata in extra fields instead of altering feedback text.
+            $this->aiDisclosureHelper->markAiAssistedExtraField('track_exercise', (int) $exeId, true);
         }
 
         // Keep legacy TrackEDefault event for analytics/backward compatibility.
@@ -1482,9 +1463,11 @@ class AiController extends AbstractController
                     return new JsonResponse(['success' => false, 'text' => '' !== $msg ? $msg : $result], $status);
                 }
 
-                // Disclosure label (visible) + audit record.
                 if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
-                    $result = $this->aiDisclosureHelper->prependDisclosureToPlainText($result);
+                    $nodeId = (int) $node->getId();
+                    if ($nodeId > 0) {
+                        $this->aiDisclosureHelper->markAiAssistedExtraField('document', $nodeId, true);
+                    }
                 }
 
                 $this->aiDisclosureHelper->logAudit(
@@ -1630,6 +1613,10 @@ class AiController extends AbstractController
                 false,
                 false
             );
+
+            if (null !== $messageId && $this->aiDisclosureHelper->isDisclosureEnabled()) {
+                $this->aiDisclosureHelper->markAiAssistedExtraField('message', (int) $messageId, true);
+            }
 
             if (null === $messageId) {
                 $this->debugLog('[AI][document_feedback][inbox] MessageHelper returned null (message not created).');

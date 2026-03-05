@@ -4457,7 +4457,7 @@ function send_notifications(CForum $forum, CForumThread $thread, $post_id = 0)
 
     // User who subscribed to the thread
     $users_to_be_notified_by_thread = [];
-    if (!$thread) {
+    if ($thread) {
         $users_to_be_notified_by_thread = get_notifications('thread', $thread->getIid());
     }
 

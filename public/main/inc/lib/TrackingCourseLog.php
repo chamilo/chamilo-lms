@@ -234,7 +234,7 @@ class TrackingCourseLog
             $displayRow[4] = $ip;
 
             // Column 5: Document title.
-            $displayRow[5] = $displayRow['document_title'];
+            $displayRow[5] = Security::remove_XSS($displayRow['document_title']);
 
             // Column 6: Date.
             $displayRow[6] = api_convert_and_format_date(

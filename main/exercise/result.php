@@ -66,6 +66,9 @@ if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSign
     }
 }
 
+if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
+    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+}
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';

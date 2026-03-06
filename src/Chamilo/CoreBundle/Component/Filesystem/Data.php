@@ -7,12 +7,11 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Driver\CourseDriver;
 use Chamilo\UserBundle\Entity\User;
 use Sunra\PhpSimple\HtmlDomParser;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-
+use Symfony\Component\Process\Process;
 
 /**
  * @todo use Gaufrette to manage course files (some day)

@@ -183,7 +183,7 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedL
             if ($letterCount > strlen($lastPartLetters) - 1) {
                 break; // No more letters available. Will append a number below
             }
-            $login = $baseLogin . substr($lastPartLetters, 1, $letterCount);
+            $login = $baseLogin.substr($lastPartLetters, 1, $letterCount);
         }
     }
 
@@ -191,7 +191,7 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedL
     $suffix = 1;
     $originalLogin = $login;
     while (isset($usedLogins['logins'][$login]) && $usedLogins['logins'][$login]['active']) {
-        $login = $originalLogin . $suffix;
+        $login = $originalLogin.$suffix;
         $suffix++;
     }
 
@@ -241,6 +241,7 @@ function generateMailFromFirstAndLastNames(string $firstname, string $lastname, 
     $emailLastname = !empty($emailLastnameParts[0]) ? strtolower($emailLastnameParts[0]) : '';
     $emailFirstnameParts = preg_split('/[\s-]+/', trim(removeAccents($firstname)), -1, PREG_SPLIT_NO_EMPTY);
     $emailFirstname = !empty($emailFirstnameParts[0]) ? strtolower($emailFirstnameParts[0]) : '';
+
     return "$emailLastname.$emailFirstname@$domain";
 }
 
@@ -360,7 +361,7 @@ while ($dbUser = $stmt->fetch()) {
             'Username' => $dbUser['username'],
             'User ID' => $dbUser['id'],
             'E-mail' => $dbUser['email'],
-            'Active' => $dbUser['active']?'Yes':'No',
+            'Active' => $dbUser['active'] ? 'Yes' : 'No',
         ];
     }
 }
@@ -405,8 +406,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
-    if (!empty($xlsxUserData['official_code']) && !empty($generatedEmails[$xlsxUserData['official_code']]))
-    {
+    if (!empty($xlsxUserData['official_code']) && !empty($generatedEmails[$xlsxUserData['official_code']])) {
         $emailSource = 'E-mail generated during import';
         $xlsxUserData['email'] = $generatedEmails[$xlsxUserData['official_code']];
     } elseif (!empty($rowData['emailSource'])) {
@@ -550,7 +550,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                             'E-mail' => $xlsxUserData['email'],
                             'E-mail source' => $emailSource,
                             'External User ID' => $xlsxMatricule,
-                            'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                            'Updated Fields' => implode(', ', array_map(function ($update) { return trim(explode(':', $update)[0]); }, $updates)),
                         ];
                     } else {
                         echo "  Error: Could not update user (username: $dbUsername)\n";
@@ -592,7 +592,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                     'E-mail' => $xlsxUserData['email'],
                     'E-mail source' => $emailSource,
                     'External User ID' => $xlsxMatricule,
-                    'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                    'Updated Fields' => implode(', ', array_map(function ($update) { return trim(explode(':', $update)[0]); }, $updates)),
                 ];
             }
         } else {

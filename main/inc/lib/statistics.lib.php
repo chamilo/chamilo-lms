@@ -41,7 +41,7 @@ class Statistics
      *
      * @return int Number of courses counted
      */
-    public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null)
+    public static function countCourses(?string $categoryCode = null, ?string $dateFrom = null, ?string $dateUntil = null)
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1722,7 +1722,7 @@ class Statistics
      * Return de number of certificates generated.
      * This function is resource intensive.
      */
-    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
+    public static function countCertificatesByQuarter(?string $dateFrom = null, ?string $dateUntil = null): int
     {
         $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 

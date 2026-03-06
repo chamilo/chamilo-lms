@@ -3304,8 +3304,8 @@ class SessionManager
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
         $return_array = [];
-        $courseFrom ="LEFT JOIN " . $session_course_table . " sco ON (sco.session_id = s.id)
-				INNER JOIN " . $course_table . " c ON sco.c_id = c.id";
+        $courseFrom = "LEFT JOIN ".$session_course_table." sco ON (sco.session_id = s.id)
+                INNER JOIN ".$course_table." c ON sco.c_id = c.id";
 
         if ($includeSessionWithNoCourse) {
             $courseFrom = "";

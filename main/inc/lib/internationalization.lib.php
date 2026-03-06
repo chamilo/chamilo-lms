@@ -714,19 +714,36 @@ function api_format_date($time, $format = null, $language = null)
         //$date_formatter->setPattern($date_format);
         $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
     } else {
-        // We replace %a %A %b %B masks of date format with translated strings
+        // Format date without strftime() (deprecated PHP 8.1, removed PHP 9.0).
+        // Process each %X token individually so date() never sees translated
+        // day/month names (which contain letters it would misinterpret as codes).
         $translated = &_api_get_day_month_names($language);
-        $date_format = str_replace(
-            ['%A', '%a', '%B', '%b'],
-            [
-                $translated['days_long'][(int) strftime('%w', $time)],
-                $translated['days_short'][(int) strftime('%w', $time)],
-                $translated['months_long'][(int) strftime('%m', $time) - 1],
-                $translated['months_short'][(int) strftime('%m', $time) - 1],
-            ],
-            $date_format
-        );
-        $formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
+        $dayOfWeek = (int) date('w', $time);
+        $monthIndex = (int) date('n', $time) - 1;
+        $strfToDate = [
+            'd' => 'd', 'm' => 'm', 'Y' => 'Y', 'y' => 'y',
+            'H' => 'H', 'I' => 'h', 'M' => 'i', 'S' => 's',
+            'p' => 'A', 'P' => 'a', 'e' => 'j', 'w' => 'w',
+            'u' => 'N',
+        ];
+        $formatted_date = '';
+        for ($fi = 0, $flen = strlen($date_format); $fi < $flen; $fi++) {
+            if ($date_format[$fi] !== '%' || $fi + 1 >= $flen) {
+                $formatted_date .= $date_format[$fi];
+                continue;
+            }
+            $code = $date_format[++$fi];
+            switch ($code) {
+                case 'A': $formatted_date .= $translated['days_long'][$dayOfWeek]; break;
+                case 'a': $formatted_date .= $translated['days_short'][$dayOfWeek]; break;
+                case 'B': $formatted_date .= $translated['months_long'][$monthIndex]; break;
+                case 'b': $formatted_date .= $translated['months_short'][$monthIndex]; break;
+                case '%': $formatted_date .= '%'; break;
+                default:
+                    $formatted_date .= isset($strfToDate[$code]) ? date($strfToDate[$code], $time) : '%'.$code;
+            }
+        }
+        $formatted_date = api_to_system_encoding($formatted_date, 'UTF-8');
     }
     date_default_timezone_set($system_timezone);
 
@@ -1052,7 +1069,7 @@ function api_sort_by_first_name($language = null)
  *               'quarter_end' => '2022-12-31',
  *               'quarter_title' => 'Q4 2022']
  */
-function getQuarterDates(string $date = null): array
+function getQuarterDates(?string $date = null): array
 {
     if (empty($date)) {
         $date = api_get_utc_datetime();
@@ -1207,7 +1224,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
             break;
     }
 
-    return mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
+    return mb_encode_numericentity($string, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
 }
 
 /**

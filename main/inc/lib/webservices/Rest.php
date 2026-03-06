@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
@@ -62,6 +61,7 @@ class Rest extends WebService
     public const GET_COURSE_LINKS = 'course_links';
     public const GET_COURSE_WORKS = 'course_works';
     public const GET_COURSE_EXERCISES = 'course_exercises';
+    public const GET_COURSE_GRADEBOOK = 'course_gradebook';
     public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
     public const GET_COURSE_BY_CODE = 'course_details_by_code';
 
@@ -187,7 +187,7 @@ class Rest extends WebService
      *
      * @param int $userId
      */
-    private function __getConfiguredUsernameById(int $userId = null): string
+    private function __getConfiguredUsernameById(?int $userId = null): string
     {
         if (empty($userId)) {
             return '';
@@ -1869,7 +1869,7 @@ class Rest extends WebService
         $removeCampusId = $request->getBoolean('remove_campus_id_from_wanted_code');
         $language = $request->get('language');
 
-        if (!isset(Course::getStatusList()[$visibility] )) {
+        if (!isset(Course::getStatusList()[$visibility])) {
             throw new Exception(get_lang('VisibilityCannotBeChanged'));
         }
 
@@ -4662,6 +4662,132 @@ class Rest extends WebService
     }
 
     /**
+     * @throws Exception
+     */
+    public function addSessionCourseCoaches(ParameterBag $request)
+    {
+        $sessionId = $request->getInt('id_session');
+        $courseId = $request->getInt('course_id');
+
+        $em = Database::getManager();
+        $countSession = $em->getRepository(Session::class)->count(['id' => $sessionId]);
+
+        if (!$countSession) {
+            throw new Exception(get_lang('NoSession'));
+        }
+
+        if (!SessionManager::cantEditSession($sessionId)) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        $countCourse = $em->getRepository(Course::class)->count(['id' => $courseId]);
+
+        if (!$countCourse) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        $coachesToSubscribe = array_filter(
+            array_map(fn ($coachId) => (int) $coachId, $request->get('coach_id', []))
+        );
+        $subscribedCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
+        $coachesToRemove = array_diff($subscribedCoaches, $coachesToSubscribe);
+
+        foreach ($coachesToSubscribe as $coachId) {
+            SessionManager::set_coach_to_course_session(
+                $coachId,
+                $sessionId,
+                $courseId
+            );
+        }
+
+        foreach ($coachesToRemove as $coachId) {
+            SessionManager::set_coach_to_course_session($coachId, $sessionId, $courseId, true);
+        }
+
+        Event::addEvent(
+            LOG_WS.self::ADD_SESSION_COURSE_COACHES,
+            'session_id-course_id-coach_ids',
+            (int) $_POST['id_session'].':'.implode(',', $coachesToSubscribe)
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCourseGradebook(): array
+    {
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+            $this->user->getId(),
+            api_get_course_info($this->course->getCode())
+        );
+
+        $isDrhOfSession = $this->session
+            && !empty(SessionManager::getSessionFollowedByDrh($this->user->getId(), $this->session->getId()));
+
+        if (!$isDrhOfCourse && !$isDrhOfSession) {
+            GradebookUtils::block_students();
+        }
+
+        Event::event_access_tool(TOOL_GRADEBOOK);
+
+        $cats = Category::load(
+            null,
+            null,
+            $this->course->getCode(),
+            null,
+            null,
+            $this->session ? $this->session->getId() : null,
+            false
+        );
+
+        $cats = array_filter(
+            $cats,
+            fn ($cat) => $cat->get_parent_id() == 0
+        );
+
+        if (empty($cats)) {
+            throw new Exception(get_lang('NoCategory'));
+        }
+
+        $cat = array_shift($cats);
+
+        $allEval = $cat->get_evaluations(0, true);
+        $allLinks = $cat->get_links(0, true);
+
+        $users = GradebookUtils::get_all_users($allEval, $allLinks);
+
+        $mainCourseCategory = Category::load(
+            null,
+            null,
+            $this->course->getCode(),
+            null,
+            null,
+            $this->session ? $this->session->getId() : null
+        );
+
+        $flatViewTable = new FlatViewTable(
+            $cat,
+            $users,
+            $allEval,
+            $allLinks,
+            true,
+            0,
+            null,
+            $mainCourseCategory[0]
+        );
+        $flatViewTable->setAutoFill(false);
+        $flatViewTable->set_additional_parameters(['export_pdf' => true]);
+
+        $headers = $this->formatGradebookHeaders($flatViewTable->datagen);
+        $rows = $this->formatGradebookRows($headers, $flatViewTable->datagen);
+
+        return [
+            'headers' => $headers,
+            'rows' => $rows,
+        ];
+    }
+
+    /**
      * Generate an API key for webservices access for the given user ID.
      */
     protected static function generateApiKeyForUser(int $userId): string
@@ -4710,53 +4836,64 @@ class Rest extends WebService
             .http_build_query(array_merge($queryParams, $additionalParams));
     }
 
-    /**
-     * @throws Exception
-     */
-    public function addSessionCourseCoaches(ParameterBag $request)
+    private function formatGradebookHeaders(FlatViewDataGenerator $dataGen): array
     {
-        $sessionId = $request->getInt('id_session');
-        $courseId = $request->getInt('course_id');
+        $result = [];
+        $colIndex = 0;
 
-        $em = Database::getManager();
-        $countSession = $em->getRepository(Session::class)->count(['id' => $sessionId]);
+        foreach ($dataGen->get_header_names() as $header) {
+            if (is_array($header)) {
+                $groupLabel = preg_replace(
+                    '/<a[^>]*>(.*?)<\/a>\s*(.*?)<\/span>/i',
+                    "$1\n$2",
+                    $header['header'] ?? 'group_'.$colIndex
+                );
+                $groupLabel = strip_tags($groupLabel);
 
-        if (!$countSession) {
-            throw new Exception(get_lang('NoSession'));
+                foreach ($header['items'] as $item) {
+                    $item = preg_replace('/<br>\s*<small>(.*?)<\/small>/', "\n$1", $item);
+                    $item = strip_tags($item);
+
+                    $result[] = [
+                        'key' => 'col_'.$colIndex,
+                        'label' => trim($item),
+                        'group_label' => trim($groupLabel),
+                    ];
+                    $colIndex++;
+                }
+            } else {
+                $header = strip_tags($header);
+
+                $result[] = [
+                    'key' => 'col_'.$colIndex,
+                    'label' => trim($header),
+                    'group_label' => null,
+                ];
+                $colIndex++;
+            }
         }
 
-        if (!SessionManager::cantEditSession($sessionId)) {
-            throw new Exception(get_lang('NotAllowed'));
+        return $result;
+    }
+
+    private function formatGradebookRows(array $headers, FlatViewDataGenerator $dataGen): array
+    {
+        $keys = array_column($headers, 'key');
+
+        $rows = [];
+
+        foreach ($dataGen->get_data() as $row) {
+            array_shift($row);
+            $cleaned = array_map(static fn ($v) => is_string($v) ? trim(strip_tags($v)) : $v, $row);
+            $mapped = [];
+
+            foreach ($keys as $i => $key) {
+                $mapped[$key] = $cleaned[$i] ?? null;
+            }
+
+            $rows[] = $mapped;
         }
 
-        $countCourse = $em->getRepository(Course::class)->count(['id' => $courseId]);
-
-        if (!$countCourse) {
-            throw new Exception(get_lang('NoCourse'));
-        }
-
-        $coachesToSubscribe = array_filter(
-            array_map(fn ($coachId) => (int) $coachId, $request->get('coach_id', []))
-        );
-        $subscribedCoaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
-        $coachesToRemove = array_diff($subscribedCoaches, $coachesToSubscribe);
-
-        foreach ($coachesToSubscribe as $coachId) {
-            SessionManager::set_coach_to_course_session(
-                $coachId,
-                $sessionId,
-                $courseId
-            );
-        }
-
-        foreach ($coachesToRemove as $coachId) {
-            SessionManager::set_coach_to_course_session($coachId, $sessionId, $courseId, true);
-        }
-
-        Event::addEvent(
-            LOG_WS.self::ADD_SESSION_COURSE_COACHES,
-            'session_id-course_id-coach_ids',
-            (int) $_POST['id_session'].':'.implode(',', $coachesToSubscribe)
-        );
+        return $rows;
     }
 }

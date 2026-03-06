@@ -973,7 +973,7 @@ class GradebookUtils
     }
 
     /**
-     * @param FlatViewTable $flatviewtable
+     * @param FlatViewTable        $flatviewtable
      * @param array<int, Category> $cat
      * @param $users
      * @param $alleval

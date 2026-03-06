@@ -303,7 +303,7 @@ if (!$hideExpirationDate || api_is_platform_admin()) {
             ]
         );
     }
-$form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
+    $form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
 }
 
 // Active account or inactive account

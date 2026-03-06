@@ -15,7 +15,6 @@
  * although it is not recommended to do so (for security reasons).
  */
 
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -336,6 +335,13 @@ try {
             $fields = $_POST['fields'] ?? [];
             $restResponse->setData(
                 $restApi->getCourseExercises($fields)
+            );
+            break;
+        case Rest::GET_COURSE_GRADEBOOK:
+            Event::addEvent(LOG_WS.$action, 'course_id', $course);
+
+            $restResponse->setData(
+                $restApi->getCourseGradebook()
             );
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:

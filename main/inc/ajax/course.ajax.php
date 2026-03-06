@@ -147,7 +147,7 @@ switch ($action) {
         if (api_is_teacher() || api_is_platform_admin()) {
             $courseList = CourseManager::searchCourse(
                 $_REQUEST['q'],
-                isset($_GET['session_id']) ? (int) $_GET['session_id']: 0
+                isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0
             );
 
             $results = [];

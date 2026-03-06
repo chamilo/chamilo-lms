@@ -14,7 +14,6 @@ class Html_Quickform_Rule_Date extends HTML_QuickForm_Rule
 	 */
 	function validate($date, $options)
 	{
-		$compareDate = create_function('$a', 'return checkdate($a[\'M\'],$a[\'d\'],$a[\'Y\']);');
-        return $compareDate($date);
+		return checkdate($date['M'], $date['d'], $date['Y']);
 	}
 }

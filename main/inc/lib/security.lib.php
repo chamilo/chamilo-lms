@@ -310,7 +310,7 @@ class Security
      *
      * @return mixed Filtered string or array
      */
-    public static function remove_XSS($var, int $user_status = null, bool $filter_terms = false)
+    public static function remove_XSS($var, ?int $user_status = null, bool $filter_terms = false)
     {
         if ($filter_terms) {
             $var = self::filter_terms($var);

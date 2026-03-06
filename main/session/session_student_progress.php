@@ -118,7 +118,7 @@ foreach ($studentList as $studentId) {
 
         $evaluationResult = '0';
 
-        $lp = new Learnpath($course['code'], $lastLearnpath['iid'], $studentId);
+        $lp = new learnpath($course['code'], $lastLearnpath['iid'], $studentId);
 
         if ($finalEvaluationItem = $lp->getFinalEvaluationItem()) {
             $bestScoreData = ExerciseLib::get_best_attempt_by_user(

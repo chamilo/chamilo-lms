@@ -337,6 +337,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_RADAR,
             ]
         )) {
             $row['result'] = $score;
@@ -353,6 +354,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_RADAR,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
@@ -419,6 +421,7 @@ if (!empty($attempts)) {
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
         case RESULT_DISABLE_RANKING:
         case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+        case RESULT_DISABLE_RADAR:
             $header_names = [
                 get_lang('Attempt'),
                 get_lang('StartDate'),

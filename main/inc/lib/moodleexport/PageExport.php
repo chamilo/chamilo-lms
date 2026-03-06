@@ -290,7 +290,7 @@ class PageExport extends ActivityExport
      * Build the pluginfile directory path (filepath in files.xml) from a Chamilo document path.
      * Example:
      *   /folder/image.jpg -> /Documents/folder/
-     *   image.jpg         -> /Documents/
+     *   image.jpg         -> /Documents/.
      */
     private function buildPluginFileDirectoryFromChamiloDocumentPath(string $documentPath): string
     {
@@ -309,7 +309,7 @@ class PageExport extends ActivityExport
      * Build the pluginfile full path used in HTML content.
      * Example:
      *   /folder/image.jpg -> /Documents/folder/image.jpg
-     *   image.jpg         -> /Documents/image.jpg
+     *   image.jpg         -> /Documents/image.jpg.
      */
     private function buildPluginFilePathFromChamiloDocumentPath(string $documentPath): string
     {

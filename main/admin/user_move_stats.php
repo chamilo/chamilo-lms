@@ -37,6 +37,8 @@ if (isset($_REQUEST['load_ajax'])) {
             }
             $user_id = (int) $_REQUEST['user_id'];
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
+            $coursesInOldSession = SessionManager::get_course_list_by_session_id($origin_session_id);
+            $countCoursesInOldSession = count($coursesInOldSession);
 
             $course_founded = false;
             foreach ($new_course_list as $course_item) {
@@ -55,13 +57,14 @@ if (isset($_REQUEST['load_ajax'])) {
             // Check if the same course exist in the session destination
             if ($course_founded) {
                 $result = SessionManager::get_users_by_session($new_session_id);
+                $subscribedToNew = false;
                 if (empty($result) || !in_array($user_id, array_keys($result))) {
                     if ($debug) {
                         echo 'User added to the session';
                     }
                     // Registering user to the new session
                     if ($update_database) {
-                        SessionManager::subscribeUsersToSession(
+                        $subscribedToNew = SessionManager::subscribeUsersToSession(
                             $new_session_id,
                             [$user_id],
                             false,
@@ -80,6 +83,11 @@ if (isset($_REQUEST['load_ajax'])) {
                     $update_database,
                     $debug
                 );
+                // If there is only one course in the old session, remove the user from the old session (otherwise leads to confusion)
+                if ($update_database && $subscribedToNew && $countCoursesInOldSession === 1) {
+                    SessionManager::unsubscribe_user_from_session($origin_session_id, $user_id);
+                    echo get_lang('UserUnsubscribedFromOldSessionAsThereWasOnlyOneCourse');
+                }
             } else {
                 echo get_lang('CourseDoesNotExistInThisSession');
             }

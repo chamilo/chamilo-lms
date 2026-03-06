@@ -56,14 +56,18 @@ if ($httpRequest->request->has('submit_change_course_category')) {
 // We edit course category
 if ($httpRequest->request->has('submit_edit_course_category')
     && $httpRequest->request->has('title_course_category')
+    && Security::check_token('post')
 ) {
     $titleCourseCategory = Security::remove_XSS($httpRequest->request->get('title_course_category'));
     $categoryId = Security::remove_XSS($httpRequest->request->get('category_id'));
-    $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
-    if ($result) {
-        Display::addFlash(
-            Display::return_message(get_lang('CourseCategoryEditStored'))
-        );
+    $categoryInfo = $auth->getUserCourseCategory($categoryId);
+    if ($categoryInfo) {
+        $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
+        if ($result) {
+            Display::addFlash(
+                Display::return_message(get_lang('CourseCategoryEditStored'))
+            );
+        }
     }
 
     header('Location: '.api_get_self());
@@ -130,6 +134,7 @@ switch ($action) {
             );
             $form->addText('title_course_category', get_lang('Name'));
             $form->addHidden('category_id', $categoryId);
+            $form->addHidden('sec_token', Security::get_token());
             $form->addButtonSave(get_lang('Edit'), 'submit_edit_course_category');
             $form->setDefaults(['title_course_category' => $categoryName]);
             $form->display();

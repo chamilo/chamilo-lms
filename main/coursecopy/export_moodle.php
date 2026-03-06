@@ -55,7 +55,7 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
 
         // Get admin details
         $adminId = (int) $_POST['admin_id'];
-        $adminUsername = filter_var($_POST['admin_username'], FILTER_SANITIZE_STRING);
+        $adminUsername = strip_tags((string) $_POST['admin_username']);
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $adminUsername)) {
             echo Display::return_message(get_lang('PleaseEnterValidLogin'), 'error');
             exit();

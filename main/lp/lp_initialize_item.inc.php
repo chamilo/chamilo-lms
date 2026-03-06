@@ -14,9 +14,9 @@
  * @param int $lp_id
  * @param int $user_id
  * @param int $view_id
- * @param int $next_item  Current item ID
+ * @param int $next_item Current item ID
  *
- * @return string  JavaScript code to be output/eval'd in the browser
+ * @return string JavaScript code to be output/eval'd in the browser
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {

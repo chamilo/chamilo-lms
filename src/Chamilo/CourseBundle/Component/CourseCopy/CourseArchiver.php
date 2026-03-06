@@ -307,6 +307,7 @@ class CourseArchiver
 
         if (!$ok || !is_file($destPath) || (int) filesize($destPath) <= 0) {
             @unlink($destPath);
+
             return false;
         }
 
@@ -335,16 +336,19 @@ class CourseArchiver
 
         if (!is_dir($unzip_dir) && !@mkdir($unzip_dir, $perms, true)) {
             error_log('[COURSE_ARCHIVER] readCourse: failed to create unzip_dir="'.$unzip_dir.'"');
+
             return new Course();
         }
 
         if (!is_file($filePath)) {
             error_log('[COURSE_ARCHIVER] readCourse: backup zip not found filePath="'.$filePath.'"');
+
             return new Course();
         }
 
         if (!@copy($filePath, $unzip_dir.'/backup.zip')) {
             error_log('[COURSE_ARCHIVER] readCourse: failed to copy zip filePath="'.$filePath.'" to "'.$unzip_dir.'/backup.zip"');
+
             return new Course();
         }
 
@@ -353,6 +357,7 @@ class CourseArchiver
 
         if (!@chdir($unzip_dir)) {
             error_log('[COURSE_ARCHIVER] readCourse: chdir failed unzip_dir="'.$unzip_dir.'"');
+
             return new Course();
         }
 
@@ -362,6 +367,7 @@ class CourseArchiver
 
         if ($extractResult === 0) {
             error_log('[COURSE_ARCHIVER] readCourse: extract failed error="'.$zip->errorInfo(true).'" unzip_dir="'.$unzip_dir.'"');
+
             return new Course();
         }
 
@@ -373,18 +379,21 @@ class CourseArchiver
         // Read the course
         if (!is_file('course_info.dat')) {
             error_log('[COURSE_ARCHIVER] readCourse: missing course_info.dat cwd="'.getcwd().'" unzip_dir="'.$unzip_dir.'"');
+
             return new Course();
         }
 
         $size = (int) @filesize('course_info.dat');
         if ($size <= 0) {
             error_log('[COURSE_ARCHIVER] readCourse: empty course_info.dat size='.$size.' cwd="'.getcwd().'"');
+
             return new Course();
         }
 
         $fp = @fopen('course_info.dat', 'r');
         if (false === $fp) {
             error_log('[COURSE_ARCHIVER] readCourse: failed to open course_info.dat cwd="'.getcwd().'"');
+
             return new Course();
         }
 
@@ -394,6 +403,7 @@ class CourseArchiver
         $readLen = is_string($contents) ? strlen($contents) : -1;
         if (!is_string($contents) || $readLen <= 0) {
             error_log('[COURSE_ARCHIVER] readCourse: failed to read course_info.dat');
+
             return new Course();
         }
 
@@ -436,6 +446,7 @@ class CourseArchiver
 
         if (!is_string($decoded) || $decoded === '') {
             error_log('[COURSE_ARCHIVER] readCourse: base64_decode produced empty payload');
+
             return new Course();
         }
 
@@ -443,6 +454,7 @@ class CourseArchiver
         $course = \UnserializeApi::unserialize('course', $decoded);
         if (!is_object($course) || !in_array(get_class($course), ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course'], true)) {
             error_log('[COURSE_ARCHIVER] readCourse: invalid class after unserialize, returning empty Course');
+
             return new Course();
         }
 

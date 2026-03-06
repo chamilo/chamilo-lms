@@ -44,7 +44,7 @@ $frmSearch = new FormValidator('search', 'get', 'session_category_list.php', '',
 $frmSearch->addText('keyword', get_lang('Search'), false);
 $frmSearch->addButtonSearch(get_lang('Search'));
 if ($frmSearch->validate()) {
-    $keyword = $frmSearch->exportValues()['keyword'];
+    $keyword = Security::remove_XSS($frmSearch->exportValues()['keyword']);
 }
 
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
@@ -230,7 +230,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $_REQUEST['order']
-                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?>">
+                        ); ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword'] ?? ''); ?><?php echo @$cond_url; ?>">
                             <?php echo get_lang('Previous'); ?></a>
                         <?php
                     } else {
@@ -243,7 +243,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $_REQUEST['order']
-                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?>">
+                        ); ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword'] ?? ''); ?><?php echo @$cond_url; ?>">
                             <?php echo get_lang('Next'); ?></a>
 
                         <?php

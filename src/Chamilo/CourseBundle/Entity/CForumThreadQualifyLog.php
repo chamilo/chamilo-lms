@@ -59,7 +59,7 @@ class CForumThreadQualifyLog
     /**
      * @var float
      *
-     * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="qualify", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
     protected $qualify;
 

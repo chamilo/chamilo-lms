@@ -129,7 +129,7 @@ class CForumThread
     /**
      * @var float
      *
-     * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false)
+     * @ORM\Column(name="thread_qualify_max", type="float", precision=6, scale=2, nullable=false, options={"default": 0})
      */
     protected $threadQualifyMax;
 

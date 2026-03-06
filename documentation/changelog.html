@@ -110,6 +110,60 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.36">
+        <a id="1.11.36"></a>
+        <h1>Chamilo 1.11.36 - Penzance, 07/03/2026</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.36 is mostly a security release on top of 1.11.34. For any significant change, please check the 1.11.30 release notes.</p>
+        <h3>Release name</h3>
+        <p><a href="https://grokipedia.com/page/Penzance">Penzance</a> is a coastal town, civil parish, and port in Cornwall, England, located on the Penwith peninsula as the largest town in West Cornwall and the westernmost major settlement on the British mainland.</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2026-03-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ecb6ace3e827b147a2221730679c2a39e79b451">6ecb6ace</a>) Security: Fix authenticated XSS in session categories - reported by @elliSzAt</li>
+            <li>[2026-03-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/f2045b746d4b4beae77fa3bebce201557a79a590">f2045b74</a>) Security: Prevent net-null double filtering of dates in statistics. Avoids possible SQL injection by admin role - Reported by @elliSzAt</li>
+            <li>[2026-03-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/5530d8b4502a27e84d7ea291bcf74ff729564b1e">5530d8b4</a>) Security: Fix user enumeration vulnerability on password reminder page - reported by Joshua Chan (@popcorn94)</li>
+            <li>[2026-03-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/99e7358fb429e8ff221aea71ec17df95c7bf403e">99e7358f</a>) Security: Fix authenticated RCE in plugin - Reported by @DhiyaneshDK</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>[2026-03-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d17107450c3f8ce0bf0bd42c5b11dd1d5651015">5d171074</a> - <a href="https://task.beeznest.com/issues/23282">BT#23282</a>) Admin: Add updates to track_e_access, track_e_access_complete (if it exists) and track_e_downloads to user_move_stats.php</li>
+            <li>[2026-03-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f7a7203a0f4a80fcec562429931805a2706dc10d">f7a7203a</a> - <a href="https://task.beeznest.com/issues/23282">BT#23282</a>) Admin: Add unsubscription of user from previous session in user_move_stats.php if there was only one course in that session</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2026-03-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/80e1a18c981057f975cf5ef72828c3b7b2df5c93">80e1a18c</a> - <a href="https://task.beeznest.com/issues/23269">BT#23269</a>) Internal: Fix excel export after update of the generation library</li>
+            <li>[2026-03-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8d8a9b7be8f523c190186f63b739e80a14186e8">f8d8a9b7</a> - <a href="https://task.beeznest.com/issues/23219">BT#23219</a>) Learnpath: Fix class name casing for `learnpath` instantiations</li>
+            <li>[2026-03-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/20ac2896d2fd69d82a03bf00e2403856957503ac">20ac2896</a> - <a href="https://task.beeznest.com/issues/23282">BT#23282</a>) Script: Add script to fix bad user session data move</li>
+            <li>[2026-03-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e7cf4803875b48c9376076efadf2f6e516b45cbe">e7cf4803</a> - <a href="https://task.beeznest.com/issues/22393">BT#22393</a>) Exercise: fix radar feedback that was not showing on the result page</li>
+            <li>[2026-03-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ea5aab0cc584c197c08f2c4fa08b9a42d3fcab0">3ea5aab0</a> - <a href="https://task.beeznest.com/issues/22393">BT#22393</a>) Exercise: fix radar feedback that was not enabling attempt access</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>No notable change</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+            <li>No notable removal</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>No notable known issue</li>
+        </ul>
+    </div>
+
+
+
     <div class="version" aria-label="1.11.34">
         <a id="1.11.34"></a>
         <h1>Chamilo 1.11.34 - Cassis, 28/02/2026</h1>

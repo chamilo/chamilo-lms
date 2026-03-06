@@ -68,7 +68,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $form->setDefaults($defaults);
     $form->display();
 } else {
-    $limit = 1;
+    $limit = 20;
     $from = $page * $limit;
     //if user is crfp admin only list its sessions
     $where = null;

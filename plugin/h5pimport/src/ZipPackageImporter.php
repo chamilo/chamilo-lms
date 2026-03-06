@@ -65,6 +65,45 @@ class ZipPackageImporter extends H5pPackageImporter
     ];
 
     /**
+     * Extensions that must never be extracted, regardless of allowlist.
+     * These can enable server-side code execution.
+     */
+    private const BLOCKED_EXTENSIONS = [
+        'php',
+        'php3',
+        'php4',
+        'php5',
+        'php6',
+        'php7',
+        'phtml',
+        'phar',
+        'shtml',
+        'cgi',
+        'pl',
+        'py',
+        'rb',
+        'sh',
+        'bash',
+        'bat',
+        'cmd',
+        'exe',
+        'dll',
+        'so',
+    ];
+
+    /**
+     * Filenames that must never be extracted.
+     * These can override server configuration to enable code execution.
+     */
+    private const BLOCKED_FILENAMES = [
+        '.htaccess',
+        '.htpasswd',
+        '.user.ini',
+        'web.config',
+        'php.ini',
+    ];
+
+    /**
      * Import an H5P package. No DB change.
      *
      * @throws Exception When the H5P package is invalid.
@@ -89,7 +128,18 @@ class ZipPackageImporter extends H5pPackageImporter
             $pathInfo = pathinfo($this->packageFileInfo['name']);
 
             $packageDirectoryPath = $this->generatePackageDirectory($pathInfo['filename']);
-            $zipFile->extract($packageDirectoryPath);
+
+            // Extract only the files that passed validation — never extract the full
+            // archive blindly, as the zip may contain entries skipped during validation.
+            $safeFiles = $this->getSafeFileList($zipContent);
+            $zipFile->extract(
+                PCLZIP_OPT_PATH, $packageDirectoryPath,
+                PCLZIP_OPT_BY_NAME, $safeFiles
+            );
+
+            // Write a protective .htaccess so that even if a server misconfiguration
+            // exists, files in this directory cannot be executed as scripts.
+            $this->writeProtectiveHtaccess($packageDirectoryPath);
 
             return "{$packageDirectoryPath}";
         }
@@ -111,8 +161,17 @@ class ZipPackageImporter extends H5pPackageImporter
 
     /**
      * Validate an H5P package.
-     * Check if 'h5p.json' or 'content/content.json' files exist
-     * and if the files are in a file whitelist (ALLOWED_EXTENSIONS).
+     *
+     * Every entry in the zip must pass all of the following checks before
+     * extraction is allowed:
+     *  - No file or directory component may start with '.' or '_' (blocks
+     *    .htaccess, .htpasswd, .user.ini, etc.)
+     *  - The base filename must not be in the blocked-filenames list.
+     *  - The extension must not be in the blocked-extensions list.
+     *  - The extension must be in the allowed-extensions list.
+     *
+     * Additionally the archive must contain 'h5p.json' to be considered a
+     * valid H5P package.
      *
      * @param array $h5pPackageContent the content of the H5P package
      *
@@ -120,29 +179,123 @@ class ZipPackageImporter extends H5pPackageImporter
      */
     private function validateH5pPackageContent(array $h5pPackageContent): bool
     {
-        $validPackage = false;
+        if (empty($h5pPackageContent)) {
+            return false;
+        }
 
-        if (!empty($h5pPackageContent)) {
-            foreach ($h5pPackageContent as $content) {
-                $filename = $content['filename'];
+        $hasH5pJson = false;
 
-                if (0 !== preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename)) {
-                    // Skip any file or folder starting with a . or _
-                    continue;
-                }
+        foreach ($h5pPackageContent as $content) {
+            $filename = $content['filename'];
 
-                $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+            // Reject — do NOT skip — any file or directory component that starts
+            // with '.' or '_'. Previously this used `continue`, which allowed
+            // dangerous files like .htaccess to be silently included in the
+            // extraction while the loop kept searching for h5p.json.
+            if (0 !== preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename)) {
+                return false;
+            }
 
-                if (in_array($fileExtension, self::ALLOWED_EXTENSIONS)) {
-                    $validPackage = 'h5p.json' === $filename || 'content/content.json' === $filename;
-                    if ($validPackage) {
-                        break;
-                    }
-                }
+            // Directories have no extension to check; skip the extension tests.
+            if (1 === ($content['folder'] ?? 0)) {
+                continue;
+            }
+
+            $basename = basename($filename);
+            $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            // Reject server-configuration and script-execution override files.
+            if (in_array(strtolower($basename), self::BLOCKED_FILENAMES, true)) {
+                return false;
+            }
+
+            // Reject extensions that can result in server-side code execution.
+            if (in_array($fileExtension, self::BLOCKED_EXTENSIONS, true)) {
+                return false;
+            }
+
+            // Reject any extension not explicitly on the allowlist.
+            if (!in_array($fileExtension, self::ALLOWED_EXTENSIONS, true)) {
+                return false;
+            }
+
+            if ('h5p.json' === $filename) {
+                $hasH5pJson = true;
             }
         }
 
-        return $validPackage;
+        return $hasH5pJson;
+    }
+
+    /**
+     * Return filenames of zip entries that are safe to extract.
+     *
+     * This mirrors the security checks in validateH5pPackageContent so that
+     * the extraction step is independently guarded even if validation logic
+     * evolves in the future.
+     *
+     * @param array $h5pPackageContent PclZip listContent() result
+     *
+     * @return array list of filenames safe to pass to PCLZIP_OPT_BY_NAME
+     */
+    private function getSafeFileList(array $h5pPackageContent): array
+    {
+        $safeFiles = [];
+
+        foreach ($h5pPackageContent as $content) {
+            $filename = $content['filename'];
+
+            if (0 !== preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename)) {
+                continue;
+            }
+
+            if (1 === ($content['folder'] ?? 0)) {
+                continue;
+            }
+
+            $basename = basename($filename);
+            $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            if (in_array(strtolower($basename), self::BLOCKED_FILENAMES, true)) {
+                continue;
+            }
+
+            if (in_array($fileExtension, self::BLOCKED_EXTENSIONS, true)) {
+                continue;
+            }
+
+            if (!in_array($fileExtension, self::ALLOWED_EXTENSIONS, true)) {
+                continue;
+            }
+
+            $safeFiles[] = $filename;
+        }
+
+        return $safeFiles;
+    }
+
+    /**
+     * Write a protective .htaccess into the extracted package directory.
+     *
+     * This is a defence-in-depth measure: even if a file with a dangerous
+     * extension somehow reached the directory (e.g. via a future code path),
+     * Apache will not execute it as a script and will not allow per-directory
+     * configuration files to override this setting.
+     */
+    private function writeProtectiveHtaccess(string $directory): void
+    {
+        $htaccessPath = $directory.'/.htaccess';
+        $content = <<<'HTACCESS'
+# Auto-generated by Chamilo H5P importer — do not remove.
+# Prevent execution of any server-side scripts in this directory.
+Options -ExecCGI -Indexes
+php_flag engine off
+RemoveHandler .php .php3 .php4 .php5 .php6 .php7 .phtml .phar
+RemoveType .php .php3 .php4 .php5 .php6 .php7 .phtml .phar
+AddType text/plain .php .php3 .php4 .php5 .php6 .php7 .phtml .phar .txt
+HTACCESS;
+
+        file_put_contents($htaccessPath, $content);
     }
 
     private function generatePackageDirectory(string $name): string

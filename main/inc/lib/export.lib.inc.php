@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
 use Ddeboer\DataImport\Writer\CsvWriter;
-use Ddeboer\DataImport\Writer\ExcelWriter;
 
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -74,14 +73,19 @@ class Export
     {
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
 
-        $file = new \SplFileObject($filePath, 'w');
-        $writer = new ExcelWriter($file);
-        @$writer->prepare();
-        foreach ($data as $row) {
-            @$writer->writeItem($row);
+        $excel = @new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $row = 1;
+        foreach ($data as $item) {
+            $values = array_values($item);
+            $count = count($values);
+            for ($i = 0; $i < $count; $i++) {
+                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i + 1, $row, $values[$i]);
+            }
+            $row++;
         }
 
-        @$writer->finish();
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+        $writer->save($filePath);
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;

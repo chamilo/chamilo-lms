@@ -164,29 +164,57 @@ class FileExport
     }
 
     /**
+     * Ensure mandatory file fields exist for Moodle restore.
+     * This avoids notices like "Undefined property: stdClass::$itemid/$userid".
+     */
+    private function normalizeFileEntry(array $file): array
+    {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = (int) ($adminData['id'] ?? 1);
+
+        if (!isset($file['itemid']) || $file['itemid'] === null || (is_string($file['itemid']) && trim($file['itemid']) === '')) {
+            $file['itemid'] = 0;
+        } else {
+            $file['itemid'] = (int) $file['itemid'];
+        }
+
+        if (!isset($file['userid']) || $file['userid'] === null || (is_string($file['userid']) && trim($file['userid']) === '')) {
+            $file['userid'] = $adminId;
+        } else {
+            $file['userid'] = (int) $file['userid'];
+        }
+
+        return $file;
+    }
+
+    /**
      * Create an XML entry for a file.
      */
     private function createFileXmlEntry(array $file): string
     {
-        $itemId = isset($file['itemid']) ? (int) $file['itemid'] : 0;
+        $file = $this->normalizeFileEntry($file);
+
+        $itemId = (int) $file['itemid'];
+        $userId = (int) $file['userid'];
 
         return '  <file id="'.$file['id'].'">'.PHP_EOL.
-            '    <contenthash>'.htmlspecialchars($file['contenthash']).'</contenthash>'.PHP_EOL.
+            '    <contenthash>'.htmlspecialchars((string) $file['contenthash']).'</contenthash>'.PHP_EOL.
             '    <contextid>'.$file['contextid'].'</contextid>'.PHP_EOL.
-            '    <component>'.htmlspecialchars($file['component']).'</component>'.PHP_EOL.
-            '    <filearea>'.htmlspecialchars($file['filearea']).'</filearea>'.PHP_EOL.
+            '    <component>'.htmlspecialchars((string) $file['component']).'</component>'.PHP_EOL.
+            '    <filearea>'.htmlspecialchars((string) $file['filearea']).'</filearea>'.PHP_EOL.
+            // IMPORTANT: only ONE <itemid> tag per file
             '    <itemid>'.$itemId.'</itemid>'.PHP_EOL.
-            '    <filepath>'.htmlspecialchars($file['filepath']).'</filepath>'.PHP_EOL.
-            '    <filename>'.htmlspecialchars($file['filename']).'</filename>'.PHP_EOL.
-            '    <userid>'.$file['userid'].'</userid>'.PHP_EOL.
+            '    <filepath>'.htmlspecialchars((string) $file['filepath']).'</filepath>'.PHP_EOL.
+            '    <filename>'.htmlspecialchars((string) $file['filename']).'</filename>'.PHP_EOL.
+            '    <userid>'.$userId.'</userid>'.PHP_EOL.
             '    <filesize>'.$file['filesize'].'</filesize>'.PHP_EOL.
-            '    <mimetype>'.htmlspecialchars($file['mimetype']).'</mimetype>'.PHP_EOL.
+            '    <mimetype>'.htmlspecialchars((string) $file['mimetype']).'</mimetype>'.PHP_EOL.
             '    <status>'.$file['status'].'</status>'.PHP_EOL.
             '    <timecreated>'.$file['timecreated'].'</timecreated>'.PHP_EOL.
             '    <timemodified>'.$file['timemodified'].'</timemodified>'.PHP_EOL.
-            '    <source>'.htmlspecialchars($file['source']).'</source>'.PHP_EOL.
-            '    <author>'.htmlspecialchars($file['author']).'</author>'.PHP_EOL.
-            '    <license>'.htmlspecialchars($file['license']).'</license>'.PHP_EOL.
+            '    <source>'.htmlspecialchars((string) $file['source']).'</source>'.PHP_EOL.
+            '    <author>'.htmlspecialchars((string) $file['author']).'</author>'.PHP_EOL.
+            '    <license>'.htmlspecialchars((string) $file['license']).'</license>'.PHP_EOL.
             '    <sortorder>0</sortorder>'.PHP_EOL.
             '    <repositorytype>$@NULL@$</repositorytype>'.PHP_EOL.
             '    <repositoryid>$@NULL@$</repositoryid>'.PHP_EOL.
@@ -228,7 +256,7 @@ class FileExport
      * Example:
      *   document/repertoire1/file.pdf   -> /repertoire1/
      *   /document/repertoire1/file.pdf  -> /repertoire1/
-     *   /file.pdf                       -> /.
+     *   /file.pdf                       -> /
      */
     private function buildMoodleFilepathFromChamiloPath(string $documentPath): string
     {

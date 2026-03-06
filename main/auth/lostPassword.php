@@ -89,20 +89,25 @@ if ($form->validate()) {
     $user = Login::get_user_accounts_by_username($values['user']);
 
     if (!$user) {
-        $messageText = get_lang('NoUserAccountWithThisEmailAddress');
+        // Always return the same neutral response regardless of whether the
+        // username/email exists. Revealing "no account with this email" allows
+        // user enumeration by observing the differing redirect destination or
+        // message. Using the same message and redirect as the success path
+        // prevents that information leak.
+        $messageText = get_lang('AnEmailToResetYourPasswordHasBeenSent');
 
-        if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
+        if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
             CustomPages::display(
-                CustomPages::LOST_PASSWORD,
+                CustomPages::INDEX_UNLOGGED,
                 ['info' => $messageText]
             );
             exit;
         }
 
         Display::addFlash(
-            Display::return_message($messageText, 'error', false)
+            Display::return_message($messageText, 'info', false)
         );
-        header('Location: '.api_get_self());
+        header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 

@@ -127,28 +127,30 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                 <div>
                     <?php
                     if ($page) {
-                        ?>
-                        <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
-                            - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
-                            $order
-                        ); ?>&keyword=<?php echo $keyword; ?>"><?php echo get_lang(
-                                'Previous'
-                            ); ?></a>
-                        <?php
+                        echo Display::url(
+                            get_lang('Previous'),
+                            api_get_self().'?'.http_build_query([
+                                'page' => $page - 1,
+                                'sort' => $sort,
+                                'order' => $order,
+                                'keyword' => $keyword,
+                            ])
+                        );
                     } else {
                         echo get_lang('Previous');
                     } ?>
                     |
                     <?php
                     if ($nbr_results > $limit) {
-                        ?>
-                        <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
-                            + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
-                            $order
-                        ); ?>&keyword=<?php echo $keyword; ?>"><?php echo get_lang(
-                                'Next'
-                            ); ?></a>
-                        <?php
+                        echo Display::url(
+                            get_lang('Next'),
+                            api_get_self().'?'.http_build_query([
+                                'page' => $page + 1,
+                                'sort' => $sort,
+                                'order' => $order,
+                                'keyword' => $keyword,
+                            ])
+                        );
                     } else {
                         echo get_lang('Next');
                     } ?>

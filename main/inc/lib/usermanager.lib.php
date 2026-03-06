@@ -2343,7 +2343,13 @@ class UserManager
             }
         }
 
-        $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
+        // $extraConditions is a caller-constructed SQL fragment, not a scalar
+        // value — escaping it as a string then immediately un-escaping the
+        // result (str_replace("\'", "'", ...)) produced a net-zero effect while
+        // giving a false sense of safety. Callers are responsible for ensuring
+        // any values embedded in $extraConditions are individually escaped or
+        // validated before being passed here.
+        $sql .= $extraConditions;
 
         if (!empty($order_by) && count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));

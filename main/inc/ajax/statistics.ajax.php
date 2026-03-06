@@ -251,12 +251,25 @@ switch ($action) {
         $statsName = 'NumberOfUsers';
         $filter = $_REQUEST['filter'];
 
-        $startDate = $_REQUEST['date_start'];
-        $endDate = $_REQUEST['date_end'];
+        $rawStartDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
+        $rawEndDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
 
         $extraConditions = '';
-        if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+        if (!empty($rawStartDate) && !empty($rawEndDate)) {
+            // Validate both values against YYYY-MM-DD before embedding in SQL.
+            // Any other format (including SQL metacharacters) is silently ignored.
+            $parsedStart = DateTime::createFromFormat('Y-m-d', $rawStartDate);
+            $parsedEnd = DateTime::createFromFormat('Y-m-d', $rawEndDate);
+
+            if (false !== $parsedStart
+                && false !== $parsedEnd
+                && $parsedStart->format('Y-m-d') === $rawStartDate
+                && $parsedEnd->format('Y-m-d') === $rawEndDate
+            ) {
+                $startDate = Database::escape_string($rawStartDate);
+                $endDate = Database::escape_string($rawEndDate);
+                $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+            }
         }
 
         switch ($filter) {

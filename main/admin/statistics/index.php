@@ -960,8 +960,16 @@ switch ($report) {
     case 'users_active':
         $content = '';
         if ($validated) {
-            $startDate = $values['daterange_start'];
-            $endDate = $values['daterange_end'];
+            // Validate date inputs strictly. Security::remove_XSS() (used for
+            // the display value above) does not protect against SQL injection.
+            $rawStartDate = isset($values['daterange_start']) ? $values['daterange_start'] : '';
+            $rawEndDate = isset($values['daterange_end']) ? $values['daterange_end'] : '';
+            $parsedStart = !empty($rawStartDate) ? DateTime::createFromFormat('Y-m-d', $rawStartDate) : false;
+            $parsedEnd = !empty($rawEndDate) ? DateTime::createFromFormat('Y-m-d', $rawEndDate) : false;
+            $startDate = (false !== $parsedStart && $parsedStart->format('Y-m-d') === $rawStartDate)
+                ? Database::escape_string($rawStartDate) : '';
+            $endDate = (false !== $parsedEnd && $parsedEnd->format('Y-m-d') === $rawEndDate)
+                ? Database::escape_string($rawEndDate) : '';
 
             $graph = '<div class="row">';
             $graph .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
@@ -986,7 +994,6 @@ switch ($report) {
             $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
-                // $extraConditions is already cleaned inside the function getUserListExtraConditions
                 $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
             }
 

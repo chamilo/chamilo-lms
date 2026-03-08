@@ -1793,6 +1793,10 @@ ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user
 //$_configuration['quiz_prevent_backwards_move'] = false;
 
 // Allow third party plugins to be uploaded through a form in the plugins section
+// This option has high inherent risks, by allowing a "simple" administrator role
+// to upload executable PHP code to the server. If needed, we recommend to use
+// this option temporarily to allow the upload to happen, and then reverting to
+// the default 'false' value for increased safety.
 //$_configuration['plugin_upload_enable'] = false;
 
 // ALTER TABLE session ADD COLUMN status INT DEFAULT 0;

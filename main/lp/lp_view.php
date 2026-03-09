@@ -334,6 +334,7 @@ if (!isset($src)) {
             break;
         case 3:
             // aicc
+            /*
             $lp->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="'.$lp->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $lp->prerequisites_match($lp_item_id);
@@ -347,6 +348,7 @@ if (!isset($src)) {
             } else {
                 $src = 'blank.php';
             }
+            */
             break;
         case 4:
             break;

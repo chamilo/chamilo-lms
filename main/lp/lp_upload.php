@@ -179,6 +179,8 @@ if (isset($_POST) && $is_error) {
             $oScorm->set_jslib('scorm_api.php');
             break;
         case 'aicc':
+            Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
+            /*
             $oAICC = new aicc();
             $config_dir = $oAICC->import_package($_FILES['user_file']);
             if (!empty($config_dir)) {
@@ -189,7 +191,8 @@ if (isset($_POST) && $is_error) {
             $oAICC->set_proximity($proximity);
             $oAICC->set_maker($maker);
             $oAICC->set_jslib('aicc_api.php');
-            break;
+            */
+            return false;
         case 'oogie':
             require_once 'openoffice_presentation.class.php';
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
@@ -290,6 +293,10 @@ if (isset($_POST) && $is_error) {
             $oScorm->set_jslib('scorm_api.php');
             break;
         case 'aicc':
+            if (is_file($s)) {
+                unlink($s);
+            }
+            /*
             $oAICC = new aicc();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
             // The file was treated, it can now be cleaned from the temp dir
@@ -310,7 +317,8 @@ if (isset($_POST) && $is_error) {
             $oAICC->set_proximity($proximity);
             $oAICC->set_maker($maker);
             $oAICC->set_jslib('aicc_api.php');
-            break;
+            */
+            return false;
         case '':
         default:
             // There was an error, clean the file from the temp dir

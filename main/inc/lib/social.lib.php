@@ -2112,18 +2112,62 @@ class SocialManager extends UserManager
     }
 
     /**
+     * Check if a URL is safe to fetch server-side (not targeting internal resources).
+     *
+     * Blocks private/reserved IP ranges, non-HTTP schemes, and unresolvable hosts
+     * to prevent SSRF attacks (CWE-918).
+     */
+    public static function isUrlSafe(string $url): bool
+    {
+        $parsed = parse_url($url);
+
+        // Allow only http and https schemes
+        if (!isset($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], true)) {
+            return false;
+        }
+
+        $host = $parsed['host'] ?? '';
+        if (empty($host)) {
+            return false;
+        }
+
+        // Resolve hostname to IP
+        $ip = gethostbyname($host);
+        if ($ip === $host) {
+            // DNS resolution failed
+            return false;
+        }
+
+        // Block private and reserved IP ranges
+        if (false === filter_var(
+            $ip,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * verify if Url Exist - Using Curl.
      */
     public static function verifyUrl(string $uri): bool
     {
+        if (!self::isUrlSafe($uri)) {
+            return false;
+        }
+
         $client = new Client();
 
         try {
             $response = $client->request('GET', $uri, [
-                'timeout' => 15,
+                'timeout' => 10,
                 'verify' => false,
+                'allow_redirects' => ['max' => 3],
                 'headers' => [
-                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
                 ],
             ]);
 

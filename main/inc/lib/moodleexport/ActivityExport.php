@@ -284,6 +284,42 @@ abstract class ActivityExport
     }
 
     /**
+     * Creates a Moodle-safe activity name.
+     * - Strip HTML
+     * - Decode entities
+     * - Normalize whitespace
+     * - Truncate to a maximum length (e.g. 255 for mdl_resource.name)
+     */
+    protected function sanitizeMoodleActivityName(string $raw, int $maxLen = 255): string
+    {
+        $s = trim($raw);
+        if ($s === '') {
+            return '';
+        }
+
+        $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $s = strip_tags($s);
+        $s = preg_replace('/\s+/u', ' ', $s);
+        $s = trim($s);
+
+        if ($s === '') {
+            return '';
+        }
+
+        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+            if (mb_strlen($s, 'UTF-8') > $maxLen) {
+                $s = mb_substr($s, 0, $maxLen, 'UTF-8');
+            }
+        } else {
+            if (strlen($s) > $maxLen) {
+                $s = substr($s, 0, $maxLen);
+            }
+        }
+
+        return $s;
+    }
+
+    /**
      * Returns the title of the item in the LP (if it exists); otherwise, $fallback.
      */
     protected function lpItemTitle(int $sectionId, string $itemType, int $resourceId, ?string $fallback): string

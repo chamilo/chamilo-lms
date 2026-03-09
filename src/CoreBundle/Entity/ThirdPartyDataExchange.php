@@ -17,7 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['third_party_exchange:read']],
     denormalizationContext: ['groups' => ['third_party_exchange:write']],
-    paginationEnabled: false
+    paginationEnabled: false,
+    security: "is_granted('ROLE_ADMIN')",
 )]
 #[ApiFilter(SearchFilter::class, properties: ['thirdParty' => 'exact'])]
 #[ORM\Table(name: 'third_party_data_exchange')]

@@ -22,9 +22,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER')"),
         new Patch(security: "
             object.getUser() === user
             or is_granted('ROLE_CURRENT_COURSE_TEACHER')

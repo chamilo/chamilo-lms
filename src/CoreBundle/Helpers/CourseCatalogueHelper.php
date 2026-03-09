@@ -232,7 +232,7 @@ readonly class CourseCatalogueHelper
                     $qb->expr()->orX(
                         $qb->expr()->isNull('efv_hide_from_catalog'),
                         $qb->expr()->eq('efv_hide_from_catalog.fieldValue', $qb->expr()->literal('')),
-                        $qb->expr()->neq('efv_hide_from_catalog.fieldValue', '0')
+                        $qb->expr()->eq('efv_hide_from_catalog.fieldValue', '0')
                     )
                 )
             ;

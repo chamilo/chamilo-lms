@@ -49,11 +49,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\Tree(type: 'materializedPath')]
 #[ApiResource(
     operations: [
-        new Get(),
-        new Put(),
-        new Patch(),
-        new Delete(),
-        new GetCollection(),
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: [
         'groups' => [

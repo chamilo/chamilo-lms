@@ -38,7 +38,8 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         // Check duplicates
         $qb = $repo->getResourcesByCourse($course, $session)
             ->andWhere('resource.title = :title')
-            ->setParameter('title', $title);
+            ->setParameter('title', $title)
+        ;
 
         $existing = $qb->getQuery()->getOneOrNullResult();
         if (null !== $existing) {
@@ -47,7 +48,8 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
 
         $glossary = (new CGlossary())
             ->setTitle($title)
-            ->setDescription($description);
+            ->setDescription($description)
+        ;
 
         if (!empty($parentResourceNodeId)) {
             $glossary->setParentResourceNode($parentResourceNodeId);
@@ -61,7 +63,7 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         $em->persist($glossary);
         $em->flush();
 
-        if (array_key_exists('ai_assisted_raw', $data)) {
+        if (\array_key_exists('ai_assisted_raw', $data)) {
             $enabled = $this->normalizeBoolean($data['ai_assisted_raw']);
             $iid = (int) ($glossary->getIid() ?? 0);
 

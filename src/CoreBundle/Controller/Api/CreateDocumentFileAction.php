@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 final class CreateDocumentFileAction extends BaseResourceFileAction
 {
@@ -73,7 +74,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 if ($docId > 0) {
                     $aiDisclosureHelper->markAiAssistedExtraField('document', $docId, true);
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Never block the upload flow because of AI marking.
             }
         }

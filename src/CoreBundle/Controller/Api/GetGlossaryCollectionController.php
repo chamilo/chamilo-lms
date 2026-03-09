@@ -40,7 +40,8 @@ final class GetGlossaryCollectionController extends BaseResourceFileAction
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         if ($q) {
             $qb->andWhere($qb->expr()->like('resource.title', ':title'))
-                ->setParameter('title', '%'.$q.'%');
+                ->setParameter('title', '%'.$q.'%')
+            ;
         }
         $glossaries = $qb->getQuery()->getResult();
         $discloseEnabled = $this->aiDisclosureHelper->isDisclosureEnabled();

@@ -18,10 +18,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new Delete(),
-        new Post(),
-        new GetCollection(),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER')"),
+        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_document:read']],
     denormalizationContext: ['groups' => ['student_publication_rel_document:write']]

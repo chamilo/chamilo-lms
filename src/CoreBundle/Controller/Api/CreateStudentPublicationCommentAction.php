@@ -133,6 +133,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
     private function normalizeBoolean(mixed $value): bool
     {
         $v = strtolower(trim((string) $value));
+
         return \in_array($v, ['1', 'true', 'yes', 'on'], true);
     }
 }

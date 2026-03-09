@@ -1698,14 +1698,16 @@ async function loadAiCapabilities() {
     // document_process providers come from capabilities.types.document_process (often a map)
     aiDocProcessProviders.value = normalizeProviders(data?.types?.document_process)
 
-    // text providers: prefer the explicit endpoint that already returns [{key,label}]
+    // text providers: only teachers use the AI feedback/analyzer feature, skip for students
     aiTextProviders.value = []
-    try {
-      const res = await axios.get("/ai/text_providers", { headers: { Accept: "application/json" } })
-      aiTextProviders.value = normalizeProviders(res?.data?.providers)
-    } catch (e) {
-      console.warn("[AI][Documents] Failed to load /ai/text_providers, fallback to capabilities:", e?.response || e)
-      aiTextProviders.value = normalizeProviders(data?.types?.text)
+    if (isCurrentTeacher.value) {
+      try {
+        const res = await axios.get("/ai/text_providers", { headers: { Accept: "application/json" } })
+        aiTextProviders.value = normalizeProviders(res?.data?.providers)
+      } catch (e) {
+        console.warn("[AI][Documents] Failed to load /ai/text_providers, fallback to capabilities:", e?.response || e)
+        aiTextProviders.value = normalizeProviders(data?.types?.text)
+      }
     }
 
     // Analyzer support depends on file mode + provider list availability.

@@ -41,6 +41,7 @@ class CatalogueController extends AbstractController
         private readonly UserRelCourseVoteRepository $courseVoteRepository,
     ) {}
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/api/courses/{id}/rating', name: 'api_course_rating', methods: ['GET'])]
     public function courseRating(Course $course, Request $request): JsonResponse
     {
@@ -50,6 +51,7 @@ class CatalogueController extends AbstractController
 
         return $this->json($rating);
     }
+    #[IsGranted('ROLE_USER')]
     #[Route('/api/courses/{id}/visits', name: 'api_course_visits', methods: ['GET'])]
     public function courseVisits(Course $course, Request $request, TrackECourseAccessRepository $courseAccessRepository): JsonResponse
     {
@@ -173,6 +175,7 @@ class CatalogueController extends AbstractController
         return \is_array($raw) ? $raw : [];
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/course-extra-fields', name: 'chamilo_core_catalogue_course_extra_fields', methods: ['GET'])]
     public function getCourseExtraFields(SettingsManager $settingsManager): JsonResponse
     {
@@ -252,6 +255,7 @@ class CatalogueController extends AbstractController
         return $this->json(array_values($mapped));
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/course-extra-field-values', name: 'chamilo_core_catalogue_course_extra_field_values', methods: ['GET'])]
     public function getCourseExtraFieldValues(Request $request, SettingsManager $settingsManager): JsonResponse
     {

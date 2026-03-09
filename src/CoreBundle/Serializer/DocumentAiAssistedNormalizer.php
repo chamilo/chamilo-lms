@@ -22,7 +22,7 @@ final class DocumentAiAssistedNormalizer implements ContextAwareNormalizerInterf
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
-    public function supportsNormalization($data, string $format = null, array $context = []): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;
@@ -31,7 +31,7 @@ final class DocumentAiAssistedNormalizer implements ContextAwareNormalizerInterf
         return $data instanceof CDocument;
     }
 
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = [])
     {
         $context[self::ALREADY_CALLED] = true;
 

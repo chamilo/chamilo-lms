@@ -23,7 +23,7 @@ final class StudentPublicationCommentAiAssistedNormalizer implements ContextAwar
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
-    public function supportsNormalization($data, string $format = null, array $context = []): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;
@@ -32,7 +32,7 @@ final class StudentPublicationCommentAiAssistedNormalizer implements ContextAwar
         return $data instanceof CStudentPublicationComment;
     }
 
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize($object, ?string $format = null, array $context = [])
     {
         $context[self::ALREADY_CALLED] = true;
 

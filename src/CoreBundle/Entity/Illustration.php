@@ -15,7 +15,10 @@ use Stringable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(normalizationContext: ['groups' => ['illustration:read']])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['illustration:read']],
+    security: "is_granted('ROLE_USER')"
+)]
 #[ORM\Table(name: 'illustration')]
 #[ORM\Entity(repositoryClass: IllustrationRepository::class)]
 class Illustration extends AbstractResource implements ResourceInterface, Stringable

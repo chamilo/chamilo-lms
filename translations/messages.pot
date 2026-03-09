@@ -32663,3 +32663,6 @@ msgstr ""
 
 msgid "Current badge set"
 msgstr ""
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr ""

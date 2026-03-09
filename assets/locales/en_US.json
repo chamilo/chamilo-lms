@@ -1522,5 +1522,6 @@
     "Branch type": "Branch type",
     "Room": "Room",
     "{0} (current)": "{0} (current)",
+    "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user.": "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user.",
     "Course home": "Course home"
 }

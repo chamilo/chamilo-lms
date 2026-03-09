@@ -202,7 +202,7 @@ class SectionExport
                 continue;
             }
 
-            if ((int) ($lp->source_id ?? 0) === $sectionId) {
+            if ((int) ($lp->source_id ?? $lp->id ?? 0) === $sectionId) {
                 return $lp;
             }
         }
@@ -217,18 +217,86 @@ class SectionExport
      */
     public function getSectionData(object $learnpath): array
     {
-        $sectionId = (int) ($learnpath->source_id ?? 0);
+        $sectionId = (int) ($learnpath->source_id ?? $learnpath->id ?? 0);
+
+        $sectionName = trim((string) ($learnpath->name ?? $learnpath->title ?? ''));
+        if ('' === $sectionName) {
+            $sectionName = 'Section '.$sectionId;
+        }
 
         return [
             'id' => $sectionId,
-            'number' => (int) ($learnpath->display_order ?? 0),
-            'name' => (string) ($learnpath->name ?? ''),
+            'number' => $this->resolveSectionNumber($sectionId),
+            'name' => $sectionName,
             'summary' => (string) ($learnpath->description ?? ''),
             'sequence' => $sectionId,
             'visible' => (int) ($learnpath->visibility ?? 1),
             'timemodified' => !empty($learnpath->modified_on) ? strtotime((string) $learnpath->modified_on) : time(),
             'activities' => $this->getActivitiesForSection($learnpath),
         ];
+    }
+
+
+    /**
+     * Resolve a stable sequential section number for Moodle topics format.
+     */
+    private function resolveSectionNumber(int $sectionId): int
+    {
+        if ($sectionId <= 0) {
+            return 0;
+        }
+
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!\is_array($learnpaths) || empty($learnpaths)) {
+            return 1;
+        }
+
+        $ordered = [];
+        foreach ($learnpaths as $learnpathWrap) {
+            $learnpath = (\is_object($learnpathWrap) && isset($learnpathWrap->obj) && \is_object($learnpathWrap->obj))
+                ? $learnpathWrap->obj
+                : $learnpathWrap;
+
+            if (!\is_object($learnpath) || (int) ($learnpath->lp_type ?? 0) !== 1) {
+                continue;
+            }
+
+            $ordered[] = $learnpath;
+        }
+
+        usort(
+            $ordered,
+            static function (object $a, object $b): int {
+                $oa = (int) ($a->display_order ?? 0);
+                $ob = (int) ($b->display_order ?? 0);
+                if ($oa !== $ob) {
+                    if ($oa <= 0) {
+                        return 1;
+                    }
+                    if ($ob <= 0) {
+                        return -1;
+                    }
+
+                    return $oa <=> $ob;
+                }
+
+                return ((int) ($a->source_id ?? $a->id ?? 0)) <=> ((int) ($b->source_id ?? $b->id ?? 0));
+            }
+        );
+
+        $position = 1;
+        foreach ($ordered as $learnpath) {
+            if ((int) ($learnpath->source_id ?? $learnpath->id ?? 0) === $sectionId) {
+                return $position;
+            }
+            $position++;
+        }
+
+        return 1;
     }
 
     /**
@@ -238,7 +306,7 @@ class SectionExport
      */
     public function getActivitiesForSection(object $learnpath, bool $isGeneral = false): array
     {
-        $sectionId = $isGeneral ? 0 : (int) ($learnpath->source_id ?? 0);
+        $sectionId = $isGeneral ? 0 : (int) ($learnpath->source_id ?? $learnpath->id ?? 0);
 
         if (isset($this->activitiesBySection[$sectionId]) && is_array($this->activitiesBySection[$sectionId])) {
             return $this->activitiesBySection[$sectionId];

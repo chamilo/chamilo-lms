@@ -296,21 +296,6 @@ if (!isset($src)) {
                 $src = 'blank.php?error=prerequisites';
             }
             break;
-        case CLp::AICC_TYPE:
-            $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'"></script>';
-            $preReqCheck = $oLP->prerequisites_match($lp_item_id);
-            if (true === $preReqCheck) {
-                $src = $oLP->get_link(
-                    'http',
-                    $lp_item_id,
-                    $get_toc_list
-                );
-                $oLP->start_current_item(); // starts time counter manually if asset
-            } else {
-                $src = 'blank.php';
-            }
-            break;
         case 4:
             break;
     }

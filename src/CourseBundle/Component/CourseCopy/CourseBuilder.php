@@ -57,6 +57,7 @@ use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Closure;
 use Countable;
@@ -64,6 +65,7 @@ use Database;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ObjectRepository;
 use DocumentManager;
 use ReflectionProperty;
 use stdClass;
@@ -1380,6 +1382,9 @@ class CourseBuilder
 
         $repo = Container::getWikiRepository();
 
+        /** @var ObjectRepository $confRepo */
+        $confRepo = $this->em->getRepository(CWikiConf::class);
+
         $ids = array_values(array_unique(array_map('intval', $ids)));
         $keep = $this->makeIdFilter($ids);
 
@@ -1508,17 +1513,52 @@ class CourseBuilder
                 $this->findAndSetDocumentsInText($content);
             }
 
+            $conf = $confRepo->findOneBy([
+                'cId' => (int) $courseEntity->getId(),
+                'pageId' => $pageId,
+            ]);
+
             $payload = [
                 'title' => $title,
+                'name' => $title,
                 'reflink' => $reflink,
                 'content' => $content,
+                'comment' => (string) ($page->getComment() ?? ''),
                 'user_id' => $userId,
                 'group_id' => $groupId,
                 'dtime' => $dtime,
                 'progress' => $progress,
                 'version' => $version,
                 'page_id' => $pageId,
-                'name' => $title,
+                'hits' => (int) ($page->getHits() ?? 0),
+                'addlock' => (int) ($page->getAddlock() ?? 1),
+                'editlock' => (int) ($page->getEditlock() ?? 0),
+                'visibility' => (int) ($page->getVisibility() ?? 1),
+                'addlock_disc' => (int) ($page->getAddlockDisc() ?? 1),
+                'visibility_disc' => (int) ($page->getVisibilityDisc() ?? 1),
+                'ratinglock_disc' => (int) ($page->getRatinglockDisc() ?? 1),
+                'assignment' => (int) ($page->getAssignment() ?? 0),
+                'score' => (int) ($page->getScore() ?? 0),
+                'linksto' => (string) ($page->getLinksto() ?? ''),
+                'tag' => (string) ($page->getTag() ?? ''),
+                'user_ip' => (string) ($page->getUserIp() ?? ''),
+                'task' => $conf ? (string) ($conf->getTask() ?? '') : '',
+                'feedback1' => $conf ? (string) ($conf->getFeedback1() ?? '') : '',
+                'feedback2' => $conf ? (string) ($conf->getFeedback2() ?? '') : '',
+                'feedback3' => $conf ? (string) ($conf->getFeedback3() ?? '') : '',
+                'fprogress1' => $conf ? (string) ($conf->getFprogress1() ?? '') : '',
+                'fprogress2' => $conf ? (string) ($conf->getFprogress2() ?? '') : '',
+                'fprogress3' => $conf ? (string) ($conf->getFprogress3() ?? '') : '',
+                'max_size' => $conf ? (int) ($conf->getMaxSize() ?? 0) : 0,
+                'max_text' => $conf ? (int) ($conf->getMaxText() ?? 0) : 0,
+                'max_version' => $conf ? (int) ($conf->getMaxVersion() ?? 0) : 0,
+                'startdate_assig' => ($conf && $conf->getStartdateAssig())
+                    ? $conf->getStartdateAssig()->format('Y-m-d H:i:s')
+                    : '',
+                'enddate_assig' => ($conf && $conf->getEnddateAssig())
+                    ? $conf->getEnddateAssig()->format('Y-m-d H:i:s')
+                    : '',
+                'delayedsubmit' => $conf ? (int) ($conf->getDelayedsubmit() ?? 0) : 0,
             ];
 
             $legacyCourse->resources[RESOURCE_WIKI][$iid] =
@@ -2933,37 +2973,61 @@ class CourseBuilder
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
 
         foreach ($docs as $doc) {
-            $node     = $doc->getResourceNode();
-            $filetype = $doc->getFiletype(); // 'file' | 'folder' | ...
-            $title    = $doc->getTitle();
-            $comment  = $doc->getComment() ?? '';
-            $iid      = (int) $doc->getIid();
+            $node = $doc->getResourceNode();
+            $filetype = (string) ($doc->getFiletype() ?? '');
+            $title = (string) ($doc->getTitle() ?? '');
+            $comment = (string) ($doc->getComment() ?? '');
+            $iid = (int) $doc->getIid();
+
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
 
             $size = 0;
             if ('folder' === $filetype) {
                 $size = $this->docRepo->getFolderSize($node, $course, $session);
             } else {
-                $files = $node?->getResourceFiles();
+                $files = $node->getResourceFiles();
                 if ($files && $files->count() > 0) {
-                    /** @var ResourceFile $first */
                     $first = $files->first();
-                    $size  = (int) $first->getSize();
+                    if ($first instanceof ResourceFile) {
+                        $size = (int) $first->getSize();
+                    }
                 }
             }
 
-            $rel = '';
-            if ($node instanceof ResourceNode) {
+            try {
                 if ($documentsRoot instanceof ResourceNode) {
-                    $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
+                    $rel = (string) $node->getPathForDisplayRemoveBase((string) ($documentsRoot->getPath() ?? ''));
                 } else {
-                    $rel = (string) $node->convertPathForDisplay((string) $node->getPath());
-                    $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
+                    $rel = (string) $node->convertPathForDisplay((string) ($node->getPath() ?? ''));
+                    $rel = preg_replace('~^/?Documents/?~i', '', $rel) ?? $rel;
                 }
+            } catch (Throwable $e) {
+                error_log(sprintf(
+                    '[MOODLE EXPORT] Failed to resolve document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
+                    $iid,
+                    (int) $node->getId(),
+                    $title,
+                    $e->getMessage()
+                ));
+                continue;
             }
 
             $rel = trim((string) $rel, '/');
 
-            $pathForSelector = 'document'.($rel !== '' ? '/'.$rel : '');
+            if ('' === $rel) {
+                error_log(sprintf(
+                    '[MOODLE EXPORT] Skipping document with empty relative path. doc_iid=%d node_id=%d title="%s" raw_path=%s',
+                    $iid,
+                    (int) $node->getId(),
+                    $title,
+                    var_export($node->getPath(), true)
+                ));
+                continue;
+            }
+
+            $pathForSelector = 'document/'.$rel;
             if ('folder' === $filetype) {
                 $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
@@ -3298,5 +3362,75 @@ class CourseBuilder
         }
 
         error_log($message);
+    }
+
+    /**
+     * Resolve the logical relative document path.
+     *
+     * Priority:
+     * 1. CDocument logical path
+     * 2. ResourceNode display path as fallback
+     */
+    private function getLogicalDocumentRelativePath(
+        CDocument $doc,
+        ?ResourceNode $documentsRoot = null
+    ): string {
+        $docPath = trim(str_replace('\\', '/', (string) $doc->getPath()), '/');
+        if ('' !== $docPath) {
+            $docPath = preg_replace('~^/?document/?~i', '', $docPath) ?? $docPath;
+
+            return $this->normalizeDocumentRelPath($docPath);
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return '';
+        }
+
+        try {
+            if ($documentsRoot instanceof ResourceNode) {
+                $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
+            } else {
+                $rel = (string) $node->convertPathForDisplay((string) ($node->getPath() ?? ''));
+                $rel = preg_replace('~^/?Documents/?~i', '', $rel) ?? $rel;
+            }
+        } catch (Throwable) {
+            return '';
+        }
+
+        return $this->normalizeDocumentRelPath($rel);
+    }
+
+    /**
+     * Resolve a document relative path from a modern resource URL UUID.
+     */
+    private function resolveDocumentRelPathFromResourceUuid(string $uuid): string
+    {
+        $uuid = trim($uuid);
+        if ('' === $uuid) {
+            return '';
+        }
+
+        try {
+            /** @var ResourceNode|null $resourceNode */
+            $resourceNode = $this->em
+                ->getRepository(ResourceNode::class)
+                ->findOneBy(['uuid' => $uuid]);
+
+            if (!$resourceNode instanceof ResourceNode) {
+                return '';
+            }
+
+            /** @var CDocument|null $doc */
+            $doc = $this->docRepo->findOneBy(['resourceNode' => $resourceNode]);
+
+            if (!$doc instanceof CDocument) {
+                return '';
+            }
+
+            return $this->getLogicalDocumentRelativePath($doc);
+        } catch (Throwable) {
+            return '';
+        }
     }
 }

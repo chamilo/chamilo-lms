@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleExport;
+use DocumentManager;
 use Exception;
 use FillBlanks;
 
@@ -13,9 +15,20 @@ use const PHP_EOL;
 
 /**
  * Handles the export of quizzes within a course.
+ *
+ * This version keeps the C2 XML structure but restores the C1 logic for:
+ * - stable question categories per exported quiz module
+ * - stable answer ids
+ * - embedded files in question text and answers
+ * - synthetic question bank context ids
  */
 class QuizExport extends ActivityExport
 {
+    /**
+     * Unique file ids for embedded quiz files.
+     */
+    private static int $embeddedFileGlobalSeq = 0;
+
     /**
      * Export a quiz to the specified directory.
      *
@@ -28,7 +41,7 @@ class QuizExport extends ActivityExport
     {
         $quizDir = $this->prepareActivityDirectory($exportDir, 'quiz', (int) $moduleId);
 
-        $quizData = $this->getData((int) $activityId, (int) $sectionId);
+        $quizData = $this->getData((int) $activityId, (int) $sectionId, (int) $moduleId);
 
         $this->createQuizXml($quizData, $quizDir);
         $this->createModuleXml($quizData, $quizDir);
@@ -44,80 +57,155 @@ class QuizExport extends ActivityExport
     }
 
     /**
+     * Direct inforef using file ids.
+     */
+    protected function createInforefXml(array $references, string $directory): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<inforef>'.PHP_EOL;
+
+        if (!empty($references['files']) && \is_array($references['files'])) {
+            $xmlContent .= '  <fileref>'.PHP_EOL;
+
+            foreach ($references['files'] as $file) {
+                $fileId = \is_array($file) ? (int) ($file['id'] ?? 0) : (int) $file;
+                if ($fileId <= 0) {
+                    continue;
+                }
+
+                $xmlContent .= '    <file>'.PHP_EOL;
+                $xmlContent .= '      <id>'.$fileId.'</id>'.PHP_EOL;
+                $xmlContent .= '    </file>'.PHP_EOL;
+            }
+
+            $xmlContent .= '  </fileref>'.PHP_EOL;
+        }
+
+        $xmlContent .= '</inforef>'.PHP_EOL;
+
+        $this->createXmlFile('inforef', $xmlContent, $directory);
+    }
+
+    /**
      * Retrieves the quiz data.
      *
      * @return array<string,mixed>
      */
-    public function getData(int $quizId, int $sectionId): array
+    public function getData(int $quizId, int $sectionId, ?int $moduleId = null): array
     {
-        $quizResources = $this->course->resources[RESOURCE_QUIZ] ?? [];
+        $quizResources =
+            $this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz']
+            ?? $this->course->resources['quiz']
+            ?? [];
 
         foreach ($quizResources as $quiz) {
-            if (-1 == $quiz->obj->iid) {
+            if (!\is_object($quiz) || !isset($quiz->obj) || !\is_object($quiz->obj)) {
                 continue;
             }
 
-            if ((int) $quiz->obj->iid === $quizId) {
-                $contextid = (int) ($quiz->obj->c_id ?? $this->course->info['real_id'] ?? 0);
-
-                return [
-                    'id' => (int) $quiz->obj->iid,
-                    'name' => (string) $quiz->obj->title,
-                    'intro' => (string) ($quiz->obj->description ?? ''),
-                    'timeopen' => (int) ($quiz->obj->start_time ?? 0),
-                    'timeclose' => (int) ($quiz->obj->end_time ?? 0),
-                    'timelimit' => (int) ($quiz->obj->timelimit ?? 0),
-                    'grademethod' => (int) ($quiz->obj->grademethod ?? 1),
-                    'decimalpoints' => (int) ($quiz->obj->decimalpoints ?? 2),
-                    'sumgrades' => (float) ($quiz->obj->sumgrades ?? 0),
-                    'grade' => (float) ($quiz->obj->grade ?? 0),
-                    'questionsperpage' => (int) ($quiz->obj->questionsperpage ?? 1),
-                    'preferredbehaviour' => (string) ($quiz->obj->preferredbehaviour ?? 'deferredfeedback'),
-                    'navmethod' => (string) ($quiz->obj->navmethod ?? 'free'),
-                    'shuffleanswers' => (int) ($quiz->obj->shuffleanswers ?? 1),
-                    'questions' => $this->getQuestionsForQuiz($quizId),
-                    'feedbacks' => $this->getFeedbacksForQuiz($quizId),
-                    'sectionid' => $sectionId,
-                    'moduleid' => (int) ($quiz->obj->iid ?? 0),
-                    'modulename' => 'quiz',
-                    'contextid' => $contextid,
-                    'overduehandling' => (string) ($quiz->obj->overduehandling ?? 'autosubmit'),
-                    'graceperiod' => (int) ($quiz->obj->graceperiod ?? 0),
-                    'canredoquestions' => (int) ($quiz->obj->canredoquestions ?? 0),
-                    'attempts_number' => (int) ($quiz->obj->attempts_number ?? 0),
-                    'attemptonlast' => (int) ($quiz->obj->attemptonlast ?? 0),
-                    'questiondecimalpoints' => (int) ($quiz->obj->questiondecimalpoints ?? 2),
-                    'reviewattempt' => (int) ($quiz->obj->reviewattempt ?? 69888),
-                    'reviewcorrectness' => (int) ($quiz->obj->reviewcorrectness ?? 4352),
-                    'reviewmarks' => (int) ($quiz->obj->reviewmarks ?? 4352),
-                    'reviewspecificfeedback' => (int) ($quiz->obj->reviewspecificfeedback ?? 4352),
-                    'reviewgeneralfeedback' => (int) ($quiz->obj->reviewgeneralfeedback ?? 4352),
-                    'reviewrightanswer' => (int) ($quiz->obj->reviewrightanswer ?? 4352),
-                    'reviewoverallfeedback' => (int) ($quiz->obj->reviewoverallfeedback ?? 4352),
-                    'timecreated' => (int) ($quiz->obj->insert_date ?? time()),
-                    'timemodified' => (int) ($quiz->obj->lastedit_date ?? time()),
-                    'password' => (string) ($quiz->obj->password ?? ''),
-                    'subnet' => (string) ($quiz->obj->subnet ?? ''),
-                    'browsersecurity' => (string) ($quiz->obj->browsersecurity ?? '-'),
-                    'delay1' => (int) ($quiz->obj->delay1 ?? 0),
-                    'delay2' => (int) ($quiz->obj->delay2 ?? 0),
-                    'showuserpicture' => (int) ($quiz->obj->showuserpicture ?? 0),
-                    'showblocks' => (int) ($quiz->obj->showblocks ?? 0),
-                    'completionattemptsexhausted' => (int) ($quiz->obj->completionattemptsexhausted ?? 0),
-                    'completionpass' => (int) ($quiz->obj->completionpass ?? 0),
-                    'completionminattempts' => (int) ($quiz->obj->completionminattempts ?? 0),
-                    'allowofflineattempts' => (int) ($quiz->obj->allowofflineattempts ?? 0),
-                    'users' => [],
-                    'files' => [],
-                ];
+            if ((int) ($quiz->obj->iid ?? 0) === -1) {
+                continue;
             }
+
+            if ((int) ($quiz->obj->iid ?? 0) !== $quizId) {
+                continue;
+            }
+
+            $courseCode = (string) ($this->course->info['code'] ?? ($this->course->code ?? ''));
+            $courseInfo = api_get_course_info($courseCode);
+            $courseRealId = (int) ($courseInfo['real_id'] ?? 0);
+
+            $contextid = $this->buildQuestionBankContextId($courseRealId);
+
+            $effectiveModuleId = (int) ($moduleId ?? ($quiz->obj->iid ?? 0));
+            if ($effectiveModuleId <= 0) {
+                $effectiveModuleId = (int) ($quiz->obj->iid ?? 0);
+            }
+
+            $questionCategoryId = $this->buildQuizQuestionCategoryId($effectiveModuleId);
+            $adminData = MoodleExport::getAdminUserData();
+            $adminId = (int) ($adminData['id'] ?? 1);
+
+            $quizFiles = [];
+            $questions = $this->getQuestionsForQuiz(
+                $quizId,
+                $questionCategoryId,
+                $contextid,
+                $courseInfo,
+                $adminId,
+                $quizFiles
+            );
+
+            $computedSumgrades = 0.0;
+            foreach ($questions as $q) {
+                $computedSumgrades += (float) ($q['maxmark'] ?? 0.0);
+            }
+
+            $rawSumgrades = $this->parseNullableFloat($quiz->obj->sumgrades ?? null);
+            $rawGrade = $this->parseNullableFloat($quiz->obj->grade ?? null);
+
+            $sumgrades = $rawSumgrades !== null ? $rawSumgrades : $computedSumgrades;
+            $grade = $rawGrade !== null ? $rawGrade : ($sumgrades > 0 ? $sumgrades : 0.0);
+
+            return [
+                'id'                      => (int) ($quiz->obj->iid ?? 0),
+                'name'                    => (string) ($quiz->obj->title ?? ('Quiz '.$quizId)),
+                'intro'                   => (string) ($quiz->obj->description ?? ''),
+                'timeopen'                => $this->sanitizeInt($quiz->obj->start_time ?? null, 0),
+                'timeclose'               => $this->sanitizeInt($quiz->obj->end_time ?? null, 0),
+                'timelimit'               => $this->sanitizeInt($quiz->obj->timelimit ?? null, 0),
+                'grademethod'             => $this->sanitizeInt($quiz->obj->grademethod ?? null, 1),
+                'decimalpoints'           => $this->sanitizeInt($quiz->obj->decimalpoints ?? null, 2),
+                'sumgrades'               => $sumgrades,
+                'grade'                   => $grade,
+                'questionsperpage'        => $this->sanitizeInt($quiz->obj->questionsperpage ?? null, 1),
+                'preferredbehaviour'      => $this->sanitizePreferredBehaviour($quiz->obj->preferredbehaviour ?? null),
+                'navmethod'               => $this->sanitizeNavMethod($quiz->obj->navmethod ?? null),
+                'shuffleanswers'          => $this->sanitizeInt($quiz->obj->shuffleanswers ?? null, 1),
+                'question_category_id'    => $questionCategoryId,
+                'questions'               => $questions,
+                'files'                   => $quizFiles,
+                'feedbacks'               => $this->getFeedbacksForQuiz($quizId),
+                'sectionid'               => $sectionId,
+                'moduleid'                => $effectiveModuleId,
+                'modulename'              => 'quiz',
+                'contextid'               => $contextid,
+                'courseid'                => $courseRealId,
+                'overduehandling'         => (string) ($quiz->obj->overduehandling ?? 'autosubmit'),
+                'graceperiod'             => $this->sanitizeInt($quiz->obj->graceperiod ?? null, 0),
+                'canredoquestions'        => $this->sanitizeInt($quiz->obj->canredoquestions ?? null, 0),
+                'attempts_number'         => $this->sanitizeInt($quiz->obj->attempts_number ?? null, 0),
+                'attemptonlast'           => $this->sanitizeInt($quiz->obj->attemptonlast ?? null, 0),
+                'questiondecimalpoints'   => $this->sanitizeInt($quiz->obj->questiondecimalpoints ?? null, 2),
+                'reviewattempt'           => $this->sanitizeInt($quiz->obj->reviewattempt ?? null, 69888),
+                'reviewcorrectness'       => $this->sanitizeInt($quiz->obj->reviewcorrectness ?? null, 4352),
+                'reviewmarks'             => $this->sanitizeInt($quiz->obj->reviewmarks ?? null, 4352),
+                'reviewspecificfeedback'  => $this->sanitizeInt($quiz->obj->reviewspecificfeedback ?? null, 4352),
+                'reviewgeneralfeedback'   => $this->sanitizeInt($quiz->obj->reviewgeneralfeedback ?? null, 4352),
+                'reviewrightanswer'       => $this->sanitizeInt($quiz->obj->reviewrightanswer ?? null, 4352),
+                'reviewoverallfeedback'   => $this->sanitizeInt($quiz->obj->reviewoverallfeedback ?? null, 4352),
+                'timecreated'             => $this->sanitizeInt($quiz->obj->insert_date ?? null, time()),
+                'timemodified'            => $this->sanitizeInt($quiz->obj->lastedit_date ?? null, time()),
+                'password'                => (string) ($quiz->obj->password ?? ''),
+                'subnet'                  => (string) ($quiz->obj->subnet ?? ''),
+                'browsersecurity'         => (string) ($quiz->obj->browsersecurity ?? '-'),
+                'delay1'                  => $this->sanitizeInt($quiz->obj->delay1 ?? null, 0),
+                'delay2'                  => $this->sanitizeInt($quiz->obj->delay2 ?? null, 0),
+                'showuserpicture'         => $this->sanitizeInt($quiz->obj->showuserpicture ?? null, 0),
+                'showblocks'              => $this->sanitizeInt($quiz->obj->showblocks ?? null, 0),
+                'completionattemptsexhausted' => $this->sanitizeInt($quiz->obj->completionattemptsexhausted ?? null, 0),
+                'completionpass'          => $this->sanitizeInt($quiz->obj->completionpass ?? null, 0),
+                'completionminattempts'   => $this->sanitizeInt($quiz->obj->completionminattempts ?? null, 0),
+                'allowofflineattempts'    => $this->sanitizeInt($quiz->obj->allowofflineattempts ?? null, 0),
+                'users'                   => [],
+            ];
         }
 
         return [];
     }
 
     /**
-     * Export one question (bank) entry in XML format.
+     * Export one question entry in XML format.
      */
     public function exportQuestion(array $question): string
     {
@@ -145,27 +233,22 @@ class QuizExport extends ActivityExport
         switch ($qtype) {
             case 'multichoice':
                 $xmlContent .= $this->exportMultichoiceQuestion($question);
-
                 break;
 
             case 'multichoice_nosingle':
                 $xmlContent .= $this->exportMultichoiceNosingleQuestion($question);
-
                 break;
 
             case 'truefalse':
                 $xmlContent .= $this->exportTrueFalseQuestion($question);
-
                 break;
 
             case 'shortanswer':
                 $xmlContent .= $this->exportShortAnswerQuestion($question);
-
                 break;
 
             case 'match':
                 $xmlContent .= $this->exportMatchQuestion($question);
-
                 break;
         }
 
@@ -175,71 +258,152 @@ class QuizExport extends ActivityExport
     }
 
     /**
+     * Retrieve the questions for a specific quiz.
+     *
      * @return array<int,array<string,mixed>>
      */
-    private function getQuestionsForQuiz(int $quizId): array
-    {
+    private function getQuestionsForQuiz(
+        int $quizId,
+        int $questionCategoryId,
+        int $contextId,
+        array $courseInfo,
+        int $adminId,
+        array &$quizFiles
+    ): array {
         $questions = [];
-        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? [];
+
+        $quizResources =
+            $this->course->resources[\defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : 'Exercise_Question']
+            ?? $this->course->resources['Exercise_Question']
+            ?? [];
 
         foreach ($quizResources as $questionId => $questionData) {
-            if (\in_array($questionId, $this->course->resources[RESOURCE_QUIZ][$quizId]->obj->question_ids ?? [], true)) {
-                $categoryId = (int) ($questionData->question_category ?? 0);
-                $categoryId = $categoryId > 0 ? $categoryId : $this->getDefaultCategoryId();
-
-                $questions[] = [
-                    'id' => (int) $questionData->source_id,
-                    'questiontext' => (string) $questionData->question,
-                    'qtype' => $this->mapQuestionType((string) $questionData->quiz_type),
-                    'questioncategoryid' => $categoryId,
-                    'answers' => $this->getAnswersForQuestion((int) $questionData->source_id),
-                    'maxmark' => (float) ($questionData->ponderation ?? 1),
-                ];
+            if (!\is_object($questionData)) {
+                continue;
             }
+
+            $quizQuestionIds = (array) ($this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz'][$quizId]->obj->question_ids ?? []);
+            if (!\in_array($questionId, $quizQuestionIds, true)) {
+                continue;
+            }
+
+            $qRes = $this->extractQuestionEmbeddedFilesAndNormalizeContent(
+                (string) ($questionData->question ?? ''),
+                $contextId,
+                'questiontext',
+                (int) ($questionData->source_id ?? 0),
+                $courseInfo,
+                $adminId
+            );
+
+            if (!empty($qRes['files'])) {
+                $quizFiles = array_merge($quizFiles, $qRes['files']);
+            }
+
+            $answers = $this->getAnswersForQuestion(
+                (int) ($questionData->source_id ?? 0),
+                $contextId,
+                $courseInfo,
+                $adminId,
+                $quizFiles
+            );
+
+            $questions[] = [
+                'id'                 => (int) ($questionData->source_id ?? 0),
+                'questiontext'       => $qRes['content'],
+                'qtype'              => $this->mapQuestionType((string) ($questionData->quiz_type ?? '')),
+                'questioncategoryid' => $questionCategoryId,
+                'answers'            => $answers,
+                'maxmark'            => (float) ($questionData->ponderation ?? 1),
+            ];
         }
 
         return $questions;
     }
 
+    /**
+     * Map legacy quiz type to Moodle qtype.
+     */
     private function mapQuestionType(string $quizType): string
     {
         switch ($quizType) {
-            case UNIQUE_ANSWER:     return 'multichoice';
+            case UNIQUE_ANSWER:
+                return 'multichoice';
 
-            case MULTIPLE_ANSWER:   return 'multichoice_nosingle';
+            case MULTIPLE_ANSWER:
+                return 'multichoice_nosingle';
 
-            case FILL_IN_BLANKS:    return 'match';
+            case FILL_IN_BLANKS:
+                return 'match';
 
-            case FREE_ANSWER:       return 'shortanswer';
+            case FREE_ANSWER:
+                return 'shortanswer';
 
-            case CALCULATED_ANSWER: return 'calculated';
+            case CALCULATED_ANSWER:
+                return 'calculated';
 
-            case UPLOAD_ANSWER:     return 'fileupload';
+            case UPLOAD_ANSWER:
+                return 'fileupload';
 
-            default:                return 'unknown';
+            default:
+                return 'unknown';
         }
     }
 
     /**
+     * Retrieves the answers for a specific question ID.
+     *
      * @return array<int,array<string,mixed>>
      */
-    private function getAnswersForQuestion(int $questionId): array
-    {
-        static $globalCounter = 0;
+    private function getAnswersForQuestion(
+        int $questionId,
+        int $contextId,
+        array $courseInfo,
+        int $adminId,
+        array &$collectedFiles
+    ): array {
         $answers = [];
-        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? [];
+
+        $quizResources =
+            $this->course->resources[\defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : 'Exercise_Question']
+            ?? $this->course->resources['Exercise_Question']
+            ?? [];
 
         foreach ($quizResources as $questionData) {
-            if ((int) $questionData->source_id === $questionId) {
-                foreach ($questionData->answers as $answer) {
-                    $globalCounter++;
-                    $answers[] = [
-                        'id' => $questionId * 1000 + $globalCounter,
-                        'text' => (string) $answer['answer'],
-                        'fraction' => (int) ('1' == $answer['correct'] ? 100 : 0),
-                        'feedback' => (string) ($answer['comment'] ?? ''),
-                    ];
+            if (!\is_object($questionData)) {
+                continue;
+            }
+
+            if ((int) ($questionData->source_id ?? 0) !== $questionId) {
+                continue;
+            }
+
+            $answerIndex = 0;
+            foreach ((array) ($questionData->answers ?? []) as $answer) {
+                $answerIndex++;
+
+                $answerId = $this->buildStableQuestionAnswerId($questionId, $answerIndex);
+                $rawText = (string) ($answer['answer'] ?? '');
+
+                $res = $this->extractQuestionEmbeddedFilesAndNormalizeContent(
+                    $rawText,
+                    $contextId,
+                    'answer',
+                    $answerId,
+                    $courseInfo,
+                    $adminId
+                );
+
+                if (!empty($res['files'])) {
+                    $collectedFiles = array_merge($collectedFiles, $res['files']);
                 }
+
+                $answers[] = [
+                    'id'       => $answerId,
+                    'text'     => $res['content'],
+                    'fraction' => (($answer['correct'] ?? '0') == '1') ? 100 : 0,
+                    'feedback' => (string) ($answer['comment'] ?? ''),
+                ];
             }
         }
 
@@ -247,29 +411,34 @@ class QuizExport extends ActivityExport
     }
 
     /**
+     * Retrieves feedbacks for a specific quiz.
+     *
      * @return array<int,array<string,mixed>>
      */
     private function getFeedbacksForQuiz(int $quizId): array
     {
         $feedbacks = [];
-        $quizResources = $this->course->resources[RESOURCE_QUIZ] ?? [];
+
+        $quizResources =
+            $this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz']
+            ?? $this->course->resources['quiz']
+            ?? [];
 
         foreach ($quizResources as $quiz) {
-            if ((int) $quiz->obj->iid === $quizId) {
+            if (!\is_object($quiz) || !isset($quiz->obj) || !\is_object($quiz->obj)) {
+                continue;
+            }
+
+            if ((int) ($quiz->obj->iid ?? 0) === $quizId) {
                 $feedbacks[] = [
                     'feedbacktext' => (string) ($quiz->obj->description ?? ''),
                     'mingrade' => 0.00000,
-                    'maxgrade' => (float) ($quiz->obj->grade ?? 10.00000),
+                    'maxgrade' => (float) ($quiz->obj->grade ?? 0.0),
                 ];
             }
         }
 
         return $feedbacks;
-    }
-
-    private function getDefaultCategoryId(): int
-    {
-        return 1;
     }
 
     /**
@@ -279,26 +448,29 @@ class QuizExport extends ActivityExport
      */
     private function createQuizXml(array $quizData, string $destinationDir): void
     {
+        $preferredBehaviour = trim((string) ($quizData['preferredbehaviour'] ?? ''));
+        if ('' === $preferredBehaviour) {
+            $preferredBehaviour = 'deferredfeedback';
+        }
+
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<activity id="'.$quizData['id'].'" moduleid="'.$quizData['moduleid'].'" modulename="quiz" contextid="'.$quizData['contextid'].'">'.PHP_EOL;
         $xmlContent .= '  <quiz id="'.$quizData['id'].'">'.PHP_EOL;
-        $xmlContent .= '    <name>'.htmlspecialchars((string) $quizData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '    <intro>'.htmlspecialchars((string) $quizData['intro']).'</intro>'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars((string) ($quizData['name'] ?? '')).'</name>'.PHP_EOL;
+        $xmlContent .= '    <intro>'.htmlspecialchars((string) ($quizData['intro'] ?? '')).'</intro>'.PHP_EOL;
         $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
         $xmlContent .= '    <timeopen>'.(int) ($quizData['timeopen'] ?? 0).'</timeopen>'.PHP_EOL;
         $xmlContent .= '    <timeclose>'.(int) ($quizData['timeclose'] ?? 0).'</timeclose>'.PHP_EOL;
         $xmlContent .= '    <timelimit>'.(int) ($quizData['timelimit'] ?? 0).'</timelimit>'.PHP_EOL;
         $xmlContent .= '    <overduehandling>'.htmlspecialchars((string) ($quizData['overduehandling'] ?? 'autosubmit')).'</overduehandling>'.PHP_EOL;
         $xmlContent .= '    <graceperiod>'.(int) ($quizData['graceperiod'] ?? 0).'</graceperiod>'.PHP_EOL;
-        $xmlContent .= '    <preferredbehaviour>'.htmlspecialchars((string) $quizData['preferredbehaviour']).'</preferredbehaviour>'.PHP_EOL;
+        $xmlContent .= '    <preferredbehaviour>'.htmlspecialchars($preferredBehaviour).'</preferredbehaviour>'.PHP_EOL;
         $xmlContent .= '    <canredoquestions>'.(int) ($quizData['canredoquestions'] ?? 0).'</canredoquestions>'.PHP_EOL;
         $xmlContent .= '    <attempts_number>'.(int) ($quizData['attempts_number'] ?? 0).'</attempts_number>'.PHP_EOL;
         $xmlContent .= '    <attemptonlast>'.(int) ($quizData['attemptonlast'] ?? 0).'</attemptonlast>'.PHP_EOL;
-        $xmlContent .= '    <grademethod>'.(int) $quizData['grademethod'].'</grademethod>'.PHP_EOL;
-        $xmlContent .= '    <decimalpoints>'.(int) $quizData['decimalpoints'].'</decimalpoints>'.PHP_EOL;
+        $xmlContent .= '    <grademethod>'.(int) ($quizData['grademethod'] ?? 1).'</grademethod>'.PHP_EOL;
+        $xmlContent .= '    <decimalpoints>'.(int) ($quizData['decimalpoints'] ?? 2).'</decimalpoints>'.PHP_EOL;
         $xmlContent .= '    <questiondecimalpoints>'.(int) ($quizData['questiondecimalpoints'] ?? -1).'</questiondecimalpoints>'.PHP_EOL;
-
-        // Review options
         $xmlContent .= '    <reviewattempt>'.(int) ($quizData['reviewattempt'] ?? 69888).'</reviewattempt>'.PHP_EOL;
         $xmlContent .= '    <reviewcorrectness>'.(int) ($quizData['reviewcorrectness'] ?? 4352).'</reviewcorrectness>'.PHP_EOL;
         $xmlContent .= '    <reviewmarks>'.(int) ($quizData['reviewmarks'] ?? 4352).'</reviewmarks>'.PHP_EOL;
@@ -306,15 +478,11 @@ class QuizExport extends ActivityExport
         $xmlContent .= '    <reviewgeneralfeedback>'.(int) ($quizData['reviewgeneralfeedback'] ?? 4352).'</reviewgeneralfeedback>'.PHP_EOL;
         $xmlContent .= '    <reviewrightanswer>'.(int) ($quizData['reviewrightanswer'] ?? 4352).'</reviewrightanswer>'.PHP_EOL;
         $xmlContent .= '    <reviewoverallfeedback>'.(int) ($quizData['reviewoverallfeedback'] ?? 4352).'</reviewoverallfeedback>'.PHP_EOL;
-
-        // Navigation and presentation
-        $xmlContent .= '    <questionsperpage>'.(int) $quizData['questionsperpage'].'</questionsperpage>'.PHP_EOL;
-        $xmlContent .= '    <navmethod>'.htmlspecialchars((string) $quizData['navmethod']).'</navmethod>'.PHP_EOL;
-        $xmlContent .= '    <shuffleanswers>'.(int) $quizData['shuffleanswers'].'</shuffleanswers>'.PHP_EOL;
-        $xmlContent .= '    <sumgrades>'.(float) $quizData['sumgrades'].'</sumgrades>'.PHP_EOL;
-        $xmlContent .= '    <grade>'.(float) $quizData['grade'].'</grade>'.PHP_EOL;
-
-        // Timing and security
+        $xmlContent .= '    <questionsperpage>'.(int) ($quizData['questionsperpage'] ?? 1).'</questionsperpage>'.PHP_EOL;
+        $xmlContent .= '    <navmethod>'.htmlspecialchars((string) ($quizData['navmethod'] ?? 'free')).'</navmethod>'.PHP_EOL;
+        $xmlContent .= '    <shuffleanswers>'.(int) ($quizData['shuffleanswers'] ?? 1).'</shuffleanswers>'.PHP_EOL;
+        $xmlContent .= '    <sumgrades>'.(float) ($quizData['sumgrades'] ?? 0.0).'</sumgrades>'.PHP_EOL;
+        $xmlContent .= '    <grade>'.(float) ($quizData['grade'] ?? 0.0).'</grade>'.PHP_EOL;
         $xmlContent .= '    <timecreated>'.(int) ($quizData['timecreated'] ?? time()).'</timecreated>'.PHP_EOL;
         $xmlContent .= '    <timemodified>'.(int) ($quizData['timemodified'] ?? time()).'</timemodified>'.PHP_EOL;
         $xmlContent .= '    <password>'.htmlspecialchars((string) ($quizData['password'] ?? '')).'</password>'.PHP_EOL;
@@ -322,20 +490,15 @@ class QuizExport extends ActivityExport
         $xmlContent .= '    <browsersecurity>'.htmlspecialchars((string) ($quizData['browsersecurity'] ?? '-')).'</browsersecurity>'.PHP_EOL;
         $xmlContent .= '    <delay1>'.(int) ($quizData['delay1'] ?? 0).'</delay1>'.PHP_EOL;
         $xmlContent .= '    <delay2>'.(int) ($quizData['delay2'] ?? 0).'</delay2>'.PHP_EOL;
-
-        // Additional options
         $xmlContent .= '    <showuserpicture>'.(int) ($quizData['showuserpicture'] ?? 0).'</showuserpicture>'.PHP_EOL;
         $xmlContent .= '    <showblocks>'.(int) ($quizData['showblocks'] ?? 0).'</showblocks>'.PHP_EOL;
         $xmlContent .= '    <completionattemptsexhausted>'.(int) ($quizData['completionattemptsexhausted'] ?? 0).'</completionattemptsexhausted>'.PHP_EOL;
         $xmlContent .= '    <completionpass>'.(int) ($quizData['completionpass'] ?? 0).'</completionpass>'.PHP_EOL;
         $xmlContent .= '    <completionminattempts>'.(int) ($quizData['completionminattempts'] ?? 0).'</completionminattempts>'.PHP_EOL;
         $xmlContent .= '    <allowofflineattempts>'.(int) ($quizData['allowofflineattempts'] ?? 0).'</allowofflineattempts>'.PHP_EOL;
-
-        // Subplugin placeholder
         $xmlContent .= '    <subplugin_quizaccess_seb_quiz>'.PHP_EOL;
         $xmlContent .= '    </subplugin_quizaccess_seb_quiz>'.PHP_EOL;
 
-        // Question instances
         $xmlContent .= '    <question_instances>'.PHP_EOL;
         $slotIndex = 1;
         foreach (($quizData['questions'] ?? []) as $question) {
@@ -352,7 +515,6 @@ class QuizExport extends ActivityExport
         }
         $xmlContent .= '    </question_instances>'.PHP_EOL;
 
-        // Sections
         $xmlContent .= '    <sections>'.PHP_EOL;
         $xmlContent .= '      <section id="'.(int) ($quizData['id'] ?? 0).'">'.PHP_EOL;
         $xmlContent .= '        <firstslot>1</firstslot>'.PHP_EOL;
@@ -360,7 +522,6 @@ class QuizExport extends ActivityExport
         $xmlContent .= '      </section>'.PHP_EOL;
         $xmlContent .= '    </sections>'.PHP_EOL;
 
-        // Feedbacks
         $xmlContent .= '    <feedbacks>'.PHP_EOL;
         foreach (($quizData['feedbacks'] ?? []) as $feedback) {
             $xmlContent .= '      <feedback id="'.(int) ($quizData['id'] ?? 0).'">'.PHP_EOL;
@@ -372,11 +533,9 @@ class QuizExport extends ActivityExport
         }
         $xmlContent .= '    </feedbacks>'.PHP_EOL;
 
-        // Placeholders
         $xmlContent .= '    <overrides></overrides>'.PHP_EOL;
         $xmlContent .= '    <grades></grades>'.PHP_EOL;
         $xmlContent .= '    <attempts></attempts>'.PHP_EOL;
-
         $xmlContent .= '  </quiz>'.PHP_EOL;
         $xmlContent .= '</activity>'.PHP_EOL;
 
@@ -386,6 +545,9 @@ class QuizExport extends ActivityExport
         }
     }
 
+    /**
+     * Exports a multiple-choice question in XML format.
+     */
     private function exportMultichoiceQuestion(array $question): string
     {
         $xmlContent = '        <plugin_qtype_multichoice_question>'.PHP_EOL;
@@ -412,31 +574,36 @@ class QuizExport extends ActivityExport
         return $xmlContent;
     }
 
+    /**
+     * Exports a multiple-choice question with single=0 in XML format.
+     */
     private function exportMultichoiceNosingleQuestion(array $question): string
     {
         return str_replace('<single>1</single>', '<single>0</single>', $this->exportMultichoiceQuestion($question));
     }
 
+    /**
+     * Exports a true/false question in XML format.
+     */
     private function exportTrueFalseQuestion(array $question): string
     {
         $xmlContent = '        <plugin_qtype_truefalse_question>'.PHP_EOL;
         $xmlContent .= '          <answers>'.PHP_EOL;
 
-        // Normalize array to avoid non-sequential indexes
         $answers = array_values($question['answers'] ?? []);
-
         foreach ($answers as $answer) {
             $xmlContent .= $this->exportAnswer($answer);
         }
+
         $xmlContent .= '          </answers>'.PHP_EOL;
 
-        // Robust mapping: determine true/false ids without assuming positions
         $trueId = 0;
         $falseId = 0;
 
         foreach ($answers as $ans) {
             $id = (int) ($ans['id'] ?? 0);
-            $fraction = (int) ($ans['fraction'] ?? 0); // 100 means correct (true), 0 means false
+            $fraction = (int) ($ans['fraction'] ?? 0);
+
             if ($fraction > 0 && 0 === $trueId) {
                 $trueId = $id;
             } elseif ($fraction <= 0 && 0 === $falseId) {
@@ -444,14 +611,12 @@ class QuizExport extends ActivityExport
             }
         }
 
-        // Fallbacks to avoid undefined references in odd data cases
         if (0 === $trueId && isset($answers[0]['id'])) {
             $trueId = (int) $answers[0]['id'];
         }
         if (0 === $falseId && isset($answers[1]['id'])) {
             $falseId = (int) $answers[1]['id'];
         }
-        // As last resort, mirror one id so XML stays valid
         if (0 === $trueId && $falseId > 0) {
             $trueId = $falseId;
         }
@@ -468,6 +633,9 @@ class QuizExport extends ActivityExport
         return $xmlContent;
     }
 
+    /**
+     * Exports a short answer question in XML format.
+     */
     private function exportShortAnswerQuestion(array $question): string
     {
         $xmlContent = '        <plugin_qtype_shortanswer_question>'.PHP_EOL;
@@ -484,6 +652,9 @@ class QuizExport extends ActivityExport
         return $xmlContent;
     }
 
+    /**
+     * Exports a matching question in XML format.
+     */
     private function exportMatchQuestion(array $question): string
     {
         $xmlContent = '        <plugin_qtype_match_question>'.PHP_EOL;
@@ -499,7 +670,6 @@ class QuizExport extends ActivityExport
         $xmlContent .= '          </matchoptions>'.PHP_EOL;
         $xmlContent .= '          <matches>'.PHP_EOL;
 
-        // Be defensive: not all datasets will have answers[0]['text'] populated
         $answers = array_values($question['answers'] ?? []);
         $firstText = (string) ($answers[0]['text'] ?? '');
 
@@ -507,7 +677,6 @@ class QuizExport extends ActivityExport
         $words = (array) ($res['words'] ?? []);
         $common = (array) ($res['common_words'] ?? []);
 
-        // Use the shortest length to avoid "Undefined array key" warnings
         $limit = min(\count($common), \count($words));
 
         for ($i = 0; $i < $limit; $i++) {
@@ -533,6 +702,9 @@ class QuizExport extends ActivityExport
         return $xmlContent;
     }
 
+    /**
+     * Exports one answer in XML format.
+     */
     private function exportAnswer(array $answer): string
     {
         return '            <answer id="'.(int) ($answer['id'] ?? 0).'">'.PHP_EOL
@@ -542,5 +714,335 @@ class QuizExport extends ActivityExport
             .'              <feedback>'.htmlspecialchars((string) ($answer['feedback'] ?? '')).'</feedback>'.PHP_EOL
             .'              <feedbackformat>1</feedbackformat>'.PHP_EOL
             .'            </answer>'.PHP_EOL;
+    }
+
+    /**
+     * Moodle requires a valid question behaviour.
+     */
+    private function sanitizePreferredBehaviour($raw): string
+    {
+        $behaviour = trim((string) $raw);
+
+        $allowed = [
+            'deferredfeedback',
+            'adaptive',
+            'adaptivenopenalty',
+            'immediatefeedback',
+            'interactive',
+            'manualgraded',
+            'deferredcbm',
+            'immediatecbm',
+            'interactivecountback',
+        ];
+
+        if ('' === $behaviour || !\in_array($behaviour, $allowed, true)) {
+            return 'deferredfeedback';
+        }
+
+        return $behaviour;
+    }
+
+    /**
+     * Normalize an integer-like value.
+     */
+    private function sanitizeInt($raw, int $default): int
+    {
+        if (null === $raw) {
+            return $default;
+        }
+        if (\is_string($raw) && '' === trim($raw)) {
+            return $default;
+        }
+
+        return \is_numeric($raw) ? (int) $raw : $default;
+    }
+
+    /**
+     * Parse a float or return null when missing.
+     */
+    private function parseNullableFloat($raw): ?float
+    {
+        if (null === $raw) {
+            return null;
+        }
+        if (\is_string($raw) && '' === trim($raw)) {
+            return null;
+        }
+
+        return \is_numeric($raw) ? (float) $raw : null;
+    }
+
+    /**
+     * Moodle quiz navmethod accepted values.
+     */
+    private function sanitizeNavMethod($raw): string
+    {
+        $v = trim((string) $raw);
+
+        return \in_array($v, ['free', 'sequential'], true) ? $v : 'free';
+    }
+
+    /**
+     * Build a stable question category id per exported quiz module occurrence.
+     */
+    private function buildQuizQuestionCategoryId(int $moduleId): int
+    {
+        return 1000000000 + max(1, $moduleId);
+    }
+
+    /**
+     * Build a stable question-bank context id for backup purposes.
+     */
+    private function buildQuestionBankContextId(int $courseId): int
+    {
+        return 600000000 + max(1, $courseId);
+    }
+
+    /**
+     * Build a deterministic answer id for one question answer.
+     */
+    private function buildStableQuestionAnswerId(int $questionId, int $answerIndex): int
+    {
+        return ($questionId * 1000) + $answerIndex;
+    }
+
+    /**
+     * Build a unique files.xml id for one embedded quiz file.
+     */
+    private function buildQuestionEmbeddedFileId(): int
+    {
+        self::$embeddedFileGlobalSeq++;
+
+        return 1300000000 + self::$embeddedFileGlobalSeq;
+    }
+
+    /**
+     * Extract embedded document files from quiz HTML and normalize URLs to @@PLUGINFILE@@.
+     *
+     * For quiz question/answer files:
+     * - component = question
+     * - filearea  = questiontext or answer
+     * - itemid    = question id or answer id
+     * - filepath  = real directory only
+     * - HTML src  = @@PLUGINFILE@@/<relative path>
+     *
+     * @return array{content:string, files:array<int,array<string,mixed>>}
+     */
+    private function extractQuestionEmbeddedFilesAndNormalizeContent(
+        string $html,
+        int $contextId,
+        string $fileArea,
+        int $itemId,
+        array $courseInfo,
+        int $adminId
+    ): array {
+        if ('' === $html) {
+            return ['content' => '', 'files' => []];
+        }
+
+        $fileExport = new \Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\FileExport($this->course);
+        $files = [];
+        $seenDocIds = [];
+
+        $resources = DocumentManager::get_resources_from_source_html($html) ?: [];
+        foreach ($resources as $resource) {
+            $src = $resource[0] ?? null;
+            if (!\is_string($src) || '' === $src) {
+                continue;
+            }
+
+            if (!preg_match('#/document(?P<path>/[^"\']+)#', $src, $m)) {
+                continue;
+            }
+
+            $documentRelativePath = (string) $m['path'];
+            $docId = DocumentManager::get_document_id($courseInfo, $documentRelativePath);
+            if (empty($docId)) {
+                continue;
+            }
+
+            $docId = (int) $docId;
+            if (isset($seenDocIds[$docId])) {
+                continue;
+            }
+
+            $doc = DocumentManager::get_document_data_by_id($docId, (string) ($courseInfo['code'] ?? ''));
+            if (empty($doc) || empty($doc['path'])) {
+                continue;
+            }
+
+            $docPath = (string) $doc['path'];
+            $absolutePath = rtrim((string) $this->course->path, '/').'/document'.$docPath;
+            $filename = basename($docPath);
+
+            $files[] = [
+                'id'           => $this->buildQuestionEmbeddedFileId(),
+                'contenthash'  => is_file($absolutePath) ? sha1_file($absolutePath) : hash('sha1', $filename),
+                'contextid'    => $contextId,
+                'component'    => 'question',
+                'filearea'     => $fileArea,
+                'itemid'       => $itemId,
+                'filepath'     => $this->buildQuestionPluginFileDirectoryFromChamiloDocumentPath($docPath),
+                'documentpath' => 'document'.$docPath,
+                'filename'     => $filename,
+                'userid'       => $adminId,
+                'filesize'     => (int) ($doc['size'] ?? 0),
+                'mimetype'     => $fileExport->getMimeType($docPath),
+                'status'       => 0,
+                'timecreated'  => time() - 3600,
+                'timemodified' => time(),
+                'source'       => (string) ($doc['title'] ?? $filename),
+                'author'       => 'Unknown',
+                'license'      => 'allrightsreserved',
+                'abs_path'     => $absolutePath,
+            ];
+
+            $seenDocIds[$docId] = true;
+        }
+
+        return [
+            'content' => $this->normalizeQuestionHtmlContent($html),
+            'files' => $files,
+        ];
+    }
+
+    /**
+     * Normalize HTML content by rewriting course document URLs to @@PLUGINFILE@@.
+     */
+    private function normalizeQuestionHtmlContent(string $html): string
+    {
+        if ('' === $html) {
+            return $html;
+        }
+
+        $html = (string) preg_replace_callback(
+            '~\bsrcset\s*=\s*([\'"])(.*?)\1~is',
+            function (array $m): string {
+                $q = $m[1];
+                $val = $m[2];
+
+                $parts = array_map('trim', explode(',', $val));
+                foreach ($parts as &$p) {
+                    if ('' === $p) {
+                        continue;
+                    }
+
+                    $tokens = preg_split('/\s+/', $p, -1, PREG_SPLIT_NO_EMPTY);
+                    if (empty($tokens)) {
+                        continue;
+                    }
+
+                    $tokens[0] = $this->rewriteQuestionDocUrl($tokens[0]);
+                    $p = implode(' ', $tokens);
+                }
+
+                return 'srcset='.$q.implode(', ', $parts).$q;
+            },
+            $html
+        );
+
+        $html = (string) preg_replace_callback(
+            '~\b(src|href|poster|data)\s*=\s*([\'"])([^\'"]+)\2~i',
+            function (array $m): string {
+                return $m[1].'='.$m[2].$this->rewriteQuestionDocUrl($m[3]).$m[2];
+            },
+            $html
+        );
+
+        $html = (string) preg_replace_callback(
+            '~\bstyle\s*=\s*([\'"])(.*?)\1~is',
+            function (array $m): string {
+                $q = $m[1];
+                $style = $m[2];
+
+                $style = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    function (array $mm): string {
+                        return 'url('.$mm[1].$this->rewriteQuestionDocUrl($mm[2]).$mm[1].')';
+                    },
+                    $style
+                );
+
+                return 'style='.$q.$style.$q;
+            },
+            $html
+        );
+
+        return (string) preg_replace_callback(
+            '~(<style\b[^>]*>)(.*?)(</style>)~is',
+            function (array $m): string {
+                $open = $m[1];
+                $css = $m[2];
+                $close = $m[3];
+
+                $css = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    function (array $mm): string {
+                        return 'url('.$mm[1].$this->rewriteQuestionDocUrl($mm[2]).$mm[1].')';
+                    },
+                    $css
+                );
+
+                return $open.$css.$close;
+            },
+            $html
+        );
+    }
+
+    /**
+     * Rewrite course document URLs to @@PLUGINFILE@@/<relative path>.
+     */
+    private function rewriteQuestionDocUrl(string $url): string
+    {
+        if ('' === $url || str_contains($url, '@@PLUGINFILE@@')) {
+            return $url;
+        }
+
+        if (preg_match('#/(?:courses/[^/]+/)?document(?P<path>/[^?\'" )]+)#i', $url, $m)) {
+            return '@@PLUGINFILE@@'.$this->buildQuestionPluginFilePathFromChamiloDocumentPath((string) $m['path']);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Build the pluginfile directory path from a Chamilo document path.
+     *
+     * Example:
+     * - /folder/image.jpg -> /folder/
+     * - image.jpg         -> /
+     */
+    private function buildQuestionPluginFileDirectoryFromChamiloDocumentPath(string $documentPath): string
+    {
+        $relative = $this->stripChamiloDocumentPrefix($documentPath);
+        $relative = ltrim(str_replace('\\', '/', $relative), '/');
+
+        $dir = dirname($relative);
+        if ('.' === $dir || '/' === $dir) {
+            return '/';
+        }
+
+        return '/'.trim($dir, '/').'/';
+    }
+
+    /**
+     * Build the pluginfile full path used in question HTML.
+     */
+    private function buildQuestionPluginFilePathFromChamiloDocumentPath(string $documentPath): string
+    {
+        $relative = $this->stripChamiloDocumentPrefix($documentPath);
+        $relative = ltrim(str_replace('\\', '/', $relative), '/');
+
+        return '/'.$relative;
+    }
+
+    /**
+     * Remove the internal Chamilo document prefix from a path.
+     */
+    private function stripChamiloDocumentPrefix(string $path): string
+    {
+        $path = str_replace('\\', '/', trim($path));
+
+        return (string) preg_replace('#^/?document/#', '', $path);
     }
 }

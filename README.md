@@ -112,9 +112,9 @@ sudo apt update && sudo apt -y upgrade
 sudo apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} unzip curl
 sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY 'chamilo2';"
 cd /var/www
-sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-RC.1/chamilo-2.0.0-RC.1.tar.gz
-sudo tar zxf chamilo-2.0.0-RC.1.tar.gz
-sudo mv chamilo-2.0.0-RC.1 chamilo
+sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-RC.2/chamilo-2.0.0-RC.2.tar.gz
+sudo tar zxf chamilo-2.0.0-RC.2.tar.gz
+sudo mv chamilo-2.0.0-RC.2 chamilo
 cd chamilo
 sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
 # Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain

@@ -101,6 +101,23 @@ if (api_get_setting('allow_social_tool') === 'true') {
 
 $tpl = new Template(get_lang('MyFiles'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
+
+$language = 'en';
+$platformLanguage = api_get_interface_language();
+$iso = api_get_language_isocode($platformLanguage);
+$filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
+$file = api_get_path(SYS_PATH).$filePart;
+$includeFile = '';
+if (file_exists($file)) {
+    $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+    $language = $iso;
+}
+$tpl->assign('course_condition', api_get_cidreq());
+$tpl->assign('session_id', api_get_session_id());
+$tpl->assign('question_id', 0);
+$tpl->assign('elfinder_lang', $language);
+$tpl->assign('elfinder_translation_file', $includeFile);
+
 $editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
 $template = $tpl->get_template($editor->getEditorStandAloneTemplate());
 $editor = $tpl->fetch($template);

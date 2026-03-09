@@ -1375,7 +1375,7 @@ class GradebookUtils
                 continue;
             }
 
-            $path = $certificateInfo['path_certificate'] ?? '';
+            $path = $certificateInfo['pathCertificate'] ?? '';
             $publish = $certificateInfo['publish'] ?? 0;
             $hash = pathinfo($path, PATHINFO_FILENAME);
 
@@ -1391,8 +1391,8 @@ class GradebookUtils
 
             $courseList[] = [
                 'course' => $courseInfo['title'],
-                'score' => $certificateInfo['score_certificate'],
-                'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
+                'score' => $certificateInfo['scoreCertificate'],
+                'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
                 'link' => $link,
                 'pdf' => $pdf,
             ];
@@ -1472,8 +1472,8 @@ class GradebookUtils
                 $sessionList[] = [
                     'session' => $session['session_name'],
                     'course' => $course['title'],
-                    'score' => $certificateInfo['score_certificate'],
-                    'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
+                    'score' => $certificateInfo['scoreCertificate'],
+                    'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
                     'link' => api_get_path(WEB_PATH)."certificates/{$hash}.html",
                 ];
             }

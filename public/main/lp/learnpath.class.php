@@ -260,16 +260,6 @@ class learnpath
                 $lp_item_id_list[] = $itemId;
 
                 switch ($this->type) {
-                    case CLp::AICC_TYPE:
-                        $oItem = new aiccItem('db', $itemId, $course_id);
-                        if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id);
-                            $oItem->set_prevent_reinit($this->prevent_reinit);
-                            // Don't use reference here as the next loop will make the pointed object change.
-                            $this->items[$itemId] = $oItem;
-                            $this->refs_list[$oItem->ref] = $itemId;
-                        }
-                        break;
                     case CLp::SCORM_TYPE:
                         $oItem = new scormItem('db', $itemId);
                         if (is_object($oItem)) {
@@ -590,7 +580,6 @@ class learnpath
         $type = 1;
         switch ($learnpath) {
             case 'guess':
-            case 'aicc':
                 break;
             case 'dokeos':
             case 'chamilo':
@@ -3068,57 +3057,6 @@ class learnpath
                         $file = 'lp_content.php?type=dir';
                     }
                     break;
-                case CLp::AICC_TYPE:
-                    // Formatting AICC HACP append URL.
-                    $aicc_append = '?aicc_sid='.
-                        urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
-                    if (!empty($lp_item_params)) {
-                        $aicc_append .= $lp_item_params.'&';
-                    }
-                    if ('dir' !== $lp_item_type) {
-                        // Quite complex here:
-                        // We want to make sure 'http://' (and similar) links can
-                        // be loaded as is (withouth the Chamilo path in front) but
-                        // some contents use this form: resource.htm?resource=http://blablabla
-                        // which means we have to find a protocol at the path's start, otherwise
-                        // it should not be considered as an external URL.
-                        if (0 != preg_match('#^[a-zA-Z]{2,5}://#', $lp_item_path)) {
-                            if ($this->debug > 2) {
-                                error_log('In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path, 0);
-                            }
-                            // Distant url, return as is.
-                            $file = $lp_item_path;
-                            // Enabled and modified by Ivan Tcholakov, 16-OCT-2008.
-                            /*
-                            if (stristr($file,'<servername>') !== false) {
-                                $file = str_replace('<servername>', $course_path.'/scorm/'.$lp_path.'/', $lp_item_path);
-                            }
-                            */
-                            if (false !== stripos($file, '<servername>')) {
-                                //$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
-                                $web_course_path = str_replace('https://', '', str_replace('http://', '', $course_path));
-                                $file = str_replace('<servername>', $web_course_path.'/scorm/'.$lp_path, $lp_item_path);
-                            }
-
-                            $file .= $aicc_append;
-                        } else {
-                            if ($this->debug > 2) {
-                                error_log('In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path, 0);
-                            }
-                            // Prevent getting untranslatable urls.
-                            $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
-                            $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
-                            // Prepare the path - lp_path might be unusable because it includes the "aicc" subdir name.
-                            $file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
-                            // TODO: Fix this for urls with protocol header.
-                            $file = str_replace('//', '/', $file);
-                            $file = str_replace(':/', '://', $file);
-                            $file .= $aicc_append;
-                        }
-                    } else {
-                        $file = 'lp_content.php?type=dir';
-                    }
-                    break;
                 case 4:
                 default:
                     break;
@@ -4037,7 +3975,6 @@ class learnpath
                 error_log('lp type: '.$type);
             }
             if ((2 == $type && 'sco' !== $item_type) ||
-                (3 == $type && 'au' !== $item_type) ||
                 (1 == $type && TOOL_QUIZ != $item_type && TOOL_HOTPOTATOES != $item_type)
             ) {
                 $this->items[$this->current]->open($allow_new_attempt);
@@ -4083,18 +4020,6 @@ class learnpath
                 error_log('In learnpath::stop_previous_item() - '.$this->last.' is object');
             }
             switch ($this->get_type()) {
-                case '3':
-                    if ('au' != $this->items[$this->last]->get_type()) {
-                        if ($debug) {
-                            error_log('In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au');
-                        }
-                        $this->items[$this->last]->close();
-                    } else {
-                        if ($debug) {
-                            error_log('In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals');
-                        }
-                    }
-                    break;
                 case '2':
                     if ('sco' != $this->items[$this->last]->get_type()) {
                         if ($debug) {

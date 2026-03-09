@@ -119,15 +119,6 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                 }
             }
             break;
-        case 'aicc':
-            $oAICC = new aicc();
-            $config_dir = $oAICC->import_package($_FILES['user_file']);
-            if (!empty($config_dir)) {
-                $oAICC->parse_config_files($config_dir);
-                $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
-            }
-            break;
         case 'oogie':
             $take_slide_name = !empty($_POST['take_slide_name']);
             $o_ppt = new OpenofficePresentation($take_slide_name);
@@ -215,37 +206,6 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                 }
             }
-            break;
-        case 'aicc':
-            $oAICC  = new aicc();
-            $entity = $oAICC->getEntity();
-            $config_dir = $oAICC->import_local_package($s, $current_dir);
-
-            if (is_file($s)) {
-                unlink($s);
-            }
-
-            if (!empty($config_dir)) {
-                $oAICC->parse_config_files($config_dir);
-                $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
-            }
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) {
-                $proximity = $_REQUEST['content_proximity'];
-            }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) {
-                $maker = $_REQUEST['content_maker'];
-            }
-
-            $entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('aicc_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();
             break;
         case '':
         default:

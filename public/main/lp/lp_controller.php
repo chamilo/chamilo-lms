@@ -149,12 +149,6 @@ if ($lpId) {
                     $lp_found = true;
                 }
                 break;
-            case CLp::AICC_TYPE:
-                $oLP = new aicc($lp, $courseInfo, $userId);
-                if (false !== $oLP) {
-                    $lp_found = true;
-                }
-                break;
             case CLp::LP_TYPE:
             default:
                 $oLP = new learnpath($lp, $courseInfo, $userId);

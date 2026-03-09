@@ -87,11 +87,6 @@ class UnserializeApi
                     [
                         learnpath::class,
                         learnpathItem::class,
-                        aicc::class,
-                        aiccBlock::class,
-                        aiccItem::class,
-                        aiccObjective::class,
-                        aiccResource::class,
                         scorm::class,
                         scormItem::class,
                         scormMetadata::class,

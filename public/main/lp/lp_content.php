@@ -87,18 +87,6 @@ if ($dir) {
                 $src = $blankBaseUrl.'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
             break;
-        case CLp::AICC_TYPE:
-            // save old if asset
-            $learnPath->stop_previous_item(); // save status manually if asset
-            $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-            if (true === $prerequisiteCheck) {
-                $src = $learnPath->get_link('http', $lpItemId);
-                $learnPath->start_current_item(); // starts time counter manually if asset
-            } else {
-                // Fallback to blank with lp context (no specific error used here).
-                $src = $blankBaseUrl;
-            }
-            break;
     }
 }
 

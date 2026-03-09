@@ -16,15 +16,20 @@ $_user = api_get_user_info();
 $this_section = SECTION_COURSES;
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
 
-$test = $_REQUEST['test'];
+$test = $_REQUEST['test'] ?? '';
 $full_file_path = $documentPath.$test;
+$fileToDelete = $full_file_path.$_user['user_id'].".t.html";
 
-my_delete($full_file_path.$_user['user_id'].".t.html");
+if (!Security::check_abs_path($fileToDelete, $documentPath.'/')) {
+    api_not_allowed(true);
+}
+
+my_delete($fileToDelete);
 
 $TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$score = $_REQUEST['score'];
+$score = isset($_REQUEST['score']) ? Security::remove_XSS($_REQUEST['score']) : '';
 $origin = api_get_origin();
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
 $lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
@@ -45,6 +50,8 @@ function save_scores($file, $score)
     global $origin;
     $TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $_user = api_get_user_info();
+    $file = Security::remove_XSS($file);
+    $score = intval($score);
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();

@@ -552,6 +552,12 @@ if ($is_allowedToEdit) {
                     // Teacher change exercise
                     break;
                 }
+
+                // Security: reject path traversal attempts (CWE-22)
+                if (!Security::check_abs_path($documentPath.$file, $documentPath.'/')) {
+                    api_not_allowed(true);
+                }
+
                 // deletes an exercise
                 $imgparams = [];
                 $imgcount = 0;

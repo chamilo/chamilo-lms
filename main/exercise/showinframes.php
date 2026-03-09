@@ -28,7 +28,14 @@ $lpViewId = isset($_REQUEST['lp_view_id']) ? $_REQUEST['lp_view_id'] : null;
 
 $user_id = api_get_user_id();
 $full_file_path = $document_path.$doc_url;
-my_delete($full_file_path.$user_id.'.t.html');
+
+// Security: reject path traversal attempts (CWE-22)
+if (!Security::check_abs_path($full_file_path, $document_path.'/')) {
+    api_not_allowed(true);
+}
+$fileToDelete = $full_file_path.$user_id.'.t.html';
+
+my_delete($fileToDelete);
 $content = ReadFileCont($full_file_path.$user_id.'.t.html');
 
 if ($content == '') {
@@ -95,7 +102,7 @@ $htmlHeadXtra[] = <<<HTML
             });
             iframe.height = maxheight;
         }
-        
+
         $(function() {
             var iframe = document.getElementById('hotpotatoe');
             iframe.onload = function () {

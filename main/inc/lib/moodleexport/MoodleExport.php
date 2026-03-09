@@ -20,6 +20,8 @@ class MoodleExport
 {
     private $course;
     private static $adminUserData = [];
+    private static int $backupCourseContextId = 0;
+    private static int $backupCourseId = 0;
 
     /**
      * Constructor to initialize the course object.
@@ -57,6 +59,11 @@ class MoodleExport
         if (!$courseInfo) {
             throw new Exception(get_lang('CourseNotFound'));
         }
+
+        // Register backup course/context ids before exporting questions and files
+        $backupCourseId = (int) ($courseInfo['real_id'] ?? 0);
+        $backupCourseContextId = $this->buildBackupCourseContextId($backupCourseId);
+        self::setBackupCourseContext($backupCourseId, $backupCourseContextId);
 
         // Generate the moodle_backup.xml
         $this->createMoodleBackupXml($tempDir, $version);
@@ -96,9 +103,28 @@ class MoodleExport
             }
         }
 
+        // Collect embedded files from quiz questions (questiontext/answers)
+        $quizFiles = [];
+        $quizExport = new QuizExport($this->course);
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'quiz') {
+                continue;
+            }
+
+            $quizData = $quizExport->getData(
+                (int) $activity['id'],
+                (int) $activity['sectionid'],
+                (int) $activity['moduleid']
+            );
+
+            if (!empty($quizData['files'])) {
+                $quizFiles = array_merge($quizFiles, $quizData['files']);
+            }
+        }
+
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
-        $filesData['files'] = array_merge($filesData['files'], $pageFiles, $resourceFiles);
+        $filesData['files'] = array_merge($filesData['files'], $pageFiles, $resourceFiles, $quizFiles);
         $fileExport->exportFiles($filesData, $tempDir);
 
         // Export sections of the course
@@ -122,39 +148,104 @@ class MoodleExport
     public function exportQuestionsXml(array $questionsData, string $exportDir): void
     {
         $quizExport = new QuizExport($this->course);
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xmlContent .= '<question_categories>'.PHP_EOL;
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xml .= '<question_categories>'.PHP_EOL;
+
+        $rootByContext = [];
+        $writtenCats = [];
 
         foreach ($questionsData as $quiz) {
-            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '1';
-            $hash = md5($categoryId.$quiz['name']);
-            if (isset($categoryHashes[$hash])) {
+            $ctx = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($ctx <= 0 || $courseId <= 0) {
                 continue;
             }
-            $categoryHashes[$hash] = true;
-            $xmlContent .= '  <question_category id="'.$categoryId.'">'.PHP_EOL;
-            $xmlContent .= '    <name>Default for '.htmlspecialchars($quiz['name'] ?? 'Unknown').'</name>'.PHP_EOL;
-            $xmlContent .= '    <contextid>'.($quiz['contextid'] ?? '0').'</contextid>'.PHP_EOL;
-            $xmlContent .= '    <contextlevel>70</contextlevel>'.PHP_EOL;
-            $xmlContent .= '    <contextinstanceid>'.($quiz['moduleid'] ?? '0').'</contextinstanceid>'.PHP_EOL;
-            $xmlContent .= '    <info>The default category for questions shared in context "'.htmlspecialchars($quiz['name'] ?? 'Unknown').'".</info>'.PHP_EOL;
-            $xmlContent .= '    <infoformat>0</infoformat>'.PHP_EOL;
-            $xmlContent .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
-            $xmlContent .= '    <parent>0</parent>'.PHP_EOL;
-            $xmlContent .= '    <sortorder>999</sortorder>'.PHP_EOL;
-            $xmlContent .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
-            $xmlContent .= '    <questions>'.PHP_EOL;
 
-            foreach ($quiz['questions'] as $question) {
-                $xmlContent .= $quizExport->exportQuestion($question);
+            if (!isset($rootByContext[$ctx])) {
+                $rootId = $this->buildRootQuestionCategoryId($ctx);
+                $rootByContext[$ctx] = $rootId;
+
+                $xml .= '  <question_category id="'.$rootId.'">'.PHP_EOL;
+                $xml .= '    <name>Top</name>'.PHP_EOL;
+                $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
+                $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+                $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+                $xml .= '    <info>Top category</info>'.PHP_EOL;
+                $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
+                $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+                $xml .= '    <parent>0</parent>'.PHP_EOL;
+                $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
+                $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+                $xml .= '    <questions></questions>'.PHP_EOL;
+                $xml .= '  </question_category>'.PHP_EOL;
             }
-
-            $xmlContent .= '    </questions>'.PHP_EOL;
-            $xmlContent .= '  </question_category>'.PHP_EOL;
         }
 
-        $xmlContent .= '</question_categories>';
-        file_put_contents($exportDir.'/questions.xml', $xmlContent);
+        foreach ($questionsData as $quiz) {
+            if (empty($quiz['questions'])) {
+                continue;
+            }
+
+            $ctx = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($ctx <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            $rootId = (int) ($rootByContext[$ctx] ?? 0);
+            if ($rootId <= 0) {
+                $rootId = $this->buildRootQuestionCategoryId($ctx);
+                $rootByContext[$ctx] = $rootId;
+            }
+
+            $catId = (int) ($quiz['question_category_id'] ?? 0);
+            if ($catId <= 0) {
+                $moduleId = (int) ($quiz['moduleid'] ?? 0);
+                $catId = 1000000000 + max(1, $moduleId);
+            }
+
+            $catKey = $ctx.':'.$catId;
+            if (isset($writtenCats[$catKey])) {
+                continue;
+            }
+            $writtenCats[$catKey] = true;
+
+            $xml .= '  <question_category id="'.$catId.'">'.PHP_EOL;
+            $xml .= '    <name>Default for '.htmlspecialchars((string) ($quiz['name'] ?? 'Quiz')).'</name>'.PHP_EOL;
+            $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
+            $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+            $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+            $xml .= '    <info>Default questions category</info>'.PHP_EOL;
+            $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
+            $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+            $xml .= '    <parent>'.$rootId.'</parent>'.PHP_EOL;
+            $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
+            $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+            $xml .= '    <questions>'.PHP_EOL;
+
+            foreach ($quiz['questions'] as $question) {
+                $xml .= $quizExport->exportQuestion($question);
+            }
+
+            $xml .= '    </questions>'.PHP_EOL;
+            $xml .= '  </question_category>'.PHP_EOL;
+        }
+
+        $xml .= '</question_categories>'.PHP_EOL;
+
+        file_put_contents($exportDir.'/questions.xml', $xml);
+    }
+
+    /**
+     * Build a stable root question category id per contextid.
+     * Must stay below Moodle int limits.
+     */
+    private function buildRootQuestionCategoryId(int $contextId): int
+    {
+        return 800000000 + max(1, $contextId);
     }
 
     /**
@@ -287,6 +378,7 @@ class MoodleExport
      */
     private function exportRootXmlFiles(string $exportDir): void
     {
+        $this->exportContextsXml($exportDir);
         $this->exportBadgesXml($exportDir);
         $this->exportCompletionXml($exportDir);
         $this->exportGradebookXml($exportDir);
@@ -300,8 +392,12 @@ class MoodleExport
         foreach ($activities as $activity) {
             if (($activity['modulename'] ?? '') === 'quiz') {
                 $quizExport = new QuizExport($this->course);
-                $quizData = $quizExport->getData((int) $activity['id'], (int) $activity['sectionid']);
-                $quizData['moduleid'] = (int) $activity['moduleid'];
+                $quizData = $quizExport->getData(
+                    (int) $activity['id'],
+                    (int) $activity['sectionid'],
+                    (int) $activity['moduleid']
+                );
+
                 $questionsData[] = $quizData;
             }
         }
@@ -348,8 +444,8 @@ class MoodleExport
         $xmlContent .= '    <original_course_shortname>'.htmlspecialchars($courseInfo['code']).'</original_course_shortname>'.PHP_EOL;
         $xmlContent .= '    <original_course_startdate>'.$courseStartDate.'</original_course_startdate>'.PHP_EOL;
         $xmlContent .= '    <original_course_enddate>'.$courseEndDate.'</original_course_enddate>'.PHP_EOL;
-        $xmlContent .= '    <original_course_contextid>'.$courseInfo['real_id'].'</original_course_contextid>'.PHP_EOL;
-        $xmlContent .= '    <original_system_contextid>'.api_get_current_access_url_id().'</original_system_contextid>'.PHP_EOL;
+        $xmlContent .= '    <original_course_contextid>'.self::getBackupCourseContextId().'</original_course_contextid>'.PHP_EOL;
+        $xmlContent .= '    <original_system_contextid>1</original_system_contextid>'.PHP_EOL;
 
         $xmlContent .= '    <details>'.PHP_EOL;
         $xmlContent .= '      <detail backup_id="'.$backupId.'">'.PHP_EOL;
@@ -1041,5 +1137,72 @@ class MoodleExport
         }
 
         return 900000000 + $lpItemId;
+    }
+
+    /**
+     * Build a stable backup course context id.
+     */
+    private function buildBackupCourseContextId(int $courseId): int
+    {
+        return 700000000 + max(1, $courseId);
+    }
+
+    /**
+     * Store backup course mapping used by question bank and question files.
+     */
+    public static function setBackupCourseContext(int $courseId, int $contextId): void
+    {
+        self::$backupCourseId = $courseId;
+        self::$backupCourseContextId = $contextId;
+    }
+
+    /**
+     * Get the exported backup course id.
+     */
+    public static function getBackupCourseId(): int
+    {
+        return self::$backupCourseId;
+    }
+
+    /**
+     * Get the exported backup course context id.
+     */
+    public static function getBackupCourseContextId(): int
+    {
+        return self::$backupCourseContextId;
+    }
+
+    /**
+     * Export minimal contexts required by Moodle restore.
+     */
+    private function exportContextsXml(string $exportDir): void
+    {
+        $courseId = self::getBackupCourseId();
+        $courseContextId = self::getBackupCourseContextId();
+
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<contexts>'.PHP_EOL;
+
+        // System context
+        $xmlContent .= '  <context id="1">'.PHP_EOL;
+        $xmlContent .= '    <contextlevel>10</contextlevel>'.PHP_EOL;
+        $xmlContent .= '    <instanceid>0</instanceid>'.PHP_EOL;
+        $xmlContent .= '    <path>/1</path>'.PHP_EOL;
+        $xmlContent .= '    <depth>1</depth>'.PHP_EOL;
+        $xmlContent .= '    <parentcontextid>0</parentcontextid>'.PHP_EOL;
+        $xmlContent .= '  </context>'.PHP_EOL;
+
+        // Course context used by question bank and question embedded files
+        $xmlContent .= '  <context id="'.$courseContextId.'">'.PHP_EOL;
+        $xmlContent .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+        $xmlContent .= '    <instanceid>'.$courseId.'</instanceid>'.PHP_EOL;
+        $xmlContent .= '    <path>/1/'.$courseContextId.'</path>'.PHP_EOL;
+        $xmlContent .= '    <depth>2</depth>'.PHP_EOL;
+        $xmlContent .= '    <parentcontextid>1</parentcontextid>'.PHP_EOL;
+        $xmlContent .= '  </context>'.PHP_EOL;
+
+        $xmlContent .= '</contexts>'.PHP_EOL;
+
+        file_put_contents($exportDir.'/contexts.xml', $xmlContent);
     }
 }

@@ -46,10 +46,13 @@ class ResourceExport extends ActivityExport
     {
         $resource = $this->course->resources[RESOURCE_DOCUMENT][$resourceId];
 
-        $name = $resource->title;
+        $name = (string) ($resource->title ?? '');
         if ($sectionId > 0) {
             $name = $this->lpItemTitle($sectionId, RESOURCE_DOCUMENT, $resourceId, $name);
         }
+
+        // Moodle stores resource.name in VARCHAR(255). Strip HTML and truncate safely.
+        $name = $this->sanitizeMoodleActivityName($name, 255);
 
         $effectiveModuleId = (int) ($moduleId ?? $resource->source_id);
         if ($effectiveModuleId <= 0) {

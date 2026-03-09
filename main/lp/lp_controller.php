@@ -395,10 +395,11 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 3:
+                        /*
                         $oLP = new aicc(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
-                        }
+                        }*/
                         break;
                     default:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());

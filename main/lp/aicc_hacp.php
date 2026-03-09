@@ -38,6 +38,8 @@ use ChamiloSession as Session;
 
 /* INIT SECTION */
 
+die('DEPRECATED');
+
 $debug = 0;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.

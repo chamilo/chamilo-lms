@@ -6,10 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities;
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleExport;
+use Chamilo\CourseBundle\Entity\CDocument;
 use DocumentManager;
 use Exception;
 use FillBlanks;
+use Symfony\Component\Uid\Uuid;
 
 use const PHP_EOL;
 
@@ -117,10 +123,11 @@ class QuizExport extends ActivityExport
 
             $contextid = $this->buildQuestionBankContextId($courseRealId);
 
-            $effectiveModuleId = (int) ($moduleId ?? ($quiz->obj->iid ?? 0));
-            if ($effectiveModuleId <= 0) {
-                $effectiveModuleId = (int) ($quiz->obj->iid ?? 0);
-            }
+            $effectiveModuleId = $this->resolveEffectiveQuizModuleId(
+                (int) ($quiz->obj->iid ?? 0),
+                $sectionId,
+                $moduleId
+            );
 
             $questionCategoryId = $this->buildQuizQuestionCategoryId($effectiveModuleId);
             $adminData = MoodleExport::getAdminUserData();
@@ -277,21 +284,29 @@ class QuizExport extends ActivityExport
             ?? $this->course->resources['Exercise_Question']
             ?? [];
 
+        $quizQuestionIds = (array) ($this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz'][$quizId]->obj->question_ids ?? []);
+
         foreach ($quizResources as $questionId => $questionData) {
-            if (!\is_object($questionData)) {
+            if (!\is_object($questionData) || !\in_array($questionId, $quizQuestionIds, true)) {
                 continue;
             }
 
-            $quizQuestionIds = (array) ($this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz'][$quizId]->obj->question_ids ?? []);
-            if (!\in_array($questionId, $quizQuestionIds, true)) {
+            $questionPayload = $this->unwrapResourcePayload($questionData);
+            if (!\is_object($questionPayload)) {
                 continue;
             }
 
+            $qtype = $this->mapQuestionType((string) ($questionPayload->quiz_type ?? $questionPayload->type ?? ''));
+            if ('unknown' === $qtype) {
+                continue;
+            }
+
+            $questionSourceId = (int) ($questionPayload->source_id ?? $questionPayload->id ?? $questionId);
             $qRes = $this->extractQuestionEmbeddedFilesAndNormalizeContent(
-                (string) ($questionData->question ?? ''),
+                (string) ($questionPayload->question ?? ''),
                 $contextId,
                 'questiontext',
-                (int) ($questionData->source_id ?? 0),
+                $questionSourceId,
                 $courseInfo,
                 $adminId
             );
@@ -301,7 +316,7 @@ class QuizExport extends ActivityExport
             }
 
             $answers = $this->getAnswersForQuestion(
-                (int) ($questionData->source_id ?? 0),
+                $questionSourceId,
                 $contextId,
                 $courseInfo,
                 $adminId,
@@ -309,12 +324,12 @@ class QuizExport extends ActivityExport
             );
 
             $questions[] = [
-                'id'                 => (int) ($questionData->source_id ?? 0),
-                'questiontext'       => $qRes['content'],
-                'qtype'              => $this->mapQuestionType((string) ($questionData->quiz_type ?? '')),
+                'id' => $questionSourceId,
+                'questiontext' => $qRes['content'],
+                'qtype' => $qtype,
                 'questioncategoryid' => $questionCategoryId,
-                'answers'            => $answers,
-                'maxmark'            => (float) ($questionData->ponderation ?? 1),
+                'answers' => $answers,
+                'maxmark' => (float) ($questionPayload->ponderation ?? 1),
             ];
         }
 
@@ -374,12 +389,18 @@ class QuizExport extends ActivityExport
                 continue;
             }
 
-            if ((int) ($questionData->source_id ?? 0) !== $questionId) {
+            $questionPayload = $this->unwrapResourcePayload($questionData);
+            if (!\is_object($questionPayload)) {
+                continue;
+            }
+
+            $questionSourceId = (int) ($questionPayload->source_id ?? $questionPayload->id ?? 0);
+            if ($questionSourceId !== $questionId) {
                 continue;
             }
 
             $answerIndex = 0;
-            foreach ((array) ($questionData->answers ?? []) as $answer) {
+            foreach ((array) ($questionPayload->answers ?? []) as $answer) {
                 $answerIndex++;
 
                 $answerId = $this->buildStableQuestionAnswerId($questionId, $answerIndex);
@@ -399,8 +420,8 @@ class QuizExport extends ActivityExport
                 }
 
                 $answers[] = [
-                    'id'       => $answerId,
-                    'text'     => $res['content'],
+                    'id' => $answerId,
+                    'text' => $res['content'],
                     'fraction' => (($answer['correct'] ?? '0') == '1') ? 100 : 0,
                     'feedback' => (string) ($answer['comment'] ?? ''),
                 ];
@@ -798,6 +819,103 @@ class QuizExport extends ActivityExport
         return 600000000 + max(1, $courseId);
     }
 
+
+    /**
+     * Resolve the effective Moodle module id for one quiz export.
+     */
+    private function resolveEffectiveQuizModuleId(int $quizId, int $sectionId, ?int $moduleId = null): int
+    {
+        $effectiveModuleId = (int) ($moduleId ?? 0);
+        if ($effectiveModuleId > 0) {
+            return $effectiveModuleId;
+        }
+
+        if ($sectionId > 0) {
+            $learnpaths =
+                $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+                ?? $this->course->resources['learnpath']
+                ?? [];
+
+            if (\is_array($learnpaths)) {
+                foreach ($learnpaths as $learnpathWrap) {
+                    $learnpath = (\is_object($learnpathWrap) && isset($learnpathWrap->obj) && \is_object($learnpathWrap->obj))
+                        ? $learnpathWrap->obj
+                        : $learnpathWrap;
+
+                    if (!\is_object($learnpath) || (int) ($learnpath->source_id ?? $learnpath->id ?? 0) !== $sectionId) {
+                        continue;
+                    }
+
+                    foreach ((array) ($learnpath->items ?? []) as $item) {
+                        if (!\is_array($item)) {
+                            continue;
+                        }
+
+                        $itemType = (string) ($item['item_type'] ?? '');
+                        $path = (string) ($item['path'] ?? '');
+                        $lpItemId = (int) ($item['id'] ?? 0);
+
+                        if ('quiz' === $itemType && ctype_digit($path) && (int) $path === $quizId && $lpItemId > 0) {
+                            return 900000000 + $lpItemId;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $quizId;
+    }
+
+    /**
+     * Extract all candidate document URLs from HTML attributes and inline CSS.
+     *
+     * @return array<int,string>
+     */
+    private function extractDocumentReferenceUrlsFromHtml(string $html): array
+    {
+        if ('' === $html) {
+            return [];
+        }
+
+        $urls = [];
+
+        if (preg_match_all("~\\b(?:src|href|poster|data)\\s*=\\s*([\"'])([^\"']+)\\1~i", $html, $matches)) {
+            foreach ($matches[2] as $url) {
+                $url = trim((string) $url);
+                if ('' !== $url) {
+                    $urls[] = $url;
+                }
+            }
+        }
+
+        if (preg_match_all("~\\bsrcset\\s*=\\s*([\"'])(.*?)\\1~is", $html, $matches)) {
+            foreach ($matches[2] as $srcset) {
+                foreach (array_map('trim', explode(',', (string) $srcset)) as $candidate) {
+                    if ('' === $candidate) {
+                        continue;
+                    }
+
+                    $tokens = preg_split('/\s+/', $candidate, -1, PREG_SPLIT_NO_EMPTY);
+                    $url = $tokens[0] ?? '';
+                    if ('' !== $url) {
+                        $urls[] = $url;
+                    }
+                }
+            }
+        }
+
+        if (preg_match_all("~url\\(([\"']?)([^)'\"]+)\\1\\)~i", $html, $matches)) {
+            foreach ($matches[2] as $url) {
+                $url = trim((string) $url);
+                if ('' !== $url) {
+                    $urls[] = $url;
+                }
+            }
+        }
+
+        return array_values(array_unique($urls));
+    }
+
     /**
      * Build a deterministic answer id for one question answer.
      */
@@ -844,57 +962,46 @@ class QuizExport extends ActivityExport
         $files = [];
         $seenDocIds = [];
 
-        $resources = DocumentManager::get_resources_from_source_html($html) ?: [];
-        foreach ($resources as $resource) {
-            $src = $resource[0] ?? null;
-            if (!\is_string($src) || '' === $src) {
+        $urls = $this->extractDocumentReferenceUrlsFromHtml($html);
+        foreach ($urls as $src) {
+            $document = $this->resolveEmbeddedQuestionDocumentData($src, $courseInfo);
+            if (null === $document) {
                 continue;
             }
 
-            if (!preg_match('#/document(?P<path>/[^"\']+)#', $src, $m)) {
+            $docId = (int) ($document['id'] ?? 0);
+            if ($docId <= 0 || isset($seenDocIds[$docId])) {
                 continue;
             }
 
-            $documentRelativePath = (string) $m['path'];
-            $docId = DocumentManager::get_document_id($courseInfo, $documentRelativePath);
-            if (empty($docId)) {
+            $docPath = (string) ($document['path'] ?? '');
+            if ('' === $docPath) {
                 continue;
             }
 
-            $docId = (int) $docId;
-            if (isset($seenDocIds[$docId])) {
-                continue;
-            }
-
-            $doc = DocumentManager::get_document_data_by_id($docId, (string) ($courseInfo['code'] ?? ''));
-            if (empty($doc) || empty($doc['path'])) {
-                continue;
-            }
-
-            $docPath = (string) $doc['path'];
-            $absolutePath = rtrim((string) $this->course->path, '/').'/document'.$docPath;
+            $absolutePath = $document['abs_path'] ?? $this->resolveQuestionDocumentAbsolutePath($docId, $docPath);
             $filename = basename($docPath);
 
             $files[] = [
-                'id'           => $this->buildQuestionEmbeddedFileId(),
-                'contenthash'  => is_file($absolutePath) ? sha1_file($absolutePath) : hash('sha1', $filename),
-                'contextid'    => $contextId,
-                'component'    => 'question',
-                'filearea'     => $fileArea,
-                'itemid'       => $itemId,
-                'filepath'     => $this->buildQuestionPluginFileDirectoryFromChamiloDocumentPath($docPath),
-                'documentpath' => 'document'.$docPath,
-                'filename'     => $filename,
-                'userid'       => $adminId,
-                'filesize'     => (int) ($doc['size'] ?? 0),
-                'mimetype'     => $fileExport->getMimeType($docPath),
-                'status'       => 0,
-                'timecreated'  => time() - 3600,
+                'id' => $this->buildQuestionEmbeddedFileId(),
+                'contenthash' => is_file((string) $absolutePath) ? sha1_file((string) $absolutePath) : hash('sha1', $filename),
+                'contextid' => $contextId,
+                'component' => 'question',
+                'filearea' => $fileArea,
+                'itemid' => $itemId,
+                'filepath' => $this->buildQuestionPluginFileDirectoryFromChamiloDocumentPath($docPath),
+                'documentpath' => 'document/'.ltrim($docPath, '/'),
+                'filename' => $filename,
+                'userid' => $adminId,
+                'filesize' => (int) ($document['size'] ?? 0),
+                'mimetype' => $fileExport->getMimeType($docPath),
+                'status' => 0,
+                'timecreated' => time() - 3600,
                 'timemodified' => time(),
-                'source'       => (string) ($doc['title'] ?? $filename),
-                'author'       => 'Unknown',
-                'license'      => 'allrightsreserved',
-                'abs_path'     => $absolutePath,
+                'source' => (string) ($document['title'] ?? $filename),
+                'author' => 'Unknown',
+                'license' => 'allrightsreserved',
+                'abs_path' => $absolutePath,
             ];
 
             $seenDocIds[$docId] = true;
@@ -998,11 +1105,12 @@ class QuizExport extends ActivityExport
             return $url;
         }
 
-        if (preg_match('#/(?:courses/[^/]+/)?document(?P<path>/[^?\'" )]+)#i', $url, $m)) {
-            return '@@PLUGINFILE@@'.$this->buildQuestionPluginFilePathFromChamiloDocumentPath((string) $m['path']);
+        $documentPath = $this->resolveQuestionDocumentPathFromUrl($url);
+        if (null === $documentPath || '' === trim($documentPath)) {
+            return $url;
         }
 
-        return $url;
+        return '@@PLUGINFILE@@'.$this->buildQuestionPluginFilePathFromChamiloDocumentPath($documentPath);
     }
 
     /**
@@ -1034,6 +1142,257 @@ class QuizExport extends ActivityExport
         $relative = ltrim(str_replace('\\', '/', $relative), '/');
 
         return '/'.$relative;
+    }
+
+
+    /**
+     * Resolve a logical question document path from legacy or modern resource URLs.
+     */
+    private function resolveQuestionDocumentPathFromUrl(string $url): ?string
+    {
+        $url = trim($url);
+        if ('' === $url) {
+            return null;
+        }
+
+        $uuid = $this->extractQuestionResourceUuidFromUrl($url);
+        if (null !== $uuid) {
+            $doc = $this->findQuestionDocumentByResourceUuid($uuid);
+            if ($doc instanceof CDocument) {
+                $courseCode = (string) ($this->course->code ?? $this->course->info['code'] ?? '');
+                if ('' !== $courseCode) {
+                    $docData = DocumentManager::get_document_data_by_id((int) $doc->getIid(), $courseCode);
+                    if (\is_array($docData) && !empty($docData['path'])) {
+                        return '/'.ltrim((string) $docData['path'], '/');
+                    }
+                }
+
+                $resourceNode = $doc->getResourceNode();
+                if ($resourceNode instanceof ResourceNode) {
+                    try {
+                        $rawPath = (string) ($resourceNode->getPath() ?? '');
+                        if ('' !== $rawPath) {
+                            $displayPath = (string) $resourceNode->convertPathForDisplay($rawPath);
+                            $displayPath = preg_replace('~^/?Documents/?~i', '', $displayPath) ?? $displayPath;
+                            $displayPath = trim($displayPath, '/');
+                            if ('' !== $displayPath) {
+                                return '/'.$displayPath;
+                            }
+                        }
+                    } catch (\Throwable) {
+                        // Ignore and continue with URL parsing fallback.
+                    }
+                }
+            }
+        }
+
+        $decoded = urldecode($url);
+        $path = (string) (parse_url($decoded, PHP_URL_PATH) ?? '');
+        if ('' === $path) {
+            $path = $decoded;
+        }
+
+        if (preg_match('#/(?:courses/[^/]+/)?document(?P<docpath>/[^?\'" )]+)#i', $path, $m)) {
+            return '/'.ltrim((string) $m['docpath'], '/');
+        }
+
+        if (preg_match('#^/?document(?P<docpath>/[^?\'" )]+)$#i', $path, $m)) {
+            return '/'.ltrim((string) $m['docpath'], '/');
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve embedded question document data from either a legacy document URL
+     * or a modern /r/.../{uuid}/view URL.
+     *
+     * @return array<string,mixed>|null
+     */
+    private function resolveEmbeddedQuestionDocumentData(string $url, array $courseInfo): ?array
+    {
+        $courseCode = (string) ($courseInfo['code'] ?? $this->course->code ?? $this->course->info['code'] ?? '');
+        if ('' === $courseCode) {
+            return null;
+        }
+
+        $uuid = $this->extractQuestionResourceUuidFromUrl($url);
+        if (null !== $uuid) {
+            $doc = $this->findQuestionDocumentByResourceUuid($uuid);
+            if ($doc instanceof CDocument) {
+                $documentPath = null;
+
+                $docData = DocumentManager::get_document_data_by_id((int) $doc->getIid(), $courseCode);
+                if (\is_array($docData) && !empty($docData['path'])) {
+                    $documentPath = (string) $docData['path'];
+                }
+
+                if ((null === $documentPath || '' === trim($documentPath)) && $doc->getResourceNode()) {
+                    try {
+                        $resourceNode = $doc->getResourceNode();
+                        $rawPath = (string) ($resourceNode?->getPath() ?? '');
+                        if ('' !== $rawPath) {
+                            $displayPath = (string) $resourceNode->convertPathForDisplay($rawPath);
+                            $displayPath = preg_replace('~^/?Documents/?~i', '', $displayPath) ?? $displayPath;
+                            $displayPath = trim($displayPath, '/');
+                            if ('' !== $displayPath) {
+                                $documentPath = '/'.$displayPath;
+                            }
+                        }
+                    } catch (\Throwable) {
+                        // Ignore and continue with fallback logic.
+                    }
+                }
+
+                if (null !== $documentPath && '' !== trim($documentPath)) {
+                    $absolutePath = $this->resolveQuestionDocumentAbsolutePath((int) $doc->getIid(), $documentPath);
+                    $size = 0;
+                    $node = $doc->getResourceNode();
+                    if ($node) {
+                        $files = $node->getResourceFiles();
+                        if ($files && $files->count() > 0) {
+                            $first = $files->first();
+                            if ($first instanceof ResourceFile) {
+                                $size = (int) $first->getSize();
+                            }
+                        }
+                    }
+
+                    return [
+                        'id' => (int) $doc->getIid(),
+                        'path' => $documentPath,
+                        'title' => method_exists($doc, 'getTitle') ? (string) $doc->getTitle() : basename($documentPath),
+                        'size' => $size,
+                        'abs_path' => $absolutePath,
+                    ];
+                }
+            }
+        }
+
+        $documentPath = $this->resolveQuestionDocumentPathFromUrl($url);
+        if (null === $documentPath || '' === trim($documentPath)) {
+            return null;
+        }
+
+        $docId = DocumentManager::get_document_id($courseInfo, $documentPath);
+        if (empty($docId)) {
+            $docId = DocumentManager::get_document_id($courseInfo, ltrim($documentPath, '/'));
+        }
+
+        if (empty($docId)) {
+            return null;
+        }
+
+        $document = DocumentManager::get_document_data_by_id((int) $docId, $courseCode);
+        if (empty($document) || empty($document['path'])) {
+            return null;
+        }
+
+        $document['abs_path'] = $this->resolveQuestionDocumentAbsolutePath((int) $docId, (string) $document['path']);
+
+        return $document;
+    }
+
+    /**
+     * Resolve the absolute document path for embedded quiz media.
+     */
+    private function resolveQuestionDocumentAbsolutePath(int $documentId, string $documentPath): ?string
+    {
+        if ($documentId > 0 && class_exists(Container::class)) {
+            try {
+                $repo = Container::getDocumentRepository();
+                $doc = $repo->findOneBy(['iid' => $documentId]);
+                if ($doc instanceof CDocument) {
+                    $absPath = $repo->getAbsolutePathForDocument($doc);
+                    if (is_file((string) $absPath)) {
+                        return (string) $absPath;
+                    }
+                }
+            } catch (\Throwable) {
+                // Ignore and continue with fallback.
+            }
+        }
+
+        $fallback = rtrim((string) $this->course->path, '/').'/document/'.ltrim($documentPath, '/');
+
+        return is_file($fallback) ? $fallback : null;
+    }
+
+    /**
+     * Extract a ResourceNode UUID from a modern resource URL.
+     */
+    private function extractQuestionResourceUuidFromUrl(string $url): ?string
+    {
+        if ('' === $url) {
+            return null;
+        }
+
+        $decoded = urldecode($url);
+        $path = (string) (parse_url($decoded, PHP_URL_PATH) ?? '');
+        if ('' === $path) {
+            $path = $decoded;
+        }
+
+        $path = ltrim($path, '/');
+
+        if (preg_match('#^r/[^/]+/[^/]+/(?P<uuid>[A-Za-z0-9-]{16,64})/(?:view|download|link)/?$#i', $path, $matches)) {
+            return (string) $matches['uuid'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve a CDocument from a ResourceNode UUID.
+     */
+    private function findQuestionDocumentByResourceUuid(string $uuid): ?CDocument
+    {
+        if ('' === trim($uuid) || !class_exists(Container::class) || null === Container::$container) {
+            return null;
+        }
+
+        try {
+            /** @var ResourceNodeRepository $resourceNodeRepo */
+            $resourceNodeRepo = Container::$container->get(ResourceNodeRepository::class);
+
+            $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => $uuid]);
+            if (null === $resourceNode && class_exists(Uuid::class)) {
+                try {
+                    $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+                } catch (\Throwable) {
+                    $resourceNode = null;
+                }
+            }
+
+            if (null === $resourceNode) {
+                return null;
+            }
+
+            $docRepo = Container::getDocumentRepository();
+            $doc = $docRepo->findOneBy(['resourceNode' => $resourceNode]);
+
+            return $doc instanceof CDocument ? $doc : null;
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Unwrap wrapped legacy payloads.
+     *
+     * @param mixed $resource
+     */
+    private function unwrapResourcePayload($resource): ?object
+    {
+        if (!\is_object($resource)) {
+            return null;
+        }
+
+        if (isset($resource->obj) && \is_object($resource->obj)) {
+            return $resource->obj;
+        }
+
+        return $resource;
     }
 
     /**

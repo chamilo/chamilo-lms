@@ -775,7 +775,7 @@ class MoodleExport
                 continue;
             }
 
-            $sectionId = (int) ($lp->source_id ?? 0);
+            $sectionId = (int) ($lp->source_id ?? $lp->id ?? 0);
             if ($sectionId <= 0 || isset($seenSectionIds[$sectionId])) {
                 continue;
             }
@@ -849,7 +849,7 @@ class MoodleExport
                 continue;
             }
 
-            $sectionId = (int) ($lp->source_id ?? 0);
+            $sectionId = (int) ($lp->source_id ?? $lp->id ?? 0);
             if ($sectionId <= 0) {
                 continue;
             }

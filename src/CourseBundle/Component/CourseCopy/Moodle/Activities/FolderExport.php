@@ -10,58 +10,54 @@ use const PATHINFO_EXTENSION;
 use const PHP_EOL;
 
 /**
- * Handles the export of folders within a course.
+ * Handles the export of folder activities within a course.
  */
 class FolderExport extends ActivityExport
 {
     /**
      * Export a folder to the specified directory.
      *
-     * @param int    $activityId the ID of the folder (0 means virtual "Documents" root)
-     * @param string $exportDir  destination base directory of the export
-     * @param int    $moduleId   module id used to name the activity folder
-     * @param int    $sectionId  moodle section id where the activity will live
+     * folderId = 0 or DOCS_MODULE_ID means the virtual root "Documents" folder.
      */
-    public function export($activityId, $exportDir, $moduleId, $sectionId): void
+    public function export(int $activityId, string $exportDir, int $moduleId, int $sectionId): void
     {
-        @error_log('[FolderExport::export] Start. activityId='.(int)$activityId.' moduleId='.(int)$moduleId.' sectionId='.(int)$sectionId.' exportDir='.$exportDir);
-
-        $folderDir = $this->prepareActivityDirectory($exportDir, 'folder', (int) $moduleId);
+        $normalizedActivityId = $activityId === self::DOCS_MODULE_ID ? 0 : $activityId;
+        $folderDir = $this->prepareActivityDirectory($exportDir, 'folder', $moduleId);
         @error_log('[FolderExport::export] Activity dir='.$folderDir);
 
-        $folderData = $this->getData((int) $activityId, (int) $sectionId);
+        $folderData = $this->getData($normalizedActivityId, $sectionId, $moduleId);
         if (!$folderData) {
-            @error_log('[FolderExport::export] ERROR: getData returned null for activityId='.$activityId);
+            @error_log('[FolderExport::export] Error: getData returned null for activityId='.$activityId);
             return;
         }
 
-        $refs = $this->getFilesForFolder((int) $activityId);
-        @error_log('[FolderExport::export] inforef files='.count($refs['files']).' users='.count($refs['users']));
-
+        $references = $this->getFilesForFolder($normalizedActivityId);
         $this->createFolderXml($folderData, $folderDir);
         $this->createModuleXml($folderData, $folderDir);
         $this->createGradesXml($folderData, $folderDir);
         $this->createFiltersXml($folderData, $folderDir);
         $this->createGradeHistoryXml($folderData, $folderDir);
-        $this->createInforefXml($refs, $folderDir);
+        $this->createInforefXml($references, $folderDir);
         $this->createRolesXml($folderData, $folderDir);
         $this->createCommentsXml($folderData, $folderDir);
         $this->createCalendarXml($folderData, $folderDir);
-
-        @error_log('[FolderExport::export] Done. folderName='.$folderData['name'].' activityDir='.$folderDir);
     }
 
     /**
      * Build the data structure consumed by the XML builders.
      */
-    public function getData(int $folderId, int $sectionId): ?array
+    public function getData(int $folderId, int $sectionId, ?int $moduleId = null): ?array
     {
-        if (0 === $folderId) {
+        if (0 === $folderId || self::DOCS_MODULE_ID === $folderId) {
+            $effectiveModuleId = ($moduleId && $moduleId > 0)
+                ? $moduleId
+                : self::DOCS_MODULE_ID;
+
             return [
-                'id' => ActivityExport::DOCS_MODULE_ID,
-                'moduleid' => ActivityExport::DOCS_MODULE_ID,
+                'id' => self::DOCS_MODULE_ID,
+                'moduleid' => $effectiveModuleId,
                 'modulename' => 'folder',
-                'contextid' => ActivityExport::DOCS_MODULE_ID,
+                'contextid' => $effectiveModuleId,
                 'name' => 'Documents',
                 'sectionid' => $sectionId,
                 'sectionnumber' => 0,
@@ -71,17 +67,23 @@ class FolderExport extends ActivityExport
             ];
         }
 
-        $folder = $this->course->resources[RESOURCE_DOCUMENT][$folderId] ?? null;
+        $documents = $this->getDocumentBucket();
+        $folder = $documents[$folderId] ?? null;
+
         if (null === $folder) {
             return null;
         }
 
+        $effectiveModuleId = ($moduleId && $moduleId > 0)
+            ? $moduleId
+            : (int) ($folder->source_id ?? $folderId);
+
         return [
             'id' => $folderId,
-            'moduleid' => (int) $folder->source_id,
+            'moduleid' => $effectiveModuleId,
             'modulename' => 'folder',
-            'contextid' => (int) $folder->source_id,
-            'name' => (string) $folder->title,
+            'contextid' => $effectiveModuleId,
+            'name' => (string) ($folder->title ?? 'Folder'),
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
             'timemodified' => time(),
@@ -115,43 +117,163 @@ class FolderExport extends ActivityExport
 
     /**
      * List files included under the exported folder.
-     * For folderId=0 we include all root-level documents (Documents root).
+     *
+     * For the virtual root folder, include every file document in the course document tree.
+     * For a real folder document, include every file under that folder path.
      *
      * @return array{users: array<int>, files: array<int,array<string,int|string>>}
      */
     private function getFilesForFolder(int $folderId): array
     {
-        @error_log('[FolderExport::getFilesForFolder] Start. folderId='.$folderId);
         $files = [];
+        $documents = $this->getDocumentBucket();
 
-        if (0 === $folderId) {
-            $docBucket = $this->course->resources[RESOURCE_DOCUMENT] ?? [];
-            foreach ($docBucket as $doc) {
-                if (($doc->file_type ?? '') === 'file') {
-                    $files[] = [
-                        'id' => (int) $doc->source_id,
-                        'contenthash' => hash('sha1', basename((string) $doc->path)),
-                        'filename' => basename((string) $doc->path),
-                        'filepath' => '/', // <- CRÍTICO para Folder
-                        'filesize' => (int) $doc->size,
-                        'mimetype' => $this->getMimeType((string) $doc->path),
-                    ];
+        if (0 === $folderId || self::DOCS_MODULE_ID === $folderId) {
+            foreach ($documents as $document) {
+                if (($document->file_type ?? '') !== 'file') {
+                    continue;
                 }
+
+                $documentPath = (string) ($document->path ?? '');
+
+                $files[] = [
+                    'id' => (int) ($document->source_id ?? 0),
+                    'contenthash' => $this->buildContentHashForDocument($document),
+                    'filename' => basename($documentPath),
+                    'filepath' => $this->buildFolderFilepathFromDocumentPath($documentPath),
+                    'filesize' => (int) ($document->size ?? 0),
+                    'mimetype' => $this->getMimeType($documentPath),
+                ];
             }
-            @error_log('[FolderExport::getFilesForFolder] Collected root docs='.count($files));
+
+            return [
+                'users' => [],
+                'files' => $files,
+            ];
         }
 
-        @error_log('[FolderExport::getFilesForFolder] Done. Returning files='.count($files));
-        return ['users' => [], 'files' => $files];
+        $folder = $documents[$folderId] ?? null;
+        $folderPath = rtrim((string) ($folder->path ?? ''), '/');
+
+        if ('' === $folderPath) {
+            return [
+                'users' => [],
+                'files' => [],
+            ];
+        }
+
+        foreach ($documents as $document) {
+            if (($document->file_type ?? '') !== 'file') {
+                continue;
+            }
+
+            $documentPath = (string) ($document->path ?? '');
+            if (strpos($documentPath, $folderPath.'/') !== 0) {
+                continue;
+            }
+
+            $files[] = [
+                'id' => (int) ($document->source_id ?? 0),
+                'contenthash' => $this->buildContentHashForDocument($document),
+                'filename' => basename($documentPath),
+                'filepath' => $this->buildFolderFilepathFromDocumentPath($documentPath),
+                'filesize' => (int) ($document->size ?? 0),
+                'mimetype' => $this->getMimeType($documentPath),
+            ];
+        }
+
+        return [
+            'users' => [],
+            'files' => $files,
+        ];
     }
 
     /**
-     * Basic mimetype resolver for common extensions.
+     * Resolve the document bucket defensively.
+     *
+     * @return array<int,mixed>
+     */
+    private function getDocumentBucket(): array
+    {
+        $documents =
+            $this->course->resources[defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document']
+            ?? $this->course->resources['document']
+            ?? [];
+
+        return is_array($documents) ? $documents : [];
+    }
+
+    /**
+     * Build the folder filepath as exported in files.xml.
+     */
+    private function buildFolderFilepathFromDocumentPath(string $documentPath): string
+    {
+        $normalizedPath = $this->stripChamiloDocumentPrefix($documentPath);
+        $normalizedPath = ltrim(str_replace('\\', '/', $normalizedPath), '/');
+
+        $relativeDir = dirname($normalizedPath);
+        if ('.' === $relativeDir || '/' === $relativeDir) {
+            return '/';
+        }
+
+        return '/'.trim($relativeDir, '/').'/';
+    }
+
+    /**
+     * Remove a leading "document/" prefix when present.
+     */
+    private function stripChamiloDocumentPrefix(string $path): string
+    {
+        $path = str_replace('\\', '/', trim($path));
+        $path = preg_replace('#^/?document/#', '', $path);
+
+        return (string) $path;
+    }
+
+    /**
+     * Build a contenthash compatible with the current exported file set.
+     * Prefer the real file SHA1 when the file exists.
+     */
+    private function buildContentHashForDocument(object $document): string
+    {
+        $documentPath = (string) ($document->path ?? '');
+
+        foreach ($this->buildAbsoluteDocumentCandidates($documentPath) as $absolutePath) {
+            if (is_file($absolutePath)) {
+                return (string) sha1_file($absolutePath);
+            }
+        }
+
+        return hash('sha1', ltrim(str_replace('\\', '/', $documentPath), '/'));
+    }
+
+    /**
+     * Try a few possible absolute paths for the same logical course document.
+     *
+     * @return array<int,string>
+     */
+    private function buildAbsoluteDocumentCandidates(string $documentPath): array
+    {
+        $basePath = rtrim((string) ($this->course->path ?? ''), '/');
+        $normalized = ltrim(str_replace('\\', '/', $documentPath), '/');
+
+        $candidates = [
+            $basePath.'/'.$normalized,
+            $basePath.'/document/'.$normalized,
+            $basePath.$documentPath,
+        ];
+
+        return array_values(array_unique(array_filter($candidates)));
+    }
+
+    /**
+     * Basic MIME type resolver for common extensions.
      */
     private function getMimeType(string $filename): string
     {
-        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
-        $mimetypes = [
+        $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+        $mimeTypes = [
             'pdf' => 'application/pdf',
             'png' => 'image/png',
             'jpg' => 'image/jpeg',
@@ -160,8 +282,9 @@ class FolderExport extends ActivityExport
             'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'txt' => 'text/plain',
             'html' => 'text/html',
+            'htm' => 'text/html',
         ];
 
-        return $mimetypes[$ext] ?? 'application/octet-stream';
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
 }

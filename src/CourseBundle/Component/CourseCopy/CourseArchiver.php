@@ -386,6 +386,19 @@ class CourseArchiver
         }
         $zip->close();
 
+        // Preserve a local copy of the uploaded zip inside the extracted temp directory.
+        // This allows later fallback extraction of individual assets even if the original
+        // uploaded zip gets deleted after readCourse().
+        $preservedZipPath = $tmp . '__source_backup.zip';
+        $preservedZipOk = @copy($zipPath, $preservedZipPath);
+
+        self::dlog('readCourse.preserve_zip', [
+            'originalZip' => $zipPath,
+            'preservedZipPath' => $preservedZipPath,
+            'copied' => $preservedZipOk,
+            'preservedExists' => is_file($preservedZipPath),
+        ]);
+
         // 2) Read course_info.dat (search nested if necessary)
         $courseInfoDat = $tmp . 'course_info.dat';
         if (!is_file($courseInfoDat)) {
@@ -500,16 +513,31 @@ class CourseArchiver
             throw new RuntimeException('Could not unserialize legacy course');
         }
 
-        // 7) Normalize numeric identifiers post-unserialize (safe)
+        // 7) Normalize numeric identifiers post-unserialize
         self::normalizeIds($course);
 
-        // 8) Optionally delete uploaded file (compat with v1)
+        // 8) Expose extraction metadata for downstream restore helpers
+        $effectiveZipPath = is_file($preservedZipPath) ? $preservedZipPath : $zipPath;
+
+        if (!isset($course->resources) || !is_array($course->resources)) {
+            $course->resources = [];
+        }
+        if (!isset($course->resources['__meta']) || !is_array($course->resources['__meta'])) {
+            $course->resources['__meta'] = [];
+        }
+
+        $course->resources['__meta']['archiver_root'] = rtrim($tmp, '/');
+        $course->resources['__meta']['backup_zip_path'] = $effectiveZipPath;
+        $course->resources['__meta']['course_info_dat'] = $courseInfoDat;
+
+        $course->backup_path = rtrim($tmp, '/');
+        $course->backup_zip_path = $effectiveZipPath;
+
+        // 9) Optionally delete the original uploaded zip
         if ($delete && is_file($zipPath)) {
             @unlink($zipPath);
             self::dlog('readCourse.deleted_zip', ['path' => $zipPath]);
         }
-
-        self::dlog('readCourse.end', ['ok' => true]);
 
         // Keep temp dir; some restore flows need extracted files
         return $course;

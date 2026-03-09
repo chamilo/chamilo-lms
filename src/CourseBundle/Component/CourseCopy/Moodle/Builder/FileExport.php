@@ -10,14 +10,22 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Entity\CDocument;
 use DocumentManager;
-use Exception;
 
-use const PATHINFO_EXTENSION;
 use const PHP_EOL;
+use const PATHINFO_EXTENSION;
 
 /**
- * Class FileExport.
- * Handles the export of files and metadata from Moodle courses.
+ * Handles the export of files and metadata for Moodle backup.
+ *
+ * Important:
+ * - This class must preserve the original owner of each file entry.
+ * - It must NOT normalize everything to mod_folder.
+ * - Real ownership examples:
+ *   - Documents tree          => mod_folder / content
+ *   - Page embedded files     => mod_page / content
+ *   - Resource main file      => mod_resource / content
+ *   - Question embedded files => question / questiontext|answer
+ *   - Assign attachments      => mod_assign / introattachment
  */
 class FileExport
 {
@@ -25,18 +33,6 @@ class FileExport
      * @var object
      */
     private $course;
-
-    /**
-     * Module context id for the mod_folder activity inside the backup.
-     * Default kept for safety; MoodleExport must override via setModuleContextId().
-     */
-    private int $moduleContextId = 1000000;
-
-    /**
-     * Keep legacy folder-children traversal but disabled by default to avoid duplicates.
-     * You can re-enable via setUseFolderTraversal(true) without losing this code path.
-     */
-    private bool $useFolderTraversal = false;
 
     /**
      * Constructor to initialize course data.
@@ -49,133 +45,146 @@ class FileExport
     }
 
     /**
-     * Allow caller (MoodleExport) to set the real context id of the created mod_folder activity.
-     */
-    public function setModuleContextId(int $ctx): void
-    {
-        // INFO: caller should pass the module's context placeholder id from activities/folder_* (e.g. 1000000)
-        $this->moduleContextId = $ctx;
-        @error_log('[FileExport] Module context id set to '.$this->moduleContextId);
-    }
-
-    /**
-     * Keep legacy folder-children traversal available (OFF by default).
-     * Turning it on may create duplicates, but dedupe will catch them.
-     */
-    public function setUseFolderTraversal(bool $on): void
-    {
-        $this->useFolderTraversal = $on;
-        @error_log('[FileExport] Use folder traversal = '.($on ? 'true' : 'false'));
-    }
-
-    /**
      * Export files and metadata from files.xml to the specified directory.
+     *
+     * This method:
+     * - keeps logical file entries separated by ownership
+     * - deduplicates only exact duplicate logical rows
+     * - copies physical payloads only once per contenthash
      */
     public function exportFiles(array $filesData, string $exportDir): void
     {
-        @error_log('[FileExport::exportFiles] Start. exportDir='.$exportDir.' inputCount='.(int)count($filesData['files'] ?? []));
+        @error_log('[FileExport::exportFiles] Start. exportDir='.$exportDir.' inputCount='.(int) count($filesData['files'] ?? []));
 
         $filesDir = $exportDir.'/files';
         if (!is_dir($filesDir)) {
             mkdir($filesDir, api_get_permissions_for_new_directories(), true);
             @error_log('[FileExport::exportFiles] Created dir '.$filesDir);
         }
+
         $this->createPlaceholderFile($filesDir);
 
-        $unique = ['files' => []];
-        $seenKeys = [];
-
-        $dedupSkipped = 0;
-        $badPaths = 0;
+        $uniqueRows = ['files' => []];
+        $seenLogicalKeys = [];
+        $logicalDuplicates = 0;
 
         foreach (($filesData['files'] ?? []) as $idx => $file) {
-            // Normalize every row to what Moodle restore expects for mod_folder
-            $file = $this->normalizeRow($file);
+            $file = $this->normalizeFileEntry($file);
 
-            $ch   = (string) ($file['contenthash'] ?? '');
-            $path = $this->ensureTrailingSlash((string) ($file['filepath'] ?? '/'));
-            $name = (string) ($file['filename'] ?? '');
+            $contenthash = (string) ($file['contenthash'] ?? '');
+            $filename = (string) ($file['filename'] ?? '');
 
-            if ('' === $ch || '' === $name) {
-                @error_log('[FileExport::exportFiles] WARNING: Skipping entry idx='.$idx.' (missing contenthash or filename).');
+            if ('' === $contenthash || '' === $filename) {
+                @error_log('[FileExport::exportFiles] Skip invalid row idx='.$idx.' (missing contenthash or filename)');
                 continue;
             }
 
-            // Dedupe across sources (do NOT include component/filearea/contextid to actually remove duplicates)
-            $dedupeKey = implode('|', [$ch, $path, $name]);
-            if (isset($seenKeys[$dedupeKey])) {
-                $dedupSkipped++;
+            // Exact logical dedupe only. Ownership must remain part of the key.
+            $logicalKey = implode('|', [
+                (string) ($file['contenthash'] ?? ''),
+                (string) ($file['contextid'] ?? ''),
+                (string) ($file['component'] ?? ''),
+                (string) ($file['filearea'] ?? ''),
+                (string) ($file['itemid'] ?? ''),
+                (string) ($file['filepath'] ?? ''),
+                (string) ($file['filename'] ?? ''),
+            ]);
+
+            if (isset($seenLogicalKeys[$logicalKey])) {
+                $logicalDuplicates++;
                 continue;
             }
-            $seenKeys[$dedupeKey] = true;
 
-            // register for inforef resolution
+            $seenLogicalKeys[$logicalKey] = true;
+            $uniqueRows['files'][] = $file;
+
+            // Register for inforef resolution by contenthash/file id when needed
             FileIndex::register($file);
-
-            if (strpos($path, '/Documents/') === 0) {
-                $badPaths++;
-                @error_log('[FileExport::exportFiles] WARNING: filepath starts with /Documents/ (Moodle folder expects /). filepath='.$path.' filename='.$name);
-            }
-
-            $file['filepath'] = $path;
-            $unique['files'][] = $file;
         }
 
-        @error_log('[FileExport::exportFiles] After dedupe: '.count($unique['files']).' file(s). dedupSkipped='.$dedupSkipped.' badPathsDetected='.$badPaths);
-
+        // Copy physical payloads only once per contenthash
+        $copiedHashes = [];
         $copied = 0;
-        foreach ($unique['files'] as $f) {
-            $ch = (string) $f['contenthash'];
-            $subdir = FileIndex::resolveSubdirByContenthash($ch);
-            $this->copyFileToExportDir($f, $filesDir, $subdir);
+        foreach ($uniqueRows['files'] as $file) {
+            $contenthash = (string) ($file['contenthash'] ?? '');
+            if (isset($copiedHashes[$contenthash])) {
+                continue;
+            }
+
+            $subdir = FileIndex::resolveSubdirByContenthash($contenthash);
+            $this->copyFileToExportDir($file, $filesDir, $subdir);
+            $copiedHashes[$contenthash] = true;
             $copied++;
         }
-        @error_log('[FileExport::exportFiles] Copied payloads: '.$copied);
 
-        $this->createFilesXml($unique, $exportDir);
+        @error_log('[FileExport::exportFiles] Copied payloads='.$copied);
+
+        $this->createFilesXml($uniqueRows, $exportDir);
+
         @error_log('[FileExport::exportFiles] Done.');
     }
 
     /**
-     * Get file data from course resources. This is for testing purposes.
+     * Get file data from course resources.
+     *
+     * Returned rows must already contain the correct logical owner.
      *
      * @return array<string,mixed>
      */
     public function getFilesData(): array
     {
         $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'] ?? 0;
+        $adminId = (int) ($adminData['id'] ?? 0);
 
         $filesData = ['files' => []];
 
-        // Defensive read: documents may be missing
-        $docResources = $this->course->resources[RESOURCE_DOCUMENT] ?? [];
+        $docResources =
+            $this->course->resources[\defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document']
+            ?? $this->course->resources['document']
+            ?? [];
+
         if (!\is_array($docResources)) {
             $docResources = [];
         }
 
         foreach ($docResources as $document) {
+            if (!\is_object($document)) {
+                continue;
+            }
             $filesData = $this->processDocument($filesData, $document);
         }
 
-        // Defensive read: works may be missing (avoids "Undefined array key 'work'")
-        $workResources = $this->course->resources[RESOURCE_WORK] ?? [];
+        $workResources =
+            $this->course->resources[\defined('RESOURCE_WORK') ? RESOURCE_WORK : 'work']
+            ?? $this->course->resources['work']
+            ?? [];
+
         if (!\is_array($workResources)) {
             $workResources = [];
         }
 
         foreach ($workResources as $work) {
-            // getAllDocumentToWork might not exist in some installs; guard it
-            $workFiles = \function_exists('getAllDocumentToWork')
-                ? (getAllDocumentToWork($work->params['id'] ?? 0, $this->course->info['real_id'] ?? 0) ?: [])
-                : [];
+            if (!\is_object($work)) {
+                continue;
+            }
 
+            if (!\function_exists('getAllDocumentToWork')) {
+                continue;
+            }
+
+            $workId = (int) ($work->params['id'] ?? 0);
+            $courseRealId = (int) ($this->course->info['real_id'] ?? 0);
+
+            if ($workId <= 0 || $courseRealId <= 0) {
+                continue;
+            }
+
+            $workFiles = getAllDocumentToWork($workId, $courseRealId) ?: [];
             if (!\is_array($workFiles) || empty($workFiles)) {
                 continue;
             }
 
             foreach ($workFiles as $file) {
-                // Safely fetch doc data
                 $docId = (int) ($file['document_id'] ?? 0);
                 if ($docId <= 0) {
                     continue;
@@ -190,29 +199,42 @@ class FileExport
                     continue;
                 }
 
-                $row = [
-                    'id'           => $docId,
-                    'contenthash'  => hash('sha1', basename($docData['path'])),
-                    'contextid'    => (int) ($this->course->info['real_id'] ?? 0), // will be normalized to moduleContextId
-                    'component'    => 'mod_assign', // will be normalized to mod_folder
-                    'filearea'     => 'introattachment', // will be normalized to content
-                    'itemid'       => (int) ($work->params['id'] ?? 0), // will be normalized to 0
-                    'filepath'     => '/Documents/', // will be normalized
-                    'documentpath' => 'document/'.$docData['path'],
-                    'filename'     => basename($docData['path']),
+                $absPath = null;
+                if (!empty($docData['id']) && class_exists(Container::class)) {
+                    try {
+                        $repo = Container::getDocumentRepository();
+                        $doc = $repo->findOneBy(['iid' => (int) $docData['id']]);
+                        if ($doc instanceof CDocument) {
+                            $absPath = $repo->getAbsolutePathForDocument($doc);
+                        }
+                    } catch (\Throwable $e) {
+                        @error_log('[FileExport::getFilesData] Assign attachment abs_path error: '.$e->getMessage());
+                    }
+                }
+
+                $filesData['files'][] = $this->normalizeFileEntry([
+                    'id'           => (int) $docId,
+                    'contenthash'  => is_file((string) $absPath)
+                        ? sha1_file((string) $absPath)
+                        : hash('sha1', basename((string) $docData['path'])),
+                    'contextid'    => (int) ($this->course->info['real_id'] ?? 0),
+                    'component'    => 'mod_assign',
+                    'filearea'     => 'introattachment',
+                    'itemid'       => $workId,
+                    'filepath'     => '/',
+                    'documentpath' => 'document'.$docData['path'],
+                    'filename'     => basename((string) $docData['path']),
                     'userid'       => $adminId,
                     'filesize'     => (int) ($docData['size'] ?? 0),
-                    'mimetype'     => $this->getMimeType($docData['path']),
+                    'mimetype'     => $this->getMimeType((string) $docData['path']),
                     'status'       => 0,
                     'timecreated'  => time() - 3600,
                     'timemodified' => time(),
                     'source'       => (string) ($docData['title'] ?? ''),
                     'author'       => 'Unknown',
                     'license'      => 'allrightsreserved',
-                ];
-
-                // Normalize to folder activity before pushing
-                $filesData['files'][] = $this->normalizeRow($row);
+                    'abs_path'     => $absPath,
+                ]);
             }
         }
 
@@ -229,58 +251,45 @@ class FileExport
     }
 
     /**
-     * Copy a file to the export directory using its contenthash.
+     * Copy a file payload to the export directory using its contenthash.
      *
-     * @param array<string,mixed> $file
+     * Payload copy is physical dedupe only; logical files.xml entries are preserved.
      */
     private function copyFileToExportDir(array $file, string $filesDir, ?string $precomputedSubdir = null): void
     {
-        $id = (int)($file['id'] ?? 0);
-        $fp = (string)($file['filepath'] ?? '.');
-        if ($fp === '.') {
-            @error_log('[FileExport::copyFileToExportDir] Skipping entry with filepath dot. id='.$id);
+        $contenthash = (string) ($file['contenthash'] ?? '');
+        if ('' === $contenthash) {
             return;
         }
 
-        $contenthash = (string)($file['contenthash'] ?? '');
-        if ($contenthash === '') {
-            @error_log('[FileExport::copyFileToExportDir] WARN missing contenthash, skipping. id='.$id);
-            return;
-        }
-
-        // Moodle-style files storage: first two chars as bucket dir.
         $subDir = $precomputedSubdir ?: substr($contenthash, 0, 2);
-        if ($subDir === '' || $subDir === false) {
-            @error_log('[FileExport::copyFileToExportDir] WARN invalid subdir derived from contenthash, skipping. id='.$id.' contenthash='.$contenthash);
+        if ('' === $subDir) {
             return;
         }
 
         $exportSubDir = rtrim($filesDir, '/').'/'.$subDir;
-
         if (!is_dir($exportSubDir)) {
             mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
-            @error_log('[FileExport::copyFileToExportDir] Created subdir '.$exportSubDir);
         }
 
         $destinationFile = $exportSubDir.'/'.$contenthash;
-
-        // Resolve source path (prefer precomputed absolute path).
-        $filePath = $file['abs_path'] ?? null;
-        if (empty($filePath)) {
-            $documentPath = (string)($file['documentpath'] ?? '');
-            $filePath = rtrim((string)$this->course->path, '/').$documentPath;
-        }
-
-        // do not abort the entire export if source is missing or is a directory.
-        // This prevents full exports from failing due to stale/bad entries.
-        if (!is_file($filePath)) {
+        if (is_file($destinationFile)) {
             return;
         }
 
-        if (!is_file($destinationFile)) {
-            if (@copy($filePath, $destinationFile)) {
-                @error_log('[FileExport::copyFileToExportDir] OK copy id='.$id.' -> '.$destinationFile);
-            }
+        $filePath = $file['abs_path'] ?? null;
+        if (empty($filePath)) {
+            $documentPath = (string) ($file['documentpath'] ?? '');
+            $filePath = rtrim((string) $this->course->path, '/').'/'.$documentPath;
+        }
+
+        if (!is_file((string) $filePath)) {
+            @error_log('[FileExport::copyFileToExportDir] Missing source file: '.(string) $filePath);
+            return;
+        }
+
+        if (@copy((string) $filePath, $destinationFile)) {
+            @error_log('[FileExport::copyFileToExportDir] Copied '.$destinationFile);
         }
     }
 
@@ -291,225 +300,232 @@ class FileExport
      */
     private function createFilesXml(array $filesData, string $destinationDir): void
     {
-        @error_log('[FileExport::createFilesXml] Start. destinationDir='.$destinationDir);
-
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<files>'.PHP_EOL;
 
-        $total = 0;
-        $modFolder = 0;
-        $badFilepath = 0;
-        $wrongItemId = 0;
-
         foreach (($filesData['files'] ?? []) as $file) {
-            // Safety: ensure already-normalized rows
-            $file = $this->normalizeRow($file);
-
-            $xmlContent .= $this->createFileXmlEntry($file);
-            $total++;
-
-            $comp = (string)($file['component'] ?? '');
-            $area = (string)($file['filearea'] ?? '');
-            $fp   = (string)($file['filepath'] ?? '');
-            $it   = (int)($file['itemid'] ?? 0);
-
-            if ($comp === 'mod_folder' && $area === 'content') {
-                $modFolder++;
-                if ($fp === '' || $fp[0] !== '/' || substr($fp, -1) !== '/') {
-                    $badFilepath++;
-                    @error_log('[FileExport::createFilesXml] WARNING bad filepath (must start/end with /): id='.(int)($file['id'] ?? 0).' filepath='.$fp);
-                }
-                if ($it !== 0) {
-                    $wrongItemId++;
-                    @error_log('[FileExport::createFilesXml] WARNING itemid must be 0 for mod_folder/content id='.(int)($file['id'] ?? 0).' itemid='.$it);
-                }
-            }
+            $xmlContent .= $this->createFileXmlEntry($this->normalizeFileEntry($file));
         }
 
         $xmlContent .= '</files>'.PHP_EOL;
         file_put_contents($destinationDir.'/files.xml', $xmlContent);
-
-        @error_log('[FileExport::createFilesXml] Done. total='.$total.' mod_folder='.$modFolder.' badFilepath='.$badFilepath.' wrongItemId='.$wrongItemId);
     }
 
     /**
      * Create an XML entry for a file.
-     *
-     * @param array<string,mixed> $file
      */
     private function createFileXmlEntry(array $file): string
     {
-        // itemid is forced to 0 in V1 files.xml for consistency with restore
-        return '  <file id="'.(int) $file['id'].'">'.PHP_EOL.
-            '    <contenthash>'.htmlspecialchars((string) $file['contenthash']).'</contenthash>'.PHP_EOL.
-            '    <contextid>'.(int) $file['contextid'].'</contextid>'.PHP_EOL.
-            '    <component>'.htmlspecialchars((string) $file['component']).'</component>'.PHP_EOL.
-            '    <filearea>'.htmlspecialchars((string) $file['filearea']).'</filearea>'.PHP_EOL.
-            '    <itemid>0</itemid>'.PHP_EOL.
-            '    <filepath>'.htmlspecialchars((string) $file['filepath']).'</filepath>'.PHP_EOL.
-            '    <filename>'.htmlspecialchars((string) $file['filename']).'</filename>'.PHP_EOL.
-            '    <userid>'.(int) $file['userid'].'</userid>'.PHP_EOL.
-            '    <filesize>'.(int) $file['filesize'].'</filesize>'.PHP_EOL.
-            '    <mimetype>'.htmlspecialchars((string) $file['mimetype']).'</mimetype>'.PHP_EOL.
-            '    <status>'.(int) $file['status'].'</status>'.PHP_EOL.
-            '    <timecreated>'.(int) $file['timecreated'].'</timecreated>'.PHP_EOL.
-            '    <timemodified>'.(int) $file['timemodified'].'</timemodified>'.PHP_EOL.
-            '    <source>'.htmlspecialchars((string) $file['source']).'</source>'.PHP_EOL.
-            '    <author>'.htmlspecialchars((string) $file['author']).'</author>'.PHP_EOL.
-            '    <license>'.htmlspecialchars((string) $file['license']).'</license>'.PHP_EOL.
-            '    <sortorder>0</sortorder>'.PHP_EOL.
-            '    <repositorytype>$@NULL@$</repositorytype>'.PHP_EOL.
-            '    <repositoryid>$@NULL@$</repositoryid>'.PHP_EOL.
-            '    <reference>$@NULL@$</reference>'.PHP_EOL.
-            '  </file>'.PHP_EOL;
+        $file = $this->normalizeFileEntry($file);
+
+        $itemId = (int) ($file['itemid'] ?? 0);
+
+        if (
+            'mod_folder' === (string) ($file['component'] ?? '')
+            && 'content' === (string) ($file['filearea'] ?? '')
+        ) {
+            $itemId = 0;
+        }
+
+        return '  <file id="'.(int) $file['id'].'">'.PHP_EOL
+            .'    <contenthash>'.htmlspecialchars((string) $file['contenthash']).'</contenthash>'.PHP_EOL
+            .'    <contextid>'.(int) $file['contextid'].'</contextid>'.PHP_EOL
+            .'    <component>'.htmlspecialchars((string) $file['component']).'</component>'.PHP_EOL
+            .'    <filearea>'.htmlspecialchars((string) $file['filearea']).'</filearea>'.PHP_EOL
+            .'    <itemid>'.$itemId.'</itemid>'.PHP_EOL
+            .'    <filepath>'.htmlspecialchars((string) $file['filepath']).'</filepath>'.PHP_EOL
+            .'    <filename>'.htmlspecialchars((string) $file['filename']).'</filename>'.PHP_EOL
+            .'    <userid>'.(int) $file['userid'].'</userid>'.PHP_EOL
+            .'    <filesize>'.(int) $file['filesize'].'</filesize>'.PHP_EOL
+            .'    <mimetype>'.htmlspecialchars((string) $file['mimetype']).'</mimetype>'.PHP_EOL
+            .'    <status>'.(int) $file['status'].'</status>'.PHP_EOL
+            .'    <timecreated>'.(int) $file['timecreated'].'</timecreated>'.PHP_EOL
+            .'    <timemodified>'.(int) $file['timemodified'].'</timemodified>'.PHP_EOL
+            .'    <source>'.htmlspecialchars((string) $file['source']).'</source>'.PHP_EOL
+            .'    <author>'.htmlspecialchars((string) $file['author']).'</author>'.PHP_EOL
+            .'    <license>'.htmlspecialchars((string) $file['license']).'</license>'.PHP_EOL
+            .'    <sortorder>0</sortorder>'.PHP_EOL
+            .'    <repositorytype>$@NULL@$</repositorytype>'.PHP_EOL
+            .'    <repositoryid>$@NULL@$</repositoryid>'.PHP_EOL
+            .'    <reference>$@NULL@$</reference>'.PHP_EOL
+            .'  </file>'.PHP_EOL;
     }
 
     /**
-     * Process a document or folder and add its data to the files array.
+     * Process a document and add its data to the files array.
+     *
+     * Documents tree files belong to the synthetic root folder activity.
+     * Top-level HTML files are skipped because they are exported as Moodle pages.
      *
      * @param array<string,mixed> $filesData
      */
     private function processDocument(array $filesData, object $document): array
     {
-        // Skip files already embedded/handled by PageExport
-        if (
-            ($document->file_type ?? null) === 'file'
-            && isset($this->course->used_page_doc_ids)
-            && \in_array($document->source_id, (array) $this->course->used_page_doc_ids, true)
-        ) {
-            @error_log('[FileExport::processDocument] Skipping file id='.$document->source_id.' (used by PageExport)');
+        if (($document->file_type ?? null) !== 'file') {
             return $filesData;
         }
 
-        // Skip top-level HTML documents that are exported as Page
-        if (
-            ($document->file_type ?? null) === 'file'
-            && 'html' === strtolower((string)pathinfo($document->path, PATHINFO_EXTENSION))
-            && 1 === substr_count($document->path, '/')
-        ) {
-            @error_log('[FileExport::processDocument] Skipping top-level HTML (will be Page) id='.$document->source_id);
+        $courseCode = (string) ($this->course->code ?? $this->course->info['code'] ?? '');
+        $sourceId = (int) ($document->source_id ?? 0);
+
+        $logicalPath = (string) ($document->path ?? '');
+        if ($sourceId > 0 && '' !== $courseCode) {
+            $docData = DocumentManager::get_document_data_by_id($sourceId, $courseCode);
+            if (\is_array($docData) && !empty($docData['path'])) {
+                $logicalPath = (string) $docData['path'];
+            }
+        }
+
+        $logicalPath = str_replace('\\', '/', trim($logicalPath));
+        $logicalPath = ltrim($logicalPath, '/');
+
+        if (!preg_match('#^(?:document/?)+#i', $logicalPath)) {
+            $logicalPath = 'document/'.$logicalPath;
+        }
+
+        $extension = strtolower((string) pathinfo($logicalPath, PATHINFO_EXTENSION));
+
+        // Root HTML documents are exported as page activities, not folder files.
+        if (\in_array($extension, ['html', 'htm'], true) && 1 === substr_count((string) $logicalPath, '/')) {
             return $filesData;
         }
 
-        // Simple FILE -> becomes part of Folder activity
-        if (($document->file_type ?? null) === 'file') {
-            $extension = strtolower((string) pathinfo($document->path, PATHINFO_EXTENSION));
-            if (!\in_array($extension, ['html', 'htm'], true)) {
-                $fileData = $this->getFileData($document);
+        $fileData = $this->getFileData($document);
 
-                // Derive hierarchical folder path inside moodle folder content
-                [$filepath, /*$fn*/, $rest] = $this->deriveRelativeDirAndName((string)$document->path);
-                $fileData['filepath']  = $filepath;          // "/folder001/" or "/folder001/subfolder 001/" or "/"
+        $fileData['documentpath'] = $logicalPath;
+        $fileData['filename'] = basename($logicalPath);
+        $fileData['contextid'] = ActivityExport::DOCS_MODULE_ID;
+        $fileData['component'] = 'mod_folder';
+        $fileData['filearea'] = 'content';
+        $fileData['itemid'] = 0;
+        $fileData['filepath'] = $this->buildMoodleFilepathFromChamiloPath($logicalPath);
 
-                // Normalize to mod_folder + moduleContextId
-                $fileData = $this->normalizeRow($fileData);
-
-                @error_log('[FileExport::processDocument] FILE id='.$fileData['id'].' rest='.$rest.' -> fp='.$fileData['filepath'].' name='.$fileData['filename']);
-
-                $filesData['files'][] = $fileData;
-            }
-        } elseif (($document->file_type ?? null) === 'folder') {
-            if (!$this->useFolderTraversal) {
-                @error_log('[FileExport::processDocument] INFO: folder traversal disabled, skipping folder iid='.(int)$document->source_id.' (kept code for compatibility)');
-                return $filesData;
-            }
-
-            $docRepo = Container::getDocumentRepository();
-            $folderFiles = $docRepo->listFilesByParentIid((int) $document->source_id);
-
-            @error_log('[FileExport::processDocument] FOLDER iid='.(int)$document->source_id.' contains '.count($folderFiles).' file(s)');
-
-            foreach ($folderFiles as $file) {
-                [$filepath, $fn, $rest] = $this->deriveRelativeDirAndName((string)($file['path'] ?? ''));
-
-                $row = $this->getFolderFileData(
-                    $file,
-                    (int)$document->source_id,
-                    $filepath
-                );
-
-                // Normalize to mod_folder + moduleContextId
-                $row = $this->normalizeRow($row);
-
-                @error_log('[FileExport::processDocument] CHILD id='.$row['id'].' rest='.$rest.' -> fp='.$row['filepath'].' name='.$row['filename']);
-
-                $filesData['files'][] = $row;
-            }
-        }
+        $filesData['files'][] = $this->normalizeFileEntry($fileData);
 
         return $filesData;
     }
 
     /**
-     * Normalize one row to Moodle mod_folder/content requirements.
-     * - component=mod_folder
-     * - filearea=content
-     * - itemid=0
-     * - contextid=$this->moduleContextId
-     * - filepath normalized, never "/Documents/"
+     * Ensure mandatory file fields exist for Moodle restore.
      */
-    private function normalizeRow(array $row): array
+    private function normalizeFileEntry(array $file): array
     {
-        $row['component'] = 'mod_folder';
-        $row['filearea']  = 'content';
-        $row['itemid']    = 0;
-        $row['contextid'] = $this->moduleContextId;
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = (int) ($adminData['id'] ?? 1);
 
-        $fp = (string)($row['filepath'] ?? '/');
-        if ($fp === '' || $fp === '.' || $fp === '/') {
-            $fp = '/';
-        } else {
-            // convert legacy /Documents/... to /
-            if (strpos($fp, '/Documents/') === 0) {
-                $fp = '/';
+        $file['id'] = (int) ($file['id'] ?? 0);
+        $file['contextid'] = (int) ($file['contextid'] ?? 0);
+        $file['component'] = (string) ($file['component'] ?? '');
+        $file['filearea'] = (string) ($file['filearea'] ?? '');
+        $file['itemid'] = (int) ($file['itemid'] ?? 0);
+        $file['filepath'] = $this->ensureTrailingSlash((string) ($file['filepath'] ?? '/'));
+        $file['filename'] = (string) ($file['filename'] ?? '');
+        $file['userid'] = (int) ($file['userid'] ?? $adminId);
+        $file['filesize'] = (int) ($file['filesize'] ?? 0);
+        $file['mimetype'] = (string) ($file['mimetype'] ?? 'application/octet-stream');
+        $file['status'] = (int) ($file['status'] ?? 0);
+        $file['timecreated'] = (int) ($file['timecreated'] ?? time());
+        $file['timemodified'] = (int) ($file['timemodified'] ?? time());
+        $file['source'] = (string) ($file['source'] ?? $file['filename']);
+        $file['author'] = (string) ($file['author'] ?? 'Unknown');
+        $file['license'] = (string) ($file['license'] ?? 'allrightsreserved');
+
+        if ('' === $file['filename'] && !empty($file['documentpath'])) {
+            $file['filename'] = basename((string) $file['documentpath']);
+        }
+
+        if (
+            'mod_folder' === $file['component']
+            && 'content' === $file['filearea']
+        ) {
+            $file['itemid'] = 0;
+
+            if (!empty($file['documentpath'])) {
+                $file['filepath'] = $this->buildMoodleFilepathFromChamiloPath((string) $file['documentpath']);
             }
         }
-        $row['filepath'] = $this->ensureTrailingSlash($fp);
 
-        // Safety: filename must never be empty
-        $row['filename'] = (string)($row['filename'] ?? '');
-        if ($row['filename'] === '') {
-            $row['filename'] = 'unnamed';
+        if (
+            \in_array($file['component'], ['mod_page', 'mod_resource'], true)
+            && 'content' === $file['filearea']
+        ) {
+            $file['itemid'] = 0;
         }
 
-        return $row;
-    }
-
-    private function deriveRelativeDirAndName(string $absolutePath): array
-    {
-        $code = (string)($this->course->code ?? '');
-        $raw  = str_replace('\\', '/', $absolutePath);
-        $raw  = ltrim($raw, '/');
-
-        // Look for the course code segment and take the remainder
-        if (preg_match('#(?:^|/)'.preg_quote($code, '#').'/+(.*)$#', $raw, $m)) {
-            $rest = $m[1]; // e.g. "folder001/subfolder 001/settings-changed.odt"
-        } else {
-            // Fallback: trim common prefixes document/document/localhost/...
-            $rest = preg_replace('#^document/(?:document/)?(?:[^/]+/)?#', '', $raw);
+        if ((int) $file['filesize'] <= 0 && !empty($file['abs_path']) && is_file((string) $file['abs_path'])) {
+            $stat = @stat((string) $file['abs_path']);
+            if ($stat) {
+                $file['filesize'] = (int) ($stat['size'] ?? 0);
+            }
         }
 
-        $rest     = trim((string)$rest, '/');
-        $filename = basename($rest);
-        $dir      = trim((string)dirname($rest), '.');
-
-        $filepath = ($dir === '' || $dir === '/') ? '/' : '/'.$dir.'/';
-
-        @error_log('[FileExport::deriveRelativeDirAndName] code='.$code.' raw='.$absolutePath.' rest='.$rest.' dir='.$dir.' -> filepath='.$filepath.' filename='.$filename);
-
-        return [$filepath, $filename, $rest];
+        return $file;
     }
 
-    private function normalizeMoodleFilepath(string $path): string
+    /**
+     * Build a Moodle folder filepath from a Chamilo document path.
+     *
+     * Examples:
+     * - /folder/file.pdf -> /folder/
+     * - file.pdf         -> /
+     */
+    private function buildMoodleFilepathFromChamiloPath(string $documentPath): string
     {
-        $path = str_replace('\\', '/', trim($path));
-        if ($path === '' || $path === '.' || $path === '/') {
+        $normalizedPath = $this->normalizeCourseDocumentPath($documentPath);
+
+        if ('' === $normalizedPath) {
             return '/';
         }
+
+        $relDir = dirname($normalizedPath);
+
+        if ('.' === $relDir || '/' === $relDir) {
+            return '/';
+        }
+
+        return $this->ensureTrailingSlash('/'.trim($relDir, '/').'/');
+    }
+
+    private function normalizeCourseDocumentPath(string $documentPath): string
+    {
+        $path = str_replace('\\', '/', trim($documentPath));
         $path = ltrim($path, '/');
-        $path = (string)preg_replace('#/+#', '/', $path);
-        $path = trim($path, '/');
-        return '/'.$path.'/';
+        $path = (string) preg_replace('#^document/#i', '', $path);
+
+        if ('' === $path) {
+            return '';
+        }
+
+        $segments = array_values(array_filter(explode('/', $path), static fn ($part) => '' !== $part));
+        if (empty($segments)) {
+            return '';
+        }
+
+        $courseCode = (string) ($this->course->code ?? $this->course->info['code'] ?? '');
+        $courseCodePattern = '' !== $courseCode
+            ? '#^'.preg_quote($courseCode, '#').'(?:-\d+)?$#i'
+            : null;
+
+        // Typical polluted C2 paths currently seen:
+        // - localhost/CURSOTESTBACKUP001/file.ext
+        // - localhost/CURSOTESTBACKUP001/repertoire1/file.ext
+        // - CURSOTESTBACKUP001/file.ext
+        // - CURSOTESTBACKUP001-19078/file.ext
+        if (
+            null !== $courseCodePattern
+            && count($segments) >= 2
+            && preg_match($courseCodePattern, $segments[1])
+        ) {
+            array_shift($segments); // host/access-url slug
+            array_shift($segments); // course code or course-code-id
+        } elseif (
+            null !== $courseCodePattern
+            && preg_match($courseCodePattern, $segments[0])
+        ) {
+            array_shift($segments); // course code or course-code-id
+        }
+
+        return implode('/', $segments);
     }
 
     /**
@@ -520,83 +536,47 @@ class FileExport
     private function getFileData(object $document): array
     {
         $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'] ?? 0;
+        $adminId = (int) ($adminData['id'] ?? 0);
 
-        $contenthash = hash('sha1', basename($document->path));
-        $mimetype = $this->getMimeType($document->path);
+        $contenthash = hash('sha1', basename((string) $document->path));
+        $mimetype = $this->getMimeType((string) $document->path);
 
-        // Try to resolve absolute path for single file documents
         $absPath = null;
-        if (isset($document->source_id)) {
-            $repo = Container::getDocumentRepository();
-            $doc = $repo->findOneBy(['iid' => (int) $document->source_id]);
-            if ($doc instanceof CDocument) {
-                $absPath = $repo->getAbsolutePathForDocument($doc);
+        if (isset($document->source_id) && class_exists(Container::class)) {
+            try {
+                $repo = Container::getDocumentRepository();
+                $doc = $repo->findOneBy(['iid' => (int) $document->source_id]);
+                if ($doc instanceof CDocument) {
+                    $absPath = $repo->getAbsolutePathForDocument($doc);
+                    if (is_file((string) $absPath)) {
+                        $contenthash = sha1_file((string) $absPath);
+                    }
+                }
+            } catch (\Throwable $e) {
+                @error_log('[FileExport::getFileData] abs_path resolution error: '.$e->getMessage());
             }
         }
 
         return [
-            'id' => (int) $document->source_id,
-            'contenthash' => $contenthash,
-            'contextid' => (int) $document->source_id, // will be normalized to moduleContextId
-            'component' => 'mod_resource',             // will be normalized to mod_folder
-            'filearea' => 'content',                   // will be normalized (kept for compatibility)
-            'itemid' => (int) $document->source_id,    // will be normalized to 0
-            'filepath' => '/',                         // will be replaced by deriveRelativeDirAndName()
+            'id'           => (int) $document->source_id,
+            'contenthash'  => $contenthash,
+            'contextid'    => (int) $document->source_id,
+            'component'    => 'mod_resource',
+            'filearea'     => 'content',
+            'itemid'       => (int) $document->source_id,
+            'filepath'     => '/',
             'documentpath' => (string) $document->path,
-            'filename' => basename($document->path),
-            'userid' => $adminId,
-            'filesize' => (int) $document->size,
-            'mimetype' => $mimetype,
-            'status' => 0,
-            'timecreated' => time() - 3600,
+            'filename'     => basename((string) $document->path),
+            'userid'       => $adminId,
+            'filesize'     => (int) ($document->size ?? 0),
+            'mimetype'     => $mimetype,
+            'status'       => 0,
+            'timecreated'  => time() - 3600,
             'timemodified' => time(),
-            'source' => (string) $document->title,
-            'author' => 'Unknown',
-            'license' => 'allrightsreserved',
-            // New: absolute path for reliable copy
-            'abs_path' => $absPath,
-        ];
-    }
-
-    /**
-     * Get file data for files inside a folder (legacy flow preserved).
-     *
-     * @param array<string,mixed> $file
-     *
-     * @return array<string,mixed>
-     */
-    private function getFolderFileData(array $file, int $sourceId, string $parentPath = '/'): array
-    {
-        $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'] ?? 0;
-
-        $contenthash = hash('sha1', basename((string) $file['path']));
-        $mimetype    = $this->getMimeType((string) $file['path']);
-        $filename    = basename((string) $file['path']);
-
-        $filepath = $this->normalizeMoodleFilepath($parentPath);
-
-        return [
-            'id'          => (int) ($file['id'] ?? 0),
-            'contenthash' => $contenthash,
-            'contextid'   => $sourceId, // will be normalized to moduleContextId
-            'component'   => 'mod_folder',
-            'filearea'    => 'content',
-            'itemid'      => (int) ($file['id'] ?? 0), // will be normalized to 0
-            'filepath'    => $filepath,
-            'documentpath'=> 'document/'.$file['path'],
-            'filename'    => $filename,
-            'userid'      => $adminId,
-            'filesize'    => (int) ($file['size'] ?? 0),
-            'mimetype'    => $mimetype,
-            'status'      => 0,
-            'timecreated' => time() - 3600,
-            'timemodified'=> time(),
-            'source'      => (string) ($file['title'] ?? ''),
-            'author'      => 'Unknown',
-            'license'     => 'allrightsreserved',
-            'abs_path'    => $file['abs_path'] ?? null,
+            'source'       => (string) ($document->title ?? basename((string) $document->path)),
+            'author'       => 'Unknown',
+            'license'      => 'allrightsreserved',
+            'abs_path'     => $absPath,
         ];
     }
 
@@ -605,14 +585,14 @@ class FileExport
      */
     private function ensureTrailingSlash(string $path): string
     {
-        // Normalize slashes and remove '/./'
-        $path = (string) str_replace('\\', '/', $path);
+        $path = str_replace('\\', '/', $path);
         $path = (string) preg_replace('#/\./#', '/', $path);
         $path = (string) preg_replace('#/+#', '/', $path);
 
-        if ($path === '' || $path === '.' || $path === '/') {
+        if ('' === $path || '.' === $path || '/' === $path) {
             return '/';
         }
+
         return rtrim($path, '/').'/';
     }
 
@@ -652,6 +632,10 @@ class FileExport
             'zip' => 'application/zip',
             'rar' => 'application/x-rar-compressed',
             'wav' => 'audio/wav',
+            'mp3' => 'audio/mpeg',
+            'mp4' => 'video/mp4',
+            'webm' => 'video/webm',
+            'svg' => 'image/svg+xml',
         ];
     }
 }

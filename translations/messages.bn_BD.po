@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -32738,4 +32738,10 @@ msgstr "ইউআরআই"
 
 msgid "%s (current)"
 msgstr "%s (বর্তমান)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "একটি ছবি আপলোড করুন বা Badge Studio দিয়ে একটি তৈরি করুন।"
+
+msgid "Current badge set"
+msgstr "বর্তমান ব্যাজ সেট"
 

@@ -32745,3 +32745,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (güncel)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Bir resim yükleyin veya Badge Studio ile oluşturun."
+
+msgid "Current badge set"
+msgstr "Mevcut rozet kümesi"
+

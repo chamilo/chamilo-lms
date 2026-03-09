@@ -32757,3 +32757,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (الحالي)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "رفع صورة أو إنشاء واحدة باستخدام Badge Studio."
+
+msgid "Current badge set"
+msgstr "مجموعة الشارات الحالية"
+

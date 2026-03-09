@@ -34625,3 +34625,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (actuel)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Téléversez une image ou créez-en une avec Badge Studio."
+
+msgid "Current badge set"
+msgstr "Ensemble de badges actuel"
+

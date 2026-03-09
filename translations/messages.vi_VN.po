@@ -32745,3 +32745,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (hiện tại)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Tải lên hình ảnh hoặc tạo một cái với Badge Studio."
+
+msgid "Current badge set"
+msgstr "Bộ huy hiệu hiện tại"
+

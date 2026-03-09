@@ -32743,3 +32743,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (လက်ရှိ)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "ပုံတစ်ပုံတင်ပါ သို့မဟုတ် Badge Studio ဖြင့်တစ်ပုံ ဖန်တီးပါ။"
+
+msgid "Current badge set"
+msgstr "လက်ရှိ ဘက်ဂျ်အစုစု"
+

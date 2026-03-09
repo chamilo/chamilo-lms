@@ -32744,3 +32744,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (pašreizējais)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Augšupielādējiet attēlu vai izveidojiet ar Badge Studio."
+
+msgid "Current badge set"
+msgstr "Pašreizējais nozīmes zīmes komplekts"
+

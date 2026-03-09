@@ -20746,7 +20746,7 @@ msgid "Portal name"
 msgstr "Portnavn"
 
 msgid "Best score"
-msgstr "Best score"
+msgstr "Best poengsum"
 
 msgid "Are you sure to delete"
 msgstr "Er du sikker på å slette"
@@ -28169,7 +28169,7 @@ msgid "Super admin"
 msgstr "Super-admin"
 
 msgid "Global admin"
-msgstr "Global admin"
+msgstr "Global administrator"
 
 msgid "Question manager"
 msgstr "Spørsmålshandterar"
@@ -32742,4 +32742,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (noe)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Last opp eit bilete eller lag eitt med Badge Studio."
+
+msgid "Current badge set"
+msgstr "Noverande merkesett"
 

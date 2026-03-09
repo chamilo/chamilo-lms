@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -32742,4 +32742,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (тековен)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Подигни слика или направи ја со Badge Studio."
+
+msgid "Current badge set"
+msgstr "Тековен сет на значка"
 

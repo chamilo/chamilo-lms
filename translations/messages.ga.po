@@ -32743,3 +32743,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (reatha)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Uaslódaigh íomhá nó cruthaigh ceann le Badge Studio."
+
+msgid "Current badge set"
+msgstr "Socrú suaitheanta reatha"
+

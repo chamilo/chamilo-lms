@@ -34823,3 +34823,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (huidig)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Upload een afbeelding of maak er een met Badge Studio."
+
+msgid "Current badge set"
+msgstr "Huidige badge-set"
+

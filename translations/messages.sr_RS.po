@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula primer: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -32745,4 +32745,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (trenutni)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Otpremi sliku ili kreiraj jednu sa Badge Studio."
+
+msgid "Current badge set"
+msgstr "Trenutni set znački"
 

@@ -32739,3 +32739,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (اوسنۍ)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "ان تصویر اپلوډ کړئ یا د Badge Studio سره یو جوړ کړئ."
+
+msgid "Current badge set"
+msgstr "اوسنی د بیج ټولګی"
+

@@ -32739,3 +32739,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (მიმდინარე)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "ატვირთეთ სურათი ან შექმენით Badge Studio-თი."
+
+msgid "Current badge set"
+msgstr "მიმდინარე ბეჯის ნაკრები"
+

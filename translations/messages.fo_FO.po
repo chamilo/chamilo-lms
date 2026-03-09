@@ -32739,3 +32739,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (verandi)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Legg upp eitt mynd ella stovtað eitt við Badge Studio."
+
+msgid "Current badge set"
+msgstr "Núvervandi merkisett"
+

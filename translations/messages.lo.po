@@ -35089,3 +35089,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (ປະຈຸບັນ)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "ອັບໂຫລດຮູບພາບ ຫຼື ສ້າງດ້ວຍ Badge Studio."
+
+msgid "Current badge set"
+msgstr "ຊຸດ badge ປະຈຸບັນ"
+

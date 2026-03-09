@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySQL Server"
+msgstr "MySql Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -32738,4 +32738,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (trenutni)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Učitaj sliku ili kreiraj jednu s Badge Studio."
+
+msgid "Current badge set"
+msgstr "Trenutni set znački"
 

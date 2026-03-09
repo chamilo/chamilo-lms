@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -8627,7 +8627,7 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%b %d, %Y"
 
 msgid "%A %B %d, %Y"
 msgstr "%A %B %d, %Y"
@@ -32742,4 +32742,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (այժմ)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Վերբեռնեք նկար կամ ստեղծեք մեկը Badge Studio-ով:"
+
+msgid "Current badge set"
+msgstr "Ընթացիկ խարիզմների փաթեթ"
 

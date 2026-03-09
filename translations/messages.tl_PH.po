@@ -27040,7 +27040,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Ang admin ng session ay makapag-access ng batch import, update at export ng user"
+msgstr "Session admin ay makapag-access ng batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -27070,7 +27070,7 @@ msgid "Add username to e-mail notification of subscription to session"
 msgstr "Idagdag ang username sa e-mail notification ng subscription sa session"
 
 msgid "Add reset password link to e-mail notification of subscription to session"
-msgstr "Magdagdag ng link sa reset ng password sa e-mail notification ng subscription sa session"
+msgstr "Magdagdag ng reset password link sa e-mail notification ng subscription sa session"
 
 msgid "Pre-fill session fields with user fields"
 msgstr "Pre-fill ang session fields gamit ang user fields"
@@ -32738,4 +32738,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (kasalukuyan)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Mag-upload ng isang imahe o gumawa ng isa gamit ang Badge Studio."
+
+msgid "Current badge set"
+msgstr "Kasalukuyang hanay ng badge"
 

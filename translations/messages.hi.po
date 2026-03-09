@@ -32739,3 +32739,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (वर्तमान)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "एक छवि अपलोड करें या Badge Studio के साथ एक बनाएं।"
+
+msgid "Current badge set"
+msgstr "वर्तमान बैज सेट"
+

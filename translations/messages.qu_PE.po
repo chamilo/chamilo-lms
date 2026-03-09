@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ñawpaq ruraykuyna: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -32744,4 +32744,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (kunan)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Raphi yachachisqa karampaq upload qillqaq, manaqchu Badge Studiowan kamachiy."
+
+msgid "Current badge set"
+msgstr "Kunanpaq insignia sarta"
 

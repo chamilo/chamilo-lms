@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -32738,4 +32738,10 @@ msgstr "URI"
 
 msgid "%s (current)"
 msgstr "%s (current)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Raru sawir ama mid ku abuuro Badge Studio."
+
+msgid "Current badge set"
+msgstr "Baajhka hadda"
 

@@ -32750,3 +32750,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (une)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Igoitzi irudi bat edo sortu Batxilergoko Studioarekin."
+
+msgid "Current badge set"
+msgstr "Uneko domina multzoa"
+

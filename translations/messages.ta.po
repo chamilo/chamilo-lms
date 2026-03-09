@@ -32743,3 +32743,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (தற்போதைய)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "படத்தை பதிவேற்றவும் அல்லது Badge Studio மூலம் ஒன்றை உருவாக்கவும்."
+
+msgid "Current badge set"
+msgstr "தற்போதைய சின்ன தொகுப்பு"
+

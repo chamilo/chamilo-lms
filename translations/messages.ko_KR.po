@@ -32743,3 +32743,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (현재)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "이미지를 업로드하거나 Badge Studio로 하나를 생성하세요."
+
+msgid "Current badge set"
+msgstr "현재 배지 세트"
+

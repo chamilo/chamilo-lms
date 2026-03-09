@@ -32743,3 +32743,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (jelenlegi)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Töltsön fel képet vagy hozzon létre egyet a Badge Studio-val."
+
+msgid "Current badge set"
+msgstr "Jelenlegi jelvénykészlet"
+

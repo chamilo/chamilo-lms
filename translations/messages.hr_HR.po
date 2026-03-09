@@ -32744,3 +32744,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (trenutno)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Učitaj sliku ili stvorite jednu s Badge Studio."
+
+msgid "Current badge set"
+msgstr "Trenutni set znački"
+

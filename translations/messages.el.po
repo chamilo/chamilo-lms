@@ -32758,3 +32758,9 @@ msgstr "URI"
 msgid "%s (current)"
 msgstr "%s (τρέχον)"
 
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Ανεβάστε μια εικόνα ή δημιουργήστε μία με το Badge Studio."
+
+msgid "Current badge set"
+msgstr "Τρέχον σύνολο διακριτικών"
+

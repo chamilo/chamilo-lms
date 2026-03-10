@@ -48,6 +48,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
+use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
@@ -622,18 +623,38 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // Existing translate_html logic
+                    // Translate HTML: show only spans matching the user language.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
                         if (null !== $user) {
-                            // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
-                            $userJson = json_encode(['locale' => $user->getLocale()]);
-                            $js = $this->renderView(
-                                '@ChamiloCore/Layout/document.html.twig',
-                                ['breadcrumb' => '', 'user_json' => $userJson]
-                            );
-                            // Insert inside the head tag.
-                            $content = str_replace('</head>', $js.'</head>', $content);
+                            $locale = $user->getLocale();
+                            $isoCode = explode('_', $locale)[0];
+                            $safeIso = htmlspecialchars($isoCode, ENT_QUOTES);
+                            $safeFull = htmlspecialchars($locale, ENT_QUOTES);
+                            $js = <<<TRANSLATE_JS
+<script>
+(function(){
+    var iso="{$safeIso}",full="{$safeFull}";
+    function show(els){for(var i=0;i<els.length;i++){els[i].style.display="";els[i].className=els[i].className.replace(/\\bhidden\\b/,"")}}
+    function byLang(sel,a,b){var m=document.querySelectorAll(sel.replace("{L}",a));if(!m.length&&b!==a)m=document.querySelectorAll(sel.replace("{L}",b));return m}
+    document.addEventListener("DOMContentLoaded",function(){
+        var mce=document.querySelectorAll(".mce-translatehtml");
+        if(mce.length){for(var i=0;i<mce.length;i++)mce[i].style.display="none";show(byLang('[lang="{L}"].mce-translatehtml',iso,full))}
+        var spans=document.querySelectorAll("span[lang]"),plain=[];
+        for(var i=0;i<spans.length;i++){if(!spans[i].classList.contains("mce-translatehtml"))plain.push(spans[i])}
+        if(plain.length){for(var i=0;i<plain.length;i++)plain[i].style.display="none";show(byLang('span[lang="{L}"]:not(.mce-translatehtml)',iso,full))}
+    });
+})();
+</script>
+TRANSLATE_JS;
+                            // Inject the inline script into the document.
+                            if (false !== stripos($content, '</head>')) {
+                                $content = str_ireplace('</head>', $js.'</head>', $content);
+                            } elseif (false !== stripos($content, '</body>')) {
+                                $content = str_ireplace('</body>', $js.'</body>', $content);
+                            } else {
+                                $content .= $js;
+                            }
                         }
                     }
                     $response->setContent($content);

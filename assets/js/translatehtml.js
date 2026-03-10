@@ -1,46 +1,50 @@
 /* For licensing terms, see /license.txt */
 
 function normalizeLocale(locale) {
-  return locale.split('_')[0]
+  return locale.split("_")[0]
+}
+
+function findByLang(selector, isoCode, fullLocale) {
+  var matches = document.querySelectorAll(selector.replace("{lang}", isoCode))
+  if (matches.length === 0 && fullLocale !== isoCode) {
+    matches = document.querySelectorAll(selector.replace("{lang}", fullLocale))
+  }
+  return matches
+}
+
+function showMatches(matches) {
+  matches.forEach(function (el) {
+    el.classList.remove("hidden")
+    el.style.display = ""
+  })
 }
 
 export default function translateHtml() {
-    if (
-      window.user &&
-      window.user.locale
-    ) {
-      var isoCode = normalizeLocale(window.user.locale)
-      const translateElement = document.querySelector(".mce-translatehtml")
-      if (translateElement) {
-        document.querySelectorAll(".mce-translatehtml").forEach(function (el) {
-          el.style.display = "none"
-        })
-        const selectedLang = document.querySelectorAll(`[lang="${isoCode}"]`)
-        if (selectedLang.length > 0) {
-          selectedLang.forEach(function (userLang) {
-            userLang.classList.remove("hidden")
-            userLang.style.display = "block"
-          })
-        }
-      }
+  if (!window.user || !window.user.locale) {
+    return
+  }
 
-      // it checks content from old version
-      const langSpans = document.querySelectorAll('span[lang]')
-      const langs = [...langSpans].filter(span => !span.classList.contains('mce-translatehtml'))
+  var fullLocale = window.user.locale
+  var isoCode = normalizeLocale(fullLocale)
 
-      if (langs.length > 0) {
-        // it hides all contents with lang
-        langs.forEach(function (el) {
-          el.style.display = "none"
-        })
+  var translateElements = document.querySelectorAll(".mce-translatehtml")
+  if (translateElements.length > 0) {
+    translateElements.forEach(function (el) {
+      el.style.display = "none"
+    })
+    showMatches(findByLang('[lang="{lang}"].mce-translatehtml', isoCode, fullLocale))
+  }
 
-        const selectedLang = document.querySelectorAll(`span[lang="${isoCode}"]`)
-        if (selectedLang.length > 0) {
-          selectedLang.forEach(function (userLang) {
-            userLang.classList.remove("hidden")
-            userLang.style.display = "block"
-          })
-        }
-      }
-    }
+  // it checks content from old version
+  var langSpans = document.querySelectorAll("span[lang]")
+  var langs = [...langSpans].filter(function (span) {
+    return !span.classList.contains("mce-translatehtml")
+  })
+
+  if (langs.length > 0) {
+    langs.forEach(function (el) {
+      el.style.display = "none"
+    })
+    showMatches(findByLang('span[lang="{lang}"]:not(.mce-translatehtml)', isoCode, fullLocale))
+  }
 }

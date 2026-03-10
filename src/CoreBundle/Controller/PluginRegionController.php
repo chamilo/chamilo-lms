@@ -29,27 +29,7 @@ class PluginRegionController extends AbstractController
     #[Route('/{region}', name: 'chamilo_core_plugin_region', methods: ['GET'])]
     public function __invoke(string $region, Request $request): JsonResponse
     {
-        $validRegions = [
-            'main_top',
-            'main_bottom',
-            'login_top',
-            'login_bottom',
-            'menu_top',
-            'menu_bottom',
-            'content_top',
-            'content_bottom',
-            'header_main',
-            'header_center',
-            'header_left',
-            'header_right',
-            'pre_footer',
-            'footer_left',
-            'footer_center',
-            'footer_right',
-            'menu_administrator',
-        ];
-
-        if (!in_array($region, $validRegions, true)) {
+        if (!in_array($region, AppPlugin::$plugin_regions, true)) {
             throw $this->createNotFoundException('Invalid region: '.$region);
         }
 
@@ -76,7 +56,11 @@ class PluginRegionController extends AbstractController
                 continue;
             }
 
-            $html = $appPlugin->loadRegion($plugin->getTitle(), $region);
+            $html = $appPlugin->loadRegion(
+                $plugin->getTitle(),
+                $region,
+                self::sanitizeContext($request)
+            );
 
             if ('' === trim($html)) {
                 continue;
@@ -90,5 +74,21 @@ class PluginRegionController extends AbstractController
         }
 
         return new JsonResponse(['blocks' => $blocks]);
+    }
+
+    private static function sanitizeContext(Request $request): array
+    {
+        $context = [];
+
+        foreach ($request->query->all() as $key => $value) {
+            if (!is_scalar($value)) {
+                continue;
+            }
+
+            $key = preg_replace('/[^a-zA-Z0-9_]/', '', $key);
+            $context[$key] = htmlspecialchars($value);
+        }
+
+        return $context;
     }
 }

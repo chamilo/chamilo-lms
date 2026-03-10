@@ -3396,7 +3396,6 @@ class learnpath
             $repo->setVisibilityPublished($resource, $course, $session);
         } else {
             $repo->setVisibilityDraft($resource, $course, $session);
-            self::toggleCategoryPublish($id, 0);
         }
 
         return false;
@@ -3407,16 +3406,11 @@ class learnpath
      * on the course homepage.
      *
      * @param int    $id            Learnpath id
-     * @param string $setVisibility New visibility (v/i - visible/invisible)
      *
      * @return bool
      */
-    public static function togglePublish($id, $setVisibility = 'v')
+    public static function togglePublish($id)
     {
-        $addShortcut = false;
-        if ('v' === $setVisibility) {
-            $addShortcut = true;
-        }
         $repo = Container::getLpRepository();
         /** @var CLp|null $lp */
         $lp = $repo->find($id);
@@ -3424,10 +3418,12 @@ class learnpath
             return false;
         }
         $repoShortcut = Container::getShortcutRepository();
-        if ($addShortcut) {
-            $repoShortcut->addShortCut($lp, api_get_user_entity(), api_get_course_entity(), api_get_session_entity());
-        } else {
+        $shortcut = $repoShortcut->getShortcutFromResource($lp);
+
+        if (null !== $shortcut) {
             $repoShortcut->removeShortCut($lp);
+        } else {
+            $repoShortcut->addShortCut($lp, api_get_user_entity(), api_get_course_entity(), api_get_session_entity());
         }
 
         return true;
@@ -3437,18 +3433,11 @@ class learnpath
      * Show or hide the learnpath category on the course homepage.
      *
      * @param int $id
-     * @param int $setVisibility
      *
      * @return bool
      */
-    public static function toggleCategoryPublish($id, $setVisibility = 1)
+    public static function toggleCategoryPublish($id)
     {
-        $setVisibility = (int) $setVisibility;
-        $addShortcut = false;
-        if (1 === $setVisibility) {
-            $addShortcut = true;
-        }
-
         $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory|null $lp */
         $category = $repo->find($id);
@@ -3458,11 +3447,13 @@ class learnpath
         }
 
         $repoShortcut = Container::getShortcutRepository();
-        if ($addShortcut) {
+        $shortcut = $repoShortcut->getShortcutFromResource($category);
+
+        if (null !== $shortcut) {
+            $repoShortcut->removeShortCut($category);
+        } else {
             $courseEntity = api_get_course_entity(api_get_course_int_id());
             $repoShortcut->addShortCut($category, api_get_user_entity(), $courseEntity, api_get_session_entity());
-        } else {
-            $repoShortcut->removeShortCut($category);
         }
 
         return true;

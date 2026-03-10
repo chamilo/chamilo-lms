@@ -82,7 +82,9 @@
             data: {
                 action: action,
                 exercisefocused_sec_token: secToken,
-                level_id: levelId
+                level_id: levelId,
+                cid: {{ ExerciseFocused.context.cid|default(0) }},
+                sid: {{ ExerciseFocused.context.sid|default(0) }}
             },
             success: function (response) {
                 if (!response) {

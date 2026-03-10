@@ -44,8 +44,8 @@ foreach ($results as $result) {
     $outfocusedLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_OUTFOCUSED_LIMIT);
     $timeLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_TIME_LIMIT);
 
-    $exercise = new Exercise($trackExe->getCId());
-    $exercise->read($trackExe->getExeExoId());
+    $exercise = new Exercise($trackExe->getCourse()->getId());
+    $exercise->read($trackExe->getQuiz()->getIid());
 
     $quizType = (int) $exercise->selectType();
 

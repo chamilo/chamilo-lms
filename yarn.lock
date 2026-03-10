@@ -1506,6 +1506,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mathjax/mathjax-newcm-font@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@mathjax/mathjax-newcm-font@npm:4.1.1"
+  checksum: 10c0/8fcddc81757b90f3141d1994222b92a04b44ad9ceb83c28638e59d31d5cfaf73e1cb26e4101cce15aee870036f8b68f10fab919e0db0e25eff8a39f249e688f2
+  languageName: node
+  linkType: hard
+
 "@maxgraph/core@npm:^0.15.1":
   version: 0.15.1
   resolution: "@maxgraph/core@npm:0.15.1"
@@ -4364,7 +4371,7 @@ __metadata:
     litepicker: "npm:^2.0.12"
     lodash: "npm:^4.17.23"
     luxon: "npm:^2.5.2"
-    mathjax: "npm:^2.7.9"
+    mathjax: "npm:^4.1.1"
     mediaelement: "npm:^7.1.0"
     mediaelement-plugins: "git+https://github.com/AngelFQC/mediaelement-plugins.git#0bbb4eaad7673725b94ab955bba1790c8a4ddc3c"
     mini-css-extract-plugin: "npm:^2.10.0"
@@ -7479,10 +7486,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mathjax@npm:^2.7.9":
-  version: 2.7.9
-  resolution: "mathjax@npm:2.7.9"
-  checksum: 10c0/fb2da4c34000d11e43844f0ebdec09a5e9e4be748e9d3eadc1fde5318746adf635680ec1b7aa33a8a31f82eff4c2428082c9e36e409da0cb214dffa9fd51273b
+"mathjax@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "mathjax@npm:4.1.1"
+  dependencies:
+    "@mathjax/mathjax-newcm-font": "npm:^4.1.1"
+  checksum: 10c0/e2a861803d8a3ed3ae6ebf40f08c41bcdd1e9110392f43c94fea3f508cd647d9c8eb80b72dcc0653757d666e94b5fdc4aac74121f0f193f8bdd262106404822a
   languageName: node
   linkType: hard
 

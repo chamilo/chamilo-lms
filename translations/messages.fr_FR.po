@@ -30372,7 +30372,7 @@ msgid "The resource doesn't have a node."
 msgstr "La ressource n'a pas de nœud."
 
 msgid "No terms and conditions available for this language."
-msgstr "Aucun conditions générales disponible pour cette langue."
+msgstr "Aucun document de conditions générales disponible pour cette langue."
 
 msgid "Client"
 msgstr "Client"

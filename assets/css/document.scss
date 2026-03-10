@@ -1,0 +1,8 @@
+// CSS that will be included when loading an HTML in the Document tool
+
+@use "tailwind" as *;
+
+.mce-translatehtml,
+span[lang] {
+  @apply hidden;
+}

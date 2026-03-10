@@ -6,7 +6,7 @@
             <div>
                 <h1 class="text-2xl font-semibold">{{ 'Content search'|trans }}</h1>
                 <p class="text-gray-600 mt-1">
-                    {{ 'Search indexed content across your courses.'|trans }}
+                    {{ 'Search indexed content across all courses.'|trans }}
                 </p>
             </div>
 
@@ -39,7 +39,7 @@
             </div>
         {% elseif visible_total == 0 %}
             <div class="p-4 rounded-lg bg-gray-20 border border-gray-20 text-gray-700">
-                {{ 'No results found for'|trans }} "<strong>{{ query }}</strong>".
+                {{ 'No results found'|trans }} "<strong>{{ query }}</strong>".
             </div>
         {% endif %}
 

@@ -76,7 +76,7 @@
             v-if="!isLoading && sessions.length === 0 && !errorMessage"
             class="p-4 text-sm text-gray-600"
           >
-            {{ t("No sessions found") }}
+            {{ t("No session available") }}
           </div>
 
           <!-- Rows -->

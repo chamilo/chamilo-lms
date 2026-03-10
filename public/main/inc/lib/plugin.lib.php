@@ -13,25 +13,25 @@ use Twig\Error\SyntaxError;
  */
 class AppPlugin
 {
-    public $plugin_regions = [
-        'main_top',
-        'main_bottom',
-        'login_top',
-        'login_bottom',
-        'menu_top',
-        'menu_bottom',
-        'content_top',
+    public static array $plugin_regions = [
         'content_bottom',
-        'header_main',
+        'content_top',
+        'course_tool_plugin',
+        'footer_center',
+        'footer_left',
+        'footer_right',
         'header_center',
         'header_left',
+        'header_main',
         'header_right',
-        'pre_footer',
-        'footer_left',
-        'footer_center',
-        'footer_right',
+        'login_bottom',
+        'login_top',
+        'main_bottom',
+        'main_top',
         'menu_administrator',
-        'course_tool_plugin',
+        'menu_bottom',
+        'menu_top',
+        'pre_footer',
     ];
 
     public $installedPluginListName = [];
@@ -286,24 +286,14 @@ class AppPlugin
         return false;
     }
 
-    /**
-     * @return array
-     */
-    public function getPluginRegions()
+    public function loadRegion($pluginName, string $region, array $context = []): ?string
     {
-        sort($this->plugin_regions);
-
-        return $this->plugin_regions;
-    }
-
-    public function loadRegion($pluginName, string $region): ?string
-    {
-        if ('course_tool_plugin' == $region) {
+        if (in_array($region, ['course_tool_plugin', 'menu_administrator'])) {
             return '';
         }
 
         ob_start();
-        $this->getAllPluginContentsByRegion($pluginName, $region);
+        $this->getAllPluginContentsByRegion($pluginName, $region, $context);
         $content = (string) ob_get_contents();
         ob_end_clean();
 
@@ -367,13 +357,18 @@ class AppPlugin
         }
     }
 
-    public function getAllPluginContentsByRegion($plugin_name, string $region): void
+    public function getAllPluginContentsByRegion($plugin_name, string $region, array $context = []): void
     {
         // The plugin_info variable is available inside the plugin index
         $plugin_info = $this->getPluginInfo($plugin_name);
 
         // We also know where the plugin is
         $plugin_info['current_region'] = $region;
+
+        // values to be accessible in Twig
+        $_template = [];
+        $_template['context'] = $context;
+
 
         // Loading the plugin/XXX/index.php file
         $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
@@ -387,11 +382,6 @@ class AppPlugin
 
         // Printing the plugin index.php file
         require $plugin_file;
-
-        // If the variable $_template is set we assign those values to be accessible in Twig
-        if (!isset($_template)) {
-            $_template = [];
-        }
 
         $_template['plugin_info'] = $plugin_info;
 
@@ -409,10 +399,6 @@ class AppPlugin
         }
 
         foreach ($templateList as $pluginTemplate) {
-            if (empty($pluginTemplate)) {
-                continue;
-            }
-
             try {
                 echo Container::getTwig()->render(
                     "$plugin_name/$pluginTemplate",

@@ -1,5 +1,4 @@
 <template>
-  <hr />
   <div
     v-if="blocks.length"
     :data-region="region"

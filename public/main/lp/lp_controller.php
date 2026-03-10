@@ -925,7 +925,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
+        learnpath::toggleCategoryPublish($_REQUEST['id']);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         $goList();
         exit;
@@ -937,7 +937,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::togglePublish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            learnpath::togglePublish($_REQUEST['lp_id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();

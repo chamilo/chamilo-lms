@@ -98,7 +98,8 @@ class MoodleImport
         // Detect meta sidecars early to drive import policy
         $hasQuizMeta = $this->hasQuizMeta($workDir);
         $hasLpMeta   = $this->hasLearnpathMeta($workDir);
-        if ($this->debug) { error_log("MBZ[$rid] meta_flags hasQuizMeta=".($hasQuizMeta?1:0)." hasLpMeta=".($hasLpMeta?1:0)); }
+        $hasDocumentMeta = $this->hasDocumentMeta($workDir);
+        if ($this->debug) { error_log("MBZ[$rid] meta_flags hasQuizMeta=".($hasQuizMeta?1:0)." hasLpMeta=".($hasLpMeta?1:0)." hasDocumentMeta=".($hasDocumentMeta?1:0)); }
 
         $skippedQuizXml = 0; // stats
 
@@ -155,17 +156,6 @@ class MoodleImport
         // 6) Ensure document working dirs
         $this->ensureDir($workDir.'/document');
         $this->ensureDir($workDir.'/document/moodle_pages');
-
-        // Root folder example (kept for consistency; optional)
-        if (empty($resources['document'])) {
-            $docFolderId = $this->nextId($resources['document']);
-            $resources['document'][$docFolderId] = $this->mkLegacyItem('document', $docFolderId, [
-                'file_type' => 'folder',
-                'path'      => '/document/moodle_pages',
-                'title'     => 'moodle_pages',
-            ]);
-            if ($this->debug) { error_log("MBZ[$rid] document.root_folder id={$docFolderId} path=/document/moodle_pages"); }
-        }
 
         // 7) Iterate activities and fill buckets
         $activityNodes = $mb->query('//activity');
@@ -241,6 +231,7 @@ class MoodleImport
             switch ($modName) {
                 case 'label': {
                     if (!$moduleXml || !is_file($moduleXml)) { break; }
+                    $this->materializeActivityHtmlFiles($workDir, $dir, $fileIndex, $resources['document']);
                     $data = $this->readHtmlModule($moduleXml, 'label');
                     $title = (string) ($data['name'] ?? 'Label');
                     $html  = (string) $this->wrapHtmlIfNeeded(
@@ -251,7 +242,8 @@ class MoodleImport
                     $resources['course_descriptions'][$descId] = $this->mkLegacyItem('course_descriptions', $descId, [
                         'title'            => $title,
                         'content'          => $html,
-                        'description_type' => 0,
+                        'description_type' => 1,
+                        'progress'         => 0,
                         'source_id'        => $descId,
                     ]);
                     if ($this->debug) { error_log("MBZ[$rid] label -> course_descriptions id={$descId} title=".json_encode($title)); }
@@ -260,18 +252,20 @@ class MoodleImport
 
                 case 'page': {
                     if (!$moduleXml || !is_file($moduleXml)) { break; }
+                    $this->materializeActivityHtmlFiles($workDir, $dir, $fileIndex, $resources['document']);
                     $isHomepage = $this->looksLikeCourseHomepage($dir, $moduleXml);
 
                     if ($isHomepage) {
                         $raw = $this->readPageContent($moduleXml);
                         $html = (string) $this->wrapHtmlIfNeeded(
-                            $this->rewritePluginfileBasic($raw, 'page'),
+                            $this->rewritePluginfileBasic($this->normalizePluginfileContent($raw), 'page'),
                             get_lang('Introduction')
                         );
                         if (!isset($resources['tool_intro']['course_homepage'])) {
                             $resources['tool_intro']['course_homepage'] = $this->mkLegacyItem('tool_intro', 0, [
                                 'id'         => 'course_homepage',
                                 'intro_text' => $html,
+                                'title'      => 'Introduction',
                             ]);
                             if ($this->debug) { error_log("MBZ[$rid] page HOMEPAGE -> tool_intro[course_homepage] set"); }
                         } else {
@@ -287,7 +281,10 @@ class MoodleImport
                     $abs   = $workDir.'/'.$rel;
 
                     $this->ensureDir(\dirname($abs));
-                    $html = $this->wrapHtmlIfNeeded($data['content'] ?? '', $data['name'] ?? ucfirst($modName));
+                    $html = $this->wrapHtmlIfNeeded(
+                        $this->rewritePluginfileBasic((string) ($data['content'] ?? ''), 'page'),
+                        $data['name'] ?? ucfirst($modName)
+                    );
                     file_put_contents($abs, $html);
 
                     $resources['document'][$docId] = $this->mkLegacyItem('document', $docId, [
@@ -296,6 +293,7 @@ class MoodleImport
                         'title'     => (string) ($data['name'] ?? ucfirst($modName)),
                         'size'      => @filesize($abs) ?: 0,
                         'comment'   => '',
+                        'source_id' => $docId,
                     ]);
                     if ($this->debug) { error_log("MBZ[$rid] page -> document id={$docId} path=/{$rel} title=".json_encode($resources['document'][$docId]->title)); }
 
@@ -304,6 +302,7 @@ class MoodleImport
                             'item_type' => 'document',
                             'ref'       => $docId,
                             'title'     => $data['name'] ?? ucfirst($modName),
+                            'path'      => '/'.$rel,
                         ];
                         if ($this->debug) { error_log("MBZ[$rid] page -> LP section={$sectionId} add document ref={$docId}"); }
                     }
@@ -617,11 +616,23 @@ class MoodleImport
             }
         }
 
-        // 8) Documents from resource + folder + inlined pluginfile
-        $this->readDocuments($workDir, $mb, $fileIndex, $resources, $lpMap);
-        if ($this->debug) {
+        // 8) Documents: prefer Chamilo sidecar document tree, fallback to Moodle files.xml parsing
+        $docsFromMeta = $this->tryImportDocumentMeta($workDir, $resources);
+
+        if (!$docsFromMeta) {
+            $this->readDocuments($workDir, $mb, $fileIndex, $resources, $lpMap);
+            if ($this->debug) {
+                $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
+                error_log("MBZ[$rid] after.readDocuments fallback counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+            }
+        } elseif ($this->debug) {
             $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
-            error_log("MBZ[$rid] after.readDocuments counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+            error_log("MBZ[$rid] after.tryImportDocumentMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+        } else {
+            if ($this->debug) {
+                $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
+                error_log("MBZ[$rid] after.documentMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+            }
         }
 
         // 8.1) Import quizzes from meta when present (skipping XML ensured above)
@@ -694,9 +705,13 @@ class MoodleImport
                     'learnpath',
                     $lid,
                     [
-                        'id'   => $lid,
-                        'name' => (string) $lp['title'],
-                        'lp_type' => 'section',
+                        'id'          => $lid,
+                        'source_id'   => $lid,
+                        'name'        => (string) $lp['title'],
+                        'title'       => (string) $lp['title'],
+                        'lp_type'     => 1,
+                        'path'        => '',
+                        'description' => '',
                         'category_id' => array_key_first($resources['learnpath_category']),
                     ],
                     ['items','linked_resources']
@@ -720,17 +735,21 @@ class MoodleImport
         if (!empty($courseMeta['summary'])) {
             $cdId = $this->nextId($resources['course_descriptions']);
             $resources['course_descriptions'][$cdId] = $this->mkLegacyItem('course_descriptions', $cdId, [
-                'title'       => 'Course summary',
-                'description' => (string) $courseMeta['summary'],
-                'type'        => 'summary',
+                'title'            => 'Course summary',
+                'content'          => (string) $courseMeta['summary'],
+                'description_type' => 1,
+                'progress'         => 0,
+                'source_id'        => $cdId,
             ]);
-            $tiId = $this->nextId($resources['tool_intro']);
-            $resources['tool_intro'][$tiId] = $this->mkLegacyItem('tool_intro', $tiId, [
-                'tool'    => 'Course home',
-                'title'   => 'Introduction',
-                'content' => (string) $courseMeta['summary'],
-            ]);
-            if ($this->debug) { error_log("MBZ[$rid] course_meta -> added summary to course_descriptions id={$cdId} and tool_intro id={$tiId}"); }
+
+            if (!isset($resources['tool_intro']['course_homepage'])) {
+                $resources['tool_intro']['course_homepage'] = $this->mkLegacyItem('tool_intro', 0, [
+                    'id'         => 'course_homepage',
+                    'title'      => 'Introduction',
+                    'intro_text' => (string) $courseMeta['summary'],
+                ]);
+            }
+            if ($this->debug) { error_log("MBZ[$rid] course_meta -> added summary to course_descriptions id={$cdId} and tool_intro[course_homepage]"); }
         }
 
         // 11) Events (course-level calendar) — optional
@@ -1748,27 +1767,11 @@ class MoodleImport
             error_log('[MOODLE_IMPORT:RESTORE_DOCS] '.$msg.(empty($ctx) ? '' : ' '.json_encode($ctx, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
         };
 
-        // Path normalizer: strip moodle-specific top-level segments like t/, moodle_pages/, Documents/
-        // NOTE: This is what makes "Documents" behave as root in Chamilo.
-        $normalizeMoodleRel = static function (string $rawPath): string {
-            $p = ltrim($rawPath, '/');
+        // Path normalizer: keep only the logical relative path that must remain visible in Chamilo.
+        $normalizeMoodleRel = function (string $rawPath): string {
+            $relative = $this->normalizeImportedDocumentRelativePath($rawPath);
 
-            // Drop "document/" prefix if present
-            if (str_starts_with($p, 'document/')) {
-                $p = substr($p, 9);
-            }
-
-            // Strip known moodle export prefixes (order matters: most specific first)
-            $strip = ['t/', 'moodle_pages/', 'Documents/'];
-            foreach ($strip as $pre) {
-                if (str_starts_with($p, $pre)) {
-                    $p = substr($p, \strlen($pre));
-                }
-            }
-
-            $p = ltrim($p, '/');
-
-            return '' === $p ? '/' : '/'.$p;
+            return '' === $relative ? '/' : '/'.$relative;
         };
 
         $isFolderItem = static function (object $item): bool {
@@ -1787,7 +1790,8 @@ class MoodleImport
 
         // Ensure folder chain and return destination parent iid
         $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $sessionId, $DBG) {
-            $rel = '/'.ltrim($relPath, '/');
+            $normalized = $this->normalizeImportedDocumentRelativePath($relPath);
+            $rel = '' === $normalized ? '/' : '/'.$normalized;
             if ('/' === $rel || '' === $rel) {
                 return 0;
             }
@@ -2156,46 +2160,27 @@ class MoodleImport
         // Ensure physical /document dir exists in the working dir (snapshot points there).
         $this->ensureDir($workDir.'/document');
 
-        // Helper: strip an optional leading "/Documents" segment *once*
-        $stripDocumentsRoot = static function (string $p): string {
-            $p = '/'.ltrim($p, '/');
-            if (preg_match('~^/Documents(/|$)~i', $p)) {
-                $p = substr($p, \strlen('/Documents'));
-                if (false === $p) {
-                    $p = '/';
-                }
-            }
+        // Small helper: ensure folder chain (legacy snapshot + filesystem) under /document
+        // using only the logical relative path that should remain visible in Chamilo.
+        $ensureFolderChain = function (string $base, string $fp) use (&$resources, $workDir): string {
+            $base = rtrim($base, '/'); // expected "/document"
+            $relative = $this->normalizeImportedDocumentRelativePath($fp);
 
-            return '' === $p ? '/' : $p;
-        };
-
-        // Small helper: ensure folder chain (legacy snapshot + filesystem) under /document,
-        // skipping an initial "Documents" segment if present.
-        $ensureFolderChain = function (string $base, string $fp) use (&$resources, $workDir, $stripDocumentsRoot): string {
-            // Normalize base and fp
-            $base = rtrim($base, '/');               // expected "/document"
-            $fp = $this->normalizeSlash($fp ?: '/'); // "/sub/dir/" or "/"
-            $fp = $stripDocumentsRoot($fp);
-
-            if ('/' === $fp || '' === $fp) {
-                // Just the base /document
+            if ('' === $relative) {
                 $this->ensureDir($workDir.$base);
 
                 return $base;
             }
 
-            // Split and ensure each segment (both on disk and in legacy snapshot)
-            $parts = array_values(array_filter(explode('/', trim($fp, '/'))));
+            $parts = array_values(array_filter(explode('/', trim($relative, '/'))));
             $accRel = $base;
             foreach ($parts as $seg) {
                 $accRel .= '/'.$seg;
-                // Create on disk
                 $this->ensureDir($workDir.$accRel);
-                // Create in legacy snapshot as a folder node (idempotent)
                 $this->ensureFolderLegacy($resources['document'], $accRel, $seg);
             }
 
-            return $accRel; // final parent folder rel path (under /document)
+            return $accRel;
         };
 
         // A) Restore "resource" activities (single-file resources)
@@ -2212,10 +2197,8 @@ class MoodleImport
                 continue;
             }
 
-            // 1) Read resource name/intro
             [$resName, $resIntro] = $this->readResourceMeta($resourceXml);
 
-            // 2) Resolve referenced file ids
             $fileIds = $this->parseInforefFileIds($inforefXml);
             if (empty($fileIds)) {
                 continue;
@@ -2227,24 +2210,21 @@ class MoodleImport
                     continue;
                 }
 
-                // Keep original structure from files.xml under /document (NOT /document/Documents)
-                $fp = $this->normalizeSlash($f['filepath'] ?? '/'); // e.g. "/sub/dir/"
-                $fp = $stripDocumentsRoot($fp);
-                $base = '/document'; // root in Chamilo
+                $fp = $this->normalizeSlash($f['filepath'] ?? '/');
+                $base = '/document';
                 $parentRel = $ensureFolderChain($base, $fp);
 
                 $fileName = ltrim((string) ($f['filename'] ?? ''), '/');
                 if ('' === $fileName) {
                     $fileName = 'file_'.$fid;
                 }
+
                 $targetRel = rtrim($parentRel, '/').'/'.$fileName;
                 $targetAbs = $workDir.$targetRel;
 
-                // Copy binary into working dir
                 $this->ensureDir(\dirname($targetAbs));
-                $this->safeCopy($f['blob'], $targetAbs);
+                $this->safeCopy((string) $f['blob'], $targetAbs);
 
-                // Register in legacy snapshot
                 $docId = $this->nextId($resources['document']);
                 $resources['document'][$docId] = $this->mkLegacyItem(
                     'document',
@@ -2258,7 +2238,6 @@ class MoodleImport
                     ]
                 );
 
-                // Add to LP of the section, if present (keeps current behavior)
                 $sectionId = (int) ($node->getElementsByTagName('sectionid')->item(0)?->nodeValue ?? 0);
                 if ($sectionId > 0 && isset($lpMap[$sectionId])) {
                     $resourcesDocTitle = $resources['document'][$docId]->title ?? (string) $fileName;
@@ -2277,28 +2256,23 @@ class MoodleImport
                 continue;
             }
 
-            // Keep inner structure from files.xml under /document; strip leading "Documents/"
-            $fp = $this->normalizeSlash($f['filepath'] ?? '/'); // e.g. "/unit1/slide/"
-            $fp = $stripDocumentsRoot($fp);
+            $fp = $this->normalizeSlash($f['filepath'] ?? '/');
             $base = '/document';
 
             // Ensure folder chain exists on disk and in legacy map; get parent rel
             $parentRel = $ensureFolderChain($base, $fp);
 
-            // Final rel path for the file
             $fileName = ltrim((string) ($f['filename'] ?? ''), '/');
             if ('' === $fileName) {
-                // Defensive: generate name if missing (rare, but keeps import resilient)
                 $fileName = 'file_'.$this->nextId($resources['document']);
             }
+
             $rel = rtrim($parentRel, '/').'/'.$fileName;
-
-            // Copy to working dir
             $abs = $workDir.$rel;
-            $this->ensureDir(\dirname($abs));
-            $this->safeCopy($f['blob'], $abs);
 
-            // Register the file in legacy snapshot (folder nodes were created by ensureFolderChain)
+            $this->ensureDir(\dirname($abs));
+            $this->safeCopy((string) $f['blob'], $abs);
+
             $docId = $this->nextId($resources['document']);
             $resources['document'][$docId] = $this->mkLegacyItem(
                 'document',
@@ -2457,23 +2431,176 @@ class MoodleImport
     }
 
     /**
-     * Replace Moodle @@PLUGINFILE@@ placeholders with package-local /document/ URLs
-     * so that later HTML URL mapping can resolve and rewire them correctly.
-     * Examples:
-     *   @@PLUGINFILE@@/Documents/foo.png  -> /document/foo.png
-     *   @@PLUGINFILE@@/documents/bar.pdf  -> /document/bar.pdf
+     * Normalize a relative document path coming from Moodle XML or sidecar files
+     * so that only the logical Chamilo document tree remains visible.
      */
+
+    private function normalizeImportedDocumentRelativePath(string $rawPath): string
+    {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $path = preg_replace('~^(?:t|courses)/[^/]+/document/~i', '', $path);
+        $path = preg_replace('~^main/document/~i', '', $path);
+        $path = preg_replace('~^document/~i', '', $path);
+
+        do {
+            $before = $path;
+            foreach (['Documents/', 'documents/', 'moodle_pages/', 't/'] as $prefix) {
+                if (str_starts_with($path, $prefix)) {
+                    $path = substr($path, \strlen($prefix));
+                }
+            }
+            $path = trim((string) preg_replace('#/+#', '/', $path), '/');
+        } while ($path !== '' && $path !== $before);
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        // Only drop a host-like prefix when there is still a remaining path after it.
+        // This avoids treating real filenames like "Cuzco.png" as if they were a hostname.
+        if (
+            \count($segments) > 1 &&
+            preg_match('~^(localhost(?:-\d+)?|127(?:\.\d+){3}|[a-z0-9.-]+\.[a-z]{2,})$~i', (string) $segments[0])
+        ) {
+            array_shift($segments);
+        }
+
+        foreach ($segments as $index => $segment) {
+            $hasExtension = '' !== (string) pathinfo($segment, PATHINFO_EXTENSION);
+
+            // Clean technical folder suffixes like certificates-23443 => certificates
+            if (!$hasExtension && preg_match('~^(.+)-\d{3,}$~', $segment, $matches)) {
+                $segments[$index] = (string) $matches[1];
+            }
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
     private function normalizePluginfileContent(string $html): string
     {
-        if ('' === $html) {
+        if ('' === $html || !str_contains($html, '@@PLUGINFILE@@')) {
             return $html;
         }
 
-        // Case-insensitive replace; keep a single leading slash
-        // Handles both Documents/ and documents/
-        $html = preg_replace('~@@PLUGINFILE@@/(?:Documents|documents)/~i', '/document/', $html);
+        return (string) preg_replace_callback(
+            "~@@PLUGINFILE@@/([^\"'\\)\\s>]+)~i",
+            function (array $m): string {
+                $relative = $this->normalizeImportedDocumentRelativePath((string) ($m[1] ?? ''));
+                if ('' === $relative) {
+                    return '@@PLUGINFILE@@/'.ltrim((string) ($m[1] ?? ''), '/');
+                }
 
-        return $html;
+                return '/document/'.$relative;
+            },
+            $html
+        );
+    }
+
+    /**
+     * Copy files referenced by an activity in inforef.xml into the logical /document tree
+     * and register them in the legacy document bucket so CourseRestorer can relink them.
+     */
+    private function materializeActivityHtmlFiles(string $workDir, string $dir, array $fileIndex, array &$documentBucket): void
+    {
+        $inforefXml = rtrim($workDir, '/').'/'.trim($dir, '/').'/inforef.xml';
+        if (!is_file($inforefXml)) {
+            return;
+        }
+
+        $fileIds = $this->parseInforefFileIds($inforefXml);
+        if (empty($fileIds)) {
+            return;
+        }
+
+        foreach ($fileIds as $fileId) {
+            $row = $fileIndex['byId'][$fileId] ?? null;
+            if (!\is_array($row)) {
+                continue;
+            }
+
+            $filename = (string) ($row['filename'] ?? '');
+            if ('' === $filename || '.' === $filename) {
+                continue;
+            }
+
+            $blob = (string) ($row['blob'] ?? '');
+            if ('' === $blob || !is_file($blob)) {
+                continue;
+            }
+
+            $filepath = trim((string) ($row['filepath'] ?? '/'), '/');
+            $relative = '' !== $filepath ? $filepath.'/'.$filename : $filename;
+            $relative = $this->normalizeImportedDocumentRelativePath($relative);
+            if ('' === $relative) {
+                continue;
+            }
+
+            $targetRel = 'document/'.$relative;
+            $targetAbs = rtrim($workDir, '/').'/'.$targetRel;
+            $this->ensureDir(dirname($targetAbs));
+
+            if (!is_file($targetAbs)) {
+                @copy($blob, $targetAbs);
+            }
+
+            $folderParts = array_values(array_filter(explode('/', trim(dirname('/'.$targetRel), '/'))));
+            $accum = '';
+            foreach ($folderParts as $part) {
+                if ('' === $part) {
+                    continue;
+                }
+                $accum .= '/'.$part;
+                $this->ensureFolderLegacy($documentBucket, $accum, $part);
+            }
+
+            $legacyPath = '/'.$targetRel;
+            $already = false;
+            foreach ($documentBucket as $existing) {
+                if (!\is_object($existing)) {
+                    continue;
+                }
+                $path = (string) (($existing->path ?? '') ?: ($existing->obj->path ?? ''));
+                if ($path === $legacyPath) {
+                    $already = true;
+                    break;
+                }
+            }
+            if ($already) {
+                continue;
+            }
+
+            $docId = $this->nextId($documentBucket);
+            $documentBucket[$docId] = $this->mkLegacyItem('document', $docId, [
+                'file_type' => 'file',
+                'path' => $legacyPath,
+                'title' => basename($relative),
+                'size' => @filesize($targetAbs) ?: 0,
+                'comment' => '',
+                'source_id' => $docId,
+            ]);
+        }
     }
 
     private function readCourseMeta(string $courseXmlPath): array
@@ -2983,8 +3110,10 @@ class MoodleImport
             $lid = $this->nextId($resources['learnpath']);
             $payload = [
                 'id'          => $lid,
+                'source_id'   => (int) ($lpRaw['id'] ?? ($row['id'] ?? $lid)),
                 'lp_type'     => $lpType, // 1=LP, 2=SCORM, 3=AICC
                 'title'       => $lpTitle,
+                'name'        => $lpTitle,
                 'path'        => (string) ($lpRaw['path'] ?? ''),
                 'ref'         => (string) ($lpRaw['ref'] ?? ''),
                 'description' => (string) ($lpRaw['description'] ?? ''),
@@ -3191,9 +3320,9 @@ class MoodleImport
 
     /**
     " Import quizzes from QuizMetaExport sidecars under chamilo/quiz/quiz_.
-    * Builds 'quiz' and 'quiz_question' (and their constant-key aliases if defined).
-    * Returns true if at least one quiz was imported.
-    */
+     * Builds 'quiz' and 'quiz_question' (and their constant-key aliases if defined).
+     * Returns true if at least one quiz was imported.
+     */
     private function tryImportQuizMeta(string $workDir, array &$resources): bool
     {
         $base = rtrim($workDir, '/').'/chamilo/quiz';
@@ -3453,6 +3582,164 @@ class MoodleImport
     {
         $base = rtrim($workDir, '/').'/chamilo/learnpath';
         return is_dir($base) && (is_file($base.'/index.json') || is_file($base.'/categories.json'));
+    }
+
+    /** Quick probe: Chamilo-sidecar document index. */
+    private function hasDocumentMeta(string $workDir): bool
+    {
+        return is_file(rtrim($workDir, '/').'/chamilo/document/index.json');
+    }
+
+    /**
+     * Import the authoritative Chamilo document sidecar and materialize files under workDir/document.
+     */
+    private function tryImportDocumentMeta(string $workDir, array &$resources): bool
+    {
+        $indexFile = rtrim($workDir, '/').'/chamilo/document/index.json';
+        if (!is_file($indexFile)) {
+            return false;
+        }
+
+        $data = $this->readJsonFile($indexFile);
+        $rows = (array) ($data['documents'] ?? []);
+        if (empty($rows)) {
+            return false;
+        }
+
+        $resources['document'] ??= [];
+        $this->ensureDir($workDir.'/document');
+
+        $existing = [];
+        foreach ((array) $resources['document'] as $item) {
+            $path = '';
+
+            if (\is_object($item)) {
+                $path = (string) ($item->path ?? '');
+                if ('' === $path && isset($item->obj) && \is_object($item->obj)) {
+                    $path = (string) ($item->obj->path ?? '');
+                }
+            } elseif (\is_array($item)) {
+                $path = (string) ($item['path'] ?? '');
+            }
+
+            if ('' !== $path) {
+                $existing[$path] = true;
+            }
+        }
+
+        $ensureFolderChain = function (string $relative) use (&$resources, $workDir, &$existing): void {
+            $segments = array_values(array_filter(
+                explode('/', trim($relative, '/')),
+                static fn ($part) => '' !== trim((string) $part)
+            ));
+
+            $acc = '/document';
+            $this->ensureDir($workDir.$acc);
+
+            foreach ($segments as $segment) {
+                $acc .= '/'.$segment;
+                $this->ensureDir($workDir.$acc);
+
+                if (!isset($existing[$acc])) {
+                    $this->ensureFolderLegacy($resources['document'], $acc, $segment);
+                    $existing[$acc] = true;
+                }
+            }
+        };
+
+        $fileRows = 0;
+        $materialized = 0;
+
+        foreach ($rows as $row) {
+            if (!\is_array($row)) {
+                continue;
+            }
+
+            $relative = $this->normalizeImportedDocumentRelativePath((string) ($row['path'] ?? ''));
+            if ('' === $relative) {
+                continue;
+            }
+
+            $fileType = strtolower((string) ($row['file_type'] ?? 'file'));
+            $title = trim((string) ($row['title'] ?? basename($relative)));
+            $comment = (string) ($row['comment'] ?? '');
+            $size = (int) ($row['size'] ?? 0);
+
+            if ('folder' === $fileType) {
+                $ensureFolderChain($relative);
+                continue;
+            }
+
+            $fileRows++;
+
+            $parent = trim((string) dirname($relative), '.');
+            if ('.' === $parent) {
+                $parent = '';
+            }
+
+            if ('' !== $parent) {
+                $ensureFolderChain($parent);
+            } else {
+                $this->ensureDir($workDir.'/document');
+            }
+
+            $legacyPath = '/document/'.$relative;
+            $targetAbs = rtrim($workDir, '/').$legacyPath;
+            $this->ensureDir(\dirname($targetAbs));
+
+            $contentHash = trim((string) ($row['contenthash'] ?? ''));
+            $assetRelPath = ltrim((string) ($row['asset_relpath'] ?? ''), '/');
+
+            $sourceAbs = '';
+            if ('' !== $contentHash) {
+                $candidate = $this->contentHashPath($workDir, $contentHash);
+                if (is_file($candidate)) {
+                    $sourceAbs = $candidate;
+                }
+            }
+
+            if ('' === $sourceAbs && '' !== $assetRelPath) {
+                $candidate = rtrim($workDir, '/').'/'.$assetRelPath;
+                if (is_file($candidate)) {
+                    $sourceAbs = $candidate;
+                }
+            }
+
+            if ('' !== $sourceAbs && !is_file($targetAbs)) {
+                @copy($sourceAbs, $targetAbs);
+            }
+
+            if (!is_file($targetAbs)) {
+                if ($this->debug) {
+                    error_log('MOODLE_IMPORT: document meta file missing '.$legacyPath);
+                }
+                continue;
+            }
+
+            $materialized++;
+
+            if (isset($existing[$legacyPath])) {
+                continue;
+            }
+
+            $docId = $this->nextId($resources['document']);
+            $resources['document'][$docId] = $this->mkLegacyItem(
+                'document',
+                $docId,
+                [
+                    'file_type' => 'file',
+                    'path' => $legacyPath,
+                    'title' => '' !== $title ? $title : basename($relative),
+                    'comment' => $comment,
+                    'size' => (string) ($size > 0 ? $size : (@filesize($targetAbs) ?: 0)),
+                    'source_id' => (int) ($row['source_id'] ?? $row['id'] ?? $docId),
+                ]
+            );
+
+            $existing[$legacyPath] = true;
+        }
+
+        return $fileRows > 0 && $materialized === $fileRows;
     }
 
     /** Cheap reader: obtain <quiz><name> from module xml without building resources. */
@@ -4012,16 +4299,27 @@ class MoodleImport
         }
 
         // src/href/poster/data
-        $html = (string)preg_replace(
-            '~\b(src|href|poster|data)\s*=\s*([\'"])@@PLUGINFILE@@/([^\'"]+)\2~i',
-            '$1=$2/document/moodle_pages/$3$2',
+        $html = (string)preg_replace_callback(
+            '~\b(src|href|poster|data)\s*=\s*([\'\"])@@PLUGINFILE@@/([^\'\"]+)\2~i',
+            function (array $m): string {
+                $attr = (string) ($m[1] ?? 'src');
+                $quote = (string) ($m[2] ?? '"');
+                $relative = $this->normalizeImportedDocumentRelativePath((string) ($m[3] ?? ''));
+
+                return $attr.'='.$quote.'/document/'.$relative.$quote;
+            },
             $html
         );
 
         // url(...) in inline styles
-        $html = (string)preg_replace(
-            '~url\((["\']?)@@PLUGINFILE@@/([^)\'"]+)\1\)~i',
-            'url($1/document/moodle_pages/$2$1)',
+        $html = (string)preg_replace_callback(
+            '~url\((["\']?)@@PLUGINFILE@@/([^)\'\"]+)\1\)~i',
+            function (array $m): string {
+                $quote = (string) ($m[1] ?? '');
+                $relative = $this->normalizeImportedDocumentRelativePath((string) ($m[2] ?? ''));
+
+                return 'url('.$quote.'/document/'.$relative.$quote.')';
+            },
             $html
         );
 

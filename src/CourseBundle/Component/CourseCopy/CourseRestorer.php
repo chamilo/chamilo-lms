@@ -715,17 +715,22 @@ class CourseRestorer
         };
 
         // Top-level folders we never want to import as visible Documents (even in import mode)
-        $alwaysSkipTopFolders = [];
+        $alwaysSkipTopFolders = ['t'];
 
         // Reserved containers that must not leak into destination when copying
         $reservedTopFolders = ['certificates', 'learnpaths'];
 
         // Normalize any incoming "rel"
         $normalizeRel = function (string $rel) use ($copyMode): string {
-            $rel = '/'.ltrim($rel, '/');
+            $rel = '/'.ltrim(str_replace('\\', '/', $rel), '/');
+            $rel = preg_replace('#/+#', '/', $rel) ?: $rel;
 
-            while (preg_match('#^/document/#i', $rel)) {
-                $rel = preg_replace('#^/document/#i', '/', $rel, 1);
+            while (preg_match('#^/document(?:/|$)#i', $rel)) {
+                $rel = preg_replace('#^/document(?:/|$)#i', '/', $rel, 1) ?: $rel;
+            }
+
+            while ('/t' === strtolower($rel) || preg_match('#^/t/#i', $rel)) {
+                $rel = preg_replace('#^/t(?:/|$)#i', '/', $rel, 1) ?: $rel;
             }
 
             if ($copyMode) {
@@ -734,18 +739,19 @@ class CourseRestorer
 
                     return $rest === '' ? '/' : '/'.ltrim($rest, '/');
                 }
+
                 if (preg_match('#^/certificates/(.*)$#i', $rel, $m)) {
                     return '/'.ltrim($m[1], '/');
                 }
             }
 
             if ($copyMode && preg_match('#^/([^/]+)/([^/]+)(?:/(.*))?$#', $rel, $m)) {
-                $host   = $m[1];
+                $host = $m[1];
                 $course = $m[2];
-                $rest   = $m[3] ?? '';
+                $rest = $m[3] ?? '';
 
                 $hostLooksLikeHostname = ($host === 'localhost') || str_contains($host, '.');
-                $courseLooksLikeCode   = (bool) preg_match('/^[A-Za-z0-9_\-]{3,}$/', $course);
+                $courseLooksLikeCode = (bool) preg_match('/^[A-Za-z0-9_\-]{3,}$/', $course);
 
                 if ($hostLooksLikeHostname && $courseLooksLikeCode) {
                     return $rest === '' ? '/' : '/'.ltrim($rest, '/');
@@ -755,6 +761,7 @@ class CourseRestorer
             if ($copyMode && preg_match('#^/(?:learnpaths?|lp)/[^/]+/(.*)$#i', $rel, $m)) {
                 return '/'.ltrim($m[1], '/');
             }
+
             if ($copyMode && preg_match('#^/(?:learnpaths?|lp)/(.*)$#i', $rel, $m)) {
                 return '/'.ltrim($m[1], '/');
             }
@@ -7440,6 +7447,11 @@ class CourseRestorer
                     return $m[0];
                 }
 
+                $resolvedRel = $this->resolveHtmlDocumentSourceRelativePath($srcRoot, $rel);
+                if (null !== $resolvedRel) {
+                    $rel = $resolvedRel;
+                }
+
                 $depAbs = rtrim($srcRoot, '/').'/'.$rel;
                 if (!is_file($depAbs) || !is_readable($depAbs)) {
                     $misses++;
@@ -8638,16 +8650,31 @@ class CourseRestorer
         $rel = ltrim(str_replace('\\', '/', $rel), '/');
         $rel = preg_replace('#/+#', '/', $rel) ?: $rel;
 
-        if (!str_starts_with($rel, 'document/')) {
-            return $rel;
+        if ('' === $rel || '.' === $rel) {
+            return '';
         }
 
-        // Legacy backups sometimes reference "/document/t/..." while the ZIP stores "/document/...".
-        if (preg_match('#^document/t/(.+)$#i', $rel, $m)) {
-            return 'document/'.ltrim((string) $m[1], '/');
+        // Remove legacy absolute prefixes first.
+        $rel = preg_replace('~^(?:t|courses)/[^/]+/document/~i', 'document/', $rel) ?: $rel;
+        $rel = preg_replace('~^main/document/~i', 'document/', $rel) ?: $rel;
+
+        // Remove stray technical root "t/" even when it comes without "document/".
+        while (str_starts_with(strtolower($rel), 't/')) {
+            $rel = ltrim(substr($rel, 2), '/');
         }
 
-        return $rel;
+        // Normalize document-prefixed paths too.
+        if (str_starts_with(strtolower($rel), 'document/')) {
+            $rel = substr($rel, \strlen('document/'));
+
+            while (str_starts_with(strtolower($rel), 't/')) {
+                $rel = ltrim(substr($rel, 2), '/');
+            }
+
+            $rel = 'document/'.ltrim($rel, '/');
+        }
+
+        return trim($rel, '/');
     }
 
     private function resolveAnnouncementAttachmentSourcePath(array $row, string $originPath): ?string
@@ -8692,5 +8719,81 @@ class CourseRestorer
         }
 
         return null;
+    }
+
+    private function resolveHtmlDocumentSourceRelativePath(string $srcRoot, string $rel): ?string
+    {
+        $rel = $this->normalizeImportedDocumentRelativePath($rel);
+        $rel = ltrim(str_replace('\\', '/', $rel), '/');
+
+        if ('' === $rel) {
+            return null;
+        }
+
+        $exact = rtrim($srcRoot, '/').'/'.$rel;
+        if (is_file($exact) && is_readable($exact)) {
+            return $rel;
+        }
+
+        $docRoot = rtrim($srcRoot, '/').'/document';
+        if (!is_dir($docRoot)) {
+            return null;
+        }
+
+        $basename = basename($rel);
+        if ('' === $basename) {
+            return null;
+        }
+
+        $matches = [];
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($docRoot, \FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if (!$file->isFile()) {
+                continue;
+            }
+
+            if (0 !== strcasecmp($file->getFilename(), $basename)) {
+                continue;
+            }
+
+            $fullPath = str_replace('\\', '/', $file->getPathname());
+            $rootPrefix = str_replace('\\', '/', rtrim($srcRoot, '/')).'/';
+
+            if (!str_starts_with($fullPath, $rootPrefix)) {
+                continue;
+            }
+
+            $candidate = ltrim(substr($fullPath, strlen($rootPrefix)), '/');
+            if (!str_starts_with(strtolower($candidate), 'document/')) {
+                continue;
+            }
+
+            $matches[] = $candidate;
+        }
+
+        $matches = array_values(array_unique($matches));
+
+        if (1 === count($matches)) {
+            return $matches[0];
+        }
+
+        $requestedDir = trim(str_replace('\\', '/', dirname($rel)), '/');
+        if ('.' === $requestedDir) {
+            $requestedDir = '';
+        }
+
+        foreach ($matches as $candidate) {
+            $candidateDir = trim(str_replace('\\', '/', dirname($candidate)), '/');
+
+            if ('' !== $requestedDir && str_ends_with(strtolower($candidateDir), strtolower($requestedDir))) {
+                return $candidate;
+            }
+        }
+
+        return $matches[0] ?? null;
     }
 }

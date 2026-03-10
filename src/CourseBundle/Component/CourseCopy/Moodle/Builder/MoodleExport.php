@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AnnouncementsForumExport;
@@ -217,6 +218,7 @@ class MoodleExport
         $this->exportGradebookActivities($activities, $tempDir);
         $this->exportQuizMetaActivities($activities, $tempDir);
         $this->exportLearnpathMeta($tempDir);
+        $this->exportDocumentIndex($tempDir);
 
         // Root XMLs.
         $this->exportRootXmlFiles($tempDir, $activities);
@@ -1535,6 +1537,289 @@ class MoodleExport
             ?? [];
 
         return is_array($documents) ? $documents : [];
+    }
+
+
+    private function exportDocumentIndex(string $exportDir): void
+    {
+        $documents = $this->getDocumentBucket();
+        if (empty($documents)) {
+            return;
+        }
+
+        $hashById = $this->buildExportedDocumentHashMap($exportDir);
+
+        $indexDir = rtrim($exportDir, '/').'/chamilo/document';
+        if (!is_dir($indexDir) && !@mkdir($indexDir, api_get_permissions_for_new_directories(), true) && !is_dir($indexDir)) {
+            @error_log('[MoodleExport::exportDocumentIndex] ERROR cannot create '.$indexDir);
+
+            return;
+        }
+
+        $entries = [];
+        $seen = [];
+
+        foreach ($documents as $id => $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $doc = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
+
+            $rawPath = (string) ($doc->path ?? $wrap->path ?? '');
+            if ('' === $rawPath) {
+                continue;
+            }
+
+            $fileType = strtolower((string) ($doc->file_type ?? $doc->filetype ?? $wrap->file_type ?? $wrap->filetype ?? ''));
+            $isFolder = 'folder' === $fileType || '/' === substr($rawPath, -1);
+
+            $relativePath = $this->normalizeDocumentIndexRelativePath($rawPath);
+            if ('' === $relativePath) {
+                continue;
+            }
+
+            $title = trim((string) ($doc->title ?? $wrap->title ?? ''));
+            $cleanPath = $this->buildCleanDocumentExportPath($relativePath, $title, $isFolder);
+            if ('' === $cleanPath) {
+                continue;
+            }
+
+            $key = ($isFolder ? 'folder:' : 'file:').$cleanPath;
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+
+            if ('' === $title) {
+                $title = basename($cleanPath);
+            }
+
+            $parentPath = trim((string) dirname($cleanPath), '.');
+            if ('.' === $parentPath) {
+                $parentPath = '';
+            }
+
+            $entry = [
+                'id' => (int) ($doc->iid ?? $wrap->source_id ?? $id),
+                'source_id' => (int) ($wrap->source_id ?? $doc->iid ?? $id),
+                'file_type' => $isFolder ? 'folder' : 'file',
+                'path' => $cleanPath,
+                'title' => $title,
+                'comment' => (string) ($doc->comment ?? $wrap->comment ?? ''),
+                'size' => (int) ($doc->size ?? $wrap->size ?? 0),
+                'parent_path' => $parentPath,
+            ];
+
+            if (!$isFolder) {
+                $lookupId = (int) ($wrap->source_id ?? $doc->iid ?? $id);
+                $contentHash = (string) ($hashById[$lookupId] ?? '');
+
+                // Only keep file entries that actually have a blob inside files/.
+                if ('' === $contentHash) {
+                    continue;
+                }
+
+                $entry['contenthash'] = $contentHash;
+            }
+
+            $entries[] = $entry;
+        }
+
+        usort(
+            $entries,
+            static function (array $a, array $b): int {
+                if (($a['file_type'] ?? '') !== ($b['file_type'] ?? '')) {
+                    return 'folder' === ($a['file_type'] ?? '') ? -1 : 1;
+                }
+
+                return strcmp((string) ($a['path'] ?? ''), (string) ($b['path'] ?? ''));
+            }
+        );
+
+        file_put_contents(
+            $indexDir.'/index.json',
+            json_encode(
+                [
+                    'generated_at' => date('c'),
+                    'course_code' => (string) ($this->course->code ?? ''),
+                    'documents' => $entries,
+                ],
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            )
+        );
+    }
+
+    private function buildExportedDocumentHashMap(string $exportDir): array
+    {
+        $filesXml = rtrim($exportDir, '/').'/files.xml';
+        if (!is_file($filesXml)) {
+            return [];
+        }
+
+        $xml = @simplexml_load_file($filesXml);
+        if (false === $xml) {
+            @error_log('[MoodleExport::buildExportedDocumentHashMap] ERROR cannot read files.xml');
+
+            return [];
+        }
+
+        $map = [];
+
+        foreach ($xml->file as $file) {
+            $id = (int) ($file['id'] ?? 0);
+            $hash = trim((string) ($file->contenthash ?? ''));
+
+            if ($id > 0 && '' !== $hash) {
+                $map[$id] = $hash;
+            }
+        }
+
+        return $map;
+    }
+
+    private function normalizeDocumentIndexRelativePath(string $rawPath): string
+    {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part) => '' !== $part
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        while (!empty($segments) && 0 === strcasecmp((string) $segments[0], 'document')) {
+            array_shift($segments);
+        }
+
+        if (
+            !empty($segments) &&
+            preg_match('~^(localhost(?:-\d+)?|127(?:\.\d+){3}|[a-z0-9.-]+\.[a-z]{2,})$~i', (string) $segments[0])
+        ) {
+            array_shift($segments);
+        }
+
+        $courseCode = (string) ($this->course->code ?? '');
+        if ('' !== $courseCode && !empty($segments)) {
+            $first = (string) $segments[0];
+            if (
+                0 === strcasecmp($first, $courseCode) ||
+                str_starts_with(strtolower($first), strtolower($courseCode).'-')
+            ) {
+                array_shift($segments);
+            }
+        }
+
+        foreach ($segments as $index => $segment) {
+            $hasExtension = '' !== (string) pathinfo($segment, PATHINFO_EXTENSION);
+            if (!$hasExtension && preg_match('~^(.+)-\d{3,}$~', $segment, $matches)) {
+                $segments[$index] = (string) $matches[1];
+            }
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
+    private function buildCleanDocumentExportPath(string $relativePath, string $title, bool $isFolder): string
+    {
+        $segments = array_values(array_filter(
+            explode('/', trim($relativePath, '/')),
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        $lastIndex = \count($segments) - 1;
+
+        foreach ($segments as $index => $segment) {
+            $segment = trim(str_replace('\\', '/', (string) $segment), '/');
+            $segment = preg_replace('#\s+#', ' ', $segment) ?? $segment;
+            $segments[$index] = basename($segment);
+        }
+
+        $cleanTitle = basename(trim(str_replace('\\', '/', $title), '/'));
+
+        if ($isFolder) {
+            if ('' !== $cleanTitle) {
+                $segments[$lastIndex] = $cleanTitle;
+            }
+        } else {
+            $originalFileName = $segments[$lastIndex];
+            $titleExt = (string) pathinfo($cleanTitle, PATHINFO_EXTENSION);
+
+            // For files, prefer the document title when it already looks like a real filename.
+            // This removes technical suffixes such as "-23450" from exported paths.
+            if ('' !== $cleanTitle && '' !== $titleExt) {
+                $segments[$lastIndex] = $cleanTitle;
+            } else {
+                $segments[$lastIndex] = $originalFileName;
+            }
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return trim(implode('/', $segments), '/');
+    }
+
+    private function resolveSourceDocumentAbsolutePath(object $doc): ?string
+    {
+        if (!method_exists($doc, 'getResourceNode')) {
+            return null;
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node || !method_exists($node, 'getResourceFiles')) {
+            return null;
+        }
+
+        $files = $node->getResourceFiles();
+        if (!$files || 0 === $files->count()) {
+            return null;
+        }
+
+        $first = $files->first();
+        if (!$first instanceof ResourceFile) {
+            return null;
+        }
+
+        $file = $first->getFile();
+        if (!$file) {
+            return null;
+        }
+
+        $pathname = $file->getPathname();
+        if ('' === $pathname || !is_file($pathname)) {
+            return null;
+        }
+
+        return $pathname;
     }
 
     /**

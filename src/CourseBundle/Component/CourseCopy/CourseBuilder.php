@@ -2997,15 +2997,16 @@ class CourseBuilder
             }
 
             try {
-                if ($documentsRoot instanceof ResourceNode) {
-                    $rel = (string) $node->getPathForDisplayRemoveBase((string) ($documentsRoot->getPath() ?? ''));
-                } else {
-                    $rel = (string) $node->convertPathForDisplay((string) ($node->getPath() ?? ''));
-                    $rel = preg_replace('~^/?Documents/?~i', '', $rel) ?? $rel;
-                }
+                $rel = $this->normalizeDocumentRelativePathForMoodleExport(
+                    (string) ($node->getPath() ?? ''),
+                    $course,
+                    $documentsRoot instanceof ResourceNode ? (string) ($documentsRoot->getPath() ?? '') : '',
+                    $title,
+                    'folder' === $filetype
+                );
             } catch (Throwable $e) {
                 error_log(sprintf(
-                    '[MOODLE EXPORT] Failed to resolve document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
+                    '[MOODLE EXPORT] Failed to normalize document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
                     $iid,
                     (int) $node->getId(),
                     $title,
@@ -3432,5 +3433,124 @@ class CourseBuilder
         } catch (Throwable) {
             return '';
         }
+    }
+
+    private function normalizeDocumentRelativePathForMoodleExport(
+        string $rawPath,
+        CourseEntity $course,
+        string $documentsRootPath = '',
+        string $title = '',
+        bool $isFolder = false
+    ): string {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $root = trim(str_replace('\\', '/', $documentsRootPath));
+        $root = preg_replace('#/+#', '/', $root);
+        $root = trim((string) $root, '/');
+
+        if ('' !== $root) {
+            if ($path === $root) {
+                return '';
+            }
+
+            if (str_starts_with($path, $root.'/')) {
+                $path = substr($path, strlen($root) + 1);
+            }
+        }
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        // Drop host-like prefix: localhost, localhost-4, domain, IP
+        if (isset($segments[0]) && $this->looksLikeExportHostSegment((string) $segments[0])) {
+            array_shift($segments);
+        }
+
+        $courseCode = trim((string) $course->getCode());
+        if ('' !== $courseCode && isset($segments[0])) {
+            $first = (string) $segments[0];
+            $courseCodeLower = mb_strtolower($courseCode);
+            $firstLower = mb_strtolower($first);
+
+            if (
+                $firstLower === $courseCodeLower ||
+                str_starts_with($firstLower, $courseCodeLower.'-')
+            ) {
+                array_shift($segments);
+            }
+        }
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        $lastIndex = array_key_last($segments);
+
+        foreach ($segments as $index => $segment) {
+            $segment = trim((string) $segment);
+
+            if ('' === $segment) {
+                unset($segments[$index]);
+                continue;
+            }
+
+            // Folders in Chamilo paths often carry "-nodeId"
+            if (!str_contains($segment, '.') && preg_match('~^(.+)-\d+$~', $segment, $matches)) {
+                $segment = (string) $matches[1];
+            }
+
+            // For the final folder segment, prefer the document title if available
+            if ($isFolder && $index === $lastIndex && '' !== trim($title)) {
+                $segment = trim($title);
+            }
+
+            $segments[$index] = $segment;
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
+    private function looksLikeExportHostSegment(string $segment): bool
+    {
+        $segment = trim($segment);
+
+        if ('' === $segment) {
+            return false;
+        }
+
+        if (preg_match('~^localhost(?:-\d+)?$~i', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^\d{1,3}(?:\.\d{1,3}){3}$~', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^[a-z0-9.-]+\.[a-z]{2,}$~i', $segment)) {
+            return true;
+        }
+
+        return false;
     }
 }

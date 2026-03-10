@@ -57,8 +57,8 @@ function prepare_user_sql_query($getCount)
                     u.created_at AS col10,
                     u.expiration_date AS exp,
                     u.password,
-                    v.field_id,
-                    v.updated_at
+                    v.field_id AS col11,
+                    v.updated_at AS col12
                 FROM $user_table u";
     }
 

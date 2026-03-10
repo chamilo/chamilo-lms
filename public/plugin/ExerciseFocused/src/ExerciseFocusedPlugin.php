@@ -163,10 +163,10 @@ class ExerciseFocusedPlugin extends Plugin
         return array_map('trim', $fields);
     }
 
-    public function isEnableForExercise(int $exerciseId): bool
+    public function isEnableForExercise(int $exerciseId, \Symfony\Component\HttpFoundation\Request $request): bool
     {
         $renderRegion = $this->isEnabled(true)
-            && str_contains($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php');
+            && '/main/exercise/exercise_submit.php' === $request->query->get('_route');
 
         if (!$renderRegion) {
             return false;

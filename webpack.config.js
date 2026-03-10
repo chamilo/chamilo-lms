@@ -138,10 +138,10 @@ Encore.copyFiles({
   from: "./node_modules/mediaelement-plugins/dist",
   to: "libs/mediaelement/plugins/[path][name].[ext]",
 })
-Encore.copyFiles({
+/*Encore.copyFiles({
   from: "./node_modules/mathjax/config",
   to: "libs/mathjax/config/[path][name].[ext]",
-})
+})*/
 Encore.copyFiles({
   from: "node_modules/moment/locale",
   to: "libs/locale/[path][name].[ext]",

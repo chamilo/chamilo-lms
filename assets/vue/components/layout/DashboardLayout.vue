@@ -6,8 +6,8 @@
     class="app-main"
   >
     <Breadcrumb v-if="showBreadcrumb" />
-    <slot />
     <router-view />
+    <slot />
   </div>
 </template>
 

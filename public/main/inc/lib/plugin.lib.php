@@ -4,6 +4,9 @@
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Finder\Finder;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class AppPlugin.
@@ -293,22 +296,15 @@ class AppPlugin
         return $this->plugin_regions;
     }
 
-    /**
-     * @param string           $region
-     * @param Twig_Environment $template
-     * @param bool             $forced
-     *
-     * @return string|null
-     */
-    public function loadRegion($pluginName, $region, $template, $forced = false)
+    public function loadRegion($pluginName, string $region): ?string
     {
         if ('course_tool_plugin' == $region) {
             return '';
         }
 
         ob_start();
-        $this->getAllPluginContentsByRegion($pluginName, $region, $template, $forced);
-        $content = ob_get_contents();
+        $this->getAllPluginContentsByRegion($pluginName, $region);
+        $content = (string) ob_get_contents();
         ob_end_clean();
 
         return $content;
@@ -371,19 +367,10 @@ class AppPlugin
         }
     }
 
-    /**
-     * @param string           $region
-     * @param Twig_Environment $template
-     * @param bool             $forced
-     *
-     * @return bool
-     *
-     * @todo improve this function
-     */
-    public function getAllPluginContentsByRegion($plugin_name, $region, $template, $forced = false)
+    public function getAllPluginContentsByRegion($plugin_name, string $region): void
     {
         // The plugin_info variable is available inside the plugin index
-        $plugin_info = $this->getPluginInfo($plugin_name, $forced);
+        $plugin_info = $this->getPluginInfo($plugin_name);
 
         // We also know where the plugin is
         $plugin_info['current_region'] = $region;
@@ -391,41 +378,50 @@ class AppPlugin
         // Loading the plugin/XXX/index.php file
         $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
 
-        if (file_exists($plugin_file)) {
-            //Loading the lang variables of the plugin if exists
-            self::load_plugin_lang_variables($plugin_name);
-
-            // Printing the plugin index.php file
-            require $plugin_file;
-
-            // If the variable $_template is set we assign those values to be accessible in Twig
-            if (isset($_template)) {
-                $_template['plugin_info'] = $plugin_info;
-            } else {
-                $_template = [];
-                $_template['plugin_info'] = $plugin_info;
-            }
-
-            // Setting the plugin info available in the template if exists.
-            //$template->addGlobal($plugin_name, $_template);
-
-            // Loading the Twig template plugin files if exists
-            $templateList = [];
-            if (isset($plugin_info) && isset($plugin_info['templates'])) {
-                $templateList = $plugin_info['templates'];
-            }
-
-            if (!empty($templateList)) {
-                foreach ($templateList as $pluginTemplate) {
-                    if (!empty($pluginTemplate)) {
-                        $templatePluginFile = "$plugin_name/$pluginTemplate"; // for twig
-                        //$template->render($templatePluginFile, []);
-                    }
-                }
-            }
+        if (!file_exists($plugin_file)) {
+            return;
         }
 
-        return true;
+        //Loading the lang variables of the plugin if exists
+        self::load_plugin_lang_variables($plugin_name);
+
+        // Printing the plugin index.php file
+        require $plugin_file;
+
+        // If the variable $_template is set we assign those values to be accessible in Twig
+        if (!isset($_template)) {
+            $_template = [];
+        }
+
+        $_template['plugin_info'] = $plugin_info;
+
+        // Setting the plugin info available in the template if exists.
+        //$template->addGlobal($plugin_name, $_template);
+
+        // Loading the Twig template plugin files if exists
+        $templateList = [];
+        if (isset($plugin_info['templates'])) {
+            $templateList = $plugin_info['templates'];
+        }
+
+        if (empty($templateList)) {
+            return;
+        }
+
+        foreach ($templateList as $pluginTemplate) {
+            if (empty($pluginTemplate)) {
+                continue;
+            }
+
+            try {
+                echo Container::getTwig()->render(
+                    "$plugin_name/$pluginTemplate",
+                    [$plugin_name => $_template],
+                );
+            } catch (LoaderError|RuntimeError|SyntaxError) {
+                continue;
+            }
+        }
     }
 
     /**
@@ -470,7 +466,10 @@ class AppPlugin
             $cls = $plugin_info['plugin_class'];
             $instance = method_exists($cls, 'create') ? $cls::create() : new $cls();
             if (method_exists($instance, 'get_info')) {
-                $plugin_info = $instance->get_info();
+                $plugin_info = array_merge(
+                    $plugin_info,
+                    $instance->get_info()
+                );
             }
         }
 

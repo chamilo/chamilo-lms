@@ -31,11 +31,13 @@
       </div>
     </Transition>
 
-    <slot />
     <div
       id="legacy_content"
       ref="legacyContainer"
     />
+
+    <PluginBlockRenderer region="content_bottom" />
+
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
 
@@ -93,6 +95,7 @@ import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
 import { useStore } from "vuex"
+import PluginBlockRenderer from "./components/layout/PluginBlockRenderer.vue"
 
 const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000
 const vuex = useStore()

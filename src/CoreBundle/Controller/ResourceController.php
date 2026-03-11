@@ -48,6 +48,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
+use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
@@ -622,18 +623,113 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // Existing translate_html logic
+                    // Translate HTML: show only spans matching the user language.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
+                    
                         if (null !== $user) {
-                            // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
-                            $userJson = json_encode(['locale' => $user->getLocale()]);
-                            $js = $this->renderView(
-                                '@ChamiloCore/Layout/document.html.twig',
-                                ['breadcrumb' => '', 'user_json' => $userJson]
+                            $locale = (string) $user->getLocale();
+                            $localeJson = json_encode(
+                                $locale,
+                                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
                             );
-                            // Insert inside the head tag.
-                            $content = str_replace('</head>', $js.'</head>', $content);
+                    
+                            $js = <<<HTML
+                    <script>
+                    (function () {
+                        var userLocale = {$localeJson};
+                    
+                        function normalizeLocale(locale) {
+                            return String(locale || "").replace("-", "_");
+                        }
+                    
+                        function buildLocaleCandidates(locale) {
+                            var normalizedLocale = normalizeLocale(locale);
+                            var isoCode = normalizedLocale.split("_")[0];
+                            var candidates = [];
+                    
+                            function addCandidate(value) {
+                                if (value && candidates.indexOf(value) === -1) {
+                                    candidates.push(value);
+                                }
+                            }
+                    
+                            addCandidate(isoCode);
+                            addCandidate(normalizedLocale);
+                            addCandidate(normalizedLocale.replace("_", "-"));
+                    
+                            return candidates;
+                        }
+                    
+                        function findByLang(selector, candidates) {
+                            for (var i = 0; i < candidates.length; i++) {
+                                var matches = document.querySelectorAll(
+                                    selector.replace("{lang}", candidates[i])
+                                );
+                    
+                                if (matches.length > 0) {
+                                    return matches;
+                                }
+                            }
+                    
+                            return [];
+                        }
+                    
+                        function hideMatches(matches) {
+                            for (var i = 0; i < matches.length; i++) {
+                                matches[i].style.display = "none";
+                            }
+                        }
+                    
+                        function showMatches(matches) {
+                            for (var i = 0; i < matches.length; i++) {
+                                matches[i].classList.remove("hidden");
+                                matches[i].style.display = "";
+                            }
+                        }
+                    
+                        function applyTranslateHtml() {
+                            var localeCandidates = buildLocaleCandidates(userLocale);
+                            var translateElements = document.querySelectorAll(".mce-translatehtml");
+                    
+                            if (translateElements.length > 0) {
+                                hideMatches(translateElements);
+                                showMatches(
+                                    findByLang('[lang="{lang}"].mce-translatehtml', localeCandidates)
+                                );
+                            }
+                    
+                            var legacyElements = document.querySelectorAll(
+                                'span[lang]:not(.mce-translatehtml)'
+                            );
+                    
+                            if (legacyElements.length > 0) {
+                                hideMatches(legacyElements);
+                                showMatches(
+                                    findByLang(
+                                        'span[lang="{lang}"]:not(.mce-translatehtml)',
+                                        localeCandidates
+                                    )
+                                );
+                            }
+                        }
+                    
+                        if (document.readyState === "loading") {
+                            document.addEventListener("DOMContentLoaded", applyTranslateHtml);
+                        } else {
+                            applyTranslateHtml();
+                        }
+                    })();
+                    </script>
+                    HTML;
+                    
+                            if (false !== stripos($content, '</head>')) {
+                                $content = str_ireplace('</head>', $js.'</head>', $content);
+                            } elseif (false !== stripos($content, '</body>')) {
+                                $content = str_ireplace('</body>', $js.'</body>', $content);
+                            } else {
+                                $content .= $js;
+                            }
                         }
                     }
                     $response->setContent($content);

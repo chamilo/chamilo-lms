@@ -48,7 +48,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
-use const ENT_QUOTES;
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
 use const PHP_EOL;
 
 /**
@@ -626,14 +629,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     // Translate HTML: show only spans matching the user language.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
-                    
+
                         if (null !== $user) {
                             $locale = (string) $user->getLocale();
                             $localeJson = json_encode(
                                 $locale,
                                 JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
                             );
-                    
+
                             $js = <<<HTML
                     <script>
                     (function () {
@@ -722,7 +725,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     })();
                     </script>
                     HTML;
-                    
+
                             if (false !== stripos($content, '</head>')) {
                                 $content = str_ireplace('</head>', $js.'</head>', $content);
                             } elseif (false !== stripos($content, '</body>')) {

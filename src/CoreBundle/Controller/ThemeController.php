@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const PATHINFO_EXTENSION;
+
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {

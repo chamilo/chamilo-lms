@@ -1,5 +1,6 @@
-{% if exercisemonitoring.show_overview_region and exercisemonitoring.enabled %}
-    {% if exercisemonitoring.enable_snapshots %}
+{% autoescape false %}
+{% if ExerciseMonitoring.show_overview_region and ExerciseMonitoring.enabled %}
+    {% if ExerciseMonitoring.enable_snapshots %}
         <div id="em-modal-start" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -8,7 +9,7 @@
                     </div>
 
                     <div class="modal-body" id="em-terms-body">
-                        {{ exercisemonitoring.instructions }}
+                        {{ ExerciseMonitoring.instructions }}
                     </div>
 
                     <div class="modal-body text-center" id="em-camera-body" style="display: none;">
@@ -20,8 +21,8 @@
                         </p>
                         <div style="position: relative">
                             <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
-                            <img id="img-iddoc-placeholder" style="display: block;" src="{{ _p.web_plugin }}ExerciseMonitoring/assets/images/idcard.png">
-                            <img id="img-learner-placeholder" style="display: none" src="{{ _p.web_plugin }}ExerciseMonitoring/assets/images/user.png">
+                            <img id="img-iddoc-placeholder" style="display: block;" src="{{ url('index') }}plugin/ExerciseMonitoring/assets/images/idcard.png">
+                            <img id="img-learner-placeholder" style="display: none" src="{{ url('index') }}plugin/ExerciseMonitoring/assets/images/user.png">
                         </div>
                         <br>
                         <button class="btn btn-default" type="button" id="btn-snap" disabled>
@@ -59,9 +60,8 @@
             </div>
         </div>
 
-        <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
         <script>
-            $(function () {
+            function startMonitoring() {
                 var $btnStartExercise = $('.exercise_overview_options a');
                 var $bodyTerms = $('#em-terms-body');
                 var $bodyCamera = $('#em-camera-body');
@@ -241,18 +241,19 @@
                     var formData = new FormData();
                     formData.append('iddoc', blobImgIdDoc, 'iddoc.jpg');
                     formData.append('learner', blobImgLearner, 'learner.jpg');
-                    formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
+                    formData.append('exercise_id', '{{ ExerciseMonitoring.exercise_id }}');
 
                     return $.ajax({
-                        url: '{{ _p.web_plugin }}ExerciseMonitoring/pages/start.ajax.php',
+                        url: '{{ url('index') }}plugin/ExerciseMonitoring/pages/start.ajax.php',
                         type: 'POST',
                         data: formData,
                         processData: false,
                         contentType: false,
                     });
                 }
-            });
+            }
         </script>
+        <script onload="startMonitoring" src="{{ url('index') }}plugin/ExerciseMonitoring/assets/js/webcamjs-1.0.6/webcam.min.js"></script>
         <style>
             #monitoring-camera {
                 height: auto !important;
@@ -283,7 +284,7 @@
                     </div>
 
                     <div class="modal-body" id="em-terms-body">
-                        {{ exercisemonitoring.instructions }}
+                        {{ ExerciseMonitoring.instructions }}
                     </div>
 
                     <div id="em-terms-footer" class="modal-footer">
@@ -312,3 +313,4 @@
         </script>
     {% endif %}
 {% endif %}
+{% endautoescape %}

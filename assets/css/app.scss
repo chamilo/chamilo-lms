@@ -1,14 +1,19 @@
 @use "./tailwind" as *;
 @use "scss/index";
 
-@import '~cropper/dist/cropper.css';
-//@import "~flag-icons/sass/flag-icons.scss";
-@import "~select2/dist/css/select2.css";
-@import "~bootstrap-daterangepicker/daterangepicker.css";
-//@import '~jquery-ui/themes/base/all.css';
+@use 'cropper/dist/cropper.css' as cropper;
+//@use "flag-icons/sass/flag-icons.scss";
+@use "select2/dist/css/select2.css" as select2;
+@use "bootstrap-daterangepicker/daterangepicker.css" as daterangepicker;
+//@use 'jquery-ui/themes/base/all.css';
+@use "tinymce/skins/ui/oxide/skin.css" as tinymce-skin;
 
-@import "~tinymce/skins/ui/oxide/skin.css";
-@import './editor_content';
+@use './editor_content';
+
+@use "@fancyapps/fancybox/dist/jquery.fancybox.css" as fancybox;
+@use "timepicker/jquery.timepicker.min.css" as timepicker;
+@use "qtip2/dist/jquery.qtip.min.css" as qtip;
+@use "primeicons/primeicons.css" as primeicons;
 
 @layer utilities {
   .border-gray-300 {
@@ -1004,8 +1009,3 @@ img.course-tool__icon {
   max-width: 100%;
   height: auto;
 }
-
-@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
-@import "~timepicker/jquery.timepicker.min.css";
-@import "~qtip2/dist/jquery.qtip.min.css";
-@import "primeicons/primeicons.css";

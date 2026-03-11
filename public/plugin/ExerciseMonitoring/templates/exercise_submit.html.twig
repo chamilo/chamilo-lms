@@ -1,12 +1,12 @@
-{% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled and exercisemonitoring.enable_snapshots %}
-    {% set ALL_ON_ONE_PAGE = exercisemonitoring.exercise_type == 1 %}
-    {% set ONE_PER_PAGE = exercisemonitoring.exercise_type == 2 %}
+{% autoescape false %}
+{% if ExerciseMonitoring.show_submit_region and ExerciseMonitoring.enabled and ExerciseMonitoring.enable_snapshots %}
+    {% set ALL_ON_ONE_PAGE = ExerciseMonitoring.exercise_type == 1 %}
+    {% set ONE_PER_PAGE = ExerciseMonitoring.exercise_type == 2 %}
 
     <div id="monitoring-camera"></div>
 
-    <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
     <script>
-        $(function () {
+        function startMonitoring() {
             var $btnSaveNow = $('button[name="save_now"]');
             var $btnEndTest = $('button[name="validate_all"]');
 
@@ -50,20 +50,21 @@
                 var blobImgIdDoc = new Blob( [ Webcam.base64DecToArr(rawImgIdDoc) ], {type: 'image/jpeg'} );
 
                 var formData = new FormData();
-                formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
+                formData.append('exercise_id', '{{ ExerciseMonitoring.exercise_id }}');
                 formData.append('level_id', questionId);
                 formData.append('snapshot', blobImgIdDoc, 'snapshot.jpg');
 
                 return $.ajax({
-                    url: '{{ _p.web_plugin }}ExerciseMonitoring/pages/exercise_submit.ajax.php',
+                    url: '{{ url('index') }}plugin/ExerciseMonitoring/pages/exercise_submit.ajax.php',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                 });
             }
-        });
+        }
     </script>
+    <script onload="startMonitoring()" src="{{ url('index') }}plugin/ExerciseMonitoring/assets/js/webcamjs-1.0.6/webcam.min.js"></script>
     <style>
         #plugin_pre_footer {
             position: relative;
@@ -82,3 +83,4 @@
         }
     </style>
 {% endif %}
+{% endautoescape %}

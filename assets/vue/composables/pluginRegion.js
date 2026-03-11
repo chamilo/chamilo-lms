@@ -1,3 +1,4 @@
+import axios from "axios"
 import { computed, nextTick, onUnmounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useCidReqStore } from "../store/cidReq"
@@ -13,6 +14,7 @@ export function usePluginRegion(region) {
 
   const blocks = ref([])
   const injectedElements = ref([])
+  let abortController = null
 
   const resolvedParams = computed(() => ({
     ...route.query,
@@ -25,12 +27,19 @@ export function usePluginRegion(region) {
   }))
 
   async function fetchBlocks() {
+    if (abortController) {
+      abortController.abort()
+    }
+
+    abortController = new AbortController()
+
     cleanup()
 
     try {
       const { data } = await api.get(`/plugin-regions/${region}`, {
         headers: { Accept: "application/json" },
         params: resolvedParams.value,
+        signal: abortController.signal,
       })
 
       blocks.value = data.blocks || []
@@ -39,8 +48,10 @@ export function usePluginRegion(region) {
 
       executeInlineScripts()
       injectAssets()
-    } catch {
-      blocks.value = []
+    } catch (e) {
+      if (!axios.isCancel(e)) {
+        blocks.value = []
+      }
     }
   }
 

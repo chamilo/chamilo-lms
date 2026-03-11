@@ -24,10 +24,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: 'is_granted(\'ROLE_USER\')'),
+        new Get(security: "is_granted('PUBLIC_ACCESS')"),
         new Put(security: 'is_granted(\'ROLE_ADMIN\')'),
         new Delete(security: 'is_granted(\'ROLE_ADMIN\')'),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('PUBLIC_ACCESS')"),
         new Post(security: 'is_granted(\'ROLE_ADMIN\')'),
     ],
     normalizationContext: [

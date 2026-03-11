@@ -93,7 +93,7 @@
                 {{ s.title }}
               </div>
               <div class="text-xs text-gray-600">
-                {{ t("From") }} {{ s.startDate || "—" }} • {{ t("Until") }} {{ s.endDate || "—" }}
+                {{ t("From {0} to {1}", [s.startDate || "—", s.endDate || "—"]) }}
               </div>
               <div
                 v-if="s.humanDate"
@@ -202,7 +202,7 @@ async function fetchPlan() {
       const text = await resp.text().catch(() => "")
       console.error("[SessionsPlan] Request failed", resp.status, text)
       if (resp.status === 403) {
-        errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in planification")
+        errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in your plan")
       } else {
         errorMessage.value = tOrFallback("Failed to load sessions plan", "Failed to load sessions plan")
       }

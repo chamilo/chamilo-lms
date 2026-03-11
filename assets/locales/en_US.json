@@ -1530,5 +1530,6 @@
     "Events list": "Events list",
     "Personal": "Personal",
     "Weeks are displayed from 1 to 52": "Weeks are displayed from 1 to 52",
-    "No tutored sessions found": "No tutored sessions found"
+    "No tutored sessions found": "No tutored sessions found",
+    "From {0} to {1}": "From {0} to {1}"
 }

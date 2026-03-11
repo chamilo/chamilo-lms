@@ -32749,3 +32749,54 @@ msgstr "Töltsön fel képet vagy hozzon létre egyet a Badge Studio-val."
 msgid "Current badge set"
 msgstr "Jelenlegi jelvénykészlet"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Ebben a szakaszban, ha egy kurzusra kattintva a 'Diák regisztrálása' gombra kattint, a következő oldalon kiválaszthatja a felhasználót. Ellenőrzés után új munkamenetet hoz létre a kiválasztott kurzussal és felhasználóval, és feliratkozási értesítést küld a felhasználónak."
+
+msgid "Read-only view"
+msgstr "Csak olvasható nézet"
+
+msgid "Events list"
+msgstr "Események listája"
+
+msgid "Personal"
+msgstr "Személyes"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "A heteket 1-től 52-ig jeleníti meg"
+
+msgid "No tutored sessions found"
+msgstr "Nincs betanított munkamenet található"
+
+msgid "Content search"
+msgstr "Tartalom keresés"
+
+msgid "Search indexed content across all courses."
+msgstr "Keresés az indexelt tartalomban az összes kurzusban."
+
+msgid "Enter a keyword..."
+msgstr "Írjon be egy kulcsszót..."
+
+msgid "Search error"
+msgstr "Keresési hiba"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Írjon be egy kulcsszót az indexelt dokumentumok kereséséhez."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "A hozzáférés nélküli eredményeket a konfiguráció elrejti."
+
+msgid "Restricted"
+msgstr "Korlátozott"
+
+msgid "You do not have access to this resource."
+msgstr "Nincs hozzáférése ehhez az erőforráshoz."
+
+msgid "Create group"
+msgstr "Csoport létrehozása"
+
+msgid "My custom certificate"
+msgstr "Saját egyedi bizonyítványom"
+
+msgid "Select permission"
+msgstr "Jogosultság kiválasztása"
+

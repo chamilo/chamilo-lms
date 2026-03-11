@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -32744,4 +32744,55 @@ msgstr "একটি ছবি আপলোড করুন বা Badge Studio 
 
 msgid "Current badge set"
 msgstr "বর্তমান ব্যাজ সেট"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "এই বিভাগে, কোনো কোর্সের জন্য 'ছাত্র নিবন্ধন' এ ক্লিক করলে, পরবর্তী পৃষ্ঠায় আপনাকে ব্যবহারকারী নির্বাচন করতে বলা হবে। যাচাইকরণের পর, এটি নির্বাচিত কোর্স এবং ব্যবহারকারীর সাথে একটি নতুন সেশন তৈরি করবে এবং ব্যবহারকারীকে সাবস্ক্রিপশন বিজ্ঞপ্তি পাঠাবে।"
+
+msgid "Read-only view"
+msgstr "শুধুমাত্র পঠন দৃশ্য"
+
+msgid "Events list"
+msgstr "ঘটনার তালিকা"
+
+msgid "Personal"
+msgstr "ব্যক্তিগত"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "সপ্তাহসমূহ ১ থেকে ৫২ পর্যন্ত প্রদর্শিত হয়"
+
+msgid "No tutored sessions found"
+msgstr "কোনো টিউটরকৃত সেশন পাওয়া যায়নি"
+
+msgid "Content search"
+msgstr "কন্টেন্ট অনুসন্ধান"
+
+msgid "Search indexed content across all courses."
+msgstr "সকল কোর্সের ইনডেক্স করা কন্টেন্ট অনুসন্ধান করুন।"
+
+msgid "Enter a keyword..."
+msgstr "একটি কীওয়ার্ড লিখুন..."
+
+msgid "Search error"
+msgstr "অনুসন্ধান ত্রুটি"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "ইনডেক্স করা ডকুমেন্ট অনুসন্ধান করতে একটি কীওয়ার্ড লিখুন।"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "আপনার অ্যাক্সেসযোগ্য নয় এমন ফলাফল কনফিগারেশন দ্বারা লুকানো হয়েছে।"
+
+msgid "Restricted"
+msgstr "সীমাবদ্ধ"
+
+msgid "You do not have access to this resource."
+msgstr "আপনার এই সম্পদে অ্যাক্সেস নেই।"
+
+msgid "Create group"
+msgstr "গ্রুপ তৈরি করুন"
+
+msgid "My custom certificate"
+msgstr "আমার কাস্টম সার্টিফিকেট"
+
+msgid "Select permission"
+msgstr "অনুমতি নির্বাচন করুন"
 

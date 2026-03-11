@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -32744,4 +32744,55 @@ msgstr "Raru sawir ama mid ku abuuro Badge Studio."
 
 msgid "Current badge set"
 msgstr "Baajhka hadda"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Qaybtaan, marka aad ku dhajiso 'Register student' koorsada, waxaa lagu weydiin doonaa inaad doorato isticmaalaha bogga xiga. Marka la xaqiijiyo, waxay abuuri doontaa kalfadhi cusub oo leh koorsada la doortay iyo isticmaalaha, waxayna u diri doontaa ogeysiis isdiiwaangelin isticmaaleha."
+
+msgid "Read-only view"
+msgstr "Muuqaal wax-akhris la'aan"
+
+msgid "Events list"
+msgstr "Liiska dhacdooyinka"
+
+msgid "Personal"
+msgstr "Shakhsi"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Toddobaadka waxaa lagu soo bandhigayaa 1 ilaa 52"
+
+msgid "No tutored sessions found"
+msgstr "Ma jiraan kalfadhi la tababareeyay oo la helay"
+
+msgid "Content search"
+msgstr "Raadiinta waxa ku jira"
+
+msgid "Search indexed content across all courses."
+msgstr "Raadi waxa la indeks gareeyay dhammaan koorsaska."
+
+msgid "Enter a keyword..."
+msgstr "Gali erayga muhiimka ah..."
+
+msgid "Search error"
+msgstr "Khaldar raadinta"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Gali erayga furaha si aad u raadiso dukumentiyada la tilmaamay."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Natiijooyinka aadan heli karin waa la qariyay iyadoo la adeegsanayo qaabaynta."
+
+msgid "Restricted"
+msgstr "Xaddidan"
+
+msgid "You do not have access to this resource."
+msgstr "Ma leh ogolaansho ku aadan kheyraadkan."
+
+msgid "Create group"
+msgstr "Abuur koox"
+
+msgid "My custom certificate"
+msgstr "Shahaadadayda gaarka ah"
+
+msgid "Select permission"
+msgstr "Dooro ogolaanshaha"
 

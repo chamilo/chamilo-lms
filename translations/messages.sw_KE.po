@@ -32745,3 +32745,54 @@ msgstr "Pakia picha au tengeneza moja kwa Badge Studio."
 msgid "Current badge set"
 msgstr "Seti ya badge ya sasa"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Katika sehemu hii, unapobonyeza 'Sajili mwanafunzi' kwa kozi, utaulizwa kuchagua mtumiaji kwenye ukurasa unaofuata. Wakati imethibitishwa, itaunda kipindi kipya na kozi na mtumiaji aliyechaguliwa, na kutuma taarifa ya usajili kwa mtumiaji."
+
+msgid "Read-only view"
+msgstr "Muonekano wa kusoma tu"
+
+msgid "Events list"
+msgstr "Orodha ya matukio"
+
+msgid "Personal"
+msgstr "Binafsi"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Wiki zinaonyeshwa kutoka 1 hadi 52"
+
+msgid "No tutored sessions found"
+msgstr "Hakuna vipindi vya usimamizi vilivyopatikana"
+
+msgid "Content search"
+msgstr "Tafuta maudhui"
+
+msgid "Search indexed content across all courses."
+msgstr "Tafuta maudhui yaliyo na indeksia katika kozi zote."
+
+msgid "Enter a keyword..."
+msgstr "Ingiza neno la msingi..."
+
+msgid "Search error"
+msgstr "Hitilafu ya utafutaji"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ingiza neno la msingi kutafuta hati zilizoorodheshwa."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Matokeo ambayo huwezi kufikia yamefichwa kwa mipangilio."
+
+msgid "Restricted"
+msgstr "Imezuiliwa"
+
+msgid "You do not have access to this resource."
+msgstr "Huna ruhusa ya kufikia rasilimali hii."
+
+msgid "Create group"
+msgstr "Unda kikundi"
+
+msgid "My custom certificate"
+msgstr "Cheti changu cha kibinafsi"
+
+msgid "Select permission"
+msgstr "Chagua ruhusa"
+

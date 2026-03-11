@@ -32749,3 +32749,54 @@ msgstr "ပုံတစ်ပုံတင်ပါ သို့မဟုတ် B
 msgid "Current badge set"
 msgstr "လက်ရှိ ဘက်ဂျ်အစုစု"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "ဤအပိုင်းတွင် သင်တက္ကသိုလ်အတွက် 'သင်တက္ကသိုလ်မှတ်ပုံတင်ရန်' ကို နှိပ်လိုက်သောအခါ နောက်စာမျက်နှာတွင် အသုံးပြုသူကို ရွေးချယ်ရန် တောင်းဆိုခံရမည်။ အတည်ပြုပြီးနောက် ရွေးချယ်ထားသော သင်တက္ကသိုလ်နှင့် အသုံးပြုသူဖြင့် အသစ်သင်း ဖန်တီးပေးမည်ဖြစ်ပြီး အသုံးပြုသူထံ မှတ်ပုံတင်အသိပေးချက်ကို ပို့လွှတ်ပေးမည်။"
+
+msgid "Read-only view"
+msgstr "ဖတ်ရုံဖြစ်သော ကြည့်ရှုမှု"
+
+msgid "Events list"
+msgstr "ဖြစ်ရပ်များစာရင်း"
+
+msgid "Personal"
+msgstr "ပုဂ္ဂိုလ်ရေး"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "အပတ်များကို ၁ မှ ၅၂ အထိ ပြသထားသည်"
+
+msgid "No tutored sessions found"
+msgstr "လမ်းညွှန်ထားသော သင်းများ မတွေ့ရပါ"
+
+msgid "Content search"
+msgstr "အကြောင်းအရာ ရှာဖွေရန်"
+
+msgid "Search indexed content across all courses."
+msgstr "သင်တက္ကသိုလ်အားလုံးရှိ အညွှန်းစဉ်ထားသော အကြောင်းအရာများကို ရှာဖွေပါ။"
+
+msgid "Enter a keyword..."
+msgstr "သော့ဝှက်စကားလုံး ရိုက်ထည့်ပါ..."
+
+msgid "Search error"
+msgstr "ရှာဖွေမှု အမှား"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "အညွှန်းစဉ်ထားသော စာရွက်စာတမ်းများကို ရှာဖွေရန် သော့ဝှက်စကားလုံး ရိုက်ထည့်ပါ။"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "သင်ဝင်ရောက်ခွင့်မရှိသော ရလဒ်များကို ဆက်တင်များဖြင့် ဖုံးကွယ်ထားသည်။"
+
+msgid "Restricted"
+msgstr "ကန့်သတ်ထားသည်"
+
+msgid "You do not have access to this resource."
+msgstr "ဤအရင်းအမြစ်ကို ဝင်ရောက်ခွင့် မရှိပါ။"
+
+msgid "Create group"
+msgstr "အုပ်စု ဖန်တီးရန်"
+
+msgid "My custom certificate"
+msgstr "ကျွန်ုပ်၏ စိတ်ကြိုက် သက်သေစာတမ်း"
+
+msgid "Select permission"
+msgstr "ခွင့်ပြုချက် ရွေးချယ်ပါ"
+

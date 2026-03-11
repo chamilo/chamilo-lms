@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -32750,4 +32750,55 @@ msgstr "อัปโหลดภาพหรือสร้างด้วย Ba
 
 msgid "Current badge set"
 msgstr "ชุดตราแสดงสถานะปัจจุบัน"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "ในส่วนนี้ เมื่อคลิก 'ลงทะเบียนนักเรียน' สำหรับวิชา คุณจะถูกถามให้เลือกผู้ใช้ในหน้าถัดไป เมื่อยืนยันแล้ว จะสร้างเซสชันใหม่ด้วยวิชาที่เลือกและผู้ใช้ และส่งการแจ้งเตือนการสมัครสมาชิกให้ผู้ใช้"
+
+msgid "Read-only view"
+msgstr "ดูแบบอ่านอย่างเดียว"
+
+msgid "Events list"
+msgstr "รายการเหตุการณ์"
+
+msgid "Personal"
+msgstr "ส่วนตัว"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "สัปดาห์แสดงจาก 1 ถึง 52"
+
+msgid "No tutored sessions found"
+msgstr "ไม่พบเซสชันที่ถูกกำกับการสอน"
+
+msgid "Content search"
+msgstr "ค้นหาเนื้อหา"
+
+msgid "Search indexed content across all courses."
+msgstr "ค้นหาเนื้อหาที่ถูกจัดทำดัชนีในทุกวิชา"
+
+msgid "Enter a keyword..."
+msgstr "ป้อนคำหลัก..."
+
+msgid "Search error"
+msgstr "ข้อผิดพลาดในการค้นหา"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "ป้อนคำหลักเพื่อค้นหาเอกสารที่ถูกจัดทำดัชนี"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "ผลลัพธ์ที่คุณไม่สามารถเข้าถึงได้จะถูกซ่อนตามการตั้งค่า"
+
+msgid "Restricted"
+msgstr "จำกัด"
+
+msgid "You do not have access to this resource."
+msgstr "คุณไม่มีสิทธิ์เข้าถึงทรัพยากรนี้"
+
+msgid "Create group"
+msgstr "สร้างกลุ่ม"
+
+msgid "My custom certificate"
+msgstr "ใบรับรองที่กำหนดเองของฉัน"
+
+msgid "Select permission"
+msgstr "เลือกสิทธิ์"
 

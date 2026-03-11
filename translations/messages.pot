@@ -32705,3 +32705,12 @@ msgstr ""
 
 msgid "You do not have access to this resource."
 msgstr ""
+
+msgid "Create group"
+msgstr ""
+
+msgid "My custom certificate"
+msgstr ""
+
+msgid "Select permission"
+msgstr ""

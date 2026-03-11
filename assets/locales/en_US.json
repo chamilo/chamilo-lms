@@ -1531,5 +1531,14 @@
     "Personal": "Personal",
     "Weeks are displayed from 1 to 52": "Weeks are displayed from 1 to 52",
     "No tutored sessions found": "No tutored sessions found",
-    "From {0} to {1}": "From {0} to {1}"
+    "From {0} to {1}": "From {0} to {1}",
+    "Create group": "Create group",
+    "Popular": "Popular",
+    "My groups": "My groups",
+    "Group permissions": "Group permissions",
+    "Select permission": "Select permission",
+    "My certificates": "My certificates",
+    "My custom certificate": "My custom certificate",
+    "Avatar": "Avatar",
+    "Edit group": "Edit group"
 }

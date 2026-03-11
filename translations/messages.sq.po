@@ -32749,3 +32749,54 @@ msgstr "Ngarkoni një imazh ose krijoni një me Badge Studio."
 msgid "Current badge set"
 msgstr "Grupi aktual i badge-ëve"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Në këtë seksion, kur klikoni 'Regjistro student' për një kurs, do të kërkohet të zgjidhni përdoruesin në faqen tjetër. Kur të konfirmohet, do të krijojë një sesion të ri me kursin e zgjedhur dhe përdoruesin, dhe do të dërgojë një njoftim regjistrimi te përdoruesi."
+
+msgid "Read-only view"
+msgstr "Pamje vetëm për lexim"
+
+msgid "Events list"
+msgstr "Lista e ngjarjeve"
+
+msgid "Personal"
+msgstr "Personale"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Javët shfaqen nga 1 deri në 52"
+
+msgid "No tutored sessions found"
+msgstr "Nuk u gjetën sesione të mbikëqyrura"
+
+msgid "Content search"
+msgstr "Kërkim përmbajtjeje"
+
+msgid "Search indexed content across all courses."
+msgstr "Kërko përmbajtje të indeksuar në të gjithë kurset."
+
+msgid "Enter a keyword..."
+msgstr "Fut një fjalë kyçe..."
+
+msgid "Search error"
+msgstr "Gabim kërkimi"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Fut një fjalë kyçe për të kërkuar dokumente të indeksuara."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultatet që nuk mund t'i aksesoni janë fshehur nga konfigurimi."
+
+msgid "Restricted"
+msgstr "I kufizuar"
+
+msgid "You do not have access to this resource."
+msgstr "Nuk keni akses në këtë burim."
+
+msgid "Create group"
+msgstr "Krijo grup"
+
+msgid "My custom certificate"
+msgstr "Certifikata ime e personalizuar"
+
+msgid "Select permission"
+msgstr "Zgjidh leje"
+

@@ -32745,3 +32745,54 @@ msgstr "Gbe aworan kan soke tabi ṣẹda ọkan pẹlu Badge Studio."
 msgid "Current badge set"
 msgstr "Eto baaji lọwọlọwọ"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Ni apakan yii, nigbati o ba tẹ 'Forukọsilẹ ọmọ ile-iwe' fun iṣẹ-ẹkọ kan, wọn yoo beere lọwọ rẹ lati yan olumulo ni oju-iwe atẹle. Nigbati a ba ṣe idaniloju, yoo ṣẹda igba tuntun pẹlu iṣẹ-ẹkọ ti a yan ati olumulo, ati firanse ifitonileti ṣiṣe akọsilẹ si olumulo."
+
+msgid "Read-only view"
+msgstr "Wiwo kika-nikan"
+
+msgid "Events list"
+msgstr "Akojọ awọn iṣẹlẹ"
+
+msgid "Personal"
+msgstr "Ti ara ẹni"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Awọn ọsẹ ti han lati 1 si 52"
+
+msgid "No tutored sessions found"
+msgstr "Ko si awọn akoko ikọni ti a ri"
+
+msgid "Content search"
+msgstr "Wiwa akoonu"
+
+msgid "Search indexed content across all courses."
+msgstr "Wa akoonu ti a ṣe atọka kọja gbogbo awọn iṣẹ-ẹkọ."
+
+msgid "Enter a keyword..."
+msgstr "Tẹ ọrọ-ìpìlẹ kan wọle..."
+
+msgid "Search error"
+msgstr "Aṣiṣe wiwa"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Tẹ ọrọ-ìpìlẹ kan wọle lati wa awọn iwe-ipamọ ti a ṣe atọka."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Awọn abajade ti o ko le wọle si ti fi pamọ nipasẹ eto."
+
+msgid "Restricted"
+msgstr "Ihamọ"
+
+msgid "You do not have access to this resource."
+msgstr "O ko ni iraye si orisun yii."
+
+msgid "Create group"
+msgstr "Ṣẹda ẹgbẹ"
+
+msgid "My custom certificate"
+msgstr "Iwe-ẹri aṣa mi"
+
+msgid "Select permission"
+msgstr "Yan igbanilaaye"
+

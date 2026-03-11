@@ -32751,3 +32751,54 @@ msgstr "Bir resim yükleyin veya Badge Studio ile oluşturun."
 msgid "Current badge set"
 msgstr "Mevcut rozet kümesi"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Bu bölümde, bir ders için 'Öğrenci kaydı' üzerine tıkladığınızda, bir sonraki sayfada kullanıcıyı seçmeniz istenecektir. Onaylandığında, seçilen ders ve kullanıcı ile yeni bir oturum oluşturulacak ve kullanıcıya abonelik bildirimi gönderilecektir."
+
+msgid "Read-only view"
+msgstr "Salt okunur görünüm"
+
+msgid "Events list"
+msgstr "Etkinlik listesi"
+
+msgid "Personal"
+msgstr "Kişisel"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Haftalar 1'den 52'ye kadar görüntülenir"
+
+msgid "No tutored sessions found"
+msgstr "Yok denetlenen oturum bulunamadı"
+
+msgid "Content search"
+msgstr "İçerik araması"
+
+msgid "Search indexed content across all courses."
+msgstr "Tüm derslerdeki indekslenmiş içeriği arayın."
+
+msgid "Enter a keyword..."
+msgstr "Bir anahtar kelime girin..."
+
+msgid "Search error"
+msgstr "Arama hatası"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "İndekslenmiş belgeleri aramak için bir anahtar kelime girin."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Erişemediğiniz sonuçlar yapılandırma tarafından gizlenmiştir."
+
+msgid "Restricted"
+msgstr "Kısıtlı"
+
+msgid "You do not have access to this resource."
+msgstr "Bu kaynağa erişiminiz yok."
+
+msgid "Create group"
+msgstr "Grup oluştur"
+
+msgid "My custom certificate"
+msgstr "Özel sertifikam"
+
+msgid "Select permission"
+msgstr "İzin seçin"
+

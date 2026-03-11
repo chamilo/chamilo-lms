@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Okta flugo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -32750,4 +32750,55 @@ msgstr "Alŝuti bildon aŭ krei unu kun Badge Studio."
 
 msgid "Current badge set"
 msgstr "Nuna insignaro"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "En tiu sekcio, kiam klaki 'Registri studenton' por kurso, vi estos petita selekti la uzanton en la sekva paĝo. Kiam validigita, ĝi kreos novan sesion kun la elektita kurso kaj uzanto, kaj sendos abonanotifon al la uzanto."
+
+msgid "Read-only view"
+msgstr "Nur-legi-vido"
+
+msgid "Events list"
+msgstr "Listo de eventoj"
+
+msgid "Personal"
+msgstr "Persona"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Semajnoj estas montrataj de 1 ĝis 52"
+
+msgid "No tutored sessions found"
+msgstr "Neniu gvidata sesio trovita"
+
+msgid "Content search"
+msgstr "Serĉo de enhavo"
+
+msgid "Search indexed content across all courses."
+msgstr "Serĉu indeksitan enhavon tra ĉiuj kursoj."
+
+msgid "Enter a keyword..."
+msgstr "Enigu ŝlosilvorton..."
+
+msgid "Search error"
+msgstr "Serĉeraro"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Enigu ŝlosilvorton por serĉi indeksitajn dokumentojn."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rizultoj al kiuj vi ne havas aliron estas kaŝitaj laŭ agordo."
+
+msgid "Restricted"
+msgstr "Limigita"
+
+msgid "You do not have access to this resource."
+msgstr "Vi ne havas aliron al tiu riŝurco."
+
+msgid "Create group"
+msgstr "Krei grupon"
+
+msgid "My custom certificate"
+msgstr "Mia propra atestilo"
+
+msgid "Select permission"
+msgstr "Selekti permisojn"
 

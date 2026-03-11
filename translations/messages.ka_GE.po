@@ -32745,3 +32745,54 @@ msgstr "ატვირთეთ სურათი ან შექმენი
 msgid "Current badge set"
 msgstr "მიმდინარე ბეჯის ნაკრები"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "ამ განყოფილებაში, როდესაც კურსისთვის 'სტუდენტის რეგისტრაცია' ღილაკზე დააჭერთ, შემდეგ გვერდზე მოგთხოვთ მომხმარებლის შერჩევა. ვალიდაციის შემდეგ შეიქმნება ახალი სესია შერჩეული კურსითა და მომხმარებლით და მომხმარებელს გაიგზავნება რეგისტრაციის შეტყობინება."
+
+msgid "Read-only view"
+msgstr "მხოლოდ წაკითხვის ხედი"
+
+msgid "Events list"
+msgstr "შეტყობინებების სია"
+
+msgid "Personal"
+msgstr "პირადი"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "კვირები ნაჩვენებია 1-დან 52-მდე"
+
+msgid "No tutored sessions found"
+msgstr "არ მოიძებნა თუტორირებული სესიები"
+
+msgid "Content search"
+msgstr "შინაარსის ძებნა"
+
+msgid "Search indexed content across all courses."
+msgstr "ძებნა ინდექსირებული შინაარსის ყველა კურსში."
+
+msgid "Enter a keyword..."
+msgstr "შეიტანეთ საკვანძო სიტყვა..."
+
+msgid "Search error"
+msgstr "ძებნის შეცდომა"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "შეიტანეთ საკვანძო სიტყვა ინდექსირებული დოკუმენტების ძეტნისთვის."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "შედეგები, რომლებიც ვერ ხედავთ, დამალულია კონფიგურაციით."
+
+msgid "Restricted"
+msgstr "შეზღუდული"
+
+msgid "You do not have access to this resource."
+msgstr "თქვენ არ გაქვთ წვდომა ამ რესურსზე."
+
+msgid "Create group"
+msgstr "ჯგუფის შექმნა"
+
+msgid "My custom certificate"
+msgstr "ჩემი მორგებული სერტიფიკატი"
+
+msgid "Select permission"
+msgstr "არჩევანი ნებართვა"
+

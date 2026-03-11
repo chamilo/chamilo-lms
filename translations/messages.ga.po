@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -32748,4 +32748,55 @@ msgstr "Uaslódaigh íomhá nó cruthaigh ceann le Badge Studio."
 
 msgid "Current badge set"
 msgstr "Socrú suaitheanta reatha"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Sa chuid seo, nuair a chliceálann tú ar 'Cláraigh mac léinn' do chúrsa, iarrfar ort an úsáideoir a roghnú ar an leathanach seo chugainn. Nuair a bheidh sé/de deimhnithe, cruthófar seisiún nua leis an gcúrsa roghnaithe agus an túsáideoir, agus seolfar fógra síntiúis chuig an úsáideoir."
+
+msgid "Read-only view"
+msgstr "Amharc léite amháin"
+
+msgid "Events list"
+msgstr "Liosta imeachtaí"
+
+msgid "Personal"
+msgstr "Persanta"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Taispeántar seachtainí ó 1 go 52"
+
+msgid "No tutored sessions found"
+msgstr "Níor aimsíodh aon seisiúin faoi threoir"
+
+msgid "Content search"
+msgstr "Cuardaigh ábhar"
+
+msgid "Search indexed content across all courses."
+msgstr "Cuardaigh ábhar innéacsaithe ar fud gach cúrsa."
+
+msgid "Enter a keyword..."
+msgstr "Iontráil eochairfhocal..."
+
+msgid "Search error"
+msgstr "Earráid chuardaigh"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Iontráil eochairfhocal chun doiciméid innéacsaithe a chuardach."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Tá torthaí nach féidir leat rochtain a fháil orthu i bhfolach de réir socrú."
+
+msgid "Restricted"
+msgstr "Srianta"
+
+msgid "You do not have access to this resource."
+msgstr "Níl rochtain agat ar an acmhainn seo."
+
+msgid "Create group"
+msgstr "Cruthaigh grúpa"
+
+msgid "My custom certificate"
+msgstr "Mo theastas saincheaptha"
+
+msgid "Select permission"
+msgstr "Roghnaigh cead"
 

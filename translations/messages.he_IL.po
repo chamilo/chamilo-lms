@@ -32762,3 +32762,54 @@ msgstr "העלה תמונה או צור אחת עם Badge Studio."
 msgid "Current badge set"
 msgstr "קבוצת תגיות נוכחית"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "במקטע זה, כאשר תלחץ על 'הרשם סטודנט' לקורס, תתבקש לבחור את המשתמש בדף הבא. לאחר אימות, ייווצר מפגש חדש עם הקורס והמשתמש שנבחרו, ויישלח הודעת הרשמה למשתמש."
+
+msgid "Read-only view"
+msgstr "תצוגת קריאה בלבד"
+
+msgid "Events list"
+msgstr "רשימת אירועים"
+
+msgid "Personal"
+msgstr "אישי"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "שבועות מוצגים מ-1 עד 52"
+
+msgid "No tutored sessions found"
+msgstr "לא נמצאו מפגשים עם הדרכה"
+
+msgid "Content search"
+msgstr "חיפוש תוכן"
+
+msgid "Search indexed content across all courses."
+msgstr "חפש תוכן מיועד בכל הקורסים."
+
+msgid "Enter a keyword..."
+msgstr "הזן מילת מפתח..."
+
+msgid "Search error"
+msgstr "שגיאת חיפוש"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "הזן מילת מפתח לחיפוש מסמכים מיועדים."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "תוצאות שאין לך גישה אליהן מוסתרות על פי הגדרה."
+
+msgid "Restricted"
+msgstr "מוגבל"
+
+msgid "You do not have access to this resource."
+msgstr "אין לך גישה למשאב זה."
+
+msgid "Create group"
+msgstr "צור קבוצה"
+
+msgid "My custom certificate"
+msgstr "תעודת הסמכה מותאמת אישית שלי"
+
+msgid "Select permission"
+msgstr "בחר הרשאה"
+

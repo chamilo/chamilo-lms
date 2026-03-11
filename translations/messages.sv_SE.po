@@ -32751,3 +32751,54 @@ msgstr "Ladda upp en bild eller skapa en med Badge Studio."
 msgid "Current badge set"
 msgstr "Nuvarande märkeuppsättning"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "I denna sektion, när du klickar på 'Registrera student' för en kurs, kommer du att ombedas att välja användaren på nästa sida. När det validerats skapas en ny session med den valda kursen och användaren, och en prenumerationsnotifikation skickas till användaren."
+
+msgid "Read-only view"
+msgstr "Skrivskyddad vy"
+
+msgid "Events list"
+msgstr "Händelselista"
+
+msgid "Personal"
+msgstr "Personligt"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Veckor visas från 1 till 52"
+
+msgid "No tutored sessions found"
+msgstr "Inga handledda sessioner hittades"
+
+msgid "Content search"
+msgstr "Innehållssökning"
+
+msgid "Search indexed content across all courses."
+msgstr "Sök indexerat innehåll i alla kurser."
+
+msgid "Enter a keyword..."
+msgstr "Ange ett nyckelord..."
+
+msgid "Search error"
+msgstr "Sökfel"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ange ett nyckelord för att söka indexerade dokument."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultat du inte har tillgång till är dolda via konfiguration."
+
+msgid "Restricted"
+msgstr "Begränsad"
+
+msgid "You do not have access to this resource."
+msgstr "Du har inte tillgång till denna resurs."
+
+msgid "Create group"
+msgstr "Skapa grupp"
+
+msgid "My custom certificate"
+msgstr "Mitt anpassade intyg"
+
+msgid "Select permission"
+msgstr "Välj behörighet"
+

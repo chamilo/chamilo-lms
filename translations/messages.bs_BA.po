@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -32744,4 +32744,55 @@ msgstr "Učitaj sliku ili kreiraj jednu s Badge Studio."
 
 msgid "Current badge set"
 msgstr "Trenutni set znački"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "U ovoj sekciji, kada kliknete na 'Registriraj studenta' za kurs, bićete zamoljeni da odaberete korisnika na sljedećoj stranici. Kada se potvrdi, stvorit će se nova sesija sa odabranim kursom i korisnikom, i poslati se obavijest o pretplati korisniku."
+
+msgid "Read-only view"
+msgstr "Prikaz samo za čitanje"
+
+msgid "Events list"
+msgstr "Lista događaja"
+
+msgid "Personal"
+msgstr "Osobno"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Sedmice se prikazuju od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Nema pronađenih tutoriranih sesija"
+
+msgid "Content search"
+msgstr "Pretraga sadržaja"
+
+msgid "Search indexed content across all courses."
+msgstr "Pretražite indeksirani sadržaj u svim kursevima."
+
+msgid "Enter a keyword..."
+msgstr "Unesite ključnu riječ..."
+
+msgid "Search error"
+msgstr "Greška u pretrazi"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Unesite ključnu riječ za pretragu indeksiranih dokumenata."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultati kojima nemate pristup su sakriveni konfiguracijom."
+
+msgid "Restricted"
+msgstr "Ograničeno"
+
+msgid "You do not have access to this resource."
+msgstr "Nemate pristup ovom resursu."
+
+msgid "Create group"
+msgstr "Kreiraj grupu"
+
+msgid "My custom certificate"
+msgstr "Moj prilagođeni certifikat"
+
+msgid "Select permission"
+msgstr "Odaberite dopuštenje"
 

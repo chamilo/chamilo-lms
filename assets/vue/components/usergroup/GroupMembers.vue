@@ -7,7 +7,7 @@
       <BaseButton
         class="edit-members-btn"
         icon="pi pi-plus"
-        label="Edit members list"
+        :label="t('Edit members list')"
         type="primary"
         @click="editMembers"
       />
@@ -22,7 +22,7 @@
           <img
             v-if="member.avatar"
             :src="member.avatar"
-            alt="Member avatar"
+            :alt="t('Avatar')"
           />
           <i
             v-else

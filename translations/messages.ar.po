@@ -32763,3 +32763,54 @@ msgstr "رفع صورة أو إنشاء واحدة باستخدام Badge Studio
 msgid "Current badge set"
 msgstr "مجموعة الشارات الحالية"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "في هذا القسم، عند النقر على 'تسجيل طالب' لدورة، سيُطلب منك اختيار المستخدم في الصفحة التالية. عند التحقق، سيتم إنشاء جلسة جديدة مع الدورة والمستخدم المحددين، وإرسال إشعار اشتراك إلى المستخدم."
+
+msgid "Read-only view"
+msgstr "عرض للقراءة فقط"
+
+msgid "Events list"
+msgstr "قائمة الأحداث"
+
+msgid "Personal"
+msgstr "شخصي"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "يتم عرض الأسابيع من 1 إلى 52"
+
+msgid "No tutored sessions found"
+msgstr "لم يتم العثور على جلسات بإشراف"
+
+msgid "Content search"
+msgstr "بحث المحتوى"
+
+msgid "Search indexed content across all courses."
+msgstr "البحث في المحتوى المفهرس عبر جميع الدورات."
+
+msgid "Enter a keyword..."
+msgstr "أدخل كلمة مفتاحية..."
+
+msgid "Search error"
+msgstr "خطأ في البحث"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "أدخل كلمة مفتاحية للبحث في الوثائق المفهرسة."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "النتائج التي لا يمكنك الوصول إليها مخفية بواسطة الإعدادات."
+
+msgid "Restricted"
+msgstr "مقيد"
+
+msgid "You do not have access to this resource."
+msgstr "ليس لديك صلاحية الوصول إلى هذا المورد."
+
+msgid "Create group"
+msgstr "إنشاء مجموعة"
+
+msgid "My custom certificate"
+msgstr "شهادتي المخصصة"
+
+msgid "Select permission"
+msgstr "اختر الصلاحية"
+

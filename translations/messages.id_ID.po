@@ -32749,3 +32749,54 @@ msgstr "Unggah gambar atau buat dengan Badge Studio."
 msgid "Current badge set"
 msgstr "Set badge saat ini"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Di bagian ini, saat mengklik 'Register student' untuk sebuah kursus, Anda akan diminta memilih pengguna di halaman berikutnya. Setelah divalidasi, itu akan membuat sesi baru dengan kursus dan pengguna yang dipilih, dan mengirim notifikasi langganan ke pengguna."
+
+msgid "Read-only view"
+msgstr "Tampilan baca-saja"
+
+msgid "Events list"
+msgstr "Daftar acara"
+
+msgid "Personal"
+msgstr "Pribadi"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Minggu ditampilkan dari 1 hingga 52"
+
+msgid "No tutored sessions found"
+msgstr "Tidak ada sesi yang dibimbing ditemukan"
+
+msgid "Content search"
+msgstr "Pencarian konten"
+
+msgid "Search indexed content across all courses."
+msgstr "Cari konten terindeks di seluruh kursus."
+
+msgid "Enter a keyword..."
+msgstr "Masukkan kata kunci..."
+
+msgid "Search error"
+msgstr "Kesalahan pencarian"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Masukkan kata kunci untuk mencari dokumen terindeks."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Hasil yang tidak dapat Anda akses disembunyikan oleh konfigurasi."
+
+msgid "Restricted"
+msgstr "Terbatas"
+
+msgid "You do not have access to this resource."
+msgstr "Anda tidak memiliki akses ke sumber daya ini."
+
+msgid "Create group"
+msgstr "Buat grup"
+
+msgid "My custom certificate"
+msgstr "Sertifikat kustom saya"
+
+msgid "Select permission"
+msgstr "Pilih izin"
+

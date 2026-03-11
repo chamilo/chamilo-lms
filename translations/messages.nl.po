@@ -34829,3 +34829,54 @@ msgstr "Upload een afbeelding of maak er een met Badge Studio."
 msgid "Current badge set"
 msgstr "Huidige badge-set"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "In deze sectie wordt u, bij het klikken op 'Student inschrijven' voor een cursus, op de volgende pagina gevraagd de gebruiker te selecteren. Na validatie wordt een nieuwe sessie aangemaakt met de geselecteerde cursus en gebruiker, en wordt een inschrijvingsmelding naar de gebruiker gestuurd."
+
+msgid "Read-only view"
+msgstr "Alleen-lezen weergave"
+
+msgid "Events list"
+msgstr "Lijst met gebeurtenissen"
+
+msgid "Personal"
+msgstr "Persoonlijk"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Weken worden weergegeven van 1 tot 52"
+
+msgid "No tutored sessions found"
+msgstr "Geen getutoreerde sessies gevonden"
+
+msgid "Content search"
+msgstr "Inhoud zoeken"
+
+msgid "Search indexed content across all courses."
+msgstr "Zoek geïndexeerde inhoud in alle cursussen."
+
+msgid "Enter a keyword..."
+msgstr "Voer een zoekwoord in..."
+
+msgid "Search error"
+msgstr "Zoekfout"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Voer een zoekwoord in om geïndexeerde documenten te doorzoeken."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultaten waartoe u geen toegang hebt, zijn verborgen door de configuratie."
+
+msgid "Restricted"
+msgstr "Beperkt"
+
+msgid "You do not have access to this resource."
+msgstr "U hebt geen toegang tot deze bron."
+
+msgid "Create group"
+msgstr "Groep aanmaken"
+
+msgid "My custom certificate"
+msgstr "Mijn aangepast certificaat"
+
+msgid "Select permission"
+msgstr "Selecteer toestemming"
+

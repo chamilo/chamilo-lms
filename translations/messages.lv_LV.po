@@ -32750,3 +32750,54 @@ msgstr "Augšupielādējiet attēlu vai izveidojiet ar Badge Studio."
 msgid "Current badge set"
 msgstr "Pašreizējais nozīmes zīmes komplekts"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Šajā sadaļā, noklikšķinot uz 'Reģistrēt studentu' kursam, nākamajā lapā tiks prasīts izvēlēties lietotāju. Apstiprinot, tiks izveidota jauna sesija ar izvēlēto kursu un lietotāju, un lietotājam tiks nosūtīts paziņojums par reģistrāciju."
+
+msgid "Read-only view"
+msgstr "Tikai lasīšanas skats"
+
+msgid "Events list"
+msgstr "Notikumu saraksts"
+
+msgid "Personal"
+msgstr "Personīgais"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Nedēļas tiek rādītas no 1 līdz 52"
+
+msgid "No tutored sessions found"
+msgstr "Nav atrastas vadītās sesijas"
+
+msgid "Content search"
+msgstr "Satura meklēšana"
+
+msgid "Search indexed content across all courses."
+msgstr "Meklēt indeksēto saturu visos kursos."
+
+msgid "Enter a keyword..."
+msgstr "Ievadiet atslēgvārdu..."
+
+msgid "Search error"
+msgstr "Meklēšanas kļūda"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ievadiet atslēgvārdu, lai meklētu indeksētus dokumentus."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultāti, kuriem nav piekļuves, ir paslēpti pēc konfigurācijas."
+
+msgid "Restricted"
+msgstr "Ierobežots"
+
+msgid "You do not have access to this resource."
+msgstr "Jums nav piekļuves šim resursam."
+
+msgid "Create group"
+msgstr "Izveidot grupu"
+
+msgid "My custom certificate"
+msgstr "Mans pielāgots sertifikāts"
+
+msgid "Select permission"
+msgstr "Izvēlēties atļauju"
+

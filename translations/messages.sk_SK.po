@@ -32764,3 +32764,54 @@ msgstr "Nahrajte obrázok alebo vytvorte jeden pomocou Badge Studio."
 msgid "Current badge set"
 msgstr "Aktuálna sada odznakov"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "V tejto sekcii, po kliknutí na 'Zaregistruj študenta' pre kurz, budete vyzvaní vybrať používateľa na ďalšej stránke. Po overení sa vytvorí nová relácia s vybraným kurzom a používateľom a používateľovi sa odešle notifikácia o registrácii."
+
+msgid "Read-only view"
+msgstr "Len na čítanie"
+
+msgid "Events list"
+msgstr "Zoznam udalostí"
+
+msgid "Personal"
+msgstr "Osobné"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Týždne sa zobrazujú od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Nenašli sa žiadne vedené relácie"
+
+msgid "Content search"
+msgstr "Vyhľadávanie obsahu"
+
+msgid "Search indexed content across all courses."
+msgstr "Vyhľadávajte indexovaný obsah naprieč všetkými kurzami."
+
+msgid "Enter a keyword..."
+msgstr "Zadajte kľúčové slovo..."
+
+msgid "Search error"
+msgstr "Chyba vyhľadávania"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Zadajte kľúčové slovo na vyhľadanie indexovaných dokumentov."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Výsledky, ku ktorým nemáte prístup, sú skryté konfiguráciou."
+
+msgid "Restricted"
+msgstr "Obmedzené"
+
+msgid "You do not have access to this resource."
+msgstr "Nemáte prístup k tomuto zdroju."
+
+msgid "Create group"
+msgstr "Vytvoriť skupinu"
+
+msgid "My custom certificate"
+msgstr "Môj vlastný certifikát"
+
+msgid "Select permission"
+msgstr "Vybrať oprávnenie"
+

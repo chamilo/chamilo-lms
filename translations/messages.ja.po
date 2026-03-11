@@ -32815,3 +32815,54 @@ msgstr "画像をアップロードするか、Badge Studioで作成してくだ
 msgid "Current badge set"
 msgstr "現在のバッジセット"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "このセクションでコースの「学生登録」をクリックすると、次のページでユーザーを選択するよう求められます。検証すると、選択したコースとユーザーの新しいセッションが作成され、ユーザーに登録通知が送信されます。"
+
+msgid "Read-only view"
+msgstr "読み取り専用ビュー"
+
+msgid "Events list"
+msgstr "イベント一覧"
+
+msgid "Personal"
+msgstr "個人"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "週は1から52まで表示されます"
+
+msgid "No tutored sessions found"
+msgstr "指導付きセッションが見つかりません"
+
+msgid "Content search"
+msgstr "コンテンツ検索"
+
+msgid "Search indexed content across all courses."
+msgstr "すべてのコースでインデックスされたコンテンツを検索します。"
+
+msgid "Enter a keyword..."
+msgstr "キーワードを入力..."
+
+msgid "Search error"
+msgstr "検索エラー"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "インデックスされたドキュメントを検索するにはキーワードを入力してください。"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "アクセスできない結果は設定により非表示です。"
+
+msgid "Restricted"
+msgstr "制限付き"
+
+msgid "You do not have access to this resource."
+msgstr "このリソースにアクセスする権限がありません。"
+
+msgid "Create group"
+msgstr "グループ作成"
+
+msgid "My custom certificate"
+msgstr "マイカスタム証明書"
+
+msgid "Select permission"
+msgstr "権限を選択"
+

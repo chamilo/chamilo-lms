@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq ruraykuyna: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ruraynipas ñawpaq: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pukyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -32750,4 +32750,55 @@ msgstr "Raphi yachachisqa karampaq upload qillqaq, manaqchu Badge Studiowan kama
 
 msgid "Current badge set"
 msgstr "Kunanpaq insignia sarta"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Kay qillqapin, kursipak \"Yachaywasi qillqay\" nisqapi thakiski, hawa p'anqapi runata mañayta mañakunki. Ñawpaq qhatuytan, mañakunawan musuq sessionnillata kamachinkuy kursiwan musuq runawan, runapaq qillqay notificaciónta kamachinkuy."
+
+msgid "Read-only view"
+msgstr "Ñawiriy"
+
+msgid "Events list"
+msgstr "Rakiqkuna ruray"
+
+msgid "Personal"
+msgstr "Ñoqap"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Pachaw kuti 1-manta 52-kamana rikunki"
+
+msgid "No tutored sessions found"
+msgstr "Manam yachachisqa sessionkuna tarikunmanchu"
+
+msgid "Content search"
+msgstr "Yachay rikch'ay"
+
+msgid "Search indexed content across all courses."
+msgstr "Rikch'akuy yachaynin  imayna kursikunapin."
+
+msgid "Enter a keyword..."
+msgstr "Simit yachayta qillqay..."
+
+msgid "Search error"
+msgstr "Rikch'ay pantasqa"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Simit qillqay rikch'akuypi yachay willakunata."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Manam rikch'akunki kuna pantasqakuna kamachiywan pakasqakuna."
+
+msgid "Restricted"
+msgstr "Kutichisqa"
+
+msgid "You do not have access to this resource."
+msgstr "Manam kay willakuyta rikch'ankichu."
+
+msgid "Create group"
+msgstr "Yachaywasi kamay"
+
+msgid "My custom certificate"
+msgstr "Ñoqap ñawpaq qillqay"
+
+msgid "Select permission"
+msgstr "Huk kuskuytan mañay"
 

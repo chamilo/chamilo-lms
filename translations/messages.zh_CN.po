@@ -32751,3 +32751,54 @@ msgstr "上传图像或使用 Badge Studio 创建一个。"
 msgid "Current badge set"
 msgstr "当前徽章集"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "在本节中，点击课程的“注册学生”时，将在下一页要求您选择用户。验证后，将为选定的课程和用户创建一个新会话，并向用户发送订阅通知。"
+
+msgid "Read-only view"
+msgstr "只读视图"
+
+msgid "Events list"
+msgstr "事件列表"
+
+msgid "Personal"
+msgstr "个人"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "周数显示为 1 到 52"
+
+msgid "No tutored sessions found"
+msgstr "未找到辅导会话"
+
+msgid "Content search"
+msgstr "内容搜索"
+
+msgid "Search indexed content across all courses."
+msgstr "搜索所有课程中的索引内容。"
+
+msgid "Enter a keyword..."
+msgstr "输入关键字..."
+
+msgid "Search error"
+msgstr "搜索错误"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "输入关键字搜索索引文档。"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "您无法访问的结果因配置而隐藏。"
+
+msgid "Restricted"
+msgstr "受限"
+
+msgid "You do not have access to this resource."
+msgstr "您无权访问此资源。"
+
+msgid "Create group"
+msgstr "创建组"
+
+msgid "My custom certificate"
+msgstr "我的自定义证书"
+
+msgid "Select permission"
+msgstr "选择权限"
+

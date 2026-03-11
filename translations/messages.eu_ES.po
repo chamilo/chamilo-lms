@@ -32756,3 +32756,54 @@ msgstr "Igoitzi irudi bat edo sortu Batxilergoko Studioarekin."
 msgid "Current badge set"
 msgstr "Uneko domina multzoa"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Atal honetan, 'Ikaslea izena eman' botoian klik egitean, hurrengo orrian erabiltzailea hautatzeko eskatuko zaizu. Balioztatutakoan, hautatutako ikastaro eta erabiltzailearekin saio berria sortuko du eta harpidetzaren jakinarazpena bidaliko dio erabiltzaileari."
+
+msgid "Read-only view"
+msgstr "Irakurtze-soilik ikuspegia"
+
+msgid "Events list"
+msgstr "Gertaeren zerrenda"
+
+msgid "Personal"
+msgstr "Pertsonala"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Asteak 1etik 52ra erakusten dira"
+
+msgid "No tutored sessions found"
+msgstr "Ez da tutoretatutako saiorik aurkitu"
+
+msgid "Content search"
+msgstr "Eduki bilaketa"
+
+msgid "Search indexed content across all courses."
+msgstr "Bilatu indeksatutako edukia ikastaro guztietan."
+
+msgid "Enter a keyword..."
+msgstr "Sartu gako-hitza..."
+
+msgid "Search error"
+msgstr "Bilaketa errorea"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Sartu gako-hitza indeksatutako dokumentuak bilatzeko."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Konfigurazioaren arabera, sarbiderik ez duzun emaitzak ezkutatuta daude."
+
+msgid "Restricted"
+msgstr "Mugatua"
+
+msgid "You do not have access to this resource."
+msgstr "Ez duzu baliabide honetara sarbiderik."
+
+msgid "Create group"
+msgstr "Taldea sortu"
+
+msgid "My custom certificate"
+msgstr "Nire ziurtagiri pertsonalizagarria"
+
+msgid "Select permission"
+msgstr "Hautatu baimena"
+

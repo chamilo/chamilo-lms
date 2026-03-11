@@ -1,11 +1,12 @@
 <template>
   <div class="p-4 social-groups">
     <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-semibold">Social Groups</h1>
-      <Button
-        class="bg-blue-500 text-white rounded-md px-4 py-2"
-        icon="pi pi-plus"
-        label="Create a social group"
+      <h1 class="text-2xl font-semibold">{{ t('Social groups') }}</h1>
+      <BaseButton
+        class="self-end"
+        type="secondary"
+        icon="plus"
+        :label="$t('Create group')"
         @click="showCreateGroupDialog = true"
       />
     </div>
@@ -14,25 +15,25 @@
         :class="['tab', { 'tab-active': activeTab === 'Newest' }]"
         @click="activeTab = 'Newest'"
       >
-        Newest
+        {{ t('Newest') }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'Popular' }]"
         @click="activeTab = 'Popular'"
       >
-        Popular
+        {{ t('Popular') }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'My groups' }]"
         @click="activeTab = 'My groups'"
       >
-        My Groups
+        {{ t('My groups') }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'Search Groups' }]"
         @click="activeTab = 'Search Groups'"
       >
-        Search Groups
+        {{ t('Search groups') }}
       </button>
     </div>
     <div v-show="activeTab === 'Newest'">
@@ -45,7 +46,7 @@
           <img
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
-            alt="Group Image"
+            :alt="t('Group image')"
             class="w-16 h-16 rounded-full mr-4"
           />
           <i
@@ -59,7 +60,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} Members</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -76,7 +77,7 @@
           <img
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
-            alt="Group Image"
+            :alt="t('Group image')"
             class="w-16 h-16 rounded-full mr-4"
           />
           <i
@@ -90,7 +91,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} Members</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -107,7 +108,7 @@
           <img
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
-            alt="Group Image"
+            :alt="t('Group image')"
             class="w-16 h-16 rounded-full mr-4"
           />
           <i
@@ -121,7 +122,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} Members</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -144,21 +145,21 @@
         <BaseInputTextWithVuelidate
           v-model="groupForm.name"
           :vuelidate-property="v$.groupForm.name"
-          label="Name*"
+          :label="t('Name')"
         />
 
         <BaseInputTextWithVuelidate
           v-model="groupForm.description"
           :vuelidate-property="v$.groupForm.description"
           as="textarea"
-          label="Description"
+          :label="t('Description')"
           rows="3"
         />
 
         <BaseInputTextWithVuelidate
           v-model="groupForm.url"
           :vuelidate-property="v$.groupForm.url"
-          label="URL"
+          :label="t('URL')"
         />
         <BaseFileUpload
           :label="t('Add a picture')"
@@ -167,13 +168,13 @@
           @file-selected="selectedFile = $event"
         />
         <div class="p-field mt-2">
-          <label for="groupPermissions">Group Permissions</label>
+          <label for="groupPermissions">{{ t('Group permissions') }}</label>
           <Dropdown
             id="groupPermissions"
             v-model="groupForm.permissions"
             :options="permissionsOptions"
             option-label="label"
-            placeholder="Select Permission"
+            :placeholder="t('Select permission')"
           />
         </div>
         <div class="p-field-checkbox mt-2">
@@ -185,15 +186,18 @@
           />
         </div>
       </div>
-      <Button
-        class="p-button-rounded p-button-text"
-        icon="pi pi-check"
-        label="Add"
+      <BaseButton
+        class="self-end"
+        type="secondary"
+        icon="check"
+        :label="$t('Add')"
         @click="createGroup"
       />
-      <Button
-        class="p-button-text"
-        label="Close"
+      <BaseButton
+        class="self-end"
+        type="secondary"
+        icon="cross"
+        :label="$t('Close')"
         @click="showCreateGroupDialog = false"
       />
     </form>
@@ -211,6 +215,7 @@ import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
 import usergroupService from "../../services/usergroupService"
 import GroupSearch from "../../components/usergroup/GroupSearch.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const newestGroups = ref([])

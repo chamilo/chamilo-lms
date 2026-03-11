@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Ροή οκτέτ,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -32763,4 +32763,55 @@ msgstr "Ανεβάστε μια εικόνα ή δημιουργήστε μία 
 
 msgid "Current badge set"
 msgstr "Τρέχον σύνολο διακριτικών"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Σε αυτή την ενότητα, όταν κάνετε κλικ στο 'Εγγραφή φοιτητή' για ένα μάθημα, θα σας ζητηθεί να επιλέξετε τον χρήστη στην επόμενη σελίδα. Όταν εγκριθεί, θα δημιουργηθεί νέα συνεδρία με το επιλεγμένο μάθημα και χρήστη, και θα σταλεί ειδοποίηση εγγραφής στον χρήστη."
+
+msgid "Read-only view"
+msgstr "Προβολή μόνο ανάγνωσης"
+
+msgid "Events list"
+msgstr "Λίστα συμβάντων"
+
+msgid "Personal"
+msgstr "Προσωπικά"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Οι εβδομάδες εμφανίζονται από 1 έως 52"
+
+msgid "No tutored sessions found"
+msgstr "Δεν βρέθηκαν συνεδρίες με επιβλέποντα"
+
+msgid "Content search"
+msgstr "Αναζήτηση περιεχομένου"
+
+msgid "Search indexed content across all courses."
+msgstr "Αναζήτηση ευρετηριασμένου περιεχομένου σε όλα τα μαθήματα."
+
+msgid "Enter a keyword..."
+msgstr "Εισαγάγετε μια λέξη-κλειδί..."
+
+msgid "Search error"
+msgstr "Σφάλμα αναζήτησης"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Εισαγάγετε μια λέξη-κλειδί για να αναζητήσετε ευρετηριασμένα έγγραφα."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Τα αποτελέσματα που δεν μπορείτε να προσπελάσετε είναι κρυμμένα από τη διαμόρφωση."
+
+msgid "Restricted"
+msgstr "Περιορισμένο"
+
+msgid "You do not have access to this resource."
+msgstr "Δεν έχετε πρόσβαση σε αυτόν τον πόρο."
+
+msgid "Create group"
+msgstr "Δημιουργία ομάδας"
+
+msgid "My custom certificate"
+msgstr "Το προσαρμοσμένο πιστοποιητικό μου"
+
+msgid "Select permission"
+msgstr "Επιλογή άδειας"
 

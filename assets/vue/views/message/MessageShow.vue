@@ -118,7 +118,7 @@
 
     <p v-text="abbreviatedDatetime(item.sendDate)" />
 
-    <div v-html="item.content" />
+    <div class="tiny-content" v-html="item.content" />
 
     <template v-if="item.attachments && item.attachments.length > 0">
       <BaseCard>

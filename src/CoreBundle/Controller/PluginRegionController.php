@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/plugin-regions')]
 class PluginRegionController extends AbstractController
@@ -29,7 +28,7 @@ class PluginRegionController extends AbstractController
     #[Route('/{region}', name: 'chamilo_core_plugin_region', methods: ['GET'])]
     public function __invoke(string $region, Request $request): JsonResponse
     {
-        if (!in_array($region, AppPlugin::$plugin_regions, true)) {
+        if (!\in_array($region, AppPlugin::$plugin_regions, true)) {
             throw $this->createNotFoundException('Invalid region: '.$region);
         }
 
@@ -52,7 +51,7 @@ class PluginRegionController extends AbstractController
             $configuration = $configByAccessUrl->getConfiguration();
             $regions = $configuration['regions'] ?? [];
 
-            if (!in_array($region, $regions)) {
+            if (!\in_array($region, $regions)) {
                 continue;
             }
 
@@ -81,7 +80,7 @@ class PluginRegionController extends AbstractController
         $context = [];
 
         foreach ($request->query->all() as $key => $value) {
-            if (!is_scalar($value)) {
+            if (!\is_scalar($value)) {
                 continue;
             }
 

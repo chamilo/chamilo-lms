@@ -896,10 +896,10 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
-                    'cm_cc13_export_download',
-                    ['node' => $node],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ).'?file='.rawurlencode($fileName);
+                'cm_cc13_export_download',
+                ['node' => $node],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ).'?file='.rawurlencode($fileName);
 
             return $this->json([
                 'ok' => true,

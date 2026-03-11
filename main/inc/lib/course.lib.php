@@ -2437,7 +2437,7 @@ class CourseManager
             return [];
         }
 
-        $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
+        $session_id != 0 ? $session_condition = ' WHERE g.session_id = '.intval($session_id) : $session_condition = ' WHERE g.session_id = 0';
         if ($in_get_empty_group == 0) {
             // get only groups that are not empty
             $sql = "SELECT DISTINCT g.id, g.iid, g.name

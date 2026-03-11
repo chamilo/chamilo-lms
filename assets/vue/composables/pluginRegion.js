@@ -3,7 +3,11 @@ import { useRoute } from "vue-router"
 import { useCidReqStore } from "../store/cidReq"
 import api from "../config/api"
 
-export function usePluginRegion(region, context = ref({})) {
+/**
+ * @param {string} region
+ * @returns {{blocks: Ref<[]>}}
+ */
+export function usePluginRegion(region) {
   const route = useRoute()
   const cidReqStore = useCidReqStore()
 
@@ -18,7 +22,6 @@ export function usePluginRegion(region, context = ref({})) {
     gid: cidReqStore.group?.id ?? undefined,
     _route: route.path,
     _route_name: route.name ?? undefined,
-    ...(typeof context.value === "object" ? context.value : context),
   }))
 
   async function fetchBlocks() {

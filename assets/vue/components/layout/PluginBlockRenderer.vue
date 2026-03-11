@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { toRef } from "vue"
 import { usePluginRegion } from "../../composables/pluginRegion"
 
 const props = defineProps({
@@ -22,12 +21,7 @@ const props = defineProps({
     required: true,
     type: String,
   },
-  context: {
-    default: () => ({}),
-    require: false,
-    type: Object,
-  },
 })
 
-const { blocks } = usePluginRegion(props.region, toRef(props, "context"))
+const { blocks } = usePluginRegion(props.region)
 </script>

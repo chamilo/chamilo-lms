@@ -10,8 +10,19 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $evaledit = Evaluation::load($_GET['editeval']);
-if ($evaledit[0]->is_locked() && !api_is_platform_admin()) {
-    api_not_allowed();
+if (empty($evaledit[0])) {
+    api_not_allowed(true);
+}
+if (!api_is_platform_admin()) {
+    $currentCourseCode = api_get_course_id();
+
+    if ($evaledit[0]->get_course_code() && $evaledit[0]->get_course_code() != $currentCourseCode) {
+        api_not_allowed(true);
+    }
+
+    if ($evaledit[0]->is_locked()) {
+        api_not_allowed(true);
+    }
 }
 $form = new EvalForm(
     EvalForm::TYPE_EDIT,
@@ -23,6 +34,12 @@ $form = new EvalForm(
 );
 if ($form->validate()) {
     $values = $form->exportValues();
+
+    $evaluationId = (int) $values['hid_id'];
+    if ($evaluationId !== (int) $evaledit[0]->get_id()) {
+        api_not_allowed(true);
+    }
+
     $eval = new Evaluation();
     $eval->set_id($values['hid_id']);
     $eval->set_name($values['name']);

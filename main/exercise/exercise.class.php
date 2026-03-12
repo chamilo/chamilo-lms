@@ -1466,56 +1466,6 @@ class Exercise
     }
 
     /**
-     * changes the exercise sound file.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @param string $sound  - exercise sound file
-     * @param string $delete - ask to delete the file
-     */
-    public function updateSound($sound, $delete)
-    {
-        global $audioPath, $documentPath;
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        if ($sound['size'] && (strstr($sound['type'], 'audio') || strstr($sound['type'], 'video'))) {
-            $this->sound = $sound['name'];
-
-            if (@move_uploaded_file($sound['tmp_name'], $audioPath.'/'.$this->sound)) {
-                $sql = "SELECT 1 FROM $TBL_DOCUMENT
-                        WHERE
-                            c_id = ".$this->course_id." AND
-                            path = '".str_replace($documentPath, '', $audioPath).'/'.$this->sound."'";
-                $result = Database::query($sql);
-
-                if (!Database::num_rows($result)) {
-                    $id = add_document(
-                        $this->course,
-                        str_replace($documentPath, '', $audioPath).'/'.$this->sound,
-                        'file',
-                        $sound['size'],
-                        $sound['name']
-                    );
-                    api_item_property_update(
-                        $this->course,
-                        TOOL_DOCUMENT,
-                        $id,
-                        'DocumentAdded',
-                        api_get_user_id()
-                    );
-                    item_property_update_on_folder(
-                        $this->course,
-                        str_replace($documentPath, '', $audioPath),
-                        api_get_user_id()
-                    );
-                }
-            }
-        } elseif ($delete && is_file($audioPath.'/'.$this->sound)) {
-            $this->sound = '';
-        }
-    }
-
-    /**
      * changes the exercise type.
      *
      * @author Olivier Brouckaert

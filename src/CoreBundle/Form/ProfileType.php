@@ -40,13 +40,20 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // High-level lists (fallback behavior)
-        $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
-        $visibleOptions = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
+        $changeableOptions = $this->normalizeSettingList(
+            $this->settingsManager->getSetting('profile.changeable_options', true) ?? []
+        );
+        $visibleOptions = $this->normalizeSettingList(
+            $this->settingsManager->getSetting('profile.visible_options', true) ?? []
+        );
 
-        // Registration required fields (used to enforce required profile fields when configured)
-        // Note: The setting key name depends on the platform settings configuration.
-        // We use a safe fallback to an empty list if not configured.
-        $requiredOptions = $this->settingsManager->getSetting('registration.required_fields', true) ?? [];
+        // Registration required fields used to mark and validate required profile fields.
+        // Prefer the current setting key and keep a fallback for older installations.
+        $requiredOptions = $this->normalizeSettingList(
+            $this->settingsManager->getSetting('registration.required_profile_fields', true)
+            ?? $this->settingsManager->getSetting('registration.required_fields', true)
+            ?? []
+        );
 
         // When enabled, the timezone field must be visible and editable in the profile form,
         // regardless of profile field visibility JSON/lists.
@@ -86,9 +93,9 @@ class ProfileType extends AbstractType
             return array_values(array_unique($out));
         };
 
-        $visibleHigh = $expand(\is_array($visibleOptions) ? $visibleOptions : []);
-        $editableHigh = $expand(\is_array($changeableOptions) ? $changeableOptions : []);
-        $requiredHigh = $expand(\is_array($requiredOptions) ? $requiredOptions : []);
+        $visibleHigh = $expand($visibleOptions);
+        $editableHigh = $expand($changeableOptions);
+        $requiredHigh = $expand($requiredOptions);
 
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true, true));
         $ignoredKeys = [
@@ -197,8 +204,7 @@ class ProfileType extends AbstractType
             return \in_array($key, $editableHigh, true);
         };
 
-        // Requiredness (core):
-        // Uses the "registration.required_fields" setting if available.
+        // Requiredness (core)
         $isCoreRequired = static function (string $key) use ($requiredHigh): bool {
             return \in_array($key, $requiredHigh, true);
         };
@@ -208,6 +214,11 @@ class ProfileType extends AbstractType
             if ('timezone' === $key) {
                 continue;
             }
+
+            if ('password' === $key && !$options['include_password_field']) {
+                continue;
+            }
+
             if (!$isCoreVisible($key)) {
                 continue;
             }
@@ -217,6 +228,7 @@ class ProfileType extends AbstractType
                 $required = true;
             }
 
+            $isEditable = $isCoreEditable($key);
             $opts = [
                 'label' => $fieldConfig['label'],
                 'required' => $required,
@@ -246,30 +258,44 @@ class ProfileType extends AbstractType
                 $opts['trim'] = true;
             }
 
-            // Email: enforce consistent validation and avoid null mapping.
+            if (!$isEditable) {
+                $opts['disabled'] = true;
+                $opts['required'] = false;
+            }
+
+            if ($opts['required']) {
+                $existingLabelAttr = $opts['label_attr'] ?? [];
+                $existingClass = (string) ($existingLabelAttr['class'] ?? '');
+                $existingLabelAttr['class'] = trim($existingClass.' required');
+                $opts['label_attr'] = $existingLabelAttr;
+            }
+
+            // Email: keep a single form-level email format validation and avoid duplicate blank errors.
             if ('email' === $key) {
-                $constraints = [
+                $constraints = $opts['constraints'] ?? [];
+
+                $constraints = $this->addConstraintIfMissing(
+                    $constraints,
+                    EmailConstraint::class,
                     new EmailConstraint([
                         'mode' => EmailConstraint::VALIDATION_MODE_HTML5,
                         'message' => 'Please enter a valid email address.',
-                    ]),
-                ];
-
-                if ($opts['required']) {
-                    $constraints[] = new NotBlank([
-                        'message' => 'This value should not be blank.',
-                    ]);
-                }
+                    ])
+                );
 
                 $opts['constraints'] = $constraints;
                 $opts['invalid_message'] = 'Please enter a valid email address.';
                 $opts['empty_data'] = '';
-            }
-
-            if (!$isCoreEditable($key)) {
-                $opts['disabled'] = true;
-                // Disabled fields are not submitted; keep required=false to avoid confusing UI markers.
-                $opts['required'] = false;
+            } elseif ($opts['required'] && 'picture' !== $key && 'password' !== $key) {
+                $constraints = $opts['constraints'] ?? [];
+                $constraints = $this->addConstraintIfMissing(
+                    $constraints,
+                    NotBlank::class,
+                    new NotBlank([
+                        'message' => 'This value should not be blank.',
+                    ])
+                );
+                $opts['constraints'] = $constraints;
             }
 
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
@@ -278,6 +304,8 @@ class ProfileType extends AbstractType
         // Timezone: show when users timezones are enabled (forced), otherwise follow visibility rules.
         if ($isCoreVisible('timezone')) {
             $tzCfg = $fieldsMap['timezone'];
+            $isEditable = $isCoreEditable('timezone');
+
             $opts = [
                 'label' => $tzCfg['label'],
                 'required' => $tzCfg['required'],
@@ -285,10 +313,25 @@ class ProfileType extends AbstractType
             ];
             $extra = ($tzCfg['form_options'])();
             $opts = array_merge($opts, $extra);
-            if (!$isCoreEditable('timezone')) {
+
+            if (!$isEditable) {
                 $opts['disabled'] = true;
                 $opts['required'] = false;
             }
+
+            if ($opts['required']) {
+                $existingLabelAttr = $opts['label_attr'] ?? [];
+                $existingClass = (string) ($existingLabelAttr['class'] ?? '');
+                $existingLabelAttr['class'] = trim($existingClass.' required');
+                $opts['label_attr'] = $existingLabelAttr;
+
+                $constraints = $opts['constraints'] ?? [];
+                $constraints[] = new NotBlank([
+                    'message' => 'This value should not be blank.',
+                ]);
+                $opts['constraints'] = $constraints;
+            }
+
             $builder->add($tzCfg['field'], $tzCfg['type'], $opts);
         }
 
@@ -324,8 +367,8 @@ class ProfileType extends AbstractType
             }
         } else {
             // Fallback: show all extras (no allowlist) and let ExtraField configuration drive editability
-            $extraAllowlist = []; // empty = render all extras
-            $extraEditableMap = []; // let EF config decide
+            $extraAllowlist = [];
+            $extraEditableMap = [];
         }
 
         $builder->add('extra_fields', ExtraFieldType::class, [
@@ -342,6 +385,43 @@ class ProfileType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'include_password_field' => false,
         ]);
+
+        $resolver->setAllowedTypes('include_password_field', 'bool');
+    }
+
+    private function addConstraintIfMissing(array $constraints, string $constraintClass, object $constraint): array
+    {
+        foreach ($constraints as $existingConstraint) {
+            if ($existingConstraint instanceof $constraintClass) {
+                return $constraints;
+            }
+        }
+
+        $constraints[] = $constraint;
+
+        return $constraints;
+    }
+
+    private function normalizeSettingList(mixed $value): array
+    {
+        if (\is_array($value)) {
+            return array_values(array_filter(array_map(
+                static fn ($item) => \is_string($item) ? trim($item) : '',
+                $value
+            )));
+        }
+
+        if (\is_string($value)) {
+            $value = trim($value);
+            if ('' === $value) {
+                return [];
+            }
+
+            return array_values(array_filter(array_map('trim', explode(',', $value))));
+        }
+
+        return [];
     }
 }

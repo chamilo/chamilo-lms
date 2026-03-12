@@ -1003,8 +1003,7 @@ if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
 }
 
 if (api_can_login_as($studentId)) {
-    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
-        .'&sec_token='.$token.'">'
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$studentId.'">'
         .Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
 }
 

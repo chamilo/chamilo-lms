@@ -188,8 +188,7 @@ if (api_is_platform_admin(true, true)) {
 
         if (api_can_login_as($user_id)) {
             $menu_items[] = '<a href="'.
-                api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.
-                '&sec_token='.Security::get_existing_token().'">'.
+                api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'">'.
                 Display::getMdiIcon(
                     ActionIcon::LOGIN_AS,
                     'ch-tool-icon',

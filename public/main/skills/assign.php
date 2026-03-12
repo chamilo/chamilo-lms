@@ -422,7 +422,7 @@ if (api_is_drh()) {
         'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+        'url' => '/admin/user-list',
         'name' => get_lang('User list'),
     ];
     $interbreadcrumb[] = [

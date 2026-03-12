@@ -232,10 +232,33 @@ class ResourceListener
                 throw new UserNotFoundException('PersonalFile validation requires a user context (creator or parent node creator).');
             }
 
+            // Ensure the user is managed by this EntityManager so lazy associations resolve.
+            if (!$em->contains($currentUser)) {
+                $managedUser = $em->find(User::class, $currentUser->getId());
+                if ($managedUser instanceof User) {
+                    $currentUser = $managedUser;
+                }
+            }
+
             $currentUserNode = $currentUser->getResourceNode();
 
             $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
                 || (null !== $currentUserNode && $parentNode->getId() === $currentUserNode->getId());
+
+            // Walk up the parent tree to check if the target belongs to the user's personal space.
+            if (!$valid && null !== $currentUserNode) {
+                $node = $parentNode->getParent();
+                while (null !== $node) {
+                    if ($node->getId() === $currentUserNode->getId()
+                        || $node->getCreator()->getUsername() === $currentUser->getUsername()
+                    ) {
+                        $valid = true;
+
+                        break;
+                    }
+                    $node = $node->getParent();
+                }
+            }
 
             if (!$valid) {
                 $msg = \sprintf('User %s cannot add a file to another user', $currentUser->getUsername());

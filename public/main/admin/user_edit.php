@@ -65,10 +65,10 @@ $advancedPanelOpen = !empty($_POST);
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 
 if (false === $userInfo) {
-    header('Location: user_list.php');
+    header('Location: /admin/user-list');
     exit;
 }
 
@@ -548,7 +548,7 @@ if ($form->validate()) {
         Session::erase('system_timezone');
 
         Display::addFlash(Display::return_message($message, 'normal', false));
-        header('Location: user_list.php');
+        header('Location: /admin/user-list');
         exit();
     }
 }

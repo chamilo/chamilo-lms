@@ -51,7 +51,7 @@ if (!empty($_GET['message'])) {
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('User list')];
+$interbreadcrumb[] = ["url" => '/admin/user-list', "name" => get_lang('User list')];
 $tool_name = get_lang('Add a user');
 
 // Create the form
@@ -465,7 +465,7 @@ if ($form->validate()) {
             exit;
         } else {
             $tok = Security::get_token();
-            header('Location: user_list.php?sec_token='.$tok);
+            header('Location: /admin/user-list');
             exit;
         }
     }

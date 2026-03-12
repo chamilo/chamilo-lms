@@ -69,7 +69,7 @@ class IndexBlocksController extends BaseController
 
         $json['users'] = [
             'id' => 'block-admin-users',
-            'searchUrl' => '/main/admin/user_list.php',
+            'searchUrl' => '/admin/user-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsUsers(),
             'extraContent' => $this->getExtraContent('block-admin-users'),
@@ -203,7 +203,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => '/main/admin/user_list.php',
+            'url' => '/admin/user-list',
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -275,7 +275,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
                 $items = array_filter($items, function (array $item) {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                         '/main/admin/user_add.php',
                     ];
 
@@ -286,7 +286,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                     ];
 
                     return !\in_array($item['url'], $urls, true);

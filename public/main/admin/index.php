@@ -76,7 +76,7 @@ $blocks['users']['class'] = 'block-admin-users';
 $searchForm = new FormValidator(
     'search_user',
     'GET',
-    api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+    '/admin/user-list',
     null,
     [],
     FormValidator::LAYOUT_BOX_SEARCH
@@ -88,7 +88,7 @@ $blocks['users']['search_form'] = $searchForm->returnForm();
 if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
     $items = [
-        ['url' => 'user_list.php', 'label' => get_lang('User list')],
+        ['url' => '/admin/user-list', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
         ['url' => 'user_export.php', 'label' => get_lang('Export users list')],
         ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
@@ -108,7 +108,7 @@ if (api_is_platform_admin()) {
     }
 } else {
     $items = [
-        ['url' => 'user_list.php', 'label' => get_lang('User list')],
+        ['url' => '/admin/user-list', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
         ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
         ['url' => 'usergroups.php', 'label' => get_lang('Classes')],
@@ -117,7 +117,7 @@ if (api_is_platform_admin()) {
     if (api_is_session_admin()) {
         if ('true' === api_get_setting('limit_session_admin_role')) {
             $items = array_filter($items, function (array $item) {
-                $urls = ['user_list.php', 'user_add.php'];
+                $urls = ['/admin/user-list', 'user_add.php'];
 
                 return in_array($item['url'], $urls);
             });
@@ -125,7 +125,7 @@ if (api_is_platform_admin()) {
 
         if ('true' === api_get_setting('session.limit_session_admin_list_users')) {
             $items = array_filter($items, function (array $item) {
-                $urls = ['user_list.php'];
+                $urls = ['/admin/user-list'];
 
                 return !in_array($item['url'], $urls);
             });

@@ -652,7 +652,7 @@ if (DRH == $user->getStatus()) {
 
 $socialTool = api_get_setting('allow_social_tool');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 $tpl = new Template(null, false, false, false, false, false, false);
 
 $tpl->assign('social_tool', $socialTool);

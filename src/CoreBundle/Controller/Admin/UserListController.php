@@ -14,6 +14,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
@@ -47,6 +48,7 @@ class UserListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('', name: 'admin_user_list_data', methods: ['GET'])]
@@ -231,6 +233,7 @@ class UserListController extends AbstractController
                 'isSessionAdmin' => $isSessionAdmin,
             ],
             'roleLabels' => self::ROLE_LABELS,
+            'csrfToken' => $this->csrfTokenManager->getToken('user_list_action')->getValue(),
         ]);
     }
 }

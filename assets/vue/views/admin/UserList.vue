@@ -501,6 +501,7 @@ const advancedFilters = reactive({
 
 const viewer = reactive({ id: 0, isPlatformAdmin: false, isSessionAdmin: false })
 const roleLabelsMap = ref({})
+const csrfToken = ref("")
 
 const roleOptions = {
   ROLE_STUDENT: "Learner",
@@ -570,7 +571,7 @@ function confirmAction(action, data) {
   form.method = "POST"
   form.action = `/admin/user-list-action`
 
-  const fields = { action, user_id: data.id, view: view.value }
+  const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
   for (const [k, v] of Object.entries(fields)) {
     const input = document.createElement("input")
     input.type = "hidden"
@@ -621,6 +622,9 @@ async function load() {
     }
     if (data.roleLabels) {
       roleLabelsMap.value = data.roleLabels
+    }
+    if (data.csrfToken) {
+      csrfToken.value = data.csrfToken
     }
   } catch (e) {
     console.error(e)

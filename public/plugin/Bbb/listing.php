@@ -448,6 +448,12 @@ if ($conferenceManager && $allowToEdit) {
     $form = new FormValidator('start_conference', 'post', $conferenceUrl);
     $form->addElement('hidden', 'action', 'start');
     $ajaxUrl     = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents&'.api_get_cidreq();
+    if ($isGlobal) {
+        $ajaxUrl .= '&global=1';
+    }
+    if ($isGlobalPerUser) {
+        $ajaxUrl .= '&user_id='.(int) $isGlobalPerUser;
+    }
     $maxTotalMb  = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', $courseInfo);
     if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
 

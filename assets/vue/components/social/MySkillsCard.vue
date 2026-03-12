@@ -84,11 +84,7 @@ const { isAdmin, isHRM, isSessionAdmin } = storeToRefs(securityStore)
 
 const canSeeSkillWheel = computed(() => isAdmin.value || isHRM.value || isSessionAdmin.value)
 const defaultBadge = "/img/icons/32/badges-default.png"
-const skillsRankingUrl = computed(() => {
-  const origin = `${window.location.pathname}${window.location.search}`
-  const params = new URLSearchParams({ origin, from: "social" })
-  return `/main/social/skills_ranking.php?${params.toString()}`
-})
+const skillsRankingUrl = computed(() => "/skill/ranking")
 
 // Wheel URL with origin so the wheel can return back
 const skillsWheelUrl = computed(() => {

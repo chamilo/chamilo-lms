@@ -33049,5 +33049,3 @@ msgstr "No user are subscribed to this class"
 
 msgid "No course are subscribed to this class"
 msgstr "No course are subscribed to this class"
-
->>>>>>> 6a9e42f0a5 (refactore translations/messages.en_US.po correctly)

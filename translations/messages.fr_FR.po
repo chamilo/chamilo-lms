@@ -10447,7 +10447,7 @@ msgid "There are no learners to add results for"
 msgstr "Il n'y a aucun étudiant auquel ajouter des points"
 
 msgid "Skills ranking"
-msgstr "Édition des règles de cotation"
+msgstr "Classement par compétences"
 
 msgid "Competence thresholds colouring"
 msgstr "Couleur des cotes"
@@ -30819,7 +30819,7 @@ msgid "You have left the group successfully"
 msgstr "Vous avez quitté le groupe avec succès"
 
 msgid "Your skill ranking"
-msgstr "Votre classement des compétences"
+msgstr "Votre classement en compétences"
 
 msgid "The comment is required"
 msgstr "Le commentaire est requis"

@@ -6341,8 +6341,9 @@ mpdf-->'.$contentPdf;
         $t = html_entity_decode($t, ENT_QUOTES);
         $t = strip_tags(trim($t));
         $t = mb_strtolower($t);
-        $t = strtr($t, [' ' => '_', '-' => '_']);
+        $t = strtr($t, [' ' => '_']);
         $t = preg_replace('/_+/', '_', $t);
+
         return $t;
     }
 

@@ -134,6 +134,7 @@ class MoodleImport
             'quizzes'             => [],
             'quiz_question'       => [],
             'surveys'             => [],
+            'survey_question'     => [],
             'works'               => [],
             'glossary'            => [],
             'wiki'                => [],
@@ -158,10 +159,16 @@ class MoodleImport
         $this->ensureDir($workDir.'/document/moodle_pages');
 
         // 7) Iterate activities and fill buckets
-        $activityNodes = $mb->query('//activity');
+        $activityNodes = $mb->query('/moodle_backup/information/contents/activities/activity');
+
+        if (!$activityNodes) {
+            $activityNodes = $mb->query('//contents/activities/activity');
+        }
+
         $activityCount = $activityNodes?->length ?? 0;
-        if ($this->debug) { error_log("MBZ[$rid] activities.count total={$activityCount}"); }
-        $i = 0; // contador interno (punto en property names no permitido, usar otra var)
+        if ($this->debug) {
+            error_log("MBZ[$rid] activities.count total={$activityCount}");
+        }
         $i = 0;
 
         foreach ($activityNodes as $node) {
@@ -515,20 +522,43 @@ class MoodleImport
                 case 'survey':
                 case 'feedback': {
                     if (!$moduleXml || !is_file($moduleXml)) { break; }
-                    $s = $this->readSurveyModule($moduleXml, $modName);
-                    if (!empty($s)) {
+
+                    $parsed = $this->readSurveyModule($moduleXml, $modName);
+                    $surveyData = (array) ($parsed['survey'] ?? []);
+                    $surveyQuestions = (array) ($parsed['questions'] ?? []);
+
+                    if (!empty($surveyData)) {
                         $sid = $this->nextId($resources['surveys']);
-                        $resources['surveys'][$sid] = $this->mkLegacyItem('surveys', $sid, $s);
-                        if ($this->debug) { error_log("MBZ[$rid] {$modName} -> surveys id={$sid}"); }
+
+                        $questionIds = [];
+                        foreach ($surveyQuestions as $q) {
+                            $legacyQid = $this->nextId($resources['survey_question']);
+                            $q['survey_id'] = $sid;
+
+                            $resources['survey_question'][$legacyQid] = $this->mkLegacyItem('survey_question', $legacyQid, $q);
+                            $questionIds[] = $legacyQid;
+                        }
+
+                        $surveyData['question_ids'] = $questionIds;
+
+                        $resources['surveys'][$sid] = $this->mkLegacyItem('surveys', $sid, $surveyData);
+
+                        if ($this->debug) {
+                            error_log("MBZ[$rid] {$modName} -> surveys id={$sid} questions=".count($questionIds));
+                        }
+
                         if ($sectionId > 0 && isset($lpMap[$sectionId])) {
                             $lpMap[$sectionId]['items'][] = [
                                 'item_type' => 'survey',
                                 'ref'       => $sid,
-                                'title'     => $s['name'] ?? ucfirst($modName),
+                                'title'     => $surveyData['name'] ?? ucfirst($modName),
                             ];
-                            if ($this->debug) { error_log("MBZ[$rid] {$modName} -> LP section={$sectionId} add survey ref={$sid}"); }
+                            if ($this->debug) {
+                                error_log("MBZ[$rid] {$modName} -> LP section={$sectionId} add survey ref={$sid}");
+                            }
                         }
                     }
+
                     break;
                 }
 
@@ -602,6 +632,32 @@ class MoodleImport
                         }
                     }
                     if ($this->debug) { error_log("MBZ[$rid] wiki -> pages added={$added}"); }
+                    break;
+                }
+
+                case 'resource': {
+                    // Resource files are imported later through document handling:
+                    // - authoritative Chamilo document meta when available
+                    // - readDocuments() fallback using resource.xml + inforef.xml
+                    if ($this->debug) {
+                        error_log(
+                            "MBZ[$rid] resource -> deferred to ".
+                            ($hasDocumentMeta ? 'document meta' : 'readDocuments fallback')
+                        );
+                    }
+                    break;
+                }
+
+                case 'folder': {
+                    // Folder files are imported later through document handling:
+                    // - authoritative Chamilo document meta when available
+                    // - readDocuments() fallback for mod_folder entries from files.xml
+                    if ($this->debug) {
+                        error_log(
+                            "MBZ[$rid] folder -> deferred to ".
+                            ($hasDocumentMeta ? 'document meta' : 'readDocuments fallback')
+                        );
+                    }
                     break;
                 }
 
@@ -1082,7 +1138,9 @@ class MoodleImport
     private function slugify(string $s): string
     {
         $t = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
-        $t = strtolower(preg_replace('/[^a-z0-9]+/', '-', $t ?: $s));
+        $t = $t ?: $s;
+        $t = strtolower($t);
+        $t = preg_replace('/[^a-z0-9]+/', '-', $t) ?: '';
 
         return trim($t, '-') ?: 'item';
     }
@@ -2372,12 +2430,23 @@ class MoodleImport
 
     private function mkLegacyItem(string $type, int $sourceId, array|object $obj, array $arrayKeysToPromote = []): stdClass
     {
+        $objArray = \is_object($obj) ? get_object_vars($obj) : (array) $obj;
+
+        $legacySourceId = (int) ($objArray['source_id'] ?? $sourceId);
+        if ($legacySourceId <= 0) {
+            $legacySourceId = $sourceId;
+        }
+
         $o = new stdClass();
         $o->type = $type;
-        $o->source_id = $sourceId;
+        $o->source_id = $legacySourceId;
         $o->destination_id = null;
         $o->has_obj = true;
-        $o->obj = (object) $obj;
+        $o->obj = (object) $objArray;
+
+        if (!isset($o->obj->source_id) || (int) $o->obj->source_id <= 0) {
+            $o->obj->source_id = $legacySourceId;
+        }
 
         if (!isset($o->obj->iid)) {
             $o->obj->iid = $sourceId;
@@ -2389,22 +2458,20 @@ class MoodleImport
             $o->obj->id = $sourceId;
         }
 
-        // Promote scalars to top-level (like the builder)
-        foreach ((array) $obj as $k => $v) {
+        foreach ($objArray as $k => $v) {
             if (\is_scalar($v) || null === $v) {
                 if (!property_exists($o, $k)) {
                     $o->{$k} = $v;
                 }
             }
         }
-        // Promote array keys (e.g., items, linked_resources in learnpath)
+
         foreach ($arrayKeysToPromote as $k) {
-            if (isset($obj[$k]) && \is_array($obj[$k])) {
-                $o->{$k} = $obj[$k];
+            if (isset($objArray[$k]) && \is_array($objArray[$k])) {
+                $o->{$k} = $objArray[$k];
             }
         }
 
-        // Special adjustments for documents
         if ('document' === $type) {
             $o->path = (string) ($o->path ?? $o->full_path ?? $o->obj->path ?? $o->obj->full_path ?? '');
             $o->full_path = (string) ($o->full_path ?? $o->path ?? $o->obj->full_path ?? $o->obj->path ?? '');
@@ -2416,12 +2483,11 @@ class MoodleImport
             }
         }
 
-        // Default name if missing
         if (!isset($o->name) || '' === $o->name || null === $o->name) {
-            if (isset($obj['name']) && '' !== $obj['name']) {
-                $o->name = (string) $obj['name'];
-            } elseif (isset($obj['title']) && '' !== $obj['title']) {
-                $o->name = (string) $obj['title'];
+            if (isset($objArray['name']) && '' !== (string) $objArray['name']) {
+                $o->name = (string) $objArray['name'];
+            } elseif (isset($objArray['title']) && '' !== (string) $objArray['title']) {
+                $o->name = (string) $objArray['title'];
             } else {
                 $o->name = $type.' '.$sourceId;
             }
@@ -2663,6 +2729,7 @@ class MoodleImport
     {
         $doc = $this->loadXml($quizXmlPath);
         $xp  = new DOMXPath($doc);
+        $meta = $this->extractActivitySourceMeta($quizXmlPath);
 
         $name  = (string) ($xp->query('//quiz/name')->item(0)?->nodeValue ?? 'Quiz');
         $intro = (string) ($xp->query('//quiz/intro')->item(0)?->nodeValue ?? '');
@@ -2671,16 +2738,20 @@ class MoodleImport
         $timelimit = (int) ($xp->query('//quiz/timelimit')->item(0)?->nodeValue ?? 0);
 
         $quiz = [
-            'name'        => $name,
+            'name' => $name,
+            'title' => $name,
             'description' => $intro,
-            'timeopen'    => $timeopen,
-            'timeclose'   => $timeclose,
-            'timelimit'   => $timelimit,
-            'attempts'    => (int) ($xp->query('//quiz/attempts')->item(0)?->nodeValue ?? 0),
-            'shuffle'     => (int) ($xp->query('//quiz/shufflequestions')->item(0)?->nodeValue ?? 0),
+            'timeopen' => $timeopen,
+            'timeclose' => $timeclose,
+            'timelimit' => $timelimit,
+            'attempts' => (int) ($xp->query('//quiz/attempts')->item(0)?->nodeValue ?? 0),
+            'shuffle' => (int) ($xp->query('//quiz/shufflequestions')->item(0)?->nodeValue ?? 0),
+            'source_id' => (int) $meta['source_id'],
+            'source_activity_id' => (int) $meta['activity_id'],
+            'source_moduleid' => (int) $meta['module_id'],
+            'source_sectionid' => (int) $meta['section_id'],
         ];
 
-        // Question bank usually sits at $dir/questions.xml (varies by Moodle version)
         $qxml = $workDir.'/'.$dir.'/questions.xml';
         $questions = [];
         if (is_file($qxml)) {
@@ -2694,13 +2765,13 @@ class MoodleImport
                 $qtext = (string) ($qn->getElementsByTagName('questiontext')->item(0)?->getElementsByTagName('text')->item(0)?->nodeValue ?? '');
 
                 $q = [
-                    'type'       => $qtype ?: 'description',
-                    'name'       => $qname ?: 'Question',
+                    'type' => $qtype ?: 'description',
+                    'name' => $qname ?: 'Question',
                     'questiontext' => $qtext,
-                    'answers'    => [],
+                    'answers' => [],
                     'defaultgrade' => (float) ($qn->getElementsByTagName('defaultgrade')->item(0)?->nodeValue ?? 1.0),
-                    'single'     => null,
-                    'correct'    => [],
+                    'single' => null,
+                    'correct' => [],
                 ];
 
                 if ('multichoice' === $qtype) {
@@ -2725,7 +2796,7 @@ class MoodleImport
                             $q['correct'][] = $t;
                         }
                     }
-                } // else: keep minimal info
+                }
 
                 $questions[] = $q;
             }
@@ -2738,17 +2809,27 @@ class MoodleImport
     {
         $doc = $this->loadXml($xmlPath);
         $xp  = new DOMXPath($doc);
+        $meta = $this->extractActivitySourceMeta($xmlPath);
 
-        $name     = (string) ($xp->query('//assign/name')->item(0)?->nodeValue ?? 'Assignment');
+        $name     = trim((string) ($xp->query('//assign/name')->item(0)?->nodeValue ?? 'Assignment'));
         $intro    = (string) ($xp->query('//assign/intro')->item(0)?->nodeValue ?? '');
         $duedate  = (int) ($xp->query('//assign/duedate')->item(0)?->nodeValue ?? 0);
         $allowsub = (int) ($xp->query('//assign/teamsubmission')->item(0)?->nodeValue ?? 0);
 
+        if ('' === $name) {
+            $name = 'Assignment';
+        }
+
         return [
-            'name'        => $name,
+            'title' => $name,
+            'name' => $name,
             'description' => $intro,
-            'deadline'    => $duedate,
-            'group'       => $allowsub,
+            'deadline' => $duedate,
+            'group' => $allowsub,
+            'source_id' => (int) $meta['source_id'],
+            'source_activity_id' => (int) $meta['activity_id'],
+            'source_moduleid' => (int) $meta['module_id'],
+            'source_sectionid' => (int) $meta['section_id'],
         ];
     }
 
@@ -2756,16 +2837,128 @@ class MoodleImport
     {
         $doc = $this->loadXml($xmlPath);
         $xp  = new DOMXPath($doc);
+        $meta = $this->extractActivitySourceMeta($xmlPath);
 
-        $name  = (string) ($xp->query("//{$type}/name")->item(0)?->nodeValue ?? ucfirst($type));
-        $intro = (string) ($xp->query("//{$type}/intro")->item(0)?->nodeValue ?? '');
+        $base = "//{$type}";
+        $name = (string) ($xp->query($base.'/name')->item(0)?->nodeValue ?? ucfirst($type));
+        $intro = (string) ($xp->query($base.'/intro')->item(0)?->nodeValue ?? '');
+        $thanks = (string) ($xp->query($base.'/page_after_submit')->item(0)?->nodeValue ?? '');
+
+        $survey = [
+            'title' => $name,
+            'name' => $name,
+            'subtitle' => '',
+            'intro' => $intro,
+            'surveythanks' => $thanks,
+            'thanks' => $thanks,
+            'survey_type' => $type,
+            'anonymous' => 0,
+            'source_id' => (int) $meta['source_id'],
+            'source_activity_id' => (int) $meta['activity_id'],
+            'source_moduleid' => (int) $meta['module_id'],
+            'source_sectionid' => (int) $meta['section_id'],
+        ];
+
+        $questions = [];
+
+        foreach ($xp->query($base.'/items/item') as $itemNode) {
+            /** @var DOMElement $itemNode */
+            $itemId = (int) ($itemNode->getAttribute('id') ?: 0);
+
+            $itemType = trim((string) ($xp->evaluate('string(typ)', $itemNode) ?? ''));
+            $presentation = (string) ($xp->evaluate('string(presentation)', $itemNode) ?? '');
+            $questionText = trim((string) ($xp->evaluate('string(name)', $itemNode) ?? ''));
+            $label = trim((string) ($xp->evaluate('string(label)', $itemNode) ?? ''));
+            $position = (int) ($xp->evaluate('number(position)', $itemNode) ?? 0);
+            $required = (int) ($xp->evaluate('number(required)', $itemNode) ?? 0);
+
+            if ('' === $questionText) {
+                $questionText = $label;
+            }
+            if ('' === $questionText) {
+                continue;
+            }
+
+            $answers = [];
+            $questionType = 'open';
+            $display = 'vertical';
+
+            $presentationDecoded = html_entity_decode($presentation, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+            switch ($itemType) {
+                case 'multichoice':
+                    $mode = '';
+                    $optionsRaw = $presentationDecoded;
+
+                    if (preg_match('/^([rcd])>{5}(.*)$/u', $presentationDecoded, $m)) {
+                        $mode = $m[1];
+                        $optionsRaw = (string) $m[2];
+                    }
+
+                    $options = array_values(array_filter(array_map(
+                        static fn ($v) => trim((string) $v),
+                        explode('|', $optionsRaw)
+                    ), static fn ($v) => '' !== $v));
+
+                    foreach ($options as $idx => $opt) {
+                        $answers[] = [
+                            'option_text' => $opt,
+                            'sort' => $idx + 1,
+                            'value' => 0,
+                        ];
+                    }
+
+                    if ('c' === $mode) {
+                        $questionType = 'multiple_multiple';
+                    } elseif ('d' === $mode) {
+                        $questionType = 'multiple_dropdown';
+                    } else {
+                        if (count($options) === 2) {
+                            $lower = array_map(static fn ($v) => mb_strtolower($v), $options);
+                            if (in_array('yes', $lower, true) && in_array('no', $lower, true)) {
+                                $questionType = 'yes_no';
+                            } else {
+                                $questionType = 'multiple_single';
+                            }
+                        } else {
+                            $questionType = 'multiple_single';
+                        }
+                    }
+                    break;
+
+                case 'textfield':
+                    $questionType = 'open_short';
+                    break;
+
+                case 'textarea':
+                    $questionType = 'open';
+                    break;
+
+                case 'numeric':
+                    $questionType = 'numeric';
+                    break;
+
+                default:
+                    $questionType = 'open';
+                    break;
+            }
+
+            $questions[] = [
+                'id' => $itemId > 0 ? $itemId : (count($questions) + 1),
+                'survey_question' => $questionText,
+                'survey_question_comment' => '',
+                'survey_question_type' => $questionType,
+                'type' => $questionType,
+                'display' => $display,
+                'sort' => $position,
+                'is_required' => $required > 0,
+                'answers' => $answers,
+            ];
+        }
 
         return [
-            'name'        => $name,
-            'subtitle'    => '',
-            'intro'       => $intro,
-            'thanks'      => '',
-            'survey_type' => $type,
+            'survey' => $survey,
+            'questions' => $questions,
         ];
     }
 
@@ -2821,13 +3014,24 @@ class MoodleImport
      */
     private function readCourseEvents(string $workDir): array
     {
-        $path = rtrim($workDir, '/').'/course/calendar.xml';
-        if (!is_file($path)) {
-            // No calendar file -> no events
+        $candidates = [
+            rtrim($workDir, '/').'/course/events.xml',
+            rtrim($workDir, '/').'/course/calendarevents.xml',
+            rtrim($workDir, '/').'/course/calendar.xml',
+        ];
+
+        $path = '';
+        foreach ($candidates as $candidate) {
+            if (is_file($candidate)) {
+                $path = $candidate;
+                break;
+            }
+        }
+
+        if ('' === $path) {
             return [];
         }
 
-        // Load XML safely
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->preserveWhiteSpace = false;
         $doc->formatOutput = false;
@@ -2838,40 +3042,49 @@ class MoodleImport
         libxml_use_internal_errors($prev);
 
         if (!$ok) {
-            // Corrupted calendar.xml -> ignore
             return [];
         }
 
         $xp = new \DOMXPath($doc);
-        $evNodes = $xp->query('/calendar/event');
+
+        $evNodes = $xp->query('/events/event');
+        if (!$evNodes || $evNodes->length === 0) {
+            $evNodes = $xp->query('/calendar/event');
+        }
         if (!$evNodes || $evNodes->length === 0) {
             return [];
         }
 
         $out = [];
+
         /** @var \DOMElement $ev */
         foreach ($evNodes as $ev) {
             $get = static function (\DOMElement $ctx, string $tag): ?string {
                 $n = $ctx->getElementsByTagName($tag)->item(0);
-                return $n ? (string) $n->nodeValue : null; // preserves CDATA inner content
+
+                return $n ? (string) $n->nodeValue : null;
             };
 
-            // Fields per CourseExport::createCalendarXml()
             $name       = trim((string) ($get($ev, 'name') ?? ''));
             $desc       = (string) ($get($ev, 'description') ?? '');
             $timestartV = (string) ($get($ev, 'timestart') ?? '');
-            $durationV  = (string) ($get($ev, 'duration') ?? '');
+            $durationV  = (string) ($get($ev, 'timeduration') ?? $get($ev, 'duration') ?? '');
             $alldayV    = (string) ($get($ev, 'allday') ?? '');
             $visibleV   = (string) ($get($ev, 'visible') ?? '1');
             $eventtype  = (string) ($get($ev, 'eventtype') ?? 'course');
             $uuid       = (string) ($get($ev, 'uuid') ?? '');
 
-            // Tolerant parsing: accept numeric or date-string (older/other writers)
             $toTs = static function (string $v, int $fallback = 0): int {
-                if ($v === '') { return $fallback; }
-                if (is_numeric($v)) { return (int) $v; }
+                if ('' === $v) {
+                    return $fallback;
+                }
+                if (is_numeric($v)) {
+                    return (int) $v;
+                }
+
                 $t = @\strtotime($v);
-                return $t !== false ? (int) $t : $fallback;
+
+                return false !== $t ? (int) $t : $fallback;
             };
 
             $timestart = $toTs($timestartV, time());
@@ -2879,19 +3092,20 @@ class MoodleImport
             $allday    = (int) $alldayV ? 1 : 0;
             $visible   = (int) $visibleV ? 1 : 0;
 
-            // Legacy-friendly payload (used by mkLegacyItem('events', ...))
-            $payload = [
-                'name'        => $name !== '' ? $name : 'Event',
-                'description' => $desc,          // HTML allowed (comes from CDATA)
-                'timestart'   => $timestart,     // Unix timestamp
-                'duration'    => $duration,      // seconds
-                'allday'      => $allday,        // 0/1
-                'visible'     => $visible,       // 0/1
-                'eventtype'   => $eventtype,     // 'course' by default
-                'uuid'        => $uuid,          // $@NULL@$ or value
+            $out[] = [
+                'name'        => '' !== $name ? $name : 'Event',
+                'description' => $desc,
+                'timestart'   => $timestart,
+                'duration'    => $duration,
+                'allday'      => $allday,
+                'visible'     => $visible,
+                'eventtype'   => $eventtype,
+                'uuid'        => $uuid,
             ];
+        }
 
-            $out[] = $payload;
+        if ($this->debug) {
+            @error_log('MOODLE_IMPORT: events loaded file='.basename($path).' count='.\count($out));
         }
 
         return $out;
@@ -3065,115 +3279,146 @@ class MoodleImport
         $base = rtrim($workDir, '/').'/chamilo/learnpath';
         $indexFile = $base.'/index.json';
         if (!is_file($indexFile)) {
-            return false; // No meta present -> fallback to sections
+            return false;
         }
 
         $index = $this->readJsonFile($indexFile);
-        $cats  = $this->readJsonFile($base.'/categories.json');
+        $cats = $this->readJsonFile($base.'/categories.json');
 
-        // 1) Ensure learnpath_category from meta (idempotent)
+        // 1) Categories
+        $resources['learnpath_category'] ??= [];
         $existingCatIds = array_map('intval', array_keys((array) ($resources['learnpath_category'] ?? [])));
+
         foreach ((array) ($cats['categories'] ?? []) as $c) {
-            $cid   = (int) ($c['id'] ?? 0);
+            $cid = (int) ($c['id'] ?? 0);
             $title = (string) ($c['title'] ?? '');
-            if ($cid <= 0) { continue; }
+
+            if ($cid <= 0) {
+                continue;
+            }
+
             if (!\in_array($cid, $existingCatIds, true)) {
-                // Preserve category id from meta to simplify mapping
                 $resources['learnpath_category'][$cid] = $this->mkLegacyItem('learnpath_category', $cid, [
-                    'id'    => $cid,
-                    'name'  => $title,
+                    'id' => $cid,
+                    'name' => $title,
                     'title' => $title,
                 ]);
                 $existingCatIds[] = $cid;
             }
         }
 
-        // 2) Build search indexes to resolve item "ref" into our freshly-built resource IDs
+        // 2) Build indexes for item ref remapping
         $idx = $this->buildResourceIndexes($resources);
 
-        // 3) Import learnpaths
+        $resources['learnpath'] ??= [];
+
         $imported = 0;
+
+        // Maps from exported LP meta -> local snapshot LP ids
+        $sourceLpToLocalLp = [];
+        $pathToLocalLp = [];
+        $titleToLocalLp = [];
+
+        $normalizeLpPathKey = static function (?string $raw): string {
+            $path = trim(str_replace('\\', '/', (string) $raw));
+            $path = preg_replace('#/+#', '/', $path) ?? $path;
+            $path = trim($path, '/');
+
+            return mb_strtolower($path);
+        };
+
+        $normalizeTitleKey = static function (?string $raw): string {
+            return mb_strtolower(trim((string) $raw));
+        };
+
+        // 3) Import LPs from sidecar
         foreach ((array) ($index['learnpaths'] ?? []) as $row) {
             $dir = (string) ($row['dir'] ?? '');
-            if ($dir === '') { continue; }
+            if ('' === $dir) {
+                continue;
+            }
 
-            $lpJson   = $this->readJsonFile($base.'/'.$dir.'/learnpath.json');
-            $itemsJson= $this->readJsonFile($base.'/'.$dir.'/items.json');
+            $lpJson = $this->readJsonFile($base.'/'.$dir.'/learnpath.json');
+            $itemsJson = $this->readJsonFile($base.'/'.$dir.'/items.json');
 
-            $lpRaw    = (array) ($lpJson['learnpath'] ?? []);
-            // Defensive normalization
-            $lpTitle  = (string) ($lpRaw['title'] ?? $lpRaw['name'] ?? ($row['title'] ?? 'Lesson'));
-            $lpType   = (int)   ($lpRaw['lp_type'] ?? $row['lp_type'] ?? 1);
-            $catId    = (int)   ($lpRaw['category_id'] ?? $row['category_id'] ?? 0);
+            $lpRaw = (array) ($lpJson['learnpath'] ?? []);
+            $lpTitle = (string) ($lpRaw['title'] ?? $lpRaw['name'] ?? ($row['title'] ?? 'Lesson'));
+            $lpType = (int) ($lpRaw['lp_type'] ?? $row['lp_type'] ?? 1);
+            $catId = (int) ($lpRaw['category_id'] ?? $row['category_id'] ?? 0);
 
-            // Allocate a fresh ID (avoid collisions) but keep source id in meta
             $lid = $this->nextId($resources['learnpath']);
+
+            $sourceLpId = (int) ($lpRaw['id'] ?? ($row['id'] ?? 0));
+            $lpPath = (string) ($lpRaw['path'] ?? '');
+            $lpRef = (string) ($lpRaw['ref'] ?? '');
+
             $payload = [
-                'id'          => $lid,
-                'source_id'   => (int) ($lpRaw['id'] ?? ($row['id'] ?? $lid)),
-                'lp_type'     => $lpType, // 1=LP, 2=SCORM, 3=AICC
-                'title'       => $lpTitle,
-                'name'        => $lpTitle,
-                'path'        => (string) ($lpRaw['path'] ?? ''),
-                'ref'         => (string) ($lpRaw['ref'] ?? ''),
+                'id' => $lid,
+                'source_id' => $sourceLpId > 0 ? $sourceLpId : $lid,
+                'lp_type' => $lpType,
+                'title' => $lpTitle,
+                'name' => $lpTitle,
+                'path' => $lpPath,
+                'ref' => $lpRef,
                 'description' => (string) ($lpRaw['description'] ?? ''),
-                'content_local'      => (string) ($lpRaw['content_local'] ?? ''),
-                'default_encoding'   => (string) ($lpRaw['default_encoding'] ?? ''),
-                'default_view_mod'   => (string) ($lpRaw['default_view_mod'] ?? ''),
-                'prevent_reinit'     => (bool)   ($lpRaw['prevent_reinit'] ?? false),
-                'force_commit'       => (bool)   ($lpRaw['force_commit'] ?? false),
-                'content_maker'      => (string) ($lpRaw['content_maker'] ?? ''),
-                'display_order'      => (int)    ($lpRaw['display_order'] ?? 0),
-                'js_lib'             => (string) ($lpRaw['js_lib'] ?? ''),
-                'content_license'    => (string) ($lpRaw['content_license'] ?? ''),
-                'debug'              => (bool)   ($lpRaw['debug'] ?? false),
-                'visibility'         => (string) ($lpRaw['visibility'] ?? '1'),
-                'author'             => (string) ($lpRaw['author'] ?? ''),
-                'use_max_score'      => (int)    ($lpRaw['use_max_score'] ?? 0),
-                'autolaunch'         => (int)    ($lpRaw['autolaunch'] ?? 0),
-                'created_on'         => (string) ($lpRaw['created_on'] ?? ''),
-                'modified_on'        => (string) ($lpRaw['modified_on'] ?? ''),
-                'published_on'       => (string) ($lpRaw['published_on'] ?? ''),
-                'expired_on'         => (string) ($lpRaw['expired_on'] ?? ''),
-                'session_id'         => 0,
-                'category_id'        => $catId > 0 ? $catId : (array_key_first($resources['learnpath_category']) ?? 0),
-                '_src'               => [
-                    'lp_id' => (int) ($lpRaw['id'] ?? ($row['id'] ?? 0)),
+                'content_local' => (string) ($lpRaw['content_local'] ?? ''),
+                'default_encoding' => (string) ($lpRaw['default_encoding'] ?? ''),
+                'default_view_mod' => (string) ($lpRaw['default_view_mod'] ?? ''),
+                'prevent_reinit' => (bool) ($lpRaw['prevent_reinit'] ?? false),
+                'force_commit' => (bool) ($lpRaw['force_commit'] ?? false),
+                'content_maker' => (string) ($lpRaw['content_maker'] ?? ''),
+                'display_order' => (int) ($lpRaw['display_order'] ?? 0),
+                'js_lib' => (string) ($lpRaw['js_lib'] ?? ''),
+                'content_license' => (string) ($lpRaw['content_license'] ?? ''),
+                'debug' => (bool) ($lpRaw['debug'] ?? false),
+                'visibility' => (string) ($lpRaw['visibility'] ?? '1'),
+                'author' => (string) ($lpRaw['author'] ?? ''),
+                'use_max_score' => (int) ($lpRaw['use_max_score'] ?? 0),
+                'autolaunch' => (int) ($lpRaw['autolaunch'] ?? 0),
+                'created_on' => (string) ($lpRaw['created_on'] ?? ''),
+                'modified_on' => (string) ($lpRaw['modified_on'] ?? ''),
+                'published_on' => (string) ($lpRaw['published_on'] ?? ''),
+                'expired_on' => (string) ($lpRaw['expired_on'] ?? ''),
+                'session_id' => 0,
+                'category_id' => $catId > 0 ? $catId : (array_key_first($resources['learnpath_category']) ?? 0),
+                '_src' => [
+                    'lp_id' => $sourceLpId,
                 ],
             ];
 
-            // Create wrapper with extended props (items, linked_resources)
-            $resources['learnpath'][$lid] = $this->mkLegacyItem('learnpath', $lid, $payload, ['items','linked_resources']);
+            $resources['learnpath'][$lid] = $this->mkLegacyItem('learnpath', $lid, $payload, ['items', 'linked_resources']);
 
-            // Items: stable-order by display_order if present
             $rawItems = (array) ($itemsJson['items'] ?? []);
-            usort($rawItems, static fn(array $a, array $b) =>
-                (int)($a['display_order'] ?? 0) <=> (int)($b['display_order'] ?? 0));
+            usort(
+                $rawItems,
+                static fn (array $a, array $b): int => (int) ($a['display_order'] ?? 0) <=> (int) ($b['display_order'] ?? 0)
+            );
 
             $items = [];
             foreach ($rawItems as $it) {
                 $mappedRef = $this->mapLpItemRef($it, $idx, $resources);
+
                 $items[] = [
-                    'id'             => (int)   ($it['id'] ?? 0),
-                    'item_type'      => (string)($it['item_type'] ?? ''),
-                    'ref'            => $mappedRef,
-                    'title'          => (string)($it['title'] ?? ''),
-                    'name'           => (string)($it['name'] ?? $lpTitle),
-                    'description'    => (string)($it['description'] ?? ''),
-                    'path'           => (string)($it['path'] ?? ''),
-                    'min_score'      => (float) ($it['min_score'] ?? 0),
-                    'max_score'      => isset($it['max_score']) ? (float) $it['max_score'] : null,
-                    'mastery_score'  => isset($it['mastery_score']) ? (float) $it['mastery_score'] : null,
-                    'parent_item_id' => (int)   ($it['parent_item_id'] ?? 0),
-                    'previous_item_id'=> isset($it['previous_item_id']) ? (int) $it['previous_item_id'] : null,
-                    'next_item_id'   => isset($it['next_item_id']) ? (int) $it['next_item_id'] : null,
-                    'display_order'  => (int)   ($it['display_order'] ?? 0),
-                    'prerequisite'   => (string)($it['prerequisite'] ?? ''),
-                    'parameters'     => (string)($it['parameters'] ?? ''),
-                    'launch_data'    => (string)($it['launch_data'] ?? ''),
-                    'audio'          => (string)($it['audio'] ?? ''),
-                    '_src'           => [
-                        'ref'  => $it['ref'] ?? null,
+                    'id' => (int) ($it['id'] ?? 0),
+                    'item_type' => (string) ($it['item_type'] ?? ''),
+                    'ref' => $mappedRef,
+                    'title' => (string) ($it['title'] ?? ''),
+                    'name' => (string) ($it['name'] ?? $lpTitle),
+                    'description' => (string) ($it['description'] ?? ''),
+                    'path' => (string) ($it['path'] ?? ''),
+                    'min_score' => (float) ($it['min_score'] ?? 0),
+                    'max_score' => isset($it['max_score']) ? (float) $it['max_score'] : null,
+                    'mastery_score' => isset($it['mastery_score']) ? (float) $it['mastery_score'] : null,
+                    'parent_item_id' => (int) ($it['parent_item_id'] ?? 0),
+                    'previous_item_id' => isset($it['previous_item_id']) ? (int) $it['previous_item_id'] : null,
+                    'next_item_id' => isset($it['next_item_id']) ? (int) $it['next_item_id'] : null,
+                    'display_order' => (int) ($it['display_order'] ?? 0),
+                    'prerequisite' => (string) ($it['prerequisite'] ?? ''),
+                    'parameters' => (string) ($it['parameters'] ?? ''),
+                    'launch_data' => (string) ($it['launch_data'] ?? ''),
+                    'audio' => (string) ($it['audio'] ?? ''),
+                    '_src' => [
+                        'ref' => $it['ref'] ?? null,
                         'path' => $it['path'] ?? null,
                     ],
                 ];
@@ -3182,12 +3427,117 @@ class MoodleImport
             $resources['learnpath'][$lid]->items = $items;
             $resources['learnpath'][$lid]->linked_resources = $this->collectLinkedFromLpItems($items);
 
+            if ($sourceLpId > 0) {
+                $sourceLpToLocalLp[$sourceLpId] = $lid;
+            }
+
+            $lpPathKey = $normalizeLpPathKey($lpPath);
+            if ('' !== $lpPathKey) {
+                $pathToLocalLp[$lpPathKey] = $lid;
+
+                $baseName = basename($lpPathKey);
+                if ('' !== $baseName) {
+                    $pathToLocalLp[$baseName] = $lid;
+                }
+            }
+
+            $titleKey = $normalizeTitleKey($lpTitle);
+            if ('' !== $titleKey) {
+                $titleToLocalLp[$titleKey] = $lid;
+            }
+
             $imported++;
         }
 
-        if ($this->debug) {
-            @error_log("MOODLE_IMPORT: LPs from meta imported={$imported}");
+        // 4) Import SCORM sidecar when present
+        $scormIndex = $this->readJsonFile($base.'/scorm_index.json');
+        $scormRows = (array) ($scormIndex['scorm'] ?? []);
+
+        if (!empty($scormRows)) {
+            // Prefer sidecar data over weak Moodle XML placeholders for C2->C2 reimport
+            $resources['scorm'] = [];
+            $resources['scorm_documents'] = [];
+
+            foreach ($scormRows as $row) {
+                if (!\is_array($row)) {
+                    continue;
+                }
+
+                $raw = (array) ($row['raw'] ?? []);
+
+                $name = trim((string) ($raw['name'] ?? $raw['title'] ?? $row['name'] ?? 'SCORM package'));
+                $path = trim(str_replace('\\', '/', (string) ($raw['path'] ?? $row['path'] ?? '')), '/');
+                $zip = trim(str_replace('\\', '/', (string) ($raw['zip'] ?? $row['zip'] ?? '')), '/');
+
+                if ('' === $name && '' !== $path) {
+                    $name = basename($path);
+                }
+                if ('' === $name && '' !== $zip) {
+                    $name = basename($zip);
+                }
+                if ('' === $name) {
+                    $name = 'SCORM package';
+                }
+
+                $sourceLpId = (int) (
+                    $raw['source_lp_id']
+                    ?? $row['source_lp_id']
+                    ?? $raw['lp_id']
+                    ?? $raw['learnpath_id']
+                    ?? 0
+                );
+
+                $localLpId = 0;
+
+                if ($sourceLpId > 0 && isset($sourceLpToLocalLp[$sourceLpId])) {
+                    $localLpId = (int) $sourceLpToLocalLp[$sourceLpId];
+                }
+
+                if ($localLpId <= 0 && '' !== $path) {
+                    $pathKey = $normalizeLpPathKey($path);
+                    if (isset($pathToLocalLp[$pathKey])) {
+                        $localLpId = (int) $pathToLocalLp[$pathKey];
+                    } else {
+                        $baseName = basename($pathKey);
+                        if ('' !== $baseName && isset($pathToLocalLp[$baseName])) {
+                            $localLpId = (int) $pathToLocalLp[$baseName];
+                        }
+                    }
+                }
+
+                if ($localLpId <= 0) {
+                    $titleKey = $normalizeTitleKey($name);
+                    if (isset($titleToLocalLp[$titleKey])) {
+                        $localLpId = (int) $titleToLocalLp[$titleKey];
+                    }
+                }
+
+                $sid = $this->nextId($resources['scorm']);
+
+                $payload = [
+                    'id' => $sid,
+                    'source_id' => (int) ($raw['id'] ?? $row['id'] ?? $sid),
+                    'source_lp_id' => $localLpId,
+                    'lp_id_dest' => 0,
+                    'title' => $name,
+                    'name' => $name,
+                    'path' => $path,
+                    'zip' => $zip,
+                ];
+
+                $resources['scorm'][$sid] = $this->mkLegacyItem('scorm', $sid, $payload);
+                $resources['scorm_documents'][$sid] = $this->mkLegacyItem('scorm_documents', $sid, $payload);
+            }
         }
+
+        if ($this->debug) {
+            @error_log(
+                'MOODLE_IMPORT: LPs from meta imported='
+                .$imported
+                .' scorm='.\count((array) ($resources['scorm'] ?? []))
+            );
+        }
+
         return $imported > 0;
     }
 
@@ -3330,9 +3680,7 @@ class MoodleImport
             return false;
         }
 
-        // Resolve resource keys (support both constant and string bags)
         $quizKey = \defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz';
-        // Chamilo snapshot also uses sometimes 'quizzes' — we fill both for compatibility
         $quizCompatKey = 'quizzes';
 
         $qqKey = \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : 'Exercise_Question';
@@ -3340,7 +3688,6 @@ class MoodleImport
 
         $imported = 0;
 
-        // Iterate all quiz_* folders
         $dh = @opendir($base);
         if (!$dh) {
             return false;
@@ -3350,6 +3697,7 @@ class MoodleImport
             if ($entry === '.' || $entry === '..') {
                 continue;
             }
+
             $dir = $base.'/'.$entry;
             if (!is_dir($dir) || strpos($entry, 'quiz_') !== 0) {
                 continue;
@@ -3357,12 +3705,12 @@ class MoodleImport
 
             $quizJsonFile = $dir.'/quiz.json';
             $questionsFile = $dir.'/questions.json';
-            $answersFile   = $dir.'/answers.json'; // optional (flat; we prefer nested)
+            $answersFile = $dir.'/answers.json';
 
             $quizWrap = $this->readJsonFile($quizJsonFile);
-            $qList    = $this->readJsonFile($questionsFile);
+            $qList = $this->readJsonFile($questionsFile);
+
             if (empty($quizWrap) || empty($qList)) {
-                // Nothing to import for this folder
                 if ($this->debug) {
                     @error_log("MOODLE_IMPORT: Quiz meta missing or incomplete in {$entry}");
                 }
@@ -3372,132 +3720,168 @@ class MoodleImport
             $quizArr = (array) ($quizWrap['quiz'] ?? []);
             $questions = (array) ($qList['questions'] ?? []);
 
-            // ---- Resolve or allocate quiz local id
+            if (!isset($resources[$quizKey])) {
+                $resources[$quizKey] = [];
+            }
+            if (!isset($resources[$quizCompatKey])) {
+                $resources[$quizCompatKey] = [];
+            }
+            if (!isset($resources[$qqKey])) {
+                $resources[$qqKey] = [];
+            }
+            if (!isset($resources[$qqCompatKey])) {
+                $resources[$qqCompatKey] = [];
+            }
+
             $title = (string) ($quizArr['title'] ?? $quizArr['name'] ?? 'Quiz');
             $qidLocal = $this->findExistingQuizIdByTitle($resources, $title, [$quizKey, $quizCompatKey]);
             if (!$qidLocal) {
                 $qidLocal = $this->nextId($resources[$quizKey] ?? []);
             }
 
-            // Ensure bags exist
-            if (!isset($resources[$quizKey]))      { $resources[$quizKey] = []; }
-            if (!isset($resources[$quizCompatKey])){ $resources[$quizCompatKey] = []; }
-            if (!isset($resources[$qqKey]))        { $resources[$qqKey] = []; }
-            if (!isset($resources[$qqCompatKey]))  { $resources[$qqCompatKey] = []; }
-
-            // ---- Build local question id map (src → local)
-            $srcToLocalQ = [];
-            // If meta provides question_ids, we keep order from 'question_orders' when present.
-            $srcIds   = array_map('intval', (array) ($quizArr['question_ids'] ?? []));
+            $srcIds = array_map('intval', (array) ($quizArr['question_ids'] ?? []));
             $srcOrder = array_map('intval', (array) ($quizArr['question_orders'] ?? []));
 
-            // First pass: assign local ids to all questions we are about to import
+            $normalizedQuestions = [];
+            $srcToLocalQ = [];
+
+            $nextLocalQid = $this->nextId($resources[$qqKey]);
+            $nextSyntheticSrcQid = 1;
+
             foreach ($questions as $qArr) {
-                // Prefer explicit id added by exporter; otherwise try _links.quiz_id or fallback 0
                 $srcQid = (int) ($qArr['id'] ?? 0);
-                if ($srcQid <= 0) {
-                    // Try to infer from position in the list (not ideal, but keeps import going)
-                    $srcQid = $this->nextId($srcToLocalQ); // synthetic progressive id
+
+                if ($srcQid <= 0 || isset($srcToLocalQ[$srcQid])) {
+                    while (isset($srcToLocalQ[$nextSyntheticSrcQid])) {
+                        $nextSyntheticSrcQid++;
+                    }
+                    $srcQid = $nextSyntheticSrcQid;
+                    $nextSyntheticSrcQid++;
                 }
-                $srcToLocalQ[$srcQid] = $this->nextId($resources[$qqKey]);
+
+                $srcToLocalQ[$srcQid] = $nextLocalQid;
+                $normalizedQuestions[] = [
+                    '_src_qid' => $srcQid,
+                    '_data' => (array) $qArr,
+                ];
+                $nextLocalQid++;
             }
 
-            // ---- Rebuild quiz payload (builder-compatible)
+            $sourceQuizId = (int) (
+                $quizArr['source_moduleid']
+                ?? $quizArr['moduleid']
+                ?? $quizArr['source_activity_id']
+                ?? $quizArr['source_id']
+                ?? $quizArr['iid']
+                ?? $quizArr['id']
+                ?? 0
+            );
+
+            $sourceModuleId = (int) (
+                $quizArr['source_moduleid']
+                ?? $quizArr['moduleid']
+                ?? 0
+            );
+
             $payload = [
-                'title'                 => (string) ($quizArr['title'] ?? ''),
-                'description'           => (string) ($quizArr['description'] ?? ''),
-                'type'                  => (int)    ($quizArr['type'] ?? 0),
-                'random'                => (int)    ($quizArr['random'] ?? 0),
-                'random_answers'        => (bool)   ($quizArr['random_answers'] ?? false),
-                'results_disabled'      => (int)    ($quizArr['results_disabled'] ?? 0),
-                'max_attempt'           => (int)    ($quizArr['max_attempt'] ?? 0),
-                'feedback_type'         => (int)    ($quizArr['feedback_type'] ?? 0),
-                'expired_time'          => (int)    ($quizArr['expired_time'] ?? 0),
-                'review_answers'        => (int)    ($quizArr['review_answers'] ?? 0),
-                'random_by_category'    => (int)    ($quizArr['random_by_category'] ?? 0),
-                'text_when_finished'    => (string) ($quizArr['text_when_finished'] ?? ''),
+                'title' => (string) ($quizArr['title'] ?? $quizArr['name'] ?? ''),
+                'description' => (string) ($quizArr['description'] ?? ''),
+                'type' => (int) ($quizArr['type'] ?? 0),
+                'random' => (int) ($quizArr['random'] ?? 0),
+                'random_answers' => (bool) ($quizArr['random_answers'] ?? false),
+                'results_disabled' => (int) ($quizArr['results_disabled'] ?? 0),
+                'max_attempt' => (int) ($quizArr['max_attempt'] ?? 0),
+                'feedback_type' => (int) ($quizArr['feedback_type'] ?? 0),
+                'expired_time' => (int) ($quizArr['expired_time'] ?? 0),
+                'review_answers' => (int) ($quizArr['review_answers'] ?? 0),
+                'random_by_category' => (int) ($quizArr['random_by_category'] ?? 0),
+                'text_when_finished' => (string) ($quizArr['text_when_finished'] ?? ''),
                 'text_when_finished_failure' => (string) ($quizArr['text_when_finished_failure'] ?? ''),
-                'display_category_name' => (int)    ($quizArr['display_category_name'] ?? 0),
-                'save_correct_answers'  => (int)    ($quizArr['save_correct_answers'] ?? 0),
-                'propagate_neg'         => (int)    ($quizArr['propagate_neg'] ?? 0),
-                'hide_question_title'   => (bool)   ($quizArr['hide_question_title'] ?? false),
-                'hide_question_number'  => (int)    ($quizArr['hide_question_number'] ?? 0),
-                'question_selection_type'=> (int)   ($quizArr['question_selection_type'] ?? 0),
-                'access_condition'      => (string) ($quizArr['access_condition'] ?? ''),
-                'pass_percentage'       => $quizArr['pass_percentage'] ?? null,
-                'start_time'            => (string) ($quizArr['start_time'] ?? ''),
-                'end_time'              => (string) ($quizArr['end_time'] ?? ''),
-                // We will remap IDs to locals below:
-                'question_ids'          => [],
-                'question_orders'       => [],
+                'display_category_name' => (int) ($quizArr['display_category_name'] ?? 0),
+                'save_correct_answers' => (int) ($quizArr['save_correct_answers'] ?? 0),
+                'propagate_neg' => (int) ($quizArr['propagate_neg'] ?? 0),
+                'hide_question_title' => (bool) ($quizArr['hide_question_title'] ?? false),
+                'hide_question_number' => (int) ($quizArr['hide_question_number'] ?? 0),
+                'question_selection_type' => (int) ($quizArr['question_selection_type'] ?? 0),
+                'access_condition' => (string) ($quizArr['access_condition'] ?? ''),
+                'pass_percentage' => $quizArr['pass_percentage'] ?? null,
+                'start_time' => (string) ($quizArr['start_time'] ?? ''),
+                'end_time' => (string) ($quizArr['end_time'] ?? ''),
+                'source_id' => $sourceQuizId > 0 ? $sourceQuizId : $qidLocal,
+                'source_moduleid' => $sourceModuleId,
+                'question_ids' => [],
+                'question_orders' => [],
             ];
 
-            // Fill question_ids and orders using the local id map
-            $localIds   = [];
+            $localIds = [];
             $localOrder = [];
 
-            // If we received aligned srcIds/srcOrder, keep that order; otherwise, use question '_order'
             if (!empty($srcIds) && !empty($srcOrder) && \count($srcIds) === \count($srcOrder)) {
                 foreach ($srcIds as $i => $srcQid) {
                     if (isset($srcToLocalQ[$srcQid])) {
-                        $localIds[]   = $srcToLocalQ[$srcQid];
+                        $localIds[] = $srcToLocalQ[$srcQid];
                         $localOrder[] = (int) $srcOrder[$i];
                     }
                 }
             } else {
-                // Build order from questions array (_order) if present; otherwise keep list order
-                usort($questions, static fn(array $a, array $b) =>
-                    (int)($a['_order'] ?? 0) <=> (int)($b['_order'] ?? 0));
-                foreach ($questions as $qArr) {
-                    $srcQid = (int) ($qArr['id'] ?? 0);
+                usort(
+                    $normalizedQuestions,
+                    static fn (array $a, array $b): int =>
+                        (int) (($a['_data']['_order'] ?? 0)) <=> (int) (($b['_data']['_order'] ?? 0))
+                );
+
+                foreach ($normalizedQuestions as $row) {
+                    $srcQid = (int) $row['_src_qid'];
+                    $qArr = (array) $row['_data'];
+
                     if (isset($srcToLocalQ[$srcQid])) {
-                        $localIds[]   = $srcToLocalQ[$srcQid];
+                        $localIds[] = $srcToLocalQ[$srcQid];
                         $localOrder[] = (int) ($qArr['_order'] ?? 0);
                     }
                 }
             }
 
-            $payload['question_ids']    = $localIds;
+            $payload['question_ids'] = $localIds;
             $payload['question_orders'] = $localOrder;
 
-            // Store quiz in both bags (constant/string and compat)
             $resources[$quizKey][$qidLocal] =
                 $this->mkLegacyItem($quizKey, $qidLocal, $payload, ['question_ids', 'question_orders']);
             $resources[$quizCompatKey][$qidLocal] = $resources[$quizKey][$qidLocal];
 
-            // ---- Import questions (with nested answers), mapping to local ids
-            foreach ($questions as $qArr) {
-                $srcQid = (int) ($qArr['id'] ?? 0);
-                $qid    = $srcToLocalQ[$srcQid] ?? $this->nextId($resources[$qqKey]);
+            $ansFlat = $this->readJsonFile($answersFile);
+            $flatAnswers = (array) ($ansFlat['answers'] ?? []);
+
+            foreach ($normalizedQuestions as $row) {
+                $srcQid = (int) $row['_src_qid'];
+                $qArr = (array) $row['_data'];
+                $qid = $srcToLocalQ[$srcQid];
 
                 $qPayload = [
-                    'question'        => (string) ($qArr['question'] ?? ''),
-                    'description'     => (string) ($qArr['description'] ?? ''),
-                    'ponderation'     => (float)  ($qArr['ponderation'] ?? 0),
-                    'position'        => (int)    ($qArr['position'] ?? 0),
-                    'type'            => (int)    ($qArr['type'] ?? ($qArr['quiz_type'] ?? 0)),
-                    'quiz_type'       => (int)    ($qArr['quiz_type'] ?? ($qArr['type'] ?? 0)),
-                    'picture'         => (string) ($qArr['picture'] ?? ''),
-                    'level'           => (int)    ($qArr['level'] ?? 0),
-                    'extra'           => (string) ($qArr['extra'] ?? ''),
-                    'feedback'        => (string) ($qArr['feedback'] ?? ''),
-                    'question_code'   => (string) ($qArr['question_code'] ?? ''),
-                    'mandatory'       => (int)    ($qArr['mandatory'] ?? 0),
-                    'duration'        => $qArr['duration'] ?? null,
+                    'source_id' => $srcQid > 0 ? $srcQid : $qid,
+                    'question' => (string) ($qArr['question'] ?? ''),
+                    'description' => (string) ($qArr['description'] ?? ''),
+                    'ponderation' => (float) ($qArr['ponderation'] ?? 0),
+                    'position' => (int) ($qArr['position'] ?? 0),
+                    'type' => (int) ($qArr['type'] ?? ($qArr['quiz_type'] ?? 0)),
+                    'quiz_type' => (int) ($qArr['quiz_type'] ?? ($qArr['type'] ?? 0)),
+                    'picture' => (string) ($qArr['picture'] ?? ''),
+                    'level' => (int) ($qArr['level'] ?? 0),
+                    'extra' => (string) ($qArr['extra'] ?? ''),
+                    'feedback' => (string) ($qArr['feedback'] ?? ''),
+                    'question_code' => (string) ($qArr['question_code'] ?? ''),
+                    'mandatory' => (int) ($qArr['mandatory'] ?? 0),
+                    'duration' => $qArr['duration'] ?? null,
                     'parent_media_id' => $qArr['parent_media_id'] ?? null,
-                    'answers'         => [],
+                    'answers' => [],
                 ];
 
-                // Answers: prefer nested in questions.json; fallback to answers.json (flat)
                 $ansList = [];
                 if (isset($qArr['answers']) && \is_array($qArr['answers'])) {
                     $ansList = $qArr['answers'];
                 } else {
-                    // Try to reconstruct from flat answers.json
-                    $ansFlat = $this->readJsonFile($answersFile);
-                    foreach ((array) ($ansFlat['answers'] ?? []) as $row) {
-                        if ((int) ($row['question_id'] ?? -1) === $srcQid && isset($row['data'])) {
-                            $ansList[] = $row['data'];
+                    foreach ($flatAnswers as $flatRow) {
+                        if ((int) ($flatRow['question_id'] ?? -1) === $srcQid && isset($flatRow['data'])) {
+                            $ansList[] = $flatRow['data'];
                         }
                     }
                 }
@@ -3505,25 +3889,27 @@ class MoodleImport
                 $pos = 1;
                 foreach ($ansList as $a) {
                     $qPayload['answers'][] = [
-                        'id'                  => (int)    ($a['id'] ?? $this->nextId($qPayload['answers'])),
-                        'answer'              => (string) ($a['answer'] ?? ''),
-                        'comment'             => (string) ($a['comment'] ?? ''),
-                        'ponderation'         => (float)  ($a['ponderation'] ?? 0),
-                        'position'            => (int)    ($a['position'] ?? $pos),
+                        'id' => (int) ($a['id'] ?? $pos),
+                        'answer' => (string) ($a['answer'] ?? ''),
+                        'comment' => (string) ($a['comment'] ?? ''),
+                        'ponderation' => (float) ($a['ponderation'] ?? 0),
+                        'position' => (int) ($a['position'] ?? $pos),
                         'hotspot_coordinates' => $a['hotspot_coordinates'] ?? null,
-                        'hotspot_type'        => $a['hotspot_type'] ?? null,
-                        'correct'             => $a['correct'] ?? null,
+                        'hotspot_type' => $a['hotspot_type'] ?? null,
+                        'correct' => $a['correct'] ?? null,
                     ];
                     $pos++;
                 }
 
-                // Optional: MATF options (as in builder)
                 if (isset($qArr['question_options']) && \is_array($qArr['question_options'])) {
-                    $qPayload['question_options'] = array_map(static fn ($o) => [
-                        'id'       => (int) ($o['id'] ?? 0),
-                        'name'     => (string) ($o['name'] ?? ''),
-                        'position' => (int) ($o['position'] ?? 0),
-                    ], $qArr['question_options']);
+                    $qPayload['question_options'] = array_map(
+                        static fn ($o) => [
+                            'id' => (int) ($o['id'] ?? 0),
+                            'name' => (string) ($o['name'] ?? ''),
+                            'position' => (int) ($o['position'] ?? 0),
+                        ],
+                        $qArr['question_options']
+                    );
                 }
 
                 $resources[$qqKey][$qid] =
@@ -3539,6 +3925,7 @@ class MoodleImport
         if ($this->debug) {
             @error_log("MOODLE_IMPORT: Quizzes from meta imported={$imported}");
         }
+
         return $imported > 0;
     }
 
@@ -4240,7 +4627,7 @@ class MoodleImport
             /** @var DOMElement $node */
             $pid   = (int) ($node->getAttribute('id') ?: 0);
             $title = (string) ($node->getElementsByTagName('title')->item(0)?->nodeValue ?? ('Wiki page '.$pid));
-            $uid   = (int)    ($node->getElementsByTagName('userid')->item(0)?->nodeValue ?? 0);
+            $uid   = (int) ($node->getElementsByTagName('userid')->item(0)?->nodeValue ?? 0);
 
             $timeCreated  = (int) ($node->getElementsByTagName('timecreated')->item(0)?->nodeValue ?? time());
             $timeModified = (int) ($node->getElementsByTagName('timemodified')->item(0)?->nodeValue ?? $timeCreated);
@@ -4257,7 +4644,7 @@ class MoodleImport
                     $last = $versNodes->item($versNodes->length - 1);
                     $vHtml = $last?->getElementsByTagName('content')->item(0)?->nodeValue ?? '';
                     $vNum  = (int) ($last?->getElementsByTagName('version')->item(0)?->nodeValue ?? 1);
-                    if (trim((string)$vHtml) !== '') {
+                    if (trim((string) $vHtml) !== '') {
                         $content = (string) $vHtml;
                     }
                     if ($vNum > 0) {
@@ -4282,11 +4669,55 @@ class MoodleImport
         // Stable order
         usort($pages, fn(array $a, array $b) => $a['id'] <=> $b['id']);
 
+        $hasIndex = false;
+        foreach ($pages as $page) {
+            if ('index' === (string) ($page['reflink'] ?? '')) {
+                $hasIndex = true;
+                break;
+            }
+        }
+
+        if (!$hasIndex && !empty($pages)) {
+            $homeCandidates = [
+                'index',
+                'home',
+                'homepage',
+                'home-page',
+                'main-page',
+                'inicio',
+                'portada',
+            ];
+
+            $homeCandidateMap = [];
+            foreach ($homeCandidates as $candidate) {
+                $homeCandidateMap[$this->slugify($candidate)] = true;
+            }
+
+            $promoted = false;
+
+            foreach ($pages as &$page) {
+                $ref = (string) ($page['reflink'] ?? '');
+                $ttl = $this->slugify((string) ($page['title'] ?? ''));
+
+                if (isset($homeCandidateMap[$ref]) || isset($homeCandidateMap[$ttl])) {
+                    $page['reflink'] = 'index';
+                    $promoted = true;
+                    break;
+                }
+            }
+            unset($page);
+
+            // Fallback: if no recognizable home alias exists, use the first page as home.
+            if (!$promoted) {
+                $pages[0]['reflink'] = 'index';
+            }
+        }
+
         return [
             [
-                'moduleid'   => $moduleId,
-                'sectionid'  => $sectionId,
-                'name'       => $name,
+                'moduleid'  => $moduleId,
+                'sectionid' => $sectionId,
+                'name'      => $name,
             ],
             $pages,
         ];
@@ -4574,6 +5005,41 @@ class MoodleImport
 
         // PageExport wrote content with htmlspecialchars; decode back to HTML.
         return html_entity_decode($node->nodeValue ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private function extractActivitySourceMeta(string $xmlPath): array
+    {
+        try {
+            $doc = $this->loadXml($xmlPath);
+            $xp = new DOMXPath($doc);
+
+            $activityId = (int) ($xp->query('/activity/@id')->item(0)?->nodeValue ?? 0);
+            $moduleId = (int) ($xp->query('/activity/@moduleid')->item(0)?->nodeValue ?? 0);
+
+            $sectionId = (int) ($xp->query('/activity/sectionid')->item(0)?->nodeValue ?? 0);
+            if ($sectionId <= 0) {
+                $sectionId = (int) ($xp->query('/activity/@sectionid')->item(0)?->nodeValue ?? 0);
+            }
+
+            $sourceId = $activityId > 0 ? $activityId : $moduleId;
+            if ($sourceId <= 0) {
+                $sourceId = 0;
+            }
+
+            return [
+                'activity_id' => $activityId,
+                'module_id' => $moduleId,
+                'section_id' => $sectionId,
+                'source_id' => $sourceId,
+            ];
+        } catch (\Throwable) {
+            return [
+                'activity_id' => 0,
+                'module_id' => 0,
+                'section_id' => 0,
+                'source_id' => 0,
+            ];
+        }
     }
 
 }

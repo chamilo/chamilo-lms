@@ -133,11 +133,10 @@ class MoodleExport
         $backupCourseContextId = $this->buildBackupCourseContextId($backupCourseId);
         self::setBackupCourseContext($backupCourseId, $backupCourseContextId);
 
-        // Keep this call for compatibility with legacy experiments,
-        // even if current activity collection already resolves URLs directly.
         $this->enqueueUrlActivities();
-
+        $this->debugExportResourceBuckets();
         $activities = $this->getActivities();
+        $this->debugExportActivitiesSummary($activities);
         $sections = $this->getSections($activities);
 
         // Create Moodle backup skeleton.
@@ -470,6 +469,93 @@ class MoodleExport
         }
 
         return false;
+    }
+
+    private function debugExportResourceBuckets(): void
+    {
+        $resources = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+
+        $wanted = [
+            'announcement' => ['announcement', 'announcements'],
+            'work' => ['work', 'works', 'assign'],
+            'wiki' => ['wiki'],
+            'attendance' => ['attendance'],
+            'thematic' => ['thematic'],
+            'gradebook' => ['gradebook'],
+            'survey' => ['survey', 'surveys', 'feedback'],
+            'forum' => ['forum'],
+            'document' => ['document', 'documents'],
+            'learnpath' => ['learnpath'],
+        ];
+
+        $out = [];
+
+        foreach ($wanted as $label => $aliases) {
+            $count = 0;
+
+            foreach ($resources as $key => $bag) {
+                $matched = false;
+
+                foreach ($aliases as $alias) {
+                    if ($this->isType($key, 'RESOURCE_'.strtoupper($alias), [$alias])) {
+                        $matched = true;
+                        break;
+                    }
+
+                    if (\is_string($key) && mb_strtolower((string) $key) === mb_strtolower($alias)) {
+                        $matched = true;
+                        break;
+                    }
+                }
+
+                if (!$matched) {
+                    continue;
+                }
+
+                if (\is_array($bag)) {
+                    $count += \count($bag);
+                } elseif ($bag instanceof \Countable) {
+                    $count += \count($bag);
+                } elseif (null !== $bag) {
+                    $count++;
+                }
+            }
+
+            $out[$label] = $count;
+        }
+
+        @error_log('[MoodleExport::debugExportResourceBuckets] '.json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
+    private function debugExportActivitiesSummary(array $activities): void
+    {
+        $summary = [];
+        $details = [];
+
+        foreach ($activities as $activity) {
+            $module = (string) ($activity['modulename'] ?? '');
+            if ('' === $module) {
+                $module = '(empty)';
+            }
+
+            if (!isset($summary[$module])) {
+                $summary[$module] = 0;
+                $details[$module] = [];
+            }
+
+            $summary[$module]++;
+
+            $details[$module][] = [
+                'id' => (int) ($activity['id'] ?? 0),
+                'moduleid' => (int) ($activity['moduleid'] ?? 0),
+                'sectionid' => (int) ($activity['sectionid'] ?? 0),
+                'title' => (string) ($activity['title'] ?? ''),
+                '__from' => (string) ($activity['__from'] ?? ''),
+            ];
+        }
+
+        @error_log('[MoodleExport::debugExportActivitiesSummary][counts] '.json_encode($summary, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        @error_log('[MoodleExport::debugExportActivitiesSummary][details] '.json_encode($details, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
 
     /**
@@ -1005,15 +1091,21 @@ class MoodleExport
                 }
 
                 if ($this->isType($resourceType, 'RESOURCE_WORK', ['work', 'assign'])) {
-                    $workId = (int) ($resource->source_id ?? 0);
+                    $workId = (int) (
+                        $resource->source_id
+                        ?? $resource->params['iid']
+                        ?? 0
+                    );
+
                     if ($workId > 0 && !$this->isActivityInLearnpath('work', $workId)) {
                         $activities[] = [
                             'id' => $workId,
                             'sectionid' => 0,
                             'modulename' => 'assign',
                             'moduleid' => $workId,
-                            'title' => (string) ($resource->params['title'] ?? ''),
+                            'title' => (string) ($resource->params['title'] ?? 'Assignment'),
                             'order' => 0,
+                            '__from' => 'work',
                         ];
                     }
                     continue;
@@ -1125,26 +1217,55 @@ class MoodleExport
                 }
 
                 if ($this->isType($resourceType, 'RESOURCE_ATTENDANCE', ['attendance'])) {
+                    $attendanceObj = (isset($resource->obj) && \is_object($resource->obj)) ? $resource->obj : $resource;
+
+                    $params = [];
+                    if (isset($attendanceObj->params)) {
+                        if (\is_array($attendanceObj->params)) {
+                            $params = $attendanceObj->params;
+                        } elseif (\is_object($attendanceObj->params)) {
+                            $params = (array) $attendanceObj->params;
+                        }
+                    }
+
                     $id = 0;
-                    if (isset($resource->obj->iid) && \is_numeric($resource->obj->iid)) {
-                        $id = (int) $resource->obj->iid;
+                    if (isset($params['id']) && \is_numeric($params['id'])) {
+                        $id = (int) $params['id'];
+                    } elseif (isset($attendanceObj->iid) && \is_numeric($attendanceObj->iid)) {
+                        $id = (int) $attendanceObj->iid;
+                    } elseif (isset($attendanceObj->id) && \is_numeric($attendanceObj->id)) {
+                        $id = (int) $attendanceObj->id;
                     } elseif (isset($resource->source_id) && \is_numeric($resource->source_id)) {
                         $id = (int) $resource->source_id;
-                    } elseif (isset($resource->obj->id) && \is_numeric($resource->obj->id)) {
-                        $id = (int) $resource->obj->id;
                     }
 
                     $title = '';
                     foreach (['title', 'name'] as $key) {
-                        if (!empty($resource->obj->{$key}) && \is_string($resource->obj->{$key})) {
-                            $title = trim((string) $resource->obj->{$key});
-                            break;
+                        if (isset($params[$key]) && \is_string($params[$key])) {
+                            $value = trim((string) $params[$key]);
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
+                            }
                         }
-                        if (!empty($resource->{$key}) && \is_string($resource->{$key})) {
-                            $title = trim((string) $resource->{$key});
-                            break;
+
+                        if (isset($attendanceObj->{$key}) && \is_string($attendanceObj->{$key})) {
+                            $value = trim((string) $attendanceObj->{$key});
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
+                            }
+                        }
+
+                        if (isset($resource->{$key}) && \is_string($resource->{$key})) {
+                            $value = trim((string) $resource->{$key});
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
+                            }
                         }
                     }
+
                     if ('' === $title) {
                         $title = 'Attendance';
                     }

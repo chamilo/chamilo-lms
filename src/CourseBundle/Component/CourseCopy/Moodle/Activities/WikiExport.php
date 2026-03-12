@@ -288,9 +288,18 @@ final class WikiExport extends ActivityExport
         if ($url === '' || str_contains($url, '@@PLUGINFILE@@')) {
             return $url;
         }
+
         if (preg_match('#/(?:courses/[^/]+/)?document(/[^?\'" )]+)#i', $url, $m)) {
-            return '@@PLUGINFILE@@/'.basename($m[1]);
+            $rel = ltrim((string) $m[1], '/');
+
+            // Do not rewrite unresolved uuid/view wiki paths.
+            if (preg_match('~^files/[0-9a-f-]{36}/(?:view|download|link)$~i', $rel)) {
+                return $url;
+            }
+
+            return '@@PLUGINFILE@@/'.$rel;
         }
+
         return $url;
     }
 

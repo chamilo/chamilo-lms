@@ -76,9 +76,8 @@ class LearnpathMetaExport extends ActivityExport
         ;
 
         if (!is_array($lpBag) || empty($lpBag)) {
-            @error_log('[LearnpathMetaExport] No learnpaths present in resources; skipping.');
             // still return 0 after writing (possibly empty) categories.json
-            $this->exportScormIndexIfAny($res, $baseDir);
+            $this->exportScormIndexIfAny($res, $baseDir, $exportDir);
             $this->writeJson($baseDir.'/index.json', ['learnpaths' => []]);
             return 0;
         }
@@ -133,31 +132,239 @@ class LearnpathMetaExport extends ActivityExport
         $this->writeJson($baseDir.'/index.json', ['learnpaths' => $index]);
 
         // Optional SCORM index (if present in resources)
-        $this->exportScormIndexIfAny($res, $baseDir);
+        $this->exportScormIndexIfAny($res, $baseDir, $exportDir);
 
-        @error_log('[LearnpathMetaExport] Exported learnpaths='.$count.' categories='.count($categories));
         return $count;
     }
 
-    /** If builder added "scorm" bag, also dump a simple index for reference. */
-    private function exportScormIndexIfAny(array $res, string $baseDir): void
+    private function exportScormIndexIfAny(array $res, string $baseDir, string $exportDir): void
     {
-        $scormBag = $res['scorm'] ?? null;
-        if (!is_array($scormBag) || empty($scormBag)) {
+        $scormBag =
+            ($res[\defined('RESOURCE_SCORM') ? RESOURCE_SCORM : 'scorm'] ?? null)
+            ?? ($res['scorm'] ?? []);
+
+        $lpBag =
+            ($res[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath'] ?? null)
+            ?? ($res['learnpath'] ?? []);
+
+        $docBag =
+            ($res[\defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document'] ?? null)
+            ?? ($res['document'] ?? []);
+
+        $hashById = $this->buildExportedFileRelativePathMap($exportDir);
+
+        $out = [];
+        $seen = [];
+
+        // 1) Keep existing SCORM bag entries when present.
+        if (is_array($scormBag)) {
+            foreach ($scormBag as $sid => $swrap) {
+                $sobj = $this->unwrapIfObject($swrap);
+                $sarr = $this->toArray($sobj);
+
+                $sourceLpId = (int) ($sarr['source_lp_id'] ?? 0);
+                $name = trim((string) ($sarr['name'] ?? $sarr['title'] ?? ''));
+                $path = trim(str_replace('\\', '/', (string) ($sarr['path'] ?? '')), '/');
+                $zip = trim(str_replace('\\', '/', (string) ($sarr['zip'] ?? '')), '/');
+
+                if ('' === $zip && $sourceLpId > 0) {
+                    $zip = $this->findScormZipForLearnpath($docBag, $hashById, $sourceLpId, $name, $path);
+                }
+
+                $key = $sourceLpId > 0 ? 'lp:'.$sourceLpId : 'scorm:'.(int) ($sarr['id'] ?? $sid);
+                if (isset($seen[$key])) {
+                    continue;
+                }
+                $seen[$key] = true;
+
+                $raw = $sarr;
+                $raw['source_lp_id'] = $sourceLpId;
+                if ('' !== $zip) {
+                    $raw['zip'] = $zip;
+                }
+
+                $out[] = [
+                    'id' => (int) ($sarr['id'] ?? $sid),
+                    'name' => '' !== $name ? $name : 'SCORM package',
+                    'path' => $path,
+                    'zip' => $zip,
+                    'source_lp_id' => $sourceLpId,
+                    'raw' => $raw,
+                ];
+            }
+        }
+
+        // 2) Synthesize SCORM rows from LP type=2 when the builder did not create a scorm bag.
+        if (is_array($lpBag)) {
+            foreach ($lpBag as $lpId => $lpWrap) {
+                $lpObj = $this->unwrapIfObject($lpWrap);
+                $lpArr = $this->toArray($lpObj);
+
+                $lpType = (int) ($lpArr['lp_type'] ?? 0);
+                if (2 !== $lpType) {
+                    continue;
+                }
+
+                $sourceLpId = (int) ($lpArr['id'] ?? $lpId);
+                if ($sourceLpId <= 0) {
+                    continue;
+                }
+
+                $key = 'lp:'.$sourceLpId;
+                if (isset($seen[$key])) {
+                    continue;
+                }
+                $seen[$key] = true;
+
+                $name = trim((string) ($lpArr['title'] ?? $lpArr['name'] ?? ''));
+                $path = trim(str_replace('\\', '/', (string) ($lpArr['path'] ?? '')), '/');
+                $zip = $this->findScormZipForLearnpath($docBag, $hashById, $sourceLpId, $name, $path);
+
+                $raw = [
+                    'id' => $sourceLpId,
+                    'name' => '' !== $name ? $name : 'SCORM package',
+                    'title' => '' !== $name ? $name : 'SCORM package',
+                    'path' => $path,
+                    'zip' => $zip,
+                    'source_lp_id' => $sourceLpId,
+                ];
+
+                $out[] = [
+                    'id' => $sourceLpId,
+                    'name' => $raw['name'],
+                    'path' => $path,
+                    'zip' => $zip,
+                    'source_lp_id' => $sourceLpId,
+                    'raw' => $raw,
+                ];
+            }
+        }
+
+        if (empty($out)) {
             return;
         }
-        $out = [];
-        foreach ($scormBag as $sid => $swrap) {
-            $sobj = $this->unwrapIfObject($swrap);
-            $sarr = $this->toArray($sobj);
-            $out[] = [
-                'id'   => (int) ($sarr['id'] ?? $sid),
-                'name' => (string) ($sarr['name'] ?? ''),
-                'path' => (string) ($sarr['path'] ?? ''),
-                'raw'  => $sarr,
-            ];
-        }
+
         $this->writeJson($baseDir.'/scorm_index.json', ['scorm' => $out]);
+    }
+
+    private function buildExportedFileRelativePathMap(string $exportDir): array
+    {
+        $filesXml = rtrim($exportDir, '/').'/files.xml';
+        if (!is_file($filesXml)) {
+            return [];
+        }
+
+        $xml = @simplexml_load_file($filesXml);
+        if (false === $xml) {
+            @error_log('[LearnpathMetaExport] ERROR reading files.xml for SCORM index');
+
+            return [];
+        }
+
+        $map = [];
+
+        foreach ($xml->file as $file) {
+            $id = (int) ($file['id'] ?? 0);
+            $hash = trim((string) ($file->contenthash ?? ''));
+
+            if ($id <= 0 || '' === $hash) {
+                continue;
+            }
+
+            $map[$id] = 'files/'.substr($hash, 0, 2).'/'.$hash;
+        }
+
+        return $map;
+    }
+
+    private function findScormZipForLearnpath(
+        array $docBag,
+        array $hashById,
+        int $sourceLpId,
+        string $lpTitle = '',
+        string $lpPath = ''
+    ): string {
+        if (empty($docBag)) {
+            return '';
+        }
+
+        $titleNeedle = mb_strtolower(trim($lpTitle));
+        $pathNeedle = mb_strtolower(trim(str_replace('\\', '/', $lpPath), '/'));
+
+        foreach ($docBag as $docId => $dwrap) {
+            if (!is_object($dwrap)) {
+                continue;
+            }
+
+            $dobj = $this->unwrapIfObject($dwrap);
+            $darr = $this->toArray($dobj);
+
+            $effectiveId = (int) (
+                $darr['iid']
+                ?? $darr['id']
+                ?? ($dwrap->source_id ?? $docId)
+            );
+
+            $fileType = strtolower((string) ($darr['file_type'] ?? $darr['filetype'] ?? $dwrap->file_type ?? $dwrap->filetype ?? ''));
+            if ('folder' === $fileType) {
+                continue;
+            }
+
+            $docTitle = mb_strtolower(trim((string) ($darr['title'] ?? $darr['name'] ?? $dwrap->title ?? '')));
+            $docPath = mb_strtolower(trim(str_replace('\\', '/', (string) ($darr['path'] ?? $dwrap->path ?? '')), '/'));
+            $comment = mb_strtolower(trim((string) ($darr['comment'] ?? $dwrap->comment ?? '')));
+
+            $looksZip = str_ends_with($docTitle, '.zip') || str_ends_with($docPath, '.zip');
+            if (!$looksZip) {
+                continue;
+            }
+
+            $matches = false;
+
+            if ('' !== $comment && str_contains($comment, 'scorm zip for lp #'.$sourceLpId)) {
+                $matches = true;
+            }
+
+            if (
+                !$matches
+                && '' !== $docPath
+                && preg_match('~(^|/)scorm\s*-\s*'.preg_quote((string) $sourceLpId, '~').'\s*-~i', $docPath)
+            ) {
+                $matches = true;
+            }
+
+            if (
+                !$matches
+                && '' !== $pathNeedle
+                && '' !== $docPath
+                && (
+                    str_contains($docPath, $pathNeedle.'/')
+                    || basename(dirname($docPath)) === basename($pathNeedle)
+                )
+            ) {
+                $matches = true;
+            }
+
+            if (
+                !$matches
+                && '' !== $titleNeedle
+                && (
+                    ('' !== $docTitle && str_contains($docTitle, $titleNeedle))
+                    || ('' !== $docPath && str_contains($docPath, $titleNeedle))
+                    || ('' !== $comment && str_contains($comment, $titleNeedle))
+                )
+            ) {
+                $matches = true;
+            }
+
+            if (!$matches) {
+                continue;
+            }
+
+            return (string) ($hashById[$effectiveId] ?? '');
+        }
+
+        return '';
     }
 
     /** Ensure directory exists (recursive). */

@@ -116,6 +116,7 @@ class UserListController extends AbstractController
             }
 
             if (!empty($keywordRoles)) {
+                $adminVariants = ['ROLE_PLATFORM_ADMIN', 'PLATFORM_ADMIN', 'ROLE_GLOBAL_ADMIN', 'GLOBAL_ADMIN', 'ROLE_ADMIN', 'ADMIN'];
                 $roleConds = [];
                 $i = 0;
                 foreach ($keywordRoles as $role) {
@@ -123,9 +124,18 @@ class UserListController extends AbstractController
                     if ('' === $role) {
                         continue;
                     }
-                    $paramName = 'role'.$i++;
-                    $roleConds[] = "u.roles LIKE :{$paramName}";
-                    $qb->setParameter($paramName, '%"'.$role.'"%');
+                    // Map admin variants to actual role names stored in the JSON column
+                    if (in_array($role, $adminVariants, true)) {
+                        $paramA = 'role'.$i++;
+                        $paramB = 'role'.$i++;
+                        $roleConds[] = "(u.roles LIKE :{$paramA} OR u.roles LIKE :{$paramB})";
+                        $qb->setParameter($paramA, '%"ROLE_ADMIN"%');
+                        $qb->setParameter($paramB, '%"ROLE_GLOBAL_ADMIN"%');
+                    } else {
+                        $paramName = 'role'.$i++;
+                        $roleConds[] = "u.roles LIKE :{$paramName}";
+                        $qb->setParameter($paramName, '%"'.$role.'"%');
+                    }
                 }
                 if (!empty($roleConds)) {
                     $qb->andWhere('('.implode(' OR ', $roleConds).')');

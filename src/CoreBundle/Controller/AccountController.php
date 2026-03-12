@@ -66,7 +66,9 @@ class AccountController extends BaseController
         $user = $this->userHelper->getCurrent();
 
         /** @var User $user */
-        $form = $this->createForm(ProfileType::class, $user);
+        $form = $this->createForm(ProfileType::class, $user, [
+            'include_password_field' => false,
+        ]);
         $form->setData($user);
         $form->handleRequest($request);
 
@@ -79,15 +81,7 @@ class AccountController extends BaseController
                 }
             }
 
-            if ($form->has('password')) {
-                $password = $form['password']->getData();
-                if ($password) {
-                    $user->setPlainPassword($password);
-                    $user->setPasswordUpdatedAt(new DateTimeImmutable());
-                }
-            }
-
-            $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed'));
+            $showTermsIfProfileCompleted = 'true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed');
             $user->setProfileCompleted($showTermsIfProfileCompleted);
 
             $userRepository->updateUser($user);

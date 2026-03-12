@@ -53,13 +53,31 @@
                 />
             </div>
             <div class="flex-grow">
-                {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+                <div class="mb-4 flex justify-end">
+                    <a href="{{ path('chamilo_core_account_change_password') }}" class="btn btn--secondary">
+                        {{ 'Change password'|trans }}
+                    </a>
+                </div>
+
+                {{ form_start(form, {
+                    'action': path('chamilo_core_account_edit'),
+                    'attr': {
+                        'class': 'edit',
+                        'novalidate': 'novalidate'
+                    }
+                }) }}
                 {# Legacy Chamilo CSRF token used by old token checks (sec_token). #}
                 <input type="hidden" name="sec_token" value="{{ legacy_token }}" />
                 {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
+                <div class="mt-2 mb-4 text-sm text-gray-600">
+                    <span class="required-marker">*</span> {{ 'Required fields'|trans }}
+                </div>
+
                 <div>
-                    <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+                    <button class="btn btn--primary" name="update_profile" type="submit">
+                        {{ 'Update profile'|trans }}
+                    </button>
                 </div>
                 {{ form_end(form) }}
             </div>
@@ -67,7 +85,6 @@
 
         {# Flatpickr JS from /build #}
         <script src="{{ asset('build/flatpickr/flatpickr.min.js') }}"></script>
-        {# Optional locale example: <script src="/build/flatpickr/l10n/fr.js"></script> #}
         <script>
           document.addEventListener('DOMContentLoaded', function () {
             if (window.flatpickr) {
@@ -76,14 +93,31 @@
                 allowInput: true,
                 altInput: true,
                 altFormat: 'd/m/Y',
-                maxDate: new Date().toISOString().slice(0,10),
-                // locale: 'fr',
+                maxDate: new Date().toISOString().slice(0, 10),
               });
             }
           });
         </script>
         <style>
-            form.edit .p-float-label > ul, form.edit .field > ul { margin-top: .25rem; color: #dc2626; font-size: .875rem; padding-left: 1.25rem; list-style: disc; }
+            form.edit .p-float-label > ul,
+            form.edit .field > ul {
+                margin-top: .25rem;
+                color: #dc2626;
+                font-size: .875rem;
+                padding-left: 1.25rem;
+                list-style: disc;
+            }
+
+            .required-marker {
+                color: #dc2626;
+                font-weight: 700;
+            }
+
+            form.edit label.required::after {
+                content: ' *';
+                color: #dc2626;
+                font-weight: 700;
+            }
         </style>
     {% endautoescape %}
 {% endblock %}

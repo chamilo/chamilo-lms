@@ -596,13 +596,13 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_ID,
-                'display_text' => 'Azure ID (mailNickname)',
+                'display_text' => 'EntraID ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
                 'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_UID,
-                'display_text' => 'Azure UID (internal ID)',
+                'display_text' => 'EntraID UID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],

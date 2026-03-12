@@ -1435,46 +1435,6 @@ class Exercise
     }
 
     /**
-     * changes the exercise sound file.
-     *
-     * @param string $sound  - exercise sound file
-     * @param string $delete - ask to delete the file
-     *
-     * @author Olivier Brouckaert
-     */
-    public function updateSound($sound, $delete)
-    {
-        global $audioPath, $documentPath;
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        if ($sound['size'] &&
-            (strstr($sound['type'], 'audio') || strstr($sound['type'], 'video'))
-        ) {
-            $this->sound = $sound['name'];
-
-            if (@move_uploaded_file($sound['tmp_name'], $audioPath.'/'.$this->sound)) {
-                $sql = "SELECT 1 FROM $TBL_DOCUMENT
-                        WHERE
-                            c_id = ".$this->course_id." AND
-                            path = '".str_replace($documentPath, '', $audioPath).'/'.$this->sound."'";
-                $result = Database::query($sql);
-
-                if (!Database::num_rows($result)) {
-                    DocumentManager::addDocument(
-                        $this->course,
-                        str_replace($documentPath, '', $audioPath).'/'.$this->sound,
-                        'file',
-                        $sound['size'],
-                        $sound['name']
-                    );
-                }
-            }
-        } elseif ($delete && is_file($audioPath.'/'.$this->sound)) {
-            $this->sound = '';
-        }
-    }
-
-    /**
      * changes the exercise type.
      *
      * @param int $type - exercise type

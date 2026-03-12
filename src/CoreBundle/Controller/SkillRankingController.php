@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[Route('/skill/ranking')]
+#[Route('/skill/ranking-data')]
 class SkillRankingController extends AbstractController
 {
     public function __construct(

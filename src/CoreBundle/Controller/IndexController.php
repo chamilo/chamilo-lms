@@ -36,6 +36,7 @@ class IndexController extends BaseController
     #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
+    #[Route('/skill/ranking', name: 'skill_ranking')]
     #[Route('/access-url/auth-sources', methods: ['GET'])]
     public function index(): Response
     {

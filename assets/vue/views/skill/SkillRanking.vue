@@ -64,7 +64,7 @@ const isLoading = ref(true)
 async function load() {
   isLoading.value = true
   try {
-    rows.value = await baseService.get("/skill/ranking")
+    rows.value = await baseService.get("/skill/ranking-data")
   } catch (e) {
     console.error(e)
   } finally {

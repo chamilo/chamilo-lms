@@ -14724,7 +14724,7 @@ msgstr "Brúkarar og bólkar"
 msgid "Sorry no results"
 msgstr "Ónótt útlit"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Bókarloyvi"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Mitt egna skjal"
 
 msgid "Select permission"
 msgstr "Vel loyvi"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Við at samtykja hesa boðskrivstina, verður tú koparlaður við viðkomandi brúkara á ein hátt, sum gerir summar ella allar av tíni profilupplýsingum tilgjørðar til lesing fyri viðkomandi brúkara"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Vísir %d av umleið %d úrslit(um) fyri %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Vísir %d tilgjørð(ur) úrslit fyri %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Tær verður tí sjálvum umstillað til hesa slóðina"
+
+msgid "You have access to multiple URLs"
+msgstr "Tú hevur atgongu til fleiri slóðir"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klikk á leinkjuna niðanfyri, sum svarar til slóðina, tú ynskir at fáa atgongu til"
+
+msgid "You do not currently have access to any URL"
+msgstr "Tú hevur í løtuni ikki atgongu til nakra slóð"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Hámarkstalið av prenumerationum loypt"
+
+msgid "An error occurred"
+msgstr "Ein feiluppførdi"
+
+msgid "You don't have any course content yet"
+msgstr "Tú hevur ongantíð kursusinnhold enn"
+
+msgid "This course is locked"
+msgstr "Hesin kursusin er låsatur"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "T-post adressan, sum t-post sendast frá, tá plattformurin sendir ein t-post, brúkt eisini sum 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Finnur ikki títt mál í listanum? Stovta okkum á %s fyri at geva títt íkast sum týðarar"
+
+msgid "An update is available"
+msgstr "Ein uppføring er til tak"
+
+msgid "to know what's new and what has been changed"
+msgstr "fyri at síggja hvørt nýtt og hvørt broytt er"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vit hava funnið út, at tíni PHP-uppføring skilur ikki dagin"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Tíni PHP útgáva svarar ikki kravunum til hesa hugbúnaðin"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Onkran fílar ella mappur hava ikki skriviatgongu"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Ávaring! Installatiónin hevur funnið ein verandi Chamilo plattform á tínum hệsi"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Tí <code>newscorm</code> og <code>exercice</code> mappurnar vóru umnevndar til <code>lp</code> og <code>exercise</code> í senn, er neyðugt at sletta ella umnevna til <code>newscorm_old</code> og <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formið inniheldur skeivar ella ókomplettar upplýsingar"
+
+msgid "Your contact information could not be sent"
+msgstr "Tín kontaktupplýsing kundi ikki verða send"
+
+msgid "Please contact support with the error details"
+msgstr "Stovta stuðul við feilupplýsingunum"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klikk á myndina fyri at klippa hana (1:1 lutfall, 120x120 px anbefalt)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Brúka klippiverktið til at velja eitt 1:1 øki"
+
+msgid "Checking push subscription"
+msgstr "Kontrollerar push-prenumeratión"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Tú ert prenumererað á push-viðvaringar í hesari ynskjara"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-viðvaringar eru ikki virknar í hesari ynskjara"
+
+msgid "Data exchange successfully saved"
+msgstr "Dataskiptini varð væl goymdur"
+
+msgid "Error saving data exchange"
+msgstr "Feil at goyma dataskipti"
+
+msgid "No documents added yet"
+msgstr "Ongir skjøl løgd afturat enn"
+
+msgid "No available documents"
+msgstr "Ongir tilgjørð skjøl"
+
+msgid "No users added yet"
+msgstr "Ongir brúkarar løgdir afturat enn"
+
+msgid "No available users"
+msgstr "Ongir tilgjørdir brúkarar"
+
+msgid "You can no longer submit"
+msgstr "Tú kanst ikki senda longur"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Ongar faldandi innsendingar funnar fyri hesa uppgávuna ella data eru ikki til tak"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "T-post sendt til allar óinnsendu brúkarar"
+
+msgid "Failed to send email"
+msgstr "Miseyknað at senda t-post"
+
+msgid "Write your answer here"
+msgstr "Skriva títt svar her"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Útstillingarkalendarin leypir tær at skrivaðsetja útsjógnarlistar (ein fyri hvør raðstøðu, sum studentarnir skulu taka lut í)"
+
+msgid "Loading attendance data"
+msgstr "Innlesur útsjógnarupplýsingar"
+
+msgid "No attendance assigned yet"
+msgstr "Ongin útsjógnarstøða fingin enn"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Tað er onki bólk stongd í dag, royn at velja annan dag ella legg til tín útsjógnarinnskrift sjálvur við virkna ikonini"
+
+msgid "No attendance data for today"
+msgstr "Ongar útsjógnarupplýsingar fyri í dag"
+
+msgid "Saving"
+msgstr "Goymir"
+
+msgid "No attendance data to save"
+msgstr "Ongar útsjógnarupplýsingar at goyma"
+
+msgid "Failed to save attendance"
+msgstr "Miseyknað at goyma útsjógn"
+
+msgid "Loading more courses"
+msgstr "Innlesur fleiri kursus"
+
+msgid "Loading more sessions"
+msgstr "Innlesur fleiri útsjógnarstøður"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Støðan fyri sjálvvirkandi skjal-start funksjónin er virkin"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Stillingin fyri sjálvuppsløtna ævintyr er virkin"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Stillingin fyri sjálvuppsløtna lærugang er PÁ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumins sjálvuppsløtna stilling er á"
+
+msgid "Course ID is missing"
+msgstr "Kurs ID manglar"
+
+msgid "Course created successfully"
+msgstr "Kursið varð stovnað við ogn"
+
+msgid "Error deleting document(s)"
+msgstr "Feil at sletta skjal(i)"
+
+msgid "Template successfully deleted"
+msgstr "Skalið varð slett við ogn"
+
+msgid "Error deleting the template"
+msgstr "Feil at sletta skalann"
+
+msgid "The title and thumbnail are required"
+msgstr "Heiti og smámynd eru krav"
+
+msgid "Template created successfully"
+msgstr "Skalið varð stovnað við ogn"
+
+msgid "Error creating the template"
+msgstr "Feil at stovna skalann"
+
+msgid "Error submitting the form"
+msgstr "Feil at senda inn ljómandiformið"
+
+msgid "Loading templates"
+msgstr "Innlesur skalarnar"
+
+msgid "Loading layout"
+msgstr "Innlesur útlitið"
+
+msgid "Loading courses"
+msgstr "Innlesur kursarnar"
+
+msgid "No courses available"
+msgstr "Ongir kursar til taks"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Hendan listin vísir brúkarar frá øllum atgongd URL-um, tí stillingin \"session_admin_access_to_all_users_on_all_urls\" er virkin."
+
+msgid "User not found"
+msgstr "Brúkarin finst ikki"
+
+msgid "An error occurred while sending the course"
+msgstr "Ein feil kom upp við at senda kursin"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Minst at breytingar í reglum sum hava við GDPR at gera krevja, at tú tilkennir hesar breytingar til triðja partar, sum tú hevur givið persónligar upplýsingar um tína brúkarar til, sum stovnað er í 19. lið í GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Tú skalt stovna \"Reglur og skilmalar\" fyri allar tilgonguligar málsætnir"
+
+msgid "You don't have any course yet"
+msgstr "Tú hevur ongan kurs enn"
+
+msgid "You have received a new friend request"
+msgstr "Tú hevur fingið eina nýggja vinabeiðing"
+
+msgid "Diagnosis Management"
+msgstr "Greiningarstýring"
 

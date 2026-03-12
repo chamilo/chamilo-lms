@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -9528,7 +9528,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "檔案上傳失敗：檔案的類型或延伸檔名不被接受"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID 網址"
 
 msgid "The file is too big to upload."
 msgstr "檔案太大不能上傳"
@@ -14729,7 +14729,7 @@ msgstr "使用者、群組"
 msgid "Sorry no results"
 msgstr "抱歉，無結果"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "群組權限"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "我的自訂證書"
 
 msgid "Select permission"
 msgstr "選擇權限"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "接受此邀請後，您將與請求使用者連結，使請求使用者能夠讀取您的部分或全部個人資料"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "顯示約 %d 個結果中的 %d 個，搜尋 %s。"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "顯示 %s 的 %d 個可存取結果。"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "因此您將自動重新導向至此網址"
+
+msgid "You have access to multiple URLs"
+msgstr "您可存取多個網址"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "請點選下方對應您欲存取網址的連結"
+
+msgid "You do not currently have access to any URL"
+msgstr "目前您無法存取任何網址"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "訂閱數量上限"
+
+msgid "An error occurred"
+msgstr "發生錯誤"
+
+msgid "You don't have any course content yet"
+msgstr "您尚未有任何課程內容"
+
+msgid "This course is locked"
+msgstr "此課程已鎖定"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "平台寄送電子郵件時使用的寄件人電子郵件地址，亦用作「回覆至」標頭"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "找不到您的語言？請聯絡 %s 貢獻翻譯"
+
+msgid "An update is available"
+msgstr "有更新可用"
+
+msgid "to know what's new and what has been changed"
+msgstr "了解新功能與變更內容"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "偵測到您的 PHP 安裝未定義日期"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "您的 PHP 版本不符合此軟體需求"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "部分檔案或資料夾無寫入權限"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "警告！安裝程式偵測到系統中已存在 Chamilo 平臺"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "因為 <code>newscorm</code> 和 <code>exercice</code> 資料夾已分別重新命名為 <code>lp</code> 和 <code>exercise</code>，因此需刪除或重新命名為 <code>newscorm_old</code> 和 <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "表單包含不正確或不完整資料"
+
+msgid "Your contact information could not be sent"
+msgstr "無法傳送您的聯絡資訊"
+
+msgid "Please contact support with the error details"
+msgstr "請聯絡支援人員並提供錯誤詳細資訊"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "點選圖片裁剪（1:1 比例，建議 120x120 像素）"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "使用裁剪工具選取 1:1 區域"
+
+msgid "Checking push subscription"
+msgstr "檢查推播訂閱"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "您已在此瀏覽器訂閱推播通知"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "此瀏覽器未啟用推播通知"
+
+msgid "Data exchange successfully saved"
+msgstr "資料交換已成功儲存"
+
+msgid "Error saving data exchange"
+msgstr "儲存資料交換發生錯誤"
+
+msgid "No documents added yet"
+msgstr "尚未新增文件"
+
+msgid "No available documents"
+msgstr "沒有可用的文件"
+
+msgid "No users added yet"
+msgstr "尚未新增使用者"
+
+msgid "No available users"
+msgstr "沒有可用的使用者"
+
+msgid "You can no longer submit"
+msgstr "您無法再提交"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "此作業未找到缺少提交，或資料不可用"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "已將電子郵件發送給所有未提交的使用者"
+
+msgid "Failed to send email"
+msgstr "發送電子郵件失敗"
+
+msgid "Write your answer here"
+msgstr "在此輸入您的答案"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "點名行事曆可讓您註冊點名清單（每個學生需參加的實際課程一筆）"
+
+msgid "Loading attendance data"
+msgstr "正在載入點名資料"
+
+msgid "No attendance assigned yet"
+msgstr "尚未指派點名"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "今天沒有排程課程，請試著選擇另一天，或使用動作圖示自行新增點名記錄"
+
+msgid "No attendance data for today"
+msgstr "今天沒有點名資料"
+
+msgid "Saving"
+msgstr "儲存中"
+
+msgid "No attendance data to save"
+msgstr "沒有點名資料可儲存"
+
+msgid "Failed to save attendance"
+msgstr "儲存點名失敗"
+
+msgid "Loading more courses"
+msgstr "正在載入更多課程"
+
+msgid "Loading more sessions"
+msgstr "正在載入更多課程期間"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "文件自動啟動功能設定已啟用"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "測驗自動啟動功能設定已啟用"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "學習路徑自動啟動設定已開啟"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "論壇自動啟動設定已開啟"
+
+msgid "Course ID is missing"
+msgstr "缺少課程 ID"
+
+msgid "Course created successfully"
+msgstr "課程建立成功"
+
+msgid "Error deleting document(s)"
+msgstr "刪除文件發生錯誤"
+
+msgid "Template successfully deleted"
+msgstr "範本已成功刪除"
+
+msgid "Error deleting the template"
+msgstr "刪除範本發生錯誤"
+
+msgid "The title and thumbnail are required"
+msgstr "標題與縮圖為必填"
+
+msgid "Template created successfully"
+msgstr "範本建立成功"
+
+msgid "Error creating the template"
+msgstr "建立範本發生錯誤"
+
+msgid "Error submitting the form"
+msgstr "提交表單發生錯誤"
+
+msgid "Loading templates"
+msgstr "正在載入範本"
+
+msgid "Loading layout"
+msgstr "正在載入版面配置"
+
+msgid "Loading courses"
+msgstr "正在載入課程"
+
+msgid "No courses available"
+msgstr "沒有可用的課程"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "此清單顯示所有存取網址的使用者，因為設定「session_admin_access_to_all_users_on_all_urls」已啟用。"
+
+msgid "User not found"
+msgstr "找不到使用者"
+
+msgid "An error occurred while sending the course"
+msgstr "發送課程時發生錯誤"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "請記住，與 GDPR 相關條款的修改需要您向已提供使用者個人資訊的第三方報告這些修改，如 GDPR 第 19 條所述"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "您應為所有可用語言建立「條款與條件」"
+
+msgid "You don't have any course yet"
+msgstr "您尚未有任何課程"
+
+msgid "You have received a new friend request"
+msgstr "您收到新的好友請求"
+
+msgid "Diagnosis Management"
+msgstr "診斷管理"
 

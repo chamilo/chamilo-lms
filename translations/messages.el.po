@@ -14737,7 +14737,7 @@ msgstr "Χρήστες, Ομάδες"
 msgid "Sorry no results"
 msgstr "Δεν υπάρχουν αποτελέμσατα"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Δικαιώματα ομάδας"
 
 msgid "Closed"
@@ -32814,4 +32814,226 @@ msgstr "Το προσαρμοσμένο πιστοποιητικό μου"
 
 msgid "Select permission"
 msgstr "Επιλογή άδειας"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Αποδεχόμενος αυτή την πρόσκληση, θα συνδεθείτε με τον χρήστη που την απέστειλε με τρόπο που θα επιτρέψει στον χρήστη να διαβάσει κάποια ή όλα τα δεδομένα του προφίλ σας"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Εμφανίζονται %d από περίπου %d αποτέλεσμα(τα) για %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Εμφανίζονται %d προσβάσιμα αποτελέσματα για %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Θα μεταφερθείτε αυτόματα σε αυτή τη διεύθυνση URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Έχετε πρόσβαση σε πολλαπλές διευθύνσεις URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Κάντε κλικ στον σύνδεσμο παρακάτω που αντιστοιχεί στη διεύθυνση URL που επιθυμείτε να προσπελάσετε"
+
+msgid "You do not currently have access to any URL"
+msgstr "Προς το παρόν δεν έχετε πρόσβαση σε καμία διεύθυνση URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Μέγιστος αριθμός συνδρομών επιτρέπεται"
+
+msgid "An error occurred"
+msgstr "Προέκυψε σφάλμα"
+
+msgid "You don't have any course content yet"
+msgstr "Δεν υπάρχει ακόμα περιεχόμενο μαθήματος"
+
+msgid "This course is locked"
+msgstr "Το μάθημα είναι κλειδωμένο"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Η διεύθυνση e-mail από την οποία θα αποστέλλονται τα e-mails όταν η πλατφόρμα στέλνει e-mail, χρησιμοποιείται επίσης ως κεφαλίδα 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Δεν βρίσκετε τη γλώσσα σας στη λίστα; Επικοινωνήστε μαζί μας στο %s για να συνεισφέρετε ως μεταφραστής"
+
+msgid "An update is available"
+msgstr "Διαθέσιμη ενημέρωση"
+
+msgid "to know what's new and what has been changed"
+msgstr "για να μάθετε τι νέο υπάρχει και τι έχει αλλάξει"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Εντοπίσαμε ότι η εγκατάστασή σας PHP δεν ορίζει την ημερομηνία"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Η έκδοση PHP σας δεν ταιριάζει με τις απαιτήσεις αυτού του λογισμικού"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Κάποια αρχεία ή φάκελοι δεν έχουν δικαιώματα εγγραφής"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Προειδοποίηση! Ο εγκαταστάτης εντόπισε υπάρχουσα πλατφόρμα Chamilo στο σύστημά σας"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Επειδή οι κατάλογοι <code>newscorm</code> και <code>exercice</code> μετονομάστηκαν σε <code>lp</code> και <code>exercise</code> αντίστοιχα, είναι απαραίτητο να διαγραφούν ή να μετονομαστούν σε <code>newscorm_old</code> και <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Η φόρμα περιέχει εσφαλμένα ή ελλιπή δεδομένα"
+
+msgid "Your contact information could not be sent"
+msgstr "Οι πληροφορίες επικοινωνίας σας δεν μπόρεσαν να σταλούν"
+
+msgid "Please contact support with the error details"
+msgstr "Παρακαλούμε επικοινωνήστε με την υποστήριξη με λεπτομέρειες σφάλματος"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Κάντε κλικ στην εικόνα για να την περικόψετε (αναλογία 1:1, συνιστάται 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Χρησιμοποιήστε το εργαλείο περικοπής για να επιλέξετε περιοχή 1:1"
+
+msgid "Checking push subscription"
+msgstr "Έλεγχος συνδρομής push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Είστε συνδρομητής σε ειδοποιήσεις push σε αυτό το πρόγραμμα περιήγησης"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Οι ειδοποιήσεις push δεν είναι ενεργοποιημένες σε αυτό το πρόγραμμα περιήγησης"
+
+msgid "Data exchange successfully saved"
+msgstr "Η ανταλλαγή δεδομένων αποθηκεύτηκε επιτυχώς"
+
+msgid "Error saving data exchange"
+msgstr "Σφάλμα αποθήκευσης ανταλλαγής δεδομένων"
+
+msgid "No documents added yet"
+msgstr "Δεν έχουν προστεθεί έγγραφα ακόμα"
+
+msgid "No available documents"
+msgstr "Δεν υπάρχουν διαθέσιμα έγγραφα"
+
+msgid "No users added yet"
+msgstr "Δεν έχουν προστεθεί χρήστες ακόμα"
+
+msgid "No available users"
+msgstr "Δεν υπάρχουν διαθέσιμοι χρήστες"
+
+msgid "You can no longer submit"
+msgstr "Δεν μπορείτε πλέον να υποβάλετε"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Δεν βρέθηκαν μη υποβληθείσες εργασίες για αυτή την ανάθεση ή τα δεδομένα δεν είναι διαθέσιμα"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Το email εστάλη σε όλους τους χρήστες που δεν υπέβαλε"
+
+msgid "Failed to send email"
+msgstr "Αποτυχία αποστολής email"
+
+msgid "Write your answer here"
+msgstr "Γράψτε την απάντησή σας εδώ"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Το ημερολόγιο παρουσίας σας επιτρέπει να καταχωρείτε λίστες παρουσίας (μία ανά πραγματική συνεδρία που πρέπει να παρακολουθήσουν οι μαθητές)"
+
+msgid "Loading attendance data"
+msgstr "Φόρτωση δεδομένων παρουσίας"
+
+msgid "No attendance assigned yet"
+msgstr "Δεν έχει οριστεί παρουσία ακόμη"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Δεν έχει προγραμματιστεί μάθημα σήμερα, δοκιμάστε να επιλέξετε άλλη ημέρα ή προσθέστε την εγγραφή παρουσίας μόνοι σας χρησιμοποιώντας τα εικονίδια ενεργειών"
+
+msgid "No attendance data for today"
+msgstr "Δεν υπάρχουν δεδομένα παρουσίας για σήμερα"
+
+msgid "Saving"
+msgstr "Αποθήκευση"
+
+msgid "No attendance data to save"
+msgstr "Δεν υπάρχουν δεδομένα παρουσίας προς αποθήκευση"
+
+msgid "Failed to save attendance"
+msgstr "Αποτυχία αποθήκευσης παρουσίας"
+
+msgid "Loading more courses"
+msgstr "Φόρτωση περισσότερων μαθημάτων"
+
+msgid "Loading more sessions"
+msgstr "Φόρτωση περισσότερων συνεδριών"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Η ρύθμιση αυτόματης εκκίνησης εγγράφων είναι ενεργοποιημένη"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Η ρύθμιση αυτόματης εκκίνησης ασκήσεων είναι ενεργοποιημένη"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Η ρύθμιση αυτόματης εκκίνησης μονοπατιού μάθησης είναι ΕΝΕΡΓΗ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Η ρύθμιση αυτόματης εκκίνησης του φόρουμ είναι ενεργή"
+
+msgid "Course ID is missing"
+msgstr "Λείπει το ID του μαθήματος"
+
+msgid "Course created successfully"
+msgstr "Το μάθημα δημιουργήθηκε επιτυχώς"
+
+msgid "Error deleting document(s)"
+msgstr "Σφάλμα διαγραφής εγγράφου(-ων)"
+
+msgid "Template successfully deleted"
+msgstr "Το πρότυπο διαγράφηκε επιτυχώς"
+
+msgid "Error deleting the template"
+msgstr "Σφάλμα διαγραφής του προτύπου"
+
+msgid "The title and thumbnail are required"
+msgstr "Ο τίτλος και η μικρογραφία είναι υποχρεωτικά"
+
+msgid "Template created successfully"
+msgstr "Το πρότυπο δημιουργήθηκε επιτυχώς"
+
+msgid "Error creating the template"
+msgstr "Σφάλμα δημιουργίας του προτύπου"
+
+msgid "Error submitting the form"
+msgstr "Σφάλμα υποβολής της φόρμας"
+
+msgid "Loading templates"
+msgstr "Φόρτωση προτύπων"
+
+msgid "Loading layout"
+msgstr "Φόρτωση διάταξης"
+
+msgid "Loading courses"
+msgstr "Φόρτωση μαθημάτων"
+
+msgid "No courses available"
+msgstr "Δεν υπάρχουν διαθέσιμα μαθήματα"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Αυτή η λίστα εμφανίζει χρήστες από όλες τις διευθύνσεις URL πρόσβασης επειδή η ρύθμιση \"session_admin_access_to_all_users_on_all_urls\" είναι ενεργοποιημένη."
+
+msgid "User not found"
+msgstr "Χρήστης δεν βρέθηκε"
+
+msgid "An error occurred while sending the course"
+msgstr "Παρουσιάστηκε σφάλμα κατά την αποστολή του μαθήματος"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Θυμηθείτε ότι οι τροποποιήσεις στους όρους σχετικά με τον GDPR απαιτούν να ενημερώσετε αυτές τις τροποποιήσεις σε τρίτους στους οποίους έχετε παρέχει προσωπικές πληροφορίες για τους χρήστες σας, όπως αναφέρεται στο Άρθρο 19 του GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Θα πρέπει να δημιουργήσετε τους \"Όρους και Προϋποθέσεις\" για όλες τις διαθέσιμες γλώσσες"
+
+msgid "You don't have any course yet"
+msgstr "Δεν έχετε ακόμη κανένα μάθημα"
+
+msgid "You have received a new friend request"
+msgstr "Λάβατε νέο αίτημα φιλίας"
+
+msgid "Diagnosis Management"
+msgstr "Διαχείριση Διάγνωσης"
 

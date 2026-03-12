@@ -14729,8 +14729,8 @@ msgstr "Users, Groups"
 msgid "Sorry no results"
 msgstr "Sorry no results"
 
-msgid "Group Permissions"
-msgstr "Group Permissions"
+msgid "Group permissions"
+msgstr "Group permissions"
 
 msgid "Closed"
 msgstr "Closed"
@@ -32809,3 +32809,216 @@ msgstr "Showing %d of approximately %d result(s) for %s."
 
 msgid "Showing %d accessible result(s) for %s."
 msgstr "Showing %d accessible result(s) for %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "You will therefore be automatically redirected to this URL"
+
+msgid "You have access to multiple URLs"
+msgstr "You have access to multiple URLs"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Please click on the link below corresponding to the URL you wish to access"
+
+msgid "You do not currently have access to any URL"
+msgstr "You do not currently have access to any URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximum number of subscriptions allowed"
+
+msgid "An error occurred"
+msgstr "An error occurred"
+
+msgid "You don't have any course content yet"
+msgstr "You don't have any course content yet"
+
+msgid "This course is locked"
+msgstr "This course is locked"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+
+msgid "An update is available"
+msgstr "An update is available"
+
+msgid "to know what's new and what has been changed"
+msgstr "to know what's new and what has been changed"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "We have detected that your PHP installation does not define the date"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Your PHP version does not match the requirements for this software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Some files or folders don't have writing permission"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Warning! The installer has detected an existing Chamilo platform on your system"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "The form contains incorrect or incomplete data"
+
+msgid "Your contact information could not be sent"
+msgstr "Your contact information could not be sent"
+
+msgid "Please contact support with the error details"
+msgstr "Please contact support with the error details"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Use the crop tool to select a 1:1 region"
+
+msgid "Checking push subscription"
+msgstr "Checking push subscription"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "You're subscribed to push notifications in this browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push notifications are not enabled in this browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Data exchange successfully saved"
+
+msgid "Error saving data exchange"
+msgstr "Error saving data exchange"
+
+msgid "No documents added yet"
+msgstr "No documents added yet"
+
+msgid "No available documents"
+msgstr "No available documents"
+
+msgid "No users added yet"
+msgstr "No users added yet"
+
+msgid "No available users"
+msgstr "No available users"
+
+msgid "You can no longer submit"
+msgstr "You can no longer submit"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "No missing submissions found for this assignment or data is not available"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email sent to all unsubmitted users"
+
+msgid "Failed to send email"
+msgstr "Failed to send email"
+
+msgid "Write your answer here"
+msgstr "Write your answer here"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+
+msgid "Loading attendance data"
+msgstr "Loading attendance data"
+
+msgid "No attendance assigned yet"
+msgstr "No attendance assigned yet"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+
+msgid "No attendance data for today"
+msgstr "No attendance data for today"
+
+msgid "Saving"
+msgstr "Saving"
+
+msgid "No attendance data to save"
+msgstr "No attendance data to save"
+
+msgid "Failed to save attendance"
+msgstr "Failed to save attendance"
+
+msgid "Loading more courses"
+msgstr "Loading more courses"
+
+msgid "Loading more sessions"
+msgstr "Loading more sessions"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "The document auto-launch feature configuration is enabled"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "The exercises auto-launch feature configuration is enabled"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "The learning path auto-launch setting is ON"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "The forum's auto-launch setting is on"
+
+msgid "Course ID is missing"
+msgstr "Course ID is missing"
+
+msgid "Course created successfully"
+msgstr "Course created successfully"
+
+msgid "Error deleting document(s)"
+msgstr "Error deleting document(s)"
+
+msgid "Template successfully deleted"
+msgstr "Template successfully deleted"
+
+msgid "Error deleting the template"
+msgstr "Error deleting the template"
+
+msgid "The title and thumbnail are required"
+msgstr "The title and thumbnail are required"
+
+msgid "Template created successfully"
+msgstr "Template created successfully"
+
+msgid "Error creating the template"
+msgstr "Error creating the template"
+
+msgid "Error submitting the form"
+msgstr "Error submitting the form"
+
+msgid "Loading templates"
+msgstr "Loading templates"
+
+msgid "Loading layout"
+msgstr "Loading layout"
+
+msgid "Loading courses"
+msgstr "Loading courses"
+
+msgid "No courses available"
+msgstr "No courses available"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+
+msgid "User not found"
+msgstr "User not found"
+
+msgid "An error occurred while sending the course"
+msgstr "An error occurred while sending the course"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "You should create the \"Term and Conditions\" for all the available languages"
+
+msgid "You don't have any course yet"
+msgstr "You don't have any course yet"
+
+msgid "You have received a new friend request"
+msgstr "You have received a new friend request"
+
+msgid "Diagnosis Management"
+msgstr "Diagnosis Management"

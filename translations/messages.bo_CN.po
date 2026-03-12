@@ -14724,7 +14724,7 @@ msgstr "མི་མང་ སྡེ་ཚན་"
 msgid "Sorry no results"
 msgstr "སྙིང་རྗེ་ མཐོང་བ་མེད།"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "སྡེ་ཚན་གྱི་འབྲང་བརྩོན་"
 
 msgid "Closed"

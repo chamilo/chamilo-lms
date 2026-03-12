@@ -14724,7 +14724,7 @@ msgstr "Utent, Grups"
 msgid "Sorry no results"
 msgstr "Disolpe, no risultâts"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permissins grup"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Muoi certificât personalizât"
 
 msgid "Select permission"
 msgstr "Selezionâ permês"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Acceptant chest invit, tu divendrarâs leigât al utent che l’ha fat, in way che fasarà disponibi par lisê al utent che l’ha fat cualcûs o dutis i tie dâts di profîl"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Mostrant %d di cirive %d risultât(s) par %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Mostrant %d risultât(s) acessibi par %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Tu sarâs doncj rediret automatichement a chest URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Tu âs acess a plui URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Ples clic sul leam che corispond al URL che vuês acessê"
+
+msgid "You do not currently have access to any URL"
+msgstr "Tu n’âs nudis acess a gnun URL al moment"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Numar massim di abonaments permetûts"
+
+msgid "An error occurred"
+msgstr "Un erôr lu è vignût"
+
+msgid "You don't have any course content yet"
+msgstr "Tu n’âs ancor gnun contenut di curs"
+
+msgid "This course is locked"
+msgstr "Chest curs è sblocât"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "L’indiris e-post dal cual si mandaran les e-post cuant che la plate-forme mane une e-post, ancj usât come 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "No tu trevis il to lenguât na liste? Contatneus a %s par contribuî come tradutôr"
+
+msgid "An update is available"
+msgstr "N’aggiornamento è disponibil"
+
+msgid "to know what's new and what has been changed"
+msgstr "par savê chei ce n’è di gnof e ce che i è cambiâts"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "No avon detectât che l’installazion PHP no definiss la date"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "La version PHP no corispond ai requisiti par chest sofuer"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Cualcûs file o cartelle no ân permîs di scriture"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Atention! L'installadôr al à scontre une plate-forme Chamilo esistente sul to sistema"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Parce che lis diritories <code>newscorm</code> e <code>exercice</code> a son stât rinominâts a <code>lp</code> e <code>exercise</code> rispetivement, è necessari eliminarli o rinominili a <code>newscorm_old</code> e <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Il formulari al contign dâtis incorêts o incomplets"
+
+msgid "Your contact information could not be sent"
+msgstr "Lis informazions di contat no si puesin inviâ"
+
+msgid "Please contact support with the error details"
+msgstr "Contate il supòrt cun i detais dal erôr"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Clic sul imagjine par taijâla (raport 1:1, 120x120 px resumât)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Dòs il strûl di taiai par selecionâ une region 1:1"
+
+msgid "Checking push subscription"
+msgstr "Controlant abonament push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Tu sê abonât às notifichezions push in chest navigadôr"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Lis notifichezions push no son ativadis in chest navigadôr"
+
+msgid "Data exchange successfully saved"
+msgstr "Scambi di dâtis salvâts cun sucès"
+
+msgid "Error saving data exchange"
+msgstr "Erôr nel salvâ lis scambis di dâtis"
+
+msgid "No documents added yet"
+msgstr "Nissun document zontât finore"
+
+msgid "No available documents"
+msgstr "Nissun document disponibil"
+
+msgid "No users added yet"
+msgstr "Nissun utent zontât finore"
+
+msgid "No available users"
+msgstr "Nissun utent disponibil"
+
+msgid "You can no longer submit"
+msgstr "Tu nûs puês piâ plasî"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nissune invie consegne mancjantis trovade par chest impaît o lis dâtis no son disponibis"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail inviât a ducj i utents che no l'an inviât"
+
+msgid "Failed to send email"
+msgstr "No si è rivât a inviâ l'e-mail"
+
+msgid "Write your answer here"
+msgstr "Scrivi taire rispueste chi"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Il calendari des presenis al ti permet di registriâ lis liste des presenis (une par session reale che i students a devin doprâ)"
+
+msgid "Loading attendance data"
+msgstr "Cjampe dâtis presenis"
+
+msgid "No attendance assigned yet"
+msgstr "Nissune presene asignade finore"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Nò i è clasis preveude vuê, proe a scoltâ un altri di o zonte la tô intrade presene cu i iconis des azions"
+
+msgid "No attendance data for today"
+msgstr "Nissun dât presenis par vuê"
+
+msgid "Saving"
+msgstr "Salvant"
+
+msgid "No attendance data to save"
+msgstr "Nissun dât presenis da salvâ"
+
+msgid "Failed to save attendance"
+msgstr "No si è rivât a salvâ la presene"
+
+msgid "Loading more courses"
+msgstr "Cjampe plui curs"
+
+msgid "Loading more sessions"
+msgstr "Cjampe plui sesions"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "La configurazion dal funziun automatic dal lans dal document al è ativade"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "La configurazion dal funziun automatic dal lans des esercizi al è ativade"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Il parametar dal lans automatic dal percors didatich al è ATIVÂT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Il parametar dal lans automatic dal forum al è ativât"
+
+msgid "Course ID is missing"
+msgstr "ID curs mancjant"
+
+msgid "Course created successfully"
+msgstr "Curs creât cun sucès"
+
+msgid "Error deleting document(s)"
+msgstr "Erôr nel eliminar il/lis document(s)"
+
+msgid "Template successfully deleted"
+msgstr "Model eliminât cun sucès"
+
+msgid "Error deleting the template"
+msgstr "Erôr nel eliminar il model"
+
+msgid "The title and thumbnail are required"
+msgstr "Il titol e la miniaure son obligatoriis"
+
+msgid "Template created successfully"
+msgstr "Model creât cun sucès"
+
+msgid "Error creating the template"
+msgstr "Erôr nel crear il model"
+
+msgid "Error submitting the form"
+msgstr "Erôr nel inviâ il formulari"
+
+msgid "Loading templates"
+msgstr "Cjampe models"
+
+msgid "Loading layout"
+msgstr "Cjampe disposizion"
+
+msgid "Loading courses"
+msgstr "Cjampe curs"
+
+msgid "No courses available"
+msgstr "Nissun curs disponibil"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Cheste liste al mostrâ utents di ducj lis URL di acess parché il parametar \"session_admin_access_to_all_users_on_all_urls\" al è ativât."
+
+msgid "User not found"
+msgstr "Utent nu trovât"
+
+msgid "An error occurred while sending the course"
+msgstr "Un erôr a je vû par inviâ il curs"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Ricorde che lis modifichis ai termins relatius al GDPR ti a jerne di signalâlis a tiercis partîs a cui tu âs fornî informazions personâls sui tie usaris, come stât scjit int Articul 19 dal GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Tu devi creâ il \"Termins e Condizions\" par tute lis lenguis disponibis"
+
+msgid "You don't have any course yet"
+msgstr "Tu n'o âs encjemó gnun curs"
+
+msgid "You have received a new friend request"
+msgstr "Tu âs resevû une gnove invit a fesâ amis"
+
+msgid "Diagnosis Management"
+msgstr "Gestion de diagnostic"
 

@@ -14724,7 +14724,7 @@ msgstr "Uživatelé, Skupiny"
 msgid "Sorry no results"
 msgstr "Omlouváme se, žádné výsledky"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Oprávnění skupiny"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Můj vlastní certifikát"
 
 msgid "Select permission"
 msgstr "Vybrat oprávnění"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Přijetím tohoto pozvánky se spojíte s žádajícím uživatelem způsobem, který umožní žádajícímu uživateli číst některá nebo všechna vaše data profilu"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Zobrazuji %d z přibližně %d výsledků pro %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Zobrazuji %d dostupných výsledků pro %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Proto budete automaticky přesměrováni na tuto URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Máte přístup k více URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klikněte prosím na odkaz níže odpovídající URL, ke které chcete získat přístup"
+
+msgid "You do not currently have access to any URL"
+msgstr "V současnosti nemáte přístup k žádné URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximální povolený počet odběrů"
+
+msgid "An error occurred"
+msgstr "Došlo k chybě"
+
+msgid "You don't have any course content yet"
+msgstr "Nemáte ještě žádný obsah kurzu"
+
+msgid "This course is locked"
+msgstr "Tento kurz je zamknutý"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mailová adresa, ze které budou e-maily odesílány, když platforma pošle e-mail, také používaná jako hlavička 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nenajdete svůj jazyk v seznamu? Kontaktujte nás na %s, abyste přispěli jako překladatel"
+
+msgid "An update is available"
+msgstr "Je k dispozici aktualizace"
+
+msgid "to know what's new and what has been changed"
+msgstr "zobrazit novinky a změny"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Zjišťujeme, že vaše PHP instalace nedefinuje datum"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vaše verze PHP neodpovídá požadavkům tohoto softwaru"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Některé soubory nebo složky nemají oprávnění k zápisu"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Varování! Instalátor detekoval existující platformu Chamilo na vašem systému"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Protože adresáře <code>newscorm</code> a <code>exercice</code> byly přejmenovány na <code>lp</code> a <code>exercise</code>, je nutné je smazat nebo přejmenovat na <code>newscorm_old</code> a <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formulář obsahuje nesprávná nebo neúplná data"
+
+msgid "Your contact information could not be sent"
+msgstr "Vaše kontaktní informace nemohly být odeslány"
+
+msgid "Please contact support with the error details"
+msgstr "Kontaktujte prosím podporu s podrobnostmi chyby"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klikněte na obrázek pro oříznutí (poměr 1:1, doporučeno 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Použijte nástroj pro oříznutí k výběru oblasti 1:1"
+
+msgid "Checking push subscription"
+msgstr "Kontrola odběru push notifikací"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jste přihlášeni k push notifikacím v tomto prohlížeči"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push notifikace nejsou v tomto prohlížeči povoleny"
+
+msgid "Data exchange successfully saved"
+msgstr "Výměna dat byla úspěšně uložena"
+
+msgid "Error saving data exchange"
+msgstr "Chyba při ukládání výměny dat"
+
+msgid "No documents added yet"
+msgstr "Zatím nebyly přidány žádné dokumenty"
+
+msgid "No available documents"
+msgstr "Žádné dostupné dokumenty"
+
+msgid "No users added yet"
+msgstr "Zatím nebyli přidáni žádní uživatelé"
+
+msgid "No available users"
+msgstr "Žádní dostupní uživatelé"
+
+msgid "You can no longer submit"
+msgstr "Už nemůžete odeslat"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Pro toto zadání nebyly nalezeny chybějící odevzdání nebo data nejsou k dispozici"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail odeslán všem uživatelům, kteří neodevzidali"
+
+msgid "Failed to send email"
+msgstr "Odeslání e-mailu selhalo"
+
+msgid "Write your answer here"
+msgstr "Napište sem svou odpověď"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendář docházky vám umožňuje registrovat seznamy docházky (jeden pro každou skutečnou sezení, které studenti musí navštívit)"
+
+msgid "Loading attendance data"
+msgstr "Načítání dat docházky"
+
+msgid "No attendance assigned yet"
+msgstr "Zatím nepřiřazena žádná docházka"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Dnes není naplánována žádná lekce, zkuste zvolit jiný den nebo přidejte záznam docházky sami pomocí ikon akcí"
+
+msgid "No attendance data for today"
+msgstr "Žádná data docházky pro dnešek"
+
+msgid "Saving"
+msgstr "Ukládání"
+
+msgid "No attendance data to save"
+msgstr "Žádná data docházky k uložení"
+
+msgid "Failed to save attendance"
+msgstr "Uložení docházky selhalo"
+
+msgid "Loading more courses"
+msgstr "Načítání dalších kurzů"
+
+msgid "Loading more sessions"
+msgstr "Načítání dalších sezení"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurace funkce automatického spuštění dokumentu je povolena"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurace funkce automatického spuštění cvičení je povolena"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Nastavení automatického spuštění učební cesty je ZAPNUTÉ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Nastavení automatického spuštění fóra je zapnuté"
+
+msgid "Course ID is missing"
+msgstr "Chybí ID kurzu"
+
+msgid "Course created successfully"
+msgstr "Kurz byl úspěšně vytvořen"
+
+msgid "Error deleting document(s)"
+msgstr "Chyba při mazání dokumentu(ů)"
+
+msgid "Template successfully deleted"
+msgstr "Šablona byla úspěšně smazána"
+
+msgid "Error deleting the template"
+msgstr "Chyba při mazání šablony"
+
+msgid "The title and thumbnail are required"
+msgstr "Název a náhled jsou povinné"
+
+msgid "Template created successfully"
+msgstr "Šablona byla úspěšně vytvořena"
+
+msgid "Error creating the template"
+msgstr "Chyba při vytváření šablony"
+
+msgid "Error submitting the form"
+msgstr "Chyba při odesílání formuláře"
+
+msgid "Loading templates"
+msgstr "Načítání šablon"
+
+msgid "Loading layout"
+msgstr "Načítání rozložení"
+
+msgid "Loading courses"
+msgstr "Načítání kurzů"
+
+msgid "No courses available"
+msgstr "Žádné dostupné kurzy"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Tento seznam zobrazuje uživatele ze všech přístupových URL, protože je povoleno nastavení \"session_admin_access_to_all_users_on_all_urls\"."
+
+msgid "User not found"
+msgstr "Uživatel nenalezen"
+
+msgid "An error occurred while sending the course"
+msgstr "Došlo k chybě při odesílání kurzu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Pamatujte, že změny podmínek souvisejících s GDPR vyžadují, abyste tyto změny nahlásili třetím stranám, kterým jste poskytli osobní údaje o svých uživatelích, jak je uvedeno v článku 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Měli byste vytvořit \"Podmínky a pravidla\" pro všechny dostupné jazyky"
+
+msgid "You don't have any course yet"
+msgstr "Nemáte ještě žádný kurz"
+
+msgid "You have received a new friend request"
+msgstr "Obdrželi jste novou žádost o přátelství"
+
+msgid "Diagnosis Management"
+msgstr "Správa diagnostiky"
 

@@ -14774,7 +14774,7 @@ msgstr "Gebruikers, Groepen"
 msgid "Sorry no results"
 msgstr "Sorry, geen resultaten"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Groepsrechten"
 
 msgid "Closed"
@@ -34879,4 +34879,226 @@ msgstr "Mijn aangepast certificaat"
 
 msgid "Select permission"
 msgstr "Selecteer toestemming"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Door deze uitnodiging te accepteren, wordt u gekoppeld aan de aanvragende gebruiker op een manier waardoor sommige of al uw profielgegevens beschikbaar zijn voor lezen door de aanvragende gebruiker"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Toont %d van ongeveer %d resultaat(s) voor %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Toont %d toegankelijke resultaat(s) voor %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "U wordt daarom automatisch doorgestuurd naar deze URL"
+
+msgid "You have access to multiple URLs"
+msgstr "U hebt toegang tot meerdere URL's"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klik op de onderstaande link die overeenkomt met de URL die u wilt openen"
+
+msgid "You do not currently have access to any URL"
+msgstr "U hebt momenteel geen toegang tot een URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximum aantal toegestane abonnementen"
+
+msgid "An error occurred"
+msgstr "Er is een fout opgetreden"
+
+msgid "You don't have any course content yet"
+msgstr "U hebt nog geen cursusinhoud"
+
+msgid "This course is locked"
+msgstr "Deze cursus is vergrendeld"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Het e-mailadres van waaruit e-mails worden verzonden wanneer het platform een e-mail verstuurt, ook gebruikt als 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Uw taal niet in de lijst gevonden? Neem contact met ons op via %s om bij te dragen als vertaler"
+
+msgid "An update is available"
+msgstr "Er is een update beschikbaar"
+
+msgid "to know what's new and what has been changed"
+msgstr "om te weten wat nieuw is en wat is gewijzigd"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "We hebben gedetecteerd dat uw PHP-installatie de datum niet definieert"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Uw PHP-versie voldoet niet aan de vereisten voor deze software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Sommige bestanden of mappen hebben geen schrijfrechten"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Waarschuwing! De installer heeft een bestaande Chamilo-platform op uw systeem gedetecteerd"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Omdat de <code>newscorm</code> en <code>exercice</code> mappen zijn hernoemd naar <code>lp</code> en <code>exercise</code> respectievelijk, is het noodzakelijk om deze te verwijderen of te hernoemen naar <code>newscorm_old</code> en <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Het formulier bevat onjuiste of onvolledige gegevens"
+
+msgid "Your contact information could not be sent"
+msgstr "Uw contactgegevens konden niet worden verzonden"
+
+msgid "Please contact support with the error details"
+msgstr "Neem contact op met de ondersteuning met de foutdetails"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klik op de afbeelding om deze bij te snijden (1:1 verhouding, 120x120 px aanbevolen)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Gebruik het bijsnijgereedschap om een 1:1-gebied te selecteren"
+
+msgid "Checking push subscription"
+msgstr "Controleren van push-abonnement"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "U bent geabonneerd op pushmeldingen in deze browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Pushmeldingen zijn niet ingeschakeld in deze browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Gegevensuitwisseling succesvol opgeslagen"
+
+msgid "Error saving data exchange"
+msgstr "Fout bij opslaan gegevensuitwisseling"
+
+msgid "No documents added yet"
+msgstr "Nog geen documenten toegevoegd"
+
+msgid "No available documents"
+msgstr "Geen beschikbare documenten"
+
+msgid "No users added yet"
+msgstr "Nog geen gebruikers toegevoegd"
+
+msgid "No available users"
+msgstr "Geen beschikbare gebruikers"
+
+msgid "You can no longer submit"
+msgstr "U kunt niet langer indienen"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Geen ontbrekende inzendingen gevonden voor deze opdracht of gegevens niet beschikbaar"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail verzonden naar alle niet-ingediende gebruikers"
+
+msgid "Failed to send email"
+msgstr "Verzenden van e-mail mislukt"
+
+msgid "Write your answer here"
+msgstr "Schrijf uw antwoord hier"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "De aanwezigheidskalender stelt u in staat om aanwezigheidslijsten te registreren (één per echte sessie die studenten moeten bijwonen)"
+
+msgid "Loading attendance data"
+msgstr "Aan het laden van aanwezigheidsgegevens"
+
+msgid "No attendance assigned yet"
+msgstr "Nog geen aanwezigheid toegewezen"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Er staat vandaag geen les gepland, probeer een andere dag te kiezen of voeg zelf uw aanwezigheidsregistratie toe met de actie-iconen"
+
+msgid "No attendance data for today"
+msgstr "Geen aanwezigheidsgegevens voor vandaag"
+
+msgid "Saving"
+msgstr "Opslaan"
+
+msgid "No attendance data to save"
+msgstr "Geen aanwezigheidsgegevens om op te slaan"
+
+msgid "Failed to save attendance"
+msgstr "Opslaan aanwezigheid mislukt"
+
+msgid "Loading more courses"
+msgstr "Meer cursussen laden"
+
+msgid "Loading more sessions"
+msgstr "Meer sessies laden"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "De configuratie van de automatische documentstartfunctie is ingeschakeld"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "De configuratie van de automatische startfunctie voor oefeningen is ingeschakeld"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "De automatische startinstelling voor leerpaden staat AAN"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "De automatische startinstelling van het forum staat aan"
+
+msgid "Course ID is missing"
+msgstr "Cursus-ID ontbreekt"
+
+msgid "Course created successfully"
+msgstr "Cursus succesvol aangemaakt"
+
+msgid "Error deleting document(s)"
+msgstr "Fout bij het verwijderen van document(en)"
+
+msgid "Template successfully deleted"
+msgstr "Sjabloon succesvol verwijderd"
+
+msgid "Error deleting the template"
+msgstr "Fout bij het verwijderen van het sjabloon"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel en miniatuur zijn verplicht"
+
+msgid "Template created successfully"
+msgstr "Sjabloon succesvol aangemaakt"
+
+msgid "Error creating the template"
+msgstr "Fout bij het aanmaken van het sjabloon"
+
+msgid "Error submitting the form"
+msgstr "Fout bij het verzenden van het formulier"
+
+msgid "Loading templates"
+msgstr "Sjablonen laden"
+
+msgid "Loading layout"
+msgstr "Lay-out laden"
+
+msgid "Loading courses"
+msgstr "Cursussen laden"
+
+msgid "No courses available"
+msgstr "Geen cursussen beschikbaar"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Deze lijst toont gebruikers van alle toegang-URLs omdat de instelling \"session_admin_access_to_all_users_on_all_urls\" is ingeschakeld."
+
+msgid "User not found"
+msgstr "Gebruiker niet gevonden"
+
+msgid "An error occurred while sending the course"
+msgstr "Er is een fout opgetreden bij het verzenden van de cursus"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Houd er rekening mee dat wijzigingen in de voorwaarden met betrekking tot GDPR vereisen dat u die wijzigingen meldt aan derden aan wie u persoonlijke informatie over uw gebruikers hebt verstrekt, zoals vermeld in artikel 19 van de GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "U moet de \"Voorwaarden\" aanmaken voor alle beschikbare talen"
+
+msgid "You don't have any course yet"
+msgstr "U heeft nog geen cursus"
+
+msgid "You have received a new friend request"
+msgstr "U heeft een nieuw vriendschapsverzoek ontvangen"
+
+msgid "Diagnosis Management"
+msgstr "Diagnosebeheer"
 

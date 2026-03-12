@@ -14727,7 +14727,7 @@ msgstr "Pengguna, Kumpulan"
 msgid "Sorry no results"
 msgstr "Maaf tiada hasil"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Keizinan Kumpulan"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Sijil tersuai saya"
 
 msgid "Select permission"
 msgstr "Pilih kebenaran"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr ""
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr ""
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr ""
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr ""
+
+msgid "You have access to multiple URLs"
+msgstr ""
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr ""
+
+msgid "You do not currently have access to any URL"
+msgstr ""
+
+msgid "Maximum number of subscriptions allowed"
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
+msgid "You don't have any course content yet"
+msgstr ""
+
+msgid "This course is locked"
+msgstr ""
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr ""
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr ""
+
+msgid "An update is available"
+msgstr ""
+
+msgid "to know what's new and what has been changed"
+msgstr ""
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr ""
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr ""
+
+msgid "Some files or folders don't have writing permission"
+msgstr ""
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr ""
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr ""
+
+msgid "The form contains incorrect or incomplete data"
+msgstr ""
+
+msgid "Your contact information could not be sent"
+msgstr ""
+
+msgid "Please contact support with the error details"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr ""
+
+msgid "Checking push subscription"
+msgstr ""
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr ""
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Pemberitahuan dorong tidak diaktifkan dalam pelayar ini"
+
+msgid "Data exchange successfully saved"
+msgstr "Pertukaran data berjaya disimpan"
+
+msgid "Error saving data exchange"
+msgstr "Ralat menyimpan pertukaran data"
+
+msgid "No documents added yet"
+msgstr "Tiada dokumen ditambah lagi"
+
+msgid "No available documents"
+msgstr "Tiada dokumen yang tersedia"
+
+msgid "No users added yet"
+msgstr "Tiada pengguna ditambah lagi"
+
+msgid "No available users"
+msgstr "Tiada pengguna yang tersedia"
+
+msgid "You can no longer submit"
+msgstr "Anda tidak boleh hantar lagi"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Tiada penyerahan yang hilang ditemui untuk tugasan ini atau data tidak tersedia"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mel dihantar kepada semua pengguna yang belum menyerah"
+
+msgid "Failed to send email"
+msgstr "Gagal menghantar e-mel"
+
+msgid "Write your answer here"
+msgstr "Tulis jawapan anda di sini"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendar kehadiran membolehkan anda mendaftar senarai kehadiran (satu sesi sebenar yang pelajar perlu hadir)"
+
+msgid "Loading attendance data"
+msgstr "Memuat data kehadiran"
+
+msgid "No attendance assigned yet"
+msgstr "Tiada kehadiran yang ditetapkan lagi"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Tiada kelas dijadualkan hari ini, cuba pilih hari lain atau tambah entri kehadiran anda sendiri menggunakan ikon tindakan"
+
+msgid "No attendance data for today"
+msgstr "Tiada data kehadiran untuk hari ini"
+
+msgid "Saving"
+msgstr "Menyimpan"
+
+msgid "No attendance data to save"
+msgstr "Tiada data kehadiran untuk disimpan"
+
+msgid "Failed to save attendance"
+msgstr "Gagal menyimpan kehadiran"
+
+msgid "Loading more courses"
+msgstr "Memuat lebih banyak kursus"
+
+msgid "Loading more sessions"
+msgstr "Memuat lebih banyak sesi"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurasi ciri pelancaran automatik dokumen diaktifkan"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurasi ciri pelancaran automatik latihan diaktifkan"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Tetapan pelancaran automatik laluan pembelajaran adalah BAKAT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Tetapan pelancaran automatik forum adalah bakat"
+
+msgid "Course ID is missing"
+msgstr "ID kursus hilang"
+
+msgid "Course created successfully"
+msgstr "Kursus berjaya dicipta"
+
+msgid "Error deleting document(s)"
+msgstr "Ralat memadam dokumen"
+
+msgid "Template successfully deleted"
+msgstr "Templat berjaya dipadam"
+
+msgid "Error deleting the template"
+msgstr "Ralat memadam templat"
+
+msgid "The title and thumbnail are required"
+msgstr "Tajuk dan thumbnail diperlukan"
+
+msgid "Template created successfully"
+msgstr "Templat berjaya dicipta"
+
+msgid "Error creating the template"
+msgstr "Ralat mencipta templat"
+
+msgid "Error submitting the form"
+msgstr "Ralat menyerahkan borang"
+
+msgid "Loading templates"
+msgstr "Memuat templat"
+
+msgid "Loading layout"
+msgstr "Memuat susun atur"
+
+msgid "Loading courses"
+msgstr "Memuat kursus"
+
+msgid "No courses available"
+msgstr "Tiada kursus yang tersedia"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Senarai ini memaparkan pengguna dari semua URL akses kerana tetapan \"session_admin_access_to_all_users_on_all_urls\" diaktifkan."
+
+msgid "User not found"
+msgstr "Pengguna tidak ditemui"
+
+msgid "An error occurred while sending the course"
+msgstr "Ralat berlaku semasa menghantar kursus"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Sila ingat bahawa pengubahsuaian kepada terma yang berkaitan dengan GDPR memerlukan anda melaporkan pengubahsuaian tersebut kepada pihak ketiga yang anda berikan maklumat peribadi tentang pengguna anda, seperti yang dinyatakan dalam Artikel 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Anda perlu mencipta \"Terma dan Syarat\" untuk semua bahasa yang tersedia"
+
+msgid "You don't have any course yet"
+msgstr "Anda belum mempunyai sebarang kursus"
+
+msgid "You have received a new friend request"
+msgstr "Anda menerima permintaan rakan baru"
+
+msgid "Diagnosis Management"
+msgstr "Pengurusan Diagnosis"
 

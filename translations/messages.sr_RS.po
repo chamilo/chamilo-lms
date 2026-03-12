@@ -14730,7 +14730,7 @@ msgstr "Korisnici, Grupe"
 msgid "Sorry no results"
 msgstr "Nažalost, nema rezultata"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Dozvole grupe"
 
 msgid "Closed"
@@ -32802,4 +32802,226 @@ msgstr "Moj prilagođeni sertifikat"
 
 msgid "Select permission"
 msgstr "Izaberite dozvolu"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Prihvatanjem ove pozivnice, bićete povezani sa korisnikom koji je poslao zahtev na način koji će učiniti deo ili sve vaše podatke profila dostupnim za čitanje korisniku koji je poslao zahtev"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Prikazujem %d od približno %d rezultata(t) za %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Prikazujem %d dostupnih rezultata(t) za %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Stoga ćete biti automatski preusmereni na ovu URL adresu"
+
+msgid "You have access to multiple URLs"
+msgstr "Imate pristup više URL adresa"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Molimo kliknite na link ispod koji odgovara URL adresi koju želite da koristite"
+
+msgid "You do not currently have access to any URL"
+msgstr "Trenutno nemate pristup nijednoj URL adresi"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalan broj dozvoljenih pretplata"
+
+msgid "An error occurred"
+msgstr "Došlo je do greške"
+
+msgid "You don't have any course content yet"
+msgstr "Još uvek nemate sadržaj kursa"
+
+msgid "This course is locked"
+msgstr "Ovaj kurs je zaključan"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mail adresa sa koje će e-poruke biti poslata kada platforma pošalje e-poruku, takođe se koristi kao 'reply-to' zaglavlje"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ne možete pronaći svoj jezik na listi? Kontaktirajte nas na %s da biste doprineli kao prevodilac"
+
+msgid "An update is available"
+msgstr "Dostupan je update"
+
+msgid "to know what's new and what has been changed"
+msgstr "da biste saznali šta je novo i šta je promenjeno"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Otkriveno je da vaša PHP instalacija ne definiše datum"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vaša PHP verzija ne zadovoljava zahteve za ovaj softver"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Neki fajlovi ili fascikle nemaju dozvolu za pisanje"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Upozorenje! Instalater je otkrio postojeću Chamilo platformu na vašem sistemu"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Pošto su direktorijumi <code>newscorm</code> i <code>exercice</code> preimenovani u <code>lp</code> i <code>exercise</code> respektivno, potrebno je obrisati ih ili preimenovati u <code>newscorm_old</code> i <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Obrazac sadrži netačne ili nepotpune podatke"
+
+msgid "Your contact information could not be sent"
+msgstr "Vaši kontakt podaci nisu mogli biti poslati"
+
+msgid "Please contact support with the error details"
+msgstr "Molimo kontaktirajte podršku sa detaljima greške"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Kliknite na sliku da biste je isekli (omjer 1:1, preporučeno 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Koristite alat za isecanje da biste izabrali oblast 1:1"
+
+msgid "Checking push subscription"
+msgstr "Proveravam pretplatu na push obaveštenja"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Pretplaćeni ste na push obaveštenja u ovom pretraživaču"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push obaveštenja nisu omogućena u ovom pretraživaču"
+
+msgid "Data exchange successfully saved"
+msgstr "Razmena podataka uspešno sačuvana"
+
+msgid "Error saving data exchange"
+msgstr "Greška pri čuvanju razmene podataka"
+
+msgid "No documents added yet"
+msgstr "Još uvek nisu dodati dokumenti"
+
+msgid "No available documents"
+msgstr "Nema dostupnih dokumenata"
+
+msgid "No users added yet"
+msgstr "Još uvek nisu dodati korisnici"
+
+msgid "No available users"
+msgstr "Nema dostupnih korisnika"
+
+msgid "You can no longer submit"
+msgstr "Više ne možete podneti"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nema pronađenih nedostajućih podnesaka za ovaj zadatak ili podaci nisu dostupni"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email poslat svim korisnicima koji nisu podneli"
+
+msgid "Failed to send email"
+msgstr "Neuspešno slanje emaila"
+
+msgid "Write your answer here"
+msgstr "Napišite svoj odgovor ovde"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendar prisustva omogućava vam registraciju listi prisustva (jedna po stvarnoj sesiji koju studenti moraju pohađati)"
+
+msgid "Loading attendance data"
+msgstr "Učitavam podatke o prisustvu"
+
+msgid "No attendance assigned yet"
+msgstr "Još uvek nije dodeljeno prisustvo"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Danas nema zakazanih časova, pokušajte izabrati drugi dan ili dodajte unos prisustva sami koristeći ikone akcija"
+
+msgid "No attendance data for today"
+msgstr "Nema podataka o prisustvu za danas"
+
+msgid "Saving"
+msgstr "Čuvam"
+
+msgid "No attendance data to save"
+msgstr "Nema podataka o prisustvu za čuvanje"
+
+msgid "Failed to save attendance"
+msgstr "Neuspešno čuvanje prisustva"
+
+msgid "Loading more courses"
+msgstr "Učitavam više kurseva"
+
+msgid "Loading more sessions"
+msgstr "Učitavam više sesija"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Podešavanje za automatsko pokretanje dokumenta je omogućeno"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Podešavanje za automatsko pokretanje vežbi je omogućeno"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Podešavanje za automatsko pokretanje staze učenja je UKLJUČENO"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Podešavanje za automatsko pokretanje foruma je uključeno"
+
+msgid "Course ID is missing"
+msgstr "Nedostaje ID kursa"
+
+msgid "Course created successfully"
+msgstr "Kurs uspešno kreiran"
+
+msgid "Error deleting document(s)"
+msgstr "Greška pri brisanju dokument(a)"
+
+msgid "Template successfully deleted"
+msgstr "Šablon uspešno obrisan"
+
+msgid "Error deleting the template"
+msgstr "Greška pri brisanju šablona"
+
+msgid "The title and thumbnail are required"
+msgstr "Naslov i sličica su obavezni"
+
+msgid "Template created successfully"
+msgstr "Šablon uspešno kreiran"
+
+msgid "Error creating the template"
+msgstr "Greška pri kreiranju šablona"
+
+msgid "Error submitting the form"
+msgstr "Greška pri podnošenju obrasca"
+
+msgid "Loading templates"
+msgstr "Učitavanje šablona"
+
+msgid "Loading layout"
+msgstr "Učitavanje rasporeda"
+
+msgid "Loading courses"
+msgstr "Učitavanje kurseva"
+
+msgid "No courses available"
+msgstr "Nema dostupnih kurseva"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ova lista prikazuje korisnike sa svih URL-ova za pristup jer je podešavanje \"session_admin_access_to_all_users_on_all_urls\" omogućeno."
+
+msgid "User not found"
+msgstr "Korisnik nije pronađen"
+
+msgid "An error occurred while sending the course"
+msgstr "Došlo je do greške prilikom slanja kursa"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Imajte na umu da izmene uslova vezanih za GDPR zahtevaju da prijavite te izmene trećim stranama kojima ste dostavili lične podatke o vašim korisnicima, kako je navedeno u članu 19. GDPR-a"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Trebalo bi da kreirate \"Uslove i odredbe\" za sve dostupne jezike"
+
+msgid "You don't have any course yet"
+msgstr "Još nemate nijedan kurs"
+
+msgid "You have received a new friend request"
+msgstr "Primali ste novi zahtev za prijateljstvo"
+
+msgid "Diagnosis Management"
+msgstr "Upravljanje dijagnostikom"
 

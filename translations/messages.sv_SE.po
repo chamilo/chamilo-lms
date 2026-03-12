@@ -14729,7 +14729,7 @@ msgstr "Användare, grupper"
 msgid "Sorry no results"
 msgstr "Tyvärr inga resultat"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppbehörigheter"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Mitt anpassade intyg"
 
 msgid "Select permission"
 msgstr "Välj behörighet"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Genom att acceptera denna inbjudan kommer du att kopplas till den begärande användaren på ett sätt som gör viss eller all din profilinformation tillgänglig för läsning av den begärande användaren"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Visar %d av cirka %d resultat för %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Visar %d tillgängliga resultat för %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Du kommer därför att omdirigeras automatiskt till denna URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Du har tillgång till flera URL:er"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klicka på länken nedan som motsvarar den URL du vill komma åt"
+
+msgid "You do not currently have access to any URL"
+msgstr "Du har för närvarande inte tillgång till någon URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximalt antal prenumerationer tillåtna"
+
+msgid "An error occurred"
+msgstr "Ett fel uppstod"
+
+msgid "You don't have any course content yet"
+msgstr "Du har inget kursinnehåll än"
+
+msgid "This course is locked"
+msgstr "Denna kurs är låst"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-postadressen från vilken e-postmeddelanden skickas när plattformen skickar ett e-postmeddelande, även använd som 'reply-to'-rubrik"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Hittar du inte ditt språk i listan? Kontakta oss på %s för att bidra som översättare"
+
+msgid "An update is available"
+msgstr "En uppdatering är tillgänglig"
+
+msgid "to know what's new and what has been changed"
+msgstr "för att veta vad som är nytt och vad som har ändrats"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vi har upptäckt att din PHP-installation inte definierar datumet"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Din PHP-version uppfyller inte kraven för denna programvara"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Vissa filer eller mappar har inte skrivrättigheter"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Varning! Installationsprogrammet har upptäckt en befintlig Chamilo-plattform på ditt system"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Eftersom katalogerna <code>newscorm</code> och <code>exercice</code> har bytt namn till <code>lp</code> respektive <code>exercise</code>, är det nödvändigt att radera eller byta namn på dem till <code>newscorm_old</code> och <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formuläret innehåller felaktiga eller ofullständiga uppgifter"
+
+msgid "Your contact information could not be sent"
+msgstr "Din kontaktinformation kunde inte skickas"
+
+msgid "Please contact support with the error details"
+msgstr "Kontakta support med felinformationen"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klicka på bilden för att beskära den (förhållande 1:1, 120x120 px rekommenderas)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Använd beskärningsverktyget för att välja ett område med förhållande 1:1"
+
+msgid "Checking push subscription"
+msgstr "Kontrollerar push-prenumeration"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Du är prenumererad på push-notiser i denna webbläsare"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-notiser är inte aktiverade i denna webbläsare"
+
+msgid "Data exchange successfully saved"
+msgstr "Datautbyte sparat framgångsrikt"
+
+msgid "Error saving data exchange"
+msgstr "Fel vid sparande av datautbyte"
+
+msgid "No documents added yet"
+msgstr "Inga dokument tillagda än"
+
+msgid "No available documents"
+msgstr "Inga tillgängliga dokument"
+
+msgid "No users added yet"
+msgstr "Inga användare tillagda än"
+
+msgid "No available users"
+msgstr "Inga tillgängliga användare"
+
+msgid "You can no longer submit"
+msgstr "Du kan inte längre skicka in"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Inga saknade inlämningar hittades för denna uppgift eller data är inte tillgänglig"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-post skickad till alla icke-inlämnade användare"
+
+msgid "Failed to send email"
+msgstr "Kunde inte skicka e-post"
+
+msgid "Write your answer here"
+msgstr "Skriv ditt svar här"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Närvarokalendern låter dig registrera närvarolistor (en per verklig session som studenterna behöver delta i)"
+
+msgid "Loading attendance data"
+msgstr "Laddar närvdata"
+
+msgid "No attendance assigned yet"
+msgstr "Ingen närvaro tilldelad än"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Det finns ingen lektion schemalagd idag, prova att välja en annan dag eller lägg till din närvaro manuellt med hjälp av åtgärdsikonerna"
+
+msgid "No attendance data for today"
+msgstr "Ingen närvdata för idag"
+
+msgid "Saving"
+msgstr "Sparar"
+
+msgid "No attendance data to save"
+msgstr "Ingen närvdata att spara"
+
+msgid "Failed to save attendance"
+msgstr "Kunde inte spara närvaro"
+
+msgid "Loading more courses"
+msgstr "Laddar fler kurser"
+
+msgid "Loading more sessions"
+msgstr "Laddar fler sessioner"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Funktionen för automatisk start av dokument är aktiverad"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurationen för övningarnas autostartfunktion är aktiverad"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Inställningen för autostart av inlärningsväg är PÅ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumets inställning för autostart är på"
+
+msgid "Course ID is missing"
+msgstr "Kurs-ID saknas"
+
+msgid "Course created successfully"
+msgstr "Kurs skapad framgångsrikt"
+
+msgid "Error deleting document(s)"
+msgstr "Fel vid radering av dokument"
+
+msgid "Template successfully deleted"
+msgstr "Mall raderad framgångsrikt"
+
+msgid "Error deleting the template"
+msgstr "Fel vid radering av mallen"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel och miniatyrbild krävs"
+
+msgid "Template created successfully"
+msgstr "Mall skapad framgångsrikt"
+
+msgid "Error creating the template"
+msgstr "Fel vid skapande av mallen"
+
+msgid "Error submitting the form"
+msgstr "Fel vid inskickning av formuläret"
+
+msgid "Loading templates"
+msgstr "Laddar mallar"
+
+msgid "Loading layout"
+msgstr "Laddar layout"
+
+msgid "Loading courses"
+msgstr "Laddar kurser"
+
+msgid "No courses available"
+msgstr "Inga kurser tillgängliga"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Denna lista visar användare från alla åtkomst-URL:er eftersom inställningen \"session_admin_access_to_all_users_on_all_urls\" är aktiverad."
+
+msgid "User not found"
+msgstr "Användare hittades inte"
+
+msgid "An error occurred while sending the course"
+msgstr "Ett fel uppstod vid sändning av kursen"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Kom ihåg att ändringar i villkoren relaterade till GDPR kräver att du rapporterar dessa ändringar till tredje parter till vilka du har tillhandahållit personuppgifter om dina användare, enligt artikel 19 i GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Du bör skapa \"Villkor och avtal\" för alla tillgängliga språk"
+
+msgid "You don't have any course yet"
+msgstr "Du har inga kurser än"
+
+msgid "You have received a new friend request"
+msgstr "Du har mottagit en ny vänförfrågan"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoshantering"
 

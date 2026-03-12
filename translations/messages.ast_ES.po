@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Fluxu octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -14729,7 +14729,7 @@ msgstr "Usuarios, Grupos"
 msgid "Sorry no results"
 msgstr "Nun hai resultaos"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permisos del grupu"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "El meu certificáu personalizáu"
 
 msgid "Select permission"
 msgstr "Seleicionar permisos"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Al aceptar esta convidación, quedarás vinculáu al usuariu solicitante de mou que fará algunos o tolos tos datos de perfil disponibles pa lleer pol solicitante"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Amosando %d de aproximadamente %d resultáu(s) pa %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Amosando %d resultáu(s) accesibles pa %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Poro ye, serás redirixíu automáticamente a esta URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Tienes accesu a delles URLs"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Calca nel enllace d'abaxo correspendiente a la URL que quies acceder"
+
+msgid "You do not currently have access to any URL"
+msgstr "N'entes tienes accesu a denguna URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Númberu máximu de subscripciones permitíes"
+
+msgid "An error occurred"
+msgstr "He acaecíu un error"
+
+msgid "You don't have any course content yet"
+msgstr "Encami nengún conteníu de cursu encami"
+
+msgid "This course is locked"
+msgstr "Esti cursu ta bloquiáu"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "La direición de corréu-e dende se van enviar los correos-e cuando la plataforma envíe un corréu-e, tamién usada como cabecera 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "¿Nun atopas la to llingua na llista? Contautanos en %s pa aportar como traductor"
+
+msgid "An update is available"
+msgstr "Hay una actualización disponible"
+
+msgid "to know what's new and what has been changed"
+msgstr "pa saber qué hai de nuevu y qué s'amudó"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Detectamos que la to instalación de PHP nun define la fecha"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "La to versión de PHP nun cumpre los requisitos d'esti software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Algunos archivos o carpetes nun tienen permisu d'escritura"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "¡Atención! L'instalador detectó una plataforma Chamilo esistente nel sistema"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Como los direutoriu <code>newscorm</code> y <code>exercice</code> fueron renombraos a <code>lp</code> y <code>exercise</code> respectivamentemente, ye necesario desaniciar o renombrar a <code>newscorm_old</code> y <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "El formulariu contién datos incorreutos o incompletos"
+
+msgid "Your contact information could not be sent"
+msgstr "Nun ye posible enviar la to información de contautu"
+
+msgid "Please contact support with the error details"
+msgstr "Ponte en contautu col equipu de sofitu colos detalles del error"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Calca na imaxe pa recortala (relación 1:1, 120x120 px recomendáu)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Usa l'ferramenta de recortu pa seleicionar una rexón 1:1"
+
+msgid "Checking push subscription"
+msgstr "Comprobando subscripción push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Tas suscritu a notificaciones push neste navegador"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Les notificaciones push nun tan activades neste navegador"
+
+msgid "Data exchange successfully saved"
+msgstr "Cambeu de datos guardáu correutamente"
+
+msgid "Error saving data exchange"
+msgstr "Error al guardar el cambeu de datos"
+
+msgid "No documents added yet"
+msgstr "Nun se tresmitió nengún documentu"
+
+msgid "No available documents"
+msgstr "Nun hai documentos disponibles"
+
+msgid "No users added yet"
+msgstr "Nun se tresmitió nengún usuariu"
+
+msgid "No available users"
+msgstr "Nun hai usuarios disponibles"
+
+msgid "You can no longer submit"
+msgstr "Yá nun pues entutor"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nun s'alfunden entreghes faltantes pa esta actividá o los datos nun tan disponibles"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Corréu unviáu a toos los usuarios ensin entregar"
+
+msgid "Failed to send email"
+msgstr "Fallu al unviar el corréu"
+
+msgid "Write your answer here"
+msgstr "Escribi la to respuesta equí"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "El calendariu d'assistolia permite rexistrar llistes d'assistencia (una por sesión real a la que tienen d'assistir los estudiantes)"
+
+msgid "Loading attendance data"
+msgstr "Cargando datos d'assistolia"
+
+msgid "No attendance assigned yet"
+msgstr "Encami nuna assistolia asignada"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Nun hai clase programada pa güei, prueba escoyer otru día o amesta la entrada d'assistolia tu mesmu usando los iconos d'acción"
+
+msgid "No attendance data for today"
+msgstr "Nun hai datos d'assistolia pa güei"
+
+msgid "Saving"
+msgstr "Guardando"
+
+msgid "No attendance data to save"
+msgstr "Nun hai datos d'assistolia pa guardar"
+
+msgid "Failed to save attendance"
+msgstr "Fallu al guardar l'assistolia"
+
+msgid "Loading more courses"
+msgstr "Cargando más cursos"
+
+msgid "Loading more sessions"
+msgstr "Cargando más sesiones"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "La configuración del carauterístiques d'auto-lanzamientu de documentos ta activada"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "La configuración del carauterístiques d'auto-lanzamientu d'eiercicios ta activada"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "La axuste d'auto-lanzamientu del camín d'apreendizaxe ta ACTIVU"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "La axuste d'auto-lanzamientu del foru ta activada"
+
+msgid "Course ID is missing"
+msgstr "Falta l'ID del cursu"
+
+msgid "Course created successfully"
+msgstr "Cursu creadu con èxitu"
+
+msgid "Error deleting document(s)"
+msgstr "Error al esborrar el/los documentu(s)"
+
+msgid "Template successfully deleted"
+msgstr "Plantía esborrada con èxitu"
+
+msgid "Error deleting the template"
+msgstr "Error al esborrar la plantía"
+
+msgid "The title and thumbnail are required"
+msgstr "El títulu y la miniatura son obligatorios"
+
+msgid "Template created successfully"
+msgstr "Plantía creada con èxitu"
+
+msgid "Error creating the template"
+msgstr "Error al crear la plantía"
+
+msgid "Error submitting the form"
+msgstr "Error al enviar el formulariu"
+
+msgid "Loading templates"
+msgstr "Cargando plantíes"
+
+msgid "Loading layout"
+msgstr "Cargando estaya"
+
+msgid "Loading courses"
+msgstr "Cargando cursos"
+
+msgid "No courses available"
+msgstr "Nun hai cursos disponibles"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Esta llista amosa usuarios de toles URLs d'accesu porque l'axuste \"session_admin_access_to_all_users_on_all_urls\" ta activáu."
+
+msgid "User not found"
+msgstr "Usuario non atopáu"
+
+msgid "An error occurred while sending the course"
+msgstr "He produciu un error mentres s'unviaba el cursu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Recuerda que les modificaciones nos términos rellacionaos col RGPD requieren que notifiques eses cambéos a les terceres partes a les que facilitaste información personal de los tos usuarios, como se indica nell'Artículu 19 del RGPD"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Deberíes crear los \"Términos y Condiciones\" pa toles llingües disponibles"
+
+msgid "You don't have any course yet"
+msgstr "Encami nun tienes nengún cursu"
+
+msgid "You have received a new friend request"
+msgstr "Recibisti una solicitute nueva d'amistá"
+
+msgid "Diagnosis Management"
+msgstr "Xestión de diagnósticu"
 

@@ -14727,7 +14727,7 @@ msgstr "Felhasználók, csoportok"
 msgid "Sorry no results"
 msgstr "Sajnos nincs találat"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Csoportjogosultságok"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Saját egyedi bizonyítványom"
 
 msgid "Select permission"
 msgstr "Jogosultság kiválasztása"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "E meghívás elfogadásával a kérő felhasználóhoz kapcsolódik, ami miatt profiladatok egy része vagy egésze olvashatóvá válik a kérő felhasználó számára"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%d kb. %d találatból %s kifejezésre."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%d elérhető találat %s kifejezésre."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Ezért automatikusan átirányítva erre az URL-re"
+
+msgid "You have access to multiple URLs"
+msgstr "Több URL-hez van hozzáférése"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Kattintson az alábbi, a hozzáférni kívánt URL-nek megfelelő hivatkozásra"
+
+msgid "You do not currently have access to any URL"
+msgstr "Jelenleg nincs hozzáférése URL-ekhez"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximális engedélyezett előfizetések száma"
+
+msgid "An error occurred"
+msgstr "Hiba történt"
+
+msgid "You don't have any course content yet"
+msgstr "Még nincs kurzustartalma"
+
+msgid "This course is locked"
+msgstr "A kurzus zárolva van"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Az az e-mail cím, amelyről a platform e-mailt küld, továbbá 'Válaszcím' fejlécben is használatos"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nem találja a nyelvét a listában? Lépjen kapcsolatba velünk a %s címen, hogy fordítóként hozzájáruljon"
+
+msgid "An update is available"
+msgstr "Frissítés érhető el"
+
+msgid "to know what's new and what has been changed"
+msgstr "az újdonságok és változtatások megismeréséhez"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "PHP telepítése nem definiálja a dátumot"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP verziója nem felel meg a szoftver követelményeinek"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Néhány fájlnak vagy mappának nincs írási jogosultsága"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Figyelem! A telepítő meglévő Chamilo platformot észlelt a rendszerén"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Mivel a <code>newscorm</code> és <code>exercice</code> könyvtárakat átnevezték <code>lp</code>-re és <code>exercise</code>-re, törölni vagy átnevezni kell őket <code>newscorm_old</code>-ra és <code>exercice_old</code>-ra"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "A űrlap hibás vagy hiányos adatokat tartalmaz"
+
+msgid "Your contact information could not be sent"
+msgstr "Kapcsolatfelvételi adatait nem sikerült elküldeni"
+
+msgid "Please contact support with the error details"
+msgstr "Kérjük, forduljon a támogatáshoz a hiba részleteivel"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Kattintson a képre a kivágáshoz (1:1 arány, 120x120 px ajánlott)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Használja a kivágó eszközt 1:1 terület kijelöléséhez"
+
+msgid "Checking push subscription"
+msgstr "Push előfizetés ellenőrzése"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Előfizetett a böngészőben a push értesítésekre"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "A push értesítések nincsenek engedélyezve ebben a böngészőben"
+
+msgid "Data exchange successfully saved"
+msgstr "Adatcsere sikeresen mentve"
+
+msgid "Error saving data exchange"
+msgstr "Hiba az adatcsere mentésekor"
+
+msgid "No documents added yet"
+msgstr "Még nincs dokumentum hozzáadva"
+
+msgid "No available documents"
+msgstr "Nincs elérhető dokumentum"
+
+msgid "No users added yet"
+msgstr "Még nincs felhasználó hozzáadva"
+
+msgid "No available users"
+msgstr "Nincs elérhető felhasználó"
+
+msgid "You can no longer submit"
+msgstr "Többé nem küldhet be"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nincs hiányzó beadandó ebből a feladatból, vagy az adat nem elérhető"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail elküldve minden be nem adott felhasználónak"
+
+msgid "Failed to send email"
+msgstr "E-mail küldése sikertelen"
+
+msgid "Write your answer here"
+msgstr "Írja ide a válaszát"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "A jelenléti naptár lehetővé teszi a jelenléti listák regisztrálását (egy valódi foglalkozásra, amelyen a hallgatóknak meg kell jelenniük)"
+
+msgid "Loading attendance data"
+msgstr "Jelenléti adatok betöltése"
+
+msgid "No attendance assigned yet"
+msgstr "Még nincs jelenlét hozzárendelve"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Ma nincs órarendbe vett foglalkozás, próbáljon másik napot választani, vagy adja hozzá maga a jelenléti bejegyzést a műveleti ikonok használatával"
+
+msgid "No attendance data for today"
+msgstr "Nincs mai jelenléti adat"
+
+msgid "Saving"
+msgstr "Mentés"
+
+msgid "No attendance data to save"
+msgstr "Nincs mentendő jelenléti adat"
+
+msgid "Failed to save attendance"
+msgstr "Jelenlét mentése sikertelen"
+
+msgid "Loading more courses"
+msgstr "További kurzusok betöltése"
+
+msgid "Loading more sessions"
+msgstr "További foglalkozások betöltése"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "A dokumentum automatikus indítás funkció konfigurációja engedélyezve van"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "A gyakorlatok automatikus indítás funkció konfigurációja engedélyezve van"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "A tanulási útvonal automatikus indítás beállítása BE van kapcsolva"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "A fórum automatikus indítás beállítása be van kapcsolva"
+
+msgid "Course ID is missing"
+msgstr "Kurzus azonosító hiányzik"
+
+msgid "Course created successfully"
+msgstr "Kurzus sikeresen létrehozva"
+
+msgid "Error deleting document(s)"
+msgstr "Hiba a dokumentum(ok) törlésekor"
+
+msgid "Template successfully deleted"
+msgstr "Sablon sikeresen törölve"
+
+msgid "Error deleting the template"
+msgstr "Hiba a sablon törlésekor"
+
+msgid "The title and thumbnail are required"
+msgstr "A cím és a miniatűr kötelező"
+
+msgid "Template created successfully"
+msgstr "Sablon sikeresen létrehozva"
+
+msgid "Error creating the template"
+msgstr "Hiba a sablon létrehozása során"
+
+msgid "Error submitting the form"
+msgstr "Hiba az űrlap beküldésekor"
+
+msgid "Loading templates"
+msgstr "Sablonok betöltése"
+
+msgid "Loading layout"
+msgstr "Elrendezés betöltése"
+
+msgid "Loading courses"
+msgstr "Kurzusok betöltése"
+
+msgid "No courses available"
+msgstr "Nincs elérhető kurzus"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ez a lista az összes hozzáférési URL felhasználóit jeleníti meg, mert a \"session_admin_access_to_all_users_on_all_urls\" beállítás engedélyezve van."
+
+msgid "User not found"
+msgstr "Felhasználó nem található"
+
+msgid "An error occurred while sending the course"
+msgstr "Hiba történt a kurzus küldése során"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Ne feledje, hogy a GDPR-ral kapcsolatos feltételek módosításához értesítenie kell a harmadik felet, akinek a felhasználóiról személyes adatokat adott át, ahogy a GDPR 19. cikke előírja"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Hozza létre a \"Felhasználási feltételeket\" minden elérhető nyelvre"
+
+msgid "You don't have any course yet"
+msgstr "Még nincs kurzusod"
+
+msgid "You have received a new friend request"
+msgstr "Új barátkeresést kaptál"
+
+msgid "Diagnosis Management"
+msgstr "Diagnosztika kezelés"
 

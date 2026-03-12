@@ -14727,7 +14727,7 @@ msgstr "Brukarar, Grupper"
 msgid "Sorry no results"
 msgstr "Orsak, ingen resultat"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppetilganger"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Mitt tilpassa sertifikat"
 
 msgid "Select permission"
 msgstr "Vel tilgjenge"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ved å akseptere denne invitasjonen vil du bli kobla til den som ba om invitasjonen på ein måte som gjer nokre eller alle profilopplysningane dine tilgjengelege for lesing av personen som ba om invitasjonen"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Viser %d av om lag %d resultat for %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Viser %d tilgjengelege resultat for %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Du vil derfor bli automatisk omdirigert til denne URL-en"
+
+msgid "You have access to multiple URLs"
+msgstr "Du har tilgang til fleire URL-ar"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klikk på lenka nedanfor som samsvarar med URL-en du ønsker å få tilgang til"
+
+msgid "You do not currently have access to any URL"
+msgstr "Du har for tida ikkje tilgang til nokre URL-ar"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalt antal abonnement tillate"
+
+msgid "An error occurred"
+msgstr "Ein feil oppstod"
+
+msgid "You don't have any course content yet"
+msgstr "Du har ikkje nokon kursinnhold enno"
+
+msgid "This course is locked"
+msgstr "Dette kurset er låst"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-postadressa som e-postar vil bli sendt frå når plattforma sender ein e-post, òg brukt som 'reply-to'-hodet"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Finner du ikkje språket ditt i lista? Kontakt oss på %s for å bidra som oversettar"
+
+msgid "An update is available"
+msgstr "Ein oppdatering er tilgjengeleg"
+
+msgid "to know what's new and what has been changed"
+msgstr "for å sjå kva som er nytt og kva som er endra"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vi har oppdaga at PHP-installasjonen din ikkje definerer datoen"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP-versjonen din samsvarar ikkje med krava for denne programvaren"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Nokre filer eller mapper har ikkje skrivetilgang"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Åtvaring! Installasjonsprogrammet har oppdaga ein eksisterande Chamilo-plattform på systemet ditt"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Vegen <code>newscorm</code> og <code>exercice</code> blei endra til <code>lp</code> og <code>exercise</code> på same måte, det er nødvendig å sletta eller endra til <code>newscorm_old</code> og <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Skjemaet inneheld feilaktige eller ufullstende data"
+
+msgid "Your contact information could not be sent"
+msgstr "Kontaktopplysningane dine kunne ikkje sendast"
+
+msgid "Please contact support with the error details"
+msgstr "Ta kontakt med støtte med feildetaljane"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klikk på bildet for å beskjære det (forhold 1:1, 120x120 px anbefalt)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Bruk beskjæringsverktøyet for å velje eit område med forhold 1:1"
+
+msgid "Checking push subscription"
+msgstr "Sjekkar push-abonnement"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Du er abonnert på push-varsler i denne nettlesaren"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-varsler er ikkje aktivert i denne nettlesaren"
+
+msgid "Data exchange successfully saved"
+msgstr "Datadelingsdata er velsignelsesfullt lagra"
+
+msgid "Error saving data exchange"
+msgstr "Feil ved lagring av datadelingsdata"
+
+msgid "No documents added yet"
+msgstr "Ingen dokument tilknytte enno"
+
+msgid "No available documents"
+msgstr "Ingen tilgjengelege dokument"
+
+msgid "No users added yet"
+msgstr "Ingen brukarar tilknytte enno"
+
+msgid "No available users"
+msgstr "Ingen tilgjengelege brukarar"
+
+msgid "You can no longer submit"
+msgstr "Du kan ikkje lever inn lenger"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Ingen manglande innleveringar funne for denne oppgåva eller data er ikkje tilgjengelege"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-post sendt til alle elevar utan innlevering"
+
+msgid "Failed to send email"
+msgstr "Kunne ikkje sende e-post"
+
+msgid "Write your answer here"
+msgstr "Skriv svaret ditt her"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Framandskalendaren lar deg registrere frammandskapslister (ein per reell samling elevane må delta på)"
+
+msgid "Loading attendance data"
+msgstr "Lastar framandskapsdata"
+
+msgid "No attendance assigned yet"
+msgstr "Ingen frammadskal endra enno"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Det finst ingen time planlagt i dag, prøv å velje ein annan dag eller legg til frammadskalen din sjølv med brukarikonane"
+
+msgid "No attendance data for today"
+msgstr "Ingen frammadskapsdata for i dag"
+
+msgid "Saving"
+msgstr "Lagrar"
+
+msgid "No attendance data to save"
+msgstr "Ingen frammadskapsdata å lagre"
+
+msgid "Failed to save attendance"
+msgstr "Kunne ikkje lagre frammadskap"
+
+msgid "Loading more courses"
+msgstr "Lastar fleire kurs"
+
+msgid "Loading more sessions"
+msgstr "Lastar fleire samlingar"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Automatisk start for dokument er aktivert"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Automatisk start for øvingar er aktivert"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Automatisk start for læringssti er PÅ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Automatisk start for forum er på"
+
+msgid "Course ID is missing"
+msgstr "Kurs-ID manglar"
+
+msgid "Course created successfully"
+msgstr "Kurset er velsignelsesfullt oppretta"
+
+msgid "Error deleting document(s)"
+msgstr "Feil ved sletting av dokument"
+
+msgid "Template successfully deleted"
+msgstr "Mal velsignelsesfullt sletta"
+
+msgid "Error deleting the template"
+msgstr "Feil ved sletting av mal"
+
+msgid "The title and thumbnail are required"
+msgstr "Tittel og miniatyrbilde er påkrævd"
+
+msgid "Template created successfully"
+msgstr "Mal velsignelsesfullt oppretta"
+
+msgid "Error creating the template"
+msgstr "Feil ved oppretting av mal"
+
+msgid "Error submitting the form"
+msgstr "Feil ved innsending av skjema"
+
+msgid "Loading templates"
+msgstr "Lastar malar"
+
+msgid "Loading layout"
+msgstr "Lastar oppsett"
+
+msgid "Loading courses"
+msgstr "Lastar kurs"
+
+msgid "No courses available"
+msgstr "Ingen kurs tilgjengelege"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Denne lista viser brukarar frå alle tilgjengelege URL-ar fordi innstillinga \"session_admin_access_to_all_users_on_all_urls\" er aktivert."
+
+msgid "User not found"
+msgstr "Brukar ikkje funnen"
+
+msgid "An error occurred while sending the course"
+msgstr "Ein feil oppstod under sending av kurset"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Hugs at endringar i vilkår relatert til GDPR krev at du melder desse endringane til tredjepartar du har gjeve personopplysningar om brukarane dine til, som angitt i artikkel 19 i GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Du burde opprette \"Vilkår og betingelser\" for alle tilgjengelege språk"
+
+msgid "You don't have any course yet"
+msgstr "Du har ikkje noko kurs enno"
+
+msgid "You have received a new friend request"
+msgstr "Du har fått ein ny vennforespørsel"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoseadministrasjon"
 

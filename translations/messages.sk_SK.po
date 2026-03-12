@@ -14737,7 +14737,7 @@ msgstr "Používatelia, Skupiny"
 msgid "Sorry no results"
 msgstr "Ospravedlňujeme sa, nie sú žiadne výsledky"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Oprávnenie skupiny"
 
 msgid "Closed"
@@ -32814,4 +32814,226 @@ msgstr "Môj vlastný certifikát"
 
 msgid "Select permission"
 msgstr "Vybrať oprávnenie"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Akceptovaním tohto pozvania sa prepojíte s žiadajúcim používateľom spôsobom, ktorý sprístupní niektoré alebo všetky vaše údaje profilu na čítanie žiadajúcemu používateľovi"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Zobrazuje sa %d z približne %d výsledkov pre %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Zobrazuje sa %d prístupných výsledkov pre %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Budete preto automaticky presmerovaní na túto URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Máte prístup k viacerým URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Kliknite prosím na odkaz nižšie zodpovedajúci URL, ku ktorému chcete získať prístup"
+
+msgid "You do not currently have access to any URL"
+msgstr "Momentálne nemáte prístup k žiadnemu URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximálny povolený počet predplatného"
+
+msgid "An error occurred"
+msgstr "Vyskytla sa chyba"
+
+msgid "You don't have any course content yet"
+msgstr "Zatiaľ nemáte žiadny obsah kurzu"
+
+msgid "This course is locked"
+msgstr "Tento kurz je zamknutý"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mailová adresa, z ktorej budú odoslané e-maily, keď platforma pošle e-mail, používa sa aj ako hlavička 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nenájdete svoj jazyk v zozname? Kontaktujte nás na %s, aby ste prispeli ako prekladateľ"
+
+msgid "An update is available"
+msgstr "Je dostupná aktualizácia"
+
+msgid "to know what's new and what has been changed"
+msgstr "aby ste sa dozvedeli, čo je nové a čo sa zmenilo"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Zistili sme, že vaša PHP inštalácia nedefinuje dátum"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vaša verzia PHP nevyhovuje požiadavkám tohto softvéru"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Niektoré súbory alebo priečinky nemajú povolenie na zápis"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Upozornenie! Inštalátor zistil existujúcu platformu Chamilo vo vašom systéme"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Pretože adresáre <code>newscorm</code> a <code>exercice</code> boli premenované na <code>lp</code> a <code>exercise</code> respectivamente, je potrebné ich odstrániť alebo premenovať na <code>newscorm_old</code> a <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formulár obsahuje nesprávne alebo neúplné údaje"
+
+msgid "Your contact information could not be sent"
+msgstr "Vaše kontaktné informácie nebolo možné odoslať"
+
+msgid "Please contact support with the error details"
+msgstr "Kontaktujte podporu s podrobnosťami chyby"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Kliknite na obrázok, aby ste ho orezali (pomer 1:1, odporúčané 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Použite nástroj na orezenie na výber oblasti 1:1"
+
+msgid "Checking push subscription"
+msgstr "Kontroluje sa predplatné push notifikácií"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Ste prihlásený na push notifikácie v tomto prehliadači"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push notifikácie nie sú v tomto prehliadači povolené"
+
+msgid "Data exchange successfully saved"
+msgstr "Výmena údajov bola úspešne uložená"
+
+msgid "Error saving data exchange"
+msgstr "Chyba pri ukladaní výmeny údajov"
+
+msgid "No documents added yet"
+msgstr "Zatiaľ neboli pridané žiadne dokumenty"
+
+msgid "No available documents"
+msgstr "Žiadne dostupné dokumenty"
+
+msgid "No users added yet"
+msgstr "Zatiaľ neboli pridaní žiadni používatelia"
+
+msgid "No available users"
+msgstr "Žiadni dostupní používatelia"
+
+msgid "You can no longer submit"
+msgstr "Už nemôžete odoslať"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Pre toto zadanie neboli nájdené žiadne chýbajúce odovzdania alebo údaje nie sú dostupné"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail bol odoslaný všetkým používateľom, ktorí neodoslali"
+
+msgid "Failed to send email"
+msgstr "Odoslanie e-mailu zlyhalo"
+
+msgid "Write your answer here"
+msgstr "Napíšte svoju odpoveď sem"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendár dochádzky vám umožňuje registrovať zoznamy dochádzky (jeden na skutočnú sedenie, na ktorú musia študenti prísť)"
+
+msgid "Loading attendance data"
+msgstr "Načítavajú sa údaje o dochádzke"
+
+msgid "No attendance assigned yet"
+msgstr "Zatiaľ nebola priradená žiadna dochádzka"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Dnes nie je naplánovaná žiadna hodina, skúste vybrať iný deň alebo pridajte záznam dochádzky sami pomocou ikon akcií"
+
+msgid "No attendance data for today"
+msgstr "Žiadne údaje o dochádzke na dnes"
+
+msgid "Saving"
+msgstr "Ukladá sa"
+
+msgid "No attendance data to save"
+msgstr "Žiadne údaje o dochádzke na uloženie"
+
+msgid "Failed to save attendance"
+msgstr "Uloženie dochádzky zlyhalo"
+
+msgid "Loading more courses"
+msgstr "Načítavajú sa ďalšie kurzy"
+
+msgid "Loading more sessions"
+msgstr "Načítavajú sa ďalšie sedenia"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurácia funkcie automatického spustenia dokumentu je povolená"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurácia funkcie automatického spustenia cvičení je povolená"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Nastavenie automatického spustenia učebnej cesty je ZAPNUTÉ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Nastavenie automatického spustenia fóra je zapnuté"
+
+msgid "Course ID is missing"
+msgstr "Chýba ID kurzu"
+
+msgid "Course created successfully"
+msgstr "Kurz bol úspešne vytvorený"
+
+msgid "Error deleting document(s)"
+msgstr "Chyba pri odstraňovaní dokumentu(ov)"
+
+msgid "Template successfully deleted"
+msgstr "Šablóna bola úspešne odstránená"
+
+msgid "Error deleting the template"
+msgstr "Chyba pri odstraňovaní šablóny"
+
+msgid "The title and thumbnail are required"
+msgstr "Názov a náhľad sú povinné"
+
+msgid "Template created successfully"
+msgstr "Šablóna bola úspešne vytvorená"
+
+msgid "Error creating the template"
+msgstr "Chyba pri vytváraní šablóny"
+
+msgid "Error submitting the form"
+msgstr "Chyba pri odosielaní formulára"
+
+msgid "Loading templates"
+msgstr "Načítavajú sa šablóny"
+
+msgid "Loading layout"
+msgstr "Načítava sa rozloženie"
+
+msgid "Loading courses"
+msgstr "Načítavajú sa kurzy"
+
+msgid "No courses available"
+msgstr "Žiadne dostupné kurzy"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Tento zoznam zobrazuje používateľov zo všetkých prístupových URL, pretože nastavenie \"session_admin_access_to_all_users_on_all_urls\" je povolené."
+
+msgid "User not found"
+msgstr "Používateľ nenájdený"
+
+msgid "An error occurred while sending the course"
+msgstr "Vyskytla sa chyba pri odosielaní kurzu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Pamätajte, že zmeny v znení podmienok týkajúcich sa GDPR vyžadujú, aby ste o týchto zmenách informovali tretie strany, ktorým ste poskytli osobné údaje o vašich používateľoch, ako je uvedené v článku 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Mali by ste vytvoriť \"Všeobecné obchodné podmienky\" pre všetky dostupné jazyky"
+
+msgid "You don't have any course yet"
+msgstr "Zatiaľ nemáte žiadny kurz"
+
+msgid "You have received a new friend request"
+msgstr "Dostali ste novú požiadavku na priateľstvo"
+
+msgid "Diagnosis Management"
+msgstr "Správa diagnostiky"
 

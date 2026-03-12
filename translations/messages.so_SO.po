@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -14724,7 +14724,7 @@ msgstr "Isticmaale, Kooxo"
 msgid "Sorry no results"
 msgstr "Waan ka xumahay ma jiraan natiijooyin"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Oggolaanshaha kooxda"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Shahaadadayda gaarka ah"
 
 msgid "Select permission"
 msgstr "Dooro ogolaanshaha"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Marka aad aqbasho martiqaadkan, waxaad la xiriiri doontaa isticmaaleha codsaday si ay uga dhigaan qaar ama dhammaan xogtaaga profile-ka aad u heli karto isticmaaleha codsaday"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Muujinaya %d ee qiyaastii %d natiijo(oyin) %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Muujinaya %d natiijo(oyin) la heli karo %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Sidaa darteed si toos ah ayaa loogu wareejin doonaa URL-kaan"
+
+msgid "You have access to multiple URLs"
+msgstr " Waxaad leedahay marin u heli karo URL-yo badan"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Fad klikka xiriirka hoose ee u safra URL-ka aad rabto inaad gasho"
+
+msgid "You do not currently have access to any URL"
+msgstr "Waqtigan ma haysatid marin u heli karo URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Tirada ugu badan ee la ogol yahay ee is-diiwaangelinta"
+
+msgid "An error occurred"
+msgstr "Qalad ayaa dhacay"
+
+msgid "You don't have any course content yet"
+msgstr "Wali ma haysatid waxyaalaha koorsada"
+
+msgid "This course is locked"
+msgstr "Koorsadani waa qufulan"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Ciwaanka iimaylka ee loo soo diri doono marka platformku uu soo diro iimaylka, sidoo kale loo adeegsado sidii 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ma heli kartid luqaddaada liiska? Nala soo xiriir %s si aad ugu darsato tarjumaad ahaan"
+
+msgid "An update is available"
+msgstr "Cusboonaysiin baa diyaar"
+
+msgid "to know what's new and what has been changed"
+msgstr "si aad u ogaato waxa cusub iyo waxa la beddelay"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Waxaan ogaanay in rakibaadda PHP-ka aad aanu qeexin taariikhda"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Noocaaga PHP ma waafaqsanayo shuruudaha softwarekan"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Faylasha ama xeryaha qaarkood ma haystaan ogolaanshaha qorista"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Digtoow! Rakibuhu wuxuu ogaaday jiritaanka Chamilo platform nidaamkaaga"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Sababtoo ah <code>newscorm</code> iyo <code>exercice</code> ee la beddelay <code>lp</code> iyo <code>exercise</code> siday u kala horreeyaan, waa lagama maarmaan in la tirtirto ama loo beddelo <code>newscorm_old</code> iyo <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Foomku waxa uu ka kooban yahay xog qaldan ama aan dhammaystirnayn"
+
+msgid "Your contact information could not be sent"
+msgstr "Macluumaadkaaga la xidhiidha lama soo diri karin"
+
+msgid "Please contact support with the error details"
+msgstr "Fadlan la xidhiidh taageerada oo la socda faahfaahinta khaladka"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Riix sawirka si aad u goydo (saamiga 1:1, 120x120 px waa lagu talinayaa)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Isticmaal qalabka goynta si aad u doorato gobol 1:1"
+
+msgid "Checking push subscription"
+msgstr "Baaraya furfurnaan push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Waxaa lagu diiwaan geliyay ogeysiisyada riixista ee biraawsarkan"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Ogeysiisyada riixista kuma shaqayn biraawsarkan"
+
+msgid "Data exchange successfully saved"
+msgstr "Isku beddelka xogta si guul leh loo keydiyay"
+
+msgid "Error saving data exchange"
+msgstr "Khalad keydinta isku beddelka xogta"
+
+msgid "No documents added yet"
+msgstr "Wali lama darin dukumentiyo"
+
+msgid "No available documents"
+msgstr "Ma jiraan dukumentiyo diyaar"
+
+msgid "No users added yet"
+msgstr "Wali lama darin isticmaale"
+
+msgid "No available users"
+msgstr "Ma jiraan isticmaale diyaar"
+
+msgid "You can no longer submit"
+msgstr "Mar dambe ma gudbin karid"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Ma jiraan gudbiyo maqan ee loo sameeyay shaqadan ama xogtu diyaar maaha"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Iimaylka waxaa loo diray dhammaan isticmaalaasha aan la gudbin"
+
+msgid "Failed to send email"
+msgstr "Waan ku guuldareystay dirida iimaylka"
+
+msgid "Write your answer here"
+msgstr "Halkan ku qor jawaabtaada"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kaalmaanka xaadirka wuxuu kuu oggolaanayaa in aad diiwaan geliso liisaska xaadirka (mid kasta oo kalfadhi dhab ah oo ardaydu u baahan yihiin inay ka qayb galaan)"
+
+msgid "Loading attendance data"
+msgstr "Raraya xogta xaadirka"
+
+msgid "No attendance assigned yet"
+msgstr "Wali lama meeleyn xaadir"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Ma jiro fasal maanta loo qorsheeyay, isku day doorashada maalin kale ama ku dar xaadirkaaga adiga oo iska shaqaynaya astaamaha ficilka"
+
+msgid "No attendance data for today"
+msgstr "Ma jiro xog xaadir maanta"
+
+msgid "Saving"
+msgstr "Kaydinta"
+
+msgid "No attendance data to save"
+msgstr "Ma jiro xog xaadir la keydsan karo"
+
+msgid "Failed to save attendance"
+msgstr "Waan ku guuldareystay keydinta xaadirka"
+
+msgid "Loading more courses"
+msgstr "Raraya koorsado badan"
+
+msgid "Loading more sessions"
+msgstr "Raraya fadhiyo badan"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Qaabaynta auto-launch dukumentiga waa shaqaysa"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Qaabaynta auto-launch ee layliyada waa shaqaysa"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Dejinta auto-launch ee jidka waxbarashadu waa ON"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Dejinta auto-launch ee madasha waa shidan"
+
+msgid "Course ID is missing"
+msgstr "ID koorsadu waa maqan"
+
+msgid "Course created successfully"
+msgstr "Koorsadda si guul leh loo abuuray"
+
+msgid "Error deleting document(s)"
+msgstr "Khalad tirtirka dukumentiga(a)"
+
+msgid "Template successfully deleted"
+msgstr "Qaabka si guul leh loo tirtiray"
+
+msgid "Error deleting the template"
+msgstr "Khalad tirtirka qaabka"
+
+msgid "The title and thumbnail are required"
+msgstr "Ciwaanka iyo thumbnail-ka waa loo baahan yahay"
+
+msgid "Template created successfully"
+msgstr "Template-ka si guul leh loo abuuray"
+
+msgid "Error creating the template"
+msgstr "Khalad ku dhacay abuurista template-ka"
+
+msgid "Error submitting the form"
+msgstr "Khaldad ku dhacay gudbinta foomka"
+
+msgid "Loading templates"
+msgstr "Raraya template-yada"
+
+msgid "Loading layout"
+msgstr "Raraya qaabka"
+
+msgid "Loading courses"
+msgstr "Raraya koorsooyinka"
+
+msgid "No courses available"
+msgstr "Ma jiraan koorsooyin diyaar ah"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Liiskan waxa uu soo bandhigayaa isticmaaleyaal ka yimaada dhammaan URL-yada gelitaanka sababtoo ah dejinta \"session_admin_access_to_all_users_on_all_urls\" waa la shaqeeyey."
+
+msgid "User not found"
+msgstr "Isticmaale lama helin"
+
+msgid "An error occurred while sending the course"
+msgstr "Khaldad ayaa dhacay intii la gudbinayay koorsada"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Fadlan xusuuso in isbeddelada ku yimaada shuruudaha la xidhiidha GDPR ay kaa rabaan in aad u sheegto dhinacyada saddexaad ee aad u siiso macluumaadka shakhsi ahaaneed ee isticmaaleeyaashaaga, sida ku cad Qodobka 19 ee GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Waa in aad u abuurtaa \"Shuruudaha iyo Xaaladaha\" dhammaan luqadaha diyaar ah"
+
+msgid "You don't have any course yet"
+msgstr "Wali ma haysatid koorsad"
+
+msgid "You have received a new friend request"
+msgstr "Waxaa laguugu soo diray codsi saaxiibnimo cusub"
+
+msgid "Diagnosis Management"
+msgstr "Maamulka Cilmi-baadhista"
 

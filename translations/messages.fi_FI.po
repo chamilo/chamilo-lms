@@ -14729,7 +14729,7 @@ msgstr "Käyttäjät, Ryhmät"
 msgid "Sorry no results"
 msgstr "Ei tuloksia"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Ryhmän oikeudet"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Oma mukautettu todistus"
 
 msgid "Select permission"
 msgstr "Valitse oikeus"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Hyväksymällä tämän kutsun liityt pyytävään käyttäjään siten, että osa tai kaikki profiilitietosi ovat pyytävän käyttäjän luettavissa"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Näytetään %d noin %d tuloksesta %s kohteelle."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Näytetään %d saatavilla olevaa tulosta kohteelle %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Sinut ohjataan automaattisesti tähän URL-osoitteeseen"
+
+msgid "You have access to multiple URLs"
+msgstr "Sinulla on pääsy useisiin URL-osoitteisiin"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Valitse alla oleva linkki, joka vastaa haluamaasi URL-osoitetta"
+
+msgid "You do not currently have access to any URL"
+msgstr "Sinulla ei ole tällä hetkellä pääsyä yhteenkään URL-osoitteeseen"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimi sallittu määrä tilauksia"
+
+msgid "An error occurred"
+msgstr "Tapahtui virhe"
+
+msgid "You don't have any course content yet"
+msgstr "Sinulla ei ole vielä kurssisisältöä"
+
+msgid "This course is locked"
+msgstr "Tämä kurssi on lukittu"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Sähköpostiosoite, josta alustan lähettämät sähköpostit lähetetään, myös 'Vastaa tähän' -otsikkona"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Kieltäsi ei löydy luettelosta? Ota yhteyttä %s osallistuaksesi kääntäjänä"
+
+msgid "An update is available"
+msgstr "Päivitys on saatavilla"
+
+msgid "to know what's new and what has been changed"
+msgstr "tietääksesi mitä uutta ja mitä on muutettu"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Olemme havainneet, että PHP-asennuksesi ei määrittele päivämäärää"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP-versiosi ei vastaa tämän ohjelmiston vaatimuksia"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Joillakin tiedostoilla tai kansioilla ei ole kirjoitusoikeuksia"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Varoitus! Asennusohjelma havaitsi olemassa olevan Chamilo-alustan järjestelmässäsi"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Koska <code>newscorm</code> ja <code>exercice</code> -kansiot on nimetty uudelleen <code>lp</code> ja <code>exercise</code> -kansioiksi, on tarpeen poistaa ne tai nimetä ne <code>newscorm_old</code> ja <code>exercice_old</code> -kansioiksi"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Lomakkeessa on virheellisiä tai puutteellisia tietoja"
+
+msgid "Your contact information could not be sent"
+msgstr "Yhteystietojasi ei voitu lähettää"
+
+msgid "Please contact support with the error details"
+msgstr "Ota yhteyttä tukeen virheen tiedoilla"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Napsauta kuvaa rajataksesi sen (1:1-suhde, suositellaan 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Käytä rajausvälinettä valitaksesi 1:1-alueen"
+
+msgid "Checking push subscription"
+msgstr "Tarkistetaan push-tilaus"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Olet tilannut push-ilmoitukset tässä selaimessa"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-ilmoituksia ei ole otettu käyttöön tässä selaimessa"
+
+msgid "Data exchange successfully saved"
+msgstr "Tiedonvaihto tallennettu onnistuneesti"
+
+msgid "Error saving data exchange"
+msgstr "Virhe tallennettaessa tiedonvaihtoa"
+
+msgid "No documents added yet"
+msgstr "Ei vielä lisättyjä asiakirjoja"
+
+msgid "No available documents"
+msgstr "Ei saatavilla olevia asiakirjoja"
+
+msgid "No users added yet"
+msgstr "Ei vielä lisättyjä käyttäjiä"
+
+msgid "No available users"
+msgstr "Ei saatavilla olevia käyttäjiä"
+
+msgid "You can no longer submit"
+msgstr "Et voi enää lähettää"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Tälle tehtävälle ei löytynyt puuttuvia palautuksia tai tietoja ei ole saatavilla"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Sähköposti lähetetty kaikille palauttamattomille käyttäjille"
+
+msgid "Failed to send email"
+msgstr "Sähköpostin lähetyksessä epäonnistuttiin"
+
+msgid "Write your answer here"
+msgstr "Kirjoita vastauksesi tähän"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Läsnäolokalenteri mahdollistaa läsnäololuetteloiden rekisteröinnin (yksi per todellinen istunto, johon opiskelijoiden täytyy osallistua)"
+
+msgid "Loading attendance data"
+msgstr "Ladataan läsnäolotietoja"
+
+msgid "No attendance assigned yet"
+msgstr "Yhtään läsnäoloa ei ole vielä määritetty"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Tänään ei ole yhtään luokkaa aikataulutettuna, kokeile valita toinen päivä tai lisää läsnäolosi itse toimintakuvakkeita käyttäen"
+
+msgid "No attendance data for today"
+msgstr "Ei läsnäolotietoja tälle päivälle"
+
+msgid "Saving"
+msgstr "Tallennetaan"
+
+msgid "No attendance data to save"
+msgstr "Ei läsnäolotietoja tallennettavaksi"
+
+msgid "Failed to save attendance"
+msgstr "Läsnäolon tallennuksessa epäonnistuttiin"
+
+msgid "Loading more courses"
+msgstr "Ladataan lisää kursseja"
+
+msgid "Loading more sessions"
+msgstr "Ladataan lisää istuntoja"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Dokumentin automaattisen käynnistyksen asetukset on otettu käyttöön"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Tehtävien automaattisen käynnistyksen asetukset on otettu käyttöön"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Oppimispolun automaattisen käynnistyksen asetus on PÄÄLLÄ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Foorumin automaattisen käynnistyksen asetus on päällä"
+
+msgid "Course ID is missing"
+msgstr "Kurssin tunnus puuttuu"
+
+msgid "Course created successfully"
+msgstr "Kurssi luotiin onnistuneesti"
+
+msgid "Error deleting document(s)"
+msgstr "Virhe dokumentin(tien) poistossa"
+
+msgid "Template successfully deleted"
+msgstr "Pohja poistettiin onnistuneesti"
+
+msgid "Error deleting the template"
+msgstr "Virhe poistaessa pohjaa"
+
+msgid "The title and thumbnail are required"
+msgstr "Otsikko ja pikkukuva ovat pakollisia"
+
+msgid "Template created successfully"
+msgstr "Pohja luotiin onnistuneesti"
+
+msgid "Error creating the template"
+msgstr "Virhe luotaessa pohjaa"
+
+msgid "Error submitting the form"
+msgstr "Virhe lomakkeen lähetyksessä"
+
+msgid "Loading templates"
+msgstr "Ladataan pohjia"
+
+msgid "Loading layout"
+msgstr "Ladataan asettelua"
+
+msgid "Loading courses"
+msgstr "Ladataan kursseja"
+
+msgid "No courses available"
+msgstr "Yhtään kurssia ei ole saatavilla"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Tämä luettelo näyttää käyttäjät kaikista pääsylinkin URL-osoitteista, koska asetus \"session_admin_access_to_all_users_on_all_urls\" on käytössä."
+
+msgid "User not found"
+msgstr "Käyttäjää ei löytynyt"
+
+msgid "An error occurred while sending the course"
+msgstr "Virhe kurssin lähetyksessä"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Muista, että GDPR:ään liittyvien ehtojen muutokset edellyttävät ilmoittamista kolmansille osapuolille, joille olet toimittanut käyttäjiisi liittyviä henkilötietoja, kuten GDPR:n artiklassa 19 todetaan"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Sinun tulisi luoda \"Käyttöehdot\" kaikille saatavilla oleville kielille"
+
+msgid "You don't have any course yet"
+msgstr "Sinulla ei ole vielä yhtään kurssia"
+
+msgid "You have received a new friend request"
+msgstr "Olet saanut uuden kaveripyynnön"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostiikkahallinta"
 

@@ -14727,7 +14727,7 @@ msgstr "Pengguna, Grup"
 msgid "Sorry no results"
 msgstr "Maaf tidak ada hasil"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Izin Grup"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Sertifikat kustom saya"
 
 msgid "Select permission"
 msgstr "Pilih izin"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Dengan menerima undangan ini, Anda akan terhubung dengan pengguna yang meminta sehingga sebagian atau seluruh data profil Anda dapat dibaca oleh pengguna yang meminta"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Menampilkan %d dari sekitar %d hasil untuk %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Menampilkan %d hasil yang dapat diakses untuk %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Anda akan otomatis dialihkan ke URL ini"
+
+msgid "You have access to multiple URLs"
+msgstr "Anda memiliki akses ke beberapa URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Silakan klik tautan di bawah ini yang sesuai dengan URL yang ingin Anda akses"
+
+msgid "You do not currently have access to any URL"
+msgstr "Saat ini Anda tidak memiliki akses ke URL manapun"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Jumlah maksimum langganan yang diizinkan"
+
+msgid "An error occurred"
+msgstr "Terjadi kesalahan"
+
+msgid "You don't have any course content yet"
+msgstr "Anda belum memiliki konten kursus"
+
+msgid "This course is locked"
+msgstr "Kursus ini terkunci"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Alamat e-mail dari mana e-mail akan dikirim ketika platform mengirim e-mail, juga digunakan sebagai header 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Tidak menemukan bahasa Anda dalam daftar? Hubungi kami di %s untuk berkontribusi sebagai penerjemah"
+
+msgid "An update is available"
+msgstr "Pembaruan tersedia"
+
+msgid "to know what's new and what has been changed"
+msgstr "untuk mengetahui apa yang baru dan apa yang telah diubah"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Kami mendeteksi bahwa instalasi PHP Anda tidak mendefinisikan tanggal"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Versi PHP Anda tidak sesuai dengan persyaratan perangkat lunak ini"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Beberapa file atau folder tidak memiliki izin penulisan"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Peringatan! Installer mendeteksi platform Chamilo yang ada di sistem Anda"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Karena direktori <code>newscorm</code> dan <code>exercice</code> telah diganti namanya menjadi <code>lp</code> dan <code>exercise</code>, diperlukan untuk menghapus atau mengganti nama menjadi <code>newscorm_old</code> dan <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formulir berisi data yang salah atau tidak lengkap"
+
+msgid "Your contact information could not be sent"
+msgstr "Informasi kontak Anda tidak dapat dikirim"
+
+msgid "Please contact support with the error details"
+msgstr "Hubungi dukungan dengan detail kesalahan"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klik gambar untuk memotongnya (rasio 1:1, 120x120 px direkomendasikan)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Gunakan alat potong untuk memilih wilayah 1:1"
+
+msgid "Checking push subscription"
+msgstr "Memeriksa langganan push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Anda berlangganan notifikasi push di browser ini"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Notifikasi push tidak diaktifkan di browser ini"
+
+msgid "Data exchange successfully saved"
+msgstr "Pertukaran data berhasil disimpan"
+
+msgid "Error saving data exchange"
+msgstr "Gagal menyimpan pertukaran data"
+
+msgid "No documents added yet"
+msgstr "Belum ada dokumen yang ditambahkan"
+
+msgid "No available documents"
+msgstr "Tidak ada dokumen yang tersedia"
+
+msgid "No users added yet"
+msgstr "Belum ada pengguna yang ditambahkan"
+
+msgid "No available users"
+msgstr "Tidak ada pengguna yang tersedia"
+
+msgid "You can no longer submit"
+msgstr "Anda tidak dapat lagi mengirimkan"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Tidak ditemukan pengiriman yang hilang untuk tugas ini atau data tidak tersedia"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email dikirim ke semua pengguna yang belum mengirimkan"
+
+msgid "Failed to send email"
+msgstr "Gagal mengirim email"
+
+msgid "Write your answer here"
+msgstr "Tulis jawaban Anda di sini"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalender kehadiran memungkinkan Anda mendaftarkan daftar kehadiran (satu per sesi nyata yang harus dihadiri siswa)"
+
+msgid "Loading attendance data"
+msgstr "Memuat data kehadiran"
+
+msgid "No attendance assigned yet"
+msgstr "Belum ada kehadiran yang ditugaskan"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Tidak ada kelas yang dijadwalkan hari ini, coba pilih hari lain atau tambahkan entri kehadiran Anda sendiri menggunakan ikon aksi"
+
+msgid "No attendance data for today"
+msgstr "Tidak ada data kehadiran untuk hari ini"
+
+msgid "Saving"
+msgstr "Menyimpan"
+
+msgid "No attendance data to save"
+msgstr "Tidak ada data kehadiran untuk disimpan"
+
+msgid "Failed to save attendance"
+msgstr "Gagal menyimpan kehadiran"
+
+msgid "Loading more courses"
+msgstr "Memuat lebih banyak kursus"
+
+msgid "Loading more sessions"
+msgstr "Memuat lebih banyak sesi"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurasi fitur auto-launch dokumen diaktifkan"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurasi fitur auto-launch latihan diaktifkan"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Pengaturan auto-launch jalur pembelajaran HIDUP"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Pengaturan auto-launch forum menyala"
+
+msgid "Course ID is missing"
+msgstr "ID kursus hilang"
+
+msgid "Course created successfully"
+msgstr "Kursus berhasil dibuat"
+
+msgid "Error deleting document(s)"
+msgstr "Kesalahan menghapus dokumen"
+
+msgid "Template successfully deleted"
+msgstr "Template berhasil dihapus"
+
+msgid "Error deleting the template"
+msgstr "Kesalahan menghapus template"
+
+msgid "The title and thumbnail are required"
+msgstr "Judul dan thumbnail diperlukan"
+
+msgid "Template created successfully"
+msgstr "Template berhasil dibuat"
+
+msgid "Error creating the template"
+msgstr "Kesalahan membuat template"
+
+msgid "Error submitting the form"
+msgstr "Kesalahan mengirimkan formulir"
+
+msgid "Loading templates"
+msgstr "Memuat template"
+
+msgid "Loading layout"
+msgstr "Memuat tata letak"
+
+msgid "Loading courses"
+msgstr "Memuat mata kuliah"
+
+msgid "No courses available"
+msgstr "Tidak ada mata kuliah yang tersedia"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Daftar ini menampilkan pengguna dari semua URL akses karena pengaturan \"session_admin_access_to_all_users_on_all_urls\" diaktifkan."
+
+msgid "User not found"
+msgstr "Pengguna tidak ditemukan"
+
+msgid "An error occurred while sending the course"
+msgstr "Terjadi kesalahan saat mengirim mata kuliah"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Ingatlah bahwa modifikasi pada ketentuan terkait GDPR mengharuskan Anda melaporkan modifikasi tersebut kepada pihak ketiga yang telah Anda berikan informasi pribadi tentang pengguna Anda, sebagaimana dinyatakan dalam Pasal 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Anda harus membuat \"Syarat dan Ketentuan\" untuk semua bahasa yang tersedia"
+
+msgid "You don't have any course yet"
+msgstr "Anda belum memiliki mata kuliah"
+
+msgid "You have received a new friend request"
+msgstr "Anda menerima permintaan pertemanan baru"
+
+msgid "Diagnosis Management"
+msgstr "Manajemen Diagnosis"
 

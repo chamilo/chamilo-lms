@@ -14724,7 +14724,7 @@ msgstr "उपयोगकर्ता, समूह"
 msgid "Sorry no results"
 msgstr "क्षमा करें, कोई परिणाम नहीं"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "समूह अनुमतियाँ"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "मेरा कस्टम प्रमाणपत्र"
 
 msgid "Select permission"
 msgstr "अनुमति चुनें"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "इस निमंत्रण को स्वीकार करने से आप अनुरोध करने वाले उपयोगकर्ता से जुड़ जाएंगे जिससे आपके प्रोफ़ाइल डेटा का कुछ या पूरा हिस्सा अनुरोध करने वाले उपयोगकर्ता द्वारा पढ़ा जा सकेगा"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s के लिए लगभग %d परिणामों में से %d प्रदर्शित कर रहे हैं।"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s के लिए %d सुलभ परिणाम प्रदर्शित कर रहे हैं।"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "इसलिए आपको स्वचालित रूप से इस URL पर पुनर्निर्देशित किया जाएगा"
+
+msgid "You have access to multiple URLs"
+msgstr "आपके पास कई URLs तक पहुँच है"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "कृपया उस URL के लिए नीचे दिए लिंक पर क्लिक करें जिसे आप पहुँचाना चाहते हैं"
+
+msgid "You do not currently have access to any URL"
+msgstr "वर्तमान में आपके पास किसी भी URL तक पहुँच नहीं है"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "अधिकतम सदस्यता संख्या की अनुमति"
+
+msgid "An error occurred"
+msgstr "एक त्रुटि हुई"
+
+msgid "You don't have any course content yet"
+msgstr "आपके पास अभी तक कोई कोर्स सामग्री नहीं है"
+
+msgid "This course is locked"
+msgstr "यह कोर्स लॉक है"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "जब प्लेटफ़ॉर्म ईमेल भेजता है तब भेजे जाने वाले ईमेल का पता, 'reply-to' हेडर के रूप में भी उपयोग किया जाता है"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "सूची में आपकी भाषा नहीं मिल रही? अनुवादक के रूप में योगदान देने के लिए %s पर संपर्क करें"
+
+msgid "An update is available"
+msgstr "एक अपडेट उपलब्ध है"
+
+msgid "to know what's new and what has been changed"
+msgstr "नया क्या है और क्या बदला गया है जानने के लिए"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "हमने पता लगाया है कि आपकी PHP स्थापना तिथि परिभाषित नहीं करती"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "आपकी PHP संस्करण इस सॉफ़्टवेयर की आवश्यकताओं से मेल नहीं खाता"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "कुछ फ़ाइलें या फ़ोल्डर लिखने की अनुमति नहीं रखते"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "चेतावनी! इंस्टॉलर ने आपके सिस्टम पर मौजूदा Chamilo प्लेटफ़ॉर्म का पता लगाया है"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> और <code>exercice</code> निर्देशिकाओं को क्रमशः <code>lp</code> और <code>exercise</code> में नाम बदले जाने के कारण, <code>newscorm_old</code> और <code>exercice_old</code> में नाम बदलना या हटाना आवश्यक है"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "फ़ॉर्म में गलत या अपूर्ण डेटा है"
+
+msgid "Your contact information could not be sent"
+msgstr "आपकी संपर्क जानकारी भेजी नहीं जा सकी"
+
+msgid "Please contact support with the error details"
+msgstr "त्रुटि विवरण के साथ समर्थन से संपर्क करें"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "इसे काटने के लिए छवि पर क्लिक करें (1:1 अनुपात, 120x120 px अनुशंसित)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "1:1 क्षेत्र चुनने के लिए कटाई उपकरण का उपयोग करें"
+
+msgid "Checking push subscription"
+msgstr "पुष नोटिफिकेशन सदस्यता की जाँच कर रहे हैं"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "आप इस ब्राउज़र में पुष नोटिफिकेशन के लिए सदस्य हैं"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "इस ब्राउज़र में पुष नोटिफिकेशन सक्षम नहीं हैं"
+
+msgid "Data exchange successfully saved"
+msgstr "डेटा विनिमय सफलतापूर्वक सहेजा गया"
+
+msgid "Error saving data exchange"
+msgstr "डेटा विनिमय सहेजते समय त्रुटि"
+
+msgid "No documents added yet"
+msgstr "अभी तक कोई दस्तावेज़ जोड़े नहीं गए"
+
+msgid "No available documents"
+msgstr "कोई उपलब्ध दस्तावेज़ नहीं"
+
+msgid "No users added yet"
+msgstr "अभी तक कोई उपयोगकर्ता जोड़े नहीं गए"
+
+msgid "No available users"
+msgstr "कोई उपलब्ध उपयोगकर्ता नहीं"
+
+msgid "You can no longer submit"
+msgstr "आप अब जमा नहीं कर सकते"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "इस असाइनमेंट के लिए कोई लंबित जमा नहीं मिला या डेटा उपलब्ध नहीं है"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "अभी तक जमा न करने वाले सभी उपयोगकर्ताओं को ईमेल भेजा गया"
+
+msgid "Failed to send email"
+msgstr "ईमेल भेजने में विफल"
+
+msgid "Write your answer here"
+msgstr "यहाँ अपना उत्तर लिखें"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "उपस्थिति कैलेंडर आपको उपस्थिति सूचियाँ दर्ज करने की अनुमति देता है (छात्रों को उपस्थित होने वाली प्रत्येक वास्तविक सत्र के लिए एक)"
+
+msgid "Loading attendance data"
+msgstr "उपस्थिति डेटा लोड हो रहा है"
+
+msgid "No attendance assigned yet"
+msgstr "अभी तक कोई उपस्थिति सौंपी नहीं गई"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "आज कोई कक्षा निर्धारित नहीं है, किसी अन्य दिन का चयन करें या क्रिया आइकनों का उपयोग करके स्वयं अपनी उपस्थिति प्रविष्टि जोड़ें"
+
+msgid "No attendance data for today"
+msgstr "आज के लिए कोई उपस्थिति डेटा नहीं"
+
+msgid "Saving"
+msgstr "सहेजा जा रहा है"
+
+msgid "No attendance data to save"
+msgstr "सहेजने के लिए कोई उपस्थिति डेटा नहीं"
+
+msgid "Failed to save attendance"
+msgstr "उपस्थिति सहेजने में विफल"
+
+msgid "Loading more courses"
+msgstr "अधिक पाठ्यक्रम लोड हो रहे हैं"
+
+msgid "Loading more sessions"
+msgstr "अधिक सत्र लोड हो रहे हैं"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "दस्तावेज़ स्वतः-प्रक्षेपण सुविधा कॉन्फ़िगरेशन सक्षम है"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "अभ्यास स्वतः-प्रक्षेपण सुविधा कॉन्फ़िगरेशन सक्षम है"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "लर्निंग पथ स्वतः-प्रक्षेपण सेटिंग चालू है"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "फोरम की स्वतः-प्रक्षेपण सेटिंग चालू है"
+
+msgid "Course ID is missing"
+msgstr "पाठ्यक्रम आईडी गायब है"
+
+msgid "Course created successfully"
+msgstr "पाठ्यक्रम सफलतापूर्वक बनाया गया"
+
+msgid "Error deleting document(s)"
+msgstr "दस्तावेज़(ों) हटाते समय त्रुटि"
+
+msgid "Template successfully deleted"
+msgstr "टेम्पलेट सफलतापूर्वक हटा दिया गया"
+
+msgid "Error deleting the template"
+msgstr "टेम्पलेट हटाते समय त्रुटि"
+
+msgid "The title and thumbnail are required"
+msgstr "शीर्षक और थंबनेल आवश्यक हैं"
+
+msgid "Template created successfully"
+msgstr "टेम्पलेट सफलतापूर्वक बनाया गया"
+
+msgid "Error creating the template"
+msgstr "टेम्पलेट बनाते समय त्रुटि"
+
+msgid "Error submitting the form"
+msgstr "फ़ॉर्म जमा करते समय त्रुटि"
+
+msgid "Loading templates"
+msgstr "टेम्पलेट लोड हो रहे हैं"
+
+msgid "Loading layout"
+msgstr "लेआउट लोड हो रहा है"
+
+msgid "Loading courses"
+msgstr "पाठ्यक्रम लोड हो रहे हैं"
+
+msgid "No courses available"
+msgstr "कोई उपलब्ध पाठ्यक्रम नहीं"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "यह सूची सभी पहुँच URL से उपयोगकर्ताओं को प्रदर्शित करती है क्योंकि \"session_admin_access_to_all_users_on_all_urls\" सेटिंग सक्षम है।"
+
+msgid "User not found"
+msgstr "उपयोगकर्ता नहीं मिला"
+
+msgid "An error occurred while sending the course"
+msgstr "पाठ्यक्रम भेजते समय एक त्रुटि हुई"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "कृपया याद रखें कि GDPR से संबंधित शर्तों में संशोधन आपको उन तीसरे पक्षों को उन संशोधनों की रिपोर्ट करने की आवश्यकता है जिन्हें आपने अपने उपयोगकर्ताओं के बारे में व्यक्तिगत जानकारी प्रदान की है, जैसा कि GDPR के अनुच्छेद 19 में कहा गया है"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "आपको सभी उपलब्ध भाषाओं के लिए \"शर्तें और नियम\" बनाना चाहिए"
+
+msgid "You don't have any course yet"
+msgstr "आपके पास अभी तक कोई पाठ्यक्रम नहीं है"
+
+msgid "You have received a new friend request"
+msgstr "आपको एक नया मित्र अनुरोध प्राप्त हुआ है"
+
+msgid "Diagnosis Management"
+msgstr "निदान प्रबंधन"
 

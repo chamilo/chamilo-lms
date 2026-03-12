@@ -14729,7 +14729,7 @@ msgstr "用户、群组"
 msgid "Sorry no results"
 msgstr "抱歉，无结果"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "群组权限"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "我的自定义证书"
 
 msgid "Select permission"
 msgstr "选择权限"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "接受此邀请后，您将与请求用户关联，从而使您的部分或全部个人资料数据可供请求用户阅读"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "显示 %s 的约 %d 个结果中的 %d 个。"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "显示 %s 的 %d 个可访问结果。"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "因此，您将被自动重定向到此 URL"
+
+msgid "You have access to multiple URLs"
+msgstr "您可以访问多个 URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "请点击下方对应您希望访问的 URL 的链接"
+
+msgid "You do not currently have access to any URL"
+msgstr "您当前无权访问任何 URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "允许的最大订阅数"
+
+msgid "An error occurred"
+msgstr "发生错误"
+
+msgid "You don't have any course content yet"
+msgstr "您还没有任何课程内容"
+
+msgid "This course is locked"
+msgstr "此课程已锁定"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "平台发送电子邮件时使用的发件人电子邮件地址，也用作“回复”标头"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "在列表中找不到您的语言？请联系 %s 作为译者贡献"
+
+msgid "An update is available"
+msgstr "有更新可用"
+
+msgid "to know what's new and what has been changed"
+msgstr "了解新功能和变更内容"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "我们检测到您的 PHP 安装未定义日期"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "您的 PHP 版本不符合此软件的要求"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "某些文件或文件夹没有写入权限"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "警告！安装程序检测到您的系统中已存在 Chamilo 平台"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "因为 <code>newscorm</code> 和 <code>exercice</code> 目录分别重命名为 <code>lp</code> 和 <code>exercise</code>，因此需要删除它们或重命名为 <code>newscorm_old</code> 和 <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "表单包含不正确或不完整的数据"
+
+msgid "Your contact information could not be sent"
+msgstr "您的联系信息无法发送"
+
+msgid "Please contact support with the error details"
+msgstr "请联系支持人员并提供错误详情"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "点击图像进行裁剪（1:1 比例，推荐 120x120 像素）"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "使用裁剪工具选择 1:1 区域"
+
+msgid "Checking push subscription"
+msgstr "检查推送订阅"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "您已在此浏览器中订阅推送通知"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "此浏览器未启用推送通知"
+
+msgid "Data exchange successfully saved"
+msgstr "数据交换已成功保存"
+
+msgid "Error saving data exchange"
+msgstr "保存数据交换出错"
+
+msgid "No documents added yet"
+msgstr "尚未添加文档"
+
+msgid "No available documents"
+msgstr "没有可用的文档"
+
+msgid "No users added yet"
+msgstr "尚未添加用户"
+
+msgid "No available users"
+msgstr "没有可用的用户"
+
+msgid "You can no longer submit"
+msgstr "您无法再提交"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "未找到此作业的缺失提交，或数据不可用"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "已向所有未提交用户发送邮件"
+
+msgid "Failed to send email"
+msgstr "发送邮件失败"
+
+msgid "Write your answer here"
+msgstr "在此处撰写您的答案"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "出勤日历允许您注册出勤列表（学生需要参加的每个实际课程会话一个）"
+
+msgid "Loading attendance data"
+msgstr "正在加载出勤数据"
+
+msgid "No attendance assigned yet"
+msgstr "尚未分配出勤"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "今天没有安排课程，请尝试选择其他日期，或使用操作图标自行添加出勤记录"
+
+msgid "No attendance data for today"
+msgstr "今天没有出勤数据"
+
+msgid "Saving"
+msgstr "正在保存"
+
+msgid "No attendance data to save"
+msgstr "没有出勤数据可保存"
+
+msgid "Failed to save attendance"
+msgstr "保存出勤失败"
+
+msgid "Loading more courses"
+msgstr "正在加载更多课程"
+
+msgid "Loading more sessions"
+msgstr "正在加载更多课程会话"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "文档自动启动功能配置已启用"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "练习自动启动功能配置已启用"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "学习路径自动启动设置已开启"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "论坛自动启动设置已开启"
+
+msgid "Course ID is missing"
+msgstr "缺少课程 ID"
+
+msgid "Course created successfully"
+msgstr "课程创建成功"
+
+msgid "Error deleting document(s)"
+msgstr "删除文档出错"
+
+msgid "Template successfully deleted"
+msgstr "模板删除成功"
+
+msgid "Error deleting the template"
+msgstr "删除模板出错"
+
+msgid "The title and thumbnail are required"
+msgstr "标题和缩略图为必填项"
+
+msgid "Template created successfully"
+msgstr "模板创建成功"
+
+msgid "Error creating the template"
+msgstr "创建模板出错"
+
+msgid "Error submitting the form"
+msgstr "提交表单出错"
+
+msgid "Loading templates"
+msgstr "正在加载模板"
+
+msgid "Loading layout"
+msgstr "正在加载布局"
+
+msgid "Loading courses"
+msgstr "正在加载课程"
+
+msgid "No courses available"
+msgstr "没有可用的课程"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "此列表显示所有访问 URL 的用户，因为设置\"session_admin_access_to_all_users_on_all_urls\"已启用。"
+
+msgid "User not found"
+msgstr "用户未找到"
+
+msgid "An error occurred while sending the course"
+msgstr "发送课程时发生错误"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "请记住，与 GDPR 相关的条款修改需要您向已提供用户个人信息的第三方报告这些修改，如 GDPR 第 19 条所述"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "您应该为所有可用语言创建\"条款和条件\""
+
+msgid "You don't have any course yet"
+msgstr "您还没有任何课程"
+
+msgid "You have received a new friend request"
+msgstr "您收到了一条新的好友请求"
+
+msgid "Diagnosis Management"
+msgstr "诊断管理"
 

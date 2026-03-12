@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mape,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -14728,7 +14728,7 @@ msgstr "Lietotājus, Grupas"
 msgid "Sorry no results"
 msgstr "Diemžēl bez rezultāta :("
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Grupas statuss"
 
 msgid "Closed"
@@ -32800,4 +32800,226 @@ msgstr "Mans pielāgots sertifikāts"
 
 msgid "Select permission"
 msgstr "Izvēlēties atļauju"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Pieņemot šo ielūgumu, jūs tiksiet saistīts ar pieprasītāju tā, ka daļa vai visa jūsu profila informācija būs pieejama lasīšanai pieprasītājam"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Tiek rādīti %d no aptuveni %d rezultātiem '%s'."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Tiek rādīti %d pieejamie rezultāti '%s'."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Tāpēc jūs tiksiet automātiski novirzīts uz šo URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Jums ir pieeja vairākiem URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Lūdzu, noklikšķiniet uz saites zemāk, kas atbilst URL, uz kuru vēlaties piekļūt"
+
+msgid "You do not currently have access to any URL"
+msgstr "Pašlaik jums nav pieejams neviens URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Atļautais abonementu skaita maksimums"
+
+msgid "An error occurred"
+msgstr "Radās kļūda"
+
+msgid "You don't have any course content yet"
+msgstr "Jums vēl nav kursa satura"
+
+msgid "This course is locked"
+msgstr "Šis kurss ir bloķēts"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-pasta adrese, no kuras tiks sūtītas e-pasta ziņas, kad platforma sūta e-pastu, ko izmanto arī kā 'reply-to' galveni"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nevarat atrast savu valodu sarakstā? Sazinieties ar mums %s, lai iegūtu iespēju kļūt par tulkotāju"
+
+msgid "An update is available"
+msgstr "Ir pieejams atjauninājums"
+
+msgid "to know what's new and what has been changed"
+msgstr "lai uzzinātu, kas jauns un kas ir mainījies"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Mēs konstatējām, ka jūsu PHP instalācija neatbalsta datumu"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Jūsu PHP versija neatbilst šīs programmatūras prasībām"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Dažiem failiem vai mapēm nav rakstīšanas atļaujas"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Brīdinājums! Instalētājs konstatēja esošu Chamilo platformu jūsu sistēmā"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Tā kā mapes <code>newscorm</code> un <code>exercice</code> tika pārdēvētas par <code>lp</code> un <code>exercise</code>, ir nepieciešams dzēst vai pārdēvēt tās par <code>newscorm_old</code> un <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formā ir nepareizi vai nepilnīgi dati"
+
+msgid "Your contact information could not be sent"
+msgstr "Jūsu kontaktinformāciju nevarēja nosūtīt"
+
+msgid "Please contact support with the error details"
+msgstr "Lūdzu, sazinieties ar atbalstu, norādot kļūdas detaļas"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Noklikšķiniet uz attēla, lai to apgrieztu (1:1 attiecība, ieteicams 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Izmantojiet apgriešanas rīku, lai izvēlētos 1:1 reģionu"
+
+msgid "Checking push subscription"
+msgstr "Pārbauda push abonementu"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jūs esat abonējis push paziņojumus šajā pārlūkprogrammā"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push paziņojumi nav iespējoti šajā pārlūkprogrammā"
+
+msgid "Data exchange successfully saved"
+msgstr "Datu apmaiņa veiksmīgi saglabāta"
+
+msgid "Error saving data exchange"
+msgstr "Kļūda saglabājot datu apmaiņu"
+
+msgid "No documents added yet"
+msgstr "Vēl nav pievienoti dokumenti"
+
+msgid "No available documents"
+msgstr "Nav pieejami dokumenti"
+
+msgid "No users added yet"
+msgstr "Vēl nav pievienoti lietotāji"
+
+msgid "No available users"
+msgstr "Nav pieejami lietotāji"
+
+msgid "You can no longer submit"
+msgstr "Jūs vairs nevarat iesniegt"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Šim uzdevumam nav atrasti trūkstošie iesniegumi vai dati nav pieejami"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-pasts nosūtīts visiem neiesniegušajiem lietotājiem"
+
+msgid "Failed to send email"
+msgstr "Neizdevās nosūtīt e-pastu"
+
+msgid "Write your answer here"
+msgstr "Rakstiet savu atbildi šeit"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Apmeklētības kalendārs ļauj reģistrēt apmeklētības sarakstus (viens par katru reālo sesiju, kurā studenti jāapmeklē)"
+
+msgid "Loading attendance data"
+msgstr "Ielādē apmeklētības datus"
+
+msgid "No attendance assigned yet"
+msgstr "Vēl nav piešķirta apmeklētība"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Šodien nav plānotu nodarbību, mēģiniet izvēlēties citu dienu vai pievienojiet savu apmeklētības ierakstu pats, izmantojot darbības ikonas"
+
+msgid "No attendance data for today"
+msgstr "Šodien nav apmeklētības datu"
+
+msgid "Saving"
+msgstr "Saglabā"
+
+msgid "No attendance data to save"
+msgstr "Nav apmeklētības datu, ko saglabāt"
+
+msgid "Failed to save attendance"
+msgstr "Neizdevās saglabāt apmeklētību"
+
+msgid "Loading more courses"
+msgstr "Ielādē vairāk kursu"
+
+msgid "Loading more sessions"
+msgstr "Ielādē vairāk sesiju"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Dokumentu automātiskās palaišanas funkcijas konfigurācija ir iespējota"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Uzdevumu automātiskās palaišanas funkcijas konfigurācija ir iespējota"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mācību ceļa automātiskās palaišanas iestatījums ir IESLĒGTS"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Foruma automātiskās palaišanas iestatījums ir ieslēgts"
+
+msgid "Course ID is missing"
+msgstr "Trūkst kursa ID"
+
+msgid "Course created successfully"
+msgstr "Kurss veiksmīgi izveidots"
+
+msgid "Error deleting document(s)"
+msgstr "Kļūda dzēšot dokumentu(s)"
+
+msgid "Template successfully deleted"
+msgstr "Veidne veiksmīgi dzēsta"
+
+msgid "Error deleting the template"
+msgstr "Kļūda dzēšot veidni"
+
+msgid "The title and thumbnail are required"
+msgstr "Nosaukums un sīktēls ir obligāti"
+
+msgid "Template created successfully"
+msgstr "Veidne veiksmīgi izveidota"
+
+msgid "Error creating the template"
+msgstr "Kļūda izveidojot veidni"
+
+msgid "Error submitting the form"
+msgstr "Kļūda iesniedzot formu"
+
+msgid "Loading templates"
+msgstr "Ielādē veidnes"
+
+msgid "Loading layout"
+msgstr "Ielādē izkārtojumu"
+
+msgid "Loading courses"
+msgstr "Ielādē kursus"
+
+msgid "No courses available"
+msgstr "Nav pieejami kursi"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Šis saraksts parāda lietotājus no visām piekļuves URL, jo iestatījums \"session_admin_access_to_all_users_on_all_urls\" ir iespējots."
+
+msgid "User not found"
+msgstr "Lietotājs nav atrasts"
+
+msgid "An error occurred while sending the course"
+msgstr "Radās kļūda nosūtot kursu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Atcerieties, ka izmaiņas noteikumos, kas saistīti ar GDPR, prasa jums ziņot par šīm izmaiņām trešajām pusēm, kurām esat nodrošinājis personisko informāciju par saviem lietotājiem, kā norādīts GDPR 19. pantā"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Jums vajadzētu izveidot \"Noteikumus un nosacījumus\" visām pieejamajām valodām"
+
+msgid "You don't have any course yet"
+msgstr "Jums vēl nav neviena kursa"
+
+msgid "You have received a new friend request"
+msgstr "Jūs esat saņēmis jaunu drauga pieprasījumu"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostikas pārvaldība"
 

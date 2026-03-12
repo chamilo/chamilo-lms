@@ -14736,7 +14736,7 @@ msgstr "משתמשים, קבוצות"
 msgid "Sorry no results"
 msgstr "סליחה, אין תוצאות."
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "הרשאות קבוצה"
 
 msgid "Closed"
@@ -32812,4 +32812,226 @@ msgstr "תעודת הסמכה מותאמת אישית שלי"
 
 msgid "Select permission"
 msgstr "בחר הרשאה"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "על ידי קבלת הזמנה זו, תהפוך למקושר למשתמש המבקש בדרך שתאפשר למשתמש המבקש לקרוא חלק או את כל נתוני הפרופיל שלך"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "מציג %d מתוך כ-%d תוצאה(ות) עבור %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "מציג %d תוצאה(ות) נגישות עבור %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "לכן תופנה אוטומטית לכתובת URL זו"
+
+msgid "You have access to multiple URLs"
+msgstr "יש לך גישה לכמה כתובות URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "אנא לחץ על הקישור למטה המתאים לכתובת ה-URL שברצונך לגשת אליה"
+
+msgid "You do not currently have access to any URL"
+msgstr "כרגע אין לך גישה לאף כתובת URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "מספר המנויים המרבי המותר"
+
+msgid "An error occurred"
+msgstr "אירעה שגיאה"
+
+msgid "You don't have any course content yet"
+msgstr "עדיין אין לך תוכן קורס"
+
+msgid "This course is locked"
+msgstr "קורס זה נעול"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "כתובת הדוא\"ל שממנה יישלחו הדוא\"לים כאשר הפלטפורמה שולחת דוא\"ל, משמשת גם ככותרת 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "לא מצאת את שפתך ברשימה? צור קשר איתנו ב-%s כדי לתרום כמתרגם"
+
+msgid "An update is available"
+msgstr "עדכון זמין"
+
+msgid "to know what's new and what has been changed"
+msgstr "לדעת מה חדש ומה השתנה"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "זיהינו שההתקנה של PHP שלך אינה מגדירה את התאריך"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "גרסת ה-PHP שלך אינה תואמת לדרישות התוכנה הזו"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "חלק מהקבצים או התיקיות אין להם הרשאת כתיבה"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "אזהרה! המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "מכיוון שהספריות <code>newscorm</code> ו-<code>exercice</code> שונו שם ל-<code>lp</code> ו-<code>exercise</code> בהתאמה, יש למחוק או לשנות שם ל-<code>newscorm_old</code> ו-<code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "הטופס מכיל נתונים שגויים או חלקיים"
+
+msgid "Your contact information could not be sent"
+msgstr "לא ניתן היה לשלוח את פרטי הקשר שלך"
+
+msgid "Please contact support with the error details"
+msgstr "אנא פנה לתמיכה עם פרטי השגיאה"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "לחץ על התמונה כדי לגזור אותה (יחס 1:1, 120x120 פיקסלים מומלץ)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "השתמש בכלי הגיזום כדי לבחור אזור 1:1"
+
+msgid "Checking push subscription"
+msgstr "בודק מנוי דחיפה"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "אתה מנוי להתראות דחיפה בדפדפן זה"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "התראות דחיפה אינן מופעלות בדפדפן זה"
+
+msgid "Data exchange successfully saved"
+msgstr "החלפת נתונים נשמרה בהצלחה"
+
+msgid "Error saving data exchange"
+msgstr "שגיאה בשמירת החלפת נתונים"
+
+msgid "No documents added yet"
+msgstr "עדיין לא נוספו מסמכים"
+
+msgid "No available documents"
+msgstr "אין מסמכים זמינים"
+
+msgid "No users added yet"
+msgstr "עדיין לא נוספו משתמשים"
+
+msgid "No available users"
+msgstr "אין משתמשים זמינים"
+
+msgid "You can no longer submit"
+msgstr "אינך יכול להגיש עוד"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "לא נמצאו הגשות חסרות למטלה זו או שהנתונים אינם זמינים"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "דוא\"ל נשלח לכל המשתמשים שלא הגישו"
+
+msgid "Failed to send email"
+msgstr "נכשל בשליחת הדוא\"ל"
+
+msgid "Write your answer here"
+msgstr "כתוב את תשובתך כאן"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "לוח השנה של נוכחות מאפשר לך לרשום רשימות נוכחות (אחת לכל מפגש אמיתי שהתלמידים צריכים להשתתף בו)"
+
+msgid "Loading attendance data"
+msgstr "טוען נתוני נוכחות"
+
+msgid "No attendance assigned yet"
+msgstr "לא הוקצתה נוכחות עדיין"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "אין שיעור מתוכנן להיום, נסה לבחור יום אחר או הוסף את רישום הנוכחות בעצמך באמצעות סמלי הפעולה"
+
+msgid "No attendance data for today"
+msgstr "אין נתוני נוכחות להיום"
+
+msgid "Saving"
+msgstr "שומר"
+
+msgid "No attendance data to save"
+msgstr "אין נתוני נוכחות לשמירה"
+
+msgid "Failed to save attendance"
+msgstr "נכשל בשמירת הנוכחות"
+
+msgid "Loading more courses"
+msgstr "טוען קורסים נוספים"
+
+msgid "Loading more sessions"
+msgstr "טוען מפגשים נוספים"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "הגדרת הפעלת מסמכים אוטומטית מופעלת"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "הגדרת הפעלת תרגילים אוטומטית מופעלת"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "הגדרת הפעלה אוטומטית של מסלול למידה פועלת"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "הגדרת הפעלה אוטומטית של הפורום פועלת"
+
+msgid "Course ID is missing"
+msgstr "מזהה קורס חסר"
+
+msgid "Course created successfully"
+msgstr "הקורס נוצר בהצלחה"
+
+msgid "Error deleting document(s)"
+msgstr "שגיאה במחיקת מסמך(ים)"
+
+msgid "Template successfully deleted"
+msgstr "תבנית נמחקה בהצלחה"
+
+msgid "Error deleting the template"
+msgstr "שגיאה במחיקת התבנית"
+
+msgid "The title and thumbnail are required"
+msgstr "הכותרת והתמונה מיניאטורה נדרשות"
+
+msgid "Template created successfully"
+msgstr "תבנית נוצרה בהצלחה"
+
+msgid "Error creating the template"
+msgstr "שגיאה ביצירת התבנית"
+
+msgid "Error submitting the form"
+msgstr "שגיאה בשליחת הטופס"
+
+msgid "Loading templates"
+msgstr "טוען תבניות"
+
+msgid "Loading layout"
+msgstr "טוען פריסה"
+
+msgid "Loading courses"
+msgstr "טוען קורסים"
+
+msgid "No courses available"
+msgstr "אין קורסים זמינים"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "רשימה זו מציגה משתמשים מכל כתובות הגישה כי ההגדרה \"session_admin_access_to_all_users_on_all_urls\" מופעלת."
+
+msgid "User not found"
+msgstr "משתמש לא נמצא"
+
+msgid "An error occurred while sending the course"
+msgstr "אירעה שגיאה בשליחת הקורס"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "זכור כי שינויים בתנאים הקשורים ל-GDPR מחייבים אותך לדווח על שינויים אלה לצדדים שלישיים שסיפקת להם מידע אישי על המשתמשים שלך, כפי שמצוין בסעיף 19 של GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "אתה צריך ליצור את \"תנאי השימוש\" לכל השפות הזמינות"
+
+msgid "You don't have any course yet"
+msgstr "אין לך קורסים עדיין"
+
+msgid "You have received a new friend request"
+msgstr "קיבלת בקשת חברות חדשה"
+
+msgid "Diagnosis Management"
+msgstr "ניהול אבחון"
 

@@ -14724,7 +14724,7 @@ msgstr "کاربران، گروه‌ها"
 msgid "Sorry no results"
 msgstr "متأسفانه نتیجه‌ای یافت نشد"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "مجوزهای گروه"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "گواهینامه سفارشی من"
 
 msgid "Select permission"
 msgstr "انتخاب مجوز"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "با پذیرش این دعوت، شما به کاربر درخواست‌کننده مرتبط خواهید شد به طوری که برخی یا تمام داده‌های پروفایل شما برای خواندن توسط کاربر درخواست‌کننده در دسترس خواهد بود"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "نمایش %d از تقریباً %d نتیجه برای %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "نمایش %d نتیجه قابل دسترس برای %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "بنابراین شما به طور خودکار به این URL هدایت خواهید شد"
+
+msgid "You have access to multiple URLs"
+msgstr "شما به چندین URL دسترسی دارید"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "لطفاً روی لینک زیر مربوط به URL مورد نظر برای دسترسی کلیک کنید"
+
+msgid "You do not currently have access to any URL"
+msgstr "شما در حال حاضر به هیچ URL دسترسی ندارید"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "حداکثر تعداد اشتراک‌های مجاز"
+
+msgid "An error occurred"
+msgstr "خطایی رخ داد"
+
+msgid "You don't have any course content yet"
+msgstr "شما هنوز هیچ محتوای درسی ندارید"
+
+msgid "This course is locked"
+msgstr "این درس قفل شده است"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "آدرس ایمیل که از آن ایمیل‌ها هنگام ارسال ایمیل توسط پلتفرم ارسال می‌شود، همچنین به عنوان هدر 'reply-to' استفاده می‌شود"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "زبان خود را در لیست پیدا نمی‌کنید؟ با ما در %s تماس بگیرید تا به عنوان مترجم کمک کنید"
+
+msgid "An update is available"
+msgstr "به‌روزرسانی در دسترس است"
+
+msgid "to know what's new and what has been changed"
+msgstr "برای دانستن آنچه جدید است و چه چیزی تغییر کرده"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "ما تشخیص دادیم که نصب PHP شما تاریخ را تعریف نمی‌کند"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "نسخه PHP شما با الزامات این نرم‌افزار مطابقت ندارد"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "برخی فایل‌ها یا پوشه‌ها مجوز نوشتن ندارند"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "هشدار! نصاب یک پلتفرم Chamilo موجود در سیستم شما را تشخیص داد"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "چون پوشه‌های <code>newscorm</code> و <code>exercice</code> به ترتیب به <code>lp</code> و <code>exercise</code> تغییر نام داده شدند، لازم است آن‌ها را حذف یا به <code>newscorm_old</code> و <code>exercice_old</code> تغییر نام دهید"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "فرم حاوی داده‌های نادرست یا ناقص است"
+
+msgid "Your contact information could not be sent"
+msgstr "اطلاعات تماس شما ارسال نشد"
+
+msgid "Please contact support with the error details"
+msgstr "لطفاً با جزئیات خطا با پشتیبانی تماس بگیرید"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "روی تصویر کلیک کنید تا برش داده شود (نسبت 1:1، 120x120 پیکسل توصیه شده)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "از ابزار برش برای انتخاب ناحیه 1:1 استفاده کنید"
+
+msgid "Checking push subscription"
+msgstr "بررسی اشتراک push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "شما به اعلان‌های push در این مرورگر اشتراک دارید"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "اعلان‌های push در این مرورگر فعال نیستند"
+
+msgid "Data exchange successfully saved"
+msgstr "تبادل داده با موفقیت ذخیره شد"
+
+msgid "Error saving data exchange"
+msgstr "خطا در ذخیره تبادل داده"
+
+msgid "No documents added yet"
+msgstr "هنوز هیچ سندی اضافه نشده"
+
+msgid "No available documents"
+msgstr "هیچ سند در دسترس نیست"
+
+msgid "No users added yet"
+msgstr "هنوز هیچ کاربری اضافه نشده"
+
+msgid "No available users"
+msgstr "هیچ کاربر در دسترس نیست"
+
+msgid "You can no longer submit"
+msgstr "شما دیگر نمی‌توانید ارسال کنید"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "هیچ ارسال گم‌شده‌ای برای این تکلیف یافت نشد یا داده در دسترس نیست"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "ایمیل به همه کاربران ارسال نشده ارسال شد"
+
+msgid "Failed to send email"
+msgstr "ارسال ایمیل ناموفق بود"
+
+msgid "Write your answer here"
+msgstr "پاسخ خود را اینجا بنویسید"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "تقویم حضور به شما اجازه می‌دهد لیست‌های حضور را ثبت کنید (یکی برای هر جلسه واقعی که دانشجویان باید در آن شرکت کنند)"
+
+msgid "Loading attendance data"
+msgstr "بارگذاری داده‌های حضور"
+
+msgid "No attendance assigned yet"
+msgstr "هنوز حضور و غیابی اختصاص داده نشده است"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "امروز هیچ کلاسی برنامه‌ریزی نشده است، روز دیگری را انتخاب کنید یا خودتان حضور و غیاب را با استفاده از آیکون‌های عملیاتی اضافه کنید"
+
+msgid "No attendance data for today"
+msgstr "داده حضور و غیاب برای امروز وجود ندارد"
+
+msgid "Saving"
+msgstr "در حال ذخیره"
+
+msgid "No attendance data to save"
+msgstr "داده حضور و غیابی برای ذخیره وجود ندارد"
+
+msgid "Failed to save attendance"
+msgstr "خطا در ذخیره حضور و غیاب"
+
+msgid "Loading more courses"
+msgstr "در حال بارگذاری دوره‌های بیشتر"
+
+msgid "Loading more sessions"
+msgstr "در حال بارگذاری جلسات بیشتر"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "پیکربندی ویژگی راه‌اندازی خودکار سند فعال است"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "پیکربندی ویژگی راه‌اندازی خودکار تمرین‌ها فعال است"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "تنظیم راه‌اندازی خودکار مسیر یادگیری روشن است"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "تنظیم راه‌اندازی خودکار انجمن روشن است"
+
+msgid "Course ID is missing"
+msgstr "شناسه دوره موجود نیست"
+
+msgid "Course created successfully"
+msgstr "دوره با موفقیت ایجاد شد"
+
+msgid "Error deleting document(s)"
+msgstr "خطا در حذف سند(ها)"
+
+msgid "Template successfully deleted"
+msgstr "الگو با موفقیت حذف شد"
+
+msgid "Error deleting the template"
+msgstr "خطا در حذف الگو"
+
+msgid "The title and thumbnail are required"
+msgstr "عنوان و تصویر کوچک الزامی است"
+
+msgid "Template created successfully"
+msgstr "الگو با موفقیت ایجاد شد"
+
+msgid "Error creating the template"
+msgstr "خطا در ایجاد الگو"
+
+msgid "Error submitting the form"
+msgstr "خطا در ارسال فرم"
+
+msgid "Loading templates"
+msgstr "در حال بارگذاری الگوها"
+
+msgid "Loading layout"
+msgstr "در حال بارگذاری طرح‌بندی"
+
+msgid "Loading courses"
+msgstr "در حال بارگذاری دوره‌ها"
+
+msgid "No courses available"
+msgstr "هیچ دوره‌ای در دسترس نیست"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "این لیست کاربران از تمام URLهای دسترسی را نمایش می‌دهد زیرا تنظیم \"session_admin_access_to_all_users_on_all_urls\" فعال است."
+
+msgid "User not found"
+msgstr "کاربر یافت نشد"
+
+msgid "An error occurred while sending the course"
+msgstr "خطایی در ارسال دوره رخ داد"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "لطفاً به یاد داشته باشید که تغییرات در شرایط مرتبط با GDPR نیازمند گزارش آن تغییرات به اشخاص ثالث است که اطلاعات شخصی کاربرانتان را به آنها ارائه داده‌اید، همانطور که در ماده ۱۹ GDPR ذکر شده است"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "شما باید \"شرایط و ضوابط\" را برای تمام زبان‌های موجود ایجاد کنید"
+
+msgid "You don't have any course yet"
+msgstr "شما هنوز هیچ دوره‌ای ندارید"
+
+msgid "You have received a new friend request"
+msgstr "شما درخواست دوستی جدیدی دریافت کرده‌اید"
+
+msgid "Diagnosis Management"
+msgstr "مدیریت تشخیص"
 

@@ -14724,7 +14724,7 @@ msgstr "Abasebenzisi, Amagruphu"
 msgid "Sorry no results"
 msgstr "Umxolo akukho ziphumo"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Iimvume zeqela"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Isatifikethi sam esiqulathiweyo"
 
 msgid "Select permission"
 msgstr "Khetha imvume"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr ""
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr ""
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr ""
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr ""
+
+msgid "You have access to multiple URLs"
+msgstr ""
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr ""
+
+msgid "You do not currently have access to any URL"
+msgstr ""
+
+msgid "Maximum number of subscriptions allowed"
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
+msgid "You don't have any course content yet"
+msgstr ""
+
+msgid "This course is locked"
+msgstr ""
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr ""
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr ""
+
+msgid "An update is available"
+msgstr ""
+
+msgid "to know what's new and what has been changed"
+msgstr ""
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr ""
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr ""
+
+msgid "Some files or folders don't have writing permission"
+msgstr ""
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr ""
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr ""
+
+msgid "The form contains incorrect or incomplete data"
+msgstr ""
+
+msgid "Your contact information could not be sent"
+msgstr ""
+
+msgid "Please contact support with the error details"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr ""
+
+msgid "Checking push subscription"
+msgstr ""
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr ""
+
+msgid "Push notifications are not enabled in this browser"
+msgstr ""
+
+msgid "Data exchange successfully saved"
+msgstr ""
+
+msgid "Error saving data exchange"
+msgstr ""
+
+msgid "No documents added yet"
+msgstr ""
+
+msgid "No available documents"
+msgstr ""
+
+msgid "No users added yet"
+msgstr ""
+
+msgid "No available users"
+msgstr ""
+
+msgid "You can no longer submit"
+msgstr ""
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr ""
+
+msgid "Email sent to all unsubmitted users"
+msgstr ""
+
+msgid "Failed to send email"
+msgstr ""
+
+msgid "Write your answer here"
+msgstr ""
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr ""
+
+msgid "Loading attendance data"
+msgstr ""
+
+msgid "No attendance assigned yet"
+msgstr ""
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr ""
+
+msgid "No attendance data for today"
+msgstr ""
+
+msgid "Saving"
+msgstr ""
+
+msgid "No attendance data to save"
+msgstr ""
+
+msgid "Failed to save attendance"
+msgstr ""
+
+msgid "Loading more courses"
+msgstr ""
+
+msgid "Loading more sessions"
+msgstr ""
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The learning path auto-launch setting is ON"
+msgstr ""
+
+msgid "The forum's auto-launch setting is on"
+msgstr ""
+
+msgid "Course ID is missing"
+msgstr ""
+
+msgid "Course created successfully"
+msgstr ""
+
+msgid "Error deleting document(s)"
+msgstr ""
+
+msgid "Template successfully deleted"
+msgstr ""
+
+msgid "Error deleting the template"
+msgstr ""
+
+msgid "The title and thumbnail are required"
+msgstr ""
+
+msgid "Template created successfully"
+msgstr ""
+
+msgid "Error creating the template"
+msgstr "Impazamo yokudala ithemplethi"
+
+msgid "Error submitting the form"
+msgstr "Impazamo yokungenisa ifomu"
+
+msgid "Loading templates"
+msgstr "Ukulayisha iithemplethi"
+
+msgid "Loading layout"
+msgstr "Ukulayisha uyilo"
+
+msgid "Loading courses"
+msgstr "Ukulayisha izifundo"
+
+msgid "No courses available"
+msgstr "Akukho zifundo zikhona"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Olu luhlu lubonisa abasebenzisi kubo bonke ii-URLs zokufikelela kuba isetingi \"session_admin_access_to_all_users_on_all_urls\" ivuliwe."
+
+msgid "User not found"
+msgstr "Umsebenzisi akafunyanwa"
+
+msgid "An error occurred while sending the course"
+msgstr "Kwenzeke impazamo xa kuthunyelwa isifundo"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Nceda ukhumbule ukuba utshintsho kwizifundo ezinxulumene ne-GDPR kufuna ukuba ubike ezo tshintsho kumaqela esithathu apho uwanikezela khona ulwazi lomntu ngabasebenzisi bakho, njengoko kuchaziwe kwi-Article 19 ye-GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Kufuneka wenze i\"Term and Conditions\" kuzo zonke iilwimi ezikhona"
+
+msgid "You don't have any course yet"
+msgstr "Awunayo nayiphi na isifundo okwangoku"
+
+msgid "You have received a new friend request"
+msgstr "Ufumene isicelo somhlobo omtsha"
+
+msgid "Diagnosis Management"
+msgstr "Ulawulo lwe-Diagnosis"
 

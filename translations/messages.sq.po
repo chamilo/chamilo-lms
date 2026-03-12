@@ -14728,7 +14728,7 @@ msgstr "Përdoruesit, Grupi"
 msgid "Sorry no results"
 msgstr "Nuk ka rezultate"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Lejet e grupit"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Certifikata ime e personalizuar"
 
 msgid "Select permission"
 msgstr "Zgjidh leje"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Duke pranuar këtë ftesë, do të lidheni me përdoruesin që kërkon në një mënyrë që do të bëjë disa ose të gjitha të dhënat e profilit tuaj të disponueshme për lexim nga përdoruesi që kërkon"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Duke shfaqur %d nga rreth %d rezultat(e) për %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Duke shfaqur %d rezultat(e) të aksesueshëm për %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Prandaj do të ridrejtoheni automatikisht në këtë URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Ju keni akses në shumë URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Ju lutemi, klikoni në lidhjen më poshtë që korrespondon me URL-në që dëshironi të aksesoni"
+
+msgid "You do not currently have access to any URL"
+msgstr "Aktualisht nuk keni akses në asnjë URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Numri maksimal i abonimeve të lejuara"
+
+msgid "An error occurred"
+msgstr "Ndodhi një gabim"
+
+msgid "You don't have any course content yet"
+msgstr "Ju nuk keni ende ndonjë përmbajtje kursi"
+
+msgid "This course is locked"
+msgstr "Ky kurs është i bllokuar"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Adresa e email-it nga e cila do të dërgohen email-et kur platforma dërgon një email, e përdorur gjithashtu si krye 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nuk mund të gjeni gjuhën tuaj në listë? Na kontaktoni në %s për të kontribuar si përkthyes"
+
+msgid "An update is available"
+msgstr "Është i disponueshëm një përditësim"
+
+msgid "to know what's new and what has been changed"
+msgstr "për të ditur çfarë ka të re dhe çfarë është ndryshuar"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Kemi zbuluar se instalimi juaj PHP nuk e përcakton datën"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Versioni juaj PHP nuk përputhet me kërkesat për këtë software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Disа skedarë ose dosje nuk kanë leje shkrimi"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Paralajmërim! Instaluesi ka zbuluar një platformë Chamilo ekzistuese në sistemin tuaj"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Sepse direktoritë <code>newscorm</code> dhe <code>exercice</code> u riemërtuan në <code>lp</code> dhe <code>exercise</code> respektivisht, është e nevojshme të fshihen ose të riemërtohen në <code>newscorm_old</code> dhe <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Forma përmban të dhëna të gabuara ose të paplota"
+
+msgid "Your contact information could not be sent"
+msgstr "Informacioni juaj i kontaktit nuk mund të dërgohej"
+
+msgid "Please contact support with the error details"
+msgstr "Ju lutemi kontaktoni mbështetjen me detajet e gabimit"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klikoni imazhin për ta prerë (proporcion 1:1, 120x120 px të rekomanduara)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Përdorni mjetin e prerjes për të zgjedhur një zonë 1:1"
+
+msgid "Checking push subscription"
+msgstr "Duke kontrolluar abonimin push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Ju jeni abonuar në njoftimet push në këtë shfletues"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Njoftimet push nuk janë të aktivizuara në këtë shfletues"
+
+msgid "Data exchange successfully saved"
+msgstr "Shkëmbimi i të dhënave u ruajt me sukses"
+
+msgid "Error saving data exchange"
+msgstr "Gabim gjatë ruajtjes së shkëmbimit të të dhënave"
+
+msgid "No documents added yet"
+msgstr "Nuk ka dokumente të shtuara ende"
+
+msgid "No available documents"
+msgstr "Nuk ka dokumente të disponueshme"
+
+msgid "No users added yet"
+msgstr "Nuk ka përdorues të shtuar ende"
+
+msgid "No available users"
+msgstr "Nuk ka përdorues të disponueshëm"
+
+msgid "You can no longer submit"
+msgstr "Nuk mund të dorëzoni më"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nuk u gjetën dorëzime të munguara për këtë detyrë ose të dhënat nuk janë të disponueshme"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Emaili u dërgua te të gjithë përdoruesit e padorëzuar"
+
+msgid "Failed to send email"
+msgstr "Dështoi dërgimi i emailit"
+
+msgid "Write your answer here"
+msgstr "Shkruani përgjigjen tuaj këtu"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendari i pranisë ju lejon të regjistroni listat e pranisë (një për çdo seancë reale që studentët duhet të frekuentojnë)"
+
+msgid "Loading attendance data"
+msgstr "Duke ngarkuar të dhënat e pranisë"
+
+msgid "No attendance assigned yet"
+msgstr "Nuk ka prani të caktuar ende"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Nuk ka klasë të planifikuar sot, provoni të zgjidhni një ditë tjetër ose shtoni hyrjen tuaj të pranisë vetë duke përdorur ikonat e veprimit"
+
+msgid "No attendance data for today"
+msgstr "Nuk ka të dhëna pranie për sot"
+
+msgid "Saving"
+msgstr "Duke ruajtur"
+
+msgid "No attendance data to save"
+msgstr "Nuk ka të dhëna pranie për të ruajtur"
+
+msgid "Failed to save attendance"
+msgstr "Dështoi ruajtja e pranisë"
+
+msgid "Loading more courses"
+msgstr "Duke ngarkuar më shumë kurse"
+
+msgid "Loading more sessions"
+msgstr "Duke ngarkuar më shumë sesione"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurimi i veçorisë së auto-lançimit të dokumentit është i aktivizuar"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurimi i veçorisë së auto-lançimit të ushtrimeve është i aktivizuar"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mjedisi i auto-lançimit të shtegut të mësimit është i ndezur"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Mjedisi i auto-lançimit të forumit është i ndezur"
+
+msgid "Course ID is missing"
+msgstr "Mungon ID e kursit"
+
+msgid "Course created successfully"
+msgstr "Kursi u krijua me sukses"
+
+msgid "Error deleting document(s)"
+msgstr "Gabim gjatë fshirjes së dokumentit(e)"
+
+msgid "Template successfully deleted"
+msgstr "Modeli u fshi me sukses"
+
+msgid "Error deleting the template"
+msgstr "Gabim gjatë fshirjes së modelit"
+
+msgid "The title and thumbnail are required"
+msgstr "Titulli dhe miniaturë janë të domosdoshme"
+
+msgid "Template created successfully"
+msgstr "Modeli u krijua me sukses"
+
+msgid "Error creating the template"
+msgstr "Gabim gjatë krijimit të modelit"
+
+msgid "Error submitting the form"
+msgstr "Gabim gjatë dorëzimit të formularit"
+
+msgid "Loading templates"
+msgstr "Duke ngarkuar modelet"
+
+msgid "Loading layout"
+msgstr "Duke ngarkuar skemën"
+
+msgid "Loading courses"
+msgstr "Duke ngarkuar kurset"
+
+msgid "No courses available"
+msgstr "Nuk ka kurse të disponueshme"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Kjo listë shfaq përdoruesit nga të gjitha URL-të e aksesit sepse mjedisi \"session_admin_access_to_all_users_on_all_urls\" është i aktivizuar."
+
+msgid "User not found"
+msgstr "Përdoruesi nuk u gjet"
+
+msgid "An error occurred while sending the course"
+msgstr "Ndodhi një gabim gjatë dërgimit të kursit"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Ju lutemi mbani mend se modifikimet në kushtet e lidhura me GDPR kërkojnë që të raportoni ato modifikime te palët e treta të cilave u keni dhënë informacione personale për përdoruesit tuaj, siç thuhet në Nenin 19 të GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Duhet të krijoni \"Kushtet dhe Rregulloret\" për të gjitha gjuhët e disponueshme"
+
+msgid "You don't have any course yet"
+msgstr "Ju nuk keni ende asnjë kurs"
+
+msgid "You have received a new friend request"
+msgstr "Keni marrë një kërkesë të re miqësie"
+
+msgid "Diagnosis Management"
+msgstr "Menaxhimi i Diagnozës"
 

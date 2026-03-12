@@ -14724,7 +14724,7 @@ msgstr "Mga Gumagamit, Mga Grupo"
 msgid "Sorry no results"
 msgstr "Paumanhin walang resulta"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Mga Permission ng Grupo"
 
 msgid "Closed"
@@ -27070,7 +27070,7 @@ msgid "Add username to e-mail notification of subscription to session"
 msgstr "Idagdag ang username sa e-mail notification ng subscription sa session"
 
 msgid "Add reset password link to e-mail notification of subscription to session"
-msgstr "Magdagdag ng reset password link sa e-mail notification ng subscription sa session"
+msgstr "Magdagdag ng link sa pag-reset ng password sa email notification ng subscription sa session"
 
 msgid "Pre-fill session fields with user fields"
 msgstr "Pre-fill ang session fields gamit ang user fields"
@@ -32795,4 +32795,226 @@ msgstr "Aking custom na sertipiko"
 
 msgid "Select permission"
 msgstr "Pumili ng pahintulot"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Sa pagtanggap mo sa imbitasyong ito, ikaw ay magiging konektado sa humihinging user sa paraang magbibigay-daan sa humihinging user na mabasa ang ilan o lahat ng iyong data sa profile"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Ipinapakita ang %d mula sa humigit-kumulang %d resulta para sa %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Ipinapakita ang %d na accessible na resulta para sa %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Kung gayon, awtomatikong i-redirect ka sa URL na ito"
+
+msgid "You have access to multiple URLs"
+msgstr "May access ka sa maraming URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Pindutin ang link sa ibaba na tumutugma sa URL na nais mong ma-access"
+
+msgid "You do not currently have access to any URL"
+msgstr "Wala kang access sa anumang URL sa kasalukuyan"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Pinakamataas na bilang ng mga subscription na pinapayagan"
+
+msgid "An error occurred"
+msgstr "Nagkaroon ng error"
+
+msgid "You don't have any course content yet"
+msgstr "Wala kang anumang laman ng kurso pa"
+
+msgid "This course is locked"
+msgstr "Nak锁定 ang kurso na ito"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Ang address ng e-mail kung saan ipapadala ang mga e-mail kapag nagpadala ang platform ng e-mail, ginagamit din bilang 'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Hindi mo natagpuan ang iyong wika sa listahan? Makipag-ugnayan sa amin sa %s upang mag-ambag bilang tagasalin"
+
+msgid "An update is available"
+msgstr "May available na update"
+
+msgid "to know what's new and what has been changed"
+msgstr "upang malaman ang mga bagong tampok at mga pagbabago"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Napansin namin na ang iyong PHP installation ay hindi nagtatakda ng date"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Ang bersyon ng iyong PHP ay hindi tugma sa mga kinakailangan para sa software na ito"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "May mga file o folder na walang pahintulot sa pagsulat"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Babala! Natuklasan ng installer ang umiiral na Chamilo platform sa iyong sistema"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Dahil binago ang pangalan ng <code>newscorm</code> at <code>exercice</code> directories sa <code>lp</code> at <code>exercise</code> ayon ng kaayusan, kinakailangang tanggalin o palitan ang pangalan sa <code>newscorm_old</code> at <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Ang form ay naglalaman ng hindi tama o hindi kumpletong data"
+
+msgid "Your contact information could not be sent"
+msgstr "Hindi maipadala ang iyong impormasyon ng kontak"
+
+msgid "Please contact support with the error details"
+msgstr "Makipag-ugnayan sa suporta na may mga detalye ng error"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "I-klik ang imahe upang i-crop ito (ratio 1:1, inirerekomendang 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Gumamit ng crop tool upang pumili ng rehiyon na 1:1"
+
+msgid "Checking push subscription"
+msgstr "Sinasuri ang push subscription"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Naka-subscribe ka sa push notifications sa browser na ito"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Hindi pinapagana ang push notifications sa browser na ito"
+
+msgid "Data exchange successfully saved"
+msgstr "Matagumpay na nai-save ang data exchange"
+
+msgid "Error saving data exchange"
+msgstr "Error sa pag-save ng data exchange"
+
+msgid "No documents added yet"
+msgstr "Walang idinagdag na dokumento pa"
+
+msgid "No available documents"
+msgstr "Walang available na dokumento"
+
+msgid "No users added yet"
+msgstr "Walang idinagdag na user pa"
+
+msgid "No available users"
+msgstr "Walang available na user"
+
+msgid "You can no longer submit"
+msgstr "Hindi ka na makakapag-submit"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Walang natagpuang kulang na submission para sa gawaing ito o ang data ay hindi available"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Ipapadala ang email sa lahat ng hindi nag-submit na user"
+
+msgid "Failed to send email"
+msgstr "Nabigo sa pagpapadala ng email"
+
+msgid "Write your answer here"
+msgstr "Isulat ang iyong sagot dito"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Ang kalendaryo ng attendance ay nagbibigay-daan sa iyo upang magrehistro ng mga listahan ng attendance (isa bawat tunay na session na kailangang dumalo ang mga mag-aaral)"
+
+msgid "Loading attendance data"
+msgstr "Naglo-load ang data ng attendance"
+
+msgid "No attendance assigned yet"
+msgstr "Walang inirahistro na attendance pa"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Walang naka-schedule na klase ngayon, subukan ang ibang araw o magdagdag ng iyong entry ng attendance gamit ang mga action icon"
+
+msgid "No attendance data for today"
+msgstr "Walang data ng attendance ngayon"
+
+msgid "Saving"
+msgstr "Nagsasa-save"
+
+msgid "No attendance data to save"
+msgstr "Walang data ng attendance na nagsasa-save"
+
+msgid "Failed to save attendance"
+msgstr "Nabigo sa pag-save ng attendance"
+
+msgid "Loading more courses"
+msgstr "Naglo-load ng higit pang kurso"
+
+msgid "Loading more sessions"
+msgstr "Naglo-load ng higit pang session"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Pinagana ang configuration ng auto-launch feature ng dokumento"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Pinagana ang configuration ng auto-launch feature ng exercises"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Ang auto-launch setting ng learning path ay naka-ON"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Ang auto-launch setting ng forum ay naka-ON"
+
+msgid "Course ID is missing"
+msgstr "Walang Course ID"
+
+msgid "Course created successfully"
+msgstr "Matagumpay na nalikha ang kurso"
+
+msgid "Error deleting document(s)"
+msgstr "Error sa pag-delete ng dokumento(s)"
+
+msgid "Template successfully deleted"
+msgstr "Matagumpay na na-delete ang template"
+
+msgid "Error deleting the template"
+msgstr "Error sa pag-delete ng template"
+
+msgid "The title and thumbnail are required"
+msgstr "Kailangan ang pamagat at thumbnail"
+
+msgid "Template created successfully"
+msgstr "Matagumpay na nalikha ang template"
+
+msgid "Error creating the template"
+msgstr "Error sa paglikha ng template"
+
+msgid "Error submitting the form"
+msgstr "Error sa pagsumite ng form"
+
+msgid "Loading templates"
+msgstr "Naglo-load ng mga template"
+
+msgid "Loading layout"
+msgstr "Naglo-load ng layout"
+
+msgid "Loading courses"
+msgstr "Naglo-load ng mga kurso"
+
+msgid "No courses available"
+msgstr "Walang magagamit na kurso"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ang listahang ito ay nagpapakita ng mga user mula sa lahat ng access URL dahil naka-enable ang setting \"session_admin_access_to_all_users_on_all_urls\"."
+
+msgid "User not found"
+msgstr "Hindi natagpuan ang user"
+
+msgid "An error occurred while sending the course"
+msgstr "Nagkaroon ng error habang nagpapadala ng kurso"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Tandaan na ang mga pagbabago sa mga tuntunin na may kaugnayan sa GDPR ay nangangailangan na iulat mo ang mga pagbabagong iyon sa mga third party na iyong binigyan ng personal na impormasyon tungkol sa iyong mga user, gaya ng nakasaad sa Article 19 ng GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Dapat mong likhain ang \"Term and Conditions\" para sa lahat ng magagamit na wika"
+
+msgid "You don't have any course yet"
+msgstr "Wala ka pang kurso"
+
+msgid "You have received a new friend request"
+msgstr "Natanggap mo ang bagong friend request"
+
+msgid "Diagnosis Management"
+msgstr "Pamamahala ng Diagnosis"
 

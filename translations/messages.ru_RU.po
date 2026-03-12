@@ -14730,7 +14730,7 @@ msgstr "Пользователи, Группы"
 msgid "Sorry no results"
 msgstr "К сожалению, результатов нет"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Права группы"
 
 msgid "Closed"
@@ -32802,4 +32802,226 @@ msgstr "Мой пользовательский сертификат"
 
 msgid "Select permission"
 msgstr "Выбрать разрешение"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Принимая это приглашение, вы свяжетесь с запрашивающим пользователем таким образом, что некоторые или все данные вашего профиля станут доступны для чтения запрашивающим пользователем"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Показаны %d из примерно %d результата(ов) для %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Показаны %d доступных результата(ов) для %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Поэтому вы будете автоматически перенаправлены на этот URL"
+
+msgid "You have access to multiple URLs"
+msgstr "У вас есть доступ к нескольким URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Пожалуйста, нажмите на ссылку ниже, соответствующую URL, который вы хотите посетить"
+
+msgid "You do not currently have access to any URL"
+msgstr "В настоящее время у вас нет доступа ни к одному URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Максимальное количество разрешенных подписок"
+
+msgid "An error occurred"
+msgstr "Произошла ошибка"
+
+msgid "You don't have any course content yet"
+msgstr "У вас пока нет содержимого курса"
+
+msgid "This course is locked"
+msgstr "Этот курс заблокирован"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Адрес электронной почты, с которого будут отправляться электронные письма при отправке платформой электронного письма, также используется как заголовок 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Не нашли свой язык в списке? Свяжитесь с нами по адресу %s, чтобы внести вклад в качестве переводчика"
+
+msgid "An update is available"
+msgstr "Доступно обновление"
+
+msgid "to know what's new and what has been changed"
+msgstr "чтобы узнать, что нового и что изменилось"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Мы обнаружили, что ваша установка PHP не определяет дату"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Версия вашей PHP не соответствует требованиям этого ПО"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "У некоторых файлов или папок нет прав на запись"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Внимание! Установщик обнаружил существующую платформу Chamilo в вашей системе"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Поскольку директории <code>newscorm</code> и <code>exercice</code> были переименованы в <code>lp</code> и <code>exercise</code> соответственно, необходимо удалить их или переименовать в <code>newscorm_old</code> и <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Форма содержит неверные или неполные данные"
+
+msgid "Your contact information could not be sent"
+msgstr "Ваша контактная информация не может быть отправлена"
+
+msgid "Please contact support with the error details"
+msgstr "Пожалуйста, свяжитесь со службой поддержки с подробностями ошибки"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Нажмите на изображение, чтобы обрезать его (соотношение 1:1, рекомендуется 120x120 пикселей)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Используйте инструмент обрезки, чтобы выбрать область 1:1"
+
+msgid "Checking push subscription"
+msgstr "Проверка подписки на push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Вы подписаны на push-уведомления в этом браузере"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-уведомления не включены в этом браузере"
+
+msgid "Data exchange successfully saved"
+msgstr "Обмен данными успешно сохранен"
+
+msgid "Error saving data exchange"
+msgstr "Ошибка сохранения обмена данными"
+
+msgid "No documents added yet"
+msgstr "Документы пока не добавлены"
+
+msgid "No available documents"
+msgstr "Нет доступных документов"
+
+msgid "No users added yet"
+msgstr "Пользователи пока не добавлены"
+
+msgid "No available users"
+msgstr "Нет доступных пользователей"
+
+msgid "You can no longer submit"
+msgstr "Вы больше не можете отправить"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Не найдено пропущенных отправок для этого задания или данные недоступны"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Письмо отправлено всем пользователям, не отправившим работу"
+
+msgid "Failed to send email"
+msgstr "Не удалось отправить письмо"
+
+msgid "Write your answer here"
+msgstr "Напишите свой ответ здесь"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Календарь посещаемости позволяет регистрировать списки посещаемости (по одному на реальную сессию, которую должны посещать студенты)"
+
+msgid "Loading attendance data"
+msgstr "Загрузка данных посещаемости"
+
+msgid "No attendance assigned yet"
+msgstr "Посещаемость еще не назначена"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Сегодня нет запланированных занятий, попробуйте выбрать другой день или добавьте запись посещаемости самостоятельно с помощью значков действий"
+
+msgid "No attendance data for today"
+msgstr "Нет данных о посещаемости на сегодня"
+
+msgid "Saving"
+msgstr "Сохранение"
+
+msgid "No attendance data to save"
+msgstr "Нет данных о посещаемости для сохранения"
+
+msgid "Failed to save attendance"
+msgstr "Не удалось сохранить посещаемость"
+
+msgid "Loading more courses"
+msgstr "Загрузка дополнительных курсов"
+
+msgid "Loading more sessions"
+msgstr "Загрузка дополнительных сессий"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Функция автозапуска документов включена"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Функция автозапуска упражнений включена"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Настройка автозапуска учебного пути включена"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Настройка автозапуска форума включена"
+
+msgid "Course ID is missing"
+msgstr "ID курса отсутствует"
+
+msgid "Course created successfully"
+msgstr "Курс успешно создан"
+
+msgid "Error deleting document(s)"
+msgstr "Ошибка при удалении документа(ов)"
+
+msgid "Template successfully deleted"
+msgstr "Шаблон успешно удален"
+
+msgid "Error deleting the template"
+msgstr "Ошибка при удалении шаблона"
+
+msgid "The title and thumbnail are required"
+msgstr "Заголовок и миниатюра обязательны"
+
+msgid "Template created successfully"
+msgstr "Шаблон успешно создан"
+
+msgid "Error creating the template"
+msgstr "Ошибка при создании шаблона"
+
+msgid "Error submitting the form"
+msgstr "Ошибка отправки формы"
+
+msgid "Loading templates"
+msgstr "Загрузка шаблонов"
+
+msgid "Loading layout"
+msgstr "Загрузка макета"
+
+msgid "Loading courses"
+msgstr "Загрузка курсов"
+
+msgid "No courses available"
+msgstr "Нет доступных курсов"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Этот список отображает пользователей со всех URL доступа, поскольку настройка \"session_admin_access_to_all_users_on_all_urls\" включена."
+
+msgid "User not found"
+msgstr "Пользователь не найден"
+
+msgid "An error occurred while sending the course"
+msgstr "Произошла ошибка при отправке курса"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Помните, что изменения в условиях, связанных с GDPR, требуют уведомления третьих лиц, которым вы предоставили персональную информацию о ваших пользователях, как указано в статье 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Вы должны создать «Условия и положения» для всех доступных языков"
+
+msgid "You don't have any course yet"
+msgstr "У вас пока нет курсов"
+
+msgid "You have received a new friend request"
+msgstr "Вы получили новый запрос в друзья"
+
+msgid "Diagnosis Management"
+msgstr "Управление диагностикой"
 

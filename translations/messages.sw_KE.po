@@ -14724,7 +14724,7 @@ msgstr "Watumiaji, Makundi"
 msgid "Sorry no results"
 msgstr "Samahani hakuna matokeo"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Ruhusa za Kikundi"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Cheti changu cha kibinafsi"
 
 msgid "Select permission"
 msgstr "Chagua ruhusa"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Kukubali mwaliko huu, utaunganishwa na mtumiaji aliyeomba kwa njia ambayo itafanya baadhi au yote ya data ya wasifu wako iweze kusomwa na mtumiaji aliyeomba"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Inaonyesha %d ya takriban %d matokeo kwa %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Inaonyesha %d matokeo yanayopatikana kwa %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Kwa hivyo utaelekezwa kiotomatiki kwenye URL hii"
+
+msgid "You have access to multiple URLs"
+msgstr "Una ufikiaji wa URL nyingi"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Tafadhali bofya kiungo hapa chini kinacholingana na URL unayotaka kufikia"
+
+msgid "You do not currently have access to any URL"
+msgstr "Huna ufikiaji wa URL yoyote kwa sasa"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Idadi ya juu zaidi ya usajili inaruhusiwa"
+
+msgid "An error occurred"
+msgstr "Hitilafu imetokea"
+
+msgid "You don't have any course content yet"
+msgstr "Huna maudhui yoyote ya kozi bado"
+
+msgid "This course is locked"
+msgstr "Kozi hii imefungwa"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Anwani ya barua pepe ambayo barua pepe zitatumwa wakati jukwaa linatuma barua pepe, pia inatumika kama kichwa cha 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa %s ili kuchangia kama mtafsiri"
+
+msgid "An update is available"
+msgstr " sasisho lipo"
+
+msgid "to know what's new and what has been changed"
+msgstr "kujua vipya na yaliyobadilishwa"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Tumegundua kuwa usakinishaji wako wa PHP haujeainisha tarehe"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Toleo lako la PHP halilingani na mahitaji ya programu hii"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Faili au folda zingine hazina ruhusa ya kuandika"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Onyo! Installeri imegundua jukwaa la Chamilo lililopo kwenye mfumo wako"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Kwa sababu majukwaa ya <code>newscorm</code> na <code>exercice</code> yalibadilishwa jina hadi <code>lp</code> na <code>exercise</code> mtawalia, ni lazima kufuta au kubadilisha jina hadi <code>newscorm_old</code> na <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Fomu ina data isiyofaa au isiyokamilika"
+
+msgid "Your contact information could not be sent"
+msgstr "Taarifa zako za mawasiliano hazikuweza kutumwa"
+
+msgid "Please contact support with the error details"
+msgstr "Tafadhali wasiliana na msaada na maelezo ya hitilafu"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Bonyeza picha iliikate (uwiano wa 1:1, 120x120 px inashauriwa)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Tumia zana ya kukata kuchagua eneo la 1:1"
+
+msgid "Checking push subscription"
+msgstr "Inaangalia usajili wa push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Umejiandikisha kwa arifa za push katika kivinjari hiki"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Arifa za push hazijawezeshwa katika kivinjari hiki"
+
+msgid "Data exchange successfully saved"
+msgstr "Uuzaji wa data umehifadhiwa kwa mafanikio"
+
+msgid "Error saving data exchange"
+msgstr "Hitilafu ya kuhifadhi uuzaji wa data"
+
+msgid "No documents added yet"
+msgstr "Hakuna hati zilizongezwa bado"
+
+msgid "No available documents"
+msgstr "Hakuna hati zinazopatikana"
+
+msgid "No users added yet"
+msgstr "Hakuna watumiaji waliyoongezwa bado"
+
+msgid "No available users"
+msgstr "Hakuna watumiaji wanaopatikana"
+
+msgid "You can no longer submit"
+msgstr "Huwezi tena kuwasilisha"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Hakuna wasilisho uliopotea uliopatikana kwa kazi hii au data haipatikani"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Barua pepe imetumwa kwa watumiaji wote ambao hawajawasilisha"
+
+msgid "Failed to send email"
+msgstr "Imeshindwa kutuma barua pepe"
+
+msgid "Write your answer here"
+msgstr "Andika jibu lako hapa"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalenda ya mahubiri inakuruhusu kusajili orodha za mahubiri (moja kwa kila kikao cha kweli ambacho wanafunzi wanahitaji kuhudhuria)"
+
+msgid "Loading attendance data"
+msgstr "Inapakia data ya mahubiri"
+
+msgid "No attendance assigned yet"
+msgstr "Hakuna mahubiri yaliyotengwa bado"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Hakuna darasa lililopangwa leo, jaribu kuchagua siku nyingine au ongeza ingizo lako la mahubiri mwenyewe kwa kutumia ikoni za kitendo"
+
+msgid "No attendance data for today"
+msgstr "Hakuna data ya mahubiri ya leo"
+
+msgid "Saving"
+msgstr "Inahifadhi"
+
+msgid "No attendance data to save"
+msgstr "Hakuna data ya mahubiri ya kuhifadhi"
+
+msgid "Failed to save attendance"
+msgstr "Imeshindwa kuhifadhi mahubiri"
+
+msgid "Loading more courses"
+msgstr "Inapakia kozi zaidi"
+
+msgid "Loading more sessions"
+msgstr "Inapakia vikao zaidi"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Mpangilio wa kipengele cha kuanza kiotomatiki cha hati umewashwa"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Mpangilio wa kipengele cha kuanza kiotomatiki cha mazoezi umewashwa"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mpangilio wa kuanza kiotomatiki wa njia ya kujifunza uko IMEWASHWA"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Mpangilio wa kuanza kiotomatiki wa forum uko umewashwa"
+
+msgid "Course ID is missing"
+msgstr "Kitambulisho cha kozi kinakosekana"
+
+msgid "Course created successfully"
+msgstr "Kozi imeundwa kwa mafanikio"
+
+msgid "Error deleting document(s)"
+msgstr "Hitilafu ya kufuta hati"
+
+msgid "Template successfully deleted"
+msgstr "Tembelea imefutwa kwa mafanikio"
+
+msgid "Error deleting the template"
+msgstr "Hitilafu ya kufuta tembelea"
+
+msgid "The title and thumbnail are required"
+msgstr "Kichwa na picha ndogo zinahitajika"
+
+msgid "Template created successfully"
+msgstr "Tembelea imetengenezwa kwa mafanikio"
+
+msgid "Error creating the template"
+msgstr "Kosa la kuunda tembelea"
+
+msgid "Error submitting the form"
+msgstr "Kosa la kutuma fomu"
+
+msgid "Loading templates"
+msgstr "Inapakia templea"
+
+msgid "Loading layout"
+msgstr "Inapakia mpangilio"
+
+msgid "Loading courses"
+msgstr "Inapakia kozi"
+
+msgid "No courses available"
+msgstr "Hakuna kozi zinazopatikana"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Orodha hii inaonyesha watumiaji kutoka URL zote za ufikiaji kwa sababu mpangilio \"session_admin_access_to_all_users_on_all_urls\" umewashwa."
+
+msgid "User not found"
+msgstr "Mtumiaji hajapatikana"
+
+msgid "An error occurred while sending the course"
+msgstr "Kosa limetokea wakati wa kutuma kozi"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Tafadhali kumbuka kuwa marekebisho ya masharti yanayohusiana na GDPR yanahitaji kuripoti marekebisho hayo kwa washirika wa tatu ambao umewapa taarifa za kibinafsi kuhusu watumiaji wako, kama ilivyoelezwa katika Kifungu cha 19 cha GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Unapaswa kuunda \"Masharti na Mazingira\" kwa lugha zote zinazopatikana"
+
+msgid "You don't have any course yet"
+msgstr "Bado huna kozi yoyote"
+
+msgid "You have received a new friend request"
+msgstr "Ume pokea ombi jipya la urafiki"
+
+msgid "Diagnosis Management"
+msgstr "Usimamizi wa Uchunguzi"
 

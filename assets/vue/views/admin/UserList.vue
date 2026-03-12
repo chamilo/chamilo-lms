@@ -403,18 +403,6 @@
               <span class="mdi mdi-shield-star ch-tool-icon" />
             </a>
 
-            <!-- Admin star indicator -->
-            <span
-              v-if="data.isAdmin"
-              class="mdi mdi-star ch-tool-icon text-yellow-500"
-              :title="t('Is administrator')"
-            />
-            <span
-              v-else
-              class="mdi mdi-star ch-tool-icon-disabled"
-              :title="t('Is not administrator')"
-            />
-
             <!-- Anonymize (platform admin only, not self, not anonymous) -->
             <a
               v-if="viewer.isPlatformAdmin && data.id !== viewer.id && !data.isAnonymous && !data.isAdmin"

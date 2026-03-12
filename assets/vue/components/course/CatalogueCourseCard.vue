@@ -17,7 +17,6 @@ import { useCourseRequirementStatus } from "../../composables/course/useCourseRe
 import { useLocale } from "../../composables/locale"
 
 const { t } = useI18n()
-
 const { getOriginalLanguageName } = useLocale()
 
 const props = defineProps({
@@ -43,19 +42,14 @@ const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
 const ratingResetKey = ref(0)
 
-// local copy for display / optimistic updates
 const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
-// local reference for the vote
 const localVote = ref(props.course?.userVote?.vote || 0)
-// ensure numeric placeholders
+
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
-// initialize rating count from props if available
 localCourse.value.ratingCount = Number(
   localCourse.value.ratingCount ?? props.course?.count ?? props.course?.ratingCount ?? 0,
 )
 
-// --- fetch rating ---
-// adjust fetchRating to tolerate multiple formats returned by the API
 const fetchRating = async () => {
   if (!localCourse.value?.id) return
   try {
@@ -66,45 +60,37 @@ const fetchRating = async () => {
     })
     if (!res.ok) return
     const data = await res.json()
-    // robust fallback: average, avg, ratingAvg, etc.
     localCourse.value.ratingAvg = Number(data.average ?? data.avg ?? data.ratingAvg ?? 0)
-    // get count if provided by API
     localCourse.value.ratingCount = Number(data.count ?? data.countVotes ?? localCourse.value.ratingCount ?? 0)
   } catch (e) {
     console.error("fetchRating error", e)
   }
 }
 
-// call on mount
 onMounted(() => {
   fetchRating()
 })
 
-// watcher on localVote: apply update + emit but do not alter the local average
 watch(
   localVote,
   (newVote, oldVote) => {
     if (newVote === oldVote) return
 
-    // fallback sur la valeur locale stockée puis sur props (toujours numérique).
     const prevVote = Number(oldVote ?? localCourse.value.userVote?.vote ?? props.course?.userVote?.vote ?? 0)
 
     if (localCourse.value.popularity === undefined && props.course?.popularity !== undefined) {
       localCourse.value.popularity = props.course.popularity
     }
 
-    // Local rating/count adjustment to show immediate feedback
     const oldAvg = Number(localCourse.value.ratingAvg ?? 0)
     let oldCount = Number(localCourse.value.ratingCount ?? 0)
     let newCount = oldCount
     let newAvg = oldAvg
 
     if (prevVote === 0 && newVote > 0) {
-      // new vote added
       newCount = oldCount + 1
       newAvg = newCount > 0 ? (oldAvg * oldCount + newVote) / newCount : newVote
     } else if (prevVote > 0 && newVote === 0) {
-      // vote removed
       newCount = Math.max(oldCount - 1, 0)
       if (newCount === 0) {
         newAvg = 0
@@ -112,12 +98,10 @@ watch(
         newAvg = (oldAvg * oldCount - prevVote) / newCount
       }
     } else if (prevVote > 0 && newVote > 0) {
-      // vote changed
       newCount = oldCount
       newAvg = newCount > 0 ? (oldAvg * oldCount - prevVote + newVote) / newCount : newVote
     }
 
-    // round like backend (2 decimals)
     localCourse.value.ratingAvg = Number((isFinite(newAvg) ? newAvg : 0).toFixed(2))
     localCourse.value.ratingCount = Math.max(0, Math.round(newCount))
 
@@ -128,7 +112,6 @@ watch(
     }
 
     localCourse.value.userVote = { vote: Number(newVote || 0) }
-    // Emit to the parent to persist (the parent must call the API)
     emit("rate", { value: Number(newVote || 0), course: props.course })
   },
   { immediate: false },
@@ -139,9 +122,9 @@ const allowSelfSignup = computed(() => {
   if (localCourse.value?.allowSelfSignup !== undefined) return Boolean(localCourse.value.allowSelfSignup)
   return localCourse.value?.visibility === 0
 })
+
 localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
 
-// fetch visits
 const fetchVisits = async () => {
   if (!localCourse.value?.id) return
   try {
@@ -170,7 +153,6 @@ const durationInHours = computed(() => {
   return localCourse.value.durationExtra ? `${duration.toFixed(2)}+ h` : `${duration.toFixed(2)} h`
 })
 
-// the display computed to prioritize the local value (optimistic/fetch)
 const displayRatingAvg = computed(() => {
   return Number(
     localCourse.value?.ratingAvg ??
@@ -182,7 +164,6 @@ const displayRatingAvg = computed(() => {
   )
 })
 
-// formatted string for the numeric average
 const formattedRatingAvg = computed(() => {
   const v = Number(displayRatingAvg.value ?? 0)
 
@@ -193,21 +174,18 @@ const formattedRatingAvg = computed(() => {
   return v.toFixed(1)
 })
 
-// computed used by the Rating component: shows the user's vote if available, otherwise the average
 const onUserRate = (val) => {
-  // local update of the vote — do not overwrite the value if `val` is null/undefined
   localVote.value = Number(val ?? localVote.value)
-  // keeping the existing reset (optional)
   setTimeout(() => {
     ratingResetKey.value++
   }, 0)
 }
 
 const subscribing = ref(false)
+
 const subscribeToCourse = async () => {
   if (!props.currentUserId) {
     showErrorNotification("You must be logged in to subscribe to a course.")
-
     return
   }
 
@@ -296,6 +274,14 @@ const showInfoPopup = computed(() => {
   return value && allowed.includes(value)
 })
 
+const catalogueDescriptions = computed(() => {
+  return Array.isArray(localCourse.value?.catalogueDescriptions) ? localCourse.value.catalogueDescriptions : []
+})
+
+const hasCatalogueDescription = computed(() => {
+  return catalogueDescriptions.value.length > 0
+})
+
 const { isLocked, hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
   localCourse.value.id,
   localCourse.value.sessionId || 0,
@@ -322,6 +308,7 @@ onMounted(() => {
             referrerpolicy="no-referrer"
           />
         </BaseAppLink>
+
         <img
           v-else
           :alt="localCourse.title"
@@ -329,7 +316,7 @@ onMounted(() => {
         />
 
         <BaseButton
-          v-if="allowDescription && showInfoPopup"
+          v-if="allowDescription && showInfoPopup && hasCatalogueDescription"
           :label="t('Show description')"
           class="absolute bottom-0 left-0 rounded-none"
           icon="information"
@@ -404,8 +391,8 @@ onMounted(() => {
 
         <BaseRating
           v-if="props.currentUserId"
-          @change="onUserRate($event.value)"
           v-model="displayRatingAvg"
+          @change="onUserRate($event.value)"
         />
       </div>
 
@@ -501,11 +488,51 @@ onMounted(() => {
   <Dialog
     v-model:visible="showDescriptionDialog"
     :header="localCourse.title"
-    class="w-96"
+    class="w-[95vw] md:w-[70vw] lg:w-[60vw]"
     modal
   >
-    <p class="whitespace-pre-line">
-      {{ localCourse.description || t("No description available") }}
+    <div
+      v-if="hasCatalogueDescription"
+      class="space-y-6"
+    >
+      <section
+        v-for="item in catalogueDescriptions"
+        :key="item.iid ?? `${item.title}-${item.descriptionType}-${item.progress}`"
+        class="space-y-3"
+      >
+        <h3
+          v-if="item.title"
+          class="text-lg font-semibold"
+        >
+          {{ item.title }}
+        </h3>
+
+        <div
+          v-if="item.content"
+          class="rich-html-content"
+          v-html="item.content"
+        />
+      </section>
+    </div>
+
+    <p
+      v-else
+      class="whitespace-pre-line"
+    >
+      {{ t("No description available") }}
     </p>
   </Dialog>
 </template>
+<style scoped>
+.rich-html-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+}
+.rich-html-content :deep(video),
+.rich-html-content :deep(iframe) {
+  max-width: 100%;
+}
+.rich-html-content :deep(table) {
+  width: 100%;
+}
+</style>

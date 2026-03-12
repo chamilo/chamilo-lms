@@ -71,8 +71,7 @@ if (api_can_login_as($userId)) {
             ICON_SIZE_MEDIUM,
             get_lang('Login as')
         ),
-        api_get_path(WEB_CODE_PATH).
-        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.$secToken
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId
     );
 }
 

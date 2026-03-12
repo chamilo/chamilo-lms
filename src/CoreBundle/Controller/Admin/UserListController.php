@@ -31,6 +31,19 @@ class UserListController extends AbstractController
         'lastLogin' => 'u.lastLogin',
     ];
 
+    private const ROLE_LABELS = [
+        'ROLE_STUDENT' => 'Learner',
+        'ROLE_TEACHER' => 'Teacher',
+        'ROLE_HR' => 'Human Resources Manager',
+        'ROLE_SESSION_MANAGER' => 'Session administrator',
+        'ROLE_STUDENT_BOSS' => 'Superior (n+1)',
+        'ROLE_INVITEE' => 'Invitee',
+        'ROLE_QUESTION_MANAGER' => 'Question manager',
+        'ROLE_ADMIN' => 'Administrator',
+        'ROLE_PLATFORM_ADMIN' => 'Administrator',
+        'ROLE_GLOBAL_ADMIN' => 'Global Administrator',
+    ];
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
@@ -50,6 +63,10 @@ class UserListController extends AbstractController
         $keywordUsername = trim((string) $request->query->get('keyword_username', ''));
         $keywordEmail = trim((string) $request->query->get('keyword_email', ''));
         $keywordOfficialCode = trim((string) $request->query->get('keyword_officialcode', ''));
+        $keywordRoles = $request->query->all('keyword_roles');
+        $keywordActive = $request->query->get('keyword_active');
+        $keywordInactive = $request->query->get('keyword_inactive');
+        $classId = (int) $request->query->get('class_id', 0);
 
         $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 'u.lastname';
         $showDeleted = 'deleted' === $view;
@@ -61,12 +78,19 @@ class UserListController extends AbstractController
         ;
 
         if ($showDeleted) {
-            $qb->andWhere('u.active = :activeStatus')
-                ->setParameter('activeStatus', User::SOFT_DELETED)
+            $qb->andWhere('u.active = :softDeleted')
+                ->setParameter('softDeleted', User::SOFT_DELETED)
             ;
         } else {
-            $qb->andWhere('u.active != :activeStatus')
-                ->setParameter('activeStatus', User::SOFT_DELETED)
+            $qb->andWhere('u.active != :softDeleted')
+                ->setParameter('softDeleted', User::SOFT_DELETED)
+            ;
+        }
+
+        if ($classId > 0) {
+            $qb->join('u.classes', 'ug')
+                ->andWhere('ug.usergroup = :classId')
+                ->setParameter('classId', $classId)
             ;
         }
 
@@ -90,13 +114,36 @@ class UserListController extends AbstractController
             if ('' !== $keywordOfficialCode) {
                 $qb->andWhere('u.officialCode LIKE :kwoc')->setParameter('kwoc', '%'.$keywordOfficialCode.'%');
             }
+
+            if (!empty($keywordRoles)) {
+                $roleConds = [];
+                $i = 0;
+                foreach ($keywordRoles as $role) {
+                    $role = strtoupper(trim($role));
+                    if ('' === $role) {
+                        continue;
+                    }
+                    $paramName = 'role'.$i++;
+                    $roleConds[] = "u.roles LIKE :{$paramName}";
+                    $qb->setParameter($paramName, '%"'.$role.'"%');
+                }
+                if (!empty($roleConds)) {
+                    $qb->andWhere('('.implode(' OR ', $roleConds).')');
+                }
+            }
+
+            if ('1' === $keywordActive && '1' !== $keywordInactive) {
+                $qb->andWhere('u.active = 1');
+            } elseif ('1' === $keywordInactive && '1' !== $keywordActive) {
+                $qb->andWhere('u.active = 0');
+            }
         }
 
         $countQb = clone $qb;
         $total = (int) $countQb->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('u.id, u.officialCode, u.firstname, u.lastname, u.username, u.email, u.active, u.createdAt, u.lastLogin, u.roles, u.status')
+            ->select('u.id, u.officialCode, u.firstname, u.lastname, u.username, u.email, u.active, u.createdAt, u.lastLogin, u.expiresAt, u.roles, u.status')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -104,13 +151,45 @@ class UserListController extends AbstractController
             ->getArrayResult()
         ;
 
+        $currentUser = $this->getUser();
+        $currentUserId = $currentUser ? $currentUser->getId() : 0;
+        $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
+        $isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER') && !$isPlatformAdmin;
+
+        $adminTable = $this->em->getConnection()->createQueryBuilder()
+            ->select('user_id')
+            ->from('admin')
+            ->executeQuery()
+            ->fetchFirstColumn()
+        ;
+        $adminIds = array_map('intval', $adminTable);
+
         $items = [];
+        $now = new \DateTime();
+
         foreach ($rows as $row) {
             $userId = (int) $row['id'];
-            $roles = array_values(array_filter(
-                (array) $row['roles'],
+            $allRoles = (array) $row['roles'];
+            $filteredRoles = array_values(array_filter(
+                $allRoles,
                 static fn (string $r): bool => !in_array(strtoupper($r), ['ROLE_USER', 'USER', 'ROLE_ANONYMOUS', 'ANONYMOUS'], true)
             ));
+
+            $isAnonymous = in_array('ROLE_ANONYMOUS', $allRoles, true);
+            $isUserAdmin = in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
+                || in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
+                || in_array('ROLE_ADMIN', $allRoles, true)
+                || in_array($userId, $adminIds, true);
+            $isStudent = in_array('ROLE_STUDENT', $allRoles, true);
+            $isSessionManager = in_array('ROLE_SESSION_MANAGER', $allRoles, true);
+            $isHR = in_array('ROLE_HR', $allRoles, true);
+            $isStudentBoss = in_array('ROLE_STUDENT_BOSS', $allRoles, true);
+
+            $activeValue = (int) $row['active'];
+            $expiresAt = $row['expiresAt'];
+            if (1 === $activeValue && $expiresAt instanceof \DateTime && $expiresAt < $now) {
+                $activeValue = User::INACTIVE_AUTOMATIC;
+            }
 
             $items[] = [
                 'id' => $userId,
@@ -119,14 +198,29 @@ class UserListController extends AbstractController
                 'lastname' => $row['lastname'] ?? '',
                 'username' => $row['username'] ?? '',
                 'email' => $row['email'] ?? '',
-                'active' => (int) $row['active'],
-                'roles' => $roles,
+                'active' => $activeValue,
+                'roles' => $filteredRoles,
+                'isAdmin' => $isUserAdmin,
+                'isAnonymous' => $isAnonymous,
+                'isStudent' => $isStudent,
+                'isSessionManager' => $isSessionManager,
+                'isHR' => $isHR,
+                'isStudentBoss' => $isStudentBoss,
                 'createdAt' => $row['createdAt'] ? $row['createdAt']->format('Y-m-d H:i') : null,
                 'lastLogin' => $row['lastLogin'] ? $row['lastLogin']->format('Y-m-d H:i') : null,
                 'avatarUrl' => $this->userRepository->getUserPicture($userId, UserRepository::USER_IMAGE_SIZE_SMALL),
             ];
         }
 
-        return $this->json(['items' => $items, 'total' => $total]);
+        return $this->json([
+            'items' => $items,
+            'total' => $total,
+            'viewer' => [
+                'id' => $currentUserId,
+                'isPlatformAdmin' => $isPlatformAdmin,
+                'isSessionAdmin' => $isSessionAdmin,
+            ],
+            'roleLabels' => self::ROLE_LABELS,
+        ]);
     }
 }

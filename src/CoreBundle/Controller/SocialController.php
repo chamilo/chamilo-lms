@@ -110,6 +110,10 @@ class SocialController extends AbstractController
         UserRepository $userRepo,
         LanguageRepository $languageRepo
     ): JsonResponse {
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json($this->getEmptyTermsResponse('1' === (string) $request->query->get('accepted', '0')));
+        }
+
         $user = $userRepo->find($userId);
         if (!$user) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -125,25 +129,30 @@ class SocialController extends AbstractController
             $extraFieldValue = new ExtraFieldValue('user');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
 
-            if (!empty($value['value'])) {
-                [$acceptedVersion, $acceptedLanguageId] = explode(':', $value['value']);
-                $languageId = (int) $acceptedLanguageId;
-                $version = (int) $acceptedVersion;
-            } else {
-                return $this->json(['error' => 'No accepted terms found'], Response::HTTP_NOT_FOUND);
+            if (empty($value['value'])) {
+                return $this->json($this->getEmptyTermsResponse(true));
+            }
+
+            $parts = explode(':', (string) $value['value']);
+            $languageId = (int) ($parts[1] ?? 0);
+            $version = (int) ($parts[0] ?? 0);
+
+            if ($languageId <= 0 || $version <= 0) {
+                return $this->json($this->getEmptyTermsResponse(true));
             }
         } else {
             $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
             if (!$resolved) {
-                return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+                return $this->json($this->getEmptyTermsResponse(false));
             }
+
             $languageId = (int) $resolved['languageId'];
             $version = (int) $resolved['version'];
         }
 
         $rows = $legalTermsRepo->findByLanguageAndVersion($languageId, $version);
         if (empty($rows)) {
-            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+            return $this->json($this->getEmptyTermsResponse($showAccepted));
         }
 
         $terms = [];
@@ -151,8 +160,8 @@ class SocialController extends AbstractController
             $type = $row->getType();
             $section = self::TERMS_SECTIONS[$type] ?? self::TERMS_SECTIONS[0];
 
-            $content = $row->getContent() ?? '';
-            if ('' === trim($content)) {
+            $content = trim((string) ($row->getContent() ?? ''));
+            if ('' === $content) {
                 continue;
             }
 
@@ -165,6 +174,10 @@ class SocialController extends AbstractController
             ];
         }
 
+        if (empty($terms)) {
+            return $this->json($this->getEmptyTermsResponse($showAccepted));
+        }
+
         $pubDate = $this->dateTimeHelper->localTimeYmdHis($rows[0]->getDate(), null, 'UTC');
 
         return $this->json([
@@ -173,6 +186,7 @@ class SocialController extends AbstractController
             'version' => $version,
             'language_id' => $languageId,
             'showing_accepted' => $showAccepted,
+            'available' => true,
         ]);
     }
 
@@ -187,29 +201,19 @@ class SocialController extends AbstractController
         LanguageRepository $languageRepo,
         LegalRepository $legalTermsRepo
     ): JsonResponse {
-        $allowTermsConditions = 'true' === $settingsManager->getSetting('registration.allow_terms_conditions');
-        if (!$allowTermsConditions) {
-            throw $this->createAccessDeniedException($translator->trans('No terms and conditions available'));
-        }
-
-        /*if (!$currentUser) {
-            throw $this->createAccessDeniedException(
-                $translator->trans('User not found')
-            );
-        }*/
-
         if ($userId !== $currentUser->getId()) {
             throw $this->createAccessDeniedException();
+        }
+
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json($this->getUnavailableLegalStatusResponse());
         }
 
         $isoCode = $currentUser->getLocale();
 
         $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
         if (!$resolved) {
-            return $this->json([
-                'isAccepted' => false,
-                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
-            ], Response::HTTP_NOT_FOUND);
+            return $this->json($this->getUnavailableLegalStatusResponse());
         }
 
         $latestLanguageId = (int) $resolved['languageId'];
@@ -220,20 +224,27 @@ class SocialController extends AbstractController
 
         if (empty($value['value'])) {
             return $this->json([
+                'available' => true,
                 'isAccepted' => false,
+                'acceptDate' => null,
                 'message' => $translator->trans('Send legal agreement', [], 'messages'),
             ]);
         }
 
-        [$acceptedVersion, $acceptedLanguageId, $acceptedTime] = explode(':', $value['value']);
-        $dateTime = new DateTime('@'.(int) $acceptedTime);
+        $parts = explode(':', (string) $value['value']);
+        $acceptedVersion = (int) ($parts[0] ?? 0);
+        $acceptedLanguageId = (int) ($parts[1] ?? 0);
+        $acceptedTime = (int) ($parts[2] ?? 0);
 
-        $isLatestAccepted = null !== $latestVersion
-            && (int) $acceptedLanguageId === (int) $latestLanguageId
-            && (int) $acceptedVersion === (int) $latestVersion;
+        $dateTime = new DateTime('@'.$acceptedTime);
+
+        $isLatestAccepted =
+            $acceptedLanguageId === $latestLanguageId
+            && $acceptedVersion === $latestVersion;
 
         if (!$isLatestAccepted) {
             return $this->json([
+                'available' => true,
                 'isAccepted' => false,
                 'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
                 'message' => $translator->trans('Please accept the latest version of the terms and conditions.', [], 'messages'),
@@ -241,12 +252,12 @@ class SocialController extends AbstractController
         }
 
         return $this->json([
+            'available' => true,
             'isAccepted' => true,
             'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
             'message' => '',
         ]);
     }
-
     #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term', methods: ['POST'])]
     public function sendLegalTerm(
         Request $request,
@@ -258,6 +269,13 @@ class SocialController extends AbstractController
         UserRepository $userRepo,
         LanguageRepository $languageRepo
     ): JsonResponse {
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $data = json_decode($request->getContent(), true);
         if (!\is_array($data)) {
             return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
@@ -274,6 +292,7 @@ class SocialController extends AbstractController
             if (0 === $targetUserId) {
                 return $this->json(['error' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
             }
+
             $user = $userRepo->find($targetUserId);
             if (!$user) {
                 return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -282,19 +301,24 @@ class SocialController extends AbstractController
 
         $isoCode = $user->getLocale();
         $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+
         if (!$resolved) {
-            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
+            ], Response::HTTP_BAD_REQUEST);
         }
+
         $languageId = (int) $resolved['languageId'];
         $version = (int) $resolved['version'];
 
         $legalAcceptType = $version.':'.$languageId.':'.time();
         UserManager::update_extra_field_value($targetUserId, 'legal_accept', $legalAcceptType);
 
-        // Notify bosses (kept as-is, now based on $targetUserId)
         $bossList = UserManager::getStudentBossList($targetUserId);
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
+
             foreach ($bossList as $bossId) {
                 $subjectEmail = \sprintf(
                     $translator->trans('User %s signed the agreement.', [], 'messages'),
@@ -1358,16 +1382,15 @@ class SocialController extends AbstractController
         }
 
         $platformIso = (string) $settingsManager->getSetting('language.platform_language');
-        if ('' !== $platformIso) {
+        if ('' === $platformIso || 'false' === $platformIso) {
+            $platformIso = (string) $settingsManager->getSetting('platformLanguage');
+        }
+
+        if ('' !== $platformIso && 'false' !== $platformIso) {
             $platformLang = $languageRepo->findByIsoCode($platformIso);
             if ($platformLang) {
                 $candidates[] = (int) $platformLang->getId();
             }
-        }
-
-        $en = $languageRepo->findByIsoCode('en_US');
-        if ($en) {
-            $candidates[] = (int) $en->getId();
         }
 
         $candidates = array_values(array_unique(array_filter($candidates)));
@@ -1375,10 +1398,41 @@ class SocialController extends AbstractController
         foreach ($candidates as $languageId) {
             $version = $legalRepo->findLatestVersionByLanguage($languageId);
             if ($version > 0) {
-                return ['languageId' => $languageId, 'version' => $version];
+                return [
+                    'languageId' => $languageId,
+                    'version' => $version,
+                ];
             }
         }
 
         return null;
+    }
+
+    private function isTermsConditionsEnabled(SettingsManager $settingsManager): bool
+    {
+        return 'true' === (string) $settingsManager->getSetting('registration.allow_terms_conditions')
+            || 'true' === (string) $settingsManager->getSetting('allow_terms_conditions');
+    }
+
+    private function getEmptyTermsResponse(bool $showingAccepted = false): array
+    {
+        return [
+            'terms' => [],
+            'date_text' => '',
+            'version' => null,
+            'language_id' => null,
+            'showing_accepted' => $showingAccepted,
+            'available' => false,
+        ];
+    }
+
+    private function getUnavailableLegalStatusResponse(): array
+    {
+        return [
+            'available' => false,
+            'isAccepted' => false,
+            'acceptDate' => null,
+            'message' => '',
+        ];
     }
 }

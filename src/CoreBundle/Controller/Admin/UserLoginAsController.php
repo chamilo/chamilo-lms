@@ -46,6 +46,6 @@ class UserLoginAsController extends AbstractController
             sprintf('Attempting to login as %s (id %d)', $user->getFullname(), $userId)
         );
 
-        return $this->redirect('/?_switch_user='.$user->getUsername());
+        return $this->redirect('/?_switch_user='.urlencode($user->getUsername()));
     }
 }

@@ -28,6 +28,13 @@ class UserListActionController extends AbstractController
         $action = (string) $request->request->get('action');
         $userId = (int) $request->request->get('user_id');
         $view = (string) $request->request->get('view', 'all');
+        $token = (string) $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('user_list_action', $token)) {
+            $this->addFlash('error', 'Invalid CSRF token.');
+
+            return $this->redirect('/admin/user-list');
+        }
 
         $currentUser = $this->getUser();
         $currentUserId = $currentUser ? $currentUser->getId() : 0;

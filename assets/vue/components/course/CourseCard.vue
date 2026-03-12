@@ -687,7 +687,13 @@ const courseLanguageCode = computed(() => {
   return normalizeIso(raw)
 })
 
+const showCourseLanguage = computed(() => {
+  return platformConfigStore.getSetting("language.show_different_course_language") !== "false"
+})
+
 const languageLabel = computed(() => {
+  if (!showCourseLanguage.value) return null
+
   const iso = courseLanguageCode.value
   if (!iso) return null
 

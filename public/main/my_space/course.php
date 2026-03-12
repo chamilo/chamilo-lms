@@ -187,8 +187,9 @@ if (api_is_platform_admin(true, true)) {
         $menu_items[] = $questionTabs;
 
         if (api_can_login_as($user_id)) {
+            $loginAsToken = Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
             $menu_items[] = '<a href="'.
-                api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'">'.
+                api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'&sec_token='.urlencode($loginAsToken).'">'.
                 Display::getMdiIcon(
                     ActionIcon::LOGIN_AS,
                     'ch-tool-icon',

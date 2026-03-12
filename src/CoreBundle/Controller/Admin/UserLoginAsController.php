@@ -30,6 +30,11 @@ class UserLoginAsController extends AbstractController
     public function loginAs(Request $request): RedirectResponse
     {
         $userId = (int) $request->query->get('user_id', 0);
+        $token = (string) $request->query->get('sec_token', '');
+
+        if (!$this->isCsrfTokenValid('login_as', $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
 
         if ($userId <= 0) {
             throw $this->createAccessDeniedException('Invalid user ID.');

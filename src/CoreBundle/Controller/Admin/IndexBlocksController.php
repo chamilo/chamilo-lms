@@ -692,7 +692,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-skill-ranking',
-            'url' => '/main/social/skills_ranking.php?origin=admin',
+            'url' => '/skill/ranking',
             'label' => $this->translator->trans('Skills ranking'),
         ];
         $items[] = [

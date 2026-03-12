@@ -3578,10 +3578,10 @@ msgstr "Missing images detected"
 msgid "Publish"
 msgstr "Publish"
 
-msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
-msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
+msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
 msgid "The zip file can not contain .PHP files"
@@ -4130,7 +4130,7 @@ msgstr "PDF download is not allowed for students"
 msgid "Login list"
 msgstr "Login list"
 
-msgid "Status of MySQL server :"
+msgid "Status of MySQL server :"
 msgstr "Status of MySQL server :"
 
 msgid "Database"
@@ -5261,8 +5261,8 @@ msgstr "Show the number of courses in each category in the courses categories on
 msgid "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
 msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> 										<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> 										 You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
 
-msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
-msgstr "<strong>Leaders in <br />anti plagiarism </strong>				"
+msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
+msgstr "<strong>Leaders in <br />anti plagiarism </strong>				"
 
 msgid "Click here for more information and prices\t\t\t"
 msgstr "Click here for more information and prices			"
@@ -6866,8 +6866,8 @@ msgstr "Learners not in this group"
 msgid "A user can be member of maximum"
 msgstr "A user can be member of maximum"
 
-msgid " groups"
-msgstr " groups"
+msgid " groups"
+msgstr " groups"
 
 msgid "Limit"
 msgstr "Limit"
@@ -7382,8 +7382,8 @@ msgstr "Please upload text documents only. Filename extension should be .doc, .d
 msgid "Show audio recorder"
 msgstr "Show audio recorder"
 
-msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
-msgstr "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
+msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
+msgstr "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
 
 msgid "View course"
 msgstr "View course"
@@ -7673,7 +7673,7 @@ msgstr "-elem"
 msgid "Please type your text below"
 msgstr "Please type your text below"
 
-msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\"> [29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false;\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
@@ -10811,7 +10811,7 @@ msgstr "Preserved"
 msgid "Confirm user unsubscription"
 msgstr "Confirm user unsubscription"
 
-msgid "Go to"
+msgid "Go to"
 msgstr "Go to"
 
 msgid "My latest visits"
@@ -10847,7 +10847,7 @@ msgstr "number"
 msgid "Upload the list"
 msgstr "Upload the list"
 
-msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
+msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
 msgstr "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
 
 msgid "Import a users list"
@@ -25490,7 +25490,7 @@ msgstr "The fields defined in this array will appear on the course settings page
 msgid "Prefill course fields with fields from user"
 msgstr "Prefill course fields with fields from user"
 
-msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
 msgstr "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
 
 msgid "Allow tool visibility edition in sessions"
@@ -32576,32 +32576,11 @@ msgstr "Total space used by %s is %sGB"
 msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
 msgstr "Total space used by portal %s is %sGB (limit is set to %sGB)"
 
-msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
-msgstr "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Confirm your e-mail"
 
-msgid "Link classes to created groups ?"
-msgstr "Link classes to created groups ?"
-
-msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
-msgstr "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
-
-msgid "New groups creation in category %s"
-msgstr "New groups creation in category %s"
-
-msgid "Users subscribed to the class"
-msgstr "Users subscribed to the class"
-
-msgid "Courses subscribed to the class"
-msgstr "Courses subscribed to the class"
-
-msgid "No user and no course are subscribed to this class"
-msgstr "No user and no course are subscribed to this class"
-
-msgid "No user are subscribed to this class"
-msgstr "No user are subscribed to this class"
-
-msgid "No course are subscribed to this class"
-msgstr "No course are subscribed to this class"
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "To verify your e-mail and enable your account on %s, please click the link below."
 
 msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
 msgstr "If you did not register this account, you can ignore this e-mail. No action will be taken."
@@ -33049,3 +33028,32 @@ msgstr "You have received a new friend request"
 
 msgid "Diagnosis Management"
 msgstr "Diagnosis Management"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+
+msgid "Link classes to created groups ?"
+msgstr "Link classes to created groups ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+
+msgid "New groups creation in category %s"
+msgstr "New groups creation in category %s"
+
+msgid "Users subscribed to the class"
+msgstr "Users subscribed to the class"
+
+msgid "Courses subscribed to the class"
+msgstr "Courses subscribed to the class"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "No user and no course are subscribed to this class"
+
+msgid "No user are subscribed to this class"
+msgstr "No user are subscribed to this class"
+
+msgid "No course are subscribed to this class"
+msgstr "No course are subscribed to this class"
+
+>>>>>>> 6a9e42f0a5 (refactore translations/messages.en_US.po correctly)

@@ -18,6 +18,8 @@ use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -39,6 +41,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private AccessUrlHelper $accessUrlHelper,
         private TranslatorInterface $translator,
         private CourseCatalogueHelper $courseCatalogueHelper,
+        private CCourseDescriptionRepository $courseDescriptionRepository,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -48,7 +51,6 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
         $catalogIsPublic = 'true' === (string) $this->settingsManager->getSetting('catalog.course_catalog_published', true);
 
-        // If the catalogue is not public, anonymous users must be blocked.
         if (!$isAuthenticated && !$catalogIsPublic) {
             throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
@@ -83,6 +85,27 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         /** @var Course $course */
         foreach ($paginator as $course) {
             $course->subscribed = $isAuthenticated ? $course->hasSubscriptionByUser($user) : false;
+            $course->catalogueDescriptions = [];
+
+            $descriptions = $this->courseDescriptionRepository->findAllInCourse($course);
+
+            /** @var CCourseDescription $description */
+            foreach ($descriptions as $description) {
+                $title = trim((string) $description->getTitle());
+                $content = $this->normalizeHtmlContent((string) $description->getContent());
+
+                if ('' === $title && '' === $content) {
+                    continue;
+                }
+
+                $course->catalogueDescriptions[] = [
+                    'iid' => $description->getIid(),
+                    'title' => $title,
+                    'content' => $content,
+                    'descriptionType' => $description->getDescriptionType(),
+                    'progress' => $description->getProgress(),
+                ];
+            }
         }
 
         return $paginator;
@@ -110,5 +133,22 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         $this->courseCatalogueHelper->addVisibilityCondition($qb, true);
 
         return $qb;
+    }
+
+    private function normalizeHtmlContent(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        $content = preg_replace('/<!doctype[^>]*>/i', '', $content) ?? $content;
+
+        if (preg_match('/<body[^>]*>(.*)<\/body>/is', $content, $matches)) {
+            $content = $matches[1];
+        }
+
+        return trim($content);
     }
 }

@@ -425,6 +425,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     public bool $subscribed = false;
 
+    #[Groups([
+        'course_catalogue:read',
+    ])]
+    public array $catalogueDescriptions = [];
+
     #[SerializedName('allowSelfSignup')]
     #[Groups([
         'course:read',

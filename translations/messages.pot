@@ -32717,3 +32717,9 @@ msgstr ""
 
 msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
 msgstr ""
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr ""
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr ""

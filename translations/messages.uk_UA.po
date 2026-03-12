@@ -32745,3 +32745,54 @@ msgstr "Завантажте зображення або створіть йог
 msgid "Current badge set"
 msgstr "Поточний набір значків"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "У цьому розділі, коли ви натискаєте 'Зареєструвати студента' для курсу, вас попросять вибрати користувача на наступній сторінці. Після підтвердження буде створено нову сесію з вибраним курсом і користувачем, і користувачу буде надіслано повідомлення про підписку."
+
+msgid "Read-only view"
+msgstr "Тільки для читання"
+
+msgid "Events list"
+msgstr "Список подій"
+
+msgid "Personal"
+msgstr "Особисте"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Тижні відображаються з 1 по 52"
+
+msgid "No tutored sessions found"
+msgstr "Сесій з наставником не знайдено"
+
+msgid "Content search"
+msgstr "Пошук вмісту"
+
+msgid "Search indexed content across all courses."
+msgstr "Шукайте проіндексований вміст у всіх курсах."
+
+msgid "Enter a keyword..."
+msgstr "Введіть ключове слово..."
+
+msgid "Search error"
+msgstr "Помилка пошуку"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Введіть ключове слово для пошуку проіндексованих документів."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Результати, до яких у вас немає доступу, приховані налаштуваннями."
+
+msgid "Restricted"
+msgstr "Обмежено"
+
+msgid "You do not have access to this resource."
+msgstr "У вас немає доступу до цього ресурсу."
+
+msgid "Create group"
+msgstr "Створити групу"
+
+msgid "My custom certificate"
+msgstr "Моє користувацьке свідоцтво"
+
+msgid "Select permission"
+msgstr "Вибрати дозвіл"
+

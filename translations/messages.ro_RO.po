@@ -32765,3 +32765,54 @@ msgstr "Încarcă o imagine sau creează una cu Badge Studio."
 msgid "Current badge set"
 msgstr "Setul actual de insigne"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "În această secțiune, când faceți clic pe 'Înregistrează student' pentru un curs, vi se va cere să selectați utilizatorul pe pagina următoare. După validare, se va crea o nouă sesiune cu cursul și utilizatorul selectat și se va trimite o notificare de înscriere utilizatorului."
+
+msgid "Read-only view"
+msgstr "Vizualizare doar citire"
+
+msgid "Events list"
+msgstr "Lista evenimentelor"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Săptămânile sunt afișate de la 1 la 52"
+
+msgid "No tutored sessions found"
+msgstr "Nu s-au găsit sesiuni tutorate"
+
+msgid "Content search"
+msgstr "Căutare conținut"
+
+msgid "Search indexed content across all courses."
+msgstr "Căutați conținutul indexat în toate cursurile."
+
+msgid "Enter a keyword..."
+msgstr "Introduceți un cuvânt cheie..."
+
+msgid "Search error"
+msgstr "Eroare de căutare"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Introduceți un cuvânt cheie pentru a căuta documente indexate."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultatele la care nu aveți acces sunt ascunse prin configurație."
+
+msgid "Restricted"
+msgstr "Restricționat"
+
+msgid "You do not have access to this resource."
+msgstr "Nu aveți acces la această resursă."
+
+msgid "Create group"
+msgstr "Creează grup"
+
+msgid "My custom certificate"
+msgstr "Certificatul meu personalizat"
+
+msgid "Select permission"
+msgstr "Selectați permisiunea"
+

@@ -32752,3 +32752,54 @@ msgstr "Current badge set"
 
 msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
 msgstr "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+
+msgid "Read-only view"
+msgstr "Read-only view"
+
+msgid "Events list"
+msgstr "Events list"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Weeks are displayed from 1 to 52"
+
+msgid "No tutored sessions found"
+msgstr "No tutored sessions found"
+
+msgid "Content search"
+msgstr "Content search"
+
+msgid "Search indexed content across all courses."
+msgstr "Search indexed content across all courses."
+
+msgid "Enter a keyword..."
+msgstr "Enter a keyword..."
+
+msgid "Search error"
+msgstr "Search error"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Enter a keyword to search indexed documents."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Results you cannot access are hidden by configuration."
+
+msgid "Restricted"
+msgstr "Restricted"
+
+msgid "You do not have access to this resource."
+msgstr "You do not have access to this resource."
+
+msgid "Create group"
+msgstr "Create group"
+
+msgid "My custom certificate"
+msgstr "My custom certificate"
+
+msgid "Select permission"
+msgstr "Select permission"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"

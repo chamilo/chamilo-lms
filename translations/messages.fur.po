@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartelle,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -32744,4 +32744,55 @@ msgstr "Cjarie un'immagine o creile une con Badge Studio."
 
 msgid "Current badge set"
 msgstr "Conjunt di badge atual"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "In chest sezion, cuindhandi su 'Regjistre studint' par un curs, ti vegnarà domândi di selezionâ l'utent te pàgine sucessive. Cuind validât, si creârâ une gnoje sesion cun il curs selezionât e l'utent, e si inviarâ une notifiche di iscrission all'utent."
+
+msgid "Read-only view"
+msgstr "Viste sul vignôr"
+
+msgid "Events list"
+msgstr "Liste dai events"
+
+msgid "Personal"
+msgstr "Personâl"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Le setiminis si mostrin dal 1 al 52"
+
+msgid "No tutored sessions found"
+msgstr "Nissune sesion tutorade trovate"
+
+msgid "Content search"
+msgstr "Ricercje dal contignut"
+
+msgid "Search indexed content across all courses."
+msgstr "Ricercje contignuts indicizâts tra tuit i curs."
+
+msgid "Enter a keyword..."
+msgstr "Inserî une perule ciave..."
+
+msgid "Search error"
+msgstr "Erôr di ricercje"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Inserî une perule ciave par ricercjî documents indicizâts."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "I rezutâts che no podês viodî a son celâts par configurazion."
+
+msgid "Restricted"
+msgstr "Restrit"
+
+msgid "You do not have access to this resource."
+msgstr "No âs acès a cheste ressource."
+
+msgid "Create group"
+msgstr "Cree grup"
+
+msgid "My custom certificate"
+msgstr "Muoi certificât personalizât"
+
+msgid "Select permission"
+msgstr "Selezionâ permês"
 

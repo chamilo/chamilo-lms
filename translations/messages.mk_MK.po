@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -32748,4 +32748,55 @@ msgstr "Подигни слика или направи ја со Badge Studio."
 
 msgid "Current badge set"
 msgstr "Тековен сет на значка"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Во оваа секција, кога ќе кликнете на 'Регистрирај студент' за курс, ќе бидете побарани да го изберете корисникот на следната страница. Кога ќе се потврди, ќе се создаде нова сесија со избраниот курс и корисник, и ќе се испрати известување за претплата до корисникот."
+
+msgid "Read-only view"
+msgstr "Поглед само за читање"
+
+msgid "Events list"
+msgstr "Листа на настани"
+
+msgid "Personal"
+msgstr "Лично"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Неделите се прикажуваат од 1 до 52"
+
+msgid "No tutored sessions found"
+msgstr "Нема најдени сесии со ментор"
+
+msgid "Content search"
+msgstr "Пребарување содржина"
+
+msgid "Search indexed content across all courses."
+msgstr "Пребарај индексирана содржина низ сите курсеви."
+
+msgid "Enter a keyword..."
+msgstr "Внеси клучна збор..."
+
+msgid "Search error"
+msgstr "Грешка во пребарувањето"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Внеси клучна збор за пребарување на индексирани документи."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Резултатите до кои немате пристап се скриени со конфигурација."
+
+msgid "Restricted"
+msgstr "Ограничено"
+
+msgid "You do not have access to this resource."
+msgstr "Немате пристап до овој ресурс."
+
+msgid "Create group"
+msgstr "Создај група"
+
+msgid "My custom certificate"
+msgstr "Мој сертификат по нарачка"
+
+msgid "Select permission"
+msgstr "Избери дозвола"
 

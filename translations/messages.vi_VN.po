@@ -32751,3 +32751,54 @@ msgstr "Tải lên hình ảnh hoặc tạo một cái với Badge Studio."
 msgid "Current badge set"
 msgstr "Bộ huy hiệu hiện tại"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Trong phần này, khi nhấp vào 'Đăng ký học viên' cho một khóa học, bạn sẽ được yêu cầu chọn người dùng trên trang tiếp theo. Khi xác nhận, nó sẽ tạo một phiên mới với khóa học và người dùng đã chọn, và gửi thông báo đăng ký cho người dùng."
+
+msgid "Read-only view"
+msgstr "Chế độ xem chỉ đọc"
+
+msgid "Events list"
+msgstr "Danh sách sự kiện"
+
+msgid "Personal"
+msgstr "Cá nhân"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Tuần được hiển thị từ 1 đến 52"
+
+msgid "No tutored sessions found"
+msgstr "Không tìm thấy phiên được hướng dẫn"
+
+msgid "Content search"
+msgstr "Tìm kiếm nội dung"
+
+msgid "Search indexed content across all courses."
+msgstr "Tìm kiếm nội dung đã lập chỉ mục trên tất cả các khóa học."
+
+msgid "Enter a keyword..."
+msgstr "Nhập từ khóa..."
+
+msgid "Search error"
+msgstr "Lỗi tìm kiếm"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Nhập từ khóa để tìm kiếm tài liệu đã lập chỉ mục."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Kết quả bạn không thể truy cập được ẩn theo cấu hình."
+
+msgid "Restricted"
+msgstr "Bị hạn chế"
+
+msgid "You do not have access to this resource."
+msgstr "Bạn không có quyền truy cập tài nguyên này."
+
+msgid "Create group"
+msgstr "Tạo nhóm"
+
+msgid "My custom certificate"
+msgstr "Chứng chỉ tùy chỉnh của tôi"
+
+msgid "Select permission"
+msgstr "Chọn quyền"
+

@@ -3955,7 +3955,7 @@ msgid "Number of users"
 msgstr "Nombre d'utilisateurs"
 
 msgid "Members"
-msgstr "participants"
+msgstr "Membres"
 
 msgid "First letter (class name)"
 msgstr "Première lettre (classe)"
@@ -30372,7 +30372,7 @@ msgid "The resource doesn't have a node."
 msgstr "La ressource n'a pas de nœud."
 
 msgid "No terms and conditions available for this language."
-msgstr "Aucun conditions générales disponible pour cette langue."
+msgstr "Aucun document de conditions générales disponible pour cette langue."
 
 msgid "Client"
 msgstr "Client"
@@ -34630,4 +34630,55 @@ msgstr "Téléversez une image ou créez-en une avec Badge Studio."
 
 msgid "Current badge set"
 msgstr "Ensemble de badges actuel"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Dans cette section, en cliquant sur « Inscrire un étudiant » pour un cours, vous serez invité à sélectionner l'utilisateur sur la page suivante. Une fois validé, cela créera une nouvelle session avec le cours et l'utilisateur sélectionnés, et enverra une notification d'inscription à l'utilisateur."
+
+msgid "Read-only view"
+msgstr "Vue en lecture seule"
+
+msgid "Events list"
+msgstr "Liste des événements"
+
+msgid "Personal"
+msgstr "Personnel"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Les semaines sont affichées de 1 à 52"
+
+msgid "No tutored sessions found"
+msgstr "Aucune session tutorée trouvée"
+
+msgid "Content search"
+msgstr "Recherche de contenu"
+
+msgid "Search indexed content across all courses."
+msgstr "Rechercher le contenu indexé dans tous les cours."
+
+msgid "Enter a keyword..."
+msgstr "Entrez un mot-clé..."
+
+msgid "Search error"
+msgstr "Erreur de recherche"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Entrez un mot-clé pour rechercher les documents indexés."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Les résultats auxquels vous n'avez pas accès sont masqués par la configuration."
+
+msgid "Restricted"
+msgstr "Restreint"
+
+msgid "You do not have access to this resource."
+msgstr "Vous n'avez pas accès à cette ressource."
+
+msgid "Create group"
+msgstr "Créer un groupe"
+
+msgid "My custom certificate"
+msgstr "Mon certificat personnalisé"
+
+msgid "Select permission"
+msgstr "Sélectionner une permission"
 

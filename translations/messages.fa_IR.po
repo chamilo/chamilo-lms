@@ -32749,3 +32749,54 @@ msgstr "تصویر را بارگذاری کنید یا با Badge Studio یکی 
 msgid "Current badge set"
 msgstr "مجموعه نشان فعلی"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "در این بخش، با کلیک بر روی 'ثبت‌نام دانشجو' برای یک درس، در صفحه بعد از شما خواسته می‌شود کاربر را انتخاب کنید. پس از تأیید، یک جلسه جدید با درس و کاربر انتخاب‌شده ایجاد می‌شود و اعلان ثبت‌نام به کاربر ارسال می‌گردد."
+
+msgid "Read-only view"
+msgstr "نمایش فقط خواندنی"
+
+msgid "Events list"
+msgstr "فهرست رویدادها"
+
+msgid "Personal"
+msgstr "شخصی"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "هفته‌ها از ۱ تا ۵۲ نمایش داده می‌شوند"
+
+msgid "No tutored sessions found"
+msgstr "هیچ جلسه راهنمایی‌شده‌ای یافت نشد"
+
+msgid "Content search"
+msgstr "جستجوی محتوا"
+
+msgid "Search indexed content across all courses."
+msgstr "جستجوی محتوای نمایه‌شده در تمام دروس."
+
+msgid "Enter a keyword..."
+msgstr "یک کلمه کلیدی وارد کنید..."
+
+msgid "Search error"
+msgstr "خطای جستجو"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "یک کلمه کلیدی برای جستجوی اسناد نمایه‌شده وارد کنید."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "نتایج غیرقابل دسترس طبق تنظیمات مخفی شده‌اند."
+
+msgid "Restricted"
+msgstr "محدود"
+
+msgid "You do not have access to this resource."
+msgstr "شما به این منبع دسترسی ندارید."
+
+msgid "Create group"
+msgstr "ایجاد گروه"
+
+msgid "My custom certificate"
+msgstr "گواهینامه سفارشی من"
+
+msgid "Select permission"
+msgstr "انتخاب مجوز"
+

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Okto duomenų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -32749,4 +32749,55 @@ msgstr "Įkelti paveikslėlį arba sukurti su Badge Studio."
 
 msgid "Current badge set"
 msgstr "Dabartinis ženklelių rinkinys"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Šiame skyriuje spustelėjus „Registruoti studentą“ kursui, bus paprašyta pasirinkti vartotoją kitame puslapyje. Patvirtinus, bus sukurta nauja sesija su pasirinktu kursu ir vartotoju bei išsiųstas prenumeratos pranešimas vartotojui."
+
+msgid "Read-only view"
+msgstr "Tik skaitymo vaizdas"
+
+msgid "Events list"
+msgstr "Renginių sąrašas"
+
+msgid "Personal"
+msgstr "Asmeniniai"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Savaitės rodomos nuo 1 iki 52"
+
+msgid "No tutored sessions found"
+msgstr "Nerasta mentoriuojamų sesijų"
+
+msgid "Content search"
+msgstr "Turinio paieška"
+
+msgid "Search indexed content across all courses."
+msgstr "Ieškoti indeksuoto turinio visuose kursuose."
+
+msgid "Enter a keyword..."
+msgstr "Įveskite raktažodį..."
+
+msgid "Search error"
+msgstr "Paieškos klaida"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Įveskite raktažodį, kad ieškotumėte indeksuotų dokumentų."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultatai, prie kurių neturite prieigos, yra paslėpti pagal konfigūraciją."
+
+msgid "Restricted"
+msgstr "Apribota"
+
+msgid "You do not have access to this resource."
+msgstr "Neturite prieigos prie šio ištekliaus."
+
+msgid "Create group"
+msgstr "Kurti grupę"
+
+msgid "My custom certificate"
+msgstr "Mano pasirinktinis pažymėjimas"
+
+msgid "Select permission"
+msgstr "Pasirinkti leidimą"
 

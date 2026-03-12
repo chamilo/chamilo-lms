@@ -1,46 +1,70 @@
 /* For licensing terms, see /license.txt */
 
 function normalizeLocale(locale) {
-  return locale.split('_')[0]
+  return String(locale || "").replace("-", "_")
+}
+
+function buildLocaleCandidates(locale) {
+  var normalizedLocale = normalizeLocale(locale)
+  var isoCode = normalizedLocale.split("_")[0]
+  var candidates = []
+
+  function addCandidate(value) {
+    if (value && candidates.indexOf(value) === -1) {
+      candidates.push(value)
+    }
+  }
+
+  addCandidate(isoCode)
+  addCandidate(normalizedLocale)
+  addCandidate(normalizedLocale.replace("_", "-"))
+
+  return candidates
+}
+
+function findByLang(selector, candidates) {
+  for (var i = 0; i < candidates.length; i++) {
+    var matches = document.querySelectorAll(selector.replace("{lang}", candidates[i]))
+
+    if (matches.length > 0) {
+      return matches
+    }
+  }
+
+  return []
+}
+
+function hideMatches(matches) {
+  matches.forEach(function (el) {
+    el.style.display = "none"
+  })
+}
+
+function showMatches(matches) {
+  matches.forEach(function (el) {
+    el.classList.remove("hidden")
+    el.style.display = ""
+  })
 }
 
 export default function translateHtml() {
-    if (
-      window.user &&
-      window.user.locale
-    ) {
-      var isoCode = normalizeLocale(window.user.locale)
-      const translateElement = document.querySelector(".mce-translatehtml")
-      if (translateElement) {
-        document.querySelectorAll(".mce-translatehtml").forEach(function (el) {
-          el.style.display = "none"
-        })
-        const selectedLang = document.querySelectorAll(`[lang="${isoCode}"]`)
-        if (selectedLang.length > 0) {
-          selectedLang.forEach(function (userLang) {
-            userLang.classList.remove("hidden")
-            userLang.style.display = "block"
-          })
-        }
-      }
+  if (!window.user || !window.user.locale) {
+    return
+  }
 
-      // it checks content from old version
-      const langSpans = document.querySelectorAll('span[lang]')
-      const langs = [...langSpans].filter(span => !span.classList.contains('mce-translatehtml'))
+  var localeCandidates = buildLocaleCandidates(window.user.locale)
+  var translateElements = document.querySelectorAll(".mce-translatehtml")
 
-      if (langs.length > 0) {
-        // it hides all contents with lang
-        langs.forEach(function (el) {
-          el.style.display = "none"
-        })
+  if (translateElements.length > 0) {
+    hideMatches(translateElements)
+    showMatches(findByLang('[lang="{lang}"].mce-translatehtml', localeCandidates))
+  }
 
-        const selectedLang = document.querySelectorAll(`span[lang="${isoCode}"]`)
-        if (selectedLang.length > 0) {
-          selectedLang.forEach(function (userLang) {
-            userLang.classList.remove("hidden")
-            userLang.style.display = "block"
-          })
-        }
-      }
-    }
+  // Legacy translate_html content
+  var legacyElements = document.querySelectorAll("span[lang]:not(.mce-translatehtml)")
+
+  if (legacyElements.length > 0) {
+    hideMatches(legacyElements)
+    showMatches(findByLang('span[lang="{lang}"]:not(.mce-translatehtml)', localeCandidates))
+  }
 }

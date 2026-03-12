@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Oktečni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -32764,4 +32764,55 @@ msgstr "Naložite sliko ali ustvarite eno z Badge Studio."
 
 msgid "Current badge set"
 msgstr "Trenutni nabor značk"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "V tem razdelku, ko kliknete na 'Vpiši študenta' za tečaj, boste na naslednji strani pozvani k izbiri uporabnika. Ko potrdite, bo ustvarjena nova seja s izbranim tečajem in uporabnikom ter uporabniku poslano obvestilo o vpisu."
+
+msgid "Read-only view"
+msgstr "Le za branje"
+
+msgid "Events list"
+msgstr "Seznam dogodkov"
+
+msgid "Personal"
+msgstr "Osebno"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Teden je prikazan od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Ni najdenih sej z mentorjem"
+
+msgid "Content search"
+msgstr "Iskanje vsebine"
+
+msgid "Search indexed content across all courses."
+msgstr "Iskanje indeksirane vsebine po vseh tečajih."
+
+msgid "Enter a keyword..."
+msgstr "Vnesite ključno besedo..."
+
+msgid "Search error"
+msgstr "Napaka iskanja"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Vnesite ključno besedo za iskanje indeksiranih dokumentov."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultati, do katerih nimate dostopa, so skriti zaradi nastavitev."
+
+msgid "Restricted"
+msgstr "Omejeno"
+
+msgid "You do not have access to this resource."
+msgstr "Do tega vira nimate dostopa."
+
+msgid "Create group"
+msgstr "Ustvari skupino"
+
+msgid "My custom certificate"
+msgstr "Moj prilagojen certifikat"
+
+msgid "Select permission"
+msgstr "Izberite dovoljenje"
 

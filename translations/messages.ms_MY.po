@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Papar Berasaskan,, application/msword:MsWord,, application/octet-stream:Aliran Oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -32748,4 +32748,55 @@ msgstr "Muat naik imej atau cipta satu dengan Badge Studio."
 
 msgid "Current badge set"
 msgstr "Set lencana semasa"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Dalam bahagian ini, apabila mengklik 'Daftar pelajar' untuk kursus, anda akan diminta memilih pengguna di halaman seterusnya. Apabila disahkan, ia akan mencipta sesi baru dengan kursus dan pengguna yang dipilih, dan menghantar pemberitahuan pendaftaran kepada pengguna."
+
+msgid "Read-only view"
+msgstr "Paparan baca sahaja"
+
+msgid "Events list"
+msgstr "Senarai acara"
+
+msgid "Personal"
+msgstr "Peribadi"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Minggu dipaparkan dari 1 hingga 52"
+
+msgid "No tutored sessions found"
+msgstr "Tiada sesi yang ditutor ditemui"
+
+msgid "Content search"
+msgstr "Carian kandungan"
+
+msgid "Search indexed content across all courses."
+msgstr "Cari kandungan yang diindeks merentasi semua kursus."
+
+msgid "Enter a keyword..."
+msgstr "Masukkan kata kunci..."
+
+msgid "Search error"
+msgstr "Ralat carian"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Masukkan kata kunci untuk mencari dokumen yang diindeks."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Keputusan yang tidak boleh diakses disembunyikan oleh konfigurasi."
+
+msgid "Restricted"
+msgstr "Dibatasi"
+
+msgid "You do not have access to this resource."
+msgstr "Anda tidak mempunyai akses kepada sumber ini."
+
+msgid "Create group"
+msgstr "Cipta kumpulan"
+
+msgid "My custom certificate"
+msgstr "Sijil tersuai saya"
+
+msgid "Select permission"
+msgstr "Pilih kebenaran"
 

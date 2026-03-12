@@ -59,7 +59,7 @@ function handleRegions()
 
     /* We display all the possible plugins and the checkboxes */
     $plugin_region_list = [];
-    $my_plugin_list = $plugin_obj->getPluginRegions();
+    $my_plugin_list = AppPlugin::$plugin_regions;
     foreach ($my_plugin_list as $plugin_item) {
         $plugin_region_list[$plugin_item] = $plugin_item;
     }

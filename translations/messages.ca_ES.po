@@ -32764,3 +32764,54 @@ msgstr "Puja una imatge o crea'n una amb Badge Studio."
 msgid "Current badge set"
 msgstr "Conjunt d'insígnies actual"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "En aquesta secció, en fer clic a 'Registra estudiant' per a un curs, se us demanarà que seleccioneu l'usuari a la pàgina següent. Un cop validat, es crearà una nova sessió amb el curs i l'usuari seleccionats, i s'enviarà una notificació de subscripció a l'usuari."
+
+msgid "Read-only view"
+msgstr "Visualització només de lectura"
+
+msgid "Events list"
+msgstr "Llista d'esdeveniments"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Les setmanes es mostren de l'1 al 52"
+
+msgid "No tutored sessions found"
+msgstr "No s'ha trobat cap sessió tutoritzada"
+
+msgid "Content search"
+msgstr "Cerca de contingut"
+
+msgid "Search indexed content across all courses."
+msgstr "Cerca contingut indexat en tots els cursos."
+
+msgid "Enter a keyword..."
+msgstr "Introduïu una paraula clau..."
+
+msgid "Search error"
+msgstr "Error de cerca"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Introduïu una paraula clau per cercar documents indexats."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Els resultats als quals no teniu accés estan ocults per configuració."
+
+msgid "Restricted"
+msgstr "Restringit"
+
+msgid "You do not have access to this resource."
+msgstr "No teniu accés a aquest recurs."
+
+msgid "Create group"
+msgstr "Crea grup"
+
+msgid "My custom certificate"
+msgstr "El meu certificat personalitzat"
+
+msgid "Select permission"
+msgstr "Selecciona permís"
+

@@ -32745,3 +32745,54 @@ msgstr "एक छवि अपलोड करें या Badge Studio के
 msgid "Current badge set"
 msgstr "वर्तमान बैज सेट"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "इस अनुभाग में, जब आप किसी पाठ्यक्रम के लिए 'छात्र पंजीकृत करें' पर क्लिक करेंगे, तो अगले पृष्ठ पर उपयोगकर्ता का चयन करने के लिए कहा जाएगा। सत्यापित करने पर, यह चयनित पाठ्यक्रम और उपयोगकर्ता के साथ एक नई सत्र बनाएगा, और उपयोगकर्ता को सदस्यता अधिसूचना भेजेगा।"
+
+msgid "Read-only view"
+msgstr "केवल पढ़ने योग्य दृश्य"
+
+msgid "Events list"
+msgstr "कार्यों की सूची"
+
+msgid "Personal"
+msgstr "व्यक्तिगत"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "सप्ताह 1 से 52 तक प्रदर्शित किए जाते हैं"
+
+msgid "No tutored sessions found"
+msgstr "कोई संरक्षित सत्र नहीं मिला"
+
+msgid "Content search"
+msgstr "सामग्री खोज"
+
+msgid "Search indexed content across all courses."
+msgstr "सभी पाठ्यक्रमों में अनुक्रमित सामग्री खोजें।"
+
+msgid "Enter a keyword..."
+msgstr "एक कुंजी शब्द दर्ज करें..."
+
+msgid "Search error"
+msgstr "खोज त्रुटि"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "अनुक्रमित दस्तावेज़ खोजने के लिए एक कुंजी शब्द दर्ज करें।"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "परिणाम जिन तक आप पहुँच नहीं सकते, कॉन्फ़िगरेशन द्वारा छिपाए गए हैं।"
+
+msgid "Restricted"
+msgstr "प्रतिबंधित"
+
+msgid "You do not have access to this resource."
+msgstr "आपके पास इस संसाधन तक पहुँच नहीं है।"
+
+msgid "Create group"
+msgstr "समूह बनाएँ"
+
+msgid "My custom certificate"
+msgstr "मेरा कस्टम प्रमाणपत्र"
+
+msgid "Select permission"
+msgstr "अनुमति चुनें"
+

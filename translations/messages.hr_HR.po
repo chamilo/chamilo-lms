@@ -32750,3 +32750,54 @@ msgstr "Učitaj sliku ili stvorite jednu s Badge Studio."
 msgid "Current badge set"
 msgstr "Trenutni set znački"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "U ovom odjeljku, kada kliknete na 'Registriraj studenta' za predmet, zatražit će se od vas da odaberete korisnika na sljedećoj stranici. Kada se potvrdi, stvorit će se nova sesija s odabranim predmetom i korisnikom te će korisniku biti poslana obavijest o pretplati."
+
+msgid "Read-only view"
+msgstr "Prikaz samo za čitanje"
+
+msgid "Events list"
+msgstr "Popis događaja"
+
+msgid "Personal"
+msgstr "Osobno"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Tjedni se prikazuju od 1. do 52."
+
+msgid "No tutored sessions found"
+msgstr "Nema pronađenih tutoriranih sesija"
+
+msgid "Content search"
+msgstr "Pretraživanje sadržaja"
+
+msgid "Search indexed content across all courses."
+msgstr "Pretražite indeksirani sadržaj u svim predmetima."
+
+msgid "Enter a keyword..."
+msgstr "Unesite ključnu riječ..."
+
+msgid "Search error"
+msgstr "Greška pri pretraživanju"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Unesite ključnu riječ za pretraživanje indeksiranih dokumenata."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultati kojima nemate pristup sakriveni su konfiguracijom."
+
+msgid "Restricted"
+msgstr "Ograničeno"
+
+msgid "You do not have access to this resource."
+msgstr "Nemate pristup ovom resursu."
+
+msgid "Create group"
+msgstr "Stvori grupu"
+
+msgid "My custom certificate"
+msgstr "Moj prilagođeni certifikat"
+
+msgid "Select permission"
+msgstr "Odaberi dopuštenje"
+

@@ -32745,3 +32745,54 @@ msgstr "Legg upp eitt mynd ella stovtað eitt við Badge Studio."
 msgid "Current badge set"
 msgstr "Núvervandi merkisett"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Í hesum bólki, tá ið tú klikkar á 'Skrá lærling' fyri eitt kursus, verður tú biðin um at velja brúkaran á næstu síðu. Tá ið staðfest, verður ein nýggj fundur uppruttur við valda kursi og brúkara, og ein tilmeldingartilkenning send til brúkarans."
+
+msgid "Read-only view"
+msgstr "Bert lesa-sýn"
+
+msgid "Events list"
+msgstr "Hendingalisti"
+
+msgid "Personal"
+msgstr "Persónligt"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Vikur verða vísar frá 1 til 52"
+
+msgid "No tutored sessions found"
+msgstr "Ongir tutoreraðir fundir funnir"
+
+msgid "Content search"
+msgstr "Innslagsleit"
+
+msgid "Search indexed content across all courses."
+msgstr "Leita í indeksuðum innihaldum í øllum kursum."
+
+msgid "Enter a keyword..."
+msgstr "Skriva eitt lyklaorð..."
+
+msgid "Search error"
+msgstr "Leitarfeilur"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Skriva eitt lyklaorð at leita í indeksuðum skjúlum."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Niðurstøður, ið tú ikki hevur atgongu til, eru fjalnar við stilling."
+
+msgid "Restricted"
+msgstr "Avmarkað"
+
+msgid "You do not have access to this resource."
+msgstr "Tú hevur ikki atgongu til henda almenna fyritøkju."
+
+msgid "Create group"
+msgstr "Upprætta bólk"
+
+msgid "My custom certificate"
+msgstr "Mitt egna skjal"
+
+msgid "Select permission"
+msgstr "Vel loyvi"
+

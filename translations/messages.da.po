@@ -32751,3 +32751,54 @@ msgstr ""
 msgid "Current badge set"
 msgstr "Nuværende badge-sæt"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "I dette afsnit, når du klikker på 'Tilmeld elev' for et kursus, vil du blive bedt om at vælge brugeren på næste side. Når det er valideret, oprettes en ny session med det valgte kursus og bruger, og en tilmeldingsbesked sendes til brugeren."
+
+msgid "Read-only view"
+msgstr "Skrivebeskyttet visning"
+
+msgid "Events list"
+msgstr "Begivenhedsliste"
+
+msgid "Personal"
+msgstr "Personlig"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Uger vises fra 1 til 52"
+
+msgid "No tutored sessions found"
+msgstr "Ingen vejledte sessioner fundet"
+
+msgid "Content search"
+msgstr "Indholdssøgning"
+
+msgid "Search indexed content across all courses."
+msgstr "Søg indekseret indhold på tværs af alle kurser."
+
+msgid "Enter a keyword..."
+msgstr "Indtast et søgeord..."
+
+msgid "Search error"
+msgstr "Søgefejl"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Indtast et søgeord for at søge i indekserede dokumenter."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultater, du ikke har adgang til, er skjult via konfiguration."
+
+msgid "Restricted"
+msgstr "Begrænset"
+
+msgid "You do not have access to this resource."
+msgstr "Du har ikke adgang til denne ressource."
+
+msgid "Create group"
+msgstr "Opret gruppe"
+
+msgid "My custom certificate"
+msgstr "Mit brugerdefinerede certifikat"
+
+msgid "Select permission"
+msgstr "Vælg tilladelse"
+

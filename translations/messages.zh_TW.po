@@ -32751,3 +32751,54 @@ msgstr "上傳圖片或使用 Badge Studio 建立一個。"
 msgid "Current badge set"
 msgstr "目前徽章組"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "在本節中，點選課程的「註冊學生」時，將在下一頁要求您選擇使用者。驗證後，將建立包含選定課程及使用者的新工作階段，並向使用者發送註冊通知。"
+
+msgid "Read-only view"
+msgstr "唯讀檢視"
+
+msgid "Events list"
+msgstr "活動清單"
+
+msgid "Personal"
+msgstr "個人"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "週數顯示為 1 至 52"
+
+msgid "No tutored sessions found"
+msgstr "未找到輔導工作階段"
+
+msgid "Content search"
+msgstr "內容搜尋"
+
+msgid "Search indexed content across all courses."
+msgstr "搜尋所有課程中的索引內容。"
+
+msgid "Enter a keyword..."
+msgstr "輸入關鍵字…"
+
+msgid "Search error"
+msgstr "搜尋錯誤"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "輸入關鍵字以搜尋索引文件。"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "依設定隱藏您無法存取的結果。"
+
+msgid "Restricted"
+msgstr "受限"
+
+msgid "You do not have access to this resource."
+msgstr "您無權存取此資源。"
+
+msgid "Create group"
+msgstr "建立群組"
+
+msgid "My custom certificate"
+msgstr "我的自訂證書"
+
+msgid "Select permission"
+msgstr "選擇權限"
+

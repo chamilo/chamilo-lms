@@ -1300,6 +1300,48 @@ class CourseBuilder
         /** @var CThematic[] $rows */
         $rows = $qb->getQuery()->getResult();
 
+        if (!$rows) {
+            $cid = (int) $courseEntity->getId();
+            $sid = (int) ($sessionEntity?->getId() ?? 0);
+
+            $fallbackQb = $this->em->createQueryBuilder()
+                ->select('resource')
+                ->from(CThematic::class, 'resource')
+                ->andWhere('resource.cId = :cid')
+                ->setParameter('cid', $cid)
+                ->orderBy('resource.iid', 'ASC');
+
+            if ($sid > 0) {
+                if ($this->withBaseContent) {
+                    $fallbackQb->andWhere(
+                        $fallbackQb->expr()->orX(
+                            'resource.sessionId = :sid',
+                            'resource.sessionId IS NULL',
+                            'resource.sessionId = 0'
+                        )
+                    )->setParameter('sid', $sid);
+                } else {
+                    $fallbackQb->andWhere('resource.sessionId = :sid')
+                        ->setParameter('sid', $sid);
+                }
+            } else {
+                $fallbackQb->andWhere(
+                    $fallbackQb->expr()->orX(
+                        'resource.sessionId IS NULL',
+                        'resource.sessionId = 0'
+                    )
+                );
+            }
+
+            if (!empty($ids)) {
+                $fallbackQb->andWhere('resource.iid IN (:ids)')
+                    ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+            }
+
+            /** @var CThematic[] $rows */
+            $rows = $fallbackQb->getQuery()->getResult();
+        }
+
         foreach ($rows as $row) {
             $iid = (int) $row->getIid();
             $title = (string) $row->getTitle();
@@ -1330,7 +1372,6 @@ class CourseBuilder
                         }
                     }
                 } catch (Throwable) {
-                    // keep $attendanceId = 0
                 }
 
                 $advArr = [
@@ -1502,7 +1543,7 @@ class CourseBuilder
             $pageId = (int) ($page->getPageId() ?? $iid);
             $reflink = (string) $page->getReflink();
             $title = (string) $page->getTitle();
-            $content = (string) $page->getContent();
+            $content = $this->normalizeWikiHtmlForExport((string) $page->getContent());
             $userId = (int) $page->getUserId();
             $groupId = (int) ($page->getGroupId() ?? 0);
             $progress = (string) ($page->getProgress() ?? '');
@@ -1788,13 +1829,14 @@ class CourseBuilder
         foreach ($anns as $a) {
             $iid = (int) $a->getIid();
             $title = (string) $a->getTitle();
-            $html = (string) ($a->getContent() ?? '');
+            $html = $this->normalizeWikiHtmlForExport((string) ($a->getContent() ?? ''));
             $date = $a->getEndDate()?->format('Y-m-d H:i:s') ?? '';
             $email = (bool) $a->getEmailSent();
 
+            $this->findAndSetDocumentsInText($html);
+
             $firstPath = $firstName = $firstComment = '';
             $firstSize = 0;
-
             $attachmentsArr = [];
 
             /** @var CAnnouncementAttachment $att */
@@ -2997,15 +3039,16 @@ class CourseBuilder
             }
 
             try {
-                if ($documentsRoot instanceof ResourceNode) {
-                    $rel = (string) $node->getPathForDisplayRemoveBase((string) ($documentsRoot->getPath() ?? ''));
-                } else {
-                    $rel = (string) $node->convertPathForDisplay((string) ($node->getPath() ?? ''));
-                    $rel = preg_replace('~^/?Documents/?~i', '', $rel) ?? $rel;
-                }
+                $rel = $this->normalizeDocumentRelativePathForMoodleExport(
+                    (string) ($node->getPath() ?? ''),
+                    $course,
+                    $documentsRoot instanceof ResourceNode ? (string) ($documentsRoot->getPath() ?? '') : '',
+                    $title,
+                    'folder' === $filetype
+                );
             } catch (Throwable $e) {
                 error_log(sprintf(
-                    '[MOODLE EXPORT] Failed to resolve document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
+                    '[MOODLE EXPORT] Failed to normalize document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
                     $iid,
                     (int) $node->getId(),
                     $title,
@@ -3412,10 +3455,17 @@ class CourseBuilder
         }
 
         try {
+            $resourceNodeRepo = $this->em->getRepository(ResourceNode::class);
+
             /** @var ResourceNode|null $resourceNode */
-            $resourceNode = $this->em
-                ->getRepository(ResourceNode::class)
-                ->findOneBy(['uuid' => $uuid]);
+            $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => $uuid]);
+            if (!$resourceNode instanceof ResourceNode && class_exists(Uuid::class)) {
+                try {
+                    $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+                } catch (Throwable) {
+                    $resourceNode = null;
+                }
+            }
 
             if (!$resourceNode instanceof ResourceNode) {
                 return '';
@@ -3423,7 +3473,6 @@ class CourseBuilder
 
             /** @var CDocument|null $doc */
             $doc = $this->docRepo->findOneBy(['resourceNode' => $resourceNode]);
-
             if (!$doc instanceof CDocument) {
                 return '';
             }
@@ -3432,5 +3481,270 @@ class CourseBuilder
         } catch (Throwable) {
             return '';
         }
+    }
+
+    private function normalizeDocumentRelativePathForMoodleExport(
+        string $rawPath,
+        CourseEntity $course,
+        string $documentsRootPath = '',
+        string $title = '',
+        bool $isFolder = false
+    ): string {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $root = trim(str_replace('\\', '/', $documentsRootPath));
+        $root = preg_replace('#/+#', '/', $root);
+        $root = trim((string) $root, '/');
+
+        if ('' !== $root) {
+            if ($path === $root) {
+                return '';
+            }
+
+            if (str_starts_with($path, $root.'/')) {
+                $path = substr($path, strlen($root) + 1);
+            }
+        }
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        // Drop host-like prefix: localhost, localhost-4, domain, IP
+        if (isset($segments[0]) && $this->looksLikeExportHostSegment((string) $segments[0])) {
+            array_shift($segments);
+        }
+
+        $courseCode = trim((string) $course->getCode());
+        if ('' !== $courseCode && isset($segments[0])) {
+            $first = (string) $segments[0];
+            $courseCodeLower = mb_strtolower($courseCode);
+            $firstLower = mb_strtolower($first);
+
+            if (
+                $firstLower === $courseCodeLower ||
+                str_starts_with($firstLower, $courseCodeLower.'-')
+            ) {
+                array_shift($segments);
+            }
+        }
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        $lastIndex = array_key_last($segments);
+
+        foreach ($segments as $index => $segment) {
+            $segment = trim((string) $segment);
+
+            if ('' === $segment) {
+                unset($segments[$index]);
+                continue;
+            }
+
+            // Folders in Chamilo paths often carry "-nodeId"
+            if (!str_contains($segment, '.') && preg_match('~^(.+)-\d+$~', $segment, $matches)) {
+                $segment = (string) $matches[1];
+            }
+
+            // For the final folder segment, prefer the document title if available
+            if ($isFolder && $index === $lastIndex && '' !== trim($title)) {
+                $segment = trim($title);
+            }
+
+            $segments[$index] = $segment;
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
+    private function looksLikeExportHostSegment(string $segment): bool
+    {
+        $segment = trim($segment);
+
+        if ('' === $segment) {
+            return false;
+        }
+
+        if (preg_match('~^localhost(?:-\d+)?$~i', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^\d{1,3}(?:\.\d{1,3}){3}$~', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^[a-z0-9.-]+\.[a-z]{2,}$~i', $segment)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function normalizeWikiHtmlForExport(string $html): string
+    {
+        if ('' === trim($html)) {
+            return $html;
+        }
+
+        $rewrite = function (string $url): string {
+            return $this->normalizeWikiEmbeddedUrlForExport($url);
+        };
+
+        // src, href, poster, data
+        $html = (string) preg_replace_callback(
+            '~\b(src|href|poster|data)\s*=\s*([\'"])([^\'"]+)\2~i',
+            static function (array $m) use ($rewrite): string {
+                return $m[1].'='.$m[2].$rewrite((string) $m[3]).$m[2];
+            },
+            $html
+        );
+
+        // srcset
+        $html = (string) preg_replace_callback(
+            '~\bsrcset\s*=\s*([\'"])(.*?)\1~is',
+            static function (array $m) use ($rewrite): string {
+                $quote = $m[1];
+                $value = (string) $m[2];
+                $parts = array_map('trim', explode(',', $value));
+
+                foreach ($parts as &$part) {
+                    if ('' === $part) {
+                        continue;
+                    }
+
+                    $tokens = preg_split('/\s+/', $part, -1, PREG_SPLIT_NO_EMPTY);
+                    if (!$tokens || empty($tokens[0])) {
+                        continue;
+                    }
+
+                    $tokens[0] = $rewrite((string) $tokens[0]);
+                    $part = implode(' ', $tokens);
+                }
+
+                return 'srcset='.$quote.implode(', ', $parts).$quote;
+            },
+            $html
+        );
+
+        // inline style url(...)
+        $html = (string) preg_replace_callback(
+            '~\bstyle\s*=\s*([\'"])(.*?)\1~is',
+            static function (array $m) use ($rewrite): string {
+                $quote = $m[1];
+                $style = (string) $m[2];
+
+                $style = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    static function (array $mm) use ($rewrite): string {
+                        return 'url('.$mm[1].$rewrite((string) $mm[2]).$mm[1].')';
+                    },
+                    $style
+                );
+
+                return 'style='.$quote.$style.$quote;
+            },
+            $html
+        );
+
+        // <style> blocks
+        $html = (string) preg_replace_callback(
+            '~(<style\b[^>]*>)(.*?)(</style>)~is',
+            static function (array $m) use ($rewrite): string {
+                $open = $m[1];
+                $css = (string) $m[2];
+                $close = $m[3];
+
+                $css = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    static function (array $mm) use ($rewrite): string {
+                        return 'url('.$mm[1].$rewrite((string) $mm[2]).$mm[1].')';
+                    },
+                    $css
+                );
+
+                return $open.$css.$close;
+            },
+            $html
+        );
+
+        return $html;
+    }
+
+    private function normalizeWikiEmbeddedUrlForExport(string $url): string
+    {
+        $url = trim(html_entity_decode($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        if ('' === $url) {
+            return $url;
+        }
+
+        if (str_starts_with($url, 'data:') || str_contains($url, '@@PLUGINFILE@@')) {
+            return $url;
+        }
+
+        $decodedUrl = urldecode($url);
+        $path = (string) (parse_url($decodedUrl, PHP_URL_PATH) ?? '');
+        $query = (string) (parse_url($decodedUrl, PHP_URL_QUERY) ?? '');
+
+        if ('' === $path) {
+            $path = $decodedUrl;
+        }
+
+        $trimmedPath = trim($path, '/');
+
+        if (preg_match('~^(?:r/)?document/files/(?P<uuid>[A-Za-z0-9-]{16,64})/(?:view|download|link)/?$~i', $trimmedPath, $matches)) {
+            $relativePath = $this->resolveDocumentRelPathFromResourceUuid((string) $matches['uuid']);
+            if ('' !== $relativePath) {
+                return '/document/'.$relativePath;
+            }
+        }
+
+        if (preg_match('~^document/view$~i', $trimmedPath)) {
+            $params = [];
+            parse_str($query, $params);
+
+            $candidate = (string) ($params['file'] ?? $params['path'] ?? '');
+            $candidate = $this->normalizeDocumentRelPath($candidate);
+            if ('' !== $candidate) {
+                return '/document/'.$candidate;
+            }
+        }
+
+        $candidate = $this->normalizeDocumentRelPath($this->extractRelativeDocumentPathFromUrl($decodedUrl));
+        if ('' !== $candidate) {
+            if (preg_match('~^files/(?P<uuid>[A-Za-z0-9-]{16,64})/(?:view|download|link)$~i', $candidate, $matches)) {
+                $relativePath = $this->resolveDocumentRelPathFromResourceUuid((string) $matches['uuid']);
+                if ('' !== $relativePath) {
+                    return '/document/'.$relativePath;
+                }
+
+                return $url;
+            }
+
+            return '/document/'.$candidate;
+        }
+
+        return $url;
     }
 }

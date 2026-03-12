@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CDocument;
 
@@ -64,7 +65,7 @@ if ($action === 'list_documents') {
         $courseId = api_get_course_int_id();
         $isAdmin  = api_is_platform_admin();
 
-        // Require edit rights inside a course; otherwise only admins can list globally
+        // Require edit rights inside a course; otherwise check BBB conference manager for global context
         if ($courseId > 0) {
             if (!api_is_allowed_to_edit()) {
                 http_response_code(403);
@@ -73,33 +74,52 @@ if ($action === 'list_documents') {
             }
         } else {
             if (!$isAdmin) {
-                http_response_code(403);
-                echo json_encode(['error' => 'Forbidden (admin required for global listing)']);
-                exit;
+                $allowed = false;
+                $isGlobal = isset($_GET['global']);
+                $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+                if ($isGlobal || $isGlobalPerUser) {
+                    $bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
+                    $allowed = $bbb->isConferenceManager();
+                }
+                if (!$allowed) {
+                    http_response_code(403);
+                    echo json_encode(['error' => 'Forbidden']);
+                    exit;
+                }
             }
         }
 
         $em   = Database::getManager();
         $repo = $em->getRepository(ResourceNode::class);
 
-        $qb = $em->createQueryBuilder()
-            ->select('DISTINCT d')
-            ->from(CDocument::class, 'd')
-            ->innerJoin('d.resourceNode', 'rn')
-            ->innerJoin('rn.resourceFiles', 'rf')
-            ->innerJoin('rn.resourceLinks', 'rl')
-            ->where('d.filetype = :type')
-            ->setParameter('type', 'file');
-
         if ($courseId > 0) {
-            $qb->andWhere('IDENTITY(rl.course) = :cId')
-                ->setParameter('cId', (int)$courseId);
+            // Course context: list course documents
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT d')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->innerJoin('rn.resourceFiles', 'rf')
+                ->innerJoin('rn.resourceLinks', 'rl')
+                ->where('d.filetype = :type')
+                ->andWhere('IDENTITY(rl.course) = :cId')
+                ->setParameter('type', 'file')
+                ->setParameter('cId', (int) $courseId);
+        } else {
+            // Global context: list only the current user's personal files
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT d')
+                ->from(PersonalFile::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->innerJoin('rn.resourceFiles', 'rf')
+                ->where('rn.creator = :userId')
+                ->setParameter('userId', api_get_user_id());
         }
 
         $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
         $limit = max(1, min($limit, 2000));
+        $orderField = $courseId > 0 ? 'd.iid' : 'd.id';
         $qb->setMaxResults($limit)
-            ->orderBy('d.iid', 'DESC');
+            ->orderBy($orderField, 'DESC');
 
         $docs = $qb->getQuery()->getResult();
         $out  = [];
@@ -126,8 +146,9 @@ if ($action === 'list_documents') {
                 continue;
             }
 
+            $docId = $doc instanceof CDocument ? $doc->getIid() : $doc->getId();
             $out[] = [
-                'id'       => $doc->getIid(),
+                'id'       => $docId,
                 'url'      => $diskPath,
                 'filename' => $orig,
                 'size'     => @filesize($diskPath) ?: null,

@@ -32749,3 +32749,54 @@ msgstr "Last opp eit bilete eller lag eitt med Badge Studio."
 msgid "Current badge set"
 msgstr "Noverande merkesett"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "I dette området, når du klikkar på 'Registrer student' for eit kurs, blir du bede om å velje brukar på neste side. Når det er validert, vil det opprettast ei ny sesjon med det valde kurset og brukaren, og ein abonnementsvarsel blir sendt til brukaren."
+
+msgid "Read-only view"
+msgstr "Berre lesing"
+
+msgid "Events list"
+msgstr "Hendelsesliste"
+
+msgid "Personal"
+msgstr "Personleg"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Veker visast frå 1 til 52"
+
+msgid "No tutored sessions found"
+msgstr "Ingen tutorde sesjonar funne"
+
+msgid "Content search"
+msgstr "Innhaldssøk"
+
+msgid "Search indexed content across all courses."
+msgstr "Søk indeksert innhald på tvers av alle kurs."
+
+msgid "Enter a keyword..."
+msgstr "Skriv inn eit søkeord..."
+
+msgid "Search error"
+msgstr "Søkjefejl"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Skriv inn eit søkeord for å søkje i indekserte dokument."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultat du ikkje har tilgang til er skjult av konfigurasjon."
+
+msgid "Restricted"
+msgstr "Begrensa"
+
+msgid "You do not have access to this resource."
+msgstr "Du har ikkje tilgang til denne ressursen."
+
+msgid "Create group"
+msgstr "Opprett gruppe"
+
+msgid "My custom certificate"
+msgstr "Mitt tilpassa sertifikat"
+
+msgid "Select permission"
+msgstr "Vel tilgjenge"
+

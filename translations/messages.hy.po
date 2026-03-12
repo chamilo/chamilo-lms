@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ֆորմուլայի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ձևաչափի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -32748,4 +32748,55 @@ msgstr "Վերբեռնեք նկար կամ ստեղծեք մեկը Badge Studio-
 
 msgid "Current badge set"
 msgstr "Ընթացիկ խարիզմների փաթեթ"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Այս բաժնում, ընտրելով «Գրանցել ուսանող» դասընթացի համար, հաջորդ էջում կ պահանջվի ընտրել օգտատիրոջը: Հաստատումից հետո կստեղծվի նոր սեանս ընտրված դասընթացով և օգտատիրոջ հետ, և կուղարկվի գրանցման ծանուցում օգտատիրոջը:"
+
+msgid "Read-only view"
+msgstr "Միայն կարդալու ձևանմուշ"
+
+msgid "Events list"
+msgstr "Միջոցառումների ցուցակ"
+
+msgid "Personal"
+msgstr "Անձնական"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Շաբաթները ցուցադրվում են 1-ից մինչև 52"
+
+msgid "No tutored sessions found"
+msgstr "Ոչ մի ուսուցչական սեանս չի գտնվել"
+
+msgid "Content search"
+msgstr "Բովանդակության որոնում"
+
+msgid "Search indexed content across all courses."
+msgstr "Որոնել ինդեքսավորված բովանդակությունը բոլոր դասընթացներում:"
+
+msgid "Enter a keyword..."
+msgstr "Մուտքագրեք բանալի բառ..."
+
+msgid "Search error"
+msgstr "Որոնման սխալ"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Մուտքագրեք բանալի բառ՝ ինդեքսավորված փաստաթղթերը որոնելու համար:"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Մուտք չունեցող արդյունքները թաքցված են կարգավորումներով:"
+
+msgid "Restricted"
+msgstr "Սահմանափակված"
+
+msgid "You do not have access to this resource."
+msgstr "Դուք մուտք չունեք այս ռեսուրսին:"
+
+msgid "Create group"
+msgstr "Ստեղծել խումբ"
+
+msgid "My custom certificate"
+msgstr "Իմ հատուկ վկայականը"
+
+msgid "Select permission"
+msgstr "Ընտրել թույլտվություն"
 

@@ -32666,3 +32666,54 @@ msgstr ""
 
 msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
 msgstr ""
+
+msgid "Read-only view"
+msgstr ""
+
+msgid "Events list"
+msgstr ""
+
+msgid "Personal"
+msgstr ""
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr ""
+
+msgid "No tutored sessions found"
+msgstr ""
+
+msgid "Content search"
+msgstr ""
+
+msgid "Search indexed content across all courses."
+msgstr ""
+
+msgid "Enter a keyword..."
+msgstr ""
+
+msgid "Search error"
+msgstr ""
+
+msgid "Enter a keyword to search indexed documents."
+msgstr ""
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr ""
+
+msgid "Restricted"
+msgstr ""
+
+msgid "You do not have access to this resource."
+msgstr ""
+
+msgid "Create group"
+msgstr ""
+
+msgid "My custom certificate"
+msgstr ""
+
+msgid "Select permission"
+msgstr ""
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr ""

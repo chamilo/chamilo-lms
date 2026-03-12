@@ -310,7 +310,7 @@ export function useSidebarMenu() {
       }
     }
 
-    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
+    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Agenda", "CCalendarEventList"))
 
     if (allowSearchFeature.value && isMenuTabEnabled("search")) {
       items.push({

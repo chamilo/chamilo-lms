@@ -27040,7 +27040,7 @@ msgid "Show all learner publications (from base course and from all sessions) in
 msgstr "Ipakita ang lahat ng learner publications (mula sa base course at mula sa lahat ng sessions) sa work/pending.php page ng base course."
 
 msgid "Session admin can access batch user import, update and export"
-msgstr "Session admin ay makapag-access ng batch user import, update at export"
+msgstr "Session admin makapag-access ng batch user import, update at export"
 
 msgid "Hide session chart in My progress"
 msgstr "Itago ang session chart sa My progress"
@@ -32744,4 +32744,55 @@ msgstr "Mag-upload ng isang imahe o gumawa ng isa gamit ang Badge Studio."
 
 msgid "Current badge set"
 msgstr "Kasalukuyang hanay ng badge"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Sa seksyong ito, kapag nag-click ng 'Magrehistro ng mag-aaral' para sa isang kurso, hihilingin sa iyo na pumili ng user sa susunod na pahina. Kapag na-validate, ito ay maglikha ng bagong sesyon na may napiling kurso at user, at magpapadala ng abisong pang-subscription sa user."
+
+msgid "Read-only view"
+msgstr "View lamang na pangbasa"
+
+msgid "Events list"
+msgstr "Listahan ng mga kaganapan"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Ang mga linggo ay ipinapakita mula 1 hanggang 52"
+
+msgid "No tutored sessions found"
+msgstr "Walang natagpuang sesyon na may tutor"
+
+msgid "Content search"
+msgstr "Paghahanap ng nilalaman"
+
+msgid "Search indexed content across all courses."
+msgstr "Maghanap ng na-index na nilalaman sa lahat ng kurso."
+
+msgid "Enter a keyword..."
+msgstr "Ilagay ang isang keyword..."
+
+msgid "Search error"
+msgstr "Error sa paghahanap"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ilagay ang isang keyword upang maghanap ng na-index na mga dokumento."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Ang mga resulta na hindi mo ma-access ay nakatago sa pamamagitan ng configuration."
+
+msgid "Restricted"
+msgstr "Pinaghihigpitan"
+
+msgid "You do not have access to this resource."
+msgstr "Wala kang access sa mapna-yaring ito."
+
+msgid "Create group"
+msgstr "Lumikha ng grupo"
+
+msgid "My custom certificate"
+msgstr "Aking custom na sertipiko"
+
+msgid "Select permission"
+msgstr "Pumili ng pahintulot"
 

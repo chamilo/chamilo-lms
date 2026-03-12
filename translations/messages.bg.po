@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -32750,4 +32750,55 @@ msgstr "Качете изображение или създайте едно с 
 
 msgid "Current badge set"
 msgstr "Текущ комплект значки"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "В този раздел, когато кликнете върху 'Регистрирай студент' за курс, на следващата страница ще трябва да изберете потребител. След валидиране ще се създаде нова сесия с избрания курс и потребител и ще се изпрати известие за абонамент на потребителя."
+
+msgid "Read-only view"
+msgstr "Само за четене"
+
+msgid "Events list"
+msgstr "Списък събития"
+
+msgid "Personal"
+msgstr "Лично"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Седмиците се показват от 1 до 52"
+
+msgid "No tutored sessions found"
+msgstr "Не са намерени сесии с tutor"
+
+msgid "Content search"
+msgstr "Търсене на съдържание"
+
+msgid "Search indexed content across all courses."
+msgstr "Търсене на индексирано съдържание във всички курсове."
+
+msgid "Enter a keyword..."
+msgstr "Въведете ключова дума..."
+
+msgid "Search error"
+msgstr "Грешка при търсене"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Въведете ключова дума за търсене на индексирани документи."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Резултатите, към които нямате достъп, са скрити от конфигурацията."
+
+msgid "Restricted"
+msgstr "Ограничен"
+
+msgid "You do not have access to this resource."
+msgstr "Нямате достъп до този ресурс."
+
+msgid "Create group"
+msgstr "Създай група"
+
+msgid "My custom certificate"
+msgstr "Моят персонализиран сертификат"
+
+msgid "Select permission"
+msgstr "Избери разрешение"
 

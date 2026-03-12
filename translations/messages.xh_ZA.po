@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -32744,4 +32744,55 @@ msgstr "Layisha umfanekiso okanye wenze ngokusebenzisa iBadge Studio."
 
 msgid "Current badge set"
 msgstr "Iseti yeebhedji zangoku"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Kwala eli candelo, xa ucofa ku 'Bhalisa umfundi' kwizifundo, uya kucelwa ukuba ukhethe umsebenzisi kwiphepha elandelayo. Xa kuqinisekisiwe, iya kudala iseshini entsha enezifundo ezikhethiweyo kunye nomsebenzisi, kwaye ithumele isaziso sobhaliso kumsebenzisi."
+
+msgid "Read-only view"
+msgstr "Umbono wokufunda kuphela"
+
+msgid "Events list"
+msgstr "Uluhlu lwezinto"
+
+msgid "Personal"
+msgstr "Zobuntu"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Iiveki zibonakaliswa ukusuka 1 ukuya 52"
+
+msgid "No tutored sessions found"
+msgstr "Akukho seshini ezinobuqeqeshi ezifunyanwayo"
+
+msgid "Content search"
+msgstr "Gqalisela umxholo"
+
+msgid "Search indexed content across all courses."
+msgstr "Gqalisela umxholo owenziwe index kuzo zonke izifundo."
+
+msgid "Enter a keyword..."
+msgstr "Faka igama elingundoqo..."
+
+msgid "Search error"
+msgstr "Impazamo yokugqalisela"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Faka igama elingundoqo ukuze ukhangele amaxwebhu abhalisiweyo."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Iziphumo ongenakho ukufikelela kuzo zifihliwe ngolungelelwaniso."
+
+msgid "Restricted"
+msgstr "Ikhethekileyo"
+
+msgid "You do not have access to this resource."
+msgstr "Awunakho ukufikelela kulo mxholo."
+
+msgid "Create group"
+msgstr "Yenza iqela"
+
+msgid "My custom certificate"
+msgstr "Isatifikethi sam esiqulathiweyo"
+
+msgid "Select permission"
+msgstr "Khetha imvume"
 

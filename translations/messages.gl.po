@@ -32764,3 +32764,54 @@ msgstr "Subir unha imaxe ou creala con Badge Studio."
 msgid "Current badge set"
 msgstr "Conxunto actual de insignias"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Nesta sección, ao facer clic en 'Rexistrar estudante' para un curso, pediráselle que seleccione o usuario na páxina seguinte. Ao validar, creará unha nova sesión co curso e usuario seleccionados, e enviará unha notificación de subscrición ao usuario."
+
+msgid "Read-only view"
+msgstr "Vista só de lectura"
+
+msgid "Events list"
+msgstr "Lista de eventos"
+
+msgid "Personal"
+msgstr "Persoal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "As semanas móstranse do 1 ao 52"
+
+msgid "No tutored sessions found"
+msgstr "Non se atoparon sesións tutorizadas"
+
+msgid "Content search"
+msgstr "Busca de contido"
+
+msgid "Search indexed content across all courses."
+msgstr "Busque contido indexado en todos os cursos."
+
+msgid "Enter a keyword..."
+msgstr "Introduza unha palabra clave..."
+
+msgid "Search error"
+msgstr "Erro de busca"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Introduza unha palabra clave para buscar documentos indexados."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Os resultados aos que non ten acceso están agochados por configuración."
+
+msgid "Restricted"
+msgstr "Restringido"
+
+msgid "You do not have access to this resource."
+msgstr "Non ten acceso a este recurso."
+
+msgid "Create group"
+msgstr "Crear grupo"
+
+msgid "My custom certificate"
+msgstr "O meu certificado personalizado"
+
+msgid "Select permission"
+msgstr "Seleccionar permiso"
+

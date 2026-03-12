@@ -22,7 +22,7 @@
       <BaseButton
         class="self-end"
         icon="search"
-        label="Search"
+        :label="$t('Search')"
         type="secondary"
         @click="handleFormSearch"
       />
@@ -57,7 +57,7 @@
             <BaseButton
               class="mt-2"
               icon=""
-              label="See more"
+              :label="t('See more')"
               type="secondary"
             />
           </a>

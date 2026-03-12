@@ -3802,7 +3802,7 @@ function api_get_languages_with_platform_default(): array
     $sql = "SELECT isocode, original_name
             FROM $langTable
             WHERE available = '1'
-            ORDER BY english_name ASC";
+            ORDER BY original_name ASC";
     $res = Database::query($sql);
 
     $languages = [];

@@ -32755,3 +32755,54 @@ msgstr "Wczytaj obraz lub utwórz go za pomocą Badge Studio."
 msgid "Current badge set"
 msgstr "Aktualny zestaw odznak"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "W tej sekcji, po kliknięciu 'Zarejestruj studenta' dla kursu, na następnej stronie zostaniesz poproszony o wybranie użytkownika. Po zatwierdzeniu zostanie utworzona nowa sesja z wybranym kursem i użytkownikiem oraz wysłane powiadomienie o subskrypcji do użytkownika."
+
+msgid "Read-only view"
+msgstr "Widok tylko do odczytu"
+
+msgid "Events list"
+msgstr "Lista wydarzeń"
+
+msgid "Personal"
+msgstr "Osobiste"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Tygodnie są wyświetlane od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Nie znaleziono sesji z tutorem"
+
+msgid "Content search"
+msgstr "Wyszukiwanie treści"
+
+msgid "Search indexed content across all courses."
+msgstr "Wyszukuj indeksowane treści we wszystkich kursach."
+
+msgid "Enter a keyword..."
+msgstr "Wpisz słowo kluczowe..."
+
+msgid "Search error"
+msgstr "Błąd wyszukiwania"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Wpisz słowo kluczowe, aby wyszukać indeksowane dokumenty."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Wyniki, do których nie masz dostępu, są ukryte przez konfigurację."
+
+msgid "Restricted"
+msgstr "Ograniczone"
+
+msgid "You do not have access to this resource."
+msgstr "Nie masz dostępu do tego zasobu."
+
+msgid "Create group"
+msgstr "Utwórz grupę"
+
+msgid "My custom certificate"
+msgstr "Mój niestandardowy certyfikat"
+
+msgid "Select permission"
+msgstr "Wybierz uprawnienie"
+

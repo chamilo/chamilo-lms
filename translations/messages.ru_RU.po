@@ -32752,3 +32752,54 @@ msgstr "Загрузите изображение или создайте его
 msgid "Current badge set"
 msgstr "Текущий набор значков"
 
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "В этом разделе при нажатии на «Зарегистрировать студента» для курса вам будет предложено выбрать пользователя на следующей странице. После подтверждения будет создана новая сессия с выбранным курсом и пользователем, и пользователю будет отправлено уведомление о подписке."
+
+msgid "Read-only view"
+msgstr "Только для чтения"
+
+msgid "Events list"
+msgstr "Список событий"
+
+msgid "Personal"
+msgstr "Личное"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Недели отображаются с 1 по 52"
+
+msgid "No tutored sessions found"
+msgstr "Сессии с наставником не найдены"
+
+msgid "Content search"
+msgstr "Поиск контента"
+
+msgid "Search indexed content across all courses."
+msgstr "Поиск индексированного контента по всем курсам."
+
+msgid "Enter a keyword..."
+msgstr "Введите ключевое слово..."
+
+msgid "Search error"
+msgstr "Ошибка поиска"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Введите ключевое слово для поиска индексированных документов."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Результаты, к которым у вас нет доступа, скрыты настройками."
+
+msgid "Restricted"
+msgstr "Ограниченный"
+
+msgid "You do not have access to this resource."
+msgstr "У вас нет доступа к этому ресурсу."
+
+msgid "Create group"
+msgstr "Создать группу"
+
+msgid "My custom certificate"
+msgstr "Мой пользовательский сертификат"
+
+msgid "Select permission"
+msgstr "Выбрать разрешение"
+

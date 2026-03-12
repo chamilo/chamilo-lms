@@ -311,7 +311,7 @@ EOT;
         foreach ($classes as $index => $class) {
             $number_of_users = count($obj->get_users_by_usergroup($class['id']));
             $description .= '<li>';
-            $description .= $class['name'];
+            $description .= $class['title'];
             $description .= ' ('.$number_of_users.' '.get_lang('Users').')';
             $description .= '</li>';
         }

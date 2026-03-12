@@ -47,12 +47,9 @@
             <div class="flex items-center justify-between mt-4 mb-4">
                 <div class="text-sm text-gray-600">
                     {% if show_unlinked %}
-                        {{ 'Showing'|trans }} <strong>{{ visible_total }}</strong>
-                        {{ 'of approximately'|trans }} <strong>{{ estimated_total }}</strong>
-                        {{ 'result(s) for'|trans }} "<strong>{{ query }}</strong>".
+                        {{ 'Showing %d of approximately %d result(s) for %s.'|trans({'%d': visible_total, '%d': estimated_total, '%s': query}) }}
                     {% else %}
-                        {{ 'Showing'|trans }} <strong>{{ visible_total }}</strong>
-                        {{ 'accessible result(s) for'|trans }} "<strong>{{ query }}</strong>".
+                        {{ 'Showing %d accessible result(s) for %s.'|trans({'%d': visible_total, '%s': query}) }}
                     {% endif %}
                 </div>
 
@@ -95,7 +92,7 @@
                     {% set isLpResult          = (kind == 'learnpath') or (tool == 'learnpath') %}
 
                     {% set openUrl = null %}
-                    {% set actionLabel = 'Open'|trans %}
+                    {% set actionLabel = 'View'|trans %}
                     {% set actionIcon  = 'mdi-open-in-new' %}
 
                     {% if isCourseDescResult %}

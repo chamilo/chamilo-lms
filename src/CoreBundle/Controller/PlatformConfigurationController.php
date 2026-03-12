@@ -170,6 +170,7 @@ class PlatformConfigurationController extends AbstractController
                 'search.search_prefilter_prefix',
                 'search.search_show_unlinked_results',
                 'certificate.allow_general_certificate',
+                'language.show_different_course_language',
             ];
 
             $user = $this->userHelper->getCurrent();

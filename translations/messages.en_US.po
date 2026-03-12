@@ -32803,3 +32803,9 @@ msgstr "Select permission"
 
 msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
 msgstr "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Showing %d of approximately %d result(s) for %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Showing %d accessible result(s) for %s."

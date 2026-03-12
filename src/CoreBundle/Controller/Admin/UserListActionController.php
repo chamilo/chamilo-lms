@@ -86,7 +86,7 @@ class UserListActionController extends AbstractController
                 $user->setUsername('anon_'.$userId);
                 $user->setPhone(null);
                 $user->setAddress(null);
-                $user->setBiography(null);
+                $user->setBiography('');
                 $user->setDateOfBirth(null);
                 $this->em->flush();
                 $this->addFlash('success', 'User has been anonymized.');

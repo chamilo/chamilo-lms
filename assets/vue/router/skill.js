@@ -14,5 +14,14 @@ export default {
       },
       component: () => import("../views/skill/SkillWheel.vue"),
     },
+    {
+      name: "SkillRanking",
+      path: "ranking",
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+      },
+      component: () => import("../views/skill/SkillRanking.vue"),
+    },
   ],
 }

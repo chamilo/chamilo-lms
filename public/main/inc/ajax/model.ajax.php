@@ -71,7 +71,6 @@ $courseActions = [
 ];
 
 $adminActions = [
-    'get_user_skill_ranking',
     'get_usergroups',
     'get_user_course_report_resumed',
     'get_user_course_report',
@@ -601,12 +600,6 @@ switch ($action) {
         // Close the session as we don't need it any further
         session_write_close();
         $count = Question::get_count_course_medias($course_id);
-        break;
-    case 'get_user_skill_ranking':
-        // Close the session as we don't need it any further
-        session_write_close();
-        $skill = new SkillModel();
-        $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
         $courseId = !empty($cid) ? $cid : api_get_course_int_id();
@@ -1396,51 +1389,6 @@ switch ($action) {
             }
         }
 
-        break;
-    case 'get_user_skill_ranking':
-        $columns = [
-            'photo',
-            'firstname',
-            'lastname',
-            'skills_acquired',
-            'currently_learning',
-            'rank',
-        ];
-        if ('1 = 1' === trim($whereCondition)) {
-            $whereCondition = '';
-        }
-        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
-        $result = $skill->getUserListSkillRanking(
-            $start,
-            $limit,
-            $sidx,
-            $sord,
-            $whereCondition
-        );
-        $result = msort($result, 'skills_acquired', 'asc');
-
-        $skills_in_course = [];
-        if (!empty($result)) {
-            foreach ($result as &$item) {
-                $user_info = api_get_user_info($item['user_id']);
-                $personal_course_list = UserManager::get_personal_session_course_list(
-                    $item['user_id']
-                );
-                $count_skill_by_course = [];
-                foreach ($personal_course_list as $course_item) {
-                    if (!isset($skills_in_course[$course_item['code']])) {
-                        $count_skill_by_course[$course_item['code']] = $skill->getCountSkillsByCourse(
-                            $course_item['code']
-                        );
-                        $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
-                    } else {
-                        $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
-                    }
-                }
-                $item['photo'] = Display::img($user_info['avatar_small'], $user_info['complete_name'], [], false);
-                $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
-            }
-        }
         break;
     case 'get_course_announcements':
         $columns = [
@@ -2736,7 +2684,6 @@ $allowed_actions = [
     'get_work_pending_list',
     'get_timelines',
     'get_grade_models',
-    'get_user_skill_ranking',
     'get_extra_fields',
     'get_extra_field_options',
     //'get_course_exercise_medias',

@@ -303,7 +303,7 @@ if (api_is_platform_admin()) {
         ];
 
         $items[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'social/skills_ranking.php',
+            'url' => '/skill/ranking',
             'label' => get_lang('Skills ranking'),
         ];
         $items[] = [

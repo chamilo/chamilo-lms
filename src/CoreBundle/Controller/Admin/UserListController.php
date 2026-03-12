@@ -143,7 +143,7 @@ class UserListController extends AbstractController
         $total = (int) $countQb->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('u.id, u.officialCode, u.firstname, u.lastname, u.username, u.email, u.active, u.createdAt, u.lastLogin, u.expiresAt, u.roles, u.status')
+            ->select('u.id, u.officialCode, u.firstname, u.lastname, u.username, u.email, u.active, u.createdAt, u.lastLogin, u.expirationDate, u.roles, u.status')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -186,8 +186,8 @@ class UserListController extends AbstractController
             $isStudentBoss = in_array('ROLE_STUDENT_BOSS', $allRoles, true);
 
             $activeValue = (int) $row['active'];
-            $expiresAt = $row['expiresAt'];
-            if (1 === $activeValue && $expiresAt instanceof \DateTime && $expiresAt < $now) {
+            $expirationDate = $row['expirationDate'];
+            if (1 === $activeValue && $expirationDate instanceof \DateTime && $expirationDate < $now) {
                 $activeValue = User::INACTIVE_AUTOMATIC;
             }
 

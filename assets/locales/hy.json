@@ -999,7 +999,7 @@
     "You're subscribed to push notifications in this browser": "You're subscribed to push notifications in this browser",
     "Push notifications are not enabled in this browser": "Push notifications are not enabled in this browser",
     "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user": "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user",
-    "Please select at least one user": "Please select at least one user",
+    "Please select at least one user.": "\u053d\u0576\u0564\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u0568\u0576\u057f\u0580\u0565\u056c \u0561\u057c\u0576\u057e\u0561\u0566\u0576 \u0574\u0565\u056f \u0585\u0563\u057f\u0561\u057f\u056b\u0580\u0578\u057b\u0568:",
     "Data exchange successfully saved": "Data exchange successfully saved",
     "Error saving data exchange": "Error saving data exchange",
     "No documents added yet": "No documents added yet",

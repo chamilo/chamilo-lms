@@ -999,7 +999,7 @@
     "You're subscribed to push notifications in this browser": "You're subscribed to push notifications in this browser",
     "Push notifications are not enabled in this browser": "Push notifications are not enabled in this browser",
     "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user": "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user",
-    "Please select at least one user": "Please select at least one user",
+    "Please select at least one user.": "Selecciona al menos un usuario.",
     "Data exchange successfully saved": "Data exchange successfully saved",
     "Error saving data exchange": "Error saving data exchange",
     "No documents added yet": "No documents added yet",

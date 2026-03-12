@@ -56,6 +56,7 @@
     </BaseCard>
 
     <BaseCard
+      v-if="showTermsAndConditionsCard"
       class="bg-white"
       plain
     >
@@ -76,6 +77,7 @@
     </BaseCard>
 
     <BaseCard
+      v-if="showLegalAgreementCard"
       class="bg-white"
       plain
     >
@@ -97,25 +99,65 @@
           </p>
           <p>{{ t("Date") }}: {{ legalStatus.acceptDate }}</p>
 
+          <div class="mt-3 p-3 rounded bg-blue-50 text-sm text-blue-800">
+            <p>
+              {{
+                t("Your legal agreement remains active until any withdrawal request has been reviewed and processed.")
+              }}
+            </p>
+          </div>
+
+          <div
+            v-if="legalWithdrawalRequestPending"
+            class="mt-3 p-3 rounded bg-amber-50 text-sm text-amber-800"
+          >
+            <p>{{ t("Your legal consent withdrawal request is pending review.") }}</p>
+          </div>
+
+          <div
+            v-if="accountDeletionRequestPending"
+            class="mt-3 p-3 rounded bg-amber-50 text-sm text-amber-800"
+          >
+            <p>{{ t("Your account deletion request is pending review.") }}</p>
+          </div>
+
           <div v-if="termsAndConditions?.items?.length">
             <div class="p-4">
               <p class="text-sm text-gray-600">
-                {{ t("Why you want to delete your Legal Agreement") }}
+                {{ t("Why do you want to request the withdrawal of your legal consent?") }}
               </p>
             </div>
-            <form class="flex flex-col gap-2 mt-6">
+
+            <form
+              class="flex flex-col gap-2 mt-6"
+              @submit.prevent="submitDeleteTerm"
+            >
               <BaseTextArea
                 v-model="deleteTermExplanation"
                 :label="
                   t(
-                    'Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible',
+                    'Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly',
                   )
                 "
+                :disabled="legalWithdrawalRequestPending || isSubmittingDeleteLegalRequest"
                 required
               />
+
+              <div
+                v-if="isSubmittingDeleteLegalRequest"
+                class="text-sm text-blue-700"
+              >
+                {{ t("Submitting your legal consent withdrawal request...") }}
+              </div>
+
               <LayoutFormButtons>
                 <BaseButton
-                  :label="t('Delete legal agreement')"
+                  :label="
+                    isSubmittingDeleteLegalRequest
+                      ? t('Submitting request...')
+                      : t('Request withdrawal of legal consent')
+                  "
+                  :disabled="legalWithdrawalRequestPending || isSubmittingDeleteLegalRequest"
                   icon="delete"
                   type="danger"
                   @click="submitDeleteTerm"
@@ -130,11 +172,21 @@
               <BaseTextArea
                 v-model="deleteAccountExplanation"
                 :label="t('Explain in this box why you want your account deleted')"
+                :disabled="accountDeletionRequestPending || isSubmittingDeleteAccountRequest"
                 required
               />
+
+              <div
+                v-if="isSubmittingDeleteAccountRequest"
+                class="text-sm text-blue-700"
+              >
+                {{ t("Submitting your account deletion request...") }}
+              </div>
+
               <LayoutFormButtons>
                 <BaseButton
-                  :label="t('Delete account')"
+                  :label="isSubmittingDeleteAccountRequest ? t('Submitting request...') : t('Delete account')"
+                  :disabled="accountDeletionRequestPending || isSubmittingDeleteAccountRequest"
                   icon="delete"
                   type="danger"
                   @click="submitDeleteAccount"
@@ -143,9 +195,18 @@
             </form>
           </div>
         </div>
-        <div v-else>
+
+        <div v-else-if="canAcceptTerms">
+          <div
+            v-if="isSubmittingAcceptTerms"
+            class="mb-2 text-sm text-blue-700"
+          >
+            {{ t("Submitting your acceptance...") }}
+          </div>
+
           <BaseButton
-            :label="t(legalStatus.message)"
+            :label="isSubmittingAcceptTerms ? t('Submitting request...') : t(legalStatus.message)"
+            :disabled="isSubmittingAcceptTerms"
             icon="send"
             type="primary"
             @click="submitAcceptTerm"
@@ -168,7 +229,6 @@
       >
         <h3 class="text-lg font-semibold mb-2">{{ term.title }}</h3>
 
-        <!-- Optional subtitle if backend returns it -->
         <p
           v-if="term.subtitle"
           class="text-sm text-gray-500 mb-2"
@@ -194,7 +254,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
@@ -209,40 +269,72 @@ import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
-
+const isSubmittingDeleteLegalRequest = ref(false)
+const isSubmittingDeleteAccountRequest = ref(false)
+const isSubmittingAcceptTerms = ref(false)
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const personalData = reactive({
   data: {},
 })
 
-const termsAndConditions = ref({
-  items: [],
-  date_text: "",
-  version: null,
-  language_id: null,
-  showing_accepted: false,
+function createEmptyTermsAndConditions() {
+  return {
+    items: [],
+    date_text: "",
+    version: null,
+    language_id: null,
+    showing_accepted: false,
+    content: [],
+    available: false,
+  }
+}
 
-  content: [],
-})
+function createEmptyLegalStatus() {
+  return {
+    isAccepted: false,
+    acceptDate: null,
+    message: "",
+    available: false,
+  }
+}
 
-const legalStatus = reactive({
-  isAccepted: false,
-  acceptDate: null,
-  message: "",
-})
+const termsAndConditions = ref(createEmptyTermsAndConditions())
+const legalStatus = reactive(createEmptyLegalStatus())
 
 const termsAndConditionsDialogVisible = ref(false)
 const expandedCategories = ref([])
 const deleteTermExplanation = ref("")
 const deleteAccountExplanation = ref("")
+const legalWithdrawalRequestPending = ref(false)
+const accountDeletionRequestPending = ref(false)
+
+const showTermsAndConditionsCard = computed(() => {
+  return termsAndConditions.value.available && termsAndConditions.value.items.length > 0
+})
+
+const showLegalAgreementCard = computed(() => {
+  return showTermsAndConditionsCard.value
+})
+
+const canAcceptTerms = computed(() => {
+  return showLegalAgreementCard.value && !legalStatus.isAccepted && Boolean(legalStatus.message)
+})
+
+function resetTermsAndConditions() {
+  termsAndConditions.value = createEmptyTermsAndConditions()
+  termsAndConditionsDialogVisible.value = false
+}
+
+function resetLegalStatus() {
+  Object.assign(legalStatus, createEmptyLegalStatus())
+}
 
 const openTermsDialog = () => {
-  if (!termsAndConditions.value?.items?.length) {
-    console.warn("No terms available to display in dialog.")
-    showErrorNotification("No terms and conditions available.")
+  if (!showTermsAndConditionsCard.value) {
     return
   }
+
   termsAndConditionsDialogVisible.value = true
 }
 
@@ -251,6 +343,7 @@ const submitDeleteAccount = () => submitPrivacyRequest("delete_account")
 
 function toggleCategory(categoryName) {
   const index = expandedCategories.value.indexOf(categoryName)
+
   if (index === -1) {
     expandedCategories.value.push(categoryName)
   } else {
@@ -283,26 +376,22 @@ async function fetchTermsAndConditions() {
   try {
     const res = await socialService.fetchTermsAndConditions(userId)
 
-    // Normalize + keep backward compatibility
+    if (!res?.items?.length) {
+      resetTermsAndConditions()
+      return
+    }
+
     termsAndConditions.value = {
-      ...termsAndConditions.value,
+      ...createEmptyTermsAndConditions(),
       ...res,
       items: res?.items ?? [],
       content: res?.items ?? [],
       date_text: res?.date_text ?? "",
+      available: true,
     }
   } catch (error) {
     console.error("Error fetching terms and conditions:", error)
-    showErrorNotification("Error fetching terms and conditions.")
-
-    termsAndConditions.value = {
-      items: [],
-      content: [],
-      date_text: "",
-      version: null,
-      language_id: null,
-      showing_accepted: false,
-    }
+    resetTermsAndConditions()
   }
 }
 
@@ -315,9 +404,29 @@ async function submitPrivacyRequest(requestType) {
   }
 
   const explanation = requestType === "delete_account" ? deleteAccountExplanation.value : deleteTermExplanation.value
+
   if (explanation.trim() === "") {
     showErrorNotification("Explanation is required.")
     return
+  }
+
+  if (requestType === "delete_legal" && (legalWithdrawalRequestPending.value || isSubmittingDeleteLegalRequest.value)) {
+    return
+  }
+
+  if (
+    requestType === "delete_account" &&
+    (accountDeletionRequestPending.value || isSubmittingDeleteAccountRequest.value)
+  ) {
+    return
+  }
+
+  if (requestType === "delete_legal") {
+    isSubmittingDeleteLegalRequest.value = true
+  }
+
+  if (requestType === "delete_account") {
+    isSubmittingDeleteAccountRequest.value = true
   }
 
   try {
@@ -329,8 +438,17 @@ async function submitPrivacyRequest(requestType) {
 
     if (response.success) {
       showSuccessNotification(response.message)
-      deleteTermExplanation.value = ""
-      deleteAccountExplanation.value = ""
+
+      if ("delete_legal" === requestType) {
+        legalWithdrawalRequestPending.value = true
+        deleteTermExplanation.value = ""
+      }
+
+      if ("delete_account" === requestType) {
+        accountDeletionRequestPending.value = true
+        deleteAccountExplanation.value = ""
+      }
+
       await updateUserData()
     } else {
       showErrorNotification(response.message)
@@ -338,6 +456,14 @@ async function submitPrivacyRequest(requestType) {
   } catch (error) {
     console.error("Error submitting privacy request:", error)
     showErrorNotification("Error submitting privacy request.")
+  } finally {
+    if (requestType === "delete_legal") {
+      isSubmittingDeleteLegalRequest.value = false
+    }
+
+    if (requestType === "delete_account") {
+      isSubmittingDeleteAccountRequest.value = false
+    }
   }
 }
 
@@ -348,6 +474,12 @@ async function submitAcceptTerm() {
     showErrorNotification("User ID is not available.")
     return
   }
+
+  if (!showTermsAndConditionsCard.value || isSubmittingAcceptTerms.value) {
+    return
+  }
+
+  isSubmittingAcceptTerms.value = true
 
   try {
     const response = await socialService.submitAcceptTerm(userId)
@@ -361,6 +493,8 @@ async function submitAcceptTerm() {
   } catch (error) {
     console.error("Error accepting the term:", error)
     showErrorNotification("Error accepting the term.")
+  } finally {
+    isSubmittingAcceptTerms.value = false
   }
 }
 
@@ -373,10 +507,15 @@ async function fetchLegalStatus() {
 
   try {
     const legalStatusData = await socialService.fetchLegalStatus(userId)
-    Object.assign(legalStatus, legalStatusData)
+
+    Object.assign(legalStatus, {
+      ...createEmptyLegalStatus(),
+      ...legalStatusData,
+      available: true,
+    })
   } catch (error) {
     console.error("Error fetching legal status:", error)
-    showErrorNotification("Error fetching legal status.")
+    resetLegalStatus()
   }
 }
 
@@ -392,17 +531,12 @@ async function updateUserData() {
 watch(
   () => securityStore.user?.id,
   async (id) => {
-    if (!id) return
+    if (!id) {
+      return
+    }
+
     await updateUserData()
   },
   { immediate: true },
 )
-
-onMounted(async () => {
-  if (!securityStore.user?.id) {
-    console.warn("User is not available onMounted. Waiting for watcher to trigger.")
-    return
-  }
-  await updateUserData()
-})
 </script>

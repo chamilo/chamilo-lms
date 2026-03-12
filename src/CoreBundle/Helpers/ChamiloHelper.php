@@ -493,33 +493,18 @@ class ChamiloHelper
      */
     public static function addLegalTermsFields(FormValidator $form, bool $userAlreadyRegisteredShowTerms): void
     {
-        if ('true' !== api_get_setting('allow_terms_conditions') || $userAlreadyRegisteredShowTerms) {
+        if (!self::isTermsConditionsEnabled() || $userAlreadyRegisteredShowTerms) {
             return;
         }
 
-        $languageIso = api_get_language_isocode();
-        $languageId = api_get_language_id($languageIso);
-        $termPreview = LegalManager::get_last_condition($languageId);
+        $termPreview = self::getLastConditionForCurrentOrDefaultLanguage();
 
         if (!$termPreview) {
-            $defaultIso = (string) api_get_setting('language.platform_language');
-            if ('' === $defaultIso || 'false' === $defaultIso) {
-                $defaultIso = (string) api_get_setting('platformLanguage');
-            }
-
-            $defaultLangId = api_get_language_id($defaultIso);
-            if ($defaultLangId > 0 && $defaultLangId !== $languageId) {
-                $languageId = $defaultLangId;
-                $termPreview = LegalManager::get_last_condition($languageId);
-            }
-        }
-
-        if (!$termPreview) {
-            return; // Still nothing -> show nothing
+            return;
         }
 
         $version = (int) ($termPreview['version'] ?? 0);
-        $langId = (int) ($termPreview['language_id'] ?? $languageId);
+        $langId = (int) ($termPreview['language_id'] ?? 0);
 
         // Track acceptance context
         $form->addElement('hidden', 'legal_accept_type', $version.':'.$langId);
@@ -673,70 +658,63 @@ class ChamiloHelper
      */
     public static function displayLegalTermsPage(string $returnUrl = '/home', bool $canAccept = true, string $infoMessage = ''): void
     {
-        $iso = api_get_language_isocode();
-        $langId = api_get_language_id($iso);
-        $term = LegalManager::get_last_condition($langId);
+        $safeReturnUrl = self::normalizeReturnUrl($returnUrl);
 
-        if (!$term) {
-            // No T&C for current language → show a message
-            Display::display_header(get_lang('Terms and Conditions'));
-            echo '<div class="max-w-3xl mx-auto text-gray-90 text-lg text-center">'
-                .get_lang('No terms and conditions available for this language.')
-                .'</div>';
-            Display::display_footer();
+        if (!self::isTermsConditionsEnabled()) {
+            self::redirectTo($safeReturnUrl);
+        }
 
-            exit;
+        $term = self::getLastConditionForCurrentOrDefaultLanguage();
+
+        if (!$term || !self::hasRenderableLegalContent($term)) {
+            self::redirectTo($safeReturnUrl);
         }
 
         Display::display_header(get_lang('Terms and Conditions'));
 
-        if (!empty($term['content'])) {
-            echo '<div class="max-w-3xl mx-auto bg-white shadow p-8 rounded">';
-            echo '<h1 class="text-2xl font-bold text-primary mb-6">'.get_lang('Terms and Conditions').'</h1>';
+        echo '<div class="max-w-3xl mx-auto bg-white shadow p-8 rounded">';
+        echo '<h1 class="text-2xl font-bold text-primary mb-6">'.get_lang('Terms and Conditions').'</h1>';
 
-            if (!empty($infoMessage)) {
-                echo '<div class="mb-4">'.$infoMessage.'</div>';
-            }
-
-            echo '<div class="prose prose-sm max-w-none mb-6">'.$term['content'].'</div>';
-
-            $extra = new ExtraFieldValue('terms_and_condition');
-            foreach ($extra->getAllValuesByItem($term['id']) as $field) {
-                if (!empty($field['field_value'])) {
-                    echo '<div class="mb-4">';
-                    echo '<h3 class="text-lg font-semibold text-primary">'.$field['display_text'].'</h3>';
-                    echo '<p class="text-gray-90 mt-1">'.$field['field_value'].'</p>';
-                    echo '</div>';
-                }
-            }
-
-            echo '<form method="post" action="tc.php?return='.urlencode($returnUrl).'" class="space-y-6">';
-            echo '<input type="hidden" name="legal_accept_type" value="'.$term['version'].':'.$term['language_id'].'">';
-            echo '<input type="hidden" name="return" value="'.htmlspecialchars($returnUrl).'">';
-
-            if ($canAccept) {
-                $hide = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
-                if ($hide) {
-                    echo '<input type="hidden" name="legal_accept" value="1">';
-                } else {
-                    echo '<label class="flex items-start space-x-2">';
-                    echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
-                    echo '<span class="text-gray-90 text-sm">'.get_lang('I have read and agree to the').' ';
-                    echo '<a href="tc.php?preview=1" target="_blank" class="text-primary hover:underline">'.get_lang('Terms and Conditions').'</a>';
-                    echo '</span>';
-                    echo '</label>';
-                }
-
-                echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">'.get_lang('Accept Terms and Conditions').'</button></div>';
-            } else {
-                echo '<div><button type="button" class="inline-block bg-gray-400 text-white font-semibold px-6 py-3 rounded cursor-not-allowed" disabled>'.get_lang('Accept Terms and Conditions').'</button></div>';
-            }
-
-            echo '</form>';
-            echo '</div>';
-        } else {
-            echo '<div class="text-center text-gray-90 text-lg">'.get_lang('Coming soon...').'</div>';
+        if (!empty($infoMessage)) {
+            echo '<div class="mb-4">'.$infoMessage.'</div>';
         }
+
+        echo '<div class="prose prose-sm max-w-none mb-6">'.$term['content'].'</div>';
+
+        $extra = new ExtraFieldValue('terms_and_condition');
+        foreach ($extra->getAllValuesByItem($term['id']) as $field) {
+            if (!empty($field['field_value'])) {
+                echo '<div class="mb-4">';
+                echo '<h3 class="text-lg font-semibold text-primary">'.$field['display_text'].'</h3>';
+                echo '<p class="text-gray-90 mt-1">'.$field['field_value'].'</p>';
+                echo '</div>';
+            }
+        }
+
+        echo '<form method="post" action="tc.php?return='.urlencode($safeReturnUrl).'" class="space-y-6">';
+        echo '<input type="hidden" name="legal_accept_type" value="'.$term['version'].':'.$term['language_id'].'">';
+        echo '<input type="hidden" name="return" value="'.htmlspecialchars($safeReturnUrl).'">';
+
+        if ($canAccept) {
+            $hide = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
+            if ($hide) {
+                echo '<input type="hidden" name="legal_accept" value="1">';
+            } else {
+                echo '<label class="flex items-start space-x-2">';
+                echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
+                echo '<span class="text-gray-90 text-sm">'.get_lang('I have read and agree to the').' ';
+                echo '<a href="tc.php?preview=1" target="_blank" class="text-primary hover:underline">'.get_lang('Terms and Conditions').'</a>';
+                echo '</span>';
+                echo '</label>';
+            }
+
+            echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">'.get_lang('Accept Terms and Conditions').'</button></div>';
+        } else {
+            echo '<div><button type="button" class="inline-block bg-gray-400 text-white font-semibold px-6 py-3 rounded cursor-not-allowed" disabled>'.get_lang('Accept Terms and Conditions').'</button></div>';
+        }
+
+        echo '</form>';
+        echo '</div>';
 
         Display::display_footer();
 
@@ -1140,5 +1118,66 @@ class ChamiloHelper
         }, $html);
 
         return ['html' => $html, 'replaced' => $replaced, 'misses' => $misses];
+    }
+
+    private static function getLastConditionForCurrentOrDefaultLanguage(): ?array
+    {
+        $languageIso = api_get_language_isocode();
+        $languageId = api_get_language_id($languageIso);
+
+        $term = LegalManager::get_last_condition($languageId);
+        if ($term) {
+            return $term;
+        }
+
+        $defaultIso = (string) api_get_setting('language.platform_language');
+        if ('' === $defaultIso || 'false' === $defaultIso) {
+            $defaultIso = (string) api_get_setting('platformLanguage');
+        }
+
+        if ('' === $defaultIso || 'false' === $defaultIso) {
+            return null;
+        }
+
+        $defaultLangId = api_get_language_id($defaultIso);
+        if ($defaultLangId <= 0 || $defaultLangId === $languageId) {
+            return null;
+        }
+
+        $term = LegalManager::get_last_condition($defaultLangId);
+
+        return $term ?: null;
+    }
+
+    private static function isTermsConditionsEnabled(): bool
+    {
+        return 'true' === (string) api_get_setting('allow_terms_conditions')
+            || 'true' === (string) api_get_setting('registration.allow_terms_conditions');
+    }
+
+    private static function hasRenderableLegalContent(array $term): bool
+    {
+        $content = (string) ($term['content'] ?? '');
+
+        return '' !== trim(strip_tags($content));
+    }
+
+    private static function normalizeReturnUrl(string $returnUrl): string
+    {
+        $returnUrl = trim($returnUrl);
+
+        if ('' === $returnUrl) {
+            return api_get_path(WEB_PATH);
+        }
+
+        if (preg_match('/^https?:\/\//i', $returnUrl)) {
+            return $returnUrl;
+        }
+
+        if (str_starts_with($returnUrl, '/')) {
+            return $returnUrl;
+        }
+
+        return api_get_path(WEB_PATH).ltrim($returnUrl, '/');
     }
 }

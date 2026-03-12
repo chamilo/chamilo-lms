@@ -1,6 +1,6 @@
 <template>
   <div class="relative isolate">
-    <Card class="course-card">
+    <Card class="course-card h-full">
       <template #header>
         <div class="course-card__header">
           <img
@@ -37,19 +37,32 @@
         </div>
       </template>
       <template #title>
-        <div class="flex gap-2">
-          <div class="course-card__title">
+        <div class="flex items-start gap-2">
+          <div class="course-card__title min-w-0 flex-1">
             <div
               v-if="session"
-              class="session"
+              class="session min-w-0"
             >
               <span
-                class="session__title"
+                class="session__title block truncate"
+                :title="session.title"
+                :aria-label="session.title"
                 v-text="session.title"
               />
             </div>
-            <div v-if="isLocked">
-              {{ courseTitle }}
+
+            <div
+              v-if="isLocked"
+              class="min-w-0"
+            >
+              <div
+                class="block truncate"
+                :title="courseTitle"
+                :aria-label="courseTitle"
+              >
+                {{ courseTitle }}
+              </div>
+
               <div
                 v-if="showCourseDuration && courseDurationSeconds"
                 class="text-gray-50 font-normal text-caption"
@@ -61,15 +74,24 @@
             <BaseAppLink
               v-else
               :to="courseHomeTo"
+              class="block min-w-0"
             >
-              {{ courseTitle }}
+              <span
+                class="block truncate"
+                :title="courseTitle"
+                :aria-label="courseTitle"
+              >
+                {{ courseTitle }}
+              </span>
             </BaseAppLink>
             <div
               v-if="showSessionDisplayDate && sessionDisplayDate"
-              class="session"
+              class="session min-w-0"
             >
               <span
-                class="session__display-date"
+                class="session__display-date block truncate"
+                :title="sessionDisplayDate"
+                :aria-label="sessionDisplayDate"
                 v-text="sessionDisplayDate"
               />
             </div>
@@ -81,6 +103,7 @@
             icon="shield-check"
             onlyIcon
             type="black"
+            class="shrink-0"
             @click="openRequirementsModal"
           />
         </div>

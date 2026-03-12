@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelGradebook;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,31 +22,25 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class SkillRankingController extends AbstractController
 {
     public function __construct(
-        private readonly Connection $connection,
+        private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
     ) {}
 
     #[Route('', name: 'skill_ranking_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        // Replicate the getUserListSkillRanking logic: rank users by number of acquired skills.
-        $sql = '
-            SELECT
-                u.id        AS userId,
-                u.firstname AS firstname,
-                u.lastname  AS lastname,
-                COUNT(su.skill_id) AS skillsAcquired
-            FROM skill_rel_user su
-            INNER JOIN user u ON u.id = su.user_id
-            WHERE u.active <> -1
-            GROUP BY u.id, u.firstname, u.lastname
-            ORDER BY skillsAcquired DESC
-        ';
+        $rows = $this->em->createQueryBuilder()
+            ->select('u.id AS userId, u.firstname, u.lastname, COUNT(sru.id) AS skillsAcquired')
+            ->from(SkillRelUser::class, 'sru')
+            ->join('sru.user', 'u')
+            ->andWhere('u.active != :softDeleted')
+            ->setParameter('softDeleted', -1)
+            ->groupBy('u.id, u.firstname, u.lastname')
+            ->orderBy('skillsAcquired', 'DESC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $rows = $this->connection->fetchAllAssociative($sql);
-
-        // For each user calculate currently_learning:
-        // sum of skills-per-course across all courses the user is enrolled in.
         $currentlyLearningByUser = $this->fetchCurrentlyLearningMap(
             array_column($rows, 'userId')
         );
@@ -80,58 +78,55 @@ class SkillRankingController extends AbstractController
             return [];
         }
 
-        // Build a list of (user_id, c_id) pairs from both direct and session enrolments.
-        $sql = '
-            SELECT DISTINCT user_id, c_id
-            FROM course_rel_user
-            WHERE user_id IN (:ids)
-            UNION
-            SELECT DISTINCT user_id, c_id
-            FROM session_rel_course_rel_user
-            WHERE user_id IN (:ids)
-        ';
+        $direct = $this->em->createQueryBuilder()
+            ->select('IDENTITY(cru.user) AS userId, IDENTITY(cru.course) AS courseId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.user) IN (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->distinct()
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $enrolmentRows = $this->connection->fetchAllAssociative(
-            $sql,
-            ['ids' => $userIds],
-            ['ids' => Connection::PARAM_INT_ARRAY]
-        );
+        $viaSession = $this->em->createQueryBuilder()
+            ->select('IDENTITY(srcru.user) AS userId, IDENTITY(srcru.course) AS courseId')
+            ->from(SessionRelCourseRelUser::class, 'srcru')
+            ->where('IDENTITY(srcru.user) IN (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->distinct()
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $enrolmentRows = array_merge($direct, $viaSession);
 
         if (empty($enrolmentRows)) {
             return [];
         }
 
-        // Get skill counts per course (c_id).
-        $courseIds = array_unique(array_column($enrolmentRows, 'c_id'));
+        $courseIds = array_values(array_unique(array_column($enrolmentRows, 'courseId')));
 
-        $skillCountSql = '
-            SELECT gc.c_id, COUNT(sg.skill_id) AS cnt
-            FROM gradebook_category gc
-            INNER JOIN skill_rel_gradebook sg ON sg.gradebook_id = gc.id
-            WHERE gc.c_id IN (:cids)
-            GROUP BY gc.c_id
-        ';
-
-        $skillCountRows = $this->connection->fetchAllAssociative(
-            $skillCountSql,
-            ['cids' => $courseIds],
-            ['cids' => Connection::PARAM_INT_ARRAY]
-        );
+        $skillCountRows = $this->em->createQueryBuilder()
+            ->select('IDENTITY(gc.course) AS courseId, COUNT(srg.id) AS cnt')
+            ->from(SkillRelGradebook::class, 'srg')
+            ->join('srg.gradebookCategory', 'gc')
+            ->where('IDENTITY(gc.course) IN (:courseIds)')
+            ->setParameter('courseIds', $courseIds)
+            ->groupBy('gc.course')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $skillsPerCourse = [];
         foreach ($skillCountRows as $row) {
-            $skillsPerCourse[(int) $row['c_id']] = (int) $row['cnt'];
+            $skillsPerCourse[(int) $row['courseId']] = (int) $row['cnt'];
         }
 
-        // Aggregate per user.
         $map = [];
         foreach ($enrolmentRows as $row) {
-            $uid = (int) $row['user_id'];
-            $cid = (int) $row['c_id'];
-            if (!isset($map[$uid])) {
-                $map[$uid] = 0;
-            }
-            $map[$uid] += $skillsPerCourse[$cid] ?? 0;
+            $uid = (int) $row['userId'];
+            $cid = (int) $row['courseId'];
+            $map[$uid] = ($map[$uid] ?? 0) + ($skillsPerCourse[$cid] ?? 0);
         }
 
         return $map;

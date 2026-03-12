@@ -337,10 +337,23 @@ if (isset($exerciseId) && $exerciseId > 0) {
         // Pagination navigation
         if ($showPagination && $nbrQuestions > $length) {
             $totalPages = ceil($nbrQuestions / $length);
-            echo '<div class="pagination flex justify-center mt-4">';
+            echo '<div class="pagination flex justify-center mt-4 space-x-2">';
             for ($i = 1; $i <= $totalPages; $i++) {
-                $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
-                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="mx-1 px-4 py-2 border ' . $isActive . ' rounded">' . $i . '</a>';
+                $allowedParams = [
+                    'cid' => 0,
+                    'sid' => 0,
+                    'gid' => 0,
+                    'gradebook' => 0,
+                    'origin' => '',
+                    'exerciseId' => 0,
+                    'page' => 0,
+                ];
+                $filteredGet = array_intersect_key($_GET, $allowedParams);
+                echo Display::url(
+                    $i,
+                    '?'.http_build_query(array_merge($filteredGet, ['page' => $i])),
+                    ['class' => $i == $page ? 'btn btn--primary' : 'btn btn--plain']
+                );
             }
             echo '</div>';
         }

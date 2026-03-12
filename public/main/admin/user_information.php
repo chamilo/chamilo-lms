@@ -71,7 +71,7 @@ if (api_can_login_as($userId)) {
             ICON_SIZE_MEDIUM,
             get_lang('Login as')
         ),
-        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
     );
 }
 

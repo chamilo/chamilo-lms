@@ -569,7 +569,7 @@ $actions = [
     ),
     Display::url(
         Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')),
-        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
     ),
 ];
 

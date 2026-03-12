@@ -347,7 +347,7 @@
             <template v-if="showLoginAs(data)">
               <a
                 v-if="canLoginAs(data)"
-                :href="`/admin/user-list-login-as?user_id=${data.id}`"
+                :href="`/admin/user-list-login-as?user_id=${data.id}&sec_token=${loginAsToken}`"
                 :title="t('Login as')"
               >
                 <span class="mdi mdi-account-key ch-tool-icon" />
@@ -502,6 +502,7 @@ const advancedFilters = reactive({
 const viewer = reactive({ id: 0, isPlatformAdmin: false, isSessionAdmin: false })
 const roleLabelsMap = ref({})
 const csrfToken = ref("")
+const loginAsToken = ref("")
 
 const roleOptions = {
   ROLE_STUDENT: "Learner",
@@ -625,6 +626,9 @@ async function load() {
     }
     if (data.csrfToken) {
       csrfToken.value = data.csrfToken
+    }
+    if (data.loginAsToken) {
+      loginAsToken.value = data.loginAsToken
     }
   } catch (e) {
     console.error(e)

@@ -234,6 +234,7 @@ class UserListController extends AbstractController
             ],
             'roleLabels' => self::ROLE_LABELS,
             'csrfToken' => $this->csrfTokenManager->getToken('user_list_action')->getValue(),
+            'loginAsToken' => $this->csrfTokenManager->getToken('login_as')->getValue(),
         ]);
     }
 }

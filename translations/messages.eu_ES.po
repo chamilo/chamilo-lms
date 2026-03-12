@@ -14729,7 +14729,7 @@ msgstr "Erabiltzaileak, Taldeak"
 msgid "Sorry no results"
 msgstr "Sentitzen dugu, ez dago emaitzarik"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Taldearen baimenak"
 
 msgid "Closed"
@@ -30516,13 +30516,13 @@ msgid "ex. root"
 msgstr "ad. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE lanak"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE lanak"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN lanak"
 
 msgid "Theme selected as current"
 msgstr "Gaia uneko gisa aukeratua"
@@ -32806,4 +32806,226 @@ msgstr "Nire ziurtagiri pertsonalizagarria"
 
 msgid "Select permission"
 msgstr "Hautatu baimena"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Gonbidapena onartuz, eskatzailearekin lotuta egongo zara, zure profil-datu batzuk edo guztiak eskatzaileak irakur ditzakeela"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%d emaitza erakusten %d emaitza inguruko %s(r)entzat."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%d emaitza eskuragarri erakusten %s(r)entzat."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Beraz, automatikoki birbideratuko zara URL honetara"
+
+msgid "You have access to multiple URLs"
+msgstr "URL anitzetara duzu sarbidea"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Mesedez, klik egin azpiko estekan sarbidea izan nahi duzun URLari dagokionari"
+
+msgid "You do not currently have access to any URL"
+msgstr "Momentu honetan ez duzu sarbiderik URL ezeretara"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Harpidetzak gehienezko kopurua"
+
+msgid "An error occurred"
+msgstr "Errore bat gertatu da"
+
+msgid "You don't have any course content yet"
+msgstr "Oraindik ez duzu ikastaro-edukirik"
+
+msgid "This course is locked"
+msgstr "Ikastaroa blokeatuta dago"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Plataformak e-posta bidaltzen duenean erabilitako e-posta helbidea, 'reply-to' goiburua bezala ere erabilia"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Zure hizkuntza ez duzu zerrendan aurkitu? Jarri gurekin harremanetan %s itzultzaile gisa parte hartzeko"
+
+msgid "An update is available"
+msgstr "Eguneratze bat eskuragarri dago"
+
+msgid "to know what's new and what has been changed"
+msgstr "berrienaz jakiteko eta aldaketak ezagutzeko"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Zure PHP instalazioak ez du data zehazten detektatu dugu"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Zure PHP bertsioa ez dator software honen eskakizunekin bat"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Fitxategi edo karpetak ez dute idazteko baimenik"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Abisua! Instalazioak Chamilo plataforma existitzen duela detektatu du zure sisteman"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> eta <code>exercice</code> direktorioak <code>lp</code> eta <code>exercise</code> izenera aldatu zirelako, ezabatu edo <code>newscorm_old</code> eta <code>exercice_old</code> izenera aldatu behar dira"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formularioak datu okerrak edo osatu gabeak ditu"
+
+msgid "Your contact information could not be sent"
+msgstr ""
+
+msgid "Please contact support with the error details"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr ""
+
+msgid "Checking push subscription"
+msgstr ""
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr ""
+
+msgid "Push notifications are not enabled in this browser"
+msgstr ""
+
+msgid "Data exchange successfully saved"
+msgstr ""
+
+msgid "Error saving data exchange"
+msgstr ""
+
+msgid "No documents added yet"
+msgstr ""
+
+msgid "No available documents"
+msgstr ""
+
+msgid "No users added yet"
+msgstr ""
+
+msgid "No available users"
+msgstr ""
+
+msgid "You can no longer submit"
+msgstr ""
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr ""
+
+msgid "Email sent to all unsubmitted users"
+msgstr ""
+
+msgid "Failed to send email"
+msgstr ""
+
+msgid "Write your answer here"
+msgstr ""
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr ""
+
+msgid "Loading attendance data"
+msgstr ""
+
+msgid "No attendance assigned yet"
+msgstr ""
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr ""
+
+msgid "No attendance data for today"
+msgstr ""
+
+msgid "Saving"
+msgstr ""
+
+msgid "No attendance data to save"
+msgstr ""
+
+msgid "Failed to save attendance"
+msgstr ""
+
+msgid "Loading more courses"
+msgstr ""
+
+msgid "Loading more sessions"
+msgstr ""
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The learning path auto-launch setting is ON"
+msgstr ""
+
+msgid "The forum's auto-launch setting is on"
+msgstr ""
+
+msgid "Course ID is missing"
+msgstr ""
+
+msgid "Course created successfully"
+msgstr ""
+
+msgid "Error deleting document(s)"
+msgstr ""
+
+msgid "Template successfully deleted"
+msgstr ""
+
+msgid "Error deleting the template"
+msgstr ""
+
+msgid "The title and thumbnail are required"
+msgstr ""
+
+msgid "Template created successfully"
+msgstr ""
+
+msgid "Error creating the template"
+msgstr ""
+
+msgid "Error submitting the form"
+msgstr ""
+
+msgid "Loading templates"
+msgstr ""
+
+msgid "Loading layout"
+msgstr ""
+
+msgid "Loading courses"
+msgstr ""
+
+msgid "No courses available"
+msgstr ""
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr ""
+
+msgid "User not found"
+msgstr ""
+
+msgid "An error occurred while sending the course"
+msgstr ""
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr ""
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr ""
+
+msgid "You don't have any course yet"
+msgstr "Oraindik ez duzu ikastarcenik"
+
+msgid "You have received a new friend request"
+msgstr "Lagun eskaera berria jaso duzu"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostiko kudeaketa"
 

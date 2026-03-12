@@ -14729,7 +14729,7 @@ msgstr "Brugere, Grupper"
 msgid "Sorry no results"
 msgstr "Undskyld, ingen resultater"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppebevisninger"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Mit brugerdefinerede certifikat"
 
 msgid "Select permission"
 msgstr "Vælg tilladelse"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ved at acceptere denne invitation vil du blive knyttet til den anmodende bruger på en måde, der gør nogle eller alle dine profiloplysninger tilgængelige for læsning af den anmodende bruger"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Viser %d af ca. %d resultat(er) for %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Viser %d tilgængelige resultat(er) for %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Du vil derfor blive automatisk omdirigeret til denne URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Du har adgang til flere URL'er"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klik venligst på linket nedenfor, der svarer til den URL, du ønsker at tilgå"
+
+msgid "You do not currently have access to any URL"
+msgstr "Du har i øjeblikket ikke adgang til nogen URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalt antal tilladte abonnementer"
+
+msgid "An error occurred"
+msgstr "Der opstod en fejl"
+
+msgid "You don't have any course content yet"
+msgstr "Du har endnu ikke noget kursusindhold"
+
+msgid "This course is locked"
+msgstr "Dette kursus er låst"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mailadressen, som e-mails vil blive sendt fra, når platformen sender en e-mail, også brugt som 'reply-to'-header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Kan ikke finde dit sprog i listen? Kontakt os på %s for at bidrage som oversætter"
+
+msgid "An update is available"
+msgstr "En opdatering er tilgængelig"
+
+msgid "to know what's new and what has been changed"
+msgstr "for at vide, hvad der er nyt og hvad der er ændret"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vi har opdaget, at din PHP-installation ikke definerer datoen"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Din PHP-version opfylder ikke kravene til denne software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Nogle filer eller mapper har ikke skrivetilladelse"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Advarsel! Installationsprogrammet har opdaget en eksisterende Chamilo-platform på dit system"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Fordi mapperne <code>newscorm</code> og <code>exercice</code> blev omdøbt til <code>lp</code> og <code>exercise</code> henholdsvis, er det nødvendigt at slette eller omdøbe til <code>newscorm_old</code> og <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Skemaet indeholder forkert eller ufuldstændige data"
+
+msgid "Your contact information could not be sent"
+msgstr "Dine kontaktoplysninger kunne ikke sendes"
+
+msgid "Please contact support with the error details"
+msgstr "Kontakt venligst support med fejldetaljerne"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klik på billedet for at beskjære det (1:1 forhold, 120x120 px anbefalet)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Brug beskjæring værktøjet til at vælge et 1:1 område"
+
+msgid "Checking push subscription"
+msgstr "Kontrollerer push-abonnement"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Du er abonneret på push-meddelelser i denne browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-meddelelser er ikke aktiveret i denne browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Datadeling gemt succesfuldt"
+
+msgid "Error saving data exchange"
+msgstr "Fejl ved gemning af datadeling"
+
+msgid "No documents added yet"
+msgstr "Ingen dokumenter tilføjet endnu"
+
+msgid "No available documents"
+msgstr "Ingen tilgængelige dokumenter"
+
+msgid "No users added yet"
+msgstr "Ingen brugere tilføjet endnu"
+
+msgid "No available users"
+msgstr "Ingen tilgængelige brugere"
+
+msgid "You can no longer submit"
+msgstr "Du kan ikke længere indsende"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Ingen manglende indsendelser fundet for denne opgave, eller data er ikke tilgængelige"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail sendt til alle ikke-indsendte brugere"
+
+msgid "Failed to send email"
+msgstr "Fejl ved afsendelse af e-mail"
+
+msgid "Write your answer here"
+msgstr "Skriv dit svar her"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Denne fremmødekalender giver dig mulighed for at registrere fremmødelister (en pr. rigtig session, som eleverne skal deltage i)"
+
+msgid "Loading attendance data"
+msgstr "Indlæser fremmødedata"
+
+msgid "No attendance assigned yet"
+msgstr "Ingen fremmøde tildelt endnu"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Der er ingen time planlagt i dag, prøv at vælge en anden dag eller tilføj din fremmødeindgang selv ved hjælp af handlingsikonerne"
+
+msgid "No attendance data for today"
+msgstr "Ingen fremmødedata for i dag"
+
+msgid "Saving"
+msgstr "Gemmer"
+
+msgid "No attendance data to save"
+msgstr "Ingen fremmødedata at gemme"
+
+msgid "Failed to save attendance"
+msgstr "Fejl ved gemning af fremmøde"
+
+msgid "Loading more courses"
+msgstr "Indlæser flere kurser"
+
+msgid "Loading more sessions"
+msgstr "Indlæser flere sessioner"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurationen af dokumentets auto-start-funktion er aktiveret"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurationen af øvelsernes auto-start-funktion er aktiveret"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Læringssti auto-start-indstillingen er TÆNDT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumets auto-start-indstilling er tændt"
+
+msgid "Course ID is missing"
+msgstr "Kursus-ID mangler"
+
+msgid "Course created successfully"
+msgstr "Kursus oprettet succesfuldt"
+
+msgid "Error deleting document(s)"
+msgstr "Fejl ved sletning af dokument(er)"
+
+msgid "Template successfully deleted"
+msgstr "Skabelon slettet succesfuldt"
+
+msgid "Error deleting the template"
+msgstr "Fejl ved sletning af skabelonen"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel og miniaturebillede er påkrævet"
+
+msgid "Template created successfully"
+msgstr "Skabelon oprettet succesfuldt"
+
+msgid "Error creating the template"
+msgstr "Fejl ved oprettelse af skabelonen"
+
+msgid "Error submitting the form"
+msgstr "Fejl ved indsendelse af formularen"
+
+msgid "Loading templates"
+msgstr "Indlæser skabeloner"
+
+msgid "Loading layout"
+msgstr "Indlæser layout"
+
+msgid "Loading courses"
+msgstr "Indlæser kurser"
+
+msgid "No courses available"
+msgstr "Ingen kurser tilgængelige"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Denne liste viser brugere fra alle adgangs-URL'er, fordi indstillingen \"session_admin_access_to_all_users_on_all_urls\" er aktiveret."
+
+msgid "User not found"
+msgstr "Bruger ikke fundet"
+
+msgid "An error occurred while sending the course"
+msgstr "Der opstod en fejl under afsendelse af kurset"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Husk, at ændringer i betingelserne relateret til GDPR kræver, at du rapporterer disse ændringer til tredjeparter, som du har givet personlige oplysninger om dine brugere, som angivet i artikel 19 i GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Du bør oprette \"Villkor og Betingelser\" for alle tilgængelige sprog"
+
+msgid "You don't have any course yet"
+msgstr "Du har endnu ikke nogen kursus"
+
+msgid "You have received a new friend request"
+msgstr "Du har modtaget en ny venskabsanmodning"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoseadministration"
 

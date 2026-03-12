@@ -14724,7 +14724,7 @@ msgstr "Користувачі, Групи"
 msgid "Sorry no results"
 msgstr "Вибачте, результатів немає"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Права групи"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Моє користувацьке свідоцтво"
 
 msgid "Select permission"
 msgstr "Вибрати дозвіл"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Приймаючи це запрошення, ви будете пов’язані з користувачем, що надіслав запит, таким чином, що деякі або всі ваші дані профілю стануть доступними для читання цим користувачем"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Показується %d з приблизно %d результатів для %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Показується %d доступних результатів для %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Тому вас буде автоматично перенаправлено на цю URL-адресу"
+
+msgid "You have access to multiple URLs"
+msgstr "У вас є доступ до кількох URL-адрес"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Будь ласка, натисніть на посилання нижче, що відповідає URL-адресі, яку ви бажаєте відвідати"
+
+msgid "You do not currently have access to any URL"
+msgstr "Наразі у вас немає доступу до жодної URL-адреси"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Максимальна кількість дозволених підписок"
+
+msgid "An error occurred"
+msgstr "Сталася помилка"
+
+msgid "You don't have any course content yet"
+msgstr "У вас ще немає вмісту курсу"
+
+msgid "This course is locked"
+msgstr "Цей курс заблоковано"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Адреса електронної пошти, з якої надсилатимуться електронні листи, коли платформа надсилає електронний лист, також використовується як заголовок 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Не можете знайти свою мову в списку? Зв’яжіться з нами за адресою %s, щоб долучитися як перекладач"
+
+msgid "An update is available"
+msgstr "Доступне оновлення"
+
+msgid "to know what's new and what has been changed"
+msgstr "щоб дізнатися, що нового та що змінено"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Ми виявили, що ваша інсталяція PHP не визначає дату"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Ваша версія PHP не відповідає вимогам цього програмного забезпечення"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Деякі файли чи папки не мають прав на запис"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Увага! Інсталятор виявив наявну платформу Chamilo у вашій системі"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Оскільки каталоги <code>newscorm</code> та <code>exercice</code> були перейменовані на <code>lp</code> та <code>exercise</code> відповідно, необхідно видалити їх або перейменувати на <code>newscorm_old</code> та <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Форма містить некоректні або неповні дані"
+
+msgid "Your contact information could not be sent"
+msgstr "Не вдалося надіслати ваші контактні дані"
+
+msgid "Please contact support with the error details"
+msgstr "Будь ласка, зверніться до служби підтримки з деталями помилки"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Натисніть на зображення, щоб обрізати його (співвідношення 1:1, рекомендовано 120x120 пікс.)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Використовуйте інструмент обрізання, щоб вибрати область 1:1"
+
+msgid "Checking push subscription"
+msgstr "Перевірка підписки на push-повідомлення"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Ви підписані на push-повідомлення в цьому браузері"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-повідомлення не увімкнено в цьому браузері"
+
+msgid "Data exchange successfully saved"
+msgstr "Обмін даними успішно збережено"
+
+msgid "Error saving data exchange"
+msgstr "Помилка збереження обміну даними"
+
+msgid "No documents added yet"
+msgstr "Документів ще не додано"
+
+msgid "No available documents"
+msgstr "Немає доступних документів"
+
+msgid "No users added yet"
+msgstr "Користувачів ще не додано"
+
+msgid "No available users"
+msgstr "Немає доступних користувачів"
+
+msgid "You can no longer submit"
+msgstr "Ви більше не можете надіслати"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Не знайдено пропущених подань для цього завдання або дані недоступні"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Лист надіслано всім користувачам, які не подали"
+
+msgid "Failed to send email"
+msgstr "Не вдалося надіслати лист"
+
+msgid "Write your answer here"
+msgstr "Напишіть свою відповідь тут"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Календар відвідуваності дозволяє реєструвати списки відвідуваності (один на кожну реальну сесію, яку студенти повинні відвідати)"
+
+msgid "Loading attendance data"
+msgstr "Завантаження даних відвідуваності"
+
+msgid "No attendance assigned yet"
+msgstr "Відвідуваність ще не призначена"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Сьогодні немає запланованих занять, спробуйте обрати інший день або додайте запис відвідуваності самостійно за допомогою іконок дій"
+
+msgid "No attendance data for today"
+msgstr "Немає даних відвідуваності на сьогодні"
+
+msgid "Saving"
+msgstr "Збереження"
+
+msgid "No attendance data to save"
+msgstr "Немає даних відвідуваності для збереження"
+
+msgid "Failed to save attendance"
+msgstr "Не вдалося зберегти відвідуваність"
+
+msgid "Loading more courses"
+msgstr "Завантаження додаткових курсів"
+
+msgid "Loading more sessions"
+msgstr "Завантаження додаткових сесій"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Налаштування функції автоматичного запуску документів увімкнено"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Налаштування функції автоматичного запуску вправ увімкнено"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Налаштування автоматичного запуску навчального шляху УВІМКНЕНО"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Налаштування автоматичного запуску форуму увімкнено"
+
+msgid "Course ID is missing"
+msgstr "Відсутній ID курсу"
+
+msgid "Course created successfully"
+msgstr "Курс успішно створено"
+
+msgid "Error deleting document(s)"
+msgstr "Помилка видалення документа(ів)"
+
+msgid "Template successfully deleted"
+msgstr "Шаблон успішно видалено"
+
+msgid "Error deleting the template"
+msgstr "Помилка видалення шаблону"
+
+msgid "The title and thumbnail are required"
+msgstr "Заголовок та ескіз є обов'язковими"
+
+msgid "Template created successfully"
+msgstr "Шаблон успішно створено"
+
+msgid "Error creating the template"
+msgstr "Помилка створення шаблону"
+
+msgid "Error submitting the form"
+msgstr "Помилка надсилання форми"
+
+msgid "Loading templates"
+msgstr "Завантаження шаблонів"
+
+msgid "Loading layout"
+msgstr "Завантаження макету"
+
+msgid "Loading courses"
+msgstr "Завантаження курсів"
+
+msgid "No courses available"
+msgstr "Курсів недоступно"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Цей список відображає користувачів з усіх URL доступу, оскільки налаштування \"session_admin_access_to_all_users_on_all_urls\" увімкнено."
+
+msgid "User not found"
+msgstr "Користувача не знайдено"
+
+msgid "An error occurred while sending the course"
+msgstr "Виникла помилка під час надсилання курсу"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Пам'ятайте, що зміни в умовах, пов'язаних з GDPR, вимагають від вас повідомити про ці зміни третім сторонам, яким ви надали персональну інформацію про ваших користувачів, як зазначено в статті 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Ви повинні створити \"Умови та положення\" для всіх доступних мов"
+
+msgid "You don't have any course yet"
+msgstr "У вас ще немає курсів"
+
+msgid "You have received a new friend request"
+msgstr "Ви отримали новий запит у друзі"
+
+msgid "Diagnosis Management"
+msgstr "Керування діагностикою"
 

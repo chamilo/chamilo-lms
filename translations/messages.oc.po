@@ -14724,7 +14724,7 @@ msgstr "Utilizaires, Gropes"
 msgid "Sorry no results"
 msgstr "Desolat, cap de resultats"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permissions de la gropo"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "Mon certificat personalizat"
 
 msgid "Select permission"
 msgstr "Seleccionar un permissió"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "En acceptant aquesta invitacion, vos ligarezetz a l’utilizaire que demanda d’un biais que farà que d’unas o totas vòstras donadas de perfil siá disponibla per èsser legida per l’utilizaire que demanda"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Afichatz %d sus aproximativament %d resultatz(s) per %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Afichatz %d resultatz(s) accessible(s) per %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Seretz doncas redirigit automaticament sus aqueste URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Avètz accés a de multiples URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Clicatz sus lo ligam çaijós corresponent a l’URL que volètz accedir"
+
+msgid "You do not currently have access to any URL"
+msgstr "Actualament, avètz pas cap d’accés a cap d’URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Nombre maximum d’abonaments autorizat"
+
+msgid "An error occurred"
+msgstr "Una error s’es producha"
+
+msgid "You don't have any course content yet"
+msgstr "Enca pas cap de contengut de curs"
+
+msgid "This course is locked"
+msgstr "Aqueste curs es barrat"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Adreça electronica dempuèi la qual los corrièls seràn enviats quand la plataforma envia un corrièl, tanben utilizada coma entèsta 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Trovatz pas vòstra lenga dins la lista ? Contactatz-nos a %s per contribuir coma traductor"
+
+msgid "An update is available"
+msgstr "Una mesa a jorn es disponibla"
+
+msgid "to know what's new and what has been changed"
+msgstr "per saber qué es novèl e qué es cambiat"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Avèm detectat que vòstra instalacion PHP definís pas la data"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vòstra version PHP correspond pas ais requisits d’aqueste logiciau"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "D’unas fichièrs o dossièrs an pas lo drech d’escritura"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Avís ! L'installador a detectat una plataforma Chamilo existenta sul vòstre sistèma"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Pr’amor dels repertòris <code>newscorm</code> e <code>exercice</code> que son estats renomenats en <code>lp</code> e <code>exercise</code> respectivament, cal suprimir o renomenar en <code>newscorm_old</code> e <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Lo formulari conten de donadas incorrèctas o incomplètas"
+
+msgid "Your contact information could not be sent"
+msgstr "Vòstras informacions de contacte pòdon pas èsser enviadas"
+
+msgid "Please contact support with the error details"
+msgstr "Contactatz lo supòrt amb los detalhs de l’error"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Clicatz sus l’imatge per lo retalhar (rapòrt 1:1, 120x120 px recomanda)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Utilizatz l’òpti de retalh per seleccionar una region 1:1"
+
+msgid "Checking push subscription"
+msgstr "Verificacion de l’abonament push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Sètz abonat às notificacions push dins aqueste navigador"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Las notificacions push son pas activadas dins aqueste navigador"
+
+msgid "Data exchange successfully saved"
+msgstr "Escambi de donadas salvat amb succès"
+
+msgid "Error saving data exchange"
+msgstr "Error al salvament de l’escambi de donadas"
+
+msgid "No documents added yet"
+msgstr "Cap de document apondut encara"
+
+msgid "No available documents"
+msgstr "Cap de document disponible"
+
+msgid "No users added yet"
+msgstr "Cap d’utilizaire apondut encara"
+
+msgid "No available users"
+msgstr "Cap d’utilizaire disponible"
+
+msgid "You can no longer submit"
+msgstr "Podètz pas tramèter d’autrei"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Cap de tramesa mancant trobada per aquesta travailha o las donadas son pas disponibles"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email enviat a totes los utilizaires sens tramesa"
+
+msgid "Failed to send email"
+msgstr "Fracàs de l’enviament de l’email"
+
+msgid "Write your answer here"
+msgstr "Escrivètz vòstra responsa aquí"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Lo calendari de preséncia vos permet d’enregistrar las listas de preséncia (una per session reela que los estudiants an de seguir)"
+
+msgid "Loading attendance data"
+msgstr "Carga de las donadas de preséncia"
+
+msgid "No attendance assigned yet"
+msgstr "Cap de preséncia assignada encara"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Cap de classe pas prevista dimècres, ensajatz de seleccionar un autre jorn o apondètz vòstra entrat de preséncia vós mem amb las icònas d’acció"
+
+msgid "No attendance data for today"
+msgstr "Cap de donada de preséncia per hôm"
+
+msgid "Saving"
+msgstr "Salvament"
+
+msgid "No attendance data to save"
+msgstr "Cap de donada de preséncia de salvar"
+
+msgid "Failed to save attendance"
+msgstr "Fracàs del salvament de la preséncia"
+
+msgid "Loading more courses"
+msgstr "Carga de mai de cors"
+
+msgid "Loading more sessions"
+msgstr "Carga de mai de sessions"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "La configuracion de la foncion d’auto-lançament dels documents es activada"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "La configuracion de la foncion d’auto-lançament dels exercicis es activada"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Lo paramètre d’auto-lançament del senhier d’aprendissatge es ACTIVAT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Lo paramètre d’auto-lançament del fòrum es activat"
+
+msgid "Course ID is missing"
+msgstr "L’ID del còrs manca"
+
+msgid "Course created successfully"
+msgstr "Còrs creat amb succès"
+
+msgid "Error deleting document(s)"
+msgstr "Error a la supression del/dels document(s)"
+
+msgid "Template successfully deleted"
+msgstr "Modèl suprimit amb succès"
+
+msgid "Error deleting the template"
+msgstr "Error a la supression del modèl"
+
+msgid "The title and thumbnail are required"
+msgstr "Lo títol e la miniatura son obligatòris"
+
+msgid "Template created successfully"
+msgstr "Modèl creat amb succès"
+
+msgid "Error creating the template"
+msgstr "Error a la creacion del modèl"
+
+msgid "Error submitting the form"
+msgstr "Error al mandadís del formulari"
+
+msgid "Loading templates"
+msgstr "Carga dels modèls"
+
+msgid "Loading layout"
+msgstr "Carga de la disposicion"
+
+msgid "Loading courses"
+msgstr "Carga dels cors"
+
+msgid "No courses available"
+msgstr "Cap de còrs disponible"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Aquesta lista aficha los utilizaires de totes las URLs d’accès perque lo paramètre \"session_admin_access_to_all_users_on_all_urls\" es activat."
+
+msgid "User not found"
+msgstr "Utilizaire pas trobat"
+
+msgid "An error occurred while sending the course"
+msgstr "Un error s'es produït pendent l'enviament del cors"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Ne remembratz pas que las modificacions dels termes relatius al RGPD vos obligan a informar aquels tresen partis a qui avetz furnit d'informacions personalas sus vòstres utilizaires, coma indicat a l'article 19 del RGPD"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Devríatz crear los \"Terms e Condicions\" per totas las lengas disponiblas"
+
+msgid "You don't have any course yet"
+msgstr "En ancun cors encara"
+
+msgid "You have received a new friend request"
+msgstr "Avètz recebut una novèla demanda d'amicícia"
+
+msgid "Diagnosis Management"
+msgstr "Gestion del diagnostic"
 

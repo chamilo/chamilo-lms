@@ -14793,7 +14793,7 @@ msgstr "ユーザー、グループ"
 msgid "Sorry no results"
 msgstr "結果がありません"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "グループ権限"
 
 msgid "Closed"
@@ -32865,4 +32865,226 @@ msgstr "マイカスタム証明書"
 
 msgid "Select permission"
 msgstr "権限を選択"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "この招待を受け入れると、リクエストしたユーザーとリンクされ、プロフィールデータのいくつかまたはすべてがそのユーザーによって読み取り可能になります"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s の約 %d 件中 %d 件を表示しています。"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s のアクセス可能な結果 %d 件を表示しています。"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "したがって、この URL に自動的にリダイレクトされます"
+
+msgid "You have access to multiple URLs"
+msgstr "複数の URL にアクセス権があります"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "アクセスしたい URL に対応する下記のリンクをクリックしてください"
+
+msgid "You do not currently have access to any URL"
+msgstr "現在、どの URL にもアクセス権がありません"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "許可された最大購読数です"
+
+msgid "An error occurred"
+msgstr "エラーが発生しました"
+
+msgid "You don't have any course content yet"
+msgstr "コースコンテンツがまだありません"
+
+msgid "This course is locked"
+msgstr "このコースはロックされています"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "プラットフォームがメールを送信する際に使用される送信元メールアドレス。「返信先」ヘッダーとしても使用されます"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "リストに言語が見つかりませんか？翻訳者として貢献するために %s までご連絡ください"
+
+msgid "An update is available"
+msgstr "更新が利用可能です"
+
+msgid "to know what's new and what has been changed"
+msgstr "新機能と変更点を知るために"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "PHP インストールで日付が定義されていません"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP バージョンがこのソフトウェアの要件に一致しません"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "一部のファイルまたはフォルダに書き込み権限がありません"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "警告！インストーラーがシステムに既存の Chamilo プラットフォームを検出しました"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> と <code>exercice</code> ディレクトリがそれぞれ <code>lp</code> と <code>exercise</code> に名前変更されたため、<code>newscorm_old</code> と <code>exercice_old</code> に削除または名前変更する必要があります"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "フォームに不正または不完全なデータが含まれています"
+
+msgid "Your contact information could not be sent"
+msgstr "連絡先情報が送信できませんでした"
+
+msgid "Please contact support with the error details"
+msgstr "エラー詳細をサポートに連絡してください"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "画像をクリックしてトリミングしてください（1:1 比率、120x120 px を推奨）"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "トリミングツールを使用して 1:1 の領域を選択してください"
+
+msgid "Checking push subscription"
+msgstr "プッシュ購読をチェック中"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "このブラウザでプッシュ通知に購読済みです"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "このブラウザでプッシュ通知が有効になっていません"
+
+msgid "Data exchange successfully saved"
+msgstr "データ交換が正常に保存されました"
+
+msgid "Error saving data exchange"
+msgstr "データ交換の保存中にエラーが発生しました"
+
+msgid "No documents added yet"
+msgstr "まだドキュメントが追加されていません"
+
+msgid "No available documents"
+msgstr "利用可能なドキュメントがありません"
+
+msgid "No users added yet"
+msgstr "まだユーザーが追加されていません"
+
+msgid "No available users"
+msgstr "利用可能なユーザーがありません"
+
+msgid "You can no longer submit"
+msgstr "これ以上提出できません"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "この課題に未提出の提出物が見つかりません、またはデータが利用できません"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "未提出ユーザーの全員にメールを送信しました"
+
+msgid "Failed to send email"
+msgstr "メール送信に失敗しました"
+
+msgid "Write your answer here"
+msgstr "ここに回答を記入してください"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "出席カレンダーでは、学生が出席する必要がある実際のセッションごとに出席リストを登録できます"
+
+msgid "Loading attendance data"
+msgstr "出席データを読み込み中"
+
+msgid "No attendance assigned yet"
+msgstr "まだ出席が割り当てられていません"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "今日は授業が予定されていません。別の日を選択するか、アクションボタンを使用して出席を自分で登録してください"
+
+msgid "No attendance data for today"
+msgstr "今日の出席データがありません"
+
+msgid "Saving"
+msgstr "保存中"
+
+msgid "No attendance data to save"
+msgstr "保存する出席データがありません"
+
+msgid "Failed to save attendance"
+msgstr "出席の保存に失敗しました"
+
+msgid "Loading more courses"
+msgstr "コースをさらに読み込み中"
+
+msgid "Loading more sessions"
+msgstr "セッションをさらに読み込み中"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "ドキュメントの自動起動機能が有効です"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "演習の自動起動機能が有効です"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "学習パスの自動起動設定がオンです"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "フォーラムの自動起動設定がオンです"
+
+msgid "Course ID is missing"
+msgstr "コースIDが不足しています"
+
+msgid "Course created successfully"
+msgstr "コースが正常に作成されました"
+
+msgid "Error deleting document(s)"
+msgstr "ドキュメントの削除エラー"
+
+msgid "Template successfully deleted"
+msgstr "テンプレートが正常に削除されました"
+
+msgid "Error deleting the template"
+msgstr "テンプレートの削除エラー"
+
+msgid "The title and thumbnail are required"
+msgstr "タイトルとサムネイルが必要です"
+
+msgid "Template created successfully"
+msgstr "テンプレートが正常に作成されました"
+
+msgid "Error creating the template"
+msgstr "テンプレートの作成エラー"
+
+msgid "Error submitting the form"
+msgstr "フォームの送信エラー"
+
+msgid "Loading templates"
+msgstr "テンプレートを読み込み中"
+
+msgid "Loading layout"
+msgstr "レイアウトを読み込み中"
+
+msgid "Loading courses"
+msgstr "コースを読み込み中"
+
+msgid "No courses available"
+msgstr "利用可能なコースがありません"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "設定「session_admin_access_to_all_users_on_all_urls」が有効のため、全アクセスURLのユーザーが表示されます。"
+
+msgid "User not found"
+msgstr "ユーザーが見つかりません"
+
+msgid "An error occurred while sending the course"
+msgstr "コース送信中にエラーが発生しました"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "GDPR関連の利用規約の変更は、GDPR第19条で規定されている通り、ユーザーの個人情報を提供した第三者にその変更を通知する必要があります"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "利用可能な全言語で「利用規約」を作成してください"
+
+msgid "You don't have any course yet"
+msgstr "まだコースがありません"
+
+msgid "You have received a new friend request"
+msgstr "新しい友達リクエストを受け取りました"
+
+msgid "Diagnosis Management"
+msgstr "診断管理"
 

@@ -14735,7 +14735,7 @@ msgstr "Utilizadores, Grupos"
 msgid "Sorry no results"
 msgstr "Lamentamos, não existem resultados"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permissões de Grupo"
 
 msgid "Closed"
@@ -26601,7 +26601,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse role deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -32807,4 +32807,226 @@ msgstr "O meu certificado personalizado"
 
 msgid "Select permission"
 msgstr "Selecionar permissão"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ao aceitar este convite, você ficará vinculado ao usuário solicitante de forma que alguns ou todos os seus dados de perfil ficarão disponíveis para leitura pelo usuário solicitante"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Mostrando %d de aproximadamente %d resultado(s) para %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Mostrando %d resultado(s) acessível(s) para %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Portanto, você será automaticamente redirecionado para esta URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Você tem acesso a múltiplas URLs"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Por favor, clique no link abaixo correspondente à URL que deseja acessar"
+
+msgid "You do not currently have access to any URL"
+msgstr "Você não tem acesso a nenhuma URL no momento"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Número máximo de subscrições permitidas"
+
+msgid "An error occurred"
+msgstr "Ocorreu um erro"
+
+msgid "You don't have any course content yet"
+msgstr "Você ainda não tem conteúdo de curso"
+
+msgid "This course is locked"
+msgstr "Este curso está bloqueado"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "O endereço de e-mail de onde os e-mails serão enviados quando a plataforma enviar um e-mail, também usado como cabeçalho 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Não encontra a sua língua na lista? Contacte-nos em %s para contribuir como tradutor"
+
+msgid "An update is available"
+msgstr "Está disponível uma atualização"
+
+msgid "to know what's new and what has been changed"
+msgstr "para saber o que há de novo e o que foi alterado"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Detetámos que a sua instalação PHP não define a data"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "A sua versão PHP não cumpre os requisitos deste software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Alguns ficheiros ou pastas não têm permissão de escrita"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Atenção! O instalador detetou uma plataforma Chamilo existente no seu sistema"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Porque as diretórias <code>newscorm</code> e <code>exercice</code> foram renomeadas para <code>lp</code> e <code>exercise</code> respetivamente, é necessário eliminar ou renomear para <code>newscorm_old</code> e <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "O formulário contém dados incorretos ou incompletos"
+
+msgid "Your contact information could not be sent"
+msgstr "As suas informações de contacto não puderam ser enviadas"
+
+msgid "Please contact support with the error details"
+msgstr "Por favor, contacte o suporte com os detalhes do erro"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Clique na imagem para a recortar (proporção 1:1, 120x120 px recomendado)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Use a ferramenta de recorte para selecionar uma região 1:1"
+
+msgid "Checking push subscription"
+msgstr "A verificar subscrição push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Está subscrito às notificações push neste browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "As notificações push não estão ativadas neste browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Troca de dados guardada com sucesso"
+
+msgid "Error saving data exchange"
+msgstr "Erro ao guardar troca de dados"
+
+msgid "No documents added yet"
+msgstr "Nenhum documento adicionado ainda"
+
+msgid "No available documents"
+msgstr "Nenhum documento disponível"
+
+msgid "No users added yet"
+msgstr "Nenhum utilizador adicionado ainda"
+
+msgid "No available users"
+msgstr "Nenhum utilizador disponível"
+
+msgid "You can no longer submit"
+msgstr "Já não pode submeter"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nenhuma submissão em falta encontrada para esta tarefa ou os dados não estão disponíveis"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email enviado a todos os utilizadores não submetidos"
+
+msgid "Failed to send email"
+msgstr "Falha ao enviar email"
+
+msgid "Write your answer here"
+msgstr "Escreva a sua resposta aqui"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "O calendário de presenças permite-lhe registar listas de presenças (uma por sessão real que os alunos precisam de frequentar)"
+
+msgid "Loading attendance data"
+msgstr "A carregar dados de presenças"
+
+msgid "No attendance assigned yet"
+msgstr "Nenhuma presença atribuída ainda"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Não há aula agendada para hoje, tente selecionar outro dia ou adicione a sua entrada de presença manualmente usando os ícones de ação"
+
+msgid "No attendance data for today"
+msgstr "Nenhum dado de presença para hoje"
+
+msgid "Saving"
+msgstr "A guardar"
+
+msgid "No attendance data to save"
+msgstr "Nenhum dado de presença para guardar"
+
+msgid "Failed to save attendance"
+msgstr "Falha ao guardar presenças"
+
+msgid "Loading more courses"
+msgstr "A carregar mais cursos"
+
+msgid "Loading more sessions"
+msgstr "A carregar mais sessões"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "A configuração da funcionalidade de auto-lançamento de documentos está ativada"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "A configuração da funcionalidade de auto-lançamento de exercícios está ativada"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "A configuração de auto-lançamento do percurso de aprendizagem está LIGADA"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "A configuração de auto-lançamento do fórum está ligada"
+
+msgid "Course ID is missing"
+msgstr "Falta o ID do curso"
+
+msgid "Course created successfully"
+msgstr "Curso criado com sucesso"
+
+msgid "Error deleting document(s)"
+msgstr "Erro ao eliminar documento(s)"
+
+msgid "Template successfully deleted"
+msgstr "Modelo eliminado com sucesso"
+
+msgid "Error deleting the template"
+msgstr "Erro ao eliminar o modelo"
+
+msgid "The title and thumbnail are required"
+msgstr "O título e a miniatura são obrigatórios"
+
+msgid "Template created successfully"
+msgstr "Modelo criado com sucesso"
+
+msgid "Error creating the template"
+msgstr "Erro ao criar o modelo"
+
+msgid "Error submitting the form"
+msgstr "Erro ao submeter o formulário"
+
+msgid "Loading templates"
+msgstr "A carregar modelos"
+
+msgid "Loading layout"
+msgstr "A carregar layout"
+
+msgid "Loading courses"
+msgstr "A carregar cursos"
+
+msgid "No courses available"
+msgstr "Nenhum curso disponível"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Esta lista mostra utilizadores de todas as URLs de acesso porque a configuração \"session_admin_access_to_all_users_on_all_urls\" está ativada."
+
+msgid "User not found"
+msgstr "Utilizador não encontrado"
+
+msgid "An error occurred while sending the course"
+msgstr "Ocorreu um erro ao enviar o curso"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Lembre-se de que as modificações aos termos relacionados com o RGPD exigem que reporte essas modificações a terceiros a quem forneceu informações pessoais sobre os seus utilizadores, conforme estabelecido no Artigo 19 do RGPD"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Deve criar os \"Termos e Condições\" para todas as línguas disponíveis"
+
+msgid "You don't have any course yet"
+msgstr "Não tem nenhum curso ainda"
+
+msgid "You have received a new friend request"
+msgstr "Recebeu um novo pedido de amizade"
+
+msgid "Diagnosis Management"
+msgstr "Gestão de Diagnóstico"
 

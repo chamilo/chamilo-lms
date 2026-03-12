@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -14728,7 +14728,7 @@ msgstr "Úsáideoirí, Grúpaí"
 msgid "Sorry no results"
 msgstr "Brón ort, gan aon thoradh"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Ceadanna Grúpa"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Mo theastas saincheaptha"
 
 msgid "Select permission"
 msgstr "Roghnaigh cead"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Trí ghlacadh leis an gcuireadh seo, beidh tú nasctha leis an úsáideoir a d'iarr é ar bhealach a chuirfidh roinnt de do chuid sonraí próifíle ar fáil don úsáideoir a d'iarr é a léamh"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Taispeáint %d de thart ar %d toradh(toraidh) do %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Taispeáint %d toradh(toraidh) inrochtana do %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Dá bhrí sin, tiocfaidh athdhíriú go huathoibríoch chuig an URL seo"
+
+msgid "You have access to multiple URLs"
+msgstr "Tá rochtain agat ar il-URLanna"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Cliceáil ar an nasc thíos a fhreagraíonn don URL ar mhaith leat rochtain a fháil air"
+
+msgid "You do not currently have access to any URL"
+msgstr "Níl rochtain agat faoi láthair ar aon URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Uasmhéid síntiúsanna ceadaithe"
+
+msgid "An error occurred"
+msgstr "Tharla earráid"
+
+msgid "You don't have any course content yet"
+msgstr "Níl aon ábhar cúrsa agat go fóill"
+
+msgid "This course is locked"
+msgstr "Tá an cúrsa seo faoi ghlas"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "An seoladh r-phoist óna seolfar ríomhphost nuair a sheolann an t-ardán ríomhphost, a úsáidtear freisin mar cheanntásc 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ní féidir teanga a fháil sa liosta? Déan teagmháil linn ag %s chun cur le hoibre aistritheoir"
+
+msgid "An update is available"
+msgstr "Tá nuashonrú ar fáil"
+
+msgid "to know what's new and what has been changed"
+msgstr "le fáil amach cad atá nua agus cad atá athraithe"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Brahmhave foilsniú PHP ní shainmhíníonn sé an dáta"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Ní chomhlíonann leagan PHP do na ceanglais don bhogearra seo"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Níl cead scríbhinnne ag roinnt comhad nó fillteán"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Rabhadh! Braith an suiteálaí ardán Chamilo atá ann cheana ar do chóras"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Toisc gur athainmníodh na eolairí <code>newscorm</code> agus <code>exercice</code> go <code>lp</code> agus <code>exercise</code> faoi seach, is gá iad a scriosadh nó a athainmniú go <code>newscorm_old</code> agus <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Tá sonraí míchearta nó neamhiomlána san fhoirm"
+
+msgid "Your contact information could not be sent"
+msgstr "Níorbh fhéidir do chuid faisnéise teagmhála a sheoladh"
+
+msgid "Please contact support with the error details"
+msgstr "Déan teagmháil le tacaíocht leis na sonraí earráide"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Cliceáil ar an íomhá chun í a bhearradh (cóimheas 1:1, 120x120 px moltóir)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Úsáid an uirlis bearrtha chun réigiún 1:1 a roghnú"
+
+msgid "Checking push subscription"
+msgstr "Seiceáil síntiús brú"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Tá tú síntiúsithe le fógraí brú sa bhrabhsálaí seo"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Níl fógraí brú cumasaithe sa bhrabhsálaí seo"
+
+msgid "Data exchange successfully saved"
+msgstr "Malartú sonraí sábháilte go rathúil"
+
+msgid "Error saving data exchange"
+msgstr "Earráid ag sábháil malartú sonraí"
+
+msgid "No documents added yet"
+msgstr "Gan aon doiciméid curtha leis go fóill"
+
+msgid "No available documents"
+msgstr "Gan aon doiciméid ar fáil"
+
+msgid "No users added yet"
+msgstr "Níor cuireadh aon úsáideoirí leis go fóill"
+
+msgid "No available users"
+msgstr "Níl aon úsáideoirí ar fáil"
+
+msgid "You can no longer submit"
+msgstr "Ní féidir a chur isteach níos mó"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Níor aimsíodh aon aighneachtaí in easnamh don taisceán seo nó níl na sonraí ar fáil"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Seoladh ríomhphost chuig gach úsáideoir nár chuir isteach"
+
+msgid "Failed to send email"
+msgstr "Theip ar ríomhphost a sheoladh"
+
+msgid "Write your answer here"
+msgstr "Scríobh do fhreagra anseo"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Ligann féilire tinrimh duit liostaí tinrimh a chlárú (ceann in aghaidh seisiún fíor a chaithfidh na mic léinn freastal air)"
+
+msgid "Loading attendance data"
+msgstr "Ag lódáil sonraí tinrimh"
+
+msgid "No attendance assigned yet"
+msgstr "Níl tinrimh ar bith sannta go fóill"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Níl aon rang sceidealta inniu, déan iarracht lá eile a roghnú nó cuir iontráil tinrimh tú féin leis trí na deilbhíní gníomhaíochta a úsáid"
+
+msgid "No attendance data for today"
+msgstr "Níl sonraí tinrimh inniu"
+
+msgid "Saving"
+msgstr "Ag sábháil"
+
+msgid "No attendance data to save"
+msgstr "Níl sonraí tinrimh le sábháil"
+
+msgid "Failed to save attendance"
+msgstr "Theip ar tinrimh a shábháil"
+
+msgid "Loading more courses"
+msgstr "Ag lódáil níos mó cúrsaí"
+
+msgid "Loading more sessions"
+msgstr "Ag lódáil níos mó seisiún"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Tá cumraíocht an ghné uathsheoladh doiciméad cumasaithe"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Tá cumraíocht an ghné uathsheoladh cleachtaí cumasaithe"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Tá socrú uathsheoladh an chosáin foghlama ar ON"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Tá socrú uathsheoladh an fhóraim ar siúl"
+
+msgid "Course ID is missing"
+msgstr "Tá ID an chursa in easnamh"
+
+msgid "Course created successfully"
+msgstr "Cruthaíodh an cúrsa go rathúil"
+
+msgid "Error deleting document(s)"
+msgstr "Earráid ag scriosadh doiciméad(í)"
+
+msgid "Template successfully deleted"
+msgstr "Scriosadh an teimpléad go rathúil"
+
+msgid "Error deleting the template"
+msgstr "Earráid ag scriosadh an teimpléid"
+
+msgid "The title and thumbnail are required"
+msgstr "Tá an teideal agus an mionsamhail ag teastáil"
+
+msgid "Template created successfully"
+msgstr "Cruthaíodh an teimpléad go rathúil"
+
+msgid "Error creating the template"
+msgstr "Earráid ag cruthú an teimpléid"
+
+msgid "Error submitting the form"
+msgstr "Earráid ag cur isteach an fhoirm"
+
+msgid "Loading templates"
+msgstr "Ag lódáil teimpléid"
+
+msgid "Loading layout"
+msgstr "Ag lódáil leagan amach"
+
+msgid "Loading courses"
+msgstr "Ag lódáil cúrsaí"
+
+msgid "No courses available"
+msgstr "Níl aon chúrsaí ar fáil"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Taispeánann an liosta seo úsáideoirí ó gach URL rochtana toisc go bhfuil an socrú \"session_admin_access_to_all_users_on_all_urls\" cumasaithe."
+
+msgid "User not found"
+msgstr "Níor aimsíodh an úsáideoir"
+
+msgid "An error occurred while sending the course"
+msgstr "Tharla earráid agus an cúrsa á sheoladh"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Cuimhnigh le do thoil go bhfuil modhnuithe ar na téarmaí a bhaineann le GDPR ag teastáil uait chun na modhnuithe sin a thuairisciú do thríú páirtithe ar thug tú faisnéis phearsanta faoi do chuid úsáideoirí dóibh, mar a dúradh in Airteagal 19 de GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Ba cheart duit an \"Téarmaí agus Coinníollacha\" a chruthú do na teangacha go léir atá ar fáil"
+
+msgid "You don't have any course yet"
+msgstr "Níl aon chúrsa agat go fóill"
+
+msgid "You have received a new friend request"
+msgstr "Fuair tú iarratas cara nua"
+
+msgid "Diagnosis Management"
+msgstr "Bainistíocht Diagnóise"
 

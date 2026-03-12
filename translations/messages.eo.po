@@ -14729,7 +14729,7 @@ msgstr "Uzantoj, Grupoj"
 msgid "Sorry no results"
 msgstr "Bedaŭrinde neniu rezulto"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permesoj de grupo"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Mia propra atestilo"
 
 msgid "Select permission"
 msgstr "Selekti permisojn"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Akceptante ĉi inviton, vi estos ligita al la petinta uzanto maniere, kiu faros kelkajn aŭ ĉiujn de viaj profilaj datumoj haveblaj por legado de la petinta uzanto"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Montras %d el ĉirkaŭ %d rezult(a)(ojn) por %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Montras %d alirebl(a)(ojn) rezult(a)(ojn) por %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Do vi estos aŭtomate reenhavigita al ĉi URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Vi havas aliron al pluraj URL-oj"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Bonvolu klaki la ligilon malsupre, kiu kongruas kun la URL, kiun vi deziras aliri"
+
+msgid "You do not currently have access to any URL"
+msgstr "Vi nune ne havas aliron al iu ajn URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimuma nombro de abonoj permesitaj"
+
+msgid "An error occurred"
+msgstr "Okazis eraro"
+
+msgid "You don't have any course content yet"
+msgstr "Vi ankoraŭ ne havas kursan enhavon"
+
+msgid "This course is locked"
+msgstr "Ĉi kursaro estas ŝlosita"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Retpoŝtadreso el kiu retmesaĝoj estos senditaj kiam la platformo sendas retmesaĝon, ankaŭ uzata kiel 'reply-to' kapo"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ne trovas vian lingvon en la listo? Kontaktu nin je %s por kontribui kiel tradukisto"
+
+msgid "An update is available"
+msgstr "Disponas ĝisdatigo"
+
+msgid "to know what's new and what has been changed"
+msgstr "por scii kio estas nova kaj kio estas ŝanĝita"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Ni detektis, ke via PHP-instalo ne difinas la daton"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Via PHP-versio ne kongruas kun la postulantecoj de ĉi programaro"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Kelkaj dosieroj aŭ dosierujoj ne havas skribpermeson"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Averto! La instalilo detektis ekzistantan Chamilo-platformon en via sistemo"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Pro tio, ke la dosierujoj <code>newscorm</code> kaj <code>exercice</code> estis renomitaj al <code>lp</code> kaj <code>exercise</code> respektive, necesas forigi aŭ renomi ilin al <code>newscorm_old</code> kaj <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "La formularo enhavas malĝustan aŭ nekompletan datenaron"
+
+msgid "Your contact information could not be sent"
+msgstr "Via kontakta informoj ne povis esti senditaj"
+
+msgid "Please contact support with the error details"
+msgstr "Bonvolu kontakti la subtenon kun la detaloj de la eraro"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klaku la bildon por tondri ĝin (1:1 proporcio, 120x120 px rekomenditaj)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Uzŭ la tondrililon por selekti 1:1 regionon"
+
+msgid "Checking push subscription"
+msgstr "Kontrolo de puŝa abono"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Vi estas abonutaj al puŝaj sciigoj en tiu ĉi retumilo"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Puŝaj sciigoj ne estas aktivigitaj en tiu ĉi retumilo"
+
+msgid "Data exchange successfully saved"
+msgstr "Datointerŝanĝo sukcese konservita"
+
+msgid "Error saving data exchange"
+msgstr "Eraro dum konservado de datointerŝanĝo"
+
+msgid "No documents added yet"
+msgstr "Neniu dokumento aldonita ankoraŭ"
+
+msgid "No available documents"
+msgstr "Neniu havebla dokumento"
+
+msgid "No users added yet"
+msgstr "Neniu uzanto aldonita ankoraŭ"
+
+msgid "No available users"
+msgstr "Neniu havebla uzanto"
+
+msgid "You can no longer submit"
+msgstr "Vi ne povas submeti pli"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Neniu mankanta submeto trovita por tiu tasko aŭ datumoj ne disponeblas"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Retpoŝto sendita al ĉiuj ne-submetintaj uzantoj"
+
+msgid "Failed to send email"
+msgstr "Fiulo dum sendado de retpoŝto"
+
+msgid "Write your answer here"
+msgstr "Skribu vian respondon ĉi tie"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "La kalendaro de partopreno permesas vin registri listojn de partopreno (po unu por ĉiu reela seanco kiun la studentoj devas ĉeesti)"
+
+msgid "Loading attendance data"
+msgstr "Ŝargado de datumoj pri partopreno"
+
+msgid "No attendance assigned yet"
+msgstr "Neniu partopreno asignita ankoraŭ"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Neniu kurso planita hodiaŭ, provu elekti alian tagon aŭ aldonu vian eniron de partopreno mem uzante la simbolojn de agoj"
+
+msgid "No attendance data for today"
+msgstr "Neniu datumoj pri partopreno por hodiaŭ"
+
+msgid "Saving"
+msgstr "Konservado"
+
+msgid "No attendance data to save"
+msgstr "Neniu datumoj pri partopreno por konservi"
+
+msgid "Failed to save attendance"
+msgstr "Fiulo dum konservado de partopreno"
+
+msgid "Loading more courses"
+msgstr "Ŝargado de pli da kursoj"
+
+msgid "Loading more sessions"
+msgstr "Ŝargado de pli da seancoj"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "La agordo de aŭtolanĉo de dokumentoj estas aktivigita"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "La agordo de aŭtolanĉo de ekzercoj estas aktivigita"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "La agordo de aŭtolanĉo de lernvojo estas EN"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "La agordo de aŭtolanĉo de la forumo estas ŝaltita"
+
+msgid "Course ID is missing"
+msgstr "Mankas ID de kurso"
+
+msgid "Course created successfully"
+msgstr "Kurso sukcese kreita"
+
+msgid "Error deleting document(s)"
+msgstr "Eraro dum forigado de dokumento(j)"
+
+msgid "Template successfully deleted"
+msgstr "Ŝablono sukcese forigita"
+
+msgid "Error deleting the template"
+msgstr "Eraro dum forigado de la ŝablono"
+
+msgid "The title and thumbnail are required"
+msgstr "La titolo kaj miniaturbildo estas devigaj"
+
+msgid "Template created successfully"
+msgstr "Ŝablono sukcese kreita"
+
+msgid "Error creating the template"
+msgstr "Eraro dum kreo de la ŝablono"
+
+msgid "Error submitting the form"
+msgstr "Eraro dum submetado de la paĝo"
+
+msgid "Loading templates"
+msgstr "Ŝargado de ŝablonoj"
+
+msgid "Loading layout"
+msgstr "Ŝargado de aranĝo"
+
+msgid "Loading courses"
+msgstr "Ŝargado de kursoj"
+
+msgid "No courses available"
+msgstr "Neniu havebla kurso"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ĉi tiu listo montras uzantojn de ĉiuj aliraĵoj URL ĉar la agordo \"session_admin_access_to_all_users_on_all_urls\" estas aktivigita."
+
+msgid "User not found"
+msgstr "Uzanto ne trovita"
+
+msgid "An error occurred while sending the course"
+msgstr "Eraro okazis dum sendado de la kurso"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Memoru ke modifo de la kondiĉoj rilataj al GDPR postulas de vi raporti tiujn modifoajn al triaj partioj al kiuj vi donis personajn informojn pri viaj uzantoj, kiel indikite en Artikel 19 de GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Vi devus krei la \"Terminojn kaj Kondiĉojn\" por ĉiuj haveblaj lingvoj"
+
+msgid "You don't have any course yet"
+msgstr "Vi ankoraŭ ne havas kurson"
+
+msgid "You have received a new friend request"
+msgstr "Vi ricevis novan peton pri amikeco"
+
+msgid "Diagnosis Management"
+msgstr "Administro de diagnozo"
 

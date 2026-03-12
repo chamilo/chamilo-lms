@@ -490,7 +490,7 @@ class AiController extends AbstractController
                 ], 500);
             }
 
-            $questionsText = trim((string) $questions);
+            $questionsText = $this->sanitizeGeneratedAikenText((string) $questions);
 
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'course:'.$cid.':aiken:'.sha1($topic.'|'.$language.'|'.$nQ.'|'.$questionType),
@@ -2173,5 +2173,74 @@ class AiController extends AbstractController
         }
 
         return $sid > 0 ? $sid : 0;
+    }
+
+    /**
+     * Sanitizes AI-generated Aiken text before it is shown in the textarea.
+     * Removes markdown fences and leading numbering from question lines only.
+     */
+    private function sanitizeGeneratedAikenText(string $text): string
+    {
+        $text = str_replace(["\r\n", "\r"], "\n", trim($text));
+
+        if ('' === $text) {
+            return '';
+        }
+
+        $lines = explode("\n", $text);
+        $normalizedLines = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ('' === $line) {
+                $normalizedLines[] = '';
+
+                continue;
+            }
+
+            if ('```' === $line || str_starts_with($line, '```')) {
+                continue;
+            }
+
+            if ($this->isAikenQuestionTitleLine($line)) {
+                $line = $this->stripLeadingAikenQuestionNumber($line);
+            }
+
+            $normalizedLines[] = $line;
+        }
+
+        return trim(implode("\n", $normalizedLines));
+    }
+
+    /**
+     * Returns true only for Aiken question title lines.
+     */
+    private function isAikenQuestionTitleLine(string $line): bool
+    {
+        return 1 !== preg_match('/^[A-Z]\.\s/', $line)
+            && 1 !== preg_match('/^ANSWER:\s?[A-Z]/', $line)
+            && 1 !== preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line);
+    }
+
+    /**
+     * Removes a leading numeric prefix from a generated Aiken question title.
+     */
+    private function stripLeadingAikenQuestionNumber(string $line): string
+    {
+        $line = trim($line);
+
+        if ('' === $line) {
+            return $line;
+        }
+
+        $normalized = preg_replace('/^\d+\s*[\.\)\-:]\s+/u', '', $line);
+        if (null === $normalized) {
+            return $line;
+        }
+
+        $normalized = trim($normalized);
+
+        return '' !== $normalized ? $normalized : $line;
     }
 }

@@ -14724,7 +14724,7 @@ msgstr "کارنونه، ګروپونه"
 msgid "Sorry no results"
 msgstr "بخښنه غواړو، هیڅ پایلې نشته"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "د ګروپ اجازې"
 
 msgid "Closed"
@@ -32795,4 +32795,226 @@ msgstr "زما ګمرکي سند"
 
 msgid "Select permission"
 msgstr "اجازې انتخاب وکړئ"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "د دې دعوت منل کولو سره به تاسو د غوښتونکي کاروونکي سره تړل شئ چې ستاسو پروفایل ډاټا ځینې یا ټول د غوښتونکي کاروونکي لوستلو لپاره شي"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%d شاوخوا %d پایلو څخه د %s لپاره ښودل کېږي."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s لپاره %d لاسرسي وړ پایلې ښودل کېږي."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "نو تاسو به په اتومات ډول د دې URL ته لارښوونه شئ"
+
+msgid "You have access to multiple URLs"
+msgstr "تاسو څو URL ته لاسرسی لرئ"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "په مهرباني کې د هغه URL لینک باندې کلیک وکړئ چې تاسو غواړئ لاسرسی وکړئ"
+
+msgid "You do not currently have access to any URL"
+msgstr "اوس تاسو هیڅ URL ته لاسرسی نلرئ"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "د اجازې ورکړل شويو تابعیتونو اعظمي شمېر"
+
+msgid "An error occurred"
+msgstr "یوه خطا پېښه شوه"
+
+msgid "You don't have any course content yet"
+msgstr "تاسو لا تر اوسه هیڅ کورس مواد نلرئ"
+
+msgid "This course is locked"
+msgstr "دا کورس قفل دی"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "د بریالیتوب بریښنالیک پتې چې کله پلیټفارم بریښنالیک واستوي، هم د 'reply-to' سرلیک په توګه کارول کېږي"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "ستاسو ژبه په لیست کې نه موندل کېږي؟ د ژباړونکي په توګه ونډه ورکولو لپاره له موږ سره په %s کې اړیکه ونیسئ"
+
+msgid "An update is available"
+msgstr "یوه تازه کول شتون لري"
+
+msgid "to know what's new and what has been changed"
+msgstr "د نوي څه پوهېدل او څه بدل شوي دي"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "موږ موندلي چې ستاسو PHP نصبونه نېټه تعریف نه کوي"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "ستاسو PHP نسخې د دې سافټویر غوښتنو سره مطابقت نلري"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "ځینې فایلونه یا پوښې لیکلو اجازې نلري"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "ګواښنه! نصبونکي مو موندلي چې ستاسو سیسټم کې شته Chamilo پلیټفارم شتون لري"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "ځکه چې <code>newscorm</code> او <code>exercice</code> ډایریکټريګان په <code>lp</code> او <code>exercise</code> ته بدل شوي، نو د <code>newscorm_old</code> او <code>exercice_old</code> ته حذف کول یا بدل نومول ضروري دي"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "د فورمه ناسم یا ناتمام معلومات لري"
+
+msgid "Your contact information could not be sent"
+msgstr "ستاسو اړیکه معلومات نه شي لیږل کېدای"
+
+msgid "Please contact support with the error details"
+msgstr "په مهرباني کې د خطا تفصیلاتو سره ملاتړ سره اړیکه ونیسئ"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "تصویر کلیک وکړئ ترڅو یې پرې کړئ (1:1 نسبت، 120x120 px وړاندیز شوی)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "د پرې کولو وسیلې استعمال وکړئ ترڅو 1:1 سیمه غوره کړئ"
+
+msgid "Checking push subscription"
+msgstr "د فشار تابعیت چک کول"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "تاسو په دې براوزر کې د فشار اعلانونو تابع یئ"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "په دې براوزر کې فشار اعلانونه فعال ندی"
+
+msgid "Data exchange successfully saved"
+msgstr "د معلوماتو تبادلې په بریالیتوب سره خوندار شوه"
+
+msgid "Error saving data exchange"
+msgstr "د معلوماتو تبادلې خوندارولو کې خطا"
+
+msgid "No documents added yet"
+msgstr "لا تر اوسه هیڅ اسناد اضافه شوي ندی"
+
+msgid "No available documents"
+msgstr "هیڅ شته اسناد ندی"
+
+msgid "No users added yet"
+msgstr "لا تر اوسه هیڅ کاروونکي اضافه شوي ندی"
+
+msgid "No available users"
+msgstr "هیڅ شته کاروونکي ندی"
+
+msgid "You can no longer submit"
+msgstr "تاسو نور سترګه نه شئ کولی"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "د دې تکلیف لپاره هیڅ نشتو سترګې نه موندل کېږي یا ډاټا شتون نلري"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "بریښنالیک ټولو غیر سترګو کاروونکو ته واستول شو"
+
+msgid "Failed to send email"
+msgstr "بریښنالیک لیږلو کې ناکامه شو"
+
+msgid "Write your answer here"
+msgstr "دلته خپله ځواب ولیکئ"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "حضوري تقويم د شاګردانو لپاره حقيقي غونډو (يوه هره غونډه چې شاګردان پکې ګډون کوي) کې د حضور ليستونه ثبتول چمتو کوي"
+
+msgid "Loading attendance data"
+msgstr "د حضور معلومات لود کېږي"
+
+msgid "No attendance assigned yet"
+msgstr "تر اوسه هېڅ حضور ټاکل شوی نه دی"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "نن ورځ هېڅ درس ندی ټاکل شوی، بل ورځ وټاکئ یا د عمل ايکونونو په مرسته خپل حضور اضافه کړئ"
+
+msgid "No attendance data for today"
+msgstr "نن ورځ د حضور هېڅ معلومات نشته"
+
+msgid "Saving"
+msgstr "ساتل کېږي"
+
+msgid "No attendance data to save"
+msgstr "د ساتلو وړ حضور معلومات نشته"
+
+msgid "Failed to save attendance"
+msgstr "د حضور ساتل پېښه شوه"
+
+msgid "Loading more courses"
+msgstr "نور کورسونه لود کېږي"
+
+msgid "Loading more sessions"
+msgstr "نورې غونډې لود کېږي"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "د اسنادو اتومات پيلولو ځانګړتيايي ترتيب فعال دی"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "د تجربو اتومات پيلولو ځانګړتيايي ترتيب فعال دی"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "د زده کړې لارې اتومات پيلول ترتيب فعال دی"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "د فورم اتومات پيلول ترتيب فعال دی"
+
+msgid "Course ID is missing"
+msgstr "د کورس آي دي نشته"
+
+msgid "Course created successfully"
+msgstr "کورس په بريامه جوړ شو"
+
+msgid "Error deleting document(s)"
+msgstr "د اسنادو له منځه وړلو کې پېښه شوه"
+
+msgid "Template successfully deleted"
+msgstr "تشکيله په بريامه له منځه وړل شوه"
+
+msgid "Error deleting the template"
+msgstr "د تشکيلې له منځه وړلو کې پېښه شوه"
+
+msgid "The title and thumbnail are required"
+msgstr "سرليک او لږه انځور اړين دي"
+
+msgid "Template created successfully"
+msgstr "تشکيله په بريامه جوړه شوه"
+
+msgid "Error creating the template"
+msgstr "د تشکيلې جوړولو کې پېښه شوه"
+
+msgid "Error submitting the form"
+msgstr "د فورم لېږلو کې پېښه شوه"
+
+msgid "Loading templates"
+msgstr "تشکيلې لود کېږي"
+
+msgid "Loading layout"
+msgstr "ترتيب لود کېږي"
+
+msgid "Loading courses"
+msgstr "کورسونه لود کېږي"
+
+msgid "No courses available"
+msgstr "هېڅ کورس شتون نلري"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "دا ليست د ټولو لاسرسي URL څخه کاروونکي ښيي ځکه چې ترتيب \"session_admin_access_to_all_users_on_all_urls\" فعال دی."
+
+msgid "User not found"
+msgstr "کاروونکى ويال نه شو موندل"
+
+msgid "An error occurred while sending the course"
+msgstr "د کورس لېږلو پر مهال پېښه رامنځته شوه"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "مه ياد وساتئ چې د GDPR سره تړلي اصطلاحاتو بدلونونه تاسو ته اړ دي چې هغه د هغو دريمې ګوندونو ته راپور ورکړئ چې تاسو يې د خپلو کاروونکو شخصي معلومات ورکړي دي، لکه څنګه چې د GDPR په ۱۹مة ماده کې ذکر شوي دي"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "تاسو د ټولو شته ژبو لپاره \"اصطلاحات او شرطونه\" جوړ کړئ"
+
+msgid "You don't have any course yet"
+msgstr "تاسو تر اوسه هېڅ کورس نلرئ"
+
+msgid "You have received a new friend request"
+msgstr "تاسو نوې ملګري غوښتنه ترلاسه کړې ده"
+
+msgid "Diagnosis Management"
+msgstr "تشخيص اداره"
 

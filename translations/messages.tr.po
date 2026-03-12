@@ -14729,7 +14729,7 @@ msgstr "Kullanıcılar, Gruplar"
 msgid "Sorry no results"
 msgstr "Üzgünüz, sonuç yok"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Grup İzinleri"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Özel sertifikam"
 
 msgid "Select permission"
 msgstr "İzin seçin"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Bu daveti kabul ederek, isteği yapan kullanıcıyla bağlantılı hale gelecek ve profil verilerinizin bir kısmı veya tamamı isteği yapan kullanıcı tarafından okunabilir olacaktır"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s için yaklaşık %d sonuçtan %d tanesi gösteriliyor."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s için %d erişilebilir sonuç gösteriliyor."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Bu nedenle otomatik olarak bu URL'ye yönlendirileceksiniz"
+
+msgid "You have access to multiple URLs"
+msgstr "Birden fazla URL'ye erişiminiz var"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Erişmek istediğiniz URL'ye karşılık gelen aşağıdaki bağlantıya tıklayın"
+
+msgid "You do not currently have access to any URL"
+msgstr "Şu anda hiçbir URL'ye erişiminiz yok"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "İzin verilen maksimum abonelik sayısı"
+
+msgid "An error occurred"
+msgstr "Bir hata oluştu"
+
+msgid "You don't have any course content yet"
+msgstr "Henüz kurs içeriğiniz yok"
+
+msgid "This course is locked"
+msgstr "Bu kurs kilitli"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Platform e-posta gönderdiğinde kullanılacak e-posta adresi, ayrıca 'yanıtla' başlığı olarak da kullanılır"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Listede dilinizi bulamıyor musunuz? Çevirmen olarak katkıda bulunmak için %s adresinden bizimle iletişime geçin"
+
+msgid "An update is available"
+msgstr "Bir güncelleme mevcut"
+
+msgid "to know what's new and what has been changed"
+msgstr "Yenilikleri ve değişiklikleri öğrenmek için"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "PHP kurulumunuzun tarih tanımlamadığını tespit ettik"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP sürümünüz bu yazılımın gereksinimlerini karşılamıyor"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Bazı dosyalar veya klasörlerde yazma izni yok"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Uyarı! Kurulum programınız sisteminizde mevcut bir Chamilo platformu tespit etti"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> ve <code>exercice</code> dizinleri sırasıyla <code>lp</code> ve <code>exercise</code> olarak yeniden adlandırıldığı için, bunları silmek veya <code>newscorm_old</code> ve <code>exercice_old</code> olarak yeniden adlandırmak gereklidir"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Form yanlış veya eksik veri içeriyor"
+
+msgid "Your contact information could not be sent"
+msgstr "İletişim bilgileriniz gönderilemedi"
+
+msgid "Please contact support with the error details"
+msgstr "Hata detaylarıyla destek ekibiyle iletişime geçin"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Resmi kırpmak için resme tıklayın (1:1 oran, 120x120 px önerilir)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "1:1 bölge seçmek için kırpma aracını kullanın"
+
+msgid "Checking push subscription"
+msgstr "Push aboneliği kontrol ediliyor"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Bu tarayıcıda push bildirimlerine abone oldunuz"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Bu tarayıcıda push bildirimleri etkin değil"
+
+msgid "Data exchange successfully saved"
+msgstr "Veri değişimi başarıyla kaydedildi"
+
+msgid "Error saving data exchange"
+msgstr "Veri değişimi kaydedilirken hata oluştu"
+
+msgid "No documents added yet"
+msgstr "Henüz belge eklenmedi"
+
+msgid "No available documents"
+msgstr "Mevcut belge yok"
+
+msgid "No users added yet"
+msgstr "Henüz kullanıcı eklenmedi"
+
+msgid "No available users"
+msgstr "Mevcut kullanıcı yok"
+
+msgid "You can no longer submit"
+msgstr "Artık gönderme yapamazsınız"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Bu ödev için eksik teslimat bulunamadı veya veri mevcut değil"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Teslim edilmemiş tüm kullanıcılara e-posta gönderildi"
+
+msgid "Failed to send email"
+msgstr "E-posta gönderilemedi"
+
+msgid "Write your answer here"
+msgstr "Cevabınızı buraya yazın"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Yoklama takvimi, öğrencilerin katılması gereken her gerçek oturum için bir yoklama listesi kaydetmenizi sağlar"
+
+msgid "Loading attendance data"
+msgstr "Yoklama verileri yükleniyor"
+
+msgid "No attendance assigned yet"
+msgstr "Henüz yoklama atanmadı"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Bugün planlanmış ders yok, başka bir gün seçmeyi deneyin veya eylem simgelerini kullanarak yoklama girişinizi kendiniz ekleyin"
+
+msgid "No attendance data for today"
+msgstr "Bugün yoklama verisi yok"
+
+msgid "Saving"
+msgstr "Kaydediliyor"
+
+msgid "No attendance data to save"
+msgstr "Kaydedilecek yoklama verisi yok"
+
+msgid "Failed to save attendance"
+msgstr "Yoklama kaydedilemedi"
+
+msgid "Loading more courses"
+msgstr "Daha fazla ders yükleniyor"
+
+msgid "Loading more sessions"
+msgstr "Daha fazla oturum yükleniyor"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Belge otomatik başlatma özelliği yapılandırması etkin"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Egzersizler otomatik başlatma özelliği yapılandırması etkin"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "\"Öğrenme yolu otomatik başlatma ayarı AÇIK"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumun otomatik başlatma ayarı açık"
+
+msgid "Course ID is missing"
+msgstr "Ders kimliği eksik"
+
+msgid "Course created successfully"
+msgstr "Ders başarıyla oluşturuldu"
+
+msgid "Error deleting document(s)"
+msgstr "Belge(ler) silinirken hata oluştu"
+
+msgid "Template successfully deleted"
+msgstr "Şablon başarıyla silindi"
+
+msgid "Error deleting the template"
+msgstr "Şablon silinirken hata oluştu"
+
+msgid "The title and thumbnail are required"
+msgstr "Başlık ve küçük resim gereklidir"
+
+msgid "Template created successfully"
+msgstr "Şablon başarıyla oluşturuldu"
+
+msgid "Error creating the template"
+msgstr "Şablon oluşturulurken hata oluştu"
+
+msgid "Error submitting the form"
+msgstr "Form gönderilirken hata oluştu"
+
+msgid "Loading templates"
+msgstr "Şablonlar yükleniyor"
+
+msgid "Loading layout"
+msgstr "Düzen yükleniyor"
+
+msgid "Loading courses"
+msgstr "Dersler yükleniyor"
+
+msgid "No courses available"
+msgstr "Mevcut ders yok"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "\"session_admin_access_to_all_users_on_all_urls\" ayarı etkin olduğu için bu liste tüm erişim URL'lerindeki kullanıcıları görüntüler."
+
+msgid "User not found"
+msgstr "Kullanıcı bulunamadı"
+
+msgid "An error occurred while sending the course"
+msgstr "Ders gönderilirken bir hata oluştu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "GDPR ile ilgili şartlardaki değişikliklerin, kullanıcılarınız hakkında kişisel bilgi sağladığınız üçüncü taraflara bildirilmesi gerektiğini unutmayın, GDPR Madde 19'da belirtildiği gibi"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Mevcut tüm diller için \"Şartlar ve Koşullar\" oluşturmalısınız"
+
+msgid "You don't have any course yet"
+msgstr "Henüz dersiniz yok"
+
+msgid "You have received a new friend request"
+msgstr "Yeni bir arkadaşlık isteği aldınız"
+
+msgid "Diagnosis Management"
+msgstr "Teşhis Yönetimi"
 

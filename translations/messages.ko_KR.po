@@ -14727,7 +14727,7 @@ msgstr "사용자, 그룹"
 msgid "Sorry no results"
 msgstr "결과 없음"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "그룹 권한"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "내 사용자 지정 증명서"
 
 msgid "Select permission"
 msgstr "권한 선택"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "이 초대를 수락하면 요청한 사용자와 연결되어 프로필 데이터의 일부 또는 전체가 요청한 사용자에게 읽기 가능하게 됩니다."
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s에 대한 약 %d개 결과 중 %d개를 표시 중입니다."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s에 대한 %d개의 접근 가능한 결과를 표시 중입니다."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "따라서 자동으로 이 URL로 리디렉션됩니다."
+
+msgid "You have access to multiple URLs"
+msgstr "여러 URL에 접근할 수 있습니다."
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "접근하려는 URL에 해당하는 아래 링크를 클릭하십시오."
+
+msgid "You do not currently have access to any URL"
+msgstr "현재 접근할 수 있는 URL이 없습니다."
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "허용된 최대 구독 수입니다."
+
+msgid "An error occurred"
+msgstr "오류가 발생했습니다."
+
+msgid "You don't have any course content yet"
+msgstr "아직 강의 콘텐츠가 없습니다."
+
+msgid "This course is locked"
+msgstr "이 강의는 잠겨 있습니다."
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "플랫폼이 이메일을 보낼 때 사용되는 발신 이메일 주소, '답장 경로' 헤더로도 사용됩니다."
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "목록에서 언어를 찾을 수 없나요? 번역자로 기여하려면 %s로 연락 주십시오."
+
+msgid "An update is available"
+msgstr "업데이트가 사용 가능합니다."
+
+msgid "to know what's new and what has been changed"
+msgstr "새로운 내용과 변경 사항을 확인하려면"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "PHP 설치본에서 날짜가 정의되지 않았습니다."
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP 버전이 이 소프트웨어 요구 사항과 일치하지 않습니다."
+
+msgid "Some files or folders don't have writing permission"
+msgstr "일부 파일 또는 폴더에 쓰기 권한이 없습니다."
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "경고! 설치 프로그램이 시스템에 기존 Chamilo 플랫폼을 감지했습니다."
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> 및 <code>exercice</code> 디렉토리가 각각 <code>lp</code> 및 <code>exercise</code>로 이름이 변경되었으므로 <code>newscorm_old</code> 및 <code>exercice_old</code>로 삭제하거나 이름 변경이 필요합니다."
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "양식에 잘못되거나 불완전한 데이터가 포함되어 있습니다."
+
+msgid "Your contact information could not be sent"
+msgstr "연락처 정보가 전송되지 않았습니다."
+
+msgid "Please contact support with the error details"
+msgstr "오류 세부 정보를 지원팀에 문의하십시오."
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "이미지를 자르려면 이미지를 클릭하십시오 (1:1 비율, 120x120 px 권장)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "자르기 도구를 사용하여 1:1 영역을 선택하십시오."
+
+msgid "Checking push subscription"
+msgstr "푸시 구독 확인 중"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "이 브라우저에서 푸시 알림을 구독했습니다."
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "이 브라우저에서 푸시 알림이 활성화되지 않았습니다."
+
+msgid "Data exchange successfully saved"
+msgstr "데이터 교환이 성공적으로 저장되었습니다."
+
+msgid "Error saving data exchange"
+msgstr "데이터 교환 저장 오류"
+
+msgid "No documents added yet"
+msgstr "아직 문서가 추가되지 않았습니다."
+
+msgid "No available documents"
+msgstr "사용 가능한 문서가 없습니다"
+
+msgid "No users added yet"
+msgstr "아직 사용자가 추가되지 않았습니다"
+
+msgid "No available users"
+msgstr "사용 가능한 사용자가 없습니다"
+
+msgid "You can no longer submit"
+msgstr "더 이상 제출할 수 없습니다"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "이 과제에 누락된 제출물이 없거나 데이터가 없습니다"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "제출하지 않은 모든 사용자에게 이메일이 발송되었습니다"
+
+msgid "Failed to send email"
+msgstr "이메일 발송에 실패했습니다"
+
+msgid "Write your answer here"
+msgstr "여기에 답변을 작성하세요"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "출석 캘린더는 학생들이 참석해야 하는 실제 세션당 출석 목록(하나씩)을 등록할 수 있게 합니다"
+
+msgid "Loading attendance data"
+msgstr "출석 데이터 로딩 중"
+
+msgid "No attendance assigned yet"
+msgstr "아직 출석이 지정되지 않았습니다"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "오늘 예정된 수업이 없습니다. 다른 날짜를 선택하거나 작업 아이콘을 사용하여 직접 출석을 입력하세요"
+
+msgid "No attendance data for today"
+msgstr "오늘 출석 데이터가 없습니다"
+
+msgid "Saving"
+msgstr "저장 중"
+
+msgid "No attendance data to save"
+msgstr "저장할 출석 데이터가 없습니다"
+
+msgid "Failed to save attendance"
+msgstr "출석 저장에 실패했습니다"
+
+msgid "Loading more courses"
+msgstr "추가 코스 로딩 중"
+
+msgid "Loading more sessions"
+msgstr "추가 세션 로딩 중"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "문서 자동 실행 기능이 활성화되었습니다"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "연습 자동 실행 기능이 활성화되었습니다"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "학습 경로 자동 실행 설정이 켜져 있습니다"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "포럼 자동 실행 설정이 켜져 있습니다"
+
+msgid "Course ID is missing"
+msgstr "코스 ID가 누락되었습니다"
+
+msgid "Course created successfully"
+msgstr "코스가 성공적으로 생성되었습니다"
+
+msgid "Error deleting document(s)"
+msgstr "문서 삭제 오류"
+
+msgid "Template successfully deleted"
+msgstr "템플릿이 성공적으로 삭제되었습니다"
+
+msgid "Error deleting the template"
+msgstr "템플릿 삭제 오류"
+
+msgid "The title and thumbnail are required"
+msgstr "제목과 썸네일이 필요합니다"
+
+msgid "Template created successfully"
+msgstr "템플릿이 성공적으로 생성되었습니다"
+
+msgid "Error creating the template"
+msgstr "템플릿 생성 오류"
+
+msgid "Error submitting the form"
+msgstr "양식 제출 오류"
+
+msgid "Loading templates"
+msgstr "템플릿 로딩 중"
+
+msgid "Loading layout"
+msgstr "레이아웃 로딩 중"
+
+msgid "Loading courses"
+msgstr "코스 로딩 중"
+
+msgid "No courses available"
+msgstr "사용 가능한 코스가 없습니다"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "\"session_admin_access_to_all_users_on_all_urls\" 설정이 활성화되어 있으므로 모든 액세스 URL의 사용자를 표시합니다."
+
+msgid "User not found"
+msgstr "사용자를 찾을 수 없습니다"
+
+msgid "An error occurred while sending the course"
+msgstr "코스 발송 중 오류가 발생했습니다"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "GDPR 관련 약관 수정 시 GDPR 제19조에 따라 사용자 개인정보를 제공한 제3자에게 해당 수정을 보고해야 합니다"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "모든 사용 가능한 언어에 대해 \"이용 약관\"을 생성해야 합니다"
+
+msgid "You don't have any course yet"
+msgstr "아직 코스가 없습니다"
+
+msgid "You have received a new friend request"
+msgstr "새 친구 요청을 받았습니다"
+
+msgid "Diagnosis Management"
+msgstr "진단 관리"
 

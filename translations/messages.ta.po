@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணச் சூத்திரம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "புரோக்காலா மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -14728,7 +14728,7 @@ msgstr "பயனர்கள், குழுக்கள்"
 msgid "Sorry no results"
 msgstr "மன்னிக்கவும், எந்த முடிவும் இல்லை"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "குழு அனுமதிகள்"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "எனது தனிப்பயன் சான்றிதழ்"
 
 msgid "Select permission"
 msgstr "அனுமதியைத் தேர்ந்தெடுக்கவும்"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "இந்த அழைப்பை ஏற்றுக்கொண்டதன் மூலம், நீங்கள் கோரிய பயனருடன் இணைக்கப்படுவீர்கள், இதன் மூலம் உங்கள் சில அல்லது அனைத்து புரோஃபைல் தரவுகளும் கோரிய பயனரால் படிக்க முடியும்"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s க்கான தோராயமாக %d இல் இருந்து %d காட்டுகிறது."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s க்கான %d அணுகக்கூடிய முடிவுகளைக் காட்டுகிறது."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "எனவே நீங்கள் தானாகவே இந்த URL க்கு திருப்பி அனுப்பப்படுவீர்கள்"
+
+msgid "You have access to multiple URLs"
+msgstr "உங்களுக்கு பல URLகளுக்கு அணுகல் உள்ளது"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "நீங்கள் அணுக விரும்பும் URL க்கு இணையை கீழே கிளிக் செய்யவும்"
+
+msgid "You do not currently have access to any URL"
+msgstr "தற்போது உங்களுக்கு எந்த URL க்கும் அணுகல் இல்லை"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "அனுமதிக்கப்பட்ட குறிப்பிட்டங்கள் எண்ணிக்கையின் அதிகபட்சம்"
+
+msgid "An error occurred"
+msgstr "ஒரு பிழை ஏற்பட்டது"
+
+msgid "You don't have any course content yet"
+msgstr "உங்களுக்கு இன்னும் எந்த பாட விஷயமும் இல்லை"
+
+msgid "This course is locked"
+msgstr "இந்த பாடம் பூட்டப்பட்டுள்ளது"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "தளம் மின்னஞ்சல் அனுப்பும் போது அனுப்பப்படும் மின்னஞ்சல் முகவரி, 'reply-to' தலைப்பாகவும் பயன்படுத்தப்படும்"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "பட்டியலில் உங்கள் மொழியைக் கண்டுபிடிக்க முடியவில்லையா? மொழிபெயர்ப்பாளராக பங்களிக்க %s இல் எங்களை தொடர்பு கொள்ளுங்கள்"
+
+msgid "An update is available"
+msgstr "ஒரு புதுப்பிப்பு கிடைக்கிறது"
+
+msgid "to know what's new and what has been changed"
+msgstr "என்ன புதிது மற்றும் என்ன மாற்றப்பட்டது என்பதை அறிய"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "உங்கள் PHP நிறுவல் தேதியை வரையறுக்கவில்லை என்பதை கண்டறிந்துள்ளோம்"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "உங்கள் PHP பதிப்பு இந்த மென்பொருளுக்கான தேவைகளுக்கு பொருந்தவில்லை"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "சில கோப்புகள் அல்லது பாக்கெட்டுகளுக்கு எழுதும் அனுமதி இல்லை"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "எச்சரிக்கை! உங்கள் அமைப்பில் உள்ள Chamilo தளத்தை நிறுவி கண்டறிந்துள்ளது"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> மற்றும் <code>exercice</code> அடைவுகள் முறையாக <code>lp</code> மற்றும் <code>exercise</code> என்று மாற்றப்பட்டன, எனவே <code>newscorm_old</code> மற்றும் <code>exercice_old</code> என்று நீக்கவோ அல்லது மாற்றவோ அவசியம்"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "அளவுருப்பில் தவறான அல்லது முழுமையற்ற தரவு உள்ளது"
+
+msgid "Your contact information could not be sent"
+msgstr "உங்கள் தொடர்பு தகவல் அனுப்ப முடியவில்லை"
+
+msgid "Please contact support with the error details"
+msgstr "பிழை விவரங்களுடன் ஆதரவை தொடர்பு கொள்ளவும்"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "படத்தை வெட்ட (1:1 விகிதம், 120x120 px பரிந்துரை) கிளிக் செய்யவும்"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "1:1 பகுதியை தேர்ந்தெடுக்க வெட்ட கருவியை பயன்படுத்தவும்"
+
+msgid "Checking push subscription"
+msgstr "புஷ் குறிப்பிட்டத்தை சரிபார்க்கிறது"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "இந்த உலாவியில் புஷ் அறிவிப்புகளுக்கு நீங்கள் குறிப்பிட்டுள்ளீர்கள்"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "இந்த உலாவியில் புஷ் அறிவிப்புகள் இயல்புநிலைப்படுத்தப்படவில்லை"
+
+msgid "Data exchange successfully saved"
+msgstr "தரவு பரிமாற்றம் வெற்றிகரமாக சேமிக்கப்பட்டது"
+
+msgid "Error saving data exchange"
+msgstr "தரவு பரிமாற்றத்தை சேமிக்க பிழை"
+
+msgid "No documents added yet"
+msgstr "இன்னும் ஆவணங்கள் சேர்க்கப்படவில்லை"
+
+msgid "No available documents"
+msgstr "எந்த ஆவணங்களும் கிடைக்கவில்லை"
+
+msgid "No users added yet"
+msgstr "ஏதும் பயனர்கள் சேர்க்கப்படவில்லை"
+
+msgid "No available users"
+msgstr "எந்த பயனர்களும் கிடைக்கவில்லை"
+
+msgid "You can no longer submit"
+msgstr "நீங்கள் இனி சமர்ப்பிக்க முடியாது"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "இந்த பணிக்கு எந்த குறைந்த சமர்ப்பணங்களும் கிடைக்கவில்லை அல்லது தரவு கிடைக்கவில்லை"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "சமர்ப்பிக்கப்படாத அனைத்து பயனர்களுக்கும் மின்னஞ்சல் அனுப்பப்பட்டது"
+
+msgid "Failed to send email"
+msgstr "மின்னஞ்சலை அனுப்புவதில் தோல்வி"
+
+msgid "Write your answer here"
+msgstr "உங்கள் பதிலை இங்கே எழுதவும்"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "இருப்பு நிகழ்காலம் மாணவர்கள் க to attend செய்ய வேண்டிய உண்மையான அமர்வுக்கு ஒன்று) இருப்பு பட்டியல்களை பதிவு செய்ய உங்களுக்கு அனுமதிக்கிறது"
+
+msgid "Loading attendance data"
+msgstr "இருப்பு தரவை ஏற்றுகிறது"
+
+msgid "No attendance assigned yet"
+msgstr "இன்னும் எந்த இருப்பும் ஒதுக்கப்படவில்லை"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "இன்று எந்த வகுப்பும் திட்டமிடப்படவில்லை, வேறு நாளை தேர்ந்தெடுக்க முயற்சிக்கவும் அல்லது செயல் படிகளைப் பயன்படுத்தி உங்கள் இருப்பு பதிவை நீங்களே சேர்க்கவும்"
+
+msgid "No attendance data for today"
+msgstr "இன்று எந்த இருப்பு தரவும் இல்லை"
+
+msgid "Saving"
+msgstr "சேமிக்கிறது"
+
+msgid "No attendance data to save"
+msgstr "சேமிக்க எந்த இருப்பு தரவும் இல்லை"
+
+msgid "Failed to save attendance"
+msgstr "இருப்பை சேமிக்க தோல்வி"
+
+msgid "Loading more courses"
+msgstr "இன்னும் பல பாடங்களை ஏற்றுகிறது"
+
+msgid "Loading more sessions"
+msgstr "இன்னும் பல அமர்வுகளை ஏற்றுகிறது"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "ஆவண தானியங்கி-இயக்க வசதி அமைப்பு செயல்படுத்தப்பட்டுள்ளது"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "பயிற்சி தானியங்கி-இயக்க வசதி அமைப்பு செயல்படுத்தப்பட்டுள்ளது"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "கற்றல் பாதை தானியங்கி-இயக்க அமைப்பு ON ஆக உள்ளது"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "விவாதமன்றத்தின் தானியங்கி-இயக்க அமைப்பு ஆன் செய்யப்பட்டுள்ளது"
+
+msgid "Course ID is missing"
+msgstr "பாட ID குறைவு"
+
+msgid "Course created successfully"
+msgstr "பாடம் வெற்றிகரமாக உருவாக்கப்பட்டது"
+
+msgid "Error deleting document(s)"
+msgstr "ஆவணத்தை(ங்கள்) நீக்குவதில் பிழை"
+
+msgid "Template successfully deleted"
+msgstr "இலச்சியம் வெற்றிகரமாக நீக்கப்பட்டது"
+
+msgid "Error deleting the template"
+msgstr "இலச்சியத்தை நீக்குவதில் பிழை"
+
+msgid "The title and thumbnail are required"
+msgstr "தலைப்பு மற்றும் சிறு படம் தேவை"
+
+msgid "Template created successfully"
+msgstr "இலச்சியம் வெற்றிகரமாக உருவாக்கப்பட்டது"
+
+msgid "Error creating the template"
+msgstr "இலச்சியத்தை உருவாக்குவதில் பிழை"
+
+msgid "Error submitting the form"
+msgstr "படிவத்தை சமர்ப்பிப்பதில் பிழை"
+
+msgid "Loading templates"
+msgstr "இலச்சியங்களை ஏற்றுகிறது"
+
+msgid "Loading layout"
+msgstr "அமைப்பை ஏற்றுகிறது"
+
+msgid "Loading courses"
+msgstr "பாடங்களை ஏற்றுகிறது"
+
+msgid "No courses available"
+msgstr "எந்த பாடங்களும் கிடைக்கவில்லை"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "அமைப்பு \"session_admin_access_to_all_users_on_all_urls\" செயல்படுத்தப்பட்டதால், அனைத்து அணுகல் URL-களிலிருந்தும் பயனர்களை இந்த பட்டியல் காட்டுகிறது."
+
+msgid "User not found"
+msgstr "பயனர் கிடைக்கவில்லை"
+
+msgid "An error occurred while sending the course"
+msgstr "பாடத்தை அனுப்பும்போது ஒரு பிழை ஏற்பட்டது"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "GDPR தொடர்பான நிபந்தனைகளில் மாற்றங்கள் செய்தால், உங்கள் பயனர்களின் தனிப்பட்ட தகவல்களை வழங்கிய மூன்றாம் தரப்பினருக்கு அந்த மாற்றங்களை அறிவிக்க வேண்டும் என GDPR பிரிவு 19 இல் கூறப்பட்டுள்ளது என்பதை நினைவில் கொள்ளுங்கள்"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "எல்லா கிடைக்கும் மொழிகளுக்கும் \"நிபந்தனைகள் மற்றும் விதிமுறைகள்\" உருவாக்க வேண்டும்"
+
+msgid "You don't have any course yet"
+msgstr "உங்களுக்கு இன்னும் எந்த பாடமும் இல்லை"
+
+msgid "You have received a new friend request"
+msgstr "ஒரு புதிய நட்பு கோரிக்கை உங்களுக்கு வந்துள்ளது"
+
+msgid "Diagnosis Management"
+msgstr "நோயறிதல் மேலாண்மை"
 

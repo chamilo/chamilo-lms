@@ -264,7 +264,6 @@ import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
-import translateHtml from "../../../js/translatehtml.js"
 import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
@@ -488,11 +487,6 @@ const showCourseSequence = computed(() => {
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
-  if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
-    setTimeout(() => {
-      translateHtml()
-    }, 1000)
-  }
 
   await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0

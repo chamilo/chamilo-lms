@@ -4793,7 +4793,8 @@ EOT;
             &$showQuestionScore,
             &$counter,
             &$attemptResult,
-            &$category_list
+            &$category_list,
+            $showTotalScoreAndUserChoicesInLastAttempt
         ) {
             // Start buffering rendering for this question
             ob_start();
@@ -4818,7 +4819,7 @@ EOT;
                 $show_results,
                 $objExercise->selectPropagateNeg(),
                 $delineationChoice,
-                true // keep user choices in last attempt when applicable
+                $showTotalScoreAndUserChoicesInLastAttempt
             );
 
             if (empty($result)) {

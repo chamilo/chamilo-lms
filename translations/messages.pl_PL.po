@@ -14728,7 +14728,7 @@ msgstr "Użytkownicy, Grupy"
 msgid "Sorry no results"
 msgstr "Brak wyników"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Uprawnienia grupy"
 
 msgid "Closed"
@@ -32805,4 +32805,226 @@ msgstr "Mój niestandardowy certyfikat"
 
 msgid "Select permission"
 msgstr "Wybierz uprawnienie"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Akceptując to zaproszenie, zostaniesz powiązany z użytkownikiem zgłaszającym w sposób, który umożliwi temu użytkownikowi odczyt niektórych lub wszystkich Twoich danych profilowych"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Wyświetlanie %d z około %d wyników dla %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Wyświetlanie %d dostępnych wyników dla %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Zostaniesz więc automatycznie przekierowany do tego adresu URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Masz dostęp do wielu adresów URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Kliknij link poniżej odpowiadający adresowi URL, do którego chcesz uzyskać dostęp"
+
+msgid "You do not currently have access to any URL"
+msgstr "Obecnie nie masz dostępu do żadnego adresu URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksymalna liczba dozwolonych subskrypcji"
+
+msgid "An error occurred"
+msgstr "Wystąpił błąd"
+
+msgid "You don't have any course content yet"
+msgstr "Nie masz jeszcze żadnych treści kursu"
+
+msgid "This course is locked"
+msgstr "Ten kurs jest zablokowany"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Adres e-mail, z którego będą wysyłane e-maile, gdy platforma wyśle e-mail, używany również jako nagłówek 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nie możesz znaleźć swojego języka na liście? Skontaktuj się z nami pod adresem %s, aby przyczynić się jako tłumacz"
+
+msgid "An update is available"
+msgstr "Dostępna jest aktualizacja"
+
+msgid "to know what's new and what has been changed"
+msgstr "aby dowiedzieć się, co nowego i co zostało zmienione"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Wykryliśmy, że Twoja instalacja PHP nie definiuje daty"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Twoja wersja PHP nie spełnia wymagań tego oprogramowania"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Niektóre pliki lub foldery nie mają uprawnień do zapisu"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Ostrzeżenie! Instalator wykrył istniejącą platformę Chamilo w Twoim systemie"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Ponieważ katalogi <code>newscorm</code> i <code>exercice</code> zostały przemianowane na <code>lp</code> i <code>exercise</code>, konieczne jest ich usunięcie lub przemianowanie na <code>newscorm_old</code> i <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formularz zawiera nieprawidłowe lub niekompletne dane"
+
+msgid "Your contact information could not be sent"
+msgstr "Twoje dane kontaktowe nie mogły zostać wysłane"
+
+msgid "Please contact support with the error details"
+msgstr "Skontaktuj się z pomocą techniczną, podając szczegóły błędu"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Kliknij obraz, aby go przyciąć (proporcje 1:1, zalecane 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Użyj narzędzia przycinania, aby wybrać obszar 1:1"
+
+msgid "Checking push subscription"
+msgstr "Sprawdzanie subskrypcji push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Subskrybujesz powiadomienia push w tej przeglądarce"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Powiadomienia push nie są włączone w tej przeglądarce"
+
+msgid "Data exchange successfully saved"
+msgstr "Wymiana danych została pomyślnie zapisana"
+
+msgid "Error saving data exchange"
+msgstr "Błąd podczas zapisywania wymiany danych"
+
+msgid "No documents added yet"
+msgstr "Nie dodano jeszcze żadnych dokumentów"
+
+msgid "No available documents"
+msgstr "Brak dostępnych dokumentów"
+
+msgid "No users added yet"
+msgstr "Brak dodanych użytkowników"
+
+msgid "No available users"
+msgstr "Brak dostępnych użytkowników"
+
+msgid "You can no longer submit"
+msgstr "Nie możesz już przesłać"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nie znaleziono brakujących zgłoszeń dla tego zadania lub dane nie są dostępne"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail wysłany do wszystkich użytkowników bez zgłoszeń"
+
+msgid "Failed to send email"
+msgstr "Nie udało się wysłać e-maila"
+
+msgid "Write your answer here"
+msgstr "Wpisz swoją odpowiedź tutaj"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendarz obecności pozwala rejestrować listy obecności (jedna na rzeczywistą sesję, na którą studenci muszą uczęszczać)"
+
+msgid "Loading attendance data"
+msgstr "Ładowanie danych obecności"
+
+msgid "No attendance assigned yet"
+msgstr "Brak przypisanej obecności"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Dzisiaj nie ma zaplanowanych zajęć, spróbuj wybrać inny dzień lub dodaj wpis obecności samodzielnie za pomocą ikon akcji"
+
+msgid "No attendance data for today"
+msgstr "Brak danych obecności na dzisiaj"
+
+msgid "Saving"
+msgstr "Zapisywanie"
+
+msgid "No attendance data to save"
+msgstr "Brak danych obecności do zapisania"
+
+msgid "Failed to save attendance"
+msgstr "Nie udało się zapisać obecności"
+
+msgid "Loading more courses"
+msgstr "Ładowanie kolejnych kursów"
+
+msgid "Loading more sessions"
+msgstr "Ładowanie kolejnych sesji"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Funkcja automatycznego uruchamiania dokumentów jest włączona"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Funkcja automatycznego uruchamiania ćwiczeń jest włączona"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Ustawienie automatycznego uruchamiania ścieżki uczenia jest WŁĄCZONE"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Ustawienie automatycznego uruchamiania forum jest włączone"
+
+msgid "Course ID is missing"
+msgstr "Brakuje ID kursu"
+
+msgid "Course created successfully"
+msgstr "Kurs utworzony pomyślnie"
+
+msgid "Error deleting document(s)"
+msgstr "Błąd usuwania dokumentu/dokumentów"
+
+msgid "Template successfully deleted"
+msgstr "Szablon pomyślnie usunięty"
+
+msgid "Error deleting the template"
+msgstr "Błąd usuwania szablonu"
+
+msgid "The title and thumbnail are required"
+msgstr "Tytuł i miniaturka są wymagane"
+
+msgid "Template created successfully"
+msgstr "Szablon utworzony pomyślnie"
+
+msgid "Error creating the template"
+msgstr "Błąd tworzenia szablonu"
+
+msgid "Error submitting the form"
+msgstr "Błąd przesyłania formularza"
+
+msgid "Loading templates"
+msgstr "Ładowanie szablonów"
+
+msgid "Loading layout"
+msgstr "Ładowanie układu"
+
+msgid "Loading courses"
+msgstr "Ładowanie kursów"
+
+msgid "No courses available"
+msgstr "Brak dostępnych kursów"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ta lista wyświetla użytkowników ze wszystkich adresów URL dostępu, ponieważ ustawienie \"session_admin_access_to_all_users_on_all_urls\" jest włączone."
+
+msgid "User not found"
+msgstr "Użytkownik nie znaleziony"
+
+msgid "An error occurred while sending the course"
+msgstr "Wystąpił błąd podczas wysyłania kursu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Pamiętaj, że modyfikacje warunków związanych z RODO wymagają zgłoszenia tych modyfikacji stronom trzecim, którym przekazałeś dane osobowe swoich użytkowników, zgodnie z art. 19 RODO"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Powinieneś utworzyć \"Regulamin\" dla wszystkich dostępnych języków"
+
+msgid "You don't have any course yet"
+msgstr "Nie masz jeszcze żadnego kursu"
+
+msgid "You have received a new friend request"
+msgstr "Otrzymałeś nowe zaproszenie do grona znajomych"
+
+msgid "Diagnosis Management"
+msgstr "Zarządzanie diagnostyką"
 

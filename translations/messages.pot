@@ -14725,7 +14725,7 @@ msgstr ""
 msgid "Sorry no results"
 msgstr ""
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr ""
 
 msgid "Closed"
@@ -32883,7 +32883,7 @@ msgstr ""
 msgid "Error deleting document(s)"
 msgstr ""
 
-msgid "Template successfully deteled"
+msgid "Template successfully deleted"
 msgstr ""
 
 msgid "Error deleting the template"

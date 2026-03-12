@@ -14729,7 +14729,7 @@ msgstr "Потребители, групи"
 msgid "Sorry no results"
 msgstr "Няма резултати."
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Разрешения на групата"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Моят персонализиран сертификат"
 
 msgid "Select permission"
 msgstr "Избери разрешение"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "При приемане на това покана ще бъдете свързани с заявителя по начин, който ще направи част или цялата ви профилна информация достъпна за четене от заявителя"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Показва се %d от приблизително %d резултат(и) за %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Показва се %d достъпен(и) резултат(и) за %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Затова ще бъдете автоматично пренасочени към този URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Имате достъп до множество URL адреси"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Моля, кликнете върху връзката по-долу, съответстваща на URL адреса, към който желаете да получите достъп"
+
+msgid "You do not currently have access to any URL"
+msgstr "В момента нямате достъп до нито един URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Максимален брой разрешени абонаменти"
+
+msgid "An error occurred"
+msgstr "Грешка"
+
+msgid "You don't have any course content yet"
+msgstr "Все още нямате съдържание на курса"
+
+msgid "This course is locked"
+msgstr "Този курс е заключен"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Имейл адресът, от който ще се изпращат имейли, когато платформата изпраща имейл, също използван като 'reply-to' заглавка"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Не намирате ли езика си в списъка? Свържете се с нас на %s, за да допринесете като преводач"
+
+msgid "An update is available"
+msgstr "Има налично обновление"
+
+msgid "to know what's new and what has been changed"
+msgstr "за да научите какво е ново и какво е променено"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Открихме, че вашата PHP инсталация не дефинира датата"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Вашата PHP версия не отговаря на изискванията за този софтуер"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Някои файлове или папки нямат права за запис"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Внимание! Инсталаторът откри съществуваща Chamilo платформа във вашата система"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Тъй като директориите <code>newscorm</code> и <code>exercice</code> бяха преименувани на <code>lp</code> и <code>exercise</code> съответно, е необходимо да ги изтриете или преименувате на <code>newscorm_old</code> и <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Формата съдържа неверни или непълни данни"
+
+msgid "Your contact information could not be sent"
+msgstr "Контактната ви информация не може да бъде изпратена"
+
+msgid "Please contact support with the error details"
+msgstr "Моля, свържете се със поддръжката с детайлите на грешката"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Кликнете върху изображението, за да го изрежете (соотношение 1:1, препоръчително 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Използвайте инструмента за изрязване, за да изберете област 1:1"
+
+msgid "Checking push subscription"
+msgstr "Проверява се абонаментът за push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Абонирани сте за push известия в този браузър"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push известията не са активирани в този браузър"
+
+msgid "Data exchange successfully saved"
+msgstr "Данните за обмен са запазени успешно"
+
+msgid "Error saving data exchange"
+msgstr "Грешка при запазване на данните за обмен"
+
+msgid "No documents added yet"
+msgstr "Все още не са добавени документи"
+
+msgid "No available documents"
+msgstr "Няма налични документи"
+
+msgid "No users added yet"
+msgstr "Все още не са добавени потребители"
+
+msgid "No available users"
+msgstr "Няма налични потребители"
+
+msgid "You can no longer submit"
+msgstr "Вече не можете да изпратите"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Не са намерени липсващи изпращания за това задание или данните не са налични"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Имейлът е изпратен до всички потребители без изпращане"
+
+msgid "Failed to send email"
+msgstr "Грешка при изпращане на имейл"
+
+msgid "Write your answer here"
+msgstr "Напишете отговора си тук"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Календарът за присъствие ви позволява да регистрирате списъци с присъствие (по един за всяка реална сесия, на която студентите трябва да присъстват)"
+
+msgid "Loading attendance data"
+msgstr "Зареждане на данни за присъствие"
+
+msgid "No attendance assigned yet"
+msgstr "Още няма зададено присъствие"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Днес няма планиран час, опитайте с друг ден или добавете записа за присъствие сами чрез иконите за действия"
+
+msgid "No attendance data for today"
+msgstr "Няма данни за присъствие за днес"
+
+msgid "Saving"
+msgstr "Съхраняване"
+
+msgid "No attendance data to save"
+msgstr "Няма данни за присъствие за съхранение"
+
+msgid "Failed to save attendance"
+msgstr "Грешка при съхраняване на присъствието"
+
+msgid "Loading more courses"
+msgstr "Зареждане на още курсове"
+
+msgid "Loading more sessions"
+msgstr "Зареждане на още сесии"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Конфигурацията за автоматично стартиране на документи е активирана"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Конфигурацията за автоматично стартиране на упражнения е активирана"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Настройката за автоматично стартиране на учебни пътеки е ВКЛЮЧЕНА"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Настройката за автоматично стартиране на форума е включена"
+
+msgid "Course ID is missing"
+msgstr "Липсва ID на курс"
+
+msgid "Course created successfully"
+msgstr "Курсът е създаден успешно"
+
+msgid "Error deleting document(s)"
+msgstr "Грешка при изтриване на документ(и)"
+
+msgid "Template successfully deleted"
+msgstr "Шаблонът е изтрит успешно"
+
+msgid "Error deleting the template"
+msgstr "Грешка при изтриване на шаблона"
+
+msgid "The title and thumbnail are required"
+msgstr "Заглавието и миниатюрата са задължителни"
+
+msgid "Template created successfully"
+msgstr "Шаблонът е създаден успешно"
+
+msgid "Error creating the template"
+msgstr "Грешка при създаване на шаблона"
+
+msgid "Error submitting the form"
+msgstr "Грешка при изпращане на формата"
+
+msgid "Loading templates"
+msgstr "Зареждане на шаблони"
+
+msgid "Loading layout"
+msgstr "Зареждане на оформление"
+
+msgid "Loading courses"
+msgstr "Зареждане на курсове"
+
+msgid "No courses available"
+msgstr "Няма налични курсове"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Този списък показва потребители от всички URL адреси за достъп, защото настройката \"session_admin_access_to_all_users_on_all_urls\" е активирана."
+
+msgid "User not found"
+msgstr "Потребителят не е намерен"
+
+msgid "An error occurred while sending the course"
+msgstr "Грешка при изпращане на курса"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Имайте предвид, че промените в условията, свързани с GDPR, изискват да съобщите тези промени на трети страни, на които сте предоставили лична информация за вашите потребители, както е посочено в член 19 от GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Трябва да създадете \"Условия и правила\" за всички налични езици"
+
+msgid "You don't have any course yet"
+msgstr "Още нямате курсове"
+
+msgid "You have received a new friend request"
+msgstr "Получихте нова заявка за приятелство"
+
+msgid "Diagnosis Management"
+msgstr "Управление на диагностика"
 

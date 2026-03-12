@@ -14729,8 +14729,8 @@ msgstr "Users, Groups"
 msgid "Sorry no results"
 msgstr "Sorry no results"
 
-msgid "Group Permissions"
-msgstr "Group Permissions"
+msgid "Group permissions"
+msgstr "Group permissions"
 
 msgid "Closed"
 msgstr "Closed"
@@ -32969,8 +32969,8 @@ msgstr "Course created successfully"
 msgid "Error deleting document(s)"
 msgstr "Error deleting document(s)"
 
-msgid "Template successfully deteled"
-msgstr "Template successfully deteled"
+msgid "Template successfully deleted"
+msgstr "Template successfully deleted"
 
 msgid "Error deleting the template"
 msgstr "Error deleting the template"

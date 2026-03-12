@@ -14729,7 +14729,7 @@ msgstr "Người dùng, Nhóm"
 msgid "Sorry no results"
 msgstr "Xin lỗi không có kết quả"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Quyền nhóm"
 
 msgid "Closed"
@@ -32801,4 +32801,226 @@ msgstr "Chứng chỉ tùy chỉnh của tôi"
 
 msgid "Select permission"
 msgstr "Chọn quyền"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Bằng cách chấp nhận lời mời này, bạn sẽ được liên kết với người dùng yêu cầu theo cách mà một số hoặc tất cả dữ liệu hồ sơ của bạn có thể được người dùng yêu cầu đọc"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Hiển thị %d trong khoảng %d kết quả cho %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Hiển thị %d kết quả có thể truy cập cho %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Bạn sẽ được tự động chuyển hướng đến URL này"
+
+msgid "You have access to multiple URLs"
+msgstr "Bạn có quyền truy cập vào nhiều URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Vui lòng nhấp vào liên kết bên dưới tương ứng với URL bạn muốn truy cập"
+
+msgid "You do not currently have access to any URL"
+msgstr "Hiện tại bạn không có quyền truy cập vào URL nào"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Số lượng đăng ký tối đa được phép"
+
+msgid "An error occurred"
+msgstr "Đã xảy ra lỗi"
+
+msgid "You don't have any course content yet"
+msgstr "Bạn chưa có nội dung khóa học nào"
+
+msgid "This course is locked"
+msgstr "Khóa học này bị khóa"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Địa chỉ e-mail mà từ đó e-mail sẽ được gửi khi nền tảng gửi e-mail, cũng được sử dụng làm tiêu đề 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Không tìm thấy ngôn ngữ của bạn trong danh sách? Liên hệ với chúng tôi tại %s để đóng góp với tư cách là dịch giả"
+
+msgid "An update is available"
+msgstr "Có bản cập nhật sẵn có"
+
+msgid "to know what's new and what has been changed"
+msgstr "để biết những gì mới và những gì đã thay đổi"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Chúng tôi phát hiện rằng cài đặt PHP của bạn không định nghĩa ngày"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Phiên bản PHP của bạn không phù hợp với yêu cầu của phần mềm này"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Một số tệp hoặc thư mục không có quyền ghi"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Cảnh báo! Trình cài đặt đã phát hiện nền tảng Chamilo hiện có trên hệ thống của bạn"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Vì các thư mục <code>newscorm</code> và <code>exercice</code> đã được đổi tên thành <code>lp</code> và <code>exercise</code> tương ứng, cần phải xóa hoặc đổi tên thành <code>newscorm_old</code> và <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Mẫu có dữ liệu không đúng hoặc không đầy đủ"
+
+msgid "Your contact information could not be sent"
+msgstr "Thông tin liên hệ của bạn không thể gửi được"
+
+msgid "Please contact support with the error details"
+msgstr "Vui lòng liên hệ hỗ trợ với chi tiết lỗi"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Nhấp vào hình ảnh để cắt nó (tỷ lệ 1:1, khuyến nghị 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Sử dụng công cụ cắt để chọn vùng 1:1"
+
+msgid "Checking push subscription"
+msgstr "Đang kiểm tra đăng ký push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Bạn đã đăng ký thông báo push trong trình duyệt này"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Thông báo push không được bật trong trình duyệt này"
+
+msgid "Data exchange successfully saved"
+msgstr "Trao đổi dữ liệu đã được lưu thành công"
+
+msgid "Error saving data exchange"
+msgstr "Lỗi lưu trao đổi dữ liệu"
+
+msgid "No documents added yet"
+msgstr "Chưa có tài liệu nào được thêm"
+
+msgid "No available documents"
+msgstr "Không có tài liệu nào khả dụng"
+
+msgid "No users added yet"
+msgstr "Chưa có người dùng nào được thêm"
+
+msgid "No available users"
+msgstr "Không có người dùng nào khả dụng"
+
+msgid "You can no longer submit"
+msgstr "Bạn không thể nộp nữa"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Không tìm thấy bài nộp thiếu cho bài tập này hoặc dữ liệu không khả dụng"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Email đã được gửi đến tất cả người dùng chưa nộp"
+
+msgid "Failed to send email"
+msgstr "Gửi email thất bại"
+
+msgid "Write your answer here"
+msgstr "Viết câu trả lời của bạn ở đây"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Lịch điểm danh cho phép bạn đăng ký danh sách điểm danh (một danh sách cho mỗi buổi học thực tế mà học viên cần tham dự)"
+
+msgid "Loading attendance data"
+msgstr "Đang tải dữ liệu điểm danh"
+
+msgid "No attendance assigned yet"
+msgstr "Chưa có điểm danh nào được gán"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Hôm nay không có lớp học nào được lên lịch, hãy thử chọn ngày khác hoặc tự thêm mục điểm danh bằng các biểu tượng hành động"
+
+msgid "No attendance data for today"
+msgstr "Không có dữ liệu điểm danh cho hôm nay"
+
+msgid "Saving"
+msgstr "Đang lưu"
+
+msgid "No attendance data to save"
+msgstr "Không có dữ liệu điểm danh để lưu"
+
+msgid "Failed to save attendance"
+msgstr "Lưu điểm danh thất bại"
+
+msgid "Loading more courses"
+msgstr "Đang tải thêm khóa học"
+
+msgid "Loading more sessions"
+msgstr "Đang tải thêm phiên học"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Cấu hình tính năng tự động mở tài liệu đã được bật"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Cấu hình tính năng tự động mở bài tập đã được bật"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Cài đặt tự động mở đường dẫn học tập đã được BẬT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Cài đặt tự động mở diễn đàn đã được bật"
+
+msgid "Course ID is missing"
+msgstr "Thiếu ID khóa học"
+
+msgid "Course created successfully"
+msgstr "Khóa học đã được tạo thành công"
+
+msgid "Error deleting document(s)"
+msgstr "Lỗi khi xóa tài liệu"
+
+msgid "Template successfully deleted"
+msgstr "Mẫu đã được xóa thành công"
+
+msgid "Error deleting the template"
+msgstr "Lỗi khi xóa mẫu"
+
+msgid "The title and thumbnail are required"
+msgstr "Tiêu đề và hình thu nhỏ là bắt buộc"
+
+msgid "Template created successfully"
+msgstr "Mẫu đã được tạo thành công"
+
+msgid "Error creating the template"
+msgstr "Lỗi khi tạo mẫu"
+
+msgid "Error submitting the form"
+msgstr "Lỗi khi gửi biểu mẫu"
+
+msgid "Loading templates"
+msgstr "Đang tải mẫu"
+
+msgid "Loading layout"
+msgstr "Đang tải bố cục"
+
+msgid "Loading courses"
+msgstr "Đang tải khóa học"
+
+msgid "No courses available"
+msgstr "Không có khóa học nào khả dụng"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Danh sách này hiển thị người dùng từ tất cả URL truy cập vì cài đặt \"session_admin_access_to_all_users_on_all_urls\" đã được bật."
+
+msgid "User not found"
+msgstr "Không tìm thấy người dùng"
+
+msgid "An error occurred while sending the course"
+msgstr "Đã xảy ra lỗi khi gửi khóa học"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Vui lòng nhớ rằng việc sửa đổi các điều khoản liên quan đến GDPR yêu cầu bạn báo cáo những sửa đổi đó cho các bên thứ ba mà bạn đã cung cấp thông tin cá nhân về người dùng của mình, như quy định tại Điều 19 của GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Bạn nên tạo \"Điều khoản và Điều kiện\" cho tất cả các ngôn ngữ khả dụng"
+
+msgid "You don't have any course yet"
+msgstr "Bạn chưa có khóa học nào"
+
+msgid "You have received a new friend request"
+msgstr "Bạn đã nhận được yêu cầu kết bạn mới"
+
+msgid "Diagnosis Management"
+msgstr "Quản lý Chẩn đoán"
 

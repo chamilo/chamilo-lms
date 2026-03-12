@@ -14738,7 +14738,7 @@ msgstr "Uzuari,Grupuri"
 msgid "Sorry no results"
 msgstr "Nu sunt rezultate"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permise ale grupului"
 
 msgid "Closed"
@@ -32815,4 +32815,226 @@ msgstr "Certificatul meu personalizat"
 
 msgid "Select permission"
 msgstr "Selectați permisiunea"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Prin acceptarea acestei invitații, veți fi legat de utilizatorul care a solicitat în mod astfel încât unele sau toate datele dvs. de profil vor fi disponibile pentru citire de către utilizatorul solicitant"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Se afișează %d din aproximativ %d rezultat(e) pentru %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Se afișează %d rezultat(e) accesibil(e) pentru %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Veți fi redirecționat automat la această adresă URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Aveți acces la mai multe adrese URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Vă rugăm să faceți clic pe linkul de mai jos corespunzător adresei URL la care doriți să accesați"
+
+msgid "You do not currently have access to any URL"
+msgstr "În prezent nu aveți acces la nicio adresă URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Numărul maxim de abonamente permise"
+
+msgid "An error occurred"
+msgstr "A apărut o eroare"
+
+msgid "You don't have any course content yet"
+msgstr "Nu aveți încă conținut de curs"
+
+msgid "This course is locked"
+msgstr "Acest curs este blocat"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Adresa de e-mail de la care vor fi trimise e-mailurile când platforma trimite un e-mail, utilizată și ca antet 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nu găsiți limba în listă? Contactați-ne la %s pentru a contribui ca traducător"
+
+msgid "An update is available"
+msgstr "Este disponibilă o actualizare"
+
+msgid "to know what's new and what has been changed"
+msgstr "pentru a afla ce este nou și ce s-a schimbat"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Am detectat că instalarea dvs. PHP nu definește data"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Versiunea dvs. PHP nu corespunde cerințelor pentru acest software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Unele fișiere sau directoare nu au permisiuni de scriere"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Atenție! Instulatorul a detectat o platformă Chamilo existentă în sistemul dvs."
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Deoarece directoarele <code>newscorm</code> și <code>exercice</code> au fost redenumite în <code>lp</code> și <code>exercise</code> respectiv, este necesar să le ștergeți sau să le redenumiți în <code>newscorm_old</code> și <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formularul conține date incorecte sau incomplete"
+
+msgid "Your contact information could not be sent"
+msgstr "Informațiile dvs. de contact nu au putut fi trimise"
+
+msgid "Please contact support with the error details"
+msgstr "Vă rugăm să contactați suportul cu detaliile erorii"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Faceți clic pe imagine pentru a o decupa (raport 1:1, 120x120 px recomandat)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Utilizați instrumentul de decupare pentru a selecta o regiune 1:1"
+
+msgid "Checking push subscription"
+msgstr "Se verifică abonamentul push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Sunteți abonat la notificările push în acest browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Notificările push nu sunt activate în acest browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Schimbul de date a fost salvat cu succes"
+
+msgid "Error saving data exchange"
+msgstr "Eroare la salvarea schimbului de date"
+
+msgid "No documents added yet"
+msgstr "Niciun document adăugat încă"
+
+msgid "No available documents"
+msgstr "Niciun document disponibil"
+
+msgid "No users added yet"
+msgstr "Niciun utilizator adăugat încă"
+
+msgid "No available users"
+msgstr "Niciun utilizator disponibil"
+
+msgid "You can no longer submit"
+msgstr "Nu mai puteți trimite"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Nu s-au găsit trimiteri lipsă pentru această sarcină sau datele nu sunt disponibile"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail trimis către toți utilizatorii care nu au trimis"
+
+msgid "Failed to send email"
+msgstr "Eșec la trimiterea e-mailului"
+
+msgid "Write your answer here"
+msgstr "Scrieți răspunsul aici"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Calendarul de prezență vă permite să înregistrați listele de prezență (una per sesiune reală la care studenții trebuie să participe)"
+
+msgid "Loading attendance data"
+msgstr "Se încarcă datele de prezență"
+
+msgid "No attendance assigned yet"
+msgstr "Nicio prezență atribuită încă"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Nu este programată nicio clasă astăzi, încercați să alegeți altă zi sau adăugați manual înregistrarea de prezență folosind pictogramele de acțiune"
+
+msgid "No attendance data for today"
+msgstr "Nicio dată de prezență pentru astăzi"
+
+msgid "Saving"
+msgstr "Se salvează"
+
+msgid "No attendance data to save"
+msgstr "Nicio dată de prezență de salvat"
+
+msgid "Failed to save attendance"
+msgstr "Eșec la salvarea prezenței"
+
+msgid "Loading more courses"
+msgstr "Se încarcă mai multe cursuri"
+
+msgid "Loading more sessions"
+msgstr "Se încarcă mai multe sesiuni"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Configurarea funcției de lansare automată a documentelor este activată"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Configurarea funcției de lansare automată a exercițiilor este activată"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Setarea de lansare automată a parcursului de învățare este ACTIVATĂ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Setarea de lansare automată a forumului este activată"
+
+msgid "Course ID is missing"
+msgstr "Lipsește ID-ul cursului"
+
+msgid "Course created successfully"
+msgstr "Cursul a fost creat cu succes"
+
+msgid "Error deleting document(s)"
+msgstr "Eroare la ștergerea documentului(i)"
+
+msgid "Template successfully deleted"
+msgstr "Șablonul a fost șters cu succes"
+
+msgid "Error deleting the template"
+msgstr "Eroare la ștergerea șablonului"
+
+msgid "The title and thumbnail are required"
+msgstr "Titlul și miniatura sunt obligatorii"
+
+msgid "Template created successfully"
+msgstr "Șablonul a fost creat cu succes"
+
+msgid "Error creating the template"
+msgstr "Eroare la crearea șablonului"
+
+msgid "Error submitting the form"
+msgstr "Eroare la trimiterea formularului"
+
+msgid "Loading templates"
+msgstr "Se încarcă șabloanele"
+
+msgid "Loading layout"
+msgstr "Se încarcă aspectul"
+
+msgid "Loading courses"
+msgstr "Se încarcă cursurile"
+
+msgid "No courses available"
+msgstr "Niciun curs disponibil"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Această listă afișează utilizatorii din toate URL-urile de acces deoarece setarea \"session_admin_access_to_all_users_on_all_urls\" este activată."
+
+msgid "User not found"
+msgstr "Utilizator negăsit"
+
+msgid "An error occurred while sending the course"
+msgstr "A apărut o eroare în timpul trimiterii cursului"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Amintiți-vă că modificările aduse termenilor legați de GDPR vă obligă să raportați acele modificări către terții cărora le-ați furnizat informații personale despre utilizatorii dvs., conform Articolului 19 din GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Ar trebui să creați \"Termenii și condițiile\" pentru toate limbile disponibile"
+
+msgid "You don't have any course yet"
+msgstr "Nu aveți niciun curs încă"
+
+msgid "You have received a new friend request"
+msgstr "Ați primit o nouă cerere de prietenie"
+
+msgid "Diagnosis Management"
+msgstr "Gestionarea diagnosticului"
 

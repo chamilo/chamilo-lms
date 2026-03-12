@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobinis srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -14729,7 +14729,7 @@ msgstr "Vartotojai, Grupės"
 msgid "Sorry no results"
 msgstr "Atsiprašome, rezultatų nėra"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Grupės teisės"
 
 msgid "Closed"
@@ -32800,4 +32800,226 @@ msgstr "Mano pasirinktinis pažymėjimas"
 
 msgid "Select permission"
 msgstr "Pasirinkti leidimą"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Priimdami šį pakvietimą, būsite susietas su prašančiu vartotoju taip, kad dalis arba visi jūsų profilio duomenys bus prieinami prašančiam vartotojui skaityti"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Rodoma %d iš maždaug %d rezultatų(-ų) pagal %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Rodoma %d prieinamų rezultatų(-ų) pagal %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Todėl būsite automatiškai nukreipti į šį URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Jūs turite prieigą prie kelių URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Spustelėkite žemiau esančią nuorodą, atitinkančią URL, prie kurio norite prisijungti"
+
+msgid "You do not currently have access to any URL"
+msgstr "Šiuo metu neturite prieigos prie jokio URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalus leidžiamų prenumeratų skaičius"
+
+msgid "An error occurred"
+msgstr "Įvyko klaida"
+
+msgid "You don't have any course content yet"
+msgstr "Jūs dar neturite kurso turinio"
+
+msgid "This course is locked"
+msgstr "Šis kursas užrakintas"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "El. pašto adresas, iš kurio bus siunčiami el. laiškai, kai platforma siunčia el. laišką, taip pat naudojamas kaip 'atsakymo-i' antraštė"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nematau savo kalbos sąraše? Susisiekite su mumis adresu %s, kad prisidėtumėte kaip vertėjas"
+
+msgid "An update is available"
+msgstr "Yra prieinamas atnaujinimas"
+
+msgid "to know what's new and what has been changed"
+msgstr "sužinoti, kas nauja ir kas buvo pakeista"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Mes nustatėme, kad jūsų PHP įdiegimas nedefiniuoja datos"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Jūsų PHP versija neatitinka šios programinės įrangos reikalavimų"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Kai kurie failai ar aplankai neturi rašymo teisių"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Įspėjimas! Diegimo programa nustatė esamą Chamilo platformą jūsų sistemoje"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Kadangi <code>newscorm</code> ir <code>exercice</code> katalogai buvo pervadinti į <code>lp</code> ir <code>exercise</code> atitinkamai, būtina ištrinti arba pervadinti į <code>newscorm_old</code> ir <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Forma pateikia neteisingus ar neišsamus duomenis"
+
+msgid "Your contact information could not be sent"
+msgstr "Jūsų kontaktinė informacija negalėjo būti išsiųsta"
+
+msgid "Please contact support with the error details"
+msgstr "Susisiekite su pagalbos tarnyba dėl klaidos detalių"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Spustelėkite paveikslėlį, kad jį apkirptumėte (1:1 santykis, rekomenduojama 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Naudokite apkarpymo įrankį, kad pasirinktumėte 1:1 sritį"
+
+msgid "Checking push subscription"
+msgstr "Tikrinama stūmimo prenumerata"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jūs prenumeruojate stūmimo pranešimus šiame naršyklės įskiepyje"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Stūmimo pranešimai šioje naršyklėje neįjungti"
+
+msgid "Data exchange successfully saved"
+msgstr "Duomenų mainai sėkmingai išsaugoti"
+
+msgid "Error saving data exchange"
+msgstr "Klaida saugant duomenų mainus"
+
+msgid "No documents added yet"
+msgstr "Dar neįkelta jokių dokumentų"
+
+msgid "No available documents"
+msgstr "Nėra prieinamų dokumentų"
+
+msgid "No users added yet"
+msgstr "Dar nepridėta jokių naudotojų"
+
+msgid "No available users"
+msgstr "Nėra prieinamų naudotojų"
+
+msgid "You can no longer submit"
+msgstr "Jūs nebegalite pateikti"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Šiam uždaviniui nerasta nepateiktų darbų arba duomenys neprieinami"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "El. laiškas išsiųstas visiems nepateikusiems naudotojams"
+
+msgid "Failed to send email"
+msgstr "Nepavyko išsiųsti el. laiško"
+
+msgid "Write your answer here"
+msgstr "Parašykite savo atsakymą čia"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Apsilankymų kalendorius leidžia registruoti apsilankymų sąrašus (vieną kiekvienai realiai sesijai, kurioje studentai turi dalyvauti)"
+
+msgid "Loading attendance data"
+msgstr "Įkeliami apsilankymų duomenys"
+
+msgid "No attendance assigned yet"
+msgstr "Dar nepriskirta jokių apsilankymų"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Šiandien nėra suplanuotų užsiėmimų, pabandykite pasirinkti kitą dieną arba pridėkite apsilankymų įrašą patys naudodami veiksmų piktogramas"
+
+msgid "No attendance data for today"
+msgstr "Šiandien nėra apsilankymų duomenų"
+
+msgid "Saving"
+msgstr "Išsaugoma"
+
+msgid "No attendance data to save"
+msgstr "Nėra apsilankymų duomenų išsaugojimui"
+
+msgid "Failed to save attendance"
+msgstr "Nepavyko išsaugoti apsilankymų"
+
+msgid "Loading more courses"
+msgstr "Įkeliami daugiau kursų"
+
+msgid "Loading more sessions"
+msgstr "Įkeliamos daugiau sesijų"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Dokumentų automatinio paleidimo funkcijos konfigūracija įjungta"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Užduočių automatinio paleidimo funkcijos konfigūracija įjungta"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mokymosi kelio automatinio paleidimo nustatymas ĮJUNGTAS"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumo automatinio paleidimo nustatymas įjungtas"
+
+msgid "Course ID is missing"
+msgstr "Trūksta kurso ID"
+
+msgid "Course created successfully"
+msgstr "Kursas sėkmingai sukurtas"
+
+msgid "Error deleting document(s)"
+msgstr "Klaida ištrinant dokumentą/us"
+
+msgid "Template successfully deleted"
+msgstr "Šablonas sėkmingai ištrintas"
+
+msgid "Error deleting the template"
+msgstr "Klaida ištrinant šabloną"
+
+msgid "The title and thumbnail are required"
+msgstr "Pavadinimas ir miniatiūra yra privalomi"
+
+msgid "Template created successfully"
+msgstr "Šablonas sėkmingai sukurtas"
+
+msgid "Error creating the template"
+msgstr "Klaida kuriant šabloną"
+
+msgid "Error submitting the form"
+msgstr "Klaida pateikiant formą"
+
+msgid "Loading templates"
+msgstr "Įkeliami šablonai"
+
+msgid "Loading layout"
+msgstr "Įkeliamas išdėstymas"
+
+msgid "Loading courses"
+msgstr "Įkeliami kursai"
+
+msgid "No courses available"
+msgstr "Nėra prieinamų kursų"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Šis sąrašas rodo naudotojus iš visų prieigos URL, nes nustatymas \"session_admin_access_to_all_users_on_all_urls\" įjungtas."
+
+msgid "User not found"
+msgstr "Naudotojas nerastas"
+
+msgid "An error occurred while sending the course"
+msgstr "Įvyko klaida siunčiant kursą"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Prisiminkite, kad pakeitimai sąlygose, susijusiose su BDAR, reikalauja pranešti apie tuos pakeitimus trečiosioms šalims, kurioms pateikėte savo naudotojų asmeninius duomenis, kaip nurodyta BDAR 19 straipsnyje"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Turėtumėte sukurti \"Sąlygas ir taisykles\" visomis prieinamomis kalbomis"
+
+msgid "You don't have any course yet"
+msgstr "Jūs dar neturite jokių kursų"
+
+msgid "You have received a new friend request"
+msgstr "Jūs gavote naują draugo užklausą"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostikos valdymas"
 

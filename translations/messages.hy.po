@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ձևաչափի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ֆորմուլայի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -14728,7 +14728,7 @@ msgstr "Օգտատերեր, Խմբեր"
 msgid "Sorry no results"
 msgstr "Ցավակցություն, արդյունքներ չկան"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Խմբի թույլտվություններ"
 
 msgid "Closed"
@@ -32799,4 +32799,226 @@ msgstr "Իմ հատուկ վկայականը"
 
 msgid "Select permission"
 msgstr "Ընտրել թույլտվություն"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ստանալով այս հրավերը, դուք կկապվեք խնդրող օգտատիրոջ հետ այնպես, որ ձեր մեկնաբանության տվյալների որոշ կամ բոլոր տվյալները կլինեն հասանելի խնդրող օգտատիրոջ համար"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Ցուցադրվում է %d մոտավորապես %d արդյունք(ներ) %s-ի համար:"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Ցուցադրվում է %d հասանելի արդյունք(ներ) %s-ի համար:"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Ձեզ հետևաբար ավտոմատ կուղղորդվի այս URL-ին"
+
+msgid "You have access to multiple URLs"
+msgstr "Դուք ունեք հասանելիություն բազմաթիվ URL-ների"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Խնդրում ենք սեղմել ստորև տեղադրված հղումը, որը համապատասխանում է ձեր ցանկալի URL-ին"
+
+msgid "You do not currently have access to any URL"
+msgstr "Դուք ներկայումս չունեք հասանելիություն որևէ URL-ի"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Առավելագույն թվով թույլատրվող բաժանորդագրություններ"
+
+msgid "An error occurred"
+msgstr "Սխալ է տեղի ունեցել"
+
+msgid "You don't have any course content yet"
+msgstr "Դուք դեռ չունեք դասընթացի բովանդակություն"
+
+msgid "This course is locked"
+msgstr "Այս դասընթացը փակ է"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Էլ. փոստի հասցեն, որտեղից կուղարկվեն էլ. նամակները, երբ հարթակը ուղարկում է էլ. նամակ, նաև օգտագործվում է որպես 'reply-to' վերնագիր"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ձեր լեզուն չգտաք ցուցակում? Կապվեք մեզ հետ %s-ում՝ որպես թարգմանիչ նպաստել"
+
+msgid "An update is available"
+msgstr "Հասանելի է թարմացում"
+
+msgid "to know what's new and what has been changed"
+msgstr "իմանալ նորությունների և փոփոխությունների մասին"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Դետեկտավորվել է, որ ձեր PHP տեղադրմանը չի սահմանվում ամսաթիվը"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Ձեր PHP տարբերակը չի համապատասխանում այս ծրագրի պահանջներին"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Որոշ ֆայլեր կամ թղթապանակներ չունեն գրելու թույլտվություն"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Զգուշացում! Տեղադրիչը հայտնաբերել է առկա Chamilo հարթակ ձեր համակարգում"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Քանի որ <code>newscorm</code> և <code>exercice</code> թղթապանակները վերանվանվել են <code>lp</code> և <code>exercise</code> համապատասխանաբար, անհրաժեշտ է ջնջել կամ վերանվանել <code>newscorm_old</code> և <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Ձևանմուշը պարունակում է սխալ կամ անավարտ տվյալներ"
+
+msgid "Your contact information could not be sent"
+msgstr "Ձեր կոնտակտային տվյալները չկարողացան ուղարկվել"
+
+msgid "Please contact support with the error details"
+msgstr "Խնդրում ենք կապվել աջակցության հետ սխալի մանրամասներով"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Սեղմեք նկարը՝ այն կտրելու համար (1:1 հարաբերակցություն, 120x120 պկ թույլատրվում է)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Օգտագործեք կտրելու գործիքը՝ 1:1 տարածք ընտրելու համար"
+
+msgid "Checking push subscription"
+msgstr "Ստուգվում է push բաժանորդագրությունը"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Դուք բաժանորդագրված եք push ծանուցումներին այս բրաուզերում"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push ծանուցումները չեն միացված այս բրաուզերում"
+
+msgid "Data exchange successfully saved"
+msgstr "Տվյալների փոխանակումը հաջողությամբ պահպանվեց"
+
+msgid "Error saving data exchange"
+msgstr "Սխալ տվյալների փոխանակումը պահպանելիս"
+
+msgid "No documents added yet"
+msgstr "Փաստաթղթեր դեռ ավելացված չեն"
+
+msgid "No available documents"
+msgstr "Չկան հասանելի փաստաթղթեր"
+
+msgid "No users added yet"
+msgstr "Օգտատերեր դեռ ավելացված չեն"
+
+msgid "No available users"
+msgstr "Չկան հասանելի օգտատերեր"
+
+msgid "You can no longer submit"
+msgstr "Դուք այլևս չեք կարող ուղարկել"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Այս առաջադրանքի համար չեն գտնվել բացակայող հանձնումներ կամ տվյալները հասանելի չեն"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Էլ. նամակն ուղարկվեց բոլոր չհանձնած օգտատերերին"
+
+msgid "Failed to send email"
+msgstr "Չհաջողվեց ուղարկել էլ. նամակը"
+
+msgid "Write your answer here"
+msgstr "Գրեք Ձեր պատասխանը այստեղ"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Մոտեցման օրացույցը թույլ է տալիս գրանցել մոտեցման ցուցակներ (մեկը յուրաքանչյուր իրական սեանսի համար, որին ուսանողները պետք է մասնակցեն)"
+
+msgid "Loading attendance data"
+msgstr "Բեռնվում է մոտեցման տվյալները"
+
+msgid "No attendance assigned yet"
+msgstr "Մոտեցում դեռ հատկացված չէ"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Այսօր դաս չի նախատեսված, փորձեք ընտրել մեկ այլ օր կամ ավելացրեք Ձեր մոտեցման գրառումը ինքներդ՝ օգտագործելով գործողության պատկերակները"
+
+msgid "No attendance data for today"
+msgstr "Այսօր մոտեցման տվյալներ չկան"
+
+msgid "Saving"
+msgstr "Պահպանվում է"
+
+msgid "No attendance data to save"
+msgstr "Չկա պահպանելու մոտեցման տվյալներ"
+
+msgid "Failed to save attendance"
+msgstr "Չհաջողվեց պահպանել մոտեցումը"
+
+msgid "Loading more courses"
+msgstr "Բեռնվում են լրացուցիչ դասընթացներ"
+
+msgid "Loading more sessions"
+msgstr "Բեռնվում են լրացուցիչ սեանսներ"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Փաստաթղթի ավտոմեկնարկի կարգավորումը միացված է"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Դր Illl ավտոմեկնարկի կարգավորումը միացված է"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Ուսման ուղու ավտոմեկնարկի կարգավորումը ՄԻԱՑՎԱԶ է"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Ֆորումի ավտոմեկնարկի կարգավորումը միացված է"
+
+msgid "Course ID is missing"
+msgstr "Դասընթացի ID-ն բացակայում է"
+
+msgid "Course created successfully"
+msgstr "Դասընթացը հաջողությամբ ստեղծվեց"
+
+msgid "Error deleting document(s)"
+msgstr "Սխալ փաստաթուղթ(ներ) ջնջելիս"
+
+msgid "Template successfully deleted"
+msgstr "Նախշի հաջողությամբ ջնջվեց"
+
+msgid "Error deleting the template"
+msgstr "Սխալ նախշը ջնջելիս"
+
+msgid "The title and thumbnail are required"
+msgstr "Վերնագիրը և թումբնեյլը պարտադիր են"
+
+msgid "Template created successfully"
+msgstr "Նախշը հաջողությամբ ստեղծվեց"
+
+msgid "Error creating the template"
+msgstr "Սխալ նախշ ստեղծելիս"
+
+msgid "Error submitting the form"
+msgstr "Սխալ ձևանմուշ ուղարկելիս"
+
+msgid "Loading templates"
+msgstr "Բեռնվում են նախշերը"
+
+msgid "Loading layout"
+msgstr "Բեռնվում է դասավորությունը"
+
+msgid "Loading courses"
+msgstr "Բեռնվում են դասընթացները"
+
+msgid "No courses available"
+msgstr "Չկան հասանելի դասընթացներ"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Այս ցուցակը ցուցադրում է օգտատերեր բոլոր մուտքի URL-ներից, քանի որ «session_admin_access_to_all_users_on_all_urls» կարգավորումը միացված է:"
+
+msgid "User not found"
+msgstr "Օգտատերը չի գտնվել"
+
+msgid "An error occurred while sending the course"
+msgstr "Սխալ տեղի ունեցավ դասընթացն ուղարկելիս"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Միացեք հիշել, որ GDPR-ի հետ կապված պայմանների փոփոխությունները պահանջում են ձեզ տեղեկացնել այդ փոփոխությունների մասին երրորդ կողմերին, ում տրամադրել եք ձեր օգտատերերի անձնական տվյալները, ինչպես նշված է GDPR-ի 19-րդ հոդվածում"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Դուք պետք է ստեղծեք «Պայմաններ և կանոններ» բոլոր հասանելի լեզուների համար"
+
+msgid "You don't have any course yet"
+msgstr "Դուք դեռ չունեք դասընթաց"
+
+msgid "You have received a new friend request"
+msgstr "Դուք ստացել եք նոր ընկերության հարցում"
+
+msgid "Diagnosis Management"
+msgstr "Դիագնոստիկայի կառավարում"
 

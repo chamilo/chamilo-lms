@@ -32894,6 +32894,9 @@ msgstr "Error saving data exchange"
 msgid "No documents added yet"
 msgstr "No documents added yet"
 
+msgid "No additional details available for this skill."
+msgstr "No additional details available for this skill."
+
 msgid "No available documents"
 msgstr "No available documents"
 

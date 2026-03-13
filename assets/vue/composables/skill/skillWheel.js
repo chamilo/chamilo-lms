@@ -3,7 +3,7 @@ import * as d3 from "d3"
 import { getSkillTree } from "../../services/skillService"
 import { useNotification } from "../notification"
 
-export function useSkillWheel() {
+export function useSkillWheel({ onSkillDetail } = {}) {
   const isLoading = ref(true)
 
   const skillList = ref([])
@@ -30,6 +30,7 @@ export function useSkillWheel() {
     hasGradebook,
     isSearched,
     isAchievedByUser,
+    description,
   }) {
     const item = {
       id,
@@ -40,6 +41,7 @@ export function useSkillWheel() {
       hasGradebook,
       isSearched,
       isAchievedByUser,
+      description,
     }
 
     if (children.length) {
@@ -102,6 +104,27 @@ export function useSkillWheel() {
       .filter((d) => d.children)
       .style("cursor", "pointer")
       .on("click", clicked)
+
+    // Right-click shows skill details.
+    path.on("contextmenu", (event, d) => {
+      event.preventDefault()
+      if (onSkillDetail) {
+        const parentPath = d
+          .ancestors()
+          .filter((a) => a.depth > 0)
+          .map(setNodeText)
+          .reverse()
+          .slice(0, -1)
+          .join(" / ")
+        onSkillDetail({
+          id: d.data.id,
+          name: d.data.name,
+          shortCode: d.data.shortCode || "",
+          description: d.data.description || "",
+          parentPath,
+        })
+      }
+    })
 
     path.append("title").text(
       (d) =>

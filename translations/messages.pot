@@ -32808,6 +32808,9 @@ msgstr ""
 msgid "No documents added yet"
 msgstr ""
 
+msgid "No additional details available for this skill."
+msgstr ""
+
 msgid "No available documents"
 msgstr ""
 

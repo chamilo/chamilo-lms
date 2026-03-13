@@ -4,6 +4,8 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { storeToRefs } from "pinia"
 
+import Dialog from "primevue/dialog"
+
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -36,6 +38,13 @@ const profileMatchesEl = ref()
 const foundSkills = ref([])
 const showSkilProfileForm = ref(false)
 const showProfileMatches = ref(false)
+const showSkillDetail = ref(false)
+const skillDetail = ref(null)
+
+function onSkillDetail(detail) {
+  skillDetail.value = detail
+  showSkillDetail.value = true
+}
 
 // Kept for compatibility (origin might still be used elsewhere, e.g. breadcrumb logic)
 const safeOrigin = computed(() => {
@@ -195,6 +204,7 @@ async function onSearchProfile(profile) {
       <SkillWheelGraph
         v-show="!showProfileMatches"
         ref="wheelEl"
+        @skill-detail="onSkillDetail"
       />
       <SkillProfileMatches
         v-if="canUseProfiles"
@@ -210,4 +220,35 @@ async function onSearchProfile(profile) {
     v-model:visible="showSkilProfileForm"
     @saved="profileListEL.loadProfiles()"
   />
+
+  <Dialog
+    v-model:visible="showSkillDetail"
+    :header="skillDetail?.name"
+    modal
+    class="w-full max-w-lg"
+  >
+    <div
+      v-if="skillDetail"
+      class="flex flex-col gap-4"
+    >
+      <div v-if="skillDetail.shortCode">
+        <span class="font-semibold">{{ t("Code") }}:</span>
+        {{ skillDetail.shortCode }}
+      </div>
+      <div v-if="skillDetail.parentPath">
+        <span class="font-semibold">{{ t("Parent") }}:</span>
+        {{ skillDetail.parentPath }}
+      </div>
+      <div v-if="skillDetail.description">
+        <span class="font-semibold">{{ t("Description") }}:</span>
+        <div
+          class="mt-1"
+          v-html="skillDetail.description"
+        />
+      </div>
+      <div v-if="!skillDetail.shortCode && !skillDetail.parentPath && !skillDetail.description">
+        <p>{{ t("No additional details available for this skill.") }}</p>
+      </div>
+    </div>
+  </Dialog>
 </template>

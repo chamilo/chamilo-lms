@@ -47,13 +47,13 @@
                                         <em class="mdi mdi-facebook"></em> Facebook
                                     </a>
                                     <a href="https://x.com/intent/post?{{ {'text': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
-                                        <em class="mdi mdi-twitter"></em> X
+                                        <img src="/img/icons/svg/x.svg" alt="X" style="width:1em;height:1em;vertical-align:middle;display:inline-block;" /> X
                                     </a>
                                     <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
                                         <em class="mdi mdi-linkedin"></em> LinkedIn
                                     </a>
-                                    <a href="#" class="instagram" onclick="navigator.clipboard.writeText('{{ url }}');this.textContent=' {{ "Link copied!"|trans }}';return false;">
-                                        <em class="mdi mdi-instagram"></em> Instagram
+                                    <a href="#" onclick="navigator.clipboard.writeText('{{ url }}');this.textContent=' {{ "Link copied!"|trans }}';return false;">
+                                        <em class="mdi mdi-paperclip"></em> {{ "Copy link"|trans }}
                                     </a>
                                 </div>
                             </div>

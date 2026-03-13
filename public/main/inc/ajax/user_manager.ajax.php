@@ -282,7 +282,10 @@ switch ($action) {
         echo json_encode(['items' => $items]);
         break;
     case 'teacher_to_basis_course':
-        api_block_anonymous_users(false);
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         // Close the session as we don't need it any further
         session_write_close();
 
@@ -315,7 +318,10 @@ switch ($action) {
         echo json_encode(['items' => $items]);
         break;
     case 'user_by_all_roles':
-        api_block_anonymous_users(false);
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         // Close the session as we don't need it any further
         session_write_close();
 

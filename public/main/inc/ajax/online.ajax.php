@@ -9,6 +9,10 @@ $action = isset($_GET['a']) ? $_GET['a'] : '';
 
 switch ($action) {
     case 'get_users_online':
+        if (api_is_anonymous()) {
+            echo '';
+            break;
+        }
         echo returnNotificationMenu();
         break;
     case 'load_online_user':

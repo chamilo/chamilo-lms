@@ -56,6 +56,10 @@ switch ($action) {
         }
         break;*/
     case 'export_all_certificates':
+        if (!api_is_allowed_to_edit(null, true) && !api_is_student_boss()) {
+            echo '';
+            break;
+        }
         $categoryId = (int) $_GET['cat_id'];
         $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 

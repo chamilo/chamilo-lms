@@ -147,7 +147,7 @@ export function useSkillWheel({ onSkillDetail } = {}) {
       .attr("dy", "0.35em")
       .attr("fill-opacity", (d) => +labelVisible(d.current))
       .attr("transform", (d) => labelTransform(d.current))
-      .text(setNodeText)
+      .text(setNodeLabel)
 
     centralCircle = svg
       .append("circle")
@@ -235,11 +235,25 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     }
 
     function setNodeText(d) {
+      return getFullNodeText(d)
+    }
+
+    function getFullNodeText(d) {
       if (d.data.shortCode) {
         return d.data.shortCode
       }
 
       return d.data.name
+    }
+
+    function setNodeLabel(d) {
+      const text = getFullNodeText(d)
+
+      if (text.length > 28) {
+        return text.substring(0, 28) + "…"
+      }
+
+      return text
     }
 
     return svg.node()

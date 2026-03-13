@@ -249,8 +249,8 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     function setNodeLabel(d) {
       const text = getFullNodeText(d)
 
-      if (text.length > 28) {
-        return text.substring(0, 28) + "…"
+      if (text.length > 26) {
+        return text.substring(0, 26) + "…"
       }
 
       return text

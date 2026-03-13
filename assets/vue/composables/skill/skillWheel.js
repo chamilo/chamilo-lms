@@ -20,6 +20,7 @@ export function useSkillWheel({ onSkillDetail } = {}) {
   const width = 928
   const height = width
   const radius = width / 6
+  const centerRadius = radius * 0.25
 
   function transformSkillToWheelItem({
     id,
@@ -72,14 +73,22 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     root.each((d) => (d.current = d))
 
     // Create the arc generator.
+    // Map depth to pixel radius: center uses centerRadius, outer rings fill the rest evenly.
+    const ringWidth = (radius - centerRadius) / (hierarchy.height || 1)
+
+    function depthToRadius(y) {
+      if (y <= 0) return 0
+      return centerRadius + (y - 1) * ringWidth
+    }
+
     const arc = d3
       .arc()
       .startAngle((d) => d.x0)
       .endAngle((d) => d.x1)
       .padAngle((d) => Math.min((d.x1 - d.x0) / 2, 0.005))
       .padRadius(radius * 1.5)
-      .innerRadius((d) => d.y0 * radius)
-      .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 1))
+      .innerRadius((d) => depthToRadius(d.y0))
+      .outerRadius((d) => Math.max(depthToRadius(d.y0), depthToRadius(d.y1) - 1))
 
     // Create the SVG container.
     const svg = d3
@@ -152,7 +161,7 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     centralCircle = svg
       .append("circle")
       .datum(root)
-      .attr("r", radius)
+      .attr("r", centerRadius)
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .on("click", clicked)
@@ -209,7 +218,7 @@ export function useSkillWheel({ onSkillDetail } = {}) {
 
     function labelTransform(d) {
       const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI
-      const y = ((d.y0 + d.y1) / 2) * radius
+      const y = (depthToRadius(d.y0) + depthToRadius(d.y1)) / 2
 
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`
     }

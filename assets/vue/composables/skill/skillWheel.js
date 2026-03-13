@@ -73,12 +73,11 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     root.each((d) => (d.current = d))
 
     // Create the arc generator.
-    // Map depth to pixel radius: center uses centerRadius, outer rings fill the rest evenly.
-    const ringWidth = (radius - centerRadius) / (hierarchy.height || 1)
-
+    // The center circle uses centerRadius; outer rings use the full radius unit.
     function depthToRadius(y) {
       if (y <= 0) return 0
-      return centerRadius + (y - 1) * ringWidth
+      if (y <= 1) return centerRadius + (y - 1) * (radius - centerRadius)
+      return radius + (y - 1) * radius
     }
 
     const arc = d3

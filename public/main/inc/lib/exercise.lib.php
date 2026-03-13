@@ -2113,6 +2113,8 @@ HOTSPOT;
             return [];
         }
 
+        $extra_where_conditions = (string) $extra_where_conditions;
+
         $sessionId = api_get_session_id();
         $exercise_id = (int) $exercise_id;
 
@@ -2158,7 +2160,7 @@ HOTSPOT;
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
             // Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
-            if (strpos($extra_where_conditions, 'group_id')) {
+            if (strpos($extra_where_conditions, 'group_id') !== false) {
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
@@ -2179,7 +2181,7 @@ HOTSPOT;
                 )";
             }
 
-            if (strpos($extra_where_conditions, 'group_all')) {
+            if (strpos($extra_where_conditions, 'group_all') !== false) {
                 $extra_where_conditions = str_replace(
                     "AND (  group_id = 'group_all'  )",
                     '',
@@ -2213,7 +2215,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = null;
             }
 
-            if (strpos($extra_where_conditions, 'group_none')) {
+            if (strpos($extra_where_conditions, 'group_none') !== false) {
                 $extra_where_conditions = str_replace(
                     "AND (  group_id = 'group_none'  )",
                     "AND (  group_id is null  )",
@@ -2363,9 +2365,18 @@ HOTSPOT;
             }
         }
 
-        $lp_list_obj = new LearnpathList(api_get_user_id());
-        $lp_list = $lp_list_obj->get_flat_list();
-        $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+        $lp_list = [];
+        $oldIds = [];
+        $loadLearningPathData = false === $showExerciseCategories;
+
+        if ($loadLearningPathData) {
+            $lp_list_obj = new LearnpathList(api_get_user_id());
+            $lp_list = $lp_list_obj->get_flat_list();
+
+            if (!empty($lp_list)) {
+                $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+            }
+        }
 
         if (is_array($results)) {
             $users_array_id = [];
@@ -2417,23 +2428,31 @@ HOTSPOT;
                     $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
                 }
 
-                $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
-                if (empty($lp_obj)) {
-                    // Try to get the old id (id instead of iid)
-                    $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
-                    if ($lpNewId) {
-                        $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
-                    }
-                }
                 $lp_name = null;
-                if ($lp_obj) {
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
-                    $lp_name = Display::url(
-                        $lp_obj['lp_name'],
-                        $url,
-                        ['target' => '_blank']
-                    );
+                if ($loadLearningPathData) {
+                    $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']])
+                        ? $lp_list[$results[$i]['orig_lp_id']]
+                        : null;
+
+                    if (empty($lp_obj)) {
+                        // Try to get the old id (id instead of iid)
+                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']])
+                            ? $oldIds[$results[$i]['orig_lp_id']]
+                            : null;
+                        if ($lpNewId) {
+                            $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
+                        }
+                    }
+
+                    if ($lp_obj) {
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                        $lp_name = Display::url(
+                            $lp_obj['lp_name'],
+                            $url,
+                            ['target' => '_blank']
+                        );
+                    }
                 }
 
                 // Add all groups by user
@@ -2735,8 +2754,8 @@ HOTSPOT;
                                 $result['total'],
                                 true,
                                 true,
-                                true, // $show_only_percentage = false
-                                true, // hide % sign
+                                true,
+                                true,
                                 $decimalSeparator,
                                 $thousandSeparator,
                                 $roundValues
@@ -2761,8 +2780,8 @@ HOTSPOT;
                         );
 
                         if ($roundValues) {
-                            $whole = floor($my_res); // 1
-                            $fraction = $my_res - $whole; // .25
+                            $whole = floor($my_res);
+                            $fraction = $my_res - $whole;
                             if ($fraction >= 0.5) {
                                 $onlyScore = ceil($my_res);
                             } else {
@@ -2780,8 +2799,8 @@ HOTSPOT;
                         $results[$i]['only_score'] = $onlyScore;
 
                         if ($roundValues) {
-                            $whole = floor($my_total); // 1
-                            $fraction = $my_total - $whole; // .25
+                            $whole = floor($my_total);
+                            $fraction = $my_total - $whole;
                             if ($fraction >= 0.5) {
                                 $onlyTotal = ceil($my_total);
                             } else {

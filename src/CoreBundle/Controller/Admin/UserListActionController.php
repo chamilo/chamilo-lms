@@ -62,6 +62,7 @@ class UserListActionController extends AbstractController
                 $user->setActive(User::SOFT_DELETED);
                 $this->em->flush();
                 $this->addFlash('success', 'User has been removed.');
+
                 break;
 
             case 'restore':
@@ -71,6 +72,7 @@ class UserListActionController extends AbstractController
                 $user->setActive(User::ACTIVE);
                 $this->em->flush();
                 $this->addFlash('success', 'The user has been restored.');
+
                 break;
 
             case 'destroy':
@@ -81,6 +83,7 @@ class UserListActionController extends AbstractController
                 $this->em->flush();
                 $this->addFlash('success', 'The user has been deleted permanently.');
                 $view = 'deleted';
+
                 break;
 
             case 'anonymize':
@@ -97,6 +100,7 @@ class UserListActionController extends AbstractController
                 $user->setDateOfBirth(null);
                 $this->em->flush();
                 $this->addFlash('success', 'User has been anonymized.');
+
                 break;
         }
 

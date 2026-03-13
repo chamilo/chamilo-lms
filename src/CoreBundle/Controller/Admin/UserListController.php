@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -127,7 +128,7 @@ class UserListController extends AbstractController
                         continue;
                     }
                     // Map admin variants to actual role names stored in the JSON column
-                    if (in_array($role, $adminVariants, true)) {
+                    if (\in_array($role, $adminVariants, true)) {
                         $paramA = 'role'.$i++;
                         $paramB = 'role'.$i++;
                         $roleConds[] = "(u.roles LIKE :{$paramA} OR u.roles LIKE :{$paramB})";
@@ -177,29 +178,29 @@ class UserListController extends AbstractController
         $adminIds = array_map('intval', $adminTable);
 
         $items = [];
-        $now = new \DateTime();
+        $now = new DateTime();
 
         foreach ($rows as $row) {
             $userId = (int) $row['id'];
             $allRoles = (array) $row['roles'];
             $filteredRoles = array_values(array_filter(
                 $allRoles,
-                static fn (string $r): bool => !in_array(strtoupper($r), ['ROLE_USER', 'USER', 'ROLE_ANONYMOUS', 'ANONYMOUS'], true)
+                static fn (string $r): bool => !\in_array(strtoupper($r), ['ROLE_USER', 'USER', 'ROLE_ANONYMOUS', 'ANONYMOUS'], true)
             ));
 
-            $isAnonymous = in_array('ROLE_ANONYMOUS', $allRoles, true);
-            $isUserAdmin = in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
-                || in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
-                || in_array('ROLE_ADMIN', $allRoles, true)
-                || in_array($userId, $adminIds, true);
-            $isStudent = in_array('ROLE_STUDENT', $allRoles, true);
-            $isSessionManager = in_array('ROLE_SESSION_MANAGER', $allRoles, true);
-            $isHR = in_array('ROLE_HR', $allRoles, true);
-            $isStudentBoss = in_array('ROLE_STUDENT_BOSS', $allRoles, true);
+            $isAnonymous = \in_array('ROLE_ANONYMOUS', $allRoles, true);
+            $isUserAdmin = \in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
+                || \in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
+                || \in_array('ROLE_ADMIN', $allRoles, true)
+                || \in_array($userId, $adminIds, true);
+            $isStudent = \in_array('ROLE_STUDENT', $allRoles, true);
+            $isSessionManager = \in_array('ROLE_SESSION_MANAGER', $allRoles, true);
+            $isHR = \in_array('ROLE_HR', $allRoles, true);
+            $isStudentBoss = \in_array('ROLE_STUDENT_BOSS', $allRoles, true);
 
             $activeValue = (int) $row['active'];
             $expirationDate = $row['expirationDate'];
-            if (1 === $activeValue && $expirationDate instanceof \DateTime && $expirationDate < $now) {
+            if (1 === $activeValue && $expirationDate instanceof DateTime && $expirationDate < $now) {
                 $activeValue = User::INACTIVE_AUTOMATIC;
             }
 

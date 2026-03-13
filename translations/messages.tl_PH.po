@@ -33018,3 +33018,18 @@ msgstr "Natanggap mo ang bagong friend request"
 msgid "Diagnosis Management"
 msgstr "Pamamahala ng Diagnosis"
 
+msgid "Tracking"
+msgstr ""
+
+msgid "View reports, statistics and tracking data"
+msgstr ""
+
+msgid "System activity audit"
+msgstr "Pag-audit ng aktibidad ng sistema"
+
+msgid "Learning analytics"
+msgstr "Analytics ng pag-aaral"
+
+msgid "Administrative activity auditing"
+msgstr "Pag-audit ng aktibidad ng administrador"
+

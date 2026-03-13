@@ -33028,3 +33028,18 @@ msgstr "Otrzymałeś nowe zaproszenie do grona znajomych"
 msgid "Diagnosis Management"
 msgstr "Zarządzanie diagnostyką"
 
+msgid "Tracking"
+msgstr "Śledzenie"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Wyświetl raporty, statystyki i dane śledzenia"
+
+msgid "System activity audit"
+msgstr "Audyt aktywności systemu"
+
+msgid "Learning analytics"
+msgstr "Analityka uczenia się"
+
+msgid "Administrative activity auditing"
+msgstr "Audyt aktywności administracyjnej"
+

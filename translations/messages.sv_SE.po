@@ -33024,3 +33024,18 @@ msgstr "Du har mottagit en ny vänförfrågan"
 msgid "Diagnosis Management"
 msgstr "Diagnoshantering"
 
+msgid "Tracking"
+msgstr "Spårning"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Visa rapporter, statistik och spårningsdata"
+
+msgid "System activity audit"
+msgstr "Systemaktivitetsgranskning"
+
+msgid "Learning analytics"
+msgstr "Lärandeanalys"
+
+msgid "Administrative activity auditing"
+msgstr "Administrativ aktivitetsgranskning"
+

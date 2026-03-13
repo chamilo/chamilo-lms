@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -33021,4 +33021,19 @@ msgstr "Примавте нова барање за пријателство"
 
 msgid "Diagnosis Management"
 msgstr "Управување со дијагноза"
+
+msgid "Tracking"
+msgstr "Следење"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Преглед на извештаи, статистики и податоци за следење"
+
+msgid "System activity audit"
+msgstr "Аудит на системската активност"
+
+msgid "Learning analytics"
+msgstr "Аналитика на учењето"
+
+msgid "Administrative activity auditing"
+msgstr "Аудит на административната активност"
 

@@ -357,6 +357,8 @@
     "Course management": "Gesti\u00f3 de cursos",
     "Create course packages for a certain time with training sessions": "Creeu paquets de cursos per un temps determinat amb sessions de formaci\u00f3",
     "Sessions management": "Gesti\u00f3 de sessions",
+    "Tracking": "Seguiment",
+    "View reports, statistics and tracking data": "Veure informes, estad\u00edstiques i dades de seguiment",
     "Manage the skills of your users, through courses and badges": "Gestioneu les habilitats dels vostres usuaris, a trav\u00e9s de cursos i ins\u00edgnies",
     "Personal data protection": "Protecci\u00f3 de dades personals",
     "View the status of your server, perform performance tests": "Veieu l'estat del vostre servidor, realitzeu proves de rendiment",
@@ -1575,5 +1577,7 @@
     "Edit group": "Edita grup",
     "Received Files": "Fitxers rebuts",
     "Share a new file": "Enviar un nou fitxer",
-    "Latest sent on": "Darrer reenviament en"
+    "Latest sent on": "Darrer reenviament en",
+    "Learning analytics": "An\u00e0lisi d'aprenentatge",
+    "Administrative activity auditing": "Auditoria d'activitat administrativa"
 }

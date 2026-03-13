@@ -33038,3 +33038,18 @@ msgstr "Ați primit o nouă cerere de prietenie"
 msgid "Diagnosis Management"
 msgstr "Gestionarea diagnosticului"
 
+msgid "Tracking"
+msgstr "Urmărire"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vizualizați rapoarte, statistici și date de urmărire"
+
+msgid "System activity audit"
+msgstr "Audit activitate sistem"
+
+msgid "Learning analytics"
+msgstr "Analiză învățare"
+
+msgid "Administrative activity auditing"
+msgstr "Audit activitate administrativă"
+

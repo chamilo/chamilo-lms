@@ -33037,3 +33037,18 @@ msgstr "Λάβατε νέο αίτημα φιλίας"
 msgid "Diagnosis Management"
 msgstr "Διαχείριση Διάγνωσης"
 
+msgid "Tracking"
+msgstr "Παρακολούθηση"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Προβολή αναφορών, στατιστικών και δεδομένων παρακολούθησης"
+
+msgid "System activity audit"
+msgstr "Έλεγχος δραστηριότητας συστήματος"
+
+msgid "Learning analytics"
+msgstr "Αναλυτική εκπαίδευση"
+
+msgid "Administrative activity auditing"
+msgstr "Έλεγχος διοικητικής δραστηριότητας"
+

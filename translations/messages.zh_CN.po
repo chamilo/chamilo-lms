@@ -33024,3 +33024,18 @@ msgstr "您收到了一条新的好友请求"
 msgid "Diagnosis Management"
 msgstr "诊断管理"
 
+msgid "Tracking"
+msgstr "跟踪"
+
+msgid "View reports, statistics and tracking data"
+msgstr "查看报告、统计和跟踪数据"
+
+msgid "System activity audit"
+msgstr "系统活动审计"
+
+msgid "Learning analytics"
+msgstr "学习分析"
+
+msgid "Administrative activity auditing"
+msgstr "管理活动审计"
+

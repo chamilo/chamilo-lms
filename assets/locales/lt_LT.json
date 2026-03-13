@@ -357,6 +357,8 @@
     "Course management": "Kurso valdymas",
     "Create course packages for a certain time with training sessions": "Kurti kurso paketus tam tikram laikui su mokymo sesijomis",
     "Sessions management": "Sesij\u0173 valdymas",
+    "Tracking": "Steb\u0117jimas",
+    "View reports, statistics and tracking data": "Per\u017ei\u016br\u0117ti ataskaitas, statistik\u0105 ir steb\u0117jimo duomenis",
     "Manage the skills of your users, through courses and badges": "Valdykite savo vartotoj\u0173 \u012fg\u016bd\u017eius per kursus ir \u017eenklelius",
     "Personal data protection": "Asmens duomen\u0173 apsauga",
     "View the status of your server, perform performance tests": "Per\u017ei\u016br\u0117kite serverio b\u016bsen\u0105, atlikite veiklos testus",
@@ -1575,5 +1577,7 @@
     "Edit group": "Redaguoti grup\u0119",
     "Received Files": "Gauti failai",
     "Share a new file": "Si\u0173sti nauj\u0105 fail\u0105",
-    "Latest sent on": "Paskutinis siuntimas buvo"
+    "Latest sent on": "Paskutinis siuntimas buvo",
+    "Learning analytics": "Mokymosi analitika",
+    "Administrative activity auditing": "Administracin\u0117s veiklos auditas"
 }

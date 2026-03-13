@@ -357,6 +357,8 @@
     "Course management": "Spr\u00e1va kurz\u016f",
     "Create course packages for a certain time with training sessions": "Vytv\u00e1\u0159ejte bal\u00ed\u010dky kurz\u016f na ur\u010ditou dobu s tr\u00e9ninkov\u00fdmi sezen\u00edmi",
     "Sessions management": "Spr\u00e1va sezen\u00ed",
+    "Tracking": "Sledov\u00e1n\u00ed",
+    "View reports, statistics and tracking data": "Zobrazit zpr\u00e1vy, statistiky a sledovac\u00ed data",
     "Manage the skills of your users, through courses and badges": "Spravujte dovednosti sv\u00fdch u\u017eivatel\u016f prost\u0159ednictv\u00edm kurz\u016f a odznak\u016f",
     "Personal data protection": "Ochrana osobn\u00edch \u00fadaj\u016f",
     "View the status of your server, perform performance tests": "Zobrazte stav va\u0161eho serveru, prove\u010fte testy v\u00fdkonu",
@@ -1575,5 +1577,7 @@
     "Edit group": "Upravit skupinu",
     "Received Files": "P\u0159ijat\u00e9 soubory",
     "Share a new file": "Sd\u00edlet nov\u00fd soubor",
-    "Latest sent on": "Naposledy p\u0159eposlan\u00fd"
+    "Latest sent on": "Naposledy p\u0159eposlan\u00fd",
+    "Learning analytics": "Learning analytics",
+    "Administrative activity auditing": "Audit administrativn\u00ed aktivity"
 }

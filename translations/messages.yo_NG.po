@@ -32797,154 +32797,154 @@ msgid "Select permission"
 msgstr "Yan igbanilaaye"
 
 msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
-msgstr ""
+msgstr "Nipasẹ gbigba ìpè yìí, yóò ṣe ìsọpọ̀ pẹ̀lú olùbéèrè ní ọ̀nà tí yóò jẹ́ kí àwùṣe pìlì yìí tàbí gbogbo àwùṣe yí ṣe àfihàn fún olùbéèrè láti kà"
 
 msgid "Showing %d of approximately %d result(s) for %s."
-msgstr ""
+msgstr "Àfihàn %d nínú ìdàbọ̀bù %d ìdíje fún %s."
 
 msgid "Showing %d accessible result(s) for %s."
-msgstr ""
+msgstr "Àfihàn %d ìdíje tí a ṣe ìrírí fún %s."
 
 msgid "You will therefore be automatically redirected to this URL"
-msgstr ""
+msgstr "Nítorí náà, yóò ṣe ìdarí rẹ̀ lọ́nà ìdásílẹ̀ sí URL yìí"
 
 msgid "You have access to multiple URLs"
-msgstr ""
+msgstr "O ni ìwọ̀pọ̀ URL"
 
 msgid "Please click on the link below corresponding to the URL you wish to access"
-msgstr ""
+msgstr "Jọ̀wọ́ tẹ ìdọ́gba ìsọ́nà ìsàlẹ̀ tí ó bá URL tí o fẹ́ ìwọ̀pọ̀"
 
 msgid "You do not currently have access to any URL"
-msgstr ""
+msgstr "O kò ní ìwọ̀pọ̀ sí URL kankan lọ́nà yìí"
 
 msgid "Maximum number of subscriptions allowed"
-msgstr ""
+msgstr "Nọ́mbà ìpàdépọ̀ púpọ̀ jù lọ"
 
 msgid "An error occurred"
-msgstr ""
+msgstr "Ìṣòro kan ṣẹlẹ̀"
 
 msgid "You don't have any course content yet"
-msgstr ""
+msgstr "Kò sí àkòkò ìkẹ́kọ̀ọ́ kankan rẹ̀ lọ́nà yìí"
 
 msgid "This course is locked"
-msgstr ""
+msgstr "Ìkẹ́kọ̀ọ́ yìí ti di ìdílé"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
-msgstr ""
+msgstr "Àwùrẹ́ e-mail tí a fi rán àwùrẹ́ e-mail rẹ̀, tí a tún ṣe ìlò gẹ́gẹ́ bí ìpìlẹ̀ 'ìdáhùn-sí'"
 
 msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
-msgstr ""
+msgstr "Kò rí èdè rẹ nínú àtòkọ? Ṣe ìfọwérànṣẹ́ sí wa ní %s láti ṣe ìdàsílẹ̀ gẹ́gẹ́ bí olùtumọ̀"
 
 msgid "An update is available"
-msgstr ""
+msgstr "Ìmú ìdàsílẹ̀ ṣe pàtàkì"
 
 msgid "to know what's new and what has been changed"
-msgstr ""
+msgstr "láti mọ ìdí tí ó ṣe ìyàtọ̀ àti ìyípadà"
 
 msgid "We have detected that your PHP installation does not define the date"
-msgstr ""
+msgstr "A ti ṣàwárí pé ìdásílẹ̀ PHP rẹ kò ṣàpèjúwe ọjọ́"
 
 msgid "Your PHP version does not match the requirements for this software"
-msgstr ""
+msgstr "Àwòdúrá PHP rẹ kò bá ìbeere fún ìdàbọ̀bù yìí mu"
 
 msgid "Some files or folders don't have writing permission"
-msgstr ""
+msgstr "Àwọn ìwé tàbí àwùnà kò ní ìyọ̀nda kíkọ"
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system"
-msgstr ""
+msgstr "Ìkìlọ̀! Olùdásílẹ̀ ti ṣàwárí ìpìlẹ̀ Chamilo tí ó wà lórí ìṣètò rẹ"
 
 msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
-msgstr ""
+msgstr "Nítorí tí àwùnà <code>newscorm</code> àti <code>exercice</code> ti yí orúkọ sí <code>lp</code> àti <code>exercise</code> lọ́nà ìyàtọ̀, ó ṣe pàtàkì láti pa tàbí yí orúkọ sí <code>newscorm_old</code> àti <code>exercice_old</code>"
 
 msgid "The form contains incorrect or incomplete data"
-msgstr ""
+msgstr "Fọ́ọ̀mù náà ni ìròyìn tí kò tọ́ tàbí kò pé"
 
 msgid "Your contact information could not be sent"
-msgstr ""
+msgstr "Ìròyìn ìfọwọ̀kan rẹ kò le fi ránṣẹ́"
 
 msgid "Please contact support with the error details"
-msgstr ""
+msgstr "Jọ̀wọ́ kan si ìdàá jìnnà pẹ̀lú ìròyìn ìṣòro"
 
 msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
-msgstr ""
+msgstr "Tẹ àwòrán náà láti gé e (ipín 1:1, 120x120 px tí a fọwósílẹ̀)"
 
 msgid "Use the crop tool to select a 1:1 region"
-msgstr ""
+msgstr "Lo ohun èlò gé láti yan agbègbè 1:1"
 
 msgid "Checking push subscription"
-msgstr ""
+msgstr "Ṣàyẹ̀wò ìdàsọlẹ̀ ìtẹ̀wọ́"
 
 msgid "You're subscribed to push notifications in this browser"
-msgstr ""
+msgstr "O ti ṣàpèwà sí ìfìfọ́hùn ìtẹ̀wọ́ nínú ẹ̀rín ìwò yìí"
 
 msgid "Push notifications are not enabled in this browser"
-msgstr ""
+msgstr "Ìfìfọ́hùn ìtẹ̀wọ́ kò ṣiṣẹ́ nínú ẹ̀rín ìwò yìí"
 
 msgid "Data exchange successfully saved"
-msgstr ""
+msgstr "Pàṣípààrọ̀ ìròyìn ti fipamọ́ dáadáa"
 
 msgid "Error saving data exchange"
-msgstr ""
+msgstr "Ìṣòro fipamọ́ ìpàṣípààrọ̀ ìròyìn"
 
 msgid "No documents added yet"
-msgstr ""
+msgstr "Kò sí ìwé tí a fi kun"
 
 msgid "No available documents"
-msgstr ""
+msgstr "Kò sí ìwé tí o ṣe ìwọ̀pọ̀"
 
 msgid "No users added yet"
-msgstr ""
+msgstr "Kò sí olùpẹ̀yìndà tí a fi kun"
 
 msgid "No available users"
-msgstr ""
+msgstr "Kò sí olùpẹ̀yìndà tí o ṣe ìwọ̀pọ̀"
 
 msgid "You can no longer submit"
-msgstr ""
+msgstr "O kò le fiwọ́silẹ̀ mọ́"
 
 msgid "No missing submissions found for this assignment or data is not available"
-msgstr ""
+msgstr "Kò sí ìfiwọ́silẹ̀ tí ó ṣòfo fún iṣẹ́ yìí tàbí ìròyìn kò ṣe ìwọ̀pọ̀"
 
 msgid "Email sent to all unsubmitted users"
-msgstr ""
+msgstr "A ti fi e-mail ránṣẹ́ sí gbogbo àwùn olùpẹ̀yìndà tí kò fiwọ́silẹ̀"
 
 msgid "Failed to send email"
-msgstr ""
+msgstr "Kùnà sí ìfifi e-mail ránṣẹ́"
 
 msgid "Write your answer here"
-msgstr ""
+msgstr "Kọ ìdáhùn rẹ níbí"
 
 msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
-msgstr ""
+msgstr "Kìlẹ́ndà ìdàhùn jẹ́ kí o ṣe ìdàsílẹ̀ àwùn ìdàhùn (ọ̀kan fún ìpàdé gidi tí àwùn akẹ́kọ̀ọ́ gbọ́dọ̀ wà)"
 
 msgid "Loading attendance data"
-msgstr ""
+msgstr "Ṣe ìdọ̀tí ìròyìn ìdàhùn"
 
 msgid "No attendance assigned yet"
-msgstr ""
+msgstr "Kò sí ìdàhùn tí a yàn lọ́nà yìí"
 
 msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
-msgstr ""
+msgstr "Kò sí ìdàhùn kí òrùn, gbìyànjú yan ọjọ́ mìíràn tàbí ṣàfikún ìdàhùn rẹ fúnra rẹ pẹ̀lú àwùn ìdí ìdàsílẹ̀"
 
 msgid "No attendance data for today"
-msgstr ""
+msgstr "Kò sí ìròyìn ìdàhùn fún òní"
 
 msgid "Saving"
-msgstr ""
+msgstr "Fipamọ́"
 
 msgid "No attendance data to save"
-msgstr ""
+msgstr "Kò sí ìròyìn ìdàhùn láti fipamọ́"
 
 msgid "Failed to save attendance"
-msgstr ""
+msgstr "Kùnà sí ìfipamọ́ ìdàhùn"
 
 msgid "Loading more courses"
-msgstr ""
+msgstr "Ṣe ìdọ̀tí ìkẹ́kọ̀ọ́ púpọ̀ sí i"
 
 msgid "Loading more sessions"
-msgstr ""
+msgstr "Ṣe ìdọ̀tí ìpàdé púpọ̀ sí i"
 
 msgid "The document auto-launch feature configuration is enabled"
-msgstr ""
+msgstr "Ìdàsílẹ̀ ìdàsílẹ̀ ìdàsílẹ̀ ìwé ṣiṣẹ́"
 
 msgid "The exercises auto-launch feature configuration is enabled"
 msgstr "Ìfìdàsílẹ̀ ìdàgbàsókè ìdàsílẹ̀ àwọn ìdàsílẹ̀ ti ṣiṣẹ́ pẹ̀lú"
@@ -33017,4 +33017,19 @@ msgstr "O ti gba ìfẹ́ràn ọrẹ́ tuntun"
 
 msgid "Diagnosis Management"
 msgstr "Ìdarí Ìdíje"
+
+msgid "Tracking"
+msgstr "Ìtúpalẹ̀"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Wo àwọn ìròyìn, ìṣirò àti ìtúpalẹ̀ dátà"
+
+msgid "System activity audit"
+msgstr "Àyẹ̀wò ìgbòkànṣe eto"
+
+msgid "Learning analytics"
+msgstr "Àyẹ̀wò ìmọ̀"
+
+msgid "Administrative activity auditing"
+msgstr "Àyẹ̀wò ìgbòkànṣe ìṣàkadì"
 

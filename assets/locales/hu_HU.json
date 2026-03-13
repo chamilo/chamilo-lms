@@ -357,6 +357,8 @@
     "Course management": "Kurzuskezel\u00e9s",
     "Create course packages for a certain time with training sessions": "Hozzon l\u00e9tre kurzuscsomagokat bizonyos id\u0151re k\u00e9pz\u00e9si foglalkoz\u00e1sokkal",
     "Sessions management": "Foglalkoz\u00e1skezel\u00e9s",
+    "Tracking": "K\u00f6vet\u00e9s",
+    "View reports, statistics and tracking data": "Jelent\u00e9sek, statisztik\u00e1k \u00e9s k\u00f6vet\u00e9si adatok megtekint\u00e9se",
     "Manage the skills of your users, through courses and badges": "Kezelje felhaszn\u00e1l\u00f3i k\u00e9szs\u00e9geit kurzusokon \u00e9s jelv\u00e9nyeken kereszt\u00fcl",
     "Personal data protection": "Szem\u00e9lyes adatv\u00e9delem",
     "View the status of your server, perform performance tests": "Tekintse meg szervere \u00e1llapot\u00e1t, v\u00e9gezzen teljes\u00edtm\u00e9nyteszteket",
@@ -1575,5 +1577,7 @@
     "Edit group": "Csoport szerkeszt\u00e9se",
     "Received Files": "Kapott \u00e1llom\u00e1nyok",
     "Share a new file": "\u00daj \u00e1llom\u00e1ny k\u00fcld\u00e9se",
-    "Latest sent on": "Utols\u00f3 \u00fajrak\u00fcld\u00e9s"
+    "Latest sent on": "Utols\u00f3 \u00fajrak\u00fcld\u00e9s",
+    "Learning analytics": "Tanul\u00e1si analitika",
+    "Administrative activity auditing": "Adminisztrat\u00edv tev\u00e9kenys\u00e9g napl\u00f3z\u00e1sa"
 }

@@ -33018,3 +33018,18 @@ msgstr "Avètz recebut una novèla demanda d'amicícia"
 msgid "Diagnosis Management"
 msgstr "Gestion del diagnostic"
 
+msgid "Tracking"
+msgstr "Segament"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Veire los rapòrts, estadisticas e donadas de segament"
+
+msgid "System activity audit"
+msgstr "Audit de l'activitat del sistèma"
+
+msgid "Learning analytics"
+msgstr "Analitica d'aprendimentatge"
+
+msgid "Administrative activity auditing"
+msgstr "Audit de l'activitat administrativa"
+

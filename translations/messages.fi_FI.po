@@ -33024,3 +33024,18 @@ msgstr "Olet saanut uuden kaveripyynnön"
 msgid "Diagnosis Management"
 msgstr "Diagnostiikkahallinta"
 
+msgid "Tracking"
+msgstr "Seuranta"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Näytä raportit, tilastot ja seurannan tiedot"
+
+msgid "System activity audit"
+msgstr "Järjestelmän toiminnan tarkastus"
+
+msgid "Learning analytics"
+msgstr "Opi analytiikka"
+
+msgid "Administrative activity auditing"
+msgstr "Hallinnollisen toiminnan tarkastus"
+

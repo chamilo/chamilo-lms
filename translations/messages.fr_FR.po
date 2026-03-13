@@ -23995,7 +23995,7 @@ msgid "Sessions by date"
 msgstr "Sessions par dates"
 
 msgid "Global statistics"
-msgstr "Statistiques générales"
+msgstr "Statistiques globales"
 
 msgid "Weeks"
 msgstr "Semaines"
@@ -34903,4 +34903,19 @@ msgstr "Vous avez reçu une nouvelle demande d'ami"
 
 msgid "Diagnosis Management"
 msgstr "Gestion du diagnostic"
+
+msgid "Tracking"
+msgstr "Suivi"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Voir les rapports, statistiques et données de suivi"
+
+msgid "System activity audit"
+msgstr "Audit d'activité du système"
+
+msgid "Learning analytics"
+msgstr "Analytique d'apprentissage"
+
+msgid "Administrative activity auditing"
+msgstr "Audit d'activité administrative"
 

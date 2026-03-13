@@ -33088,3 +33088,18 @@ msgstr "新しい友達リクエストを受け取りました"
 msgid "Diagnosis Management"
 msgstr "診断管理"
 
+msgid "Tracking"
+msgstr "トラッキング"
+
+msgid "View reports, statistics and tracking data"
+msgstr "レポート、統計、トラッキングデータを表示"
+
+msgid "System activity audit"
+msgstr "システム活動監査"
+
+msgid "Learning analytics"
+msgstr "学習分析"
+
+msgid "Administrative activity auditing"
+msgstr "管理活動監査"
+

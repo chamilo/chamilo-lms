@@ -357,6 +357,8 @@
     "Course management": "Xesti\u00f3n de cursos",
     "Create course packages for a certain time with training sessions": "Crear paquetes de cursos pa un tiempu determin\u00e1u con sesiones de formaci\u00f3n",
     "Sessions management": "Xesti\u00f3n de sesiones",
+    "Tracking": "Seguimientu",
+    "View reports, statistics and tracking data": "Ver informes, estad\u00edstiques y datos de seguimientu",
     "Manage the skills of your users, through courses and badges": "Xestionar les competencias de tos usuarios, a travi\u00e9s de cursos y distintivos",
     "Personal data protection": "Proteici\u00f3n de datos personals",
     "View the status of your server, perform performance tests": "Ver l'est\u00e1u del to sirvidor, realizar pruebes de rendimientu",
@@ -1575,5 +1577,7 @@
     "Edit group": "Editar grupu",
     "Received Files": "Archivos recib\u00edos",
     "Share a new file": "Unviar un archivu",
-    "Latest sent on": "\u00daltimu reunv\u00edu'l"
+    "Latest sent on": "\u00daltimu reunv\u00edu'l",
+    "Learning analytics": "Anal\u00edtica de l'aprendizaxe",
+    "Administrative activity auditing": "Auditor\u00eda d'activid\u00e1 administrativa"
 }

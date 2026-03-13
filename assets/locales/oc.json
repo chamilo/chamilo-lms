@@ -357,6 +357,8 @@
     "Course management": "Gestion dels cors",
     "Create course packages for a certain time with training sessions": "Crear de pach\u00e8ts de cors per un temps cert amb de sesions de formacion",
     "Sessions management": "Gestion de las sesions",
+    "Tracking": "Segament",
+    "View reports, statistics and tracking data": "Veire los rap\u00f2rts, estadisticas e donadas de segament",
     "Manage the skills of your users, through courses and badges": "Gerir las compet\u00e9ncias de v\u00f2stres utilizaires, a trav\u00e8rs dels cors e de las ins\u00edgnas",
     "Personal data protection": "Proteccion de las donadas personals",
     "View the status of your server, perform performance tests": "Visionar l'estatut de v\u00f2stre servidor, effectuar de tests de perform\u00e0ncia",
@@ -1575,5 +1577,7 @@
     "Edit group": "Modificar la gropo",
     "Received Files": "Fichi\u00e8rs recebuts",
     "Share a new file": "Partejar un nov\u00e8l fichi\u00e8r",
-    "Latest sent on": "Darri\u00e8r enviat lo"
+    "Latest sent on": "Darri\u00e8r enviat lo",
+    "Learning analytics": "Analitica d'aprendimentatge",
+    "Administrative activity auditing": "Audit de l'activitat administrativa"
 }

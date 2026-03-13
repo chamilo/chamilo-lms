@@ -32871,154 +32871,154 @@ msgid "The form contains incorrect or incomplete data"
 msgstr "Formularioak datu okerrak edo osatu gabeak ditu"
 
 msgid "Your contact information could not be sent"
-msgstr ""
+msgstr "Zure kontaktuko informazioa ezin izan da bidali"
 
 msgid "Please contact support with the error details"
-msgstr ""
+msgstr "Mesedez, jarri harremanetan laguntza zerbitzuarekin erroreakin"
 
 msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
-msgstr ""
+msgstr "Egin klik irudian moztzeko (1:1 ratio, 120x120 px gomendatua)"
 
 msgid "Use the crop tool to select a 1:1 region"
-msgstr ""
+msgstr "Erabili mozteko tresna 1:1 eremua hautatzeko"
 
 msgid "Checking push subscription"
-msgstr ""
+msgstr "Push harpidetzaren egiaztapena"
 
 msgid "You're subscribed to push notifications in this browser"
-msgstr ""
+msgstr "Push jakinarazpenetara harpidetuta zaude nabigatzaile honetan"
 
 msgid "Push notifications are not enabled in this browser"
-msgstr ""
+msgstr "Push jakinarazpenak ez daude gaituta nabigatzaile honetan"
 
 msgid "Data exchange successfully saved"
-msgstr ""
+msgstr "Datu trukaketa ongi gorde da"
 
 msgid "Error saving data exchange"
-msgstr ""
+msgstr "Errorea datu trukaketaren gordetzean"
 
 msgid "No documents added yet"
-msgstr ""
+msgstr "Oraindik ez da dokumenturik gehitu"
 
 msgid "No available documents"
-msgstr ""
+msgstr "Ez dago eskuragarri dagoen dokumenturik"
 
 msgid "No users added yet"
-msgstr ""
+msgstr "Oraindik ez da erabillearik gehitu"
 
 msgid "No available users"
-msgstr ""
+msgstr "Ez dago eskuragarri dagoen erabillearik"
 
 msgid "You can no longer submit"
-msgstr ""
+msgstr "Ez duzu gehiago bidal dezakezu"
 
 msgid "No missing submissions found for this assignment or data is not available"
-msgstr ""
+msgstr "Ez da falta den bidalketaririk aurkitu lan honetarako edo datuak ez daude eskuragarri"
 
 msgid "Email sent to all unsubmitted users"
-msgstr ""
+msgstr "E-posta bidali da bidalketa egin gabe dauden erabiltzaile guztiei"
 
 msgid "Failed to send email"
-msgstr ""
+msgstr "Huts egin du e-posta bidaltzean"
 
 msgid "Write your answer here"
-msgstr ""
+msgstr "Idatzi zure erantzuna hemen"
 
 msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
-msgstr ""
+msgstr "Asistentzia egutegiak asistentzia zerrendak erregistratzeko aukera ematen du (ikasleek bertaratzeko behar duten saio benetako bakoitzeko bat)"
 
 msgid "Loading attendance data"
-msgstr ""
+msgstr "Asistentzia datuak kargatzen"
 
 msgid "No attendance assigned yet"
-msgstr ""
+msgstr "Oraindik ez da asistentziarik esleitu"
 
 msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
-msgstr ""
+msgstr "Ez dago gaur egunerako klase egutagirik, saiatu beste egun bat aukeratzen edo gehitu zure asistentzia sarrera ekintza ikurren bidez"
 
 msgid "No attendance data for today"
-msgstr ""
+msgstr "Ez dago gaurko asistentzia daturik"
 
 msgid "Saving"
-msgstr ""
+msgstr "Gordetzen"
 
 msgid "No attendance data to save"
-msgstr ""
+msgstr "Gorde daitekeen asistentzia daturik ez"
 
 msgid "Failed to save attendance"
-msgstr ""
+msgstr "Asistentzia gordetzean huts egin da"
 
 msgid "Loading more courses"
-msgstr ""
+msgstr "Gehiago ikastaroak kargatzen"
 
 msgid "Loading more sessions"
-msgstr ""
+msgstr "Gehiago saioak kargatzen"
 
 msgid "The document auto-launch feature configuration is enabled"
-msgstr ""
+msgstr "Dokumentuaren auto-abiarazpen ezaugarriaren konfigurazioa gaituta dago"
 
 msgid "The exercises auto-launch feature configuration is enabled"
-msgstr ""
+msgstr "Ariketaen auto-abiarazpen ezaugarriaren konfigurazioa gaituta dago"
 
 msgid "The learning path auto-launch setting is ON"
-msgstr ""
+msgstr "Ikasmen-bidearen auto-abiarazpen ezarpena AKTIBATUTA dago"
 
 msgid "The forum's auto-launch setting is on"
-msgstr ""
+msgstr "Foroaren auto-abiarazpen ezarpena aktibatuta dago"
 
 msgid "Course ID is missing"
-msgstr ""
+msgstr "Ikastaroaren ID falta da"
 
 msgid "Course created successfully"
-msgstr ""
+msgstr "Ikastaroa ongi sortu da"
 
 msgid "Error deleting document(s)"
-msgstr ""
+msgstr "Dokumentua(k) ezabatzean errorea"
 
 msgid "Template successfully deleted"
-msgstr ""
+msgstr "Txantiloia ongi ezabatu da"
 
 msgid "Error deleting the template"
-msgstr ""
+msgstr "Txantiloia ezabatzean errorea"
 
 msgid "The title and thumbnail are required"
-msgstr ""
+msgstr "Izenburua eta irudizko txartela beharrezkoak dira"
 
 msgid "Template created successfully"
-msgstr ""
+msgstr "Txantiloia ongi sortu da"
 
 msgid "Error creating the template"
-msgstr ""
+msgstr "Txantiloia sortzean errorea"
 
 msgid "Error submitting the form"
-msgstr ""
+msgstr "Formularioa bidaltzean errorea"
 
 msgid "Loading templates"
-msgstr ""
+msgstr "Txantiloiak kargatzen"
 
 msgid "Loading layout"
-msgstr ""
+msgstr "Makina kargatzen"
 
 msgid "Loading courses"
-msgstr ""
+msgstr "Ikastaroak kargatzen"
 
 msgid "No courses available"
-msgstr ""
+msgstr "Ikastaroik ez dago eskuragarri"
 
 msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
-msgstr ""
+msgstr "Zerrenda honek \"session_admin_access_to_all_users_on_all_urls\" ezarpena gaituta dagoelako guztiak sarbide URLetako erabiltzaileak erakusten ditu."
 
 msgid "User not found"
-msgstr ""
+msgstr "Erabiltzailerik ez da aurkitu"
 
 msgid "An error occurred while sending the course"
-msgstr ""
+msgstr "Ikastaroa bidaltzean errorea gertatu da"
 
 msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
-msgstr ""
+msgstr "Gogoratu GDPRrekin lotutako baldintzen aldaketek, 19. artikuluan adierazten denez, erabiltzaileen pertsonal informazioa eman diezuen hirugarrenei aldaketa horiek jakinaraztea eskatzen dutela"
 
 msgid "You should create the \"Term and Conditions\" for all the available languages"
-msgstr ""
+msgstr "\"Baldintza eta Lehenaldien\"ak sortu behar dituzu eskuragarri dauden hizkuntza guztietarako"
 
 msgid "You don't have any course yet"
 msgstr "Oraindik ez duzu ikastarcenik"
@@ -33028,4 +33028,19 @@ msgstr "Lagun eskaera berria jaso duzu"
 
 msgid "Diagnosis Management"
 msgstr "Diagnostiko kudeaketa"
+
+msgid "Tracking"
+msgstr "Jarraitzea"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Txostenak, estatistikak eta jarraipen datuak ikusi"
+
+msgid "System activity audit"
+msgstr "Sistemaren jardueraren ikuskaritza"
+
+msgid "Learning analytics"
+msgstr "Ikasmen analitikak"
+
+msgid "Administrative activity auditing"
+msgstr "Administrazio jardueraren ikuskaritza"
 

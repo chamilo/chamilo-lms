@@ -33018,3 +33018,18 @@ msgstr "Obdrželi jste novou žádost o přátelství"
 msgid "Diagnosis Management"
 msgstr "Správa diagnostiky"
 
+msgid "Tracking"
+msgstr "Sledování"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Zobrazit zprávy, statistiky a sledovací data"
+
+msgid "System activity audit"
+msgstr "Audit aktivity systému"
+
+msgid "Learning analytics"
+msgstr "Learning analytics"
+
+msgid "Administrative activity auditing"
+msgstr "Audit administrativní aktivity"
+

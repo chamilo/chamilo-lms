@@ -357,6 +357,8 @@
     "Course management": "Gestione curs",
     "Create course packages for a certain time with training sessions": "Cree pachets di curs par un cjant temp coi sesions di formazion",
     "Sessions management": "Gestione sesions",
+    "Tracking": "Tracking",
+    "View reports, statistics and tracking data": "V\u00ea reports, statistichis e d\u00e2t di tracking",
     "Manage the skills of your users, through courses and badges": "Gjest\u00ees lis competenzis dai tie utints, tra curs e badge",
     "Personal data protection": "Protezion dai datus person\u00e2ls",
     "View the status of your server, perform performance tests": "V\u00ea lo st\u00e2t dal to server, f\u00e2 test di prestazion",
@@ -1575,5 +1577,7 @@
     "Edit group": "Modific\u00e2 grup",
     "Received Files": "Files reseiv\u00fbts",
     "Share a new file": "Parteagi un gnof file",
-    "Latest sent on": "Ultim invi\u00e2t il"
+    "Latest sent on": "Ultim invi\u00e2t il",
+    "Learning analytics": "Analytics di apreniment",
+    "Administrative activity auditing": "Audit de ativit\u00e2t aministrative"
 }

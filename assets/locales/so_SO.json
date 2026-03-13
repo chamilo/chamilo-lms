@@ -357,6 +357,8 @@
     "Course management": "Maamulka koorsada",
     "Create course packages for a certain time with training sessions": "Samee xirmooyin koorsada muddo gaaban leh fadhiyo tababar",
     "Sessions management": "Maamulka fadhiyada",
+    "Tracking": "Raacista",
+    "View reports, statistics and tracking data": "Eeg warbixinnada, tirakoobka iyo xogta raadraaca",
     "Manage the skills of your users, through courses and badges": "Maamul xirfadaha isticmaaleeyaashaada, iyada oo loo marayo koorsooyinka iyo calaamadaha",
     "Personal data protection": "Difaaca xogta shakhsi ahaaneed",
     "View the status of your server, perform performance tests": "Eeg xaaladda server-kaaga, samee tijaabooyin waxqabadka",
@@ -1575,5 +1577,7 @@
     "Edit group": "Tafatir kooxda",
     "Received Files": "Faylooyinka la helay",
     "Share a new file": "La wadaag fayl cusub",
-    "Latest sent on": "Ugu dambeeyay la diray"
+    "Latest sent on": "Ugu dambeeyay la diray",
+    "Learning analytics": "Fahamka waxbarashada",
+    "Administrative activity auditing": "Hantida dhaqdhaqaaqa maamulka"
 }

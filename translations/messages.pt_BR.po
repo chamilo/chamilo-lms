@@ -33037,3 +33037,18 @@ msgstr "Você recebeu um novo pedido de amizade"
 msgid "Diagnosis Management"
 msgstr "Gerenciamento de Diagnóstico"
 
+msgid "Tracking"
+msgstr "Rastreamento"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Visualizar relatórios, estatísticas e dados de rastreamento"
+
+msgid "System activity audit"
+msgstr "Auditoria de atividade do sistema"
+
+msgid "Learning analytics"
+msgstr "Análise de aprendizagem"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoria de atividade administrativa"
+

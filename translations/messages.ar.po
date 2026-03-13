@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -33035,4 +33035,19 @@ msgstr "لقد تلقيت طلب صداقة جديد"
 
 msgid "Diagnosis Management"
 msgstr "إدارة التشخيص"
+
+msgid "Tracking"
+msgstr "التتبع"
+
+msgid "View reports, statistics and tracking data"
+msgstr "عرض التقارير والإحصاءات وبيانات التتبع"
+
+msgid "System activity audit"
+msgstr "تدقيق نشاط النظام"
+
+msgid "Learning analytics"
+msgstr "تحليلات التعلم"
+
+msgid "Administrative activity auditing"
+msgstr "تدقيق نشاط الإدارة"
 

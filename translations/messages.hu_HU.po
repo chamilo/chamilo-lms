@@ -33022,3 +33022,18 @@ msgstr "Új barátkeresést kaptál"
 msgid "Diagnosis Management"
 msgstr "Diagnosztika kezelés"
 
+msgid "Tracking"
+msgstr "Követés"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Jelentések, statisztikák és követési adatok megtekintése"
+
+msgid "System activity audit"
+msgstr "Rendszerműködés naplózása"
+
+msgid "Learning analytics"
+msgstr "Tanulási analitika"
+
+msgid "Administrative activity auditing"
+msgstr "Adminisztratív tevékenység naplózása"
+

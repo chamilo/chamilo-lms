@@ -34162,3 +34162,18 @@ msgstr "Has recibido una nueva solicitud de amistad"
 msgid "Diagnosis Management"
 msgstr "Gestión de Diagnóstico"
 
+msgid "Tracking"
+msgstr "Seguimiento"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Ver informes, estadísticas y datos de seguimiento"
+
+msgid "System activity audit"
+msgstr "Auditoría de actividad del sistema"
+
+msgid "Learning analytics"
+msgstr "Analítica del aprendizaje"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoría de actividad administrativa"
+

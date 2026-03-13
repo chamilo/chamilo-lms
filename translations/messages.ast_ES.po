@@ -33024,3 +33024,18 @@ msgstr "Recibisti una solicitute nueva d'amistá"
 msgid "Diagnosis Management"
 msgstr "Xestión de diagnósticu"
 
+msgid "Tracking"
+msgstr "Seguimientu"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Ver informes, estadístiques y datos de seguimientu"
+
+msgid "System activity audit"
+msgstr "Auditoría d'actividá del sistema"
+
+msgid "Learning analytics"
+msgstr "Analítica de l'aprendizaxe"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoría d'actividá administrativa"
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -33017,4 +33017,19 @@ msgstr "Waxaa laguugu soo diray codsi saaxiibnimo cusub"
 
 msgid "Diagnosis Management"
 msgstr "Maamulka Cilmi-baadhista"
+
+msgid "Tracking"
+msgstr "Raacista"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Eeg warbixinnada, tirakoobka iyo xogta raadraaca"
+
+msgid "System activity audit"
+msgstr "Hantida nidaamka"
+
+msgid "Learning analytics"
+msgstr "Fahamka waxbarashada"
+
+msgid "Administrative activity auditing"
+msgstr "Hantida dhaqdhaqaaqa maamulka"
 

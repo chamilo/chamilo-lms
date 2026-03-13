@@ -33035,3 +33035,18 @@ msgstr "קיבלת בקשת חברות חדשה"
 msgid "Diagnosis Management"
 msgstr "ניהול אבחון"
 
+msgid "Tracking"
+msgstr "מעקב"
+
+msgid "View reports, statistics and tracking data"
+msgstr "צפייה בדוחות, סטטיסטיקות וניטור נתונים"
+
+msgid "System activity audit"
+msgstr "ביקורת פעילות המערכת"
+
+msgid "Learning analytics"
+msgstr "ניתוח למידה"
+
+msgid "Administrative activity auditing"
+msgstr "ביקורת פעילות ניהולית"
+

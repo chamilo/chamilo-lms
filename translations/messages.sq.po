@@ -33022,3 +33022,18 @@ msgstr "Keni marrë një kërkesë të re miqësie"
 msgid "Diagnosis Management"
 msgstr "Menaxhimi i Diagnozës"
 
+msgid "Tracking"
+msgstr "Ndjekje"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Shiko raportet, statistikat dhe të dhënat e ndjekjes"
+
+msgid "System activity audit"
+msgstr "Auditim i aktivitetit të sistemit"
+
+msgid "Learning analytics"
+msgstr "Analitikë mësimore"
+
+msgid "Administrative activity auditing"
+msgstr "Auditim i aktivitetit administrativ"
+

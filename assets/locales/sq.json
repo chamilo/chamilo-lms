@@ -357,6 +357,8 @@
     "Course management": "Menaxhimi i kurseve",
     "Create course packages for a certain time with training sessions": "Krijoni paketa kursesh p\u00ebr nj\u00eb koh\u00eb t\u00eb caktuar me sesione trajnimi",
     "Sessions management": "Menaxhimi i sesioneve",
+    "Tracking": "Ndjekje",
+    "View reports, statistics and tracking data": "Shiko raportet, statistikat dhe t\u00eb dh\u00ebnat e ndjekjes",
     "Manage the skills of your users, through courses and badges": "Menaxhoni aft\u00ebsit\u00eb e p\u00ebrdoruesve tuaj, p\u00ebrmes kurseve dhe badgeve",
     "Personal data protection": "Mbrojtja e t\u00eb dh\u00ebnave personale",
     "View the status of your server, perform performance tests": "Shihni statusin e serverit tuaj, kryeni testet e performanc\u00ebs",
@@ -1575,5 +1577,7 @@
     "Edit group": "Ndrysho grupin",
     "Received Files": "Kartelat e marra",
     "Share a new file": "Ndaj nj\u00eb kartel\u00eb t\u00eb re",
-    "Latest sent on": "E d\u00ebrguara m\u00eb e re m\u00eb"
+    "Latest sent on": "E d\u00ebrguara m\u00eb e re m\u00eb",
+    "Learning analytics": "Analitik\u00eb m\u00ebsimore",
+    "Administrative activity auditing": "Auditim i aktivitetit administrativ"
 }

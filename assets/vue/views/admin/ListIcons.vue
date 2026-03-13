@@ -22,9 +22,9 @@
         <span class="text-sm font-normal text-gray-50">({{ group.fqcn }})</span>
       </h2>
 
-      <BaseTable
-        :values="group.icons"
-        :is-loading="false"
+      <DataTable
+        :value="group.icons"
+        striped-rows
       >
         <Column
           field="icon"
@@ -46,7 +46,7 @@
           field="value"
           :header="t('MDI icon name')"
         />
-      </BaseTable>
+      </DataTable>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import DataTable from "primevue/datatable"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()

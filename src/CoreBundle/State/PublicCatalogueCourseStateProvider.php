@@ -87,7 +87,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $course->subscribed = $isAuthenticated ? $course->hasSubscriptionByUser($user) : false;
             $course->catalogueDescriptions = [];
 
-            $descriptions = $this->courseDescriptionRepository->findAllInCourse($course);
+            $descriptions = $this->courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
             /** @var CCourseDescription $description */
             foreach ($descriptions as $description) {

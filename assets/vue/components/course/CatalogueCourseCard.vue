@@ -243,36 +243,45 @@ const linkSettings = computed(() => {
   return settings?.link_settings ?? {}
 })
 
-const imageLink = computed(() => {
-  const routeName =
-    linkSettings.value.image_url === "course_home"
-      ? "CourseHome"
-      : linkSettings.value.image_url === "course_about"
-        ? "CourseAbout"
-        : null
-
-  if (routeName && routeExists(routeName)) {
-    return { name: routeName, params: { id: localCourse.value.id } }
+function resolveLinkSetting(value) {
+  if (value === "course_home") {
+    if (routeExists("CourseHome")) {
+      return { type: "route", to: { name: "CourseHome", params: { id: localCourse.value.id } } }
+    }
+  } else if (value === "course_about") {
+    return { type: "url", to: `/course/${localCourse.value.id}/about` }
+  } else if (value === "course_description_popup") {
+    return { type: "popup" }
   }
-
   return null
+}
+
+const imageLinkResolved = computed(() => resolveLinkSetting(linkSettings.value.image_url))
+const titleLinkResolved = computed(() => resolveLinkSetting(linkSettings.value.title_url))
+const infoLinkResolved = computed(() => resolveLinkSetting(linkSettings.value.info_url))
+
+const imageLink = computed(() => {
+  const r = imageLinkResolved.value
+  return r && r.type !== "popup" ? r.to : null
 })
+
+const imageOpensPopup = computed(() => imageLinkResolved.value?.type === "popup")
 
 const titleLink = computed(() => {
-  const routeName = linkSettings.value.title_url === "course_home" ? "CourseHome" : null
-
-  if (routeName && routeExists(routeName)) {
-    return { name: routeName, params: { id: localCourse.value.id } }
-  }
-
-  return null
+  const r = titleLinkResolved.value
+  return r && r.type !== "popup" ? r.to : null
 })
 
-const showInfoPopup = computed(() => {
-  const allowed = ["course_description_popup"]
-  const value = linkSettings.value.info_url
-  return value && allowed.includes(value)
+const titleOpensPopup = computed(() => titleLinkResolved.value?.type === "popup")
+
+const infoLink = computed(() => {
+  const r = infoLinkResolved.value
+  return r && r.type !== "popup" ? r.to : null
 })
+
+const infoOpensPopup = computed(() => infoLinkResolved.value?.type === "popup")
+
+const showInfoButton = computed(() => !!infoLinkResolved.value)
 
 const catalogueDescriptions = computed(() => {
   return Array.isArray(localCourse.value?.catalogueDescriptions) ? localCourse.value.catalogueDescriptions : []
@@ -297,7 +306,20 @@ onMounted(() => {
     <template #header>
       <div class="course-card__header">
         <BaseAppLink
-          v-if="imageLink"
+          v-if="imageLink && typeof imageLink === 'string'"
+          :url="imageLink"
+          aria-label="Open course"
+        >
+          <img
+            :alt="localCourse.title"
+            :src="localCourse.illustrationUrl"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          />
+        </BaseAppLink>
+
+        <BaseAppLink
+          v-else-if="imageLink && typeof imageLink === 'object'"
           :to="imageLink"
           aria-label="Open course"
         >
@@ -309,14 +331,55 @@ onMounted(() => {
           />
         </BaseAppLink>
 
+        <a
+          v-else-if="imageOpensPopup && allowDescription && hasCatalogueDescription"
+          class="cursor-pointer"
+          @click="showDescriptionDialog = true"
+        >
+          <img
+            :alt="localCourse.title"
+            :src="localCourse.illustrationUrl"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          />
+        </a>
+
         <img
           v-else
           :alt="localCourse.title"
           :src="localCourse.illustrationUrl"
         />
 
+        <BaseAppLink
+          v-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'string'"
+          :url="infoLink"
+          class="absolute bottom-0 left-0"
+        >
+          <BaseButton
+            :label="t('Show description')"
+            class="rounded-none"
+            icon="information"
+            only-icon
+            size="small"
+          />
+        </BaseAppLink>
+
+        <BaseAppLink
+          v-else-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'object'"
+          :to="infoLink"
+          class="absolute bottom-0 left-0"
+        >
+          <BaseButton
+            :label="t('Show description')"
+            class="rounded-none"
+            icon="information"
+            only-icon
+            size="small"
+          />
+        </BaseAppLink>
+
         <BaseButton
-          v-if="allowDescription && showInfoPopup && hasCatalogueDescription"
+          v-else-if="allowDescription && infoOpensPopup && hasCatalogueDescription"
           :label="t('Show description')"
           class="absolute bottom-0 left-0 rounded-none"
           icon="information"
@@ -350,11 +413,24 @@ onMounted(() => {
     <template #title>
       <div class="course-card__title">
         <BaseAppLink
-          v-if="showTitle && titleLink"
+          v-if="showTitle && titleLink && typeof titleLink === 'string'"
+          :url="titleLink"
+        >
+          {{ localCourse.title }}
+        </BaseAppLink>
+        <BaseAppLink
+          v-else-if="showTitle && titleLink && typeof titleLink === 'object'"
           :to="titleLink"
         >
           {{ localCourse.title }}
         </BaseAppLink>
+        <a
+          v-else-if="showTitle && titleOpensPopup && allowDescription && hasCatalogueDescription"
+          class="cursor-pointer"
+          @click="showDescriptionDialog = true"
+        >
+          {{ localCourse.title }}
+        </a>
         <template v-else>{{ localCourse.title }}</template>
       </div>
     </template>

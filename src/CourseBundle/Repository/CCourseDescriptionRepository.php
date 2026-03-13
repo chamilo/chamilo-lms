@@ -41,4 +41,19 @@ final class CCourseDescriptionRepository extends ResourceRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Returns all course descriptions without visibility filtering.
+     * Used by the public catalogue where course descriptions should be
+     * visible to any visitor regardless of their role.
+     */
+    public function findAllInCourseForCatalogue(Course $course): array
+    {
+        $qb = $this->getResourcesByCourseIgnoreVisibility($course)
+            ->addOrderBy('resource.progress', 'ASC')
+            ->addOrderBy('resource.iid', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -1572,5 +1572,8 @@
     "My certificates": "\u6211\u7684\u8b49\u66f8",
     "My custom certificate": "\u6211\u7684\u81ea\u8a02\u8b49\u66f8",
     "Avatar": "\u982d\u50cf",
-    "Edit group": "\u7de8\u8f2f\u7fa4\u7d44"
+    "Edit group": "\u7de8\u8f2f\u7fa4\u7d44",
+    "Received Files": "\u6536\u5230\u7684\u6a94\u6848",
+    "Share a new file": "\u9001\u51fa\u65b0\u6a94\u6848",
+    "Latest sent on": "\u6700\u5f8c\u91cd\u9001\u6642\u9593"
 }

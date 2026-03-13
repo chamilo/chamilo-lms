@@ -2267,9 +2267,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getDefaultIllustration(int $size): string
     {
-        $size = empty($size) ? 32 : $size;
-
-        return \sprintf('/img/icons/%s/unknown.png', $size);
+        return '/img/user_default.svg';
     }
 
     public function getAdmin(): ?Admin

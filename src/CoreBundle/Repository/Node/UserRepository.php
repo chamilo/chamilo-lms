@@ -1134,7 +1134,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     ) {
         $user = $this->find($userId);
         if (!$user) {
-            return '/img/icons/64/unknown.png';
+            return '/img/user_default.svg';
         }
 
         switch ($size) {

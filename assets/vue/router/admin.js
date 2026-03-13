@@ -46,5 +46,11 @@ export default {
       meta: { requiresAdmin: true, showBreadcrumb: true, },
       component: () => import("../views/terms/Terms.vue"),
     },
+    {
+      name: "AdminUserList",
+      path: "user-list",
+      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true },
+      component: () => import("../views/admin/UserList.vue"),
+    },
   ],
 }

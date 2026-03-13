@@ -50,11 +50,11 @@ class SkillRankingController extends AbstractController
         foreach ($rows as $row) {
             $userId = (int) $row['userId'];
             $result[] = [
-                'rank'              => $rank++,
-                'firstname'         => $row['firstname'],
-                'lastname'          => $row['lastname'],
-                'avatarUrl'         => $this->userRepository->getUserPicture($userId),
-                'skillsAcquired'    => (int) $row['skillsAcquired'],
+                'rank' => $rank++,
+                'firstname' => $row['firstname'],
+                'lastname' => $row['lastname'],
+                'avatarUrl' => $this->userRepository->getUserPicture($userId),
+                'skillsAcquired' => (int) $row['skillsAcquired'],
                 'currentlyLearning' => $currentlyLearningByUser[$userId] ?? 0,
             ];
         }

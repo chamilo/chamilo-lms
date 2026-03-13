@@ -753,11 +753,11 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         $this->logDebug('[moodleExportExecute] built resource keys', array_keys((array) ($course->resources ?? [])));
 
         $this->logDebug('[moodleExportExecute] built resource counts', [
-            'announcements' => isset($course->resources['announcements']) && is_array($course->resources['announcements']) ? count($course->resources['announcements']) : 0,
-            'events' => isset($course->resources['events']) && is_array($course->resources['events']) ? count($course->resources['events']) : 0,
-            'attendance' => isset($course->resources['attendance']) && is_array($course->resources['attendance']) ? count($course->resources['attendance']) : 0,
-            'gradebook' => isset($course->resources['gradebook']) && is_array($course->resources['gradebook']) ? count($course->resources['gradebook']) : 0,
-            'wiki' => isset($course->resources['wiki']) && is_array($course->resources['wiki']) ? count($course->resources['wiki']) : 0,
+            'announcements' => isset($course->resources['announcements']) && \is_array($course->resources['announcements']) ? \count($course->resources['announcements']) : 0,
+            'events' => isset($course->resources['events']) && \is_array($course->resources['events']) ? \count($course->resources['events']) : 0,
+            'attendance' => isset($course->resources['attendance']) && \is_array($course->resources['attendance']) ? \count($course->resources['attendance']) : 0,
+            'gradebook' => isset($course->resources['gradebook']) && \is_array($course->resources['gradebook']) ? \count($course->resources['gradebook']) : 0,
+            'wiki' => isset($course->resources['wiki']) && \is_array($course->resources['wiki']) ? \count($course->resources['wiki']) : 0,
         ]);
 
         if ('selected' === $scope) {
@@ -943,10 +943,10 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
-                    'cm_cc13_export_download',
-                    ['node' => $node],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ).'?file='.rawurlencode($fileName);
+                'cm_cc13_export_download',
+                ['node' => $node],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ).'?file='.rawurlencode($fileName);
 
             return $this->json([
                 'ok' => true,

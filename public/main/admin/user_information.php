@@ -71,8 +71,7 @@ if (api_can_login_as($userId)) {
             ICON_SIZE_MEDIUM,
             get_lang('Login as')
         ),
-        api_get_path(WEB_CODE_PATH).
-        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.$secToken
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
     );
 }
 
@@ -652,7 +651,7 @@ if (DRH == $user->getStatus()) {
 
 $socialTool = api_get_setting('allow_social_tool');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 $tpl = new Template(null, false, false, false, false, false, false);
 
 $tpl->assign('social_tool', $socialTool);

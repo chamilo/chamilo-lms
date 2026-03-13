@@ -3484,7 +3484,6 @@ function api_detect_feature_context(): string
     $script = basename($script);
 
     $map = [
-        'user_list.php' => 'user',
         'user_add.php' => 'user',
         'user_edit.php' => 'user',
         'session_list.php' => 'session',

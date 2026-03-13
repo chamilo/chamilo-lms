@@ -22,7 +22,7 @@ export default {
       name: "DropboxListReceived",
       path: "received",
       component: () => import("../views/dropbox/DropboxListReceived.vue"),
-      meta: { breadcrumb: "Received files" },
+      meta: { breadcrumb: "Received Files" },
     },
     {
       name: "DropboxCreate",

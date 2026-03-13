@@ -8433,10 +8433,10 @@ msgid "End of activity"
 msgstr "Fin de l'activité"
 
 msgid "Exam (no feedback)"
-msgstr "Pas de feedback"
+msgstr "Pas de rétroalimentation"
 
 msgid "Adaptative test with immediate feedback"
-msgstr "Test adaptatif avec feedback immédiat"
+msgstr "Test adaptatif avec rétroalimentation immédiate"
 
 msgid "Feedback"
 msgstr "Rétroalimentation"
@@ -23553,7 +23553,7 @@ msgstr "Ne pas montrer le score (seulement quand l'utilisateur a utilisé toutes
 msgid "Ranking mode: Do not show results details question by question and show a table with the ranking of all other users."
 msgstr ""
 "Mode classement : Ne pas montrer les résultats question par question, mais "
-"montrer une table de classification par rapport aux autres utilisateurs."
+"montrer une table de classement par rapport aux autres utilisateurs."
 
 msgid "Back to top"
 msgstr "Sommet de la page"
@@ -23771,9 +23771,9 @@ msgstr "Permettre les fichiers htaccess dans les imports SCORM"
 
 msgid "Auto-evaluation mode and ranking"
 msgstr ""
-"Mode auto-évaluation et ranking : Montrer seulement la note globale (pas le "
+"Mode auto-évaluation et classement : Montrer seulement la note globale (pas le "
 "détail de chaque question) et montrer la réponse correcte et la réponse "
-"sélectionnée par l'apprenant, tout en montrant la table de classification"
+"sélectionnée par l'apprenant, tout en montrant la table de classement"
 
 msgid "You're receiving a copy because, you're a course coach"
 msgstr "Vous recevez cette copie en tant que tuteur de ce cours"
@@ -24672,7 +24672,7 @@ msgid "Back to the attempt list"
 msgstr "Retour à la liste des tentatives"
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
-msgstr "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte."
+msgstr "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et sa rétroalimentation à chaque tentative, ajouter la réponse correcte et sa rétroalimentation lorsque la limite choisie de tentatives est atteinte."
 
 msgid "Signed in as"
 msgstr "Connecté comme"

@@ -73,11 +73,13 @@ export function useSkillWheel({ onSkillDetail } = {}) {
     root.each((d) => (d.current = d))
 
     // Create the arc generator.
-    // The center circle uses centerRadius; outer rings use the full radius unit.
+    // Shrink only the center (depth 0–1) from radius to centerRadius.
+    // All outer rings keep their original width (radius per depth unit).
+    const centerShrink = radius - centerRadius
+
     function depthToRadius(y) {
       if (y <= 0) return 0
-      if (y <= 1) return centerRadius + (y - 1) * (radius - centerRadius)
-      return radius + (y - 1) * radius
+      return y * radius - centerShrink
     }
 
     const arc = d3

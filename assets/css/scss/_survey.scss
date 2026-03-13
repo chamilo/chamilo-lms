@@ -34,7 +34,7 @@
     td {
       border-color: $border;
       color: $text;
-      background: #fff;
+      @apply bg-white;
     }
 
     th[scope="row"] {
@@ -79,18 +79,18 @@
   // ---- spacing for the number pagination row (if present) ----
   #question_report_questionnumbers {
     margin: 10px 0 16px;
-    display: flex;
+    @apply flex;
     gap: 6px;
 
     li {
       list-style: none;
 
       a {
-        display: block;
+        @apply block;
         padding: 6px 10px;
         border: 1px solid $border;
         border-radius: 8px;
-        background: #fff;
+        @apply bg-white;
         color: $text;
         text-decoration: none;
 
@@ -106,16 +106,12 @@
 }
 
 form#question-survey {
-  display: block !important;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  @apply block m-0 box-border;
 }
 
 form#question-survey .survey_question {
-  display: block !important;
+  @apply block m-0 box-border;
   width: 100% !important;
-  box-sizing: border-box;
   margin-bottom: 1rem !important;
   clear: both;
 }
@@ -124,7 +120,7 @@ form#question-survey .survey_question {
 form#question-survey .survey_question .question-text,
 form#question-survey .survey_question > label,
 form#question-survey .survey_question .control-label {
-  display: block;
+  @apply block;
   margin-bottom: .4rem;
   font-weight: 600;
   color: #111827;
@@ -135,14 +131,14 @@ form#question-survey .survey_question .options {
   display: flex !important;
   flex-wrap: wrap;
   gap: .5rem;
-  align-items: center;
+  @apply items-center;
   margin-top: .25rem;
 }
 
 /* Radios inline vs vertical */
 form#question-survey .survey_question .radio-inline {
   display: inline-flex;
-  align-items: center;
+  @apply items-center;
   gap: .35rem;
   margin-right: .6rem;
 }

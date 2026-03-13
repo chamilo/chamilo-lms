@@ -1,20 +1,22 @@
 // BASE CSS
 
-.table{
-  .checkbox{
+.table {
+  .checkbox {
+    @apply block;
     margin-top: -1px;
     margin-bottom: 0;
     padding: 0;
     width: 15px;
     position: relative;
-    display: block;
-    label{
+
+    label {
       cursor: pointer;
       padding-left: 0;
-      color: rgba(0,0,0, 0.5);
+      color: rgba(0, 0, 0, 0.5);
       min-height: 20px;
       margin-bottom: 0;
     }
+
     input[type=checkbox] {
       opacity: 0;
       position: absolute;
@@ -27,11 +29,13 @@
       pointer-events: none;
     }
   }
-  .avatar-user{
+
+  .avatar-user {
     position: relative;
-    display: block;
+    @apply block;
     width: 100%;
-    .avatar{
+
+    .avatar {
       border: 1px solid #cdcdcd;
     }
   }

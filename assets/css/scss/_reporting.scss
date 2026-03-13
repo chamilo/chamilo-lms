@@ -41,15 +41,15 @@ $reporting-text-muted: #4b5563;
 // -------------------------------------
 
 .course-log-nav {
-  display: flex;
+  @apply flex;
   flex-wrap: wrap;
   gap: 6px;
-  align-items: center;
+  @apply items-center;
 }
 
 .course-log-nav-link {
   display: inline-flex;
-  align-items: center;
+  @apply items-center;
   justify-content: center;
   padding: 4px;
   border-radius: 9999px;
@@ -130,8 +130,7 @@ $reporting-text-muted: #4b5563;
   max-width: 100%;
   padding: 8px 16px 0;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   gap: 8px;
 
   h1 {
@@ -147,8 +146,7 @@ $reporting-text-muted: #4b5563;
   margin-top: 8px;
   padding: 0 16px;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   gap: 8px;
   flex-wrap: wrap;
 
@@ -179,18 +177,8 @@ $reporting-text-muted: #4b5563;
   border-color: $reporting-border;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
   min-height: 60vh;
-  display: flex;
+  @apply flex;
   flex-direction: column;
-}
-
-#group-reporting-wrapper .card > .flex.justify-between {
-  padding: 8px 12px;
-}
-
-#group-reporting-wrapper .card > .flex.justify-between > .relative.flex {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 #group-reporting-wrapper table {
@@ -287,7 +275,7 @@ $reporting-text-muted: #4b5563;
     border: 1px solid $reporting-border;
     border-radius: 6px;
     padding: 6px 8px;
-    background: #ffffff;
+    @apply bg-white;
   }
 
   .has-long-list .radio,
@@ -324,7 +312,7 @@ $reporting-text-muted: #4b5563;
   margin-top: 6px;
 
   > span {
-    display: flex;
+    @apply flex;
     flex-direction: column;
     gap: 6px;
   }
@@ -347,8 +335,7 @@ $reporting-text-muted: #4b5563;
   .field-radiobutton {
     width: 50%;
     float: left;
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
     gap: 6px;
     margin-bottom: 4px;
 
@@ -386,7 +373,7 @@ $reporting-text-muted: #4b5563;
 
 #unhideButtons {
   margin: 12px 0 6px;
-  display: flex;
+  @apply flex;
   flex-wrap: wrap;
   gap: 4px;
 }
@@ -399,8 +386,7 @@ $reporting-text-muted: #4b5563;
   margin: 4px 0 0;
 
   li {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
     gap: 6px;
     font-size: 13px;
     padding: 2px 0;
@@ -409,7 +395,7 @@ $reporting-text-muted: #4b5563;
 
 // Meta cards at the top of courseLog
 .course-log-meta {
-  display: flex;
+  @apply flex;
   flex-wrap: wrap;
   gap: 16px;
   margin: 16px 0 8px;
@@ -428,8 +414,7 @@ $reporting-text-muted: #4b5563;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 
   &__header {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
     gap: 6px;
     margin-bottom: 8px;
   }
@@ -459,7 +444,7 @@ $reporting-text-muted: #4b5563;
 
 /* Card used for each boss column */
 .boss_column {
-  display: flex;
+  @apply flex;
   flex-direction: column;
   background-color: #f9fafb;
   border-radius: 0.75rem;
@@ -488,7 +473,7 @@ $reporting-text-muted: #4b5563;
 }
 
 .row .col-md-1 {
-  display: flex;
+  @apply flex;
   flex: 0 0 auto;
 }
 
@@ -499,7 +484,7 @@ $reporting-text-muted: #4b5563;
 }
 
 .flex-row {
-  display: flex;
+  @apply flex;
   -webkit-box-orient: horizontal !important;
   -webkit-box-direction: normal !important;
   -webkit-flex-direction: row !important;
@@ -538,8 +523,7 @@ $reporting-text-muted: #4b5563;
 }
 
 .course-log-session-item {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   gap: 6px;
   padding: 3px 0;
   font-size: 13px;
@@ -565,7 +549,7 @@ table.session-metrics-header th:first-child {
 }
 
 table.session-metrics-header th span {
-  display: block;
+  @apply block;
   transform: none !important;
   writing-mode: horizontal-tb !important;
 }

@@ -126,8 +126,7 @@
   border-top: 1px dashed #8c8b8b;
 
   &:after {
-    @apply inline-block relative;
-    background: #FFF;
+    @apply inline-block relative bg-white;
     color: #8c8b8b;
     content: '\002702';
     font-size: 18px;

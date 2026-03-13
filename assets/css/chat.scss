@@ -128,7 +128,7 @@
 .emoji-wysiwyg-editor-preview,
 .emoji-wysiwyg-editor {
   height: 50px;
-  background-color: #ffffff;
+  @apply bg-white;
   border-radius: 10px;
   border: 1px solid #EEEEEE;
   color: #666;

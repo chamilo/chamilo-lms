@@ -52,7 +52,11 @@ const imageSize = computed(() => {
 
 const finalImageUrl = computed(() => {
   if (!props.imageUrl) {
-    return `/img/icons/${imageSize.value}/unknown.png`
+    return "/img/user_default.svg"
+  }
+
+  if (props.imageUrl.endsWith(".svg")) {
+    return props.imageUrl
   }
 
   return `${props.imageUrl}?w=${imageSize.value}&h=${imageSize.value}&fit=crop`

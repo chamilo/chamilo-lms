@@ -184,24 +184,42 @@ switch ($action) {
                 $start_date,
                 $end_date
             );
-            $stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
-            $stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-            $stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
+
+            $totalLabel = get_lang('Total');
+            $averageLabel = get_lang('Average');
+            $quantityLabel = get_lang('Quantity');
+
+            $totalValue = $rst['total'] ?? '-';
+            $averageValue = $rst['avg'] ?? '-';
+            $quantityValue = $rst['times'] ?? 0;
+
+            $stats = '
+            <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="rounded-xl bg-gray-20 p-4">
+                    <dt class="text-sm font-medium text-gray-500">'.$totalLabel.'</dt>
+                    <dd class="mt-2 text-xl font-semibold text-gray-900">'.$totalValue.'</dd>
+                </div>
+                <div class="rounded-xl bg-gray-20 p-4">
+                    <dt class="text-sm font-medium text-gray-500">'.$averageLabel.'</dt>
+                    <dd class="mt-2 text-xl font-semibold text-gray-900">'.$averageValue.'</dd>
+                </div>
+                <div class="rounded-xl bg-gray-20 p-4">
+                    <dt class="text-sm font-medium text-gray-500">'.$quantityLabel.'</dt>
+                    <dd class="mt-2 text-xl font-semibold text-gray-900">'.$quantityValue.'</dd>
+                </div>
+            </dl>';
+
             $result['stats'] = $stats;
             $result['graph_result'] = MySpace::grapher($connections, $start_date, $end_date, $type);
         } else {
-            $result['result'] = Display::return_message(
-                get_lang('No data available'),
-                'warning'
-            );
-            $result['graph_result'] = Display::return_message(
-                get_lang('No data available'),
-                'warning'
-            );
-            $result['stats'] = Display::return_message(
-                get_lang('No data available'),
-                'warning'
-            );
+            $emptyMessage = get_lang('No data available');
+
+            $result['result'] = Display::return_message($emptyMessage, 'warning');
+            $result['graph_result'] = Display::return_message($emptyMessage, 'warning');
+            $result['stats'] = '
+            <div class="rounded-xl border border-gray-30 bg-gray-10 px-4 py-3 text-sm text-amber-800">
+                '.$emptyMessage.'
+            </div>';
         }
         header('Cache-Control: no-cache');
         echo json_encode($result);

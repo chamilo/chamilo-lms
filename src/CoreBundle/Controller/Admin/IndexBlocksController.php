@@ -590,32 +590,12 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-stats',
             'url' => '/main/admin/statistics/index.php',
-            'label' => $this->translator->trans('Statistics'),
-        ];
-        $items[] = [
-            'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
-            'label' => $this->translator->trans('Reports'),
-        ];
-        $items[] = [
-            'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
-            'label' => $this->translator->trans('Teachers time report'),
+            'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [
             'class' => 'item-my-space',
             'url' => '/main/my_space/index.php',
-            'label' => $this->translator->trans('Reporting'),
-        ];
-        $items[] = [
-            'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
-            'label' => $this->translator->trans('Tickets'),
-        ];
-        $items[] = [
-            'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
-            'label' => $this->translator->trans('Special exports'),
+            'label' => $this->translator->trans('Learning analytics'),
         ];
         $items[] = [
             'class' => 'item-quarterly-report',
@@ -623,9 +603,29 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Quarterly report'),
         ];
         $items[] = [
+            'class' => 'item-teacher-time-report',
+            'url' => '/main/admin/teacher_time_report.php',
+            'label' => $this->translator->trans('Teachers time report'),
+        ];
+        $items[] = [
+            'class' => 'item-stats-report',
+            'url' => '/main/my_space/company_reports.php',
+            'label' => $this->translator->trans('Corporate report'),
+        ];
+        $items[] = [
+            'class' => 'item-special-export',
+            'url' => '/main/admin/special_exports.php',
+            'label' => $this->translator->trans('Special exports'),
+        ];
+        $items[] = [
             'class' => 'item-activity-audit',
             'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'activities']),
-            'label' => $this->translator->trans('System activity audit'),
+            'label' => $this->translator->trans('Administrative activity auditing'),
+        ];
+        $items[] = [
+            'class' => 'item-ticket-system',
+            'url' => '/main/ticket/tickets.php',
+            'label' => $this->translator->trans('Tickets'),
         ];
 
         return $items;

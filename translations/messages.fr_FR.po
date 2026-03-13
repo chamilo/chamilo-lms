@@ -23995,7 +23995,7 @@ msgid "Sessions by date"
 msgstr "Sessions par dates"
 
 msgid "Global statistics"
-msgstr "Statistiques générales"
+msgstr "Statistiques globales"
 
 msgid "Weeks"
 msgstr "Semaines"

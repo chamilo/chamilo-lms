@@ -32945,3 +32945,9 @@ msgstr ""
 
 msgid "System activity audit"
 msgstr ""
+
+msgid "Learning analytics"
+msgstr ""
+
+msgid "Administrative activity auditing"
+msgstr ""

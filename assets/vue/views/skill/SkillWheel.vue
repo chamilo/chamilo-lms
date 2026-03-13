@@ -40,10 +40,39 @@ const showSkilProfileForm = ref(false)
 const showProfileMatches = ref(false)
 const showSkillDetail = ref(false)
 const skillDetail = ref(null)
+const skillGradebookLinks = ref([])
+const isLoadingDetail = ref(false)
 
-function onSkillDetail(detail) {
+async function onSkillDetail(detail) {
   skillDetail.value = detail
+  skillGradebookLinks.value = []
   showSkillDetail.value = true
+  isLoadingDetail.value = true
+
+  try {
+    const data = await skillService.getSkillDetail(detail.id)
+    skillGradebookLinks.value = data.gradebookLinks || []
+  } catch (e) {
+    showErrorNotification(e)
+  } finally {
+    isLoadingDetail.value = false
+  }
+}
+
+function addSkillToSearch(skillId, skillName) {
+  const alreadyAdded = foundSkills.value.some((s) => s.id === skillId)
+  if (!alreadyAdded) {
+    foundSkills.value = [...foundSkills.value, { id: skillId, name: skillName, value: `/api/skills/${skillId}` }]
+  }
+  showSkillDetail.value = false
+}
+
+function gradebookUrl(link) {
+  let url = `/main/gradebook/index.php?cid=${link.courseId}`
+  if (link.sessionId) {
+    url += `&sid=${link.sessionId}`
+  }
+  return url
 }
 
 // Kept for compatibility (origin might still be used elsewhere, e.g. breadcrumb logic)
@@ -246,8 +275,66 @@ async function onSearchProfile(profile) {
           v-html="skillDetail.description"
         />
       </div>
-      <div v-if="!skillDetail.shortCode && !skillDetail.parentPath && !skillDetail.description">
-        <p>{{ t("No additional details available for this skill.") }}</p>
+
+      <div>
+        <h4 class="font-semibold mb-2">
+          {{ t("This skill can be obtained through:") }}
+        </h4>
+        <div
+          v-if="isLoadingDetail"
+          class="text-gray-500"
+        >
+          {{ t("Loading") }}...
+        </div>
+        <ul
+          v-else-if="skillGradebookLinks.length"
+          class="list-disc pl-4"
+        >
+          <li
+            v-for="link in skillGradebookLinks"
+            :key="`${link.courseId}-${link.sessionId}`"
+          >
+            <a
+              :href="gradebookUrl(link)"
+              class="text-primary hover:underline"
+            >
+              {{ link.courseTitle }}
+              <span v-if="link.sessionTitle">({{ link.sessionTitle }})</span>
+            </a>
+          </li>
+        </ul>
+        <p
+          v-else
+          class="text-gray-500"
+        >
+          {{ t("No course currently allows you to obtain this skill.") }}
+        </p>
+      </div>
+
+      <div
+        v-if="canUseProfiles"
+        class="flex gap-2 mt-2"
+      >
+        <a :href="`/main/skills/skill_edit.php?id=${skillDetail.id}`">
+          <BaseButton
+            :label="t('Edit')"
+            icon="edit"
+            type="primary"
+          />
+        </a>
+        <a :href="`/main/skills/skill_create.php?parent=${skillDetail.id}`">
+          <BaseButton
+            :label="t('Create child skill')"
+            icon="add"
+            type="success"
+          />
+        </a>
+        <BaseButton
+          :label="t('Add skill to search profile')"
+          icon="search"
+          type="secondary"
+          @click="addSkillToSearch(skillDetail.id, skillDetail.name)"
+        />
       </div>
     </div>
   </Dialog>

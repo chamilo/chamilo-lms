@@ -16073,6 +16073,15 @@ msgstr "Short code"
 msgid "Create child skill"
 msgstr "Create child skill"
 
+msgid "This skill can be obtained through:"
+msgstr "This skill can be obtained through:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "No course currently allows you to obtain this skill."
+
+msgid "Add skill to search profile"
+msgstr "Add skill to search profile"
+
 msgid "Search profile matches"
 msgstr "Search profile matches"
 

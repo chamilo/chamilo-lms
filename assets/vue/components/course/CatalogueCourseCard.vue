@@ -274,7 +274,14 @@ const titleLink = computed(() => {
 
 const titleOpensPopup = computed(() => titleLinkResolved.value?.type === "popup")
 
-const showInfoPopup = computed(() => infoLinkResolved.value?.type === "popup")
+const infoLink = computed(() => {
+  const r = infoLinkResolved.value
+  return r && r.type !== "popup" ? r.to : null
+})
+
+const infoOpensPopup = computed(() => infoLinkResolved.value?.type === "popup")
+
+const showInfoButton = computed(() => !!infoLinkResolved.value)
 
 const catalogueDescriptions = computed(() => {
   return Array.isArray(localCourse.value?.catalogueDescriptions) ? localCourse.value.catalogueDescriptions : []
@@ -343,8 +350,36 @@ onMounted(() => {
           :src="localCourse.illustrationUrl"
         />
 
+        <BaseAppLink
+          v-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'string'"
+          :url="infoLink"
+          class="absolute bottom-0 left-0"
+        >
+          <BaseButton
+            :label="t('Show description')"
+            class="rounded-none"
+            icon="information"
+            only-icon
+            size="small"
+          />
+        </BaseAppLink>
+
+        <BaseAppLink
+          v-else-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'object'"
+          :to="infoLink"
+          class="absolute bottom-0 left-0"
+        >
+          <BaseButton
+            :label="t('Show description')"
+            class="rounded-none"
+            icon="information"
+            only-icon
+            size="small"
+          />
+        </BaseAppLink>
+
         <BaseButton
-          v-if="allowDescription && showInfoPopup && hasCatalogueDescription"
+          v-else-if="allowDescription && infoOpensPopup && hasCatalogueDescription"
           :label="t('Show description')"
           class="absolute bottom-0 left-0 rounded-none"
           icon="information"

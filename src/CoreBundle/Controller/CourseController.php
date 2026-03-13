@@ -782,9 +782,9 @@ class CourseController extends ToolBaseController
                 true
             ),
             'subscription' => $subscriptionUser,
-            'url' => '',
+            'url' => $urlCourse,
             'is_premium' => '',
-            'token' => '',
+            'token' => \Security::get_token(),
             'base_url' => $request->getSchemeAndHttpHost(),
             'allow_subscribe' => $allowSubscribe,
         ];

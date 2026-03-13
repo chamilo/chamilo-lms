@@ -103,13 +103,9 @@ const sendNotificationMessage = async (friend) => {
   const targetUserId = extractIdFromPath(friend["@id"])
 
   const messageData = {
-    userId: userId,
-    targetUserId: targetUserId,
-    action: "send_message",
-    subject: t("You have a new friend request"),
-    content:
-      t("You have received a new friend request. Visit the invitations page to accept or reject the request.") +
-      ` <a href="/resources/friends">${t("here")}</a>`,
+    userId,
+    targetUserId,
+    action: "send_friend_request_message",
   }
 
   try {

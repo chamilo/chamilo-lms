@@ -51,7 +51,6 @@ if (!in_array($sord, ['asc', 'desc'])) {
 $courseActions = [
     'get_exercise_results',
     'get_exercise_pending_results',
-    'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_work_teacher',
     'get_work_student',
@@ -76,6 +75,7 @@ $adminActions = [
     'get_user_course_report',
     'get_sessions_tracking',
     'get_sessions',
+    'get_exercise_results_report',
 ];
 
 $origin = $_REQUEST['origin'] ?? '';
@@ -775,34 +775,42 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         api_protect_admin_script();
-        $exerciseId = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : 0;
-        $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
 
-        if (empty($exerciseId)) {
-            exit;
-        }
+        $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $courseInfo = [];
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $courseId = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : '';
-            if (!empty($courseId)) {
-                $courseInfo = api_get_course_info_by_id($courseId);
+            $fallbackCourseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0;
+            if (!empty($fallbackCourseId)) {
+                $courseInfo = api_get_course_info_by_id($fallbackCourseId);
             }
         }
 
-        if (empty($courseInfo)) {
-            exit;
+        if (empty($exerciseId) || empty($courseInfo)) {
+            $count = 0;
+            break;
         }
 
-        $startDate = Database::escape_string($_REQUEST['start_date']);
+        $startDate = isset($_REQUEST['start_date']) ? Database::escape_string($_REQUEST['start_date']) : '';
+
+        $reportWhereCondition = '';
+
         if (!empty($whereCondition)) {
-            $whereCondition = " AND $whereCondition";
+            $reportWhereCondition .= " AND ($whereCondition) ";
         }
-        $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
+
+        if (!empty($startDate)) {
+            $reportWhereCondition .= " AND exe_date > '$startDate' ";
+        }
+
+        $reportWhereCondition .= " AND te.status = '' ";
+
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
-            $whereCondition,
+            $reportWhereCondition,
             $courseInfo['real_id'],
             true
         );
@@ -1709,6 +1717,24 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
+        $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $courseInfo = [];
+
+        if (!empty($courseId)) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+        } else {
+            $fallbackCourseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0;
+            if (!empty($fallbackCourseId)) {
+                $courseInfo = api_get_course_info_by_id($fallbackCourseId);
+            }
+        }
+
+        if (empty($exerciseId) || empty($courseInfo)) {
+            $result = [];
+            break;
+        }
+
         $columns = [
             'firstname',
             'lastname',
@@ -1786,7 +1812,19 @@ switch ($action) {
             $columns[] = 'actions';
         }
 
-        $whereCondition .= " AND te.status = '' ";
+        $startDate = isset($_REQUEST['start_date']) ? Database::escape_string($_REQUEST['start_date']) : '';
+
+        $reportWhereCondition = '';
+
+        if (!empty($whereCondition)) {
+            $reportWhereCondition .= " AND ($whereCondition) ";
+        }
+
+        if (!empty($startDate)) {
+            $reportWhereCondition .= " AND exe_date > '$startDate' ";
+        }
+
+        $reportWhereCondition .= " AND te.status = '' ";
 
         $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
         $result = ExerciseLib::get_exam_results_data(
@@ -1795,7 +1833,7 @@ switch ($action) {
             $sidx,
             $sord,
             $exerciseId,
-            $whereCondition,
+            $reportWhereCondition,
             false,
             $courseInfo['real_id'],
             true,

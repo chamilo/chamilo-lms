@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -529,6 +530,17 @@ class AiController extends AbstractController
         $questionId = $request->request->getInt('questionId', 0);
         $courseId = $request->request->getInt('courseId', 0);
 
+        if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
+            return $this->json(['error' => 'Missing parameters'], 400);
+        }
+
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         // Optional provider selection (form-encoded)
         $aiProvider = $request->request->get('ai_provider');
 
@@ -546,10 +558,6 @@ class AiController extends AbstractController
             if ('' === $aiProvider) {
                 $aiProvider = null;
             }
-        }
-
-        if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
-            return $this->json(['error' => 'Missing parameters'], 400);
         }
 
         /** @var TrackEExercise|null $trackExercise */

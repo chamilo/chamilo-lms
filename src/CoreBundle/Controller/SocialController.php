@@ -1044,7 +1044,8 @@ class SocialController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         MessageRepository $messageRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -1068,6 +1069,36 @@ class SocialController extends AbstractController
 
         try {
             switch ($action) {
+                case 'send_friend_request_message':
+                    $receiverLocale = $friendUser->getLocale() ?: null;
+
+                    $subject = $translator->trans(
+                        'You have a new friend request',
+                        [],
+                        'messages',
+                        $receiverLocale
+                    );
+
+                    $content = $translator->trans(
+                            'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        ).' <a href="/resources/friends/invitations">'.
+                        $translator->trans(
+                            'here',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        ).'</a>';
+
+                    $result = MessageManager::send_message(
+                        $friendUser->getId(),
+                        $subject,
+                        $content
+                    );
+
+                    break;
                 case 'send_invitation':
                     $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
@@ -1077,7 +1108,42 @@ class SocialController extends AbstractController
                     break;
 
                 case 'send_message':
-                    $result = MessageManager::send_message($friendUser->getId(), $subject, $content);
+                    $receiverLocale = $friendUser->getLocale() ?: null;
+
+                    $isFriendInvitationMessage =
+                        'You have a new friend request' === trim((string) $subject) &&
+                        str_contains(
+                            (string) $content,
+                            'You have received a new friend request. Visit the invitations page to accept or reject the request.'
+                        );
+
+                    if ($isFriendInvitationMessage) {
+                        $subject = $translator->trans(
+                            'You have a new friend request',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        );
+
+                        $content = $translator->trans(
+                                'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                                [],
+                                'messages',
+                                $receiverLocale
+                            ).' <a href="/resources/friends/invitations">'.
+                            $translator->trans(
+                                'here',
+                                [],
+                                'messages',
+                                $receiverLocale
+                            ).'</a>';
+                    }
+
+                    $result = MessageManager::send_message(
+                        $friendUser->getId(),
+                        $subject,
+                        $content
+                    );
 
                     break;
 

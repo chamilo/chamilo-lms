@@ -50,14 +50,26 @@
 
       <ul
         v-if="resourceFileList && resourceFileList.length > 0"
-        class="space-y-2"
+        class="space-y-3"
       >
         <li
           v-for="(resourceFile, index) in resourceFileList"
           :key="index"
-          class="text-body-2"
-          v-text="resourceFile.originalName"
-        />
+          class="rounded border border-gray-25 p-3"
+        >
+          <p
+            class="text-body-2 font-semibold break-all"
+            v-text="resourceFile.originalName || resourceFile.displayName || t('Attachment')"
+          />
+
+          <audio
+            v-if="resourceFile.isAudio && resourceFile.previewUrl"
+            :src="resourceFile.previewUrl"
+            class="mt-2 w-full"
+            controls
+            preload="metadata"
+          />
+        </li>
       </ul>
 
       <BaseUploader
@@ -74,7 +86,7 @@
 <script setup>
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
-import { computed, ref, watch } from "vue"
+import { computed, onBeforeUnmount, ref, watch } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseUploader from "../basecomponents/BaseUploader.vue"
 import resourceFileService from "../../services/resourceFileService"
@@ -185,8 +197,46 @@ async function asyncFind(query) {
     }))
 }
 
-function onUploadSuccess({ response }) {
-  resourceFileList.value.push(response)
+function isAudioAttachment(response, file) {
+  const mimeType = response?.mimeType || file?.type || ""
+  if (typeof mimeType === "string" && mimeType.startsWith("audio/")) {
+    return true
+  }
+
+  const fileName = response?.originalName || file?.name || ""
+  return /\.(mp3|wav|ogg|m4a|aac|webm)$/i.test(fileName)
+}
+
+function createPreviewUrl(file) {
+  if (!file?.data || typeof URL === "undefined" || typeof URL.createObjectURL !== "function") {
+    return ""
+  }
+
+  try {
+    return URL.createObjectURL(file.data)
+  } catch (error) {
+    return ""
+  }
+}
+
+function revokePreviewUrl(previewUrl) {
+  if (!previewUrl || typeof URL === "undefined" || typeof URL.revokeObjectURL !== "function") {
+    return
+  }
+
+  URL.revokeObjectURL(previewUrl)
+}
+
+function onUploadSuccess({ file, response }) {
+  const isAudio = isAudioAttachment(response, file)
+  const previewUrl = isAudio ? createPreviewUrl(file) : ""
+
+  resourceFileList.value.push({
+    ...response,
+    displayName: response?.originalName || file?.name || "",
+    isAudio,
+    previewUrl,
+  })
 }
 
 const isUploading = ref(false)
@@ -226,4 +276,10 @@ function onSubmit() {
 
   emit("submit", messagePayload.value)
 }
+
+onBeforeUnmount(() => {
+  resourceFileList.value.forEach((resourceFile) => {
+    revokePreviewUrl(resourceFile.previewUrl)
+  })
+})
 </script>

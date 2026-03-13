@@ -348,6 +348,10 @@ switch ($action) {
         }
         break;
     case 'display_sessions_courses':
+        if (!$isPlatformAdmin && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         // Close the session as we don't need it any further
         session_write_close();
 
@@ -398,6 +402,10 @@ switch ($action) {
         echo $result;
         break;
     case 'search_room':
+        if (!$isPlatformAdmin && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         $em = Database::getManager();
         $term = isset($_REQUEST['q']) ? trim($_REQUEST['q']) : '';
         $qb = $em->createQueryBuilder()

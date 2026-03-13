@@ -52,5 +52,11 @@ export default {
       meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true },
       component: () => import("../views/admin/UserList.vue"),
     },
+    {
+      name: "AdminListIcons",
+      path: "list-icons",
+      meta: { requiresAdmin: true, showBreadcrumb: true },
+      component: () => import("../views/admin/ListIcons.vue"),
+    },
   ],
 }

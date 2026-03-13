@@ -32951,3 +32951,12 @@ msgstr ""
 
 msgid "Administrative activity auditing"
 msgstr ""
+
+msgid "List icons"
+msgstr ""
+
+msgid "Constant name"
+msgstr ""
+
+msgid "MDI icon name"
+msgstr ""

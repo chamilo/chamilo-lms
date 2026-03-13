@@ -33037,3 +33037,12 @@ msgstr "Learning analytics"
 
 msgid "Administrative activity auditing"
 msgstr "Administrative activity auditing"
+
+msgid "List icons"
+msgstr "List icons"
+
+msgid "Constant name"
+msgstr "Constant name"
+
+msgid "MDI icon name"
+msgstr "MDI icon name"

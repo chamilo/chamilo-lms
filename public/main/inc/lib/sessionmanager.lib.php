@@ -6560,7 +6560,7 @@ class SessionManager
 
         if (isset($active)) {
             $active = (int) $active;
-            $userConditions .= " AND active = $active";
+            $userConditions .= " AND u.active = $active";
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
@@ -6644,7 +6644,12 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND (
+            u.last_login IS NULL OR
+            u.last_login = '0000-00-00 00:00:00' OR
+            u.last_login = '0000-00-00' OR
+            u.last_login <= '$lastConnectionDate'
+        ) ";
         }
 
         if (!empty($keyword)) {

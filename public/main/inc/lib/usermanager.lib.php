@@ -4509,7 +4509,12 @@ class UserManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND (
+            u.last_login IS NULL OR
+            u.last_login = '0000-00-00 00:00:00' OR
+            u.last_login = '0000-00-00' OR
+            u.last_login <= '$lastConnectionDate'
+        ) ";
         }
 
         $sessionConditionsCoach = null;
@@ -4549,12 +4554,6 @@ class UserManager
 					";
                 }
 
-                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
-                /*
-                INNER JOIN $tbl_session_rel_user sru
-                ON (sru.user_id = u.id)
-                INNER JOIN $tbl_session_rel_course_rel_user scu
-                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -4643,7 +4642,6 @@ class UserManager
             }
 
             if (!empty($column) && !empty($direction)) {
-                // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
                 $orderBy = " ORDER BY `$column` $direction ";
             }

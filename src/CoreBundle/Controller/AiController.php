@@ -31,6 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -529,6 +530,17 @@ class AiController extends AbstractController
         $questionId = $request->request->getInt('questionId', 0);
         $courseId = $request->request->getInt('courseId', 0);
 
+        if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
+            return $this->json(['error' => 'Missing parameters'], 400);
+        }
+
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         // Optional provider selection (form-encoded)
         $aiProvider = $request->request->get('ai_provider');
 
@@ -546,10 +558,6 @@ class AiController extends AbstractController
             if ('' === $aiProvider) {
                 $aiProvider = null;
             }
-        }
-
-        if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
-            return $this->json(['error' => 'Missing parameters'], 400);
         }
 
         /** @var TrackEExercise|null $trackExercise */

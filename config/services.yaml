@@ -62,6 +62,10 @@ services:
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
+    Symfony\Component\Security\Csrf\CsrfTokenManagerInterface:
+        alias: security.csrf.token_manager
+        public: true
+
     # Locale listener
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
         arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']

@@ -52,8 +52,8 @@
                                     <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
                                         <em class="mdi mdi-linkedin"></em> LinkedIn
                                     </a>
-                                    <a href="#" onclick="navigator.clipboard.writeText('{{ url }}');this.textContent=' {{ "Link copied!"|trans }}';return false;">
-                                        <em class="mdi mdi-paperclip"></em> {{ "Copy link"|trans }}
+                                    <a href="#" id="copy-link-btn" data-url="{{ url|e('html_attr') }}">
+                                        <em class="mdi mdi-paperclip"></em> <span>{{ "Copy link"|trans }}</span>
                                     </a>
                                 </div>
                             </div>
@@ -152,6 +152,30 @@
 
         <script>
           $(function() {
+            var copyBtn = document.getElementById('copy-link-btn');
+            if (copyBtn) {
+              copyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var url = this.getAttribute('data-url');
+                var span = this.querySelector('span');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(url).then(function() {
+                    span.textContent = '{{ "Link copied!"|trans }}';
+                  });
+                } else {
+                  var ta = document.createElement('textarea');
+                  ta.value = url;
+                  ta.style.position = 'fixed';
+                  ta.style.opacity = '0';
+                  document.body.appendChild(ta);
+                  ta.select();
+                  document.execCommand('copy');
+                  document.body.removeChild(ta);
+                  span.textContent = '{{ "Link copied!"|trans }}';
+                }
+              });
+            }
+
             $('.course-information').readmore({
               speed: 100,
               lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',

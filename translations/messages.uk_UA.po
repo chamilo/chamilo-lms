@@ -33018,3 +33018,18 @@ msgstr "Ви отримали новий запит у друзі"
 msgid "Diagnosis Management"
 msgstr "Керування діагностикою"
 
+msgid "Tracking"
+msgstr "Відстеження"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Перегляд звітів, статистики та даних відстеження"
+
+msgid "System activity audit"
+msgstr "Аудит активності системи"
+
+msgid "Learning analytics"
+msgstr "Навчальна аналітика"
+
+msgid "Administrative activity auditing"
+msgstr "Аудит адміністративної активності"
+

@@ -33024,3 +33024,18 @@ msgstr "Yeni bir arkadaşlık isteği aldınız"
 msgid "Diagnosis Management"
 msgstr "Teşhis Yönetimi"
 
+msgid "Tracking"
+msgstr "İzleme"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Raporları, istatistikleri ve izleme verilerini görüntüle"
+
+msgid "System activity audit"
+msgstr "Sistem etkinliği denetimi"
+
+msgid "Learning analytics"
+msgstr "Öğrenme analitiği"
+
+msgid "Administrative activity auditing"
+msgstr "Yönetimsel etkinlik denetimi"
+

@@ -357,6 +357,8 @@
     "Course management": "\uacfc\ubaa9 \uad00\ub9ac",
     "Create course packages for a certain time with training sessions": "\ud2b9\uc815 \uae30\uac04 \ub3d9\uc548 \ud6c8\ub828 \uc138\uc158\uc73c\ub85c \uacfc\ubaa9 \ud328\ud0a4\uc9c0 \uc0dd\uc131",
     "Sessions management": "\uc138\uc158 \uad00\ub9ac",
+    "Tracking": "\ucd94\uc801",
+    "View reports, statistics and tracking data": "\ubcf4\uace0\uc11c, \ud1b5\uacc4 \ubc0f \ucd94\uc801 \ub370\uc774\ud130 \ubcf4\uae30",
     "Manage the skills of your users, through courses and badges": "\uacfc\ubaa9\uacfc \ubc30\uc9c0\ub97c \ud1b5\ud574 \uc0ac\uc6a9\uc790 \uae30\uc220 \uad00\ub9ac",
     "Personal data protection": "\uac1c\uc778 \ub370\uc774\ud130 \ubcf4\ud638",
     "View the status of your server, perform performance tests": "\uc11c\ubc84 \uc0c1\ud0dc \ud655\uc778, \uc131\ub2a5 \ud14c\uc2a4\ud2b8 \uc218\ud589",
@@ -1575,5 +1577,7 @@
     "Edit group": "\uadf8\ub8f9 \ud3b8\uc9d1",
     "Received Files": "\uc218\uc2e0 \ud30c\uc77c",
     "Share a new file": "\uc0c8 \ud30c\uc77c \uacf5\uc720",
-    "Latest sent on": "\ucd5c\uadfc \ubc1c\uc2e0"
+    "Latest sent on": "\ucd5c\uadfc \ubc1c\uc2e0",
+    "Learning analytics": "\ud559\uc2b5 \ubd84\uc11d",
+    "Administrative activity auditing": "\uad00\ub9ac \ud65c\ub3d9 \uac10\uc0ac"
 }

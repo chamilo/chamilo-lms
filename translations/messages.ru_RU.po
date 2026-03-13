@@ -33025,3 +33025,18 @@ msgstr "Вы получили новый запрос в друзья"
 msgid "Diagnosis Management"
 msgstr "Управление диагностикой"
 
+msgid "Tracking"
+msgstr "Отслеживание"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Просмотр отчетов, статистики и данных отслеживания"
+
+msgid "System activity audit"
+msgstr "Аудит активности системы"
+
+msgid "Learning analytics"
+msgstr "Аналитика обучения"
+
+msgid "Administrative activity auditing"
+msgstr "Аудит административной активности"
+

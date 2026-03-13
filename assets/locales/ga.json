@@ -357,6 +357,8 @@
     "Course management": "Bainist\u00edocht c\u00farsa\u00ed",
     "Create course packages for a certain time with training sessions": "Cruthaigh paic\u00e9id ch\u00farsa ar feadh tr\u00e9imhse \u00e1irithe le seisi\u00fain oili\u00fana",
     "Sessions management": "Bainist\u00edocht seisi\u00fan",
+    "Tracking": "Rian\u00fa",
+    "View reports, statistics and tracking data": "F\u00e9ach tuairisc\u00ed, staitistic\u00ed agus sonra\u00ed rianaithe",
     "Manage the skills of your users, through courses and badges": "Bainistigh scileanna do chuid \u00fas\u00e1ideoir\u00ed, tr\u00ed ch\u00farsa\u00ed agus suaill\u00ed",
     "Personal data protection": "Cosaint sonra\u00ed pearsanta",
     "View the status of your server, perform performance tests": "F\u00e9ach ar st\u00e1das do fhreastala\u00ed, d\u00e9an t\u00e1st\u00e1lacha feidhm\u00edochta",
@@ -1575,5 +1577,7 @@
     "Edit group": "Cuir gr\u00fapa in eagar",
     "Received Files": "Comhaid Faighte",
     "Share a new file": "Comhairde roinnte nua",
-    "Latest sent on": "Seolta is d\u00e9ana\u00ed ar"
+    "Latest sent on": "Seolta is d\u00e9ana\u00ed ar",
+    "Learning analytics": "Anail\u00eds foghlama",
+    "Administrative activity auditing": "Ini\u00fachadh gn\u00edomha\u00edochta riarach\u00e1in"
 }

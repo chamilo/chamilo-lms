@@ -357,6 +357,8 @@
     "Course management": "Gestionare cursuri",
     "Create course packages for a certain time with training sessions": "Crea\u021bi pachete de cursuri pentru o anumit\u0103 perioad\u0103 cu sesiuni de training",
     "Sessions management": "Gestionare sesiuni",
+    "Tracking": "Urm\u0103rire",
+    "View reports, statistics and tracking data": "Vizualiza\u021bi rapoarte, statistici \u0219i date de urm\u0103rire",
     "Manage the skills of your users, through courses and badges": "Gestiona\u021bi competen\u021bele utilizatorilor dvs., prin cursuri \u0219i insigne",
     "Personal data protection": "Protec\u021bia datelor personale",
     "View the status of your server, perform performance tests": "Vizualiza\u021bi starea serverului dvs., efectua\u021bi teste de performan\u021b\u0103",
@@ -1575,5 +1577,7 @@
     "Edit group": "Editati grupul",
     "Received Files": "Fisiere Primite",
     "Share a new file": "Trimite un fisier nou",
-    "Latest sent on": "Ultima retrimitere pe"
+    "Latest sent on": "Ultima retrimitere pe",
+    "Learning analytics": "Analiz\u0103 \u00eenv\u0103\u021bare",
+    "Administrative activity auditing": "Audit activitate administrativ\u0103"
 }

@@ -33022,3 +33022,18 @@ msgstr "Du har fått ein ny vennforespørsel"
 msgid "Diagnosis Management"
 msgstr "Diagnoseadministrasjon"
 
+msgid "Tracking"
+msgstr "Sporing"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vis rapportar, statistikk og sporeringsdata"
+
+msgid "System activity audit"
+msgstr "Systemaktivitet revisjon"
+
+msgid "Learning analytics"
+msgstr "Læringsanalyse"
+
+msgid "Administrative activity auditing"
+msgstr "Administrativ aktivitetsrevisjon"
+

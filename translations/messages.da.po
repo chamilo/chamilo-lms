@@ -33024,3 +33024,18 @@ msgstr "Du har modtaget en ny venskabsanmodning"
 msgid "Diagnosis Management"
 msgstr "Diagnoseadministration"
 
+msgid "Tracking"
+msgstr "Sporing"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vis rapporter, statistik og sporingsdata"
+
+msgid "System activity audit"
+msgstr "Systemaktivitet revision"
+
+msgid "Learning analytics"
+msgstr "Læringsanalytik"
+
+msgid "Administrative activity auditing"
+msgstr "Administrativ aktivitetsrevision"
+

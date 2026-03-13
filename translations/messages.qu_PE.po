@@ -33024,3 +33024,18 @@ msgstr "Yachaywasiq kuti qhankirqaq chaskisqanki"
 msgid "Diagnosis Management"
 msgstr "Ñawpaq kasukuq kamachiy"
 
+msgid "Tracking"
+msgstr "Yachakuy"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Willakuykunata, estadistikakunata, yachakuy suyukunata rikunayki"
+
+msgid "System activity audit"
+msgstr "Sistima kamachikuy willakuy"
+
+msgid "Learning analytics"
+msgstr "Yachay ñawpaq kamaq"
+
+msgid "Administrative activity auditing"
+msgstr "Kamachikuy willakuy"
+

@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mape,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -33022,4 +33022,19 @@ msgstr "Jūs esat saņēmis jaunu drauga pieprasījumu"
 
 msgid "Diagnosis Management"
 msgstr "Diagnostikas pārvaldība"
+
+msgid "Tracking"
+msgstr "Sekojums"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Skatīt pārskatus, statistiku un sekošanas datus"
+
+msgid "System activity audit"
+msgstr "Sistēmas darbības audits"
+
+msgid "Learning analytics"
+msgstr "Mācīšanās analītika"
+
+msgid "Administrative activity auditing"
+msgstr "Administratīvās darbības audits"
 

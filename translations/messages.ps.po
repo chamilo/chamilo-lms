@@ -33018,3 +33018,18 @@ msgstr "تاسو نوې ملګري غوښتنه ترلاسه کړې ده"
 msgid "Diagnosis Management"
 msgstr "تشخيص اداره"
 
+msgid "Tracking"
+msgstr "تعقیب"
+
+msgid "View reports, statistics and tracking data"
+msgstr "راپورونه، احصایې او تعقیبي معلومات وګورئ"
+
+msgid "System activity audit"
+msgstr "د سیستمی فعالیت تفتیش"
+
+msgid "Learning analytics"
+msgstr "د زده کړې تجزیه"
+
+msgid "Administrative activity auditing"
+msgstr "د اداري فعالیت تفتیش"
+

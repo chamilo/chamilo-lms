@@ -35102,3 +35102,18 @@ msgstr "U heeft een nieuw vriendschapsverzoek ontvangen"
 msgid "Diagnosis Management"
 msgstr "Diagnosebeheer"
 
+msgid "Tracking"
+msgstr "Volgen"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Rapporten, statistieken en volggegevens bekijken"
+
+msgid "System activity audit"
+msgstr "Systeemactiviteiten-audit"
+
+msgid "Learning analytics"
+msgstr "Leeranalyses"
+
+msgid "Administrative activity auditing"
+msgstr "Administratieve activiteiten-audit"
+

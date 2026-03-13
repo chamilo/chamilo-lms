@@ -357,6 +357,8 @@
     "Course management": "Mastrumado de kursoj",
     "Create course packages for a certain time with training sessions": "Kreu kursajn paka\u0135ojn por certa tempo kun trejnadaj seancoj",
     "Sessions management": "Mastrumado de seancoj",
+    "Tracking": "Spurado",
+    "View reports, statistics and tracking data": "Vidi raportojn, statistikojn kaj spurajn datumojn",
     "Manage the skills of your users, through courses and badges": "Administri la kapablojn de viaj uzantoj, tra kursoj kaj insignoj",
     "Personal data protection": "Protektado de persona datumoj",
     "View the status of your server, perform performance tests": "Vidi la staton de via servilo, efektivigi efikecesprovojn",
@@ -1575,5 +1577,7 @@
     "Edit group": "Redakti grupon",
     "Received Files": "Ricevitaj dosieroj",
     "Share a new file": "Sendi novan dosieron",
-    "Latest sent on": "Laste sendita je"
+    "Latest sent on": "Laste sendita je",
+    "Learning analytics": "Lernanalizo",
+    "Administrative activity auditing": "Administra agado-a\u016ddito"
 }

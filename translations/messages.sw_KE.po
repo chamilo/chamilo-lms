@@ -33018,3 +33018,18 @@ msgstr "Ume pokea ombi jipya la urafiki"
 msgid "Diagnosis Management"
 msgstr "Usimamizi wa Uchunguzi"
 
+msgid "Tracking"
+msgstr "Ufuatiliaji"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Tazama ripoti, takwimu na data ya ufuatiliaji"
+
+msgid "System activity audit"
+msgstr "Uchunguzi wa shughuli za mfumo"
+
+msgid "Learning analytics"
+msgstr " Uchambuzi wa kujifunza"
+
+msgid "Administrative activity auditing"
+msgstr "Uchunguzi wa shughuli za utawala"
+

@@ -26601,7 +26601,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse role deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou oculto.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -33029,4 +33029,19 @@ msgstr "Recebeu um novo pedido de amizade"
 
 msgid "Diagnosis Management"
 msgstr "Gestão de Diagnóstico"
+
+msgid "Tracking"
+msgstr "Rastreamento"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Ver relatórios, estatísticas e dados de rastreamento"
+
+msgid "System activity audit"
+msgstr "Auditoria de atividade do sistema"
+
+msgid "Learning analytics"
+msgstr "Análise de aprendizagem"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoria de atividade administrativa"
 

@@ -33037,3 +33037,18 @@ msgstr "Heu rebut una nova sol·licitud d'amicició"
 msgid "Diagnosis Management"
 msgstr "Gestió del diagnòstic"
 
+msgid "Tracking"
+msgstr "Seguiment"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Veure informes, estadístiques i dades de seguiment"
+
+msgid "System activity audit"
+msgstr "Auditoria d'activitat del sistema"
+
+msgid "Learning analytics"
+msgstr "Anàlisi d'aprenentatge"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoria d'activitat administrativa"
+

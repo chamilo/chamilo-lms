@@ -357,6 +357,8 @@
     "Course management": "Pengurusan kursus",
     "Create course packages for a certain time with training sessions": "Cipta pakej kursus untuk masa tertentu dengan sesi latihan",
     "Sessions management": "Pengurusan sesi",
+    "Tracking": "Jejak",
+    "View reports, statistics and tracking data": "Lihat laporan, statistik dan data jejak",
     "Manage the skills of your users, through courses and badges": "Urus kemahiran pengguna anda, melalui kursus dan lencana",
     "Personal data protection": "Perlindungan data peribadi",
     "View the status of your server, perform performance tests": "Lihat status pelayan anda, jalankan ujian prestasi",
@@ -1551,5 +1553,7 @@
     "Edit group": "Edit kumpulan",
     "Received Files": "Fail Diterima",
     "Share a new file": "Kongsi fail baru",
-    "Latest sent on": "Hantar terkini pada"
+    "Latest sent on": "Hantar terkini pada",
+    "Learning analytics": "Analitik pembelajaran",
+    "Administrative activity auditing": "Audit aktiviti pentadbiran"
 }

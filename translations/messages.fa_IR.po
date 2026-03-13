@@ -33022,3 +33022,18 @@ msgstr "شما درخواست دوستی جدیدی دریافت کرده‌ای
 msgid "Diagnosis Management"
 msgstr "مدیریت تشخیص"
 
+msgid "Tracking"
+msgstr "پیگیری"
+
+msgid "View reports, statistics and tracking data"
+msgstr "مشاهده گزارش‌ها، آمار و داده‌های پیگیری"
+
+msgid "System activity audit"
+msgstr "حسابرسی فعالیت سیستم"
+
+msgid "Learning analytics"
+msgstr "تحلیل‌های یادگیری"
+
+msgid "Administrative activity auditing"
+msgstr "حسابرسی فعالیت‌های مدیریتی"
+

@@ -357,6 +357,8 @@
     "Course management": "Musyuk kamachiy",
     "Create course packages for a certain time with training sessions": "Kutiripakunata kamachinakuy yachaykunawan paqarimuy",
     "Sessions management": "Musyukuna kamachiy",
+    "Tracking": "Yachakuy",
+    "View reports, statistics and tracking data": "Willakuykunata, estadistikakunata, yachakuy suyukunata rikunayki",
     "Manage the skills of your users, through courses and badges": "Yachaykunawan llanthukunawan rurakuna yachanakunata kamachinakuy",
     "Personal data protection": "Qespisqan yachaykunaq amachay",
     "View the status of your server, perform performance tests": "Sirwiq hallp'ata qhawarichiy, ruraykuna sirwinakuyta qhaway",
@@ -1575,5 +1577,7 @@
     "Edit group": "Yarpakuyta pu\u00f1uy",
     "Received Files": "Khipukuna chaskisqa",
     "Share a new file": "Apachiy hoq khiputa",
-    "Latest sent on": "Qepa kuti apachisqa"
+    "Latest sent on": "Qepa kuti apachisqa",
+    "Learning analytics": "Yachay \u00f1awpaq kamaq",
+    "Administrative activity auditing": "Kamachikuy willakuy"
 }

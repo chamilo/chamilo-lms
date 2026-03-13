@@ -357,6 +357,8 @@
     "Course management": "Gestione corsi",
     "Create course packages for a certain time with training sessions": "Crea pacchetti di corsi per un certo periodo con sessioni di formazione",
     "Sessions management": "Gestione sessioni",
+    "Tracking": "Tracciamento",
+    "View reports, statistics and tracking data": "Visualizza report, statistiche e dati di tracciamento",
     "Manage the skills of your users, through courses and badges": "Gestisci le competenze dei tuoi utenti, attraverso corsi e badge",
     "Personal data protection": "Protezione dati personali",
     "View the status of your server, perform performance tests": "Visualizza lo stato del tuo server, esegui test di performance",
@@ -1575,5 +1577,7 @@
     "Edit group": "Modifica il gruppo",
     "Received Files": "File ricevuti",
     "Share a new file": "Invia un nuovo file",
-    "Latest sent on": "Ultimo reinvio il"
+    "Latest sent on": "Ultimo reinvio il",
+    "Learning analytics": "Analisi dell'apprendimento",
+    "Administrative activity auditing": "Audit attivit\u00e0 amministrative"
 }

@@ -357,6 +357,8 @@
     "Course management": "Cursusbeheer",
     "Create course packages for a certain time with training sessions": "Maak cursuspakketten voor een bepaalde tijd met trainingssessies",
     "Sessions management": "Beheer van sessies",
+    "Tracking": "Volgen",
+    "View reports, statistics and tracking data": "Rapporten, statistieken en volggegevens bekijken",
     "Manage the skills of your users, through courses and badges": "Beheer de vaardigheden van uw gebruikers, via cursussen en badges",
     "Personal data protection": "Persoonsgegevensbescherming",
     "View the status of your server, perform performance tests": "Bekijk de status van uw server, voer prestatietests uit",
@@ -1564,5 +1566,7 @@
     "Edit group": "Groep wijzigen",
     "Received Files": "Ontvangen bestanden",
     "Share a new file": "Nieuw bestand versturen",
-    "Latest sent on": "Laatst verzonden op"
+    "Latest sent on": "Laatst verzonden op",
+    "Learning analytics": "Leeranalyses",
+    "Administrative activity auditing": "Administratieve activiteiten-audit"
 }

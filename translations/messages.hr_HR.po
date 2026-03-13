@@ -33023,3 +33023,18 @@ msgstr "Primili ste novi zahtjev za prijateljstvo"
 msgid "Diagnosis Management"
 msgstr "Uređivanje dijagnoze"
 
+msgid "Tracking"
+msgstr "Praćenje"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Pogledajte izvještaje, statistike i podatke praćenja"
+
+msgid "System activity audit"
+msgstr "Revizija aktivnosti sustava"
+
+msgid "Learning analytics"
+msgstr "Learning analytics"
+
+msgid "Administrative activity auditing"
+msgstr "Revizija administrativne aktivnosti"
+

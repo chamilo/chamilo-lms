@@ -33022,3 +33022,18 @@ msgstr "Anda menerima permintaan rakan baru"
 msgid "Diagnosis Management"
 msgstr "Pengurusan Diagnosis"
 
+msgid "Tracking"
+msgstr "Jejak"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Lihat laporan, statistik dan data jejak"
+
+msgid "System activity audit"
+msgstr "Audit aktiviti sistem"
+
+msgid "Learning analytics"
+msgstr "Analitik pembelajaran"
+
+msgid "Administrative activity auditing"
+msgstr "Audit aktiviti pentadbiran"
+

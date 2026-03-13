@@ -33022,3 +33022,18 @@ msgstr "새 친구 요청을 받았습니다"
 msgid "Diagnosis Management"
 msgstr "진단 관리"
 
+msgid "Tracking"
+msgstr "추적"
+
+msgid "View reports, statistics and tracking data"
+msgstr "보고서, 통계 및 추적 데이터 보기"
+
+msgid "System activity audit"
+msgstr "시스템 활동 감사"
+
+msgid "Learning analytics"
+msgstr "학습 분석"
+
+msgid "Administrative activity auditing"
+msgstr "관리 활동 감사"
+

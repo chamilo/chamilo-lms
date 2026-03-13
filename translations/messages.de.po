@@ -34590,3 +34590,18 @@ msgstr "Sie haben eine neue Freundschaftsanfrage erhalten"
 msgid "Diagnosis Management"
 msgstr "Diagnoseverwaltung"
 
+msgid "Tracking"
+msgstr "Tracking"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Berichte, Statistiken und Tracking-Daten anzeigen"
+
+msgid "System activity audit"
+msgstr "Systemaktivitätsprüfung"
+
+msgid "Learning analytics"
+msgstr "Lernanalytik"
+
+msgid "Administrative activity auditing"
+msgstr "Administrative Aktivitätsprüfung"
+

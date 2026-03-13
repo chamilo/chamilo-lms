@@ -33018,3 +33018,18 @@ msgstr "Tú hevur fingið eina nýggja vinabeiðing"
 msgid "Diagnosis Management"
 msgstr "Greiningarstýring"
 
+msgid "Tracking"
+msgstr "Sporing"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vís skýrslur, talfræði og sporingardáta"
+
+msgid "System activity audit"
+msgstr "Reikningsskriving av keruliga virksemi"
+
+msgid "Learning analytics"
+msgstr "Lærugreinanalysa"
+
+msgid "Administrative activity auditing"
+msgstr "Reikningsskriving av stjórnarvirksemi"
+

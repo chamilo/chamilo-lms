@@ -357,6 +357,8 @@
     "Course management": "Udhibiti wa kozi",
     "Create course packages for a certain time with training sessions": "Unda vifurushi vya kozi kwa muda maalum na vikao vya mafunzo",
     "Sessions management": "Udhibiti wa vikao",
+    "Tracking": "Ufuatiliaji",
+    "View reports, statistics and tracking data": "Tazama ripoti, takwimu na data ya ufuatiliaji",
     "Manage the skills of your users, through courses and badges": "Dhibiti ustadi wa watumiaji wako, kupitia kozi na beji",
     "Personal data protection": "Ulinzi wa data za kibinafsi",
     "View the status of your server, perform performance tests": "Tazama hali ya seva yako, fanya vipimo vya utendaji",
@@ -1575,5 +1577,7 @@
     "Edit group": "Hariri kikundi",
     "Received Files": "Faili Zilizopokelewa",
     "Share a new file": "Shiriki faili mpya",
-    "Latest sent on": "Ilitumwa mwisho tarehe"
+    "Latest sent on": "Ilitumwa mwisho tarehe",
+    "Learning analytics": " Uchambuzi wa kujifunza",
+    "Administrative activity auditing": "Uchunguzi wa shughuli za utawala"
 }

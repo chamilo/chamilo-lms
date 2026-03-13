@@ -357,6 +357,8 @@
     "Course management": "Kursu p\u0101rvald\u012bba",
     "Create course packages for a certain time with training sessions": "Izveidojiet kursu paketes noteiktam laikam ar apm\u0101c\u012bbu sesij\u0101m",
     "Sessions management": "Sesiju p\u0101rvald\u012bba",
+    "Tracking": "Sekojums",
+    "View reports, statistics and tracking data": "Skat\u012bt p\u0101rskatus, statistiku un seko\u0161anas datus",
     "Manage the skills of your users, through courses and badges": "P\u0101rvaldiet savu lietot\u0101ju prasmes caur kursiem un noz\u012bm\u012bt\u0113m",
     "Personal data protection": "Personas datu aiz neuro",
     "View the status of your server, perform performance tests": "Apskatiet servera statusu, veiciet veiktsp\u0113jas testus",
@@ -1575,5 +1577,7 @@
     "Edit group": "Redi\u0123\u0113t grupu",
     "Received Files": "Sa\u0146emtie faili",
     "Share a new file": "Koplietot failu / dokumentu",
-    "Latest sent on": "P\u0113d\u0113joreiz p\u0101rs\u016bt\u012bts"
+    "Latest sent on": "P\u0113d\u0113joreiz p\u0101rs\u016bt\u012bts",
+    "Learning analytics": "M\u0101c\u012b\u0161an\u0101s anal\u012btika",
+    "Administrative activity auditing": "Administrat\u012bv\u0101s darb\u012bbas audits"
 }

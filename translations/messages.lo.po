@@ -35368,3 +35368,18 @@ msgstr "ທ່ານໄດ້ຮັບຄຳຂໍເພື່ອນທີ່ໃ
 msgid "Diagnosis Management"
 msgstr "ການຈັດການວິນิจໄຈ"
 
+msgid "Tracking"
+msgstr "ການຕິດຕາມ"
+
+msgid "View reports, statistics and tracking data"
+msgstr "ເບິ່ງລາຍງານ, ສະຖິຕິ ແລະ ຂໍ້ມູນການຕິດຕາມ"
+
+msgid "System activity audit"
+msgstr "ການຕິດຕາມກິດຈະການລະບົບ"
+
+msgid "Learning analytics"
+msgstr "ການວິເຄາະການຮຽນ"
+
+msgid "Administrative activity auditing"
+msgstr "ການຕິດຕາມກິດຈະການບໍລິຫານ"
+

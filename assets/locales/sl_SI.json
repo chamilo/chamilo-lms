@@ -357,6 +357,8 @@
     "Course management": "Upravljanje te\u010dajev",
     "Create course packages for a certain time with training sessions": "Ustvarite pakete te\u010dajev za dolo\u010den \u010das s trening sejami",
     "Sessions management": "Upravljanje sej",
+    "Tracking": "Sledenje",
+    "View reports, statistics and tracking data": "Ogled poro\u010dil, statistik in podatkov o sledenju",
     "Manage the skills of your users, through courses and badges": "Upravljajte spretnosti svojih uporabnikov prek te\u010dajev in zna\u010dk",
     "Personal data protection": "Za\u0161\u010dita osebnih podatkov",
     "View the status of your server, perform performance tests": "Poglejte stanje va\u0161ega stre\u017enika, izvedite teste zmogljivosti",
@@ -1575,5 +1577,7 @@
     "Edit group": "Uredi skupino",
     "Received Files": "Prejete datoteke",
     "Share a new file": "Po\u0161lji novo datoteko",
-    "Latest sent on": "Nazadnje odposlano"
+    "Latest sent on": "Nazadnje odposlano",
+    "Learning analytics": "U\u010dne analitike",
+    "Administrative activity auditing": "Revizija administrativnih aktivnosti"
 }

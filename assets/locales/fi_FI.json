@@ -357,6 +357,8 @@
     "Course management": "Kurssien hallinta",
     "Create course packages for a certain time with training sessions": "Luo kurssipaketit tietyksi ajaksi koulutuksellisilla istunnoilla",
     "Sessions management": "Istuntojen hallinta",
+    "Tracking": "Seuranta",
+    "View reports, statistics and tracking data": "N\u00e4yt\u00e4 raportit, tilastot ja seurannan tiedot",
     "Manage the skills of your users, through courses and badges": "Hallitse k\u00e4ytt\u00e4j\u00e4si taitoja kursseilla ja merkkeill\u00e4",
     "Personal data protection": "Henkil\u00f6tietojen suoja",
     "View the status of your server, perform performance tests": "N\u00e4yt\u00e4 palvelimesi tila, suorita suorituskykytestej\u00e4",
@@ -1575,5 +1577,7 @@
     "Edit group": "Muokkaa ryhm\u00e4\u00e4",
     "Received Files": "Vastaanotetut Tiedostot",
     "Share a new file": "Jaa uusi tiedosto",
-    "Latest sent on": "Viimeisin"
+    "Latest sent on": "Viimeisin",
+    "Learning analytics": "Opi analytiikka",
+    "Administrative activity auditing": "Hallinnollisen toiminnan tarkastus"
 }

@@ -357,6 +357,8 @@
     "Course management": "Kursadministrasjon",
     "Create course packages for a certain time with training sessions": "Opprett kurs-pakke for ein viss tid med trenings\u00f8kter",
     "Sessions management": "\u00d8ktadministrasjon",
+    "Tracking": "Sporing",
+    "View reports, statistics and tracking data": "Vis rapportar, statistikk og sporeringsdata",
     "Manage the skills of your users, through courses and badges": "Administrer ferdigheitane til brukarane dine, gjennom kurs og merke",
     "Personal data protection": "Personvern",
     "View the status of your server, perform performance tests": "Sj\u00e5 status p\u00e5 serveren din, utf\u00f8r ytelsestestar",
@@ -1575,5 +1577,7 @@
     "Edit group": "Rediger gruppe",
     "Received Files": "Mottatte filer",
     "Share a new file": "Del ei ny fil",
-    "Latest sent on": "Siste sendt"
+    "Latest sent on": "Siste sendt",
+    "Learning analytics": "L\u00e6ringsanalyse",
+    "Administrative activity auditing": "Administrativ aktivitetsrevisjon"
 }

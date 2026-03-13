@@ -357,6 +357,8 @@
     "Course management": "L\u00edkust\u00fdring",
     "Create course packages for a certain time with training sessions": "Stovna l\u00edkupakkur fyri ein \u00e1virst t\u00ed\u00f0 vi\u00f0 \u00fatb\u00fagvingarsamtalum",
     "Sessions management": "Samtalsst\u00fdring",
+    "Tracking": "Sporing",
+    "View reports, statistics and tracking data": "V\u00eds sk\u00fdrslur, talfr\u00e6\u00f0i og sporingard\u00e1ta",
     "Manage the skills of your users, through courses and badges": "St\u00fdr f\u00edggindi hj\u00e1 br\u00fakarunum t\u00ednum, gj\u00f8gnum l\u00edkur og merki",
     "Personal data protection": "Verjuleiki fyri pers\u00f3nsumstillingum",
     "View the status of your server, perform performance tests": "S\u00ed st\u00f8\u00f0u \u00e1 servara t\u00ednum, \u00fatf\u00f8r avrikapr\u00f3v",
@@ -1563,5 +1565,7 @@
     "Edit group": "Broyt b\u00f3lk",
     "Received Files": "M\u00f3ttarar skjal",
     "Share a new file": "Deil ein n\u00fdtt skjal",
-    "Latest sent on": "S\u00ed\u00f0st sendt tann"
+    "Latest sent on": "S\u00ed\u00f0st sendt tann",
+    "Learning analytics": "L\u00e6rugreinanalysa",
+    "Administrative activity auditing": "Reikningsskriving av stj\u00f3rnarvirksemi"
 }

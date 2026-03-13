@@ -33024,3 +33024,18 @@ msgstr "Bạn đã nhận được yêu cầu kết bạn mới"
 msgid "Diagnosis Management"
 msgstr "Quản lý Chẩn đoán"
 
+msgid "Tracking"
+msgstr "Theo dõi"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Xem báo cáo, thống kê và dữ liệu theo dõi"
+
+msgid "System activity audit"
+msgstr "Kiểm toán hoạt động hệ thống"
+
+msgid "Learning analytics"
+msgstr "Phân tích học tập"
+
+msgid "Administrative activity auditing"
+msgstr "Kiểm toán hoạt động quản trị"
+

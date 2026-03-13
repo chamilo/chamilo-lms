@@ -33024,3 +33024,18 @@ msgstr "Vi ricevis novan peton pri amikeco"
 msgid "Diagnosis Management"
 msgstr "Administro de diagnozo"
 
+msgid "Tracking"
+msgstr "Spurado"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vidi raportojn, statistikojn kaj spurajn datumojn"
+
+msgid "System activity audit"
+msgstr "Sistema agado-aŭdito"
+
+msgid "Learning analytics"
+msgstr "Lernanalizo"
+
+msgid "Administrative activity auditing"
+msgstr "Administra agado-aŭdito"
+

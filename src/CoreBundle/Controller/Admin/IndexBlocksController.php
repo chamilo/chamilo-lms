@@ -690,6 +690,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Resources by type'),
         ];
 
+        $items[] = [
+            'class' => 'item-list-icons',
+            'route' => ['name' => 'AdminListIcons'],
+            'label' => $this->translator->trans('List icons'),
+        ];
+
         return $items;
     }
 

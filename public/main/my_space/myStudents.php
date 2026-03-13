@@ -975,7 +975,13 @@ $actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_
 
 $actions .= Display::url(
     Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details')),
-    api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?user_id='.$studentId
+    api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?'.http_build_query([
+        'user_id' => $studentId,
+        'cid' => $courseId,
+        'course' => $courseCode,
+        'origin' => $origin,
+        'sid' => $sessionId,
+    ])
 );
 $email = $user->getEmail();
 if (!empty($email)) {
@@ -1003,8 +1009,8 @@ if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
 }
 
 if (api_can_login_as($studentId)) {
-    $loginAsToken = Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$studentId.'&sec_token='.urlencode($loginAsToken).'">'
+    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
+        .'&sec_token='.$token.'">'
         .Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
 }
 

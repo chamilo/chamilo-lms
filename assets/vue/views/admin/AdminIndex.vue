@@ -64,6 +64,17 @@
     />
 
     <AdminBlock
+      v-if="blockTracking"
+      :id="blockTracking.id"
+      v-model:extra-content="blockTracking.extraContent"
+      :description="t('View reports, statistics and tracking data')"
+      :editable="blockTracking.editable"
+      :items="blockTracking.items"
+      :title="t('Tracking')"
+      icon="tracking"
+    />
+
+    <AdminBlock
       v-if="blockGradebook"
       :id="blockGradebook.id"
       v-model:extra-content="blockGradebook.extraContent"
@@ -297,6 +308,7 @@ const {
   blockPrivacy,
   blockSettings,
   blockPlatform,
+  blockTracking,
   blockChamilo,
   blockSecurity,
   loadBlocks,

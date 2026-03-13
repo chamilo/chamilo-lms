@@ -33022,3 +33022,12 @@ msgstr "You have received a new friend request"
 
 msgid "Diagnosis Management"
 msgstr "Diagnosis Management"
+
+msgid "Tracking"
+msgstr "Tracking"
+
+msgid "View reports, statistics and tracking data"
+msgstr "View reports, statistics and tracking data"
+
+msgid "System activity audit"
+msgstr "System activity audit"

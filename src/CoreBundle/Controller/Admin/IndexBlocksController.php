@@ -98,6 +98,13 @@ class IndexBlocksController extends BaseController
                 'extraContent' => $this->getExtraContent('block-admin-platform'),
             ];
 
+            $json['tracking'] = [
+                'id' => 'block-admin-tracking',
+                'editable' => false,
+                'items' => $this->getItemsTracking(),
+                'extraContent' => $this->getExtraContent('block-admin-tracking'),
+            ];
+
             /* Settings */
             $json['settings'] = [
                 'id' => 'block-admin-settings',
@@ -492,22 +499,6 @@ class IndexBlocksController extends BaseController
             'url' => '/main/auth/registration.php?'.http_build_query(['create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
-        $items[] = [
-            'class' => 'item-stats',
-            'url' => '/main/admin/statistics/index.php',
-            'label' => $this->translator->trans('Statistics'),
-        ];
-        $items[] = [
-            'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
-            'label' => $this->translator->trans('Reports'),
-        ];
-        $items[] = [
-            'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
-            'label' => $this->translator->trans('Teachers time report'),
-        ];
-
         if (api_get_configuration_value('chamilo_cms')) {
             $items[] = [
                 'class' => 'item-cms',
@@ -593,6 +584,53 @@ class IndexBlocksController extends BaseController
         return $items;
     }
 
+    private function getItemsTracking(): array
+    {
+        $items = [];
+        $items[] = [
+            'class' => 'item-stats',
+            'url' => '/main/admin/statistics/index.php',
+            'label' => $this->translator->trans('Statistics'),
+        ];
+        $items[] = [
+            'class' => 'item-stats-report',
+            'url' => '/main/my_space/company_reports.php',
+            'label' => $this->translator->trans('Reports'),
+        ];
+        $items[] = [
+            'class' => 'item-teacher-time-report',
+            'url' => '/main/admin/teacher_time_report.php',
+            'label' => $this->translator->trans('Teachers time report'),
+        ];
+        $items[] = [
+            'class' => 'item-my-space',
+            'url' => '/main/my_space/index.php',
+            'label' => $this->translator->trans('Reporting'),
+        ];
+        $items[] = [
+            'class' => 'item-ticket-system',
+            'url' => '/main/ticket/tickets.php',
+            'label' => $this->translator->trans('Tickets'),
+        ];
+        $items[] = [
+            'class' => 'item-special-export',
+            'url' => '/main/admin/special_exports.php',
+            'label' => $this->translator->trans('Special exports'),
+        ];
+        $items[] = [
+            'class' => 'item-quarterly-report',
+            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'quarterly_report']),
+            'label' => $this->translator->trans('Quarterly report'),
+        ];
+        $items[] = [
+            'class' => 'item-activity-audit',
+            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'activities']),
+            'label' => $this->translator->trans('System activity audit'),
+        ];
+
+        return $items;
+    }
+
     private function getItemsSettings(): array
     {
         $items = [];
@@ -602,11 +640,6 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Clean temporary files'),
         ];
 
-        $items[] = [
-            'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
-            'label' => $this->translator->trans('Special exports'),
-        ];
         /*$items[] = [
             'url' => '/main/admin/periodic_export.php',
             'label' => $this->translator->$this->trans('Periodic export'),
@@ -631,12 +664,6 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('E-mail tester'),
             ];
         }
-
-        $items[] = [
-            'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
-            'label' => $this->translator->trans('Tickets'),
-        ];
 
         // Disabled until it is reemplemented to work with Chamilo 2
         /*

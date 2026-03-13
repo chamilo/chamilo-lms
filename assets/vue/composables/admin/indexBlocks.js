@@ -79,6 +79,7 @@ export function useIndexBlocks() {
   const blockPlatform = ref(null)
   const blockChamilo = ref(null)
   const blockSecurity = ref(null)
+  const blockTracking = ref(null)
   const blockPlugins = ref(null)
   const blockHealthCheck = ref(null)
   const blockRooms = ref(null)
@@ -92,6 +93,7 @@ export function useIndexBlocks() {
     blockGradebook.value = blocks.gradebook || null
     blockSkills.value = blocks.skills || null
     blockPrivacy.value = blocks.data_privacy || null
+    blockTracking.value = blocks.tracking || null
     blockSettings.value = blocks.settings || null
     blockPlatform.value = blocks.platform || null
     blockChamilo.value = blocks.chamilo || null
@@ -113,6 +115,7 @@ export function useIndexBlocks() {
     blockSettings,
     blockPlatform,
     blockChamilo,
+    blockTracking,
     blockSecurity,
     loadBlocks,
     blockNewsStatusEl,

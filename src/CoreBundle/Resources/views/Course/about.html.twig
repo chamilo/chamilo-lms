@@ -52,6 +52,9 @@
                                     <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
                                         <em class="mdi mdi-linkedin"></em> LinkedIn
                                     </a>
+                                    <a href="#" class="instagram" onclick="navigator.clipboard.writeText('{{ url }}');this.textContent=' {{ "Link copied!"|trans }}';return false;">
+                                        <em class="mdi mdi-instagram"></em> Instagram
+                                    </a>
                                 </div>
                             </div>
                         {% endif %}

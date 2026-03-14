@@ -205,23 +205,23 @@ async function onSearchProfile(profile) {
         <ul class="fa-ul">
           <li>
             <BaseIcon
-              class="skill-legend-basic"
               icon="square"
+              style="color: #3182bd"
             />
 
             {{ t("Basic skills") }}
           </li>
           <li>
             <BaseIcon
-              class="skill-legend-add"
               icon="square"
+              style="color: #F89406"
             />
             {{ t("Skills you can learn") }}
           </li>
           <li>
             <BaseIcon
-              class="skill-legend-search"
               icon="square"
+              style="color: #B94A48"
             />
             {{ t("Skills searched for") }}
           </li>

@@ -64,6 +64,7 @@ export const chamiloIconToClass = {
   "file-excel": "mdi mdi-file-excel-box",
   "filter": "mdi mdi-filter",
   "file-replace": "mdi mdi-file-replace",
+  "onlyoffice": "mdi mdi-file-document-edit-outline",
   "fit-to-screen": "",
   "folder-generic": "mdi mdi-folder",
   "folder-multiple-plus": "mdi mdi-folder-multiple-plus",

@@ -18,6 +18,7 @@ use Onlyoffice\DocsIntegrationSdk\Models\Customization;
 use Onlyoffice\DocsIntegrationSdk\Models\EditorsMode;
 use Onlyoffice\DocsIntegrationSdk\Models\GoBack;
 use Onlyoffice\DocsIntegrationSdk\Models\Permissions;
+use Onlyoffice\DocsIntegrationSdk\Models\Type;
 use Onlyoffice\DocsIntegrationSdk\Models\User;
 use Onlyoffice\DocsIntegrationSdk\Service\DocEditorConfig\DocEditorConfigService;
 
@@ -31,83 +32,86 @@ class OnlyofficeConfigService extends DocEditorConfigService
     public function getEditorsMode()
     {
         if ($this->isEditable() && $this->getAccessRights() && !$this->isReadOnly()) {
-            $editorsMode = new EditorsMode('edit');
-        } else {
-            if ($this->canView()) {
-                $editorsMode = new EditorsMode('view');
-            } else {
-                api_not_allowed(true);
-            }
+            return new EditorsMode('edit');
         }
 
-        return $editorsMode;
+        if ($this->canView()) {
+            return new EditorsMode('view');
+        }
+
+        api_not_allowed(true);
     }
 
     public function isEditable()
     {
-        return $this->documentManager->isDocumentEditable($this->documentManager->getDocInfo('title'));
+        return $this->documentManager->isDocumentEditable(
+            (string) $this->documentManager->getDocInfo('title')
+        );
     }
 
     public function canView()
     {
-        return $this->documentManager->isDocumentViewable($this->documentManager->getDocInfo('title'));
+        return $this->documentManager->isDocumentViewable(
+            (string) $this->documentManager->getDocInfo('title')
+        );
     }
 
     public function getAccessRights()
     {
-        $isAllowToEdit = api_is_allowed_to_edit(true, true);
-        $isMyDir = DocumentManager::is_my_shared_folder(
-            api_get_user_id(),
-            $this->documentManager->getDocInfo('absolute_parent_path'),
-            api_get_session_id()
-        );
-        $isGroupAccess = false;
-        if (!empty($this->documentManager->getGroupId())) {
-            $groupProperties = GroupManager::get_group_properties($this->documentManager->getGroupId());
-            $docInfoGroup = api_get_item_property_info(
-                api_get_course_int_id(),
-                'document',
-                $docId,
-                $sessionId
-            );
-            $isGroupAccess = GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseCode,
-                $groupProperties,
-                $docInfoGroup
-            );
-            $isMemberGroup = GroupManager::is_user_in_group($userId, $groupProperties);
-            if (!$isGroupAccess) {
-                if (!$groupProperties['status']) {
-                    api_not_allowed(true);
-                }
-                if (!$isMemberGroup && 1 != $groupProperties['doc_state']) {
-                    api_not_allowed(true);
-                }
-            }
-        }
-
-        // Allow editing if the document is part of an exercise
+        // Exercise responses must remain editable.
         if (!empty($_GET['exerciseId']) || !empty($_GET['exeId'])) {
             return true;
         }
 
-        $accessRights = $isAllowToEdit || $isMyDir || $isGroupAccess;
+        // Explicit readonly flag always wins.
+        if ($this->isReadOnly()) {
+            return false;
+        }
 
-        return $accessRights;
+        // Standard teacher/admin edit permission in current context.
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_is_allowed_to_edit(true, true)) {
+            return true;
+        }
+
+        // Minimal fallback for user-owned resources when creator info exists.
+        $currentUserId = (int) api_get_user_id();
+        $creatorId = $this->resolveDocumentCreatorId();
+
+        if ($creatorId > 0 && $creatorId === $currentUserId) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isReadOnly()
     {
-        return $this->documentManager->getDocInfo('readonly');
+        return (bool) $this->documentManager->getDocInfo('readonly');
     }
 
     public function getUser()
     {
         $user = new User();
-        $user->setId(api_get_user_id());
+
+        $userId = (int) api_get_user_id();
+        $user->setId($userId);
+
         $userInfo = api_get_user_info($userId);
-        $user->setName($userInfo['username']);
+        $userName = '';
+
+        if (is_array($userInfo)) {
+            $userName = (string) ($userInfo['complete_name'] ?? $userInfo['username'] ?? '');
+        }
+
+        if ('' === trim($userName)) {
+            $userName = 'user_'.$userId;
+        }
+
+        $user->setName($userName);
 
         return $user;
     }
@@ -116,8 +120,9 @@ class OnlyofficeConfigService extends DocEditorConfigService
     {
         $goback = new GoBack();
 
-        if (!empty($this->documentManager->getGobackUrl($fileId))) {
-            $goback->setUrl($this->documentManager->getGobackUrl($fileId));
+        $gobackUrl = $this->documentManager->getGobackUrl($fileId);
+        if (!empty($gobackUrl)) {
+            $goback->setUrl($gobackUrl);
         }
         $goback->setBlank(false);
         $customization = new Customization();
@@ -142,15 +147,21 @@ class OnlyofficeConfigService extends DocEditorConfigService
     {
         $langInfo = LangManager::getLangUser();
 
-        return $langInfo['isocode'];
-    }
+        if (is_array($langInfo) && !empty($langInfo['isocode'])) {
+            return (string) $langInfo['isocode'];
+        }
 
+        return 'en';
+    }
     public function getPermissions(string $fileId = '')
     {
         $permsEdit = $this->getAccessRights() && !$this->isReadOnly();
-        $isFillable = $this->documentManager->isDocumentFillable($this->documentManager->getDocInfo('title'));
+        $isFillable = $this->documentManager->isDocumentFillable(
+            (string) $this->documentManager->getDocInfo('title')
+        );
 
-        $permissions = new Permissions(null,
+        return new Permissions(
+            null,
             null,
             null,
             null,
@@ -168,12 +179,45 @@ class OnlyofficeConfigService extends DocEditorConfigService
             null,
             null
         );
-
-        return $permissions;
     }
 
-    public function getCoEditing(string $fileId = '', $mode = null, $type)
+    public function getCoEditing(string $fileId = '', $mode = null, $type = null)
     {
         return null;
+    }
+
+    public function isMobileAgent(string $userAgent = '')
+    {
+        if ('' === trim($userAgent)) {
+            $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
+        }
+
+        if ('' === trim($userAgent)) {
+            return false;
+        }
+
+        return 1 === preg_match('/android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i', $userAgent);
+    }
+
+    public function getType(string $userAgent = '')
+    {
+        return new Type($this->isMobileAgent($userAgent) ? 'mobile' : 'desktop');
+    }
+
+    private function resolveDocumentCreatorId(): int
+    {
+        $candidates = [
+            $this->documentManager->getDocInfo('creator_id'),
+            $this->documentManager->getDocInfo('insert_user_id'),
+            $this->documentManager->getDocInfo('user_id'),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (is_numeric($candidate) && (int) $candidate > 0) {
+                return (int) $candidate;
+            }
+        }
+
+        return 0;
     }
 }

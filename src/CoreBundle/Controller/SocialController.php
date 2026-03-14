@@ -1080,11 +1080,11 @@ class SocialController extends AbstractController
                     );
 
                     $content = $translator->trans(
-                            'You have received a new friend request. Visit the invitations page to accept or reject the request.',
-                            [],
-                            'messages',
-                            $receiverLocale
-                        ).' <a href="/resources/friends/invitations">'.
+                        'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                        [],
+                        'messages',
+                        $receiverLocale
+                    ).' <a href="/resources/friends/invitations">'.
                         $translator->trans(
                             'here',
                             [],
@@ -1099,6 +1099,7 @@ class SocialController extends AbstractController
                     );
 
                     break;
+
                 case 'send_invitation':
                     $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
@@ -1111,8 +1112,8 @@ class SocialController extends AbstractController
                     $receiverLocale = $friendUser->getLocale() ?: null;
 
                     $isFriendInvitationMessage =
-                        'You have a new friend request' === trim((string) $subject) &&
-                        str_contains(
+                        'You have a new friend request' === trim((string) $subject)
+                        && str_contains(
                             (string) $content,
                             'You have received a new friend request. Visit the invitations page to accept or reject the request.'
                         );
@@ -1126,11 +1127,11 @@ class SocialController extends AbstractController
                         );
 
                         $content = $translator->trans(
-                                'You have received a new friend request. Visit the invitations page to accept or reject the request.',
-                                [],
-                                'messages',
-                                $receiverLocale
-                            ).' <a href="/resources/friends/invitations">'.
+                            'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        ).' <a href="/resources/friends/invitations">'.
                             $translator->trans(
                                 'here',
                                 [],

@@ -16069,6 +16069,15 @@ msgstr ""
 msgid "Create child skill"
 msgstr ""
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr ""
 
@@ -32806,6 +32815,9 @@ msgid "Error saving data exchange"
 msgstr ""
 
 msgid "No documents added yet"
+msgstr ""
+
+msgid "No additional details available for this skill."
 msgstr ""
 
 msgid "No available documents"

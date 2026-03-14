@@ -5,7 +5,11 @@ import Skeleton from "primevue/skeleton"
 
 import { useSkillWheel } from "../../composables/skill/skillWheel"
 
-const { wheelContainer, isLoading, loadSkills, showRoot, showSkill } = useSkillWheel()
+const emit = defineEmits(["skill-detail"])
+
+const { wheelContainer, isLoading, loadSkills, showRoot, showSkill } = useSkillWheel({
+  onSkillDetail: (detail) => emit("skill-detail", detail),
+})
 
 defineExpose({
   showRoot,

@@ -4,6 +4,8 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { storeToRefs } from "pinia"
 
+import Dialog from "primevue/dialog"
+
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -36,6 +38,42 @@ const profileMatchesEl = ref()
 const foundSkills = ref([])
 const showSkilProfileForm = ref(false)
 const showProfileMatches = ref(false)
+const showSkillDetail = ref(false)
+const skillDetail = ref(null)
+const skillGradebookLinks = ref([])
+const isLoadingDetail = ref(false)
+
+async function onSkillDetail(detail) {
+  skillDetail.value = detail
+  skillGradebookLinks.value = []
+  showSkillDetail.value = true
+  isLoadingDetail.value = true
+
+  try {
+    const data = await skillService.getSkillDetail(detail.id)
+    skillGradebookLinks.value = data.gradebookLinks || []
+  } catch (e) {
+    showErrorNotification(e)
+  } finally {
+    isLoadingDetail.value = false
+  }
+}
+
+function addSkillToSearch(skillId, skillName) {
+  const alreadyAdded = foundSkills.value.some((s) => s.id === skillId)
+  if (!alreadyAdded) {
+    foundSkills.value = [...foundSkills.value, { id: skillId, name: skillName, value: `/api/skills/${skillId}` }]
+  }
+  showSkillDetail.value = false
+}
+
+function gradebookUrl(link) {
+  let url = `/main/gradebook/index.php?cid=${link.courseId}`
+  if (link.sessionId) {
+    url += `&sid=${link.sessionId}`
+  }
+  return url
+}
 
 // Kept for compatibility (origin might still be used elsewhere, e.g. breadcrumb logic)
 const safeOrigin = computed(() => {
@@ -167,23 +205,23 @@ async function onSearchProfile(profile) {
         <ul class="fa-ul">
           <li>
             <BaseIcon
-              class="skill-legend-basic"
               icon="square"
+              style="color: #3182bd"
             />
 
             {{ t("Basic skills") }}
           </li>
           <li>
             <BaseIcon
-              class="skill-legend-add"
               icon="square"
+              style="color: #F89406"
             />
             {{ t("Skills you can learn") }}
           </li>
           <li>
             <BaseIcon
-              class="skill-legend-search"
               icon="square"
+              style="color: #B94A48"
             />
             {{ t("Skills searched for") }}
           </li>
@@ -195,6 +233,7 @@ async function onSearchProfile(profile) {
       <SkillWheelGraph
         v-show="!showProfileMatches"
         ref="wheelEl"
+        @skill-detail="onSkillDetail"
       />
       <SkillProfileMatches
         v-if="canUseProfiles"
@@ -210,4 +249,93 @@ async function onSearchProfile(profile) {
     v-model:visible="showSkilProfileForm"
     @saved="profileListEL.loadProfiles()"
   />
+
+  <Dialog
+    v-model:visible="showSkillDetail"
+    :header="skillDetail?.name"
+    modal
+    class="w-full max-w-lg"
+  >
+    <div
+      v-if="skillDetail"
+      class="flex flex-col gap-4"
+    >
+      <div v-if="skillDetail.shortCode">
+        <span class="font-semibold">{{ t("Code") }}:</span>
+        {{ skillDetail.shortCode }}
+      </div>
+      <div v-if="skillDetail.parentPath">
+        <span class="font-semibold">{{ t("Parent") }}:</span>
+        {{ skillDetail.parentPath }}
+      </div>
+      <div v-if="skillDetail.description">
+        <span class="font-semibold">{{ t("Description") }}:</span>
+        <div
+          class="mt-1"
+          v-html="skillDetail.description"
+        />
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">
+          {{ t("This skill can be obtained through:") }}
+        </h4>
+        <div
+          v-if="isLoadingDetail"
+          class="text-gray-500"
+        >
+          {{ t("Loading") }}...
+        </div>
+        <ul
+          v-else-if="skillGradebookLinks.length"
+          class="list-disc pl-4"
+        >
+          <li
+            v-for="link in skillGradebookLinks"
+            :key="`${link.courseId}-${link.sessionId}`"
+          >
+            <a
+              :href="gradebookUrl(link)"
+              class="text-primary hover:underline"
+            >
+              {{ link.courseTitle }}
+              <span v-if="link.sessionTitle">({{ link.sessionTitle }})</span>
+            </a>
+          </li>
+        </ul>
+        <p
+          v-else
+          class="text-gray-500"
+        >
+          {{ t("No course currently allows you to obtain this skill.") }}
+        </p>
+      </div>
+
+      <div
+        v-if="canUseProfiles"
+        class="flex gap-2 mt-2"
+      >
+        <a :href="`/main/skills/skill_edit.php?id=${skillDetail.id}`">
+          <BaseButton
+            :label="t('Edit')"
+            icon="edit"
+            type="primary"
+          />
+        </a>
+        <a :href="`/main/skills/skill_create.php?parent=${skillDetail.id}`">
+          <BaseButton
+            :label="t('Create child skill')"
+            icon="add"
+            type="success"
+          />
+        </a>
+        <BaseButton
+          :label="t('Add skill to search profile')"
+          icon="search"
+          type="secondary"
+          @click="addSkillToSearch(skillDetail.id, skillDetail.name)"
+        />
+      </div>
+    </div>
+  </Dialog>
 </template>

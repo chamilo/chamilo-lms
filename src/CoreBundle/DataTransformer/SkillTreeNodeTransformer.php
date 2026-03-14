@@ -24,6 +24,7 @@ readonly class SkillTreeNodeTransformer
         $skillNode->status = $object->getStatus();
         $skillNode->isSearched = $object->getProfiles()->count() > 0;
         $skillNode->hasGradebook = $object->getGradeBookCategories()->count() > 0;
+        $skillNode->description = $object->getDescription();
 
         if (($shortCode = $object->getShortCode())
             && 'false' === $this->settingsManager->getSetting('skill.show_full_skill_name_on_skill_wheel')

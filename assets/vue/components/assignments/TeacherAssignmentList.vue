@@ -20,12 +20,12 @@
       field="title"
     >
       <template #body="slotProps">
-        <RouterLink
+        <BaseAppLink
           class="text-blue-600 hover:underline"
           :to="getAssignmentDetailLink(slotProps.data)"
         >
           {{ slotProps.data.title }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </Column>
 

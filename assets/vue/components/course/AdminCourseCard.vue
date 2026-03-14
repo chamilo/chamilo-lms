@@ -33,12 +33,12 @@
 
     <template #footer>
       <div class="flex justify-end pt-2">
-        <RouterLink
+        <BaseAppLink
           :to="{ name: 'RegisterStudent', params: { courseId: course.id } }"
           class="btn btn--primary"
         >
           {{ t("Register student") }}
-        </RouterLink>
+        </BaseAppLink>
       </div>
     </template>
   </Card>

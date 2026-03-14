@@ -57,12 +57,12 @@
           <div>
             <div class="meta">{{ t("Created") }}: {{ formatDate(proj.createdAt) }}</div>
 
-            <RouterLink
+            <BaseAppLink
               class="title-link"
               :to="{ name: 'BlogPosts', params: { ...$route.params, blogId: proj.id }, query: $route.query }"
             >
               <h4 class="title">{{ proj.title }}</h4>
-            </RouterLink>
+            </BaseAppLink>
 
             <div class="subtitle">{{ proj.subtitle }}</div>
           </div>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="actions icons">
-          <RouterLink
+          <BaseAppLink
             :to="{ name: 'BlogPosts', params: { ...$route.params, blogId: proj.id }, query: $route.query }"
             class="no-underline"
           >
@@ -83,7 +83,7 @@
               icon="link-external"
               only-icon
             />
-          </RouterLink>
+          </BaseAppLink>
 
           <BaseButton
             :label="t('Rename')"

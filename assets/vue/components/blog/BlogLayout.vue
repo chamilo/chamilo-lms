@@ -17,43 +17,43 @@
 
       <template #end>
         <!-- Primary nav -->
-        <RouterLink
+        <BaseAppLink
           class="nav-link"
           :class="{ active: $route.name === 'BlogPosts' }"
-          :to="{ name:'BlogPosts', params:$route.params, query:$route.query }"
+          :to="{ name: 'BlogPosts', params: $route.params, query: $route.query }"
         >
           {{ t("Posts") }}
-        </RouterLink>
+        </BaseAppLink>
 
-        <RouterLink
+        <BaseAppLink
           class="nav-link"
           :class="{ active: $route.name === 'BlogTasks' }"
-          :to="{ name:'BlogTasks', params:$route.params, query:$route.query }"
+          :to="{ name: 'BlogTasks', params: $route.params, query: $route.query }"
         >
           {{ t("Tasks") }}
-        </RouterLink>
+        </BaseAppLink>
 
-        <RouterLink
+        <BaseAppLink
           class="nav-link"
           :class="{ active: $route.name === 'BlogMembers' }"
-          :to="{ name:'BlogMembers', params:$route.params, query:$route.query }"
+          :to="{ name: 'BlogMembers', params: $route.params, query: $route.query }"
         >
           {{ t("Members") }}
-        </RouterLink>
+        </BaseAppLink>
 
         <!-- Visible to course admins/teachers only -->
-        <RouterLink
+        <BaseAppLink
           v-if="isAdminOrTeacher"
           class="nav-link"
           :class="{ active: $route.name === 'BlogsAdmin' }"
           :to="{
             name: 'BlogsAdmin',
             params: { ...$route.params, node: $route.params.node ?? 'course' },
-            query: $route.query
+            query: $route.query,
           }"
         >
           {{ t("Projects") }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </BaseToolbar>
 

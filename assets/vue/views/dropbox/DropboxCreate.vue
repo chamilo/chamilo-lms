@@ -9,13 +9,13 @@
         </div>
       </template>
       <template #end>
-        <RouterLink :to="returnRoute">
+        <BaseAppLink :to="returnRoute">
           <BaseButton
             type="black"
             icon="arrow-left"
             :label="t('Back')"
           />
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </BaseToolbar>
 
@@ -130,13 +130,13 @@
             </div>
 
             <div class="flex justify-end gap-2 mt-6">
-              <RouterLink :to="returnRoute">
+              <BaseAppLink :to="returnRoute">
                 <BaseButton
                   type="black"
                   icon="xmark"
                   :label="t('Cancel')"
                 />
-              </RouterLink>
+              </BaseAppLink>
               <BaseButton
                 type="primary"
                 icon="check"

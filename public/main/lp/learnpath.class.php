@@ -2879,31 +2879,144 @@ class learnpath
                     );
                     switch ($lp_item_type) {
                         case 'document':
-                            // Shows a button to download the file instead of just downloading the file directly.
-                            $documentPathInfo = pathinfo($file);
-                            if (isset($documentPathInfo['extension'])) {
-                                $parsed = parse_url($documentPathInfo['extension']);
-                                if (isset($parsed['path'])) {
-                                    $extension = $parsed['path'];
-                                    $extensionsToDownload = [
-                                        'zip',
-                                        'ppt',
-                                        'pptx',
-                                        'ods',
-                                        'xlsx',
-                                        'xls',
-                                        'csv',
-                                        'doc',
-                                        'docx',
-                                        'dot',
-                                    ];
+                            $lpItem = $this->getItem($item_id);
+                            $docId = $lpItem ? (int) $lpItem->get_path() : 0;
 
-                                    if (in_array($extension, $extensionsToDownload)) {
-                                        $file = api_get_path(WEB_CODE_PATH).
-                                            'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
+                            $extensionsToDownload = [
+                                'zip',
+                                'ppt',
+                                'pptx',
+                                'ods',
+                                'xlsx',
+                                'xls',
+                                'csv',
+                                'doc',
+                                'docx',
+                                'dot',
+                            ];
+
+                            $onlyofficeAllowedExtensions = [
+                                'doc',
+                                'docx',
+                                'odt',
+                                'rtf',
+                                'txt',
+                                'xls',
+                                'xlsx',
+                                'ods',
+                                'csv',
+                                'ppt',
+                                'pptx',
+                                'odp',
+                                'pdf',
+                            ];
+
+                            $onlyofficeViewOnlyExtensions = [
+                                'pdf',
+                            ];
+
+                            $onlyofficeHandled = false;
+                            $extension = '';
+                            $docInfo = [];
+
+                            if ($docId > 0) {
+                                $docInfo = DocumentManager::get_document_data_by_id(
+                                    $docId,
+                                    api_get_course_id(),
+                                    false,
+                                    $this->get_lp_session_id()
+                                );
+                            }
+
+                            $fileNameCandidates = [];
+
+                            if (!empty($docInfo['title'])) {
+                                $fileNameCandidates[] = (string) $docInfo['title'];
+                            }
+
+                            if (!empty($docInfo['path'])) {
+                                $fileNameCandidates[] = (string) $docInfo['path'];
+                            }
+
+                            if (!empty($docInfo['absolute_path'])) {
+                                $fileNameCandidates[] = basename((string) $docInfo['absolute_path']);
+                            }
+
+                            if (!empty($file)) {
+                                $parsedFilePath = parse_url($file, PHP_URL_PATH);
+                                if (!empty($parsedFilePath)) {
+                                    $fileNameCandidates[] = basename((string) $parsedFilePath);
+                                }
+                            }
+
+                            foreach ($fileNameCandidates as $candidate) {
+                                $candidateExtension = strtolower((string) pathinfo($candidate, PATHINFO_EXTENSION));
+                                if ('' !== $candidateExtension) {
+                                    $extension = $candidateExtension;
+                                    break;
+                                }
+                            }
+
+                            $isOnlyofficeEnabled = false;
+
+                            if (class_exists('OnlyofficePlugin')) {
+                                $plugin = OnlyofficePlugin::create();
+
+                                if ($plugin) {
+                                    if (method_exists($plugin, 'isEnabled')) {
+                                        $isOnlyofficeEnabled = (bool) $plugin->isEnabled();
+                                    }
+
+                                    if (!$isOnlyofficeEnabled && method_exists($plugin, 'get')) {
+                                        $isOnlyofficeEnabled = 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
                                     }
                                 }
                             }
+
+                            if ($this->debug > 0) {
+                                error_log(
+                                    'LP ONLYOFFICE document check - itemId: '.$item_id.
+                                    ', docId: '.$docId.
+                                    ', extension: '.$extension.
+                                    ', pluginEnabled: '.($isOnlyofficeEnabled ? 'yes' : 'no')
+                                );
+                            }
+
+                            if (
+                                $isOnlyofficeEnabled &&
+                                $docId > 0 &&
+                                !empty($extension) &&
+                                in_array($extension, $onlyofficeAllowedExtensions, true)
+                            ) {
+                                $onlyofficeUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php'
+                                    .'?docId='.$docId
+                                    .'&cid='.$course_id
+                                    .'&sid='.(int) $this->get_lp_session_id()
+                                    .'&groupId='.(int) api_get_group_id()
+                                    .'&nh=1';
+
+                                if (in_array($extension, $onlyofficeViewOnlyExtensions, true)) {
+                                    $onlyofficeUrl .= '&readOnly=1';
+                                }
+
+                                $file = $onlyofficeUrl;
+                                $onlyofficeHandled = true;
+
+                                if ($this->debug > 0) {
+                                    error_log('LP ONLYOFFICE editor URL: '.$file);
+                                }
+                            }
+
+                            if (
+                                false === $onlyofficeHandled &&
+                                !empty($extension) &&
+                                in_array($extension, $extensionsToDownload, true)
+                            ) {
+                                $file = api_get_path(WEB_CODE_PATH)
+                                    .'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'
+                                    .api_get_cidreq();
+                            }
+
                             break;
                         case 'dir':
                             $file = 'lp_content.php?type=dir';

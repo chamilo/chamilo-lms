@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -32,6 +33,7 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
+        private readonly PluginHelper $pluginHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -194,6 +196,8 @@ class PlatformConfigurationController extends AbstractController
                 ]),
                 'listingURL' => (new Bbb('', '', true, $user->getId()))->getListingUrl(),
             ];
+
+            $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
         }
 
         foreach ($variables as $variable) {
@@ -277,5 +281,50 @@ class PlatformConfigurationController extends AbstractController
 
         // Return empty array as fallback
         return [];
+    }
+
+    private function getOnlyofficeFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('Onlyoffice');
+
+        $documentServerUrl = (string) $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'document_server_url',
+            ''
+        );
+
+        $jwtSecret = (string) $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'jwt_secret',
+            ''
+        );
+
+        $demoData = $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'onlyoffice_connect_demo_data',
+            null
+        );
+
+        $demoEnabled = false;
+
+        if (\is_string($demoData) && '' !== trim($demoData)) {
+            $decodedDemo = json_decode($demoData, true);
+            if (\is_array($decodedDemo)) {
+                $demoEnabled = !empty($decodedDemo['enabled']);
+            }
+        } elseif (\is_array($demoData)) {
+            $demoEnabled = !empty($demoData['enabled']);
+        }
+
+        $configured = $demoEnabled || (
+                '' !== trim($documentServerUrl)
+                && '' !== trim($jwtSecret)
+            );
+
+        return [
+            'enabled' => $enabled,
+            'configured' => $configured,
+            'editorPath' => '/plugin/Onlyoffice/editor.php',
+        ];
     }
 }

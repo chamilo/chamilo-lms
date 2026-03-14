@@ -26,44 +26,33 @@ const ONLYOFFICE_EDITOR_LOG_ENABLED = true;
 
 $plugin = OnlyofficePlugin::create();
 
-<<<<<<< Updated upstream
-$isEnable = 'true' === $plugin->get('enable_onlyoffice_plugin');
-if (!$isEnable) {
-    exit("Document server isn't enabled");
-=======
 $isEnabled = 'true' === $plugin->get('enable_onlyoffice_plugin');
 if (!$isEnabled) {
     exit('Document server is not enabled.');
->>>>>>> Stashed changes
 }
 
 $appSettings = new OnlyofficeAppsettings($plugin);
 $documentServerUrl = $appSettings->getDocumentServerUrl();
 if (empty($documentServerUrl)) {
-<<<<<<< Updated upstream
-    exit("Document server isn't configured");
-=======
     exit('Document server is not configured.');
->>>>>>> Stashed changes
 }
 
-$config = [];
 $docApiUrl = $appSettings->getDocumentServerApiUrl();
-<<<<<<< Updated upstream
-=======
 if (empty($docApiUrl)) {
     exit('Document server API URL is not configured.');
 }
 
->>>>>>> Stashed changes
 $docId = isset($_GET['docId']) ? (int) $_GET['docId'] : null;
-$docPath = isset($_GET['doc']) ? urldecode($_GET['doc']) : null;
+$docPath = isset($_GET['doc']) ? urldecode((string) $_GET['doc']) : null;
 
-$groupId = isset($_GET['groupId']) && !empty($_GET['groupId']) ? (int) $_GET['groupId'] : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : null);
-$userId = api_get_user_id();
+$groupId = isset($_GET['groupId']) && !empty($_GET['groupId'])
+    ? (int) $_GET['groupId']
+    : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : 0);
+
+$userId = (int) api_get_user_id();
 $userInfo = api_get_user_info($userId);
-$sessionId = api_get_session_id();
-$courseId = api_get_course_int_id();
+$sessionId = (int) api_get_session_id();
+$courseId = (int) api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
 if (empty($courseInfo)) {
@@ -75,6 +64,8 @@ $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
 $questionId = isset($_GET['questionId']) ? (int) $_GET['questionId'] : null;
 $isReadOnly = isset($_GET['readOnly']) ? (int) $_GET['readOnly'] : null;
+$forceEdit = isset($_GET['forceEdit']) && in_array(strtolower((string) $_GET['forceEdit']), ['1', 'true', 'yes', 'on'], true);
+
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
@@ -97,18 +88,13 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'questionId' => $questionId,
 ]);
 
-if ($docPath) {
+if (!empty($docPath)) {
     $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
     if (!file_exists($filePath)) {
-<<<<<<< Updated upstream
-        error_log("ERROR: Original file not found -> ".$filePath);
-        exit("Error: Document not found.");
-=======
         onlyofficeEditorLog('ERROR', 'Original file not found', [
             'filePath' => $filePath,
         ]);
         exit('Error: Document not found.');
->>>>>>> Stashed changes
     }
 
     $extension = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
@@ -125,7 +111,7 @@ if ($docPath) {
             }
 
             if (!copy($filePath, $userFilePath)) {
-                exit("Error: Failed to create a copy of the file.");
+                exit('Error: Failed to create a document copy.');
             }
         }
     }
@@ -136,11 +122,6 @@ if ($docPath) {
     $downloadPayload = [
         'type' => 'download',
         'doctype' => 'exercise',
-<<<<<<< Updated upstream
-        'docPath' => urlencode($newDocPath),
-        'courseId' => api_get_course_int_id(),
-        'userId' => api_get_user_id(),
-=======
         'docPath' => $newDocPath,
         'courseId' => $courseId,
         'userId' => $userId,
@@ -154,21 +135,10 @@ if ($docPath) {
         'docPath' => $newDocPath,
         'courseId' => $courseId,
         'userId' => $userId,
->>>>>>> Stashed changes
         'docId' => $fileId,
-        'sessionId' => api_get_session_id(),
+        'sessionId' => $sessionId,
     ];
 
-<<<<<<< Updated upstream
-    $jwtManager = new OnlyofficeJwtManager($appSettings);
-    $hashUrl = $jwtManager->getHash($data);
-    $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$hashUrl;
-    if ($exeId) {
-        $callbackUrl .= '&docPath='.urlencode($newDocPath);
-    } else {
-        $callbackUrl .= '&docPath='.urlencode($newDocPath);
-    }
-=======
     if (!empty($groupId)) {
         $downloadPayload['groupId'] = $groupId;
         $trackPayload['groupId'] = $groupId;
@@ -186,7 +156,6 @@ if ($docPath) {
         api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash.'&docPath='.urlencode($newDocPath),
         $versionToken
     );
->>>>>>> Stashed changes
 
     $docInfo = [
         'iid' => null,
@@ -199,34 +168,20 @@ if ($docPath) {
         'size' => (int) filesize($userFilePath),
         'readonly' => (int) $isReadOnly,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH)."Onlyoffice/editor.php?doc=".urlencode($newDocPath).($exeId ? "&exeId={$exeId}" : "").($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
+        'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?doc='.urlencode($newDocPath)
+            .($exeId ? '&exeId='.$exeId : '')
+            .($exerciseId ? '&exerciseId='.$exerciseId : '')
+            .($questionId ? '&questionId='.$questionId : '')
+            .($isReadOnly ? '&readOnly='.$isReadOnly : '')
+            .($groupId ? '&groupId='.$groupId : '')
+            .($forceEdit ? '&forceEdit=true' : ''),
         'document_url' => $callbackUrl,
         'direct_url' => $fileUrl,
         'basename' => basename($userFilePath),
-        'parent_id' => false,
+        'parent_id' => 0,
         'parents' => [],
-        'forceEdit' => $_GET['forceEdit'] ?? false,
+        'forceEdit' => $forceEdit,
         'exercise_id' => $exerciseId,
-<<<<<<< Updated upstream
-    ];
-} elseif ($docId) {
-    $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
-    if ($docInfo) {
-        $fileId = $docId;
-        $fileUrl = (new OnlyofficeDocumentManager($appSettings, $docInfo))->getFileUrl($docId);
-    }
-}
-
-if (!$docInfo || !$fileId) {
-    error_log("ERROR: Document not found.");
-    exit("Error: Document not found.");
-}
-
-$langInfo = LangManager::getLangUser();
-$jwtManager = new OnlyofficeJwtManager($appSettings);
-if (isset($_GET['forceEdit']) && (bool) $_GET['forceEdit'] === true) {
-    $docInfo['forceEdit'] = $_GET['forceEdit'];
-=======
         'creator_id' => $userId,
         'version_token' => $versionToken,
     ];
@@ -382,16 +337,9 @@ if (empty($docInfo) || empty($fileId)) {
 
 if ($forceEdit) {
     $docInfo['forceEdit'] = true;
->>>>>>> Stashed changes
 }
+
 $documentManager = new OnlyofficeDocumentManager($appSettings, $docInfo);
-<<<<<<< Updated upstream
-$extension = $documentManager->getExt($documentManager->getDocInfo('title'));
-$docType = $documentManager->getDocType($extension);
-$fileIdentifier = $docId ? (string) $docId : md5($docPath);
-$key = $documentManager->getDocumentKey($fileIdentifier, $courseCode);
-$fileUrl = $fileUrl ?? $documentManager->getFileUrl($fileIdentifier);
-=======
 $extension = strtolower((string) $documentManager->getExt((string) $documentManager->getDocInfo('title')));
 $docType = $documentManager->getDocType($extension);
 
@@ -408,7 +356,6 @@ $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $vers
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
 
 $fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
->>>>>>> Stashed changes
 
 if (!empty($appSettings->getStorageUrl()) && !empty($fileUrl)) {
     $fileUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $fileUrl);
@@ -419,14 +366,6 @@ if (!empty($appSettings->getStorageUrl()) && !empty($fileUrl)) {
 
 $configService = new OnlyofficeConfigService($appSettings, $jwtManager, $documentManager);
 $editorsMode = $configService->getEditorsMode();
-<<<<<<< Updated upstream
-$config = $configService->createConfig($fileIdentifier, $editorsMode, $_SERVER['HTTP_USER_AGENT']);
-$config = json_decode(json_encode($config), true);
-
-if (empty($config)) {
-    error_log("ERROR: Failed to generate the configuration for OnlyOffice");
-    exit("Error: Failed to generate the configuration for OnlyOffice.");
-=======
 
 $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
 $config = $configService->createConfig($runtimeIdentifier, $editorsMode, $userAgent);
@@ -435,62 +374,16 @@ $config = onlyofficeEditorConfigToArray($config);
 if (empty($config) || !is_array($config)) {
     onlyofficeEditorLog('ERROR', 'Failed to generate editor configuration');
     exit('Error: Failed to generate the configuration for ONLYOFFICE.');
->>>>>>> Stashed changes
 }
 
-$isMobileAgent = $configService->isMobileAgent($_SERVER['HTTP_USER_AGENT']);
-
-$showHeaders = true;
-$headerHeight = 'calc(100% - 140px)';
-if (!empty($_GET['nh'])) {
-    $showHeaders = false;
-    $headerHeight = '100%';
+if (!isset($config['document']) || !is_array($config['document'])) {
+    $config['document'] = [];
 }
 
-<<<<<<< Updated upstream
-?>
-<title>ONLYOFFICE</title>
-<style>
-    #app > iframe {
-        height: <?php echo $headerHeight; ?>;
-    }
-    body {
-        height: 100%;
-    }
-    .chatboxheadmain,
-    .pull-right,
-    .breadcrumb {
-        display: none;
-    }
-</style>
-<script type="text/javascript" src="<?php echo $docApiUrl; ?>"></script>
-<script type="text/javascript">
-    var onAppReady = function () {
-        innerAlert("Document editor ready");
-    };
+if (!isset($config['editorConfig']) || !is_array($config['editorConfig'])) {
+    $config['editorConfig'] = [];
+}
 
-    var onRequestSaveAs = function (event) {
-        var url = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH)); ?> + "Onlyoffice/ajax/saveas.php";
-        var folderId = <?php echo json_encode($docInfo['parent_id'] ?? 0); ?>;
-        var saveData = {
-            title: event.data.title,
-            url: event.data.url,
-            folderId: folderId,
-            sessionId: <?php echo json_encode($sessionId); ?>,
-            courseId: <?php echo json_encode($courseId); ?>,
-            groupId: <?php echo json_encode($groupId); ?>
-        };
-
-        $.ajax(url, {
-            method: "POST",
-            data: JSON.stringify(saveData),
-            processData: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (response) {
-                if (response.error) {
-                    console.error("Create error: ", response.error);
-=======
 if (!isset($config['document']['permissions']) || !is_array($config['document']['permissions'])) {
     $config['document']['permissions'] = [];
 }
@@ -538,155 +431,155 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
 sendOnlyofficeEditorNoCacheHeaders();
 
 ?>
-    <!DOCTYPE html>
-    <html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ONLYOFFICE</title>
-        <style>
-            html,
-            body,
-            #<?php echo $editorContainerId; ?> {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
+<!DOCTYPE html>
+<html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ONLYOFFICE</title>
+    <style>
+        html,
+        body,
+        #<?php echo $editorContainerId; ?> {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+            background: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
+</head>
+<body>
+<div id="<?php echo $editorContainerId; ?>"></div>
+
+<script type="text/javascript">
+    (function () {
+        const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+        const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
+        const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
+        const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
+        const sessionId = <?php echo json_encode((int) $sessionId); ?>;
+        const courseId = <?php echo json_encode((int) $courseId); ?>;
+        const groupId = <?php echo json_encode((int) $groupId); ?>;
+        const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
+        const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
+        const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
+
+        function debugLog() {
+            if (!debugEnabled) {
+                return;
             }
 
-            body {
-                overflow: hidden;
-                background: #ffffff;
-                font-family: Arial, sans-serif;
-            }
-        </style>
-        <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
-    </head>
-    <body>
-    <div id="<?php echo $editorContainerId; ?>"></div>
+            const args = Array.prototype.slice.call(arguments);
+            console.log.apply(console, args);
+        }
 
-    <script type="text/javascript">
-        (function () {
-            const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
-            const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
-            const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
-            const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
-            const sessionId = <?php echo json_encode((int) $sessionId); ?>;
-            const courseId = <?php echo json_encode((int) $courseId); ?>;
-            const groupId = <?php echo json_encode((int) $groupId); ?>;
-            const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
-            const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
-            const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
+        function onAppReady() {
+            debugLog("ONLYOFFICE editor ready");
+        }
 
-            function debugLog() {
-                if (!debugEnabled) {
-                    return;
-                }
+        function onDocumentReady() {
+            debugLog("ONLYOFFICE document ready");
+        }
 
-                const args = Array.prototype.slice.call(arguments);
-                console.log.apply(console, args);
-            }
+        function onError(event) {
+            debugLog("ONLYOFFICE editor error", event);
+        }
 
-            function onAppReady() {
-                debugLog("ONLYOFFICE editor ready");
-            }
+        function onRequestSaveAs(event) {
+            const payload = {
+                title: event.data.title,
+                url: event.data.url,
+                folderId: folderId,
+                sessionId: sessionId,
+                courseId: courseId,
+                groupId: groupId
+            };
 
-            function onDocumentReady() {
-                debugLog("ONLYOFFICE document ready");
-            }
-
-            function onError(event) {
-                debugLog("ONLYOFFICE editor error", event);
-            }
-
-            function onRequestSaveAs(event) {
-                const payload = {
-                    title: event.data.title,
-                    url: event.data.url,
-                    folderId: folderId,
-                    sessionId: sessionId,
-                    courseId: courseId,
-                    groupId: groupId
-                };
-
-                fetch(saveAsUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
+            fetch(saveAsUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(function (response) {
+                    return response.json();
                 })
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (response) {
-                        if (response && response.error) {
-                            console.error("ONLYOFFICE save-as error:", response.error);
-                        }
-                    })
-                    .catch(function (error) {
-                        console.error("ONLYOFFICE save-as request failed:", error);
-                    });
-            }
-
-            function onRequestEditRights() {
-                const url = new URL(window.location.href);
-                url.searchParams.set("forceEdit", "true");
-                window.location.href = url.toString();
-            }
-
-            function checkDocsVersion() {
-                if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
-                    console.error("ONLYOFFICE DocsAPI is not available.");
-                    return false;
-                }
-
-                const docsVersion = DocsAPI.DocEditor.version().split(".");
-                const major = parseInt(docsVersion[0] || "0", 10);
-                const minor = parseInt(docsVersion[1] || "0", 10);
-
-                if ((config.document && config.document.fileType === "pdf") && major < 8) {
-                    window.location.href = errorPage + "?status=1";
-                    return false;
-                }
-
-                if (major < 6 || (major === 6 && minor === 0)) {
-                    window.location.href = errorPage + "?status=2";
-                    return false;
-                }
-
-                return true;
-            }
-
-            function connectEditor() {
-                if (!checkDocsVersion()) {
-                    return;
-                }
-
-                config.events = {
-                    onAppReady: onAppReady,
-                    onDocumentReady: onDocumentReady,
-                    onError: onError,
-                    onRequestSaveAs: onRequestSaveAs,
-                    onRequestEditRights: onRequestEditRights
-                };
-
-                window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
-
-                if (isMobileAgent) {
-                    const iframe = document.querySelector("#" + editorContainerId + " iframe");
-                    if (iframe) {
-                        iframe.style.height = "100%";
-                        iframe.style.top = "0";
+                .then(function (response) {
+                    if (response && response.error) {
+                        console.error("ONLYOFFICE save-as error:", response.error);
                     }
-                }
+                })
+                .catch(function (error) {
+                    console.error("ONLYOFFICE save-as request failed:", error);
+                });
+        }
+
+        function onRequestEditRights() {
+            const url = new URL(window.location.href);
+            url.searchParams.set("forceEdit", "true");
+            window.location.href = url.toString();
+        }
+
+        function checkDocsVersion() {
+            if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
+                console.error("ONLYOFFICE DocsAPI is not available.");
+                return false;
             }
 
-            window.addEventListener("load", connectEditor);
-        })();
-    </script>
-    </body>
-    </html>
+            const docsVersion = DocsAPI.DocEditor.version().split(".");
+            const major = parseInt(docsVersion[0] || "0", 10);
+            const minor = parseInt(docsVersion[1] || "0", 10);
+
+            if ((config.document && config.document.fileType === "pdf") && major < 8) {
+                window.location.href = errorPage + "?status=1";
+                return false;
+            }
+
+            if (major < 6 || (major === 6 && minor === 0)) {
+                window.location.href = errorPage + "?status=2";
+                return false;
+            }
+
+            return true;
+        }
+
+        function connectEditor() {
+            if (!checkDocsVersion()) {
+                return;
+            }
+
+            config.events = {
+                onAppReady: onAppReady,
+                onDocumentReady: onDocumentReady,
+                onError: onError,
+                onRequestSaveAs: onRequestSaveAs,
+                onRequestEditRights: onRequestEditRights
+            };
+
+            window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
+
+            if (isMobileAgent) {
+                const iframe = document.querySelector("#" + editorContainerId + " iframe");
+                if (iframe) {
+                    iframe.style.height = "100%";
+                    iframe.style.top = "0";
+                }
+            }
+        }
+
+        window.addEventListener("load", connectEditor);
+    })();
+</script>
+</body>
+</html>
 <?php
 
 /**
@@ -835,33 +728,8 @@ function getResourceNodeRepositoryForOnlyofficeEditor(): ?ResourceNodeRepository
 
                 if ($repo instanceof ResourceNodeRepository) {
                     return $repo;
->>>>>>> Stashed changes
                 }
-            },
-            error: function (e) {
-                console.error("Create error: ", e);
             }
-        });
-    };
-
-    var onRequestEditRights = function () {
-        location.href += "&forceEdit=true";
-    }
-
-    var connectEditor = function () {
-        var config = <?php echo json_encode($config); ?>;
-        var errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
-
-        var docsVersion = DocsAPI.DocEditor.version().split(".");
-        if ((config.document.fileType === "pdf")
-            && docsVersion[0] < 8) {
-            window.location.href = errorPage + "?status=" + 1;
-            return;
-        }
-        if (docsVersion[0] < 6
-            || docsVersion[0] == 6 && docsVersion[1] == 0) {
-            window.location.href = errorPage + "?status=" + 2;
-            return;
         }
     } catch (\Throwable $e) {
         onlyofficeEditorLog('WARNING', 'Failed to resolve ResourceNodeRepository', [
@@ -869,48 +737,6 @@ function getResourceNodeRepositoryForOnlyofficeEditor(): ?ResourceNodeRepository
         ]);
     }
 
-<<<<<<< Updated upstream
-        $("#cm-content")[0].remove(".container");
-        $("#main").append('<div id="app-onlyoffice">' +
-                            '<div id="app">' +
-                                '<div id="iframeEditor">' +
-                                '</div>' +
-                            '</div>' +
-                          '</div>');
-
-        var isMobileAgent = <?php echo json_encode($isMobileAgent); ?>;
-
-        config.events = {
-            "onAppReady": onAppReady,
-            "onRequestSaveAs": onRequestSaveAs,
-            "onRequestEditRights": onRequestEditRights
-        };
-
-        docEditor = new DocsAPI.DocEditor("iframeEditor", config);
-
-        $(".navbar").css({"margin-bottom": "0px"});
-        $("body").css({"margin": "0 0 0px"});
-        if (isMobileAgent) {
-            var frameEditor = $("#app > iframe")[0];
-            $(frameEditor).css({"height": "100%", "top": "0px"});
-        }
-    }
-
-    if (window.addEventListener) {
-        window.addEventListener("load", connectEditor);
-    } else if (window.attachEvent) {
-        window.attachEvent("load", connectEditor);
-    }
-
-</script>
-<?php
-if ($showHeaders) {
-    echo Display::display_header();
-} else {
-    echo Display::display_reduced_header();
-}
-?>
-=======
     return null;
 }
 
@@ -1143,4 +969,3 @@ function onlyofficeEditorLog(string $level, string $message, array $context = []
 
     error_log($line);
 }
->>>>>>> Stashed changes

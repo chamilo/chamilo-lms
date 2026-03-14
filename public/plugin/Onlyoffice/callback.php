@@ -23,7 +23,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 
-const ONLYOFFICE_CALLBACK_LOG_ENABLED = true;
+const ONLYOFFICE_CALLBACK_LOG_ENABLED = false;
 
 $plugin = OnlyofficePlugin::create();
 

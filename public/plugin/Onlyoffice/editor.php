@@ -22,7 +22,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 
-const ONLYOFFICE_EDITOR_LOG_ENABLED = true;
+const ONLYOFFICE_EDITOR_LOG_ENABLED = false;
 
 $plugin = OnlyofficePlugin::create();
 
@@ -42,6 +42,7 @@ if (empty($docApiUrl)) {
     exit('Document server API URL is not configured.');
 }
 
+$isMetaRequest = isset($_GET['meta']) && '1' === (string) $_GET['meta'];
 $docId = isset($_GET['docId']) ? (int) $_GET['docId'] : null;
 $docPath = isset($_GET['doc']) ? urldecode((string) $_GET['doc']) : null;
 
@@ -86,6 +87,7 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'exerciseId' => $exerciseId,
     'exeId' => $exeId,
     'questionId' => $questionId,
+    'meta' => $isMetaRequest,
 ]);
 
 if (!empty($docPath)) {
@@ -354,6 +356,8 @@ $fileIdentifier = $docId ? (string) $docId : md5((string) $docPath);
 $versionToken = (string) ($docInfo['version_token'] ?? buildOnlyofficeVersionTokenFromLegacyDocInfo($docInfo, $fileIdentifier));
 $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $versionToken);
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
+$documentIdentity = buildOnlyofficeDocumentIdentity($courseId, $sessionId, $groupId, $fileIdentifier);
+$metaUrl = buildOnlyofficeMetaUrl($docId, $docPath, $groupId, $exerciseId, $exeId, $questionId, $isReadOnly, $forceEdit);
 
 $fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
 
@@ -362,6 +366,28 @@ if (!empty($appSettings->getStorageUrl()) && !empty($fileUrl)) {
     if (!empty($callbackUrl)) {
         $callbackUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $callbackUrl);
     }
+    if (!empty($metaUrl)) {
+        $metaUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $metaUrl);
+    }
+}
+
+if ($isMetaRequest) {
+    sendOnlyofficeEditorNoCacheHeaders();
+    @header('Content-Type: application/json');
+
+    echo json_encode([
+        'status' => 'ok',
+        'docId' => $docId,
+        'fileIdentifier' => $fileIdentifier,
+        'documentIdentity' => $documentIdentity,
+        'versionToken' => $versionToken,
+        'key' => $runtimeKey,
+        'readonly' => $editorReadOnly,
+        'extension' => $extension,
+        'size' => (int) ($docInfo['size'] ?? 0),
+    ]);
+
+    exit;
 }
 
 $configService = new OnlyofficeConfigService($appSettings, $jwtManager, $documentManager);
@@ -426,160 +452,250 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'versionToken' => $versionToken,
     'extension' => $extension,
     'jwtTokenPresent' => !empty($config['token']),
+    'metaUrl' => $metaUrl,
 ]);
 
 sendOnlyofficeEditorNoCacheHeaders();
 
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ONLYOFFICE</title>
-    <style>
-        html,
-        body,
-        #<?php echo $editorContainerId; ?> {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            overflow: hidden;
-            background: #ffffff;
-            font-family: Arial, sans-serif;
-        }
-    </style>
-    <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
-</head>
-<body>
-<div id="<?php echo $editorContainerId; ?>"></div>
-
-<script type="text/javascript">
-    (function () {
-        const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
-        const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
-        const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
-        const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
-        const sessionId = <?php echo json_encode((int) $sessionId); ?>;
-        const courseId = <?php echo json_encode((int) $courseId); ?>;
-        const groupId = <?php echo json_encode((int) $groupId); ?>;
-        const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
-        const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
-        const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
-
-        function debugLog() {
-            if (!debugEnabled) {
-                return;
+    <!DOCTYPE html>
+    <html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ONLYOFFICE</title>
+        <style>
+            html,
+            body,
+            #<?php echo $editorContainerId; ?> {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
             }
 
-            const args = Array.prototype.slice.call(arguments);
-            console.log.apply(console, args);
-        }
+            body {
+                overflow: hidden;
+                background: #ffffff;
+                font-family: Arial, sans-serif;
+            }
+        </style>
+        <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    </head>
+    <body>
+    <div id="<?php echo $editorContainerId; ?>"></div>
 
-        function onAppReady() {
-            debugLog("ONLYOFFICE editor ready");
-        }
+    <script type="text/javascript">
+        (function () {
+            const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+            const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
+            const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
+            const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
+            const sessionId = <?php echo json_encode((int) $sessionId); ?>;
+            const courseId = <?php echo json_encode((int) $courseId); ?>;
+            const groupId = <?php echo json_encode((int) $groupId); ?>;
+            const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
+            const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
+            const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
 
-        function onDocumentReady() {
-            debugLog("ONLYOFFICE document ready");
-        }
+            const isEditableMode = !!(
+                config &&
+                config.editorConfig &&
+                config.editorConfig.mode === "edit"
+            );
 
-        function onError(event) {
-            debugLog("ONLYOFFICE editor error", event);
-        }
+            function debugLog() {
+                if (!debugEnabled) {
+                    return;
+                }
 
-        function onRequestSaveAs(event) {
-            const payload = {
-                title: event.data.title,
-                url: event.data.url,
-                folderId: folderId,
-                sessionId: sessionId,
-                courseId: courseId,
-                groupId: groupId
-            };
+                const args = Array.prototype.slice.call(arguments);
+                console.log.apply(console, args);
+            }
 
-            fetch(saveAsUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (response) {
-                    if (response && response.error) {
-                        console.error("ONLYOFFICE save-as error:", response.error);
+            function getNavigationType() {
+                try {
+                    const entries = performance.getEntriesByType("navigation");
+                    if (entries && entries.length > 0 && entries[0].type) {
+                        return entries[0].type;
                     }
+
+                    if (performance.navigation) {
+                        if (performance.navigation.type === 1) {
+                            return "reload";
+                        }
+
+                        if (performance.navigation.type === 0) {
+                            return "navigate";
+                        }
+                    }
+                } catch (error) {
+                    debugLog("ONLYOFFICE failed to detect navigation type", error);
+                }
+
+                return "unknown";
+            }
+
+            function leaveEditorSafely() {
+                if (window.history.length > 1) {
+                    window.history.back();
+                    return;
+                }
+
+                if (document.referrer && document.referrer !== window.location.href) {
+                    window.location.href = document.referrer;
+                    return;
+                }
+
+                window.location.href = <?php echo json_encode(api_get_path(WEB_PATH)); ?>;
+            }
+
+            function handleUnsafeReload() {
+                alert("Refreshing the editor while the document session is still open is not supported. You will return to the previous page so the document can be reopened safely.");
+                leaveEditorSafely();
+            }
+
+            function onAppReady() {
+                debugLog("ONLYOFFICE editor ready");
+            }
+
+            function onDocumentReady() {
+                debugLog("ONLYOFFICE document ready");
+            }
+
+            function onDocumentStateChange(event) {
+                debugLog("ONLYOFFICE document state changed", event);
+            }
+
+            function onError(event) {
+                debugLog("ONLYOFFICE editor error", event);
+            }
+
+            function onRequestSaveAs(event) {
+                const payload = {
+                    title: event.data.title,
+                    url: event.data.url,
+                    folderId: folderId,
+                    sessionId: sessionId,
+                    courseId: courseId,
+                    groupId: groupId
+                };
+
+                fetch(saveAsUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
                 })
-                .catch(function (error) {
-                    console.error("ONLYOFFICE save-as request failed:", error);
-                });
-        }
-
-        function onRequestEditRights() {
-            const url = new URL(window.location.href);
-            url.searchParams.set("forceEdit", "true");
-            window.location.href = url.toString();
-        }
-
-        function checkDocsVersion() {
-            if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
-                console.error("ONLYOFFICE DocsAPI is not available.");
-                return false;
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (response) {
+                        if (response && response.error) {
+                            console.error("ONLYOFFICE save-as error:", response.error);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("ONLYOFFICE save-as request failed:", error);
+                    });
             }
 
-            const docsVersion = DocsAPI.DocEditor.version().split(".");
-            const major = parseInt(docsVersion[0] || "0", 10);
-            const minor = parseInt(docsVersion[1] || "0", 10);
-
-            if ((config.document && config.document.fileType === "pdf") && major < 8) {
-                window.location.href = errorPage + "?status=1";
-                return false;
+            function onRequestEditRights() {
+                const url = new URL(window.location.href);
+                url.searchParams.set("forceEdit", "true");
+                window.location.href = url.toString();
             }
 
-            if (major < 6 || (major === 6 && minor === 0)) {
-                window.location.href = errorPage + "?status=2";
-                return false;
+            function checkDocsVersion() {
+                if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
+                    console.error("ONLYOFFICE DocsAPI is not available.");
+                    return false;
+                }
+
+                const docsVersion = DocsAPI.DocEditor.version().split(".");
+                const major = parseInt(docsVersion[0] || "0", 10);
+                const minor = parseInt(docsVersion[1] || "0", 10);
+
+                if ((config.document && config.document.fileType === "pdf") && major < 8) {
+                    window.location.href = errorPage + "?status=1";
+                    return false;
+                }
+
+                if (major < 6 || (major === 6 && minor === 0)) {
+                    window.location.href = errorPage + "?status=2";
+                    return false;
+                }
+
+                return true;
             }
 
-            return true;
-        }
+            function connectEditor() {
+                if (!checkDocsVersion()) {
+                    return;
+                }
 
-        function connectEditor() {
-            if (!checkDocsVersion()) {
-                return;
-            }
+                const navigationType = getNavigationType();
+                debugLog("ONLYOFFICE navigation type", navigationType);
 
-            config.events = {
-                onAppReady: onAppReady,
-                onDocumentReady: onDocumentReady,
-                onError: onError,
-                onRequestSaveAs: onRequestSaveAs,
-                onRequestEditRights: onRequestEditRights
-            };
+                if (isEditableMode && navigationType === "reload") {
+                    handleUnsafeReload();
+                    return;
+                }
 
-            window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
+                config.events = {
+                    onAppReady: onAppReady,
+                    onDocumentReady: onDocumentReady,
+                    onDocumentStateChange: onDocumentStateChange,
+                    onError: onError,
+                    onRequestSaveAs: onRequestSaveAs,
+                    onRequestEditRights: onRequestEditRights
+                };
 
-            if (isMobileAgent) {
-                const iframe = document.querySelector("#" + editorContainerId + " iframe");
-                if (iframe) {
-                    iframe.style.height = "100%";
-                    iframe.style.top = "0";
+                window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
+
+                if (isMobileAgent) {
+                    const iframe = document.querySelector("#" + editorContainerId + " iframe");
+                    if (iframe) {
+                        iframe.style.height = "100%";
+                        iframe.style.top = "0";
+                    }
                 }
             }
-        }
 
-        window.addEventListener("load", connectEditor);
-    })();
-</script>
-</body>
-</html>
+            window.addEventListener("keydown", function (event) {
+                if (!isEditableMode) {
+                    return;
+                }
+
+                const key = String(event.key || "").toLowerCase();
+                const isReloadShortcut =
+                    key === "f5" ||
+                    ((event.ctrlKey || event.metaKey) && key === "r");
+
+                if (!isReloadShortcut) {
+                    return;
+                }
+
+                event.preventDefault();
+                handleUnsafeReload();
+            });
+
+            window.addEventListener("beforeunload", function (event) {
+                if (!isEditableMode) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.returnValue = "";
+                return "";
+            });
+
+            window.addEventListener("load", connectEditor);
+        })();
+    </script>
+    </body>
+    </html>
 <?php
 
 /**
@@ -837,6 +953,71 @@ function buildOnlyofficeRuntimeDocumentKey(string $fileIdentifier, string $cours
     ];
 
     return substr(hash('sha256', implode('|', $parts)), 0, 32);
+}
+
+/**
+ * Build a stable document identity for browser-side reload handling.
+ */
+function buildOnlyofficeDocumentIdentity(int $courseId, int $sessionId, int $groupId, string $fileIdentifier): string
+{
+    return implode(':', [
+        'c'.$courseId,
+        's'.$sessionId,
+        'g'.$groupId,
+        'f'.$fileIdentifier,
+    ]);
+}
+
+/**
+ * Build meta URL for the current editor request.
+ */
+function buildOnlyofficeMetaUrl(
+    ?int $docId,
+    ?string $docPath,
+    int $groupId,
+    ?int $exerciseId,
+    ?int $exeId,
+    ?int $questionId,
+    ?int $isReadOnly,
+    bool $forceEdit
+): string {
+    $params = [
+        'meta' => '1',
+    ];
+
+    if (!empty($docId)) {
+        $params['docId'] = (string) $docId;
+    }
+
+    if (!empty($docPath)) {
+        $params['doc'] = $docPath;
+    }
+
+    if (!empty($groupId)) {
+        $params['groupId'] = (string) $groupId;
+    }
+
+    if (!empty($exerciseId)) {
+        $params['exerciseId'] = (string) $exerciseId;
+    }
+
+    if (!empty($exeId)) {
+        $params['exeId'] = (string) $exeId;
+    }
+
+    if (!empty($questionId)) {
+        $params['questionId'] = (string) $questionId;
+    }
+
+    if (!empty($isReadOnly)) {
+        $params['readOnly'] = (string) $isReadOnly;
+    }
+
+    if ($forceEdit) {
+        $params['forceEdit'] = 'true';
+    }
+
+    return api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?'.http_build_query($params);
 }
 
 /**

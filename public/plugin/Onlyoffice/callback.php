@@ -14,17 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
-use Throwable;
+
+const ONLYOFFICE_CALLBACK_LOG_ENABLED = true;
 
 $plugin = OnlyofficePlugin::create();
 
 if (empty($_GET['hash'])) {
+    sendNoCacheHeaders();
     @header('Content-Type: application/json');
 
     exit(json_encode([
@@ -45,8 +49,9 @@ $signingKey = $jwtManager->getSigningKey();
 [$hashData, $error] = $jwtManager->readHash($hash, $signingKey);
 
 if (null === $hashData) {
+    sendNoCacheHeaders();
     @header('Content-Type: application/json');
-    error_log('ONLYOFFICE CALLBACK: ERROR - Invalid hash: '.$error);
+    onlyofficeLog('ERROR', 'Invalid hash', ['error' => $error]);
 
     exit(json_encode([
         'status' => 'error',
@@ -74,7 +79,19 @@ if ($courseId > 0) {
     $courseCode = is_array($courseInfo) ? ($courseInfo['code'] ?? '') : '';
 }
 
+onlyofficeLog('DEBUG', 'Callback entry', [
+    'type' => $type,
+    'courseId' => $courseId,
+    'courseCode' => $courseCode,
+    'userId' => $userId,
+    'docId' => $docId,
+    'groupId' => $groupId,
+    'sessionId' => $sessionId,
+    'docPath' => $docPath,
+]);
+
 if ($userId <= 0) {
+    sendNoCacheHeaders();
     @header('Content-Type: application/json');
 
     exit(json_encode([
@@ -86,6 +103,7 @@ if ($userId <= 0) {
 $userInfo = api_get_user_info($userId);
 
 if (empty($userInfo)) {
+    sendNoCacheHeaders();
     @header('Content-Type: application/json');
 
     exit(json_encode([
@@ -103,14 +121,16 @@ if (api_is_anonymous()) {
 
     Session::write('_user', $loggedUser);
     Login::init_user($loggedUser['user_id'], true);
-} else {
-    $userId = api_get_user_id();
+}
+
+if (PHP_SESSION_ACTIVE === session_status()) {
+    session_write_close();
 }
 
 switch ($type) {
     case 'track':
+        sendNoCacheHeaders();
         @header('Content-Type: application/json');
-
         exit(json_encode(track()));
 
     case 'download':
@@ -122,6 +142,7 @@ switch ($type) {
         exit;
 
     default:
+        sendNoCacheHeaders();
         @header('Content-Type: application/json');
 
         exit(json_encode([
@@ -144,92 +165,101 @@ function track(): array
 
     $bodyStream = file_get_contents('php://input');
     if (false === $bodyStream || '' === $bodyStream) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - Empty callback body.');
+        onlyofficeLog('ERROR', 'Empty callback body');
 
         return ['error' => 1];
     }
 
     $data = json_decode($bodyStream, true);
     if (!is_array($data)) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - Invalid callback JSON.');
+        onlyofficeLog('ERROR', 'Invalid callback JSON');
 
         return ['error' => 1];
     }
 
     $status = (int) ($data['status'] ?? 0);
 
-    // 4 = closed with no changes
-    if (4 === $status) {
+    if (\in_array($status, [1, 4], true)) {
+        onlyofficeLog('INFO', 'Ignored callback status', ['status' => $status]);
+
         return ['error' => 0];
     }
 
     $payload = validateDocumentServerToken($data, $jwtManager, $appSettings);
     if (is_array($payload) && isset($payload['__error'])) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - '.$payload['__error']);
+        onlyofficeLog('ERROR', 'Token validation failed', ['error' => $payload['__error']]);
 
         return ['error' => 1];
     }
 
-    // 3 / 7 = save error on document server side, nothing to write locally
     if (\in_array($status, [3, 7], true)) {
-        error_log('ONLYOFFICE CALLBACK: WARNING - Document server reported save error. Status: '.$status);
+        onlyofficeLog('WARNING', 'Document server reported save error', ['status' => $status]);
 
         return ['error' => 0];
     }
 
-    // 2 = must save, 6 = force save
     if (!\in_array($status, [2, 6], true)) {
-        error_log('ONLYOFFICE CALLBACK: INFO - Ignored callback status: '.$status);
+        onlyofficeLog('INFO', 'Ignored callback status', ['status' => $status]);
 
         return ['error' => 0];
     }
 
     $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
     if (null === $resolved) {
-        error_log(
-            'ONLYOFFICE CALLBACK: ERROR - File not found for save. '
-            .'docId='.$docId.' docPath='.$docPath
-        );
+        onlyofficeLog('ERROR', 'File not found for save', [
+            'docId' => $docId,
+            'docPath' => $docPath,
+            'courseCode' => $courseCode,
+            'sessionId' => $sessionId,
+        ]);
 
         return ['error' => 1];
     }
 
     $downloadUrl = extractCallbackDownloadUrl($data, $payload);
     if ('' === $downloadUrl) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - Missing callback download URL.');
+        onlyofficeLog('ERROR', 'Missing callback download URL');
 
         return ['error' => 1];
     }
 
-    $newContent = @file_get_contents($downloadUrl);
-    if (false === $newContent) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - Failed to fetch updated document from '.$downloadUrl);
+    $newContent = fetchRemoteBinary($downloadUrl);
+    if (null === $newContent) {
+        onlyofficeLog('ERROR', 'Failed to fetch updated document', [
+            'downloadUrl' => $downloadUrl,
+        ]);
 
         return ['error' => 1];
     }
 
-    if (false === @file_put_contents($resolved['filePath'], $newContent)) {
-        error_log('ONLYOFFICE CALLBACK: ERROR - Failed to save updated file into '.$resolved['filePath']);
+    $writeResult = writeResolvedDocumentContent($resolved, $newContent);
+    if (false === $writeResult) {
+        onlyofficeLog('ERROR', 'Failed to write updated document', [
+            'docId' => $docId,
+            'documentKey' => $resolved['documentKey'] ?? '',
+            'filePath' => $resolved['filePath'] ?? '',
+            'storagePath' => $resolved['storagePath'] ?? '',
+        ]);
 
         return ['error' => 1];
     }
 
-    clearstatcache(true, $resolved['filePath']);
-    syncResolvedDocumentMetadata($resolved);
+    syncResolvedDocumentMetadata($resolved, strlen($newContent));
 
-    error_log(
-        'ONLYOFFICE CALLBACK: SUCCESS - File saved. '
-        .'docId='.$docId
-        .' key='.$resolved['documentKey']
-        .' path='.$resolved['filePath']
-        .' size='.(string) @filesize($resolved['filePath'])
-    );
+    onlyofficeLog('SUCCESS', 'File saved', [
+        'docId' => $docId,
+        'documentKey' => $resolved['documentKey'] ?? '',
+        'filePath' => $resolved['filePath'] ?? '',
+        'storagePath' => $resolved['storagePath'] ?? '',
+        'size' => strlen($newContent),
+        'sha1' => sha1($newContent),
+    ]);
 
     return ['error' => 0];
 }
 
 /**
- * Downloading file by the document service.
+ * Download the file for ONLYOFFICE.
  */
 function download(): void
 {
@@ -241,11 +271,14 @@ function download(): void
     $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
 
     if (null === $resolved) {
+        sendNoCacheHeaders();
         @header('Content-Type: application/json');
-        error_log(
-            'ONLYOFFICE CALLBACK: ERROR - Download file not found. '
-            .'docId='.$docId.' docPath='.$docPath
-        );
+        onlyofficeLog('ERROR', 'Download file not found', [
+            'docId' => $docId,
+            'docPath' => $docPath,
+            'courseCode' => $courseCode,
+            'sessionId' => $sessionId,
+        ]);
 
         echo json_encode([
             'status' => 'error',
@@ -255,21 +288,63 @@ function download(): void
         return;
     }
 
-    @header('Content-Type: application/octet-stream');
-    @header('Content-Disposition: attachment; filename="'.basename((string) $resolved['title']).'"');
-    @header('Content-Length: '.(string) filesize($resolved['filePath']));
+    $title = (string) ($resolved['title'] ?? 'document');
+    $safeFilename = buildSafeDownloadFilename($title);
+    $mimeType = (string) ($resolved['mimeType'] ?? getMimeTypeFromFilename($title));
+    $size = (int) ($resolved['size'] ?? 0);
 
-    readfile($resolved['filePath']);
+    sendNoCacheHeaders();
+    @header('Content-Type: '.$mimeType);
+    @header('Content-Disposition: inline; filename="'.$safeFilename.'"');
+    @header('Content-Transfer-Encoding: binary');
+
+    if ($size > 0) {
+        @header('Content-Length: '.(string) $size);
+    }
+
+    onlyofficeLog('DEBUG', 'Download source resolved', [
+        'docId' => $docId,
+        'title' => $title,
+        'mimeType' => $mimeType,
+        'size' => $size,
+        'storagePath' => $resolved['storagePath'] ?? '',
+        'filePath' => $resolved['filePath'] ?? '',
+    ]);
+
+    if (!empty($resolved['stream']) && \is_resource($resolved['stream'])) {
+        fpassthru($resolved['stream']);
+        fclose($resolved['stream']);
+
+        return;
+    }
+
+    if (!empty($resolved['filePath']) && file_exists($resolved['filePath'])) {
+        readfile($resolved['filePath']);
+
+        return;
+    }
+
+    sendNoCacheHeaders();
+    @header('Content-Type: application/json');
+    onlyofficeLog('ERROR', 'Download source resolved but unreadable', [
+        'docId' => $docId,
+    ]);
+
+    echo json_encode([
+        'status' => 'error',
+        'error' => 'File not found',
+    ]);
 }
 
 /**
- * Downloading empty file by the document service.
+ * Download an empty file template.
  */
 function emptyFile(): void
 {
     $template = TemplateManager::getEmptyTemplate('docx');
 
     if (!$template) {
+        sendNoCacheHeaders();
         @header('Content-Type: application/json');
 
         echo json_encode([
@@ -280,14 +355,15 @@ function emptyFile(): void
         return;
     }
 
+    sendNoCacheHeaders();
     @header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    @header('Content-Disposition: attachment; filename="docx.docx"');
+    @header('Content-Disposition: inline; filename="docx.docx"');
 
     readfile($template);
 }
 
 /**
- * Resolve a document source for callback download/save in C2 first, then fallback to legacy logic.
+ * Resolve a document source in C2 first, then legacy.
  */
 function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, string $docPath): ?array
 {
@@ -295,15 +371,30 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
         $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
 
         if (file_exists($filePath)) {
+            onlyofficeLog('DEBUG', 'Resolved direct docPath', [
+                'docPath' => $docPath,
+                'filePath' => $filePath,
+            ]);
+
             return [
                 'filePath' => $filePath,
+                'stream' => null,
+                'storagePath' => '',
                 'title' => basename($filePath),
                 'documentKey' => basename($docPath),
                 'resourceFileId' => 0,
                 'resourceNodeId' => 0,
                 'entityManager' => null,
+                'resourceNodeRepository' => null,
+                'size' => (int) filesize($filePath),
+                'mimeType' => @mime_content_type($filePath) ?: getMimeTypeFromFilename($filePath),
             ];
         }
+
+        onlyofficeLog('WARNING', 'Direct docPath not found', [
+            'docPath' => $docPath,
+            'filePath' => $filePath,
+        ]);
     }
 
     if ($docId > 0) {
@@ -316,91 +407,240 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
             $legacyDocInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
 
             if ($legacyDocInfo && !empty($legacyDocInfo['absolute_path']) && file_exists($legacyDocInfo['absolute_path'])) {
+                $filePath = (string) $legacyDocInfo['absolute_path'];
+                $title = (string) ($legacyDocInfo['title'] ?? basename($filePath));
+
+                onlyofficeLog('DEBUG', 'Resolved legacy document', [
+                    'docId' => $docId,
+                    'filePath' => $filePath,
+                    'title' => $title,
+                ]);
+
                 return [
-                    'filePath' => $legacyDocInfo['absolute_path'],
-                    'title' => $legacyDocInfo['title'] ?? basename($legacyDocInfo['absolute_path']),
+                    'filePath' => $filePath,
+                    'stream' => null,
+                    'storagePath' => '',
+                    'title' => $title,
                     'documentKey' => (string) $docId,
                     'resourceFileId' => 0,
                     'resourceNodeId' => 0,
                     'entityManager' => null,
+                    'resourceNodeRepository' => null,
+                    'size' => (int) filesize($filePath),
+                    'mimeType' => @mime_content_type($filePath) ?: getMimeTypeFromFilename($title),
                 ];
             }
         }
     }
 
+    onlyofficeLog('ERROR', 'resolveDocumentSource failed', [
+        'docId' => $docId,
+        'docPath' => $docPath,
+        'courseCode' => $courseCode,
+        'sessionId' => $sessionId,
+    ]);
+
     return null;
 }
 
 /**
- * Resolve C2 document physical file using CDocument -> ResourceNode -> ResourceFile.
+ * Resolve C2 document using CDocument -> ResourceNode -> ResourceFile.
  */
 function resolveDocumentSourceFromC2(int $docId): ?array
 {
     $entityManager = getEntityManager();
-    $storage = getVichStorage();
+    if (null === $entityManager) {
+        onlyofficeLog('ERROR', 'Entity manager could not be resolved');
 
-    if (null === $entityManager || null === $storage) {
         return null;
     }
 
     /** @var CDocument|null $document */
     $document = $entityManager->getRepository(CDocument::class)->find($docId);
     if (!$document instanceof CDocument) {
+        onlyofficeLog('ERROR', 'CDocument not found', [
+            'docId' => $docId,
+        ]);
+
         return null;
     }
 
     $resourceNode = $document->getResourceNode();
     if (null === $resourceNode) {
+        onlyofficeLog('ERROR', 'ResourceNode missing for document', [
+            'docId' => $docId,
+        ]);
+
         return null;
     }
 
     $resourceFile = $resourceNode->getFirstResourceFile();
     if (!$resourceFile instanceof ResourceFile) {
+        onlyofficeLog('ERROR', 'ResourceFile missing for document', [
+            'docId' => $docId,
+            'resourceNodeId' => (int) $resourceNode->getId(),
+        ]);
+
         return null;
     }
 
-    $filePath = $storage->resolvePath($resourceFile, 'file');
-    if (!is_string($filePath) || '' === $filePath || !file_exists($filePath)) {
+    $resourceNodeRepository = getResourceNodeRepository();
+    if (null === $resourceNodeRepository) {
+        onlyofficeLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
         return null;
     }
 
-    $title = $resourceFile->getOriginalName();
-    if (empty($title)) {
-        $title = $document->getTitle();
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'Failed to resolve storage filename', [
+            'message' => $e->getMessage(),
+        ]);
     }
+
+    try {
+        $stream = $resourceNodeRepository->getResourceNodeFileStream($resourceNode, $resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('ERROR', 'Failed to open resource stream', [
+            'message' => $e->getMessage(),
+        ]);
+
+        return null;
+    }
+
+    if (!\is_resource($stream)) {
+        onlyofficeLog('ERROR', 'Resource stream is not available', [
+            'docId' => $docId,
+            'resourceNodeId' => (int) $resourceNode->getId(),
+            'resourceFileId' => (int) $resourceFile->getId(),
+            'storagePath' => $storagePath,
+            'originalName' => (string) $resourceFile->getOriginalName(),
+            'title' => (string) $resourceFile->getTitle(),
+        ]);
+
+        return null;
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $document->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+    $mimeType = (string) ($resourceFile->getMimeType() ?: getMimeTypeFromFilename($title));
+
+    onlyofficeLog('DEBUG', 'Resolved C2 resource file', [
+        'docId' => $docId,
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'storagePath' => $storagePath,
+        'title' => $title,
+        'size' => $size,
+        'mimeType' => $mimeType,
+    ]);
 
     return [
-        'filePath' => $filePath,
+        'filePath' => null,
+        'stream' => $stream,
+        'storagePath' => $storagePath,
         'title' => $title,
         'documentKey' => (string) $docId,
         'resourceFileId' => (int) $resourceFile->getId(),
         'resourceNodeId' => (int) $resourceNode->getId(),
         'entityManager' => $entityManager,
+        'resourceNodeRepository' => $resourceNodeRepository,
+        'size' => $size,
+        'mimeType' => $mimeType,
     ];
 }
 
 /**
- * Update DB metadata after a physical save.
+ * Write content back to the resolved storage.
  */
-function syncResolvedDocumentMetadata(array $resolved): void
+function writeResolvedDocumentContent(array $resolved, string $content): bool
+{
+    if (!empty($resolved['filePath'])) {
+        $filePath = (string) $resolved['filePath'];
+
+        if (false === @file_put_contents($filePath, $content, LOCK_EX)) {
+            return false;
+        }
+
+        clearstatcache(true, $filePath);
+
+        return true;
+    }
+
+    $resourceNodeRepository = $resolved['resourceNodeRepository'] ?? null;
+    $storagePath = (string) ($resolved['storagePath'] ?? '');
+
+    if ($resourceNodeRepository instanceof ResourceNodeRepository && '' !== $storagePath) {
+        try {
+            $filesystem = $resourceNodeRepository->getFileSystem();
+
+            try {
+                if ($filesystem->fileExists($storagePath)) {
+                    $filesystem->delete($storagePath);
+                }
+            } catch (\Throwable $e) {
+                onlyofficeLog('WARNING', 'Flysystem delete before write failed', [
+                    'storagePath' => $storagePath,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+
+            $filesystem->write($storagePath, $content);
+
+            onlyofficeLog('DEBUG', 'Content written through Flysystem', [
+                'storagePath' => $storagePath,
+                'size' => strlen($content),
+                'sha1' => sha1($content),
+            ]);
+
+            return true;
+        } catch (\Throwable $e) {
+            onlyofficeLog('ERROR', 'Flysystem write failed', [
+                'storagePath' => $storagePath,
+                'message' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Update DB metadata after save.
+ */
+function syncResolvedDocumentMetadata(array $resolved, ?int $contentSize = null): void
 {
     $entityManager = $resolved['entityManager'] ?? null;
     $resourceFileId = (int) ($resolved['resourceFileId'] ?? 0);
     $resourceNodeId = (int) ($resolved['resourceNodeId'] ?? 0);
-    $filePath = (string) ($resolved['filePath'] ?? '');
+    $title = (string) ($resolved['title'] ?? '');
 
-    if (null === $entityManager || $resourceFileId <= 0 || '' === $filePath || !file_exists($filePath)) {
+    if (null === $entityManager || $resourceFileId <= 0) {
         return;
     }
 
-    $size = (int) filesize($filePath);
-    $mimeType = @mime_content_type($filePath) ?: 'application/octet-stream';
+    $size = max(0, (int) $contentSize);
+    $mimeType = getMimeTypeFromFilename($title);
+
+    if (!empty($resolved['filePath']) && file_exists((string) $resolved['filePath'])) {
+        $filePath = (string) $resolved['filePath'];
+        $size = (int) filesize($filePath);
+        $mimeType = @mime_content_type($filePath) ?: $mimeType;
+    }
 
     try {
         $connection = $entityManager->getConnection();
 
         $connection->executeStatement(
-            'UPDATE resource_file SET size = :size, mime_type = :mime_type WHERE id = :id',
+            'UPDATE resource_file
+             SET size = :size,
+                 mime_type = :mime_type,
+                 updated_at = NOW()
+             WHERE id = :id',
             [
                 'size' => $size,
                 'mime_type' => $mimeType,
@@ -410,19 +650,30 @@ function syncResolvedDocumentMetadata(array $resolved): void
 
         if ($resourceNodeId > 0) {
             $connection->executeStatement(
-                'UPDATE resource_node SET updated_at = NOW() WHERE id = :id',
+                'UPDATE resource_node
+                 SET updated_at = NOW()
+                 WHERE id = :id',
                 [
                     'id' => $resourceNodeId,
                 ]
             );
         }
-    } catch (Throwable $e) {
-        error_log('ONLYOFFICE CALLBACK: WARNING - Metadata sync failed: '.$e->getMessage());
+
+        onlyofficeLog('DEBUG', 'Metadata synced', [
+            'resourceFileId' => $resourceFileId,
+            'resourceNodeId' => $resourceNodeId,
+            'size' => $size,
+            'mimeType' => $mimeType,
+        ]);
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'Metadata sync failed', [
+            'message' => $e->getMessage(),
+        ]);
     }
 }
 
 /**
- * Try to validate document server JWT, but keep URL hash as the primary routing token.
+ * Validate JWT from ONLYOFFICE document server.
  */
 function validateDocumentServerToken(array $data, $jwtManager, $appSettings): object|array|null
 {
@@ -454,13 +705,13 @@ function validateDocumentServerToken(array $data, $jwtManager, $appSettings): ob
         }
 
         return null;
-    } catch (Throwable $e) {
+    } catch (\Throwable $e) {
         return ['__error' => '403 Access denied'];
     }
 }
 
 /**
- * Extract the updated file URL from callback body or decoded payload.
+ * Extract the updated file URL from callback body or payload.
  */
 function extractCallbackDownloadUrl(array $data, mixed $payload): string
 {
@@ -473,6 +724,49 @@ function extractCallbackDownloadUrl(array $data, mixed $payload): string
     }
 
     return '';
+}
+
+/**
+ * Fetch remote binary data.
+ */
+function fetchRemoteBinary(string $url): ?string
+{
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+
+        if (false !== $ch) {
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+            $content = curl_exec($ch);
+            $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+
+            curl_close($ch);
+
+            if (false !== $content && $httpCode >= 200 && $httpCode < 300) {
+                return (string) $content;
+            }
+
+            onlyofficeLog('WARNING', 'cURL download failed', [
+                'url' => $url,
+                'httpCode' => $httpCode,
+                'error' => $error,
+            ]);
+        }
+    }
+
+    $content = @file_get_contents($url);
+
+    if (false === $content) {
+        return null;
+    }
+
+    return $content;
 }
 
 /**
@@ -492,7 +786,7 @@ function getHashValue(mixed $data, string $key, mixed $default = null): mixed
 }
 
 /**
- * Read Bearer token from callback request headers.
+ * Read Bearer token from request headers.
  */
 function readBearerToken(string $headerName): string
 {
@@ -514,25 +808,54 @@ function readBearerToken(string $headerName): string
 }
 
 /**
- * Resolve Doctrine entity manager from Symfony container.
+ * Resolve Doctrine entity manager.
  */
 function getEntityManager()
 {
     try {
         if (isset(Container::$container) && null !== Container::$container) {
-            $doctrine = Container::$container->get('doctrine');
+            if (Container::$container->has('doctrine.orm.entity_manager')) {
+                $entityManager = Container::$container->get('doctrine.orm.entity_manager');
 
-            return $doctrine->getManager();
+                onlyofficeLog('DEBUG', 'Entity manager resolved from container', [
+                    'serviceId' => 'doctrine.orm.entity_manager',
+                    'class' => get_class($entityManager),
+                ]);
+
+                return $entityManager;
+            }
+
+            if (Container::$container->has('doctrine')) {
+                $doctrine = Container::$container->get('doctrine');
+                $entityManager = $doctrine->getManager();
+
+                onlyofficeLog('DEBUG', 'Entity manager resolved from doctrine service', [
+                    'serviceId' => 'doctrine',
+                    'class' => get_class($entityManager),
+                ]);
+
+                return $entityManager;
+            }
         }
-    } catch (Throwable $e) {
-        error_log('ONLYOFFICE CALLBACK: WARNING - Doctrine container access failed: '.$e->getMessage());
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'Doctrine container access failed', [
+            'message' => $e->getMessage(),
+        ]);
     }
 
     if (class_exists('Database') && method_exists('Database', 'getManager')) {
         try {
-            return Database::getManager();
-        } catch (Throwable $e) {
-            error_log('ONLYOFFICE CALLBACK: WARNING - Database::getManager failed: '.$e->getMessage());
+            $entityManager = Database::getManager();
+
+            onlyofficeLog('DEBUG', 'Entity manager resolved from Database::getManager', [
+                'class' => get_class($entityManager),
+            ]);
+
+            return $entityManager;
+        } catch (\Throwable $e) {
+            onlyofficeLog('WARNING', 'Database::getManager failed', [
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -540,17 +863,116 @@ function getEntityManager()
 }
 
 /**
- * Resolve Vich storage service from Symfony container.
+ * Resolve ResourceNodeRepository.
  */
-function getVichStorage()
+function getResourceNodeRepository(): ?ResourceNodeRepository
 {
     try {
         if (isset(Container::$container) && null !== Container::$container) {
-            return Container::$container->get('vich_uploader.storage');
+            if (Container::$container->has(ResourceNodeRepository::class)) {
+                $repo = Container::$container->get(ResourceNodeRepository::class);
+
+                if ($repo instanceof ResourceNodeRepository) {
+                    onlyofficeLog('DEBUG', 'ResourceNodeRepository resolved by class name');
+
+                    return $repo;
+                }
+            }
+
+            $serviceIds = [
+                'Chamilo\\CoreBundle\\Repository\\ResourceNodeRepository',
+                'chamilo.repository.resource_node',
+            ];
+
+            foreach ($serviceIds as $serviceId) {
+                if (!Container::$container->has($serviceId)) {
+                    continue;
+                }
+
+                $repo = Container::$container->get($serviceId);
+
+                if ($repo instanceof ResourceNodeRepository) {
+                    onlyofficeLog('DEBUG', 'ResourceNodeRepository resolved by service id', [
+                        'serviceId' => $serviceId,
+                    ]);
+
+                    return $repo;
+                }
+            }
         }
-    } catch (Throwable $e) {
-        error_log('ONLYOFFICE CALLBACK: WARNING - Vich storage access failed: '.$e->getMessage());
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'ResourceNodeRepository access failed', [
+            'message' => $e->getMessage(),
+        ]);
     }
 
     return null;
+}
+
+/**
+ * Build a safe download filename.
+ */
+function buildSafeDownloadFilename(string $filename): string
+{
+    $filename = trim($filename);
+    if ('' === $filename) {
+        return 'document';
+    }
+
+    return preg_replace('/[^A-Za-z0-9._-]/', '_', $filename) ?: 'document';
+}
+
+/**
+ * Resolve mime type from filename.
+ */
+function getMimeTypeFromFilename(string $filename): string
+{
+    $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+    return match ($extension) {
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'doc' => 'application/msword',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xls' => 'application/vnd.ms-excel',
+        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+        'odp' => 'application/vnd.oasis.opendocument.presentation',
+        'pdf' => 'application/pdf',
+        'txt' => 'text/plain',
+        'csv' => 'text/csv',
+        default => 'application/octet-stream',
+    };
+}
+
+/**
+ * Send anti-cache headers.
+ */
+function sendNoCacheHeaders(): void
+{
+    @header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    @header('Pragma: no-cache');
+    @header('Expires: 0');
+}
+
+/**
+ * Structured logger helper.
+ */
+function onlyofficeLog(string $level, string $message, array $context = []): void
+{
+    if (!ONLYOFFICE_CALLBACK_LOG_ENABLED) {
+        return;
+    }
+
+    $line = 'ONLYOFFICE CALLBACK: '.$level.' - '.$message;
+
+    if (!empty($context)) {
+        $json = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if (false !== $json) {
+            $line .= ' | '.$json;
+        }
+    }
+
+    error_log($line);
 }

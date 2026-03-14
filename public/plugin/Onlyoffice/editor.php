@@ -14,24 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
+
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CourseBundle\Entity\CDocument;
+
+const ONLYOFFICE_EDITOR_LOG_ENABLED = true;
 
 $plugin = OnlyofficePlugin::create();
 
 $isEnabled = 'true' === $plugin->get('enable_onlyoffice_plugin');
 if (!$isEnabled) {
-    exit("Document server is not enabled.");
+    exit('Document server is not enabled.');
 }
 
 $appSettings = new OnlyofficeAppsettings($plugin);
 $documentServerUrl = $appSettings->getDocumentServerUrl();
 if (empty($documentServerUrl)) {
-    exit("Document server is not configured.");
+    exit('Document server is not configured.');
 }
 
 $docApiUrl = $appSettings->getDocumentServerApiUrl();
 if (empty($docApiUrl)) {
-    exit("Document server API URL is not configured.");
+    exit('Document server API URL is not configured.');
 }
 
 $docId = isset($_GET['docId']) ? (int) $_GET['docId'] : null;
@@ -46,9 +54,11 @@ $userInfo = api_get_user_info($userId);
 $sessionId = (int) api_get_session_id();
 $courseId = (int) api_get_course_int_id();
 $courseInfo = api_get_course_info();
+
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
@@ -59,16 +69,35 @@ $forceEdit = isset($_GET['forceEdit']) && in_array(strtolower((string) $_GET['fo
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
+$callbackUrl = null;
+
+$jwtManager = new OnlyofficeJwtManager($appSettings);
+
+onlyofficeEditorLog('DEBUG', 'Editor entry', [
+    'docId' => $docId,
+    'docPath' => $docPath,
+    'courseId' => $courseId,
+    'courseCode' => $courseCode,
+    'sessionId' => $sessionId,
+    'groupId' => $groupId,
+    'userId' => $userId,
+    'readOnly' => $isReadOnly,
+    'forceEdit' => $forceEdit,
+    'exerciseId' => $exerciseId,
+    'exeId' => $exeId,
+    'questionId' => $questionId,
+]);
 
 if (!empty($docPath)) {
     $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
     if (!file_exists($filePath)) {
-        error_log('ONLYOFFICE editor: original file not found -> '.$filePath);
+        onlyofficeEditorLog('ERROR', 'Original file not found', [
+            'filePath' => $filePath,
+        ]);
         exit('Error: Document not found.');
     }
 
-    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-    $fileUrl = api_get_path(WEB_COURSE_PATH).$docPath;
+    $extension = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
     $newDocPath = $docPath;
     $userFilePath = $filePath;
 
@@ -80,20 +109,30 @@ if (!empty($docPath)) {
             if (!is_dir(dirname($userFilePath))) {
                 mkdir(dirname($userFilePath), 0775, true);
             }
+
             if (!copy($filePath, $userFilePath)) {
                 exit('Error: Failed to create a document copy.');
             }
         }
-        $fileUrl = api_get_path(WEB_COURSE_PATH).$newDocPath;
     }
 
     $fileId = basename($newDocPath);
-    $absolutePath = $userFilePath;
-    $absoluteParentPath = dirname($userFilePath).'/';
-    $data = [
+    $versionToken = buildOnlyofficeVersionTokenFromFile($userFilePath, $newDocPath);
+
+    $downloadPayload = [
         'type' => 'download',
         'doctype' => 'exercise',
-        'docPath' => urlencode($newDocPath),
+        'docPath' => $newDocPath,
+        'courseId' => $courseId,
+        'userId' => $userId,
+        'docId' => $fileId,
+        'sessionId' => $sessionId,
+    ];
+
+    $trackPayload = [
+        'type' => 'track',
+        'doctype' => 'exercise',
+        'docPath' => $newDocPath,
         'courseId' => $courseId,
         'userId' => $userId,
         'docId' => $fileId,
@@ -101,12 +140,22 @@ if (!empty($docPath)) {
     ];
 
     if (!empty($groupId)) {
-        $data['groupId'] = $groupId;
+        $downloadPayload['groupId'] = $groupId;
+        $trackPayload['groupId'] = $groupId;
     }
 
-    $jwtManager = new OnlyofficeJwtManager($appSettings);
-    $hashUrl = $jwtManager->getHash($data);
-    $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$hashUrl.'&docPath='.urlencode($newDocPath);
+    $downloadHash = $jwtManager->getHash($downloadPayload);
+    $trackHash = $jwtManager->getHash($trackPayload);
+
+    $fileUrl = appendVersionTokenToUrl(
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash.'&docPath='.urlencode($newDocPath),
+        $versionToken
+    );
+
+    $callbackUrl = appendVersionTokenToUrl(
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash.'&docPath='.urlencode($newDocPath),
+        $versionToken
+    );
 
     $docInfo = [
         'iid' => null,
@@ -116,7 +165,7 @@ if (!empty($docPath)) {
         'comment' => null,
         'title' => basename($userFilePath),
         'filetype' => 'file',
-        'size' => filesize($userFilePath),
+        'size' => (int) filesize($userFilePath),
         'readonly' => (int) $isReadOnly,
         'session_id' => $sessionId,
         'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?doc='.urlencode($newDocPath)
@@ -127,62 +176,203 @@ if (!empty($docPath)) {
             .($groupId ? '&groupId='.$groupId : '')
             .($forceEdit ? '&forceEdit=true' : ''),
         'document_url' => $callbackUrl,
-        'absolute_path' => $absolutePath,
-        'absolute_path_from_document' => '/document/'.basename($userFilePath),
-        'absolute_parent_path' => $absoluteParentPath,
-        'direct_url' => $callbackUrl,
+        'direct_url' => $fileUrl,
         'basename' => basename($userFilePath),
         'parent_id' => 0,
         'parents' => [],
         'forceEdit' => $forceEdit,
         'exercise_id' => $exerciseId,
         'creator_id' => $userId,
+        'version_token' => $versionToken,
     ];
+
+    onlyofficeEditorLog('DEBUG', 'Resolved direct path document', [
+        'fileId' => $fileId,
+        'path' => $newDocPath,
+        'versionToken' => $versionToken,
+    ]);
 } elseif (!empty($docId)) {
-    $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
+    $resolvedC2 = resolveDocumentSourceFromC2ForEditor($docId);
 
-    if ($docInfo) {
+    if (null !== $resolvedC2) {
         $fileId = $docId;
+        $versionToken = $resolvedC2['versionToken'];
 
-        if (!isset($docInfo['forceEdit'])) {
-            $docInfo['forceEdit'] = $forceEdit;
+        $downloadPayload = [
+            'type' => 'download',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'docId' => $docId,
+            'sessionId' => $sessionId,
+        ];
+
+        $trackPayload = [
+            'type' => 'track',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'docId' => $docId,
+            'sessionId' => $sessionId,
+        ];
+
+        if (!empty($groupId)) {
+            $downloadPayload['groupId'] = $groupId;
+            $trackPayload['groupId'] = $groupId;
         }
 
-        $fileUrl = (new OnlyofficeDocumentManager($appSettings, $docInfo))->getFileUrl((string) $docId);
+        $downloadHash = $jwtManager->getHash($downloadPayload);
+        $trackHash = $jwtManager->getHash($trackPayload);
+
+        $fileUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
+            $versionToken
+        );
+
+        $callbackUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
+            $versionToken
+        );
+
+        $docInfo = [
+            'iid' => $docId,
+            'id' => $docId,
+            'c_id' => $courseId,
+            'path' => $resolvedC2['storagePath'],
+            'comment' => $resolvedC2['comment'],
+            'title' => $resolvedC2['title'],
+            'filetype' => 'file',
+            'size' => $resolvedC2['size'],
+            'readonly' => (int) $isReadOnly,
+            'session_id' => $sessionId,
+            'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?docId='.$docId
+                .($isReadOnly ? '&readOnly='.$isReadOnly : '')
+                .($groupId ? '&groupId='.$groupId : '')
+                .($forceEdit ? '&forceEdit=true' : ''),
+            'document_url' => $callbackUrl,
+            'direct_url' => $fileUrl,
+            'basename' => basename((string) $resolvedC2['title']),
+            'parent_id' => $resolvedC2['parentId'],
+            'parents' => [],
+            'forceEdit' => $forceEdit,
+            'exercise_id' => $exerciseId,
+            'creator_id' => $resolvedC2['creatorId'],
+            'resource_node_id' => $resolvedC2['resourceNodeId'],
+            'resource_file_id' => $resolvedC2['resourceFileId'],
+            'version_token' => $versionToken,
+        ];
+
+        onlyofficeEditorLog('DEBUG', 'Resolved C2 document', [
+            'docId' => $docId,
+            'title' => $resolvedC2['title'],
+            'resourceNodeId' => $resolvedC2['resourceNodeId'],
+            'resourceFileId' => $resolvedC2['resourceFileId'],
+            'storagePath' => $resolvedC2['storagePath'],
+            'versionToken' => $versionToken,
+        ]);
+    } else {
+        $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
+
+        if ($docInfo) {
+            $fileId = $docId;
+
+            if (!isset($docInfo['forceEdit'])) {
+                $docInfo['forceEdit'] = $forceEdit;
+            }
+
+            $versionToken = buildOnlyofficeVersionTokenFromLegacyDocInfo($docInfo, (string) $docId);
+
+            $downloadPayload = [
+                'type' => 'download',
+                'courseId' => $courseId,
+                'userId' => $userId,
+                'docId' => $docId,
+                'sessionId' => $sessionId,
+            ];
+
+            $trackPayload = [
+                'type' => 'track',
+                'courseId' => $courseId,
+                'userId' => $userId,
+                'docId' => $docId,
+                'sessionId' => $sessionId,
+            ];
+
+            if (!empty($groupId)) {
+                $downloadPayload['groupId'] = $groupId;
+                $trackPayload['groupId'] = $groupId;
+            }
+
+            $downloadHash = $jwtManager->getHash($downloadPayload);
+            $trackHash = $jwtManager->getHash($trackPayload);
+
+            $fileUrl = appendVersionTokenToUrl(
+                api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
+                $versionToken
+            );
+
+            $callbackUrl = appendVersionTokenToUrl(
+                api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
+                $versionToken
+            );
+
+            $docInfo['direct_url'] = $fileUrl;
+            $docInfo['document_url'] = $callbackUrl;
+            $docInfo['version_token'] = $versionToken;
+
+            onlyofficeEditorLog('DEBUG', 'Resolved legacy document', [
+                'docId' => $docId,
+                'absolutePath' => $docInfo['absolute_path'] ?? '',
+                'versionToken' => $versionToken,
+            ]);
+        }
     }
 }
 
 if (empty($docInfo) || empty($fileId)) {
-    error_log('ONLYOFFICE editor: document not found.');
+    onlyofficeEditorLog('ERROR', 'Document not found', [
+        'docId' => $docId,
+        'docPath' => $docPath,
+    ]);
     exit('Error: Document not found.');
 }
-
-$jwtManager = new OnlyofficeJwtManager($appSettings);
 
 if ($forceEdit) {
     $docInfo['forceEdit'] = true;
 }
 
 $documentManager = new OnlyofficeDocumentManager($appSettings, $docInfo);
-$extension = $documentManager->getExt((string) $documentManager->getDocInfo('title'));
+$extension = strtolower((string) $documentManager->getExt((string) $documentManager->getDocInfo('title')));
 $docType = $documentManager->getDocType($extension);
 
+$editorReadOnly = shouldOpenOnlyofficeInReadOnlyMode(
+    $extension,
+    $isReadOnly,
+    $forceEdit,
+    $exeId
+);
+
 $fileIdentifier = $docId ? (string) $docId : md5((string) $docPath);
-$key = $documentManager->getDocumentKey($fileIdentifier, $courseCode);
-$fileUrl = $fileUrl ?? $documentManager->getFileUrl($fileIdentifier);
+$versionToken = (string) ($docInfo['version_token'] ?? buildOnlyofficeVersionTokenFromLegacyDocInfo($docInfo, $fileIdentifier));
+$runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $versionToken);
+$runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
+
+$fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
 
 if (!empty($appSettings->getStorageUrl()) && !empty($fileUrl)) {
     $fileUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $fileUrl);
+    if (!empty($callbackUrl)) {
+        $callbackUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $callbackUrl);
+    }
 }
 
 $configService = new OnlyofficeConfigService($appSettings, $jwtManager, $documentManager);
 $editorsMode = $configService->getEditorsMode();
 
 $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
-$config = $configService->createConfig($fileIdentifier, $editorsMode, $userAgent);
-$config = json_decode(json_encode($config), true);
+$config = $configService->createConfig($runtimeIdentifier, $editorsMode, $userAgent);
+$config = onlyofficeEditorConfigToArray($config);
+
 if (empty($config) || !is_array($config)) {
-    error_log('ONLYOFFICE editor: failed to generate editor configuration.');
+    onlyofficeEditorLog('ERROR', 'Failed to generate editor configuration');
     exit('Error: Failed to generate the configuration for ONLYOFFICE.');
 }
 
@@ -194,21 +384,51 @@ if (!isset($config['editorConfig']) || !is_array($config['editorConfig'])) {
     $config['editorConfig'] = [];
 }
 
-if (!empty($fileUrl)) {
-    $config['document']['url'] = $fileUrl;
+if (!isset($config['document']['permissions']) || !is_array($config['document']['permissions'])) {
+    $config['document']['permissions'] = [];
 }
 
-if (!empty($key)) {
-    $config['document']['key'] = $key;
+if (!isset($config['editorConfig']['customization']) || !is_array($config['editorConfig']['customization'])) {
+    $config['editorConfig']['customization'] = [];
 }
 
-if (!empty($docType)) {
-    $config['documentType'] = $docType;
-}
+$config['document']['url'] = $fileUrl;
+$config['document']['title'] = (string) ($docInfo['title'] ?? basename((string) ($docInfo['path'] ?? 'document')));
+$config['document']['key'] = $runtimeKey;
+$config['document']['fileType'] = $extension;
+$config['documentType'] = $docType;
+
+$config['editorConfig']['callbackUrl'] = $callbackUrl;
+$config['editorConfig']['mode'] = $editorReadOnly ? 'view' : 'edit';
+
+$config['document']['permissions']['edit'] = !$editorReadOnly;
+$config['document']['permissions']['review'] = !$editorReadOnly;
+$config['document']['permissions']['comment'] = true;
+$config['document']['permissions']['download'] = true;
+$config['document']['permissions']['print'] = true;
+$config['document']['permissions']['copy'] = true;
+
+$config['editorConfig']['customization']['autosave'] = true;
+$config['editorConfig']['customization']['forcesave'] = true;
+
+$config = refreshOnlyofficeEditorToken($config, $jwtManager, $appSettings);
 
 $isMobileAgent = $configService->isMobileAgent($userAgent);
 $langCode = $configService->getLang();
 $editorContainerId = 'iframeEditor';
+
+onlyofficeEditorLog('DEBUG', 'Final config summary', [
+    'docId' => (string) ($docId ?? 0),
+    'key' => $config['document']['key'] ?? '',
+    'fileUrl' => $config['document']['url'] ?? '',
+    'callbackUrl' => $config['editorConfig']['callbackUrl'] ?? '',
+    'readonly' => $editorReadOnly,
+    'versionToken' => $versionToken,
+    'extension' => $extension,
+    'jwtTokenPresent' => !empty($config['token']),
+]);
+
+sendOnlyofficeEditorNoCacheHeaders();
 
 ?>
 <!DOCTYPE html>
@@ -249,9 +469,27 @@ $editorContainerId = 'iframeEditor';
         const groupId = <?php echo json_encode((int) $groupId); ?>;
         const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
         const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
+        const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
+
+        function debugLog() {
+            if (!debugEnabled) {
+                return;
+            }
+
+            const args = Array.prototype.slice.call(arguments);
+            console.log.apply(console, args);
+        }
 
         function onAppReady() {
-            console.log('ONLYOFFICE editor ready');
+            debugLog("ONLYOFFICE editor ready");
+        }
+
+        function onDocumentReady() {
+            debugLog("ONLYOFFICE document ready");
+        }
+
+        function onError(event) {
+            debugLog("ONLYOFFICE editor error", event);
         }
 
         function onRequestSaveAs(event) {
@@ -265,9 +503,9 @@ $editorContainerId = 'iframeEditor';
             };
 
             fetch(saveAsUrl, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify(payload)
             })
@@ -276,37 +514,37 @@ $editorContainerId = 'iframeEditor';
                 })
                 .then(function (response) {
                     if (response && response.error) {
-                        console.error('ONLYOFFICE save-as error:', response.error);
+                        console.error("ONLYOFFICE save-as error:", response.error);
                     }
                 })
                 .catch(function (error) {
-                    console.error('ONLYOFFICE save-as request failed:', error);
+                    console.error("ONLYOFFICE save-as request failed:", error);
                 });
         }
 
         function onRequestEditRights() {
             const url = new URL(window.location.href);
-            url.searchParams.set('forceEdit', 'true');
+            url.searchParams.set("forceEdit", "true");
             window.location.href = url.toString();
         }
 
         function checkDocsVersion() {
-            if (typeof DocsAPI === 'undefined' || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== 'function') {
-                console.error('ONLYOFFICE DocsAPI is not available.');
+            if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
+                console.error("ONLYOFFICE DocsAPI is not available.");
                 return false;
             }
 
-            const docsVersion = DocsAPI.DocEditor.version().split('.');
-            const major = parseInt(docsVersion[0] || '0', 10);
-            const minor = parseInt(docsVersion[1] || '0', 10);
+            const docsVersion = DocsAPI.DocEditor.version().split(".");
+            const major = parseInt(docsVersion[0] || "0", 10);
+            const minor = parseInt(docsVersion[1] || "0", 10);
 
-            if ((config.document && config.document.fileType === 'pdf') && major < 8) {
-                window.location.href = errorPage + '?status=1';
+            if ((config.document && config.document.fileType === "pdf") && major < 8) {
+                window.location.href = errorPage + "?status=1";
                 return false;
             }
 
             if (major < 6 || (major === 6 && minor === 0)) {
-                window.location.href = errorPage + '?status=2';
+                window.location.href = errorPage + "?status=2";
                 return false;
             }
 
@@ -320,6 +558,8 @@ $editorContainerId = 'iframeEditor';
 
             config.events = {
                 onAppReady: onAppReady,
+                onDocumentReady: onDocumentReady,
+                onError: onError,
                 onRequestSaveAs: onRequestSaveAs,
                 onRequestEditRights: onRequestEditRights
             };
@@ -327,16 +567,405 @@ $editorContainerId = 'iframeEditor';
             window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
 
             if (isMobileAgent) {
-                const iframe = document.querySelector('#' + editorContainerId + ' iframe');
+                const iframe = document.querySelector("#" + editorContainerId + " iframe");
                 if (iframe) {
-                    iframe.style.height = '100%';
-                    iframe.style.top = '0';
+                    iframe.style.height = "100%";
+                    iframe.style.top = "0";
                 }
             }
         }
 
-        window.addEventListener('load', connectEditor);
+        window.addEventListener("load", connectEditor);
     })();
 </script>
 </body>
 </html>
+<?php
+
+/**
+ * Resolve a C2 document for editor usage.
+ */
+function resolveDocumentSourceFromC2ForEditor(int $docId): ?array
+{
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        onlyofficeEditorLog('ERROR', 'Entity manager could not be resolved');
+
+        return null;
+    }
+
+    /** @var CDocument|null $document */
+    $document = $entityManager->getRepository(CDocument::class)->find($docId);
+    if (!$document instanceof CDocument) {
+        onlyofficeEditorLog('ERROR', 'CDocument not found', [
+            'docId' => $docId,
+        ]);
+
+        return null;
+    }
+
+    $resourceNode = $document->getResourceNode();
+    if (!$resourceNode instanceof ResourceNode) {
+        onlyofficeEditorLog('ERROR', 'Resource node not found', [
+            'docId' => $docId,
+        ]);
+
+        return null;
+    }
+
+    $resourceFile = $resourceNode->getFirstResourceFile();
+    if (!$resourceFile) {
+        onlyofficeEditorLog('ERROR', 'Resource file not found', [
+            'docId' => $docId,
+            'resourceNodeId' => (int) $resourceNode->getId(),
+        ]);
+
+        return null;
+    }
+
+    $resourceNodeRepository = getResourceNodeRepositoryForOnlyofficeEditor();
+    if (null === $resourceNodeRepository) {
+        onlyofficeEditorLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
+        return null;
+    }
+
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to resolve storage path', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $document->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+
+    $versionToken = buildOnlyofficeVersionTokenFromDatabase(
+        $entityManager,
+        (int) $resourceNode->getId(),
+        (int) $resourceFile->getId(),
+        $size,
+        $storagePath ?: $title
+    );
+
+    return [
+        'title' => $title,
+        'size' => $size,
+        'comment' => method_exists($document, 'getComment') ? $document->getComment() : null,
+        'storagePath' => $storagePath,
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'parentId' => $resourceNode->getParent() ? (int) $resourceNode->getParent()->getId() : 0,
+        'creatorId' => $resourceNode->getCreator() ? (int) $resourceNode->getCreator()->getId() : (int) api_get_user_id(),
+        'versionToken' => $versionToken,
+    ];
+}
+
+/**
+ * Resolve Doctrine entity manager.
+ */
+function getEntityManagerForOnlyofficeEditor()
+{
+    try {
+        if (isset(Container::$container) && null !== Container::$container) {
+            if (Container::$container->has('doctrine.orm.entity_manager')) {
+                return Container::$container->get('doctrine.orm.entity_manager');
+            }
+
+            if (Container::$container->has('doctrine')) {
+                $doctrine = Container::$container->get('doctrine');
+
+                return $doctrine->getManager();
+            }
+        }
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to resolve entity manager from container', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    if (class_exists('Database') && method_exists('Database', 'getManager')) {
+        try {
+            return Database::getManager();
+        } catch (\Throwable $e) {
+            onlyofficeEditorLog('WARNING', 'Database::getManager failed', [
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Resolve ResourceNodeRepository.
+ */
+function getResourceNodeRepositoryForOnlyofficeEditor(): ?ResourceNodeRepository
+{
+    try {
+        if (isset(Container::$container) && null !== Container::$container) {
+            if (Container::$container->has(ResourceNodeRepository::class)) {
+                $repo = Container::$container->get(ResourceNodeRepository::class);
+
+                if ($repo instanceof ResourceNodeRepository) {
+                    return $repo;
+                }
+            }
+
+            $serviceIds = [
+                'Chamilo\\CoreBundle\\Repository\\ResourceNodeRepository',
+                'chamilo.repository.resource_node',
+            ];
+
+            foreach ($serviceIds as $serviceId) {
+                if (!Container::$container->has($serviceId)) {
+                    continue;
+                }
+
+                $repo = Container::$container->get($serviceId);
+
+                if ($repo instanceof ResourceNodeRepository) {
+                    return $repo;
+                }
+            }
+        }
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to resolve ResourceNodeRepository', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    return null;
+}
+
+/**
+ * Build a version token from database timestamps for C2 documents.
+ */
+function buildOnlyofficeVersionTokenFromDatabase($entityManager, int $resourceNodeId, int $resourceFileId, int $size, string $storagePath): string
+{
+    try {
+        $row = $entityManager->getConnection()->fetchAssociative(
+            'SELECT rf.updated_at AS resource_file_updated_at,
+                    rf.size AS resource_file_size,
+                    rn.updated_at AS resource_node_updated_at
+             FROM resource_file rf
+             INNER JOIN resource_node rn ON rn.id = :resource_node_id
+             WHERE rf.id = :resource_file_id',
+            [
+                'resource_node_id' => $resourceNodeId,
+                'resource_file_id' => $resourceFileId,
+            ]
+        );
+
+        $seed = [
+            'resourceNodeId' => $resourceNodeId,
+            'resourceFileId' => $resourceFileId,
+            'resourceFileUpdatedAt' => $row['resource_file_updated_at'] ?? '',
+            'resourceNodeUpdatedAt' => $row['resource_node_updated_at'] ?? '',
+            'resourceFileSize' => $row['resource_file_size'] ?? $size,
+            'storagePath' => $storagePath,
+        ];
+
+        return substr(hash('sha256', (string) json_encode($seed, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)), 0, 20);
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to build DB version token', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    return substr(hash('sha256', $resourceNodeId.'|'.$resourceFileId.'|'.$size.'|'.$storagePath), 0, 20);
+}
+
+/**
+ * Build a version token from a real file.
+ */
+function buildOnlyofficeVersionTokenFromFile(string $absolutePath, string $fallbackPath = ''): string
+{
+    if ('' !== $absolutePath && file_exists($absolutePath)) {
+        return substr(hash('sha256', implode('|', [
+            $absolutePath,
+            (string) filesize($absolutePath),
+            (string) filemtime($absolutePath),
+        ])), 0, 20);
+    }
+
+    return substr(hash('sha256', $fallbackPath), 0, 20);
+}
+
+/**
+ * Build a version token from legacy document info.
+ */
+function buildOnlyofficeVersionTokenFromLegacyDocInfo(array $docInfo, string $fallbackIdentifier): string
+{
+    $absolutePath = (string) ($docInfo['absolute_path'] ?? '');
+
+    if ('' !== $absolutePath && file_exists($absolutePath)) {
+        return buildOnlyofficeVersionTokenFromFile($absolutePath, $fallbackIdentifier);
+    }
+
+    return substr(hash('sha256', implode('|', [
+        $fallbackIdentifier,
+        (string) ($docInfo['size'] ?? 0),
+        (string) ($docInfo['path'] ?? ''),
+        (string) ($docInfo['title'] ?? ''),
+    ])), 0, 20);
+}
+
+/**
+ * Build a runtime file identifier.
+ */
+function buildOnlyofficeRuntimeFileIdentifier(string $fileIdentifier, string $versionToken): string
+{
+    return substr(hash('sha256', $fileIdentifier.'|'.$versionToken), 0, 32);
+}
+
+/**
+ * Build a runtime document key.
+ */
+function buildOnlyofficeRuntimeDocumentKey(string $fileIdentifier, string $courseCode, array $docInfo, string $versionToken): string
+{
+    $parts = [
+        $courseCode,
+        $fileIdentifier,
+        (string) ($docInfo['iid'] ?? ''),
+        (string) ($docInfo['title'] ?? ''),
+        (string) ($docInfo['resource_file_id'] ?? ''),
+        (string) ($docInfo['resource_node_id'] ?? ''),
+        $versionToken,
+    ];
+
+    return substr(hash('sha256', implode('|', $parts)), 0, 32);
+}
+
+/**
+ * Append version token to URL.
+ */
+function appendVersionTokenToUrl(string $url, string $versionToken): string
+{
+    if ('' === $versionToken) {
+        return $url;
+    }
+
+    $separator = str_contains($url, '?') ? '&' : '?';
+
+    return $url.$separator.'v='.rawurlencode($versionToken);
+}
+
+/**
+ * Decide if the editor must open in read-only mode.
+ */
+function shouldOpenOnlyofficeInReadOnlyMode(string $extension, ?int $isReadOnly, bool $forceEdit, ?int $exeId): bool
+{
+    if ($forceEdit) {
+        return false;
+    }
+
+    if (\in_array($extension, ['pdf'], true)) {
+        return true;
+    }
+
+    if ($exeId) {
+        return false;
+    }
+
+    if (!empty($isReadOnly)) {
+        return true;
+    }
+
+    if (api_is_allowed_to_edit(false, true, true, false)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Normalize config to array.
+ */
+function onlyofficeEditorConfigToArray(mixed $config): array
+{
+    if (is_array($config)) {
+        return $config;
+    }
+
+    $json = json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    if (false === $json) {
+        return [];
+    }
+
+    $array = json_decode($json, true);
+
+    return is_array($array) ? $array : [];
+}
+
+/**
+ * Refresh editor token after final config changes.
+ */
+function refreshOnlyofficeEditorToken(array $config, $jwtManager, $appSettings): array
+{
+    if (!is_object($jwtManager) || !method_exists($jwtManager, 'isJwtEnabled') || !$jwtManager->isJwtEnabled()) {
+        unset($config['token']);
+
+        return $config;
+    }
+
+    $payload = $config;
+    unset($payload['token']);
+
+    $token = '';
+
+    try {
+        $token = (string) $jwtManager->encode($payload, $appSettings->getJwtKey());
+    } catch (\Throwable $e) {
+        try {
+            $token = (string) $jwtManager->encode($payload);
+        } catch (\Throwable $inner) {
+            onlyofficeEditorLog('WARNING', 'Failed to refresh editor JWT token', [
+                'message' => $inner->getMessage(),
+            ]);
+        }
+    }
+
+    if ('' !== $token) {
+        $config['token'] = $token;
+    } else {
+        unset($config['token']);
+    }
+
+    return $config;
+}
+
+/**
+ * Send anti-cache headers for editor page.
+ */
+function sendOnlyofficeEditorNoCacheHeaders(): void
+{
+    @header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    @header('Pragma: no-cache');
+    @header('Expires: 0');
+    @header('X-Robots-Tag: noindex');
+    @header('X-Content-Type-Options: nosniff');
+}
+
+/**
+ * Structured logger helper.
+ */
+function onlyofficeEditorLog(string $level, string $message, array $context = []): void
+{
+    if (!ONLYOFFICE_EDITOR_LOG_ENABLED) {
+        return;
+    }
+
+    $line = 'ONLYOFFICE EDITOR: '.$level.' - '.$message;
+
+    if (!empty($context)) {
+        $json = json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if (false !== $json) {
+            $line .= ' | '.$json;
+        }
+    }
+
+    error_log($line);
+}

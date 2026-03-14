@@ -32,6 +32,7 @@ class SkillDetailController extends AbstractController
         }
 
         $gradebookLinks = [];
+
         /** @var SkillRelGradebook $srg */
         foreach ($skill->getGradeBookCategories() as $srg) {
             $category = $srg->getGradeBookCategory();

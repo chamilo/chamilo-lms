@@ -47,13 +47,15 @@
                       @click="() => acceptGroupInvitation(invitation.itemId)"
                     />
 
-                    <button
+                    <BaseButton
                       v-if="invitation.canDeny"
-                      class="remove-btn"
+                      :label="t('Deny')"
+                      icon="close"
+                      only-icon
+                      size="small"
+                      type="danger"
                       @click="() => denyGroupInvitation(invitation.itemId)"
-                    >
-                      -
-                    </button>
+                    />
                   </div>
                 </div>
               </div>

@@ -70,6 +70,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  showInline: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 function getLocalePrefix(locale) {
@@ -158,6 +163,7 @@ const onCancelClick = () => {
         ref="datepickerRef"
         v-model="internalValue"
         :date-format="dateFormat"
+        :inline="showInline"
         :input-id="id"
         :invalid="isInvalid"
         :manual-input="allowManualInput"

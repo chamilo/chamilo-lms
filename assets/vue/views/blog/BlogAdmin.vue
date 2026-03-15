@@ -8,14 +8,14 @@
         id="search"
         v-model="q"
         :label="t('Search')"
-        label-position="invisible"
-        class="search-input"
         :placeholder="t('Search for projects...')"
+        class="search-input"
+        label-position="invisible"
       />
       <BaseButton
-        type="primary"
-        icon="plus"
         :label="t('New project')"
+        icon="plus"
+        type="primary"
         @click="openCreate()"
       />
     </SectionHeader>
@@ -47,16 +47,16 @@
       <div
         v-for="proj in filtered"
         :key="proj.id"
-        class="card"
         :class="{ 'card--hidden': !proj.visible }"
+        class="card"
       >
         <div class="card-head">
           <div>
             <div class="meta">{{ t("Created") }}: {{ formatDate(proj.createdAt) }}</div>
 
             <BaseAppLink
-              class="title-link"
               :to="{ name: 'BlogPosts', params: { ...$route.params, blogId: proj.id }, query: $route.query }"
+              class="title-link"
             >
               <h4 class="title">{{ proj.title }}</h4>
             </BaseAppLink>
@@ -92,18 +92,18 @@
           />
 
           <BaseButton
-            type="black"
-            only-icon
             :icon="proj.visible ? 'eye-on' : 'eye-off'"
             :label="proj.visible ? t('Hide') : t('Show')"
+            only-icon
+            type="black"
             @click="toggleVisibility(proj)"
           />
 
           <BaseButton
-            type="danger"
-            only-icon
-            icon="trash"
             :label="t('Delete')"
+            icon="trash"
+            only-icon
+            type="danger"
             @click="remove(proj)"
           />
         </div>
@@ -123,27 +123,27 @@
     <BaseDialog
       v-model:isVisible="showRename"
       :title="t('Rename project')"
-      header-icon="pencil"
       :width="'520px'"
+      header-icon="pencil"
     >
       <BaseInputText
         id="rename"
-        :label="t('New title')"
         v-model="renameTitle"
         :form-submitted="renameSubmitted"
         :is-invalid="!renameTitle"
+        :label="t('New title')"
       />
       <template #footer>
         <BaseButton
-          type="black"
-          icon="close"
           :label="t('Cancel')"
+          icon="close"
+          type="black"
           @click="closeRename"
         />
         <BaseButton
-          type="primary"
-          icon="check"
           :label="t('Save')"
+          icon="check"
+          type="primary"
           @click="saveRename"
         />
       </template>
@@ -151,7 +151,10 @@
   </div>
 
   <!-- FALLBACK FOR UNAUTHORIZED USERS -->
-  <div v-else class="p-8 text-center text-gray-600">
+  <div
+    v-else
+    class="p-8 text-center text-gray-600"
+  >
     <div class="inline-flex items-center gap-2 text-red-600 font-semibold mb-2">
       <i class="mdi mdi-lock-alert-outline text-2xl"></i>
       <span>{{ t("Access denied") }}</span>
@@ -212,15 +215,19 @@ const sortOptions = [
 ]
 
 function formatDate(iso) {
-  try { return new Date(iso).toLocaleDateString() } catch { return iso }
+  try {
+    return new Date(iso).toLocaleDateString()
+  } catch {
+    return iso
+  }
 }
 
 const filtered = computed(() => {
   let out = [...rows.value]
-  if (q.value) out = out.filter(r => r.title.toLowerCase().includes(q.value.toLowerCase()))
-  if (onlyVisible.value) out = out.filter(r => r.visible)
+  if (q.value) out = out.filter((r) => r.title.toLowerCase().includes(q.value.toLowerCase()))
+  if (onlyVisible.value) out = out.filter((r) => r.visible)
   const [f, d] = (sort.value || "createdAt:desc").split(":")
-  out.sort((a,b) => (a[f] > b[f] ? 1 : -1) * (d === "desc" ? -1 : 1))
+  out.sort((a, b) => (a[f] > b[f] ? 1 : -1) * (d === "desc" ? -1 : 1))
   return out
 })
 

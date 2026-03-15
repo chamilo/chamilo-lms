@@ -154,7 +154,7 @@ if (api_is_platform_admin()) {
     $searchForm = new FormValidator(
         'search_course',
         'GET',
-        api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+        '/admin/course-list',
         null,
         null,
         FormValidator::LAYOUT_BOX_SEARCH
@@ -165,7 +165,7 @@ if (api_is_platform_admin()) {
     $blocks['courses']['search_form'] = $searchForm->returnForm();
 
     $items = [];
-    $items[] = ['url' => 'course_list.php', 'label' => get_lang('Course list')];
+    $items[] = ['url' => '/admin/course-list', 'label' => get_lang('Course list')];
     $items[] = ['url' => 'course_add.php', 'label' => get_lang('Add course')];
 
     if ('true' === api_get_setting('course_validation')) {

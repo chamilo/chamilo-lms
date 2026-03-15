@@ -78,7 +78,7 @@ class IndexBlocksController extends BaseController
         if ($this->isAdmin) {
             $json['courses'] = [
                 'id' => 'block-admin-courses',
-                'searchUrl' => '/main/admin/course_list.php',
+                'searchUrl' => '/admin/course-list',
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
@@ -348,7 +348,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => '/main/admin/course_list.php',
+            'url' => '/admin/course-list',
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [

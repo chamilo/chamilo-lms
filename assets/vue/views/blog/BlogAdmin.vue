@@ -1,49 +1,46 @@
 <template>
-  <div v-if="isAdminOrTeacher" class="w-full blog-admin">
-    <!-- HEADER / TOOLBAR -->
-    <BaseToolbar class="sticky top-0 z-10 bg-[var(--surface-card,#fff)]">
-      <template #start>
-        <div class="flex items-center gap-2">
-          <i class="mdi mdi-view-grid-plus text-xl text-primary"></i>
-          <h3 class="text-lg font-semibold m-0">{{ t("Projects") }}</h3>
-        </div>
-      </template>
-
-      <template #end>
-        <div class="admin-actions">
-          <BaseInputText
-            id="search"
-            v-model="q"
-            :label="t('Search')"
-            label-position="invisible"
-            class="search-input"
-            :placeholder="t('Search for projects...')"
-          />
-          <BaseButton
-            type="primary"
-            icon="plus"
-            :label="t('New project')"
-            @click="openCreate()"
-          />
-        </div>
-      </template>
-    </BaseToolbar>
+  <div
+    v-if="isAdminOrTeacher"
+    class="blog-admin"
+  >
+    <SectionHeader :title="t('Projects')">
+      <BaseInputText
+        id="search"
+        v-model="q"
+        :label="t('Search')"
+        label-position="invisible"
+        class="search-input"
+        :placeholder="t('Search for projects...')"
+      />
+      <BaseButton
+        type="primary"
+        icon="plus"
+        :label="t('New project')"
+        @click="openCreate()"
+      />
+    </SectionHeader>
 
     <!-- CONTROLS -->
-    <div class="controls">
-      <BaseSelect
-        v-model="sort"
-        :options="sortOptions"
-        optionLabel="label"
-        optionValue="value"
-        label=""
-        class="w-44"
-      />
-      <label class="inline-flex items-center text-sm gap-2">
-        <input type="checkbox" v-model="onlyVisible" />
-        <span>{{ t("Only visible") }}</span>
-      </label>
-    </div>
+    <BaseToolbar>
+      <template #start>
+        <BaseCheckbox
+          id="visible-filter"
+          v-model="onlyVisible"
+          :label="t('Only visible')"
+          name="visible-filter"
+        />
+      </template>
+      <template #end>
+        <BaseSelect
+          v-model="sort"
+          :label="t('Sort by')"
+          :options="sortOptions"
+          class="w-44"
+          optionLabel="label"
+          optionValue="value"
+        />
+      </template>
+    </BaseToolbar>
 
     <!-- GRID -->
     <div class="cards-grid">
@@ -179,6 +176,8 @@ import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_DRAFT } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
 const { cid, sid } = useCidReq()
 const { t } = useI18n()

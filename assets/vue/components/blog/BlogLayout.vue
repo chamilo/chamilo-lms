@@ -1,21 +1,14 @@
 <template>
-  <div class="dbx w-full min-h-full flex flex-col bg-[var(--surface-ground,#fff)] blog-layout">
-    <BaseToolbar class="sticky top-0 z-20 bg-[var(--surface-card,#fff)]">
-      <template #start>
-        <div class="flex items-center gap-3">
-          <i class="mdi mdi-notebook-outline text-2xl text-primary"></i>
-          <div>
-            <h2 class="m-0 text-lg font-semibold">
-              {{ blog?.title || t("Blogs") }}
-            </h2>
-            <div v-if="blog?.subtitle" class="text-xs text-gray-500">
-              {{ blog.subtitle }}
-            </div>
-          </div>
-        </div>
-      </template>
+  <div class="blog-layout">
+    <SectionHeader :title="blog?.title || t('Blogs')">
+      <div
+        class="text-h6"
+        v-text="blog?.subtitle"
+      />
+    </SectionHeader>
 
-      <template #end>
+    <BaseToolbar>
+      <template #start>
         <!-- Primary nav -->
         <BaseButton
           :label="t('Posts')"
@@ -53,7 +46,7 @@
       </template>
     </BaseToolbar>
 
-    <section class="p-4 md:p-6">
+    <section>
       <RouterView />
     </section>
   </div>
@@ -63,6 +56,7 @@
 import { onMounted, watch, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import SectionHeader from "../layout/SectionHeader.vue"
 import BaseToolbar from "../basecomponents/BaseToolbar.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
@@ -87,7 +81,6 @@ async function loadBlogMeta() {
     }
     blog.value = await service.getProject(id)
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn("BlogLayout: failed to fetch blog meta", e)
     blog.value = null
   }

@@ -232,32 +232,6 @@
 }
 
 .blog-layout {
-  .nav-link {
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.5rem;
-    color: var(--text-color, #334155);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .nav-link:hover {
-    background: color-mix(in srgb, var(--primary-color, #2563eb) 10%, transparent);
-    @apply text-primary;
-  }
-
-  a.router-link-active.nav-link {
-    background: color-mix(in srgb, var(--primary-color, #2563eb) 15%, transparent);
-    @apply text-primary;
-  }
-
-  .nav-link {
-    @apply px-3 py-1 rounded text-sm text-gray-90 hover:bg-gray-20 no-underline;
-  }
-
-  .nav-link.active {
-    @apply font-medium;
-  }
-
   .calendar {
     user-select: none
   }

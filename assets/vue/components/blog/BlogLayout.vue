@@ -17,43 +17,39 @@
 
       <template #end>
         <!-- Primary nav -->
-        <BaseAppLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogPosts' }"
-          :to="{ name: 'BlogPosts', params: $route.params, query: $route.query }"
-        >
-          {{ t("Posts") }}
-        </BaseAppLink>
+        <BaseButton
+          :label="t('Posts')"
+          :route="{ name: 'BlogPosts', params: route.params, query: route.query }"
+          :type="route.name === 'BlogPosts' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
-        <BaseAppLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogTasks' }"
-          :to="{ name: 'BlogTasks', params: $route.params, query: $route.query }"
-        >
-          {{ t("Tasks") }}
-        </BaseAppLink>
+        <BaseButton
+          :label="t('Tasks')"
+          :route="{ name: 'BlogTasks', params: route.params, query: route.query }"
+          :type="route.name === 'BlogTasks' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
-        <BaseAppLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogMembers' }"
-          :to="{ name: 'BlogMembers', params: $route.params, query: $route.query }"
-        >
-          {{ t("Members") }}
-        </BaseAppLink>
+        <BaseButton
+          :label="t('Members')"
+          :route="{ name: 'BlogMembers', params: route.params, query: route.query }"
+          :type="route.name === 'BlogMembers' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
         <!-- Visible to course admins/teachers only -->
-        <BaseAppLink
+        <BaseButton
           v-if="isAdminOrTeacher"
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogsAdmin' }"
-          :to="{
+          :label="t('Projects')"
+          :route="{
             name: 'BlogsAdmin',
-            params: { ...$route.params, node: $route.params.node ?? 'course' },
-            query: $route.query,
+            params: { ...route.params, node: route.params.node ?? 'course' },
+            query: route.query,
           }"
-        >
-          {{ t("Projects") }}
-        </BaseAppLink>
+          :type="route.name === 'BlogsAdmin' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
       </template>
     </BaseToolbar>
 
@@ -70,6 +66,7 @@ import { useRoute } from "vue-router"
 import BaseToolbar from "../basecomponents/BaseToolbar.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()

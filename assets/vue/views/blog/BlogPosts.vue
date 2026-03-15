@@ -2,19 +2,12 @@
   <div class="grid gap-4 md:grid-cols-[280px,1fr] blog-posts">
     <!-- LEFT SIDEBAR -->
     <aside class="space-y-4">
-      <div class="rounded-lg border bg-white shadow-sm">
-        <div class="p-3 border-b text-sm font-semibold">{{ t("Calendar") }}</div>
-        <div class="p-3">
-          <CalendarMini
-            :year="calendarYear"
-            :month="calendarMonth"
-            :selected="selectedDate"
-            @select="onSelectDate"
-            @prev="prevMonth"
-            @next="nextMonth"
-          />
-        </div>
-      </div>
+      <BaseCalendar
+        id="cal-test"
+        v-model="dateFilter"
+        :label="t('Calendar')"
+        show-inline
+      />
 
       <div class="rounded-lg border bg-white shadow-sm">
         <div class="p-3 border-b text-sm font-semibold">{{ t("Search") }}</div>
@@ -122,8 +115,11 @@
             <template v-else>
               <span v-if="viewMode==='posts'">
                 {{ t("Showing {n} posts", { n: total }) }}
-                <span v-if="selectedDate" class="text-gray-400">
-                  — {{ t("Filtered by {0}", [selectedDate]) }}
+                <span
+                  v-if="dateFilter"
+                  class="text-gray-400"
+                >
+                  — {{ t("Filtered by {0}", [abbreviatedDate(dateFilter)]) }}
                 </span>
               </span>
               <span v-else>
@@ -167,8 +163,8 @@
                     {{ row.title }}
                   </div>
                   <div class="text-sm text-gray-500 mt-0.5 flex items-center gap-3">
-                    <span>{{ t("By") }} {{ row.author }} · {{ row.date }}</span>
                     <span v-if="row.tags?.length" class="text-xs text-gray-400">
+                    <span>{{ t("By") }} {{ row.author }} · {{ abbreviatedDatetime(row.date) }}</span>
                       — {{ row.tags.join(", ") }}
                     </span>
 
@@ -260,19 +256,21 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter, useRoute } from "vue-router"
 import { storeToRefs } from "pinia"
+import { DateTime } from "luxon"
 
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
-import CalendarMini from "../../components/blog/CalendarMini.vue"
 import MyTasksPanel from "../../components/blog/MyTasksPanel.vue"
 import PostCreateDialog from "../../components/blog/PostCreateDialog.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import TaskCreateDialog from "../../components/blog/TaskCreateDialog.vue"
 
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReqStore } from "../../store/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -284,6 +282,8 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const securityStore = useSecurityStore()
 const currentUser = computed(() => securityStore.user)
+
+const { abbreviatedDatetime, abbreviatedDate } = useFormatDate()
 
 // Blog metadata
 const blogTitle = ref("")
@@ -315,13 +315,12 @@ async function loadBlogMeta() {
 }
 
 // Sidebar state
-const today = new Date()
-const calendarYear = ref(today.getFullYear())
-const calendarMonth = ref(today.getMonth() + 1) // 1-12
-const selectedDate = ref("") // YYYY-MM-DD
-function onSelectDate(iso){ selectedDate.value = iso; page.value = 1; reload() }
-function prevMonth(){ const d=new Date(calendarYear.value, calendarMonth.value-2, 1); calendarYear.value=d.getFullYear(); calendarMonth.value=d.getMonth()+1 }
-function nextMonth(){ const d=new Date(calendarYear.value, calendarMonth.value, 1); calendarYear.value=d.getFullYear(); calendarMonth.value=d.getMonth()+1 }
+const dateFilter = ref(new Date())
+
+watch(dateFilter, () => {
+  page.value = 1
+  reload()
+})
 
 // Top filters
 const viewMode = ref("posts") // 'posts' | 'tasks'
@@ -372,15 +371,19 @@ async function loadPosts(){
     })
 
     // Optional date filter (client-side)
-    const filtered = selectedDate.value
-      ? data.filter(p => (p.date || "").startsWith(selectedDate.value))
+    const filtered = dateFilter.value
+      ? data.filter((p) => {
+          const d = DateTime.fromISO(p.date)
+
+          return d.hasSame(dateFilter.value, "day")
+        })
       : data
 
     rows.value = filtered
-    total.value = selectedDate.value ? filtered.length : tot
+    total.value = dateFilter.value ? filtered.length : tot
 
     // Ratings prefetch
-    const ids = filtered.map(p => p.id)
+    const ids = filtered.map((p) => p.id)
     ratings.value = await service.getManyPostRatingsApi(blogId, ids)
 
     // Attachments count (use provided count if present, otherwise fetch)

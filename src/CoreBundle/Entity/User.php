@@ -19,9 +19,7 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
-use Chamilo\CoreBundle\Controller\Api\GetStatsAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
@@ -59,48 +57,6 @@ use UserManager;
                 summary: 'Get details of one specific user, including name, e-mail and role.'
             ),
             security: "is_granted('VIEW', object)",
-        ),
-        new Get(
-            uriTemplate: '/users/{id}/courses/{courseId}/stats/{metric}',
-            requirements: [
-                'id' => '\d+',
-                'courseId' => '\d+',
-                'metric' => 'avg-lp-progress|certificates|gradebook-global',
-            ],
-            controller: GetStatsAction::class,
-            openapi: new Operation(
-                summary: 'User-course statistics, switch by {metric}',
-                parameters: [
-                    new Parameter(
-                        name: 'courseId',
-                        in: 'path',
-                        description: 'Course ID',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'metric',
-                        in: 'path',
-                        description: 'Metric selector',
-                        required: true,
-                        schema: [
-                            'type' => 'string',
-                            'enum' => ['avg-lp-progress', 'certificates', 'gradebook-global'],
-                        ],
-                    ),
-                    new Parameter(
-                        name: 'sessionId',
-                        in: 'query',
-                        description: 'Optional Session ID',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
-            security: "is_granted('ROLE_USER')",
-            output: false,
-            read: false,
-            name: 'stats_user_course_metric'
         ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),

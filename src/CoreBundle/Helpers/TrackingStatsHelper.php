@@ -162,12 +162,15 @@ class TrackingStatsHelper
             ->andWhere('e.visible = 1')
             ->andWhere('c.visible = 1')
             ->andWhere('r.user = :user')
-            ->setParameter('course', $course, ParameterType::INTEGER)
-            ->setParameter('user', $user, ParameterType::INTEGER)
+            ->setParameter('course', $course)
+            ->setParameter('user', $user)
         ;
 
         if ($session) {
-            $qb->andWhere('c.session = :session')->setParameter('session', $session, ParameterType::INTEGER);
+            $qb
+                ->andWhere('c.session = :session')
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('c.session IS NULL');
         }

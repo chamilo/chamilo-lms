@@ -99,7 +99,7 @@ class CourseListController extends AbstractController
             }
             if ('' !== $keywordCategory) {
                 $qb->innerJoin('c.categories', 'cat')
-                    ->andWhere('cat.name LIKE :kwCat')
+                    ->andWhere('cat.title LIKE :kwCat')
                     ->setParameter('kwCat', '%'.$keywordCategory.'%')
                 ;
             }
@@ -196,7 +196,7 @@ class CourseListController extends AbstractController
     private function loadCategories(array $courseIds, array &$categoriesMap): void
     {
         $catRows = $this->em->createQueryBuilder()
-            ->select('c.id AS courseId, cat.id AS catId, cat.name AS catName')
+            ->select('c.id AS courseId, cat.id AS catId, cat.title AS catName')
             ->from(Course::class, 'c')
             ->innerJoin('c.categories', 'cat')
             ->where('c.id IN (:ids)')

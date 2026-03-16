@@ -370,7 +370,57 @@ async function performCopy(ids) {
   }
 }
 
-onMounted(() => {
+async function handleLegacyAction() {
+  const query = route.query
+  const action = query.action
+  const idChecked = query.idChecked || query.id
+
+  if (!action || !idChecked) {
+    return false
+  }
+
+  // Wait for first load so we have a CSRF token
+  await load()
+
+  const ids = String(idChecked)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  if (ids.length === 0) {
+    return false
+  }
+
+  if ((action === "copy" || action === "copy_multiple") && confirm(t("Please confirm your choice"))) {
+    await performCopy(ids)
+  } else if ((action === "delete" || action === "delete_multiple") && confirm(t("Please confirm your choice"))) {
+    await confirmDeleteDirect(ids)
+  }
+
+  return true
+}
+
+async function confirmDeleteDirect(ids) {
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", "delete")
+    formData.set("_token", csrfToken.value)
+    ids.forEach((id) => formData.append("sessionIds[]", String(id)))
+
+    await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+
+    selectedItems.value = []
+    await load()
+  } catch (e) {
+    console.error("Error deleting sessions:", e)
+  }
+}
+
+onMounted(async () => {
   // Read URL query params for backward compatibility with legacy links
   const query = route.query
   if (query.list_type && tabs.some((tab) => tab.value === query.list_type)) {
@@ -382,6 +432,11 @@ onMounted(() => {
   if (query.keyword) {
     keyword.value = String(query.keyword)
   }
-  load()
+
+  // Handle legacy action params (?action=copy&idChecked=X or ?action=delete&idChecked=X)
+  const handled = await handleLegacyAction()
+  if (!handled) {
+    load()
+  }
 })
 </script>

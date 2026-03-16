@@ -168,32 +168,6 @@
       </div>
     </div>
 
-    <!-- Bulk actions toolbar -->
-    <div
-      v-if="selectedItems.length > 0 && view !== 'deleted' && viewer.isPlatformAdmin"
-      class="flex items-center gap-4"
-    >
-      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
-      <button
-        class="btn btn--danger text-sm"
-        @click="confirmBulkAction('delete_users')"
-      >
-        {{ t("Remove from portal") }}
-      </button>
-      <button
-        class="btn btn--plain text-sm"
-        @click="confirmBulkAction('disable_users')"
-      >
-        {{ t("Disable") }}
-      </button>
-      <button
-        class="btn btn--primary text-sm"
-        @click="confirmBulkAction('enable_users')"
-      >
-        {{ t("Enable") }}
-      </button>
-    </div>
-
     <!-- User table -->
     <BaseTable
       v-model:rows="pageSize"
@@ -502,6 +476,32 @@
         </template>
       </Column>
     </BaseTable>
+
+    <!-- Bulk actions toolbar -->
+    <div
+      v-if="selectedItems.length > 0 && view !== 'deleted' && viewer.isPlatformAdmin"
+      class="flex items-center gap-4"
+    >
+      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
+      <button
+        class="btn btn--danger text-sm"
+        @click="confirmBulkAction('delete_users')"
+      >
+        {{ t("Remove from portal") }}
+      </button>
+      <button
+        class="btn btn--plain text-sm"
+        @click="confirmBulkAction('disable_users')"
+      >
+        {{ t("Disable") }}
+      </button>
+      <button
+        class="btn btn--primary text-sm"
+        @click="confirmBulkAction('enable_users')"
+      >
+        {{ t("Enable") }}
+      </button>
+    </div>
   </div>
 </template>
 

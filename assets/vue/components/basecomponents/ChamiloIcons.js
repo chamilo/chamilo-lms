@@ -166,4 +166,6 @@ export const chamiloIconToClass = {
   "notification": "mdi mdi-bell",
   "room": "mdi mdi-seat",
   "tracking": "mdi mdi-chart-box",
+  "delete-forever": "mdi mdi-delete-forever",
+  "copy": "mdi mdi-content-duplicate",
 }

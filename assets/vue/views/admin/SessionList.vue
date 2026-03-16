@@ -1,0 +1,387 @@
+<template>
+  <div class="flex flex-col gap-8">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-semibold text-gray-800">{{ t("Session list") }}</h2>
+      <a
+        class="btn btn--primary"
+        href="/main/session/session_add.php"
+      >
+        {{ t("Add a training session") }}
+      </a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-2 border-b border-gray-200">
+      <button
+        v-for="tab in tabs"
+        :key="tab.value"
+        :class="[
+          'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+          listType === tab.value
+            ? 'border-blue-600 text-blue-600'
+            : 'border-transparent text-gray-500 hover:text-gray-700',
+        ]"
+        @click="switchTab(tab.value)"
+      >
+        {{ t(tab.label) }}
+      </button>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="flex flex-col gap-4">
+      <form
+        class="flex gap-4 items-end"
+        @submit.prevent="onSearch"
+      >
+        <div class="flex flex-col gap-1 flex-1 max-w-md">
+          <input
+            v-model="keyword"
+            :placeholder="t('Search sessions')"
+            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            type="text"
+          />
+        </div>
+        <div class="flex flex-col gap-1 max-w-xs">
+          <select
+            v-model="categoryFilter"
+            class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+            @change="onSearch"
+          >
+            <option value="">{{ t("All categories") }}</option>
+            <option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat.id"
+            >
+              {{ cat.title }}
+            </option>
+          </select>
+        </div>
+        <button
+          class="btn btn--primary"
+          type="submit"
+        >
+          {{ t("Search") }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Session table -->
+    <BaseTable
+      v-model:rows="pageSize"
+      v-model:selectedItems="selectedItems"
+      :is-loading="isLoading"
+      :lazy="true"
+      :text-for-empty="t('No data available')"
+      :total-items="total"
+      :values="items"
+      data-key="id"
+      @page="onPage"
+      @sort="onSort"
+    >
+      <Column
+        :header="t('Title')"
+        field="title"
+        sortable
+      >
+        <template #body="{ data }">
+          <span
+            v-if="data.isChild"
+            class="text-gray-500"
+          >{{ data.title }}</span>
+          <a
+            v-else
+            :href="`/main/session/resume_session.php?id_session=${data.id}`"
+            class="text-blue-600 hover:underline"
+          >{{ data.title }}</a>
+        </template>
+      </Column>
+      <Column
+        :header="t('Category')"
+        field="categoryName"
+        sortable
+      />
+      <Column
+        :header="t('Start date to display')"
+        field="displayStartDate"
+        sortable
+      />
+      <Column
+        :header="t('End date to display')"
+        field="displayEndDate"
+        sortable
+      />
+      <Column
+        :header="t('Visibility')"
+        field="visibilityLabel"
+      />
+      <Column
+        :header="t('Users')"
+        field="nbrUsers"
+        sortable
+      />
+      <Column
+        :header="t('Courses')"
+        field="nbrCourses"
+        sortable
+      />
+      <Column
+        :header="t('Session status')"
+        field="statusLabel"
+      >
+        <template #body="{ data }">
+          <span
+            :class="statusClass(data.status)"
+            class="inline-block px-2 py-0.5 rounded text-xs font-medium"
+          >{{ t(data.statusLabel) }}</span>
+        </template>
+      </Column>
+      <Column
+        :header="t('Actions')"
+        field="id"
+      >
+        <template #body="{ data }">
+          <div class="flex gap-1 flex-nowrap">
+            <a
+              :href="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
+              :title="t('Edit')"
+            >
+              <span class="mdi mdi-pencil ch-tool-icon" />
+            </a>
+            <a
+              :href="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              :title="t('Subscribe users to this session')"
+            >
+              <span class="mdi mdi-account-multiple-plus ch-tool-icon" />
+            </a>
+            <a
+              :href="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              :title="t('Add courses to this session')"
+            >
+              <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
+            </a>
+            <a
+              :title="t('Copy')"
+              class="cursor-pointer"
+              @click.prevent="copySession(data.id)"
+            >
+              <span class="mdi mdi-text-box-plus ch-tool-icon" />
+            </a>
+            <a
+              v-if="viewer.isPlatformAdmin"
+              :title="t('Delete')"
+              class="cursor-pointer"
+              @click.prevent="confirmDelete([data.id])"
+            >
+              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
+            </a>
+          </div>
+        </template>
+      </Column>
+    </BaseTable>
+
+    <!-- Bulk actions -->
+    <div
+      v-if="selectedItems.length > 0"
+      class="flex gap-4 items-center p-4 bg-gray-50 rounded border border-gray-200"
+    >
+      <span class="text-sm text-gray-600">{{ t("{0} selected", [selectedItems.length]) }}</span>
+      <button
+        v-if="viewer.isPlatformAdmin"
+        class="btn btn--danger text-sm"
+        @click="confirmDelete(selectedItems.map((s) => s.id))"
+      >
+        {{ t("Delete selected") }}
+      </button>
+      <button
+        class="btn btn--plain text-sm"
+        @click="copyMultiple(selectedItems.map((s) => s.id))"
+      >
+        {{ t("Copy selected") }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { onMounted, reactive, ref } from "vue"
+import { useRoute } from "vue-router"
+import { useI18n } from "vue-i18n"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import baseService from "../../services/baseService"
+
+const { t } = useI18n()
+const route = useRoute()
+
+const items = ref([])
+const total = ref(0)
+const isLoading = ref(false)
+const page = ref(1)
+const pageSize = ref(20)
+const sortField = ref("title")
+const sortOrder = ref(1)
+const listType = ref("all")
+const keyword = ref("")
+const categoryFilter = ref("")
+const selectedItems = ref([])
+const categories = ref([])
+const csrfToken = ref("")
+const viewer = reactive({ isPlatformAdmin: false })
+
+const tabs = [
+  { label: "All sessions", value: "all" },
+  { label: "Active sessions", value: "active" },
+  { label: "Closed sessions", value: "close" },
+  { label: "Custom list", value: "custom" },
+  { label: "Replication", value: "replication" },
+]
+
+function statusClass(status) {
+  switch (status) {
+    case 1:
+      return "bg-blue-100 text-blue-700"
+    case 2:
+      return "bg-green-100 text-green-700"
+    case 3:
+      return "bg-gray-100 text-gray-700"
+    case 4:
+      return "bg-red-100 text-red-700"
+    default:
+      return "bg-gray-100 text-gray-500"
+  }
+}
+
+async function load() {
+  isLoading.value = true
+  try {
+    const params = new URLSearchParams({
+      page: String(page.value),
+      limit: String(pageSize.value),
+      sortField: sortField.value,
+      sortOrder: sortOrder.value === 1 ? "ASC" : "DESC",
+      listType: listType.value,
+    })
+
+    if (keyword.value) {
+      params.set("keyword", keyword.value)
+    }
+    if (categoryFilter.value) {
+      params.set("category", categoryFilter.value)
+    }
+
+    const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
+    items.value = data.items
+    total.value = data.total
+    categories.value = data.categories || []
+    csrfToken.value = data.csrfToken || ""
+    if (data.viewer) {
+      viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
+    }
+  } catch (e) {
+    console.error("Error loading sessions:", e)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function onPage(event) {
+  page.value = event.page + 1
+  pageSize.value = event.rows
+  load()
+}
+
+function onSort(event) {
+  sortField.value = event.sortField ?? "title"
+  sortOrder.value = event.sortOrder ?? 1
+  page.value = 1
+  load()
+}
+
+function onSearch() {
+  page.value = 1
+  selectedItems.value = []
+  load()
+}
+
+function switchTab(tab) {
+  listType.value = tab
+  page.value = 1
+  keyword.value = ""
+  categoryFilter.value = ""
+  selectedItems.value = []
+  load()
+}
+
+async function confirmDelete(ids) {
+  if (!confirm(t("Please confirm your choice"))) {
+    return
+  }
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", "delete")
+    formData.set("_token", csrfToken.value)
+    ids.forEach((id) => formData.append("sessionIds[]", String(id)))
+
+    await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+
+    selectedItems.value = []
+    load()
+  } catch (e) {
+    console.error("Error deleting sessions:", e)
+  }
+}
+
+async function copySession(id) {
+  if (!confirm(t("Please confirm your choice"))) {
+    return
+  }
+  await performCopy([id])
+}
+
+async function copyMultiple(ids) {
+  if (!confirm(t("Please confirm your choice"))) {
+    return
+  }
+  await performCopy(ids)
+}
+
+async function performCopy(ids) {
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", "copy")
+    formData.set("_token", csrfToken.value)
+    ids.forEach((id) => formData.append("sessionIds[]", String(id)))
+
+    await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+
+    selectedItems.value = []
+    load()
+  } catch (e) {
+    console.error("Error copying sessions:", e)
+  }
+}
+
+onMounted(() => {
+  // Read URL query params for backward compatibility with legacy links
+  const query = route.query
+  if (query.list_type && tabs.some((tab) => tab.value === query.list_type)) {
+    listType.value = query.list_type
+  }
+  if (query.id_category) {
+    categoryFilter.value = String(query.id_category)
+  }
+  if (query.keyword) {
+    keyword.value = String(query.keyword)
+  }
+  load()
+})
+</script>

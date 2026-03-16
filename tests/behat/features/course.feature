@@ -12,7 +12,7 @@ Feature: Course tools basic testing
 
 
   Scenario: See the courses list
-    Given I am on "/main/admin/course_list.php"
+    Given I am on "/admin/course-list"
     And I wait for the page to be loaded
     And I should not see "not authorized"
 

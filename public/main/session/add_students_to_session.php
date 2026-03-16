@@ -13,7 +13,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 

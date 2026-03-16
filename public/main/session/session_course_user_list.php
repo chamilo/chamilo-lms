@@ -118,7 +118,7 @@ $users = Database::store_result($result);
 $nbr_results = count($users);
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
     'name' => get_lang('Session overview'),

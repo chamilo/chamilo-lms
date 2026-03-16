@@ -19,7 +19,7 @@ api_protect_admin_script(true);
 
 $tool_name = get_lang('Session overview');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

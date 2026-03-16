@@ -70,7 +70,7 @@ class FeatureContext extends MinkContext
     public function courseExists($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
+        $this->visit('/admin/course-list?keyword='.$argument);
         $this->assertPageContainsText($argument);
     }
 
@@ -80,7 +80,7 @@ class FeatureContext extends MinkContext
     public function courseIsDeleted($argument): void
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
+        $this->visit('/admin/course-list?keyword='.$argument);
         $this->clickLink('Delete');
     }
 

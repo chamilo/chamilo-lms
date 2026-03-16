@@ -6726,11 +6726,11 @@ class CourseManager
         $tabs = [
             'simple' => [
                 'content' => get_lang('Standard List'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+                'url' => '/admin/course-list',
             ],
             'admin' => [
                 'content' => get_lang('Management List'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
+                'url' => '/admin/course-list',
             ],
         ];
 

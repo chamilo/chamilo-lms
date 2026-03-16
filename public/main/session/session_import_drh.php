@@ -15,7 +15,7 @@ api_protect_limit_for_session_admin();
 $form_sent = 0;
 $tool_name = get_lang('Import list of HR directors into sessions');
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
 
@@ -60,7 +60,7 @@ if ($form->validate()) {
 }
 
 Display::display_header($tool_name);
-$actions = '<a href="../session/session_list.php">'.
+$actions = '<a href="/admin/session-list">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);

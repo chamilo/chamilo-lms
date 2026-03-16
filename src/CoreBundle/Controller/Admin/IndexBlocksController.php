@@ -78,7 +78,7 @@ class IndexBlocksController extends BaseController
         if ($this->isAdmin) {
             $json['courses'] = [
                 'id' => 'block-admin-courses',
-                'searchUrl' => '/main/admin/course_list.php',
+                'searchUrl' => '/admin/course-list',
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
@@ -174,7 +174,7 @@ class IndexBlocksController extends BaseController
         /* Sessions */
         $json['sessions'] = [
             'id' => 'block-admin-sessions',
-            'searchUrl' => '/main/session/session_list.php',
+            'searchUrl' => '/admin/session-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
@@ -210,7 +210,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => '/admin/user-list',
+            'route' => ['name' => 'AdminUserList'],
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -348,7 +348,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => '/main/admin/course_list.php',
+            'route' => ['name' => 'AdminCourseList'],
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [
@@ -852,7 +852,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-session-list',
-            'url' => '/main/session/session_list.php',
+            'url' => '/admin/session-list',
             'label' => $this->translator->trans('Training sessions list'),
         ];
         $items[] = [

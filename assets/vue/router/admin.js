@@ -53,10 +53,22 @@ export default {
       component: () => import("../views/admin/UserList.vue"),
     },
     {
+      name: "AdminCourseList",
+      path: "course-list",
+      meta: { requiresAdmin: true, showBreadcrumb: true },
+      component: () => import("../views/admin/CourseList.vue"),
+    },
+    {
       name: "AdminListIcons",
       path: "list-icons",
       meta: { requiresAdmin: true, showBreadcrumb: true },
       component: () => import("../views/admin/ListIcons.vue"),
+    },
+    {
+      name: "AdminSessionList",
+      path: "session-list",
+      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true },
+      component: () => import("../views/admin/SessionList.vue"),
     },
   ],
 }

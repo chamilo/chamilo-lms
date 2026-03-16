@@ -266,7 +266,7 @@ function mapPostRow(item) {
     id,
     title: item.title ?? "",
     author: authorName,
-    date: date ? new Date(date).toISOString().slice(0, 10) : "",
+    date,
     excerpt: makeExcerpt(fullText, 160),
     tags: [],
     comments: 0,

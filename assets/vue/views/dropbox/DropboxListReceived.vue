@@ -17,7 +17,7 @@
             :label="t('New folder')"
             @click="openCreateFolder('received')"
           />
-          <RouterLink
+          <BaseAppLink
             :to="{ name: 'DropboxCreate', params: $route.params, query: { ...$route.query, from: 'received' } }"
           >
             <BaseButton
@@ -25,7 +25,7 @@
               type="primary-alternative"
               :label="t('Share a new file')"
             />
-          </RouterLink>
+          </BaseAppLink>
         </div>
       </template>
     </BaseToolbar>

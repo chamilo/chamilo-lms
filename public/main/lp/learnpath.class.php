@@ -2988,15 +2988,30 @@ class learnpath
                                 !empty($extension) &&
                                 in_array($extension, $onlyofficeAllowedExtensions, true)
                             ) {
+                                $returnUrl = '';
+                                $currentRequestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
+                                $currentHost = isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
+
+                                if ('' !== $currentRequestUri && '' !== $currentHost) {
+                                    $scheme = api_is_https() ? 'https://' : 'http://';
+                                    $returnUrl = $scheme.$currentHost.$currentRequestUri;
+                                }
+
                                 $onlyofficeUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php'
                                     .'?docId='.$docId
                                     .'&cid='.$course_id
                                     .'&sid='.(int) $this->get_lp_session_id()
-                                    .'&groupId='.(int) api_get_group_id()
-                                    .'&nh=1';
+                                    .'&nh=1'
+                                    .'&origin=learnpath'
+                                    .'&embedded=1';
 
-                                if (in_array($extension, $onlyofficeViewOnlyExtensions, true)) {
-                                    $onlyofficeUrl .= '&readOnly=1';
+                                $currentGroupId = (int) api_get_group_id();
+                                if ($currentGroupId > 0) {
+                                    $onlyofficeUrl .= '&groupId='.$currentGroupId;
+                                }
+
+                                if ('' !== $returnUrl) {
+                                    $onlyofficeUrl .= '&returnUrl='.rawurlencode($returnUrl);
                                 }
 
                                 $file = $onlyofficeUrl;

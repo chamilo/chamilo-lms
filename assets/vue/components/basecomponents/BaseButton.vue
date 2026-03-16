@@ -1,5 +1,21 @@
 <template>
   <Button
+    v-if="route"
+    v-slot="slotProps"
+    :severity="primeSeverityProperty"
+    :variant="primerVariantProperty"
+    as-child
+  >
+    <BaseAppLink
+      v-if="route"
+      :to="route"
+      :class="slotProps.class"
+    >
+      {{ label }}
+    </BaseAppLink>
+  </Button>
+  <Button
+    v-else
     :aria-label="onlyIcon ? label : undefined"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
@@ -21,6 +37,7 @@ import Button from "primevue/button"
 import { computed } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
+import BaseAppLink from "./BaseAppLink.vue"
 
 const props = defineProps({
   label: {
@@ -79,7 +96,7 @@ const props = defineProps({
   route: {
     type: Object,
     required: false,
-    default: () => ({ name: "", params: {} }),
+    default: null,
   },
 })
 

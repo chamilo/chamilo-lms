@@ -25,9 +25,7 @@
       <button
         :class="[
           'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
-          view === 'deleted'
-            ? 'border-blue-600 text-blue-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700',
+          view === 'deleted' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700',
         ]"
         @click="switchView('deleted')"
       >
@@ -170,9 +168,36 @@
       </div>
     </div>
 
+    <!-- Bulk actions toolbar -->
+    <div
+      v-if="selectedItems.length > 0 && view !== 'deleted' && viewer.isPlatformAdmin"
+      class="flex items-center gap-4"
+    >
+      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
+      <button
+        class="btn btn--danger text-sm"
+        @click="confirmBulkAction('delete_users')"
+      >
+        {{ t("Remove from portal") }}
+      </button>
+      <button
+        class="btn btn--plain text-sm"
+        @click="confirmBulkAction('disable_users')"
+      >
+        {{ t("Disable") }}
+      </button>
+      <button
+        class="btn btn--primary text-sm"
+        @click="confirmBulkAction('enable_users')"
+      >
+        {{ t("Enable") }}
+      </button>
+    </div>
+
     <!-- User table -->
     <BaseTable
       v-model:rows="pageSize"
+      v-model:selectedItems="selectedItems"
       :is-loading="isLoading"
       :lazy="true"
       :text-for-empty="t('No data available')"
@@ -182,6 +207,10 @@
       @page="onPage"
       @sort="onSort"
     >
+      <Column
+        header-style="width: 3rem"
+        selection-mode="multiple"
+      />
       <Column
         :header="t('Photo')"
         field="avatarUrl"
@@ -208,7 +237,8 @@
           <a
             :href="`/main/admin/user_information.php?user_id=${data.id}`"
             class="text-blue-600 hover:underline"
-          >{{ data.firstname }}</a>
+            >{{ data.firstname }}</a
+          >
         </template>
       </Column>
       <Column
@@ -220,7 +250,8 @@
           <a
             :href="`/main/admin/user_information.php?user_id=${data.id}`"
             class="text-blue-600 hover:underline"
-          >{{ data.lastname }}</a>
+            >{{ data.lastname }}</a
+          >
         </template>
       </Column>
       <Column
@@ -242,7 +273,8 @@
             v-for="role in data.roles"
             :key="role"
             class="block text-xs"
-          >{{ formatRole(role) }}</span>
+            >{{ formatRole(role) }}</span
+          >
         </template>
       </Column>
       <Column
@@ -266,14 +298,20 @@
           <!-- Active: clickable to lock (unless current user) -->
           <span
             v-else-if="data.active === 1"
-            :class="['mdi mdi-check-circle ch-tool-icon text-green-600', canToggleActive(data) ? 'cursor-pointer' : 'cursor-default']"
+            :class="[
+              'mdi mdi-check-circle ch-tool-icon text-green-600',
+              canToggleActive(data) ? 'cursor-pointer' : 'cursor-default',
+            ]"
             :title="t('Lock')"
             @click="canToggleActive(data) && toggleActive(data)"
           />
           <!-- Inactive: clickable to unlock (unless current user) -->
           <span
             v-else
-            :class="['mdi mdi-alert ch-tool-icon text-yellow-600', canToggleActive(data) ? 'cursor-pointer' : 'cursor-default']"
+            :class="[
+              'mdi mdi-alert ch-tool-icon text-yellow-600',
+              canToggleActive(data) ? 'cursor-pointer' : 'cursor-default',
+            ]"
             :title="t('Unlock')"
             @click="canToggleActive(data) && toggleActive(data)"
           />
@@ -476,6 +514,7 @@ import baseService from "../../services/baseService"
 const { t } = useI18n()
 
 const items = ref([])
+const selectedItems = ref([])
 const total = ref(0)
 const isLoading = ref(false)
 const page = ref(1)
@@ -519,13 +558,11 @@ function formatRole(role) {
   const upper = role.toUpperCase()
   const label = roleLabelsMap.value[upper] || roleLabelsMap.value[role]
   if (label) return label
-  return (
-    role
-      .replace(/^ROLE_/, "")
-      .replace(/_/g, " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (c) => c.toUpperCase())
-  )
+  return role
+    .replace(/^ROLE_/, "")
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 function canToggleActive(data) {
@@ -535,16 +572,12 @@ function canToggleActive(data) {
 async function toggleActive(data) {
   const newStatus = data.active === 1 ? 0 : 1
   const msg =
-    data.active === 1
-      ? t("Are you sure you want to lock this user?")
-      : t("Are you sure you want to unlock this user?")
+    data.active === 1 ? t("Are you sure you want to lock this user?") : t("Are you sure you want to unlock this user?")
 
   if (!confirm(msg)) return
 
   try {
-    const res = await fetch(
-      `/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`,
-    )
+    const res = await fetch(`/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`)
     const text = await res.text()
     data.active = text.trim() === "1" ? 1 : 0
   } catch (e) {
@@ -582,6 +615,28 @@ function confirmAction(action, data) {
   }
   document.body.appendChild(form)
   form.submit()
+}
+
+async function confirmBulkAction(action) {
+  if (!confirm(t("Please confirm your choice"))) return
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", action)
+    formData.set("_token", csrfToken.value)
+    selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
+
+    await fetch("/admin/user-list-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+
+    selectedItems.value = []
+    load()
+  } catch (e) {
+    console.error("Error performing bulk action:", e)
+  }
 }
 
 async function load() {

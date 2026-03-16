@@ -394,10 +394,14 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
+const route = useRoute()
+
+const urlParams = new URLSearchParams(window.location.search)
 
 const items = ref([])
 const total = ref(0)
@@ -409,15 +413,17 @@ const sortOrder = ref(1)
 const view = ref("simple")
 const selectedItems = ref([])
 
-const simpleKeyword = ref("")
-const showAdvanced = ref(false)
+const simpleKeyword = ref(urlParams.get("keyword") || String(route.query.keyword || ""))
+
+const initVisibility = urlParams.get("keyword_visibility") || String(route.query.keyword_visibility || "")
+const showAdvanced = ref(initVisibility !== "")
 
 const advancedFilters = reactive({
   keyword_code: "",
   keyword_title: "",
   keyword_category: "",
   keyword_language: "",
-  keyword_visibility: "",
+  keyword_visibility: initVisibility,
   keyword_subscribe: "",
   keyword_unsubscribe: "",
   course_teacher_input: "",

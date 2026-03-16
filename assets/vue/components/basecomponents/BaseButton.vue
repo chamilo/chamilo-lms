@@ -9,7 +9,10 @@
     <BaseAppLink
       :to="route ? route : null"
       :url="toUrl ? toUrl : null"
-      :class="[slotProps.class, { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon }]"
+      :class="[
+        slotProps.class,
+        { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon, 'p-disabled': disabled },
+      ]"
     >
       <span
         v-if="icon"

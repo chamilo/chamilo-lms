@@ -22,7 +22,7 @@ SessionManager::protectSession($session);
 
 $tool_name = get_lang('Edit this session');
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = ['url' => 'resume_session.php?id_session='.$id, 'name' => get_lang('Session overview')];
 
 $categoriesList = SessionManager::get_all_session_category();

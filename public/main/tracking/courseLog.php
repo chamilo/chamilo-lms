@@ -503,7 +503,7 @@ if ('resume_session' === $origin) {
         'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
-        'url' => '../session/session_list.php',
+        'url' => '/admin/session-list',
         'name' => get_lang('Session list'),
     ];
     $interbreadcrumb[] = [

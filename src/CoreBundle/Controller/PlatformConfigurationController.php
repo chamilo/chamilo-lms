@@ -317,9 +317,9 @@ class PlatformConfigurationController extends AbstractController
         }
 
         $configured = $demoEnabled || (
-                '' !== trim($documentServerUrl)
+            '' !== trim($documentServerUrl)
                 && '' !== trim($jwtSecret)
-            );
+        );
 
         return [
             'enabled' => $enabled,

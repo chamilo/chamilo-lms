@@ -179,20 +179,6 @@
       </div>
     </div>
 
-    <!-- Bulk actions -->
-    <div
-      v-if="selectedItems.length > 0"
-      class="flex items-center gap-4"
-    >
-      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
-      <button
-        class="btn btn--danger text-sm"
-        @click="confirmBulkDelete"
-      >
-        {{ t("Delete selected") }}
-      </button>
-    </div>
-
     <!-- Course table -->
     <BaseTable
       v-model:rows="pageSize"
@@ -388,6 +374,20 @@
         </template>
       </Column>
     </BaseTable>
+
+    <!-- Toolbar below table -->
+    <div
+      v-if="selectedItems.length > 0"
+      class="flex items-center gap-4"
+    >
+      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
+      <button
+        class="btn btn--danger text-sm"
+        @click="confirmBulkDelete"
+      >
+        {{ t("Delete selected") }}
+      </button>
+    </div>
   </div>
 </template>
 

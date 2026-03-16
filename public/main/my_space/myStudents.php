@@ -520,6 +520,9 @@ switch ($action) {
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
+                        if ((int) $boss['boss_id'] === (int) $currentUser->getId()) {
+                            continue;
+                        }
                         $studentFullName = UserManager::formatUserFullName($student);
                         $contentBoss = sprintf(
                             get_lang('Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s'),

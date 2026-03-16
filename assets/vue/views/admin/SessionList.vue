@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-semibold text-gray-800">{{ t("Session list") }}</h2>
       <a
-        class="btn btn--primary"
+        class="btn btn--success"
         href="/main/session/session_add.php"
       >
         {{ t("Add a training session") }}
@@ -194,7 +194,7 @@
         {{ t("Delete selected") }}
       </button>
       <button
-        class="btn btn--plain text-sm"
+        class="btn btn--success text-sm"
         @click="copyMultiple(selectedItems.map((s) => s.id))"
       >
         {{ t("Copy selected") }}

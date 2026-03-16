@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-semibold text-gray-800">{{ t("Course list") }}</h2>
       <a
-        class="btn btn--primary"
+        class="btn btn--success"
         href="/main/admin/course_add.php"
       >
         {{ t("Add course") }}

@@ -210,7 +210,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => '/admin/user-list',
+            'route' => ['name' => 'AdminUserList'],
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -348,7 +348,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => '/admin/course-list',
+            'route' => ['name' => 'AdminCourseList'],
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [

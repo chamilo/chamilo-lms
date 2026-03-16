@@ -702,9 +702,6 @@ class PortfolioController
             api_not_allowed(true);
         }
 
-        $itemCourse = $item->getCourse();
-        $itemSession = $item->getSession();
-
         $form = new FormValidator('edit_portfolio', 'post', $this->baseUrl."action=edit_item&id={$item->getId()}");
 
         if ('true' === api_get_setting('editor.save_titles_as_html')) {
@@ -783,30 +780,13 @@ class PortfolioController
         );
 
         if ($form->validate()) {
-            if ($itemCourse) {
-                api_item_property_update(
-                    api_get_course_info($itemCourse->getCode()),
-                    TOOL_PORTFOLIO,
-                    $item->getId(),
-                    'PortfolioUpdated',
-                    api_get_user_id(),
-                    [],
-                    null,
-                    '',
-                    '',
-                    $itemSession ? $itemSession->getId() : 0
-                );
-            }
-
             $values = $form->exportValues();
-            $currentTime = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
 
             $item
                 ->setTitle($values['title'])
                 ->setContent($values['content'])
-                ->setUpdateDate($currentTime)
                 ->setCategory(
-                    $this->em->find('ChamiloCoreBundle:PortfolioCategory', $values['category'])
+                    $this->em->find(PortfolioCategory::class, $values['category'])
                 );
 
             $values['item_id'] = $item->getId();
@@ -814,7 +794,6 @@ class PortfolioController
             $extraFieldValue = new ExtraFieldValue('portfolio');
             $extraFieldValue->saveFieldValues($values);
 
-            $this->em->persist($item);
             $this->em->flush();
 
             Container::getEventDispatcher()->dispatch(
@@ -824,7 +803,7 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $item->getUser(),
+                $item->getCreator(),
                 $item->getId(),
                 Portfolio::TYPE_ITEM
             );

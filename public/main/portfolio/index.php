@@ -115,7 +115,6 @@ switch ($action) {
     case 'edit_item':
         $id = $httpRequest->query->getInt('id');
 
-        /** @var Portfolio|null $item */
         $item = $em->find(Portfolio::class, $id);
 
         if (empty($item)) {

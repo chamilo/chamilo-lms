@@ -79,7 +79,7 @@ class CourseListController extends AbstractController
 
         if ($accessUrl) {
             $qb->andWhere('auc.url = :accessUrl')
-                ->setParameter('accessUrl', $accessUrl)
+                ->setParameter('accessUrl', $accessUrl->getId())
             ;
         }
 

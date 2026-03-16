@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use SessionManager;
@@ -94,7 +96,7 @@ class SessionListController extends AbstractController
             $qb->join('s.users', 'sru')
                 ->andWhere('sru.user = :currentUser')
                 ->andWhere('sru.relationType = :sessionAdminType')
-                ->setParameter('currentUser', $user)
+                ->setParameter('currentUser', $user->getId(), Types::INTEGER)
                 ->setParameter('sessionAdminType', Session::SESSION_ADMIN);
         }
 
@@ -290,7 +292,7 @@ class SessionListController extends AbstractController
                 ->from(\Chamilo\CoreBundle\Entity\SessionRelUser::class, 'sru')
                 ->where('sru.user = :user')
                 ->andWhere('sru.relationType = :type')
-                ->setParameter('user', $user)
+                ->setParameter('user', $user->getId(), Types::INTEGER)
                 ->setParameter('type', Session::SESSION_ADMIN)
                 ->getQuery()
                 ->getSingleColumnResult()
@@ -318,7 +320,7 @@ class SessionListController extends AbstractController
                         's.accessEndDate >= :now',
                     ),
                 )
-            )->setParameter('now', $now),
+            )->setParameter('now', $now, Types::DATETIME_MUTABLE),
 
             // Closed: current date is past access_end_date
             'close' => $qb->andWhere(
@@ -334,11 +336,11 @@ class SessionListController extends AbstractController
                         's.accessEndDate < :now',
                     ),
                 )
-            )->setParameter('now', $now),
+            )->setParameter('now', $now, Types::DATETIME_MUTABLE),
 
             // Custom: only PLANNED or IN PROGRESS status
             'custom' => $qb->andWhere('s.status IN (:customStatuses)')
-                ->setParameter('customStatuses', [Session::STATUS_PLANNED, Session::STATUS_PROGRESS]),
+                ->setParameter('customStatuses', [Session::STATUS_PLANNED, Session::STATUS_PROGRESS], ArrayParameterType::INTEGER),
 
             // Replication: only sessions configured for repetition with <= 1 child
             'replication' => $qb->andWhere('s.daysToNewRepetition IS NOT NULL')
@@ -378,7 +380,7 @@ class SessionListController extends AbstractController
             ->from(Session::class, 's')
             ->leftJoin('s.category', 'sc')
             ->where('s.parentId IN (:parentIds)')
-            ->setParameter('parentIds', $parentIds)
+            ->setParameter('parentIds', $parentIds, ArrayParameterType::INTEGER)
             ->orderBy('s.id', 'ASC')
             ->getQuery()
             ->getArrayResult();

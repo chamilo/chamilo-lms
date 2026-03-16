@@ -8,10 +8,12 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use RuntimeException;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -72,20 +74,23 @@ class SessionListController extends AbstractController
 
         $qb = $this->em->createQueryBuilder()
             ->from(Session::class, 's')
-            ->leftJoin('s.category', 'sc');
+            ->leftJoin('s.category', 'sc')
+        ;
 
         $this->applyListTypeFilter($qb, $listType);
 
         // Keyword search
         if ('' !== $keyword) {
             $qb->andWhere('(s.title LIKE :kw OR sc.title LIKE :kw)')
-                ->setParameter('kw', '%'.$keyword.'%');
+                ->setParameter('kw', '%'.$keyword.'%')
+            ;
         }
 
         // Category filter
         if (null !== $categoryFilter && '' !== $categoryFilter) {
             $qb->andWhere('sc.id = :catId')
-                ->setParameter('catId', (int) $categoryFilter);
+                ->setParameter('catId', (int) $categoryFilter)
+            ;
         }
 
         // Session admin restriction: only show sessions they manage
@@ -95,7 +100,8 @@ class SessionListController extends AbstractController
                 ->andWhere('sru.user = :currentUser')
                 ->andWhere('sru.relationType = :sessionAdminType')
                 ->setParameter('currentUser', $user)
-                ->setParameter('sessionAdminType', Session::SESSION_ADMIN);
+                ->setParameter('sessionAdminType', Session::SESSION_ADMIN)
+            ;
         }
 
         // Count
@@ -119,7 +125,8 @@ class SessionListController extends AbstractController
             )
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+        ;
 
         $rows = $dataQb->getQuery()->getArrayResult();
 
@@ -159,7 +166,8 @@ class SessionListController extends AbstractController
             ->from(SessionCategory::class, 'cat')
             ->orderBy('cat.title', 'ASC')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
@@ -245,7 +253,7 @@ class SessionListController extends AbstractController
                     // This method sends headers and calls exit() on success,
                     // or returns with no output if there is no data.
                     SessionManager::exportSessionsAsCSV($sessionIds);
-                } catch (\RuntimeException) {
+                } catch (RuntimeException) {
                     return $this->json(['error' => 'No data to export.'], 400);
                 }
 
@@ -264,7 +272,7 @@ class SessionListController extends AbstractController
                 try {
                     // This method sends headers and calls exit() on success
                     SessionManager::exportSessionsAsZip($sessionIds);
-                } catch (\RuntimeException) {
+                } catch (RuntimeException) {
                     return $this->json(['error' => 'No data to export.'], 400);
                 }
 
@@ -287,7 +295,7 @@ class SessionListController extends AbstractController
             'intval',
             $this->em->createQueryBuilder()
                 ->select('IDENTITY(sru.session)')
-                ->from(\Chamilo\CoreBundle\Entity\SessionRelUser::class, 'sru')
+                ->from(SessionRelUser::class, 'sru')
                 ->where('sru.user = :user')
                 ->andWhere('sru.relationType = :type')
                 ->setParameter('user', $user)
@@ -381,7 +389,8 @@ class SessionListController extends AbstractController
             ->setParameter('parentIds', $parentIds)
             ->orderBy('s.id', 'ASC')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         $childMap = [];
         foreach ($children as $child) {

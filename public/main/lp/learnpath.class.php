@@ -3001,12 +3001,17 @@ class learnpath
                                     .'?docId='.$docId
                                     .'&cid='.$course_id
                                     .'&sid='.(int) $this->get_lp_session_id()
-                                    .'&groupId='.(int) api_get_group_id()
                                     .'&nh=1'
-                                    .('' !== $returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : '');
+                                    .'&origin=learnpath'
+                                    .'&embedded=1';
 
-                                if (in_array($extension, $onlyofficeViewOnlyExtensions, true)) {
-                                    $onlyofficeUrl .= '&readOnly=1';
+                                $currentGroupId = (int) api_get_group_id();
+                                if ($currentGroupId > 0) {
+                                    $onlyofficeUrl .= '&groupId='.$currentGroupId;
+                                }
+
+                                if ('' !== $returnUrl) {
+                                    $onlyofficeUrl .= '&returnUrl='.rawurlencode($returnUrl);
                                 }
 
                                 $file = $onlyofficeUrl;

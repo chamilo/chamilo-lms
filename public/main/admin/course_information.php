@@ -99,7 +99,7 @@ function get_course_usage($course, $session_id = 0)
 
 $courseUrl = api_get_course_url($courseId);
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Courses')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Courses')];
 
 Display::display_header($course->getTitleAndCode());
 

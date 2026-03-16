@@ -32,7 +32,7 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
 $tool_name = get_lang('Export sessions list');
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 set_time_limit(0);
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
@@ -294,7 +294,7 @@ if (api_is_multiple_url_enabled()) {
 $result = Database::query($sql);
 $sessions = Database::store_result($result);
 
-$actions = '<a href="../session/session_list.php">'.
+$actions = '<a href="/admin/session-list">'.
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Session list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 

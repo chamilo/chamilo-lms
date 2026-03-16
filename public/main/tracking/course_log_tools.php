@@ -81,7 +81,7 @@ $csv_content = [];
 // -----------------------------------------------------------------------------
 if (isset($_GET['origin']) && 'resume_session' === $_GET['origin']) {
     $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('Administration')];
-    $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('Session list')];
+    $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
     $interbreadcrumb[] = [
         'url'  => '../session/resume_session.php?id_session='.api_get_session_id(),
         'name' => get_lang('Session overview'),

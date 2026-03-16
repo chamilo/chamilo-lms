@@ -25,7 +25,7 @@ $formSent = 0;
 $errorMsg = '';
 
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 
@@ -412,7 +412,7 @@ if (!empty($return)) {
     echo Display::return_message($return, 'error', false);
 }
 
-$actions = '<a href="../session/session_list.php">'.
+$actions = '<a href="/admin/session-list">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
 echo Display::toolbarAction('session', [$actions]);
 $form->display();

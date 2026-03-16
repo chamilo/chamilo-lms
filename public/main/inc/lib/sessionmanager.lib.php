@@ -10239,23 +10239,23 @@ class SessionManager
         $tabs = [
             [
                 'content' => get_lang('All sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+                'url' => '/admin/session-list?list_type=all',
             ],
             [
                 'content' => get_lang('Active sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+                'url' => '/admin/session-list?list_type=active',
             ],
             [
                 'content' => get_lang('Closed sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+                'url' => '/admin/session-list?list_type=close',
             ],
             [
                 'content' => get_lang('Custom list'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
+                'url' => '/admin/session-list?list_type=custom',
             ],
             [
                 'content' => get_lang('Replication'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=replication',
+                'url' => '/admin/session-list?list_type=replication',
             ],
         ];
         $default = null;

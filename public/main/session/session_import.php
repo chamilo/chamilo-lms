@@ -22,7 +22,7 @@ $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)
 
 $toolName = get_lang('Import sessions list');
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
 $csvCustomError = '';
@@ -337,7 +337,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     header('Location: resume_session.php?id_session=' . $sessionId);
                     exit;
                 } else {
-                    header('Location: session_list.php');
+                    header('Location: /admin/session-list');
                     exit;
                 }
             }
@@ -348,7 +348,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 Display::display_header($toolName);
-$actions = '<a href="../session/session_list.php">'.
+$actions = '<a href="/admin/session-list">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
     '</a>';
 echo Display::toolbarAction('session_import', [$actions]);

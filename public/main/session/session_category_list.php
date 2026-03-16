@@ -47,7 +47,7 @@ if ($frmSearch->validate()) {
     $keyword = Security::remove_XSS($frmSearch->exportValues()['keyword']);
 }
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $interbreadcrumb[] = ['url' => 'session_category_list.php', 'name' => get_lang('Sessions categories list')];
@@ -111,7 +111,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
             api_get_path(WEB_CODE_PATH).'session/session_category_add.php'
         ).Display::url(
             Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Training sessions list')),
-            api_get_path(WEB_CODE_PATH).'session/session_list.php'
+            '/admin/session-list'
         );
     $actionsRight = $frmSearch->returnForm();
 
@@ -193,7 +193,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]"
                                    value="<?php echo $enreg['id']; ?>"></td>
                         <td><?php echo api_htmlentities($enreg['title'], ENT_QUOTES); ?></td>
-                        <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses
+                        <td><?php echo "<a href=\"/admin/session-list?id_category=".$enreg['id']."\">".$nb_courses
                                 ." Session(s) </a>"; ?></td>
                         <td><?php echo api_format_date($enreg['date_start'], DATE_FORMAT_SHORT); ?></td>
                         <td>

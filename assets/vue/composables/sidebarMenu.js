@@ -492,7 +492,7 @@ export function useSidebarMenu() {
             ? [{ label: t("Add user"), url: "/main/admin/user_add.php" }]
             : [{ label: t("Users"), route: { name: "AdminUserList" } }]),
           { label: t("Courses"), url: "/main/admin/course_list.php" },
-          { label: t("Sessions"), url: "/main/session/session_list.php" },
+          { label: t("Sessions"), route: { name: "AdminSessionList" } },
           ...(securityStore.isAdmin ? [{ label: t("Settings"), url: "/admin/settings" }] : []),
         ]
 

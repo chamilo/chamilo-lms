@@ -16,7 +16,7 @@ api_protect_admin_script(true);
 $formSent = 0;
 $errorMsg = '';
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
@@ -78,7 +78,7 @@ if (!empty($return)) {
         );
         echo Display::url(
             Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Training sessions list')),
-            api_get_path(WEB_CODE_PATH).'session/session_list.php'
+            '/admin/session-list'
         );
         echo '</div>';
         ?>

@@ -218,7 +218,7 @@ if (api_is_platform_admin()) {
     $searchForm = new FormValidator(
         'search_session',
         'GET',
-        $sessionPath.'session_list.php',
+        '/admin/session-list',
         null,
         null,
         FormValidator::LAYOUT_BOX_SEARCH
@@ -227,7 +227,7 @@ if (api_is_platform_admin()) {
     $searchForm->addButtonSearch(get_lang('Search'));
     $blocks['sessions']['search_form'] = $searchForm->returnForm();
     $items = [];
-    $items[] = ['url' => $sessionPath.'session_list.php', 'label' => get_lang('Training sessions list')];
+    $items[] = ['url' => '/admin/session-list', 'label' => get_lang('Training sessions list')];
     $items[] = ['url' => $sessionPath.'session_add.php', 'label' => get_lang('Add a training session')];
     $items[] = [
         'url' => $sessionPath.'session_category_list.php',

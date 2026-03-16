@@ -99,7 +99,7 @@ if (isset($_GET['origin']) && 'resume_session' === $_GET['origin']) {
         'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
-        'url'  => api_get_path(WEB_CODE_PATH).'session/session_list.php',
+        'url'  => '/admin/session-list',
         'name' => get_lang('Session list'),
     ];
     $interbreadcrumb[] = [

@@ -174,7 +174,7 @@ class IndexBlocksController extends BaseController
         /* Sessions */
         $json['sessions'] = [
             'id' => 'block-admin-sessions',
-            'searchUrl' => '/main/session/session_list.php',
+            'searchUrl' => '/admin/session-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
@@ -852,7 +852,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-session-list',
-            'url' => '/main/session/session_list.php',
+            'url' => '/admin/session-list',
             'label' => $this->translator->trans('Training sessions list'),
         ];
         $items[] = [

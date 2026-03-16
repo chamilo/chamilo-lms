@@ -11,6 +11,8 @@ namespace moodleexport;
  */
 class GlossaryExport extends ActivityExport
 {
+    private static int $embeddedFileGlobalSeq = 0;
+
     /**
      * Export all glossary terms into a single Moodle glossary.
      *
@@ -21,13 +23,18 @@ class GlossaryExport extends ActivityExport
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Prepare the directory where the glossary export will be saved
-        $glossaryDir = $this->prepareActivityDirectory($exportDir, 'glossary', $moduleId);
+        $effectiveModuleId = (int) $moduleId;
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = (int) $activityId;
+        }
 
-        // Retrieve glossary data
-        $glossaryData = $this->getData($activityId, $sectionId);
+        $glossaryDir = $this->prepareActivityDirectory($exportDir, 'glossary', $effectiveModuleId);
+        $glossaryData = $this->getData((int) $activityId, (int) $sectionId, $effectiveModuleId);
 
-        // Generate XML files for the glossary
+        if (empty($glossaryData)) {
+            return;
+        }
+
         $this->createGlossaryXml($glossaryData, $glossaryDir);
         $this->createModuleXml($glossaryData, $glossaryDir);
         $this->createGradesXml($glossaryData, $glossaryDir);
@@ -43,30 +50,57 @@ class GlossaryExport extends ActivityExport
     /**
      * Get all terms from the course and group them into a single glossary.
      */
-    public function getData(int $glossaryId, int $sectionId): ?array
+    public function getData(int $glossaryId, int $sectionId, ?int $moduleId = null): ?array
     {
+        if (empty($this->course->resources['glossary'])) {
+            return null;
+        }
+
         $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'];
+        $adminId = (int) ($adminData['id'] ?? 1);
+
+        $effectiveModuleId = (int) ($moduleId ?? $glossaryId);
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = $glossaryId;
+        }
 
         $glossaryEntries = [];
+        $glossaryFiles = [];
+
         foreach ($this->course->resources['glossary'] as $glossary) {
+            $entryId = (int) ($glossary->glossary_id ?? 0);
+
+            $definitionResult = $this->extractEmbeddedFilesAndNormalizeContent(
+                (string) ($glossary->description ?? ''),
+                $effectiveModuleId,
+                'mod_glossary',
+                'entry',
+                $entryId,
+                fn (int $sequence): int => $this->buildGlossaryEmbeddedFileId()
+            );
+
+            if (!empty($definitionResult['files'])) {
+                $glossaryFiles = array_merge($glossaryFiles, $definitionResult['files']);
+            }
+
             $glossaryEntries[] = [
-                'id' => $glossary->glossary_id,
+                'id' => $entryId,
                 'userid' => $adminId,
-                'concept' => $glossary->name,
-                'definition' => $glossary->description,
+                'concept' => $this->sanitizeMoodleActivityName((string) ($glossary->name ?? ''), 255),
+                'definition' => $definitionResult['content'],
                 'timecreated' => time(),
                 'timemodified' => time(),
             ];
         }
 
-        // Return the glossary data with all terms included
+        $glossaryName = $this->sanitizeMoodleActivityName((string) get_lang('Glossary'), 255);
+
         return [
             'id' => $glossaryId,
-            'moduleid' => $glossaryId,
+            'moduleid' => $effectiveModuleId,
             'modulename' => 'glossary',
-            'contextid' => $this->course->info['real_id'],
-            'name' => get_lang('Glossary'),
+            'contextid' => $effectiveModuleId,
+            'name' => $glossaryName,
             'description' => '',
             'timecreated' => time(),
             'timemodified' => time(),
@@ -75,7 +109,7 @@ class GlossaryExport extends ActivityExport
             'userid' => $adminId,
             'entries' => $glossaryEntries,
             'users' => [$adminId],
-            'files' => [],
+            'files' => $glossaryFiles,
         ];
     }
 
@@ -87,7 +121,7 @@ class GlossaryExport extends ActivityExport
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<activity id="'.$glossaryData['id'].'" moduleid="'.$glossaryData['moduleid'].'" modulename="'.$glossaryData['modulename'].'" contextid="'.$glossaryData['contextid'].'">'.PHP_EOL;
         $xmlContent .= '  <glossary id="'.$glossaryData['id'].'">'.PHP_EOL;
-        $xmlContent .= '    <name>'.htmlspecialchars($glossaryData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars((string) $glossaryData['name']).'</name>'.PHP_EOL;
         $xmlContent .= '    <intro></intro>'.PHP_EOL;
         $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
         $xmlContent .= '    <allowduplicatedentries>0</allowduplicatedentries>'.PHP_EOL;
@@ -114,12 +148,11 @@ class GlossaryExport extends ActivityExport
         $xmlContent .= '    <completionentries>0</completionentries>'.PHP_EOL;
         $xmlContent .= '    <entries>'.PHP_EOL;
 
-        // Add glossary terms (entries)
         foreach ($glossaryData['entries'] as $entry) {
             $xmlContent .= '      <entry id="'.$entry['id'].'">'.PHP_EOL;
             $xmlContent .= '        <userid>'.$entry['userid'].'</userid>'.PHP_EOL;
-            $xmlContent .= '        <concept>'.htmlspecialchars($entry['concept']).'</concept>'.PHP_EOL;
-            $xmlContent .= '        <definition><![CDATA['.$entry['definition'].']]></definition>'.PHP_EOL;
+            $xmlContent .= '        <concept>'.htmlspecialchars((string) $entry['concept']).'</concept>'.PHP_EOL;
+            $xmlContent .= '        <definition><![CDATA['.(string) $entry['definition'].']]></definition>'.PHP_EOL;
             $xmlContent .= '        <definitionformat>1</definitionformat>'.PHP_EOL;
             $xmlContent .= '        <definitiontrust>0</definitiontrust>'.PHP_EOL;
             $xmlContent .= '        <attachment></attachment>'.PHP_EOL;
@@ -135,6 +168,7 @@ class GlossaryExport extends ActivityExport
             $xmlContent .= '        </ratings>'.PHP_EOL;
             $xmlContent .= '      </entry>'.PHP_EOL;
         }
+
         $xmlContent .= '    </entries>'.PHP_EOL;
         $xmlContent .= '    <entriestags></entriestags>'.PHP_EOL;
         $xmlContent .= '    <categories></categories>'.PHP_EOL;
@@ -142,5 +176,15 @@ class GlossaryExport extends ActivityExport
         $xmlContent .= '</activity>';
 
         $this->createXmlFile('glossary', $xmlContent, $glossaryDir);
+    }
+
+    /**
+     * Build a stable embedded file id for glossary files.
+     */
+    private function buildGlossaryEmbeddedFileId(): int
+    {
+        self::$embeddedFileGlobalSeq++;
+
+        return 1500000000 + self::$embeddedFileGlobalSeq;
     }
 }

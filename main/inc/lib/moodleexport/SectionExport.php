@@ -49,8 +49,8 @@ class SectionExport
             $sectionData = [
                 'id' => 0,
                 'number' => 0,
-                'name' => get_lang('General'),
-                'summary' => get_lang('GeneralResourcesCourse'),
+                'name' => $this->sanitizeText((string) get_lang('General')),
+                'summary' => (string) get_lang('GeneralResourcesCourse'),
                 'sequence' => 0,
                 'visible' => 1,
                 'timemodified' => time(),
@@ -70,7 +70,6 @@ class SectionExport
     {
         $generalItems = [];
 
-        // List of resource types and their corresponding ID keys
         $resourceTypes = [
             RESOURCE_DOCUMENT => 'source_id',
             RESOURCE_QUIZ => 'source_id',
@@ -87,8 +86,9 @@ class SectionExport
                 foreach ($this->course->resources[$resourceType] as $id => $resource) {
                     if (!$this->isItemInLearnpath($resource, $resourceType)) {
                         $title = $resourceType === RESOURCE_WORK
-                            ? ($resource->params['title'] ?? '')
-                            : ($resource->title ?? $resource->name);
+                            ? (string) ($resource->params['title'] ?? '')
+                            : (string) ($resource->title ?? $resource->name ?? '');
+
                         $generalItems[] = [
                             'id' => $resource->$idKey,
                             'item_type' => $resourceType,
@@ -108,12 +108,10 @@ class SectionExport
      */
     public function getActivitiesForGeneral(): array
     {
-        // Preferred path: reuse precomputed activities from MoodleExport
         if (isset($this->activitiesBySection[0]) && is_array($this->activitiesBySection[0])) {
             return $this->activitiesBySection[0];
         }
 
-        // Fallback to legacy behavior (kept for safety)
         $generalLearnpath = (object) [
             'items' => $this->getGeneralItems(),
             'source_id' => 0,
@@ -140,7 +138,7 @@ class SectionExport
     public function getLearnpathById(int $sectionId): ?object
     {
         foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
-            if ($learnpath->source_id == $sectionId) {
+            if ((int) $learnpath->source_id === $sectionId) {
                 return $learnpath;
             }
         }
@@ -157,12 +155,12 @@ class SectionExport
 
         return [
             'id' => $sectionId,
-            'number' => $learnpath->display_order,
-            'name' => $learnpath->name,
-            'summary' => $learnpath->description,
+            'number' => (int) ($learnpath->display_order ?? 0),
+            'name' => $this->sanitizeText((string) ($learnpath->name ?? '')),
+            'summary' => (string) ($learnpath->description ?? ''),
             'sequence' => $sectionId,
-            'visible' => $learnpath->visibility,
-            'timemodified' => strtotime($learnpath->modified_on),
+            'visible' => 1,
+            'timemodified' => !empty($learnpath->modified_on) ? (int) strtotime((string) $learnpath->modified_on) : time(),
             'activities' => $this->getActivitiesForSection($learnpath),
         ];
     }
@@ -174,12 +172,10 @@ class SectionExport
     {
         $sectionId = $isGeneral ? 0 : (int) $learnpath->source_id;
 
-        // Preferred path: reuse precomputed activities from MoodleExport
         if (isset($this->activitiesBySection[$sectionId]) && is_array($this->activitiesBySection[$sectionId])) {
             return $this->activitiesBySection[$sectionId];
         }
 
-        // Fallback to legacy behavior
         $activities = [];
         foreach ($learnpath->items as $item) {
             $this->addActivityToList($item, $sectionId, $activities);
@@ -211,7 +207,7 @@ class SectionExport
                 $exportClass = new $exportClasses[$moduleName]($this->course);
                 $exportClass->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
             } else {
-                throw new \Exception("Export for module '$moduleName' is not supported.");
+                throw new Exception("Export for module '$moduleName' is not supported.");
             }
         }
     }
@@ -267,12 +263,10 @@ class SectionExport
 
                 $lpPath = isset($learnpathItem['path']) ? (string) $learnpathItem['path'] : '';
 
-                // Classic numeric comparison (most LP items)
                 if ($itemSourceId !== '' && $lpPath === $itemSourceId) {
                     return true;
                 }
 
-                // Extra fallback for documents if LP stores a path instead of numeric id
                 if ($normalizedType === 'document' && $itemSourceId !== '' && ctype_digit($itemSourceId)) {
                     $doc = \DocumentManager::get_document_data_by_id((int) $itemSourceId, $this->course->code);
                     if (!empty($doc['path'])) {
@@ -294,9 +288,6 @@ class SectionExport
 
     /**
      * Add an activity to the activities list.
-     * Generic approach: for any activity in a real section (LP sectionId > 0),
-     * force a unique moduleid per LP item occurrence:
-     *   moduleid = 900000000 + lp_item_id.
      */
     private function addActivityToList(array $item, int $sectionId, array &$activities): void
     {
@@ -324,14 +315,14 @@ class SectionExport
             'feedback' => FeedbackExport::class,
         ];
 
-        if (($item['id'] ?? null) == 'course_homepage') {
+        if (($item['id'] ?? null) === 'course_homepage') {
             $item['item_type'] = 'page';
             $item['path'] = 0;
         }
 
-        $itemType = ($item['item_type'] ?? '') === 'link' ? 'url' :
-            (($item['item_type'] ?? '') === 'work' || ($item['item_type'] ?? '') === 'student_publication' ? 'assign' :
-                (($item['item_type'] ?? '') === 'survey' ? 'feedback' : ($item['item_type'] ?? '')));
+        $itemType = ($item['item_type'] ?? '') === 'link' ? 'url'
+            : ((($item['item_type'] ?? '') === 'work' || ($item['item_type'] ?? '') === 'student_publication') ? 'assign'
+                : ((($item['item_type'] ?? '') === 'survey') ? 'feedback' : ($item['item_type'] ?? '')));
 
         switch ($itemType) {
             case 'quiz':
@@ -352,14 +343,13 @@ class SectionExport
                 $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
 
                 if ($document) {
-                    $documentType = $this->getDocumentType($document['filetype'], $document['path']);
+                    $documentType = $this->getDocumentType((string) $document['filetype'], (string) $document['path']);
 
                     if ($sectionId > 0 && $documentType && isset($activityClassMap[$documentType])) {
                         $activityClass = $activityClassMap[$documentType];
                         $exportInstance = new $activityClass($this->course);
                         $activityData = $exportInstance->getData($documentId, $sectionId);
                     } elseif ($sectionId === 0 && $documentType === 'page') {
-                        // Keep your original behavior for general section if you want
                         $activityClass = $activityClassMap['page'];
                         $exportInstance = new $activityClass($this->course);
                         $activityData = $exportInstance->getData($documentId, $sectionId);
@@ -368,7 +358,6 @@ class SectionExport
                 break;
         }
 
-        // Generic override: unique moduleid per LP occurrence (sectionId > 0)
         if (!empty($activityData) && $sectionId > 0) {
             $lpItemId = isset($item['id']) ? (int) $item['id'] : 0;
             $modName = (string) ($activityData['modulename'] ?? '');
@@ -384,7 +373,7 @@ class SectionExport
                 'moduleid' => $activityData['moduleid'],
                 'type' => $item['item_type'],
                 'modulename' => $activityData['modulename'],
-                'name' => $activityData['name'],
+                'name' => $this->sanitizeText((string) ($activityData['name'] ?? '')),
             ];
         }
     }
@@ -394,13 +383,15 @@ class SectionExport
      */
     private function getDocumentType(string $filetype, string $path): ?string
     {
-        if ('html' === pathinfo($path, PATHINFO_EXTENSION)) {
+        $ext = strtolower((string) pathinfo($path, PATHINFO_EXTENSION));
+
+        if ($ext === 'html' || $ext === 'htm') {
             return 'page';
-        } elseif ('file' === $filetype) {
+        }
+
+        if ($filetype === 'file') {
             return 'resource';
-        } /*elseif ('folder' === $filetype) {
-            return 'folder';
-        }*/
+        }
 
         return null;
     }
@@ -410,19 +401,20 @@ class SectionExport
      */
     private function createSectionXml(array $sectionData, string $destinationDir): void
     {
+        $sequence = implode(',', array_column($sectionData['activities'], 'moduleid'));
+
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<section id="'.$sectionData['id'].'">'.PHP_EOL;
         $xmlContent .= '  <number>'.$sectionData['number'].'</number>'.PHP_EOL;
-        $xmlContent .= '  <name>'.htmlspecialchars($sectionData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '  <summary>'.htmlspecialchars($sectionData['summary']).'</summary>'.PHP_EOL;
+        $xmlContent .= '  <name>'.htmlspecialchars((string) $sectionData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '  <summary>'.htmlspecialchars((string) $sectionData['summary']).'</summary>'.PHP_EOL;
         $xmlContent .= '  <summaryformat>1</summaryformat>'.PHP_EOL;
-        $xmlContent .= '  <sequence>'.implode(',', array_column($sectionData['activities'], 'moduleid')).'</sequence>'.PHP_EOL;
-        $xmlContent .= '  <visible>'.$sectionData['visible'].'</visible>'.PHP_EOL;
+        $xmlContent .= '  <sequence>'.$sequence.'</sequence>'.PHP_EOL;
+        $xmlContent .= '  <visible>1</visible>'.PHP_EOL;
         $xmlContent .= '  <timemodified>'.$sectionData['timemodified'].'</timemodified>'.PHP_EOL;
         $xmlContent .= '</section>'.PHP_EOL;
 
-        $xmlFile = $destinationDir.'/section.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($destinationDir.'/section.xml', $xmlContent);
     }
 
     /**
@@ -435,12 +427,41 @@ class SectionExport
 
         foreach ($sectionData['activities'] as $activity) {
             $refId = $activity['moduleid'] ?? $activity['id'];
-            $xmlContent .= '  <activity id="'.$refId.'">'.htmlspecialchars($activity['name']).'</activity>'.PHP_EOL;
+            $xmlContent .= '  <activity id="'.$refId.'">'.htmlspecialchars((string) ($activity['name'] ?? '')).'</activity>'.PHP_EOL;
         }
 
         $xmlContent .= '</inforef>'.PHP_EOL;
 
-        $xmlFile = $destinationDir.'/inforef.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($destinationDir.'/inforef.xml', $xmlContent);
+    }
+
+    /**
+     * Sanitize section or activity titles for Moodle.
+     */
+    private function sanitizeText(string $raw, int $maxLen = 255): string
+    {
+        $text = trim($raw);
+        if ($text === '') {
+            return '';
+        }
+
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = strip_tags($text);
+        $text = preg_replace('/\s+/u', ' ', $text);
+        $text = trim($text);
+
+        if ($text === '') {
+            return '';
+        }
+
+        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+            if (mb_strlen($text, 'UTF-8') > $maxLen) {
+                $text = mb_substr($text, 0, $maxLen, 'UTF-8');
+            }
+        } elseif (strlen($text) > $maxLen) {
+            $text = substr($text, 0, $maxLen);
+        }
+
+        return $text;
     }
 }

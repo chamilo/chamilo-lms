@@ -55,8 +55,12 @@ class CourseExport
      */
     private function createCourseXml(string $destinationDir): void
     {
-        $courseId = $this->courseInfo['real_id'] ?? 0;
-        $contextId = $this->courseInfo['real_id'] ?? 1;
+        $courseId = (int) ($this->courseInfo['real_id'] ?? 0);
+        $contextId = (int) MoodleExport::getBackupCourseContextId();
+        if ($contextId <= 0) {
+            $contextId = 700000000 + max(1, $courseId);
+        }
+
         $shortname = $this->courseInfo['code'] ?? 'Unknown Course';
         $fullname = $this->courseInfo['title'] ?? 'Unknown Fullname';
         $showgrades = $this->courseInfo['showgrades'] ?? 0;
@@ -153,15 +157,24 @@ class CourseExport
 
         $questionCategories = [];
         foreach ($this->activities as $activity) {
-            if ($activity['modulename'] === 'quiz') {
-                $quizExport = new QuizExport($this->course);
-                $quizData = $quizExport->getData($activity['id'], $activity['sectionid']);
-                foreach ($quizData['questions'] as $question) {
-                    $categoryId = $question['questioncategoryid'];
-                    if (!in_array($categoryId, $questionCategories, true)) {
-                        $questionCategories[] = $categoryId;
-                    }
-                }
+            if (($activity['modulename'] ?? '') !== 'quiz') {
+                continue;
+            }
+
+            $quizExport = new QuizExport($this->course);
+            $quizData = $quizExport->getData(
+                (int) ($activity['id'] ?? 0),
+                (int) ($activity['sectionid'] ?? 0),
+                (int) ($activity['moduleid'] ?? 0)
+            );
+
+            if (empty($quizData)) {
+                continue;
+            }
+
+            $categoryId = (int) ($quizData['question_category_id'] ?? 0);
+            if ($categoryId > 0 && !in_array($categoryId, $questionCategories, true)) {
+                $questionCategories[] = $categoryId;
             }
         }
 
@@ -175,7 +188,6 @@ class CourseExport
             $xmlContent .= '  </question_categoryref>'.PHP_EOL;
         }
 
-        // Add role references
         $xmlContent .= '  <roleref>'.PHP_EOL;
         $xmlContent .= '    <role>'.PHP_EOL;
         $xmlContent .= '      <id>5</id>'.PHP_EOL;

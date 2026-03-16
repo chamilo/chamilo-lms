@@ -21,13 +21,13 @@ class ResourceExport extends ActivityExport
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Prepare the directory where the resource export will be saved
-        $resourceDir = $this->prepareActivityDirectory($exportDir, 'resource', $moduleId);
-
-        // Retrieve resource data (must use the actual exported module id)
+        $resourceDir = $this->prepareActivityDirectory($exportDir, 'resource', (int) $moduleId);
         $resourceData = $this->getData((int) $activityId, (int) $sectionId, (int) $moduleId);
 
-        // Generate XML files
+        if (empty($resourceData)) {
+            return;
+        }
+
         $this->createResourceXml($resourceData, $resourceDir);
         $this->createModuleXml($resourceData, $resourceDir);
         $this->createGradesXml($resourceData, $resourceDir);
@@ -44,14 +44,16 @@ class ResourceExport extends ActivityExport
      */
     public function getData(int $resourceId, int $sectionId, ?int $moduleId = null): array
     {
+        if (empty($this->course->resources[RESOURCE_DOCUMENT][$resourceId])) {
+            return [];
+        }
+
         $resource = $this->course->resources[RESOURCE_DOCUMENT][$resourceId];
 
         $name = (string) ($resource->title ?? '');
         if ($sectionId > 0) {
             $name = $this->lpItemTitle($sectionId, RESOURCE_DOCUMENT, $resourceId, $name);
         }
-
-        // Moodle stores resource.name in VARCHAR(255). Strip HTML and truncate safely.
         $name = $this->sanitizeMoodleActivityName($name, 255);
 
         $effectiveModuleId = (int) ($moduleId ?? $resource->source_id);
@@ -61,18 +63,27 @@ class ResourceExport extends ActivityExport
 
         $resourceFile = $this->buildResourceFileEntry($resource, $effectiveModuleId);
 
+        $introResult = $this->extractEmbeddedFilesAndNormalizeContent(
+            (string) ($resource->comment ?? ''),
+            $effectiveModuleId,
+            'mod_resource',
+            'intro',
+            0,
+            fn (int $sequence): int => $this->buildResourceIntroFileId($effectiveModuleId, $sequence)
+        );
+
         return [
             'id' => $resourceId,
             'moduleid' => $effectiveModuleId,
             'modulename' => 'resource',
             'contextid' => $effectiveModuleId,
             'name' => $name,
-            'intro' => $resource->comment ?? '',
+            'intro' => $introResult['content'],
             'sectionid' => $sectionId,
             'sectionnumber' => 1,
             'timemodified' => time(),
             'users' => [],
-            'files' => [$resourceFile],
+            'files' => array_merge([$resourceFile], $introResult['files']),
         ];
     }
 
@@ -110,7 +121,7 @@ class ResourceExport extends ActivityExport
     }
 
     /**
-     * Build the files.xml entry for a resource activity file (mod_resource).
+     * Build the files.xml entry for a resource activity file.
      */
     private function buildResourceFileEntry(object $resource, int $moduleId): array
     {
@@ -126,7 +137,6 @@ class ResourceExport extends ActivityExport
             : hash('sha1', $filename);
 
         return [
-            // Use a dedicated range to avoid collisions with folder/page file ids
             'id' => $this->buildResourceFileId($moduleId, (int) $resource->source_id),
             'contenthash' => $contenthash,
             'contextid' => $moduleId,
@@ -149,13 +159,21 @@ class ResourceExport extends ActivityExport
     }
 
     /**
-     * Build a stable file id for mod_resource entries.
+     * Build a stable file id for mod_resource main file entries.
      */
     private function buildResourceFileId(int $moduleId, int $resourceId): int
     {
         $base = $moduleId > 0 ? $moduleId : $resourceId;
 
         return 1000000000 + $base;
+    }
+
+    /**
+     * Build a stable file id for embedded intro files in mod_resource.
+     */
+    private function buildResourceIntroFileId(int $moduleId, int $sequence): int
+    {
+        return 1250000000 + max(0, $moduleId) + max(1, $sequence);
     }
 
     /**
@@ -171,9 +189,17 @@ class ResourceExport extends ActivityExport
             'jpeg' => 'image/jpeg',
             'png' => 'image/png',
             'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'webp' => 'image/webp',
             'html' => 'text/html',
             'htm' => 'text/html',
             'txt' => 'text/plain',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'mp4' => 'video/mp4',
+            'webm' => 'video/webm',
+            'mp3' => 'audio/mpeg',
+            'ogg' => 'audio/ogg',
             'doc' => 'application/msword',
             'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'xls' => 'application/vnd.ms-excel',
@@ -195,8 +221,8 @@ class ResourceExport extends ActivityExport
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<activity id="'.$resourceData['id'].'" moduleid="'.$resourceData['moduleid'].'" modulename="resource" contextid="'.$resourceData['contextid'].'">'.PHP_EOL;
         $xmlContent .= '  <resource id="'.$resourceData['id'].'">'.PHP_EOL;
-        $xmlContent .= '    <name>'.htmlspecialchars($resourceData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '    <intro>'.htmlspecialchars($resourceData['intro']).'</intro>'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars((string) $resourceData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '    <intro><![CDATA['.(string) $resourceData['intro'].']]></intro>'.PHP_EOL;
         $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
         $xmlContent .= '    <tobemigrated>0</tobemigrated>'.PHP_EOL;
         $xmlContent .= '    <legacyfiles>0</legacyfiles>'.PHP_EOL;

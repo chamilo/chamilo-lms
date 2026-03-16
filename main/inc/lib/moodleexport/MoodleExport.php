@@ -28,17 +28,11 @@ class MoodleExport
      */
     public function __construct(object $course)
     {
-        // Build the complete course object
         $cb = new CourseBuilder('complete');
         $complete = $cb->build();
 
-        // Store the selected course
         $this->course = $course;
-
-        // Fill missing resources from learnpath
         $this->fillResourcesFromLearnpath($complete);
-
-        // Fill missing quiz questions
         $this->fillQuestionsFromQuiz($complete);
     }
 
@@ -60,30 +54,54 @@ class MoodleExport
             throw new Exception(get_lang('CourseNotFound'));
         }
 
-        // Register backup course/context ids before exporting questions and files
         $backupCourseId = (int) ($courseInfo['real_id'] ?? 0);
         $backupCourseContextId = $this->buildBackupCourseContextId($backupCourseId);
         self::setBackupCourseContext($backupCourseId, $backupCourseContextId);
 
-        // Generate the moodle_backup.xml
         $this->createMoodleBackupXml($tempDir, $version);
 
-        // Get the activities from the course
         $activities = $this->getActivities();
 
-        // Export course-related files
         $courseExport = new CourseExport($this->course, $activities);
         $courseExport->exportCourse($tempDir);
 
-        // Export files-related data and actual files
         $pageExport = new PageExport($this->course);
         $pageFiles = [];
-        $pageData = $pageExport->getData(0, 1);
-        if (!empty($pageData['files'])) {
-            $pageFiles = $pageData['files'];
+
+        // Force export of the synthetic introduction activity when it exists.
+        // This guarantees that activities/page_910000000/module.xml is created
+        // when the backup declares the introduction page in moodle_backup.xml.
+        if ($this->hasCourseIntroduction()) {
+            $pageExport->export(0, $tempDir, PageExport::INTRO_PAGE_MODULE_ID, 0);
+
+            $introPageData = $pageExport->getData(0, 0, PageExport::INTRO_PAGE_MODULE_ID);
+            if (!empty($introPageData['files'])) {
+                $pageFiles = array_merge($pageFiles, $introPageData['files']);
+            }
         }
 
-        // Collect files for resource activities (LP FILE items)
+        // Collect embedded files for real page activities.
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'page') {
+                continue;
+            }
+
+            // The synthetic introduction page was already exported explicitly above.
+            if ((int) ($activity['id'] ?? 0) === 0) {
+                continue;
+            }
+
+            $pageData = $pageExport->getData(
+                (int) $activity['id'],
+                (int) $activity['sectionid'],
+                (int) $activity['moduleid']
+            );
+
+            if (!empty($pageData['files'])) {
+                $pageFiles = array_merge($pageFiles, $pageData['files']);
+            }
+        }
+
         $resourceFiles = [];
         $resourceExport = new ResourceExport($this->course);
 
@@ -103,9 +121,9 @@ class MoodleExport
             }
         }
 
-        // Collect embedded files from quiz questions (questiontext/answers)
         $quizFiles = [];
         $quizExport = new QuizExport($this->course);
+
         foreach ($activities as $activity) {
             if (($activity['modulename'] ?? '') !== 'quiz') {
                 continue;
@@ -122,24 +140,72 @@ class MoodleExport
             }
         }
 
+        $urlFiles = [];
+        $urlExport = new UrlExport($this->course);
+
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'url') {
+                continue;
+            }
+
+            $urlData = $urlExport->getData(
+                (int) $activity['id'],
+                (int) $activity['sectionid'],
+                (int) $activity['moduleid']
+            );
+
+            if (!empty($urlData['files'])) {
+                $urlFiles = array_merge($urlFiles, $urlData['files']);
+            }
+        }
+
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
-        $filesData['files'] = array_merge($filesData['files'], $pageFiles, $resourceFiles, $quizFiles);
+        $filesData['files'] = $this->mergeUniqueFiles(array_merge(
+            $filesData['files'],
+            $pageFiles,
+            $resourceFiles,
+            $quizFiles,
+            $urlFiles
+        ));
         $fileExport->exportFiles($filesData, $tempDir);
 
-        // Export sections of the course
         $this->exportSections($tempDir, $activities);
-
-        // Export all root XML files
         $this->exportRootXmlFiles($tempDir);
 
-        // Compress everything into a .mbz (ZIP) file
         $exportedFile = $this->createMbzFile($tempDir);
-
-        // Clean up temporary directory
         $this->cleanupTempDir($tempDir);
 
         return $exportedFile;
+    }
+
+    /**
+     * Merge file definitions avoiding duplicate files.xml ids.
+     */
+    private function mergeUniqueFiles(array $files): array
+    {
+        $unique = [];
+
+        foreach ($files as $file) {
+            $id = (string) ($file['id'] ?? '');
+            if ($id === '') {
+                continue;
+            }
+
+            $unique[$id] = $file;
+        }
+
+        return array_values($unique);
+    }
+
+    /**
+     * Check whether the course introduction contains HTML content.
+     */
+    private function hasCourseIntroduction(): bool
+    {
+        $introText = trim((string) ($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text ?? ''));
+
+        return $introText !== '';
     }
 
     /**
@@ -241,7 +307,6 @@ class MoodleExport
 
     /**
      * Build a stable root question category id per contextid.
-     * Must stay below Moodle int limits.
      */
     private function buildRootQuestionCategoryId(int $contextId): int
     {
@@ -314,30 +379,23 @@ class MoodleExport
 
     /**
      * Fills missing resources from the learnpath into the course structure.
-     *
-     * This method checks if the course has a learnpath and ensures that all
-     * referenced resources (documents, quizzes, etc.) exist in the course's
-     * resources array by pulling them from the complete course object.
      */
     private function fillResourcesFromLearnpath(object $complete): void
     {
-        // Check if the course has learnpath
         if (!isset($this->course->resources['learnpath'])) {
             return;
         }
 
-        foreach ($this->course->resources['learnpath'] as $learnpathId => $learnpath) {
+        foreach ($this->course->resources['learnpath'] as $learnpath) {
             if (!isset($learnpath->items)) {
                 continue;
             }
 
             foreach ($learnpath->items as $item) {
-                $type = $item['item_type']; // Resource type (document, quiz, etc.)
-                $resourceId = $item['path']; // Resource ID in resources
+                $type = $item['item_type'];
+                $resourceId = $item['path'];
 
-                // Check if the resource exists in the complete object and is not yet in the course resources
                 if (isset($complete->resources[$type][$resourceId]) && !isset($this->course->resources[$type][$resourceId])) {
-                    // Add the resource directly to the original course resources structure
                     $this->course->resources[$type][$resourceId] = $complete->resources[$type][$resourceId];
                 }
             }
@@ -346,27 +404,20 @@ class MoodleExport
 
     /**
      * Fills missing exercise questions related to quizzes in the course.
-     *
-     * This method checks if the course has quizzes and ensures that all referenced
-     * questions exist in the course's resources array by pulling them from the complete
-     * course object.
      */
     private function fillQuestionsFromQuiz(object $complete): void
     {
-        // Check if the course has quizzes
         if (!isset($this->course->resources['quiz'])) {
             return;
         }
 
-        foreach ($this->course->resources['quiz'] as $quizId => $quiz) {
+        foreach ($this->course->resources['quiz'] as $quiz) {
             if (!isset($quiz->obj->question_ids)) {
                 continue;
             }
 
             foreach ($quiz->obj->question_ids as $questionId) {
-                // Check if the question exists in the complete object and is not yet in the course resources
                 if (isset($complete->resources['Exercise_Question'][$questionId]) && !isset($this->course->resources['Exercise_Question'][$questionId])) {
-                    // Add the question directly to the original course resources structure
                     $this->course->resources['Exercise_Question'][$questionId] = $complete->resources['Exercise_Question'][$questionId];
                 }
             }
@@ -386,7 +437,6 @@ class MoodleExport
         $this->exportGroupsXml($exportDir);
         $this->exportOutcomesXml($exportDir);
 
-        // Export quizzes and their questions
         $activities = $this->getActivities();
         $questionsData = [];
         foreach ($activities as $activity) {
@@ -413,7 +463,6 @@ class MoodleExport
      */
     private function createMoodleBackupXml(string $destinationDir, int $version): void
     {
-        // Generate course information and backup metadata
         $courseInfo = api_get_course_info($this->course->code);
         $backupId = md5(uniqid(mt_rand(), true));
         $siteHash = md5(uniqid(mt_rand(), true));
@@ -422,12 +471,11 @@ class MoodleExport
         $courseStartDate = strtotime($courseInfo['creation_date']);
         $courseEndDate = $courseStartDate + (365 * 24 * 60 * 60);
 
-        // Build the XML content for the backup
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<moodle_backup>'.PHP_EOL;
         $xmlContent .= '  <information>'.PHP_EOL;
 
-        $xmlContent .= '    <name>backup-'.htmlspecialchars($courseInfo['code']).'.mbz</name>'.PHP_EOL;
+        $xmlContent .= '    <name>backup-'.htmlspecialchars((string) $courseInfo['code']).'.mbz</name>'.PHP_EOL;
         $xmlContent .= '    <moodle_version>'.($version === 3 ? '2021051718' : '2022041900').'</moodle_version>'.PHP_EOL;
         $xmlContent .= '    <moodle_release>'.($version === 3 ? '3.11.18 (Build: 20231211)' : '4.x version here').'</moodle_release>'.PHP_EOL;
         $xmlContent .= '    <backup_version>'.($version === 3 ? '2021051700' : '2022041900').'</backup_version>'.PHP_EOL;
@@ -438,10 +486,10 @@ class MoodleExport
         $xmlContent .= '    <include_file_references_to_external_content>0</include_file_references_to_external_content>'.PHP_EOL;
         $xmlContent .= '    <original_wwwroot>'.$wwwRoot.'</original_wwwroot>'.PHP_EOL;
         $xmlContent .= '    <original_site_identifier_hash>'.$siteHash.'</original_site_identifier_hash>'.PHP_EOL;
-        $xmlContent .= '    <original_course_id>'.htmlspecialchars($courseInfo['real_id']).'</original_course_id>'.PHP_EOL;
+        $xmlContent .= '    <original_course_id>'.htmlspecialchars((string) $courseInfo['real_id']).'</original_course_id>'.PHP_EOL;
         $xmlContent .= '    <original_course_format>'.get_lang('Topics').'</original_course_format>'.PHP_EOL;
-        $xmlContent .= '    <original_course_fullname>'.htmlspecialchars($courseInfo['title']).'</original_course_fullname>'.PHP_EOL;
-        $xmlContent .= '    <original_course_shortname>'.htmlspecialchars($courseInfo['code']).'</original_course_shortname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_fullname>'.htmlspecialchars((string) $courseInfo['title']).'</original_course_fullname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_shortname>'.htmlspecialchars((string) $courseInfo['code']).'</original_course_shortname>'.PHP_EOL;
         $xmlContent .= '    <original_course_startdate>'.$courseStartDate.'</original_course_startdate>'.PHP_EOL;
         $xmlContent .= '    <original_course_enddate>'.$courseEndDate.'</original_course_enddate>'.PHP_EOL;
         $xmlContent .= '    <original_course_contextid>'.self::getBackupCourseContextId().'</original_course_contextid>'.PHP_EOL;
@@ -458,17 +506,15 @@ class MoodleExport
         $xmlContent .= '      </detail>'.PHP_EOL;
         $xmlContent .= '    </details>'.PHP_EOL;
 
-        // Contents with activities and sections
         $xmlContent .= '    <contents>'.PHP_EOL;
 
-        // Export sections dynamically and add them to the XML
         $sections = $this->getSections();
         if (!empty($sections)) {
             $xmlContent .= '      <sections>'.PHP_EOL;
             foreach ($sections as $section) {
                 $xmlContent .= '        <section>'.PHP_EOL;
                 $xmlContent .= '          <sectionid>'.$section['id'].'</sectionid>'.PHP_EOL;
-                $xmlContent .= '          <title>'.htmlspecialchars($section['name']).'</title>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars($this->sanitizeBackupTitle((string) $section['name'])).'</title>'.PHP_EOL;
                 $xmlContent .= '          <directory>sections/section_'.$section['id'].'</directory>'.PHP_EOL;
                 $xmlContent .= '        </section>'.PHP_EOL;
             }
@@ -482,36 +528,34 @@ class MoodleExport
                 $xmlContent .= '        <activity>'.PHP_EOL;
                 $xmlContent .= '          <moduleid>'.$activity['moduleid'].'</moduleid>'.PHP_EOL;
                 $xmlContent .= '          <sectionid>'.$activity['sectionid'].'</sectionid>'.PHP_EOL;
-                $xmlContent .= '          <modulename>'.htmlspecialchars($activity['modulename']).'</modulename>'.PHP_EOL;
-                $xmlContent .= '          <title>'.htmlspecialchars($activity['title']).'</title>'.PHP_EOL;
+                $xmlContent .= '          <modulename>'.htmlspecialchars((string) $activity['modulename']).'</modulename>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars($this->sanitizeBackupTitle((string) $activity['title'])).'</title>'.PHP_EOL;
                 $xmlContent .= '          <directory>activities/'.$activity['modulename'].'_'.$activity['moduleid'].'</directory>'.PHP_EOL;
                 $xmlContent .= '        </activity>'.PHP_EOL;
             }
             $xmlContent .= '      </activities>'.PHP_EOL;
         }
 
-        // Course directory
         $xmlContent .= '      <course>'.PHP_EOL;
         $xmlContent .= '        <courseid>'.$courseInfo['real_id'].'</courseid>'.PHP_EOL;
-        $xmlContent .= '        <title>'.htmlspecialchars($courseInfo['title']).'</title>'.PHP_EOL;
+        $xmlContent .= '        <title>'.htmlspecialchars((string) $courseInfo['title']).'</title>'.PHP_EOL;
         $xmlContent .= '        <directory>course</directory>'.PHP_EOL;
         $xmlContent .= '      </course>'.PHP_EOL;
 
         $xmlContent .= '    </contents>'.PHP_EOL;
 
-        // Backup settings
         $xmlContent .= '    <settings>'.PHP_EOL;
         $settings = $this->exportBackupSettings($sections, $activities);
         foreach ($settings as $setting) {
             $xmlContent .= '      <setting>'.PHP_EOL;
-            $xmlContent .= '        <level>'.htmlspecialchars($setting['level']).'</level>'.PHP_EOL;
-            $xmlContent .= '        <name>'.htmlspecialchars($setting['name']).'</name>'.PHP_EOL;
+            $xmlContent .= '        <level>'.htmlspecialchars((string) $setting['level']).'</level>'.PHP_EOL;
+            $xmlContent .= '        <name>'.htmlspecialchars((string) $setting['name']).'</name>'.PHP_EOL;
             $xmlContent .= '        <value>'.$setting['value'].'</value>'.PHP_EOL;
             if (isset($setting['section'])) {
-                $xmlContent .= '        <section>'.htmlspecialchars($setting['section']).'</section>'.PHP_EOL;
+                $xmlContent .= '        <section>'.htmlspecialchars((string) $setting['section']).'</section>'.PHP_EOL;
             }
             if (isset($setting['activity'])) {
-                $xmlContent .= '        <activity>'.htmlspecialchars($setting['activity']).'</activity>'.PHP_EOL;
+                $xmlContent .= '        <activity>'.htmlspecialchars((string) $setting['activity']).'</activity>'.PHP_EOL;
             }
             $xmlContent .= '      </setting>'.PHP_EOL;
         }
@@ -526,27 +570,21 @@ class MoodleExport
 
     /**
      * Get all sections from the course ordered by LP display_order.
-     * Uses the SAME activities list (and moduleid) as moodle_backup.xml.
+     * Uses the same activities list and module ids as moodle_backup.xml.
      */
     private function getSections(?array $activities = null): array
     {
         $sections = [];
 
-        // Compute activities once if not provided
         if ($activities === null) {
             $activities = $this->getActivities();
         }
 
         $activitiesBySection = $this->groupActivitiesBySection($activities);
-
-        // We only need SectionExport for metadata (name/summary/visible/timemodified),
-        // but it MUST reuse the precomputed activities to keep moduleid consistent.
         $sectionExport = new SectionExport($this->course, $activitiesBySection);
 
-        // Safety: if there is no learnpath resource, return only the general section
         $learnpaths = $this->course->resources[RESOURCE_LEARNPATH] ?? [];
 
-        // Sort LPs by display_order to respect the order defined in c_lp
         usort($learnpaths, static function ($a, $b): int {
             $aOrder = (int) ($a->display_order ?? 0);
             $bOrder = (int) ($b->display_order ?? 0);
@@ -555,13 +593,11 @@ class MoodleExport
         });
 
         foreach ($learnpaths as $learnpath) {
-            // We only export "real" LPs (type 1)
             if ((int) $learnpath->lp_type === 1) {
                 $sections[] = $sectionExport->getSectionData($learnpath);
             }
         }
 
-        // Add a general section for resources without a lesson
         $sections[] = [
             'id' => 0,
             'number' => 0,
@@ -583,7 +619,6 @@ class MoodleExport
     private function getActivities(): array
     {
         $activities = [];
-        // "Documents" folder pseudo-activity (always in section 0)
         $activities[] = [
             'id' => ActivityExport::DOCS_MODULE_ID,
             'sectionid' => 0,
@@ -593,16 +628,13 @@ class MoodleExport
             'order' => 0,
         ];
 
-        // Build activities from LP items (one course module per LP item)
         $learnpaths = $this->course->resources[RESOURCE_LEARNPATH] ?? [];
 
-        // Sort by LP display_order to respect c_lp order
         usort($learnpaths, static function ($a, $b): int {
             return (int) ($a->display_order ?? 0) <=> (int) ($b->display_order ?? 0);
         });
 
         foreach ($learnpaths as $lp) {
-            // Only "real" LPs
             if ((int) ($lp->lp_type ?? 0) !== 1) {
                 continue;
             }
@@ -619,7 +651,6 @@ class MoodleExport
                 $title = (string) ($it['title'] ?? '');
                 $order = isset($it['display_order']) ? (int) $it['display_order'] : 0;
 
-                // Map LP item_type to Moodle modulename
                 $moduleName = null;
                 $instanceId = null;
 
@@ -663,12 +694,10 @@ class MoodleExport
                     }
                 }
 
-                // Skip unsupported / invalid
                 if (empty($moduleName) || empty($instanceId)) {
                     continue;
                 }
 
-                // Generic unique course module id per LP occurrence
                 $moduleId = $this->resolveLpModuleId($moduleName, $lpItemId, (int) $instanceId);
 
                 $activities[] = [
@@ -676,33 +705,42 @@ class MoodleExport
                     'sectionid' => $sectionId,
                     'modulename' => $moduleName,
                     'moduleid' => $moduleId,
-                    'title' => $title !== '' ? $title : $moduleName,
+                    'title' => $this->sanitizeBackupTitle($title !== '' ? $title : $moduleName),
                     'order' => $order,
                 ];
             }
         }
 
-        // Add general section activities (items not in any LP)
         $sectionExport = new SectionExport($this->course);
         $generalActivities = $sectionExport->getActivitiesForGeneral();
 
         foreach ($generalActivities as $ga) {
-            // Avoid duplicating the Documents folder (we added it already)
             if (($ga['modulename'] ?? '') === 'folder') {
                 continue;
             }
 
+            $activityId = (int) ($ga['id'] ?? 0);
+            $moduleName = (string) ($ga['modulename'] ?? '');
+            $moduleId = (int) ($ga['moduleid'] ?? 0);
+
+            if ($moduleName === 'page' && $activityId === 0) {
+                if (!$this->hasCourseIntroduction()) {
+                    continue;
+                }
+
+                $moduleId = PageExport::INTRO_PAGE_MODULE_ID;
+            }
+
             $activities[] = [
-                'id' => (int) ($ga['id'] ?? 0),
+                'id' => $activityId,
                 'sectionid' => 0,
-                'modulename' => (string) ($ga['modulename'] ?? ''),
-                'moduleid' => (int) ($ga['moduleid'] ?? 0),
-                'title' => (string) ($ga['name'] ?? ''),
+                'modulename' => $moduleName,
+                'moduleid' => $moduleId,
+                'title' => $this->sanitizeBackupTitle((string) ($ga['name'] ?? '')),
                 'order' => 0,
             ];
         }
 
-        // Sort activities per section by LP display_order
         $grouped = [];
         $seqBySec = [];
 
@@ -736,6 +774,19 @@ class MoodleExport
     }
 
     /**
+     * Sanitize titles used in moodle_backup.xml contents.
+     */
+    private function sanitizeBackupTitle(string $title): string
+    {
+        $title = html_entity_decode($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $title = strip_tags($title);
+        $title = str_replace("\xc2\xa0", ' ', $title);
+        $title = preg_replace('/\s+/u', ' ', trim($title));
+
+        return $title;
+    }
+
+    /**
      * Export the sections of the course.
      */
     private function exportSections(string $exportDir, array $activities): void
@@ -743,7 +794,6 @@ class MoodleExport
         $sections = $this->getSections($activities);
         $activitiesBySection = $this->groupActivitiesBySection($activities);
 
-        // Reuse ONE instance to keep any internal caches stable
         $sectionExport = new SectionExport($this->course, $activitiesBySection);
 
         foreach ($sections as $section) {
@@ -753,7 +803,6 @@ class MoodleExport
 
     /**
      * Convert MoodleExport::getActivities() output into the structure SectionExport expects.
-     * Ensures section.xml sequence uses the same moduleid as moodle_backup.xml.
      */
     private function groupActivitiesBySection(array $activities): array
     {
@@ -974,13 +1023,12 @@ class MoodleExport
         $xmlContent .= '    <timemodified>'.$adminData['timemodified'].'</timemodified>'.PHP_EOL;
         $xmlContent .= '    <trustbitmask>'.$adminData['trustbitmask'].'</trustbitmask>'.PHP_EOL;
 
-        // Preferences
         if (isset($adminData['preferences']) && is_array($adminData['preferences'])) {
             $xmlContent .= '    <preferences>'.PHP_EOL;
             foreach ($adminData['preferences'] as $preference) {
                 $xmlContent .= '      <preference>'.PHP_EOL;
-                $xmlContent .= '        <name>'.htmlspecialchars($preference['name']).'</name>'.PHP_EOL;
-                $xmlContent .= '        <value>'.htmlspecialchars($preference['value']).'</value>'.PHP_EOL;
+                $xmlContent .= '        <name>'.htmlspecialchars((string) $preference['name']).'</name>'.PHP_EOL;
+                $xmlContent .= '        <value>'.htmlspecialchars((string) $preference['value']).'</value>'.PHP_EOL;
                 $xmlContent .= '      </preference>'.PHP_EOL;
             }
             $xmlContent .= '    </preferences>'.PHP_EOL;
@@ -988,7 +1036,6 @@ class MoodleExport
             $xmlContent .= '    <preferences></preferences>'.PHP_EOL;
         }
 
-        // Roles (empty for now)
         $xmlContent .= '    <roles>'.PHP_EOL;
         $xmlContent .= '      <role_overrides></role_overrides>'.PHP_EOL;
         $xmlContent .= '      <role_assignments></role_assignments>'.PHP_EOL;
@@ -997,7 +1044,6 @@ class MoodleExport
         $xmlContent .= '  </user>'.PHP_EOL;
         $xmlContent .= '</users>';
 
-        // Save the content to the users.xml file
         file_put_contents($exportDir.'/users.xml', $xmlContent);
     }
 
@@ -1006,7 +1052,6 @@ class MoodleExport
      */
     private function exportBackupSettings(array $sections, array $activities): array
     {
-        // root-level settings
         $settings = [
             ['level' => 'root', 'name' => 'filename', 'value' => 'backup-moodle-course-'.time().'.mbz'],
             ['level' => 'root', 'name' => 'imscc11', 'value' => '0'],
@@ -1031,7 +1076,6 @@ class MoodleExport
             ['level' => 'root', 'name' => 'legacyfiles', 'value' => '1'],
         ];
 
-        // section-level settings
         foreach ($sections as $section) {
             $settings[] = [
                 'level' => 'section',
@@ -1047,7 +1091,6 @@ class MoodleExport
             ];
         }
 
-        // activity-level settings
         foreach ($activities as $activity) {
             $settings[] = [
                 'level' => 'activity',
@@ -1067,63 +1110,7 @@ class MoodleExport
     }
 
     /**
-     * Maps module name to item_type of c_lp_item.
-     * (c_lp_item.item_type: document, quiz, link, forum, student_publication, survey).
-     */
-    private function mapToLpItemType(string $moduleOrItemType): string
-    {
-        switch ($moduleOrItemType) {
-            case 'page':
-            case 'resource':
-                return 'document';
-            case 'assign':
-                return 'student_publication';
-            case 'url':
-                return 'link';
-            case 'feedback':
-                return 'survey';
-            default:
-                return $moduleOrItemType; // quiz, forum...
-        }
-    }
-
-    /** Index titles by section + type + id from the LP items (c_lp_item.title). */
-    private function buildLpTitleIndex(): array
-    {
-        $idx = [];
-        if (empty($this->course->resources[RESOURCE_LEARNPATH])) {
-            return $idx;
-        }
-        foreach ($this->course->resources[RESOURCE_LEARNPATH] as $lp) {
-            $sid = (int) $lp->source_id;
-            if (empty($lp->items)) {
-                continue;
-            }
-            foreach ($lp->items as $it) {
-                $type = $this->mapToLpItemType($it['item_type']);
-                $rid = (string) $it['path'];
-                $idx[$sid][$type][$rid] = $it['title'] ?? '';
-            }
-        }
-
-        return $idx;
-    }
-
-    /** Returns the LP title if it exists; otherwise, use the fallback. */
-    private function titleFromLp(array $idx, int $sectionId, string $moduleName, int $resourceId, string $fallback): string
-    {
-        if ($sectionId <= 0) {
-            return $fallback;
-        }
-        $type = $this->mapToLpItemType($moduleName);
-        $rid = (string) $resourceId;
-
-        return $idx[$sectionId][$type][$rid] ?? $fallback;
-    }
-
-    /**
      * Generic resolver for Moodle course module id from an LP item occurrence.
-     * Keep folder/glossary stable (if you treat glossary as singleton).
      */
     private function resolveLpModuleId(string $moduleName, int $lpItemId, int $fallback): int
     {
@@ -1131,7 +1118,6 @@ class MoodleExport
             return $fallback;
         }
 
-        // Keep special/singleton modules stable if needed
         if (in_array($moduleName, ['folder', 'glossary'], true)) {
             return $fallback;
         }
@@ -1179,11 +1165,11 @@ class MoodleExport
     {
         $courseId = self::getBackupCourseId();
         $courseContextId = self::getBackupCourseContextId();
+        $activities = $this->getActivities();
 
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<contexts>'.PHP_EOL;
 
-        // System context
         $xmlContent .= '  <context id="1">'.PHP_EOL;
         $xmlContent .= '    <contextlevel>10</contextlevel>'.PHP_EOL;
         $xmlContent .= '    <instanceid>0</instanceid>'.PHP_EOL;
@@ -1192,7 +1178,6 @@ class MoodleExport
         $xmlContent .= '    <parentcontextid>0</parentcontextid>'.PHP_EOL;
         $xmlContent .= '  </context>'.PHP_EOL;
 
-        // Course context used by question bank and question embedded files
         $xmlContent .= '  <context id="'.$courseContextId.'">'.PHP_EOL;
         $xmlContent .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
         $xmlContent .= '    <instanceid>'.$courseId.'</instanceid>'.PHP_EOL;
@@ -1200,6 +1185,28 @@ class MoodleExport
         $xmlContent .= '    <depth>2</depth>'.PHP_EOL;
         $xmlContent .= '    <parentcontextid>1</parentcontextid>'.PHP_EOL;
         $xmlContent .= '  </context>'.PHP_EOL;
+
+        $seen = [
+            1 => true,
+            $courseContextId => true,
+        ];
+
+        foreach ($activities as $activity) {
+            $moduleContextId = (int) ($activity['moduleid'] ?? 0);
+            if ($moduleContextId <= 0 || isset($seen[$moduleContextId])) {
+                continue;
+            }
+
+            $seen[$moduleContextId] = true;
+
+            $xmlContent .= '  <context id="'.$moduleContextId.'">'.PHP_EOL;
+            $xmlContent .= '    <contextlevel>70</contextlevel>'.PHP_EOL;
+            $xmlContent .= '    <instanceid>'.$moduleContextId.'</instanceid>'.PHP_EOL;
+            $xmlContent .= '    <path>/1/'.$courseContextId.'/'.$moduleContextId.'</path>'.PHP_EOL;
+            $xmlContent .= '    <depth>3</depth>'.PHP_EOL;
+            $xmlContent .= '    <parentcontextid>'.$courseContextId.'</parentcontextid>'.PHP_EOL;
+            $xmlContent .= '  </context>'.PHP_EOL;
+        }
 
         $xmlContent .= '</contexts>'.PHP_EOL;
 

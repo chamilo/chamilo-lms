@@ -80,6 +80,10 @@
       @sort="onSort"
     >
       <Column
+        header-style="width: 3rem"
+        selection-mode="multiple"
+      />
+      <Column
         :header="t('Title')"
         field="title"
         sortable
@@ -180,8 +184,8 @@
       </Column>
     </BaseTable>
 
-    <!-- Bulk actions -->
-    <div class="flex gap-4 items-center p-4 bg-gray-50 rounded border border-gray-200">
+    <!-- Toolbar below table -->
+    <div class="flex items-center gap-4">
       <button
         class="btn btn--plain text-sm"
         @click="load"
@@ -190,7 +194,7 @@
         {{ t("Refresh") }}
       </button>
       <template v-if="selectedItems.length > 0">
-        <span class="text-sm text-gray-600">{{ t("{0} selected", [selectedItems.length]) }}</span>
+        <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
         <button
           v-if="viewer.isPlatformAdmin"
           class="btn btn--danger text-sm"

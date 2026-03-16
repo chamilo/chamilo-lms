@@ -6,7 +6,7 @@
  */
 // prettier-ignore
 export const chamiloIconToClass = {
-  "account-key": "",
+  "account-key": "mdi mdi-account-key",
   "account-multiple-plus": "",
   "alert": "mdi mdi-alert",
   "arrow-down-bold": "",
@@ -168,4 +168,7 @@ export const chamiloIconToClass = {
   "tracking": "mdi mdi-chart-box",
   "delete-forever": "mdi mdi-delete-forever",
   "copy": "mdi mdi-content-duplicate",
+  "restore": "mdi mdi-restore",
+  "shield-star": "mdi mdi-shield-star",
+  "assign-users": "mdi mdi-account-child",
 }

@@ -372,7 +372,7 @@
               @click.prevent="toggleCatalogue(data)"
             >
               <span
-                :class="['ch-tool-icon', data.inCatalogue ? 'mdi mdi-star text-yellow-500' : 'mdi mdi-star-outline']"
+                :class="data.inCatalogue ? 'mdi mdi-book-minus-outline ch-tool-icon' : 'mdi mdi-book-plus ch-tool-icon'"
               />
             </a>
 
@@ -427,11 +427,11 @@ const csrfToken = ref("")
 
 function visibilityIcon(visibility) {
   const map = {
-    0: "mdi mdi-lock ch-tool-icon text-red-500",
-    1: "mdi mdi-lock-open-variant ch-tool-icon text-orange-500",
-    2: "mdi mdi-eye ch-tool-icon text-blue-500",
-    3: "mdi mdi-earth ch-tool-icon text-green-600",
-    4: "mdi mdi-eye-off ch-tool-icon text-gray-400",
+    0: "mdi mdi-eye-off-outline ch-tool-icon",
+    1: "mdi mdi-eye-off ch-tool-icon",
+    2: "mdi mdi-eye-outline ch-tool-icon",
+    3: "mdi mdi-eye ch-tool-icon",
+    4: "mdi mdi-eye-closed ch-tool-icon",
   }
   return map[visibility] || "mdi mdi-help-circle ch-tool-icon"
 }

@@ -890,6 +890,7 @@ function buildOnlyofficeUrl(doc) {
     url.searchParams.set("groupId", String(currentGroupId))
   }
   url.searchParams.set("docId", String(doc.iid))
+  url.searchParams.set("returnUrl", window.location.href)
 
   if (isOnlyofficeViewOnly(doc) || !canEdit(doc)) {
     url.searchParams.set("readOnly", "1")

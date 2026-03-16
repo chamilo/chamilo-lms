@@ -181,24 +181,45 @@
     </BaseTable>
 
     <!-- Bulk actions -->
-    <div
-      v-if="selectedItems.length > 0"
-      class="flex gap-4 items-center p-4 bg-gray-50 rounded border border-gray-200"
-    >
-      <span class="text-sm text-gray-600">{{ t("{0} selected", [selectedItems.length]) }}</span>
+    <div class="flex gap-4 items-center p-4 bg-gray-50 rounded border border-gray-200">
       <button
-        v-if="viewer.isPlatformAdmin"
-        class="btn btn--danger text-sm"
-        @click="confirmDelete(selectedItems.map((s) => s.id))"
+        class="btn btn--plain text-sm"
+        @click="load"
       >
-        {{ t("Delete selected") }}
+        <span class="mdi mdi-refresh ch-tool-icon" />
+        {{ t("Refresh") }}
       </button>
-      <button
-        class="btn btn--success text-sm"
-        @click="copyMultiple(selectedItems.map((s) => s.id))"
-      >
-        {{ t("Copy selected") }}
-      </button>
+      <template v-if="selectedItems.length > 0">
+        <span class="text-sm text-gray-600">{{ t("{0} selected", [selectedItems.length]) }}</span>
+        <button
+          v-if="viewer.isPlatformAdmin"
+          class="btn btn--danger text-sm"
+          @click="confirmDelete(selectedItems.map((s) => s.id))"
+        >
+          {{ t("Delete selected") }}
+        </button>
+        <button
+          class="btn btn--success text-sm"
+          @click="copyMultiple(selectedItems.map((s) => s.id))"
+        >
+          <span class="mdi mdi-content-duplicate ch-tool-icon" />
+          {{ t("Copy selected") }}
+        </button>
+        <button
+          class="btn btn--primary text-sm"
+          @click="exportCoursesReports(selectedItems.map((s) => s.id))"
+        >
+          <span class="mdi mdi-archive-arrow-down ch-tool-icon" />
+          {{ t("Courses reports") }}
+        </button>
+        <button
+          class="btn btn--primary text-sm"
+          @click="exportCoursesReportsComplete(selectedItems.map((s) => s.id))"
+        >
+          <span class="mdi mdi-file-delimited-outline ch-tool-icon" />
+          {{ t("Export courses reports complete") }}
+        </button>
+      </template>
     </div>
   </div>
 </template>
@@ -368,6 +389,37 @@ async function performCopy(ids) {
   } catch (e) {
     console.error("Error copying sessions:", e)
   }
+}
+
+async function exportCoursesReports(ids) {
+  await submitExportForm(ids, "export_zip")
+}
+
+async function exportCoursesReportsComplete(ids) {
+  await submitExportForm(ids, "export_csv")
+}
+
+async function submitExportForm(ids, action) {
+  const form = document.createElement("form")
+  form.method = "POST"
+  form.action = "/admin/session-list-data-action"
+  form.style.display = "none"
+
+  const addField = (name, value) => {
+    const input = document.createElement("input")
+    input.type = "hidden"
+    input.name = name
+    input.value = value
+    form.appendChild(input)
+  }
+
+  addField("action", action)
+  addField("_token", csrfToken.value)
+  ids.forEach((id) => addField("sessionIds[]", String(id)))
+
+  document.body.appendChild(form)
+  form.submit()
+  document.body.removeChild(form)
 }
 
 async function handleLegacyAction() {

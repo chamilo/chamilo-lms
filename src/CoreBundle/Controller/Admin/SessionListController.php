@@ -232,6 +232,34 @@ class SessionListController extends AbstractController
                     'errors' => $errors,
                 ]);
 
+            case 'export_csv':
+                if (!$isPlatformAdmin) {
+                    $allowedIds = $this->getSessionIdsManagedByCurrentUser();
+                    $sessionIds = array_intersect($sessionIds, $allowedIds);
+                }
+                if (empty($sessionIds)) {
+                    return $this->json(['error' => 'No sessions to export.'], 400);
+                }
+
+                // This method sends headers and calls exit()
+                SessionManager::exportSessionsAsCSV($sessionIds);
+
+                return $this->json(['error' => 'Export failed.'], 500);
+
+            case 'export_zip':
+                if (!$isPlatformAdmin) {
+                    $allowedIds = $this->getSessionIdsManagedByCurrentUser();
+                    $sessionIds = array_intersect($sessionIds, $allowedIds);
+                }
+                if (empty($sessionIds)) {
+                    return $this->json(['error' => 'No sessions to export.'], 400);
+                }
+
+                // This method sends headers and calls exit()
+                SessionManager::exportSessionsAsZip($sessionIds);
+
+                return $this->json(['error' => 'Export failed.'], 500);
+
             default:
                 return $this->json(['error' => 'Unknown action.'], 400);
         }

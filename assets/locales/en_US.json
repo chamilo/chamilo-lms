@@ -1609,5 +1609,7 @@
     "Are you sure you want to delete the selected courses?": "Are you sure you want to delete the selected courses?",
     "selected": "selected",
     "Teacher user ID": "Teacher user ID",
-    "Public": "Public"
+    "Public": "Public",
+    "Courses reports": "Courses reports",
+    "Export courses reports complete": "Export courses reports complete"
 }

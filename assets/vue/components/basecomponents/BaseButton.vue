@@ -9,9 +9,18 @@
     <BaseAppLink
       :to="route ? route : null"
       :url="toUrl ? toUrl : null"
-      :class="slotProps.class"
+      :class="[slotProps.class, { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon }]"
     >
-      {{ label }}
+      <span
+        v-if="icon"
+        class="p-button-icon"
+        :class="chamiloIconToClass[icon]"
+      />
+      <span
+        v-if="!onlyIcon"
+        class="p-button-label"
+        v-text="label"
+      />
     </BaseAppLink>
   </Button>
   <Button

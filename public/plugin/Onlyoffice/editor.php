@@ -66,7 +66,11 @@ $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
 $questionId = isset($_GET['questionId']) ? (int) $_GET['questionId'] : null;
 $isReadOnly = isset($_GET['readOnly']) ? (int) $_GET['readOnly'] : null;
 $forceEdit = isset($_GET['forceEdit']) && in_array(strtolower((string) $_GET['forceEdit']), ['1', 'true', 'yes', 'on'], true);
-
+$rawReturnUrl = isset($_GET['returnUrl']) ? urldecode((string) $_GET['returnUrl']) : '';
+$returnUrl = resolveOnlyofficeEditorReturnUrl(
+    $rawReturnUrl,
+    isset($_SERVER['HTTP_REFERER']) ? (string) $_SERVER['HTTP_REFERER'] : ''
+);
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
@@ -88,6 +92,7 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'exeId' => $exeId,
     'questionId' => $questionId,
     'meta' => $isMetaRequest,
+    'returnUrl' => $returnUrl,
 ]);
 
 if (!empty($docPath)) {
@@ -176,7 +181,8 @@ if (!empty($docPath)) {
             .($questionId ? '&questionId='.$questionId : '')
             .($isReadOnly ? '&readOnly='.$isReadOnly : '')
             .($groupId ? '&groupId='.$groupId : '')
-            .($forceEdit ? '&forceEdit=true' : ''),
+            .($forceEdit ? '&forceEdit=true' : '')
+            .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
         'document_url' => $callbackUrl,
         'direct_url' => $fileUrl,
         'basename' => basename($userFilePath),
@@ -186,6 +192,7 @@ if (!empty($docPath)) {
         'exercise_id' => $exerciseId,
         'creator_id' => $userId,
         'version_token' => $versionToken,
+        'return_url' => $returnUrl,
     ];
 
     onlyofficeEditorLog('DEBUG', 'Resolved direct path document', [
@@ -248,7 +255,8 @@ if (!empty($docPath)) {
             'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?docId='.$docId
                 .($isReadOnly ? '&readOnly='.$isReadOnly : '')
                 .($groupId ? '&groupId='.$groupId : '')
-                .($forceEdit ? '&forceEdit=true' : ''),
+                .($forceEdit ? '&forceEdit=true' : '')
+                .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
             'document_url' => $callbackUrl,
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
@@ -260,6 +268,7 @@ if (!empty($docPath)) {
             'resource_node_id' => $resolvedC2['resourceNodeId'],
             'resource_file_id' => $resolvedC2['resourceFileId'],
             'version_token' => $versionToken,
+            'return_url' => $returnUrl,
         ];
 
         onlyofficeEditorLog('DEBUG', 'Resolved C2 document', [
@@ -319,6 +328,12 @@ if (!empty($docPath)) {
             $docInfo['direct_url'] = $fileUrl;
             $docInfo['document_url'] = $callbackUrl;
             $docInfo['version_token'] = $versionToken;
+            $docInfo['return_url'] = $returnUrl;
+            $docInfo['url'] = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?docId='.$docId
+                .($isReadOnly ? '&readOnly='.$isReadOnly : '')
+                .($groupId ? '&groupId='.$groupId : '')
+                .($forceEdit ? '&forceEdit=true' : '')
+                .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : '');
 
             onlyofficeEditorLog('DEBUG', 'Resolved legacy document', [
                 'docId' => $docId,
@@ -357,7 +372,17 @@ $versionToken = (string) ($docInfo['version_token'] ?? buildOnlyofficeVersionTok
 $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $versionToken);
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
 $documentIdentity = buildOnlyofficeDocumentIdentity($courseId, $sessionId, $groupId, $fileIdentifier);
-$metaUrl = buildOnlyofficeMetaUrl($docId, $docPath, $groupId, $exerciseId, $exeId, $questionId, $isReadOnly, $forceEdit);
+$metaUrl = buildOnlyofficeMetaUrl(
+    $docId,
+    $docPath,
+    $groupId,
+    $exerciseId,
+    $exeId,
+    $questionId,
+    $isReadOnly,
+    $forceEdit,
+    $returnUrl
+);
 
 $fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
 
@@ -418,6 +443,10 @@ if (!isset($config['editorConfig']['customization']) || !is_array($config['edito
     $config['editorConfig']['customization'] = [];
 }
 
+if (!isset($config['editorConfig']['customization']['goback']) || !is_array($config['editorConfig']['customization']['goback'])) {
+    $config['editorConfig']['customization']['goback'] = [];
+}
+
 $config['document']['url'] = $fileUrl;
 $config['document']['title'] = (string) ($docInfo['title'] ?? basename((string) ($docInfo['path'] ?? 'document')));
 $config['document']['key'] = $runtimeKey;
@@ -436,6 +465,14 @@ $config['document']['permissions']['copy'] = true;
 
 $config['editorConfig']['customization']['autosave'] = true;
 $config['editorConfig']['customization']['forcesave'] = true;
+$config['editorConfig']['customization']['close'] = [
+    'visible' => true,
+];
+
+if ('' !== $returnUrl) {
+    $config['editorConfig']['customization']['goback']['url'] = $returnUrl;
+    $config['editorConfig']['customization']['goback']['blank'] = false;
+}
 
 $config = refreshOnlyofficeEditorToken($config, $jwtManager, $appSettings);
 
@@ -453,6 +490,7 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'extension' => $extension,
     'jwtTokenPresent' => !empty($config['token']),
     'metaUrl' => $metaUrl,
+    'returnUrl' => $returnUrl,
 ]);
 
 sendOnlyofficeEditorNoCacheHeaders();
@@ -497,6 +535,7 @@ sendOnlyofficeEditorNoCacheHeaders();
             const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
             const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
             const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
+            const safeReturnUrl = <?php echo json_encode($returnUrl, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
 
             const isEditableMode = !!(
                 config &&
@@ -537,6 +576,11 @@ sendOnlyofficeEditorNoCacheHeaders();
             }
 
             function leaveEditorSafely() {
+                if (safeReturnUrl) {
+                    window.location.href = safeReturnUrl;
+                    return;
+                }
+
                 if (window.history.length > 1) {
                     window.history.back();
                     return;
@@ -607,6 +651,10 @@ sendOnlyofficeEditorNoCacheHeaders();
                 window.location.href = url.toString();
             }
 
+            function onRequestClose() {
+                leaveEditorSafely();
+            }
+
             function checkDocsVersion() {
                 if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
                     console.error("ONLYOFFICE DocsAPI is not available.");
@@ -649,7 +697,8 @@ sendOnlyofficeEditorNoCacheHeaders();
                     onDocumentStateChange: onDocumentStateChange,
                     onError: onError,
                     onRequestSaveAs: onRequestSaveAs,
-                    onRequestEditRights: onRequestEditRights
+                    onRequestEditRights: onRequestEditRights,
+                    onRequestClose: onRequestClose
                 };
 
                 window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
@@ -979,7 +1028,8 @@ function buildOnlyofficeMetaUrl(
     ?int $exeId,
     ?int $questionId,
     ?int $isReadOnly,
-    bool $forceEdit
+    bool $forceEdit,
+    string $returnUrl = ''
 ): string {
     $params = [
         'meta' => '1',
@@ -1015,6 +1065,10 @@ function buildOnlyofficeMetaUrl(
 
     if ($forceEdit) {
         $params['forceEdit'] = 'true';
+    }
+
+    if ('' !== $returnUrl) {
+        $params['returnUrl'] = $returnUrl;
     }
 
     return api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?'.http_build_query($params);
@@ -1116,6 +1170,78 @@ function refreshOnlyofficeEditorToken(array $config, $jwtManager, $appSettings):
     }
 
     return $config;
+}
+
+/**
+ * Resolve a safe internal return URL for editor navigation.
+ */
+function resolveOnlyofficeEditorReturnUrl(string $rawReturnUrl, string $referrer = ''): string
+{
+    $candidates = [
+        $rawReturnUrl,
+        $referrer,
+    ];
+
+    foreach ($candidates as $candidate) {
+        $normalized = normalizeOnlyofficeInternalUrl($candidate);
+        if ('' === $normalized) {
+            continue;
+        }
+
+        if (isOnlyofficeSafeInternalUrl($normalized)) {
+            return $normalized;
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Normalize relative internal URLs to absolute URLs.
+ */
+function normalizeOnlyofficeInternalUrl(string $url): string
+{
+    $url = trim($url);
+    if ('' === $url) {
+        return '';
+    }
+
+    if (str_starts_with($url, '/')) {
+        if (str_starts_with($url, '//')) {
+            return '';
+        }
+
+        return rtrim((string) api_get_path(WEB_PATH), '/').$url;
+    }
+
+    return $url;
+}
+
+/**
+ * Check if a return URL is internal and safe to use.
+ */
+function isOnlyofficeSafeInternalUrl(string $url): bool
+{
+    $url = trim($url);
+    if ('' === $url) {
+        return false;
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+
+    $webPath = rtrim((string) api_get_path(WEB_PATH), '/');
+    if ('' === $webPath || !str_starts_with($url, $webPath)) {
+        return false;
+    }
+
+    $editorUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php';
+    if (str_starts_with($url, $editorUrl)) {
+        return false;
+    }
+
+    return true;
 }
 
 /**

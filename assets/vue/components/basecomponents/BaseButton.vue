@@ -1,14 +1,14 @@
 <template>
   <Button
-    v-if="route"
+    v-if="route || toUrl"
     v-slot="slotProps"
     :severity="primeSeverityProperty"
     :variant="primerVariantProperty"
     as-child
   >
     <BaseAppLink
-      v-if="route"
-      :to="route"
+      :to="route ? route : null"
+      :url="toUrl ? toUrl : null"
       :class="slotProps.class"
     >
       {{ label }}
@@ -95,6 +95,11 @@ const props = defineProps({
   },
   route: {
     type: Object,
+    required: false,
+    default: null,
+  },
+  toUrl: {
+    type: String,
     required: false,
     default: null,
   },

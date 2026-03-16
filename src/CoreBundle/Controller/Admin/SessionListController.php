@@ -241,10 +241,16 @@ class SessionListController extends AbstractController
                     return $this->json(['error' => 'No sessions to export.'], 400);
                 }
 
-                // This method sends headers and calls exit()
-                SessionManager::exportSessionsAsCSV($sessionIds);
+                try {
+                    // This method sends headers and calls exit() on success,
+                    // or returns with no output if there is no data.
+                    SessionManager::exportSessionsAsCSV($sessionIds);
+                } catch (\RuntimeException) {
+                    return $this->json(['error' => 'No data to export.'], 400);
+                }
 
-                return $this->json(['error' => 'Export failed.'], 500);
+                // Reached when no data was found (method returned without output)
+                return $this->json(['error' => 'No data to export.'], 400);
 
             case 'export_zip':
                 if (!$isPlatformAdmin) {
@@ -255,10 +261,15 @@ class SessionListController extends AbstractController
                     return $this->json(['error' => 'No sessions to export.'], 400);
                 }
 
-                // This method sends headers and calls exit()
-                SessionManager::exportSessionsAsZip($sessionIds);
+                try {
+                    // This method sends headers and calls exit() on success
+                    SessionManager::exportSessionsAsZip($sessionIds);
+                } catch (\RuntimeException) {
+                    return $this->json(['error' => 'No data to export.'], 400);
+                }
 
-                return $this->json(['error' => 'Export failed.'], 500);
+                // Fallback — should not be reached
+                return $this->json(['error' => 'No data to export.'], 400);
 
             default:
                 return $this->json(['error' => 'Unknown action.'], 400);

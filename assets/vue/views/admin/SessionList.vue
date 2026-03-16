@@ -404,26 +404,42 @@ async function exportCoursesReportsComplete(ids) {
 }
 
 async function submitExportForm(ids, action) {
-  const form = document.createElement("form")
-  form.method = "POST"
-  form.action = "/admin/session-list-data-action"
-  form.style.display = "none"
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", action)
+    formData.set("_token", csrfToken.value)
+    ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-  const addField = (name, value) => {
-    const input = document.createElement("input")
-    input.type = "hidden"
-    input.name = name
-    input.value = value
-    form.appendChild(input)
+    const response = await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null)
+      alert(data?.error || t("No data to export"))
+      return
+    }
+
+    // File download — extract filename from Content-Disposition header
+    const disposition = response.headers.get("Content-Disposition") || ""
+    const match = disposition.match(/filename="?([^";\n]+)"?/)
+    const filename = match ? match[1] : "export"
+
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  } catch (e) {
+    console.error("Export error:", e)
+    alert(t("No data to export"))
   }
-
-  addField("action", action)
-  addField("_token", csrfToken.value)
-  ids.forEach((id) => addField("sessionIds[]", String(id)))
-
-  document.body.appendChild(form)
-  form.submit()
-  document.body.removeChild(form)
 }
 
 async function handleLegacyAction() {

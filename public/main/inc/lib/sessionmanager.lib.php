@@ -10856,7 +10856,7 @@ class SessionManager
         $rawCsvContent = ChamiloSession::read('csv_content');
 
         if (empty($rawCsvContent)) {
-            throw new \RuntimeException("No CSV content found in session for course $courseCode and session $sessionId.");
+            return [$csvHeaders, []];
         }
 
         $csvContent = [];

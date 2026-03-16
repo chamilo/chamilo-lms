@@ -1,15 +1,12 @@
 <template>
   <div class="flex flex-col gap-8">
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-semibold text-gray-800">{{ t("User list") }}</h2>
-      <a
-        v-if="viewer.isPlatformAdmin && view !== 'deleted'"
-        class="btn btn--primary"
-        href="/main/admin/user_add.php"
-      >
-        {{ t("Add a user") }}
-      </a>
-    </div>
+    <SectionHeader :title="t('User list')">
+      <BaseButton
+        :label="t('Add a user')"
+        :to-url="'/main/admin/user_add.php'"
+        icon="user-add"
+      />
+    </SectionHeader>
 
     <!-- Tabs -->
     <div class="flex gap-2 border-b border-gray-200">
@@ -205,10 +202,12 @@
         sortable
       >
         <template #body="{ data }">
-          <a
-            :href="`/main/admin/user_information.php?user_id=${data.id}`"
+          <BaseAppLink
+            :url="`/main/admin/user_information.php?user_id=${data.id}`"
             class="text-blue-600 hover:underline"
-          >{{ data.firstname }}</a>
+          >
+            {{ data.firstname }}
+          </BaseAppLink>
         </template>
       </Column>
       <Column
@@ -217,10 +216,12 @@
         sortable
       >
         <template #body="{ data }">
-          <a
-            :href="`/main/admin/user_information.php?user_id=${data.id}`"
+          <BaseAppLink
+            :url="`/main/admin/user_information.php?user_id=${data.id}`"
             class="text-blue-600 hover:underline"
-          >{{ data.lastname }}</a>
+          >
+            {{ data.lastname }}
+          </BaseAppLink>
         </template>
       </Column>
       <Column
@@ -299,12 +300,12 @@
             class="flex gap-1 flex-nowrap"
           >
             <!-- Edit (deleted view) -->
-            <a
-              :href="`/main/admin/user_edit.php?user_id=${data.id}`"
+            <BaseAppLink
               :title="t('Edit')"
+              :url="`/main/admin/user_edit.php?user_id=${data.id}`"
             >
               <span class="mdi mdi-pencil ch-tool-icon" />
-            </a>
+            </BaseAppLink>
             <!-- Restore -->
             <a
               :title="t('Restore')"
@@ -329,13 +330,13 @@
           >
             <!-- Information -->
             <template v-if="viewer.isPlatformAdmin">
-              <a
+              <BaseAppLink
                 v-if="!data.isAnonymous"
-                :href="`/main/admin/user_information.php?user_id=${data.id}`"
                 :title="t('Information')"
+                :url="`/main/admin/user_information.php?user_id=${data.id}`"
               >
                 <span class="mdi mdi-information ch-tool-icon" />
-              </a>
+              </BaseAppLink>
               <span
                 v-else
                 class="mdi mdi-information ch-tool-icon-disabled"
@@ -345,13 +346,13 @@
 
             <!-- Login as -->
             <template v-if="showLoginAs(data)">
-              <a
+              <BaseAppLink
                 v-if="canLoginAs(data)"
-                :href="`/admin/user-list-login-as?user_id=${data.id}&sec_token=${loginAsToken}`"
                 :title="t('Login as')"
+                :url="`/admin/user-list-login-as?user_id=${data.id}&sec_token=${loginAsToken}`"
               >
                 <span class="mdi mdi-account-key ch-tool-icon" />
-              </a>
+              </BaseAppLink>
               <span
                 v-else
                 class="mdi mdi-account-key ch-tool-icon-disabled"
@@ -365,13 +366,13 @@
             />
 
             <!-- Reporting (students only) -->
-            <a
+            <BaseAppLink
               v-if="data.isStudent"
-              :href="`/main/my_space/myStudents.php?student=${data.id}`"
               :title="t('Reporting')"
+              :url="`/main/my_space/myStudents.php?student=${data.id}`"
             >
               <span class="mdi mdi-chart-box ch-tool-icon" />
-            </a>
+            </BaseAppLink>
             <span
               v-else
               class="mdi mdi-chart-box ch-tool-icon-disabled"
@@ -380,13 +381,13 @@
 
             <!-- Edit -->
             <template v-if="viewer.isPlatformAdmin || viewer.isSessionAdmin">
-              <a
+              <BaseAppLink
                 v-if="!data.isAnonymous"
-                :href="`/main/admin/user_edit.php?user_id=${data.id}`"
                 :title="t('Edit')"
+                :url="`/main/admin/user_edit.php?user_id=${data.id}`"
               >
                 <span class="mdi mdi-pencil ch-tool-icon" />
-              </a>
+              </BaseAppLink>
               <span
                 v-else
                 class="mdi mdi-pencil ch-tool-icon-disabled"
@@ -395,13 +396,13 @@
             </template>
 
             <!-- Assign skill -->
-            <a
+            <BaseAppLink
               v-if="viewer.isPlatformAdmin"
-              :href="`/main/skills/assign.php?user=${data.id}`"
               :title="t('Assign skill')"
+              :url="`/main/skills/assign.php?user=${data.id}`"
             >
               <span class="mdi mdi-shield-star ch-tool-icon" />
-            </a>
+            </BaseAppLink>
 
             <!-- Anonymize (platform admin only, not self, not anonymous) -->
             <a
@@ -424,41 +425,41 @@
             </a>
 
             <!-- Assign sessions (session manager) -->
-            <a
+            <BaseAppLink
               v-if="!viewer.isSessionAdmin && data.isSessionManager"
-              :href="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
               :title="t('Assign sessions')"
+              :url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
             >
               <span class="mdi mdi-google-classroom ch-tool-icon" />
-            </a>
+            </BaseAppLink>
 
             <!-- Assign users (HR / admin / student boss, not session manager) -->
             <template v-if="!viewer.isSessionAdmin && !data.isSessionManager">
-              <a
+              <BaseAppLink
                 v-if="data.isHR || data.isAdmin || data.isStudentBoss"
-                :href="`/main/admin/dashboard_add_users_to_user.php?user=${data.id}`"
                 :title="t('Assign users')"
+                :url="`/main/admin/dashboard_add_users_to_user.php?user=${data.id}`"
               >
                 <span class="mdi mdi-account-child ch-tool-icon" />
-              </a>
+              </BaseAppLink>
 
               <!-- Assign courses (HR / admin) -->
-              <a
+              <BaseAppLink
                 v-if="data.isHR || data.isAdmin"
-                :href="`/main/admin/dashboard_add_courses_to_user.php?user=${data.id}`"
                 :title="t('Assign courses')"
+                :url="`/main/admin/dashboard_add_courses_to_user.php?user=${data.id}`"
               >
                 <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
-              </a>
+              </BaseAppLink>
 
               <!-- Assign sessions (HR / admin) -->
-              <a
+              <BaseAppLink
                 v-if="data.isHR || data.isAdmin"
-                :href="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
                 :title="t('Assign sessions')"
+                :url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
               >
                 <span class="mdi mdi-google-classroom ch-tool-icon" />
-              </a>
+              </BaseAppLink>
             </template>
           </div>
         </template>
@@ -471,6 +472,9 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()

@@ -16,3 +16,11 @@ export async function getSkillTree() {
 export async function findAll(searchParams) {
   return await baseService.getCollection("api/skills", searchParams)
 }
+
+/**
+ * @param {number} skillId
+ * @returns {Promise<Object>}
+ */
+export async function getSkillDetail(skillId) {
+  return await baseService.get(`/skill/${skillId}/detail-data`)
+}

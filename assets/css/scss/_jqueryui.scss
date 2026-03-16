@@ -20,7 +20,7 @@
     .btn-moved{
       padding: .6rem .5rem;
       font-size: 1.25rem;
-      display: block;
+      @apply block;
       text-align: center;
     }
   }

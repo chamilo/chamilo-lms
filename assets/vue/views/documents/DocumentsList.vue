@@ -214,6 +214,14 @@
             @click="btnShowInformationOnClick(slotProps.data)"
           />
           <BaseButton
+            v-if="showOnlyofficeButton(slotProps.data)"
+            :title="getOnlyofficeButtonTitle(slotProps.data)"
+            icon="onlyoffice"
+            size="small"
+            type="secondary"
+            @click="openWithOnlyoffice(slotProps.data)"
+          />
+          <BaseButton
             v-if="showAiFeedbackButton(slotProps.data)"
             :disabled="aiFeedbackLoading"
             :title="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
@@ -793,6 +801,108 @@ const defaultCertificateId = ref(null)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 
+const onlyofficePluginEnabled = computed(() => {
+  return platformConfigStore.plugins?.onlyoffice?.enabled === true
+})
+
+const onlyofficeEditorPath = computed(() => {
+  return String(platformConfigStore.plugins?.onlyoffice?.editorPath || "/plugin/Onlyoffice/editor.php")
+})
+
+const onlyofficeSupportedExtensions = new Set([
+  "doc",
+  "docx",
+  "odt",
+  "rtf",
+  "txt",
+  "xls",
+  "xlsx",
+  "ods",
+  "csv",
+  "ppt",
+  "pptx",
+  "odp",
+  "pdf",
+])
+
+const onlyofficeViewOnlyExtensions = new Set(["pdf"])
+
+function getOnlyofficeFileName(doc) {
+  return String(doc?.resourceNode?.firstResourceFile?.originalName || doc?.title || "").trim()
+}
+
+function getOnlyofficeExtension(doc) {
+  const fileName = getOnlyofficeFileName(doc).toLowerCase()
+  const parts = fileName.split(".")
+  if (parts.length < 2) {
+    return ""
+  }
+
+  return String(parts.pop() || "").trim()
+}
+
+function isOnlyofficeSupportedDocument(doc) {
+  if (!doc) {
+    return false
+  }
+
+  const filetype = String(doc?.filetype || "")
+    .trim()
+    .toLowerCase()
+
+  if (!["file", "certificate"].includes(filetype)) {
+    return false
+  }
+
+  const resourceFileId = doc?.resourceNode?.firstResourceFile?.id
+  if (!resourceFileId) {
+    return false
+  }
+
+  const ext = getOnlyofficeExtension(doc)
+  if (!ext) {
+    return false
+  }
+
+  return onlyofficeSupportedExtensions.has(ext)
+}
+
+function isOnlyofficeViewOnly(doc) {
+  const ext = getOnlyofficeExtension(doc)
+  return onlyofficeViewOnlyExtensions.has(ext)
+}
+
+function showOnlyofficeButton(doc) {
+  return securityStore.isAuthenticated && onlyofficePluginEnabled.value && isOnlyofficeSupportedDocument(doc)
+}
+
+function getOnlyofficeButtonTitle() {
+  return t("Open with ONLYOFFICE")
+}
+
+function buildOnlyofficeUrl(doc) {
+  const url = new URL(onlyofficeEditorPath.value, window.location.origin)
+
+  url.searchParams.set("cid", String(unref(cid) || 0))
+  url.searchParams.set("sid", String(unref(sid) || 0))
+  const currentGroupId = Number(unref(gid) || 0)
+  if (currentGroupId > 0) {
+    url.searchParams.set("groupId", String(currentGroupId))
+  }
+  url.searchParams.set("docId", String(doc.iid))
+  url.searchParams.set("returnUrl", window.location.href)
+
+  if (isOnlyofficeViewOnly(doc) || !canEdit(doc)) {
+    url.searchParams.set("readOnly", "1")
+  }
+
+  return url.toString()
+}
+
+function openWithOnlyoffice(doc) {
+  const url = buildOnlyofficeUrl(doc)
+  window.open(url, "_blank", "noopener,noreferrer")
+}
 /**
  * Local loading flag to show the table spinner immediately.
  * This prevents the "empty table" impression while the store is still preparing the request.

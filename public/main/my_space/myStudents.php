@@ -520,6 +520,9 @@ switch ($action) {
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
+                        if ((int) $boss['boss_id'] === (int) $currentUser->getId()) {
+                            continue;
+                        }
                         $studentFullName = UserManager::formatUserFullName($student);
                         $contentBoss = sprintf(
                             get_lang('Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s'),
@@ -550,12 +553,14 @@ switch ($action) {
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));
+                header('Location: '.$currentUrl);
+                exit;
             } else {
+                $sendMessageError = true;
+                $sendMessageSubject = $subject;
+                $sendMessageContent = $content;
                 Display::addFlash(Display::return_message(get_lang('all fields required'), 'warning'));
             }
-
-            header('Location: '.$currentUrl);
-            exit;
         }
 
         break;
@@ -2400,17 +2405,25 @@ if ($allowMessages) {
         ]
     );
 
+    $hasMessageError = !empty($sendMessageError);
     $form = new FormValidator(
         'messages',
         'post',
         $currentUrl.'&action=send_message'
     );
-    $form->addHtml('<div id="compose_message" style="display:none;">');
+    $composeStyle = $hasMessageError ? '' : ' style="display:none;"';
+    $form->addHtml('<div id="compose_message"'.$composeStyle.'>');
     $form->addText('subject', get_lang('Subject'));
     $form->addHtmlEditor('message', get_lang('Message'));
     $form->addButtonSend(get_lang('Send message'));
     $form->addHidden('sec_token', $token);
     $form->addHtml('</div>');
+    if ($hasMessageError) {
+        $form->setDefaults([
+            'subject' => $sendMessageSubject ?? '',
+            'message' => $sendMessageContent ?? '',
+        ]);
+    }
     $form->display();
     echo '</section>';
 }

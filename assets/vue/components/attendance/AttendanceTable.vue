@@ -13,7 +13,7 @@
       sortable
     >
       <template #body="slotProps">
-        <RouterLink
+        <BaseAppLink
           :to="{
             name: 'AttendanceSheetList',
             params: {
@@ -29,7 +29,7 @@
           class="text-blue-500 underline"
         >
           {{ slotProps.data.title }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </Column>
 

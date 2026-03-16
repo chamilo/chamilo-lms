@@ -32886,7 +32886,7 @@ msgid "Create your first note to get started."
 msgstr "Créez votre première note pour commencer."
 
 msgid "F d, Y"
-msgstr "d j, Y"
+msgstr "d F, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Impossible de charger les informations de support pour le moment."

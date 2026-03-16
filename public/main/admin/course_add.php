@@ -13,7 +13,7 @@ api_protect_admin_script();
 
 $tool_name = get_lang('Create a course');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
 $em = Database::getManager();
 $accessUrlId = (int) api_get_current_access_url_id();
@@ -290,11 +290,11 @@ if ($form->validate()) {
                 $em->flush();
             }
         }
-        header('Location: course_list.php?new_course_id=' . $course->getId());
+        header('Location: /admin/course-list');
         exit;
     }
 
-    header('Location: course_list.php');
+    header('Location: /admin/course-list');
     exit;
 }
 

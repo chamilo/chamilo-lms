@@ -145,10 +145,9 @@ img {
 }
 
 .viewcaption {
-  @apply relative font-bold text-xs;
+  @apply relative font-bold text-xs bg-white;
   top: -20px;
   color: #4171B5;
-  background-color: #fff;
   padding: 0 4px;
 }
 

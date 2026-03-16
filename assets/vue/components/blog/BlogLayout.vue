@@ -1,63 +1,52 @@
 <template>
-  <div class="dbx w-full min-h-full flex flex-col bg-[var(--surface-ground,#fff)] blog-layout">
-    <BaseToolbar class="sticky top-0 z-20 bg-[var(--surface-card,#fff)]">
+  <div class="blog-layout">
+    <SectionHeader :title="blog?.title || t('Blogs')">
+      <div
+        class="text-h6"
+        v-text="blog?.subtitle"
+      />
+    </SectionHeader>
+
+    <BaseToolbar>
       <template #start>
-        <div class="flex items-center gap-3">
-          <i class="mdi mdi-notebook-outline text-2xl text-primary"></i>
-          <div>
-            <h2 class="m-0 text-lg font-semibold">
-              {{ blog?.title || t("Blogs") }}
-            </h2>
-            <div v-if="blog?.subtitle" class="text-xs text-gray-500">
-              {{ blog.subtitle }}
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <template #end>
         <!-- Primary nav -->
-        <RouterLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogPosts' }"
-          :to="{ name:'BlogPosts', params:$route.params, query:$route.query }"
-        >
-          {{ t("Posts") }}
-        </RouterLink>
+        <BaseButton
+          :label="t('Posts')"
+          :route="{ name: 'BlogPosts', params: route.params, query: route.query }"
+          :type="route.name === 'BlogPosts' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
-        <RouterLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogTasks' }"
-          :to="{ name:'BlogTasks', params:$route.params, query:$route.query }"
-        >
-          {{ t("Tasks") }}
-        </RouterLink>
+        <BaseButton
+          :label="t('Tasks')"
+          :route="{ name: 'BlogTasks', params: route.params, query: route.query }"
+          :type="route.name === 'BlogTasks' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
-        <RouterLink
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogMembers' }"
-          :to="{ name:'BlogMembers', params:$route.params, query:$route.query }"
-        >
-          {{ t("Members") }}
-        </RouterLink>
+        <BaseButton
+          :label="t('Members')"
+          :route="{ name: 'BlogMembers', params: route.params, query: route.query }"
+          :type="route.name === 'BlogMembers' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
 
         <!-- Visible to course admins/teachers only -->
-        <RouterLink
+        <BaseButton
           v-if="isAdminOrTeacher"
-          class="nav-link"
-          :class="{ active: $route.name === 'BlogsAdmin' }"
-          :to="{
+          :label="t('Projects')"
+          :route="{
             name: 'BlogsAdmin',
-            params: { ...$route.params, node: $route.params.node ?? 'course' },
-            query: $route.query
+            params: { ...route.params, node: route.params.node ?? 'course' },
+            query: route.query,
           }"
-        >
-          {{ t("Projects") }}
-        </RouterLink>
+          :type="route.name === 'BlogsAdmin' ? 'primary' : 'primary-alternative'"
+          icon=""
+        />
       </template>
     </BaseToolbar>
 
-    <section class="p-4 md:p-6">
+    <section>
       <RouterView />
     </section>
   </div>
@@ -67,9 +56,11 @@
 import { onMounted, watch, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import SectionHeader from "../layout/SectionHeader.vue"
 import BaseToolbar from "../basecomponents/BaseToolbar.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -90,7 +81,6 @@ async function loadBlogMeta() {
     }
     blog.value = await service.getProject(id)
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn("BlogLayout: failed to fetch blog meta", e)
     blog.value = null
   }

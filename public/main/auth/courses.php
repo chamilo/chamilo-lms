@@ -561,7 +561,7 @@ switch ($action) {
 
         if (api_is_course_admin()) {
             foreach ($courses as &$course) {
-                $course['admin_url'] = api_get_path(WEB_CODE_PATH).'/admin/course_list.php?keyword='.$course['code'];
+                $course['admin_url'] = '/admin/course-list?keyword='.$course['code'];
             }
         }
 

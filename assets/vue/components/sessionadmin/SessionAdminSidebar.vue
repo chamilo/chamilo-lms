@@ -1,6 +1,6 @@
 <template>
   <div class="w-64 h-full bg-white border-r border-gray-25 p-4 space-y-1">
-    <RouterLink
+    <BaseAppLink
       v-for="item in items"
       :key="item.name"
       :to="{ name: item.route }"
@@ -12,7 +12,7 @@
     >
       <i :class="`pi ${item.icon} text-base group-hover:text-primary`" />
       <span class="text-sm">{{ t(item.label) }}</span>
-    </RouterLink>
+    </BaseAppLink>
   </div>
 </template>
 

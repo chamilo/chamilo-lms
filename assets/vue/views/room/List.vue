@@ -112,7 +112,7 @@
           :key="course.id"
           class="py-2 border-b border-gray-100 last:border-0"
         >
-          <router-link
+          <BaseAppLink
             :to="{ name: 'CourseHome', params: { id: course.id } }"
             class="text-primary hover:underline"
           >
@@ -121,7 +121,7 @@
               v-if="course.code"
               class="text-gray-400 text-sm ml-1"
             >({{ course.code }})</span>
-          </router-link>
+          </BaseAppLink>
         </li>
       </ul>
     </Dialog>

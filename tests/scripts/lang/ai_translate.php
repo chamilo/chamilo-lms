@@ -436,6 +436,11 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
         return true;
     }
 
+    if ('F d, Y' === $msgid) {
+        // The "F d, Y" format is used in the Chamilo LMS for dates, e.g. "March 10, 2001", but it is not well auto-translated.
+        return false;
+    }
+
     // Normalize whitespace and case; do NOT touch backslashes
     $src = mb_strtolower(preg_replace('/\s+/u', ' ', poUnescape($msgid)));
     $tgt = mb_strtolower(preg_replace('/\s+/u', ' ', poUnescape($s)));

@@ -31020,7 +31020,7 @@ msgid "Create your first note to get started."
 msgstr "Ustvarite svojo prvo opombo za začetek."
 
 msgid "F d, Y"
-msgstr "d. d, L"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ni mogoče naložiti informacij o podpori."

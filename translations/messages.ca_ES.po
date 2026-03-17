@@ -31019,7 +31019,7 @@ msgid "Create your first note to get started."
 msgstr "Creeu la vostra primera nota per començar."
 
 msgid "F d, Y"
-msgstr "d F, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "No s'ha pogut carregar la informació de suport en aquest moment."

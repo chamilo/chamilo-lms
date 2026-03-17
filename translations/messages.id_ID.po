@@ -31004,7 +31004,7 @@ msgid "Create your first note to get started."
 msgstr "Buat catatan pertama Anda untuk memulai."
 
 msgid "F d, Y"
-msgstr "j F, Y"
+msgstr "d F، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Tidak dapat memuat info dukungan saat ini."

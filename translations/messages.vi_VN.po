@@ -31006,7 +31006,7 @@ msgid "Create your first note to get started."
 msgstr "Tạo ghi chú đầu tiên để bắt đầu."
 
 msgid "F d, Y"
-msgstr "D, d, Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Không thể tải thông tin hỗ trợ lúc này."

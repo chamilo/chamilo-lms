@@ -31000,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr "Vytvořte svou první poznámku pro začátek."
 
 msgid "F d, Y"
-msgstr "j n, RRRR"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nelze načíst informace o podpoře."

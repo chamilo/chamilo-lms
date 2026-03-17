@@ -31011,7 +31011,7 @@ msgid "Create your first note to get started."
 msgstr "Sortu zure lehen oharra hasteko."
 
 msgid "F d, Y"
-msgstr "E d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ezin izan da laguntza informazioa kargatu une honetan."

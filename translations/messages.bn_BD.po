@@ -31000,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr "শুরু করতে আপনার প্রথম নোট তৈরি করুন।"
 
 msgid "F d, Y"
-msgstr "d F, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "এখন সমর্থন তথ্য লোড করা যায়নি।"

@@ -31019,7 +31019,7 @@ msgid "Create your first note to get started."
 msgstr "Δημιουργήστε την πρώτη σας σημείωση για να ξεκινήσετε."
 
 msgid "F d, Y"
-msgstr "d M, Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Δεν ήταν δυνατή η φόρτωση πληροφοριών υποστήριξης αυτή τη στιγμή."

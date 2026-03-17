@@ -31004,7 +31004,7 @@ msgid "Create your first note to get started."
 msgstr "စတင်ရန် သင်၏ပထမဆုံး မှတ်စုတစ်ခုဖန်တီးပါ။"
 
 msgid "F d, Y"
-msgstr "သ%မ။ %d၊ %Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "ယခုအချိန်တွင် ပံ့ပိုးမှုအချက်အလက်များကို မဖွင့်လှစ်နိုင်ပါ။"

@@ -31018,7 +31018,7 @@ msgid "Create your first note to get started."
 msgstr "أنشئ ملاحظتك الأولى لبدء العمل."
 
 msgid "F d, Y"
-msgstr "j d، Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "تعذر تحميل معلومات الدعم في الوقت الحالي."

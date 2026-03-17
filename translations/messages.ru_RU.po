@@ -31007,7 +31007,7 @@ msgid "Create your first note to get started."
 msgstr "Создайте первую заметку, чтобы начать."
 
 msgid "F d, Y"
-msgstr "d MMM, Y"
+msgstr "d m, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не удалось загрузить информацию о поддержке."

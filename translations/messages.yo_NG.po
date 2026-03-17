@@ -31000,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr "Ṣẹ̀dá akọsilẹ̀ àkọ́kọ́ rẹ láti bẹ̀rẹ̀."
 
 msgid "F d, Y"
-msgstr "Ọjọ́ F, Ọdún Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "A kò le gbe alaye atilẹyin ni akoko yi."

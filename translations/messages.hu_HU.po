@@ -31004,7 +31004,7 @@ msgid "Create your first note to get started."
 msgstr "Hozzon létre első jegyzetét a kezdéshez."
 
 msgid "F d, Y"
-msgstr "Y. m. d."
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nem sikerült betölteni a támogatási információkat."

@@ -31000,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr "Creâ la prime anotazion par inizî."
 
 msgid "F d, Y"
-msgstr "D F, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "No si pues cargjâ lis informazions di supuart in chest moment."

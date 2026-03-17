@@ -31006,7 +31006,7 @@ msgid "Create your first note to get started."
 msgstr "创建您的第一条笔记以开始。"
 
 msgid "F d, Y"
-msgstr "Y 年 M 月 d 日"
+msgstr "Y 年 m 月 d 日"
 
 msgid "Could not load support info at this time."
 msgstr "此时无法加载支持信息。"

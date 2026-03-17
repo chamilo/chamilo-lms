@@ -31012,7 +31012,7 @@ msgid "Create your first note to get started."
 msgstr "Crie sua primeira anotação para começar."
 
 msgid "F d, Y"
-msgstr "D d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Não foi possível carregar as informações de suporte no momento."

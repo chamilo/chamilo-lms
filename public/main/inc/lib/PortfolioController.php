@@ -6,11 +6,11 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Portfolio;
-use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\PortfolioRelTag;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
@@ -31,14 +31,22 @@ use Chamilo\CoreBundle\Event\PortfolioItemViewedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
+use League\Flysystem\FilesystemException;
 use Mpdf\MpdfException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class PortfolioController.
@@ -642,7 +650,6 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $this->owner,
                 $portfolio->getId(),
                 Portfolio::TYPE_ITEM
             );
@@ -845,14 +852,15 @@ class PortfolioController
         $form->addHtml("<script>$script</script>");
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\NotSupported
+     */
     private function processAttachments(
         FormValidator $form,
-        User $user,
         int $originId,
         int $originType
     ): void {
         $em = Database::getManager();
-        $fs = new Filesystem();
 
         $comments = $form->getSubmitValue('attachment_comment');
 
@@ -883,40 +891,31 @@ class PortfolioController
                 continue;
             }
 
-            $newFileName = uniqid();
-            $attachmentsDirectory = UserManager::getUserPathById($user->getId(), 'system').'portfolio_attachments/';
+            $resourceRepo = null;
+            $resource = null;
 
-            if (!$fs->exists($attachmentsDirectory)) {
-                $fs->mkdir($attachmentsDirectory, api_get_permissions_for_new_directories());
+            $file = new UploadedFile(
+                $_file['tmp_name'],
+                $_file['name'],
+                $_file['type'] ?? null,
+                $_file['error'] ?? 0,
+                true
+            );
+
+            if (Portfolio::TYPE_ITEM === $originType) {
+                $resourceRepo = $em->getRepository(Portfolio::class);
+                $resource = $resourceRepo->find($originId);
+
+                // Explicit false for clarity (no behavior change).
+
+            } elseif (Portfolio::TYPE_COMMENT === $originType) {
+                $resourceRepo = $em->getRepository(PortfolioComment::class);
+                $resource = $resourceRepo->find($originId);
+            } else {
+                continue;
             }
 
-            $attachmentFilename = $attachmentsDirectory.$newFileName;
-
-            if (is_uploaded_file($_file['tmp_name'])) {
-                $moved = move_uploaded_file($_file['tmp_name'], $attachmentFilename);
-
-                if (!$moved) {
-                    Display::addFlash(Display::return_message(
-                        get_lang('The uploaded file could not be saved (perhaps a permission problem?)'),
-                        'error'
-                    ));
-
-                    continue;
-                }
-            }
-
-            $attachment = new PortfolioAttachment();
-            $attachment
-                ->setFilename($_file['name'])
-                ->setComment($comments[$i])
-                ->setPath($newFileName)
-                ->setOrigin($originId)
-                ->setOriginType($originType)
-                ->setSize($_file['size'])
-            ;
-
-            $em->persist($attachment);
-            $em->flush();
+            $resourceRepo->addFile($resource, $file, $comments[$i], true);
         }
     }
 
@@ -1033,7 +1032,6 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $item->getCreator(),
                 $item->getId(),
                 Portfolio::TYPE_ITEM
             );
@@ -1120,6 +1118,9 @@ class PortfolioController
             return '';
         }
 
+        /** @var ResourceRepository $nodeRepo */
+        $resourceRepo = $this->em->getRepository(ResourceRepository::class);
+
         $currentUserId = api_get_user_id();
 
         $listItems = '<ul class="fa-ul">';
@@ -1129,10 +1130,14 @@ class PortfolioController
 
         foreach ($attachments as $attachment) {
             $downloadParams = http_build_query([
-                'action' => 'download_attachment', 'node_id' => $post->resourceNode->getId(),
+                'action' => 'download_attachment',
+                'node' => $post->resourceNode->getId(),
+                'attachment' => $attachment->getId(),
             ]);
             $deleteParams = http_build_query([
-                'action' => 'delete_attachment', 'node_id' => $post->resourceNode->getId(),
+                'action' => 'download_attachment',
+                'node' => $post->resourceNode->getId(),
+                'attachment' => $attachment->getId(),
             ]);
 
             $listItems .= '<li>'
@@ -2026,7 +2031,6 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $this->owner,
                 $comment->getId(),
                 Portfolio::TYPE_COMMENT
             );
@@ -3295,6 +3299,9 @@ class PortfolioController
         return $commentsHtml;
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\NotSupported
+     */
     public function exportZip(HttpRequest $httpRequest): void
     {
         $currentUserId = api_get_user_id();
@@ -3310,8 +3317,8 @@ class PortfolioController
             }
         }
 
-        $commentsRepo = $this->em->getRepository(PortfolioComment::class);
-        $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
+        $commentsRepo = Container::getPortfolioCommentRepository();
+        $resourceNodeRepo = Container::getResourceNodeRepository();
 
         $visibility = [];
 
@@ -3334,9 +3341,6 @@ class PortfolioController
 
         $sysArchivePath = api_get_path(SYS_ARCHIVE_PATH);
         $tempPortfolioDirectory = $sysArchivePath."portfolio/{$this->owner->getId()}";
-
-        $userDirectory = UserManager::getUserPathById($this->owner->getId(), 'system');
-        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
 
         $tblItemsHeaders = [];
         $tblItemsHeaders[] = get_lang('Title');
@@ -3366,10 +3370,8 @@ class PortfolioController
          */
         foreach ($items as $i => $item) {
             $itemCategory = $item->getCategory();
-            $itemCourse = $item->getCourse();
-            $itemSession = $item->getSession();
 
-            $itemDirectory = $item->getCreationDate()->format('Y-m-d-H-i-s');
+            $itemDirectory = $item->resourceNode->getCreatedAt()->format('Y-m-d-H-i-s');
 
             $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
             $imagePaths = [];
@@ -3385,29 +3387,31 @@ class PortfolioController
                 try {
                     $filenames[] = $inlineFile;
                     $fs->copy($imagePath, $inlineFile);
-                } catch (FileNotFoundException $notFoundException) {
+                } catch (FileNotFoundException) {
                     continue;
                 }
             }
 
-            $attachments = $attachmentsRepo->findFromItem($item);
+            $attachments = $item->resourceNode->getResourceFiles();
 
-            /** @var PortfolioAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentFilename = sprintf(
                     '%s/items/%s/attachments/%s',
                     $tempPortfolioDirectory,
                     $itemDirectory,
-                    $attachment->getFilename()
+                    $attachment->getTitle()
                 );
 
                 try {
-                    $fs->copy(
-                        $attachmentsDirectory.$attachment->getPath(),
-                        $attachmentFilename
+                    $path = $resourceNodeRepo->getFilename($attachment);
+                    $content = $resourceNodeRepo->getFileSystem()->read($path);
+
+                    $fs->dumpFile(
+                        $attachmentFilename,
+                        $content
                     );
                     $filenames[] = $attachmentFilename;
-                } catch (FileNotFoundException $notFoundException) {
+                } catch (FileNotFoundException|FilesystemException) {
                     continue;
                 }
             }
@@ -3417,13 +3421,13 @@ class PortfolioController
                     Security::remove_XSS($item->getTitle()),
                     sprintf('items/%s/item.html', $itemDirectory)
                 ),
-                api_convert_and_format_date($item->getCreationDate()),
-                api_convert_and_format_date($item->getUpdateDate()),
-                $itemCategory ? $itemCategory->getTitle() : null,
+                api_convert_and_format_date($item->resourceNode->getCreatedAt()),
+                api_convert_and_format_date($item->resourceNode->getUpdatedAt()),
+                $itemCategory?->getTitle(),
                 $item->getComments()->count(),
                 $item->getScore(),
-                $itemCourse->getTitle(),
-                $itemSession ? $itemSession->getTitle() : null,
+                $this->course->getTitle(),
+                $this->session?->getTitle(),
             ];
         }
 
@@ -3448,29 +3452,31 @@ class PortfolioController
                 try {
                     $filenames[] = $inlineFile;
                     $fs->copy($imagePath, $inlineFile);
-                } catch (FileNotFoundException $notFoundException) {
+                } catch (FileNotFoundException) {
                     continue;
                 }
             }
 
-            $attachments = $attachmentsRepo->findFromComment($comment);
+            $attachments = $comment->resourceNode->getResourceFiles();
 
-            /** @var PortfolioAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $attachmentFilename = sprintf(
                     '%s/comments/%s/attachments/%s',
                     $tempPortfolioDirectory,
                     $commentDirectory,
-                    $attachment->getFilename()
+                    $attachment->getTitle()
                 );
 
                 try {
-                    $fs->copy(
-                        $attachmentsDirectory.$attachment->getPath(),
-                        $attachmentFilename
+                    $path = $resourceNodeRepo->getFilename($attachment);
+                    $content = $resourceNodeRepo->getFileSystem()->read($path);
+
+                    $fs->dumpFile(
+                        $attachmentFilename,
+                        $content
                     );
                     $filenames[] = $attachmentFilename;
-                } catch (FileNotFoundException $notFoundException) {
+                } catch (FileNotFoundException|FilesystemException) {
                     continue;
                 }
             }
@@ -3784,99 +3790,94 @@ class PortfolioController
 
     public function downloadAttachment(HttpRequest $httpRequest): void
     {
-        $path = $httpRequest->query->get('file');
+        $nodeId = $httpRequest->query->getInt('node');
+        $attachmentId = $httpRequest->query->getInt('attachment');
 
-        if (empty($path)) {
+        $resourceNode = Container::getResourceNodeRepository()->find($nodeId);
+        $attachment = Container::getResourceFileRepository()->find($attachmentId);
+
+        $isGranted = Container::$container
+            ->get('security.authorization_checker')
+            ->isGranted(ResourceNodeVoter::VIEW, $resourceNode)
+        ;
+
+        if (!$isGranted) {
             api_not_allowed(true);
         }
 
-        $em = Database::getManager();
-        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
+        $fileName = $attachment->getOriginalName();
+        $fileSize = $attachment->getSize();
+        $mimeType = $attachment->getMimeType() ?: '';
+        [$start, $end, $length] = $this->getRange($httpRequest, $fileSize);
 
-        $attachment = $attachmentRepo->findOneByPath($path);
+        // Convert the file name to ASCII using iconv
+        $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
 
-        if (empty($attachment)) {
-            api_not_allowed(true);
+        // MIME normalization for HTML
+        $looksLikeHtmlByExt = (bool) preg_match('/\.x?html?$/i', (string) $fileName);
+        if ('' === $mimeType || false === stripos($mimeType, 'html')) {
+            if ($looksLikeHtmlByExt) {
+                $mimeType = 'text/html; charset=UTF-8';
+            }
         }
 
-        $originOwnerId = 0;
+        $response = new StreamedResponse(
+            function () use ($resourceNode, $attachment, $start, $length): void {
+                $stream = $resourceNode->getResourceNodeFileStream(
+                    $attachment->getResourceNode(),
+                    $attachment
+                );
 
-        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
-            $item = $em->find(Portfolio::class, $attachment->getOrigin());
-
-            $originOwnerId = $item->getUser()->getId();
-        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
-            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
-
-            $originOwnerId = $comment->getCreator()->getId();
-        } else {
-            api_not_allowed(true);
-        }
-
-        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
-        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
-        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
-
-        if (!Security::check_abs_path($attachmentFilename, $attachmentsDirectory)) {
-            api_not_allowed(true);
-        }
-
-        $downloaded = DocumentManager::file_send_for_download(
-            $attachmentFilename,
-            true,
-            $attachment->getFilename()
+                $this->echoBuffer($stream, $start, $length);
+            }
         );
 
-        if (!$downloaded) {
-            api_not_allowed(true);
-        }
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $fileName
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+        $response->headers->set('Content-Length', (string) $length);
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+        $response->setStatusCode(
+            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
+        );
+
+        $response->send();
     }
 
-    public function deleteAttachment(HttpRequest $httpRequest): void
+    public function deleteAttachment(HttpRequest $httpRequest): never
     {
-        $currentUserId = api_get_user_id();
+        $nodeId = $httpRequest->query->getInt('node');
+        $attachmentId = $httpRequest->query->getInt('attachment');
 
-        $path = $httpRequest->query->get('file');
+        $attachment = Container::getResourceFileRepository()->find($attachmentId);
+        $resourceNode = Container::getResourceNodeRepository()->find($nodeId);
+        $commentRepo = Container::getPortfolioCommentRepository();
+        $itemRepo = Container::getPortfolioRepository();
 
-        if (empty($path)) {
+        $isGranted = Container::$container
+            ->get('security.authorization_checker')
+            ->isGranted(ResourceNodeVoter::VIEW, $resourceNode)
+        ;
+
+        if (!$isGranted) {
             api_not_allowed(true);
         }
 
-        $em = Database::getManager();
-        $fs = new Filesystem();
+        $this->em->remove($attachment);
+        $this->em->flush();
 
-        $attachmentRepo = $em->getRepository(PortfolioAttachment::class);
-        $attachment = $attachmentRepo->findOneByPath($path);
+        $comment = $commentRepo->findOneBy(['resourceNode' => $nodeId]);
 
-        if (empty($attachment)) {
-            api_not_allowed(true);
+        if ($comment) {
+            $item = $comment->getItem();
+        } else {
+            $item = $itemRepo->findOneBy(['resourceNode' => $nodeId]);
         }
-
-        $originOwnerId = 0;
-        $itemId = 0;
-
-        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
-            $item = $em->find(Portfolio::class, $attachment->getOrigin());
-            $originOwnerId = $item->getUser()->getId();
-            $itemId = $item->getId();
-        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
-            $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
-            $originOwnerId = $comment->getCreator()->getId();
-            $itemId = $comment->getItem()->getId();
-        }
-
-        if ($currentUserId !== $originOwnerId) {
-            api_not_allowed(true);
-        }
-
-        $em->remove($attachment);
-        $em->flush();
-
-        $userDirectory = UserManager::getUserPathById($originOwnerId, 'system');
-        $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
-        $attachmentFilename = $attachmentsDirectory.$attachment->getPath();
-
-        $fs->remove($attachmentFilename);
 
         if ($httpRequest->isXmlHttpRequest()) {
             echo Display::return_message(get_lang('The attached file has been deleted'), 'success');
@@ -3885,7 +3886,7 @@ class PortfolioController
                 Display::return_message(get_lang('The attached file has been deleted'), 'success')
             );
 
-            $url = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]);
+            $url = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item?->getId()]);
 
             if (Portfolio::TYPE_COMMENT === $attachment->getOriginType() && isset($comment)) {
                 $url .= '#comment-'.$comment->getId();
@@ -4207,7 +4208,6 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $comment->getCreator(),
                 $comment->getId(),
                 Portfolio::TYPE_COMMENT
             );
@@ -4273,11 +4273,6 @@ class PortfolioController
         }
 
         $this->em->remove($comment);
-
-        $this->em
-            ->getRepository(PortfolioAttachment::class)
-            ->removeFromComment($comment)
-        ;
 
         $this->em->flush();
 
@@ -4508,5 +4503,49 @@ class PortfolioController
             get_lang('Choose recipients'),
             $actions
         );
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    protected function getRange(Request $request, int $fileSize): array
+    {
+        $range = $request->headers->get('Range');
+
+        if ($range) {
+            [, $range] = explode('=', $range, 2);
+            [$start, $end] = explode('-', $range);
+
+            $start = (int) $start;
+            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
+
+            $length = $end - $start + 1;
+        } else {
+            $start = 0;
+            $end = $fileSize - 1;
+            $length = $fileSize;
+        }
+
+        return [$start, $end, $length];
+    }
+
+    /**
+     * @param resource $stream
+     */
+    protected function echoBuffer($stream, int $start, int $length): void
+    {
+        fseek($stream, $start);
+
+        $bytesSent = 0;
+
+        while ($bytesSent < $length && !feof($stream)) {
+            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
+
+            echo $buffer;
+
+            $bytesSent += \strlen($buffer);
+        }
+
+        fclose($stream);
     }
 }

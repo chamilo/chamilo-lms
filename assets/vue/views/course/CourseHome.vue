@@ -145,9 +145,9 @@
           v-if="isAllowedToEdit"
           :href="reportingUrl"
           :title="t('Reporting')"
-          class="grow-0 flex items-center"
+          class="grow-0 flex items-center justify-center border border-black rounded-md px-2 hover:bg-gray-100 h-[40.67px]"
         >
-          <span class="mdi mdi-chart-box ch-tool-icon-disabled text-[40px] leading-none" />
+          <span class="mdi mdi-chart-box ch-tool-icon-disabled text-xl" />
         </a>
 
         <div

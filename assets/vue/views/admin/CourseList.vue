@@ -2,12 +2,12 @@
   <div class="flex flex-col gap-8">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-semibold text-gray-800">{{ t("Course list") }}</h2>
-      <a
-        class="btn btn--success"
-        href="/main/admin/course_add.php"
-      >
-        {{ t("Add course") }}
-      </a>
+      <BaseButton
+        :label="t('Add course')"
+        :to-url="'/main/admin/course_add.php'"
+        icon="plus"
+        type="success"
+      />
     </div>
 
     <!-- Tabs -->

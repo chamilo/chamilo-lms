@@ -4,7 +4,8 @@
       <BaseButton
         :label="t('Add a training session')"
         :to-url="'/main/session/session_add.php'"
-        icon=""
+        icon="plus"
+        type="success"
       />
     </SectionHeader>
 

@@ -5,6 +5,7 @@
         :label="t('Add a user')"
         :to-url="'/main/admin/user_add.php'"
         icon="user-add"
+        type="success"
       />
     </SectionHeader>
 

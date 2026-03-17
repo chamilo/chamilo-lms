@@ -51,7 +51,7 @@
           {{ t("Search") }}
         </button>
         <button
-          class="btn btn--plain flex items-center gap-1"
+          class="btn btn--primary flex items-center gap-1"
           type="button"
           @click="showAdvanced = !showAdvanced"
         >

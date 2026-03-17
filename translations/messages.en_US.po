@@ -33058,3 +33058,12 @@ msgstr "Constant name"
 
 msgid "MDI icon name"
 msgstr "MDI icon name"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Are you sure you want to remove the class?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Are you sure you want to remove the class without removing users?"
+
+
+

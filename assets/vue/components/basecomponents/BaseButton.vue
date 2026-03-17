@@ -13,6 +13,7 @@
         slotProps.class,
         { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon, 'p-disabled': disabled },
       ]"
+      :title="onlyIcon ? label : undefined"
     >
       <span
         v-if="icon"

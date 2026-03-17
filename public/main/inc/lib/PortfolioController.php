@@ -76,13 +76,12 @@ class PortfolioController
     }
 
     /**
-     * @param mixed $category
      * @param mixed $languages
      * @param mixed $languageId
      *
      * @throws Exception
      */
-    public function translateCategory($category, $languages, $languageId): void
+    public function translateCategory(PortfolioCategory $category, $languages, $languageId): void
     {
         global $interbreadcrumb;
 
@@ -139,7 +138,7 @@ class PortfolioController
         ];
         $interbreadcrumb[] = [
             'name' => get_lang('Categories'),
-            'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId(),
+            'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParent()?->getId(),
         ];
         $interbreadcrumb[] = [
             'name' => Security::remove_XSS($category->getTitle()),
@@ -219,13 +218,13 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
-        $parentId = isset($_REQUEST['parent_id']) ? (int) $_REQUEST['parent_id'] : 0;
+        $parentId = isset($_REQUEST['parent_id']) ? (int) $_REQUEST['parent_id'] : null;
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $headers = [
             get_lang('Title'),
             get_lang('Description'),
         ];
-        if (0 === $parentId) {
+        if (empty($parentId)) {
             $headers[] = get_lang('Sub-categories');
         }
         $headers[] = get_lang('Actions');
@@ -251,7 +250,7 @@ class PortfolioController
             }
             $table->setCellContents($row, $column++, $linkSubCategories);
             $table->setCellContents($row, $column++, strip_tags($category->getDescription()));
-            if (0 === $parentId) {
+            if (!$parentId) {
                 $table->setCellContents($row, $column++, count($subcategories));
             }
 
@@ -280,7 +279,7 @@ class PortfolioController
             'name' => get_lang('Portfolio'),
             'url' => $this->baseUrl,
         ];
-        if ($parentId > 0) {
+        if ($parentId) {
             $interbreadcrumb[] = [
                 'name' => get_lang('Categories'),
                 'url' => $this->baseUrl.'action=list_categories',
@@ -290,9 +289,9 @@ class PortfolioController
         $actions = [];
         $actions[] = Display::url(
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
-            $this->baseUrl.($parentId > 0 ? 'action=list_categories' : '')
+            $this->baseUrl.($parentId ? 'action=list_categories' : '')
         );
-        if ($currentUserId == $this->owner->getId() && 0 === $parentId) {
+        if ($currentUserId == $this->owner->getId() && !$parentId) {
             $actions[] = Display::url(
                 Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
                 $this->baseUrl.'action=add_category'
@@ -301,7 +300,7 @@ class PortfolioController
         $content = $table->toHtml();
 
         $pageTitle = get_lang('Categories');
-        if ($parentId > 0) {
+        if ($parentId) {
             $em = Database::getManager();
             $parentCategory = $em->find(PortfolioCategory::class, $parentId);
             $pageTitle = $parentCategory->getTitle().' : '.get_lang('Sub-categories');
@@ -312,13 +311,12 @@ class PortfolioController
 
     private function getCategoriesForIndex(?int $parentId = null): array
     {
-        $categoriesCriteria = [];
+        $categoriesCriteria = [
+            'parent' => $parentId,
+        ];
 
         if (!api_is_platform_admin() && null !== $this->owner->getId()) {
             $categoriesCriteria['isVisible'] = true;
-        }
-        if (isset($parentId)) {
-            $categoriesCriteria['parent'] = $parentId;
         }
 
         return $this->em
@@ -354,7 +352,7 @@ class PortfolioController
             get_lang('Parent category')
         );
         $parentSelect->addOption(sprintf(get_lang('Level %s'), '0'), 0);
-        $categories = $this->getCategoriesForIndex(0);
+        $categories = $this->getCategoriesForIndex();
 
         foreach ($categories as $category) {
             $parentSelect->addOption($category->getTitle(), $category->getId());
@@ -365,11 +363,15 @@ class PortfolioController
         if ($form->validate()) {
             $values = $form->exportValues();
 
+            $categoryRepo = $this->em->getRepository(PortfolioCategory::class);
+
             $category = new PortfolioCategory();
             $category
                 ->setTitle($values['title'])
                 ->setDescription($values['description'])
-                ->setParentId($values['parent_id'])
+                ->setParent(
+                    $categoryRepo->find($values['parent_id'])
+                )
                 ->setUser($this->owner)
             ;
 
@@ -462,7 +464,7 @@ class PortfolioController
                 Display::return_message(get_lang('Updated'), 'success')
             );
 
-            header("Location: {$this->baseUrl}action=list_categories&parent_id=".$category->getParentId());
+            header("Location: {$this->baseUrl}action=list_categories&parent_id=".$category->getParent()?->getId());
 
             exit;
         }
@@ -475,20 +477,20 @@ class PortfolioController
             'name' => get_lang('Categories'),
             'url' => $this->baseUrl.'action=list_categories',
         ];
-        if ($category->getParentId() > 0) {
+        if ($category->getParent()) {
             $em = Database::getManager();
-            $parentCategory = $em->find(PortfolioCategory::class, $category->getParentId());
+            $parentCategory = $em->find(PortfolioCategory::class, $category->getParent()->getId());
             $pageTitle = $parentCategory->getTitle().' : '.get_lang('Sub-categories');
             $interbreadcrumb[] = [
                 'name' => Security::remove_XSS($pageTitle),
-                'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId(),
+                'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParent()->getId(),
             ];
         }
 
         $actions = [];
         $actions[] = Display::url(
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
-            $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId()
+            $this->baseUrl.'action=list_categories&parent_id='.$category->getParent()->getId()
         );
 
         $content = $form->returnForm();
@@ -600,7 +602,7 @@ class PortfolioController
             [get_lang('Category'), get_lang('Categories are for organization only in personal portfolio.')]
         );
         $categoriesSelect->addOption(get_lang('Select a category'), 0);
-        $parentCategories = $this->getCategoriesForIndex(0);
+        $parentCategories = $this->getCategoriesForIndex();
         foreach ($parentCategories as $parentCategory) {
             $categoriesSelect->addOption($this->translateDisplayName($parentCategory->getTitle()), $parentCategory->getId());
             $subCategories = $this->getCategoriesForIndex($parentCategory->getId());
@@ -972,7 +974,7 @@ class PortfolioController
             [get_lang('Category'), get_lang('Categories are for organization only in personal portfolio.')]
         );
         $categoriesSelect->addOption(get_lang('Select a category'), 0);
-        $parentCategories = $this->getCategoriesForIndex(0);
+        $parentCategories = $this->getCategoriesForIndex();
         foreach ($parentCategories as $parentCategory) {
             $categoriesSelect->addOption($this->translateDisplayName($parentCategory->getTitle()), $parentCategory->getId());
             $subCategories = $this->getCategoriesForIndex($parentCategory->getId());
@@ -1304,7 +1306,7 @@ class PortfolioController
             $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted, $listAlphabetical);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
             // it translates the category title with the current user language
-            $categories = $this->getCategoriesForIndex(0);
+            $categories = $this->getCategoriesForIndex();
             if (count($categories) > 0) {
                 foreach ($categories as &$category) {
                     $translated = $this->translateDisplayName($category->getTitle());

@@ -44,20 +44,23 @@
             type="text"
           />
         </div>
-        <button
-          class="btn btn--primary"
-          type="submit"
-        >
-          {{ t("Search") }}
-        </button>
-        <button
-          class="btn btn--primary flex items-center gap-1"
-          type="button"
-          @click="showAdvanced = !showAdvanced"
-        >
-          <span :class="showAdvanced ? 'mdi mdi-arrow-down-bold' : 'mdi mdi-arrow-right-bold'" />
-          {{ t("Advanced search") }}
-        </button>
+        <BaseButton
+          :label="t('Search')"
+          icon="search"
+          is-submit
+        />
+        <BaseButton
+          v-if="showAdvanced"
+          :label="t('Advanced search')"
+          icon="unfold"
+          @click="showAdvanced = false"
+        />
+        <BaseButton
+          v-else
+          :label="t('Advanced search')"
+          icon="fold"
+          @click="showAdvanced = true"
+        />
       </form>
 
       <!-- Advanced search form -->

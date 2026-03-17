@@ -487,6 +487,40 @@ class ResourceNode implements Stringable
         return $first ?: null;
     }
 
+    /**
+     * @return Collection<int, ResourceLink>
+     */
+    public function getResourceLinksByContext(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?User $user = null,
+    ): Collection {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('resourceTypeGroup', $this->resourceType->getId())
+        );
+
+        if ($course) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('course', $course)
+            );
+        }
+
+        if ($session) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        }
+
+        if ($user) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+        }
+
+        return $this->resourceLinks->matching($criteria);
+    }
+
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;

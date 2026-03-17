@@ -2,12 +2,12 @@
   <div class="flex flex-col gap-8">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-semibold text-gray-800">{{ t("Course list") }}</h2>
-      <a
-        class="btn btn--success"
-        href="/main/admin/course_add.php"
-      >
-        {{ t("Add course") }}
-      </a>
+      <BaseButton
+        :label="t('Add course')"
+        :to-url="'/main/admin/course_add.php'"
+        icon="plus"
+        type="success"
+      />
     </div>
 
     <!-- Tabs -->
@@ -42,24 +42,27 @@
           <input
             v-model="simpleKeyword"
             :placeholder="t('Search courses')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
-        <button
-          class="btn btn--primary"
-          type="submit"
-        >
-          {{ t("Search") }}
-        </button>
-        <button
-          class="btn btn--plain text-sm flex items-center gap-1"
-          type="button"
-          @click="showAdvanced = !showAdvanced"
-        >
-          <span :class="showAdvanced ? 'mdi mdi-arrow-down-bold' : 'mdi mdi-arrow-right-bold'" />
-          {{ t("Advanced search") }}
-        </button>
+        <BaseButton
+          :label="t('Search')"
+          icon="search"
+          is-submit
+        />
+        <BaseButton
+          v-if="showAdvanced"
+          :label="t('Advanced search')"
+          icon="unfold"
+          @click="showAdvanced = false"
+        />
+        <BaseButton
+          v-else
+          :label="t('Advanced search')"
+          icon="fold"
+          @click="showAdvanced = true"
+        />
       </form>
 
       <!-- Advanced search form -->
@@ -76,7 +79,7 @@
             <label class="text-sm text-gray-600">{{ t("Course code") }}</label>
             <input
               v-model="advancedFilters.keyword_code"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -84,7 +87,7 @@
             <label class="text-sm text-gray-600">{{ t("Title") }}</label>
             <input
               v-model="advancedFilters.keyword_title"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -95,7 +98,7 @@
             <label class="text-sm text-gray-600">{{ t("Language") }}</label>
             <input
               v-model="advancedFilters.keyword_language"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -106,7 +109,7 @@
             <label class="text-sm text-gray-600">{{ t("Categories") }}</label>
             <input
               v-model="advancedFilters.keyword_category"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -117,7 +120,7 @@
             <label class="text-sm text-gray-600">{{ t("Visibility") }}</label>
             <select
               v-model="advancedFilters.keyword_visibility"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="0">{{ t("Closed") }}</option>
@@ -134,7 +137,7 @@
             <label class="text-sm text-gray-600">{{ t("Registr. allowed") }}</label>
             <select
               v-model="advancedFilters.keyword_subscribe"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="1">{{ t("Yes") }}</option>
@@ -148,7 +151,7 @@
             <label class="text-sm text-gray-600">{{ t("Unreg. allowed") }}</label>
             <select
               v-model="advancedFilters.keyword_unsubscribe"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="1">{{ t("Yes") }}</option>
@@ -163,7 +166,7 @@
             <input
               v-model="advancedFilters.course_teacher_input"
               :placeholder="t('Teacher user ID')"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -396,6 +399,7 @@ import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()

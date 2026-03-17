@@ -4,7 +4,8 @@
       <BaseButton
         :label="t('Add a training session')"
         :to-url="'/main/session/session_add.php'"
-        icon=""
+        icon="plus"
+        type="success"
       />
     </SectionHeader>
 
@@ -35,14 +36,14 @@
           <input
             v-model="keyword"
             :placeholder="t('Search sessions')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
         <div class="flex flex-col gap-1 max-w-xs">
           <select
             v-model="categoryFilter"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+            class="form-control"
             @change="onSearch"
           >
             <option value="">{{ t("All categories") }}</option>
@@ -148,47 +149,44 @@
       >
         <template #body="{ data }">
           <div class="flex gap-1 flex-nowrap">
-            <BaseButton
-              :label="t('Edit')"
-              :to-url="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
-              icon="edit"
-              only-icon
-              size="small"
-              type="primary"
-            />
-            <BaseButton
-              :label="t('Subscribe users to this session')"
-              :to-url="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              icon="join-group"
-              only-icon
-              size="small"
-              type="primary"
-            />
-            <BaseButton
-              :label="t('Add courses to this session')"
-              :to-url="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              icon="courses"
-              only-icon
-              size="small"
-              type="primary"
-            />
-            <BaseButton
-              :label="t('Copy')"
-              icon="copy"
-              only-icon
-              size="small"
-              type="primary"
-              @click="copySession(data.id)"
-            />
-            <BaseButton
+            <!-- Edit -->
+            <a
+              :href="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
+              :title="t('Edit')"
+            >
+              <span class="mdi mdi-pencil ch-tool-icon" />
+            </a>
+            <!-- Subscribe users -->
+            <a
+              :href="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              :title="t('Subscribe users to this session')"
+            >
+              <span class="mdi mdi-account-multiple-plus ch-tool-icon" />
+            </a>
+            <!-- Add courses -->
+            <a
+              :href="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              :title="t('Add courses to this session')"
+            >
+              <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
+            </a>
+            <!-- Copy -->
+            <a
+              :title="t('Copy')"
+              class="cursor-pointer"
+              @click.prevent="copySession(data.id)"
+            >
+              <span class="mdi mdi-content-duplicate ch-tool-icon" />
+            </a>
+            <!-- Delete -->
+            <a
               v-if="viewer.isPlatformAdmin"
-              :label="t('Delete')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger"
-              @click="confirmDelete([data.id])"
-            />
+              :title="t('Delete')"
+              class="cursor-pointer"
+              @click.prevent="confirmDelete([data.id])"
+            >
+              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
+            </a>
           </div>
         </template>
       </Column>

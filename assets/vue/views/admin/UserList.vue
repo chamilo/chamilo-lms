@@ -5,6 +5,7 @@
         :label="t('Add a user')"
         :to-url="'/main/admin/user_add.php'"
         icon="user-add"
+        type="success"
       />
     </SectionHeader>
 
@@ -40,7 +41,7 @@
           <input
             v-model="simpleKeyword"
             :placeholder="t('Search users')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
@@ -50,11 +51,16 @@
           is-submit
         />
         <BaseButton
-          :icon="showAdvanced ? 'arrow-down' : 'arrow-right'"
+          v-if="showAdvanced"
           :label="t('Advanced search')"
-          size="small"
-          type="black"
-          @click="showAdvanced = !showAdvanced"
+          icon="unfold"
+          @click="showAdvanced = false"
+        />
+        <BaseButton
+          v-else
+          :label="t('Advanced search')"
+          icon="fold"
+          @click="showAdvanced = true"
         />
       </form>
 
@@ -72,7 +78,7 @@
             <label class="text-sm text-gray-600">{{ t("First name") }}</label>
             <input
               v-model="advancedFilters.keyword_firstname"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -80,7 +86,7 @@
             <label class="text-sm text-gray-600">{{ t("Last name") }}</label>
             <input
               v-model="advancedFilters.keyword_lastname"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -88,23 +94,7 @@
             <label class="text-sm text-gray-600">{{ t("Login") }}</label>
             <input
               v-model="advancedFilters.keyword_username"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
-              type="text"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">{{ t("E-mail") }}</label>
-            <input
-              v-model="advancedFilters.keyword_email"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
-              type="text"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">{{ t("Official code") }}</label>
-            <input
-              v-model="advancedFilters.keyword_officialcode"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -112,7 +102,7 @@
             <label class="text-sm text-gray-600">{{ t("Roles") }}</label>
             <select
               v-model="advancedFilters.keyword_roles"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               multiple
               size="6"
             >
@@ -124,6 +114,22 @@
                 {{ label }}
               </option>
             </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">{{ t("E-mail") }}</label>
+            <input
+              v-model="advancedFilters.keyword_email"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">{{ t("Official code") }}</label>
+            <input
+              v-model="advancedFilters.keyword_officialcode"
+              class="form-control"
+              type="text"
+            />
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-sm text-gray-600">{{ t("Account") }}</label>
@@ -307,33 +313,29 @@
             class="flex gap-1 flex-nowrap"
           >
             <!-- Edit (deleted view) -->
-            <BaseButton
-              :label="t('Edit')"
-              :to-url="`/main/admin/user_edit.php?user_id=${data.id}`"
-              icon="edit"
-              only-icon
-              size="small"
-              type="primary"
-            />
+            <a
+              :href="`/main/admin/user_edit.php?user_id=${data.id}`"
+              :title="t('Edit')"
+            >
+              <span class="mdi mdi-pencil ch-tool-icon" />
+            </a>
             <!-- Restore -->
-            <BaseButton
-              :label="t('Restore')"
-              icon="restore"
-              only-icon
-              size="small"
-              type="primary"
-              @click="confirmAction('restore', data)"
-            />
+            <a
+              :title="t('Restore')"
+              class="cursor-pointer"
+              @click.prevent="confirmAction('restore', data)"
+            >
+              <span class="mdi mdi-restore ch-tool-icon" />
+            </a>
             <!-- Delete permanently -->
-            <BaseButton
+            <a
               v-if="viewer.isPlatformAdmin"
-              :label="t('Delete permanently')"
-              icon="delete-forever"
-              only-icon
-              size="small"
-              type="danger"
-              @click="confirmAction('destroy', data)"
-            />
+              :title="t('Delete permanently')"
+              class="cursor-pointer"
+              @click.prevent="confirmAction('destroy', data)"
+            >
+              <span class="mdi mdi-delete-forever ch-tool-icon text-red-600" />
+            </a>
           </div>
           <div
             v-else
@@ -341,143 +343,136 @@
           >
             <!-- Information -->
             <template v-if="viewer.isPlatformAdmin">
-              <BaseButton
+              <a
                 v-if="!data.isAnonymous"
-                :label="t('Information')"
-                :disabled="data.isAnonymous"
-                :to-url="`/main/admin/user_information.php?user_id=${data.id}`"
-                icon="information"
-                only-icon
-                size="small"
-                type="primary"
+                :href="`/main/admin/user_information.php?user_id=${data.id}`"
+                :title="t('Information')"
+              >
+                <span class="mdi mdi-information ch-tool-icon" />
+              </a>
+              <span
+                v-else
+                class="mdi mdi-information ch-tool-icon-disabled"
+                :title="t('Information')"
               />
             </template>
 
             <!-- Login as -->
             <template v-if="showLoginAs(data)">
-              <BaseButton
+              <a
                 v-if="canLoginAs(data)"
-                :label="t('Login as')"
-                :disabled="!canLoginAs(data)"
-                :to-url="`/admin/user-list-login-as?user_id=${data.id}&sec_token=${loginAsToken}`"
-                icon="account-key"
-                only-icon
-                size="small"
-                type="primary"
+                :href="`/admin/user-list-login-as?user_id=${data.id}&sec_token=${loginAsToken}`"
+                :title="t('Login as')"
+              >
+                <span class="mdi mdi-account-key ch-tool-icon" />
+              </a>
+              <span
+                v-else
+                class="mdi mdi-account-key ch-tool-icon-disabled"
+                :title="t('Login as')"
               />
             </template>
-            <BaseButton
+            <span
               v-else
-              :label="t('Login as')"
-              disabled
-              icon="account-key"
-              only-icon
-              size="small"
-              type="primary"
+              class="mdi mdi-account-key ch-tool-icon-disabled"
+              :title="t('Login as')"
             />
 
             <!-- Reporting (students only) -->
-            <BaseButton
-              :disabled="!data.isStudent"
-              :label="t('Reporting')"
-              :to-url="`/main/my_space/myStudents.php?student=${data.id}`"
-              icon="tracking"
-              only-icon
-              size="small"
-              type="primary"
+            <a
+              v-if="data.isStudent"
+              :href="`/main/my_space/myStudents.php?student=${data.id}`"
+              :title="t('Reporting')"
+            >
+              <span class="mdi mdi-chart-box ch-tool-icon" />
+            </a>
+            <span
+              v-else
+              class="mdi mdi-chart-box ch-tool-icon-disabled"
+              :title="t('Reporting')"
             />
 
             <!-- Edit -->
             <template v-if="viewer.isPlatformAdmin || viewer.isSessionAdmin">
-              <BaseButton
+              <a
                 v-if="!data.isAnonymous"
-                :disabled="data.isAnonymous"
-                :label="t('Edit')"
-                :to-url="`/main/admin/user_edit.php?user_id=${data.id}`"
-                icon="edit"
-                only-icon
-                size="small"
-                type="primary"
+                :href="`/main/admin/user_edit.php?user_id=${data.id}`"
+                :title="t('Edit')"
+              >
+                <span class="mdi mdi-pencil ch-tool-icon" />
+              </a>
+              <span
+                v-else
+                class="mdi mdi-pencil ch-tool-icon-disabled"
+                :title="t('Edit')"
               />
             </template>
 
             <!-- Assign skill -->
-            <BaseButton
+            <a
               v-if="viewer.isPlatformAdmin"
-              :label="t('Assign skill')"
-              :to-url="`/main/skills/assign.php?user=${data.id}`"
-              icon="shield-star"
-              only-icon
-              size="small"
-              type="primary"
-            />
+              :href="`/main/skills/assign.php?user=${data.id}`"
+              :title="t('Assign skill')"
+            >
+              <span class="mdi mdi-shield-star ch-tool-icon" />
+            </a>
 
             <!-- Anonymize (platform admin only, not self, not anonymous) -->
-            <BaseButton
+            <a
               v-if="viewer.isPlatformAdmin && data.id !== viewer.id && !data.isAnonymous && !data.isAdmin"
-              :label="t('Anonymize')"
-              icon="anonymous"
-              only-icon
-              size="small"
-              type="primary"
-              @click="confirmAction('anonymize', data)"
-            />
+              :title="t('Anonymize')"
+              class="cursor-pointer"
+              @click.prevent="confirmAction('anonymize', data)"
+            >
+              <span class="mdi mdi-incognito ch-tool-icon" />
+            </a>
 
             <!-- Delete (platform admin, not self, not anonymous) -->
-            <BaseButton
+            <a
               v-if="viewer.isPlatformAdmin && data.id !== viewer.id && !data.isAnonymous && !data.isAdmin"
-              :label="t('Delete')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger"
-              @click="confirmAction('delete_user', data)"
-            />
+              :title="t('Delete')"
+              class="cursor-pointer"
+              @click.prevent="confirmAction('delete_user', data)"
+            >
+              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
+            </a>
 
             <!-- Assign sessions (session manager) -->
-            <BaseButton
+            <a
               v-if="!viewer.isSessionAdmin && data.isSessionManager"
-              :label="t('Assign sessions')"
-              :to-url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
-              icon="sessions"
-              only-icon
-              size="small"
-              type="primary"
-            />
+              :href="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
+              :title="t('Assign sessions')"
+            >
+              <span class="mdi mdi-google-classroom ch-tool-icon" />
+            </a>
 
             <!-- Assign users (HR / admin / student boss, not session manager) -->
             <template v-if="!viewer.isSessionAdmin && !data.isSessionManager">
-              <BaseButton
+              <a
                 v-if="data.isHR || data.isAdmin || data.isStudentBoss"
-                :label="t('Assign users')"
-                :to-url="`/main/admin/dashboard_add_users_to_user.php?user=${data.id}`"
-                icon="assign-users"
-                only-icon
-                size="small"
-                type="primary"
-              />
+                :href="`/main/admin/dashboard_add_users_to_user.php?user=${data.id}`"
+                :title="t('Assign users')"
+              >
+                <span class="mdi mdi-account-child ch-tool-icon" />
+              </a>
 
               <!-- Assign courses (HR / admin) -->
-              <BaseButton
+              <a
                 v-if="data.isHR || data.isAdmin"
-                :label="t('Assign courses')"
-                :to-url="`/main/admin/dashboard_add_courses_to_user.php?user=${data.id}`"
-                icon="courses"
-                only-icon
-                size="small"
-                type="primary"
-              />
+                :href="`/main/admin/dashboard_add_courses_to_user.php?user=${data.id}`"
+                :title="t('Assign courses')"
+              >
+                <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
+              </a>
 
               <!-- Assign sessions (HR / admin) -->
-              <BaseButton
+              <a
                 v-if="data.isHR || data.isAdmin"
-                :label="t('Assign sessions')"
-                :to-url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
-                icon="sessions"
-                only-icon
-                size="small"
-                type="primary"
-              />
+                :href="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
+                :title="t('Assign sessions')"
+              >
+                <span class="mdi mdi-google-classroom ch-tool-icon" />
+              </a>
             </template>
           </div>
         </template>

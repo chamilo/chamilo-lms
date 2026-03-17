@@ -5643,12 +5643,18 @@ function api_global_admin_can_edit_admin(
         return true;
     }
 
-    // If i'm a simple admin
+    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
+    if (!$is_platform_admin) {
+        $userEntity = api_get_user_entity($userId);
+        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
+            $is_platform_admin = true;
+        }
+    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
-        $is_platform_admin = $user->isSessionAdmin();
+        $is_platform_admin = $user !== null && $user->isSessionAdmin();
     }
 
     if ($is_platform_admin) {

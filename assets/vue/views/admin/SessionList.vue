@@ -1,14 +1,12 @@
 <template>
   <div class="flex flex-col gap-8">
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-semibold text-gray-800">{{ t("Session list") }}</h2>
-      <a
-        class="btn btn--success"
-        href="/main/session/session_add.php"
-      >
-        {{ t("Add a training session") }}
-      </a>
-    </div>
+    <SectionHeader :title="t('Session list')">
+      <BaseButton
+        :label="t('Add a training session')"
+        :to-url="'/main/session/session_add.php'"
+        icon=""
+      />
+    </SectionHeader>
 
     <!-- Tabs -->
     <div class="flex gap-2 border-b border-gray-200">
@@ -57,12 +55,11 @@
             </option>
           </select>
         </div>
-        <button
-          class="btn btn--primary"
-          type="submit"
-        >
-          {{ t("Search") }}
-        </button>
+        <BaseButton
+          :label="t('Search')"
+          icon="search"
+          is-submit
+        />
       </form>
     </div>
 
@@ -92,12 +89,16 @@
           <span
             v-if="data.isChild"
             class="text-gray-500"
-          >{{ data.title }}</span>
-          <a
+          >
+            {{ data.title }}
+          </span>
+          <BaseAppLink
             v-else
-            :href="`/main/session/resume_session.php?id_session=${data.id}`"
+            :url="`/main/session/resume_session.php?id_session=${data.id}`"
             class="text-blue-600 hover:underline"
-          >{{ data.title }}</a>
+          >
+            {{ data.title }}
+          </BaseAppLink>
         </template>
       </Column>
       <Column
@@ -137,7 +138,8 @@
           <span
             :class="statusClass(data.status)"
             class="inline-block px-2 py-0.5 rounded text-xs font-medium"
-          >{{ t(data.statusLabel) }}</span>
+            >{{ t(data.statusLabel) }}</span
+          >
         </template>
       </Column>
       <Column
@@ -146,39 +148,47 @@
       >
         <template #body="{ data }">
           <div class="flex gap-1 flex-nowrap">
-            <a
-              :href="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
-              :title="t('Edit')"
-            >
-              <span class="mdi mdi-pencil ch-tool-icon" />
-            </a>
-            <a
-              :href="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              :title="t('Subscribe users to this session')"
-            >
-              <span class="mdi mdi-account-multiple-plus ch-tool-icon" />
-            </a>
-            <a
-              :href="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              :title="t('Add courses to this session')"
-            >
-              <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
-            </a>
-            <a
-              :title="t('Copy')"
-              class="cursor-pointer"
-              @click.prevent="copySession(data.id)"
-            >
-              <span class="mdi mdi-text-box-plus ch-tool-icon" />
-            </a>
-            <a
+            <BaseButton
+              :label="t('Edit')"
+              :to-url="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
+              icon="edit"
+              only-icon
+              size="small"
+              type="primary"
+            />
+            <BaseButton
+              :label="t('Subscribe users to this session')"
+              :to-url="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              icon="join-group"
+              only-icon
+              size="small"
+              type="primary"
+            />
+            <BaseButton
+              :label="t('Add courses to this session')"
+              :to-url="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              icon="courses"
+              only-icon
+              size="small"
+              type="primary"
+            />
+            <BaseButton
+              :label="t('Copy')"
+              icon="copy"
+              only-icon
+              size="small"
+              type="primary"
+              @click="copySession(data.id)"
+            />
+            <BaseButton
               v-if="viewer.isPlatformAdmin"
-              :title="t('Delete')"
-              class="cursor-pointer"
-              @click.prevent="confirmDelete([data.id])"
-            >
-              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
-            </a>
+              :label="t('Delete')"
+              icon="delete"
+              only-icon
+              size="small"
+              type="danger"
+              @click="confirmDelete([data.id])"
+            />
           </div>
         </template>
       </Column>
@@ -186,43 +196,44 @@
 
     <!-- Toolbar below table -->
     <div class="flex items-center gap-4">
-      <button
-        class="btn btn--plain text-sm"
+      <BaseButton
+        :label="t('Refresh')"
+        icon="refresh"
+        type="black"
+        size="small"
         @click="load"
-      >
-        <span class="mdi mdi-refresh ch-tool-icon" />
-        {{ t("Refresh") }}
-      </button>
+      />
       <template v-if="selectedItems.length > 0">
         <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
-        <button
+        <BaseButton
           v-if="viewer.isPlatformAdmin"
-          class="btn btn--danger text-sm"
+          :label="t('Delete selected')"
+          icon="delete"
+          type="danger"
+          size="small"
           @click="confirmDelete(selectedItems.map((s) => s.id))"
-        >
-          {{ t("Delete selected") }}
-        </button>
-        <button
-          class="btn btn--success text-sm"
+        />
+        <BaseButton
+          :label="t('Copy selected')"
+          icon="copy"
+          type="success"
+          size="small"
           @click="copyMultiple(selectedItems.map((s) => s.id))"
-        >
-          <span class="mdi mdi-content-duplicate ch-tool-icon" />
-          {{ t("Copy selected") }}
-        </button>
-        <button
-          class="btn btn--primary text-sm"
+        />
+        <BaseButton
+          :label="t('Courses reports')"
+          icon="zip-pack"
+          type="primary"
+          size="small"
           @click="exportCoursesReports(selectedItems.map((s) => s.id))"
-        >
-          <span class="mdi mdi-archive-arrow-down ch-tool-icon" />
-          {{ t("Courses reports") }}
-        </button>
-        <button
-          class="btn btn--primary text-sm"
+        />
+        <BaseButton
+          :label="t('Export courses reports complete')"
+          icon="file-export"
+          type="primary"
+          size="small"
           @click="exportCoursesReportsComplete(selectedItems.map((s) => s.id))"
-        >
-          <span class="mdi mdi-file-delimited-outline ch-tool-icon" />
-          {{ t("Export courses reports complete") }}
-        </button>
+        />
       </template>
     </div>
   </div>
@@ -234,6 +245,8 @@ import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import baseService from "../../services/baseService"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -297,7 +310,6 @@ async function load() {
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
     items.value = data.items
     total.value = data.total
-    categories.value = data.categories || []
     csrfToken.value = data.csrfToken || ""
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
@@ -503,6 +515,14 @@ onMounted(async () => {
   }
   if (query.keyword) {
     keyword.value = String(query.keyword)
+  }
+
+  // Load session categories for the filter dropdown
+  try {
+    const catData = await baseService.get("/api/session_categories")
+    categories.value = (catData["hydra:member"] || []).map((c) => ({ id: c.id, title: c.title }))
+  } catch (e) {
+    console.error("Error loading categories:", e)
   }
 
   // Handle legacy action params (?action=copy&idChecked=X or ?action=delete&idChecked=X)

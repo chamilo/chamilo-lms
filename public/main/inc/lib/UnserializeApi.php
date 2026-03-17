@@ -169,7 +169,13 @@ class UnserializeApi
         }
 
         foreach (get_object_vars($node) as $property => $value) {
-            $node->{$property} = self::normalizeCourseBackup($value, $visited);
+            $normalizedProperty = self::normalizeSerializedPropertyName($property);
+
+            try {
+                $node->{$normalizedProperty} = self::normalizeCourseBackup($value, $visited);
+            } catch (\Throwable) {
+                // Read-only or otherwise inaccessible property — skip silently.
+            }
         }
 
         return $node;

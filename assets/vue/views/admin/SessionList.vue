@@ -37,14 +37,14 @@
           <input
             v-model="keyword"
             :placeholder="t('Search sessions')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
         <div class="flex flex-col gap-1 max-w-xs">
           <select
             v-model="categoryFilter"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+            class="form-control"
             @change="onSearch"
           >
             <option value="">{{ t("All categories") }}</option>

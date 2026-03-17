@@ -42,7 +42,7 @@
           <input
             v-model="simpleKeyword"
             :placeholder="t('Search courses')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
@@ -76,7 +76,7 @@
             <label class="text-sm text-gray-600">{{ t("Course code") }}</label>
             <input
               v-model="advancedFilters.keyword_code"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -84,7 +84,7 @@
             <label class="text-sm text-gray-600">{{ t("Title") }}</label>
             <input
               v-model="advancedFilters.keyword_title"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -95,7 +95,7 @@
             <label class="text-sm text-gray-600">{{ t("Language") }}</label>
             <input
               v-model="advancedFilters.keyword_language"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -106,7 +106,7 @@
             <label class="text-sm text-gray-600">{{ t("Categories") }}</label>
             <input
               v-model="advancedFilters.keyword_category"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -117,7 +117,7 @@
             <label class="text-sm text-gray-600">{{ t("Visibility") }}</label>
             <select
               v-model="advancedFilters.keyword_visibility"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="0">{{ t("Closed") }}</option>
@@ -134,7 +134,7 @@
             <label class="text-sm text-gray-600">{{ t("Registr. allowed") }}</label>
             <select
               v-model="advancedFilters.keyword_subscribe"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="1">{{ t("Yes") }}</option>
@@ -148,7 +148,7 @@
             <label class="text-sm text-gray-600">{{ t("Unreg. allowed") }}</label>
             <select
               v-model="advancedFilters.keyword_unsubscribe"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
             >
               <option value="">{{ t("All") }}</option>
               <option value="1">{{ t("Yes") }}</option>
@@ -163,7 +163,7 @@
             <input
               v-model="advancedFilters.course_teacher_input"
               :placeholder="t('Teacher user ID')"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>

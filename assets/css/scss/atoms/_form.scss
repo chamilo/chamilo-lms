@@ -142,3 +142,16 @@
     }
   }
 }
+
+// Plain HTML form controls sized to match .btn height and rounding.
+.form-control {
+  @apply border border-solid border-gray-300 rounded-md text-sm;
+  padding: calc(0.5rem - 1px) calc(1rem - 1px);
+}
+
+select.form-control {
+  @apply pr-8 appearance-none bg-no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center;
+  background-size: 12px;
+}

@@ -45,7 +45,7 @@
           <input
             v-model="simpleKeyword"
             :placeholder="t('Search users')"
-            class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full"
+            class="form-control w-full"
             type="text"
           />
         </div>
@@ -79,7 +79,7 @@
             <label class="text-sm text-gray-600">{{ t("First name") }}</label>
             <input
               v-model="advancedFilters.keyword_firstname"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -87,7 +87,7 @@
             <label class="text-sm text-gray-600">{{ t("Last name") }}</label>
             <input
               v-model="advancedFilters.keyword_lastname"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -95,7 +95,7 @@
             <label class="text-sm text-gray-600">{{ t("Login") }}</label>
             <input
               v-model="advancedFilters.keyword_username"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -103,7 +103,7 @@
             <label class="text-sm text-gray-600">{{ t("E-mail") }}</label>
             <input
               v-model="advancedFilters.keyword_email"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -111,7 +111,7 @@
             <label class="text-sm text-gray-600">{{ t("Official code") }}</label>
             <input
               v-model="advancedFilters.keyword_officialcode"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               type="text"
             />
           </div>
@@ -119,7 +119,7 @@
             <label class="text-sm text-gray-600">{{ t("Roles") }}</label>
             <select
               v-model="advancedFilters.keyword_roles"
-              class="border border-gray-300 rounded px-3 py-1.5 text-sm"
+              class="form-control"
               multiple
               size="6"
             >

@@ -141,14 +141,15 @@
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
-        <a
+        <BaseButton
           v-if="isAllowedToEdit"
-          :href="reportingUrl"
-          :title="t('Reporting')"
-          class="grow-0 flex items-center justify-center border border-black rounded-md px-2 hover:bg-gray-100 h-[40.67px]"
-        >
-          <span class="mdi mdi-chart-box ch-tool-icon-disabled text-xl" />
-        </a>
+          :label="t('Reporting')"
+          :to-url="reportingUrl"
+          icon="tracking"
+          only-icon
+          type="black"
+          @click="courseIntroEl.goToCreateOrUpdate()"
+        />
 
         <div
           v-if="hasCourseTMenuItems"

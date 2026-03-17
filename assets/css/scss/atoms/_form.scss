@@ -145,7 +145,7 @@
 
 // Plain HTML form controls sized to match .btn height and rounding.
 .form-control {
-  @apply border border-solid border-gray-300 rounded-md text-sm;
+  @apply border border-solid border-gray-300 rounded-md leading-normal;
   padding: calc(0.5rem - 1px) calc(1rem - 1px);
 }
 

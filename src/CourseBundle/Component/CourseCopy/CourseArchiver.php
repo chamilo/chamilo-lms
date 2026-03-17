@@ -380,7 +380,7 @@ class CourseArchiver
         if (true !== $zip->open($zipPath)) {
             throw new RuntimeException('Cannot open zip: ' . $filename);
         }
-        if (!$zip->extractTo($tmp)) {
+        if (!$zip->extractTo(rtrim($tmp, '/'))) {
             $zip->close();
             throw new RuntimeException('Cannot extract zip: ' . $filename);
         }
@@ -643,10 +643,16 @@ class CourseArchiver
      */
     private static function deincomplete(mixed $v): mixed
     {
-        // Handle leaf
         if ($v instanceof \__PHP_Incomplete_Class) {
             $o = new \stdClass();
             foreach (get_object_vars($v) as $k => $vv) {
+                if (is_string($k) && str_contains($k, "\0")) {
+                    $parts = explode("\0", $k);
+                    $k = end($parts); // e.g. "\0Course\0code" → "code"
+                    if ($k === '' || $k === false) {
+                        continue; // degenerate key — skip
+                    }
+                }
                 $o->{$k} = self::deincomplete($vv);
             }
             return $o;
@@ -658,10 +664,22 @@ class CourseArchiver
             }
             return $v;
         }
-        // Recurse stdClass or any object
+        // Recurse stdClass or any object (non-incomplete)
         if (is_object($v)) {
             foreach (get_object_vars($v) as $k => $vv) {
-                $v->{$k} = self::deincomplete($vv);
+                // Same guard for any object that may have been partially incomplete.
+                if (is_string($k) && str_contains($k, "\0")) {
+                    $parts = explode("\0", $k);
+                    $k = end($parts);
+                    if ($k === '' || $k === false) {
+                        continue;
+                    }
+                }
+                try {
+                    $v->{$k} = self::deincomplete($vv);
+                } catch (\Throwable) {
+                    // Read-only or inaccessible property — skip silently.
+                }
             }
             return $v;
         }

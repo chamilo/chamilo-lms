@@ -1,25 +1,52 @@
-.divider {
-  @apply bg-white;
-
-  &[aria-orientation="vertical"] {
-    @apply before:absolute before:block before:left-1/2 before:top-0 before:h-full before:content-[""] before:border-l before:border-solid before:border-gray-25
-      flex min-h-full mx-4 py-2 relative justify-center;
-
-    div {
-      @apply first:py-2;
-    }
+.p-divider {
+  &-horizontal {
+    @apply flex w-full relative items-center px-2
+      before:absolute before:block before:top-1/2 before:left-0 before:w-full before:content-[''] before:border-t before:border-solid before:border-gray-25;
   }
 
-  &[aria-orientation="horizontal"] {
-    @apply before:absolute before:block before:left-0 before:w-full before:top-1/2 before:content-[""] before:border-t before:border-solid before:border-gray-25
-      flex relative items-center my-4 px-2;
-
-    div {
-      @apply first:px-2;
-    }
+  &-horizontal &-content {
+    @apply px-2;
   }
 
-  div {
-    @apply first:z-[1] first:bg-white first:text-gray-50 first:font-semibold first:text-caption;
+  &-vertical {
+    @apply flex min-h-full relative justify-center mx-4 py-2
+      before:absolute before:block before:top-0 before:left-1/2 before:h-full before:content-[''] before:border-l before:border-solid before:border-gray-25;
+  }
+
+  &.p-divider-vertical &-content {
+    @apply py-2;
+  }
+
+  &-content {
+    @apply z-[1] bg-white text-gray-50 font-semibold text-caption
+      hover:text-support-3;
+  }
+
+  &-solid#{&}-horizontal:before {
+    border-block-start-style: solid;
+  }
+
+  &-solid#{&}-vertical:before {
+    border-inline-start-style: solid;
+  }
+
+  &-dashed#{&}-horizontal:before {
+    border-block-start-style: dashed;
+  }
+
+  &-dashed#{&}-vertical:before {
+    border-inline-start-style: dashed;
+  }
+
+  &-dotted#{&}-horizontal:before {
+    border-block-start-style: dotted;
+  }
+
+  &-dotted#{&}-vertical:before {
+    border-inline-start-style: dotted;
+  }
+
+  &-left, &-right {
+    @apply rtl:flex-row-reverse;
   }
 }

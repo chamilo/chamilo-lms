@@ -725,7 +725,7 @@ class PortfolioController
                 $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
 
                 $form->addLabel(
-                    sprintf(get_lang('Comment by %s'), $origin->getAuthor()->getFullName()),
+                    sprintf(get_lang('Comment by %s'), $origin->getCreator()->getFullName()),
                     Display::panel(
                         Security::remove_XSS($origin->getContent())
                     )
@@ -1132,10 +1132,8 @@ class PortfolioController
 
         $commentsRepo = Container::getPortfolioCommentRepository();
 
-        $commentsQueryBuilder = $commentsRepo->getResources();
-        $commentsQueryBuilder->andWhere('resource.item = :item');
-
         if ($this->advancedSharingEnabled) {
+            $commentsQueryBuilder = $commentsRepo->getResources();
             // @todo change to left join with resource_link to get resources with advanced sharing
             if ($itemCourse) {
                 $commentsQueryBuilder
@@ -1157,7 +1155,14 @@ class PortfolioController
                 )
                 ->setParameter('current_user', $this->owner->getId())
             ;
+        } else {
+            $commentsQueryBuilder = $commentsRepo->getResourcesIgnoringLinks();
         }
+
+        $commentsQueryBuilder
+            ->andWhere($commentsQueryBuilder->expr()->eq('resource.item', ':item'))
+            ->setParameter('item', $item->getId())
+        ;
 
         if ('true' === api_get_setting('platform.portfolio_show_base_course_post_in_sessions')
             && $this->session && !$itemSession && !$item->isDuplicatedInSession($this->session)
@@ -1166,176 +1171,15 @@ class PortfolioController
         } else {
             $comments = $commentsQueryBuilder
                 ->orderBy('node.level', 'ASC')
-                ->setParameter('item', $item->getId())
+                ->addOrderBy('node.createdAt', 'ASC')
                 ->getQuery()
-                ->getArrayResult()
+                ->getResult()
             ;
         }
 
-        $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
+        $clockIcon = Display::getMdiIcon('calendar-range', null, '', ICON_SIZE_TINY);
 
-        $commentsHtml = '';
-
-//        $commentsRepo->buildTree(
-//            $comments,
-//            [
-//                'decorate' => true,
-//                'rootOpen' => '<div class="media-list">',
-//                'rootClose' => '</div>',
-//                'childOpen' => function ($node) use ($commentsRepo) {
-//                    /** @var PortfolioComment $comment */
-//                    $comment = $commentsRepo->find($node['id']);
-//                    $author = $comment->getAuthor();
-//
-//                    $userPicture = UserManager::getUserPicture(
-//                        $comment->getAuthor()->getId(),
-//                        USER_IMAGE_SIZE_SMALL,
-//                        null,
-//                        [
-//                            'picture_uri' => $author->getPictureUri(),
-//                            'email' => $author->getEmail(),
-//                        ]
-//                    );
-//
-//                    return '<article class="media" id="comment-'.$node['id'].'">
-//                        <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
-//                        .$author->getFullName().'"></div>
-//                        <div class="media-body">';
-//                },
-//                'childClose' => '</div></article>',
-//                'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
-//                    $commentActions = [];
-//                    /** @var PortfolioComment $comment */
-//                    $comment = $commentsRepo->find($node['id']);
-//
-//                    if ($this->commentBelongsToOwner($comment)) {
-//                        $commentActions[] = Display::url(
-//                            Display::getMdiIcon(
-//                                ActionIcon::FIX,
-//                                $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
-//                                null,
-//                                ICON_SIZE_MEDIUM,
-//                                $item->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template'),
-//                            ),
-//                            $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
-//                        );
-//                    }
-//
-//                    $commentActions[] = Display::url(
-//                        Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this comment')),
-//                        '#',
-//                        [
-//                            'data-comment' => htmlspecialchars(
-//                                json_encode(['id' => $comment->getId()])
-//                            ),
-//                            'role' => 'button',
-//                            'class' => 'btn-reply-to',
-//                        ]
-//                    );
-//                    $commentActions[] = Display::url(
-//                        Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
-//                        $this->baseUrl.http_build_query(
-//                            [
-//                                'action' => 'copy',
-//                                'copy' => 'comment',
-//                                'id' => $comment->getId(),
-//                            ]
-//                        )
-//                    );
-//
-//                    $isAllowedToEdit = api_is_allowed_to_edit();
-//
-//                    if ($isAllowedToEdit) {
-//                        $commentActions[] = Display::url(
-//                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
-//                            $this->baseUrl.http_build_query(
-//                                [
-//                                    'action' => 'teacher_copy',
-//                                    'copy' => 'comment',
-//                                    'id' => $comment->getId(),
-//                                ]
-//                            )
-//                        );
-//
-//                        if ($comment->isImportant()) {
-//                            $commentActions[] = Display::url(
-//                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark comment as important')),
-//                                $this->baseUrl.http_build_query(
-//                                    [
-//                                        'action' => 'mark_important',
-//                                        'item' => $item->getId(),
-//                                        'id' => $comment->getId(),
-//                                    ]
-//                                )
-//                            );
-//                        } else {
-//                            $commentActions[] = Display::url(
-//                                Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Mark comment as important')),
-//                                $this->baseUrl.http_build_query(
-//                                    [
-//                                        'action' => 'mark_important',
-//                                        'item' => $item->getId(),
-//                                        'id' => $comment->getId(),
-//                                    ]
-//                                )
-//                            );
-//                        }
-//
-//                        if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
-//                            $commentActions[] = Display::url(
-//                                Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this comment')),
-//                                $this->baseUrl.http_build_query(
-//                                    [
-//                                        'action' => 'qualify',
-//                                        'comment' => $comment->getId(),
-//                                    ]
-//                                )
-//                            );
-//                        }
-//                    }
-//
-//                    if ($this->commentBelongsToOwner($comment)) {
-//                        if ($this->advancedSharingEnabled) {
-//                            $commentActions[] = Display::url(
-//                                Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
-//                                $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
-//                            );
-//                        }
-//
-//                        $commentActions[] = Display::url(
-//                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
-//                            $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
-//                        );
-//                        $commentActions[] = Display::url(
-//                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
-//                            $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
-//                        );
-//                    }
-//
-//                    $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
-//                        .'<footer class="media-heading h4">'.PHP_EOL
-//                        .'<p>'.$comment->getAuthor()->getFullName().'</p>'.PHP_EOL;
-//
-//                    if ($comment->isImportant()
-//                        && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
-//                    ) {
-//                        $nodeHtml .= '<span class="pull-right label label-warning origin-style">'
-//                            .get_lang('Portfolio item marked as important')
-//                            .'</span>'.PHP_EOL;
-//                    }
-//
-//                    $nodeHtml .= '<small>'.$clockIcon.PHP_EOL
-//                        .$this->getLabelForCommentDate($comment).'</small>'.PHP_EOL;
-//
-//                    $nodeHtml .= '</footer>'.PHP_EOL
-//                        .Security::remove_XSS($comment->getContent()).PHP_EOL;
-//
-//                    $nodeHtml .= $this->generateAttachmentList($comment);
-//
-//                    return $nodeHtml;
-//                },
-//            ]
-//        );
+        $commentsHtml = $this->renderCommentsTree($comments, $item, $clockIcon);
 
         $context = [];
         $context['baseurl'] = $this->baseUrl;
@@ -1520,7 +1364,7 @@ class PortfolioController
         $portfolio
             ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
-                sprintf(get_lang('Comment by %s'), $originComment->getAuthor()->getFullName())
+                sprintf(get_lang('Comment by %s'), $originComment->getCreator()->getFullName())
             )
             ->setContent('')
             ->setUser($this->owner)
@@ -1654,7 +1498,7 @@ class PortfolioController
         }
 
         $form->addLabel(
-            sprintf(get_lang('Comment from %s'), $originComment->getAuthor()->getFullName()),
+            sprintf(get_lang('Comment from %s'), $originComment->getCreator()->getFullName()),
             Display::panel(
                 Security::remove_XSS($originComment->getContent())
             )
@@ -1969,7 +1813,8 @@ class PortfolioController
             $qb = $commentsRepo->createQueryBuilder('c');
             $qb
                 ->select('COUNT(c)')
-                ->where('c.author = :author')
+                ->innerJoin('c.resourceNode', 'cNode')
+                ->where('cNode.creator = :author')
                 ->setParameter('author', $this->owner);
 
             if ($this->course) {
@@ -1992,7 +1837,8 @@ class PortfolioController
         $getCommentsData = function ($from, $limit, $columnNo, $orderDirection) use ($commentsRepo) {
             $qb = $commentsRepo->createQueryBuilder('comment');
             $qb
-                ->where('comment.author = :user')
+                ->innerJoin('comment.resourceNode', 'commentNode')
+                ->where('commentNode.creator = :user')
                 ->innerJoin('comment.item', 'item')
                 ->setParameter('user', $this->owner);
 
@@ -2582,7 +2428,7 @@ class PortfolioController
 
         $form->setDefaults(
             [
-                'user' => $comment->getAuthor(),
+                'user' => $comment->getCreator(),
                 'score' => (float) $comment->getScore(),
             ]
         );
@@ -2631,7 +2477,7 @@ class PortfolioController
         } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
 
-            $originOwnerId = $comment->getAuthor()->getId();
+            $originOwnerId = $comment->getCreator()->getId();
         } else {
             api_not_allowed(true);
         }
@@ -2684,7 +2530,7 @@ class PortfolioController
             $itemId = $item->getId();
         } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
-            $originOwnerId = $comment->getAuthor()->getId();
+            $originOwnerId = $comment->getCreator()->getId();
             $itemId = $comment->getItem()->getId();
         }
 
@@ -3030,7 +2876,7 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $comment->getAuthor(),
+                $comment->getCreator(),
                 $comment->getId(),
                 Portfolio::TYPE_COMMENT
             );
@@ -3548,7 +3394,223 @@ class PortfolioController
 
     private function commentBelongsToOwner(PortfolioComment $comment): bool
     {
-        return $comment->getAuthor() === $this->owner;
+        return $comment->getCreator() === $this->owner;
+    }
+
+    /**
+     * @param PortfolioComment[] $comments
+     */
+    private function renderCommentsTree(array $comments, Portfolio $item, string $clockIcon): string
+    {
+        if (empty($comments)) {
+            return '';
+        }
+
+        $commentsByParentNodeId = [];
+        $rootComments = [];
+        $commentNodeIdMap = [];
+
+        foreach ($comments as $comment) {
+            $resourceNode = $comment->getResourceNode();
+            if (!$resourceNode) {
+                continue;
+            }
+            $commentNodeIdMap[$resourceNode->getId()] = $comment;
+        }
+
+        $itemNodeId = $item->getResourceNode()?->getId();
+
+        foreach ($comments as $comment) {
+            $resourceNode = $comment->getResourceNode();
+            if (!$resourceNode) {
+                continue;
+            }
+
+            $parentNode = $resourceNode->getParent();
+            $parentNodeId = $parentNode?->getId();
+
+            if (!$parentNodeId || $parentNodeId === $itemNodeId || !isset($commentNodeIdMap[$parentNodeId])) {
+                $rootComments[] = $comment;
+            } else {
+                $commentsByParentNodeId[$parentNodeId][] = $comment;
+            }
+        }
+
+        $html = '<div class="media-list">';
+        foreach ($rootComments as $comment) {
+            $html .= $this->renderCommentNode($comment, $commentsByParentNodeId, $commentNodeIdMap, $item, $clockIcon);
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
+     * @param array<int, PortfolioComment[]> $commentsByParentNodeId
+     * @param array<int, PortfolioComment>   $commentNodeIdMap
+     */
+    private function renderCommentNode(
+        PortfolioComment $comment,
+        array $commentsByParentNodeId,
+        array $commentNodeIdMap,
+        Portfolio $item,
+        string $clockIcon
+    ): string {
+        $author = $comment->getCreator();
+
+        $userPicture = UserManager::getUserPicture(
+            $author->getId(),
+            USER_IMAGE_SIZE_SMALL,
+            null,
+            [
+                'picture_uri' => $author->getPictureUri(),
+                'email' => $author->getEmail(),
+            ]
+        );
+
+        $html = '<article class="media" id="comment-'.$comment->getId().'">'
+            .'<div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
+            .$author->getFullName().'"></div>'
+            .'<div class="media-body">';
+
+        $commentActions = [];
+
+        if ($this->commentBelongsToOwner($comment)) {
+            $commentActions[] = Display::url(
+                Display::getMdiIcon(
+                    ActionIcon::FIX,
+                    $item->isTemplate() ? 'ch-tool-icon' : 'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    $item->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template'),
+                ),
+                $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
+            );
+        }
+
+        $commentActions[] = Display::url(
+            Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this comment')),
+            '#',
+            [
+                'data-comment' => htmlspecialchars(
+                    json_encode(['id' => $comment->getId()])
+                ),
+                'role' => 'button',
+                'class' => 'btn-reply-to',
+            ]
+        );
+        $commentActions[] = Display::url(
+            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to my portfolio')),
+            $this->baseUrl.http_build_query(
+                [
+                    'action' => 'copy',
+                    'copy' => 'comment',
+                    'id' => $comment->getId(),
+                ]
+            )
+        );
+
+        $isAllowedToEdit = api_is_allowed_to_edit();
+
+        if ($isAllowedToEdit) {
+            $commentActions[] = Display::url(
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy to student portfolio')),
+                $this->baseUrl.http_build_query(
+                    [
+                        'action' => 'teacher_copy',
+                        'copy' => 'comment',
+                        'id' => $comment->getId(),
+                    ]
+                )
+            );
+
+            if ($comment->isImportant()) {
+                $commentActions[] = Display::url(
+                    Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unmark comment as important')),
+                    $this->baseUrl.http_build_query(
+                        [
+                            'action' => 'mark_important',
+                            'item' => $item->getId(),
+                            'id' => $comment->getId(),
+                        ]
+                    )
+                );
+            } else {
+                $commentActions[] = Display::url(
+                    Display::getMdiIcon(ObjectIcon::PIN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Mark comment as important')),
+                    $this->baseUrl.http_build_query(
+                        [
+                            'action' => 'mark_important',
+                            'item' => $item->getId(),
+                            'id' => $comment->getId(),
+                        ]
+                    )
+                );
+            }
+
+            if ($this->course && '1' === api_get_course_setting('qualify_portfolio_comment')) {
+                $commentActions[] = Display::url(
+                    Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade this comment')),
+                    $this->baseUrl.http_build_query(
+                        [
+                            'action' => 'qualify',
+                            'comment' => $comment->getId(),
+                        ]
+                    )
+                );
+            }
+        }
+
+        if ($this->commentBelongsToOwner($comment)) {
+            if ($this->advancedSharingEnabled) {
+                $commentActions[] = Display::url(
+                    Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Choose recipients')),
+                    $this->baseUrl.http_build_query(['action' => 'comment_visiblity_choose', 'id' => $comment->getId()])
+                );
+            }
+
+            $commentActions[] = Display::url(
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
+                $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
+            );
+            $commentActions[] = Display::url(
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')),
+                $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
+            );
+        }
+
+        $html .= '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
+            .'<footer class="media-heading h4">'.PHP_EOL
+            .'<p>'.$author->getFullName().'</p>'.PHP_EOL;
+
+        if ($comment->isImportant()
+            && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
+        ) {
+            $html .= '<span class="pull-right label label-warning origin-style">'
+                .get_lang('Portfolio item marked as important')
+                .'</span>'.PHP_EOL;
+        }
+
+        $html .= '<small>'.$clockIcon.PHP_EOL
+            .$this->getLabelForCommentDate($comment).'</small>'.PHP_EOL;
+
+        $html .= '</footer>'.PHP_EOL
+            .Security::remove_XSS($comment->getContent()).PHP_EOL;
+
+        $html .= $this->generateAttachmentList($comment);
+
+        $nodeId = $comment->getResourceNode()?->getId();
+        if ($nodeId && !empty($commentsByParentNodeId[$nodeId])) {
+            $html .= '<div class="media-list">';
+            foreach ($commentsByParentNodeId[$nodeId] as $childComment) {
+                $html .= $this->renderCommentNode($childComment, $commentsByParentNodeId, $commentNodeIdMap, $item, $clockIcon);
+            }
+            $html .= '</div>';
+        }
+
+        $html .= '</div></article>';
+
+        return $html;
     }
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
@@ -4062,7 +4124,7 @@ class PortfolioController
                 $originContentFooter = vsprintf(
                     get_lang('Originally commented by %s in "%s"'),
                     [
-                        $origin->getAuthor()->getFullName(),
+                        $origin->getCreator()->getFullName(),
                         "<cite>{$origin->getItem()->getTitle(true)}</cite>",
                     ]
                 );
@@ -4379,27 +4441,14 @@ class PortfolioController
 
     private function getLabelForCommentDate(PortfolioComment $comment): string
     {
-        $item = $comment->getItem();
-        $commmentCourse = $item->getCourse();
-        $commmentSession = $item->getSession();
-
         $dateLabel = Display::dateToStringAgoAndLongDate($comment->getDate()).PHP_EOL;
 
-        if ($commmentCourse) {
-            $propertyInfo = api_get_item_property_info(
-                $commmentCourse->getId(),
-                TOOL_PORTFOLIO_COMMENT,
-                $comment->getId(),
-                $commmentSession ? $commmentSession->getId() : 0
-            );
-
-            if ($propertyInfo) {
-                $dateLabel .= '|'.PHP_EOL
-                    .sprintf(
-                        get_lang('Updated %s'),
-                        Display::dateToStringAgoAndLongDate($propertyInfo['lastedit_date'])
-                    );
-            }
+        if ($comment->getDate() < $comment->resourceNode->getUpdatedAt()) {
+            $dateLabel .= '|'.PHP_EOL
+                .sprintf(
+                    get_lang('Updated %s'),
+                    Display::dateToStringAgoAndLongDate($comment->resourceNode->getUpdatedAt())
+                );
         }
 
         return $dateLabel;

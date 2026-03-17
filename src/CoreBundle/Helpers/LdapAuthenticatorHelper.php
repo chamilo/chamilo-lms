@@ -12,6 +12,9 @@ use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Ldap\Exception\InvalidCredentialsException;
 use Symfony\Component\Ldap\Ldap;
 
+use const LDAP_ESCAPE_DN;
+use const LDAP_ESCAPE_FILTER;
+
 readonly class LdapAuthenticatorHelper
 {
     protected array $ldapConfig;

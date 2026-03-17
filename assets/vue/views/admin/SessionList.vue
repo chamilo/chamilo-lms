@@ -310,7 +310,6 @@ async function load() {
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
     items.value = data.items
     total.value = data.total
-    categories.value = data.categories || []
     csrfToken.value = data.csrfToken || ""
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
@@ -516,6 +515,14 @@ onMounted(async () => {
   }
   if (query.keyword) {
     keyword.value = String(query.keyword)
+  }
+
+  // Load session categories for the filter dropdown
+  try {
+    const catData = await baseService.get("/api/session_categories")
+    categories.value = (catData["hydra:member"] || []).map((c) => ({ id: c.id, title: c.title }))
+  } catch (e) {
+    console.error("Error loading categories:", e)
   }
 
   // Handle legacy action params (?action=copy&idChecked=X or ?action=delete&idChecked=X)

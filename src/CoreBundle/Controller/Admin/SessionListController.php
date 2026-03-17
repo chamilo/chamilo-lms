@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use DateTime;
 use DateTimeZone;
@@ -106,9 +105,14 @@ class SessionListController extends AbstractController
             ;
         }
 
-        // Count
+        // Count – when GROUP BY / HAVING is active (replication tab), we must
+        // count the number of groups rather than a plain COUNT aggregate.
         $countQb = clone $qb;
-        $total = (int) $countQb->select('COUNT(s.id)')->getQuery()->getSingleScalarResult();
+        if (!empty($countQb->getDQLPart('groupBy'))) {
+            $total = \count($countQb->select('s.id')->getQuery()->getSingleColumnResult());
+        } else {
+            $total = (int) $countQb->select('COUNT(s.id)')->getQuery()->getSingleScalarResult();
+        }
 
         // Data query
         $dataQb = (clone $qb)
@@ -162,21 +166,11 @@ class SessionListController extends AbstractController
             $items = $this->enrichWithChildSessions($items);
         }
 
-        // Fetch categories for filter dropdown
-        $categories = $this->em->createQueryBuilder()
-            ->select('cat.id, cat.title')
-            ->from(SessionCategory::class, 'cat')
-            ->orderBy('cat.title', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
-        ;
-
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         return $this->json([
             'items' => $items,
             'total' => $total,
-            'categories' => $categories,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
             'viewer' => [
@@ -353,9 +347,10 @@ class SessionListController extends AbstractController
             // Replication: only sessions configured for repetition with <= 1 child
             'replication' => $qb->andWhere('s.daysToNewRepetition IS NOT NULL')
                 ->andWhere('s.parentId IS NULL')
-                ->andWhere(
-                    '(SELECT COUNT(child.id) FROM '.Session::class.' child WHERE child.parentId = s.id) <= 1'
-                ),
+                ->leftJoin(Session::class, 'child', 'WITH', 'child.parentId = s.id')
+                ->groupBy('s.id')
+                ->addGroupBy('sc.id')
+                ->having('COUNT(child.id) <= 1'),
 
             // All: no filter
             default => null,

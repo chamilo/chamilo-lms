@@ -54,7 +54,10 @@
           class="btn btn--plain flex items-center gap-1"
           type="button"
           @click="showAdvanced = !showAdvanced"
-        />
+        >
+          <span :class="showAdvanced ? 'mdi mdi-arrow-down-bold' : 'mdi mdi-arrow-right-bold'" />
+          {{ t("Advanced search") }}
+        </button>
       </form>
 
       <!-- Advanced search form -->

@@ -95,22 +95,6 @@
             />
           </div>
           <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">{{ t("E-mail") }}</label>
-            <input
-              v-model="advancedFilters.keyword_email"
-              class="form-control"
-              type="text"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-600">{{ t("Official code") }}</label>
-            <input
-              v-model="advancedFilters.keyword_officialcode"
-              class="form-control"
-              type="text"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
             <label class="text-sm text-gray-600">{{ t("Roles") }}</label>
             <select
               v-model="advancedFilters.keyword_roles"
@@ -126,6 +110,22 @@
                 {{ label }}
               </option>
             </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">{{ t("E-mail") }}</label>
+            <input
+              v-model="advancedFilters.keyword_email"
+              class="form-control"
+              type="text"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">{{ t("Official code") }}</label>
+            <input
+              v-model="advancedFilters.keyword_officialcode"
+              class="form-control"
+              type="text"
+            />
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-sm text-gray-600">{{ t("Account") }}</label>

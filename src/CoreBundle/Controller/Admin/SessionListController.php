@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use DateTime;
 use DateTimeZone;
@@ -167,21 +166,11 @@ class SessionListController extends AbstractController
             $items = $this->enrichWithChildSessions($items);
         }
 
-        // Fetch categories for filter dropdown
-        $categories = $this->em->createQueryBuilder()
-            ->select('cat.id, cat.title')
-            ->from(SessionCategory::class, 'cat')
-            ->orderBy('cat.title', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
-        ;
-
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         return $this->json([
             'items' => $items,
             'total' => $total,
-            'categories' => $categories,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
             'viewer' => [

@@ -73,13 +73,20 @@
       v-model:selectedItems="selectedItems"
       :is-loading="isLoading"
       :lazy="true"
+      :reorderable-rows="allowOrder && viewer.isPlatformAdmin"
       :text-for-empty="t('No data available')"
       :total-items="total"
       :values="items"
       data-key="id"
       @page="onPage"
+      @row-reorder="onRowReorder"
       @sort="onSort"
     >
+      <Column
+        v-if="allowOrder && viewer.isPlatformAdmin"
+        :row-reorder="true"
+        header-style="width: 3rem"
+      />
       <Column
         header-style="width: 3rem"
         selection-mode="multiple"
@@ -299,6 +306,7 @@ const csrfToken = ref("")
 const showCountUsers = ref(false)
 const hideSearch = ref(false)
 const allowCopyWithContent = ref(false)
+const allowOrder = ref(false)
 const viewer = reactive({ isPlatformAdmin: false })
 
 const tabs = [
@@ -349,6 +357,7 @@ async function load() {
     showCountUsers.value = data.showCountUsers || false
     hideSearch.value = data.hideSearch || false
     allowCopyWithContent.value = data.allowCopyWithContent || false
+    allowOrder.value = data.allowOrder || false
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }
@@ -370,6 +379,37 @@ function onSort(event) {
   sortOrder.value = event.sortOrder ?? 1
   page.value = 1
   load()
+}
+
+async function onRowReorder(event) {
+  // Apply the reorder locally
+  items.value = event.value
+
+  // Compute position offset based on current page
+  const start = (page.value - 1) * pageSize.value
+  const orderData = items.value.map((item, index) => ({
+    id: item.id,
+    position: start + index,
+  }))
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", "reorder")
+    formData.set("_token", csrfToken.value)
+    orderData.forEach((entry, i) => {
+      formData.append(`order[${i}][id]`, String(entry.id))
+      formData.append(`order[${i}][position]`, String(entry.position))
+    })
+
+    await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+  } catch (e) {
+    console.error("Error saving session order:", e)
+    load()
+  }
 }
 
 function onSearch() {

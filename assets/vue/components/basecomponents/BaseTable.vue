@@ -69,6 +69,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  reorderableRows: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 /* ---------- helpers settings ---------- */
@@ -76,7 +81,7 @@ const DEFAULT_FALLBACK_ROWS = 20
 
 function getSetting(key, fallback) {
   const v = platformConfigStore.getSetting(key)
-  return (v === undefined || v === null || v === "") ? fallback : v
+  return v === undefined || v === null || v === "" ? fallback : v
 }
 
 function parseRowList(val) {
@@ -88,8 +93,8 @@ function parseRowList(val) {
       const arr = Array.isArray(parsed) ? parsed : parsed?.options
       if (Array.isArray(arr)) return arr.map(Number).filter(Number.isFinite)
     } catch {
-      const arr = val.split(",").map(s => Number(s.trim()))
-      if (arr.some(n => !Number.isNaN(n))) return arr
+      const arr = val.split(",").map((s) => Number(s.trim()))
+      if (arr.some((n) => !Number.isNaN(n))) return arr
     }
   } else if (typeof val === "object" && val?.options) {
     const arr = val.options
@@ -129,7 +134,7 @@ if (rows.value == null) {
   rows.value = initialRows()
 }
 
-defineEmits(["filter", "page", "sort"])
+defineEmits(["filter", "page", "sort", "row-reorder"])
 
 const slots = useSlots()
 
@@ -154,6 +159,7 @@ defineExpose({
     :global-filter-fields="globalFilterFields"
     :lazy="lazy"
     :loading="isLoading"
+    :reorderable-rows="reorderableRows"
     :removable-sort="removableSort"
     :rows-per-page-options="rowsPerPageOptions"
     :sort-mode="sortMode"
@@ -167,6 +173,7 @@ defineExpose({
     striped-rows
     @filter="$emit('filter', $event)"
     @page="$emit('page', $event)"
+    @row-reorder="$emit('row-reorder', $event)"
     @sort="$emit('sort', $event)"
   >
     <slot />

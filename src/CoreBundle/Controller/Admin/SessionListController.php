@@ -72,7 +72,13 @@ class SessionListController extends AbstractController
         $categoryFilter = $request->query->get('category');
         $listType = (string) $request->query->get('listType', 'all');
 
+        $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
         $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 's.title';
+
+        // When manual ordering is enabled and no explicit sort was requested, sort by position
+        if ($allowOrder && 'title' === $sortField && 'ASC' === $sortOrder) {
+            $dqlSortField = 's.position';
+        }
 
         $qb = $this->em->createQueryBuilder()
             ->from(Session::class, 's')
@@ -192,6 +198,7 @@ class SessionListController extends AbstractController
             'showCountUsers' => $showCountUsers,
             'hideSearch' => $hideSearch,
             'allowCopyWithContent' => $allowCopyWithContent,
+            'allowOrder' => $allowOrder,
             'total' => $total,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
@@ -300,6 +307,33 @@ class SessionListController extends AbstractController
 
                 // Fallback — should not be reached
                 return $this->json(['error' => 'No data to export.'], 400);
+
+            case 'reorder':
+                if (!$isPlatformAdmin) {
+                    return $this->json(['error' => 'Only platform admins can reorder sessions.'], 403);
+                }
+                if ('true' !== $this->settingsManager->getSetting('session.session_list_order', true)) {
+                    return $this->json(['error' => 'Session ordering is not enabled.'], 400);
+                }
+
+                $orderData = $request->request->all('order');
+                if (empty($orderData)) {
+                    return $this->json(['error' => 'No order data provided.'], 400);
+                }
+
+                $conn = $this->em->getConnection();
+                foreach ($orderData as $entry) {
+                    $sessionId = (int) ($entry['id'] ?? 0);
+                    $position = (int) ($entry['position'] ?? 0);
+                    if ($sessionId > 0) {
+                        $conn->executeStatement(
+                            'UPDATE session SET position = ? WHERE id = ?',
+                            [$position, $sessionId]
+                        );
+                    }
+                }
+
+                return $this->json(['success' => true]);
 
             default:
                 return $this->json(['error' => 'Unknown action.'], 400);

@@ -125,7 +125,22 @@
         :header="t('Users')"
         field="nbrUsers"
         sortable
-      />
+      >
+        <template #body="{ data }">
+          <span
+            v-if="data.usersLang && Object.keys(data.usersLang).length"
+            :title="
+              Object.entries(data.usersLang)
+                .map(([lang, count]) => `${lang} ${count}`)
+                .join(' | ')
+            "
+            class="cursor-help underline decoration-dotted"
+          >
+            {{ data.nbrUsers }}
+          </span>
+          <span v-else>{{ data.nbrUsers }}</span>
+        </template>
+      </Column>
       <Column
         :header="t('Courses')"
         field="nbrCourses"

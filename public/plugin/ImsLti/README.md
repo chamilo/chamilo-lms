@@ -1,242 +1,246 @@
-IMS/LTI plugin
-===
+# IMS/LTI Client Plugin
 
-Version 1.9.0
+Version 2.x
 
-> This plugin is meant to be later integrated into Chamilo (in a major version
-> release).
+This plugin adds **IMS/LTI client** capabilities to Chamilo 2.
 
-This plugin allows certified support for LTI 1.0, 1.1, 1.1.1, Deep Linking 1.x, Outcome Services 1.x.
-You can get information about the LTI Certification on [this page][certification link].
-The LTI 1.3 is being developed.
+It allows Chamilo to register and launch **external LTI tools** from other platforms, providers, or services. In this setup, **Chamilo acts as the LTI platform/client**, while the remote service acts as the **LTI tool/provider**.
 
-IMS/LTI defines the possibility to integrate tools or content into Chamilo.
-This plugin allows the integration of a new tool into courses, obtaining
-data back from those tools and recording them as gradebook "external" activities.
+Depending on the tool configuration and supported protocol version, the plugin can be used to integrate external learning activities into Chamilo courses.
 
-As a platform admin, you can register external tools available for all courses.
-You need set the tools settings in the IMS/LTI administration page.
-Then the registered tools should be added in each course individually.
+---
 
-As a teacher, you can register external tools available only for the current
-course. You need follow the link in the IMS/LTI block located in the Course
-Settings tool. Then select a tool registered previously or register a new
-external tool.
+## What this plugin does
 
-# Installation
+Once installed and enabled, the plugin allows administrators to:
 
-* Make sure PHP's [OpenSSL extension](https://www.php.net/manual/en/openssl.installation.php) is available on your server
-* Prepare your web server to allow to send cookies in all contexts, set the `SameSite` attribute to `None`
-    * i.e. Apache configuration
+1. Create and manage external LTI tools
+2. Configure platform keys for LTI 1.3 flows
+3. Register launch endpoints and client credentials for remote tools
+4. Add an external tool to one or more courses
+5. Launch external activities from Chamilo course home
+6. Reuse a global external tool across multiple courses through course shortcuts
 
-      ```apacheconf
-      Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=None
-      ```
+This means Chamilo can consume external LTI tools and expose them inside course pages as direct course access items.
 
-1. Install the plugin from the Plugins page
-2. Enable the plugin from the IMS/LTI Plugin Settings page
-3. Assign to the Administrator region (in the regions management page)
+---
 
-# Changelog
+## Installation and activation
 
-## v1.9
+In Chamilo 2, the plugin lifecycle is managed from the **Plugins** administration page.
 
-> Requires DB changes to upgrade, see [v1.9](#to-v190).
+### Typical steps
 
-* Add option to add LTI tool to sessions
+1. Go to **Administration > Configuration settings > Plugins**
+2. Install the plugin
+3. Enable the plugin
+4. Open the plugin administration page
+5. Configure platform keys if needed
+6. Create one or more external tools
+7. Add each external tool to one or more courses
 
-## v1.8
+> No manual database table creation is required.
+> No manual SQL upgrade instructions are needed in the README for normal Chamilo 2 usage.
 
-> Requires DB changes to upgrade, see [v1.8](#to-v180).
+---
 
-* Add option to add replacements for launch params
+## Current administration flow
 
-## v1.7
+The plugin administration page provides actions such as:
 
-> Requires DB changes to upgrade, see [v1.8](#to-v170).
+- **Platform keys**
+- **Add external tool**
+- list of registered external tools
+- **Add in courses**
+- **Edit**
+- **Delete**
 
-* Fix auth params
-* Add option to show LTI tool in iframe or new window.
+### Platform keys
 
-## v1.6
+This section is used for the platform-side key material required by LTI 1.3 integrations.
 
-> Requires DB changes to upgrade, see [v1.8](#to-v160).
+These keys identify Chamilo as the client/platform when communicating with external LTI 1.3 tools.
 
-* Add support to LTI 1.3 and Advantage Services
+### Add external tool
 
-## v1.5
+This form is used to register a remote LTI tool in Chamilo.
 
-> Requires DB changes to upgrade, see [v1.8](#to-v151).
+An external tool can later be added to one or more courses.
 
-* Plugin has passed the tests from the LTI Certification suite.
-* Add support for substitution of variable.
-  See `ImsLti::getSubstitutableParams()`.
-* Outcome services has a unique URL and sourced ID.
+### Add in courses
 
-## v1.4
+This action allows assigning an existing external tool to one or more courses.
 
-> Requires DB changes to upgrade, see [v1.8](#to-v140).
+In the current Chamilo 2 model, a global external tool can be reused across multiple courses without duplicating the base tool definition.
 
-* Allow create external tools when there is no key/secret available for launch
+---
 
-## v1.3
+## Typical external tool data
 
-> Requires DB changes to upgrade, see [v1.8](#to-v130).
+When creating or editing an external tool, the exact fields may vary depending on the selected LTI version and enabled features.
 
-* Privacy settings added. Allow to indicate id the launcher's data
-  should be sent in request.
+Common values include:
 
-## v1.2
+### Name
+Administrative and visible name of the tool inside Chamilo.
 
-> Requires DB changes to upgrade, see [v1.8](#to-v120).
+Example:
 
-* Register course in which the tool was added.
-* Register parent tool from which the new tool comes from.
-
-## v1.1
-
-> Requires DB changes to upgrade, see [v1.8](#to-v110).
-
-* Support for Deep-Linking added.
-* Support for outcomes services. And register score on course gradebook.
-
-# Upgrading
-
-Run this changes on database:
-
-## To v1.9.0
-
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD session_id INT DEFAULT NULL;
-ALTER TABLE plugin_ims_lti_tool
-    ADD CONSTRAINT FK_C5E47F7C613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
-CREATE INDEX IDX_C5E47F7C613FECDF ON plugin_ims_lti_tool (session_id);
+```text
+Demo LTI Provider
 ```
 
-## To v1.8.0
+### Launch URL
+Main launch endpoint of the remote tool/provider.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+Example:
+
+```text
+<REMOTE_TOOL_LAUNCH_URL>
 ```
 
-## To v1.7.0
+For example:
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+```text
+https://provider.example.com/lti/launch
 ```
 
-## To v1.6.0
+### Client ID
+Client identifier assigned to Chamilo by the remote LTI 1.3 provider.
 
-```sql
-CREATE TABLE plugin_ims_lti_platform
-(
-    id          INT AUTO_INCREMENT NOT NULL,
-    kid         VARCHAR(255)       NOT NULL,
-    public_key  LONGTEXT           NOT NULL,
-    private_key LONGTEXT           NOT NULL,
-    PRIMARY KEY (id)
-) DEFAULT CHARACTER SET utf8
-  COLLATE utf8_unicode_ci
-  ENGINE = InnoDB;
-CREATE TABLE plugin_ims_lti_token
-(
-    id         INT AUTO_INCREMENT NOT NULL,
-    tool_id    INT DEFAULT NULL,
-    scope      LONGTEXT           NOT NULL COMMENT '(DC2Type:json)',
-    hash       VARCHAR(255)       NOT NULL,
-    created_at INT                NOT NULL,
-    expires_at INT                NOT NULL,
-    INDEX IDX_F7B5692F8F7B22CC (tool_id),
-    PRIMARY KEY (id)
-) DEFAULT CHARACTER SET utf8
-  COLLATE utf8_unicode_ci
-  ENGINE = InnoDB;
-ALTER TABLE plugin_ims_lti_token
-    ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE;
-ALTER TABLE plugin_ims_lti_tool
-    ADD client_id          VARCHAR(255) DEFAULT NULL,
-    ADD public_key         LONGTEXT     DEFAULT NULL,
-    ADD login_url          VARCHAR(255) DEFAULT NULL,
-    ADD redirect_url       VARCHAR(255) DEFAULT NULL,
-    ADD advantage_services LONGTEXT     DEFAULT NULL COMMENT '(DC2Type:json)',
-    ADD version            VARCHAR(255) DEFAULT 'lti1p1' NOT NULL;
-CREATE TABLE plugin_ims_lti_lineitem
-(
-    id          INT AUTO_INCREMENT NOT NULL,
-    tool_id     INT                NOT NULL,
-    evaluation  INT                NOT NULL,
-    resource_id VARCHAR(255) DEFAULT NULL,
-    tag         VARCHAR(255) DEFAULT NULL,
-    start_date  DATETIME     DEFAULT NULL,
-    end_date    DATETIME     DEFAULT NULL,
-    INDEX IDX_BA81BBF08F7B22CC (tool_id),
-    UNIQUE INDEX UNIQ_BA81BBF01323A575 (evaluation),
-    PRIMARY KEY (id)
-) DEFAULT CHARACTER SET utf8
-  COLLATE utf8_unicode_ci
-  ENGINE = InnoDB;
-ALTER TABLE plugin_ims_lti_lineitem
-    ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE;
-ALTER TABLE plugin_ims_lti_lineitem
-    ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;
+Example:
+
+```text
+<REMOTE_TOOL_CLIENT_ID>
 ```
 
-## To v1.5.1
+### Login URL
+OIDC login initiation endpoint of the remote provider.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    DROP FOREIGN KEY FK_C5E47F7C727ACA70,
-    ADD FOREIGN KEY (parent_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE ON UPDATE RESTRICT;
+Example:
+
+```text
+<REMOTE_TOOL_LOGIN_URL>
 ```
 
-## To v1.4
+### Redirect URL
+Redirect or callback URL used in the LTI authentication flow.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    CHANGE consumer_key consumer_key VARCHAR(255) DEFAULT NULL,
-    CHANGE shared_secret shared_secret VARCHAR(255) DEFAULT NULL;
+Example:
+
+```text
+<CHAMILO_REDIRECT_URL>
 ```
 
-## To v1.3
+### Public key / platform keys
+Key material used for LTI 1.3 signed exchanges.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD privacy LONGTEXT DEFAULT NULL;
+This is configured through the plugin platform key management flow.
+
+### Version
+Protocol version used by the external tool.
+
+Typical examples may include legacy LTI versions or LTI 1.3, depending on the tool and current implementation.
+
+### Privacy / launch parameters / presentation settings
+Some tools may expose additional launch behavior options such as:
+
+- user data sharing level
+- custom launch parameters
+- iframe or new window presentation
+- deep linking behavior
+- grading or outcome-related options
+
+The exact available options depend on the implementation and version of the tool.
+
+---
+
+## Example external tool registration
+
+The following example uses placeholders instead of real values.
+
+| Field | Example value |
+|---|---|
+| Name | `Demo LTI Provider` |
+| Launch URL | `<REMOTE_TOOL_LAUNCH_URL>` |
+| Client ID | `<REMOTE_TOOL_CLIENT_ID>` |
+| Login URL | `<REMOTE_TOOL_LOGIN_URL>` |
+| Redirect URL | `<CHAMILO_REDIRECT_URL>` |
+| Version | `LTI 1.3` |
+
+Example:
+
+```text
+Name:         Demo LTI Provider
+Launch URL:   https://provider.example.com/lti/launch
+Client ID:    client-id-generated-by-provider
+Login URL:    https://provider.example.com/lti/login
+Redirect URL: https://your-chamilo.example.com/plugin/ImsLti/redirect.php
+Version:      LTI 1.3
 ```
 
-## To v1.2
+> Replace these values with the real values supplied by the external provider.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD c_id INT DEFAULT NULL;
-ALTER TABLE plugin_ims_lti_tool
-    ADD CONSTRAINT FK_C5E47F7C91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
-CREATE INDEX IDX_C5E47F7C91D79BD3 ON plugin_ims_lti_tool (c_id);
+---
 
-ALTER TABLE plugin_ims_lti_tool
-    ADD parent_id INT DEFAULT NULL,
-    DROP is_global;
-ALTER TABLE plugin_ims_lti_tool
-    ADD CONSTRAINT FK_C5E47F7C727ACA70 FOREIGN KEY (parent_id) REFERENCES plugin_ims_lti_tool (id);
-CREATE INDEX IDX_C5E47F7C727ACA70 ON plugin_ims_lti_tool (parent_id);
-```
+## Course assignment model
 
-## To v1.1
+In the current Chamilo 2 implementation, an external tool can be defined once and then assigned to multiple courses.
 
-```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,
-    CHANGE id id INT AUTO_INCREMENT NOT NULL,
-    CHANGE launch_url launch_url VARCHAR(255) NOT NULL;
+This means:
 
-ALTER TABLE plugin_ims_lti_tool
-    ADD gradebook_eval_id INT DEFAULT NULL;
-ALTER TABLE plugin_ims_lti_tool
-    ADD CONSTRAINT FK_C5E47F7C82F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;
-CREATE INDEX IDX_C5E47F7C82F80D8B ON plugin_ims_lti_tool (gradebook_eval_id);
-```
+- the base external tool definition remains global,
+- course visibility is handled per course,
+- and adding or removing the tool from a course affects the course shortcut/access entry rather than duplicating the original tool definition.
 
-[certification link]: https://site.imsglobal.org/certifications/asociacion-chamilo/156616/chamilo+lms
+This makes administration cleaner and avoids maintaining duplicate tool records for each course.
+
+---
+
+## Typical usage flow
+
+A normal setup flow looks like this:
+
+1. Install and enable the plugin from the **Plugins** page
+2. Open the IMS/LTI administration page
+3. Configure platform keys if the tool uses LTI 1.3
+4. Create a new external tool
+5. Save the tool
+6. Use **Add in courses** to assign it to one or more courses
+7. Open the course and launch the external tool from the course home or corresponding shortcut
+
+---
+
+## Notes about launch behavior
+
+Depending on the tool configuration, an external tool may be launched:
+
+- embedded in an iframe
+- or in a new window/tab
+
+Some external platforms require specific browser or server behavior for cookies and cross-site authentication.
+
+If an LTI launch fails in iframe mode, verify the hosting environment and browser restrictions related to secure cookies and cross-site requests.
+
+---
+
+## Notes
+
+- This plugin is used to consume **external LTI tools from Chamilo**
+- Chamilo acts as the **platform/client**
+- The remote service acts as the **tool/provider**
+- Available options depend on the selected LTI version and current implementation
+- Some advanced behaviors such as deep linking, grading, launch presentation, or replacements depend on the tool definition and platform compatibility
+
+---
+
+## Summary
+
+This plugin turns Chamilo 2 into an **IMS/LTI client/platform** for external tools.
+
+It allows administrators to:
+
+- register external LTI tools,
+- configure LTI 1.3 platform keys,
+- assign tools to one or more courses,
+- and make those tools available from Chamilo course pages.

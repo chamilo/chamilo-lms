@@ -30,6 +30,10 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $origin = api_get_origin();
+$isLtiEmbeddable = 'embeddable' === $origin && !empty(Session::read('_ltiProvider'));
+if (!$isLtiEmbeddable && !empty(Session::read('_ltiProvider'))) {
+    Session::erase('_ltiProvider');
+}
 
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
@@ -44,7 +48,7 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
+        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq().'&origin='.$origin);
         exit;
     }
     api_not_allowed(true);
@@ -196,9 +200,9 @@ if (!empty($exercise_stat_info)) {
 
 $maxScore = $objExercise->getMaxScore();
 
-if ('embeddable' === $origin) {
+if ('embeddable' === $origin && !$isLtiEmbeddable) {
     $pageTop .= showEmbeddableFinishButton();
-} else {
+} elseif ('embeddable' !== $origin) {
     Display::addFlash(
         Display::return_message(get_lang('Saved.'), 'normal', false)
     );
@@ -324,7 +328,12 @@ $template->assign('allow_signature', $allowSignature);
 $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
 $template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
-$template->display_one_col_template();
+
+if ('embeddable' === $origin) {
+    $template->display_blank_template();
+} else {
+    $template->display_one_col_template();
+}
 
 function showEmbeddableFinishButton()
 {

@@ -76,3 +76,4 @@ $strings['AddInCourses'] = 'Ajouter aux cours';
 $strings['AddInAllCourses'] = 'Ajouter à tous les cours';
 $strings['AddInSessions'] = 'Ajouter aux sessions';
 $strings["BaseToolsCanBeAddedInSessionsOnly"] = "Les outils de base peuvent uniquement être ajoutés dans les sessions";
+$strings["ChangesWillApplyToAllAssignedCourses"] = "Les modifications s’appliqueront à tous les cours assignés";

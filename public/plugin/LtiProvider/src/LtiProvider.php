@@ -2,26 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-use Packback\Lti1p3;
+use Firebase\JWT\JWT;
+use GuzzleHttp\Client;
 use Packback\Lti1p3\LtiMessageLaunch;
 use Packback\Lti1p3\LtiOidcLogin;
-
-require_once __DIR__.'/../db/lti13_cookie.php';
-require_once __DIR__.'/../db/lti13_cache.php';
-require_once __DIR__.'/../db/lti13_database.php';
+use Packback\Lti1p3\LtiServiceConnector;
 
 /**
  * Class LtiProvider.
  */
 class LtiProvider
 {
-    /**
-     * Get the class instance.
-     *
-     * @staticvar LtiProvider $result
-     *
-     * @return LtiProvider
-     */
     public static function create()
     {
         static $result = null;
@@ -29,21 +20,88 @@ class LtiProvider
         return $result ?: $result = new self();
     }
 
-    /**
-     * Oidc login and register.
-     *
-     * @throws Lti1p3\OidcException
-     */
-    public function login(?array $request = null)
+    private function getCache(): Lti13Cache
     {
-        $launchUrl = Security::remove_XSS($request['target_link_uri']);
-        LtiOidcLogin::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie())
-            ->doOidcLoginRedirect($launchUrl, $request)
-            ->doRedirect();
+        return new Lti13Cache();
+    }
+
+    private function getCookie(): Lti13Cookie
+    {
+        return new Lti13Cookie();
+    }
+
+    private function getDatabase(): Lti13Database
+    {
+        return new Lti13Database();
+    }
+
+    private function getServiceConnector(): LtiServiceConnector
+    {
+        return new LtiServiceConnector(
+            $this->getCache(),
+            new Client()
+        );
     }
 
     /**
-     * It removes user and oLP session.
+     * OIDC login and redirect.
+     *
+     * @throws \Packback\Lti1p3\OidcException
+     */
+    public function login(?array $request = null): void
+    {
+        JWT::$leeway = 5;
+
+        $request ??= $_REQUEST;
+
+        $launchUrl = Security::remove_XSS($request['target_link_uri'] ?? '');
+
+        $login = new LtiOidcLogin(
+            $this->getDatabase(),
+            $this->getCache(),
+            $this->getCookie()
+        );
+
+        $redirectUrl = $login->getRedirectUrl($launchUrl, $request);
+
+        header('Location: '.$redirectUrl);
+        exit;
+    }
+
+    /**
+     * LTI Message Launch.
+     */
+    public function launch(bool $fromCache = false, ?string $launchId = null): LtiMessageLaunch
+    {
+        JWT::$leeway = 5;
+
+        $database = $this->getDatabase();
+        $cache = $this->getCache();
+        $cookie = $this->getCookie();
+        $serviceConnector = $this->getServiceConnector();
+
+        if ($fromCache) {
+            return LtiMessageLaunch::fromCache(
+                (string) $launchId,
+                $database,
+                $cache,
+                $cookie,
+                $serviceConnector
+            );
+        }
+
+        $launch = LtiMessageLaunch::new(
+            $database,
+            $cache,
+            $cookie,
+            $serviceConnector
+        );
+
+        return $launch->initialize($_REQUEST);
+    }
+
+    /**
+     * It removes user and LP session.
      */
     public function logout(string $toolName = '')
     {
@@ -51,8 +109,8 @@ class LtiProvider
         Session::erase('is_platformAdmin');
         Session::erase('is_allowedCreateCourse');
         Session::erase('_uid');
-        if ('lp' == $toolName) {
-            // Deleting the objects
+
+        if ('lp' === $toolName) {
             Session::erase('oLP');
             Session::erase('lpobject');
             Session::erase('scorm_view_id');
@@ -61,6 +119,7 @@ class LtiProvider
             Session::erase('objExercise');
             Session::erase('questionList');
         }
+
         Session::erase('is_allowed_in_course');
         Session::erase('_real_cid');
         Session::erase('_cid');
@@ -68,21 +127,7 @@ class LtiProvider
     }
 
     /**
-     * Lti Message Launch.
-     */
-    public function launch(bool $fromCache = false, ?string $launchId = null): LtiMessageLaunch
-    {
-        if ($fromCache) {
-            $launch = LtiMessageLaunch::fromCache($launchId, new Lti13Database(), new Lti13Cache());
-        } else {
-            $launch = LtiMessageLaunch::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie())->validate();
-        }
-
-        return $launch;
-    }
-
-    /**
-     * Verify if user is in the provider platform to create it and login (true) or not (false).
+     * Verify if user exists in provider platform, create if needed and login.
      */
     public function validateUser(array $launchData, string $courseCode, string $toolName): bool
     {
@@ -90,23 +135,29 @@ class LtiProvider
             return false;
         }
 
-        $authSource = IMS_LTI_SOURCE;
+        // Use a stable auth source label for provider-created LTI users.
+        $authSource = defined('IMS_LTI_SOURCE') ? IMS_LTI_SOURCE : 'lti_provider';
         $username = md5($launchData['iss'].'_'.$launchData['sub']);
         $userInfo = api_get_user_info_from_username($username, $authSource);
+
         if (empty($userInfo)) {
             $email = $username.'@'.$authSource.'.com';
             if (!empty($launchData['email'])) {
                 $email = $launchData['email'];
             }
+
             $firstName = $launchData['aud'];
             if (!empty($launchData['given_name'])) {
                 $firstName = $launchData['given_name'];
             }
+
             $lastName = $launchData['sub'];
             if (!empty($launchData['family_name'])) {
                 $lastName = $launchData['family_name'];
             }
+
             $password = api_generate_password();
+
             $userId = UserManager::create_user(
                 $firstName,
                 $lastName,
@@ -131,6 +182,7 @@ class LtiProvider
         $this->logout($toolName);
 
         $login = UserManager::loginAsUser($userId, false);
+
         if ($login && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
             $_course = api_get_course_info($courseCode);
             Session::write('is_allowed_in_course', true);
@@ -143,16 +195,12 @@ class LtiProvider
     }
 
     /**
-     * It checks if request is from lti customer.
-     *
-     * @param $request
-     * @param $session
-     *
-     * @return bool
+     * Check if request is from LTI customer.
      */
     public function isLtiRequest($request, $session)
     {
         $isLti = false;
+
         if (isset($request['lti_message_hint'])) {
             $isLti = true;
         } elseif (isset($request['state'])) {

@@ -56,7 +56,7 @@ try {
 
     $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId().'&session_id='.$sessionId);
     $form->addLabel(get_lang('SessionName'), $session);
-    $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
+    $form->addLabel($plugin->get_lang('Tool'), $tool->getTitle());
     $form->addSelectAjax(
         'courses',
         get_lang('Courses'),

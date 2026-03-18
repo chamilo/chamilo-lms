@@ -121,6 +121,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobilea
 }
 
 $template = new Template();
+$embeddedLegacyTemplate = '@ChamiloCore/Layout/blank.html.twig';
 
 // General parameters passed via POST/GET
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
@@ -634,6 +635,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&origin=".$origin
     . "&page=" . ($page ?? 1)
     . "&" . api_get_cidreq();
 
@@ -642,6 +644,7 @@ $submitBaseQuery = "exe_id=$exe_id&exerciseId=$exerciseId"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&origin=".$origin
     . "&reminder=$reminder"
     . "&" . api_get_cidreq();
 
@@ -649,6 +652,7 @@ $resultBaseQuery = "exe_id=$exe_id"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
+    . "&origin=".$origin
     . "&" . api_get_cidreq();
 
 
@@ -1334,10 +1338,14 @@ if ($allowTimePerQuestion && ONE_PER_PAGE == $objExercise->type) {
     }
 }
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
-    //so we are not in learnpath tool
+    // Standalone quiz page with full legacy layout.
     SessionManager::addFlashSessionReadOnly();
-
     Display::display_header(null, 'Exercises');
+} elseif ('embeddable' === $origin) {
+    // Use a clean legacy layout without Vue shell, sidebar, header or breadcrumbs.
+    ob_start();
+    Display::$legacyTemplate = $embeddedLegacyTemplate;
+    echo '<div style="height:10px">&nbsp;</div>';
 } else {
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
@@ -1977,6 +1985,7 @@ echo '<script>
 
 echo '<form id="exercise_form" method="post" action="'
     . api_get_self() . '?' . api_get_cidreq()
+    . '&origin=' . urlencode($origin)
     . '&page=' . $page
     . '&reminder=' . $reminder
     . '&autocomplete=off&exerciseId=' . $exerciseId
@@ -2265,8 +2274,11 @@ if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     echo '</div>';
 }
 echo '</form>';
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
-    // So we are not in learnpath tool
-    echo '</div>'; //End glossary div
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+    echo '</div>'; // End glossary div
+    Display::display_footer();
+} elseif ('embeddable' === $origin) {
+    Display::display_footer();
+} else {
+    Display::display_reduced_footer();
 }
-Display::display_footer();

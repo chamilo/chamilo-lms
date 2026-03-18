@@ -184,9 +184,12 @@ class SessionListController extends AbstractController
 
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
+        $hideSearch = 'true' === $this->settingsManager->getSetting('session.hide_search_form_in_session_list', true);
+
         return $this->json([
             'items' => $items,
             'showCountUsers' => $showCountUsers,
+            'hideSearch' => $hideSearch,
             'total' => $total,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,

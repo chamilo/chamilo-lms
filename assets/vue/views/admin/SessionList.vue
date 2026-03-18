@@ -27,7 +27,10 @@
     </div>
 
     <!-- Search & Filters -->
-    <div class="flex flex-col gap-4">
+    <div
+      v-if="!hideSearch"
+      class="flex flex-col gap-4"
+    >
       <form
         class="flex gap-4 items-end"
         @submit.prevent="onSearch"
@@ -286,6 +289,7 @@ const selectedItems = ref([])
 const categories = ref([])
 const csrfToken = ref("")
 const showCountUsers = ref(false)
+const hideSearch = ref(false)
 const viewer = reactive({ isPlatformAdmin: false })
 
 const tabs = [
@@ -334,6 +338,7 @@ async function load() {
     total.value = data.total
     csrfToken.value = data.csrfToken || ""
     showCountUsers.value = data.showCountUsers || false
+    hideSearch.value = data.hideSearch || false
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }

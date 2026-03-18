@@ -312,67 +312,66 @@
       >
         <template #body="{ data }">
           <div class="flex gap-1 flex-nowrap">
-            <!-- Information -->
-            <a
-              :href="`/main/admin/course_information.php?code=${encodeURIComponent(data.code)}`"
-              :title="t('Information')"
-            >
-              <span class="mdi mdi-information ch-tool-icon" />
-            </a>
-
-            <!-- Course home -->
-            <a
+            <BaseButton
+              :label="t('Information')"
+              :to-url="`/main/admin/course_information.php?code=${encodeURIComponent(data.code)}`"
+              icon="information"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
               v-if="view === 'simple'"
-              :href="`/course/${data.id}/home`"
-              :title="t('Course home')"
-            >
-              <span class="mdi mdi-home ch-tool-icon" />
-            </a>
-
-            <!-- Reporting -->
-            <a
-              :href="`/main/tracking/courseLog.php?cid=${data.id}`"
-              :title="t('Reporting')"
-            >
-              <span class="mdi mdi-chart-box ch-tool-icon" />
-            </a>
-
-            <!-- Edit -->
-            <a
-              :href="`/main/admin/course_edit.php?id=${data.id}`"
-              :title="t('Edit')"
-            >
-              <span class="mdi mdi-pencil ch-tool-icon" />
-            </a>
-
-            <!-- Backup -->
-            <a
-              :href="`/main/course_copy/create_backup.php?cid=${data.id}`"
-              :title="t('Create a backup')"
-            >
-              <span class="mdi mdi-archive ch-tool-icon" />
-            </a>
-
+              :label="t('Course home')"
+              :to-url="`/course/${data.id}/home`"
+              icon="home"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Reporting')"
+              :to-url="`/main/tracking/courseLog.php?cid=${data.id}`"
+              icon="tracking"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Edit')"
+              :to-url="`/main/admin/course_edit.php?id=${data.id}`"
+              icon="edit"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Create a backup')"
+              :to-url="`/main/course_copy/create_backup.php?cid=${data.id}`"
+              icon="folder-backup"
+              only-icon
+              type="primary-text"
+            />
             <!-- Catalogue toggle (simple view only) -->
-            <a
-              v-if="view === 'simple'"
-              :title="data.inCatalogue ? t('Remove from catalogue') : t('Add to catalogue')"
-              class="cursor-pointer"
-              @click.prevent="toggleCatalogue(data)"
-            >
-              <span
-                :class="data.inCatalogue ? 'mdi mdi-book-minus-outline ch-tool-icon' : 'mdi mdi-book-plus ch-tool-icon'"
-              />
-            </a>
-
-            <!-- Delete -->
-            <a
-              :title="t('Delete')"
-              class="cursor-pointer"
-              @click.prevent="confirmDelete(data)"
-            >
-              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
-            </a>
+            <BaseButton
+              v-if="view === 'simple' && data.inCatalogue"
+              :label="t('Remove from catalogue')"
+              icon="catalogue-remove"
+              only-icon
+              type="primary-text"
+              @click="toggleCatalogue(data)"
+            />
+            <BaseButton
+              v-else-if="view === 'simple'"
+              :label="t('Add to catalogue')"
+              icon="catalogue-add"
+              only-icon
+              type="primary-text"
+              @click="toggleCatalogue(data)"
+            />
+            <BaseButton
+              :label="t('Delete')"
+              icon="delete"
+              only-icon
+              type="danger-text"
+              @click="confirmDelete(data)"
+            />
           </div>
         </template>
       </Column>

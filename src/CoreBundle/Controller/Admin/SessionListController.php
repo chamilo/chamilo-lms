@@ -168,6 +168,7 @@ class SessionListController extends AbstractController
                 'status' => $row['status'],
                 'statusLabel' => self::STATUS_LABELS[$row['status']] ?? 'Unknown',
                 'parentId' => $row['parentId'],
+                'usersLang' => $usersLangMap[$row['id']] ?? [],
             ];
 
             if ($showCountUsers) {
@@ -475,6 +476,7 @@ class SessionListController extends AbstractController
                 'status' => $child['status'],
                 'statusLabel' => self::STATUS_LABELS[$child['status']] ?? 'Unknown',
                 'parentId' => $child['parentId'],
+                'usersLang' => $childUsersLangMap[$child['id']] ?? [],
                 'isChild' => true,
             ];
 

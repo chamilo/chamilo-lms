@@ -136,6 +136,10 @@ class SessionListController extends AbstractController
 
         $rows = $dataQb->getQuery()->getArrayResult();
 
+        // Batch-fetch user counts per language for all sessions on this page
+        $sessionIds = array_column($rows, 'id');
+        $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
+
         $items = [];
         foreach ($rows as $row) {
             $item = [
@@ -151,6 +155,7 @@ class SessionListController extends AbstractController
                 'status' => $row['status'],
                 'statusLabel' => self::STATUS_LABELS[$row['status']] ?? 'Unknown',
                 'parentId' => $row['parentId'],
+                'usersLang' => $usersLangMap[$row['id']] ?? [],
             ];
 
             // For replication tab, mark child sessions
@@ -389,6 +394,9 @@ class SessionListController extends AbstractController
             ->getArrayResult()
         ;
 
+        $childIds = array_column($children, 'id');
+        $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
+
         $childMap = [];
         foreach ($children as $child) {
             $childMap[$child['parentId']][] = [
@@ -404,6 +412,7 @@ class SessionListController extends AbstractController
                 'status' => $child['status'],
                 'statusLabel' => self::STATUS_LABELS[$child['status']] ?? 'Unknown',
                 'parentId' => $child['parentId'],
+                'usersLang' => $childUsersLangMap[$child['id']] ?? [],
                 'isChild' => true,
             ];
         }
@@ -420,5 +429,39 @@ class SessionListController extends AbstractController
         }
 
         return $result;
+    }
+
+    /**
+     * Returns user counts per language for the given session IDs (students only).
+     *
+     * @param int[] $sessionIds
+     *
+     * @return array<int, array<string, int>> Map of sessionId => [isocode => count]
+     */
+    private function getUsersLangBySessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $conn = $this->em->getConnection();
+        $result = $conn->executeQuery(
+            'SELECT su.session_id, l.isocode, COUNT(u.id) AS cnt
+             FROM session_rel_user su
+             INNER JOIN user u ON u.id = su.user_id
+             INNER JOIN language l ON l.isocode = u.locale
+             WHERE su.session_id IN (?)
+               AND su.relation_type = ?
+             GROUP BY su.session_id, l.isocode',
+            [$sessionIds, Session::STUDENT],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        );
+
+        $map = [];
+        foreach ($result->fetchAllAssociative() as $row) {
+            $map[(int) $row['session_id']][strtoupper($row['isocode'])] = (int) $row['cnt'];
+        }
+
+        return $map;
     }
 }

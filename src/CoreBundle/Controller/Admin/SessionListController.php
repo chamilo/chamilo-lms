@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -57,6 +58,7 @@ class SessionListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     #[Route('', name: 'admin_session_list_data', methods: ['GET'])]
@@ -134,11 +136,17 @@ class SessionListController extends AbstractController
 
         $rows = $dataQb->getQuery()->getArrayResult();
 
-        // Batch-fetch student counts, per-language breakdown, and tutors for all sessions on this page
         $sessionIds = array_column($rows, 'id');
-        $studentCountMap = $this->getStudentCountBySessionIds($sessionIds);
-        $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
-        $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
+        $showCountUsers = 'true' === $this->settingsManager->getSetting('session.session_list_show_count_users', true);
+
+        $studentCountMap = [];
+        $usersLangMap = [];
+        $tutorsMap = [];
+        if ($showCountUsers) {
+            $studentCountMap = $this->getStudentCountBySessionIds($sessionIds);
+            $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
+            $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
+        }
 
         $items = [];
         foreach ($rows as $row) {
@@ -150,13 +158,16 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $row['displayEndDate'] ? $row['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$row['visibility']] ?? 'Unknown',
-                'nbrUsers' => $studentCountMap[$row['id']] ?? 0,
                 'status' => $row['status'],
                 'statusLabel' => self::STATUS_LABELS[$row['status']] ?? 'Unknown',
                 'parentId' => $row['parentId'],
-                'usersLang' => $usersLangMap[$row['id']] ?? [],
-                'tutors' => $tutorsMap[$row['id']] ?? [],
             ];
+
+            if ($showCountUsers) {
+                $item['nbrUsers'] = $studentCountMap[$row['id']] ?? 0;
+                $item['usersLang'] = $usersLangMap[$row['id']] ?? [];
+                $item['tutors'] = $tutorsMap[$row['id']] ?? [];
+            }
 
             // For replication tab, mark child sessions
             if ('replication' === $listType && null !== $row['parentId']) {
@@ -168,13 +179,14 @@ class SessionListController extends AbstractController
 
         // For replication tab, fetch child sessions for each parent
         if ('replication' === $listType) {
-            $items = $this->enrichWithChildSessions($items);
+            $items = $this->enrichWithChildSessions($items, $showCountUsers);
         }
 
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         return $this->json([
             'items' => $items,
+            'showCountUsers' => $showCountUsers,
             'total' => $total,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
@@ -365,7 +377,7 @@ class SessionListController extends AbstractController
     /**
      * For the replication tab, insert child sessions after their parent.
      */
-    private function enrichWithChildSessions(array $items): array
+    private function enrichWithChildSessions(array $items, bool $showCountUsers): array
     {
         $parentIds = array_column($items, 'id');
         if (empty($parentIds)) {
@@ -394,13 +406,18 @@ class SessionListController extends AbstractController
         ;
 
         $childIds = array_column($children, 'id');
-        $childStudentCountMap = $this->getStudentCountBySessionIds($childIds);
-        $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
-        $childTutorsMap = $this->getTutorsBySessionIds($childIds);
+        $childStudentCountMap = [];
+        $childUsersLangMap = [];
+        $childTutorsMap = [];
+        if ($showCountUsers) {
+            $childStudentCountMap = $this->getStudentCountBySessionIds($childIds);
+            $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
+            $childTutorsMap = $this->getTutorsBySessionIds($childIds);
+        }
 
         $childMap = [];
         foreach ($children as $child) {
-            $childMap[$child['parentId']][] = [
+            $childItem = [
                 'id' => $child['id'],
                 'title' => '-- '.$child['title'],
                 'categoryName' => $child['categoryName'] ?? '',
@@ -408,14 +425,19 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $child['displayEndDate'] ? $child['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $child['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$child['visibility']] ?? 'Unknown',
-                'nbrUsers' => $childStudentCountMap[$child['id']] ?? 0,
                 'status' => $child['status'],
                 'statusLabel' => self::STATUS_LABELS[$child['status']] ?? 'Unknown',
                 'parentId' => $child['parentId'],
-                'usersLang' => $childUsersLangMap[$child['id']] ?? [],
-                'tutors' => $childTutorsMap[$child['id']] ?? [],
                 'isChild' => true,
             ];
+
+            if ($showCountUsers) {
+                $childItem['nbrUsers'] = $childStudentCountMap[$child['id']] ?? 0;
+                $childItem['usersLang'] = $childUsersLangMap[$child['id']] ?? [];
+                $childItem['tutors'] = $childTutorsMap[$child['id']] ?? [];
+            }
+
+            $childMap[$child['parentId']][] = $childItem;
         }
 
         // Interleave: insert children right after their parent

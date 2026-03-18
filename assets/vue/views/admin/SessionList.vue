@@ -122,6 +122,7 @@
         field="visibilityLabel"
       />
       <Column
+        v-if="showCountUsers"
         :header="t('Users')"
         field="nbrUsers"
         sortable
@@ -142,6 +143,7 @@
         </template>
       </Column>
       <Column
+        v-if="showCountUsers"
         :header="t('Tutors')"
         field="tutors"
       >
@@ -283,6 +285,7 @@ const categoryFilter = ref("")
 const selectedItems = ref([])
 const categories = ref([])
 const csrfToken = ref("")
+const showCountUsers = ref(false)
 const viewer = reactive({ isPlatformAdmin: false })
 
 const tabs = [
@@ -330,6 +333,7 @@ async function load() {
     items.value = data.items
     total.value = data.total
     csrfToken.value = data.csrfToken || ""
+    showCountUsers.value = data.showCountUsers || false
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }

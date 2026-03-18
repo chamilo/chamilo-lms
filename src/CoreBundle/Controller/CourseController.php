@@ -638,7 +638,7 @@ class CourseController extends ToolBaseController
     #[Route('/{course}/settings/{namespace}', name: 'chamilo_core_course_settings')]
     public function updateSettings(
         Request $request,
-        #[MapEntity(expr: 'repository.find(cid)')]
+        #[MapEntity(expr: 'repository.find(course)')]
         Course $course,
         string $namespace,
         SettingsCourseManager $manager,

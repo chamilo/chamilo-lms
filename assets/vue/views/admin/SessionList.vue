@@ -189,6 +189,7 @@
               :to-url="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
               icon="edit"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -196,6 +197,7 @@
               :to-url="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
               icon="join-group"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -203,12 +205,14 @@
               :to-url="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
               icon="courses"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
               :label="t('Copy')"
               icon="copy"
               only-icon
+              size="small"
               type="primary-text"
               @click="copySession(data.id)"
             />
@@ -217,6 +221,7 @@
               :label="t('Copy with session content')"
               icon="copy"
               only-icon
+              size="small"
               type="primary-text"
               @click="copySessionWithContent(data.id)"
             />
@@ -225,6 +230,7 @@
               :label="t('Delete')"
               icon="delete"
               only-icon
+              size="small"
               type="danger-text"
               @click="confirmDelete([data.id])"
             />

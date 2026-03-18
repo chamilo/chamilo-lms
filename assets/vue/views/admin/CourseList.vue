@@ -317,6 +317,7 @@
               :to-url="`/main/admin/course_information.php?code=${encodeURIComponent(data.code)}`"
               icon="information"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -325,6 +326,7 @@
               :to-url="`/course/${data.id}/home`"
               icon="home"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -332,6 +334,7 @@
               :to-url="`/main/tracking/courseLog.php?cid=${data.id}`"
               icon="tracking"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -339,6 +342,7 @@
               :to-url="`/main/admin/course_edit.php?id=${data.id}`"
               icon="edit"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
@@ -346,6 +350,7 @@
               :to-url="`/main/course_copy/create_backup.php?cid=${data.id}`"
               icon="folder-backup"
               only-icon
+              size="small"
               type="primary-text"
             />
             <!-- Catalogue toggle (simple view only) -->
@@ -354,6 +359,7 @@
               :label="t('Remove from catalogue')"
               icon="catalogue-remove"
               only-icon
+              size="small"
               type="primary-text"
               @click="toggleCatalogue(data)"
             />
@@ -362,6 +368,7 @@
               :label="t('Add to catalogue')"
               icon="catalogue-add"
               only-icon
+              size="small"
               type="primary-text"
               @click="toggleCatalogue(data)"
             />
@@ -369,6 +376,7 @@
               :label="t('Delete')"
               icon="delete"
               only-icon
+              size="small"
               type="danger-text"
               @click="confirmDelete(data)"
             />

@@ -21,8 +21,8 @@ $platformId = (int) $_REQUEST['id'];
 $plugin = LtiProviderPlugin::create();
 $em = Database::getManager();
 
-/** @var Platform $platform */
-$platform = $em->find('ChamiloPluginBundle:LtiProvider\Platform', $platformId);
+/** @var Platform|null $platform */
+$platform = $em->find(Platform::class, $platformId);
 
 if (!$platform) {
     Display::addFlash(
@@ -44,7 +44,7 @@ if ($form->validate()) {
     $platform->setKeySetUrl($formValues['key_set_url']);
     $platform->setDeploymentId($formValues['deployment_id']);
     $platform->setKid($formValues['kid']);
-    $toolProvider = (isset($formValues['tool_provider']) ? $formValues['tool_provider'] : $_POST['tool_provider']);
+    $toolProvider = $formValues['tool_provider'] ?? ($_POST['tool_provider'] ?? null);
     $platform->setToolProvider($toolProvider);
 
     $em->persist($platform);
@@ -56,18 +56,28 @@ if ($form->validate()) {
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php');
     exit;
-} else {
-    $form->setDefaultValues();
 }
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php', 'name' => $plugin->get_title()];
+$form->setDefaultValues();
 
-$template = new Template($plugin->get_lang('EditPlatform'));
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('Administration'),
+];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php',
+    'name' => $plugin->get_title(),
+];
+
+$pageTitle = $plugin->get_lang('EditPlatform');
+$adminUrl = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php';
+
+$template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
+$template->assign('back_url', $adminUrl);
 
 $content = $template->fetch('LtiProvider/view/add.tpl');
 
-$template->assign('header', $plugin->get_title());
+$template->assign('header', $pageTitle);
 $template->assign('content', $content);
 $template->display_one_col_template();

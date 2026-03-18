@@ -7,6 +7,7 @@
     {% set show_left_column = (show_left_column|default(1) + 0) %}
     {% set lp_id_num = (lp_id|default(0) + 0) %}
     {% set lp_current_item_id_num = (lp_current_item_id|default(0) + 0) %}
+    {% set is_lti_embeddable = (is_lti_embeddable|default(0) + 0) %}
     {% set render_left_zone = (show_left_column == 1) or (toc_hidden == 1) %}
     <script>
       window.lpId = {{ lp_id_num }};
@@ -416,7 +417,9 @@
                                     {{ lp_progress }}
                                 {% endif %}
 
-                                {{ teacher_toc_buttons }}
+                                {% if not is_lti_embeddable %}
+                                    {{ teacher_toc_buttons }}
+                                {% endif %}
                             </div>
                         </div>
 
@@ -497,6 +500,17 @@
               $toggle = $menu.find(".menu-button").first();
             }
 
+            function cleanupLtiEmbedMenu() {
+              if ({{ is_lti_embeddable }} !== 1) {
+                return;
+              }
+              $("#home-course").remove();
+              $("#lp-view-info-toggle, #lp-view-item-info, #lp-view-item-info-btn").remove();
+              $("#btn-menu-float i.mdi-information, #btn-menu-float i.mdi-information-outline")
+                .closest("a, button, .icon-toolbar")
+                .remove();
+            }
+
             function updateMenuLayout() {
               // Layout rules:
               // - Real TOC hidden setting -> top-right + vertical panel
@@ -509,6 +523,7 @@
             }
 
             updateMenuLayout();
+            cleanupLtiEmbedMenu();
             // Observe class changes to keep menu layout consistent (covers expand/collapse toggles).
             try {
               var mo = new MutationObserver(function () {
@@ -761,6 +776,10 @@
               loaderShowTimer = setTimeout(function () {
                 showLoaderNow(reason || "delayed");
               }, loaderShowDelayMs);
+            }
+
+            function showLoader(reason) {
+              scheduleShowLoader(reason || "manual");
             }
 
             function hideLoader(reason) {
@@ -1080,6 +1099,8 @@
             bindPrimaryNavButtons();
             setTimeout(bindPrimaryNavButtons, 200);
             setTimeout(bindPrimaryNavButtons, 600);
+            setTimeout(cleanupLtiEmbedMenu, 200);
+            setTimeout(cleanupLtiEmbedMenu, 600);
             if (tocHiddenSetting === 1) {
               // Run immediately + retries (menu markup sometimes arrives late)
               patchNavArrowsWhenTocHiddenSafe();

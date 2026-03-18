@@ -48,6 +48,7 @@ use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\CourseBundle\Settings\SettingsFormFactory;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use CourseManager;
 use Database;
 use DateTimeInterface;
@@ -258,13 +259,43 @@ class CourseController extends ToolBaseController
             $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
             $shortcuts = $shortcutQuery->getQuery()->getResult();
 
+            $pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+            $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+            $pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+            $isImsLtiEnabled = $pluginEntity
+                && $pluginEntity->isInstalled()
+                && $pluginConfiguration
+                && $pluginConfiguration->isActive();
+
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();
             $sid = $this->getSessionId() ?: null;
 
+            $externalToolRepository = $em->getRepository(ExternalTool::class);
+            $visibleShortcuts = [];
+
             /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
+
+                /** @var ExternalTool|null $externalTool */
+                $externalTool = $externalToolRepository->findOneBy(['resourceNode' => $resourceNode]);
+                if ($externalTool) {
+                    // Hide LTI shortcuts when the plugin is disabled.
+                    if (!$isImsLtiEnabled) {
+                        continue;
+                    }
+
+                    $shortcut->setCustomImageUrl(null);
+                    $shortcut->setUrlOverride(null);
+                    $shortcut->setIcon(null);
+                    $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
+
+                    continue;
+                }
 
                 // Try as CLink
                 $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
@@ -276,39 +307,35 @@ class CourseController extends ToolBaseController
                             : null
                     );
 
-                    // External link behavior
-                    $shortcut->setUrlOverride($cLink->getUrl()); // open external URL
-                    $shortcut->setIcon(null);                    // keep default icon for links
-                    $shortcut->target = $cLink->getTarget();     // e.g. "_blank"
+                    $shortcut->setUrlOverride($cLink->getUrl());
+                    $shortcut->setIcon(null);
+                    $shortcut->target = $cLink->getTarget();
+
+                    $visibleShortcuts[] = $shortcut;
 
                     continue;
                 }
 
                 // Try as CBlog
-                $cBlog = $em->getRepository(CBlog::class)
-                    ->findOneBy(['resourceNode' => $resourceNode])
-                ;
-
+                $cBlog = $em->getRepository(CBlog::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cBlog) {
-                    $courseNodeId = $course->getResourceNode()->getId();
-                    $cid = $course->getId();
-                    $sid = $this->getSessionId() ?: null;
-
                     $qs = http_build_query(array_filter([
                         'cid' => $cid,
                         'sid' => $sid ?: null,
                         'gid' => 0,
-                    ], static fn ($v) => null !== $v));
+                    ], static fn ($value): bool => null !== $value));
 
-                    $shortcut->setUrlOverride(\sprintf(
+                    $shortcut->setUrlOverride(sprintf(
                         '/resources/blog/%d/%d/posts?%s',
                         $courseNodeId,
                         $cBlog->getIid(),
                         $qs
                     ));
-                    $shortcut->setIcon('mdi-notebook-outline');  // blog icon
-                    $shortcut->setCustomImageUrl(null);          // blogs use icon by default
+                    $shortcut->setIcon('mdi-notebook-outline');
+                    $shortcut->setCustomImageUrl(null);
                     $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
 
                     continue;
                 }
@@ -318,7 +345,11 @@ class CourseController extends ToolBaseController
                 $shortcut->setUrlOverride(null);
                 $shortcut->setIcon(null);
                 $shortcut->target = '_self';
+
+                $visibleShortcuts[] = $shortcut;
             }
+
+            $shortcuts = $visibleShortcuts;
         }
         $responseData = [
             'shortcuts' => $shortcuts,

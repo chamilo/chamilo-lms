@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\Platform;
 
 $cidReset = true;
@@ -11,14 +12,21 @@ api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 
-if ($plugin->get('enabled') !== 'true') {
+$pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isPluginEnabled = $pluginEntity
+    && $pluginEntity->isInstalled()
+    && $pluginConfiguration
+    && $pluginConfiguration->isActive();
+
+if (!$isPluginEnabled) {
     api_not_allowed(true);
 }
 
 /** @var Platform $platform */
-$platform = Database::getManager()
-    ->getRepository(Platform::class)
-    ->findOneBy([]);
+$platform = $plugin->ensurePlatformKeys();
 
 $table = new HTML_Table(['class' => 'table table-striped']);
 $table->setHeaderContents(0, 0, $plugin->get_lang('KeyId'));

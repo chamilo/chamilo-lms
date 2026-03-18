@@ -40,13 +40,13 @@ if ($tool->isActiveDeepLinking()) {
     //$params['accept_multiple'];
     //$params['accept_copy_advice'];
     //$params['auto_create']';
-    $params['title'] = $tool->getName();
+    $params['title'] = $tool->getTitle();
     $params['text'] = $tool->getDescription();
     $params['data'] = 'tool:'.$tool->getId();
 } else {
     $params['lti_message_type'] = 'basic-lti-launch-request';
     $params['resource_link_id'] = $tool->getId();
-    $params['resource_link_title'] = $tool->getName();
+    $params['resource_link_title'] = $tool->getTitle();
     $params['resource_link_description'] = $tool->getDescription();
 
     $toolEval = $tool->getGradebookEval();

@@ -221,12 +221,42 @@ class SessionListController extends AbstractController
             return $this->json(['error' => 'Invalid CSRF token.'], 403);
         }
 
+        $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
+
+        // Reorder doesn't use sessionIds — handle it before the check
+        if ('reorder' === $action) {
+            if (!$isPlatformAdmin) {
+                return $this->json(['error' => 'Only platform admins can reorder sessions.'], 403);
+            }
+            if ('true' !== $this->settingsManager->getSetting('session.session_list_order', true)) {
+                return $this->json(['error' => 'Session ordering is not enabled.'], 400);
+            }
+
+            $orderData = $request->request->all('order');
+            if (empty($orderData)) {
+                return $this->json(['error' => 'No order data provided.'], 400);
+            }
+
+            $conn = $this->em->getConnection();
+            foreach ($orderData as $entry) {
+                $sessionId = (int) ($entry['id'] ?? 0);
+                $position = (int) ($entry['position'] ?? 0);
+                if ($sessionId > 0) {
+                    $conn->executeStatement(
+                        'UPDATE session SET position = ? WHERE id = ?',
+                        [$position, $sessionId]
+                    );
+                }
+            }
+
+            return $this->json(['success' => true]);
+        }
+
         if (empty($sessionIds)) {
             return $this->json(['error' => 'No sessions selected.'], 400);
         }
 
         $sessionIds = array_map('intval', $sessionIds);
-        $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         switch ($action) {
             case 'delete':
@@ -308,33 +338,6 @@ class SessionListController extends AbstractController
 
                 // Fallback — should not be reached
                 return $this->json(['error' => 'No data to export.'], 400);
-
-            case 'reorder':
-                if (!$isPlatformAdmin) {
-                    return $this->json(['error' => 'Only platform admins can reorder sessions.'], 403);
-                }
-                if ('true' !== $this->settingsManager->getSetting('session.session_list_order', true)) {
-                    return $this->json(['error' => 'Session ordering is not enabled.'], 400);
-                }
-
-                $orderData = $request->request->all('order');
-                if (empty($orderData)) {
-                    return $this->json(['error' => 'No order data provided.'], 400);
-                }
-
-                $conn = $this->em->getConnection();
-                foreach ($orderData as $entry) {
-                    $sessionId = (int) ($entry['id'] ?? 0);
-                    $position = (int) ($entry['position'] ?? 0);
-                    if ($sessionId > 0) {
-                        $conn->executeStatement(
-                            'UPDATE session SET position = ? WHERE id = ?',
-                            [$position, $sessionId]
-                        );
-                    }
-                }
-
-                return $this->json(['success' => true]);
 
             default:
                 return $this->json(['error' => 'Unknown action.'], 400);

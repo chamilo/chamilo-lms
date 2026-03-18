@@ -35,6 +35,7 @@ class SessionListController extends AbstractController
         'displayStartDate' => 's.displayStartDate',
         'displayEndDate' => 's.displayEndDate',
         'nbrUsers' => 's.nbrUsers',
+        'position' => 's.position',
         'visibility' => 's.visibility',
         'status' => 's.status',
     ];
@@ -73,12 +74,12 @@ class SessionListController extends AbstractController
         $listType = (string) $request->query->get('listType', 'all');
 
         $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
-        $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 's.title';
 
-        // When manual ordering is enabled and no explicit sort was requested, sort by position
-        if ($allowOrder && 'title' === $sortField && 'ASC' === $sortOrder) {
-            $dqlSortField = 's.position';
+        // When manual ordering is enabled and the default sort is active, sort by position instead
+        if ($allowOrder && 'title' === $sortField) {
+            $sortField = 'position';
         }
+        $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 's.title';
 
         $qb = $this->em->createQueryBuilder()
             ->from(Session::class, 's')

@@ -358,6 +358,9 @@ async function load() {
     hideSearch.value = data.hideSearch || false
     allowCopyWithContent.value = data.allowCopyWithContent || false
     allowOrder.value = data.allowOrder || false
+    if (allowOrder.value && sortField.value === "title") {
+      sortField.value = "position"
+    }
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }
@@ -382,12 +385,15 @@ function onSort(event) {
 }
 
 async function onRowReorder(event) {
-  // Apply the reorder locally
-  items.value = event.value
+  // Reorder the local array using dragIndex/dropIndex
+  const reordered = [...items.value]
+  const [moved] = reordered.splice(event.dragIndex, 1)
+  reordered.splice(event.dropIndex, 0, moved)
+  items.value = reordered
 
   // Compute position offset based on current page
   const start = (page.value - 1) * pageSize.value
-  const orderData = items.value.map((item, index) => ({
+  const orderData = reordered.map((item, index) => ({
     id: item.id,
     position: start + index,
   }))
@@ -408,8 +414,10 @@ async function onRowReorder(event) {
     })
   } catch (e) {
     console.error("Error saving session order:", e)
-    load()
   }
+
+  // Reload to get server-confirmed order
+  load()
 }
 
 function onSearch() {

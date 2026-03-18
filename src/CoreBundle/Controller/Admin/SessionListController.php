@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -34,7 +35,7 @@ class SessionListController extends AbstractController
         'displayStartDate' => 's.displayStartDate',
         'displayEndDate' => 's.displayEndDate',
         'nbrUsers' => 's.nbrUsers',
-        'nbrCourses' => 's.nbrCourses',
+        'position' => 's.position',
         'visibility' => 's.visibility',
         'status' => 's.status',
     ];
@@ -58,6 +59,7 @@ class SessionListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     #[Route('', name: 'admin_session_list_data', methods: ['GET'])]
@@ -71,6 +73,12 @@ class SessionListController extends AbstractController
         $categoryFilter = $request->query->get('category');
         $listType = (string) $request->query->get('listType', 'all');
 
+        $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
+
+        // When manual ordering is enabled and the default sort is active, sort by position instead
+        if ($allowOrder && 'title' === $sortField) {
+            $sortField = 'position';
+        }
         $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 's.title';
 
         $qb = $this->em->createQueryBuilder()
@@ -123,7 +131,6 @@ class SessionListController extends AbstractController
                 's.displayEndDate',
                 's.visibility',
                 's.nbrUsers',
-                's.nbrCourses',
                 's.status',
                 's.parentId',
                 's.daysToNewRepetition',
@@ -136,9 +143,17 @@ class SessionListController extends AbstractController
 
         $rows = $dataQb->getQuery()->getArrayResult();
 
-        // Batch-fetch user counts per language for all sessions on this page
         $sessionIds = array_column($rows, 'id');
-        $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
+        $showCountUsers = 'true' === $this->settingsManager->getSetting('session.session_list_show_count_users', true);
+
+        $studentCountMap = [];
+        $usersLangMap = [];
+        $tutorsMap = [];
+        if ($showCountUsers) {
+            $studentCountMap = $this->getStudentCountBySessionIds($sessionIds);
+            $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
+            $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
+        }
 
         $items = [];
         foreach ($rows as $row) {
@@ -150,13 +165,17 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $row['displayEndDate'] ? $row['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$row['visibility']] ?? 'Unknown',
-                'nbrUsers' => $row['nbrUsers'],
-                'nbrCourses' => $row['nbrCourses'],
                 'status' => $row['status'],
                 'statusLabel' => self::STATUS_LABELS[$row['status']] ?? 'Unknown',
                 'parentId' => $row['parentId'],
                 'usersLang' => $usersLangMap[$row['id']] ?? [],
             ];
+
+            if ($showCountUsers) {
+                $item['nbrUsers'] = $studentCountMap[$row['id']] ?? 0;
+                $item['usersLang'] = $usersLangMap[$row['id']] ?? [];
+                $item['tutors'] = $tutorsMap[$row['id']] ?? [];
+            }
 
             // For replication tab, mark child sessions
             if ('replication' === $listType && null !== $row['parentId']) {
@@ -168,13 +187,20 @@ class SessionListController extends AbstractController
 
         // For replication tab, fetch child sessions for each parent
         if ('replication' === $listType) {
-            $items = $this->enrichWithChildSessions($items);
+            $items = $this->enrichWithChildSessions($items, $showCountUsers);
         }
 
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
+        $hideSearch = 'true' === $this->settingsManager->getSetting('session.hide_search_form_in_session_list', true);
+        $allowCopyWithContent = 'true' === $this->settingsManager->getSetting('session.duplicate_specific_session_content_on_session_copy', true);
+
         return $this->json([
             'items' => $items,
+            'showCountUsers' => $showCountUsers,
+            'hideSearch' => $hideSearch,
+            'allowCopyWithContent' => $allowCopyWithContent,
+            'allowOrder' => $allowOrder,
             'total' => $total,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
@@ -196,12 +222,42 @@ class SessionListController extends AbstractController
             return $this->json(['error' => 'Invalid CSRF token.'], 403);
         }
 
+        $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
+
+        // Reorder doesn't use sessionIds — handle it before the check
+        if ('reorder' === $action) {
+            if (!$isPlatformAdmin) {
+                return $this->json(['error' => 'Only platform admins can reorder sessions.'], 403);
+            }
+            if ('true' !== $this->settingsManager->getSetting('session.session_list_order', true)) {
+                return $this->json(['error' => 'Session ordering is not enabled.'], 400);
+            }
+
+            $orderData = $request->request->all('order');
+            if (empty($orderData)) {
+                return $this->json(['error' => 'No order data provided.'], 400);
+            }
+
+            $conn = $this->em->getConnection();
+            foreach ($orderData as $entry) {
+                $sessionId = (int) ($entry['id'] ?? 0);
+                $position = (int) ($entry['position'] ?? 0);
+                if ($sessionId > 0) {
+                    $conn->executeStatement(
+                        'UPDATE session SET position = ? WHERE id = ?',
+                        [$position, $sessionId]
+                    );
+                }
+            }
+
+            return $this->json(['success' => true]);
+        }
+
         if (empty($sessionIds)) {
             return $this->json(['error' => 'No sessions selected.'], 400);
         }
 
         $sessionIds = array_map('intval', $sessionIds);
-        $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         switch ($action) {
             case 'delete':
@@ -218,16 +274,20 @@ class SessionListController extends AbstractController
                 return $this->json(['success' => true, 'message' => 'Sessions deleted.']);
 
             case 'copy':
+            case 'copy_with_content':
                 // Session admins may only copy sessions they manage
                 if (!$isPlatformAdmin) {
                     $allowedIds = $this->getSessionIdsManagedByCurrentUser();
                     $sessionIds = array_intersect($sessionIds, $allowedIds);
                 }
 
+                $copyWithContent = 'copy_with_content' === $action
+                    && 'true' === $this->settingsManager->getSetting('session.duplicate_specific_session_content_on_session_copy', true);
+
                 $copied = [];
                 $errors = [];
                 foreach ($sessionIds as $id) {
-                    $newId = SessionManager::copy($id);
+                    $newId = SessionManager::copy($id, true, true, false, false, $copyWithContent);
                     if ($newId) {
                         $copied[] = $newId;
                     } else {
@@ -365,7 +425,7 @@ class SessionListController extends AbstractController
     /**
      * For the replication tab, insert child sessions after their parent.
      */
-    private function enrichWithChildSessions(array $items): array
+    private function enrichWithChildSessions(array $items, bool $showCountUsers): array
     {
         $parentIds = array_column($items, 'id');
         if (empty($parentIds)) {
@@ -380,7 +440,6 @@ class SessionListController extends AbstractController
                 's.displayEndDate',
                 's.visibility',
                 's.nbrUsers',
-                's.nbrCourses',
                 's.status',
                 's.parentId',
                 'sc.title AS categoryName',
@@ -395,11 +454,18 @@ class SessionListController extends AbstractController
         ;
 
         $childIds = array_column($children, 'id');
-        $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
+        $childStudentCountMap = [];
+        $childUsersLangMap = [];
+        $childTutorsMap = [];
+        if ($showCountUsers) {
+            $childStudentCountMap = $this->getStudentCountBySessionIds($childIds);
+            $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
+            $childTutorsMap = $this->getTutorsBySessionIds($childIds);
+        }
 
         $childMap = [];
         foreach ($children as $child) {
-            $childMap[$child['parentId']][] = [
+            $childItem = [
                 'id' => $child['id'],
                 'title' => '-- '.$child['title'],
                 'categoryName' => $child['categoryName'] ?? '',
@@ -407,14 +473,20 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $child['displayEndDate'] ? $child['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $child['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$child['visibility']] ?? 'Unknown',
-                'nbrUsers' => $child['nbrUsers'],
-                'nbrCourses' => $child['nbrCourses'],
                 'status' => $child['status'],
                 'statusLabel' => self::STATUS_LABELS[$child['status']] ?? 'Unknown',
                 'parentId' => $child['parentId'],
                 'usersLang' => $childUsersLangMap[$child['id']] ?? [],
                 'isChild' => true,
             ];
+
+            if ($showCountUsers) {
+                $childItem['nbrUsers'] = $childStudentCountMap[$child['id']] ?? 0;
+                $childItem['usersLang'] = $childUsersLangMap[$child['id']] ?? [];
+                $childItem['tutors'] = $childTutorsMap[$child['id']] ?? [];
+            }
+
+            $childMap[$child['parentId']][] = $childItem;
         }
 
         // Interleave: insert children right after their parent
@@ -429,6 +501,100 @@ class SessionListController extends AbstractController
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the number of students subscribed to each session.
+     *
+     * @param int[] $sessionIds
+     *
+     * @return array<int, int> Map of sessionId => student count
+     */
+    private function getStudentCountBySessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $conn = $this->em->getConnection();
+        $result = $conn->executeQuery(
+            'SELECT su.session_id, COUNT(su.user_id) AS cnt
+             FROM session_rel_user su
+             WHERE su.session_id IN (?)
+               AND su.relation_type = ?
+             GROUP BY su.session_id',
+            [$sessionIds, Session::STUDENT],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        );
+
+        $map = [];
+        foreach ($result->fetchAllAssociative() as $row) {
+            $map[(int) $row['session_id']] = (int) $row['cnt'];
+        }
+
+        return $map;
+    }
+
+    /**
+     * Returns distinct tutors for each session (first initial + lastname).
+     * Includes both course coaches (from session_rel_course_rel_user) and
+     * general coaches (from session_rel_user), as general coaches are often
+     * the default coaches for courses inside the session.
+     *
+     * @param int[] $sessionIds
+     *
+     * @return array<int, list<string>> Map of sessionId => ['J. Doe', 'M. Smith']
+     */
+    private function getTutorsBySessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $conn = $this->em->getConnection();
+
+        // Course coaches from session_rel_course_rel_user
+        $courseCoaches = $conn->executeQuery(
+            'SELECT DISTINCT srcu.session_id, u.firstname, u.lastname
+             FROM session_rel_course_rel_user srcu
+             INNER JOIN user u ON u.id = srcu.user_id
+             WHERE srcu.session_id IN (?)
+               AND srcu.status = ?',
+            [$sessionIds, Session::COURSE_COACH],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        )->fetchAllAssociative();
+
+        // General coaches from session_rel_user
+        $generalCoaches = $conn->executeQuery(
+            'SELECT su.session_id, u.firstname, u.lastname
+             FROM session_rel_user su
+             INNER JOIN user u ON u.id = su.user_id
+             WHERE su.session_id IN (?)
+               AND su.relation_type = ?',
+            [$sessionIds, Session::GENERAL_COACH],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        )->fetchAllAssociative();
+
+        $map = [];
+        $seen = [];
+
+        foreach (array_merge($courseCoaches, $generalCoaches) as $row) {
+            $sid = (int) $row['session_id'];
+            $uid = $row['firstname'].'|'.$row['lastname'];
+            if (isset($seen[$sid][$uid])) {
+                continue;
+            }
+            $seen[$sid][$uid] = true;
+            $initial = mb_strtoupper(mb_substr(trim($row['firstname']), 0, 1));
+            $map[$sid][] = $initial.'. '.$row['lastname'];
+        }
+
+        // Sort tutor names alphabetically per session
+        foreach ($map as &$tutors) {
+            sort($tutors);
+        }
+
+        return $map;
     }
 
     /**

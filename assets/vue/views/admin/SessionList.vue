@@ -27,7 +27,10 @@
     </div>
 
     <!-- Search & Filters -->
-    <div class="flex flex-col gap-4">
+    <div
+      v-if="!hideSearch"
+      class="flex flex-col gap-4"
+    >
       <form
         class="flex gap-4 items-end"
         @submit.prevent="onSearch"
@@ -70,13 +73,20 @@
       v-model:selectedItems="selectedItems"
       :is-loading="isLoading"
       :lazy="true"
+      :reorderable-rows="allowOrder && viewer.isPlatformAdmin"
       :text-for-empty="t('No data available')"
       :total-items="total"
       :values="items"
       data-key="id"
       @page="onPage"
+      @row-reorder="onRowReorder"
       @sort="onSort"
     >
+      <Column
+        v-if="allowOrder && viewer.isPlatformAdmin"
+        :row-reorder="true"
+        header-style="width: 3rem"
+      />
       <Column
         header-style="width: 3rem"
         selection-mode="multiple"
@@ -122,6 +132,7 @@
         field="visibilityLabel"
       />
       <Column
+        v-if="showCountUsers"
         :header="t('Users')"
         field="nbrUsers"
         sortable
@@ -142,10 +153,19 @@
         </template>
       </Column>
       <Column
-        :header="t('Courses')"
-        field="nbrCourses"
-        sortable
-      />
+        v-if="showCountUsers"
+        :header="t('Tutors')"
+        field="tutors"
+      >
+        <template #body="{ data }">
+          <span
+            v-if="data.tutors && data.tutors.length"
+            class="text-sm"
+          >
+            {{ data.tutors.join(", ") }}
+          </span>
+        </template>
+      </Column>
       <Column
         :header="t('Session status')"
         field="statusLabel"
@@ -191,6 +211,14 @@
               only-icon
               type="primary-text"
               @click="copySession(data.id)"
+            />
+            <BaseButton
+              v-if="allowCopyWithContent"
+              :label="t('Copy with session content')"
+              icon="copy"
+              only-icon
+              type="primary-text"
+              @click="copySessionWithContent(data.id)"
             />
             <BaseButton
               v-if="viewer.isPlatformAdmin"
@@ -275,6 +303,10 @@ const categoryFilter = ref("")
 const selectedItems = ref([])
 const categories = ref([])
 const csrfToken = ref("")
+const showCountUsers = ref(false)
+const hideSearch = ref(false)
+const allowCopyWithContent = ref(false)
+const allowOrder = ref(false)
 const viewer = reactive({ isPlatformAdmin: false })
 
 const tabs = [
@@ -322,6 +354,13 @@ async function load() {
     items.value = data.items
     total.value = data.total
     csrfToken.value = data.csrfToken || ""
+    showCountUsers.value = data.showCountUsers || false
+    hideSearch.value = data.hideSearch || false
+    allowCopyWithContent.value = data.allowCopyWithContent || false
+    allowOrder.value = data.allowOrder || false
+    if (allowOrder.value && sortField.value === "title") {
+      sortField.value = "position"
+    }
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }
@@ -342,6 +381,42 @@ function onSort(event) {
   sortField.value = event.sortField ?? "title"
   sortOrder.value = event.sortOrder ?? 1
   page.value = 1
+  load()
+}
+
+async function onRowReorder(event) {
+  // Reorder the local array using dragIndex/dropIndex
+  const reordered = [...items.value]
+  const [moved] = reordered.splice(event.dragIndex, 1)
+  reordered.splice(event.dropIndex, 0, moved)
+  items.value = reordered
+
+  // Compute position offset based on current page
+  const start = (page.value - 1) * pageSize.value
+  const orderData = reordered.map((item, index) => ({
+    id: item.id,
+    position: start + index,
+  }))
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("action", "reorder")
+    formData.set("_token", csrfToken.value)
+    orderData.forEach((entry, i) => {
+      formData.append(`order[${i}][id]`, String(entry.id))
+      formData.append(`order[${i}][position]`, String(entry.position))
+    })
+
+    await fetch("/admin/session-list-data-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString(),
+    })
+  } catch (e) {
+    console.error("Error saving session order:", e)
+  }
+
+  // Reload to get server-confirmed order
   load()
 }
 
@@ -391,6 +466,13 @@ async function copySession(id) {
   await performCopy([id])
 }
 
+async function copySessionWithContent(id) {
+  if (!confirm(t("Please confirm your choice"))) {
+    return
+  }
+  await performCopy([id], "copy_with_content")
+}
+
 async function copyMultiple(ids) {
   if (!confirm(t("Please confirm your choice"))) {
     return
@@ -398,10 +480,10 @@ async function copyMultiple(ids) {
   await performCopy(ids)
 }
 
-async function performCopy(ids) {
+async function performCopy(ids, action = "copy") {
   try {
     const formData = new URLSearchParams()
-    formData.set("action", "copy")
+    formData.set("action", action)
     formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 

@@ -461,6 +461,11 @@ class SessionManager
         $order = empty($conditions['order']) ? ' ORDER BY s.title ASC' : $conditions['order'];
         $limit = $conditions['limit'];
 
+        // When session_list_order is enabled, sort by position by default
+        if ('true' === api_get_setting('session.session_list_order') && empty($conditions['order'])) {
+            $order = ' ORDER BY s.position ASC';
+        }
+
         $isMakingOrder = false;
         $showCountUsers = false;
 

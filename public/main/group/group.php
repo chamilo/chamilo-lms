@@ -244,18 +244,16 @@ if ('true' === api_get_setting('allow_group_categories')) {
         $defaultCategoryId = GroupManager::create_category(
             get_lang('Default groups'),
             '',
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0
+            1
         );
         $defaultCategory = GroupManager::get_category($defaultCategoryId);
         $categories = [$defaultCategory];

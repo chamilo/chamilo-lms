@@ -121,6 +121,43 @@ function handleExtensions()
 }
 
 /**
+ * Return the first readable README file path for a plugin.
+ */
+function plugin_get_readme_path(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $basePath = rtrim(api_get_path(SYS_PLUGIN_PATH).$pluginName, '/').'/';
+    $candidates = [
+        'README.md',
+        'Readme.md',
+        'readme.md',
+        'README.MD',
+    ];
+
+    foreach ($candidates as $candidate) {
+        $fullPath = $basePath.$candidate;
+        if (is_file($fullPath) && is_readable($fullPath)) {
+            return $cache[$pluginName] = $fullPath;
+        }
+    }
+
+    return $cache[$pluginName] = null;
+}
+
+/**
+ * Check whether the plugin exposes a README file.
+ */
+function plugin_has_readme(string $pluginName): bool
+{
+    return null !== plugin_get_readme_path($pluginName);
+}
+
+/**
  * This function allows easy activating and inactivating of plugins.
  *
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
@@ -135,7 +172,6 @@ function handlePlugins()
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
-    // Header
     echo '<div class="mb-4 flex items-center justify-between">';
     echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage plugins').'</h2>';
     echo '<p class="text-gray-50 text-sm">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
@@ -169,9 +205,13 @@ function handlePlugins()
         $plugin = $pluginRepo->findOneByTitle($pluginName);
         $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
-        $isEnabled   = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+        $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+        $hasReadme = plugin_has_readme($pluginName);
 
-        // Status badge
+        $pluginDisplayTitle = htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES);
+        $pluginDisplayVersion = htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES);
+        $pluginDataName = htmlspecialchars($pluginName, ENT_QUOTES);
+
         $statusBadge = $isInstalled
             ? ($isEnabled
                 ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
@@ -179,44 +219,63 @@ function handlePlugins()
             : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
-        echo '<td class="p-3 font-medium">'.htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES).'</td>';
-        echo '<td class="p-3">'.htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES).'</td>';
+        echo '<td class="p-3 font-medium">'.$pluginDisplayTitle.'</td>';
+        echo '<td class="p-3">'.$pluginDisplayVersion.'</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
-        echo '<td class="p-3 text-center"><div class="flex justify-center gap-2">';
+        echo '<td class="p-3 text-center">';
+        echo '<div class="flex flex-wrap justify-center gap-2">';
 
         if ($isInstalled) {
             $toggleAction = $isEnabled ? 'disable' : 'enable';
-            $toggleText   = $isEnabled ? get_lang('Disable') : get_lang('Enable');
-            $toggleColor  = $isEnabled ? 'btn--plain' : 'btn--warning';
-            $toggleIcon   = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
+            $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
+            $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
+            $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
             echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="'.$toggleAction.'">
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="'.$toggleAction.'">
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
                   </button>';
 
             echo '<button class="plugin-action btn btn--sm btn--danger"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="uninstall">
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="uninstall">
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
 
-            // Show "Configure" only if the plugin is ENABLED and actually has editable settings.
-            if ($isEnabled && plugin_has_editable_settings($pluginName)) {
-                $configureUrl = '/main/admin/configure_plugin.php?'.http_build_query(['plugin' => $pluginName]);
-                echo Display::url(
-                    get_lang('Configure'),
-                    $configureUrl,
-                    ['class' => 'btn btn--info btn--sm']
-                );
+            if ($isEnabled) {
+                $managementUrl = plugin_get_management_url($pluginName);
+
+                if (!empty($managementUrl)) {
+                    echo Display::url(
+                        get_lang('Configure'),
+                        $managementUrl,
+                        ['class' => 'btn btn--info btn--sm']
+                    );
+                }
             }
         } else {
             echo '<button class="plugin-action btn btn--sm btn--success"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="install">
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="install">
                     <i class="mdi mdi-download"></i> '.get_lang('Install').'
                   </button>';
         }
 
-        echo '</div></td></tr>';
+        if ($hasReadme) {
+            echo '<button
+                    type="button"
+                    class="js-plugin-readme btn btn--sm btn--plain"
+                    data-plugin="'.$pluginDataName.'"
+                    data-title="'.$pluginDisplayTitle.'"
+                >
+                    <i class="mdi mdi-file-document-outline"></i> README
+                  </button>';
+        }
+
+        echo '</div>';
+        echo '</td>';
+        echo '</tr>';
     }
 
     echo '</tbody></table>';
@@ -230,76 +289,196 @@ function handlePlugins()
             </div>
           </div>';
 
-    echo '<script>
+    echo '<div id="plugin-readme-modal" class="hidden fixed inset-0 z-50">
+            <div class="absolute inset-0 bg-black/40 js-plugin-readme-close"></div>
+            <div class="relative flex min-h-screen items-start justify-center p-4 md:p-6">
+                <div class="relative flex w-full max-w-4xl flex-col rounded-xl bg-white shadow-xl">
+                    <div class="flex items-center justify-between gap-3 border-b border-gray-25 px-5 py-4">
+                        <h3 id="plugin-readme-modal-title" class="text-xl font-semibold text-gray-90 mb-0">README</h3>
+                        <button type="button"
+                                class="js-plugin-readme-close inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-50 transition hover:bg-gray-10 hover:text-gray-90"
+                                aria-label="'.htmlspecialchars(get_lang('Close'), ENT_QUOTES).'"
+                                title="'.htmlspecialchars(get_lang('Close'), ENT_QUOTES).'">
+                            <i class="mdi mdi-close"></i>
+                        </button>
+                    </div>
+                    <div id="plugin-readme-modal-body" class="max-h-[75vh] overflow-y-auto px-5 py-4 text-sm leading-6 text-gray-90"></div>
+                </div>
+            </div>
+          </div>';
+
+    $ajaxUrl = json_encode(api_get_path(WEB_AJAX_PATH).'plugin.ajax.php');
+    $loadingText = json_encode(get_lang('Loading').'…');
+    $errorText = json_encode(get_lang('Error'));
+    $requestFailedText = json_encode(get_lang('Request failed'));
+    $doneText = json_encode(get_lang('Done'));
+    $processingText = json_encode(get_lang('Processing'));
+    $installingText = json_encode(get_lang('Installing'));
+    $uninstallingText = json_encode(get_lang('Uninstalling'));
+    $enablingText = json_encode(get_lang('Enabling'));
+    $disablingText = json_encode(get_lang('Disabling'));
+    $readmeMissingText = json_encode('README file not found for this plugin.');
+    $readmeTitleSuffix = json_encode('README');
+
+    echo <<<JS
+<script>
 (function($){
+  var ajaxUrl = {$ajaxUrl};
+  var loadingText = {$loadingText};
+  var errorText = {$errorText};
+  var requestFailedText = {$requestFailedText};
+  var doneText = {$doneText};
+  var processingText = {$processingText};
+  var installingText = {$installingText};
+  var uninstallingText = {$uninstallingText};
+  var enablingText = {$enablingText};
+  var disablingText = {$disablingText};
+  var readmeMissingText = {$readmeMissingText};
+  var readmeTitleSuffix = {$readmeTitleSuffix};
+
   function showToast(message, type) {
     var bg = type === "success" ? "bg-green-600" : (type === "warning" ? "bg-yellow-600" : "bg-red-600");
-    var $toast = $("<div/>", {
+    var \$toast = $("<div/>", {
       class: "fixed top-4 right-4 z-50 text-white px-4 py-3 rounded shadow " + bg,
       text: message
     }).appendTo("body");
-    setTimeout(function(){ $toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
+    setTimeout(function(){ \$toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
   }
-  function actionLabel(a) {
-    switch(a){
-      case "install": return "'.get_lang('Installing').'";
-      case "uninstall": return "'.get_lang('Uninstalling').'";
-      case "enable": return "'.get_lang('Enabling').'";
-      case "disable": return "'.get_lang('Disabling').'";
-      default: return "'.get_lang('Processing').'";
+
+  function actionLabel(action) {
+    switch (action) {
+      case "install": return installingText;
+      case "uninstall": return uninstallingText;
+      case "enable": return enablingText;
+      case "disable": return disablingText;
+      default: return processingText;
     }
   }
-  function showPageLoader(show){ $("#page-loader").toggleClass("hidden", !show); }
+
+  function openReadmeModal(title) {
+    $("#plugin-readme-modal-title").text(title);
+    $("#plugin-readme-modal").removeClass("hidden");
+    $("body").addClass("overflow-hidden");
+  }
+
+  function closeReadmeModal() {
+    $("#plugin-readme-modal").addClass("hidden");
+    $("#plugin-readme-modal-body").empty();
+    $("body").removeClass("overflow-hidden");
+  }
+
+  function showReadmeLoading(title) {
+    openReadmeModal(title);
+    $("#plugin-readme-modal-body").html(
+      '<div class="flex flex-col items-center justify-center gap-3 py-8 text-gray-50">' +
+      '<i class="mdi mdi-loading mdi-spin text-3xl"></i>' +
+      '<div>' + loadingText + '</div>' +
+      '</div>'
+    );
+  }
 
   $(document).ready(function () {
     $(".plugin-action").on("click", function () {
-      var $btn = $(this);
-      if ($btn.data("busy")) return;
+      var \$btn = $(this);
+      if (\$btn.data("busy")) {
+        return;
+      }
 
-      var pluginName = $btn.data("plugin");
-      var action = $btn.data("action");
-      var originalHtml = $btn.html();
+      var pluginName = \$btn.data("plugin");
+      var action = \$btn.data("action");
+      var originalHtml = \$btn.html();
 
-      $btn.data("busy", true)
+      \$btn.data("busy", true)
           .attr("aria-busy", "true")
           .addClass("opacity-60 cursor-not-allowed")
-          .html(\'<i class="mdi mdi-loading mdi-spin"></i> \' + actionLabel(action) + "...");
+          .html('<i class="mdi mdi-loading mdi-spin"></i> ' + actionLabel(action) + "...");
+
       $.ajax({
         type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php",
+        url: ajaxUrl,
         data: { a: action, plugin: pluginName },
         dataType: "json",
         timeout: 120000,
-        beforeSend: function(){ showToast(actionLabel(action) + "…", "warning"); },
-        success: function(data){
+        beforeSend: function() {
+          showToast(actionLabel(action) + "…", "warning");
+        },
+        success: function(data) {
           if (data && data.success) {
-            showToast("'.get_lang('Done').': " + action.toUpperCase(), "success");
+            showToast(doneText + ": " + action.toUpperCase(), "success");
             setTimeout(function(){ location.reload(); }, 500);
           } else {
-            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : "'.get_lang('Error').'";
-            showToast("'.get_lang('Error').': " + msg, "error");
-            $btn.html(originalHtml);
+            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : errorText;
+            showToast(errorText + ": " + msg, "error");
+            \$btn.html(originalHtml);
           }
         },
-        error: function(xhr){
-          var msg = "'.get_lang('Request failed').'";
+        error: function(xhr) {
+          var msg = requestFailedText;
           try {
-            var j = JSON.parse(xhr.responseText);
-            if (j && (j.error || j.message)) msg = j.error || j.message;
-          } catch(e) {}
-          showToast("'.get_lang('Error').': " + msg, "error");
-          $btn.html(originalHtml);
+            var json = JSON.parse(xhr.responseText);
+            if (json && (json.error || json.message)) {
+              msg = json.error || json.message;
+            }
+          } catch (e) {}
+          showToast(errorText + ": " + msg, "error");
+          \$btn.html(originalHtml);
         },
-        complete: function(){
-          $btn.data("busy", false)
+        complete: function() {
+          \$btn.data("busy", false)
               .removeAttr("aria-busy")
               .removeClass("opacity-60 cursor-not-allowed");
         }
       });
     });
+
+    $(document).on("click", ".js-plugin-readme", function () {
+      var \$button = $(this);
+      var pluginName = \$button.data("plugin");
+      var pluginTitle = \$button.data("title") || pluginName;
+      var modalTitle = pluginTitle + " · " + readmeTitleSuffix;
+
+      showReadmeLoading(modalTitle);
+
+      $.ajax({
+        type: "GET",
+        url: ajaxUrl,
+        data: {
+          a: "md_to_html",
+          plugin: pluginName
+        },
+        dataType: "html",
+        success: function(html) {
+          if ($.trim(html) === "") {
+            html = '<div class="alert alert-warning mb-0">' + readmeMissingText + '</div>';
+          }
+
+          $("#plugin-readme-modal-body").html(
+            '<div class="space-y-4 break-words">' + html + '</div>'
+          );
+        },
+        error: function(xhr) {
+          var html = xhr.responseText;
+          if (!html || $.trim(html) === "") {
+            html = '<div class="alert alert-danger mb-0">' + errorText + ': ' + requestFailedText + '</div>';
+          }
+          $("#plugin-readme-modal-body").html(html);
+        }
+      });
+    });
+
+    $(document).on("click", ".js-plugin-readme-close", function () {
+      closeReadmeModal();
+    });
+
+    $(document).on("keydown", function (e) {
+      if (e.key === "Escape" && !$("#plugin-readme-modal").hasClass("hidden")) {
+        closeReadmeModal();
+      }
+    });
   });
 })(jQuery);
-</script>';
+</script>
+JS;
 }
 
 /**
@@ -348,6 +527,44 @@ function plugin_has_editable_settings(string $pluginName): bool
     }
 
     return $cache[$pluginName] = $has;
+}
+
+/**
+ * Return the best management URL for a plugin.
+ * Priority:
+ * 1. plugin admin.php
+ * 2. plugin configure.php
+ * 3. legacy configure_plugin.php when the plugin exposes editable settings
+ */
+function plugin_get_management_url(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
+    $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
+
+    $candidates = [
+        'admin.php',
+        'configure.php',
+    ];
+
+    foreach ($candidates as $file) {
+        if (is_file($sysPluginPath.$file)) {
+            return $cache[$pluginName] = $webPluginPath.$file;
+        }
+    }
+
+    if (plugin_has_editable_settings($pluginName)) {
+        return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+                'plugin' => $pluginName,
+            ]);
+    }
+
+    return $cache[$pluginName] = null;
 }
 
 /**

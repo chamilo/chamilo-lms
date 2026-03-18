@@ -190,11 +190,19 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getCustomParamsAsArray(): array
     {
+        if (empty($this->customParams)) {
+            return [];
+        }
+
         $params = [];
         $lines = explode("\n", $this->customParams);
         $lines = array_filter($lines);
 
         foreach ($lines as $line) {
+            if (!str_contains($line, '=')) {
+                continue;
+            }
+
             [$key, $value] = explode('=', $line, 2);
 
             $key = self::filterSpecialChars($key);
@@ -501,8 +509,16 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->launchPresentation;
     }
 
-    public function setReplacementForUserId(string $replacement): static
+    public function setReplacementForUserId(?string $replacement): static
     {
+        $replacement = null !== $replacement ? trim($replacement) : null;
+
+        if (empty($replacement)) {
+            unset($this->replacementParams['user_id']);
+
+            return $this;
+        }
+
         $this->replacementParams['user_id'] = $replacement;
 
         return $this;
@@ -510,11 +526,13 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getReplacementForUserId(): ?string
     {
-        if (!empty($this->replacementParams['user_id'])) {
-            return $this->replacementParams['user_id'];
+        $replacement = $this->replacementParams['user_id'] ?? null;
+
+        if (null === $replacement || '' === trim((string) $replacement)) {
+            return null;
         }
 
-        return null;
+        return $replacement;
     }
 
     // @TODO: move it to repository

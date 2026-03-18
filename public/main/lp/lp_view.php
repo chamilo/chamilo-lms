@@ -22,6 +22,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 $origin = api_get_origin();
+$ltiSession = Session::read('_ltiProvider');
+$currentLaunchId = $_REQUEST['lti_launch_id'] ?? '';
+$isLtiEmbeddable =
+    'embeddable' === $origin &&
+    !empty($ltiSession) &&
+    !empty($currentLaunchId) &&
+    !empty($ltiSession['lti_launch_id']) &&
+    hash_equals((string) $ltiSession['lti_launch_id'], (string) $currentLaunchId);
+
+if (!$isLtiEmbeddable && !empty(Session::read('_ltiProvider'))) {
+    Session::erase('_ltiProvider');
+}
 
 // To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
@@ -372,8 +384,29 @@ $progress_bar = '';
 if (!api_is_invitee()) {
     $progress_bar = $oLP->getProgressBar();
 }
+
 $navigation_bar = $oLP->get_navigation_bar();
 $navigation_bar_bottom = $oLP->get_navigation_bar('control-bottom');
+
+if ($isLtiEmbeddable) {
+    $stripLpInfoButton = static function (?string $html): string {
+        if (empty($html)) {
+            return '';
+        }
+
+        $patterns = [
+            '#<li\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</li>#is',
+            '#<a\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</a>#is',
+            '#<button\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</button>#is',
+        ];
+
+        return trim((string) preg_replace($patterns, '', $html));
+    };
+
+    $navigation_bar = $stripLpInfoButton($navigation_bar);
+    $navigation_bar_bottom = $stripLpInfoButton($navigation_bar_bottom);
+}
+
 $mediaplayer = $oLP->get_mediaplayer($oLP->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -500,6 +533,7 @@ $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
+$template->assign('is_lti_embeddable', $isLtiEmbeddable);
 $template->assign('button_home_url', $buttonHomeUrl);
 $template->assign('button_home_text', $buttonHomeText);
 $template->assign('navigation_bar', $navigation_bar);
@@ -509,6 +543,7 @@ $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
+$template->assign('is_lti_embeddable', (int) $isLtiEmbeddable);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $tocHidden = (bool) $lp->getHideTocFrame();
 $template->assign('toc_hidden', (int) $tocHidden);

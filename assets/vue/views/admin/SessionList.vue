@@ -164,44 +164,42 @@
       >
         <template #body="{ data }">
           <div class="flex gap-1 flex-nowrap">
-            <!-- Edit -->
-            <a
-              :href="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
-              :title="t('Edit')"
-            >
-              <span class="mdi mdi-pencil ch-tool-icon" />
-            </a>
-            <!-- Subscribe users -->
-            <a
-              :href="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              :title="t('Subscribe users to this session')"
-            >
-              <span class="mdi mdi-account-multiple-plus ch-tool-icon" />
-            </a>
-            <!-- Add courses -->
-            <a
-              :href="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
-              :title="t('Add courses to this session')"
-            >
-              <span class="mdi mdi-book-open-page-variant ch-tool-icon" />
-            </a>
-            <!-- Copy -->
-            <a
-              :title="t('Copy')"
-              class="cursor-pointer"
-              @click.prevent="copySession(data.id)"
-            >
-              <span class="mdi mdi-content-duplicate ch-tool-icon" />
-            </a>
-            <!-- Delete -->
-            <a
+            <BaseButton
+              :label="t('Edit')"
+              :to-url="`/main/session/session_edit.php?page=resume_session.php&id=${data.id}`"
+              icon="edit"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Subscribe users to this session')"
+              :to-url="`/main/session/add_users_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              icon="join-group"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Add courses to this session')"
+              :to-url="`/main/session/add_courses_to_session.php?page=/admin/session-list&id_session=${data.id}`"
+              icon="courses"
+              only-icon
+              type="primary-text"
+            />
+            <BaseButton
+              :label="t('Copy')"
+              icon="copy"
+              only-icon
+              type="primary-text"
+              @click="copySession(data.id)"
+            />
+            <BaseButton
               v-if="viewer.isPlatformAdmin"
-              :title="t('Delete')"
-              class="cursor-pointer"
-              @click.prevent="confirmDelete([data.id])"
-            >
-              <span class="mdi mdi-delete ch-tool-icon text-red-600" />
-            </a>
+              :label="t('Delete')"
+              icon="delete"
+              only-icon
+              type="danger-text"
+              @click="confirmDelete([data.id])"
+            />
           </div>
         </template>
       </Column>

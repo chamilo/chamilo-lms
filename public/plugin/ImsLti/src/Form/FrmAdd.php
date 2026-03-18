@@ -191,7 +191,7 @@ class FrmAdd extends FormValidator
         $defaults['public_key_type'] = ImsLti::LTI_JWK_KEYSET;
 
         if ($this->baseTool) {
-            $defaults['name'] = $this->baseTool->getName();
+            $defaults['name'] = $this->baseTool->getTitle();
             $defaults['description'] = $this->baseTool->getDescription();
             $defaults['custom_params'] = $this->baseTool->getCustomParams();
             $defaults['document_target'] = $this->baseTool->getDocumentTarget();

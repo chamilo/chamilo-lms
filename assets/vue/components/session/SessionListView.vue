@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <h2 class="text-xl font-bold text-gray-90">{{ t("My sessions") }}</h2>
     <div
-      v-for="session in props.uncategorizedSessions.filter((s) => s.courses?.length > 0)"
+      v-for="session in allSessions"
       :key="session.id"
       class="rounded-xl border border-gray-25 bg-gray-10 shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden"
     >
@@ -71,6 +71,21 @@ const props = defineProps({
   uncategorizedSessions: Array,
   categories: Array,
   categoriesWithSessions: Map,
+})
+
+const allSessions = computed(() => {
+  const uncategorized = (props.uncategorizedSessions || []).filter((s) => s.courses?.length > 0)
+  const categorized = []
+  if (props.categoriesWithSessions) {
+    for (const bucket of props.categoriesWithSessions.values()) {
+      for (const session of bucket.sessions || []) {
+        if (session.courses?.length > 0) {
+          categorized.push(session)
+        }
+      }
+    }
+  }
+  return [...uncategorized, ...categorized]
 })
 
 const showRemainingDays = computed(

@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Levél küldése az új felhasználónak."
 
 msgid "Portfolio"
-msgstr "Kibővített profil"
+msgstr "Portfólió"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ha ez a beállíás 'igaz'-ra van állítva, a felhasználók megadhatnak opcionális adatokat: 'Kompetenciáim', 'Végzettségeim', 'Mit tudok oktatni', és 'A személyes oldalam'"

@@ -4628,7 +4628,7 @@ msgid "Send mail to new user"
 msgstr "Enviar correu a un nou usuari"
 
 msgid "Portfolio"
-msgstr "Perfil extès"
+msgstr "Portfoli"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si es configura com a 'Veritable', l'usuari podrà emplenar els següents camps (opcionals): 'Les meves competències', 'Les meves titulacions', 'Què puc ensenyar' i 'La meva àrea personal pública'"

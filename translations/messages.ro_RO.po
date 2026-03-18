@@ -4629,7 +4629,7 @@ msgid "Send mail to new user"
 msgstr "Trimiteti email noului utilizator"
 
 msgid "Portfolio"
-msgstr "Profil extins"
+msgstr "Portofoliu"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Daca este selectat \"Adevarat\", utilizatorul poate completa si urmatoarele campuri: \"Competentele mele\", \"Diplomele mele\", \"Ce pot preda\" si \"Zona mea libera\""

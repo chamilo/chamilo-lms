@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Kirim email ke user baru"
 
 msgid "Portfolio"
-msgstr "Extended profile"
+msgstr "Portofolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Jika seting diset 'Benar', user dapat mengisi field (opsional) berikut ini: 'Kompetensi-ku', 'Diploma-ku', 'Apa yang dapat saya ajarkan' dan 'Open area personal-ku'"

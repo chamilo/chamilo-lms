@@ -4619,7 +4619,7 @@ msgid "Send mail to new user"
 msgstr "Sūtīt e-pastu jaunam lietotājam"
 
 msgid "Portfolio"
-msgstr "Izvērstie lietotāja dati"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ja šis ir ieslēgts, Lietotāji var aizpildīt papildus datus par sevi: Sadaļās: Mani sertifikāti / Mani diplomi / Ko es varu papildus darīt ... un  Personīgie sasniegumi."

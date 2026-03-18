@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Send epost til ny bruker"
 
 msgid "Portfolio"
-msgstr "Utvidet profil"
+msgstr "Portefølje"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Om denne innstillinga er på, kan ein brukar fylle ut dei følgjande (valfrie) feltene: 'Mitt personlege opne område', 'Mine kompetansar', 'Mine diplomar', 'Kva eg kan undervise i'"

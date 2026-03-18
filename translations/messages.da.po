@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Send e-mail til ny bruger"
 
 msgid "Portfolio"
-msgstr "Udvidet profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Hvis denne indstilling er sat til 'Sand', kan en bruger udfylde følgende (valgfrie) felter: 'Mine kompetencer', 'Mine diplomer', 'Hvad jeg kan undervise i', og 'Mit personlige åbne område'"

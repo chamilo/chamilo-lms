@@ -4679,7 +4679,7 @@ msgid "Send mail to new user"
 msgstr "E-Mail an neuen Nutzer schicken"
 
 msgid "Portfolio"
-msgstr "Ausführliches Profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Wenn Ja gewählt, kann der Benutzer die Felder \"Meine Kompetenzen\", \"Meine Qualifikationen\", \"Was isch unterrichten kann\", \"Mein persönlicher Bereich\" vervoillständigen."

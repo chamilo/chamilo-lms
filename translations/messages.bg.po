@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "E-mail съобщение до новия потребител"
 
 msgid "Portfolio"
-msgstr "Разширен профил"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "При стойност \"Да\" на тази настройка, потребителят ще може да попълни в профила си следните незадължителни полета: \"Моята квалификация\", \"Моите дипломи\", \"Какво мога да преподавам\", \"Моите работи\" и \"Моята лична страница\"."

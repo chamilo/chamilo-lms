@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Sendu retpoŝtaĵon al la nova uzulo"
 
 msgid "Portfolio"
-msgstr "Etenda profilo"
+msgstr "Portfoliejo"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Se tiu agordo estas markita, uzulo povas plenigi jenajn (opciajn) kampojn: 'Miaj kompetentecoj', 'Miaj diplomoj', 'Pri kio mi povas instrui' kaj 'Mia persona spaco'"

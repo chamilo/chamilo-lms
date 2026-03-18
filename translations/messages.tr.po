@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Yeni kullanıcıya posta gönder"
 
 msgid "Portfolio"
-msgstr "Detaylı kişisel bilgiler"
+msgstr "Portfolyo"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Be seçenek aktifleştirilirse üye kaydı esnasında bir kullanıcı isteğe bağlı 'My Competences', 'Diplomalarım', 'Branşım' ve 'Kişisel açık alanım' bilgilerini doldurabilir"

@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Apachiy e-chaskita musuq hakuqmasiman"
 
 msgid "Portfolio"
-msgstr "Perfil extendido"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si se configura como 'Verdadero', un usuario puede rellenar los siguientes campos (opcionales): 'Mis competencias', 'Mis títulos', '¿Qué puedo enseñar?' y 'Mi área personal pública'"

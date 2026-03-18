@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "ส่งอีเมลให้ผู้ใช้คนใหม่"
 
 msgid "Portfolio"
-msgstr "ส่วนเพิ่มเติมแฟ้มประวัติ"
+msgstr "พอร์ตโฟลิโอ"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "หากตั้งค่าให้เป็น\"ใช่\"ผู้สมัครในสิทธิฐานะอาจารย์ผู้สอนต้องกรอกข้อมูลเพิ่มเติมในช่องของ ความสามารถพิเศษ คุณวุฒิ และวิชาที่สามารถสอนได้ และข้อมูลส่วนตัวที่สามารถเปิดเผยได้"

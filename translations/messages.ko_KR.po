@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "새로 등록한 유저에게 메일 전송"
 
 msgid "Portfolio"
-msgstr "부가적 개인 정보"
+msgstr "포트폴리오"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "이 설정이 'True'로 설정되었다면, 유저는 다음과 같은 (부가적) 내용을 입력할 수 있습니다: 'My competences', 'My diplomas', 'What I am able to teach' and 'My personal open area'"

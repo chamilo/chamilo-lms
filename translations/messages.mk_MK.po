@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Испрати пошта на новиот корисник"
 
 msgid "Portfolio"
-msgstr "Продолжен профил"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ако поставките се поставени на 'Точно', корисникот може (незадолжително) да ги пополни следните полиња: 'Мои надлежности', 'Мои дипломи', 'Што можам да подучувам' и 'Мои лична области на интереси'"

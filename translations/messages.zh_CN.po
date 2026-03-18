@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "给新用户发邮件"
 
 msgid "Portfolio"
-msgstr "扩展特征"
+msgstr "作品集"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "如果设置为\"真\", 用户可填写下列(可选)字段: \"我的能力\", \"我的学历\", \"我能教授的课程\"与\"个人开放区\"."

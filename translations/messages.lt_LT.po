@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Siūsti laišką naujam vartotojui"
 
 msgid "Portfolio"
-msgstr "Išplėstinis profilis"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Šis nustatymas leidžia vartotojui užpildyti šiuos nebūtinus laukelius: 'Mano kompetencijos', 'Mano diplomai', 'Ką aš galėčiau išmokti' ir 'Mano privati informacija'"

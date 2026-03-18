@@ -4615,7 +4615,7 @@ msgid "Send mail to new user"
 msgstr "Poslat email novému uživateli"
 
 msgid "Portfolio"
-msgstr "Rozšířený profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Toto nastavení je dáno na 'Povolit', uživatel může vyplnit následující(nepovinné) pole: 'Má kvalifikace', 'Mé certifikáty', 'Co jsem schopný vyučovat' a 'Můj osobní obsah'"

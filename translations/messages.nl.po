@@ -4652,7 +4652,7 @@ msgid "Send mail to new user"
 msgstr "Verzend een mail naar de nieuwe gebruiker"
 
 msgid "Portfolio"
-msgstr "Uitgebreid profiel"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Als deze instelling op 'Ja' staat, kan een gebruiker volgende (optionele) velden invullen: 'Mijn competenties', 'Mijn diploma's', 'Waarin kan ik lesgeven' en 'Mijn persoonlijke ruimte'."

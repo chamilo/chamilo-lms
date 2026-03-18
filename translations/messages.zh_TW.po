@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "向新使用者發送電郵"
 
 msgid "Portfolio"
-msgstr "詳細個人資料"
+msgstr "作品集"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "若選「是」，使用者可自選填寫以下項目：個人能力、我的證書、可任教科目、個人開放區域"

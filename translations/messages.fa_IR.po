@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "ارسال ایمیل به کاربران جدید"
 
 msgid "Portfolio"
-msgstr "استفاده از مشخصات گسترده"
+msgstr "پورتفولیو"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "با انتخاب گزینۀ �بله�، کاربران خواهند توانست خانه های اختیاری زیر را در قسمت مشخصات پر کنند: �توانایی های من�، �گواهی های تحصیلی من�، �چه دروسی را می توانم تدریس کنم� و �فضای شخصی من�"

@@ -4615,7 +4615,7 @@ msgid "Send mail to new user"
 msgstr "Надіслати листа новому користувачу"
 
 msgid "Portfolio"
-msgstr "Розширений профіль"
+msgstr "Портфоліо"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Якщо цю опцію встановлено в \"Правда\", користувач може заповнювати (опціональні) поля: \"Мої навички\", \"Мої дипломи\", \"Що я можу викладати\" та \"Моя персональна відкрита зона\""

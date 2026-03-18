@@ -4629,7 +4629,7 @@ msgid "Send mail to new user"
 msgstr " أرسل بريدا إلى مستخدم جديد"
 
 msgid "Portfolio"
-msgstr " واجهة ممتدة"
+msgstr "بورتفوليو"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr " '/إذا تم وضع /'صح/'، في هذه الإاعدادات فإنّه يمكن للمستخدم ملأ (اختياري) الحقول التالية: /'قدراتي/'، /'الدبلوماسية الخاصة بي/'، /'ماذا أستطيع أن أدرس/'، و /'الحيز الشخصي المفتوح"

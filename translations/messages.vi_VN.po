@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Gửi thư cho người dùng mới"
 
 msgid "Portfolio"
-msgstr "Danh mục đầu tư"
+msgstr "Hồ sơ năng lực"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Nếu bật, người dùng có thể điền các trường tùy chọn: 'Khu vực mở cá nhân của tôi', 'Năng lực của tôi', 'Bằng cấp của tôi', 'Những gì tôi có thể dạy'"

@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Lähetä sähköposti uudelle käyttäjälle"
 
 msgid "Portfolio"
-msgstr "Laajennettu profiili"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Jos tämä asetus on päällä, käyttäjä voi täyttää seuraavat (valinnaiset) kentät: 'Oma avoin alue', 'Omat osaamisalueet', 'Tutkinnot', 'Mitä voin opettaa'"

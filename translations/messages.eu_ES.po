@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Bidali mezu elektronikoa erabiltzaile berriari"
 
 msgid "Portfolio"
-msgstr "Profil hedatua"
+msgstr "Portfolioa"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Konfigurazioan \"Egiazkoa\" dela ezartzen badugu, erabiltzaile batek honako eremu hauek (aukerakoak) bete ditzake: 'Gaitasunak', 'Nire tituluak', 'Zer irakatsi dezaket?' eta 'Espazio pertsonal irekia'"

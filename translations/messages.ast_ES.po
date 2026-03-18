@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Unviar e-mail a los usuarios nuevos"
 
 msgid "Portfolio"
-msgstr "Perfil estendíu"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si lo configura en 'braeru' un usuariu cualquier va poder llenar los campos (opcionales) que vienen darréu: 'Les mio competencies', 'Los mios títulos', '¿Qué puedo enseñar?' y 'El mio área personal pública'"

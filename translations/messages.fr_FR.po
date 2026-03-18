@@ -4755,7 +4755,7 @@ msgid "Send mail to new user"
 msgstr "Envoyer un courriel au nouvel utilisateur"
 
 msgid "Portfolio"
-msgstr "Utiliser le port-folio"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr ""

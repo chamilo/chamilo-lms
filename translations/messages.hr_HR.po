@@ -4619,7 +4619,7 @@ msgid "Send mail to new user"
 msgstr "Pošalji poštu novome korisniku"
 
 msgid "Portfolio"
-msgstr "Prošireni profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ako je ova opcija postavljena na 'Ispravno', korisnik može popuniti sljedeće (neobvezne) rubrike: 'Moje vještine', 'Moje svjedodžbe', 'Što mogu podučavati' i 'Moj osobni prostor'"

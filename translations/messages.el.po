@@ -4628,7 +4628,7 @@ msgid "Send mail to new user"
 msgstr "Αποστολή mail στο νέο χρήστη"
 
 msgid "Portfolio"
-msgstr "Εκτεταμένο προφίλ"
+msgstr "Χαρτοφυλάκιο"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Αν αυτή η ρύθμιση είναι ενεργή, ο χρήστης μπορεί να συμπληρώσει τα εξής (προαιρετικά) πεδία: 'Η προσωπική μου ανοιχτή περιοχή', 'Οι ικανότητές μου', 'Τα πτυχία μου', 'Τι μπορώ να διδάξω'"

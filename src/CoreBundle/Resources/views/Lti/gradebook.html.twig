@@ -12,7 +12,7 @@
                     var cat_id = $(this).val();
 
                     $.ajax({
-                        url: "{{ url('web_ajax') }}gradebook.ajax.php?a=get_gradebook_weight",
+                        url: "/main/inc/ajax/course_home.ajax.php?gradebook.ajax.php?a=get_gradebook_weight",
                         data: "cat_id=" + cat_id,
                         success: function (return_value) {
                             if (return_value != 0) {

@@ -142,10 +142,18 @@
         </template>
       </Column>
       <Column
-        :header="t('Courses')"
-        field="nbrCourses"
-        sortable
-      />
+        :header="t('Tutors')"
+        field="tutors"
+      >
+        <template #body="{ data }">
+          <span
+            v-if="data.tutors && data.tutors.length"
+            class="text-sm"
+          >
+            {{ data.tutors.join(", ") }}
+          </span>
+        </template>
+      </Column>
       <Column
         :header="t('Session status')"
         field="statusLabel"

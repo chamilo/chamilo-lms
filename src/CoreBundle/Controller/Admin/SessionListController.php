@@ -34,7 +34,6 @@ class SessionListController extends AbstractController
         'displayStartDate' => 's.displayStartDate',
         'displayEndDate' => 's.displayEndDate',
         'nbrUsers' => 's.nbrUsers',
-        'nbrCourses' => 's.nbrCourses',
         'visibility' => 's.visibility',
         'status' => 's.status',
     ];
@@ -123,7 +122,6 @@ class SessionListController extends AbstractController
                 's.displayEndDate',
                 's.visibility',
                 's.nbrUsers',
-                's.nbrCourses',
                 's.status',
                 's.parentId',
                 's.daysToNewRepetition',
@@ -136,9 +134,11 @@ class SessionListController extends AbstractController
 
         $rows = $dataQb->getQuery()->getArrayResult();
 
-        // Batch-fetch user counts per language for all sessions on this page
+        // Batch-fetch student counts, per-language breakdown, and tutors for all sessions on this page
         $sessionIds = array_column($rows, 'id');
+        $studentCountMap = $this->getStudentCountBySessionIds($sessionIds);
         $usersLangMap = $this->getUsersLangBySessionIds($sessionIds);
+        $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
 
         $items = [];
         foreach ($rows as $row) {
@@ -150,12 +150,12 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $row['displayEndDate'] ? $row['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$row['visibility']] ?? 'Unknown',
-                'nbrUsers' => $row['nbrUsers'],
-                'nbrCourses' => $row['nbrCourses'],
+                'nbrUsers' => $studentCountMap[$row['id']] ?? 0,
                 'status' => $row['status'],
                 'statusLabel' => self::STATUS_LABELS[$row['status']] ?? 'Unknown',
                 'parentId' => $row['parentId'],
                 'usersLang' => $usersLangMap[$row['id']] ?? [],
+                'tutors' => $tutorsMap[$row['id']] ?? [],
             ];
 
             // For replication tab, mark child sessions
@@ -380,7 +380,6 @@ class SessionListController extends AbstractController
                 's.displayEndDate',
                 's.visibility',
                 's.nbrUsers',
-                's.nbrCourses',
                 's.status',
                 's.parentId',
                 'sc.title AS categoryName',
@@ -395,7 +394,9 @@ class SessionListController extends AbstractController
         ;
 
         $childIds = array_column($children, 'id');
+        $childStudentCountMap = $this->getStudentCountBySessionIds($childIds);
         $childUsersLangMap = $this->getUsersLangBySessionIds($childIds);
+        $childTutorsMap = $this->getTutorsBySessionIds($childIds);
 
         $childMap = [];
         foreach ($children as $child) {
@@ -407,12 +408,12 @@ class SessionListController extends AbstractController
                 'displayEndDate' => $child['displayEndDate'] ? $child['displayEndDate']->format('Y-m-d H:i') : null,
                 'visibility' => $child['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$child['visibility']] ?? 'Unknown',
-                'nbrUsers' => $child['nbrUsers'],
-                'nbrCourses' => $child['nbrCourses'],
+                'nbrUsers' => $childStudentCountMap[$child['id']] ?? 0,
                 'status' => $child['status'],
                 'statusLabel' => self::STATUS_LABELS[$child['status']] ?? 'Unknown',
                 'parentId' => $child['parentId'],
                 'usersLang' => $childUsersLangMap[$child['id']] ?? [],
+                'tutors' => $childTutorsMap[$child['id']] ?? [],
                 'isChild' => true,
             ];
         }
@@ -429,6 +430,79 @@ class SessionListController extends AbstractController
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the number of students subscribed to each session.
+     *
+     * @param int[] $sessionIds
+     *
+     * @return array<int, int> Map of sessionId => student count
+     */
+    private function getStudentCountBySessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $conn = $this->em->getConnection();
+        $result = $conn->executeQuery(
+            'SELECT su.session_id, COUNT(su.user_id) AS cnt
+             FROM session_rel_user su
+             WHERE su.session_id IN (?)
+               AND su.relation_type = ?
+             GROUP BY su.session_id',
+            [$sessionIds, Session::STUDENT],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        );
+
+        $map = [];
+        foreach ($result->fetchAllAssociative() as $row) {
+            $map[(int) $row['session_id']] = (int) $row['cnt'];
+        }
+
+        return $map;
+    }
+
+    /**
+     * Returns distinct course tutors for each session (first initial + lastname).
+     *
+     * @param int[] $sessionIds
+     *
+     * @return array<int, list<string>> Map of sessionId => ['J. Doe', 'M. Smith']
+     */
+    private function getTutorsBySessionIds(array $sessionIds): array
+    {
+        if (empty($sessionIds)) {
+            return [];
+        }
+
+        $conn = $this->em->getConnection();
+        $result = $conn->executeQuery(
+            'SELECT DISTINCT srcu.session_id, u.firstname, u.lastname
+             FROM session_rel_course_rel_user srcu
+             INNER JOIN user u ON u.id = srcu.user_id
+             WHERE srcu.session_id IN (?)
+               AND srcu.status = ?
+             ORDER BY u.lastname, u.firstname',
+            [$sessionIds, Session::COURSE_COACH],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        );
+
+        $map = [];
+        $seen = [];
+        foreach ($result->fetchAllAssociative() as $row) {
+            $sid = (int) $row['session_id'];
+            $uid = $row['firstname'].'|'.$row['lastname'];
+            if (isset($seen[$sid][$uid])) {
+                continue;
+            }
+            $seen[$sid][$uid] = true;
+            $initial = mb_strtoupper(mb_substr(trim($row['firstname']), 0, 1));
+            $map[$sid][] = $initial.'. '.$row['lastname'];
+        }
+
+        return $map;
     }
 
     /**

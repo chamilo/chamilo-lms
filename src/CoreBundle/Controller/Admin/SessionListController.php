@@ -465,7 +465,10 @@ class SessionListController extends AbstractController
     }
 
     /**
-     * Returns distinct course tutors for each session (first initial + lastname).
+     * Returns distinct tutors for each session (first initial + lastname).
+     * Includes both course coaches (from session_rel_course_rel_user) and
+     * general coaches (from session_rel_user), as general coaches are often
+     * the default coaches for courses inside the session.
      *
      * @param int[] $sessionIds
      *
@@ -478,20 +481,33 @@ class SessionListController extends AbstractController
         }
 
         $conn = $this->em->getConnection();
-        $result = $conn->executeQuery(
+
+        // Course coaches from session_rel_course_rel_user
+        $courseCoaches = $conn->executeQuery(
             'SELECT DISTINCT srcu.session_id, u.firstname, u.lastname
              FROM session_rel_course_rel_user srcu
              INNER JOIN user u ON u.id = srcu.user_id
              WHERE srcu.session_id IN (?)
-               AND srcu.status = ?
-             ORDER BY u.lastname, u.firstname',
+               AND srcu.status = ?',
             [$sessionIds, Session::COURSE_COACH],
             [ArrayParameterType::INTEGER, Types::INTEGER]
-        );
+        )->fetchAllAssociative();
+
+        // General coaches from session_rel_user
+        $generalCoaches = $conn->executeQuery(
+            'SELECT su.session_id, u.firstname, u.lastname
+             FROM session_rel_user su
+             INNER JOIN user u ON u.id = su.user_id
+             WHERE su.session_id IN (?)
+               AND su.relation_type = ?',
+            [$sessionIds, Session::GENERAL_COACH],
+            [ArrayParameterType::INTEGER, Types::INTEGER]
+        )->fetchAllAssociative();
 
         $map = [];
         $seen = [];
-        foreach ($result->fetchAllAssociative() as $row) {
+
+        foreach (array_merge($courseCoaches, $generalCoaches) as $row) {
             $sid = (int) $row['session_id'];
             $uid = $row['firstname'].'|'.$row['lastname'];
             if (isset($seen[$sid][$uid])) {
@@ -500,6 +516,11 @@ class SessionListController extends AbstractController
             $seen[$sid][$uid] = true;
             $initial = mb_strtoupper(mb_substr(trim($row['firstname']), 0, 1));
             $map[$sid][] = $initial.'. '.$row['lastname'];
+        }
+
+        // Sort tutor names alphabetically per session
+        foreach ($map as &$tutors) {
+            sort($tutors);
         }
 
         return $map;

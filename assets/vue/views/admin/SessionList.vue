@@ -206,6 +206,14 @@
               @click="copySession(data.id)"
             />
             <BaseButton
+              v-if="allowCopyWithContent"
+              :label="t('Copy with session content')"
+              icon="copy"
+              only-icon
+              type="primary-text"
+              @click="copySessionWithContent(data.id)"
+            />
+            <BaseButton
               v-if="viewer.isPlatformAdmin"
               :label="t('Delete')"
               icon="delete"
@@ -290,6 +298,7 @@ const categories = ref([])
 const csrfToken = ref("")
 const showCountUsers = ref(false)
 const hideSearch = ref(false)
+const allowCopyWithContent = ref(false)
 const viewer = reactive({ isPlatformAdmin: false })
 
 const tabs = [
@@ -339,6 +348,7 @@ async function load() {
     csrfToken.value = data.csrfToken || ""
     showCountUsers.value = data.showCountUsers || false
     hideSearch.value = data.hideSearch || false
+    allowCopyWithContent.value = data.allowCopyWithContent || false
     if (data.viewer) {
       viewer.isPlatformAdmin = data.viewer.isPlatformAdmin
     }
@@ -408,6 +418,13 @@ async function copySession(id) {
   await performCopy([id])
 }
 
+async function copySessionWithContent(id) {
+  if (!confirm(t("Please confirm your choice"))) {
+    return
+  }
+  await performCopy([id], "copy_with_content")
+}
+
 async function copyMultiple(ids) {
   if (!confirm(t("Please confirm your choice"))) {
     return
@@ -415,10 +432,10 @@ async function copyMultiple(ids) {
   await performCopy(ids)
 }
 
-async function performCopy(ids) {
+async function performCopy(ids, action = "copy") {
   try {
     const formData = new URLSearchParams()
-    formData.set("action", "copy")
+    formData.set("action", action)
     formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 

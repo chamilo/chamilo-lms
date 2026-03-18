@@ -185,11 +185,13 @@ class SessionListController extends AbstractController
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         $hideSearch = 'true' === $this->settingsManager->getSetting('session.hide_search_form_in_session_list', true);
+        $allowCopyWithContent = 'true' === $this->settingsManager->getSetting('session.duplicate_specific_session_content_on_session_copy', true);
 
         return $this->json([
             'items' => $items,
             'showCountUsers' => $showCountUsers,
             'hideSearch' => $hideSearch,
+            'allowCopyWithContent' => $allowCopyWithContent,
             'total' => $total,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
@@ -233,16 +235,20 @@ class SessionListController extends AbstractController
                 return $this->json(['success' => true, 'message' => 'Sessions deleted.']);
 
             case 'copy':
+            case 'copy_with_content':
                 // Session admins may only copy sessions they manage
                 if (!$isPlatformAdmin) {
                     $allowedIds = $this->getSessionIdsManagedByCurrentUser();
                     $sessionIds = array_intersect($sessionIds, $allowedIds);
                 }
 
+                $copyWithContent = 'copy_with_content' === $action
+                    && 'true' === $this->settingsManager->getSetting('session.duplicate_specific_session_content_on_session_copy', true);
+
                 $copied = [];
                 $errors = [];
                 foreach ($sessionIds as $id) {
-                    $newId = SessionManager::copy($id);
+                    $newId = SessionManager::copy($id, true, true, false, false, $copyWithContent);
                     if ($newId) {
                         $copied[] = $newId;
                     } else {

@@ -458,16 +458,7 @@ class GroupManager
         // check if a category has been done, create one otherwise
         $categorieGroupe =  self::get_category($category_id);
         if (count($categorieGroupe) == 0) {
-            $category_id = self::create_category(
-                get_lang('DefaultGroupCategory'),
-                '',
-                1,
-                1,
-                1,
-                1,
-                1,
-                1
-            );
+            $category_id = self::create_category(get_lang('DefaultGroupCategory'));
         }
 
         if ($category_id == 0) {

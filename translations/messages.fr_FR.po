@@ -3934,7 +3934,7 @@ msgid "Change picture"
 msgstr "Changer la photo"
 
 msgid "%s comments"
-msgstr "Les résultats éventuels des enseignants ne sont ni affichés ni pris en compte dans l'outil d'évaluations."
+msgstr "%s commentaires"
 
 msgid "Add a user"
 msgstr "Ajouter des utilisateurs"

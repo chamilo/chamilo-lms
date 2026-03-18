@@ -3836,7 +3836,7 @@ msgid "Change picture"
 msgstr "imagem mudança"
 
 msgid "%s comments"
-msgstr "Comentários %s"
+msgstr " %s comentários"
 
 msgid "Add a user"
 msgstr "Adicionar um usuário"

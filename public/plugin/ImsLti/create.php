@@ -22,15 +22,14 @@ if ($form->validate()) {
 
     $externalTool = new ExternalTool();
     $externalTool
-        ->setName($formValues['name'])
+        ->setTitle($formValues['name'])
         ->setDescription(
             empty($formValues['description']) ? null : $formValues['description']
         )
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
-        ->setDocumenTarget($formValues['document_target'])
-        ->setCourse(null)
+        ->setDocumenTarget($formValues['document_target'] ?? 'iframe')
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
         )
@@ -48,18 +47,26 @@ if ($form->validate()) {
         $externalTool
             ->setVersion(ImsLti::V_1P3)
             ->setLaunchUrl($formValues['launch_url'])
-            ->setClientId(
-                ImsLti::generateClientId()
+            ->setClientId(ImsLti::generateClientId())
+            ->setLoginUrl(
+                empty($formValues['login_url']) ? null : $formValues['login_url']
             )
-            ->setLoginUrl($formValues['login_url'])
-            ->setRedirectUrl($formValues['redirect_url'])
+            ->setRedirectUrl(
+                empty($formValues['redirect_url']) ? null : $formValues['redirect_url']
+            )
             ->setAdvantageServices(
                 [
-                    'ags' => $formValues['1p3_ags'],
+                    'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
+                    'nrps' => $formValues['1p3_nrps'] ?? LtiNamesRoleProvisioningService::NRPS_NONE,
                 ]
             )
-            ->setJwksUrl($formValues['jwks_url'])
-            ->publicKey = $formValues['public_key'];
+            ->setJwksUrl(
+                empty($formValues['jwks_url']) ? null : $formValues['jwks_url']
+            );
+
+        $externalTool->publicKey = empty($formValues['public_key'])
+            ? null
+            : $formValues['public_key'];
     } else {
         $externalTool->setVersion(ImsLti::V_1P1);
 

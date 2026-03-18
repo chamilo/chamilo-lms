@@ -29,6 +29,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -199,11 +200,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
-    public function link(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository): RedirectResponse
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $id = $request->get('id');
+    public function link(
+        Request $request,
+        RouterInterface $router,
+        CLinkRepository $cLinkRepository,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse {
+        $tool = (string) $request->get('tool');
+        $type = (string) $request->get('type');
+        $id = (int) $request->get('id');
+
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -212,24 +218,47 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         if ('course_tool' === $tool && 'links' === $type) {
             $cLink = $cLinkRepository->findOneBy(['resourceNode' => $resourceNode]);
-            if ($cLink) {
-                $url = $cLink->getUrl();
 
-                return $this->redirect($url);
+            if ($cLink) {
+                return $this->redirect($cLink->getUrl());
             }
 
             throw new FileNotFoundException('CLink not found for the given resource node');
-        } else {
-            $repo = $this->getRepositoryFromRequest($request);
-            if ($repo instanceof ResourceWithLinkInterface) {
-                $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
-                $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
+        }
+
+        if ('external_tools' === $type) {
+            /** @var ExternalTool|null $externalTool */
+            $externalTool = $entityManager
+                ->getRepository(ExternalTool::class)
+                ->findOneBy(['resourceNode' => $resourceNode]);
+
+            if ($externalTool) {
+                $query = array_filter(
+                    array_merge(
+                        ['id' => $externalTool->getId()],
+                        $this->getCourseUrlQueryToArray()
+                    ),
+                    static fn ($value): bool => null !== $value && '' !== $value
+                );
+
+                $url = api_get_path(WEB_PLUGIN_PATH).'ImsLti/start.php?'.http_build_query($query);
 
                 return $this->redirect($url);
             }
 
             $this->abort('No redirect');
         }
+
+        $repo = $this->getRepositoryFromRequest($request);
+
+        if ($repo instanceof ResourceWithLinkInterface) {
+            $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
+            $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
+
+            return $this->redirect($url);
+        }
+
+        $this->abort('No redirect');
     }
 
     /**
@@ -641,71 +670,71 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     <script>
                     (function () {
                         var userLocale = {$localeJson};
-                    
+
                         function normalizeLocale(locale) {
                             return String(locale || "").replace("-", "_");
                         }
-                    
+
                         function buildLocaleCandidates(locale) {
                             var normalizedLocale = normalizeLocale(locale);
                             var isoCode = normalizedLocale.split("_")[0];
                             var candidates = [];
-                    
+
                             function addCandidate(value) {
                                 if (value && candidates.indexOf(value) === -1) {
                                     candidates.push(value);
                                 }
                             }
-                    
+
                             addCandidate(isoCode);
                             addCandidate(normalizedLocale);
                             addCandidate(normalizedLocale.replace("_", "-"));
-                    
+
                             return candidates;
                         }
-                    
+
                         function findByLang(selector, candidates) {
                             for (var i = 0; i < candidates.length; i++) {
                                 var matches = document.querySelectorAll(
                                     selector.replace("{lang}", candidates[i])
                                 );
-                    
+
                                 if (matches.length > 0) {
                                     return matches;
                                 }
                             }
-                    
+
                             return [];
                         }
-                    
+
                         function hideMatches(matches) {
                             for (var i = 0; i < matches.length; i++) {
                                 matches[i].style.display = "none";
                             }
                         }
-                    
+
                         function showMatches(matches) {
                             for (var i = 0; i < matches.length; i++) {
                                 matches[i].classList.remove("hidden");
                                 matches[i].style.display = "";
                             }
                         }
-                    
+
                         function applyTranslateHtml() {
                             var localeCandidates = buildLocaleCandidates(userLocale);
                             var translateElements = document.querySelectorAll(".mce-translatehtml");
-                    
+
                             if (translateElements.length > 0) {
                                 hideMatches(translateElements);
                                 showMatches(
                                     findByLang('[lang="{lang}"].mce-translatehtml', localeCandidates)
                                 );
                             }
-                    
+
                             var legacyElements = document.querySelectorAll(
                                 'span[lang]:not(.mce-translatehtml)'
                             );
-                    
+
                             if (legacyElements.length > 0) {
                                 hideMatches(legacyElements);
                                 showMatches(
@@ -716,7 +745,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                                 );
                             }
                         }
-                    
+
                         if (document.readyState === "loading") {
                             document.addEventListener("DOMContentLoaded", applyTranslateHtml);
                         } else {

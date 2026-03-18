@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * Responses to AJAX calls.
@@ -18,6 +20,12 @@ $action = $_REQUEST['a'] ?? '';
 if ($action === 'md_to_html') {
     header('Content-Type: text/html; charset=utf-8');
     api_block_anonymous_users();
+
+    if (!api_is_platform_admin()) {
+        http_response_code(403);
+        echo Display::return_message(get_lang('Forbidden'), 'error', false);
+        exit;
+    }
 
     try {
         $plugin = $_GET['plugin'] ?? '';
@@ -33,15 +41,33 @@ if ($action === 'md_to_html') {
             exit;
         }
 
-        $pluginInfo = $appPlugin->getPluginInfo($plugin);
+        $readmeFile = null;
+        $basePath = rtrim(api_get_path(SYS_PLUGIN_PATH).$plugin, '/').'/';
+        $candidates = [
+            'README.md',
+            'Readme.md',
+            'readme.md',
+            'README.MD',
+        ];
 
-        $html = '';
-        if (!empty($pluginInfo)) {
-            $file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
-            if (file_exists($file)) {
-                $content = file_get_contents($file);
-                $html = MarkdownExtra::defaultTransform($content);
+        foreach ($candidates as $candidate) {
+            $fullPath = $basePath.$candidate;
+            if (is_file($fullPath) && is_readable($fullPath)) {
+                $readmeFile = $fullPath;
+                break;
             }
+        }
+
+        if (null === $readmeFile) {
+            echo Display::return_message('README file not found for this plugin.', 'warning', false);
+            exit;
+        }
+
+        $content = file_get_contents($readmeFile);
+        $html = MarkdownExtra::defaultTransform($content);
+
+        if ('' === trim((string) $html)) {
+            $html = Display::return_message('README file is empty.', 'warning', false);
         }
         echo $html;
     } catch (\Throwable $e) {
@@ -164,6 +190,80 @@ if ($action === 'list_documents') {
     exit;
 }
 
+/**
+ * Normalize a DB id list to unique positive integers.
+ */
+function plugin_normalize_int_ids(array $ids): array
+{
+    $ids = array_map('intval', $ids);
+    $ids = array_filter($ids, static fn (int $id): bool => $id > 0);
+
+    return array_values(array_unique($ids));
+}
+
+/**
+ * Remove all IMS/LTI shortcuts and tool resource nodes before uninstalling the plugin.
+ *
+ * This keeps disable non-destructive, while uninstall performs a real cleanup.
+ */
+function plugin_cleanup_imslti_data_before_uninstall(Connection $connection): void
+{
+    $externalToolNodeIds = $connection->fetchFirstColumn(
+        'SELECT resource_node_id
+         FROM lti_external_tool
+         WHERE resource_node_id IS NOT NULL'
+    );
+
+    $externalToolNodeIds = plugin_normalize_int_ids($externalToolNodeIds);
+
+    if (empty($externalToolNodeIds)) {
+        return;
+    }
+
+    $shortcutNodeIds = $connection->fetchFirstColumn(
+        'SELECT resource_node_id
+         FROM c_shortcut
+         WHERE shortcut_node_id IN (?)',
+        [$externalToolNodeIds],
+        [ArrayParameterType::INTEGER]
+    );
+
+    $shortcutNodeIds = plugin_normalize_int_ids($shortcutNodeIds);
+
+    $connection->beginTransaction();
+
+    try {
+        // Remove shortcut rows first.
+        if (!empty($shortcutNodeIds)) {
+            $connection->executeStatement(
+                'DELETE FROM c_shortcut WHERE resource_node_id IN (?)',
+                [$shortcutNodeIds],
+                [ArrayParameterType::INTEGER]
+            );
+
+            // Remove the resource nodes that belonged to those shortcuts.
+            $connection->executeStatement(
+                'DELETE FROM resource_node WHERE id IN (?)',
+                [$shortcutNodeIds],
+                [ArrayParameterType::INTEGER]
+            );
+        }
+
+        // Remove LTI tool resource nodes.
+        // This will also cascade-delete lti_external_tool rows.
+        $connection->executeStatement(
+            'DELETE FROM resource_node WHERE id IN (?)',
+            [$externalToolNodeIds],
+            [ArrayParameterType::INTEGER]
+        );
+
+        $connection->commit();
+    } catch (\Throwable $e) {
+        $connection->rollBack();
+        throw $e;
+    }
+}
+
 try {
     if (!api_is_platform_admin()) {
         http_response_code(403);
@@ -234,6 +334,10 @@ try {
             break;
 
         case 'uninstall':
+            if ('ImsLti' === $pluginTitle) {
+                plugin_cleanup_imslti_data_before_uninstall($em->getConnection());
+            }
+
             $appPlugin->uninstall($pluginTitle);
 
             $pluginEntity->uninstall($currentAccessUrl);

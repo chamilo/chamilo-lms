@@ -1,13 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Entity\Platform;
 use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_course_script();
 api_block_anonymous_users(false);
 
 $scope = empty($_REQUEST['scope']) ? '' : trim($_REQUEST['scope']);
@@ -21,7 +23,7 @@ $nonce = empty($_REQUEST['nonce']) ? '' : trim($_REQUEST['nonce']);
 $loginHint = empty($_REQUEST['login_hint']) ? '' : trim($_REQUEST['login_hint']);
 $ltiMessageHint = empty($_REQUEST['lti_message_hint']) ? '' : trim($_REQUEST['lti_message_hint']);
 
-$em = Database::getManager();
+$em = Container::getEntityManager();
 
 $webPath = api_get_path(WEB_PATH);
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
@@ -40,11 +42,11 @@ try {
         throw LtiAuthException::invalidRequest();
     }
 
-    if ($scope !== 'openid') {
+    if ('openid' !== $scope) {
         throw LtiAuthException::invalidScope();
     }
 
-    if ($responseType !== 'id_token') {
+    if ('id_token' !== $responseType) {
         throw LtiAuthException::unsupportedResponseType();
     }
 
@@ -52,35 +54,67 @@ try {
         throw LtiAuthException::missingResponseMode();
     }
 
-    if ($responseMode !== 'form_post') {
+    if ('form_post' !== $responseMode) {
         throw LtiAuthException::invalidRespondeMode();
     }
 
-    if ($prompt !== 'none') {
+    if ('none' !== $prompt) {
         throw LtiAuthException::invalidPrompt();
     }
 
-    $ltiToolLogin = ChamiloSession::read('lti_tool_login');
+    $ltiToolLogin = (int) ChamiloSession::read('lti_tool_login');
 
-    if ($ltiToolLogin != $ltiMessageHint) {
+    if ($ltiToolLogin <= 0 || (string) $ltiToolLogin !== $ltiMessageHint) {
         throw LtiAuthException::invalidRequest();
     }
 
-    try {
-        /** @var ExternalTool $tool */
-        $tool = $em
-            ->find(ExternalTool::class, $ltiToolLogin);
-    } catch (\Exception $e) {
-        api_not_allowed(true);
-    }
+    /** @var ExternalTool|null $tool */
+    $tool = $em->find(ExternalTool::class, $ltiToolLogin);
 
-    if ($tool->getClientId() != $clientId) {
-        throw LtiAuthException::unauthorizedClient();
+    if (!$tool) {
+        throw LtiAuthException::invalidRequest();
     }
 
     $user = api_get_user_entity(api_get_user_id());
 
-    if (ImsLtiPlugin::getLaunchUserIdClaim($tool, $user) != $loginHint) {
+    if (!$user) {
+        throw LtiAuthException::accessDenied();
+    }
+
+    $launchContext = ChamiloSession::read('ims_lti_launch_context');
+
+    if (
+        empty($launchContext) ||
+        !isset($launchContext['cid'])
+    ) {
+        throw LtiAuthException::invalidRequest();
+    }
+
+    $courseId = (int) $launchContext['cid'];
+    $sessionId = isset($launchContext['sid']) ? (int) $launchContext['sid'] : 0;
+
+    /** @var Course|null $course */
+    $course = $em->find(Course::class, $courseId);
+
+    /** @var Session|null $session */
+    $session = $sessionId > 0 ? $em->find(Session::class, $sessionId) : null;
+
+    if (!$course) {
+        throw LtiAuthException::invalidRequest();
+    }
+
+    $isPlatformAdmin = api_is_platform_admin_by_id($user->getId());
+    $isSubscribed = CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
+
+    if (!$isPlatformAdmin && !$isSubscribed) {
+        throw LtiAuthException::accessDenied();
+    }
+
+    if ($tool->getClientId() !== $clientId) {
+        throw LtiAuthException::unauthorizedClient();
+    }
+
+    if (ImsLtiPlugin::getLaunchUserIdClaim($tool, $user) !== $loginHint) {
         throw LtiAuthException::accessDenied();
     }
 
@@ -88,11 +122,12 @@ try {
         throw LtiAuthException::unregisteredRedirectUri();
     }
 
-    $platform = $em
-        ->getRepository(Platform::class)
-        ->findOneBy([]);
-    $session = api_get_session_entity(api_get_session_id());
-    $course = api_get_course_entity(api_get_course_int_id());
+    /** @var Platform|null $platform */
+    $platform = $em->getRepository(Platform::class)->findOneBy([]);
+
+    if (!$platform) {
+        throw LtiAuthException::invalidRequest();
+    }
 
     $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
@@ -108,7 +143,6 @@ try {
         $jwtContent['nonce'] = md5(microtime().mt_rand());
     }
 
-    // User info
     if ($tool->isSharingName()) {
         $jwtContent['name'] = $user->getFullname();
         $jwtContent['given_name'] = $user->getFirstname();
@@ -129,7 +163,6 @@ try {
         $jwtContent['email'] = $user->getEmail();
     }
 
-    // Course (context) info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/context'] = [
         'id' => (string) $course->getId(),
         'title' => $course->getTitle(),
@@ -137,12 +170,12 @@ try {
         'type' => ['http://purl.imsglobal.org/vocab/lis/v2/course#CourseSection'],
     ];
 
-    // Deployment info
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/deployment_id'] = $tool->getParent()
+    $deploymentId = $tool->getParent()
         ? (string) $tool->getParent()->getId()
         : (string) $tool->getId();
 
-    // Platform info
+    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/deployment_id'] = $deploymentId;
+
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/tool_platform'] = [
         'guid' => $platformDomain,
         'contact_email' => api_get_setting('emailAdministrator'),
@@ -152,36 +185,30 @@ try {
         'url' => $webPath,
     ];
 
-    // Launch info
+    $userLocale = str_replace('_', '-', (string) $user->getLocale());
+
+    if ('' === trim($userLocale)) {
+        $userLocale = 'en';
+    }
+
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/launch_presentation'] = [
-        'locale' => api_get_language_isocode($user->getLanguage()),
+        'locale' => $userLocale,
         'document_target' => $tool->getDocumentTarget(),
-        //'height' => 320,
-        //'wdith' => 240,
-        //'return_url' => api_get_course_url(),
     ];
 
-    // LTI info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/version'] = '1.3.0';
-
-    // Roles info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/roles'] = ImsLtiPlugin::getRoles($user);
-
-    // Message type info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getLaunchUrl();
 
     if ($tool->isActiveDeepLinking()) {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiDeepLinkingRequest';
         $jwtContent['https://purl.imsglobal.org/spec/lti-dl/claim/deep_linking_settings'] = [
             'accept_types' => ['ltiResourceLink'],
-            'accept_media_types' => implode(
-                ',',
-                ['*/*', ':::asterisk:::/:::asterisk:::']
-            ),
+            'accept_media_types' => implode(',', ['*/*', ':::asterisk:::/:::asterisk:::']),
             'accept_presentation_document_targets' => ['iframe', 'window'],
             'accept_multiple' => true,
             'auto_create' => true,
-            'title' => $tool->getName(),
+            'title' => $tool->getTitle(),
             'text' => $tool->getDescription(),
             'data' => "tool:{$tool->getId()}",
             'deep_link_return_url' => $webPluginPath.'ImsLti/item_return2.php',
@@ -189,14 +216,12 @@ try {
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
 
-        // Resource link
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/resource_link'] = [
             'id' => (string) $tool->getId(),
-            'title' => $tool->getName(),
+            'title' => $tool->getTitle(),
             'description' => $tool->getDescription(),
         ];
 
-        // LIS info
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
             'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
             'course_section_sourcedid' => ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session),
@@ -234,7 +259,8 @@ try {
                 $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = $agsClaim;
             }
 
-            if (LtiNamesRoleProvisioningService::NRPS_NONE !== $advServices['nrps'] &&
+            if (
+                LtiNamesRoleProvisioningService::NRPS_NONE !== $advServices['nrps'] &&
                 api_is_allowed_to_edit(false, false, true)
             ) {
                 $nrpsClaim = [
@@ -251,7 +277,6 @@ try {
         }
     }
 
-    // Custom params info
     $customParams = $tool->getCustomParamsAsArray();
 
     if (!empty($customParams)) {
@@ -270,14 +295,13 @@ try {
     array_walk_recursive(
         $jwtContent,
         function (&$value) {
-            if (gettype($value) === 'string') {
+            if ('string' === gettype($value)) {
                 $value = preg_replace('/\s+/', ' ', $value);
                 $value = trim($value);
             }
         }
     );
 
-    // Sign
     $jwt = JWT::encode(
         $jwtContent,
         $platform->getPrivateKey(),
@@ -304,10 +328,18 @@ $formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool-
 ?>
 <!DOCTYPE html>
 <html>
-<form action="<?php echo $formActionUrl; ?>" name="ltiLaunchForm" method="post">
+<body>
+<form action="<?php echo Security::remove_XSS($formActionUrl); ?>" name="ltiLaunchForm" method="post">
     <?php foreach ($params as $name => $value) { ?>
-    <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
+        <input
+            type="hidden"
+            name="<?php echo Security::remove_XSS($name); ?>"
+            value="<?php echo Security::remove_XSS($value); ?>"
+        >
     <?php } ?>
 </form>
-<script>document.ltiLaunchForm.submit();</script>
+<script>
+    document.ltiLaunchForm.submit();
+</script>
+</body>
 </html>

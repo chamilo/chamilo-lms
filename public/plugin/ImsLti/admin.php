@@ -1,8 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
 
@@ -12,35 +12,35 @@ api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 
-if ($plugin->get('enabled') !== 'true') {
+$pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isPluginEnabled = $pluginEntity
+    && $pluginEntity->isInstalled()
+    && $pluginConfiguration
+    && $pluginConfiguration->isActive();
+
+if (!$isPluginEnabled) {
     api_not_allowed(true);
 }
 
 $em = Database::getManager();
 
-$criteria = Criteria::create()
-    ->where(
-        Criteria::expr()->isNull('parent')
-    );
+/** @var ExternalTool[] $tools */
+$tools = $em->getRepository(ExternalTool::class)->findAll();
 
-$tools = $em->getRepository(ExternalTool::class)->matching($criteria);
-
-$categoriesGradeBook = [];
-foreach ($tools as $tool) {
-    foreach ($tool->getChildren() as $childTool) {
-        $categories = [];
-        if ($childTool->getSession() != null) {
-            $categories = Category::load(null, null, $childTool->getCourse()->getCode(), null, null, $childTool->getSession()->getId());
-        } else {
-            $categories = Category::load(null, null, $childTool->getCourse()->getCode());
-        }
-        if (!empty($categories) && !in_array($categories[0], $categoriesGradeBook)) {
-            $categoriesGradeBook[] = $categories[0];
-        }
+usort(
+    $tools,
+    static function (ExternalTool $a, ExternalTool $b): int {
+        return ($a->getId() ?? 0) <=> ($b->getId() ?? 0);
     }
-}
+);
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('PlatformAdmin'),
+];
 
 $htmlHeadXtra[] = api_get_css(
     api_get_path(WEB_PLUGIN_PATH).'ImsLti/assets/style.css'
@@ -48,7 +48,6 @@ $htmlHeadXtra[] = api_get_css(
 
 $template = new Template($plugin->get_title());
 $template->assign('tools', $tools);
-$template->assign('categories', $categoriesGradeBook);
 
 $content = $template->fetch('ImsLti/view/admin.tpl');
 

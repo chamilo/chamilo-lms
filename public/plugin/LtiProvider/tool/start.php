@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -18,6 +19,7 @@ $toolVars = $plugin->getToolProviderVars($launchData['aud']);
 
 $login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode'], $toolVars['toolName']);
 $ltiSession = [];
+
 if ($login) {
     $values = [];
     $values['issuer'] = $launchData['iss'];
@@ -31,14 +33,43 @@ if ($login) {
     $ltiSession = $values;
 }
 
-$cidReq = 'cidReq='.$toolVars['courseCode'].'&id_session=0&gidReq=0&gradebook=0';
+$courseInfo = api_get_course_info($toolVars['courseCode']);
 
-if ('lp' == $toolVars['toolName']) {
-    $launchUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$toolVars['toolId'].'&isStudentView=true&lti_launch_id='.$launch->getLaunchId();
-} else {
-    $launchUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$cidReq.'&origin=embeddable&exerciseId='.$toolVars['toolId'].'&lti_launch_id='.$launch->getLaunchId();
+if (empty($courseInfo) || empty($courseInfo['real_id'])) {
+    api_not_allowed(true);
 }
+
+$courseId = (int) $courseInfo['real_id'];
+$sessionId = 0;
+
+$contextQuery = http_build_query([
+    'cid' => $courseId,
+    'sid' => $sessionId,
+]);
+
+if ('lp' === $toolVars['toolName']) {
+    $launchUrl = api_get_path(WEB_CODE_PATH)
+        .'lp/lp_controller.php?'
+        .$contextQuery
+        .'&action=view&lp_id='
+        .$toolVars['toolId']
+        .'&isStudentView=true'
+        .'&origin=embeddable'
+        .'&lti_launch_id='
+        .$launch->getLaunchId();
+} else {
+    $launchUrl = api_get_path(WEB_CODE_PATH)
+        .'exercise/exercise_submit.php?'
+        .$contextQuery
+        .'&origin=embeddable&exerciseId='
+        .$toolVars['toolId']
+        .'&learnpath_id=0&learnpath_item_id=0&learnpath_item_view_id=0'
+        .'&lti_launch_id='
+        .$launch->getLaunchId();
+}
+
 $ltiSession['launch_url'] = $launchUrl;
 Session::write('_ltiProvider', $ltiSession);
+
 header('Location: '.$launchUrl);
 exit;

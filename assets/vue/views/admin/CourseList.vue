@@ -323,7 +323,7 @@
             <BaseButton
               v-if="view === 'simple'"
               :label="t('Course home')"
-              :to-url="`/course/${data.id}/home`"
+              :route="{ name: 'CourseHome', params: { id: data.id } }"
               icon="home"
               only-icon
               size="small"

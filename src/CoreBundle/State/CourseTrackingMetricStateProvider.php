@@ -19,6 +19,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @implements ProviderInterface<CourseAverageMetricInSession>
+ */
 final class CourseTrackingMetricStateProvider extends AbstractTrackingStateProvider implements ProviderInterface
 {
     public function __construct(

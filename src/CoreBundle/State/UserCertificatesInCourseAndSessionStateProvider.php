@@ -16,6 +16,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @implements ProviderInterface<UserCertificateInCourseAndSession>
+ */
 final class UserCertificatesInCourseAndSessionStateProvider extends AbstractTrackingStateProvider implements ProviderInterface
 {
     public function __construct(
@@ -35,6 +38,9 @@ final class UserCertificatesInCourseAndSessionStateProvider extends AbstractTrac
         );
     }
 
+    /**
+     * @return list<UserCertificateInCourseAndSession>
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $user = $this->getUserFromQuery();
@@ -45,7 +51,7 @@ final class UserCertificatesInCourseAndSessionStateProvider extends AbstractTrac
 
         $rows = $this->trackingStatsHelper->getUserCertificates($user, $course, $session);
 
-        return array_map(
+        return array_values(array_map(
             static fn (array $row): UserCertificateInCourseAndSession => new UserCertificateInCourseAndSession(
                 (int) $row['id'],
                 (string) $row['title'],
@@ -53,6 +59,6 @@ final class UserCertificatesInCourseAndSessionStateProvider extends AbstractTrac
                 isset($row['downloadUrl']) ? (string) $row['downloadUrl'] : null,
             ),
             $rows
-        );
+        ));
     }
 }

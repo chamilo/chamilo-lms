@@ -21,6 +21,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @implements ProviderInterface<UserAvgLpProgressInCourseAndSession|UserGradebookResultInCourseAndSession>
+ */
 final class UserTrackingMetricStateProvider extends AbstractTrackingStateProvider implements ProviderInterface
 {
     public function __construct(

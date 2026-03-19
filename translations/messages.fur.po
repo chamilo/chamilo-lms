@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartelle,, application/msword:MsWord,, application/octet-stream:Flui octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -16067,6 +16067,15 @@ msgstr "Codici curt"
 
 msgid "Create child skill"
 msgstr "Cree competenzis fieste"
+
+msgid "This skill can be obtained through:"
+msgstr "Cheste competence e si pues obtî tramite:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Nissun curs al moment ti permit di obtî cheste competince."
+
+msgid "Add skill to search profile"
+msgstr "Zontâ competince al profîl di busie"
 
 msgid "Search profile matches"
 msgstr "Sercje corispondencis profil"
@@ -32889,6 +32898,9 @@ msgstr "Erôr nel salvâ lis scambis di dâtis"
 msgid "No documents added yet"
 msgstr "Nissun document zontât finore"
 
+msgid "No additional details available for this skill."
+msgstr "Nissun detai adizionâl disponibil par cheste competince."
+
 msgid "No available documents"
 msgstr "Nissun document disponibil"
 
@@ -33032,4 +33044,13 @@ msgstr "Analytics di apreniment"
 
 msgid "Administrative activity auditing"
 msgstr "Audit de ativitât aministrative"
+
+msgid "List icons"
+msgstr "Liste icone"
+
+msgid "Constant name"
+msgstr "Non costant"
+
+msgid "MDI icon name"
+msgstr "Non icone MDI"
 

@@ -16081,6 +16081,15 @@ msgstr "Código corto."
 msgid "Create child skill"
 msgstr "Crear competencia filla."
 
+msgid "This skill can be obtained through:"
+msgstr "Esta competencia pódese obter a través de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ningún curso permite obter esta competencia actualmente."
+
+msgid "Add skill to search profile"
+msgstr "Engadir competencia ao perfil de busca"
+
 msgid "Search profile matches"
 msgstr "Buscar perfiles que correspondan."
 
@@ -32908,6 +32917,9 @@ msgstr "Erro ao gardar o intercambio de datos"
 msgid "No documents added yet"
 msgstr "Aínda non se engadiron documentos"
 
+msgid "No additional details available for this skill."
+msgstr "Non hai detalles adicionais dispoñibles para esta competencia."
+
 msgid "No available documents"
 msgstr "Non hai documentos dispoñibles"
 
@@ -33051,4 +33063,13 @@ msgstr "Análise de aprendizaxe"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoría de actividade administrativa"
+
+msgid "List icons"
+msgstr "Íconos de lista"
+
+msgid "Constant name"
+msgstr "Nome constante"
+
+msgid "MDI icon name"
+msgstr "Nome do ícono MDI"
 

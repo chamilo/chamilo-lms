@@ -16073,6 +16073,15 @@ msgstr "短代码"
 msgid "Create child skill"
 msgstr "创建子技能"
 
+msgid "This skill can be obtained through:"
+msgstr "此技能可通过以下方式获得："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "目前没有课程允许您获得此技能。"
+
+msgid "Add skill to search profile"
+msgstr "将技能添加到搜索资料"
+
 msgid "Search profile matches"
 msgstr "搜索个人资料匹配"
 
@@ -32895,6 +32904,9 @@ msgstr "保存数据交换出错"
 msgid "No documents added yet"
 msgstr "尚未添加文档"
 
+msgid "No additional details available for this skill."
+msgstr "此技能没有额外详细信息。"
+
 msgid "No available documents"
 msgstr "没有可用的文档"
 
@@ -33038,4 +33050,13 @@ msgstr "学习分析"
 
 msgid "Administrative activity auditing"
 msgstr "管理活动审计"
+
+msgid "List icons"
+msgstr "列表图标"
+
+msgid "Constant name"
+msgstr "常量名称"
+
+msgid "MDI icon name"
+msgstr "MDI 图标名称"
 

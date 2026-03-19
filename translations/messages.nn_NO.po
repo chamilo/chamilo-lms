@@ -16071,6 +16071,15 @@ msgstr "Kortkode"
 msgid "Create child skill"
 msgstr "Opprett underferdigheit"
 
+msgid "This skill can be obtained through:"
+msgstr "Denne ferdigheita kan oppnåast gjennom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ingen kurs tillèt deg å oppnå denne ferdigheita akkurat no."
+
+msgid "Add skill to search profile"
+msgstr "Legg ferdigheit til søkprofil"
+
 msgid "Search profile matches"
 msgstr "Søk profilsamsvar"
 
@@ -32893,6 +32902,9 @@ msgstr "Feil ved lagring av datadelingsdata"
 msgid "No documents added yet"
 msgstr "Ingen dokument tilknytte enno"
 
+msgid "No additional details available for this skill."
+msgstr "Ingen tilleggsopplysningar tilgjengelege for denne ferdigheita."
+
 msgid "No available documents"
 msgstr "Ingen tilgjengelege dokument"
 
@@ -33036,4 +33048,13 @@ msgstr "Læringsanalyse"
 
 msgid "Administrative activity auditing"
 msgstr "Administrativ aktivitetsrevisjon"
+
+msgid "List icons"
+msgstr "List ikoner"
+
+msgid "Constant name"
+msgstr "Konstantnamn"
+
+msgid "MDI icon name"
+msgstr "MDI ikonnamn"
 

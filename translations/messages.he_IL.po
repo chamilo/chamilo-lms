@@ -16080,6 +16080,15 @@ msgstr "קוד קצר"
 msgid "Create child skill"
 msgstr "צור מיומנות ילד"
 
+msgid "This skill can be obtained through:"
+msgstr "מיומנות זו ניתן להשיג באמצעות:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "אין קורס כיום המאפשר לך להשיג מיומנות זו."
+
+msgid "Add skill to search profile"
+msgstr "הוסף מיומנות לפרופיל חיפוש"
+
 msgid "Search profile matches"
 msgstr "חיפוש התאמת פרופיל"
 
@@ -32906,6 +32915,9 @@ msgstr "שגיאה בשמירת החלפת נתונים"
 msgid "No documents added yet"
 msgstr "עדיין לא נוספו מסמכים"
 
+msgid "No additional details available for this skill."
+msgstr "אין פרטים נוספים זמינים עבור מיומנות זו."
+
 msgid "No available documents"
 msgstr "אין מסמכים זמינים"
 
@@ -33049,4 +33061,13 @@ msgstr "ניתוח למידה"
 
 msgid "Administrative activity auditing"
 msgstr "ביקורת פעילות ניהולית"
+
+msgid "List icons"
+msgstr "רשימת אייקונים"
+
+msgid "Constant name"
+msgstr "שם קבועה"
+
+msgid "MDI icon name"
+msgstr "שם אייקון MDI"
 

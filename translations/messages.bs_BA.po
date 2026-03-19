@@ -16068,6 +16068,15 @@ msgstr "Kratki kod"
 msgid "Create child skill"
 msgstr "Kreiraj podvještinu"
 
+msgid "This skill can be obtained through:"
+msgstr "Ovu vještinu možete steći putem:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Trenutno nijedan kurs ne omogućava stečenje ove vještine."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj vještinu u profil pretrage"
+
 msgid "Search profile matches"
 msgstr "Pretraži podudaranja profila"
 
@@ -32889,6 +32898,9 @@ msgstr "Greška pri čuvanju razmjene podataka"
 msgid "No documents added yet"
 msgstr "Još uvijek nisu dodani dokumenti"
 
+msgid "No additional details available for this skill."
+msgstr "Nema dodatnih detalja za ovu vještinu."
+
 msgid "No available documents"
 msgstr "Nema dostupnih dokumenata"
 
@@ -33032,4 +33044,13 @@ msgstr "Analitika učenja"
 
 msgid "Administrative activity auditing"
 msgstr "Revizija administrativnih aktivnosti"
+
+msgid "List icons"
+msgstr "Ikone liste"
+
+msgid "Constant name"
+msgstr "Naziv konstante"
+
+msgid "MDI icon name"
+msgstr "Naziv MDI ikone"
 

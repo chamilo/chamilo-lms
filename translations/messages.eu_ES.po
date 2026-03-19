@@ -16073,6 +16073,15 @@ msgstr "Kode laburra"
 msgid "Create child skill"
 msgstr "Sortu gaitasun umea"
 
+msgid "This skill can be obtained through:"
+msgstr "Gaitasun hau honen bidez lortu daiteke:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ez dago ikastarcirik gaitasun hau lortzeko."
+
+msgid "Add skill to search profile"
+msgstr "Gehitu gaitasuna bilaketa profilaren"
+
 msgid "Search profile matches"
 msgstr "Bilatu antzeko profilak"
 
@@ -32900,6 +32909,9 @@ msgstr "Errorea datu trukaketaren gordetzean"
 msgid "No documents added yet"
 msgstr "Oraindik ez da dokumenturik gehitu"
 
+msgid "No additional details available for this skill."
+msgstr "Ez dago xehetasun gehigarririk gaitasun honetarako."
+
 msgid "No available documents"
 msgstr "Ez dago eskuragarri dagoen dokumenturik"
 
@@ -33043,4 +33055,13 @@ msgstr "Ikasmen analitikak"
 
 msgid "Administrative activity auditing"
 msgstr "Administrazio jardueraren ikuskaritza"
+
+msgid "List icons"
+msgstr "Zerrenda ikonoak"
+
+msgid "Constant name"
+msgstr "Konstantearen izena"
+
+msgid "MDI icon name"
+msgstr "MDI ikonoaren izena"
 

@@ -16071,6 +16071,15 @@ msgstr "짧은 코드"
 msgid "Create child skill"
 msgstr "하위 기술 생성"
 
+msgid "This skill can be obtained through:"
+msgstr "이 기술은 다음을 통해 획득할 수 있습니다:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "현재 이 기술을 획득할 수 있는 과정이 없습니다."
+
+msgid "Add skill to search profile"
+msgstr "검색 프로필에 기술 추가"
+
 msgid "Search profile matches"
 msgstr "프로필 일치 검색"
 
@@ -32893,6 +32902,9 @@ msgstr "데이터 교환 저장 오류"
 msgid "No documents added yet"
 msgstr "아직 문서가 추가되지 않았습니다."
 
+msgid "No additional details available for this skill."
+msgstr "이 기술에 대한 추가 세부 정보가 없습니다."
+
 msgid "No available documents"
 msgstr "사용 가능한 문서가 없습니다"
 
@@ -33036,4 +33048,13 @@ msgstr "학습 분석"
 
 msgid "Administrative activity auditing"
 msgstr "관리 활동 감사"
+
+msgid "List icons"
+msgstr "아이콘 목록"
+
+msgid "Constant name"
+msgstr "상수 이름"
+
+msgid "MDI icon name"
+msgstr "MDI 아이콘 이름"
 

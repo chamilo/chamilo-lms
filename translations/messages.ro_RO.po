@@ -16082,6 +16082,15 @@ msgstr "Cod scurt"
 msgid "Create child skill"
 msgstr "Creați concurență fica"
 
+msgid "This skill can be obtained through:"
+msgstr "Această competență poate fi obținută prin:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Niciun curs nu permite în prezent obținerea acestei competențe."
+
+msgid "Add skill to search profile"
+msgstr "Adăugare competență la profilul de căutare"
+
 msgid "Search profile matches"
 msgstr "Cautati perfile care corespund"
 
@@ -32909,6 +32918,9 @@ msgstr "Eroare la salvarea schimbului de date"
 msgid "No documents added yet"
 msgstr "Niciun document adăugat încă"
 
+msgid "No additional details available for this skill."
+msgstr "Nu sunt disponibile detalii suplimentare pentru această competență."
+
 msgid "No available documents"
 msgstr "Niciun document disponibil"
 
@@ -33052,4 +33064,13 @@ msgstr "Analiză învățare"
 
 msgid "Administrative activity auditing"
 msgstr "Audit activitate administrativă"
+
+msgid "List icons"
+msgstr "Pictograme listă"
+
+msgid "Constant name"
+msgstr "Nume constantă"
+
+msgid "MDI icon name"
+msgstr "Nume pictogramă MDI"
 

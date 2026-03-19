@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowa formuła: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowy wzór: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -16071,6 +16071,15 @@ msgstr "Krótki kod"
 
 msgid "Create child skill"
 msgstr "Utwórz umiejętność potomną"
+
+msgid "This skill can be obtained through:"
+msgstr "Ta umiejętność może być uzyskana poprzez:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Żaden kurs nie pozwala obecnie na uzyskanie tej umiejętności."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj umiejętność do profilu wyszukiwania"
 
 msgid "Search profile matches"
 msgstr "Szukaj profile pasujące"
@@ -32899,6 +32908,9 @@ msgstr "Błąd podczas zapisywania wymiany danych"
 msgid "No documents added yet"
 msgstr "Nie dodano jeszcze żadnych dokumentów"
 
+msgid "No additional details available for this skill."
+msgstr "Brak dodatkowych informacji na temat tej umiejętności."
+
 msgid "No available documents"
 msgstr "Brak dostępnych dokumentów"
 
@@ -33042,4 +33054,13 @@ msgstr "Analityka uczenia się"
 
 msgid "Administrative activity auditing"
 msgstr "Audyt aktywności administracyjnej"
+
+msgid "List icons"
+msgstr "Ikony listy"
+
+msgid "Constant name"
+msgstr "Nazwa stałej"
+
+msgid "MDI icon name"
+msgstr "Nazwa ikony MDI"
 

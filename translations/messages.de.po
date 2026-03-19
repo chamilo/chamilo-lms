@@ -16132,6 +16132,15 @@ msgstr "Kürzel"
 msgid "Create child skill"
 msgstr "Erstelle Kind-Fähigkeit"
 
+msgid "This skill can be obtained through:"
+msgstr "Diese Kompetenz kann erworben werden durch:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Derzeit erlaubt kein Kurs den Erwerb dieser Kompetenz."
+
+msgid "Add skill to search profile"
+msgstr "Kompetenz zum Suchprofil hinzufügen"
+
 msgid "Search profile matches"
 msgstr "Profil-Suche nach"
 
@@ -34461,6 +34470,9 @@ msgstr "Fehler beim Speichern des Datenaustauschs"
 msgid "No documents added yet"
 msgstr "Noch keine Dokumente hinzugefügt"
 
+msgid "No additional details available for this skill."
+msgstr "Keine zusätzlichen Details für diese Kompetenz verfügbar."
+
 msgid "No available documents"
 msgstr "Keine verfügbaren Dokumente"
 
@@ -34604,4 +34616,13 @@ msgstr "Lernanalytik"
 
 msgid "Administrative activity auditing"
 msgstr "Administrative Aktivitätsprüfung"
+
+msgid "List icons"
+msgstr "Listenikonen"
+
+msgid "Constant name"
+msgstr "Konstantenname"
+
+msgid "MDI icon name"
+msgstr "MDI-Symbolname"
 

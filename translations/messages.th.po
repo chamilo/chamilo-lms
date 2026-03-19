@@ -16073,6 +16073,15 @@ msgstr "รหัสสั้น"
 msgid "Create child skill"
 msgstr "สร้างทักษะย่อย"
 
+msgid "This skill can be obtained through:"
+msgstr "ทักษะนี้สามารถได้รับได้ผ่าน:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "ไม่มีวิชาคอร์สใดที่อนุญาตให้คุณได้รับทักษะนี้ในปัจจุบัน"
+
+msgid "Add skill to search profile"
+msgstr "เพิ่มทักษะไปยังโปรไฟล์ค้นหา"
+
 msgid "Search profile matches"
 msgstr "ค้นหาการจับคู่โปรไฟล์"
 
@@ -32895,6 +32904,9 @@ msgstr "เกิดข้อผิดพลาดในการบันทึ
 msgid "No documents added yet"
 msgstr "ยังไม่มีการเพิ่มเอกสาร"
 
+msgid "No additional details available for this skill."
+msgstr "ไม่มีรายละเอียดเพิ่มเติมสำหรับทักษะนี้"
+
 msgid "No available documents"
 msgstr "ไม่มีเอกสารที่พร้อมใช้งาน"
 
@@ -33038,4 +33050,13 @@ msgstr "การวิเคราะห์การเรียนรู้"
 
 msgid "Administrative activity auditing"
 msgstr "การตรวจสอบกิจกรรมผู้ดูแลระบบ"
+
+msgid "List icons"
+msgstr "ไอคอนรายการ"
+
+msgid "Constant name"
+msgstr "ชื่อค่าคงที่"
+
+msgid "MDI icon name"
+msgstr "ชื่อไอคอน MDI"
 

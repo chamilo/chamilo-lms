@@ -16073,6 +16073,15 @@ msgstr "Kortkod"
 msgid "Create child skill"
 msgstr "Skapa underfärdighet"
 
+msgid "This skill can be obtained through:"
+msgstr "Denna färdighet kan erhållas genom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ingen kurs tillåter för närvarande att du erhåller denna färdighet."
+
+msgid "Add skill to search profile"
+msgstr "Lägg till färdighet i sökprofil"
+
 msgid "Search profile matches"
 msgstr "Sök profilträffar"
 
@@ -32584,70 +32593,70 @@ msgid "Current authentication method"
 msgstr "Nuvarande autentiseringsmetod"
 
 msgid "Branches"
-msgstr ""
+msgstr "Kontor"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Rum"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Sök rumstillgänglighet"
 
 msgid "New branch"
-msgstr ""
+msgstr "Nytt kontor"
 
 msgid "New room"
-msgstr ""
+msgstr "Nytt rum"
 
 msgid "Branch"
-msgstr ""
+msgstr "Kontor"
 
 msgid "Default room"
-msgstr ""
+msgstr "Standardsal"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Rumsbeläggning: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Hitta lediga rum"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Lediga rum"
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Belagda rum"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Inga lediga rum hittades för detta tidsintervall"
 
 msgid "No rooms have been created yet"
-msgstr ""
+msgstr "Inga rum har skapats ännu"
 
 msgid "Courses linked to %s"
-msgstr ""
+msgstr "Kurser länkade till %s"
 
 msgid "No branches have been created yet"
-msgstr ""
+msgstr "Inga kontor har skapats ännu"
 
 msgid "Occupation"
-msgstr ""
+msgstr "Beläggning"
 
 msgid "Cannot delete branch with rooms attached"
-msgstr ""
+msgstr "Kan inte radera kontor med rum kopplade till det"
 
 msgid "Cannot delete room with courses attached"
-msgstr ""
+msgstr "Kan inte radera rum med kurser kopplade till det"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Konflikter"
 
 msgid "Geolocation"
-msgstr ""
+msgstr "Geolokalisering"
 
 msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
-msgstr ""
+msgstr "Latitud, Longitud (t.ex. 48.8566, 2.3522)"
 
 msgid "IPv4 or IPv6"
-msgstr ""
+msgstr "IPv4 eller IPv6"
 
 msgid "IP mask"
 msgstr "IP-mask"
@@ -32895,6 +32904,9 @@ msgstr "Fel vid sparande av datautbyte"
 msgid "No documents added yet"
 msgstr "Inga dokument tillagda än"
 
+msgid "No additional details available for this skill."
+msgstr "Inga ytterligare detaljer tillgängliga för denna färdighet."
+
 msgid "No available documents"
 msgstr "Inga tillgängliga dokument"
 
@@ -33038,4 +33050,13 @@ msgstr "Lärandeanalys"
 
 msgid "Administrative activity auditing"
 msgstr "Administrativ aktivitetsgranskning"
+
+msgid "List icons"
+msgstr "Listikoner"
+
+msgid "Constant name"
+msgstr "Konstantnamn"
+
+msgid "MDI icon name"
+msgstr "MDI-ikonnamn"
 

@@ -16073,6 +16073,15 @@ msgstr "Kortkode"
 msgid "Create child skill"
 msgstr "Opret underfærdighed"
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr "Søg profilmuligheder"
 
@@ -32743,10 +32752,10 @@ msgid "URI"
 msgstr "URI"
 
 msgid "%s (current)"
-msgstr ""
+msgstr "%s (nuværende)"
 
 msgid "Upload an image or create one with Badge Studio."
-msgstr ""
+msgstr "Upload et billede eller opret et med Badge Studio."
 
 msgid "Current badge set"
 msgstr "Nuværende badge-sæt"
@@ -32895,6 +32904,9 @@ msgstr "Fejl ved gemning af datadeling"
 msgid "No documents added yet"
 msgstr "Ingen dokumenter tilføjet endnu"
 
+msgid "No additional details available for this skill."
+msgstr "Ingen yderligere detaljer tilgængelige for denne færdighed."
+
 msgid "No available documents"
 msgstr "Ingen tilgængelige dokumenter"
 
@@ -33038,4 +33050,13 @@ msgstr "Læringsanalytik"
 
 msgid "Administrative activity auditing"
 msgstr "Administrativ aktivitetsrevision"
+
+msgid "List icons"
+msgstr "Liste ikoner"
+
+msgid "Constant name"
+msgstr "Konstantnavn"
+
+msgid "MDI icon name"
+msgstr "MDI-ikonnavn"
 

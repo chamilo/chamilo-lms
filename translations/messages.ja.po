@@ -16137,6 +16137,15 @@ msgstr "短縮コード"
 msgid "Create child skill"
 msgstr "子スキルの作成"
 
+msgid "This skill can be obtained through:"
+msgstr "このスキルを習得できる方法："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "現在、このスキルを習得できるコースはありません。"
+
+msgid "Add skill to search profile"
+msgstr "検索プロファイルにスキルを追加"
+
 msgid "Search profile matches"
 msgstr "プロフィール一致の検索"
 
@@ -32959,6 +32968,9 @@ msgstr "データ交換の保存中にエラーが発生しました"
 msgid "No documents added yet"
 msgstr "まだドキュメントが追加されていません"
 
+msgid "No additional details available for this skill."
+msgstr "このスキルに追加の詳細はありません。"
+
 msgid "No available documents"
 msgstr "利用可能なドキュメントがありません"
 
@@ -33102,4 +33114,13 @@ msgstr "学習分析"
 
 msgid "Administrative activity auditing"
 msgstr "管理活動監査"
+
+msgid "List icons"
+msgstr "アイコン一覧"
+
+msgid "Constant name"
+msgstr "定数名"
+
+msgid "MDI icon name"
+msgstr "MDI アイコン名"
 

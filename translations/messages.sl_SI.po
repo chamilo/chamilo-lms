@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Octetni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -16081,6 +16081,15 @@ msgstr "Kratka koda"
 
 msgid "Create child skill"
 msgstr "Ustvari podrejeno veščino"
+
+msgid "This skill can be obtained through:"
+msgstr "To spretnost lahko pridobite prek:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Trenutno noben tečaj ne omogoča pridobitve te spretnosti."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj spretnost v iskalni profil"
 
 msgid "Search profile matches"
 msgstr "Iskani profil ustreza"
@@ -32909,6 +32918,9 @@ msgstr "Napaka pri shranjevanju izmenjave podatkov"
 msgid "No documents added yet"
 msgstr "Noben dokument še ni dodan"
 
+msgid "No additional details available for this skill."
+msgstr "Za to spretnost ni dodatnih podrobnosti."
+
 msgid "No available documents"
 msgstr "Ni na voljo nobenega dokumenta"
 
@@ -33052,4 +33064,13 @@ msgstr "Učne analitike"
 
 msgid "Administrative activity auditing"
 msgstr "Revizija administrativnih aktivnosti"
+
+msgid "List icons"
+msgstr "Seznam ikon"
+
+msgid "Constant name"
+msgstr "Ime konstante"
+
+msgid "MDI icon name"
+msgstr "Ime MDI ikone"
 

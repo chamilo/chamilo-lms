@@ -16071,6 +16071,15 @@ msgstr "Rövid kód"
 msgid "Create child skill"
 msgstr "Alképesség létrehozása"
 
+msgid "This skill can be obtained through:"
+msgstr "Ezt a készséget a következőn keresztül lehet megszerezni:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Jelenleg nincs olyan kurzus, amely lehetővé tenné ennek a készségnek a megszerzését."
+
+msgid "Add skill to search profile"
+msgstr "Készség hozzáadása a keresési profilhoz"
+
 msgid "Search profile matches"
 msgstr "Profil egyezések keresése"
 
@@ -32893,6 +32902,9 @@ msgstr "Hiba az adatcsere mentésekor"
 msgid "No documents added yet"
 msgstr "Még nincs dokumentum hozzáadva"
 
+msgid "No additional details available for this skill."
+msgstr "Nincs további részlet elérhető ehhez a készséghez."
+
 msgid "No available documents"
 msgstr "Nincs elérhető dokumentum"
 
@@ -33036,4 +33048,13 @@ msgstr "Tanulási analitika"
 
 msgid "Administrative activity auditing"
 msgstr "Adminisztratív tevékenység naplózása"
+
+msgid "List icons"
+msgstr "Ikonlista"
+
+msgid "Constant name"
+msgstr "Konstans neve"
+
+msgid "MDI icon name"
+msgstr "MDI ikonnév"
 

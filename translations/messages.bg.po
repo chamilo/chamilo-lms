@@ -16073,6 +16073,15 @@ msgstr "Кратък код"
 msgid "Create child skill"
 msgstr "Създаване на дъщерно умение"
 
+msgid "This skill can be obtained through:"
+msgstr "Този умение може да се получи чрез:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Няма курс, който в момента позволява да получите това умение."
+
+msgid "Add skill to search profile"
+msgstr "Добави умение към профил за търсене"
+
 msgid "Search profile matches"
 msgstr "Търсене на съвпадения в профила"
 
@@ -32895,6 +32904,9 @@ msgstr "Грешка при запазване на данните за обме
 msgid "No documents added yet"
 msgstr "Все още не са добавени документи"
 
+msgid "No additional details available for this skill."
+msgstr "Няма налични допълнителни детайли за това умение."
+
 msgid "No available documents"
 msgstr "Няма налични документи"
 
@@ -33038,4 +33050,13 @@ msgstr "Анализ на обучението"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит на административната активност"
+
+msgid "List icons"
+msgstr "Икони на списък"
+
+msgid "Constant name"
+msgstr "Име на константа"
+
+msgid "MDI icon name"
+msgstr "Име на MDI икона"
 

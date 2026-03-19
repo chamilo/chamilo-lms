@@ -16068,6 +16068,15 @@ msgstr "მოკლე კოდი"
 msgid "Create child skill"
 msgstr "შვილობილი უნარის შექმნა"
 
+msgid "This skill can be obtained through:"
+msgstr "ეს უნარი შეიძლება მივიღოთ შემდეგი გზით:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "არცერთი კურსი არ გაძლევთ საშუალებას მიიღოთ ეს უნარი."
+
+msgid "Add skill to search profile"
+msgstr "უნარის დამატება ძიების პროფილში"
+
 msgid "Search profile matches"
 msgstr "პროფილის შესაბამისობის ძიება"
 
@@ -32889,6 +32898,9 @@ msgstr "შეცდომა მონაცემთა გაცვლის 
 msgid "No documents added yet"
 msgstr "ჯერ არანაირი დოკუმენტი არის დამატებული"
 
+msgid "No additional details available for this skill."
+msgstr "ამ უნარზე დამატებითი დეტალები არ არის ხელმისაწვდომი."
+
 msgid "No available documents"
 msgstr "არანაირი ხელმისაწვდომი დოკუმენტი"
 
@@ -33032,4 +33044,13 @@ msgstr "სწავლების ანალიტიკა"
 
 msgid "Administrative activity auditing"
 msgstr "ადმინისტრაციული აქტივობის აუდიტი"
+
+msgid "List icons"
+msgstr "არჩევანის ხატულები"
+
+msgid "Constant name"
+msgstr "კონსტანტის სახელი"
+
+msgid "MDI icon name"
+msgstr "MDI ხატულის სახელი"
 

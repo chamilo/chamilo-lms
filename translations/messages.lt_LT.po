@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Okto duomenų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -16072,6 +16072,15 @@ msgstr "Trumpasis kodas"
 
 msgid "Create child skill"
 msgstr "Sukurti vaiko įgūdį"
+
+msgid "This skill can be obtained through:"
+msgstr "Šį įgūdį galima įgyti per:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Šiuo metu nėra kurso, leidžiančio įgyti šį įgūdį."
+
+msgid "Add skill to search profile"
+msgstr "Pridėti įgūdį prie paieškos profilio"
 
 msgid "Search profile matches"
 msgstr "Ieškoti atitinkančių profilių"
@@ -32894,6 +32903,9 @@ msgstr "Klaida saugant duomenų mainus"
 msgid "No documents added yet"
 msgstr "Dar neįkelta jokių dokumentų"
 
+msgid "No additional details available for this skill."
+msgstr "Šiam įgūdžiui nėra papildomų detalių."
+
 msgid "No available documents"
 msgstr "Nėra prieinamų dokumentų"
 
@@ -33037,4 +33049,13 @@ msgstr "Mokymosi analitika"
 
 msgid "Administrative activity auditing"
 msgstr "Administracinės veiklos auditas"
+
+msgid "List icons"
+msgstr "Piktogramų sąrašas"
+
+msgid "Constant name"
+msgstr "Konstantos pavadinimas"
+
+msgid "MDI icon name"
+msgstr "MDI piktogramos pavadinimas"
 

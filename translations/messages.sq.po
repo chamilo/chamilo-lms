@@ -16072,6 +16072,15 @@ msgstr "Kod i shkurtër"
 msgid "Create child skill"
 msgstr "Krijo aftësi nënord"
 
+msgid "This skill can be obtained through:"
+msgstr "Kjo aftësi mund të fitohet përmes:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Asnjë kurs aktualisht nuk ju lejon të fitoni këtë aftësi."
+
+msgid "Add skill to search profile"
+msgstr "Shto aftësi në profilin e kërkimit"
+
 msgid "Search profile matches"
 msgstr "Kërko përputhje profili"
 
@@ -32893,6 +32902,9 @@ msgstr "Gabim gjatë ruajtjes së shkëmbimit të të dhënave"
 msgid "No documents added yet"
 msgstr "Nuk ka dokumente të shtuara ende"
 
+msgid "No additional details available for this skill."
+msgstr "Asnjë detaj shtesë i disponueshëm për këtë aftësi."
+
 msgid "No available documents"
 msgstr "Nuk ka dokumente të disponueshme"
 
@@ -33036,4 +33048,13 @@ msgstr "Analitikë mësimore"
 
 msgid "Administrative activity auditing"
 msgstr "Auditim i aktivitetit administrativ"
+
+msgid "List icons"
+msgstr "Ikona e listës"
+
+msgid "Constant name"
+msgstr "Emri i kostantës"
+
+msgid "MDI icon name"
+msgstr "Emri i ikonës MDI"
 

@@ -16072,6 +16072,15 @@ msgstr "အတိုကုဒ်"
 msgid "Create child skill"
 msgstr "သားအရည်အချင်းဖန်တီးပါ"
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr "ပရိုဖိုင်ကိုက်ညီမှုများကို ရှာဖွေပါ"
 
@@ -32893,6 +32902,9 @@ msgstr ""
 msgid "No documents added yet"
 msgstr ""
 
+msgid "No additional details available for this skill."
+msgstr ""
+
 msgid "No available documents"
 msgstr ""
 
@@ -32939,16 +32951,16 @@ msgid "No attendance data to save"
 msgstr ""
 
 msgid "Failed to save attendance"
-msgstr ""
+msgstr "တက်ရောက်မှုကို သိမ်းဆည်းရန် မအောင်မြင်ပါ"
 
 msgid "Loading more courses"
-msgstr ""
+msgstr "ကူးစရိတ်များထပ်မံဖွင့်နေသည်"
 
 msgid "Loading more sessions"
-msgstr ""
+msgstr "သင်တန်းများထပ်မံဖွင့်နေသည်"
 
 msgid "The document auto-launch feature configuration is enabled"
-msgstr ""
+msgstr "စာရွက်စာတမ်း အလိုအလျောက်ဖွင့်ခြင်း အင်္ဂါရပ်ပုံစံချက်ကို ဖွင့်ထားပါသည်"
 
 msgid "The exercises auto-launch feature configuration is enabled"
 msgstr "လေ့ကျင့်ခန်း အလိုအလျောက်စတင်ခြင်း အင်္ဂါရပ်ပုံစံချက်ကို ဖွင့်ထားပါသည်"
@@ -33036,4 +33048,13 @@ msgstr "သင်ယူမှု ခွဲခြမ်းစိတ်ဖြာ"
 
 msgid "Administrative activity auditing"
 msgstr "စီမံခန့်ခွဲရေး လှုပ်ရှားမှု စစ်ဆေးခြင်း"
+
+msgid "List icons"
+msgstr "စာရင်းသင်္ကေတ"
+
+msgid "Constant name"
+msgstr "စံနိမ့်အမည်"
+
+msgid "MDI icon name"
+msgstr "MDI သင်္ကေတအမည်"
 

@@ -16068,6 +16068,15 @@ msgstr "Короткий код"
 msgid "Create child skill"
 msgstr "Створити дочірню навичку"
 
+msgid "This skill can be obtained through:"
+msgstr "Цю навичку можна отримати через:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Жоден курс наразі не дозволяє отримати цю навичку."
+
+msgid "Add skill to search profile"
+msgstr "Додати навичку до профілю пошуку"
+
 msgid "Search profile matches"
 msgstr "Пошук відповідностей профілю"
 
@@ -32889,6 +32898,9 @@ msgstr "Помилка збереження обміну даними"
 msgid "No documents added yet"
 msgstr "Документів ще не додано"
 
+msgid "No additional details available for this skill."
+msgstr "Додаткової інформації про цю навичку недоступно."
+
 msgid "No available documents"
 msgstr "Немає доступних документів"
 
@@ -33032,4 +33044,13 @@ msgstr "Навчальна аналітика"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит адміністративної активності"
+
+msgid "List icons"
+msgstr "Іконки списку"
+
+msgid "Constant name"
+msgstr "Назва константи"
+
+msgid "MDI icon name"
+msgstr "Назва іконки MDI"
 

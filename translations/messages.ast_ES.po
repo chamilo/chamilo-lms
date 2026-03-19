@@ -16073,6 +16073,15 @@ msgstr "Cóuigu curtíu"
 msgid "Create child skill"
 msgstr "Crear competencia fía"
 
+msgid "This skill can be obtained through:"
+msgstr "Esta competencia pue obtenerse permedio de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ningún cursu permite actualmente obter esta competencia."
+
+msgid "Add skill to search profile"
+msgstr "Amestar competencia al perfil de gueta"
+
 msgid "Search profile matches"
 msgstr "Guetar coincidencies del perfil"
 
@@ -32895,6 +32904,9 @@ msgstr "Error al guardar el cambeu de datos"
 msgid "No documents added yet"
 msgstr "Nun se tresmitió nengún documentu"
 
+msgid "No additional details available for this skill."
+msgstr "Nun hai detalles adicionales disponibles pa esta competencia."
+
 msgid "No available documents"
 msgstr "Nun hai documentos disponibles"
 
@@ -33038,4 +33050,13 @@ msgstr "Analítica de l'aprendizaxe"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoría d'actividá administrativa"
+
+msgid "List icons"
+msgstr "Iconos de llista"
+
+msgid "Constant name"
+msgstr "Nome de la constante"
+
+msgid "MDI icon name"
+msgstr "Nome del iconu MDI"
 

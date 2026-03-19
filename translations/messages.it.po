@@ -16082,6 +16082,15 @@ msgstr "Codice funzione"
 msgid "Create child skill"
 msgstr "Crea competenze figlie"
 
+msgid "This skill can be obtained through:"
+msgstr "Questa competenza può essere ottenuta tramite:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Nessun corso consente attualmente di ottenere questa competenza."
+
+msgid "Add skill to search profile"
+msgstr "Aggiungi competenza al profilo di ricerca"
+
 msgid "Search profile matches"
 msgstr "La ricerca del profilo corrisponde"
 
@@ -32909,6 +32918,9 @@ msgstr "Errore nel salvare lo scambio dati"
 msgid "No documents added yet"
 msgstr "Nessun documento aggiunto ancora"
 
+msgid "No additional details available for this skill."
+msgstr "Nessun dettaglio aggiuntivo disponibile per questa competenza."
+
 msgid "No available documents"
 msgstr "Nessun documento disponibile"
 
@@ -33052,4 +33064,13 @@ msgstr "Analisi dell'apprendimento"
 
 msgid "Administrative activity auditing"
 msgstr "Audit attività amministrative"
+
+msgid "List icons"
+msgstr "Icone elenco"
+
+msgid "Constant name"
+msgstr "Nome costante"
+
+msgid "MDI icon name"
+msgstr "Nome icona MDI"
 

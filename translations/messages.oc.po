@@ -16068,6 +16068,15 @@ msgstr "Còdi court"
 msgid "Create child skill"
 msgstr "Crear una competéncia filha"
 
+msgid "This skill can be obtained through:"
+msgstr "Aquesta competéncia se pòt obténer per:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Cap cors permet pas actualament d'obténer aquesta competéncia."
+
+msgid "Add skill to search profile"
+msgstr "Apondre la competéncia al perfil de recèrca"
+
 msgid "Search profile matches"
 msgstr "Recercar los perfils correspondents"
 
@@ -32889,6 +32898,9 @@ msgstr "Error al salvament de l’escambi de donadas"
 msgid "No documents added yet"
 msgstr "Cap de document apondut encara"
 
+msgid "No additional details available for this skill."
+msgstr "Cap detalh suplementari disponible per aquesta competéncia."
+
 msgid "No available documents"
 msgstr "Cap de document disponible"
 
@@ -33032,4 +33044,13 @@ msgstr "Analitica d'aprendimentatge"
 
 msgid "Administrative activity auditing"
 msgstr "Audit de l'activitat administrativa"
+
+msgid "List icons"
+msgstr "Icònes de lista"
+
+msgid "Constant name"
+msgstr "Nom de la constante"
+
+msgid "MDI icon name"
+msgstr "Nom de l'icòna MDI"
 

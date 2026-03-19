@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuqñachina,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -16072,6 +16072,15 @@ msgstr "Kutipay"
 
 msgid "Create child skill"
 msgstr "Wawqi yachanata kamariy"
+
+msgid "This skill can be obtained through:"
+msgstr "Kay yachayniywanqa kaymanta chaskikunayki:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Manam kuna kursu kay yachayniywanqa chaskikunanchu."
+
+msgid "Add skill to search profile"
+msgstr "Yachayniywanqa ñawpaq profilanman yapay"
 
 msgid "Search profile matches"
 msgstr "Propiyuy concordakunata maskhay"
@@ -32895,6 +32904,9 @@ msgstr "Error intercambiyu yachaykuna suyullaypi"
 msgid "No documents added yet"
 msgstr "Manam imayna willakuykunaq qhipallaq"
 
+msgid "No additional details available for this skill."
+msgstr "Kay yachayniywanpaq mana iskaq yachaykuna manam."
+
 msgid "No available documents"
 msgstr "Manam willakuykunaq kanchu"
 
@@ -33038,4 +33050,13 @@ msgstr "Yachay ñawpaq kamaq"
 
 msgid "Administrative activity auditing"
 msgstr "Kamachikuy willakuy"
+
+msgid "List icons"
+msgstr "Ruruchina ikikuna"
+
+msgid "Constant name"
+msgstr "Kutichisqa sutin"
+
+msgid "MDI icon name"
+msgstr "MDI ikin sutin"
 

@@ -16073,6 +16073,15 @@ msgstr "Mallonga kodo"
 msgid "Create child skill"
 msgstr "Krei id-kompetencon"
 
+msgid "This skill can be obtained through:"
+msgstr "Ĉi tiun kompetencon oni povas akiri per:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Neniu kurso nune permesas al vi akiri ĉi tiun kompetencon."
+
+msgid "Add skill to search profile"
+msgstr "Aldoni kompetencon al serĉa profilo"
+
 msgid "Search profile matches"
 msgstr "Serĉi kongruojn de profilo"
 
@@ -32895,6 +32904,9 @@ msgstr "Eraro dum konservado de datointerŝanĝo"
 msgid "No documents added yet"
 msgstr "Neniu dokumento aldonita ankoraŭ"
 
+msgid "No additional details available for this skill."
+msgstr "Neniu kromaj detaloj haveblas por ĉi tiu kompetenco."
+
 msgid "No available documents"
 msgstr "Neniu havebla dokumento"
 
@@ -33038,4 +33050,13 @@ msgstr "Lernanalizo"
 
 msgid "Administrative activity auditing"
 msgstr "Administra agado-aŭdito"
+
+msgid "List icons"
+msgstr "Listo de piktogramoj"
+
+msgid "Constant name"
+msgstr "Nomo de konstanto"
+
+msgid "MDI icon name"
+msgstr "Nomo de MDI-piktogramo"
 

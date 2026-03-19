@@ -16073,6 +16073,15 @@ msgstr "Mã ngắn"
 msgid "Create child skill"
 msgstr "Tạo kỹ năng con"
 
+msgid "This skill can be obtained through:"
+msgstr "Kỹ năng này có thể đạt được qua:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Hiện không có khóa học nào cho phép bạn đạt được kỹ năng này."
+
+msgid "Add skill to search profile"
+msgstr "Thêm kỹ năng vào hồ sơ tìm kiếm"
+
 msgid "Search profile matches"
 msgstr "Tìm kiếm hồ sơ khớp"
 
@@ -32895,6 +32904,9 @@ msgstr "Lỗi lưu trao đổi dữ liệu"
 msgid "No documents added yet"
 msgstr "Chưa có tài liệu nào được thêm"
 
+msgid "No additional details available for this skill."
+msgstr "Không có chi tiết bổ sung nào cho kỹ năng này."
+
 msgid "No available documents"
 msgstr "Không có tài liệu nào khả dụng"
 
@@ -33038,4 +33050,13 @@ msgstr "Phân tích học tập"
 
 msgid "Administrative activity auditing"
 msgstr "Kiểm toán hoạt động quản trị"
+
+msgid "List icons"
+msgstr "Danh sách biểu tượng"
+
+msgid "Constant name"
+msgstr "Tên hằng số"
+
+msgid "MDI icon name"
+msgstr "Tên biểu tượng MDI"
 

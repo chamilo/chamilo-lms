@@ -16081,6 +16081,15 @@ msgstr "Codi curt"
 msgid "Create child skill"
 msgstr "Crea competència filla"
 
+msgid "This skill can be obtained through:"
+msgstr "Aquesta competència es pot obtenir a través de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Cap curs permet actualment obtenir aquesta competència."
+
+msgid "Add skill to search profile"
+msgstr "Afegir competència al perfil de cerca"
+
 msgid "Search profile matches"
 msgstr "Cerca perfils que corresponguin"
 
@@ -32908,6 +32917,9 @@ msgstr "Error en desar l'intercanvi de dades"
 msgid "No documents added yet"
 msgstr "Encara no s'ha afegit cap document"
 
+msgid "No additional details available for this skill."
+msgstr "No hi ha detalls addicionals disponibles per aquesta competència."
+
 msgid "No available documents"
 msgstr "No hi ha documents disponibles"
 
@@ -33051,4 +33063,13 @@ msgstr "Anàlisi d'aprenentatge"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoria d'activitat administrativa"
+
+msgid "List icons"
+msgstr "Icones de llista"
+
+msgid "Constant name"
+msgstr "Nom de la constant"
+
+msgid "MDI icon name"
+msgstr "Nom de la icona MDI"
 

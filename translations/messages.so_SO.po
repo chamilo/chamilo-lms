@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes: xuquuqda daabacaadda ,, no: xuquuqda daabacaadda maaha"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Galka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise: layli ,,      simulation: simulation ,,      questionnaire: su'aalo ,,      diagram: jaantus ,,      figure: jaantus ,,      graph: graf ,,      index: index ,,      slide: slide ,,      table: miis ,,      narrative text: qoraal sheeko ah ,,      exam: imtixaan ,,      experiment: tijaabo ,,      problem statement: bayaan dhibaato ,,      self assessment: is-qiimeyn ,,      lecture: cashar"
@@ -14428,25 +14428,25 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Badda buluugga ah"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Buluug qabow"
 
 msgid "Corporate"
 msgstr "Shirkad"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampaska Cosmic"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux macaan"
 
 msgid "Empire green"
 msgstr "Empire cagaar"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Orange midho leh"
 
 msgid "Medical"
 msgstr "Caafimaad"
@@ -16067,6 +16067,15 @@ msgstr "Kood gaaban"
 
 msgid "Create child skill"
 msgstr "Abuur xirfad ilmo"
+
+msgid "This skill can be obtained through:"
+msgstr "Xirfaddan waxaa lagu heli karaa iyada oo loo marayo:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ma jiro koorsada hadda kuu ogolaanaysa in aad hesho xirfaddan."
+
+msgid "Add skill to search profile"
+msgstr "Ku dar xirfadda astaanta raadinta"
 
 msgid "Search profile matches"
 msgstr "Raadi iswaafajiga profile-ka"
@@ -32889,6 +32898,9 @@ msgstr "Khalad keydinta isku beddelka xogta"
 msgid "No documents added yet"
 msgstr "Wali lama darin dukumentiyo"
 
+msgid "No additional details available for this skill."
+msgstr "Ma jiraan faahfaahin dheeraad ah oo diyaar u ah xirfaddan."
+
 msgid "No available documents"
 msgstr "Ma jiraan dukumentiyo diyaar"
 
@@ -33032,4 +33044,13 @@ msgstr "Fahamka waxbarashada"
 
 msgid "Administrative activity auditing"
 msgstr "Hantida dhaqdhaqaaqa maamulka"
+
+msgid "List icons"
+msgstr "Liiska astaamaha"
+
+msgid "Constant name"
+msgstr "Magaca joogtada ah"
+
+msgid "MDI icon name"
+msgstr "Magaca astaanta MDI"
 

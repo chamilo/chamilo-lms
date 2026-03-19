@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -16067,6 +16067,15 @@ msgstr "সংক্ষিপ্ত কোড"
 
 msgid "Create child skill"
 msgstr "সন্তান দক্ষতা তৈরি করুন"
+
+msgid "This skill can be obtained through:"
+msgstr "এই দক্ষতা আহরণ করা যায়:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "কোনো কোর্স বর্তমানে আপনাকে এই দক্ষতা আহরণ করতে দেয় না।"
+
+msgid "Add skill to search profile"
+msgstr "অনুসন্ধান প্রোফাইলে দক্ষতা যোগ করুন"
 
 msgid "Search profile matches"
 msgstr "প্রোফাইল মিল অনুসন্ধান করুন"
@@ -32889,6 +32898,9 @@ msgstr "ডেটা বিনিময় সংরক্ষণে ত্রু
 msgid "No documents added yet"
 msgstr "এখনো কোনো ডকুমেন্ট যোগ করা হয়নি"
 
+msgid "No additional details available for this skill."
+msgstr "এই দক্ষতার জন্য কোনো অতিরিক্ত বিবরণ উপলব্ধ নেই।"
+
 msgid "No available documents"
 msgstr "কোনো উপলব্ধ ডকুমেন্ট নেই"
 
@@ -33032,4 +33044,13 @@ msgstr "শিক্ষা বিশ্লেষণ"
 
 msgid "Administrative activity auditing"
 msgstr "প্রশাসনিক কার্যকলাপের নিরীক্ষা"
+
+msgid "List icons"
+msgstr "আইকন তালিকা"
+
+msgid "Constant name"
+msgstr "কনস্ট্যান্টের নাম"
+
+msgid "MDI icon name"
+msgstr "MDI আইকনের নাম"
 

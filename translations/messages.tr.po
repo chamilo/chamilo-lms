@@ -16073,6 +16073,15 @@ msgstr "Kısa kod"
 msgid "Create child skill"
 msgstr "Alt beceri oluştur"
 
+msgid "This skill can be obtained through:"
+msgstr "Bu beceri şu yollarla elde edilebilir:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Şu anda bu beceriyi elde etmenize izin veren kurs yok."
+
+msgid "Add skill to search profile"
+msgstr "Arama profiline beceri ekle"
+
 msgid "Search profile matches"
 msgstr "Profil eşleşmelerini ara"
 
@@ -32895,6 +32904,9 @@ msgstr "Veri değişimi kaydedilirken hata oluştu"
 msgid "No documents added yet"
 msgstr "Henüz belge eklenmedi"
 
+msgid "No additional details available for this skill."
+msgstr "Bu beceri için ek detay yok."
+
 msgid "No available documents"
 msgstr "Mevcut belge yok"
 
@@ -33038,4 +33050,13 @@ msgstr "Öğrenme analitiği"
 
 msgid "Administrative activity auditing"
 msgstr "Yönetimsel etkinlik denetimi"
+
+msgid "List icons"
+msgstr "Simge listesi"
+
+msgid "Constant name"
+msgstr "Sabit adı"
+
+msgid "MDI icon name"
+msgstr "MDI simge adı"
 

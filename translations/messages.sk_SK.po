@@ -16081,6 +16081,15 @@ msgstr "Krátky kód"
 msgid "Create child skill"
 msgstr "Vytvorte detské zručnosti"
 
+msgid "This skill can be obtained through:"
+msgstr "Táto zručnosť sa dá získať prostredníctvom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Žiadny kurz momentálne neumožňuje získať túto zručnosť."
+
+msgid "Add skill to search profile"
+msgstr "Pridať zručnosť do vyhľadávacieho profilu"
+
 msgid "Search profile matches"
 msgstr "Výsledky hľadania profilu"
 
@@ -32908,6 +32917,9 @@ msgstr "Chyba pri ukladaní výmeny údajov"
 msgid "No documents added yet"
 msgstr "Zatiaľ neboli pridané žiadne dokumenty"
 
+msgid "No additional details available for this skill."
+msgstr "Žiadne ďalšie podrobnosti pre túto zručnosť nie sú k dispozícii."
+
 msgid "No available documents"
 msgstr "Žiadne dostupné dokumenty"
 
@@ -33051,4 +33063,13 @@ msgstr "Learning analytics"
 
 msgid "Administrative activity auditing"
 msgstr "Audit administratívnej aktivity"
+
+msgid "List icons"
+msgstr "Ikony zoznamu"
+
+msgid "Constant name"
+msgstr "Názov konštanty"
+
+msgid "MDI icon name"
+msgstr "Názov ikony MDI"
 

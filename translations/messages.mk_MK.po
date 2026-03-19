@@ -16071,6 +16071,15 @@ msgstr "Краток код"
 msgid "Create child skill"
 msgstr "Создај детска вештина"
 
+msgid "This skill can be obtained through:"
+msgstr "Оваа вештина може да се добие преку:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Нема курс кој моментално ви овозможува да ја добиете оваа вештина."
+
+msgid "Add skill to search profile"
+msgstr "Додади вештина во профилот за пребарување"
+
 msgid "Search profile matches"
 msgstr "Пребарај усогласености на профил"
 
@@ -32893,6 +32902,9 @@ msgstr "Грешка при зачувување на размената на п
 msgid "No documents added yet"
 msgstr "Нема додадени документи"
 
+msgid "No additional details available for this skill."
+msgstr "Нема дополнителни детали достапни за оваа вештина."
+
 msgid "No available documents"
 msgstr "Нема достапни документи"
 
@@ -33036,4 +33048,13 @@ msgstr "Аналитика на учењето"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит на административната активност"
+
+msgid "List icons"
+msgstr "Икони на листа"
+
+msgid "Constant name"
+msgstr "Име на константа"
+
+msgid "MDI icon name"
+msgstr "MDI име на икона"
 

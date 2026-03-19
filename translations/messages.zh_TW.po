@@ -16073,6 +16073,15 @@ msgstr "簡短代碼"
 msgid "Create child skill"
 msgstr "建立子技能"
 
+msgid "This skill can be obtained through:"
+msgstr "此技能可透過以下方式取得："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "目前無課程可讓您取得此技能。"
+
+msgid "Add skill to search profile"
+msgstr "新增技能至搜尋設定檔"
+
 msgid "Search profile matches"
 msgstr "搜尋個人檔案匹配"
 
@@ -32895,6 +32904,9 @@ msgstr "儲存資料交換發生錯誤"
 msgid "No documents added yet"
 msgstr "尚未新增文件"
 
+msgid "No additional details available for this skill."
+msgstr "此技能無額外詳細資訊。"
+
 msgid "No available documents"
 msgstr "沒有可用的文件"
 
@@ -33038,4 +33050,13 @@ msgstr "學習分析"
 
 msgid "Administrative activity auditing"
 msgstr "管理活動審核"
+
+msgid "List icons"
+msgstr "清單圖示"
+
+msgid "Constant name"
+msgstr "常數名稱"
+
+msgid "MDI icon name"
+msgstr "MDI 圖示名稱"
 

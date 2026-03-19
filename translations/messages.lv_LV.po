@@ -16072,6 +16072,15 @@ msgstr "Īss kods"
 msgid "Create child skill"
 msgstr "Izveidot apakšprasmju"
 
+msgid "This skill can be obtained through:"
+msgstr "Šo prasmi var iegūt caur:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Pašlaik neviens kurss neļauj jums iegūt šo prasmju."
+
+msgid "Add skill to search profile"
+msgstr "Pievienot prasmju meklēšanas profilam"
+
 msgid "Search profile matches"
 msgstr "Meklēt profila atbilstības"
 
@@ -32894,6 +32903,9 @@ msgstr "Kļūda saglabājot datu apmaiņu"
 msgid "No documents added yet"
 msgstr "Vēl nav pievienoti dokumenti"
 
+msgid "No additional details available for this skill."
+msgstr "Šai prasmei nav pieejami papildu dati."
+
 msgid "No available documents"
 msgstr "Nav pieejami dokumenti"
 
@@ -33037,4 +33049,13 @@ msgstr "Mācīšanās analītika"
 
 msgid "Administrative activity auditing"
 msgstr "Administratīvās darbības audits"
+
+msgid "List icons"
+msgstr "Saraksta ikonas"
+
+msgid "Constant name"
+msgstr "Konstantes nosaukums"
+
+msgid "MDI icon name"
+msgstr "MDI ikonas nosaukums"
 

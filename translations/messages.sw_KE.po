@@ -16068,6 +16068,15 @@ msgstr "Kodi fupi"
 msgid "Create child skill"
 msgstr "Unda ustadi wa mtoto"
 
+msgid "This skill can be obtained through:"
+msgstr "Uwezo huu unaweza kupatikana kupitia:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Hakuna kozi yoyote kwa sasa inayakuruhusu kupata uwezo huu."
+
+msgid "Add skill to search profile"
+msgstr "Ongeza uwezo kwenye wasifu wa utafutaji"
+
 msgid "Search profile matches"
 msgstr "Tafuta milingano ya wasifu"
 
@@ -32889,6 +32898,9 @@ msgstr "Hitilafu ya kuhifadhi uuzaji wa data"
 msgid "No documents added yet"
 msgstr "Hakuna hati zilizongezwa bado"
 
+msgid "No additional details available for this skill."
+msgstr "Hakuna maelezo ya ziada yanayopatikana kwa uwezo huu."
+
 msgid "No available documents"
 msgstr "Hakuna hati zinazopatikana"
 
@@ -33032,4 +33044,13 @@ msgstr " Uchambuzi wa kujifunza"
 
 msgid "Administrative activity auditing"
 msgstr "Uchunguzi wa shughuli za utawala"
+
+msgid "List icons"
+msgstr "Orodha ya ikoni"
+
+msgid "Constant name"
+msgstr "Jina la konstanti"
+
+msgid "MDI icon name"
+msgstr "Jina la ikoni MDI"
 

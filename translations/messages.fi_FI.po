@@ -16073,6 +16073,15 @@ msgstr "Lyhyt koodi"
 msgid "Create child skill"
 msgstr "Luo alitaito"
 
+msgid "This skill can be obtained through:"
+msgstr "Tämän taidon voi saada seuraavasti:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Yksikään kurssi ei tällä hetkellä anna tätä taitoa."
+
+msgid "Add skill to search profile"
+msgstr "Lisää taito hakuprofiiliin"
+
 msgid "Search profile matches"
 msgstr "Hae profiilit vastauksia"
 
@@ -32895,6 +32904,9 @@ msgstr "Virhe tallennettaessa tiedonvaihtoa"
 msgid "No documents added yet"
 msgstr "Ei vielä lisättyjä asiakirjoja"
 
+msgid "No additional details available for this skill."
+msgstr "Tälle taidolle ei ole lisätietoja saatavilla."
+
 msgid "No available documents"
 msgstr "Ei saatavilla olevia asiakirjoja"
 
@@ -33038,4 +33050,13 @@ msgstr "Opi analytiikka"
 
 msgid "Administrative activity auditing"
 msgstr "Hallinnollisen toiminnan tarkastus"
+
+msgid "List icons"
+msgstr "Luettelokuvat"
+
+msgid "Constant name"
+msgstr "Vakion nimi"
+
+msgid "MDI icon name"
+msgstr "MDI-kuvan nimi"
 

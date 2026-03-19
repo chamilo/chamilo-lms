@@ -16068,6 +16068,15 @@ msgstr "Krátký kód"
 msgid "Create child skill"
 msgstr "Vytvořit podřízenou dovednost"
 
+msgid "This skill can be obtained through:"
+msgstr "Tuto dovednost lze získat prostřednictvím:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Žádný kurz v současnosti neumožňuje získat tuto dovednost."
+
+msgid "Add skill to search profile"
+msgstr "Přidat dovednost do vyhledávacího profilu"
+
 msgid "Search profile matches"
 msgstr "Vyhledat shody profilu"
 
@@ -32889,6 +32898,9 @@ msgstr "Chyba při ukládání výměny dat"
 msgid "No documents added yet"
 msgstr "Zatím nebyly přidány žádné dokumenty"
 
+msgid "No additional details available for this skill."
+msgstr "Žádné další podrobnosti k této dovednosti nejsou k dispozici."
+
 msgid "No available documents"
 msgstr "Žádné dostupné dokumenty"
 
@@ -33028,8 +33040,17 @@ msgid "System activity audit"
 msgstr "Audit aktivity systému"
 
 msgid "Learning analytics"
-msgstr "Learning analytics"
+msgstr "Analýza učení"
 
 msgid "Administrative activity auditing"
 msgstr "Audit administrativní aktivity"
+
+msgid "List icons"
+msgstr "Ikony seznamu"
+
+msgid "Constant name"
+msgstr "Název konstanty"
+
+msgid "MDI icon name"
+msgstr "Název ikony MDI"
 

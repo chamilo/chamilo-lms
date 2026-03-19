@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -16081,6 +16081,15 @@ msgstr "رمز مختصر"
 
 msgid "Create child skill"
 msgstr "انشاء مهارة فرعية"
+
+msgid "This skill can be obtained through:"
+msgstr "يمكن الحصول على هذه المهارة من خلال:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "لا يوجد مساق حاليًا يسمح لك بالحصول على هذه المهارة."
+
+msgid "Add skill to search profile"
+msgstr "إضافة مهارة إلى ملف البحث"
 
 msgid "Search profile matches"
 msgstr "تطابقات البحث عن الحساب الشخصي"
@@ -32907,6 +32916,9 @@ msgstr "خطأ في حفظ تبادل البيانات"
 msgid "No documents added yet"
 msgstr "لم يتم إضافة وثائق بعد"
 
+msgid "No additional details available for this skill."
+msgstr "لا توجد تفاصيل إضافية متاحة لهذه المهارة."
+
 msgid "No available documents"
 msgstr "لا توجد وثائق متاحة"
 
@@ -33050,4 +33062,13 @@ msgstr "تحليلات التعلم"
 
 msgid "Administrative activity auditing"
 msgstr "تدقيق نشاط الإدارة"
+
+msgid "List icons"
+msgstr "قائمة الأيقونات"
+
+msgid "Constant name"
+msgstr "اسم الثابت"
+
+msgid "MDI icon name"
+msgstr "اسم أيقونة MDI"
 

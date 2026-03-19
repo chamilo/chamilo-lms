@@ -16081,6 +16081,15 @@ msgstr "Código curto"
 msgid "Create child skill"
 msgstr "Criar habilidade criança"
 
+msgid "This skill can be obtained through:"
+msgstr "Esta competência pode ser obtida por meio de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Nenhum curso permite atualmente obter esta competência."
+
+msgid "Add skill to search profile"
+msgstr "Adicionar competência ao perfil de busca"
+
 msgid "Search profile matches"
 msgstr "Resultados da pesquisa"
 
@@ -32908,6 +32917,9 @@ msgstr "Erro ao salvar troca de dados"
 msgid "No documents added yet"
 msgstr "Nenhum documento adicionado ainda"
 
+msgid "No additional details available for this skill."
+msgstr "Nenhum detalhe adicional disponível para esta competência."
+
 msgid "No available documents"
 msgstr "Nenhum documento disponível"
 
@@ -33051,4 +33063,13 @@ msgstr "Análise de aprendizagem"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoria de atividade administrativa"
+
+msgid "List icons"
+msgstr "Ícones da lista"
+
+msgid "Constant name"
+msgstr "Nome da constante"
+
+msgid "MDI icon name"
+msgstr "Nome do ícone MDI"
 

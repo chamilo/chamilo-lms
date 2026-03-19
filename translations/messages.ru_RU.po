@@ -16074,6 +16074,15 @@ msgstr "Короткий код"
 msgid "Create child skill"
 msgstr "Создать дочерний навык"
 
+msgid "This skill can be obtained through:"
+msgstr "Этот навык можно получить через:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "На данный момент ни один курс не позволяет получить этот навык."
+
+msgid "Add skill to search profile"
+msgstr "Добавить навык в профиль поиска"
+
 msgid "Search profile matches"
 msgstr "Поиск совпадений профиля"
 
@@ -32896,6 +32905,9 @@ msgstr "Ошибка сохранения обмена данными"
 msgid "No documents added yet"
 msgstr "Документы пока не добавлены"
 
+msgid "No additional details available for this skill."
+msgstr "Дополнительной информации по этому навыку нет."
+
 msgid "No available documents"
 msgstr "Нет доступных документов"
 
@@ -33039,4 +33051,13 @@ msgstr "Аналитика обучения"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит административной активности"
+
+msgid "List icons"
+msgstr "Иконки списка"
+
+msgid "Constant name"
+msgstr "Имя константы"
+
+msgid "MDI icon name"
+msgstr "Имя иконки MDI"
 

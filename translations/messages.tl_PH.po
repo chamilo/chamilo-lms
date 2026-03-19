@@ -16068,6 +16068,15 @@ msgstr "Maikling code"
 msgid "Create child skill"
 msgstr "Lumikha ng child skill"
 
+msgid "This skill can be obtained through:"
+msgstr "Makukuha ang kakayahang ito sa pamamagitan ng:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Walang kurso ang nagbibigay-daan sa iyo upang makuha ang kakayahang ito sa kasalukuyan."
+
+msgid "Add skill to search profile"
+msgstr "Idagdag ang kakayahan sa profile ng paghahanap"
+
 msgid "Search profile matches"
 msgstr "Maghanap ng profile matches"
 
@@ -19975,7 +19984,7 @@ msgid "Hide Learning Path PDF export"
 msgstr "Itago ang Learning Path PDF export"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
-msgstr "Itago ang Learning Path PDF Export icon mula sa listahan ng Learning Paths"
+msgstr "Itago ang icon ng PDF Export ng Learning Path mula sa listahan ng Learning Paths"
 
 msgid "Default coach access days before session"
 msgstr "Default coach access days bago ang session"
@@ -25633,7 +25642,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-activate ang player renderers para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch media"
+msgstr "I-activate ang mga tagapag-render ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch na media"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -32889,6 +32898,9 @@ msgstr "Error sa pag-save ng data exchange"
 msgid "No documents added yet"
 msgstr "Walang idinagdag na dokumento pa"
 
+msgid "No additional details available for this skill."
+msgstr "Walang karagdagang detalye ang magagamit para sa kakayahang ito."
+
 msgid "No available documents"
 msgstr "Walang available na dokumento"
 
@@ -33019,10 +33031,10 @@ msgid "Diagnosis Management"
 msgstr "Pamamahala ng Diagnosis"
 
 msgid "Tracking"
-msgstr ""
+msgstr "Pagsubaybay"
 
 msgid "View reports, statistics and tracking data"
-msgstr ""
+msgstr "Tingnan ang mga ulat, istatistika at data ng pagsubaybay"
 
 msgid "System activity audit"
 msgstr "Pag-audit ng aktibidad ng sistema"
@@ -33032,4 +33044,13 @@ msgstr "Analytics ng pag-aaral"
 
 msgid "Administrative activity auditing"
 msgstr "Pag-audit ng aktibidad ng administrador"
+
+msgid "List icons"
+msgstr "Listahan ng mga icon"
+
+msgid "Constant name"
+msgstr "Pangalan ng constant"
+
+msgid "MDI icon name"
+msgstr "Pangalan ng MDI icon"
 

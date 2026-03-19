@@ -17,7 +17,6 @@ class TinCanParser extends PackageParser
     public function parse(): XApiToolLaunch
     {
         $content = file_get_contents($this->filePath);
-
         $xml = new Crawler($content);
 
         $activityNode = $xml->filter('tincan activities activity')->first();
@@ -30,16 +29,16 @@ class TinCanParser extends PackageParser
             ->setCourse($this->course)
             ->setSession($this->session)
             ->setCreatedAt(api_get_utc_datetime(null, false, true))
-            ->setActivityId($activityNode->attr('id'))
-            ->setActivityType($activityNode->attr('type'))
+            ->setActivityId((string) $activityNode->attr('id'))
+            ->setActivityType((string) $activityNode->attr('type'))
             ->setLaunchUrl($this->parseLaunchUrl($nodeLaunch))
         ;
 
-        if ($nodeName) {
+        if ($nodeName->count() > 0) {
             $toolLaunch->setTitle($nodeName->text());
         }
 
-        if ($nodeDescription) {
+        if ($nodeDescription->count() > 0) {
             $toolLaunch->setDescription($nodeDescription->text() ?: null);
         }
 
@@ -48,20 +47,6 @@ class TinCanParser extends PackageParser
 
     private function parseLaunchUrl(Crawler $launchNode): string
     {
-        $launchUrl = $launchNode->text();
-
-        $urlInfo = parse_url($launchUrl);
-
-        if (empty($urlInfo['scheme'])) {
-            $baseUrl = str_replace(
-                api_get_path(SYS_COURSE_PATH),
-                api_get_path(WEB_COURSE_PATH),
-                \dirname($this->filePath)
-            );
-
-            return "$baseUrl/$launchUrl";
-        }
-
-        return $launchUrl;
+        return $this->resolvePackageUrl($launchNode->text());
     }
 }

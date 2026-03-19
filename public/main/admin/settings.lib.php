@@ -547,6 +547,12 @@ function plugin_get_management_url(string $pluginName): ?string
     $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
     $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
 
+    if ('XApi' === $pluginName && plugin_has_editable_settings($pluginName)) {
+        return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+                'plugin' => $pluginName,
+            ]);
+    }
+
     $candidates = [
         'admin.php',
         'configure.php',

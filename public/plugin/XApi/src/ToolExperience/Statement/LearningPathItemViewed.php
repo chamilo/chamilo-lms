@@ -15,28 +15,15 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\LearningPathItem as Learni
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Viewed as ViewedVerb;
 use Database;
-use Xabbuh\XApi\Model\Result;
-use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class LearningPathItemViewed.
  */
 class LearningPathItemViewed extends BaseStatement
 {
-    /**
-     * @var CLpItemView
-     */
-    private $lpItemView;
-
-    /**
-     * @var CLpItem
-     */
-    private $lpItem;
-
-    /**
-     * @var CLpView
-     */
-    private $lpView;
+    private CLpItemView $lpItemView;
+    private CLpItem $lpItem;
+    private CLpView $lpView;
 
     public function __construct(CLpItemView $lpItemView, CLpItem $lpItem, CLpView $lpView)
     {
@@ -45,7 +32,7 @@ class LearningPathItemViewed extends BaseStatement
         $this->lpView = $lpView;
     }
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $user = api_get_user_entity($this->lpView->getUserId());
         $lp = Database::getManager()->find(CLp::class, $this->lpView->getLpId());
@@ -53,30 +40,36 @@ class LearningPathItemViewed extends BaseStatement
         $userActor = new UserActor($user);
         $viewedVerb = new ViewedVerb();
         $lpItemActivity = new LearningPathItemActivity($this->lpItem);
-        $lpActivity = new LearningPath($lp);
 
         $context = $this->generateContext();
-        $contextActivities = $context
-            ->getContextActivities()
-            ->withAddedGroupingActivity($lpActivity->generate())
-        ;
 
-        return new Statement(
-            $this->generateStatementId('learning-path-item'),
-            $userActor->generate(),
-            $viewedVerb->generate(),
-            $lpItemActivity->generate(),
-            new Result(
+        if ($lp instanceof CLp) {
+            $lpActivity = new LearningPath($lp);
+            $context = $this->mergeGroupingActivity($context, $lpActivity->generate());
+        }
+
+        $status = method_exists($this->lpItemView, 'getStatus')
+            ? (string) $this->lpItemView->getStatus()
+            : '';
+
+        $totalTime = method_exists($this->lpItemView, 'getTotalTime')
+            ? (int) $this->lpItemView->getTotalTime()
+            : 0;
+
+        return [
+            'id' => $this->generateStatementId('learning-path-item'),
+            'actor' => $userActor->generate(),
+            'verb' => $viewedVerb->generate(),
+            'object' => $lpItemActivity->generate(),
+            'result' => $this->buildResult(
+                [],
                 null,
+                'completed' === strtolower(trim($status)),
                 null,
-                'completed' === $this->lpItemView->getStatus(),
-                null,
-                'PT'.$this->lpItemView->getTotalTime().'S'
+                $totalTime > 0 ? 'PT'.$totalTime.'S' : null
             ),
-            null,
-            api_get_utc_datetime(null, false, true),
-            null,
-            $context->withContextActivities($contextActivities)
-        );
+            'timestamp' => api_get_utc_datetime(null, false, true)->format(DATE_ATOM),
+            'context' => $context,
+        ];
     }
 }

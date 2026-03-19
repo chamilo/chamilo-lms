@@ -12,17 +12,13 @@ use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Database;
 use UserManager;
-use Xabbuh\XApi\Model\Attachment;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\IRL;
-use Xabbuh\XApi\Model\LanguageMap;
 
 trait PortfolioAttachmentsTrait
 {
     /**
      * @param array<int, PortfolioAttachment> $portfolioAttachments
      *
-     * @return array<int, Attachment>
+     * @return array<int, array<string, mixed>>
      */
     protected function generateAttachments(array $portfolioAttachments, User $user): array
     {
@@ -35,7 +31,13 @@ trait PortfolioAttachmentsTrait
         $userDirectory = UserManager::getUserPathById($user->getId(), 'system');
         $attachmentsDirectory = $userDirectory.'portfolio_attachments/';
 
-        $langIso = api_get_language_isocode();
+        $languageSource = function_exists('api_get_interface_language')
+            ? api_get_interface_language()
+            : api_get_setting('platformLanguage');
+
+        $langIso = !empty($languageSource)
+            ? api_get_language_isocode($languageSource)
+            : 'en';
 
         $cidreq = api_get_cidreq();
         $baseUrl = api_get_path(WEB_CODE_PATH).'portfolio/index.php?'.($cidreq ? $cidreq.'&' : '');
@@ -43,49 +45,58 @@ trait PortfolioAttachmentsTrait
         foreach ($portfolioAttachments as $portfolioAttachment) {
             $attachmentFilename = $attachmentsDirectory.$portfolioAttachment->getPath();
 
-            $display = LanguageMap::create(
-                ['und' => $portfolioAttachment->getFilename()]
-            );
-            $description = null;
-
-            if ($portfolioAttachment->getComment()) {
-                $description = LanguageMap::create(
-                    [$langIso => $portfolioAttachment->getComment()]
-                );
+            if (!is_file($attachmentFilename)) {
+                continue;
             }
 
-            $attachments[] = new Attachment(
-                IRI::fromString('http://id.tincanapi.com/attachment/supporting_media'),
-                mime_content_type($attachmentFilename),
-                $portfolioAttachment->getSize(),
-                hash_file('sha256', $attachmentFilename),
-                $display,
-                $description,
-                IRL::fromString(
-                    $baseUrl.http_build_query(['action' => 'download', 'file' => $portfolioAttachment->getPath()])
-                )
-            );
+            $attachment = [
+                'usageType' => 'http://id.tincanapi.com/attachment/supporting_media',
+                'contentType' => mime_content_type($attachmentFilename) ?: 'application/octet-stream',
+                'length' => (int) $portfolioAttachment->getSize(),
+                'sha2' => hash_file('sha256', $attachmentFilename),
+                'display' => [
+                    'und' => (string) $portfolioAttachment->getFilename(),
+                ],
+                'fileUrl' => $baseUrl.http_build_query(
+                        ['action' => 'download', 'file' => $portfolioAttachment->getPath()],
+                        '',
+                        '&',
+                        PHP_QUERY_RFC3986
+                    ),
+            ];
+
+            if ($portfolioAttachment->getComment()) {
+                $attachment['description'] = [
+                    $langIso => (string) $portfolioAttachment->getComment(),
+                ];
+            }
+
+            $attachments[] = $attachment;
         }
 
         return $attachments;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     protected function generateAttachmentsForItem(Portfolio $item): array
     {
         $itemAttachments = Database::getManager()
             ->getRepository(PortfolioAttachment::class)
-            ->findFromItem($item)
-        ;
+            ->findFromItem($item);
 
         return $this->generateAttachments($itemAttachments, $item->getUser());
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     protected function generateAttachmentsForComment(PortfolioCommentEntity $comment): array
     {
         $commentAttachments = Database::getManager()
             ->getRepository(PortfolioAttachment::class)
-            ->findFromComment($this->comment)
-        ;
+            ->findFromComment($comment);
 
         return $this->generateAttachments($commentAttachments, $comment->getAuthor());
     }

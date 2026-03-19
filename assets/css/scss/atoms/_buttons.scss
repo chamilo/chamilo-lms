@@ -2,6 +2,7 @@
 
 .btn {
   @include m.base-button();
+  @apply text-base;
 
   .mdi {
     @apply text-base;

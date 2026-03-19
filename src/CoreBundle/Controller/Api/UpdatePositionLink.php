@@ -211,7 +211,8 @@ class UpdatePositionLink extends AbstractController
 
             $rl = $rn->getResourceLinkByContext($course, $session);
             if (!$rl) {
-                throw new BadRequestHttpException('ResourceLink not found for link in the current context.');
+                // Link belongs to a different context (e.g. another session); skip it.
+                continue;
             }
 
             $rl->setDisplayOrder($idx);

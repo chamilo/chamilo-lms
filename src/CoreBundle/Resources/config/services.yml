@@ -1,6 +1,7 @@
 # Settings parameters that will be used in the 'services' section
 parameters:
   chamilo.search.xapian_index_dir: '%kernel.project_dir%/var/search'
+  chamilo.plugin.storage_dir: '%kernel.project_dir%/var/plugins'
 
 services:
     _defaults:
@@ -17,9 +18,9 @@ services:
             - {name: translation.loader, alias: po}
 
     Chamilo\CoreBundle\:
-        resource: '../../*'
-        exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge}'
-        public: true
+      resource: '../../*'
+      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Tool/LegacyPluginCourseTool.php}'
+      public: true
 
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
     Chamilo\CoreBundle\Migrations\MigrationFactory:

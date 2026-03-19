@@ -36,7 +36,7 @@
                     </ul>
                     <p>
                         <a class="ajax btn btn--primary btn--sm" data-title="{{ course.name }}"
-                           href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
+                           href="/main/inc/ajax/course_home.ajax.php?{{ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
                             {{ 'Description'|get_lang }}
                         </a>
                     </p>

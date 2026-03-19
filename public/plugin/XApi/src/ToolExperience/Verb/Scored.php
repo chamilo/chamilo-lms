@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
+/**
+ * Class Scored.
+ */
 class Scored extends BaseVerb
 {
     public function __construct()

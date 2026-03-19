@@ -6,42 +6,38 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
-use Xabbuh\XApi\Model\Verb;
-
 /**
  * Class BaseVerb.
  */
 abstract class BaseVerb
 {
-    /**
-     * @var string
-     */
-    protected $iri;
-
-    /**
-     * @var string
-     */
-    protected $display;
+    protected string $iri;
+    protected string $display;
 
     public function __construct(string $iri, string $display)
     {
-        $this->iri = $iri;
-        $this->display = $display;
+        $this->iri = trim($iri);
+        $this->display = trim($display);
     }
 
-    public function generate(): Verb
+    /**
+     * Build a plain xAPI verb payload.
+     */
+    public function generate(): array
     {
-        $langIso = api_get_language_isocode();
+        $languageSource = function_exists('api_get_interface_language')
+            ? api_get_interface_language()
+            : api_get_setting('platformLanguage');
 
-        return new Verb(
-            IRI::fromString($this->iri),
-            LanguageMap::create(
-                [
-                    $langIso => get_lang($this->display),
-                ]
-            )
-        );
+        $languageIso = !empty($languageSource)
+            ? api_get_language_isocode($languageSource)
+            : 'en';
+
+        return [
+            'id' => $this->iri,
+            'display' => [
+                $languageIso => get_lang($this->display),
+            ],
+        ];
     }
 }

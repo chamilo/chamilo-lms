@@ -144,7 +144,7 @@
                         checkbox.prop('disabled', true);
 
                         $.post(
-                            '{{ url('web_ajax') }}exercise.ajax.php?a=quiz_confirm_saved_answers',
+                            '/main/inc/ajax/exercise.ajax.php?a=quiz_confirm_saved_answers',
                             xhrData
                         ).done(function () {
                             button.parents('.form-group').remove();

@@ -317,12 +317,14 @@
               :to-url="`/main/admin/user_edit.php?user_id=${data.id}`"
               icon="edit"
               only-icon
+              size="small"
               type="primary-text"
             />
             <BaseButton
               :label="t('Restore')"
               icon="restore"
               only-icon
+              size="small"
               type="primary-text"
               @click="confirmAction('restore', data)"
             />
@@ -331,6 +333,7 @@
               :label="t('Delete permanently')"
               icon="delete-forever"
               only-icon
+              size="small"
               type="danger-text"
               @click="confirmAction('destroy', data)"
             />
@@ -347,6 +350,7 @@
               :to-url="data.isAnonymous ? null : `/main/admin/user_information.php?user_id=${data.id}`"
               icon="information"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -359,6 +363,7 @@
               "
               icon="account-key"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -369,6 +374,7 @@
               :to-url="data.isStudent ? `/main/my_space/myStudents.php?student=${data.id}` : null"
               icon="tracking"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -380,6 +386,7 @@
               :to-url="data.isAnonymous ? null : `/main/admin/user_edit.php?user_id=${data.id}`"
               icon="edit"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -390,6 +397,7 @@
               :to-url="`/main/skills/assign.php?user=${data.id}`"
               icon="shield-star"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -399,6 +407,7 @@
               :label="t('Anonymize')"
               icon="anonymous"
               only-icon
+              size="small"
               type="primary-text"
               @click="confirmAction('anonymize', data)"
             />
@@ -409,6 +418,7 @@
               :label="t('Delete')"
               icon="delete"
               only-icon
+              size="small"
               type="danger-text"
               @click="confirmAction('delete_user', data)"
             />
@@ -420,6 +430,7 @@
               :to-url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
               icon="sessions"
               only-icon
+              size="small"
               type="primary-text"
             />
 
@@ -431,6 +442,7 @@
                 :to-url="`/main/admin/dashboard_add_users_to_user.php?user=${data.id}`"
                 icon="assign-users"
                 only-icon
+                size="small"
                 type="primary-text"
               />
               <BaseButton
@@ -439,6 +451,7 @@
                 :to-url="`/main/admin/dashboard_add_courses_to_user.php?user=${data.id}`"
                 icon="courses"
                 only-icon
+                size="small"
                 type="primary-text"
               />
               <BaseButton
@@ -447,6 +460,7 @@
                 :to-url="`/main/admin/dashboard_add_sessions_to_user.php?user=${data.id}`"
                 icon="sessions"
                 only-icon
+                size="small"
                 type="primary-text"
               />
             </template>

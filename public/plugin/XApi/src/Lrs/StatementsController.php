@@ -6,142 +6,203 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
-use Chamilo\PluginBundle\XApi\Lrs\Util\InternalLogUtil;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Model\StatementId;
-use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
-use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
-use XApi\LrsBundle\Controller\StatementGetController;
-use XApi\LrsBundle\Controller\StatementHeadController;
-use XApi\LrsBundle\Controller\StatementPostController;
-use XApi\LrsBundle\Controller\StatementPutController;
-use XApi\LrsBundle\Model\StatementsFilterFactory;
-use XApi\Repository\Doctrine\Mapping\Statement as StatementEntity;
-use XApi\Repository\Doctrine\Repository\StatementRepository;
-use XApiPlugin;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Class StatementsController.
  */
 class StatementsController extends BaseController
 {
-    /**
-     * @var StatementRepository
-     */
-    private $statementRepository;
-
-    /**
-     * @var \Symfony\Component\Serializer\Serializer|\Symfony\Component\Serializer\SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var SerializerFactory
-     */
-    private $serializerFactory;
-
     public function __construct(Request $httpRequest)
     {
         parent::__construct($httpRequest);
-
-        $pluginEm = XApiPlugin::getEntityManager();
-
-        $this->statementRepository = new StatementRepository(
-            $pluginEm->getRepository(StatementEntity::class)
-        );
-        $this->serializer = Serializer::createSerializer();
-        $this->serializerFactory = new SerializerFactory($this->serializer);
     }
 
     public function get(): Response
     {
-        $getStatementController = new StatementGetController(
-            $this->statementRepository,
-            $this->serializerFactory->createStatementSerializer(),
-            $this->serializerFactory->createStatementResultSerializer(),
-            new StatementsFilterFactory(
-                new ActorSerializer($this->serializer)
-            )
-        );
+        $this->ensureSessionStarted();
 
-        return $getStatementController->getStatement($this->httpRequest);
+        $statementId = trim((string) $this->httpRequest->query->get('statementId', ''));
+
+        if ('' !== $statementId) {
+            $statement = $_SESSION['xapi_statement_store'][$statementId] ?? null;
+
+            if (!\is_array($statement)) {
+                return new Response('', Response::HTTP_NOT_FOUND);
+            }
+
+            return new JsonResponse($statement, Response::HTTP_OK);
+        }
+
+        $registration = trim((string) $this->httpRequest->query->get('registration', ''));
+        $statements = array_values($_SESSION['xapi_statement_store'] ?? []);
+
+        if ('' !== $registration) {
+            $statements = array_values(
+                array_filter(
+                    $statements,
+                    fn ($statement): bool => \is_array($statement) && $this->matchesRegistration($statement, $registration)
+                )
+            );
+        }
+
+        return new JsonResponse(
+            [
+                'statements' => $statements,
+                'more' => '',
+            ],
+            Response::HTTP_OK
+        );
     }
 
     public function head(): Response
     {
-        $headStatementController = new StatementHeadController(
-            $this->statementRepository,
-            $this->serializerFactory->createStatementSerializer(),
-            $this->serializerFactory->createStatementResultSerializer(),
-            new StatementsFilterFactory(
-                new ActorSerializer($this->serializer)
-            )
-        );
-
-        return $headStatementController->getStatement($this->httpRequest);
+        return $this->get()->setContent('');
     }
 
     public function put(): Response
     {
-        $statement = $this->serializerFactory
-            ->createStatementSerializer()
-            ->deserializeStatement(
-                $this->httpRequest->getContent()
-            )
-        ;
+        $statement = $this->decodeSingleStatement($this->httpRequest->getContent());
 
-        $putStatementController = new StatementPutController($this->statementRepository);
+        $statementId = trim((string) $this->httpRequest->query->get('statementId', ''));
 
-        $response = $putStatementController->putStatement($this->httpRequest, $statement);
+        if ('' === $statementId) {
+            $statementId = $this->extractStatementId($statement);
+        }
 
-        $this->saveLog(
-            [$this->httpRequest->query->get('statementId')]
-        );
+        if ('' === $statementId) {
+            $statementId = Uuid::v4()->toRfc4122();
+        }
 
-        return $response;
+        $statement['id'] = $statementId;
+
+        $this->storeStatement($statementId, $statement);
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     public function post(): Response
     {
-        $content = $this->httpRequest->getContent();
+        $statements = $this->decodeStatementCollection($this->httpRequest->getContent());
 
-        if ('[' !== substr($content, 0, 1)) {
-            $content = "[$content]";
+        $storedIds = [];
+
+        foreach ($statements as $statement) {
+            $statementId = $this->extractStatementId($statement);
+
+            if ('' === $statementId) {
+                $statementId = Uuid::v4()->toRfc4122();
+            }
+
+            $statement['id'] = $statementId;
+
+            $this->storeStatement($statementId, $statement);
+            $storedIds[] = $statementId;
         }
 
-        $statements = $this->serializerFactory
-            ->createStatementSerializer()
-            ->deserializeStatements($content)
-        ;
+        return new JsonResponse($storedIds, Response::HTTP_OK);
+    }
 
-        $postStatementController = new StatementPostController($this->statementRepository);
+    private function storeStatement(string $statementId, array $statement): void
+    {
+        $this->ensureSessionStarted();
 
-        $response = $postStatementController->postStatements($this->httpRequest, $statements);
+        if (!isset($_SESSION['xapi_statement_store']) || !\is_array($_SESSION['xapi_statement_store'])) {
+            $_SESSION['xapi_statement_store'] = [];
+        }
 
-        $this->saveLog(
-            json_decode($response->getContent(), false)
-        );
+        $_SESSION['xapi_statement_store'][$statementId] = $statement;
+    }
 
-        return $response;
+    private function decodeSingleStatement(string $content): array
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            throw new \RuntimeException('Statement payload is empty.');
+        }
+
+        $decoded = json_decode($content, true);
+
+        if (JSON_ERROR_NONE !== json_last_error() || !\is_array($decoded)) {
+            throw new \RuntimeException('Invalid statement JSON payload.');
+        }
+
+        if ($this->isSequentialArray($decoded)) {
+            throw new \RuntimeException('PUT /statements expects a single statement object.');
+        }
+
+        return $decoded;
     }
 
     /**
-     * @param array<string> $statementsId
+     * @return array<int, array<string, mixed>>
      */
-    private function saveLog(array $statementsId): void
+    private function decodeStatementCollection(string $content): array
     {
-        foreach ($statementsId as $statementId) {
-            try {
-                $storedStatement = $this->statementRepository->findStatementById(
-                    StatementId::fromString($statementId)
-                );
+        $content = trim($content);
 
-                InternalLogUtil::saveStatementForInternalLog($storedStatement);
-            } catch (NotFoundException $e) {
-            }
+        if ('' === $content) {
+            throw new \RuntimeException('Statement payload is empty.');
         }
+
+        $decoded = json_decode($content, true);
+
+        if (JSON_ERROR_NONE !== json_last_error() || !\is_array($decoded)) {
+            throw new \RuntimeException('Invalid statement JSON payload.');
+        }
+
+        if ($this->isSequentialArray($decoded)) {
+            $statements = [];
+
+            foreach ($decoded as $statement) {
+                if (!\is_array($statement)) {
+                    throw new \RuntimeException('Invalid statement entry in collection.');
+                }
+
+                $statements[] = $statement;
+            }
+
+            return $statements;
+        }
+
+        return [$decoded];
+    }
+
+    private function extractStatementId(array $statement): string
+    {
+        $statementId = $statement['id'] ?? '';
+
+        return \is_string($statementId) ? trim($statementId) : '';
+    }
+
+    private function ensureSessionStarted(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+    }
+
+    private function isSequentialArray(array $array): bool
+    {
+        return array_keys($array) === range(0, \count($array) - 1);
+    }
+
+    private function matchesRegistration(array $statement, string $registration): bool
+    {
+        $topLevelRegistration = $statement['registration'] ?? null;
+        if (\is_string($topLevelRegistration) && '' !== trim($topLevelRegistration)) {
+            return trim($topLevelRegistration) === $registration;
+        }
+
+        $contextRegistration = $statement['context']['registration'] ?? null;
+        if (\is_string($contextRegistration) && '' !== trim($contextRegistration)) {
+            return trim($contextRegistration) === $registration;
+        }
+
+        return false;
     }
 }

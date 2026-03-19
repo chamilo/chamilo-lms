@@ -13,9 +13,12 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
+use Chamilo\CoreBundle\Tool\AbstractTool;
+use Chamilo\CoreBundle\Tool\LegacyPluginCourseTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -61,17 +64,22 @@ final class CToolStateProvider implements ProviderInterface
         /** @var User|null $user */
         $user = $this->security->getUser();
 
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
+        if (null === $course) {
+            return [];
+        }
+
         $isAllowToEdit = $user && ($user->isAdmin() || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-            $user->isAdmin()
+                $user->isAdmin()
                 || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
                 || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-        );
+            );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('session.allow_edit_tool_visibility_in_session');
-        $session = $this->getSession();
-        $course = $this->getCourse();
 
         [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly(
             $user,
@@ -88,10 +96,10 @@ final class CToolStateProvider implements ProviderInterface
                 continue;
             }
 
+            /** @var AbstractTool $toolModel */
             $toolModel = $resolved['model'];
             $resolvedName = $resolved['name'];
 
-            // If a positioning restriction is active, keep only the allowed tool.
             if ($restrictToPositioning && $allowedToolName && $resolvedName !== $allowedToolName) {
                 continue;
             }
@@ -113,7 +121,6 @@ final class CToolStateProvider implements ProviderInterface
                 );
 
                 if ($sessionLink) {
-                    // Set the session link as unique to include in repsonse
                     $resourceLinks->clear();
                     $resourceLinks->add($sessionLink);
 
@@ -129,34 +136,32 @@ final class CToolStateProvider implements ProviderInterface
                     continue;
                 }
 
-                $notPublishedLink = ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility();
-                if ($notPublishedLink) {
+                if (ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility()) {
                     continue;
                 }
             }
 
-            $results[] = $this->transformer->transform($cTool);
+            $results[] = $this->transformer->transform($cTool, $toolModel);
         }
 
         return $results;
     }
 
     /**
-     * Resolve a ToolChain model for a given CTool safely.
-     * Tries multiple candidate names derived from the stored tool title.
+     * Resolve a tool model from ToolChain first, then fallback to a legacy plugin course tool.
      *
-     * @return array{model: object, name: string}|null
+     * @return array{model: AbstractTool, name: string}|null
      */
     private function resolveToolModelFromCTool(CTool $cTool): ?array
     {
         $toolEntity = $cTool->getTool();
-        $rawTitle = $toolEntity ? (string) $toolEntity->getTitle() : '';
+        $rawTitle = $toolEntity ? trim((string) $toolEntity->getTitle()) : '';
+        $courseToolTitle = trim((string) $cTool->getTitle());
 
         foreach ($this->buildToolNameCandidates($rawTitle) as $candidate) {
             try {
                 $model = $this->toolChain->getToolFromName($candidate);
 
-                // Return the candidate we used so other logic can rely on a stable key.
                 return [
                     'model' => $model,
                     'name' => $candidate,
@@ -166,12 +171,94 @@ final class CToolStateProvider implements ProviderInterface
             }
         }
 
+        $legacyTool = $this->resolveLegacyPluginTool($rawTitle, $courseToolTitle);
+        if (null !== $legacyTool) {
+            return [
+                'model' => $legacyTool,
+                'name' => $legacyTool->getTitle(),
+            ];
+        }
+
+        return null;
+    }
+
+    private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?AbstractTool
+    {
+        $appPlugin = new \AppPlugin();
+        $pluginRepository = Container::getPluginRepository();
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+
+        foreach ($this->buildLegacyPluginCandidates($rawTitle, $courseToolTitle) as $pluginName) {
+            try {
+                $pluginEntity = $pluginRepository->findOneByTitle($pluginName)
+                    ?: $pluginRepository->findOneByTitle(ucfirst(strtolower($pluginName)));
+
+                if (!$pluginEntity || !$pluginEntity->isInstalled()) {
+                    continue;
+                }
+
+                $pluginConfiguration = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
+
+                if (!$pluginConfiguration || !$pluginConfiguration->isActive()) {
+                    continue;
+                }
+
+                $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
+                $pluginClass = $pluginInfo['plugin_class'] ?? null;
+
+                if (!$pluginClass || !class_exists($pluginClass, false)) {
+                    continue;
+                }
+
+                $plugin = method_exists($pluginClass, 'create')
+                    ? $pluginClass::create()
+                    : new $pluginClass();
+
+                if (!$plugin instanceof \Plugin) {
+                    continue;
+                }
+
+                if (!$plugin->isCoursePlugin || !$plugin->addCourseTool) {
+                    continue;
+                }
+
+                return LegacyPluginCourseTool::fromLegacyPlugin($plugin, $courseToolTitle);
+            } catch (Throwable) {
+                // Try next candidate
+            }
+        }
+
         return null;
     }
 
     /**
+     * @return string[]
+     */
+    private function buildLegacyPluginCandidates(string ...$values): array
+    {
+        $candidates = [];
+
+        foreach ($values as $value) {
+            $value = trim($value);
+            if ('' === $value) {
+                continue;
+            }
+
+            $candidates[] = $value;
+            $candidates[] = ucfirst(strtolower($value));
+
+            $normalized = preg_replace('/[^a-z0-9]+/i', '', $value) ?? $value;
+            if ('' !== $normalized) {
+                $candidates[] = $normalized;
+                $candidates[] = ucfirst(strtolower($normalized));
+            }
+        }
+
+        return array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
+    }
+
+    /**
      * Build candidate tool names from a DB title.
-     * This keeps backward compatibility while supporting human titles like "H5P import".
      *
      * @return string[]
      */
@@ -184,40 +271,31 @@ final class CToolStateProvider implements ProviderInterface
 
         $candidates = [];
 
-        // Prefer lowercase first (ToolChain commonly uses lowercase keys)
         $lower = strtolower($rawTitle);
         $candidates[] = $lower;
 
-        // Original as fallback
         if ($rawTitle !== $lower) {
             $candidates[] = $rawTitle;
         }
 
-        // Replace spaces/dashes with underscores (e.g., "H5P import" -> "h5p_import")
         $spaceSnake = strtolower(preg_replace('/[\s\-]+/', '_', $rawTitle) ?? $rawTitle);
         $spaceSnake = trim($spaceSnake, '_');
         $candidates[] = $spaceSnake;
 
-        // Replace any non-alnum with underscores
         $alnumSnake = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $rawTitle) ?? $rawTitle);
         $alnumSnake = trim($alnumSnake, '_');
         $candidates[] = $alnumSnake;
 
-        // CamelCase to snake_case (e.g., "CustomCertificate" -> "custom_certificate")
         $camelSnake = preg_replace('/(?<!^)[A-Z]/', '_$0', $rawTitle) ?? $rawTitle;
         $camelSnake = strtolower($camelSnake);
         $camelSnake = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $camelSnake) ?? $camelSnake);
         $camelSnake = trim($camelSnake, '_');
         $candidates[] = $camelSnake;
 
-        // Some tool keys might be stored without underscores
         $candidates[] = str_replace('_', '', $camelSnake);
         $candidates[] = str_replace('_', '', $alnumSnake);
 
-        // Unique + non-empty
-        $candidates = array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
-
-        return $candidates;
+        return array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
     }
 
     private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array

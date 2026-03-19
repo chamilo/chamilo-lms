@@ -9,14 +9,11 @@ namespace Chamilo\PluginBundle\XApi\Lrs;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class BaseController.
+ * Base controller for xAPI legacy LRS endpoints.
  */
 abstract class BaseController
 {
-    /**
-     * @var Request
-     */
-    protected $httpRequest;
+    protected Request $httpRequest;
 
     public function __construct(Request $httpRequest)
     {

@@ -140,8 +140,8 @@
 .p-button-sm {
   padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
 
-  .p-button-icon,
-  .p-button-label {
+  &:not(.p-button-icon-only) .p-button-icon,
+  &:not(.p-button-icon-only) .p-button-label {
     font-size: 13px;
   }
 }
@@ -159,7 +159,17 @@
 // Icon-only
 // =============================================================================
 .p-button-icon-only {
-  @apply px-3 gap-0;
+  @apply gap-0;
+
+  &:not(.p-button-sm) {
+    padding-left: calc(0.625rem - 1px);
+    padding-right: calc(0.625rem - 1px);
+  }
+
+  &.p-button-sm {
+    padding-left: calc(0.5rem - 1px);
+    padding-right: calc(0.5rem - 1px);
+  }
 
   .p-button-label {
     @apply flex-initial hidden w-0;

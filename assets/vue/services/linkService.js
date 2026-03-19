@@ -80,14 +80,11 @@ export default {
    * @param {{categoryId?: number|null, cid?: number|null, sid?: number|null}} opts
    */
   moveLink: async (linkId, position, opts = {}) => {
-    const cid = opts.cid ?? null
-    const sid = opts.sid ?? null
+    const endpoint = `${ENTRYPOINT}links/${linkId}/move`
 
-    const query = []
-    if (cid !== null) query.push(`cid=${encodeURIComponent(cid)}`)
-    if (sid !== null) query.push(`sid=${encodeURIComponent(sid)}`)
-
-    const endpoint = `${ENTRYPOINT}links/${linkId}/move` + (query.length ? `?${query.join("&")}` : "")
+    const params = {}
+    if (opts.cid !== undefined && opts.cid !== null) params.cid = opts.cid
+    if (opts.sid !== undefined && opts.sid !== null) params.sid = opts.sid
 
     const payload = { position }
 
@@ -95,7 +92,7 @@ export default {
       payload.categoryId = opts.categoryId ?? 0
     }
 
-    const response = await axios.put(endpoint, payload)
+    const response = await axios.put(endpoint, payload, { params })
     return response.data
   },
 

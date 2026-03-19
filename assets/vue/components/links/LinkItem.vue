@@ -14,6 +14,7 @@
         <h6 class="min-w-0">
           <a
             :href="link.url"
+            :target="link.target || '_self'"
             class="inline-flex items-center gap-2 min-w-0"
           >
             <BaseIcon

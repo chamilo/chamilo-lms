@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -33053,4 +33053,61 @@ msgstr "কনস্ট্যান্টের নাম"
 
 msgid "MDI icon name"
 msgstr "MDI আইকনের নাম"
+
+msgid "Assign authentication sources"
+msgstr "অনুমোদন উৎস বরাদ্দ করুন"
+
+msgid "Assignment details"
+msgstr "বরাদ্দের বিবরণ"
+
+msgid "Terms and conditions"
+msgstr "শর্তাবলী"
+
+msgid "Icons"
+msgstr "আইকন"
+
+msgid "Create backup"
+msgstr "ব্যাকআপ তৈরি করুন"
+
+msgid "Create file"
+msgstr "ফাইল তৈরি করুন"
+
+msgid "Create link"
+msgstr "লিঙ্ক তৈরি করুন"
+
+msgid "Edit template"
+msgstr "টেমপ্লেট সম্পাদনা করুন"
+
+msgid "Shared files"
+msgstr "শেয়ার করা ফাইল"
+
+msgid "Skill wheel"
+msgstr "দক্ষতা চাকা"
+
+msgid "Favourite courses"
+msgstr "প্রিয় কোর্স"
+
+msgid "Restart courses"
+msgstr "কোর্স পুনরায় শুরু করুন"
+
+msgid "Generate terms"
+msgstr "শর্তাবলী তৈরি করুন"
+
+msgid "Add variation"
+msgstr "বৈচিত্র্য যোগ করুন"
+
+msgid "Editor demo"
+msgstr "সম্পাদক ডেমো"
+
+msgid "Tool introduction"
+msgstr "টুল পরিচিতি"
+
+msgid "Data exchanges"
+msgstr "তথ্য বিনিময়"
+
+msgid "Third parties"
+msgstr "তৃতীয় পক্ষ"
+
+msgid "Layouts"
+msgstr "লেআউট"
 

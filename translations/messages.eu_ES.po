@@ -33065,3 +33065,60 @@ msgstr "Konstantearen izena"
 msgid "MDI icon name"
 msgstr "MDI ikonoaren izena"
 
+msgid "Assign authentication sources"
+msgstr "Autentifikazio iturriak esleitu"
+
+msgid "Assignment details"
+msgstr "Lanaren xehetasunak"
+
+msgid "Terms and conditions"
+msgstr "Baldintza eta条款"
+
+msgid "Icons"
+msgstr "Ikurrak"
+
+msgid "Create backup"
+msgstr "Backup sortu"
+
+msgid "Create file"
+msgstr "Fitxategi sortu"
+
+msgid "Create link"
+msgstr "Esteka sortu"
+
+msgid "Edit template"
+msgstr "Txantiloia editatu"
+
+msgid "Shared files"
+msgstr "Fitxategi partekatua"
+
+msgid "Skill wheel"
+msgstr "Gaitasun-gurdi"
+
+msgid "Favourite courses"
+msgstr "Ikastaro gogokoak"
+
+msgid "Restart courses"
+msgstr "Ikastaroak berrabiarazi"
+
+msgid "Generate terms"
+msgstr "Baldintzak sortu"
+
+msgid "Add variation"
+msgstr "Aldaketa gehitu"
+
+msgid "Editor demo"
+msgstr "Editorearen demoa"
+
+msgid "Tool introduction"
+msgstr "Tresna sartzea"
+
+msgid "Data exchanges"
+msgstr "Datu-trukaketak"
+
+msgid "Third parties"
+msgstr "Hirugarrenak"
+
+msgid "Layouts"
+msgstr "Diseinuak"
+

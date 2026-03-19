@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Rurasqa rakiy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ñawpaq formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Phuqñachina,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Puqyu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -33059,4 +33059,61 @@ msgstr "Kutichisqa sutin"
 
 msgid "MDI icon name"
 msgstr "MDI ikin sutin"
+
+msgid "Assign authentication sources"
+msgstr "Willaykuna sapaqnin ruray"
+
+msgid "Assignment details"
+msgstr "Willay willakuy"
+
+msgid "Terms and conditions"
+msgstr "Kamachiyninkuna yachachisqakuna"
+
+msgid "Icons"
+msgstr "Ikonokuna"
+
+msgid "Create backup"
+msgstr "Backup kamay"
+
+msgid "Create file"
+msgstr "Pukyu kamay"
+
+msgid "Create link"
+msgstr "Huwllaq kamay"
+
+msgid "Edit template"
+msgstr "Plantilla llamk'ay"
+
+msgid "Shared files"
+msgstr "Yachakusqakuna pukyukuna"
+
+msgid "Skill wheel"
+msgstr "Yachay ruru"
+
+msgid "Favourite courses"
+msgstr "Kuyaykuna kursokuna"
+
+msgid "Restart courses"
+msgstr "Kursokuna paqarispa"
+
+msgid "Generate terms"
+msgstr "Kamachiyninkuna kamay"
+
+msgid "Add variation"
+msgstr "Wakinchay yuyay"
+
+msgid "Editor demo"
+msgstr "Llamk'aq namay"
+
+msgid "Tool introduction"
+msgstr "Introducción de herramienta"
+
+msgid "Data exchanges"
+msgstr "Willakuy wakichikuy"
+
+msgid "Third parties"
+msgstr "Kikinmanta runakuna"
+
+msgid "Layouts"
+msgstr "Ruwukuna"
 

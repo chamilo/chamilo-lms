@@ -33054,3 +33054,60 @@ msgstr "Název konstanty"
 msgid "MDI icon name"
 msgstr "Název ikony MDI"
 
+msgid "Assign authentication sources"
+msgstr "Přiřadit zdroje autentizace"
+
+msgid "Assignment details"
+msgstr "Podrobnosti úkolu"
+
+msgid "Terms and conditions"
+msgstr "Všeobecné podmínky"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Vytvořit zálohu"
+
+msgid "Create file"
+msgstr "Vytvořit soubor"
+
+msgid "Create link"
+msgstr "Vytvořit odkaz"
+
+msgid "Edit template"
+msgstr "Upravit šablonu"
+
+msgid "Shared files"
+msgstr "Sdílené soubory"
+
+msgid "Skill wheel"
+msgstr "Kolo dovedností"
+
+msgid "Favourite courses"
+msgstr "Oblíbené kurzy"
+
+msgid "Restart courses"
+msgstr "Restartovat kurzy"
+
+msgid "Generate terms"
+msgstr "Generovat podmínky"
+
+msgid "Add variation"
+msgstr "Přidat variantu"
+
+msgid "Editor demo"
+msgstr "Demo editoru"
+
+msgid "Tool introduction"
+msgstr "Představení nástroje"
+
+msgid "Data exchanges"
+msgstr "Výměna dat"
+
+msgid "Third parties"
+msgstr "Třetí strany"
+
+msgid "Layouts"
+msgstr "Rozložení"
+

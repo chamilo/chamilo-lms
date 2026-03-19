@@ -33060,3 +33060,60 @@ msgstr "常量名称"
 msgid "MDI icon name"
 msgstr "MDI 图标名称"
 
+msgid "Assign authentication sources"
+msgstr "分配认证源"
+
+msgid "Assignment details"
+msgstr "作业详情"
+
+msgid "Terms and conditions"
+msgstr "条款和条件"
+
+msgid "Icons"
+msgstr "图标"
+
+msgid "Create backup"
+msgstr "创建备份"
+
+msgid "Create file"
+msgstr "创建文件"
+
+msgid "Create link"
+msgstr "创建链接"
+
+msgid "Edit template"
+msgstr "编辑模板"
+
+msgid "Shared files"
+msgstr "共享文件"
+
+msgid "Skill wheel"
+msgstr "技能轮"
+
+msgid "Favourite courses"
+msgstr "收藏课程"
+
+msgid "Restart courses"
+msgstr "重启课程"
+
+msgid "Generate terms"
+msgstr "生成条款"
+
+msgid "Add variation"
+msgstr "添加变体"
+
+msgid "Editor demo"
+msgstr "编辑器演示"
+
+msgid "Tool introduction"
+msgstr "工具介绍"
+
+msgid "Data exchanges"
+msgstr "数据交换"
+
+msgid "Third parties"
+msgstr "第三方"
+
+msgid "Layouts"
+msgstr "布局"
+

@@ -33059,3 +33059,60 @@ msgstr "Konstantes nosaukums"
 msgid "MDI icon name"
 msgstr "MDI ikonas nosaukums"
 
+msgid "Assign authentication sources"
+msgstr "Piešķirt autentifikācijas avotus"
+
+msgid "Assignment details"
+msgstr "Uzdevuma detaļas"
+
+msgid "Terms and conditions"
+msgstr "Lietošanas noteikumi un nosacījumi"
+
+msgid "Icons"
+msgstr "Ikonas"
+
+msgid "Create backup"
+msgstr "Izveidot dublējumu"
+
+msgid "Create file"
+msgstr "Izveidot failu"
+
+msgid "Create link"
+msgstr "Izveidot saiti"
+
+msgid "Edit template"
+msgstr "Rediģēt veidni"
+
+msgid "Shared files"
+msgstr "Koplietotie faili"
+
+msgid "Skill wheel"
+msgstr "Prasmju rats"
+
+msgid "Favourite courses"
+msgstr "Iemīļotie kursi"
+
+msgid "Restart courses"
+msgstr "Atsākt kursus"
+
+msgid "Generate terms"
+msgstr "Ģenerēt noteikumus"
+
+msgid "Add variation"
+msgstr "Pievienot variāciju"
+
+msgid "Editor demo"
+msgstr "Redaktora demonstrācija"
+
+msgid "Tool introduction"
+msgstr "Apgūt rīku izmantošanas iespējas"
+
+msgid "Data exchanges"
+msgstr "Datu apmaiņas"
+
+msgid "Third parties"
+msgstr "Trešās puses"
+
+msgid "Layouts"
+msgstr "Maketi"
+

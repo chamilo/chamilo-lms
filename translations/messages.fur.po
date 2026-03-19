@@ -33054,3 +33054,60 @@ msgstr "Non costant"
 msgid "MDI icon name"
 msgstr "Non icone MDI"
 
+msgid "Assign authentication sources"
+msgstr "Assegné fontis de autenticazion"
+
+msgid "Assignment details"
+msgstr "Détails dal assegnament"
+
+msgid "Terms and conditions"
+msgstr "Condizions e termins"
+
+msgid "Icons"
+msgstr "Iconis"
+
+msgid "Create backup"
+msgstr "Cree backup"
+
+msgid "Create file"
+msgstr "Cree file"
+
+msgid "Create link"
+msgstr "Cree leam"
+
+msgid "Edit template"
+msgstr "Modifiche model"
+
+msgid "Shared files"
+msgstr "File condividûts"
+
+msgid "Skill wheel"
+msgstr "Roue des competenzis"
+
+msgid "Favourite courses"
+msgstr "Corsi preferîts"
+
+msgid "Restart courses"
+msgstr "Restart cors"
+
+msgid "Generate terms"
+msgstr "Generâ termins"
+
+msgid "Add variation"
+msgstr "Zontê variazion"
+
+msgid "Editor demo"
+msgstr "Demo editor"
+
+msgid "Tool introduction"
+msgstr "Intrudussion al strûl"
+
+msgid "Data exchanges"
+msgstr "Scambis di dâtis"
+
+msgid "Third parties"
+msgstr "Tierçis partîts"
+
+msgid "Layouts"
+msgstr "Layout"
+

@@ -33058,3 +33058,60 @@ msgstr "Име на константа"
 msgid "MDI icon name"
 msgstr "MDI име на икона"
 
+msgid "Assign authentication sources"
+msgstr "Додели извори за автентикација"
+
+msgid "Assignment details"
+msgstr "Детали за задолжение"
+
+msgid "Terms and conditions"
+msgstr "Услови и правила"
+
+msgid "Icons"
+msgstr "Икони"
+
+msgid "Create backup"
+msgstr "Создај резервна копија"
+
+msgid "Create file"
+msgstr "Создај датотека"
+
+msgid "Create link"
+msgstr "Создај врска"
+
+msgid "Edit template"
+msgstr "Уреди шаблон"
+
+msgid "Shared files"
+msgstr "Споделени датотеки"
+
+msgid "Skill wheel"
+msgstr "Точка на вештини"
+
+msgid "Favourite courses"
+msgstr "Омилени курсеви"
+
+msgid "Restart courses"
+msgstr "Рестартирај курсеви"
+
+msgid "Generate terms"
+msgstr "Генерирај услови"
+
+msgid "Add variation"
+msgstr "Додај варијација"
+
+msgid "Editor demo"
+msgstr "Пример за уредник"
+
+msgid "Tool introduction"
+msgstr "Воведна алатка"
+
+msgid "Data exchanges"
+msgstr "Размена на податоци"
+
+msgid "Third parties"
+msgstr "Трети страни"
+
+msgid "Layouts"
+msgstr "Layouts"
+

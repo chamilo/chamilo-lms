@@ -33054,3 +33054,60 @@ msgstr "ثابت نوم"
 msgid "MDI icon name"
 msgstr "MDI آیکون نوم"
 
+msgid "Assign authentication sources"
+msgstr "د تصدیق سرچینې ټاکل"
+
+msgid "Assignment details"
+msgstr "د تکلیف تفصیلات"
+
+msgid "Terms and conditions"
+msgstr "د شرایطو او ضوابط"
+
+msgid "Icons"
+msgstr "آیکونونه"
+
+msgid "Create backup"
+msgstr "نسخه جوړول"
+
+msgid "Create file"
+msgstr "د فایل جوړول"
+
+msgid "Create link"
+msgstr "د لینک جوړول"
+
+msgid "Edit template"
+msgstr "د قالب سمول"
+
+msgid "Shared files"
+msgstr "شریک شوي فایلونه"
+
+msgid "Skill wheel"
+msgstr "د مهارت چرخوټ"
+
+msgid "Favourite courses"
+msgstr "خوښې کورسونه"
+
+msgid "Restart courses"
+msgstr "کورسونه بیا پیلول"
+
+msgid "Generate terms"
+msgstr "د شرایطو تولیدول"
+
+msgid "Add variation"
+msgstr "د بدلون اضافه کول"
+
+msgid "Editor demo"
+msgstr "د سمویر دمو"
+
+msgid "Tool introduction"
+msgstr "د وسیلې پېژندنه"
+
+msgid "Data exchanges"
+msgstr "د معلوماتو تبادلې"
+
+msgid "Third parties"
+msgstr "دریمې غاړې"
+
+msgid "Layouts"
+msgstr "ډیزاینونه"
+

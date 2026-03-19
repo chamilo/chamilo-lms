@@ -33054,3 +33054,60 @@ msgstr "Naziv konstante"
 msgid "MDI icon name"
 msgstr "Naziv MDI ikone"
 
+msgid "Assign authentication sources"
+msgstr "Dodijeli izvore autentifikacije"
+
+msgid "Assignment details"
+msgstr "Detalji zadatka"
+
+msgid "Terms and conditions"
+msgstr "Uvjeti i odredbe"
+
+msgid "Icons"
+msgstr "Ikone"
+
+msgid "Create backup"
+msgstr "Kreiraj sigurnosnu kopiju"
+
+msgid "Create file"
+msgstr "Kreiraj datoteku"
+
+msgid "Create link"
+msgstr "Kreiraj vezu"
+
+msgid "Edit template"
+msgstr "Uredi predložak"
+
+msgid "Shared files"
+msgstr "Zajedničke datoteke"
+
+msgid "Skill wheel"
+msgstr "Kota vještina"
+
+msgid "Favourite courses"
+msgstr "Omiljeni kursevi"
+
+msgid "Restart courses"
+msgstr "Ponovo pokreni kurseve"
+
+msgid "Generate terms"
+msgstr "Generiraj uvjete"
+
+msgid "Add variation"
+msgstr "Dodaj varijaciju"
+
+msgid "Editor demo"
+msgstr "Demo uređivača"
+
+msgid "Tool introduction"
+msgstr "Uvod u alat"
+
+msgid "Data exchanges"
+msgstr "Razmjene podataka"
+
+msgid "Third parties"
+msgstr "Treće strane"
+
+msgid "Layouts"
+msgstr "Izgledi"
+

@@ -33058,3 +33058,60 @@ msgstr "Մշտականի անուն"
 msgid "MDI icon name"
 msgstr "MDI պատկերակի անուն"
 
+msgid "Assign authentication sources"
+msgstr "Վստահելի աղբյուրներ վերագրել"
+
+msgid "Assignment details"
+msgstr "Վերագրման մանրամասներ"
+
+msgid "Terms and conditions"
+msgstr "Պայմաններ և կանոններ"
+
+msgid "Icons"
+msgstr "Նկարներ"
+
+msgid "Create backup"
+msgstr "Պահպանման պատճեն ստեղծել"
+
+msgid "Create file"
+msgstr "Նիշք ստեղծել"
+
+msgid "Create link"
+msgstr "Հղում ստեղծել"
+
+msgid "Edit template"
+msgstr "Գաղափարաթուղթ խմբագրել"
+
+msgid "Shared files"
+msgstr "Համատեղ նիշքեր"
+
+msgid "Skill wheel"
+msgstr "Վերջին կարողությունների շրջան"
+
+msgid "Favourite courses"
+msgstr "Любимые курсы"
+
+msgid "Restart courses"
+msgstr "Կրկին սկսել դասընթացները"
+
+msgid "Generate terms"
+msgstr "Պայմաններ գեներացնել"
+
+msgid "Add variation"
+msgstr "Տարբերություն ավելացնել"
+
+msgid "Editor demo"
+msgstr "Խմբագրիչի դեմո"
+
+msgid "Tool introduction"
+msgstr "Գործիքի ներածություն"
+
+msgid "Data exchanges"
+msgstr "Տվյալների փոխանակումներ"
+
+msgid "Third parties"
+msgstr "Երրորդ կողմեր"
+
+msgid "Layouts"
+msgstr "Տիպարներ"
+

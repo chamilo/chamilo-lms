@@ -33060,3 +33060,60 @@ msgstr "Tên hằng số"
 msgid "MDI icon name"
 msgstr "Tên biểu tượng MDI"
 
+msgid "Assign authentication sources"
+msgstr "Gán nguồn xác thực"
+
+msgid "Assignment details"
+msgstr "Chi tiết bài tập"
+
+msgid "Terms and conditions"
+msgstr "Điều khoản và điều kiện"
+
+msgid "Icons"
+msgstr "Biểu tượng"
+
+msgid "Create backup"
+msgstr "Tạo bản sao lưu"
+
+msgid "Create file"
+msgstr "Tạo tệp"
+
+msgid "Create link"
+msgstr "Tạo liên kết"
+
+msgid "Edit template"
+msgstr "Chỉnh sửa mẫu"
+
+msgid "Shared files"
+msgstr "Tệp chia sẻ"
+
+msgid "Skill wheel"
+msgstr "Bánh xe kỹ năng"
+
+msgid "Favourite courses"
+msgstr "Khóa học yêu thích"
+
+msgid "Restart courses"
+msgstr "Khởi động lại khóa học"
+
+msgid "Generate terms"
+msgstr "Tạo điều khoản"
+
+msgid "Add variation"
+msgstr "Thêm biến thể"
+
+msgid "Editor demo"
+msgstr "Mẫu trình soạn thảo"
+
+msgid "Tool introduction"
+msgstr "Giới thiệu công cụ"
+
+msgid "Data exchanges"
+msgstr "Trao đổi dữ liệu"
+
+msgid "Third parties"
+msgstr "Bên thứ ba"
+
+msgid "Layouts"
+msgstr "Bố cục"
+

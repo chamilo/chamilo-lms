@@ -33073,3 +33073,60 @@ msgstr "Nom de la constant"
 msgid "MDI icon name"
 msgstr "Nom de la icona MDI"
 
+msgid "Assign authentication sources"
+msgstr "Assigna fonts d'autenticació"
+
+msgid "Assignment details"
+msgstr "Detalls de la tasca"
+
+msgid "Terms and conditions"
+msgstr "Termes i condicions"
+
+msgid "Icons"
+msgstr "Icones"
+
+msgid "Create backup"
+msgstr "Crea còpia de seguretat"
+
+msgid "Create file"
+msgstr "Crea fitxer"
+
+msgid "Create link"
+msgstr "Crea enllaç"
+
+msgid "Edit template"
+msgstr "Edita plantilla"
+
+msgid "Shared files"
+msgstr "Fitxers compartits"
+
+msgid "Skill wheel"
+msgstr "Roda de competències"
+
+msgid "Favourite courses"
+msgstr "Cursos favorits"
+
+msgid "Restart courses"
+msgstr "Reinicia cursos"
+
+msgid "Generate terms"
+msgstr "Genera termes"
+
+msgid "Add variation"
+msgstr "Afegeix variació"
+
+msgid "Editor demo"
+msgstr "Demo de l'editor"
+
+msgid "Tool introduction"
+msgstr "Introducció"
+
+msgid "Data exchanges"
+msgstr "Intercanvis de dades"
+
+msgid "Third parties"
+msgstr "Tercers"
+
+msgid "Layouts"
+msgstr "Dissenys"
+

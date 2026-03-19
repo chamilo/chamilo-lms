@@ -33054,3 +33054,60 @@ msgstr "Jina la konstanti"
 msgid "MDI icon name"
 msgstr "Jina la ikoni MDI"
 
+msgid "Assign authentication sources"
+msgstr "Panga vyanzo vya uthibitisho"
+
+msgid "Assignment details"
+msgstr "Maelezo ya kazi"
+
+msgid "Terms and conditions"
+msgstr "Sheria na masharti"
+
+msgid "Icons"
+msgstr "Ikoni"
+
+msgid "Create backup"
+msgstr "Unda nakala ya hrabari"
+
+msgid "Create file"
+msgstr "Unda faili"
+
+msgid "Create link"
+msgstr "Unda kiungo"
+
+msgid "Edit template"
+msgstr "Hariri templeti"
+
+msgid "Shared files"
+msgstr "Faili zilizoshirikiwa"
+
+msgid "Skill wheel"
+msgstr "Roda ya ustadi"
+
+msgid "Favourite courses"
+msgstr "Kozi zinazopendwa"
+
+msgid "Restart courses"
+msgstr "Anza upya kozi"
+
+msgid "Generate terms"
+msgstr "Tengeneza maneno"
+
+msgid "Add variation"
+msgstr "Ongeza tofauti"
+
+msgid "Editor demo"
+msgstr "Onyesho la mhariri"
+
+msgid "Tool introduction"
+msgstr "Utangulizi wa zana"
+
+msgid "Data exchanges"
+msgstr "Ubade wa data"
+
+msgid "Third parties"
+msgstr "Wengine wa tatu"
+
+msgid "Layouts"
+msgstr "Muundo"
+

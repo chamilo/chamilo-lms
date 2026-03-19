@@ -33071,3 +33071,60 @@ msgstr "שם קבועה"
 msgid "MDI icon name"
 msgstr "שם אייקון MDI"
 
+msgid "Assign authentication sources"
+msgstr "הקצאת מקורות אימות"
+
+msgid "Assignment details"
+msgstr "פרטי המטלה"
+
+msgid "Terms and conditions"
+msgstr "תנאים וכללים"
+
+msgid "Icons"
+msgstr "אייקונים"
+
+msgid "Create backup"
+msgstr "יצירת גיבוי"
+
+msgid "Create file"
+msgstr "יצירת קובץ"
+
+msgid "Create link"
+msgstr "יצירת קישור"
+
+msgid "Edit template"
+msgstr "עריכת תבנית"
+
+msgid "Shared files"
+msgstr "קבצים משותפים"
+
+msgid "Skill wheel"
+msgstr "גלגל כישורים"
+
+msgid "Favourite courses"
+msgstr "קורסים מועדפים"
+
+msgid "Restart courses"
+msgstr "הפעלת קורסים מחדש"
+
+msgid "Generate terms"
+msgstr "יצירת תנאים"
+
+msgid "Add variation"
+msgstr "הוספת וריאציה"
+
+msgid "Editor demo"
+msgstr "הדגמת עורך"
+
+msgid "Tool introduction"
+msgstr "מבוא לכלי"
+
+msgid "Data exchanges"
+msgstr "החלפת נתונים"
+
+msgid "Third parties"
+msgstr "צדדים שלישיים"
+
+msgid "Layouts"
+msgstr "פריסות"
+

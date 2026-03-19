@@ -8,47 +8,83 @@ namespace Chamilo\PluginBundle\XApi\Importer;
 
 use DocumentManager;
 use Exception;
-use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 /**
- * Class ZipImporter.
+ * Class ZipPackageImporter.
  */
 class ZipPackageImporter extends PackageImporter
 {
     public function import(): string
     {
-        $zipFile = new PclZip($this->packageFileInfo['tmp_name']);
-        $zipContent = $zipFile->listContent();
+        if (!class_exists(ZipArchive::class)) {
+            throw new Exception('ZipArchive extension is not available.');
+        }
 
-        $packageSize = array_reduce(
-            $zipContent,
-            function ($accumulator, $zipEntry) {
-                if (preg_match('~.(php.*|phtml)$~i', $zipEntry['filename'])) {
-                    throw new Exception("File \"{$zipEntry['filename']}\" contains a PHP script");
-                }
+        $zipFile = new ZipArchive();
+        $openResult = $zipFile->open($this->packageFileInfo['tmp_name']);
 
-                if (\in_array($zipEntry['filename'], ['tincan.xml', 'cmi5.xml'])) {
-                    $this->packageType = explode('.', $zipEntry['filename'], 2)[0];
-                }
+        if (true !== $openResult) {
+            throw new Exception('Unable to open ZIP package.');
+        }
 
-                return $accumulator + $zipEntry['size'];
+        $packageSize = 0;
+
+        for ($i = 0; $i < $zipFile->numFiles; ++$i) {
+            $stat = $zipFile->statIndex($i);
+
+            if (false === $stat || empty($stat['name'])) {
+                continue;
             }
-        );
+
+            $entryName = (string) $stat['name'];
+
+            $this->validateZipEntryName($entryName);
+
+            if (preg_match('~\.(php[0-9]?|phtml|phar)$~i', $entryName)) {
+                $zipFile->close();
+
+                throw new Exception(sprintf('File "%s" contains a PHP script', $entryName));
+            }
+
+            $baseName = basename($entryName);
+
+            if (\in_array($baseName, ['tincan.xml', 'cmi5.xml'], true)) {
+                $this->packageType = explode('.', $baseName, 2)[0];
+            }
+
+            $packageSize += (int) ($stat['size'] ?? 0);
+        }
 
         if (empty($this->packageType)) {
+            $zipFile->close();
+
             throw new Exception('Invalid package');
         }
 
         $this->validateEnoughSpace($packageSize);
 
         $pathInfo = pathinfo($this->packageFileInfo['name']);
+        $packageName = $pathInfo['filename'] ?? ('package_'.uniqid());
 
-        $packageDirectoryPath = $this->generatePackageDirectory($pathInfo['filename']);
+        $packageDirectoryPath = $this->generatePackageDirectory($packageName);
 
-        $zipFile->extract($packageDirectoryPath);
+        if (!$zipFile->extractTo($packageDirectoryPath)) {
+            $zipFile->close();
 
-        return "$packageDirectoryPath/{$this->packageType}.xml";
+            throw new Exception('Unable to extract ZIP package.');
+        }
+
+        $zipFile->close();
+
+        $manifestPath = $packageDirectoryPath.'/'.$this->packageType.'.xml';
+
+        if (!is_file($manifestPath)) {
+            throw new Exception(sprintf('Manifest file "%s.xml" not found after extraction.', $this->packageType));
+        }
+
+        return $manifestPath;
     }
 
     /**
@@ -56,10 +92,27 @@ class ZipPackageImporter extends PackageImporter
      */
     protected function validateEnoughSpace(int $packageSize): void
     {
-        $courseSpaceQuota = DocumentManager::get_course_quota($this->course->getCode());
+        $baseDirectory = dirname($this->courseDirectoryPath);
+        $freeSpace = @disk_free_space($baseDirectory);
 
-        if (!enough_size($packageSize, $this->courseDirectoryPath, $courseSpaceQuota)) {
-            throw new Exception('Not enough space to storage package.');
+        if (false !== $freeSpace && $packageSize > $freeSpace) {
+            throw new Exception('Not enough disk space to store package.');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function validateZipEntryName(string $entryName): void
+    {
+        $normalized = str_replace('\\', '/', $entryName);
+
+        if (str_starts_with($normalized, '/')) {
+            throw new Exception(sprintf('Invalid ZIP entry "%s".', $entryName));
+        }
+
+        if (str_contains($normalized, '../') || str_contains($normalized, '..\\')) {
+            throw new Exception(sprintf('ZIP entry "%s" contains an invalid relative path.', $entryName));
         }
     }
 
@@ -68,14 +121,14 @@ class ZipPackageImporter extends PackageImporter
         $directoryPath = implode(
             '/',
             [
-                $this->courseDirectoryPath,
+                rtrim($this->courseDirectoryPath, '/'),
                 $this->packageType,
                 api_replace_dangerous_char($name),
             ]
         );
 
-        $fs = new Filesystem();
-        $fs->mkdir(
+        $filesystem = new Filesystem();
+        $filesystem->mkdir(
             $directoryPath,
             api_get_permissions_for_new_directories()
         );

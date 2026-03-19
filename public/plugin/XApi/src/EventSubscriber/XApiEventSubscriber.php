@@ -6,11 +6,11 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\ExerciseEndedEvent;
 use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
-use Chamilo\CoreBundle\Event\AbstractEvent;
-use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Event\LearningPathItemViewedEvent;
 use Chamilo\CoreBundle\Event\PortfolioCommentEditedEvent;
@@ -34,6 +34,8 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioCommentEdited;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioCommentScored;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioDownloaded;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemCommented;
+use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemEdited;
+use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemHighlighted;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemScored;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemShared;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemViewed;
@@ -100,7 +102,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onExerciseQuestionAnswered(ExerciseQuestionAnsweredEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_QUESTION_ACTIVE)
         ) {
             return;
@@ -111,6 +114,11 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
         $exe = $em->find(TrackEExercise::class, $event->getTrackingExeId());
         $question = $em->find(CQuizQuestion::class, $event->getQuestionId());
+
+        if (!$exe || !$question) {
+            return;
+        }
+
         $attempt = $attemptRepo->findOneBy(
             [
                 'exeId' => $exe->getExeId(),
@@ -119,10 +127,11 @@ class XApiEventSubscriber implements EventSubscriberInterface
         );
         $quiz = $em->find(CQuiz::class, $event->getExerciseId());
 
-        $quizQuestionAnswered = new QuizQuestionAnswered($attempt, $question, $quiz);
+        if (!$attempt || !$quiz) {
+            return;
+        }
 
-        $statement = $quizQuestionAnswered->generate();
-
+        $statement = (new QuizQuestionAnswered($attempt, $question, $quiz))->generate();
         $this->saveSharedStatement($statement);
     }
 
@@ -133,7 +142,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onExerciseEnded(ExerciseEndedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_ACTIVE)
         ) {
             return;
@@ -142,12 +152,18 @@ class XApiEventSubscriber implements EventSubscriberInterface
         $em = Database::getManager();
 
         $exe = $em->find(TrackEExercise::class, $event->getTrackingExeId());
+
+        if (!$exe) {
+            return;
+        }
+
         $quiz = $em->find(CQuiz::class, $exe->getExeExoId());
 
-        $quizCompleted = new QuizCompleted($exe, $quiz);
+        if (!$quiz) {
+            return;
+        }
 
-        $statement = $quizCompleted->generate();
-
+        $statement = (new QuizCompleted($exe, $quiz))->generate();
         $this->saveSharedStatement($statement);
     }
 
@@ -158,7 +174,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onLpItemViewed(LearningPathItemViewedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ITEM_ACTIVE)
         ) {
             return;
@@ -167,19 +184,25 @@ class XApiEventSubscriber implements EventSubscriberInterface
         $em = Database::getManager();
 
         $lpItemView = $em->find(CLpItemView::class, $event->getItemViewId());
+
+        if (!$lpItemView) {
+            return;
+        }
+
         $lpItem = $em->find(CLpItem::class, $lpItemView->getLpItemId());
 
-        if ('quiz' == $lpItem->getItemType()) {
+        if (!$lpItem || 'quiz' === $lpItem->getItemType()) {
             return;
         }
 
         $lpView = $em->find(CLpView::class, $lpItemView->getLpViewId());
 
-        $lpItemViewed = new LearningPathItemViewed($lpItemView, $lpItem, $lpView);
+        if (!$lpView) {
+            return;
+        }
 
-        $this->saveSharedStatement(
-            $lpItemViewed->generate()
-        );
+        $statement = (new LearningPathItemViewed($lpItemView, $lpItem, $lpView))->generate();
+        $this->saveSharedStatement($statement);
     }
 
     /**
@@ -189,7 +212,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onLpEnded(LearningPathEndedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ACTIVE)
         ) {
             return;
@@ -198,13 +222,19 @@ class XApiEventSubscriber implements EventSubscriberInterface
         $em = Database::getManager();
 
         $lpView = $em->find(CLpView::class, $event->getLpViewId());
+
+        if (!$lpView) {
+            return;
+        }
+
         $lp = $em->find(CLp::class, $lpView->getLpId());
 
-        $learningPathEnded = new LearningPathCompleted($lpView, $lp);
+        if (!$lp) {
+            return;
+        }
 
-        $this->saveSharedStatement(
-            $learningPathEnded->generate()
-        );
+        $statement = (new LearningPathCompleted($lpView, $lp))->generate();
+        $this->saveSharedStatement($statement);
     }
 
     /**
@@ -213,7 +243,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -226,7 +257,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioItemShared($item))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
@@ -236,7 +266,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -248,8 +279,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $statement = (new PortfolioItemShared($item))->generate();
-
+        $statement = (new PortfolioItemEdited($item))->generate();
         $this->saveSharedStatement($statement);
     }
 
@@ -259,7 +289,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemViewed(PortfolioItemViewedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -272,7 +303,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioItemViewed($item))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
@@ -282,7 +312,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemCommented(PortfolioItemCommentedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -294,16 +325,14 @@ class XApiEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $portfolioItemCommented = new PortfolioItemCommented($comment);
-
-        $statement = $portfolioItemCommented->generate();
-
+        $statement = (new PortfolioItemCommented($comment))->generate();
         $this->saveSharedStatement($statement);
     }
 
     public function onPortfolioItemHighlighted(PortfolioItemHighlightedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -316,7 +345,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioItemHighlighted($item))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
@@ -326,7 +354,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemDownloaded(PortfolioItemDownloadedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -339,13 +368,13 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioDownloaded($owner))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
     public function onPortfolioItemScored(PortfolioItemScoredEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -358,7 +387,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioItemScored($item))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
@@ -368,7 +396,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioCommentScored(PortfolioCommentScoredEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -381,7 +410,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioCommentScored($comment))->generate();
-
         $this->saveSharedStatement($statement);
     }
 
@@ -391,7 +419,8 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioCommentEdited(PortfolioCommentEditedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (
+            !$this->plugin->isEnabled(true)
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -404,7 +433,6 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new PortfolioCommentEdited($comment))->generate();
-
         $this->saveSharedStatement($statement);
     }
 }

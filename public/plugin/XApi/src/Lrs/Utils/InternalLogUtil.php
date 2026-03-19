@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs\Util;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\XApiInternalLog;
 use Chamilo\CoreBundle\Framework\Container;
 use Database;
-use UserManager;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Actor;
 use Xabbuh\XApi\Model\Agent;
@@ -17,22 +17,32 @@ use Xabbuh\XApi\Model\IRL;
 use Xabbuh\XApi\Model\Statement;
 use XApiPlugin;
 
+/**
+ * Utility used to mirror xAPI statements into Chamilo internal logs.
+ */
 class InternalLogUtil
 {
     public static function saveStatementForInternalLog(Statement $statement): void
     {
-        if (null === $user = self::getUserFromActor($statement->getActor())) {
+        $user = self::getUserFromActor($statement->getActor());
+        if (null === $user) {
             return;
         }
 
         $statementObject = $statement->getObject();
-
         if (!$statementObject instanceof Activity) {
             return;
         }
 
         $languageIso = api_get_language_isocode();
-        $statementVerbString = XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), $languageIso);
+        if (empty($languageIso)) {
+            $languageIso = 'en';
+        }
+
+        $statementVerbString = XApiPlugin::extractVerbInLanguage(
+            $statement->getVerb()->getDisplay(),
+            $languageIso
+        );
 
         $internalLog = new XApiInternalLog();
         $internalLog
@@ -41,44 +51,43 @@ class InternalLogUtil
             ->setObjectId($statementObject->getId()->getValue())
         ;
 
-        if (null !== $statementId = $statement->getId()) {
+        $statementId = $statement->getId();
+        if (null !== $statementId) {
             $internalLog->setStatementId($statementId->getValue());
         }
 
-        if (null !== $definition = $statementObject->getDefinition()) {
-            if (null !== $nameInLanguages = $definition->getName()) {
+        $definition = $statementObject->getDefinition();
+        if (null !== $definition) {
+            $nameInLanguages = $definition->getName();
+            if (null !== $nameInLanguages) {
                 $internalLog->setActivityName(
                     XApiPlugin::extractVerbInLanguage($nameInLanguages, $languageIso)
                 );
             }
 
-            if (null !== $descriptionInLanguage = $definition->getDescription()) {
+            $descriptionInLanguages = $definition->getDescription();
+            if (null !== $descriptionInLanguages) {
                 $internalLog->setActivityDescription(
-                    XApiPlugin::extractVerbInLanguage($descriptionInLanguage, $languageIso)
+                    XApiPlugin::extractVerbInLanguage($descriptionInLanguages, $languageIso)
                 );
             }
         }
 
-        if (null !== $statementResult = $statement->getResult()) {
-            if (null !== $score = $statementResult->getScore()) {
+        $statementResult = $statement->getResult();
+        if (null !== $statementResult) {
+            $score = $statementResult->getScore();
+            if (null !== $score) {
                 $internalLog
-                    ->setScoreScaled(
-                        $score->getScaled()
-                    )
-                    ->setScoreRaw(
-                        $score->getRaw()
-                    )
-                    ->setScoreMin(
-                        $score->getMin()
-                    )
-                    ->setScoreMax(
-                        $score->getMax()
-                    )
+                    ->setScoreScaled($score->getScaled())
+                    ->setScoreRaw($score->getRaw())
+                    ->setScoreMin($score->getMin())
+                    ->setScoreMax($score->getMax())
                 ;
             }
         }
 
-        if (null !== $created = $statement->getCreated()) {
+        $created = $statement->getCreated();
+        if (null !== $created) {
             $internalLog->setCreatedAt($created);
         }
 
@@ -87,34 +96,40 @@ class InternalLogUtil
         $em->flush();
     }
 
-    private static function getUserFromActor(Actor $actor): ?object
+    private static function getUserFromActor(Actor $actor): ?User
     {
         if (!$actor instanceof Agent) {
             return null;
         }
 
-        $actorIri = $actor->getInverseFunctionalIdentifier();
-
-        if (null === $actorIri) {
+        $actorIdentifier = $actor->getInverseFunctionalIdentifier();
+        if (null === $actorIdentifier) {
             return null;
         }
 
         $userRepo = Container::getUserRepository();
 
-        $user = null;
-
-        if (null !== $mbox = $actorIri->getMbox()) {
-            if ((null !== $parts = explode(':', $mbox->getValue(), 2)) && !empty($parts[1])) {
+        if (null !== $mbox = $actorIdentifier->getMbox()) {
+            $parts = explode(':', $mbox->getValue(), 2);
+            if (!empty($parts[1])) {
+                /** @var User|null $user */
                 $user = $userRepo->findOneBy(['email' => $parts[1]]);
-            }
-        } elseif (null !== $account = $actorIri->getAccount()) {
-            $chamiloIrl = IRL::fromString(api_get_path(WEB_PATH));
 
-            if ($account->getHomePage()->equals($chamiloIrl)) {
-                $user = $userRepo->findOneBy(['username' => $account->getName()]);
+                return $user;
             }
         }
 
-        return $user;
+        if (null !== $account = $actorIdentifier->getAccount()) {
+            $chamiloIrl = IRL::fromString(api_get_path(WEB_PATH));
+
+            if ($account->getHomePage()->equals($chamiloIrl)) {
+                /** @var User|null $user */
+                $user = $userRepo->findOneBy(['username' => $account->getName()]);
+
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

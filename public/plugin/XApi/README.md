@@ -1,88 +1,322 @@
-# Experience API (xAPI)
+Experience API (xAPI)
+=====================
 
-Allows you to connect to an external Learning Record Store and use activities with the xAPI standard.
+Overview
+--------
+The XApi plugin for Chamilo 2 lets you:
 
-> You can import and use TinCan packages.
-> Import CMI5 packages is to be considered a Beta state and still in development. 
+1. connect Chamilo to a Learning Record Store (LRS),
+2. import and launch TinCan and cmi5 packages as course activities,
+3. expose a local xAPI endpoint for package runtime communication,
+4. generate xAPI statements from native Chamilo events such as learning paths, quizzes and portfolio actions.
 
-**Configuration**
+Current status
+--------------
+- TinCan package import and launch are supported.
+- cmi5 package import and launch are available in beta.
+- The plugin includes a local lightweight LRS endpoint used by imported activities and by internal plugin flows.
+- Native Chamilo event hooks can generate xAPI statements depending on the global plugin settings.
 
-Set LRS endpoint, username and password to integrate an external LRS in Chamilo LMS.
+Important note about the database
+---------------------------------
+Do not create MySQL tables manually.
+In Chamilo 2, the required tables are already created by the platform installation and migrations.
 
-The fields "Learning path item viewed", "Learning path ended", "Quiz question answered" and "Quiz ended" allow enabling
-hooks when the user views an item in learning path, completes a learning path, answers a quiz question and ends the exam.
+How the plugin works
+--------------------
+The plugin currently has two main responsibilities:
 
-The statements generated with these hooks are logged in Chamilo database, waiting to be sent to the LRS by a cron job.
-The cron job to configure on your server is located in `CHAMILO_PATH/plugin/XApi/cron/send_statements.php`.
+1. Package-based activities
+    - Teachers can import TinCan or cmi5 packages inside a course.
+    - Imported activities appear in the course XApi tool list.
+    - TinCan activities can be launched from the course interface.
+    - cmi5 activities can be launched through the cmi5 flow, including token retrieval for the AU.
+    - Local package files are extracted and served by the plugin.
 
-**Use the Statement API from Chamilo LMS**
+2. Native Chamilo xAPI statement generation
+    - The plugin can listen to Chamilo events such as:
+        - learning path item viewed,
+        - learning path completed,
+        - quiz question answered,
+        - quiz completed,
+        - portfolio actions.
+    - When these hooks are enabled, Chamilo generates xAPI statements and stores them in the internal shared statement log.
+    - These stored statements can later be sent to an external LRS by the plugin cron process.
 
-You can use xAPI's "Statement API" to save some statements from another service.
-You need to create credentials (username/password) to do this. First you need to enable the "menu_administrator" region
-in the plugin configuration. You will then be able to create the credentials with the new page "Experience API (xAPI)"
-inside de Plugins block in the Administration panel.
-The endpoint for the statements API is "https://CHAMILO_DOMAIN/plugin/XApi/lrs.php/";
+Main pages in the plugin
+------------------------
+Course tool pages:
+- plugin/XApi/start.php
+  Lists imported xAPI activities in the current course.
+- plugin/XApi/tool_import.php
+  Imports TinCan or cmi5 packages.
+- plugin/XApi/tool_edit.php
+  Edits an imported activity configuration.
+- plugin/XApi/tool_delete.php
+  Deletes an imported activity.
+- plugin/XApi/tincan/view.php
+  TinCan activity view and launch page.
+- plugin/XApi/cmi5/view.php
+  cmi5 activity view and launch page.
+- plugin/XApi/tincan/stats.php
+  TinCan reporting page.
+- plugin/XApi/cmi5/stats.php
+  cmi5 reporting page, if enabled in the current codebase.
 
-```mysql
-CREATE TABLE xapi_attachment (identifier INT AUTO_INCREMENT NOT NULL, statement_id VARCHAR(255) DEFAULT NULL, usageType VARCHAR(255) NOT NULL, contentType VARCHAR(255) NOT NULL, length INT NOT NULL, sha2 VARCHAR(255) NOT NULL, display LONGTEXT NOT NULL COMMENT '(DC2Type:json)', hasDescription TINYINT(1) NOT NULL, description LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', fileUrl VARCHAR(255) DEFAULT NULL, content LONGTEXT DEFAULT NULL, INDEX IDX_7148C9A1849CB65B (statement_id), PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_object (identifier INT AUTO_INCREMENT NOT NULL, group_id INT DEFAULT NULL, actor_id INT DEFAULT NULL, verb_id INT DEFAULT NULL, object_id INT DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, activityId VARCHAR(255) DEFAULT NULL, hasActivityDefinition TINYINT(1) DEFAULT NULL, hasActivityName TINYINT(1) DEFAULT NULL, activityName LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', hasActivityDescription TINYINT(1) DEFAULT NULL, activityDescription LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', activityType VARCHAR(255) DEFAULT NULL, activityMoreInfo VARCHAR(255) DEFAULT NULL, mbox VARCHAR(255) DEFAULT NULL, mboxSha1Sum VARCHAR(255) DEFAULT NULL, openId VARCHAR(255) DEFAULT NULL, accountName VARCHAR(255) DEFAULT NULL, accountHomePage VARCHAR(255) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, referenced_statement_id VARCHAR(255) DEFAULT NULL, activityExtensions_id INT DEFAULT NULL, parentContext_id INT DEFAULT NULL, groupingContext_id INT DEFAULT NULL, categoryContext_id INT DEFAULT NULL, otherContext_id INT DEFAULT NULL, UNIQUE INDEX UNIQ_E2B68640303C7F1D (activityExtensions_id), INDEX IDX_E2B68640FE54D947 (group_id), UNIQUE INDEX UNIQ_E2B6864010DAF24A (actor_id), UNIQUE INDEX UNIQ_E2B68640C1D03483 (verb_id), UNIQUE INDEX UNIQ_E2B68640232D562B (object_id), INDEX IDX_E2B68640988A4CEC (parentContext_id), INDEX IDX_E2B686404F542860 (groupingContext_id), INDEX IDX_E2B68640AEA1B132 (categoryContext_id), INDEX IDX_E2B68640B73EEAB7 (otherContext_id), PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_result (identifier INT AUTO_INCREMENT NOT NULL, extensions_id INT DEFAULT NULL, hasScore TINYINT(1) NOT NULL, scaled DOUBLE PRECISION DEFAULT NULL, raw DOUBLE PRECISION DEFAULT NULL, min DOUBLE PRECISION DEFAULT NULL, max DOUBLE PRECISION DEFAULT NULL, success TINYINT(1) DEFAULT NULL, completion TINYINT(1) DEFAULT NULL, response VARCHAR(255) DEFAULT NULL, duration VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_5971ECBFD0A19400 (extensions_id), PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_verb (identifier INT AUTO_INCREMENT NOT NULL, id VARCHAR(255) NOT NULL, display LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_extensions (identifier INT AUTO_INCREMENT NOT NULL, extensions LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_context (identifier INT AUTO_INCREMENT NOT NULL, instructor_id INT DEFAULT NULL, team_id INT DEFAULT NULL, extensions_id INT DEFAULT NULL, registration VARCHAR(255) DEFAULT NULL, hasContextActivities TINYINT(1) DEFAULT NULL, revision VARCHAR(255) DEFAULT NULL, platform VARCHAR(255) DEFAULT NULL, language VARCHAR(255) DEFAULT NULL, statement VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_3D7771908C4FC193 (instructor_id), UNIQUE INDEX UNIQ_3D777190296CD8AE (team_id), UNIQUE INDEX UNIQ_3D777190D0A19400 (extensions_id), PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_actor (identifier INT AUTO_INCREMENT NOT NULL, type VARCHAR(255) DEFAULT NULL, mbox VARCHAR(255) DEFAULT NULL, mboxSha1Sum VARCHAR(255) DEFAULT NULL, openId VARCHAR(255) DEFAULT NULL, accountName VARCHAR(255) DEFAULT NULL, accountHomePage VARCHAR(255) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, members VARCHAR(255) NOT NULL, PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_statement (id VARCHAR(255) NOT NULL, actor_id INT DEFAULT NULL, verb_id INT DEFAULT NULL, object_id INT DEFAULT NULL, result_id INT DEFAULT NULL, authority_id INT DEFAULT NULL, context_id INT DEFAULT NULL, created BIGINT DEFAULT NULL, `stored` BIGINT DEFAULT NULL, hasAttachments TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_BAF6663B10DAF24A (actor_id), UNIQUE INDEX UNIQ_BAF6663BC1D03483 (verb_id), UNIQUE INDEX UNIQ_BAF6663B232D562B (object_id), UNIQUE INDEX UNIQ_BAF6663B7A7B643 (result_id), UNIQUE INDEX UNIQ_BAF6663B81EC865B (authority_id), UNIQUE INDEX UNIQ_BAF6663B6B00C1CF (context_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE xapi_attachment ADD CONSTRAINT FK_7148C9A1849CB65B FOREIGN KEY (statement_id) REFERENCES xapi_statement (id);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640303C7F1D FOREIGN KEY (activityExtensions_id) REFERENCES xapi_extensions (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640FE54D947 FOREIGN KEY (group_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B6864010DAF24A FOREIGN KEY (actor_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640C1D03483 FOREIGN KEY (verb_id) REFERENCES xapi_verb (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640232D562B FOREIGN KEY (object_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640988A4CEC FOREIGN KEY (parentContext_id) REFERENCES xapi_context (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B686404F542860 FOREIGN KEY (groupingContext_id) REFERENCES xapi_context (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640AEA1B132 FOREIGN KEY (categoryContext_id) REFERENCES xapi_context (identifier);
-ALTER TABLE xapi_object ADD CONSTRAINT FK_E2B68640B73EEAB7 FOREIGN KEY (otherContext_id) REFERENCES xapi_context (identifier);
-ALTER TABLE xapi_result ADD CONSTRAINT FK_5971ECBFD0A19400 FOREIGN KEY (extensions_id) REFERENCES xapi_extensions (identifier);
-ALTER TABLE xapi_context ADD CONSTRAINT FK_3D7771908C4FC193 FOREIGN KEY (instructor_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_context ADD CONSTRAINT FK_3D777190296CD8AE FOREIGN KEY (team_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_context ADD CONSTRAINT FK_3D777190D0A19400 FOREIGN KEY (extensions_id) REFERENCES xapi_extensions (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663B10DAF24A FOREIGN KEY (actor_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663BC1D03483 FOREIGN KEY (verb_id) REFERENCES xapi_verb (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663B232D562B FOREIGN KEY (object_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663B7A7B643 FOREIGN KEY (result_id) REFERENCES xapi_result (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663B81EC865B FOREIGN KEY (authority_id) REFERENCES xapi_object (identifier);
-ALTER TABLE xapi_statement ADD CONSTRAINT FK_BAF6663B6B00C1CF FOREIGN KEY (context_id) REFERENCES xapi_context (identifier);
+Local xAPI endpoints:
+- plugin/XApi/lrs
+  Main local xAPI endpoint.
+- plugin/XApi/cmi5/token.php
+  Token endpoint used during cmi5 launches.
 
-CREATE TABLE xapi_shared_statement (id INT AUTO_INCREMENT NOT NULL, uuid VARCHAR(255) DEFAULT NULL, statement LONGTEXT NOT NULL COMMENT '(DC2Type:array)', sent TINYINT(1) DEFAULT '0' NOT NULL, INDEX idx_uuid (uuid), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+Global plugin configuration page
+--------------------------------
+The global plugin configuration is used to define the default LRS behavior for the whole plugin.
+Typical stored values look like this:
 
-CREATE TABLE xapi_lrs_auth (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+- uuid_namespace
+- lrs_url
+- lrs_auth_username
+- lrs_auth_password
+- cron_lrs_url
+- cron_lrs_auth_username
+- cron_lrs_auth_password
+- lrs_lp_item_viewed_active
+- lrs_lp_end_active
+- lrs_quiz_active
+- lrs_quiz_question_active
+- lrs_portfolio_active
+- defaultVisibilityInCourseHomepage
 
-CREATE TABLE xapi_tool_launch (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, launch_url VARCHAR(255) NOT NULL, activity_id VARCHAR(255) DEFAULT NULL, activity_type VARCHAR(255) DEFAULT NULL, allow_multiple_attempts TINYINT(1) DEFAULT '1' NOT NULL, lrs_url VARCHAR(255) DEFAULT NULL, lrs_auth_username VARCHAR(255) DEFAULT NULL, lrs_auth_password VARCHAR(255) DEFAULT NULL, INDEX IDX_E18CB58391D79BD3 (c_id), INDEX IDX_E18CB583613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB58391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
-ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
+Explanation of each parameter
+-----------------------------
+1. uuid_namespace
+   Default UUID namespace used when generating deterministic identifiers for statements or related xAPI data.
+   Recommended value: keep the generated UUID provided by the plugin.
 
-CREATE TABLE xapi_cmi5_item (id INT AUTO_INCREMENT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, identifier VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, title LONGTEXT NOT NULL COMMENT '(DC2Type:json)', description LONGTEXT NOT NULL COMMENT '(DC2Type:json)', url VARCHAR(255) DEFAULT NULL, activity_type VARCHAR(255) DEFAULT NULL, launch_method VARCHAR(255) DEFAULT NULL, move_on VARCHAR(255) DEFAULT NULL, mastery_score DOUBLE PRECISION DEFAULT NULL, launch_parameters VARCHAR(255) DEFAULT NULL, entitlement_key VARCHAR(255) DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, tool_id INT DEFAULT NULL, INDEX IDX_7CA116D88F7B22CC (tool_id), INDEX IDX_7CA116D8A977936C (tree_root), INDEX IDX_7CA116D8727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D8A977936C FOREIGN KEY (tree_root) REFERENCES xapi_cmi5_item (id) ON DELETE CASCADE;
-ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D8727ACA70 FOREIGN KEY (parent_id) REFERENCES xapi_cmi5_item (id) ON DELETE CASCADE;
+2. lrs_url
+   Default LRS endpoint used by the plugin for activity launches and statement submission.
+   Common values:
+    - Local plugin LRS:
+      https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+    - External LRS:
+      https://your-lrs.example.com/xapi
 
-CREATE TABLE xapi_activity_state (id INT AUTO_INCREMENT NOT NULL, state_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, agent LONGTEXT NOT NULL COMMENT '(DC2Type:json)', document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE xapi_activity_profile (id INT AUTO_INCREMENT NOT NULL, profile_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-```
+3. lrs_auth_username
+   Default username used to authenticate against the configured LRS.
 
-**From 0.2 (beta) [2021-10-15]**
-- With the LRS an internal log is registered based on the actor mbox's email or the actor account's name coming from the statement
-To update, execute this queries:
+4. lrs_auth_password
+   Default password used to authenticate against the configured LRS.
 
-```sql
-CREATE TABLE xapi_internal_log (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, statement_id VARCHAR(255) NOT NULL, verb VARCHAR(255) NOT NULL, object_id VARCHAR(255) NOT NULL, activity_name VARCHAR(255) DEFAULT NULL, activity_description VARCHAR(255) DEFAULT NULL, score_scaled DOUBLE PRECISION DEFAULT NULL, score_raw DOUBLE PRECISION DEFAULT NULL, score_min DOUBLE PRECISION DEFAULT NULL, score_max DOUBLE PRECISION DEFAULT NULL, created_at DATETIME DEFAULT NULL, INDEX IDX_C1C667ACA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
-```
+5. cron_lrs_url
+   Optional endpoint used by the cron task that sends internally logged shared statements to an external LRS.
+   Use this when you want native Chamilo hooks to be sent to a different LRS than the one used for package launches.
+   If empty, the plugin may fall back to the main LRS configuration depending on the code path.
 
-**From 0.3 (beta) [2021-11-11]**
+6. cron_lrs_auth_username
+   Username used by the cron sender for the external LRS.
 
-- Fix: Add foreign keys with course/session in tool_launch table and foreign key with user in internal_log table.
-```sql
-ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
-ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB58391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
-ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
-```
+7. cron_lrs_auth_password
+   Password used by the cron sender for the external LRS.
+
+8. lrs_lp_item_viewed_active
+   Enables xAPI generation when a learner views a learning path item.
+   Values:
+    - true: enabled
+    - false: disabled
+
+9. lrs_lp_end_active
+   Enables xAPI generation when a learner completes a learning path.
+   Values:
+    - true: enabled
+    - false: disabled
+
+10. lrs_quiz_active
+    Enables xAPI generation when a learner finishes a quiz.
+    Values:
+    - true: enabled
+    - false: disabled
+
+11. lrs_quiz_question_active
+    Enables xAPI generation when a learner answers a quiz question.
+    Values:
+    - true: enabled
+    - false: disabled
+
+12. lrs_portfolio_active
+    Enables xAPI generation for portfolio events such as view, edit, comment, score, download or highlight.
+    Values:
+    - true: enabled
+    - false: disabled
+
+13. defaultVisibilityInCourseHomepage
+    Controls whether the XApi course tool is visible by default in course homepages.
+    Typical value:
+    - visible
+
+Recommended global configuration scenarios
+------------------------------------------
+A. Local runtime for imported TinCan/cmi5 packages
+Use:
+- lrs_url = https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+- lrs_auth_username = a valid local xAPI credential
+- lrs_auth_password = the matching password
+
+This is the recommended setup when you want imported activities to communicate with the local XApi endpoint in Chamilo.
+
+B. Sending Chamilo event statements to an external LRS through cron
+Use:
+- cron_lrs_url = https://your-external-lrs.example.com/xapi
+- cron_lrs_auth_username = external username
+- cron_lrs_auth_password = external password
+
+Then enable the hook settings you want, such as learning path or quiz options.
+
+Per-activity configuration page (tool_edit.php)
+-----------------------------------------------
+Each imported activity can override some defaults.
+The edit page includes these fields:
+
+1. title
+   Human-readable activity title shown in the course tool.
+
+2. description
+   Optional text shown in the activity list and view page.
+
+3. allow_multiple_attempts
+   TinCan-specific option.
+   When enabled, learners can launch multiple attempts for the activity.
+
+4. lrs_url
+   Optional per-activity LRS URL override.
+   If filled, this activity will use this endpoint instead of the global lrs_url.
+
+5. lrs_auth_username
+   Optional per-activity username override.
+
+6. lrs_auth_password
+   Optional per-activity password override.
+
+How to use these per-activity fields
+------------------------------------
+- Leave them empty if the activity should use the global plugin LRS settings.
+- Fill them only when a specific TinCan or cmi5 activity must use a different LRS.
+- For local testing, the per-activity LRS URL can also point to:
+  https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+
+Importing TinCan and cmi5 packages
+----------------------------------
+Teacher workflow:
+1. Open the XApi tool inside a course.
+2. Click Import.
+3. Upload a TinCan or cmi5 package.
+4. The plugin extracts the package and creates a course activity entry.
+5. The activity appears in start.php with its type badge.
+
+Notes:
+- TinCan packages are the most stable path today.
+- cmi5 is available in beta and still evolving.
+- The package should contain the expected entry files in a format compatible with the importer.
+
+Launching imported activities
+-----------------------------
+TinCan:
+- The plugin builds a launch URL including endpoint, auth, actor, registration and activity_id.
+- TinCan packages can be launched inside the Chamilo interface.
+
+cmi5:
+- The plugin builds the launch flow using the local cmi5 token endpoint.
+- The AU receives the required launch parameters, including fetch and activityId.
+- cmi5 support is still considered beta.
+
+Local LRS behavior
+------------------
+The plugin includes a local xAPI endpoint at:
+https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+
+This endpoint is used for:
+- TinCan runtime requests,
+- cmi5 runtime requests,
+- local testing,
+- internal plugin communication.
+
+For TinCan launches using the local LRS, the username and password must match a valid local xAPI credential known by the plugin.
+
+Statement API usage
+-------------------
+The local xAPI endpoint can also be used as a Statement API endpoint by another service.
+Typical endpoint:
+https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+
+Required headers:
+- Authorization: Basic ...
+- X-Experience-API-Version: 1.0.3
+- Content-Type: application/json
+
+Common operations handled by the local endpoint:
+- statements
+- activities/state
+- about
+
+Internal shared statement log and cron
+--------------------------------------
+When native Chamilo hooks are enabled, the plugin stores generated statements in the internal shared statement log.
+This internal log is useful when:
+- you want to keep a local queue of statements,
+- you want to send them later to an external LRS,
+- you want to decouple runtime events from LRS delivery.
+
+Cron sender:
+- plugin/XApi/cron/send_statements.php
+
+Use the cron configuration fields when the sender must push data to a dedicated external LRS.
+
+Testing recommendations
+-----------------------
+1. For imported activities
+    - Configure lrs_url to the local endpoint:
+      https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+    - Use valid local LRS credentials.
+    - Import a TinCan package first.
+    - Then test cmi5 packages.
+
+2. For native event hooks
+    - Enable only one family of hooks at a time:
+        - learning path,
+        - quiz,
+        - portfolio.
+    - Trigger a real learner action in Chamilo.
+    - Verify that the plugin stores a shared statement.
+
+Examples of hook-driven scenarios
+---------------------------------
+Learning path only:
+- lrs_lp_item_viewed_active = true
+- lrs_lp_end_active = true
+- all other hook flags = false
+
+Quiz only:
+- lrs_quiz_active = true
+- lrs_quiz_question_active = true
+- all other hook flags = false
+
+Portfolio only:
+- lrs_portfolio_active = true
+- all other hook flags = false
+
+Summary
+-------
+Use this plugin when you want one or both of these capabilities:
+- launch xAPI-compatible packaged content in Chamilo,
+- generate xAPI statements from native Chamilo activity.
+
+For current Chamilo 2 usage, the most important configuration fields are:
+- lrs_url
+- lrs_auth_username
+- lrs_auth_password
+- cron_lrs_url
+- cron_lrs_auth_username
+- cron_lrs_auth_password
+- the hook activation flags
+
+Do not add SQL manually. In Chamilo 2, the required database structure is managed by the platform installation and migrations.

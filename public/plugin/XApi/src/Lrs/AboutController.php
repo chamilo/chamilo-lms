@@ -10,21 +10,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class AboutController.
+ * xAPI about endpoint.
  */
 class AboutController extends BaseController
 {
     public function get(): Response
     {
-        $json = [
+        return new JsonResponse([
             'version' => [
                 '1.0.3',
                 '1.0.2',
                 '1.0.1',
                 '1.0.0',
             ],
-        ];
-
-        return JsonResponse::create($json);
+        ]);
     }
 }

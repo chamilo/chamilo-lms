@@ -6,16 +6,6 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Agent;
-use Xabbuh\XApi\Model\DocumentData;
-use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\State;
-use Xabbuh\XApi\Model\StateDocument;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -28,13 +18,13 @@ $user = api_get_user_entity(api_get_user_id());
 
 $em = Database::getManager();
 
-$attemptId = $request->request->get('attempt_id');
+$attemptId = trim((string) $request->request->get('attempt_id'));
 $toolLaunch = $em->find(
     XApiToolLaunch::class,
     $request->request->getInt('id')
 );
 
-if (empty($attemptId)
+if ('' === $attemptId
     || null === $toolLaunch
     || $toolLaunch->getCourse()->getId() !== api_get_course_entity()->getId()
 ) {
@@ -42,108 +32,78 @@ if (empty($attemptId)
 }
 
 $plugin = XApiPlugin::create();
-
-$activity = new Activity(
-    IRI::fromString($toolLaunch->getActivityId())
-);
-$actor = new Agent(
-    InverseFunctionalIdentifier::withMbox(
-        IRI::fromString('mailto:'.$user->getEmail())
-    ),
-    $user->getFullName()
-);
-$state = new State(
-    $activity,
-    $actor,
-    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')->getValue()
-);
+$actor = $plugin->buildTinCanActorPayload($user);
+$stateId = $plugin->getTinCanStateId($toolLaunch->getId());
 
 $nowDate = api_get_utc_datetime(null, false, true)->format('c');
 
 try {
-    $stateDocument = $plugin
-        ->getXApiStateClient(
-            $toolLaunch->getLrsUrl(),
-            $toolLaunch->getLrsAuthUsername(),
-            $toolLaunch->getLrsAuthPassword()
-        )
-        ->getDocument($state)
-    ;
+    $stateDocument = $plugin->fetchActivityStateDocument(
+        (string) $toolLaunch->getActivityId(),
+        $actor,
+        $stateId,
+        null,
+        $toolLaunch->getLrsUrl(),
+        $toolLaunch->getLrsAuthUsername(),
+        $toolLaunch->getLrsAuthPassword()
+    );
 
-    $data = $stateDocument->getData()->getData();
+    if (!is_array($stateDocument)) {
+        $stateDocument = [];
+    }
 
-    if ($stateDocument->offsetExists($attemptId)) {
-        $data[$attemptId][XApiPlugin::STATE_LAST_LAUNCH] = $nowDate;
+    if (isset($stateDocument[$attemptId]) && is_array($stateDocument[$attemptId])) {
+        $stateDocument[$attemptId][XApiPlugin::STATE_LAST_LAUNCH] = $nowDate;
     } else {
-        $data[$attemptId] = [
+        $stateDocument[$attemptId] = [
             XApiPlugin::STATE_FIRST_LAUNCH => $nowDate,
             XApiPlugin::STATE_LAST_LAUNCH => $nowDate,
         ];
     }
 
     uasort(
-        $data,
-        function ($attemptA, $attemptB) {
-            $timeA = strtotime($attemptA[XApiPlugin::STATE_LAST_LAUNCH]);
-            $timeB = strtotime($attemptB[XApiPlugin::STATE_LAST_LAUNCH]);
+        $stateDocument,
+        static function ($attemptA, $attemptB): int {
+            $timeA = isset($attemptA[XApiPlugin::STATE_LAST_LAUNCH])
+                ? strtotime((string) $attemptA[XApiPlugin::STATE_LAST_LAUNCH])
+                : 0;
+            $timeB = isset($attemptB[XApiPlugin::STATE_LAST_LAUNCH])
+                ? strtotime((string) $attemptB[XApiPlugin::STATE_LAST_LAUNCH])
+                : 0;
 
-            return $timeB - $timeA;
+            return $timeB <=> $timeA;
         }
     );
 
-    $documentData = new DocumentData($data);
-} catch (NotFoundException $notFoundException) {
-    $documentData = new DocumentData(
-        [
-            $attemptId => [
-                XApiPlugin::STATE_FIRST_LAUNCH => $nowDate,
-                XApiPlugin::STATE_LAST_LAUNCH => $nowDate,
-            ],
-        ]
-    );
-} catch (Exception $exception) {
-    Display::addFlash(
-        Display::return_message($exception->getMessage(), 'error')
-    );
-
-    header('Location: '.api_get_course_url());
-
-    exit;
-}
-
-try {
-    $plugin
-        ->getXApiStateClient()
-        ->createOrReplaceDocument(
-            new StateDocument($state, $documentData)
-        )
-    ;
-} catch (Exception $exception) {
-    Display::addFlash(
-        Display::return_message($exception->getMessage(), 'error')
-    );
-
-    header('Location: '.api_get_course_url());
-
-    exit;
-}
-
-$lrsUrl = $toolLaunch->getLrsUrl() ?: $plugin->get(XApiPlugin::SETTING_LRS_URL);
-$lrsAuthUsername = $toolLaunch->getLrsAuthUsername() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_USERNAME);
-$lrsAuthPassword = $toolLaunch->getLrsAuthPassword() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_PASSWORD);
-
-$activityLaunchUrl = $toolLaunch->getLaunchUrl().'?'
-    .http_build_query(
-        [
-            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
-            'auth' => 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword)),
-            'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
-            'registration' => $attemptId,
-            'activity_id' => $toolLaunch->getActivityId(),
-        ],
+    $plugin->storeActivityStateDocument(
+        (string) $toolLaunch->getActivityId(),
+        $actor,
+        $stateId,
+        $stateDocument,
         null,
-        '&',
-        \PHP_QUERY_RFC3986
+        $toolLaunch->getLrsUrl(),
+        $toolLaunch->getLrsAuthUsername(),
+        $toolLaunch->getLrsAuthPassword()
     );
+} catch (Exception $exception) {
+    Display::addFlash(
+        Display::return_message($exception->getMessage(), 'error')
+    );
+
+    header('Location: '.api_get_course_url());
+    exit;
+}
+
+$activityLaunchUrl = $plugin->generateLaunchUrl(
+    'tincan',
+    (string) $toolLaunch->getLaunchUrl(),
+    (string) $toolLaunch->getActivityId(),
+    $actor,
+    $attemptId,
+    $toolLaunch->getLrsUrl(),
+    $toolLaunch->getLrsAuthUsername(),
+    $toolLaunch->getLrsAuthPassword()
+);
 
 header("Location: $activityLaunchUrl");
+exit;

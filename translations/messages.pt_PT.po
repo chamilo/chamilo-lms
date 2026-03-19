@@ -26610,7 +26610,7 @@ msgid "Selective display of roles"
 msgstr "Exibição seletiva de papéis"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou oculto.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Um array de role => true/false que define se esse papel deve ser mostrado ou ocultado.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opções de exibição de papéis"
@@ -33065,4 +33065,61 @@ msgstr "Nome da constante"
 
 msgid "MDI icon name"
 msgstr "Nome do ícone MDI"
+
+msgid "Assign authentication sources"
+msgstr "Atribuir fontes de autenticação"
+
+msgid "Assignment details"
+msgstr "Detalhes da atribuição"
+
+msgid "Terms and conditions"
+msgstr "Termos e condições"
+
+msgid "Icons"
+msgstr "Ícones"
+
+msgid "Create backup"
+msgstr "Criar cópia de segurança"
+
+msgid "Create file"
+msgstr "Criar ficheiro"
+
+msgid "Create link"
+msgstr "Criar ligação"
+
+msgid "Edit template"
+msgstr "Editar modelo"
+
+msgid "Shared files"
+msgstr "Ficheiros partilhados"
+
+msgid "Skill wheel"
+msgstr "Roda de competências"
+
+msgid "Favourite courses"
+msgstr "Cursos favoritos"
+
+msgid "Restart courses"
+msgstr "Reiniciar cursos"
+
+msgid "Generate terms"
+msgstr "Gerar termos"
+
+msgid "Add variation"
+msgstr "Adicionar variação"
+
+msgid "Editor demo"
+msgstr "Demo do editor"
+
+msgid "Tool introduction"
+msgstr "Introdução da aplicação/ferramenta"
+
+msgid "Data exchanges"
+msgstr "Trocas de dados"
+
+msgid "Third parties"
+msgstr "Terceiros"
+
+msgid "Layouts"
+msgstr "Esquemas"
 

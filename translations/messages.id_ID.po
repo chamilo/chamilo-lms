@@ -33058,3 +33058,60 @@ msgstr "Nama konstanta"
 msgid "MDI icon name"
 msgstr "Nama ikon MDI"
 
+msgid "Assign authentication sources"
+msgstr "Tetapkan sumber autentikasi"
+
+msgid "Assignment details"
+msgstr "Detail penugasan"
+
+msgid "Terms and conditions"
+msgstr "Syarat dan ketentuan"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Buat cadangan"
+
+msgid "Create file"
+msgstr "Buat file"
+
+msgid "Create link"
+msgstr "Buat tautan"
+
+msgid "Edit template"
+msgstr "Edit template"
+
+msgid "Shared files"
+msgstr "Berkas bersama"
+
+msgid "Skill wheel"
+msgstr "Roda keterampilan"
+
+msgid "Favourite courses"
+msgstr "Kursus favorit"
+
+msgid "Restart courses"
+msgstr "Restart mata kuliah"
+
+msgid "Generate terms"
+msgstr "Buat istilah"
+
+msgid "Add variation"
+msgstr "Tambah variasi"
+
+msgid "Editor demo"
+msgstr "Demo editor"
+
+msgid "Tool introduction"
+msgstr "Tool Pengantar"
+
+msgid "Data exchanges"
+msgstr "Pertukaran data"
+
+msgid "Third parties"
+msgstr "Pihak ketiga"
+
+msgid "Layouts"
+msgstr "Tata letak"
+

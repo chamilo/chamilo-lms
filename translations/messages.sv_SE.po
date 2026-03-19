@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -33059,4 +33059,61 @@ msgstr "Konstantnamn"
 
 msgid "MDI icon name"
 msgstr "MDI-ikonnamn"
+
+msgid "Assign authentication sources"
+msgstr "Tilldela autentiseringskällor"
+
+msgid "Assignment details"
+msgstr "Uppgiftens detaljer"
+
+msgid "Terms and conditions"
+msgstr "Villkor och användarvillkor"
+
+msgid "Icons"
+msgstr "Ikoner"
+
+msgid "Create backup"
+msgstr "Skapa säkerhetskopia"
+
+msgid "Create file"
+msgstr "Skapa fil"
+
+msgid "Create link"
+msgstr "Skapa länk"
+
+msgid "Edit template"
+msgstr "Redigera mall"
+
+msgid "Shared files"
+msgstr "Delade filer"
+
+msgid "Skill wheel"
+msgstr "Kompetenshjul"
+
+msgid "Favourite courses"
+msgstr "Favoritkurser"
+
+msgid "Restart courses"
+msgstr "Starta om kurser"
+
+msgid "Generate terms"
+msgstr "Generera villkor"
+
+msgid "Add variation"
+msgstr "Lägg till variation"
+
+msgid "Editor demo"
+msgstr "Redigeringsdemo"
+
+msgid "Tool introduction"
+msgstr "Verktygsintroduktion"
+
+msgid "Data exchanges"
+msgstr "Datautbyten"
+
+msgid "Third parties"
+msgstr "Tredjeparter"
+
+msgid "Layouts"
+msgstr "Layouter"
 

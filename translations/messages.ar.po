@@ -33072,3 +33072,60 @@ msgstr "اسم الثابت"
 msgid "MDI icon name"
 msgstr "اسم أيقونة MDI"
 
+msgid "Assign authentication sources"
+msgstr "تعيين مصادر المصادقة"
+
+msgid "Assignment details"
+msgstr "تفاصيل المهمة"
+
+msgid "Terms and conditions"
+msgstr "الشروط والأحكام"
+
+msgid "Icons"
+msgstr "الأيقونات"
+
+msgid "Create backup"
+msgstr "إنشاء نسخة احتياطية"
+
+msgid "Create file"
+msgstr "إنشاء ملف"
+
+msgid "Create link"
+msgstr "إنشاء رابط"
+
+msgid "Edit template"
+msgstr "تحرير القالب"
+
+msgid "Shared files"
+msgstr "الملفات المشتركة"
+
+msgid "Skill wheel"
+msgstr "عجلة المهارات"
+
+msgid "Favourite courses"
+msgstr "الدورات المفضلة"
+
+msgid "Restart courses"
+msgstr "إعادة تشغيل الدورات"
+
+msgid "Generate terms"
+msgstr "توليد الشروط"
+
+msgid "Add variation"
+msgstr "إضافة تباين"
+
+msgid "Editor demo"
+msgstr "عرض تجريبي للمحرر"
+
+msgid "Tool introduction"
+msgstr " تعريف بالأداة"
+
+msgid "Data exchanges"
+msgstr "تبادل البيانات"
+
+msgid "Third parties"
+msgstr "الأطراف الثالثة"
+
+msgid "Layouts"
+msgstr "التخطيطات"
+

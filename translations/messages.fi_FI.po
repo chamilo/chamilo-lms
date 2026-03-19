@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -33059,4 +33059,61 @@ msgstr "Vakion nimi"
 
 msgid "MDI icon name"
 msgstr "MDI-kuvan nimi"
+
+msgid "Assign authentication sources"
+msgstr "Määritä tunnistautumislähteet"
+
+msgid "Assignment details"
+msgstr "Tehtävän tiedot"
+
+msgid "Terms and conditions"
+msgstr "Käyttöehdot"
+
+msgid "Icons"
+msgstr "Kuvakkeet"
+
+msgid "Create backup"
+msgstr "Luo varmuuskopio"
+
+msgid "Create file"
+msgstr "Luo tiedosto"
+
+msgid "Create link"
+msgstr "Luo linkki"
+
+msgid "Edit template"
+msgstr "Muokkaa mallipohjaa"
+
+msgid "Shared files"
+msgstr "Jaetut tiedostot"
+
+msgid "Skill wheel"
+msgstr "Osaamispyörä"
+
+msgid "Favourite courses"
+msgstr "Suosikkikurssit"
+
+msgid "Restart courses"
+msgstr "Käynnistä kurssit uudelleen"
+
+msgid "Generate terms"
+msgstr "Luo käyttöehdot"
+
+msgid "Add variation"
+msgstr "Lisää variaatio"
+
+msgid "Editor demo"
+msgstr "Editorin esittely"
+
+msgid "Tool introduction"
+msgstr "Työkalun kuvaus"
+
+msgid "Data exchanges"
+msgstr "Tiedonvaihdot"
+
+msgid "Third parties"
+msgstr "Kolmannet osapuolet"
+
+msgid "Layouts"
+msgstr "Ulkoasut"
 

@@ -34198,3 +34198,60 @@ msgstr "Nombre de la constante"
 msgid "MDI icon name"
 msgstr "Nombre del icono MDI"
 
+msgid "Assign authentication sources"
+msgstr "Asignar fuentes de autenticación"
+
+msgid "Assignment details"
+msgstr "Detalles de la tarea"
+
+msgid "Terms and conditions"
+msgstr "Términos y condiciones"
+
+msgid "Icons"
+msgstr "Iconos"
+
+msgid "Create backup"
+msgstr "Crear copia de seguridad"
+
+msgid "Create file"
+msgstr "Crear archivo"
+
+msgid "Create link"
+msgstr "Crear enlace"
+
+msgid "Edit template"
+msgstr "Editar plantilla"
+
+msgid "Shared files"
+msgstr "Archivos compartidos"
+
+msgid "Skill wheel"
+msgstr "Rueda de habilidades"
+
+msgid "Favourite courses"
+msgstr "Cursos favoritos"
+
+msgid "Restart courses"
+msgstr "Reiniciar cursos"
+
+msgid "Generate terms"
+msgstr "Generar términos"
+
+msgid "Add variation"
+msgstr "Añadir variación"
+
+msgid "Editor demo"
+msgstr "Demo del editor"
+
+msgid "Tool introduction"
+msgstr "Textos de introducción"
+
+msgid "Data exchanges"
+msgstr "Intercambios de datos"
+
+msgid "Third parties"
+msgstr "Terceros"
+
+msgid "Layouts"
+msgstr "Diseños"
+

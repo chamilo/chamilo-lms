@@ -33058,3 +33058,60 @@ msgstr "Nama pemalar"
 msgid "MDI icon name"
 msgstr "Nama ikon MDI"
 
+msgid "Assign authentication sources"
+msgstr "Tugaskan sumber pengesahan"
+
+msgid "Assignment details"
+msgstr "Butiran tugasan"
+
+msgid "Terms and conditions"
+msgstr "Terma dan syarat"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Cipta sandaran"
+
+msgid "Create file"
+msgstr "Cipta fail"
+
+msgid "Create link"
+msgstr "Cipta pautan"
+
+msgid "Edit template"
+msgstr "Edit templat"
+
+msgid "Shared files"
+msgstr "Fail dikongsi"
+
+msgid "Skill wheel"
+msgstr "Roda kemahiran"
+
+msgid "Favourite courses"
+msgstr "Kursus kegemaran"
+
+msgid "Restart courses"
+msgstr "Mulakan semula kursus"
+
+msgid "Generate terms"
+msgstr "Jana terma"
+
+msgid "Add variation"
+msgstr "Tambah variasi"
+
+msgid "Editor demo"
+msgstr "Demo penyunting"
+
+msgid "Tool introduction"
+msgstr "Pengenalan alat"
+
+msgid "Data exchanges"
+msgstr "Pertukaran data"
+
+msgid "Third parties"
+msgstr "Pihak ketiga"
+
+msgid "Layouts"
+msgstr "Susun atur"
+

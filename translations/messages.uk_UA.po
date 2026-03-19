@@ -33054,3 +33054,60 @@ msgstr "Назва константи"
 msgid "MDI icon name"
 msgstr "Назва іконки MDI"
 
+msgid "Assign authentication sources"
+msgstr "Призначити джерела автентифікації"
+
+msgid "Assignment details"
+msgstr "Деталі призначення"
+
+msgid "Terms and conditions"
+msgstr "Умови та положення"
+
+msgid "Icons"
+msgstr "Іконки"
+
+msgid "Create backup"
+msgstr "Створити резервну копію"
+
+msgid "Create file"
+msgstr "Створити файл"
+
+msgid "Create link"
+msgstr "Створити посилання"
+
+msgid "Edit template"
+msgstr "Редагувати шаблон"
+
+msgid "Shared files"
+msgstr "Спільні файли"
+
+msgid "Skill wheel"
+msgstr "Коло навичок"
+
+msgid "Favourite courses"
+msgstr "Улюблені курси"
+
+msgid "Restart courses"
+msgstr "Перезапустити курси"
+
+msgid "Generate terms"
+msgstr "Згенерувати умови"
+
+msgid "Add variation"
+msgstr "Додати варіацію"
+
+msgid "Editor demo"
+msgstr "Демо редактора"
+
+msgid "Tool introduction"
+msgstr "Вступ до інструменту"
+
+msgid "Data exchanges"
+msgstr "Обмін даними"
+
+msgid "Third parties"
+msgstr "Треті сторони"
+
+msgid "Layouts"
+msgstr "Макети"
+

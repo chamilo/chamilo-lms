@@ -33054,3 +33054,60 @@ msgstr "კონსტანტის სახელი"
 msgid "MDI icon name"
 msgstr "MDI ხატულის სახელი"
 
+msgid "Assign authentication sources"
+msgstr "აუთენტიფიკაციის წყაროების მინიჭება"
+
+msgid "Assignment details"
+msgstr "შეკვეთის დეტალები"
+
+msgid "Terms and conditions"
+msgstr "პირობები და წესები"
+
+msgid "Icons"
+msgstr "ხატულები"
+
+msgid "Create backup"
+msgstr "რეზერვის შექმნა"
+
+msgid "Create file"
+msgstr "ფაილის შექმნა"
+
+msgid "Create link"
+msgstr "ბმულის შექმნა"
+
+msgid "Edit template"
+msgstr "შაბლონის რედაქტირება"
+
+msgid "Shared files"
+msgstr "გაზიარებული ფაილები"
+
+msgid "Skill wheel"
+msgstr "კომპეტენციის როტაცია"
+
+msgid "Favourite courses"
+msgstr "საყვარელი კურსები"
+
+msgid "Restart courses"
+msgstr "კურსების გადატვირთვა"
+
+msgid "Generate terms"
+msgstr "პირობების გენერაცია"
+
+msgid "Add variation"
+msgstr "ვარიაციის დამატება"
+
+msgid "Editor demo"
+msgstr "რედაქტორის დემო"
+
+msgid "Tool introduction"
+msgstr "ხელსაწყოს შესავალი"
+
+msgid "Data exchanges"
+msgstr "მონაცემთა გაცვლები"
+
+msgid "Third parties"
+msgstr "მესამე მხარეები"
+
+msgid "Layouts"
+msgstr "განლაგებები"
+

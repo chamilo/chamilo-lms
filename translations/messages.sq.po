@@ -33058,3 +33058,60 @@ msgstr "Emri i kostantës"
 msgid "MDI icon name"
 msgstr "Emri i ikonës MDI"
 
+msgid "Assign authentication sources"
+msgstr "Cakto burimet e autentikimit"
+
+msgid "Assignment details"
+msgstr "Detajet e detyrës"
+
+msgid "Terms and conditions"
+msgstr "Kushtet dhe rregulloret"
+
+msgid "Icons"
+msgstr "Ikona"
+
+msgid "Create backup"
+msgstr "Krijo kopjer rezervë"
+
+msgid "Create file"
+msgstr "Krijo skedar"
+
+msgid "Create link"
+msgstr "Krijo lidhje"
+
+msgid "Edit template"
+msgstr "Ndrysho shabllon"
+
+msgid "Shared files"
+msgstr "Skedarë të ndarë"
+
+msgid "Skill wheel"
+msgstr "Rrota e aftësive"
+
+msgid "Favourite courses"
+msgstr "Kursesh të preferuara"
+
+msgid "Restart courses"
+msgstr "Rinisni kursesh"
+
+msgid "Generate terms"
+msgstr "Gjenero kushte"
+
+msgid "Add variation"
+msgstr "Shto variacion"
+
+msgid "Editor demo"
+msgstr "Demo redaktori"
+
+msgid "Tool introduction"
+msgstr "Hyrje në vegël"
+
+msgid "Data exchanges"
+msgstr "Këmbe të dhëna"
+
+msgid "Third parties"
+msgstr "Palët e treta"
+
+msgid "Layouts"
+msgstr "Layout-et"
+

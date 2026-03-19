@@ -33074,3 +33074,60 @@ msgstr "Nume constantă"
 msgid "MDI icon name"
 msgstr "Nume pictogramă MDI"
 
+msgid "Assign authentication sources"
+msgstr "Atribuie surse de autentificare"
+
+msgid "Assignment details"
+msgstr "Detalii atribuire"
+
+msgid "Terms and conditions"
+msgstr "Termeni și condiții"
+
+msgid "Icons"
+msgstr "Pictograme"
+
+msgid "Create backup"
+msgstr "Creează copie de rezervă"
+
+msgid "Create file"
+msgstr "Creează fișier"
+
+msgid "Create link"
+msgstr "Creează legătură"
+
+msgid "Edit template"
+msgstr "Editează șablon"
+
+msgid "Shared files"
+msgstr "Fișiere partajate"
+
+msgid "Skill wheel"
+msgstr "Roată competențe"
+
+msgid "Favourite courses"
+msgstr "Cursuri favorite"
+
+msgid "Restart courses"
+msgstr "Repornește cursuri"
+
+msgid "Generate terms"
+msgstr "Generează termeni"
+
+msgid "Add variation"
+msgstr "Adaugă variație"
+
+msgid "Editor demo"
+msgstr "Demo editor"
+
+msgid "Tool introduction"
+msgstr "Texte introductive"
+
+msgid "Data exchanges"
+msgstr "Schimburi de date"
+
+msgid "Third parties"
+msgstr "Terți"
+
+msgid "Layouts"
+msgstr "Aspecte"
+

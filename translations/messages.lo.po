@@ -35404,3 +35404,60 @@ msgstr "ຊື່ຄ່າຄົງທີ່"
 msgid "MDI icon name"
 msgstr "ຊື່ຮູບພາບ MDI"
 
+msgid "Assign authentication sources"
+msgstr "ກົນໄຫປະລະການຢັ້ງຕົວ"
+
+msgid "Assignment details"
+msgstr "ລາຍລະອຽດການກຳນົດງານ"
+
+msgid "Terms and conditions"
+msgstr "ເງື່ອນໄຂ ແລະ ກົດລະຫັດ"
+
+msgid "Icons"
+msgstr "ໄອຄອນ"
+
+msgid "Create backup"
+msgstr "ສ້າງສຳຮອງ"
+
+msgid "Create file"
+msgstr "ສ້າງໄຟລ໌"
+
+msgid "Create link"
+msgstr "ສ້າງລິ້ງ"
+
+msgid "Edit template"
+msgstr "ແກ້ໄຂແມ່ພິມ"
+
+msgid "Shared files"
+msgstr "ໄຟລ໌ທີ່ແບ່ງປັນ"
+
+msgid "Skill wheel"
+msgstr "ວົງເລືອກທັດສະນະ"
+
+msgid "Favourite courses"
+msgstr "ຄອສທີ່ມັກ"
+
+msgid "Restart courses"
+msgstr "ເລີ່ມຄອສໃໝ່"
+
+msgid "Generate terms"
+msgstr "ສ້າງເງື່ອນໄຂ"
+
+msgid "Add variation"
+msgstr "ເພີ່ມການປ່ຽນແປງ"
+
+msgid "Editor demo"
+msgstr "ຕົວຢ່າງອົດຕະໂຫນ"
+
+msgid "Tool introduction"
+msgstr "ແນະນຳເຄື່ອງມື"
+
+msgid "Data exchanges"
+msgstr "ການແລກປ່ຽນຂໍ້ມູນ"
+
+msgid "Third parties"
+msgstr "ພາກສ່ວນທີສາມ"
+
+msgid "Layouts"
+msgstr "ຮູບແບບ"
+

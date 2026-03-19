@@ -33058,3 +33058,60 @@ msgstr "Konstantnamn"
 msgid "MDI icon name"
 msgstr "MDI ikonnamn"
 
+msgid "Assign authentication sources"
+msgstr "Tildel autentiseringskjelder"
+
+msgid "Assignment details"
+msgstr "Oppgaveopplysningar"
+
+msgid "Terms and conditions"
+msgstr "Vilkår og betingelser"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Opprett sikkeringskopi"
+
+msgid "Create file"
+msgstr "Opprett fil"
+
+msgid "Create link"
+msgstr "Opprett lenke"
+
+msgid "Edit template"
+msgstr "Rediger mal"
+
+msgid "Shared files"
+msgstr "Delt filer"
+
+msgid "Skill wheel"
+msgstr "Kompetansehjul"
+
+msgid "Favourite courses"
+msgstr "Favorittkurs"
+
+msgid "Restart courses"
+msgstr "Start kurs på nytt"
+
+msgid "Generate terms"
+msgstr "Generer vilkår"
+
+msgid "Add variation"
+msgstr "Legg til variasjon"
+
+msgid "Editor demo"
+msgstr "Redigerar demonstrasjon"
+
+msgid "Tool introduction"
+msgstr "Verktøyintroduksjon"
+
+msgid "Data exchanges"
+msgstr "Databytingar"
+
+msgid "Third parties"
+msgstr "Tredjeparter"
+
+msgid "Layouts"
+msgstr "Oppsett"
+

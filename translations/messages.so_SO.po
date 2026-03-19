@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes: xuquuqda daabacaadda ,, no: xuquuqda daabacaadda maaha"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Galka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise: layli ,,      simulation: simulation ,,      questionnaire: su'aalo ,,      diagram: jaantus ,,      figure: jaantus ,,      graph: graf ,,      index: index ,,      slide: slide ,,      table: miis ,,      narrative text: qoraal sheeko ah ,,      exam: imtixaan ,,      experiment: tijaabo ,,      problem statement: bayaan dhibaato ,,      self assessment: is-qiimeyn ,,      lecture: cashar"
@@ -33053,4 +33053,61 @@ msgstr "Magaca joogtada ah"
 
 msgid "MDI icon name"
 msgstr "Magaca astaanta MDI"
+
+msgid "Assign authentication sources"
+msgstr "Meelmar authentication-ka"
+
+msgid "Assignment details"
+msgstr "Faahfaahinta shaqada"
+
+msgid "Terms and conditions"
+msgstr "Shuruudaha iyo xaaladaha"
+
+msgid "Icons"
+msgstr "Astarrada"
+
+msgid "Create backup"
+msgstr "Samee kayd"
+
+msgid "Create file"
+msgstr "Samee fayl"
+
+msgid "Create link"
+msgstr "Samee xiriir"
+
+msgid "Edit template"
+msgstr "Tafatir template"
+
+msgid "Shared files"
+msgstr "Fayllada la wadaago"
+
+msgid "Skill wheel"
+msgstr "Garaabka xirfadaha"
+
+msgid "Favourite courses"
+msgstr "Koorsooyinka ugu jeclaan"
+
+msgid "Restart courses"
+msgstr "Bilow mar kale koorsooyinka"
+
+msgid "Generate terms"
+msgstr "Soosaar shuruudaha"
+
+msgid "Add variation"
+msgstr "Ku dar kala duwanaansho"
+
+msgid "Editor demo"
+msgstr "Tusualka editor-ka"
+
+msgid "Tool introduction"
+msgstr "Hordhac qalabka"
+
+msgid "Data exchanges"
+msgstr "Isku dhaafsi data"
+
+msgid "Third parties"
+msgstr "Qaybaha saddexaad"
+
+msgid "Layouts"
+msgstr "Layouts"
 

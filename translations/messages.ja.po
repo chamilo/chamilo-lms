@@ -33124,3 +33124,60 @@ msgstr "定数名"
 msgid "MDI icon name"
 msgstr "MDI アイコン名"
 
+msgid "Assign authentication sources"
+msgstr "認証ソースの割り当て"
+
+msgid "Assignment details"
+msgstr "割り当て詳細"
+
+msgid "Terms and conditions"
+msgstr "利用規約"
+
+msgid "Icons"
+msgstr "アイコン"
+
+msgid "Create backup"
+msgstr "バックアップを作成"
+
+msgid "Create file"
+msgstr "ファイルを作成"
+
+msgid "Create link"
+msgstr "リンクを作成"
+
+msgid "Edit template"
+msgstr "テンプレートを編集"
+
+msgid "Shared files"
+msgstr "共有ファイル"
+
+msgid "Skill wheel"
+msgstr "スキルホイール"
+
+msgid "Favourite courses"
+msgstr "お気に入りコース"
+
+msgid "Restart courses"
+msgstr "コースを再開"
+
+msgid "Generate terms"
+msgstr "規約を生成"
+
+msgid "Add variation"
+msgstr "バリエーションを追加"
+
+msgid "Editor demo"
+msgstr "エディターのデモ"
+
+msgid "Tool introduction"
+msgstr "ツールの概要"
+
+msgid "Data exchanges"
+msgstr "データ交換"
+
+msgid "Third parties"
+msgstr "サードパーティ"
+
+msgid "Layouts"
+msgstr "レイアウト"
+

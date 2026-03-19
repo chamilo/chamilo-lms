@@ -33060,3 +33060,60 @@ msgstr "Sabit adı"
 msgid "MDI icon name"
 msgstr "MDI simge adı"
 
+msgid "Assign authentication sources"
+msgstr "Kimlik doğrulama kaynaklarını atayın"
+
+msgid "Assignment details"
+msgstr "Görev ayrıntıları"
+
+msgid "Terms and conditions"
+msgstr "Şartlar ve koşullar"
+
+msgid "Icons"
+msgstr "Simge"
+
+msgid "Create backup"
+msgstr "Yedekleme oluştur"
+
+msgid "Create file"
+msgstr "Dosya oluştur"
+
+msgid "Create link"
+msgstr "Bağlantı oluştur"
+
+msgid "Edit template"
+msgstr "Şablon düzenle"
+
+msgid "Shared files"
+msgstr "Paylaşılan dosyalar"
+
+msgid "Skill wheel"
+msgstr "Yetenek çarkı"
+
+msgid "Favourite courses"
+msgstr "Favori kurslar"
+
+msgid "Restart courses"
+msgstr "Kursları yeniden başlat"
+
+msgid "Generate terms"
+msgstr "Şartlar oluştur"
+
+msgid "Add variation"
+msgstr "Varyasyon ekle"
+
+msgid "Editor demo"
+msgstr "Düzenleyici demosu"
+
+msgid "Tool introduction"
+msgstr "Araç tanıtımı"
+
+msgid "Data exchanges"
+msgstr "Veri alışverişleri"
+
+msgid "Third parties"
+msgstr "Üçüncü taraflar"
+
+msgid "Layouts"
+msgstr "Düzenler"
+

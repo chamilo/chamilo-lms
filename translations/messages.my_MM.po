@@ -33058,3 +33058,60 @@ msgstr "စံနိမ့်အမည်"
 msgid "MDI icon name"
 msgstr "MDI သင်္ကေတအမည်"
 
+msgid "Assign authentication sources"
+msgstr "အသုံးပြုသူများအတည်ပြုရင်းမြစ်များခန့်အပ်ရန်"
+
+msgid "Assignment details"
+msgstr "ခန့်အပ်မှုအသေးစိတ်"
+
+msgid "Terms and conditions"
+msgstr "စည်းမျဉ်းများနှင့်အခြေအနေ"
+
+msgid "Icons"
+msgstr "အိုင်ကွန်များ"
+
+msgid "Create backup"
+msgstr "အရန်ကူးသိမ်းဖန်တီးရန်"
+
+msgid "Create file"
+msgstr "ဖိုင်ဖန်တီးရန်"
+
+msgid "Create link"
+msgstr "လင့်ခ်ဖန်တီးရန်"
+
+msgid "Edit template"
+msgstr "ပုံစံဖိုင်တည်းဖြတ်ရန်"
+
+msgid "Shared files"
+msgstr "မျှဝေဖိုင်များ"
+
+msgid "Skill wheel"
+msgstr "ကျွမ်းကျင်မှုဘီးလည်"
+
+msgid "Favourite courses"
+msgstr "ကြိုက်နှစ်သက်သင်တန်းများ"
+
+msgid "Restart courses"
+msgstr "သင်တန်းများပြန်စတင်ရန်"
+
+msgid "Generate terms"
+msgstr "စည်းမျဉ်းများထုတ်လုပ်ရန်"
+
+msgid "Add variation"
+msgstr "ပြောင်းလဲမှုထည့်ရန်"
+
+msgid "Editor demo"
+msgstr "တည်းဖြတ်ကိရိယာနမူနာ"
+
+msgid "Tool introduction"
+msgstr "ကိရိယာမိတ်ဆက်"
+
+msgid "Data exchanges"
+msgstr "ဒေတာဖလှယ်မှုများ"
+
+msgid "Third parties"
+msgstr "တတိယပုဂ္ဂိုလ်များ"
+
+msgid "Layouts"
+msgstr "ဒီဇိုင်းပုံစံများ"
+

@@ -33058,3 +33058,60 @@ msgstr "स्थिर नाम"
 msgid "MDI icon name"
 msgstr "MDI आइकन नाम"
 
+msgid "Assign authentication sources"
+msgstr "प्रमाणीकरण स्रोतहरू नियुक्त गर्नुहोस्"
+
+msgid "Assignment details"
+msgstr "नियुक्ति विवरण"
+
+msgid "Terms and conditions"
+msgstr "नियम र शर्तहरू"
+
+msgid "Icons"
+msgstr "आइकनहरू"
+
+msgid "Create backup"
+msgstr "ब्याकअप बनाउनुहोस्"
+
+msgid "Create file"
+msgstr "फाइल बनाउनुहोस्"
+
+msgid "Create link"
+msgstr "लिङ्क बनाउनुहोस्"
+
+msgid "Edit template"
+msgstr "टेम्प्लेट सम्पादन गर्नुहोस्"
+
+msgid "Shared files"
+msgstr "साझा फाइलहरू"
+
+msgid "Skill wheel"
+msgstr "कौशल चक्र"
+
+msgid "Favourite courses"
+msgstr "मनपर्ने कोर्सहरू"
+
+msgid "Restart courses"
+msgstr "कोर्सहरू पुन: सुरु गर्नुहोस्"
+
+msgid "Generate terms"
+msgstr "नियमहरू उत्पन्न गर्नुहोस्"
+
+msgid "Add variation"
+msgstr "भिन्नता थप्नुहोस्"
+
+msgid "Editor demo"
+msgstr "सम्पादक डेमो"
+
+msgid "Tool introduction"
+msgstr "उपकरण परिचय"
+
+msgid "Data exchanges"
+msgstr "डाटा आदानप्रदान"
+
+msgid "Third parties"
+msgstr "तृतीय पक्षहरू"
+
+msgid "Layouts"
+msgstr "लेआउटहरू"
+

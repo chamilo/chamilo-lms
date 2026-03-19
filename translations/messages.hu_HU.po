@@ -33058,3 +33058,60 @@ msgstr "Konstans neve"
 msgid "MDI icon name"
 msgstr "MDI ikonnév"
 
+msgid "Assign authentication sources"
+msgstr "Hitelesítési források hozzárendelése"
+
+msgid "Assignment details"
+msgstr "Feladat részletek"
+
+msgid "Terms and conditions"
+msgstr "Felhasználási feltételek"
+
+msgid "Icons"
+msgstr "Ikonok"
+
+msgid "Create backup"
+msgstr "Biztonsági mentés létrehozása"
+
+msgid "Create file"
+msgstr "Fájl létrehozása"
+
+msgid "Create link"
+msgstr "Link létrehozása"
+
+msgid "Edit template"
+msgstr "Sablon szerkesztése"
+
+msgid "Shared files"
+msgstr "Megosztott fájlok"
+
+msgid "Skill wheel"
+msgstr "Képességkerék"
+
+msgid "Favourite courses"
+msgstr "Kedvenc kurzusok"
+
+msgid "Restart courses"
+msgstr "Kurzusok újraindítása"
+
+msgid "Generate terms"
+msgstr "Szerződési feltételek generálása"
+
+msgid "Add variation"
+msgstr "Változat hozzáadása"
+
+msgid "Editor demo"
+msgstr "Szerkesztő demó"
+
+msgid "Tool introduction"
+msgstr "Eszközismertető"
+
+msgid "Data exchanges"
+msgstr "Adatcserék"
+
+msgid "Third parties"
+msgstr "Harmadik felek"
+
+msgid "Layouts"
+msgstr "Elrendezések"
+

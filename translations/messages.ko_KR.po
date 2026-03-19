@@ -33058,3 +33058,60 @@ msgstr "상수 이름"
 msgid "MDI icon name"
 msgstr "MDI 아이콘 이름"
 
+msgid "Assign authentication sources"
+msgstr "인증 소스 지정"
+
+msgid "Assignment details"
+msgstr "지정 상세정보"
+
+msgid "Terms and conditions"
+msgstr "이용 약관"
+
+msgid "Icons"
+msgstr "아이콘"
+
+msgid "Create backup"
+msgstr "백업 생성"
+
+msgid "Create file"
+msgstr "파일 생성"
+
+msgid "Create link"
+msgstr "링크 생성"
+
+msgid "Edit template"
+msgstr "템플릿 편집"
+
+msgid "Shared files"
+msgstr "공유 파일"
+
+msgid "Skill wheel"
+msgstr "스킬 휠"
+
+msgid "Favourite courses"
+msgstr "즐겨찾는 강좌"
+
+msgid "Restart courses"
+msgstr "강좌 재시작"
+
+msgid "Generate terms"
+msgstr "약관 생성"
+
+msgid "Add variation"
+msgstr "변형 추가"
+
+msgid "Editor demo"
+msgstr "편집기 데모"
+
+msgid "Tool introduction"
+msgstr "툴 개요"
+
+msgid "Data exchanges"
+msgstr "데이터 교환"
+
+msgid "Third parties"
+msgstr "타사"
+
+msgid "Layouts"
+msgstr "레이아웃"
+

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykładowy wzór: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykładowa formuła: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -33063,4 +33063,61 @@ msgstr "Nazwa stałej"
 
 msgid "MDI icon name"
 msgstr "Nazwa ikony MDI"
+
+msgid "Assign authentication sources"
+msgstr "Przypisz źródła uwierzytelniania"
+
+msgid "Assignment details"
+msgstr "Szczegóły zadania"
+
+msgid "Terms and conditions"
+msgstr "Regulamin"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Utwórz kopię zapasową"
+
+msgid "Create file"
+msgstr "Utwórz plik"
+
+msgid "Create link"
+msgstr "Utwórz link"
+
+msgid "Edit template"
+msgstr "Edytuj szablon"
+
+msgid "Shared files"
+msgstr "Udostępnione pliki"
+
+msgid "Skill wheel"
+msgstr "Koło umiejętności"
+
+msgid "Favourite courses"
+msgstr "Ulubione kursy"
+
+msgid "Restart courses"
+msgstr "Restartuj kursy"
+
+msgid "Generate terms"
+msgstr "Wygeneruj regulamin"
+
+msgid "Add variation"
+msgstr "Dodaj wariant"
+
+msgid "Editor demo"
+msgstr "Demo edytora"
+
+msgid "Tool introduction"
+msgstr "Wprowadzenie do narzędzia"
+
+msgid "Data exchanges"
+msgstr "Wymiana danych"
+
+msgid "Third parties"
+msgstr "Strony trzecie"
+
+msgid "Layouts"
+msgstr "Układów"
 

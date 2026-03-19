@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Ροή οκτέττων,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -33072,4 +33072,61 @@ msgstr "Όνομα σταθεράς"
 
 msgid "MDI icon name"
 msgstr "Όνομα εικονιδίου MDI"
+
+msgid "Assign authentication sources"
+msgstr "Ανάθεση πηγών πιστοποίησης"
+
+msgid "Assignment details"
+msgstr "Λεπτομέρειες ανάθεσης"
+
+msgid "Terms and conditions"
+msgstr "Όροι και προϋποθέσεις"
+
+msgid "Icons"
+msgstr "Εικονίδια"
+
+msgid "Create backup"
+msgstr "Δημιουργία αντιγράφου ασφαλείας"
+
+msgid "Create file"
+msgstr "Δημιουργία αρχείου"
+
+msgid "Create link"
+msgstr "Δημιουργία συνδέσμου"
+
+msgid "Edit template"
+msgstr "Επεξεργασία προτύπου"
+
+msgid "Shared files"
+msgstr "Κοινόχρηστα αρχεία"
+
+msgid "Skill wheel"
+msgstr "Τροχός δεξιοτήτων"
+
+msgid "Favourite courses"
+msgstr "Αγαπημένα μαθήματα"
+
+msgid "Restart courses"
+msgstr "Επανεκκίνηση μαθημάτων"
+
+msgid "Generate terms"
+msgstr "Γεννήτρια όρων"
+
+msgid "Add variation"
+msgstr "Προσθήκη παραλλαγής"
+
+msgid "Editor demo"
+msgstr "Δείγμα επεξεργαστή"
+
+msgid "Tool introduction"
+msgstr "Εισαγωγή εργαλείου"
+
+msgid "Data exchanges"
+msgstr "Ανταλλαγές δεδομένων"
+
+msgid "Third parties"
+msgstr "Τρίτοι"
+
+msgid "Layouts"
+msgstr "Διάταξη"
 

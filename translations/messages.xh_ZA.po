@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokugcwalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -16069,13 +16069,13 @@ msgid "Create child skill"
 msgstr "Yenza isakhono somntwana"
 
 msgid "This skill can be obtained through:"
-msgstr ""
+msgstr "Esi khono sinokufunyanwa ngokw:"
 
 msgid "No course currently allows you to obtain this skill."
-msgstr ""
+msgstr "Akukho khosi ngoku elikuvumela ukufumana esi khono."
 
 msgid "Add skill to search profile"
-msgstr ""
+msgstr "Faka isakhono kwiprofile yokukhangela"
 
 msgid "Search profile matches"
 msgstr "Khangela ukufanana kweprofayili"
@@ -32836,31 +32836,31 @@ msgid "You don't have any course content yet"
 msgstr "Awunayo umxholo wesifundo okwangoku"
 
 msgid "This course is locked"
-msgstr ""
+msgstr "Eli khosi litsekile"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
-msgstr ""
+msgstr "Idilesi ye-imeyile apho iimeyile ziya kuthunyelwa xa i-platform ithumela i-imeyile, ikwasetyenziswa njenge-'reply-to' header"
 
 msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
-msgstr ""
+msgstr "Awuyifumani ulwimi lwakho kuluhlu? Qhagamshelana nathi kwi-%s ukuze unikele njengomguqulelo"
 
 msgid "An update is available"
-msgstr ""
+msgstr "Kukhona uhlaziyo olufumanekayo"
 
 msgid "to know what's new and what has been changed"
-msgstr ""
+msgstr "ukwazi izinto ezintsha kunye nezintathu"
 
 msgid "We have detected that your PHP installation does not define the date"
-msgstr ""
+msgstr "Sifumanise ukuba ufakelo lwakho lwe-PHP aluchazi umhla"
 
 msgid "Your PHP version does not match the requirements for this software"
-msgstr ""
+msgstr "Inguqulelo yakho ye-PHP ayihambelani neemfuno zeso sofwewe"
 
 msgid "Some files or folders don't have writing permission"
-msgstr ""
+msgstr "Ezinye iifayile okanye iifoldara azinayo imvume yokubhala"
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system"
-msgstr ""
+msgstr "Isaziso! Umfaki-sicelo ufumanise i-platform ye-Chamilo esele ikhona kwisistim yakho"
 
 msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
 msgstr "Kuba i-<code>newscorm</code> ne-<code>exercice</code> directories ziguqulwe igama zaba <code>lp</code> ne-<code>exercise</code> ngokulandelelanayo, kuyafuneka ukucima okanye ukuguqula igama laba <code>newscorm_old</code> ne-<code>exercice_old</code>"
@@ -33053,4 +33053,61 @@ msgstr "Igama eliqhubekayo"
 
 msgid "MDI icon name"
 msgstr "Igama le-ayikoni ye-MDI"
+
+msgid "Assign authentication sources"
+msgstr "Yabela imithombo yoqinisekiso"
+
+msgid "Assignment details"
+msgstr "Iinkcukacha zesabelo"
+
+msgid "Terms and conditions"
+msgstr "Imiqathango nemigaqo"
+
+msgid "Icons"
+msgstr "Iicons"
+
+msgid "Create backup"
+msgstr "Yenza isuphu"
+
+msgid "Create file"
+msgstr "Yenza ifayile"
+
+msgid "Create link"
+msgstr "Yenza ikhonkco"
+
+msgid "Edit template"
+msgstr "Hlela ithemplethi"
+
+msgid "Shared files"
+msgstr "Iifayile ezabelwana"
+
+msgid "Skill wheel"
+msgstr "Ivili lesakhono"
+
+msgid "Favourite courses"
+msgstr "Izifundo ezithandwayo"
+
+msgid "Restart courses"
+msgstr "Qala ngokutsha izifundo"
+
+msgid "Generate terms"
+msgstr "Yenza imigaqo"
+
+msgid "Add variation"
+msgstr "Faka umahluko"
+
+msgid "Editor demo"
+msgstr "Ubonakalo lomhleli"
+
+msgid "Tool introduction"
+msgstr "Intshayelelo yesixhobo"
+
+msgid "Data exchanges"
+msgstr "Utshintshiselwano lwedatha"
+
+msgid "Third parties"
+msgstr "Amaqela esithathu"
+
+msgid "Layouts"
+msgstr "Uyilo"
 

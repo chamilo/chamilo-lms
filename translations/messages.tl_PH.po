@@ -33054,3 +33054,60 @@ msgstr "Pangalan ng constant"
 msgid "MDI icon name"
 msgstr "Pangalan ng MDI icon"
 
+msgid "Assign authentication sources"
+msgstr ""
+
+msgid "Assignment details"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Icons"
+msgstr "Mga Icon"
+
+msgid "Create backup"
+msgstr "Lumikha ng backup"
+
+msgid "Create file"
+msgstr "Lumikha ng file"
+
+msgid "Create link"
+msgstr "Lumikha ng link"
+
+msgid "Edit template"
+msgstr "I-edit ang template"
+
+msgid "Shared files"
+msgstr "Mga nakabahagiang file"
+
+msgid "Skill wheel"
+msgstr "Skill wheel"
+
+msgid "Favourite courses"
+msgstr "Mga paboritong kurso"
+
+msgid "Restart courses"
+msgstr "I-restart ang mga kurso"
+
+msgid "Generate terms"
+msgstr "Humuta ng mga termino"
+
+msgid "Add variation"
+msgstr "Magdagdag ng variation"
+
+msgid "Editor demo"
+msgstr "Demo ng editor"
+
+msgid "Tool introduction"
+msgstr "Panimulang Tool"
+
+msgid "Data exchanges"
+msgstr "Mga palitan ng data"
+
+msgid "Third parties"
+msgstr "Mga third party"
+
+msgid "Layouts"
+msgstr "Mga layout"
+

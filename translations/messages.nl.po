@@ -35138,3 +35138,60 @@ msgstr "Constante naam"
 msgid "MDI icon name"
 msgstr "MDI-pictogramnaam"
 
+msgid "Assign authentication sources"
+msgstr ""
+
+msgid "Assignment details"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Icons"
+msgstr ""
+
+msgid "Create backup"
+msgstr ""
+
+msgid "Create file"
+msgstr ""
+
+msgid "Create link"
+msgstr ""
+
+msgid "Edit template"
+msgstr ""
+
+msgid "Shared files"
+msgstr ""
+
+msgid "Skill wheel"
+msgstr ""
+
+msgid "Favourite courses"
+msgstr ""
+
+msgid "Restart courses"
+msgstr ""
+
+msgid "Generate terms"
+msgstr "Voorwaarden genereren"
+
+msgid "Add variation"
+msgstr "Variatie toevoegen"
+
+msgid "Editor demo"
+msgstr "Editor demo"
+
+msgid "Tool introduction"
+msgstr "Introductietekst"
+
+msgid "Data exchanges"
+msgstr "Gegevensuitwisselingen"
+
+msgid "Third parties"
+msgstr "Derden"
+
+msgid "Layouts"
+msgstr "Lay-outs"
+

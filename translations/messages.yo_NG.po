@@ -26851,13 +26851,13 @@ msgid "Check password strength"
 msgstr "Ṣayẹwo agbara ọrọ igbaniwọle"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "HTTP Ìdúróṣinṣin Ìgbé Lọ́nà Ìkọ́kọ́"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security jẹ ẹya ti o dara julọ lati ṣe atilẹyin lori aaye rẹ ati o mu imulo TLS rẹ lagbara nipa gbigba Agent Olumulo lati fi ipa mu lilo HTTPS. Iye ti a ṣe iṣeduro: 'strict-transport-security: max-age=63072000; includeSubDomains'. Wo https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. O le fi 'preload' suffix kun, ṣugbọn eyi ni awọn ipa lori agbegbe ipele oke (TLD), nitorinaa boya ko ṣe laifọwọsi. Wo https://hstspreload.org/. Fi si空白 lati pa."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Ètò Ìdílé Ìdààmú Àkóónù"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy jẹ iwọn ti o munadoko lati daabobo aaye rẹ lati awọn ikọlu XSS. Nipa whitelisting awọn orisun ti akoonu ti a fọwọsi, o le ṣe idena fun ẹrọ aṣawe lati gbe awọn ohun-ini buburu. Eyi ṣeto jẹ idiwọn pataki pẹlu awọn olootu WYSIWYG, ṣugbọn ti o ba fi gbogbo awọn aaye-orisun ti o fẹ lati yọọda fun ifilelẹ iframes kun ninu alaye child-src, apẹẹrẹ yii yẹ ki o ṣiṣẹ fun ọ. O le ṣe idena JavaScript lati ṣiṣẹ lati awọn orisun ita (pẹlu inu awọn aworan SVG) nipa lilo akojọ ti o muna ni 'script-src' ariyanjiyan. Fi si空白 lati pa. Apẹẹrẹ ṣeto: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26869,7 +26869,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Eyi ṣeto gba ọ laaye lati ṣe idanwo nipa ijabọ ṣugbọn ko fi ipa mu diẹ ninu Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "HTTP Ìpìlẹ̀ Kọ́kọ́ Ìkọ́kọ́"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning daabobo aaye rẹ lati awọn ikọlu MiTM nipa lilo awọn iwe-ẹri X.509 rogue. Nipa whitelisting awọn idaniloju nikan ti ẹrọ aṣawe yẹ ki o gbẹkẹle, awọn olumulo rẹ ni aabo ni iṣẹlẹ ti alaṣẹ iwe-ẹri kan ba bajẹ."
@@ -33053,4 +33053,61 @@ msgstr "Orukọ igbagbogbo"
 
 msgid "MDI icon name"
 msgstr "Orukọ aami MDI"
+
+msgid "Assign authentication sources"
+msgstr "Yà sọ́nà ìdáàbòbò"
+
+msgid "Assignment details"
+msgstr "Àwòrán Ìyà sọ"
+
+msgid "Terms and conditions"
+msgstr "Àwùjọ àti Ìlànà"
+
+msgid "Icons"
+msgstr "Àwòrán àmì"
+
+msgid "Create backup"
+msgstr "Ṣẹ̀dá ìṣàpẹẹrẹ"
+
+msgid "Create file"
+msgstr "Ṣẹ̀dá ìwé"
+
+msgid "Create link"
+msgstr "Ṣẹ̀dá ìnọ́nnìbò"
+
+msgid "Edit template"
+msgstr "Ṣàtúnṣe àwòrán ìtumọ̀"
+
+msgid "Shared files"
+msgstr "Àwọn ìwé tí a pín"
+
+msgid "Skill wheel"
+msgstr "Kẹ̀kẹ́ ìbáwí"
+
+msgid "Favourite courses"
+msgstr "Àwọn kọlẹẹ̀jì a fẹ́ràn"
+
+msgid "Restart courses"
+msgstr "Ṣàtúnṣe ìbẹ̀rẹ̀ kọlẹẹ̀jì"
+
+msgid "Generate terms"
+msgstr "Ṣẹ̀dá àwùjọ"
+
+msgid "Add variation"
+msgstr "Ṣàfikún ìyàtọ̀"
+
+msgid "Editor demo"
+msgstr "Àwò ìwòrán olùdàbí"
+
+msgid "Tool introduction"
+msgstr "Ìdọ̀tí ìgbòòlù"
+
+msgid "Data exchanges"
+msgstr "Pàṣípààrọ̀ dátà"
+
+msgid "Third parties"
+msgstr "Àwùjọ kẹta"
+
+msgid "Layouts"
+msgstr "Àwùrẹ̀"
 

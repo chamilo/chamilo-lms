@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரண உதாரணம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "பூரணச் சூத்திரம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:பதிப்புரிமை,, no:பதிப்புரிமை இல்லை"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெட்,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:பாக்கெடு,, application/msword:MsWord,, application/octet-stream:அக்டெட் ஸ்ட்ரீம்,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:பயிற்சி,,      simulation:மெய்யப்படுத்தல்,,      questionnaire:கேள்வித்தாள்,,      diagram:சித்திரம்,,      figure:உருவம்,,      graph:படம்,,      index:அட்டவணை,,      slide:இன்னுசைடு,,      table:அட்டவணை,,      narrative text:கதை உரை,,      exam:தேர்வு,,      experiment:பரிசோதனை,,      problem statement:பிரச்சினை அறிக்கை,,      self assessment:சுய மதிப்பீடு,,      lecture:உபதேசம்"
@@ -33057,4 +33057,61 @@ msgstr "நிலையான பெயர்"
 
 msgid "MDI icon name"
 msgstr "MDI சின்ன பெயர்"
+
+msgid "Assign authentication sources"
+msgstr "அங்கீகார ஆதாரங்களை ஒதுக்கீடு செய்யவும்"
+
+msgid "Assignment details"
+msgstr "ஒதுக்கீட்ட விவரங்கள்"
+
+msgid "Terms and conditions"
+msgstr "நிபந்தனைகள் மற்றும் விதிமுறைகள்"
+
+msgid "Icons"
+msgstr "படத்துரைகள்"
+
+msgid "Create backup"
+msgstr "உருவாக்கு பேக்-அப்"
+
+msgid "Create file"
+msgstr "கோப்பை உருவாக்கு"
+
+msgid "Create link"
+msgstr "தொடர்பை உருவாக்கு"
+
+msgid "Edit template"
+msgstr "மாதிரியைத் திருத்து"
+
+msgid "Shared files"
+msgstr "பகிர்ந்த கோப்புகள்"
+
+msgid "Skill wheel"
+msgstr "திறமை சக்கரம்"
+
+msgid "Favourite courses"
+msgstr "பிடித்த பாடங்கள்"
+
+msgid "Restart courses"
+msgstr "பாடங்களை மீண்டும் தொடங்கு"
+
+msgid "Generate terms"
+msgstr "நிபந்தனைகளை உருவாக்கு"
+
+msgid "Add variation"
+msgstr "மாறுபாட்டைச் சேர்க்கவும்"
+
+msgid "Editor demo"
+msgstr "திருத்தி நிரலகம்"
+
+msgid "Tool introduction"
+msgstr "கருவி அறிமுகம்"
+
+msgid "Data exchanges"
+msgstr "தரவு பரிமாற்றங்கள்"
+
+msgid "Third parties"
+msgstr "மூன்றாம் தரப்பினர்"
+
+msgid "Layouts"
+msgstr "அமைப்புகள்"
 

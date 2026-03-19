@@ -33054,3 +33054,60 @@ msgstr "Fast navn"
 msgid "MDI icon name"
 msgstr "MDI ikon navn"
 
+msgid "Assign authentication sources"
+msgstr "Vítta til heimildir til innlogging"
+
+msgid "Assignment details"
+msgstr "Upplýsingar um uppgávuna"
+
+msgid "Terms and conditions"
+msgstr "Viljartreytir og skilmálir"
+
+msgid "Icons"
+msgstr "Ikoner"
+
+msgid "Create backup"
+msgstr "Upprætta órugv"
+
+msgid "Create file"
+msgstr "Upprætta fílu"
+
+msgid "Create link"
+msgstr "Upprætta leinkju"
+
+msgid "Edit template"
+msgstr "Brota sniðmát"
+
+msgid "Shared files"
+msgstr "Deildir fílar"
+
+msgid "Skill wheel"
+msgstr "Fíggjarhjól"
+
+msgid "Favourite courses"
+msgstr "Yndisligir líkur"
+
+msgid "Restart courses"
+msgstr "Endurnýggja líkur"
+
+msgid "Generate terms"
+msgstr "Útvega viljar"
+
+msgid "Add variation"
+msgstr "Legg afturat variatión"
+
+msgid "Editor demo"
+msgstr "Ritsagnarævning"
+
+msgid "Tool introduction"
+msgstr "Verktøkisinnleiðing"
+
+msgid "Data exchanges"
+msgstr "Dataskipti"
+
+msgid "Third parties"
+msgstr "Triðir aðilar"
+
+msgid "Layouts"
+msgstr "Útsjógn"
+

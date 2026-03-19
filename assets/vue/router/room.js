@@ -8,6 +8,7 @@ export default {
     {
       name: "RoomList",
       path: "",
+      meta: { breadcrumb: "Rooms" },
       component: () => import("../views/room/List.vue"),
     },
     {

@@ -8,11 +8,13 @@ export default {
     {
       name: "AttendanceList",
       path: "",
+      meta: { breadcrumb: "Attendance" },
       component: () => import("../views/attendance/AttendanceList.vue"),
     },
     {
       name: "CreateAttendance",
       path: "create",
+      meta: { breadcrumb: "Create" },
       component: () => import("../views/attendance/AttendanceCreate.vue"),
     },
     {
@@ -42,6 +44,7 @@ export default {
     {
       name: "ExportToPdf",
       path: ":id?/export/pdf",
+      meta: { breadcrumb: "Export to PDF" },
       component: () => import("../views/attendance/AttendanceExport.vue"),
     },
     {

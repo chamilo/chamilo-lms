@@ -8,7 +8,7 @@ export default {
       name: "AccountHome",
       path: "home",
       component: () => import("../views/account/Home.vue"),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, breadcrumb: "My account" },
     },
   ],
 }

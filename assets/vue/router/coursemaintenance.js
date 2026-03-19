@@ -9,19 +9,19 @@ export default {
       name: "CMImportBackup",
       path: "import",
       component: () => import("../views/coursemaintenance/ImportBackup.vue"),
-      meta: { breadcrumb: "Importar backup" },
+      meta: { breadcrumb: "Import backup" },
     },
     {
       name: "CMCreateBackup",
       path: "create",
       component: () => import("../views/coursemaintenance/CreateBackup.vue"),
-      meta: { breadcrumb: "Crear backup" },
+      meta: { breadcrumb: "Create backup" },
     },
     {
       name: "CMCopyCourse",
       path: "copy",
       component: () => import("../views/coursemaintenance/CopyCourse.vue"),
-      meta: { breadcrumb: "Copiar curso" },
+      meta: { breadcrumb: "Copy course" },
     },
     {
       name: "CMCc13",
@@ -33,13 +33,13 @@ export default {
       name: "CMRecycle",
       path: "recycle",
       component: () => import("../views/coursemaintenance/RecycleCourse.vue"),
-      meta: { breadcrumb: "Reciclar curso" },
+      meta: { breadcrumb: "Recycle course" },
     },
     {
       name: "CMDelete",
       path: "delete",
       component: () => import("../views/coursemaintenance/DeleteCourse.vue"),
-      meta: { breadcrumb: "Eliminar curso" },
+      meta: { breadcrumb: "Delete course" },
     },
   ],
 }

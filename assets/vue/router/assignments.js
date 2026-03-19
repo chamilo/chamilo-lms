@@ -11,11 +11,13 @@ export default {
     {
       name: "AssignmentsList",
       path: "",
+      meta: { breadcrumb: "Assignments" },
       component: () => import("../views/assignments/AssignmentsList.vue"),
     },
     {
       name: "AssignmentsCreate",
       path: "new",
+      meta: { breadcrumb: "Create" },
       component: () => import("../views/assignments/AssignmentsCreate.vue"),
     },
     {
@@ -32,12 +34,14 @@ export default {
       path: "submission/:id",
       component: () => import("../views/assignments/AssignmentDetail.vue"),
       props: true,
+      meta: { breadcrumb: "Assignment details" },
     },
     {
       name: "AssignmentSubmit",
       path: ":id/submit",
       component: () => import("../views/assignments/AssignmentSubmit.vue"),
       props: true,
+      meta: { breadcrumb: "Submit" },
     },
     {
       name: "AssignmentAddDocument",
@@ -62,6 +66,7 @@ export default {
       path: ":id/missing",
       component: () => import("../views/assignments/AssignmentMissing.vue"),
       props: true,
+      meta: { breadcrumb: "Missing assignments" },
     },
   ],
 }

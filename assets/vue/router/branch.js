@@ -8,6 +8,7 @@ export default {
     {
       name: "BranchList",
       path: "",
+      meta: { breadcrumb: "Branches" },
       component: () => import("../views/branch/List.vue"),
     },
     {

@@ -33058,3 +33058,60 @@ msgstr "Constant name"
 
 msgid "MDI icon name"
 msgstr "MDI icon name"
+
+msgid "Assign authentication sources"
+msgstr "Assign authentication sources"
+
+msgid "Assignment details"
+msgstr "Assignment details"
+
+msgid "Terms and conditions"
+msgstr "Terms and conditions"
+
+msgid "Icons"
+msgstr "Icons"
+
+msgid "Create backup"
+msgstr "Create backup"
+
+msgid "Create file"
+msgstr "Create file"
+
+msgid "Create link"
+msgstr "Create link"
+
+msgid "Edit template"
+msgstr "Edit template"
+
+msgid "Shared files"
+msgstr "Shared files"
+
+msgid "Skill wheel"
+msgstr "Skill wheel"
+
+msgid "Favourite courses"
+msgstr "Favourite courses"
+
+msgid "Restart courses"
+msgstr "Restart courses"
+
+msgid "Generate terms"
+msgstr "Generate terms"
+
+msgid "Add variation"
+msgstr "Add variation"
+
+msgid "Editor demo"
+msgstr "Editor demo"
+
+msgid "Tool introduction"
+msgstr "Tool introduction"
+
+msgid "Data exchanges"
+msgstr "Data exchanges"
+
+msgid "Third parties"
+msgstr "Third parties"
+
+msgid "Layouts"
+msgstr "Layouts"

@@ -141,6 +141,16 @@
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
+        <BaseButton
+          v-if="isAllowedToEdit"
+          :label="t('Reporting')"
+          :to-url="reportingUrl"
+          icon="tracking"
+          only-icon
+          type="black"
+          @click="courseIntroEl.goToCreateOrUpdate()"
+        />
+
         <div
           v-if="hasCourseTMenuItems"
           class="grow-0"
@@ -326,6 +336,13 @@ const toolsForDisplay = computed(() => {
   return tools.value.filter((tool) => getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE)
 })
 
+const reportingUrl = computed(() => {
+  const cid = course.value?.id
+  if (!cid) return null
+  const sid = session.value?.id || 0
+  return `/main/tracking/courseLog.php?cid=${cid}&sid=${sid}&gid=0`
+})
+
 /**
  * Load tools for the course, split admin tools into the cog menu
  * and keep the rest in the main tools grid.
@@ -356,7 +373,9 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
-      if (tool.tool?.category === "admin") {
+      if (tool.title === "tracking") {
+        // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
+      } else if (tool.tool?.category === "admin") {
         adminMenuItems.push({
           label: t(tool.tool.titleToShow),
           url: tool.url,

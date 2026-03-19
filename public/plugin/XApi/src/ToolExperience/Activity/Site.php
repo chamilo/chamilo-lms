@@ -6,28 +6,28 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Definition;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
-
 /**
  * Class Site.
  */
 class Site extends BaseActivity
 {
-    public function generate(): Activity
+    public function generate(): array
     {
-        $platformLanguageIso = api_get_language_isocode(
-            api_get_setting('platformLanguage')
-        );
-        $platform = api_get_setting('Institution').' - '.api_get_setting('siteName');
+        $platformLanguage = api_get_setting('platformLanguage');
+        $platformLanguageIso = !empty($platformLanguage)
+            ? api_get_language_isocode($platformLanguage)
+            : 'en';
 
-        return new Activity(
-            IRI::fromString('http://id.tincanapi.com/activitytype/lms'),
-            new Definition(
-                LanguageMap::create([$platformLanguageIso => $platform])
-            )
-        );
+        $platform = trim((string) api_get_setting('Institution').' - '.(string) api_get_setting('siteName'));
+
+        return [
+            'objectType' => 'Activity',
+            'id' => 'http://id.tincanapi.com/activitytype/lms',
+            'definition' => [
+                'name' => [
+                    $platformLanguageIso => $platform,
+                ],
+            ],
+        ];
     }
 }

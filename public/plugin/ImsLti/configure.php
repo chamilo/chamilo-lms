@@ -132,7 +132,7 @@ switch ($action) {
                         $course->getId()
                     );
                     $lineItemResource->createLineItem(
-                        ['label' => $tool->getName(), 'scoreMaximum' => 100]
+                        ['label' => $tool->getTitle(), 'scoreMaximum' => 100]
                     );
 
                     Display::addFlash(

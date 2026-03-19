@@ -7,29 +7,41 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Actor;
 
 use Chamilo\CoreBundle\Entity\User as UserEntity;
-use Xabbuh\XApi\Model\Agent;
-use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
-use Xabbuh\XApi\Model\IRI;
 
 /**
  * Class User.
  */
 class User extends BaseActor
 {
-    private $user;
-
-    public function __construct(UserEntity $user)
+    public function __construct(private UserEntity $user)
     {
-        $this->user = $user;
     }
 
-    public function generate(): Agent
+    public function generate(): array
     {
-        return new Agent(
-            InverseFunctionalIdentifier::withMbox(
-                IRI::fromString('mailto:'.$this->user->getEmail())
-            ),
-            $this->user->getFullName()
-        );
+        $fullName = $this->normalizeString($this->user->getFullName());
+        $email = $this->normalizeString($this->user->getEmail());
+
+        if ('' !== $email) {
+            return [
+                'objectType' => 'Agent',
+                'name' => $fullName,
+                'mbox' => 'mailto:'.$email,
+            ];
+        }
+
+        $homePage = rtrim(api_get_path(WEB_PATH), '/').'/';
+        $accountName = method_exists($this->user, 'getUsername')
+            ? $this->normalizeString($this->user->getUsername())
+            : (string) $this->user->getId();
+
+        return [
+            'objectType' => 'Agent',
+            'name' => $fullName,
+            'account' => [
+                'homePage' => $homePage,
+                'name' => $accountName,
+            ],
+        ];
     }
 }

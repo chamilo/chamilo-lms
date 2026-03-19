@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "给新用户发邮件"
 
 msgid "Portfolio"
-msgstr "扩展特征"
+msgstr "作品集"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "如果设置为\"真\", 用户可填写下列(可选)字段: \"我的能力\", \"我的学历\", \"我能教授的课程\"与\"个人开放区\"."
@@ -16072,6 +16072,15 @@ msgstr "短代码"
 
 msgid "Create child skill"
 msgstr "创建子技能"
+
+msgid "This skill can be obtained through:"
+msgstr "此技能可通过以下方式获得："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "目前没有课程允许您获得此技能。"
+
+msgid "Add skill to search profile"
+msgstr "将技能添加到搜索资料"
 
 msgid "Search profile matches"
 msgstr "搜索个人资料匹配"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "创建您的第一条笔记以开始。"
 
 msgid "F d, Y"
-msgstr "Y 年 M 月 d 日"
+msgstr "Y 年 m 月 d 日"
 
 msgid "Could not load support info at this time."
 msgstr "此时无法加载支持信息。"
@@ -32895,6 +32904,9 @@ msgstr "保存数据交换出错"
 msgid "No documents added yet"
 msgstr "尚未添加文档"
 
+msgid "No additional details available for this skill."
+msgstr "此技能没有额外详细信息。"
+
 msgid "No available documents"
 msgstr "没有可用的文档"
 
@@ -33038,4 +33050,70 @@ msgstr "学习分析"
 
 msgid "Administrative activity auditing"
 msgstr "管理活动审计"
+
+msgid "List icons"
+msgstr "列表图标"
+
+msgid "Constant name"
+msgstr "常量名称"
+
+msgid "MDI icon name"
+msgstr "MDI 图标名称"
+
+msgid "Assign authentication sources"
+msgstr "分配认证源"
+
+msgid "Assignment details"
+msgstr "作业详情"
+
+msgid "Terms and conditions"
+msgstr "条款和条件"
+
+msgid "Icons"
+msgstr "图标"
+
+msgid "Create backup"
+msgstr "创建备份"
+
+msgid "Create file"
+msgstr "创建文件"
+
+msgid "Create link"
+msgstr "创建链接"
+
+msgid "Edit template"
+msgstr "编辑模板"
+
+msgid "Shared files"
+msgstr "共享文件"
+
+msgid "Skill wheel"
+msgstr "技能轮"
+
+msgid "Favourite courses"
+msgstr "收藏课程"
+
+msgid "Restart courses"
+msgstr "重启课程"
+
+msgid "Generate terms"
+msgstr "生成条款"
+
+msgid "Add variation"
+msgstr "添加变体"
+
+msgid "Editor demo"
+msgstr "编辑器演示"
+
+msgid "Tool introduction"
+msgstr "工具介绍"
+
+msgid "Data exchanges"
+msgstr "数据交换"
+
+msgid "Third parties"
+msgstr "第三方"
+
+msgid "Layouts"
+msgstr "布局"
 

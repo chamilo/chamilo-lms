@@ -16068,6 +16068,15 @@ msgstr "Kọ́ọ̀dù kùkù"
 msgid "Create child skill"
 msgstr "Ṣẹ̀dá ìmọ̀ ìbáṣepọ̀ ọmọ"
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr "Ṣàwádìí ìbámu profaili"
 
@@ -25780,88 +25789,88 @@ msgid "For tests with many questions, use pagination if the number of questions 
 msgstr ""
 
 msgid "Question pagination length for teachers"
-msgstr ""
+msgstr "Gigun pagination ibeere fun olukọ"
 
 msgid "Number of questions to show on every page when using the question pagination for teachers option."
-msgstr ""
+msgstr "Nọmba awọn ibeere lati ṣafihan lori gbogbo oju-iwe nigba lilo aṣayan pagination ibeere fun olukọ."
 
 msgid "Limit teachers' permissions over tests"
-msgstr ""
+msgstr "Idinku awọn igbanilaaye olukọ lori awọn idanwo"
 
 msgid "When enabled, teachers cannot delete tests nor questions, change tests visibility, download to QTI, clean results, etc."
-msgstr ""
+msgstr "Nigbati a ba ṣiṣẹ, awọn olukọ ko le paarẹ awọn idanwo tabi awọn ibeere, yi hihan idanwo pada, ṣe igbasilẹ si QTI, nu awọn abajade, abbl."
 
 msgid "Lock questions of previous categories in a test"
-msgstr ""
+msgstr "Titiipa awọn ibeere ti awọn ẹka iṣaaju ninu idanwo kan"
 
 msgid "When using this option, an additional option will appear in the test's configuration. When using a test with multiple question categories and asking for a distribution by category, this will allow the user to navigate questions per category. Once a category is finished, (s)he moves to the next category and cannot return to the previous category."
-msgstr ""
+msgstr "Nigbati lilo aṣayan yii, aṣayan afikun yoo han ni iṣeto idanwo naa. Nigbati lilo idanwo pẹlu awọn ẹka ibeere pupọ ati bibeere fun pinpin nipasẹ ẹka, eyi yoo gba olumulo laaye lati lilọ kiri awọn ibeere fun ẹka kan. Ni kete ti ẹka kan ti pari, (o) yoo lọ si ẹka atẹle ko si le pada si ẹka iṣaaju."
 
 msgid "Tests score format"
-msgstr ""
+msgstr "Ọna kika ami idanwo"
 
 msgid "Select between the following forms for the display of users' score in various reports: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Use the numerical ID of the form you want to use."
-msgstr ""
+msgstr "Yan laarin awọn fọọmu wọnyi fun ifihan ami awọn olumulo ni awọn ijabọ oriṣiriṣi: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Lo ID oni nọmba ti fọọmu ti o fẹ lo."
 
 msgid "Additional links for teachers in tests list"
-msgstr ""
+msgstr "Awọn ọna asopọ afikun fun awọn olukọ ni akojọ awọn idanwo"
 
 msgid "Configure callback elements to generate new action icons for teachers to the right side of the tests list, in the form of an array, e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
-msgstr ""
+msgstr "Ṣeto awọn eroja callback lati ṣẹda awọn aami igbese tuntun fun awọn olukọ si apa ọtun ti akojọ awọn idanwo, ni irisi ohun elo, fun apẹẹrẹ ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
 
 msgid "Add checkbox for answers count confirmation"
-msgstr ""
+msgstr "Fi apoti idaniloju fun iṣiro awọn idahun kun"
 
 msgid "This option adds a checkbox at the end of each test asking the user to confirm the number of answers saved. This provides better auditing data for critical tests."
-msgstr ""
+msgstr "Aṣayan yii fi apoti idaniloju kun ni opin idanwo kọọkan ti n beere lọwọ olumulo lati jẹrisi nọmba awọn idahun ti a fipamọ. Eyi pese data ṣayẹwo to dara julọ fun awọn idanwo to ṣe pataki."
 
 msgid "Enable test categories"
-msgstr ""
+msgstr "Ṣiṣẹ awọn ẹka idanwo"
 
 msgid "Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear."
-msgstr ""
+msgstr "Awọn ẹka idanwo ko ṣiṣẹ nipasẹ aiyipada nitori wọn ṣafikun ipele ti idiwọn. Ṣiṣẹ ẹya yii lati ṣafihan gbogbo awọn aami iṣakoso ti o ni ibatan si awọn ẹka idanwo."
 
 msgid "Enable test results page configuration"
-msgstr ""
+msgstr "Ṣiṣẹ iṣeto oju-iwe awọn abajade idanwo"
 
 msgid "Define an array of settings you want to apply to all tests results pages. Settings can be 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' and possibly more in the future. Look for ‘getPageConfigurationAttribute’ in the code to see what’s in use."
-msgstr ""
+msgstr "Ṣalaye ohun elo ti awọn eto ti o fẹ lo si gbogbo awọn oju-iwe awọn abajade idanwo. Awọn eto le jẹ 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' ati boya diẹ sii ni ọjọ iwaju. Wa ‘getPageConfigurationAttribute’ ninu koodu lati rii kini o wa ni lilo."
 
 msgid "Enable test images zooming"
-msgstr ""
+msgstr "Ṣiṣẹ titunse awọn aworan idanwo"
 
 msgid "Enable this feature to allow users to zoom on images used in the tests."
-msgstr ""
+msgstr "Ṣiṣẹ ẹya yii lati gba awọn olumulo laaye lati titun awọn aworan ti a lo ninu awọn idanwo."
 
 msgid "Enable extra test answers recording"
-msgstr ""
+msgstr "Ṣiṣẹ igbasilẹ awọn idahun idanwo afikun"
 
 msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
-msgstr ""
+msgstr "Ṣiṣẹ igbasilẹ gbogbo awọn idahun (ani igba diẹ) ni tabili track_e_attempt_recording. Ẹya yii jẹ idanwo ati le ṣẹda awọn iṣoro ni awọn oju-iwe ijabọ nigbati o ngbiyanju lati ṣe ami idanwo kan."
 
 msgid "Enable selecting mandatory questions"
-msgstr ""
+msgstr "Ṣiṣẹ yiyan awọn ibeere ti o gbọdọ"
 
 msgid "Enable the selection of mandatory questions in a test when using random categories."
-msgstr ""
+msgstr "Ṣiṣẹ yiyan awọn ibeere ti o gbọdọ ninu idanwo nigbati lilo awọn ẹka laileto."
 
 msgid "Enable display of best score attempt"
-msgstr ""
+msgstr "Ṣiṣẹ ifihan igbiyanju ami ti o dara julọ"
 
 msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
-msgstr ""
+msgstr "Pese akojọ awọn akoko-ẹkọ ati awọn ID idanwo ti yoo ṣafihan igbiyanju ami ti o dara julọ fun eyikeyi akẹkọ ni awọn ijabọ."
 
 msgid "Add user extra fields in exercise category report"
-msgstr ""
+msgstr "Fi awọn aaye afikun olumulo kun ni ijabọ ẹka adaṣe"
 
 msgid "Define an array with the list of user extra fields to add to the report."
-msgstr ""
+msgstr "Ṣalaye ohun elo pẹlu akojọ awọn aaye afikun olumulo lati fi kun si ijabọ."
 
 msgid "Score grades model"
-msgstr ""
+msgstr "Awoṣe ami ami"
 
 msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
-msgstr ""
+msgstr "Ṣalaye ohun elo ti awọn iwọn ami ati awọn awọ lati ṣafihan awọn ijabọ nipa lilo awoṣe yii. Eyi gba ọ laaye lati ṣafihan awọn awọ dipo awọn ami oni nọmba."
 
 msgid "Enable time per question in tests"
 msgstr "Ṣiṣẹ akoko fun ibeere kọọkan ninu awọn idanwo"
@@ -26842,13 +26851,13 @@ msgid "Check password strength"
 msgstr "Ṣayẹwo agbara ọrọ igbaniwọle"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "HTTP Ìdúróṣinṣin Ìgbé Lọ́nà Ìkọ́kọ́"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security jẹ ẹya ti o dara julọ lati ṣe atilẹyin lori aaye rẹ ati o mu imulo TLS rẹ lagbara nipa gbigba Agent Olumulo lati fi ipa mu lilo HTTPS. Iye ti a ṣe iṣeduro: 'strict-transport-security: max-age=63072000; includeSubDomains'. Wo https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. O le fi 'preload' suffix kun, ṣugbọn eyi ni awọn ipa lori agbegbe ipele oke (TLD), nitorinaa boya ko ṣe laifọwọsi. Wo https://hstspreload.org/. Fi si空白 lati pa."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Ètò Ìdílé Ìdààmú Àkóónù"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy jẹ iwọn ti o munadoko lati daabobo aaye rẹ lati awọn ikọlu XSS. Nipa whitelisting awọn orisun ti akoonu ti a fọwọsi, o le ṣe idena fun ẹrọ aṣawe lati gbe awọn ohun-ini buburu. Eyi ṣeto jẹ idiwọn pataki pẹlu awọn olootu WYSIWYG, ṣugbọn ti o ba fi gbogbo awọn aaye-orisun ti o fẹ lati yọọda fun ifilelẹ iframes kun ninu alaye child-src, apẹẹrẹ yii yẹ ki o ṣiṣẹ fun ọ. O le ṣe idena JavaScript lati ṣiṣẹ lati awọn orisun ita (pẹlu inu awọn aworan SVG) nipa lilo akojọ ti o muna ni 'script-src' ariyanjiyan. Fi si空白 lati pa. Apẹẹrẹ ṣeto: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26860,7 +26869,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Eyi ṣeto gba ọ laaye lati ṣe idanwo nipa ijabọ ṣugbọn ko fi ipa mu diẹ ninu Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "HTTP Ìpìlẹ̀ Kọ́kọ́ Ìkọ́kọ́"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning daabobo aaye rẹ lati awọn ikọlu MiTM nipa lilo awọn iwe-ẹri X.509 rogue. Nipa whitelisting awọn idaniloju nikan ti ẹrọ aṣawe yẹ ki o gbẹkẹle, awọn olumulo rẹ ni aabo ni iṣẹlẹ ti alaṣẹ iwe-ẹri kan ba bajẹ."
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Ṣẹ̀dá akọsilẹ̀ àkọ́kọ́ rẹ láti bẹ̀rẹ̀."
 
 msgid "F d, Y"
-msgstr "Ọjọ́ F, Ọdún Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "A kò le gbe alaye atilẹyin ni akoko yi."
@@ -32578,61 +32587,61 @@ msgid "Current authentication method"
 msgstr "Ọ̀nà ìdáwò lọ́wọ́ lọ́wọ́"
 
 msgid "Branches"
-msgstr ""
+msgstr "Ẹka"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Yara"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Olufun wa yara ti o wa"
 
 msgid "New branch"
-msgstr ""
+msgstr "Ẹka tuntun"
 
 msgid "New room"
-msgstr ""
+msgstr "Yara tuntun"
 
 msgid "Branch"
-msgstr ""
+msgstr "Ẹka"
 
 msgid "Default room"
-msgstr ""
+msgstr "Yara aiyipada"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Iṣẹ yara: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Wa awọn yara ti o wa"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Awọn yara ti o wa"
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Awọn yara ti a ti gba"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Ko si awọn yara ti o wa ti a ri fun akoko yii"
 
 msgid "No rooms have been created yet"
-msgstr ""
+msgstr "Ko si awọn yara ti a ṣẹda sibẹsibẹ"
 
 msgid "Courses linked to %s"
-msgstr ""
+msgstr "Awọn akoko-ẹkọ ti a so pọ si %s"
 
 msgid "No branches have been created yet"
-msgstr ""
+msgstr "Ko si awọn ẹka ti a ṣẹda sibẹsibẹ"
 
 msgid "Occupation"
-msgstr ""
+msgstr "Iṣẹ"
 
 msgid "Cannot delete branch with rooms attached"
-msgstr ""
+msgstr "Ko ṣee pa ẹka pẹ̀lú awọn yara ti a so mọ́ rẹ̀"
 
 msgid "Cannot delete room with courses attached"
-msgstr ""
+msgstr "Ko ṣee pa yara pẹ̀lú awọn ẹkọ ti a so mọ́ rẹ̀"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Awọn ija"
 
 msgid "Geolocation"
 msgstr "Ipo Geo"
@@ -32889,6 +32898,9 @@ msgstr "Ìṣòro fipamọ́ ìpàṣípààrọ̀ ìròyìn"
 msgid "No documents added yet"
 msgstr "Kò sí ìwé tí a fi kun"
 
+msgid "No additional details available for this skill."
+msgstr "Ko si alaye afikun ti o wa fun ogbon yii."
+
 msgid "No available documents"
 msgstr "Kò sí ìwé tí o ṣe ìwọ̀pọ̀"
 
@@ -33032,4 +33044,70 @@ msgstr "Àyẹ̀wò ìmọ̀"
 
 msgid "Administrative activity auditing"
 msgstr "Àyẹ̀wò ìgbòkànṣe ìṣàkadì"
+
+msgid "List icons"
+msgstr "Awọn aami akojọ"
+
+msgid "Constant name"
+msgstr "Orukọ igbagbogbo"
+
+msgid "MDI icon name"
+msgstr "Orukọ aami MDI"
+
+msgid "Assign authentication sources"
+msgstr "Yà sọ́nà ìdáàbòbò"
+
+msgid "Assignment details"
+msgstr "Àwòrán Ìyà sọ"
+
+msgid "Terms and conditions"
+msgstr "Àwùjọ àti Ìlànà"
+
+msgid "Icons"
+msgstr "Àwòrán àmì"
+
+msgid "Create backup"
+msgstr "Ṣẹ̀dá ìṣàpẹẹrẹ"
+
+msgid "Create file"
+msgstr "Ṣẹ̀dá ìwé"
+
+msgid "Create link"
+msgstr "Ṣẹ̀dá ìnọ́nnìbò"
+
+msgid "Edit template"
+msgstr "Ṣàtúnṣe àwòrán ìtumọ̀"
+
+msgid "Shared files"
+msgstr "Àwọn ìwé tí a pín"
+
+msgid "Skill wheel"
+msgstr "Kẹ̀kẹ́ ìbáwí"
+
+msgid "Favourite courses"
+msgstr "Àwọn kọlẹẹ̀jì a fẹ́ràn"
+
+msgid "Restart courses"
+msgstr "Ṣàtúnṣe ìbẹ̀rẹ̀ kọlẹẹ̀jì"
+
+msgid "Generate terms"
+msgstr "Ṣẹ̀dá àwùjọ"
+
+msgid "Add variation"
+msgstr "Ṣàfikún ìyàtọ̀"
+
+msgid "Editor demo"
+msgstr "Àwò ìwòrán olùdàbí"
+
+msgid "Tool introduction"
+msgstr "Ìdọ̀tí ìgbòòlù"
+
+msgid "Data exchanges"
+msgstr "Pàṣípààrọ̀ dátà"
+
+msgid "Third parties"
+msgstr "Àwùjọ kẹta"
+
+msgid "Layouts"
+msgstr "Àwùrẹ̀"
 

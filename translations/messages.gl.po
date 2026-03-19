@@ -4628,7 +4628,7 @@ msgid "Send mail to new user"
 msgstr "Enviar un correo a un novo usuario"
 
 msgid "Portfolio"
-msgstr "Perfil completo"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Se esta función se marca como \"verdadeiro\" un usuario pode completar os seguintes campos (opcionais): \"as miñas competencias\", \"os meus diplomas\", \"o que podo ensinar\", e \"a miña área pública\""
@@ -16080,6 +16080,15 @@ msgstr "Código corto."
 
 msgid "Create child skill"
 msgstr "Crear competencia filla."
+
+msgid "This skill can be obtained through:"
+msgstr "Esta competencia pódese obter a través de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ningún curso permite obter esta competencia actualmente."
+
+msgid "Add skill to search profile"
+msgstr "Engadir competencia ao perfil de busca"
 
 msgid "Search profile matches"
 msgstr "Buscar perfiles que correspondan."
@@ -31019,7 +31028,7 @@ msgid "Create your first note to get started."
 msgstr "Cree a súa primeira nota para comezar."
 
 msgid "F d, Y"
-msgstr "D, %d de %b"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Non foi posíbel cargar a información de soporte nesta altura."
@@ -32908,6 +32917,9 @@ msgstr "Erro ao gardar o intercambio de datos"
 msgid "No documents added yet"
 msgstr "Aínda non se engadiron documentos"
 
+msgid "No additional details available for this skill."
+msgstr "Non hai detalles adicionais dispoñibles para esta competencia."
+
 msgid "No available documents"
 msgstr "Non hai documentos dispoñibles"
 
@@ -33051,4 +33063,70 @@ msgstr "Análise de aprendizaxe"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoría de actividade administrativa"
+
+msgid "List icons"
+msgstr "Íconos de lista"
+
+msgid "Constant name"
+msgstr "Nome constante"
+
+msgid "MDI icon name"
+msgstr "Nome do ícono MDI"
+
+msgid "Assign authentication sources"
+msgstr "Asignar fontes de autenticación"
+
+msgid "Assignment details"
+msgstr "Detalles da tarefa"
+
+msgid "Terms and conditions"
+msgstr "Termos e condicións"
+
+msgid "Icons"
+msgstr "Iconas"
+
+msgid "Create backup"
+msgstr "Crear copia de seguridade"
+
+msgid "Create file"
+msgstr "Crear ficheiro"
+
+msgid "Create link"
+msgstr "Crear ligazón"
+
+msgid "Edit template"
+msgstr "Editar plantilla"
+
+msgid "Shared files"
+msgstr "Ficheiros compartidos"
+
+msgid "Skill wheel"
+msgstr "Roda de competencias"
+
+msgid "Favourite courses"
+msgstr "Cursos favoritos"
+
+msgid "Restart courses"
+msgstr "Reiniciar cursos"
+
+msgid "Generate terms"
+msgstr "Xerar termos"
+
+msgid "Add variation"
+msgstr "Engadir variación"
+
+msgid "Editor demo"
+msgstr "Demo do editor"
+
+msgid "Tool introduction"
+msgstr "Introdución da ferramenta"
+
+msgid "Data exchanges"
+msgstr "Intercambios de datos"
+
+msgid "Third parties"
+msgstr "Terceiros"
+
+msgid "Layouts"
+msgstr "Distribucións"
 

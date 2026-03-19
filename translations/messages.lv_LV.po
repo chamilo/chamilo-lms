@@ -4619,7 +4619,7 @@ msgid "Send mail to new user"
 msgstr "Sūtīt e-pastu jaunam lietotājam"
 
 msgid "Portfolio"
-msgstr "Izvērstie lietotāja dati"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ja šis ir ieslēgts, Lietotāji var aizpildīt papildus datus par sevi: Sadaļās: Mani sertifikāti / Mani diplomi / Ko es varu papildus darīt ... un  Personīgie sasniegumi."
@@ -16071,6 +16071,15 @@ msgstr "Īss kods"
 
 msgid "Create child skill"
 msgstr "Izveidot apakšprasmju"
+
+msgid "This skill can be obtained through:"
+msgstr "Šo prasmi var iegūt caur:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Pašlaik neviens kurss neļauj jums iegūt šo prasmju."
+
+msgid "Add skill to search profile"
+msgstr "Pievienot prasmju meklēšanas profilam"
 
 msgid "Search profile matches"
 msgstr "Meklēt profila atbilstības"
@@ -31005,7 +31014,7 @@ msgid "Create your first note to get started."
 msgstr "Izveidojiet savu pirmo piezīmi, lai sāktu."
 
 msgid "F d, Y"
-msgstr "D d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nevarēja ielādēt atbalsta informāciju šobrīd."
@@ -32894,6 +32903,9 @@ msgstr "Kļūda saglabājot datu apmaiņu"
 msgid "No documents added yet"
 msgstr "Vēl nav pievienoti dokumenti"
 
+msgid "No additional details available for this skill."
+msgstr "Šai prasmei nav pieejami papildu dati."
+
 msgid "No available documents"
 msgstr "Nav pieejami dokumenti"
 
@@ -33037,4 +33049,70 @@ msgstr "Mācīšanās analītika"
 
 msgid "Administrative activity auditing"
 msgstr "Administratīvās darbības audits"
+
+msgid "List icons"
+msgstr "Saraksta ikonas"
+
+msgid "Constant name"
+msgstr "Konstantes nosaukums"
+
+msgid "MDI icon name"
+msgstr "MDI ikonas nosaukums"
+
+msgid "Assign authentication sources"
+msgstr "Piešķirt autentifikācijas avotus"
+
+msgid "Assignment details"
+msgstr "Uzdevuma detaļas"
+
+msgid "Terms and conditions"
+msgstr "Lietošanas noteikumi un nosacījumi"
+
+msgid "Icons"
+msgstr "Ikonas"
+
+msgid "Create backup"
+msgstr "Izveidot dublējumu"
+
+msgid "Create file"
+msgstr "Izveidot failu"
+
+msgid "Create link"
+msgstr "Izveidot saiti"
+
+msgid "Edit template"
+msgstr "Rediģēt veidni"
+
+msgid "Shared files"
+msgstr "Koplietotie faili"
+
+msgid "Skill wheel"
+msgstr "Prasmju rats"
+
+msgid "Favourite courses"
+msgstr "Iemīļotie kursi"
+
+msgid "Restart courses"
+msgstr "Atsākt kursus"
+
+msgid "Generate terms"
+msgstr "Ģenerēt noteikumus"
+
+msgid "Add variation"
+msgstr "Pievienot variāciju"
+
+msgid "Editor demo"
+msgstr "Redaktora demonstrācija"
+
+msgid "Tool introduction"
+msgstr "Apgūt rīku izmantošanas iespējas"
+
+msgid "Data exchanges"
+msgstr "Datu apmaiņas"
+
+msgid "Third parties"
+msgstr "Trešās puses"
+
+msgid "Layouts"
+msgstr "Maketi"
 

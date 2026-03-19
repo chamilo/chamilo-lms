@@ -37,7 +37,7 @@ try {
     $content = '';
 
     $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId());
-    $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
+    $form->addLabel($plugin->get_lang('Tool'), $tool->getTitle());
     $form->addSelectAjax(
         'sessions',
         get_lang('Sessions'),

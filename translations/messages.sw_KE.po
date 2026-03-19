@@ -16068,6 +16068,15 @@ msgstr "Kodi fupi"
 msgid "Create child skill"
 msgstr "Unda ustadi wa mtoto"
 
+msgid "This skill can be obtained through:"
+msgstr "Uwezo huu unaweza kupatikana kupitia:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Hakuna kozi yoyote kwa sasa inayakuruhusu kupata uwezo huu."
+
+msgid "Add skill to search profile"
+msgstr "Ongeza uwezo kwenye wasifu wa utafutaji"
+
 msgid "Search profile matches"
 msgstr "Tafuta milingano ya wasifu"
 
@@ -32889,6 +32898,9 @@ msgstr "Hitilafu ya kuhifadhi uuzaji wa data"
 msgid "No documents added yet"
 msgstr "Hakuna hati zilizongezwa bado"
 
+msgid "No additional details available for this skill."
+msgstr "Hakuna maelezo ya ziada yanayopatikana kwa uwezo huu."
+
 msgid "No available documents"
 msgstr "Hakuna hati zinazopatikana"
 
@@ -33032,4 +33044,70 @@ msgstr " Uchambuzi wa kujifunza"
 
 msgid "Administrative activity auditing"
 msgstr "Uchunguzi wa shughuli za utawala"
+
+msgid "List icons"
+msgstr "Orodha ya ikoni"
+
+msgid "Constant name"
+msgstr "Jina la konstanti"
+
+msgid "MDI icon name"
+msgstr "Jina la ikoni MDI"
+
+msgid "Assign authentication sources"
+msgstr "Panga vyanzo vya uthibitisho"
+
+msgid "Assignment details"
+msgstr "Maelezo ya kazi"
+
+msgid "Terms and conditions"
+msgstr "Sheria na masharti"
+
+msgid "Icons"
+msgstr "Ikoni"
+
+msgid "Create backup"
+msgstr "Unda nakala ya hrabari"
+
+msgid "Create file"
+msgstr "Unda faili"
+
+msgid "Create link"
+msgstr "Unda kiungo"
+
+msgid "Edit template"
+msgstr "Hariri templeti"
+
+msgid "Shared files"
+msgstr "Faili zilizoshirikiwa"
+
+msgid "Skill wheel"
+msgstr "Roda ya ustadi"
+
+msgid "Favourite courses"
+msgstr "Kozi zinazopendwa"
+
+msgid "Restart courses"
+msgstr "Anza upya kozi"
+
+msgid "Generate terms"
+msgstr "Tengeneza maneno"
+
+msgid "Add variation"
+msgstr "Ongeza tofauti"
+
+msgid "Editor demo"
+msgstr "Onyesho la mhariri"
+
+msgid "Tool introduction"
+msgstr "Utangulizi wa zana"
+
+msgid "Data exchanges"
+msgstr "Ubade wa data"
+
+msgid "Third parties"
+msgstr "Wengine wa tatu"
+
+msgid "Layouts"
+msgstr "Muundo"
 

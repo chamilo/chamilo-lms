@@ -4619,7 +4619,7 @@ msgid "Send mail to new user"
 msgstr "Wyśli wiadomość do nowego użytkownika"
 
 msgid "Portfolio"
-msgstr "Profil rozszerzony"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Jeżeli ustawione na \"Tak\", użytkownik może wypełniać następujące opcjonalne pola:\"Moje kompetencje\", \"Moje dyplomy\" , \"Czego mógłbym uczyć\", \"Moje otwarte pole osobiste\""
@@ -16071,6 +16071,15 @@ msgstr "Krótki kod"
 
 msgid "Create child skill"
 msgstr "Utwórz umiejętność potomną"
+
+msgid "This skill can be obtained through:"
+msgstr "Ta umiejętność może być uzyskana poprzez:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Żaden kurs nie pozwala obecnie na uzyskanie tej umiejętności."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj umiejętność do profilu wyszukiwania"
 
 msgid "Search profile matches"
 msgstr "Szukaj profile pasujące"
@@ -31010,7 +31019,7 @@ msgid "Create your first note to get started."
 msgstr "Utwórz pierwszą notatkę, aby zacząć."
 
 msgid "F d, Y"
-msgstr "j d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nie można załadować informacji o pomocy w tym momencie."
@@ -32899,6 +32908,9 @@ msgstr "Błąd podczas zapisywania wymiany danych"
 msgid "No documents added yet"
 msgstr "Nie dodano jeszcze żadnych dokumentów"
 
+msgid "No additional details available for this skill."
+msgstr "Brak dodatkowych informacji na temat tej umiejętności."
+
 msgid "No available documents"
 msgstr "Brak dostępnych dokumentów"
 
@@ -33042,4 +33054,70 @@ msgstr "Analityka uczenia się"
 
 msgid "Administrative activity auditing"
 msgstr "Audyt aktywności administracyjnej"
+
+msgid "List icons"
+msgstr "Ikony listy"
+
+msgid "Constant name"
+msgstr "Nazwa stałej"
+
+msgid "MDI icon name"
+msgstr "Nazwa ikony MDI"
+
+msgid "Assign authentication sources"
+msgstr "Przypisz źródła uwierzytelniania"
+
+msgid "Assignment details"
+msgstr "Szczegóły zadania"
+
+msgid "Terms and conditions"
+msgstr "Regulamin"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Utwórz kopię zapasową"
+
+msgid "Create file"
+msgstr "Utwórz plik"
+
+msgid "Create link"
+msgstr "Utwórz link"
+
+msgid "Edit template"
+msgstr "Edytuj szablon"
+
+msgid "Shared files"
+msgstr "Udostępnione pliki"
+
+msgid "Skill wheel"
+msgstr "Koło umiejętności"
+
+msgid "Favourite courses"
+msgstr "Ulubione kursy"
+
+msgid "Restart courses"
+msgstr "Restartuj kursy"
+
+msgid "Generate terms"
+msgstr "Wygeneruj regulamin"
+
+msgid "Add variation"
+msgstr "Dodaj wariant"
+
+msgid "Editor demo"
+msgstr "Demo edytora"
+
+msgid "Tool introduction"
+msgstr "Wprowadzenie do narzędzia"
+
+msgid "Data exchanges"
+msgstr "Wymiana danych"
+
+msgid "Third parties"
+msgstr "Strony trzecie"
+
+msgid "Layouts"
+msgstr "Układów"
 

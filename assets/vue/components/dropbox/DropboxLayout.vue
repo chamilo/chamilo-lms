@@ -9,18 +9,18 @@
       </template>
 
       <template #end>
-        <RouterLink
+        <BaseAppLink
           class="nav-link"
           :to="{ name: 'DropboxListReceived', params: $route.params, query: { ...$route.query, tab: 'received' } }"
         >
           {{ t("Received") }}
-        </RouterLink>
-        <RouterLink
+        </BaseAppLink>
+        <BaseAppLink
           class="nav-link"
           :to="{ name: 'DropboxListSent', params: $route.params, query: { ...$route.query, tab: 'sent' } }"
         >
           {{ t("Sent") }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </BaseToolbar>
 

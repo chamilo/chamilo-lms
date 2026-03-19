@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Apachiy e-chaskita musuq hakuqmasiman"
 
 msgid "Portfolio"
-msgstr "Perfil extendido"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si se configura como 'Verdadero', un usuario puede rellenar los siguientes campos (opcionales): 'Mis competencias', 'Mis títulos', '¿Qué puedo enseñar?' y 'Mi área personal pública'"
@@ -16072,6 +16072,15 @@ msgstr "Kutipay"
 
 msgid "Create child skill"
 msgstr "Wawqi yachanata kamariy"
+
+msgid "This skill can be obtained through:"
+msgstr "Kay yachayniywanqa kaymanta chaskikunayki:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Manam kuna kursu kay yachayniywanqa chaskikunanchu."
+
+msgid "Add skill to search profile"
+msgstr "Yachayniywanqa ñawpaq profilanman yapay"
 
 msgid "Search profile matches"
 msgstr "Propiyuy concordakunata maskhay"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Qallariyki yachakuyta qelqay, chaywan qallariy."
 
 msgid "F d, Y"
-msgstr "F d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Manam yanapay yachakuyta carganachu kay punchaw."
@@ -32895,6 +32904,9 @@ msgstr "Error intercambiyu yachaykuna suyullaypi"
 msgid "No documents added yet"
 msgstr "Manam imayna willakuykunaq qhipallaq"
 
+msgid "No additional details available for this skill."
+msgstr "Kay yachayniywanpaq mana iskaq yachaykuna manam."
+
 msgid "No available documents"
 msgstr "Manam willakuykunaq kanchu"
 
@@ -33038,4 +33050,70 @@ msgstr "Yachay ñawpaq kamaq"
 
 msgid "Administrative activity auditing"
 msgstr "Kamachikuy willakuy"
+
+msgid "List icons"
+msgstr "Ruruchina ikikuna"
+
+msgid "Constant name"
+msgstr "Kutichisqa sutin"
+
+msgid "MDI icon name"
+msgstr "MDI ikin sutin"
+
+msgid "Assign authentication sources"
+msgstr "Willaykuna sapaqnin ruray"
+
+msgid "Assignment details"
+msgstr "Willay willakuy"
+
+msgid "Terms and conditions"
+msgstr "Kamachiyninkuna yachachisqakuna"
+
+msgid "Icons"
+msgstr "Ikonokuna"
+
+msgid "Create backup"
+msgstr "Backup kamay"
+
+msgid "Create file"
+msgstr "Pukyu kamay"
+
+msgid "Create link"
+msgstr "Huwllaq kamay"
+
+msgid "Edit template"
+msgstr "Plantilla llamk'ay"
+
+msgid "Shared files"
+msgstr "Yachakusqakuna pukyukuna"
+
+msgid "Skill wheel"
+msgstr "Yachay ruru"
+
+msgid "Favourite courses"
+msgstr "Kuyaykuna kursokuna"
+
+msgid "Restart courses"
+msgstr "Kursokuna paqarispa"
+
+msgid "Generate terms"
+msgstr "Kamachiyninkuna kamay"
+
+msgid "Add variation"
+msgstr "Wakinchay yuyay"
+
+msgid "Editor demo"
+msgstr "Llamk'aq namay"
+
+msgid "Tool introduction"
+msgstr "Introducción de herramienta"
+
+msgid "Data exchanges"
+msgstr "Willakuy wakichikuy"
+
+msgid "Third parties"
+msgstr "Kikinmanta runakuna"
+
+msgid "Layouts"
+msgstr "Ruwukuna"
 

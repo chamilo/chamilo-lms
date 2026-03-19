@@ -4621,7 +4621,7 @@ msgid "Send mail to new user"
 msgstr "Pošalji e-mail novom korisniku"
 
 msgid "Portfolio"
-msgstr "Produženi profil"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ako je ova opcija podešenoana 'Ispravno', korisnik može da popuni sledeća (nije obavezno)polja: 'Moje kompetencije', 'Moje diplome', 'Šta mogu da predajem' i 'Moje lične oblasti interesovanja'"
@@ -16073,6 +16073,15 @@ msgstr "Kratki kod"
 
 msgid "Create child skill"
 msgstr "Kreiraj podveštinu"
+
+msgid "This skill can be obtained through:"
+msgstr "Ovu veštinu možete steći kroz:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Trenutno nijedan kurs ne omogućava stečenje ove veštine."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj veštinu u profil pretrage"
 
 msgid "Search profile matches"
 msgstr "Pretraži podudaranja profila"
@@ -31007,7 +31016,7 @@ msgid "Create your first note to get started."
 msgstr "Napravite svoju prvu belešku da biste počeli."
 
 msgid "F d, Y"
-msgstr "d M, G"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ne mogu da učitam informacije o podršci u ovom trenutku."
@@ -32896,6 +32905,9 @@ msgstr "Greška pri čuvanju razmene podataka"
 msgid "No documents added yet"
 msgstr "Još uvek nisu dodati dokumenti"
 
+msgid "No additional details available for this skill."
+msgstr "Nema dodatnih detalja za ovu veštinu."
+
 msgid "No available documents"
 msgstr "Nema dostupnih dokumenata"
 
@@ -33039,4 +33051,70 @@ msgstr "Analitika učenja"
 
 msgid "Administrative activity auditing"
 msgstr "Revizija administrativnih aktivnosti"
+
+msgid "List icons"
+msgstr "Lista ikona"
+
+msgid "Constant name"
+msgstr "Naziv konstante"
+
+msgid "MDI icon name"
+msgstr "MDI naziv ikone"
+
+msgid "Assign authentication sources"
+msgstr "Dodeli izvore autentifikacije"
+
+msgid "Assignment details"
+msgstr "Detalji zadatka"
+
+msgid "Terms and conditions"
+msgstr "Uslovi i pravila"
+
+msgid "Icons"
+msgstr "Ikone"
+
+msgid "Create backup"
+msgstr "Kreiraj rezervnu kopiju"
+
+msgid "Create file"
+msgstr "Kreiraj fajl"
+
+msgid "Create link"
+msgstr "Kreiraj link"
+
+msgid "Edit template"
+msgstr "Izmeni šablon"
+
+msgid "Shared files"
+msgstr "Podeljeni fajlovi"
+
+msgid "Skill wheel"
+msgstr "Točak veština"
+
+msgid "Favourite courses"
+msgstr "Omiljeni kursevi"
+
+msgid "Restart courses"
+msgstr "Restartuj kurseve"
+
+msgid "Generate terms"
+msgstr "Generiši uslove"
+
+msgid "Add variation"
+msgstr "Dodaj varijaciju"
+
+msgid "Editor demo"
+msgstr "Demo uređivača"
+
+msgid "Tool introduction"
+msgstr "Uvod u alate"
+
+msgid "Data exchanges"
+msgstr "Razmena podataka"
+
+msgid "Third parties"
+msgstr "Treće strane"
+
+msgid "Layouts"
+msgstr "Izgledi"
 

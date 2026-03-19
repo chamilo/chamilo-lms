@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Bidali mezu elektronikoa erabiltzaile berriari"
 
 msgid "Portfolio"
-msgstr "Profil hedatua"
+msgstr "Portfolioa"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Konfigurazioan \"Egiazkoa\" dela ezartzen badugu, erabiltzaile batek honako eremu hauek (aukerakoak) bete ditzake: 'Gaitasunak', 'Nire tituluak', 'Zer irakatsi dezaket?' eta 'Espazio pertsonal irekia'"
@@ -16072,6 +16072,15 @@ msgstr "Kode laburra"
 
 msgid "Create child skill"
 msgstr "Sortu gaitasun umea"
+
+msgid "This skill can be obtained through:"
+msgstr "Gaitasun hau honen bidez lortu daiteke:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ez dago ikastarcirik gaitasun hau lortzeko."
+
+msgid "Add skill to search profile"
+msgstr "Gehitu gaitasuna bilaketa profilaren"
 
 msgid "Search profile matches"
 msgstr "Bilatu antzeko profilak"
@@ -31011,7 +31020,7 @@ msgid "Create your first note to get started."
 msgstr "Sortu zure lehen oharra hasteko."
 
 msgid "F d, Y"
-msgstr "E d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ezin izan da laguntza informazioa kargatu une honetan."
@@ -32900,6 +32909,9 @@ msgstr "Errorea datu trukaketaren gordetzean"
 msgid "No documents added yet"
 msgstr "Oraindik ez da dokumenturik gehitu"
 
+msgid "No additional details available for this skill."
+msgstr "Ez dago xehetasun gehigarririk gaitasun honetarako."
+
 msgid "No available documents"
 msgstr "Ez dago eskuragarri dagoen dokumenturik"
 
@@ -33043,4 +33055,70 @@ msgstr "Ikasmen analitikak"
 
 msgid "Administrative activity auditing"
 msgstr "Administrazio jardueraren ikuskaritza"
+
+msgid "List icons"
+msgstr "Zerrenda ikonoak"
+
+msgid "Constant name"
+msgstr "Konstantearen izena"
+
+msgid "MDI icon name"
+msgstr "MDI ikonoaren izena"
+
+msgid "Assign authentication sources"
+msgstr "Autentifikazio iturriak esleitu"
+
+msgid "Assignment details"
+msgstr "Lanaren xehetasunak"
+
+msgid "Terms and conditions"
+msgstr "Baldintza eta条款"
+
+msgid "Icons"
+msgstr "Ikurrak"
+
+msgid "Create backup"
+msgstr "Backup sortu"
+
+msgid "Create file"
+msgstr "Fitxategi sortu"
+
+msgid "Create link"
+msgstr "Esteka sortu"
+
+msgid "Edit template"
+msgstr "Txantiloia editatu"
+
+msgid "Shared files"
+msgstr "Fitxategi partekatua"
+
+msgid "Skill wheel"
+msgstr "Gaitasun-gurdi"
+
+msgid "Favourite courses"
+msgstr "Ikastaro gogokoak"
+
+msgid "Restart courses"
+msgstr "Ikastaroak berrabiarazi"
+
+msgid "Generate terms"
+msgstr "Baldintzak sortu"
+
+msgid "Add variation"
+msgstr "Aldaketa gehitu"
+
+msgid "Editor demo"
+msgstr "Editorearen demoa"
+
+msgid "Tool introduction"
+msgstr "Tresna sartzea"
+
+msgid "Data exchanges"
+msgstr "Datu-trukaketak"
+
+msgid "Third parties"
+msgstr "Hirugarrenak"
+
+msgid "Layouts"
+msgstr "Diseinuak"
 

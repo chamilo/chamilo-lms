@@ -16068,6 +16068,15 @@ msgstr "لنډ کوډ"
 msgid "Create child skill"
 msgstr "د ماشوم مهارت جوړ کړئ"
 
+msgid "This skill can be obtained through:"
+msgstr "دا مهارت د لاندې له لارې ترلاسه کېدای شي:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "هیڅ کورس اوسمهال تاسو ته د دې مهارت ترلاسه کولو ته اجازه نه ورکوي."
+
+msgid "Add skill to search profile"
+msgstr "مهارت لټون پروفایل ته اضافه کړئ"
+
 msgid "Search profile matches"
 msgstr "پروفایل ورته والي لټون"
 
@@ -32889,6 +32898,9 @@ msgstr "د معلوماتو تبادلې خوندارولو کې خطا"
 msgid "No documents added yet"
 msgstr "لا تر اوسه هیڅ اسناد اضافه شوي ندی"
 
+msgid "No additional details available for this skill."
+msgstr "د دې مهارت لپاره نور جزئیات شتون نلري."
+
 msgid "No available documents"
 msgstr "هیڅ شته اسناد ندی"
 
@@ -33032,4 +33044,70 @@ msgstr "د زده کړې تجزیه"
 
 msgid "Administrative activity auditing"
 msgstr "د اداري فعالیت تفتیش"
+
+msgid "List icons"
+msgstr "آیکونونو لړ"
+
+msgid "Constant name"
+msgstr "ثابت نوم"
+
+msgid "MDI icon name"
+msgstr "MDI آیکون نوم"
+
+msgid "Assign authentication sources"
+msgstr "د تصدیق سرچینې ټاکل"
+
+msgid "Assignment details"
+msgstr "د تکلیف تفصیلات"
+
+msgid "Terms and conditions"
+msgstr "د شرایطو او ضوابط"
+
+msgid "Icons"
+msgstr "آیکونونه"
+
+msgid "Create backup"
+msgstr "نسخه جوړول"
+
+msgid "Create file"
+msgstr "د فایل جوړول"
+
+msgid "Create link"
+msgstr "د لینک جوړول"
+
+msgid "Edit template"
+msgstr "د قالب سمول"
+
+msgid "Shared files"
+msgstr "شریک شوي فایلونه"
+
+msgid "Skill wheel"
+msgstr "د مهارت چرخوټ"
+
+msgid "Favourite courses"
+msgstr "خوښې کورسونه"
+
+msgid "Restart courses"
+msgstr "کورسونه بیا پیلول"
+
+msgid "Generate terms"
+msgstr "د شرایطو تولیدول"
+
+msgid "Add variation"
+msgstr "د بدلون اضافه کول"
+
+msgid "Editor demo"
+msgstr "د سمویر دمو"
+
+msgid "Tool introduction"
+msgstr "د وسیلې پېژندنه"
+
+msgid "Data exchanges"
+msgstr "د معلوماتو تبادلې"
+
+msgid "Third parties"
+msgstr "دریمې غاړې"
+
+msgid "Layouts"
+msgstr "ډیزاینونه"
 

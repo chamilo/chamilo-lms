@@ -387,8 +387,7 @@ if ($form->validate()) {
     if (isset($_POST['save_and_add_more'])) {
         header('Location: '.api_get_path(WEB_CODE_PATH)."skills/assign.php?user={$userId}");
     } else {
-        $secToken = Security::get_token();
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId.'&sec_token='.$secToken);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userId);
     }
     exit;
 }

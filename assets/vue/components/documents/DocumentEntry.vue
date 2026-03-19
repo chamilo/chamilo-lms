@@ -177,6 +177,7 @@ const onlyofficeUrl = computed(() => {
   url.searchParams.set("sid", String(cidQuery.sid || 0))
   url.searchParams.set("groupId", String(cidQuery.gid || 0))
   url.searchParams.set("docId", String(props.data.iid))
+  url.searchParams.set("returnUrl", window.location.href)
 
   return url.toString()
 })

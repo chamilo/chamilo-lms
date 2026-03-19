@@ -16072,6 +16072,15 @@ msgstr "Cód gearr"
 msgid "Create child skill"
 msgstr "Cruthaigh scil leanaí"
 
+msgid "This skill can be obtained through:"
+msgstr "Is féidir an scil seo a fháil trí:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Níl aon chúrsa ar fáil faoi láthair a ligeann duit an scil seo a fháil."
+
+msgid "Add skill to search profile"
+msgstr "Cuir scil le próifíl chuardaigh"
+
 msgid "Search profile matches"
 msgstr "Cuardaigh meáin próifíle"
 
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "Cruthaigh do chéad nóta le tosú."
 
 msgid "F d, Y"
-msgstr "F lá, B"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Níorbh fhéidir faisnéis tacaíochta a lódáil an uair seo."
@@ -32893,6 +32902,9 @@ msgstr "Earráid ag sábháil malartú sonraí"
 msgid "No documents added yet"
 msgstr "Gan aon doiciméid curtha leis go fóill"
 
+msgid "No additional details available for this skill."
+msgstr "Níl aon sonraí breise ar fáil don scil seo."
+
 msgid "No available documents"
 msgstr "Gan aon doiciméid ar fáil"
 
@@ -33036,4 +33048,70 @@ msgstr "Anailís foghlama"
 
 msgid "Administrative activity auditing"
 msgstr "Iniúchadh gníomhaíochta riaracháin"
+
+msgid "List icons"
+msgstr "Liosta íocón"
+
+msgid "Constant name"
+msgstr "Ainm an tsuaitheanta"
+
+msgid "MDI icon name"
+msgstr "Ainm íocón MDI"
+
+msgid "Assign authentication sources"
+msgstr "Sainigh foinsí fíordheimhnithe"
+
+msgid "Assignment details"
+msgstr "Sonraí tasc"
+
+msgid "Terms and conditions"
+msgstr "Téarmaí agus coinníollacha"
+
+msgid "Icons"
+msgstr "Deilbhíní"
+
+msgid "Create backup"
+msgstr "Cruthaigh cúltacair"
+
+msgid "Create file"
+msgstr "Cruthaigh comhad"
+
+msgid "Create link"
+msgstr "Cruthaigh nasc"
+
+msgid "Edit template"
+msgstr "Cuir teimpléad in eagar"
+
+msgid "Shared files"
+msgstr "Comhaid roshared"
+
+msgid "Skill wheel"
+msgstr "Roth scileanna"
+
+msgid "Favourite courses"
+msgstr "Cúrsaí is fearr leo"
+
+msgid "Restart courses"
+msgstr "Aththosaigh cúrsaí"
+
+msgid "Generate terms"
+msgstr "Giniúint téarmaí"
+
+msgid "Add variation"
+msgstr "Cuir athrú leis"
+
+msgid "Editor demo"
+msgstr "Demo eagarthóra"
+
+msgid "Tool introduction"
+msgstr "Réamhrá an uirlise"
+
+msgid "Data exchanges"
+msgstr "Malartuithe sonraí"
+
+msgid "Third parties"
+msgstr "Tríú páirtithe"
+
+msgid "Layouts"
+msgstr "Leagan amach"
 

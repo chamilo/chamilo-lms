@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -4652,7 +4652,7 @@ msgid "Send mail to new user"
 msgstr "Verzend een mail naar de nieuwe gebruiker"
 
 msgid "Portfolio"
-msgstr "Uitgebreid profiel"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Als deze instelling op 'Ja' staat, kan een gebruiker volgende (optionele) velden invullen: 'Mijn competenties', 'Mijn diploma's', 'Waarin kan ik lesgeven' en 'Mijn persoonlijke ruimte'."
@@ -16158,6 +16158,15 @@ msgstr "Korte code"
 
 msgid "Create child skill"
 msgstr "Maak kind-skill"
+
+msgid "This skill can be obtained through:"
+msgstr "Deze vaardigheid kan worden behaald via:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Er is momenteel geen cursus die deze vaardigheid aanbiedt."
+
+msgid "Add skill to search profile"
+msgstr "Voeg vaardigheid toe aan zoekprofiel"
 
 msgid "Search profile matches"
 msgstr "Zoek profiel matches"
@@ -34662,40 +34671,40 @@ msgid "Current authentication method"
 msgstr "Huidige authenticatiemethode"
 
 msgid "Branches"
-msgstr ""
+msgstr "Filialen"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Lokalen"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Beschikbare ruimte zoeken"
 
 msgid "New branch"
-msgstr ""
+msgstr "Nieuw filiaal"
 
 msgid "New room"
-msgstr ""
+msgstr "Nieuw lokaal"
 
 msgid "Branch"
-msgstr ""
+msgstr "Filiaal"
 
 msgid "Default room"
-msgstr ""
+msgstr "Standaard lokaal"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Ruimtebezetting: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Beschikbare ruimtes vinden"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Beschikbare ruimtes"
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Bezet ruimtes"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Geen beschikbare ruimtes gevonden voor dit tijdvak"
 
 msgid "No rooms have been created yet"
 msgstr "Er zijn nog geen ruimtes aangemaakt"
@@ -34973,6 +34982,9 @@ msgstr "Fout bij opslaan gegevensuitwisseling"
 msgid "No documents added yet"
 msgstr "Nog geen documenten toegevoegd"
 
+msgid "No additional details available for this skill."
+msgstr "Geen aanvullende details beschikbaar voor deze vaardigheid."
+
 msgid "No available documents"
 msgstr "Geen beschikbare documenten"
 
@@ -35116,4 +35128,70 @@ msgstr "Leeranalyses"
 
 msgid "Administrative activity auditing"
 msgstr "Administratieve activiteiten-audit"
+
+msgid "List icons"
+msgstr "Lijst pictogrammen"
+
+msgid "Constant name"
+msgstr "Constante naam"
+
+msgid "MDI icon name"
+msgstr "MDI-pictogramnaam"
+
+msgid "Assign authentication sources"
+msgstr ""
+
+msgid "Assignment details"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Icons"
+msgstr ""
+
+msgid "Create backup"
+msgstr ""
+
+msgid "Create file"
+msgstr ""
+
+msgid "Create link"
+msgstr ""
+
+msgid "Edit template"
+msgstr ""
+
+msgid "Shared files"
+msgstr ""
+
+msgid "Skill wheel"
+msgstr ""
+
+msgid "Favourite courses"
+msgstr ""
+
+msgid "Restart courses"
+msgstr ""
+
+msgid "Generate terms"
+msgstr "Voorwaarden genereren"
+
+msgid "Add variation"
+msgstr "Variatie toevoegen"
+
+msgid "Editor demo"
+msgstr "Editor demo"
+
+msgid "Tool introduction"
+msgstr "Introductietekst"
+
+msgid "Data exchanges"
+msgstr "Gegevensuitwisselingen"
+
+msgid "Third parties"
+msgstr "Derden"
+
+msgid "Layouts"
+msgstr "Lay-outs"
 

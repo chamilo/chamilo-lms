@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -39,6 +40,8 @@ trait ChamiloTestTrait
             $password = $username;
         }
 
+        $accessUrl = $this->getAccessUrl();
+
         $user = $repo->createUser()
             ->setLastname($username)
             ->setFirstname($username)
@@ -47,7 +50,8 @@ trait ChamiloTestTrait
             ->setPlainPassword($password)
             ->setEmail($email)
             ->setCreator($admin)
-            ->setCurrentUrl($this->getAccessUrl())
+            ->setCurrentUrl($accessUrl)
+            ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
         ;
 
         if (!empty($role)) {

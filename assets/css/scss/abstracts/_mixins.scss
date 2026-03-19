@@ -1,7 +1,8 @@
 @mixin base-button() {
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md transition select-none border border-solid
-    disabled:cursor-default;
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center rounded-md select-none border border-solid transition-colors outline-transparent
+    disabled:cursor-default disabled:opacity-60;
   padding: calc(0.5rem - 1px) calc(1rem - 1px);
+  font-size: 1rem;
 }
 
 @mixin button-filled-style($color, $hoverColor) {
@@ -11,47 +12,52 @@
     $textColor: 'gray-90';
   }
 
-  @apply bg-#{$color} text-#{$textColor} border-#{$color};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @apply bg-#{$hoverColor};
-    }
+  @apply bg-#{$color} text-#{$textColor} border-#{$color}
+    focus-visible:outline-#{$color} focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+  
+  &:not(:disabled) {
+    @apply
+      hover:bg-#{$hoverColor} hover:border-#{$hoverColor}
+      active:bg-#{$hoverColor} active:border-#{$hoverColor} active:brightness-[0.92];
   }
 }
 
 @mixin button-outlined-style($color) {
-  @apply bg-white border-#{$color} text-#{$color};
+  $textColor: $color;
+  $hoverTextColor: 'white';
+  $hoverBg: $color;
+  $hoverBorder: $color;
 
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if ('warning' == $color) {
-        @apply bg-#{$color} border-#{$color} text-gray-90;
-      } @else if ('black' == $color) {
-        @apply bg-gray-90 border-gray-90 text-white;
-      } @else {
-        @apply bg-#{$color} border-#{$color} text-white;
-      }
-    }
+  @if ('warning' == $color) {
+    $hoverTextColor: 'gray-90';
+  } @else if ('black' == $color) {
+    $hoverBg: 'gray-90';
+    $hoverBorder: 'gray-90';
+  }
+
+  @apply bg-transparent border-#{$color} text-#{$textColor}
+    focus-visible:outline-#{$color} focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+  &:not(:disabled) {
+    @apply
+      hover:bg-#{$hoverBg} hover:border-#{$hoverBorder} hover:text-#{$hoverTextColor}
+      active:bg-#{$hoverBg} active:border-#{$hoverBorder} active:text-#{$hoverTextColor} active:brightness-[0.92];
   }
 }
 
 @mixin button-text-style($color) {
-  @apply bg-white text-#{$color} border-transparent;
+  @apply bg-transparent text-#{$color} border-transparent
+    focus-visible:outline-#{$color} focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
 
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if ('tertiary' == $color) {
-        @apply bg-support-1 text-primary;
-      } @else {
-        @apply bg-gray-10;
-      }
+  &:not(:disabled) {
+    @if ('tertiary' == $color) {
+      @apply
+        hover:bg-support-1 hover:text-primary
+      active:bg-support-1 active:text-primary active:brightness-[0.95];
+    } @else {
+      @apply
+        hover:bg-gray-10
+        active:bg-gray-25;
     }
   }
 }

@@ -16068,6 +16068,15 @@ msgstr "Kratki kod"
 msgid "Create child skill"
 msgstr "Kreiraj podvještinu"
 
+msgid "This skill can be obtained through:"
+msgstr "Ovu vještinu možete steći putem:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Trenutno nijedan kurs ne omogućava stečenje ove vještine."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj vještinu u profil pretrage"
+
 msgid "Search profile matches"
 msgstr "Pretraži podudaranja profila"
 
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Kreirajte svoju prvu bilješku da biste započeli."
 
 msgid "F d, Y"
-msgstr "d M, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ne mogu učitati informacije o podršci u ovom trenutku."
@@ -32889,6 +32898,9 @@ msgstr "Greška pri čuvanju razmjene podataka"
 msgid "No documents added yet"
 msgstr "Još uvijek nisu dodani dokumenti"
 
+msgid "No additional details available for this skill."
+msgstr "Nema dodatnih detalja za ovu vještinu."
+
 msgid "No available documents"
 msgstr "Nema dostupnih dokumenata"
 
@@ -33032,4 +33044,70 @@ msgstr "Analitika učenja"
 
 msgid "Administrative activity auditing"
 msgstr "Revizija administrativnih aktivnosti"
+
+msgid "List icons"
+msgstr "Ikone liste"
+
+msgid "Constant name"
+msgstr "Naziv konstante"
+
+msgid "MDI icon name"
+msgstr "Naziv MDI ikone"
+
+msgid "Assign authentication sources"
+msgstr "Dodijeli izvore autentifikacije"
+
+msgid "Assignment details"
+msgstr "Detalji zadatka"
+
+msgid "Terms and conditions"
+msgstr "Uvjeti i odredbe"
+
+msgid "Icons"
+msgstr "Ikone"
+
+msgid "Create backup"
+msgstr "Kreiraj sigurnosnu kopiju"
+
+msgid "Create file"
+msgstr "Kreiraj datoteku"
+
+msgid "Create link"
+msgstr "Kreiraj vezu"
+
+msgid "Edit template"
+msgstr "Uredi predložak"
+
+msgid "Shared files"
+msgstr "Zajedničke datoteke"
+
+msgid "Skill wheel"
+msgstr "Kota vještina"
+
+msgid "Favourite courses"
+msgstr "Omiljeni kursevi"
+
+msgid "Restart courses"
+msgstr "Ponovo pokreni kurseve"
+
+msgid "Generate terms"
+msgstr "Generiraj uvjete"
+
+msgid "Add variation"
+msgstr "Dodaj varijaciju"
+
+msgid "Editor demo"
+msgstr "Demo uređivača"
+
+msgid "Tool introduction"
+msgstr "Uvod u alat"
+
+msgid "Data exchanges"
+msgstr "Razmjene podataka"
+
+msgid "Third parties"
+msgstr "Treće strane"
+
+msgid "Layouts"
+msgstr "Izgledi"
 

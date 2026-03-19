@@ -33,7 +33,8 @@
   &:has(.p-inputwrapper-focus) label,
   &:has(.p-inputwrapper-filled) label,
   &:has(input[placeholder]) label,
-  &:has(textarea[placeholder]) label {
+  &:has(textarea[placeholder]) label,
+  &:has(.p-datepicker-panel-inline) label {
     @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
   }
 

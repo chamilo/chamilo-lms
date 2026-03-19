@@ -1,7 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CShortcut;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 
 $cidReset = true;
@@ -11,16 +13,131 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
-
 $em = Database::getManager();
 
+$showDebug = false;
+$adminUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php';
+$isAjax = false;
+
+/**
+ * Build a normalized list of assigned courses for the modal.
+ *
+ * Each item is shaped as:
+ * [
+ *   'id' => '123',
+ *   'text' => 'Course title (COURSECODE)'
+ * ]
+ */
+$buildAssignedCoursesData = static function (array $courseIds): array {
+    $items = [];
+
+    foreach ($courseIds as $courseId) {
+        $courseId = (int) $courseId;
+        if ($courseId <= 0) {
+            continue;
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo)) {
+            continue;
+        }
+
+        $title = trim((string) ($courseInfo['title'] ?? ''));
+        $code = trim((string) ($courseInfo['code'] ?? ''));
+
+        $label = $title;
+        if ('' !== $code) {
+            $label .= ' ('.$code.')';
+        }
+
+        $items[] = [
+            'id' => (string) $courseId,
+            'text' => $label,
+        ];
+    }
+
+    return $items;
+};
+
+/**
+ * Render the assignment form as a reusable HTML fragment.
+ */
+$renderFormContent = static function (
+    FormValidator $form,
+    ExternalTool $tool,
+    array $assignedCourses = [],
+    string $message = '',
+    string $messageType = 'error'
+): string {
+    $toolTitle = htmlspecialchars((string) $tool->getTitle(), ENT_QUOTES, 'UTF-8');
+    $assignedCoursesJson = htmlspecialchars(
+        json_encode(array_values($assignedCourses), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $html = '';
+    $html .= '<div class="space-y-4">';
+    $html .= '    <div class="mb-3">';
+    $html .= '        <div class="text-body-2 text-gray-50 mb-1">Tool</div>';
+    $html .= '        <div class="font-semibold">'.$toolTitle.'</div>';
+    $html .= '    </div>';
+    $html .= '    <div class="text-body-2 text-gray-50 mb-3">';
+    $html .= '        Select one or more courses to add this external tool.';
+    $html .= '    </div>';
+    $html .= '    <div class="js-imslti-assigned-courses hidden" data-assigned="'.$assignedCoursesJson.'"></div>';
+
+    if (!empty($message)) {
+        $html .= Display::return_message($message, $messageType, false);
+    }
+
+    $html .= $form->returnForm();
+    $html .= '</div>';
+
+    return $html;
+};
+
+/**
+ * Return a JSON success payload for AJAX mode.
+ */
+$sendJsonSuccess = static function (string $message): void {
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode([
+        'success' => true,
+        'message' => $message,
+    ]);
+    exit;
+};
+
+/**
+ * Return HTML content for AJAX mode.
+ */
+$sendAjaxHtml = static function (string $html, int $statusCode = 200): void {
+    http_response_code($statusCode);
+    header('Content-Type: text/html; charset=UTF-8');
+    echo $html;
+    exit;
+};
+
 try {
-    if ($plugin->get('enabled') !== 'true') {
+    $pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+    $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+    $pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+    $isPluginEnabled = $pluginEntity
+        && $pluginEntity->isInstalled()
+        && $pluginConfiguration
+        && $pluginConfiguration->isActive();
+
+    if (!$isPluginEnabled) {
         throw new Exception(get_lang('NotAllowed'));
     }
 
     $request = Container::getRequest();
+    $isAjax = $request->isXmlHttpRequest()
+        || 1 === (int) $request->query->get('ajax', 0)
+        || 1 === (int) $request->request->get('ajax', 0);
+
     /** @var ExternalTool|null $tool */
     $tool = $em->find(ExternalTool::class, $request->query->getInt('id'));
 
@@ -28,121 +145,195 @@ try {
         throw new Exception($plugin->get_lang('NoTool'));
     }
 
-    if ($tool->getParent()) {
-        throw new Exception($plugin->get_lang('NoAllowed'));
+    if (!$tool->hasResourceNode()) {
+        throw new Exception('The external tool does not have a resource node yet.');
     }
 
-    $content = '';
+    /** @var CShortcutRepository $shortcutRepository */
+    $shortcutRepository = $em->getRepository(CShortcut::class);
 
-    $courses = ImsLtiPlugin::getCoursesForParentTool($tool);
+    $assignedCourseIds = $shortcutRepository->getAssignedCourseIdsFromResource($tool);
+    $assignedCoursesData = $buildAssignedCoursesData($assignedCourseIds);
 
-    $slctCourses = [];
-
-    /** @var \Chamilo\CoreBundle\Entity\Course $course */
-    foreach ($courses as $course) {
-        $slctCourses[$course->getId()] = $course->getName();
+    $formAction = api_get_self().'?id='.$tool->getId();
+    if ($isAjax) {
+        $formAction .= '&ajax=1';
     }
 
-    $selectedCoursesIds = array_keys($slctCourses);
-
-    $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId());
-    $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
+    $form = new FormValidator('frm_multiply', 'post', $formAction);
+    $form->addHidden('ajax', $isAjax ? '1' : '0');
     $form->addSelectAjax(
         'courses',
         get_lang('Courses'),
-        $slctCourses,
-        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course', 'multiple' => true]
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
+            'multiple' => true,
+        ]
     );
-    $form->addCheckBox('all_courses', '', $plugin->get_lang('AddInAllCourses'));
-    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
     $form->addButtonExport(get_lang('Save'));
 
     if ($form->validate()) {
-        $em = Database::getManager();
         $formValues = $form->exportValues();
-        $formValues['courses'] = empty($formValues['courses']) ? [] : $formValues['courses'];
-        $formValues['tool_visible'] = !empty($formValues['tool_visible']);
+        $selectedCourseIds = empty($formValues['courses']) ? [] : $formValues['courses'];
+        $selectedCourseIds = array_values(array_unique(array_filter(array_map('intval', $selectedCourseIds))));
 
-        if (!empty($formValues['all_courses'])) {
-            $courseList = Database::select('id', Database::get_main_table(TABLE_MAIN_COURSE));
-            $formValues['courses'] = array_keys($courseList);
-        }
+        // Allow empty selection when the tool is already assigned:
+        // saving with no courses means "remove all course shortcuts".
+        if (empty($selectedCourseIds) && empty($assignedCourseIds)) {
+            $content = $renderFormContent(
+                $form,
+                $tool,
+                $assignedCoursesData,
+                get_lang('You must select at least one course'),
+                'error'
+            );
 
-        $courseIdsToDelete = array_diff($selectedCoursesIds, $formValues['courses']);
-        $newSelectedCourseIds = array_diff($formValues['courses'], $selectedCoursesIds);
-
-        if ($courseIdsToDelete) {
-            $toolLinks = [];
-
-            foreach ($tool->getChildrenInCourses($courseIdsToDelete) as $childInCourse) {
-                $toolLinks[] = "ImsLti/start.php?id={$childInCourse->getId()}";
-
-                $em->remove($childInCourse);
+            if ($isAjax) {
+                $sendAjaxHtml($content, 200);
             }
 
-            $em->flush();
+            $interbreadcrumb[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+                'name' => get_lang('PlatformAdmin'),
+            ];
+            $interbreadcrumb[] = [
+                'url' => $adminUrl,
+                'name' => $plugin->get_title(),
+            ];
 
-            if (!empty($toolLinks)) {
-                $em
-                    ->createQuery(
-                        "DELETE FROM ChamiloCourseBundle:CTool ct WHERE ct.category = :category AND ct.link IN (:links)"
-                    )
-                    ->execute(['category' => 'plugin', 'links' => $toolLinks]);
-            }
+            $backButton = Display::toolbarButton(
+                get_lang('Back'),
+                $adminUrl,
+                'arrow-left',
+                'plain'
+            );
+
+            $actions = Display::toolbarAction(
+                'ims_lti_multiply_actions',
+                [
+                    $backButton,
+                ]
+            );
+
+            $template = new Template($plugin->get_lang('AddInCourses'));
+            $template->assign('actions', $actions);
+            $template->assign('header', $plugin->get_lang('AddInCourses'));
+            $template->assign('content', $content);
+            $template->display_one_col_template();
+            exit;
         }
 
-        if ($newSelectedCourseIds) {
-            foreach ($newSelectedCourseIds as $newSelectedCourseId) {
-                $newSelectedCourse = api_get_course_entity($newSelectedCourseId);
+        $currentUser = api_get_user_entity(api_get_user_id());
 
-                $newTool = clone $tool;
-                $newTool->setParent($tool);
-                $newTool->setCourse($newSelectedCourse);
-
-                $em->persist($newTool);
-                $em->flush();
-
-                if ($tool->isActiveDeepLinking()) {
-                    continue;
-                }
-
-                $plugin->addCourseTool(
-                    api_get_course_entity($newSelectedCourseId),
-                    $newTool,
-                    $formValues['tool_visible']
-                );
-            }
+        if (!$currentUser) {
+            throw new Exception(get_lang('UserNotFound'));
         }
+
+        $selectedLookup = array_fill_keys($selectedCourseIds, true);
+
+        // Create or keep selected course shortcuts.
+        foreach ($selectedCourseIds as $courseId) {
+            $course = api_get_course_entity($courseId);
+
+            if (!$course || !$course->getResourceNode()) {
+                continue;
+            }
+
+            /** @var CShortcut $shortcut */
+            $shortcut = $shortcutRepository->addShortCut($tool, $currentUser, $course, null);
+
+            $shortcut->setTitle($tool->getTitle());
+            $shortcut->setShortCutNode($tool->getResourceNode());
+            $shortcut->target = 'iframe' === $tool->getDocumentTarget() ? '_self' : '_blank';
+
+            $em->persist($shortcut);
+            $shortcutRepository->setVisibilityPublished($shortcut, $course, null);
+        }
+
+        // Remove shortcuts for courses that are no longer selected.
+        foreach ($assignedCourseIds as $assignedCourseId) {
+            if (isset($selectedLookup[(int) $assignedCourseId])) {
+                continue;
+            }
+
+            $course = api_get_course_entity((int) $assignedCourseId);
+            if (!$course) {
+                continue;
+            }
+
+            $shortcutRepository->removeShortCutFromCourse($tool, $course);
+        }
+
+        $em->flush();
 
         Display::addFlash(
             Display::return_message(get_lang('ItemUpdated'))
         );
 
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+        if ($isAjax) {
+            $sendJsonSuccess(get_lang('ItemUpdated'));
+        }
+
+        header('Location: '.$adminUrl);
         exit;
     }
 
-    $form->setDefaults(
+    $form->protect();
+    $content = $renderFormContent($form, $tool, $assignedCoursesData);
+
+    if ($isAjax) {
+        $sendAjaxHtml($content, 200);
+    }
+
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+        'name' => get_lang('PlatformAdmin'),
+    ];
+    $interbreadcrumb[] = [
+        'url' => $adminUrl,
+        'name' => $plugin->get_title(),
+    ];
+
+    $backButton = Display::toolbarButton(
+        get_lang('Back'),
+        $adminUrl,
+        'arrow-left',
+        'plain'
+    );
+
+    $actions = Display::toolbarAction(
+        'ims_lti_multiply_actions',
         [
-            'courses' => $selectedCoursesIds,
-            'tool_visible' => true,
+            $backButton,
         ]
     );
-    $form->protect();
-
-    $content = $form->returnForm();
-
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInCourses'));
+    $template->assign('actions', $actions);
     $template->assign('header', $plugin->get_lang('AddInCourses'));
     $template->assign('content', $content);
     $template->display_one_col_template();
 } catch (Exception $exception) {
+    if ($showDebug) {
+        Display::display_header($plugin->get_lang('AddInCourses'));
+        echo Display::return_message($exception->getMessage(), 'error', false);
+        echo '<pre style="white-space: pre-wrap; font-size: 12px;">'
+            .htmlspecialchars($exception->getTraceAsString(), ENT_QUOTES, 'UTF-8')
+            .'</pre>';
+        Display::display_footer();
+        exit;
+    }
+
+    if ($isAjax) {
+        $errorHtml = Display::return_message($exception->getMessage(), 'error', false);
+        $sendAjaxHtml($errorHtml, 400);
+    }
+
     Display::addFlash(
         Display::return_message($exception->getMessage(), 'error')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+    header('Location: '.$adminUrl);
+    exit;
 }

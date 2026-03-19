@@ -8,11 +8,13 @@ export default {
       name: "UserGroupShow",
       //path: ':id',
       path: "show",
+      meta: { breadcrumb: "Show" },
       component: () => import("../views/usergroup/Show.vue"),
     },
     {
       name: "PersonalData",
       path: "personal_data",
+      meta: { breadcrumb: "Personal data" },
       component: () => import("../views/user/PersonalData.vue"),
     },
   ],

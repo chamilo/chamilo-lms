@@ -6,37 +6,57 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem;
+use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
-use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Viewed;
-use Xabbuh\XApi\Model\Statement;
 
-class PortfolioItemViewed extends PortfolioItemStatement
+/**
+ * Class PortfolioItemViewed.
+ */
+class PortfolioItemViewed extends PortfolioItem
 {
     use PortfolioAttachmentsTrait;
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $user = api_get_user_entity(api_get_user_id());
 
         $actor = new User($user);
         $verb = new Viewed();
-        $object = new PortfolioItem($this->item);
+        $object = new PortfolioItemActivity($this->item);
         $context = $this->generateContext();
         $attachments = $this->generateAttachmentsForItem($this->item);
 
-        return new Statement(
-            $this->generateStatementId('portfolio-item'),
-            $actor->generate(),
-            $verb->generate(),
-            $object->generate(),
-            null,
-            null,
-            $this->item->getCreationDate(),
-            null,
-            $context,
-            $attachments
-        );
+        $statement = [
+            'id' => $this->generateStatementId('portfolio-item'),
+            'actor' => $actor->generate(),
+            'verb' => $verb->generate(),
+            'object' => $object->generate(),
+            'timestamp' => $this->normalizeTimestamp($this->item->getCreationDate()),
+            'context' => $context,
+        ];
+
+        if (!empty($attachments)) {
+            $statement['attachments'] = $attachments;
+        }
+
+        return $statement;
+    }
+
+    private function normalizeTimestamp($value): string
+    {
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format(DATE_ATOM);
+        }
+
+        $stringValue = trim((string) $value);
+
+        if ('' === $stringValue) {
+            return gmdate(DATE_ATOM);
+        }
+
+        $timestamp = strtotime($stringValue);
+
+        return false !== $timestamp ? gmdate(DATE_ATOM, $timestamp) : gmdate(DATE_ATOM);
     }
 }

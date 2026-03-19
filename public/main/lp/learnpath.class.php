@@ -1334,6 +1334,8 @@ class learnpath
         if (empty($barId)) {
             $barId = 'control-top';
         }
+
+        $isLtiEmbeddable = 'embeddable' === api_get_origin() && !empty(Session::read('_ltiProvider'));
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
         $reportingText = get_lang('Reporting');
@@ -1345,7 +1347,9 @@ class learnpath
         $display = $settings['display'] ?? false;
         $icon = Display::getMdiIcon('information');
 
-        $reportingIcon = '
+        $reportingIcon = '';
+        if (!$isLtiEmbeddable) {
+            $reportingIcon = '
             <a class="icon-toolbar"
                 id="stats_link"
                 href="lp_controller.php?action=stats&origin=learnpath&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
@@ -1353,6 +1357,7 @@ class learnpath
                 target="content_name" title="'.$reportingText.'">
                 '.$icon.'<span class="sr-only">'.$reportingText.'</span>
             </a>';
+        }
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
@@ -1371,38 +1376,38 @@ class learnpath
         if (false === $hideArrows) {
             $icon = Display::getMdiIcon('chevron-left');
             $previousIcon = '
-                <button class="icon-toolbar" id="scorm-previous" type="button"
-                    onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                    '.$icon.'<span class="sr-only">'.$previousText.'</span>
-                </button>';
+            <button class="icon-toolbar" id="scorm-previous" type="button"
+                onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                '.$icon.'<span class="sr-only">'.$previousText.'</span>
+            </button>';
 
             $icon = Display::getMdiIcon('chevron-right');
             $nextIcon = '
-                <button class="icon-toolbar" id="scorm-next" type="button"
-                    onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                    '.$icon.'<span class="sr-only">'.$nextText.'</span>
-                </button>';
+            <button class="icon-toolbar" id="scorm-next" type="button"
+                onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                '.$icon.'<span class="sr-only">'.$nextText.'</span>
+            </button>';
         }
 
         if ('fullscreen' === $this->mode) {
             $icon = Display::getMdiIcon('view-column');
             $navbar = '
-                  <span id="'.$barId.'" class="buttons">
-                    '.$reportingIcon.'
-                    '.$previousIcon.'
-                    '.$nextIcon.'
-                    <a class="icon-toolbar" id="view-embedded"
-                        href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
-                        '.$icon.'<span class="sr-only">'.$fullScreenText.'</span>
-                    </a>
-                  </span>';
+              <span id="'.$barId.'" class="buttons">
+                '.$reportingIcon.'
+                '.$previousIcon.'
+                '.$nextIcon.'
+                <a class="icon-toolbar" id="view-embedded"
+                    href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
+                    '.$icon.'<span class="sr-only">'.$fullScreenText.'</span>
+                </a>
+              </span>';
         } else {
             $navbar = '
-                 <span id="'.$barId.'" class="buttons text-right">
-                    '.$reportingIcon.'
-                    '.$previousIcon.'
-                    '.$nextIcon.'
-                </span>';
+             <span id="'.$barId.'" class="buttons text-right">
+                '.$reportingIcon.'
+                '.$previousIcon.'
+                '.$nextIcon.'
+            </span>';
         }
 
         return $navbar;
@@ -2988,15 +2993,30 @@ class learnpath
                                 !empty($extension) &&
                                 in_array($extension, $onlyofficeAllowedExtensions, true)
                             ) {
+                                $returnUrl = '';
+                                $currentRequestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
+                                $currentHost = isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
+
+                                if ('' !== $currentRequestUri && '' !== $currentHost) {
+                                    $scheme = api_is_https() ? 'https://' : 'http://';
+                                    $returnUrl = $scheme.$currentHost.$currentRequestUri;
+                                }
+
                                 $onlyofficeUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php'
                                     .'?docId='.$docId
                                     .'&cid='.$course_id
                                     .'&sid='.(int) $this->get_lp_session_id()
-                                    .'&groupId='.(int) api_get_group_id()
-                                    .'&nh=1';
+                                    .'&nh=1'
+                                    .'&origin=learnpath'
+                                    .'&embedded=1';
 
-                                if (in_array($extension, $onlyofficeViewOnlyExtensions, true)) {
-                                    $onlyofficeUrl .= '&readOnly=1';
+                                $currentGroupId = (int) api_get_group_id();
+                                if ($currentGroupId > 0) {
+                                    $onlyofficeUrl .= '&groupId='.$currentGroupId;
+                                }
+
+                                if ('' !== $returnUrl) {
+                                    $onlyofficeUrl .= '&returnUrl='.rawurlencode($returnUrl);
                                 }
 
                                 $file = $onlyofficeUrl;

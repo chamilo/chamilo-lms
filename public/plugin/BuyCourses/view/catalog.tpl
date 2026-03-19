@@ -41,7 +41,7 @@
                                             </figure>
                                         </div>
                                         <div class="items-course-info">
-                                            {% set course_description_url = url('web_ajax') ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode %}
+                                            {% set course_description_url = '/main/inc/ajax/course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode %}
                                             <h4 class="title">
                                                 <a class="ajax" href="{{ course_description_url }}"
                                                    data-title="{{ course.title }}">{{ course.title }}</a>

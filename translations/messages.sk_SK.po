@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorková formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -4628,7 +4628,7 @@ msgid "Send mail to new user"
 msgstr "Poslať mail novému používateľovi"
 
 msgid "Portfolio"
-msgstr "Rozšírený profil"
+msgstr "Portfólio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ak je toto nastavenie dané na 'Správne' používateľ môže vyplniť nasledujúce (voliteľné) polia: 'Moje kompetencie', 'Moje diplomy', 'Čo môžem učiť' a 'Môj osobný priestor'"
@@ -16080,6 +16080,15 @@ msgstr "Krátky kód"
 
 msgid "Create child skill"
 msgstr "Vytvorte detské zručnosti"
+
+msgid "This skill can be obtained through:"
+msgstr "Táto zručnosť sa dá získať prostredníctvom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Žiadny kurz momentálne neumožňuje získať túto zručnosť."
+
+msgid "Add skill to search profile"
+msgstr "Pridať zručnosť do vyhľadávacieho profilu"
 
 msgid "Search profile matches"
 msgstr "Výsledky hľadania profilu"
@@ -31019,7 +31028,7 @@ msgid "Create your first note to get started."
 msgstr "Vytvorte svoju prvú poznámku na začiatok."
 
 msgid "F d, Y"
-msgstr "d. d, RRRR"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nedá sa načítať informácia o podpore."
@@ -32908,6 +32917,9 @@ msgstr "Chyba pri ukladaní výmeny údajov"
 msgid "No documents added yet"
 msgstr "Zatiaľ neboli pridané žiadne dokumenty"
 
+msgid "No additional details available for this skill."
+msgstr "Žiadne ďalšie podrobnosti pre túto zručnosť nie sú k dispozícii."
+
 msgid "No available documents"
 msgstr "Žiadne dostupné dokumenty"
 
@@ -33051,4 +33063,70 @@ msgstr "Learning analytics"
 
 msgid "Administrative activity auditing"
 msgstr "Audit administratívnej aktivity"
+
+msgid "List icons"
+msgstr "Ikony zoznamu"
+
+msgid "Constant name"
+msgstr "Názov konštanty"
+
+msgid "MDI icon name"
+msgstr "Názov ikony MDI"
+
+msgid "Assign authentication sources"
+msgstr "Priradiť zdroje autentifikácie"
+
+msgid "Assignment details"
+msgstr "Detaily úlohy"
+
+msgid "Terms and conditions"
+msgstr "Podmienky a pravidlá"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Vytvoriť zálohu"
+
+msgid "Create file"
+msgstr "Vytvoriť súbor"
+
+msgid "Create link"
+msgstr "Vytvoriť odkaz"
+
+msgid "Edit template"
+msgstr "Upraviť šablónu"
+
+msgid "Shared files"
+msgstr "Zdieľané súbory"
+
+msgid "Skill wheel"
+msgstr "Koleso zručností"
+
+msgid "Favourite courses"
+msgstr "Obľúbené kurzy"
+
+msgid "Restart courses"
+msgstr "Reštartovať kurzy"
+
+msgid "Generate terms"
+msgstr "Generovať podmienky"
+
+msgid "Add variation"
+msgstr "Pridať variant"
+
+msgid "Editor demo"
+msgstr "Demo editora"
+
+msgid "Tool introduction"
+msgstr "Predstavenie nástroja"
+
+msgid "Data exchanges"
+msgstr "Výmeny dát"
+
+msgid "Third parties"
+msgstr "Tretie strany"
+
+msgid "Layouts"
+msgstr "Rozloženia"
 

@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Gửi thư cho người dùng mới"
 
 msgid "Portfolio"
-msgstr "Danh mục đầu tư"
+msgstr "Hồ sơ năng lực"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Nếu bật, người dùng có thể điền các trường tùy chọn: 'Khu vực mở cá nhân của tôi', 'Năng lực của tôi', 'Bằng cấp của tôi', 'Những gì tôi có thể dạy'"
@@ -16072,6 +16072,15 @@ msgstr "Mã ngắn"
 
 msgid "Create child skill"
 msgstr "Tạo kỹ năng con"
+
+msgid "This skill can be obtained through:"
+msgstr "Kỹ năng này có thể đạt được qua:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Hiện không có khóa học nào cho phép bạn đạt được kỹ năng này."
+
+msgid "Add skill to search profile"
+msgstr "Thêm kỹ năng vào hồ sơ tìm kiếm"
 
 msgid "Search profile matches"
 msgstr "Tìm kiếm hồ sơ khớp"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Tạo ghi chú đầu tiên để bắt đầu."
 
 msgid "F d, Y"
-msgstr "D, d, Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Không thể tải thông tin hỗ trợ lúc này."
@@ -32895,6 +32904,9 @@ msgstr "Lỗi lưu trao đổi dữ liệu"
 msgid "No documents added yet"
 msgstr "Chưa có tài liệu nào được thêm"
 
+msgid "No additional details available for this skill."
+msgstr "Không có chi tiết bổ sung nào cho kỹ năng này."
+
 msgid "No available documents"
 msgstr "Không có tài liệu nào khả dụng"
 
@@ -33038,4 +33050,70 @@ msgstr "Phân tích học tập"
 
 msgid "Administrative activity auditing"
 msgstr "Kiểm toán hoạt động quản trị"
+
+msgid "List icons"
+msgstr "Danh sách biểu tượng"
+
+msgid "Constant name"
+msgstr "Tên hằng số"
+
+msgid "MDI icon name"
+msgstr "Tên biểu tượng MDI"
+
+msgid "Assign authentication sources"
+msgstr "Gán nguồn xác thực"
+
+msgid "Assignment details"
+msgstr "Chi tiết bài tập"
+
+msgid "Terms and conditions"
+msgstr "Điều khoản và điều kiện"
+
+msgid "Icons"
+msgstr "Biểu tượng"
+
+msgid "Create backup"
+msgstr "Tạo bản sao lưu"
+
+msgid "Create file"
+msgstr "Tạo tệp"
+
+msgid "Create link"
+msgstr "Tạo liên kết"
+
+msgid "Edit template"
+msgstr "Chỉnh sửa mẫu"
+
+msgid "Shared files"
+msgstr "Tệp chia sẻ"
+
+msgid "Skill wheel"
+msgstr "Bánh xe kỹ năng"
+
+msgid "Favourite courses"
+msgstr "Khóa học yêu thích"
+
+msgid "Restart courses"
+msgstr "Khởi động lại khóa học"
+
+msgid "Generate terms"
+msgstr "Tạo điều khoản"
+
+msgid "Add variation"
+msgstr "Thêm biến thể"
+
+msgid "Editor demo"
+msgstr "Mẫu trình soạn thảo"
+
+msgid "Tool introduction"
+msgstr "Giới thiệu công cụ"
+
+msgid "Data exchanges"
+msgstr "Trao đổi dữ liệu"
+
+msgid "Third parties"
+msgstr "Bên thứ ba"
+
+msgid "Layouts"
+msgstr "Bố cục"
 

@@ -16072,6 +16072,15 @@ msgstr "အတိုကုဒ်"
 msgid "Create child skill"
 msgstr "သားအရည်အချင်းဖန်တီးပါ"
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr "ပရိုဖိုင်ကိုက်ညီမှုများကို ရှာဖွေပါ"
 
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "စတင်ရန် သင်၏ပထမဆုံး မှတ်စုတစ်ခုဖန်တီးပါ။"
 
 msgid "F d, Y"
-msgstr "သ%မ။ %d၊ %Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "ယခုအချိန်တွင် ပံ့ပိုးမှုအချက်အလက်များကို မဖွင့်လှစ်နိုင်ပါ။"
@@ -32893,6 +32902,9 @@ msgstr ""
 msgid "No documents added yet"
 msgstr ""
 
+msgid "No additional details available for this skill."
+msgstr ""
+
 msgid "No available documents"
 msgstr ""
 
@@ -32939,16 +32951,16 @@ msgid "No attendance data to save"
 msgstr ""
 
 msgid "Failed to save attendance"
-msgstr ""
+msgstr "တက်ရောက်မှုကို သိမ်းဆည်းရန် မအောင်မြင်ပါ"
 
 msgid "Loading more courses"
-msgstr ""
+msgstr "ကူးစရိတ်များထပ်မံဖွင့်နေသည်"
 
 msgid "Loading more sessions"
-msgstr ""
+msgstr "သင်တန်းများထပ်မံဖွင့်နေသည်"
 
 msgid "The document auto-launch feature configuration is enabled"
-msgstr ""
+msgstr "စာရွက်စာတမ်း အလိုအလျောက်ဖွင့်ခြင်း အင်္ဂါရပ်ပုံစံချက်ကို ဖွင့်ထားပါသည်"
 
 msgid "The exercises auto-launch feature configuration is enabled"
 msgstr "လေ့ကျင့်ခန်း အလိုအလျောက်စတင်ခြင်း အင်္ဂါရပ်ပုံစံချက်ကို ဖွင့်ထားပါသည်"
@@ -33036,4 +33048,70 @@ msgstr "သင်ယူမှု ခွဲခြမ်းစိတ်ဖြာ"
 
 msgid "Administrative activity auditing"
 msgstr "စီမံခန့်ခွဲရေး လှုပ်ရှားမှု စစ်ဆေးခြင်း"
+
+msgid "List icons"
+msgstr "စာရင်းသင်္ကေတ"
+
+msgid "Constant name"
+msgstr "စံနိမ့်အမည်"
+
+msgid "MDI icon name"
+msgstr "MDI သင်္ကေတအမည်"
+
+msgid "Assign authentication sources"
+msgstr "အသုံးပြုသူများအတည်ပြုရင်းမြစ်များခန့်အပ်ရန်"
+
+msgid "Assignment details"
+msgstr "ခန့်အပ်မှုအသေးစိတ်"
+
+msgid "Terms and conditions"
+msgstr "စည်းမျဉ်းများနှင့်အခြေအနေ"
+
+msgid "Icons"
+msgstr "အိုင်ကွန်များ"
+
+msgid "Create backup"
+msgstr "အရန်ကူးသိမ်းဖန်တီးရန်"
+
+msgid "Create file"
+msgstr "ဖိုင်ဖန်တီးရန်"
+
+msgid "Create link"
+msgstr "လင့်ခ်ဖန်တီးရန်"
+
+msgid "Edit template"
+msgstr "ပုံစံဖိုင်တည်းဖြတ်ရန်"
+
+msgid "Shared files"
+msgstr "မျှဝေဖိုင်များ"
+
+msgid "Skill wheel"
+msgstr "ကျွမ်းကျင်မှုဘီးလည်"
+
+msgid "Favourite courses"
+msgstr "ကြိုက်နှစ်သက်သင်တန်းများ"
+
+msgid "Restart courses"
+msgstr "သင်တန်းများပြန်စတင်ရန်"
+
+msgid "Generate terms"
+msgstr "စည်းမျဉ်းများထုတ်လုပ်ရန်"
+
+msgid "Add variation"
+msgstr "ပြောင်းလဲမှုထည့်ရန်"
+
+msgid "Editor demo"
+msgstr "တည်းဖြတ်ကိရိယာနမူနာ"
+
+msgid "Tool introduction"
+msgstr "ကိရိယာမိတ်ဆက်"
+
+msgid "Data exchanges"
+msgstr "ဒေတာဖလှယ်မှုများ"
+
+msgid "Third parties"
+msgstr "တတိယပုဂ္ဂိုလ်များ"
+
+msgid "Layouts"
+msgstr "ဒီဇိုင်းပုံစံများ"
 

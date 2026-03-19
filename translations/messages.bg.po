@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "E-mail съобщение до новия потребител"
 
 msgid "Portfolio"
-msgstr "Разширен профил"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "При стойност \"Да\" на тази настройка, потребителят ще може да попълни в профила си следните незадължителни полета: \"Моята квалификация\", \"Моите дипломи\", \"Какво мога да преподавам\", \"Моите работи\" и \"Моята лична страница\"."
@@ -16072,6 +16072,15 @@ msgstr "Кратък код"
 
 msgid "Create child skill"
 msgstr "Създаване на дъщерно умение"
+
+msgid "This skill can be obtained through:"
+msgstr "Този умение може да се получи чрез:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Няма курс, който в момента позволява да получите това умение."
+
+msgid "Add skill to search profile"
+msgstr "Добави умение към профил за търсене"
 
 msgid "Search profile matches"
 msgstr "Търсене на съвпадения в профила"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Създайте първата си бележка, за да започнете."
 
 msgid "F d, Y"
-msgstr "d M, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не може да се зареди информация за поддръжка в момента."
@@ -32895,6 +32904,9 @@ msgstr "Грешка при запазване на данните за обме
 msgid "No documents added yet"
 msgstr "Все още не са добавени документи"
 
+msgid "No additional details available for this skill."
+msgstr "Няма налични допълнителни детайли за това умение."
+
 msgid "No available documents"
 msgstr "Няма налични документи"
 
@@ -33038,4 +33050,70 @@ msgstr "Анализ на обучението"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит на административната активност"
+
+msgid "List icons"
+msgstr "Икони на списък"
+
+msgid "Constant name"
+msgstr "Име на константа"
+
+msgid "MDI icon name"
+msgstr "Име на MDI икона"
+
+msgid "Assign authentication sources"
+msgstr "Назначаване на източници за автентикация"
+
+msgid "Assignment details"
+msgstr "Подробности за заданието"
+
+msgid "Terms and conditions"
+msgstr "Условия и правила"
+
+msgid "Icons"
+msgstr "Иконки"
+
+msgid "Create backup"
+msgstr "Създай резервно копие"
+
+msgid "Create file"
+msgstr "Създай файл"
+
+msgid "Create link"
+msgstr "Създай връзка"
+
+msgid "Edit template"
+msgstr "Редактирай шаблон"
+
+msgid "Shared files"
+msgstr "Споделени файлове"
+
+msgid "Skill wheel"
+msgstr "Колело на уменията"
+
+msgid "Favourite courses"
+msgstr "Потребителски курсове"
+
+msgid "Restart courses"
+msgstr "Рестартирай курсове"
+
+msgid "Generate terms"
+msgstr "Генерирай условия"
+
+msgid "Add variation"
+msgstr "Добави вариант"
+
+msgid "Editor demo"
+msgstr "Демо на редактора"
+
+msgid "Tool introduction"
+msgstr "Встъпителен текст"
+
+msgid "Data exchanges"
+msgstr "Обмен на данни"
+
+msgid "Third parties"
+msgstr "Трети страни"
+
+msgid "Layouts"
+msgstr "Макети"
 

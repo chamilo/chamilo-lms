@@ -4621,7 +4621,7 @@ msgid "Send mail to new user"
 msgstr "Послать письмо новому пользователю"
 
 msgid "Portfolio"
-msgstr "Расширенный профиль"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Если этоа настройка является настроить опцию \"Правда\", пользователь можеть заполнить следующие (необязательные) поля: \"Мои способности, знания\", \"Мой диплом\", \"Что я могу преподавать\", \"Моя личная открытая территория\""
@@ -16073,6 +16073,15 @@ msgstr "Короткий код"
 
 msgid "Create child skill"
 msgstr "Создать дочерний навык"
+
+msgid "This skill can be obtained through:"
+msgstr "Этот навык можно получить через:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "На данный момент ни один курс не позволяет получить этот навык."
+
+msgid "Add skill to search profile"
+msgstr "Добавить навык в профиль поиска"
 
 msgid "Search profile matches"
 msgstr "Поиск совпадений профиля"
@@ -31007,7 +31016,7 @@ msgid "Create your first note to get started."
 msgstr "Создайте первую заметку, чтобы начать."
 
 msgid "F d, Y"
-msgstr "d MMM, Y"
+msgstr "d m, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не удалось загрузить информацию о поддержке."
@@ -32896,6 +32905,9 @@ msgstr "Ошибка сохранения обмена данными"
 msgid "No documents added yet"
 msgstr "Документы пока не добавлены"
 
+msgid "No additional details available for this skill."
+msgstr "Дополнительной информации по этому навыку нет."
+
 msgid "No available documents"
 msgstr "Нет доступных документов"
 
@@ -33039,4 +33051,70 @@ msgstr "Аналитика обучения"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит административной активности"
+
+msgid "List icons"
+msgstr "Иконки списка"
+
+msgid "Constant name"
+msgstr "Имя константы"
+
+msgid "MDI icon name"
+msgstr "Имя иконки MDI"
+
+msgid "Assign authentication sources"
+msgstr "Назначить источники аутентификации"
+
+msgid "Assignment details"
+msgstr "Детали задания"
+
+msgid "Terms and conditions"
+msgstr "Условия и положения"
+
+msgid "Icons"
+msgstr "Иконки"
+
+msgid "Create backup"
+msgstr "Создать резервную копию"
+
+msgid "Create file"
+msgstr "Создать файл"
+
+msgid "Create link"
+msgstr "Создать ссылку"
+
+msgid "Edit template"
+msgstr "Редактировать шаблон"
+
+msgid "Shared files"
+msgstr "Общие файлы"
+
+msgid "Skill wheel"
+msgstr "Колесо навыков"
+
+msgid "Favourite courses"
+msgstr "Избранные курсы"
+
+msgid "Restart courses"
+msgstr "Перезапустить курсы"
+
+msgid "Generate terms"
+msgstr "Сгенерировать условия"
+
+msgid "Add variation"
+msgstr "Добавить вариант"
+
+msgid "Editor demo"
+msgstr "Демо редактора"
+
+msgid "Tool introduction"
+msgstr "Введение в инструмент"
+
+msgid "Data exchanges"
+msgstr "Обмены данными"
+
+msgid "Third parties"
+msgstr "Сторонние организации"
+
+msgid "Layouts"
+msgstr "Макеты"
 

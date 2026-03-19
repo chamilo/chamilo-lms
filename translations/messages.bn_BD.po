@@ -16068,6 +16068,15 @@ msgstr "সংক্ষিপ্ত কোড"
 msgid "Create child skill"
 msgstr "সন্তান দক্ষতা তৈরি করুন"
 
+msgid "This skill can be obtained through:"
+msgstr "এই দক্ষতা আহরণ করা যায়:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "কোনো কোর্স বর্তমানে আপনাকে এই দক্ষতা আহরণ করতে দেয় না।"
+
+msgid "Add skill to search profile"
+msgstr "অনুসন্ধান প্রোফাইলে দক্ষতা যোগ করুন"
+
 msgid "Search profile matches"
 msgstr "প্রোফাইল মিল অনুসন্ধান করুন"
 
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "শুরু করতে আপনার প্রথম নোট তৈরি করুন।"
 
 msgid "F d, Y"
-msgstr "d F, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "এখন সমর্থন তথ্য লোড করা যায়নি।"
@@ -32889,6 +32898,9 @@ msgstr "ডেটা বিনিময় সংরক্ষণে ত্রু
 msgid "No documents added yet"
 msgstr "এখনো কোনো ডকুমেন্ট যোগ করা হয়নি"
 
+msgid "No additional details available for this skill."
+msgstr "এই দক্ষতার জন্য কোনো অতিরিক্ত বিবরণ উপলব্ধ নেই।"
+
 msgid "No available documents"
 msgstr "কোনো উপলব্ধ ডকুমেন্ট নেই"
 
@@ -33032,4 +33044,70 @@ msgstr "শিক্ষা বিশ্লেষণ"
 
 msgid "Administrative activity auditing"
 msgstr "প্রশাসনিক কার্যকলাপের নিরীক্ষা"
+
+msgid "List icons"
+msgstr "আইকন তালিকা"
+
+msgid "Constant name"
+msgstr "কনস্ট্যান্টের নাম"
+
+msgid "MDI icon name"
+msgstr "MDI আইকনের নাম"
+
+msgid "Assign authentication sources"
+msgstr "অনুমোদন উৎস বরাদ্দ করুন"
+
+msgid "Assignment details"
+msgstr "বরাদ্দের বিবরণ"
+
+msgid "Terms and conditions"
+msgstr "শর্তাবলী"
+
+msgid "Icons"
+msgstr "আইকন"
+
+msgid "Create backup"
+msgstr "ব্যাকআপ তৈরি করুন"
+
+msgid "Create file"
+msgstr "ফাইল তৈরি করুন"
+
+msgid "Create link"
+msgstr "লিঙ্ক তৈরি করুন"
+
+msgid "Edit template"
+msgstr "টেমপ্লেট সম্পাদনা করুন"
+
+msgid "Shared files"
+msgstr "শেয়ার করা ফাইল"
+
+msgid "Skill wheel"
+msgstr "দক্ষতা চাকা"
+
+msgid "Favourite courses"
+msgstr "প্রিয় কোর্স"
+
+msgid "Restart courses"
+msgstr "কোর্স পুনরায় শুরু করুন"
+
+msgid "Generate terms"
+msgstr "শর্তাবলী তৈরি করুন"
+
+msgid "Add variation"
+msgstr "বৈচিত্র্য যোগ করুন"
+
+msgid "Editor demo"
+msgstr "সম্পাদক ডেমো"
+
+msgid "Tool introduction"
+msgstr "টুল পরিচিতি"
+
+msgid "Data exchanges"
+msgstr "তথ্য বিনিময়"
+
+msgid "Third parties"
+msgstr "তৃতীয় পক্ষ"
+
+msgid "Layouts"
+msgstr "লেআউট"
 

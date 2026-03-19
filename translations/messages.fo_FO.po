@@ -16068,6 +16068,15 @@ msgstr "Stuttkode"
 msgid "Create child skill"
 msgstr "Stovna undirfærøvu"
 
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
+
 msgid "Search profile matches"
 msgstr "Leita eftir profilakørslum"
 
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Upprætta tín fyrsta minnisseðul fyri at byrja."
 
 msgid "F d, Y"
-msgstr "D. mmm, Y"
+msgstr "D. m, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Kundi ikki lesa stuðulupplýsingar júst nú."
@@ -32608,13 +32617,13 @@ msgid "Available rooms"
 msgstr ""
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Uptømdar stovur"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Ongar tiltøk stovur funnin fyri hesa tíðarætt"
 
 msgid "No rooms have been created yet"
-msgstr ""
+msgstr "Ongar stovur eru uppruttar enn"
 
 msgid "Courses linked to %s"
 msgstr "Kursar stovnaðir við %s"
@@ -32889,6 +32898,9 @@ msgstr "Feil at goyma dataskipti"
 msgid "No documents added yet"
 msgstr "Ongir skjøl løgd afturat enn"
 
+msgid "No additional details available for this skill."
+msgstr "Ongar viðkomandi detaljar tilgjørdir fyri hesa fyritøku."
+
 msgid "No available documents"
 msgstr "Ongir tilgjørð skjøl"
 
@@ -33032,4 +33044,70 @@ msgstr "Lærugreinanalysa"
 
 msgid "Administrative activity auditing"
 msgstr "Reikningsskriving av stjórnarvirksemi"
+
+msgid "List icons"
+msgstr "Listi ikonar"
+
+msgid "Constant name"
+msgstr "Fast navn"
+
+msgid "MDI icon name"
+msgstr "MDI ikon navn"
+
+msgid "Assign authentication sources"
+msgstr "Vítta til heimildir til innlogging"
+
+msgid "Assignment details"
+msgstr "Upplýsingar um uppgávuna"
+
+msgid "Terms and conditions"
+msgstr "Viljartreytir og skilmálir"
+
+msgid "Icons"
+msgstr "Ikoner"
+
+msgid "Create backup"
+msgstr "Upprætta órugv"
+
+msgid "Create file"
+msgstr "Upprætta fílu"
+
+msgid "Create link"
+msgstr "Upprætta leinkju"
+
+msgid "Edit template"
+msgstr "Brota sniðmát"
+
+msgid "Shared files"
+msgstr "Deildir fílar"
+
+msgid "Skill wheel"
+msgstr "Fíggjarhjól"
+
+msgid "Favourite courses"
+msgstr "Yndisligir líkur"
+
+msgid "Restart courses"
+msgstr "Endurnýggja líkur"
+
+msgid "Generate terms"
+msgstr "Útvega viljar"
+
+msgid "Add variation"
+msgstr "Legg afturat variatión"
+
+msgid "Editor demo"
+msgstr "Ritsagnarævning"
+
+msgid "Tool introduction"
+msgstr "Verktøkisinnleiðing"
+
+msgid "Data exchanges"
+msgstr "Dataskipti"
+
+msgid "Third parties"
+msgstr "Triðir aðilar"
+
+msgid "Layouts"
+msgstr "Útsjógn"
 

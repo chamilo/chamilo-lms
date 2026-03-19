@@ -8,18 +8,20 @@ namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioCategory;
-use Xabbuh\XApi\Model\Context;
 
+/**
+ * Class PortfolioItem.
+ */
 abstract class PortfolioItem extends BaseStatement
 {
-    protected $item;
+    protected Portfolio $item;
 
     public function __construct(Portfolio $item)
     {
         $this->item = $item;
     }
 
-    protected function generateContext(): Context
+    protected function generateContext(): array
     {
         $context = parent::generateContext();
 
@@ -27,15 +29,7 @@ abstract class PortfolioItem extends BaseStatement
 
         if ($category) {
             $categoryActivity = new PortfolioCategory($category);
-
-            $contextActivities = $context
-                ->getContextActivities()
-                ->withAddedCategoryActivity(
-                    $categoryActivity->generate()
-                )
-            ;
-
-            $context = $context->withContextActivities($contextActivities);
+            $context = $this->mergeGroupingActivity($context, $categoryActivity->generate());
         }
 
         return $context;

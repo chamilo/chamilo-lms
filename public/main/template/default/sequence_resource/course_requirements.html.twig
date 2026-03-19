@@ -28,7 +28,7 @@
     </div>
 
     <script>
-        var url = '{{ url('web_ajax') }}sequence.ajax.php?type={{ sequence_type }}';
+        var url = '/main/inc/ajax/sequence.ajax.php?type={{ sequence_type }}';
         var sequenceId = '{{ key }}';
         $(function() {
             $.ajax({

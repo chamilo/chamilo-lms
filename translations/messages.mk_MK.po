@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Испрати пошта на новиот корисник"
 
 msgid "Portfolio"
-msgstr "Продолжен профил"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ако поставките се поставени на 'Точно', корисникот може (незадолжително) да ги пополни следните полиња: 'Мои надлежности', 'Мои дипломи', 'Што можам да подучувам' и 'Мои лична области на интереси'"
@@ -16070,6 +16070,15 @@ msgstr "Краток код"
 
 msgid "Create child skill"
 msgstr "Создај детска вештина"
+
+msgid "This skill can be obtained through:"
+msgstr "Оваа вештина може да се добие преку:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Нема курс кој моментално ви овозможува да ја добиете оваа вештина."
+
+msgid "Add skill to search profile"
+msgstr "Додади вештина во профилот за пребарување"
 
 msgid "Search profile matches"
 msgstr "Пребарај усогласености на профил"
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "Креирајте ја вашата прва белешка за да започнете."
 
 msgid "F d, Y"
-msgstr "d M, Y"
+msgstr "d F, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не можев да го вчитам информации за поддршка во моментов."
@@ -32893,6 +32902,9 @@ msgstr "Грешка при зачувување на размената на п
 msgid "No documents added yet"
 msgstr "Нема додадени документи"
 
+msgid "No additional details available for this skill."
+msgstr "Нема дополнителни детали достапни за оваа вештина."
+
 msgid "No available documents"
 msgstr "Нема достапни документи"
 
@@ -33036,4 +33048,70 @@ msgstr "Аналитика на учењето"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит на административната активност"
+
+msgid "List icons"
+msgstr "Икони на листа"
+
+msgid "Constant name"
+msgstr "Име на константа"
+
+msgid "MDI icon name"
+msgstr "MDI име на икона"
+
+msgid "Assign authentication sources"
+msgstr "Додели извори за автентикација"
+
+msgid "Assignment details"
+msgstr "Детали за задолжение"
+
+msgid "Terms and conditions"
+msgstr "Услови и правила"
+
+msgid "Icons"
+msgstr "Икони"
+
+msgid "Create backup"
+msgstr "Создај резервна копија"
+
+msgid "Create file"
+msgstr "Создај датотека"
+
+msgid "Create link"
+msgstr "Создај врска"
+
+msgid "Edit template"
+msgstr "Уреди шаблон"
+
+msgid "Shared files"
+msgstr "Споделени датотеки"
+
+msgid "Skill wheel"
+msgstr "Точка на вештини"
+
+msgid "Favourite courses"
+msgstr "Омилени курсеви"
+
+msgid "Restart courses"
+msgstr "Рестартирај курсеви"
+
+msgid "Generate terms"
+msgstr "Генерирај услови"
+
+msgid "Add variation"
+msgstr "Додај варијација"
+
+msgid "Editor demo"
+msgstr "Пример за уредник"
+
+msgid "Tool introduction"
+msgstr "Воведна алатка"
+
+msgid "Data exchanges"
+msgstr "Размена на податоци"
+
+msgid "Third parties"
+msgstr "Трети страни"
+
+msgid "Layouts"
+msgstr "Layouts"
 

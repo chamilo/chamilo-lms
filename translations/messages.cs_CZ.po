@@ -4615,7 +4615,7 @@ msgid "Send mail to new user"
 msgstr "Poslat email novému uživateli"
 
 msgid "Portfolio"
-msgstr "Rozšířený profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Toto nastavení je dáno na 'Povolit', uživatel může vyplnit následující(nepovinné) pole: 'Má kvalifikace', 'Mé certifikáty', 'Co jsem schopný vyučovat' a 'Můj osobní obsah'"
@@ -16067,6 +16067,15 @@ msgstr "Krátký kód"
 
 msgid "Create child skill"
 msgstr "Vytvořit podřízenou dovednost"
+
+msgid "This skill can be obtained through:"
+msgstr "Tuto dovednost lze získat prostřednictvím:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Žádný kurz v současnosti neumožňuje získat tuto dovednost."
+
+msgid "Add skill to search profile"
+msgstr "Přidat dovednost do vyhledávacího profilu"
 
 msgid "Search profile matches"
 msgstr "Vyhledat shody profilu"
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Vytvořte svou první poznámku pro začátek."
 
 msgid "F d, Y"
-msgstr "j n, RRRR"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nelze načíst informace o podpoře."
@@ -32889,6 +32898,9 @@ msgstr "Chyba při ukládání výměny dat"
 msgid "No documents added yet"
 msgstr "Zatím nebyly přidány žádné dokumenty"
 
+msgid "No additional details available for this skill."
+msgstr "Žádné další podrobnosti k této dovednosti nejsou k dispozici."
+
 msgid "No available documents"
 msgstr "Žádné dostupné dokumenty"
 
@@ -33028,8 +33040,74 @@ msgid "System activity audit"
 msgstr "Audit aktivity systému"
 
 msgid "Learning analytics"
-msgstr "Learning analytics"
+msgstr "Analýza učení"
 
 msgid "Administrative activity auditing"
 msgstr "Audit administrativní aktivity"
+
+msgid "List icons"
+msgstr "Ikony seznamu"
+
+msgid "Constant name"
+msgstr "Název konstanty"
+
+msgid "MDI icon name"
+msgstr "Název ikony MDI"
+
+msgid "Assign authentication sources"
+msgstr "Přiřadit zdroje autentizace"
+
+msgid "Assignment details"
+msgstr "Podrobnosti úkolu"
+
+msgid "Terms and conditions"
+msgstr "Všeobecné podmínky"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Vytvořit zálohu"
+
+msgid "Create file"
+msgstr "Vytvořit soubor"
+
+msgid "Create link"
+msgstr "Vytvořit odkaz"
+
+msgid "Edit template"
+msgstr "Upravit šablonu"
+
+msgid "Shared files"
+msgstr "Sdílené soubory"
+
+msgid "Skill wheel"
+msgstr "Kolo dovedností"
+
+msgid "Favourite courses"
+msgstr "Oblíbené kurzy"
+
+msgid "Restart courses"
+msgstr "Restartovat kurzy"
+
+msgid "Generate terms"
+msgstr "Generovat podmínky"
+
+msgid "Add variation"
+msgstr "Přidat variantu"
+
+msgid "Editor demo"
+msgstr "Demo editoru"
+
+msgid "Tool introduction"
+msgstr "Představení nástroje"
+
+msgid "Data exchanges"
+msgstr "Výměna dat"
+
+msgid "Third parties"
+msgstr "Třetí strany"
+
+msgid "Layouts"
+msgstr "Rozložení"
 

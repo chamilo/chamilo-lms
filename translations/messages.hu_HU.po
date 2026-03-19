@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Levél küldése az új felhasználónak."
 
 msgid "Portfolio"
-msgstr "Kibővített profil"
+msgstr "Portfólió"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ha ez a beállíás 'igaz'-ra van állítva, a felhasználók megadhatnak opcionális adatokat: 'Kompetenciáim', 'Végzettségeim', 'Mit tudok oktatni', és 'A személyes oldalam'"
@@ -16070,6 +16070,15 @@ msgstr "Rövid kód"
 
 msgid "Create child skill"
 msgstr "Alképesség létrehozása"
+
+msgid "This skill can be obtained through:"
+msgstr "Ezt a készséget a következőn keresztül lehet megszerezni:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Jelenleg nincs olyan kurzus, amely lehetővé tenné ennek a készségnek a megszerzését."
+
+msgid "Add skill to search profile"
+msgstr "Készség hozzáadása a keresési profilhoz"
 
 msgid "Search profile matches"
 msgstr "Profil egyezések keresése"
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "Hozzon létre első jegyzetét a kezdéshez."
 
 msgid "F d, Y"
-msgstr "Y. m. d."
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nem sikerült betölteni a támogatási információkat."
@@ -32893,6 +32902,9 @@ msgstr "Hiba az adatcsere mentésekor"
 msgid "No documents added yet"
 msgstr "Még nincs dokumentum hozzáadva"
 
+msgid "No additional details available for this skill."
+msgstr "Nincs további részlet elérhető ehhez a készséghez."
+
 msgid "No available documents"
 msgstr "Nincs elérhető dokumentum"
 
@@ -33036,4 +33048,70 @@ msgstr "Tanulási analitika"
 
 msgid "Administrative activity auditing"
 msgstr "Adminisztratív tevékenység naplózása"
+
+msgid "List icons"
+msgstr "Ikonlista"
+
+msgid "Constant name"
+msgstr "Konstans neve"
+
+msgid "MDI icon name"
+msgstr "MDI ikonnév"
+
+msgid "Assign authentication sources"
+msgstr "Hitelesítési források hozzárendelése"
+
+msgid "Assignment details"
+msgstr "Feladat részletek"
+
+msgid "Terms and conditions"
+msgstr "Felhasználási feltételek"
+
+msgid "Icons"
+msgstr "Ikonok"
+
+msgid "Create backup"
+msgstr "Biztonsági mentés létrehozása"
+
+msgid "Create file"
+msgstr "Fájl létrehozása"
+
+msgid "Create link"
+msgstr "Link létrehozása"
+
+msgid "Edit template"
+msgstr "Sablon szerkesztése"
+
+msgid "Shared files"
+msgstr "Megosztott fájlok"
+
+msgid "Skill wheel"
+msgstr "Képességkerék"
+
+msgid "Favourite courses"
+msgstr "Kedvenc kurzusok"
+
+msgid "Restart courses"
+msgstr "Kurzusok újraindítása"
+
+msgid "Generate terms"
+msgstr "Szerződési feltételek generálása"
+
+msgid "Add variation"
+msgstr "Változat hozzáadása"
+
+msgid "Editor demo"
+msgstr "Szerkesztő demó"
+
+msgid "Tool introduction"
+msgstr "Eszközismertető"
+
+msgid "Data exchanges"
+msgstr "Adatcserék"
+
+msgid "Third parties"
+msgstr "Harmadik felek"
+
+msgid "Layouts"
+msgstr "Elrendezések"
 

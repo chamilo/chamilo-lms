@@ -37,7 +37,7 @@ $courseCode = $courseInfo['code'];
 
 $tool_name = get_lang('Edit course information');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
 // Get all course categories
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -364,7 +364,7 @@ if ($form->validate()) {
                     )
                 );
 
-                header('Location: course_list.php');
+                header('Location: /admin/course-list');
                 exit;
             }
         }
@@ -492,7 +492,7 @@ if ($form->validate()) {
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
     }
-    header('Location: course_list.php');
+    header('Location: /admin/course-list');
     exit;
 }
 
@@ -511,7 +511,7 @@ Display::display_header($tool_name);
 
 $actions = Display::url(
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')),
-    api_get_path(WEB_CODE_PATH).'admin/course_list.php'
+    '/admin/course-list'
 );
 $actions .= Display::url(
     Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage')),

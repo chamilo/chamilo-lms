@@ -4679,7 +4679,7 @@ msgid "Send mail to new user"
 msgstr "E-Mail an neuen Nutzer schicken"
 
 msgid "Portfolio"
-msgstr "Ausführliches Profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Wenn Ja gewählt, kann der Benutzer die Felder \"Meine Kompetenzen\", \"Meine Qualifikationen\", \"Was isch unterrichten kann\", \"Mein persönlicher Bereich\" vervoillständigen."
@@ -16131,6 +16131,15 @@ msgstr "Kürzel"
 
 msgid "Create child skill"
 msgstr "Erstelle Kind-Fähigkeit"
+
+msgid "This skill can be obtained through:"
+msgstr "Diese Kompetenz kann erworben werden durch:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Derzeit erlaubt kein Kurs den Erwerb dieser Kompetenz."
+
+msgid "Add skill to search profile"
+msgstr "Kompetenz zum Suchprofil hinzufügen"
 
 msgid "Search profile matches"
 msgstr "Profil-Suche nach"
@@ -32572,7 +32581,7 @@ msgid "Create your first note to get started."
 msgstr "Erstellen Sie Ihre erste Notiz, um zu beginnen."
 
 msgid "F d, Y"
-msgstr "d. M. Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Support-Informationen konnten derzeit nicht geladen werden."
@@ -34461,6 +34470,9 @@ msgstr "Fehler beim Speichern des Datenaustauschs"
 msgid "No documents added yet"
 msgstr "Noch keine Dokumente hinzugefügt"
 
+msgid "No additional details available for this skill."
+msgstr "Keine zusätzlichen Details für diese Kompetenz verfügbar."
+
 msgid "No available documents"
 msgstr "Keine verfügbaren Dokumente"
 
@@ -34604,4 +34616,70 @@ msgstr "Lernanalytik"
 
 msgid "Administrative activity auditing"
 msgstr "Administrative Aktivitätsprüfung"
+
+msgid "List icons"
+msgstr "Listenikonen"
+
+msgid "Constant name"
+msgstr "Konstantenname"
+
+msgid "MDI icon name"
+msgstr "MDI-Symbolname"
+
+msgid "Assign authentication sources"
+msgstr "Authentifizierungsquellen zuweisen"
+
+msgid "Assignment details"
+msgstr "Aufgabendetails"
+
+msgid "Terms and conditions"
+msgstr "Nutzungsbedingungen"
+
+msgid "Icons"
+msgstr "Symbole"
+
+msgid "Create backup"
+msgstr "Sicherung erstellen"
+
+msgid "Create file"
+msgstr "Datei erstellen"
+
+msgid "Create link"
+msgstr "Link erstellen"
+
+msgid "Edit template"
+msgstr "Vorlage bearbeiten"
+
+msgid "Shared files"
+msgstr "Geteilte Dateien"
+
+msgid "Skill wheel"
+msgstr "Kompetenzrad"
+
+msgid "Favourite courses"
+msgstr "Favorisierte Kurse"
+
+msgid "Restart courses"
+msgstr "Kurse neu starten"
+
+msgid "Generate terms"
+msgstr "Bedingungen generieren"
+
+msgid "Add variation"
+msgstr "Variation hinzufügen"
+
+msgid "Editor demo"
+msgstr "Editor-Demo"
+
+msgid "Tool introduction"
+msgstr "Werkzeug  Einleitung"
+
+msgid "Data exchanges"
+msgstr "Datenaustausch"
+
+msgid "Third parties"
+msgstr "Drittanbieter"
+
+msgid "Layouts"
+msgstr "Layouts"
 

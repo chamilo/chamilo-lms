@@ -4628,7 +4628,7 @@ msgid "Send mail to new user"
 msgstr "Enviar correu a un nou usuari"
 
 msgid "Portfolio"
-msgstr "Perfil extès"
+msgstr "Portfoli"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si es configura com a 'Veritable', l'usuari podrà emplenar els següents camps (opcionals): 'Les meves competències', 'Les meves titulacions', 'Què puc ensenyar' i 'La meva àrea personal pública'"
@@ -16080,6 +16080,15 @@ msgstr "Codi curt"
 
 msgid "Create child skill"
 msgstr "Crea competència filla"
+
+msgid "This skill can be obtained through:"
+msgstr "Aquesta competència es pot obtenir a través de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Cap curs permet actualment obtenir aquesta competència."
+
+msgid "Add skill to search profile"
+msgstr "Afegir competència al perfil de cerca"
 
 msgid "Search profile matches"
 msgstr "Cerca perfils que corresponguin"
@@ -31019,7 +31028,7 @@ msgid "Create your first note to get started."
 msgstr "Creeu la vostra primera nota per començar."
 
 msgid "F d, Y"
-msgstr "d F, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "No s'ha pogut carregar la informació de suport en aquest moment."
@@ -32908,6 +32917,9 @@ msgstr "Error en desar l'intercanvi de dades"
 msgid "No documents added yet"
 msgstr "Encara no s'ha afegit cap document"
 
+msgid "No additional details available for this skill."
+msgstr "No hi ha detalls addicionals disponibles per aquesta competència."
+
 msgid "No available documents"
 msgstr "No hi ha documents disponibles"
 
@@ -33051,4 +33063,70 @@ msgstr "Anàlisi d'aprenentatge"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoria d'activitat administrativa"
+
+msgid "List icons"
+msgstr "Icones de llista"
+
+msgid "Constant name"
+msgstr "Nom de la constant"
+
+msgid "MDI icon name"
+msgstr "Nom de la icona MDI"
+
+msgid "Assign authentication sources"
+msgstr "Assigna fonts d'autenticació"
+
+msgid "Assignment details"
+msgstr "Detalls de la tasca"
+
+msgid "Terms and conditions"
+msgstr "Termes i condicions"
+
+msgid "Icons"
+msgstr "Icones"
+
+msgid "Create backup"
+msgstr "Crea còpia de seguretat"
+
+msgid "Create file"
+msgstr "Crea fitxer"
+
+msgid "Create link"
+msgstr "Crea enllaç"
+
+msgid "Edit template"
+msgstr "Edita plantilla"
+
+msgid "Shared files"
+msgstr "Fitxers compartits"
+
+msgid "Skill wheel"
+msgstr "Roda de competències"
+
+msgid "Favourite courses"
+msgstr "Cursos favorits"
+
+msgid "Restart courses"
+msgstr "Reinicia cursos"
+
+msgid "Generate terms"
+msgstr "Genera termes"
+
+msgid "Add variation"
+msgstr "Afegeix variació"
+
+msgid "Editor demo"
+msgstr "Demo de l'editor"
+
+msgid "Tool introduction"
+msgstr "Introducció"
+
+msgid "Data exchanges"
+msgstr "Intercanvis de dades"
+
+msgid "Third parties"
+msgstr "Tercers"
+
+msgid "Layouts"
+msgstr "Dissenys"
 

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج صيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -4629,7 +4629,7 @@ msgid "Send mail to new user"
 msgstr " أرسل بريدا إلى مستخدم جديد"
 
 msgid "Portfolio"
-msgstr " واجهة ممتدة"
+msgstr "بورتفوليو"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr " '/إذا تم وضع /'صح/'، في هذه الإاعدادات فإنّه يمكن للمستخدم ملأ (اختياري) الحقول التالية: /'قدراتي/'، /'الدبلوماسية الخاصة بي/'، /'ماذا أستطيع أن أدرس/'، و /'الحيز الشخصي المفتوح"
@@ -16081,6 +16081,15 @@ msgstr "رمز مختصر"
 
 msgid "Create child skill"
 msgstr "انشاء مهارة فرعية"
+
+msgid "This skill can be obtained through:"
+msgstr "يمكن الحصول على هذه المهارة من خلال:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "لا يوجد مساق حاليًا يسمح لك بالحصول على هذه المهارة."
+
+msgid "Add skill to search profile"
+msgstr "إضافة مهارة إلى ملف البحث"
 
 msgid "Search profile matches"
 msgstr "تطابقات البحث عن الحساب الشخصي"
@@ -31018,7 +31027,7 @@ msgid "Create your first note to get started."
 msgstr "أنشئ ملاحظتك الأولى لبدء العمل."
 
 msgid "F d, Y"
-msgstr "j d، Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "تعذر تحميل معلومات الدعم في الوقت الحالي."
@@ -32907,6 +32916,9 @@ msgstr "خطأ في حفظ تبادل البيانات"
 msgid "No documents added yet"
 msgstr "لم يتم إضافة وثائق بعد"
 
+msgid "No additional details available for this skill."
+msgstr "لا توجد تفاصيل إضافية متاحة لهذه المهارة."
+
 msgid "No available documents"
 msgstr "لا توجد وثائق متاحة"
 
@@ -33050,4 +33062,70 @@ msgstr "تحليلات التعلم"
 
 msgid "Administrative activity auditing"
 msgstr "تدقيق نشاط الإدارة"
+
+msgid "List icons"
+msgstr "قائمة الأيقونات"
+
+msgid "Constant name"
+msgstr "اسم الثابت"
+
+msgid "MDI icon name"
+msgstr "اسم أيقونة MDI"
+
+msgid "Assign authentication sources"
+msgstr "تعيين مصادر المصادقة"
+
+msgid "Assignment details"
+msgstr "تفاصيل المهمة"
+
+msgid "Terms and conditions"
+msgstr "الشروط والأحكام"
+
+msgid "Icons"
+msgstr "الأيقونات"
+
+msgid "Create backup"
+msgstr "إنشاء نسخة احتياطية"
+
+msgid "Create file"
+msgstr "إنشاء ملف"
+
+msgid "Create link"
+msgstr "إنشاء رابط"
+
+msgid "Edit template"
+msgstr "تحرير القالب"
+
+msgid "Shared files"
+msgstr "الملفات المشتركة"
+
+msgid "Skill wheel"
+msgstr "عجلة المهارات"
+
+msgid "Favourite courses"
+msgstr "الدورات المفضلة"
+
+msgid "Restart courses"
+msgstr "إعادة تشغيل الدورات"
+
+msgid "Generate terms"
+msgstr "توليد الشروط"
+
+msgid "Add variation"
+msgstr "إضافة تباين"
+
+msgid "Editor demo"
+msgstr "عرض تجريبي للمحرر"
+
+msgid "Tool introduction"
+msgstr " تعريف بالأداة"
+
+msgid "Data exchanges"
+msgstr "تبادل البيانات"
+
+msgid "Third parties"
+msgstr "الأطراف الثالثة"
+
+msgid "Layouts"
+msgstr "التخطيطات"
 

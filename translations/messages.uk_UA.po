@@ -4615,7 +4615,7 @@ msgid "Send mail to new user"
 msgstr "Надіслати листа новому користувачу"
 
 msgid "Portfolio"
-msgstr "Розширений профіль"
+msgstr "Портфоліо"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Якщо цю опцію встановлено в \"Правда\", користувач може заповнювати (опціональні) поля: \"Мої навички\", \"Мої дипломи\", \"Що я можу викладати\" та \"Моя персональна відкрита зона\""
@@ -16067,6 +16067,15 @@ msgstr "Короткий код"
 
 msgid "Create child skill"
 msgstr "Створити дочірню навичку"
+
+msgid "This skill can be obtained through:"
+msgstr "Цю навичку можна отримати через:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Жоден курс наразі не дозволяє отримати цю навичку."
+
+msgid "Add skill to search profile"
+msgstr "Додати навичку до профілю пошуку"
 
 msgid "Search profile matches"
 msgstr "Пошук відповідностей профілю"
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Створіть свою першу примітку, щоб розпочати."
 
 msgid "F d, Y"
-msgstr "d MMM, Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не вдалося завантажити інформацію про підтримку наразі."
@@ -32889,6 +32898,9 @@ msgstr "Помилка збереження обміну даними"
 msgid "No documents added yet"
 msgstr "Документів ще не додано"
 
+msgid "No additional details available for this skill."
+msgstr "Додаткової інформації про цю навичку недоступно."
+
 msgid "No available documents"
 msgstr "Немає доступних документів"
 
@@ -33032,4 +33044,70 @@ msgstr "Навчальна аналітика"
 
 msgid "Administrative activity auditing"
 msgstr "Аудит адміністративної активності"
+
+msgid "List icons"
+msgstr "Іконки списку"
+
+msgid "Constant name"
+msgstr "Назва константи"
+
+msgid "MDI icon name"
+msgstr "Назва іконки MDI"
+
+msgid "Assign authentication sources"
+msgstr "Призначити джерела автентифікації"
+
+msgid "Assignment details"
+msgstr "Деталі призначення"
+
+msgid "Terms and conditions"
+msgstr "Умови та положення"
+
+msgid "Icons"
+msgstr "Іконки"
+
+msgid "Create backup"
+msgstr "Створити резервну копію"
+
+msgid "Create file"
+msgstr "Створити файл"
+
+msgid "Create link"
+msgstr "Створити посилання"
+
+msgid "Edit template"
+msgstr "Редагувати шаблон"
+
+msgid "Shared files"
+msgstr "Спільні файли"
+
+msgid "Skill wheel"
+msgstr "Коло навичок"
+
+msgid "Favourite courses"
+msgstr "Улюблені курси"
+
+msgid "Restart courses"
+msgstr "Перезапустити курси"
+
+msgid "Generate terms"
+msgstr "Згенерувати умови"
+
+msgid "Add variation"
+msgstr "Додати варіацію"
+
+msgid "Editor demo"
+msgstr "Демо редактора"
+
+msgid "Tool introduction"
+msgstr "Вступ до інструменту"
+
+msgid "Data exchanges"
+msgstr "Обмін даними"
+
+msgid "Third parties"
+msgstr "Треті сторони"
+
+msgid "Layouts"
+msgstr "Макети"
 

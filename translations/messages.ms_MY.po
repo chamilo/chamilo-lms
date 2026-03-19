@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -16070,6 +16070,15 @@ msgstr "Kod pendek"
 
 msgid "Create child skill"
 msgstr "Cipta kemahiran anak"
+
+msgid "This skill can be obtained through:"
+msgstr "Kemahiran ini boleh diperoleh melalui:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Tiada kursus yang membolehkan anda memperoleh kemahiran ini buat masa ini."
+
+msgid "Add skill to search profile"
+msgstr "Tambah kemahiran ke profil carian"
 
 msgid "Search profile matches"
 msgstr "Cari padanan profil"
@@ -32801,85 +32810,85 @@ msgid "Select permission"
 msgstr "Pilih kebenaran"
 
 msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
-msgstr ""
+msgstr "Dengan menerima jemputan ini, anda akan menjadi terhubung dengan pengguna yang meminta dalam cara yang akan menjadikan sebahagian atau semua data profil anda boleh dibaca oleh pengguna yang meminta"
 
 msgid "Showing %d of approximately %d result(s) for %s."
-msgstr ""
+msgstr "Memaparkan %d daripada kira-kira %d hasil untuk %s."
 
 msgid "Showing %d accessible result(s) for %s."
-msgstr ""
+msgstr "Memaparkan %d hasil yang boleh diakses untuk %s."
 
 msgid "You will therefore be automatically redirected to this URL"
-msgstr ""
+msgstr "Oleh itu anda akan diarahkan secara automatik ke URL ini"
 
 msgid "You have access to multiple URLs"
-msgstr ""
+msgstr "Anda mempunyai akses kepada pelbagai URL"
 
 msgid "Please click on the link below corresponding to the URL you wish to access"
-msgstr ""
+msgstr "Sila klik pautan di bawah yang sepadan dengan URL yang anda ingin akses"
 
 msgid "You do not currently have access to any URL"
-msgstr ""
+msgstr "Anda tidak mempunyai akses kepada sebarang URL buat masa ini"
 
 msgid "Maximum number of subscriptions allowed"
-msgstr ""
+msgstr "Bilangan langganan maksimum dibenarkan"
 
 msgid "An error occurred"
-msgstr ""
+msgstr "Ralat berlaku"
 
 msgid "You don't have any course content yet"
-msgstr ""
+msgstr "Anda belum mempunyai sebarang kandungan kursus"
 
 msgid "This course is locked"
-msgstr ""
+msgstr "Kursus ini terkunci"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
-msgstr ""
+msgstr "Alamat e-mel yang akan digunakan untuk menghantar e-mel apabila platform menghantar e-mel, juga digunakan sebagai header 'reply-to'"
 
 msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
-msgstr ""
+msgstr "Tidak jumpa bahasa anda dalam senarai? Hubungi kami di %s untuk menyumbang sebagai penterjemah"
 
 msgid "An update is available"
-msgstr ""
+msgstr "Kemas kini tersedia"
 
 msgid "to know what's new and what has been changed"
-msgstr ""
+msgstr "untuk mengetahui apa yang baru dan apa yang telah diubah"
 
 msgid "We have detected that your PHP installation does not define the date"
-msgstr ""
+msgstr "Kami mengesan bahawa pemasangan PHP anda tidak mentakrif tarikh"
 
 msgid "Your PHP version does not match the requirements for this software"
-msgstr ""
+msgstr "Versi PHP anda tidak memenuhi keperluan perisian ini"
 
 msgid "Some files or folders don't have writing permission"
-msgstr ""
+msgstr "Sesetengah fail atau folder tidak mempunyai kebenaran penulisan"
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system"
-msgstr ""
+msgstr "Amaran! Pemasang mengesan platform Chamilo sedia ada dalam sistem anda"
 
 msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
-msgstr ""
+msgstr "Kerana direktori <code>newscorm</code> dan <code>exercice</code> dinamakan semula kepada <code>lp</code> dan <code>exercise</code> masing-masing, adalah perlu untuk memadam atau menamakan semula kepada <code>newscorm_old</code> dan <code>exercice_old</code>"
 
 msgid "The form contains incorrect or incomplete data"
-msgstr ""
+msgstr "Borang mengandungi data yang salah atau tidak lengkap"
 
 msgid "Your contact information could not be sent"
-msgstr ""
+msgstr "Maklumat hubungan anda tidak dapat dihantar"
 
 msgid "Please contact support with the error details"
-msgstr ""
+msgstr "Sila hubungi sokongan dengan butiran ralat"
 
 msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
-msgstr ""
+msgstr "Klik imej untuk memangkasnya (nisbah 1:1, 120x120 px disyorkan)"
 
 msgid "Use the crop tool to select a 1:1 region"
-msgstr ""
+msgstr "Gunakan alat tanam untuk memilih kawasan 1:1"
 
 msgid "Checking push subscription"
-msgstr ""
+msgstr "Semak langganan push"
 
 msgid "You're subscribed to push notifications in this browser"
-msgstr ""
+msgstr "Anda telah melanggan pemberitahuan push dalam pelayar ini"
 
 msgid "Push notifications are not enabled in this browser"
 msgstr "Pemberitahuan dorong tidak diaktifkan dalam pelayar ini"
@@ -32892,6 +32901,9 @@ msgstr "Ralat menyimpan pertukaran data"
 
 msgid "No documents added yet"
 msgstr "Tiada dokumen ditambah lagi"
+
+msgid "No additional details available for this skill."
+msgstr "Tiada butiran tambahan tersedia untuk kemahiran ini."
 
 msgid "No available documents"
 msgstr "Tiada dokumen yang tersedia"
@@ -33036,4 +33048,70 @@ msgstr "Analitik pembelajaran"
 
 msgid "Administrative activity auditing"
 msgstr "Audit aktiviti pentadbiran"
+
+msgid "List icons"
+msgstr "Senarai ikon"
+
+msgid "Constant name"
+msgstr "Nama pemalar"
+
+msgid "MDI icon name"
+msgstr "Nama ikon MDI"
+
+msgid "Assign authentication sources"
+msgstr "Tugaskan sumber pengesahan"
+
+msgid "Assignment details"
+msgstr "Butiran tugasan"
+
+msgid "Terms and conditions"
+msgstr "Terma dan syarat"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Cipta sandaran"
+
+msgid "Create file"
+msgstr "Cipta fail"
+
+msgid "Create link"
+msgstr "Cipta pautan"
+
+msgid "Edit template"
+msgstr "Edit templat"
+
+msgid "Shared files"
+msgstr "Fail dikongsi"
+
+msgid "Skill wheel"
+msgstr "Roda kemahiran"
+
+msgid "Favourite courses"
+msgstr "Kursus kegemaran"
+
+msgid "Restart courses"
+msgstr "Mulakan semula kursus"
+
+msgid "Generate terms"
+msgstr "Jana terma"
+
+msgid "Add variation"
+msgstr "Tambah variasi"
+
+msgid "Editor demo"
+msgstr "Demo penyunting"
+
+msgid "Tool introduction"
+msgstr "Pengenalan alat"
+
+msgid "Data exchanges"
+msgstr "Pertukaran data"
+
+msgid "Third parties"
+msgstr "Pihak ketiga"
+
+msgid "Layouts"
+msgstr "Susun atur"
 

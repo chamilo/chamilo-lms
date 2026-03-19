@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosierujo,, application/msword:MsWord,, application/octet-stream:Okteta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Sendu retpoŝtaĵon al la nova uzulo"
 
 msgid "Portfolio"
-msgstr "Etenda profilo"
+msgstr "Portfoliejo"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Se tiu agordo estas markita, uzulo povas plenigi jenajn (opciajn) kampojn: 'Miaj kompetentecoj', 'Miaj diplomoj', 'Pri kio mi povas instrui' kaj 'Mia persona spaco'"
@@ -16072,6 +16072,15 @@ msgstr "Mallonga kodo"
 
 msgid "Create child skill"
 msgstr "Krei id-kompetencon"
+
+msgid "This skill can be obtained through:"
+msgstr "Ĉi tiun kompetencon oni povas akiri per:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Neniu kurso nune permesas al vi akiri ĉi tiun kompetencon."
+
+msgid "Add skill to search profile"
+msgstr "Aldoni kompetencon al serĉa profilo"
 
 msgid "Search profile matches"
 msgstr "Serĉi kongruojn de profilo"
@@ -32895,6 +32904,9 @@ msgstr "Eraro dum konservado de datointerŝanĝo"
 msgid "No documents added yet"
 msgstr "Neniu dokumento aldonita ankoraŭ"
 
+msgid "No additional details available for this skill."
+msgstr "Neniu kromaj detaloj haveblas por ĉi tiu kompetenco."
+
 msgid "No available documents"
 msgstr "Neniu havebla dokumento"
 
@@ -33038,4 +33050,70 @@ msgstr "Lernanalizo"
 
 msgid "Administrative activity auditing"
 msgstr "Administra agado-aŭdito"
+
+msgid "List icons"
+msgstr "Listo de piktogramoj"
+
+msgid "Constant name"
+msgstr "Nomo de konstanto"
+
+msgid "MDI icon name"
+msgstr "Nomo de MDI-piktogramo"
+
+msgid "Assign authentication sources"
+msgstr "Atribui aŭtentigajn fontojn"
+
+msgid "Assignment details"
+msgstr "Detaloj de la tasko"
+
+msgid "Terms and conditions"
+msgstr "Uskondiĉoj"
+
+msgid "Icons"
+msgstr "Ikonoj"
+
+msgid "Create backup"
+msgstr "Krei sekurkopion"
+
+msgid "Create file"
+msgstr "Krei dosieron"
+
+msgid "Create link"
+msgstr "Krei ligilon"
+
+msgid "Edit template"
+msgstr "Redakti ŝablonon"
+
+msgid "Shared files"
+msgstr "Komunaj dosieroj"
+
+msgid "Skill wheel"
+msgstr "Ronda rado de kompetencoj"
+
+msgid "Favourite courses"
+msgstr "Ŝatataj kursoj"
+
+msgid "Restart courses"
+msgstr "Restartigi kursojn"
+
+msgid "Generate terms"
+msgstr "Generi kondiĉojn"
+
+msgid "Add variation"
+msgstr "Aldoni varion"
+
+msgid "Editor demo"
+msgstr "Redaktilo demo"
+
+msgid "Tool introduction"
+msgstr "Enkonduka teksto"
+
+msgid "Data exchanges"
+msgstr "Datŝanĝoj"
+
+msgid "Third parties"
+msgstr "Tria partio"
+
+msgid "Layouts"
+msgstr "Bildaj aranĝoj"
 

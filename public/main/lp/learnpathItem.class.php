@@ -27,7 +27,7 @@ class learnpathItem
     public $current_stop_time;
     public $current_data = '';
     public $db_id;
-    public $db_item_view_id = '';
+    public ?int $db_item_view_id;
     public $description = '';
     public $file;
     /**
@@ -362,7 +362,7 @@ class learnpathItem
      *
      * @return int attempt_id for this item view by this user or 1 if none defined
      */
-    public function get_attempt_id()
+    public function get_attempt_id(): int
     {
         $res = 1;
         if (!empty($this->attempt_id)) {
@@ -1489,14 +1489,15 @@ class learnpathItem
     /**
      * Gets the item status.
      *
-     * @param bool $check_db     Do or don't check into the database for the
+     * @param bool $check_db Do or don't check into the database for the
      *                           latest value. Optional. Default is true
      * @param bool $update_local Do or don't update the local attribute
      *                           value with what's been found in DB
      *
      * @return string Current status or 'Not attempted' if no status set yet
+     * @throws Exception
      */
-    public function get_status($check_db = true, $update_local = false)
+    public function get_status(?bool $check_db = true, ?bool $update_local = false): string
     {
         $debug = self::DEBUG;
         if ($debug) {
@@ -1510,8 +1511,8 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE
-                            iid = '".$this->db_item_view_id."' AND
-                            view_count = '".$this->get_attempt_id()."'";
+                            iid = ".$this->db_item_view_id." AND
+                            view_count = ".$this->get_attempt_id();
                 $res = Database::query($sql);
                 if (1 == Database::num_rows($res)) {
                     $row = Database::fetch_array($res);
@@ -1605,7 +1606,7 @@ class learnpathItem
                 $sql = "SELECT start_time, total_time
                         FROM $table
                         WHERE
-                            iid = '".$this->db_item_view_id."' AND
+                            iid = ".$this->db_item_view_id." AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
@@ -3537,6 +3538,7 @@ class learnpathItem
      * Writes the current data to the database.
      *
      * @return bool Query result
+     * @throws \Doctrine\DBAL\Exception
      */
     public function write_to_db()
     {

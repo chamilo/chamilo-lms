@@ -29,7 +29,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    #[ORM\OneToOne(targetEntity: ResourceNode::class, inversedBy: 'shortCut')]
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'shortCuts')]
     #[ORM\JoinColumn(name: 'shortcut_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $shortCutNode;
 
@@ -56,7 +56,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     private ?string $urlOverride = null;
 
     /**
-     * Optional icon name (e.g., 'mdi-notebook-outline' for CBlog).
+     * Optional icon name (e.g., 'mdi-notebook-outline').
      */
     #[Groups(['cshortcut:read'])]
     private ?string $icon = null;
@@ -112,7 +112,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Main URL for the shortcut:
-     * - If a custom URL was set (e.g., for CBlog), return that one.
+     * - If a custom URL was set, return that one.
      * - Otherwise, fallback to the legacy /r/{tool}/{type}/{nodeId}/link pattern.
      */
     public function getUrl(): string
@@ -165,8 +165,6 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Set a custom URL that will be returned by getUrl().
-     * Use it, for example, to point a CBlog shortcut to:
-     *   /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0.
      */
     public function setUrlOverride(?string $url): self
     {
@@ -181,7 +179,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     }
 
     /**
-     * Set an icon name (e.g., 'mdi-notebook-outline').
+     * Set an icon name.
      */
     public function setIcon(?string $icon): self
     {

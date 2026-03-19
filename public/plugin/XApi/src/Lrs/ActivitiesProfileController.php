@@ -8,61 +8,59 @@ namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Chamilo\CoreBundle\Entity\XApiActivityProfile;
 use Database;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ActivitiesProfileController.
+ * xAPI activities/profile endpoint.
  */
 class ActivitiesProfileController extends BaseController
 {
     public function get(): Response
     {
-        $profileId = $this->httpRequest->query->get('profileId');
-        $activityId = $this->httpRequest->query->get('activityId');
+        $profileId = (string) $this->httpRequest->query->get('profileId', '');
+        $activityId = (string) $this->httpRequest->query->get('activityId', '');
 
         $em = Database::getManager();
         $profileRepo = $em->getRepository(XApiActivityProfile::class);
 
-        /** @var XApiActivityProfile $activityProfile */
-        $activityProfile = $profileRepo->findOneBy(
-            [
-                'profileId' => $profileId,
-                'activityId' => $activityId,
-            ]
-        );
+        /** @var XApiActivityProfile|null $activityProfile */
+        $activityProfile = $profileRepo->findOneBy([
+            'profileId' => $profileId,
+            'activityId' => $activityId,
+        ]);
 
-        if (empty($activityProfile)) {
-            return Response::create(null, Response::HTTP_NO_CONTENT);
+        if (null === $activityProfile) {
+            return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        return Response::create(
-            json_encode($activityProfile->getDocumentData())
-        );
+        return new JsonResponse($activityProfile->getDocumentData());
     }
 
     public function head(): Response
     {
-        return $this->get()->setContent('');
+        $response = $this->get();
+        $response->setContent('');
+
+        return $response;
     }
 
     public function put(): Response
     {
-        $profileId = $this->httpRequest->query->get('profileId');
-        $activityId = $this->httpRequest->query->get('activityId');
-        $documentData = $this->httpRequest->getContent();
+        $profileId = (string) $this->httpRequest->query->get('profileId', '');
+        $activityId = (string) $this->httpRequest->query->get('activityId', '');
+        $documentDataJson = $this->httpRequest->getContent();
 
         $em = Database::getManager();
         $profileRepo = $em->getRepository(XApiActivityProfile::class);
 
-        /** @var XApiActivityProfile $activityProfile */
-        $activityProfile = $profileRepo->findOneBy(
-            [
-                'profileId' => $profileId,
-                'activityId' => $activityId,
-            ]
-        );
+        /** @var XApiActivityProfile|null $activityProfile */
+        $activityProfile = $profileRepo->findOneBy([
+            'profileId' => $profileId,
+            'activityId' => $activityId,
+        ]);
 
-        if (empty($activityProfile)) {
+        if (null === $activityProfile) {
             $activityProfile = new XApiActivityProfile();
             $activityProfile
                 ->setProfileId($profileId)
@@ -70,11 +68,11 @@ class ActivitiesProfileController extends BaseController
             ;
         }
 
-        $activityProfile->setDocumentData(json_decode($documentData, true));
+        $activityProfile->setDocumentData(json_decode($documentDataJson, true) ?? []);
 
         $em->persist($activityProfile);
         $em->flush();
 
-        return Response::create(null, Response::HTTP_NO_CONTENT);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

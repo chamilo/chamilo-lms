@@ -6,7 +6,7 @@ export default {
     {
       path: "auth-sources",
       name: "AccessUrlAuthSourcesAssign",
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, breadcrumb: "Assign authentication sources" },
       component: () => import("../views/accessurl/AccessUrlAuthSourcesAssign.vue"),
     },
   ],

@@ -6,7 +6,7 @@
  */
 // prettier-ignore
 export const chamiloIconToClass = {
-  "account-key": "",
+  "account-key": "mdi mdi-account-key",
   "account-multiple-plus": "",
   "alert": "mdi mdi-alert",
   "arrow-down-bold": "",
@@ -16,6 +16,8 @@ export const chamiloIconToClass = {
   "back": "mdi mdi-arrow-left-bold-box",
   "bug-check": "",
   "bug-outline": "",
+  "catalogue-add": "mdi mdi-book-plus",
+  "catalogue-remove": "mdi mdi-book-minus-outline",
   "calendar-plus": "mdi mdi-calendar-plus",
   "agenda-event": "mdi mdi-calendar-month",
   "agenda-plan": "mdi mdi-calendar-end",
@@ -66,6 +68,7 @@ export const chamiloIconToClass = {
   "file-replace": "mdi mdi-file-replace",
   "onlyoffice": "mdi mdi-file-document-edit-outline",
   "fit-to-screen": "",
+  "folder-backup": "mdi mdi-archive",
   "folder-generic": "mdi mdi-folder",
   "folder-multiple-plus": "mdi mdi-folder-multiple-plus",
   "folder-open": "mdi mdi-folder-open",
@@ -75,6 +78,7 @@ export const chamiloIconToClass = {
   "glossary": "mdi mdi-alphabetical",
   "gradebook": "mdi mdi-certificate",
   "hammer-wrench": "",
+  "home": "mdi mdi-home",
   "inbox": "mdi mdi-inbox",
   "information": "mdi mdi-information",
   "import": "mdi mdi-archive-arrow-up",
@@ -166,4 +170,9 @@ export const chamiloIconToClass = {
   "notification": "mdi mdi-bell",
   "room": "mdi mdi-seat",
   "tracking": "mdi mdi-chart-box",
+  "delete-forever": "mdi mdi-delete-forever",
+  "copy": "mdi mdi-content-duplicate",
+  "restore": "mdi mdi-restore",
+  "shield-star": "mdi mdi-shield-star",
+  "assign-users": "mdi mdi-account-child",
 }

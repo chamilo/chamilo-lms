@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Yeni kullanıcıya posta gönder"
 
 msgid "Portfolio"
-msgstr "Detaylı kişisel bilgiler"
+msgstr "Portfolyo"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Be seçenek aktifleştirilirse üye kaydı esnasında bir kullanıcı isteğe bağlı 'My Competences', 'Diplomalarım', 'Branşım' ve 'Kişisel açık alanım' bilgilerini doldurabilir"
@@ -16072,6 +16072,15 @@ msgstr "Kısa kod"
 
 msgid "Create child skill"
 msgstr "Alt beceri oluştur"
+
+msgid "This skill can be obtained through:"
+msgstr "Bu beceri şu yollarla elde edilebilir:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Şu anda bu beceriyi elde etmenize izin veren kurs yok."
+
+msgid "Add skill to search profile"
+msgstr "Arama profiline beceri ekle"
 
 msgid "Search profile matches"
 msgstr "Profil eşleşmelerini ara"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Başlamak için ilk notunuzu oluşturun."
 
 msgid "F d, Y"
-msgstr "d F Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Destek bilgileri şu anda yüklenemedi."
@@ -32895,6 +32904,9 @@ msgstr "Veri değişimi kaydedilirken hata oluştu"
 msgid "No documents added yet"
 msgstr "Henüz belge eklenmedi"
 
+msgid "No additional details available for this skill."
+msgstr "Bu beceri için ek detay yok."
+
 msgid "No available documents"
 msgstr "Mevcut belge yok"
 
@@ -33038,4 +33050,70 @@ msgstr "Öğrenme analitiği"
 
 msgid "Administrative activity auditing"
 msgstr "Yönetimsel etkinlik denetimi"
+
+msgid "List icons"
+msgstr "Simge listesi"
+
+msgid "Constant name"
+msgstr "Sabit adı"
+
+msgid "MDI icon name"
+msgstr "MDI simge adı"
+
+msgid "Assign authentication sources"
+msgstr "Kimlik doğrulama kaynaklarını atayın"
+
+msgid "Assignment details"
+msgstr "Görev ayrıntıları"
+
+msgid "Terms and conditions"
+msgstr "Şartlar ve koşullar"
+
+msgid "Icons"
+msgstr "Simge"
+
+msgid "Create backup"
+msgstr "Yedekleme oluştur"
+
+msgid "Create file"
+msgstr "Dosya oluştur"
+
+msgid "Create link"
+msgstr "Bağlantı oluştur"
+
+msgid "Edit template"
+msgstr "Şablon düzenle"
+
+msgid "Shared files"
+msgstr "Paylaşılan dosyalar"
+
+msgid "Skill wheel"
+msgstr "Yetenek çarkı"
+
+msgid "Favourite courses"
+msgstr "Favori kurslar"
+
+msgid "Restart courses"
+msgstr "Kursları yeniden başlat"
+
+msgid "Generate terms"
+msgstr "Şartlar oluştur"
+
+msgid "Add variation"
+msgstr "Varyasyon ekle"
+
+msgid "Editor demo"
+msgstr "Düzenleyici demosu"
+
+msgid "Tool introduction"
+msgstr "Araç tanıtımı"
+
+msgid "Data exchanges"
+msgstr "Veri alışverişleri"
+
+msgid "Third parties"
+msgstr "Üçüncü taraflar"
+
+msgid "Layouts"
+msgstr "Düzenler"
 

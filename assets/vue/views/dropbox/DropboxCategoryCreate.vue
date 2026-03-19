@@ -7,7 +7,7 @@
     <div class="mt-2 text-sm text-gray-600">Area: <b>{{ area }}</b></div>
 
     <div class="flex justify-end gap-2 mt-4">
-      <RouterLink :to="backTo"><BaseButton type="black" icon="xmark" label="Cancel" /></RouterLink>
+      <BaseAppLink :to="backTo"><BaseButton type="black" icon="xmark" label="Cancel" /></BaseAppLink>
       <BaseButton type="primary" icon="check" label="Create category" @click="save" />
     </div>
   </div>

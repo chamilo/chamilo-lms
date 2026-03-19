@@ -16072,6 +16072,15 @@ msgstr "Kod i shkurtër"
 msgid "Create child skill"
 msgstr "Krijo aftësi nënord"
 
+msgid "This skill can be obtained through:"
+msgstr "Kjo aftësi mund të fitohet përmes:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Asnjë kurs aktualisht nuk ju lejon të fitoni këtë aftësi."
+
+msgid "Add skill to search profile"
+msgstr "Shto aftësi në profilin e kërkimit"
+
 msgid "Search profile matches"
 msgstr "Kërko përputhje profili"
 
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "Krijoni shënimin tuaj të parë për të filluar."
 
 msgid "F d, Y"
-msgstr "D e, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nuk mund të ngarkohet informacioni i mbështetjes në këtë kohë."
@@ -32893,6 +32902,9 @@ msgstr "Gabim gjatë ruajtjes së shkëmbimit të të dhënave"
 msgid "No documents added yet"
 msgstr "Nuk ka dokumente të shtuara ende"
 
+msgid "No additional details available for this skill."
+msgstr "Asnjë detaj shtesë i disponueshëm për këtë aftësi."
+
 msgid "No available documents"
 msgstr "Nuk ka dokumente të disponueshme"
 
@@ -33036,4 +33048,70 @@ msgstr "Analitikë mësimore"
 
 msgid "Administrative activity auditing"
 msgstr "Auditim i aktivitetit administrativ"
+
+msgid "List icons"
+msgstr "Ikona e listës"
+
+msgid "Constant name"
+msgstr "Emri i kostantës"
+
+msgid "MDI icon name"
+msgstr "Emri i ikonës MDI"
+
+msgid "Assign authentication sources"
+msgstr "Cakto burimet e autentikimit"
+
+msgid "Assignment details"
+msgstr "Detajet e detyrës"
+
+msgid "Terms and conditions"
+msgstr "Kushtet dhe rregulloret"
+
+msgid "Icons"
+msgstr "Ikona"
+
+msgid "Create backup"
+msgstr "Krijo kopjer rezervë"
+
+msgid "Create file"
+msgstr "Krijo skedar"
+
+msgid "Create link"
+msgstr "Krijo lidhje"
+
+msgid "Edit template"
+msgstr "Ndrysho shabllon"
+
+msgid "Shared files"
+msgstr "Skedarë të ndarë"
+
+msgid "Skill wheel"
+msgstr "Rrota e aftësive"
+
+msgid "Favourite courses"
+msgstr "Kursesh të preferuara"
+
+msgid "Restart courses"
+msgstr "Rinisni kursesh"
+
+msgid "Generate terms"
+msgstr "Gjenero kushte"
+
+msgid "Add variation"
+msgstr "Shto variacion"
+
+msgid "Editor demo"
+msgstr "Demo redaktori"
+
+msgid "Tool introduction"
+msgstr "Hyrje në vegël"
+
+msgid "Data exchanges"
+msgstr "Këmbe të dhëna"
+
+msgid "Third parties"
+msgstr "Palët e treta"
+
+msgid "Layouts"
+msgstr "Layout-et"
 

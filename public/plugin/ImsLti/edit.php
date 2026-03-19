@@ -1,6 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CShortcut;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\Form\FrmEdit;
 
@@ -14,9 +17,22 @@ if (!isset($_REQUEST['id'])) {
     api_not_allowed(true);
 }
 
-$toolId = intval($_REQUEST['id']);
-
 $plugin = ImsLtiPlugin::create();
+
+$pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isPluginEnabled = $pluginEntity
+    && $pluginEntity->isInstalled()
+    && $pluginConfiguration
+    && $pluginConfiguration->isActive();
+
+if (!$isPluginEnabled) {
+    api_not_allowed(true);
+}
+
+$toolId = (int) $_REQUEST['id'];
 $em = Database::getManager();
 
 /** @var ExternalTool|null $tool */
@@ -31,6 +47,9 @@ if (!$tool) {
     exit;
 }
 
+/** @var CShortcutRepository $shortcutRepository */
+$shortcutRepository = $em->getRepository(CShortcut::class);
+
 $form = new FrmEdit('ims_lti_edit_tool', [], $tool);
 $form->build();
 
@@ -38,7 +57,7 @@ if ($form->validate()) {
     $formValues = $form->exportValues();
 
     $tool
-        ->setName($formValues['name'])
+        ->setTitle($formValues['name'])
         ->setDescription(
             empty($formValues['description']) ? null : $formValues['description']
         )
@@ -50,75 +69,60 @@ if ($form->validate()) {
             !empty($formValues['share_name']),
             !empty($formValues['share_email']),
             !empty($formValues['share_picture'])
-        );
+        )
+        ->setLaunchUrl($formValues['launch_url'])
+    ;
 
-    if (null === $tool->getParent()) {
-        $tool->setLaunchUrl($formValues['launch_url']);
+    if ($tool->getVersion() === ImsLti::V_1P1) {
+        $tool
+            ->setConsumerKey(
+                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+            )
+            ->setSharedSecret(
+                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+            )
+        ;
+    } elseif ($tool->getVersion() === ImsLti::V_1P3) {
+        $tool
+            ->setLoginUrl($formValues['login_url'])
+            ->setRedirectUrl($formValues['redirect_url'])
+            ->setAdvantageServices(
+                [
+                    'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
+                    'nrps' => $formValues['1p3_nrps'] ?? LtiNamesRoleProvisioningService::NRPS_NONE,
+                ]
+            )
+        ;
 
-        if ($tool->getVersion() === ImsLti::V_1P1) {
-            $tool
-                ->setConsumerKey(
-                    empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
-                )
-                ->setSharedSecret(
-                    empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
-                );
-        } elseif ($tool->getVersion() === ImsLti::V_1P3) {
-            $tool
-                ->setLoginUrl($formValues['login_url'])
-                ->setRedirectUrl($formValues['redirect_url'])
-                ->setAdvantageServices(
-                    [
-                        'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
-                        'nrps' => $formValues['1p3_nrps'],
-                    ]
-                )
-                ->setJwksUrl($formValues['jwks_url'])
-                ->publicKey = $formValues['public_key'];
-        }
-
-        if (!empty($formValues['replacement_user_id'])) {
-            $tool->setReplacementForUserId($formValues['replacement_user_id']);
+        if (!empty($formValues['jwks_url'])) {
+            $tool->setJwksUrl($formValues['jwks_url']);
+            $tool->publicKey = null;
+        } else {
+            $tool->setJwksUrl(null);
+            $tool->publicKey = empty($formValues['public_key']) ? null : $formValues['public_key'];
         }
     }
 
-    if (null === $tool->getParent() ||
-        (null !== $tool->getParent() && !$tool->getParent()->isActiveDeepLinking())
-    ) {
-        $tool->setActiveDeepLinking(!empty($formValues['deep_linking']));
-    }
+    $tool->setActiveDeepLinking(!empty($formValues['deep_linking']));
 
-    if (null == $tool->getParent()) {
-        foreach ($tool->getChildren() as $child) {
-            $child
-                ->setLaunchUrl($tool->getLaunchUrl())
-                ->setLoginUrl($tool->getLoginUrl())
-                ->setRedirectUrl($tool->getRedirectUrl())
-                ->setAdvantageServices(
-                    $tool->getAdvantageServices()
-                )
-                ->setDocumenTarget($tool->getDocumentTarget())
-                ->publicKey = $tool->publicKey;
-
-            $em->persist($child);
-
-            $courseTool = $plugin->findCourseToolByLink(
-                $child->getCourse(),
-                $child
-            );
-
-            $plugin->updateCourseTool($courseTool, $child);
-        }
-    } else {
-        $courseTool = $plugin->findCourseToolByLink(
-            $tool->getCourse(),
-            $tool
-        );
-
-        $plugin->updateCourseTool($courseTool, $tool);
+    if (isset($formValues['replacement_user_id'])) {
+        $replacementUserId = trim((string) $formValues['replacement_user_id']);
+        $tool->setReplacementForUserId($replacementUserId !== '' ? $replacementUserId : null);
     }
 
     $em->persist($tool);
+
+    // Keep course shortcuts synchronized with the edited tool.
+    $shortcuts = $shortcutRepository->getShortcutsFromResource($tool);
+
+    /** @var CShortcut $shortcut */
+    foreach ($shortcuts as $shortcut) {
+        $shortcut->setTitle($tool->getTitle());
+        $shortcut->target = 'iframe' === $tool->getDocumentTarget() ? '_self' : '_blank';
+
+        $em->persist($shortcut);
+    }
+
     $em->flush();
 
     Display::addFlash(
@@ -127,12 +131,18 @@ if ($form->validate()) {
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
     exit;
-} else {
-    $form->setDefaultValues();
 }
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
+$form->setDefaultValues();
+
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('PlatformAdmin'),
+];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php',
+    'name' => $plugin->get_title(),
+];
 
 $template = new Template($plugin->get_lang('EditExternalTool'));
 $template->assign('form', $form->returnForm());

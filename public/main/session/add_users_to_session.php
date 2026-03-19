@@ -20,7 +20,7 @@ $session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => 'resume_session.php?id_session='.$sessionId,
     'name' => get_lang('Session overview'),

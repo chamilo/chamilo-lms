@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Send epost til ny bruker"
 
 msgid "Portfolio"
-msgstr "Utvidet profil"
+msgstr "Portefølje"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Om denne innstillinga er på, kan ein brukar fylle ut dei følgjande (valfrie) feltene: 'Mitt personlege opne område', 'Mine kompetansar', 'Mine diplomar', 'Kva eg kan undervise i'"
@@ -16070,6 +16070,15 @@ msgstr "Kortkode"
 
 msgid "Create child skill"
 msgstr "Opprett underferdigheit"
+
+msgid "This skill can be obtained through:"
+msgstr "Denne ferdigheita kan oppnåast gjennom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ingen kurs tillèt deg å oppnå denne ferdigheita akkurat no."
+
+msgid "Add skill to search profile"
+msgstr "Legg ferdigheit til søkprofil"
 
 msgid "Search profile matches"
 msgstr "Søk profilsamsvar"
@@ -32893,6 +32902,9 @@ msgstr "Feil ved lagring av datadelingsdata"
 msgid "No documents added yet"
 msgstr "Ingen dokument tilknytte enno"
 
+msgid "No additional details available for this skill."
+msgstr "Ingen tilleggsopplysningar tilgjengelege for denne ferdigheita."
+
 msgid "No available documents"
 msgstr "Ingen tilgjengelege dokument"
 
@@ -33036,4 +33048,70 @@ msgstr "Læringsanalyse"
 
 msgid "Administrative activity auditing"
 msgstr "Administrativ aktivitetsrevisjon"
+
+msgid "List icons"
+msgstr "List ikoner"
+
+msgid "Constant name"
+msgstr "Konstantnamn"
+
+msgid "MDI icon name"
+msgstr "MDI ikonnamn"
+
+msgid "Assign authentication sources"
+msgstr "Tildel autentiseringskjelder"
+
+msgid "Assignment details"
+msgstr "Oppgaveopplysningar"
+
+msgid "Terms and conditions"
+msgstr "Vilkår og betingelser"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Opprett sikkeringskopi"
+
+msgid "Create file"
+msgstr "Opprett fil"
+
+msgid "Create link"
+msgstr "Opprett lenke"
+
+msgid "Edit template"
+msgstr "Rediger mal"
+
+msgid "Shared files"
+msgstr "Delt filer"
+
+msgid "Skill wheel"
+msgstr "Kompetansehjul"
+
+msgid "Favourite courses"
+msgstr "Favorittkurs"
+
+msgid "Restart courses"
+msgstr "Start kurs på nytt"
+
+msgid "Generate terms"
+msgstr "Generer vilkår"
+
+msgid "Add variation"
+msgstr "Legg til variasjon"
+
+msgid "Editor demo"
+msgstr "Redigerar demonstrasjon"
+
+msgid "Tool introduction"
+msgstr "Verktøyintroduksjon"
+
+msgid "Data exchanges"
+msgstr "Databytingar"
+
+msgid "Third parties"
+msgstr "Tredjeparter"
+
+msgid "Layouts"
+msgstr "Oppsett"
 

@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "向新使用者發送電郵"
 
 msgid "Portfolio"
-msgstr "詳細個人資料"
+msgstr "作品集"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "若選「是」，使用者可自選填寫以下項目：個人能力、我的證書、可任教科目、個人開放區域"
@@ -16072,6 +16072,15 @@ msgstr "簡短代碼"
 
 msgid "Create child skill"
 msgstr "建立子技能"
+
+msgid "This skill can be obtained through:"
+msgstr "此技能可透過以下方式取得："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "目前無課程可讓您取得此技能。"
+
+msgid "Add skill to search profile"
+msgstr "新增技能至搜尋設定檔"
 
 msgid "Search profile matches"
 msgstr "搜尋個人檔案匹配"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "建立您的第一個筆記以開始使用。"
 
 msgid "F d, Y"
-msgstr "Y 年 M 月 d 日"
+msgstr "Y 年 m 月 d 日"
 
 msgid "Could not load support info at this time."
 msgstr "目前無法載入支援資訊。"
@@ -32895,6 +32904,9 @@ msgstr "儲存資料交換發生錯誤"
 msgid "No documents added yet"
 msgstr "尚未新增文件"
 
+msgid "No additional details available for this skill."
+msgstr "此技能無額外詳細資訊。"
+
 msgid "No available documents"
 msgstr "沒有可用的文件"
 
@@ -33038,4 +33050,70 @@ msgstr "學習分析"
 
 msgid "Administrative activity auditing"
 msgstr "管理活動審核"
+
+msgid "List icons"
+msgstr "清單圖示"
+
+msgid "Constant name"
+msgstr "常數名稱"
+
+msgid "MDI icon name"
+msgstr "MDI 圖示名稱"
+
+msgid "Assign authentication sources"
+msgstr "指派驗證來源"
+
+msgid "Assignment details"
+msgstr "作業詳情"
+
+msgid "Terms and conditions"
+msgstr "條款與條件"
+
+msgid "Icons"
+msgstr "圖示"
+
+msgid "Create backup"
+msgstr "建立備份"
+
+msgid "Create file"
+msgstr "建立檔案"
+
+msgid "Create link"
+msgstr "建立連結"
+
+msgid "Edit template"
+msgstr "編輯範本"
+
+msgid "Shared files"
+msgstr "共用檔案"
+
+msgid "Skill wheel"
+msgstr "技能輪"
+
+msgid "Favourite courses"
+msgstr "最愛課程"
+
+msgid "Restart courses"
+msgstr "重新開始課程"
+
+msgid "Generate terms"
+msgstr "產生條款"
+
+msgid "Add variation"
+msgstr "新增變體"
+
+msgid "Editor demo"
+msgstr "編輯器示範"
+
+msgid "Tool introduction"
+msgstr "工具簡介"
+
+msgid "Data exchanges"
+msgstr "資料交換"
+
+msgid "Third parties"
+msgstr "第三方"
+
+msgid "Layouts"
+msgstr "版面配置"
 

@@ -64,7 +64,7 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
         bool $filteredForStudent = false
     ): int {
         $qb = $this->createQueryBuilder('tl');
-        $qb->select($qb->expr()->count('tl'))
+        $qb->select($qb->expr()->count('tl.id'))
             ->where($qb->expr()->eq('tl.course', ':course'))
             ->setParameter('course', $course)
         ;
@@ -83,18 +83,19 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
                     CLpItem::class,
                     'lpi',
                     Join::WITH,
-                    "tl.id = lpi.path AND tl.course = lpi.cId AND lpi.itemType = 'xapi'"
+                    "lpi.itemType = :itemType AND lpi.path = CONCAT('', tl.id)"
                 )
-                ->andWhere($qb->expr()->isNull('lpi.path'))
+                ->andWhere($qb->expr()->isNull('lpi.iid'))
+                ->setParameter('itemType', TOOL_XAPI)
             ;
         }
 
-        $query = $qb->getQuery();
-
-        return (int) $query->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
+     * Return how many learning paths include the given xAPI tool launch.
+     *
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
@@ -102,15 +103,15 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return (int) $qb->select($qb->expr()->count('lp'))
-            ->from(CLp::class, 'lp')
-            ->innerJoin(CLpItem::class, 'lpi', Join::WITH, 'lp.id = lpi.lpId')
+        return (int) $qb->select('COUNT(DISTINCT lp.iid)')
+            ->from(CLpItem::class, 'lpi')
+            ->innerJoin('lpi.lp', 'lp')
             ->where('lpi.itemType = :type')
-            ->andWhere('lpi.path = :tool_id')
+            ->andWhere('lpi.path = :toolId')
             ->setParameter('type', TOOL_XAPI)
-            ->setParameter('tool_id', $toolLaunch->getId())
+            ->setParameter('toolId', (string) $toolLaunch->getId())
             ->getQuery()
             ->getSingleScalarResult()
-        ;
+            ;
     }
 }

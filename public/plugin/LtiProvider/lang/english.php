@@ -32,3 +32,5 @@ $strings['ToolProvider'] = 'Provider tool';
 $strings['SelectOneActivity'] = 'Select one activity';
 $strings['Quizzes'] = 'Exercises';
 $strings['KeySetUrlJwks'] = 'Keyset url (jwks)';
+$strings["NoData"] = "No data";
+$strings["ToolProvider"] = "Tool provider";

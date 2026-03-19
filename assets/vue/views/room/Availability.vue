@@ -43,12 +43,12 @@
           field="title"
         >
           <template #body="slotProps">
-            <router-link
+            <BaseAppLink
               :to="{ name: 'RoomOccupation', params: { id: slotProps.data.id } }"
               class="text-primary hover:underline"
             >
               {{ slotProps.data.title }}
-            </router-link>
+            </BaseAppLink>
           </template>
         </Column>
         <Column :header="t('Branch')">

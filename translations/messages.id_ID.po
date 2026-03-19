@@ -4618,7 +4618,7 @@ msgid "Send mail to new user"
 msgstr "Kirim email ke user baru"
 
 msgid "Portfolio"
-msgstr "Extended profile"
+msgstr "Portofolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Jika seting diset 'Benar', user dapat mengisi field (opsional) berikut ini: 'Kompetensi-ku', 'Diploma-ku', 'Apa yang dapat saya ajarkan' dan 'Open area personal-ku'"
@@ -16070,6 +16070,15 @@ msgstr "Kode pendek"
 
 msgid "Create child skill"
 msgstr "Buat keterampilan anak"
+
+msgid "This skill can be obtained through:"
+msgstr "Keterampilan ini dapat diperoleh melalui:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Tidak ada mata kuliah yang saat ini memungkinkan Anda memperoleh keterampilan ini."
+
+msgid "Add skill to search profile"
+msgstr "Tambahkan keterampilan ke profil pencarian"
 
 msgid "Search profile matches"
 msgstr "Cari kecocokan profil"
@@ -31004,7 +31013,7 @@ msgid "Create your first note to get started."
 msgstr "Buat catatan pertama Anda untuk memulai."
 
 msgid "F d, Y"
-msgstr "j F, Y"
+msgstr "d F، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Tidak dapat memuat info dukungan saat ini."
@@ -32893,6 +32902,9 @@ msgstr "Gagal menyimpan pertukaran data"
 msgid "No documents added yet"
 msgstr "Belum ada dokumen yang ditambahkan"
 
+msgid "No additional details available for this skill."
+msgstr "Tidak ada detail tambahan yang tersedia untuk keterampilan ini."
+
 msgid "No available documents"
 msgstr "Tidak ada dokumen yang tersedia"
 
@@ -33036,4 +33048,70 @@ msgstr "Analitik pembelajaran"
 
 msgid "Administrative activity auditing"
 msgstr "Audit aktivitas administratif"
+
+msgid "List icons"
+msgstr "Daftar ikon"
+
+msgid "Constant name"
+msgstr "Nama konstanta"
+
+msgid "MDI icon name"
+msgstr "Nama ikon MDI"
+
+msgid "Assign authentication sources"
+msgstr "Tetapkan sumber autentikasi"
+
+msgid "Assignment details"
+msgstr "Detail penugasan"
+
+msgid "Terms and conditions"
+msgstr "Syarat dan ketentuan"
+
+msgid "Icons"
+msgstr "Ikon"
+
+msgid "Create backup"
+msgstr "Buat cadangan"
+
+msgid "Create file"
+msgstr "Buat file"
+
+msgid "Create link"
+msgstr "Buat tautan"
+
+msgid "Edit template"
+msgstr "Edit template"
+
+msgid "Shared files"
+msgstr "Berkas bersama"
+
+msgid "Skill wheel"
+msgstr "Roda keterampilan"
+
+msgid "Favourite courses"
+msgstr "Kursus favorit"
+
+msgid "Restart courses"
+msgstr "Restart mata kuliah"
+
+msgid "Generate terms"
+msgstr "Buat istilah"
+
+msgid "Add variation"
+msgstr "Tambah variasi"
+
+msgid "Editor demo"
+msgstr "Demo editor"
+
+msgid "Tool introduction"
+msgstr "Tool Pengantar"
+
+msgid "Data exchanges"
+msgstr "Pertukaran data"
+
+msgid "Third parties"
+msgstr "Pihak ketiga"
+
+msgid "Layouts"
+msgstr "Tata letak"
 

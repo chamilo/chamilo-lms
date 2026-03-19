@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Lähetä sähköposti uudelle käyttäjälle"
 
 msgid "Portfolio"
-msgstr "Laajennettu profiili"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Jos tämä asetus on päällä, käyttäjä voi täyttää seuraavat (valinnaiset) kentät: 'Oma avoin alue', 'Omat osaamisalueet', 'Tutkinnot', 'Mitä voin opettaa'"
@@ -16072,6 +16072,15 @@ msgstr "Lyhyt koodi"
 
 msgid "Create child skill"
 msgstr "Luo alitaito"
+
+msgid "This skill can be obtained through:"
+msgstr "Tämän taidon voi saada seuraavasti:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Yksikään kurssi ei tällä hetkellä anna tätä taitoa."
+
+msgid "Add skill to search profile"
+msgstr "Lisää taito hakuprofiiliin"
 
 msgid "Search profile matches"
 msgstr "Hae profiilit vastauksia"
@@ -32895,6 +32904,9 @@ msgstr "Virhe tallennettaessa tiedonvaihtoa"
 msgid "No documents added yet"
 msgstr "Ei vielä lisättyjä asiakirjoja"
 
+msgid "No additional details available for this skill."
+msgstr "Tälle taidolle ei ole lisätietoja saatavilla."
+
 msgid "No available documents"
 msgstr "Ei saatavilla olevia asiakirjoja"
 
@@ -33038,4 +33050,70 @@ msgstr "Opi analytiikka"
 
 msgid "Administrative activity auditing"
 msgstr "Hallinnollisen toiminnan tarkastus"
+
+msgid "List icons"
+msgstr "Luettelokuvat"
+
+msgid "Constant name"
+msgstr "Vakion nimi"
+
+msgid "MDI icon name"
+msgstr "MDI-kuvan nimi"
+
+msgid "Assign authentication sources"
+msgstr "Määritä tunnistautumislähteet"
+
+msgid "Assignment details"
+msgstr "Tehtävän tiedot"
+
+msgid "Terms and conditions"
+msgstr "Käyttöehdot"
+
+msgid "Icons"
+msgstr "Kuvakkeet"
+
+msgid "Create backup"
+msgstr "Luo varmuuskopio"
+
+msgid "Create file"
+msgstr "Luo tiedosto"
+
+msgid "Create link"
+msgstr "Luo linkki"
+
+msgid "Edit template"
+msgstr "Muokkaa mallipohjaa"
+
+msgid "Shared files"
+msgstr "Jaetut tiedostot"
+
+msgid "Skill wheel"
+msgstr "Osaamispyörä"
+
+msgid "Favourite courses"
+msgstr "Suosikkikurssit"
+
+msgid "Restart courses"
+msgstr "Käynnistä kurssit uudelleen"
+
+msgid "Generate terms"
+msgstr "Luo käyttöehdot"
+
+msgid "Add variation"
+msgstr "Lisää variaatio"
+
+msgid "Editor demo"
+msgstr "Editorin esittely"
+
+msgid "Tool introduction"
+msgstr "Työkalun kuvaus"
+
+msgid "Data exchanges"
+msgstr "Tiedonvaihdot"
+
+msgid "Third parties"
+msgstr "Kolmannet osapuolet"
+
+msgid "Layouts"
+msgstr "Ulkoasut"
 

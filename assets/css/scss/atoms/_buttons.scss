@@ -7,233 +7,349 @@
     @apply text-base;
   }
 
+  // ---------------------------------------------------------------------------
+  // Severity — filled
+  // ---------------------------------------------------------------------------
   &--primary {
-    @apply bg-primary text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-support-4;
-    }
-  }
-
-  &--primary-outline {
-    @apply bg-white border border-solid border-primary text-primary;
-
-    &:hover,
-    &:focus {
-      @apply bg-primary text-white;
-    }
+    @include m.button-filled-style('primary', 'primary-gradient');
   }
 
   &--secondary {
-    @apply bg-secondary text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-support-5;
-    }
-  }
-
-  &--secondary-outline {
-    @apply bg-white border border-solid border-secondary text-secondary;
-
-    &:hover,
-    &:focus {
-      @apply bg-secondary text-white;
-    }
+    @include m.button-filled-style('secondary', 'secondary-gradient');
   }
 
   &--plain {
-    @apply bg-gray-50 text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-gray-90;
-    }
-  }
-
-  &--plain-outline {
-    @apply bg-white border border-solid border-black text-black;
-
-    &:hover,
-    &:focus {
-      @apply bg-gray-90 border-gray-90 text-white;
-    }
+    @include m.button-filled-style('gray-90', 'black');
   }
 
   &--success {
-    @apply bg-success text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-success;
-    }
-  }
-
-  &--success-outline {
-    @apply bg-white border border-solid border-success text-success;
-
-    &:hover,
-    &:focus {
-      @apply bg-success text-white;
-    }
+    @include m.button-filled-style('success', 'success-gradient');
   }
 
   &--info {
-    @apply bg-info text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-info;
-    }
-  }
-
-  &--info-outline {
-    @apply bg-white border border-solid border-info text-info;
-
-    &:hover,
-    &:focus {
-      @apply bg-info text-white;
-    }
+    @include m.button-filled-style('info', 'info-gradient');
   }
 
   &--warning {
-    @apply bg-warning text-gray-90;
-
-    &:hover,
-    &:focus {
-      @apply bg-warning;
-    }
-  }
-
-  &--warning-outline {
-    @apply bg-white border border-solid border-warning text-warning;
-
-    &:hover,
-    &:focus {
-      @apply bg-warning text-gray-90;
-    }
+    @include m.button-filled-style('warning', 'warning-gradient');
   }
 
   &--danger {
-    @apply bg-error text-white;
+    @include m.button-filled-style('danger', 'danger-gradient');
+  }
 
-    &:hover,
-    &:focus {
-      @apply bg-error;
-    }
+  // ---------------------------------------------------------------------------
+  // Severity — outlined
+  // ---------------------------------------------------------------------------
+  &--primary-outline {
+    @include m.button-outlined-style('primary');
+  }
+
+  &--secondary-outline {
+    @include m.button-outlined-style('secondary');
+  }
+
+  &--plain-outline {
+    @include m.button-outlined-style('black');
+  }
+
+  &--success-outline {
+    @include m.button-outlined-style('success');
+  }
+
+  &--info-outline {
+    @include m.button-outlined-style('info');
+  }
+
+  &--warning-outline {
+    @include m.button-outlined-style('warning');
   }
 
   &--danger-outline {
-    @apply bg-white border border-solid border-error text-error;
-
-    &:hover,
-    &:focus {
-      @apply bg-error text-white;
-    }
+    @include m.button-outlined-style('danger');
   }
 
+  // ---------------------------------------------------------------------------
+  // Size variants
+  // ---------------------------------------------------------------------------
   &-sm,
-  &--sm{
+  &--sm {
     padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
     font-size: 13px;
   }
 }
 
+// =============================================================================
+// PrimeVue Button — base
+// =============================================================================
 .p-button {
   @include m.base-button();
   @include m.button-filled-style('primary', 'primary-gradient');
+  position: relative;
+  overflow: hidden;
+  outline-color: transparent;
+  font-family: inherit;
+  font-feature-settings: inherit;
 
-  &:focus {
-    @apply outline-none;
+  &:disabled {
+    @apply cursor-default;
   }
 
+  // badge inside button
   .p-badge {
     @apply bg-white font-semibold h-4 leading-4 min-w-[1rem] text-primary text-[0.625rem];
   }
 
-  &.p-button-outlined {
-    @include m.button-outlined-style('primary');
+  // icon ordering
+  .p-button-icon-right {
+    @apply order-1;
   }
 
-  &.p-button-text {
-    @include m.button-text-style('primary');
-  }
-
-  &.p-button-raised {
-    @apply shadow-lg;
-  }
-
-  &.p-button-rounded {
-    @apply rounded-full;
-  }
-
-  &.p-button-sm {
-    padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
-
-    .p-button-icon,
-    .p-button-label {
-      font-size: 13px;
-    }
-  }
-
-  &.p-button-lg {
-    padding: calc(1rem - 1px) calc(2rem - 1px);
-
-    .p-button-icon,
-    .p-button-label {
-      font-size: 18px;
-    }
+  .p-button-icon-bottom {
+    @apply order-2;
   }
 
   .p-button-icon {
     @apply text-base;
   }
 
+  // label
   .p-button-label {
     @apply align-middle font-semibold text-base;
   }
+}
+
+// =============================================================================
+// Layout variants
+// =============================================================================
+.p-button-vertical {
+  @apply flex-col;
+}
+
+.p-button-fluid {
+  @apply w-full;
 
   &.p-button-icon-only {
-    @apply px-3 gap-0;
-
-    .p-button-label {
-      @apply flex-initial hidden w-0;
-    }
-  }
-
-  &.p-button-link {
-    @apply bg-transparent text-primary;
-
-    &:enabled {
-      &:hover,
-      &:focus,
-      &:active {
-        @apply bg-gray-10;
-
-        .p-button-label {
-          @apply underline;
-        }
-      }
-    }
+    @apply w-12;
   }
 }
 
-// secondary button
-.p-button.p-button-secondary {
-  @include m.button-filled-style('secondary', 'secondary-gradient');
+// =============================================================================
+// Size variants
+// =============================================================================
+.p-button-sm {
+  padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
 
-  &.p-button-outlined {
+  &:not(.p-button-icon-only) .p-button-icon,
+  &:not(.p-button-icon-only) .p-button-label {
+    font-size: 13px;
+  }
+}
+
+.p-button-lg {
+  padding: calc(1rem - 1px) calc(2rem - 1px);
+
+  .p-button-icon,
+  .p-button-label {
+    font-size: 18px;
+  }
+}
+
+// =============================================================================
+// Icon-only
+// =============================================================================
+.p-button-icon-only {
+  @apply gap-0;
+
+  &:not(.p-button-sm) {
+    padding-left: calc(0.625rem - 1px);
+    padding-right: calc(0.625rem - 1px);
+  }
+
+  &.p-button-sm {
+    padding-left: calc(0.5rem - 1px);
+    padding-right: calc(0.5rem - 1px);
+  }
+
+  .p-button-label {
+    @apply flex-initial hidden w-0;
+  }
+
+  &::after {
+    @apply invisible w-0;
+    content: "\00A0";
+  }
+}
+
+// =============================================================================
+// Shape variants
+// =============================================================================
+.p-button-raised {
+  @apply shadow-lg;
+}
+
+.p-button-rounded {
+  @apply rounded-full;
+
+  &.p-button-icon-only {
+    @apply rounded-full;
+  }
+}
+
+// =============================================================================
+// Severity — filled
+// =============================================================================
+.p-button-secondary {
+  @include m.button-filled-style('secondary', 'secondary-gradient');
+}
+
+.p-button-success {
+  @include m.button-filled-style('success', 'success-gradient');
+}
+
+.p-button-info {
+  @include m.button-filled-style('info', 'info-gradient');
+}
+
+.p-button-warn {
+  @include m.button-filled-style('warning', 'warning-gradient');
+}
+
+.p-button-help {
+  @include m.button-filled-style('tertiary', 'tertiary-gradient');
+}
+
+.p-button-danger {
+  @include m.button-filled-style('danger', 'danger-gradient');
+}
+
+.p-button-contrast {
+  @include m.button-filled-style('gray-90', 'black');
+}
+
+// =============================================================================
+// Severity — outlined
+// =============================================================================
+.p-button-outlined {
+  @include m.button-outlined-style('primary');
+
+  &.p-button-secondary {
     @include m.button-outlined-style('secondary');
   }
 
-  &.p-button-text {
-    @include m.button-text-style('secondary');
+  &.p-button-success {
+    @include m.button-outlined-style('success');
+  }
+
+  &.p-button-info {
+    @include m.button-outlined-style('info');
+  }
+
+  &.p-button-warn {
+    @include m.button-outlined-style('warning');
+  }
+
+  &.p-button-help {
+    @include m.button-outlined-style('tertiary');
+  }
+
+  &.p-button-danger {
+    @include m.button-outlined-style('danger');
+  }
+
+  &.p-button-contrast {
+    @include m.button-outlined-style('black');
+  }
+
+  &.p-button-plain {
+    @apply bg-transparent border-black text-black
+      focus-visible:outline-black focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+    &:not(:disabled) {
+      @apply
+        hover:bg-gray-90 hover:border-gray-90 hover:text-white
+        active:bg-gray-90 active:border-gray-90 active:text-white active:brightness-[0.92];
+    }
   }
 }
 
-.p-buttonset.p-button-secondary {
-  > .p-button {
+// =============================================================================
+// Severity — text (no background, no border)
+// =============================================================================
+.p-button-text {
+  @include m.button-text-style('primary');
+
+  &.p-button-secondary {
+    @include m.button-text-style('secondary');
+  }
+
+  &.p-button-success {
+    @include m.button-text-style('success');
+  }
+
+  &.p-button-info {
+    @include m.button-text-style('info');
+  }
+
+  &.p-button-warn {
+    @include m.button-text-style('warning');
+  }
+
+  &.p-button-help {
+    @include m.button-text-style('tertiary');
+  }
+
+  &.p-button-danger {
+    @include m.button-text-style('danger');
+  }
+
+  &.p-button-contrast {
+    @include m.button-text-style('black');
+  }
+
+  &.p-button-plain {
+    @apply bg-transparent text-gray-50 border-transparent
+      focus-visible:outline-gray-50 focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+    &:not(:disabled) {
+      @apply
+        hover:bg-gray-10
+        active:bg-gray-25;
+    }
+  }
+}
+
+// =============================================================================
+// Link variant
+// =============================================================================
+.p-button-link {
+  @apply bg-transparent text-primary border-transparent
+    focus-visible:outline-primary focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+  &:not(:disabled) {
+    @apply
+      hover:bg-gray-10 hover:border-transparent
+      active:bg-gray-25 active:border-transparent;
+  }
+
+  &:not(:disabled):hover {
+    .p-button-label {
+      @apply underline;
+    }
+  }
+
+  &:not(:disabled):active {
+    .p-button-label {
+      @apply underline;
+    }
+  }
+}
+
+// =============================================================================
+// ButtonSet (grouped buttons) — severity overrides
+// =============================================================================
+.p-buttonset {
+  &.p-button-secondary > .p-button {
     @include m.button-filled-style('secondary', 'secondary-gradient');
 
     &.p-button-outlined {
@@ -244,23 +360,68 @@
       @include m.button-text-style('secondary');
     }
   }
-}
 
-// contrast button
-.p-button.p-button-contrast {
-  @include m.button-filled-style('gray-90', 'black');
+  &.p-button-success > .p-button {
+    @include m.button-filled-style('success', 'success-gradient');
 
-  &.p-button-outlined {
-    @include m.button-outlined-style('black');
+    &.p-button-outlined {
+      @include m.button-outlined-style('success');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('success');
+    }
   }
 
-  &.p-button-text {
-    @include m.button-text-style('black');
-  }
-}
+  &.p-button-info > .p-button {
+    @include m.button-filled-style('info', 'info-gradient');
 
-.p-buttonset.p-button-contrast {
-  > .p-button {
+    &.p-button-outlined {
+      @include m.button-outlined-style('info');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('info');
+    }
+  }
+
+  &.p-button-warn > .p-button {
+    @include m.button-filled-style('warning', 'warning-gradient');
+
+    &.p-button-outlined {
+      @include m.button-outlined-style('warning');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('warning');
+    }
+  }
+
+  &.p-button-help > .p-button {
+    @include m.button-filled-style('tertiary', 'tertiary-gradient');
+
+    &.p-button-outlined {
+      @include m.button-outlined-style('tertiary');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('tertiary');
+    }
+  }
+
+  &.p-button-danger > .p-button {
+    @include m.button-filled-style('danger', 'danger-gradient');
+
+    &.p-button-outlined {
+      @include m.button-outlined-style('danger');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('danger');
+    }
+  }
+
+  &.p-button-contrast > .p-button {
     @include m.button-filled-style('gray-90', 'black');
 
     &.p-button-outlined {
@@ -273,146 +434,12 @@
   }
 }
 
-// info button
-.p-button.p-button-info {
-  @include m.button-filled-style('info', 'info-gradient');
-
-  &.p-button-outlined {
-    @include m.button-outlined-style('info');
-  }
-
-  &.p-button-text {
-    @include m.button-text-style('info');
-  }
-}
-
-.p-buttonset.p-button-info {
-  > .p-button {
-    @include m.button-filled-style('info', 'info-gradient');
-
-    &.p-button-outlined {
-      @include m.button-outlined-style('info');
-    }
-
-    &.p-button-text {
-      @include m.button-text-style('info');
-    }
-  }
-}
-
-// success button
-.p-button.p-button-success {
-  @include m.button-filled-style('success', 'success-gradient');
-
-  &.p-button-outlined {
-    @include m.button-outlined-style('success');
-  }
-
-  &.p-button-text {
-    @include m.button-text-style('success');
-  }
-}
-
-.p-buttonset.p-button-success {
-  > .p-button {
-    @include m.button-filled-style('success', 'success-gradient');
-
-    &.p-button-outlined {
-      @include m.button-outlined-style('success');
-    }
-
-    &.p-button-text {
-      @include m.button-text-style('success');
-    }
-  }
-}
-
-// warning button
-.p-button.p-button-warn {
-  @include m.button-filled-style('warning', 'warning-gradient');
-
-  &.p-button-outlined {
-    @include m.button-outlined-style('warning');
-  }
-
-  &.p-button-text {
-    @include m.button-text-style('warning');
-  }
-}
-
-.p-buttonset.p-button-warn {
-  > .p-button {
-    @include m.button-filled-style('warning', 'warning-gradient');
-
-    &.p-button-outlined {
-      @include m.button-outlined-style('warning');
-    }
-
-    &.p-button-text {
-      @include m.button-text-style('warning');
-    }
-  }
-}
-
-// help button
-.p-button.p-button-help {
-  @include m.button-filled-style('tertiary', 'tertiary-gradient');
-
-  &.p-button-outlined {
-    @include m.button-outlined-style('tertiary');
-  }
-
-  &.p-button-text {
-    @include m.button-text-style('tertiary');
-  }
-}
-
-.p-buttonset.p-button-help {
-  > .p-button {
-    @include m.button-filled-style('tertiary', 'tertiary-gradient');
-  }
-
-  > .p-button.p-button-outlined {
-    @include m.button-outlined-style('tertiary');
-  }
-
-  > .p-button.p-button-text {
-    @include m.button-text-style('tertiary');
-  }
-}
-
-// danger button
-.p-button.p-button-danger {
-  @include m.button-filled-style('danger', 'danger-gradient');
-
-  &.p-button-outlined {
-    @include m.button-outlined-style('danger');
-  }
-
-  &.p-button-text {
-    @include m.button-text-style('danger');
-  }
-}
-
-.p-buttonset.p-button-danger {
-  > .p-button {
-    @include m.button-filled-style('danger', 'danger-gradient');
-
-    &.p-button-outlined {
-      @include m.button-outlined-style('danger');
-    }
-
-    &.p-button-text {
-      @include m.button-text-style('danger');
-    }
-  }
-}
-
-// toggle button
-.p-togglebutton{
+// =============================================================================
+// Toggle button
+// =============================================================================
+.p-togglebutton {
   &.p-button {
     &.p-highlight {
-
       &.p-button-contrast {
         @apply bg-support-1 text-primary;
       }

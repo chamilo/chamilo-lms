@@ -32972,3 +32972,60 @@ msgstr ""
 
 msgid "MDI icon name"
 msgstr ""
+
+msgid "Assign authentication sources"
+msgstr ""
+
+msgid "Assignment details"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Icons"
+msgstr ""
+
+msgid "Create backup"
+msgstr ""
+
+msgid "Create file"
+msgstr ""
+
+msgid "Create link"
+msgstr ""
+
+msgid "Edit template"
+msgstr ""
+
+msgid "Shared files"
+msgstr ""
+
+msgid "Skill wheel"
+msgstr ""
+
+msgid "Favourite courses"
+msgstr ""
+
+msgid "Restart courses"
+msgstr ""
+
+msgid "Generate terms"
+msgstr ""
+
+msgid "Add variation"
+msgstr ""
+
+msgid "Editor demo"
+msgstr ""
+
+msgid "Tool introduction"
+msgstr ""
+
+msgid "Data exchanges"
+msgstr ""
+
+msgid "Third parties"
+msgstr ""
+
+msgid "Layouts"
+msgstr ""

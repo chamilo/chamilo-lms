@@ -185,8 +185,13 @@ class ResourceNode implements Stringable
 
     protected ?string $content = null;
 
-    #[ORM\OneToOne(mappedBy: 'shortCutNode', targetEntity: CShortcut::class, cascade: ['persist', 'remove'])]
-    protected ?CShortcut $shortCut = null;
+    /**
+     * Shortcuts that point to this resource node.
+     *
+     * @var Collection<int, CShortcut>
+     */
+    #[ORM\OneToMany(mappedBy: 'shortCutNode', targetEntity: CShortcut::class, cascade: ['persist', 'remove'])]
+    protected Collection $shortCuts;
 
     #[Groups(['resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -216,6 +221,7 @@ class ResourceNode implements Stringable
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
         $this->resourceFiles = new ArrayCollection();
+        $this->shortCuts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -487,6 +493,40 @@ class ResourceNode implements Stringable
         return $first ?: null;
     }
 
+    /**
+     * @return Collection<int, ResourceLink>
+     */
+    public function getResourceLinksByContext(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?User $user = null,
+    ): Collection {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('resourceTypeGroup', $this->resourceType->getId())
+        );
+
+        if ($course) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('course', $course)
+            );
+        }
+
+        if ($session) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        }
+
+        if ($user) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+        }
+
+        return $this->resourceLinks->matching($criteria);
+    }
+
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -609,14 +649,51 @@ class ResourceNode implements Stringable
         return $this;
     }
 
-    public function getShortCut(): ?CShortcut
+    /**
+     * Returns all shortcuts that point to this resource node.
+     *
+     * @return Collection<int, CShortcut>
+     */
+    public function getShortCuts(): Collection
     {
-        return $this->shortCut;
+        return $this->shortCuts;
     }
 
+    /**
+     * Backward-compatible helper.
+     * Returns the first shortcut if any exists.
+     */
+    public function getShortCut(): ?CShortcut
+    {
+        return $this->shortCuts->first() ?: null;
+    }
+
+    /**
+     * Backward-compatible helper for legacy code paths.
+     * It no longer replaces a single relation, it just adds one shortcut.
+     */
     public function setShortCut(?CShortcut $shortCut): self
     {
-        $this->shortCut = $shortCut;
+        if (null === $shortCut) {
+            return $this;
+        }
+
+        return $this->addShortCut($shortCut);
+    }
+
+    public function addShortCut(CShortcut $shortCut): self
+    {
+        if (!$this->shortCuts->contains($shortCut)) {
+            $this->shortCuts->add($shortCut);
+            $shortCut->setShortCutNode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShortCut(CShortcut $shortCut): self
+    {
+        $this->shortCuts->removeElement($shortCut);
 
         return $this;
     }

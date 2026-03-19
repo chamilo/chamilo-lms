@@ -145,7 +145,7 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $courseTool->setName($ltiTool->getName());
+        $courseTool->setName($ltiTool->getTitle());
 
         if ('iframe' !== $ltiTool->getDocumentTarget()) {
             $courseTool->setTarget('_blank');
@@ -167,7 +167,7 @@ class ImsLtiPlugin extends Plugin
     public function addCourseTool(Course $course, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getName(),
+            $ltiTool->getTitle(),
             $course->getId(),
             null,
             self::generateToolLink($ltiTool)
@@ -193,7 +193,7 @@ class ImsLtiPlugin extends Plugin
     public function addCourseSessionTool(Course $course, Session $session, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getName(),
+            $ltiTool->getTitle(),
             $course->getId(),
             null,
             self::generateToolLink($ltiTool),
@@ -390,7 +390,7 @@ class ImsLtiPlugin extends Plugin
 
         $newLtiTool
             ->setName(
-                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getName()
+                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getTitle()
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
@@ -581,25 +581,60 @@ class ImsLtiPlugin extends Plugin
      *
      * @return mixed|string|null
      */
-    public static function getToolPublicKey(ExternalTool $tool)
+    public function getToolPublicKey($tool): string
     {
-        $publicKey = '';
-        if (!empty($tool->getJwksUrl())) {
-            $publicKeySet = json_decode(file_get_contents($tool->getJwksUrl()), true);
-            $pk = [];
-            foreach ($publicKeySet['keys'] as $key) {
-                $pk = openssl_pkey_get_details(
-                    JWK::parseKeySet(['keys' => [$key]])[$key['kid']]
-                );
-            }
-            if (!empty($pk)) {
-                $publicKey = $pk['key'];
-            }
-        } else {
-            $publicKey = $tool->publicKey;
-        };
+        if (empty($tool)) {
+            return '';
+        }
 
-        return $publicKey;
+        if (!empty($tool->publicKey)) {
+            return (string) $tool->publicKey;
+        }
+
+        if (empty($tool->getJwksUrl())) {
+            return '';
+        }
+
+        $jwksRaw = @file_get_contents($tool->getJwksUrl());
+        if (false === $jwksRaw || '' === trim($jwksRaw)) {
+            return '';
+        }
+
+        $publicKeySet = json_decode($jwksRaw, true);
+        if (
+            !is_array($publicKeySet) ||
+            empty($publicKeySet['keys']) ||
+            !is_array($publicKeySet['keys'])
+        ) {
+            return '';
+        }
+
+        $keys = \Firebase\JWT\JWK::parseKeySet($publicKeySet);
+
+        if (empty($keys) || !is_array($keys)) {
+            return '';
+        }
+
+        foreach ($keys as $kid => $parsedKey) {
+            if (!$parsedKey instanceof \Firebase\JWT\Key) {
+                continue;
+            }
+
+            $keyMaterial = $parsedKey->getKeyMaterial();
+
+            if (is_string($keyMaterial) && '' !== trim($keyMaterial)) {
+                return $keyMaterial;
+            }
+
+            if ($keyMaterial instanceof \OpenSSLAsymmetricKey) {
+                $details = openssl_pkey_get_details($keyMaterial);
+                if (!empty($details['key'])) {
+                    return $details['key'];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -625,19 +660,18 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        $metadata = $this->getLtiMetadata();
+        $tableNames = array_map(
+            static fn ($classMetadata) => $classMetadata->getTableName(),
+            $metadata
+        );
+
+        if ($em->getConnection()->createSchemaManager()->tablesExist($tableNames)) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(ExternalTool::class),
-                $em->getClassMetadata(LineItem::class),
-                $em->getClassMetadata(Platform::class),
-                $em->getClassMetadata(Token::class),
-            ]
-        );
+        $schemaTool->updateSchema($metadata, true);
     }
 
     /**
@@ -647,19 +681,18 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        $metadata = $this->getLtiMetadata();
+        $tableNames = array_map(
+            static fn ($classMetadata) => $classMetadata->getTableName(),
+            $metadata
+        );
+
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([$tableNames[0]])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema(
-            [
-                $em->getClassMetadata(ExternalTool::class),
-                $em->getClassMetadata(LineItem::class),
-                $em->getClassMetadata(Platform::class),
-                $em->getClassMetadata(Token::class),
-            ]
-        );
+        $schemaTool->dropSchema($metadata);
     }
 
     private function removeTools()
@@ -741,5 +774,42 @@ class ImsLtiPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
+    }
+
+    private function getLtiMetadata(): array
+    {
+        $em = Database::getManager();
+
+        return [
+            $em->getClassMetadata(ExternalTool::class),
+            $em->getClassMetadata(LineItem::class),
+            $em->getClassMetadata(Platform::class),
+            $em->getClassMetadata(Token::class),
+        ];
+    }
+
+    public function ensurePlatformKeys(): Platform
+    {
+        $em = Database::getManager();
+
+        /** @var Platform|null $platform */
+        $platform = $em->getRepository(Platform::class)->findOneBy([]);
+
+        if ($platform) {
+            return $platform;
+        }
+
+        $platform = new Platform();
+
+        $keyPair = self::generatePlatformKeys();
+
+        $platform->setKid($keyPair['kid']);
+        $platform->publicKey = $keyPair['public'];
+        $platform->setPrivateKey($keyPair['private']);
+
+        $em->persist($platform);
+        $em->flush();
+
+        return $platform;
     }
 }

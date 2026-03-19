@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Unviar e-mail a los usuarios nuevos"
 
 msgid "Portfolio"
-msgstr "Perfil estendíu"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si lo configura en 'braeru' un usuariu cualquier va poder llenar los campos (opcionales) que vienen darréu: 'Les mio competencies', 'Los mios títulos', '¿Qué puedo enseñar?' y 'El mio área personal pública'"
@@ -16072,6 +16072,15 @@ msgstr "Cóuigu curtíu"
 
 msgid "Create child skill"
 msgstr "Crear competencia fía"
+
+msgid "This skill can be obtained through:"
+msgstr "Esta competencia pue obtenerse permedio de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ningún cursu permite actualmente obter esta competencia."
+
+msgid "Add skill to search profile"
+msgstr "Amestar competencia al perfil de gueta"
 
 msgid "Search profile matches"
 msgstr "Guetar coincidencies del perfil"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Creita la primera nota pa entamar."
 
 msgid "F d, Y"
-msgstr "D d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nun ye posible cargar la información de sofitu agora."
@@ -32895,6 +32904,9 @@ msgstr "Error al guardar el cambeu de datos"
 msgid "No documents added yet"
 msgstr "Nun se tresmitió nengún documentu"
 
+msgid "No additional details available for this skill."
+msgstr "Nun hai detalles adicionales disponibles pa esta competencia."
+
 msgid "No available documents"
 msgstr "Nun hai documentos disponibles"
 
@@ -33038,4 +33050,70 @@ msgstr "Analítica de l'aprendizaxe"
 
 msgid "Administrative activity auditing"
 msgstr "Auditoría d'actividá administrativa"
+
+msgid "List icons"
+msgstr "Iconos de llista"
+
+msgid "Constant name"
+msgstr "Nome de la constante"
+
+msgid "MDI icon name"
+msgstr "Nome del iconu MDI"
+
+msgid "Assign authentication sources"
+msgstr "Asignar fontes d'autenticación"
+
+msgid "Assignment details"
+msgstr "Detalles de la tarefa"
+
+msgid "Terms and conditions"
+msgstr "Términos y condicions"
+
+msgid "Icons"
+msgstr "Iconos"
+
+msgid "Create backup"
+msgstr "Crear copia de seguridá"
+
+msgid "Create file"
+msgstr "Crear ficheru"
+
+msgid "Create link"
+msgstr "Crear enllace"
+
+msgid "Edit template"
+msgstr "Editar plantía"
+
+msgid "Shared files"
+msgstr "Ficheros compartíos"
+
+msgid "Skill wheel"
+msgstr "Rueda de competencies"
+
+msgid "Favourite courses"
+msgstr "Cursos favoritos"
+
+msgid "Restart courses"
+msgstr "Reiniciar cursos"
+
+msgid "Generate terms"
+msgstr "Xenerar términos"
+
+msgid "Add variation"
+msgstr "Amestar variación"
+
+msgid "Editor demo"
+msgstr "Demo del editor"
+
+msgid "Tool introduction"
+msgstr "Ferramienta d'Introducción"
+
+msgid "Data exchanges"
+msgstr "Cambeos de datos"
+
+msgid "Third parties"
+msgstr "Terceiros"
+
+msgid "Layouts"
+msgstr "Distribuiciones"
 

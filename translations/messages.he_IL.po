@@ -16080,6 +16080,15 @@ msgstr "קוד קצר"
 msgid "Create child skill"
 msgstr "צור מיומנות ילד"
 
+msgid "This skill can be obtained through:"
+msgstr "מיומנות זו ניתן להשיג באמצעות:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "אין קורס כיום המאפשר לך להשיג מיומנות זו."
+
+msgid "Add skill to search profile"
+msgstr "הוסף מיומנות לפרופיל חיפוש"
+
 msgid "Search profile matches"
 msgstr "חיפוש התאמת פרופיל"
 
@@ -31017,7 +31026,7 @@ msgid "Create your first note to get started."
 msgstr "צור את ההערה הראשונה שלך כדי להתחיל."
 
 msgid "F d, Y"
-msgstr "D, d ב-M Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "לא ניתן לטעון מידע תמיכה כרגע."
@@ -32906,6 +32915,9 @@ msgstr "שגיאה בשמירת החלפת נתונים"
 msgid "No documents added yet"
 msgstr "עדיין לא נוספו מסמכים"
 
+msgid "No additional details available for this skill."
+msgstr "אין פרטים נוספים זמינים עבור מיומנות זו."
+
 msgid "No available documents"
 msgstr "אין מסמכים זמינים"
 
@@ -33049,4 +33061,70 @@ msgstr "ניתוח למידה"
 
 msgid "Administrative activity auditing"
 msgstr "ביקורת פעילות ניהולית"
+
+msgid "List icons"
+msgstr "רשימת אייקונים"
+
+msgid "Constant name"
+msgstr "שם קבועה"
+
+msgid "MDI icon name"
+msgstr "שם אייקון MDI"
+
+msgid "Assign authentication sources"
+msgstr "הקצאת מקורות אימות"
+
+msgid "Assignment details"
+msgstr "פרטי המטלה"
+
+msgid "Terms and conditions"
+msgstr "תנאים וכללים"
+
+msgid "Icons"
+msgstr "אייקונים"
+
+msgid "Create backup"
+msgstr "יצירת גיבוי"
+
+msgid "Create file"
+msgstr "יצירת קובץ"
+
+msgid "Create link"
+msgstr "יצירת קישור"
+
+msgid "Edit template"
+msgstr "עריכת תבנית"
+
+msgid "Shared files"
+msgstr "קבצים משותפים"
+
+msgid "Skill wheel"
+msgstr "גלגל כישורים"
+
+msgid "Favourite courses"
+msgstr "קורסים מועדפים"
+
+msgid "Restart courses"
+msgstr "הפעלת קורסים מחדש"
+
+msgid "Generate terms"
+msgstr "יצירת תנאים"
+
+msgid "Add variation"
+msgstr "הוספת וריאציה"
+
+msgid "Editor demo"
+msgstr "הדגמת עורך"
+
+msgid "Tool introduction"
+msgstr "מבוא לכלי"
+
+msgid "Data exchanges"
+msgstr "החלפת נתונים"
+
+msgid "Third parties"
+msgstr "צדדים שלישיים"
+
+msgid "Layouts"
+msgstr "פריסות"
 

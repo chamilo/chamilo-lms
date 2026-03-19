@@ -3934,7 +3934,7 @@ msgid "Change picture"
 msgstr "Changer la photo"
 
 msgid "%s comments"
-msgstr "Les résultats éventuels des enseignants ne sont ni affichés ni pris en compte dans l'outil d'évaluations."
+msgstr "%s commentaires"
 
 msgid "Add a user"
 msgstr "Ajouter des utilisateurs"
@@ -4755,7 +4755,7 @@ msgid "Send mail to new user"
 msgstr "Envoyer un courriel au nouvel utilisateur"
 
 msgid "Portfolio"
-msgstr "Utiliser le port-folio"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr ""
@@ -16618,6 +16618,15 @@ msgstr "Code court"
 
 msgid "Create child skill"
 msgstr "Créer compétence enfant"
+
+msgid "This skill can be obtained through:"
+msgstr "Cette compétence peut être obtenue par :"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Aucun cours ne permet actuellement d'obtenir cette compétence."
+
+msgid "Add skill to search profile"
+msgstr "Ajouter la compétence au profil de recherche"
 
 msgid "Search profile matches"
 msgstr "Voir les profils qui correspondent"
@@ -32886,7 +32895,7 @@ msgid "Create your first note to get started."
 msgstr "Créez votre première note pour commencer."
 
 msgid "F d, Y"
-msgstr "d j, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Impossible de charger les informations de support pour le moment."
@@ -34775,6 +34784,9 @@ msgstr "Erreur lors de l'enregistrement de l'échange de données"
 msgid "No documents added yet"
 msgstr "Aucun document ajouté pour le moment"
 
+msgid "No additional details available for this skill."
+msgstr "Aucun détail supplémentaire disponible pour cette compétence."
+
 msgid "No available documents"
 msgstr "Aucun document disponible"
 
@@ -34918,4 +34930,70 @@ msgstr "Analytique d'apprentissage"
 
 msgid "Administrative activity auditing"
 msgstr "Audit d'activité administrative"
+
+msgid "List icons"
+msgstr "Icônes en liste"
+
+msgid "Constant name"
+msgstr "Nom de la constante"
+
+msgid "MDI icon name"
+msgstr "Nom de l'icône MDI"
+
+msgid "Assign authentication sources"
+msgstr "Attribuer des sources d'authentification"
+
+msgid "Assignment details"
+msgstr "Détails de la tâche"
+
+msgid "Terms and conditions"
+msgstr "Conditions générales"
+
+msgid "Icons"
+msgstr "Icônes"
+
+msgid "Create backup"
+msgstr "Créer une sauvegarde"
+
+msgid "Create file"
+msgstr "Créer un fichier"
+
+msgid "Create link"
+msgstr "Créer un lien"
+
+msgid "Edit template"
+msgstr "Modifier le modèle"
+
+msgid "Shared files"
+msgstr "Fichiers partagés"
+
+msgid "Skill wheel"
+msgstr "Roue des compétences"
+
+msgid "Favourite courses"
+msgstr "Cours favoris"
+
+msgid "Restart courses"
+msgstr "Redémarrer les cours"
+
+msgid "Generate terms"
+msgstr "Générer les conditions"
+
+msgid "Add variation"
+msgstr "Ajouter une variation"
+
+msgid "Editor demo"
+msgstr "Démo de l'éditeur"
+
+msgid "Tool introduction"
+msgstr "Introduction"
+
+msgid "Data exchanges"
+msgstr "Échanges de données"
+
+msgid "Third parties"
+msgstr "Tierces parties"
+
+msgid "Layouts"
+msgstr "Mises en page"
 

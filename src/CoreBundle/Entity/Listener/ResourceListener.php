@@ -385,6 +385,8 @@ class ResourceListener
             $resourceNode->setParent($parentResourceNode);
         }
 
+        $this->updateResourceName($resource);
+
         // error_log('Resource listener preUpdate');
         // $this->setLinks($resource, $eventArgs->getEntityManager());
     }

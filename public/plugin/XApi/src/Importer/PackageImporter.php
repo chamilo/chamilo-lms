@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\Importer;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class AbstractImporter.
+ * Class PackageImporter.
  */
 abstract class PackageImporter
 {
@@ -38,12 +40,26 @@ abstract class PackageImporter
     {
         $this->packageFileInfo = $fileInfo;
         $this->course = $course;
-
-        $this->courseDirectoryPath = api_get_path(SYS_COURSE_PATH).$this->course->getDirectory();
+        $this->courseDirectoryPath = $this->resolveStoragePath();
     }
 
     /**
-     * @return \Chamilo\PluginBundle\XApi\Importer\XmlPackageImporter|\Chamilo\PluginBundle\XApi\Importer\ZipPackageImporter
+     * Resolve persistent storage for plugin packages in Chamilo 2.
+     */
+    protected function resolveStoragePath(): string
+    {
+        $basePath = Container::$container->getParameter('chamilo.plugin.storage_dir');
+
+        $path = rtrim((string) $basePath, '/').'/XApi/course_'.$this->course->getId();
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($path, api_get_permissions_for_new_directories());
+
+        return $path;
+    }
+
+    /**
+     * @return XmlPackageImporter|ZipPackageImporter
      */
     public static function create(array $fileInfo, Course $course)
     {
@@ -55,8 +71,6 @@ abstract class PackageImporter
     }
 
     /**
-     * @return mixed
-     *
      * @throws Exception
      */
     abstract public function import(): string;

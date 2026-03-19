@@ -41,6 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Table(name: 'session_rel_user')]
 #[ORM\Index(columns: ['user_id', 'moved_to'], name: 'idx_session_rel_user_id_user_moved')]
+#[ORM\Index(columns: ['user_id', 'relation_type', 'session_id'], name: 'idx_session_rel_user_user_reltype_session')]
 #[ORM\UniqueConstraint(name: 'session_user_unique', columns: ['session_id', 'user_id', 'relation_type'])]
 #[ORM\Entity]
 #[UniqueEntity(

@@ -2,19 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\ORMException;
-use GuzzleHttp\RequestOptions;
-use Http\Adapter\Guzzle6\Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Uid\Uuid;
-use Xabbuh\XApi\Client\Api\StatementsApiClientInterface;
-use Xabbuh\XApi\Client\XApiClientBuilder;
-use Xabbuh\XApi\Model\Agent;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class XApiPlugin.
@@ -37,9 +35,9 @@ class XApiPlugin extends Plugin
     public const STATE_FIRST_LAUNCH = 'first_launch';
     public const STATE_LAST_LAUNCH = 'last_launch';
 
-    /**
-     * XApiPlugin constructor.
-     */
+    public $isAdminPlugin = true;
+    public $isCoursePlugin = true;
+
     protected function __construct()
     {
         $version = '0.3 (beta)';
@@ -71,72 +69,88 @@ class XApiPlugin extends Plugin
         );
     }
 
-    /**
-     * @return \XApiPlugin
-     */
     public static function create()
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
-    /**
-     * Process to install plugin.
-     */
     public function install()
     {
-        $this->installInitialConfig();
+        $this->initializePluginConfigurationForCurrentUrl();
         $this->addCourseTools();
     }
 
-    /**
-     * Process to uninstall plugin.
-     */
     public function uninstall()
     {
         $this->deleteCourseTools();
     }
 
-    /**
-     * @param string|null $lrsUrl
-     * @param string|null $lrsAuthUsername
-     * @param string|null $lrsAuthPassword
-     *
-     * @return \Xabbuh\XApi\Client\Api\StateApiClientInterface
-     */
-    public function getXApiStateClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
+    public function performActionsAfterConfigure()
     {
-        return $this
-            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
-            ->getStateApiClient();
+        $this->initializePluginConfigurationForCurrentUrl();
+
+        return $this;
     }
 
-    public function getXApiStatementClient(): StatementsApiClientInterface
+    private function initializePluginConfigurationForCurrentUrl(): void
     {
-        return $this->createXApiClient()->getStatementsApiClient();
+        $em = Database::getManager();
+        $pluginRepository = Container::getPluginRepository();
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+
+        $pluginEntity = $pluginRepository->findOneByTitle($this->get_name());
+
+        if (!$pluginEntity) {
+            $pluginEntity = (new PluginEntity())
+                ->setTitle($this->get_name())
+                ->setInstalled(true)
+                ->setInstalledVersion($this->get_version());
+
+            if (AppPlugin::isOfficial($this->get_name())) {
+                $pluginEntity->setSource(PluginEntity::SOURCE_OFFICIAL);
+            }
+
+            $em->persist($pluginEntity);
+        }
+
+        $pluginConfiguration = $pluginEntity->getOrCreatePluginConfiguration($currentAccessUrl);
+        $configuration = $pluginConfiguration->getConfiguration() ?? [];
+
+        $defaultLrsUrl = api_get_path(WEB_PLUGIN_PATH).'XApi/lrs';
+
+        $defaults = [
+            self::SETTING_UUID_NAMESPACE => Uuid::v1()->toRfc4122(),
+            self::SETTING_LRS_URL => $defaultLrsUrl,
+            self::SETTING_LRS_AUTH_USERNAME => '',
+            self::SETTING_LRS_AUTH_PASSWORD => '',
+            self::SETTING_CRON_LRS_URL => '',
+            self::SETTING_CRON_LRS_AUTH_USERNAME => '',
+            self::SETTING_CRON_LRS_AUTH_PASSWORD => '',
+            self::SETTING_LRS_LP_ITEM_ACTIVE => false,
+            self::SETTING_LRS_LP_ACTIVE => false,
+            self::SETTING_LRS_QUIZ_ACTIVE => false,
+            self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => false,
+            self::SETTING_LRS_PORTFOLIO_ACTIVE => false,
+        ];
+
+        foreach ($defaults as $key => $value) {
+            if (!array_key_exists($key, $configuration) || null === $configuration[$key] || '' === $configuration[$key]) {
+                $configuration[$key] = $value;
+            }
+        }
+
+        $configuration[self::SETTING_LRS_URL] = $this->normalizeLrsUrl(
+            isset($configuration[self::SETTING_LRS_URL]) ? (string) $configuration[self::SETTING_LRS_URL] : $defaultLrsUrl
+        ) ?? $defaultLrsUrl;
+
+        $pluginConfiguration->setConfiguration($configuration);
+
+        $em->persist($pluginEntity);
+        $em->flush();
     }
 
-    public function getXapiStatementCronClient(): StatementsApiClientInterface
-    {
-        $lrsUrl = $this->get(self::SETTING_CRON_LRS_URL);
-        $lrsUsername = $this->get(self::SETTING_CRON_LRS_AUTH_USERNAME);
-        $lrsPassword = $this->get(self::SETTING_CRON_LRS_AUTH_PASSWORD);
-
-        return $this
-            ->createXApiClient(
-                empty($lrsUrl) ? null : $lrsUrl,
-                empty($lrsUsername) ? null : $lrsUsername,
-                empty($lrsPassword) ? null : $lrsPassword
-            )
-            ->getStatementsApiClient();
-    }
-
-    /**
-     * @param string $variable
-     *
-     * @return array
-     */
     public function getLangMap($variable)
     {
         $platformLanguage = api_get_setting('platformLanguage');
@@ -145,126 +159,629 @@ class XApiPlugin extends Plugin
         $map = [];
         $map[$platformLanguageIso] = $this->getLangFromFile($variable, $platformLanguage);
 
-        try {
+        if (function_exists('api_get_interface_language')) {
             $interfaceLanguage = api_get_interface_language();
-        } catch (Exception $e) {
-            return $map;
-        }
 
-        if (!empty($interfaceLanguage) && $platformLanguage !== $interfaceLanguage) {
-            $interfaceLanguageIso = api_get_language_isocode($interfaceLanguage);
-
-            $map[$interfaceLanguageIso] = $this->getLangFromFile($variable, $interfaceLanguage);
+            if (!empty($interfaceLanguage) && $platformLanguage !== $interfaceLanguage) {
+                $interfaceLanguageIso = api_get_language_isocode($interfaceLanguage);
+                $map[$interfaceLanguageIso] = $this->getLangFromFile($variable, $interfaceLanguage);
+            }
         }
 
         return $map;
     }
 
-    /**
-     * @param string $value
-     * @param string $type
-     *
-     * @return \Xabbuh\XApi\Model\IRI
-     */
-    public function generateIri($value, $type)
+    public function generateIri($value, $type): string
     {
-        return IRI::fromString(
-            api_get_path(WEB_PATH)."xapi/$type/$value"
-        );
+        return api_get_path(WEB_PATH)."xapi/$type/$value";
     }
 
     /**
-     * @param int $courseId
+     * Build a plain xAPI actor payload compatible with cmi5 launch URLs and LRS requests.
      */
-    public function addCourseToolForTinCan($courseId)
+    public function buildActorPayload($user): array
     {
-        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
-        // Otherwise, the link en the course tool will link to "/main/" URL.
-        $this->createLinkToCourseTool(
-            $this->get_lang('ToolTinCan'),
-            $courseId,
-            'sessions_category.png',
-            '../plugin/XApi/start.php',
-            0,
-            'authoring'
-        );
+        $homePage = rtrim(api_get_path(WEB_PATH), '/').'/';
+        $accountName = method_exists($user, 'getUsername')
+            ? (string) $user->getUsername()
+            : (string) $user->getFullName();
+
+        return [
+            'objectType' => 'Agent',
+            'name' => (string) $user->getFullName(),
+            'account' => [
+                'homePage' => $homePage,
+                'name' => $accountName,
+            ],
+        ];
     }
 
-    /**
-     * @param string $language
-     *
-     * @return mixed|string
-     */
-    public static function extractVerbInLanguage(Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
+    public function buildTinCanActorPayload($user): array
     {
-        $iso = self::findLanguageIso($languageMap->languageTags(), $language);
+        $email = method_exists($user, 'getEmail')
+            ? trim((string) $user->getEmail())
+            : '';
 
-        $text = current($languageMap);
-
-        if (isset($languageMap[$iso])) {
-            $text = trim($languageMap[$iso]);
-        } elseif (isset($languageMap['und'])) {
-            $text = $languageMap['und'];
+        if ('' === $email) {
+            return $this->buildActorPayload($user);
         }
 
-        return $text;
+        return [
+            'objectType' => 'Agent',
+            'name' => (string) $user->getFullName(),
+            'mbox' => 'mailto:'.$email,
+        ];
+    }
+
+    public function getTinCanStateId(int $toolId): string
+    {
+        return $this->generateIri('tool-'.$toolId, 'state');
+    }
+
+    public function fetchActivityStateDocument(
+        string $activityId,
+        array|string $actor,
+        string $stateId,
+        ?string $registration = null,
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): ?array {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        if ('' === $lrsUrl) {
+            throw new Exception('LRS URL is not configured.');
+        }
+
+        $query = [
+            'activityId' => $activityId,
+            'agent' => json_encode(
+                $this->normalizeActorPayload($actor),
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+            ),
+            'stateId' => $stateId,
+        ];
+
+        if (null !== $registration && '' !== trim($registration)) {
+            $query['registration'] = trim($registration);
+        }
+
+        $url = rtrim($lrsUrl, '/').'/activities/state?'.http_build_query(
+                $query,
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+        $response = $this->requestXApi(
+            'GET',
+            $url,
+            null,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+
+        if (404 === $response['status']) {
+            return null;
+        }
+
+        if ($response['status'] < 200 || $response['status'] >= 300) {
+            $message = 'xAPI state request failed with HTTP '.$response['status'].'.';
+
+            if ('' !== trim($response['content'])) {
+                $message .= ' '.$response['content'];
+            }
+
+            throw new Exception($message);
+        }
+
+        if ('' === trim($response['content'])) {
+            return [];
+        }
+
+        $decoded = json_decode($response['content'], true);
+
+        if (JSON_ERROR_NONE !== json_last_error() || !is_array($decoded)) {
+            throw new Exception('Invalid state document JSON received from LRS.');
+        }
+
+        return $decoded;
+    }
+
+    public function storeActivityStateDocument(
+        string $activityId,
+        array|string $actor,
+        string $stateId,
+        array $documentData,
+        ?string $registration = null,
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): void {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        if ('' === $lrsUrl) {
+            throw new Exception('LRS URL is not configured.');
+        }
+
+        $query = [
+            'activityId' => $activityId,
+            'agent' => json_encode(
+                $this->normalizeActorPayload($actor),
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+            ),
+            'stateId' => $stateId,
+        ];
+
+        if (null !== $registration && '' !== trim($registration)) {
+            $query['registration'] = trim($registration);
+        }
+
+        $url = rtrim($lrsUrl, '/').'/activities/state?'.http_build_query(
+                $query,
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+        $this->sendXApiRequest(
+            'PUT',
+            $url,
+            $documentData,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+    }
+
+    public function fetchStatementsByRegistration(
+        string $registration,
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): array {
+        $registration = trim($registration);
+
+        if ('' === $registration) {
+            return [];
+        }
+
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        if ('' === $lrsUrl) {
+            throw new Exception('LRS URL is not configured.');
+        }
+
+        $url = rtrim($lrsUrl, '/').'/statements?'.http_build_query(
+                ['registration' => $registration],
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+        $response = $this->requestXApi(
+            'GET',
+            $url,
+            null,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+
+        if (404 === $response['status']) {
+            return [];
+        }
+
+        if ($response['status'] < 200 || $response['status'] >= 300) {
+            $message = 'xAPI statements request failed with HTTP '.$response['status'].'.';
+
+            if ('' !== trim($response['content'])) {
+                $message .= ' '.$response['content'];
+            }
+
+            throw new Exception($message);
+        }
+
+        if ('' === trim($response['content'])) {
+            return [];
+        }
+
+        $decoded = json_decode($response['content'], true);
+
+        if (JSON_ERROR_NONE !== json_last_error() || !is_array($decoded)) {
+            throw new Exception('Invalid statements JSON received from LRS.');
+        }
+
+        $statements = [];
+        if (isset($decoded['statements']) && is_array($decoded['statements'])) {
+            $statements = $decoded['statements'];
+        } elseif ($this->isSequentialArray($decoded)) {
+            $statements = $decoded;
+        }
+
+        $filtered = array_filter(
+            $statements,
+            fn ($statement): bool => is_array($statement) && $this->statementMatchesRegistration($statement, $registration)
+        );
+
+        return array_values($filtered);
+    }
+
+    private function statementMatchesRegistration(array $statement, string $registration): bool
+    {
+        $topLevelRegistration = $statement['registration'] ?? null;
+        if (is_string($topLevelRegistration) && '' !== trim($topLevelRegistration)) {
+            return trim($topLevelRegistration) === $registration;
+        }
+
+        $contextRegistration = $statement['context']['registration'] ?? null;
+        if (is_string($contextRegistration) && '' !== trim($contextRegistration)) {
+            return trim($contextRegistration) === $registration;
+        }
+
+        return false;
+    }
+
+    private function isSequentialArray(array $array): bool
+    {
+        return array_keys($array) === range(0, count($array) - 1);
     }
 
     /**
-     * @param string $needle
-     *
-     * @return string
+     * Store the cmi5 LMS.LaunchData state document using a native HTTP request.
      */
+    public function storeCmi5LaunchDataDocument(
+        string $activityId,
+        array $actor,
+        string $registration,
+        array $documentData,
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): void {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        if ('' === $lrsUrl) {
+            throw new Exception('LRS URL is not configured.');
+        }
+
+        $url = rtrim($lrsUrl, '/').'/activities/state?'.http_build_query(
+                [
+                    'activityId' => $activityId,
+                    'agent' => json_encode($actor, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                    'stateId' => 'LMS.LaunchData',
+                    'registration' => $registration,
+                ],
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+        $this->sendXApiRequest(
+            'PUT',
+            $url,
+            $documentData,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+    }
+
+    /**
+     * Keep a lightweight statement client for compatibility with existing code paths.
+     */
+    public function getXApiStatementClient()
+    {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration();
+
+        return new class($this, $lrsUrl, $lrsAuthUsername, $lrsAuthPassword) {
+            public function __construct(
+                private XApiPlugin $plugin,
+                private string $lrsUrl,
+                private string $lrsAuthUsername,
+                private string $lrsAuthPassword
+            ) {
+            }
+
+            public function storeStatement(array $statement): void
+            {
+                $this->plugin->storeStatement(
+                    $statement,
+                    $this->lrsUrl,
+                    $this->lrsAuthUsername,
+                    $this->lrsAuthPassword
+                );
+            }
+        };
+    }
+
+    public function getXapiStatementCronClient()
+    {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $this->get(self::SETTING_CRON_LRS_URL),
+            $this->get(self::SETTING_CRON_LRS_AUTH_USERNAME),
+            $this->get(self::SETTING_CRON_LRS_AUTH_PASSWORD)
+        );
+
+        return new class($this, $lrsUrl, $lrsAuthUsername, $lrsAuthPassword) {
+            public function __construct(
+                private XApiPlugin $plugin,
+                private string $lrsUrl,
+                private string $lrsAuthUsername,
+                private string $lrsAuthPassword
+            ) {
+            }
+
+            public function storeStatement(array $statement): void
+            {
+                $this->plugin->storeStatement(
+                    $statement,
+                    $this->lrsUrl,
+                    $this->lrsAuthUsername,
+                    $this->lrsAuthPassword
+                );
+            }
+        };
+    }
+
+    public function storeStatement(
+        array $statement,
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): void {
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        if ('' === $lrsUrl) {
+            throw new Exception('LRS URL is not configured.');
+        }
+
+        $url = rtrim($lrsUrl, '/').'/statements';
+
+        $this->sendXApiRequest(
+            'POST',
+            $url,
+            $statement,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+    }
+
+    /**
+     * Accept array-based language maps instead of old library objects.
+     */
+    public static function extractVerbInLanguage($languageMap, $language): string
+    {
+        if (is_string($languageMap)) {
+            return trim($languageMap);
+        }
+
+        if (!is_array($languageMap) || empty($languageMap)) {
+            return '';
+        }
+
+        $normalizedNeedle = strtolower(str_replace('_', '-', (string) $language));
+
+        foreach ($languageMap as $key => $value) {
+            $normalizedKey = strtolower(str_replace('_', '-', (string) $key));
+
+            if ($normalizedKey === $normalizedNeedle) {
+                return trim((string) $value);
+            }
+
+            if (str_starts_with($normalizedKey, $normalizedNeedle.'-')) {
+                return trim((string) $value);
+            }
+
+            if (str_starts_with($normalizedNeedle, $normalizedKey.'-')) {
+                return trim((string) $value);
+            }
+        }
+
+        if (isset($languageMap['und'])) {
+            return trim((string) $languageMap['und']);
+        }
+
+        foreach ($languageMap as $value) {
+            if ('' !== trim((string) $value)) {
+                return trim((string) $value);
+            }
+        }
+
+        return '';
+    }
+
     public static function findLanguageIso(array $haystack, $needle)
     {
-        if (in_array($needle, $haystack)) {
-            return $needle;
-        }
+        $normalizedNeedle = strtolower(str_replace('_', '-', (string) $needle));
 
         foreach ($haystack as $language) {
-            if (strpos($language, $needle) === 0) {
+            $normalizedLanguage = strtolower(str_replace('_', '-', (string) $language));
+
+            if ($normalizedLanguage === $normalizedNeedle) {
+                return $language;
+            }
+
+            if (str_starts_with($normalizedLanguage, $normalizedNeedle.'-')) {
                 return $language;
             }
         }
 
-        return $haystack[0];
+        return $haystack[0] ?? $needle;
     }
 
     public function generateLaunchUrl(
         $type,
         $launchUrl,
         $activityId,
-        Agent $actor,
+        array|string $actor,
         $attemptId,
         $customLrsUrl = null,
         $customLrsUsername = null,
         $customLrsPassword = null,
         $viewSessionId = null
     ) {
-        $lrsUrl = $customLrsUrl ?: $this->get(self::SETTING_LRS_URL);
-        $lrsAuthUsername = $customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
-        $lrsAuthPassword = $customLrsPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
+        [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword] = $this->resolveLrsConfiguration(
+            $customLrsUrl,
+            $customLrsUsername,
+            $customLrsPassword
+        );
+
+        $lrsUrl = $this->normalizeLrsUrl($lrsUrl) ?? '';
+        $actorJson = $this->normalizeActorForLaunch($actor);
+        $courseContext = $this->getCourseContextQuery();
 
         $queryData = [
-            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
-            'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
-            'registration' => $attemptId,
+            'endpoint' => rtrim($lrsUrl, "/ \t\n\r\0\x0B"),
+            'actor' => $actorJson,
+            'registration' => (string) $attemptId,
         ];
 
         if ('tincan' === $type) {
-            $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
+            $queryData['auth'] = 'Basic '.base64_encode(
+                    trim((string) $lrsAuthUsername).':'.trim((string) $lrsAuthPassword)
+                );
             $queryData['activity_id'] = $activityId;
         } elseif ('cmi5' === $type) {
-            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'XApi/cmi5/token.php?session='.$viewSessionId;
+            $fetchUrl = api_get_path(WEB_PLUGIN_PATH).'XApi/cmi5/token.php';
+
+            $queryData['fetch'] = $this->appendQueryToUrl(
+                $fetchUrl,
+                array_merge(
+                    $courseContext,
+                    [
+                        'session' => (string) $viewSessionId,
+                    ]
+                )
+            );
             $queryData['activityId'] = $activityId;
         }
 
-        return $launchUrl.'?'.http_build_query($queryData, null, '&', PHP_QUERY_RFC3986);
+        $finalUrl = $this->appendQueryToUrl($launchUrl, $queryData);
+
+        // When the AU URL is local to Chamilo, preserve the course/session context.
+        if ($this->isLocalChamiloUrl($launchUrl)) {
+            $finalUrl = $this->appendQueryToUrl($finalUrl, $courseContext);
+        }
+
+        return $finalUrl;
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager|null
+     * Normalize the actor payload for launch URLs.
      */
+    private function normalizeActorForLaunch(array|string $actor): string
+    {
+        if (\is_array($actor)) {
+            $json = json_encode($actor, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+            if (false === $json) {
+                throw new RuntimeException('Unable to encode actor payload.');
+            }
+
+            return $json;
+        }
+
+        $actor = trim($actor);
+
+        if ('' === $actor) {
+            throw new RuntimeException('Actor payload cannot be empty.');
+        }
+
+        json_decode($actor, true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new RuntimeException('Actor payload must be valid JSON.');
+        }
+
+        return $actor;
+    }
+
+    /**
+     * Build the current Chamilo course context query params.
+     */
+    private function getCourseContextQuery(): array
+    {
+        return [
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+            'gradebook' => isset($_GET['gradebook']) ? (int) $_GET['gradebook'] : 0,
+            'origin' => (string) (api_get_origin() ?: ''),
+        ];
+    }
+
+    /**
+     * Append query parameters to a URL while preserving existing parameters.
+     */
+    private function appendQueryToUrl(string $url, array $params): string
+    {
+        $parts = parse_url($url);
+
+        $existingQuery = [];
+        if (!empty($parts['query'])) {
+            parse_str($parts['query'], $existingQuery);
+        }
+
+        $mergedQuery = array_merge($existingQuery, $params);
+
+        $scheme = isset($parts['scheme']) ? $parts['scheme'].'://' : '';
+        $user = $parts['user'] ?? '';
+        $pass = isset($parts['pass']) ? ':'.$parts['pass'] : '';
+        $auth = '' !== $user ? $user.$pass.'@' : '';
+        $host = $parts['host'] ?? '';
+        $port = isset($parts['port']) ? ':'.$parts['port'] : '';
+        $path = $parts['path'] ?? '';
+        $fragment = isset($parts['fragment']) ? '#'.$parts['fragment'] : '';
+
+        $query = http_build_query($mergedQuery, '', '&', PHP_QUERY_RFC3986);
+
+        return $scheme.$auth.$host.$port.$path.('' !== $query ? '?'.$query : '').$fragment;
+    }
+
+    /**
+     * Detect whether the launch URL points to this Chamilo instance.
+     */
+    private function isLocalChamiloUrl(string $url): bool
+    {
+        $url = trim($url);
+
+        if ('' === $url) {
+            return false;
+        }
+
+        // Relative URLs are local by definition.
+        if (!preg_match('#^https?://#i', $url)) {
+            return true;
+        }
+
+        $target = parse_url($url);
+        $current = parse_url(api_get_path(WEB_PATH));
+
+        if (empty($target['host']) || empty($current['host'])) {
+            return false;
+        }
+
+        return 0 === strcasecmp((string) $target['host'], (string) $current['host']);
+    }
+
     public static function getEntityManager()
     {
         $em = Database::getManager();
@@ -288,9 +805,6 @@ class XApiPlugin extends Plugin
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAdminUrl()
     {
         $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
@@ -328,9 +842,9 @@ class XApiPlugin extends Plugin
             $toolAnchor = Display::url(
                 Security::remove_XSS($tool->getTitle()),
                 api_get_self()."?$cidReq&"
-                    .http_build_query(
-                        ['action' => 'add_item', 'type' => TOOL_XAPI, 'file' => $tool->getId(), 'lp_id' => $lpId]
-                    ),
+                .http_build_query(
+                    ['action' => 'add_item', 'type' => TOOL_XAPI, 'file' => $tool->getId(), 'lp_id' => $lpId]
+                ),
                 ['class' => 'moved']
             );
 
@@ -351,9 +865,6 @@ class XApiPlugin extends Plugin
         return $return;
     }
 
-    /**
-     * @throws \Exception
-     */
     private function installInitialConfig()
     {
         $uuidNamespace = Uuid::v1()->toRfc4122();
@@ -376,7 +887,7 @@ class XApiPlugin extends Plugin
         );
 
         api_add_setting(
-            api_get_path(WEB_PATH).'plugin/XApi/lrs.php',
+            api_get_path(WEB_PATH).'plugin/XApi/lrs',
             $pluginName.'_'.self::SETTING_LRS_URL,
             $pluginName,
             'setting',
@@ -390,44 +901,276 @@ class XApiPlugin extends Plugin
         );
     }
 
-    /**
-     * @param string|null $lrsUrl
-     * @param string|null $lrsAuthUsername
-     * @param string|null $lrsAuthPassword
-     *
-     * @return \Xabbuh\XApi\Client\XApiClientInterface
-     */
-    private function createXApiClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
+    private function addCourseTools(): void
     {
-        $baseUrl = $lrsUrl ?: $this->get(self::SETTING_LRS_URL);
-        $lrsAuthUsername = $lrsAuthUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
-        $lrsAuthPassword = $lrsAuthPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
-
-        $clientBuilder = new XApiClientBuilder();
-        $clientBuilder
-            ->setHttpClient(Client::createWithConfig([RequestOptions::VERIFY => false]))
-            ->setRequestFactory(new GuzzleMessageFactory())
-            ->setBaseUrl(trim($baseUrl, "/ \t\n\r\0\x0B"))
-            ->setAuth(trim($lrsAuthUsername), trim($lrsAuthPassword));
-
-        return $clientBuilder->build();
+        $this->install_course_fields_in_all_courses(true);
     }
 
-    private function addCourseTools()
+    private function deleteCourseTools(): void
     {
-        $courses = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
-            ->getResult();
+        $this->uninstall_course_fields_in_all_courses();
+    }
 
-        foreach ($courses as $course) {
-            $this->addCourseToolForTinCan($course['id']);
+    private function getCourseToolIdentifier(): string
+    {
+        return 'XApi';
+    }
+
+    private function getCourseToolLabel(): string
+    {
+        return 'XApi';
+    }
+
+    private function resolveLrsConfiguration(
+        ?string $customLrsUrl = null,
+        ?string $customLrsUsername = null,
+        ?string $customLrsPassword = null
+    ): array {
+        $rawLrsUrl = trim((string) ($customLrsUrl ?: $this->get(self::SETTING_LRS_URL)));
+        $lrsUrl = $this->normalizeLrsUrl($rawLrsUrl) ?? '';
+
+        $lrsAuthUsername = trim((string) ($customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME)));
+        $lrsAuthPassword = trim((string) ($customLrsPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD)));
+
+        return [$lrsUrl, $lrsAuthUsername, $lrsAuthPassword];
+    }
+
+    private function normalizeActorPayload($actor): array
+    {
+        if (is_array($actor)) {
+            return $actor;
+        }
+
+        if (is_string($actor)) {
+            $decoded = json_decode($actor, true);
+            if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+                return $decoded;
+            }
+
+            return [
+                'objectType' => 'Agent',
+                'name' => $actor,
+            ];
+        }
+
+        return [
+            'objectType' => 'Agent',
+            'name' => get_lang('User'),
+        ];
+    }
+
+    private function sendXApiRequest(
+        string $method,
+        string $url,
+        array $payload,
+        ?string $lrsAuthUsername = null,
+        ?string $lrsAuthPassword = null
+    ): void {
+        $response = $this->requestXApi(
+            $method,
+            $url,
+            $payload,
+            $lrsAuthUsername,
+            $lrsAuthPassword
+        );
+
+        if ($response['status'] < 200 || $response['status'] >= 300) {
+            $message = 'xAPI request failed with HTTP '.$response['status'].'.';
+
+            if (!empty($response['content'])) {
+                $message .= ' '.$response['content'];
+            }
+
+            throw new Exception($message);
         }
     }
 
-    private function deleteCourseTools()
+    private function requestXApi(
+        string $method,
+        string $url,
+        ?array $payload = null,
+        ?string $lrsAuthUsername = null,
+        ?string $lrsAuthPassword = null
+    ): array {
+        $headers = [
+            'Accept' => 'application/json',
+            'X-Experience-API-Version' => '1.0.3',
+        ];
+
+        if (null !== $payload) {
+            $headers['Content-Type'] = 'application/json';
+        }
+
+        if (!empty($lrsAuthUsername) || !empty($lrsAuthPassword)) {
+            $headers['Authorization'] = 'Basic '.base64_encode(
+                    (string) $lrsAuthUsername.':'.(string) $lrsAuthPassword
+                );
+        }
+
+        $options = [
+            'headers' => $headers,
+            'verify_peer' => false,
+            'verify_host' => false,
+        ];
+
+        if (null !== $payload) {
+            $options['body'] = json_encode(
+                $payload,
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+            );
+        }
+
+        $client = HttpClient::create([
+            'verify_peer' => false,
+            'verify_host' => false,
+        ]);
+
+        $response = $client->request($method, $url, $options);
+
+        return [
+            'status' => $response->getStatusCode(),
+            'content' => $response->getContent(false),
+            'headers' => $response->getHeaders(false),
+        ];
+    }
+
+    public function addCourseToolForTinCan(int $courseId): ?CTool
     {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/XApi/start.php%']);
+        if (!$this->addCourseTool) {
+            return null;
+        }
+
+        $course = api_get_course_entity($courseId);
+        if (!$course) {
+            return null;
+        }
+
+        $em = Database::getManager();
+        $toolRepository = $em->getRepository(Tool::class);
+
+        $toolIdentifier = $this->getCourseToolIdentifier();
+        $toolLabel = $this->getCourseToolLabel();
+
+        /** @var Tool|null $tool */
+        $tool = $toolRepository->findOneBy(['title' => $toolIdentifier]);
+
+        if (!$tool) {
+            $tool = (new Tool())->setTitle($toolIdentifier);
+            $em->persist($tool);
+            $em->flush();
+        }
+
+        $existingCourseTools = $this->findCourseTools($courseId);
+
+        if (!empty($existingCourseTools)) {
+            /** @var CTool $courseTool */
+            $courseTool = reset($existingCourseTools);
+            $courseTool->setTitle($toolLabel);
+            $em->persist($courseTool);
+            $em->flush();
+
+            return $courseTool;
+        }
+
+        $visibility = $this->isIconVisibleByDefault()
+            ? ResourceLink::VISIBILITY_PUBLISHED
+            : ResourceLink::VISIBILITY_DRAFT;
+
+        $creator = api_get_user_entity();
+        if (!$creator) {
+            $creator = $course->getCreator();
+        }
+
+        $courseTool = (new CTool())
+            ->setTool($tool)
+            ->setTitle($toolLabel)
+            ->setCourse($course)
+            ->setParent($course)
+            ->setCreator($creator)
+            ->addCourseLink($course, null, null, $visibility);
+
+        $em->persist($courseTool);
+        $em->flush();
+
+        return $courseTool;
+    }
+
+    public function install_course_fields($courseId, $add_tool_link = true)
+    {
+        if (!$add_tool_link) {
+            return true;
+        }
+
+        $this->addCourseToolForTinCan((int) $courseId);
+
+        return true;
+    }
+
+    public function uninstall_course_fields($courseId)
+    {
+        $course = api_get_course_entity((int) $courseId);
+
+        if (!$course) {
+            return false;
+        }
+
+        $em = Database::getManager();
+        $courseTools = $this->findCourseTools((int) $courseId);
+
+        foreach ($courseTools as $courseTool) {
+            $em->remove($courseTool);
+        }
+
+        $em->flush();
+
+        return true;
+    }
+
+    private function findCourseTools(int $courseId): array
+    {
+        $course = api_get_course_entity($courseId);
+
+        if (!$course) {
+            return [];
+        }
+
+        $em = Database::getManager();
+
+        return $em->createQuery(
+            'SELECT ct
+             FROM Chamilo\CourseBundle\Entity\CTool ct
+             LEFT JOIN ct.tool t
+             WHERE ct.course = :course
+               AND ct.session IS NULL
+               AND (
+                    t.title = :toolIdentifier
+                    OR ct.title = :toolLabel
+               )'
+        )
+            ->setParameter('course', $course)
+            ->setParameter('toolIdentifier', $this->getCourseToolIdentifier())
+            ->setParameter('toolLabel', $this->getCourseToolLabel())
+            ->getResult();
+    }
+
+    public function normalizeLrsUrl(?string $lrsUrl): ?string
+    {
+        if (null === $lrsUrl) {
+            return null;
+        }
+
+        $lrsUrl = trim($lrsUrl);
+
+        if ('' === $lrsUrl) {
+            return null;
+        }
+
+        $normalized = preg_replace(
+            '#/plugin/XApi/lrs\.php(?=/|$)#',
+            '/plugin/XApi/lrs',
+            $lrsUrl
+        );
+
+        return $normalized ?: $lrsUrl;
     }
 }

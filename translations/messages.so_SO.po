@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -14428,25 +14428,25 @@ msgid "Baby Orange"
 msgstr "Baby Orange"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Badda buluugga ah"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Buluug qabow"
 
 msgid "Corporate"
 msgstr "Shirkad"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampaska Cosmic"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux macaan"
 
 msgid "Empire green"
 msgstr "Empire cagaar"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Orange midho leh"
 
 msgid "Medical"
 msgstr "Caafimaad"
@@ -16067,6 +16067,15 @@ msgstr "Kood gaaban"
 
 msgid "Create child skill"
 msgstr "Abuur xirfad ilmo"
+
+msgid "This skill can be obtained through:"
+msgstr "Xirfaddan waxaa lagu heli karaa iyada oo loo marayo:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ma jiro koorsada hadda kuu ogolaanaysa in aad hesho xirfaddan."
+
+msgid "Add skill to search profile"
+msgstr "Ku dar xirfadda astaanta raadinta"
 
 msgid "Search profile matches"
 msgstr "Raadi iswaafajiga profile-ka"
@@ -32889,6 +32898,9 @@ msgstr "Khalad keydinta isku beddelka xogta"
 msgid "No documents added yet"
 msgstr "Wali lama darin dukumentiyo"
 
+msgid "No additional details available for this skill."
+msgstr "Ma jiraan faahfaahin dheeraad ah oo diyaar u ah xirfaddan."
+
 msgid "No available documents"
 msgstr "Ma jiraan dukumentiyo diyaar"
 
@@ -33032,4 +33044,70 @@ msgstr "Fahamka waxbarashada"
 
 msgid "Administrative activity auditing"
 msgstr "Hantida dhaqdhaqaaqa maamulka"
+
+msgid "List icons"
+msgstr "Liiska astaamaha"
+
+msgid "Constant name"
+msgstr "Magaca joogtada ah"
+
+msgid "MDI icon name"
+msgstr "Magaca astaanta MDI"
+
+msgid "Assign authentication sources"
+msgstr "Meelmar authentication-ka"
+
+msgid "Assignment details"
+msgstr "Faahfaahinta shaqada"
+
+msgid "Terms and conditions"
+msgstr "Shuruudaha iyo xaaladaha"
+
+msgid "Icons"
+msgstr "Astarrada"
+
+msgid "Create backup"
+msgstr "Samee kayd"
+
+msgid "Create file"
+msgstr "Samee fayl"
+
+msgid "Create link"
+msgstr "Samee xiriir"
+
+msgid "Edit template"
+msgstr "Tafatir template"
+
+msgid "Shared files"
+msgstr "Fayllada la wadaago"
+
+msgid "Skill wheel"
+msgstr "Garaabka xirfadaha"
+
+msgid "Favourite courses"
+msgstr "Koorsooyinka ugu jeclaan"
+
+msgid "Restart courses"
+msgstr "Bilow mar kale koorsooyinka"
+
+msgid "Generate terms"
+msgstr "Soosaar shuruudaha"
+
+msgid "Add variation"
+msgstr "Ku dar kala duwanaansho"
+
+msgid "Editor demo"
+msgstr "Tusualka editor-ka"
+
+msgid "Tool introduction"
+msgstr "Hordhac qalabka"
+
+msgid "Data exchanges"
+msgstr "Isku dhaafsi data"
+
+msgid "Third parties"
+msgstr "Qaybaha saddexaad"
+
+msgid "Layouts"
+msgstr "Layouts"
 

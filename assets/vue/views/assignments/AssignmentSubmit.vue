@@ -38,6 +38,7 @@
       <BaseButton
         :label="t('Submit')"
         type="primary"
+        icon="send"
         @click="submitText"
       />
     </div>
@@ -100,6 +101,7 @@
       <BaseButton
         :label="t('Submit')"
         type="primary"
+        icon="send"
         @click="submitMixed"
       />
     </div>

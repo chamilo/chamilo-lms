@@ -84,12 +84,14 @@
             :disabled="currentPage === 1"
             @click="prevPage"
             :label="t('Previous')"
+            icon="arrow-left"
           />
           <span>{{ t("Page") }} {{ currentPage }}</span>
           <BaseButton
             :disabled="!hasNextPage"
             @click="nextPage"
             :label="t('Next')"
+            icon="arrow-right"
           />
         </div>
       </div>

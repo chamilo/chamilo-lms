@@ -6,7 +6,7 @@
         <BaseButton
           v-if="isAdmin"
           icon="edit"
-          label="Edit"
+          :label="t('Edit')"
           size="small"
           type="black"
           @click="handleClick(page)"
@@ -20,6 +20,7 @@
 
 <script setup>
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
@@ -27,6 +28,7 @@ import DOMPurify from "dompurify"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 
+const { t } = useI18n()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const { isAdmin } = storeToRefs(securityStore)

@@ -11,7 +11,7 @@
         />
         <BaseButton
           icon="mdi mdi-magnify"
-          label="Search"
+          :label="t('Search')"
           type="button"
           @click="performSearch"
         />

@@ -40,7 +40,7 @@
               v-if="invitation.canAccept"
               class="ml-2"
               icon="check"
-              label="Accept"
+              :label="t('Accept')"
               type="success"
               @click="emitEvent('accept', invitation.itemId)"
             />
@@ -48,7 +48,7 @@
               v-if="invitation.canDeny"
               class="ml-2"
               icon="times"
-              label="Deny"
+              :label="t('Deny')"
               type="danger"
               @click="emitEvent('deny', invitation.itemId)"
             />

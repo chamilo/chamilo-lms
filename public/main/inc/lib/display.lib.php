@@ -1796,32 +1796,36 @@ HTML;
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
         $id = uniqid('dropdown', false);
+        $menuPositionClass = $alignToRight ? 'right-0' : 'left-0';
+
         $html = '
-        <div class="dropdown inline-block relative grow">
-            <button
-                id="'.$id.'"
-                type="button"
-                class="btn btn--plain-outline btn--sm"
-                aria-expanded="false"
-                aria-haspopup="true"
-                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
-            >
-              '.$title.'
-              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <div class="dropdown inline-block relative">
+        <button
+            id="'.$id.'"
+            type="button"
+            class="btn btn--plain-outline btn--sm whitespace-nowrap"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
+        >
+            <span class="whitespace-nowrap">'.$title.'</span>
+            <svg class="h-5 w-5 inline-block align-middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </button>
-            <div
-                id="'.$id.'_menu"
-                class="dropdown-menu hidden absolute mt-1 py-2 bg-white border-0 shadow-xl rounded-lg "
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="menu-button"
-                tabindex="-1"
-            >';
+            </svg>
+        </button>
+        <div
+            id="'.$id.'_menu"
+            class="dropdown-menu hidden absolute '.$menuPositionClass.' mt-1 py-2 bg-white border-0 shadow-xl rounded-lg z-50 flex flex-col items-stretch"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="'.$id.'"
+            tabindex="-1"
+            style="min-width: 360px; max-width: 90vw;"
+        >';
+
         foreach ($elements as $item) {
             $attrs = [
-                'class' => 'rounded-none py-1 px-4 transition-none select-none w-full text-start text-body-2 gap-1 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1',
+                'class' => 'block w-full rounded-none py-2 px-4 transition-none text-start text-body-2 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1 whitespace-nowrap',
                 'role' => 'menuitem',
                 'onclick' => $item['onclick'] ?? '',
                 'data-action' => $item['data-action'] ?? '',
@@ -1829,17 +1833,25 @@ HTML;
             ];
 
             if (empty($item['type'])) {
-                $html .= self::url($item['title'], $item['href'], $attrs);
-            } elseif('button' === $item['type']) {
+                $html .= self::url(
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
+                    $item['href'],
+                    $attrs
+                );
+            } elseif ('button' === $item['type']) {
                 $attrs['type'] = 'button';
-
-                $html .= self::button('', $item['title'], $attrs);
+                $html .= self::button(
+                    '',
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
+                    $attrs
+                );
             }
         }
+
         $html .= '
-            </div>
-            </div>
-        ';
+        </div>
+    </div>
+    ';
 
         return $html;
     }

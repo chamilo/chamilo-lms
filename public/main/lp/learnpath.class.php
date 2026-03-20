@@ -5263,7 +5263,11 @@ class learnpath
             $parentId
         );
 
-        if ($document && in_array($ext, ['html','htm'], true)) {
+        if (!$document) {
+            return 0;
+        }
+
+        if (in_array($ext, ['html', 'htm'], true)) {
             $em = Database::getManager();
             $docRepo = Container::getDocumentRepository();
             $docEntity = $docRepo->find($document->getIid());

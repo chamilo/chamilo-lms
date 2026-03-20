@@ -27,14 +27,14 @@ class LearningPath extends BaseActivity
             'lp/lp_controller.php',
             [
                 'action' => 'view',
-                'lp_id' => $this->lp->getId(),
+                'lp_id' => $this->lp->getIid(),
                 'isStudentView' => 'true',
             ]
         );
 
         return $this->buildActivity(
             $iri,
-            (string) $this->lp->getName(),
+            (string) $this->lp->getTitle(),
             null,
             'http://adlnet.gov/expapi/activities/lesson'
         );

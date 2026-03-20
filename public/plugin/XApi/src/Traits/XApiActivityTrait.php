@@ -4,7 +4,6 @@
 
 declare(strict_types=1);
 
-use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Uid\Uuid;
@@ -15,17 +14,21 @@ trait XApiActivityTrait
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    protected function saveSharedStatement(array $statement): SharedStatement
+    protected function saveSharedStatement(array $statement): void
     {
         $normalizedStatement = $this->normalizeSharedStatement($statement);
 
-        $sharedStmt = new SharedStatement($normalizedStatement);
+        $sharedStatementClass = 'Chamilo\\PluginBundle\\XApi\\Entity\\SharedStatement';
+
+        if (!class_exists($sharedStatementClass)) {
+            return;
+        }
+
+        $sharedStmt = new $sharedStatementClass($normalizedStatement);
 
         $em = Database::getManager();
         $em->persist($sharedStmt);
         $em->flush();
-
-        return $sharedStmt;
     }
 
     private function normalizeSharedStatement(array $statement): array

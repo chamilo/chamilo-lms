@@ -126,10 +126,7 @@
         </p>
 
         <div class="grow-0">
-          <StudentViewButton
-            v-if="course"
-            @change="onStudentViewChanged"
-          />
+          <StudentViewButton v-if="course" />
         </div>
 
         <BaseButton
@@ -519,6 +516,8 @@ const onStudentViewChanged = async () => {
 
   await loadCourseTools(false)
 }
+
+watch(() => platformConfigStore.isStudentViewActive, onStudentViewChanged)
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

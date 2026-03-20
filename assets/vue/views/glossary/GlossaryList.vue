@@ -1,13 +1,7 @@
 <template>
   <div>
-    <SectionHeader :title="t('Glossary')">
-      <template #end>
-        <StudentViewButton
-          v-if="securityStore.isAuthenticated"
-          @change="onStudentViewChange"
-        />
-      </template>
-    </SectionHeader>
+    <SectionHeader :title="t('Glossary')" />
+
     <BaseToolbar v-if="securityStore.isAuthenticated">
       <template v-if="canEditGlossary">
         <BaseButton
@@ -143,7 +137,6 @@ import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const route = useRoute()
 const router = useRouter()

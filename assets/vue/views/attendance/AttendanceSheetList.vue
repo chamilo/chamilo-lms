@@ -1,10 +1,7 @@
 <template>
   <SectionHeader :title="t('Attendance')">
     <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
+      <StudentViewButton v-if="securityStore.isAuthenticated" />
     </template>
   </SectionHeader>
 
@@ -562,6 +559,8 @@ function onStudentViewChange() {
     fetchFullAttendanceData(route.params.id)
   }
 }
+
+watch(() => platformConfigStore.isStudentViewActive, onStudentViewChange)
 
 const isAdmin = computed(() => securityStore.isAdmin)
 const currentUserId = computed(() => securityStore.user?.id)

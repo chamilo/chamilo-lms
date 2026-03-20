@@ -1,12 +1,5 @@
 <template>
-  <SectionHeader :title="t('Assignment')">
-    <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Assignment')" />
 
   <div>
     <div
@@ -187,7 +180,6 @@ import { useNotification } from "../../composables/notification"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 
@@ -209,8 +201,6 @@ const isTeacherUI = computed(
 )
 
 const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
-
-function onStudentViewChange() {}
 
 const assignment = ref(null)
 const addedDocuments = ref([])

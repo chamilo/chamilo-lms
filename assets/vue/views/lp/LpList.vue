@@ -1,67 +1,23 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-90">{{ t("Learning path") }}</h1>
-      <div class="relative flex items-center gap-2">
-        <StudentViewButton
-          :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"
-          @change="onStudentViewChange"
-        />
-        <BaseDropdownMenu
-          v-if="canEdit"
-          :dropdown-id="'top-menu'"
-          class="relative flex items-center gap-2"
-        >
-          <template #button>
-            <button
-              :aria-label="t('More actions')"
-              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-            >
-              <i
-                aria-hidden="true"
-                class="mdi mdi-dots-vertical text-lg"
-              ></i>
-            </button>
-          </template>
-          <template #menu>
-            <div class="absolute right-0 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1">
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('new', $event)"
-              >
-                {{ t("Create new learning path") }}
-              </button>
-              <button
-                v-if="canUseAi"
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('ai', $event)"
-              >
-                {{ t("AI learning path generator") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('import', $event)"
-              >
-                {{ t("Import") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('rapid', $event)"
-              >
-                {{ t("Chamilo RAPID") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('category', $event)"
-              >
-                {{ t("Add category") }}
-              </button>
-            </div>
-          </template>
-        </BaseDropdownMenu>
-      </div>
-    </div>
+  <div class="lp-list flex flex-col">
+    <SectionHeader :title="t('Learning paths')">
+      <BaseButton
+        :label="t('More actions')"
+        icon="dots-vertical"
+        only-icon
+        popup-identifier="lp-list-tmenu"
+        type="black"
+        @click="mLpList.toggle($event)"
+      />
+      <BaseMenu
+        id="lp-list-tmenu"
+        ref="mLpList"
+        :model="mItems"
+      />
+    </SectionHeader>
+  </div>
 
+  <div class="space-y-6">
     <div
       v-if="loading"
       class="space-y-4 animate-pulse"
@@ -195,7 +151,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -205,12 +161,13 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import Draggable from "vuedraggable"
 import LpRowItem from "../../components/lp/LpRowItem.vue"
 import LpCategorySection from "../../components/lp/LpCategorySection.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
-import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import ExportPdfDialog from "../../components/lp/ExportPdfDialog.vue"
 import { storeToRefs } from "pinia"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -227,6 +184,58 @@ const draggingUncat = ref(false)
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
+
+const mLpList = ref(null)
+const mItems = computed(() => {
+  const items = []
+
+  items.push({
+    label: t("Create new learning path"),
+    url: lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }),
+  })
+
+  if (canUseAi.value) {
+    items.push({
+      label: t("AI learning path generator"),
+      url: lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value }),
+    })
+  }
+
+  items.push({
+    label: t("Import"),
+    url: `/main/upload/index.php?${new URLSearchParams({
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid,
+      tool: "learnpath",
+      curdirpath: "/",
+      node: legacyContext.value.node,
+      gid: legacyContext.value.gid,
+      gradebook: legacyContext.value.gradebook,
+      origin: legacyContext.value.origin,
+    }).toString()}`,
+  })
+
+  items.push({
+    label: t("Chamilo RAPID"),
+    url: `/main/upload/upload_ppt.php?${new URLSearchParams({
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid,
+      tool: "learnpath",
+      curdirpath: "/",
+      node: legacyContext.value.node,
+      gid: legacyContext.value.gid,
+      gradebook: legacyContext.value.gradebook,
+      origin: legacyContext.value.origin,
+    }).toString()}`,
+  })
+
+  items.push({
+    label: t("Add category"),
+    url: lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value }),
+  })
+
+  return items
+})
 
 const { course, session } = storeToRefs(cidReqStore)
 
@@ -591,21 +600,24 @@ const ringDash = (val) => {
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
 
-const onStudentViewChange = async (val) => {
-  if (val) {
-    await router.replace({
-      name: route.name,
-      params: route.params,
-      query: { ...route.query, isStudentView: "true" },
-    })
-  } else {
-    const q = new URLSearchParams(window.location.search)
-    q.delete("isStudentView")
+watch(
+  () => platformConfig.isStudentViewActive,
+  async (val) => {
+    if (val) {
+      await router.replace({
+        name: route.name,
+        params: route.params,
+        query: { ...route.query, isStudentView: "true" },
+      })
+    } else {
+      const q = new URLSearchParams(window.location.search)
+      q.delete("isStudentView")
 
-    const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
-    window.location.replace(newUrl)
-  }
-}
+      const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
+      window.location.replace(newUrl)
+    }
+  },
+)
 
 const openLegacy = (lp) => {
   window.location.href = lpService.buildLegacyViewUrl(lp.iid, {

@@ -1,10 +1,7 @@
 <template>
   <SectionHeader :title="t('Assignments')">
     <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
+      <StudentViewButton v-if="securityStore.isAuthenticated" />
     </template>
   </SectionHeader>
 
@@ -118,10 +115,6 @@ const selectedAssignmentId = ref(null)
 const isDialogVisible = ref(false)
 const loadingProgress = ref(false)
 const studentProgress = ref([])
-
-function onStudentViewChange() {
-  // Intentionally empty: child components read from the reactive store
-}
 
 function goToNewAssignment() {
   router.push({

@@ -1,10 +1,7 @@
 <template>
   <SectionHeader :title="t('Attendance')">
     <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
+      <StudentViewButton v-if="securityStore.isAuthenticated" />
     </template>
   </SectionHeader>
 
@@ -151,9 +148,6 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
   } finally {
     isLoading.value = false
   }
-}
-function onStudentViewChange() {
-  fetchAttendances()
 }
 
 watch(

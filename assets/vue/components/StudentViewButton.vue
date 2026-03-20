@@ -4,23 +4,21 @@
     v-model="isStudentView"
     :off-label="t('Switch to student view')"
     :on-label="t('Switch to teacher view')"
+    :only-icon="isOnlyIcon"
     off-icon="eye-off"
     on-icon="eye-on"
-    :onlyIcon="isOnlyIcon"
   />
 </template>
 
 <script setup>
 import BaseToggleButton from "./basecomponents/BaseToggleButton.vue"
-import { ref, computed, onMounted, onBeforeUnmount } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import permissionService from "../services/permissionService"
 import { useUserSessionSubscription } from "../composables/userPermissions"
-
-const emit = defineEmits(["change"])
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
@@ -36,11 +34,8 @@ const isStudentView = computed({
       const desired = mode === "studentview"
 
       platformConfigStore.setStudentViewEnabled(desired)
-      emit("change", desired)
     } catch (e) {
-      console.warn("[SVB] toggle failed", e)
       platformConfigStore.setStudentViewEnabled(!platformConfigStore.isStudentViewActive)
-      emit("change", platformConfigStore.isStudentViewActive)
     }
   },
   get() {

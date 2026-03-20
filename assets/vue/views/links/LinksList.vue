@@ -1,13 +1,6 @@
 <template>
   <div>
-    <SectionHeader :title="t('Links')">
-      <template #end>
-        <StudentViewButton
-          v-if="securityStore.isAuthenticated"
-          @change="refreshForViewToggle"
-        />
-      </template>
-    </SectionHeader>
+    <SectionHeader :title="t('Links')" />
     <BaseToolbar v-if="securityStore.isAuthenticated && canEditLinks">
       <BaseButton
         :label="t('Add a link')"
@@ -347,7 +340,6 @@ import LinkItem from "../../components/links/LinkItem.vue"
 import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 
 import Skeleton from "primevue/skeleton"
 import Draggable from "vuedraggable"

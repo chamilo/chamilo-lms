@@ -19,15 +19,6 @@ $showDebug = false;
 $adminUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php';
 $isAjax = false;
 
-/**
- * Build a normalized list of assigned courses for the modal.
- *
- * Each item is shaped as:
- * [
- *   'id' => '123',
- *   'text' => 'Course title (COURSECODE)'
- * ]
- */
 $buildAssignedCoursesData = static function (array $courseIds): array {
     $items = [];
 
@@ -60,7 +51,13 @@ $buildAssignedCoursesData = static function (array $courseIds): array {
 };
 
 /**
- * Render the assignment form as a reusable HTML fragment.
+ * Build a normalized list of assigned courses for the modal.
+ *
+ * Each item is shaped as:
+ * [
+ *   'id' => '123',
+ *   'text' => 'Course title (COURSECODE)'
+ * ]
  */
 $renderFormContent = static function (
     FormValidator $form,
@@ -68,7 +65,7 @@ $renderFormContent = static function (
     array $assignedCourses = [],
     string $message = '',
     string $messageType = 'error'
-): string {
+) use ($plugin): string {
     $toolTitle = htmlspecialchars((string) $tool->getTitle(), ENT_QUOTES, 'UTF-8');
     $assignedCoursesJson = htmlspecialchars(
         json_encode(array_values($assignedCourses), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
@@ -79,11 +76,11 @@ $renderFormContent = static function (
     $html = '';
     $html .= '<div class="space-y-4">';
     $html .= '    <div class="mb-3">';
-    $html .= '        <div class="text-body-2 text-gray-50 mb-1">Tool</div>';
+    $html .= '        <div class="text-body-2 text-gray-50 mb-1">'.$plugin->get_lang('Tool').'</div>';
     $html .= '        <div class="font-semibold">'.$toolTitle.'</div>';
     $html .= '    </div>';
     $html .= '    <div class="text-body-2 text-gray-50 mb-3">';
-    $html .= '        Select one or more courses to add this external tool.';
+    $html .=          $plugin->get_lang('SelectCoursesForExternalTool');
     $html .= '    </div>';
     $html .= '    <div class="js-imslti-assigned-courses hidden" data-assigned="'.$assignedCoursesJson.'"></div>';
 
@@ -119,6 +116,48 @@ $sendAjaxHtml = static function (string $html, int $statusCode = 200): void {
     exit;
 };
 
+$buildIncompleteToolMessage = static function (ExternalTool $tool) use ($plugin): string {
+    $missingFields = [];
+
+    if (ImsLti::V_1P3 === $tool->getVersion()) {
+        if ('' === trim((string) $tool->getLaunchUrl())) {
+            $missingFields[] = $plugin->get_lang('LaunchUrl');
+        }
+
+        if ('' === trim((string) $tool->getLoginUrl())) {
+            $missingFields[] = $plugin->get_lang('LoginUrl');
+        }
+
+        if ('' === trim((string) $tool->getRedirectUrl())) {
+            $missingFields[] = $plugin->get_lang('RedirectUrl');
+        }
+
+        if (
+            '' === trim((string) $tool->getJwksUrl()) &&
+            '' === trim((string) $tool->publicKey)
+        ) {
+            $missingFields[] = $plugin->get_lang('JwksUrlOrRsaKey');
+        }
+
+        if ('' === trim((string) $tool->getClientId())) {
+            $missingFields[] = $plugin->get_lang('ClientId');
+        }
+    } else {
+        if ('' === trim((string) $tool->getLaunchUrl())) {
+            $missingFields[] = $plugin->get_lang('LaunchUrl');
+        }
+    }
+
+    if (empty($missingFields)) {
+        return '';
+    }
+
+    return sprintf(
+        $plugin->get_lang('CompleteParamsLti'),
+        implode(', ', $missingFields)
+    );
+};
+
 try {
     $pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
     $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
@@ -145,8 +184,14 @@ try {
         throw new Exception($plugin->get_lang('NoTool'));
     }
 
+    $incompleteToolMessage = $buildIncompleteToolMessage($tool);
+
+    if ('' !== $incompleteToolMessage) {
+        throw new Exception($incompleteToolMessage);
+    }
+
     if (!$tool->hasResourceNode()) {
-        throw new Exception('The external tool does not have a resource node yet.');
+        throw new Exception($plugin->get_lang('ExternalToolWithoutResourceNode'));
     }
 
     /** @var CShortcutRepository $shortcutRepository */

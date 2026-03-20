@@ -37,6 +37,67 @@ usort(
     }
 );
 
+$toolRows = array_map(
+    static function (ExternalTool $tool) use ($plugin): array {
+        $isLti13 = ImsLti::V_1P3 === $tool->getVersion();
+
+        $launchUrl = trim((string) $tool->getLaunchUrl());
+        $loginUrl = trim((string) $tool->getLoginUrl());
+        $redirectUrl = trim((string) $tool->getRedirectUrl());
+        $jwksUrl = trim((string) $tool->getJwksUrl());
+        $publicKey = trim((string) $tool->publicKey);
+        $clientId = trim((string) $tool->getClientId());
+
+        $missingFields = [];
+
+        if ($isLti13) {
+            if ('' === $launchUrl) {
+                $missingFields[] = $plugin->get_lang('LaunchUrl');
+            }
+
+            if ('' === $loginUrl) {
+                $missingFields[] = $plugin->get_lang('LoginUrl');
+            }
+
+            if ('' === $redirectUrl) {
+                $missingFields[] = $plugin->get_lang('RedirectUrl');
+            }
+
+            if ('' === $jwksUrl && '' === $publicKey) {
+                $missingFields[] = $plugin->get_lang('JwksUrlOrRsaKey');
+            }
+
+            if ('' === $clientId) {
+                $missingFields[] = $plugin->get_lang('ClientId');
+            }
+        } else {
+            if ('' === $launchUrl) {
+                $missingFields[] = $plugin->get_lang('LaunchUrl');
+            }
+        }
+
+        $isReadyForCourses = empty($missingFields);
+        $incompleteMessage = $isReadyForCourses
+            ? ''
+            : sprintf(
+                $plugin->get_lang('CompleteParamsLti'),
+                implode(', ', $missingFields)
+            );
+
+        return [
+            'id' => $tool->getId(),
+            'title' => (string) $tool->getTitle(),
+            'version' => (string) $tool->getVersion(),
+            'client_id' => $clientId,
+            'launch_url' => $launchUrl,
+            'is_lti13' => $isLti13,
+            'is_ready_for_courses' => $isReadyForCourses,
+            'incomplete_message' => $incompleteMessage,
+        ];
+    },
+    $tools
+);
+
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('PlatformAdmin'),
@@ -47,7 +108,7 @@ $htmlHeadXtra[] = api_get_css(
 );
 
 $template = new Template($plugin->get_title());
-$template->assign('tools', $tools);
+$template->assign('tools', $toolRows);
 
 $content = $template->fetch('ImsLti/view/admin.tpl');
 

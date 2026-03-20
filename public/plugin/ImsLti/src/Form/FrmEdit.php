@@ -75,16 +75,27 @@ class FrmEdit extends FormValidator
             $this->addText('client_id', $plugin->get_lang('ClientId'), true);
             $this->freeze(['client_id']);
 
-            if (!empty($this->tool->getJwksUrl())) {
-                $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'));
-            } else {
-                $this->addTextarea(
-                    'public_key',
-                    $plugin->get_lang('PublicKey'),
-                    ['style' => 'font-family: monospace;', 'rows' => 5],
-                    true
-                );
-            }
+            $this->addRadio(
+                'public_key_type',
+                $plugin->get_lang('PublicKeyType'),
+                [
+                    ImsLti::LTI_JWK_KEYSET => $plugin->get_lang('KeySetUrl'),
+                    ImsLti::LTI_RSA_KEY => $plugin->get_lang('RsaKey'),
+                ]
+            );
+
+            $this->addHtml('<div class="'.ImsLti::LTI_JWK_KEYSET.'" style="display: block;">');
+            $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'), false);
+            $this->addHtml('</div>');
+
+            $this->addHtml('<div class="'.ImsLti::LTI_RSA_KEY.'" style="display: none;">');
+            $this->addTextarea(
+                'public_key',
+                $plugin->get_lang('PublicKey'),
+                ['style' => 'font-family: monospace;', 'rows' => 5],
+                false
+            );
+            $this->addHtml('</div>');
 
             $this->addUrl('login_url', $plugin->get_lang('LoginUrl'));
             $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'));
@@ -100,7 +111,7 @@ class FrmEdit extends FormValidator
 
         $this->addSelect(
             'document_target',
-            get_lang('LinkTarget'),
+            $plugin->get_lang('LinkTarget'),
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
@@ -187,6 +198,11 @@ class FrmEdit extends FormValidator
     public function setDefaultValues()
     {
         $advServices = $this->tool->getAdvantageServices() ?? [];
+        $hasJwksUrl = '' !== trim((string) $this->tool->getJwksUrl());
+        $hasPublicKey = '' !== trim((string) $this->tool->publicKey);
+        $defaultPublicKeyType = $hasJwksUrl || !$hasPublicKey
+            ? ImsLti::LTI_JWK_KEYSET
+            : ImsLti::LTI_RSA_KEY;
 
         $this->setDefaults(
             [
@@ -202,6 +218,7 @@ class FrmEdit extends FormValidator
                 'share_picture' => $this->tool->isSharingPicture(),
                 'version' => $this->tool->getVersion(),
                 'client_id' => $this->tool->getClientId(),
+                'public_key_type' => $defaultPublicKeyType,
                 'public_key' => $this->tool->publicKey,
                 'jwks_url' => $this->tool->getJwksUrl(),
                 'login_url' => $this->tool->getLoginUrl(),
@@ -212,5 +229,32 @@ class FrmEdit extends FormValidator
                 'replacement_user_id' => $this->tool->getReplacementForUserId(),
             ]
         );
+    }
+
+    public function returnForm(): string
+    {
+        $js = "<script>
+            \$(function () {
+                function togglePublicKeyType() {
+                    var selectedValue = \$('[name=\"public_key_type\"]:checked').val();
+
+                    if (!selectedValue) {
+                        selectedValue = '".ImsLti::LTI_JWK_KEYSET."';
+                        \$('[name=\"public_key_type\"][value=\"' + selectedValue + '\"]').prop('checked', true);
+                    }
+
+                    $('.".ImsLti::LTI_JWK_KEYSET.", .".ImsLti::LTI_RSA_KEY."').hide();
+                    $('.' + selectedValue).show();
+                }
+
+                \$('[name=\"public_key_type\"]').on('change', function () {
+                    togglePublicKeyType();
+                });
+
+                togglePublicKeyType();
+            });
+        </script>";
+
+        return $js.parent::returnForm();
     }
 }

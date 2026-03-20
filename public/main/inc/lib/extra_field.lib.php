@@ -113,7 +113,7 @@ class ExtraField extends Model
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        $this->pageName = ucwords($this->type).' fields';
+        $this->pageName = ucwords($this->type).'Fields';
     }
 
     public static function getTypeList(): array
@@ -2272,7 +2272,7 @@ class ExtraField extends Model
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
-            $breadcrumb[] = ['url' => '#', 'name' => ('user' === $this->type ? get_lang('Profiling') : get_lang($this->pageName))];
+            $breadcrumb[] = ['url' => '#', 'name' => $this->pageName];
         }
     }
 

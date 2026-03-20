@@ -507,7 +507,7 @@ onMounted(() => {
         <Button
           :label="t('Go to the course')"
           class="w-full"
-          icon="pi pi-external-link"
+          icon="mdi mdi-open-in-new"
         />
       </BaseAppLink>
 
@@ -523,7 +523,7 @@ onMounted(() => {
         v-else-if="localCourse.subscribe && props.currentUserId && allowSelfSignup"
         :label="t('Subscribe')"
         class="w-full"
-        icon="pi pi-sign-in"
+        icon="mdi mdi-login"
         @click="subscribeToCourse"
       />
 
@@ -532,7 +532,7 @@ onMounted(() => {
         :label="t('Subscription not allowed')"
         class="w-full"
         disabled
-        icon="pi pi-ban"
+        icon="mdi mdi-cancel"
       />
 
       <Button
@@ -540,7 +540,7 @@ onMounted(() => {
         :label="t('Private course')"
         class="w-full"
         disabled
-        icon="pi pi-lock"
+        icon="mdi mdi-lock"
       />
 
       <Button
@@ -548,7 +548,7 @@ onMounted(() => {
         :label="t('Not available')"
         class="w-full"
         disabled
-        icon="pi pi-eye-slash"
+        icon="mdi mdi-eye-off"
       />
     </template>
   </Card>

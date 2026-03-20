@@ -14,7 +14,7 @@
       <Column :header="t('Type')">
         <template #body="{}">
           <div class="flex justify-center">
-            <i class="pi pi-file" />
+            <i class="mdi mdi-file" />
           </div>
         </template>
       </Column>
@@ -38,11 +38,11 @@
                 download
                 class="hover:underline"
               >
-                <i class="pi pi-check-circle"></i>
+                <i class="mdi mdi-check-circle"></i>
               </a>
               <i
                 v-else
-                class="pi pi-check-circle"
+                class="mdi mdi-check-circle"
               ></i>
             </span>
 
@@ -51,7 +51,7 @@
               class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i> {{ data.comments.length }}
+              <i class="mdi mdi-comment"></i> {{ data.comments.length }}
             </span>
 
             <span

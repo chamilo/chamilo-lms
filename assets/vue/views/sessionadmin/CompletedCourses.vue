@@ -38,14 +38,14 @@
                 rel="noopener"
                 class="text-blue-600 hover:underline"
               >
-                <i class="pi pi-download" />
+                <i class="mdi mdi-download" />
               </a>
               <span
                 v-else
                 class="text-gray-400 cursor-not-allowed"
                 title="Certificate not accessible."
               >
-                <i class="pi pi-download" />
+                <i class="mdi mdi-download" />
               </span>
             </td>
           </tr>

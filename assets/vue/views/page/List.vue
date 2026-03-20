@@ -141,7 +141,7 @@
   >
     <div class="confirmation-content">
       <i
-        class="pi pi-exclamation-triangle p-mr-3"
+        class="mdi mdi-alert p-mr-3"
         style="font-size: 2rem"
       />
       <span v-if="item"
@@ -152,13 +152,13 @@
       <Button
         :label="t('No')"
         class="p-button-outlined p-button-plain"
-        icon="pi pi-times"
+        icon="mdi mdi-close"
         @click="deleteItemDialog = false"
       />
       <Button
         :label="t('Yes')"
         class="p-button-secondary"
-        icon="pi pi-check"
+        icon="mdi mdi-check"
         @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
@@ -172,7 +172,7 @@
   >
     <div class="confirmation-content">
       <i
-        class="pi pi-exclamation-triangle p-mr-3"
+        class="mdi mdi-alert p-mr-3"
         style="font-size: 2rem"
       />
       <span
@@ -183,13 +183,13 @@
     <template #footer>
       <Button
         class="p-button-text"
-        icon="pi pi-times"
+        icon="mdi mdi-close"
         label="No"
         @click="deleteMultipleDialog = false"
       />
       <Button
         class="p-button-text"
-        icon="pi pi-check"
+        icon="mdi mdi-check"
         label="Yes"
         @click="deleteMultipleItems"
       />

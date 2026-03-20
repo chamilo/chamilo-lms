@@ -63,7 +63,7 @@
       <template #body="slotProps">
         <div class="flex gap-2 justify-center">
           <Button
-            icon="pi pi-pencil"
+            icon="mdi mdi-pencil"
             class="p-button-rounded p-button-sm p-button-info"
             @click="onEdit(slotProps.data)"
             tooltip="Edit"
@@ -76,7 +76,7 @@
             :tooltip="getVisibilityTooltip(slotProps.data)"
           />
           <Button
-            icon="pi pi-trash"
+            icon="mdi mdi-delete"
             class="p-button-rounded p-button-sm p-button-danger"
             @click="onDelete(slotProps.data)"
             tooltip="Delete"
@@ -123,7 +123,7 @@ const sanitizeHtml = (html, options = {}) => {
 
 const getVisibilityIcon = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "pi pi-eye" : "pi pi-eye-slash"
+  return visibility === 2 ? "mdi mdi-eye" : "mdi mdi-eye-off"
 }
 
 const getVisibilityClass = (attendance) => {

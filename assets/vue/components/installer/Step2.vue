@@ -87,9 +87,9 @@
 
         <Tag
           :icon="{
-            'pi pi-check': 'success' === extension.status.severity,
-            'pi pi-exclamation-triangle': 'warning' === extension.status.severity,
-            'pi pi-times': 'danger' === extension.status.severity,
+            'mdi mdi-check': 'success' === extension.status.severity,
+            'mdi mdi-alert': 'warning' === extension.status.severity,
+            'mdi mdi-close': 'danger' === extension.status.severity,
           }"
           :severity="extension.status.severity"
           :value="extension.status.message"

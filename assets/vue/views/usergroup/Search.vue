@@ -10,7 +10,7 @@
           label="Search term ..."
         />
         <BaseButton
-          icon="pi pi-search"
+          icon="mdi mdi-magnify"
           label="Search"
           type="button"
           @click="performSearch"
@@ -27,7 +27,7 @@
           <div class="group-image">
             <i
               v-if="!group.pictureUrl"
-              class="pi pi-users large-icon"
+              class="mdi mdi-account-group large-icon"
             ></i>
             <img
               v-else

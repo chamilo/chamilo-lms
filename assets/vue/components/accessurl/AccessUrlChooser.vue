@@ -25,7 +25,7 @@ const visible = ref(loadComponent.value)
   >
     <i
       v-if="isLoading"
-      class="pi pi-spin pi-spinner"
+      class="mdi mdi-loading mdi-spin"
     />
     <div
       v-else

@@ -3408,12 +3408,14 @@ This folder contains all sessions that have been opened in the chat. Although th
         self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
 
         $repo = Container::getDocumentRepository();
-        if (!empty($content)) {
-            $repo->addFileFromString($document, $title, 'text/html', $content, true);
-        } else {
-            if (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
-                $repo->addFileFromPath($document, $title, $realPath);
-            }
+        $isHtmlDocument = in_array(strtolower((string) $fileType), ['html', 'htm'], true);
+
+        if ($isHtmlDocument) {
+            $repo->addFileFromString($document, $title, 'text/html', (string) $content, true);
+        } elseif (!empty($content)) {
+            $repo->addFileFromString($document, $title, 'text/html', (string) $content, true);
+        } elseif (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
+            $repo->addFileFromPath($document, $title, $realPath);
         }
 
         if ($document) {

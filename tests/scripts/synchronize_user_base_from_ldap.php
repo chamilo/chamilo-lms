@@ -58,6 +58,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\OptimisticLockException;
 
 if (php_sapi_name() !== 'cli') {
@@ -472,10 +473,9 @@ if ($anonymizeUserAccountsDisbaledFor3Years) {
         if ($user && !$user->isEnabled()) {
             if (!$test) {
                 try {
-                    UserManager::anonymize($userId)
-                    or die("could not anonymize user $userId\n");
+                    Container::getUserAnonymizationHelper()->anonymize($user);
                 } catch (Exception $exception) {
-                    die($exception->getMessage()."\n");
+                    die($exception->getMessage() . "\ncould not anonymize user $userId\n");
                 }
             }
             if ($debug) {

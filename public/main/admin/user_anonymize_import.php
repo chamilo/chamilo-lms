@@ -128,7 +128,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             $name = api_get_person_name($user->getFirstname(), $user->getLastname());
             echo "<h4>$username ($name, id= $userId) </h4>";
             try {
-                if (UserManager::anonymize($userId)) {
+                if (Container::getUserAnonymizationHelper()->anonymize($user)) {
                     if ($anonymizedSessionsValue) {
                         $sessions = SessionManager::getSessionsFollowedByUser($userId);
                         if ($sessions) {

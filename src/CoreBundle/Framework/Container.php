@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\UserAnonymizationHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
@@ -737,5 +738,10 @@ class Container
     public static function getResourceFileRepository(): ResourceFileRepository
     {
         return self::$container->get(ResourceFileRepository::class);
+    }
+
+    public static function getUserAnonymizationHelper(): UserAnonymizationHelper
+    {
+        return self::$container->get(UserAnonymizationHelper::class);
     }
 }

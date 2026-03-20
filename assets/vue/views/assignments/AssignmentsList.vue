@@ -1,9 +1,5 @@
 <template>
-  <SectionHeader :title="t('Assignments')">
-    <template #end>
-      <StudentViewButton v-if="securityStore.isAuthenticated" />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Assignments')" />
 
   <BaseToolbar>
     <template #start>

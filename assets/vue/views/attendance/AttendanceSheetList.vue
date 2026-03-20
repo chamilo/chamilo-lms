@@ -278,7 +278,7 @@
                             title="View for tablet"
                           />
                           <BaseIcon
-                            v-if="isAdmin"
+                            v-if="canManageLocks"
                             :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
                             size="normal"
                             @click="toggleLock(date.id)"
@@ -563,7 +563,6 @@ function onStudentViewChange() {
   }
 }
 
-const isAdmin = computed(() => securityStore.isAdmin)
 const currentUserId = computed(() => securityStore.user?.id)
 
 const cidReqStore = useCidReqStore()
@@ -580,6 +579,8 @@ const canEdit = computed(() => {
   const readonly = route.query.readonly === "1"
   return !readonly && isTeacherUI.value
 })
+
+const canManageLocks = computed(() => canEdit.value)
 
 const signedCount = computed(
   () => filteredDates.value.filter((d) => attendanceData.value[`${currentUserId.value}-${d.id}`] === 1).length,
@@ -668,9 +669,9 @@ const saveAttendanceSheet = async () => {
   isSaving.value = true
   try {
     await attendanceService.saveAttendanceSheet({
-      courseId: parseInt(cid),
-      sessionId: sid ? parseInt(sid) : null,
-      groupId: gid ? parseInt(gid) : null,
+      courseId: parseInt(cid, 10),
+      sessionId: sid ? parseInt(sid, 10) : null,
+      groupId: gid ? parseInt(gid, 10) : null,
       attendanceData: preparedData,
     })
 
@@ -818,10 +819,14 @@ const initializeColumnLocks = (dates) => {
 
 const isToggling = ref(false)
 const toggleLock = (dateId) => {
-  if (!isTeacherUI.value) return
+  if (!canManageLocks.value) return
   if (isToggling.value) return
   isToggling.value = true
-  columnLocks.value = { ...columnLocks.value, [dateId]: !columnLocks.value[dateId] }
+  columnLocks.value = {
+    ...columnLocks.value,
+    [dateId]: !columnLocks.value[dateId],
+  }
+
   setTimeout(() => {
     isToggling.value = false
   }, 100)
@@ -907,7 +912,8 @@ const toggleAttendanceState = (userId, dateId) => {
 }
 
 const setAllAttendance = (dateId, stateId) => {
-  if (!canEdit.value) return
+  if (!canEdit.value || isColumnLocked(dateId)) return
+
   filteredAttendanceSheets.value.forEach((user) => {
     attendanceData.value[`${user.id}-${dateId}`] = stateId
   })

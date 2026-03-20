@@ -249,7 +249,6 @@ class PlatformConfigurationController extends AbstractController
      * Attempts to decode a setting value that may be stored as:
      * - native PHP array
      * - JSON string
-     * - PHP array code string
      */
     private function decodeSettingArray(mixed $setting): array
     {
@@ -261,21 +260,9 @@ class PlatformConfigurationController extends AbstractController
         // Try to decode JSON string
         if (\is_string($setting)) {
             $json = json_decode($setting, true);
+
             if (\is_array($json)) {
                 return $json;
-            }
-
-            // Try to evaluate PHP-style array string
-            $trimmed = rtrim($setting, ';');
-
-            try {
-                $evaluated = eval("return $trimmed;");
-                if (\is_array($evaluated)) {
-                    return $evaluated;
-                }
-            } catch (Throwable $e) {
-                // Log error and continue
-                error_log('Failed to eval setting value: '.$e->getMessage());
             }
         }
 

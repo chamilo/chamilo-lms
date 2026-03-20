@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+// WARNING: This script has not been updated to work on 2.* yet.
+// It uses deprecated tables, functions and settings.
+
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -3286,15 +3289,3 @@ $import->run();
 $timeEnd = microtime(true);
 $executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");
-
-if (isset($_configuration['import_csv_fix_permissions']) &&
-    true == $_configuration['import_csv_fix_permissions']
-) {
-    $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
-    echo "Executing: ".$command.PHP_EOL;
-    system($command);
-
-    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
-    echo "Executing: ".$command.PHP_EOL;
-    system($command);
-}

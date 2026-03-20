@@ -231,6 +231,8 @@ export function useSidebarMenu() {
   const isActive = (item) => {
     if (item.route) {
       return route.path === item.route || (item.route.name && route.name === item.route.name)
+    } else if (item.url) {
+      return window.location.pathname.startsWith(item.url)
     } else if (item.items) {
       return item.items.some((subItem) => isActive(subItem))
     }

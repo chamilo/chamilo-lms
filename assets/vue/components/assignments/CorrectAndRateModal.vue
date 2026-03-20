@@ -891,12 +891,18 @@ async function submit() {
 
   if (!hasComment && !hasFile && hasQualificationChange) {
     try {
-      await cStudentPublicationService.updateScore(props.item.iid, currentQ)
+      const formData = new FormData()
+      formData.append("submissionId", props.item.iid)
+      formData.append("qualification", currentQ === null ? "" : String(currentQ))
+      formData.append("ai_assisted_raw", aiAssistedRaw.value ? "1" : "0")
+
+      await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, false)
+
       notification.showSuccessNotification(t("Score updated successfully"))
       emit("commentSent")
       close()
     } catch (e) {
-      console.warn("[Assignments][CorrectAndRateModal] Failed to update score", e)
+      console.warn("[Assignments][CorrectAndRateModal] Failed to update score through correction endpoint", e)
       notification.showErrorNotification(e)
     } finally {
       submitting.value = false

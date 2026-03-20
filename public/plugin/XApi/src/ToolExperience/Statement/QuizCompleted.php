@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\Quiz as QuizActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
@@ -17,10 +17,10 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Completed as CompletedVerb;
  */
 class QuizCompleted extends BaseStatement
 {
-    private TrackEExercises $exe;
+    private TrackEExercise $exe;
     private CQuiz $quiz;
 
-    public function __construct(TrackEExercises $exe, CQuiz $quiz)
+    public function __construct(TrackEExercise $exe, CQuiz $quiz)
     {
         $this->exe = $exe;
         $this->quiz = $quiz;
@@ -28,14 +28,14 @@ class QuizCompleted extends BaseStatement
 
     public function generate(): array
     {
-        $user = api_get_user_entity($this->exe->getExeUserId());
+        $user = $this->exe->getUser();
 
         $userActor = new UserActor($user);
         $completedVerb = new CompletedVerb();
         $quizActivity = new QuizActivity($this->quiz);
 
-        $rawResult = (float) $this->exe->getExeResult();
-        $maxResult = (float) $this->exe->getExeWeighting();
+        $rawResult = (float) $this->exe->getScore();
+        $maxResult = (float) $this->exe->getMaxScore();
         $scaledResult = $maxResult > 0 ? ($rawResult / $maxResult) : 0.0;
 
         $duration = $this->exe->getExeDuration();

@@ -27,13 +27,22 @@ abstract class BaseStatement
             return Uuid::v4()->toRfc4122();
         }
 
-        $namespace = (string) XApiPlugin::create()->get(XApiPlugin::SETTING_UUID_NAMESPACE);
+        $namespace = trim((string) XApiPlugin::create()->get(XApiPlugin::SETTING_UUID_NAMESPACE));
 
-        if ('' !== trim($namespace)) {
-            return Uuid::v5($namespace, $type.'-'.microtime(true).'-'.bin2hex(random_bytes(8)))->toRfc4122();
+        if ('' === $namespace) {
+            return Uuid::v4()->toRfc4122();
         }
 
-        return Uuid::v4()->toRfc4122();
+        try {
+            $namespaceUuid = Uuid::fromString($namespace);
+
+            return Uuid::v5(
+                $namespaceUuid,
+                $type.'-'.microtime(true).'-'.bin2hex(random_bytes(8))
+            )->toRfc4122();
+        } catch (\Throwable) {
+            return Uuid::v4()->toRfc4122();
+        }
     }
 
     /**

@@ -54,11 +54,6 @@ class Lti13Database implements IDatabase
             return null;
         }
 
-        error_log(sprintf(
-            '[LTI Provider] findDeployment storedDeployment="%s"',
-            $platform->getDeploymentId()
-        ));
-
         if ($platform->getDeploymentId() !== $deploymentId) {
             error_log('[LTI Provider] findDeployment deployment mismatch');
 

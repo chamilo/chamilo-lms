@@ -27,7 +27,7 @@ class Quiz extends BaseActivity
         $iri = $this->generateIri(
             WEB_CODE_PATH,
             'exercise/overview.php',
-            ['exerciseId' => $this->quiz->getId()]
+            ['exerciseId' => $this->quiz->getIid()]
         );
 
         return $this->buildActivity(

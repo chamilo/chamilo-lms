@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
@@ -39,6 +40,7 @@ class CatalogueController extends AbstractController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SessionRepository $sessionRepository,
         private readonly UserRelCourseVoteRepository $courseVoteRepository,
+        private readonly CourseHelper $courseHelper,
     ) {}
 
     #[IsGranted('ROLE_USER')]
@@ -51,6 +53,7 @@ class CatalogueController extends AbstractController
 
         return $this->json($rating);
     }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/api/courses/{id}/visits', name: 'api_course_visits', methods: ['GET'])]
     public function courseVisits(Course $course, Request $request, TrackECourseAccessRepository $courseAccessRepository): JsonResponse
@@ -60,6 +63,20 @@ class CatalogueController extends AbstractController
         $count = $courseAccessRepository->getCourseVisits($course, $session);
 
         return $this->json(['visits' => $count]);
+    }
+
+    #[Route('/api/course-subscription-statuses', name: 'chamilo_core_catalogue_course_subscription_statuses', methods: ['GET'])]
+    public function courseSubscriptionStatuses(Request $request): JsonResponse
+    {
+        $ids = array_values(array_filter(array_map('intval', explode(',', (string) $request->query->get('ids', '')))));
+        if ([] === $ids) {
+            return $this->json(new stdClass());
+        }
+
+        $courses = $this->em->getRepository(Course::class)->findBy(['id' => $ids]);
+        $infoMap = $this->courseHelper->getCourseSubscriptionLimitInfoMap($courses, 1);
+
+        return $this->json($infoMap);
     }
 
     #[Route('/sessions-list', name: 'chamilo_core_catalogue_sessions_list', methods: ['GET'])]
@@ -86,7 +103,7 @@ class CatalogueController extends AbstractController
                 $session = $rel->getSession();
                 $usergroup = $rel->getUsergroup();
 
-                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
+                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds, true)) {
                     $visibleSessions[$session->getId()] = $session;
                 }
             }
@@ -244,15 +261,15 @@ class CatalogueController extends AbstractController
         foreach ($mapped as $row) {
             $byVar[$row['variable']] = $row;
         }
+
         $ordered = [];
         foreach ($allowed as $var) {
             if (isset($byVar[$var])) {
                 $ordered[] = $byVar[$var];
             }
         }
-        $mapped = $ordered;
 
-        return $this->json(array_values($mapped));
+        return $this->json(array_values($ordered));
     }
 
     #[IsGranted('ROLE_USER')]
@@ -266,12 +283,10 @@ class CatalogueController extends AbstractController
 
         $settings = $this->readCatalogueSettings($settingsManager);
 
-        // Union of allowed variables (search form ∪ course card)
         $allowedSearch = array_map('strval', $settings['extra_fields_in_search_form'] ?? []);
         $allowedCard = array_map('strval', $settings['extra_fields_in_course_block'] ?? []);
         $allowedVars = array_values(array_unique(array_filter(array_merge($allowedSearch, $allowedCard))));
 
-        // Force-include variables that we always want to expose
         $allowedVars = array_values(array_unique(array_merge($allowedVars, ['video_url', 'special_course'])));
 
         if (!$allowedVars) {
@@ -280,8 +295,6 @@ class CatalogueController extends AbstractController
 
         $ef = new ExtraField('course');
 
-        // Build metadata maps (by variable and by id)
-        // rows: ['id','variable','value_type','field_default_value', ...]
         $allFields = $ef->get_all(['filter = ?' => 1, 'AND visible_to_self = ?' => 1], 'option_order');
         $byVar = [];
         $byId = [];
@@ -290,9 +303,6 @@ class CatalogueController extends AbstractController
             $var = (string) ($f['variable'] ?? '');
             if (!$var) {
                 continue;
-            }
-            if (!\in_array($var, $allowedVars, true)) {
-                // continue; // only expose what we explicitly allow
             }
 
             $type = (int) ($f['value_type'] ?? 0);
@@ -303,17 +313,17 @@ class CatalogueController extends AbstractController
                 'value_type' => $type,
                 'default_raw' => $default,
             ];
+
             if (!empty($f['id'])) {
                 $byId[(int) $f['id']] = $var;
             }
         }
 
-        // If settings reference a variable that doesn't exist, still include it with a null-like default
         foreach ($allowedVars as $var) {
             if (!isset($byVar[$var])) {
                 $byVar[$var] = [
                     'id' => 0,
-                    'value_type' => 0,     // unknown → treat as text-like
+                    'value_type' => 0,
                     'default_raw' => null,
                 ];
             }
@@ -344,7 +354,18 @@ class CatalogueController extends AbstractController
             return $this->json(['error' => 'Self sign up not allowed for this course'], 403);
         }
 
+        $limitInfo = $this->courseHelper->getCourseSubscriptionLimitInfo($course, 1);
+        if (!(bool) $limitInfo['canSubscribe']) {
+            return $this->json([
+                'error' => $limitInfo['subscriptionLimitTooltip'],
+                'code' => 'course_user_limit_reached',
+                'limitInfo' => $limitInfo,
+            ], 409);
+        }
+
         $useAutoSession = 'true' === $settings->getSetting('catalog.course_subscription_in_user_s_session', true);
+
+        $session = null;
 
         if ($useAutoSession) {
             $session = new Session();
@@ -394,6 +415,7 @@ class CatalogueController extends AbstractController
         return $this->json([
             'message' => 'User subscribed successfully.',
             'sessionId' => $session?->getId(),
+            'limitInfo' => $this->courseHelper->getCourseSubscriptionLimitInfo($course, 1),
         ]);
     }
 }

@@ -59,31 +59,65 @@
                     <td>
                         <div class="flex flex-col gap-1">
                             <span class="font-semibold">{{ tool.title }}</span>
-                            {% if tool.version is defined and tool.version %}
+
+                            {% if tool.version %}
                             <span class="badge badge--secondary inline-flex w-fit">
                                             {{ tool.version|upper }}
                                         </span>
+                            {% endif %}
+
+                            {% if not tool.is_ready_for_courses %}
+                            <div class="text-body-2 text-danger mt-1">
+                                {{ tool.incomplete_message }}
+                            </div>
                             {% endif %}
                         </div>
                     </td>
                     <td>{{ tool.id }}</td>
                     <td>
-                        <code class="whitespace-normal break-all">{{ tool.clientId }}</code>
+                        <code class="whitespace-normal break-all">
+                            {{ tool.client_id ?: '—' }}
+                        </code>
                     </td>
                     <td>
-                        <code class="whitespace-normal break-all">{{ tool.launchUrl }}</code>
+                        <code class="whitespace-normal break-all">
+                            {{ tool.launch_url ?: '—' }}
+                        </code>
                     </td>
                     <td class="text-right">
                         <div class="flex flex-wrap justify-end gap-2">
                             <a
+                                    href="{{ url('index') }}plugin/ImsLti/tool_settings.php?id={{ tool.id }}"
+                                    class="btn btn--plain js-imslti-open-modal"
+                                    data-title="{{ 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin') }}"
+                                    title="{{ 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin') }}"
+                            >
+                                <i class="mdi mdi-cog-outline"></i>
+                                {{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin') }}
+                            </a>
+
+                            {% if tool.is_ready_for_courses %}
+                            <a
                                     href="{{ url('index') }}plugin/ImsLti/multiply.php?id={{ tool.id }}"
-                                    class="btn btn--plain js-imslti-open-multiply"
+                                    class="btn btn--plain js-imslti-open-modal"
                                     data-title="{{ 'AddInCourses'|get_plugin_lang('ImsLtiPlugin') }}"
+                                    data-ajax="1"
                                     title="{{ 'AddInCourses'|get_plugin_lang('ImsLtiPlugin') }}"
                             >
                                 <i class="mdi mdi-book-plus-outline"></i>
                                 {{ 'AddInCourses'|get_plugin_lang('ImsLtiPlugin') }}
                             </a>
+                            {% else %}
+                            <button
+                                    type="button"
+                                    class="btn btn--plain opacity-50 cursor-not-allowed"
+                                    disabled="disabled"
+                                    title="{{ tool.incomplete_message }}"
+                            >
+                                <i class="mdi mdi-book-plus-outline"></i>
+                                {{ 'AddInCourses'|get_plugin_lang('ImsLtiPlugin') }}
+                            </button>
+                            {% endif %}
 
                             <a
                                     href="{{ url('index') }}plugin/ImsLti/edit.php?id={{ tool.id }}"
@@ -123,7 +157,7 @@
 </div>
 
 <div
-        id="imslti-multiply-modal"
+        id="imslti-admin-modal"
         class="hidden fixed inset-0 z-50"
         aria-hidden="true"
 >
@@ -131,14 +165,14 @@
 
     <div class="relative flex min-h-screen items-start justify-center p-4 md:p-6">
         <div
-                class="relative flex w-full max-w-3xl flex-col overflow-visible rounded-xl bg-white shadow-xl"
+                class="relative flex w-full max-w-4xl flex-col overflow-visible rounded-xl bg-white shadow-xl"
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby="imslti-multiply-modal-title"
+                aria-labelledby="imslti-admin-modal-title"
         >
             <div class="flex items-center justify-between gap-3 border-b border-gray-20 px-5 py-4">
-                <h4 id="imslti-multiply-modal-title" class="text-h5 mb-0">
-                    {{ 'AddInCourses'|get_plugin_lang('ImsLtiPlugin') }}
+                <h4 id="imslti-admin-modal-title" class="text-h5 mb-0">
+                    {{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin') }}
                 </h4>
 
                 <button
@@ -160,13 +194,13 @@
 {% autoescape false %}
 <script>
   $(function () {
-    var $modal = $('#imslti-multiply-modal');
+    var $modal = $('#imslti-admin-modal');
     var $modalBody = $modal.find('.imslti-modal__body');
-    var $modalTitle = $('#imslti-multiply-modal-title');
+    var $modalTitle = $('#imslti-admin-modal-title');
     var adminUrl = '{{ url('index') }}plugin/ImsLti/admin.php';
 
     function openModal(title) {
-      $modalTitle.text(title || 'Add in courses');
+      $modalTitle.text(title || '{{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin')|e('js') }}');
       $modal.removeClass('hidden').attr('aria-hidden', 'false');
       $('body').addClass('overflow-hidden');
     }
@@ -188,9 +222,7 @@
     }
 
     function showError(message) {
-      $modalBody.html(
-        '<div class="alert alert-danger mb-0">' + message + '</div>'
-      );
+      $modalBody.html('<div class="alert alert-danger mb-0">' + message + '</div>');
     }
 
     function fixAsyncDropdowns() {
@@ -329,18 +361,21 @@
       });
     }
 
-    $(document).off('click.imsltiOpenMultiply').on('click.imsltiOpenMultiply', '.js-imslti-open-multiply', function (e) {
+    $(document).off('click.imsltiOpenModal').on('click.imsltiOpenModal', '.js-imslti-open-modal', function (e) {
       e.preventDefault();
 
       var $link = $(this);
-      var title = $link.data('title') || $link.attr('title') || 'Add in courses';
+      var title = $link.data('title') || $link.attr('title') || '{{ 'ToolSettings'|get_plugin_lang('ImsLtiPlugin')|e('js') }}';
       var url = $link.attr('href');
+      var requiresAjax = String($link.data('ajax') || '') === '1';
 
       if (!url) {
         return;
       }
 
-      url += (url.indexOf('?') === -1 ? '?' : '&') + 'ajax=1';
+      if (requiresAjax) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'ajax=1';
+      }
 
       showLoading(title);
 
@@ -355,7 +390,7 @@
           bindMultiplyForm();
         },
         error: function (xhr) {
-          var responseText = xhr.responseText || 'Unable to load the form.';
+          var responseText = xhr.responseText || 'Unable to load the content.';
           showError(responseText);
         }
       });

@@ -2,11 +2,9 @@
 /* For license terms, see /license.txt */
 $strings['plugin_title'] = 'IMS/LTI client';
 $strings['plugin_comment'] = 'Adds support for IMS/LTI activities integration, where Chamilo acts as an IMS/LTI client';
-
 $strings['enabled'] = 'Enabled';
 $strings['client_id'] = 'Client ID';
 $strings['client_id_help'] = 'Client ID to be used for tools by default. You can customize the client_id for each tool.';
-
 $strings['ImsLtiDescription'] = '<p>Learning Tools Interoperability® (LTI®) is a specification developed by IMS Global Learning Consortium. The principal concept of LTI is to establish a standard way of integrating rich learning applications (often remotely hosted and provided through third-party services) with platforms like learning management systems, portals, learning object repositories, or other educational environments.</p>';
 $strings['ManageToolButton'] = '<p>To manage the tools go to <a href="%s">Tool list</a></p>';
 $strings['AddExternalTool'] = 'Add external tool';
@@ -77,3 +75,11 @@ $strings['AddInAllCourses'] = 'Add in all courses';
 $strings['AddInSessions'] = 'Add in sessions';
 $strings["BaseToolsCanBeAddedInSessionsOnly"] = "Base tools can be added in sessions only";
 $strings["ChangesWillApplyToAllAssignedCourses"] = "Changes will apply to all assigned courses";
+$strings['NoData'] = 'No data';
+$strings['LinkTarget'] = 'Link target';
+$strings['WarningLaunchUrl'] = 'For LTI 1.3, Launch URL can be completed later after registering Chamilo in the external provider. For LTI 1.0 / 1.1, Launch URL is still required.';
+$strings['Tool'] = 'Tool';
+$strings['SelectCoursesForExternalTool'] = 'Select one or more courses to add this external tool.';
+$strings['ExternalToolWithoutResourceNode'] = 'The external tool does not have a resource node yet.';
+$strings['JwksUrlOrRsaKey'] = 'JWKS URL or RSA key';
+$strings['CompleteParamsLti'] = 'Complete the external tool configuration before adding it to courses: %s.';

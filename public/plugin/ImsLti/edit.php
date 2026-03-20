@@ -56,6 +56,10 @@ $form->build();
 if ($form->validate()) {
     $formValues = $form->exportValues();
 
+    $normalizeOptionalValue = static function ($value): string {
+        return empty($value) ? '' : trim((string) $value);
+    };
+
     $tool
         ->setTitle($formValues['name'])
         ->setDescription(
@@ -70,8 +74,7 @@ if ($form->validate()) {
             !empty($formValues['share_email']),
             !empty($formValues['share_picture'])
         )
-        ->setLaunchUrl($formValues['launch_url'])
-    ;
+        ->setLaunchUrl($normalizeOptionalValue($formValues['launch_url'] ?? ''));
 
     if ($tool->getVersion() === ImsLti::V_1P1) {
         $tool
@@ -80,26 +83,38 @@ if ($form->validate()) {
             )
             ->setSharedSecret(
                 empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
-            )
-        ;
+            );
     } elseif ($tool->getVersion() === ImsLti::V_1P3) {
         $tool
-            ->setLoginUrl($formValues['login_url'])
-            ->setRedirectUrl($formValues['redirect_url'])
+            ->setLoginUrl($normalizeOptionalValue($formValues['login_url'] ?? ''))
+            ->setRedirectUrl($normalizeOptionalValue($formValues['redirect_url'] ?? ''))
             ->setAdvantageServices(
                 [
                     'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                     'nrps' => $formValues['1p3_nrps'] ?? LtiNamesRoleProvisioningService::NRPS_NONE,
                 ]
-            )
-        ;
+            );
 
-        if (!empty($formValues['jwks_url'])) {
-            $tool->setJwksUrl($formValues['jwks_url']);
+        $jwksUrl = $normalizeOptionalValue($formValues['jwks_url'] ?? '');
+        $publicKey = empty($formValues['public_key'])
+            ? null
+            : trim((string) $formValues['public_key']);
+
+        $publicKeyType = $formValues['public_key_type'] ?? ImsLti::LTI_JWK_KEYSET;
+
+        /* Prefer JWKS when a value is provided, even if the radio button state is inconsistent. */
+        if ('' !== $jwksUrl) {
+            $publicKeyType = ImsLti::LTI_JWK_KEYSET;
+        } elseif (!empty($publicKey)) {
+            $publicKeyType = ImsLti::LTI_RSA_KEY;
+        }
+
+        if (ImsLti::LTI_JWK_KEYSET === $publicKeyType) {
+            $tool->setJwksUrl($jwksUrl);
             $tool->publicKey = null;
         } else {
-            $tool->setJwksUrl(null);
-            $tool->publicKey = empty($formValues['public_key']) ? null : $formValues['public_key'];
+            $tool->setJwksUrl('');
+            $tool->publicKey = $publicKey;
         }
     }
 
@@ -112,7 +127,6 @@ if ($form->validate()) {
 
     $em->persist($tool);
 
-    // Keep course shortcuts synchronized with the edited tool.
     $shortcuts = $shortcutRepository->getShortcutsFromResource($tool);
 
     /** @var CShortcut $shortcut */

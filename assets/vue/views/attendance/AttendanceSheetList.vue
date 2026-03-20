@@ -263,32 +263,38 @@
                           class="flex gap-2 mt-1"
                           v-if="isTeacherUI"
                         >
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('View for tablet')"
                             icon="view-table"
-                            size="normal"
+                            only-icon
+                            size="small"
+                            type="black"
                             @click="viewForTablet(date.id)"
-                            class="cursor-pointer text-primary"
-                            title="View for tablet"
                           />
-                          <BaseIcon
+                          <BaseButton
                             v-if="canManageLocks"
                             :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
-                            size="normal"
+                            :label="isColumnLocked(date.id) ? t('Unlock column') : t('Lock column')"
+                            only-icon
+                            size="small"
+                            type="warning"
                             @click="toggleLock(date.id)"
-                            :class="isColumnLocked(date.id) ? 'text-gray-500' : 'text-warning'"
-                            :title="isColumnLocked(date.id) ? 'Unlock column' : 'Lock column'"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Present')"
                             icon="account-check"
+                            only-icon
+                            size="small"
+                            type="success"
                             @click="setAllAttendance(date.id, 1)"
-                            class="text-success"
-                            title="Set all Present"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Absent')"
                             icon="account-cancel"
+                            only-icon
+                            size="small"
+                            type="danger"
                             @click="setAllAttendance(date.id, 0)"
-                            class="text-danger"
-                            title="Set all Absent"
                           />
                         </div>
                       </div>
@@ -389,19 +395,23 @@
                         v-if="canEdit"
                         class="absolute top-2 right-2 flex gap-3"
                       >
-                        <BaseIcon
+                        <BaseButton
                           v-if="allowComments && !isColumnLocked(date.id)"
+                          :label="t('Comment')"
                           icon="comment"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="info"
                           @click="openCommentDialog(user.id, date.id)"
-                          class="cursor-pointer text-info"
                         />
-                        <BaseIcon
+                        <BaseButton
                           v-if="enableSignature && !isColumnLocked(date.id)"
+                          :label="t('Sign')"
                           icon="drawing"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="success"
                           @click="openSignatureDialog(user.id, date.id)"
-                          class="cursor-pointer text-success"
                         />
                       </div>
                     </td>

@@ -22,10 +22,10 @@
               </span>
               <BaseIcon
                 v-if="isAllowedToEdit && term.sessionId && term.sessionId === sid"
+                :title="t('Session Item')"
                 class="mr-8"
                 icon="session-star"
                 size="small"
-                title="Session Item"
               />
             </div>
             <div v-if="securityStore.isAuthenticated && props.canEditGlossary && canEdit(term)">

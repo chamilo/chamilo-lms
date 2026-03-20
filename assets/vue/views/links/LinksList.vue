@@ -141,25 +141,28 @@
                 v-if="securityStore.isAuthenticated && canEditLinks"
                 class="flex items-center gap-3 text-gray-700"
               >
-                <BaseIcon
+                <BaseButton
+                  :label="t('Edit')"
                   icon="edit"
-                  size="normal"
-                  :title="t('Edit')"
-                  class="hover:text-black"
+                  only-icon
+                  size="small"
+                  type="black"
                   @click="editCategory(category)"
                 />
-                <BaseIcon
+                <BaseButton
                   :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
-                  size="normal"
-                  :title="t('Change visibility')"
-                  class="hover:text-black"
+                  :label="t('Change visibility')"
+                  only-icon
+                  size="small"
+                  type="black"
                   @click="toggleCategoryVisibility(category)"
                 />
-                <BaseIcon
+                <BaseButton
+                  :label="t('Delete')"
                   icon="delete"
-                  size="normal"
-                  :title="t('Delete')"
-                  class="hover:text-black"
+                  only-icon
+                  size="small"
+                  type="danger"
                   @click="confirmDeleteCategory(category)"
                 />
               </div>
@@ -238,25 +241,28 @@
                   v-if="securityStore.isAuthenticated && canEditLinks"
                   class="flex items-center gap-3 text-gray-700"
                 >
-                  <BaseIcon
+                  <BaseButton
+                    :label="t('Edit')"
                     icon="edit"
-                    size="normal"
-                    :title="t('Edit')"
-                    class="hover:text-black"
+                    only-icon
+                    size="small"
+                    type="black"
                     @click="editCategory(category)"
                   />
-                  <BaseIcon
+                  <BaseButton
                     :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
-                    size="normal"
-                    :title="t('Change visibility')"
-                    class="hover:text-black"
+                    :label="t('Change visibility')"
+                    only-icon
+                    size="small"
+                    type="black"
                     @click="toggleCategoryVisibility(category)"
                   />
-                  <BaseIcon
+                  <BaseButton
+                    :label="t('Delete')"
                     icon="delete"
-                    size="normal"
-                    :title="t('Delete')"
-                    class="hover:text-black"
+                    only-icon
+                    size="small"
+                    type="danger"
                     @click="confirmDeleteCategory(category)"
                   />
                 </div>

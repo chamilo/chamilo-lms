@@ -24,11 +24,11 @@
           ></slot>
         </template>
         <template #removetokenicon="slopProps">
-          <span class="p-autocomplete-token-icon">
-            <BaseIcon
-              icon="close"
-              @click="slopProps.removeCallback"
-            />
+          <span
+            class="p-icon p-chip-remove-icon"
+            @click="slopProps.removeCallback"
+          >
+            <BaseIcon icon="close" />
           </span>
         </template>
       </AutoComplete>

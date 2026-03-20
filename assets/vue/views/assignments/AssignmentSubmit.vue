@@ -1,11 +1,13 @@
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
     <hr />
@@ -121,7 +123,6 @@ import Uppy from "@uppy/core"
 import XHRUpload from "@uppy/xhr-upload"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 

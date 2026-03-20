@@ -34,3 +34,4 @@ $strings['Quizzes'] = 'Exercises';
 $strings['KeySetUrlJwks'] = 'Keyset url (jwks)';
 $strings["NoData"] = "No data";
 $strings["ToolProvider"] = "Tool provider";
+$strings["ConnectionDetailsHelp"] = "Use these values to register this Chamilo tool in your external LTI 1.3 platform.";

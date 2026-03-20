@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,28 +16,26 @@ api_protect_admin_script();
 $plugin = LtiProviderPlugin::create();
 $response = new Response();
 
-$pluginEntity = Container::getPluginRepository()->findOneByTitle('LtiProvider');
-$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
-$pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
-
-$isPluginEnabled = $pluginEntity
-    && $pluginEntity->isInstalled()
-    && $pluginConfiguration
-    && $pluginConfiguration->isActive();
-
-$launchUrl = api_get_plugin_setting('lti_provider', 'launch_url');
-$loginUrl = api_get_plugin_setting('lti_provider', 'login_url');
-$redirectUrl = api_get_plugin_setting('lti_provider', 'redirect_url');
-$jwksUrl = api_get_plugin_setting('lti_provider', 'jwks_url');
-
-if (empty($jwksUrl)) {
-    $jwksUrl = api_get_path(WEB_PLUGIN_PATH).LtiProviderPlugin::JWKS_URL;
-}
-
 try {
+    $pluginEntity = Container::getPluginRepository()->findOneByTitle('LtiProvider');
+    $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+    $pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+    $isPluginEnabled = $pluginEntity
+        && $pluginEntity->isInstalled()
+        && $pluginConfiguration
+        && $pluginConfiguration->isActive();
+
     if (!$isPluginEnabled) {
         throw new Exception(get_lang('Not allowed'));
     }
+
+    $toolBaseUrl = rtrim(api_get_path(WEB_PLUGIN_PATH).'LtiProvider/tool/', '/').'/';
+
+    $launchUrl = $toolBaseUrl.'start.php';
+    $loginUrl = $toolBaseUrl.'login.php';
+    $redirectUrl = $toolBaseUrl.'start.php';
+    $jwksUrl = $toolBaseUrl.'jwks.php';
 
     $items = [
         [
@@ -58,6 +58,11 @@ try {
 
     $html = '<div class="space-y-4">';
 
+    $html .= ''
+        .'<div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-90">'
+        .Security::remove_XSS($plugin->get_lang('ConnectionDetailsHelp'))
+        .'</div>';
+
     foreach ($items as $item) {
         $label = Security::remove_XSS((string) $item['label']);
         $value = Security::remove_XSS((string) $item['value']);
@@ -65,14 +70,14 @@ try {
         $html .= ''
             .'<div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">'
             .'<div class="mb-2 text-sm font-semibold text-gray-700">'.$label.'</div>'
-            .'<div class="break-all text-sm text-gray-900">'.$value.'</div>'
+            .'<div class="break-all rounded-md bg-gray-10 px-3 py-2 font-mono text-sm text-gray-900">'.$value.'</div>'
             .'</div>';
     }
 
     $html .= '</div>';
 
     $response->setContent($html);
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     $response->setContent(
         Display::return_message($exception->getMessage(), 'error')
     );

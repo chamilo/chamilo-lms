@@ -32,3 +32,4 @@ $strings['ToolProvider'] = 'Herramienta del proveedor';
 $strings['SelectOneActivity'] = 'Selecccione una actividad';
 $strings['Quizzes'] = 'Ejercicios';
 $strings['KeySetUrlJwks'] = 'Clave url (jwks)';
+$strings["ConnectionDetailsHelp"] = "Use estos valores para registrar esta herramienta de Chamilo en su plataforma externa LTI 1.3.";

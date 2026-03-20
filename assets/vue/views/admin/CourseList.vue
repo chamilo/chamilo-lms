@@ -207,12 +207,12 @@
         sortable
       >
         <template #body="{ data }">
-          <a
-            :href="`/main/admin/course_information.php?code=${encodeURIComponent(data.code)}`"
+          <router-link
+            :to="{ name: 'CourseHome', params: { id: data.id } }"
             class="text-blue-600 hover:underline"
           >
             {{ data.title }}
-          </a>
+          </router-link>
         </template>
       </Column>
       <Column

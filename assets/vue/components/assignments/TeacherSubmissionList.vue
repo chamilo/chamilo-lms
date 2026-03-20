@@ -41,11 +41,11 @@
                 download
                 class="text-green-50 hover:underline"
               >
-                <i class="pi pi-check-circle"></i>
+                <i class="mdi mdi-check-circle"></i>
               </a>
               <i
                 v-else
-                class="pi pi-check-circle"
+                class="mdi mdi-check-circle"
               ></i>
             </span>
             <span
@@ -53,7 +53,7 @@
               class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i> {{ data.comments.length }}
+              <i class="mdi mdi-comment"></i> {{ data.comments.length }}
             </span>
           </div>
         </template>
@@ -61,22 +61,31 @@
 
       <Column :header="t('Score')">
         <template #body="{ data }">
-          <template v-if="data.qualification !== null && data.publicationParent?.qualification">
-            <span
-              :class="{
-                'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification > data.publicationParent.qualification / 2,
-                'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification <= data.publicationParent.qualification / 2,
-              }"
-            >
-              {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
-            </span>
+          <template v-if="data.qualification !== null && data.qualification !== undefined && data.qualification !== ''">
+            <template v-if="data.publicationParent?.qualification !== null && data.publicationParent?.qualification !== undefined && data.publicationParent?.qualification !== ''">
+        <span
+          :class="{
+            'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
+              Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
+            'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
+              Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
+          }"
+        >
+          {{ Number(data.qualification).toFixed(1) }} / {{ Number(data.publicationParent.qualification).toFixed(1) }}
+        </span>
+            </template>
+
+            <template v-else>
+        <span class="bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded">
+          {{ Number(data.qualification).toFixed(1) }}
+        </span>
+            </template>
           </template>
+
           <template v-else>
-            <span class="text-gray-50">
-              {{ t("Not graded yet") }}
-            </span>
+      <span class="text-gray-50">
+        {{ t("Not graded yet") }}
+      </span>
           </template>
         </template>
       </Column>

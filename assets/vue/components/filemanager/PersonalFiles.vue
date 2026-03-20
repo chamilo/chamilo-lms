@@ -21,7 +21,7 @@
           <Button
             v-if="selectedFiles.length"
             class="btn btn--danger"
-            icon="pi pi-trash"
+            icon="mdi mdi-delete"
             label="Delete"
             @click="confirmDeleteMultiple"
           />
@@ -33,7 +33,7 @@
           <Button
             v-if="previousFolders.length"
             class="btn btn--primary"
-            icon="pi pi-arrow-left"
+            icon="mdi mdi-arrow-left"
             label="Back"
             @click="goBack"
           />
@@ -112,7 +112,7 @@
               <Button
                 v-if="isAuthenticated"
                 class="btn btn--danger"
-                icon="pi pi-trash"
+                icon="mdi mdi-delete"
                 @click="confirmDeleteItem(slotProps.data)"
               />
             </div>
@@ -226,13 +226,13 @@
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           label="Cancel"
           @click="hideDialog"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           label="Save"
           @click="saveItem"
         />
@@ -247,7 +247,7 @@
     >
       <div class="confirmation-content">
         <i
-          class="pi pi-exclamation-triangle p-mr-3"
+          class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
         <span
@@ -258,13 +258,13 @@
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           label="No"
           @click="deleteDialog = false"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           label="Yes"
           @click="deleteItemButton"
         />
@@ -279,7 +279,7 @@
     >
       <div class="confirmation-content">
         <i
-          class="pi pi-exclamation-triangle p-mr-3"
+          class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
         <span>{{ $t("Are you sure you want to delete the selected items?") }}</span>
@@ -287,13 +287,13 @@
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           label="No"
           @click="deleteMultipleDialog = false"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           label="Yes"
           @click="deleteMultipleItems"
         />

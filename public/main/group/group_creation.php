@@ -222,12 +222,8 @@ EOT;
                 ['class' => 'span1', 'id' => 'places_'.$group_number]
             );
 
-            if ($_POST['number_of_groups'] < 10000) {
+            if ($_POST['number_of_groups'] < 100) {
                 if ($numberOfGroups < 10) {
-                    $prev = '000';
-                } elseif ($numberOfGroups < 100) {
-                    $prev = '00';
-                } elseif ($numberOfGroups < 1000) {
                     $prev = '0';
                 } else {
                     $prev = '';

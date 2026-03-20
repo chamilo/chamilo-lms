@@ -537,7 +537,7 @@ function confirmDelete() {
   confirm.require({
     message: t("Are you sure you want to delete"),
     header: t("Delete"),
-    icon: "pi pi-exclamation-triangle",
+    icon: "mdi mdi-alert",
     acceptClass: "p-button-danger",
     rejectClass: "p-button-plain p-button-outlined",
     acceptLabel: t("Yes"),

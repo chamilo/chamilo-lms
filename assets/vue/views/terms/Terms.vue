@@ -17,7 +17,7 @@
       <div v-if="!accepted && !blockButton">
         <BaseButton
           :label="$t('Accept Terms and Conditions')"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           type="primary"
           @click="acceptTerms"
         />
@@ -26,7 +26,7 @@
         <p>{{ t("You accepted these terms on") }} {{ acceptanceDate }}</p>
         <BaseButton
           :label="$t('Revoke Acceptance')"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           type="danger"
           @click="revokeAcceptance"
         />

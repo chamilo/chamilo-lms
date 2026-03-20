@@ -466,12 +466,15 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
             $defaults['forum_category'] = Security::remove_XSS($_GET['forumcategory']);
         }
     } else {
-        // the default values when editing = the data in the table
+        // The default values when editing = the data stored in the entity.
+        $startTime = $forum->getStartTime();
+        $endTime = $forum->getEndTime();
+
         $defaults['forum_id'] = $forum->getIid();
         $defaults['forum_title'] = prepare4display($forum->getTitle());
         $defaults['forum_comment'] = prepare4display($forum->getForumComment());
-        $defaults['start_time'] = api_get_local_time($forum->getStartTime());
-        $defaults['end_time'] = api_get_local_time($forum->getEndTime());
+        $defaults['start_time'] = $startTime ? api_get_local_time($startTime) : '';
+        $defaults['end_time'] = $endTime ? api_get_local_time($endTime) : '';
         $defaults['moderated']['moderated'] = $forum->isModerated();
         $defaults['forum_category'] = $forum->getForumCategory()->getIid();
         $defaults['allow_anonymous_group']['allow_anonymous'] = $forum->getAllowAnonymous();

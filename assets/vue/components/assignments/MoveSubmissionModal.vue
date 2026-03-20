@@ -32,7 +32,7 @@
 
         <Button
           :label="t('Move the file')"
-          icon="pi pi-send"
+          icon="mdi mdi-send"
           @click="move"
           class="p-button-primary"
           :disabled="assignments.length === 0"

@@ -63,7 +63,7 @@
         class="absolute inset-0 z-10 bg-white/70 flex items-center justify-center"
       >
         <div class="flex items-center gap-3 text-gray-90">
-          <i class="pi pi-spin pi-spinner text-2xl" />
+          <i class="mdi mdi-loading mdi-spin text-2xl" />
           <span class="text-sm">{{ t("Loading") }}</span>
         </div>
       </div>

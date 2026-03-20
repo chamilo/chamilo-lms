@@ -52,7 +52,7 @@ import ConfirmationService from "primevue/confirmationservice"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 
 // import 'primeflex/primeflex.css';
-import "primeicons/primeicons.css"
+
 import Alpine from "alpinejs"
 import { ENTRYPOINT } from "./config/entrypoint"
 

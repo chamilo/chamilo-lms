@@ -379,6 +379,11 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
         $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
         $parentResourceNode = $resource->getParent()?->resourceNode;
 
         if ($parentResourceNode) {
@@ -399,11 +404,16 @@ class ResourceListener
             throw new InvalidArgumentException('Resource needs a name');
         }
 
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             // $slug = $this->slugify->slugify($resourceName);
         }
-        $resource->getResourceNode()->setTitle($resourceName);
+        $resourceNode->setTitle($resourceName);
     }
 
     private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void

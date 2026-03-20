@@ -231,6 +231,8 @@ export function useSidebarMenu() {
   const isActive = (item) => {
     if (item.route) {
       return route.path === item.route || (item.route.name && route.name === item.route.name)
+    } else if (item.url) {
+      return window.location.pathname.startsWith(item.url)
     } else if (item.items) {
       return item.items.some((subItem) => isActive(subItem))
     }
@@ -289,6 +291,7 @@ export function useSidebarMenu() {
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
+          expanded: courseItems.length > 1 ? isActive({ items: courseItems }) : undefined,
         })
       }
     }
@@ -480,6 +483,7 @@ export function useSidebarMenu() {
         icon: "mdi mdi-account-cog",
         label: t("Session administrator"),
         items: sessionAdminItems,
+        expanded: isActive({ items: sessionAdminItems }),
       })
     }
 
@@ -500,6 +504,7 @@ export function useSidebarMenu() {
           icon: "mdi mdi-cog",
           items: adminItems,
           label: t("Administration"),
+          expanded: isActive({ items: adminItems }),
         })
       }
     }

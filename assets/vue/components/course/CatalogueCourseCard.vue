@@ -123,6 +123,14 @@ const allowSelfSignup = computed(() => {
   return localCourse.value?.visibility === 0
 })
 
+const subscriptionLimitReached = computed(() => {
+  return Boolean(localCourse.value?.subscriptionLimitReached)
+})
+
+const subscriptionLimitTooltip = computed(() => {
+  return localCourse.value?.subscriptionLimitTooltip || t("The subscription limit for this course has been reached.")
+})
+
 localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
 
 const fetchVisits = async () => {
@@ -228,7 +236,17 @@ const subscribeToCourse = async () => {
     })
   } catch (e) {
     console.error("Subscription error:", e)
-    showErrorNotification("Failed to subscribe to the course.")
+
+    const apiCode = e?.response?.data?.code
+    const apiMessage = e?.response?.data?.error || e?.response?.data?.message || "Failed to subscribe to the course."
+
+    if (apiCode === "course_user_limit_reached") {
+      localCourse.value.subscriptionLimitReached = true
+      localCourse.value.subscriptionLimitTooltip = apiMessage
+      showErrorNotification(apiMessage)
+    } else {
+      showErrorNotification(apiMessage)
+    }
   } finally {
     subscribing.value = false
   }
@@ -507,7 +525,7 @@ onMounted(() => {
         <Button
           :label="t('Go to the course')"
           class="w-full"
-          icon="pi pi-external-link"
+          icon="mdi mdi-open-in-new"
         />
       </BaseAppLink>
 
@@ -519,11 +537,25 @@ onMounted(() => {
         @click="showDependenciesModal = true"
       />
 
+      <span
+        v-else-if="subscriptionLimitReached"
+        class="block w-full"
+        :title="subscriptionLimitTooltip"
+      >
+        <Button
+          :label="t('Subscription limit reached')"
+          class="w-full"
+          disabled
+          icon="mdi mdi-account-group"
+        />
+      </span>
+
       <Button
         v-else-if="localCourse.subscribe && props.currentUserId && allowSelfSignup"
         :label="t('Subscribe')"
         class="w-full"
-        icon="pi pi-sign-in"
+        icon="mdi mdi-login"
+        :loading="subscribing"
         @click="subscribeToCourse"
       />
 
@@ -532,7 +564,7 @@ onMounted(() => {
         :label="t('Subscription not allowed')"
         class="w-full"
         disabled
-        icon="pi pi-ban"
+        icon="mdi mdi-cancel"
       />
 
       <Button
@@ -540,7 +572,7 @@ onMounted(() => {
         :label="t('Private course')"
         class="w-full"
         disabled
-        icon="pi pi-lock"
+        icon="mdi mdi-lock"
       />
 
       <Button
@@ -548,7 +580,7 @@ onMounted(() => {
         :label="t('Not available')"
         class="w-full"
         disabled
-        icon="pi pi-eye-slash"
+        icon="mdi mdi-eye-off"
       />
     </template>
   </Card>

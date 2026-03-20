@@ -421,23 +421,31 @@ switch ($action) {
                 $extraFieldValue->saveFieldValues($_POST, $itemId);
             };
 
-            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'])) {
+            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'], true)) {
+                $document_id = 0;
+                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
+
                 if (isset($_POST['path']) && !empty($_GET['id'])) {
-                    $document_id = $_POST['path'];
+                    $document_id = (int) $_POST['path'];
                 } else {
-                    if ($_POST['content_lp']) {
-                        $document_id = $oLP->create_document(
-                            $courseInfo,
-                            $_POST['content_lp'],
-                            $_POST['title'],
-                            'html',
-                            $directoryParentId
-                        );
-                    }
+                    $document_id = (int) $oLP->create_document(
+                        $courseInfo,
+                        $contentLp,
+                        $_POST['title'],
+                        'html',
+                        $directoryParentId
+                    );
+                }
+
+                if (empty($document_id)) {
+                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
                 $documentRepo = Database::getManager()->getRepository(CDocument::class);
-                $document = $documentRepo->find((int) $document_id);
+                $document = $documentRepo->find($document_id);
                 if ($document && $document->getFiletype() === 'video') {
                     $type = 'video';
                 }
@@ -453,19 +461,26 @@ switch ($action) {
                 );
                 $saveExportFlag($createdItemId);
                 $saveLpItemExtraFields($createdItemId);
-
             } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
-                if (isset($_POST['path']) && 'true' != $_GET['edit']) {
-                    $document_id = $_POST['path'];
+                $document_id = 0;
+                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
+
+                if (isset($_POST['path']) && 'true' != ($_GET['edit'] ?? '')) {
+                    $document_id = (int) $_POST['path'];
                 } else {
-                    if ($_POST['content_lp']) {
-                        $document_id = $oLP->createReadOutText(
-                            $courseInfo,
-                            $_POST['content_lp'],
-                            $_POST['title'],
-                            $directoryParentId
-                        );
-                    }
+                    $document_id = (int) $oLP->createReadOutText(
+                        $courseInfo,
+                        $contentLp,
+                        $_POST['title'],
+                        $directoryParentId
+                    );
+                }
+
+                if (empty($document_id)) {
+                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
                 $createdItemId = $oLP->add_item(

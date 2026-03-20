@@ -18,6 +18,8 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
@@ -101,6 +103,10 @@ class ResourceNodeVoter extends Voter
 
         // Checking admin role.
         if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        if (self::VIEW === $attribute && $this->canViewOwnStudentPublicationRelatedResource($resourceNode, $token)) {
             return true;
         }
 
@@ -598,6 +604,59 @@ class ResourceNodeVoter extends Voter
             if (\in_array(strtolower((string) $toolName), ['blog', 'blogs'], true)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private function canViewOwnStudentPublicationRelatedResource(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        $resourceTypeTitle = $resourceNode->getResourceType()->getTitle();
+
+        if ('student_publications' === $resourceTypeTitle) {
+            $publication = $this->entityManager
+                ->getRepository(CStudentPublication::class)
+                ->findOneBy(['resourceNode' => $resourceNode]);
+
+            if ($publication instanceof CStudentPublication) {
+                return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
+        }
+
+        if ('student_publications_comments' === $resourceTypeTitle) {
+            $comment = $this->entityManager
+                ->getRepository(CStudentPublicationComment::class)
+                ->findOneBy(['resourceNode' => $resourceNode]);
+
+            if ($comment instanceof CStudentPublicationComment) {
+                return $comment->getPublication()->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
+        }
+
+        if ('student_publications_corrections' === $resourceTypeTitle) {
+            $parentNode = $resourceNode->getParent();
+            if (!$parentNode instanceof ResourceNode) {
+                return false;
+            }
+
+            $publication = $this->entityManager
+                ->getRepository(CStudentPublication::class)
+                ->findOneBy(['resourceNode' => $parentNode]);
+
+            if ($publication instanceof CStudentPublication) {
+                return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
         }
 
         return false;

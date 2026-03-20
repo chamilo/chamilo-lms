@@ -75,7 +75,7 @@
       </div>
       <Button
         class="p-button-rounded p-button-text"
-        icon="pi pi-check"
+        icon="mdi mdi-check"
         :label="t('Save')"
         @click="submitGroupEdit"
       />

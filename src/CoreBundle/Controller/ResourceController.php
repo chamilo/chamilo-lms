@@ -230,7 +230,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             /** @var ExternalTool|null $externalTool */
             $externalTool = $entityManager
                 ->getRepository(ExternalTool::class)
-                ->findOneBy(['resourceNode' => $resourceNode]);
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
 
             if ($externalTool) {
                 $query = array_filter(

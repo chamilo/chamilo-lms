@@ -26,10 +26,10 @@
 
           <BaseIcon
             v-if="isAllowedToEdit && link.sessionId && Number(link.sessionId) === sidValue"
+            :title="t('Session Item')"
             class="ml-2"
             icon="session-star"
             size="normal"
-            title="Session Item"
           />
 
           <BaseIcon
@@ -53,34 +53,38 @@
     <!-- Icon-only actions (same style as categories) -->
     <div
       v-if="securityStore.isAuthenticated && canEdit(link)"
-      class="flex items-center gap-3 text-gray-700"
+      class="flex items-center gap-2 text-gray-700"
     >
-      <BaseIcon
+      <BaseButton
+        :label="t('Check link')"
         icon="check"
-        size="normal"
-        :title="t('Check link')"
-        class="hover:text-black"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('check', link)"
       />
-      <BaseIcon
+      <BaseButton
+        :label="t('Edit')"
         icon="edit"
-        size="normal"
-        :title="t('Edit')"
-        class="hover:text-black"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('edit', link)"
       />
-      <BaseIcon
+      <BaseButton
         :icon="isVisible(link.linkVisible) ? 'eye-on' : 'eye-off'"
-        size="normal"
-        :title="t('Toggle visibility')"
-        class="hover:text-black"
+        :label="t('Toggle visibility')"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('toggle', link)"
       />
-      <BaseIcon
+      <BaseButton
+        :label="t('Delete')"
         icon="delete"
-        size="normal"
-        :title="t('Delete')"
-        class="hover:text-red-600"
+        only-icon
+        size="small"
+        type="danger"
         @click="emit('delete', link)"
       />
     </div>
@@ -89,6 +93,7 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"

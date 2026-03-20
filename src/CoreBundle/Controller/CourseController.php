@@ -325,7 +325,7 @@ class CourseController extends ToolBaseController
                         'gid' => 0,
                     ], static fn ($value): bool => null !== $value));
 
-                    $shortcut->setUrlOverride(sprintf(
+                    $shortcut->setUrlOverride(\sprintf(
                         '/resources/blog/%d/%d/posts?%s',
                         $courseNodeId,
                         $cBlog->getIid(),

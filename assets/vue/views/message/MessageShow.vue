@@ -13,49 +13,44 @@
 
     <SectionHeader :title="item.title">
       <BaseButton
+        :label="t('Back')"
         icon="back"
         only-icon
         type="black"
-        :title="t('Back')"
-        :aria-label="t('Back')"
         @click="goBackToList"
       />
 
       <BaseButton
         :disabled="isLoading"
+        :label="t('Reply to this message')"
         icon="reply"
         only-icon
         type="black"
-        :title="t('Reply to this message')"
-        :aria-label="t('Reply to this message')"
         @click="reply"
       />
 
       <BaseButton
         :disabled="isLoading"
+        :label="t('Reply to all')"
         icon="reply-all"
         only-icon
         type="black"
-        :title="t('Reply to all')"
-        :aria-label="t('Reply to all')"
         @click="replyAll"
       />
 
       <BaseButton
+        :label="t('Add to calendar')"
         icon="calendar-plus"
         only-icon
         type="black"
-        :title="t('Add to calendar')"
-        :aria-label="t('Add to calendar')"
         @click="createEvent"
       />
 
       <BaseButton
+        :label="t('Delete')"
         icon="delete"
         only-icon
         type="black"
-        :title="t('Delete')"
-        :aria-label="t('Delete')"
         @click="confirmDelete"
       />
     </SectionHeader>
@@ -118,7 +113,10 @@
 
     <p v-text="abbreviatedDatetime(item.sendDate)" />
 
-    <div class="tiny-content" v-html="item.content" />
+    <div
+      class="tiny-content"
+      v-html="item.content"
+    />
 
     <template v-if="item.attachments && item.attachments.length > 0">
       <BaseCard>
@@ -138,14 +136,13 @@
               <source :src="attachment.downloadUrl" />
             </audio>
 
-            <a
+            <BaseButton
               v-else
-              :href="attachment.downloadUrl"
-              class="btn btn--plain"
-            >
-              <BaseIcon icon="attachment" />
-              {{ attachment.resourceNode.firstResourceFile.originalName }}
-            </a>
+              :label="attachment.resourceNode.firstResourceFile.originalName"
+              :to-url="attachment.downloadUrl"
+              icon="attachment"
+              type="black"
+            />
           </li>
         </ul>
       </BaseCard>
@@ -172,7 +169,6 @@ import messageRelUserService from "../../services/messagereluser"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { useNotification } from "../../composables/notification"

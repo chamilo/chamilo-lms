@@ -15,7 +15,7 @@ export const sizeValidator = (value) => {
     return false
   }
 
-  return ["normal", "small"].includes(value)
+  return ["normal", "small", "large"].includes(value)
 }
 
 export const buttonTypeValidator = (value) => {

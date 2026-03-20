@@ -1,8 +1,11 @@
 <template>
   <div class="field space-y-2">
-    <BaseIcon
+    <BaseButton
+      :label="t('Back')"
       icon="back"
-      size="big"
+      only-icon
+      size="small"
+      type="black"
       @click="goBack"
     />
     <div class="field">
@@ -25,7 +28,7 @@ import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()

@@ -35,7 +35,7 @@ class LearningPathItem extends BaseActivity
                 'action' => 'view',
                 'lp_id' => $lpId,
                 'isStudentView' => 'true',
-                'lp_item' => $this->lpItem->getId(),
+                'lp_item' => $this->lpItem->getIid(),
             ]
         );
 

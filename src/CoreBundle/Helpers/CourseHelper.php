@@ -1371,5 +1371,4 @@ class CourseHelper
 
         return $infoMap;
     }
-
 }

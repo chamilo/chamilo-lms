@@ -32,7 +32,7 @@ class QuizQuestionAnswered extends BaseStatement
 
     public function generate(): array
     {
-        $user = api_get_user_entity($this->attempt->getUserId());
+        $user = $this->attempt->getUser();
 
         $userActor = new UserActor($user);
         $answeredVerb = new AnsweredVerb();

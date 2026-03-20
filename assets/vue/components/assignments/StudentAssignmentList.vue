@@ -43,10 +43,12 @@
           <span class="bg-primary text-white text-tiny font-semibold px-2 py-0.5 rounded">
             {{ slotProps.data.feedbackCount }} {{ t("Feedback") }}
           </span>
-          <BaseIcon
+          <BaseButton
+            :label="t('Feedback')"
             icon="comment"
+            only-icon
             size="small"
-            class="cursor-pointer hover:text-primary"
+            type="black"
             @click="openCommentDialog(slotProps.data)"
           />
         </div>
@@ -81,6 +83,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 

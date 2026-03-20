@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
+use AppPlugin;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
@@ -24,6 +25,7 @@ use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
+use Plugin;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
@@ -74,10 +76,10 @@ final class CToolStateProvider implements ProviderInterface
         $isAllowToEdit = $user && ($user->isAdmin() || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-                $user->isAdmin()
+            $user->isAdmin()
                 || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
                 || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            );
+        );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('session.allow_edit_tool_visibility_in_session');
 
@@ -184,7 +186,7 @@ final class CToolStateProvider implements ProviderInterface
 
     private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?AbstractTool
     {
-        $appPlugin = new \AppPlugin();
+        $appPlugin = new AppPlugin();
         $pluginRepository = Container::getPluginRepository();
         $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
 
@@ -214,7 +216,7 @@ final class CToolStateProvider implements ProviderInterface
                     ? $pluginClass::create()
                     : new $pluginClass();
 
-                if (!$plugin instanceof \Plugin) {
+                if (!$plugin instanceof Plugin) {
                     continue;
                 }
 

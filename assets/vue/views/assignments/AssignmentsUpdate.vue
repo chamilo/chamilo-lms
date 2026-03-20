@@ -1,8 +1,11 @@
 <template>
   <div class="field space-y-2">
-    <BaseIcon
+    <BaseButton
+      :label="t('Back')"
       icon="back"
-      size="big"
+      only-icon
+      size="small"
+      type="black"
       @click="goBack"
     />
 
@@ -21,7 +24,7 @@ import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
 import { useCidReq } from "../../composables/cidReq"

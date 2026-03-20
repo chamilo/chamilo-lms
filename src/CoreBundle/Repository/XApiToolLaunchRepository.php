@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -112,6 +111,6 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
             ->setParameter('toolId', (string) $toolLaunch->getId())
             ->getQuery()
             ->getSingleScalarResult()
-            ;
+        ;
     }
 }

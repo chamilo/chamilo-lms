@@ -26,7 +26,7 @@ class QuizQuestion extends BaseActivity
         $iri = $this->generateIri(
             WEB_CODE_PATH,
             'xapi/quiz/',
-            ['question' => $this->question->getId()]
+            ['question' => $this->question->getIid()]
         );
 
         return [
@@ -57,7 +57,7 @@ class QuizQuestion extends BaseActivity
             ];
         }
 
-        $objAnswer = new Answer($this->question->getId(), $courseId);
+        $objAnswer = new Answer($this->question->getIid(), $courseId);
         $objAnswer->read();
 
         switch ($this->question->getType()) {

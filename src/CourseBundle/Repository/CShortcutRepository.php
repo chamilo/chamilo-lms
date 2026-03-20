@@ -33,7 +33,8 @@ final class CShortcutRepository extends ResourceRepository
             ->orderBy('shortcut.id', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -49,7 +50,8 @@ final class CShortcutRepository extends ResourceRepository
             ->setParameter('shortcutNode', $resource->getResourceNode())
             ->orderBy('resourceNode.id', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -67,7 +69,8 @@ final class CShortcutRepository extends ResourceRepository
             ->andWhere('link.course IS NOT NULL')
             ->setParameter('shortcutNode', $resource->getResourceNode())
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         $courseIds = [];
         foreach ($rows as $row) {
@@ -96,7 +99,8 @@ final class CShortcutRepository extends ResourceRepository
             ->orderBy('shortcut.id', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -116,7 +120,8 @@ final class CShortcutRepository extends ResourceRepository
                 ->setShortCutNode($resource->getResourceNode())
                 ->setCreator($user)
                 ->setParent($course)
-                ->addCourseLink($course, $session);
+                ->addCourseLink($course, $session)
+            ;
 
             $this->create($shortcut);
 
@@ -125,7 +130,8 @@ final class CShortcutRepository extends ResourceRepository
 
         $shortcut
             ->setTitle($resource->getResourceName())
-            ->setShortCutNode($resource->getResourceNode());
+            ->setShortCutNode($resource->getResourceNode())
+        ;
 
         if (!$shortcut->getFirstResourceLinkFromCourseSession($course, $session)) {
             $shortcut->addCourseLink($course, $session);

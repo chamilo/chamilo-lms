@@ -22,11 +22,8 @@ use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemHighlightedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemScoredEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemViewedEvent;
-use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CLpItem;
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CLpView;
-use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\LearningPathCompleted;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\LearningPathItemViewed;
@@ -119,13 +116,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $attempt = $attemptRepo->findOneBy(
-            [
-                'exeId' => $exe->getExeId(),
-                'questionId' => $question->getId(),
-            ]
-        );
-        $quiz = $em->find(CQuiz::class, $event->getExerciseId());
+        $attempt = $attemptRepo->findOneBy([
+            'trackExercise' => $exe,
+            'questionId' => $question->getIid(),
+        ]);
+
+        $quiz = $exe->getQuiz();
 
         if (!$attempt || !$quiz) {
             return;
@@ -157,7 +153,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $quiz = $em->find(CQuiz::class, $exe->getExeExoId());
+        $quiz = $exe->getQuiz();
 
         if (!$quiz) {
             return;
@@ -183,19 +179,20 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
         $em = Database::getManager();
 
+        /** @var CLpItemView|null $lpItemView */
         $lpItemView = $em->find(CLpItemView::class, $event->getItemViewId());
 
         if (!$lpItemView) {
             return;
         }
 
-        $lpItem = $em->find(CLpItem::class, $lpItemView->getLpItemId());
+        $lpItem = $lpItemView->getItem();
 
         if (!$lpItem || 'quiz' === $lpItem->getItemType()) {
             return;
         }
 
-        $lpView = $em->find(CLpView::class, $lpItemView->getLpViewId());
+        $lpView = $lpItemView->getView();
 
         if (!$lpView) {
             return;
@@ -221,13 +218,14 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
         $em = Database::getManager();
 
+        /** @var CLpView|null $lpView */
         $lpView = $em->find(CLpView::class, $event->getLpViewId());
 
         if (!$lpView) {
             return;
         }
 
-        $lp = $em->find(CLp::class, $lpView->getLpId());
+        $lp = $lpView->getLp();
 
         if (!$lp) {
             return;

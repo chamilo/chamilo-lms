@@ -145,6 +145,21 @@ class CidReqListener
             // Setting variables for the twig templates.
             $twig->addGlobal('course', $course);
 
+            $ltiAccessRestored = true === $request->attributes->get('_lti_provider_access_restored');
+
+            if ($ltiAccessRestored) {
+                $ltiUserId = (int) $request->attributes->get('_lti_provider_user_id', 0);
+                $ltiCourseId = (int) $request->attributes->get('_lti_provider_course_id', 0);
+
+                if (
+                    $ltiUserId > 0
+                    && $ltiCourseId > 0
+                    && $ltiCourseId === (int) $course->getId()
+                ) {
+                    return;
+                }
+            }
+
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
                 throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
             }

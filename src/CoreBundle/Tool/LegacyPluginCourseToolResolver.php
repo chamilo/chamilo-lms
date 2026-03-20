@@ -15,8 +15,7 @@ final class LegacyPluginCourseToolResolver
     public function __construct(
         private readonly ToolChain $toolChain,
         private readonly PluginHelper $pluginHelper,
-    ) {
-    }
+    ) {}
 
     /**
      * Resolve a course tool model from:

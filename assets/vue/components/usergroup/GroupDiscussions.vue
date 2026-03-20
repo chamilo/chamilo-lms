@@ -73,7 +73,7 @@
       <BaseButton
         class="mt-8"
         icon="save"
-        label="Send message"
+        :label="t('Send message')"
         type="button"
         @click="handleSubmit"
       />

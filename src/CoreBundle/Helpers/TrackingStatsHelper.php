@@ -327,7 +327,7 @@ class TrackingStatsHelper
                 ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
                 ->getQuery()
                 ->getResult()
-                ;
+            ;
         }
 
         $conn = $this->em->getConnection();
@@ -364,6 +364,6 @@ class TrackingStatsHelper
             ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 }

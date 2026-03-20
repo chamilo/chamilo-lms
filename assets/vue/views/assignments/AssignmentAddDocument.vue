@@ -1,11 +1,13 @@
 <template>
   <div>
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
     <hr />
@@ -73,7 +75,6 @@ import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const route = useRoute()

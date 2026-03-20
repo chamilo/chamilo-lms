@@ -1,11 +1,13 @@
 <template>
   <div>
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
 
@@ -84,12 +86,14 @@
             :disabled="currentPage === 1"
             @click="prevPage"
             :label="t('Previous')"
+            icon="arrow-left"
           />
           <span>{{ t("Page") }} {{ currentPage }}</span>
           <BaseButton
             :disabled="!hasNextPage"
             @click="nextPage"
             :label="t('Next')"
+            icon="arrow-right"
           />
         </div>
       </div>
@@ -112,7 +116,6 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import debounce from "lodash/debounce"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const route = useRoute()

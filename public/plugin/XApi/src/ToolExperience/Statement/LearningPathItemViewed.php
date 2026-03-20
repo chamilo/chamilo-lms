@@ -14,7 +14,6 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\LearningPath;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\LearningPathItem as LearningPathItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Viewed as ViewedVerb;
-use Database;
 
 /**
  * Class LearningPathItemViewed.
@@ -34,8 +33,8 @@ class LearningPathItemViewed extends BaseStatement
 
     public function generate(): array
     {
-        $user = api_get_user_entity($this->lpView->getUserId());
-        $lp = Database::getManager()->find(CLp::class, $this->lpView->getLpId());
+        $user = $this->lpView->getUser();
+        $lp = $this->lpView->getLp();
 
         $userActor = new UserActor($user);
         $viewedVerb = new ViewedVerb();
@@ -48,13 +47,8 @@ class LearningPathItemViewed extends BaseStatement
             $context = $this->mergeGroupingActivity($context, $lpActivity->generate());
         }
 
-        $status = method_exists($this->lpItemView, 'getStatus')
-            ? (string) $this->lpItemView->getStatus()
-            : '';
-
-        $totalTime = method_exists($this->lpItemView, 'getTotalTime')
-            ? (int) $this->lpItemView->getTotalTime()
-            : 0;
+        $status = (string) $this->lpItemView->getStatus();
+        $totalTime = (int) $this->lpItemView->getTotalTime();
 
         return [
             'id' => $this->generateStatementId('learning-path-item'),

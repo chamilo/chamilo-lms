@@ -5698,149 +5698,11 @@ SQL;
     }
 
     /**
-     * Anonymize a user. Replace personal info by anonymous info.
-     *
-     * @param int  $userId   User id
-     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     * @assert (0) === false
-     */
-    public static function anonymize($userId, $deleteIP = true)
-    {
-        global $debug;
-
-        $userId = (int) $userId;
-
-        if (empty($userId)) {
-            return false;
-        }
-
-        $em = Database::getManager();
-        $user = api_get_user_entity($userId);
-        $uniqueId = uniqid('anon', true);
-        $user
-            ->setFirstname($uniqueId)
-            ->setLastname($uniqueId)
-            ->setBiography('')
-            ->setAddress('')
-            //->setCurriculumItems(null)
-            ->setDateOfBirth(null)
-            ->setCompetences('')
-            ->setDiplomas('')
-            ->setOpenarea('')
-            ->setTeach('')
-            ->setProductions(null)
-            ->setOpenid('')
-            ->setEmailCanonical($uniqueId.'@example.com')
-            ->setEmail($uniqueId.'@example.com')
-            ->setUsername($uniqueId)
-            ->setUsernameCanonical($uniqueId)
-            ->setPhone('')
-            ->setOfficialCode('')
-        ;
-
-        self::deleteUserPicture($userId);
-        self::cleanUserRequestsOfRemoval($userId);
-
-        // The IP address is a border-case personal data, as it does
-        // not directly allow for personal identification (it is not
-        // a completely safe value in most countries - the IP could
-        // be used by neighbours and crackers)
-        if ($deleteIP) {
-            $substitute = '127.0.0.1';
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE exe_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
-            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-        }
-
-        $extraFieldRepository = $em->getRepository(EntityExtraField::class);
-        $autoRemoveFields = $extraFieldRepository->findBy([
-            'autoRemove' => 1,
-            'itemType' => EntityExtraField::USER_FIELD_TYPE
-        ]);
-
-        foreach ($autoRemoveFields as $field) {
-            $extraFieldValueRepository = $em->getRepository(EntityExtraFieldValues::class);
-            $extraFieldValue = $extraFieldValueRepository->findOneBy([
-                'field' => $field,
-                'itemId' => $userId
-            ]);
-
-            if ($extraFieldValue) {
-                $em->remove($extraFieldValue);
-            }
-        }
-
-        $em->persist($user);
-        $em->flush();
-        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
-
-        return true;
-    }
-
-    /**
      * @param int $userId
      *
      * @throws Exception
-     *
-     * @return string
      */
-    public static function anonymizeUserWithVerification($userId)
+    public static function anonymizeUserWithVerification($userId): string
     {
         $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
 
@@ -5848,28 +5710,28 @@ SQL;
         if (api_is_platform_admin() ||
             ($allowDelete && api_is_session_admin())
         ) {
-            $userToUpdateInfo = api_get_user_info($userId);
+            $userEntity = api_get_user_entity($userId);
             $currentUserId = api_get_user_id();
 
-            if ($userToUpdateInfo &&
+            if ($userEntity &&
                 api_global_admin_can_edit_admin($userId, null, $allowDelete)
             ) {
                 if ($userId != $currentUserId &&
-                    self::anonymize($userId)
+                    Container::getUserAnonymizationHelper()->anonymize($userEntity)
                 ) {
                     $message = Display::return_message(
-                        sprintf(get_lang("User %s's information anonymized."), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("User %s's information anonymized."), $userEntity->getFullNameWithUsername()),
                         'confirmation'
                     );
                 } else {
                     $message = Display::return_message(
-                        sprintf(get_lang("We could not anonymize user %s's information. Please try again or check the logs."), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("We could not anonymize user %s's information. Please try again or check the logs."), $userEntity->getFullNameWithUsername()),
                         'error'
                     );
                 }
             } else {
                 $message = Display::return_message(
-                    sprintf(get_lang('You don\'t have permissions to anonymize user %s. You need the same permissions as to delete users.'), $userToUpdateInfo['complete_name_with_username']),
+                    sprintf(get_lang('You don\'t have permissions to anonymize user %s. You need the same permissions as to delete users.'), $userEntity->getFullNameWithUsername()),
                     'error'
                 );
             }

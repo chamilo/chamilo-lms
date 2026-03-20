@@ -1228,4 +1228,148 @@ class CourseHelper
         $suffix = $context ? ' '.json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '';
         error_log('[CourseHelper] '.$message.$suffix);
     }
+
+    public function getGlobalUsersPerCourseLimit(): int
+    {
+        $info = $this->getGlobalUsersPerCourseLimitDebugInfo();
+
+        return $info['limit'];
+    }
+
+    public function getGlobalUsersPerCourseLimitDebugInfo(): array
+    {
+        $raw = $this->settingsManager->getSetting('platform.hosting_limit_users_per_course', true);
+        $limit = max(0, (int) ($raw ?? 0));
+
+        return [
+            'limit' => $limit,
+            'rawSettingKey' => 'platform.hosting_limit_users_per_course',
+            'rawSettingValue' => null !== $raw ? (string) $raw : null,
+        ];
+    }
+
+    public function countUsersForGlobalLimit(Course $course): int
+    {
+        $counts = $this->getCourseSubscriptionCountsByCourseIds([(int) $course->getId()]);
+
+        return (int) ($counts[(int) $course->getId()] ?? 0);
+    }
+
+    public function getCourseSubscriptionCountsByCourseIds(array $courseIds): array
+    {
+        $courseIds = array_values(array_filter(array_map('intval', $courseIds)));
+        if ([] === $courseIds) {
+            return [];
+        }
+
+        $rows = $this->entityManager
+            ->createQueryBuilder()
+            ->select('IDENTITY(cru.course) AS courseId, COUNT(DISTINCT cru.user) AS total')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('cru.course IN (:courseIds)')
+            ->andWhere('cru.relationType <> :rrhhRelationType')
+            ->setParameter('courseIds', $courseIds)
+            ->setParameter('rrhhRelationType', COURSE_RELATION_TYPE_RRHH)
+            ->groupBy('cru.course')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $counts = array_fill_keys($courseIds, 0);
+
+        foreach ($rows as $row) {
+            $counts[(int) $row['courseId']] = (int) $row['total'];
+        }
+
+        return $counts;
+    }
+
+    public function getCourseSubscriptionLimitInfo(Course $course, int $nbNewUsers = 1): array
+    {
+        $map = $this->getCourseSubscriptionLimitInfoMap([$course], $nbNewUsers);
+
+        return $map[(int) $course->getId()] ?? [
+            'subscriptionLimitEnabled' => false,
+            'subscriptionLimit' => 0,
+            'subscriptionCount' => 0,
+            'subscriptionLimitReached' => false,
+            'canSubscribe' => true,
+            'subscriptionLimitTooltip' => '',
+            'rawSettingKey' => 'platform.hosting_limit_users_per_course',
+            'rawSettingValue' => null,
+        ];
+    }
+
+    public function getCourseSubscriptionLimitInfoMap(array $courses, int $nbNewUsers = 1): array
+    {
+        $courses = array_values(array_filter(
+            $courses,
+            static fn ($course) => $course instanceof Course
+        ));
+
+        if ([] === $courses) {
+            return [];
+        }
+
+        $limitInfo = $this->getGlobalUsersPerCourseLimitDebugInfo();
+        $limit = (int) $limitInfo['limit'];
+        $rawSettingKey = $limitInfo['rawSettingKey'];
+        $rawSettingValue = $limitInfo['rawSettingValue'];
+
+        $courseIds = array_map(
+            static fn (Course $course): int => (int) $course->getId(),
+            $courses
+        );
+
+        if ($limit <= 0) {
+            $infoMap = [];
+
+            foreach ($courseIds as $courseId) {
+                $infoMap[$courseId] = [
+                    'subscriptionLimitEnabled' => false,
+                    'subscriptionLimit' => 0,
+                    'subscriptionCount' => 0,
+                    'subscriptionLimitReached' => false,
+                    'canSubscribe' => true,
+                    'subscriptionLimitTooltip' => '',
+                    'rawSettingKey' => $rawSettingKey,
+                    'rawSettingValue' => $rawSettingValue,
+                ];
+            }
+
+            return $infoMap;
+        }
+
+        $counts = $this->getCourseSubscriptionCountsByCourseIds($courseIds);
+        $infoMap = [];
+
+        foreach ($courses as $course) {
+            $courseId = (int) $course->getId();
+            $current = (int) ($counts[$courseId] ?? 0);
+            $reached = $current >= $limit;
+            $canSubscribe = ($current + $nbNewUsers) <= $limit;
+
+            $tooltip = $this->translator->trans(
+                'The subscription limit for this course has been reached (%current%/%limit%).',
+                [
+                    '%current%' => $current,
+                    '%limit%' => $limit,
+                ]
+            );
+
+            $infoMap[$courseId] = [
+                'subscriptionLimitEnabled' => true,
+                'subscriptionLimit' => $limit,
+                'subscriptionCount' => $current,
+                'subscriptionLimitReached' => $reached,
+                'canSubscribe' => $canSubscribe,
+                'subscriptionLimitTooltip' => $tooltip,
+                'rawSettingKey' => $rawSettingKey,
+                'rawSettingValue' => $rawSettingValue,
+            ];
+        }
+
+        return $infoMap;
+    }
+
 }

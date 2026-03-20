@@ -14,9 +14,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
@@ -44,38 +41,6 @@ use const SORT_NATURAL;
     types: ['https://schema.org/Course'],
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
-        new Get(
-            uriTemplate: '/courses/{id}/stats/{metric}',
-            requirements: [
-                'id' => '\d+',
-                'metric' => 'course-avg-score|course-avg-progress',
-            ],
-            controller: GetCourseStatsAction::class,
-            openapi: new Operation(
-                summary: 'Course-wide statistics, switched by {metric}',
-                parameters: [
-                    new Parameter(
-                        name: 'metric',
-                        in: 'path',
-                        description: 'Metric selector',
-                        required: true,
-                        schema: [
-                            'type' => 'string',
-                            'enum' => ['course-avg-score', 'course-avg-progress'],
-                        ],
-                    ),
-                    new Parameter(
-                        name: 'sessionId',
-                        in: 'query',
-                        description: 'Optional Session ID',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
-            read: false,
-            deserialize: false,
-        ),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         new GetCollection(
             paginationClientEnabled: true,

@@ -151,11 +151,15 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
      */
     public function findByVariableAndValue(
         ExtraField $extraField,
-        int|string $value,
+        int|string|null $value,
         bool $last = false,
         bool $all = false,
         bool $useLike = false,
     ): array|ExtraFieldValues|null {
+        if (null === $value) {
+            return null;
+        }
+
         $qb = $this->createQueryBuilder('s');
 
         if ($useLike) {

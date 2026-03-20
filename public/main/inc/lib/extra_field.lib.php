@@ -2944,7 +2944,7 @@ JAVASCRIPT;
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
-                    $item = trim($item);
+                    $item = Database::escape_string(trim($item));
                     $result .= ' '.$conditionBetweenOptions.' '.$col.' LIKE "%'.$item.'%"';
                 }
                 $val = $result;

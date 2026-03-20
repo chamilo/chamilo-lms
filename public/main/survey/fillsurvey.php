@@ -698,7 +698,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) || isset($_POST['personality']
                           ON survey_question.iid = survey_question_option.question_id
                         WHERE survey_question NOT LIKE '%{{%'
                           AND survey_question.survey_id = '".$surveyId."'
-                          AND survey_question.iid IN (".implode(',', $paged_questions[$_GET['show']]).')
+                          AND survey_question.iid IN (".implode(',', $paged_questions[(int)$_GET['show']]).')
                         ORDER BY survey_question.sort, survey_question_option.sort ASC';
             }
 
@@ -1153,7 +1153,7 @@ if (isset($questions) && is_array($questions)) {
                 case 'dropdown':
                     $finalAnswer = current($userAnswer);
 
-                    break; 
+                    break;
 
                 default:
                     $finalAnswer = $userAnswer;

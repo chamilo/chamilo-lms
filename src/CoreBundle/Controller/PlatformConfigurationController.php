@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Throwable;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -48,11 +47,20 @@ class PlatformConfigurationController extends AbstractController
         $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
-            if (\in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
+            if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {
                 $enabledOAuthProviders = [$forcedLoginMethod => $enabledOAuthProviders[$forcedLoginMethod]];
             } else {
                 $enabledOAuthProviders = [];
             }
+        }
+
+        $oauth2Providers = [];
+        foreach ($enabledOAuthProviders as $providerName => $providerParams) {
+            $oauth2Providers[] = [
+                'name' => $providerName,
+                'title' => $providerParams['title'] ?? ucwords($providerName),
+                'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
+            ];
         }
 
         $configuration = [
@@ -60,15 +68,7 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
-            'oauth2_providers' => array_map(
-                fn ($providerName, $providerParams) => [
-                    'name' => $providerName,
-                    'title' => $providerParams['title'] ?? ucwords($providerName),
-                    'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
-                ],
-                array_keys($enabledOAuthProviders),
-                $enabledOAuthProviders
-            ),
+            'oauth2_providers' => $oauth2Providers,
             'ldap_auth' => null,
             'forced_login_method' => $forcedLoginMethod,
         ];
@@ -90,19 +90,14 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['catalog.allow_students_to_browse_courses'] = $settingsManager->getSetting('catalog.allow_students_to_browse_courses', true);
         $configuration['settings']['catalog.allow_session_auto_subscription'] = $settingsManager->getSetting('catalog.allow_session_auto_subscription', true);
         $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
-        $rawCourseCatalogSetting = $settingsManager->getSetting('catalog.course_catalog_settings', true);
-        $configuration['settings']['catalog.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
-        $rawSessionCatalogSetting = $settingsManager->getSetting('catalog.session_catalog_settings', true);
-        $configuration['settings']['catalog.session_catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['catalog.course_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.course_catalog_settings', true));
+        $configuration['settings']['catalog.session_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.session_catalog_settings', true));
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
-        $rawCourseStudentInfoSetting = $settingsManager->getSetting('course.course_student_info', true);
-        $configuration['settings']['course.course_student_info'] = 'false' !== $rawCourseStudentInfoSetting ? $this->decodeSettingArray($rawCourseStudentInfoSetting) : 'false';
-
-        $variables = [];
+        $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
 
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
@@ -175,6 +170,10 @@ class PlatformConfigurationController extends AbstractController
                 'language.show_different_course_language',
             ];
 
+            foreach ($variables as $variable) {
+                $configuration['settings'][$variable] = $settingsManager->getSetting($variable, true);
+            }
+
             $user = $this->userHelper->getCurrent();
 
             $configuration['settings']['ticket.show_link_ticket_notification'] = 'false';
@@ -198,12 +197,6 @@ class PlatformConfigurationController extends AbstractController
             ];
 
             $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
-        }
-
-        foreach ($variables as $variable) {
-            $value = $settingsManager->getSetting($variable, true);
-
-            $configuration['settings'][$variable] = $value;
         }
 
         return new JsonResponse($configuration);
@@ -246,12 +239,15 @@ class PlatformConfigurationController extends AbstractController
     }
 
     /**
-     * Attempts to decode a setting value that may be stored as:
-     * - native PHP array
-     * - JSON string
+     * Decodes a setting stored as a JSON string or native array.
+     * Returns the string 'false' unchanged (used as a sentinel by the settings system).
      */
-    private function decodeSettingArray(mixed $setting): array
+    private function decodeSetting(mixed $setting): mixed
     {
+        if ('false' === $setting) {
+            return 'false';
+        }
+
         // Already an array, return as is
         if (\is_array($setting)) {
             return $setting;

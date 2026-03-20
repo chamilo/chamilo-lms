@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
+use Plugin;
+
 final class LegacyPluginCourseTool extends AbstractPlugin
 {
     private string $link = '';
@@ -25,7 +27,7 @@ final class LegacyPluginCourseTool extends AbstractPlugin
         $this->scope = '01';
     }
 
-    public static function fromLegacyPlugin(\Plugin $plugin, string $courseToolTitle = ''): self
+    public static function fromLegacyPlugin(Plugin $plugin, string $courseToolTitle = ''): self
     {
         $pluginName = $plugin->get_name();
         $titleToShow = trim($courseToolTitle);
@@ -41,6 +43,7 @@ final class LegacyPluginCourseTool extends AbstractPlugin
         foreach (['start.php', 'index.php', 'admin.php'] as $file) {
             if (is_file($sysPluginPath.$file)) {
                 $link = $webPluginPath.$file;
+
                 break;
             }
         }

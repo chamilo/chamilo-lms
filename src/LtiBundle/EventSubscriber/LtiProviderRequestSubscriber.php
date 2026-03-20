@@ -7,6 +7,7 @@ namespace Chamilo\LtiBundle\EventSubscriber;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\LtiBundle\Security\LtiProviderLaunchToken;
+use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,8 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Throwable;
+
+use const PHP_URL_PATH;
 
 final class LtiProviderRequestSubscriber implements EventSubscriberInterface
 {
@@ -51,8 +55,7 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -200,7 +203,7 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
                 if (\is_array($payload)) {
                     return $this->normalizeContext($payload, $token, $launchId, 'token');
                 }
-            } catch (\Throwable $throwable) {
+            } catch (Throwable $throwable) {
                 $this->logger->warning('[LtiProvider subscriber] Failed to parse launch token.', [
                     'message' => $throwable->getMessage(),
                 ]);
@@ -298,7 +301,7 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
         $referer = (string) $request->headers->get('referer', '');
 
         if ('' !== $referer) {
-            $refererPath = (string) (parse_url($referer, \PHP_URL_PATH) ?: '');
+            $refererPath = (string) (parse_url($referer, PHP_URL_PATH) ?: '');
 
             if (str_starts_with($refererPath, self::MAIN_PREFIX)) {
                 return true;
@@ -422,14 +425,14 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
     private function isUserSubscribedToCourse(User $user, Course $course): bool
     {
         try {
-            $result = \CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
+            $result = CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
 
             if (!$result) {
-                $result = \CourseManager::is_user_subscribed_in_course($course->getCode(), $user->getId());
+                $result = CourseManager::is_user_subscribed_in_course($course->getCode(), $user->getId());
             }
 
             return (bool) $result;
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->logger->warning('[LtiProvider subscriber] Subscription check failed. Falling back to trusting launch validation.', [
                 'user_id' => $user->getId(),
                 'course_code' => $course->getCode(),
@@ -465,7 +468,7 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
 
         if ('' === $path || '/' === $path) {
             $requestUri = (string) $request->server->get('REQUEST_URI', '');
-            $path = (string) (parse_url($requestUri, \PHP_URL_PATH) ?: '/');
+            $path = (string) (parse_url($requestUri, PHP_URL_PATH) ?: '/');
         }
 
         $this->logger->debug('[LtiProvider subscriber] Resolved legacy request path.', [

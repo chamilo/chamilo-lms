@@ -1,9 +1,16 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 declare(strict_types=1);
 
 namespace Chamilo\LtiBundle\Security;
+
+use RuntimeException;
+
+use const JSON_ERROR_NONE;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 final class LtiProviderLaunchToken
 {
@@ -22,7 +29,7 @@ final class LtiProviderLaunchToken
         );
 
         if (false === $json) {
-            throw new \RuntimeException('Unable to encode LTI provider launch token payload.');
+            throw new RuntimeException('Unable to encode LTI provider launch token payload.');
         }
 
         $payloadPart = $this->base64UrlEncode($json);
@@ -84,7 +91,7 @@ final class LtiProviderLaunchToken
         return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
     }
 
-    private function base64UrlDecode(string $value): string|false
+    private function base64UrlDecode(string $value): false|string
     {
         $padding = \strlen($value) % 4;
 

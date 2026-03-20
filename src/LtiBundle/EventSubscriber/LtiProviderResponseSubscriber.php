@@ -12,6 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
+use const PHP_URL_HOST;
+use const PHP_URL_PATH;
+
 final class LtiProviderResponseSubscriber implements EventSubscriberInterface
 {
     private const TOKEN_PARAM = 'lti_provider_token';
@@ -41,8 +50,7 @@ final class LtiProviderResponseSubscriber implements EventSubscriberInterface
 
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -129,7 +137,7 @@ final class LtiProviderResponseSubscriber implements EventSubscriberInterface
             $launchId = (string) $request->cookies->get(self::LAUNCH_ID_PARAM, '');
         }
 
-        if (($token === '' || $launchId === '') && $request->hasSession()) {
+        if (('' === $token || '' === $launchId) && $request->hasSession()) {
             $storedContext = $request->getSession()->get(self::SESSION_CONTEXT_KEY);
 
             if (\is_array($storedContext)) {
@@ -310,12 +318,12 @@ HTML;
         $lower = strtolower($url);
 
         return
-            str_starts_with($lower, '#') ||
-            str_starts_with($lower, 'javascript:') ||
-            str_starts_with($lower, 'mailto:') ||
-            str_starts_with($lower, 'tel:') ||
-            str_starts_with($lower, 'data:') ||
-            str_starts_with($lower, 'blob:');
+            str_starts_with($lower, '#')
+            || str_starts_with($lower, 'javascript:')
+            || str_starts_with($lower, 'mailto:')
+            || str_starts_with($lower, 'tel:')
+            || str_starts_with($lower, 'data:')
+            || str_starts_with($lower, 'blob:');
     }
 
     private function unparseUrl(array $parts): string

@@ -621,7 +621,8 @@ class ResourceNodeVoter extends Voter
         if ('student_publications' === $resourceTypeTitle) {
             $publication = $this->entityManager
                 ->getRepository(CStudentPublication::class)
-                ->findOneBy(['resourceNode' => $resourceNode]);
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
 
             if ($publication instanceof CStudentPublication) {
                 return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();
@@ -633,7 +634,8 @@ class ResourceNodeVoter extends Voter
         if ('student_publications_comments' === $resourceTypeTitle) {
             $comment = $this->entityManager
                 ->getRepository(CStudentPublicationComment::class)
-                ->findOneBy(['resourceNode' => $resourceNode]);
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
 
             if ($comment instanceof CStudentPublicationComment) {
                 return $comment->getPublication()->getUser()->getUserIdentifier() === $user->getUserIdentifier();
@@ -650,7 +652,8 @@ class ResourceNodeVoter extends Voter
 
             $publication = $this->entityManager
                 ->getRepository(CStudentPublication::class)
-                ->findOneBy(['resourceNode' => $parentNode]);
+                ->findOneBy(['resourceNode' => $parentNode])
+            ;
 
             if ($publication instanceof CStudentPublication) {
                 return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();

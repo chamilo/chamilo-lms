@@ -35,21 +35,15 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
             foreach ($this->getAzureUsers() as $azureUserInfo) {
                 try {
                     if (empty($azureUserInfo['mail'])) {
-                        throw new BadRequestHttpException(
-                            'The mail field is empty in Azure AD and is needed to set the organisation email for this user.'
-                        );
+                        throw new BadRequestHttpException('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
                     }
 
                     if (empty($azureUserInfo['mailNickname'])) {
-                        throw new BadRequestHttpException(
-                            'The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.'
-                        );
+                        throw new BadRequestHttpException('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
                     }
 
                     if (empty($azureUserInfo['id'])) {
-                        throw new BadRequestHttpException(
-                            'The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.'
-                        );
+                        throw new BadRequestHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
                     }
 
                     $user = $this->azureHelper->registerUser($azureUserInfo);

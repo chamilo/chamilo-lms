@@ -45,7 +45,7 @@ abstract class AbstractTrackingStateProvider
         $value = $this->getCurrentRequest()->query->getInt($name);
 
         if ($value <= 0) {
-            throw new BadRequestHttpException(sprintf('Missing or invalid %s.', $name));
+            throw new BadRequestHttpException(\sprintf('Missing or invalid %s.', $name));
         }
 
         return $value;
@@ -115,11 +115,11 @@ abstract class AbstractTrackingStateProvider
             && $currentUser->getId() === $targetUser->getId();
 
         $isCourseTeacher = $currentUser instanceof User && (
-                $course->hasUserAsTeacher($currentUser)
+            $course->hasUserAsTeacher($currentUser)
                 || ($session && $session->hasCoachInCourseList($currentUser))
-            );
+        );
 
-        $isPrivileged = \api_is_platform_admin()
+        $isPrivileged = api_is_platform_admin()
             || $this->security->isGranted('ROLE_ADMIN')
             || $this->security->isGranted('ROLE_SESSION_MANAGER')
             || $this->security->isGranted('ROLE_HR')

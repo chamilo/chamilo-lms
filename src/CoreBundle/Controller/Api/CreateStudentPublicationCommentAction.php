@@ -14,9 +14,10 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,7 +28,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         Request $request,
         CStudentPublicationCommentRepository $commentRepo,
         CStudentPublicationRepository $publicationRepo,
-        EntityManager $em,
+        EntityManagerInterface $em,
         KernelInterface $kernel,
         TranslatorInterface $translator,
         MessageHelper $messageHelper,
@@ -71,14 +72,19 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             throw new NotFoundHttpException('Student publication not found');
         }
 
-        /** @var User $user */
-        $user = $security->getUser();
+        $securityUser = $security->getUser();
+
+        if (!$securityUser instanceof User || !$securityUser->getId()) {
+            throw new AccessDeniedHttpException('Authenticated user not found.');
+        }
+
+        $managedUser = $em->getReference(User::class, $securityUser->getId());
 
         $qualification = $request->get('qualification', null);
         $hasQualification = null !== $qualification;
 
         if ($hasFile || $hasComment) {
-            $commentEntity->setUser($user);
+            $commentEntity->setUser($managedUser);
             $commentEntity->setPublication($submission);
             $commentEntity->setComment($commentText ?? '');
 
@@ -87,7 +93,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         if ($hasQualification) {
             $submission->setQualification((float) $qualification);
-            $submission->setQualificatorId($user->getId());
+            $submission->setQualificatorId($managedUser->getId());
             $submission->setDateOfQualification(new DateTime());
 
             $em->persist($submission);
@@ -110,7 +116,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         if ($sendMail && $submission->getUser() instanceof User) {
             /** @var User $receiverUser */
             $receiverUser = $submission->getUser();
-            $senderUserId = $user?->getId() ?? 0;
+            $senderUserId = $managedUser->getId() ?? 0;
 
             $subject = \sprintf('New feedback for your submission "%s"', $submission->getTitle());
             $content = \sprintf(

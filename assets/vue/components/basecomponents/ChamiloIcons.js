@@ -175,4 +175,5 @@ export const chamiloIconToClass = {
   "restore": "mdi mdi-restore",
   "shield-star": "mdi mdi-shield-star",
   "assign-users": "mdi mdi-account-child",
+  "learning-paths": "mdi mdi-map-marker-path",
 }

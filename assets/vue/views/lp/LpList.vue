@@ -17,7 +17,7 @@
     </SectionHeader>
   </div>
 
-  <div class="space-y-6">
+  <div class="flex flex-col gap-4 flex-1 min-h-0">
     <div
       v-if="loading"
       class="space-y-4 animate-pulse"
@@ -34,39 +34,20 @@
       {{ t("Error loading learning paths.") }}
     </div>
 
-    <div
+    <EmptyState
       v-else-if="!hasAnyVisible"
-      class="flex flex-col items-center justify-center py-20 text-center"
+      :detail="t('Create your first learning path to start organizing course content.')"
+      :summary="t('You don\'t have any learning path.')"
+      icon="learning-paths"
     >
-      <div class="w-24 h-24 rounded-full bg-support-1 flex items-center justify-center mb-4 text-support-3">
-        <svg
-          fill="none"
-          height="36"
-          viewBox="0 0 24 24"
-          width="36"
-        >
-          <path
-            d="M4 17l6-6 4 4 6-6"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-      </div>
-      <h3 class="text-base font-semibold">{{ t("You don't have any learning path.") }}</h3>
-      <p
+      <BaseButton
         v-if="canEdit"
-        class="text-body-2 text-gray-50 max-w-sm"
-      >
-        {{ t("Create your first learning path to start organizing course content.") }}
-      </p>
-      <button
-        v-if="canEdit"
-        class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
-        @click="handleTopMenu('new', $event)"
-      >
-        + {{ t("Create new learning path") }}
-      </button>
-    </div>
+        :label="t('Create new learning path')"
+        :to-url="lpService.buildLegacyActionUrl('add_lp', { ...legacyContext.value })"
+        class="mt-4"
+        icon="plus"
+      />
+    </EmptyState>
 
     <template v-else>
       <div v-if="uncatList.length">
@@ -140,6 +121,7 @@
       />
     </template>
   </div>
+
   <ExportPdfDialog
     v-if="showExportDialog && exportTarget"
     :cid="course?.id"
@@ -168,6 +150,7 @@ import { storeToRefs } from "pinia"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
+import EmptyState from "../../components/EmptyState.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -628,51 +611,6 @@ const openLegacy = (lp) => {
 }
 const goEdit = (lp) => {
   router.push({ name: "LpUpdate", params: { id: lp.iid }, query: route.query })
-}
-
-const handleTopMenu = (action, ev) => {
-  ev?.preventDefault?.()
-  ev?.stopPropagation?.()
-  ev?.stopImmediatePropagation?.()
-
-  if (!canEdit.value) {
-    return
-  }
-
-  const url =
-    action === "new"
-      ? lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value })
-      : action === "category"
-        ? lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value })
-        : action === "import"
-          ? `/main/upload/index.php?${new URLSearchParams({
-              cid: legacyContext.value.cid,
-              sid: legacyContext.value.sid,
-              tool: "learnpath",
-              curdirpath: "/",
-              node: legacyContext.value.node,
-              gid: legacyContext.value.gid,
-              gradebook: legacyContext.value.gradebook,
-              origin: legacyContext.value.origin,
-            }).toString()}`
-          : action === "rapid"
-            ? `/main/upload/upload_ppt.php?${new URLSearchParams({
-                cid: legacyContext.value.cid,
-                sid: legacyContext.value.sid,
-                tool: "learnpath",
-                curdirpath: "/",
-                node: legacyContext.value.node,
-                gid: legacyContext.value.gid,
-                gradebook: legacyContext.value.gradebook,
-                origin: legacyContext.value.origin,
-              }).toString()}`
-            : action === "ai"
-              ? lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value })
-              : null
-
-  if (url) {
-    window.location.assign(url)
-  }
 }
 
 const onReport = (lp) => {

@@ -16,7 +16,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 readonly class AzureAuthenticatorHelper
 {
@@ -67,7 +67,7 @@ readonly class AzureAuthenticatorHelper
     public function registerUser(array $azureUserInfo): User
     {
         if (empty($azureUserInfo)) {
-            throw new UnauthorizedHttpException('User info not found.');
+            throw new BadRequestHttpException('User info not found.');
         }
 
         [

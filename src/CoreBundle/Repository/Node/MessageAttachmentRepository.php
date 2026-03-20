@@ -16,6 +16,9 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<MessageAttachment>
+ */
 final class MessageAttachmentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

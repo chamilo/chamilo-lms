@@ -20,6 +20,9 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * @extends ResourceRepository<Illustration>
+ */
 final class IllustrationRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

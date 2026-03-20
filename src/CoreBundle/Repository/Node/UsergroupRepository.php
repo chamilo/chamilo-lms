@@ -17,6 +17,9 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
+/**
+ * @extends ResourceRepository<Usergroup>
+ */
 class UsergroupRepository extends ResourceRepository
 {
     public function __construct(

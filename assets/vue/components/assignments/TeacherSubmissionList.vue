@@ -41,11 +41,11 @@
                 download
                 class="text-green-50 hover:underline"
               >
-                <i class="pi pi-check-circle"></i>
+                <i class="mdi mdi-check-circle"></i>
               </a>
               <i
                 v-else
-                class="pi pi-check-circle"
+                class="mdi mdi-check-circle"
               ></i>
             </span>
             <span
@@ -53,7 +53,7 @@
               class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i> {{ data.comments.length }}
+              <i class="mdi mdi-comment"></i> {{ data.comments.length }}
             </span>
           </div>
         </template>

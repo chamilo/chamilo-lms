@@ -28,7 +28,7 @@
       >
         <Button
           :label="$t('Show more courses')"
-          icon="pi pi-angle-down"
+          icon="mdi mdi-chevron-down"
           class="p-button-outlined"
           @click="loadMore"
         />

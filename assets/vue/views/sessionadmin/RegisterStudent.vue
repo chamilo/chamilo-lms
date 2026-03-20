@@ -74,12 +74,12 @@
       <div class="flex items-center gap-4 pt-2">
         <Button
           :label="t('Search student')"
-          icon="pi pi-search"
+          icon="mdi mdi-magnify"
           @click="searchStudent"
         />
         <Button
           :label="t('Create new user')"
-          icon="pi pi-user-plus"
+          icon="mdi mdi-account-plus"
           text
           @click="showCreateModal = true"
         />
@@ -137,7 +137,7 @@
               </td>
               <td class="px-4 py-2 text-right">
                 <Button
-                  icon="pi pi-send"
+                  icon="mdi mdi-send"
                   size="small"
                   :label="t('Send course invitation')"
                   @click="sendCourseTo(user)"
@@ -204,7 +204,7 @@
             @click="showCreateModal = false"
           />
           <Button
-            icon="pi pi-check"
+            icon="mdi mdi-check"
             :label="t('Save')"
             :disabled="createLoading"
             @click="handleCreateUser"

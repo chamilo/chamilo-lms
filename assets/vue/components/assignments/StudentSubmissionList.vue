@@ -14,7 +14,7 @@
       <Column :header="t('Type')">
         <template #body="{}">
           <div class="flex justify-center">
-            <i class="pi pi-file" />
+            <i class="mdi mdi-file" />
           </div>
         </template>
       </Column>
@@ -38,7 +38,7 @@
               class="inline-flex items-center gap-2 text-green-700 text-sm hover:underline max-w-[260px]"
               :title="data.correctionTitle"
             >
-              <i class="pi pi-check-circle shrink-0" />
+              <i class="mdi mdi-check-circle shrink-0" />
               <span class="truncate">
                 {{ data.correctionTitle }}
               </span>
@@ -49,7 +49,7 @@
               class="inline-flex items-center gap-2 text-green-700 text-sm max-w-[260px]"
               :title="data.correctionTitle"
             >
-              <i class="pi pi-check-circle shrink-0" />
+              <i class="mdi mdi-check-circle shrink-0" />
               <span class="truncate">
                 {{ data.correctionTitle }}
               </span>
@@ -60,7 +60,7 @@
               class="inline-flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i>
+              <i class="mdi mdi-comment"></i>
               <span>{{ data.comments.length }}</span>
             </span>
           </div>

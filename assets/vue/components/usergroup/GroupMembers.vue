@@ -6,7 +6,7 @@
     >
       <BaseButton
         class="edit-members-btn"
-        icon="pi pi-plus"
+        icon="mdi mdi-plus"
         :label="t('Edit members list')"
         type="primary"
         @click="editMembers"

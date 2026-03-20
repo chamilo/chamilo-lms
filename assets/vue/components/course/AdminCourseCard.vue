@@ -15,7 +15,7 @@
           class="absolute top-2 right-2 grid place-content-center w-10 h-10 rounded-full bg-white/80 backdrop-blur text-yellow-400 hover:text-yellow-500 shadow"
           @click.stop="toggleFavorite"
         >
-          <i :class="isFavorite ? 'pi pi-star-fill' : 'pi pi-star'" />
+          <i :class="isFavorite ? 'mdi mdi-star' : 'mdi mdi-star-outline'" />
         </button>
       </div>
     </template>

@@ -59,13 +59,13 @@
         <Button
           :label="t('No')"
           class="p-button-outlined p-button-plain"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           @click="deleteDialog = false"
         />
         <Button
           :label="t('Yes')"
           class="p-button-secondary"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           @click="performDelete"
         />
       </template>

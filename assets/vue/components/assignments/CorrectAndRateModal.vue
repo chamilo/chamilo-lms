@@ -33,7 +33,7 @@
             class="inline-flex items-center gap-2 rounded-full border bg-gray-10 px-3 py-1 text-xs text-gray-700"
             :title="submissionFilename"
           >
-            <i class="pi pi-paperclip text-gray-600"></i>
+            <i class="mdi mdi-paperclip text-gray-600"></i>
             <span class="truncate max-w-[280px]">{{ submissionFilename }}</span>
           </span>
         </div>
@@ -78,7 +78,7 @@
           <Button
             :label="aiBusy ? t('Generate') + '…' : t('Generate')"
             :disabled="!aiCanGenerate"
-            icon="pi pi-bolt"
+            icon="mdi mdi-lightning-bolt"
             class="p-button-sm"
             @click="runAiTaskGrader"
           />
@@ -89,7 +89,7 @@
           <!-- What will be sent -->
           <div class="rounded-lg border bg-gray-10 p-3 text-xs text-gray-700">
             <div class="flex items-center gap-2 font-medium text-gray-800 mb-2">
-              <i class="pi pi-info-circle text-gray-600"></i>
+              <i class="mdi mdi-information text-gray-600"></i>
               <span>{{ t("What will be sent to the AI") }}</span>
             </div>
 
@@ -215,7 +215,7 @@
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <Button
                 :label="t('Apply to comment')"
-                icon="pi pi-arrow-down"
+                icon="mdi mdi-arrow-down"
                 class="p-button-sm"
                 :disabled="aiBusy || !aiFeedback.trim()"
                 @click="applyAiFeedbackToComment"
@@ -223,7 +223,7 @@
 
               <Button
                 :label="t('Clear')"
-                icon="pi pi-times"
+                icon="mdi mdi-close"
                 class="p-button-sm p-button-text"
                 :disabled="aiBusy"
                 @click="clearAiFeedback"
@@ -232,7 +232,7 @@
               <Button
                 v-if="aiSuggestedScore !== null && !forceStudentView"
                 :label="t('Apply score')"
-                icon="pi pi-check"
+                icon="mdi mdi-check"
                 class="p-button-sm p-button-secondary"
                 type="button"
                 :disabled="aiBusy"
@@ -393,7 +393,7 @@
           v-if="commentItem.file && commentItem.downloadUrl"
           class="flex items-center gap-1 text-sm"
         >
-          <i class="pi pi-paperclip text-gray-600"></i>
+          <i class="mdi mdi-paperclip text-gray-600"></i>
           <a
             :href="commentItem.downloadUrl"
             target="_blank"

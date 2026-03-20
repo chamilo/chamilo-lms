@@ -4,7 +4,7 @@
       <Message
         :closable="false"
         class="mt-5"
-        icon="pi pi-send"
+        icon="mdi mdi-send"
         severity="info"
       >
         {{
@@ -17,7 +17,7 @@
       <Message
         :closable="false"
         class="mt-2"
-        icon="pi pi-exclamation-triangle"
+        icon="mdi mdi-alert"
         severity="warn"
       >
         {{

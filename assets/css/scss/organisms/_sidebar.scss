@@ -185,7 +185,8 @@
     }
   }
 
-  .router-link-active {
+  .router-link-exact-active,
+  .router-link-url-active {
     @apply text-primary;
   }
 }

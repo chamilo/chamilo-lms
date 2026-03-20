@@ -45,7 +45,7 @@ function isUrlActive(item) {
     <template #item="{ item, root, active, props }">
       <BaseAppLink
         v-if="item.route || item.url"
-        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root, 'router-link-active': isUrlActive(item) }"
+        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root, 'router-link-url-active': isUrlActive(item) }"
         :to="item.route"
         :url="item.url"
       >

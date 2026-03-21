@@ -405,11 +405,13 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const route = useRoute()
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -520,55 +522,59 @@ function switchView(newView) {
 }
 
 function confirmDelete(data) {
-  if (!confirm(t("Please confirm your choice"))) return
-  if (!confirm(t("Are you sure you want to delete this course?"))) return
+  requireConfirmation({
+    message: t("Are you sure you want to delete this course?"),
+    accept() {
+      const form = document.createElement("form")
+      form.method = "POST"
+      form.action = "/admin/course-list-action"
 
-  const form = document.createElement("form")
-  form.method = "POST"
-  form.action = "/admin/course-list-action"
-
-  const fields = { action: "delete_course", course_id: data.id, _token: csrfToken.value }
-  for (const [k, v] of Object.entries(fields)) {
-    const input = document.createElement("input")
-    input.type = "hidden"
-    input.name = k
-    input.value = v
-    form.appendChild(input)
-  }
-  document.body.appendChild(form)
-  form.submit()
+      const fields = { action: "delete_course", course_id: data.id, _token: csrfToken.value }
+      for (const [k, v] of Object.entries(fields)) {
+        const input = document.createElement("input")
+        input.type = "hidden"
+        input.name = k
+        input.value = v
+        form.appendChild(input)
+      }
+      document.body.appendChild(form)
+      form.submit()
+    },
+  })
 }
 
 function confirmBulkDelete() {
-  if (!confirm(t("Please confirm your choice"))) return
-  if (!confirm(t("Are you sure you want to delete the selected courses?"))) return
+  requireConfirmation({
+    message: t("Are you sure you want to delete the selected courses?"),
+    accept() {
+      const form = document.createElement("form")
+      form.method = "POST"
+      form.action = "/admin/course-list-action"
 
-  const form = document.createElement("form")
-  form.method = "POST"
-  form.action = "/admin/course-list-action"
+      const tokenInput = document.createElement("input")
+      tokenInput.type = "hidden"
+      tokenInput.name = "_token"
+      tokenInput.value = csrfToken.value
+      form.appendChild(tokenInput)
 
-  const tokenInput = document.createElement("input")
-  tokenInput.type = "hidden"
-  tokenInput.name = "_token"
-  tokenInput.value = csrfToken.value
-  form.appendChild(tokenInput)
+      const actionInput = document.createElement("input")
+      actionInput.type = "hidden"
+      actionInput.name = "action"
+      actionInput.value = "delete_courses"
+      form.appendChild(actionInput)
 
-  const actionInput = document.createElement("input")
-  actionInput.type = "hidden"
-  actionInput.name = "action"
-  actionInput.value = "delete_courses"
-  form.appendChild(actionInput)
+      for (const item of selectedItems.value) {
+        const input = document.createElement("input")
+        input.type = "hidden"
+        input.name = "course_ids[]"
+        input.value = item.id
+        form.appendChild(input)
+      }
 
-  for (const item of selectedItems.value) {
-    const input = document.createElement("input")
-    input.type = "hidden"
-    input.name = "course_ids[]"
-    input.value = item.id
-    form.appendChild(input)
-  }
-
-  document.body.appendChild(form)
-  form.submit()
+      document.body.appendChild(form)
+      form.submit()
+    },
+  })
 }
 
 async function toggleCatalogue(data) {

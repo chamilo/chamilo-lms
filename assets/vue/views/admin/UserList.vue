@@ -326,7 +326,7 @@
               only-icon
               size="small"
               type="primary-text"
-              @click="confirmAction('restore', data)"
+              @click="confirmAction('restore', data, t('Restore'))"
             />
             <BaseButton
               v-if="viewer.isPlatformAdmin"
@@ -335,7 +335,7 @@
               only-icon
               size="small"
               type="danger-text"
-              @click="confirmAction('destroy', data)"
+              @click="confirmAction('destroy', data, t('Delete permanently'))"
             />
           </div>
           <div
@@ -409,7 +409,7 @@
               only-icon
               size="small"
               type="primary-text"
-              @click="confirmAction('anonymize', data)"
+              @click="confirmAction('anonymize', data, t('Anonymize'))"
             />
 
             <!-- Delete (platform admin, not self, not anonymous) -->
@@ -420,7 +420,7 @@
               only-icon
               size="small"
               type="danger-text"
-              @click="confirmAction('delete_user', data)"
+              @click="confirmAction('delete_user', data, t('Delete'))"
             />
 
             <!-- Assign sessions (session manager) -->
@@ -503,6 +503,7 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -510,6 +511,7 @@ import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 
 const items = ref([])
 const selectedItems = ref([])
@@ -567,20 +569,25 @@ function canToggleActive(data) {
   return data.id !== viewer.id && (data.active === 0 || data.active === 1)
 }
 
-async function toggleActive(data) {
+function toggleActive(data) {
   const newStatus = data.active === 1 ? 0 : 1
-  const msg =
+  const message =
     data.active === 1 ? t("Are you sure you want to lock this user?") : t("Are you sure you want to unlock this user?")
 
-  if (!confirm(msg)) return
-
-  try {
-    const res = await fetch(`/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`)
-    const text = await res.text()
-    data.active = text.trim() === "1" ? 1 : 0
-  } catch (e) {
-    console.error(e)
-  }
+  requireConfirmation({
+    message,
+    async accept() {
+      try {
+        const res = await fetch(
+          `/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`,
+        )
+        const text = await res.text()
+        data.active = text.trim() === "1" ? 1 : 0
+      } catch (e) {
+        console.error(e)
+      }
+    },
+  })
 }
 
 function canLoginAs(data) {
@@ -592,45 +599,50 @@ function canLoginAs(data) {
   return false
 }
 
-function confirmAction(action, data) {
-  if (!confirm(t("Please confirm your choice"))) return
+function confirmAction(action, data, title) {
+  requireConfirmation({
+    title,
+    accept() {
+      const form = document.createElement("form")
+      form.method = "POST"
+      form.action = `/admin/user-list-action`
 
-  const form = document.createElement("form")
-  form.method = "POST"
-  form.action = `/admin/user-list-action`
-
-  const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
-  for (const [k, v] of Object.entries(fields)) {
-    const input = document.createElement("input")
-    input.type = "hidden"
-    input.name = k
-    input.value = v
-    form.appendChild(input)
-  }
-  document.body.appendChild(form)
-  form.submit()
+      const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
+      for (const [k, v] of Object.entries(fields)) {
+        const input = document.createElement("input")
+        input.type = "hidden"
+        input.name = k
+        input.value = v
+        form.appendChild(input)
+      }
+      document.body.appendChild(form)
+      form.submit()
+    },
+  })
 }
 
-async function confirmBulkAction(action) {
-  if (!confirm(t("Please confirm your choice"))) return
+function confirmBulkAction(action) {
+  requireConfirmation({
+    async accept() {
+      try {
+        const formData = new URLSearchParams()
+        formData.set("action", action)
+        formData.set("_token", csrfToken.value)
+        selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
-  try {
-    const formData = new URLSearchParams()
-    formData.set("action", action)
-    formData.set("_token", csrfToken.value)
-    selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
+        await fetch("/admin/user-list-action", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData.toString(),
+        })
 
-    await fetch("/admin/user-list-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
-
-    selectedItems.value = []
-    load()
-  } catch (e) {
-    console.error("Error performing bulk action:", e)
-  }
+        selectedItems.value = []
+        await load()
+      } catch (e) {
+        console.error("Error performing bulk action:", e)
+      }
+    },
+  })
 }
 
 async function load() {

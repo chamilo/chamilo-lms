@@ -288,12 +288,14 @@
 import { onMounted, reactive, ref } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
+import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import baseService from "../../services/baseService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const route = useRoute()
 
 const items = ref([])
@@ -441,49 +443,40 @@ function switchTab(tab) {
   load()
 }
 
-async function confirmDelete(ids) {
-  if (!confirm(t("Please confirm your choice"))) {
-    return
-  }
+function confirmDelete(ids) {
+  requireConfirmation({
+    async accept() {
+      try {
+        const formData = new URLSearchParams()
+        formData.set("action", "delete")
+        formData.set("_token", csrfToken.value)
+        ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-  try {
-    const formData = new URLSearchParams()
-    formData.set("action", "delete")
-    formData.set("_token", csrfToken.value)
-    ids.forEach((id) => formData.append("sessionIds[]", String(id)))
+        await fetch("/admin/session-list-data-action", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData.toString(),
+        })
 
-    await fetch("/admin/session-list-data-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
-
-    selectedItems.value = []
-    load()
-  } catch (e) {
-    console.error("Error deleting sessions:", e)
-  }
+        selectedItems.value = []
+        await load()
+      } catch (e) {
+        console.error("Error deleting sessions:", e)
+      }
+    },
+  })
 }
 
-async function copySession(id) {
-  if (!confirm(t("Please confirm your choice"))) {
-    return
-  }
-  await performCopy([id])
+function copySession(id) {
+  requireConfirmation({ accept: () => performCopy([id]) })
 }
 
-async function copySessionWithContent(id) {
-  if (!confirm(t("Please confirm your choice"))) {
-    return
-  }
-  await performCopy([id], "copy_with_content")
+function copySessionWithContent(id) {
+  requireConfirmation({ accept: () => performCopy([id], "copy_with_content") })
 }
 
-async function copyMultiple(ids) {
-  if (!confirm(t("Please confirm your choice"))) {
-    return
-  }
-  await performCopy(ids)
+function copyMultiple(ids) {
+  requireConfirmation({ accept: () => performCopy(ids) })
 }
 
 async function performCopy(ids, action = "copy") {
@@ -500,7 +493,7 @@ async function performCopy(ids, action = "copy") {
     })
 
     selectedItems.value = []
-    load()
+    await load()
   } catch (e) {
     console.error("Error copying sessions:", e)
   }
@@ -574,10 +567,10 @@ async function handleLegacyAction() {
     return false
   }
 
-  if ((action === "copy" || action === "copy_multiple") && confirm(t("Please confirm your choice"))) {
-    await performCopy(ids)
-  } else if ((action === "delete" || action === "delete_multiple") && confirm(t("Please confirm your choice"))) {
-    await confirmDeleteDirect(ids)
+  if (action === "copy" || action === "copy_multiple") {
+    requireConfirmation({ accept: () => performCopy(ids) })
+  } else if (action === "delete" || action === "delete_multiple") {
+    requireConfirmation({ accept: () => confirmDeleteDirect(ids) })
   }
 
   return true

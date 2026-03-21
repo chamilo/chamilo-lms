@@ -3,236 +3,174 @@ Experience API (xAPI)
 
 Overview
 --------
-The XApi plugin for Chamilo 2 lets you:
+The XApi plugin for Chamilo 2 provides two main capabilities:
 
-1. connect Chamilo to a Learning Record Store (LRS),
-2. import and launch TinCan and cmi5 packages as course activities,
-3. expose a local xAPI endpoint for package runtime communication,
-4. generate xAPI statements from native Chamilo events such as learning paths, quizzes and portfolio actions.
+1. launch TinCan and cmi5 packages as course activities,
+2. generate xAPI statements from native Chamilo events such as learning paths, quizzes and portfolio actions.
+
+It also exposes a local lightweight xAPI endpoint that can be used by imported activities and by internal plugin flows.
 
 Current status
 --------------
 - TinCan package import and launch are supported.
 - cmi5 package import and launch are available in beta.
-- The plugin includes a local lightweight LRS endpoint used by imported activities and by internal plugin flows.
+- The plugin includes a local xAPI endpoint at `plugin/XApi/lrs`.
 - Native Chamilo event hooks can generate xAPI statements depending on the global plugin settings.
 
-Important note about the database
----------------------------------
+Important database note
+-----------------------
 Do not create MySQL tables manually.
-In Chamilo 2, the required tables are already created by the platform installation and migrations.
 
-How the plugin works
---------------------
-The plugin currently has two main responsibilities:
+In Chamilo 2, the required database structure is managed by the platform installation and migrations.
 
-1. Package-based activities
-    - Teachers can import TinCan or cmi5 packages inside a course.
-    - Imported activities appear in the course XApi tool list.
-    - TinCan activities can be launched from the course interface.
-    - cmi5 activities can be launched through the cmi5 flow, including token retrieval for the AU.
-    - Local package files are extracted and served by the plugin.
-
-2. Native Chamilo xAPI statement generation
-    - The plugin can listen to Chamilo events such as:
-        - learning path item viewed,
-        - learning path completed,
-        - quiz question answered,
-        - quiz completed,
-        - portfolio actions.
-    - When these hooks are enabled, Chamilo generates xAPI statements and stores them in the internal shared statement log.
-    - These stored statements can later be sent to an external LRS by the plugin cron process.
-
-Main pages in the plugin
-------------------------
+Main plugin pages
+-----------------
 Course tool pages:
-- plugin/XApi/start.php
+- `plugin/XApi/start.php`
   Lists imported xAPI activities in the current course.
-- plugin/XApi/tool_import.php
+- `plugin/XApi/tool_import.php`
   Imports TinCan or cmi5 packages.
-- plugin/XApi/tool_edit.php
-  Edits an imported activity configuration.
-- plugin/XApi/tool_delete.php
+- `plugin/XApi/tool_edit.php`
+  Edits an imported activity.
+- `plugin/XApi/tool_delete.php`
   Deletes an imported activity.
-- plugin/XApi/tincan/view.php
-  TinCan activity view and launch page.
-- plugin/XApi/cmi5/view.php
-  cmi5 activity view and launch page.
-- plugin/XApi/tincan/stats.php
+- `plugin/XApi/tincan/view.php`
+  TinCan activity launch page.
+- `plugin/XApi/cmi5/view.php`
+  cmi5 activity launch page.
+- `plugin/XApi/tincan/stats.php`
   TinCan reporting page.
-- plugin/XApi/cmi5/stats.php
-  cmi5 reporting page, if enabled in the current codebase.
 
-Local xAPI endpoints:
-- plugin/XApi/lrs
+Technical pages:
+- `plugin/XApi/lrs`
   Main local xAPI endpoint.
-- plugin/XApi/cmi5/token.php
+- `plugin/XApi/cmi5/token.php`
   Token endpoint used during cmi5 launches.
+- `plugin/XApi/admin.php`
+  Local LRS credential management page. This page may need to be opened manually by URL depending on the current platform navigation.
 
-Global plugin configuration page
---------------------------------
-The global plugin configuration is used to define the default LRS behavior for the whole plugin.
-Typical stored values look like this:
+Global configuration
+--------------------
+The global plugin configuration defines the default xAPI and LRS behavior for the whole plugin.
 
-- uuid_namespace
-- lrs_url
-- lrs_auth_username
-- lrs_auth_password
-- cron_lrs_url
-- cron_lrs_auth_username
-- cron_lrs_auth_password
-- lrs_lp_item_viewed_active
-- lrs_lp_end_active
-- lrs_quiz_active
-- lrs_quiz_question_active
-- lrs_portfolio_active
-- defaultVisibilityInCourseHomepage
+Typical stored values:
+- `uuid_namespace`
+- `lrs_url`
+- `lrs_auth_username`
+- `lrs_auth_password`
+- `cron_lrs_url`
+- `cron_lrs_auth_username`
+- `cron_lrs_auth_password`
+- `lrs_lp_item_viewed_active`
+- `lrs_lp_end_active`
+- `lrs_quiz_active`
+- `lrs_quiz_question_active`
+- `lrs_portfolio_active`
+- `defaultVisibilityInCourseHomepage`
 
-Explanation of each parameter
------------------------------
-1. uuid_namespace
-   Default UUID namespace used when generating deterministic identifiers for statements or related xAPI data.
-   Recommended value: keep the generated UUID provided by the plugin.
+Parameter summary
+-----------------
+1. `uuid_namespace`
+   Default UUID namespace used for deterministic xAPI-related identifiers.
+   Recommended: keep the generated value provided by the plugin.
 
-2. lrs_url
-   Default LRS endpoint used by the plugin for activity launches and statement submission.
-   Common values:
-    - Local plugin LRS:
-      https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
-    - External LRS:
-      https://your-lrs.example.com/xapi
+2. `lrs_url`
+   Default LRS endpoint used by the plugin.
+   Examples:
+    - Local LRS: `https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs`
+    - External LRS: `https://your-lrs.example.com/xapi`
 
-3. lrs_auth_username
-   Default username used to authenticate against the configured LRS.
+3. `lrs_auth_username`
+   Default username for the configured LRS.
 
-4. lrs_auth_password
-   Default password used to authenticate against the configured LRS.
+4. `lrs_auth_password`
+   Default password for the configured LRS.
 
-5. cron_lrs_url
-   Optional endpoint used by the cron task that sends internally logged shared statements to an external LRS.
-   Use this when you want native Chamilo hooks to be sent to a different LRS than the one used for package launches.
-   If empty, the plugin may fall back to the main LRS configuration depending on the code path.
+5. `cron_lrs_url`
+   Optional LRS endpoint used only by the cron sender.
 
-6. cron_lrs_auth_username
-   Username used by the cron sender for the external LRS.
+6. `cron_lrs_auth_username`
+   Optional cron-specific username.
 
-7. cron_lrs_auth_password
-   Password used by the cron sender for the external LRS.
+7. `cron_lrs_auth_password`
+   Optional cron-specific password.
 
-8. lrs_lp_item_viewed_active
-   Enables xAPI generation when a learner views a learning path item.
-   Values:
-    - true: enabled
-    - false: disabled
+8. `lrs_lp_item_viewed_active`
+   Enable xAPI generation when a learner views a learning path item.
 
-9. lrs_lp_end_active
-   Enables xAPI generation when a learner completes a learning path.
-   Values:
-    - true: enabled
-    - false: disabled
+9. `lrs_lp_end_active`
+   Enable xAPI generation when a learner completes a learning path.
 
-10. lrs_quiz_active
-    Enables xAPI generation when a learner finishes a quiz.
-    Values:
-    - true: enabled
-    - false: disabled
+10. `lrs_quiz_active`
+    Enable xAPI generation when a learner finishes a quiz.
 
-11. lrs_quiz_question_active
-    Enables xAPI generation when a learner answers a quiz question.
-    Values:
-    - true: enabled
-    - false: disabled
+11. `lrs_quiz_question_active`
+    Enable xAPI generation when a learner answers a quiz question.
 
-12. lrs_portfolio_active
-    Enables xAPI generation for portfolio events such as view, edit, comment, score, download or highlight.
-    Values:
-    - true: enabled
-    - false: disabled
+12. `lrs_portfolio_active`
+    Enable xAPI generation for portfolio actions.
 
-13. defaultVisibilityInCourseHomepage
-    Controls whether the XApi course tool is visible by default in course homepages.
-    Typical value:
-    - visible
+13. `defaultVisibilityInCourseHomepage`
+    Controls whether the XApi course tool is visible by default in newly created courses.
 
-Recommended global configuration scenarios
-------------------------------------------
-A. Local runtime for imported TinCan/cmi5 packages
+Recommended configuration scenarios
+-----------------------------------
+### A. Local runtime for imported TinCan/cmi5 packages
 Use:
-- lrs_url = https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
-- lrs_auth_username = a valid local xAPI credential
-- lrs_auth_password = the matching password
+- `lrs_url = https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs`
+- `lrs_auth_username = valid local xAPI credential`
+- `lrs_auth_password = matching password`
 
-This is the recommended setup when you want imported activities to communicate with the local XApi endpoint in Chamilo.
+This is the recommended setup for local package runtime testing.
 
-B. Sending Chamilo event statements to an external LRS through cron
+### B. Sending native Chamilo statements to an external LRS through cron
 Use:
-- cron_lrs_url = https://your-external-lrs.example.com/xapi
-- cron_lrs_auth_username = external username
-- cron_lrs_auth_password = external password
+- `cron_lrs_url = https://your-external-lrs.example.com/xapi`
+- `cron_lrs_auth_username = external username`
+- `cron_lrs_auth_password = external password`
 
-Then enable the hook settings you want, such as learning path or quiz options.
+Use this when hook-generated statements must be delivered to a dedicated external LRS.
 
-Per-activity configuration page (tool_edit.php)
------------------------------------------------
-Each imported activity can override some defaults.
-The edit page includes these fields:
+Imported activity configuration
+-------------------------------
+Each imported activity can override some global values in `tool_edit.php`.
 
-1. title
-   Human-readable activity title shown in the course tool.
+Available fields:
+- `title`
+- `description`
+- `allow_multiple_attempts`
+- `lrs_url`
+- `lrs_auth_username`
+- `lrs_auth_password`
 
-2. description
-   Optional text shown in the activity list and view page.
+Usage:
+- leave these fields empty to use the global plugin configuration,
+- fill them only when a specific activity must use a different LRS.
 
-3. allow_multiple_attempts
-   TinCan-specific option.
-   When enabled, learners can launch multiple attempts for the activity.
-
-4. lrs_url
-   Optional per-activity LRS URL override.
-   If filled, this activity will use this endpoint instead of the global lrs_url.
-
-5. lrs_auth_username
-   Optional per-activity username override.
-
-6. lrs_auth_password
-   Optional per-activity password override.
-
-How to use these per-activity fields
-------------------------------------
-- Leave them empty if the activity should use the global plugin LRS settings.
-- Fill them only when a specific TinCan or cmi5 activity must use a different LRS.
-- For local testing, the per-activity LRS URL can also point to:
-  https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
-
-Importing TinCan and cmi5 packages
-----------------------------------
-Teacher workflow:
+Import and launch workflow
+--------------------------
+### TinCan
 1. Open the XApi tool inside a course.
 2. Click Import.
-3. Upload a TinCan or cmi5 package.
-4. The plugin extracts the package and creates a course activity entry.
-5. The activity appears in start.php with its type badge.
+3. Upload a TinCan package.
+4. The plugin extracts the package and creates the course activity.
+5. Launch the activity from the course interface.
+
+### cmi5
+1. Open the XApi tool inside a course.
+2. Click Import.
+3. Upload a cmi5 package.
+4. Launch the activity through the cmi5 flow.
 
 Notes:
-- TinCan packages are the most stable path today.
-- cmi5 is available in beta and still evolving.
-- The package should contain the expected entry files in a format compatible with the importer.
+- TinCan is currently the most stable package-based workflow.
+- cmi5 is still considered beta.
 
-Launching imported activities
------------------------------
-TinCan:
-- The plugin builds a launch URL including endpoint, auth, actor, registration and activity_id.
-- TinCan packages can be launched inside the Chamilo interface.
-
-cmi5:
-- The plugin builds the launch flow using the local cmi5 token endpoint.
-- The AU receives the required launch parameters, including fetch and activityId.
-- cmi5 support is still considered beta.
-
-Local LRS behavior
-------------------
+Local LRS
+---------
 The plugin includes a local xAPI endpoint at:
-https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+
+`https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs`
 
 This endpoint is used for:
 - TinCan runtime requests,
@@ -240,83 +178,117 @@ This endpoint is used for:
 - local testing,
 - internal plugin communication.
 
-For TinCan launches using the local LRS, the username and password must match a valid local xAPI credential known by the plugin.
+Required headers for statement/state requests:
+- `Authorization: Basic ...`
+- `X-Experience-API-Version: 1.0.3`
+- `Content-Type: application/json`
 
-Statement API usage
--------------------
-The local xAPI endpoint can also be used as a Statement API endpoint by another service.
-Typical endpoint:
-https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
+Common supported operations:
+- `about`
+- `statements`
+- `activities/state`
 
-Required headers:
-- Authorization: Basic ...
-- X-Experience-API-Version: 1.0.3
-- Content-Type: application/json
+Internal queue and cron sender
+------------------------------
+When native Chamilo hooks are enabled, generated statements are stored in the internal queue table:
 
-Common operations handled by the local endpoint:
-- statements
-- activities/state
-- about
-
-Internal shared statement log and cron
---------------------------------------
-When native Chamilo hooks are enabled, the plugin stores generated statements in the internal shared statement log.
-This internal log is useful when:
-- you want to keep a local queue of statements,
-- you want to send them later to an external LRS,
-- you want to decouple runtime events from LRS delivery.
+- `xapi_shared_statement`
 
 Cron sender:
-- plugin/XApi/cron/send_statements.php
+- `plugin/XApi/cron/send_statements.php`
 
-Use the cron configuration fields when the sender must push data to a dedicated external LRS.
+The cron sender processes pending rows and marks them as sent after successful delivery.
 
-Testing recommendations
------------------------
-1. For imported activities
-    - Configure lrs_url to the local endpoint:
-      https://YOUR_CHAMILO_DOMAIN/plugin/XApi/lrs
-    - Use valid local LRS credentials.
-    - Import a TinCan package first.
-    - Then test cmi5 packages.
+Validated behavior in Chamilo 2
+-------------------------------
+The following behaviors have been manually validated in a Chamilo 2 environment:
 
-2. For native event hooks
-    - Enable only one family of hooks at a time:
-        - learning path,
-        - quiz,
-        - portfolio.
-    - Trigger a real learner action in Chamilo.
-    - Verify that the plugin stores a shared statement.
+### Local LRS
+- `GET /plugin/XApi/lrs/about`
+- `GET /plugin/XApi/lrs/statements`
+- `POST /plugin/XApi/lrs/statements`
+- `GET /plugin/XApi/lrs/activities/state`
+- `PUT /plugin/XApi/lrs/activities/state`
 
-Examples of hook-driven scenarios
----------------------------------
-Learning path only:
-- lrs_lp_item_viewed_active = true
-- lrs_lp_end_active = true
-- all other hook flags = false
+### Native hook-based statements
+- Quiz question answered
+- Quiz completed
+- Learning path item viewed
+- Learning path completed
 
-Quiz only:
-- lrs_quiz_active = true
-- lrs_quiz_question_active = true
-- all other hook flags = false
+### Internal queue and delivery
+- Hook-generated statements are stored in `xapi_shared_statement`
+- The cron sender processes pending statements and marks them as sent
 
-Portfolio only:
-- lrs_portfolio_active = true
-- all other hook flags = false
+### Course tool visibility
+- `defaultVisibilityInCourseHomepage` affects whether the XApi course tool is visible by default in newly created courses
+
+Portfolio-related events are part of the plugin design but should still be validated separately in the target environment.
+
+Practical testing workflow
+--------------------------
+### Native Chamilo hooks
+1. Configure:
+    - `lrs_url`
+    - `lrs_auth_username`
+    - `lrs_auth_password`
+
+2. Enable only one hook family at a time:
+    - learning path
+    - quiz
+    - portfolio
+
+3. Trigger a real learner action.
+
+4. Verify that a row was added to:
+    - `xapi_shared_statement`
+
+5. Run:
+    - `plugin/XApi/cron/send_statements.php`
+
+6. Verify that processed rows were marked as sent.
+
+Examples:
+- Quiz only:
+    - `lrs_quiz_active = true`
+    - `lrs_quiz_question_active = true`
+- Learning path only:
+    - `lrs_lp_item_viewed_active = true`
+    - `lrs_lp_end_active = true`
+- Portfolio only:
+    - `lrs_portfolio_active = true`
+
+### Imported activities
+1. Configure `lrs_url` to the local endpoint.
+2. Use valid local LRS credentials.
+3. Import a TinCan package first.
+4. Then test cmi5 packages.
+
+Notes
+-----
+- `cron_lrs_url`, `cron_lrs_auth_username` and `cron_lrs_auth_password` are optional.
+  They are only needed when the cron sender must use a different LRS than the main plugin configuration.
+
+- `defaultVisibilityInCourseHomepage` is mainly relevant for newly created courses.
+  Existing courses may already have their own stored tool visibility.
+
+- `plugin/XApi/admin.php` is mainly useful to manage local LRS credentials used by the local endpoint.
+  It is not required for normal quiz or learning path testing if the configured local credentials already work.
 
 Summary
 -------
 Use this plugin when you want one or both of these capabilities:
+
 - launch xAPI-compatible packaged content in Chamilo,
 - generate xAPI statements from native Chamilo activity.
 
 For current Chamilo 2 usage, the most important configuration fields are:
-- lrs_url
-- lrs_auth_username
-- lrs_auth_password
-- cron_lrs_url
-- cron_lrs_auth_username
-- cron_lrs_auth_password
-- the hook activation flags
+- `lrs_url`
+- `lrs_auth_username`
+- `lrs_auth_password`
+- `cron_lrs_url`
+- `cron_lrs_auth_username`
+- `cron_lrs_auth_password`
+- hook activation flags
 
 Do not add SQL manually. In Chamilo 2, the required database structure is managed by the platform installation and migrations.

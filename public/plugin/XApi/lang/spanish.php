@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 $strings['plugin_title'] = 'Experience API (xAPI)';
 $strings['plugin_comment'] = 'Permite incorporar un Learning Record Store externo (o interno) y usar actividades con la especificación xAPI.';
-
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace para los identificadores unicos universales (UUID) usados como IDs de statements.'
     .'<br>Esto es generado automáticamente por Chamilo LMS. <strong>No reemplazarlo.</strong>';
@@ -27,7 +26,6 @@ $strings['lrs_lp_end_active'] = 'Finalización de lección';
 $strings['lrs_quiz_active'] = 'Finalización de ejercicio';
 $strings['lrs_quiz_question_active'] = 'Resolución de pregunta en ejercicio';
 $strings['lrs_portfolio_active'] = 'Eventos en portafolio';
-
 $strings['NoActivities'] = 'No hay actividades aún';
 $strings['ActivityTitle'] = 'Actividad';
 $strings['AddActivity'] = 'Agregar actividad';
@@ -56,3 +54,4 @@ $strings['Viewed'] = 'Visualizó';
 $strings['ActivityAddedToLPCannotBeAccessed'] = 'Esta actividad ha sido incluida en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí.';
 $strings['XApiPackage'] = 'Paquete XApi';
 $strings['TinCanAllowMultipleAttempts'] = 'Permitir múltiples intentos';
+$strings['defaultVisibilityInCourseHomepage'] = 'Visibilidad predeterminada en la página principal del curso';

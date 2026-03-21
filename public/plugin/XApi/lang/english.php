@@ -56,3 +56,4 @@ $strings['Viewed'] = 'Viewed';
 $strings['ActivityAddedToLPCannotBeAccessed'] = 'This activity has been included in a learning path, so it cannot be accessed by students directly from here.';
 $strings['XApiPackage'] = 'XApi Package';
 $strings['TinCanAllowMultipleAttempts'] = 'Allow multiple attempts';
+$strings['defaultVisibilityInCourseHomepage'] = 'Default visibility in course homepage';

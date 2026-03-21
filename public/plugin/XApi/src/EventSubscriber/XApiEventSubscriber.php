@@ -43,6 +43,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\TransactionRequiredException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Chamilo\CoreBundle\Entity\XApiSharedStatement;
 
 class XApiEventSubscriber implements EventSubscriberInterface
 {
@@ -232,6 +233,11 @@ class XApiEventSubscriber implements EventSubscriberInterface
         }
 
         $statement = (new LearningPathCompleted($lpView, $lp))->generate();
+
+        if ($this->isDuplicateLearningPathCompletedStatement($statement)) {
+            return;
+        }
+
         $this->saveSharedStatement($statement);
     }
 
@@ -432,5 +438,137 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
         $statement = (new PortfolioCommentEdited($comment))->generate();
         $this->saveSharedStatement($statement);
+    }
+
+    private function isDuplicateLearningPathCompletedStatement(array $statement, int $windowSeconds = 30): bool
+    {
+        $candidateKey = $this->buildLearningPathCompletedDedupKey($statement);
+
+        if (null === $candidateKey) {
+            return false;
+        }
+
+        $candidateTimestamp = $this->extractStatementTimestamp($statement);
+
+        if (null === $candidateTimestamp) {
+            return false;
+        }
+
+        $em = Database::getManager();
+
+        /** @var XApiSharedStatement[] $recentStatements */
+        $recentStatements = $em
+            ->getRepository(XApiSharedStatement::class)
+            ->findBy([], ['id' => 'DESC'], 50)
+        ;
+
+        foreach ($recentStatements as $recentStatement) {
+            $payload = $recentStatement->getStatement();
+
+            if (!is_array($payload) || empty($payload)) {
+                continue;
+            }
+
+            $recentKey = $this->buildLearningPathCompletedDedupKey($payload);
+
+            if (null === $recentKey || $recentKey !== $candidateKey) {
+                continue;
+            }
+
+            $recentTimestamp = $this->extractStatementTimestamp($payload);
+
+            if (null === $recentTimestamp) {
+                continue;
+            }
+
+            if (abs($candidateTimestamp - $recentTimestamp) <= $windowSeconds) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function buildLearningPathCompletedDedupKey(array $statement): ?string
+    {
+        $verbId = (string) ($statement['verb']['id'] ?? '');
+        $activityType = (string) ($statement['object']['definition']['type'] ?? '');
+        $actorMbox = strtolower(trim((string) ($statement['actor']['mbox'] ?? '')));
+        $objectId = $this->normalizeLearningPathActivityId((string) ($statement['object']['id'] ?? ''));
+
+        if (
+            'http://activitystrea.ms/schema/1.0/complete' !== $verbId
+            || 'http://adlnet.gov/expapi/activities/lesson' !== $activityType
+            || '' === $actorMbox
+            || '' === $objectId
+        ) {
+            return null;
+        }
+
+        return sha1($actorMbox.'|'.$objectId.'|'.$verbId);
+    }
+
+    private function normalizeLearningPathActivityId(string $activityId): string
+    {
+        $activityId = trim($activityId);
+
+        if ('' === $activityId) {
+            return '';
+        }
+
+        $parts = parse_url($activityId);
+
+        if (false === $parts) {
+            return $activityId;
+        }
+
+        $normalized = '';
+
+        if (isset($parts['scheme'])) {
+            $normalized .= $parts['scheme'].'://';
+        }
+
+        if (isset($parts['host'])) {
+            $normalized .= $parts['host'];
+        }
+
+        if (isset($parts['port'])) {
+            $normalized .= ':'.$parts['port'];
+        }
+
+        $normalized .= $parts['path'] ?? '';
+
+        $query = [];
+
+        if (!empty($parts['query'])) {
+            parse_str($parts['query'], $query);
+        }
+
+        unset($query['origin']);
+
+        ksort($query);
+
+        if (!empty($query)) {
+            $normalized .= '?'.http_build_query($query);
+        }
+
+        return $normalized;
+    }
+
+    private function extractStatementTimestamp(array $statement): ?int
+    {
+        $timestamp = $statement['timestamp'] ?? null;
+
+        if (!is_string($timestamp) || '' === trim($timestamp)) {
+            return null;
+        }
+
+        $value = strtotime($timestamp);
+
+        if (false === $value) {
+            return null;
+        }
+
+        return $value;
     }
 }

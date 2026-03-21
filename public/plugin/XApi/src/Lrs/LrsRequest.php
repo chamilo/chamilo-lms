@@ -48,12 +48,16 @@ class LrsRequest
 
             $response = $this->generateResponse($controllerName, $methodName);
         } catch (HttpException $httpException) {
-            $response = HttpResponse::create(
+            $response = new HttpResponse(
                 $httpException->getMessage(),
                 $httpException->getStatusCode()
             );
+
+            if ($httpException instanceof AccessDeniedHttpException) {
+                $response->headers->set('WWW-Authenticate', 'Basic realm="xAPI LRS"');
+            }
         } catch (Exception $exception) {
-            $response = HttpResponse::create(
+            $response = new HttpResponse(
                 $exception->getMessage(),
                 HttpResponse::HTTP_BAD_REQUEST
             );

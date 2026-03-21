@@ -4,6 +4,7 @@
 
 declare(strict_types=1);
 
+use Chamilo\CoreBundle\Entity\XApiSharedStatement;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Uid\Uuid;
@@ -18,13 +19,11 @@ trait XApiActivityTrait
     {
         $normalizedStatement = $this->normalizeSharedStatement($statement);
 
-        $sharedStatementClass = 'Chamilo\\PluginBundle\\XApi\\Entity\\SharedStatement';
-
-        if (!class_exists($sharedStatementClass)) {
-            return;
-        }
-
-        $sharedStmt = new $sharedStatementClass($normalizedStatement);
+        $sharedStmt = new XApiSharedStatement(
+            $normalizedStatement,
+            null,
+            false
+        );
 
         $em = Database::getManager();
         $em->persist($sharedStmt);

@@ -158,7 +158,7 @@ import { computed, ref } from "vue"
 import isEmpty from "lodash/isEmpty"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useI18n } from "vue-i18n"
 import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
@@ -175,7 +175,7 @@ import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const { t } = useI18n()
 
 const isLoadingSelect = ref(false)
@@ -270,8 +270,7 @@ async function deleteMessage(message) {
 }
 
 function confirmDelete() {
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t(`Are you sure you want to delete {0}?`, [item.value.title]),
     accept: async () => {
       await deleteMessage(item.value)

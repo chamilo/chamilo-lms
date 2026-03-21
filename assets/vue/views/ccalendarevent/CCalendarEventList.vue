@@ -126,7 +126,7 @@
 import { computed, reactive, ref, watch } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRoute, useRouter } from "vue-router"
 import { DateTime } from "luxon"
@@ -154,7 +154,7 @@ import { useCourseSettings } from "../../store/courseSettingStore"
 
 const store = useStore()
 const securityStore = useSecurityStore()
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const cidReqStore = useCidReqStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
@@ -534,14 +534,9 @@ function reFetch() {
 }
 
 function confirmDelete() {
-  confirm.require({
+  requireConfirmation({
+    title: t("Delete"),
     message: t("Are you sure you want to delete"),
-    header: t("Delete"),
-    icon: "mdi mdi-alert",
-    acceptClass: "p-button-danger",
-    rejectClass: "p-button-plain p-button-outlined",
-    acceptLabel: t("Yes"),
-    rejectLabel: t("Cancel"),
     accept() {
       const isOwner = item.value["parentResourceNodeId"] === securityStore.user["id"]
       const isAdmin = securityStore.isCourseAdmin || securityStore.isSessionAdmin
@@ -572,7 +567,6 @@ function confirmDelete() {
         }
       }
     },
-    reject() {},
   })
 }
 

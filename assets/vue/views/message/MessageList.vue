@@ -333,7 +333,7 @@ import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import Column from "primevue/column"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
@@ -352,7 +352,7 @@ const store = useStore()
 const securityStore = useSecurityStore()
 const { t } = useI18n()
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const notification = useNotification()
 
 const messageRelUserStore = useMessageRelUserStore()
@@ -635,11 +635,8 @@ async function deleteMessage(message) {
 function showDlgConfirmDeleteSingle(dataOrItem) {
   const item = dataOrItem.data || dataOrItem
 
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t("Are you sure you want to delete {0}?", [item.title]),
-    acceptLabel: t("Yes"),
-    rejectLabel: t("No"),
     accept: async () => {
       await deleteMessage(item)
     },
@@ -647,11 +644,8 @@ function showDlgConfirmDeleteSingle(dataOrItem) {
 }
 
 function showDlgConfirmDeleteMultiple() {
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t("Are you sure you want to delete the selected items?"),
-    acceptLabel: t("Yes"),
-    rejectLabel: t("No"),
     accept: async () => {
       for (const message of selectedItems.value) {
         await deleteMessage(message)

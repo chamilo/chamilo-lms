@@ -147,7 +147,7 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -166,7 +166,7 @@ const { cid, sid, gid } = useCidReq()
 
 const notification = useNotification()
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const securityStore = useSecurityStore()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
@@ -233,8 +233,7 @@ const onSort = (event) => {
 }
 
 function onClickMultipleDelete() {
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t("Are you sure you want to delete the selected items?"),
     accept: async () => {
       loading.value = true

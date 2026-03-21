@@ -58,7 +58,7 @@
 import Loading from "../../components/Loading.vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useRoute, useRouter } from "vue-router"
 import { inject, ref, watch } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
@@ -75,7 +75,7 @@ const { isAdmin } = storeToRefs(securityStore)
 const route = useRoute()
 const router = useRouter()
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const notification = useNotification()
 
 const isLoading = ref(true)
@@ -112,8 +112,7 @@ watch(item, () => {
     {
       label: "Delete page",
       command() {
-        confirm.require({
-          header: "Confirmation",
+        requireConfirmation({
           message: "Are you sure you want to delete it?",
           async accept() {
             await pageService.del(item.value)

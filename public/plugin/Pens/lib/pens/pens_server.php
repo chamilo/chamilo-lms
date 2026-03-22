@@ -128,7 +128,10 @@ class PENSServer extends PENSController
                             // Process package
                             $this->processPackage($request, $path_to_package);
                         }
-                        unlink($path_to_package);
+
+                        if (is_string($path_to_package) && is_file($path_to_package)) {
+                            unlink($path_to_package);
+                        }
                     }
                 } else {
                     // Then, send a success response to the client

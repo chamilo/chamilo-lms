@@ -55,7 +55,8 @@
 }
 
 .field {
-  @apply mb-5;
+  @apply mb-5
+    last:mb-0;
 
   > small,
   .help-text {

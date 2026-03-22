@@ -75,24 +75,16 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-$image = '';
-$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
-if (!empty($illustrationUrl)) {
-    $image = '<div class="row">
-                <label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                <div class="col-md-8">
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" />
-                </div>
-            </div>';
-}
-
-$form->addElement('html', '<div id="course-main-settings-legacy-start"></div>');
-
 // --- Main course settings fields (legacy block) ---
+$form->addStartPanel(
+    'course_main',
+    get_lang('Course settings'),
+    true,
+    ActionIcon::INFORMATION
+);
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
-
 $form->addSelectLanguage(
     'course_language',
     [get_lang('Language'), get_lang('This language will be valid for every visitor of your courses portal')]
@@ -102,7 +94,6 @@ $group = [
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
 ];
-
 $form->addGroup($group, null, [get_lang('Show course in user\'s language')]);
 
 $form->addText('department_name', get_lang('Department'), false);
@@ -162,15 +153,13 @@ $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_
 
 if (!empty($illustrationUrl)) {
     $image = '
-        <div class="row course-picture-preview-row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="course-picture-preview ml-4">
-                    <span class="help-block small">'.get_lang('Current picture').'</span>
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
-                </div>
+        <div class="field course-picture-preview-row">
+            <div class="course-picture-preview">
+                <small class="help-block">'.get_lang('Current picture').'</small>
+                <img class="w-full" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
             </div>
-        </div>';
+        </div>'
+    ;
 }
 
 // Picture file input
@@ -259,24 +248,7 @@ $aiOptions = [
 // This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
 
-// Marker: end of legacy main settings block
-$form->addElement('html', '<div id="course-main-settings-legacy-end"></div>');
-$mainPanelGroup = [
-    '' => [
-        $form->createElement(
-            'html',
-            '<!-- Main course settings will be moved into this panel via JavaScript -->'
-        ),
-    ],
-];
-
-$form->addPanelOption(
-    'course_main',
-    get_lang('Course settings'),
-    $mainPanelGroup,
-    ActionIcon::INFORMATION,
-    true
-);
+$form->addEndPanel();
 
 // --- End of legacy block, from here panels start as usual ---
 
@@ -1224,53 +1196,8 @@ if ($enableAiHelpers) {
 
 $form->setDefaults($values);
 
-// JS helpers: move legacy main block into the "Course settings" panel
-$htmlHeadXtra[] = '
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("update_course");
-    if (!form) {
-        return;
-    }
-
-    // Move legacy main settings into the "Course settings" panel body
-    var start = document.getElementById("course-main-settings-legacy-start");
-    var end = document.getElementById("course-main-settings-legacy-end");
-    var panelBody = document.getElementById("collapse_course_main");
-
-    if (start && end && panelBody) {
-        var nodesToMove = [];
-        var node = start.nextSibling;
-
-        // Collect nodes between start and end (exclusive)
-        while (node && node !== end) {
-            var next = node.nextSibling;
-            nodesToMove.push(node);
-            node = next;
-        }
-
-        // Move nodes into the panel body
-        nodesToMove.forEach(function (n) {
-            panelBody.appendChild(n);
-        });
-
-        // Remove markers to keep DOM clean
-        if (start.parentNode) {
-            start.parentNode.removeChild(start);
-        }
-        if (end.parentNode) {
-            end.parentNode.removeChild(end);
-        }
-    }
-});
-</script>
-';
 $htmlHeadXtra[] = '
 <style>
-    .course-picture-preview-row {
-        margin-top: 0.5rem;
-    }
-
     .course-picture-preview img {
         max-width: 320px;
         height: auto;

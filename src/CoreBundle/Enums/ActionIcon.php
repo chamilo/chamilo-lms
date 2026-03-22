@@ -184,4 +184,5 @@ enum ActionIcon: string
     case HEALTH_CHECK = 'clipboard-pulse-outline';
     case FIX = 'auto-fix';
     case AWARD = 'medal';
+    case CROP = 'crop';
 }

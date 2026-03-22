@@ -185,7 +185,6 @@ if ($debug) {
 }
 
 $__returnTo = $_GET['returnTo'] ?? '';
-$__listUrlForSpa = $listUrl;
 $redirectToReturnToOr = static function (string $fallback) use ($__returnTo): void {
     $returnTo = (string) ($_REQUEST['returnTo'] ?? $__returnTo ?? '');
     if ($returnTo !== '') {
@@ -206,8 +205,8 @@ $redirectToReturnToOr = static function (string $fallback) use ($__returnTo): vo
     exit;
 };
 
-$goList = static function () use ($__listUrlForSpa, $__returnTo) {
-    header('Location: '.$__listUrlForSpa);
+$goList = static function () use ($listUrl) {
+    header('Location: '.$listUrl);
     exit;
 };
 

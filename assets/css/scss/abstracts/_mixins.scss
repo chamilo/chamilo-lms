@@ -52,8 +52,8 @@
   &:not(:disabled) {
     @if ('tertiary' == $color) {
       @apply
-        hover:bg-support-1 hover:text-primary
-      active:bg-support-1 active:text-primary active:brightness-[0.95];
+        hover:bg-support-1 hover:text-primary hover:border-transparent
+        active:bg-support-1 active:text-primary active:brightness-[0.95];
     } @else {
       @apply
         hover:bg-gray-10

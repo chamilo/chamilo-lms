@@ -1040,7 +1040,7 @@ HTML;
         $i = 1;
         foreach ($headers as $item) {
             $isActive = (empty($selected) && 1 === $i) || (!empty($selected) && (int) $selected === $i);
-            $activeClass = $isActive ? ' active' : '';
+            $activeClass = $isActive ? 'active' : '';
             $ariaSelected = $isActive ? 'true' : 'false';
 
             $item = self::tag(
@@ -1048,7 +1048,7 @@ HTML;
                 $item,
                 [
                     'href' => 'javascript:void(0)',
-                    'class' => 'nav-item nav-link text-primary'.$activeClass,
+                    'class' => 'nav-item nav-link '.$activeClass,
                     '@click' => "openTab = $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
@@ -1067,7 +1067,7 @@ HTML;
             $lis,
             [
                 'id' => 'nav_'.$id,
-                'class' => 'nav nav-tabs bg-white px-3 pt-3 border-bottom-0',
+                'class' => 'nav nav-tabs bg-white',
                 'role' => 'tablist',
             ]
         );
@@ -1113,7 +1113,7 @@ HTML;
             $attributes['class'] = '';
         }
         // Shadow, rounded corners, small top margin
-        $attributes['class'] .= ' tab_wrapper shadow-sm rounded mt-3';
+        $attributes['class'] .= ' tab_wrapper shadow-sm rounded';
 
         $initialTab = !empty($selected) ? (int) $selected : 1;
         $attributes['x-data'] = '{ openTab: '.$initialTab.' }';

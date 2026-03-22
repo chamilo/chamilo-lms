@@ -145,11 +145,11 @@
   // Tabs
 
   .tab_wrapper nav {
-    @apply card flex flex-row justify-between gap-4;
+    @apply card flex flex-row justify-between gap-2.5;
   }
 
   .tab_wrapper nav a {
-    @apply p-4;
+    @apply px-4 py-2 rounded-lg text-primary transition-colors;
   }
 
   // Calendar

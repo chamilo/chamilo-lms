@@ -6611,11 +6611,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!empty($templatesPanel)) {
             // Two-column layout: templates on the left, form on the right.
             $new = '
-            <div class="lp-document-create flex flex-col lg:flex-row gap-4">
-                <div class="w-full lg:w-1/3">
+            <div class="lp-document-create flex flex-col xl:flex-row gap-4">
+                <div class="w-full xl:w-1/3">
                     '.$templatesPanel.'
                 </div>
-                <div class="w-full lg:w-2/3">
+                <div class="w-full xl:w-2/3">
                     '.$newForm.'
                 </div>
             </div>
@@ -6681,7 +6681,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $headers,
             [$documentTree, $videosTree, $new, $uploadHtml],
             'subtab',
-            ['class' => 'mt-3 lp-subtabs']
+            ['class' => 'lp-subtabs']
         );
     }
 

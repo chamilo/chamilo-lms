@@ -5,7 +5,7 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 
 {%- block form_row -%}
     {% if not compound -%}
-        {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-float-label')) }) -%}
+        {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-floatlabel p-floatlabel-on')) }) -%}
     {% endif %}
 
     {%- set widget_attr = {} -%}

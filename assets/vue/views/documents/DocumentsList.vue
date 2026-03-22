@@ -345,7 +345,7 @@
     @confirm-clicked="createNewFolder"
     @cancel-clicked="hideNewFolderDialog"
   >
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <InputText
         id="title"
         v-model.trim="item.title"
@@ -359,7 +359,7 @@
         v-text="t('Name')"
         for="title"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="submitted && !item.title"
       v-text="t('Title is required')"
@@ -567,7 +567,7 @@
     @cancel-clicked="showTemplateFormModal = false"
   >
     <form @submit.prevent="submitTemplateForm">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           id="templateTitle"
           v-model.trim="templateFormData.title"
@@ -578,7 +578,7 @@
           v-text="t('Name')"
           for="templateTitle"
         />
-      </div>
+      </FloatLabel>
       <small
         v-if="submitted && !templateFormData.title"
         v-text="t('Title is required')"
@@ -657,6 +657,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import FloatLabel from "primevue/floatlabel"
 
 const store = useStore()
 const route = useRoute()

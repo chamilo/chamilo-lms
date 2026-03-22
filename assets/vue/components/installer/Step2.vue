@@ -209,7 +209,7 @@
 
       <!-- form inputs for old version path -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             id="updatePath"
             :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
@@ -217,7 +217,7 @@
             size="50"
           />
           <label v-text="t('Old version\'s root path')" />
-        </div>
+        </FloatLabel>
       </div>
 
       <div class="formgroup-inline">
@@ -352,6 +352,7 @@ import { inject } from "vue"
 
 import Message from "primevue/message"
 import Tag from "primevue/tag"
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"

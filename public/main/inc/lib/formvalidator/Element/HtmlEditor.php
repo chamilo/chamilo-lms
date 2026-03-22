@@ -110,7 +110,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '
                 <div class="field">
-                    <div class="p-float-label">
+                    <div class="p-floatlabel p-floatlabel-on">
                         <div class="html-editor-container">
                             {element}
                             {icon}

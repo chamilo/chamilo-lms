@@ -353,7 +353,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '<div class="field">
-                    <div class="p-float-label">
+                    <div class="p-floatlabel p-floatlabel-on">
                         {element}
                         {icon}
                         <label {label-for}>

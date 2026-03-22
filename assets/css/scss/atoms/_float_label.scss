@@ -21,16 +21,6 @@
   &:has(textarea:focus) label,
   &:has(textarea.p-filled) label,
   &:has(.p-inputwrapper-focus) label,
-  &:has(.p-inputwrapper-filled) label {
-    @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
-  }
-
-  &:has(input:focus) label,
-  &:has(input.p-filled) label,
-  &:has(input:-webkit-autofill) label,
-  &:has(textarea:focus) label,
-  &:has(textarea.p-filled) label,
-  &:has(.p-inputwrapper-focus) label,
   &:has(.p-inputwrapper-filled) label,
   &:has(input[placeholder]) label,
   &:has(textarea[placeholder]) label,
@@ -60,19 +50,25 @@
 
   &-in:has(input:focus) label,
   &-in:has(input.p-filled) label,
-  &-in:has(input:-webkit-autofill) label,
+  &-in:has(input:autofill) label,
   &-in:has(textarea:focus) label,
   &-in:has(textarea.p-filled) label,
   &-in:has(.p-inputwrapper-focus) label,
-  &-in:has(.p-inputwrapper-filled) label {
+  &-in:has(.p-inputwrapper-filled) label,
+  &-in:has(input[placeholder]) label,
+  &-in:has(textarea[placeholder]) label {
   }
 
   &-on:has(input:focus) label,
   &-on:has(input.p-filled) label,
-  &-on:has(input:-webkit-autofill) label,
+  &-on:has(input:autofill) label,
   &-on:has(textarea:focus) label,
   &-on:has(textarea.p-filled) label,
   &-on:has(.p-inputwrapper-focus) label,
-  &-on:has(.p-inputwrapper-filled) label {
+  &-on:has(.p-inputwrapper-filled) label,
+  &-on:has(input[placeholder]) label,
+  &-on:has(textarea[placeholder]) label,
+  &-on:has(.p-datepicker-panel-inline) label {
+    @apply -translate-y-1/2;
   }
 }

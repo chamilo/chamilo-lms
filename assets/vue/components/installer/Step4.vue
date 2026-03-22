@@ -22,7 +22,7 @@
     />
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbHostForm"
           :readonly="'update' === installerData.installType"
@@ -35,12 +35,12 @@
           v-text="t('Database host')"
           for="dbHostForm"
         />
-      </div>
+      </FloatLabel>
       <small v-text="t('ex. localhost')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbPortForm"
           :readonly="'update' === installerData.installType"
@@ -53,12 +53,12 @@
           v-text="t('Port')"
           for="dbPortForm"
         />
-      </div>
+      </FloatLabel>
       <small v-text="t('ex. 3306')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbUsernameForm"
           :readonly="'update' === installerData.installType"
@@ -71,12 +71,12 @@
           v-text="t('Database user')"
           for="dbUsernameForm"
         />
-      </div>
+      </FloatLabel>
       <small v-text="t('ex. root')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <Password
           v-model="installerData.stepData.dbPassForm"
           :feedback="false"
@@ -89,12 +89,12 @@
           v-text="t('Database Password')"
           for="dbPassForm"
         />
-      </div>
+      </FloatLabel>
       <small v-text="t('ex. {0}', [installerData.stepData.examplePassword])" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbNameForm"
           :readonly="'update' === installerData.installType"
@@ -107,7 +107,7 @@
           v-text="t('Database name')"
           for="dbNameForm"
         />
-      </div>
+      </FloatLabel>
       <small v-if="'update' !== installerData.installType">
         {{
           t(
@@ -235,6 +235,7 @@
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"

@@ -95,7 +95,7 @@
     class="p-fluid"
   >
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           id="title"
           v-model.trim="item.title"
@@ -108,7 +108,7 @@
           v-text="t('Name')"
           for="title"
         />
-      </div>
+      </FloatLabel>
       <small
         v-if="submitted && !item.title"
         v-text="t('Title is required')"
@@ -144,9 +144,7 @@
         class="mdi mdi-alert p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item"
-        >{{ t('Are you sure you want to delete {0}?', [item.title]) }}</span
-      >
+      <span v-if="item">{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span>
     </div>
     <template #footer>
       <Button
@@ -225,6 +223,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import FloatLabel from "primevue/floatlabel"
 
 const router = useRouter()
 const store = useStore()

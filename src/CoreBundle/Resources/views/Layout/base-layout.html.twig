@@ -19,14 +19,21 @@
 <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
 {%- block chamilo_wrap -%}
     <div class="page-marker {{ page_type_classes|join(' ') }}" aria-hidden="true"></div>
+
+    {{ chamilo_plugin_region('main_top') }}
+
     {%- block page_content %}
     {% endblock %}
+
+    {{ chamilo_plugin_region('main_bottom') }}
 {% endblock -%}
 
 {%- block chamilo_footer -%}
 {% endblock -%}
 
 {{ modals_block }}
+
+{{ chamilo_plugin_region('pre_footer') }}
 
 {# Cookie banner (global) #}
 {% include "@ChamiloCore/Layout/cookie_banner.html.twig" %}

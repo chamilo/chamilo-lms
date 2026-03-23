@@ -34,7 +34,7 @@ if (isset($_REQUEST['interact']) && is_array($_REQUEST['interact'])) {
 
 $result = ScormApi::saveItem(
     $_REQUEST['lid'] ?? null,
-    $_REQUEST['uid'] ?? null,
+    api_get_user_id(),
     $_REQUEST['vid'] ?? null,
     $_REQUEST['iid'] ?? null,
     $_REQUEST['s'] ?? null,

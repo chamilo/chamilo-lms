@@ -11,6 +11,8 @@ namespace moodleexport;
  */
 class ForumExport extends ActivityExport
 {
+    private static int $embeddedFileGlobalSeq = 0;
+
     /**
      * Export all forum data into a single Moodle forum activity.
      *
@@ -21,13 +23,18 @@ class ForumExport extends ActivityExport
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Prepare the directory where the forum export will be saved
-        $forumDir = $this->prepareActivityDirectory($exportDir, 'forum', $moduleId);
+        $effectiveModuleId = (int) $moduleId;
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = (int) $activityId;
+        }
 
-        // Retrieve forum data
-        $forumData = $this->getData($activityId, $sectionId);
+        $forumDir = $this->prepareActivityDirectory($exportDir, 'forum', $effectiveModuleId);
+        $forumData = $this->getData((int) $activityId, (int) $sectionId, $effectiveModuleId);
 
-        // Generate XML files for the forum
+        if (empty($forumData)) {
+            return;
+        }
+
         $this->createForumXml($forumData, $forumDir);
         $this->createModuleXml($forumData, $forumDir);
         $this->createGradesXml($forumData, $forumDir);
@@ -43,53 +50,123 @@ class ForumExport extends ActivityExport
     /**
      * Get all forum data from the course.
      */
-    public function getData(int $forumId, int $sectionId): ?array
+    public function getData(int $forumId, int $sectionId, ?int $moduleId = null): ?array
     {
-        $forum = $this->course->resources[RESOURCE_FORUM][$forumId]->obj;
-
-        $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'];
-
-        $threads = [];
-        foreach ($this->course->resources['thread'] as $threadId => $thread) {
-            if ($thread->obj->forum_id == $forumId) {
-                // Get the posts for each thread
-                $posts = [];
-                foreach ($this->course->resources['post'] as $postId => $post) {
-                    if ($post->obj->thread_id == $threadId) {
-                        $posts[] = [
-                            'id' => $post->obj->post_id,
-                            'userid' => $adminId,
-                            'message' => $post->obj->post_text,
-                            'created' => strtotime($post->obj->post_date),
-                            'modified' => strtotime($post->obj->post_date),
-                        ];
-                    }
-                }
-
-                $threads[] = [
-                    'id' => $thread->obj->thread_id,
-                    'title' => $thread->obj->thread_title,
-                    'userid' => $adminId,
-                    'timemodified' => strtotime($thread->obj->thread_date),
-                    'usermodified' => $adminId,
-                    'posts' => $posts,
-                ];
-            }
+        if (empty($this->course->resources[RESOURCE_FORUM][$forumId])) {
+            return null;
         }
 
-        $name = $forum->forum_title ?? '';
+        $forum = $this->course->resources[RESOURCE_FORUM][$forumId]->obj;
+
+        $effectiveModuleId = (int) ($moduleId ?? $forumId);
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = $forumId;
+        }
+
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = (int) ($adminData['id'] ?? 1);
+
+        $name = (string) ($forum->forum_title ?? '');
         if ($sectionId > 0) {
             $name = $this->lpItemTitle($sectionId, RESOURCE_FORUM, $forumId, $name);
+        }
+        $name = $this->sanitizeMoodleActivityName($name, 255);
+
+        $descriptionResult = $this->extractEmbeddedFilesAndNormalizeContent(
+            (string) ($forum->forum_comment ?? ''),
+            $effectiveModuleId,
+            'mod_forum',
+            'intro',
+            0,
+            fn (int $sequence): int => $this->buildForumEmbeddedFileId()
+        );
+
+        $forumFiles = $descriptionResult['files'];
+        $threads = [];
+
+        $threadResources = $this->course->resources['thread'] ?? [];
+        $postResources = $this->course->resources['post'] ?? [];
+
+        foreach ($threadResources as $threadId => $thread) {
+            if ((int) ($thread->obj->forum_id ?? 0) !== $forumId) {
+                continue;
+            }
+
+            $threadPosts = [];
+            foreach ($postResources as $post) {
+                if ((int) ($post->obj->thread_id ?? 0) !== (int) $threadId) {
+                    continue;
+                }
+
+                $postId = (int) ($post->obj->post_id ?? 0);
+                $postDate = strtotime((string) ($post->obj->post_date ?? 'now'));
+                if ($postDate === false) {
+                    $postDate = time();
+                }
+
+                $messageResult = $this->extractEmbeddedFilesAndNormalizeContent(
+                    (string) ($post->obj->post_text ?? ''),
+                    $effectiveModuleId,
+                    'mod_forum',
+                    'post',
+                    $postId,
+                    fn (int $sequence): int => $this->buildForumEmbeddedFileId()
+                );
+
+                if (!empty($messageResult['files'])) {
+                    $forumFiles = array_merge($forumFiles, $messageResult['files']);
+                }
+
+                $threadPosts[] = [
+                    'id' => $postId,
+                    'userid' => $adminId,
+                    'message' => $messageResult['content'],
+                    'created' => $postDate,
+                    'modified' => $postDate,
+                ];
+            }
+
+            usort($threadPosts, static function (array $a, array $b): int {
+                return ((int) $a['created']) <=> ((int) $b['created']);
+            });
+
+            $firstPostId = 0;
+            foreach ($threadPosts as $index => &$postData) {
+                if ($index === 0) {
+                    $firstPostId = (int) $postData['id'];
+                    $postData['parent'] = 0;
+                } else {
+                    $postData['parent'] = $firstPostId;
+                }
+
+                $postData['mailed'] = 0;
+                $postData['subject'] = (string) ($thread->obj->thread_title ?? get_lang('Forum'));
+            }
+            unset($postData);
+
+            $threadDate = strtotime((string) ($thread->obj->thread_date ?? 'now'));
+            if ($threadDate === false) {
+                $threadDate = time();
+            }
+
+            $threads[] = [
+                'id' => (int) ($thread->obj->thread_id ?? 0),
+                'title' => (string) ($thread->obj->thread_title ?? ''),
+                'firstpost' => $firstPostId,
+                'userid' => $adminId,
+                'timemodified' => $threadDate,
+                'usermodified' => $adminId,
+                'posts' => $threadPosts,
+            ];
         }
 
         return [
             'id' => $forumId,
-            'moduleid' => $forumId,
+            'moduleid' => $effectiveModuleId,
             'modulename' => 'forum',
-            'contextid' => $this->course->info['real_id'],
+            'contextid' => $effectiveModuleId,
             'name' => $name,
-            'description' => $forum->forum_comment,
+            'description' => $descriptionResult['content'],
             'timecreated' => time(),
             'timemodified' => time(),
             'sectionid' => $sectionId,
@@ -97,7 +174,7 @@ class ForumExport extends ActivityExport
             'userid' => $adminId,
             'threads' => $threads,
             'users' => [$adminId],
-            'files' => [],
+            'files' => $forumFiles,
         ];
     }
 
@@ -110,8 +187,8 @@ class ForumExport extends ActivityExport
         $xmlContent .= '<activity id="'.$forumData['id'].'" moduleid="'.$forumData['moduleid'].'" modulename="'.$forumData['modulename'].'" contextid="'.$forumData['contextid'].'">'.PHP_EOL;
         $xmlContent .= '  <forum id="'.$forumData['id'].'">'.PHP_EOL;
         $xmlContent .= '    <type>general</type>'.PHP_EOL;
-        $xmlContent .= '    <name>'.htmlspecialchars($forumData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '    <intro>'.htmlspecialchars($forumData['description']).'</intro>'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars((string) $forumData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '    <intro><![CDATA['.(string) $forumData['description'].']]></intro>'.PHP_EOL;
         $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
         $xmlContent .= '    <duedate>0</duedate>'.PHP_EOL;
         $xmlContent .= '    <cutoffdate>0</cutoffdate>'.PHP_EOL;
@@ -135,13 +212,12 @@ class ForumExport extends ActivityExport
         $xmlContent .= '    <displaywordcount>0</displaywordcount>'.PHP_EOL;
         $xmlContent .= '    <lockdiscussionafter>0</lockdiscussionafter>'.PHP_EOL;
         $xmlContent .= '    <grade_forum>0</grade_forum>'.PHP_EOL;
-
-        // Add forum threads
         $xmlContent .= '    <discussions>'.PHP_EOL;
+
         foreach ($forumData['threads'] as $thread) {
             $xmlContent .= '      <discussion id="'.$thread['id'].'">'.PHP_EOL;
-            $xmlContent .= '        <name>'.htmlspecialchars($thread['title']).'</name>'.PHP_EOL;
-            $xmlContent .= '        <firstpost>'.$thread['firstpost'].'</firstpost>'.PHP_EOL;
+            $xmlContent .= '        <name>'.htmlspecialchars((string) $thread['title']).'</name>'.PHP_EOL;
+            $xmlContent .= '        <firstpost>'.(int) ($thread['firstpost'] ?? 0).'</firstpost>'.PHP_EOL;
             $xmlContent .= '        <userid>'.$thread['userid'].'</userid>'.PHP_EOL;
             $xmlContent .= '        <groupid>-1</groupid>'.PHP_EOL;
             $xmlContent .= '        <assessed>0</assessed>'.PHP_EOL;
@@ -151,18 +227,17 @@ class ForumExport extends ActivityExport
             $xmlContent .= '        <timeend>0</timeend>'.PHP_EOL;
             $xmlContent .= '        <pinned>0</pinned>'.PHP_EOL;
             $xmlContent .= '        <timelocked>0</timelocked>'.PHP_EOL;
-
-            // Add forum posts to the thread
             $xmlContent .= '        <posts>'.PHP_EOL;
+
             foreach ($thread['posts'] as $post) {
                 $xmlContent .= '          <post id="'.$post['id'].'">'.PHP_EOL;
-                $xmlContent .= '            <parent>'.$post['parent'].'</parent>'.PHP_EOL;
+                $xmlContent .= '            <parent>'.(int) ($post['parent'] ?? 0).'</parent>'.PHP_EOL;
                 $xmlContent .= '            <userid>'.$post['userid'].'</userid>'.PHP_EOL;
                 $xmlContent .= '            <created>'.$post['created'].'</created>'.PHP_EOL;
                 $xmlContent .= '            <modified>'.$post['modified'].'</modified>'.PHP_EOL;
-                $xmlContent .= '            <mailed>'.$post['mailed'].'</mailed>'.PHP_EOL;
-                $xmlContent .= '            <subject>'.htmlspecialchars($post['subject']).'</subject>'.PHP_EOL;
-                $xmlContent .= '            <message>'.htmlspecialchars($post['message']).'</message>'.PHP_EOL;
+                $xmlContent .= '            <mailed>'.(int) ($post['mailed'] ?? 0).'</mailed>'.PHP_EOL;
+                $xmlContent .= '            <subject>'.htmlspecialchars((string) ($post['subject'] ?? '')).'</subject>'.PHP_EOL;
+                $xmlContent .= '            <message><![CDATA['.(string) ($post['message'] ?? '').']]></message>'.PHP_EOL;
                 $xmlContent .= '            <messageformat>1</messageformat>'.PHP_EOL;
                 $xmlContent .= '            <messagetrust>0</messagetrust>'.PHP_EOL;
                 $xmlContent .= '            <attachment></attachment>'.PHP_EOL;
@@ -173,19 +248,31 @@ class ForumExport extends ActivityExport
                 $xmlContent .= '            </ratings>'.PHP_EOL;
                 $xmlContent .= '          </post>'.PHP_EOL;
             }
+
             $xmlContent .= '        </posts>'.PHP_EOL;
             $xmlContent .= '        <discussion_subs>'.PHP_EOL;
-            $xmlContent .= '            <discussion_sub id="'.$thread['id'].'">'.PHP_EOL;
-            $xmlContent .= '              <userid>'.$thread['userid'].'</userid>'.PHP_EOL;
-            $xmlContent .= '              <preference>'.$thread['timemodified'].'</preference>'.PHP_EOL;
-            $xmlContent .= '            </discussion_sub>'.PHP_EOL;
+            $xmlContent .= '          <discussion_sub id="'.$thread['id'].'">'.PHP_EOL;
+            $xmlContent .= '            <userid>'.$thread['userid'].'</userid>'.PHP_EOL;
+            $xmlContent .= '            <preference>'.$thread['timemodified'].'</preference>'.PHP_EOL;
+            $xmlContent .= '          </discussion_sub>'.PHP_EOL;
             $xmlContent .= '        </discussion_subs>'.PHP_EOL;
             $xmlContent .= '      </discussion>'.PHP_EOL;
         }
+
         $xmlContent .= '    </discussions>'.PHP_EOL;
         $xmlContent .= '  </forum>'.PHP_EOL;
         $xmlContent .= '</activity>';
 
         $this->createXmlFile('forum', $xmlContent, $forumDir);
+    }
+
+    /**
+     * Build a stable embedded file id for forum files.
+     */
+    private function buildForumEmbeddedFileId(): int
+    {
+        self::$embeddedFileGlobalSeq++;
+
+        return 1400000000 + self::$embeddedFileGlobalSeq;
     }
 }

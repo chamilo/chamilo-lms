@@ -38,20 +38,17 @@ class FileExport
             mkdir($filesDir, api_get_permissions_for_new_directories(), true);
         }
 
-        // Create placeholder index.html
         $this->createPlaceholderFile($filesDir);
 
-        // Export each file
         foreach ($filesData['files'] as $file) {
             $this->copyFileToExportDir($file, $filesDir);
         }
 
-        // Create files.xml in the export directory
         $this->createFilesXml($filesData, $exportDir);
     }
 
     /**
-     * Get file data from course resources. This is for testing purposes.
+     * Get file data from course resources.
      */
     public function getFilesData(): array
     {
@@ -104,7 +101,7 @@ class FileExport
      */
     public function getMimeType($filePath): string
     {
-        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $extension = strtolower((string) pathinfo((string) $filePath, PATHINFO_EXTENSION));
         $mimeTypes = $this->getMimeTypes();
 
         return $mimeTypes[$extension] ?? 'application/octet-stream';
@@ -124,27 +121,38 @@ class FileExport
      */
     private function copyFileToExportDir(array $file, string $filesDir): void
     {
-        if ($file['filepath'] === '.') {
+        if (($file['filepath'] ?? '') === '.') {
             return;
         }
 
-        $contenthash = $file['contenthash'];
+        $contenthash = (string) ($file['contenthash'] ?? '');
+        if ($contenthash === '') {
+            return;
+        }
+
         $subDir = substr($contenthash, 0, 2);
-        $filePath = $this->course->path.$file['documentpath'];
         $exportSubDir = $filesDir.'/'.$subDir;
 
-        // Ensure the subdirectory exists
         if (!is_dir($exportSubDir)) {
             mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
         }
 
-        // Copy the file to the export directory
         $destinationFile = $exportSubDir.'/'.$contenthash;
-        if (file_exists($filePath)) {
-            copy($filePath, $destinationFile);
+
+        $filePath = '';
+        if (!empty($file['absolutepath'])) {
+            $filePath = (string) $file['absolutepath'];
         } else {
-            throw new Exception("File {$filePath} not found.");
+            $filePath = $this->course->path.($file['documentpath'] ?? '');
         }
+
+        if (is_file($filePath)) {
+            copy($filePath, $destinationFile);
+
+            return;
+        }
+
+        throw new Exception("File {$filePath} not found.");
     }
 
     /**
@@ -165,7 +173,6 @@ class FileExport
 
     /**
      * Ensure mandatory file fields exist for Moodle restore.
-     * This avoids notices like "Undefined property: stdClass::$itemid/$userid".
      */
     private function normalizeFileEntry(array $file): array
     {
@@ -202,7 +209,6 @@ class FileExport
             '    <contextid>'.$file['contextid'].'</contextid>'.PHP_EOL.
             '    <component>'.htmlspecialchars((string) $file['component']).'</component>'.PHP_EOL.
             '    <filearea>'.htmlspecialchars((string) $file['filearea']).'</filearea>'.PHP_EOL.
-            // IMPORTANT: only ONE <itemid> tag per file
             '    <itemid>'.$itemId.'</itemid>'.PHP_EOL.
             '    <filepath>'.htmlspecialchars((string) $file['filepath']).'</filepath>'.PHP_EOL.
             '    <filename>'.htmlspecialchars((string) $file['filename']).'</filename>'.PHP_EOL.
@@ -227,19 +233,13 @@ class FileExport
      */
     private function processDocument(array $filesData, object $document): array
     {
-        // Only real files are exported; folders are represented implicitly by "filepath"
         if ($document->file_type !== 'file') {
             return $filesData;
         }
 
-        // Base file data (contenthash, size, title, etc.)
         $fileData = $this->getFileData($document);
-
-        // Rebuild the relative filepath so Moodle can recreate the Documents tree
-        // without the internal Chamilo "document" prefix.
         $filepath = $this->buildMoodleFilepathFromChamiloPath((string) $document->path);
 
-        // Attach this file to the global "Documents" folder activity
         $fileData['filepath'] = $filepath;
         $fileData['contextid'] = ActivityExport::DOCS_MODULE_ID;
         $fileData['component'] = 'mod_folder';
@@ -253,10 +253,6 @@ class FileExport
 
     /**
      * Build a Moodle filepath from a Chamilo document path.
-     * Example:
-     *   document/repertoire1/file.pdf   -> /repertoire1/
-     *   /document/repertoire1/file.pdf  -> /repertoire1/
-     *   /file.pdf                       -> /
      */
     private function buildMoodleFilepathFromChamiloPath(string $documentPath): string
     {
@@ -274,8 +270,6 @@ class FileExport
     private function stripChamiloDocumentPrefix(string $path): string
     {
         $path = str_replace('\\', '/', trim($path));
-
-        // Remove leading "/document/" or "document/" only once
         $path = preg_replace('#^/?document/#', '', $path);
 
         return $path;
@@ -314,40 +308,6 @@ class FileExport
     }
 
     /**
-     * Get file data for files inside a folder.
-     */
-    private function getFolderFileData(array $file, int $sourceId, string $parentPath = '/'): array
-    {
-        $adminData = MoodleExport::getAdminUserData();
-        $adminId = $adminData['id'];
-        $contenthash = hash('sha1', basename($file['path']));
-        $mimetype = $this->getMimeType($file['path']);
-        $filename = basename($file['path']);
-        $filepath = $this->buildMoodleFilepathFromChamiloPath((string) $file['path']);
-
-        return [
-            'id' => $file['id'],
-            'contenthash' => $contenthash,
-            'contextid' => ActivityExport::DOCS_MODULE_ID,
-            'component' => 'mod_folder',
-            'filearea' => 'content',
-            'itemid' => ActivityExport::DOCS_MODULE_ID,
-            'filepath' => $filepath,
-            'documentpath' => 'document/'.$file['path'],
-            'filename' => $filename,
-            'userid' => $adminId,
-            'filesize' => $file['size'],
-            'mimetype' => $mimetype,
-            'status' => 0,
-            'timecreated' => time() - 3600,
-            'timemodified' => time(),
-            'source' => $file['title'],
-            'author' => 'Unknown',
-            'license' => 'allrightsreserved',
-        ];
-    }
-
-    /**
      * Ensure the directory path has a trailing slash.
      */
     private function ensureTrailingSlash(string $path): string
@@ -372,8 +332,17 @@ class FileExport
             'jpeg' => 'image/jpeg',
             'png' => 'image/png',
             'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'webp' => 'image/webp',
             'html' => 'text/html',
+            'htm' => 'text/html',
             'txt' => 'text/plain',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'mp4' => 'video/mp4',
+            'webm' => 'video/webm',
+            'mp3' => 'audio/mpeg',
+            'ogg' => 'audio/ogg',
             'doc' => 'application/msword',
             'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'xls' => 'application/vnd.ms-excel',

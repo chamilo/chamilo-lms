@@ -3216,27 +3216,27 @@ class DocumentManager
                 fclose($handle);
                 break;
             case 'application/pdf':
-                exec("pdftotext $doc_path -", $output, $ret_val);
+                exec("pdftotext ".escapeshellarg($doc_path)." -", $output, $ret_val);
                 break;
             case 'application/postscript':
                 $temp_file = tempnam(sys_get_temp_dir(), 'chamilo');
-                exec("ps2pdf $doc_path $temp_file", $output, $ret_val);
+                exec("ps2pdf ".escapeshellarg($doc_path)." ".escapeshellarg($temp_file), $output, $ret_val);
                 if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
                     return false;
                 }
-                exec("pdftotext $temp_file -", $output, $ret_val);
+                exec("pdftotext ".escapeshellarg($temp_file)." -", $output, $ret_val);
                 unlink($temp_file);
                 break;
             case 'application/msword':
-                exec("catdoc $doc_path", $output, $ret_val);
+                exec("catdoc ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'text/html':
-                exec("html2text $doc_path", $output, $ret_val);
+                exec("html2text ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'text/rtf':
                 // Note: correct handling of code pages in unrtf
                 // on debian lenny unrtf v0.19.2 can not, but unrtf v0.20.5 can
-                exec("unrtf --text $doc_path", $output, $ret_val);
+                exec("unrtf --text ".escapeshellarg($doc_path), $output, $ret_val);
                 if ($ret_val == 127) { // command not found
                     return false;
                 }
@@ -3254,10 +3254,10 @@ class DocumentManager
                 }
                 break;
             case 'application/vnd.ms-powerpoint':
-                exec("catppt $doc_path", $output, $ret_val);
+                exec("catppt ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'application/vnd.ms-excel':
-                exec("xls2csv -c\" \" $doc_path", $output, $ret_val);
+                exec("xls2csv -c\" \" ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
         }
 

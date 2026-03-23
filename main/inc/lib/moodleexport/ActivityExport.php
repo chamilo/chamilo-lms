@@ -146,27 +146,29 @@ abstract class ActivityExport
      */
     protected function createInforefXml(array $references, string $directory): void
     {
-        // Start the XML content
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<inforef>'.PHP_EOL;
 
-        // Add user references if provided
         if (isset($references['users']) && is_array($references['users'])) {
             $xmlContent .= '  <userref>'.PHP_EOL;
             foreach ($references['users'] as $userId) {
                 $xmlContent .= '    <user>'.PHP_EOL;
-                $xmlContent .= '      <id>'.htmlspecialchars($userId).'</id>'.PHP_EOL;
+                $xmlContent .= '      <id>'.htmlspecialchars((string) $userId).'</id>'.PHP_EOL;
                 $xmlContent .= '    </user>'.PHP_EOL;
             }
             $xmlContent .= '  </userref>'.PHP_EOL;
         }
 
-        // Add file references if provided
         if (isset($references['files']) && is_array($references['files'])) {
             $xmlContent .= '  <fileref>'.PHP_EOL;
             foreach ($references['files'] as $file) {
+                $fileId = is_array($file) ? (int) ($file['id'] ?? 0) : (int) $file;
+                if ($fileId <= 0) {
+                    continue;
+                }
+
                 $xmlContent .= '    <file>'.PHP_EOL;
-                $xmlContent .= '      <id>'.htmlspecialchars($file['id']).'</id>'.PHP_EOL;
+                $xmlContent .= '      <id>'.$fileId.'</id>'.PHP_EOL;
                 $xmlContent .= '    </file>'.PHP_EOL;
             }
             $xmlContent .= '  </fileref>'.PHP_EOL;
@@ -288,7 +290,7 @@ abstract class ActivityExport
      * - Strip HTML
      * - Decode entities
      * - Normalize whitespace
-     * - Truncate to a maximum length (e.g. 255 for mdl_resource.name)
+     * - Truncate to a maximum length.
      */
     protected function sanitizeMoodleActivityName(string $raw, int $maxLen = 255): string
     {
@@ -320,7 +322,7 @@ abstract class ActivityExport
     }
 
     /**
-     * Returns the title of the item in the LP (if it exists); otherwise, $fallback.
+     * Returns the title of the item in the LP if it exists, otherwise the fallback.
      */
     protected function lpItemTitle(int $sectionId, string $itemType, int $resourceId, ?string $fallback): string
     {
@@ -340,5 +342,253 @@ abstract class ActivityExport
         }
 
         return $fallback ?? '';
+    }
+
+    /**
+     * Extract embedded files from HTML content and normalize URLs to @@PLUGINFILE@@.
+     *
+     * Supported sources:
+     * - Course documents: /document/...
+     * - Platform assets: /main/default_course_document/... and /main/img/...
+     *
+     * @param callable $fileIdBuilder Receives the 1-based sequence and must return a unique file id.
+     *
+     * @return array{content:string, files:array<int,array<string,mixed>>}
+     */
+    protected function extractEmbeddedFilesAndNormalizeContent(
+        string $html,
+        int $contextId,
+        string $component,
+        string $fileArea,
+        int $itemId,
+        callable $fileIdBuilder
+    ): array {
+        if ($html === '') {
+            return [
+                'content' => '',
+                'files' => [],
+            ];
+        }
+
+        $courseInfo = api_get_course_info($this->course->code);
+        $adminId = (int) (MoodleExport::getAdminUserData()['id'] ?? 1);
+        $fileExport = new FileExport($this->course);
+
+        $files = [];
+        $seenSources = [];
+        $sequence = 0;
+
+        $normalizedHtml = preg_replace_callback(
+            '#<img[^>]+src=["\'](?<url>[^"\']+)["\']#i',
+            function ($match) use (
+                $courseInfo,
+                $contextId,
+                $component,
+                $fileArea,
+                $itemId,
+                $fileIdBuilder,
+                $adminId,
+                $fileExport,
+                &$files,
+                &$seenSources,
+                &$sequence
+            ) {
+                $src = (string) ($match['url'] ?? '');
+                $resolved = $this->resolveEmbeddedFileSource($src, $courseInfo);
+
+                if ($resolved === null) {
+                    return $match[0];
+                }
+
+                $sourceKey = (string) $resolved['sourcekey'];
+
+                if (!isset($seenSources[$sourceKey])) {
+                    $sequence++;
+                    $fileId = (int) call_user_func($fileIdBuilder, $sequence);
+
+                    $absolutePath = (string) $resolved['absolutepath'];
+                    $filename = (string) $resolved['filename'];
+
+                    $files[] = [
+                        'id' => $fileId,
+                        'contenthash' => is_file($absolutePath)
+                            ? sha1_file($absolutePath)
+                            : hash('sha1', $filename),
+                        'contextid' => $contextId,
+                        'component' => $component,
+                        'filearea' => $fileArea,
+                        'itemid' => $itemId,
+                        'filepath' => (string) $resolved['filepath'],
+                        'documentpath' => (string) $resolved['documentpath'],
+                        'absolutepath' => $absolutePath,
+                        'filename' => $filename,
+                        'userid' => $adminId,
+                        'filesize' => is_file($absolutePath) ? (int) filesize($absolutePath) : 0,
+                        'mimetype' => $fileExport->getMimeType($filename),
+                        'status' => 0,
+                        'timecreated' => time() - 3600,
+                        'timemodified' => time(),
+                        'source' => $filename,
+                        'author' => 'Unknown',
+                        'license' => 'allrightsreserved',
+                    ];
+
+                    $seenSources[$sourceKey] = true;
+                }
+
+                return str_replace($src, '@@PLUGINFILE@@'.(string) $resolved['pluginfilepath'], $match[0]);
+            },
+            $html
+        );
+
+        return [
+            'content' => (string) $normalizedHtml,
+            'files' => $files,
+        ];
+    }
+
+    /**
+     * Resolve an embeddable source URL into export metadata.
+     *
+     * @return array<string,string>|null
+     */
+    protected function resolveEmbeddedFileSource(string $src, array $courseInfo): ?array
+    {
+        $urlPath = $this->extractUrlPath($src);
+
+        if (preg_match('#/document(?P<path>/[^"\']+)#', $urlPath, $m)) {
+            $documentRelativePath = (string) $m['path'];
+            $docId = \DocumentManager::get_document_id($courseInfo, $documentRelativePath);
+            if (empty($docId)) {
+                return null;
+            }
+
+            $document = \DocumentManager::get_document_data_by_id((int) $docId, $this->course->code);
+            if (empty($document)) {
+                return null;
+            }
+
+            $documentPath = (string) ($document['path'] ?? '');
+            if ($documentPath === '') {
+                return null;
+            }
+
+            return [
+                'sourcekey' => 'document:'.$docId,
+                'filepath' => $this->buildPluginFileDirectoryFromChamiloDocumentPath($documentPath),
+                'pluginfilepath' => $this->buildPluginFilePathFromChamiloDocumentPath($documentRelativePath),
+                'documentpath' => 'document'.$documentPath,
+                'absolutepath' => $this->buildChamiloDocumentAbsolutePath($documentPath),
+                'filename' => basename($documentPath),
+            ];
+        }
+
+        if (preg_match('#(?P<path>/main/(?:default_course_document|img)/[^"\']+)#', $urlPath, $m)) {
+            $assetPath = (string) $m['path'];
+
+            return [
+                'sourcekey' => 'static:'.$assetPath,
+                'filepath' => $this->buildPluginFileDirectoryFromStaticAssetPath($assetPath),
+                'pluginfilepath' => $this->buildPluginFilePathFromStaticAssetPath($assetPath),
+                'documentpath' => '',
+                'absolutepath' => $this->buildStaticAssetAbsolutePath($assetPath),
+                'filename' => basename($assetPath),
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * Extract the path part from a raw URL.
+     */
+    protected function extractUrlPath(string $src): string
+    {
+        $decoded = html_entity_decode($src, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $path = (string) parse_url($decoded, PHP_URL_PATH);
+
+        return $path !== '' ? $path : $decoded;
+    }
+
+    /**
+     * Build the absolute path for one Chamilo course document.
+     */
+    protected function buildChamiloDocumentAbsolutePath(string $documentPath): string
+    {
+        $normalizedPath = (string) preg_replace('#^/?document/#', '', str_replace('\\', '/', trim($documentPath)));
+        $normalizedPath = '/'.ltrim($normalizedPath, '/');
+
+        return rtrim((string) $this->course->path, '/').'/document'.$normalizedPath;
+    }
+
+    /**
+     * Build the absolute path for one static platform asset.
+     */
+    protected function buildStaticAssetAbsolutePath(string $assetPath): string
+    {
+        return rtrim(api_get_path(SYS_PATH), '/').'/'.ltrim($assetPath, '/');
+    }
+
+    /**
+     * Build the pluginfile directory path from a Chamilo document path.
+     */
+    protected function buildPluginFileDirectoryFromChamiloDocumentPath(string $documentPath): string
+    {
+        $relative = $this->stripChamiloDocumentPrefix($documentPath);
+        $relative = ltrim(str_replace('\\', '/', $relative), '/');
+
+        $dir = dirname($relative);
+        if ($dir === '.' || $dir === '/') {
+            return '/';
+        }
+
+        return '/'.trim($dir, '/').'/';
+    }
+
+    /**
+     * Build the pluginfile full path used in HTML content.
+     */
+    protected function buildPluginFilePathFromChamiloDocumentPath(string $documentPath): string
+    {
+        $relative = $this->stripChamiloDocumentPrefix($documentPath);
+        $relative = ltrim(str_replace('\\', '/', $relative), '/');
+
+        return '/'.$relative;
+    }
+
+    /**
+     * Build the pluginfile directory path for one static platform asset.
+     */
+    protected function buildPluginFileDirectoryFromStaticAssetPath(string $assetPath): string
+    {
+        $relative = ltrim(str_replace('\\', '/', trim($assetPath)), '/');
+        $dir = dirname($relative);
+
+        if ($dir === '.' || $dir === '/') {
+            return '/Static/';
+        }
+
+        return '/Static/'.trim($dir, '/').'/';
+    }
+
+    /**
+     * Build the pluginfile full path used in HTML content for one static platform asset.
+     */
+    protected function buildPluginFilePathFromStaticAssetPath(string $assetPath): string
+    {
+        $relative = ltrim(str_replace('\\', '/', trim($assetPath)), '/');
+
+        return '/Static/'.$relative;
+    }
+
+    /**
+     * Remove the internal Chamilo "document/" prefix if present.
+     */
+    protected function stripChamiloDocumentPrefix(string $path): string
+    {
+        $path = str_replace('\\', '/', trim($path));
+        $path = preg_replace('#^/?document/#', '', $path);
+
+        return (string) $path;
     }
 }

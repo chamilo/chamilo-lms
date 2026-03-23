@@ -212,7 +212,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
         if (is_file($source)) {
             if ($forceMove) {
                 if (!$isWindowsOS && $canExec) {
-                    exec('mv '.$source.' '.$target.'/'.$file_name);
+                    exec('mv '.escapeshellarg($source).' '.escapeshellarg($target.'/'.$file_name));
                 } else {
                     // Try copying
                     copy($source, $target.'/'.$file_name);
@@ -235,15 +235,19 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     $base = basename($source);
                     $out = [];
                     $retVal = -1;
-                    exec('mv '.$source.'/* '.$target.'/'.$base, $out, $retVal);
+                    exec(
+                        'find '.escapeshellarg($source).' -mindepth 1 -maxdepth 1 -exec mv -t '.escapeshellarg($target.'/'.$base).' {} +',
+                        $out,
+                        $retVal
+                    );
                     if ($retVal !== 0) {
                         return false; // mv should return 0 on success
                     }
-                    exec('rm -rf '.$source);
+                    exec('rm -rf '.escapeshellarg($source));
                 } else {
                     $out = [];
                     $retVal = -1;
-                    exec("mv $source $target", $out, $retVal);
+                    exec('mv '.escapeshellarg($source).' '.escapeshellarg($target), $out, $retVal);
                     if ($retVal !== 0) {
                         error_log("Chamilo error fileManage.lib.php: mv $source $target\n");
 

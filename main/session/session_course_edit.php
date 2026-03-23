@@ -42,6 +42,18 @@ if (!list($session_name, $course_title) = Database::fetch_row($result)) {
     exit();
 }
 
+$allowedPages = [
+    'session_course_list.php',
+    'resume_session.php',
+];
+
+$page = isset($_GET['page']) ? basename($_GET['page']) : 'session_course_list.php';
+
+if (!in_array($page,$allowedPages)) {
+    $page = 'session_course_list.php';
+}
+
+
 $interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("SessionList")];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
@@ -49,7 +61,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => "session_course_list.php?id_session=$id_session",
-    "name" => api_htmlentities($session_name, ENT_QUOTES, $charset),
+    "name" => api_htmlentities($session_name, ENT_QUOTES),
 ];
 
 $arr_infos = [];
@@ -80,7 +92,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             );
         }
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
+        header('Location: '.$page.'?id_session='.$id_session);
         exit();
     }
 } else {

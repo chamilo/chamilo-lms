@@ -24,15 +24,20 @@ switch ($action) {
     case 'get_user_registration_by_month':
         // Close the session as we don't need it any further
         session_write_close();
-        $dateStart = Security::remove_XSS($_POST['date_start']);
-        $dateEnd = Security::remove_XSS($_POST['date_end']);
+        $dateStart = isset($_POST['date_start']) ? $_POST['date_start'] : '';
+        $dateEnd = isset($_POST['date_end']) ? $_POST['date_end'] : '';
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateStart) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateEnd)) {
+            echo json_encode(['labels' => [], 'data' => []]);
+            exit;
+        }
 
         $registrations = Statistics::getNewUserRegistrations($dateStart, $dateEnd);
         $all = Statistics::groupByMonth($registrations);
         $labels = [];
         $data = [];
         foreach ($all as $month => $count) {
-            $labels[] = $month;
+            $labels[] = Security::remove_XSS($month);
             $data[] = $count;
         }
 
@@ -50,7 +55,7 @@ switch ($action) {
         $labels = [];
         $data = [];
         foreach ($dailyData as $registration) {
-            $labels[] = $registration['date'];
+            $labels[] = Security::remove_XSS($registration['date']);
             $data[] = $registration['count'];
         }
 
@@ -295,14 +300,23 @@ switch ($action) {
         $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
-        $filter = $_REQUEST['filter'];
+        $filter = isset($_REQUEST['filter']) && in_array($_REQUEST['filter'], ['active', 'status', 'language', 'language_cible', 'age', 'career', 'contract', 'certificate'], true)
+            ? $_REQUEST['filter']
+            : 'active';
 
-        $startDate = $_REQUEST['date_start'];
-        $endDate = $_REQUEST['date_end'];
+        $startDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
+        $endDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
 
         $extraConditions = '';
         if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+                $startDate = '';
+                $endDate = '';
+            } else {
+                $startDate = Database::escape_string($startDate);
+                $endDate = Database::escape_string($endDate);
+                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            }
         }
 
         switch ($filter) {
@@ -642,10 +656,20 @@ switch ($action) {
         $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
-        $filter = $_REQUEST['filter'];
+        $filter = isset($_REQUEST['filter']) && in_array($_REQUEST['filter'], ['category', 'status', 'language', 'course_in_session'], true)
+            ? $_REQUEST['filter']
+            : 'category';
 
-        $startDate = Database::escape_string($_REQUEST['date_start']);
-        $endDate = Database::escape_string($_REQUEST['date_end']);
+        $startDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
+        $endDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+            echo json_encode([]);
+            break;
+        }
+
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $statusId = (int) $_REQUEST['status'];
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
 

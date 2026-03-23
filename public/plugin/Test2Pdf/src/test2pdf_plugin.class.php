@@ -13,9 +13,7 @@ class Test2pdfPlugin extends Plugin
         parent::__construct(
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author)',
-            [
-                'enable_plugin' => 'boolean',
-            ]
+            []
         );
     }
 
@@ -30,13 +28,15 @@ class Test2pdfPlugin extends Plugin
     }
 
     /**
-     * This method creates the tables required to this plugin.
+     * This method creates the global resources required by this plugin.
+     *
+     * Important:
+     * Do not install course fields here.
+     * In Chamilo 2, course plugin tools must only be propagated when the plugin
+     * is enabled from the plugins list, not merely when it is installed.
      */
     public function install()
     {
-        //Installing course settings
-        $this->install_course_fields_in_all_courses();
-
         $list = [
             '/64/test2pdf.png',
             '/64/test2pdf_na.png',
@@ -56,20 +56,21 @@ class Test2pdfPlugin extends Plugin
         }
 
         if (!$res) {
-            $warning = 'Test2PDF plugin icons could not be copied to main/img/ because of folder permissions. 
-            To fix, give web server user permissions to write to main/img/ before enabling this plugin.';
+            $warning = 'Test2PDF plugin icons could not be copied to main/img/ because of folder permissions. To fix, give the web server user permission to write to main/img/ before enabling this plugin.';
             Display::addFlash(Display::return_message($warning, 'warning'));
         }
     }
 
     /**
-     * This method drops the plugin tables.
+     * This method removes the data created by this plugin.
+     *
+     * Course fields are already removed by the core enable/disable/uninstall
+     * synchronization flow in plugin.ajax.php, but keeping this cleanup here
+     * is harmless and makes the plugin uninstall safer.
      */
     public function uninstall()
     {
-        // Deleting course settings.
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
-        $this->manageTab(false);
     }
 
     public function get_name(): string

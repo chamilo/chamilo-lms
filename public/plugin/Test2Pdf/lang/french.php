@@ -3,7 +3,6 @@
 $strings['plugin_title'] = 'Test à Pdf (Test2Pdf)';
 $strings['plugin_comment'] = "Donne la possibilité de télécharger dans des questions d'un exercice au format PDF.";
 $strings['Test2pdf'] = 'Test à PDF';
-$strings['enable_plugin'] = 'Activer le plugin';
 $strings['ViewExercises'] = 'Voir les exercices';
 $strings['NoExercise'] = 'Aucun exercice dans le cours';
 $strings['Exercise'] = 'Exercice';
@@ -14,3 +13,4 @@ $strings['PluginDisabledFromAdminPanel'] = "Le plugin a été désactivé depuis
 $strings['AnswersColumn'] = 'Réponses: ';
 $strings['Statement'] = 'Énoncé';
 $strings['PageX'] = 'Page %s';
+$strings['defaultVisibilityInCourseHomepage'] = 'Visibilité par défaut sur la page d’accueil du cours';

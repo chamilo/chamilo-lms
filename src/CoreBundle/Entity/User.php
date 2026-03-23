@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\State\UserCollectionStateProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -60,7 +61,10 @@ use UserManager;
         ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            security: "is_granted('ROLE_USER')",
+            provider: UserCollectionStateProvider::class,
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(
             uriTemplate: '/users/{id}/skills',
@@ -163,6 +167,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups([
         'user_export',
         'user:read',
+        'user:read:public',
         'resource_node:read',
         'document:read',
         'media_object_read',
@@ -179,6 +184,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[Groups([
         'user:read',
+        'user:read:public',
         'course:read',
         'resource_node:read',
         'user_json:read',
@@ -196,6 +202,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups([
         'user_export',
         'user:read',
+        'user:read:public',
         'user:write',
         'course:read',
         'course_rel_user:read',
@@ -219,6 +226,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Groups([
         'user:read',
+        'user:read:public',
         'user:write',
         'resource_node:read',
         'user_json:read',
@@ -233,6 +241,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[Groups([
         'user:read',
+        'user:read:public',
         'user:write',
         'resource_node:read',
         'user_json:read',

@@ -88,6 +88,12 @@ services:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
 
+    Chamilo\CoreBundle\Serializer\UserSerializerContextBuilder:
+        decorates: api_platform.serializer.context_builder
+        arguments:
+            - '@.inner'
+            - '@security.helper'
+
     Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'

@@ -3519,7 +3519,7 @@ class UserManager
             return false;
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $md5 = md5((time() + ($user_id * 5)) - rand(10000, 10000)); //generate some kind of random key
+        $md5 = bin2hex(random_bytes(32));
         $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
         $res = Database::query($sql);
         if (false === $res) {

@@ -2707,9 +2707,25 @@ class Rest extends WebService
             throw new Exception(get_lang('NoData'));
         }
 
-        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+        $isAdmin = api_is_platform_admin();
+
+        if (!$isAdmin && $userId != $this->user->getId()) {
             self::throwNotAllowedException();
         }
+
+        // Fields that only platform admins may change
+        $adminOnlyFields = [
+            'status',
+            'roles',
+            'auth_source',
+            'enabled',
+            'active',
+            'creator_id',
+            'registration_date',
+            'expiration_date',
+            'hr_dept_id',
+            'official_code',
+        ];
 
         if (!empty($parameters['new_login_name'])) {
             // Make sure the new username, if set, is available
@@ -2732,6 +2748,9 @@ class Rest extends WebService
 
         // apply submitted modifications
         foreach ($parameters as $name => $value) {
+            if (!$isAdmin && in_array(strtolower($name), $adminOnlyFields, true)) {
+                self::throwNotAllowedException();
+            }
             switch (strtolower($name)) {
                 case 'email':
                     $user->setEmail($value);

@@ -365,10 +365,9 @@ class AppPlugin
         // We also know where the plugin is
         $plugin_info['current_region'] = $region;
 
-        // values to be accessible in Twig
+        // Values to be accessible in Twig
         $_template = [];
         $_template['context'] = $context;
-
 
         // Loading the plugin/XXX/index.php file
         $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
@@ -377,18 +376,15 @@ class AppPlugin
             return;
         }
 
-        //Loading the lang variables of the plugin if exists
+        // Loading the lang variables of the plugin if they exist
         self::load_plugin_lang_variables($plugin_name);
 
-        // Printing the plugin index.php file
+        // Execute the plugin bootstrap
         require $plugin_file;
 
         $_template['plugin_info'] = $plugin_info;
 
-        // Setting the plugin info available in the template if exists.
-        //$template->addGlobal($plugin_name, $_template);
-
-        // Loading the Twig template plugin files if exists
+        // Loading the Twig template plugin files if they exist
         $templateList = [];
         if (isset($plugin_info['templates'])) {
             $templateList = $plugin_info['templates'];
@@ -398,13 +394,22 @@ class AppPlugin
             return;
         }
 
+        $templateContext = [
+            $plugin_name => $_template,
+            strtolower((string) $plugin_name) => $_template,
+            'plugin_info' => $plugin_info,
+        ];
+
         foreach ($templateList as $pluginTemplate) {
             try {
                 echo Container::getTwig()->render(
                     "$plugin_name/$pluginTemplate",
-                    [$plugin_name => $_template],
+                    $templateContext,
                 );
-            } catch (LoaderError|RuntimeError|SyntaxError) {
+            } catch (LoaderError|RuntimeError|SyntaxError $e) {
+                error_log('[AppPlugin][renderRegion]['.$plugin_name.']['.$region.'] '.$e->getMessage());
+                echo '<!-- plugin render error: '.htmlspecialchars((string) $plugin_name, ENT_QUOTES, 'UTF-8').' -->';
+
                 continue;
             }
         }

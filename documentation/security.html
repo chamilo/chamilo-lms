@@ -29,6 +29,7 @@
   <li><a href="#9.Change-password-first-login">Change password on first login</a></li>
   <li><a href="#10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></li>
   <li><a href="#11.SVG-and-XSS">SVG and XSS</a></li>
+  <li><a href="#12.Template-files-access">Restricting access to template files</a></li>
 </ol>
 
 <h2><a id="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -279,6 +280,38 @@ This will prevent direct access to your settings and make it seem totally the sa
     <li>Define some XSS Protection clause ('security_xss_protection') in your configuration.php file</li>
     </ul>
     </p>
+
+<h2><a id="12.Template-files-access"></a>12. Restricting access to template files</h2>
+    <p>
+        Twig template files (<code>.tpl</code>) under <code>main/template/</code> are
+        not meant to be served directly over HTTP. They are loaded by PHP from the
+        filesystem. If left accessible, they expose internal application logic,
+        AJAX endpoint URLs, admin panel structure, and variable names to
+        unauthenticated users.
+    </p>
+    <p>
+        Chamilo ships a <code>.htaccess</code> file in <code>main/template/</code>
+        that blocks direct access. If your Apache configuration does not support
+        <code>.htaccess</code> overrides, add the following to your VirtualHost
+        definition (replace <code>/var/www/URL</code> with your Chamilo root):
+    </p>
+    <pre>
+  &lt;Directory /var/www/URL/main/template&gt;
+    &lt;FilesMatch "\.tpl$"&gt;
+      Require all denied
+    &lt;/FilesMatch&gt;
+  &lt;/Directory&gt;
+    </pre>
+    <p>
+        For Nginx, add this rule near the top of your location blocks (before
+        any generic location rules) so it takes priority:
+    </p>
+    <pre>
+  location ~* \.tpl$ {
+    deny all;
+    return 403;
+  }
+    </pre>
 
     <h2>Authors</h2>
 <ul>

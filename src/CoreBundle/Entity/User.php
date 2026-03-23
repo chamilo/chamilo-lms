@@ -359,8 +359,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
+     * Writable only by admins — see UserSerializerContextBuilder.
      */
-    #[Groups(['user:read', 'user:write', 'user_json:read'])]
+    #[Groups(['user:read', 'user:admin:write', 'user_json:read'])]
     #[ORM\Column(type: 'array')]
     protected array $roles = [];
 

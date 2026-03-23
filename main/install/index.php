@@ -259,24 +259,32 @@ if (!isset($_GET['running'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
 } else {
-    foreach ($_POST as $key => $val) {
-        $magic_quotes_gpc = ini_get('magic_quotes_gpc');
-        if (is_string($val)) {
-            if ($magic_quotes_gpc) {
-                $val = stripslashes($val);
-            }
-            $val = trim($val);
-            $_POST[$key] = $val;
-        } elseif (is_array($val)) {
-            foreach ($val as $key2 => $val2) {
+    // Only assign known installer variables from POST. Never inject
+    // arbitrary POST keys into $GLOBALS — that allows an attacker to
+    // overwrite any global variable and inject code into configuration.php.
+    $allowedFields = [
+        'dbHostForm', 'dbPortForm', 'dbUsernameForm', 'dbPassForm',
+        'dbNameForm', 'urlForm', 'pathForm', 'urlAppendPath',
+        'languageForm', 'emailForm', 'adminLastName', 'adminFirstName',
+        'adminPhoneForm', 'loginForm', 'passForm', 'campusForm',
+        'educationForm', 'institutionForm', 'institutionUrlForm',
+        'encryptPassForm', 'allowSelfReg', 'allowSelfRegProf',
+        'checkEmailByHashSent', 'ShowEmailNotCheckedToStudent',
+        'userMailCanBeEmpty', 'session_lifetime', 'installationProfile',
+        'old_version', 'new_version',
+    ];
+    $magic_quotes_gpc = ini_get('magic_quotes_gpc');
+    foreach ($allowedFields as $field) {
+        if (isset($_POST[$field])) {
+            $val = $_POST[$field];
+            if (is_string($val)) {
                 if ($magic_quotes_gpc) {
-                    $val2 = stripslashes($val2);
+                    $val = stripslashes($val);
                 }
-                $val2 = trim($val2);
-                $_POST[$key][$key2] = $val2;
+                $val = trim($val);
             }
+            $$field = $val;
         }
-        $GLOBALS[$key] = $_POST[$key];
     }
 }
 $dbPortForm = (int) $dbPortForm;

@@ -41,15 +41,12 @@ function isAlreadyInstalledSystem()
     if (!file_exists($current_config_file)) {
         return false; // Configuration file does not exist, install the system.
     }
-    require $current_config_file;
 
-    $current_version = null;
-    if (isset($_configuration['system_version'])) {
-        $current_version = trim($_configuration['system_version']);
-    }
-
-    // If the current version is old, upgrading is assumed, the installer goes ahead.
-    return empty($current_version) ? false : version_compare($current_version, $new_version, '>=');
+    // If configuration.php exists the system is already installed.
+    // Block re-installation entirely to prevent unauthenticated attackers
+    // from overwriting the configuration. To upgrade, remove or rename
+    // configuration.php first, then run the installer.
+    return true;
 }
 
 /**
@@ -395,21 +392,28 @@ function write_system_config_file($path)
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
     $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
 
-    $config['{DATE_GENERATED}'] = date('r');
-    $config['{DATABASE_HOST}'] = $dbHostForm;
-    $config['{DATABASE_PORT}'] = $dbPortForm;
-    $config['{DATABASE_USER}'] = $dbUsernameForm;
-    $config['{DATABASE_PASSWORD}'] = $dbPassForm;
-    $config['{DATABASE_MAIN}'] = $dbNameForm;
-    $config['{ROOT_WEB}'] = $urlForm;
-    $config['{ROOT_SYS}'] = $root_sys;
-    $config['{URL_APPEND_PATH}'] = $urlAppendPath;
-    $config['{PLATFORM_LANGUAGE}'] = $languageForm;
-    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-    $config['{ENCRYPT_PASSWORD}'] = $encryptPassForm;
+    // Escape all user-supplied values to prevent PHP code injection.
+    // These values are interpolated into single-quoted strings in the
+    // configuration template, so escape single quotes and backslashes.
+    $safe = function ($value) {
+        return addcslashes((string) $value, "'\\");
+    };
 
-    $config['SESSION_LIFETIME'] = $session_lifetime;
-    $config['{NEW_VERSION}'] = $new_version;
+    $config['{DATE_GENERATED}'] = date('r');
+    $config['{DATABASE_HOST}'] = $safe($dbHostForm);
+    $config['{DATABASE_PORT}'] = (int) $dbPortForm;
+    $config['{DATABASE_USER}'] = $safe($dbUsernameForm);
+    $config['{DATABASE_PASSWORD}'] = $safe($dbPassForm);
+    $config['{DATABASE_MAIN}'] = $safe($dbNameForm);
+    $config['{ROOT_WEB}'] = $safe($urlForm);
+    $config['{ROOT_SYS}'] = $safe($root_sys);
+    $config['{URL_APPEND_PATH}'] = $safe($urlAppendPath);
+    $config['{PLATFORM_LANGUAGE}'] = $safe($languageForm);
+    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
+    $config['{ENCRYPT_PASSWORD}'] = $safe($encryptPassForm);
+
+    $config['SESSION_LIFETIME'] = (int) $session_lifetime;
+    $config['{NEW_VERSION}'] = $safe($new_version);
     $config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
 
     foreach ($config as $key => $value) {

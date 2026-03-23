@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
+use ArrayIterator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -318,11 +320,27 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             $itemsPerPage = 5000;
         }
 
+        // Count total results before applying pagination limits.
+        $countQb = clone $qb;
+        $countQb->resetDQLPart('orderBy');
+        $totalItems = (int) $countQb
+            ->select('COUNT(DISTINCT d.iid)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
         $qb
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
         ;
 
-        return $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
+
+        return new TraversablePaginator(
+            new ArrayIterator($results),
+            $page,
+            $itemsPerPage,
+            $totalItems
+        );
     }
 }

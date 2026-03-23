@@ -87,6 +87,7 @@
   </div>
   <BaseTable
     v-model:filters="filters"
+    v-model:rows="options.itemsPerPage"
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :is-loading="isLoading"
@@ -320,6 +321,14 @@ export default {
     },
   },
   methods: {
+    onPage(event) {
+      this.options.itemsPerPage = event.rows
+      this.options.page = event.page + 1
+
+      this.$store.commit("documents/RESET_LIST")
+      this.resetList = true
+      this.onUpdateOptions(this.options)
+    },
     sortingChanged(event) {
       this.options.sortBy = event.sortField
       this.options.sortDesc = event.sortOrder === -1

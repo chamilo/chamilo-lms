@@ -226,7 +226,7 @@ class learnpath
                 $this->last_item_seen = $row['last_item'];
                 $this->progress_db = $row['progress'];
                 $this->lp_view_session_id = $row['session_id'];
-            } elseif (!api_is_invitee()) {
+            } elseif (!api_is_invitee() && !empty($user_id)) {
                 $this->attempt = 1;
                 $params = [
                     'c_id' => $course_id,
@@ -3250,7 +3250,7 @@ class learnpath
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
             $this->lp_view_id = $row['iid'];
-        } elseif (!api_is_invitee()) {
+        } elseif (!api_is_invitee() && !empty($userId)) {
             $params = [
                 'c_id' => $course_id,
                 'lp_id' => $this->get_id(),

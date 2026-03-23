@@ -1,0 +1,6 @@
+# Deny direct access to template files.
+# Templates are loaded by PHP internally via the filesystem, not via HTTP,
+# so they never need to be web-accessible.
+<FilesMatch "\.tpl$">
+    Require all denied
+</FilesMatch>

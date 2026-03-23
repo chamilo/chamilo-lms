@@ -101,7 +101,8 @@ export const chamiloIconToClass = {
   "reply": "mdi mdi-reply",
   "reply-all": "mdi mdi-reply-all",
   "restart": "mdi mdi-restart",
-  "rocket-launch": "",
+  "autolunch": "mdi mdi-rocket-launch",
+  "autolunch-off": "mdi mdi-rocket-launch-outline",
   "select-all": "mdi mdi-select-group",
   "send": "mdi mdi-send",
   "sent": "mdi mdi-send-check",
@@ -176,4 +177,5 @@ export const chamiloIconToClass = {
   "shield-star": "mdi mdi-shield-star",
   "assign-users": "mdi mdi-account-child",
   "learning-paths": "mdi mdi-map-marker-path",
+  visible: "mdi mdi-eye",
 }

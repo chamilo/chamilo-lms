@@ -56,7 +56,7 @@
           :animation="180"
           :disabled="!canEdit"
           chosen-class="chosen"
-          class="space-y-3"
+          class="space-y-6"
           drag-class="dragging"
           ghost-class="ghosting"
           handle=".drag-handle"

@@ -1,0 +1,141 @@
+.lp-panel {
+  @apply rounded-lg border border-gray-30 shadow-none bg-white
+    sm:rounded-r-lg sm:rounded-l-none sm:border-0 sm:border-none sm:bg-support-6 sm:shadow-xl;
+
+  & &__container {
+    @apply relative rounded-lg p-4 w-full
+      sm:py-2 sm:pr-4 sm:pl-0 sm:rounded-r-lg sm:rounded-l-none
+      md:flex md:gap-4;
+
+    &:before {
+      @apply sm:content-[""] sm:absolute sm:rounded-l-lg sm:bg-secondary sm:w-1 sm:h-full sm:-left-1 sm:top-0;
+    }
+  }
+
+  &__drag-handler {
+    @apply w-6 h-6 inline-grid place-content-center text-gray-50 transition-colors cursor-move align-top;
+
+    svg {
+      @apply w-6 h-6;
+    }
+  }
+
+  &__body {
+    @apply flex gap-4 items-start ml-8 -mt-6
+      sm:ml-6
+      md:-ml-2 md:mt-0;
+  }
+
+  &__cover {
+    @apply w-20 h-20 rounded-xl overflow-hidden bg-gray-20 shrink-0;
+
+    &-image {
+      @apply w-full h-full;
+
+      &:is(img) {
+        @apply object-cover;
+      }
+
+      &:not(img) {
+        @apply grid place-content-center;
+      }
+    }
+  }
+
+  &__info {
+    @apply flex-1 min-w-0
+      md:flex md:flex-col md:justify-center;
+  }
+
+  &__title {
+    @apply font-semibold text-gray-90 text-body-1 text-left leading-none
+      hover:underline
+      focus:underline focus:underline-offset-2;
+  }
+
+  &__dates {
+    @apply text-caption text-gray-50;
+
+    &--desktop {
+      @apply mt-8 hidden
+        md:block;
+    }
+
+    &--mobile {
+      @apply mt-4 block  ml-6
+        md:hidden;
+    }
+  }
+
+  &__prerequisite {
+    @apply mt-1 text-caption;
+
+    &--desktop {
+      @apply hidden
+        md:block;
+    }
+
+    &-label {
+      @apply text-support-5 font-medium;
+    }
+
+    &-value {
+      @apply text-support-5;
+    }
+  }
+
+  &__mobile-dropdown {
+    @apply flex
+      md:hidden;
+  }
+
+  &__actions {
+    @apply ml-6 mt-4 flex items-center justify-between
+      md:ml-auto md:mt-0 md:flex-col md:items-end md:justify-start;
+  }
+
+  &__action-buttons {
+    @apply flex gap-x-2 order-2 mt-0
+      md:order-1;
+  }
+
+  &__progress {
+    @apply flex items-center gap-2 mt-2 order-1
+      md:order-2;
+  }
+
+  &__progress-label {
+    @apply text-caption text-gray-50 order-2
+      md:order-1;
+  }
+
+  &__progress-ring {
+    @apply relative w-10 h-10 order-1
+      md:order-2;
+  }
+
+  &__progress-dot {
+    @apply absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white;
+
+    &--student {
+      @apply bg-support-5;
+    }
+  }
+
+  &__progress-value {
+    @apply absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90;
+  }
+
+  &__student {
+    @apply ml-auto flex items-center gap-3;
+  }
+
+  &__student-actions {
+    @apply flex items-center gap-2;
+  }
+
+  &__student-button {
+    @apply opacity-80 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center
+      hover:opacity-100;
+  }
+}

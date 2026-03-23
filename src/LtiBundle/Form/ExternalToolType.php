@@ -178,14 +178,13 @@ class ExternalToolType extends AbstractType
         }
 
         libxml_use_internal_errors(true);
-        $sxe = simplexml_load_string($content);
+        $sxe = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
 
         if (false === $sxe) {
             return null;
         }
 
-        $xml = new SimpleXMLElement($content);
-        $result = $xml->xpath('blti:launch_url');
+        $result = $sxe->xpath('blti:launch_url');
 
         if (empty($result)) {
             return null;

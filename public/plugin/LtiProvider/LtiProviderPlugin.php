@@ -639,7 +639,10 @@ class LtiProviderPlugin extends Plugin
             return null;
         }
 
-        return new SimpleXMLElement($request);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($request, SimpleXMLElement::class, LIBXML_NONET);
+
+        return $xml !== false ? $xml : null;
     }
 
     private function normalizeActivityLabel(?string $label): string

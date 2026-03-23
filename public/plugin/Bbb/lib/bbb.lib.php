@@ -2401,7 +2401,7 @@ class Bbb
                 return ['returncode' => 'FAILED', 'messageKey' => 'noResponse', 'error' => $err ?: ''];
             }
 
-            $xml = @simplexml_load_string($body);
+            $xml = simplexml_load_string($body, SimpleXMLElement::class, LIBXML_NONET);
             if (!$xml) {
                 $this->dlog('bbbHooksRequest: invalid XML body', ['body_sample' => substr($body, 0, 200)]);
                 return ['returncode' => 'FAILED', 'messageKey' => 'invalidXML'];

@@ -99,9 +99,10 @@ class ServiceController extends BaseController
             return null;
         }
 
-        $xml = new SimpleXMLElement($requestContent);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($requestContent, SimpleXMLElement::class, LIBXML_NONET);
 
-        if (empty($xml)) {
+        if ($xml === false) {
             return null;
         }
 

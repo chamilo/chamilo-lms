@@ -6098,7 +6098,7 @@ class SessionManager
 
         $content = file_get_contents($file);
         $content = api_utf8_encode_xml($content);
-        $root = @simplexml_load_string($content);
+        $root = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
 
         if (!is_object($root)) {
             $errorMessage .= get_lang('XML document is not valid');

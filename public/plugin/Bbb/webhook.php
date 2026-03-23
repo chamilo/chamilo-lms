@@ -44,7 +44,7 @@ function read_raw_payload() {
         return ['json', $js, strlen($raw)];
     }
     // XML
-    $xml = @simplexml_load_string($raw);
+    $xml = simplexml_load_string($raw, SimpleXMLElement::class, LIBXML_NONET);
     if ($xml) {
         return ['xml', $xml, strlen($raw)];
     }

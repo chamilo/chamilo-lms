@@ -688,7 +688,8 @@ function isQtiManifest($filePath)
  */
 function qtiProcessManifest($filePath)
 {
-    $xml = simplexml_load_file($filePath);
+    libxml_use_internal_errors(true);
+    $xml = simplexml_load_file($filePath, SimpleXMLElement::class, LIBXML_NONET);
     $course = api_get_course_info();
     $sessionId = api_get_session_id();
     $courseDir = $course['path'];

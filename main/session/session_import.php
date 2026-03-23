@@ -58,7 +58,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $content = file_get_contents($_FILES['import_file']['tmp_name']);
 
             $content = api_utf8_encode_xml($content);
-            $root = @simplexml_load_string($content);
+            $root = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
             unset($content);
 
             if (is_object($root)) {

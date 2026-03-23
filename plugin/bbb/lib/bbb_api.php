@@ -73,7 +73,9 @@ class BigBlueButtonBN
             curl_close( $ch );
 
             if ($data) {
-                return (new SimpleXMLElement($data));
+                $xml = simplexml_load_string($data, SimpleXMLElement::class, LIBXML_NONET);
+
+                return $xml !== false ? $xml : false;
             } else {
                 return false;
             }

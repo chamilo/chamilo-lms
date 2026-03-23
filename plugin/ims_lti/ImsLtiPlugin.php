@@ -486,7 +486,13 @@ class ImsLtiPlugin extends Plugin
             throw new Exception($this->get_lang('NoAccessToUrl'));
         }
 
-        $xml = new SimpleXMLElement($content);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
+
+        if ($xml === false) {
+            throw new Exception($this->get_lang('LaunchUrlNotFound'));
+        }
+
         $result = $xml->xpath('blti:launch_url');
 
         if (empty($result)) {
@@ -718,7 +724,10 @@ class ImsLtiPlugin extends Plugin
             return null;
         }
 
-        return new SimpleXMLElement($request);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($request, SimpleXMLElement::class, LIBXML_NONET);
+
+        return $xml !== false ? $xml : null;
     }
 
     /**

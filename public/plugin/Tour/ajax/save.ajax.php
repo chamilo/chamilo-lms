@@ -1,24 +1,50 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
- * Get the intro steps for the web page.
+ * Save the completion state of a page tour.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-/**
- * Init.
- */
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+
 require_once __DIR__.'/../config.php';
 
-if (!api_is_anonymous()) {
-    $currentPageClass = isset($_POST['page_class']) ? $_POST['page_class'] : '';
+header('Content-Type: application/json; charset=utf-8');
 
-    if (!empty($currentPageClass)) {
-        $userId = api_get_user_id();
+api_block_anonymous_users();
 
-        $tourPlugin = Tour::create();
-        $tourPlugin->saveCompletedTour($currentPageClass, $userId);
+try {
+    $pageName = isset($_POST['page_name']) ? trim((string) $_POST['page_name']) : '';
+    $pageClass = isset($_POST['page_class']) ? trim((string) $_POST['page_class']) : '';
+
+    $resolvedPageName = '' !== $pageName ? $pageName : $pageClass;
+
+    if ('' === $resolvedPageName) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Missing page identifier.',
+        ]);
+        exit;
     }
+
+    $userId = api_get_user_id();
+    $tourPlugin = Tour::create();
+
+    $saved = $tourPlugin->saveCompletedTour($resolvedPageName, $userId);
+
+    echo json_encode([
+        'success' => true,
+        'saved' => $saved,
+        'page' => $resolvedPageName,
+    ]);
+} catch (\Throwable $e) {
+    error_log('[Tour][save.ajax] '.$e->getMessage());
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unable to save tour state.',
+    ]);
 }

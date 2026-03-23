@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
  * Show the JavaScript template in the web pages.
  *
@@ -8,6 +9,8 @@
  */
 require_once __DIR__.'/config.php';
 
-$plugin_info = Tour::create()->get_info();
+if (!isset($plugin_info) || !is_array($plugin_info)) {
+    $plugin_info = Tour::create()->get_info();
+}
 
 $plugin_info['templates'] = ['views/script.tpl'];

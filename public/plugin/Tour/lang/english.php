@@ -62,3 +62,122 @@ $strings['DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnab
 $strings['AdministrationAllowsYouToManageYourPortal'] = 'The administration panel allows you to manage all resources in your Chamilo portal';
 $strings['AdminUsersBlockAllowsYouToManageUsers'] = 'The users block allows you to manage all things related to users.';
 $strings['AdminCoursesBlockAllowsYouToManageCourses'] = 'The courses block gives you access to course creation, edition, etc. Other blocks are dedicated to specific uses as well.';
+
+
+$strings['tour_home_featured_courses_title'] = 'Featured courses';
+$strings['tour_home_featured_courses_content'] = 'This section shows the featured courses available on your home page.';
+
+$strings['tour_home_course_card_title'] = 'Course card';
+$strings['tour_home_course_card_content'] = 'Each card summarizes one course and gives you quick access to its main information.';
+
+$strings['tour_home_course_title_title'] = 'Course title';
+$strings['tour_home_course_title_content'] = 'The course title helps you identify the course quickly and may also open more information depending on the platform settings.';
+
+$strings['tour_home_teachers_title'] = 'Teachers';
+$strings['tour_home_teachers_content'] = 'This area shows the teachers or users associated with the course.';
+
+$strings['tour_home_rating_title'] = 'Rating and feedback';
+$strings['tour_home_rating_content'] = 'Here you can review the course rating and, when allowed, submit your own vote.';
+
+$strings['tour_home_main_action_title'] = 'Main course action';
+$strings['tour_home_main_action_content'] = 'Use this button to enter the course, subscribe, or review access restrictions depending on the course status.';
+
+$strings['tour_home_show_more_title'] = 'Show more courses';
+$strings['tour_home_show_more_content'] = 'Use this button to load more courses and continue exploring the catalogue from the home page.';
+
+$strings['tour_my_courses_cards_title'] = 'Your course cards';
+$strings['tour_my_courses_cards_content'] = 'This page lists the courses you are subscribed to. Each card gives you quick access to the course and its current status.';
+
+$strings['tour_my_courses_image_title'] = 'Course image';
+$strings['tour_my_courses_image_content'] = 'The course image helps you identify the course quickly. In most cases, clicking it opens the course.';
+
+$strings['tour_my_courses_title_title'] = 'Course and session title';
+$strings['tour_my_courses_title_content'] = 'Here you can see the course title and, when applicable, the session name associated with that course.';
+
+$strings['tour_my_courses_progress_title'] = 'Learning progress';
+$strings['tour_my_courses_progress_content'] = 'This progress bar shows how much of the course you have completed.';
+
+$strings['tour_my_courses_notifications_title'] = 'New content notifications';
+$strings['tour_my_courses_notifications_content'] = 'Use this bell button to check whether the course has new content or recent updates. When highlighted, it helps you quickly spot changes since your last access.';
+
+$strings['tour_my_courses_footer_title'] = 'Teachers and course details';
+$strings['tour_my_courses_footer_content'] = 'The footer can show teachers, language, and other useful information related to the course.';
+
+$strings['tour_my_courses_create_course_title'] = 'Create a course';
+$strings['tour_my_courses_create_course_content'] = 'If you have permission to create courses, use this button to open the course creation form directly from this page.';
+
+$strings['tour_course_home_header_title'] = 'Course header';
+$strings['tour_course_home_header_content'] = 'This header shows the course title and, when applicable, the active session. It also groups the main teacher actions available on this page.';
+
+$strings['tour_course_home_title_title'] = 'Course title';
+$strings['tour_course_home_title_content'] = 'Here you can identify the current course quickly. If the course belongs to a session, the session title is displayed next to it.';
+
+$strings['tour_course_home_teacher_tools_title'] = 'Teacher tools';
+$strings['tour_course_home_teacher_tools_content'] = 'Depending on your permissions, this area may include the student view switch, introduction editing, reporting access, and additional course management actions.';
+
+$strings['tour_course_home_intro_title'] = 'Course introduction';
+$strings['tour_course_home_intro_content'] = 'This section displays the introduction of the course. Teachers can use it to present objectives, guidance, links, or key information for learners.';
+
+$strings['tour_course_home_tools_controls_title'] = 'Tools controls';
+$strings['tour_course_home_tools_controls_content'] = 'Teachers can use these controls to show or hide all tools at once, or enable sorting mode to reorganize the course tools.';
+
+$strings['tour_course_home_tools_title'] = 'Course tools';
+$strings['tour_course_home_tools_content'] = 'This area contains the main course tools, such as documents, learning paths, exercises, forums and other resources available in the course.';
+
+$strings['tour_course_home_tool_card_title'] = 'Tool card';
+$strings['tour_course_home_tool_card_content'] = 'Each tool card gives access to one course tool. Use it to enter the selected area of the course quickly.';
+
+$strings['tour_course_home_tool_shortcut_title'] = 'Tool shortcut';
+$strings['tour_course_home_tool_shortcut_content'] = 'Click the icon area to open the selected course tool directly.';
+
+$strings['tour_course_home_tool_name_title'] = 'Tool name';
+$strings['tour_course_home_tool_name_content'] = 'The title identifies the tool and also works as a direct access link.';
+
+$strings['tour_course_home_tool_visibility_title'] = 'Tool visibility';
+$strings['tour_course_home_tool_visibility_content'] = 'If you are editing the course, this button lets you quickly change the visibility of the tool for learners.';
+$strings['tour_admin_overview_title'] = 'Administration dashboard';
+$strings['tour_admin_overview_content'] = 'This page centralizes the main administration areas of the platform, grouped by management topic.';
+
+$strings['tour_admin_user_management_title'] = 'User management';
+$strings['tour_admin_user_management_content'] = 'From this block you can manage registered users, create accounts, import or export user lists, edit users, anonymize data and manage classes.';
+
+$strings['tour_admin_course_management_title'] = 'Course management';
+$strings['tour_admin_course_management_content'] = 'This block lets you create and manage courses, import or export course lists, organize categories, assign users to courses and configure course-related fields and tools.';
+
+$strings['tour_admin_sessions_management_title'] = 'Sessions management';
+$strings['tour_admin_sessions_management_content'] = 'Here you can manage training sessions, session categories, imports and exports, HR directors, careers, promotions and session-related fields.';
+
+$strings['tour_admin_platform_management_title'] = 'Platform management';
+$strings['tour_admin_platform_management_content'] = 'Use this block to configure the platform globally, adjust settings, manage announcements, languages and other central administration options.';
+
+$strings['tour_admin_tracking_title'] = 'Tracking';
+$strings['tour_admin_tracking_content'] = 'This area gives access to reports, global statistics, learning analytics and other tracking data across the platform.';
+
+$strings['tour_admin_assessments_title'] = 'Assessments';
+$strings['tour_admin_assessments_content'] = 'This block provides access to assessment-related administration features available on the platform.';
+$strings['tour_admin_skills_title'] = 'Skills';
+$strings['tour_admin_skills_content'] = 'This block lets you manage user skills, skill imports, rankings, levels and assessments related to skills.';
+
+$strings['tour_admin_system_title'] = 'System';
+$strings['tour_admin_system_content'] = 'Here you can access server and platform maintenance tools, such as system status, temporary file cleanup, data filler, e-mail tests and technical utilities.';
+
+$strings['tour_admin_rooms_title'] = 'Rooms';
+$strings['tour_admin_rooms_content'] = 'This block gives access to room management features, including branches, rooms and room availability search.';
+
+$strings['tour_admin_security_title'] = 'Security';
+$strings['tour_admin_security_content'] = 'Use this area to review login attempts, security-related reports and additional security tools available on the platform.';
+
+$strings['tour_admin_chamilo_org_title'] = 'Chamilo.org';
+$strings['tour_admin_chamilo_org_content'] = 'This block provides official Chamilo references, user guides, forums, installation resources and links to service providers and project information.';
+
+$strings['tour_admin_health_check_title'] = 'Health check';
+$strings['tour_admin_health_check_content'] = 'This area helps you review the technical health of the platform by listing environment checks, writable paths and important installation warnings.';
+
+$strings['tour_admin_version_check_title'] = 'Version check';
+$strings['tour_admin_version_check_content'] = 'Use this block to register your portal and enable version checking features and public platform listing options.';
+
+$strings['tour_admin_professional_support_title'] = 'Professional support';
+$strings['tour_admin_professional_support_content'] = 'This block explains how to contact official Chamilo providers for consulting, hosting, training and custom development support.';
+
+$strings['tour_admin_news_title'] = 'News from Chamilo';
+$strings['tour_admin_news_content'] = 'This section displays recent news and announcements from the Chamilo project.';

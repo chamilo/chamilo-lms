@@ -1,117 +1,265 @@
 [
-    {
-        "pageClass": ".section-mycampus",
-        "steps": [
-            {
-                "elementSelector": "#logo",
-                "message": "TheLogoStep"
-            },
-            {
-                "elementSelector": ".navbar",
-                "message": "TheNavbarStep"
-            },
-            {
-                "elementSelector": "#user_image_block",
-                "message": "TheUserImageBlock"
-            },
-            {
-                "elementSelector": "#profile_block",
-                "message": "TheProfileBlock"
-            },
-            {
-                "elementSelector": "#homepage",
-                "message": "TheHomePageStep"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-mycourses",
-        "steps": [
-            {
-                "elementSelector": ".content-column",
-                "message": "YourCoursesList"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-myagenda",
-        "steps": [
-            {
-                "elementSelector": ".breacrumb",
-                "message": "AgendaAllowsYouToSeeWhatsHappening"
-            },
-            {
-                "elementSelector": ".actions",
-                "message": "AgendaTheActionBar"
-            },
-            {
-                "elementSelector": ".fc-button-today",
-                "message": "AgendaTodayButton"
-            },
-            {
-                "elementSelector": ".fc-header-title",
-                "message": "AgendaTheMonthIsAlwaysInEvidence"
-            },
-            {
-                "elementSelector": ".fc-button-month",
-                "message": "AgendaButtonsAllowYouToChangePeriod"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-session_my_space",
-        "steps": [
-            {
-                "elementSelector": ".breadcrumb",
-                "message": "MySpaceAllowsYouToKeepTrackOfProgress"
-            },
-            {
-                "elementSelector": ".actions",
-                "message": "MySpaceSectionsGiveYouImportantInsight"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-social-network",
-        "steps": [
-            {
-                "elementSelector": ".breadcrumb",
-                "message": "SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform"
-            },
-            {
-                "elementSelector": ".social-network-menu",
-                "message": "SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-dashboard",
-        "steps": [
-            {
-                "elementSelector": ".breadcrumb",
-                "message": "DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat"
-            },
-            {
-                "elementSelector": ".actions",
-                "message": "DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks"
-            }
-        ]
-    },
-    {
-        "pageClass": ".section-platform_admin",
-        "steps": [
-            {
-                "elementSelector": ".breadcrumb",
-                "message": "AdministrationAllowsYouToManageYourPortal"
-            },
-            {
-                "elementSelector": ".block-admin-users",
-                "message": "AdminUsersBlockAllowsYouToManageUsers"
-            },
-            {
-                "elementSelector": ".block-admin-courses",
-                "message": "AdminCoursesBlockAllowsYouToManageCourses"
-            }
-        ]
-    }
+  {
+    "pageClass": "body.page-home",
+    "name": "home",
+    "steps": [
+      {
+        "elementSelector": "h2",
+        "titleMessage": "tour_home_featured_courses_title",
+        "message": "tour_home_featured_courses_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type",
+        "titleMessage": "tour_home_course_card_title",
+        "message": "tour_home_course_card_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .course-card__title",
+        "titleMessage": "tour_home_course_title_title",
+        "message": "tour_home_course_title_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .p-card-content .p-avatar, .course-card:first-of-type .p-card-content",
+        "titleMessage": "tour_home_teachers_title",
+        "message": "tour_home_teachers_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .p-card-content .flex.gap-2",
+        "titleMessage": "tour_home_rating_title",
+        "message": "tour_home_rating_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .p-card-footer .p-button",
+        "titleMessage": "tour_home_main_action_title",
+        "message": "tour_home_main_action_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".p-button-outlined",
+        "titleMessage": "tour_home_show_more_title",
+        "message": "tour_home_show_more_content",
+        "position": "top"
+      }
+    ]
+  },
+  {
+    "pageClass": "body.page-my-courses",
+    "name": "my_courses",
+    "steps": [
+      {
+        "elementSelector": ".course-card:first-of-type",
+        "titleMessage": "tour_my_courses_cards_title",
+        "message": "tour_my_courses_cards_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .course-card__header",
+        "titleMessage": "tour_my_courses_image_title",
+        "message": "tour_my_courses_image_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .course-card__title",
+        "titleMessage": "tour_my_courses_title_title",
+        "message": "tour_my_courses_title_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type [role='progressbar']",
+        "titleMessage": "tour_my_courses_progress_title",
+        "message": "tour_my_courses_progress_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .course-card__notification-button",
+        "titleMessage": "tour_my_courses_notifications_title",
+        "message": "tour_my_courses_notifications_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".course-card:first-of-type .p-card-footer",
+        "titleMessage": "tour_my_courses_footer_title",
+        "message": "tour_my_courses_footer_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".p-button.p-button-warning, .p-button .mdi-plus, .mdi-plus",
+        "titleMessage": "tour_my_courses_create_course_title",
+        "message": "tour_my_courses_create_course_content",
+        "position": "left"
+      }
+    ]
+  },
+  {
+    "pageClass": "body.page-course",
+    "name": "course_home",
+    "steps": [
+      {
+        "elementSelector": ".section-header.section-header--h2",
+        "titleMessage": "tour_course_home_header_title",
+        "message": "tour_course_home_header_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".section-header.section-header--h2 h2",
+        "titleMessage": "tour_course_home_title_title",
+        "message": "tour_course_home_title_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".section-header.section-header--h2 .grow-0",
+        "titleMessage": "tour_course_home_teacher_tools_title",
+        "message": "tour_course_home_teacher_tools_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".mb-4",
+        "titleMessage": "tour_course_home_intro_title",
+        "message": "tour_course_home_intro_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".section-header.section-header--h6",
+        "titleMessage": "tour_course_home_tools_controls_title",
+        "message": "tour_course_home_tools_controls_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": "#course-tools",
+        "titleMessage": "tour_course_home_tools_title",
+        "message": "tour_course_home_tools_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": "#course-tools .course-tool:first-of-type",
+        "titleMessage": "tour_course_home_tool_card_title",
+        "message": "tour_course_home_tool_card_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": "#course-tools .course-tool:first-of-type .course-tool__link",
+        "titleMessage": "tour_course_home_tool_shortcut_title",
+        "message": "tour_course_home_tool_shortcut_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": "#course-tools .course-tool:first-of-type .course-tool__title",
+        "titleMessage": "tour_course_home_tool_name_title",
+        "message": "tour_course_home_tool_name_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": "#course-tools .course-tool:first-of-type .course-tool__options button",
+        "titleMessage": "tour_course_home_tool_visibility_title",
+        "message": "tour_course_home_tool_visibility_content",
+        "position": "left"
+      }
+    ]
+  },
+  {
+    "pageClass": "body.page-administration.page-administration-platform",
+    "name": "administration_platform",
+    "steps": [
+      {
+        "titleMessage": "tour_admin_overview_title",
+        "message": "tour_admin_overview_content",
+        "position": "floating"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(1)",
+        "titleMessage": "tour_admin_user_management_title",
+        "message": "tour_admin_user_management_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(2)",
+        "titleMessage": "tour_admin_course_management_title",
+        "message": "tour_admin_course_management_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(3)",
+        "titleMessage": "tour_admin_sessions_management_title",
+        "message": "tour_admin_sessions_management_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(4)",
+        "titleMessage": "tour_admin_platform_management_title",
+        "message": "tour_admin_platform_management_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(5)",
+        "titleMessage": "tour_admin_tracking_title",
+        "message": "tour_admin_tracking_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(6)",
+        "titleMessage": "tour_admin_assessments_title",
+        "message": "tour_admin_assessments_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(7)",
+        "titleMessage": "tour_admin_skills_title",
+        "message": "tour_admin_skills_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(8)",
+        "titleMessage": "tour_admin_system_title",
+        "message": "tour_admin_system_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(9)",
+        "titleMessage": "tour_admin_rooms_title",
+        "message": "tour_admin_rooms_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(10)",
+        "titleMessage": "tour_admin_security_title",
+        "message": "tour_admin_security_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(11)",
+        "titleMessage": "tour_admin_chamilo_org_title",
+        "message": "tour_admin_chamilo_org_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(12)",
+        "titleMessage": "tour_admin_health_check_title",
+        "message": "tour_admin_health_check_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(13)",
+        "titleMessage": "tour_admin_version_check_title",
+        "message": "tour_admin_version_check_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(14)",
+        "titleMessage": "tour_admin_professional_support_title",
+        "message": "tour_admin_professional_support_content",
+        "position": "top"
+      },
+      {
+        "elementSelector": ".admin-index > .admin-index__block-container:nth-of-type(15)",
+        "titleMessage": "tour_admin_news_title",
+        "message": "tour_admin_news_content",
+        "position": "left"
+      }
+    ]
+  }
 ]

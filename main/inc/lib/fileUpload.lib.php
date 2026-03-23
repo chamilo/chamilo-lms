@@ -26,7 +26,7 @@ use enshrined\svgSanitize\Sanitizer;
  */
 function php2phps($file_name)
 {
-    return preg_replace('/\.(phar.?|php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
+    return preg_replace('/\.(phar.?|php.?|pht.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
 /**

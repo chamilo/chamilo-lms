@@ -39,9 +39,9 @@ class Login
 
         if ($reset) {
             if ($by_username) {
-                $secret_word = self::get_secret_word($user['email']);
-                if ($reset) {
-                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['id'];
+                $token = self::generateResetToken($user['id']);
+                if ($token) {
+                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$token."&id=".$user['id'];
                     $reset_link = Display::url($reset_link, $reset_link);
                 } else {
                     $reset_link = get_lang('Pass')." : $user[password]";
@@ -55,9 +55,9 @@ class Login
                 }
             } else {
                 foreach ($user as $this_user) {
-                    $secret_word = self::get_secret_word($this_user['email']);
-                    if ($reset) {
-                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['id'];
+                    $token = self::generateResetToken($this_user['id']);
+                    if ($token) {
+                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$token."&id=".$this_user['id'];
                         $reset_link = Display::url($reset_link, $reset_link);
                     } else {
                         $reset_link = get_lang('Pass')." : $this_user[password]";
@@ -238,17 +238,43 @@ class Login
     }
 
     /**
-     * Gets the secret word.
+     * Generates a cryptographically secure reset token for the given user,
+     * stores it in the user's confirmationToken field with a timestamp,
+     * and returns the token.
      *
-     * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
+     * @param int $userId
+     *
+     * @return string|null the generated token, or null on failure
      */
-    public static function get_secret_word($add)
+    public static function generateResetToken($userId)
     {
-        return $secret_word = sha1($add);
+        $userEntity = api_get_user_entity((int) $userId);
+        if (!$userEntity) {
+            return null;
+        }
+
+        $token = api_get_unique_id();
+        $userEntity->setConfirmationToken($token);
+        $userEntity->setPasswordRequestedAt(new \DateTime());
+
+        Database::getManager()->persist($userEntity);
+        Database::getManager()->flush();
+
+        return $token;
     }
 
     /**
-     * Resets a password.
+     * Gets the secret word.
+     *
+     * @deprecated Use generateResetToken() instead
+     */
+    public static function get_secret_word($add)
+    {
+        return sha1($add);
+    }
+
+    /**
+     * Resets a password using a secure, time-limited token.
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
@@ -276,16 +302,37 @@ class Login
             return get_lang('Could not reset password');
         }
 
-        if (self::get_secret_word($user['email']) == $secret) {
-            // OK, secret word is good. Now change password and mail it.
-            $user['password'] = api_generate_password();
+        $storedToken = $userEntity->getConfirmationToken();
 
-            UserManager::updatePassword($userEntity->getId(), $user['password']);
-
-            return self::send_password_to_user($user, $by_username);
-        } else {
+        if (empty($storedToken) || !hash_equals($storedToken, $secret)) {
             return get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.');
         }
+
+        $ttl = (int) api_get_setting('user_reset_password_token_limit');
+        if (empty($ttl)) {
+            $ttl = 3600;
+        }
+
+        if (!$userEntity->isPasswordRequestNonExpired($ttl)) {
+            $userEntity->setConfirmationToken(null);
+            $userEntity->setPasswordRequestedAt(null);
+            Database::getManager()->persist($userEntity);
+            Database::getManager()->flush();
+
+            return get_lang('Link expired, please try again.');
+        }
+
+        // Token is valid. Change password and mail it.
+        $user['password'] = api_generate_password();
+        UserManager::updatePassword($userEntity->getId(), $user['password']);
+
+        // Invalidate the token so it cannot be reused.
+        $userEntity->setConfirmationToken(null);
+        $userEntity->setPasswordRequestedAt(null);
+        Database::getManager()->persist($userEntity);
+        Database::getManager()->flush();
+
+        return self::send_password_to_user($user, $by_username);
     }
 
     /**

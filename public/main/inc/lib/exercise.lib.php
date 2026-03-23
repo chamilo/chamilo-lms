@@ -4909,7 +4909,7 @@ EOT;
                     echo self::getFeedbackText($comnt);
                 }
                 if ($teacherAudio) {
-                    echo $teacherAudio;
+                    echo '<div>'.$teacherAudio.'</div>';
                 }
             }
 

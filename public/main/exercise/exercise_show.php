@@ -657,7 +657,10 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
             }
-            echo ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+            $audioHtml = ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+            if (!empty($audioHtml)) {
+                echo '<div>'.$audioHtml.'</div>';
+            }
 
             echo '</div>';
 
@@ -708,7 +711,10 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
                 echo ExerciseLib::getFeedbackText($comnt);
-                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+                $audioHtml = ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+                if (!empty($audioHtml)) {
+                    echo '<div>'.$audioHtml.'</div>';
+                }
             }
         }
 

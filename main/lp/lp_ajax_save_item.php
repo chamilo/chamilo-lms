@@ -611,9 +611,12 @@ if (isset($_REQUEST['interact'])) {
     }
 }
 
+// Always use the authenticated user's ID to prevent IDOR — never trust
+// the uid from the request, as any enrolled user could overwrite another
+// user's Learning Path progress by changing this parameter.
 echo save_item(
     (!empty($_REQUEST['lid']) ? $_REQUEST['lid'] : null),
-    (!empty($_REQUEST['uid']) ? $_REQUEST['uid'] : null),
+    api_get_user_id(),
     (!empty($_REQUEST['vid']) ? $_REQUEST['vid'] : null),
     (!empty($_REQUEST['iid']) ? $_REQUEST['iid'] : null),
     (!empty($_REQUEST['s']) ? $_REQUEST['s'] : null),

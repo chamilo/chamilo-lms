@@ -581,6 +581,10 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_INFO_FROM_USERNAME:
+            if (!api_is_platform_admin()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
             $loginname = trim($httpRequest->request->get('loginname'));
             if (empty($loginname)) {
                 throw new Exception(get_lang('NoData'));

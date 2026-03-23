@@ -4519,18 +4519,16 @@ class UserManager
         if ($user_id === false) {
             return false;
         }
-        $service_name = Database::escape_string($api_service);
-        if (is_string($service_name) === false) {
-            return false;
-        }
-        $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $md5 = md5((time() + ($user_id * 5)) - rand(10000, 10000)); //generate some kind of random key
-        $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
-        $res = Database::query($sql);
-        if ($res === false) {
-            return false;
-        } //error during query
-        $num = Database::insert_id();
+
+        $apiKey = bin2hex(random_bytes(16)); // cryptographically secure random API key
+        $num = Database::insert(
+            Database::get_main_table(TABLE_MAIN_USER_API_KEY),
+            [
+                'user_id' => $user_id,
+                'api_key' => $apiKey,
+                'api_service' => $api_service,
+            ]
+        );
 
         return $num == 0 ? false : $num;
     }

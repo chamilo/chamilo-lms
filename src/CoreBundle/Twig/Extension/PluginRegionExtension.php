@@ -21,7 +21,7 @@ final class PluginRegionExtension extends AbstractExtension
 
     public function renderRegion(string $region, array $context = []): string
     {
-        if (!in_array($region, AppPlugin::$plugin_regions, true)) {
+        if (!\in_array($region, AppPlugin::$plugin_regions, true)) {
             return '';
         }
 
@@ -46,7 +46,7 @@ final class PluginRegionExtension extends AbstractExtension
             $pluginName = $plugin->get_name();
             $regions = $appPlugin->getAreasByPlugin($pluginName);
 
-            if (empty($regions) || !in_array($region, $regions, true)) {
+            if (empty($regions) || !\in_array($region, $regions, true)) {
                 continue;
             }
 

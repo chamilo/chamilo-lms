@@ -26,6 +26,7 @@ use const CURLOPT_HEADER;
 use const CURLOPT_POST;
 use const CURLOPT_RETURNTRANSFER;
 use const CURLOPT_SSL_VERIFYPEER;
+use const LIBXML_NONET;
 
 class ExternalToolType extends AbstractType
 {

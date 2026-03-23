@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Plugin;
 
+use PensProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ final class PensController extends AbstractController
                 parse_str((string) $request->getContent(), $payload);
             }
 
-            $processor = new \PensProcessor();
+            $processor = new PensProcessor();
             $content = $processor->handle($payload);
         } catch (Throwable $exception) {
             error_log('[Pens][collect] '.$exception->getMessage());

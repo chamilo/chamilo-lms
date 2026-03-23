@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const LIBXML_NONET;
+
 class ServiceController extends BaseController
 {
     public function __construct(
@@ -102,7 +104,7 @@ class ServiceController extends BaseController
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string($requestContent, SimpleXMLElement::class, LIBXML_NONET);
 
-        if ($xml === false) {
+        if (false === $xml) {
             return null;
         }
 

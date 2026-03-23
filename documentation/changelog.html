@@ -110,6 +110,74 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.38">
+        <a id="1.11.38"></a>
+        <h1>Chamilo 1.11.38 - Pontorson, 23/03/2026</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.38 is a security and bugfix release on top of 1.11.36. For any significant change, please check the 1.11.30 release notes.</p>
+        <h3>Release name</h3>
+        <p><a href="https://fr.wikipedia.org/wiki/Pontorson_(commune_d%C3%A9l%C3%A9gu%C3%A9e)">Pontorson</a> is a former commune in the Manche department in Normandy, France. It is known as the gateway to the Mont Saint-Michel bay.</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/22b1cb1c609b643765c88654155aba27070c927e">22b1cb1c</a>) Security: Improve XML parsing by adding LIBXML_NONET and better error handling to prevent XXE attacks</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e7400dd840586ae134b286d0a2374f3d269a9a9d">e7400dd8</a>) Security: Replace weak API key generation with cryptographically secure random keys using random_bytes</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/750a45312a0d5c3ad60dbfbd0d959ca40be4a18c">750a4531</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-f27g-66gq-g7v2">GHSA-f27g-66gq-g7v2</a>) Security: Fix weak password recovery token generation - deterministic SHA1 replaced by cryptographic random token with expiry</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/4a119f93abbfba6fe833580f2463c8d4afa500c2">4a119f93</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6078">GH#6078</a>) Security: Restrict non-admin users from accessing GET_USER_INFO_FROM_USERNAME REST API action</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/4efb5ee8ed849ca147ca1fe7472ef7b98db17bff">4efb5ee8</a>) Security: Avoid information disclosure through direct access to .tpl template files</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0acf8a196307c66c049f97f5ff76cf21c4a08127">0acf8a19</a>) Security: Restrict non-admin users from modifying admin-only user fields in REST API</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/9748f1ffbdb8b6dc84c0e0591c9d3c1d92e21c00">9748f1ff</a>) Security: Add filtering of .pht files to prevent extension-based upload filter bypass</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/6331d051b4468deb5830c01d1e047c5e5cf2c74f">6331d051</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-3rv7-9fhx-j654">GHSA-3rv7-9fhx-j654</a>) Security: Fix IDOR in learning path progress saving endpoint</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/d3355d7873c7e5b907c5fa84cbd5d9b62ed33e51">d3355d78</a>) Security: Remove chained unauthenticated RCE in main/install/ scripts</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/02f82ba627fd9831b2bb7b01df3a2d3cdf44784a">02f82ba6</a>) Security: Remove configuration file update vector in install scripts</li>
+            <li>[2026-03-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/5b0531d0c84fa0cca7f8a5e2f416fc009591e17a">5b0531d0</a>) Security: Remove chained RCE in main/install/ scripts via $GLOBALS injection and unsanitized config writes</li>
+            <li>[2026-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/8cbe660de267f2b6ed625433bdfcf38dee8752b4">8cbe660d</a>) Security: Remove unused updateSound method from exercise.class.php</li>
+            <li>[2026-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/b005b3d3e76cf6eafc03e15ac445ceff089551c0">b005b3d3</a>) Security: Validate and sanitize page parameter in session course edit to prevent unauthorized redirects</li>
+            <li>[2026-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/63e1e6d3d717bd537c7c61719416da35aaa658dd">63e1e6d3</a>) Security: Strengthen evaluation editing logic by adding course ownership and ID validation</li>
+            <li>[2026-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/3b03306d1a0301a81b9284e86893b27f518ab151">3b03306d</a>) Security: Add evaluation ID validation in gradebook result operations to prevent unauthorized actions</li>
+            <li>[2026-03-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/3597b19b73d73d681e4fb503285e9bbfe71714bf">3597b19b</a>) Security: Sanitize shell command inputs using escapeshellarg to prevent command injection</li>
+            <li>[2026-03-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea6b7b7e90580c9b01dc4bcafe4ad737061e0ead">ea6b7b7e</a>) Security: Add URL safety checks to prevent SSRF attacks</li>
+            <li>[2026-03-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/4dddcc19d36119da27b7c49eb84a035800abae78">4dddcc19</a>) Security: Prevent path traversal attempts in HotPotatoes exercises</li>
+            <li>[2026-03-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/f968082b991d08a71718d5a75ecfef0c98e67ec9">f968082b</a>) Security: Add additional safety warning to configuration.php setting 'plugin_upload_enable'</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>No notable new feature</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>[2026-03-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/ce0192c62e48c9d9474d915c541b3274844afbf9">ce0192c6</a>) Learnpath: Deprecate and disable AICC support functionality</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2026-03-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/b20b1f950195007e170f54a6a599cd0646f70c40">b20b1f95</a> - <a href="https://task.beeznest.com/issues/21977">BT#21977</a>) Course: Fix Moodle export titles, visibility and embedded images</li>
+            <li>[2026-03-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/2ab28ec5a61b7eed34c0e4222dff03dcdfc5e6fa">2ab28ec5</a> - <a href="https://task.beeznest.com/issues/23292">BT#23292</a>) Announcement: Fix destination group select to only have the current session groups</li>
+            <li>[2026-03-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b85c8c9822b035a37ffcb7f2559e15eabb3a778">2b85c8c9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7673">GH#7673</a>) Social: Fix missing session_id parameter and add language management</li>
+            <li>[2026-03-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/cc1a341c9fcdc4e4e377980c2c880d77181e7929">cc1a341c</a> - <a href="https://task.beeznest.com/issues/21977">BT#21977</a>) Course: Improve Moodle export for quiz questions and embedded files</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>No notable change</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+            <li>AICC support has been deprecated and disabled (see features above)</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>No notable known issue</li>
+        </ul>
+    </div>
+
+
+
     <div class="version" aria-label="1.11.36">
         <a id="1.11.36"></a>
         <h1>Chamilo 1.11.36 - Penzance, 08/03/2026</h1>

@@ -2108,6 +2108,8 @@ class Statistics
      */
     public static function getNewUserRegistrations(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
             FROM user
             WHERE created_at BETWEEN '$startDate' AND '$endDate'
@@ -2129,6 +2131,8 @@ class Statistics
      */
     public static function getUserRegistrationsByCreator(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
                 FROM user u
                 LEFT JOIN user c ON u.creator_id = c.id

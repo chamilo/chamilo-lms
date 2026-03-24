@@ -122,7 +122,7 @@ class PensProcessor
             throw new PENSException(1322);
         }
 
-        if (!$this->isAllowedDownloadUrl($request->getPackageUrl())) {
+        if (!$this->isAllowedPackageUrl($request->getPackageUrl())) {
             error_log('[Pens][collectPackage] download url rejected');
             throw new PENSException(1301);
         }
@@ -428,26 +428,11 @@ class PensProcessor
     }
 
     /**
-     * Allow callback URLs pointing to public hosts or to the current Chamilo host.
+     * Allow callback URLs pointing to public hosts only (no private/reserved ranges).
      */
     private function isAllowedCallbackUrl(string $url): bool
     {
-        $parts = parse_url($url);
-        if (!is_array($parts)) {
-            return false;
-        }
-
-        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
-        if (!in_array($scheme, ['http', 'https'], true)) {
-            return false;
-        }
-
-        $host = strtolower((string) ($parts['host'] ?? ''));
-        if ('' === $host) {
-            return false;
-        }
-
-        return true;
+        return $this->isAllowedRemoteUrl($url, false);
     }
 
     /**
@@ -529,23 +514,4 @@ class PensProcessor
         return in_array($signature, ["PK\x03\x04", "PK\x05\x06", "PK\x07\x08"], true);
     }
 
-    private function isAllowedDownloadUrl(string $url): bool
-    {
-        $parts = parse_url($url);
-        if (!is_array($parts)) {
-            return false;
-        }
-
-        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
-        if (!in_array($scheme, ['http', 'https'], true)) {
-            return false;
-        }
-
-        $host = strtolower((string) ($parts['host'] ?? ''));
-        if ('' === $host) {
-            return false;
-        }
-
-        return true;
-    }
 }

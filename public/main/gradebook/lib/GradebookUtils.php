@@ -233,9 +233,6 @@ class GradebookUtils
         $modify_icons = null;
 
         if ('' === $show_message) {
-            $visibility_icon = (0 == $cat->is_visible()) ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
-            $visibility_command = (0 == $cat->is_visible()) ? 'set_visible' : 'set_invisible';
-
             $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.
                 Display::getMdiIcon(
                     ActionIcon::VIEW_MORE,
@@ -304,14 +301,6 @@ class GradebookUtils
 
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::getMdiIcon('format-list-text', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('List View')).'</a>';
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visiblecat='.$cat->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.'">'.
-                    Display::getMdiIcon(
-                        $visibility_icon,
-                        'ch-tool-icon',
-                        null,
-                        ICON_SIZE_SMALL,
-                        get_lang('Visible')
-                    ).'</a>';
 
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete all'));
@@ -341,8 +330,6 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($eval->getCourseId(), $eval->getSessionId());
 
         if ('' === $message_eval && api_is_allowed_to_edit(null, true)) {
-            $visibility_icon = 0 == $eval->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
-            $visibility_command = 0 == $eval->is_visible() ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
             } else {
@@ -350,16 +337,6 @@ class GradebookUtils
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit weight')).
                     '</a>';
             }
-
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visibleeval='.$eval->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.' ">'.
-                Display::getMdiIcon(
-                    $visibility_icon,
-                    'ch-tool-icon',
-                    null,
-                    ICON_SIZE_SMALL,
-                    get_lang('Visible')
-                ).
-                '</a>';
 
             if (api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'">'.
@@ -409,9 +386,6 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($link->getCourseId(), $link->get_session_id());
 
         if ('' === $message_link) {
-            $visibility_icon = 0 == $link->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
-            $visibility_command = 0 == $link->is_visible() ? 'set_visible' : 'set_invisible';
-
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
             } else {
@@ -419,15 +393,6 @@ class GradebookUtils
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit weight')).
                     '</a>';
             }
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?visiblelink='.$link->get_id().'&'.$visibility_command.'=&selectcat='.$selectcat.'&'.$courseParams.' ">'.
-                Display::getMdiIcon(
-                    $visibility_icon,
-                    'ch-tool-icon',
-                    null,
-                    ICON_SIZE_SMALL,
-                    get_lang('Visible'),
-                ).
-                '</a>';
 
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink='.$link->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'">'.
                 Display::getMdiIcon(

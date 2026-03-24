@@ -190,6 +190,50 @@ function plugin_has_readme(string $pluginName): bool
 }
 
 /**
+ * Return the plugin folder names allowed in the stable plugins list.
+ */
+function getStablePluginAllowList(): array
+{
+    return [
+        'Bbb',
+        'BuyCourses',
+        'CardGame',
+        'H5pImport',
+        'ImsLti',
+        'LtiProvider',
+        'Onlyoffice',
+        'PauseTraining',
+        'Pens',
+        'Positioning',
+        'Test2Pdf',
+        'Tour',
+        'XApi',
+    ];
+}
+
+/**
+ * Allow administrators to temporarily display every plugin from the URL.
+ */
+function shouldShowAllPlugins(): bool
+{
+    return isset($_GET['show_all_plugins']) && '1' === (string) $_GET['show_all_plugins'];
+}
+
+/**
+ * Check whether a plugin should be visible in the stable plugins list.
+ */
+function pluginShouldBeVisibleInStableList(string $pluginName): bool
+{
+    static $allowedPlugins = null;
+
+    if (null === $allowedPlugins) {
+        $allowedPlugins = array_flip(getStablePluginAllowList());
+    }
+
+    return isset($allowedPlugins[$pluginName]);
+}
+
+/**
  * This function allows easy activating and inactivating of plugins.
  *
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
@@ -221,6 +265,11 @@ function handlePlugins()
     echo '<tbody>';
 
     foreach ($allPlugins as $pluginName) {
+
+        if (!shouldShowAllPlugins() && !pluginShouldBeVisibleInStableList($pluginName)) {
+            continue;
+        }
+
         $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (!file_exists($pluginInfoFile)) {
             continue;

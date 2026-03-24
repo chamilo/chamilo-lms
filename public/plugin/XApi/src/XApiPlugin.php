@@ -40,7 +40,7 @@ class XApiPlugin extends Plugin
 
     protected function __construct()
     {
-        $version = '0.3 (beta)';
+        $version = '1.0.0';
         $author = [
             'Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>',
         ];

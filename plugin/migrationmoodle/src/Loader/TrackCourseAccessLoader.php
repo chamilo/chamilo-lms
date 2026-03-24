@@ -19,7 +19,7 @@ class TrackCourseAccessLoader implements LoaderInterface
     {
         list($userId, $cId, $loginCourseDate, $ip, $sessionId) = array_values($incomingData);
 
-        $sessionLifetime = api_get_configuration_value('session_lifetime');
+        $sessionLifetime = (int) api_get_configuration_value('session_lifetime');
 
         /** @var \DateTime $time */
         $time = clone $loginCourseDate;

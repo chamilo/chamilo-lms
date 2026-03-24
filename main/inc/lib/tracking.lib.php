@@ -8659,7 +8659,7 @@ class Tracking
                 WHERE login_id = $iIdLastConnection";
             $qLogoutDate = Database::query($sql);
             $resLogoutDate = convert_sql_date(Database::result($qLogoutDate, 0, 'logout_date'));
-            $lifeTime = api_get_configuration_value('session_lifetime');
+            $lifeTime = (int) api_get_configuration_value('session_lifetime');
 
             if ($resLogoutDate < time() - $lifeTime) {
                 // it isn't, we should create a fresh entry

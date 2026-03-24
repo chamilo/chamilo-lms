@@ -52,7 +52,7 @@ class ChamiloSession extends System\Session
      */
     public static function session_lifetime()
     {
-        return api_get_configuration_value('session_lifetime');
+        return (int) api_get_configuration_value('session_lifetime');
     }
 
     /**

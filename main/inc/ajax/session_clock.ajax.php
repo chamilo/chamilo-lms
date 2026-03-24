@@ -9,7 +9,7 @@ $kernel = new AppKernel('', '');
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
 
-    if ($action == 'time') {
+    if ($action === 'time') {
         // Load the Chamilo configuration
         $alreadyInstalled = false;
         if (file_exists($kernel->getConfigurationFile())) {
@@ -56,7 +56,7 @@ if (isset($_GET['action'])) {
             http_response_code(500);
             echo json_encode(['error' => 'Error retrieving data from the current session']);
         }
-    } elseif ($action == 'logout') {
+    } elseif ($action === 'logout') {
         require_once __DIR__.'/../../../main/inc/global-min.inc.php';
 
         $userId = api_get_user_id();

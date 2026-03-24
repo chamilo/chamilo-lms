@@ -2,6 +2,11 @@
 (function () {
   'use strict';
 
+  if (window.__cardGameWidgetInitialized) {
+    return;
+  }
+  window.__cardGameWidgetInitialized = true;
+
   function parseParts(raw) {
     if (!raw) {
       return [];
@@ -204,6 +209,10 @@
   }
 
   function openModal() {
+    if (!shouldShowLauncher()) {
+      return;
+    }
+
     renderModalContent();
     state.overlay.classList.add('is-visible');
     document.body.classList.add('cardgame-open');
@@ -291,6 +300,75 @@
       });
   }
 
+  function getCurrentPath() {
+    var path = window.location.pathname || '/';
+
+    if (path.length > 1) {
+      path = path.replace(/\/+$/, '');
+    }
+
+    return path || '/';
+  }
+
+  function shouldShowLauncher() {
+    var path = getCurrentPath();
+
+    return path === '/courses' || path.endsWith('/courses');
+  }
+
+  function applyLauncherVisibility() {
+    var visible;
+
+    if (!state.launcher) {
+      return;
+    }
+
+    visible = shouldShowLauncher();
+    state.launcher.hidden = !visible;
+
+    if (!visible) {
+      closeModal();
+    }
+  }
+
+  function scheduleVisibilityRefresh() {
+    window.setTimeout(applyLauncherVisibility, 0);
+  }
+
+  function installRouteListeners() {
+    var originalPushState;
+    var originalReplaceState;
+
+    if (window.__cardGameRouteListenersInstalled) {
+      return;
+    }
+    window.__cardGameRouteListenersInstalled = true;
+
+    originalPushState = window.history.pushState;
+    originalReplaceState = window.history.replaceState;
+
+    window.history.pushState = function () {
+      var result = originalPushState.apply(this, arguments);
+      scheduleVisibilityRefresh();
+      return result;
+    };
+
+    window.history.replaceState = function () {
+      var result = originalReplaceState.apply(this, arguments);
+      scheduleVisibilityRefresh();
+      return result;
+    };
+
+    window.addEventListener('popstate', scheduleVisibilityRefresh);
+    window.addEventListener('hashchange', scheduleVisibilityRefresh);
+
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) {
+        scheduleVisibilityRefresh();
+      }
+    });
+  }
+
   function buildUi() {
     var launcher = createElement('button', 'cardgame-launcher');
     var badge = createElement('span', 'cardgame-launcher__badge', '●');
@@ -339,6 +417,8 @@
 
     updateLauncher();
     renderModalContent();
+    applyLauncherVisibility();
+    installRouteListeners();
   }
 
   var root = document.getElementById('cardgame-root');

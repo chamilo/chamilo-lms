@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageImporter;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
 
@@ -9,27 +10,24 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
 api_protect_course_script(true);
-$cidReq = api_get_cidreq();
-$pluginIndex = "./start.php?$cidReq";
-$plugin = H5pImportPlugin::create();
 
-if ('false' === $plugin->get('tool_enable')) {
+$plugin = H5pImportPlugin::create();
+if (!$plugin->isToolEnabled()) {
     api_not_allowed(true);
 }
 
+$cidReq = api_get_cidreq();
+$pluginIndex = api_get_path(WEB_PLUGIN_PATH).'H5pImport/start.php'.('' !== $cidReq ? '?'.$cidReq : '');
 $isAllowedToEdit = api_is_allowed_to_edit(true);
-
 $action = $_REQUEST['action'] ?? null;
 
 $em = Database::getManager();
-$h5pRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImport');
-$h5pResultsRepo = $em->getRepository('ChamiloPluginBundle:H5pImport\H5pImportResults');
+$h5pRepo = $em->getRepository(H5pImport::class);
+$h5pResultsRepo = $em->getRepository(H5pImportResults::class);
 
 $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
 $user = api_get_user_entity(api_get_user_id());
-
-$actions = [];
 
 $view = new Template($plugin->getToolTitle());
 $view->assign('is_allowed_to_edit', $isAllowedToEdit);
@@ -40,12 +38,13 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $actions[] = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-            api_get_self()
-        );
+        $actions = [
+            Display::url(
+                Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                $pluginIndex
+            ),
+        ];
 
-        // Set the max upload size in php.ini in the file uploader
         $maxFileSize = getIniMaxFileSizeInBytes();
         $form = new FormValidator('frm_edit');
         $form->addFile('file', $plugin->get_lang('h5p_package'), ['accept' => '.h5p']);
@@ -67,125 +66,115 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
+            $zipFileInfo = $_FILES['file'] ?? null;
 
-            $zipFileInfo = $_FILES['file'];
+            if (empty($zipFileInfo['tmp_name'])) {
+                Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                header('Location: '.$pluginIndex);
+                exit;
+            }
 
             try {
                 $importer = H5pPackageImporter::create($zipFileInfo, $course);
                 $packageFile = $importer->import();
 
-                // Get the h5p.json and content.json contents
-                $h5pJson = H5pPackageTools::getJson($packageFile.DIRECTORY_SEPARATOR.'h5p.json');
-                $contentJson = H5pPackageTools::getJson(
-                    $packageFile.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'content.json'
-                );
-                if ($h5pJson && $contentJson) {
-                    if (H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
-                        H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session, $values);
-
-                        Display::addFlash(
-                            Display::return_message(get_lang('Added'), 'success')
-                        );
-                    } else {
-                        Display::addFlash(
-                            Display::return_message(get_lang('Error'), 'error')
-                        );
-                        break;
-                    }
-
-                    header('Location: '.api_get_self());
+                $h5pJson = H5pPackageTools::getJson($packageFile.'/h5p.json');
+                $contentJson = H5pPackageTools::getJson($packageFile.'/content/content.json');
+                if (false === $contentJson) {
+                    $contentJson = H5pPackageTools::getJson($packageFile.'/content.json');
                 }
 
-                exit;
-            } catch (Exception $e) {
-                Display::addFlash(
-                    Display::return_message($e->getMessage(), 'error')
-                );
+                if ($h5pJson && $contentJson && H5pPackageTools::checkPackageIntegrity($h5pJson, $packageFile)) {
+                    H5pPackageTools::storeH5pPackage($packageFile, $h5pJson, $course, $session, $values);
+                    Display::addFlash(Display::return_message(get_lang('Added'), 'success'));
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                }
 
-                header("Location: $pluginIndex");
+                header('Location: '.$pluginIndex);
+                exit;
+            } catch (Throwable $e) {
+                Display::addFlash(Display::return_message($e->getMessage(), 'error'));
+                header('Location: '.$pluginIndex);
                 exit;
             }
         }
 
         $view->assign('header', $plugin->get_lang('import_h5p_package'));
+        $view->assign('actions', Display::toolbarAction($plugin->get_name(), $actions));
         $view->assign('form', $form->returnForm());
 
         break;
-    case 'delete':
-        $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
-        if (!$h5pImportId && !Security::check_token('get')) {
-            break;
+    case 'delete':
+        if (!$isAllowedToEdit) {
+            api_not_allowed(true);
+        }
+
+        $h5pImportId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+        if (!$h5pImportId || !Security::check_token('get')) {
+            Display::addFlash(Display::return_message(get_lang('Error'), 'danger'));
+            header('Location: '.$pluginIndex);
+            exit;
         }
 
         /** @var H5pImport|null $h5pImport */
         $h5pImport = $h5pRepo->find($h5pImportId);
 
-        if (!$h5pImport) {
+        if (
+            !$h5pImport
+            || $course->getId() !== $h5pImport->getCourse()->getId()
+            || (($session && $h5pImport->getSession()) && $session->getId() !== $h5pImport->getSession()->getId())
+        ) {
             Display::addFlash(Display::return_message($plugin->get_lang('ContentNotFound'), 'danger'));
-
-            break;
+            header('Location: '.$pluginIndex);
+            exit;
         }
+
         if (H5pPackageTools::deleteH5pPackage($h5pImport)) {
-            Display::addFlash(
-                Display::return_message(get_lang('Deleted'), 'success')
-            );
+            Display::addFlash(Display::return_message(get_lang('Deleted'), 'success'));
         } else {
-            Display::addFlash(
-                Display::return_message(get_lang('Error'), 'danger')
-            );
+            Display::addFlash(Display::return_message(get_lang('Error'), 'danger'));
         }
 
-        header('Location: '.api_get_self());
+        header('Location: '.$pluginIndex);
         exit;
-    default:
 
-        /** @var array|H5pImport[] $h5pImports */
+    default:
+        /** @var H5pImport[] $h5pImports */
         $h5pImports = $h5pRepo->findBy(['course' => $course, 'session' => $session]);
 
         $tableData = [];
-        /** @var H5pImport $h5pImport */
         foreach ($h5pImports as $h5pImport) {
-            $h5pImportsResults = $h5pResultsRepo->count(
-                [
-                    'course' => $course,
-                    'session' => $session,
-                    'user' => $user,
-                    'h5pImport' => $h5pImport,
-                ]
-            );
-            $data = [
-                Display::url(
-                    $h5pImport->getName(),
-                    $plugin->getViewUrl($h5pImport)
-                ),
+            $attemptCount = $h5pResultsRepo->count([
+                'course' => $course,
+                'session' => $session,
+                'user' => $user,
+                'h5pImport' => $h5pImport,
+            ]);
+
+            $row = [
+                Display::url($h5pImport->getName(), $plugin->getViewUrl($h5pImport)),
                 $h5pImport->getDescription(),
-                $h5pImportsResults,
+                $attemptCount,
             ];
 
             if ($isAllowedToEdit) {
-                $data[] = $h5pImport;
+                $row[] = $h5pImport;
             }
 
-            $tableData[] = $data;
+            $tableData[] = $row;
         }
 
         if ($isAllowedToEdit) {
             $btnAdd = Display::toolbarButton(
                 get_lang('Upload'),
-                api_get_self().'?action=add',
+                $pluginIndex.('' !== $cidReq ? '&' : '?').'action=add',
                 'file-code-o',
                 'primary'
             );
 
-            $view->assign(
-                'actions',
-                Display::toolbarAction($plugin->get_name(), [$btnAdd])
-            );
-
-            if (in_array($action, ['add', 'edit'])) {
-                $view->assign('form', $form->returnForm());
-            }
+            $view->assign('actions', Display::toolbarAction($plugin->get_name(), [$btnAdd]));
         }
 
         $table = new SortableTableFromArray($tableData, 0);
@@ -194,47 +183,26 @@ switch ($action) {
         $table->set_header(2, $plugin->get_lang('attempts'));
 
         if ($isAllowedToEdit) {
-            $table->set_header(
-                3,
-                get_lang('Actions'),
-                false,
-                'th-header text-right',
-                ['class' => 'text-right']
-            );
+            $table->set_header(3, get_lang('Actions'), false, 'th-header text-right', ['class' => 'text-right']);
             $table->set_column_filter(
                 3,
-                function (H5pImport $value) use ($isAllowedToEdit) {
-                    $actions = [];
-
-                    if ($isAllowedToEdit) {
-                        $actions[] = Display::url(
-                            Display::return_icon('delete.png', get_lang('Delete')),
-                            api_get_self().'?'.http_build_query([
-                                'action' => 'delete',
-                                'id' => $value->getIid(),
-                                'sec_token' => Security::getTokenFromSession(),
-                            ])
-                        );
-                    }
-
-                    return implode(PHP_EOL, $actions);
+                static function (H5pImport $value) use ($pluginIndex) {
+                    return Display::url(
+                        Display::return_icon('delete.png', get_lang('Delete')),
+                        $pluginIndex.('' !== parse_url($pluginIndex, PHP_URL_QUERY) ? '&' : '?').http_build_query([
+                            'action' => 'delete',
+                            'id' => $value->getIid(),
+                            'sec_token' => Security::getTokenFromSession(),
+                        ])
+                    );
                 }
             );
         }
-        $view->assign('h5pImports', $h5pImports);
+
+        $view->assign('header', $plugin->getToolTitle());
         $view->assign('table', $table->return_table());
 
+        break;
 }
 
-$content = $view->fetch('H5pImport/view/index.tpl');
-if ($actions) {
-    $actions = implode(PHP_EOL, $actions);
-
-    $view->assign(
-        'actions',
-        Display::toolbarAction($plugin->get_name(), [$actions])
-    );
-}
-
-$view->assign('content', $content);
 $view->display_one_col_template();

@@ -15,7 +15,7 @@ class CardGame extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.0',
+            '2.1.0',
             'Damien Renou / C2 adaptation'
         );
     }

@@ -1815,6 +1815,26 @@ class SkillModel extends Model
     }
 
     /**
+     * Collect all descendant skill IDs for a given skill using the flat
+     * skills list returned by getAllSkills() (each entry has a parent_id key).
+     *
+     * @return int[]
+     */
+    private function getDescendantIds(int $skillId, array $allSkills): array
+    {
+        $descendants = [];
+        foreach ($allSkills as $skill) {
+            if ((int) $skill['parent_id'] === $skillId) {
+                $childId = (int) $skill['id'];
+                $descendants[] = $childId;
+                $descendants = array_merge($descendants, $this->getDescendantIds($childId, $allSkills));
+            }
+        }
+
+        return $descendants;
+    }
+
+    /**
      * @param array $skillInfo
      *
      * @return array
@@ -1824,10 +1844,18 @@ class SkillModel extends Model
         $allSkills = $this->getAllSkills();
         $objGradebook = new Gradebook();
 
+        // Collect the current skill and all its descendants so they cannot
+        // be selected as parent (which would create a cycle).
+        $excludeIds = [];
+        if (!empty($skillInfo['id'])) {
+            $excludeIds = $this->getDescendantIds((int) $skillInfo['id'], $allSkills);
+            $excludeIds[] = (int) $skillInfo['id'];
+        }
+
         $skillList = [0 => get_lang('None')];
 
         foreach ($allSkills as $skill) {
-            if (isset($skillInfo['id']) && $skill['id'] == $skillInfo['id']) {
+            if (in_array((int) $skill['id'], $excludeIds, true)) {
                 continue;
             }
 

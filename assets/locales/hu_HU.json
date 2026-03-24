@@ -1648,5 +1648,20 @@
     "Generate terms": "Szerz\u0151d\u00e9si felt\u00e9telek gener\u00e1l\u00e1sa",
     "Add variation": "V\u00e1ltozat hozz\u00e1ad\u00e1sa",
     "Editor demo": "Szerkeszt\u0151 dem\u00f3",
-    "Tool introduction": "Eszk\u00f6zismertet\u0151"
+    "Tool introduction": "Eszk\u00f6zismertet\u0151",
+    "Subscribe users to class": "Felhaszn\u00e1l\u00f3k feliratkoz\u00e1sa oszt\u00e1lyra",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Els\u0151 bet\u0171 (vezet\u00e9kn\u00e9v)",
+    "Users on platform": "Platformon l\u00e9v\u0151 felhaszn\u00e1l\u00f3k",
+    "Users in group": "Csoportban l\u00e9v\u0151 felhaszn\u00e1l\u00f3k",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Friss\u00edt\u00e9s sikeres",
+    "Select role": "Szerepk\u00f6r kiv\u00e1laszt\u00e1sa",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Olvas\u00f3",
+    "Admin": "Kurzus adminisztr\u00e1tor",
+    "Moderator": "Moder\u00e1tor:",
+    "Pending invitation": "F\u00fcgg\u0151ben l\u00e9v\u0151 megh\u00edv\u00e1s",
+    "Human Resources Manager": "Emberi er\u0151forr\u00e1sok vezet\u0151je"
 }

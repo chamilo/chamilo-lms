@@ -1648,5 +1648,20 @@
     "Generate terms": "Generovat podm\u00ednky",
     "Add variation": "P\u0159idat variantu",
     "Editor demo": "Demo editoru",
-    "Tool introduction": "P\u0159edstaven\u00ed n\u00e1stroje"
+    "Tool introduction": "P\u0159edstaven\u00ed n\u00e1stroje",
+    "Subscribe users to class": "P\u0159ihl\u00e1sit u\u017eivatele ke t\u0159\u00edd\u011b",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Prvn\u00ed p\u00edsmeno (p\u0159\u00edjmen\u00ed)",
+    "Users on platform": "U\u017eivatel\u00e9 na platform\u011b",
+    "Users in group": "U\u017eivatel\u00e9 ve skupin\u011b",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Aktualizace \u00fasp\u011b\u0161n\u00e1",
+    "Select role": "Vybrat roli",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "\u010cten\u00e1\u0159",
+    "Admin": "Admin",
+    "Moderator": "Moder\u00e1tor",
+    "Pending invitation": "\u010cekaj\u00edc\u00ed pozv\u00e1nka",
+    "Human Resources Manager": "Mana\u017eer lidsk\u00fdch zdroj\u016f"
 }

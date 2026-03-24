@@ -1636,5 +1636,20 @@
     "Generate terms": "Voorwaarden genereren",
     "Add variation": "Variatie toevoegen",
     "Editor demo": "Editor demo",
-    "Tool introduction": "Introductietekst"
+    "Tool introduction": "Introductietekst",
+    "Subscribe users to class": "Schrijf gebruikers in voor klas",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Eerste letter (familienaam)",
+    "Users on platform": "Gebruikers in platform",
+    "Users in group": "Gebruikers in groep",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Update is gelukt",
+    "Select role": "Selecteer rol",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lezer",
+    "Admin": "Cursusbeheerder",
+    "Moderator": "Moderator:",
+    "Pending invitation": "Lopende uitnodiging",
+    "Human Resources Manager": "HR-manager"
 }

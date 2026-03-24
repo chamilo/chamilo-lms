@@ -1648,5 +1648,20 @@
     "Generate terms": "Baldintzak sortu",
     "Add variation": "Aldaketa gehitu",
     "Editor demo": "Editorearen demoa",
-    "Tool introduction": "Tresna sartzea"
+    "Tool introduction": "Tresna sartzea",
+    "Subscribe users to class": "Inskribatu erabiltzaileak klasean",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Lehen letra (deiturak)",
+    "Users on platform": "Erabiltzaileak plataforman",
+    "Users in group": "Erabiltzaileak taldean",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Eguneraketa ongi egin da",
+    "Select role": "Rol bat hautatu",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Irakurlea",
+    "Admin": "Ikastaroaren kudeatzailea",
+    "Moderator": "Moderatzailea",
+    "Pending invitation": "Gonbitea itxaroten",
+    "Human Resources Manager": "Giza baliabideen zuzendaria"
 }

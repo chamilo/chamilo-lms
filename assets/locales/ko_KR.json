@@ -1648,5 +1648,20 @@
     "Generate terms": "\uc57d\uad00 \uc0dd\uc131",
     "Add variation": "\ubcc0\ud615 \ucd94\uac00",
     "Editor demo": "\ud3b8\uc9d1\uae30 \ub370\ubaa8",
-    "Tool introduction": "\ud234 \uac1c\uc694"
+    "Tool introduction": "\ud234 \uac1c\uc694",
+    "Subscribe users to class": "\uc0ac\uc6a9\uc790\ub97c \uc218\uc5c5\uc5d0 \uad6c\ub3c5",
+    "Relation type": "Relation type",
+    "First letter (last name)": "\uccab \uae00\uc790 (\uc131)",
+    "Users on platform": "\ud50c\ub7ab\ud3fc\uc758 \uc0ac\uc6a9\uc790",
+    "Users in group": "\uadf8\ub8f9\uc758 \uc0ac\uc6a9\uc790",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "\uc5c5\ub370\uc774\ud2b8 \uc131\uacf5",
+    "Select role": "\uc5ed\ud560 \uc120\ud0dd",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "\ub3c5\uc790",
+    "Admin": "\uacfc\uc815 \uad00\ub9ac\uc790",
+    "Moderator": "\uc911\uc7ac\uc790",
+    "Pending invitation": "\ub300\uae30 \uc911\uc778 \ucd08\ub300",
+    "Human Resources Manager": "\uc778\uc0ac \uad00\ub9ac\uc790"
 }

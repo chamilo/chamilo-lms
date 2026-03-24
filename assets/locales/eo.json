@@ -1648,5 +1648,20 @@
     "Generate terms": "Generi kondi\u0109ojn",
     "Add variation": "Aldoni varion",
     "Editor demo": "Redaktilo demo",
-    "Tool introduction": "Enkonduka teksto"
+    "Tool introduction": "Enkonduka teksto",
+    "Subscribe users to class": "Ali\u0109igi uzantojn al klaso",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Unua litero (familinoma)",
+    "Users on platform": "Uzantoj en platformo",
+    "Users in group": "Uzantoj en grupo",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "\u011cisdatigo sukcesa",
+    "Select role": "Elekti rolon",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Leganto",
+    "Admin": "Kursadministranto",
+    "Moderator": "Moderanto",
+    "Pending invitation": "Penda invito",
+    "Human Resources Manager": "Gestanto de homaj rimedoj"
 }

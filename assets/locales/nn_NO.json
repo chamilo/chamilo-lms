@@ -1648,5 +1648,20 @@
     "Generate terms": "Generer vilk\u00e5r",
     "Add variation": "Legg til variasjon",
     "Editor demo": "Redigerar demonstrasjon",
-    "Tool introduction": "Verkt\u00f8yintroduksjon"
+    "Tool introduction": "Verkt\u00f8yintroduksjon",
+    "Subscribe users to class": "Meld brukere p\u00e5 klasse",
+    "Relation type": "Relation type",
+    "First letter (last name)": "F\u00f8rste bokstav (etternavn)",
+    "Users on platform": "Brukere p\u00e5 plattform",
+    "Users in group": "Brukere i gruppe",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Oppdatering vellykka",
+    "Select role": "Vel rolle",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lesar",
+    "Admin": "Administrator",
+    "Moderator": "Moderator",
+    "Pending invitation": "Ventar p\u00e5 invitasjon",
+    "Human Resources Manager": "Personalansvarleg"
 }

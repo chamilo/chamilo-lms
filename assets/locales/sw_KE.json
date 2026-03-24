@@ -1648,5 +1648,20 @@
     "Generate terms": "Tengeneza maneno",
     "Add variation": "Ongeza tofauti",
     "Editor demo": "Onyesho la mhariri",
-    "Tool introduction": "Utangulizi wa zana"
+    "Tool introduction": "Utangulizi wa zana",
+    "Subscribe users to class": "Jisajili watumiaji kwenye darasa",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Herufi ya kwanza (jina la mwisho)",
+    "Users on platform": "Watumiaji kwenye jukwaa",
+    "Users in group": "Watumiaji katika kikundi",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Utasajili umefanikiwa",
+    "Select role": "Chagua jukumu",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Msomaji",
+    "Admin": "Msimamizi",
+    "Moderator": "Modereta",
+    "Pending invitation": "Mwaliko unaosubiri",
+    "Human Resources Manager": "Meneja wa Rasilimali za Kibinadamu"
 }

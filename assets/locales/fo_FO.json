@@ -1636,5 +1636,20 @@
     "Generate terms": "\u00datvega viljar",
     "Add variation": "Legg afturat variati\u00f3n",
     "Editor demo": "Ritsagnar\u00e6vning",
-    "Tool introduction": "Verkt\u00f8kisinnlei\u00f0ing"
+    "Tool introduction": "Verkt\u00f8kisinnlei\u00f0ing",
+    "Subscribe users to class": "Melda br\u00fakarar til b\u00f3lka",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Fyrsta b\u00f3kstavir (eftirnavn)",
+    "Users on platform": "Br\u00fakarar \u00e1 talg\u00f8vuni",
+    "Users in group": "Br\u00fakarar \u00ed b\u00f3lki",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Dagf\u00f8ring v\u00e6leydna\u00f0",
+    "Select role": "Vel roli",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lesari",
+    "Admin": "Stj\u00f3rna",
+    "Moderator": "Moderator",
+    "Pending invitation": "\u00d3l\u00f8st bo\u00f0",
+    "Human Resources Manager": "Manntalsskipari"
 }

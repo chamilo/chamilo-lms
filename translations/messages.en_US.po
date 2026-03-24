@@ -33115,3 +33115,15 @@ msgstr "Third parties"
 
 msgid "Layouts"
 msgstr "Layouts"
+
+msgid "Relation type"
+msgstr "Relation type"
+
+msgid "Add all"
+msgstr "Add all"
+
+msgid "Remove all"
+msgstr "Remove all"
+
+msgid "An error occurred. Please try again."
+msgstr "An error occurred. Please try again."

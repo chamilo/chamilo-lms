@@ -1648,5 +1648,20 @@
     "Generate terms": "Bedingungen generieren",
     "Add variation": "Variation hinzuf\u00fcgen",
     "Editor demo": "Editor-Demo",
-    "Tool introduction": "Werkzeug  Einleitung"
+    "Tool introduction": "Werkzeug  Einleitung",
+    "Subscribe users to class": "Benutzer in eine Klasse eintragen",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Erster Buchstabe (Nachname)",
+    "Users on platform": "Benutzer der Plattform",
+    "Users in group": "Benutzer in Klassen",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Aktualisierung erfolgreich",
+    "Select role": "Rolle ausw\u00e4hlen",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Leser",
+    "Admin": "Administrator",
+    "Moderator": "Moderator:",
+    "Pending invitation": "Offene Einladungen",
+    "Human Resources Manager": "Personalmanager"
 }

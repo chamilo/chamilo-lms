@@ -39,7 +39,6 @@ class ProfileType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // High-level lists (fallback behavior)
         $changeableOptions = $this->normalizeSettingList(
             $this->settingsManager->getSetting('profile.changeable_options', true) ?? []
         );
@@ -47,19 +46,14 @@ class ProfileType extends AbstractType
             $this->settingsManager->getSetting('profile.visible_options', true) ?? []
         );
 
-        // Registration required fields used to mark and validate required profile fields.
-        // Prefer the current setting key and keep a fallback for older installations.
         $requiredOptions = $this->normalizeSettingList(
             $this->settingsManager->getSetting('registration.required_profile_fields', true)
             ?? $this->settingsManager->getSetting('registration.required_fields', true)
             ?? []
         );
 
-        // When enabled, the timezone field must be visible and editable in the profile form,
-        // regardless of profile field visibility JSON/lists.
         $usersTimezonesEnabled = 'true' === (string) $this->settingsManager->getSetting('profile.use_users_timezone', true);
 
-        // Fine-grained JSON (authoritative if present)
         $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
         if (\is_string($rawFine)) {
             try {
@@ -77,17 +71,18 @@ class ProfileType extends AbstractType
                 $fieldsVisibility = [];
             }
         }
-        $hasFine = !empty($fieldsVisibility); // strict mode if true
 
-        // Expand aliases used by high-level settings (fallbacks only)
+        $hasFine = !empty($fieldsVisibility);
+
         $expandMap = [
             'name' => ['firstname', 'lastname'],
             'surname' => ['lastname'],
         ];
+
         $expand = static function (array $keys) use ($expandMap): array {
             $out = [];
-            foreach ($keys as $k) {
-                $out = array_merge($out, $expandMap[$k] ?? [$k]);
+            foreach ($keys as $key) {
+                $out = array_merge($out, $expandMap[$key] ?? [$key]);
             }
 
             return array_values(array_unique($out));
@@ -98,11 +93,16 @@ class ProfileType extends AbstractType
         $requiredHigh = $expand($requiredOptions);
 
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true, true));
-        $ignoredKeys = [
-            'theme',
-        ];
+        $ignoredKeys = ['theme'];
 
-        // Core fields map (keys must align with settings keys)
+        $pauseTrainingFields = [
+            'pause_formation',
+            'start_pause_date',
+            'end_pause_date',
+            'disable_emails',
+        ];
+        $showPauseTrainingFields = $this->shouldShowPauseTrainingFields();
+
         $fieldsMap = [
             'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'First name'],
             'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Last name'],
@@ -122,8 +122,6 @@ class ProfileType extends AbstractType
             ],
             'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone number'],
             'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme (stylesheet)'],
-
-            // Core date_of_birth → entity property dateOfBirth
             'date_of_birth' => [
                 'field' => 'date_of_birth',
                 'type' => DateType::class,
@@ -142,8 +140,6 @@ class ProfileType extends AbstractType
                     ],
                 ],
             ],
-
-            // Timezone will be added below if visible (fine JSON or fallback), unless forced by setting.
             'timezone' => [
                 'field' => 'timezone',
                 'type' => ChoiceType::class,
@@ -163,16 +159,11 @@ class ProfileType extends AbstractType
             ],
         ];
 
-        // Visibility (core):
-        // Strict when $hasFine: only keys present in $fieldsVisibility are visible.
-        // Otherwise, fallback to visible_options.
-        // Special case: timezone must be visible when users timezones are enabled.
         $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine, $ignoredKeys, $usersTimezonesEnabled): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
 
-            // Force timezone field visibility when the feature is enabled.
             if ('timezone' === $key) {
                 return $usersTimezonesEnabled;
             }
@@ -184,15 +175,11 @@ class ProfileType extends AbstractType
             return \in_array($key, $visibleHigh, true);
         };
 
-        // Editability (core):
-        // If key is in fine JSON, its boolean decides; otherwise fallback to changeable_options.
-        // Special case: timezone must be editable when users timezones are enabled.
         $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh, $ignoredKeys, $usersTimezonesEnabled): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
 
-            // Force timezone field editability when the feature is enabled.
             if ('timezone' === $key) {
                 return $usersTimezonesEnabled;
             }
@@ -204,12 +191,10 @@ class ProfileType extends AbstractType
             return \in_array($key, $editableHigh, true);
         };
 
-        // Requiredness (core)
         $isCoreRequired = static function (string $key) use ($requiredHigh): bool {
             return \in_array($key, $requiredHigh, true);
         };
 
-        // Build core fields (except timezone; decide after)
         foreach ($fieldsMap as $key => $fieldConfig) {
             if ('timezone' === $key) {
                 continue;
@@ -252,7 +237,6 @@ class ProfileType extends AbstractType
                 $opts = array_merge($opts, $extra);
             }
 
-            // Prevent TypeError when clearing scalar fields (e.g. email) by ensuring empty value maps to a string.
             if (\in_array($fieldConfig['type'], [TextType::class, EmailType::class], true)) {
                 $opts['empty_data'] = '';
                 $opts['trim'] = true;
@@ -270,10 +254,8 @@ class ProfileType extends AbstractType
                 $opts['label_attr'] = $existingLabelAttr;
             }
 
-            // Email: keep a single form-level email format validation and avoid duplicate blank errors.
             if ('email' === $key) {
                 $constraints = $opts['constraints'] ?? [];
-
                 $constraints = $this->addConstraintIfMissing(
                     $constraints,
                     EmailConstraint::class,
@@ -282,7 +264,6 @@ class ProfileType extends AbstractType
                         'message' => 'Please enter a valid email address.',
                     ])
                 );
-
                 $opts['constraints'] = $constraints;
                 $opts['invalid_message'] = 'Please enter a valid email address.';
                 $opts['empty_data'] = '';
@@ -301,7 +282,6 @@ class ProfileType extends AbstractType
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
         }
 
-        // Timezone: show when users timezones are enabled (forced), otherwise follow visibility rules.
         if ($isCoreVisible('timezone')) {
             $tzCfg = $fieldsMap['timezone'];
             $isEditable = $isCoreEditable('timezone');
@@ -335,7 +315,6 @@ class ProfileType extends AbstractType
             $builder->add($tzCfg['field'], $tzCfg['type'], $opts);
         }
 
-        // Normalize null submissions to empty string to prevent "Expected string, null given" mapping errors.
         $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (FormEvent $event): void {
             $data = $event->getData();
             if (!\is_array($data)) {
@@ -349,27 +328,23 @@ class ProfileType extends AbstractType
             $event->setData($data);
         });
 
-        // Build ExtraFieldType with allowlist + editable map derived from fine JSON (strict when present)
         $coreKeys = array_keys($fieldsMap);
         $extraAllowlist = [];
         $extraEditableMap = [];
 
         if ($hasFine) {
-            // Strict: only extras listed in fine JSON
             foreach ($fieldsVisibility as $key => $bool) {
                 if (\in_array($key, $ignoredKeys, true)) {
                     continue;
                 }
                 if (!\in_array($key, $coreKeys, true)) {
-                    $extraAllowlist[] = $key;               // visible
-                    $extraEditableMap[$key] = (bool) $bool; // editable
+                    $extraAllowlist[] = $key;
+                    $extraEditableMap[$key] = (bool) $bool;
                 }
             }
-        } else {
-            // Fallback: show all extras (no allowlist) and let ExtraField configuration drive editability
-            $extraAllowlist = [];
-            $extraEditableMap = [];
         }
+
+        $showPauseTrainingFields = $this->shouldShowPauseTrainingFields();
 
         $builder->add('extra_fields', ExtraFieldType::class, [
             'mapped' => false,
@@ -377,6 +352,9 @@ class ProfileType extends AbstractType
             'visibility_allowlist' => $extraAllowlist,
             'visibility_editable_map' => $extraEditableMap,
             'visibility_strict' => $hasFine,
+            'forced_visible_variables' => $showPauseTrainingFields ? $pauseTrainingFields : [],
+            'forced_editable_map' => $showPauseTrainingFields ? array_fill_keys($pauseTrainingFields, true) : [],
+            'excluded_variables' => $showPauseTrainingFields ? [] : $pauseTrainingFields,
             'item' => $builder->getData(),
         ]);
     }
@@ -423,5 +401,47 @@ class ProfileType extends AbstractType
         }
 
         return [];
+    }
+
+    private function shouldShowPauseTrainingFields(): bool
+    {
+        if (!$this->loadPauseTrainingPlugin()) {
+            return false;
+        }
+
+        try {
+            $plugin = \PauseTraining::create();
+
+            return 'true' === (string) $plugin->get('tool_enable')
+                && 'true' === (string) $plugin->get('allow_users_to_edit_pause_formation');
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    private function loadPauseTrainingPlugin(): bool
+    {
+        if (\class_exists(\PauseTraining::class, false)) {
+            return true;
+        }
+
+        if (!\function_exists('api_get_path') || !\defined('SYS_PLUGIN_PATH')) {
+            return false;
+        }
+
+        $pluginBasePath = rtrim((string) api_get_path(SYS_PLUGIN_PATH), '/\\');
+        $candidateFiles = [
+            $pluginBasePath.'/PauseTraining/PauseTraining.php',
+            $pluginBasePath.'/pausetraining/PauseTraining.php',
+        ];
+
+        foreach ($candidateFiles as $candidateFile) {
+            if (\is_file($candidateFile)) {
+                require_once $candidateFile;
+                break;
+            }
+        }
+
+        return \class_exists(\PauseTraining::class, false);
     }
 }

@@ -37,6 +37,10 @@
     />
 
     <PluginBlockRenderer region="content_bottom" />
+    <PluginBlockRenderer
+      v-if="showCardGame"
+      region="pre_footer"
+    />
 
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
@@ -73,7 +77,17 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
+import {
+  computed,
+  defineAsyncComponent,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  provide,
+  ref,
+  watch,
+  watchEffect,
+} from "vue"
 import { useRoute, useRouter } from "vue-router"
 import axios from "axios"
 import { capitalize, isEmpty } from "lodash"
@@ -165,10 +179,7 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  if (
-    (qp.has("lp_id") && "view" === qp.get("action")) ||
-    (qp.has("origin") && "learnpath" === qp.get("origin"))
-  ) {
+  if ((qp.has("lp_id") && "view" === qp.get("action")) || (qp.has("origin") && "learnpath" === qp.get("origin"))) {
     return EmptyLayout
   }
 
@@ -293,6 +304,20 @@ const allowGlobalChat = computed(() => {
 const showGlobalChat = computed(() => {
   // Do not render global chat when the app is embedded (iframe/dialog/picker).
   return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value
+})
+
+const showCardGame = computed(() => {
+  if (!securityStore.isAuthenticated) {
+    return false
+  }
+
+  if (isEmbeddedContext.value) {
+    return false
+  }
+
+  const path = route.path || ""
+
+  return path === "/courses" || path.startsWith("/courses/")
 })
 
 watch(

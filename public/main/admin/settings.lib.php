@@ -134,6 +134,7 @@ function handleRegions()
         echo '          <div class="mt-4">';
         echo '              <div class="mb-2 text-caption font-semibold uppercase tracking-wide text-gray-50">Assigned regions</div>';
         echo '              <div class="flex flex-wrap gap-2">'.plugin_render_region_badges($selectedRegions).'</div>';
+        echo                    get_lang(plugin_render_region_descriptions($selectedRegions));
         echo '          </div>';
 
         echo '          <div class="mt-4 flex flex-wrap gap-2">';
@@ -448,6 +449,80 @@ function plugin_render_status_badge(bool $isInstalled, bool $isEnabled): string
 }
 
 /**
+ * Return human-friendly labels for supported plugin regions.
+ */
+function plugin_get_region_labels(): array
+{
+    return [
+        'menu_administrator' => 'Admin menu',
+        'course_tool_plugin' => 'Course tool',
+        'content_top' => 'Above page content',
+        'content_bottom' => 'Below page content',
+        'main_top' => 'Top of main layout',
+        'main_bottom' => 'Bottom of main layout',
+        'pre_footer' => 'Before footer',
+    ];
+}
+
+/**
+ * Return a readable label for a region name.
+ */
+function plugin_get_region_label(string $region): string
+{
+    $labels = plugin_get_region_labels();
+
+    return $labels[$region] ?? $region;
+}
+
+/**
+ * Return human-friendly descriptions for supported plugin regions.
+ */
+function plugin_get_region_descriptions(): array
+{
+    return [
+        'menu_administrator' => 'Recommended for admin-only plugins shown in the administration area.',
+        'course_tool_plugin' => 'Recommended for plugins that must appear as course tools.',
+        'content_top' => 'Displayed above the main page content.',
+        'content_bottom' => 'Displayed below the main page content.',
+        'main_top' => 'Displayed near the top of the main layout shell.',
+        'main_bottom' => 'Displayed near the bottom of the main layout shell.',
+        'pre_footer' => 'Recommended for global floating or persistent plugins shown before the footer.',
+    ];
+}
+
+/**
+ * Return a readable description for a region name.
+ */
+function plugin_get_region_description(string $region): string
+{
+    $descriptions = plugin_get_region_descriptions();
+
+    return $descriptions[$region] ?? 'Displayed in the selected plugin region.';
+}
+
+/**
+ * Render descriptions for assigned regions.
+ */
+function plugin_render_region_descriptions(array $regions): string
+{
+    if (empty($regions)) {
+        return '';
+    }
+
+    $items = [];
+
+    foreach ($regions as $region) {
+        $regionKey = (string) $region;
+        $label = htmlspecialchars(plugin_get_region_label($regionKey), ENT_QUOTES);
+        $description = htmlspecialchars(plugin_get_region_description($regionKey), ENT_QUOTES);
+
+        $items[] = '<div><span class="font-semibold text-gray-90">'.$label.':</span> '.$description.'</div>';
+    }
+
+    return '<div class="mt-3 space-y-1 text-caption text-gray-50">'.implode('', $items).'</div>';
+}
+
+/**
  * Render scope badges for admin/course/global usage.
  */
 function plugin_render_scope_badges(array $metadata): string
@@ -480,8 +555,11 @@ function plugin_render_region_badges(array $regions): string
 
     $html = [];
     foreach ($regions as $region) {
-        $regionEscaped = htmlspecialchars($region, ENT_QUOTES);
-        $html[] = '<span class="badge badge--info">'.$regionEscaped.'</span>';
+        $regionKey = (string) $region;
+        $regionLabel = htmlspecialchars(plugin_get_region_label($regionKey), ENT_QUOTES);
+        $regionTechnical = htmlspecialchars($regionKey, ENT_QUOTES);
+
+        $html[] = '<span class="badge badge--info" title="'.$regionTechnical.'">'.$regionLabel.'</span>';
     }
 
     return implode(' ', $html);
@@ -509,27 +587,27 @@ function plugin_render_comment_preview(string $comment): string
  */
 function plugin_get_available_region_options(array $metadata): array
 {
-    $pluginRegionList = [];
-    foreach (AppPlugin::$plugin_regions as $pluginItem) {
-        $pluginRegionList[$pluginItem] = $pluginItem;
+    $labels = plugin_get_region_labels();
+
+    if (!empty($metadata['is_admin_plugin'])) {
+        return [
+            'menu_administrator' => $labels['menu_administrator'].' (menu_administrator)',
+        ];
     }
 
-    unset($pluginRegionList['course_tool_plugin']);
-
-    if (!$metadata['is_admin_plugin'] && !$metadata['is_course_plugin']) {
-        return $pluginRegionList;
+    if (!empty($metadata['is_course_plugin'])) {
+        return [
+            'course_tool_plugin' => $labels['course_tool_plugin'].' (course_tool_plugin)',
+        ];
     }
 
-    $regionList = [];
-    if ($metadata['is_admin_plugin']) {
-        $regionList['menu_administrator'] = 'menu_administrator';
-    }
-
-    if ($metadata['is_course_plugin']) {
-        $regionList['course_tool_plugin'] = 'course_tool_plugin';
-    }
-
-    return $regionList;
+    return [
+        'content_top' => $labels['content_top'].' (content_top)',
+        'content_bottom' => $labels['content_bottom'].' (content_bottom)',
+        'main_top' => $labels['main_top'].' (main_top)',
+        'main_bottom' => $labels['main_bottom'].' (main_bottom)',
+        'pre_footer' => $labels['pre_footer'].' (pre_footer)',
+    ];
 }
 
 /**

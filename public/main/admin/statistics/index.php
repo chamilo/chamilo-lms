@@ -583,6 +583,7 @@ $tools = [
         'report=tool_usage' => get_lang('Tool-based resource count'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
+        'report=courses_usage' => get_lang('Courses usage'),
     ],
     get_lang('Users') => [
         'report=users' => get_lang('Number of users'),
@@ -604,7 +605,6 @@ $tools = [
         'report=activities' => get_lang('Important activities'),
         'report=user_session' => get_lang('Portal user session stats'),
         'report=quarterly_report' => get_lang('Quarterly report'),
-        'report=courses_usage' => get_lang('Courses usage'),
     ],
     get_lang('Social') => [
         'report=messagereceived' => get_lang('Number of messages received'),

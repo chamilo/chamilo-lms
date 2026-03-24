@@ -3506,6 +3506,13 @@ class SurveyUtil
                     '.$icon
                     .$row['title']
                     .'</a></td>';
+            } elseif (3 === $survey->getSurveyType()) {
+                // Meeting poll: always keep the link active within the date range so users can update their availability.
+                $icon = Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Click here to answer the survey'));
+                $url = self::generateFillSurveyLink($survey, $row['invitation_code'], $course, $row['session_id']);
+                echo '<td>';
+                echo '<a href="'.$url.'">'.$icon.PHP_EOL.$row['title'].'</a>';
+                echo '</td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     $user_id,

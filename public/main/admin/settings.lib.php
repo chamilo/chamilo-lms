@@ -290,6 +290,7 @@ function handlePlugins()
         $hasReadme = plugin_has_readme($pluginName);
 
         $pluginDisplayTitle = htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES);
+        $pluginDislpayComment = $plugin_info['comment'] ?? '';
         $pluginDisplayVersion = htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES);
         $pluginDataName = htmlspecialchars($pluginName, ENT_QUOTES);
 
@@ -300,10 +301,14 @@ function handlePlugins()
             : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
-        echo '<td class="p-3 font-medium">'.$pluginDisplayTitle.'</td>';
-        echo '<td class="p-3">'.$pluginDisplayVersion.'</td>';
-        echo '<td class="p-3">'.$statusBadge.'</td>';
-        echo '<td class="p-3 text-center">';
+        echo '<td class="p-2"><p class="font-bold">'.$pluginDisplayTitle.'</p>';
+        if ($pluginDislpayComment) {
+            echo '<p class="text-caption">'.$pluginDislpayComment.'</p>';
+        }
+        echo '</td>';
+        echo '<td class="p-2">'.$pluginDisplayVersion.'</td>';
+        echo '<td class="p-2">'.$statusBadge.'</td>';
+        echo '<td class="p-2 text-center">';
         echo '<div class="flex flex-wrap justify-center gap-2">';
 
         if ($isInstalled) {
@@ -346,12 +351,10 @@ function handlePlugins()
         if ($hasReadme) {
             echo '<button
                     type="button"
-                    class="js-plugin-readme btn btn--sm btn--plain"
+                    class="js-plugin-readme btn btn--sm btn--plain-outline"
                     data-plugin="'.$pluginDataName.'"
                     data-title="'.$pluginDisplayTitle.'"
-                >
-                    <i class="mdi mdi-file-document-outline"></i> README
-                  </button>';
+                >'.Display::getMdiIcon(ObjectIcon::DEFAULT).' README </button>';
         }
 
         echo '</div>';

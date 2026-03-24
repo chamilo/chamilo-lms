@@ -193,9 +193,10 @@ if (1 == (int) $survey->getAnonymous()) {
 }
 
 
-// Block if already answered
+// Block if already answered (meeting polls, type 3, are always accessible within the date range)
 if (
     !isset($_POST['finish_survey'])
+    && 3 !== $survey->getSurveyType()
     && (
         ($isAnonymous && !empty($surveyUserFromSession) && SurveyUtil::isSurveyAnsweredFlagged($survey->getCode(), $survey_invitation['c_id']))
         || (1 == $survey_invitation['answered'] && !isset($_GET['user_id']))

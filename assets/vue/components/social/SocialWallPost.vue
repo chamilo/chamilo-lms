@@ -82,6 +82,13 @@
 
         <div v-html="post.content" />
 
+        <LinkPreviewCard
+          v-for="previewUrl in extractedUrls"
+          :key="previewUrl"
+          :url="previewUrl"
+          class="mt-2"
+        />
+
         <hr :class="{ 'text-success': post.type === SOCIAL_TYPE_PROMOTED_MESSAGE }" />
 
         <div
@@ -109,6 +116,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue"
+import LinkPreviewCard from "./LinkPreviewCard.vue"
 import { computed, inject, onMounted, reactive, ref, watch } from "vue"
 import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
@@ -161,6 +169,24 @@ watch(
 )
 
 const computedAttachments = computed(() => attachments.value)
+
+const extractedUrls = computed(() => {
+  const content = props.post?.content || ""
+  // Strip HTML tags, then extract URLs
+  const text = content.replace(/<[^>]+>/g, " ")
+  const urlRegex = /https?:\/\/[^\s<>"')\]]+/gi
+  const matches = text.match(urlRegex) || []
+  // Also extract hrefs from anchor tags in the original HTML
+  const hrefRegex = /href=["'](https?:\/\/[^"']+)["']/gi
+  let hrefMatch
+  while ((hrefMatch = hrefRegex.exec(content)) !== null) {
+    if (!matches.includes(hrefMatch[1])) {
+      matches.push(hrefMatch[1])
+    }
+  }
+  // Deduplicate and limit to first 3
+  return [...new Set(matches)].slice(0, 3)
+})
 
 async function loadAttachments() {
   try {

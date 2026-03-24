@@ -51,6 +51,12 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             ->createQueryBuilder('d')
             ->innerJoin('d.resourceNode', 'rn')
             ->addSelect('rn')
+            ->leftJoin('rn.resourceType', 'rt')
+            ->addSelect('rt')
+            ->leftJoin('rt.tool', 'tool')
+            ->addSelect('tool')
+            ->leftJoin('rn.creator', 'creator')
+            ->addSelect('creator')
         ;
 
         $query = $request->query->all();
@@ -174,7 +180,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         if ($hasContext) {
             // Contextual hierarchy based on ResourceLink.parent
-            $qb->innerJoin('rn.resourceLinks', 'rl');
+            $qb->innerJoin('rn.resourceLinks', 'rl')->addSelect('rl');
 
             if ($cid > 0) {
                 $qb->andWhere('IDENTITY(rl.course) = :cid')->setParameter('cid', $cid);
@@ -294,7 +300,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
             $qb->distinct();
         } else {
-            // No context: legacy behavior
+            // No context: legacy behavior — still eager-load links for serialization/voter
+            $qb->leftJoin('rn.resourceLinks', 'rl')->addSelect('rl');
             if ($parentNodeId > 0) {
                 $qb
                     ->andWhere('IDENTITY(rn.parent) = :parentId')

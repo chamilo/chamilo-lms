@@ -1648,5 +1648,20 @@
     "Generate terms": "Generate terms",
     "Add variation": "Add variation",
     "Editor demo": "Editor demo",
-    "Tool introduction": "Tool introduction"
+    "Tool introduction": "Tool introduction",
+    "Subscribe users to class": "Subscribe users to class",
+    "Relation type": "Relation type",
+    "First letter (last name)": "First letter (last name)",
+    "Users on platform": "Users on platform",
+    "Users in group": "Users in group",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Update successful",
+    "Select role": "Select role",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Reader",
+    "Admin": "Admin",
+    "Moderator": "Moderator",
+    "Pending invitation": "Pending invitation",
+    "Human Resources Manager": "Human Resources Manager"
 }

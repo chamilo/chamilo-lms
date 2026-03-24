@@ -1648,5 +1648,20 @@
     "Generate terms": "Yenza imigaqo",
     "Add variation": "Faka umahluko",
     "Editor demo": "Ubonakalo lomhleli",
-    "Tool introduction": "Intshayelelo yesixhobo"
+    "Tool introduction": "Intshayelelo yesixhobo",
+    "Subscribe users to class": "Bhalisela abasebenzisi ekilasini",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Unobumba wokuqala (ifani)",
+    "Users on platform": "Abasebenzisi eqongqothiweyo",
+    "Users in group": "Abasebenzisi equlathethiweyo",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Uhlaziyo luyaphumelela",
+    "Select role": "Khetha indima",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Mfundi",
+    "Admin": "Umlawuli",
+    "Moderator": "Umodareyitha",
+    "Pending invitation": "Isimemo esilindile",
+    "Human Resources Manager": "Umphathi wezeMisebenzi yoLuntu"
 }

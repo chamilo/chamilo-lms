@@ -1648,5 +1648,20 @@
     "Generate terms": "\u751f\u6210\u6761\u6b3e",
     "Add variation": "\u6dfb\u52a0\u53d8\u4f53",
     "Editor demo": "\u7f16\u8f91\u5668\u6f14\u793a",
-    "Tool introduction": "\u5de5\u5177\u4ecb\u7ecd"
+    "Tool introduction": "\u5de5\u5177\u4ecb\u7ecd",
+    "Subscribe users to class": "\u5c06\u7528\u6237\u8ba2\u9605\u5230\u73ed\u7ea7",
+    "Relation type": "Relation type",
+    "First letter (last name)": "\u9996\u5b57\u6bcd",
+    "Users on platform": "\u5e73\u53f0\u4e0a\u7684\u7528\u6237",
+    "Users in group": "\u7ec4\u4e2d\u7684\u7528\u6237",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "\u66f4\u65b0\u6210\u529f",
+    "Select role": "\u9009\u62e9\u89d2\u8272",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "\u8bfb\u8005",
+    "Admin": "\u8bfe\u7a0b\u7ba1\u7406\u5458",
+    "Moderator": "\u4e3b\u6301\u4eba",
+    "Pending invitation": "\u5f85\u5b9a\u9080\u8bf7",
+    "Human Resources Manager": "\u4eba\u529b\u8d44\u6e90\u7ecf\u7406"
 }

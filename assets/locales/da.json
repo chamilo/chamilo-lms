@@ -1645,5 +1645,20 @@
     "Generate terms": "Generer vilk\u00e5r",
     "Add variation": "Tilf\u00f8j variation",
     "Editor demo": "Editor demo",
-    "Tool introduction": "Introduktioner til v\u00e6rkt\u00f8jer p\u00e5 siden"
+    "Tool introduction": "Introduktioner til v\u00e6rkt\u00f8jer p\u00e5 siden",
+    "Subscribe users to class": "Tilmeld brugere til klasse",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Efternavn",
+    "Users on platform": "Brugere p\u00e5 platformen",
+    "Users in group": "Brugere i gruppe",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Opdatering vellykket",
+    "Select role": "V\u00e6lg rolle",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "L\u00e6ser",
+    "Admin": "Kursusadministration",
+    "Moderator": "Moderator:",
+    "Pending invitation": "Afventende invitation",
+    "Human Resources Manager": "HR-chef"
 }

@@ -1648,5 +1648,20 @@
     "Generate terms": "\u015eartlar olu\u015ftur",
     "Add variation": "Varyasyon ekle",
     "Editor demo": "D\u00fczenleyici demosu",
-    "Tool introduction": "Ara\u00e7 tan\u0131t\u0131m\u0131"
+    "Tool introduction": "Ara\u00e7 tan\u0131t\u0131m\u0131",
+    "Subscribe users to class": "Kullan\u0131c\u0131lar\u0131 s\u0131n\u0131fa abone et",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Soyad\u0131n\u0131n ilk harfi",
+    "Users on platform": "Platformdaki kullan\u0131c\u0131lar",
+    "Users in group": "Gruptaki kullan\u0131c\u0131lar",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "G\u00fcncelleme ba\u015far\u0131l\u0131",
+    "Select role": "Rol se\u00e7in",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Okuyucu",
+    "Admin": "Ders Yetkilisi",
+    "Moderator": "Y\u00f6netici:",
+    "Pending invitation": "Bekleyen davet",
+    "Human Resources Manager": "\u0130nsan Kaynaklar\u0131 M\u00fcd\u00fcr\u00fc"
 }

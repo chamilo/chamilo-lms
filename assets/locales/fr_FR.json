@@ -1648,5 +1648,20 @@
     "Generate terms": "G\u00e9n\u00e9rer les conditions",
     "Add variation": "Ajouter une variation",
     "Editor demo": "D\u00e9mo de l'\u00e9diteur",
-    "Tool introduction": "Introduction"
+    "Tool introduction": "Introduction",
+    "Subscribe users to class": "Inscrire des utilisateurs dans la classe",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Premi\u00e8re lettre (nom)",
+    "Users on platform": "Utilisateurs de la plateforme",
+    "Users in group": "Utilisateurs du groupe",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Mise \u00e0 jour enregistr\u00e9e",
+    "Select role": "Choisir r\u00f4le",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lecteur",
+    "Admin": "Admin",
+    "Moderator": "Mod\u00e9rateur",
+    "Pending invitation": "Invitation en attente",
+    "Human Resources Manager": "Directeur RH"
 }

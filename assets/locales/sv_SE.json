@@ -1648,5 +1648,20 @@
     "Generate terms": "Generera villkor",
     "Add variation": "L\u00e4gg till variation",
     "Editor demo": "Redigeringsdemo",
-    "Tool introduction": "Verktygsintroduktion"
+    "Tool introduction": "Verktygsintroduktion",
+    "Subscribe users to class": "Prenumerera anv\u00e4ndare p\u00e5 klass",
+    "Relation type": "Relation type",
+    "First letter (last name)": "F\u00f6rsta bokstaven (efternamn)",
+    "Users on platform": "Anv\u00e4ndare p\u00e5 plattformen",
+    "Users in group": "Anv\u00e4ndare i grupp",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Uppdatering lyckades",
+    "Select role": "V\u00e4lj roll",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "L\u00e4sare",
+    "Admin": "Admin",
+    "Moderator": "Moderator:",
+    "Pending invitation": "Inbjudan avvaktar svar",
+    "Human Resources Manager": "Personalchef"
 }

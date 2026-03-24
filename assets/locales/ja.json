@@ -1648,5 +1648,20 @@
     "Generate terms": "\u898f\u7d04\u3092\u751f\u6210",
     "Add variation": "\u30d0\u30ea\u30a8\u30fc\u30b7\u30e7\u30f3\u3092\u8ffd\u52a0",
     "Editor demo": "\u30a8\u30c7\u30a3\u30bf\u30fc\u306e\u30c7\u30e2",
-    "Tool introduction": "\u30c4\u30fc\u30eb\u306e\u6982\u8981"
+    "Tool introduction": "\u30c4\u30fc\u30eb\u306e\u6982\u8981",
+    "Subscribe users to class": "\u30af\u30e9\u30b9\u306b\u30e6\u30fc\u30b6\u30fc\u3092\u767b\u9332",
+    "Relation type": "Relation type",
+    "First letter (last name)": "\u6700\u521d\u306e\u6587\u5b57\uff08\u59d3\uff09",
+    "Users on platform": "\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0\u4e0a\u306e\u30e6\u30fc\u30b6\u30fc",
+    "Users in group": "\u30b0\u30eb\u30fc\u30d7\u5185\u306e\u30e6\u30fc\u30b6\u30fc",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "\u66f4\u65b0\u304c\u6210\u529f\u3057\u307e\u3057\u305f",
+    "Select role": "\u5f79\u5272\u3092\u9078\u629e",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "\u95b2\u89a7\u8005",
+    "Admin": "\u7ba1\u7406\u8005",
+    "Moderator": "\u30e2\u30c7\u30ec\u30fc\u30bf\u30fc",
+    "Pending invitation": "\u4fdd\u7559\u4e2d\u306e\u62db\u5f85",
+    "Human Resources Manager": "\u4eba\u4e8b\u7ba1\u7406\u8005"
 }

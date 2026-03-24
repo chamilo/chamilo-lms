@@ -1648,5 +1648,20 @@
     "Generate terms": "Wygeneruj regulamin",
     "Add variation": "Dodaj wariant",
     "Editor demo": "Demo edytora",
-    "Tool introduction": "Wprowadzenie do narz\u0119dzia"
+    "Tool introduction": "Wprowadzenie do narz\u0119dzia",
+    "Subscribe users to class": "Subskrybuj u\u017cytkownik\u00f3w do klasy",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Pierwsza litera nazwiska",
+    "Users on platform": "U\u017cytkownicy na platformie",
+    "Users in group": "U\u017cytkownicy w grupie",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Zaktualizowano",
+    "Select role": "Wybierz rol\u0119",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Czytelnik",
+    "Admin": "Administrator kursu",
+    "Moderator": "Moderator",
+    "Pending invitation": "Oczekuj\u0105ce zaproszenie",
+    "Human Resources Manager": "Kierownik Zasob\u00f3w Ludzkich"
 }

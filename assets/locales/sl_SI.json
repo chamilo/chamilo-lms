@@ -1648,5 +1648,20 @@
     "Generate terms": "Ustvari pogoje",
     "Add variation": "Dodaj variacijo",
     "Editor demo": "Predstavitev urejevalnika",
-    "Tool introduction": "Predstavitev orodja"
+    "Tool introduction": "Predstavitev orodja",
+    "Subscribe users to class": "Vpi\u0161i uporabnike v razred",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Prva \u010drka (priimek)",
+    "Users on platform": "Uporabniki platforme",
+    "Users in group": "Uporabniki skupine",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "A\u017euriranje je bilo uspe\u0161no",
+    "Select role": "Izberite vlogo",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Bralec",
+    "Admin": "Upravitelj te\u010daja",
+    "Moderator": "Moderator",
+    "Pending invitation": "\u010cakajo\u010da povabila",
+    "Human Resources Manager": "Upravljalec \u010dove\u0161kih virom (HRM)"
 }

@@ -1648,5 +1648,20 @@
     "Generate terms": "Genereaz\u0103 termeni",
     "Add variation": "Adaug\u0103 varia\u021bie",
     "Editor demo": "Demo editor",
-    "Tool introduction": "Texte introductive"
+    "Tool introduction": "Texte introductive",
+    "Subscribe users to class": "\u00censcrie\u021bi utilizatorii in clasa",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Prima litera (a numelui)",
+    "Users on platform": "Utilizatorii plataformei",
+    "Users in group": "Utilizatorii grupului",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Actualizare corecta",
+    "Select role": "Alege rol",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Cititor",
+    "Admin": "Administratorul cursului",
+    "Moderator": "Moderador",
+    "Pending invitation": "Invitatie in asteptare",
+    "Human Resources Manager": "Director de resurse umane"
 }

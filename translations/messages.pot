@@ -33029,3 +33029,15 @@ msgstr ""
 
 msgid "Layouts"
 msgstr ""
+
+msgid "Relation type"
+msgstr ""
+
+msgid "Add all"
+msgstr ""
+
+msgid "Remove all"
+msgstr ""
+
+msgid "An error occurred. Please try again."
+msgstr ""

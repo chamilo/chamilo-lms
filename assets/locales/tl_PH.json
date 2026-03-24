@@ -1645,5 +1645,20 @@
     "Generate terms": "Humuta ng mga termino",
     "Add variation": "Magdagdag ng variation",
     "Editor demo": "Demo ng editor",
-    "Tool introduction": "Panimulang Tool"
+    "Tool introduction": "Panimulang Tool",
+    "Subscribe users to class": "Mag-subscribe ng mga gumagamit sa klase",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Unang titik (apat na pangalan)",
+    "Users on platform": "Mga gumagamit sa platform",
+    "Users in group": "Mga gumagamit sa grupo",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Na-update nang matagumpay",
+    "Select role": "Pumili ng papel",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Mambabasa",
+    "Admin": "Admin",
+    "Moderator": "Moderator",
+    "Pending invitation": "Nakapagantay na paanyaya",
+    "Human Resources Manager": "Tagapamahala ng Human Resources"
 }

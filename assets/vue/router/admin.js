@@ -70,5 +70,11 @@ export default {
       meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Session list" },
       component: () => import("../views/admin/SessionList.vue"),
     },
+    {
+      name: "AdminUsergroupAddUsers",
+      path: "usergroups/:id/add-users",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe users to class" },
+      component: () => import("../views/admin/UsergroupAddUsers.vue"),
+    },
   ],
 }

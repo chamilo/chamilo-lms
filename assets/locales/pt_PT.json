@@ -1648,5 +1648,20 @@
     "Generate terms": "Gerar termos",
     "Add variation": "Adicionar varia\u00e7\u00e3o",
     "Editor demo": "Demo do editor",
-    "Tool introduction": "Introdu\u00e7\u00e3o da aplica\u00e7\u00e3o/ferramenta"
+    "Tool introduction": "Introdu\u00e7\u00e3o da aplica\u00e7\u00e3o/ferramenta",
+    "Subscribe users to class": "Inscrever utilizadores na aula",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Primeira letra (\u00faltimo nome)",
+    "Users on platform": "Usu\u00e1rios do plataforma",
+    "Users in group": "Utilizadores no grupo",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Atualiza\u00e7\u00e3o correta",
+    "Select role": "Selecionar a fun\u00e7\u00e3o",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Leitor",
+    "Admin": "Admin",
+    "Moderator": "Moderador:",
+    "Pending invitation": "Convite pendente",
+    "Human Resources Manager": "Gerente de Recursos Humanos"
 }

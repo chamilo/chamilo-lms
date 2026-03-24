@@ -169,7 +169,7 @@ if ($isFromSession) {
 // With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
-    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\''.$ctx.'">'.Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe users to class')).'</a>'
+    .' <a href="/admin/usergroups/\'+options.rowId+\'/add-users">'.Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe users to class')).'</a>'
     .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\''.$ctx.'">'.Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe class to courses')).'</a>'
     .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\''.$ctx.'">'.Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe class to sessions')).'</a>'
     .' <a href="?action=edit&id=\'+options.rowId+\''.$ctx.'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'

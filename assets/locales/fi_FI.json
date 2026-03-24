@@ -1648,5 +1648,20 @@
     "Generate terms": "Luo k\u00e4ytt\u00f6ehdot",
     "Add variation": "Lis\u00e4\u00e4 variaatio",
     "Editor demo": "Editorin esittely",
-    "Tool introduction": "Ty\u00f6kalun kuvaus"
+    "Tool introduction": "Ty\u00f6kalun kuvaus",
+    "Subscribe users to class": "Ilmoittaudu k\u00e4ytt\u00e4j\u00e4t luokkaan",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Ensimm\u00e4inen kirjain (sukunimi)",
+    "Users on platform": "K\u00e4ytt\u00e4ji\u00e4 alustalla",
+    "Users in group": "K\u00e4ytt\u00e4ji\u00e4 ryhm\u00e4ss\u00e4",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "P\u00e4ivitys onnistui",
+    "Select role": "Valitse rooli",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lukija",
+    "Admin": "Kurssin yll\u00e4pit\u00e4j\u00e4",
+    "Moderator": "Moderaattori",
+    "Pending invitation": "Odottava kutsu",
+    "Human Resources Manager": "Henkil\u00f6st\u00f6johtaja"
 }

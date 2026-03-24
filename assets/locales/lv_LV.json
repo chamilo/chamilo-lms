@@ -1648,5 +1648,20 @@
     "Generate terms": "\u0122ener\u0113t noteikumus",
     "Add variation": "Pievienot vari\u0101ciju",
     "Editor demo": "Redaktora demonstr\u0101cija",
-    "Tool introduction": "Apg\u016bt r\u012bku izmanto\u0161anas iesp\u0113jas"
+    "Tool introduction": "Apg\u016bt r\u012bku izmanto\u0161anas iesp\u0113jas",
+    "Subscribe users to class": "Piespriest lietot\u0101jus klasei",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Pirmais burts (uzv\u0101rds)",
+    "Users on platform": "Lietot\u0101ji platform\u0101",
+    "Users in group": "Lietot\u0101ji grup\u0101",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Atjaunin\u0101jums veiksm\u012bgs",
+    "Select role": "Izv\u0113l\u0113ties lomu",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Las\u012bt\u0101js",
+    "Admin": "Kursa administrators",
+    "Moderator": "Moderators:",
+    "Pending invitation": "Neatv\u0113rtie uzaicin\u0101jumi",
+    "Human Resources Manager": "Cilv\u0113kresursu vad\u012bt\u0101js"
 }

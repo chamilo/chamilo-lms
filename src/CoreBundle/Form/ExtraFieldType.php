@@ -37,6 +37,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ExtraFieldType extends AbstractType
 {
+    private const PAUSE_TRAINING_LABELS = [
+        'pause_formation' => 'Pause training',
+        'start_pause_date' => 'Start pause date',
+        'end_pause_date' => 'End pause date',
+        'disable_emails' => 'Disable automatic emails',
+    ];
+
+    private const PAUSE_TRAINING_HELP = [
+        'pause_formation' => 'Temporarily pause inactivity follow-up for your account.',
+        'start_pause_date' => 'Use your local date and time.',
+        'end_pause_date' => 'Use your local date and time.',
+        'disable_emails' => 'Stop automatic inactivity emails for your account.',
+    ];
+
     public function __construct(
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly ExtraFieldRepository $extraFieldRepository,
@@ -47,75 +61,136 @@ class ExtraFieldType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** Prefer the bound item (user) passed by ProfileType; fallback to Security user. */
         /** @var User|null $item */
-        $item = $options['item'] instanceof User ? $options['item'] : ($this->security->getUser() instanceof User ? $this->security->getUser() : null);
+        $item = $options['item'] instanceof User
+            ? $options['item']
+            : ($this->security->getUser() instanceof User ? $this->security->getUser() : null);
 
         $extraFieldType = ExtraField::USER_FIELD_TYPE;
-
-        // Load all extra fields for user type
         $extraFields = $this->extraFieldRepository->getExtraFields($extraFieldType);
 
-        // Optional allowlist/editable map provided by parent form
         /** @var string[] $allowlist */
         $allowlist = $options['visibility_allowlist'] ?? [];
 
-        /** @var array<string,bool> $editableMap */
+        /** @var array<string, bool> $editableMap */
         $editableMap = $options['visibility_editable_map'] ?? [];
+
+        /** @var string[] $forcedVisibleVariables */
+        $forcedVisibleVariables = $options['forced_visible_variables'] ?? [];
+
+        /** @var array<string, bool> $forcedEditableMap */
+        $forcedEditableMap = $options['forced_editable_map'] ?? [];
+
+        /** @var string[] $excludedVariables */
+        $excludedVariables = $options['excluded_variables'] ?? [];
+
         $strict = (bool) ($options['visibility_strict'] ?? false);
 
-        if ($strict && empty($allowlist)) {
-            return;
+        $editableMap = array_merge($editableMap, $forcedEditableMap);
+
+        $hasAllowlistFilter = $strict || !empty($allowlist) || !empty($forcedVisibleVariables);
+        $effectiveAllowlist = $allowlist;
+
+        if ($hasAllowlistFilter) {
+            $effectiveAllowlist = array_values(array_unique(array_map(
+                static fn ($value) => (string) $value,
+                array_merge($allowlist, $forcedVisibleVariables)
+            )));
+
+            if (!empty($excludedVariables)) {
+                $effectiveAllowlist = array_values(array_diff($effectiveAllowlist, $excludedVariables));
+            }
+
+            if (empty($effectiveAllowlist)) {
+                return;
+            }
         }
 
-        // Google Maps plugin state
         $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
         $gMapsPlugin = GoogleMapsPlugin::create();
-        $apiEnabled = ('true' === $gMapsPlugin->get('enable_api'));
+        $apiEnabled = 'true' === $gMapsPlugin->get('enable_api');
 
-        // If allowlist is provided and plugin is active, we may add forced fields only if included in allowlist
+        $existingVariables = array_map(
+            static fn ($extraField) => $extraField->getVariable(),
+            $extraFields
+        );
+
+        foreach ($forcedVisibleVariables as $variable) {
+            if (\in_array($variable, $existingVariables, true)) {
+                continue;
+            }
+
+            $forced = $this->extraFieldRepository->findOneBy([
+                'variable' => $variable,
+                'itemType' => $extraFieldType,
+            ]);
+
+            if ($forced) {
+                $extraFields[] = $forced;
+                $existingVariables[] = $variable;
+            }
+        }
+
         if ($pluginEnabled && $apiEnabled) {
             $forceVars = ['terms_villedustage', 'terms_ville'];
-            $existing = array_map(static fn ($ef) => $ef->getVariable(), $extraFields);
-            foreach ($forceVars as $v) {
-                if (!\in_array($v, $existing, true)) {
-                    // Only inject if parent explicitly allowed it
-                    if (!empty($allowlist) && !\in_array($v, $allowlist, true)) {
-                        continue;
-                    }
-                    $forced = $this->extraFieldRepository->findOneBy([
-                        'variable' => $v,
-                        'itemType' => $extraFieldType,
-                    ]);
-                    if ($forced) {
-                        $extraFields[] = $forced;
-                    }
+
+            foreach ($forceVars as $variable) {
+                if (\in_array($variable, $existingVariables, true)) {
+                    continue;
+                }
+
+                if ($hasAllowlistFilter && !\in_array($variable, $effectiveAllowlist, true)) {
+                    continue;
+                }
+
+                $forced = $this->extraFieldRepository->findOneBy([
+                    'variable' => $variable,
+                    'itemType' => $extraFieldType,
+                ]);
+
+                if ($forced) {
+                    $extraFields[] = $forced;
+                    $existingVariables[] = $variable;
                 }
             }
         }
 
-        // Current values for the (possibly null) user
         $data = [];
+        $legacyExtraFieldValue = null;
+        $legacyItemId = null;
+
         if ($item instanceof User) {
+            $legacyExtraFieldValue = new \ExtraFieldValue('user');
+            $legacyItemId = (int) $item->getId();
+
             $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
             foreach ($values as $value) {
                 $data[$value->getField()->getVariable()] = $value->getFieldValue();
             }
         }
 
-        // Build form fields
         foreach ($extraFields as $extraField) {
             $variable = $extraField->getVariable();
 
-            // If allowlist provided, skip not-listed extras
-            if (!empty($allowlist) && !\in_array($variable, $allowlist, true)) {
+            if (\in_array($variable, $excludedVariables, true)) {
                 continue;
             }
 
-            $text = $extraField->getDisplayText();
+            if ($hasAllowlistFilter && !\in_array($variable, $effectiveAllowlist, true)) {
+                continue;
+            }
+
+            $text = self::PAUSE_TRAINING_LABELS[$variable] ?? $extraField->getDisplayText();
             $value = $data[$variable] ?? null;
 
-            // If editable map provided, use it; otherwise fallback to field config
+            if (null === $value && null !== $legacyExtraFieldValue && null !== $legacyItemId) {
+                $legacyRow = $legacyExtraFieldValue->get_values_by_handler_and_field_variable($legacyItemId, $variable);
+
+                if (\is_array($legacyRow)) {
+                    $value = $legacyRow['value'] ?? $legacyRow['field_value'] ?? null;
+                }
+            }
+
             $editable = \array_key_exists($variable, $editableMap)
                 ? (bool) $editableMap[$variable]
                 : (bool) $extraField->isChangeable();
@@ -128,6 +203,22 @@ class ExtraFieldType extends AbstractType
                 'data' => $value,
                 'disabled' => !$editable,
             ];
+
+            if (\array_key_exists($variable, self::PAUSE_TRAINING_LABELS)) {
+                $defaultOptions['translation_domain'] = 'messages';
+            }
+
+            if (\array_key_exists($variable, self::PAUSE_TRAINING_HELP)) {
+                $defaultOptions['help'] = self::PAUSE_TRAINING_HELP[$variable];
+            }
+
+            if (\in_array($variable, ['start_pause_date', 'end_pause_date'], true)) {
+                $defaultOptions['attr'] = array_merge($defaultOptions['attr'] ?? [], [
+                    'class' => trim((string) (($defaultOptions['attr']['class'] ?? '').' js-pause-training-datetime')),
+                    'placeholder' => 'YYYY-MM-DD HH:mm',
+                    'autocomplete' => 'off',
+                ]);
+            }
 
             switch ($extraField->getValueType()) {
                 case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
@@ -161,6 +252,7 @@ class ExtraFieldType extends AbstractType
                     $class = 'select2_user_rel_tag';
                     $choices = [];
                     $choicesAttributes = [];
+
                     if ($item instanceof User) {
                         $tags = $this->tagRepository->getTagsByUser($extraField, $item);
                         foreach ($tags as $tag) {
@@ -172,6 +264,7 @@ class ExtraFieldType extends AbstractType
                             $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                         }
                     }
+
                     $defaultOptions['choices'] = $choices;
                     $defaultOptions['choice_attr'] = $choicesAttributes;
                     $defaultOptions['data'] = array_values($choices);
@@ -206,6 +299,12 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_DATETIME:
                     $defaultOptions['data'] = !empty($value) ? new DateTime((string) $value) : null;
                     $defaultOptions['widget'] = 'single_text';
+
+                    if (\in_array($variable, ['start_pause_date', 'end_pause_date'], true)) {
+                        $defaultOptions['html5'] = false;
+                        $defaultOptions['format'] = 'yyyy-MM-dd HH:mm';
+                    }
+
                     $builder->add($variable, DateTimeType::class, $defaultOptions);
 
                     break;
@@ -233,7 +332,7 @@ class ExtraFieldType extends AbstractType
                     break;
 
                 case \ExtraField::FIELD_TYPE_CHECKBOX:
-                    $defaultOptions['data'] = (1 === (int) $value);
+                    $defaultOptions['data'] = '1' === (string) $value || 1 === (int) $value;
                     $builder->add($variable, CheckboxType::class, $defaultOptions);
 
                     break;
@@ -242,14 +341,15 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_SELECT:
                     $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
 
-                    // no break
+                // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
                     }
-                    $options = $extraField->getOptions();
+
+                    $fieldOptions = $extraField->getOptions();
                     $choices = [];
-                    foreach ($options as $option) {
+                    foreach ($fieldOptions as $option) {
                         $choices[$option->getDisplayText()] = $option->getValue();
                     }
                     $defaultOptions['choices'] = $choices;
@@ -258,37 +358,67 @@ class ExtraFieldType extends AbstractType
                         $defaultOptions['expanded'] = false;
                         $defaultOptions['multiple'] = false;
                     }
+
                     if (\ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $extraField->getValueType()) {
                         $defaultOptions['expanded'] = false;
                         $defaultOptions['multiple'] = true;
                     }
+
                     $builder->add($variable, ChoiceType::class, $defaultOptions);
 
                     break;
 
                 default:
-                    // Safely skip unsupported types
                     break;
             }
         }
 
-        // Persist new values on submit
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($item, $extraFields): void {
-                // If item is missing, we cannot persist, but we still built fields for UX
+            function (FormEvent $event) use ($item, $extraFields, $excludedVariables): void {
                 if (!$item instanceof User) {
                     return;
                 }
 
-                $data = $event->getData() ?? [];
+                $submittedData = $event->getData() ?? [];
+                if (!\is_array($submittedData)) {
+                    $submittedData = [];
+                }
+
+                foreach (['pause_formation', 'disable_emails'] as $checkboxVariable) {
+                    if (!\array_key_exists($checkboxVariable, $submittedData)) {
+                        $submittedData[$checkboxVariable] = '0';
+                    } else {
+                        $submittedData[$checkboxVariable] = empty($submittedData[$checkboxVariable]) ? '0' : '1';
+                    }
+                }
+
+                foreach (['start_pause_date', 'end_pause_date'] as $dateVariable) {
+                    if (\array_key_exists($dateVariable, $submittedData)) {
+                        $value = $submittedData[$dateVariable];
+
+                        if (null === $value || '' === $value) {
+                            $submittedData[$dateVariable] = null;
+                        } else {
+                            $submittedData[$dateVariable] = (string) $value;
+                        }
+                    }
+                }
+
+                $event->setData($submittedData);
+
                 foreach ($extraFields as $extraField) {
                     $variable = $extraField->getVariable();
-                    if (!\array_key_exists($variable, $data)) {
+
+                    if (\in_array($variable, $excludedVariables, true)) {
                         continue;
                     }
 
-                    $newValue = $data[$variable];
+                    if (!\array_key_exists($variable, $submittedData)) {
+                        continue;
+                    }
+
+                    $newValue = $submittedData[$variable];
 
                     switch ($extraField->getValueType()) {
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
@@ -302,9 +432,9 @@ class ExtraFieldType extends AbstractType
 
                         case \ExtraField::FIELD_TYPE_TAG:
                             $formItem = $event->getForm()->get($variable);
-                            $options = $formItem->getConfig()->getOptions();
-                            $options['choices'] = $newValue;
-                            $event->getForm()->add($variable, ChoiceType::class, $options);
+                            $fieldOptions = $formItem->getConfig()->getOptions();
+                            $fieldOptions['choices'] = $newValue;
+                            $event->getForm()->add($variable, ChoiceType::class, $fieldOptions);
 
                             if (!empty($newValue)) {
                                 foreach ((array) $newValue as $tag) {
@@ -315,6 +445,10 @@ class ExtraFieldType extends AbstractType
                             break;
 
                         default:
+                            if (null !== $newValue && !\is_string($newValue)) {
+                                $newValue = (string) $newValue;
+                            }
+
                             $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
 
                             break;
@@ -330,12 +464,18 @@ class ExtraFieldType extends AbstractType
             'visibility_allowlist' => [],
             'visibility_editable_map' => [],
             'visibility_strict' => false,
+            'forced_visible_variables' => [],
+            'forced_editable_map' => [],
+            'excluded_variables' => [],
             'item' => null,
         ]);
 
         $resolver->setAllowedTypes('visibility_allowlist', ['array']);
         $resolver->setAllowedTypes('visibility_editable_map', ['array']);
         $resolver->setAllowedTypes('visibility_strict', ['bool']);
+        $resolver->setAllowedTypes('forced_visible_variables', ['array']);
+        $resolver->setAllowedTypes('forced_editable_map', ['array']);
+        $resolver->setAllowedTypes('excluded_variables', ['array']);
         $resolver->setAllowedTypes('item', ['null', User::class]);
     }
 }

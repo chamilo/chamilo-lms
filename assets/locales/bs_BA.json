@@ -1648,5 +1648,20 @@
     "Generate terms": "Generiraj uvjete",
     "Add variation": "Dodaj varijaciju",
     "Editor demo": "Demo ure\u0111iva\u010da",
-    "Tool introduction": "Uvod u alat"
+    "Tool introduction": "Uvod u alat",
+    "Subscribe users to class": "Pretplati korisnike na razred",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Prvo slovo (prezime)",
+    "Users on platform": "Korisnici na platformi",
+    "Users in group": "Korisnici u grupi",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "A\u017euriranje uspje\u0161no",
+    "Select role": "Odaberite ulogu",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "\u010citalac",
+    "Admin": "Admin",
+    "Moderator": "Moderator",
+    "Pending invitation": "Neobra\u0111eni poziv",
+    "Human Resources Manager": "Menad\u017eer ljudskih resursa"
 }

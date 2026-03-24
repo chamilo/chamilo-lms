@@ -1648,5 +1648,20 @@
     "Generate terms": "Generuoti s\u0105lygas",
     "Add variation": "Prid\u0117ti variant\u0105",
     "Editor demo": "Redaktoriaus demonstracija",
-    "Tool introduction": "\u012erankio apib\u016bdinimas"
+    "Tool introduction": "\u012erankio apib\u016bdinimas",
+    "Subscribe users to class": "Priskirti vartotojus klasei",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Pirmoji raid\u0117 (pavard\u0117)",
+    "Users on platform": "Vartotojai platformoje",
+    "Users in group": "Vartotojai grup\u0117je",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Atnaujinimas s\u0117kmingas",
+    "Select role": "Pasirinkti rol\u0119",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Skaitytojas",
+    "Admin": "Kurso vadovas",
+    "Moderator": "Moderatorius",
+    "Pending invitation": "Laukiantis pakvietimas",
+    "Human Resources Manager": "\u017dmogi\u0161k\u0173j\u0173 i\u0161tekli\u0173 vadovas"
 }

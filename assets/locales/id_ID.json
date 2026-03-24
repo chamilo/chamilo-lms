@@ -1648,5 +1648,20 @@
     "Generate terms": "Buat istilah",
     "Add variation": "Tambah variasi",
     "Editor demo": "Demo editor",
-    "Tool introduction": "Tool Pengantar"
+    "Tool introduction": "Tool Pengantar",
+    "Subscribe users to class": "Daftarkan pengguna ke kelas",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Huruf Pertama (nama belakang)",
+    "Users on platform": "Pengguna di platform",
+    "Users in group": "Pengguna dalam grup",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Pembaruan berhasil",
+    "Select role": "Pilih peran",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Pembaca",
+    "Admin": "Admin",
+    "Moderator": "Moderator",
+    "Pending invitation": "Undangan tertunda",
+    "Human Resources Manager": "Manajer Sumber Daya Manusia"
 }

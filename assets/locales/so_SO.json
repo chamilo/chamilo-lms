@@ -1648,5 +1648,20 @@
     "Generate terms": "Soosaar shuruudaha",
     "Add variation": "Ku dar kala duwanaansho",
     "Editor demo": "Tusualka editor-ka",
-    "Tool introduction": "Hordhac qalabka"
+    "Tool introduction": "Hordhac qalabka",
+    "Subscribe users to class": "Ku-dallacsi isticmaale fasalka",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Farta ugu horeysa (magaca dambe)",
+    "Users on platform": "Isticmaale platform-ka",
+    "Users in group": "Isticmaale kooxda",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Cusboonaysii guul leh",
+    "Select role": "Dooro door",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Akhrisaha",
+    "Admin": "Maamule",
+    "Moderator": "Dhexdhexaadiye",
+    "Pending invitation": "Casuumad sugaysa",
+    "Human Resources Manager": "Maareeyaha Kheyraadka Dadka"
 }

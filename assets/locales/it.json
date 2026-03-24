@@ -1648,5 +1648,20 @@
     "Generate terms": "Genera termini",
     "Add variation": "Aggiungi variazione",
     "Editor demo": "Demo editor",
-    "Tool introduction": "Testo introduttivo"
+    "Tool introduction": "Testo introduttivo",
+    "Subscribe users to class": "Iscrivi dei corsisti a dei gruppi",
+    "Relation type": "Relation type",
+    "First letter (last name)": "Prima lettera (cognome)",
+    "Users on platform": "Utenti nella piattaforma",
+    "Users in group": "Utenti nel gruppo",
+    "Add all": "Add all",
+    "Remove all": "Remove all",
+    "Update successful": "Aggiornamento riuscito",
+    "Select role": "Seleziona ruolo",
+    "An error occurred. Please try again.": "An error occurred. Please try again.",
+    "Reader": "Lettore",
+    "Admin": "amministratore",
+    "Moderator": "Moderatore",
+    "Pending invitation": "Inviti in attesa",
+    "Human Resources Manager": "Responsabile Risorse Umane"
 }

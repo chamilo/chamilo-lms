@@ -1,237 +1,381 @@
 /* For license terms, see /license.txt */
-/**
- * Whenever the cardgame.js file is included into the loaded JavaScript,
- * search for the user picture in the left menu and add a div
- * "enjoy-cardgame" to it to show a little drawing cards icon to enable
- * this plugin
- */
-$(document).ready(function ($) {
+(function () {
+  'use strict';
 
-  if (!document.getElementById('havedeckcardgame')) {
-    $('.sidebar .panel-body .img-circle').parent().parent().after('<div id="plugin-cardgame-icon" class="enjoy-cardgame" onClick="onlyOpenCardView();" ></div>')
+  function parseParts(raw) {
+    if (!raw) {
+      return [];
+    }
+
+    return raw
+      .split(',')
+      .map(function (value) {
+        return parseInt(value, 10);
+      })
+      .filter(function (value, index, array) {
+        return value >= 1 && value <= 15 && array.indexOf(value) === index;
+      })
+      .sort(function (a, b) {
+        return a - b;
+      });
+  }
+
+  function getDisplayPan(pan) {
+    var value = parseInt(pan, 10) || 1;
+    if (value < 1) {
+      return 1;
+    }
+    if (value > 4) {
+      return 4;
+    }
+
+    return value;
+  }
+
+  function pickRandomMissingPart(parts) {
+    var available = [];
+    var index;
+
+    for (index = 1; index <= 15; index += 1) {
+      if (parts.indexOf(index) === -1) {
+        available.push(index);
+      }
+    }
+
+    if (!available.length) {
+      return null;
+    }
+
+    return available[Math.floor(Math.random() * available.length)];
+  }
+
+  function postForm(url, payload) {
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      credentials: 'same-origin',
+      body: new URLSearchParams(payload).toString()
+    }).then(function (response) {
+      return response.json();
+    });
+  }
+
+  function createElement(tag, className, text) {
+    var element = document.createElement(tag);
+
+    if (className) {
+      element.className = className;
+    }
+
+    if (typeof text === 'string') {
+      element.textContent = text;
+    }
+
+    return element;
+  }
+
+  function buildPieceMasks(parts) {
+    var fragment = document.createDocumentFragment();
+    var index;
+    var piece;
+
+    for (index = 1; index <= 15; index += 1) {
+      piece = document.createElement('div');
+      piece.className = 'cardgame-piece-mask';
+      piece.setAttribute('data-part', String(index));
+
+      if (parts.indexOf(index) !== -1) {
+        piece.classList.add('cardgame-piece-mask--revealed');
+      }
+
+      fragment.appendChild(piece);
+    }
+
+    return fragment;
+  }
+
+  function buildArchive(pan) {
+    var container = createElement('div', 'cardgame-archive');
+    var title = createElement(
+      'div',
+      'cardgame-archive__title',
+      state.labels.completed + ': ' + Math.max(0, pan - 1)
+    );
+    var grid = createElement('div', 'cardgame-archive__grid');
+    var index;
+    var item;
+    var maxPreview = Math.min(4, Math.max(0, pan - 1));
+
+    container.appendChild(title);
+
+    for (index = 1; index <= 4; index += 1) {
+      item = createElement('div', 'cardgame-archive__item');
+
+      if (index <= maxPreview) {
+        item.classList.add('pimg0' + index);
+      }
+
+      grid.appendChild(item);
+    }
+
+    container.appendChild(grid);
+
+    return container;
+  }
+
+  function setStatus(message, variant) {
+    if (!state.statusElement) {
+      return;
+    }
+
+    state.statusElement.textContent = message;
+    state.statusElement.className = 'cardgame-status';
+
+    if (variant) {
+      state.statusElement.classList.add('cardgame-status--' + variant);
+    }
+  }
+
+  function updateLauncher() {
+    if (!state.launcher || !state.launcherBadge) {
+      return;
+    }
+
+    state.launcher.classList.toggle('cardgame-launcher--active', state.canPlayToday);
+    state.launcherBadge.hidden = !state.canPlayToday;
+  }
+
+  function renderModalContent() {
+    var body;
+    var current;
+    var currentHeader;
+    var board;
+    var actions;
+    var revealButton;
+    var closeButton;
+
+    if (!state.modalBody) {
+      return;
+    }
+
+    body = state.modalBody;
+    body.innerHTML = '';
+
+    current = createElement('div', 'cardgame-current');
+    currentHeader = createElement(
+      'div',
+      'cardgame-current__header',
+      state.labels.title + ' · Panel ' + state.pan
+    );
+
+    board = createElement('div', 'cardgame-current__board pimg0' + getDisplayPan(state.pan));
+    board.appendChild(buildPieceMasks(state.parts));
+
+    current.appendChild(currentHeader);
+    current.appendChild(board);
+
+    actions = createElement('div', 'cardgame-actions');
+
+    state.statusElement = createElement('div', 'cardgame-status');
+    if (state.canPlayToday) {
+      setStatus(state.labels.openMessage, 'info');
+    } else {
+      setStatus(state.labels.engageMessage, 'muted');
+    }
+
+    revealButton = createElement('button', 'btn btn-primary cardgame-button', state.labels.reveal);
+    revealButton.type = 'button';
+    revealButton.disabled = !state.canPlayToday || state.busy;
+    revealButton.addEventListener('click', revealTodayPiece);
+
+    closeButton = createElement('button', 'btn btn-default cardgame-button', state.labels.close);
+    closeButton.type = 'button';
+    closeButton.addEventListener('click', closeModal);
+
+    actions.appendChild(state.statusElement);
+    actions.appendChild(revealButton);
+    actions.appendChild(closeButton);
+
+    body.appendChild(current);
+    body.appendChild(buildArchive(state.pan));
+    body.appendChild(actions);
+  }
+
+  function openModal() {
+    renderModalContent();
+    state.overlay.classList.add('is-visible');
+    document.body.classList.add('cardgame-open');
+  }
+
+  function closeModal() {
+    state.overlay.classList.remove('is-visible');
+    document.body.classList.remove('cardgame-open');
+  }
+
+  function syncStateFromResponse(payload) {
+    state.parts = Array.isArray(payload.parts)
+      ? payload.parts.map(function (value) {
+        return parseInt(value, 10);
+      }).filter(function (value, index, array) {
+        return value >= 1 && value <= 15 && array.indexOf(value) === index;
+      }).sort(function (a, b) {
+        return a - b;
+      })
+      : [];
+
+    state.pan = parseInt(payload.pan, 10) || state.pan;
+    state.canPlayToday =
+      payload.canPlayToday === true ||
+      payload.canPlayToday === 1 ||
+      payload.canPlayToday === '1';
+  }
+
+  function revealTodayPiece() {
+    var nextPart;
+
+    if (state.busy || !state.canPlayToday) {
+      return;
+    }
+
+    nextPart = pickRandomMissingPart(state.parts);
+
+    if (!nextPart) {
+      setStatus(state.labels.loadingError, 'error');
+      return;
+    }
+
+    state.busy = true;
+    renderModalContent();
+    setStatus(state.labels.openMessage, 'info');
+
+    postForm(state.endpoint, {
+      action: 'reveal',
+      part: String(nextPart)
+    })
+      .then(function (payload) {
+        state.busy = false;
+
+        if (!payload || typeof payload !== 'object') {
+          renderModalContent();
+          setStatus(state.labels.loadingError, 'error');
+          return;
+        }
+
+        syncStateFromResponse(payload);
+        updateLauncher();
+        renderModalContent();
+
+        if (payload.completedPan) {
+          setStatus(state.labels.panelCompleted + ' ' + (state.pan - 1) + '.', 'success');
+          return;
+        }
+
+        if (payload.duplicatePart) {
+          setStatus(state.labels.duplicateMessage, 'warning');
+          return;
+        }
+
+        if (payload.alreadyPlayed) {
+          setStatus(state.labels.engageMessage, 'muted');
+          return;
+        }
+
+        setStatus(state.labels.pieceRevealed + ' #' + nextPart + '.', 'success');
+      })
+      .catch(function () {
+        state.busy = false;
+        renderModalContent();
+        setStatus(state.labels.loadingError, 'error');
+      });
+  }
+
+  function buildUi() {
+    var launcher = createElement('button', 'cardgame-launcher');
+    var badge = createElement('span', 'cardgame-launcher__badge', '●');
+    var overlay = createElement('div', 'cardgame-overlay');
+    var modal = createElement('div', 'cardgame-modal');
+    var header = createElement('div', 'cardgame-modal__header');
+    var title = createElement('h3', 'cardgame-modal__title', state.labels.title);
+    var close = createElement('button', 'cardgame-modal__close', '×');
+    var body = createElement('div', 'cardgame-modal__body');
+
+    launcher.type = 'button';
+    launcher.setAttribute('aria-label', state.labels.title);
+    launcher.addEventListener('click', openModal);
+    launcher.appendChild(badge);
+
+    close.type = 'button';
+    close.setAttribute('aria-label', state.labels.close);
+    close.addEventListener('click', closeModal);
+
+    overlay.addEventListener('click', function (event) {
+      if (event.target === overlay) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && state.overlay.classList.contains('is-visible')) {
+        closeModal();
+      }
+    });
+
+    header.appendChild(title);
+    header.appendChild(close);
+
+    modal.appendChild(header);
+    modal.appendChild(body);
+    overlay.appendChild(modal);
+
+    document.body.appendChild(launcher);
+    document.body.appendChild(overlay);
+
+    state.launcher = launcher;
+    state.launcherBadge = badge;
+    state.overlay = overlay;
+    state.modalBody = body;
+
+    updateLauncher();
+    renderModalContent();
+  }
+
+  var root = document.getElementById('cardgame-root');
+  var state;
+
+  if (!root) {
+    return;
+  }
+
+  state = {
+    endpoint: root.dataset.endpoint || '',
+    canPlayToday: root.dataset.canPlay === '1',
+    pan: parseInt(root.dataset.pan, 10) || 1,
+    parts: parseParts(root.dataset.parts),
+    busy: false,
+    launcher: null,
+    launcherBadge: null,
+    overlay: null,
+    modalBody: null,
+    statusElement: null,
+    labels: {
+      title: root.dataset.title || 'Card game',
+      openMessage: root.dataset.openMessage || 'You have won a Chamilo card! Open it to see its contents.',
+      engageMessage: root.dataset.engageMessage || 'Come back every day to win new cards.',
+      duplicateMessage: root.dataset.duplicateMessage || 'You already have this piece. Come back tomorrow.',
+      reveal: root.dataset.revealLabel || 'Reveal today’s piece',
+      close: root.dataset.closeLabel || 'Close',
+      completed: root.dataset.completedLabel || 'Completed panels',
+      pieceRevealed: root.dataset.pieceRevealedLabel || 'Piece revealed',
+      panelCompleted: root.dataset.panelCompletedLabel || 'Panel completed',
+      loadingError: root.dataset.loadingErrorLabel || 'Unable to load the card game right now.'
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildUi);
   } else {
-    $('.sidebar .panel-body .img-circle').parent().parent().after('<div id="plugin-cardgame-icon" class="enjoy-cardgame-active" onClick="installCardView()" ></div>')
+    buildUi();
   }
-})
-
-/**
- * This function inserts the <article> element 'home-card' for the card game
- * before the .page-content element on the page (the right side of the
- * "my courses" page) only if the element with id 'home-card' does not exist
- * yet.
- */
-function installCardView () {
-  if (!document.getElementById('home-card')) {
-    var mess1 = $('#cardgamemessage').html()
-    var h = '<article id="home-card" style="border:solid 1px gray;" >'
-    h += '<div class="cardgame-pack" >'
-    var panClass = 'pimg0' + $('#pancardgame').html()
-
-    // Setup the 3x5 table of images
-    h += '<div class="puzzlecardone ' + panClass + '" >'
-    h += '<div id="puzzlepart1"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart2"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart3"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart4"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart5"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart6"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart7"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart8"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart9"  class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart10" class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart11" class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart12" class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart13" class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart14" class="puzzlepart1" ></div>'
-    h += '<div id="puzzlepart15" class="puzzlepart1" ></div>'
-    h += '</div>'
-
-    h += '<div id="puzzleMinOther1" class="puzzleMinOther" ></div>'
-    h += '<div id="puzzleMinOther2" class="puzzleMinOther" ></div>'
-    h += '<div id="puzzleMinOther3" class="puzzleMinOther" ></div>'
-    h += '<div id="puzzleMinOther4" class="puzzleMinOther" ></div>'
-
-    h += '<div class="card-one" onclick="cardOpenCardView();" ></div>'
-    h += '<div class="linescissors" ></div>'
-
-    h += '<div id="viewDeckBottom" class="viewDeckBottom" onClick="minimizePuzzle()" ></div>'
-    h += '<div id="messagePackDeck" class="messagePackDeck" >' + mess1 + '</div>'
-
-    h += '<div id="scissors" class="scissorsrightinit" onclick="animationOpenCardView();" ></div>'
-    h += '</div>'
-    h += '</article>'
-
-    $('.page-content').before(h)
-
-  } else {
-    $('#home-card').fadeToggle()
-  }
-
-}
-
-/**
- * Animate the scissors
- */
-function animationOpenCardView () {
-
-  $('#scissors').addClass('scissorsrightinitfinal')
-
-  setTimeout(function () {
-    $('#scissors').fadeOut()
-    $('.linescissors').fadeOut()
-    $('#messagePackDeck').css('display', 'none')
-    $('#messagePackDeck').removeClass('messagePackDeck')
-
-  }, 2600)
-
-  setTimeout(function () {
-    $('.cardgame-pack').addClass('cardgame-open')
-    $('.card-one').addClass('card-one-2')
-  }, 3000)
-
-}
-
-function cardOpenCardView () {
-
-  $('.card-one').removeClass('card-one-2')
-
-  setTimeout(function () {
-    $('.puzzlecardone').fadeIn()
-    randomOpenCardView()
-  }, 700)
-
-}
-
-function randomOpenCardView () {
-
-  var part = Math.floor(Math.random() * (15 - 1 + 1)) + 1
-
-  $('.puzzlecardone').css('display', 'block')
-  $('#scissors').fadeOut()
-  $('.linescissors').fadeOut()
-  $('#messagePackDeck').css('display', 'none')
-  $('#messagePackDeck').removeClass('messagePackDeck')
-
-  var memocardgame = $('#memocardgame').html()
-  var parts = memocardgame
-  var arrayOfStrings = parts.split(';')
-
-  var findDouble = false
-  for (var i = 0; i < arrayOfStrings.length; i++) {
-    var idpart = arrayOfStrings[i]
-    idpart = idpart.replace('!!', '')
-    idpart = idpart.replace('!', '')
-    idpart = idpart.replace('!', '')
-    idpart = idpart.replace(';', '')
-    $('#puzzlepart' + idpart).css('opacity', 0)
-
-    if (part == idpart) {
-      findDouble = true
-    }
-
-  }
-  if (findDouble) {
-    part = Math.floor(Math.random() * (15 - 1 + 1)) + 1
-  }
-  if (memocardgame.indexOf('!' + part + ';') != -1) {
-    part = Math.floor(Math.random() * (15 - 1 + 1)) + 1
-  }
-  if (memocardgame.indexOf('!' + part + ';') != -1) {
-    part = Math.floor(Math.random() * (15 - 1 + 1)) + 1
-  }
-
-  if (memocardgame.indexOf('!' + part + ';') != -1) {
-    var mess2 = $('#cardgameloose').html()
-    $('#messagePackDeck').html(mess2)
-    $('#messagePackDeck').css('display', 'block')
-    $('#messagePackDeck').css('backgroundColor', 'red')
-    $('#messagePackDeck').addClass('messagePackDeckBottom')
-    var lk = $('#linkcardgame').html()
-    $.ajax({ url: lk + '?loose=1' }).done(function () { })
-
-  } else {
-    var lk = $('#linkcardgame').html()
-    $.ajax({ url: lk + '?part=' + part }).done(function () { })
-
-    setTimeout(function () {
-      $('#puzzlepart' + part).addClass('puzzlepartstar')
-    }, 600)
-
-    setTimeout(function () {
-      $('#puzzlepart' + part).css('opacity', 0)
-    }, 1200)
-
-    setTimeout(function () {
-      var mess2 = $('#cardgameengage').html()
-      $('#messagePackDeck').html(mess2)
-      $('#messagePackDeck').css('display', 'block')
-      $('#messagePackDeck').addClass('messagePackDeckBottom')
-      $('#viewDeckBottom').css('display', 'block')
-    }, 1500)
-
-  }
-  $('#plugin-cardgame-icon').removeClass('enjoy-cardgame-active')
-  $('#plugin-cardgame-icon').addClass('enjoy-cardgame')
-}
-
-/**
- * This function adds the cardgame area block (in invisible state), then
- * changes the visibility of blocks inside the puzzle area to show them
- */
-function onlyOpenCardView () {
-
-  installCardView();
-
-  var memocardgame = $('#memocardgame').html()
-
-  $('.puzzlecardone').css('display', 'block')
-  $('#scissors').css('display', 'none')
-  $('.linescissors').css('display', 'none')
-  $('#messagePackDeck').css('display', 'none')
-  $('#messagePackDeck').removeClass('messagePackDeck')
-
-  var lk = $('#linkcardgame').html()
-  var parts = memocardgame
-  // alert(parts);
-  var arrayOfStrings = parts.split(';')
-
-  for (var i = 0; i < arrayOfStrings.length; i++) {
-    var idpart = arrayOfStrings[i]
-    idpart = idpart.replace('!!', '')
-    idpart = idpart.replace('!', '')
-    idpart = idpart.replace('!', '')
-    idpart = idpart.replace(';', '')
-    $('#puzzlepart' + idpart).css('opacity', 0)
-  }
-
-  var mess2 = $('#cardgameengage').html()
-  $('#messagePackDeck').html(mess2)
-  $('#messagePackDeck').css('display', 'block')
-  $('#messagePackDeck').addClass('messagePackDeckBottom')
-  $('#viewDeckBottom').css('display', 'block')
-}
-
-function minimizePuzzle () {
-
-  $('.puzzlecardone').addClass('puzzleMin')
-  setTimeout(function () {
-
-    $('.puzzleMinOther').css('display', 'block')
-
-    var panNumber = parseInt($('#pancardgame').html())
-
-    if (panNumber > 1) {
-      $('#puzzleMinOther1').addClass('pimg01')
-    }
-    if (panNumber > 2) {
-      $('#puzzleMinOther2').addClass('pimg02')
-    }
-    if (panNumber > 3) {
-      $('#puzzleMinOther3').addClass('pimg03')
-    }
-    if (panNumber > 4) {
-      $('#puzzleMinOther4').addClass('pimg04')
-    }
-  }, 1000)
-}
-
+})();

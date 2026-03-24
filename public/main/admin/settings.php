@@ -40,6 +40,7 @@ $tool_name = get_lang('Configuration settings');
 if (empty($_GET['category'])) {
     $_GET['category'] = 'Platform';
 }
+
 $watermark_deleted = false;
 if (isset($_GET['delete_watermark'])) {
     $watermark_deleted = PDF::delete_watermark();
@@ -47,7 +48,7 @@ if (isset($_GET['delete_watermark'])) {
 }
 
 if (isset($_GET['action']) && 'delete_grading' == $_GET['action']) {
-    $id = intval($_GET['id']);
+    $id = (int) $_GET['id'];
     api_delete_setting_option($id);
 }
 
@@ -55,11 +56,12 @@ $url_id = api_get_current_access_url_id();
 
 $settings = null;
 
-// Build the form.
-if (!empty($_GET['category']) &&
-    !in_array($_GET['category'], ['Plugins', 'Search'])
+// Build the form only for classic settings categories.
+if (
+    !empty($_GET['category']) &&
+    !in_array($_GET['category'], ['Plugins', 'Search', 'Regions', 'Templates'], true)
 ) {
-    $my_category = isset($_GET['category']) ? $_GET['category'] : null;
+    $my_category = $_GET['category'] ?? null;
     $settings_array = getCategorySettings($my_category);
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
@@ -72,13 +74,15 @@ if (!empty($_GET['category']) &&
         $un_mark_all = false;
 
         if (api_is_multiple_url_enabled()) {
-            if (isset($values['buttons_in_action_right']) &&
+            if (
+                isset($values['buttons_in_action_right']) &&
                 isset($values['buttons_in_action_right']['mark_all'])
             ) {
                 $mark_all = true;
             }
 
-            if (isset($values['buttons_in_action_right']) &&
+            if (
+                isset($values['buttons_in_action_right']) &&
                 isset($values['buttons_in_action_right']['unmark_all'])
             ) {
                 $un_mark_all = true;
@@ -89,7 +93,7 @@ if (!empty($_GET['category']) &&
             if (api_is_global_platform_admin()) {
                 $locked_settings = api_get_locked_settings();
                 foreach ($values as $key => $value) {
-                    if (!in_array($key, $locked_settings)) {
+                    if (!in_array($key, $locked_settings, true)) {
                         $changeable = 0;
                         if ($mark_all) {
                             $changeable = 1;
@@ -109,7 +113,8 @@ if (!empty($_GET['category']) &&
                         }
                     }
                 }
-                // Reload settings
+
+                // Reload settings.
                 $settings_array = getCategorySettings($my_category);
                 $settings = $settings_array['settings'];
                 $settings_by_access_list = $settings_array['settings_by_access_list'];
@@ -119,6 +124,7 @@ if (!empty($_GET['category']) &&
                 );
             }
         }
+
         if (!empty($_FILES['pdf_export_watermark_path'])) {
             $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
         }
@@ -128,35 +134,40 @@ if (!empty($_GET['category']) &&
                 $pdf_export_watermark_path['name'],
                 $pdf_export_watermark_path['tmp_name']
             );
+
             if ($pdf_export_watermark_path_result) {
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             } else {
                 $message = get_lang('The uploaded file could not be saved (perhaps a permission problem?)').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document/images';
                 Display::addFlash(Display::return_message($message), 'warning');
             }
+
             unset($update_values['pdf_export_watermark_path']);
         }
 
-        if (isset($values['allow_social_tool']) && 'true' == $values['allow_social_tool']) {
+        if (isset($values['allow_social_tool']) && 'true' === $values['allow_social_tool']) {
             $values['allow_message_tool'] = 'true';
         }
 
         foreach ($settings as $item) {
             $key = $item['variable'];
+
             if ('prevent_multiple_simultaneous_login' === $key) {
                 Session::write('first_user_login', 1);
             }
-            if ('search_field' == $key || 'submit_fixed_in_bottom' == $key) {
+
+            if ('search_field' === $key || 'submit_fixed_in_bottom' === $key) {
                 continue;
             }
+
             $key = Database::escape_string($key);
             $sql = "UPDATE $table_settings_current
                     SET selected_value = 'false'
                     WHERE
                         variable = '".$key."' AND
-                        access_url = ".intval($url_id)." AND
-                        type IN ('checkbox', 'radio') ";
-            $res = Database::query($sql);
+                        access_url = ".(int) $url_id." AND
+                        type IN ('checkbox', 'radio')";
+            Database::query($sql);
         }
 
         // Save the settings.
@@ -166,15 +177,15 @@ if (!empty($_GET['category']) &&
             if (0 === strcmp($key, 'MAX_FILE_SIZE')) {
                 continue;
             }
-            // Avoid form elements which have nothing to do with settings
-            if ('search_field' == $key || 'submit_fixed_in_bottom' == $key) {
+
+            // Avoid form elements which have nothing to do with settings.
+            if ('search_field' === $key || 'submit_fixed_in_bottom' === $key) {
                 continue;
             }
 
-            // Treat gradebook values in separate function.
-            //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
             if (!is_array($value)) {
                 $old_value = api_get_setting($key);
+
                 switch ($key) {
                     case 'header_extra_content':
                         file_put_contents(api_get_home_path().'header_extra_content.txt', $value);
@@ -186,43 +197,38 @@ if (!empty($_GET['category']) &&
                         break;
                     case 'InstitutionUrl':
                     case 'course_validation_terms_and_conditions_url':
-                        // URL validation for some settings.
                         $value = trim(Security::remove_XSS($value));
-                        if ('' != $value) {
-                            // Here we accept absolute URLs only.
+                        if ('' !== $value) {
                             if (false === strpos($value, '://')) {
                                 $value = 'http://'.$value;
                             }
                             if (!api_valid_url($value, true)) {
-                                // If the new (non-empty) URL value is invalid, then the old URL value stays.
                                 $value = $old_value;
                             }
                         }
-                        // If the new URL value is empty, then it will be stored (i.e. the setting will be deleted).
                         break;
                     case 'emailAdministrator':
-                        // Validation against e-mail address for some settings.
                         $value = trim(Security::remove_XSS($value));
-                        if ('' != $value && !api_valid_email($value)) {
-                            // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
-                            // If the new e-mail address is empty, then it will be stored (i.e. the setting will be deleted).
+                        if ('' !== $value && !api_valid_email($value)) {
                             $value = $old_value;
                         }
                         break;
                 }
+
                 if ($old_value != $value) {
                     $keys[] = $key;
                 }
-                $result = api_set_setting($key, $value, null, null, $url_id);
+
+                api_set_setting($key, $value, null, null, $url_id);
             } else {
                 $sql = "SELECT subkey FROM $table_settings_current
                         WHERE variable = '$key'";
                 $res = Database::query($sql);
 
                 while ($row_subkeys = Database::fetch_array($res)) {
-                    // If subkey is changed:
-                    if ((isset($value[$row_subkeys['subkey']]) && 'false' == api_get_setting($key, $row_subkeys['subkey'])) ||
-                        (!isset($value[$row_subkeys['subkey']]) && 'true' == api_get_setting($key, $row_subkeys['subkey']))
+                    if (
+                        (isset($value[$row_subkeys['subkey']]) && 'false' === api_get_setting($key, $row_subkeys['subkey'])) ||
+                        (!isset($value[$row_subkeys['subkey']]) && 'true' === api_get_setting($key, $row_subkeys['subkey']))
                     ) {
                         $keys[] = $key;
                         break;
@@ -230,7 +236,7 @@ if (!empty($_GET['category']) &&
                 }
 
                 foreach ($value as $subkey => $subvalue) {
-                    $result = api_set_setting($key, 'true', $subkey, null, $url_id);
+                    api_set_setting($key, 'true', $subkey, null, $url_id);
                 }
             }
         }
@@ -265,6 +271,7 @@ if (!empty($_GET['category']) &&
         exit;
     }
 }
+
 $htmlHeadXtra[] = '<script>
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
@@ -297,6 +304,7 @@ $htmlHeadXtra[] = '<script>
 </script>';
 
 ob_start();
+
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
@@ -322,6 +330,7 @@ if (!empty($_GET['category'])) {
             break;
     }
 }
+
 $content = ob_get_clean();
 
 // Including the header (banner).

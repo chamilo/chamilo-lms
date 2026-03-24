@@ -693,7 +693,6 @@ class EvalForm extends FormValidator
 
         $this->addElement('textarea', 'description', get_lang('Description'));
         $this->addRule('hid_category_id', get_lang('Required field'), 'required');
-        $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         $this->addRule('max', get_lang('Only numbers'), 'numeric');
         $this->addRule(
             'max',
@@ -716,13 +715,6 @@ class EvalForm extends FormValidator
         );
         $this->addRule('min_score', get_lang('Only numbers'), 'numeric');
         $this->addRule('min_score', get_lang('Negative value'), 'compare', '>=', 'server', false, false, 0);
-        $tools = api_get_setting('course.active_tools_on_create', true);
-
-        $visibility_default = 1;
-        if (!in_array('gradebook', $tools, true)) {
-            $visibility_default = 0;
-        }
-        $this->setDefaults(['visible' => $visibility_default]);
     }
 
     /**

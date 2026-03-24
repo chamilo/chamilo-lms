@@ -59,7 +59,7 @@ if ($form->validate()) {
     if (!empty($values['select_gradebook'])) {
         $link->set_category_id($values['select_gradebook']);
     }
-    $link->set_visible(empty($values['visible']) ? 0 : 1);
+    $link->set_visible(1);
     if (isset($values['min_score']) && $values['min_score'] !== '') {
         $link->set_min_score(api_float_val($values['min_score']));
     }

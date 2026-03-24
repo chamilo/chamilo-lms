@@ -60,7 +60,7 @@ if ($form->validate()) {
 
     $evaluation->setWeight($values['weight_mask']);
     $evaluation->setMax($values['max']);
-    $evaluation->setVisible(empty($values['visible']) ? 0 : 1);
+    $evaluation->setVisible(1);
 
     if (isset($values['min_score'])) {
         $evaluation->setMinScore($values['min_score']);

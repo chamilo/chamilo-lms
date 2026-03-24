@@ -351,12 +351,10 @@ function handlePlugins()
         if ($hasReadme) {
             echo '<button
                     type="button"
-                    class="js-plugin-readme btn btn--sm btn--plain"
+                    class="js-plugin-readme btn btn--sm btn--plain-outline"
                     data-plugin="'.$pluginDataName.'"
                     data-title="'.$pluginDisplayTitle.'"
-                >
-                    <i class="mdi mdi-file-document-outline"></i> README
-                  </button>';
+                >'.Display::getMdiIcon(ObjectIcon::DEFAULT).' README </button>';
         }
 
         echo '</div>';

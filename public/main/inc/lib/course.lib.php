@@ -7041,4 +7041,74 @@ class CourseManager
             $list
         );
     }
+
+    /**
+     * Returns access to courses based on course id, user, and a start and end date range.
+     * If withSession is 0, only the courses will be taken.
+     * If withSession is 1, only the sessions will be taken.
+     * If withSession is different from 0 and 1, the whole set will be taken.
+     */
+    public static function getAccessCourse(
+        int $courseId = 0,
+        int $withSession = 0,
+        int $userId = 0,
+        ?string $startDate = null,
+        ?string $endDate = null
+    ): array {
+        $datePattern = '/^\d{4}-\d{2}-\d{2}$/';
+        if (!empty($startDate) && !preg_match($datePattern, $startDate)) {
+            return [];
+        }
+        if (!empty($endDate) && !preg_match($datePattern, $endDate)) {
+            return [];
+        }
+
+        $tblTrackECourse = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $conditions = [];
+
+        if (0 !== $courseId) {
+            $conditions[] = "course_access.c_id = $courseId";
+        }
+        if (0 !== $userId) {
+            $conditions[] = "course_access.user_id = $userId";
+        }
+        if (!empty($startDate)) {
+            $startDateObj = api_get_utc_datetime($startDate, false, true);
+            if ($startDateObj) {
+                $safeStart = Database::escape_string($startDateObj->format('Y-m-d'));
+                $conditions[] = "course_access.login_course_date >= '$safeStart'";
+            }
+        }
+        if (!empty($endDate)) {
+            $endDateObj = api_get_utc_datetime($endDate, false, true);
+            if ($endDateObj) {
+                $safeEnd = Database::escape_string($endDateObj->format('Y-m-d'));
+                $conditions[] = "course_access.login_course_date <= '$safeEnd'";
+            }
+        }
+        if (0 === $withSession) {
+            $conditions[] = 'course_access.session_id = 0';
+        } elseif (1 === $withSession) {
+            $conditions[] = 'course_access.session_id != 0';
+        }
+
+        $where = '';
+        if (!empty($conditions)) {
+            $where = ' WHERE '.implode(' AND ', $conditions);
+        }
+
+        $sql = "SELECT DISTINCT
+                    CAST(course_access.login_course_date AS DATE) AS login_course_date,
+                    user_id,
+                    c_id
+                FROM $tblTrackECourse AS course_access
+                $where
+                GROUP BY c_id, session_id, CAST(course_access.login_course_date AS DATE), user_id
+                ORDER BY c_id";
+
+        $res = Database::query($sql);
+        $data = Database::store_result($res);
+
+        return $data;
+    }
 }

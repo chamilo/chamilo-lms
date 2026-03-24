@@ -164,11 +164,9 @@ class Certificate extends Model
                     // Build HTML content (always available for PDF even if upsert fails).
                     $content = $this->generateCustomCertificate();
 
-                    $hash     = hash('sha256', $this->user_id.$categoryId);
-                    $fileName = $hash.'.html';
-
-                    // upsertCertificateResource(catId, userId, score, htmlContent, pdfBinary?, legacyFileName?)
-                    $cert = $certRepo->upsertCertificateResource(0, $this->user_id, 100.0, $content, null, $fileName);
+                    // upsertCertificateResource generates an unpredictable hash filename internally
+                    $cert = $certRepo->upsertCertificateResource(0, $this->user_id, 100.0, $content);
+                    $fileName = $cert->getPathCertificate();
 
                     // Keep legacy compatibility fields in DB if required
                     if ($updateCertificateData) {

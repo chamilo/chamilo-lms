@@ -22,6 +22,32 @@ use Symfony\Component\Filesystem\Filesystem;
 define('CSS_UPLOAD_PATH', api_get_path(SYMFONY_SYS_PATH).'var/themes/');
 
 /**
+ * Safely read plugin metadata for the Regions page.
+ */
+function plugin_get_region_metadata(string $pluginName): array
+{
+    $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+    $plugin_info = [];
+
+    if (is_file($pluginInfoFile)) {
+        try {
+            require $pluginInfoFile;
+        } catch (\Throwable $e) {
+            error_log('[regions] failed to read '.$pluginName.' metadata: '.$e->getMessage());
+            $plugin_info = [];
+        }
+    }
+
+    return [
+        'title' => (string) ($plugin_info['title'] ?? $plugin_info['name'] ?? $pluginName),
+        'version' => (string) ($plugin_info['version'] ?? '0.0.0'),
+        'comment' => (string) ($plugin_info['comment'] ?? ''),
+        'is_admin_plugin' => !empty($plugin_info['is_admin_plugin']),
+        'is_course_plugin' => !empty($plugin_info['is_course_plugin']),
+    ];
+}
+
+/**
  * This function allows easy activating and inactivating of regions.
  *
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
@@ -30,6 +56,7 @@ function handleRegions()
 {
     if (isset($_POST['submit_plugins'])) {
         storeRegions();
+
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
@@ -40,6 +67,7 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
+
         echo Display::return_message(get_lang('The settings have been stored'), 'confirmation');
     }
 
@@ -49,69 +77,73 @@ function handleRegions()
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
-    echo '<th width="400px">';
-    echo get_lang('Plugin');
-    echo '</th><th>';
-    echo get_lang('Regions');
-    echo '</th>';
-    echo '</th>';
+    echo '<th width="400px">'.get_lang('Plugin').'</th>';
+    echo '<th>'.get_lang('Regions').'</th>';
     echo '</tr>';
 
-    /* We display all the possible plugins and the checkboxes */
     $plugin_region_list = [];
     $my_plugin_list = AppPlugin::$plugin_regions;
+
     foreach ($my_plugin_list as $plugin_item) {
         $plugin_region_list[$plugin_item] = $plugin_item;
     }
 
-    // Removing course tool
+    // Removing course tool from the generic list.
     unset($plugin_region_list['course_tool_plugin']);
 
     foreach ($installed_plugins as $pluginName) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+        $metadata = plugin_get_region_metadata($pluginName);
 
-        if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
-            require $plugin_info_file;
-            if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
-                echo '<tr class="row_selected">';
-            } else {
-                echo '<tr>';
-            }
-            echo '<td>';
-            echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '</td><td>';
-            $selected_plugins = $plugin_obj->getAreasByPlugin($pluginName);
-            $region_list = [];
-            $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
-            $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
-
-            if (!$isAdminPlugin && !$isCoursePlugin) {
-                $region_list = $plugin_region_list;
-            } else {
-                if ($isAdminPlugin) {
-                    $region_list['menu_administrator'] = 'menu_administrator';
-                }
-                if ($isCoursePlugin) {
-                    $region_list['course_tool_plugin'] = 'course_tool_plugin';
-                }
-            }
-
-            echo Display::select(
-                'plugin_'.$pluginName.'[]',
-                $region_list,
-                $selected_plugins,
-                ['multiple' => 'multiple', 'style' => 'width:500px'],
-                true,
-                get_lang('none')
-            );
-            echo '</td></tr>';
+        if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
+            echo '<tr class="row_selected">';
+        } else {
+            echo '<tr>';
         }
+
+        $pluginTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
+        $pluginVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
+        $pluginComment = htmlspecialchars($metadata['comment'], ENT_QUOTES);
+
+        echo '<td>';
+        echo '<h4>'.$pluginTitle.' <small>v'.$pluginVersion.'</small></h4>';
+        echo '<p>'.$pluginComment.'</p>';
+        echo '</td>';
+
+        $selected_plugins = $plugin_obj->getAreasByPlugin($pluginName);
+        $region_list = [];
+
+        if (!$metadata['is_admin_plugin'] && !$metadata['is_course_plugin']) {
+            $region_list = $plugin_region_list;
+        } else {
+            if ($metadata['is_admin_plugin']) {
+                $region_list['menu_administrator'] = 'menu_administrator';
+            }
+
+            if ($metadata['is_course_plugin']) {
+                $region_list['course_tool_plugin'] = 'course_tool_plugin';
+            }
+        }
+
+        echo '<td>';
+        echo Display::select(
+            'plugin_'.$pluginName.'[]',
+            $region_list,
+            $selected_plugins,
+            [
+                'multiple' => 'multiple',
+                'style' => 'width:500px',
+            ],
+            true,
+            get_lang('none')
+        );
+        echo '</td>';
+        echo '</tr>';
     }
+
     echo '</table>';
     echo '<br />';
-    echo '<button class="btn btn--success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
+    echo '<button class="btn btn--success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button>';
+    echo '</form>';
 }
 
 function handleExtensions()
@@ -722,19 +754,6 @@ function storeRegions(): void
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
-        if (!isset($_POST['plugin_'.$plugin])) {
-            continue;
-        }
-
-        $areas_to_installed = array_filter(
-            $_POST['plugin_'.$plugin] ?? [],
-            fn ($region) => !empty($region) && '-1' != $region
-        );
-
-        if (empty($areas_to_installed)) {
-            continue;
-        }
-
         $entityPlugin = $pluginRepo->getInstalledByName($plugin);
 
         if (!$entityPlugin) {
@@ -742,14 +761,18 @@ function storeRegions(): void
         }
 
         $pluginInUrl = $entityPlugin->getOrCreatePluginConfiguration($currentAccessUrl);
-
         $pluginConfiguration = $pluginInUrl->getConfiguration();
-        $pluginConfiguration['regions'] = $areas_to_installed;
 
+        $areas_to_install = array_filter(
+            $_POST['plugin_'.$plugin] ?? [],
+            static fn ($region) => !empty($region) && '-1' !== (string) $region
+        );
+
+        $pluginConfiguration['regions'] = array_values($areas_to_install);
         $pluginInUrl->setConfiguration($pluginConfiguration);
-
-        $em->flush();
     }
+
+    $em->flush();
 }
 
 /**

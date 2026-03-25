@@ -602,6 +602,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // This covers files uploaded before the MIME-type allowlist was introduced.
         $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
 
+        // SVG: sanitize before serving in any mode (view or download).
+        // Glide is raster-only and cannot process SVG; sanitization strips embedded scripts regardless of how the file was stored.
+        if ('image/svg+xml' === $mimeType) {
+            $raw = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
+            $content = (new SvgSanitizer())->sanitize((string) $raw);
+
+            if (false === $content || '' === $content) {
+                throw new BadRequestHttpException('Invalid SVG file');
+            }
+
+            $response = new Response($content);
+            $dispositionMode = 'download' === $mode
+                ? ResponseHeaderBag::DISPOSITION_ATTACHMENT
+                : ResponseHeaderBag::DISPOSITION_INLINE;
+            $disposition = $response->headers->makeDisposition($dispositionMode, $fileName);
+            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set('Content-Type', 'image/svg+xml');
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+
+            return $response;
+        }
+
         switch ($mode) {
             case 'download':
                 $forceDownload = true;
@@ -611,28 +633,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             case 'show':
             default:
                 $forceDownload = false;
-
-                // SVG must not go through Glide (raster-only library); serve directly after sanitization.
-                // Sanitizing at serve time ensures scripts are stripped regardless of how the file was stored.
-                if ('image/svg+xml' === $mimeType) {
-                    $raw = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
-                    $content = (new SvgSanitizer())->sanitize($raw);
-
-                    if (false === $content || '' === $content) {
-                        throw new BadRequestHttpException('Invalid SVG file');
-                    }
-
-                    $response = new Response($content);
-                    $disposition = $response->headers->makeDisposition(
-                        ResponseHeaderBag::DISPOSITION_INLINE,
-                        $fileName
-                    );
-                    $response->headers->set('Content-Disposition', $disposition);
-                    $response->headers->set('Content-Type', 'image/svg+xml');
-                    $response->headers->set('X-Content-Type-Options', 'nosniff');
-
-                    return $response;
-                }
 
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {

@@ -1,16 +1,15 @@
-import { ref, watchEffect } from "vue"
+import { watchEffect } from "vue"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReqStore } from "../../store/cidReq"
-import { checkIsAllowedToEdit } from "../userPermissions"
+import { useIsAllowedToEdit } from "../userPermissions"
 
 export function useCalendarActionButtons() {
   const securityStore = useSecurityStore()
   const cidReqStore = useCidReqStore()
   const { course } = storeToRefs(cidReqStore)
 
-  const isAllowedToEdit = ref(false)
-  checkIsAllowedToEdit(false, true).then((response) => (isAllowedToEdit.value = response))
+  const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true })
 
   const showAddButton = ref(false)
   const showAgendaListButton = ref(false)

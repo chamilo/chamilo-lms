@@ -70,8 +70,8 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRoute } from "vue-router"
-import { computed, onMounted, ref } from "vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { computed } from "vue"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReq } from "../../composables/cidReq"
 import DOMPurify from "dompurify"
 
@@ -80,7 +80,7 @@ const securityStore = useSecurityStore()
 const route = useRoute()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 const { cid, sid, gid } = useCidReq()
 
 const props = defineProps({
@@ -114,7 +114,4 @@ const canEdit = (item) => {
 
 const sanitize = (html) => DOMPurify.sanitize(html ?? "", { ADD_ATTR: ["target", "rel"] })
 
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
 </script>

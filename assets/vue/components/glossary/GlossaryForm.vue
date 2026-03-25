@@ -63,7 +63,7 @@ import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
@@ -93,7 +93,7 @@ const resourceLinkList = ref(
   ]),
 )
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canShowAiToggle = computed(() => {
   const isAdmin = !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin)
@@ -113,21 +113,6 @@ const rules = {
 const v$ = useVuelidate(rules, formData)
 
 onMounted(async () => {
-  try {
-    isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-  } catch (e) {
-    console.warn("[GlossaryForm] checkIsAllowedToEdit failed:", e)
-    isAllowedToEdit.value = false
-  }
-
-  console.log("[GlossaryForm] AI toggle flags:", {
-    isAllowedToEdit: isAllowedToEdit.value,
-    isCurrentTeacher: !!securityStore.isCurrentTeacher,
-    isTeacher: !!securityStore.isTeacher,
-    isAdmin: !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin),
-    canShowAiToggle: canShowAiToggle.value,
-  })
-
   await fetchTerm()
 })
 

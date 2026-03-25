@@ -16,18 +16,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted } from "vue"
 import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
 import { useDatatableUpdate } from "../../composables/datatableUpdate"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRoute } from "vue-router"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const securityStore = useSecurityStore()
 const route = useRoute()
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher || isAllowedToEdit.value)
 const { item, retrieve, updateItemWithFormData, isLoading } = useDatatableUpdate("Documents")
 
@@ -43,7 +43,6 @@ const canEditItem = computed(() => {
 })
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   await retrieve()
 })
 </script>

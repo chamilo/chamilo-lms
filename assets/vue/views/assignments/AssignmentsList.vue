@@ -82,10 +82,10 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import { onMounted, ref, computed } from "vue"
+import { ref, computed } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import cstudentpublicationService from "../../services/cstudentpublication"
 
 const { t } = useI18n()
@@ -94,10 +94,7 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
-const isAllowedToEdit = ref(false)
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const isTeacherUI = computed(
   () =>

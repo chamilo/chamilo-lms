@@ -45,7 +45,7 @@ import { onMounted, ref, watch, computed, provide } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import PersonalFiles from "../../components/filemanager/PersonalFiles.vue"
 import CourseDocuments from "../../components/filemanager/CourseDocuments.vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useI18n } from "vue-i18n"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
@@ -55,7 +55,7 @@ const route = useRoute()
 const router = useRouter()
 
 const activeTab = ref(String(route.query.tab || "personalFiles"))
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit()
 const isLoading = ref(true)
 const { t } = useI18n()
 
@@ -94,7 +94,6 @@ provide("chamiloTinyPickerContext", {
 })
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
   courseIsSet.value = !!course.value
 
   // If opened as TinyMCE picker, default to personalFiles tab unless explicitly set.

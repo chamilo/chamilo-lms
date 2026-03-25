@@ -75,60 +75,7 @@
       v-else
       class="flex flex-col gap-4"
     >
-      <div class="section-header section-header--h2">
-        <h2 class="">
-          {{ course.title }}
-          <small v-if="session"> ({{ session.title }}) </small>
-        </h2>
-
-        <p
-          v-if="isAllowedToEdit && documentAutoLaunch === 1"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
-            )
-          }}
-        </p>
-
-        <div class="grow-0">
-          <StudentViewButton v-if="course" />
-        </div>
-
+      <SectionHeader :title="course.title">
         <BaseButton
           v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
           :label="t('Edit introduction')"
@@ -148,11 +95,9 @@
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
-        <div
-          v-if="hasCourseTMenuItems"
-          class="grow-0"
-        >
+        <template v-if="hasCourseTMenuItems">
           <BaseButton
+            :label="t('More actions')"
             icon="cog"
             only-icon
             popup-identifier="course-tmenu"
@@ -165,8 +110,52 @@
             ref="courseTMenu"
             :model="courseItems"
           />
-        </div>
-      </div>
+        </template>
+      </SectionHeader>
+
+      <p
+        v-if="isAllowedToEdit && documentAutoLaunch === 1"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
+          )
+        }}
+      </p>
 
       <CourseThematicProgress />
 
@@ -275,9 +264,9 @@ import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import Sortable from "sortablejs"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
@@ -496,14 +485,12 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
 }
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit()
 const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-
   await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
   exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
@@ -511,13 +498,10 @@ onMounted(async () => {
   forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
-const onStudentViewChanged = async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-
-  await loadCourseTools(false)
-}
-
-watch(() => platformConfigStore.isStudentViewActive, onStudentViewChanged)
+watch(
+  () => platformConfigStore.isStudentViewActive,
+  () => loadCourseTools(false),
+)
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

@@ -38,6 +38,7 @@ final class UserGradebookResultInCourseAndSession
         public float $score = 0.0,
         public float $max = 0.0,
         public float $percentage = 0.0,
+        public float $min = 0.0,
     ) {}
 
     #[ApiProperty(identifier: true, readable: false, writable: false)]

@@ -48,13 +48,13 @@
 
         <BaseFileUpload
           :label="t('Add a picture')"
-          accept="image"
+          accept="image/*"
           size="small"
           @file-selected="selectedFile = $event"
         />
 
         <div class="p-field mt-2">
-          <label for="groupPermissions">{{ t('Group permissions') }}</label>
+          <label for="groupPermissions">{{ t("Group permissions") }}</label>
           <Dropdown
             id="groupPermissions"
             v-model="editGroupForm.permissions"

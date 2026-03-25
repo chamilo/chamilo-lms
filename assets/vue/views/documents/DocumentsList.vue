@@ -410,8 +410,6 @@
     <BaseFileUpload
       id="replace-file"
       :label="t('Select replacement file')"
-      accept="*/*"
-      model-value="selectedReplaceFile"
       @file-selected="selectedReplaceFile = $event"
     />
   </BaseDialogConfirmCancel>
@@ -589,8 +587,7 @@
       <BaseFileUpload
         id="post-file"
         :label="t('File upload')"
-        accept="image"
-        model-value=""
+        accept="image/*"
         size="small"
         @file-selected="selectedFile = $event"
       />

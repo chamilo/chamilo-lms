@@ -9,6 +9,9 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f5f7fa;
+    background-image: url('bg-pattern.svg');
+    background-size: 600px 600px;
+    background-repeat: repeat;
     color: #333;
     line-height: 1.6;
     font-size: 15px;

@@ -97,6 +97,8 @@
       icon="download"
       only-icon
       type="primary"
+      :disabled="isDownloadingAll"
+      @click="downloadAllItems"
     />
     <BaseButton
       v-if="showGenerateMediaButton"
@@ -667,6 +669,40 @@ const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
 const { t, locale } = useI18n()
 const notification = useNotification()
+
+const isDownloadingAll = ref(false)
+
+async function downloadAllItems() {
+  isDownloadingAll.value = true
+
+  try {
+    const rootNodeId = getDocumentsRootNodeId()
+
+    const response = await axios.post(
+      "/api/documents/download-all",
+      { rootNodeId },
+      {
+        responseType: "blob",
+        params: { cid, sid, gid },
+      },
+    )
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", "all_documents.zip")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    notification.showSuccessNotification(t("Download started"))
+  } catch (error) {
+    console.error("[Documents] Error downloading all documents:", error)
+    notification.showErrorNotification(t("Error downloading all documents."))
+  } finally {
+    isDownloadingAll.value = false
+  }
+}
 
 const aiHelpersEnabled = computed(() => {
   return String(platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"

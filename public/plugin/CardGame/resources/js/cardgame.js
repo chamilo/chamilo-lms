@@ -7,6 +7,56 @@
   }
   window.__cardGameWidgetInitialized = true;
 
+  var root = document.getElementById('cardgame-root');
+  var state;
+  var destroyCallbacks = [];
+  var originalPushState = null;
+  var originalReplaceState = null;
+
+  function registerCleanup(fn) {
+    if (typeof fn === 'function') {
+      destroyCallbacks.push(fn);
+    }
+  }
+
+  function destroyWidget() {
+    destroyCallbacks.forEach(function (fn) {
+      try {
+        fn();
+      } catch (e) {
+        // Ignore cleanup errors.
+      }
+    });
+    destroyCallbacks = [];
+
+    if (state) {
+      if (state.launcher && state.launcher.parentNode) {
+        state.launcher.parentNode.removeChild(state.launcher);
+      }
+
+      if (state.overlay && state.overlay.parentNode) {
+        state.overlay.parentNode.removeChild(state.overlay);
+      }
+    }
+
+    document.body.classList.remove('cardgame-open');
+
+    if (originalPushState && window.history.pushState !== originalPushState) {
+      window.history.pushState = originalPushState;
+    }
+
+    if (originalReplaceState && window.history.replaceState !== originalReplaceState) {
+      window.history.replaceState = originalReplaceState;
+    }
+
+    window.__cardGameWidgetInitialized = false;
+    window.__cardGameRouteListenersInstalled = false;
+    window.__destroyCardGameWidget = null;
+    state = null;
+  }
+
+  window.__destroyCardGameWidget = destroyWidget;
+
   function parseParts(raw) {
     if (!raw) {
       return [];
@@ -219,6 +269,10 @@
   }
 
   function closeModal() {
+    if (!state.overlay) {
+      return;
+    }
+
     state.overlay.classList.remove('is-visible');
     document.body.classList.remove('cardgame-open');
   }
@@ -310,10 +364,36 @@
     return path || '/';
   }
 
+  function isCoursesPath(path) {
+    return path === '/courses' || path.indexOf('/courses/') === 0;
+  }
+
+  function isCoursePath(path) {
+    return path.indexOf('/course/') === 0;
+  }
+
+  function hasCourseQueryContext() {
+    var params = new URLSearchParams(window.location.search || '');
+
+    return params.has('cidReq') || params.has('cid') || params.has('course');
+  }
+
+  function isLegacyCoursePath(path) {
+    if (path.indexOf('/main/') !== 0) {
+      return false;
+    }
+
+    if (path.indexOf('/main/inc/ajax/') === 0) {
+      return false;
+    }
+
+    return hasCourseQueryContext();
+  }
+
   function shouldShowLauncher() {
     var path = getCurrentPath();
 
-    return path === '/courses' || path.endsWith('/courses');
+    return isCoursesPath(path) || isCoursePath(path) || isLegacyCoursePath(path);
   }
 
   function applyLauncherVisibility() {
@@ -333,11 +413,15 @@
 
   function scheduleVisibilityRefresh() {
     window.setTimeout(applyLauncherVisibility, 0);
+    window.setTimeout(applyLauncherVisibility, 150);
+    window.setTimeout(applyLauncherVisibility, 400);
+    window.setTimeout(applyLauncherVisibility, 800);
   }
 
   function installRouteListeners() {
-    var originalPushState;
-    var originalReplaceState;
+    var onPopState;
+    var onHashChange;
+    var onVisibilityChange;
 
     if (window.__cardGameRouteListenersInstalled) {
       return;
@@ -359,13 +443,28 @@
       return result;
     };
 
-    window.addEventListener('popstate', scheduleVisibilityRefresh);
-    window.addEventListener('hashchange', scheduleVisibilityRefresh);
+    onPopState = function () {
+      scheduleVisibilityRefresh();
+    };
 
-    document.addEventListener('visibilitychange', function () {
+    onHashChange = function () {
+      scheduleVisibilityRefresh();
+    };
+
+    onVisibilityChange = function () {
       if (!document.hidden) {
         scheduleVisibilityRefresh();
       }
+    };
+
+    window.addEventListener('popstate', onPopState);
+    window.addEventListener('hashchange', onHashChange);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    registerCleanup(function () {
+      window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('hashchange', onHashChange);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     });
   }
 
@@ -378,6 +477,8 @@
     var title = createElement('h3', 'cardgame-modal__title', state.labels.title);
     var close = createElement('button', 'cardgame-modal__close', '×');
     var body = createElement('div', 'cardgame-modal__body');
+    var onOverlayClick;
+    var onKeyDown;
 
     launcher.type = 'button';
     launcher.setAttribute('aria-label', state.labels.title);
@@ -388,16 +489,24 @@
     close.setAttribute('aria-label', state.labels.close);
     close.addEventListener('click', closeModal);
 
-    overlay.addEventListener('click', function (event) {
+    onOverlayClick = function (event) {
       if (event.target === overlay) {
         closeModal();
       }
-    });
+    };
 
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && state.overlay.classList.contains('is-visible')) {
+    onKeyDown = function (event) {
+      if (event.key === 'Escape' && state.overlay && state.overlay.classList.contains('is-visible')) {
         closeModal();
       }
+    };
+
+    overlay.addEventListener('click', onOverlayClick);
+    document.addEventListener('keydown', onKeyDown);
+
+    registerCleanup(function () {
+      overlay.removeEventListener('click', onOverlayClick);
+      document.removeEventListener('keydown', onKeyDown);
     });
 
     header.appendChild(title);
@@ -419,12 +528,12 @@
     renderModalContent();
     applyLauncherVisibility();
     installRouteListeners();
+    scheduleVisibilityRefresh();
   }
 
-  var root = document.getElementById('cardgame-root');
-  var state;
-
   if (!root) {
+    window.__cardGameWidgetInitialized = false;
+    window.__destroyCardGameWidget = null;
     return;
   }
 
@@ -454,7 +563,7 @@
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildUi);
+    document.addEventListener('DOMContentLoaded', buildUi, { once: true });
   } else {
     buildUi();
   }

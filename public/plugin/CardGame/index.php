@@ -5,8 +5,9 @@
 /**
  * CardGame widget entry point.
  *
- * The plugin is injected globally through a region, but it should only be
- * rendered on the My Courses page.
+ * The plugin is injected globally through a region.
+ * Visibility is handled on the frontend so the widget can survive SPA-like
+ * navigation without requiring a full backend re-render on each route change.
  */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -21,29 +22,6 @@ if (defined('CARDGAME_WIDGET_RENDERED')) {
 
 define('CARDGAME_WIDGET_RENDERED', true);
 
-$requestUri = (string) ($_SERVER['REQUEST_URI'] ?? '');
-$requestPath = (string) (parse_url($requestUri, PHP_URL_PATH) ?? '');
-
-$webPath = (string) (parse_url(api_get_path(WEB_PATH), PHP_URL_PATH) ?? '/');
-$webPath = '/' === $webPath ? '' : rtrim($webPath, '/');
-
-if ('' !== $webPath && str_starts_with($requestPath, $webPath)) {
-    $requestPath = substr($requestPath, strlen($webPath));
-}
-
-if ('' === $requestPath) {
-    $requestPath = '/';
-}
-
-$allowedPaths = [
-    '/courses',
-    '/courses/',
-];
-
-if (!in_array($requestPath, $allowedPaths, true)) {
-    return;
-}
-
 require_once __DIR__.'/CardGame.php';
 
 $cardGame = CardGame::create();
@@ -56,7 +34,7 @@ if ($userId <= 0) {
 $progress = $cardGame->getOrCreateProgress($userId);
 $canPlayToday = $cardGame->canPlayToday($progress);
 $pluginWebPath = api_get_path(WEB_PLUGIN_PATH).'CardGame/resources/';
-$version = '?v=20260323_05';
+$version = '?v=20260324_03';
 
 $dataAttributes = [
     'endpoint' => $pluginWebPath.'ajax.card.php',

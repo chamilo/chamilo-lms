@@ -33,7 +33,7 @@ export function usePluginRegion(region) {
 
     abortController = new AbortController()
 
-    cleanup()
+    cleanupInjectedElements()
 
     try {
       const { data } = await api.get(`/plugin-regions/${region}`, {
@@ -112,14 +112,27 @@ export function usePluginRegion(region) {
     })
   }
 
-  function cleanup() {
+  function cleanupInjectedElements() {
     injectedElements.value.forEach((el) => el.remove())
     injectedElements.value = []
   }
 
+  function cleanupRegionWidgets() {
+    if (region === "pre_footer" && typeof window.__destroyCardGameWidget === "function") {
+      window.__destroyCardGameWidget()
+    }
+  }
+
   watch(resolvedParams, fetchBlocks, { immediate: true })
 
-  onUnmounted(cleanup)
+  onUnmounted(() => {
+    if (abortController) {
+      abortController.abort()
+    }
+
+    cleanupRegionWidgets()
+    cleanupInjectedElements()
+  })
 
   return {
     blocks,

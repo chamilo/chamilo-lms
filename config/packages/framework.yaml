@@ -23,6 +23,12 @@ framework:
 
     error_controller: 'Chamilo\CoreBundle\Controller\ErrorController::show'
 
+    rate_limiter:
+        opengraph_fetch:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 minute'
+
     # For legacy code (ending in ".php"), also edit public/main/inc/global.inc.php according to the changes you make here
 
 when@test:

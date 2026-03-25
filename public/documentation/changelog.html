@@ -2,11 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Changelog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog - Chamilo LMS</title>
     <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Chamilo" /></a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="license.html">License</a></li>
+            <li><a href="credits.html">Credits</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </div>
+</nav>
 <div class="version" aria-label="2.0">
+
+    <div class="toc">
+        <h2>Releases</h2>
+        <ul>
+            <li><a href="#2.0-rc.3">2.0 RC 3 (upcoming)</a></li>
+            <li><a href="#2.0-rc.2">2.0 RC 2 - Pensum</a></li>
+            <li><a href="#2.0-rc.1">2.0 RC 1 - Harmonium</a></li>
+            <li><a href="#2.0-beta.3">2.0 beta 3 - Tartopum</a></li>
+            <li><a href="#2.0-beta.2">2.0 beta 2 - Chouingum</a></li>
+            <li><a href="#2.0-beta.1">2.0 beta 1 - Aquarium</a></li>
+        </ul>
+    </div>
+
+    <a id="2.0-rc.3"></a>
+    <h1>Chamilo 2.0 RC 3 - (upcoming)</h1>
+
+    <h3>Removals</h3>
+    <ul aria-live="off">
+        <li>Gradebook: Remove visibility toggle (eye icon) for gradebook items (categories, evaluations, links). Hiding individual items could cause inconsistencies in the overall gradebook score calculation.</li>
+    </ul>
 
     <a id="2.0-rc.2"></a>
     <h1>Chamilo 2.0 RC 2 - Pensum, 2026-03-09</h1>
@@ -3009,6 +3042,10 @@
         <li>Browser tracking: The track_e_open table has been removed. To our knowledge, it served at one point to support a kind of analytics tool inside Chamilo (aware of browser details), but hasn't been used for at least 10 years. This has been removed in Chamilo 2.0 for maintainability.</li>
         <li>Upgrade: Homepages : custom homepages are not migrated from 1.11.x to 2.0. Save a copy of app/home/ locally before migrating and re-apply manually.</li>
     </ul>
+</div>
+<div>
+    <h2>Previous versions</h2>
+    <p>For changes in Chamilo 1.x and earlier, see the <a href="legacy/changelog.html">legacy changelog</a>.</p>
 </div>
 <div class="syntax-description">
     <h2>Syntax and terminology</h2>

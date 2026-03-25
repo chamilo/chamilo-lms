@@ -82,6 +82,7 @@ final class UserTrackingMetricStateProvider extends AbstractTrackingStateProvide
             (float) $data['score'],
             (float) $data['max'],
             (float) $data['percentage'],
+            (float) $data['min'],
         );
     }
 }

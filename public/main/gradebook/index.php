@@ -148,17 +148,9 @@ if (isset($_GET['movelink'])) {
     $list_actions[] = 'movelink';
     $list_values[] = $_GET['movelink'];
 }
-if (isset($_GET['visiblecat'])) {
-    $list_actions[] = 'visiblecat';
-    $list_values[] = $_GET['visiblecat'];
-}
 if (isset($_GET['deletecat'])) {
     $list_actions[] = 'deletecat';
     $list_values[] = $_GET['deletecat'];
-}
-if (isset($_GET['visibleeval'])) {
-    $list_actions[] = 'visibleeval';
-    $list_values[] = $_GET['visibleeval'];
 }
 if (isset($_GET['lockedeval'])) {
     $list_actions[] = 'lockedeval';
@@ -167,10 +159,6 @@ if (isset($_GET['lockedeval'])) {
 if (isset($_GET['deleteeval'])) {
     $list_actions[] = 'deleteeval';
     $list_values[] = $_GET['deleteeval'];
-}
-if (isset($_GET['visiblelink'])) {
-    $list_actions[] = 'visiblelink';
-    $list_values[] = $_GET['visiblelink'];
 }
 if (isset($_GET['deletelink'])) {
     $list_actions[] = 'deletelink';
@@ -349,22 +337,6 @@ if (isset($_GET['movelink'])) {
     }
 }
 
-// Parameters for categories.
-if (isset($_GET['visiblecat'])) {
-    GradebookUtils::block_students();
-    $visibility_command = 0;
-    if (isset($_GET['set_visible'])) {
-        $visibility_command = 1;
-    }
-    $cats = Category::load($_GET['visiblecat']);
-    $cats[0]->set_visible($visibility_command);
-    $cats[0]->save();
-    $cats[0]->apply_visibility_to_children();
-    unset($cats);
-    $confirmation_message = get_lang('Visibility modified');
-    $filter_confirm_msg = false;
-}
-
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
@@ -378,21 +350,6 @@ if (isset($_GET['deletecat'])) {
         }
     }
     $confirmation_message = get_lang('The category has been deleted.');
-    $filter_confirm_msg = false;
-}
-
-// Parameters for evaluations.
-if (isset($_GET['visibleeval'])) {
-    GradebookUtils::block_students();
-    $visibility_command = 0;
-    if (isset($_GET['set_visible'])) {
-        $visibility_command = 1;
-    }
-    $eval = Evaluation::load($_GET['visibleeval']);
-    $eval[0]->set_visible($visibility_command);
-    $eval[0]->save();
-    unset($eval);
-    $confirmation_message = get_lang('Visibility modified');
     $filter_confirm_msg = false;
 }
 
@@ -421,23 +378,6 @@ if (isset($_GET['deleteeval'])) {
         $eval[0]->delete_with_results();
     }
     $confirmation_message = get_lang('Assessment deleted');
-    $filter_confirm_msg = false;
-}
-
-// Parameters for links.
-if (isset($_GET['visiblelink'])) {
-    GradebookUtils::block_students();
-    $visibility_command = 0;
-    if (isset($_GET['set_visible'])) {
-        $visibility_command = 1;
-    }
-    $link = LinkFactory::load($_GET['visiblelink']);
-    if (isset($link) && isset($link[0])) {
-        $link[0]->set_visible($visibility_command);
-        $link[0]->save();
-    }
-    unset($link);
-    $confirmation_message = get_lang('Visibility modified');
     $filter_confirm_msg = false;
 }
 

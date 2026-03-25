@@ -137,7 +137,7 @@
 
 <script setup>
 import Column from "primevue/column"
-import { computed, onMounted, reactive, ref, watch } from "vue"
+import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useCidReq } from "../../composables/cidReq"
@@ -150,7 +150,7 @@ import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t, locale } = useI18n()
@@ -178,11 +178,7 @@ const loadParams = reactive({
   itemsPerPage: null,
 })
 
-const isAllowedToEdit = ref(false)
-
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 watch(
   loadParams,

@@ -359,7 +359,7 @@ import { useNotification } from "../../composables/notification"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReq } from "../../composables/cidReq"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const route = useRoute()
@@ -386,11 +386,15 @@ const linkValidationResults = ref({})
 const isToggling = ref({})
 const isMoving = ref(false)
 
-const isAllowedToEdit = ref(securityStore.isAdmin || securityStore.isCurrentTeacher)
-const canEditLinks = computed(() => {
-  if (platform.isStudentViewActive) return false
-  return Boolean(isAllowedToEdit.value || securityStore.isAdmin || securityStore.isCurrentTeacher)
+const { isAllowedToEdit: isAllowedToEditFromServer } = useIsAllowedToEdit({
+  tutor: true,
+  coach: true,
+  sessionCoach: true,
 })
+const isAllowedToEdit = computed(
+  () => isAllowedToEditFromServer.value || securityStore.isAdmin || securityStore.isCurrentTeacher,
+)
+const canEditLinks = computed(() => !platform.isStudentViewActive && isAllowedToEdit.value)
 
 const canMoveCategories = false
 const parentId = computed(() => Number(route.query.parent || 0))
@@ -402,27 +406,12 @@ const showGeneralCard = computed(() => {
   return Boolean(canEditLinks.value)
 })
 
-onMounted(async () => {
-  await reconcileEditGate()
-  await fetchLinks()
-})
+onMounted(() => fetchLinks())
 
-watch(() => platform.isStudentViewActive, refreshForViewToggle)
-
-async function reconcileEditGate() {
-  try {
-    const allowed = await checkIsAllowedToEdit(true, true, true)
-    isAllowedToEdit.value = Boolean(allowed || securityStore.isAdmin || securityStore.isCurrentTeacher)
-  } catch (error) {
-    console.error("Error checking edit permission:", error)
-    isAllowedToEdit.value = Boolean(securityStore.isAdmin || securityStore.isCurrentTeacher)
-  }
-}
-
-async function refreshForViewToggle() {
-  await reconcileEditGate()
-  await fetchLinks()
-}
+watch(
+  () => platform.isStudentViewActive,
+  () => fetchLinks(),
+)
 
 async function fetchLinks() {
   isLoading.value = true

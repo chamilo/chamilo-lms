@@ -651,7 +651,7 @@ import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -694,7 +694,7 @@ const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Docu
 const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml, isFile } = useFileUtils()
 const { relativeDatetime } = useFormatDate()
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 const folders = ref([])
 const selectedFolder = ref(null)
 const isDownloading = ref(false)
@@ -972,7 +972,6 @@ const documentToReplace = ref(null)
 
 onMounted(async () => {
   tableLoading.value = true
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
   filters.value.filetype = ["file", "folder", "video"]
 

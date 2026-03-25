@@ -266,7 +266,7 @@ import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import Sortable from "sortablejs"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
@@ -485,14 +485,12 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
 }
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit()
 const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-
   await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
   exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
@@ -500,13 +498,10 @@ onMounted(async () => {
   forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
-const onStudentViewChanged = async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-
-  await loadCourseTools(false)
-}
-
-watch(() => platformConfigStore.isStudentViewActive, onStudentViewChanged)
+watch(
+  () => platformConfigStore.isStudentViewActive,
+  () => loadCourseTools(false),
+)
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

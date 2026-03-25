@@ -97,8 +97,8 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { computed, onMounted, ref } from "vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { computed } from "vue"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 
@@ -122,7 +122,7 @@ defineProps({
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEdit = (item) => {
   const sessionId = item.sessionId ? Number(item.sessionId) : 0
@@ -132,12 +132,4 @@ const canEdit = (item) => {
   return (isSessionItem && isAllowedToEdit.value) || (isBaseCourseItem && !sidValue.value && isCurrentTeacher.value)
 }
 
-onMounted(async () => {
-  try {
-    isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-  } catch (error) {
-    console.error("Error checking edit permission for link item:", error)
-    isAllowedToEdit.value = false
-  }
-})
 </script>

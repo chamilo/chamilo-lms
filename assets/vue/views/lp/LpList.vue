@@ -293,7 +293,7 @@ const catLists = ref({})
 const visibilityMap = ref({})
 
 onMounted(() => {
-  platformConfig.studentView = route.query?.isStudentView === "true"
+  platformConfig.setStudentViewEnabled(route.query?.isStudentView === "true")
 })
 
 const hasImageRF = (lp) => {
@@ -395,9 +395,8 @@ const load = async () => {
     }
 
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
-    const roles = securityStore.user?.roles ?? []
 
-    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
+    if (!allowed && securityStore.isAdmin) {
       allowed = true
     }
 
@@ -586,19 +585,11 @@ const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0)
 watch(
   () => platformConfig.isStudentViewActive,
   async (val) => {
-    if (val) {
-      await router.replace({
-        name: route.name,
-        params: route.params,
-        query: { ...route.query, isStudentView: "true" },
-      })
-    } else {
-      const q = new URLSearchParams(window.location.search)
-      q.delete("isStudentView")
-
-      const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
-      window.location.replace(newUrl)
-    }
+    await router.replace({
+      name: route.name,
+      params: route.params,
+      query: { ...route.query, isStudentView: val ? "true" : "false" },
+    })
   },
 )
 

@@ -249,6 +249,13 @@
   }
 }
 
+.studentview-button {
+  .p-button-label {
+    @apply hidden
+      sm:block;
+  }
+}
+
 .mdi {
   @apply font-normal text-base leading-none;
 

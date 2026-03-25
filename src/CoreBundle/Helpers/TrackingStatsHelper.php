@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
@@ -152,46 +152,49 @@ class TrackingStatsHelper
     /**
      * Global gradebook score for a user within a course/session.
      *
-     * @return array{score: float, max: float, percentage: float}
+     * Uses the same dynamic calculation as the legacy gradebook flat view
+     * (Category::calc_score), which aggregates scores from exercises, quizzes,
+     * LPs and manual evaluations via gradebook_link — not just gradebook_result rows.
+     *
+     * @return array{score: float, max: float, percentage: float, min: float}
      */
     public function getUserGradebookGlobal(User $user, Course $course, ?Session $session): array
     {
-        $qb = $this->em->createQueryBuilder()
-            ->select('COALESCE(SUM(r.score), 0) AS score_sum', 'COALESCE(SUM(e.max), 0) AS max_sum')
-            ->from(GradebookResult::class, 'r')
-            ->innerJoin('r.evaluation', 'e')
-            ->innerJoin('e.category', 'c')
-            ->where('IDENTITY(c.course) = :courseId')
-            ->andWhere('e.visible = 1')
-            ->andWhere('c.visible = 1')
-            ->andWhere('IDENTITY(r.user) = :userId')
-            ->setParameter('courseId', (int) $course->getId(), ParameterType::INTEGER)
-            ->setParameter('userId', (int) $user->getId(), ParameterType::INTEGER)
-        ;
+        $empty = ['score' => 0.0, 'max' => 0.0, 'percentage' => 0.0, 'min' => 0.0];
 
-        if ($session) {
-            $qb
-                ->andWhere('IDENTITY(c.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), ParameterType::INTEGER)
-            ;
-        } else {
-            $qb->andWhere('c.session IS NULL');
+        $gradebookCategory = $this->em->getRepository(GradebookCategory::class)->findOneBy([
+            'course' => $course,
+            'session' => $session,
+        ]);
+
+        if (!$gradebookCategory) {
+            return $empty;
         }
 
-        $row = $qb->getQuery()->getSingleResult();
-        $score = (float) $row['score_sum'];
-        $max = (float) $row['max_sum'];
+        $min = (float) ($gradebookCategory->getCertifMinScore() ?? 0);
 
-        if ($max <= 0.0) {
-            return ['score' => 0.0, 'max' => 0.0, 'percentage' => 0.0];
+        $catArr = Category::load((int) $gradebookCategory->getId());
+        $catObj = $catArr[0] ?? null;
+
+        if (!$catObj instanceof Category) {
+            return array_merge($empty, ['min' => $min]);
         }
 
-        $pct = ($score / $max) * 100.0;
+        $score = $catObj->calc_score($user->getId());
+
+        if (!is_array($score) || !isset($score[0], $score[1]) || (float) $score[1] <= 0.0) {
+            return array_merge($empty, ['min' => $min]);
+        }
+
+        $num = (float) $score[0];
+        $den = (float) $score[1];
+        $pct = ($num / $den) * 100.0;
 
         return [
-            'score' => round($score, 2, PHP_ROUND_HALF_UP),
-            'max' => round($max, 2, PHP_ROUND_HALF_UP),
+            'score' => round($num, 2, PHP_ROUND_HALF_UP),
+            'max' => round($den, 2, PHP_ROUND_HALF_UP),
             'percentage' => round($pct, 2, PHP_ROUND_HALF_UP),
+            'min' => $min,
         ];
     }
 

@@ -596,6 +596,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         }
 
+        // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
+        // This covers files uploaded before the MIME-type allowlist was introduced.
+        $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
+
         switch ($mode) {
             case 'download':
                 $forceDownload = true;
@@ -637,7 +641,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 }
 
                 // Modify the HTML content before displaying it.
-                if (str_contains($mimeType, 'html')) {
+                if (str_contains($mimeType, 'html') && !$isSocialAttachment) {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
 
                     if (null !== $allUserInfo) {

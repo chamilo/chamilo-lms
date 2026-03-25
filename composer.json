@@ -78,6 +78,7 @@
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "^2.16",
     "endroid/qr-code": "~4.2",
+    "enshrined/svg-sanitize": "^0.22.0",
     "essence/essence": "~3.0",
     "ezyang/htmlpurifier": "~4.13",
     "firebase/php-jwt": "^7.0",

@@ -1003,6 +1003,14 @@ const isReplaceDialogVisible = ref(false)
 const selectedReplaceFile = ref(null)
 const documentToReplace = ref(null)
 
+const hasAiImage = ref(false)
+const hasAiVideo = ref(false)
+const hasAiDocumentProcess = ref(false)
+const hasAiTextForAnalyzer = ref(false)
+
+const aiTextProviders = ref([]) // [{ key, label }]
+const aiDocProcessProviders = ref([]) // [{ key, label }]
+
 onMounted(async () => {
   tableLoading.value = true
   filters.value.loadNode = 1
@@ -1745,13 +1753,6 @@ const submitTemplateForm = async () => {
  * AI: capabilities + provider lists (selector in modal)
  * -----------------------------------------
  */
-const hasAiImage = ref(false)
-const hasAiVideo = ref(false)
-const hasAiDocumentProcess = ref(false)
-const hasAiTextForAnalyzer = ref(false)
-
-const aiTextProviders = ref([]) // [{ key, label }]
-const aiDocProcessProviders = ref([]) // [{ key, label }]
 
 function normalizeProviders(raw) {
   if (!raw) return []

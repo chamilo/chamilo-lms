@@ -85,6 +85,7 @@
     "graphp/algorithms": "~0.8",
     "graphp/graphviz": "~0.2",
     "gregwar/captcha-bundle": "^2.2",
+    "h5p/h5p-core": "^1.24",
     "jbroadway/urlify": "~1.1",
     "jeremykendall/php-domain-parser": "^6.4",
     "jeroendesloovere/vcard": "~1.7",

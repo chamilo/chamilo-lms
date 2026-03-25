@@ -39,6 +39,8 @@ if (
     H5PCore::ajaxError($plugin->get_lang('ContentNotFound'));
 }
 
+$launchSessionKey = 'h5p_import_launch_id_'.$h5pId;
+
 if ('set_finished' === $action) {
     if (!H5PCore::validToken('result', (string) filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
@@ -52,17 +54,62 @@ if ('set_finished' === $action) {
         H5PCore::ajaxError();
     }
 
-    $h5pImportResults = new H5pImportResults();
-    $h5pImportResults->setH5pImport($h5pImport);
-    $h5pImportResults->setCourse($course);
-    $h5pImportResults->setSession($session);
-    $h5pImportResults->setUser($user);
+    $resultsRepo = $em->getRepository(H5pImportResults::class);
+    $launchId = Session::read($launchSessionKey);
+
+    /** @var H5pImportResults|null $h5pImportResults */
+    $h5pImportResults = null;
+
+    if (!empty($launchId)) {
+        $h5pImportResults = $resultsRepo->find((int) $launchId);
+
+        if (
+            $h5pImportResults instanceof H5pImportResults
+            && (
+                $h5pImportResults->getH5pImport()->getIid() !== $h5pImport->getIid()
+                || $h5pImportResults->getCourse()->getId() !== $course->getId()
+                || $h5pImportResults->getUser()->getId() !== $user->getId()
+            )
+        ) {
+            $h5pImportResults = null;
+        }
+    }
+
+    if (!$h5pImportResults) {
+        $h5pImportResults = $resultsRepo->findOneBy(
+            [
+                'h5pImport' => $h5pImport,
+                'course' => $course,
+                'session' => $session,
+                'user' => $user,
+            ],
+            ['iid' => 'DESC']
+        );
+    }
+
+    if (!$h5pImportResults) {
+        $h5pImportResults = new H5pImportResults();
+        $h5pImportResults->setH5pImport($h5pImport);
+        $h5pImportResults->setCourse($course);
+        $h5pImportResults->setSession($session);
+        $h5pImportResults->setUser($user);
+        $h5pImportResults->setStartTime((int) $opened);
+        $h5pImportResults->setScore(0);
+        $h5pImportResults->setMaxScore(0);
+        $h5pImportResults->setTotalTime(0);
+
+        $em->persist($h5pImportResults);
+    }
+
     $h5pImportResults->setScore((int) $score);
     $h5pImportResults->setMaxScore((int) $maxScore);
-    $h5pImportResults->setStartTime((int) $opened);
-    $h5pImportResults->setTotalTime(max(0, time() - (int) $opened));
 
-    $em->persist($h5pImportResults);
+    if ((int) $h5pImportResults->getStartTime() <= 0) {
+        $h5pImportResults->setStartTime((int) $opened);
+    }
+
+    $startTime = (int) $h5pImportResults->getStartTime();
+    $h5pImportResults->setTotalTime(max(0, time() - $startTime));
 
     if (1 === (int) ($_REQUEST['learnpath'] ?? 0) && Session::has('oLP')) {
         $lpObject = Session::read('oLP');
@@ -93,6 +140,8 @@ if ('set_finished' === $action) {
     }
 
     $em->flush();
+    Session::write($launchSessionKey, $h5pImportResults->getIid());
+
     H5PCore::ajaxSuccess();
 }
 

@@ -1,11 +1,14 @@
 <?php
 
-// For licensing terms, see /license.txt
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Symfony\Component\Filesystem\Filesystem;
@@ -20,11 +23,13 @@ class H5pPackageTools
     public static function getJson(string $file, bool $assoc = false)
     {
         $fs = new Filesystem();
+
         if (!$fs->exists($file)) {
             return false;
         }
 
         $contents = file_get_contents($file);
+
         if (false === $contents) {
             return false;
         }
@@ -34,12 +39,94 @@ class H5pPackageTools
         return null === $json ? false : $json;
     }
 
+    public static function getStorageBasePath(): string
+    {
+        $basePath = Container::$container->getParameter('chamilo.plugin.storage_dir');
+        $path = rtrim((string) $basePath, '/').'/H5pImport';
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($path, api_get_permissions_for_new_directories());
+
+        return $path;
+    }
+
+    public static function buildCourseRelativePrefix(Course $course): string
+    {
+        return 'course_'.$course->getId();
+    }
+
+    public static function getCourseStoragePath(Course $course): string
+    {
+        $path = rtrim(self::getStorageBasePath(), '/').'/'.self::buildCourseRelativePrefix($course);
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($path, api_get_permissions_for_new_directories());
+        $filesystem->mkdir($path.'/content', api_get_permissions_for_new_directories());
+        $filesystem->mkdir($path.'/libraries', api_get_permissions_for_new_directories());
+
+        return $path;
+    }
+
+    public static function normalizeRelativeStoragePath(string $path): ?string
+    {
+        $path = str_replace('\\', '/', trim($path));
+        $path = ltrim($path, '/');
+
+        if ('' === $path) {
+            return null;
+        }
+
+        $segments = explode('/', $path);
+        $normalized = [];
+
+        foreach ($segments as $segment) {
+            $segment = trim($segment);
+
+            if ('' === $segment || '.' === $segment) {
+                continue;
+            }
+
+            if ('..' === $segment) {
+                if (empty($normalized)) {
+                    return null;
+                }
+
+                array_pop($normalized);
+                continue;
+            }
+
+            $normalized[] = $segment;
+        }
+
+        if (empty($normalized)) {
+            return null;
+        }
+
+        return implode('/', $normalized);
+    }
+
+    public static function buildPackageAssetUrl(string $relativePath): string
+    {
+        $relativePath = self::normalizeRelativeStoragePath($relativePath);
+
+        if (null === $relativePath) {
+            return '';
+        }
+
+        return api_get_path(\WEB_PLUGIN_PATH).'H5pImport/package_asset.php?path='.$relativePath;
+    }
+
+    public static function getCourseLibrariesAssetBaseUrl(Course $course): string
+    {
+        return self::buildPackageAssetUrl(self::buildCourseRelativePrefix($course));
+    }
+
     public static function checkPackageIntegrity(object $h5pJson, string $extractedDir): bool
     {
         $filesystem = new Filesystem();
         $packageDir = rtrim($extractedDir, '/');
-        $h5pDir = dirname($packageDir, 2);
-        $sharedLibrariesDir = $h5pDir.'/libraries';
+        $courseStoragePath = dirname($packageDir, 2);
+        $sharedLibrariesDir = $courseStoragePath.'/libraries';
 
         if (!$filesystem->exists($packageDir.'/h5p.json')) {
             return false;
@@ -54,12 +141,9 @@ class H5pPackageTools
             return false;
         }
 
-        if (!$filesystem->exists($sharedLibrariesDir)) {
-            $filesystem->mkdir($sharedLibrariesDir, api_get_permissions_for_new_directories());
-        }
+        $filesystem->mkdir($sharedLibrariesDir, api_get_permissions_for_new_directories());
 
-        $preloadedDependencies = $h5pJson->preloadedDependencies ?? [];
-        foreach ($preloadedDependencies as $dependency) {
+        foreach (($h5pJson->preloadedDependencies ?? []) as $dependency) {
             if (
                 empty($dependency->machineName)
                 || !isset($dependency->majorVersion)
@@ -68,16 +152,20 @@ class H5pPackageTools
                 return false;
             }
 
-            $libraryFolderName = api_replace_dangerous_char(
-                $dependency->machineName.'-'.$dependency->majorVersion.'.'.$dependency->minorVersion
+            $libraryFolderName = self::buildLibraryFolderName(
+                (string) $dependency->machineName,
+                (int) $dependency->majorVersion,
+                (int) $dependency->minorVersion
             );
-            $libraryPath = $packageDir.'/'.$libraryFolderName;
 
-            if (!$filesystem->exists($libraryPath) || !$filesystem->exists($libraryPath.'/library.json')) {
+            $libraryPath = self::resolveExistingLibraryPath($packageDir, $libraryFolderName);
+
+            if (null === $libraryPath || !$filesystem->exists($libraryPath.'/library.json')) {
                 return false;
             }
 
-            $targetPath = $sharedLibrariesDir.'/'.$libraryFolderName;
+            $targetPath = $sharedLibrariesDir.'/'.basename($libraryPath);
+
             if (!$filesystem->exists($targetPath)) {
                 $filesystem->rename($libraryPath, $targetPath, true);
             } else {
@@ -96,77 +184,186 @@ class H5pPackageTools
         ?array $values = null
     ): void {
         $entityManager = \Database::getManager();
-        $h5pDir = dirname($packagePath, 2);
-        $sharedLibrariesDir = $h5pDir.'/libraries';
+        $filesystem = new Filesystem();
+        $now = new \DateTime();
 
-        $mainLibraryName = (string) ($h5pJson->mainLibrary ?? '');
-        $relativePath = api_get_path(REL_COURSE_PATH).$course->getDirectory().'/h5p/';
+        $packagePath = rtrim($packagePath, '/');
+
+        if (!$filesystem->exists($packagePath.'/h5p.json')) {
+            throw new \RuntimeException('Missing h5p.json in the extracted package.');
+        }
+
+        if (!$filesystem->exists($packagePath.'/content.json')) {
+            throw new \RuntimeException('Missing content.json in the extracted package.');
+        }
+
+        $relativePath = self::normalizeRelativeStoragePath(
+            self::buildCourseRelativePrefix($course).'/content/'.basename($packagePath)
+        );
+
+        if (null === $relativePath) {
+            throw new \RuntimeException('Unable to resolve the package storage path.');
+        }
 
         $h5pImport = new H5pImport();
         $h5pImport->setName((string) ($h5pJson->title ?? basename($packagePath)));
-        $h5pImport->setPath(rtrim($packagePath, '/'));
-        $h5pImport->setDescription($values['description'] ?? null);
+        $h5pImport->setPath($packagePath);
         $h5pImport->setRelativePath($relativePath);
+        $h5pImport->setDescription($values['description'] ?? null);
         $h5pImport->setCourse($course);
         $h5pImport->setSession($session);
+        $h5pImport->setCreatedAt($now);
+        $h5pImport->setModifiedAt($now);
+
         $entityManager->persist($h5pImport);
 
-        $libraries = $h5pJson->preloadedDependencies ?? [];
-        foreach ($libraries as $libraryData) {
+        $sharedLibrariesDir = self::getCourseStoragePath($course).'/libraries';
+        $resolvedMainLibrary = null;
+
+        foreach (($h5pJson->preloadedDependencies ?? []) as $libraryData) {
+            $machineName = (string) $libraryData->machineName;
+            $majorVersion = (int) $libraryData->majorVersion;
+            $minorVersion = (int) $libraryData->minorVersion;
+
             $library = $entityManager->getRepository(H5pImportLibrary::class)->findOneBy([
-                'machineName' => $libraryData->machineName,
-                'majorVersion' => (int) $libraryData->majorVersion,
-                'minorVersion' => (int) $libraryData->minorVersion,
+                'machineName' => $machineName,
+                'majorVersion' => $majorVersion,
+                'minorVersion' => $minorVersion,
                 'course' => $course,
             ]);
 
+            $folderName = self::buildLibraryFolderName($machineName, $majorVersion, $minorVersion);
+            $libraryPath = self::resolveExistingLibraryPath($sharedLibrariesDir, $folderName);
+
+            if (null === $libraryPath) {
+                throw new \RuntimeException(sprintf('Library "%s" was not found in shared storage.', $folderName));
+            }
+
             if (null === $library) {
-                $folderName = api_replace_dangerous_char(
-                    $libraryData->machineName.'-'.$libraryData->majorVersion.'.'.$libraryData->minorVersion
-                );
-                $libraryOwnJson = self::getJson($sharedLibrariesDir.'/'.$folderName.'/library.json');
+                $libraryOwnJson = self::getJson($libraryPath.'/library.json');
+
                 if (!$libraryOwnJson) {
-                    continue;
+                    throw new \RuntimeException(sprintf('Library "%s" has an invalid library.json file.', $folderName));
                 }
 
                 $library = new H5pImportLibrary();
-                $library->setMachineName((string) $libraryData->machineName);
-                $library->setTitle((string) ($libraryOwnJson->title ?? $libraryData->machineName));
-                $library->setMajorVersion((int) $libraryData->majorVersion);
-                $library->setMinorVersion((int) $libraryData->minorVersion);
+                $library->setMachineName($machineName);
+                $library->setTitle((string) ($libraryOwnJson->title ?? $machineName));
+                $library->setMajorVersion($majorVersion);
+                $library->setMinorVersion($minorVersion);
                 $library->setPatchVersion((int) ($libraryOwnJson->patchVersion ?? 0));
                 $library->setRunnable((int) ($libraryOwnJson->runnable ?? 0));
                 $library->setEmbedTypes(is_array($libraryOwnJson->embedTypes ?? null) ? $libraryOwnJson->embedTypes : ['div']);
-                $library->setPreloadedJs(is_array($libraryOwnJson->preloadedJs ?? null) ? $libraryOwnJson->preloadedJs : []);
-                $library->setPreloadedCss(is_array($libraryOwnJson->preloadedCss ?? null) ? $libraryOwnJson->preloadedCss : []);
-                $library->setLibraryPath($sharedLibrariesDir.'/'.$folderName);
+                $library->setPreloadedJs(self::normalizeLibraryAssetList($libraryOwnJson->preloadedJs ?? null));
+                $library->setPreloadedCss(self::normalizeLibraryAssetList($libraryOwnJson->preloadedCss ?? null));
+                $library->setLibraryPath($libraryPath);
                 $library->setCourse($course);
+                $library->setCreatedAt($now);
+                $library->setModifiedAt($now);
+
                 $entityManager->persist($library);
             }
 
             $h5pImport->addLibraries($library);
 
-            if ($mainLibraryName === $libraryData->machineName) {
-                $h5pImport->setMainLibrary($library);
+            if ((string) ($h5pJson->mainLibrary ?? '') === $machineName) {
+                $resolvedMainLibrary = $library;
             }
         }
+
+        if (null === $resolvedMainLibrary) {
+            throw new \RuntimeException('The main H5P library could not be resolved.');
+        }
+
+        $h5pImport->setMainLibrary($resolvedMainLibrary);
 
         $entityManager->persist($h5pImport);
         $entityManager->flush();
     }
 
+    private static function normalizeLibraryAssetList($assets): array
+    {
+        if (!is_array($assets)) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($assets as $asset) {
+            if (is_string($asset)) {
+                $asset = trim($asset);
+
+                if ('' !== $asset) {
+                    $normalized[] = $asset;
+                }
+
+                continue;
+            }
+
+            if (is_array($asset)) {
+                $path = trim((string) ($asset['path'] ?? $asset['src'] ?? ''));
+
+                if ('' !== $path) {
+                    $normalized[] = $path;
+                }
+
+                continue;
+            }
+
+            if (is_object($asset)) {
+                $path = trim((string) ($asset->path ?? $asset->src ?? ''));
+
+                if ('' !== $path) {
+                    $normalized[] = $path;
+                }
+            }
+        }
+
+        return array_values(array_unique($normalized));
+    }
+
     public static function deleteH5pPackage(H5pImport $h5pImport): bool
     {
         $packagePath = $h5pImport->getPath();
-        $entityManager = \Database::getManager();
-        $entityManager->remove($h5pImport);
-        $entityManager->flush();
+        $h5pImportId = (int) $h5pImport->getIid();
 
+        $entityManager = \Database::getManager();
+        $connection = $entityManager->getConnection();
         $filesystem = new Filesystem();
+
+        $connection->beginTransaction();
+
+        try {
+            $connection->executeStatement(
+                'DELETE FROM plugin_h5p_import_results WHERE plugin_h5p_import_id = :id',
+                ['id' => $h5pImportId]
+            );
+
+            $connection->executeStatement(
+                'DELETE FROM plugin_h5p_import_rel_libraries WHERE h5p_import_id = :id',
+                ['id' => $h5pImportId]
+            );
+
+            $managed = $entityManager->find(H5pImport::class, $h5pImportId);
+
+            if (null !== $managed) {
+                $entityManager->remove($managed);
+                $entityManager->flush();
+            }
+
+            $connection->commit();
+        } catch (\Throwable $e) {
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+
+            return false;
+        }
+
         if ($filesystem->exists($packagePath)) {
             try {
                 $filesystem->remove($packagePath);
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
                 return false;
             }
         }
@@ -177,18 +374,16 @@ class H5pPackageTools
     public static function getCoreSettings(H5pImport $h5pImport, \H5PCore $h5pCore): array
     {
         $originIsLearnpath = 'learnpath' === api_get_origin();
-        $course = $h5pImport->getCourse();
-        $libraryBaseUrl = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/h5p/libraries';
         $cidReq = api_get_cidreq();
         $cidQuery = '' !== $cidReq ? '&'.$cidReq : '';
 
         $settings = [
-            'baseUrl' => api_get_path(WEB_PATH),
-            'url' => $h5pImport->getRelativePath(),
+            'baseUrl' => api_get_path(\WEB_PATH),
+            'url' => self::buildPackageAssetUrl($h5pImport->getRelativePath()),
             'postUserStatistics' => true,
             'ajax' => [
-                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.(int) $originIsLearnpath.'&token='.\H5PCore::createToken('result').$cidQuery,
-                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.\H5PCore::createToken('content').$cidQuery,
+                'setFinished' => api_get_path(\WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.(int) $originIsLearnpath.'&token='.\H5PCore::createToken('result').$cidQuery,
+                'contentUserData' => api_get_path(\WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.\H5PCore::createToken('content').$cidQuery,
             ],
             'saveFreq' => false,
             'l10n' => [
@@ -196,10 +391,14 @@ class H5pPackageTools
             ],
             'crossorigin' => false,
             'pluginCacheBuster' => '?0',
-            'libraryUrl' => $libraryBaseUrl,
+            'libraryUrl' => self::getCourseLibrariesAssetBaseUrl($h5pImport->getCourse()),
+            'contents' => [],
+            'loadedJs' => [],
+            'loadedCss' => [],
         ];
 
         $loggedUser = api_get_user_info();
+
         if (!empty($loggedUser)) {
             $settings['user'] = [
                 'name' => $loggedUser['complete_name'] ?? '',
@@ -220,60 +419,62 @@ class H5pPackageTools
             'js' => [],
         ];
 
+        $projectRoot = dirname(__DIR__, 4);
+        $coreBasePath = $projectRoot.'/vendor/h5p/h5p-core';
+
         foreach (\H5PCore::$styles as $style) {
-            $assetPath = 'vendor/h5p/h5p-core/'.$style;
-            if (!file_exists(api_get_path(SYS_PATH).$assetPath)) {
+            $relativeAssetPath = ltrim((string) $style, '/');
+            $absoluteAssetPath = $coreBasePath.'/'.$relativeAssetPath;
+
+            if (!is_file($absoluteAssetPath)) {
                 return false;
             }
 
-            $assets['css'][] = api_get_path(WEB_PATH).$assetPath;
+            $assets['css'][] = api_get_path(\WEB_PLUGIN_PATH).'H5pImport/core_asset.php?'.http_build_query([
+                    'path' => $relativeAssetPath,
+                ]);
         }
 
         foreach (\H5PCore::$scripts as $script) {
-            $assetPath = 'vendor/h5p/h5p-core/'.$script;
-            if (!file_exists(api_get_path(SYS_PATH).$assetPath)) {
+            $relativeAssetPath = ltrim((string) $script, '/');
+            $absoluteAssetPath = $coreBasePath.'/'.$relativeAssetPath;
+
+            if (!is_file($absoluteAssetPath)) {
                 return false;
             }
 
-            $assets['js'][] = api_get_path(WEB_PATH).$assetPath;
+            $assets['js'][] = api_get_path(\WEB_PLUGIN_PATH).'H5pImport/core_asset.php?'.http_build_query([
+                    'path' => $relativeAssetPath,
+                ]);
         }
 
         return $assets;
     }
 
-    /**
-     * @param mixed $h5pNode
-     */
-    public static function getContentSettings($h5pNode, \H5PCore $h5pCore): array
+    public function getContentSettings(array $h5pNode): array
     {
-        $filtered = $h5pCore->filterParameters($h5pNode);
-        $displayOptions = [
-            'frame' => self::getPluginBooleanSetting('frame', true),
-            'embed' => self::getPluginBooleanSetting('embed', true),
-            'copyright' => self::getPluginBooleanSetting('copyright', true),
-            'icon' => self::getPluginBooleanSetting('icon', true),
-        ];
+        $params = $h5pNode['params'] ?? '{}';
+
+        if (!is_string($params)) {
+            $encoded = json_encode($params, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $params = false === $encoded ? '{}' : $encoded;
+        }
+
+        $library = $h5pNode['library'] ?? [];
 
         return [
-            'library' => \H5PCore::libraryToString($h5pNode['library']),
-            'jsonContent' => $h5pNode['params'],
-            'fullScreen' => $h5pNode['library']['fullscreen'] ?? 0,
-            'exportUrl' => '',
-            'language' => $h5pNode['language'] ?? 'en',
-            'filtered' => is_string($filtered) && '' !== $filtered ? $filtered : $h5pNode['params'],
-            'embedCode' => '',
-            'resizeCode' => '',
-            'mainId' => $h5pNode['mainId'],
-            'url' => $h5pNode['url'],
-            'contentUserData' => [['state' => '{}']],
-            'displayOptions' => $displayOptions,
-            'metadata' => $h5pNode['metadata'],
+            'library' => ($library['machineName'] ?? '').' '.($library['majorVersion'] ?? 0).'.'.($library['minorVersion'] ?? 0),
+            'jsonContent' => $params,
+            'filtered' => $params,
+            'displayOptions' => $h5pNode['display_options'] ?? [],
+            'metadata' => $h5pNode['metadata'] ?? [],
         ];
     }
 
     public static function h5pDependenciesToLibraryList(array $dependencies): array
     {
         $libraryList = [];
+
         foreach ($dependencies as $dependency) {
             $libraryList[$dependency['machineName']] = [
                 'majorVersion' => $dependency['majorVersion'],
@@ -284,15 +485,25 @@ class H5pPackageTools
         return $libraryList;
     }
 
-    private static function getPluginBooleanSetting(string $name, bool $default = true): bool
+    private static function buildLibraryFolderName(string $machineName, int $majorVersion, int $minorVersion): string
     {
-        $plugin = \H5pImportPlugin::create();
-        $value = $plugin->get($name);
+        return $machineName.'-'.$majorVersion.'.'.$minorVersion;
+    }
 
-        if (null === $value || '' === $value) {
-            return $default;
+    private static function resolveExistingLibraryPath(string $basePath, string $expectedFolderName): ?string
+    {
+        $filesystem = new Filesystem();
+
+        $rawPath = rtrim($basePath, '/').'/'.$expectedFolderName;
+        if ($filesystem->exists($rawPath)) {
+            return $rawPath;
         }
 
-        return in_array($value, [true, 1, '1', 'true', 'yes', 'on'], true);
+        $safePath = rtrim($basePath, '/').'/'.api_replace_dangerous_char($expectedFolderName);
+        if ($filesystem->exists($safePath)) {
+            return $safePath;
+        }
+
+        return null;
     }
 }

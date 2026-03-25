@@ -360,12 +360,12 @@ class ExtraField
         };
     }
 
-    public function getHelperText(): string
+    public function getHelperText(): ?string
     {
         return $this->helperText;
     }
 
-    public function setHelperText(string $helperText): self
+    public function setHelperText(?string $helperText): self
     {
         $this->helperText = $helperText;
 

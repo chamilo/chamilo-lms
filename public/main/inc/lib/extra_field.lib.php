@@ -45,6 +45,7 @@ class ExtraField extends Model
         'variable',
         'description',
         'display_text',
+        'helper_text',
         'default_value',
         'field_order',
         'visible_to_self',
@@ -1136,9 +1137,9 @@ class ExtraField extends Model
                 $extraField = $extraFieldRepo->find($field_details['id']);
                 $translatedDisplayText = $extraField->getDisplayText();
 
-                $translatedDisplayHelpText = '';
-                if ($help) {
-                    $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
+                $translatedDisplayHelpText = trim((string) $extraField->getHelperText());
+                if ($help && '' === $translatedDisplayHelpText) {
+                    $translatedDisplayHelpText = (string) get_lang($field_details['display_text'].'Help');
                 }
 
                 if (!empty($translatedDisplayText)) {
@@ -1147,7 +1148,6 @@ class ExtraField extends Model
                         // which is then treated by display_form()
                         $field_details['display_text'] = [$translatedDisplayText, $translatedDisplayHelpText];
                     } else {
-                        // We have an helper text, use it
                         $field_details['display_text'] = $translatedDisplayText;
                     }
                 }
@@ -2434,6 +2434,13 @@ class ExtraField extends Model
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
 
+        $form->addElement(
+            'textarea',
+            'helper_text',
+            get_lang('Helper text'),
+            ['rows' => 4, 'class' => 'span6']
+        );
+
         // Field type
         $types = self::get_field_types();
 
@@ -2531,6 +2538,7 @@ class ExtraField extends Model
         if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
+            $defaults['helper_text'] = $defaults['helper_text'] ?? '';
             $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $defaults['visible_to_self'] = 0;
@@ -2538,6 +2546,7 @@ class ExtraField extends Model
             $defaults['changeable'] = 0;
             $defaults['filter'] = 0;
             $defaults['auto_remove'] = 0;
+            $defaults['helper_text'] = '';
             $form->addButtonCreate(get_lang('Add'));
         }
 

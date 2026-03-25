@@ -1595,8 +1595,8 @@ class CourseRestorer
                     $existingForum->setAllowAttachments((int) ($p['allow_attachments'] ?? 1));
                     $existingForum->setAllowNewThreads((int) ($p['allow_new_threads'] ?? 1));
                     $existingForum->setDefaultView((string) ($p['default_view'] ?? 'flat'));
-                    $existingForum->setForumOfGroup((string) ($p['forum_of_group'] ?? '0'));
-                    $existingForum->setForumGroupPublicPrivate((string) ($p['forum_group_public_private'] ?? 'public'));
+                    $existingForum->setForumOfGroup('0');
+                    $existingForum->setForumGroupPublicPrivate('public');
                     $existingForum->setModerated((bool) ($p['moderated'] ?? false));
                     $existingForum->setStartTime($this->toUtcDateTime($p['start_time'] ?? null));
                     $existingForum->setEndTime($this->toUtcDateTime($p['end_time'] ?? null));
@@ -1637,8 +1637,8 @@ class CourseRestorer
             $forum->setAllowAttachments((int) ($p['allow_attachments'] ?? 1));
             $forum->setAllowNewThreads((int) ($p['allow_new_threads'] ?? 1));
             $forum->setDefaultView((string) ($p['default_view'] ?? 'flat'));
-            $forum->setForumOfGroup((string) ($p['forum_of_group'] ?? '0'));
-            $forum->setForumGroupPublicPrivate((string) ($p['forum_group_public_private'] ?? 'public'));
+            $forum->setForumOfGroup('0');
+            $forum->setForumGroupPublicPrivate('public');
             $forum->setModerated((bool) ($p['moderated'] ?? false));
             $forum->setStartTime($this->toUtcDateTime($p['start_time'] ?? null));
             $forum->setEndTime($this->toUtcDateTime($p['end_time'] ?? null));
@@ -2638,7 +2638,7 @@ class CourseRestorer
         $em = Database::getManager();
         $course = api_get_course_entity($this->destination_course_id);
         $session = api_get_session_entity($sessionId);
-        $group = api_get_group_entity();
+        $group = null;
         $eventRepo = Container::getCalendarEventRepository();
         $attachRepo = Container::getCalendarEventAttachmentRepository();
 
@@ -2849,7 +2849,7 @@ class CourseRestorer
                 ->addCourseLink(
                     api_get_course_entity($this->destination_course_id),
                     api_get_session_entity(0),
-                    api_get_group_entity()
+                    null
                 )
             ;
 
@@ -2954,7 +2954,7 @@ class CourseRestorer
             $sessionEntity = api_get_session_entity($sessionId);
         }
 
-        $groupEntity = api_get_group_entity();
+        $groupEntity = null;
 
         // Normalize file_option: 1=SKIP, 2=RENAME, 3=OVERWRITE
         $policy = 1;
@@ -3249,7 +3249,7 @@ class CourseRestorer
         }
 
         $sessionEntity = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
-        $groupEntity = api_get_group_entity();
+        $groupEntity = null;
 
         $annRepo = \Chamilo\CoreBundle\Framework\Container::getAnnouncementRepository();
 
@@ -3734,7 +3734,7 @@ class CourseRestorer
 
             $entity = (new CQuiz())
                 ->setParent($courseEntity)
-                ->addCourseLink($courseEntity, $linkSession, api_get_group_entity())
+                ->addCourseLink($courseEntity, $linkSession, null)
                 ->setTitle((string) ($quiz->title ?? ''))
                 ->setDescription($description)
                 ->setType(isset($quiz->quiz_type) ? (int) $quiz->quiz_type : (int) ($quiz->type ?? 0))
@@ -3899,7 +3899,7 @@ class CourseRestorer
 
         $entity = (new CQuizQuestion())
             ->setParent($courseEntity)
-            ->addCourseLink($courseEntity, $sessionEntity, api_get_group_entity())
+            ->addCourseLink($courseEntity, $sessionEntity, null)
             ->setQuestion((string) $questionText)
             ->setDescription((string) $descriptionText)
             ->setPonderation((float) ($question->ponderation ?? 0))
@@ -4974,7 +4974,7 @@ class CourseRestorer
                     $courseEnt->getResourceNode(),
                     $courseEnt,
                     $sessionEnt,
-                    api_get_group_entity()
+                    null
                 );
 
                 return ($hit && method_exists($hit, 'getIid')) ? (int) $hit->getIid() : 0;
@@ -5827,7 +5827,7 @@ class CourseRestorer
                 $progress = (string) ($src->progress ?? '');
                 $version = (int) ($src->version ?? 1);
 
-                $groupId = (int) ($src->group_id ?? $src->groupId ?? 0);
+                $groupId = 0;
                 $userId = (int) ($src->user_id ?? $src->userId ?? api_get_user_id());
 
                 $srcPageId = (int) ($src->page_id ?? $src->pageId ?? 0);
@@ -6024,7 +6024,7 @@ class CourseRestorer
                     $wiki->setCreator(api_get_user_entity());
                 }
 
-                $groupEntity = $groupId ? api_get_group_entity($groupId) : null;
+                $groupEntity = null;
                 if (method_exists($wiki, 'addCourseLink')) {
                     $wiki->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                 }
@@ -6927,8 +6927,8 @@ class CourseRestorer
                 $extensions = isset($p['extensions']) ? trim((string) $p['extensions']) : '';
                 $extensions = '' !== $extensions ? $extensions : null;
 
-                $groupCategoryWorkId = isset($p['group_category_work_id']) ? (int) $p['group_category_work_id'] : 0;
-                $postGroupId = isset($p['post_group_id']) ? (int) $p['post_group_id'] : 0;
+                $groupCategoryWorkId = 0;
+                $postGroupId = 0;
 
                 $creatorId = (int) ($p['user_id'] ?? 0);
                 if ($creatorId <= 0) {
@@ -7193,15 +7193,7 @@ class CourseRestorer
 
         $courseEntity = api_get_course_entity($this->destination_course_id);
         $sessionEntity = $sessionId ? api_get_session_entity($sessionId) : null;
-        $groupEntity = api_get_group_entity();
-
-        if ($groupEntity instanceof CGroup) {
-            if (!method_exists($groupEntity, 'getIid') || (int) $groupEntity->getIid() <= 0) {
-                $groupEntity = null;
-            }
-        } else {
-            $groupEntity = null;
-        }
+        $groupEntity = null;
 
         $docRepo = Container::getDocumentRepository();
 

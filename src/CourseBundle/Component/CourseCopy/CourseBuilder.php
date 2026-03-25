@@ -1173,8 +1173,8 @@ class CourseBuilder
                 'student_delete_own_publication' => (bool) ($pub->getStudentDeleteOwnPublication() ?? false),
 
                 'extensions' => (string) ($pub->getExtensions() ?? ''),
-                'group_category_work_id' => (int) ($pub->getGroupCategoryWorkId() ?? 0),
-                'post_group_id' => (int) ($pub->getPostGroupId() ?? 0),
+                'group_category_work_id' => 0,
+                'post_group_id' => 0,
             ];
 
             try {
@@ -1550,6 +1550,8 @@ class CourseBuilder
                     );
                 }
 
+                $qb2->andWhere('COALESCE(resource.groupId, 0) = 0');
+
                 if (!empty($ids)) {
                     $qb2->andWhere(
                         $qb2->expr()->orX(
@@ -1585,7 +1587,7 @@ class CourseBuilder
                 continue;
             }
 
-            $groupId = (int) ($page->getGroupId() ?? 0);
+            $groupId = 0;
             $reflink = (string) $page->getReflink();
 
             $key = $pageId.'|'.$groupId.'|'.$reflink;
@@ -1605,7 +1607,7 @@ class CourseBuilder
             $title = (string) $page->getTitle();
             $content = $this->normalizeWikiHtmlForExport((string) $page->getContent());
             $userId = (int) $page->getUserId();
-            $groupId = (int) ($page->getGroupId() ?? 0);
+            $groupId = 0;
             $progress = (string) ($page->getProgress() ?? '');
             $version = (int) ($page->getVersion() ?? 1);
             $dtime = $page->getDtime()?->format('Y-m-d H:i:s') ?? '';
@@ -1626,7 +1628,7 @@ class CourseBuilder
                 'content' => $content,
                 'comment' => (string) ($page->getComment() ?? ''),
                 'user_id' => $userId,
-                'group_id' => $groupId,
+                'group_id' => 0,
                 'dtime' => $dtime,
                 'progress' => $progress,
                 'version' => $version,
@@ -2829,8 +2831,8 @@ class CourseBuilder
                 'allow_attachments' => (int) ($f->getAllowAttachments() ?? 1),
                 'allow_new_threads' => (int) ($f->getAllowNewThreads() ?? 1),
                 'default_view' => (string) ($f->getDefaultView() ?? 'flat'),
-                'forum_of_group' => (string) ($f->getForumOfGroup() ?? '0'),
-                'forum_group_public_private' => (string) ($f->getForumGroupPublicPrivate() ?? 'public'),
+                'forum_of_group' => '0',
+                'forum_group_public_private' => 'public',
                 'moderated' => (int) ($f->isModerated() ? 1 : 0),
                 'start_time' => $this->fmtDate($f->getStartTime()),
                 'end_time' => $this->fmtDate($f->getEndTime()),

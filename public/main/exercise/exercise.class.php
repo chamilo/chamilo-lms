@@ -3431,6 +3431,7 @@ class Exercise
         $answerType = $objQuestionTmp->selectType();
         $quesId = $objQuestionTmp->getId();
         $extra = $objQuestionTmp->extra;
+        $fillBlanksCaseInsensitive = ('case:false' === $extra);
         $next = 1; //not for now
         $totalWeighting = 0;
         $totalScore = 0;
@@ -4048,7 +4049,7 @@ class Exercise
                                 }
 
                                 $isAnswerCorrect = 0;
-                                if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
+                                if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive)) {
                                     // gives the related weighting to the student
                                     $questionScore += $answerWeighting[$i];
                                     // increments total score
@@ -4112,7 +4113,8 @@ class Exercise
                                         if (FillBlanks::isStudentAnswerGood(
                                             $studentAnswer,
                                             $correctAnswer,
-                                            $from_database
+                                            $from_database,
+                                            $fillBlanksCaseInsensitive
                                         )) {
                                             $questionScore += $answerWeighting[$i];
                                             $totalScore += $answerWeighting[$i];
@@ -4858,7 +4860,7 @@ class Exercise
                                     }
                                 }
 
-                                $ok = FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database);
+                                $ok = FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive);
                                 $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
                                 $listCorrectAnswers['student_score'][$i]  = $ok ? 1 : 0;
                             }
@@ -4881,7 +4883,7 @@ class Exercise
                                         if ($found) {
                                             continue;
                                         }
-                                        if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
+                                        if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive)) {
                                             // consume this teacher slot
                                             $teacherTemp[$j] = '';
                                             $found = true;

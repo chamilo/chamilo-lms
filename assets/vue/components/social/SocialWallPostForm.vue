@@ -30,7 +30,7 @@
         <BaseFileUpload
           id="post-file"
           :label="t('File upload')"
-          accept="image"
+          accept="image/*, video/*"
           size="small"
           @file-selected="selectedFile = $event"
         />

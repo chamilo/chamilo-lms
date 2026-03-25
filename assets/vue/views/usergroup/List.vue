@@ -163,7 +163,7 @@
         />
         <BaseFileUpload
           :label="t('Add a picture')"
-          accept="image"
+          accept="image/*"
           size="small"
           @file-selected="selectedFile = $event"
         />

@@ -237,7 +237,7 @@ function onPostDeleted(post) {
 const isImageAttachment = (attachment) => {
   if (attachment?.filename) {
     const fileExtension = attachment.filename.split(".").pop().toLowerCase()
-    return ["jpg", "jpeg", "png", "gif"].includes(fileExtension)
+    return ["jpg", "jpeg", "png", "gif", "svg"].includes(fileExtension)
   }
   return false
 }

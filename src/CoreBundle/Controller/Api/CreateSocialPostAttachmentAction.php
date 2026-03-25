@@ -34,13 +34,11 @@ class CreateSocialPostAttachmentAction extends BaseResourceFileAction
         }
 
         // Security: allowlist of safe MIME types for social post attachments (A03 - XSS prevention).
-        // Only raster images and videos are rendered by the social feed; everything else is rejected.
+        // Only images and videos are accepted; everything else (HTML, JS, PDF, etc.) is rejected.
         $actualMimeType = strtolower((string) $uploadedFile->getMimeType());
         $isSafeCategory = str_starts_with($actualMimeType, 'image/') || str_starts_with($actualMimeType, 'video/');
-        // SVG is excluded despite being `image/*` because it can contain executable JavaScript.
-        $isSvg = \in_array($actualMimeType, ['image/svg+xml', 'image/svg', 'image/svgz'], true);
 
-        if (!$isSafeCategory || $isSvg) {
+        if (!$isSafeCategory) {
             throw new Exception('File type not allowed');
         }
 

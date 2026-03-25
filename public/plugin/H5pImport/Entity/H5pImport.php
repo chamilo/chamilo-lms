@@ -19,10 +19,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class H5pImport
 {
     #[ORM\Column(name: 'path', type: 'text', nullable: false)]
-    protected string $path;
+    protected string $path = '';
 
     #[ORM\Column(name: 'relative_path', type: 'text', nullable: false)]
-    protected string $relativePath;
+    protected string $relativePath = '';
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
@@ -35,7 +35,7 @@ class H5pImport
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    private ?int $iid;
+    private ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
@@ -43,13 +43,13 @@ class H5pImport
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
-    private ?Session $session;
+    private ?Session $session = null;
 
     #[ORM\Column(name: 'name', type: 'text', nullable: true)]
-    private ?string $name;
+    private ?string $name = null;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @var Collection<int, H5pImportLibrary>
@@ -58,15 +58,15 @@ class H5pImport
     private Collection $libraries;
 
     #[ORM\ManyToOne(targetEntity: H5pImportLibrary::class)]
-    #[ORM\JoinColumn(name: 'main_library_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
-    private H5pImportLibrary $mainLibrary;
+    #[ORM\JoinColumn(name: 'main_library_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
+    private ?H5pImportLibrary $mainLibrary = null;
 
     public function __construct()
     {
         $this->libraries = new ArrayCollection();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -102,7 +102,7 @@ class H5pImport
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     public function setName(string $name): H5pImport
@@ -165,15 +165,19 @@ class H5pImport
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(DateTime $modifiedAt): void
+    public function setModifiedAt(DateTime $modifiedAt): H5pImport
     {
         $this->modifiedAt = $modifiedAt;
+
+        return $this;
     }
 
     public function addLibraries(H5pImportLibrary $library): self
     {
-        $library->addH5pImport($this);
-        $this->libraries[] = $library;
+        if (!$this->libraries->contains($library)) {
+            $library->addH5pImport($this);
+            $this->libraries[] = $library;
+        }
 
         return $this;
     }
@@ -190,7 +194,7 @@ class H5pImport
         return $this->libraries;
     }
 
-    public function setMainLibrary(H5pImportLibrary $library): self
+    public function setMainLibrary(?H5pImportLibrary $library): self
     {
         $this->mainLibrary = $library;
 

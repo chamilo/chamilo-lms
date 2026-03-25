@@ -48,6 +48,17 @@ class H5pImplementation implements \H5PFrameworkInterface
         return true;
     }
 
+    public function resetHubOrganizationData()
+    {
+        $this->contentHubMetadata = [];
+        $this->contentHubChecked = [];
+
+        $this->setOption('site_uuid', null);
+        $this->setOption('hub_secret', null);
+
+        return true;
+    }
+
     public function getPlatformInfo()
     {
         return [
@@ -97,6 +108,7 @@ class H5pImplementation implements \H5PFrameworkInterface
     public function t($message, $replacements = [])
     {
         $translated = get_lang($message);
+
         if (empty($translated) || $translated === $message) {
             $translated = $message;
         }
@@ -106,14 +118,15 @@ class H5pImplementation implements \H5PFrameworkInterface
 
     public function getLibraryFileUrl($libraryFolderName, $fileName)
     {
-        $course = $this->h5pImport->getCourse();
-
-        return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/h5p/libraries/'.$libraryFolderName.'/'.$fileName;
+        return H5pPackageTools::buildPackageAssetUrl(
+            H5pPackageTools::buildCourseRelativePrefix($this->h5pImport->getCourse())
+            .'/libraries/'.$libraryFolderName.'/'.$fileName
+        );
     }
 
     public function getUploadedH5pFolderPath()
     {
-        $path = api_get_path(SYS_ARCHIVE_PATH).'h5pimport_tmp';
+        $path = H5pPackageTools::getCourseStoragePath($this->h5pImport->getCourse()).'/tmp';
 
         if (!is_dir($path)) {
             @mkdir($path, api_get_permissions_for_new_directories(), true);
@@ -142,6 +155,7 @@ class H5pImplementation implements \H5PFrameworkInterface
         ';
 
         $result = \Database::query($sql);
+
         while ($row = \Database::fetch_array($result)) {
             $addons[] = \H5PCore::snakeToCamel($row);
         }
@@ -156,21 +170,35 @@ class H5pImplementation implements \H5PFrameworkInterface
 
     public function loadLibraries()
     {
+        $rows = $this->findAllLibraryRows();
         $libraries = [];
 
-        /** @var H5pImportLibrary $library */
-        foreach ($this->h5pImportLibraries as $library) {
-            $libraries[] = [
-                'libraryId' => $library->getIid(),
-                'title' => $library->getTitle(),
-                'machineName' => $library->getMachineName(),
-                'majorVersion' => $library->getMajorVersion(),
-                'minorVersion' => $library->getMinorVersion(),
-                'patchVersion' => $library->getPatchVersion(),
-                'runnable' => $library->getRunnable(),
-                'preloadedJs' => $library->getPreloadedJsFormatted(),
-                'preloadedCss' => $library->getPreloadedCssFormatted(),
+        foreach ($rows as $row) {
+            $library = [
+                'libraryId' => (int) $row['iid'],
+                'title' => (string) $row['title'],
+                'machineName' => (string) $row['machine_name'],
+                'majorVersion' => (int) $row['major_version'],
+                'minorVersion' => (int) $row['minor_version'],
+                'patchVersion' => (int) $row['patch_version'],
+                'runnable' => (int) $row['runnable'],
+                'embedTypes' => $this->normalizeEmbedTypes($row['embed_types'] ?? ''),
+                'fullscreen' => 0,
+                'hasIcon' => false,
+                'addTo' => $this->normalizeAddTo($row['add_to'] ?? null),
             ];
+
+            $library['preloadedJs'] = $this->normalizeAssetList(
+                $this->csvToAssetPaths($row['preloaded_js'] ?? ''),
+                $library
+            );
+
+            $library['preloadedCss'] = $this->normalizeAssetList(
+                $this->csvToAssetPaths($row['preloaded_css'] ?? ''),
+                $library
+            );
+
+            $libraries[] = $library;
         }
 
         return $libraries;
@@ -267,51 +295,65 @@ class H5pImplementation implements \H5PFrameworkInterface
         return false;
     }
 
-    public function loadLibrary($machineName, $majorVersion, $minorVersion)
+    public function loadLibrary($name, $majorVersion, $minorVersion)
     {
-        if (!$this->h5pImportLibraries) {
+        $row = $this->findLibraryRow($name, (int) $majorVersion, (int) $minorVersion);
+
+        if (!$row) {
             return false;
         }
 
-        $foundLibrary = $this->h5pImportLibraries->filter(
-            static function (H5pImportLibrary $library) use ($machineName, $majorVersion, $minorVersion) {
-                return false !== $library->getLibraryByMachineNameAndVersions($machineName, (int) $majorVersion, (int) $minorVersion);
-            }
-        )->first();
-
-        if (!$foundLibrary instanceof H5pImportLibrary) {
-            return false;
-        }
-
-        $embedTypes = $foundLibrary->getEmbedTypes() ?? ['div'];
-
-        return [
-            'libraryId' => $foundLibrary->getIid(),
-            'title' => $foundLibrary->getTitle(),
-            'machineName' => $foundLibrary->getMachineName(),
-            'majorVersion' => $foundLibrary->getMajorVersion(),
-            'minorVersion' => $foundLibrary->getMinorVersion(),
-            'patchVersion' => $foundLibrary->getPatchVersion(),
-            'runnable' => $foundLibrary->getRunnable(),
-            'preloadedJs' => $foundLibrary->getPreloadedJsFormatted(),
-            'preloadedCss' => $foundLibrary->getPreloadedCssFormatted(),
-            'embedTypes' => $embedTypes,
+        $library = [
+            'libraryId' => (int) $row['iid'],
+            'title' => (string) $row['title'],
+            'machineName' => (string) $row['machine_name'],
+            'majorVersion' => (int) $row['major_version'],
+            'minorVersion' => (int) $row['minor_version'],
+            'patchVersion' => (int) $row['patch_version'],
+            'runnable' => (int) $row['runnable'],
+            'embedTypes' => $this->normalizeEmbedTypes($row['embed_types'] ?? ''),
+            'preloadedDependencies' => $this->getLibraryDependencies((int) $row['iid']),
             'fullscreen' => 0,
+            'hasIcon' => false,
+            'addTo' => $this->normalizeAddTo($row['add_to'] ?? null),
         ];
+
+        $library['preloadedJs'] = $this->normalizeAssetList(
+            $this->csvToAssetPaths($row['preloaded_js'] ?? ''),
+            $library
+        );
+
+        $library['preloadedCss'] = $this->normalizeAssetList(
+            $this->csvToAssetPaths($row['preloaded_css'] ?? ''),
+            $library
+        );
+
+        return $library;
     }
 
-    public function loadLibrarySemantics($machineName, $majorVersion, $minorVersion)
+    public function loadLibrarySemantics($name, $majorVersion, $minorVersion)
     {
-        /** @var H5pImportLibrary $library */
-        foreach ($this->h5pImportLibraries as $library) {
-            if (false !== $library->getLibraryByMachineNameAndVersions($machineName, (int) $majorVersion, (int) $minorVersion)) {
-                $semantics = H5pPackageTools::getJson($library->getLibraryPath().'/semantics.json', true);
+        $row = $this->findLibraryRow($name, (int) $majorVersion, (int) $minorVersion);
 
-                return $semantics ?: false;
-            }
+        if (!$row) {
+            return '';
         }
 
-        return false;
+        $libraryPath = (string) ($row['library_path'] ?? '');
+
+        if ('' === $libraryPath) {
+            return '';
+        }
+
+        $semanticsFile = rtrim($libraryPath, '/').'/semantics.json';
+
+        if (!is_file($semanticsFile) || !is_readable($semanticsFile)) {
+            return '';
+        }
+
+        $contents = file_get_contents($semanticsFile);
+
+        return false === $contents ? '' : $contents;
     }
 
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion)
@@ -343,6 +385,7 @@ class H5pImplementation implements \H5PFrameworkInterface
     {
         $packagePath = rtrim($this->h5pImport->getPath(), '/');
         $contentJson = H5pPackageTools::getJson($packagePath.'/content.json');
+
         if (!$contentJson) {
             $contentJson = H5pPackageTools::getJson($packagePath.'/content/content.json');
         }
@@ -355,13 +398,14 @@ class H5pImplementation implements \H5PFrameworkInterface
         }
 
         $embedTypes = $mainLibrary->getEmbedTypes() ?? ['div'];
+        $encodedParams = json_encode($contentJson, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         return [
             'id' => $this->h5pImport->getIid(),
             'contentId' => $this->h5pImport->getIid(),
             'mainId' => $this->h5pImport->getIid(),
             'slug' => (string) $this->h5pImport->getIid(),
-            'params' => json_encode($contentJson),
+            'params' => false === $encodedParams ? '{}' : $encodedParams,
             'embedType' => implode(',', $embedTypes),
             'title' => $this->h5pImport->getName(),
             'language' => $h5pJson->language ?? 'en',
@@ -373,11 +417,15 @@ class H5pImplementation implements \H5PFrameworkInterface
             'libraryFullscreen' => 0,
             'library' => [
                 'libraryId' => $mainLibrary->getIid(),
+                'title' => $mainLibrary->getTitle(),
                 'machineName' => $mainLibrary->getMachineName(),
                 'majorVersion' => $mainLibrary->getMajorVersion(),
                 'minorVersion' => $mainLibrary->getMinorVersion(),
+                'patchVersion' => $mainLibrary->getPatchVersion(),
+                'runnable' => $mainLibrary->getRunnable(),
                 'embedTypes' => $embedTypes,
                 'fullscreen' => 0,
+                'hasIcon' => false,
             ],
             'url' => api_get_path(WEB_PLUGIN_PATH).'H5pImport/view.php?id='.$this->h5pImport->getIid().'&'.api_get_cidreq(),
             'metadata' => [
@@ -399,8 +447,8 @@ class H5pImplementation implements \H5PFrameworkInterface
                 'majorVersion' => $library->getMajorVersion(),
                 'minorVersion' => $library->getMinorVersion(),
                 'patchVersion' => $library->getPatchVersion(),
-                'preloadedJs' => $library->getPreloadedJsFormatted(),
-                'preloadedCss' => $library->getPreloadedCssFormatted(),
+                'preloadedJs' => implode(',', $this->extractAssetPaths($library->getPreloadedJs() ?? [])),
+                'preloadedCss' => implode(',', $this->extractAssetPaths($library->getPreloadedCss() ?? [])),
             ];
         }
 
@@ -488,5 +536,196 @@ class H5pImplementation implements \H5PFrameworkInterface
     public function libraryHasUpgrade($library)
     {
         return false;
+    }
+
+    private function normalizeEmbedTypes($value): array
+    {
+        if (is_array($value)) {
+            return array_values(array_filter($value, static fn ($item) => is_string($item) && '' !== trim($item)));
+        }
+
+        if (!is_string($value) || '' === trim($value)) {
+            return ['div'];
+        }
+
+        $decoded = json_decode($value, true);
+
+        if (is_array($decoded)) {
+            $items = array_values(array_filter($decoded, static fn ($item) => is_string($item) && '' !== trim($item)));
+
+            return [] === $items ? ['div'] : $items;
+        }
+
+        $items = array_map('trim', explode(',', $value));
+        $items = array_values(array_filter($items, static fn (string $item) => '' !== $item));
+
+        return [] === $items ? ['div'] : $items;
+    }
+
+    private function mapLibraryEntityToRow(H5pImportLibrary $library): array
+    {
+        return [
+            'iid' => $library->getIid(),
+            'title' => $library->getTitle(),
+            'machine_name' => $library->getMachineName(),
+            'major_version' => $library->getMajorVersion(),
+            'minor_version' => $library->getMinorVersion(),
+            'patch_version' => $library->getPatchVersion(),
+            'runnable' => $library->getRunnable(),
+            'embed_types' => $library->getEmbedTypes(),
+            'preloaded_js' => implode(',', $this->extractAssetPaths($library->getPreloadedJs() ?? [])),
+            'preloaded_css' => implode(',', $this->extractAssetPaths($library->getPreloadedCss() ?? [])),
+            'add_to' => null,
+            'semantics' => '',
+            'library_path' => $library->getLibraryPath(),
+        ];
+    }
+
+    private function extractAssetPaths(?array $assets): array
+    {
+        if (empty($assets)) {
+            return [];
+        }
+
+        $paths = [];
+
+        foreach ($assets as $asset) {
+            if (is_string($asset)) {
+                $asset = trim($asset);
+
+                if ('' !== $asset) {
+                    $paths[] = $asset;
+                }
+
+                continue;
+            }
+
+            if (is_array($asset)) {
+                $path = trim((string) ($asset['path'] ?? $asset['src'] ?? ''));
+
+                if ('' !== $path) {
+                    $paths[] = $path;
+                }
+
+                continue;
+            }
+
+            if (is_object($asset)) {
+                $path = trim((string) ($asset->path ?? $asset->src ?? ''));
+
+                if ('' !== $path) {
+                    $paths[] = $path;
+                }
+            }
+        }
+
+        return array_values(array_unique($paths));
+    }
+
+    private function findAllLibraryRows(): array
+    {
+        $rows = [];
+
+        /** @var H5pImportLibrary $library */
+        foreach ($this->h5pImportLibraries as $library) {
+            $rows[] = $this->mapLibraryEntityToRow($library);
+        }
+
+        return $rows;
+    }
+
+    private function findLibraryRow(string $name, int $majorVersion, int $minorVersion): ?array
+    {
+        /** @var H5pImportLibrary $library */
+        foreach ($this->h5pImportLibraries as $library) {
+            if (
+                $library->getMachineName() === $name
+                && $library->getMajorVersion() === $majorVersion
+                && $library->getMinorVersion() === $minorVersion
+            ) {
+                return $this->mapLibraryEntityToRow($library);
+            }
+        }
+
+        return null;
+    }
+
+    private function getLibraryDependencies(int $libraryId): array
+    {
+        return [];
+    }
+
+    private function normalizeAssetList(?array $assets, array $library): array
+    {
+        if (empty($assets)) {
+            return [];
+        }
+
+        $normalized = [];
+        $defaultVersion = $this->buildAssetVersion($library);
+        $defaultAddTo = $this->normalizeAddTo($library['addTo'] ?? null);
+
+        foreach ($assets as $asset) {
+            $path = '';
+            $version = $defaultVersion;
+            $addTo = $defaultAddTo;
+
+            if (is_string($asset)) {
+                $path = trim($asset);
+            } elseif (is_array($asset)) {
+                $path = trim((string) ($asset['path'] ?? $asset['src'] ?? ''));
+                $version = (string) ($asset['version'] ?? $defaultVersion);
+                $addTo = $this->normalizeAddTo($asset['addTo'] ?? $defaultAddTo);
+            }
+
+            if ('' === $path) {
+                continue;
+            }
+
+            $normalized[] = [
+                'path' => $path,
+                'version' => $version,
+                'addTo' => $addTo,
+            ];
+        }
+
+        return $normalized;
+    }
+
+    private function normalizeAddTo(mixed $value): array
+    {
+        if (is_array($value)) {
+            return array_values(array_filter($value, static fn ($item) => is_string($item) && '' !== trim($item)));
+        }
+
+        if (is_string($value) && '' !== trim($value)) {
+            $decoded = json_decode($value, true);
+
+            if (is_array($decoded)) {
+                return array_values(array_filter($decoded, static fn ($item) => is_string($item) && '' !== trim($item)));
+            }
+        }
+
+        return [];
+    }
+
+    private function buildAssetVersion(array $library): string
+    {
+        $major = (string) ($library['majorVersion'] ?? $library['major_version'] ?? '0');
+        $minor = (string) ($library['minorVersion'] ?? $library['minor_version'] ?? '0');
+        $patch = (string) ($library['patchVersion'] ?? $library['patch_version'] ?? '0');
+
+        return $major.'.'.$minor.'.'.$patch;
+    }
+
+    private function csvToAssetPaths(?string $csv): array
+    {
+        if (null === $csv || '' === trim($csv)) {
+            return [];
+        }
+
+        $items = array_map('trim', explode(',', $csv));
+
+        return array_values(array_filter($items, static fn (string $item) => '' !== $item));
     }
 }

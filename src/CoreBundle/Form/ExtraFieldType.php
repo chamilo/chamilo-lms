@@ -212,6 +212,11 @@ class ExtraFieldType extends AbstractType
                 $defaultOptions['help'] = self::PAUSE_TRAINING_HELP[$variable];
             }
 
+            $helperText = trim((string) $extraField->getHelperText());
+            if ('' !== $helperText && !\array_key_exists($variable, self::PAUSE_TRAINING_HELP)) {
+                $defaultOptions['help'] = $helperText;
+            }
+
             if (\in_array($variable, ['start_pause_date', 'end_pause_date'], true)) {
                 $defaultOptions['attr'] = array_merge($defaultOptions['attr'] ?? [], [
                     'class' => trim((string) (($defaultOptions['attr']['class'] ?? '').' js-pause-training-datetime')),

@@ -30,6 +30,7 @@ use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use enshrined\svgSanitize\Sanitizer as SvgSanitizer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,6 +43,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
@@ -609,6 +611,29 @@ class ResourceController extends AbstractResourceController implements CourseCon
             case 'show':
             default:
                 $forceDownload = false;
+
+                // SVG must not go through Glide (raster-only library); serve directly after sanitization.
+                // Sanitizing at serve time ensures scripts are stripped regardless of how the file was stored.
+                if ('image/svg+xml' === $mimeType) {
+                    $raw = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
+                    $content = (new SvgSanitizer())->sanitize($raw);
+
+                    if (false === $content || '' === $content) {
+                        throw new BadRequestHttpException('Invalid SVG file');
+                    }
+
+                    $response = new Response($content);
+                    $disposition = $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_INLINE,
+                        $fileName
+                    );
+                    $response->headers->set('Content-Disposition', $disposition);
+                    $response->headers->set('Content-Type', 'image/svg+xml');
+                    $response->headers->set('X-Content-Type-Options', 'nosniff');
+
+                    return $response;
+                }
+
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {
                     $glide = $this->getGlide();

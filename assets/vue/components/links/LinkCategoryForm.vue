@@ -12,7 +12,7 @@
       :label="t('Description')"
     />
 
-    <div class="flex gap-4">
+    <div class="flex justify-end gap-4">
       <BaseButton
         :label="t('Back')"
         icon="back"

@@ -197,6 +197,10 @@
   }
 
   // Form
+  .form-actions {
+    @apply flex justify-end gap-2;
+  }
+
   .has-error input, .has-error select {
     border-color: red !important;
   }

@@ -92,7 +92,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
-            $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
+            $templateSimpleRight = '<div class="form-actions">{label} {element}</div>';
             $renderer->setElementTemplate($templateSimpleRight, 'buttons_in_action_right');
         }
 

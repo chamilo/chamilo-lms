@@ -65,7 +65,7 @@
       required
     />
 
-    <div class="text-right">
+    <div class="flex justify-end">
       <Button
         :disabled="v$.item.$invalid"
         :label="t('Save')"

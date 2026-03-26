@@ -462,7 +462,7 @@ watch(colorDanger, (nv) => {
       </div>
     </div>
 
-    <div class="field-group">
+    <div class="field-group justify-end">
       <BaseButton
         :disabled="!selectedThemeIri"
         :label="t('Select as current theme')"

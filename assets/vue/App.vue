@@ -37,10 +37,7 @@
     />
 
     <PluginBlockRenderer region="content_bottom" />
-    <PluginBlockRenderer
-      v-if="showCardGame"
-      region="pre_footer"
-    />
+    <PluginBlockRenderer region="pre_footer" />
 
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
@@ -304,20 +301,6 @@ const allowGlobalChat = computed(() => {
 const showGlobalChat = computed(() => {
   // Do not render global chat when the app is embedded (iframe/dialog/picker).
   return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value
-})
-
-const showCardGame = computed(() => {
-  if (!securityStore.isAuthenticated) {
-    return false
-  }
-
-  if (isEmbeddedContext.value) {
-    return false
-  }
-
-  const path = route.path || ""
-
-  return path === "/courses" || path.startsWith("/courses/")
 })
 
 watch(

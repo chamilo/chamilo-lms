@@ -35,6 +35,8 @@ export function usePluginRegion(region) {
 
     cleanupInjectedElements()
 
+    blocks.value = []
+
     try {
       const { data } = await api.get(`/plugin-regions/${region}`, {
         headers: { Accept: "application/json" },
@@ -117,12 +119,6 @@ export function usePluginRegion(region) {
     injectedElements.value = []
   }
 
-  function cleanupRegionWidgets() {
-    if (region === "pre_footer" && typeof window.__destroyCardGameWidget === "function") {
-      window.__destroyCardGameWidget()
-    }
-  }
-
   watch(resolvedParams, fetchBlocks, { immediate: true })
 
   onUnmounted(() => {
@@ -130,7 +126,6 @@ export function usePluginRegion(region) {
       abortController.abort()
     }
 
-    cleanupRegionWidgets()
     cleanupInjectedElements()
   })
 

@@ -97,7 +97,7 @@ function derivePageTypeClasses(to) {
   if (p.startsWith("/catalogue")) return ["page-catalogue"]
   if (p.startsWith("/social")) return ["page-social"]
   if (p.startsWith("/account")) return ["page-account-security"]
-  if (p.startsWith("/admin-dashboard")) return ["page-administration", "page-administration-session"]
+  if (p.startsWith("/admin-dashboard")) return ["page-administration-session"]
   if (p.startsWith("/admin")) return ["page-administration", "page-administration-platform"]
   if (p.startsWith("/tracking")) return ["page-tracking"]
 

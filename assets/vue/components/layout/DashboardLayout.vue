@@ -26,3 +26,38 @@ defineProps({
 
 const securityStore = useSecurityStore()
 </script>
+
+<style>
+body.page-administration-platform .app-main {
+  background-image: url("/themes/chamilo/images/bg-cityscape.png");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto 180px;
+  padding-bottom: 200px;
+}
+
+body.page-administration-session .app-main {
+  background-image: url("/themes/chamilo/images/bg-fieldscape.png");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto 180px;
+  padding-bottom: 200px;
+}
+
+body.page-my-courses .app-main,
+body.page-sessions .app-main {
+  background-image: url("/themes/chamilo/images/bg-landscape.png");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto 180px;
+  padding-bottom: 200px;
+}
+
+body.page-social .app-main {
+  background-image: url("/themes/chamilo/images/bg-seascape.png");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto 180px;
+  padding-bottom: 200px;
+}
+</style>

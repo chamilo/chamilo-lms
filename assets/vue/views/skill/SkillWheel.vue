@@ -319,7 +319,7 @@ async function onSearchProfile(profile) {
           <BaseButton
             :label="t('Edit')"
             icon="edit"
-            type="primary"
+            type="secondary"
           />
         </a>
         <a :href="`/main/skills/skill_create.php?parent=${skillDetail.id}`">

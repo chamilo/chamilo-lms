@@ -4,7 +4,7 @@
       <BaseButton
         :label="t('Edit Terms and Conditions')"
         icon="edit"
-        type="primary"
+        type="secondary"
         @click="editTerms"
       />
     </BaseToolbar>

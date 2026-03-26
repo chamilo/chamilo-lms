@@ -486,14 +486,14 @@
         :label="t('Disable')"
         icon="lock"
         size="small"
-        type="black"
+        type="secondary"
         @click="confirmBulkAction('disable_users')"
       />
       <BaseButton
         :label="t('Enable')"
         icon="unlock"
         size="small"
-        type="primary"
+        type="secondary"
         @click="confirmBulkAction('enable_users')"
       />
     </div>

@@ -527,8 +527,8 @@
     updateLauncher();
     renderModalContent();
     applyLauncherVisibility();
-    installRouteListeners();
-    scheduleVisibilityRefresh();
+    //installRouteListeners();
+    //scheduleVisibilityRefresh();
   }
 
   if (!root) {

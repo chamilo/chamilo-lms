@@ -13,6 +13,8 @@
   <div
     v-else
     class="admin-index"
+    :style="adminIndexStyle"
+    style="padding-bottom: 200px;"
   >
     <!-- Main admin blocks -->
     <AdminBlock
@@ -280,6 +282,7 @@
 
 <script setup>
 import { ref } from "vue"
+import { computed } from 'vue'
 import { useI18n } from "vue-i18n"
 import Button from "primevue/button"
 import Checkbox from "primevue/checkbox"
@@ -290,6 +293,7 @@ import { useSecurityStore } from "../../store/securityStore"
 
 import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { useVisualTheme } from '../../composables/theme'
 
 const { t } = useI18n()
 
@@ -318,6 +322,15 @@ const {
   blockHealthCheck,
   blockRooms,
 } = useIndexBlocks()
+
+const { getThemeAssetUrl } = useVisualTheme()
+
+const adminIndexStyle = computed(() => ({
+    backgroundImage: `url('${getThemeAssetUrl('images/bg-cityscape.png')}')`,
+    backgroundRepeat: 'repeat-x',
+    backgroundPosition: 'bottom center',
+    backgroundSize: 'auto 180px',
+}))
 
 function checkVersionOnSubmit() {
   checkVersion(doNotListCampus.value)

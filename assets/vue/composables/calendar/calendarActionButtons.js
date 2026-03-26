@@ -1,4 +1,4 @@
-import { watchEffect } from "vue"
+import { ref, watchEffect } from "vue"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReqStore } from "../../store/cidReq"

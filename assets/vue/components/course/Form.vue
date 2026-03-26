@@ -56,7 +56,7 @@
       />
     </div>
     <!-- Form Footer -->
-    <div class="flex justify-end gap-4">
+    <div class="flex justify-end gap-4 mt-2">
       <BaseButton
         :label="t('Back')"
         class="mr-4"

@@ -68,7 +68,7 @@
     <!-- Extra blocks injected by parent -->
     <slot></slot>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end mt-2">
       <BaseButton
         type="primary"
         icon="save"

@@ -32,7 +32,7 @@
 
       <slot></slot>
 
-      <div class="flex justify-end mt-4">
+      <div class="flex justify-end mt-2">
         <BaseButton
           :disabled="!canSubmitMessage"
           :label="t('Send')"

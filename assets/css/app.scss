@@ -198,7 +198,7 @@
 
   // Form
   .form-actions {
-    @apply flex justify-end gap-2;
+    @apply flex justify-end gap-2 mt-2;
   }
 
   .has-error input, .has-error select {

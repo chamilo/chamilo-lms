@@ -2,7 +2,7 @@
   <div class="max-w-lg" v-if="cat">
     <BaseToolbar><template #start><h3 class="font-semibold">Edit folder</h3></template></BaseToolbar>
     <BaseInputText id="catTitle2" label="Category name" v-model="name" :form-submitted="submitted" :is-invalid="!name" />
-    <div class="flex justify-end gap-2 mt-4">
+    <div class="flex justify-end gap-2 mt-2">
       <BaseAppLink :to="backTo"><BaseButton type="black" icon="xmark" :label="t('Cancel')" /></BaseAppLink>
       <BaseButton type="primary" icon="check" :label="t('Save')" @click="save" />
     </div>

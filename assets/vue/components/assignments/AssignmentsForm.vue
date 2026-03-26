@@ -128,7 +128,7 @@
       </div>
     </BaseAdvancedSettingsButton>
 
-    <div class="flex justify-end space-x-2 mt-4">
+    <div class="flex justify-end space-x-2 mt-2">
       <BaseButton
         :disabled="isFormLoading"
         :label="t('Save')"

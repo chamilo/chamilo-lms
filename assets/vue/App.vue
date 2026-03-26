@@ -107,8 +107,10 @@ import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
 import { useStore } from "vuex"
 import PluginBlockRenderer from "./components/layout/PluginBlockRenderer.vue"
+import { useCidReqStore } from "./store/cidReq"
 
 const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000
+const cidReqStore = useCidReqStore()
 const vuex = useStore()
 const forbiddenMsg = computed(() => vuex.state.ux?.forbiddenMessage)
 
@@ -275,6 +277,16 @@ onMounted(async () => {
   const { loader } = useMediaElementLoader()
   loader()
 
+  Object.defineProperty(window, "chamiloCidReq", {
+    get: () =>
+      Object.freeze({
+        course: cidReqStore.course ? Object.freeze({ ...cidReqStore.course }) : null,
+        session: cidReqStore.session ? Object.freeze({ ...cidReqStore.session }) : null,
+        group: cidReqStore.group ? Object.freeze({ ...cidReqStore.group }) : null,
+      }),
+    configurable: true,
+  })
+
   await securityStore.checkSession()
 
   if ("serviceWorker" in navigator) {
@@ -348,5 +360,7 @@ onBeforeUnmount(() => {
     window.clearTimeout(forbiddenBannerTimer)
     forbiddenBannerTimer = null
   }
+
+  delete window.chamiloCidReq
 })
 </script>

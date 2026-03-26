@@ -163,8 +163,8 @@
   @apply gap-0;
 
   &:not(.p-button-sm) {
-    padding-left: calc(0.625rem - 1px);
-    padding-right: calc(0.625rem - 1px);
+    padding-left: calc(0.75rem - 1px);
+    padding-right: calc(0.75rem - 1px);
   }
 
   &.p-button-sm {

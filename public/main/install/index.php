@@ -595,8 +595,8 @@ if (isset($_POST['step2'])) {
 
         set_file_folder_permissions();
 
-        // Sanitize database name: only letters, numbers and underscore
-        $dbNameForm = preg_replace('/[^a-zA-Z0-9_]/', '', $dbNameForm);
+        // Sanitize database name: only letters, numbers and underscore/hyphen
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
         error_log("Connect to DB server as user {$dbUsernameForm}");
 

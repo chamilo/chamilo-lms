@@ -11,7 +11,7 @@
           v-if="securityStore.isAdmin"
           icon="edit"
           :label="$t('Edit')"
-          type="black"
+          type="secondary"
           @click="handleAnnouncementClick(announcement)"
         />
       </div>

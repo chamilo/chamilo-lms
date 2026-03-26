@@ -756,16 +756,16 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
                 <?php
             } ?>
             <?php if ($ajax_search) { ?>
-                <button name="remove_user" class="btn btn--primary mb-4"
+                <button name="remove_user" class="btn btn--secondary mb-4"
                         type="button" onclick="remove_item(document.getElementById('destination_users'))">
                     <em class="pi pi-chevron-left"></em>
                 </button>
             <?php } else { ?>
-                <button name="add_user" class="btn btn--primary mb-4"
+                <button name="add_user" class="btn btn--secondary mb-4"
                         type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                     <em class="pi pi-chevron-right"></em>
                 </button>
-                <button name="remove_user" class="btn btn--primary mb-4"
+                <button name="remove_user" class="btn btn--secondary mb-4"
                         type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                     <em class="pi pi-chevron-left"></em>
                 </button>

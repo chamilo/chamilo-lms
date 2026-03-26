@@ -730,7 +730,7 @@ function handlePlugins()
 
             $managementUrl = $isEnabled ? plugin_get_management_url($pluginName) : null;
             if (!empty($managementUrl)) {
-                echo '  <a href="'.htmlspecialchars($managementUrl, ENT_QUOTES).'" class="btn btn--info btn--sm w-full justify-center">';
+                echo '  <a href="'.htmlspecialchars($managementUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
                 echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
                 echo '  </a>';
             } else {

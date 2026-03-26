@@ -3,68 +3,14 @@
     {% set ALL_ON_ONE_PAGE = ExerciseMonitoring.exercise_type == 1 %}
     {% set ONE_PER_PAGE = ExerciseMonitoring.exercise_type == 2 %}
 
-    <div id="monitoring-camera"></div>
+    <div
+        id="monitoring-camera"
+        data-exercise-id="{{ ExerciseMonitoring.exercise_id }}"
+        data-exercise-type="{{ ExerciseMonitoring.exercise_type }}"
+    ></div>
 
-    <script>
-        function startMonitoring() {
-            var $btnSaveNow = $('button[name="save_now"]');
-            var $btnEndTest = $('button[name="validate_all"]');
-
-            Webcam.set({
-                height: 480,
-                width: 640,
-            });
-            Webcam.attach('#monitoring-camera');
-            Webcam.on('live', function () {
-                {% if ALL_ON_ONE_PAGE %}
-                    snapAndSendData(0);
-                {% elseif ONE_PER_PAGE %}
-                    snapByQuestion();
-                {% endif %}
-            });
-
-            {% if ALL_ON_ONE_PAGE %}
-                $btnEndTest.on('click', function () {
-                    snapAndSendData(0);
-                });
-            {% elseif ONE_PER_PAGE %}
-                $btnSaveNow.on('click', function () {
-                    snapByQuestion();
-                });
-            {% endif %}
-
-            function snapAndSendData(levelId) {
-                Webcam.snap(function (dataUri) {
-                    sendData(levelId, dataUri);
-                });
-            }
-
-            function snapByQuestion() {
-                var questionId = $btnSaveNow.data('question') || 0;
-
-                snapAndSendData(questionId);
-            }
-
-            function sendData(questionId, imageUri) {
-                var rawImgIdDoc = imageUri.replace(/^data:image\/\w+;base64,/, '');
-                var blobImgIdDoc = new Blob( [ Webcam.base64DecToArr(rawImgIdDoc) ], {type: 'image/jpeg'} );
-
-                var formData = new FormData();
-                formData.append('exercise_id', '{{ ExerciseMonitoring.exercise_id }}');
-                formData.append('level_id', questionId);
-                formData.append('snapshot', blobImgIdDoc, 'snapshot.jpg');
-
-                return $.ajax({
-                    url: '{{ url('index') }}plugin/ExerciseMonitoring/pages/exercise_submit.ajax.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                });
-            }
-        }
-    </script>
-    <script onload="startMonitoring()" src="{{ url('index') }}plugin/ExerciseMonitoring/assets/js/webcamjs-1.0.6/webcam.min.js"></script>
+    <script src="/plugin/ExerciseMonitoring/assets/js/webcamjs-1.0.6/webcam.min.js"></script>
+    <script src="/plugin/ExerciseMonitoring/assets/js/exercise-submit.js"></script>
     <style>
         #plugin_pre_footer {
             position: relative;

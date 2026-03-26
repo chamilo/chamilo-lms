@@ -169,7 +169,7 @@
               :label="t('Move')"
               :class="actionBtnClass"
               @click="moveSubmission(data)"
-              type="info"
+              type="secondary"
             />
             <BaseButton
               :icon="

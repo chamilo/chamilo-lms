@@ -146,7 +146,7 @@
                   icon="edit"
                   only-icon
                   size="small"
-                  type="black"
+                  type="secondary"
                   @click="editCategory(category)"
                 />
                 <BaseButton

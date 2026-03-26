@@ -87,7 +87,7 @@
             aria-label="rename"
             icon="edit"
             only-icon
-            type="black"
+            type="secondary"
             @click="openRename(proj)"
           />
 

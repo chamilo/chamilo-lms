@@ -34,7 +34,7 @@
           :label="t('Move the file')"
           icon="mdi mdi-send"
           @click="move"
-          class="p-button-primary"
+          severity="secondary"
           :disabled="assignments.length === 0"
         />
       </div>

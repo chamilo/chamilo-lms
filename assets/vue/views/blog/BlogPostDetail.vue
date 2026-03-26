@@ -12,7 +12,7 @@
 
           <div v-if="canEditPost" class="shrink-0 flex items-center gap-2">
             <BaseButton
-              type="black"
+              type="secondary"
               icon="edit"
               :label="t('Edit')"
               @click="openEditPost"
@@ -134,7 +134,7 @@
                 :label="t('Edit')"
                 icon="edit"
                 only-icon
-                type="black"
+                type="secondary"
                 @click="openEditComment(c)"
               />
               <BaseButton

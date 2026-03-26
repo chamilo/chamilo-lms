@@ -81,7 +81,7 @@
           :label="t('Edit introduction')"
           class="grow-0"
           icon="edit"
-          type="black"
+          type="secondary"
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
@@ -101,7 +101,7 @@
             icon="cog"
             only-icon
             popup-identifier="course-tmenu"
-            type="black"
+            type="secondary"
             @click="toggleCourseTMenu"
           />
 

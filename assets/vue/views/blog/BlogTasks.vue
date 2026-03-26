@@ -44,7 +44,7 @@
                     :label="t('Edit')"
                     icon="edit"
                     only-icon
-                    type="black"
+                    type="secondary"
                     @click="openEdit(task)"
                   />
                   <BaseButton

@@ -178,7 +178,7 @@
               :label="t('Move')"
               icon="file-swap"
               only-icon
-              type="black"
+              type="secondary"
               @click.stop="openMove(data)"
             />
             <a

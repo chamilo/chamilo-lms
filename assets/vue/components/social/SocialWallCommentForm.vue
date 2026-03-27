@@ -2,6 +2,7 @@
   <form
     class="mt-3"
     @submit.prevent="sendComment"
+    data-no-autofocus="1"
   >
     <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 items-start">
       <div class="w-full">

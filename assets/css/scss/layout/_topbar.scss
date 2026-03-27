@@ -110,14 +110,22 @@
     .item-button {
       @apply w-8 h-8 relative text-center;
 
+      & > .base-icon > .mdi {
+        @apply text-2xl leading-6 w-6 h-6;
+      }
+
+      > .base-icon {
+        @apply w-8 h-8 items-center justify-center text-gray-50
+          hover:text-gray-90;
+      }
+
+      .base-icon__badge--top-left {
+        @apply -top-1.5 -left-2;
+      }
+
       .mdi,
       &__icon {
-        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
-        hover:text-gray-90;
-
-        &::before {
-          @apply text-2xl leading-6;
-        }
+        @apply inline-flex transition-colors align-middle;
       }
 
       &__badge {
@@ -146,7 +154,7 @@
 
       .mdi,
       &__icon {
-        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
+        @apply text-gray-50 inline-flex transition-colors align-middle text-2xl leading-6 w-6 h-6
           hover:text-gray-90;
 
         &::before {

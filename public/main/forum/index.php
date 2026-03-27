@@ -344,7 +344,9 @@ jQuery(function ($) {
         [],
         true           // $addEmptyOptionSelects = false
     );
-    $form->setDefault('extra_language', $defaultUserLanguage);
+    if ($form->elementExists('extra_language')) {
+        $form->setDefault('extra_language', $defaultUserLanguage);
+    }
 
     $searchFilter = $form->returnForm();
 }

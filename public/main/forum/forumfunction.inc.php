@@ -274,7 +274,9 @@ function getForumCategoryAddForm(int $lp_id = null): string
             saveForumCategory($values);
         }
         Security::clear_token();
-        return '';
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -591,6 +593,9 @@ function editForumCategoryForm(CForumCategory $category): string
             saveForumCategory($values);
         }
         Security::clear_token();
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -598,8 +603,6 @@ function editForumCategoryForm(CForumCategory $category): string
 
         return $form->returnForm();
     }
-
-    return '';
 }
 
 /**

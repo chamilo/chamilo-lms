@@ -1262,7 +1262,7 @@ class TicketManager
                         $sessionId = $row['session_id'];
                     }
                     if ($course) {
-                        $row['course_url'] = '<a href="'.$course['course_public_url'].'?id_session='.$sessionId.'">'.$course['name'].'</a>';
+                        $row['course_url'] = '<a href="'.$course['course_public_url'].'?sid='.$sessionId.'">'.$course['name'].'</a>';
                     }
                     $row['exercise_url'] = null;
 

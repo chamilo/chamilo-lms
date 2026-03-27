@@ -1,9 +1,10 @@
 <?php
 
 declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 /*
- * Configuration script for the Buy Courses plugin.
+ * Configuration script for the Buy Courses plugin subscriptions.
  */
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -27,32 +28,26 @@ Display::addFlash(
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $type = isset($_GET['type']) ? (int) $_GET['type'] : BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$currentPage = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 $first = $pageSize * ($currentPage - 1);
 
 $qb = $plugin->getCourses($first, $pageSize);
 $query = $qb->getQuery();
 $courses = new Paginator($query, $fetchJoinCollection = true);
+
 foreach ($courses as $course) {
     $item = $plugin->getSubscriptionItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
+
     if (false !== $item) {
         $course->buyCourseData = $item;
     }
 }
 
 $totalItems = count($courses);
-$pagesCount = (int) ceil($totalItems / $pageSize);
+$pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
 
-$pagination = BuyCoursesPlugin::returnPagination(
-    api_get_self(),
-    $currentPage,
-    $pagesCount,
-    $totalItems,
-    ['type' => $type]
-);
-
-// breadcrumbs
+// Breadcrumbs.
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
     'name' => $plugin->get_lang('plugin_title'),
@@ -60,33 +55,39 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('AvailableCourses');
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
+$defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$backUrl = $defaultBackUrl;
 
 $tpl = new Template($templateName);
 
-$toolbar = Display::url(
-    Display::returnFontAwesomeIcon('fa-calendar-alt').
-    $plugin->get_lang('ConfigureSubscriptionsFrequencies'),
-    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_frequency.php',
-    ['class' => 'btn btn-primary']
-);
-
+$tpl->assign('page_title', $templateName);
+$tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));
+$tpl->assign('back_url', $backUrl);
 $tpl->assign(
-    'actions',
-    Display::toolbarAction('toolbar', [$toolbar])
+    'frequency_url',
+    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_frequency.php'
 );
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+
 $tpl->assign('courses', $courses);
 $tpl->assign('sessions', []);
-$tpl->assign('course_pagination', $pagination);
-$tpl->assign('session_pagination', '');
+
+$tpl->assign('course_current_page', $currentPage);
+$tpl->assign('course_pages_count', $pagesCount);
+$tpl->assign('course_total_items', (int) $totalItems);
+
+$tpl->assign('session_current_page', 1);
+$tpl->assign('session_pages_count', 1);
+$tpl->assign('session_total_items', 0);
+
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('tax_enable', $taxEnable);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();
+
     $tpl->assign('global_tax_perc', $globalParameters['global_tax_perc']);
     $tpl->assign('tax_applies_to', $globalParameters['tax_applies_to']);
     $tpl->assign('tax_name', $globalParameters['tax_name']);

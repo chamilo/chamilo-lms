@@ -32,7 +32,7 @@ class ch_multiplechoice extends survey_question
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
                 if ($total > 2) {
-                    $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
+                    $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger', 'default', null, [], false, false);
                 }
             }
         }

@@ -721,50 +721,29 @@ class Plugin
     /**
      * Add a tab to the platform.
      */
-    public function addTab(string $tabName, string $url, ?string $userFilter = null): bool
+    public function addTab(bool $installInHomePage = false): bool
     {
         $settingsManager = Container::getSettingsManager();
+        $showTabsSetting = $this->normalizeShowTabsSetting(
+            $settingsManager->getSetting('display.show_tabs', true)
+        );
 
-        $currentUrl = Container::getAccessUrlUtil()->getCurrent();
-
-        $pluginInUrl = Container::getPluginRepository()
-            ->findOneByTitle($this->get_name())
-            ->getConfigurationsByAccessUrl($currentUrl)
-        ;
-        $pluginConf = $pluginInUrl->getConfiguration();
-
-        $showTabs = $pluginConf['show_tabs'] ?? [];
-
-        if (!isset($showTabs[$tabName])) {
-            $showTabs[$tabName] = $url;
-            $pluginConf['show_tabs'] = $showTabs;
-
-            $pluginInUrl->setConfiguration($pluginConf);
-        }
-
-        $showTabsSetting = $settingsManager->getSetting('display.show_tabs', true);
-
-//        $subkey = 'custom_tab_'.$tabNum;
-//
-//        if (!empty($userFilter)) {
-//            switch ($userFilter) {
-//                case self::TAB_FILTER_NO_STUDENT:
-//                case self::TAB_FILTER_ONLY_STUDENT:
-//                    $subkey .= $userFilter;
-//                    break;
-//            }
-//        }
-
-        if (!in_array($tabName, $showTabsSetting)) {
-            $showTabsSetting[] = $tabName;
-        }
+        $tabName = $this->get_name();
 
         try {
-            $settingsManager->updateSetting('display.show_tabs', $showTabsSetting);
+            if (!in_array($tabName, $showTabsSetting, true)) {
+                $showTabsSetting[] = $tabName;
+            }
 
-            Container::getEntityManager()->flush();
-        } catch (OptimisticLockException|ORMException) {
+            $settingsManager->updateSetting('display.show_tabs', $showTabsSetting);
+        } catch (Exception $exception) {
+            error_log('[Plugin::addTab] Failed to update display.show_tabs: '.$exception->getMessage());
+
             return false;
+        }
+
+        if ($installInHomePage && !empty($this->isCoursePlugin)) {
+            $this->install_course_fields_in_all_courses();
         }
 
         return true;
@@ -777,26 +756,34 @@ class Plugin
      *
      * @return bool $resp Transaction response
      */
-    public function deleteTab($tabName): bool
+    public function deleteTab(bool $uninstallFromHomePage = false): bool
     {
         $settingsManager = Container::getSettingsManager();
+        $showTabsSetting = $this->normalizeShowTabsSetting(
+            $settingsManager->getSetting('display.show_tabs', true)
+        );
 
-        $showTabsSetting = $settingsManager->getSetting('display.show_tabs', true);
+        $tabName = $this->get_name();
 
         try {
-            if (in_array($tabName, $showTabsSetting)) {
+            if (in_array($tabName, $showTabsSetting, true)) {
                 $key = array_search($tabName, $showTabsSetting, true);
 
-                if ($key !== false) {
+                if (false !== $key) {
                     unset($showTabsSetting[$key]);
-
                     $showTabsSetting = array_values($showTabsSetting);
                 }
             }
 
             $settingsManager->updateSetting('display.show_tabs', $showTabsSetting);
-        } catch (OptimisticLockException|ORMException) {
+        } catch (Exception $exception) {
+            error_log('[Plugin::deleteTab] Failed to update display.show_tabs: '.$exception->getMessage());
+
             return false;
+        }
+
+        if ($uninstallFromHomePage && !empty($this->isCoursePlugin)) {
+            $this->uninstall_course_fields_in_all_courses();
         }
 
         return true;
@@ -1061,5 +1048,78 @@ class Plugin
     public function getFieldNames(): array
     {
         return array_keys($this->fields);
+    }
+
+    private function normalizeShowTabsSetting($value): array
+    {
+        $result = [];
+
+        $appendValue = static function ($item) use (&$result, &$appendValue): void {
+            if (is_array($item)) {
+                foreach ($item as $subItem) {
+                    $appendValue($subItem);
+                }
+
+                return;
+            }
+
+            if (is_object($item) || null === $item) {
+                return;
+            }
+
+            if (!is_scalar($item)) {
+                return;
+            }
+
+            $item = trim((string) $item);
+
+            if ('' === $item) {
+                return;
+            }
+
+            if (!in_array($item, $result, true)) {
+                $result[] = $item;
+            }
+        };
+
+        if (is_array($value)) {
+            $appendValue($value);
+
+            return $result;
+        }
+
+        if (is_string($value)) {
+            $value = trim($value);
+
+            if ('' === $value) {
+                return [];
+            }
+
+            $decoded = json_decode($value, true);
+
+            if (JSON_ERROR_NONE === json_last_error()) {
+                $appendValue($decoded);
+
+                return $result;
+            }
+
+            $unserialized = @unserialize($value);
+
+            if (false !== $unserialized || 'b:0;' === $value) {
+                $appendValue($unserialized);
+
+                return $result;
+            }
+
+            foreach (explode(',', $value) as $part) {
+                $appendValue($part);
+            }
+
+            return $result;
+        }
+
+        $appendValue($value);
+
+        return $result;
     }
 }

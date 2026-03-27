@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 /*
  * Configuration script for the Buy Courses plugin.
@@ -31,15 +32,17 @@ Display::addFlash(
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $type = $httpRequest->query->getInt('type', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
-$currentPage = $httpRequest->query->getInt('page', 1);
+$currentPage = max(1, $httpRequest->query->getInt('page', 1));
 $first = $pageSize * ($currentPage - 1);
 
 $qb = $plugin->getCourses($first, $pageSize);
 $query = $qb->getQuery();
 $courses = new Paginator($query, $fetchJoinCollection = true);
+
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
+
     if ($item) {
         $course->buyCourseData = $item;
     }
@@ -48,15 +51,18 @@ foreach ($courses as $course) {
 $totalItems = count($courses);
 $pagesCount = (int) ceil($totalItems / $pageSize);
 
-$pagination = BuyCoursesPlugin::returnPagination(
-    api_get_self(),
-    $currentPage,
-    $pagesCount,
-    $totalItems,
-    ['type' => $type]
-);
 
-// breadcrumbs
+$interbreadcrumb[] = [
+    'name' => get_lang('Administration'),
+    'url' => api_get_path(WEB_PATH).'admin',
+];
+
+$interbreadcrumb[] = [
+    'name' => get_lang('Plugins'),
+    'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
+];
+
+// Breadcrumbs.
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
     'name' => $plugin->get_lang('plugin_title'),
@@ -64,26 +70,36 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('AvailableCourses');
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
-
 $tpl = new Template($templateName);
+
+$tpl->assign('page_title', $templateName);
+$tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+
 $tpl->assign('courses', $courses);
 $tpl->assign('showing_sessions', false);
 $tpl->assign('showing_services', false);
+
 $tpl->assign('sessions', []);
 $tpl->assign('services', []);
-$tpl->assign('course_pagination', $pagination);
-$tpl->assign('session_pagination', $type);
-$tpl->assign('service_pagination', $type);
+
+$tpl->assign('course_current_page', $currentPage);
+$tpl->assign('course_pages_count', $pagesCount);
+$tpl->assign('course_total_items', $totalItems);
+$tpl->assign('course_page_size', $pageSize);
+
+$tpl->assign('session_pagination', null);
+$tpl->assign('service_pagination', null);
+
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();
+
     $tpl->assign('global_tax_perc', $globalParameters['global_tax_perc']);
     $tpl->assign('tax_applies_to', $globalParameters['tax_applies_to']);
     $tpl->assign('tax_name', $globalParameters['tax_name']);

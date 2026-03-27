@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 
 /**
@@ -10,20 +11,409 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
+/**
+ * Add classes to an element without removing the existing ones.
+ */
+function addTailwindClassesToElement(DOMElement $element, array $classes): void
+{
+    $existing = trim((string) $element->getAttribute('class'));
+    $currentClasses = '' === $existing ? [] : preg_split('/\s+/', $existing);
+    $currentClasses = is_array($currentClasses) ? $currentClasses : [];
+
+    foreach ($classes as $class) {
+        if (!in_array($class, $currentClasses, true)) {
+            $currentClasses[] = $class;
+        }
+    }
+
+    $element->setAttribute('class', trim(implode(' ', array_filter($currentClasses))));
+}
+
+/**
+ * Return the inner HTML of a DOM element.
+ */
+function getElementInnerHtml(DOMElement $element): string
+{
+    $html = '';
+
+    foreach ($element->childNodes as $childNode) {
+        $html .= $element->ownerDocument->saveHTML($childNode);
+    }
+
+    return $html;
+}
+
+/**
+ * Style legacy FormValidator markup with Tailwind utility classes.
+ */
+function styleBuyCoursesFormHtml(string $html): string
+{
+    if (!class_exists(DOMDocument::class) || '' === trim($html)) {
+        return $html;
+    }
+
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+
+    $document = new DOMDocument('1.0', 'UTF-8');
+    $wrappedHtml = '<?xml encoding="utf-8" ?><div id="buycourses-form-root">'.$html.'</div>';
+
+    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    if (!$loaded) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $xpath = new DOMXPath($document);
+    $root = $document->getElementById('buycourses-form-root');
+
+    if (!$root) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $forms = $xpath->query('.//form', $root);
+    if ($forms) {
+        foreach ($forms as $form) {
+            if (!$form instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($form, ['space-y-6']);
+        }
+    }
+
+    $hrs = $xpath->query('.//hr', $root);
+    if ($hrs) {
+        foreach ($hrs as $hr) {
+            if (!$hr instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($hr, ['my-6', 'border-0', 'border-t', 'border-gray-25']);
+        }
+    }
+
+    $formGroups = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]', $root);
+    if ($formGroups) {
+        foreach ($formGroups as $group) {
+            if (!$group instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($group, [
+                'rounded-2xl',
+                'border',
+                'border-gray-25',
+                'bg-white',
+                'p-5',
+                'shadow-sm',
+                'space-y-3',
+            ]);
+        }
+    }
+
+    $labels = $xpath->query('.//label', $root);
+    if ($labels) {
+        foreach ($labels as $label) {
+            if (!$label instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($label, [
+                'mb-2',
+                'block',
+                'text-sm',
+                'font-semibold',
+                'text-gray-90',
+            ]);
+        }
+    }
+
+    $columns = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " col-sm-2 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-3 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-7 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-8 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-10 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-offset-2 ")]',
+        $root
+    );
+
+    if ($columns) {
+        foreach ($columns as $column) {
+            if (!$column instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($column, ['w-full', 'max-w-none']);
+        }
+    }
+
+    $inputs = $xpath->query('.//input', $root);
+    if ($inputs) {
+        foreach ($inputs as $input) {
+            if (!$input instanceof DOMElement) {
+                continue;
+            }
+
+            $type = strtolower((string) $input->getAttribute('type'));
+
+            if ('hidden' === $type) {
+                continue;
+            }
+
+            if (in_array($type, ['checkbox', 'radio'], true)) {
+                addTailwindClassesToElement($input, [
+                    'h-4',
+                    'w-4',
+                    'rounded',
+                    'border-gray-25',
+                    'text-primary',
+                    'focus:ring-primary',
+                ]);
+
+                continue;
+            }
+
+            if (in_array($type, ['submit', 'button'], true)) {
+                $buttonClasses = [
+                    'inline-flex',
+                    'items-center',
+                    'justify-center',
+                    'gap-2',
+                    'rounded-xl',
+                    'px-4',
+                    'py-2.5',
+                    'text-sm',
+                    'font-semibold',
+                    'shadow-sm',
+                    'transition',
+                    'focus:outline-none',
+                    'focus:ring-2',
+                    'focus:ring-offset-2',
+                ];
+
+                $isPrimaryAction = false !== stripos((string) $input->getAttribute('class'), 'save')
+                    || false !== stripos((string) $input->getAttribute('value'), 'save')
+                    || false !== stripos((string) $input->getAttribute('value'), 'add')
+                    || false !== stripos((string) $input->getAttribute('value'), 'create');
+
+                if ($isPrimaryAction) {
+                    $buttonClasses = array_merge($buttonClasses, [
+                        'bg-primary',
+                        'text-white',
+                        'hover:opacity-90',
+                        'focus:ring-primary/30',
+                    ]);
+                } else {
+                    $buttonClasses = array_merge($buttonClasses, [
+                        'bg-secondary',
+                        'text-white',
+                        'hover:opacity-90',
+                        'focus:ring-secondary/30',
+                    ]);
+                }
+
+                addTailwindClassesToElement($input, $buttonClasses);
+
+                continue;
+            }
+
+            addTailwindClassesToElement($input, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'placeholder:text-gray-50',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $selects = $xpath->query('.//select', $root);
+    if ($selects) {
+        foreach ($selects as $select) {
+            if (!$select instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($select, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $textareas = $xpath->query('.//textarea', $root);
+    if ($textareas) {
+        foreach ($textareas as $textarea) {
+            if (!$textarea instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($textarea, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'placeholder:text-gray-50',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $buttons = $xpath->query('.//button', $root);
+    if ($buttons) {
+        foreach ($buttons as $button) {
+            if (!$button instanceof DOMElement) {
+                continue;
+            }
+
+            $buttonClasses = [
+                'inline-flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'rounded-xl',
+                'px-4',
+                'py-2.5',
+                'text-sm',
+                'font-semibold',
+                'shadow-sm',
+                'transition',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-offset-2',
+            ];
+
+            $isPrimaryAction = 'submit' === strtolower((string) $button->getAttribute('type'))
+                || false !== stripos((string) $button->getAttribute('class'), 'save')
+                || false !== stripos((string) $button->textContent, 'save')
+                || false !== stripos((string) $button->textContent, 'add')
+                || false !== stripos((string) $button->textContent, 'create');
+
+            if ($isPrimaryAction) {
+                $buttonClasses = array_merge($buttonClasses, [
+                    'bg-primary',
+                    'text-white',
+                    'hover:opacity-90',
+                    'focus:ring-primary/30',
+                ]);
+            } else {
+                $buttonClasses = array_merge($buttonClasses, [
+                    'bg-secondary',
+                    'text-white',
+                    'hover:opacity-90',
+                    'focus:ring-secondary/30',
+                ]);
+            }
+
+            addTailwindClassesToElement($button, $buttonClasses);
+        }
+    }
+
+    $helpBlocks = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " help-block ")
+            or contains(concat(" ", normalize-space(@class), " "), " form-control-feedback ")]',
+        $root
+    );
+    if ($helpBlocks) {
+        foreach ($helpBlocks as $helpBlock) {
+            if (!$helpBlock instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($helpBlock, [
+                'mt-2',
+                'block',
+                'text-sm',
+                'text-gray-50',
+            ]);
+        }
+    }
+
+    $alerts = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " alert ")]', $root);
+    if ($alerts) {
+        foreach ($alerts as $alert) {
+            if (!$alert instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($alert, [
+                'rounded-2xl',
+                'border',
+                'px-4',
+                'py-3',
+                'text-sm',
+            ]);
+        }
+    }
+
+    $checkboxContainers = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " checkbox ")]',
+        $root
+    );
+    if ($checkboxContainers) {
+        foreach ($checkboxContainers as $checkboxContainer) {
+            if (!$checkboxContainer instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($checkboxContainer, [
+                'flex',
+                'items-center',
+                'gap-3',
+            ]);
+        }
+    }
+
+    $result = getElementInnerHtml($root);
+
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+
+    return $result;
+}
+
 api_protect_admin_script(true);
 
 $plugin = BuyCoursesPlugin::create();
 
-$paypalEnable = $plugin->get('paypal_enable');
-$transferEnable = $plugin->get('transfer_enable');
-$tpvRedsysEnable = $plugin->get('tpv_redsys_enable');
-$commissionsEnable = $plugin->get('commissions_enable');
-$culqiEnable = $plugin->get('culqi_enable');
+$paypalEnable = 'true' === $plugin->get('paypal_enable');
+$transferEnable = 'true' === $plugin->get('transfer_enable');
+$tpvRedsysEnable = 'true' === $plugin->get('tpv_redsys_enable');
+$commissionsEnable = 'true' === $plugin->get('commissions_enable');
+$culqiEnable = 'true' === $plugin->get('culqi_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
 $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
+$taxEnable = 'true' === $plugin->get('tax_enable');
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
-    if ('delete_taccount' == $_GET['action']) {
+    if ('delete_taccount' === $_GET['action']) {
         try {
             $plugin->deleteTransferAccount($_GET['id']);
 
@@ -66,6 +456,7 @@ if ($globalSettingForm->validate()) {
 }
 
 $currencies = $plugin->getCurrencies();
+$selectedCurrencyLabel = get_lang('None');
 
 $currencySelect = $globalSettingForm->addSelect(
     'currency',
@@ -85,10 +476,12 @@ foreach ($currencies as $currency) {
         ]
     );
     $currencyValue = $currency['id'];
+
     $currencySelect->addOption($currencyText, $currencyValue);
 
-    if ($currency['status']) {
+    if (!empty($currency['status'])) {
         $currencySelect->setSelected($currencyValue);
+        $selectedCurrencyLabel = $currencyText;
     }
 }
 
@@ -105,9 +498,6 @@ $globalSettingForm->addElement(
     'sale_email',
     $plugin->get_lang('SaleEmail')
 );
-
-$taxEnable = 'true' === $plugin->get('tax_enable');
-$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if ($taxEnable) {
     $globalSettingForm->addHtml('<hr/>');
@@ -128,10 +518,7 @@ if ($taxEnable) {
     );
 
     foreach ($taxAppliesTo as $key => $value) {
-        $optionText = $value;
-        $optionyValue = $key;
-
-        $taxTypeSelect->addOption($optionText, $optionyValue);
+        $taxTypeSelect->addOption($value, $key);
     }
 
     $globalSettingForm->addElement(
@@ -230,8 +617,8 @@ $paypalForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
 $paypalForm->addButtonSave(get_lang('Save'));
 $paypalForm->setDefaults($plugin->getPaypalParams());
 
-// TPV Redsys
 $htmlTpvRedsys = Display::return_message($plugin->get_lang('NotFindRedsysFile'), 'warning', false);
+
 if (file_exists(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/resources/apiRedsys.php')) {
     $tpvRedsysForm = new FormValidator('tpv_redsys');
     $tpvRedsysForm->addHtml(
@@ -299,8 +686,6 @@ if (file_exists(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/resources/apiRedsys.ph
     $htmlTpvRedsys = $tpvRedsysForm->returnForm();
 }
 
-// Platform Commissions
-
 $commissionForm = new FormValidator('commissions');
 
 if ($commissionForm->validate()) {
@@ -323,7 +708,6 @@ $commissionForm->addElement(
     [$plugin->get_lang('Commission'), null, '%'],
     ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
 );
-
 $commissionForm->addButtonSave(get_lang('Save'));
 $commissionForm->setDefaults($plugin->getPlatformCommission());
 
@@ -388,6 +772,7 @@ if ($transferInfoForm->validate()) {
 
     exit;
 }
+
 $transferInfoForm->addHtmlEditor(
     'tinfo_email_extra',
     $plugin->get_lang('InfoEmailExtra'),
@@ -397,8 +782,6 @@ $transferInfoForm->addHtmlEditor(
 );
 $transferInfoForm->addButtonCreate(get_lang('Save'));
 $transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
-
-// Culqi main configuration
 
 $culqiForm = new FormValidator('culqi_config');
 
@@ -431,8 +814,6 @@ $culqiForm->addText(
 $culqiForm->addCheckBox('integration', null, $plugin->get_lang('Sandbox'));
 $culqiForm->addButtonSave(get_lang('Save'));
 $culqiForm->setDefaults($plugin->getCulqiParams());
-
-// Stripe main configuration
 
 $stripeForm = new FormValidator('stripe_config');
 
@@ -474,8 +855,6 @@ $stripeForm->addText(
 );
 $stripeForm->addButtonSave(get_lang('Save'));
 $stripeForm->setDefaults($plugin->getStripeParams());
-
-// Cecabank main configuration
 
 $cecabankForm = new FormValidator('cecabank_config');
 
@@ -544,34 +923,70 @@ $cecabankForm->addText(
 $cecabankForm->addButtonSave(get_lang('Save'));
 $cecabankForm->setDefaults($plugin->getCecabankParams());
 
-// breadcrumbs
+$enabledPaymentMethods = array_filter([
+    'PayPal' => $paypalEnable,
+    'Bank transfer' => $transferEnable,
+    'TPV Redsys' => $tpvRedsysEnable,
+    'Culqi' => $culqiEnable,
+    'Stripe' => $stripeEnable,
+    'Cecabank' => $cecabankEnable,
+]);
+
+$enabledPaymentMethodLabels = array_keys($enabledPaymentMethods);
+
+$pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$pluginSettingsUrl = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?plugin=BuyCourses';
+$adminPluginsUrl = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins';
+$deleteTransferBaseUrl = api_get_self();
+
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
+    'name' => get_lang('Administration'),
+    'url' => api_get_path(WEB_PATH).'admin',
+];
+$interbreadcrumb[] = [
+    'name' => get_lang('Plugins'),
+    'url' => $adminPluginsUrl,
+];
+$interbreadcrumb[] = [
+    'url' => $pluginIndexUrl,
     'name' => $plugin->get_lang('plugin_title'),
 ];
-
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $templateName = $plugin->get_lang('PaymentsConfiguration');
 $tpl = new Template($templateName);
 $tpl->assign('header', $templateName);
-$tpl->assign('global_config_form', $globalSettingForm->returnForm());
-$tpl->assign('paypal_form', $paypalForm->returnForm());
-$tpl->assign('commission_form', $commissionForm->returnForm());
-$tpl->assign('transfer_form', $transferForm->returnForm());
-$tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
-$tpl->assign('culqi_form', $culqiForm->returnForm());
+
+$tpl->assign('page_title', $templateName);
+$tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));
+$tpl->assign('plugin_index_url', $pluginIndexUrl);
+$tpl->assign('plugin_settings_url', $pluginSettingsUrl);
+$tpl->assign('delete_transfer_base_url', $deleteTransferBaseUrl);
+
+$tpl->assign('selected_currency_label', $selectedCurrencyLabel);
+$tpl->assign('tax_enable', $taxEnable);
+$tpl->assign('invoicing_enable', $invoicingEnable);
+$tpl->assign('enabled_payment_method_labels', $enabledPaymentMethodLabels);
+$tpl->assign('enabled_payment_method_count', count($enabledPaymentMethodLabels));
+
+$tpl->assign('global_config_form', styleBuyCoursesFormHtml($globalSettingForm->returnForm()));
+$tpl->assign('paypal_form', styleBuyCoursesFormHtml($paypalForm->returnForm()));
+$tpl->assign('commission_form', styleBuyCoursesFormHtml($commissionForm->returnForm()));
+$tpl->assign('transfer_form', styleBuyCoursesFormHtml($transferForm->returnForm()));
+$tpl->assign('transfer_info_form', styleBuyCoursesFormHtml($transferInfoForm->returnForm()));
+$tpl->assign('culqi_form', styleBuyCoursesFormHtml($culqiForm->returnForm()));
+$tpl->assign('tpv_redsys_form', styleBuyCoursesFormHtml($htmlTpvRedsys));
+$tpl->assign('stripe_form', styleBuyCoursesFormHtml($stripeForm->returnForm()));
+$tpl->assign('cecabank_form', styleBuyCoursesFormHtml($cecabankForm->returnForm()));
+
 $tpl->assign('transfer_accounts', $transferAccounts);
+
 $tpl->assign('paypal_enable', $paypalEnable);
 $tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
 $tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
-$tpl->assign('tpv_redsys_form', $htmlTpvRedsys);
 $tpl->assign('stripe_enable', $stripeEnable);
-$tpl->assign('stripe_form', $stripeForm->returnForm());
 $tpl->assign('cecabank_enable', $cecabankEnable);
-$tpl->assign('cecabank_form', $cecabankForm->returnForm());
 
 $content = $tpl->fetch('BuyCourses/view/paymentsetup.tpl');
 

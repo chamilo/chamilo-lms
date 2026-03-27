@@ -92,7 +92,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
-            $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
+            $templateSimpleRight = '<div class="form-actions">{label} {element}</div>';
             $renderer->setElementTemplate($templateSimpleRight, 'buttons_in_action_right');
         }
 
@@ -373,6 +373,7 @@ EOT;
      * @param string $class         Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
      * @param bool   $createElement
+     * @param bool   $isFormAction  Whether to wrap in form-actions (right-aligned). Pass false for mid-form buttons.
      *
      * @return HTML_QuickForm_button
      */
@@ -384,7 +385,8 @@ EOT;
         $size = 'default',
         $class = null,
         $attributes = [],
-        $createElement = false
+        $createElement = false,
+        $isFormAction = true
     ) {
         if ($createElement) {
             return $this->createElement(
@@ -399,7 +401,7 @@ EOT;
             );
         }
 
-        return $this->addElement(
+        $element = $this->addElement(
             'button',
             $name,
             $label,
@@ -409,6 +411,16 @@ EOT;
             $class,
             $attributes
         );
+        if ($isFormAction) {
+            $this->registerAsFormAction($name);
+        }
+
+        return $element;
+    }
+
+    private function registerAsFormAction(string $name): void
+    {
+        $this->defaultRenderer()->setElementTemplate('<div class="form-actions">{label} {element}</div>', $name);
     }
 
     /**
@@ -589,7 +601,12 @@ EOT;
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'magnify', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'magnify',
+            'primary'
+        );
     }
 
     /**
@@ -713,7 +730,7 @@ EOT;
             );
         }
 
-        return $this->addElement(
+        $element = $this->addElement(
             'reset',
             $name,
             $label,
@@ -723,6 +740,9 @@ EOT;
             $class,
             $attributes
         );
+        $this->registerAsFormAction($name);
+
+        return $element;
     }
 
     /**

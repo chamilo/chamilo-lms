@@ -32,14 +32,15 @@
 
       <slot></slot>
 
-      <BaseButton
-        :disabled="!canSubmitMessage"
-        :label="t('Send')"
-        class="mt-4"
-        icon="plus"
-        type="primary"
-        @click="onSubmit"
-      />
+      <div class="flex justify-end mt-2">
+        <BaseButton
+          :disabled="!canSubmitMessage"
+          :label="t('Send')"
+          icon="plus"
+          type="primary"
+          @click="onSubmit"
+        />
+      </div>
     </div>
 
     <div class="mt-4 md:mt-0 md:w-1/3">

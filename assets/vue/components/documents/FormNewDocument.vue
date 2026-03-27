@@ -68,12 +68,14 @@
     <!-- Extra blocks injected by parent -->
     <slot></slot>
 
-    <BaseButton
-      type="primary"
-      icon="save"
-      :label="$t('Save')"
-      @click.prevent="$emit('submit')"
-    />
+    <div class="flex justify-end mt-2">
+      <BaseButton
+        type="primary"
+        icon="save"
+        :label="$t('Save')"
+        @click.prevent="$emit('submit')"
+      />
+    </div>
   </form>
 </template>
 

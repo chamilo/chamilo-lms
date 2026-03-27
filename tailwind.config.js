@@ -16,8 +16,8 @@ module.exports = {
   important: true,
   content: [
     "./assets/**/*.{js,vue}",
-    "./public/main/**/*.{php,twig}",
-    "./public/plugin/**/*.{php,twig}",
+    "./public/main/**/*.{php,twig,tpl}",
+    "./public/plugin/**/*.{php,twig,tpl}",
     "./src/CoreBundle/Resources/views/**/*.html.twig",
   ],
   theme: {

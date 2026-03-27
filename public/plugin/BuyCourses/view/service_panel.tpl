@@ -1,5 +1,5 @@
 {% autoescape false %}
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
 <script type="text/javascript" src="../resources/js/modals.js"></script>
 
 <div id="buy-courses-tabs">
@@ -23,7 +23,7 @@
                role="tab">{{ 'MyPayouts'| get_plugin_lang('BuyCoursesPlugin') }}</a>
         </li>
     </ul>
-    <table class="table table-striped table-hover">
+    <table class="min-w-full divide-y divide-gray-25">
         <thead>
         <tr>
             <th>{{ 'Service'| get_plugin_lang('BuyCoursesPlugin') }}</th>
@@ -44,7 +44,7 @@
                 <td class="text-center">{{ sale.reference }}</td>
                 <td class="text-center">
                     <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
-                       class="btn btn--info btn--sm">{{ 'Info'|get_lang }}</a>
+                       class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2">{{ 'Info'|get_lang }}</a>
                 </td>
                 </td>
             </tr>
@@ -87,4 +87,5 @@
         });
     });
 </script>
+</div>
 {% endautoescape %}

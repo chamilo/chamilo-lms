@@ -423,7 +423,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="mt-4 flex justify-end">
+        <div class="mt-2 flex justify-end">
           <BaseButton
             v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
             :label="isSaving ? t('Saving...') : t('Save attendance')"

@@ -3,8 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * Plugin configuration page.
+ *
+ * This page renders the dynamic settings form declared by each plugin and
+ * persists the configuration for the current access URL.
  */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -14,52 +16,468 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$pluginRepo = Container::getPluginRepository();
+/**
+ * Add classes to a DOM element without removing existing classes.
+ */
+function c2_add_tailwind_classes_to_element(DOMElement $element, array $classes): void
+{
+    $existing = trim((string) $element->getAttribute('class'));
+    $currentClasses = '' === $existing ? [] : preg_split('/\s+/', $existing);
+    $currentClasses = is_array($currentClasses) ? $currentClasses : [];
 
-$plugin = $pluginRepo->getInstalledByName($_GET['plugin']);
+    foreach ($classes as $class) {
+        if (!in_array($class, $currentClasses, true)) {
+            $currentClasses[] = $class;
+        }
+    }
 
-if (!$plugin) {
-    api_not_allowed(true);
+    $element->setAttribute('class', trim(implode(' ', array_filter($currentClasses))));
 }
 
-$accessUrl = Container::getAccessUrlUtil()->getCurrent();
-$pluginConfiguration = $plugin->getOrCreatePluginConfiguration($accessUrl);
+/**
+ * Return the inner HTML of a DOM element.
+ */
+function c2_get_element_inner_html(DOMElement $element): string
+{
+    $html = '';
 
-$appPlugin  = new AppPlugin();
-$pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true) ?? [];
-$prevDefaultVis = $pluginInfo['settings']['defaultVisibilityInCourseHomepage'] ?? null;
-$prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
+    foreach ($element->childNodes as $childNode) {
+        $html .= $element->ownerDocument->saveHTML($childNode);
+    }
+
+    return $html;
+}
 
 /**
- * Optional best-effort loader for legacy plugin object.
- * Returns a Plugin instance or null. We DO NOT abort if null.
+ * Style legacy plugin settings forms with Tailwind utility classes.
+ */
+function c2_style_plugin_settings_form_html(string $html): string
+{
+    if (!class_exists(DOMDocument::class) || '' === trim($html)) {
+        return $html;
+    }
+
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+
+    $document = new DOMDocument('1.0', 'UTF-8');
+    $wrappedHtml = '<?xml encoding="utf-8" ?><div id="plugin-settings-form-root">'.$html.'</div>';
+
+    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    if (!$loaded) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $xpath = new DOMXPath($document);
+    $root = $document->getElementById('plugin-settings-form-root');
+
+    if (!$root) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $forms = $xpath->query('.//form', $root);
+    if ($forms) {
+        foreach ($forms as $form) {
+            if (!$form instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($form, ['space-y-6']);
+        }
+    }
+
+    $fieldsets = $xpath->query('.//fieldset', $root);
+    if ($fieldsets) {
+        foreach ($fieldsets as $fieldset) {
+            if (!$fieldset instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($fieldset, [
+                'rounded-3xl',
+                'border',
+                'border-gray-25',
+                'bg-white',
+                'p-6',
+                'shadow-sm',
+                'space-y-4',
+            ]);
+        }
+    }
+
+    $legends = $xpath->query('.//legend', $root);
+    if ($legends) {
+        foreach ($legends as $legend) {
+            if (!$legend instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($legend, [
+                'px-2',
+                'text-sm',
+                'font-semibold',
+                'text-gray-90',
+            ]);
+        }
+    }
+
+    $formGroups = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]', $root);
+    if ($formGroups) {
+        foreach ($formGroups as $group) {
+            if (!$group instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($group, [
+                'rounded-2xl',
+                'border',
+                'border-gray-25',
+                'bg-white',
+                'p-5',
+                'shadow-sm',
+                'space-y-3',
+            ]);
+        }
+    }
+
+    $labels = $xpath->query('.//label', $root);
+    if ($labels) {
+        foreach ($labels as $label) {
+            if (!$label instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($label, [
+                'mb-2',
+                'block',
+                'text-sm',
+                'font-semibold',
+                'text-gray-90',
+            ]);
+        }
+    }
+
+    $columns = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " col-sm-2 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-3 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-4 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-5 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-6 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-7 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-8 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-9 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-10 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-11 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-12 ")
+            or contains(concat(" ", normalize-space(@class), " "), " col-sm-offset-2 ")]',
+        $root
+    );
+
+    if ($columns) {
+        foreach ($columns as $column) {
+            if (!$column instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($column, ['w-full', 'max-w-none']);
+        }
+    }
+
+    $inputs = $xpath->query('.//input', $root);
+    if ($inputs) {
+        foreach ($inputs as $input) {
+            if (!$input instanceof DOMElement) {
+                continue;
+            }
+
+            $type = strtolower((string) $input->getAttribute('type'));
+
+            if ('hidden' === $type) {
+                continue;
+            }
+
+            if (in_array($type, ['checkbox', 'radio'], true)) {
+                c2_add_tailwind_classes_to_element($input, [
+                    'h-4',
+                    'w-4',
+                    'rounded',
+                    'border-gray-25',
+                    'text-primary',
+                    'focus:ring-primary',
+                ]);
+
+                continue;
+            }
+
+            if (in_array($type, ['submit', 'button'], true)) {
+                c2_add_tailwind_classes_to_element($input, [
+                    'inline-flex',
+                    'items-center',
+                    'justify-center',
+                    'gap-2',
+                    'rounded-xl',
+                    'bg-primary',
+                    'px-4',
+                    'py-2.5',
+                    'text-sm',
+                    'font-semibold',
+                    'text-white',
+                    'shadow-sm',
+                    'transition',
+                    'hover:opacity-90',
+                    'focus:outline-none',
+                    'focus:ring-2',
+                    'focus:ring-primary/30',
+                    'focus:ring-offset-2',
+                ]);
+
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($input, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'placeholder:text-gray-50',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $selects = $xpath->query('.//select', $root);
+    if ($selects) {
+        foreach ($selects as $select) {
+            if (!$select instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($select, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $textareas = $xpath->query('.//textarea', $root);
+    if ($textareas) {
+        foreach ($textareas as $textarea) {
+            if (!$textarea instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($textarea, [
+                'block',
+                'w-full',
+                'rounded-xl',
+                'border-gray-25',
+                'bg-white',
+                'text-sm',
+                'text-gray-90',
+                'shadow-sm',
+                'placeholder:text-gray-50',
+                'focus:border-primary',
+                'focus:ring-primary',
+            ]);
+        }
+    }
+
+    $buttons = $xpath->query('.//button', $root);
+    if ($buttons) {
+        foreach ($buttons as $button) {
+            if (!$button instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($button, [
+                'inline-flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'rounded-xl',
+                'bg-primary',
+                'px-4',
+                'py-2.5',
+                'text-sm',
+                'font-semibold',
+                'text-white',
+                'shadow-sm',
+                'transition',
+                'hover:opacity-90',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-primary/30',
+                'focus:ring-offset-2',
+            ]);
+        }
+    }
+
+    $checkboxContainers = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " checkbox ")
+            or contains(concat(" ", normalize-space(@class), " "), " radio ")]',
+        $root
+    );
+    if ($checkboxContainers) {
+        foreach ($checkboxContainers as $container) {
+            if (!$container instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($container, [
+                'flex',
+                'items-center',
+                'gap-3',
+            ]);
+        }
+    }
+
+    $helpBlocks = $xpath->query(
+        './/*[contains(concat(" ", normalize-space(@class), " "), " help-block ")
+            or contains(concat(" ", normalize-space(@class), " "), " form-control-feedback ")]',
+        $root
+    );
+    if ($helpBlocks) {
+        foreach ($helpBlocks as $helpBlock) {
+            if (!$helpBlock instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($helpBlock, [
+                'mt-2',
+                'block',
+                'text-sm',
+                'text-gray-50',
+            ]);
+        }
+    }
+
+    $tables = $xpath->query('.//table', $root);
+    if ($tables) {
+        foreach ($tables as $table) {
+            if (!$table instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($table, [
+                'min-w-full',
+                'divide-y',
+                'divide-gray-25',
+            ]);
+        }
+    }
+
+    $theadList = $xpath->query('.//thead', $root);
+    if ($theadList) {
+        foreach ($theadList as $thead) {
+            if (!$thead instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($thead, ['bg-gray-15']);
+        }
+    }
+
+    $thList = $xpath->query('.//th', $root);
+    if ($thList) {
+        foreach ($thList as $th) {
+            if (!$th instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($th, [
+                'px-4',
+                'py-3',
+                'text-left',
+                'text-xs',
+                'font-semibold',
+                'uppercase',
+                'tracking-wide',
+                'text-gray-50',
+            ]);
+        }
+    }
+
+    $tdList = $xpath->query('.//td', $root);
+    if ($tdList) {
+        foreach ($tdList as $td) {
+            if (!$td instanceof DOMElement) {
+                continue;
+            }
+
+            c2_add_tailwind_classes_to_element($td, [
+                'px-4',
+                'py-4',
+                'align-middle',
+                'text-sm',
+                'text-gray-90',
+            ]);
+        }
+    }
+
+    $result = c2_get_element_inner_html($root);
+
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+
+    return $result;
+}
+
+/**
+ * Optional best-effort loader for a legacy plugin object.
+ *
+ * Returns a Plugin instance or null.
  */
 function c2_try_load_legacy_plugin_obj(string $title): ?Plugin
 {
-    // Try helper first (handles title normalization through repositories)
     $obj = Container::getPluginHelper()->loadLegacyPlugin($title);
+
     if ($obj instanceof Plugin) {
         return $obj;
     }
 
-    // Minimal extra attempts with common casings and suffix
-    $sysPath  = api_get_path(SYS_PLUGIN_PATH);
-    $studly   = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', $title)));
-    $dirs     = array_unique([$title, strtolower($title), ucfirst(strtolower($title)), $studly]);
+    $sysPath = api_get_path(SYS_PLUGIN_PATH);
+    $studly = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', $title)));
+    $dirs = array_unique([$title, strtolower($title), ucfirst(strtolower($title)), $studly]);
+
     foreach ($dirs as $dir) {
-        $base   = $sysPath.$dir.'/';
-        $classS = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', (string)$dir)));
+        $base = $sysPath.$dir.'/';
+        $classS = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', (string) $dir)));
         $classes = array_unique([$dir, $dir.'Plugin', $classS, $classS.'Plugin']);
+
         foreach ($classes as $cls) {
             $paths = [$base.'src/'.$cls.'.php', $base.$cls.'.php'];
-            foreach ($paths as $p) {
-                if (is_readable($p)) {
-                    require_once $p;
-                    if (class_exists($cls) && method_exists($cls, 'create')) {
-                        $maybe = $cls::create();
-                        if ($maybe instanceof Plugin) {
-                            return $maybe;
-                        }
+
+            foreach ($paths as $path) {
+                if (!is_readable($path)) {
+                    continue;
+                }
+
+                require_once $path;
+
+                if (class_exists($cls) && method_exists($cls, 'create')) {
+                    $maybe = $cls::create();
+
+                    if ($maybe instanceof Plugin) {
+                        return $maybe;
                     }
                 }
             }
@@ -69,10 +487,26 @@ function c2_try_load_legacy_plugin_obj(string $title): ?Plugin
     return null;
 }
 
-// Try to ensure we have a Plugin instance, but DO NOT hard-fail if we can't.
+$pluginRepo = Container::getPluginRepository();
+$pluginName = isset($_GET['plugin']) ? (string) $_GET['plugin'] : '';
+$plugin = $pluginRepo->getInstalledByName($pluginName);
+
+if (!$plugin) {
+    api_not_allowed(true);
+}
+
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
+$pluginConfiguration = $plugin->getOrCreatePluginConfiguration($accessUrl);
+
+$appPlugin = new AppPlugin();
+$pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true) ?? [];
+$prevDefaultVis = $pluginInfo['settings']['defaultVisibilityInCourseHomepage'] ?? null;
+$prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
+
 $legacyObj = $pluginInfo['obj'] ?? null;
 if (!$legacyObj instanceof Plugin) {
     $legacyObj = c2_try_load_legacy_plugin_obj($plugin->getTitle());
+
     if ($legacyObj instanceof Plugin) {
         $pluginInfo['obj'] = $legacyObj;
     }
@@ -82,154 +516,130 @@ if (!$legacyObj instanceof Plugin) {
 $objPlugin = $pluginInfo['obj'] ?? null;
 
 $em = Container::getEntityManager();
+$pluginHelper = Container::getPluginHelper();
 
 $currentUrl = api_get_self().'?plugin='.$plugin->getTitle();
-$backUrl    = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins';
+$backUrl = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins';
 
-$headerHtml = '
-<div class="mb-4 flex items-center justify-between">
-  <h2 class="text-2xl font-semibold text-gray-90">'.htmlspecialchars($pluginInfo['title'] ?? $plugin->getTitle(), ENT_QUOTES).'</h2>
-  <a href="'.$backUrl.'" class="btn btn--sm btn--plain" title="'.get_lang('Back').'">
-    <i class="mdi mdi-arrow-left"></i> '.get_lang('Back to plugins').'
-  </a>
-</div>
-';
-
-$content = $headerHtml;
-
-/**
- * Decide if there are editable settings to render.
- * - Remove legacy 'tool_enable' from the list before deciding.
- */
-$declaredFieldNames =
-    $objPlugin instanceof Plugin
-        ? $objPlugin->getFieldNames()
-        : (isset($pluginInfo['settings']) && is_array($pluginInfo['settings']) ? array_keys($pluginInfo['settings']) : []);
+$declaredFieldNames = $objPlugin instanceof Plugin
+    ? $objPlugin->getFieldNames()
+    : (isset($pluginInfo['settings']) && is_array($pluginInfo['settings']) ? array_keys($pluginInfo['settings']) : []);
 
 $editableFieldNames = array_values(array_diff($declaredFieldNames, ['tool_enable']));
-$hasEditableFields  = \count($editableFieldNames) > 0;
+$hasEditableFields = count($editableFieldNames) > 0;
+$isEnabledNow = $pluginHelper->isPluginEnabled($plugin->getTitle());
+
+$form = null;
+$styledFormHtml = '';
 
 if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
     /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];
-    if (!empty($form)) {
-        // Ensure proper form action and method
-        $form->updateAttributes(['action' => $currentUrl, 'method' => 'POST']);
 
-        // Drop legacy toggle from defaults, so it won't get posted accidentally
+    if (!empty($form)) {
+        $form->updateAttributes([
+            'action' => $currentUrl,
+            'method' => 'POST',
+        ]);
+
         if (isset($pluginInfo['settings'])) {
             unset($pluginInfo['settings']['tool_enable']);
             $form->setDefaults($pluginInfo['settings']);
         }
 
-        // Best-effort: hide legacy 'tool_enable' if some plugin still injects it
-        $content .= '<style>
-            [name="tool_enable"],
-            input[name*="[tool_enable]"],
-            select[name*="[tool_enable]"],
-            label[for="tool_enable"] { display:none !important; }
-        </style>';
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
 
-        $content .= $form->toHtml();
-    }
-} else {
-    // No editable settings: show a small info block (no empty form, no Save button).
-    $content .= '
-    <div class="rounded-md border border-gray-20 bg-gray-05 p-4 text-sm text-gray-80">
-      <div class="font-semibold mb-1">'.get_lang('Information').'</div>
-      <p class="m-0">'.get_lang('This plugin has no configurable settings. Activation is managed from the plugins list.').'</p>
-    </div>';
-}
-
-if (isset($form) && $hasEditableFields) {
-    if ($form->validate()) {
-        $values = $form->getSubmitValues();
-
-        // Fix only for bbb (keep previous behavior)
-        if ('bbb' == $plugin->getTitle() && !isset($values['global_conference_allow_roles'])) {
-            $values['global_conference_allow_roles'] = [];
-        }
-
-        // Never persist legacy toggle even if posted by mistake (deep filter)
-        $stripToolEnable = function (&$arr) use (&$stripToolEnable) {
-            if (!is_array($arr)) { return; }
-            foreach ($arr as $k => &$v) {
-                if ($k === 'tool_enable') {
-                    unset($arr[$k]);
-                    continue;
-                }
-                if (is_array($v)) {
-                    $stripToolEnable($v);
-                }
+            if ('bbb' === $plugin->getTitle() && !isset($values['global_conference_allow_roles'])) {
+                $values['global_conference_allow_roles'] = [];
             }
-        };
-        $stripToolEnable($values);
 
-        // Reserved/irrelevant keys we don't want to persist
-        $formName = method_exists($form, 'getAttribute') ? ($form->getAttribute('name') ?: 'form') : 'form';
-        $reservedKeys = ['submit', 'submit_button', '_token', '_qf__'.$formName];
-        foreach ($reservedKeys as $rk) {
-            if (isset($values[$rk])) {
-                unset($values[$rk]);
-            }
-        }
+            $stripToolEnable = static function (&$arr) use (&$stripToolEnable): void {
+                if (!is_array($arr)) {
+                    return;
+                }
 
-        // Build safe whitelist
-        if ($objPlugin instanceof Plugin) {
-            /** @var array<int, string> $pluginFields */
-            $pluginFields = $objPlugin->getFieldNames();
-            $toPersist = array_intersect_key($values, array_flip($pluginFields));
-        } elseif (!empty($pluginInfo['settings']) && is_array($pluginInfo['settings'])) {
-            $whitelist = array_keys($pluginInfo['settings']);
-            $toPersist = array_intersect_key($values, array_flip($whitelist));
-        } else {
-            $toPersist = $values;
-        }
+                foreach ($arr as $key => &$value) {
+                    if ('tool_enable' === $key) {
+                        unset($arr[$key]);
+                        continue;
+                    }
 
-        // Persist configuration JSON
-        $pluginConfiguration->setConfiguration($toPersist);
-        $em->flush();
+                    if (is_array($value)) {
+                        $stripToolEnable($value);
+                    }
+                }
+            };
+            $stripToolEnable($values);
 
-        Event::addEvent(
-            LOG_PLUGIN_CHANGE,
-            LOG_PLUGIN_SETTINGS_CHANGE,
-            $plugin->getTitle(),
-            api_get_utc_datetime(),
-            api_get_user_id()
-        );
+            $formName = $form->getAttribute('name') ?: 'form';
+            $reservedKeys = ['submit', 'submit_button', '_token', '_qf__'.$formName];
 
-        // Compute only visibility delta; activation is managed from the plugins list (C2 source of truth)
-        $newDefaultVis = $values['defaultVisibilityInCourseHomepage'] ?? $prevDefaultVis;
-
-        // Re-seed course icons only if plugin object exists, is course plugin, and is currently active
-        if ($objPlugin instanceof Plugin) {
-            $isEnabledNow = Container::getPluginHelper()->isPluginEnabled($plugin->getTitle());
-            $objPlugin->get_settings(true);
-
-            if (!empty($objPlugin->isCoursePlugin) && $isEnabledNow) {
-                if ($newDefaultVis !== $prevDefaultVis) {
-                    // Recreate links to match new default visibility
-                    $objPlugin->uninstall_course_fields_in_all_courses();
-                    $objPlugin->install_course_fields_in_all_courses();
+            foreach ($reservedKeys as $reservedKey) {
+                if (isset($values[$reservedKey])) {
+                    unset($values[$reservedKey]);
                 }
             }
 
-            // Allow plugins to run post-config hooks
-            $objPlugin->performActionsAfterConfigure();
-
-            // Optional tab management (preserve existing behavior)
-            if (isset($values['show_main_menu_tab'])) {
-                $objPlugin->manageTab($values['show_main_menu_tab']);
+            if ($objPlugin instanceof Plugin) {
+                $pluginFields = $objPlugin->getFieldNames();
+                $toPersist = array_intersect_key($values, array_flip($pluginFields));
+            } elseif (!empty($pluginInfo['settings']) && is_array($pluginInfo['settings'])) {
+                $whitelist = array_keys($pluginInfo['settings']);
+                $toPersist = array_intersect_key($values, array_flip($whitelist));
+            } else {
+                $toPersist = $values;
             }
+
+            unset($toPersist['tool_enable']);
+
+            $pluginConfiguration->setConfiguration($toPersist);
+            $em->flush();
+
+            Event::addEvent(
+                LOG_PLUGIN_CHANGE,
+                LOG_PLUGIN_SETTINGS_CHANGE,
+                $plugin->getTitle(),
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
+
+            $newDefaultVis = $values['defaultVisibilityInCourseHomepage'] ?? $prevDefaultVis;
+
+            if ($objPlugin instanceof Plugin) {
+                $isEnabledNow = $pluginHelper->isPluginEnabled($plugin->getTitle());
+                $objPlugin->get_settings(true);
+
+                if (!empty($objPlugin->isCoursePlugin) && $isEnabledNow) {
+                    if ($newDefaultVis !== $prevDefaultVis) {
+                        $objPlugin->uninstall_course_fields_in_all_courses();
+                        $objPlugin->install_course_fields_in_all_courses();
+                    }
+                }
+
+                $objPlugin->performActionsAfterConfigure();
+
+                if (isset($values['show_main_menu_tab']) && $objPlugin instanceof Plugin) {
+                    $showMainMenuTab = filter_var(
+                        $values['show_main_menu_tab'],
+                        FILTER_VALIDATE_BOOLEAN,
+                        FILTER_NULL_ON_FAILURE
+                    );
+
+                    $objPlugin->manageTab(true === $showMainMenuTab);
+                }
+            }
+
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
+            header("Location: $currentUrl");
+            exit;
         }
 
-        Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
-        header("Location: $currentUrl");
-        exit;
-    } else {
         foreach ($form->_errors as $error) {
             Display::addFlash(Display::return_message($error, 'error'));
         }
+
+        $styledFormHtml = c2_style_plugin_settings_form_html($form->toHtml());
     }
 }
 
@@ -241,6 +651,118 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
     'name' => get_lang('Plugins'),
 ];
+
+$pluginTitle = $pluginInfo['title'] ?? $plugin->getTitle();
+$pluginTitleEscaped = htmlspecialchars((string) $pluginTitle, ENT_QUOTES, 'UTF-8');
+$pluginNameEscaped = htmlspecialchars((string) $plugin->getTitle(), ENT_QUOTES, 'UTF-8');
+$pluginStatusLabel = $isEnabledNow ? get_lang('Enabled') : get_lang('Disabled');
+$pluginStatusClasses = $isEnabledNow
+    ? 'bg-success text-white'
+    : 'bg-gray-20 text-gray-90';
+
+$settingsCountLabel = (string) count($editableFieldNames);
+$hasSettingsLabel = $hasEditableFields ? get_lang('Yes') : get_lang('No');
+$pluginSummaryText = $hasEditableFields
+    ? 'This plugin exposes configurable settings for the current access URL.'
+    : 'This plugin does not expose configurable settings. Activation is managed from the plugins list.';
+
+$content = '
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="space-y-3">
+                <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
+                    '.htmlspecialchars(get_lang('Plugins'), ENT_QUOTES, 'UTF-8').'
+                </div>
+
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
+                        '.$pluginTitleEscaped.'
+                    </h1>
+                    <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
+                        '.$pluginSummaryText.'
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row">
+                <a
+                    href="'.$backUrl.'"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                    title="'.htmlspecialchars(get_lang('Back'), ENT_QUOTES, 'UTF-8').'"
+                >
+                    <em class="mdi mdi-arrow-left"></em>
+                    '.htmlspecialchars(get_lang('Back to plugins'), ENT_QUOTES, 'UTF-8').'
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    '.htmlspecialchars(get_lang('Name'), ENT_QUOTES, 'UTF-8').'
+                </div>
+                <div class="mt-2 text-base font-semibold text-gray-90">
+                    '.$pluginNameEscaped.'
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    '.htmlspecialchars(get_lang('Status'), ENT_QUOTES, 'UTF-8').'
+                </div>
+                <div class="mt-2">
+                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold '.$pluginStatusClasses.'">
+                        '.htmlspecialchars($pluginStatusLabel, ENT_QUOTES, 'UTF-8').'
+                    </span>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    '.htmlspecialchars(get_lang('Settings'), ENT_QUOTES, 'UTF-8').'
+                </div>
+                <div class="mt-2 text-base font-semibold text-gray-90">
+                    '.$settingsCountLabel.'
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    '.htmlspecialchars(get_lang('Configuration'), ENT_QUOTES, 'UTF-8').'
+                </div>
+                <div class="mt-2 text-base font-semibold text-gray-90">
+                    '.htmlspecialchars($hasSettingsLabel, ENT_QUOTES, 'UTF-8').'
+                </div>
+            </div>
+        </div>
+    </section>';
+
+if ($hasEditableFields && '' !== trim($styledFormHtml)) {
+    $content .= '
+    <section class="rounded-3xl border border-gray-25 bg-gray-10 p-6 shadow-sm">
+        '.$styledFormHtml.'
+    </section>';
+} else {
+    $content .= '
+    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-4 text-sm text-gray-90">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 text-primary">
+                    <em class="fa fa-info-circle text-lg"></em>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-90">'.htmlspecialchars(get_lang('Information'), ENT_QUOTES, 'UTF-8').'</p>
+                    <p class="mt-1 leading-6 text-gray-90">
+                        '.htmlspecialchars(get_lang('This plugin has no configurable settings. Activation is managed from the plugins list.'), ENT_QUOTES, 'UTF-8').'
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>';
+}
+
+$content .= '</div>';
 
 $tpl = new Template($plugin->getTitle(), true, true, false, true, false);
 $tpl->assign('content', $content);

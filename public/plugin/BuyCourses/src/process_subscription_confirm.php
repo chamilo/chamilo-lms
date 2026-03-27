@@ -4,69 +4,133 @@ declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
- * Process purchase confirmation script for the Buy Courses plugin.
+ * Process purchase confirmation script for subscription sales in the Buy Courses plugin.
  */
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
 
-$saleId = $_SESSION['bc_sale_id'];
-$couponId = $_SESSION['bc_coupon_id'];
+$saleId = isset($_SESSION['bc_sale_id']) && is_scalar($_SESSION['bc_sale_id'])
+    ? (int) $_SESSION['bc_sale_id']
+    : 0;
 
-if (empty($saleId)) {
+$couponId = isset($_SESSION['bc_coupon_id']) && is_scalar($_SESSION['bc_coupon_id'])
+    ? (int) $_SESSION['bc_coupon_id']
+    : 0;
+
+if ($saleId <= 0) {
     api_not_allowed(true);
 }
 
 $sale = $plugin->getSubscriptionSale($saleId);
 
-if (!empty($couponId)) {
-    $coupon = $plugin->getCoupon($couponId, $sale['product_type'], $sale['product_id']);
-}
-
-$userInfo = api_get_user_info($sale['user_id']);
-
 if (empty($sale)) {
     api_not_allowed(true);
 }
 
-$currency = $plugin->getCurrency($sale['currency_id']);
+$coupon = [];
+if ($couponId > 0) {
+    $coupon = $plugin->getCoupon(
+        $couponId,
+        (int) $sale['product_type'],
+        (int) $sale['product_id']
+    );
+}
+
+$userInfo = api_get_user_info((int) $sale['user_id']);
+$currency = $plugin->getCurrency((int) $sale['currency_id']);
 $globalParameters = $plugin->getGlobalParameters();
 
-switch ($sale['payment_type']) {
+$catalogRedirectUrl = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === (int) $sale['product_type']
+    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscription_session_catalog.php'
+    : api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscription_course_catalog.php';
+
+$buyingCourse = false;
+$buyingSession = false;
+$course = [];
+$session = [];
+
+switch ((int) $sale['product_type']) {
+    case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+        $buyingCourse = true;
+        $course = $plugin->getSubscriptionCourseInfo((int) $sale['product_id'], $coupon);
+
+        break;
+
+    case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+        $buyingSession = true;
+        $session = $plugin->getSubscriptionSessionInfo((int) $sale['product_id'], $coupon);
+
+        break;
+}
+
+switch ((int) $sale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = 1 == $paypalParams['sandbox'];
-        $paypalUsername = $paypalParams['username'];
-        $paypalPassword = $paypalParams['password'];
-        $paypalSignature = $paypalParams['signature'];
+        $pruebas = 1 == ($paypalParams['sandbox'] ?? 0);
+        $paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
+        $paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
+        $paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
+
+        error_log('[BuyCourses][Subscription][PayPal] Starting Express Checkout for subscription sale '.$sale['id']);
+        error_log('[BuyCourses][Subscription][PayPal] Sandbox='.($pruebas ? 'true' : 'false'));
+        error_log('[BuyCourses][Subscription][PayPal] API username configured='.($paypalUsername !== '' ? 'yes' : 'no'));
+        error_log('[BuyCourses][Subscription][PayPal] API password configured='.($paypalPassword !== '' ? 'yes' : 'no'));
+        error_log('[BuyCourses][Subscription][PayPal] API signature configured='.($paypalSignature !== '' ? 'yes' : 'no'));
+
+        if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('PayPalApiCredentialsIncomplete'), 'error', false)
+            );
+
+            error_log('[BuyCourses][Subscription][PayPal] Missing API credentials');
+
+            header('Location: '.$catalogRedirectUrl);
+            exit;
+        }
 
         require_once 'paypalfunctions.php';
 
-        $i = 0;
-        $extra = "&L_PAYMENTREQUEST_0_NAME0={$sale['product_name']}";
-        $extra .= "&L_PAYMENTREQUEST_0_AMT0={$sale['price']}";
+        $extra = "&L_PAYMENTREQUEST_0_NAME0=".urlencode((string) $sale['product_name']);
+        $extra .= "&L_PAYMENTREQUEST_0_AMT0=".urlencode((string) $sale['price']);
         $extra .= '&L_PAYMENTREQUEST_0_QTY0=1';
 
+        $returnUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscription_success.php';
+        $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscription_error.php';
+
+        error_log('[BuyCourses][Subscription][PayPal] Return URL: '.$returnUrl);
+        error_log('[BuyCourses][Subscription][PayPal] Cancel URL: '.$cancelUrl);
+
         $expressCheckout = CallShortcutExpressCheckout(
-            $sale['price'],
-            $currency['iso_code'],
-            'paypal',
-            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/success.php',
-            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/error.php',
+            (string) $sale['price'],
+            (string) ($currency['iso_code'] ?? ''),
+            'Sale',
+            $returnUrl,
+            $cancelUrl,
             $extra
         );
 
-        if ('Success' !== $expressCheckout['ACK']) {
-            $erroMessage = vsprintf(
-                $plugin->get_lang('ErrorOccurred'),
-                [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
-            );
-            Display::addFlash(
-                Display::return_message($erroMessage, 'error', false)
-            );
-            header('Location: ../index.php');
+        error_log('[BuyCourses][Subscription][PayPal] SetExpressCheckout response: '.json_encode($expressCheckout));
 
+        $ack = strtoupper((string) ($expressCheckout['ACK'] ?? ''));
+
+        if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+            $errorCode = (string) ($expressCheckout['L_ERRORCODE0'] ?? 'unknown');
+            $longMessage = (string) ($expressCheckout['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
+            $correlationId = (string) ($expressCheckout['CORRELATIONID'] ?? '');
+
+            error_log('[BuyCourses][Subscription][PayPal] SetExpressCheckout failed. ACK='.$ack.' CODE='.$errorCode.' MESSAGE='.$longMessage.' CORRELATION='.$correlationId);
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage),
+                    'error',
+                    false
+                )
+            );
+
+            header('Location: '.$catalogRedirectUrl);
             exit;
         }
 
@@ -78,7 +142,7 @@ switch ($sale['payment_type']) {
                 [
                     'date' => $sale['date'],
                     'product' => $sale['product_name'],
-                    'currency' => $currency['iso_code'],
+                    'currency' => $currency['iso_code'] ?? '',
                     'price' => $sale['price'],
                     'reference' => $sale['reference'],
                 ]
@@ -92,30 +156,14 @@ switch ($sale['payment_type']) {
             );
         }
 
-        RedirectToPayPal($expressCheckout['TOKEN']);
+        error_log('[BuyCourses][Subscription][PayPal] Redirecting to PayPal with token '.($expressCheckout['TOKEN'] ?? ''));
 
-        break;
+        RedirectToPayPal((string) ($expressCheckout['TOKEN'] ?? ''));
+        exit;
 
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
-        $buyingCourse = false;
-        $buyingSession = false;
-
-        switch ($sale['product_type']) {
-            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
-                $buyingCourse = true;
-                $course = $plugin->getSubscriptionCourseInfo($sale['product_id'], $coupon);
-
-                break;
-
-            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
-                $buyingSession = true;
-                $session = $plugin->getSubscriptionSessionInfo($sale['product_id'], $coupon);
-
-                break;
-        }
-
         $transferAccounts = $plugin->getTransferAccounts();
-        $infoEmailExtra = $plugin->getTransferInfoExtra()['tinfo_email_extra'];
+        $infoEmailExtra = $plugin->getTransferInfoExtra()['tinfo_email_extra'] ?? '';
 
         $form = new FormValidator(
             'success',
@@ -130,12 +178,11 @@ switch ($sale['payment_type']) {
             $formValues = $form->getSubmitValues();
 
             if (isset($formValues['cancel'])) {
-                $plugin->cancelSubscriptionSale($sale['id']);
+                $plugin->cancelSubscriptionSale((int) $sale['id']);
 
                 unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
 
-                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
-
+                header('Location: '.$catalogRedirectUrl);
                 exit;
             }
 
@@ -146,7 +193,7 @@ switch ($sale['payment_type']) {
                 [
                     'date' => $sale['date'],
                     'product' => $sale['product_name'],
-                    'currency' => $currency['iso_code'],
+                    'currency' => $currency['iso_code'] ?? '',
                     'price' => $sale['price'],
                     'reference' => $sale['reference'],
                 ]
@@ -155,7 +202,7 @@ switch ($sale['payment_type']) {
             $messageTemplate->assign('info_email_extra', $infoEmailExtra);
 
             MessageManager::send_message_simple(
-                $userInfo['user_id'],
+                (int) $userInfo['user_id'],
                 $plugin->get_lang('bc_subject'),
                 $messageTemplate->fetch('BuyCourses/view/message_transfer.tpl')
             );
@@ -168,7 +215,7 @@ switch ($sale['payment_type']) {
                     [
                         'date' => $sale['date'],
                         'product' => $sale['product_name'],
-                        'currency' => $currency['iso_code'],
+                        'currency' => $currency['iso_code'] ?? '',
                         'price' => $sale['price'],
                         'reference' => $sale['reference'],
                     ]
@@ -195,8 +242,7 @@ switch ($sale['payment_type']) {
 
             unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
 
-            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
-
+            header('Location: '.$catalogRedirectUrl);
             exit;
         }
 
@@ -221,10 +267,10 @@ switch ($sale['payment_type']) {
 
         $template->assign('buying_course', $buyingCourse);
         $template->assign('buying_session', $buyingSession);
-        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions'] ?? '');
         $template->assign('title', $sale['product_name']);
-        $template->assign('price', $sale['price']);
-        $template->assign('currency', $sale['currency_id']);
+        $template->assign('price', (float) $sale['price']);
+        $template->assign('currency', $currency);
         $template->assign('user', $userInfo);
         $template->assign('transfer_accounts', $transferAccounts);
         $template->assign('form', $form->returnForm());
@@ -238,26 +284,7 @@ switch ($sale['payment_type']) {
         break;
 
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
-        // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
-        // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
         $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
-
-        $buyingCourse = false;
-        $buyingSession = false;
-
-        switch ($sale['product_type']) {
-            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
-                $buyingCourse = true;
-                $course = $plugin->getSubscriptionCourseInfo($sale['product_id'], $coupon);
-
-                break;
-
-            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
-                $buyingSession = true;
-                $session = $plugin->getSubscriptionSessionInfo($sale['product_id'], $coupon);
-
-                break;
-        }
 
         $form = new FormValidator(
             'success',
@@ -272,7 +299,7 @@ switch ($sale['payment_type']) {
             $formValues = $form->getSubmitValues();
 
             if (isset($formValues['cancel'])) {
-                $plugin->cancelSubscriptionSale($sale['id']);
+                $plugin->cancelSubscriptionSale((int) $sale['id']);
 
                 unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
 
@@ -284,11 +311,11 @@ switch ($sale['payment_type']) {
                     )
                 );
 
-                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
-
+                header('Location: '.$catalogRedirectUrl);
                 exit;
             }
         }
+
         $form->addButton(
             'confirm',
             $plugin->get_lang('ConfirmOrder'),
@@ -318,15 +345,15 @@ switch ($sale['payment_type']) {
 
         $template->assign('buying_course', $buyingCourse);
         $template->assign('buying_session', $buyingSession);
-        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions'] ?? '');
         $template->assign('title', $sale['product_name']);
         $template->assign('price', (float) $sale['price']);
-        $template->assign('currency', $plugin->getSelectedCurrency());
+        $template->assign('currency', $currency);
         $template->assign('user', $userInfo);
         $template->assign('sale', $sale);
         $template->assign('form', $form->returnForm());
         $template->assign('is_culqi_payment', true);
-        $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());
+        $template->assign('culqi_params', $plugin->getCulqiParams());
 
         $content = $template->fetch('BuyCourses/view/subscription_process_confirm.tpl');
 
@@ -343,18 +370,19 @@ switch ($sale['payment_type']) {
 
         $merchantcode = $tpvRedsysParams['merchantcode'];
         $terminal = $tpvRedsysParams['terminal'];
-        $currency = $tpvRedsysParams['currency'];
+        $currencyCode = $tpvRedsysParams['currency'];
         $transactionType = '0';
         $urlMerchant = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/tpv_response.php';
         $urlSuccess = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/tpv_success.php';
         $urlFailed = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/tpv_error.php';
         $order = str_pad((string) $saleId, 4, '0', \STR_PAD_LEFT);
-        $amount = $sale['price'] * 100;
+        $amount = (float) $sale['price'] * 100;
         $description = $plugin->get_lang('OrderReference').': '.$sale['reference'];
+
         $tpv->setParameter('DS_MERCHANT_AMOUNT', $amount);
         $tpv->setParameter('DS_MERCHANT_ORDER', $order);
         $tpv->setParameter('DS_MERCHANT_MERCHANTCODE', $merchantcode);
-        $tpv->setParameter('DS_MERCHANT_CURRENCY', $currency);
+        $tpv->setParameter('DS_MERCHANT_CURRENCY', $currencyCode);
         $tpv->setParameter('DS_MERCHANT_TRANSACTIONTYPE', $transactionType);
         $tpv->setParameter('DS_MERCHANT_TERMINAL', $terminal);
         $tpv->setParameter('DS_MERCHANT_MERCHANTURL', $urlMerchant);
@@ -367,6 +395,7 @@ switch ($sale['payment_type']) {
 
         $urlTpv = $tpvRedsysParams['url_redsys'];
         $sandboxFlag = 1 == $tpvRedsysParams['sandbox'];
+
         if (true === $sandboxFlag) {
             $urlTpv = $tpvRedsysParams['url_redsys_sandbox'];
         }
@@ -379,10 +408,15 @@ switch ($sale['payment_type']) {
         echo '<input type="hidden" name="Ds_MerchantParameters" value="'.$params.'" />';
         echo '<input type="hidden" name="Ds_Signature" value="'.$signature.'" />';
         echo '</form>';
-
-        echo '<SCRIPT language=javascript>';
-        echo 'document.tpv_chamilo.submit();';
-        echo '</script>';
+        echo '<script>document.tpv_chamilo.submit();</script>';
 
         break;
+
+    default:
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('NoPaymentOptionAvailable'), 'error', false)
+        );
+
+        header('Location: '.$catalogRedirectUrl);
+        exit;
 }

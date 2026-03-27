@@ -129,7 +129,7 @@
               {{ t("Please select at least one recipient (“— Just upload —” or any user)") }}
             </div>
 
-            <div class="flex justify-end gap-2 mt-6">
+            <div class="flex justify-end gap-2 mt-2">
               <BaseAppLink :to="returnRoute">
                 <BaseButton
                   type="black"

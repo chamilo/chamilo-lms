@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Required fields",
     "No available users.": "No available users.",
-    "No users added yet.": "No users added yet."
+    "No users added yet.": "No users added yet.",
+    "# attended": "# attended",
+    "Dates": "Dates"
 }

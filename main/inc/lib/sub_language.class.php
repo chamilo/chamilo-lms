@@ -16,6 +16,69 @@ class SubLanguageManager
     }
 
     /**
+     * Validate that a variable name is a safe PHP identifier.
+     *
+     * @param string $variableName The variable name to validate
+     *
+     * @return bool True if the variable name matches /^[a-zA-Z_][a-zA-Z0-9_]*$/
+     */
+    public static function isValidLanguageVariable($variableName)
+    {
+        return !empty($variableName) && preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $variableName);
+    }
+
+    /**
+     * Validate that a language folder name is safe for filesystem use.
+     * Rejects path traversal sequences, slashes, null bytes, and non-alphanumeric
+     * characters other than underscores and hyphens.
+     *
+     * @param string $folderName The folder name to validate
+     *
+     * @return bool True if the folder name is safe
+     */
+    public static function isValidLanguageFolderName($folderName)
+    {
+        if (empty($folderName)) {
+            return false;
+        }
+
+        if (strpos($folderName, "\0") !== false) {
+            return false;
+        }
+
+        if (strpos($folderName, '/') !== false ||
+            strpos($folderName, '\\') !== false ||
+            strpos($folderName, '..') !== false
+        ) {
+            return false;
+        }
+
+        return (bool) preg_match('/^[a-zA-Z0-9_\-]+$/', $folderName);
+    }
+
+    /**
+     * Validate that a file path is within the language directory.
+     *
+     * @param string $path The path to validate
+     *
+     * @return bool True if the path is safely within SYS_LANG_PATH
+     */
+    public static function isPathInsideLangDir($path)
+    {
+        $langDir = realpath(api_get_path(SYS_LANG_PATH));
+        if ($langDir === false) {
+            return false;
+        }
+
+        $realPath = realpath(dirname($path));
+        if ($realPath === false) {
+            return false;
+        }
+
+        return strpos($realPath, $langDir) === 0;
+    }
+
+    /**
      * Get all the languages.
      *
      * @param bool $onlyActive Whether to return only active languages (default false)
@@ -124,6 +187,13 @@ class SubLanguageManager
      */
     public static function get_all_language_variable_in_file(string $system_path_file): array
     {
+        // Validate the file is inside the lang directory before including it
+        $langDir = realpath(api_get_path(SYS_LANG_PATH));
+        $realFile = realpath($system_path_file);
+        if ($langDir === false || $realFile === false || strpos($realFile, $langDir) !== 0) {
+            return [];
+        }
+
         ob_start();
 
         include $system_path_file;
@@ -135,6 +205,8 @@ class SubLanguageManager
         unset($variables['system_path_file']);
         unset($variables['get_as_string_index']);
         unset($variables['php_errormsg']);
+        unset($variables['langDir']);
+        unset($variables['realFile']);
 
         return $variables;
     }
@@ -148,6 +220,14 @@ class SubLanguageManager
      */
     public static function add_file_in_language_directory($system_path_file)
     {
+        // Validate the target path is inside the lang directory
+        // Use dirname check since the file itself may not exist yet
+        $langDir = realpath(api_get_path(SYS_LANG_PATH));
+        $parentDir = realpath(dirname($system_path_file));
+        if ($langDir === false || $parentDir === false || strpos($parentDir, $langDir) !== 0) {
+            return false;
+        }
+
         $return_value = @file_put_contents($system_path_file, '<?php'.PHP_EOL);
 
         return $return_value;
@@ -164,10 +244,22 @@ class SubLanguageManager
      */
     public static function write_data_in_file($path_file, $new_term, $new_variable)
     {
+        // Validate variable name is a safe PHP identifier
+        if (!self::isValidLanguageVariable($new_variable)) {
+            return false;
+        }
+
+        // Validate the target path is inside the lang directory
+        if (!self::isPathInsideLangDir($path_file)) {
+            return false;
+        }
+
         // Replace double quotes to avoid parse errors
         $new_term = addcslashes($new_term, "\$\"\\");
         // Replace new line signs to avoid parse errors - see #6773
         $new_term = str_replace("\n", "\\n", $new_term);
+        // Strip null bytes
+        $new_term = str_replace("\0", "", $new_term);
 
         $return_value = false;
         $new_data = '$'.$new_variable.'="'.$new_term.'";'.PHP_EOL;
@@ -192,6 +284,11 @@ class SubLanguageManager
         if (empty($sub_language_dir)) {
             return false;
         }
+
+        if (!self::isValidLanguageFolderName($sub_language_dir)) {
+            return false;
+        }
+
         $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
         if (is_dir($dir)) {
             return true;
@@ -249,6 +346,11 @@ class SubLanguageManager
         if (empty($sub_language_dir)) {
             return false;
         }
+
+        if (!self::isValidLanguageFolderName($sub_language_dir)) {
+            return false;
+        }
+
         $dir = api_get_path(SYS_LANG_PATH).$sub_language_dir;
         if (!is_dir($dir)) {
             return true;

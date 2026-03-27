@@ -244,6 +244,18 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             //Fixes BT#1636
             $english_name = api_strtolower($english_name);
 
+            // Validate the folder name is safe for filesystem use
+            if (!SubLanguageManager::isValidLanguageFolderName($english_name)) {
+                $msg .= Display::return_message(
+                    get_lang('EnglishName').' '.get_lang('ContainsIllegalCharacters'),
+                    'error'
+                );
+                Display::display_header($language_name);
+                echo $msg;
+                Display::display_footer();
+                exit();
+            }
+
             $isocode = str_replace(' ', '_', $isocode);
             $str_info = '<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
 

@@ -28,7 +28,7 @@ foreach ($langs as $lang) {
             $out = [];
             if (is_file($file)) {
                 //$terms = array_merge($terms,SubLanguageManager::get_all_language_variable_in_file($file,true));
-                @exec('php -l '.$file, $out);
+                @exec('php -l '.escapeshellarg($file), $out);
                 if (substr($out[0], 0, 2) != 'No') {
                     echo $out[0]."\n";
                     $ok = false;

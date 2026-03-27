@@ -17,6 +17,11 @@ switch ($action) {
         echo api_get_language_translate_html();
         break;
     case 'translate_portfolio_category':
+        // Only platform admins may write to language files
+        if (!api_is_platform_admin()) {
+            api_not_allowed(true);
+            exit;
+        }
         if (false === Security::check_token('get')) {
             exit;
         }
@@ -31,6 +36,11 @@ switch ($action) {
             $languageId = (int) $_REQUEST['id'];
             $subLanguageId = (int) $_REQUEST['sub'];
 
+            // Validate variable name is a safe PHP identifier
+            if (!SubLanguageManager::isValidLanguageVariable($langVariable)) {
+                exit;
+            }
+
             $langFilesToLoad = SubLanguageManager::get_lang_folder_files_list(
                 api_get_path(SYS_LANG_PATH).'english',
                 true
@@ -38,6 +48,12 @@ switch ($action) {
 
             $fileLanguage = $langFilesToLoad[0].'.inc.php';
             $allDataOfLanguage = SubLanguageManager::get_all_information_of_sub_language($languageId, $subLanguageId);
+
+            if (empty($allDataOfLanguage) ||
+                !SubLanguageManager::isValidLanguageFolderName($allDataOfLanguage['dokeos_folder'])
+            ) {
+                exit;
+            }
 
             $pathFolder = api_get_path(SYS_LANG_PATH).$allDataOfLanguage['dokeos_folder'].'/'.$fileLanguage;
             $allFileOfDirectory = SubLanguageManager::get_all_language_variable_in_file($pathFolder);

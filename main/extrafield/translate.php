@@ -67,6 +67,7 @@ if ($languageId) {
     $form->addHidden('sub_language_id', $languageInfo['id']);
     $form->addHidden('redirect', true);
     $form->addHidden('extra_field_type', $extraField->getExtraFieldType());
+    $form->addHidden('sec_token', Security::get_token());
     $form->addButtonSave(get_lang('Save'));
 }
 

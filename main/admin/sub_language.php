@@ -38,7 +38,8 @@ $htmlHeadXtra[] = '<script>
                     \'file_id\': file_id,
                     \'id\': '.intval($_REQUEST['id']).',
                     \'sub\': '.intval($_REQUEST['sub_language_id']).',
-                    \'sub_language_id\': '.intval($_REQUEST['sub_language_id']).'
+                    \'sub_language_id\': '.intval($_REQUEST['sub_language_id']).',
+                    \'sec_token\': \''.Security::get_token().'\'
                 },
                 success: function(datos) {
                     if (datos == "1") {

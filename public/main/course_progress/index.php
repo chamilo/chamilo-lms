@@ -648,7 +648,7 @@ switch ($action) {
                         ['class' => 'btn btn--default']
                     );
                     $toolbarThematic .= '<a
-                            class="btn btn--default"
+                            class="btn btn--secondary"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
                         .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
                     $toolbarThematic .= '<a

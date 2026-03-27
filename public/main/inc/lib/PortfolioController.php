@@ -833,7 +833,7 @@ class PortfolioController
 
     private function addAttachmentsFieldToForm(FormValidator $form): void
     {
-        $form->addButton('add_attachment', get_lang('Add attachment'), 'plus');
+        $form->addButton('add_attachment', get_lang('Add attachment'), 'plus', 'default', 'default', null, [], false, false);
         $form->addHtml('<div id="container-attachments" style="display: none;">');
         $form->addFile('attachment_file[]', get_lang('Files attachments'));
         $form->addText('attachment_comment[]', get_lang('Description'), false);

@@ -1331,7 +1331,7 @@ abstract class Question
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('Image URL'));
             $form->addElement('text', 'imageWidth', get_lang('px width'));
-            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link');
+            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link', [], false, false);
         }
 
         $form->addHtmlEditor(

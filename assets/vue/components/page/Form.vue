@@ -65,7 +65,7 @@
       required
     />
 
-    <div class="text-right">
+    <div class="flex justify-end mt-2">
       <Button
         :disabled="v$.item.$invalid"
         :label="t('Save')"

@@ -39,7 +39,7 @@
       </p>
     </div>
 
-    <div>
+    <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Available documents") }}</h2>
       <div v-if="availableDocuments.length">
         <div

@@ -71,7 +71,7 @@ switch ($event->type) {
 
         // no break
     default:
-        echo 'Received unknown event type '.$event->type;
+        echo sprintf($plugin->get_lang('StripeUnknownEventTypeX'), $event->type);
 }
 
 http_response_code(200);

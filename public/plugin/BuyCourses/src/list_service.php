@@ -51,7 +51,6 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('Services');
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $tpl = new Template($templateName);
 

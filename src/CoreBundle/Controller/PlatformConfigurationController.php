@@ -99,6 +99,8 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
         $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
 
+        $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
                 'platform.site_name',
@@ -248,12 +250,10 @@ class PlatformConfigurationController extends AbstractController
             return 'false';
         }
 
-        // Already an array, return as is
         if (\is_array($setting)) {
             return $setting;
         }
 
-        // Try to decode JSON string
         if (\is_string($setting)) {
             $json = json_decode($setting, true);
 
@@ -262,7 +262,6 @@ class PlatformConfigurationController extends AbstractController
             }
         }
 
-        // Return empty array as fallback
         return [];
     }
 
@@ -300,14 +299,60 @@ class PlatformConfigurationController extends AbstractController
         }
 
         $configured = $demoEnabled || (
-            '' !== trim($documentServerUrl)
+                '' !== trim($documentServerUrl)
                 && '' !== trim($jwtSecret)
-        );
+            );
 
         return [
             'enabled' => $enabled,
             'configured' => $configured,
             'editorPath' => '/plugin/Onlyoffice/editor.php',
         ];
+    }
+
+    private function getBuyCoursesFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
+
+        $showMainMenuTab = $enabled && $this->normalizePluginBoolean(
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
+            );
+
+        $publicMainMenuTab = $enabled && $this->normalizePluginBoolean(
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
+            );
+
+        $allowAnonymousUsers = $enabled && $this->normalizePluginBoolean(
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
+            );
+
+        return [
+            'enabled' => $enabled,
+            'showMainMenuTab' => $showMainMenuTab,
+            'publicMainMenuTab' => $publicMainMenuTab,
+            'allowAnonymousUsers' => $allowAnonymousUsers,
+            'visibleForAuthenticatedUsers' => $enabled && $showMainMenuTab,
+            'visibleForAnonymousUsers' => $enabled && $showMainMenuTab && $publicMainMenuTab,
+            'indexPath' => '/plugin/BuyCourses/index.php',
+        ];
+    }
+
+    private function normalizePluginBoolean(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value)) {
+            return 1 === $value;
+        }
+
+        if (\is_string($value)) {
+            $normalized = strtolower(trim($value));
+
+            return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+        }
+
+        return false;
     }
 }

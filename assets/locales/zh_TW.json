@@ -1836,5 +1836,7 @@
     "No available users.": "\u6c92\u6709\u53ef\u7528\u4f7f\u7528\u8005\u3002",
     "No users added yet.": "\u5c1a\u672a\u65b0\u589e\u4f7f\u7528\u8005\u3002",
     "# attended": "\u51fa\u5e2d\u6b21\u6578",
-    "Dates": "\u65e5\u671f"
+    "Dates": "\u65e5\u671f",
+    "No documents added yet.": "\u5c1a\u672a\u65b0\u589e\u6587\u4ef6\u3002",
+    "No available documents.": "\u6c92\u6709\u53ef\u7528\u6587\u4ef6\u3002"
 }

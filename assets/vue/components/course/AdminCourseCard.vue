@@ -35,7 +35,7 @@
       <div class="flex justify-end pt-2">
         <BaseAppLink
           :to="{ name: 'RegisterStudent', params: { courseId: course.id } }"
-          class="btn btn--primary"
+          class="btn btn--success"
         >
           {{ t("Register student") }}
         </BaseAppLink>

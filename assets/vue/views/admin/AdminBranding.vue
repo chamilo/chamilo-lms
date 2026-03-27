@@ -96,7 +96,7 @@
         </section>
 
         <div class="flex items-center gap-2">
-          <button class="btn btn--primary" @click="uploadHeader" :disabled="isSaving">
+          <button class="btn btn--success" @click="uploadHeader" :disabled="isSaving">
             {{ isSaving ? t('Saving...') : t('Save header logo') }}
           </button>
         </div>
@@ -192,7 +192,7 @@
         </section>
 
         <div class="flex items-center gap-2">
-          <button class="btn btn--primary" @click="uploadEmail" :disabled="isSaving">
+          <button class="btn btn--success" @click="uploadEmail" :disabled="isSaving">
             {{ isSaving ? t('Saving...') : t('Save email logo') }}
           </button>
         </div>

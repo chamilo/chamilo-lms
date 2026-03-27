@@ -466,21 +466,21 @@ watch(colorDanger, (nv) => {
       <BaseButton
         :disabled="!selectedThemeIri"
         :label="t('Select as current theme')"
-        icon="save"
-        type="primary"
+        icon="check"
+        type="success"
         @click="onClickSelectColorTheme"
       />
       <BaseButton
         :disabled="!selectedThemeIri"
         :label="t('Save')"
-        icon="send"
-        type="primary"
+        icon="save"
+        type="success"
         @click="onClickUpdate"
       />
       <BaseButton
         :label="t('Save as new theme')"
-        icon="send"
-        type="primary"
+        icon="save"
+        type="success"
         @click="dialogCreateVisible = true"
       />
     </div>

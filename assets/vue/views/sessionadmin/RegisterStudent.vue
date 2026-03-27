@@ -77,10 +77,10 @@
           icon="mdi mdi-magnify"
           @click="searchStudent"
         />
-        <Button
+        <BaseButton
           :label="t('Create new user')"
-          icon="mdi mdi-account-plus"
-          text
+          icon="plus"
+          type="success"
           @click="showCreateModal = true"
         />
       </div>
@@ -198,15 +198,18 @@
           <span>{{ t("Send access details to user by email") }}</span>
         </div>
         <div class="flex justify-end gap-2">
-          <Button
+          <BaseButton
+            icon="close"
             text
             :label="t('Cancel')"
+            type="danger"
             @click="showCreateModal = false"
           />
-          <Button
-            icon="mdi mdi-check"
+          <BaseButton
+            icon="save"
             :label="t('Save')"
             :disabled="createLoading"
+            type="success"
             @click="handleCreateUser"
           />
         </div>
@@ -222,6 +225,7 @@ import { useI18n } from "vue-i18n"
 import Card from "primevue/card"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Dialog from "primevue/dialog"
 import Message from "primevue/message"
 import Checkbox from "primevue/checkbox"

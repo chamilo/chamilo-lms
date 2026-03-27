@@ -185,4 +185,6 @@ enum ActionIcon: string
     case FIX = 'auto-fix';
     case AWARD = 'medal';
     case CROP = 'crop';
+    case WEBCAM = 'webcam';
+    case WEBCAM_OFF = 'webcam-off';
 }

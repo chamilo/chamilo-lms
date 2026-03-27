@@ -71,11 +71,11 @@
     @apply border-collapse w-full mt-2;
 
     thead th {
-      @apply bg-gray-20 text-gray-90 font-semibold text-left px-4 py-3 border-b border-gray-30 border-t border-l border-r;
+      @apply bg-gray-20 text-gray-90 font-semibold text-left p-2 border-b border-gray-30 border-t border-l border-r;
     }
 
     tbody td {
-      @apply px-4 py-3 border-b border-gray-30 border-l border-r;
+      @apply p-2 border-b border-gray-30 border-l border-r;
     }
 
     tbody tr:nth-child(odd) {

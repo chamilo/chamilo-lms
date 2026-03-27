@@ -5,6 +5,7 @@
 namespace Chamilo\PluginBundle\ExerciseFocused\Traits;
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Database;
 use Display;
@@ -122,12 +123,12 @@ trait ReportingFilterTrait
             $qb->andWhere(
                 $qb->expr()->andX(
                     $qb->expr()->gte('te.startDate', ':start_date'),
-                    $qb->expr()->lte('te.exeDate', ':end_date')
+                    //$qb->expr()->lte('te.exeDate', ':end_date')
                 )
             );
 
             $params['start_date'] = api_get_utc_datetime($formValues['start_date'].' 00:00:00', false, true);
-            $params['end_date'] = api_get_utc_datetime($formValues['start_date'].' 23:59:59', false, true);
+            //$params['end_date'] = api_get_utc_datetime($formValues['start_date'].' 23:59:59', false, true);
         }
 
         if (empty($params)) {
@@ -207,7 +208,7 @@ trait ReportingFilterTrait
         $pluginMonitoring = ExerciseMonitoringPlugin::create();
         $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled(true);
 
-        $detailIcon = Display::return_icon('forum_listview.png', get_lang('Detail'));
+        $detailIcon = Display::getMdiIcon(ActionIcon::LIST);
 
         $urlDetail = api_get_path(WEB_PLUGIN_PATH).'ExerciseFocused/pages/detail.php?'.api_get_cidreq().'&';
 
@@ -236,7 +237,7 @@ trait ReportingFilterTrait
                 $detailIcon,
                 $urlDetail.http_build_query(['id' => $result['id']]),
                 [
-                    'class' => 'ajax',
+                    'class' => 'ajax btn btn--secondary btn--secondary-outline btn--sm',
                     'data-title' => get_lang('Detail'),
                 ]
             );
@@ -278,7 +279,7 @@ trait ReportingFilterTrait
         $table->setColAttributes($courseId ? 5 : 8, ['class' => 'text-right']);
         $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-right']);
         $table->setColAttributes($courseId ? 7 : 10, ['class' => 'text-center']);
-        $table->setColAttributes($courseId ? 8 : 11, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 8 : 11, ['class' => 'text-center space-x-2 space-y-2']);
 
         foreach ($resultData as $idx => $result) {
             $table->setRowAttributes($idx + 1, ['class' => $result['class']], true);

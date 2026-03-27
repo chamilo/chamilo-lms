@@ -17,17 +17,27 @@
             :label="t('New folder')"
             @click="openCreateFolder('sent')"
           />
-          <BaseAppLink :to="{ name:'DropboxCreate', params:$route.params, query:$route.query }">
-            <BaseButton icon="upload" type="primary-alternative" :label="t('Share a new file')" />
+          <BaseAppLink :to="{ name: 'DropboxCreate', params: $route.params, query: $route.query }">
+            <BaseButton
+              icon="upload"
+              type="primary-alternative"
+              :label="t('Share a new file')"
+            />
           </BaseAppLink>
         </div>
       </template>
     </BaseToolbar>
 
-    <div v-if="categoryId!==0" class="my-2 p-2 border rounded-lg bg-gray-50 flex items-center justify-between">
+    <div
+      v-if="categoryId !== 0"
+      class="my-2 p-2 border rounded-lg bg-gray-50 flex items-center justify-between"
+    >
       <div>
-        <i :class="chamiloIconToClass['folder-generic']" class="mr-1"></i>
-        {{ t('Category') }}: <strong>{{ currentCat?.title }}</strong>
+        <i
+          :class="chamiloIconToClass['folder-generic']"
+          class="mr-1"
+        ></i>
+        {{ t("Category") }}: <strong>{{ currentCat?.title }}</strong>
       </div>
       <BaseButton
         icon="download"
@@ -46,13 +56,15 @@
       <template #header>
         <div class="flex items-center gap-2">
           <BaseButton
-            type="black"
+            type="tertiary-text"
+            size="small"
             :label="t('Select all')"
             icon="check"
             @click="selectAll"
           />
           <BaseButton
-            type="black"
+            type="tertiary-text"
+            size="small"
             :label="t('Unselect all')"
             icon="xmark"
             @click="clearAll"
@@ -62,11 +74,12 @@
             :options="bulkOptions"
             optionLabel="label"
             optionValue="value"
-            style="min-width:220px"
+            style="min-width: 220px"
             label=""
           />
           <BaseButton
-            type="primary"
+            type="primary-text"
+            size="small"
             :disabled="!selectedFiles.length || !bulk"
             :label="t('Apply')"
             icon="play"
@@ -75,18 +88,35 @@
         </div>
       </template>
 
-      <Column selectionMode="multiple" headerStyle="width:3.2rem" />
-      <Column :header="t('Type')" bodyClass="text-center" headerStyle="width:4rem">
+      <Column
+        selectionMode="multiple"
+        headerStyle="width:3.2rem"
+      />
+      <Column
+        :header="t('Type')"
+        bodyClass="text-center"
+        headerStyle="width:4rem"
+      >
         <template #body="{ data }">
-          <i v-if="data.kind==='folder'" :class="chamiloIconToClass['folder-generic']"></i>
-          <i v-else :class="chamiloIconToClass['file-generic']"></i>
+          <i
+            v-if="data.kind === 'folder'"
+            :class="chamiloIconToClass['folder-generic']"
+          ></i>
+          <i
+            v-else
+            :class="chamiloIconToClass['file-generic']"
+          ></i>
         </template>
       </Column>
 
       <Column :header="t('Sent')">
         <template #body="{ data }">
-          <template v-if="data.kind==='folder'">
-            <a class="font-semibold cursor-pointer hover:underline" @click="enterCat(data.catId)">{{ data.title }}</a>
+          <template v-if="data.kind === 'folder'">
+            <a
+              class="font-semibold cursor-pointer hover:underline"
+              @click="enterCat(data.catId)"
+              >{{ data.title }}</a
+            >
           </template>
           <template v-else>
             <a
@@ -99,61 +129,86 @@
               <i :class="chamiloIconToClass['download']"></i>
             </a>
             <span class="font-semibold">{{ data.title }}</span>
-            <div v-if="data.description" class="text-sm text-gray-500">{{ data.description }}</div>
+            <div
+              v-if="data.description"
+              class="text-sm text-gray-500"
+            >
+              {{ data.description }}
+            </div>
           </template>
         </template>
       </Column>
 
-      <Column field="sizeHuman" :header="t('Size')" headerStyle="width:8rem">
+      <Column
+        field="sizeHuman"
+        :header="t('Size')"
+        headerStyle="width:8rem"
+      >
         <template #body="{ data }">
-          <span v-if="data.kind==='file'">{{ data.sizeHuman }}</span>
+          <span v-if="data.kind === 'file'">{{ data.sizeHuman }}</span>
         </template>
       </Column>
 
-      <Column :header="t('Visible to')" headerStyle="width:18rem">
+      <Column
+        :header="t('Visible to')"
+        headerStyle="width:18rem"
+      >
         <template #body="{ data }">
-          <span v-if="data.kind==='file'">
+          <span v-if="data.kind === 'file'">
             {{
               Array.isArray(data.recipients)
                 ? data.recipients
-                  .map(r => (typeof r === 'string' ? r : r?.name))
-                  .filter(Boolean)
-                  .join(', ')
-                : (typeof data.recipients === 'string' ? data.recipients : '')
+                    .map((r) => (typeof r === "string" ? r : r?.name))
+                    .filter(Boolean)
+                    .join(", ")
+                : typeof data.recipients === "string"
+                  ? data.recipients
+                  : ""
             }}
           </span>
         </template>
       </Column>
 
-      <Column field="lastUploadAgo" :header="t('Latest sent on')" headerStyle="width:12rem">
+      <Column
+        field="lastUploadAgo"
+        :header="t('Latest sent on')"
+        headerStyle="width:12rem"
+      >
         <template #body="{ data }">
-          <span v-if="data.kind==='file'">{{ data.lastUploadAgo }}</span>
+          <span v-if="data.kind === 'file'">{{ data.lastUploadAgo }}</span>
         </template>
       </Column>
 
-      <Column :header="t('Edit')" headerStyle="width:16rem" bodyClass="text-right">
+      <Column
+        :header="t('Edit')"
+        headerStyle="width:16rem"
+        bodyClass="text-right"
+      >
         <template #body="{ data }">
           <!-- Folder actions -->
-          <template v-if="data.kind==='folder'">
+          <template v-if="data.kind === 'folder'">
             <BaseButton
               :label="t('Download as ZIP')"
               icon="download"
               only-icon
-              type="black"
+              size="small"
+              type="tertiary-text"
               @click="downloadCategoryZip(data.catId)"
             />
             <BaseButton
               :label="t('Rename')"
               icon="pencil"
               only-icon
-              type="black"
+              size="small"
+              type="tertiary-text"
               @click="openRenameFolder(data)"
             />
             <BaseButton
               :label="t('Delete')"
               icon="trash"
               only-icon
-              type="danger"
+              size="small"
+              type="danger-text"
               @click="deleteFolder(data)"
             />
           </template>
@@ -164,21 +219,24 @@
               :label="t('Feedback')"
               icon="comment"
               only-icon
-              type="black"
+              size="small"
+              type="tertiary-text"
               @click.stop="openFeedback(data)"
             />
             <BaseButton
               :label="t('Update')"
               icon="file-upload"
               only-icon
-              type="black"
+              size="small"
+              type="tertiary-text"
               @click.stop="openUpdate(data)"
             />
             <BaseButton
               :label="t('Move')"
               icon="file-swap"
               only-icon
-              type="secondary"
+              size="small"
+              type="secondary-text"
               @click.stop="openMove(data)"
             />
             <a
@@ -190,14 +248,16 @@
                 :label="t('Download')"
                 icon="download"
                 only-icon
-                type="black"
+                size="small"
+                type="tertiary-text"
               />
             </a>
             <BaseButton
               :label="t('Delete')"
               icon="delete"
               only-icon
-              type="danger"
+              size="small"
+              type="danger-text"
               @click="remove([data.id])"
             />
           </template>
@@ -225,7 +285,11 @@
     />
 
     <!-- Create folder -->
-    <BaseDialog v-model:isVisible="showCatDialog" :title="t('New folder')" header-icon="folder-plus">
+    <BaseDialog
+      v-model:isVisible="showCatDialog"
+      :title="t('New folder')"
+      header-icon="folder-plus"
+    >
       <BaseInputText
         id="catName"
         :label="t('Folder name')"
@@ -250,7 +314,11 @@
     </BaseDialog>
 
     <!-- Rename folder -->
-    <BaseDialog v-model:isVisible="showRenameDialog" :title="t('Rename folder')" header-icon="pencil">
+    <BaseDialog
+      v-model:isVisible="showRenameDialog"
+      :title="t('Rename folder')"
+      header-icon="pencil"
+    >
       <BaseInputText
         id="catRename"
         :label="t('New name')"
@@ -318,16 +386,14 @@ const renameName = ref("")
 const renameTarget = ref(null)
 const renameSubmitted = ref(false)
 
-const currentCat = computed(() => cats.value.find(c => c.id === categoryId.value))
-const selectedFiles = computed(() => selected.value.filter(r => r.kind === 'file'))
+const currentCat = computed(() => cats.value.find((c) => c.id === categoryId.value))
+const selectedFiles = computed(() => selected.value.filter((r) => r.kind === "file"))
 
 const bulkOptions = computed(() => [
   { label: t("Choose an action"), value: "" },
   { label: t("Delete"), value: "delete" },
   { label: t("Download"), value: "download" },
-  ...cats.value
-    .filter(c => c.id !== 0)
-    .map(c => ({ label: `${t('Move')} → ${c.title}`, value: `move:${c.id}` })),
+  ...cats.value.filter((c) => c.id !== 0).map((c) => ({ label: `${t("Move")} → ${c.title}`, value: `move:${c.id}` })),
 ])
 
 async function load() {
@@ -339,22 +405,32 @@ onMounted(load)
 const rowsForTable = computed(() => {
   const rows = []
   if (categoryId.value === 0) {
-    for (const c of (cats.value || [])) {
+    for (const c of cats.value || []) {
       if (!c || c.id === 0) continue
-      rows.push({ rowId: `cat:${c.id}`, kind: 'folder', catId: c.id, title: c.title })
+      rows.push({ rowId: `cat:${c.id}`, kind: "folder", catId: c.id, title: c.title })
     }
   }
-  for (const f of (items.value || [])) {
-    rows.push({ rowId: `file:${f.id}`, kind: 'file', ...f })
+  for (const f of items.value || []) {
+    rows.push({ rowId: `file:${f.id}`, kind: "file", ...f })
   }
   return rows
 })
 
-function enterCat(id) { categoryId.value = id; selected.value = []; load() }
-function goRoot() { enterCat(0) }
+function enterCat(id) {
+  categoryId.value = id
+  selected.value = []
+  load()
+}
+function goRoot() {
+  enterCat(0)
+}
 
-function selectAll() { selected.value = rowsForTable.value.filter(r => r.kind === 'file') }
-function clearAll() { selected.value = [] }
+function selectAll() {
+  selected.value = rowsForTable.value.filter((r) => r.kind === "file")
+}
+function clearAll() {
+  selected.value = []
+}
 
 async function remove(ids) {
   await service.deleteFiles(ids, "sent")
@@ -367,9 +443,9 @@ async function runBulk() {
   if (!filesOnly.length) return
 
   if (bulk.value === "delete") {
-    await remove(filesOnly.map(s => s.id))
+    await remove(filesOnly.map((s) => s.id))
   } else if (bulk.value === "download") {
-    filesOnly.forEach(f => window.open(downloadUrl(f.id), "_blank"))
+    filesOnly.forEach((f) => window.open(downloadUrl(f.id), "_blank"))
   } else if (bulk.value.startsWith("move:")) {
     const target = Number(bulk.value.split(":")[1])
     for (const row of filesOnly) {
@@ -382,8 +458,14 @@ async function runBulk() {
 }
 
 // Folder create/rename/delete
-function openCreateFolder() { showCatDialog.value = true }
-function closeCatDialog() { showCatDialog.value = false; catName.value = ""; submitted.value = false }
+function openCreateFolder() {
+  showCatDialog.value = true
+}
+function closeCatDialog() {
+  showCatDialog.value = false
+  catName.value = ""
+  submitted.value = false
+}
 async function saveCategory() {
   submitted.value = true
   if (!catName.value.trim()) return
@@ -419,7 +501,9 @@ async function deleteFolder(row) {
 }
 
 // Download URL helper
-function downloadUrl(fileId) { return service.downloadUrl(fileId) }
+function downloadUrl(fileId) {
+  return service.downloadUrl(fileId)
+}
 
 // Feedback
 const showFeedback = ref(false)
@@ -428,7 +512,9 @@ function openFeedback(row) {
   feedbackFile.value = { id: row.id, title: row.title }
   showFeedback.value = true
 }
-function onFeedbackSubmitted() { load() }
+function onFeedbackSubmitted() {
+  load()
+}
 
 // Update
 const showUpdate = ref(false)

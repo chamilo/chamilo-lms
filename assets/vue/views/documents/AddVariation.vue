@@ -128,7 +128,7 @@
             <BaseButton
               :label="t('Delete')"
               icon="delete"
-              type="danger"
+              type="danger-text"
               @click="deleteVariant(slotProps.data.id)"
             />
           </template>

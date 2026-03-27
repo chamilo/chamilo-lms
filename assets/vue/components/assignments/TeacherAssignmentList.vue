@@ -88,16 +88,16 @@
             "
             :label="t('Visibility')"
             only-icon
-            size="normal"
-            type="black"
+            size="small"
+            type="tertiary-text"
             @click="onClickVisibility(slotProps.data)"
           />
           <BaseButton
             :label="t('Upload corrections package')"
             icon="zip-unpack"
             only-icon
-            size="normal"
-            type="success"
+            size="small"
+            type="success-text"
             :title="`${t('Upload corrections package')} — ${t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')}`"
             @click="() => uploadCorrections(slotProps.data)"
           />
@@ -106,8 +106,8 @@
             :label="t('Download assignments package')"
             icon="zip-pack"
             only-icon
-            size="normal"
-            type="primary"
+            size="small"
+            type="primary-text"
             :title="t('Download assignments package')"
             @click="() => downloadAssignments(slotProps.data)"
           />
@@ -115,8 +115,8 @@
             :label="t('Edit')"
             icon="edit"
             only-icon
-            size="normal"
-            type="black"
+            size="small"
+            type="tertiary-text"
             @click="onClickEdit(slotProps.data)"
           />
         </div>
@@ -128,7 +128,8 @@
         :disabled="0 === selected.length || loading"
         :label="t('Delete selected')"
         icon="delete"
-        type="danger"
+        size="small"
+        type="danger-text"
         @click="onClickMultipleDelete()"
       />
     </template>

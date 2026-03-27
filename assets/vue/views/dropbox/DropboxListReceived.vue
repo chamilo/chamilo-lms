@@ -57,13 +57,15 @@
       <template #header>
         <div class="flex items-center gap-2">
           <BaseButton
-            type="black"
+            type="tertiary-text"
+            size="small"
             :label="t('Select all')"
             icon="check"
             @click="selectAll"
           />
           <BaseButton
-            type="black"
+            type="tertiary-text"
+            size="small"
             :label="t('Unselect all')"
             icon="xmark"
             @click="clearAll"
@@ -77,7 +79,8 @@
             label=""
           />
           <BaseButton
-            type="primary"
+            type="primary-text"
+            size="small"
             :disabled="!selectedFiles.length || !bulk"
             :label="t('Apply')"
             icon="play"
@@ -192,14 +195,16 @@
                 :label="t('Feedback')"
                 icon="comment"
                 only-icon
-                type="black"
+                size="small"
+                type="tertiary-text"
                 @click="openFeedback(data)"
               />
               <BaseButton
                 :label="t('Move')"
                 icon="file-swap"
                 only-icon
-                type="secondary"
+                size="small"
+                type="secondary-text"
                 @click="openMove(data)"
               />
               <a
@@ -211,14 +216,16 @@
                   :label="t('Download')"
                   icon="download"
                   only-icon
-                  type="black"
+                  size="small"
+                  type="tertiary-text"
                 />
               </a>
               <BaseButton
                 :label="t('Delete')"
                 icon="delete"
                 only-icon
-                type="danger"
+                size="small"
+                type="danger-text"
                 @click="remove([data.id])"
               />
             </div>

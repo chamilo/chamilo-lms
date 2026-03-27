@@ -63,23 +63,31 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="text-right space-x-2">
-          <Button
+          <BaseButton
             v-if="securityStore.isAuthenticated"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-pencil"
+            :label="t('Edit')"
+            icon="delete"
+            only-icon
+            size="small"
+            type="tertiary-text"
             @click="goToEditItem(slotProps.data)"
           />
-          <Button
+          <BaseButton
             v-if="securityStore.isAuthenticated"
-            class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-            icon="mdi mdi-delete"
+            :label="t('Delete')"
+            icon="delete"
+            only-icon
+            size="small"
+            type="danger-text"
             @click="confirmDeleteItem(slotProps.data)"
           />
-          <Button
+          <BaseButton
             v-if="slotProps.data.enabled && slotProps.data.slug"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-link-variant"
-            :title="t('Show public link')"
+            :label="t('Show public link')"
+            icon="link"
+            only-icon
+            size="small"
+            type="tertiary-text"
             @click="showPublicLinkDialog(slotProps.data)"
           />
         </div>
@@ -117,17 +125,21 @@
     </div>
 
     <template #footer>
-      <Button
+      <BaseButton
         v-if="securityStore.isAuthenticated"
-        class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-        icon="mdi mdi-pencil"
+        :label="t('Edit')"
+        icon="edit"
+        size="small"
+        type="teratiry"
         @click="goToEditItem(slotProps.data)"
       />
 
-      <Button
+      <BaseButton
         v-if="securityStore.isAuthenticated"
-        class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-        icon="mdi mdi-delete"
+        :label="t('Delete')"
+        icon="delete"
+        size="small"
+        type="danger"
         @click="confirmDeleteItem(slotProps.data)"
       />
     </template>
@@ -147,16 +159,16 @@
       <span v-if="item">{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span>
     </div>
     <template #footer>
-      <Button
+      <BaseButton
         :label="t('No')"
-        class="p-button-outlined p-button-plain"
-        icon="mdi mdi-close"
+        type="teratiry-text"
+        icon="xmark"
         @click="deleteItemDialog = false"
       />
-      <Button
+      <BaseButton
         :label="t('Yes')"
-        class="p-button-secondary"
-        icon="mdi mdi-check"
+        type="secondary"
+        icon="check"
         @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
@@ -179,13 +191,13 @@
       />
     </div>
     <template #footer>
-      <Button
+      <BaseButton
         class="p-button-text"
         icon="mdi mdi-close"
         label="No"
         @click="deleteMultipleDialog = false"
       />
-      <Button
+      <BaseButton
         class="p-button-text"
         icon="mdi mdi-check"
         label="Yes"
@@ -223,6 +235,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import FloatLabel from "primevue/floatlabel"
 
 const router = useRouter()

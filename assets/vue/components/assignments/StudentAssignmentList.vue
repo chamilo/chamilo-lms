@@ -48,7 +48,7 @@
             icon="comment"
             only-icon
             size="small"
-            type="black"
+            type="tertiary-text"
             @click="openCommentDialog(slotProps.data)"
           />
         </div>

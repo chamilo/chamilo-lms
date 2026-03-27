@@ -193,7 +193,7 @@
             :title="t('Move')"
             icon="folder-move"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
@@ -202,7 +202,7 @@
             :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="
               (slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video') &&
               openReplaceDialog(slotProps.data)
@@ -212,7 +212,7 @@
             :title="t('Information')"
             icon="information"
             size="small"
-            type="primary"
+            type="primary-text"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
           <BaseButton
@@ -220,7 +220,7 @@
             :title="getOnlyofficeButtonTitle(slotProps.data)"
             icon="onlyoffice"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openWithOnlyoffice(slotProps.data)"
           />
           <BaseButton
@@ -229,7 +229,7 @@
             :title="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
             icon="robot"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openAiFeedback(slotProps.data)"
           />
           <BaseButton
@@ -237,7 +237,7 @@
             :icon="getVisibilityIcon(slotProps.data)"
             :title="t('Visibility')"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
@@ -245,7 +245,7 @@
             v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data) && securityStore.isAdmin"
             icon="file-replace"
             size="small"
-            type="secondary"
+            type="secondary-text"
             :title="t('Add file variation')"
             @click="goToAddVariation(slotProps.data)"
           />
@@ -255,7 +255,7 @@
             :title="t('Edit')"
             icon="edit"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="btnEditOnClick(slotProps.data)"
           />
 
@@ -264,7 +264,7 @@
             :title="t('Delete')"
             icon="delete"
             size="small"
-            type="danger"
+            type="danger-text"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
@@ -283,7 +283,7 @@
             :icon="getTemplateIcon(slotProps.data.iid)"
             :title="t('Template options')"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>

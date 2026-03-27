@@ -62,30 +62,37 @@
       <Column :header="t('Score')">
         <template #body="{ data }">
           <template v-if="data.qualification !== null && data.qualification !== undefined && data.qualification !== ''">
-            <template v-if="data.publicationParent?.qualification !== null && data.publicationParent?.qualification !== undefined && data.publicationParent?.qualification !== ''">
-        <span
-          :class="{
-            'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
-              Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
-            'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
-              Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
-          }"
-        >
-          {{ Number(data.qualification).toFixed(1) }} / {{ Number(data.publicationParent.qualification).toFixed(1) }}
-        </span>
+            <template
+              v-if="
+                data.publicationParent?.qualification !== null &&
+                data.publicationParent?.qualification !== undefined &&
+                data.publicationParent?.qualification !== ''
+              "
+            >
+              <span
+                :class="{
+                  'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
+                    Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
+                  'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
+                    Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
+                }"
+              >
+                {{ Number(data.qualification).toFixed(1) }} /
+                {{ Number(data.publicationParent.qualification).toFixed(1) }}
+              </span>
             </template>
 
             <template v-else>
-        <span class="bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded">
-          {{ Number(data.qualification).toFixed(1) }}
-        </span>
+              <span class="bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded">
+                {{ Number(data.qualification).toFixed(1) }}
+              </span>
             </template>
           </template>
 
           <template v-else>
-      <span class="text-gray-50">
-        {{ t("Not graded yet") }}
-      </span>
+            <span class="text-gray-50">
+              {{ t("Not graded yet") }}
+            </span>
           </template>
         </template>
       </Column>
@@ -104,10 +111,10 @@
           <div class="flex flex-col items-center gap-1">
             <BaseButton
               icon="file-upload"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Upload correction')"
-              type="success"
+              type="success-text"
               :class="actionBtnClass"
               @click="openUploader(data)"
             />
@@ -127,35 +134,35 @@
           <div class="flex justify-center gap-2">
             <BaseButton
               icon="download"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Download')"
               :class="actionBtnClass"
               @click="saveCorrection(data)"
-              type="primary"
+              type="primary-text"
             />
             <BaseButton
               v-if="canUseAiTaskGrader"
               icon="robot"
-              size="normal"
+              size="small"
               only-icon
               :label="t('AI grade')"
               :class="actionBtnClass"
               @click="openCorrectAndRate(data)"
-              type="black"
+              type="tertiary-text"
             />
             <BaseButton
               icon="reply-all"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Correct and rate')"
               :class="actionBtnClass"
               @click="openCorrectAndRate(data)"
-              type="success"
+              type="success-text"
             />
             <BaseButton
               icon="edit"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Edit')"
               :class="actionBtnClass"
@@ -164,12 +171,12 @@
             />
             <BaseButton
               icon="folder-move"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Move')"
               :class="actionBtnClass"
               @click="moveSubmission(data)"
-              type="secondary"
+              type="secondary-text"
             />
             <BaseButton
               :icon="
@@ -181,19 +188,19 @@
               "
               :label="t('Visibility')"
               only-icon
-              size="normal"
-              type="black"
+              size="small"
+              type="tertiary-text"
               :class="actionBtnClass"
               @click="viewSubmission(data)"
             />
             <BaseButton
               icon="delete"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Delete')"
               :class="actionBtnClass"
               @click="deleteSubmission(data)"
-              type="danger"
+              type="danger-text"
             />
           </div>
         </template>

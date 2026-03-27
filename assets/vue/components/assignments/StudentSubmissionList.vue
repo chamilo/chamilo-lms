@@ -111,31 +111,31 @@
               v-if="flags.allowFile"
               icon="download"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Download')"
               @click="downloadSubmission(data)"
-              type="primary"
+              type="primary-text"
             />
             <BaseButton
               v-if="flags.allowText"
               icon="reply-all"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Comment')"
               @click="correctAndRate(data)"
-              type="success"
+              type="success-text"
             />
             <BaseButton
               v-if="canDeleteSubmission(data)"
               icon="delete"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Delete')"
               @click="deleteSubmission(data)"
-              type="danger"
+              type="danger-text"
             />
             <span
               v-if="!flags.allowFile && !flags.allowText"

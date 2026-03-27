@@ -45,7 +45,7 @@
           class="mr-2"
           icon="edit"
           size="small"
-          type="black"
+          type="tertiary-text"
           @click="emit('edit', data)"
         />
         <BaseButton
@@ -53,7 +53,7 @@
           class="mr-2"
           icon="delete"
           size="small"
-          type="danger"
+          type="danger-text"
           @click="emit('delete', data)"
         />
       </template>

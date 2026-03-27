@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
+use Chamilo\CoreBundle\State\CourseRelUserStateProcessor;
 use Chamilo\CoreBundle\State\UserCourseSubscriptionsStateProvider;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,9 +30,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN') or object.user == user"),
-        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER') or object.user == user"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object.course)"),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "object.getUser() == user",
+            processor: CourseRelUserStateProcessor::class
+        ),
         new GetCollection(
             uriTemplate: '/me/courses.{_format}',
             paginationEnabled: true,

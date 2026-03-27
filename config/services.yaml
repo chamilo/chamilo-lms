@@ -126,6 +126,10 @@ services:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
+    Chamilo\CoreBundle\State\CourseRelUserStateProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+
     Chamilo\CoreBundle\State\UserRelUserStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'

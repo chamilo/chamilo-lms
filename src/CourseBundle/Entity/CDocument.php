@@ -25,6 +25,7 @@ use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
+use Chamilo\CoreBundle\Controller\Api\DownloadAllDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
@@ -48,7 +49,6 @@ use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Chamilo\CoreBundle\Controller\Api\DownloadAllDocumentsAction;
 
 #[ApiResource(
     shortName: 'Document',

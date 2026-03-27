@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object.course)"),
         new Post(
             security: "is_granted('ROLE_USER')",
-            securityPostDenormalize: "object.getUser() == user",
+            securityPostDenormalize: 'object.getUser() == user',
             processor: CourseRelUserStateProcessor::class
         ),
         new GetCollection(

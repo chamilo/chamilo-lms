@@ -182,7 +182,7 @@ class TrackingStatsHelper
 
         $score = $catObj->calc_score($user->getId());
 
-        if (!is_array($score) || !isset($score[0], $score[1]) || (float) $score[1] <= 0.0) {
+        if (!\is_array($score) || !isset($score[0], $score[1]) || (float) $score[1] <= 0.0) {
             return array_merge($empty, ['min' => $min]);
         }
 

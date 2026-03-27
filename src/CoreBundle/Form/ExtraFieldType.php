@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use DateTime;
+use ExtraFieldValue;
 use GoogleMapsPlugin;
 use Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -160,7 +161,7 @@ class ExtraFieldType extends AbstractType
         $legacyItemId = null;
 
         if ($item instanceof User) {
-            $legacyExtraFieldValue = new \ExtraFieldValue('user');
+            $legacyExtraFieldValue = new ExtraFieldValue('user');
             $legacyItemId = (int) $item->getId();
 
             $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
@@ -346,7 +347,7 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_SELECT:
                     $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
 
-                // no break
+                    // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;

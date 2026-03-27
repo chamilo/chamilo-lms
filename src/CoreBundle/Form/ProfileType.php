@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeZone;
+use PauseTraining;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -410,7 +411,7 @@ class ProfileType extends AbstractType
         }
 
         try {
-            $plugin = \PauseTraining::create();
+            $plugin = PauseTraining::create();
 
             return 'true' === (string) $plugin->get('tool_enable')
                 && 'true' === (string) $plugin->get('allow_users_to_edit_pause_formation');
@@ -421,7 +422,7 @@ class ProfileType extends AbstractType
 
     private function loadPauseTrainingPlugin(): bool
     {
-        if (\class_exists(\PauseTraining::class, false)) {
+        if (class_exists(PauseTraining::class, false)) {
             return true;
         }
 
@@ -436,12 +437,13 @@ class ProfileType extends AbstractType
         ];
 
         foreach ($candidateFiles as $candidateFile) {
-            if (\is_file($candidateFile)) {
+            if (is_file($candidateFile)) {
                 require_once $candidateFile;
+
                 break;
             }
         }
 
-        return \class_exists(\PauseTraining::class, false);
+        return class_exists(PauseTraining::class, false);
     }
 }

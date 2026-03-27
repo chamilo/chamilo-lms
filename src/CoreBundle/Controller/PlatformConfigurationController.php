@@ -300,9 +300,9 @@ class PlatformConfigurationController extends AbstractController
         }
 
         $configured = $demoEnabled || (
-                '' !== trim($documentServerUrl)
+            '' !== trim($documentServerUrl)
                 && '' !== trim($jwtSecret)
-            );
+        );
 
         return [
             'enabled' => $enabled,
@@ -316,16 +316,16 @@ class PlatformConfigurationController extends AbstractController
         $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
 
         $showMainMenuTab = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
+        );
 
         $publicMainMenuTab = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
+        );
 
         $allowAnonymousUsers = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
+        );
 
         return [
             'enabled' => $enabled,

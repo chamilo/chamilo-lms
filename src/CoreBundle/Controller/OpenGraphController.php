@@ -6,13 +6,25 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use DOMDocument;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use GuzzleHttp\Client;
+use Throwable;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const FILTER_FLAG_NO_PRIV_RANGE;
+use const FILTER_FLAG_NO_RES_RANGE;
+use const FILTER_VALIDATE_IP;
+use const LIBXML_NOERROR;
+use const LIBXML_NONET;
+use const LIBXML_NOWARNING;
+use const PHP_URL_HOST;
 
 #[Route('/social-network')]
 #[IsGranted('ROLE_USER')]
@@ -21,6 +33,7 @@ class OpenGraphController extends AbstractController
     public function __construct(
         private readonly RateLimiterFactory $opengraphFetchLimiter,
     ) {}
+
     /**
      * Domains from which OpenGraph metadata may be fetched.
      * Only public, well-known content platforms are allowed.
@@ -70,7 +83,7 @@ class OpenGraphController extends AbstractController
         }
 
         $parsed = parse_url($url);
-        if (empty($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], true)) {
+        if (empty($parsed['scheme']) || !\in_array($parsed['scheme'], ['http', 'https'], true)) {
             return $this->json(['error' => 'Invalid URL scheme.'], 400);
         }
 
@@ -145,7 +158,7 @@ class OpenGraphController extends AbstractController
 
             // Follow redirects manually with safety checks (max 3)
             $redirectCount = 0;
-            while (in_array($statusCode, [301, 302, 303, 307, 308], true) && $redirectCount < 3) {
+            while (\in_array($statusCode, [301, 302, 303, 307, 308], true) && $redirectCount < 3) {
                 $location = $response->getHeaderLine('Location');
                 if ('' === $location) {
                     break;
@@ -168,7 +181,7 @@ class OpenGraphController extends AbstractController
                 $redirectParsed = parse_url($location);
                 $redirectScheme = strtolower($redirectParsed['scheme'] ?? '');
                 $redirectHost = strtolower($redirectParsed['host'] ?? '');
-                if (!in_array($redirectScheme, ['http', 'https'], true)) {
+                if (!\in_array($redirectScheme, ['http', 'https'], true)) {
                     return null;
                 }
                 if ('' === $redirectHost || !$this->isDomainAllowed($redirectHost) || !$this->isUrlSafe($redirectHost)) {
@@ -202,7 +215,7 @@ class OpenGraphController extends AbstractController
             $body = substr($body, 0, 102400);
 
             return $this->parseOpenGraphTags($body, $url);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
@@ -210,7 +223,7 @@ class OpenGraphController extends AbstractController
     private function parseOpenGraphTags(string $html, string $url): ?array
     {
         libxml_use_internal_errors(true);
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING);
         libxml_clear_errors();
 
@@ -273,7 +286,7 @@ class OpenGraphController extends AbstractController
         }
 
         $parsed = parse_url($url);
-        if (empty($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], true)) {
+        if (empty($parsed['scheme']) || !\in_array($parsed['scheme'], ['http', 'https'], true)) {
             return '';
         }
 

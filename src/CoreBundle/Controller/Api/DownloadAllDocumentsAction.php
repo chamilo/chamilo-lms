@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
@@ -400,7 +401,7 @@ class DownloadAllDocumentsAction
         try {
             $stream = $this->resourceNodeRepository->getResourceNodeFileStream($node, $resourceFile);
 
-            if (!is_resource($stream)) {
+            if (!\is_resource($stream)) {
                 error_log('[Documents] Invalid file stream for resource node '.$node->getId().' and file '.$fileName);
 
                 return;
@@ -408,7 +409,7 @@ class DownloadAllDocumentsAction
 
             $zip->addFileFromStream($fileName, $stream);
             $hasEntries = true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log(
                 '[Documents] Skipping missing or unreadable file during ZIP export. '
                 .'node_id='.$node->getId()

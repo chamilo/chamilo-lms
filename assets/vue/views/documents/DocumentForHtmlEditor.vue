@@ -8,7 +8,7 @@
         :title="t('New folder')"
         icon="folder-plus"
         only-icon
-        type="black"
+        type="success"
         class="!w-10 !h-10 !p-0 !flex !items-center !justify-center"
         @click="openNew"
       />

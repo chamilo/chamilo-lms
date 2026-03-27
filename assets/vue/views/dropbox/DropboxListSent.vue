@@ -13,7 +13,7 @@
           />
           <BaseButton
             icon="folder-plus"
-            type="primary"
+            type="success"
             :label="t('New folder')"
             @click="openCreateFolder('sent')"
           />
@@ -241,7 +241,7 @@
           @click="closeCatDialog"
         />
         <BaseButton
-          type="primary"
+          type="success"
           :label="t('Create folder')"
           icon="check"
           @click="saveCategory"

@@ -7,7 +7,7 @@
       <div class="p-4 flex flex-row gap-1 mb-2">
         <div class="flex flex-row gap-2">
           <Button
-            class="btn btn--primary"
+            class="btn btn--success"
             icon="fa fa-folder-plus"
             label="New folder"
             @click="openNewDialog"

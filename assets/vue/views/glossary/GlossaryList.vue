@@ -7,7 +7,7 @@
         <BaseButton
           :label="t('Add new glossary term')"
           icon="plus"
-          type="black"
+          type="success"
           @click="addNewTerm"
         />
         <BaseButton
@@ -77,7 +77,7 @@
           :label="t('Add new glossary term')"
           class="mt-4"
           icon="plus"
-          type="primary"
+          type="success"
           @click="addNewTerm"
         />
       </EmptyState>

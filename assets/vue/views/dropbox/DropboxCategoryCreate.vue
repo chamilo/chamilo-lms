@@ -8,7 +8,7 @@
 
     <div class="flex justify-end gap-2 mt-2">
       <BaseAppLink :to="backTo"><BaseButton type="black" icon="xmark" :label="t('Cancel')" /></BaseAppLink>
-      <BaseButton type="primary" icon="check" :label="t('Create category')" @click="save" />
+      <BaseButton type="success" icon="check" :label="t('Create category')" @click="save" />
     </div>
   </div>
 </template>

@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-semibold">{{ t('Social groups') }}</h1>
       <BaseButton
         class="self-end"
-        type="secondary"
+        type="success"
         icon="plus"
         :label="$t('Create group')"
         @click="showCreateGroupDialog = true"
@@ -188,7 +188,7 @@
       </div>
       <BaseButton
         class="self-end"
-        type="secondary"
+        type="success"
         icon="check"
         :label="$t('Add')"
         @click="createGroup"

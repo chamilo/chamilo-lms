@@ -5,13 +5,13 @@
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
-        type="black"
+        type="success"
         @click="redirectToCreateLink"
       />
       <BaseButton
         :label="t('Add a category')"
         icon="folder-plus"
-        type="black"
+        type="success"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
@@ -43,7 +43,7 @@
           :label="t('Add a link')"
           class="mt-4"
           icon="link-add"
-          type="primary"
+          type="success"
           @click="redirectToCreateLink"
         />
       </EmptyState>

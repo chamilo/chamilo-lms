@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":òc:dret d'autor,, non:sens dret d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossiè,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossiè,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercici:exercici,,      simulacion:simulacion,,      questionari:questionari,,      diagrama:diagrama,,      figura:figura,,      grafic:grafic,,      indèx:indèx,,      diapositiva:diapositiva,,      taula:taula,,      tèxte narratiu:tèxte narratiu,,      examen:examen,,      experiment:experiment,,      enunciat de problèma:enunciat de problèma,,      autoevaluacion:autoevaluacion,,      leçon:leçon"
@@ -33110,4 +33110,571 @@ msgstr "Tiers"
 
 msgid "Layouts"
 msgstr "Macetas"
+
+msgid "Relation type"
+msgstr "Tipe de relacion"
+
+msgid "Add all"
+msgstr "Apondre tot"
+
+msgid "Remove all"
+msgstr "Suprimir tot"
+
+msgid "An error occurred. Please try again."
+msgstr "Una error s'es producha. Ensajatz tornamai."
+
+msgid "%s created"
+msgstr "%s creat"
+
+msgid "%s updated"
+msgstr "%s actualizat"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Se planejatz passar d'una version anciana de Chamilo, podètz vòstre"
+
+msgid "have a look at the changelog"
+msgstr "mirar lo jornal dels cambiaments"
+
+msgid "to know what's new and what has been changed."
+msgstr "per saber qu'es de novèl e qu'es estat cambiat."
+
+msgid "Session Item"
+msgstr "Element de sesion"
+
+msgid "Points"
+msgstr "Punts"
+
+msgid "See notifications"
+msgstr "Veire las notificacions"
+
+msgid "New content available for this course."
+msgstr "Novèl contengut disponible per aquest cors."
+
+msgid "No new notifications."
+msgstr "Cap de novèla notificacion."
+
+msgid "No new content found."
+msgstr "Cap de novèl contengut trobat."
+
+msgid "No tool details available yet."
+msgstr "Cap de detajhs d'esplech pas encara disponible."
+
+msgid "Last access"
+msgstr "Darrièr accés"
+
+msgid "Open course"
+msgstr "Dobrir lo cors"
+
+msgid "Course completed"
+msgstr "Cors acabat"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "La limita d'inscripcion per aquest cors es estada atinta."
+
+msgid "Subscription limit reached"
+msgstr "Limita d'inscripcion atinta"
+
+msgid "Tertiary alternative"
+msgstr "Alternative tertiaría"
+
+msgid "Update SCORM"
+msgstr "Actualizar SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "L'IA pòt redigir un comentari e una nòta suggerida abans que l'envietz."
+
+msgid "What will be sent to the AI"
+msgstr "Quin serà enviat a l'IA"
+
+msgid "Assignment title + instructions"
+msgstr "Títol del trabalh + instruccions"
+
+msgid "Student submission (text)"
+msgstr "Remission de l'estudiant (tèxte)"
+
+msgid "Student submission (text): none"
+msgstr "Remission de l'estudiant (tèxte) : cap"
+
+msgid "Student attachment"
+msgstr "Piètz de l'estudiant"
+
+msgid "supported"
+msgstr "suportat"
+
+msgid "not supported for document analysis"
+msgstr "pas suportat per l'analisi de documents"
+
+msgid "Student attachment: none"
+msgstr "Piètz de l'estudiant : cap"
+
+msgid "No text AI providers available."
+msgstr "Cap furnidor d'IA tèxte disponible."
+
+msgid "AI-assisted"
+msgstr "Assistida per IA"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Aquesta decision es enregistrada amb la correccion (ExtraField) e pòt pas èsser modificada mai."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Piètz opcional de correccion (aquò es pas la remission de l'estudiant)."
+
+msgid "AI"
+msgstr "IA"
+
+msgid "Received"
+msgstr "Recut"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Desblolar la colomna"
+
+msgid "Lock column"
+msgstr "Blolar la colomna"
+
+msgid "Set all Present"
+msgstr "Marcar tot Present"
+
+msgid "Set all Absent"
+msgstr "Marcar tot Absent"
+
+msgid "Auto (recommended)"
+msgstr "Auto (recomandat)"
+
+msgid "Error downloading all documents."
+msgstr "Error al telecargar totes los documents."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Dobrir amb ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Quota limitant"
+
+msgid "Remaining space"
+msgstr "Espaci restant"
+
+msgid "Course catalogue"
+msgstr "Catálogo de cors"
+
+msgid "Drag links to reorder"
+msgstr "Tichar los ligams per los reordenar"
+
+msgid "Drop links here to keep them without category"
+msgstr "Depausar los ligams aquí per los gardar sens categoria"
+
+msgid "Could not export"
+msgstr "Impossible d'exportar"
+
+msgid "Link moved"
+msgstr "Ligam desplaçat"
+
+msgid "Could not move link"
+msgstr "Impossible de desplaçar lo ligam"
+
+msgid "Category reordering is not enabled"
+msgstr "Lo reordenament de categorias es pas activat"
+
+msgid "Showing %s posts"
+msgstr "Afichatge de %s publicacions"
+
+msgid "Showing %s tasks"
+msgstr "Afichatge de %s taches"
+
+msgid "Page %s of %s"
+msgstr "Pagina %s de %s"
+
+msgid "Tutors"
+msgstr "Tutors"
+
+msgid "selected"
+msgstr "seleccionat"
+
+msgid "No data to export"
+msgstr "Cap donada a exportar"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "L'entèsta PNG deu èsser \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Lista estandard"
+
+msgid "Management list"
+msgstr "Lista de gestion"
+
+msgid "Open platform"
+msgstr "Plataforma dubèrta"
+
+msgid "Teacher user ID"
+msgstr "ID utilizaire professor"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Sètz segur que vollez esfaçar aquest cors ?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Sètz segur que vollez esfaçar los cors seleccionats ?"
+
+msgid "Search by name, username, email"
+msgstr "Recèrca per nom, nom d'utilizaire, email"
+
+msgid "contains %s items"
+msgstr "conten %s elements"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Vòstre acòrdi legal demòra actiu fins qu'una demanda de retraire siá examinada e procesada."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Vòstra demanda de retraire del consentiment legal es en espera d'examen."
+
+msgid "Your account deletion request is pending review."
+msgstr "Vòstra demanda de supression de compte es en espera d'examen."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Perqué volètz demandar lo retraire de vòstre consentiment legal ?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Mandadetz vòstra demanda de retraire del consentiment legal..."
+
+msgid "Submitting request..."
+msgstr "Mandadetz la demanda..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Demandar lo retraire del consentiment legal"
+
+msgid "Submitting your account deletion request..."
+msgstr "Mandadetz vòstra demanda de supression de compte..."
+
+msgid "Submitting your acceptance..."
+msgstr "Mandadetz vòstra acceptacion..."
+
+msgid "Event details"
+msgstr "Detalhs de l'eveniment"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Podètz pas accedir al curs ligat dempuèi aquesta vista."
+
+msgid "Failed to load sessions"
+msgstr "Fracàs del cargament de las sesions"
+
+msgid "Failed to load events"
+msgstr "Fracàs del cargament dels eveniments"
+
+msgid "No events found"
+msgstr "Cap d'eveniment trobat"
+
+msgid "Group image"
+msgstr "Imatge del grup"
+
+msgid "SearchTCC"
+msgstr "RecèrcaTCC"
+
+msgid "Forbidden"
+msgstr "Interdit"
+
+msgid "Distribution"
+msgstr "Reparticion"
+
+msgid "Firstname"
+msgstr "Prénom"
+
+msgid "Lastname"
+msgstr "Nom de familha"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Last login in platform"
+msgstr "Darrièra connexion a la plataforma"
+
+msgid "Export as CSV"
+msgstr "Exportar en CSV"
+
+msgid "Export as XLS"
+msgstr "Exportar en XLS"
+
+msgid "Deactivate this user?"
+msgstr "Desactivar aqueste utilizaire ?"
+
+msgid "Enable this user?"
+msgstr "Activar aqueste utilizaire ?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Fusionar aqueste grup de duplicatas dins l'utilizaire #%s ?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Aquò fundrà totes las autras comptes del meteis grup dins aqueste compte."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Las comptes fusionadas seràn suprimidas definitivament e desapareishrán d'aqueste rapòrt."
+
+msgid "This action cannot be undone."
+msgstr "Aquesta accion se pòt pas anullar."
+
+msgid "Unify"
+msgstr "Fusionar"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Estudiant"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Espaci total utilizat pel portal %s limita a %s MB"
+
+msgid "Helper text"
+msgstr "Tèxte d'ajuda"
+
+msgid "NotAllowed"
+msgstr "PasAutorisat"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Utilizetz los filtres d'en haut per cargar los detalhs d'accès dels aprenents."
+
+msgid "Start date must be before end date"
+msgstr "La data de començament deu èsser abans de la data de fin"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Seleccionatz un intervalle de datas e un tipe de gropament per examinar los detalhs d'accès dels aprenents."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Aqueste curs serà creat en utilizant lo modèl de curs per defaut de la plataforma."
+
+msgid "Security breach avoid restart"
+msgstr "Violacion de seguretat evitar redemarratge"
+
+msgid "User deactivated"
+msgstr "Utilizaire desactivat"
+
+msgid "InvalidId"
+msgstr "IdInvalid"
+
+msgid "User enabled"
+msgstr "Utilizaire activat"
+
+msgid "No other duplicates found for this user."
+msgstr "Cap d'autras duplicatas trobadas per aqueste utilizaire."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Utilizaires fusionats : %s compte(s) fusionat(s) dins l'utilizaire #%s. Las comptes fusionadas son estadas suprimidas definitivament."
+
+msgid "No accounts were merged."
+msgstr "Cap de compte es pas estat fusionat."
+
+msgid "An error occurred while unifying users."
+msgstr "Un error es produït pendent l'unificacion dels utilizaires."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Utilizaires unificats : utilizaire # %s fusionat dins l'utilizaire # %s. Compte fusionat es estat suprimit definitivament."
+
+msgid "Duplicate users"
+msgstr "Utilizaires duplicats"
+
+msgid "Years"
+msgstr "Ans"
+
+msgid "All time visits outside sessions"
+msgstr "Visitas totalas fòra de sesions"
+
+msgid "All time visits in sessions"
+msgstr "Visitas totalas dins sesions"
+
+msgid "All time visits total"
+msgstr "Visitas totalas"
+
+msgid "Student visits per period, per course"
+msgstr "Visitas d'estudiants per periode, per curs"
+
+msgid "By email"
+msgstr "Per email"
+
+msgid "By extra field"
+msgstr "Per camp suplementari"
+
+msgid "Select an option"
+msgstr "Causir una opcion"
+
+msgid "Profile field"
+msgstr "Camp de perfil"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Aquest rapòrt lista solament los utilizaires qu'an la meteissa adreça electronica."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Aquest rapòrt lista solament los utilizaires qu'an la meteissa valor pel camp de perfil causit."
+
+msgid "How to use this report"
+msgstr "Com utilizar aquest rapòrt"
+
+msgid "Disable / Enable"
+msgstr "Desactivar / Activar"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Bloca o restaura solament la connexion. Suprime pas l'utilizaire e suprime pas las inscripcions."
+
+msgid "Last week"
+msgstr "Sètzmana passada"
+
+msgid "Next week"
+msgstr "Sètzmana vinenta"
+
+msgid "Loading report..."
+msgstr "Carga del rapòrt..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Fracàs de la carga d'aquest rapòrt. Ensajatz tornamai."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Causissètz una o mai sesions per copiar los formadors e causissètz lo curs de destinacion"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Mantenètz Ctrl (o Cmd) per seleccionar de multiples elements"
+
+msgid "Choose the destination course"
+msgstr "Causissètz lo curs de destinacion"
+
+msgid "You can select multiple items"
+msgstr "Podètz seleccionar multiples elements"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Utilizetz la bóstia de recèrca per trobar rapidament los curs"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Causissètz una o mai sesions font e una o mai sesions de destinacion per copiar los estudiants"
+
+msgid "Select destination sessions"
+msgstr "Causissètz las sesions de destinacion"
+
+msgid "You can select multiple users"
+msgstr "Podètz seleccionar multiples utilizaires"
+
+msgid "Use the search box to find users quickly"
+msgstr "Utilizetz la bóstia de recèrca per trobar rapidament los utilizaires"
+
+msgid "Error while creating the document"
+msgstr "Error pendent la creacion del document"
+
+msgid "Not a SCORM learning path"
+msgstr "Pas un itinerari d'aprendissatge SCORM"
+
+msgid "Final item"
+msgstr "Element final"
+
+msgid "Edit item"
+msgstr "Modificar l'element"
+
+msgid "No AI text providers configured."
+msgstr "Cap furnidor de tèxte IA configurat."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Fracàs de la cargas. Lo fichièr es probablament mai grand que la limita del servidor (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Fracàs de la mesa a jorn. Cap fichièr rebut pel servidor."
+
+msgid "Update failed. %s"
+msgstr "Fracàs de la mesa a jorn. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Fracàs de la mesa a jorn. Donadas del fichièr cargat invalida."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Fracàs de la mesa a jorn. Lo nom del fichièr ZIP cargat deu correspondre al nom del pachage SCORM original."
+
+msgid "Update failed"
+msgstr "Fracàs de la mesa a jorn"
+
+msgid "Question lower case"
+msgstr "Question en minuscula"
+
+msgid "Regenerate"
+msgstr "Regenerar"
+
+msgid "Case insensitive"
+msgstr "Sens sensibilitat a la majuscula"
+
+msgid "Select a session to load its courses."
+msgstr "Causissètz una session per cargar ses curs."
+
+msgid "Select the source course."
+msgstr "Causissètz lo curs font."
+
+msgid "Select a destination session."
+msgstr "Causissètz una session de destinacion."
+
+msgid "Select the destination course."
+msgstr "Causissètz lo curs de destinacion."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Copiatz lo contengut complet del curs de la session seleccionada."
+
+msgid "Select which tools/items to copy."
+msgstr "Causissètz quins ostalis/elements copiar."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Pic non inclure lo contengut de basa del cors (non-sessió)."
+
+msgid "An error occurred while copying the course"
+msgstr "Una error s'es produsida pendent la còpia del cors"
+
+msgid "Please select a different destination"
+msgstr "Seleccionatz una autre destinacion"
+
+msgid "You must select a destination course"
+msgstr "Vos cal seleccionar un cors de destinacion"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Per exportar los cors amb quiz vos cal seleccionar lo quiz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Se vòstres LPs contenon de fichièrs àudio, vos cal los seleccionar dins los documents"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Se vòstre quiz contenon de questions hotspot, vos cal seleccionar las images dins los documents"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Lo senhal deu far al mens %length% caractèrs de longor."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Lo senhal deu contenir al mens %count% caractèrs minuscules."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Lo senhal deu contenir al mens %count% caractèrs majuscules."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Lo senhal deu contenir al mens %count% caractèrs numèrics (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Lo senhal deu contenir al mens %count% caractèrs espècials."
+
+msgid "Invalid login request."
+msgstr "Requèsta de connexion invalida."
+
+msgid "Authentication failed."
+msgstr "Autentificacion fracassada."
+
+msgid "Login %status% for username %username%"
+msgstr "Connexion %status% pel nom d’utilizaire %username%"
+
+msgid "Co-generated with AI"
+msgstr "Co-generat amb IA"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Champs obligatòris"
 

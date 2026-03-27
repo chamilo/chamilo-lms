@@ -33115,3 +33115,570 @@ msgstr "மூன்றாம் தரப்பினர்"
 msgid "Layouts"
 msgstr "அமைப்புகள்"
 
+msgid "Relation type"
+msgstr "உறவு வகை"
+
+msgid "Add all"
+msgstr "எல்லாவற்றையும் சேர்க்கவும்"
+
+msgid "Remove all"
+msgstr "எல்லாவற்றையும் நீக்கவும்"
+
+msgid "An error occurred. Please try again."
+msgstr "ஒரு பிழை ஏற்பட்டது. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+
+msgid "%s created"
+msgstr "%s உருவாக்கப்பட்டது"
+
+msgid "%s updated"
+msgstr "%s புதுப்பிக்கப்பட்டது"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Chamilo இன் பழைய பதிப்பிலிருந்து புதுப்பிப்பதற்கு திட்டமிட்டால், நீங்கள்"
+
+msgid "have a look at the changelog"
+msgstr "மாற்றுநிரல் பட்டியலைப் பார்க்கலாம்"
+
+msgid "to know what's new and what has been changed."
+msgstr "என்ன புதியது மற்றும் என்ன மாற்றப்பட்டது என்பதை அறிய."
+
+msgid "Session Item"
+msgstr "அமர்வு பொருள்"
+
+msgid "Points"
+msgstr "மதிப்பெண்கள்"
+
+msgid "See notifications"
+msgstr "அறிவிப்புகளைக் காண்க"
+
+msgid "New content available for this course."
+msgstr "இந்தப் பாடத்திற்கு புதிய உள்ளடக்கம் கிடைக்கிறது."
+
+msgid "No new notifications."
+msgstr "புதிய அறிவிப்புகள் இல்லை."
+
+msgid "No new content found."
+msgstr "புதிய உள்ளடக்கம் கிடைக்கவில்லை."
+
+msgid "No tool details available yet."
+msgstr "கருவி விவரங்கள் இன்னும் கிடைக்கவில்லை."
+
+msgid "Last access"
+msgstr "கடைசி அணுகல்"
+
+msgid "Open course"
+msgstr "பாடத்தைத் திறக்கவும்"
+
+msgid "Course completed"
+msgstr "பாடம் முடிந்தது"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "இந்தப் பாடத்திற்கான சந்தா வரம்பு அடையப்பட்டது."
+
+msgid "Subscription limit reached"
+msgstr "சந்தா வரம்பு அடையப்பட்டது"
+
+msgid "Tertiary alternative"
+msgstr "மூன்றாம் நிலை மாற்று"
+
+msgid "Update SCORM"
+msgstr "SCORM புதுப்பிக்கவும்"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI நீங்கள் அனுப்புவதற்கு முன் கருத்துரை மற்றும் பரிந்துரைக்கப்பட்ட மதிப்பெண்ணை உருவாக்கலாம்."
+
+msgid "What will be sent to the AI"
+msgstr "AI க்கு அனுப்பப்படும் என்ன"
+
+msgid "Assignment title + instructions"
+msgstr "பணி தலைப்பு + வழிமுறைகள்"
+
+msgid "Student submission (text)"
+msgstr "மாணவர் சமர்ப்பிப்பு (உரை)"
+
+msgid "Student submission (text): none"
+msgstr "மாணவர் சமர்ப்பிப்பு (உரை): இல்லை"
+
+msgid "Student attachment"
+msgstr "மாணவர் இணைப்பு"
+
+msgid "supported"
+msgstr "ஆதரிக்கப்படுகிறது"
+
+msgid "not supported for document analysis"
+msgstr "அலவை பகுப்பாய்விற்கு ஆதரிக்கப்படவில்லை"
+
+msgid "Student attachment: none"
+msgstr "மாணவர் இணைப்பு: இல்லை"
+
+msgid "No text AI providers available."
+msgstr "எந்த உரை AI வழங்குநரும் கிடைக்கவில்லை."
+
+msgid "AI-assisted"
+msgstr "AI-உதவியுடன்"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "இந்த முடிவு சரிசெய்வதுடன் (ExtraField) சேமிக்கப்படுகிறது மற்றும் பின்னர் மாற்ற முடியாது."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "விருப்பமான சரிசெய்தல் இணைப்பு (இது மாணவரின் சமர்ப்பணம் அல்ல)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "பெறப்பட்டது"
+
+msgid "%s min"
+msgstr "%s நிமி"
+
+msgid "Unlock column"
+msgstr "நெடுவை திறக்கவும்"
+
+msgid "Lock column"
+msgstr "நெடுவை பூட்டவும்"
+
+msgid "Set all Present"
+msgstr "எல்லாவற்றையும் இருக்கையாக அமைக்கவும்"
+
+msgid "Set all Absent"
+msgstr "எல்லாவற்றையும் இல்லையாக அமைக்கவும்"
+
+msgid "Auto (recommended)"
+msgstr "தானியங்கி (பரிந்துரைக்கப்படுகிறது)"
+
+msgid "Error downloading all documents."
+msgstr "எல்லா ஆவணங்களையும் பதிவிறக்கம் செய்ய தவறு."
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICE உடன் திறக்கவும்"
+
+msgid "Limiting quota"
+msgstr "வரம்புக்குட்பட்ட ஒதுக்கீடு"
+
+msgid "Remaining space"
+msgstr "மீதமுள்ள இடம்"
+
+msgid "Course catalogue"
+msgstr "பாடநூல் பட்டியல்"
+
+msgid "Drag links to reorder"
+msgstr "மீண்டும் ஒழுங்கமைக்க இணைப்புகளை இழுக்கவும்"
+
+msgid "Drop links here to keep them without category"
+msgstr "வகையின்றி அவற்றை வைத்திருக்க இங்கு இணைப்புகளை விடுங்கள்"
+
+msgid "Could not export"
+msgstr "ஏற்றுமதி செய்ய முடியவில்லை"
+
+msgid "Link moved"
+msgstr "இணைப்பு நகர்த்தப்பட்டது"
+
+msgid "Could not move link"
+msgstr "இணைப்பை நகர்த்த முடியவில்லை"
+
+msgid "Category reordering is not enabled"
+msgstr "வகை மீண்டும் ஒழுங்கமைப்பு இயல்புநிலைப்படுத்தப்படவில்லை"
+
+msgid "Showing %s posts"
+msgstr "%s பதிவுகள் காட்டப்படுகின்றன"
+
+msgid "Showing %s tasks"
+msgstr "%s பணிகள் காட்டப்படுகின்றன"
+
+msgid "Page %s of %s"
+msgstr "%s இன் %s பக்கம்"
+
+msgid "Tutors"
+msgstr "பயிற்சியாளர்கள்"
+
+msgid "selected"
+msgstr "தேர்ந்தெடுக்கப்பட்டது"
+
+msgid "No data to export"
+msgstr "ஏற்றுமதி செய்ய தரவு இல்லை"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "தலைப்பு PNG %spx. க்கு \\u2264 இருக்க வேண்டும்."
+
+msgid "Standard list"
+msgstr "தரமான பட்டியல்"
+
+msgid "Management list"
+msgstr "நிர்வாக பட்டியல்"
+
+msgid "Open platform"
+msgstr "திறந்த தளம்"
+
+msgid "Teacher user ID"
+msgstr "ஆசிரியர் பயனர் ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "இந்த பாடத்தை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பாடங்களை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Search by name, username, email"
+msgstr "பெயர், பயனர் பெயர், மின்னஞ்சல் மூலம் தேடவும்"
+
+msgid "contains %s items"
+msgstr "%s பொருட்களைக் கொண்டுள்ளது"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "உங்கள் சட்ட ஒப்பந்தம் எந்த திரும்பப் பெறல் கோரிக்கையும் மறுஆய்வு செய்யப்பட்டு செயலாக்கப்படும் வரை செயலில் இருக்கும்."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "உங்கள் சட்ட ஒப்புதல் திரும்பப் பெறல் கோரிக்கை மறுஆய்வுக்கு காத்திருக்கிறது."
+
+msgid "Your account deletion request is pending review."
+msgstr "உங்கள் கணக்கு நீக்கல் கோரிக்கை மறுஆய்வுக்கு காத்திருக்கிறது."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "உங்கள் சட்ட ஒப்புதலை திரும்பப் பெற கோர வேண்டும் ஏன்?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "உங்கள் சட்ட ஒப்புதல் திரும்பப் பெறல் கோரிக்கையை சமர்ப்பிக்கிறது..."
+
+msgid "Submitting request..."
+msgstr "கோரிக்கையை சமர்ப்பிக்கிறது..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "சட்ட ஒப்புதலை திரும்பப் பெற கோரவும்"
+
+msgid "Submitting your account deletion request..."
+msgstr "உங்கள் கணக்கு நீக்கல் கோரிக்கையை சமர்ப்பிக்கிறது..."
+
+msgid "Submitting your acceptance..."
+msgstr "உங்கள் ஒப்புக்கொள்ளலை சமர்ப்பிக்கிறது..."
+
+msgid "Event details"
+msgstr "நிகழ்வு விவரங்கள்"
+
+msgid "You cannot access the linked course from this view."
+msgstr "இந்த பார்வையில் இணைக்கப்பட்ட பாடத்தை அணுக முடியாது."
+
+msgid "Failed to load sessions"
+msgstr "அமர்வுகளை ஏற்ற தவறு"
+
+msgid "Failed to load events"
+msgstr "நிகழ்வுகளை ஏற்றத் தவறியது"
+
+msgid "No events found"
+msgstr "நிகழ்வுகள் எதுவும் காணப்படவில்லை"
+
+msgid "Group image"
+msgstr "குழு படம்"
+
+msgid "SearchTCC"
+msgstr "தேடுTCC"
+
+msgid "Forbidden"
+msgstr "தடைசெய்யப்பட்டது"
+
+msgid "Distribution"
+msgstr "பகிர்வு"
+
+msgid "Firstname"
+msgstr "முதல் பெயர்"
+
+msgid "Lastname"
+msgstr "கடைசி பெயர்"
+
+msgid "Email"
+msgstr "மின்னஞ்சல்"
+
+msgid "Last login in platform"
+msgstr "தளத்தில் கடைசி உள்நுழைவு"
+
+msgid "Export as CSV"
+msgstr "CSV ஆக ஏற்றுமதி செய்"
+
+msgid "Export as XLS"
+msgstr "XLS ஆக ஏற்றுமதி செய்"
+
+msgid "Deactivate this user?"
+msgstr "இந்தப் பயனரை முடக்கவா?"
+
+msgid "Enable this user?"
+msgstr "இந்தப் பயனரை செயல்படுத்தவா?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "இந்த நகல் குழுவை பயனர் #%s உள்ளே ஒருங்கிணைக்கவா?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "இது அதே குழுவில் உள்ள எல்லா பிற கணக்குகளையும் இந்தக் கணக்கில் இணைக்கும்."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "இணைக்கப்பட்ட கணக்குகள் நிரந்தரமாக நீக்கப்பட்டு இந்த அறிக்கையிலிருந்து மறைந்துவிடும்."
+
+msgid "This action cannot be undone."
+msgstr "இந்த செயல் மீள முடியாது."
+
+msgid "Unify"
+msgstr "ஒருங்கிணை"
+
+msgid "SessionAdmin"
+msgstr "அமர்வு நிர்வாகி"
+
+msgid "Drh"
+msgstr "DRH"
+
+msgid "Student"
+msgstr "மாணவர்"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "தளம் %s வரம்பு %s MB ஆக மொத்த இடம் பயன்படுத்தப்பட்டது"
+
+msgid "Helper text"
+msgstr "உதவி உரை"
+
+msgid "NotAllowed"
+msgstr "அனுமதிக்கப்படவில்லை"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "மேலே உள்ள வடிகட்டிகளைப் பயன்படுத்தி கற்றல் அணுகல் விவரங்களை ஏற்றவும்."
+
+msgid "Start date must be before end date"
+msgstr "தொடக்க தேதி முடிவு தேதிக்கு முன் இருக்க வேண்டும்"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "தேதி வரம்பு மற்றும் குழுத்தொகுப்பு வகையைத் தேர்ந்தெடுத்து கற்றல் அணுகல் விவரங்களை மதிப்பாய்வு செய்யவும்."
+
+msgid "This course will be created using the platform default course template."
+msgstr "இந்த பாடநெறி தளம் இயல்புநிலை பாடநெறி மாதிரியைப் பயன்படுத்தி உருவாக்கப்படும்."
+
+msgid "Security breach avoid restart"
+msgstr "பாதுகாப்பு மீறல் மீண்டும் தொடங்குவதைத் தவிர்"
+
+msgid "User deactivated"
+msgstr "பயனர் முடக்கப்பட்டார்"
+
+msgid "InvalidId"
+msgstr "செல்லாத ID"
+
+msgid "User enabled"
+msgstr "பயனர் செயல்படுத்தப்பட்டார்"
+
+msgid "No other duplicates found for this user."
+msgstr "இந்தப் பயனருக்கு வேறு நகல்கள் எதுவும் காணப்படவில்லை."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "பயனர்கள் ஒருங்கிணைக்கப்பட்டனர்: %s கணக்குகள் பயனர் #%s உள்ளே இணைக்கப்பட்டன. இணைக்கப்பட்ட கணக்குகள் நிரந்தரமாக நீக்கப்பட்டன."
+
+msgid "No accounts were merged."
+msgstr "எந்தக் கணக்குகளும் இணைக்கப்படவில்லை."
+
+msgid "An error occurred while unifying users."
+msgstr "பயனர்களை ஒருங்கிணைக்கும் போது ஒரு பிழை ஏற்பட்டது."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "பயனர்கள் ஒருங்கிணைக்கப்பட்டனர்: பயனர் #%s பயனர் #%s உள்ளே இணைக்கப்பட்டார். இணைக்கப்பட்ட கணக்கு நிரந்தரமாக நீக்கப்பட்டது."
+
+msgid "Duplicate users"
+msgstr "நகல் பயனர்கள்"
+
+msgid "Years"
+msgstr "ஆண்டுகள்"
+
+msgid "All time visits outside sessions"
+msgstr "அமர்வுகளுக்கு வெளியே எல்லா நேர விஜிட்"
+
+msgid "All time visits in sessions"
+msgstr "அமர்வுகளுக்குள் எல்லா நேர விஜிட்"
+
+msgid "All time visits total"
+msgstr "எல்லா நேர விஜிட் மொத்தம்"
+
+msgid "Student visits per period, per course"
+msgstr "அளவுக்காலம், பாடநெறிக்கு மாணவர் விஜிட்கள்"
+
+msgid "By email"
+msgstr "மின்னஞ்சல் மூலம்"
+
+msgid "By extra field"
+msgstr "கூடுதல் களத்தால்"
+
+msgid "Select an option"
+msgstr "ஒரு விருப்பத்தைத் தேர்ந்தெடு"
+
+msgid "Profile field"
+msgstr "சுயவிவர களம்"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "இந்த அறிக்கை அதே மின்னஞ்சல் முகவரியைக் கொண்ட பயனர்களை மட்டுமே பட்டியலிடுகிறது."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "இந்த அறிக்கை தேர்ந்தெடுக்கப்பட்ட சுயவிவர களத்திற்கு அதே மதிப்பைக் கொண்ட பயனர்களை மட்டுமே பட்டியலிடுகிறது."
+
+msgid "How to use this report"
+msgstr "இந்த அறிக்கையை எவ்வாறு பயன்படுத்துவது"
+
+msgid "Disable / Enable"
+msgstr "இயல்புநிலைப்படுத்து / சேர்க்கவும்"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "உள்நுழைவை மட்டும் தடுக்கிறது அல்லது மீட்டமைக்கிறது. பயனரை நீக்காது மற்றும் சந்தா நீக்காது."
+
+msgid "Last week"
+msgstr "கடந்த வாரம்"
+
+msgid "Next week"
+msgstr "அடுத்த வாரம்"
+
+msgid "Loading report..."
+msgstr "அறிக்கை ஏற்றுகிறது..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "இந்த அறிக்கையை ஏற்ற முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "பயிற்றுவிக்கப்பட்டவர்களை நகலெடுக்க ஓரளவு அல்லது அதற்கு மேற்பட்ட அமர்வுகளைத் தேர்ந்தெடுக்கவும் மற்றும் இலக்கு பாடத்தைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "பல பொருட்களைத் தேர்ந்தெடுக்க Ctrl (அல்லது Cmd) அழுத்தவும்"
+
+msgid "Choose the destination course"
+msgstr "இலக்கு பாடத்தைத் தேர்ந்தெடுக்கவும்"
+
+msgid "You can select multiple items"
+msgstr "நீங்கள் பல பொருட்களைத் தேர்ந்தெடுக்கலாம்"
+
+msgid "Use the search box to find courses quickly"
+msgstr "பாடங்களை விரைவாகக் கண்டுபிடிக்க தேடல் பெட்டியைப் பயன்படுத்தவும்"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "மாணவர்களை நகலெடுக்க ஓரளவு அல்லது அதற்கு மேற்பட்ட ஆதார அமர்வுகள் மற்றும் ஓரளவு அல்லது அதற்கு மேற்பட்ட இலக்கு அமர்வுகளைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Select destination sessions"
+msgstr "இலக்கு அமர்வுகளைத் தேர்ந்தெடுக்கவும்"
+
+msgid "You can select multiple users"
+msgstr "நீங்கள் பல பயனர்களைத் தேர்ந்தெடுக்கலாம்"
+
+msgid "Use the search box to find users quickly"
+msgstr "பயனர்களை விரைவாகக் கண்டுபிடிக்க தேடல் பெட்டியைப் பயன்படுத்தவும்"
+
+msgid "Error while creating the document"
+msgstr "ஆவணத்தை உருவாக்கும் போது பிழை"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM கற்றல் பாதை அல்ல"
+
+msgid "Final item"
+msgstr "இறுதி பொருள்"
+
+msgid "Edit item"
+msgstr "பொருளைத் திருத்தவும்"
+
+msgid "No AI text providers configured."
+msgstr "எந்த AI உரை வழங்குநரும் அமைக்கப்படவில்லை."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "பதிவேற்றம் தோல்வியடைந்தது. கோப்பு சர்வர் வரம்பை (post_max_size) விட பெரியதாக இருக்கலாம்."
+
+msgid "Update failed. No file received by the server."
+msgstr "புதுப்பிப்பு தோல்வியடைந்தது. சர்வரால் கோப்பு பெறப்படவில்லை."
+
+msgid "Update failed. %s"
+msgstr "புதுப்பிப்பு தோல்வியடைந்தது. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "புதுப்பிப்பு தோல்வியடைந்தது. செல்லுபடியற்ற பதிவேற்றப்பட்ட கோப்பு சுமை."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "புதுப்பிப்பு தோல்வியடைந்தது. பதிவேற்றப்பட்ட ZIP கோப்பு பெயர் அசல் SCORM பேக்கேஜ் பெயருடன் ஒத்துப்போக வேண்டும்."
+
+msgid "Update failed"
+msgstr "புதுப்பிப்பு தோல்வியடைந்தது"
+
+msgid "Question lower case"
+msgstr "கேள்வி சிறிய எழுத்து"
+
+msgid "Regenerate"
+msgstr "மீண்டும் உருவாக்கு"
+
+msgid "Case insensitive"
+msgstr "பெரிய-சிறிய எழுத்து பொருட்படாமல்"
+
+msgid "Select a session to load its courses."
+msgstr "அதன் பாடங்களை ஏற்ற ஒரு அமர்வைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Select the source course."
+msgstr "ஆதார பாடத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Select a destination session."
+msgstr "இலக்கு அமர்வைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Select the destination course."
+msgstr "இலக்கு பாடத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "தேர்ந்தெடுக்கப்பட்ட அமர்வு பாடத்திலிருந்து முழு பாட உள்ளடக்கத்தை நகலெடுக்கவும்."
+
+msgid "Select which tools/items to copy."
+msgstr "நகலெடுக்க வேண்டிய கருவிகள்/பொருட்களைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "அடிப்படை (அமர்வு அல்லாத) பாட உள்ளடக்கத்தைச் சேர்க்க வேண்டாம்."
+
+msgid "An error occurred while copying the course"
+msgstr "பாடத்தை நகலெடுக்கும் போது ஒரு பிழை ஏற்பட்டது"
+
+msgid "Please select a different destination"
+msgstr "வேறு இலக்கைத் தேர்ந்தெடுக்கவும்"
+
+msgid "You must select a destination course"
+msgstr "நீங்கள் இலக்கு பாடத்தைத் தேர்ந்தெடுக்க வேண்டும்"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "விசாரணையுடன் பாடங்களை ஏற்றுமதி செய்ய விசாரணையைத் தேர்ந்தெடுக்க வேண்டும்"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "உங்கள் LPகளில் ஆடியோ கோப்புகள் சேர்க்கப்பட்டிருந்தால் ஆவணங்களிலிருந்து அவற்றைத் தேர்ந்தெடுக்க வேண்டும்"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "உங்கள் விசாரணையில் ஹாட்ஸ்பாட் கேள்விகள் சேர்க்கப்பட்டிருந்தால் ஆவணங்களிலிருந்து படங்களைத் தேர்ந்தெடுக்க வேண்டும்"
+
+msgid "GeneralResourcesCourse"
+msgstr "பொது வளங்கள் பாடம்"
+
+msgid "Password must be at least %length% characters long."
+msgstr "கடவுச்சொல் குறைந்தபட்சம் %length% எழுத்துக்கள் நீளமாக இருக்க வேண்டும்."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "கடவுச்சொல்லில் குறைந்தபட்சம் %count% சிறிய எழுத்துக்கள் இருக்க வேண்டும்."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "கடவுச்சொல்லில் குறைந்தபட்சம் %count% பெரிய எழுத்துக்கள் இருக்க வேண்டும்."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "கடவுச்சொல்லில் குறைந்தபட்சம் %count% எண் (0-9) எழுத்துக்கள் இருக்க வேண்டும்."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "கடவுச்சொல்லில் குறைந்தபட்சம் %count% சிறப்பு எழுத்துக்கள் இருக்க வேண்டும்."
+
+msgid "Invalid login request."
+msgstr "செல்லுபடியற்ற உள்நுழைவு கோரிக்கை."
+
+msgid "Authentication failed."
+msgstr "அங்கீகாரம் தோல்வியடைந்தது."
+
+msgid "Login %status% for username %username%"
+msgstr "பயனர்பெயர் %username% க்கான உள்நுழைவு %status%"
+
+msgid "Co-generated with AI"
+msgstr "AI உடன் இணைந்து உருவாக்கப்பட்டது"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "தேவையான களங்கள்"
+

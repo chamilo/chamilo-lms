@@ -33129,3 +33129,570 @@ msgstr "الأطراف الثالثة"
 msgid "Layouts"
 msgstr "التخطيطات"
 
+msgid "Relation type"
+msgstr "نوع العلاقة"
+
+msgid "Add all"
+msgstr "إضافة الكل"
+
+msgid "Remove all"
+msgstr "إزالة الكل"
+
+msgid "An error occurred. Please try again."
+msgstr "حدث خطأ. يرجى المحاولة مرة أخرى."
+
+msgid "%s created"
+msgstr "%s تم إنشاؤه"
+
+msgid "%s updated"
+msgstr "%s تم تحديثه"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "إذا كنت تخطط للترقية من إصدار أقدم من Chamilo، قد ترغب في"
+
+msgid "have a look at the changelog"
+msgstr "الاطلاع على سجل التغييرات"
+
+msgid "to know what's new and what has been changed."
+msgstr "لمعرفة ما هو جديد وما تم تغييره."
+
+msgid "Session Item"
+msgstr "عنصر الجلسة"
+
+msgid "Points"
+msgstr "النقاط"
+
+msgid "See notifications"
+msgstr "عرض الإشعارات"
+
+msgid "New content available for this course."
+msgstr "محتوى جديد متاح لهذا المقرر."
+
+msgid "No new notifications."
+msgstr "لا توجد إشعارات جديدة."
+
+msgid "No new content found."
+msgstr "لم يتم العثور على محتوى جديد."
+
+msgid "No tool details available yet."
+msgstr "لا تتوفر تفاصيل الأداة بعد."
+
+msgid "Last access"
+msgstr "آخر وصول"
+
+msgid "Open course"
+msgstr "فتح المقرر"
+
+msgid "Course completed"
+msgstr "المقرر مكتمل"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "تم الوصول إلى حد الاشتراك لهذا المقرر."
+
+msgid "Subscription limit reached"
+msgstr "تم الوصول إلى حد الاشتراك"
+
+msgid "Tertiary alternative"
+msgstr "البديل الثالثي"
+
+msgid "Update SCORM"
+msgstr "تحديث SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "يمكن للذكاء الاصطناعي صياغة تعليقات ودرجة مقترحة قبل إرسالها."
+
+msgid "What will be sent to the AI"
+msgstr "ما سيتم إرساله إلى الذكاء الاصطناعي"
+
+msgid "Assignment title + instructions"
+msgstr "عنوان المهمة + التعليمات"
+
+msgid "Student submission (text)"
+msgstr "تقديم الطالب (نص)"
+
+msgid "Student submission (text): none"
+msgstr "تقديم الطالب (نص): لا يوجد"
+
+msgid "Student attachment"
+msgstr "مرفق الطالب"
+
+msgid "supported"
+msgstr "مدعوم"
+
+msgid "not supported for document analysis"
+msgstr "غير مدعوم لتحليل الوثائق"
+
+msgid "Student attachment: none"
+msgstr "مرفق الطالب: لا يوجد"
+
+msgid "No text AI providers available."
+msgstr "لا توجد مزودي ذكاء اصطناعي نصي متاحون."
+
+msgid "AI-assisted"
+msgstr "مدعوم بالذكاء الاصطناعي"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "يتم حفظ هذا القرار مع التصحيح (ExtraField) ولا يمكن تغييره لاحقًا."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "مرفق تصحيح اختياري (هذا ليس تقديم الطالب)."
+
+msgid "AI"
+msgstr "الذكاء الاصطناعي"
+
+msgid "Received"
+msgstr "تم الاستلام"
+
+msgid "%s min"
+msgstr "%s دقيقة"
+
+msgid "Unlock column"
+msgstr "فتح العمود"
+
+msgid "Lock column"
+msgstr "قفل العمود"
+
+msgid "Set all Present"
+msgstr "تعيين الجميع حاضرين"
+
+msgid "Set all Absent"
+msgstr "تعيين الجميع غائبين"
+
+msgid "Auto (recommended)"
+msgstr "تلقائي (موصى به)"
+
+msgid "Error downloading all documents."
+msgstr "خطأ في تنزيل جميع المستندات."
+
+msgid "Open with ONLYOFFICE"
+msgstr "فتح باستخدام ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "حد الحصة"
+
+msgid "Remaining space"
+msgstr "المساحة المتبقية"
+
+msgid "Course catalogue"
+msgstr "كتالوج المقررات"
+
+msgid "Drag links to reorder"
+msgstr "اسحب الروابط لإعادة ترتيبها"
+
+msgid "Drop links here to keep them without category"
+msgstr "أسقط الروابط هنا للاحتفاظ بها بدون فئة"
+
+msgid "Could not export"
+msgstr "تعذر التصدير"
+
+msgid "Link moved"
+msgstr "تم نقل الرابط"
+
+msgid "Could not move link"
+msgstr "تعذر نقل الرابط"
+
+msgid "Category reordering is not enabled"
+msgstr "إعادة ترتيب الفئات غير مفعلة"
+
+msgid "Showing %s posts"
+msgstr "عرض %s منشور"
+
+msgid "Showing %s tasks"
+msgstr "عرض %s مهمة"
+
+msgid "Page %s of %s"
+msgstr "صفحة %s من %s"
+
+msgid "Tutors"
+msgstr "المشرفون"
+
+msgid "selected"
+msgstr "مُحدد"
+
+msgid "No data to export"
+msgstr "لا توجد بيانات للتصدير"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "رأس PNG يجب أن يكون \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "قائمة قياسية"
+
+msgid "Management list"
+msgstr "قائمة إدارية"
+
+msgid "Open platform"
+msgstr "المنصة مفتوحة"
+
+msgid "Teacher user ID"
+msgstr "معرف مستخدم المعلم"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "هل أنت متأكد من رغبتك في حذف هذا المقرر؟"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "هل أنت متأكد من رغبتك في حذف المقررات المحددة؟"
+
+msgid "Search by name, username, email"
+msgstr "البحث بالاسم أو اسم المستخدم أو البريد الإلكتروني"
+
+msgid "contains %s items"
+msgstr "يحتوي على %s عنصر"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "يظل اتفاقك القانوني ساريًا حتى يتم مراجعة طلب السحب ومعالجته."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "طلب سحب موافقتك القانونية قيد المراجعة."
+
+msgid "Your account deletion request is pending review."
+msgstr "طلب حذف حسابك قيد المراجعة."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "لماذا ترغب في طلب سحب موافقتك القانونية؟"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "جاري إرسال طلب سحب الموافقة القانونية..."
+
+msgid "Submitting request..."
+msgstr "جاري إرسال الطلب..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "طلب سحب الموافقة القانونية"
+
+msgid "Submitting your account deletion request..."
+msgstr "جاري إرسال طلب حذف الحساب..."
+
+msgid "Submitting your acceptance..."
+msgstr "جاري إرسال قبولك..."
+
+msgid "Event details"
+msgstr "تفاصيل الحدث"
+
+msgid "You cannot access the linked course from this view."
+msgstr "لا يمكنك الوصول إلى المقرر المرتبط من هذا العرض."
+
+msgid "Failed to load sessions"
+msgstr "فشل في تحميل الجلسات"
+
+msgid "Failed to load events"
+msgstr "فشل في تحميل الأحداث"
+
+msgid "No events found"
+msgstr "لم يتم العثور على أحداث"
+
+msgid "Group image"
+msgstr "صورة المجموعة"
+
+msgid "SearchTCC"
+msgstr "بحثTCC"
+
+msgid "Forbidden"
+msgstr "ممنوع"
+
+msgid "Distribution"
+msgstr "التوزيع"
+
+msgid "Firstname"
+msgstr "الاسم الأول"
+
+msgid "Lastname"
+msgstr "الاسم الأخير"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Last login in platform"
+msgstr "آخر تسجيل دخول في المنصة"
+
+msgid "Export as CSV"
+msgstr "تصدير كـ CSV"
+
+msgid "Export as XLS"
+msgstr "تصدير كـ XLS"
+
+msgid "Deactivate this user?"
+msgstr "تعطيل هذا المستخدم؟"
+
+msgid "Enable this user?"
+msgstr "تفعيل هذا المستخدم؟"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "دمج هذه المجموعة المكررة في المستخدم #%s؟"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "سيتم دمج جميع الحسابات الأخرى في نفس المجموعة في هذا الحساب."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "ستُحذف الحسابات المدموجة نهائيًا وستختفي من هذا التقرير."
+
+msgid "This action cannot be undone."
+msgstr "لا يمكن التراجع عن هذا الإجراء."
+
+msgid "Unify"
+msgstr "دمج"
+
+msgid "SessionAdmin"
+msgstr "مدير الجلسة"
+
+msgid "Drh"
+msgstr "مدير الموارد البشرية"
+
+msgid "Student"
+msgstr "طالب"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "إجمالي المساحة المستخدمة من قبل البوابة %s الحد الأقصى %s ميغابايت"
+
+msgid "Helper text"
+msgstr "نص مساعد"
+
+msgid "NotAllowed"
+msgstr "غير مسموح"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "استخدم الفلاتر أعلاه لتحميل تفاصيل وصول المتعلم."
+
+msgid "Start date must be before end date"
+msgstr "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "حدد نطاق تاريخ ونوع تجميع لمراجعة تفاصيل وصول المتعلم."
+
+msgid "This course will be created using the platform default course template."
+msgstr "سيتم إنشاء هذه الدورة باستخدام نموذج الدورة الافتراضي للمنصة."
+
+msgid "Security breach avoid restart"
+msgstr "انتهاك أمني تجنب إعادة التشغيل"
+
+msgid "User deactivated"
+msgstr "تم تعطيل المستخدم"
+
+msgid "InvalidId"
+msgstr "معرف غير صالح"
+
+msgid "User enabled"
+msgstr "تم تفعيل المستخدم"
+
+msgid "No other duplicates found for this user."
+msgstr "لم يتم العثور على تكرارات أخرى لهذا المستخدم."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "تم دمج المستخدمين: دُمج %s حساب(ات) في المستخدم #%s. تم حذف الحسابات المدموجة نهائيًا."
+
+msgid "No accounts were merged."
+msgstr "لم يتم دمج أي حسابات."
+
+msgid "An error occurred while unifying users."
+msgstr "حدث خطأ أثناء دمج المستخدمين."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "تم دمج المستخدمين: دُمج المستخدم #%s في المستخدم #%s. تم حذف الحساب المدموج نهائيًا."
+
+msgid "Duplicate users"
+msgstr "مستخدمون مكررون"
+
+msgid "Years"
+msgstr "سنوات"
+
+msgid "All time visits outside sessions"
+msgstr "زيارات كل الوقت خارج الجلسات"
+
+msgid "All time visits in sessions"
+msgstr "زيارات كل الوقت داخل الجلسات"
+
+msgid "All time visits total"
+msgstr "إجمالي زيارات كل الوقت"
+
+msgid "Student visits per period, per course"
+msgstr "زيارات الطلاب حسب الفترة، حسب الدورة"
+
+msgid "By email"
+msgstr "حسب البريد الإلكتروني"
+
+msgid "By extra field"
+msgstr "حسب الحقل الإضافي"
+
+msgid "Select an option"
+msgstr "حدد خيارًا"
+
+msgid "Profile field"
+msgstr "حقل الملف الشخصي"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "هذا التقرير يسرد فقط المستخدمين الذين لديهم نفس عنوان البريد الإلكتروني."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "هذا التقرير يسرد فقط المستخدمين الذين يشتركون في نفس القيمة لحقل الملف الشخصي المحدد."
+
+msgid "How to use this report"
+msgstr "كيفية استخدام هذا التقرير"
+
+msgid "Disable / Enable"
+msgstr "تعطيل / تفعيل"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "يقوم فقط بحظر أو استعادة تسجيل الدخول. لا يحذف المستخدم ولا يزيل الاشتراكات."
+
+msgid "Last week"
+msgstr "الأسبوع الماضي"
+
+msgid "Next week"
+msgstr "الأسبوع القادم"
+
+msgid "Loading report..."
+msgstr "جارٍ تحميل التقرير..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "فشل في تحميل هذا التقرير. يرجى المحاولة مرة أخرى."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "حدد جلسة واحدة أو أكثر لنسخ المدربين منها واختر المقرر الهدف"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "اضغط Ctrl (أو Cmd) لتحديد عناصر متعددة"
+
+msgid "Choose the destination course"
+msgstr "اختر المقرر الهدف"
+
+msgid "You can select multiple items"
+msgstr "يمكنك تحديد عناصر متعددة"
+
+msgid "Use the search box to find courses quickly"
+msgstr "استخدم مربع البحث للعثور على المقررات بسرعة"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "حدد جلسة مصدر واحدة أو أكثر وجلسة هدف واحدة أو أكثر لنسخ الطلاب"
+
+msgid "Select destination sessions"
+msgstr "حدد الجلسات الهدف"
+
+msgid "You can select multiple users"
+msgstr "يمكنك تحديد مستخدمين متعددين"
+
+msgid "Use the search box to find users quickly"
+msgstr "استخدم مربع البحث للعثور على المستخدمين بسرعة"
+
+msgid "Error while creating the document"
+msgstr "خطأ أثناء إنشاء المستند"
+
+msgid "Not a SCORM learning path"
+msgstr "ليس مسار تعلم SCORM"
+
+msgid "Final item"
+msgstr "العنصر النهائي"
+
+msgid "Edit item"
+msgstr "تعديل العنصر"
+
+msgid "No AI text providers configured."
+msgstr "لا توجد مزودي نصوص الذكاء الاصطناعي مُعَدَّة."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "فشل الرفع. الملف أكبر من حد الخادم (post_max_size) على الأرجح."
+
+msgid "Update failed. No file received by the server."
+msgstr "فشل التحديث. لم يتلقَ الخادم أي ملف."
+
+msgid "Update failed. %s"
+msgstr "فشل التحديث. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "فشل التحديث. حمولة ملف الرفع غير صالحة."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "فشل التحديث. يجب أن يطابق اسم ملف ZIP المرفوع اسم حزمة SCORM الأصلية."
+
+msgid "Update failed"
+msgstr "فشل التحديث"
+
+msgid "Question lower case"
+msgstr "سؤال بحرف صغير"
+
+msgid "Regenerate"
+msgstr "إعادة توليد"
+
+msgid "Case insensitive"
+msgstr "غير حساس لحالة الأحرف"
+
+msgid "Select a session to load its courses."
+msgstr "حدد جلسة لتحميل مقرراتها."
+
+msgid "Select the source course."
+msgstr "حدد المقرر المصدر."
+
+msgid "Select a destination session."
+msgstr "حدد جلسة هدف."
+
+msgid "Select the destination course."
+msgstr "حدد المقرر الهدف."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "انسخ محتوى المقرر الكامل من مقرر الجلسة المحددة."
+
+msgid "Select which tools/items to copy."
+msgstr "حدد الأدوات/العناصر التي سيتم نسخها."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "لا تتضمن محتوى المقرر الأساسي (غير الجلسة)."
+
+msgid "An error occurred while copying the course"
+msgstr "حدث خطأ أثناء نسخ المقرر"
+
+msgid "Please select a different destination"
+msgstr "يرجى تحديد هدف مختلف"
+
+msgid "You must select a destination course"
+msgstr "يجب عليك تحديد مقرر هدف"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "لتصدير المقررات مع الاختبارات يجب تحديد الاختبارات"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "إذا كانت مسارات التعلم تحتوي على ملفات صوتية يجب تحديدها من المستندات"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "إذا كانت الاختبارات تحتوي على أسئلة نقطة ساخنة يجب تحديد الصور من المستندات"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "يجب أن تكون كلمة المرور %length% حرفًا على الأقل."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف صغير على الأقل."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف كبير على الأقل."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% رقم (0-9) على الأقل."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف خاص على الأقل."
+
+msgid "Invalid login request."
+msgstr "طلب تسجيل دخول غير صالح."
+
+msgid "Authentication failed."
+msgstr "فشل المصادقة."
+
+msgid "Login %status% for username %username%"
+msgstr "تسجيل الدخول %status% لاسم المستخدم %username%"
+
+msgid "Co-generated with AI"
+msgstr "تم إنشاؤه بالاشتراك مع الذكاء الاصطناعي"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "معرف EntraID"
+
+msgid "EntraID UID"
+msgstr "معرف مستخدم EntraID"
+
+msgid "Required fields"
+msgstr "الحقول المطلوبة"
+

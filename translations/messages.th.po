@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [ย] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -33116,4 +33116,571 @@ msgstr "บุคคลที่สาม"
 
 msgid "Layouts"
 msgstr "เลย์เอาต์"
+
+msgid "Relation type"
+msgstr "ประเภทความสัมพันธ์"
+
+msgid "Add all"
+msgstr "เพิ่มทั้งหมด"
+
+msgid "Remove all"
+msgstr "ลบทั้งหมด"
+
+msgid "An error occurred. Please try again."
+msgstr "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
+
+msgid "%s created"
+msgstr "%s สร้างแล้ว"
+
+msgid "%s updated"
+msgstr "%s อัปเดตแล้ว"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "หากคุณวางแผนอัปเกรดจากเวอร์ชันเก่าของ Chamilo คุณอาจต้องการ"
+
+msgid "have a look at the changelog"
+msgstr "ดู changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "เพื่อทราบสิ่งใหม่และสิ่งที่เปลี่ยนแปลง"
+
+msgid "Session Item"
+msgstr "รายการเซสชัน"
+
+msgid "Points"
+msgstr "คะแนน"
+
+msgid "See notifications"
+msgstr "ดูการแจ้งเตือน"
+
+msgid "New content available for this course."
+msgstr "มีเนื้อหาใหม่สำหรับรายวิชานี้"
+
+msgid "No new notifications."
+msgstr "ไม่มีข้อมูลแจ้งเตือนใหม่"
+
+msgid "No new content found."
+msgstr "ไม่พบเนื้อหาใหม่"
+
+msgid "No tool details available yet."
+msgstr "ยังไม่มีรายละเอียดเครื่องมือ"
+
+msgid "Last access"
+msgstr "การเข้าถึงล่าสุด"
+
+msgid "Open course"
+msgstr "เปิดรายวิชา"
+
+msgid "Course completed"
+msgstr "รายวิชาเสร็จสมบูรณ์"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "ถึงขีดจำกัดการสมัครสำหรับรายวิชานี้แล้ว"
+
+msgid "Subscription limit reached"
+msgstr "ถึงขีดจำกัดการสมัคร"
+
+msgid "Tertiary alternative"
+msgstr "ทางเลือกตติยภูมิ"
+
+msgid "Update SCORM"
+msgstr "อัปเดต SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI สามารถร่างความคิดเห็นและคะแนนที่แนะนำก่อนที่คุณจะส่งได้"
+
+msgid "What will be sent to the AI"
+msgstr "สิ่งที่จะส่งไปยัง AI"
+
+msgid "Assignment title + instructions"
+msgstr "ชื่องาน + คำสั่ง"
+
+msgid "Student submission (text)"
+msgstr "การส่งงานของนักเรียน (ข้อความ)"
+
+msgid "Student submission (text): none"
+msgstr "การส่งงานของนักเรียน (ข้อความ): ไม่มี"
+
+msgid "Student attachment"
+msgstr "ไฟล์แนบของนักเรียน"
+
+msgid "supported"
+msgstr "รองรับ"
+
+msgid "not supported for document analysis"
+msgstr "ไม่รองรับสำหรับการวิเคราะห์เอกสาร"
+
+msgid "Student attachment: none"
+msgstr "ไฟล์แนบของนักเรียน: ไม่มี"
+
+msgid "No text AI providers available."
+msgstr "ไม่มีผู้ให้บริการ AI ข้อความที่ใช้ได้"
+
+msgid "AI-assisted"
+msgstr "AI ช่วยเหลือ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "การตัดสินใจนี้จะถูกบันทึกกับการแก้ไข (ExtraField) และไม่สามารถเปลี่ยนแปลงได้ในภายหลัง"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "ไฟล์แนบการแก้ไขเพิ่มเติม (ไม่ใช่การส่งของนักเรียน)"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "รับแล้ว"
+
+msgid "%s min"
+msgstr "%s นาที"
+
+msgid "Unlock column"
+msgstr "ปลดล็อกคอลัมน์"
+
+msgid "Lock column"
+msgstr "ล็อกคอลัมน์"
+
+msgid "Set all Present"
+msgstr "ตั้งค่าทุกคนเป็น มี出席"
+
+msgid "Set all Absent"
+msgstr "ตั้งค่าทุกคนเป็น ขาด"
+
+msgid "Auto (recommended)"
+msgstr "อัตโนมัติ (แนะนำ)"
+
+msgid "Error downloading all documents."
+msgstr "เกิดข้อผิดพลาดในการดาวน์โหลดเอกสารทั้งหมด"
+
+msgid "Open with ONLYOFFICE"
+msgstr "เปิดด้วย ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "โควตาที่จำกัด"
+
+msgid "Remaining space"
+msgstr "พื้นที่ที่เหลือ"
+
+msgid "Course catalogue"
+msgstr "แคตตาล็อกหลักสูตร"
+
+msgid "Drag links to reorder"
+msgstr "ลากลิงก์เพื่อเรียงลำดับใหม่"
+
+msgid "Drop links here to keep them without category"
+msgstr "วางลิงก์ที่นี่เพื่อเก็บไว้โดยไม่มีหมวดหมู่"
+
+msgid "Could not export"
+msgstr "ไม่สามารถส่งออกได้"
+
+msgid "Link moved"
+msgstr "ย้ายลิงก์แล้ว"
+
+msgid "Could not move link"
+msgstr "ไม่สามารถย้ายลิงก์ได้"
+
+msgid "Category reordering is not enabled"
+msgstr "ไม่เปิดใช้งานการเรียงลำดับหมวดหมู่"
+
+msgid "Showing %s posts"
+msgstr "แสดง %s โพสต์"
+
+msgid "Showing %s tasks"
+msgstr "แสดง %s งาน"
+
+msgid "Page %s of %s"
+msgstr "หน้า %s จาก %s"
+
+msgid "Tutors"
+msgstr "ติวเตอร์"
+
+msgid "selected"
+msgstr "เลือกแล้ว"
+
+msgid "No data to export"
+msgstr "ไม่มีข้อมูลสำหรับส่งออก"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "ส่วนหัว PNG ต้องมีขนาด ≤ %spx"
+
+msgid "Standard list"
+msgstr "รายการมาตรฐาน"
+
+msgid "Management list"
+msgstr "รายการจัดการ"
+
+msgid "Open platform"
+msgstr "แพลตฟอร์มเปิด"
+
+msgid "Teacher user ID"
+msgstr "รหัสผู้ใช้ครู"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบหลักสูตรนี้?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบหลักสูตรที่เลือก?"
+
+msgid "Search by name, username, email"
+msgstr "ค้นหาตามชื่อ ชื่อผู้ใช้ อีเมล"
+
+msgid "contains %s items"
+msgstr "มี %s รายการ"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "ความยินยอมทางกฎหมายของคุณยังคงมีผลจนกว่าจะมีการตรวจสอบและประมวลผลคำขอถอน"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "คำขอถอนความยินยอมทางกฎหมายของคุณกำลังรอการตรวจสอบ"
+
+msgid "Your account deletion request is pending review."
+msgstr "คำขอลบบัญชีของคุณกำลังรอการตรวจสอบ"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "ทำไมคุณจึงต้องการขอถอนความยินยอมทางกฎหมาย?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "กำลังส่งคำขอถอนความยินยอมทางกฎหมาย..."
+
+msgid "Submitting request..."
+msgstr "กำลังส่งคำขอ..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "ขอถอนความยินยอมทางกฎหมาย"
+
+msgid "Submitting your account deletion request..."
+msgstr "กำลังส่งคำขอลบบัญชีของคุณ..."
+
+msgid "Submitting your acceptance..."
+msgstr "กำลังส่งการยอมรับของคุณ..."
+
+msgid "Event details"
+msgstr "รายละเอียดเหตุการณ์"
+
+msgid "You cannot access the linked course from this view."
+msgstr "คุณไม่สามารถเข้าถึงคอร์สที่เชื่อมโยงจากมุมมองนี้ได้"
+
+msgid "Failed to load sessions"
+msgstr "โหลดเซสชันไม่สำเร็จ"
+
+msgid "Failed to load events"
+msgstr "โหลดเหตุการณ์ไม่สำเร็จ"
+
+msgid "No events found"
+msgstr "ไม่พบเหตุการณ์"
+
+msgid "Group image"
+msgstr "ภาพกลุ่ม"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "ไม่อนุญาต"
+
+msgid "Distribution"
+msgstr "การกระจาย"
+
+msgid "Firstname"
+msgstr "ชื่อ"
+
+msgid "Lastname"
+msgstr "นามสกุล"
+
+msgid "Email"
+msgstr "อีเมล"
+
+msgid "Last login in platform"
+msgstr "การเข้าสู่ระบบครั้งล่าสุดในแพลตฟอร์ม"
+
+msgid "Export as CSV"
+msgstr "ส่งออกเป็น CSV"
+
+msgid "Export as XLS"
+msgstr "ส่งออกเป็น XLS"
+
+msgid "Deactivate this user?"
+msgstr "ปิดใช้งานผู้ใช้นี้หรือไม่?"
+
+msgid "Enable this user?"
+msgstr "เปิดใช้งานผู้ใช้นี้หรือไม่?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "รวมกลุ่มที่ซ้ำนี้เข้าไปในผู้ใช้ #%s หรือไม่?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "การดำเนินการนี้จะรวมบัญชีอื่นๆ ในกลุ่มเดียวกันเข้ากับบัญชีนี้"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "บัญชีที่ถูกรวมจะถูกลบอย่างถาวรและจะหายไปจากรายงานนี้"
+
+msgid "This action cannot be undone."
+msgstr "การดำเนินการนี้ไม่สามารถย้อนกลับได้"
+
+msgid "Unify"
+msgstr "รวม"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "นักเรียน"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "พื้นที่ทั้งหมดที่ใช้โดยพอร์ทัล %s จำกัดที่ %s MB"
+
+msgid "Helper text"
+msgstr "ข้อความช่วยเหลือ"
+
+msgid "NotAllowed"
+msgstr "ไม่อนุญาต"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "ใช้ตัวกรองด้านบนเพื่อโหลดรายละเอียดการเข้าถึงของผู้เรียน"
+
+msgid "Start date must be before end date"
+msgstr "วันที่เริ่มต้นต้องก่อนวันที่สิ้นสุด"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "เลือกช่วงวันที่และประเภทการจัดกลุ่มเพื่อดูรายละเอียดการเข้าถึงของผู้เรียน"
+
+msgid "This course will be created using the platform default course template."
+msgstr "คอร์สนี้จะถูกสร้างโดยใช้เทมเพลตคอร์สเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Security breach avoid restart"
+msgstr "การละเมิดความปลอดภัย หลีกเลี่ยงการเริ่มต้นใหม่"
+
+msgid "User deactivated"
+msgstr "ผู้ใช้ถูกปิดใช้งาน"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "ผู้ใช้ถูกเปิดใช้งาน"
+
+msgid "No other duplicates found for this user."
+msgstr "ไม่พบผู้ใช้ที่ซ้ำอื่นๆ สำหรับผู้ใช้นี้"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "รวมผู้ใช้แล้ว: รวม %s บัญชี(s) เข้ากับผู้ใช้ #%s บัญชีที่ถูกรวมถูกลบอย่างถาวร"
+
+msgid "No accounts were merged."
+msgstr "ไม่มีบัญชีที่ถูกรวม"
+
+msgid "An error occurred while unifying users."
+msgstr "เกิดข้อผิดพลาดขณะรวมผู้ใช้"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "รวมผู้ใช้แล้ว: รวมผู้ใช้ #%s เข้ากับผู้ใช้ #%s บัญชีที่ถูกรวมถูกลบอย่างถาวร"
+
+msgid "Duplicate users"
+msgstr "ผู้ใช้ที่ซ้ำ"
+
+msgid "Years"
+msgstr "ปี"
+
+msgid "All time visits outside sessions"
+msgstr "การเยี่ยมชมทั้งหมดนอกเซสชัน"
+
+msgid "All time visits in sessions"
+msgstr "การเยี่ยมชมทั้งหมดในเซสชัน"
+
+msgid "All time visits total"
+msgstr "การเยี่ยมชมทั้งหมดรวม"
+
+msgid "Student visits per period, per course"
+msgstr "การเยี่ยมชมของนักเรียนต่อช่วง ต่อคอร์ส"
+
+msgid "By email"
+msgstr "ตามอีเมล"
+
+msgid "By extra field"
+msgstr "ตามฟิลด์พิเศษ"
+
+msgid "Select an option"
+msgstr "เลือกตัวเลือก"
+
+msgid "Profile field"
+msgstr "ฟิลด์โปรไฟล์"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "รายงานนี้แสดงเฉพาะผู้ใช้ที่มีที่อยู่อีเมลเดียวกัน"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "รายงานนี้แสดงเฉพาะผู้ใช้ที่มีค่าฟิลด์โปรไฟล์ที่เลือกเดียวกัน"
+
+msgid "How to use this report"
+msgstr "วิธีใช้รายงานนี้"
+
+msgid "Disable / Enable"
+msgstr "ปิดใช้งาน / เปิดใช้งาน"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "บล็อกหรือคืนค่าการเข้าสู่ระบบเท่านั้น ไม่ลบผู้ใช้และไม่ลบการสมัครสมาชิก"
+
+msgid "Last week"
+msgstr "สัปดาห์ที่แล้ว"
+
+msgid "Next week"
+msgstr "สัปดาห์ถัดไป"
+
+msgid "Loading report..."
+msgstr "กำลังโหลดรายงาน..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "โหลดรายงานล้มเหลว โปรดลองอีกครั้ง"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "เลือกเซสชันหนึ่งเซสชันหรือมากกว่าเพื่อคัดลอกเทรนเนอร์และเลือกคอร์สปลายทาง"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "กด Ctrl (หรือ Cmd) เพื่อเลือกหลายรายการ"
+
+msgid "Choose the destination course"
+msgstr "เลือกคอร์สปลายทาง"
+
+msgid "You can select multiple items"
+msgstr "สามารถเลือกหลายรายการได้"
+
+msgid "Use the search box to find courses quickly"
+msgstr "ใช้ช่องค้นหาเพื่อค้นหาคอร์สอย่างรวดเร็ว"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "เลือกเซสชันต้นทางหนึ่งเซสชันหรือมากกว่าและเซสชันปลายทางหนึ่งเซสชันหรือมากกว่าเพื่อคัดลอกนักเรียน"
+
+msgid "Select destination sessions"
+msgstr "เลือกเซสชันปลายทาง"
+
+msgid "You can select multiple users"
+msgstr "สามารถเลือกผู้ใช้หลายคนได้"
+
+msgid "Use the search box to find users quickly"
+msgstr "ใช้ช่องค้นหาเพื่อค้นหาผู้ใช้อย่างรวดเร็ว"
+
+msgid "Error while creating the document"
+msgstr "เกิดข้อผิดพลาดขณะสร้างเอกสาร"
+
+msgid "Not a SCORM learning path"
+msgstr "ไม่ใช่เส้นทางการเรียน SCORM"
+
+msgid "Final item"
+msgstr "รายการสุดท้าย"
+
+msgid "Edit item"
+msgstr "แก้ไขรายการ"
+
+msgid "No AI text providers configured."
+msgstr "ยังไม่ได้กำหนดค่า AI Text Providers"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "อัปโหลดล้มเหลว ไฟล์น่าจะมีขนาดใหญ่เกินขีดจำกัดของเซิร์ฟเวอร์ (post_max_size)"
+
+msgid "Update failed. No file received by the server."
+msgstr "อัปเดตล้มเหลว เซิร์ฟเวอร์ไม่ได้รับไฟล์"
+
+msgid "Update failed. %s"
+msgstr "อัปเดตล้มเหลว %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "อัปเดตล้มเหลว ข้อมูลไฟล์ที่อัปโหลดไม่ถูกต้อง"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "อัปเดตล้มเหลว ชื่อไฟล์ ZIP ที่อัปโหลดต้องตรงกับชื่อแพ็กเกจ SCORM เดิม"
+
+msgid "Update failed"
+msgstr "อัปเดตล้มเหลว"
+
+msgid "Question lower case"
+msgstr "คำถามพิมพ์เล็ก"
+
+msgid "Regenerate"
+msgstr "สร้างใหม่"
+
+msgid "Case insensitive"
+msgstr "ไม่สนใจตัวพิมพ์ใหญ่-เล็ก"
+
+msgid "Select a session to load its courses."
+msgstr "เลือกเซสชันเพื่อโหลดคอร์สของมัน"
+
+msgid "Select the source course."
+msgstr "เลือกคอร์สต้นทาง"
+
+msgid "Select a destination session."
+msgstr "เลือกเซสชันปลายทาง"
+
+msgid "Select the destination course."
+msgstr "เลือกคอร์สปลายทาง"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "คัดลอกเนื้อหาคอร์สทั้งหมดจากคอร์สเซสชันที่เลือก"
+
+msgid "Select which tools/items to copy."
+msgstr "เลือกเครื่องมือ/รายการที่จะคัดลอก"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "ไม่รวมเนื้อหาคอร์สฐาน (ไม่ใช่เซสชัน)"
+
+msgid "An error occurred while copying the course"
+msgstr "เกิดข้อผิดพลาดขณะคัดลอกคอร์ส"
+
+msgid "Please select a different destination"
+msgstr "โปรดเลือกปลายทางอื่น"
+
+msgid "You must select a destination course"
+msgstr "ต้องเลือกคอร์สปลายทาง"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "หากต้องการส่งออกคอร์สที่มีควิซ ต้องเลือกควิซ"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "หากเส้นทางการเรียนมีไฟล์เสียงรวมอยู่ ควรเลือกจากเอกสาร"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "หากควิซมีคำถาม hotspot รวมอยู่ ควรเลือกภาพจากเอกสาร"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "รหัสผ่านต้องมีความยาวอย่างน้อย %length% ตัวอักษร"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "รหัสผ่านต้องมีตัวอักษรพิมพ์เล็กอย่างน้อย %count% ตัว"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่อย่างน้อย %count% ตัว"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "รหัสผ่านต้องมีตัวเลข (0-9) อย่างน้อย %count% ตัว"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "รหัสผ่านต้องมีอักขระพิเศษอย่างน้อย %count% ตัว"
+
+msgid "Invalid login request."
+msgstr "คำขอเข้าสู่ระบบไม่ถูกต้อง"
+
+msgid "Authentication failed."
+msgstr "การรับรองความถูกต้องล้มเหลว"
+
+msgid "Login %status% for username %username%"
+msgstr "เข้าสู่ระบบ %status% สำหรับชื่อผู้ใช้ %username%"
+
+msgid "Co-generated with AI"
+msgstr "สร้างร่วมกับ AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "ช่องที่จำเป็น"
 

@@ -68,7 +68,7 @@
             @click="addDocument"
           />
           <BaseButton
-            :label="t('Add users')"
+            :label="t('Assign users')"
             icon="user-add"
             only-icon
             size="small"

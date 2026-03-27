@@ -33130,3 +33130,570 @@ msgstr "Tretie strany"
 msgid "Layouts"
 msgstr "Rozloženia"
 
+msgid "Relation type"
+msgstr "Typ vzťahu"
+
+msgid "Add all"
+msgstr "Pridať všetky"
+
+msgid "Remove all"
+msgstr "Odstrániť všetky"
+
+msgid "An error occurred. Please try again."
+msgstr "Vyskytla sa chyba. Skúste to prosím znova."
+
+msgid "%s created"
+msgstr "%s vytvorené"
+
+msgid "%s updated"
+msgstr "%s aktualizované"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ak plánujete aktualizovať z staršej verzie Chamilo, možno budete chcieť"
+
+msgid "have a look at the changelog"
+msgstr "pozrieť si zoznam zmien"
+
+msgid "to know what's new and what has been changed."
+msgstr "aby ste vedeli, čo je nové a čo sa zmenilo."
+
+msgid "Session Item"
+msgstr "Položka stretnutia"
+
+msgid "Points"
+msgstr "Body"
+
+msgid "See notifications"
+msgstr "Zobraziť notifikácie"
+
+msgid "New content available for this course."
+msgstr "Pre tento kurz je dostupný nový obsah."
+
+msgid "No new notifications."
+msgstr "Žiadne nové notifikácie."
+
+msgid "No new content found."
+msgstr "Nenájdený žiadny nový obsah."
+
+msgid "No tool details available yet."
+msgstr "Žiadne podrobnosti o nástroji zatiaľ nie sú k dispozícii."
+
+msgid "Last access"
+msgstr "Posledný prístup"
+
+msgid "Open course"
+msgstr "Otvoriť kurz"
+
+msgid "Course completed"
+msgstr "Kurz dokončený"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Bol dosiahnutý limit predplatného pre tento kurz."
+
+msgid "Subscription limit reached"
+msgstr "Dosiahnutý limit predplatného"
+
+msgid "Tertiary alternative"
+msgstr "Tretia alternatíva"
+
+msgid "Update SCORM"
+msgstr "Aktualizovať SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI môže navrhnúť spätnú väzbu a odporúčané skóre pred odoslaním."
+
+msgid "What will be sent to the AI"
+msgstr "Čo sa odošle AI"
+
+msgid "Assignment title + instructions"
+msgstr "Názov úlohy + inštrukcie"
+
+msgid "Student submission (text)"
+msgstr "Odoslanie študenta (text)"
+
+msgid "Student submission (text): none"
+msgstr "Odoslanie študenta (text): žiadne"
+
+msgid "Student attachment"
+msgstr "Príloha študenta"
+
+msgid "supported"
+msgstr "podporované"
+
+msgid "not supported for document analysis"
+msgstr "nepodporované pre analýzu dokumentu"
+
+msgid "Student attachment: none"
+msgstr "Príloha študenta: žiadna"
+
+msgid "No text AI providers available."
+msgstr "Žiadni poskytovatelia textového AI nie sú k dispozícii."
+
+msgid "AI-assisted"
+msgstr "S podporou AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Toto rozhodnutie sa uloží s opravou (ExtraField) a neskôr sa nedá zmeniť."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Voliteľná príloha opravy (nie je to odoslanie študenta)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Prijaté"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Odomknúť stĺpec"
+
+msgid "Lock column"
+msgstr "Zamknúť stĺpec"
+
+msgid "Set all Present"
+msgstr "Nastaviť všetkých Prítomní"
+
+msgid "Set all Absent"
+msgstr "Nastaviť všetkých Neprítomní"
+
+msgid "Auto (recommended)"
+msgstr "Auto (odporúčané)"
+
+msgid "Error downloading all documents."
+msgstr "Chyba pri sťahovaní všetkých dokumentov."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Otvoriť v ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Obmedzujúca kvóta"
+
+msgid "Remaining space"
+msgstr "Zostávajúci priestor"
+
+msgid "Course catalogue"
+msgstr "Katalóg kurzov"
+
+msgid "Drag links to reorder"
+msgstr "Presuňte odkazy na preusporiadanie"
+
+msgid "Drop links here to keep them without category"
+msgstr "Pusťte odkazy sem na ponechanie bez kategórie"
+
+msgid "Could not export"
+msgstr "Nie je možné exportovať"
+
+msgid "Link moved"
+msgstr "Odkaz presunutý"
+
+msgid "Could not move link"
+msgstr "Nie je možné presunúť odkaz"
+
+msgid "Category reordering is not enabled"
+msgstr "Preusporiadanie kategórií nie je povolené"
+
+msgid "Showing %s posts"
+msgstr "Zobrazujem %s príspevkov"
+
+msgid "Showing %s tasks"
+msgstr "Zobrazujem %s úloh"
+
+msgid "Page %s of %s"
+msgstr "Strana %s z %s"
+
+msgid "Tutors"
+msgstr "Tútori"
+
+msgid "selected"
+msgstr "vybrané"
+
+msgid "No data to export"
+msgstr "Žiadne dáta na export"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Hlavička PNG musí byť ≤ %spx."
+
+msgid "Standard list"
+msgstr "Štandardný zoznam"
+
+msgid "Management list"
+msgstr "Manažérsky zoznam"
+
+msgid "Open platform"
+msgstr "Otvorená platforma"
+
+msgid "Teacher user ID"
+msgstr "ID používateľa učiteľa"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Naozaj chcete zmazať tento kurz?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Naozaj chcete zmazať vybrané kurzy?"
+
+msgid "Search by name, username, email"
+msgstr "Hľadať podľa mena, používateľského mena, e-mailu"
+
+msgid "contains %s items"
+msgstr "obsahuje %s položiek"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Vaša právna dohoda zostáva aktívna, kým nebude žiadosť o odstúpenie preskúmaná a spracovaná."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Vaša žiadosť o odstúpenie právneho súhlasu čaká na preskúmanie."
+
+msgid "Your account deletion request is pending review."
+msgstr "Vaša žiadosť o vymazanie účtu čaká na preskúmanie."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Prečo chcete požiadať o odstúpenie svojho právneho súhlasu?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Odosielanie vašej žiadosti o odstúpenie právneho súhlasu..."
+
+msgid "Submitting request..."
+msgstr "Odosielanie žiadosti..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Požiadať o odstúpenie právneho súhlasu"
+
+msgid "Submitting your account deletion request..."
+msgstr "Odosielanie vašej žiadosti o vymazanie účtu..."
+
+msgid "Submitting your acceptance..."
+msgstr "Odosielanie vášho súhlasu..."
+
+msgid "Event details"
+msgstr "Podrobnosti o udalosti"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Z tohto pohľadu nemôžete pristupovať k prepojenému kurzu."
+
+msgid "Failed to load sessions"
+msgstr "Nepodarilo sa načítať relácie"
+
+msgid "Failed to load events"
+msgstr "Nepodarilo sa načítať udalosti"
+
+msgid "No events found"
+msgstr "Žiadne udalosti nenájdené"
+
+msgid "Group image"
+msgstr "Obrázok skupiny"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Zakázané"
+
+msgid "Distribution"
+msgstr "Distribúcia"
+
+msgid "Firstname"
+msgstr "Krstené meno"
+
+msgid "Lastname"
+msgstr "Priezvisko"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Last login in platform"
+msgstr "Posledné prihlásenie do platformy"
+
+msgid "Export as CSV"
+msgstr "Exportovať ako CSV"
+
+msgid "Export as XLS"
+msgstr "Exportovať ako XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivovať tohto používateľa?"
+
+msgid "Enable this user?"
+msgstr "Aktivovať tohto používateľa?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Zlúčiť túto duplicitnú skupinu do používateľa #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Toto zlúči všetky ostatné účty v rovnakej skupine do tohto účtu."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Zlúčené účty budú natrvalo vymazané a zmiznú z tejto správy."
+
+msgid "This action cannot be undone."
+msgstr "Táto akcia sa nedá vrátiť späť."
+
+msgid "Unify"
+msgstr "Zlúčiť"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Študent"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Celkový priestor použitý portálom %s limit je %s MB"
+
+msgid "Helper text"
+msgstr "Pomocný text"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Použite filtre vyššie na načítanie podrobností o prístupe študenta."
+
+msgid "Start date must be before end date"
+msgstr "Dátum začiatku musí byť pred dátumom konca"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Vyberte rozsah dátumov a typ zoskupenia na preskúmanie podrobností o prístupe študenta."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Tento kurz bude vytvorený pomocou predvolenej šablóny kurzu platformy."
+
+msgid "Security breach avoid restart"
+msgstr "Bezpečnostné porušenie vyhnúť reštartu"
+
+msgid "User deactivated"
+msgstr "Používateľ deaktivovaný"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Používateľ aktivovaný"
+
+msgid "No other duplicates found for this user."
+msgstr "Žiadne ďalšie duplikáty pre tohto používateľa nenájdené."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Používatelia zlúčení: zlúčených %s účtov(ov) do používateľa #%s. Zlúčené účty boli natrvalo vymazané."
+
+msgid "No accounts were merged."
+msgstr "Žiadne účty neboli zlúčené."
+
+msgid "An error occurred while unifying users."
+msgstr "Vyskytla sa chyba pri zlúčení používateľov."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Používatelia zlúčení: zlúčený používateľ #%s do používateľa #%s. Zlúčený účet bol natrvalo vymazaný."
+
+msgid "Duplicate users"
+msgstr "Duplicitní používatelia"
+
+msgid "Years"
+msgstr "Roky"
+
+msgid "All time visits outside sessions"
+msgstr "Návštevy mimo sedenia celkovo"
+
+msgid "All time visits in sessions"
+msgstr "Návštevy v sezeních celkovo"
+
+msgid "All time visits total"
+msgstr "Celkové návštevy"
+
+msgid "Student visits per period, per course"
+msgstr "Návštevy študentov podľa obdobia, podľa kurzu"
+
+msgid "By email"
+msgstr "Podľa e-mailu"
+
+msgid "By extra field"
+msgstr "Podľa extra poľa"
+
+msgid "Select an option"
+msgstr "Vybrať možnosť"
+
+msgid "Profile field"
+msgstr "Pole profilu"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Táto správa obsahuje iba používateľov s rovnakou e-mailovou adresou."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Táto správa obsahuje iba používateľov, ktorí zdieľajú rovnakú hodnotu vybraného poľa profilu."
+
+msgid "How to use this report"
+msgstr "Ako použiť túto správu"
+
+msgid "Disable / Enable"
+msgstr "Deaktivovať / Aktivovať"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Iba blokuje alebo obnovuje prihlásenie. Nepoužívateľa nevymaže a neodstráni predplatné."
+
+msgid "Last week"
+msgstr "Minulý týždeň"
+
+msgid "Next week"
+msgstr "Nasledujúci týždeň"
+
+msgid "Loading report..."
+msgstr "Načítavam správu..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Nepodarilo sa načítať túto správu. Skúste to prosím znova."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Vybrať jednu alebo viac sedení na kopírovanie lektorov a vybrať cieľový kurz"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Stlačte Ctrl (alebo Cmd) na výber viacerých položiek"
+
+msgid "Choose the destination course"
+msgstr "Vybrať cieľový kurz"
+
+msgid "You can select multiple items"
+msgstr "Môžete vybrať viacero položiek"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Použite vyhľadávacie pole na rýchle nájdenie kurzov"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Vybrať jedno alebo viac zdrojových sedení a jedno alebo viac cieľových sedení na kopírovanie študentov"
+
+msgid "Select destination sessions"
+msgstr "Vybrať cieľové sedenia"
+
+msgid "You can select multiple users"
+msgstr "Môžete vybrať viacero používateľov"
+
+msgid "Use the search box to find users quickly"
+msgstr "Použite vyhľadávacie pole na rýchle nájdenie používateľov"
+
+msgid "Error while creating the document"
+msgstr "Chyba pri vytváraní dokumentu"
+
+msgid "Not a SCORM learning path"
+msgstr "Nie je to SCORM učebná cesta"
+
+msgid "Final item"
+msgstr "Posledná položka"
+
+msgid "Edit item"
+msgstr "Upraviť položku"
+
+msgid "No AI text providers configured."
+msgstr "Žiadni poskytovatelia AI textu nie sú nakonfigurovaní."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Nahrávanie zlyhalo. Súbor je pravdepodobne väčší ako limit servera (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Aktualizácia zlyhala. Server neobdržal žiadny súbor."
+
+msgid "Update failed. %s"
+msgstr "Aktualizácia zlyhala. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Aktualizácia zlyhala. Neplatné nahrané dáta súboru."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Aktualizácia zlyhala. Názov nahraného ZIP súboru musí zodpovedať pôvodnému názvu SCORM balíka."
+
+msgid "Update failed"
+msgstr "Aktualizácia zlyhala"
+
+msgid "Question lower case"
+msgstr "Otázka malými písmenami"
+
+msgid "Regenerate"
+msgstr "Regenerovať"
+
+msgid "Case insensitive"
+msgstr "Nerozlišovať veľkosť písmen"
+
+msgid "Select a session to load its courses."
+msgstr "Vybrať sedenie na načítanie jeho kurzov."
+
+msgid "Select the source course."
+msgstr "Vybrať zdrojový kurz."
+
+msgid "Select a destination session."
+msgstr "Vybrať cieľové sedenie."
+
+msgid "Select the destination course."
+msgstr "Vybrať cieľový kurz."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopírovať celý obsah kurzu zo zvoleného kurzu sedenia."
+
+msgid "Select which tools/items to copy."
+msgstr "Vybrať, ktoré nástroje/položky kopírovať."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Nezahŕňajte základný (nesedlový) obsah kurzu."
+
+msgid "An error occurred while copying the course"
+msgstr "Pri kopírovaní kurzu došlo k chybe."
+
+msgid "Please select a different destination"
+msgstr "Vyberte inú cieľovú destináciu."
+
+msgid "You must select a destination course"
+msgstr "Musíte vybrať cieľový kurz."
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Na export kurzov s kvízom musíte vybrať kvíz."
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ak vaše LP obsahujú zvukové súbory, mali by ste ich vybrať z dokumentov."
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ak váš kvíz obsahuje otázky s hotspotmi, mali by ste vybrať obrázky z dokumentov."
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Heslo musí mať najmenej %length% znakov."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Heslo musí obsahovať najmenej %count% malých písmen."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Heslo musí obsahovať najmenej %count% veľkých písmen."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Heslo musí obsahovať najmenej %count% číselných (0-9) znakov."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Heslo musí obsahovať najmenej %count% špeciálnych znakov."
+
+msgid "Invalid login request."
+msgstr "Neplatná prihlasovacia požiadavka."
+
+msgid "Authentication failed."
+msgstr "Overenie zlyhalo."
+
+msgid "Login %status% for username %username%"
+msgstr "Prihlásenie %status% pre používateľa %username%"
+
+msgid "Co-generated with AI"
+msgstr "Spolu vygenerované s AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Povinné polia"
+

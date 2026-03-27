@@ -33111,3 +33111,570 @@ msgstr "მესამე მხარეები"
 msgid "Layouts"
 msgstr "განლაგებები"
 
+msgid "Relation type"
+msgstr "ბმულის ტიპი"
+
+msgid "Add all"
+msgstr "ყველას დამატება"
+
+msgid "Remove all"
+msgstr "ყველას ამოშლა"
+
+msgid "An error occurred. Please try again."
+msgstr "მოხდა შეცდომა. გთხოვთ, სცადოთ ხელახლა."
+
+msgid "%s created"
+msgstr "%s შექმნილია"
+
+msgid "%s updated"
+msgstr "%s განახლდა"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "თუ აპირებთ Chamilo-ს ძველი ვერსიიდან განახლებას, შესაძლოა დაგინტერესებდეთ"
+
+msgid "have a look at the changelog"
+msgstr "ცვლილებების ჟურნალის გადახედვა"
+
+msgid "to know what's new and what has been changed."
+msgstr "რათა გაიგოთ რა არის ახალი და რა შეიცვალა."
+
+msgid "Session Item"
+msgstr "სესიის ელემენტი"
+
+msgid "Points"
+msgstr "ქულები"
+
+msgid "See notifications"
+msgstr "შეტყობინებების ნახვა"
+
+msgid "New content available for this course."
+msgstr "ამ კურსისთვის ახალი კონტენტია ხელმისაწვდომი."
+
+msgid "No new notifications."
+msgstr "არ არის ახალი შეტყობინებები."
+
+msgid "No new content found."
+msgstr "ახალი კონტენტი არ მოიძებნა."
+
+msgid "No tool details available yet."
+msgstr "ინსტრუმენტის დეტალები ჯერ არ არის ხელმისაწვდომი."
+
+msgid "Last access"
+msgstr "ბოლო წვდომა"
+
+msgid "Open course"
+msgstr "კურსის გახსნა"
+
+msgid "Course completed"
+msgstr "კურსი დასრულებულია"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "ამ კურსისთვის გამოწერის ლიმიტი მიღწეულია."
+
+msgid "Subscription limit reached"
+msgstr "გამოწერის ლიმიტი მიღწეულია"
+
+msgid "Tertiary alternative"
+msgstr "მესამე ალტერნატივა"
+
+msgid "Update SCORM"
+msgstr "SCORM-ის განახლება"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ხელოვნური ინტელექტი შეძლებს შექმნას გამოხმაურების მოხატული ვერსია და შემოთავაზებული შეფასება თქვენი გაგზავნამდე."
+
+msgid "What will be sent to the AI"
+msgstr "რა გაიგზავნება ხელოვნურ ინტელექტთან"
+
+msgid "Assignment title + instructions"
+msgstr "ამოცანის სათაური + ინსტრუქციები"
+
+msgid "Student submission (text)"
+msgstr "სტუდენტის წარმოდგენილი მასალა (ტექსტი)"
+
+msgid "Student submission (text): none"
+msgstr "სტუდენტის წარმოდგენილი მასალა (ტექსტი): არ არსებობს"
+
+msgid "Student attachment"
+msgstr "სტუდენტის ფაილი"
+
+msgid "supported"
+msgstr "მხარდაჭერილი"
+
+msgid "not supported for document analysis"
+msgstr "დოკუმენტის ანალიზისთვის არ არის მხარდაჭერილი"
+
+msgid "Student attachment: none"
+msgstr "სტუდენტის ფაილი: არ არსებობს"
+
+msgid "No text AI providers available."
+msgstr "ტექსტის AI პროვაიდერები არ არის ხელმისაწვდომი."
+
+msgid "AI-assisted"
+msgstr "AI-ის მიერ დაეხმარებით"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "ეს გადაწყვეტილება შენახულია შესწორებასთან ერთად (ExtraField) და შემდგომ ვერ შეიცვლება."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "სურვილისამებრი შესწორების ფაილი (ეს არ არის სტუდენტის წარდგენილი მასალა)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "მიღებულია"
+
+msgid "%s min"
+msgstr "%s წთ"
+
+msgid "Unlock column"
+msgstr "სვეტის განბლოკვა"
+
+msgid "Lock column"
+msgstr "სვეტის ბლოკირება"
+
+msgid "Set all Present"
+msgstr "ყველას დასათანხმო შეტანა"
+
+msgid "Set all Absent"
+msgstr "ყველას არასწორად შეტანა"
+
+msgid "Auto (recommended)"
+msgstr "ავტო (რეკომენდებული)"
+
+msgid "Error downloading all documents."
+msgstr "შეცდომა ყველა დოკუმენტის ჩამოტვირთვისას."
+
+msgid "Open with ONLYOFFICE"
+msgstr "გახსნა ONLYOFFICE-ით"
+
+msgid "Limiting quota"
+msgstr "კვოტის შეზღუდვა"
+
+msgid "Remaining space"
+msgstr "დარჩენილი ადგილი"
+
+msgid "Course catalogue"
+msgstr "კურსების კატალოგი"
+
+msgid "Drag links to reorder"
+msgstr "ბმულების გად arrag-ით გადაადგილება"
+
+msgid "Drop links here to keep them without category"
+msgstr "ბმულების აქ ჩამოტანა კატეგორიის გარეშე შესანარჩუნებლად"
+
+msgid "Could not export"
+msgstr "ვერ გაიქოცა"
+
+msgid "Link moved"
+msgstr "ბმული გადაადგილდა"
+
+msgid "Could not move link"
+msgstr "ბმულის გადაადგილება ვერ მოხერხდა"
+
+msgid "Category reordering is not enabled"
+msgstr "კატეგორიების ხელახალი ორდენი არ არის ჩართული"
+
+msgid "Showing %s posts"
+msgstr "%s პოსტის ჩვენება"
+
+msgid "Showing %s tasks"
+msgstr "%s დავალების ჩვენება"
+
+msgid "Page %s of %s"
+msgstr "გვერდი %s %s-დან"
+
+msgid "Tutors"
+msgstr "ტუტორები"
+
+msgid "selected"
+msgstr "შერჩეული"
+
+msgid "No data to export"
+msgstr "ექსპორტისთვის მონაცემები არ არის"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "ზედა PNG უნდა იყოს \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "სტანდარტული სია"
+
+msgid "Management list"
+msgstr "მენეჯმენტის სია"
+
+msgid "Open platform"
+msgstr "ღია პლატფორმა"
+
+msgid "Teacher user ID"
+msgstr "მასწავლებლის მომხმარებლის ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ კურსის წაშლა?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ შერჩეული კურსების წაშლა?"
+
+msgid "Search by name, username, email"
+msgstr "ძიება სახელით, მომხმარებლის სახელით, ელფოსტით"
+
+msgid "contains %s items"
+msgstr "შეიცავს %s ელემენტს"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "თქვენი იურიდიული შეთანხმება რჩება აქტიური, სანამ გათავისუფლების მოთხოვნა განიხილება და დამუშავდება."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "თქვენი იურიდიული თანხმობის გათავისუფლების მოთხოვნა მოსალოდნელშია."
+
+msgid "Your account deletion request is pending review."
+msgstr "თქვენი ანგარიშის წაშლის მოთხოვნა მოსალოდნელშია."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "რატომ გსურთ იურიდიული თანხმობის გათავისუფლების მოთხოვნა?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "იურიდიული თანხმობის გათავისუფლების მოთხოვნის გაგზავნა..."
+
+msgid "Submitting request..."
+msgstr "მოთხოვნის გაგზავნა..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "იურიდიული თანხმობის გათავისუფლების მოთხოვნა"
+
+msgid "Submitting your account deletion request..."
+msgstr "ანგარიშის წაშლის მოთხოვნის გაგზავნა..."
+
+msgid "Submitting your acceptance..."
+msgstr "თქვენი მიღების გაგზავნა..."
+
+msgid "Event details"
+msgstr "ღონისძიების დეტალები"
+
+msgid "You cannot access the linked course from this view."
+msgstr "ამ ხედიდან დაკავშირებულ კურსზე წვდომა შეუძლებელია."
+
+msgid "Failed to load sessions"
+msgstr "სესიების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Failed to load events"
+msgstr "შეხვედრების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "No events found"
+msgstr "შეხვედრები ვერ მოიძებნა"
+
+msgid "Group image"
+msgstr "ჯგუფის სურათი"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "აკრძალული"
+
+msgid "Distribution"
+msgstr "განაწილება"
+
+msgid "Firstname"
+msgstr "სახელი"
+
+msgid "Lastname"
+msgstr "გვარი"
+
+msgid "Email"
+msgstr "ელფოსტა"
+
+msgid "Last login in platform"
+msgstr "ბოლო შესვლა პლატფორმაში"
+
+msgid "Export as CSV"
+msgstr "ექსპორტი CSV-ად"
+
+msgid "Export as XLS"
+msgstr "ექსპორტი XLS-ად"
+
+msgid "Deactivate this user?"
+msgstr "ამ მომხმარებლის დეაქტივაცია?"
+
+msgid "Enable this user?"
+msgstr "ამ მომხმარებლის აქტივაცია?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "ამ დუბლიკატული ჯგუფის მომხმარებელ #%s-ში გაერთიანება?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "ეს გააერთიანებს ჯგუფში არსებულ ყველა სხვა ანგარიშს ამ ანგარიშში."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "გაერთიანებული ანგარიშები სამუდამოდ წაიშლება და გაქრობა ამ ანგარიშიდან."
+
+msgid "This action cannot be undone."
+msgstr "ეს ქმედება ვერ გაუქმდება."
+
+msgid "Unify"
+msgstr "გაერთიანება"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "სტუდენტი"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "პორტალ %s-ის მიერ გამოყენებული საერთო ადგილი %s MB ლიმიტია"
+
+msgid "Helper text"
+msgstr "დამხმარე ტექსტი"
+
+msgid "NotAllowed"
+msgstr "არაა დაშვებული"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "გამოიყენეთ ზემოთ მოცემული ფილტრები მოსაწყენის წვდომის დეტალების ჩასატვირთად."
+
+msgid "Start date must be before end date"
+msgstr "დაწყების თარიღი უნდა იყოს დამთავრების თარიღამდე"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "შეარჩიეთ თარიღობრივი დიაპაზონი და ჯგუფირების ტიპი მოსაწყენის წვდომის დეტალების გასაანალიზებლად."
+
+msgid "This course will be created using the platform default course template."
+msgstr "ეს კურსი შეიქმნება პლატფორმის ნაგულისხმევი კურსის შაბლონის გამოყენებით."
+
+msgid "Security breach avoid restart"
+msgstr "უსაფრთხოების დარღვევა, გადატვირთვის თავიდან აცილება"
+
+msgid "User deactivated"
+msgstr "მომხმარებელი დეაქტივირებულია"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "მომხმარებელი აქტიურია"
+
+msgid "No other duplicates found for this user."
+msgstr "ამ მომხმარებელისთვის სხვა დუბლიკატები ვერ მოიძებნა."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "მომხმარებლები გაერთიანდა: %s ანგარიშ(ები) გაერთიანდა მომხმარებელ #%s-ში. გაერთიანებული ანგარიშები სამუდამოდ წაიშალა."
+
+msgid "No accounts were merged."
+msgstr "ანგარიშები ვერ გაერთიანდა."
+
+msgid "An error occurred while unifying users."
+msgstr "მომხმარებლების გაერთიანებისას შეცდომა მოხდა."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "მომხმარებლები გაერთიანდა: მომხმარებელი #%s გაერთიანდა მომხმარებელ #%s-ში. გაერთიანებული ანგარიში სამუდამოდ წაიშალა."
+
+msgid "Duplicate users"
+msgstr "დუბლიკატული მომხმარებლები"
+
+msgid "Years"
+msgstr "წლები"
+
+msgid "All time visits outside sessions"
+msgstr "ყველა დროის ვიზიტები სესიების გარეთ"
+
+msgid "All time visits in sessions"
+msgstr "ყველა დროის ვიზიტები სესიებში"
+
+msgid "All time visits total"
+msgstr "ყველა დროის ვიზიტები სულ"
+
+msgid "Student visits per period, per course"
+msgstr "სტუდენტის ვიზიტები პერიოდში, კურსის მიხედვით"
+
+msgid "By email"
+msgstr "ელფოსტის მიხედვით"
+
+msgid "By extra field"
+msgstr "დამატებითი ველის მიხედვით"
+
+msgid "Select an option"
+msgstr "შეარჩიეთ ვარიანტი"
+
+msgid "Profile field"
+msgstr "პროფილის ველი"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "ეს ანგარიში მხოლოდ იმ მომხმარებლებს ჩამოთვლის, რომლებსაც ერთი და იგივე ელფოსტის მისამართი აქვთ."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "ეს ანგარიში მხოლოდ იმ მომხმარებლებს ჩამოთვლის, რომლებსაც არჩეული პროფილის ველის იგივე მნიშვნელობა აქვთ."
+
+msgid "How to use this report"
+msgstr "როგორ გამოიყენოთ ეს ანგარიში"
+
+msgid "Disable / Enable"
+msgstr "გამორთვა / ჩართვა"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "მხოლოდ ბლოკავს ან აღადგენს შესვლას. არ შლის მომხმარებელს და არ ამოღებს გამოწერებს."
+
+msgid "Last week"
+msgstr "გასული კვირა"
+
+msgid "Next week"
+msgstr "შემდეგი კვირა"
+
+msgid "Loading report..."
+msgstr "ანგარიშის ჩატვირთვა..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "ანგარიშის ჩატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "არჩევა ერთი ან მეტი სესიის ტრენერების კოპირებისთვის და საბოლოო კურსის შერჩევა"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Ctrl (ან Cmd) ჩაჭერილი მდგომარეობით შეარჩიეთ მრავალი ელემენტი"
+
+msgid "Choose the destination course"
+msgstr "საბოლოო კურსის შერჩევა"
+
+msgid "You can select multiple items"
+msgstr "შეგიძლიათ მრავალი ელემენტის შერჩევა"
+
+msgid "Use the search box to find courses quickly"
+msgstr "გამოიყენეთ ძიების ველი კურსების სწრაფად მოსაძებნად"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "შეარჩიეთ ერთი ან მეტი წყაროს სესია და ერთი ან მეტი საბოლოო სესია სტუდენტების კოპირებისთვის"
+
+msgid "Select destination sessions"
+msgstr "საბოლოო სესიების შერჩევა"
+
+msgid "You can select multiple users"
+msgstr "შეგიძლიათ მრავალი მომხმარებლის შერჩევა"
+
+msgid "Use the search box to find users quickly"
+msgstr "გამოიყენეთ ძიების ველი მომხმარებლების სწრაფად მოსაძებნად"
+
+msgid "Error while creating the document"
+msgstr "შეცდომა დოკუმენტის შექმნისას"
+
+msgid "Not a SCORM learning path"
+msgstr "არ არის SCORM სწავლების გზა"
+
+msgid "Final item"
+msgstr "საბოლოო ელემენტი"
+
+msgid "Edit item"
+msgstr "ელემენტის რედაქტირება"
+
+msgid "No AI text providers configured."
+msgstr "AI ტექსტის მიმწოდებლები არ არის კონფიგურირებული."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "ატვირთვა ვერ მოხერხდა. ფაილი სავარაუდოდ აღემატება სერვერის ლიმიტს (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "განახლება ვერ მოხერხდა. სერვერმა ფაილი არ მიიღო."
+
+msgid "Update failed. %s"
+msgstr "განახლება ვერ მოხერხდა. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "განახლება ვერ მოხერხდა. ჩაკარილი ფაილის არასწორი მონაცემები."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "განახლება ვერ მოხერხდა. ჩაკარილი ZIP ფაილის სახელი უნდა შეესაბამებოდეს ორიგინალურ SCORM პაკეტის სახელს."
+
+msgid "Update failed"
+msgstr "განახლება ვერ მოხერხდა"
+
+msgid "Question lower case"
+msgstr "კითხვა პატარა ასოებით"
+
+msgid "Regenerate"
+msgstr "განახლება"
+
+msgid "Case insensitive"
+msgstr "უგულებელყოფს რეგისტრი"
+
+msgid "Select a session to load its courses."
+msgstr "შეარჩიეთ სესია მისი კურსების ჩატვირთვისთვის."
+
+msgid "Select the source course."
+msgstr "შეარჩიეთ წყაროს კურსი."
+
+msgid "Select a destination session."
+msgstr "შეარჩიეთ საბოლოო სესია."
+
+msgid "Select the destination course."
+msgstr "შეარჩიეთ საბოლოო კურსი."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "სრული კურსის შინაარსის კოპირება შერჩეული სესიის კურსიდან."
+
+msgid "Select which tools/items to copy."
+msgstr "შეარჩიეთ რომელი ინსტრუმენტები/ელემენტები უნდა დაიკოპირდეს."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "არ შეიტანოთ ბაზური (სესიისგან განსხვავებული) კურსის შინაარსი."
+
+msgid "An error occurred while copying the course"
+msgstr "შეცდომა მოხდა კურსის კოპირებისას"
+
+msgid "Please select a different destination"
+msgstr "გთხოვთ, შეარჩიოთ სხვა საბოლოო ადგილი"
+
+msgid "You must select a destination course"
+msgstr "თქვენ უნდა შეარჩიოთ საბოლოო კურსი"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "კურსების ექსპორტისთვის ვიქტორინით, უნდა შეარჩიოთ ვიქტორინა"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "თუ თქვენს სწავლების გზებს აქვს ჩართული აუდიო ფაილები, უნდა შეარჩიოთ ისინი დოკუმენტებიდან"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "თუ თქვენს ვიქტორინაში შედის hotspot კითხვები, უნდა შეარჩიოთ სურათები დოკუმენტებიდან"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "პაროლი უნდა იყოს მინიმუმ %length% სიმბოლო."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "პაროლი უნდა შეიცავდეს მინიმუმ %count% პატარა ასოს."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "პაროლი უნდა შეიცავდეს მინიმუმ %count% დიდ ასოს."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "პაროლი უნდა შეიცავდეს მინიმუმ %count% ციფრულ (0-9) სიმბოლოს."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "პაროლი უნდა შეიცავდეს მინიმუმ %count% სპეციალურ სიმბოლოს."
+
+msgid "Invalid login request."
+msgstr "არასწორი შესვლის მოთხოვნა."
+
+msgid "Authentication failed."
+msgstr "აუტენტიფიკაცია ვერ მოხერხდა."
+
+msgid "Login %status% for username %username%"
+msgstr "შესვლა %status% მომხმარებლისთვის %username%"
+
+msgid "Co-generated with AI"
+msgstr "AI-ით თანაგენერირებული"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "საჭირო ველები"
+

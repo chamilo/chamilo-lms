@@ -1,6 +1,6 @@
 <template>
   <BaseCard plain>
-    <form>
+    <form data-no-autofocus="1">
       <BaseTinyEditor
         v-model="content"
         :editor-config="editorConfig"

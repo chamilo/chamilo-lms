@@ -33130,3 +33130,570 @@ msgstr "Τρίτοι"
 msgid "Layouts"
 msgstr "Διάταξη"
 
+msgid "Relation type"
+msgstr "Τύπος σχέσης"
+
+msgid "Add all"
+msgstr "Προσθήκη όλων"
+
+msgid "Remove all"
+msgstr "Κατάργηση όλων"
+
+msgid "An error occurred. Please try again."
+msgstr "Παρουσιάστηκε σφάλμα. Παρακαλούμε δοκιμάστε ξανά."
+
+msgid "%s created"
+msgstr "%s δημιουργήθηκε"
+
+msgid "%s updated"
+msgstr "%s ενημερώθηκε"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Αν σκοπεύετε να αναβαθμίσετε από παλαιότερη έκδοση του Chamilo, ίσως θέλετε να"
+
+msgid "have a look at the changelog"
+msgstr "ρίξετε μια ματιά στο changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "για να δείτε τι είναι καινούργιο και τι έχει αλλάξει."
+
+msgid "Session Item"
+msgstr "Στοιχείο συνεδρίας"
+
+msgid "Points"
+msgstr "Βαθμοί"
+
+msgid "See notifications"
+msgstr "Δείτε ειδοποιήσεις"
+
+msgid "New content available for this course."
+msgstr "Νέο περιεχόμενο διαθέσιμο για αυτό το μάθημα."
+
+msgid "No new notifications."
+msgstr "Δεν υπάρχουν νέες ειδοποιήσεις."
+
+msgid "No new content found."
+msgstr "Δεν βρέθηκε νέο περιεχόμενο."
+
+msgid "No tool details available yet."
+msgstr "Δεν υπάρχουν ακόμα λεπτομέρειες εργαλείου."
+
+msgid "Last access"
+msgstr "Τελευταία πρόσβαση"
+
+msgid "Open course"
+msgstr "Άνοιγμα μαθήματος"
+
+msgid "Course completed"
+msgstr "Μάθημα ολοκληρωμένο"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Το όριο εγγραφής για αυτό το μάθημα έχει εξαντληθεί."
+
+msgid "Subscription limit reached"
+msgstr "Όριο εγγραφής εξαντλήθηκε"
+
+msgid "Tertiary alternative"
+msgstr "Τριτοβάθμια εναλλακτική"
+
+msgid "Update SCORM"
+msgstr "Ενημέρωση SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "Η ΤΝ μπορεί να προετοιμάσει σχόλια και προτεινόμενο βαθμό πριν τα στείλετε."
+
+msgid "What will be sent to the AI"
+msgstr "Τι θα σταλεί στην ΤΝ"
+
+msgid "Assignment title + instructions"
+msgstr "Τίτλος εργασίας + οδηγίες"
+
+msgid "Student submission (text)"
+msgstr "Υποβολή μαθητή (κείμενο)"
+
+msgid "Student submission (text): none"
+msgstr "Υποβολή μαθητή (κείμενο): κανένα"
+
+msgid "Student attachment"
+msgstr "Συνημμένο μαθητή"
+
+msgid "supported"
+msgstr "υποστηρίζεται"
+
+msgid "not supported for document analysis"
+msgstr "δεν υποστηρίζεται για ανάλυση εγγράφου"
+
+msgid "Student attachment: none"
+msgstr "Συνημμένο μαθητή: κανένα"
+
+msgid "No text AI providers available."
+msgstr "Δεν υπάρχουν διαθέσιμοι πάροχοι ΤΝ κειμένου."
+
+msgid "AI-assisted"
+msgstr "Με υποστήριξη ΤΝ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Αυτή η απόφαση αποθηκεύεται με τη διόρθωση (ExtraField) και δεν μπορεί να αλλάξει αργότερα."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Προαιρετικό συνημμένο διόρθωσης (δεν είναι η υποβολή του μαθητή)."
+
+msgid "AI"
+msgstr "ΤΝ"
+
+msgid "Received"
+msgstr "Ληφθέν"
+
+msgid "%s min"
+msgstr "%s λεπτά"
+
+msgid "Unlock column"
+msgstr "Ξεκλείδωμα στήλης"
+
+msgid "Lock column"
+msgstr "Κλείδωμα στήλης"
+
+msgid "Set all Present"
+msgstr "Ορισμός όλων ως Παρόντες"
+
+msgid "Set all Absent"
+msgstr "Ορισμός όλων ως Απόντες"
+
+msgid "Auto (recommended)"
+msgstr "Αυτόματα (συνιστώμενο)"
+
+msgid "Error downloading all documents."
+msgstr "Σφάλμα λήψης όλων των εγγράφων."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Άνοιγμα με ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Περιορισμός ποσοστώσεων"
+
+msgid "Remaining space"
+msgstr "Υπόλοιπος χώρος"
+
+msgid "Course catalogue"
+msgstr "Κατάλογος μαθημάτων"
+
+msgid "Drag links to reorder"
+msgstr "Σύρετε συνδέσμους για επανατάξη"
+
+msgid "Drop links here to keep them without category"
+msgstr "Αφήστε συνδέσμους εδώ για να μείνουν χωρίς κατηγορία"
+
+msgid "Could not export"
+msgstr "Δεν ήταν δυνατή η εξαγωγή"
+
+msgid "Link moved"
+msgstr "Ο σύνδεσμος μετακινήθηκε"
+
+msgid "Could not move link"
+msgstr "Δεν ήταν δυνατή η μετακίνηση του συνδέσμου"
+
+msgid "Category reordering is not enabled"
+msgstr "Η επανατάξη κατηγοριών δεν είναι ενεργοποιημένη"
+
+msgid "Showing %s posts"
+msgstr "Εμφάνιση %s αναρτήσεων"
+
+msgid "Showing %s tasks"
+msgstr "Εμφάνιση %s εργασιών"
+
+msgid "Page %s of %s"
+msgstr "Σελίδα %s από %s"
+
+msgid "Tutors"
+msgstr "Επιβλέποντες"
+
+msgid "selected"
+msgstr "επιλεγμένο"
+
+msgid "No data to export"
+msgstr "Δεν υπάρχουν δεδομένα προς εξαγωγή"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Η εικόνα κεφαλίδας PNG πρέπει να είναι ≤ %spx."
+
+msgid "Standard list"
+msgstr "Τυπική λίστα"
+
+msgid "Management list"
+msgstr "Λίστα διαχείρισης"
+
+msgid "Open platform"
+msgstr "Ανοιχτή πλατφόρμα"
+
+msgid "Teacher user ID"
+msgstr "ID χρήστη καθηγητή"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το μάθημα;"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε τα επιλεγμένα μαθήματα;"
+
+msgid "Search by name, username, email"
+msgstr "Αναζήτηση με όνομα, όνομα χρήστη, email"
+
+msgid "contains %s items"
+msgstr "περιέχει %s στοιχεία"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Η νομική σας συμφωνία παραμένει ενεργή μέχρι να εξεταστεί και να επεξεργαστεί οποιοδήποτε αίτημα απόσυρσης."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Το αίτημα απόσυρσης της νομικής σας συγκατάθεσης εκκρεμεί ελέγχου."
+
+msgid "Your account deletion request is pending review."
+msgstr "Το αίτημα διαγραφής του λογαριασμού σας εκκρεμεί ελέγχου."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Γιατί θέλετε να ζητήσετε την απόσυρση της νομικής σας συγκατάθεσης;"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Υποβολή αιτήματος απόσυρσης νομικής συγκατάθεσης..."
+
+msgid "Submitting request..."
+msgstr "Υποβολή αιτήματος..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Αίτημα απόσυρσης νομικής συγκατάθεσης"
+
+msgid "Submitting your account deletion request..."
+msgstr "Υποβολή αιτήματος διαγραφής λογαριασμού..."
+
+msgid "Submitting your acceptance..."
+msgstr "Υποβολή αποδοχής σας..."
+
+msgid "Event details"
+msgstr "Λεπτομέρειες συμβάντος"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Δεν μπορείτε να προσπελάσετε το συνδεδεμένο μάθημα από αυτή την προβολή."
+
+msgid "Failed to load sessions"
+msgstr "Αποτυχία φόρτωσης συνεδριών"
+
+msgid "Failed to load events"
+msgstr "Αποτυχία φόρτωσης συμβάντων"
+
+msgid "No events found"
+msgstr "Δεν βρέθηκαν γεγονότα"
+
+msgid "Group image"
+msgstr "Εικόνα ομάδας"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Απαγορευμένο"
+
+msgid "Distribution"
+msgstr "Κατανομή"
+
+msgid "Firstname"
+msgstr "Όνομα"
+
+msgid "Lastname"
+msgstr "Επώνυμο"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Last login in platform"
+msgstr "Τελευταία είσοδος στην πλατφόρμα"
+
+msgid "Export as CSV"
+msgstr "Εξαγωγή σε CSV"
+
+msgid "Export as XLS"
+msgstr "Εξαγωγή σε XLS"
+
+msgid "Deactivate this user?"
+msgstr "Απενεργοποίηση αυτού του χρήστη;"
+
+msgid "Enable this user?"
+msgstr "Ενεργοποίηση αυτού του χρήστη;"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Ενοποίηση αυτής της διπλής ομάδας στον χρήστη #%s;"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Αυτό θα συγχωνεύσει όλους τους άλλους λογαριασμούς της ίδιας ομάδας σε αυτόν τον λογαριασμό."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Οι συγχωνευμένοι λογαριασμοί θα διαγραφούν μόνιμα και θα εξαφανιστούν από αυτήν την αναφορά."
+
+msgid "This action cannot be undone."
+msgstr "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Unify"
+msgstr "Ενοποίηση"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Μαθητής"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Συνολικός χώρος που χρησιμοποιείται από την πύλη %s το όριο είναι %s MB"
+
+msgid "Helper text"
+msgstr "Βοηθητικό κείμενο"
+
+msgid "NotAllowed"
+msgstr "Δεν επιτρέπεται"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Χρησιμοποιήστε τα φίλτρα παραπάνω για να φορτώσετε λεπτομέρειες πρόσβασης του εκπαιδευομένου."
+
+msgid "Start date must be before end date"
+msgstr "Η ημερομηνία έναρξης πρέπει να είναι πριν την ημερομηνία λήξης"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Επιλέξτε εύρος ημερομηνιών και τύπο ομαδοποίησης για να ελέγξετε λεπτομέρειες πρόσβασης του εκπαιδευομένου."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Αυτό το μάθημα θα δημιουργηθεί χρησιμοποιώντας την προεπιλεγμένη προτροπή μαθήματος της πλατφόρμας."
+
+msgid "Security breach avoid restart"
+msgstr "Παραβίαση ασφαλείας αποφυγή επανεκκίνησης"
+
+msgid "User deactivated"
+msgstr "Χρήστης απενεργοποιήθηκε"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Χρήστης ενεργοποιήθηκε"
+
+msgid "No other duplicates found for this user."
+msgstr "Δεν βρέθηκαν άλλα διπλότυπα για αυτόν τον χρήστη."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Χρήστες ενοποιήθηκαν: συγχωνεύτηκαν %s λογαριασμός(-οί) στον χρήστη #%s. Οι συγχωνευμένοι λογαριασμοί διαγράφηκαν μόνιμα."
+
+msgid "No accounts were merged."
+msgstr "Δεν συγχωνεύτηκαν λογαριασμοί."
+
+msgid "An error occurred while unifying users."
+msgstr "Παρουσιάστηκε σφάλμα κατά την ενοποίηση χρηστών."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Χρήστες ενοποιήθηκαν: συγχωνεύτηκε ο χρήστης #%s στον χρήστη #%s. Ο συγχωνευμένος λογαριασμός διαγράφηκε μόνιμα."
+
+msgid "Duplicate users"
+msgstr "Διπλοί χρήστες"
+
+msgid "Years"
+msgstr "Χρόνια"
+
+msgid "All time visits outside sessions"
+msgstr "Συνολικές επισκέψεις εκτός συνεδριών όλες οι εποχές"
+
+msgid "All time visits in sessions"
+msgstr "Συνολικές επισκέψεις σε συνεδρίες όλες οι εποχές"
+
+msgid "All time visits total"
+msgstr "Συνολικές επισκέψεις όλες οι εποχές"
+
+msgid "Student visits per period, per course"
+msgstr "Επισκέψεις μαθητή ανά περίοδο, ανά μάθημα"
+
+msgid "By email"
+msgstr "Ανά email"
+
+msgid "By extra field"
+msgstr "Ανά επιπλέον πεδίο"
+
+msgid "Select an option"
+msgstr "Επιλέξτε μια επιλογή"
+
+msgid "Profile field"
+msgstr "Πεδίο προφίλ"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Αυτή η αναφορά απαριθμεί μόνο χρήστες που έχουν την ίδια διεύθυνση email."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Αυτή η αναφορά απαριθμεί μόνο χρήστες που μοιράζονται την ίδια τιμή για το επιλεγμένο πεδίο προφίλ."
+
+msgid "How to use this report"
+msgstr "Πώς να χρησιμοποιήσετε αυτήν την αναφορά"
+
+msgid "Disable / Enable"
+msgstr "Απενεργοποίηση / Ενεργοποίηση"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Μόνο μπλοκάρει ή αποκαθιστά την είσοδο. Δεν διαγράφει τον χρήστη και δεν αφαιρεί τις συνδρομές."
+
+msgid "Last week"
+msgstr "Προηγούμενη εβδομάδα"
+
+msgid "Next week"
+msgstr "Επόμενη εβδομάδα"
+
+msgid "Loading report..."
+msgstr "Φόρτωση αναφοράς..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Αποτυχία φόρτωσης αυτής της αναφοράς. Παρακαλούμε δοκιμάστε ξανά."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Επιλέξτε μία ή περισσότερες συνεδρίες για αντιγραφή εκπαιδευτών και επιλέξτε το προορισμό μάθημα"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Κρατήστε Ctrl (ή Cmd) για επιλογή πολλαπλών στοιχείων"
+
+msgid "Choose the destination course"
+msgstr "Επιλέξτε το μάθημα προορισμού"
+
+msgid "You can select multiple items"
+msgstr "Μπορείτε να επιλέξετε πολλαπλά στοιχεία"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Χρησιμοποιήστε το πλαίσιο αναζήτησης για να βρείτε μαθήματα γρήγορα"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Επιλέξτε μία ή περισσότερες συνεδρίες προέλευσης και μία ή περισσότερες συνεδρίες προορισμού για αντιγραφή φοιτητών"
+
+msgid "Select destination sessions"
+msgstr "Επιλέξτε συνεδρίες προορισμού"
+
+msgid "You can select multiple users"
+msgstr "Μπορείτε να επιλέξετε πολλαπλούς χρήστες"
+
+msgid "Use the search box to find users quickly"
+msgstr "Χρησιμοποιήστε το πλαίσιο αναζήτησης για να βρείτε χρήστες γρήγορα"
+
+msgid "Error while creating the document"
+msgstr "Σφάλμα κατά τη δημιουργία του εγγράφου"
+
+msgid "Not a SCORM learning path"
+msgstr "Δεν είναι μονοπάτι μάθησης SCORM"
+
+msgid "Final item"
+msgstr "Τελικό στοιχείο"
+
+msgid "Edit item"
+msgstr "Επεξεργασία στοιχείου"
+
+msgid "No AI text providers configured."
+msgstr "Δεν έχουν ρυθμιστεί πάροχοι κειμένου AI."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Αποτυχία ανεβάσματος. Το αρχείο είναι πιθανώς μεγαλύτερο από το όριο του διακομιστή (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Αποτυχία ενημέρωσης. Δεν έλαβε αρχείο ο διακομιστής."
+
+msgid "Update failed. %s"
+msgstr "Αποτυχία ενημέρωσης. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Αποτυχία ενημέρωσης. Μη έγκυρο φορτίο αρχείου ανεβάσματος."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Αποτυχία ενημέρωσης. Το όνομα του ZIP αρχείου ανεβάσματος πρέπει να ταιριάζει με το αρχικό όνομα πακέτου SCORM."
+
+msgid "Update failed"
+msgstr "Αποτυχία ενημέρωσης"
+
+msgid "Question lower case"
+msgstr "Ερώτηση πεζά"
+
+msgid "Regenerate"
+msgstr "Ανανέωση"
+
+msgid "Case insensitive"
+msgstr "Ανεπηρέαστο από πεζά/ΚΕΦΑΛΑΙΑ"
+
+msgid "Select a session to load its courses."
+msgstr "Επιλέξτε μια συνεδρία για να φορτώσετε τα μαθήματά της."
+
+msgid "Select the source course."
+msgstr "Επιλέξτε το μάθημα προέλευσης."
+
+msgid "Select a destination session."
+msgstr "Επιλέξτε μια συνεδρία προορισμού."
+
+msgid "Select the destination course."
+msgstr "Επιλέξτε το μάθημα προορισμού."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Αντιγράψτε το πλήρες περιεχόμενο μαθήματος από το επιλεγμένο μάθημα συνεδρίας."
+
+msgid "Select which tools/items to copy."
+msgstr "Επιλέξτε ποια εργαλεία/στοιχεία να αντιγράψετε."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Μην συμπεριλάβετε το βασικό (μη συνεδρίας) περιεχόμενο μαθήματος."
+
+msgid "An error occurred while copying the course"
+msgstr "Παρουσιάστηκε σφάλμα κατά την αντιγραφή του μαθήματος"
+
+msgid "Please select a different destination"
+msgstr "Παρακαλούμε επιλέξτε διαφορετικό προορισμό"
+
+msgid "You must select a destination course"
+msgstr "Πρέπει να επιλέξετε μάθημα προορισμού"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Για εξαγωγή μαθημάτων με κουίζ πρέπει να επιλέξετε κουίζ"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Αν τα μονοπάτια σας έχουν αρχεία ήχου συμπεριλημμένα πρέπει να τα επιλέξετε από τα έγγραφα"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Αν τα κουίζ σας έχουν ερωτήσεις hotspot συμπεριλημμένες πρέπει να επιλέξετε τις εικόνες από τα έγγραφα"
+
+msgid "GeneralResourcesCourse"
+msgstr "ΓενικοίΠόροιΜαθήματος"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον %length% χαρακτήρες."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Ο κωδικός πρόσβασης πρέπει να περιέχει τουλάχιστον %count% πεζούς χαρακτήρες."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Ο κωδικός πρόσβασης πρέπει να περιέχει τουλάχιστον %count% κεφαλαίους χαρακτήρες."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Ο κωδικός πρόσβασης πρέπει να περιέχει τουλάχιστον %count% αριθμητικούς (0-9) χαρακτήρες."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Ο κωδικός πρόσβασης πρέπει να περιέχει τουλάχιστον %count% ειδικούς χαρακτήρες."
+
+msgid "Invalid login request."
+msgstr "Μη έγκυρο αίτημα σύνδεσης."
+
+msgid "Authentication failed."
+msgstr "Αποτυχία πιστοποίησης."
+
+msgid "Login %status% for username %username%"
+msgstr "Είσοδος %status% για όνομα χρήστη %username%"
+
+msgid "Co-generated with AI"
+msgstr "Συμπαραγωγή με Τεχνητή Νοημοσύνη"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Υποχρεωτικά πεδία"
+

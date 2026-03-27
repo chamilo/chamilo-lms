@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -33116,4 +33116,571 @@ msgstr "Трети страни"
 
 msgid "Layouts"
 msgstr "Макети"
+
+msgid "Relation type"
+msgstr "Тип на връзката"
+
+msgid "Add all"
+msgstr "Добави всички"
+
+msgid "Remove all"
+msgstr "Премахни всички"
+
+msgid "An error occurred. Please try again."
+msgstr "Грешка. Моля, опитайте отново."
+
+msgid "%s created"
+msgstr "%s създаден"
+
+msgid "%s updated"
+msgstr "%s актуализиран"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ако планирате ъпгрейд от по-стара версия на Chamilo, може би ще искате да"
+
+msgid "have a look at the changelog"
+msgstr "прегледате changelog-а"
+
+msgid "to know what's new and what has been changed."
+msgstr "за да знаете какво е ново и какво е променено."
+
+msgid "Session Item"
+msgstr "Елемент на сесия"
+
+msgid "Points"
+msgstr "Точки"
+
+msgid "See notifications"
+msgstr "Вижте известията"
+
+msgid "New content available for this course."
+msgstr "Ново съдържание е налично за този курс."
+
+msgid "No new notifications."
+msgstr "Няма нови известия."
+
+msgid "No new content found."
+msgstr "Няма намерено ново съдържание."
+
+msgid "No tool details available yet."
+msgstr "Все още няма налични детайли за инструмента."
+
+msgid "Last access"
+msgstr "Последен достъп"
+
+msgid "Open course"
+msgstr "Отвори курс"
+
+msgid "Course completed"
+msgstr "Курс завършен"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Достигнат е лимитът за абонамент за този курс."
+
+msgid "Subscription limit reached"
+msgstr "Достигнат е лимитът за абонамент"
+
+msgid "Tertiary alternative"
+msgstr "Трети алтернативен"
+
+msgid "Update SCORM"
+msgstr "Актуализирай SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ИИ може да създаде чернова на обратна връзка и предложена оценка преди да я изпратите."
+
+msgid "What will be sent to the AI"
+msgstr "Какво ще бъде изпратено към ИИ"
+
+msgid "Assignment title + instructions"
+msgstr "Заглавие на задание + инструкции"
+
+msgid "Student submission (text)"
+msgstr "Студентско изпращане (текст)"
+
+msgid "Student submission (text): none"
+msgstr "Студентско изпращане (текст): няма"
+
+msgid "Student attachment"
+msgstr "Прикачен файл на студент"
+
+msgid "supported"
+msgstr "поддържано"
+
+msgid "not supported for document analysis"
+msgstr "неподдържано за анализ на документи"
+
+msgid "Student attachment: none"
+msgstr "Прикачен файл на студент: няма"
+
+msgid "No text AI providers available."
+msgstr "Няма налични доставчици на текстови ИИ."
+
+msgid "AI-assisted"
+msgstr "С помощта на ИИ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Това решение се запазва с корекцията (ExtraField) и не може да се промени по-късно."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Допълнително прикачване към корекцията (това не е предаденото от студента)."
+
+msgid "AI"
+msgstr "ИИ"
+
+msgid "Received"
+msgstr "Получен"
+
+msgid "%s min"
+msgstr "%s мин"
+
+msgid "Unlock column"
+msgstr "Отключване на колона"
+
+msgid "Lock column"
+msgstr "Заключване на колона"
+
+msgid "Set all Present"
+msgstr "Задаване на всички Присъстващи"
+
+msgid "Set all Absent"
+msgstr "Задаване на всички Отсъстващи"
+
+msgid "Auto (recommended)"
+msgstr "Автоматично (препоръчително)"
+
+msgid "Error downloading all documents."
+msgstr "Грешка при сваляне на всички документи."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Отваряне с ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Ограничение на квотата"
+
+msgid "Remaining space"
+msgstr "Оставащо място"
+
+msgid "Course catalogue"
+msgstr "Каталог на курсовете"
+
+msgid "Drag links to reorder"
+msgstr "Плъзнете връзките, за да ги прередите"
+
+msgid "Drop links here to keep them without category"
+msgstr "Пуснете връзките тук, за да ги запазите без категория"
+
+msgid "Could not export"
+msgstr "Не може да се изнесе"
+
+msgid "Link moved"
+msgstr "Връзката е преместена"
+
+msgid "Could not move link"
+msgstr "Не може да се премести връзката"
+
+msgid "Category reordering is not enabled"
+msgstr "Пререждането на категории не е разрешено"
+
+msgid "Showing %s posts"
+msgstr "Показва се %s публикации"
+
+msgid "Showing %s tasks"
+msgstr "Показва се %s задачи"
+
+msgid "Page %s of %s"
+msgstr "Страница %s от %s"
+
+msgid "Tutors"
+msgstr "Туторът"
+
+msgid "selected"
+msgstr "избрани"
+
+msgid "No data to export"
+msgstr "Няма данни за износ"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Заглавна PNG трябва да е ≤ %spx."
+
+msgid "Standard list"
+msgstr "Стандартен списък"
+
+msgid "Management list"
+msgstr "Списък за управление"
+
+msgid "Open platform"
+msgstr "Отворена платформа"
+
+msgid "Teacher user ID"
+msgstr "ID на потребител учител"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Сигурни ли сте, че искате да изтриете този курс?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Сигурни ли сте, че искате да изтриете избраните курсове?"
+
+msgid "Search by name, username, email"
+msgstr "Търсене по име, потребителско име, имейл"
+
+msgid "contains %s items"
+msgstr "съдържа %s елемента"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Вашето споразумение за легално съгласие остава активно, докато заявката за отказ не бъде прегледана и обработена."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Заявката ви за отказ от легалното съгласие е в очакване на преглед."
+
+msgid "Your account deletion request is pending review."
+msgstr "Заявката ви за изтриване на акаунт е в очакване на преглед."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Защо искате да поискате отказ от вашето легално съгласие?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Изпращане на заявката ви за отказ от легалното съгласие..."
+
+msgid "Submitting request..."
+msgstr "Изпращане на заявката..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Поискайте отказ от легалното съгласие"
+
+msgid "Submitting your account deletion request..."
+msgstr "Изпращане на заявката ви за изтриване на акаунт..."
+
+msgid "Submitting your acceptance..."
+msgstr "Изпращане на вашето съгласие..."
+
+msgid "Event details"
+msgstr "Подробности за събитието"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Не можете да получите достъп до свързания курс от това гледане."
+
+msgid "Failed to load sessions"
+msgstr "Неуспешно зареждане на сесии"
+
+msgid "Failed to load events"
+msgstr "Неуспешно зареждане на събития"
+
+msgid "No events found"
+msgstr "Няма намерени събития"
+
+msgid "Group image"
+msgstr "Изображение на група"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Забранено"
+
+msgid "Distribution"
+msgstr "Разпределение"
+
+msgid "Firstname"
+msgstr "Собствено име"
+
+msgid "Lastname"
+msgstr "Фамилно име"
+
+msgid "Email"
+msgstr "Имейл"
+
+msgid "Last login in platform"
+msgstr "Последен вход в платформата"
+
+msgid "Export as CSV"
+msgstr "Експорт като CSV"
+
+msgid "Export as XLS"
+msgstr "Експорт като XLS"
+
+msgid "Deactivate this user?"
+msgstr "Да деактивирате ли този потребител?"
+
+msgid "Enable this user?"
+msgstr "Да активирате ли този потребител?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Да обедините ли тази дублирана група в потребител #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Това ще обедини всички други акаунти от същата група в този акаунт."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Обединените акаунти ще бъдат постоянно изтрити и ще изчезнат от този отчет."
+
+msgid "This action cannot be undone."
+msgstr "Това действие не може да бъде отменено."
+
+msgid "Unify"
+msgstr "Обедини"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Студент"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Общо заето място от портала %s лимит %s MB"
+
+msgid "Helper text"
+msgstr "Помощен текст"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Използвайте филтрите по-горе, за да заредите детайлите за достъп на обучаващите се."
+
+msgid "Start date must be before end date"
+msgstr "Началната дата трябва да е преди крайната дата"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Изберете период от дати и тип групиране, за да прегледате детайлите за достъп на обучаващите се."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Този курс ще бъде създаден с шаблона по подразбиране на платформата за курсове."
+
+msgid "Security breach avoid restart"
+msgstr "Security breach avoid restart"
+
+msgid "User deactivated"
+msgstr "Потребителят е деактивиран"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Потребителят е активиран"
+
+msgid "No other duplicates found for this user."
+msgstr "Няма намерени други дубликати за този потребител."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Потребители обединени: обединени %s акаунт(а) в потребител #%s. Обединените акаунти са постоянно изтрити."
+
+msgid "No accounts were merged."
+msgstr "Няма обединени акаунти."
+
+msgid "An error occurred while unifying users."
+msgstr "Грешка при обединяване на потребители."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Потребители обединени: потребител #%s е обединен в потребител #%s. Обединеният акаунт е постоянно изтрит."
+
+msgid "Duplicate users"
+msgstr "Дублирани потребители"
+
+msgid "Years"
+msgstr "Години"
+
+msgid "All time visits outside sessions"
+msgstr "Посещения извън сесии за всички времена"
+
+msgid "All time visits in sessions"
+msgstr "Посещения в сесии за всички времена"
+
+msgid "All time visits total"
+msgstr "Общо посещения за всички времена"
+
+msgid "Student visits per period, per course"
+msgstr "Посещения на студенти на период, на курс"
+
+msgid "By email"
+msgstr "По имейл"
+
+msgid "By extra field"
+msgstr "По допълнително поле"
+
+msgid "Select an option"
+msgstr "Изберете опция"
+
+msgid "Profile field"
+msgstr "Поле на профила"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Този отчет показва само потребители с един и същ имейл адрес."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Този отчет показва само потребители, които споделят еднаква стойност за избраното поле на профила."
+
+msgid "How to use this report"
+msgstr "Как да използвате този отчет"
+
+msgid "Disable / Enable"
+msgstr "Изключване / Включване"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Само блокира или възстановява входа. Не изтрива потребителя и не премахва абонаментите."
+
+msgid "Last week"
+msgstr "Миналата седмица"
+
+msgid "Next week"
+msgstr "Следващата седмица"
+
+msgid "Loading report..."
+msgstr "Зареждане на отчет..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Неуспешно зареждане на отчета. Моля, опитайте отново."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Изберете една или повече сесии за копиране на треньори от тях и изберете целевия курс"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Задръжте Ctrl (или Cmd) за избор на множество елементи"
+
+msgid "Choose the destination course"
+msgstr "Изберете целевия курс"
+
+msgid "You can select multiple items"
+msgstr "Можете да изберете множество елементи"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Използвайте полето за търсене, за да намерите курсове бързо"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Изберете една или повече източни сесии и една или повече целеви сесии за копиране на студенти"
+
+msgid "Select destination sessions"
+msgstr "Изберете целеви сесии"
+
+msgid "You can select multiple users"
+msgstr "Можете да изберете множество потребители"
+
+msgid "Use the search box to find users quickly"
+msgstr "Използвайте полето за търсене, за да намерите потребители бързо"
+
+msgid "Error while creating the document"
+msgstr "Грешка при създаването на документа"
+
+msgid "Not a SCORM learning path"
+msgstr "Не е SCORM учебен път"
+
+msgid "Final item"
+msgstr "Краен елемент"
+
+msgid "Edit item"
+msgstr "Редактиране на елемент"
+
+msgid "No AI text providers configured."
+msgstr "Няма конфигурирани доставчици на AI текст."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Качването неуспешно. Файлът вероятно е по-голям от лимита на сървъра (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Актуализацията неуспешна. Сървърът не получи файл."
+
+msgid "Update failed. %s"
+msgstr "Актуализацията неуспешна. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Актуализацията неуспешна. Невалиден качен файл."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Актуализацията неуспешна. Името на качения ZIP файл трябва да съвпада с оригиналното име на SCORM пакета."
+
+msgid "Update failed"
+msgstr "Актуализацията неуспешна"
+
+msgid "Question lower case"
+msgstr "въпрос с малка буква"
+
+msgid "Regenerate"
+msgstr "Регенериране"
+
+msgid "Case insensitive"
+msgstr "Без различаване на регистъра"
+
+msgid "Select a session to load its courses."
+msgstr "Изберете сесия, за да заредите курсовете ѝ."
+
+msgid "Select the source course."
+msgstr "Изберете източния курс."
+
+msgid "Select a destination session."
+msgstr "Изберете целева сесия."
+
+msgid "Select the destination course."
+msgstr "Изберете целевия курс."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Копирайте пълното съдържание на курса от избрания курс на сесията."
+
+msgid "Select which tools/items to copy."
+msgstr "Изберете кои инструменти/елементи да копирате."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Не включвайте базовото (несесионно) съдържание на курса."
+
+msgid "An error occurred while copying the course"
+msgstr "Грешка при копиране на курса"
+
+msgid "Please select a different destination"
+msgstr "Моля, изберете различен пункт на назначения"
+
+msgid "You must select a destination course"
+msgstr "Трябва да изберете целевия курс"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "За износ на курсове с тестове трябва да изберете тестовете"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ако вашите учебни пътища включват звукови файлове, трябва да ги изберете от документите"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ако вашите тестове включват въпроси с hotspot, трябва да изберете изображенията от документите"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Паролата трябва да е поне %length% символа дълга."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Паролата трябва да съдържа поне %count% малки букви."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Паролата трябва да съдържа поне %count% главни букви."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Паролата трябва да съдържа поне %count% цифри (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Паролата трябва да съдържа поне %count% специални символи."
+
+msgid "Invalid login request."
+msgstr "Невалидна заявка за вход."
+
+msgid "Authentication failed."
+msgstr "Удостоверяването неуспешно."
+
+msgid "Login %status% for username %username%"
+msgstr "Вход %status% за потребителско име %username%"
+
+msgid "Co-generated with AI"
+msgstr "Създадено с помощта на изкуствен интелект"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Задължителни полета"
 

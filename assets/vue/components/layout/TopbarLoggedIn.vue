@@ -6,18 +6,19 @@
     <div class="app-topbar__items">
       <BaseAppLink
         v-if="isTeacher && allowUsersToCreateCourses"
+        :title="t('Create course')"
         :to="{ name: 'CourseCreate' }"
         class="item-button"
       >
         <BaseIcon
           icon="courses"
           badge-icon="plus"
-          :tooltip="t('Create course')"
           class="item-button__icon text-success"
         />
       </BaseAppLink>
       <BaseAppLink
         v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('ticket.show_link_ticket_notification')"
+        :title="t('Ticket')"
         :url="ticketUrl"
         class="item-button"
       >
@@ -29,6 +30,7 @@
       <BaseAppLink
         v-if="!isAnonymous && messagingEnabled"
         :class="{ 'item-button--unread': !!btnInboxBadge }"
+        :title="t('Inbox')"
         :to="{ name: 'MessageList' }"
         class="item-button"
       >

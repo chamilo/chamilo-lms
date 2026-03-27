@@ -33679,3 +33679,6 @@ msgstr "EntraID ID"
 
 msgid "EntraID UID"
 msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Required fields"

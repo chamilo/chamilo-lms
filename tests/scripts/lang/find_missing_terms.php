@@ -241,8 +241,8 @@ function extractHiddenTermsFromLine(string $line, bool $isVue): array
 function normalizePlaceholders(string $term, bool $isVue): string
 {
     if ($isVue) {
-        // Convert {0}, {1}, {count}, {name}, etc. to %s for .pot lookup
-        return preg_replace('/\{[0-9]+\}/', '%s', $term);
+        // Convert {0}, {1}, {n}, {count}, {name}, etc. to %s for .pot lookup
+        return preg_replace('/\{[0-9a-z_]+\}/i', '%s', $term);
     }
 
     return $term;

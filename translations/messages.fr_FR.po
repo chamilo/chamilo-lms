@@ -7020,7 +7020,7 @@ msgid "Number proposed exceeds max. that you allowed (you can modify in the grou
 msgstr "Le nombre de membres proposé excède le nombre maximum que vous avez fixé. La composition du groupe n'a pas été modifiée. Vous pouvez modifier le nombre maximum dans la configuration du groupe."
 
 msgid "Group tutor"
-msgstr "Modérateur du groupe"
+msgstr "Tuteur du groupe"
 
 msgid "(none)"
 msgstr "(aucun)"

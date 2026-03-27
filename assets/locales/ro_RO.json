@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "C\u00e2mpuri obligatorii",
     "No available users.": "Niciun utilizator disponibil.",
-    "No users added yet.": "Niciun utilizator ad\u0103ugat \u00eenc\u0103."
+    "No users added yet.": "Niciun utilizator ad\u0103ugat \u00eenc\u0103.",
+    "# attended": "Asistente",
+    "Dates": "Date"
 }

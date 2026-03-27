@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Obligatoriska f\u00e4lt",
     "No available users.": "Inga tillg\u00e4ngliga anv\u00e4ndare.",
-    "No users added yet.": "Inga anv\u00e4ndare tillagda \u00e4n."
+    "No users added yet.": "Inga anv\u00e4ndare tillagda \u00e4n.",
+    "# attended": "# n\u00e4rvarande",
+    "Dates": "Datum"
 }

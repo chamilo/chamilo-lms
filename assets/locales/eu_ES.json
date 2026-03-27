@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Eskatutako eremuak",
     "No available users.": "Ez dago erabiltzaile eskuragarririk.",
-    "No users added yet.": "Oraindik ez da erabiltzailerik gehitu."
+    "No users added yet.": "Oraindik ez da erabiltzailerik gehitu.",
+    "# attended": "# parte hartze",
+    "Dates": "Dataak"
 }

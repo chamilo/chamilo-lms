@@ -1809,5 +1809,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Medan wajib",
     "No available users.": "Tiada pengguna yang tersedia.",
-    "No users added yet.": "Tiada pengguna ditambah lagi."
+    "No users added yet.": "Tiada pengguna ditambah lagi.",
+    "# attended": "# hadir",
+    "Dates": "Tarikh"
 }

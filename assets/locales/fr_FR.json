@@ -1834,5 +1834,7 @@
     "EntraID UID": "UID EntraID",
     "Required fields": "Champs obligatoires",
     "No available users.": "Aucun utilisateur disponible.",
-    "No users added yet.": "Aucun utilisateur ajout\u00e9 pour le moment."
+    "No users added yet.": "Aucun utilisateur ajout\u00e9 pour le moment.",
+    "# attended": "# de pr\u00e9sences",
+    "Dates": "Dates"
 }

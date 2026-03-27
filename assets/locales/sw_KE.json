@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Sehemu zinazohitajika",
     "No available users.": "Hakuna watumiaji wanazopatikana.",
-    "No users added yet.": "Hakuna watumiaji walioongezwa bado."
+    "No users added yet.": "Hakuna watumiaji walioongezwa bado.",
+    "# attended": "# imehadiriwa",
+    "Dates": "Tarehe"
 }

@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Povinn\u00e1 pole",
     "No available users.": "\u017d\u00e1dn\u00ed dostupn\u00ed u\u017eivatel\u00e9.",
-    "No users added yet.": "Zat\u00edm nebyli p\u0159id\u00e1ni \u017e\u00e1dn\u00ed u\u017eivatel\u00e9."
+    "No users added yet.": "Zat\u00edm nebyli p\u0159id\u00e1ni \u017e\u00e1dn\u00ed u\u017eivatel\u00e9.",
+    "# attended": "# p\u0159\u00edtomn\u00fdch",
+    "Dates": "Datumy"
 }

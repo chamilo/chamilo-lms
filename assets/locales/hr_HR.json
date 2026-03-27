@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Obavezna polja",
     "No available users.": "Nema dostupnih korisnika.",
-    "No users added yet.": "Nema dodanih korisnika."
+    "No users added yet.": "Nema dodanih korisnika.",
+    "# attended": "# prisutnih",
+    "Dates": "Datumi"
 }

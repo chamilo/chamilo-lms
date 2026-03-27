@@ -1831,5 +1831,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Kailangang mga field",
     "No available users.": "Walang magagamit na gumagamit.",
-    "No users added yet.": "Walang nadagdag na gumagamit pa."
+    "No users added yet.": "Walang nadagdag na gumagamit pa.",
+    "# attended": "# ang dumalo",
+    "Dates": "Mga Petsa"
 }

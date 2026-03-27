@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Fushat e detyrueshme",
     "No available users.": "Nuk ka p\u00ebrdorues t\u00eb disponuesh\u00ebm.",
-    "No users added yet.": "Nuk ka p\u00ebrdorues t\u00eb shtuar ende."
+    "No users added yet.": "Nuk ka p\u00ebrdorues t\u00eb shtuar ende.",
+    "# attended": "# t\u00eb pranish\u00ebm",
+    "Dates": "Data"
 }

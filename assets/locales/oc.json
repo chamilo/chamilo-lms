@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Champs obligat\u00f2ris",
     "No available users.": "Cap d'utilizaire disponible.",
-    "No users added yet.": "Cap d'utilizaire apondut encara."
+    "No users added yet.": "Cap d'utilizaire apondut encara.",
+    "# attended": "# present",
+    "Dates": "Datas"
 }

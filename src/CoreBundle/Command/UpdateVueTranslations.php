@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_PRETTY_PRINT;
@@ -27,12 +28,15 @@ class UpdateVueTranslations extends Command
     private LanguageRepository $languageRepository;
     private ParameterBagInterface $parameterBag;
     private TranslatorInterface $translator;
+    private TranslatorBagInterface $translatorBag;
 
     public function __construct(LanguageRepository $languageRepository, ParameterBagInterface $parameterBag, TranslatorInterface $translator)
     {
         $this->languageRepository = $languageRepository;
         $this->parameterBag = $parameterBag;
         $this->translator = $translator;
+        \assert($translator instanceof TranslatorBagInterface, 'The translator service must implement TranslatorBagInterface.');
+        $this->translatorBag = $translator;
 
         parent::__construct();
     }
@@ -104,27 +108,26 @@ class UpdateVueTranslations extends Command
      */
     private function getTranslationWithFallback(string $variable, Language $language): string
     {
-        // Get the ISO code of the current language
         $iso = $language->getIsocode();
-        // Try to translate the variable in the current language
-        $translated = $this->translator->trans($variable, [], 'messages', $iso);
 
-        // Check if the translation is not found and if there is a parent language
-        if ($translated === $variable) {
-            if ($language->getParent()) {
-                // Get the parent language entity and its ISO code
-                $parentLanguage = $language->getParent();
-                $parentIso = $parentLanguage->getIsocode();
-                // Try to translate the variable in the parent language
-                $translated = $this->translator->trans($variable, [], 'messages', $parentIso);
+        // If the key is explicitly defined in this locale's catalogue, use it directly —
+        // even when msgstr equals msgid (intentional identity translation).
+        // Without this check, "Login" → "Login" would be mistaken for a missing translation
+        // and fall back to the parent language.
+        if ($this->translatorBag->getCatalogue($iso)->defines($variable, 'messages')) {
+            return $this->translator->trans($variable, [], 'messages', $iso);
+        }
 
-                // Check if translation is still not found and use the base language (English)
-                if ($translated === $variable) {
-                    $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
-                }
-            } else {
+        // Key not defined in this locale: fall back to parent language, then English.
+        if ($language->getParent()) {
+            $parentIso = $language->getParent()->getIsocode();
+            $translated = $this->translator->trans($variable, [], 'messages', $parentIso);
+
+            if ($translated === $variable) {
                 $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
             }
+        } else {
+            $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
         }
 
         return $translated;

@@ -9,7 +9,10 @@ declare(strict_types=1);
 /**
  * Init.
  */
+require_once '../config.php';
 require_once 'paypalfunctions.php';
+
+$plugin = BuyCoursesPlugin::create();
 
 /**
  * The paymentAmount is the total value of
@@ -41,9 +44,9 @@ if ('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
     $ErrorLongMsg = urldecode($resArray['L_LONGMESSAGE0']);
     $ErrorSeverityCode = urldecode($resArray['L_SEVERITYCODE0']);
 
-    echo 'SetExpressCheckout API call failed. ';
-    echo 'Detailed Error Message: '.$ErrorLongMsg;
-    echo 'Short Error Message: '.$ErrorShortMsg;
-    echo 'Error Code: '.$ErrorCode;
-    echo 'Error Severity Code: '.$ErrorSeverityCode;
+    echo $plugin->get_lang('SetExpressCheckoutApiCallFailed');
+    echo sprintf($plugin->get_lang('DetailedErrorMessageX'), $ErrorLongMsg);
+    echo sprintf($plugin->get_lang('ShortErrorMessageX'), $ErrorShortMsg);
+    echo sprintf($plugin->get_lang('ErrorCodeX'), $ErrorCode);
+    echo sprintf($plugin->get_lang('ErrorSeverityCodeX'), $ErrorSeverityCode);
 }

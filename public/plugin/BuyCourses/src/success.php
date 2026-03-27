@@ -1,10 +1,10 @@
 <?php
 
 declare(strict_types=1);
-/* For license terms, see /license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
- * Success page for the purchase of a course in the Buy Courses plugin.
+ * Success page for the purchase of a course or session in the Buy Courses plugin.
  */
 require_once '../config.php';
 
@@ -15,27 +15,58 @@ if (!$paypalEnabled) {
     api_not_allowed(true);
 }
 
-$sale = $plugin->getSale($_SESSION['bc_sale_id']);
+$saleId = (int) ($_SESSION['bc_sale_id'] ?? 0);
+if (empty($saleId)) {
+    api_not_allowed(true);
+}
 
+$sale = $plugin->getSale($saleId);
 if (empty($sale)) {
     api_not_allowed(true);
 }
 
 $buyingCourse = false;
 $buyingSession = false;
+$course = [];
+$session = [];
 
-switch ($sale['product_type']) {
+switch ((int) $sale['product_type']) {
     case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
         $buyingCourse = true;
-        $course = $plugin->getCourseInfo($sale['product_id']);
+        $course = $plugin->getCourseInfo((int) $sale['product_id']);
 
         break;
 
     case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
         $buyingSession = true;
-        $session = $plugin->getSessionInfo($sale['product_id']);
+        $session = $plugin->getSessionInfo((int) $sale['product_id']);
 
         break;
+
+    default:
+        api_not_allowed(true);
+}
+
+$currency = $plugin->getCurrency((int) $sale['currency_id']);
+$currencyCode = $currency['iso_code'] ?? '';
+
+if ($buyingCourse && !empty($course)) {
+    $course['name'] = $course['title'] ?? '';
+    $course['currency'] = $course['item']['iso_code'] ?? $currencyCode;
+    $course['price'] = $course['item']['price'] ?? $sale['price'];
+    $course['total_price_formatted'] = $course['item']['total_price_formatted']
+        ?? trim($course['currency'].' '.api_number_format((float) $course['price'], 2));
+}
+
+if ($buyingSession && !empty($session)) {
+    if (!isset($session['title']) && isset($session['name'])) {
+        $session['title'] = $session['name'];
+    }
+
+    $session['currency'] = $session['item']['iso_code'] ?? $currencyCode;
+    $session['price'] = $session['item']['price'] ?? $sale['price'];
+    $session['total_price_formatted'] = $session['item']['total_price_formatted']
+        ?? trim($session['currency'].' '.api_number_format((float) $session['price'], 2));
 }
 
 $paypalParams = $plugin->getPaypalParams();
@@ -45,6 +76,10 @@ $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
 require_once 'paypalfunctions.php';
+
+$redirectUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/'.(
+    $buyingSession ? 'session_catalog.php' : 'course_catalog.php'
+    );
 
 $form = new FormValidator(
     'success',
@@ -59,52 +94,62 @@ $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
+
     if (isset($formValues['cancel'])) {
-        $plugin->cancelSale($sale['id']);
+        $plugin->cancelSale((int) $sale['id']);
         unset($_SESSION['bc_sale_id']);
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
 
-        exit;
-    }
-
-    $confirmPayments = ConfirmPayment($sale['price']);
-
-    if ('Success' !== $confirmPayments['ACK']) {
-        $erroMessage = vsprintf(
-            $plugin->get_lang('ErrorOccurred'),
-            [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
-        );
         Display::addFlash(
-            Display::return_message($erroMessage, 'error', false)
+            Display::return_message($plugin->get_lang('OrderCancelled'), 'warning', false)
         );
-        header('Location: ../index.php');
 
+        header('Location: '.$redirectUrl);
         exit;
     }
 
-    $transactionId = $confirmPayments['PAYMENTINFO_0_TRANSACTIONID'];
-    $transactionType = $confirmPayments['PAYMENTINFO_0_TRANSACTIONTYPE'];
+    $confirmPayments = ConfirmPayment((string) $sale['price']);
+    $ack = strtoupper((string) ($confirmPayments['ACK'] ?? ''));
 
-    switch ($confirmPayments['PAYMENTINFO_0_PAYMENTSTATUS']) {
+    if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+        $errorCode = (string) ($confirmPayments['L_ERRORCODE0'] ?? 'unknown');
+        $longMessage = (string) ($confirmPayments['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
+
+        $errorMessage = vsprintf(
+            $plugin->get_lang('ErrorOccurred'),
+            [$errorCode, $longMessage]
+        );
+
+        Display::addFlash(
+            Display::return_message($errorMessage, 'error', false)
+        );
+
+        header('Location: '.$redirectUrl);
+        exit;
+    }
+
+    $paymentStatus = (string) ($confirmPayments['PAYMENTINFO_0_PAYMENTSTATUS'] ?? '');
+
+    switch ($paymentStatus) {
         case 'Completed':
-            $saleIsCompleted = $plugin->completeSale($sale['id']);
+            $saleIsCompleted = $plugin->completeSale((int) $sale['id']);
+
             if ($saleIsCompleted) {
                 Display::addFlash(
                     $plugin->getSubscriptionSuccessMessage($sale)
                 );
-                $plugin->storePayouts($sale['id']);
-
-                break;
+                $plugin->storePayouts((int) $sale['id']);
+            } else {
+                Display::addFlash(
+                    Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
+                );
             }
-
-            Display::addFlash(
-                Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
-            );
 
             break;
 
         case 'Pending':
-            switch ($confirmPayments['PAYMENTINFO_0_PENDINGREASON']) {
+            $pendingReason = (string) ($confirmPayments['PAYMENTINFO_0_PENDINGREASON'] ?? '');
+
+            switch ($pendingReason) {
                 case 'address':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAddress');
 
@@ -178,6 +223,8 @@ if ($form->validate()) {
             break;
 
         default:
+            $plugin->cancelSale((int) $sale['id']);
+
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
             );
@@ -186,33 +233,39 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_sale_id']);
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
-
+    header('Location: '.$redirectUrl);
     exit;
 }
 
-$token = isset($_GET['token']) ? $_GET['token'] : null;
-
+$token = isset($_GET['token']) ? Security::remove_XSS($_GET['token']) : null;
 if (empty($token)) {
     api_not_allowed(true);
 }
 
 $shippingDetails = GetShippingDetails($token);
+$ack = strtoupper((string) ($shippingDetails['ACK'] ?? ''));
 
-if ('Success' !== $shippingDetails['ACK']) {
-    $erroMessage = vsprintf(
+if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+    $errorCode = (string) ($shippingDetails['L_ERRORCODE0'] ?? 'unknown');
+    $longMessage = (string) ($shippingDetails['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
+
+    $errorMessage = vsprintf(
         $plugin->get_lang('ErrorOccurred'),
-        [$expressCheckout['L_ERRORCODE0'], $shippingDetails['L_LONGMESSAGE0']]
+        [$errorCode, $longMessage]
     );
-    Display::addFlash(
-        Display::return_message($erroMessage, 'error', false)
-    );
-    header('Location: ../index.php');
 
+    Display::addFlash(
+        Display::return_message($errorMessage, 'error', false)
+    );
+
+    header('Location: '.$redirectUrl);
     exit;
 }
 
-$interbreadcrumb[] = ['url' => 'course_catalog.php', 'name' => $plugin->get_lang('CourseListOnSale')];
+$interbreadcrumb[] = [
+    'url' => $buyingSession ? 'session_catalog.php' : 'course_catalog.php',
+    'name' => $buyingSession ? $plugin->get_lang('SessionListOnSale') : $plugin->get_lang('CourseListOnSale'),
+];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);
@@ -227,8 +280,8 @@ $tpl->assign('buying_course', $buyingCourse);
 $tpl->assign('buying_session', $buyingSession);
 $tpl->assign('title', $sale['product_name']);
 $tpl->assign('price', $sale['price']);
-$tpl->assign('currency', $sale['currency_id']);
-$tpl->assign('user', api_get_user_info($sale['user_id']));
+$tpl->assign('currency', $currencyCode);
+$tpl->assign('user', api_get_user_info((int) $sale['user_id']));
 $tpl->assign('form', $form->returnForm());
 
 $content = $tpl->fetch('BuyCourses/view/success.tpl');

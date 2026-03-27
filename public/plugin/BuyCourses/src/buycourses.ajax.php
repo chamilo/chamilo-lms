@@ -595,7 +595,7 @@ switch ($action) {
                 'success'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish').'</a>';
@@ -621,7 +621,7 @@ switch ($action) {
                 'warning'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish').'</a>';

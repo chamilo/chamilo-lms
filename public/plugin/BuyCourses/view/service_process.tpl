@@ -1,17 +1,18 @@
 {% autoescape false %}
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
 <div class="actions">
     <a href="{{ url('index') }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
              title="{{ "Back"|get_lang }}"/>
     </a>
 </div>
-<div class="page-header">
+<div class="mb-6 border-b border-gray-25 pb-4">
     <h3>{{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default panel-box-buy">
-            <div class="panel-body">
+        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+            <div class="p-6">
                 <div class="buy-info">
                 {% if buying_service %}
                     <div class="row">
@@ -119,4 +120,5 @@
         $("label[for=submit]").remove();
     });
 </script>
+</div>
 {% endautoescape %}

@@ -14,8 +14,13 @@ require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
 
-$saleId = $_SESSION['bc_sale_id'];
-$couponId = (!empty($_SESSION['bc_coupon_id']) ?? '');
+$saleId = isset($_SESSION['bc_sale_id']) && is_scalar($_SESSION['bc_sale_id'])
+    ? (int) $_SESSION['bc_sale_id']
+    : 0;
+
+$couponId = isset($_SESSION['bc_coupon_id']) && is_scalar($_SESSION['bc_coupon_id'])
+    ? (int) $_SESSION['bc_coupon_id']
+    : 0;
 
 if (empty($saleId)) {
     api_not_allowed(true);
@@ -23,18 +28,18 @@ if (empty($saleId)) {
 
 $sale = $plugin->getSale($saleId);
 
-$coupon = [];
-if (!empty($couponId)) {
-    $coupon = $plugin->getCoupon($couponId, $sale['product_type'], $sale['product_id']);
-}
-
-$userInfo = api_get_user_info($sale['user_id']);
-
 if (empty($sale)) {
     api_not_allowed(true);
 }
 
-$currency = $plugin->getCurrency($sale['currency_id']);
+$coupon = [];
+if ($couponId > 0) {
+    $coupon = $plugin->getCoupon($couponId, (int) $sale['product_type'], (int) $sale['product_id']);
+}
+
+$userInfo = api_get_user_info((int) $sale['user_id']);
+
+$currency = $plugin->getCurrency((int) $sale['currency_id']);
 $globalParameters = $plugin->getGlobalParameters();
 
 switch ($sale['payment_type']) {
@@ -42,36 +47,66 @@ switch ($sale['payment_type']) {
         $paypalParams = $plugin->getPaypalParams();
 
         $pruebas = 1 == $paypalParams['sandbox'];
-        $paypalUsername = $paypalParams['username'];
-        $paypalPassword = $paypalParams['password'];
-        $paypalSignature = $paypalParams['signature'];
+        $paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
+        $paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
+        $paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
+
+        error_log('[BuyCourses][PayPal] Starting Express Checkout for sale '.$sale['id']);
+        error_log('[BuyCourses][PayPal] Sandbox='.($pruebas ? 'true' : 'false'));
+        error_log('[BuyCourses][PayPal] API username configured='.($paypalUsername !== '' ? 'yes' : 'no'));
+        error_log('[BuyCourses][PayPal] API password configured='.($paypalPassword !== '' ? 'yes' : 'no'));
+        error_log('[BuyCourses][PayPal] API signature configured='.($paypalSignature !== '' ? 'yes' : 'no'));
+
+        if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('PayPalApiCredentialsIncomplete'), 'error', false)
+            );
+            error_log('[BuyCourses][PayPal] Missing API credentials');
+            header('Location: ../index.php');
+            exit;
+        }
 
         require_once 'paypalfunctions.php';
 
-        $i = 0;
-        $extra = "&L_PAYMENTREQUEST_0_NAME0={$sale['product_name']}";
-        $extra .= "&L_PAYMENTREQUEST_0_AMT0={$sale['price']}";
+        $extra = "&L_PAYMENTREQUEST_0_NAME0=".urlencode((string) $sale['product_name']);
+        $extra .= "&L_PAYMENTREQUEST_0_AMT0=".urlencode((string) $sale['price']);
         $extra .= '&L_PAYMENTREQUEST_0_QTY0=1';
+
+        $returnUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/success.php';
+        $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/error.php';
+
+        error_log('[BuyCourses][PayPal] Return URL: '.$returnUrl);
+        error_log('[BuyCourses][PayPal] Cancel URL: '.$cancelUrl);
 
         $expressCheckout = CallShortcutExpressCheckout(
             $sale['price'],
             $currency['iso_code'],
-            'paypal',
-            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/success.php',
-            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/error.php',
+            'Sale',
+            $returnUrl,
+            $cancelUrl,
             $extra
         );
 
-        if ('Success' !== $expressCheckout['ACK']) {
-            $erroMessage = vsprintf(
-                $plugin->get_lang('ErrorOccurred'),
-                [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
-            );
-            Display::addFlash(
-                Display::return_message($erroMessage, 'error', false)
-            );
-            header('Location: ../index.php');
+        error_log('[BuyCourses][PayPal] SetExpressCheckout response: '.json_encode($expressCheckout));
 
+        $ack = strtoupper((string) ($expressCheckout['ACK'] ?? ''));
+
+        if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+            $errorCode = (string) ($expressCheckout['L_ERRORCODE0'] ?? 'unknown');
+            $longMessage = (string) ($expressCheckout['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
+            $correlationId = (string) ($expressCheckout['CORRELATIONID'] ?? '');
+
+            error_log('[BuyCourses][PayPal] SetExpressCheckout failed. ACK='.$ack.' CODE='.$errorCode.' MESSAGE='.$longMessage.' CORRELATION='.$correlationId);
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage),
+                    'error',
+                    false
+                )
+            );
+
+            header('Location: ../index.php');
             exit;
         }
 
@@ -97,7 +132,8 @@ switch ($sale['payment_type']) {
             );
         }
 
-        RedirectToPayPal($expressCheckout['TOKEN']);
+        error_log('[BuyCourses][PayPal] Redirecting to PayPal with token '.($expressCheckout['TOKEN'] ?? ''));
+        RedirectToPayPal((string) $expressCheckout['TOKEN']);
 
         break;
 

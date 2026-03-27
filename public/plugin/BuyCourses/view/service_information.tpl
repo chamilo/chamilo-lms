@@ -1,11 +1,12 @@
 {% autoescape false %}
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
 <div id="service" class="service">
-    <div class="page-header">
+    <div class="mb-6 border-b border-gray-25 pb-4">
         <h2>{{ service.name }}</h2>
     </div>
     <section id="service-info">
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+            <div class="p-6">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="service-media">
@@ -81,7 +82,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <a href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?t=4&i=' ~ service.id }}"
-                                       class="btn btn--success btn-lg btn-block">
+                                       class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2 w-full text-base">
                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </a>
                                 </div>
@@ -94,9 +95,9 @@
     </section>
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="page-header">
+            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+                <div class="p-6">
+                    <div class="mb-6 border-b border-gray-25 pb-4">
                         <h3>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                     </div>
                     <div class="service-information">
@@ -106,5 +107,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endautoescape %}

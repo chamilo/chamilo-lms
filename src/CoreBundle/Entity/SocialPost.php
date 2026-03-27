@@ -62,7 +62,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: SocialPostAttachmentsController::class,
             normalizationContext: ['groups' => ['attachment:read']],
         ),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            paginationItemsPerPage: 30,
+            paginationClientItemsPerPage: true,
+            security: "is_granted('ROLE_USER')"
+        ),
     ],
     normalizationContext: ['groups' => ['social_post:read']],
     denormalizationContext: ['groups' => ['social_post:write']],

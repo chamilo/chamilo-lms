@@ -33111,3 +33111,570 @@ msgstr "Wengine wa tatu"
 msgid "Layouts"
 msgstr "Muundo"
 
+msgid "Relation type"
+msgstr "Aina ya uhusiano"
+
+msgid "Add all"
+msgstr "Ongeza zote"
+
+msgid "Remove all"
+msgstr "Ondoa zote"
+
+msgid "An error occurred. Please try again."
+msgstr "Hitilafu imetokea. Tafadhali jaribu tena."
+
+msgid "%s created"
+msgstr "%s imeundwa"
+
+msgid "%s updated"
+msgstr "%s imesasishwa"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Kama unapanga kusasisha kutoka toleo la zamani la Chamilo, unaweza kutaka"
+
+msgid "have a look at the changelog"
+msgstr "angalia changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "kujua ni nini kipya na kilichobadilishwa."
+
+msgid "Session Item"
+msgstr "Kipengee cha Kikao"
+
+msgid "Points"
+msgstr "Pointi"
+
+msgid "See notifications"
+msgstr "Tazama taarifa"
+
+msgid "New content available for this course."
+msgstr "Yaliyomo mapya yanapatikana kwa kozi hii."
+
+msgid "No new notifications."
+msgstr "Hakuna taarifa mpya."
+
+msgid "No new content found."
+msgstr "Hakuna yaliyomo mapya yaliyopatikana."
+
+msgid "No tool details available yet."
+msgstr "Hakuna maelezo ya zana bado."
+
+msgid "Last access"
+msgstr "Ufikiaji wa mwisho"
+
+msgid "Open course"
+msgstr "Fungua kozi"
+
+msgid "Course completed"
+msgstr "Kozi imekamilika"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Kikomo cha usajili kwa kozi hii kimefikishwa."
+
+msgid "Subscription limit reached"
+msgstr "Kikomo cha usajili kimefikishwa"
+
+msgid "Tertiary alternative"
+msgstr "Chaguo la tatu mbadala"
+
+msgid "Update SCORM"
+msgstr "Sasisha SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI inaweza kuandaa maoni na alama inayopendekezwa kabla ya kutuma."
+
+msgid "What will be sent to the AI"
+msgstr "Yatichomwa kwa AI"
+
+msgid "Assignment title + instructions"
+msgstr "Jina la kazi + maagizo"
+
+msgid "Student submission (text)"
+msgstr "Uwasilishaji wa mwanafunzi ( maandishi)"
+
+msgid "Student submission (text): none"
+msgstr "Uwasilishaji wa mwanafunzi (maandishi): hakuna"
+
+msgid "Student attachment"
+msgstr "Kiambatanisho cha mwanafunzi"
+
+msgid "supported"
+msgstr "inasaidiwa"
+
+msgid "not supported for document analysis"
+msgstr "haijaungwa mkono kwa uchambuzi wa hati"
+
+msgid "Student attachment: none"
+msgstr "Kiambatanisho cha mwanafunzi: hakuna"
+
+msgid "No text AI providers available."
+msgstr "Hakuna watoa huduma wa AI ya maandishi."
+
+msgid "AI-assisted"
+msgstr "Inasaidiwa na AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Uamuzi huu umehifadhiwa na marekebisho (ExtraField) na hauwezi kubadilishwa baadaye."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Kiambatanisho cha marekebisho cha hiari (hii si uwasilishaji wa mwanafunzi)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Imepokelewa"
+
+msgid "%s min"
+msgstr "%s dakika"
+
+msgid "Unlock column"
+msgstr "Fungua nguzo"
+
+msgid "Lock column"
+msgstr "Funga nguzo"
+
+msgid "Set all Present"
+msgstr "Weka wote Wapo"
+
+msgid "Set all Absent"
+msgstr "Weka wote Hawapo"
+
+msgid "Auto (recommended)"
+msgstr "Otomatiki (inapendekezwa)"
+
+msgid "Error downloading all documents."
+msgstr "Hitilafu ya kupakua hati zote."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Fungua na ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Kikomo cha kiasi"
+
+msgid "Remaining space"
+msgstr "Nahema nafasi"
+
+msgid "Course catalogue"
+msgstr "Orodha ya kozi"
+
+msgid "Drag links to reorder"
+msgstr "Buruta viungo ili kuyapanga upya"
+
+msgid "Drop links here to keep them without category"
+msgstr "Achana viungo hapa kuyahifadhi bila jamii"
+
+msgid "Could not export"
+msgstr "Haikuweza kusafirisha"
+
+msgid "Link moved"
+msgstr "Uunganisho umehama"
+
+msgid "Could not move link"
+msgstr "Haikuweza kuhamisha uunganisho"
+
+msgid "Category reordering is not enabled"
+msgstr "Upangaji upya wa jamii haujawezeshwa"
+
+msgid "Showing %s posts"
+msgstr "Inayoonyesha %s machapisho"
+
+msgid "Showing %s tasks"
+msgstr "Inayoonyesha %s kazi"
+
+msgid "Page %s of %s"
+msgstr "Ukurasa %s wa %s"
+
+msgid "Tutors"
+msgstr "Walimu wasaidizi"
+
+msgid "selected"
+msgstr "imechaguliwa"
+
+msgid "No data to export"
+msgstr "Hakuna data ya kusafirisha"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Kichwa cha PNG kinapaswa kuwa \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Orodha ya kawaida"
+
+msgid "Management list"
+msgstr "Orodha ya usimamizi"
+
+msgid "Open platform"
+msgstr "Jukwaa la wazi"
+
+msgid "Teacher user ID"
+msgstr "Kitambulisho cha mtumiaji mwalimu"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Je, una uhakika unataka kufuta kozi hii?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Je, una uhakika unataka kufuta kozi zilizochaguliwa?"
+
+msgid "Search by name, username, email"
+msgstr "Tafuta kwa jina, jina la mtumiaji, barua pepe"
+
+msgid "contains %s items"
+msgstr "ina vitu %s"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Makubaliano yako ya kisheria yatabaki yatendakayo hadi ombi lolote la kujiondoa limetathminiwa na kusindikwa."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ombi lako la kujiondoa kwa idhini yako ya kisheria linangoja ukaguzi."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ombi lako la kufutwa kwa akaunti linangoja ukaguzi."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kwa nini unataka kuomba kujiondoa kwa idhini yako ya kisheria?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Inawasilishwa ombi lako la kujiondoa kwa idhini ya kisheria..."
+
+msgid "Submitting request..."
+msgstr "Inawasilishwa ombi..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Omba kujiondoa kwa idhini ya kisheria"
+
+msgid "Submitting your account deletion request..."
+msgstr "Inawasilishwa ombi lako la kufutwa kwa akaunti..."
+
+msgid "Submitting your acceptance..."
+msgstr "Inawasilishwa kukubali kwako..."
+
+msgid "Event details"
+msgstr "Maelezo ya tukio"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Huwezi kufikia kozi iliyounganishwa kutoka mwonekano huu."
+
+msgid "Failed to load sessions"
+msgstr "Imeshindwa kupakia vikao"
+
+msgid "Failed to load events"
+msgstr "Imeshindwa kupakia matukio"
+
+msgid "No events found"
+msgstr "Matukio hayapatikani"
+
+msgid "Group image"
+msgstr "Picha ya kikundi"
+
+msgid "SearchTCC"
+msgstr "TafutaTCC"
+
+msgid "Forbidden"
+msgstr "Imezuiliwa"
+
+msgid "Distribution"
+msgstr "Usambazaji"
+
+msgid "Firstname"
+msgstr "Jina la kwanza"
+
+msgid "Lastname"
+msgstr "Jina la mwisho"
+
+msgid "Email"
+msgstr "Barua pepe"
+
+msgid "Last login in platform"
+msgstr "Ingizo la mwisho kwenye jukwaa"
+
+msgid "Export as CSV"
+msgstr "Safirisha kama CSV"
+
+msgid "Export as XLS"
+msgstr "Safirisha kama XLS"
+
+msgid "Deactivate this user?"
+msgstr "Zima mtumiaji huyu?"
+
+msgid "Enable this user?"
+msgstr "Washisha mtumiaji huyu?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Unganisha kikundi hiki chenye nakala katika mtumiaji #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Hii itaunganisha akaunti zote zilizopo katika kikundi hicho kwenye akaunti hii."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Akaunti zilizounganishwa zitafutwa kabisa na zitaondoka kwenye ripoti hii."
+
+msgid "This action cannot be undone."
+msgstr "Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Unify"
+msgstr "Unganisha"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Mwanafunzi"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Nauli ya jumla inayotumiwa na lango %s kikomo ni %s MB"
+
+msgid "Helper text"
+msgstr " maandishi ya msaidizi"
+
+msgid "NotAllowed"
+msgstr "Hauruhusiwi"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Tumia uchunguzi hapo juu upakie maelezo ya upatikanaji wa mwanafunzi."
+
+msgid "Start date must be before end date"
+msgstr "Tarehe ya mwanzo lazima iwe kabla ya tarehe ya mwisho"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Chagua kipindi cha tarehe na aina ya ugawaji ili kukagua maelezo ya upatikanaji wa mwanafunzi."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Kozi hii itaundwa kwa kutumia templeti ya kozi ya chaguo-msingi ya jukwaa."
+
+msgid "Security breach avoid restart"
+msgstr "Ukiukaji wa usalama epuka kurudisha"
+
+msgid "User deactivated"
+msgstr "Mtumiaji amezimwa"
+
+msgid "InvalidId"
+msgstr "Kitambulisho kisichofaa"
+
+msgid "User enabled"
+msgstr "Mtumiaji amewezeshwa"
+
+msgid "No other duplicates found for this user."
+msgstr "Hakuna mara nyingine za nakili zilizopatikana kwa mtumiaji huyu."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Watumiaji wameunganishwa: akaunti %s zimeunganishwa kwenye mtumiaji #%s. Akaunti zilizounganishwa zimefutwa kabisa."
+
+msgid "No accounts were merged."
+msgstr "Hakuna akaunti zilizounganishwa."
+
+msgid "An error occurred while unifying users."
+msgstr "Hitilafu ilitokea wakati wa kuunganisha watumiaji."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Watumiaji wameunganishwa: mtumiaji #%s ameunganishwa kwenye mtumiaji #%s. Akaunti iliyounganishwa imefutwa kabisa."
+
+msgid "Duplicate users"
+msgstr "Watumiaji wanaofanana"
+
+msgid "Years"
+msgstr "Makaazi"
+
+msgid "All time visits outside sessions"
+msgstr "Ziara zote wakati wote nje ya vipindi"
+
+msgid "All time visits in sessions"
+msgstr "Ziara zote wakati wote katika vipindi"
+
+msgid "All time visits total"
+msgstr "Ziara zote wakati wote jumla"
+
+msgid "Student visits per period, per course"
+msgstr "Ziara za wanafunzi kwa kipindi, kwa kozi"
+
+msgid "By email"
+msgstr "Kwa barua pepe"
+
+msgid "By extra field"
+msgstr "Kwa uwanja wa ziada"
+
+msgid "Select an option"
+msgstr "Chagua chaguo"
+
+msgid "Profile field"
+msgstr "Uwanja wa wasifu"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Ripoti hii inaorodhesha tu watumiaji walio na anwani ya barua pepe sawa."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Ripoti hii inaorodhesha tu watumiaji wanaoshiriki thamani sawa ya uwanja wa wasifu uliochaguliwa."
+
+msgid "How to use this report"
+msgstr "Jinsi ya kutumia ripoti hii"
+
+msgid "Disable / Enable"
+msgstr "Zima / Washa"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Inazuia au inarudisha kuingia tu. Haiifuti mtumiaji na hairuhusu usajili."
+
+msgid "Last week"
+msgstr "Wiki iliyopita"
+
+msgid "Next week"
+msgstr "Wiki ijayo"
+
+msgid "Loading report..."
+msgstr "Inapakia ripoti..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Imeshindwa kupakia ripoti hii. Tafadhali jaribu tena."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Chagua vipindi moja au zaidi vya kunakili walimu kutoka na chagua kozi ya marudio"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Bonyeza Ctrl (au Cmd) kuchagua vitu vingi"
+
+msgid "Choose the destination course"
+msgstr "Chagua kozi ya marudio"
+
+msgid "You can select multiple items"
+msgstr "Unaweza kuchagua vitu vingi"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Tumia sanduku la utafutaji kupata kozi haraka"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Chagua vipindi vya chanzo moja au zaidi na vipindi vya marudio moja au zaidi vya kunakili wanafunzi"
+
+msgid "Select destination sessions"
+msgstr "Chagua vipindi vya marudio"
+
+msgid "You can select multiple users"
+msgstr "Unaweza kuchagua watumiaji wengi"
+
+msgid "Use the search box to find users quickly"
+msgstr "Tumia sanduku la utafutaji kupata watumiaji haraka"
+
+msgid "Error while creating the document"
+msgstr "Hitilafu wakati wa kuunda hati"
+
+msgid "Not a SCORM learning path"
+msgstr "Sio njia ya kujifunza ya SCORM"
+
+msgid "Final item"
+msgstr "Kitu cha mwisho"
+
+msgid "Edit item"
+msgstr "Hariri kitu"
+
+msgid "No AI text providers configured."
+msgstr "Hakuna watoa huduma wa maandishi ya AI yaliyosanidiwa."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Upakiaji umeshindwa. Faili labda ni kubwa kuliko kikomo cha seva (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Usasishaji umeshindwa. Hakuna faili iliyopokelewa na seva."
+
+msgid "Update failed. %s"
+msgstr "Usasishaji umeshindwa. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Usasishaji umeshindwa. Payload ya faili iliyopakiwa ni batili."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Usasishaji umeshindwa. Jina la faili ya ZIP iliyopakiwa lazima lifanane na jina la paketi asili ya SCORM."
+
+msgid "Update failed"
+msgstr "Usasishaji umeshindwa"
+
+msgid "Question lower case"
+msgstr "Swali la chini"
+
+msgid "Regenerate"
+msgstr "Tengeneza upya"
+
+msgid "Case insensitive"
+msgstr "Haitumii kubwa na ndogo"
+
+msgid "Select a session to load its courses."
+msgstr "Chagua kikao ili kupakia kozi zake."
+
+msgid "Select the source course."
+msgstr "Chagua kozi ya chanzo."
+
+msgid "Select a destination session."
+msgstr "Chagua kikao cha marudio."
+
+msgid "Select the destination course."
+msgstr "Chagua kozi ya marudio."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Nakili maudhui kamili ya kozi kutoka kozi ya kikao iliyochaguliwa."
+
+msgid "Select which tools/items to copy."
+msgstr "Chagua zana/vitu vya kunakili."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Usijumuishwe maudhui ya msingi (sio ya kikao) ya kozi."
+
+msgid "An error occurred while copying the course"
+msgstr "Kosa limetokea wakati wa kunakili kozi"
+
+msgid "Please select a different destination"
+msgstr "Tafadhali chagua marudio tofauti"
+
+msgid "You must select a destination course"
+msgstr "Lazima uchague kozi ya marudio"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Ili kuhamisha kozi zenye jaribio lazima uchague jaribio"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ikiwa LP zako zina faili za sauti zilizojumuishwa unapaswa kuzichagua kutoka hati"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ikiwa jaribio lako lina maswali ya hotspot yaliyojumuishwa unapaswa kuchagua picha kutoka hati"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Nenosiri lazima liwe na angalau %length% herufi."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi ndogo."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi kubwa."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Nenosiri lazima liwe na angalau %count% nambari (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi maalum."
+
+msgid "Invalid login request."
+msgstr "Ombi la kuingia batili."
+
+msgid "Authentication failed."
+msgstr "Uthibitisho ulishindwa."
+
+msgid "Login %status% for username %username%"
+msgstr "Ingia %status% kwa jina la mtumiaji %username%"
+
+msgid "Co-generated with AI"
+msgstr "Imeundwa pamoja na AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Sehemu zinazohitajika"
+

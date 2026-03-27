@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -33110,4 +33110,571 @@ msgstr "তৃতীয় পক্ষ"
 
 msgid "Layouts"
 msgstr "লেআউট"
+
+msgid "Relation type"
+msgstr "সম্পর্কের ধরন"
+
+msgid "Add all"
+msgstr "সব যোগ করুন"
+
+msgid "Remove all"
+msgstr "সব সরান"
+
+msgid "An error occurred. Please try again."
+msgstr "একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।"
+
+msgid "%s created"
+msgstr "%s তৈরি হয়েছে"
+
+msgid "%s updated"
+msgstr "%s আপডেট হয়েছে"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "যদি আপনি Chamilo-এর পুরোনো সংস্করণ থেকে আপগ্রেড করার পরিকল্পনা করেন, তাহলে আপনি চাইতে পারেন"
+
+msgid "have a look at the changelog"
+msgstr "চেঞ্জলগ দেখুন"
+
+msgid "to know what's new and what has been changed."
+msgstr "নতুন কী এসেছে এবং কী পরিবর্তিত হয়েছে তা জানতে।"
+
+msgid "Session Item"
+msgstr "সেশন আইটেম"
+
+msgid "Points"
+msgstr "পয়েন্ট"
+
+msgid "See notifications"
+msgstr "বিজ্ঞপ্তিগুলো দেখুন"
+
+msgid "New content available for this course."
+msgstr "এই কোর্সের জন্য নতুন কন্টেন্ট উপলব্ধ।"
+
+msgid "No new notifications."
+msgstr "কোনো নতুন বিজ্ঞপ্তি নেই।"
+
+msgid "No new content found."
+msgstr "কোনো নতুন কন্টেন্ট পাওয়া যায়নি।"
+
+msgid "No tool details available yet."
+msgstr "এখনও কোনো টুলের বিস্তারিত তথ্য উপলব্ধ নেই।"
+
+msgid "Last access"
+msgstr "শেষ অ্যাক্সেস"
+
+msgid "Open course"
+msgstr "কোর্স খুলুন"
+
+msgid "Course completed"
+msgstr "কোর্স সম্পন্ন"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "এই কোর্সের জন্য সাবস্ক্রিপশন সীমা পৌঁছে গেছে।"
+
+msgid "Subscription limit reached"
+msgstr "সাবস্ক্রিপশন সীমা পৌঁছে গেছে"
+
+msgid "Tertiary alternative"
+msgstr "তৃতীয় বিকল্প"
+
+msgid "Update SCORM"
+msgstr "SCORM আপডেট করুন"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI আপনার প্রতিক্রিয়া এবং একটি প্রস্তাবিত স্কোর খসড়া করতে পারে যা আপনি পাঠানোর আগে।"
+
+msgid "What will be sent to the AI"
+msgstr "AI-তে কী পাঠানো হবে"
+
+msgid "Assignment title + instructions"
+msgstr "অ্যাসাইনমেন্টের শিরোনাম + নির্দেশনা"
+
+msgid "Student submission (text)"
+msgstr "ছাত্রের জমা (টেক্সট)"
+
+msgid "Student submission (text): none"
+msgstr "ছাত্রের জমা (টেক্সট): কোনোটিই নেই"
+
+msgid "Student attachment"
+msgstr "ছাত্রের সংযুক্তি"
+
+msgid "supported"
+msgstr "সমর্থিত"
+
+msgid "not supported for document analysis"
+msgstr "ডকুমেন্ট বিশ্লেষণের জন্য সমর্থিত নয়"
+
+msgid "Student attachment: none"
+msgstr "ছাত্রের সংযুক্তি: কোনোটিই নেই"
+
+msgid "No text AI providers available."
+msgstr "কোনো টেক্সট AI প্রোভাইডার উপলব্ধ নেই।"
+
+msgid "AI-assisted"
+msgstr "AI-সহায়ক"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "এই সিদ্ধান্তটি সংশোধনের সাথে (ExtraField) সংরক্ষিত হয় এবং পরবর্তীতে পরিবর্তন করা যাবে না।"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "ঐচ্ছিক সংশোধন সংযুক্তি (এটি ছাত্রের জমা দেওয়া নয়)।"
+
+msgid "AI"
+msgstr "এআই"
+
+msgid "Received"
+msgstr "প্রাপ্ত"
+
+msgid "%s min"
+msgstr "%s মিনিট"
+
+msgid "Unlock column"
+msgstr "কলাম আনলক করুন"
+
+msgid "Lock column"
+msgstr "কলাম লক করুন"
+
+msgid "Set all Present"
+msgstr "সকলকে উপস্থিত সেট করুন"
+
+msgid "Set all Absent"
+msgstr "সকলকে অনুপস্থিত সেট করুন"
+
+msgid "Auto (recommended)"
+msgstr "অটো (সুপারিশকৃত)"
+
+msgid "Error downloading all documents."
+msgstr "সকল নথি ডাউনলোডে ত্রুটি।"
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICE দিয়ে খুলুন"
+
+msgid "Limiting quota"
+msgstr "কোটা সীমাবদ্ধতা"
+
+msgid "Remaining space"
+msgstr "অবশিষ্ট স্থান"
+
+msgid "Course catalogue"
+msgstr "কোর্স ক্যাটালগ"
+
+msgid "Drag links to reorder"
+msgstr "লিঙ্কগুলো টেনে পুনর্বিন্যাস করুন"
+
+msgid "Drop links here to keep them without category"
+msgstr "ক্যাটাগরি ছাড়া রাখতে এখানে লিঙ্কগুলো ড্রপ করুন"
+
+msgid "Could not export"
+msgstr "রপ্তানি করা যায়নি"
+
+msgid "Link moved"
+msgstr "লিঙ্ক সরানো হয়েছে"
+
+msgid "Could not move link"
+msgstr "লিঙ্ক সরানো যায়নি"
+
+msgid "Category reordering is not enabled"
+msgstr "ক্যাটাগরি পুনর্বিন্যাস সক্রিয় নয়"
+
+msgid "Showing %s posts"
+msgstr "%s পোস্ট প্রদর্শন করা হচ্ছে"
+
+msgid "Showing %s tasks"
+msgstr "%s কাজ প্রদর্শন করা হচ্ছে"
+
+msgid "Page %s of %s"
+msgstr "%s পৃষ্ঠা %s এর মধ্যে"
+
+msgid "Tutors"
+msgstr "টিউটর"
+
+msgid "selected"
+msgstr "নির্বাচিত"
+
+msgid "No data to export"
+msgstr "রপ্তানি করার জন্য কোনো তথ্য নেই"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "হেডার PNG অবশ্যই \\u2264 %spx হতে হবে।"
+
+msgid "Standard list"
+msgstr "স্ট্যান্ডার্ড তালিকা"
+
+msgid "Management list"
+msgstr "ব্যবস্থাপনা তালিকা"
+
+msgid "Open platform"
+msgstr "ওপেন প্ল্যাটফর্ম"
+
+msgid "Teacher user ID"
+msgstr "শিক্ষকের ব্যবহারকারী আইডি"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "আপনি কি নিশ্চিত যে এই কোর্সটি মুছে ফেলতে চান?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "আপনি কি নিশ্চিত যে নির্বাচিত কোর্সগুলো মুছে ফেলতে চান?"
+
+msgid "Search by name, username, email"
+msgstr "নাম, ব্যবহারকারী নাম, ইমেইল দিয়ে অনুসন্ধান করুন"
+
+msgid "contains %s items"
+msgstr "%s আইটেম ধারণ করে"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "আপনার আইনি চুক্তি যেকোনো প্রত্যাহার অনুরোধ পর্যালোচনা এবং প্রক্রিয়াকরণ না হওয়া পর্যন্ত সক্রিয় থাকবে।"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "আপনার আইনি সম্মতি প্রত্যাহার অনুরোধ পর্যালোচনার অপেক্ষায়।"
+
+msgid "Your account deletion request is pending review."
+msgstr "আপনার অ্যাকাউন্ট মুছে ফেলার অনুরোধ পর্যালোচনার অপেক্ষায়।"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "আপনি কেন আপনার আইনি সম্মতির প্রত্যাহার অনুরোধ করতে চান?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "আপনার আইনি সম্মতি প্রত্যাহার অনুরোধ জমা দেওয়া হচ্ছে..."
+
+msgid "Submitting request..."
+msgstr "অনুরোধ জমা দেওয়া হচ্ছে..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "আইনি সম্মতির প্রত্যাহার অনুরোধ করুন"
+
+msgid "Submitting your account deletion request..."
+msgstr "আপনার অ্যাকাউন্ট মুছে ফেলার অনুরোধ জমা দেওয়া হচ্ছে..."
+
+msgid "Submitting your acceptance..."
+msgstr "আপনার গ্রহণযোগ্যতা জমা দেওয়া হচ্ছে..."
+
+msgid "Event details"
+msgstr "ইভেন্টের বিবরণ"
+
+msgid "You cannot access the linked course from this view."
+msgstr "এই দৃশ্য থেকে সংযুক্ত কোর্সে প্রবেশ করতে পারবেন না।"
+
+msgid "Failed to load sessions"
+msgstr "সেশন লোড করতে ব্যর্থ"
+
+msgid "Failed to load events"
+msgstr "ইভেন্ট লোড করতে ব্যর্থ"
+
+msgid "No events found"
+msgstr "কোনো ইভেন্ট পাওয়া যায়নি"
+
+msgid "Group image"
+msgstr "গ্রুপ ছবি"
+
+msgid "SearchTCC"
+msgstr "অনুসন্ধানTCC"
+
+msgid "Forbidden"
+msgstr "নিষিদ্ধ"
+
+msgid "Distribution"
+msgstr "বিতরণ"
+
+msgid "Firstname"
+msgstr "প্রথম নাম"
+
+msgid "Lastname"
+msgstr "শেষ নাম"
+
+msgid "Email"
+msgstr "ইমেইল"
+
+msgid "Last login in platform"
+msgstr "প্ল্যাটফর্মে শেষ লগইন"
+
+msgid "Export as CSV"
+msgstr "CSV হিসেবে রপ্তানি"
+
+msgid "Export as XLS"
+msgstr "XLS হিসেবে রপ্তানি"
+
+msgid "Deactivate this user?"
+msgstr "এই ব্যবহারকারীকে নিষ্ক্রিয় করবেন?"
+
+msgid "Enable this user?"
+msgstr "এই ব্যবহারকারীকে সক্রিয় করবেন?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "ডুপ্লিকেট গ্রুপটি ব্যবহারকারী #%s-এ একীভূত করবেন?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "এটি একই গ্রুপের সকল অন্যান্য অ্যাকাউন্ট এই অ্যাকাউন্টে একীভূত করবে।"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "একীভূতকৃত অ্যাকাউন্টগুলি স্থায়ীভাবে মুছে ফেলা হবে এবং এই রিপোর্ট থেকে অদৃশ্য হয়ে যাবে।"
+
+msgid "This action cannot be undone."
+msgstr "এই ক্রিয়া রদ করা যাবে না।"
+
+msgid "Unify"
+msgstr "একীভূত করুন"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "ছাত্র"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "পোর্টাল %s দ্বারা ব্যবহৃত মোট স্থান সীমা %s MB"
+
+msgid "Helper text"
+msgstr "সাহায্যকারী টেক্সট"
+
+msgid "NotAllowed"
+msgstr "অনুমোদিত নয়"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "শিক্ষার্থীর অ্যাক্সেস বিবরণ লোড করতে উপরের ফিল্টারগুলি ব্যবহার করুন।"
+
+msgid "Start date must be before end date"
+msgstr "শুরুর তারিখ শেষ তারিখের আগে হতে হবে"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "শিক্ষার্থীর অ্যাক্সেস বিবরণ পর্যালোচনা করতে তারিখের পরিসর এবং গ্রুপিং প্রকার নির্বাচন করুন।"
+
+msgid "This course will be created using the platform default course template."
+msgstr "এই কোর্সটি প্ল্যাটফর্মের ডিফল্ট কোর্স টেমপ্লেট ব্যবহার করে তৈরি করা হবে।"
+
+msgid "Security breach avoid restart"
+msgstr "নিরাপত্তা লঙ্ঘন এড়াতে পুনরায় শুরু করুন"
+
+msgid "User deactivated"
+msgstr "ব্যবহারকারী নিষ্ক্রিয়"
+
+msgid "InvalidId"
+msgstr "অবৈধ আইডি"
+
+msgid "User enabled"
+msgstr "ব্যবহারকারী সক্রিয়"
+
+msgid "No other duplicates found for this user."
+msgstr "এই ব্যবহারকারীর জন্য অন্য কোনো ডুপ্লিকেট পাওয়া যায়নি।"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "ব্যবহারকারী একীভূত: %sটি অ্যাকাউন্ট ব্যবহারকারী #%s-এ একীভূত করা হয়েছে। একীভূতকৃত অ্যাকাউন্টগুলি স্থায়ীভাবে মুছে ফেলা হয়েছে।"
+
+msgid "No accounts were merged."
+msgstr "কোনো অ্যাকাউন্ট একীভূত করা হয়নি।"
+
+msgid "An error occurred while unifying users."
+msgstr "ব্যবহারকারী একীভূত করার সময় একটি ত্রুটি ঘটেছে।"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "ব্যবহারকারী একীভূত: ব্যবহারকারী #%s ব্যবহারকারী #%s-এ একীভূত করা হয়েছে। একীভূতকৃত অ্যাকাউন্ট স্থায়ীভাবে মুছে ফেলা হয়েছে।"
+
+msgid "Duplicate users"
+msgstr "ডুপ্লিকেট ব্যবহারকারী"
+
+msgid "Years"
+msgstr "বছর"
+
+msgid "All time visits outside sessions"
+msgstr "সকল সময়ের সেশনের বাইরে পরিদর্শন"
+
+msgid "All time visits in sessions"
+msgstr "সকল সময়ের সেশনে পরিদর্শন"
+
+msgid "All time visits total"
+msgstr "সকল সময়ের মোট পরিদর্শন"
+
+msgid "Student visits per period, per course"
+msgstr "পিরিয়ডভিত্তিক, কোর্সভিত্তিক ছাত্র পরিদর্শন"
+
+msgid "By email"
+msgstr "ইমেইল অনুসারে"
+
+msgid "By extra field"
+msgstr "অতিরিক্ত ক্ষেত্র অনুসারে"
+
+msgid "Select an option"
+msgstr "একটি অপশন নির্বাচন করুন"
+
+msgid "Profile field"
+msgstr "প্রোফাইল ক্ষেত্র"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "এই রিপোর্টটি শুধুমাত্র একই ইমেইল ঠিকানা যুক্ত ব্যবহারকারীদের তালিকাভুক্ত করে।"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "এই রিপোর্টটি শুধুমাত্র নির্বাচিত প্রোফাইল ক্ষেত্রের একই মান শেয়ারকারী ব্যবহারকারীদের তালিকাভুক্ত করে।"
+
+msgid "How to use this report"
+msgstr "এই রিপোর্টটি কীভাবে ব্যবহার করবেন"
+
+msgid "Disable / Enable"
+msgstr "নিষ্ক্রিয় / সক্রিয় করুন"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "শুধুমাত্র লগইন ব্লক বা পুনরুদ্ধার করে। এটি ব্যবহারকারীকে মুছে ফেলে না এবং সাবস্ক্রিপশনগুলো সরায় না।"
+
+msgid "Last week"
+msgstr "গত সপ্তাহ"
+
+msgid "Next week"
+msgstr "পরবর্তী সপ্তাহ"
+
+msgid "Loading report..."
+msgstr "রিপোর্ট লোড হচ্ছে..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "এই রিপোর্টটি লোড করতে ব্যর্থ। আবার চেষ্টা করুন।"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "ট্রেইনার কপি করার জন্য এক বা একাধিক সেশন নির্বাচন করুন এবং গন্তব্য কোর্স নির্বাচন করুন"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "একাধিক আইটেম নির্বাচন করতে Ctrl (বা Cmd) চেপে ধরুন"
+
+msgid "Choose the destination course"
+msgstr "গন্তব্য কোর্স নির্বাচন করুন"
+
+msgid "You can select multiple items"
+msgstr "আপনি একাধিক আইটেম নির্বাচন করতে পারেন"
+
+msgid "Use the search box to find courses quickly"
+msgstr "কোর্স দ্রুত খুঁজতে সার্চ বক্স ব্যবহার করুন"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "ছাত্র কপি করার জন্য এক বা একাধিক উৎস সেশন এবং এক বা একাধিক গন্তব্য সেশন নির্বাচন করুন"
+
+msgid "Select destination sessions"
+msgstr "গন্তব্য সেশন নির্বাচন করুন"
+
+msgid "You can select multiple users"
+msgstr "আপনি একাধিক ব্যবহারকারী নির্বাচন করতে পারেন"
+
+msgid "Use the search box to find users quickly"
+msgstr "ব্যবহারকারী দ্রুত খুঁজতে সার্চ বক্স ব্যবহার করুন"
+
+msgid "Error while creating the document"
+msgstr "ডকুমেন্ট তৈরিতে ত্রুটি"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM লার্নিং পাথ নয়"
+
+msgid "Final item"
+msgstr "চূড়ান্ত আইটেম"
+
+msgid "Edit item"
+msgstr "আইটেম সম্পাদনা করুন"
+
+msgid "No AI text providers configured."
+msgstr "কোনো AI টেক্সট প্রোভাইডার কনফিগার করা হয়নি।"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "আপলোড ব্যর্থ। ফাইলটি সম্ভবত সার্ভার লিমিট (post_max_size) এর চেয়ে বড়।"
+
+msgid "Update failed. No file received by the server."
+msgstr "আপডেট ব্যর্থ। সার্ভার কোনো ফাইল পায়নি।"
+
+msgid "Update failed. %s"
+msgstr "আপডেট ব্যর্থ। %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "আপডেট ব্যর্থ। অবৈধ আপলোড করা ফাইল পেলোড।"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "আপডেট ব্যর্থ। আপলোড করা ZIP ফাইলের নাম মূল SCORM প্যাকেজের নামের সাথে মিলতে হবে।"
+
+msgid "Update failed"
+msgstr "আপডেট ব্যর্থ"
+
+msgid "Question lower case"
+msgstr "প্রশ্ন ছোট হাতের অক্ষর"
+
+msgid "Regenerate"
+msgstr "পুনরায় উৎপাদন করুন"
+
+msgid "Case insensitive"
+msgstr "কেস অসংবেদনশীল"
+
+msgid "Select a session to load its courses."
+msgstr "এর কোর্স লোড করার জন্য একটি সেশন নির্বাচন করুন।"
+
+msgid "Select the source course."
+msgstr "উৎস কোর্স নির্বাচন করুন।"
+
+msgid "Select a destination session."
+msgstr "একটি গন্তব্য সেশন নির্বাচন করুন।"
+
+msgid "Select the destination course."
+msgstr "গন্তব্য কোর্স নির্বাচন করুন।"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "নির্বাচিত সেশন কোর্স থেকে সম্পূর্ণ কোর্স কন্টেন্ট কপি করুন।"
+
+msgid "Select which tools/items to copy."
+msgstr "কোন টুল/আইটেম কপি করতে হবে তা নির্বাচন করুন।"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "মূল (অ-সেশন) কোর্স কন্টেন্ট অন্তর্ভুক্ত করবেন না।"
+
+msgid "An error occurred while copying the course"
+msgstr "কোর্স কপি করার সময় ত্রুটি ঘটেছে"
+
+msgid "Please select a different destination"
+msgstr "দয়া করে ভিন্ন গন্তব্য নির্বাচন করুন"
+
+msgid "You must select a destination course"
+msgstr "আপনাকে একটি গন্তব্য কোর্স নির্বাচন করতে হবে"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "কুইজ সহ কোর্স রপ্তানি করতে আপনাকে কুইজ নির্বাচন করতে হবে"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "আপনার LP গুলোতে অডিও ফাইল অন্তর্ভুক্ত থাকলে আপনাকে ডকুমেন্ট থেকে সেগুলো নির্বাচন করতে হবে"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "আপনার কুইজে হটস্পট প্রশ্ন অন্তর্ভুক্ত থাকলে আপনাকে ডকুমেন্ট থেকে ছবিগুলো নির্বাচন করতে হবে"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "পাসওয়ার্ড কমপক্ষে %length% অক্ষরের হতে হবে।"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "পাসওয়ার্ডে কমপক্ষে %count% টি ছোট হাতের অক্ষর থাকতে হবে।"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "পাসওয়ার্ডে কমপক্ষে %count% টি বড় হাতের অক্ষর থাকতে হবে।"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "পাসওয়ার্ডে কমপক্ষে %count% টি সংখ্যাত্মক (০-৯) অক্ষর থাকতে হবে।"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "পাসওয়ার্ডে কমপক্ষে %count% টি বিশেষ অক্ষর থাকতে হবে।"
+
+msgid "Invalid login request."
+msgstr "অবৈধ লগইন অনুরোধ।"
+
+msgid "Authentication failed."
+msgstr "অনুমোদন ব্যর্থ।"
+
+msgid "Login %status% for username %username%"
+msgstr "ব্যবহারকারীর নাম %username% এর জন্য লগইন %status%"
+
+msgid "Co-generated with AI"
+msgstr "এআই দ্বারা যৌথভাবে উৎপন্ন"
+
+msgid "GDPRTitle"
+msgstr "জিডিপিআর শিরোনাম"
+
+msgid "EntraID ID"
+msgstr "এন্ট্রা আইডি"
+
+msgid "EntraID UID"
+msgstr "এন্ট্রা আইডি ইউআইডি"
+
+msgid "Required fields"
+msgstr "আবশ্যক ক্ষেত্রসমূহ"
 

@@ -33115,3 +33115,570 @@ msgstr "तृतीय पक्षहरू"
 msgid "Layouts"
 msgstr "लेआउटहरू"
 
+msgid "Relation type"
+msgstr "सम्बन्ध प्रकार"
+
+msgid "Add all"
+msgstr "सबै थप्नुहोस्"
+
+msgid "Remove all"
+msgstr "सबै हटाउनुहोस्"
+
+msgid "An error occurred. Please try again."
+msgstr "एउटा त्रुटि भयो। कृपया पुनः प्रयास गर्नुहोस्।"
+
+msgid "%s created"
+msgstr "%s सिर्जना भयो"
+
+msgid "%s updated"
+msgstr "%s अपडेट भयो"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "यदि तपाईं Chamilo को पुरानो संस्करणबाट अपग्रेड गर्ने योजना राख्नुहुन्छ भने, तपाईंले सम्भवतः"
+
+msgid "have a look at the changelog"
+msgstr "चेंजलग हेर्न चाहन सक्नुहुन्छ"
+
+msgid "to know what's new and what has been changed."
+msgstr "नयाँ के छ र के परिवर्तन भएको छ थाहा पाउन।"
+
+msgid "Session Item"
+msgstr "सत्र वस्तु"
+
+msgid "Points"
+msgstr "अंकहरू"
+
+msgid "See notifications"
+msgstr "सूचनाहरू हेर्नुहोस्"
+
+msgid "New content available for this course."
+msgstr "यो कोर्सका लागि नयाँ सामग्री उपलब्ध छ।"
+
+msgid "No new notifications."
+msgstr "नयाँ सूचना छैन।"
+
+msgid "No new content found."
+msgstr "नयाँ सामग्री फेला परेन।"
+
+msgid "No tool details available yet."
+msgstr "अझै कुनै उपकरण विवरण उपलब्ध छैन।"
+
+msgid "Last access"
+msgstr "अन्तिम पहुँच"
+
+msgid "Open course"
+msgstr "कोर्स खोल्नुहोस्"
+
+msgid "Course completed"
+msgstr "कोर्स सम्पन्न"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "यो कोर्सको लागि सदस्यता सीमा पुगेको छ।"
+
+msgid "Subscription limit reached"
+msgstr "सदस्यता सीमा पुग्यो"
+
+msgid "Tertiary alternative"
+msgstr "तृतीयक वैकल्पिक"
+
+msgid "Update SCORM"
+msgstr "SCORM अपडेट गर्नुहोस्"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI ले तपाईंले पठाउनु अघि प्रतिक्रिया र सुझावित अंकको मस्यौदा तयार पार्न सक्छ।"
+
+msgid "What will be sent to the AI"
+msgstr "AI लाई के पठाइनेछ"
+
+msgid "Assignment title + instructions"
+msgstr "कार्य शीर्षक + निर्देशनहरू"
+
+msgid "Student submission (text)"
+msgstr "विद्यार्थीको पेसक (पाठ)"
+
+msgid "Student submission (text): none"
+msgstr "विद्यार्थीको पेसक (पाठ): कुनै छैन"
+
+msgid "Student attachment"
+msgstr "विद्यार्थीको संलग्नक"
+
+msgid "supported"
+msgstr "समर्थित"
+
+msgid "not supported for document analysis"
+msgstr "कागजात विश्लेषणको लागि समर्थित छैन"
+
+msgid "Student attachment: none"
+msgstr "विद्यार्थीको संलग्नक: कुनै छैन"
+
+msgid "No text AI providers available."
+msgstr "कुनै पाठ AI प्रदायक उपलब्ध छैन।"
+
+msgid "AI-assisted"
+msgstr "AI-सहायता"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "यो निर्णय सुधारसँग (ExtraField) बचत गरिन्छ र पछि परिवर्तन गर्न सकिँदैन।"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "वैकल्पिक सुधार संलग्नक (यो विद्यार्थीको प्रस्तुतिकरण होइन।)"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "प्राप्त"
+
+msgid "%s min"
+msgstr "%s मिन"
+
+msgid "Unlock column"
+msgstr "स्तम्भ अनलक गर्नुहोस्"
+
+msgid "Lock column"
+msgstr "स्तम्भ लक गर्नुहोस्"
+
+msgid "Set all Present"
+msgstr "सबै उपस्थित सेट गर्नुहोस्"
+
+msgid "Set all Absent"
+msgstr "सबै अनुपस्थित सेट गर्नुहोस्"
+
+msgid "Auto (recommended)"
+msgstr "स्वचालित (अनुशंसित)"
+
+msgid "Error downloading all documents."
+msgstr "सबै कागजात डाउनलोड गर्दा त्रुटि।"
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICE मा खोल्नुहोस्"
+
+msgid "Limiting quota"
+msgstr "सीमित कोटा"
+
+msgid "Remaining space"
+msgstr "बाँकी स्थान"
+
+msgid "Course catalogue"
+msgstr "कोर्स सूची"
+
+msgid "Drag links to reorder"
+msgstr "लिङ्कहरू ड्र्याग गरेर पुनःक्रमबद्ध गर्नुहोस्"
+
+msgid "Drop links here to keep them without category"
+msgstr "वर्गीकरण बिना राख्न यहाँ लिङ्कहरू ड्रप गर्नुहोस्"
+
+msgid "Could not export"
+msgstr "निर्यात गर्न सकिएन"
+
+msgid "Link moved"
+msgstr "लिङ्क सारेको"
+
+msgid "Could not move link"
+msgstr "लिङ्क सार्न सकिएन"
+
+msgid "Category reordering is not enabled"
+msgstr "वर्गीकरण पुनःक्रमबद्ध सुविधा सक्षम छैन"
+
+msgid "Showing %s posts"
+msgstr "%s पोस्टहरू देखाइँदै"
+
+msgid "Showing %s tasks"
+msgstr "%s कार्यहरू देखाइँदै"
+
+msgid "Page %s of %s"
+msgstr "%s को %s पृष्ठ"
+
+msgid "Tutors"
+msgstr "शिक्षकहरू"
+
+msgid "selected"
+msgstr "चयनित"
+
+msgid "No data to export"
+msgstr "निर्यात गर्न डाटा छैन"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "हेडर PNG %spx भन्दा कम वा बराबर हुनुपर्छ।"
+
+msgid "Standard list"
+msgstr "मानक सूची"
+
+msgid "Management list"
+msgstr "व्यवस्थापन सूची"
+
+msgid "Open platform"
+msgstr "खुला प्लेटफर्म"
+
+msgid "Teacher user ID"
+msgstr "शिक्षक प्रयोगकर्ता ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "के तपाईं यो कोर्स मेटाउन चाहनुहुन्छ?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "के तपाईं चयनित कोर्सहरू मेटाउन चाहनुहुन्छ?"
+
+msgid "Search by name, username, email"
+msgstr "नाम, प्रयोगकर्ता नाम, इमेल अनुसार खोज्नुहोस्"
+
+msgid "contains %s items"
+msgstr "%s वस्तुहरू समावेश छ"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "तपाईंको कानुनी सहमति कुनै पनि फिर्ता अनुरोध समीक्षा र प्रक्रिया नभएसम्म सक्रिय रहन्छ।"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "तपाईंको कानुनी सहमति फिर्ता अनुरोध समीक्षाको पर्खाइमा छ।"
+
+msgid "Your account deletion request is pending review."
+msgstr "तपाईंको खाता मेटाउने अनुरोध समीक्षाको पर्खाइमा छ।"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "तपाईं आफ्नो कानुनी सहमति फिर्ता अनुरोध किन गर्न चाहनुहुन्छ?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "तपाईंको कानुनी सहमति फिर्ता अनुरोध पेश गर्दै..."
+
+msgid "Submitting request..."
+msgstr "अनुरोध पेश गर्दै..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "कानुनी सहमति फिर्ता अनुरोध गर्नुहोस्"
+
+msgid "Submitting your account deletion request..."
+msgstr "तपाईंको खाता मेटाउने अनुरोध पेश गर्दै..."
+
+msgid "Submitting your acceptance..."
+msgstr "तपाईंको स्वीकृति पेश गर्दै..."
+
+msgid "Event details"
+msgstr "कार्यक्रम विवरण"
+
+msgid "You cannot access the linked course from this view."
+msgstr "तपाईं यो दृश्यबाट लिङ्क गरिएको कोर्समा पहुँच गर्न सक्नुहुन्न।"
+
+msgid "Failed to load sessions"
+msgstr "सत्रहरू लोड गर्न असफल"
+
+msgid "Failed to load events"
+msgstr "घटना लोड गर्न असफल"
+
+msgid "No events found"
+msgstr "कुनै घटना फेला परेन"
+
+msgid "Group image"
+msgstr "समूह छवि"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "निषेध"
+
+msgid "Distribution"
+msgstr "वितरण"
+
+msgid "Firstname"
+msgstr "प्रथम नाम"
+
+msgid "Lastname"
+msgstr "अन्तिम नाम"
+
+msgid "Email"
+msgstr "इमेल"
+
+msgid "Last login in platform"
+msgstr "प्लेटफर्ममा अन्तिम लगइन"
+
+msgid "Export as CSV"
+msgstr "CSV को रूपमा निर्यात गर्नुहोस्"
+
+msgid "Export as XLS"
+msgstr "XLS को रूपमा निर्यात गर्नुहोस्"
+
+msgid "Deactivate this user?"
+msgstr "यो प्रयोगकर्तालाई निष्क्रिय गर्नुहोस्?"
+
+msgid "Enable this user?"
+msgstr "यो प्रयोगकर्तालाई सक्रिय गर्नुहोस्?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "यो डुप्लिकेट समूहलाई प्रयोगकर्ता #%s मा एकीकरण गर्नुहोस्?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "यसले समूहका सबै अन्य खाताहरूलाई यो खातामा एकीकरण गर्नेछ।"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "एकीकृत खाताहरू स्थायी रूपमा हटाइनेछन् र यो प्रतिवेदनबाट हराउँछन्।"
+
+msgid "This action cannot be undone."
+msgstr "यो कार्यलाई पूर्ववत गर्न सकिँदैन।"
+
+msgid "Unify"
+msgstr "एकीकरण गर्नुहोस्"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "विद्यार्थी"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "पोर्टल %s ले प्रयोग गरेको कुल स्थान %s MB सीमा हो"
+
+msgid "Helper text"
+msgstr "सहायक पाठ"
+
+msgid "NotAllowed"
+msgstr "अनुमति छैन"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "सिक्ने पहुँच विवरणहरू लोड गर्न माथिका फिल्टरहरू प्रयोग गर्नुहोस्।"
+
+msgid "Start date must be before end date"
+msgstr "सुरु मिति समाप्ति मितिभन्दा पहिले हुनुपर्छ"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "सिक्ने पहुँच विवरणहरू समीक्षा गर्न मिति दायरा र समूहन प्रकार छान्नुहोस्।"
+
+msgid "This course will be created using the platform default course template."
+msgstr "यो कोर्स प्लेटफर्मको पूर्वनिर्धारित कोर्स टेम्प्लेट प्रयोग गरेर सिर्जना हुनेछ।"
+
+msgid "Security breach avoid restart"
+msgstr "सुरक्षा उल्लङ्घन पुन: सुरु नगर्नुहोस्"
+
+msgid "User deactivated"
+msgstr "प्रयोगकर्ता निष्क्रिय"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "प्रयोगकर्ता सक्रिय"
+
+msgid "No other duplicates found for this user."
+msgstr "यो प्रयोगकर्ताका लागि अन्य डुप्लिकेट फेला परेनन्।"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "प्रयोगकर्ताहरू एकीकृत: %s खाता(हरू) प्रयोगकर्ता #%s मा एकीकृत। एकीकृत खाताहरू स्थायी रूपमा हटाइए।"
+
+msgid "No accounts were merged."
+msgstr "कुनै खाता एकीकृत भएनन्।"
+
+msgid "An error occurred while unifying users."
+msgstr "प्रयोगकर्ताहरू एकीकरण गर्दा त्रुटि भयो।"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "प्रयोगकर्ताहरू एकीकृत: प्रयोगकर्ता #%s लाई प्रयोगकर्ता #%s मा एकीकृत। एकीकृत खाता स्थायी रूपमा हटाइयो।"
+
+msgid "Duplicate users"
+msgstr "डुप्लिकेट प्रयोगकर्ताहरू"
+
+msgid "Years"
+msgstr "वर्षहरू"
+
+msgid "All time visits outside sessions"
+msgstr "सत्र बाहिर सबै समयका भ्रमणहरू"
+
+msgid "All time visits in sessions"
+msgstr "सत्रहरूमा सबै समयका भ्रमणहरू"
+
+msgid "All time visits total"
+msgstr "सबै समयका भ्रमणहरू कुल"
+
+msgid "Student visits per period, per course"
+msgstr "अवधि र कोर्स अनुसार विद्यार्थी भ्रमणहरू"
+
+msgid "By email"
+msgstr "इमेल अनुसार"
+
+msgid "By extra field"
+msgstr "अतिरिक्त क्षेत्र अनुसार"
+
+msgid "Select an option"
+msgstr "विकल्प छान्नुहोस्"
+
+msgid "Profile field"
+msgstr "प्रोफाइल क्षेत्र"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "यो प्रतिवेदनले एकै इमेल ठेगाना भएका प्रयोगकर्ताहरूलाई मात्र सूचीबद्ध गर्दछ।"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "यो प्रतिवेदनले चयनित प्रोफाइल क्षेत्रको लागि एकै मान साझा गर्ने प्रयोगकर्ताहरूलाई मात्र सूचीबद्ध गर्दछ।"
+
+msgid "How to use this report"
+msgstr "यो प्रतिवेदन कसरी प्रयोग गर्ने"
+
+msgid "Disable / Enable"
+msgstr "अक्षम / सक्रिय"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "लगिन मात्र अवरोध गर्दछ वा पुनर्स्थापना गर्दछ। यसले प्रयोगकर्ता हटाउँदैन र सदस्यता हटाउँदैन।"
+
+msgid "Last week"
+msgstr "गत हप्ता"
+
+msgid "Next week"
+msgstr "अर्को हप्ता"
+
+msgid "Loading report..."
+msgstr "प्रतिवेदन लोड हुँदै..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "यो प्रतिवेदन लोड गर्न असफल। कृपया पुन: प्रयास गर्नुहोस्।"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "प्रशिक्षकहरू कपी गर्न एक वा बढी सत्रहरू चयन गर्नुहोस् र गन्तव्य कोर्स छान्नुहोस्"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "एकैसाथ धेरै वस्तुहरू चयन गर्न Ctrl (वा Cmd) थिचेर राख्नुहोस्"
+
+msgid "Choose the destination course"
+msgstr "गन्तव्य कोर्स छान्नुहोस्"
+
+msgid "You can select multiple items"
+msgstr "तपाईं धेरै वस्तुहरू चयन गर्न सक्नुहुन्छ"
+
+msgid "Use the search box to find courses quickly"
+msgstr "कोर्सहरू छिटो खोज्न खोजी बॉक्स प्रयोग गर्नुहोस्"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "विद्यार्थीहरू कपी गर्न एक वा बढी स्रोत सत्रहरू र एक वा बढी गन्तव्य सत्रहरू चयन गर्नुहोस्"
+
+msgid "Select destination sessions"
+msgstr "गन्तव्य सत्रहरू चयन गर्नुहोस्"
+
+msgid "You can select multiple users"
+msgstr "तपाईं धेरै प्रयोगकर्ताहरू चयन गर्न सक्नुहुन्छ"
+
+msgid "Use the search box to find users quickly"
+msgstr "प्रयोगकर्ताहरू छिटो खोज्न खोजी बॉक्स प्रयोग गर्नुहोस्"
+
+msgid "Error while creating the document"
+msgstr "कागजात सिर्जना गर्दा त्रुटि"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM सिकाइ मार्ग होइन"
+
+msgid "Final item"
+msgstr "अन्तिम वस्तु"
+
+msgid "Edit item"
+msgstr "वस्तु सम्पादन गर्नुहोस्"
+
+msgid "No AI text providers configured."
+msgstr "कुनै AI पाठ प्रदायक कन्फिगर गरिएको छैन।"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "अपलोड असफल। फाइल सम्भवतः सर्भर सीमाभन्दा (post_max_size) ठूलो छ।"
+
+msgid "Update failed. No file received by the server."
+msgstr "अपडेट असफल। सर्भरले कुनै फाइल प्राप्त गरेन।"
+
+msgid "Update failed. %s"
+msgstr "अपडेट असफल। %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "अपडेट असफल। अमान्य अपलोड गरिएको फाइल पेलोड।"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "अपडेट असफल। अपलोड गरिएको ZIP फाइल नामले मूल SCORM प्याकेज नामसँग मेल खानुपर्छ।"
+
+msgid "Update failed"
+msgstr "अपडेट असफल"
+
+msgid "Question lower case"
+msgstr "प्रश्न सानो अक्षर"
+
+msgid "Regenerate"
+msgstr "पुन: उत्पन्न गर्नुहोस्"
+
+msgid "Case insensitive"
+msgstr "अक्षर संवेदनशील नहुने"
+
+msgid "Select a session to load its courses."
+msgstr "यसका कोर्सहरू लोड गर्न सत्र चयन गर्नुहोस्।"
+
+msgid "Select the source course."
+msgstr "स्रोत कोर्स चयन गर्नुहोस्।"
+
+msgid "Select a destination session."
+msgstr "गन्तव्य सत्र चयन गर्नुहोस्।"
+
+msgid "Select the destination course."
+msgstr "गन्तव्य कोर्स चयन गर्नुहोस्।"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "चयनित सत्र कोर्सबाट पूर्ण कोर्स सामग्री कपी गर्नुहोस्।"
+
+msgid "Select which tools/items to copy."
+msgstr "कुन उपकरण/वस्तुहरू कपी गर्ने चयन गर्नुहोस्।"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "आधारभूत (गैर-सत्र) कोर्स सामग्री समावेश नगर्नुहोस्।"
+
+msgid "An error occurred while copying the course"
+msgstr "कोर्स कपी गर्दा त्रुटि भयो"
+
+msgid "Please select a different destination"
+msgstr "कृपया फरक गन्तव्य चयन गर्नुहोस्"
+
+msgid "You must select a destination course"
+msgstr "तपाईंले गन्तव्य कोर्स चयन गर्नुपर्छ"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "क्विज सहित कोर्सहरू निर्यात गर्न तपाईंले क्विज चयन गर्नुपर्छ"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "यदि तपाईंका LP हरूमा अडियो फाइलहरू समावेश छन् भने तपाईंले कागजातहरूबाट तिनीहरूलाई चयन गर्नुपर्छ"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "यदि तपाईंका क्विजहरूमा हटस्पट प्रश्नहरू समावेश छन् भने तपाईंले कागजातहरूबाट छविहरू चयन गर्नुपर्छ"
+
+msgid "GeneralResourcesCourse"
+msgstr "सामान्यस्रोतकोर्स"
+
+msgid "Password must be at least %length% characters long."
+msgstr "पासवर्ड कम्तीमा %length% अक्षर लामो हुनुपर्छ।"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "पासवर्डमा कम्तीमा %count% साना अक्षरहरू हुनुपर्छ।"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "पासवर्डमा कम्तीमा %count% ठूला अक्षरहरू हुनुपर्छ।"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "पासवर्डमा कम्तीमा %count% अङ्कीय (०-९) अक्षरहरू हुनुपर्छ।"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "पासवर्डमा कम्तीमा %count% विशेष अक्षरहरू हुनुपर्छ।"
+
+msgid "Invalid login request."
+msgstr "अमान्य लगइन अनुरोध।"
+
+msgid "Authentication failed."
+msgstr "प्रमाणीकरण असफल भयो।"
+
+msgid "Login %status% for username %username%"
+msgstr "प्रयोगकर्ता नाम %username% का लागि लगइन %status%"
+
+msgid "Co-generated with AI"
+msgstr "AI संग सह-उत्पन्न"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "आवश्यक क्षेत्रहरू"
+

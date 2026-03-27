@@ -33111,3 +33111,570 @@ msgstr "سومین طرف‌ها"
 msgid "Layouts"
 msgstr "طرح‌ها"
 
+msgid "Relation type"
+msgstr "نوع رابطه"
+
+msgid "Add all"
+msgstr "افزودن همه"
+
+msgid "Remove all"
+msgstr "حذف همه"
+
+msgid "An error occurred. Please try again."
+msgstr "خطایی رخ داد. لطفاً دوباره تلاش کنید."
+
+msgid "%s created"
+msgstr "%s ایجاد شد"
+
+msgid "%s updated"
+msgstr "%s به‌روزرسانی شد"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "اگر قصد ارتقا از نسخه قدیمی‌تر Chamilo را دارید، ممکن است بخواهید"
+
+msgid "have a look at the changelog"
+msgstr "به فهرست تغییرات نگاهی بیندازید"
+
+msgid "to know what's new and what has been changed."
+msgstr "تا بدانید چه چیزهای جدیدی اضافه شده و چه تغییراتی انجام شده است."
+
+msgid "Session Item"
+msgstr "آیتم جلسه"
+
+msgid "Points"
+msgstr "امتیازات"
+
+msgid "See notifications"
+msgstr "مشاهده اعلان‌ها"
+
+msgid "New content available for this course."
+msgstr "محتوای جدیدی برای این درس در دسترس است."
+
+msgid "No new notifications."
+msgstr "هیچ اعلان جدیدی وجود ندارد."
+
+msgid "No new content found."
+msgstr "هیچ محتوای جدیدی یافت نشد."
+
+msgid "No tool details available yet."
+msgstr "جزئیات ابزار هنوز در دسترس نیست."
+
+msgid "Last access"
+msgstr "آخرین دسترسی"
+
+msgid "Open course"
+msgstr "باز کردن درس"
+
+msgid "Course completed"
+msgstr "درس تکمیل شد"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "حد اشتراک این درس به پایان رسیده است."
+
+msgid "Subscription limit reached"
+msgstr "حد اشتراک رسیده"
+
+msgid "Tertiary alternative"
+msgstr "جایگزین ثالث"
+
+msgid "Update SCORM"
+msgstr "به‌روزرسانی SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "هوش مصنوعی می‌تواند پیش‌نویس بازخورد و امتیاز پیشنهادی را قبل از ارسال توسط شما تهیه کند."
+
+msgid "What will be sent to the AI"
+msgstr "آنچه به هوش مصنوعی ارسال خواهد شد"
+
+msgid "Assignment title + instructions"
+msgstr "عنوان تکلیف + دستورالعمل‌ها"
+
+msgid "Student submission (text)"
+msgstr "ارسال دانشجو (متن)"
+
+msgid "Student submission (text): none"
+msgstr "ارسال دانشجو (متن): هیچ"
+
+msgid "Student attachment"
+msgstr "پیوست دانشجو"
+
+msgid "supported"
+msgstr "پشتیبانی شده"
+
+msgid "not supported for document analysis"
+msgstr "پشتیبانی نمی‌شود برای تحلیل سند"
+
+msgid "Student attachment: none"
+msgstr "پیوست دانشجو: هیچ"
+
+msgid "No text AI providers available."
+msgstr "هیچ ارائه‌دهنده هوش مصنوعی متنی در دسترس نیست."
+
+msgid "AI-assisted"
+msgstr "با کمک هوش مصنوعی"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "این تصمیم با تصحیح (ExtraField) ذخیره می‌شود و بعداً قابل تغییر نیست."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "پیوست تصحیح اختیاری (این ارسال دانشجو نیست)."
+
+msgid "AI"
+msgstr "هوش مصنوعی"
+
+msgid "Received"
+msgstr "دریافت شده"
+
+msgid "%s min"
+msgstr "%s دقیقه"
+
+msgid "Unlock column"
+msgstr "باز کردن قفل ستون"
+
+msgid "Lock column"
+msgstr "قفل کردن ستون"
+
+msgid "Set all Present"
+msgstr "همه را حاضر قرار دهید"
+
+msgid "Set all Absent"
+msgstr "همه را غایب قرار دهید"
+
+msgid "Auto (recommended)"
+msgstr "خودکار (پیشنهادی)"
+
+msgid "Error downloading all documents."
+msgstr "خطا در دانلود همه اسناد."
+
+msgid "Open with ONLYOFFICE"
+msgstr "باز کردن با ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "محدودیت سهمیه"
+
+msgid "Remaining space"
+msgstr "فضای باقی‌مانده"
+
+msgid "Course catalogue"
+msgstr "کاتالوگ دوره‌ها"
+
+msgid "Drag links to reorder"
+msgstr "لینک‌ها را بکشید تا مرتب شوند"
+
+msgid "Drop links here to keep them without category"
+msgstr "لینک‌ها را اینجا رها کنید تا بدون دسته‌بندی نگه داشته شوند"
+
+msgid "Could not export"
+msgstr "نتوانست صادر کند"
+
+msgid "Link moved"
+msgstr "لینک جابجا شد"
+
+msgid "Could not move link"
+msgstr "نتوانست لینک را جابجا کند"
+
+msgid "Category reordering is not enabled"
+msgstr "مرتب‌سازی دسته‌بندی فعال نیست"
+
+msgid "Showing %s posts"
+msgstr "نمایش %s پست"
+
+msgid "Showing %s tasks"
+msgstr "نمایش %s وظیفه"
+
+msgid "Page %s of %s"
+msgstr "صفحه %s از %s"
+
+msgid "Tutors"
+msgstr "معلمان"
+
+msgid "selected"
+msgstr "انتخاب شده"
+
+msgid "No data to export"
+msgstr "داده‌ای برای صادر کردن وجود ندارد"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "سربرگ PNG باید \\u2264 %spx باشد."
+
+msgid "Standard list"
+msgstr "لیست استاندارد"
+
+msgid "Management list"
+msgstr "لیست مدیریت"
+
+msgid "Open platform"
+msgstr "پلتفرم باز"
+
+msgid "Teacher user ID"
+msgstr "شناسه کاربر معلم"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "آیا مطمئن هستید که می‌خواهید این دوره را حذف کنید؟"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "آیا مطمئن هستید که می‌خواهید دوره‌های انتخاب شده را حذف کنید؟"
+
+msgid "Search by name, username, email"
+msgstr "جستجو بر اساس نام، نام کاربری، ایمیل"
+
+msgid "contains %s items"
+msgstr "%s مورد شامل می‌شود"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "توافق قانونی شما تا زمان بررسی و پردازش هر درخواست انصراف فعال باقی می‌ماند."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "درخواست انصراف از رضایت قانونی شما در انتظار بررسی است."
+
+msgid "Your account deletion request is pending review."
+msgstr "درخواست حذف حساب شما در انتظار بررسی است."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "چرا می‌خواهید انصراف از رضایت قانونی خود را درخواست کنید؟"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "در حال ارسال درخواست انصراف از رضایت قانونی شما..."
+
+msgid "Submitting request..."
+msgstr "در حال ارسال درخواست..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "درخواست انصراف از رضایت قانونی"
+
+msgid "Submitting your account deletion request..."
+msgstr "در حال ارسال درخواست حذف حساب شما..."
+
+msgid "Submitting your acceptance..."
+msgstr "در حال ارسال پذیرش شما..."
+
+msgid "Event details"
+msgstr "جزئیات رویداد"
+
+msgid "You cannot access the linked course from this view."
+msgstr "نمی‌توانید از این نمای به دوره لینک شده دسترسی پیدا کنید."
+
+msgid "Failed to load sessions"
+msgstr "بارگذاری جلسات با شکست مواجه شد"
+
+msgid "Failed to load events"
+msgstr "بارگذاری رویدادها با شکست مواجه شد"
+
+msgid "No events found"
+msgstr "هیچ رویدادی یافت نشد"
+
+msgid "Group image"
+msgstr "تصویر گروه"
+
+msgid "SearchTCC"
+msgstr "جستجوی TCC"
+
+msgid "Forbidden"
+msgstr "ممنوع"
+
+msgid "Distribution"
+msgstr "توزیع"
+
+msgid "Firstname"
+msgstr "نام"
+
+msgid "Lastname"
+msgstr "نام خانوادگی"
+
+msgid "Email"
+msgstr "ایمیل"
+
+msgid "Last login in platform"
+msgstr "آخرین ورود به پلتفرم"
+
+msgid "Export as CSV"
+msgstr "خروجی به صورت CSV"
+
+msgid "Export as XLS"
+msgstr "خروجی به صورت XLS"
+
+msgid "Deactivate this user?"
+msgstr "این کاربر را غیرفعال کنید؟"
+
+msgid "Enable this user?"
+msgstr "این کاربر را فعال کنید؟"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "این گروه تکراری را در کاربر #%s ادغام کنید؟"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "این کار تمام حساب‌های دیگر در همان گروه را در این حساب ادغام خواهد کرد."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "حساب‌های ادغام شده به طور دائمی حذف شده و از این گزارش ناپدید خواهند شد."
+
+msgid "This action cannot be undone."
+msgstr "این عمل قابل بازگشت نیست."
+
+msgid "Unify"
+msgstr "ادغام"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "دانشجو"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "فضای کل استفاده شده توسط پورتال %s حد %s مگابایت است"
+
+msgid "Helper text"
+msgstr "متن راهنما"
+
+msgid "NotAllowed"
+msgstr "مجاز نیست"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "از فیلترهای بالا برای بارگیری جزئیات دسترسی یادگیرنده استفاده کنید."
+
+msgid "Start date must be before end date"
+msgstr "تاریخ شروع باید قبل از تاریخ پایان باشد"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "یک بازه زمانی و نوع گروه‌بندی را انتخاب کنید تا جزئیات دسترسی یادگیرنده را بررسی کنید."
+
+msgid "This course will be created using the platform default course template."
+msgstr "این درس با استفاده از الگوی پیش‌فرض درس پلتفرم ایجاد خواهد شد."
+
+msgid "Security breach avoid restart"
+msgstr "نقض امنیتی، از راه‌اندازی مجدد اجتناب کنید"
+
+msgid "User deactivated"
+msgstr "کاربر غیرفعال شد"
+
+msgid "InvalidId"
+msgstr "شناسه نامعتبر"
+
+msgid "User enabled"
+msgstr "کاربر فعال شد"
+
+msgid "No other duplicates found for this user."
+msgstr "هیچ تکراری دیگری برای این کاربر یافت نشد."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "کاربران ادغام شدند: %s حساب(ها) در کاربر #%s ادغام شد. حساب‌های ادغام شده به طور دائمی حذف شدند."
+
+msgid "No accounts were merged."
+msgstr "هیچ حسابی ادغام نشد."
+
+msgid "An error occurred while unifying users."
+msgstr "خطایی در حین ادغام کاربران رخ داد."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "کاربران ادغام شدند: کاربر #%s در کاربر #%s ادغام شد. حساب ادغام شده به طور دائمی حذف شد."
+
+msgid "Duplicate users"
+msgstr "کاربران تکراری"
+
+msgid "Years"
+msgstr "سال‌ها"
+
+msgid "All time visits outside sessions"
+msgstr "بازدیدهای تمام مدت خارج از جلسات"
+
+msgid "All time visits in sessions"
+msgstr "بازدیدهای تمام مدت در جلسات"
+
+msgid "All time visits total"
+msgstr "مجموع بازدیدهای تمام مدت"
+
+msgid "Student visits per period, per course"
+msgstr "بازدیدهای دانشجو در هر دوره، در هر درس"
+
+msgid "By email"
+msgstr "بر اساس ایمیل"
+
+msgid "By extra field"
+msgstr "بر اساس فیلد اضافی"
+
+msgid "Select an option"
+msgstr "یک گزینه انتخاب کنید"
+
+msgid "Profile field"
+msgstr "فیلد پروفایل"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "این گزارش فقط کاربرانی را فهرست می‌کند که آدرس ایمیل یکسانی دارند."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "این گزارش فقط کاربرانی را فهرست می‌کند که مقدار یکسانی برای فیلد پروفایل انتخاب شده دارند."
+
+msgid "How to use this report"
+msgstr "نحوه استفاده از این گزارش"
+
+msgid "Disable / Enable"
+msgstr "غیرفعال / فعال"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "فقط ورود را مسدود یا بازمی‌گرداند. کاربر را حذف نمی‌کند و اشتراک‌ها را حذف نمی‌کند."
+
+msgid "Last week"
+msgstr "هفته گذشته"
+
+msgid "Next week"
+msgstr "هفته آینده"
+
+msgid "Loading report..."
+msgstr "در حال بارگیری گزارش..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "بارگیری این گزارش با شکست مواجه شد. لطفاً دوباره تلاش کنید."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "یک یا چند جلسه را برای کپی مربیان انتخاب کنید و درس مقصد را انتخاب کنید"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Ctrl (یا Cmd) را نگه دارید تا چندین مورد را انتخاب کنید"
+
+msgid "Choose the destination course"
+msgstr "دوره مقصد را انتخاب کنید"
+
+msgid "You can select multiple items"
+msgstr "می‌توانید چندین مورد را انتخاب کنید"
+
+msgid "Use the search box to find courses quickly"
+msgstr "از جعبه جستجو برای یافتن سریع دوره‌ها استفاده کنید"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "یک یا چند جلسه مبدأ و یک یا چند جلسه مقصد را برای کپی دانشجویان انتخاب کنید"
+
+msgid "Select destination sessions"
+msgstr "جلسات مقصد را انتخاب کنید"
+
+msgid "You can select multiple users"
+msgstr "می‌توانید چندین کاربر را انتخاب کنید"
+
+msgid "Use the search box to find users quickly"
+msgstr "از جعبه جستجو برای یافتن سریع کاربران استفاده کنید"
+
+msgid "Error while creating the document"
+msgstr "خطا در ایجاد سند"
+
+msgid "Not a SCORM learning path"
+msgstr "مسیر یادگیری SCORM نیست"
+
+msgid "Final item"
+msgstr "مورد نهایی"
+
+msgid "Edit item"
+msgstr "ویرایش مورد"
+
+msgid "No AI text providers configured."
+msgstr "هیچ ارائه‌دهنده متن هوش مصنوعی پیکربندی نشده است."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "بارگذاری ناموفق. فایل احتمالاً بزرگ‌تر از حد مجاز سرور (post_max_size) است."
+
+msgid "Update failed. No file received by the server."
+msgstr "به‌روزرسانی ناموفق. هیچ فایلی توسط سرور دریافت نشد."
+
+msgid "Update failed. %s"
+msgstr "به‌روزرسانی ناموفق. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "به‌روزرسانی ناموفق. داده فایل بارگذاری‌شده نامعتبر است."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "به‌روزرسانی ناموفق. نام فایل ZIP بارگذاری‌شده باید با نام بسته SCORM اصلی مطابقت داشته باشد."
+
+msgid "Update failed"
+msgstr "به‌روزرسانی ناموفق"
+
+msgid "Question lower case"
+msgstr "سؤال کوچک"
+
+msgid "Regenerate"
+msgstr "تولید مجدد"
+
+msgid "Case insensitive"
+msgstr "عدم حساس به حروف بزرگ و کوچک"
+
+msgid "Select a session to load its courses."
+msgstr "یک جلسه را انتخاب کنید تا دوره‌های آن بارگذاری شود."
+
+msgid "Select the source course."
+msgstr "دوره مبدأ را انتخاب کنید."
+
+msgid "Select a destination session."
+msgstr "یک جلسه مقصد را انتخاب کنید."
+
+msgid "Select the destination course."
+msgstr "دوره مقصد را انتخاب کنید."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "محتوای کامل دوره را از دوره جلسه انتخاب‌شده کپی کنید."
+
+msgid "Select which tools/items to copy."
+msgstr "ابزارها/موردهایی را که می‌خواهید کپی کنید انتخاب کنید."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "محتوای پایه (غیرجلسه) دوره را شامل نشود."
+
+msgid "An error occurred while copying the course"
+msgstr "خطایی در کپی کردن دوره رخ داد"
+
+msgid "Please select a different destination"
+msgstr "لطفاً مقصد متفاوتی انتخاب کنید"
+
+msgid "You must select a destination course"
+msgstr "باید یک دوره مقصد انتخاب کنید"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "برای صادرات دوره‌ها با آزمون، باید آزمون را انتخاب کنید"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "اگر مسیرهای یادگیری شما شامل فایل‌های صوتی باشد، باید آن‌ها را از اسناد انتخاب کنید"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "اگر آزمون شما شامل سؤالات نقطه داغ باشد، باید تصاویر را از اسناد انتخاب کنید"
+
+msgid "GeneralResourcesCourse"
+msgstr "منابععمومیدوره"
+
+msgid "Password must be at least %length% characters long."
+msgstr "رمز عبور باید حداقل %length% کاراکتر باشد."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "رمز عبور باید حداقل %count% کاراکتر کوچک داشته باشد."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "رمز عبور باید حداقل %count% کاراکتر بزرگ داشته باشد."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "رمز عبور باید حداقل %count% کاراکتر عددی (۰-۹) داشته باشد."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "رمز عبور باید حداقل %count% کاراکتر ویژه داشته باشد."
+
+msgid "Invalid login request."
+msgstr "درخواست ورود نامعتبر."
+
+msgid "Authentication failed."
+msgstr "احراز هویت ناموفق."
+
+msgid "Login %status% for username %username%"
+msgstr "ورود %status% برای نام کاربری %username%"
+
+msgid "Co-generated with AI"
+msgstr "هم‌تولیدشده با هوش مصنوعی"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "شناسه EntraID"
+
+msgid "EntraID UID"
+msgstr "شناسه کاربری EntraID"
+
+msgid "Required fields"
+msgstr "فیلدهای الزامی"
+

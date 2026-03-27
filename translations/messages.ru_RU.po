@@ -31466,7 +31466,7 @@ msgid "SCIM external ID"
 msgstr "SCIM внешний ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Пожалуйста, примите последнюю версию условий и правил."
@@ -33117,4 +33117,571 @@ msgstr "Сторонние организации"
 
 msgid "Layouts"
 msgstr "Макеты"
+
+msgid "Relation type"
+msgstr "Тип связи"
+
+msgid "Add all"
+msgstr "Добавить все"
+
+msgid "Remove all"
+msgstr "Удалить все"
+
+msgid "An error occurred. Please try again."
+msgstr "Произошла ошибка. Пожалуйста, попробуйте снова."
+
+msgid "%s created"
+msgstr "%s создано"
+
+msgid "%s updated"
+msgstr "%s обновлено"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Если вы планируете обновить с более старой версии Chamilo, вам может понадобиться"
+
+msgid "have a look at the changelog"
+msgstr "ознакомиться с журналом изменений"
+
+msgid "to know what's new and what has been changed."
+msgstr "чтобы узнать, что нового и что было изменено."
+
+msgid "Session Item"
+msgstr "Элемент сессии"
+
+msgid "Points"
+msgstr "Баллы"
+
+msgid "See notifications"
+msgstr "Просмотреть уведомления"
+
+msgid "New content available for this course."
+msgstr "Доступно новое содержимое для этого курса."
+
+msgid "No new notifications."
+msgstr "Нет новых уведомлений."
+
+msgid "No new content found."
+msgstr "Новое содержимое не найдено."
+
+msgid "No tool details available yet."
+msgstr "Подробности инструмента пока недоступны."
+
+msgid "Last access"
+msgstr "Последний доступ"
+
+msgid "Open course"
+msgstr "Открыть курс"
+
+msgid "Course completed"
+msgstr "Курс завершен"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Достигнут лимит подписок на этот курс."
+
+msgid "Subscription limit reached"
+msgstr "Достигнут лимит подписки"
+
+msgid "Tertiary alternative"
+msgstr "Третичная альтернатива"
+
+msgid "Update SCORM"
+msgstr "Обновить SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ИИ может подготовить черновик обратной связи и предложить оценку перед отправкой."
+
+msgid "What will be sent to the AI"
+msgstr "Что будет отправлено ИИ"
+
+msgid "Assignment title + instructions"
+msgstr "Название задания + инструкции"
+
+msgid "Student submission (text)"
+msgstr "Отправка студента (текст)"
+
+msgid "Student submission (text): none"
+msgstr "Отправка студента (текст): нет"
+
+msgid "Student attachment"
+msgstr "Вложение студента"
+
+msgid "supported"
+msgstr "поддерживается"
+
+msgid "not supported for document analysis"
+msgstr "не поддерживается для анализа документов"
+
+msgid "Student attachment: none"
+msgstr "Вложение студента: нет"
+
+msgid "No text AI providers available."
+msgstr "Нет доступных поставщиков текстового ИИ."
+
+msgid "AI-assisted"
+msgstr "С помощью ИИ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Это решение сохраняется вместе с исправлением (ExtraField) и не может быть изменено позже."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Дополнительное вложение к исправлению (это не работа студента)."
+
+msgid "AI"
+msgstr "ИИ"
+
+msgid "Received"
+msgstr "Получено"
+
+msgid "%s min"
+msgstr "%s мин"
+
+msgid "Unlock column"
+msgstr "Разблокировать столбец"
+
+msgid "Lock column"
+msgstr "Заблокировать столбец"
+
+msgid "Set all Present"
+msgstr "Установить всем «Присутствует»"
+
+msgid "Set all Absent"
+msgstr "Установить всем «Отсутствует»"
+
+msgid "Auto (recommended)"
+msgstr "Авто (рекомендуется)"
+
+msgid "Error downloading all documents."
+msgstr "Ошибка при скачивании всех документов."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Открыть с ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Ограничение квоты"
+
+msgid "Remaining space"
+msgstr "Оставшееся место"
+
+msgid "Course catalogue"
+msgstr "Каталог курсов"
+
+msgid "Drag links to reorder"
+msgstr "Перетащите ссылки для изменения порядка"
+
+msgid "Drop links here to keep them without category"
+msgstr "Перетащите ссылки сюда, чтобы оставить их без категории"
+
+msgid "Could not export"
+msgstr "Не удалось экспортировать"
+
+msgid "Link moved"
+msgstr "Ссылка перемещена"
+
+msgid "Could not move link"
+msgstr "Не удалось переместить ссылку"
+
+msgid "Category reordering is not enabled"
+msgstr "Изменение порядка категорий отключено"
+
+msgid "Showing %s posts"
+msgstr "Показаны %s сообщений"
+
+msgid "Showing %s tasks"
+msgstr "Показаны %s заданий"
+
+msgid "Page %s of %s"
+msgstr "Страница %s из %s"
+
+msgid "Tutors"
+msgstr "Тьюторы"
+
+msgid "selected"
+msgstr "выбрано"
+
+msgid "No data to export"
+msgstr "Нет данных для экспорта"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Шапка PNG должна быть ≤ %spx."
+
+msgid "Standard list"
+msgstr "Стандартный список"
+
+msgid "Management list"
+msgstr "Список управления"
+
+msgid "Open platform"
+msgstr "Открытая платформа"
+
+msgid "Teacher user ID"
+msgstr "ID пользователя преподавателя"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Вы уверены, что хотите удалить этот курс?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Вы уверены, что хотите удалить выбранные курсы?"
+
+msgid "Search by name, username, email"
+msgstr "Поиск по имени, логину, email"
+
+msgid "contains %s items"
+msgstr "содержит %s элементов"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ваше юридическое соглашение остается активным до рассмотрения и обработки запроса на отзыв."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ваш запрос на отзыв юридического согласия ожидает рассмотрения."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ваш запрос на удаление аккаунта ожидает рассмотрения."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Почему вы хотите запросить отзыв вашего юридического согласия?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Отправка запроса на отзыв юридического согласия..."
+
+msgid "Submitting request..."
+msgstr "Отправка запроса..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Запросить отзыв юридического согласия"
+
+msgid "Submitting your account deletion request..."
+msgstr "Отправка запроса на удаление аккаунта..."
+
+msgid "Submitting your acceptance..."
+msgstr "Отправка вашего согласия..."
+
+msgid "Event details"
+msgstr "Детали события"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Вы не можете получить доступ к связанному курсу из этого представления."
+
+msgid "Failed to load sessions"
+msgstr "Не удалось загрузить сессии"
+
+msgid "Failed to load events"
+msgstr "Не удалось загрузить события"
+
+msgid "No events found"
+msgstr "События не найдены"
+
+msgid "Group image"
+msgstr "Изображение группы"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Запрещено"
+
+msgid "Distribution"
+msgstr "Распределение"
+
+msgid "Firstname"
+msgstr "Имя"
+
+msgid "Lastname"
+msgstr "Фамилия"
+
+msgid "Email"
+msgstr "Электронная почта"
+
+msgid "Last login in platform"
+msgstr "Последний вход на платформу"
+
+msgid "Export as CSV"
+msgstr "Экспорт в CSV"
+
+msgid "Export as XLS"
+msgstr "Экспорт в XLS"
+
+msgid "Deactivate this user?"
+msgstr "Деактивировать этого пользователя?"
+
+msgid "Enable this user?"
+msgstr "Активировать этого пользователя?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Объединить эту дублирующуюся группу в пользователя #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Это объединит все остальные аккаунты в той же группе в этот аккаунт."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Объединённые аккаунты будут безвозвратно удалены и исчезнут из этого отчёта."
+
+msgid "This action cannot be undone."
+msgstr "Это действие нельзя отменить."
+
+msgid "Unify"
+msgstr "Объединить"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Студент"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Общий объём, используемый порталом %s, лимит %s МБ"
+
+msgid "Helper text"
+msgstr "Вспомогательный текст"
+
+msgid "NotAllowed"
+msgstr "Не разрешено"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Используйте фильтры выше, чтобы загрузить детали доступа учащихся."
+
+msgid "Start date must be before end date"
+msgstr "Дата начала должна быть раньше даты окончания"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Выберите диапазон дат и тип группировки, чтобы просмотреть детали доступа учащихся."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Этот курс будет создан с использованием шаблона курса по умолчанию платформы."
+
+msgid "Security breach avoid restart"
+msgstr "Нарушение безопасности, избегать перезапуска"
+
+msgid "User deactivated"
+msgstr "Пользователь деактивирован"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Пользователь активирован"
+
+msgid "No other duplicates found for this user."
+msgstr "Другие дубликаты для этого пользователя не найдены."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Пользователи объединены: %s аккаунт(ов) объединено в пользователя #%s. Объединённые аккаунты безвозвратно удалены."
+
+msgid "No accounts were merged."
+msgstr "Аккаунты не были объединены."
+
+msgid "An error occurred while unifying users."
+msgstr "Произошла ошибка при объединении пользователей."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Пользователи объединены: пользователь #%s объединён в пользователя #%s. Объединённый аккаунт безвозвратно удалён."
+
+msgid "Duplicate users"
+msgstr "Дублирующиеся пользователи"
+
+msgid "Years"
+msgstr "Лет"
+
+msgid "All time visits outside sessions"
+msgstr "Посещения за всё время вне сессий"
+
+msgid "All time visits in sessions"
+msgstr "Посещения за всё время в сессиях"
+
+msgid "All time visits total"
+msgstr "Общее количество посещений за всё время"
+
+msgid "Student visits per period, per course"
+msgstr "Посещения студентов по периодам, по курсам"
+
+msgid "By email"
+msgstr "По электронной почте"
+
+msgid "By extra field"
+msgstr "По дополнительному полю"
+
+msgid "Select an option"
+msgstr "Выберите вариант"
+
+msgid "Profile field"
+msgstr "Поле профиля"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Этот отчёт показывает только пользователей с одинаковым адресом электронной почты."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Этот отчёт показывает только пользователей, имеющих одинаковое значение выбранного поля профиля."
+
+msgid "How to use this report"
+msgstr "Как использовать этот отчёт"
+
+msgid "Disable / Enable"
+msgstr "Деактивировать / Активировать"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Только блокирует или восстанавливает вход. Не удаляет пользователя и не отменяет подписки."
+
+msgid "Last week"
+msgstr "Прошлая неделя"
+
+msgid "Next week"
+msgstr "Следующая неделя"
+
+msgid "Loading report..."
+msgstr "Загрузка отчёта…"
+
+msgid "Failed to load this report. Please try again."
+msgstr "Не удалось загрузить отчёт. Попробуйте снова."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Выберите одну или несколько сессий для копирования тренеров и выберите целевой курс"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Зажмите Ctrl (или Cmd) для выбора нескольких элементов"
+
+msgid "Choose the destination course"
+msgstr "Выберите целевой курс"
+
+msgid "You can select multiple items"
+msgstr "Вы можете выбрать несколько элементов"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Используйте поле поиска для быстрого нахождения курсов"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Выберите одну или несколько исходных сессий и одну или несколько целевых сессий для копирования студентов"
+
+msgid "Select destination sessions"
+msgstr "Выберите целевые сессии"
+
+msgid "You can select multiple users"
+msgstr "Вы можете выбрать нескольких пользователей"
+
+msgid "Use the search box to find users quickly"
+msgstr "Используйте поле поиска для быстрого нахождения пользователей"
+
+msgid "Error while creating the document"
+msgstr "Ошибка при создании документа"
+
+msgid "Not a SCORM learning path"
+msgstr "Не является учебным путём SCORM"
+
+msgid "Final item"
+msgstr "Финальный элемент"
+
+msgid "Edit item"
+msgstr "Редактировать элемент"
+
+msgid "No AI text providers configured."
+msgstr "Поставщики AI-текста не настроены."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Загрузка не удалась. Файл, вероятно, превышает лимит сервера (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Обновление не удалось. Сервер не получил файл."
+
+msgid "Update failed. %s"
+msgstr "Обновление не удалось. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Обновление не удалось. Неверные данные загруженного файла."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Обновление не удалось. Имя загруженного ZIP-файла должно совпадать с именем исходного пакета SCORM."
+
+msgid "Update failed"
+msgstr "Обновление не удалось"
+
+msgid "Question lower case"
+msgstr "Вопрос в нижнем регистре"
+
+msgid "Regenerate"
+msgstr "Регенерировать"
+
+msgid "Case insensitive"
+msgstr "Нечувствительно к регистру"
+
+msgid "Select a session to load its courses."
+msgstr "Выберите сессию для загрузки её курсов."
+
+msgid "Select the source course."
+msgstr "Выберите исходный курс."
+
+msgid "Select a destination session."
+msgstr "Выберите целевую сессию."
+
+msgid "Select the destination course."
+msgstr "Выберите целевой курс."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Скопировать полный контент курса из выбранного курса сессии."
+
+msgid "Select which tools/items to copy."
+msgstr "Выберите инструменты/элементы для копирования."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Не включать базовый (несессионный) контент курса."
+
+msgid "An error occurred while copying the course"
+msgstr "Произошла ошибка при копировании курса"
+
+msgid "Please select a different destination"
+msgstr "Пожалуйста, выберите другой пункт назначения"
+
+msgid "You must select a destination course"
+msgstr "Вы должны выбрать целевой курс"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Для экспорта курсов с тестами необходимо выбрать тесты"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Если в ваших учебных путях есть аудиофайлы, выберите их из документов"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Если в ваших тестах есть вопросы с горячими точками, выберите изображения из документов"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Пароль должен содержать не менее %length% символов."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Пароль должен содержать не менее %count% строчных символов."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Пароль должен содержать не менее %count% заглавных символов."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Пароль должен содержать не менее %count% цифровых (0-9) символов."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Пароль должен содержать не менее %count% специальных символов."
+
+msgid "Invalid login request."
+msgstr "Неверный запрос входа."
+
+msgid "Authentication failed."
+msgstr "Ошибка аутентификации."
+
+msgid "Login %status% for username %username%"
+msgstr "Вход %status% для пользователя %username%"
+
+msgid "Co-generated with AI"
+msgstr "Сгенерировано с помощью ИИ"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "Идентификатор EntraID"
+
+msgid "EntraID UID"
+msgstr "UID EntraID"
+
+msgid "Required fields"
+msgstr "Обязательные поля"
 

@@ -33117,3 +33117,570 @@ msgstr "Üçüncü taraflar"
 msgid "Layouts"
 msgstr "Düzenler"
 
+msgid "Relation type"
+msgstr "İlişki türü"
+
+msgid "Add all"
+msgstr "Tümünü ekle"
+
+msgid "Remove all"
+msgstr "Tümünü kaldır"
+
+msgid "An error occurred. Please try again."
+msgstr "Bir hata oluştu. Lütfen tekrar deneyin."
+
+msgid "%s created"
+msgstr "%s oluşturuldu"
+
+msgid "%s updated"
+msgstr "%s güncellendi"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Chamilo'nun eski bir sürümünden yükseltme yapmayı planlıyorsanız, görmek isteyebilirsiniz"
+
+msgid "have a look at the changelog"
+msgstr "değişiklik günlüğüne bakın"
+
+msgid "to know what's new and what has been changed."
+msgstr "nelerin yeni olduğunu ve nelerin değiştiğini bilmek için."
+
+msgid "Session Item"
+msgstr "Oturum Öğesi"
+
+msgid "Points"
+msgstr "Puanlar"
+
+msgid "See notifications"
+msgstr "Bildirimleri gör"
+
+msgid "New content available for this course."
+msgstr "Bu ders için yeni içerik mevcut."
+
+msgid "No new notifications."
+msgstr "Yeni bildirim yok."
+
+msgid "No new content found."
+msgstr "Yeni içerik bulunamadı."
+
+msgid "No tool details available yet."
+msgstr "Henüz araç detayları mevcut değil."
+
+msgid "Last access"
+msgstr "Son erişim"
+
+msgid "Open course"
+msgstr "Dersi aç"
+
+msgid "Course completed"
+msgstr "Ders tamamlandı"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Bu ders için abonelik limiti dolmuştur."
+
+msgid "Subscription limit reached"
+msgstr "Abonelik limiti doldu"
+
+msgid "Tertiary alternative"
+msgstr "Üçüncü alternatif"
+
+msgid "Update SCORM"
+msgstr "SCORM'u güncelle"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "Yİ, göndermeden önce geri bildirim taslağı ve önerilen puan hazırlayabilir."
+
+msgid "What will be sent to the AI"
+msgstr "Yİ'ye gönderilecekler"
+
+msgid "Assignment title + instructions"
+msgstr "Görev başlığı + talimatlar"
+
+msgid "Student submission (text)"
+msgstr "Öğrenci gönderimi (metin)"
+
+msgid "Student submission (text): none"
+msgstr "Öğrenci gönderimi (metin): yok"
+
+msgid "Student attachment"
+msgstr "Öğrenci eki"
+
+msgid "supported"
+msgstr "destekleniyor"
+
+msgid "not supported for document analysis"
+msgstr "belge analizi için desteklenmiyor"
+
+msgid "Student attachment: none"
+msgstr "Öğrenci eki: yok"
+
+msgid "No text AI providers available."
+msgstr "Metin Yİ sağlayıcısı mevcut değil."
+
+msgid "AI-assisted"
+msgstr "Yİ destekli"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Bu karar düzeltmeyle birlikte kaydedilir (ExtraField) ve sonradan değiştirilemez."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "İsteğe bağlı düzeltme eki (bu öğrencinin ödevi değildir)."
+
+msgid "AI"
+msgstr "YZ"
+
+msgid "Received"
+msgstr "Alındı"
+
+msgid "%s min"
+msgstr "%s dk"
+
+msgid "Unlock column"
+msgstr "Sütunu aç"
+
+msgid "Lock column"
+msgstr "Sütunu kilitle"
+
+msgid "Set all Present"
+msgstr "Tümünü Hazır olarak ayarla"
+
+msgid "Set all Absent"
+msgstr "Tümünü Yok olarak ayarla"
+
+msgid "Auto (recommended)"
+msgstr "Otomatik (önerilen)"
+
+msgid "Error downloading all documents."
+msgstr "Tüm belgeler indirilemedi."
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICE ile aç"
+
+msgid "Limiting quota"
+msgstr "Kota sınırı"
+
+msgid "Remaining space"
+msgstr "Kalan alan"
+
+msgid "Course catalogue"
+msgstr "Ders kataloğu"
+
+msgid "Drag links to reorder"
+msgstr "Sıralamak için bağlantıları sürükleyin"
+
+msgid "Drop links here to keep them without category"
+msgstr "Kategorisiz tutmak için bağlantıları buraya bırakın"
+
+msgid "Could not export"
+msgstr "Dışarı aktarılamadı"
+
+msgid "Link moved"
+msgstr "Bağlantı taşındı"
+
+msgid "Could not move link"
+msgstr "Bağlantı taşınamadı"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategori sıralama etkin değil"
+
+msgid "Showing %s posts"
+msgstr "%s gönderi gösteriliyor"
+
+msgid "Showing %s tasks"
+msgstr "%s görev gösteriliyor"
+
+msgid "Page %s of %s"
+msgstr "%s. sayfa, toplam %s"
+
+msgid "Tutors"
+msgstr "Eğitmenler"
+
+msgid "selected"
+msgstr "seçildi"
+
+msgid "No data to export"
+msgstr "Dışarı aktarılacak veri yok"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Başlık PNG \\u2264 %spx olmalıdır."
+
+msgid "Standard list"
+msgstr "Standart liste"
+
+msgid "Management list"
+msgstr "Yönetim listesi"
+
+msgid "Open platform"
+msgstr "Açık platform"
+
+msgid "Teacher user ID"
+msgstr "Öğretmen kullanıcı kimliği"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Bu dersi silmek istediğinizden emin misiniz?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Seçili dersleri silmek istediğinizden emin misiniz?"
+
+msgid "Search by name, username, email"
+msgstr "İsim, kullanıcı adı, e-posta ile ara"
+
+msgid "contains %s items"
+msgstr "%s öğe içeriyor"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Yasal anlaşmanız, herhangi bir çekilme talebi incelenip işlenene kadar etkin kalır."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Yasal rıza çekilme talebiniz inceleme bekliyor."
+
+msgid "Your account deletion request is pending review."
+msgstr "Hesap silme talebiniz inceleme bekliyor."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Yasal rızanızın çekilmesini neden talep ediyorsunuz?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Yasal rıza çekilme talebiniz gönderiliyor..."
+
+msgid "Submitting request..."
+msgstr "Talep gönderiliyor..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Yasal rıza çekilme talebi"
+
+msgid "Submitting your account deletion request..."
+msgstr "Hesap silme talebiniz gönderiliyor..."
+
+msgid "Submitting your acceptance..."
+msgstr "Kabulünüz gönderiliyor..."
+
+msgid "Event details"
+msgstr "Etkinlik ayrıntıları"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Bu görünümden bağlantılı derse erişemezsiniz."
+
+msgid "Failed to load sessions"
+msgstr "Oturumlar yüklenemedi"
+
+msgid "Failed to load events"
+msgstr "Etkinlikler yüklenemedi"
+
+msgid "No events found"
+msgstr "Etkinlik bulunamadı"
+
+msgid "Group image"
+msgstr "Grup resmi"
+
+msgid "SearchTCC"
+msgstr "TCC Ara"
+
+msgid "Forbidden"
+msgstr "Yasaklandı"
+
+msgid "Distribution"
+msgstr "Dağıtım"
+
+msgid "Firstname"
+msgstr "Ad"
+
+msgid "Lastname"
+msgstr "Soyad"
+
+msgid "Email"
+msgstr "E-posta"
+
+msgid "Last login in platform"
+msgstr "Platformdaki son giriş"
+
+msgid "Export as CSV"
+msgstr "CSV olarak Dışa Aktar"
+
+msgid "Export as XLS"
+msgstr "XLS olarak Dışa Aktar"
+
+msgid "Deactivate this user?"
+msgstr "Bu kullanıcıyı devre dışı bırakmak mı istiyorsunuz?"
+
+msgid "Enable this user?"
+msgstr "Bu kullanıcıyı etkinleştirmek mi istiyorsunuz?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Bu yinelenen grubu kullanıcı #%s içine birleştirmek mi istiyorsunuz?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Bu işlem aynı gruptaki diğer tüm hesapları bu hesaba birleştirecektir."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Birleştirilen hesaplar kalıcı olarak silinecek ve bu rapordan kaybolacaktır."
+
+msgid "This action cannot be undone."
+msgstr "Bu işlem geri alınamaz."
+
+msgid "Unify"
+msgstr "Birleştir"
+
+msgid "SessionAdmin"
+msgstr "Oturum Yöneticisi"
+
+msgid "Drh"
+msgstr "İK Yöneticisi"
+
+msgid "Student"
+msgstr "Öğrenci"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Portal %s tarafından kullanılan toplam alan sınırı %s MB"
+
+msgid "Helper text"
+msgstr "Yardımcı metin"
+
+msgid "NotAllowed"
+msgstr "İzin Verilmedi"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Öğrenen erişim detaylarını yüklemek için yukarıdaki filtreleri kullanın."
+
+msgid "Start date must be before end date"
+msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Öğrenen erişim detaylarını incelemek için bir tarih aralığı ve gruplama türü seçin."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Bu ders platform varsayılan ders şablonu kullanılarak oluşturulacaktır."
+
+msgid "Security breach avoid restart"
+msgstr "Güvenlik ihlali yeniden başlatmayı engelle"
+
+msgid "User deactivated"
+msgstr "Kullanıcı devre dışı bırakıldı"
+
+msgid "InvalidId"
+msgstr "Geçersiz Kimlik"
+
+msgid "User enabled"
+msgstr "Kullanıcı etkinleştirildi"
+
+msgid "No other duplicates found for this user."
+msgstr "Bu kullanıcı için başka yinelenen bulunamadı."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Kullanıcılar birleştirildi: %s hesap kullanıcı #%s içine birleştirildi. Birleştirilen hesaplar kalıcı olarak silindi."
+
+msgid "No accounts were merged."
+msgstr "Hiçbir hesap birleştirilmedi."
+
+msgid "An error occurred while unifying users."
+msgstr "Kullanıcıları birleştirirken bir hata oluştu."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Kullanıcılar birleştirildi: kullanıcı #%s kullanıcı #%s içine birleştirildi. Birleştirilen hesap kalıcı olarak silindi."
+
+msgid "Duplicate users"
+msgstr "Yinelenen kullanıcılar"
+
+msgid "Years"
+msgstr "Yıllar"
+
+msgid "All time visits outside sessions"
+msgstr "Oturum dışı tüm zaman ziyaretleri"
+
+msgid "All time visits in sessions"
+msgstr "Oturum içi tüm zaman ziyaretleri"
+
+msgid "All time visits total"
+msgstr "Tüm zaman ziyaretleri toplamı"
+
+msgid "Student visits per period, per course"
+msgstr "Dönem ve ders başına öğrenci ziyaretleri"
+
+msgid "By email"
+msgstr "E-postaya göre"
+
+msgid "By extra field"
+msgstr "Ekstra alana göre"
+
+msgid "Select an option"
+msgstr "Bir seçenek seçin"
+
+msgid "Profile field"
+msgstr "Profil alanı"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Bu rapor yalnızca aynı e-posta adresine sahip kullanıcıları listeler."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Bu rapor yalnızca seçilen profil alanı için aynı değeri paylaşan kullanıcıları listeler."
+
+msgid "How to use this report"
+msgstr "Bu raporu nasıl kullanırım"
+
+msgid "Disable / Enable"
+msgstr "Devre Dışı Bırak / Etkinleştir"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Yalnızca girişi engeller veya geri yükler. Kullanıcıyı silmez ve abonelikleri kaldırmaz."
+
+msgid "Last week"
+msgstr "Geçen hafta"
+
+msgid "Next week"
+msgstr "Gelecek hafta"
+
+msgid "Loading report..."
+msgstr "Rapor yükleniyor..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Bu rapor yüklenemedi. Lütfen tekrar deneyin."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Eğitmenleri kopyalamak için bir veya birden fazla oturum seçin ve hedef kursu seçin"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Birden fazla öğe seçmek için Ctrl (veya Cmd) tuşuna basılı tutun"
+
+msgid "Choose the destination course"
+msgstr "Hedef kursu seçin"
+
+msgid "You can select multiple items"
+msgstr "Birden fazla öğe seçebilirsiniz"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Kursları hızlı bulmak için arama kutusunu kullanın"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Öğrencileri kopyalamak için bir veya birden fazla kaynak oturum ve bir veya birden fazla hedef oturum seçin"
+
+msgid "Select destination sessions"
+msgstr "Hedef oturumları seçin"
+
+msgid "You can select multiple users"
+msgstr "Birden fazla kullanıcı seçebilirsiniz"
+
+msgid "Use the search box to find users quickly"
+msgstr "Kullanıcıları hızlı bulmak için arama kutusunu kullanın"
+
+msgid "Error while creating the document"
+msgstr "Belge oluşturulurken hata oluştu"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM öğrenme yolu değil"
+
+msgid "Final item"
+msgstr "Son öğe"
+
+msgid "Edit item"
+msgstr "Öğeyi düzenle"
+
+msgid "No AI text providers configured."
+msgstr "Yapılandırılmış AI metin sağlayıcısı yok."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Yükleme başarısız. Dosya muhtemelen sunucu limitinden (post_max_size) büyük."
+
+msgid "Update failed. No file received by the server."
+msgstr "Güncelleme başarısız. Sunucu tarafından dosya alınmadı."
+
+msgid "Update failed. %s"
+msgstr "Güncelleme başarısız. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Güncelleme başarısız. Geçersiz yüklenen dosya yükü."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Güncelleme başarısız. Yüklenen ZIP dosya adı orijinal SCORM paketi adıyla eşleşmelidir."
+
+msgid "Update failed"
+msgstr "Güncelleme başarısız"
+
+msgid "Question lower case"
+msgstr "küçük harf soru"
+
+msgid "Regenerate"
+msgstr "Yeniden oluştur"
+
+msgid "Case insensitive"
+msgstr "Büyük/küçük harf duyarsız"
+
+msgid "Select a session to load its courses."
+msgstr "Kurslarını yüklemek için bir oturum seçin."
+
+msgid "Select the source course."
+msgstr "Kaynak kursu seçin."
+
+msgid "Select a destination session."
+msgstr "Bir hedef oturum seçin."
+
+msgid "Select the destination course."
+msgstr "Hedef kursu seçin."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Seçilen oturum kursundan tam kurs içeriğini kopyala."
+
+msgid "Select which tools/items to copy."
+msgstr "Kopyalanacak araçları/öğeleri seçin."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Temel (oturum dışı) kurs içeriğini dahil etme."
+
+msgid "An error occurred while copying the course"
+msgstr "Kurs kopyalanırken bir hata oluştu"
+
+msgid "Please select a different destination"
+msgstr "Lütfen farklı bir hedef seçin"
+
+msgid "You must select a destination course"
+msgstr "Bir hedef kurs seçmelisiniz"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Sınav içeren kursları dışa aktarmak için sınavı seçmelisiniz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Öğrenme yollarınızda ses dosyaları varsa belgelerden seçmelisiniz"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Sınavlarınızda sıcak nokta soruları varsa belgelerden resimleri seçmelisiniz"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Parola en az %length% karakter uzunluğunda olmalıdır."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Parola en az %count% küçük harf içermelidir."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Parola en az %count% büyük harf içermelidir."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Parola en az %count% sayısal (0-9) karakter içermelidir."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Parola en az %count% özel karakter içermelidir."
+
+msgid "Invalid login request."
+msgstr "Geçersiz giriş isteği."
+
+msgid "Authentication failed."
+msgstr "Kimlik doğrulama başarısız."
+
+msgid "Login %status% for username %username%"
+msgstr "%username% kullanıcı adı için %status% giriş"
+
+msgid "Co-generated with AI"
+msgstr "AI ile birlikte oluşturuldu"
+
+msgid "GDPRTitle"
+msgstr "GDPR Başlığı"
+
+msgid "EntraID ID"
+msgstr "EntraID Kimliği"
+
+msgid "EntraID UID"
+msgstr "EntraID Kullanıcı Kimliği"
+
+msgid "Required fields"
+msgstr "Zorunlu alanlar"
+

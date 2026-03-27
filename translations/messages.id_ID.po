@@ -33115,3 +33115,570 @@ msgstr "Pihak ketiga"
 msgid "Layouts"
 msgstr "Tata letak"
 
+msgid "Relation type"
+msgstr ""
+
+msgid "Add all"
+msgstr ""
+
+msgid "Remove all"
+msgstr ""
+
+msgid "An error occurred. Please try again."
+msgstr ""
+
+msgid "%s created"
+msgstr ""
+
+msgid "%s updated"
+msgstr ""
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr ""
+
+msgid "have a look at the changelog"
+msgstr ""
+
+msgid "to know what's new and what has been changed."
+msgstr ""
+
+msgid "Session Item"
+msgstr ""
+
+msgid "Points"
+msgstr "Poin"
+
+msgid "See notifications"
+msgstr "Lihat notifikasi"
+
+msgid "New content available for this course."
+msgstr "Konten baru tersedia untuk mata kuliah ini."
+
+msgid "No new notifications."
+msgstr "Tidak ada notifikasi baru."
+
+msgid "No new content found."
+msgstr "Tidak ditemukan konten baru."
+
+msgid "No tool details available yet."
+msgstr "Belum ada detail alat yang tersedia."
+
+msgid "Last access"
+msgstr "Akses terakhir"
+
+msgid "Open course"
+msgstr "Buka mata kuliah"
+
+msgid "Course completed"
+msgstr "Mata kuliah selesai"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Batas langganan untuk mata kuliah ini telah tercapai."
+
+msgid "Subscription limit reached"
+msgstr "Batas langganan tercapai"
+
+msgid "Tertiary alternative"
+msgstr "Alternatif tersier"
+
+msgid "Update SCORM"
+msgstr "Perbarui SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI dapat menyusun umpan balik dan skor yang disarankan sebelum Anda mengirimkannya."
+
+msgid "What will be sent to the AI"
+msgstr "Apa yang akan dikirim ke AI"
+
+msgid "Assignment title + instructions"
+msgstr "Judul tugas + instruksi"
+
+msgid "Student submission (text)"
+msgstr "Pengiriman siswa (teks)"
+
+msgid "Student submission (text): none"
+msgstr "Pengiriman siswa (teks): tidak ada"
+
+msgid "Student attachment"
+msgstr "Lampiran siswa"
+
+msgid "supported"
+msgstr "didukung"
+
+msgid "not supported for document analysis"
+msgstr "tidak didukung untuk analisis dokumen"
+
+msgid "Student attachment: none"
+msgstr "Lampiran siswa: tidak ada"
+
+msgid "No text AI providers available."
+msgstr "Tidak ada penyedia AI teks yang tersedia."
+
+msgid "AI-assisted"
+msgstr "Dibantu AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Keputusan ini disimpan dengan koreksi (ExtraField) dan tidak dapat diubah nanti."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Lampiran koreksi opsional (ini bukan pengiriman siswa)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Diterima"
+
+msgid "%s min"
+msgstr "%s menit"
+
+msgid "Unlock column"
+msgstr "Buka kunci kolom"
+
+msgid "Lock column"
+msgstr "Kunci kolom"
+
+msgid "Set all Present"
+msgstr "Setel semua Hadir"
+
+msgid "Set all Absent"
+msgstr "Setel semua Tidak Hadir"
+
+msgid "Auto (recommended)"
+msgstr "Otomatis (direkomendasikan)"
+
+msgid "Error downloading all documents."
+msgstr "Kesalahan mengunduh semua dokumen."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Buka dengan ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Kuota pembatas"
+
+msgid "Remaining space"
+msgstr "Ruang tersisa"
+
+msgid "Course catalogue"
+msgstr "Katalog mata kuliah"
+
+msgid "Drag links to reorder"
+msgstr "Seret tautan untuk mengurutkan ulang"
+
+msgid "Drop links here to keep them without category"
+msgstr "Jatuhkan tautan di sini untuk menyimpannya tanpa kategori"
+
+msgid "Could not export"
+msgstr "Tidak dapat diekspor"
+
+msgid "Link moved"
+msgstr "Tautan dipindahkan"
+
+msgid "Could not move link"
+msgstr "Tidak dapat memindahkan tautan"
+
+msgid "Category reordering is not enabled"
+msgstr "Penyusunan ulang kategori tidak diaktifkan"
+
+msgid "Showing %s posts"
+msgstr "Menampilkan %s kiriman"
+
+msgid "Showing %s tasks"
+msgstr "Menampilkan %s tugas"
+
+msgid "Page %s of %s"
+msgstr "Halaman %s dari %s"
+
+msgid "Tutors"
+msgstr "Tutor"
+
+msgid "selected"
+msgstr "dipilih"
+
+msgid "No data to export"
+msgstr "Tidak ada data untuk diekspor"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG harus \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Daftar standar"
+
+msgid "Management list"
+msgstr "Daftar manajemen"
+
+msgid "Open platform"
+msgstr "Platform terbuka"
+
+msgid "Teacher user ID"
+msgstr "ID pengguna guru"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Apakah Anda yakin ingin menghapus mata kuliah ini?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Apakah Anda yakin ingin menghapus mata kuliah yang dipilih?"
+
+msgid "Search by name, username, email"
+msgstr "Cari berdasarkan nama, nama pengguna, email"
+
+msgid "contains %s items"
+msgstr "berisi %s item"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Persetujuan hukum Anda tetap aktif hingga permintaan penarikan apa pun ditinjau dan diproses."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Permintaan penarikan persetujuan hukum Anda sedang menunggu tinjauan."
+
+msgid "Your account deletion request is pending review."
+msgstr "Permintaan penghapusan akun Anda sedang menunggu tinjauan."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Mengapa Anda ingin meminta penarikan persetujuan hukum Anda?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Mengirimkan permintaan penarikan persetujuan hukum Anda..."
+
+msgid "Submitting request..."
+msgstr "Mengirimkan permintaan..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Minta penarikan persetujuan hukum"
+
+msgid "Submitting your account deletion request..."
+msgstr "Mengirimkan permintaan penghapusan akun Anda..."
+
+msgid "Submitting your acceptance..."
+msgstr "Mengirimkan penerimaan Anda..."
+
+msgid "Event details"
+msgstr "Detail acara"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Anda tidak dapat mengakses mata kuliah terkait dari tampilan ini."
+
+msgid "Failed to load sessions"
+msgstr "Gagal memuat sesi"
+
+msgid "Failed to load events"
+msgstr "Gagal memuat acara"
+
+msgid "No events found"
+msgstr "Tidak ada acara yang ditemukan"
+
+msgid "Group image"
+msgstr "Gambar grup"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Dilarang"
+
+msgid "Distribution"
+msgstr "Distribusi"
+
+msgid "Firstname"
+msgstr "Nama depan"
+
+msgid "Lastname"
+msgstr "Nama belakang"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Last login in platform"
+msgstr "Login terakhir di platform"
+
+msgid "Export as CSV"
+msgstr "Ekspor sebagai CSV"
+
+msgid "Export as XLS"
+msgstr "Ekspor sebagai XLS"
+
+msgid "Deactivate this user?"
+msgstr "Nonaktifkan pengguna ini?"
+
+msgid "Enable this user?"
+msgstr "Aktifkan pengguna ini?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Satukan grup duplikat ini ke pengguna #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Ini akan menggabungkan semua akun lain dalam grup yang sama ke akun ini."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Akun yang digabungkan akan dihapus secara permanen dan menghilang dari laporan ini."
+
+msgid "This action cannot be undone."
+msgstr "Tindakan ini tidak dapat dibatalkan."
+
+msgid "Unify"
+msgstr "Satukan"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Peserta didik"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Total ruang yang digunakan oleh portal %s batasnya adalah %s MB"
+
+msgid "Helper text"
+msgstr "Teks bantuan"
+
+msgid "NotAllowed"
+msgstr "Tidak Diizinkan"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Gunakan filter di atas untuk memuat detail akses pembelajar."
+
+msgid "Start date must be before end date"
+msgstr "Tanggal mulai harus sebelum tanggal akhir"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Pilih rentang tanggal dan jenis pengelompokan untuk meninjau detail akses pembelajar."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Kursus ini akan dibuat menggunakan template kursus default platform."
+
+msgid "Security breach avoid restart"
+msgstr "Pelanggaran keamanan hindari restart"
+
+msgid "User deactivated"
+msgstr "Pengguna dinonaktifkan"
+
+msgid "InvalidId"
+msgstr "IDTidakValid"
+
+msgid "User enabled"
+msgstr "Pengguna diaktifkan"
+
+msgid "No other duplicates found for this user."
+msgstr "Tidak ada duplikat lain yang ditemukan untuk pengguna ini."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Pengguna digabung: %s akun digabung ke pengguna #%s. Akun yang digabung dihapus secara permanen."
+
+msgid "No accounts were merged."
+msgstr "Tidak ada akun yang digabung."
+
+msgid "An error occurred while unifying users."
+msgstr "Terjadi kesalahan saat menggabungkan pengguna."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Pengguna digabung: pengguna #%s digabung ke pengguna #%s. Akun yang digabung dihapus secara permanen."
+
+msgid "Duplicate users"
+msgstr "Pengguna duplikat"
+
+msgid "Years"
+msgstr "Tahun"
+
+msgid "All time visits outside sessions"
+msgstr "Total kunjungan sepanjang waktu di luar sesi"
+
+msgid "All time visits in sessions"
+msgstr "Total kunjungan sepanjang waktu dalam sesi"
+
+msgid "All time visits total"
+msgstr "Total kunjungan sepanjang waktu"
+
+msgid "Student visits per period, per course"
+msgstr "Kunjungan siswa per periode, per kursus"
+
+msgid "By email"
+msgstr "Berdasarkan email"
+
+msgid "By extra field"
+msgstr "Berdasarkan bidang tambahan"
+
+msgid "Select an option"
+msgstr "Pilih opsi"
+
+msgid "Profile field"
+msgstr "Bidang profil"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Laporan ini hanya mencantumkan pengguna yang memiliki alamat email yang sama."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Laporan ini hanya mencantumkan pengguna yang memiliki nilai yang sama untuk bidang profil yang dipilih."
+
+msgid "How to use this report"
+msgstr "Cara menggunakan laporan ini"
+
+msgid "Disable / Enable"
+msgstr "Nonaktifkan / Aktifkan"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Hanya memblokir atau memulihkan login. Tidak menghapus pengguna dan tidak menghapus langganan."
+
+msgid "Last week"
+msgstr "Minggu lalu"
+
+msgid "Next week"
+msgstr "Minggu depan"
+
+msgid "Loading report..."
+msgstr "Memuat laporan..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Gagal memuat laporan ini. Silakan coba lagi."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Pilih satu atau lebih sesi untuk menyalin pelatih dan pilih kursus tujuan"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Tahan Ctrl (atau Cmd) untuk memilih beberapa item"
+
+msgid "Choose the destination course"
+msgstr "Pilih kursus tujuan"
+
+msgid "You can select multiple items"
+msgstr "Anda dapat memilih beberapa item"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Gunakan kotak pencarian untuk menemukan kursus dengan cepat"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Pilih satu atau lebih sesi sumber dan satu atau lebih sesi tujuan untuk menyalin siswa"
+
+msgid "Select destination sessions"
+msgstr "Pilih sesi tujuan"
+
+msgid "You can select multiple users"
+msgstr "Anda dapat memilih beberapa pengguna"
+
+msgid "Use the search box to find users quickly"
+msgstr "Gunakan kotak pencarian untuk menemukan pengguna dengan cepat"
+
+msgid "Error while creating the document"
+msgstr "Kesalahan saat membuat dokumen"
+
+msgid "Not a SCORM learning path"
+msgstr "Bukan jalur pembelajaran SCORM"
+
+msgid "Final item"
+msgstr "Item akhir"
+
+msgid "Edit item"
+msgstr "Edit item"
+
+msgid "No AI text providers configured."
+msgstr "Tidak ada penyedia teks AI yang dikonfigurasi."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Unggah gagal. File kemungkinan lebih besar dari batas server (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Pembaruan gagal. Tidak ada file yang diterima oleh server."
+
+msgid "Update failed. %s"
+msgstr "Pembaruan gagal. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Pembaruan gagal. Payload file unggahan tidak valid."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Pembaruan gagal. Nama file ZIP yang diunggah harus cocok dengan nama paket SCORM asli."
+
+msgid "Update failed"
+msgstr "Pembaruan gagal"
+
+msgid "Question lower case"
+msgstr "Pertanyaan huruf kecil"
+
+msgid "Regenerate"
+msgstr "Regenerasi"
+
+msgid "Case insensitive"
+msgstr "Tidak sensitif huruf besar-kecil"
+
+msgid "Select a session to load its courses."
+msgstr "Pilih sesi untuk memuat mata kuliahnya."
+
+msgid "Select the source course."
+msgstr "Pilih mata kuliah sumber."
+
+msgid "Select a destination session."
+msgstr "Pilih sesi tujuan."
+
+msgid "Select the destination course."
+msgstr "Pilih mata kuliah tujuan."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Salin seluruh konten mata kuliah dari mata kuliah sesi yang dipilih."
+
+msgid "Select which tools/items to copy."
+msgstr "Pilih alat/item mana yang akan disalin."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Jangan sertakan konten mata kuliah dasar (non-sesi)."
+
+msgid "An error occurred while copying the course"
+msgstr "Terjadi kesalahan saat menyalin mata kuliah"
+
+msgid "Please select a different destination"
+msgstr "Silakan pilih tujuan yang berbeda"
+
+msgid "You must select a destination course"
+msgstr "Anda harus memilih mata kuliah tujuan"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Untuk mengekspor mata kuliah dengan kuis, Anda harus memilih kuis"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Jika LP Anda menyertakan file audio, Anda harus memilihnya dari dokumen"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Jika kuis Anda menyertakan pertanyaan hotspot, Anda harus memilih gambar dari dokumen"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Kata sandi harus minimal %length% karakter panjang."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Kata sandi harus mengandung minimal %count% karakter huruf kecil."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Kata sandi harus mengandung minimal %count% karakter huruf besar."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Kata sandi harus mengandung minimal %count% karakter numerik (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Kata sandi harus mengandung minimal %count% karakter khusus."
+
+msgid "Invalid login request."
+msgstr "Permintaan login tidak valid."
+
+msgid "Authentication failed."
+msgstr "Autentikasi gagal."
+
+msgid "Login %status% for username %username%"
+msgstr "Login %status% untuk nama pengguna %username%"
+
+msgid "Co-generated with AI"
+msgstr "Dibuat bersama dengan AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Bidang wajib"
+

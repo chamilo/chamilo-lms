@@ -33111,3 +33111,570 @@ msgstr "Треті сторони"
 msgid "Layouts"
 msgstr "Макети"
 
+msgid "Relation type"
+msgstr "Тип зв’язку"
+
+msgid "Add all"
+msgstr "Додати всіх"
+
+msgid "Remove all"
+msgstr "Видалити всіх"
+
+msgid "An error occurred. Please try again."
+msgstr "Сталася помилка. Спробуйте ще раз."
+
+msgid "%s created"
+msgstr "%s створено"
+
+msgid "%s updated"
+msgstr "%s оновлено"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Якщо ви плануєте оновити з попередньої версії Chamilo, вам може знадобитися"
+
+msgid "have a look at the changelog"
+msgstr "ознайомитися з журналом змін"
+
+msgid "to know what's new and what has been changed."
+msgstr "щоб дізнатися про нове та змінене."
+
+msgid "Session Item"
+msgstr "Елемент сесії"
+
+msgid "Points"
+msgstr "Бали"
+
+msgid "See notifications"
+msgstr "Переглянути сповіщення"
+
+msgid "New content available for this course."
+msgstr "Доступний новий контент для цього курсу."
+
+msgid "No new notifications."
+msgstr "Немає нових сповіщень."
+
+msgid "No new content found."
+msgstr "Новий контент не знайдено."
+
+msgid "No tool details available yet."
+msgstr "Деталі інструменту ще недоступні."
+
+msgid "Last access"
+msgstr "Останній доступ"
+
+msgid "Open course"
+msgstr "Відкрити курс"
+
+msgid "Course completed"
+msgstr "Курс завершено"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Досягнуто ліміт підписок для цього курсу."
+
+msgid "Subscription limit reached"
+msgstr "Досягнуто ліміт підписок"
+
+msgid "Tertiary alternative"
+msgstr "Третинна альтернатива"
+
+msgid "Update SCORM"
+msgstr "Оновити SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ШІ може скласти чернетку зворотного зв’язку та запропонованої оцінки перед відправкою."
+
+msgid "What will be sent to the AI"
+msgstr "Що буде надіслано ШІ"
+
+msgid "Assignment title + instructions"
+msgstr "Назва завдання + інструкції"
+
+msgid "Student submission (text)"
+msgstr "Надісланий матеріал студента (текст)"
+
+msgid "Student submission (text): none"
+msgstr "Надісланий матеріал студента (текст): відсутній"
+
+msgid "Student attachment"
+msgstr "Вкладення студента"
+
+msgid "supported"
+msgstr "підтримується"
+
+msgid "not supported for document analysis"
+msgstr "не підтримується для аналізу документів"
+
+msgid "Student attachment: none"
+msgstr "Додаток студента: відсутній"
+
+msgid "No text AI providers available."
+msgstr "Немає доступних постачальників ШІ тексту."
+
+msgid "AI-assisted"
+msgstr "З допомогою ШІ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Це рішення зберігається з виправленням (ExtraField) і не може бути змінене пізніше."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Додатковий додаток до виправлення (це не робота студента)."
+
+msgid "AI"
+msgstr "ШІ"
+
+msgid "Received"
+msgstr "Отримано"
+
+msgid "%s min"
+msgstr "%s хв"
+
+msgid "Unlock column"
+msgstr "Розблокувати стовпець"
+
+msgid "Lock column"
+msgstr "Заблокувати стовпець"
+
+msgid "Set all Present"
+msgstr "Позначити всіх Присутні"
+
+msgid "Set all Absent"
+msgstr "Позначити всіх Відсутні"
+
+msgid "Auto (recommended)"
+msgstr "Авто (рекомендовано)"
+
+msgid "Error downloading all documents."
+msgstr "Помилка завантаження всіх документів."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Відкрити з ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Обмеження квоти"
+
+msgid "Remaining space"
+msgstr "Залишок місця"
+
+msgid "Course catalogue"
+msgstr "Каталог курсів"
+
+msgid "Drag links to reorder"
+msgstr "Перетягніть посилання для зміни порядку"
+
+msgid "Drop links here to keep them without category"
+msgstr "Скиньте посилання сюди, щоб залишити без категорії"
+
+msgid "Could not export"
+msgstr "Не вдалося експортувати"
+
+msgid "Link moved"
+msgstr "Посилання переміщено"
+
+msgid "Could not move link"
+msgstr "Не вдалося перемістити посилання"
+
+msgid "Category reordering is not enabled"
+msgstr "Переупорядкування категорій не увімкнено"
+
+msgid "Showing %s posts"
+msgstr "Показується %s дописів"
+
+msgid "Showing %s tasks"
+msgstr "Показується %s завдань"
+
+msgid "Page %s of %s"
+msgstr "Сторінка %s з %s"
+
+msgid "Tutors"
+msgstr "Тутор"
+
+msgid "selected"
+msgstr "вибрано"
+
+msgid "No data to export"
+msgstr "Немає даних для експорту"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Шапка PNG повинна бути ≤ %spx."
+
+msgid "Standard list"
+msgstr "Стандартний список"
+
+msgid "Management list"
+msgstr "Список керування"
+
+msgid "Open platform"
+msgstr "Відкрита платформа"
+
+msgid "Teacher user ID"
+msgstr "ID користувача викладача"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Ви впевнені, що хочете видалити цей курс?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Ви впевнені, що хочете видалити вибрані курси?"
+
+msgid "Search by name, username, email"
+msgstr "Пошук за ім'ям, логіном, email"
+
+msgid "contains %s items"
+msgstr "містить %s елементів"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ваша угода про правові відносини залишається чинною, доки запит на відмову не буде розглянуто та оброблено."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ваш запит на відмову від правової згоди очікує розгляду."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ваш запит на видалення облікового запису очікує розгляду."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Чому ви хочете подати запит на відмову від своєї правової згоди?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Надсилається ваш запит на відмову від правової згоди..."
+
+msgid "Submitting request..."
+msgstr "Надсилається запит..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Запит на відмову від правової згоди"
+
+msgid "Submitting your account deletion request..."
+msgstr "Надсилається ваш запит на видалення облікового запису..."
+
+msgid "Submitting your acceptance..."
+msgstr "Надсилається ваше прийняття..."
+
+msgid "Event details"
+msgstr "Деталі події"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Ви не можете отримати доступ до пов'язаного курсу з цього перегляду."
+
+msgid "Failed to load sessions"
+msgstr "Не вдалося завантажити сесії"
+
+msgid "Failed to load events"
+msgstr "Не вдалося завантажити події"
+
+msgid "No events found"
+msgstr "Події не знайдено"
+
+msgid "Group image"
+msgstr "Зображення групи"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Заборонено"
+
+msgid "Distribution"
+msgstr "Розподіл"
+
+msgid "Firstname"
+msgstr "Ім'я"
+
+msgid "Lastname"
+msgstr "Прізвище"
+
+msgid "Email"
+msgstr "Електронна пошта"
+
+msgid "Last login in platform"
+msgstr "Останній вхід на платформу"
+
+msgid "Export as CSV"
+msgstr "Експорт у CSV"
+
+msgid "Export as XLS"
+msgstr "Експорт у XLS"
+
+msgid "Deactivate this user?"
+msgstr "Деактивувати цього користувача?"
+
+msgid "Enable this user?"
+msgstr "Активувати цього користувача?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Об'єднати цю дублікатну групу з користувачем #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Це об'єднає всі інші облікові записи в цій групі з цим обліковим записом."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Об'єднані облікові записи будуть назавжди видалені та зникнуть з цього звіту."
+
+msgid "This action cannot be undone."
+msgstr "Цю дію не можна скасувати."
+
+msgid "Unify"
+msgstr "Об'єднати"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Студент"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Загальний обсяг, використаний порталом %s, ліміт %s МБ"
+
+msgid "Helper text"
+msgstr "Довідковий текст"
+
+msgid "NotAllowed"
+msgstr "НеДозволено"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Використовуйте фільтри вище, щоб завантажити деталі доступу учня."
+
+msgid "Start date must be before end date"
+msgstr "Дата початку повинна бути раніше дати завершення"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Виберіть діапазон дат і тип групування, щоб переглянути деталі доступу учня."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Цей курс буде створено за допомогою шаблону курсу за замовчуванням платформи."
+
+msgid "Security breach avoid restart"
+msgstr "Порушення безпеки, уникайте перезапуску"
+
+msgid "User deactivated"
+msgstr "Користувач деактивовано"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Користувача активовано"
+
+msgid "No other duplicates found for this user."
+msgstr "Інших дублікатів для цього користувача не знайдено."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Користувачів об'єднано: %s облікових записів(ів) об'єднано з користувачем #%s. Об'єднані облікові записи назавжди видалено."
+
+msgid "No accounts were merged."
+msgstr "Облікові записи не об'єднано."
+
+msgid "An error occurred while unifying users."
+msgstr "Виникла помилка під час об'єднання користувачів."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Користувачів об'єднано: користувача #%s об'єднано з користувачем #%s. Об'єднаний обліковий запис назавжди видалено."
+
+msgid "Duplicate users"
+msgstr "Дублікати користувачів"
+
+msgid "Years"
+msgstr "Роки"
+
+msgid "All time visits outside sessions"
+msgstr "Візити за весь час поза сесіями"
+
+msgid "All time visits in sessions"
+msgstr "Візити за весь час у сесіях"
+
+msgid "All time visits total"
+msgstr "Всього візитів за весь час"
+
+msgid "Student visits per period, per course"
+msgstr "Візити студентів за період, за курсом"
+
+msgid "By email"
+msgstr "За електронною поштою"
+
+msgid "By extra field"
+msgstr "За додатковим полем"
+
+msgid "Select an option"
+msgstr "Виберіть опцію"
+
+msgid "Profile field"
+msgstr "Поле профілю"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Цей звіт містить лише користувачів з однаковою адресою електронної пошти."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Цей звіт показує лише користувачів, які мають однакове значення для вибраного поля профілю."
+
+msgid "How to use this report"
+msgstr "Як використовувати цей звіт"
+
+msgid "Disable / Enable"
+msgstr "Вимкнути / Увімкнути"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Лише блокує або розблоковує вхід. Не видаляє користувача і не скасовує підписку."
+
+msgid "Last week"
+msgstr "Минулого тижня"
+
+msgid "Next week"
+msgstr "Наступного тижня"
+
+msgid "Loading report..."
+msgstr "Завантаження звіту..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Не вдалося завантажити звіт. Спробуйте ще раз."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Виберіть одну або кілька сесій для копіювання тренерів та оберіть курс призначення"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Тримайте Ctrl (або Cmd) для вибору кількох елементів"
+
+msgid "Choose the destination course"
+msgstr "Оберіть курс призначення"
+
+msgid "You can select multiple items"
+msgstr "Ви можете вибрати кілька елементів"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Використовуйте поле пошуку, щоб швидко знайти курси"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Виберіть одну або кілька вихідних сесій та одну або кілька сесій призначення для копіювання студентів"
+
+msgid "Select destination sessions"
+msgstr "Виберіть сесії призначення"
+
+msgid "You can select multiple users"
+msgstr "Ви можете вибрати кількох користувачів"
+
+msgid "Use the search box to find users quickly"
+msgstr "Використовуйте поле пошуку, щоб швидко знайти користувачів"
+
+msgid "Error while creating the document"
+msgstr "Помилка під час створення документа"
+
+msgid "Not a SCORM learning path"
+msgstr "Не є навчальним шляхом SCORM"
+
+msgid "Final item"
+msgstr "Остання позиція"
+
+msgid "Edit item"
+msgstr "Редагувати позицію"
+
+msgid "No AI text providers configured."
+msgstr "Не налаштовано постачальників текстового AI."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Завантаження не вдалося. Файл, ймовірно, перевищує ліміт сервера (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Оновлення не вдалося. Сервер не отримав файл."
+
+msgid "Update failed. %s"
+msgstr "Оновлення не вдалося. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Оновлення не вдалося. Невірні дані завантаженого файлу."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Оновлення не вдалося. Назва завантаженого ZIP-файлу повинна відповідати оригінальній назві пакета SCORM."
+
+msgid "Update failed"
+msgstr "Оновлення не вдалося"
+
+msgid "Question lower case"
+msgstr "Питання з малої літери"
+
+msgid "Regenerate"
+msgstr "Регенерувати"
+
+msgid "Case insensitive"
+msgstr "Не чутливий до регістру"
+
+msgid "Select a session to load its courses."
+msgstr "Виберіть сесію, щоб завантажити її курси."
+
+msgid "Select the source course."
+msgstr "Виберіть вихідний курс."
+
+msgid "Select a destination session."
+msgstr "Виберіть сесію призначення."
+
+msgid "Select the destination course."
+msgstr "Виберіть курс призначення."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Скопіювати повний вміст курсу з вибраного курсу сесії."
+
+msgid "Select which tools/items to copy."
+msgstr "Виберіть, які інструменти/елементи копіювати."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Не включати базовий (не сесійний) вміст курсу."
+
+msgid "An error occurred while copying the course"
+msgstr "Виникла помилка під час копіювання курсу"
+
+msgid "Please select a different destination"
+msgstr "Будь ласка, виберіть інше місце призначення"
+
+msgid "You must select a destination course"
+msgstr "Ви повинні вибрати курс призначення"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Щоб експортувати курси з тестами, потрібно вибрати тести"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Якщо ваші навчальні шляхи містять аудіофайли, виберіть їх з документів"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Якщо ваші тести містять запитання з гарячими точками, виберіть зображення з документів"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Пароль повинен містити щонайменше %length% символів."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Пароль повинен містити щонайменше %count% символів у нижньому регістрі."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Пароль повинен містити щонайменше %count% символів у верхньому регістрі."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Пароль повинен містити щонайменше %count% цифр (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Пароль повинен містити щонайменше %count% спеціальних символів."
+
+msgid "Invalid login request."
+msgstr "Недійсний запит на вхід."
+
+msgid "Authentication failed."
+msgstr "Помилка автентифікації."
+
+msgid "Login %status% for username %username%"
+msgstr "Вхід %status% для користувача %username%"
+
+msgid "Co-generated with AI"
+msgstr "Спільно згенеровано з ШІ"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Обов’язкові поля"
+

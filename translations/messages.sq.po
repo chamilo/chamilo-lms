@@ -33115,3 +33115,570 @@ msgstr "Palët e treta"
 msgid "Layouts"
 msgstr "Layout-et"
 
+msgid "Relation type"
+msgstr "Lloji i marrëdhënies"
+
+msgid "Add all"
+msgstr "Shto të gjithë"
+
+msgid "Remove all"
+msgstr "Hiq të gjithë"
+
+msgid "An error occurred. Please try again."
+msgstr "Ndodhi një gabim. Ju lutemi riprovoni."
+
+msgid "%s created"
+msgstr "%s u krijua"
+
+msgid "%s updated"
+msgstr "%s u përditësua"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Nëse planifikoni të përditësoni nga një version më i vjetër i Chamilo, mund të doni të"
+
+msgid "have a look at the changelog"
+msgstr "shikoni changelog-un"
+
+msgid "to know what's new and what has been changed."
+msgstr "për të ditur çfarë ka të re dhe çfarë është ndryshuar."
+
+msgid "Session Item"
+msgstr "Artikull sesioni"
+
+msgid "Points"
+msgstr "Pikë"
+
+msgid "See notifications"
+msgstr "Shih njoftimet"
+
+msgid "New content available for this course."
+msgstr "Përmbajtje e re e disponueshme për këtë kurs."
+
+msgid "No new notifications."
+msgstr "Nuk ka njoftime të reja."
+
+msgid "No new content found."
+msgstr "Nuk u gjet përmbajtje e re."
+
+msgid "No tool details available yet."
+msgstr "Nuk ka detaje vegle të disponueshme ende."
+
+msgid "Last access"
+msgstr "Qasja e fundit"
+
+msgid "Open course"
+msgstr "Hap kursin"
+
+msgid "Course completed"
+msgstr "Kursi i përfunduar"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Limiti i abonimit për këtë kurs është arritur."
+
+msgid "Subscription limit reached"
+msgstr "Limiti i abonimit i arritur"
+
+msgid "Tertiary alternative"
+msgstr "Alternativë tertiary"
+
+msgid "Update SCORM"
+msgstr "Përditëso SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI mund të hartojë reagime dhe një notë të sugjeruar para se ta dërgoni."
+
+msgid "What will be sent to the AI"
+msgstr "Çfarë do t'i dërgohet AI-së"
+
+msgid "Assignment title + instructions"
+msgstr "Titulli i detyrës + udhëzimet"
+
+msgid "Student submission (text)"
+msgstr "Dërgimi i studentit (tekst)"
+
+msgid "Student submission (text): none"
+msgstr "Dërgimi i studentit (tekst): asnjë"
+
+msgid "Student attachment"
+msgstr "Bashkëngjitja e studentit"
+
+msgid "supported"
+msgstr "e mbështetur"
+
+msgid "not supported for document analysis"
+msgstr "jo e mbështetur për analizën e dokumenteve"
+
+msgid "Student attachment: none"
+msgstr "Bashkëngjitja e studentit: asnjë"
+
+msgid "No text AI providers available."
+msgstr "Asnjë ofrues teksti AI i disponueshëm."
+
+msgid "AI-assisted"
+msgstr "Me ndihmën e AI-së"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Kjo vendim ruhet me korrigjimin (ExtraField) dhe nuk mund të ndryshohet më vonë."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Bashkëngjitje opsionale korrigjimi (kjo nuk është dërgimi i studentit)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Marrë"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Zhblloko kolonën"
+
+msgid "Lock column"
+msgstr "Blloko kolonën"
+
+msgid "Set all Present"
+msgstr "Vendos të gjithë Të pranishëm"
+
+msgid "Set all Absent"
+msgstr "Vendos të gjithë Të munguar"
+
+msgid "Auto (recommended)"
+msgstr "Automatike (e rekomanduar)"
+
+msgid "Error downloading all documents."
+msgstr "Gabim në shkarkimin e të gjithë dokumenteve."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Hap me ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Kufiri i kuotës"
+
+msgid "Remaining space"
+msgstr "Hapësira e mbetur"
+
+msgid "Course catalogue"
+msgstr "Katalogu i kurseve"
+
+msgid "Drag links to reorder"
+msgstr "Tërhiq lidhjet për t'i rirendit"
+
+msgid "Drop links here to keep them without category"
+msgstr "Lëshoj lidhjet këtu për t'i mbajtur pa kategori"
+
+msgid "Could not export"
+msgstr "Nuk mund të eksportohet"
+
+msgid "Link moved"
+msgstr "Lidhja u zhvendos"
+
+msgid "Could not move link"
+msgstr "Nuk mund të zhvendoset lidhja"
+
+msgid "Category reordering is not enabled"
+msgstr "Rirenditja e kategorive nuk është e aktivizuar"
+
+msgid "Showing %s posts"
+msgstr "Duke shfaqur %s postime"
+
+msgid "Showing %s tasks"
+msgstr "Duke shfaqur %s detyra"
+
+msgid "Page %s of %s"
+msgstr "Faqja %s nga %s"
+
+msgid "Tutors"
+msgstr "Tutorët"
+
+msgid "selected"
+msgstr "i zgjedhur"
+
+msgid "No data to export"
+msgstr "Asnjë të dhënë për të eksportuar"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG duhet të jetë \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Listë standarde"
+
+msgid "Management list"
+msgstr "Listë menaxhimi"
+
+msgid "Open platform"
+msgstr "Platformë e hapur"
+
+msgid "Teacher user ID"
+msgstr "ID e përdoruesit mësues"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "A jeni të sigurt që dëshironi të fshini këtë kurs?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "A jeni të sigurt që dëshironi të fshini kurset e zgjedhura?"
+
+msgid "Search by name, username, email"
+msgstr "Kërko sipas emrit, përdoruesit, email"
+
+msgid "contains %s items"
+msgstr "përmban %s elemente"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Marrëveshja juaj ligjore mbetet aktive derisa kërkesa për tërheqje të shqyrtohet dhe përpunohen."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Kërkesa juaj për tërheqje të pëlqimit ligjor është në pritje të shqyrtimit."
+
+msgid "Your account deletion request is pending review."
+msgstr "Kërkesa juaj për fshirjen e llogarisë është në pritje të shqyrtimit."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Pse dëshironi të kërkoni tërheqjen e pëlqimit ligjor tuaj?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Po dorëzohet kërkesa juaj për tërheqjen e pëlqimit ligjor..."
+
+msgid "Submitting request..."
+msgstr "Po dorëzohet kërkesa..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Kërko tërheqjen e pëlqimit ligjor"
+
+msgid "Submitting your account deletion request..."
+msgstr "Po dorëzohet kërkesa juaj për fshirjen e llogarisë..."
+
+msgid "Submitting your acceptance..."
+msgstr "Po dorëzohet pranimi juaj..."
+
+msgid "Event details"
+msgstr "Detajet e ngjarjes"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Nuk mund të aksesoni kursin e lidhur nga kjo pamje."
+
+msgid "Failed to load sessions"
+msgstr "Gabim në ngarkimin e sesioneve"
+
+msgid "Failed to load events"
+msgstr "Gabim në ngarkimin e ngjarjeve"
+
+msgid "No events found"
+msgstr "Asnjë ngjarje e gjetur"
+
+msgid "Group image"
+msgstr "Imazhi i grupit"
+
+msgid "SearchTCC"
+msgstr "KërkoTCC"
+
+msgid "Forbidden"
+msgstr "Ndalohet"
+
+msgid "Distribution"
+msgstr "Shpërndarje"
+
+msgid "Firstname"
+msgstr "Emri"
+
+msgid "Lastname"
+msgstr "Mbiemri"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Last login in platform"
+msgstr "Hyrja e fundit në platformë"
+
+msgid "Export as CSV"
+msgstr "Eksporto si CSV"
+
+msgid "Export as XLS"
+msgstr "Eksporto si XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivizo këtë përdorues?"
+
+msgid "Enable this user?"
+msgstr "Aktivizo këtë përdorues?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Bashkoj këtë grup të dyfishtë në përdoruesin #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Kjo do të bashkojë të gjitha llogaritë e tjera në të njëjtin grup në këtë llogari."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Llogaritë e bashkuara do të fshihen përgjithmonë dhe do të zhduken nga ky raport."
+
+msgid "This action cannot be undone."
+msgstr "Kjo veprimtari nuk mund të zhbëhet."
+
+msgid "Unify"
+msgstr "Bashko"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Hapësira totale e përdorur nga portali %s kufiri është %s MB"
+
+msgid "Helper text"
+msgstr "Tekst ndihmës"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Përdorni filttrat e mësipërm për të ngarkuar detajet e aksesit të nxënësit."
+
+msgid "Start date must be before end date"
+msgstr "Data e fillimit duhet të jetë para datës së mbarimit"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Zgjidhni një interval datash dhe lloj grupimi për të shqyrtuar detajet e aksesit të nxënësit."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Ky kurs do të krijohet duke përdorur modelin e paracaktuar të kursit të platformës."
+
+msgid "Security breach avoid restart"
+msgstr "Shkelje sigurie shmang rinisjen"
+
+msgid "User deactivated"
+msgstr "Përdoruesi i deaktivizuar"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Përdoruesi i aktivizuar"
+
+msgid "No other duplicates found for this user."
+msgstr "Asnjë dyfish tjetër i gjetur për këtë përdorues."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Përdoruesit e bashkuar: u bashkuan %s llogari(a) në përdoruesin #%s. Llogaritë e bashkuara u fshinë përgjithmonë."
+
+msgid "No accounts were merged."
+msgstr "Asnjë llogari nuk u bashkua."
+
+msgid "An error occurred while unifying users."
+msgstr "Ndodhi një gabim gjatë bashkimit të përdoruesve."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Përdoruesit e bashkuar: u bashkua përdoruesi #%s në përdoruesin #%s. Llogaria e bashkuar u fshi përgjithmonë."
+
+msgid "Duplicate users"
+msgstr "Përdorues të dyfishuar"
+
+msgid "Years"
+msgstr "Vite"
+
+msgid "All time visits outside sessions"
+msgstr "Vizita të gjitha kohëve jashtë seancave"
+
+msgid "All time visits in sessions"
+msgstr "Vizita të gjitha kohëve në seanca"
+
+msgid "All time visits total"
+msgstr "Vizita të gjitha kohëve total"
+
+msgid "Student visits per period, per course"
+msgstr "Vizita të studentëve për periudhë, për kurs"
+
+msgid "By email"
+msgstr "Sipas email-it"
+
+msgid "By extra field"
+msgstr "Sipas fushës shtesë"
+
+msgid "Select an option"
+msgstr "Zgjidhni një opsion"
+
+msgid "Profile field"
+msgstr "Fushë profili"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Ky raport liston vetëm përdoruesit që kanë të njëjtën adresë email."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Ky raport liston vetëm përdoruesit që ndajnë të njëjtën vlerë për fushën e zgjedhur të profilit."
+
+msgid "How to use this report"
+msgstr "Si të përdorni këtë raport"
+
+msgid "Disable / Enable"
+msgstr "Çaktivizo / Aktivizo"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Vetëm bllokon ose rikthen hyrjen. Nuk fshin përdoruesin dhe nuk heq abonimet."
+
+msgid "Last week"
+msgstr "Java e kaluar"
+
+msgid "Next week"
+msgstr "Java e ardhshme"
+
+msgid "Loading report..."
+msgstr "Duke ngarkuar raportin..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Dështoi ngarkimi i këtij raporti. Ju lutemi provoni përsëri."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Zgjidhni një ose më shumë seanca për të kopjuar trajnerët dhe zgjidhni kursin destinacion"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Mbajni Ctrl (ose Cmd) për të zgjedhur artikuj të shumëfishtë"
+
+msgid "Choose the destination course"
+msgstr "Zgjidhni kursin destinacion"
+
+msgid "You can select multiple items"
+msgstr "Mund të zgjidhni artikuj të shumëfishtë"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Përdorni kutinë e kërkimit për të gjetur kurset shpejt"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Zgjidhni një ose më shumë seanca burim dhe një ose më shumë seanca destinacion për të kopjuar studentët"
+
+msgid "Select destination sessions"
+msgstr "Zgjidhni seancat destinacion"
+
+msgid "You can select multiple users"
+msgstr "Mund të zgjidhni përdorues të shumëfishtë"
+
+msgid "Use the search box to find users quickly"
+msgstr "Përdorni kutinë e kërkimit për të gjetur përdoruesit shpejt"
+
+msgid "Error while creating the document"
+msgstr "Gabim gjatë krijimit të dokumentit"
+
+msgid "Not a SCORM learning path"
+msgstr "Nuk është një udhëtim i mësimit SCORM"
+
+msgid "Final item"
+msgstr "Artikulli përfundimtar"
+
+msgid "Edit item"
+msgstr "Ndrysho artikullin"
+
+msgid "No AI text providers configured."
+msgstr "Asnjë ofrues teksti AI i konfiguruar."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Ngarkimi dështoi. Skedari ka gjasa më i madh se limiti i serverit (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Përditësimi dështoi. Asnjë skedar i marrë nga serveri."
+
+msgid "Update failed. %s"
+msgstr "Përditësimi dështoi. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Përditësimi dështoi. Payload i pavlefshëm i skedarit të ngarkuar."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Përditësimi dështoi. Emri i skedarit ZIP të ngarkuar duhet të përputhet me emrin e paketës origjinale SCORM."
+
+msgid "Update failed"
+msgstr "Përditësimi dështoi"
+
+msgid "Question lower case"
+msgstr "Pyetje me shkronja të vogla"
+
+msgid "Regenerate"
+msgstr "Rigjenero"
+
+msgid "Case insensitive"
+msgstr "Pa dallim të madhësisë së shkronjave"
+
+msgid "Select a session to load its courses."
+msgstr "Zgjidhni një seancë për të ngarkuar kurset e saj."
+
+msgid "Select the source course."
+msgstr "Zgjidhni kursin burim."
+
+msgid "Select a destination session."
+msgstr "Zgjidhni një seancë destinacion."
+
+msgid "Select the destination course."
+msgstr "Zgjidhni kursin destinacion."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopjojeni përmbajtjen e plotë të kursit nga kursi i seancës së zgjedhur."
+
+msgid "Select which tools/items to copy."
+msgstr "Zgjidhni cilat mjete/artikuj të kopjohen."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Mos përfshini përmbajtjen bazë (jo-seancë) të kursit."
+
+msgid "An error occurred while copying the course"
+msgstr "Ndodhi një gabim gjatë kopjimit të kursit"
+
+msgid "Please select a different destination"
+msgstr "Ju lutemi zgjidhni një destinacion tjetër"
+
+msgid "You must select a destination course"
+msgstr "Duhet të zgjidhni një kurs destinacion"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Për të eksportuar kurset me kuiz, duhet të zgjidhni kuizin"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Nëse LP-të tuaja kanë skedarë audio të përfshirë, duhet t'i zgjidhni ato nga dokumentet"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Nëse kuizi juaj ka pyetje hotspot të përfshira, duhet të zgjidhni imazhet nga dokumentet"
+
+msgid "GeneralResourcesCourse"
+msgstr "BurimetGjeneraleKursi"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Fjalëkalimi duhet të jetë të paktën %length% karaktere i gjatë."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Fjalëkalimi duhet të përmbajë të paktën %count% karaktere të vogla."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Fjalëkalimi duhet të përmbajë të paktën %count% karaktere të mëdha."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Fjalëkalimi duhet të përmbajë të paktën %count% karaktere numerike (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Fjalëkalimi duhet të përmbajë të paktën %count% karaktere speciale."
+
+msgid "Invalid login request."
+msgstr "Kërkesë hyrjeje e pavlefshme."
+
+msgid "Authentication failed."
+msgstr "Autentifikimi dështoi."
+
+msgid "Login %status% for username %username%"
+msgstr "Hyrje %status% për emrin e përdoruesit %username%"
+
+msgid "Co-generated with AI"
+msgstr "Gjeneruar bashkë me AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Fushat e detyrueshme"
+

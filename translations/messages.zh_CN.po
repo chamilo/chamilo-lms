@@ -33117,3 +33117,570 @@ msgstr "第三方"
 msgid "Layouts"
 msgstr "布局"
 
+msgid "Relation type"
+msgstr "关系类型"
+
+msgid "Add all"
+msgstr "全部添加"
+
+msgid "Remove all"
+msgstr "全部移除"
+
+msgid "An error occurred. Please try again."
+msgstr "发生错误。请重试。"
+
+msgid "%s created"
+msgstr "%s 已创建"
+
+msgid "%s updated"
+msgstr "%s 已更新"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "如果您计划从旧版 Chamilo 升级，您可能想要"
+
+msgid "have a look at the changelog"
+msgstr "查看变更日志"
+
+msgid "to know what's new and what has been changed."
+msgstr "以了解新功能和变更内容。"
+
+msgid "Session Item"
+msgstr "会话项目"
+
+msgid "Points"
+msgstr "分数"
+
+msgid "See notifications"
+msgstr "查看通知"
+
+msgid "New content available for this course."
+msgstr "此课程有新内容可用。"
+
+msgid "No new notifications."
+msgstr "没有新通知。"
+
+msgid "No new content found."
+msgstr "未找到新内容。"
+
+msgid "No tool details available yet."
+msgstr "尚无工具详细信息。"
+
+msgid "Last access"
+msgstr "最后访问"
+
+msgid "Open course"
+msgstr "打开课程"
+
+msgid "Course completed"
+msgstr "课程已完成"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "此课程的订阅限额已达上限。"
+
+msgid "Subscription limit reached"
+msgstr "订阅限额已达"
+
+msgid "Tertiary alternative"
+msgstr "三级备选"
+
+msgid "Update SCORM"
+msgstr "更新 SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI 可以在您发送前起草反馈和建议分数。"
+
+msgid "What will be sent to the AI"
+msgstr "将发送给 AI 的内容"
+
+msgid "Assignment title + instructions"
+msgstr "作业标题 + 说明"
+
+msgid "Student submission (text)"
+msgstr "学生提交（文本）"
+
+msgid "Student submission (text): none"
+msgstr "学生提交（文本）：无"
+
+msgid "Student attachment"
+msgstr "学生附件"
+
+msgid "supported"
+msgstr "支持"
+
+msgid "not supported for document analysis"
+msgstr "不支持文档分析"
+
+msgid "Student attachment: none"
+msgstr "学生附件：无"
+
+msgid "No text AI providers available."
+msgstr "没有可用的文本AI提供商。"
+
+msgid "AI-assisted"
+msgstr "AI辅助"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "此决定与批改一起保存（额外字段），以后无法更改。"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "可选批改附件（这不是学生的提交）。"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "已接收"
+
+msgid "%s min"
+msgstr "%s 分钟"
+
+msgid "Unlock column"
+msgstr "解锁列"
+
+msgid "Lock column"
+msgstr "锁定列"
+
+msgid "Set all Present"
+msgstr "全部设为出席"
+
+msgid "Set all Absent"
+msgstr "全部设为缺席"
+
+msgid "Auto (recommended)"
+msgstr "自动（推荐）"
+
+msgid "Error downloading all documents."
+msgstr "下载所有文档时出错。"
+
+msgid "Open with ONLYOFFICE"
+msgstr "使用 ONLYOFFICE 打开"
+
+msgid "Limiting quota"
+msgstr "限制配额"
+
+msgid "Remaining space"
+msgstr "剩余空间"
+
+msgid "Course catalogue"
+msgstr "课程目录"
+
+msgid "Drag links to reorder"
+msgstr "拖动链接以重新排序"
+
+msgid "Drop links here to keep them without category"
+msgstr "将链接拖放到此处以保持无分类"
+
+msgid "Could not export"
+msgstr "无法导出"
+
+msgid "Link moved"
+msgstr "链接已移动"
+
+msgid "Could not move link"
+msgstr "无法移动链接"
+
+msgid "Category reordering is not enabled"
+msgstr "未启用分类重新排序"
+
+msgid "Showing %s posts"
+msgstr "显示 %s 条帖子"
+
+msgid "Showing %s tasks"
+msgstr "显示 %s 个任务"
+
+msgid "Page %s of %s"
+msgstr "第 %s 页，共 %s 页"
+
+msgid "Tutors"
+msgstr "导师"
+
+msgid "selected"
+msgstr "已选择"
+
+msgid "No data to export"
+msgstr "没有数据可导出"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "页眉 PNG 必须 ≤ %spx。"
+
+msgid "Standard list"
+msgstr "标准列表"
+
+msgid "Management list"
+msgstr "管理列表"
+
+msgid "Open platform"
+msgstr "开放平台"
+
+msgid "Teacher user ID"
+msgstr "教师用户 ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "您确定要删除此课程吗？"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "您确定要删除选定的课程吗？"
+
+msgid "Search by name, username, email"
+msgstr "按姓名、用户名、电子邮件搜索"
+
+msgid "contains %s items"
+msgstr "包含 %s 项"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "您的法律协议将保持有效，直到任何撤回请求被审核和处理。"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "您的法律同意撤回请求正在等待审核。"
+
+msgid "Your account deletion request is pending review."
+msgstr "您的账户删除请求正在等待审核。"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "您为什么想要请求撤回您的法律同意？"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "正在提交您的法律同意撤回请求…"
+
+msgid "Submitting request..."
+msgstr "正在提交请求…"
+
+msgid "Request withdrawal of legal consent"
+msgstr "请求撤回法律同意"
+
+msgid "Submitting your account deletion request..."
+msgstr "正在提交您的账户删除请求…"
+
+msgid "Submitting your acceptance..."
+msgstr "正在提交您的接受…"
+
+msgid "Event details"
+msgstr "事件详情"
+
+msgid "You cannot access the linked course from this view."
+msgstr "您无法从此视图访问链接的课程。"
+
+msgid "Failed to load sessions"
+msgstr "加载会话失败"
+
+msgid "Failed to load events"
+msgstr "加载事件失败"
+
+msgid "No events found"
+msgstr "未找到事件"
+
+msgid "Group image"
+msgstr "小组图片"
+
+msgid "SearchTCC"
+msgstr "搜索TCC"
+
+msgid "Forbidden"
+msgstr "禁止"
+
+msgid "Distribution"
+msgstr "分发"
+
+msgid "Firstname"
+msgstr "名字"
+
+msgid "Lastname"
+msgstr "姓氏"
+
+msgid "Email"
+msgstr "电子邮件"
+
+msgid "Last login in platform"
+msgstr "平台最后登录"
+
+msgid "Export as CSV"
+msgstr "导出为 CSV"
+
+msgid "Export as XLS"
+msgstr "导出为 XLS"
+
+msgid "Deactivate this user?"
+msgstr "停用此用户？"
+
+msgid "Enable this user?"
+msgstr "启用此用户？"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "将此重复小组合并到用户 #%s？"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "这将把同一小组中的所有其他账户合并到此账户。"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "合并的账户将被永久删除，并将从此报告中消失。"
+
+msgid "This action cannot be undone."
+msgstr "此操作无法撤销。"
+
+msgid "Unify"
+msgstr "合并"
+
+msgid "SessionAdmin"
+msgstr "会话管理员"
+
+msgid "Drh"
+msgstr "人力资源主管"
+
+msgid "Student"
+msgstr "学生"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "门户 %s 已使用总空间 %s MB 限制"
+
+msgid "Helper text"
+msgstr "帮助文本"
+
+msgid "NotAllowed"
+msgstr "不允许"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "使用上面的过滤器加载学习者访问详情。"
+
+msgid "Start date must be before end date"
+msgstr "开始日期必须早于结束日期"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "选择日期范围和分组类型以查看学习者访问详情。"
+
+msgid "This course will be created using the platform default course template."
+msgstr "此课程将使用平台默认课程模板创建。"
+
+msgid "Security breach avoid restart"
+msgstr "安全漏洞避免重启"
+
+msgid "User deactivated"
+msgstr "用户已停用"
+
+msgid "InvalidId"
+msgstr "无效ID"
+
+msgid "User enabled"
+msgstr "用户已启用"
+
+msgid "No other duplicates found for this user."
+msgstr "未找到此用户的其他重复项。"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "用户已合并：将 %s 个账户合并到用户 #%s。合并的账户已被永久删除。"
+
+msgid "No accounts were merged."
+msgstr "没有账户被合并。"
+
+msgid "An error occurred while unifying users."
+msgstr "合并用户时发生错误。"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "用户已合并：将用户 #%s 合并到用户 #%s。合并的账户已被永久删除。"
+
+msgid "Duplicate users"
+msgstr "重复用户"
+
+msgid "Years"
+msgstr "年"
+
+msgid "All time visits outside sessions"
+msgstr "会话外全时访问"
+
+msgid "All time visits in sessions"
+msgstr "会话内全时访问"
+
+msgid "All time visits total"
+msgstr "全时访问总数"
+
+msgid "Student visits per period, per course"
+msgstr "学生每周期每课程访问"
+
+msgid "By email"
+msgstr "按电子邮件"
+
+msgid "By extra field"
+msgstr "按额外字段"
+
+msgid "Select an option"
+msgstr "选择一个选项"
+
+msgid "Profile field"
+msgstr "个人资料字段"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "此报告仅列出具有相同电子邮件地址的用户。"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "此报告仅列出所选个人资料字段值相同用户。"
+
+msgid "How to use this report"
+msgstr "如何使用此报告"
+
+msgid "Disable / Enable"
+msgstr "禁用 / 启用"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "仅阻止或恢复登录。不删除用户，也不移除订阅。"
+
+msgid "Last week"
+msgstr "上周"
+
+msgid "Next week"
+msgstr "下周"
+
+msgid "Loading report..."
+msgstr "正在加载报告…"
+
+msgid "Failed to load this report. Please try again."
+msgstr "加载此报告失败。请重试。"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "选择一个或多个会话以复制其讲师，并选择目标课程"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "按住 Ctrl（或 Cmd）选择多项"
+
+msgid "Choose the destination course"
+msgstr "选择目标课程"
+
+msgid "You can select multiple items"
+msgstr "您可以选择多项"
+
+msgid "Use the search box to find courses quickly"
+msgstr "使用搜索框快速查找课程"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "选择一个或多个源会话和一个或多个目标会话以复制学生"
+
+msgid "Select destination sessions"
+msgstr "选择目标会话"
+
+msgid "You can select multiple users"
+msgstr "您可以选择多个用户"
+
+msgid "Use the search box to find users quickly"
+msgstr "使用搜索框快速查找用户"
+
+msgid "Error while creating the document"
+msgstr "创建文档时出错"
+
+msgid "Not a SCORM learning path"
+msgstr "不是 SCORM 学习路径"
+
+msgid "Final item"
+msgstr "最终项目"
+
+msgid "Edit item"
+msgstr "编辑项目"
+
+msgid "No AI text providers configured."
+msgstr "未配置 AI 文本提供商。"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "上传失败。文件很可能超过服务器限制 (post_max_size)。"
+
+msgid "Update failed. No file received by the server."
+msgstr "更新失败。服务器未收到文件。"
+
+msgid "Update failed. %s"
+msgstr "更新失败。%s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "更新失败。上传的文件负载无效。"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "更新失败。上传的 ZIP 文件名必须与原始 SCORM 包名匹配。"
+
+msgid "Update failed"
+msgstr "更新失败"
+
+msgid "Question lower case"
+msgstr "问题小写"
+
+msgid "Regenerate"
+msgstr "重新生成"
+
+msgid "Case insensitive"
+msgstr "不区分大小写"
+
+msgid "Select a session to load its courses."
+msgstr "选择一个会话以加载其课程。"
+
+msgid "Select the source course."
+msgstr "选择源课程。"
+
+msgid "Select a destination session."
+msgstr "选择目标会话。"
+
+msgid "Select the destination course."
+msgstr "选择目标课程。"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "从所选会话课程复制完整课程内容。"
+
+msgid "Select which tools/items to copy."
+msgstr "选择要复制的工具/项目。"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "不包括基础（非会话）课程内容。"
+
+msgid "An error occurred while copying the course"
+msgstr "复制课程时发生错误"
+
+msgid "Please select a different destination"
+msgstr "请选择其他目标"
+
+msgid "You must select a destination course"
+msgstr "您必须选择目标课程"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "要导出包含测验的课程，必须选择测验"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "如果您的学习路径包含音频文件，应从文档中选择它们"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "如果您的测验包含热点问题，应从文档中选择图像"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "密码必须至少 %length% 个字符。"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "密码必须至少包含 %count% 个小写字符。"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "密码必须至少包含 %count% 个大写字符。"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "密码必须至少包含 %count% 个数字（0-9）字符。"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "密码必须至少包含 %count% 个特殊字符。"
+
+msgid "Invalid login request."
+msgstr "无效的登录请求。"
+
+msgid "Authentication failed."
+msgstr "身份验证失败。"
+
+msgid "Login %status% for username %username%"
+msgstr "用户名 %username% 的登录 %status%"
+
+msgid "Co-generated with AI"
+msgstr "与 AI 共同生成"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "必填字段"
+

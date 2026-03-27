@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թղթապանակ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթապանորդ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -33114,4 +33114,571 @@ msgstr "Երրորդ կողմեր"
 
 msgid "Layouts"
 msgstr "Տիպարներ"
+
+msgid "Relation type"
+msgstr "Հարաբերության տեսակ"
+
+msgid "Add all"
+msgstr "Ավելացնել բոլորը"
+
+msgid "Remove all"
+msgstr "Հեռացնել բոլորը"
+
+msgid "An error occurred. Please try again."
+msgstr "Սխալ է տեղի ունեցել: Խնդրում ենք նորից փորձել:"
+
+msgid "%s created"
+msgstr "%s ստեղծվել է"
+
+msgid "%s updated"
+msgstr "%s թարմացվել է"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Եթե պլանավորում եք թարմացնել Chamilo-ի ավելի հին տարբերակից, ապա կարող եք"
+
+msgid "have a look at the changelog"
+msgstr "նայել փոփոխությունների ցանկը"
+
+msgid "to know what's new and what has been changed."
+msgstr "հասկանալու համար, թե ինչն է նոր և ինչն է փոխվել:"
+
+msgid "Session Item"
+msgstr "Սեանսի տարր"
+
+msgid "Points"
+msgstr "Միավորներ"
+
+msgid "See notifications"
+msgstr "Նայել ծանուցումները"
+
+msgid "New content available for this course."
+msgstr "Այս դասընթացի համար նոր բովանդակություն է հասանելի:"
+
+msgid "No new notifications."
+msgstr "Նոր ծանուցումներ չկան:"
+
+msgid "No new content found."
+msgstr "Նոր բովանդակություն չի գտնվել:"
+
+msgid "No tool details available yet."
+msgstr "Մանրամասն տեղեկություններ դեռ հասանելի չեն:"
+
+msgid "Last access"
+msgstr "Վերջին մուտք"
+
+msgid "Open course"
+msgstr "Բացել դասընթացը"
+
+msgid "Course completed"
+msgstr "Դասընթացն ավարտված է"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Այս դասընթացի բաժանորդագրության սահմանափակումը հասել է:"
+
+msgid "Subscription limit reached"
+msgstr "Բաժանորդագրության սահմանափակումը հասել է"
+
+msgid "Tertiary alternative"
+msgstr "Երրորդական այլընտրանք"
+
+msgid "Update SCORM"
+msgstr "SCORM թարմացում"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ԱԸ-ն կարող է նախնական ստեղծել արձագանք և առաջարկվող գնահատական՝ նախքան այն ուղարկելը:"
+
+msgid "What will be sent to the AI"
+msgstr "Ինչ կուղարկվի ԱԶ-ին"
+
+msgid "Assignment title + instructions"
+msgstr "Աշխատանքի վերնագիր + հրահանգներ"
+
+msgid "Student submission (text)"
+msgstr "Ուսանողի հանձնում (տեքստ)"
+
+msgid "Student submission (text): none"
+msgstr "Ուսանողի հանձնում (տեքստ): ոչ մեկը"
+
+msgid "Student attachment"
+msgstr "Ուսանողի կցված ֆայլ"
+
+msgid "supported"
+msgstr "աջակցվում է"
+
+msgid "not supported for document analysis"
+msgstr "չի աջակցվում փաստաթղթերի վերլուծության համար"
+
+msgid "Student attachment: none"
+msgstr "Ուսանողի կցված ֆայլ: ոչ մեկը"
+
+msgid "No text AI providers available."
+msgstr "Տեքստային ԱԶ մատակարարներ չկան:"
+
+msgid "AI-assisted"
+msgstr "ԱԶ-ով օգնված"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Այս որոշումը պահպանվում է ուղղման հետ (ExtraField) և հետագայում չի կարող փոխվել:"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Ընտրովի ուղղման կցված ֆայլ (սա ուսանողի հանձնումը չէ):"
+
+msgid "AI"
+msgstr "ԱԶ"
+
+msgid "Received"
+msgstr "Վերցված"
+
+msgid "%s min"
+msgstr "%s րոպե"
+
+msgid "Unlock column"
+msgstr "Միացնել սյունակը"
+
+msgid "Lock column"
+msgstr "Արգելափակել սյունակը"
+
+msgid "Set all Present"
+msgstr "Սահմանել բոլորին Ներկա"
+
+msgid "Set all Absent"
+msgstr "Սահմանել բոլորին Ներկա չէ"
+
+msgid "Auto (recommended)"
+msgstr "Ավտո (անվանական)"
+
+msgid "Error downloading all documents."
+msgstr "Սխալ բոլոր փաստաթղթերը ներբեռնելիս:"
+
+msgid "Open with ONLYOFFICE"
+msgstr "Բացել ONLYOFFICE-ով"
+
+msgid "Limiting quota"
+msgstr "Սահմանափակման քվոտա"
+
+msgid "Remaining space"
+msgstr "Մնացած տարածք"
+
+msgid "Course catalogue"
+msgstr "Դասընթացների կատալոգ"
+
+msgid "Drag links to reorder"
+msgstr "Քաշեք հղումները վերակարգավորելու համար"
+
+msgid "Drop links here to keep them without category"
+msgstr "Զննդրեք հղումները այստեղ առանց կատեգորիայի պահելու համար"
+
+msgid "Could not export"
+msgstr "Չհաջողվեց արտահանել"
+
+msgid "Link moved"
+msgstr "Հղումը տեղափոխվեց"
+
+msgid "Could not move link"
+msgstr "Չհաջողվեց տեղափոխել հղումը"
+
+msgid "Category reordering is not enabled"
+msgstr "Կատեգորիաների վերակարգավորումը չի فعالացված"
+
+msgid "Showing %s posts"
+msgstr "Ցուցադրվում է %s գրառում"
+
+msgid "Showing %s tasks"
+msgstr "Ցուցադրվում է %s առաջադրանք"
+
+msgid "Page %s of %s"
+msgstr "Էջ %s %s-ից"
+
+msgid "Tutors"
+msgstr "Դասախոսներ"
+
+msgid "selected"
+msgstr "ընտրված"
+
+msgid "No data to export"
+msgstr "Արտահանման համար տվյալներ չկան"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Վերնագրի PNG-ն պետք է լինի ≤ %spx:"
+
+msgid "Standard list"
+msgstr "Ստանդարտ ցուցակ"
+
+msgid "Management list"
+msgstr "Կառավարման ցուցակ"
+
+msgid "Open platform"
+msgstr "Բաց հարթակ"
+
+msgid "Teacher user ID"
+msgstr "Ուսուցչի օգտատիրոջ ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "հաստատե՞ք, որ ցանկանում եք ջնջել այս դասընթացը:"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "հաստատե՞ք, որ ցանկանում եք ջնջել ընտրված դասընթացները:"
+
+msgid "Search by name, username, email"
+msgstr "Որոնել անունով, օգտանունով, էլ. փոստով"
+
+msgid "contains %s items"
+msgstr "պարունակում է %s տարր"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ձեր իրավական համաձայնությունը մնում է գործող մինչև հետ քաշման հայտը վերանայվի և մշակվի:"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ձեր իրավական համաձայնության հետ քաշման հայտը սպասում է վերանայման:"
+
+msgid "Your account deletion request is pending review."
+msgstr "Ձեր հաշվի ջնջման հայտը սպասում է վերանայման:"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Ինչու՞ եք ցանկանում խնդրել ձեր իրավական համաձայնության հետ քաշումը:"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Ձեր իրավական համաձայնության հետ քաշումը հաստատելու հարցումը ուղարկվում է..."
+
+msgid "Submitting request..."
+msgstr "Հարցումը ուղարկվում է..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Իրավական համաձայնության հետ քաշում"
+
+msgid "Submitting your account deletion request..."
+msgstr "Ձեր հաշվի ջնջման հարցումը ուղարկվում է..."
+
+msgid "Submitting your acceptance..."
+msgstr "Ձեր ընդունումը ուղարկվում է..."
+
+msgid "Event details"
+msgstr "Միջոցառման մանրամասներ"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Դուք չեք կարող այս տեսքից մուտք գործել կապված դասընթացին:"
+
+msgid "Failed to load sessions"
+msgstr "Ձախողվեց սեանսները բեռնել"
+
+msgid "Failed to load events"
+msgstr "Ձախողվեց միջոցառումները բեռնել"
+
+msgid "No events found"
+msgstr "Միջոցառումներ չեն գտնվել"
+
+msgid "Group image"
+msgstr "Խմբի պատկեր"
+
+msgid "SearchTCC"
+msgstr "ՈրոնելTCC"
+
+msgid "Forbidden"
+msgstr "Արգելված"
+
+msgid "Distribution"
+msgstr "Տարածում"
+
+msgid "Firstname"
+msgstr "Անուն"
+
+msgid "Lastname"
+msgstr "Ազգանուն"
+
+msgid "Email"
+msgstr "Էլ. փոստ"
+
+msgid "Last login in platform"
+msgstr "Վերջին մուտքը հարթակ"
+
+msgid "Export as CSV"
+msgstr "Արտահանել CSV"
+
+msgid "Export as XLS"
+msgstr "Արտահանել XLS"
+
+msgid "Deactivate this user?"
+msgstr "Անգործունակել այս օգտատիրոջը?"
+
+msgid "Enable this user?"
+msgstr "Ակտիվացնել այս օգտատիրոջը?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Միավորել այս կրկնակի խումբը օգտատիրոջ #%s-ի հետ?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Սա կմիավորի նույն խմբի բոլոր մյուս հաշիվները այս հաշվի մեջ:"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Միավորված հաշիվները կջնջվեն մշտապես և կանհետանան այս զեկույցից:"
+
+msgid "This action cannot be undone."
+msgstr "Այս գործողությունը չի կարող հետ շրջանառվել:"
+
+msgid "Unify"
+msgstr "Միավորել"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Ուսանող"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Պորտալ %s-ի կողմից օգտագործված ընդհանուր տարածքը սահմանափակված է %s ՄԲ-ով"
+
+msgid "Helper text"
+msgstr "Օգնական տեքստ"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Օգտագործեք վերևի զտիչները՝ ուսանողի մուտքի մանրամասները բեռնելու համար:"
+
+msgid "Start date must be before end date"
+msgstr "Սկզբնական ամսաթիվը պետք է լինի վերջնական ամսաթվից առաջ"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Ընտրեք ամսաթվերի շրջանակ և խմբավորման տեսակ՝ ուսանողի մուտքի մանրամասները վերանայելու համար:"
+
+msgid "This course will be created using the platform default course template."
+msgstr "Այս դասընթացը կստեղծվի հարթակի ստանդարտ դասընթացի ձևանմուշով:"
+
+msgid "Security breach avoid restart"
+msgstr "Անվտանգության խախտում, խուսափել վերագործարկումից"
+
+msgid "User deactivated"
+msgstr "Օգտատերը անգործունակվեց"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Օգտատերը ակտիվացվեց"
+
+msgid "No other duplicates found for this user."
+msgstr "Այս օգտատիրոջ համար այլ կրկնակի չեն գտնվել:"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Օգտատերերը միավորվեցին. միավորվեցին %s հաշիվ(ներ) օգտատիրոջ #%s-ի հետ: Միավորված հաշիվները մշտապես ջնջվեցին:"
+
+msgid "No accounts were merged."
+msgstr "Ոչ մի հաշիվ չի միավորվել:"
+
+msgid "An error occurred while unifying users."
+msgstr "Սխալ տեղի ունեցավ օգտատերերի միավորելիս:"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Օգտատերերը միավորվեցին. օգտատիրոջ #%s-ը միավորվեց օգտատիրոջ #%s-ի հետ: Միավորված հաշիվը մշտապես ջնջվեց:"
+
+msgid "Duplicate users"
+msgstr "Կրկնակի օգտատերեր"
+
+msgid "Years"
+msgstr "Տարիներ"
+
+msgid "All time visits outside sessions"
+msgstr "Բոլոր ժամանակների այցերը սեանսներից դուրս"
+
+msgid "All time visits in sessions"
+msgstr "Բոլոր ժամանակների այցերը սեանսներում"
+
+msgid "All time visits total"
+msgstr "Ընդհանուր այցելություններ ամբողջ ժամանակահատվածում"
+
+msgid "Student visits per period, per course"
+msgstr "Ուսանողների այցելություններ ժամանակաշրջանով, կուրսով"
+
+msgid "By email"
+msgstr "Էլ. փոստով"
+
+msgid "By extra field"
+msgstr "Լրացուցիչ դաշտով"
+
+msgid "Select an option"
+msgstr "Ընտրեք տարբերակ"
+
+msgid "Profile field"
+msgstr "Պրոֆիլի դաշտ"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Այս զեկույցը ցուցադրում է միայն նույն էլ. փոստ ունեցող օգտատերերին:"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Այս զեկույցը ցուցադրում է միայն ընտրված պրոֆիլի դաշտի նույն արժեք ունեցող օգտատերերին:"
+
+msgid "How to use this report"
+msgstr "Ինչպես օգտագործել այս զեկույցը"
+
+msgid "Disable / Enable"
+msgstr "Անջատել / Միացնել"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Միայն արգելափակում կամ վերականգնում է մուտքը: Չի ջնջում օգտատիրոջը և չի հեռացնում բաժանորդագրությունները:"
+
+msgid "Last week"
+msgstr "Վերջին շաբաթ"
+
+msgid "Next week"
+msgstr "Հաջորդ շաբաթ"
+
+msgid "Loading report..."
+msgstr "Բեռնում է զեկույցը..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Չհաջողվեց բեռնել զեկույցը: Խնդրում ենք նորից փորձել:"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Ընտրեք մեկ կամ ավելի սեանսներ՝ ուսուցիչներ պատճենելու համար և ընտրեք նշանակման կուրսը"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Պահեք Ctrl (կամ Cmd)՝ բազմաթիվ տարրեր ընտրելու համար"
+
+msgid "Choose the destination course"
+msgstr "Ընտրեք նշանակման կուրսը"
+
+msgid "You can select multiple items"
+msgstr "Կարող եք ընտրել բազմաթիվ տարրեր"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Օգտագործեք որոնման դաշտը՝ արագ գտնելու կուրսերը"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Ընտրեք մեկ կամ ավելի աղբյուր սեանսներ և մեկ կամ ավելի նշանակման սեանսներ՝ ուսանողներ պատճենելու համար"
+
+msgid "Select destination sessions"
+msgstr "Ընտրեք նշանակման սեանսները"
+
+msgid "You can select multiple users"
+msgstr "Կարող եք ընտրել բազմաթիվ օգտատերեր"
+
+msgid "Use the search box to find users quickly"
+msgstr "Օգտագործեք որոնման դաշտը՝ արագ գտնելու օգտատերերին"
+
+msgid "Error while creating the document"
+msgstr "Սխալ փաստաթղթի ստեղծման ժամանակ"
+
+msgid "Not a SCORM learning path"
+msgstr "Չէ SCORM ուսման ուղի"
+
+msgid "Final item"
+msgstr "Վերջնական տարր"
+
+msgid "Edit item"
+msgstr "Խմբագրել տարրը"
+
+msgid "No AI text providers configured."
+msgstr "Չեն կարգավորված AI տեքստ մատակարարներ:"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Չհաջողվեց վերբեռնել: Ֆայլը հավանաբար ավելի մեծ է սերվերի սահմանից (post_max_size):"
+
+msgid "Update failed. No file received by the server."
+msgstr "Թարմացումը չհաջողվեց: Սերվերը չստացավ ֆայլ:"
+
+msgid "Update failed. %s"
+msgstr "Թարմացումը չհաջողվեց: %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Թարմացումը չհաջողվեց: Վերբեռնված ֆայլի անվավեր payload:"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Թարմացումը չհաջողվեց: Վերբեռնված ZIP ֆայլի անունը պետք է համընկնի օրիգինալ SCORM փաթեթի անվան հետ:"
+
+msgid "Update failed"
+msgstr "Թարմացումը չհաջողվեց"
+
+msgid "Question lower case"
+msgstr "Հարց փոքրատառով"
+
+msgid "Regenerate"
+msgstr "Վերարտադրել"
+
+msgid "Case insensitive"
+msgstr "Մեծատառության անտեսումով"
+
+msgid "Select a session to load its courses."
+msgstr "Ընտրեք սեանս՝ բեռնելու դրա կուրսերը:"
+
+msgid "Select the source course."
+msgstr "Ընտրեք աղբյուր կուրսը:"
+
+msgid "Select a destination session."
+msgstr "Ընտրեք նշանակման սեանս:"
+
+msgid "Select the destination course."
+msgstr "Ընտրեք նշանակման կուրսը:"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Պատճենեք ընտրված սեանսի կուրսի ամբողջական բովանդակությունը:"
+
+msgid "Select which tools/items to copy."
+msgstr "Ընտրեք, թե որ գործիքներ/տարրեր պատճենել:"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Մի ներառեք հիմնական (ոչ սեանսային) կուրսի բովանդակությունը:"
+
+msgid "An error occurred while copying the course"
+msgstr "Սխալ տեղի ունեցավ կուրսը պատճենելիս"
+
+msgid "Please select a different destination"
+msgstr "Խնդրում ենք ընտրել այլ նշանակում"
+
+msgid "You must select a destination course"
+msgstr "Պետք է ընտրեք նշանակման կուրս"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Կուրսեր արտահանելու համար, որոնցում կան թեստեր, պետք է ընտրեք թեստերը"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Եթե ձեր ուսման ուղիներն ունեն ներառված աուդիո ֆայլեր, ապա պետք է ընտրեք դրանք փաստաթղթերից"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Եթե ձեր թեստը պարունակում է hotspot հարցեր, ապա պետք է ընտրեք պատկերները փաստաթղթերից"
+
+msgid "GeneralResourcesCourse"
+msgstr "ԸնդհանուրՌեսուրսներԴասընթաց"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Գաղտնաբառը պետք է լինի առնվազն %length% նիշ երկարությամբ:"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Գաղտնաբառը պետք է պարունակի առնվազն %count% փոքրատառ նիշ:"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Գաղտնաբառը պետք է պարունակի առնվազն %count% մեծատառ նիշ:"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Գաղտնաբառը պետք է պարունակի առնվազն %count% թվային (0-9) նիշ:"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Գաղտնաբառը պետք է պարունակի առնվազն %count% հատուկ նիշ:"
+
+msgid "Invalid login request."
+msgstr "Անվավեր մուտքագրում:"
+
+msgid "Authentication failed."
+msgstr "Նույնականացումը ձախողվեց:"
+
+msgid "Login %status% for username %username%"
+msgstr "Մուտք %status% օգտատիրոջ անուն %username%-ի համար"
+
+msgid "Co-generated with AI"
+msgstr "Նույնականացված AI-ով"
+
+msgid "GDPRTitle"
+msgstr "GDPRՎերնագիր"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Պարտադիր դաշտեր"
 

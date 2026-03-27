@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempio di formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula di esempio: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervalli variabili"
@@ -33130,4 +33130,571 @@ msgstr "Terze parti"
 
 msgid "Layouts"
 msgstr "Layout"
+
+msgid "Relation type"
+msgstr "Tipo di relazione"
+
+msgid "Add all"
+msgstr "Aggiungi tutto"
+
+msgid "Remove all"
+msgstr "Rimuovi tutto"
+
+msgid "An error occurred. Please try again."
+msgstr "Si è verificato un errore. Riprova."
+
+msgid "%s created"
+msgstr "%s creato"
+
+msgid "%s updated"
+msgstr "%s aggiornato"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Se prevedi di aggiornare da una versione precedente di Chamilo, potresti voler"
+
+msgid "have a look at the changelog"
+msgstr "consultare il changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "per sapere cosa è nuovo e cosa è stato cambiato."
+
+msgid "Session Item"
+msgstr "Elemento sessione"
+
+msgid "Points"
+msgstr "Punti"
+
+msgid "See notifications"
+msgstr "Visualizza notifiche"
+
+msgid "New content available for this course."
+msgstr "Nuovo contenuto disponibile per questo corso."
+
+msgid "No new notifications."
+msgstr "Nessuna nuova notifica."
+
+msgid "No new content found."
+msgstr "Nessun nuovo contenuto trovato."
+
+msgid "No tool details available yet."
+msgstr "Nessun dettaglio strumento disponibile ancora."
+
+msgid "Last access"
+msgstr "Ultimo accesso"
+
+msgid "Open course"
+msgstr "Apri corso"
+
+msgid "Course completed"
+msgstr "Corso completato"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "È stato raggiunto il limite di iscrizione per questo corso."
+
+msgid "Subscription limit reached"
+msgstr "Limite di iscrizione raggiunto"
+
+msgid "Tertiary alternative"
+msgstr "Alternativa terziaria"
+
+msgid "Update SCORM"
+msgstr "Aggiorna SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "L'IA può redigere un feedback e un punteggio suggerito prima che lo invii."
+
+msgid "What will be sent to the AI"
+msgstr "Cosa verrà inviato all'IA"
+
+msgid "Assignment title + instructions"
+msgstr "Titolo compito + istruzioni"
+
+msgid "Student submission (text)"
+msgstr "Invio studente (testo)"
+
+msgid "Student submission (text): none"
+msgstr "Invio studente (testo): nessuno"
+
+msgid "Student attachment"
+msgstr "Allegato studente"
+
+msgid "supported"
+msgstr "supportato"
+
+msgid "not supported for document analysis"
+msgstr "non supportato per l'analisi documenti"
+
+msgid "Student attachment: none"
+msgstr "Allegato studente: nessuno"
+
+msgid "No text AI providers available."
+msgstr "Nessun provider AI disponibile."
+
+msgid "AI-assisted"
+msgstr "Assistito da AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Questa decisione è salvata con la correzione (ExtraField) e non può essere modificata in seguito."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Allegato correzione opzionale (non è l'invio dello studente)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Ricevuto"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Sblocca colonna"
+
+msgid "Lock column"
+msgstr "Blocca colonna"
+
+msgid "Set all Present"
+msgstr "Imposta tutti Presenti"
+
+msgid "Set all Absent"
+msgstr "Imposta tutti Assenti"
+
+msgid "Auto (recommended)"
+msgstr "Auto (consigliato)"
+
+msgid "Error downloading all documents."
+msgstr "Errore nel scaricare tutti i documenti."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Apri con ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Quota limitante"
+
+msgid "Remaining space"
+msgstr "Spazio rimanente"
+
+msgid "Course catalogue"
+msgstr "Catalogo corsi"
+
+msgid "Drag links to reorder"
+msgstr "Trascina i link per riordinarli"
+
+msgid "Drop links here to keep them without category"
+msgstr "Rilascia i link qui per mantenerli senza categoria"
+
+msgid "Could not export"
+msgstr "Impossibile esportare"
+
+msgid "Link moved"
+msgstr "Link spostato"
+
+msgid "Could not move link"
+msgstr "Impossibile spostare il link"
+
+msgid "Category reordering is not enabled"
+msgstr "Riordino categorie non abilitato"
+
+msgid "Showing %s posts"
+msgstr "Visualizzazione di %s post"
+
+msgid "Showing %s tasks"
+msgstr "Visualizzazione di %s compiti"
+
+msgid "Page %s of %s"
+msgstr "Pagina %s di %s"
+
+msgid "Tutors"
+msgstr "Tutor"
+
+msgid "selected"
+msgstr "selezionato"
+
+msgid "No data to export"
+msgstr "Nessun dato da esportare"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG deve essere ≤ %spx."
+
+msgid "Standard list"
+msgstr "Elenco standard"
+
+msgid "Management list"
+msgstr "Elenco gestione"
+
+msgid "Open platform"
+msgstr "Piattaforma aperta"
+
+msgid "Teacher user ID"
+msgstr "ID utente insegnante"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Sei sicuro di voler eliminare questo corso?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Sei sicuro di voler eliminare i corsi selezionati?"
+
+msgid "Search by name, username, email"
+msgstr "Cerca per nome, nome utente, email"
+
+msgid "contains %s items"
+msgstr "contiene %s elementi"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Il tuo accordo legale rimane attivo finché la richiesta di recesso non sarà esaminata e processata."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "La tua richiesta di revoca del consenso legale è in attesa di revisione."
+
+msgid "Your account deletion request is pending review."
+msgstr "La tua richiesta di eliminazione account è in attesa di revisione."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Perché vuoi richiedere la revoca del tuo consenso legale?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Invio della tua richiesta di revoca del consenso legale..."
+
+msgid "Submitting request..."
+msgstr "Invio richiesta in corso..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Richiedi revoca del consenso legale"
+
+msgid "Submitting your account deletion request..."
+msgstr "Invio della richiesta di eliminazione account in corso..."
+
+msgid "Submitting your acceptance..."
+msgstr "Invio della tua accettazione..."
+
+msgid "Event details"
+msgstr "Dettagli evento"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Non è possibile accedere al corso collegato da questa vista."
+
+msgid "Failed to load sessions"
+msgstr "Impossibile caricare le sessioni"
+
+msgid "Failed to load events"
+msgstr "Impossibile caricare gli eventi"
+
+msgid "No events found"
+msgstr "Nessun evento trovato"
+
+msgid "Group image"
+msgstr "Immagine gruppo"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Vietato"
+
+msgid "Distribution"
+msgstr "Distribuzione"
+
+msgid "Firstname"
+msgstr "Nome"
+
+msgid "Lastname"
+msgstr "Cognome"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Last login in platform"
+msgstr "Ultimo accesso alla piattaforma"
+
+msgid "Export as CSV"
+msgstr "Esporta come CSV"
+
+msgid "Export as XLS"
+msgstr "Esporta come XLS"
+
+msgid "Deactivate this user?"
+msgstr "Disattivare questo utente?"
+
+msgid "Enable this user?"
+msgstr "Attivare questo utente?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Unificare questo gruppo duplicato nell'utente #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Ciò fonderà tutti gli altri account dello stesso gruppo in questo account."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Gli account fusi verranno eliminati definitivamente e spariranno da questo report."
+
+msgid "This action cannot be undone."
+msgstr "Questa azione non può essere annullata."
+
+msgid "Unify"
+msgstr "Unifica"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Studente"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Spazio totale utilizzato dal portale %s limite è %s MB"
+
+msgid "Helper text"
+msgstr "Testo di aiuto"
+
+msgid "NotAllowed"
+msgstr "NonConsentito"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Usa i filtri sopra per caricare i dettagli di accesso degli studenti."
+
+msgid "Start date must be before end date"
+msgstr "La data di inizio deve precedere la data di fine"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Seleziona un intervallo di date e tipo di raggruppamento per esaminare i dettagli di accesso degli studenti."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Questo corso verrà creato utilizzando il modello di corso predefinito della piattaforma."
+
+msgid "Security breach avoid restart"
+msgstr "Violazione di sicurezza evita riavvio"
+
+msgid "User deactivated"
+msgstr "Utente disattivato"
+
+msgid "InvalidId"
+msgstr "IdNonValido"
+
+msgid "User enabled"
+msgstr "Utente attivato"
+
+msgid "No other duplicates found for this user."
+msgstr "Nessun altro duplicato trovato per questo utente."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Utenti unificati: fusi %s account nell'utente #%s. Gli account fusi sono stati eliminati definitivamente."
+
+msgid "No accounts were merged."
+msgstr "Nessun account è stato fuso."
+
+msgid "An error occurred while unifying users."
+msgstr "Si è verificato un errore durante l'unificazione degli utenti."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Utenti unificati: fuso utente #%s nell'utente #%s. L'account fuso è stato eliminato definitivamente."
+
+msgid "Duplicate users"
+msgstr "Utenti duplicati"
+
+msgid "Years"
+msgstr "Anni"
+
+msgid "All time visits outside sessions"
+msgstr "Visite totali fuori dalle sessioni"
+
+msgid "All time visits in sessions"
+msgstr "Visite totali nelle sessioni"
+
+msgid "All time visits total"
+msgstr "Visite totali complessive"
+
+msgid "Student visits per period, per course"
+msgstr "Visite degli studenti per periodo, per corso"
+
+msgid "By email"
+msgstr "Per email"
+
+msgid "By extra field"
+msgstr "Per campo extra"
+
+msgid "Select an option"
+msgstr "Seleziona un'opzione"
+
+msgid "Profile field"
+msgstr "Campo del profilo"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Questo report elenca solo gli utenti che hanno lo stesso indirizzo email."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Questo report elenca solo gli utenti che condividono lo stesso valore per il campo del profilo selezionato."
+
+msgid "How to use this report"
+msgstr "Come usare questo report"
+
+msgid "Disable / Enable"
+msgstr "Disabilita / Abilita"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Blocca o ripristina solo l'accesso. Non elimina l'utente e non rimuove le iscrizioni."
+
+msgid "Last week"
+msgstr "Settimana scorsa"
+
+msgid "Next week"
+msgstr "Settimana prossima"
+
+msgid "Loading report..."
+msgstr "Caricamento report..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Impossibile caricare questo report. Riprova."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Seleziona una o più sessioni da cui copiare i formatori e scegli il corso di destinazione"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Tieni premuto Ctrl (o Cmd) per selezionare più elementi"
+
+msgid "Choose the destination course"
+msgstr "Scegli il corso di destinazione"
+
+msgid "You can select multiple items"
+msgstr "Puoi selezionare più elementi"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Usa la casella di ricerca per trovare rapidamente i corsi"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Seleziona una o più sessioni sorgente e una o più sessioni di destinazione per copiare gli studenti"
+
+msgid "Select destination sessions"
+msgstr "Seleziona sessioni di destinazione"
+
+msgid "You can select multiple users"
+msgstr "Puoi selezionare più utenti"
+
+msgid "Use the search box to find users quickly"
+msgstr "Usa la casella di ricerca per trovare rapidamente gli utenti"
+
+msgid "Error while creating the document"
+msgstr "Errore nella creazione del documento"
+
+msgid "Not a SCORM learning path"
+msgstr "Non è un percorso di apprendimento SCORM"
+
+msgid "Final item"
+msgstr "Elemento finale"
+
+msgid "Edit item"
+msgstr "Modifica elemento"
+
+msgid "No AI text providers configured."
+msgstr "Nessun fornitore di testo AI configurato."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Caricamento fallito. Il file è probabilmente più grande del limite del server (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Aggiornamento fallito. Nessun file ricevuto dal server."
+
+msgid "Update failed. %s"
+msgstr "Aggiornamento fallito. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Aggiornamento fallito. Payload del file caricato non valido."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Aggiornamento fallito. Il nome del file ZIP caricato deve corrispondere al nome del pacchetto SCORM originale."
+
+msgid "Update failed"
+msgstr "Aggiornamento fallito"
+
+msgid "Question lower case"
+msgstr "domanda minuscolo"
+
+msgid "Regenerate"
+msgstr "Rigenera"
+
+msgid "Case insensitive"
+msgstr "Non distingue maiuscole/minuscole"
+
+msgid "Select a session to load its courses."
+msgstr "Seleziona una sessione per caricare i suoi corsi."
+
+msgid "Select the source course."
+msgstr "Seleziona il corso sorgente."
+
+msgid "Select a destination session."
+msgstr "Seleziona una sessione di destinazione."
+
+msgid "Select the destination course."
+msgstr "Seleziona il corso di destinazione."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Copia l'intero contenuto del corso dalla sessione selezionata."
+
+msgid "Select which tools/items to copy."
+msgstr "Seleziona quali strumenti/elementi copiare."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Non includere il contenuto del corso base (non di sessione)."
+
+msgid "An error occurred while copying the course"
+msgstr "Si è verificato un errore durante la copia del corso"
+
+msgid "Please select a different destination"
+msgstr "Seleziona una destinazione diversa"
+
+msgid "You must select a destination course"
+msgstr "Devi selezionare un corso di destinazione"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Per esportare corsi con quiz devi selezionare i quiz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Se i tuoi LP includono file audio devi selezionarli dai documenti"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Se i tuoi quiz includono domande hotspot devi selezionare le immagini dai documenti"
+
+msgid "GeneralResourcesCourse"
+msgstr "RisorseGeneraliCorso"
+
+msgid "Password must be at least %length% characters long."
+msgstr "La password deve essere lunga almeno %length% caratteri."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "La password deve contenere almeno %count% caratteri minuscoli."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "La password deve contenere almeno %count% caratteri maiuscoli."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "La password deve contenere almeno %count% caratteri numerici (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "La password deve contenere almeno %count% caratteri speciali."
+
+msgid "Invalid login request."
+msgstr "Richiesta di login non valida."
+
+msgid "Authentication failed."
+msgstr "Autenticazione fallita."
+
+msgid "Login %status% for username %username%"
+msgstr "Login %status% per l'utente %username%"
+
+msgid "Co-generated with AI"
+msgstr "Co-generato con IA"
+
+msgid "GDPRTitle"
+msgstr "TitoloGDPR"
+
+msgid "EntraID ID"
+msgstr "ID EntraID"
+
+msgid "EntraID UID"
+msgstr "UID EntraID"
+
+msgid "Required fields"
+msgstr "Campi obbligatori"
 

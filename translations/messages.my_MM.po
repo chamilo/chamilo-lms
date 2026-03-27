@@ -32600,13 +32600,13 @@ msgid "Room availability finder"
 msgstr ""
 
 msgid "New branch"
-msgstr ""
+msgstr "အသစ်ဆိုင်"
 
 msgid "New room"
-msgstr ""
+msgstr "အခန်း အသစ်"
 
 msgid "Branch"
-msgstr ""
+msgstr "ဆိုင်"
 
 msgid "Default room"
 msgstr "မူလအခန်း"
@@ -32810,145 +32810,145 @@ msgid "Select permission"
 msgstr "ခွင့်ပြုချက် ရွေးချယ်ပါ"
 
 msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
-msgstr ""
+msgstr "ဤဖိတ်ခေါ်မှုကိုလက်ခံခြင်းဖြင့် သင်သည် တောင်းဆိုသူနှင့် ချိတ်ဆက်မှုဖြစ်လာပြီး သင့်ပရိုဖိုင်ဒေတာအချို့ သို့မဟုတ် အားလုံးကို တောင်းဆိုသူဖတ်ရှုနိုင်မည်"
 
 msgid "Showing %d of approximately %d result(s) for %s."
-msgstr ""
+msgstr "%s အတွက် ခန့်မှန်း %d မှ %d ကို ပြထားသည်။"
 
 msgid "Showing %d accessible result(s) for %s."
-msgstr ""
+msgstr "%s အတွက် အသုံးပြုနိုင်သော %d ရလဒ်ကို ပြထားသည်။"
 
 msgid "You will therefore be automatically redirected to this URL"
-msgstr ""
+msgstr "ထို့ကြောင့် သင်ကို ဤ URL သို့ အလိုအလျောက် ပြန်လည်ပို့လျက်ရှိသည်"
 
 msgid "You have access to multiple URLs"
-msgstr ""
+msgstr "သင်တွင် များပြားသော URL များကို အသုံးပြုနိုင်သည်"
 
 msgid "Please click on the link below corresponding to the URL you wish to access"
-msgstr ""
+msgstr "သင်အသုံးပြုလိုသော URL နှင့် ကိုက်ညီသော အောက်ပါလင့်ခ်ကို နှိပ်ပါ"
 
 msgid "You do not currently have access to any URL"
-msgstr ""
+msgstr "လက်ရှိ မည်သည့် URL ကိုမျှ အသုံးပြုခွင့်မရှိပါ"
 
 msgid "Maximum number of subscriptions allowed"
-msgstr ""
+msgstr "ခွင့်ပြုထားသော စာရင်းသွင်းမှု အများဆုံး အရေအတွက်"
 
 msgid "An error occurred"
-msgstr ""
+msgstr "အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့သည်"
 
 msgid "You don't have any course content yet"
-msgstr ""
+msgstr "သင့်ကိုးစ်တွင် အကြောင်းအရာမရှိသေးပါ"
 
 msgid "This course is locked"
-msgstr ""
+msgstr "ဤကိုးစ်ကို သော့ခတ်ထားသည်"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
-msgstr ""
+msgstr "ပလက်ဖောင်းမှ အီးမေးလ်ပို့ရာတွင် အသုံးပြုမည့် အီးမေးလ်လိပ်စာ၊ 'reply-to' ခေါင်းစဉ်အဖြစ်လည်း အသုံးပြုသည်"
 
 msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
-msgstr ""
+msgstr "စာရင်းတွင် သင့်ဘာသာစကားကို မတွေ့ရပါ။ ဘာသာပြန်ဆိုသူအဖြစ် ပါဝင်ရန် %s တွင် ကျွန်ုပ်တို့နှင့် ဆက်သွယ်ပါ"
 
 msgid "An update is available"
-msgstr ""
+msgstr "အပ်ဒိတ်ရရှိနိုင်သည်"
 
 msgid "to know what's new and what has been changed"
-msgstr ""
+msgstr "အသစ်ကျရောက်ချက်များနှင့် ပြောင်းလဲမှုများကို သိရှိရန်"
 
 msgid "We have detected that your PHP installation does not define the date"
-msgstr ""
+msgstr "သင့် PHP ထည့်သွင်းမှုတွင် ရက်စွဲကို သတ်မှတ်မထားကြောင်း တွေ့ရှိခဲ့သည်"
 
 msgid "Your PHP version does not match the requirements for this software"
-msgstr ""
+msgstr "သင့် PHP ဗားရှင်းသည် ဤဆော့ဖ်ဝဲလ်အတွက် လိုအပ်ချက်နှင့် မကိုက်ညီပါ"
 
 msgid "Some files or folders don't have writing permission"
-msgstr ""
+msgstr "ဖိုင်အချို့ သို့မဟုတ် ဖိုလ်ဒါအချို့တွင် ရေးသားခွင့်မရှိပါ"
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system"
-msgstr ""
+msgstr "သတိပေးချက်။ ထည့်သွင်းဆော့ဖ်ဝဲလ်က သင့်စနစ်တွင် ရှိပြီးသား Chamilo ပလက်ဖောင်းကို တွေ့ရှိခဲ့သည်"
 
 msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
-msgstr ""
+msgstr "<code>newscorm</code> နှင့် <code>exercice</code> ဖိုလ်ဒါများကို ဆက်လက်ပြီး <code>lp</code> နှင့် <code>exercise</code> အဖြစ် ပြန်အမည်ပေးခဲ့သောကြောင့် <code>newscorm_old</code> နှင့် <code>exercice_old</code> အဖြစ် ဖျက်ပါ သို့မဟုတ် ပြန်အမည်ပေးရန် လိုအပ်သည်"
 
 msgid "The form contains incorrect or incomplete data"
-msgstr ""
+msgstr "ဖောင်တွင် မမှန်ကန်သော သို့မဟုတ် မပြည့်စုံသော ဒေတာရှိသည်"
 
 msgid "Your contact information could not be sent"
-msgstr ""
+msgstr "သင့်ဆက်သွယ်ရန်အချက်အလက်ကို ပို့လွှတ်၍မရပါ"
 
 msgid "Please contact support with the error details"
-msgstr ""
+msgstr "အမှားအသေးစိတ်ဖြင့် ပံ့ပိုးမှုကို ဆက်သွယ်ပါ"
 
 msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
-msgstr ""
+msgstr "ရေပန်းစားရန် ပုံကို နှိပ်ပါ (၁:၁ အချိုး၊ ၁၂၀x၁၂၀ px အကြံပြုထားသည်)"
 
 msgid "Use the crop tool to select a 1:1 region"
-msgstr ""
+msgstr "၁:၁ ဧရိယာကို ရွေးရန် ရေပန်းစားကိရိယာကို အသုံးပြုပါ"
 
 msgid "Checking push subscription"
-msgstr ""
+msgstr "တွန်းအား စာရင်းသွင်းမှုကို စစ်ဆေးနေသည်"
 
 msgid "You're subscribed to push notifications in this browser"
-msgstr ""
+msgstr "ဤဘရောက်ဆာတွင် တွန်းအား အသိပေးချက်များကို စာရင်းသွင်းထားပါသည်"
 
 msgid "Push notifications are not enabled in this browser"
-msgstr ""
+msgstr "ဤဘရောက်ဆာတွင် တွန်းအား အသိပေးချက်များ ဖွင့်ထားခြင်း မရှိပါ"
 
 msgid "Data exchange successfully saved"
-msgstr ""
+msgstr "ဒေတာလဲလှယ်မှု အောင်မြင်စွာ သိမ်းဆည်းပြီးဖြစ်သည်"
 
 msgid "Error saving data exchange"
-msgstr ""
+msgstr "ဒေတာလဲလှယ်မှု သိမ်းဆည်းရာတွင် အမှား"
 
 msgid "No documents added yet"
-msgstr ""
+msgstr "စာရွက်စာတမ်းများ မထည့်ရသေးပါ"
 
 msgid "No additional details available for this skill."
-msgstr ""
+msgstr "ဤစွမ်းရည်အတွက် ထပ်မံအသေးစိတ် မရှိပါ"
 
 msgid "No available documents"
-msgstr ""
+msgstr "ရရှိနိုင်သော စာရွက်စာတမ်း မရှိပါ"
 
 msgid "No users added yet"
-msgstr ""
+msgstr "အသုံးပြုသူများ မထည့်ရသေးပါ"
 
 msgid "No available users"
-msgstr ""
+msgstr "ရရှိနိုင်သော အသုံးပြုသူ မရှိပါ"
 
 msgid "You can no longer submit"
-msgstr ""
+msgstr "သင်ထပ်မံတင်နိုင်မည်မဟုတ်ပါ"
 
 msgid "No missing submissions found for this assignment or data is not available"
-msgstr ""
+msgstr "ဤတာဝန်တင်မှုအတွက် မတင်ရသေးသော တင်မှုများ မတွေ့ရှိပါ သို့မဟုတ် ဒေတာ မရရှိပါ"
 
 msgid "Email sent to all unsubmitted users"
-msgstr ""
+msgstr "မတင်ရသေးသော အသုံးပြုသူအားလုံးထံ အီးမေးလ်ပို့ပြီးဖြစ်သည်"
 
 msgid "Failed to send email"
-msgstr ""
+msgstr "အီးမေးလ်ပို့၍မရပါ"
 
 msgid "Write your answer here"
-msgstr ""
+msgstr "သင့်အဖြေကို ဤနေရာတွင် ရေးပါ"
 
 msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
-msgstr ""
+msgstr "တက်ရောက်မှု ပြက္ခဒိန်သည် ကျောင်းသားများ တက်ရောက်ရမည့် တကယ့်အစည်းအဝေး တစ်ခုလျှင် တစ်ခု တက်ရောက်မှု စာရင်းများကို မှတ်ပုံတင်နိုင်သည်"
 
 msgid "Loading attendance data"
-msgstr ""
+msgstr "တက်ရောက်မှု ဒေတာကို ဖွင့်နေသည်"
 
 msgid "No attendance assigned yet"
-msgstr ""
+msgstr "တက်ရောက်မှု မတာဝန်ပေးရသေးပါ"
 
 msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
-msgstr ""
+msgstr "ယနေ့ အတန်းမဟုတ်ပါ၊ အခြားရက်ကို ရွေးပါ သို့မဟုတ် လုပ်ဆောင်ချက်အိုင်ကွန်များကို အသုံးပြု၍ သင့်တက်ရောက်မှု မှတ်တမ်းကို ထည့်ပါ"
 
 msgid "No attendance data for today"
-msgstr ""
+msgstr "ယနေ့အတွက် တက်ရောက်မှု ဒေတာ မရှိပါ"
 
 msgid "Saving"
-msgstr ""
+msgstr "သိမ်းနေသည်"
 
 msgid "No attendance data to save"
-msgstr ""
+msgstr "သိမ်းရန် တက်ရောက်မှု ဒေတာ မရှိပါ"
 
 msgid "Failed to save attendance"
 msgstr "တက်ရောက်မှုကို သိမ်းဆည်းရန် မအောင်မြင်ပါ"
@@ -33114,4 +33114,571 @@ msgstr "တတိယပုဂ္ဂိုလ်များ"
 
 msgid "Layouts"
 msgstr "ဒီဇိုင်းပုံစံများ"
+
+msgid "Relation type"
+msgstr "ဆက်နွယ်မှု အမျိုးအစား"
+
+msgid "Add all"
+msgstr "အားလုံး ထပ်မံထည့်ရန်"
+
+msgid "Remove all"
+msgstr "အားလုံး ဖယ်ရှားရန်"
+
+msgid "An error occurred. Please try again."
+msgstr "အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့သည်။ ထပ်မံကြိုးစားပါ။"
+
+msgid "%s created"
+msgstr "%s ဖန်တီးပြီး"
+
+msgid "%s updated"
+msgstr "%s အပ်ဒိတ်လုပ်ပြီး"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Chamilo ၏ ရှေးဘီးရှင်း ဗားရှင်းများမှ အဆင့်မြှင့်ရန် စီစဉ်ထားပါက၊ သင်သည်"
+
+msgid "have a look at the changelog"
+msgstr "changelog ကို ကြည့်ရှုလိုပါလိမ့်မည်"
+
+msgid "to know what's new and what has been changed."
+msgstr "အသစ်ပြောင်းလဲမှုများနှင့် ပြောင်းလဲချက်များကို သိရှိရန်။"
+
+msgid "Session Item"
+msgstr "သင်တန်း အရာ"
+
+msgid "Points"
+msgstr "အမှတ်များ"
+
+msgid "See notifications"
+msgstr "အသိပေးချက်များ ကြည့်ရန်"
+
+msgid "New content available for this course."
+msgstr "ဤသင်တန်းအတွက် အသစ်အကြောင်းအရာ ရရှိနိုင်ပြီ။"
+
+msgid "No new notifications."
+msgstr "အသစ်အသိပေးချက်များ မရှိပါ။"
+
+msgid "No new content found."
+msgstr "အသစ်အကြောင်းအရာ မတွေ့ပါ။"
+
+msgid "No tool details available yet."
+msgstr "ကိရိယာ အသေးစိတ် မရရှိသေးပါ။"
+
+msgid "Last access"
+msgstr "နောက်ဆုံး ဝင်ရောက်ချိန်"
+
+msgid "Open course"
+msgstr "သင်တန်း ဖွင့်ရန်"
+
+msgid "Course completed"
+msgstr "သင်တန်း ပြီးစီးပြီ"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "ဤသင်တန်း၏ စာရင်းသွင်းမှု ကန့်သတ်ချက် ရောက်ရှိပြီဖြစ်သည်။"
+
+msgid "Subscription limit reached"
+msgstr "စာရင်းသွင်းမှု ကန့်သတ်ချက် ရောက်ရှိပြီ"
+
+msgid "Tertiary alternative"
+msgstr "တတိယ ရွေးချယ်မှု"
+
+msgid "Update SCORM"
+msgstr "SCORM အပ်ဒိတ်လုပ်ရန်"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI သည် သင်မပို့မီ အကြံပြုချက်နှင့် အကြံပြုအမှတ်ကို ရေးသားနိုင်သည်။"
+
+msgid "What will be sent to the AI"
+msgstr "AI သို့ ပို့မည့်အရာ"
+
+msgid "Assignment title + instructions"
+msgstr "တာဝန်ပေးအလုပ် ခေါင်းစဉ် + ညွှန်ကြားချက်"
+
+msgid "Student submission (text)"
+msgstr "ကျောင်းသား တင်သွင်းမှု (စာသား)"
+
+msgid "Student submission (text): none"
+msgstr "ကျောင်းသား တင်သွင်းမှု (စာသား)။ မရှိ"
+
+msgid "Student attachment"
+msgstr "ကျောင်းသား ပူးတွဲဖိုင်"
+
+msgid "supported"
+msgstr "ထောက်ပံ့ထားသည်"
+
+msgid "not supported for document analysis"
+msgstr "စာရွက်စာတမ်း ခွဲခြမ်းစိတ်ဖြာမှု အတွက် မထောက်ပံ့ပါ"
+
+msgid "Student attachment: none"
+msgstr "ကျောင်းသား ပူးတွဲဖိုင်။ မရှိ"
+
+msgid "No text AI providers available."
+msgstr "စာသား AI ပေးသူများ မရရှိပါ။"
+
+msgid "AI-assisted"
+msgstr "AI အကူအညီ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "ဤဆုံးဖြတ်ချက်ကို ပြင်ဆင်မှုနှင့်အတူ (ExtraField) သိမ်းဆည်းထားပြီး နောက်ပိုင်း ပြောင်းလဲ၍မရပါ။"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "ရွေးချယ်ခွင့်ပြုပြင်ဆင်မှု ပူးတွဲဖိုင် (ဤမှာ ကျောင်းသား တင်သွင်းမှု မဟုတ်ပါ)။"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "လက်ခံရရှိပြီ"
+
+msgid "%s min"
+msgstr "%s မိနစ်"
+
+msgid "Unlock column"
+msgstr "လှံချောကို ဖွင့်ရန်"
+
+msgid "Lock column"
+msgstr "လှံချောကို သော့ခတ်ရန်"
+
+msgid "Set all Present"
+msgstr "အားလုံး တက်ရောက်သည်ဟု သတ်မှတ်ရန်"
+
+msgid "Set all Absent"
+msgstr "အားလုံး မတက်ရောက်ဟု သတ်မှတ်ရန်"
+
+msgid "Auto (recommended)"
+msgstr "အလိုအလျောက် (အကြံပြုထားသည်)"
+
+msgid "Error downloading all documents."
+msgstr "စာရွက်စာတမ်းအားလုံး ဒေါင်းလုဒ်ဖို့ အမှားဖြစ်ပေါ်ခဲ့သည်။"
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICE ဖြင့် ဖွင့်ရန်"
+
+msgid "Limiting quota"
+msgstr "ကန့်သတ်ချက် ကိုတာ"
+
+msgid "Remaining space"
+msgstr "ကျန်ရှိနေသော နေရာ"
+
+msgid "Course catalogue"
+msgstr "သင်တန်း ကတ်တာလော့ဂ်"
+
+msgid "Drag links to reorder"
+msgstr "လင့်ခ်များကို ဆွဲပြီး ပြန်လည်စီစဉ်ရန်"
+
+msgid "Drop links here to keep them without category"
+msgstr "ကတ်ဂရီ မပါဘဲ ထားရန် လင့်ခ်များကို ဒီနေရာတွင် ချပါ"
+
+msgid "Could not export"
+msgstr "တင်ပို့၍ မရပါ"
+
+msgid "Link moved"
+msgstr "လင့်ခ်ကို ရွှေ့ပြီး"
+
+msgid "Could not move link"
+msgstr "လင့်ခ်ကို ရွှေ့၍ မရပါ"
+
+msgid "Category reordering is not enabled"
+msgstr "ကတ်ဂရီ အစဉ်လိုက်ပြန်လည်စီစဉ်မှု ဖွင့်ထားမထား"
+
+msgid "Showing %s posts"
+msgstr "%s ပို့စ်များ ပြထားသည်"
+
+msgid "Showing %s tasks"
+msgstr "%s အလုပ်များ ပြထားသည်"
+
+msgid "Page %s of %s"
+msgstr "%s စာမျက်နှာ မှ %s စာမျက်နှာ"
+
+msgid "Tutors"
+msgstr "ဆရာ သင်ကြားပေး"
+
+msgid "selected"
+msgstr "ရွေးချယ်ထား"
+
+msgid "No data to export"
+msgstr "တင်ပို့ရန် ဒေတာ မရှိပါ"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "ခေါင်းစဉ် PNG သည် \\u2264 %spx ဖြစ်ရမည်။"
+
+msgid "Standard list"
+msgstr "စံ စာရင်း"
+
+msgid "Management list"
+msgstr "စီမံခန့်ခွဲမှု စာရင်း"
+
+msgid "Open platform"
+msgstr "ပလက်ဖောင်း ဖွင့်ရန်"
+
+msgid "Teacher user ID"
+msgstr "ဆရာ အသုံးပြုသူ ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "ဤ သင်တန်းကို ဖျက်မည်မှာ သေချာပါသလား။"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "ရွေးချယ်ထားသော သင်တန်းများကို ဖျက်မည်မှာ သေချာပါသလား။"
+
+msgid "Search by name, username, email"
+msgstr "အမည်၊ အသုံးပြုသူအမည်၊ အီးမေးလ်ဖြင့် ရှာဖွေရန်"
+
+msgid "contains %s items"
+msgstr "%s အရာများ ပါဝင်သည်"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "သင်၏ ဥပဒေ သဘောတူညီချက်သည် ရုပ်သိမ်းတောင်းဆိုမှု စစ်ဆေးပြီး လုပ်ဆောင်ပြီးမချင်း ထိန်းသိမ်းထားမည်။"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "သင်၏ ဥပဒေ သဘောတူညီမှု ရုပ်သိမ်း တောင်းဆိုမှု စစ်ဆေးရန် စောင့်ဆိုင်းနေသည်။"
+
+msgid "Your account deletion request is pending review."
+msgstr "သင်၏ အကောင့် ဖျက်သိမ်း တောင်းဆိုမှု စစ်ဆေးရန် စောင့်ဆိုင်းနေသည်။"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "သင်၏ ဥပဒေ သဘောတူညီမှု ရုပ်သိမ်းရန် ဘာကြောင့် တောင်းဆိုလိုပါသလဲ။"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "သင်၏ ဥပဒေ သဘောတူညီမှု ရုပ်သိမ်း တောင်းဆိုမှု တင်နေသည်..."
+
+msgid "Submitting request..."
+msgstr "တောင်းဆိုမှု တင်နေသည်..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "ဥပဒေ သဘောတူညီမှု ရုပ်သိမ်း တောင်းဆိုရန်"
+
+msgid "Submitting your account deletion request..."
+msgstr "သင်၏ အကောင့် ဖျက်သိမ်း တောင်းဆိုမှု တင်နေသည်..."
+
+msgid "Submitting your acceptance..."
+msgstr "သင်၏ လက်ခံမှု တင်နေသည်..."
+
+msgid "Event details"
+msgstr "ဖြစ်ရပ် အသေးစိတ်"
+
+msgid "You cannot access the linked course from this view."
+msgstr "ဤမြင်ကွင်းမှ လင့်ခ်ချိတ်ဆက်ထားသော သင်တန်းကို ဝင်ရောက်မရပါ။"
+
+msgid "Failed to load sessions"
+msgstr "သင်တန်း များ တင်လွှင့် မရပါ"
+
+msgid "Failed to load events"
+msgstr "ဖြစ်ရပ်များ တင်လွှင့် မရပါ"
+
+msgid "No events found"
+msgstr "ဖြစ်ရပ်များ မတွေ့ပါ"
+
+msgid "Group image"
+msgstr "အုပ်စု ပုံ"
+
+msgid "SearchTCC"
+msgstr "TCC ရှာဖွေရန်"
+
+msgid "Forbidden"
+msgstr "တားမြစ်ထားသည်"
+
+msgid "Distribution"
+msgstr "ဖြန့်ဖြူးပေးခြင်း"
+
+msgid "Firstname"
+msgstr "အမည်ရှေ့"
+
+msgid "Lastname"
+msgstr "အမည်နောက်"
+
+msgid "Email"
+msgstr "အီးမေးလ်"
+
+msgid "Last login in platform"
+msgstr "ပလက်ဖောင်းတွင် နောက်ဆုံး ဝင်ရောက်ချိန်"
+
+msgid "Export as CSV"
+msgstr "CSV အဖြစ် တင်ပို့ရန်"
+
+msgid "Export as XLS"
+msgstr "XLS အဖြစ် တင်ပို့ရန်"
+
+msgid "Deactivate this user?"
+msgstr "ဤအသုံးပြုသူကို ပိတ်ရန် သေချာပါသလား။"
+
+msgid "Enable this user?"
+msgstr "ဤအသုံးပြုသူကို ဖွင့်ရန် သေချာပါသလား။"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "ဤ ထပ်နေသော အုပ်စုကို အသုံးပြုသူ #%s ထဲ ပေါင်းစည်းမည် သေချာပါသလား။"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "ဤအုပ်စုတွင်ရှိ အခြားအကောင့်များကို ဤအကောင့်ထဲ ပေါင်းစည်းမည်။"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "ပေါင်းစည်းပြီး အကောင့်များကို ထာဝရ ဖျက်ပစ်ပြီး ဤအစီရင်ခံစာမှ ပျောက်ကွယ်သွားမည်။"
+
+msgid "This action cannot be undone."
+msgstr "ဤလုပ်ဆောင်ချက်ကို ပြန်လည် မလုပ်နိုင်ပါ။"
+
+msgid "Unify"
+msgstr "ပေါင်းစည်းရန်"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "ကျောင်းသား"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "ပေါ်တယ် %s ကန့်သတ်ချက်သည် %s MB ဖြစ်သည်"
+
+msgid "Helper text"
+msgstr "အကူညီစာသား"
+
+msgid "NotAllowed"
+msgstr "ခွင့်မပြုထားပါ"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "သင်တန်းသားဝင်ရောက်မှုအသေးစိတ်များကို ပေါင်းစပ်ရန် အပေါ်ရှိ စစ်ထုတ်ကိရိယာများကို အသုံးပြုပါ။"
+
+msgid "Start date must be before end date"
+msgstr "စတင်ရက်သည် အဆုံးရက်မတိုင်မီ ဖြစ်ရမည်"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "သင်တန်းသားဝင်ရောက်မှုအသေးစိတ်များကို ပြန်လည်သုံးသပ်ရန် ရက်ကာလတစ်ခုနှင့် အုပ်စုအမျိုးအစားကို ရွေးချယ်ပါ။"
+
+msgid "This course will be created using the platform default course template."
+msgstr "ဤသင်တန်းကို ပလက်ဖောင်းရဲ့ မူလတန်းပုံစံကို အသုံးပြု၍ ဖန်တီးပါမည်။"
+
+msgid "Security breach avoid restart"
+msgstr "လုံခြုံရေးချိုးဖောက်မှု ပြန်စတင်ရန် ရှောင်ပါ"
+
+msgid "User deactivated"
+msgstr "အသုံးပြုသူ ပိတ်ပင်ထားသည်"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "အသုံးပြုသူ ဖွင့်လှစ်ထားသည်"
+
+msgid "No other duplicates found for this user."
+msgstr "ဤအသုံးပြုသူအတွက် အခြားထပ်နေသော မတွေ့ပါ။"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "အသုံးပြုသူများ ပေါင်းစည်းပြီး: %s အကောင့်များကို အသုံးပြုသူ #%s ထဲ ပေါင်းစည်းခဲ့သည်။ ပေါင်းစည်းခဲ့သော အကောင့်များကို ထာဝရဖျက်ထားသည်။"
+
+msgid "No accounts were merged."
+msgstr "အကောင့်များ မပေါင်းစည်းခဲ့ပါ။"
+
+msgid "An error occurred while unifying users."
+msgstr "အသုံးပြုသူများကို ပေါင်းစည်းရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်။"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "အသုံးပြုသူများ ပေါင်းစည်းပြီး: အသုံးပြုသူ #%s ကို အသုံးပြုသူ #%s ထဲ ပေါင်းစည်းခဲ့သည်။ ပေါင်းစည်းခဲ့သော အကောင့်ကို ထာဝရဖျက်ထားသည်။"
+
+msgid "Duplicate users"
+msgstr "ထပ်နေသော အသုံးပြုသူများ"
+
+msgid "Years"
+msgstr "နှစ်များ"
+
+msgid "All time visits outside sessions"
+msgstr "သင်တန်းများအပြင် အားလုံးကာလ ဝင်ရောက်မှု"
+
+msgid "All time visits in sessions"
+msgstr "သင်တန်းများအတွင်း အားလုံးကာလ ဝင်ရောက်မှု"
+
+msgid "All time visits total"
+msgstr "အားလုံးကာလ ဝင်ရောက်မှု စုစုပေါင်း"
+
+msgid "Student visits per period, per course"
+msgstr "ကာလအလိုက်၊ သင်တန်းအလိုက် ကျောင်းသားဝင်ရောက်မှု"
+
+msgid "By email"
+msgstr "အီးမေးလ်ဖြင့်"
+
+msgid "By extra field"
+msgstr "အပိုကွက်ဖြင့်"
+
+msgid "Select an option"
+msgstr "ရွေးချယ်မှုတစ်ခု ရွေးပါ"
+
+msgid "Profile field"
+msgstr "ပရိုဖိုင်ကွက်"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "ဤအစီရင်ခံစာသည် တူညီသော အီးမေးလ်လိပ်စာရှိ အသုံးပြုသူများကိုသာ စာရင်းပြထားသည်။"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "ဤအစီရင်ခံစာသည် ရွေးချယ်ထားသော ပရိုဖိုင်ကွက်တွင် တူညီသော တန်ဖိုးရှိ အသုံးပြုသူများကိုသာ စာရင်းပြထားသည်။"
+
+msgid "How to use this report"
+msgstr "ဤအစီရင်ခံစာကို မည်ကဲ့သို့အသုံးပြုရမည်နည်း"
+
+msgid "Disable / Enable"
+msgstr "ပိတ်ရန် / ဖွင့်ရန်"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "လော့ဂ်အင်ကို ပိတ်ပင်ခြင်း သို့မဟုတ် ပြန်လည်ဖွင့်ခြင်းသာ ဖြစ်သည်။ အသုံးပြုသူကို မဖျက်ပါ။ စာရင်းသွင်းမှုများကို မဖယ်ရှားပါ။"
+
+msgid "Last week"
+msgstr "ပြီးခဲ့သော တစ်ပတ်"
+
+msgid "Next week"
+msgstr "နောက်တစ်ပတ်"
+
+msgid "Loading report..."
+msgstr "အစီရင်ခံစာ ဖွင့်နေသည်..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "ဤအစီရင်ခံစာကို ဖွင့်ရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "သင်ဆုရေးမှုများကို မိတ်ဆက်ဖို့ သင်တန်းတစ်ခုခု ရွေးချယ်ပါ"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "အရာများစွာ ရွေးချယ်ရန် Ctrl (သို့မဟုတ် Cmd) ကို ဖိထားပါ"
+
+msgid "Choose the destination course"
+msgstr "ခရီးသွားသင်တန်း ရွေးချယ်ပါ"
+
+msgid "You can select multiple items"
+msgstr "သင်မှာ အရာများစွာ ရွေးချယ်နိုင်သည်"
+
+msgid "Use the search box to find courses quickly"
+msgstr "သင်တန်းများကို လျင်မြန်စွာ ရှာရန် ရှာဖွေကွက်ကို အသုံးပြုပါ"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "ကျောင်းသားများကို မိတ်ဆက်ရန် ရင်းမြစ်သင်း တစ်ခု သို့မဟုတ် ပိုများနှင့် ခရီးသွားသင်း တစ်ခု သို့မဟုတ် ပိုများ ရွေးချယ်ပါ"
+
+msgid "Select destination sessions"
+msgstr "ခရီးသွားသင်း ရွေးချယ်ပါ"
+
+msgid "You can select multiple users"
+msgstr "သင်မှာ အသုံးပြုသူများစွာ ရွေးချယ်နိုင်သည်"
+
+msgid "Use the search box to find users quickly"
+msgstr "အသုံးပြုသူများကို လျင်မြန်စွာ ရှာရန် ရှာဖွေကွက်ကို အသုံးပြုပါ"
+
+msgid "Error while creating the document"
+msgstr "စာရွက်စာတမ်း ဖန်တီးရာတွင် အမှား"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM သင်ယူမှု လမ်းကြောင်း မဟုတ်ပါ"
+
+msgid "Final item"
+msgstr "နောက်ဆုံးပစ္စည်း"
+
+msgid "Edit item"
+msgstr "ပစ္စည်းကို တည်းဖြတ်ရန်"
+
+msgid "No AI text providers configured."
+msgstr "AI စာသားပေးသူများ မထားသွင်းထားပါ။"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "အပ်လုဒ်လုပ်မှု မအောင်မြင်ပါ။ ဖိုင်သည် ဆာဗာကန့်သတ်ချက် (post_max_size) ထက် ကြီးမားနိုင်ပါသည်။"
+
+msgid "Update failed. No file received by the server."
+msgstr "အပ်ဒိတ်လုပ်မှု မအောင်မြင်ပါ။ ဆာဗာမှ ဖိုင်မရရှိပါ။"
+
+msgid "Update failed. %s"
+msgstr "အပ်ဒိတ်လုပ်မှု မအောင်မြင်ပါ။ %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "အပ်ဒိတ်လုပ်မှု မအောင်မြင်ပါ။ အပ်လုဒ်လုပ်ထားသော ဖိုင်ဒေတာ မမှန်ကန်ပါ။"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "အပ်ဒိတ်လုပ်မှု မအောင်မြင်ပါ။ အပ်လုဒ်လုပ်ထားသော ZIP ဖိုင်နာမည်သည် မူရင်း SCORM ပက်ကိဂျ်နာမည်နှင့် ကိုက်ညီရမည်။"
+
+msgid "Update failed"
+msgstr "အပ်ဒိတ်လုပ်မှု မအောင်မြင်ပါ"
+
+msgid "Question lower case"
+msgstr "မေးခွန်း အသေးစာသား"
+
+msgid "Regenerate"
+msgstr "ပြန်လည်ထုတ်လုပ်ရန်"
+
+msgid "Case insensitive"
+msgstr "အကြီးအကျယ်မခွဲခြား"
+
+msgid "Select a session to load its courses."
+msgstr "သင်တန်းများကို တင်ယူရန် သင်တန်းကို ရွေးချယ်ပါ။"
+
+msgid "Select the source course."
+msgstr "ရင်းမြစ်သင်တန်းကို ရွေးချယ်ပါ။"
+
+msgid "Select a destination session."
+msgstr "ဦးတည်ရာသင်တန်းကို ရွေးချယ်ပါ။"
+
+msgid "Select the destination course."
+msgstr "ဦးတည်ရာသင်တန်းကို ရွေးချယ်ပါ။"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "ရွေးချယ်ထားသော သင်တန်းကလား၏ အပြည့်အစုံ သင်တန်းအကြောင်းအရာကို မိတ္တူကူးယူပါ။"
+
+msgid "Select which tools/items to copy."
+msgstr "ဘယ် ကိရိယာ/ပစ္စည်းများကို မိတ္တူကူးယူမည်ကို ရွေးချယ်ပါ။"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "အခြေခံ (သင်တန်းမဟုတ်သော) သင်တန်းအကြောင်းအရာကို မပါဝင်ပါနှင့်။"
+
+msgid "An error occurred while copying the course"
+msgstr "သင်တန်းကို မိတ္တူကူးယူစဉ် အမှားဖြစ်ပေါ်ခဲ့သည်"
+
+msgid "Please select a different destination"
+msgstr "အခြားဦးတည်ရာတစ်ခုကို ရွေးချယ်ပါ"
+
+msgid "You must select a destination course"
+msgstr "ဦးတည်ရာသင်တန်းကို ရွေးချယ်ရမည်"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "မေးခွန်းပါသော သင်တန်းများကို ထုတ်ယူရန် မေးခွန်းကို ရွေးချယ်ရမည်"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "သင့် LP များတွင် အသံဖိုင်များ ပါဝင်ပါက စာရွက်စာတမ်းများမှ ရွေးချယ်ရမည်"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "သင့်မေးခွန်းများတွင် hotspot မေးခွန်းများ ပါဝင်ပါက စာရွက်စာတမ်းများမှ ပုံများကို ရွေးချယ်ရမည်"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "စကားဝှက်သည် အနည်းဆုံး %length% လုံးရှိရမည်။"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "စကားဝှက်တွင် အနည်းဆုံး %count% သေးစာသားများ ပါရမည်။"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "စကားဝှက်တွင် အနည်းဆုံး %count% အကြီးစာသားများ ပါရမည်။"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "စကားဝှက်တွင် အနည်းဆုံး %count% နံပါတ် (၀-၉) များ ပါရမည်။"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "စကားဝှက်တွင် အနည်းဆုံး %count% အထူးသင်္ကေတများ ပါရမည်။"
+
+msgid "Invalid login request."
+msgstr "မမှန်ကန်သော ဝင်ရောက်ခြင်း တောင်းဆိုမှု။"
+
+msgid "Authentication failed."
+msgstr "အထောက်အထားပြုချက် မအောင်မြင်ပါ။"
+
+msgid "Login %status% for username %username%"
+msgstr "အသုံးပြုသူအမည် %username% အတွက် ဝင်ရောက်ခြင်း %status%"
+
+msgid "Co-generated with AI"
+msgstr "AI ဖြင့် ပူးတွဲထုတ်လုပ်ထားသည်"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "လိုအပ်သော ဖွဲ့စည်းမှုများ"
 

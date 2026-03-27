@@ -1094,7 +1094,7 @@ msgid "Use ::private at the end of the link to show it only to logged-in users"
 msgstr "Utiliser ::private à la fin du lien pour l'afficher seulement aux utilisateurs identifiés"
 
 msgid "Number of groups to create"
-msgstr "Nombre de groupes pour créer"
+msgstr "Nombre de groupes à créer"
 
 msgid "Coaches subscribed as teachers in course %s"
 msgstr "Coaches souscrites comme enseignants dans le cours %s"

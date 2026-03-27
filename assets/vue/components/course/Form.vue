@@ -61,13 +61,13 @@
         :label="t('Back')"
         class="mr-4"
         icon="back"
-        type="secondary"
+        type="plain"
         @click="goBack"
       />
       <BaseButton
         :label="t('Create this course')"
         icon="plus"
-        type="primary"
+        type="success"
         :is-submit="true"
       />
     </div>

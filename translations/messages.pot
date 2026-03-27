@@ -33596,3 +33596,6 @@ msgstr ""
 
 msgid "Required fields"
 msgstr ""
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr ""

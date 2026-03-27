@@ -33682,3 +33682,6 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Required fields"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."

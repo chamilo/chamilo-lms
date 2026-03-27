@@ -69,22 +69,20 @@ class DetailController
         foreach ($logs as $i => $log) {
             $date = api_get_local_time($log['createdAt'], null, null, true, true, true);
 
-            $html .= '<div class="col-xs-12 col-sm-6 col-md-3" style="clear: '.($i % 4 === 0 ? 'both' : 'none').';">';
-            $html .= '<div class="thumbnail">';
+            $html .= '<div class="border border-gray-30 rounded-lg">';
             $html .= Display::img(
                 '/plugin/ExerciseMonitoring/pages/snapshot.php?f='.urlencode($log['imageFilename']),
                 $date,
-                [],
+                ['class' => 'rounded-t-lg'],
                 false
             );
             $html .= '<div class="caption">';
-            $html .= Display::tag('p', $date, ['class' => 'text-center']);
-            $html .= Display::tag('div', $log['log_level'], ['class' => 'text-center']);
-            $html .= '</div>';
+            $html .= Display::tag('p', $date, ['class' => 'text-caption text-center']);
+            $html .= Display::tag('p', $log['log_level'], ['class' => 'text-caption text-center']);
             $html .= '</div>';
             $html .= '</div>';
         }
 
-        return '<div class="row">'.$html.'</div>';
+        return '<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">'.$html.'</div>';
     }
 }

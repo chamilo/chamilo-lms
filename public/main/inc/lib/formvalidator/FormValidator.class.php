@@ -486,7 +486,7 @@ EOT;
             $name,
             $label,
             'plus',
-            'primary',
+            'success',
             null,
             null,
             $attributes,

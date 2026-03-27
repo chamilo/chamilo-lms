@@ -36,8 +36,8 @@
       ref="legacyContainer"
     />
 
-    <PluginBlockRenderer region="content_bottom" />
-    <PluginBlockRenderer region="pre_footer" />
+    <PluginRegion region="content_bottom" />
+    <PluginRegion region="pre_footer" />
 
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
@@ -106,7 +106,7 @@ import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
 import { useStore } from "vuex"
-import PluginBlockRenderer from "./components/layout/PluginBlockRenderer.vue"
+import PluginRegion from "./components/layout/PluginRegion.vue"
 import { useCidReqStore } from "./store/cidReq"
 
 const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000

@@ -7,7 +7,7 @@
     <div
       v-for="block in blocks"
       :key="block.pluginName"
-      :class="`plugin-block plugin-block--${block.pluginName}`"
+      :class="`plugin-region plugin-region--${block.pluginName}`"
       v-html="block.html"
     />
   </div>

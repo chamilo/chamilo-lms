@@ -20,12 +20,9 @@
 {%- block chamilo_wrap -%}
     <div class="page-marker {{ page_type_classes|join(' ') }}" aria-hidden="true"></div>
 
-    {{ chamilo_plugin_region('main_top') }}
-
     {%- block page_content %}
     {% endblock %}
 
-    {{ chamilo_plugin_region('main_bottom') }}
 {% endblock -%}
 
 {%- block chamilo_footer -%}

@@ -207,16 +207,56 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 // -----------------------------------------------------------------------------
-// Retrieve categories & forums
+// Retrieve categories & forums (batch-optimized to avoid N+1 queries)
 // -----------------------------------------------------------------------------
 
 // All forum categories
 $forumCategories = get_forum_categories();
 
-// Visible forums for current course/session (students see only visible ones)
-$setting          = api_get_setting('display_groups_forum_in_general_tool'); // kept for parity
-$allCourseForums  = getVisibleForums($courseId, $sessionId);
-$user_id          = api_get_user_id();
+$setting  = api_get_setting('display_groups_forum_in_general_tool'); // kept for parity
+$user_id  = api_get_user_id();
+
+// Fetch ALL forums in one query, then derive visibility & group by category in PHP.
+$allCourseForums = get_forums($courseId, $sessionId);
+
+// Batch thread counts: one query for ALL forums instead of one per forum.
+$allForumIds = array_map(fn ($f) => $f->getIid(), $allCourseForums);
+$threadCountMap = []; // forumId => count
+if (!empty($allForumIds)) {
+    $threadCountMap = getThreadCountBatch($allForumIds, $courseId, $sessionId);
+}
+
+// Batch moderation counts: one query for ALL moderated forums instead of one per forum.
+$moderatedForumIds = array_values(array_map(
+    fn ($f) => $f->getIid(),
+    array_filter($allCourseForums, fn ($f) => $f->isModerated())
+));
+$moderationCountMap = []; // forumId => count
+if (!empty($moderatedForumIds)) {
+    $moderationCountMap = getCountPostsWithStatusBatch(
+        CForumPost::STATUS_WAITING_MODERATION,
+        $moderatedForumIds
+    );
+}
+
+// Apply visibility filter (session-inherited forums only shown if they have threads).
+$visibleForums = [];
+foreach ($allCourseForums as $forum) {
+    if ($sessionId > 0 && null === $forum->getFirstResourceLink()->getSession()) {
+        if (empty($threadCountMap[$forum->getIid()] ?? 0)) {
+            continue;
+        }
+    }
+    $visibleForums[] = $forum;
+}
+$allCourseForums = $visibleForums;
+
+// Group visible forums by category ID for O(1) lookup in the template loop.
+$forumsByCategoryId = [];
+foreach ($allCourseForums as $forum) {
+    $catId = $forum->getForumCategory() ? $forum->getForumCategory()->getIid() : 0;
+    $forumsByCategoryId[$catId][] = $forum;
+}
 
 // User groups (kept, may be used by deeper logic)
 $groups_of_user = GroupManager::get_group_ids($courseId, $user_id);
@@ -351,9 +391,8 @@ jQuery(function ($) {
     $searchFilter = $form->returnForm();
 }
 
-// Fixes error if there forums with no category.
-$forumsInNoCategory = get_forums_in_category(0);
-if (!empty($forumsInNoCategory)) {
+// Fixes error if there forums with no category (uses pre-built map, no extra query).
+if (!empty($forumsByCategoryId[0] ?? [])) {
     $forumCategories = array_merge(
         $forumCategories,
         [
@@ -423,8 +462,8 @@ if (is_array($forumCategories)) {
             }
         }
 
-        // Forums inside this category
-        $forumsInCategory = getVisibleForumsInCategory($categoryId, $courseId, $sessionId);
+        // Forums inside this category (from pre-built map, no extra query).
+        $forumsInCategory = $forumsByCategoryId[$categoryId] ?? [];
         $forumsDetailsList = [];
 
         if (!empty($forumsInCategory)) {
@@ -460,7 +499,7 @@ if (is_array($forumCategories)) {
                     'icon_session'    => api_get_session_image($forum->getFirstResourceLink()->getSession()?->getId(), $user),
                     'forum_group_title' => null,
                     'visibility'      => $forum->isVisible($courseEntity),
-                    'number_threads'  => (int) get_threads($forumId, api_get_course_int_id(), api_get_session_id(), true),
+                    'number_threads'  => (int) ($threadCountMap[$forumId] ?? 0),
                     'url'             => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&gid='.$forum->getForumOfGroup().'&forum='.$forumId,
                     'description'     => Security::remove_XSS($forum->getForumComment()),
                     'moderation'      => null,
@@ -484,9 +523,9 @@ if (is_array($forumCategories)) {
                     }
                 }
 
-                // Moderation badge for teachers
+                // Moderation badge for teachers (from pre-built map, no extra query).
                 if ($forum->isModerated() && api_is_allowed_to_edit(false, true)) {
-                    $waitingCount = getCountPostsWithStatus(CForumPost::STATUS_WAITING_MODERATION, $forum);
+                    $waitingCount = $moderationCountMap[$forumId] ?? 0;
                     if (!empty($waitingCount)) {
                         $forumInfo['moderation'] = $waitingCount;
                     }

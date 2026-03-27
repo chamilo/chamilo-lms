@@ -2194,11 +2194,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Selective display of roles',
                     'comment' => 'Enable to use an array to define which roles should be clearly displayed and which should be hidden.',
                 ],
-                [
-                    'name' => 'access_to_personal_file_for_all',
-                    'title' => 'Access to personal file for all',
-                    'comment' => 'Allows all users to access, view, and manage their personal files within the system.',
-                ],
             ],
             'language' => [
                 [

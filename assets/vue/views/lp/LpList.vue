@@ -43,9 +43,9 @@
       <BaseButton
         v-if="canEdit"
         :label="t('Create new learning path')"
-        :to-url="lpService.buildLegacyActionUrl('add_lp', { ...legacyContext.value })"
         class="mt-4"
         icon="plus"
+        @click="goCreateLp"
       />
     </EmptyState>
 
@@ -260,6 +260,14 @@ const canExportPdf = computed(() => {
   const hidden = platformConfig.getSetting("lp.hide_scorm_pdf_link") === "true"
   return !hidden
 })
+
+// Uses a click handler instead of :to-url so the URL (including cid/sid) is
+// built at click time, when the course store is guaranteed to be populated.
+// A static :to-url binding can render before the store resolves, producing a
+// link without cid that the legacy controller rejects as "Not allowed".
+const goCreateLp = () => {
+  window.location.assign(lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }))
+}
 
 // --- Auto-launch enable (course setting) ---
 const enableLpAutoLaunch = computed(() => {

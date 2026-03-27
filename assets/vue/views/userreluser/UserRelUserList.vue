@@ -9,7 +9,7 @@
       :disabled="loadingFriends"
       :label="t('Add friend')"
       icon="user-add"
-      type="black"
+      type="success"
       @click="goToAdd"
     />
 

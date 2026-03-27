@@ -8,7 +8,7 @@
     :label="t('Add')"
     class="ml-auto"
     icon="plus"
-    type="primary"
+    type="success"
     @click="onClickCreateEvent"
   />
   <Loading :visible="isLoading" />

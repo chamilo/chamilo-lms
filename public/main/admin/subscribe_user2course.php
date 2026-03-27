@@ -403,7 +403,7 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="btn btn--primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
+    <button type="submit" class="btn btn--success" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
         <em class="fa fa-plus"></em> <?php echo get_lang('Add to the course(s)'); ?>
     </button>
    </td>

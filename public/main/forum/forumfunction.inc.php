@@ -274,7 +274,9 @@ function getForumCategoryAddForm(int $lp_id = null): string
             saveForumCategory($values);
         }
         Security::clear_token();
-        return '';
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -591,6 +593,9 @@ function editForumCategoryForm(CForumCategory $category): string
             saveForumCategory($values);
         }
         Security::clear_token();
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -598,8 +603,6 @@ function editForumCategoryForm(CForumCategory $category): string
 
         return $form->returnForm();
     }
-
-    return '';
 }
 
 /**
@@ -5635,4 +5638,68 @@ function getVisibleForumsInCategory($categoryId, $courseId, $sessionId): array
     }
 
     return $visibleForums;
+}
+
+/**
+ * Batch-fetch thread counts for multiple forums in a single query.
+ *
+ * @param int[] $forumIds
+ *
+ * @return array<int, int> forumId => threadCount
+ */
+function getThreadCountBatch(array $forumIds, int $courseId = 0, int $sessionId = 0): array
+{
+    if (empty($forumIds)) {
+        return [];
+    }
+
+    $repo = Container::getForumThreadRepository();
+    $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($course, $session);
+    $qb->select('IDENTITY(resource.forum) AS forumId, COUNT(resource.iid) AS cnt')
+        ->andWhere('resource.forum IN (:forumIds)')
+        ->setParameter('forumIds', $forumIds)
+        ->groupBy('resource.forum');
+
+    $map = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $map[(int) $row['forumId']] = (int) $row['cnt'];
+    }
+
+    return $map;
+}
+
+/**
+ * Batch-fetch waiting-moderation post counts for multiple forums in a single query.
+ *
+ * @param int   $status   e.g. CForumPost::STATUS_WAITING_MODERATION
+ * @param int[] $forumIds
+ *
+ * @return array<int, int> forumId => count
+ */
+function getCountPostsWithStatusBatch(int $status, array $forumIds): array
+{
+    if (empty($forumIds)) {
+        return [];
+    }
+
+    $em = Database::getManager();
+    $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
+    $qb->select('IDENTITY(p.forum) AS forumId, COUNT(p.iid) AS cnt')
+        ->where('p.status = :status')
+        ->andWhere('p.visible = 1')
+        ->andWhere('p.forum IN (:forumIds)')
+        ->setParameter('status', $status)
+        ->setParameter('forumIds', $forumIds)
+        ->groupBy('p.forum');
+
+    $map = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $map[(int) $row['forumId']] = (int) $row['cnt'];
+    }
+
+    return $map;
 }

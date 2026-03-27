@@ -12,7 +12,7 @@
           @click="resetToRoot"
         />
         <Button
-          class="btn btn--primary"
+          class="btn btn--success"
           icon="fa fa-folder-plus"
           :label="t('New folder')"
           @click="openNewDialog"

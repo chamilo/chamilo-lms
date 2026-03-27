@@ -6,7 +6,7 @@
       </template>
       <template #end>
         <BaseButton
-          type="primary"
+          type="success"
           icon="plus"
           :label="t('New task')"
           @click="openCreate"

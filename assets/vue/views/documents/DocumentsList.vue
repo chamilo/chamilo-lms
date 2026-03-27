@@ -8,7 +8,7 @@
       :label="t('Create certificate')"
       icon="file-add"
       only-icon
-      type="black"
+      type="success"
       @click="goToNewDocument"
     />
     <BaseButton

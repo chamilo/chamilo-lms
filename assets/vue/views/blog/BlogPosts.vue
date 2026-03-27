@@ -103,14 +103,14 @@
               v-if="viewMode === 'posts'"
               :label="t('New post')"
               icon="plus"
-              type="primary"
+              type="success"
               @click="openCreate"
             />
             <BaseButton
               v-else
               :label="t('New task')"
               icon="plus"
-              type="primary"
+              type="success"
               @click="showCreateTask = true"
             />
           </div>

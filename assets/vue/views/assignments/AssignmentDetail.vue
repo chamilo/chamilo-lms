@@ -64,7 +64,7 @@
             icon="file-add"
             only-icon
             size="small"
-            type="black"
+            type="success"
             @click="addDocument"
           />
           <BaseButton
@@ -72,7 +72,7 @@
             icon="user-add"
             only-icon
             size="small"
-            type="black"
+            type="success"
             @click="addUsers"
           />
           <BaseButton

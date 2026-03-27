@@ -3,7 +3,7 @@
     <BaseAppLink :to="{ name: 'CourseCreate' }">
       <BaseButton
         v-if="isTeacher"
-        type="secondary"
+        type="success"
         icon="plus"
         :label="t('Course')"
       />

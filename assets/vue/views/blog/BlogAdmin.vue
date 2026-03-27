@@ -15,7 +15,7 @@
       <BaseButton
         :label="t('New project')"
         icon="plus"
-        type="primary"
+        type="success"
         @click="openCreate()"
       />
     </SectionHeader>

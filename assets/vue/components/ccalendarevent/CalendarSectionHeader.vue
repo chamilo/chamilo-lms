@@ -36,7 +36,7 @@ function goList() {
       :label="t('Add event')"
       icon="calendar-plus"
       only-icon
-      type="black"
+      type="success"
       @click="emit('addClick')"
     />
 

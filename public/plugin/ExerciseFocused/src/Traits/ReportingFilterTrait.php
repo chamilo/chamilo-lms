@@ -5,11 +5,9 @@
 namespace Chamilo\PluginBundle\ExerciseFocused\Traits;
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
 use Database;
 use Display;
-use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use ExerciseFocusedPlugin;
 use ExerciseMonitoringPlugin;
@@ -73,10 +71,12 @@ trait ReportingFilterTrait
 
         $qb = $this->em->createQueryBuilder();
         $qb
-            ->select('te AS exe, q.title, te.startDate, u.id AS user_id, u.firstname, u.lastname, u.username, te.sessionId, te.cId')
+            ->select('te AS exe, q.title, te.startDate, u.id AS user_id, u.firstname, u.lastname, u.username, s.id AS sessionId, c.id AS cId')
             ->from(TrackEExercise::class, 'te')
             ->innerJoin('te.quiz', 'q')
             ->innerJoin('te.user', 'u')
+            ->innerJoin('te.course', 'c')
+            ->leftJoin('te.session', 's')
         ;
 
         $params = [];

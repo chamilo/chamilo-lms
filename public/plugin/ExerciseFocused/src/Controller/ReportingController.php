@@ -51,7 +51,7 @@ class ReportingController extends BaseController
 
         $this->setBreadcrumb($exercise->getId());
 
-        return $this->renderView(
+        $this->renderView(
             $this->plugin->get_lang('ReportByAttempts'),
             $content,
             $exercise->getTitle()

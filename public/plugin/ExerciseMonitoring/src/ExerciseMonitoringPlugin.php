@@ -151,16 +151,6 @@ class ExerciseMonitoringPlugin extends Plugin
         return $showLink ? $url : $webcamNaIcon;
     }
 
-    public static function generateSnapshotUrl(
-        int $userId,
-        string $imageFileName,
-        string $path = WEB_UPLOAD_PATH
-    ): string {
-        $pluginDirName = api_get_path($path).'plugins/ExerciseMonitoring';
-
-        return $pluginDirName.'/'.$userId.'/'.$imageFileName;
-    }
-
     /**
      * @throws Exception
      */

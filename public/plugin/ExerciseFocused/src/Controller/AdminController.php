@@ -34,7 +34,7 @@ class AdminController extends BaseController
 
         $this->setBreadcrumb();
 
-        return $this->renderView(
+        $this->renderView(
             $this->plugin->get_title(),
             $content
         );

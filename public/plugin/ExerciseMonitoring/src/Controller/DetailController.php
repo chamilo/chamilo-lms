@@ -5,13 +5,10 @@
 namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\DetailControllerTrait;
 use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository;
 use Display;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Exception;
 use Exercise;
 use ExerciseMonitoringPlugin;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -53,19 +50,19 @@ class DetailController
         $quiz = $trackExe->getQuiz();
         $user = $trackExe->getUser();
 
-        $objExercise = new Exercise($trackExe->getCId());
+        $objExercise = new Exercise($trackExe->getCourse()->getId());
         $objExercise->read($quiz->getIid());
 
         $logs = $this->logRepository->findSnapshots($objExercise, $trackExe);
 
         $content = $this->generateHeader($objExercise, $user, $trackExe)
             .'<hr>'
-            .$this->generateSnapshotList($logs, $trackExe->getExeUserId());
+            .$this->generateSnapshotList($logs);
 
         return new HttpResponse($content);
     }
 
-    private function generateSnapshotList(array $logs, int $userId): string
+    private function generateSnapshotList(array $logs): string
     {
         $html = '';
 
@@ -75,8 +72,10 @@ class DetailController
             $html .= '<div class="col-xs-12 col-sm-6 col-md-3" style="clear: '.($i % 4 === 0 ? 'both' : 'none').';">';
             $html .= '<div class="thumbnail">';
             $html .= Display::img(
-                ExerciseMonitoringPlugin::generateSnapshotUrl($userId, $log['imageFilename']),
-                $date
+                '/plugin/ExerciseMonitoring/pages/snapshot.php?f='.urlencode($log['imageFilename']),
+                $date,
+                [],
+                false
             );
             $html .= '<div class="caption">';
             $html .= Display::tag('p', $date, ['class' => 'text-center']);

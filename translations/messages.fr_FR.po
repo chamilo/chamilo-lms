@@ -7337,7 +7337,7 @@ msgid "Edit test structure"
 msgstr "Éditer ce test"
 
 msgid "Edit assignment"
-msgstr "Éditer ce document"
+msgstr "Éditer ce travail"
 
 msgid "Adding a section to the course"
 msgstr "Saisissez les informations de ce nouveau chapitre"

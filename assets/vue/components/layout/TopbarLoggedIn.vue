@@ -7,20 +7,14 @@
       <BaseAppLink
         v-if="isTeacher && allowUsersToCreateCourses"
         :to="{ name: 'CourseCreate' }"
-        class="item-button item-button--create-course relative group"
-        :title="t('Create course')"
-        :aria-label="t('Create course')"
+        class="item-button"
       >
         <BaseIcon
-          class="item-button__icon text-success"
           icon="courses"
+          badge-icon="plus"
+          :tooltip="t('Create course')"
+          class="item-button__icon text-success"
         />
-        <span class="absolute -top-1 -left-1 text-success text-base font-bold leading-none">+</span>
-        <span
-          class="absolute top-full left-1/2 -translate-x-1/2 mt-1 px-2 py-1 text-xs text-white bg-gray-90 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-        >
-          {{ t("Create course") }}
-        </span>
       </BaseAppLink>
       <BaseAppLink
         v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('ticket.show_link_ticket_notification')"
@@ -113,7 +107,7 @@ const messageRelUserStore = useMessageRelUserStore()
 const notification = useNotification()
 const cidReqStore = useCidReqStore()
 const securityStore = useSecurityStore()
-const { isTeacher } = storeToRefs(useSecurityStore())
+const { isTeacher } = storeToRefs(securityStore)
 
 const loginUrl = "/login"
 const elUserSubmenu = ref(null)

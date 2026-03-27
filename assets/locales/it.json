@@ -1836,5 +1836,7 @@
     "No available users.": "Nessun utente disponibile.",
     "No users added yet.": "Nessun utente aggiunto ancora.",
     "# attended": "# presenti",
-    "Dates": "Date"
+    "Dates": "Date",
+    "No documents added yet.": "Nessun documento aggiunto ancora.",
+    "No available documents.": "Nessun documento disponibile."
 }

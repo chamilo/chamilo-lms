@@ -1836,5 +1836,7 @@
     "No available users.": "Cap d'utilizaire disponible.",
     "No users added yet.": "Cap d'utilizaire apondut encara.",
     "# attended": "# present",
-    "Dates": "Datas"
+    "Dates": "Datas",
+    "No documents added yet.": "Cap de document apondut encara.",
+    "No available documents.": "Cap de document disponible."
 }

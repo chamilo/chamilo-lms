@@ -722,6 +722,7 @@ switch ($action) {
         }
         $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
         $form->addElement('html', '<div id="tags_options" style="display:none">');
+        $form->addElement('html', '<p class="text-sm text-gray-600 mt-1 mb-2">'.get_lang('Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them.').'</p>');
         $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
         $form->addElement('html', '</div>');
         $form->addHtmlEditor(

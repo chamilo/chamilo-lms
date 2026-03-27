@@ -170,6 +170,7 @@ class PlatformConfigurationController extends AbstractController
                 'search.search_show_unlinked_results',
                 'certificate.allow_general_certificate',
                 'language.show_different_course_language',
+                'workflows.allow_users_to_create_courses',
             ];
 
             foreach ($variables as $variable) {

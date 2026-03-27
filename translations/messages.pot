@@ -33041,3 +33041,555 @@ msgstr ""
 
 msgid "An error occurred. Please try again."
 msgstr ""
+
+msgid "%s created"
+msgstr ""
+
+msgid "%s updated"
+msgstr ""
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr ""
+
+msgid "have a look at the changelog"
+msgstr ""
+
+msgid "to know what's new and what has been changed."
+msgstr ""
+
+msgid "Session Item"
+msgstr ""
+
+msgid "Points"
+msgstr ""
+
+msgid "See notifications"
+msgstr ""
+
+msgid "New content available for this course."
+msgstr ""
+
+msgid "No new notifications."
+msgstr ""
+
+msgid "No new content found."
+msgstr ""
+
+msgid "No tool details available yet."
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "Open course"
+msgstr ""
+
+msgid "Course completed"
+msgstr ""
+
+msgid "The subscription limit for this course has been reached."
+msgstr ""
+
+msgid "Subscription limit reached"
+msgstr ""
+
+msgid "Tertiary alternative"
+msgstr ""
+
+msgid "Update SCORM"
+msgstr ""
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr ""
+
+msgid "What will be sent to the AI"
+msgstr ""
+
+msgid "Assignment title + instructions"
+msgstr ""
+
+msgid "Student submission (text)"
+msgstr ""
+
+msgid "Student submission (text): none"
+msgstr ""
+
+msgid "Student attachment"
+msgstr ""
+
+msgid "supported"
+msgstr ""
+
+msgid "not supported for document analysis"
+msgstr ""
+
+msgid "Student attachment: none"
+msgstr ""
+
+msgid "No text AI providers available."
+msgstr ""
+
+msgid "AI-assisted"
+msgstr ""
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr ""
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Received"
+msgstr ""
+
+msgid "%s min"
+msgstr ""
+
+msgid "Unlock column"
+msgstr ""
+
+msgid "Lock column"
+msgstr ""
+
+msgid "Set all Present"
+msgstr ""
+
+msgid "Set all Absent"
+msgstr ""
+
+msgid "Auto (recommended)"
+msgstr ""
+
+msgid "Error downloading all documents."
+msgstr ""
+
+msgid "Open with ONLYOFFICE"
+msgstr ""
+
+msgid "Limiting quota"
+msgstr ""
+
+msgid "Remaining space"
+msgstr ""
+
+msgid "Course catalogue"
+msgstr ""
+
+msgid "Drag links to reorder"
+msgstr ""
+
+msgid "Drop links here to keep them without category"
+msgstr ""
+
+msgid "Could not export"
+msgstr ""
+
+msgid "Link moved"
+msgstr ""
+
+msgid "Could not move link"
+msgstr ""
+
+msgid "Category reordering is not enabled"
+msgstr ""
+
+msgid "Showing %s posts"
+msgstr ""
+
+msgid "Showing %s tasks"
+msgstr ""
+
+msgid "Page %s of %s"
+msgstr ""
+
+msgid "Tutors"
+msgstr ""
+
+msgid "selected"
+msgstr ""
+
+msgid "No data to export"
+msgstr ""
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr ""
+
+msgid "Standard list"
+msgstr ""
+
+msgid "Management list"
+msgstr ""
+
+msgid "Open platform"
+msgstr ""
+
+msgid "Teacher user ID"
+msgstr ""
+
+msgid "Are you sure you want to delete this course?"
+msgstr ""
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr ""
+
+msgid "Search by name, username, email"
+msgstr ""
+
+msgid "contains %s items"
+msgstr ""
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr ""
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr ""
+
+msgid "Your account deletion request is pending review."
+msgstr ""
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr ""
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr ""
+
+msgid "Submitting request..."
+msgstr ""
+
+msgid "Request withdrawal of legal consent"
+msgstr ""
+
+msgid "Submitting your account deletion request..."
+msgstr ""
+
+msgid "Submitting your acceptance..."
+msgstr ""
+
+msgid "Event details"
+msgstr ""
+
+msgid "You cannot access the linked course from this view."
+msgstr ""
+
+msgid "Failed to load sessions"
+msgstr ""
+
+msgid "Failed to load events"
+msgstr ""
+
+msgid "No events found"
+msgstr ""
+
+msgid "Group image"
+msgstr ""
+
+msgid "SearchTCC"
+msgstr ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Firstname"
+msgstr ""
+
+msgid "Lastname"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Last login in platform"
+msgstr ""
+
+msgid "Export as CSV"
+msgstr ""
+
+msgid "Export as XLS"
+msgstr ""
+
+msgid "Deactivate this user?"
+msgstr ""
+
+msgid "Enable this user?"
+msgstr ""
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr ""
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr ""
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr ""
+
+msgid "This action cannot be undone."
+msgstr ""
+
+msgid "Unify"
+msgstr ""
+
+msgid "SessionAdmin"
+msgstr ""
+
+msgid "Drh"
+msgstr ""
+
+msgid "Student"
+msgstr ""
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr ""
+
+msgid "Helper text"
+msgstr ""
+
+msgid "NotAllowed"
+msgstr ""
+
+msgid "Use the filters above to load the learner access details."
+msgstr ""
+
+msgid "Start date must be before end date"
+msgstr ""
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr ""
+
+msgid "This course will be created using the platform default course template."
+msgstr ""
+
+msgid "Security breach avoid restart"
+msgstr ""
+
+msgid "User deactivated"
+msgstr ""
+
+msgid "InvalidId"
+msgstr ""
+
+msgid "User enabled"
+msgstr ""
+
+msgid "No other duplicates found for this user."
+msgstr ""
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr ""
+
+msgid "No accounts were merged."
+msgstr ""
+
+msgid "An error occurred while unifying users."
+msgstr ""
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr ""
+
+msgid "Duplicate users"
+msgstr ""
+
+msgid "Years"
+msgstr ""
+
+msgid "All time visits outside sessions"
+msgstr ""
+
+msgid "All time visits in sessions"
+msgstr ""
+
+msgid "All time visits total"
+msgstr ""
+
+msgid "Student visits per period, per course"
+msgstr ""
+
+msgid "By email"
+msgstr ""
+
+msgid "By extra field"
+msgstr ""
+
+msgid "Select an option"
+msgstr ""
+
+msgid "Profile field"
+msgstr ""
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr ""
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr ""
+
+msgid "How to use this report"
+msgstr ""
+
+msgid "Disable / Enable"
+msgstr ""
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "Next week"
+msgstr ""
+
+msgid "Loading report..."
+msgstr ""
+
+msgid "Failed to load this report. Please try again."
+msgstr ""
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr ""
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr ""
+
+msgid "Choose the destination course"
+msgstr ""
+
+msgid "You can select multiple items"
+msgstr ""
+
+msgid "Use the search box to find courses quickly"
+msgstr ""
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr ""
+
+msgid "Select destination sessions"
+msgstr ""
+
+msgid "You can select multiple users"
+msgstr ""
+
+msgid "Use the search box to find users quickly"
+msgstr ""
+
+msgid "Error while creating the document"
+msgstr ""
+
+msgid "Not a SCORM learning path"
+msgstr ""
+
+msgid "Final item"
+msgstr ""
+
+msgid "Edit item"
+msgstr ""
+
+msgid "No AI text providers configured."
+msgstr ""
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr ""
+
+msgid "Update failed. No file received by the server."
+msgstr ""
+
+msgid "Update failed. %s"
+msgstr ""
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr ""
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr ""
+
+msgid "Update failed"
+msgstr ""
+
+msgid "Question lower case"
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Case insensitive"
+msgstr ""
+
+msgid "Select a session to load its courses."
+msgstr ""
+
+msgid "Select the source course."
+msgstr ""
+
+msgid "Select a destination session."
+msgstr ""
+
+msgid "Select the destination course."
+msgstr ""
+
+msgid "Copy the full course content from the selected session course."
+msgstr ""
+
+msgid "Select which tools/items to copy."
+msgstr ""
+
+msgid "Do not include the base (non-session) course content."
+msgstr ""
+
+msgid "An error occurred while copying the course"
+msgstr ""
+
+msgid "Please select a different destination"
+msgstr ""
+
+msgid "You must select a destination course"
+msgstr ""
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr ""
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr ""
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr ""
+
+msgid "GeneralResourcesCourse"
+msgstr ""
+
+msgid "Password must be at least %length% characters long."
+msgstr ""
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr ""
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr ""
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr ""
+
+msgid "Password must contain at least %count% special characters."
+msgstr ""
+
+msgid "Invalid login request."
+msgstr ""
+
+msgid "Authentication failed."
+msgstr ""
+
+msgid "Login %status% for username %username%"
+msgstr ""
+
+msgid "Co-generated with AI"
+msgstr ""
+
+msgid "GDPRTitle"
+msgstr ""
+
+msgid "EntraID ID"
+msgstr ""
+
+msgid "EntraID UID"
+msgstr ""

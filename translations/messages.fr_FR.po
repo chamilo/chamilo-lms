@@ -6984,10 +6984,10 @@ msgid "Group deleted"
 msgstr "Groupe supprimé"
 
 msgid "Registered"
-msgstr "inscrit"
+msgstr "Inscrits"
 
 msgid "registered"
-msgstr "inscrit"
+msgstr "inscrits"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "Utilisateurs autorisés à s'inscrire eux-même dans les groupes"

@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\ExerciseFocused\Controller;
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseFocused\Traits\ReportingFilterTrait;
 use Display;
@@ -49,7 +50,7 @@ class ReportingController extends BaseController
             isset($_GET['submit']) ? 2 : 1
         );
 
-        $this->setBreadcrumb($exercise->getId());
+        $this->setBreadcrumb($exercise->getIid());
 
         $this->renderView(
             $this->plugin->get_lang('ReportByAttempts'),
@@ -86,15 +87,16 @@ class ReportingController extends BaseController
             $formValues = $form->exportValues();
 
             $actionLeft = Display::url(
-                Display::return_icon('export_excel.png', get_lang('ExportExcel'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PLUGIN_PATH).'ExerciseFocused/pages/export.php?'.http_build_query($formValues)
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET),
+                '/plugin/ExerciseFocused/pages/export.php?'.http_build_query($formValues),
+                ['class' => 'text-primary', 'title' => get_lang('ExportExcel')]
             );
             $actionRight = Display::toolbarButton(
                 get_lang('Clean'),
                 api_get_path(WEB_PLUGIN_PATH)
                 .'ExerciseFocused/pages/reporting.php?'
                 .api_get_cidreq().'&'.http_build_query(['id' => $exercise->getIid(), 'submit' => '']),
-                'search'
+                'magnify'
             );
 
             $actions = Display::toolbarAction(

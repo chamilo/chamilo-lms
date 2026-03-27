@@ -38,7 +38,8 @@ $msgids = parsePotFile($potPath);
 
 $missing = [];
 
-$dirsToScan = ['assets', 'public', 'src', 'tests'];
+//$dirsToScan = ['assets', 'public', 'src', 'tests'];
+$dirsToScan = ['assets', 'public', 'src'];
 $dirsToAvoid = ['public/plugin'];
 
 $termIndex = 1;

@@ -168,24 +168,21 @@ $(function () {
       self = $(this)
 
     $.when(loadModalContent).done(function (modalContent) {
-      var modalTitle = self.data("title") || " ",
-        globalModalTitle = $("#global-modal").find("#global-modal-title"),
-        globalModalBody = $("#global-modal").find("#global-modal-body")
-
-      globalModalTitle.text(modalTitle)
-      globalModalBody.html(modalContent)
-
-      globalModalBody.css({ "max-height": "500px", overflow: "auto" })
-      toggleModal("global-modal")
+      var dialog = document.getElementById("global-modal")
+      $("#global-modal-title").text(self.data("title") || " ")
+      var $body = $("#global-modal-body")
+      $body.html(modalContent)
+      dialog.showModal()
     })
   })
 
-  $("#global-modal").on("hidden.bs.modal", function () {
+  $("#global-modal").on("close", function () {
     $(".embed-responsive").find("iframe").remove()
+    $("#global-modal-body").empty()
   })
 
   $("#close-global-model").on("click", function () {
-    toggleModal("global-modal")
+    document.getElementById("global-modal").close()
   })
 
   // Expands an image modal
@@ -792,13 +789,6 @@ window.copyTextToClipBoard = function (elementId) {
     copyText.select()
     document.execCommand("copy")
   }
-}
-
-function toggleModal(modalID) {
-  document.getElementById(modalID).classList.toggle("hidden")
-  document.getElementById(modalID + "-backdrop").classList.toggle("hidden")
-  document.getElementById(modalID).classList.toggle("flex")
-  document.getElementById(modalID + "-backdrop").classList.toggle("flex")
 }
 
 // Expose functions to be use inside chamilo.

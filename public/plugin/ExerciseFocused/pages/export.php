@@ -5,8 +5,11 @@
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log as FocusedLog;
+use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository as FocusedLogRepository;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log as MonitoringLog;
+use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository as MonitoringLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -21,8 +24,9 @@ $plugin = ExerciseFocusedPlugin::create();
 $monitoringPlugin = ExerciseMonitoringPlugin::create();
 $monitoringPluginIsEnabled = $monitoringPlugin->isEnabled(true);
 $em = Database::getManager();
-/** @var FocusedLog $focusedLogRepository */
+/** @var FocusedLogRepository $focusedLogRepository */
 $focusedLogRepository = $em->getRepository(FocusedLog::class);
+/** @var TrackEAttemptRepository $attempsRepository */
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
 
 if (!$plugin->isEnabled(true)) {
@@ -276,8 +280,7 @@ function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
         return '';
     }
 
-    $user = $trackExe->getUser();
-    /** @var MonitoringLog $monitoringLogRepository */
+    /** @var MonitoringLogRepository $monitoringLogRepository */
     $monitoringLogRepository = Database::getManager()->getRepository(MonitoringLog::class);
 
     $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($level, $trackExe);
@@ -285,10 +288,8 @@ function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
 
     /** @var MonitoringLog $logByQuestion */
     foreach ($monitoringLogsByQuestion as $logByQuestion) {
-        $snapshotUrl = ExerciseMonitoringPlugin::generateSnapshotUrl(
-            $user->getId(),
-            $logByQuestion->getImageFilename()
-        );
+        $snapshotUrl = '/plugin/ExerciseMonitoring/pages/snapshot.php?f='.urlencode($logByQuestion->getImageFilename());
+
         $snapshotList[] = api_get_local_time($logByQuestion->getCreatedAt()).' '.$snapshotUrl;
     }
 

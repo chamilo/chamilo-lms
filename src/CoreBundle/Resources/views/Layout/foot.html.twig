@@ -1,7 +1,5 @@
 {{ encore_entry_script_tags('vue') }}
 
-{{ chamilo_plugin_region('content_bottom') }}
-
 {# tracking.footer_extra_content: inject raw HTML before </body> #}
 {% set tracking_footer_extra = chamilo_settings_get('tracking.footer_extra_content')|default('')|trim %}
 {% if tracking_footer_extra %}

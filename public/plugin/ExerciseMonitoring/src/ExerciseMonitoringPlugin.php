@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -126,8 +127,8 @@ class ExerciseMonitoringPlugin extends Plugin
     public function generateDetailLink(int $exeId, int $userId): string
     {
         $title = $this->get_lang('ExerciseMonitored');
-        $webcamIcon = Display::return_icon('webcam.png', $title);
-        $webcamNaIcon = Display::return_icon('webcam_na.png', $this->get_lang('ExerciseUnmonitored'));
+        $webcamIcon = Display::getMdiIcon(ActionIcon::WEBCAM);
+        $webcamNaIcon = Display::getMdiIcon(ActionIcon::WEBCAM_OFF);
 
         $monitoringDetailUrl = api_get_path(WEB_PLUGIN_PATH).'ExerciseMonitoring/pages/detail.php?'.api_get_cidreq()
             .'&'.http_build_query(['id' => $exeId]);
@@ -136,7 +137,7 @@ class ExerciseMonitoringPlugin extends Plugin
             $webcamIcon,
             $monitoringDetailUrl,
             [
-                'class' => 'ajax',
+                'class' => 'ajax btn btn--secondary btn--secondary-outline btn--sm',
                 'data-title' => $title,
                 'data-size' => 'lg',
             ]
@@ -149,16 +150,6 @@ class ExerciseMonitoringPlugin extends Plugin
         }
 
         return $showLink ? $url : $webcamNaIcon;
-    }
-
-    public static function generateSnapshotUrl(
-        int $userId,
-        string $imageFileName,
-        string $path = WEB_UPLOAD_PATH
-    ): string {
-        $pluginDirName = api_get_path($path).'plugins/ExerciseMonitoring';
-
-        return $pluginDirName.'/'.$userId.'/'.$imageFileName;
     }
 
     /**

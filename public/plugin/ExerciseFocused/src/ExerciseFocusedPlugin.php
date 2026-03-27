@@ -140,18 +140,17 @@ class ExerciseFocusedPlugin extends Plugin
             return '';
         }
 
-        $icon = Display::return_icon(
-            'window_list_slide.png',
-            $this->get_lang('ReportByAttempts'),
-            [],
-            ICON_SIZE_MEDIUM
-        );
+        $icon = Display::getMdiIcon('image-filter-center-focus', null, null, ICON_SIZE_MEDIUM);
 
         $url = api_get_path(WEB_PLUGIN_PATH)
             .'ExerciseFocused/pages/reporting.php?'
             .api_get_cidreq().'&'.http_build_query(['id' => $exerciseId]);
 
-        return Display::url($icon, $url);
+        return Display::url(
+            $icon,
+            $url,
+            ['class' => 'text-primary', 'title' => $this->get_lang('ReportByAttempts')]
+        );
     }
 
     public function getSessionFieldList(): array

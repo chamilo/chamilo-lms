@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\ExerciseReportActionEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -534,6 +536,16 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         }
         $actions .= '<a class="btn btn--plain" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
             get_lang('Question stats').'</a>';
+
+        $exerciseReportActionEvent = new ExerciseReportActionEvent();
+        $exerciseReportActionEvent->setQuizId($exercise_id);
+
+        Container::getEventDispatcher()->dispatch(
+            $exerciseReportActionEvent,
+            Events::EXERCISE_REPORT_ACTION
+        );
+
+        $actions .= implode(PHP_EOL, $exerciseReportActionEvent->getActions());
     }
 } else {
     $actions .= '<a href="exercise.php">'.

@@ -602,6 +602,7 @@ function plugin_get_available_region_options(array $metadata): array
     }
 
     return [
+        'menu_administrator' => $labels['menu_administrator'].' (menu_administrator)',
         'content_top' => $labels['content_top'].' (content_top)',
         'content_bottom' => $labels['content_bottom'].' (content_bottom)',
         'main_top' => $labels['main_top'].' (main_top)',
@@ -1051,7 +1052,6 @@ function plugin_get_management_url(string $pluginName): ?string
     }
 
     $candidates = [
-        'admin.php',
         'configure.php',
     ];
 

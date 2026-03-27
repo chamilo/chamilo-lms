@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Povinn\u00e9 polia",
     "No available users.": "\u017diadni dostupn\u00ed pou\u017e\u00edvatelia.",
-    "No users added yet.": "\u017diadni pou\u017e\u00edvatelia e\u0161te nepridan\u00ed."
+    "No users added yet.": "\u017diadni pou\u017e\u00edvatelia e\u0161te nepridan\u00ed.",
+    "# attended": "# nav\u0161tevoval",
+    "Dates": "D\u00e1tumy"
 }

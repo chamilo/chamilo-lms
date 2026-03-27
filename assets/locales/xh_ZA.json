@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Iindawo ezifunwayo",
     "No available users.": "Akukho basebenzisi abakhona.",
-    "No users added yet.": "Akukho basebenzisi bafakiweyo okwangoku."
+    "No users added yet.": "Akukho basebenzisi bafakiweyo okwangoku.",
+    "# attended": "# ezinyeneleyo",
+    "Dates": "Imihla"
 }

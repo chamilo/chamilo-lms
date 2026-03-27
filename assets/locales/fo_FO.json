@@ -1822,5 +1822,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Krav til f\u00edldir",
     "No available users.": "Ongir t\u00f8k n\u00fdbrigdar.",
-    "No users added yet.": "Ongir n\u00fdbrigdar l\u00f8gdir afturat enn."
+    "No users added yet.": "Ongir n\u00fdbrigdar l\u00f8gdir afturat enn.",
+    "# attended": "# m\u00f8tt",
+    "Dates": "Dagf\u00f8ringar"
 }

@@ -1834,5 +1834,7 @@
     "EntraID UID": "UID d'EntraID",
     "Required fields": "Campos obligatorios",
     "No available users.": "Nun hai usuarios disponibles.",
-    "No users added yet.": "Encami neng\u00fan usuariu."
+    "No users added yet.": "Encami neng\u00fan usuariu.",
+    "# attended": "# asisti\u00f3",
+    "Dates": "Feches"
 }

@@ -1834,5 +1834,7 @@
     "EntraID UID": "UID EntraID",
     "Required fields": "R\u00e9ims\u00ed riachtanacha",
     "No available users.": "Gan aon \u00fas\u00e1ideoir\u00ed ar f\u00e1il.",
-    "No users added yet.": "Gan aon \u00fas\u00e1ideoir\u00ed curtha leis go f\u00f3ill."
+    "No users added yet.": "Gan aon \u00fas\u00e1ideoir\u00ed curtha leis go f\u00f3ill.",
+    "# attended": "# freastail",
+    "Dates": "D\u00e1ta\u00ed"
 }

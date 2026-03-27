@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "P\u00e5kravde felt",
     "No available users.": "Ingen tilgjengelege brukarar.",
-    "No users added yet.": "Ingen brukarar lagt til enno."
+    "No users added yet.": "Ingen brukarar lagt til enno.",
+    "# attended": "# framandne",
+    "Dates": "Datoar"
 }

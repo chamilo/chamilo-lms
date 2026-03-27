@@ -1822,5 +1822,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Verplichte velden",
     "No available users.": "Geen beschikbare gebruikers.",
-    "No users added yet.": "Nog geen gebruikers toegevoegd."
+    "No users added yet.": "Nog geen gebruikers toegevoegd.",
+    "# attended": "#bijgewoond",
+    "Dates": "Datums"
 }

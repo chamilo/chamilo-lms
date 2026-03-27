@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "\u5fc5\u586b\u6b04\u4f4d",
     "No available users.": "\u6c92\u6709\u53ef\u7528\u4f7f\u7528\u8005\u3002",
-    "No users added yet.": "\u5c1a\u672a\u65b0\u589e\u4f7f\u7528\u8005\u3002"
+    "No users added yet.": "\u5c1a\u672a\u65b0\u589e\u4f7f\u7528\u8005\u3002",
+    "# attended": "\u51fa\u5e2d\u6b21\u6578",
+    "Dates": "\u65e5\u671f"
 }

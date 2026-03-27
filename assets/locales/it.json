@@ -1834,5 +1834,7 @@
     "EntraID UID": "UID EntraID",
     "Required fields": "Campi obbligatori",
     "No available users.": "Nessun utente disponibile.",
-    "No users added yet.": "Nessun utente aggiunto ancora."
+    "No users added yet.": "Nessun utente aggiunto ancora.",
+    "# attended": "# presenti",
+    "Dates": "Date"
 }

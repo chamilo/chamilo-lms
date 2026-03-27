@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Kachkan hallk'akuna",
     "No available users.": "Manam kanchisqa runakuna.",
-    "No users added yet.": "Manam runakunaq yapasqachu."
+    "No users added yet.": "Manam runakunaq yapasqachu.",
+    "# attended": "# kutirqan",
+    "Dates": "Pachakuna"
 }

@@ -1834,5 +1834,7 @@
     "EntraID UID": "UID d'EntraID",
     "Required fields": "Camps obligatoris",
     "No available users.": "No hi ha usuaris disponibles.",
-    "No users added yet.": "Encara no s'ha afegit cap usuari."
+    "No users added yet.": "Encara no s'ha afegit cap usuari.",
+    "# attended": "Assist\u00e8ncies",
+    "Dates": "Dates"
 }

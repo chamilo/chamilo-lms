@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Privalomi laukai",
     "No available users.": "N\u0117ra prieinam\u0173 vartotoj\u0173.",
-    "No users added yet.": "Dar n\u0117ra prid\u0117ta vartotoj\u0173."
+    "No users added yet.": "Dar n\u0117ra prid\u0117ta vartotoj\u0173.",
+    "# attended": "# dalyvavo",
+    "Dates": "Datos"
 }

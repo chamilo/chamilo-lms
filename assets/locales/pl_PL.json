@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "Wymagane pola",
     "No available users.": "Brak dost\u0119pnych u\u017cytkownik\u00f3w.",
-    "No users added yet.": "Brak dodanych u\u017cytkownik\u00f3w."
+    "No users added yet.": "Brak dodanych u\u017cytkownik\u00f3w.",
+    "# attended": "# obecno\u015bci",
+    "Dates": "Daty"
 }

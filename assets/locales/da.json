@@ -1834,5 +1834,7 @@
     "EntraID UID": "EntraID UID",
     "Required fields": "P\u00e5kr\u00e6vede felter",
     "No available users.": "Ingen tilg\u00e6ngelige brugere.",
-    "No users added yet.": "Ingen brugere tilf\u00f8jet endnu."
+    "No users added yet.": "Ingen brugere tilf\u00f8jet endnu.",
+    "# attended": "# deltaget",
+    "Dates": "Datoer"
 }

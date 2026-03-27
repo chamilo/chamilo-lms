@@ -10,11 +10,11 @@
   }
 
   &__header {
-    @apply bg-white border-b border-solid border-gray-30 gap-4 rounded-t-lg p-4;
+    @apply flex items-center bg-white border-b border-solid border-gray-30 gap-4 rounded-t-lg p-4;
   }
 
   &__title {
-    @apply text-body-1 font-semibold;
+    @apply text-body-1 font-semibold mr-auto;
   }
 
   &__body {

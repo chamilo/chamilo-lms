@@ -105,7 +105,6 @@ if (api_is_platform_admin()) {
 
 $templateName = $plugin->get_lang('CourseListOnSale');
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $template = new Template($templateName);
 $template->assign('search_filter_form', $form->returnForm());

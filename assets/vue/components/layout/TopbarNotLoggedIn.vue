@@ -36,6 +36,23 @@ function normalizeLocaleCode(value) {
     .toLowerCase()
 }
 
+function normalizeBooleanFlag(value) {
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  if (typeof value === "number") {
+    return value === 1
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase()
+    return ["1", "true", "yes", "on"].includes(normalized)
+  }
+
+  return false
+}
+
 const currentLanguageLabel = computed(() => {
   // Read legacy locale from URL query (e.g. registration.php?_locale=eu_ES)
   const rawLocale = Array.isArray(route.query?._locale) ? route.query._locale[0] : route.query?._locale
@@ -69,21 +86,35 @@ const languageItems = computed(() =>
 
 const allowRegistration = computed(() => platformConfigStore.getSetting("registration.allow_registration") !== "false")
 
+const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+
+const showBuyCoursesLink = computed(() => {
+  return normalizeBooleanFlag(buyCoursesConfig.value?.visibleForAnonymousUsers)
+})
+
+const buyCoursesIndexPath = computed(() => {
+  return buyCoursesConfig.value?.indexPath || "/plugin/BuyCourses/index.php"
+})
+
 const flags = ref({ home: false, faq: false, demo: false, contact: false })
 
 async function resolveVisibility() {
   if (isUndefinedUrl.value) return
+
   const { data } = await axios.get("/pages/_topbar-visibility", {
     params: { locale: currentLocale.value },
     headers: { "Cache-Control": "no-cache" },
   })
+
   flags.value = data
 }
+
 onMounted(resolveVisibility)
 
 const menuItems = computed(() => {
   if (isUndefinedUrl.value) {
     const items = []
+
     if (languageList.length > 1) {
       items.push({
         key: "language_selector",
@@ -91,12 +122,18 @@ const menuItems = computed(() => {
         items: languageItems.value,
       })
     }
+
     return items
   }
 
   const items = []
 
-  if (flags.value.home) items.push({ label: t("Home"), url: router.resolve({ name: "Index" }).href })
+  if (flags.value.home) {
+    items.push({
+      label: t("Home"),
+      url: router.resolve({ name: "Index" }).href,
+    })
+  }
 
   const showCatalogueLink =
     platformConfigStore.getSetting("catalog.course_catalog_published") !== "false" &&
@@ -104,13 +141,46 @@ const menuItems = computed(() => {
     platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
 
   if (showCatalogueLink) {
-    items.push({ label: t("Browse courses"), url: router.resolve({ name: "CatalogueCourses" }).href })
+    items.push({
+      label: t("Browse courses"),
+      url: router.resolve({ name: "CatalogueCourses" }).href,
+    })
   }
 
-  if (flags.value.faq) items.push({ label: t("FAQ"), url: router.resolve({ name: "Faq" }).href })
-  if (allowRegistration.value) items.push({ label: t("Registration"), url: "/main/auth/registration.php" })
-  if (flags.value.demo) items.push({ label: t("Demo"), url: router.resolve({ name: "Demo" }).href })
-  if (flags.value.contact) items.push({ label: t("Contact"), url: "/contact" })
+  if (showBuyCoursesLink.value) {
+    items.push({
+      label: t("Buy courses"),
+      url: buyCoursesIndexPath.value,
+    })
+  }
+
+  if (flags.value.faq) {
+    items.push({
+      label: t("FAQ"),
+      url: router.resolve({ name: "Faq" }).href,
+    })
+  }
+
+  if (allowRegistration.value) {
+    items.push({
+      label: t("Registration"),
+      url: "/main/auth/registration.php",
+    })
+  }
+
+  if (flags.value.demo) {
+    items.push({
+      label: t("Demo"),
+      url: router.resolve({ name: "Demo" }).href,
+    })
+  }
+
+  if (flags.value.contact) {
+    items.push({
+      label: t("Contact"),
+      url: "/contact",
+    })
+  }
 
   if (languageList.length > 1) {
     items.push({

@@ -179,16 +179,16 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_STRIPE,
             self::TABLE_TPV_CECABANK,
         ];
+
         $em = Database::getManager();
         $cn = $em->getConnection();
         $sm = $cn->createSchemaManager();
-        $tables = $sm->tablesExist($tablesToBeCompared);
 
-        if ($tables) {
-            return;
+        if (!$sm->tablesExist($tablesToBeCompared)) {
+            require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/database.php';
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/database.php';
+        $this->update();
     }
 
     /**
@@ -1351,14 +1351,17 @@ class BuyCoursesPlugin extends Plugin
         return $courseCatalog;
     }
 
-    public function getPriceWithCurrencyFromIsoCode(float $price, string $isoCode): string
+    public function getPriceWithCurrencyFromIsoCode(int|float|string $price, string $isoCode): string
     {
         $useSymbol = 'true' === $this->get('use_currency_symbol');
+        $priceValue = (float) $price;
+        $formattedPrice = api_number_format($priceValue, 2);
 
-        $result = $isoCode.' '.$price;
+        $result = $isoCode.' '.$formattedPrice;
+
         if ($useSymbol) {
             $symbol = 'BRL' === $isoCode ? 'R$' : Currencies::getSymbol($isoCode);
-            $result = $symbol.' '.$price;
+            $result = $symbol.' '.$formattedPrice;
         }
 
         return $result;
@@ -1392,7 +1395,7 @@ class BuyCoursesPlugin extends Plugin
         /** @var CCourseDescription $courseDescription */
         $courseDescription = Container::getCourseDescriptionRepository()
             ->getResourcesByCourse($course)
-            ->addOrderBy('descriptionType', 'ASC')
+            ->addOrderBy('resource.descriptionType', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
@@ -1457,7 +1460,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
             'id' => $session->getId(),
-            'name' => $session->getName(),
+            'name' => $session->getTitle(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
@@ -1542,10 +1545,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        /** @var CCourseDescription $courseDescription */
+        /** @var CCourseDescription|null $courseDescription */
         $courseDescription = Container::getCourseDescriptionRepository()
             ->getResourcesByCourse($course)
-            ->addOrderBy('descriptionType', 'ASC')
+            ->addOrderBy('resource.descriptionType', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
@@ -1614,7 +1617,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
             'id' => $session->getId(),
-            'name' => $session->getName(),
+            'name' => $session->getTitle(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
@@ -1705,7 +1708,7 @@ class BuyCoursesPlugin extends Plugin
                 return null;
             }
 
-            $productName = $session->getName();
+            $productName = $session->getTitle();
         }
 
         $coupon = null;
@@ -1768,6 +1771,7 @@ class BuyCoursesPlugin extends Plugin
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
+            'invoice' => 0,
         ];
 
         return Database::insert(self::TABLE_SALE, $values);
@@ -2572,7 +2576,7 @@ class BuyCoursesPlugin extends Plugin
         $sessionItem = [
             'item_id' => null,
             'session_id' => $session->getId(),
-            'session_name' => $session->getName(),
+            'session_name' => $session->getTitle(),
             'session_visibility' => $session->getVisibility(),
             'session_display_start_date' => null,
             'session_display_end_date' => null,
@@ -2611,8 +2615,8 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
 
-        if (false !== $item) {
-            $sessionItem['item_id'] = $item['id'];
+        if (!empty($item)) {
+            $sessionItem['item_id'] = $item['iid'];
             $sessionItem['visible'] = true;
             $sessionItem['currency'] = $item['iso_code'];
             $sessionItem['price'] = $item['price'];
@@ -3115,60 +3119,75 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
+        $product['price'] = isset($product['price']) ? (float) $product['price'] : 0.0;
+        $product['tax_perc'] = isset($product['tax_perc']) && '' !== (string) $product['tax_perc']
+            ? (int) $product['tax_perc']
+            : null;
+        $product['iso_code'] = isset($product['iso_code']) ? (string) $product['iso_code'] : '';
+
         $taxPerc = null;
-        $product['has_coupon'] = null != $coupon ? true : false;
-        $couponDiscount = 0;
-        if (null != $coupon) {
-            if (self::COUPON_DISCOUNT_TYPE_AMOUNT == $coupon['discount_type']) {
-                $couponDiscount = $coupon['discount_amount'];
-            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
-                $couponDiscount = ($product['price'] * $coupon['discount_amount']) / 100;
+        $product['has_coupon'] = null !== $coupon;
+
+        $couponDiscount = 0.0;
+
+        if (null !== $coupon) {
+            $discountType = isset($coupon['discount_type']) ? (int) $coupon['discount_type'] : 0;
+            $discountAmount = isset($coupon['discount_amount']) ? (float) $coupon['discount_amount'] : 0.0;
+
+            if (self::COUPON_DISCOUNT_TYPE_AMOUNT === $discountType) {
+                $couponDiscount = $discountAmount;
+            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE === $discountType) {
+                $couponDiscount = ($product['price'] * $discountAmount) / 100;
             }
-            $product['price_without_discount'] = $product['price'];
+
+            $product['price_without_discount'] = (float) $product['price'];
         }
-        $product['discount_amount'] = $couponDiscount;
-        $product['price'] -= $couponDiscount;
-        $priceWithoutTax = $product['price'];
-        $product['total_price'] = $product['price'];
-        $product['tax_amount'] = 0;
+
+        $product['discount_amount'] = (float) $couponDiscount;
+        $product['price'] = (float) $product['price'] - (float) $couponDiscount;
+
+        $priceWithoutTax = (float) $product['price'];
+        $product['total_price'] = (float) $product['price'];
+        $product['tax_amount'] = 0.0;
 
         if ($this->checkTaxEnabledInProduct($productType)) {
             if (null === $product['tax_perc']) {
                 $globalParameters = $this->getGlobalParameters();
-                $globalTaxPerc = $globalParameters['global_tax_perc'];
-                $taxPerc = $globalTaxPerc;
+                $taxPerc = isset($globalParameters['global_tax_perc'])
+                    ? (int) $globalParameters['global_tax_perc']
+                    : 0;
             } else {
-                $taxPerc = $product['tax_perc'];
+                $taxPerc = (int) $product['tax_perc'];
             }
-            // $taxPerc = is_null($product['tax_perc']) ? $globalTaxPerc : $product['tax_perc'];
 
             $taxAmount = round($priceWithoutTax * $taxPerc / 100, 2);
-            $product['tax_amount'] = $taxAmount;
+            $product['tax_amount'] = (float) $taxAmount;
             $priceWithTax = $priceWithoutTax + $taxAmount;
-            $product['total_price'] = $priceWithTax;
+            $product['total_price'] = (float) $priceWithTax;
         }
 
         $product['tax_perc_show'] = $taxPerc;
+
         $product['price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            $product['price'],
+            (float) $product['price'],
             $product['iso_code']
         );
 
-        $product['tax_amount_formatted'] = number_format($product['tax_amount'], 2);
+        $product['tax_amount_formatted'] = api_number_format((float) $product['tax_amount'], 2);
 
         $product['total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-            $product['total_price'],
+            (float) $product['total_price'],
             $product['iso_code']
         );
 
-        if (null != $coupon) {
+        if (null !== $coupon) {
             $product['discount_amount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-                $product['discount_amount'],
+                (float) $product['discount_amount'],
                 $product['iso_code']
             );
 
             $product['price_without_discount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
-                $product['price_without_discount'],
+                (float) ($product['price_without_discount'] ?? 0),
                 $product['iso_code']
             );
         }
@@ -3345,7 +3364,7 @@ class BuyCoursesPlugin extends Plugin
             'DISTINCT ss.id ',
             "$servicesSaleTable ss $innerJoins",
             $conditions
-            // , "all", null, true
+        // , "all", null, true
         );
 
         $list = [];
@@ -3376,7 +3395,7 @@ class BuyCoursesPlugin extends Plugin
         $isoCode = $currency['iso_code'];
 
         $servicesSale = Database::select(
-            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.title, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
@@ -3478,7 +3497,7 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $whereConditions['AND s.title LIKE %?%'] = $name;
         }
 
         if (!empty($min)) {
@@ -3871,13 +3890,13 @@ class BuyCoursesPlugin extends Plugin
         if ($couponId) {
             if (isset($coupon['courses'])) {
                 foreach ($coupon['courses'] as $course) {
-                    $this->registerCouponItem($couponId, self::PRODUCT_TYPE_COURSE, $course);
+                    $this->registerCouponItem($couponId, self::PRODUCT_TYPE_COURSE, (int) $course);
                 }
             }
 
             if (isset($coupon['sessions'])) {
                 foreach ($coupon['sessions'] as $session) {
-                    $this->registerCouponItem($couponId, self::PRODUCT_TYPE_SESSION, $session);
+                    $this->registerCouponItem($couponId, self::PRODUCT_TYPE_SESSION, (int) $session);
                 }
             }
 
@@ -4182,8 +4201,10 @@ class BuyCoursesPlugin extends Plugin
                 return false;
             }
 
-            $productName = $session->getName();
+            $productName = $session->getTitle();
         }
+
+        $coupon = null;
 
         if (null != $couponId) {
             $coupon = $this->getCoupon($couponId, $item['product_type'], $item['product_id']);
@@ -4223,7 +4244,7 @@ class BuyCoursesPlugin extends Plugin
             $price = $priceWithoutTax + $taxAmount;
         }
 
-        $subscriptionEnd = date('y:m:d', strtotime('+'.$duration.' days'));
+        $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
 
         $values = [
             'reference' => $this->generateReference(
@@ -4245,7 +4266,9 @@ class BuyCoursesPlugin extends Plugin
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
+            'invoice' => 0,
             'subscription_end' => $subscriptionEnd,
+            'expired' => 0,
         ];
 
         return Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
@@ -4256,41 +4279,11 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function addNewSubscription(array $subscription)
+    public function addNewSubscription(array $subscription): bool
     {
         $result = false;
 
-        if (isset($subscription['frequencies'])) {
-            foreach ($subscription['frequencies'] as $frequency) {
-                $subscriptionDb = $this->getSubscription($subscription['product_type'], $subscription['product_id'], $frequency['duration']);
-
-                if (!isset($subscriptionDb) || empty($subscription)) {
-                    Display::addFlash(
-                        Display::return_message(
-                            $this->get_lang('SubscriptionAlreadyExists').' ('.$frequency['duration'].')',
-                            'error',
-                            false
-                        )
-                    );
-
-                    return false;
-                }
-                $subscriptionId = $this->registerSubscription($subscription, $frequency);
-                if ($subscriptionId) {
-                    $result = true;
-                } else {
-                    Display::addFlash(
-                        Display::return_message(
-                            $this->get_lang('SubscriptionErrorInsert'),
-                            'error',
-                            false
-                        )
-                    );
-
-                    return false;
-                }
-            }
-        } else {
+        if (empty($subscription['frequencies']) || !is_array($subscription['frequencies'])) {
             Display::addFlash(
                 Display::return_message(
                     $this->get_lang('FrequenciesNotSetError'),
@@ -4300,6 +4293,63 @@ class BuyCoursesPlugin extends Plugin
             );
 
             return false;
+        }
+
+        foreach ($subscription['frequencies'] as $frequency) {
+            $duration = isset($frequency['duration']) ? (int) $frequency['duration'] : 0;
+            $price = isset($frequency['price']) ? (float) $frequency['price'] : 0.0;
+
+            if ($duration <= 0 || $price <= 0) {
+                Display::addFlash(
+                    Display::return_message(
+                        $this->get_lang('FrequenciesNotSetError'),
+                        'error',
+                        false
+                    )
+                );
+
+                return false;
+            }
+
+            $subscriptionDb = $this->getDataSubscription(
+                (int) $subscription['product_type'],
+                (int) $subscription['product_id'],
+                $duration
+            );
+
+            if (!empty($subscriptionDb)) {
+                Display::addFlash(
+                    Display::return_message(
+                        $this->get_lang('SubscriptionAlreadyExists').' ('.$duration.')',
+                        'error',
+                        false
+                    )
+                );
+
+                return false;
+            }
+
+            $subscriptionId = $this->registerSubscription(
+                $subscription,
+                [
+                    'duration' => $duration,
+                    'price' => $price,
+                ]
+            );
+
+            if ($subscriptionId) {
+                $result = true;
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $this->get_lang('SubscriptionErrorInsert'),
+                        'error',
+                        false
+                    )
+                );
+
+                return false;
+            }
         }
 
         return $result;
@@ -4340,14 +4390,21 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The subscription data
      */
-    public function getSubscription(int $productType, int $productId, int $duration, ?array $coupon = null)
+    public function getSubscription(int $productType, int $productId, int $duration, ?array $coupon = null): array
     {
         $subscription = $this->getDataSubscription($productType, $productId, $duration);
 
-        $currency = $this->getSelectedCurrency();
-        $isoCode = $currency['iso_code'];
+        if (empty($subscription)) {
+            return [];
+        }
 
-        $subscription['iso_code'] = $isoCode;
+        $currency = $this->getSelectedCurrency();
+
+        if (empty($currency) || empty($currency['iso_code'])) {
+            return $subscription;
+        }
+
+        $subscription['iso_code'] = $currency['iso_code'];
 
         $this->setPriceSettings($subscription, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
 
@@ -4919,8 +4976,8 @@ class BuyCoursesPlugin extends Plugin
         unset($queryParams['page']);
 
         $url = $baseUrl.'?'.http_build_query(
-            array_merge($queryParams, $extraQueryParams)
-        );
+                array_merge($queryParams, $extraQueryParams)
+            );
 
         return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
@@ -5077,7 +5134,7 @@ class BuyCoursesPlugin extends Plugin
             )
             ->setFirstResult($first)
             ->setMaxResults($maxResults)
-        ;
+            ;
     }
 
     /**
@@ -5351,10 +5408,10 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Search filtered sessions by name, and range of price.
+     * Search filtered subscription sessions by name and optional category.
      *
-     * @param string $name            Optional. The name filter
-     * @param int    $sessionCategory Optional. Session category id
+     * @param string|null $name            Optional. The name filter.
+     * @param int         $sessionCategory Optional. Session category id.
      *
      * @return array<int, Session>|int
      */
@@ -5374,14 +5431,14 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $whereConditions['AND s.title LIKE %?%'] = $name;
         }
 
-        if (0 != $sessionCategory) {
+        if (0 !== $sessionCategory) {
             $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;
         }
 
-        $sessionIds = Database::select(
+        $sessionRows = Database::select(
             'DISTINCT s.id',
             "$sessionTable s INNER JOIN $innerJoin",
             ['where' => $whereConditions, 'limit' => "$start, $end"],
@@ -5389,29 +5446,45 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if ('count' === $typeResult) {
-            return $sessionIds;
+            return $sessionRows;
         }
 
-        if (!$sessionIds) {
+        if (!$sessionRows) {
             return [];
         }
 
+        $entityManager = Database::getManager();
         $sessions = [];
 
-        foreach ($sessionIds as $sessionId) {
-            $sessions[] = Database::getManager()->find(
-                Session::class,
-                $sessionId
-            );
+        foreach ($sessionRows as $sessionRow) {
+            $sessionId = 0;
+
+            if (is_array($sessionRow)) {
+                $sessionId = isset($sessionRow['id'])
+                    ? (int) $sessionRow['id']
+                    : (isset($sessionRow[0]) ? (int) $sessionRow[0] : 0);
+            } else {
+                $sessionId = (int) $sessionRow;
+            }
+
+            if ($sessionId <= 0) {
+                continue;
+            }
+
+            $session = $entityManager->find(Session::class, $sessionId);
+
+            if ($session) {
+                $sessions[] = $session;
+            }
         }
 
         return $sessions;
     }
 
     /**
-     * Search filtered subscription courses by name, and range of price.
+     * Search filtered subscription courses by name.
      *
-     * @param string $name Optional. The name filter
+     * @param string $name Optional. The name filter.
      *
      * @return array<int, Course>|int
      */
@@ -5437,32 +5510,48 @@ class BuyCoursesPlugin extends Plugin
 
         $whereConditions['AND url.access_url_id = ?'] = $urlId;
 
-        $courseIds = Database::select(
+        $courseRows = Database::select(
             'DISTINCT c.id',
             "$courseTable c
-            INNER JOIN $subscriptionTable st
+        INNER JOIN $subscriptionTable st
             ON c.id = st.product_id
-            INNER JOIN $urlTable url
-            ON c.id = url.c_id
-            ",
+        INNER JOIN $urlTable url
+            ON c.id = url.c_id",
             ['where' => $whereConditions, 'limit' => "$start, $end"],
             $typeResult
         );
 
         if ('count' === $typeResult) {
-            return $courseIds;
+            return $courseRows;
         }
 
-        if (!$courseIds) {
+        if (!$courseRows) {
             return [];
         }
 
+        $entityManager = Database::getManager();
         $courses = [];
-        foreach ($courseIds as $courseId) {
-            $courses[] = Database::getManager()->find(
-                Course::class,
-                $courseId
-            );
+
+        foreach ($courseRows as $courseRow) {
+            $courseId = 0;
+
+            if (is_array($courseRow)) {
+                $courseId = isset($courseRow['id'])
+                    ? (int) $courseRow['id']
+                    : (isset($courseRow[0]) ? (int) $courseRow[0] : 0);
+            } else {
+                $courseId = (int) $courseRow;
+            }
+
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $course = $entityManager->find(Course::class, $courseId);
+
+            if ($course) {
+                $courses[] = $course;
+            }
         }
 
         return $courses;
@@ -5501,7 +5590,7 @@ class BuyCoursesPlugin extends Plugin
             $select = ['ci.product_id as id', 'it.title'];
         } elseif (self::PRODUCT_TYPE_SESSION == $productType) {
             $itemTable = Database::get_main_table(TABLE_MAIN_SESSION);
-            $select = ['ci.product_id as id', 'it.name'];
+            $select = ['ci.product_id as id', 'it.title'];
         }
 
         $couponFrom = "
@@ -5540,7 +5629,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         return Database::select(
-            ['cs.service_id as id', 's.name'],
+            ['cs.service_id as id', 's.title'],
             $couponFrom,
             [
                 'where' => [
@@ -5965,13 +6054,13 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         return Database::update(
-            self::TABLE_SUBSCRIPTION,
-            $values,
-            [
-                'product_type = ? AND ' => $productType,
-                'product_id = ?' => $productId,
-            ]
-        ) > 0;
+                self::TABLE_SUBSCRIPTION,
+                $values,
+                [
+                    'product_type = ? AND ' => $productType,
+                    'product_id = ?' => $productId,
+                ]
+            ) > 0;
     }
 
     /**

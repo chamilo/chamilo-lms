@@ -51,6 +51,18 @@ function safeParseJson(value, warnLabel) {
   }
 }
 
+function normalizeBooleanFlag(value) {
+  if (typeof value === "boolean") return value
+  if (typeof value === "number") return value === 1
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase()
+    return ["1", "true", "yes", "on"].includes(normalized)
+  }
+
+  return false
+}
+
 function makeEmptyConfig() {
   return { menu: {}, topbar: {} }
 }
@@ -212,6 +224,21 @@ export function useSidebarMenu() {
   const isAnonymous = !securityStore.isAuthenticated
   const isPrivilegedUser =
     securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+
+  const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+
+  const showBuyCoursesMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(buyCoursesConfig.value?.visibleForAuthenticatedUsers)
+  })
+
+  const buyCoursesIndexPath = computed(() => {
+    return buyCoursesConfig.value?.indexPath || "/plugin/BuyCourses/index.php"
+  })
+
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
       return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
@@ -311,6 +338,14 @@ export function useSidebarMenu() {
           createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions"),
         )
       }
+    }
+
+    if (showBuyCoursesMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-cart-outline",
+        label: t("Buy courses"),
+        url: buyCoursesIndexPath.value,
+      })
     }
 
     items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Agenda", "CCalendarEventList"))

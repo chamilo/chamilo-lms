@@ -258,7 +258,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
     );
     $saleTable->addColumn('status', Types::INTEGER);
     $saleTable->addColumn('payment_type', Types::INTEGER);
-    $saleTable->addColumn('invoice', Types::INTEGER);
+    $saleTable->addColumn('invoice', Types::INTEGER, ['default' => 0]);
     $saleTable->addColumn(
         'price_without_discount',
         Types::DECIMAL,
@@ -352,7 +352,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
     );
     $servicesNodeTable->addColumn('status', Types::INTEGER);
     $servicesNodeTable->addColumn('payment_type', Types::INTEGER);
-    $servicesNodeTable->addColumn('invoice', Types::INTEGER);
+    $servicesNodeTable->addColumn('invoice', Types::INTEGER, ['default' => 0]);
     $servicesNodeTable->addColumn(
         'price_without_discount',
         Types::DECIMAL,
@@ -385,6 +385,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CULQI)) {
     $culqiTable->setPrimaryKey(['id']);
 }
 
+$globalConfigNeedsInfoEmailExtra = false;
+
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
     $globalTable->addColumn(
@@ -406,11 +408,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->addColumn('info_email_extra', Types::TEXT);
     $globalTable->setPrimaryKey(['id']);
 } else {
-    $globalTable = $pluginSchema->getTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
-
-    if (!$globalTable->hasColumn('info_email_extra')) {
-        $globalTable->addColumn('info_email_extra', Types::TEXT);
-    }
+    $globalTable = $sm->introspectTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+    $globalConfigNeedsInfoEmailExtra = !$globalTable->hasColumn('info_email_extra');
 }
 
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
@@ -522,11 +521,11 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE)) {
     $subscriptionSaleTable->addColumn('tax_amount', Types::DECIMAL, ['notnull' => false]);
     $subscriptionSaleTable->addColumn('status', Types::INTEGER);
     $subscriptionSaleTable->addColumn('payment_type', Types::INTEGER);
-    $subscriptionSaleTable->addColumn('invoice', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('invoice', Types::INTEGER, ['default' => 0]);
     $subscriptionSaleTable->addColumn('price_without_discount', Types::DECIMAL);
     $subscriptionSaleTable->addColumn('discount_amount', Types::DECIMAL);
     $subscriptionSaleTable->addColumn('subscription_end', Types::DATETIME_MUTABLE);
-    $subscriptionSaleTable->addColumn('expired', Types::BOOLEAN);
+    $subscriptionSaleTable->addColumn('expired', Types::BOOLEAN, ['default' => 0]);
     $subscriptionSaleTable->setPrimaryKey(['id']);
 }
 
@@ -612,6 +611,11 @@ $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {
     Database::query($query);
+}
+
+if ($globalConfigNeedsInfoEmailExtra) {
+    $globalTableName = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+    Database::query("ALTER TABLE $globalTableName ADD COLUMN info_email_extra TEXT");
 }
 
 // Insert data

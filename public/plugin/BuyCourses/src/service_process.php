@@ -27,9 +27,6 @@ $type = (int) $_REQUEST['t'];
 if (empty($currentUserId)) {
     api_not_allowed(true);
 }
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'
-    .api_get_path(WEB_PLUGIN_PATH)
-    .'BuyCourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
 $additionalQueryString = '';
@@ -152,7 +149,7 @@ if ($typeUser) {
             ->getResult()
         ;
         foreach ($thisLpList as $lp) {
-            $courseLpList[$course->getId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
+            $courseLpList[$course->getId()] = $lp->getTitle().' ('.$course->getCourse()->getTitle().')';
         }
     }
 

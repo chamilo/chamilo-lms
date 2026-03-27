@@ -1,18 +1,19 @@
 {% autoescape false %}
+<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
 <div class="row">
     <div id="message-alert"></div>
     <div class="col-md-5">
-        <div class="panel panel-default buycourse-panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+            <div class="border-b border-gray-25 bg-gray-15 px-6 py-4">
+                <h3 class="text-base font-semibold text-gray-90">{{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
             </div>
-            <div class="panel-body">
+            <div class="p-6">
                 {% if buying_course %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <a class="ajax" data-title="{{ course.title }}"
                                href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
-                                <img alt="{{ course.title }}" class="img-responsive" style="width: 100%;"
+                                <img alt="{{ course.title }}" class="img-responsive w-full"
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
                         </div>
@@ -26,19 +27,19 @@
                                     <li><em class="fa fa-user"></em> {{ teacher.name }}</li>
                                 {% endfor %}
                             </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
+                            <p id="n-price" class="mt-4 text-right text-lg font-semibold text-gray-90">
+                                <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
                                     {{ course.item.total_price_formatted }}
                                 </span>
                             </p>
-                            <p id="s-price" class="lead text-right"></p>
+                            <p id="s-price" class="mt-4 text-right text-lg font-semibold text-gray-90"></p>
                         </div>
                     </div>
                 {% elseif buying_session %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <p>
-                                <img alt="{{ session.title }}" class="img-responsive" style="width: 100%;"
+                                <img alt="{{ session.title }}" class="img-responsive w-full"
                                      src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                             </p>
                         </div>
@@ -59,12 +60,12 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
+                            <p id="n-price" class="mt-4 text-right text-lg font-semibold text-gray-90">
+                                <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
                                     {{ session.item.total_price_formatted }}
                                 </span>
                             </p>
-                            <p id="s-price" class="lead text-right"></p>
+                            <p id="s-price" class="mt-4 text-right text-lg font-semibold text-gray-90"></p>
                         </div>
                     </div>
                 {% elseif buying_service %}
@@ -114,12 +115,12 @@
                                     <li><em class="fa fa-align-justify"></em> {{ service.description }}</li>
                                 {% endif %}
                             </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
+                            <p id="n-price" class="mt-4 text-right text-lg font-semibold text-gray-90">
+                                <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
                                     {{ service_item.total_price_formatted }}
                                 </span>
                             </p>
-                            <p id="s-price" class="lead text-right"></p>
+                            <p id="s-price" class="mt-4 text-right text-lg font-semibold text-gray-90"></p>
                         </div>
                     </div>
                 {% endif %}
@@ -128,14 +129,14 @@
     </div>
     {% if terms %}
         <div class="col-md-7">
-            <div class="panel panel-default buycourse-panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ 'TermsAndConditions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+                <div class="border-b border-gray-25 bg-gray-15 px-6 py-4">
+                    <h3 class="text-base font-semibold text-gray-90">{{ 'TermsAndConditions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                 </div>
-                <div class="panel-body">
+                <div class="p-6">
                     <form action="#">
                         <div class="form-group">
-                            <textarea class="form-control" style="height: 345px;" readonly>{{ terms }}</textarea>
+                            <textarea class="form-control" class="form-control min-h-[22rem]" readonly>{{ terms }}</textarea>
                         </div>
                         <div class="checkbox">
                             <label for="confirmTermsAndConditons">
@@ -153,9 +154,9 @@
 {% if is_bank_transfer %}
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="page-header">{{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
+            <h3 class="mb-6 border-b border-gray-25 pb-4">{{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+                <table class="min-w-full divide-y divide-gray-25">
                     <thead>
                     <tr>
                         <th>{{ 'Name'|get_lang }}</th>
@@ -282,4 +283,5 @@
         {% endif %}
     })
 </script>
+</div>
 {% endautoescape %}

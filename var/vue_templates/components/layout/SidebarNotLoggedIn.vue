@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
@@ -9,12 +9,15 @@ import PageList from "../../../../assets/vue/components/page/PageList.vue"
 import { useLocale } from "../../../../assets/vue/composables/locale"
 import { usePlatformConfig } from "../../../../assets/vue/store/platformConfig"
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 
 const { languageList, currentLanguageFromList, reloadWithLocale } = useLocale()
 
-const selectedCity = ref({ label: currentLanguageFromList.originalName, isoCode: currentLanguageFromList.isocode })
+const selectedCity = ref({
+  label: currentLanguageFromList.originalName,
+  isoCode: currentLanguageFromList.isocode,
+})
 
 watch(selectedCity, ({ isoCode }) => reloadWithLocale(isoCode))
 
@@ -24,7 +27,71 @@ const languageItems = languageList.map((language) => ({
 }))
 
 const platformConfigStore = usePlatformConfig()
-const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration")) 
+
+const categoryMenuLinks = ref([])
+
+function buildMenuLinkUrl(item) {
+  if (item?.url) {
+    return item.url
+  }
+
+  if (item?.slug) {
+    return `/pages/${item.slug}`
+  }
+
+  return null
+}
+
+function normalizeCategoryMenuLinks(items) {
+  if (!Array.isArray(items)) {
+    return []
+  }
+
+  return items
+    .filter((item) => item?.title && (item?.slug || item?.url))
+    .map((item, index) => ({
+      key: `menu_link_${item.id || item.slug || index}`,
+      label: item.title,
+      url: buildMenuLinkUrl(item),
+    }))
+    .filter((item) => item.url)
+}
+
+async function loadCategoryMenuLinks() {
+  try {
+    const currentLocale = (locale.value || "").toString()
+    const url =
+      `/pages/_category-links?category=${encodeURIComponent("menu_links")}` +
+      `&locale=${encodeURIComponent(currentLocale)}`
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      categoryMenuLinks.value = []
+      return
+    }
+
+    const data = await response.json()
+    categoryMenuLinks.value = normalizeCategoryMenuLinks(data?.items)
+  } catch (error) {
+    console.error("Failed to load category menu links.", error)
+    categoryMenuLinks.value = []
+  }
+}
+
+onMounted(loadCategoryMenuLinks)
+
+watch(
+  () => locale.value,
+  () => {
+    loadCategoryMenuLinks()
+  },
+)
 
 const menuItems = computed(() => {
   const items = [
@@ -60,6 +127,10 @@ const menuItems = computed(() => {
       label: t("Registration"),
       url: "/main/auth/registration.php",
     })
+  }
+
+  if (categoryMenuLinks.value.length > 0) {
+    items.push(...categoryMenuLinks.value)
   }
 
   return items

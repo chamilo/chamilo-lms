@@ -5,6 +5,24 @@
     </div>
     <div class="app-topbar__items">
       <BaseAppLink
+        v-if="isTeacher && allowUsersToCreateCourses"
+        :to="{ name: 'CourseCreate' }"
+        class="item-button item-button--create-course relative group"
+        :title="t('Create course')"
+        :aria-label="t('Create course')"
+      >
+        <BaseIcon
+          class="item-button__icon text-success"
+          icon="courses"
+        />
+        <span class="absolute -top-1 -left-1 text-success text-base font-bold leading-none">+</span>
+        <span
+          class="absolute top-full left-1/2 -translate-x-1/2 mt-1 px-2 py-1 text-xs text-white bg-gray-90 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        >
+          {{ t("Create course") }}
+        </span>
+      </BaseAppLink>
+      <BaseAppLink
         v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('ticket.show_link_ticket_notification')"
         :url="ticketUrl"
         class="item-button"
@@ -14,7 +32,6 @@
           icon="ticket"
         />
       </BaseAppLink>
-
       <BaseAppLink
         v-if="!isAnonymous && messagingEnabled"
         :class="{ 'item-button--unread': !!btnInboxBadge }"
@@ -82,6 +99,7 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useCidReqStore } from "../../store/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -95,9 +113,13 @@ const messageRelUserStore = useMessageRelUserStore()
 const notification = useNotification()
 const cidReqStore = useCidReqStore()
 const securityStore = useSecurityStore()
+const { isTeacher } = storeToRefs(useSecurityStore())
 
 const loginUrl = "/login"
 const elUserSubmenu = ref(null)
+const allowUsersToCreateCourses = computed(() => {
+  return platformConfigStore.getSetting("workflows.allow_users_to_create_courses") === "true"
+})
 
 /**
  * Role mapping used by display.show_tabs_per_role.

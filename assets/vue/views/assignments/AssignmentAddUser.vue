@@ -12,7 +12,7 @@
     </div>
 
     <hr />
-    <h1 class="text-2xl font-bold">{{ t("Add users") }} - {{ publicationTitle }}</h1>
+    <h1 class="text-2xl font-bold">{{ t("Assign users") }} - {{ publicationTitle }}</h1>
 
     <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users added") }}</h2>
@@ -46,7 +46,7 @@
       </p>
     </div>
 
-    <div>
+    <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users to add") }}</h2>
 
       <div class="mb-2 flex items-center gap-2">

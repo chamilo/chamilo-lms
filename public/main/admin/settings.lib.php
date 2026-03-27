@@ -294,6 +294,8 @@ function getStablePluginAllowList(): array
         'Test2Pdf',
         'Tour',
         'XApi',
+        'ExerciseFocused',
+        'ExerciseMonitoring',
     ];
 }
 

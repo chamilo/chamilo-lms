@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -25,7 +26,10 @@ class AccessUserUrlFixtures extends Fixture
     {
         /** @var User $admin */
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
+        /** @var User $anon */
         $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE);
+        /** @var User $fallbackUser */
+        $fallbackUser = $this->getReference(AccessUserFixtures::FALLBACK_USER_REFERENCE);
 
         // Login as admin
         $token = new UsernamePasswordToken(
@@ -52,6 +56,11 @@ class AccessUserUrlFixtures extends Fixture
 
         $accessUrl->addUser($admin);
         $accessUrl->addUser($anon);
+
+        $admin->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+        $anon->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+        $fallbackUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+
         $manager->flush();
 
         $this->addReference(AccessUserFixtures::ACCESS_URL_REFERENCE, $accessUrl);

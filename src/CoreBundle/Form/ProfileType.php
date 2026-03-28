@@ -102,7 +102,6 @@ class ProfileType extends AbstractType
             'end_pause_date',
             'disable_emails',
         ];
-        $showPauseTrainingFields = $this->shouldShowPauseTrainingFields();
 
         $fieldsMap = [
             'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'First name'],
@@ -347,17 +346,19 @@ class ProfileType extends AbstractType
 
         $showPauseTrainingFields = $this->shouldShowPauseTrainingFields();
 
-        $builder->add('extra_fields', ExtraFieldType::class, [
-            'mapped' => false,
-            'label' => false,
-            'visibility_allowlist' => $extraAllowlist,
-            'visibility_editable_map' => $extraEditableMap,
-            'visibility_strict' => $hasFine,
-            'forced_visible_variables' => $showPauseTrainingFields ? $pauseTrainingFields : [],
-            'forced_editable_map' => $showPauseTrainingFields ? array_fill_keys($pauseTrainingFields, true) : [],
-            'excluded_variables' => $showPauseTrainingFields ? [] : $pauseTrainingFields,
-            'item' => $builder->getData(),
-        ]);
+        if ($extraAllowlist) {
+            $builder->add('extra_fields', ExtraFieldType::class, [
+                'mapped' => false,
+                'label' => false,
+                'visibility_allowlist' => $extraAllowlist,
+                'visibility_editable_map' => $extraEditableMap,
+                'visibility_strict' => $hasFine,
+                'forced_visible_variables' => $showPauseTrainingFields ? $pauseTrainingFields : [],
+                'forced_editable_map' => $showPauseTrainingFields ? array_fill_keys($pauseTrainingFields, true) : [],
+                'excluded_variables' => $showPauseTrainingFields ? [] : $pauseTrainingFields,
+                'item' => $builder->getData(),
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -438,12 +439,10 @@ class ProfileType extends AbstractType
 
         foreach ($candidateFiles as $candidateFile) {
             if (is_file($candidateFile)) {
-                require_once $candidateFile;
-
                 break;
             }
         }
 
-        return class_exists(PauseTraining::class, false);
+        return PauseTraining::create()->isEnabled(true);
     }
 }

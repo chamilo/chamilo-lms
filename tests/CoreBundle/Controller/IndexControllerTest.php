@@ -41,7 +41,7 @@ class IndexControllerTest extends WebTestCase
                 'body' => json_encode($params),
             ]
         );
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testLoginPage(): void

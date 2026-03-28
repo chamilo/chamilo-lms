@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\UserAnonymizationHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
@@ -743,5 +744,10 @@ class Container
     public static function getUserAnonymizationHelper(): UserAnonymizationHelper
     {
         return self::$container->get(UserAnonymizationHelper::class);
+    }
+
+    public static function getResourceHelper(): ResourceHelper
+    {
+        return self::$container->get(ResourceHelper::class);
     }
 }

@@ -16,7 +16,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -175,7 +175,7 @@ class StudentPublicationController extends AbstractController
         int $id,
         EntityManagerInterface $em,
         CStudentPublicationRepository $repo,
-        TrackEDefaultRepository $trackRepo
+        ResourceHelper $trackHelper
     ): JsonResponse {
         $submission = $repo->find($id);
 
@@ -187,7 +187,7 @@ class StudentPublicationController extends AbstractController
 
         $resourceNode = $submission->getResourceNode();
         if ($resourceNode) {
-            $trackRepo->registerResourceEvent($resourceNode, 'deletion');
+            $trackHelper->createAndSaveResourceEvent($resourceNode, 'deletion');
         }
 
         $em->remove($resourceNode);

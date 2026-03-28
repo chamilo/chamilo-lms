@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
@@ -1806,11 +1805,9 @@ class Exercise
 
         // Register resource deletion manually because this is a soft delete (active = -1)
         // and Doctrine does not trigger postRemove in this case.
-        /* @var TrackEDefaultRepository $trackRepo */
-        $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
         $resourceNode = $exercise->getResourceNode();
         if ($resourceNode) {
-            $trackRepo->registerResourceEvent(
+            Container::getResourceHelper()->createAndSaveResourceEvent(
                 $resourceNode,
                 'deletion',
                 api_get_user_id(),

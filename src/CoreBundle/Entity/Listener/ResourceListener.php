@@ -19,14 +19,13 @@ use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -50,7 +49,7 @@ class ResourceListener
         protected ToolChain $toolChain,
         protected RequestStack $request,
         protected Security $security,
-        protected TrackEDefaultRepository $trackEDefaultRepository
+        protected ResourceHelper $trackEDefaultHelper
     ) {}
 
     /**
@@ -339,10 +338,9 @@ class ResourceListener
         $resourceNode = $resource->getResourceNode();
 
         if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
+            $this->trackEDefaultHelper->createAndSaveResourceEvent(
                 $resourceNode,
-                'creation',
-                $this->security->getUser()?->getId()
+                'creation'
             );
         }
     }
@@ -352,23 +350,9 @@ class ResourceListener
         $resourceNode = $resource->getResourceNode();
 
         if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
+            $this->trackEDefaultHelper->createAndSaveResourceEvent(
                 $resourceNode,
-                'edition',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
-    public function postRemove(AbstractResource $resource, PostRemoveEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'deletion',
-                $this->security->getUser()?->getId()
+                'edition'
             );
         }
     }

@@ -52,7 +52,7 @@ class SessionController extends AbstractController
         private readonly RequestStack $requestStack
     ) {}
 
-    #[Route(path: '/{sid}/about', name: 'chamilo_core_session_about')]
+    #[Route(path: '/{session}/about', name: 'chamilo_core_session_about')]
     public function about(
         Request $request,
         Session $session,

@@ -2714,7 +2714,7 @@ HTML;
         $content .= self::url(
             '<em class="fa fa-plus"></em> '.$buttonTitle,
             $url,
-            ['class' => 'btn btn--primary']
+            ['class' => 'btn btn--success']
         );
         $content .= '</div>';
         $content .= '</div>';

@@ -187,4 +187,5 @@ enum ActionIcon: string
     case CROP = 'crop';
     case WEBCAM = 'webcam';
     case WEBCAM_OFF = 'webcam-off';
+    case VIEW_LIST = 'view-list';
 }

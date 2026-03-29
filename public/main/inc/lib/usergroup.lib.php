@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\StandardizationService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 /**
  * Class UserGroup.
@@ -1246,11 +1249,6 @@ class UserGroupModel extends Model
                             ],
                         ]
                     );
-                }
-                if (0 != $sessionId && 0 != $groupId) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
                 }
             }
         }
@@ -3265,6 +3263,90 @@ class UserGroupModel extends Model
 
         return Database::store_result($result, 'ASSOC');
     }
+
+    public function getUsersInAndOutOfCourse(int $usergroupId, int $courseId): array
+    {
+        $usersInUsergroup = $this->get_users_by_usergroup($usergroupId);
+
+        $data = [
+            'error' => null,
+            'warning' => null,
+            'usersSubscribedToCourse' => [],
+            'usersNotSubscribedToCourse' => [],
+        ];
+
+        if (count($usersInUsergroup) > 0) {
+            $courseCode = \CourseManager::get_course_code_from_course_id($courseId);
+            $usersInCourse = \CourseManager::get_user_list_from_course_code($courseCode);
+            $em = Container::getEntityManager();
+
+            $usersSubscribedToCourse = [];
+            $usersNotSubscribedToCourse = [];
+            foreach ($usersInUsergroup as $userId) {
+                $user = $em->getRepository(User::class)->find($userId);
+                if (array_key_exists($userId, $usersInCourse)) {
+                    $usersSubscribedToCourse[] = $user;
+                } else {
+                    $usersNotSubscribedToCourse[] = $user;
+                }
+            }
+
+            $data['usersSubscribedToCourse'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersSubscribedToCourse, true);
+            $data['usersNotSubscribedToCourse'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersNotSubscribedToCourse, true);;
+        } else {
+            $data['warning'] = get_lang('No user is subscribed to this class');
+        }
+
+        return $data;
+    }
+
+    public function getUsersAndCoursesSubscribedToAUserGroup(int $usergroupId): array
+    {
+        $data = [
+            'error' => null,
+            'warning' => null,
+            'usersSubscribedToUsergroup' => [],
+            'coursesSubscribedToUsergroup' => [],
+        ];
+
+        $em = Container::getEntityManager();
+
+        $usersSubscribedToUsergroupIds = $this->get_users_by_usergroup($usergroupId);
+        if (!empty($usersSubscribedToUsergroupIds)) {
+            $usersSubscribedToUsergroup = [];
+            foreach ($usersSubscribedToUsergroupIds as $userId) {
+                $user = $em->getRepository(User::class)->find($userId);
+                if (null !== $user) {
+                    $usersSubscribedToUsergroup[] = $user;
+                }
+            }
+            $data['usersSubscribedToUsergroup'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersSubscribedToUsergroup, true);
+        }
+
+        $coursesSubscribedToUsergroupIds = $this->get_courses_by_usergroup($usergroupId);
+        if (!empty($coursesSubscribedToUsergroupIds)) {
+            $coursesSubscribedToUsergroup = [];
+            foreach ($coursesSubscribedToUsergroupIds as $courseId) {
+                $code = \CourseManager::get_course_code_from_course_id($courseId);
+                $coursesSubscribedToUsergroup[] = [
+                    'code' => $code,
+                    'name' => \CourseManager::getCourseNameFromCode($code),
+                ];
+            }
+            $data['coursesSubscribedToUsergroup'] = StandardizationService::sort($coursesSubscribedToUsergroup);
+        }
+
+        if (0 === count($usersSubscribedToUsergroupIds) + count($coursesSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No user and no course are subscribed to this class');
+        } elseif (0 === count($usersSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No user are subscribed to this class');
+        } elseif (0 === count($coursesSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No course are subscribed to this class');
+        }
+
+        return $data;
+    }
+
 
     public static function getRoleName($relation)
     {

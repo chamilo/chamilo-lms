@@ -33709,3 +33709,45 @@ msgstr "Linked class"
 
 msgid "The group is no longer linked to the class"
 msgstr "The group is no longer linked to the class"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Overview students and courses subscribed to the class"
+
+msgid "Overview students subscribed to the class"
+msgstr "Overview students subscribed to the class"
+
+msgid "Overview class"
+msgstr "Overview class"
+
+msgid "Go back to the list of classes"
+msgstr "Go back to the list of classes"
+
+msgid "Go back to course classes"
+msgstr "Go back to course classes"
+
+msgid "Users subscribed to the course"
+msgstr "Users subscribed to the course"
+
+msgid "Users not subscribed to the course"
+msgstr "Users not subscribed to the course"
+
+msgid "Users subscribed to the class"
+msgstr "Users subscribed to the class"
+
+msgid "Courses subscribed to the class"
+msgstr "Courses subscribed to the class"
+
+msgid "No user is subscribed to this class"
+msgstr "No user is subscribed to this class"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "No user and no course are subscribed to this class"
+
+msgid "No user are subscribed to this class"
+msgstr "No user are subscribed to this class"
+
+msgid "No course are subscribed to this class"
+msgstr "No course are subscribed to this class"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Are you sure you want to remove the class"

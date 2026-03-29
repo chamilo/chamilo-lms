@@ -286,7 +286,7 @@ EOT;
     );
     $create_groups_form->addElement('header', $nameTools);
     $create_groups_form->addText('number_of_groups', get_lang('Number of groups to create'), null, ['value' => '1']);
-    $create_groups_form->addButton('submit', get_lang('Proceed to create group(s)'), 'plus', 'primary');
+    $create_groups_form->addButton('submit', get_lang('Proceed to create group(s)'), 'plus', 'success');
     $defaults = [];
     $defaults['number_of_groups'] = 1;
     $create_groups_form->setDefaults($defaults);

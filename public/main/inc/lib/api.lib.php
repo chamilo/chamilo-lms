@@ -2203,9 +2203,10 @@ function api_get_session_entity($id = 0): ?SessionEntity
 }
 
 /**
- * @param int $id
+ * @param ?int $id
+ * @return CGroup|null
  */
-function api_get_group_entity($id = 0): ?CGroup
+function api_get_group_entity(?int $id = null): ?CGroup
 {
     if (empty($id)) {
         $id = api_get_group_id();

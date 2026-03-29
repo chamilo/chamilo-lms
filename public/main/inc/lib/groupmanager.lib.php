@@ -440,7 +440,7 @@ class GroupManager
         $filteredClassIds = $classIds;
 
         foreach ($classIds as $k => $classId) {
-            // get count of duclicated groups in same category
+            // get count of duplicated groups in the same category
             $qb = $relRepository->createQueryBuilder('gru');
             $qb = $qb->select('count(gru.id)');
             $qb = $qb->innerJoin('gru.group', 'g', \Doctrine\ORM\Query\Expr\Join::WITH, 'g.category = :categoryId');
@@ -456,13 +456,15 @@ class GroupManager
         }
 
         $categorieGroupe = self::get_category($category_id);
-        if (0 === count($categorieGroupe)) {
+        if ((api_get_setting('allow_group_categories') === 'true') && 0 === count($categorieGroupe)) {
             $category_id = self::create_category(get_lang('DefaultGroupCategory'));
         }
 
+        /*
         if (0 === $category_id) {
             return [];
         }
+        */
 
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();

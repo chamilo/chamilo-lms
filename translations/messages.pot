@@ -33599,3 +33599,27 @@ msgstr ""
 
 msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
 msgstr ""
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "" 
+
+msgid "Link classes to created groups ?"
+msgstr ""
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr ""
+
+msgid "New groups creation in category %s"
+msgstr ""
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr ""
+
+msgid "Remove the group link with the class"
+msgstr ""
+
+msgid "Linked class"
+msgstr ""
+
+msgid "The group is no longer linked to the class"
+msgstr ""

@@ -452,6 +452,9 @@ if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $defaults['max_student']) {
     $defaults['max_member_no_limit'] = 1;
     $defaults['max_member'] = $defaults['max_student'];
 }
+if ('true' === api_get_setting('allow_group_categories') && isset($_GET['id'])) {
+    $defaults['id'] = (int) $_GET['id'];
+}
 $form->setDefaults($defaults);
 $form->display();
 

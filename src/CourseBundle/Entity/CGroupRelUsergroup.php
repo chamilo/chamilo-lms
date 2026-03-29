@@ -9,8 +9,8 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CGroupRelUsergroup.

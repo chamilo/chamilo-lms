@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use GroupManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,7 +201,8 @@ class UsergroupAddUsersController extends AbstractController
     private function syncLinkedCourseGroups(int $usergroupId, array $newUserIds): void
     {
         $linkedRels = $this->em->getRepository(CGroupRelUsergroup::class)
-            ->findBy(['usergroup' => $usergroupId]);
+            ->findBy(['usergroup' => $usergroupId])
+        ;
 
         if (empty($linkedRels)) {
             return;
@@ -225,10 +227,10 @@ class UsergroupAddUsersController extends AbstractController
             $toRemove = array_diff($currentMemberIds, $newUserIds);
 
             if (!empty($toAdd)) {
-                \GroupManager::subscribeUsers(array_values($toAdd), $cGroup, $courseId);
+                GroupManager::subscribeUsers(array_values($toAdd), $cGroup, $courseId);
             }
             if (!empty($toRemove)) {
-                \GroupManager::unsubscribeUsers(array_values($toRemove), $cGroup);
+                GroupManager::unsubscribeUsers(array_values($toRemove), $cGroup);
             }
         }
     }

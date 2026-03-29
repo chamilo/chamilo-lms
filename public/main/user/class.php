@@ -297,9 +297,9 @@ Display::display_header($tool_name, 'User');
 
 echo '<div class="course-class-page">';
 
-echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
-echo Display::return_message(get_lang($infoMessage));
+echo $actions;
+echo Display::return_message(get_lang('Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes.'));
 $usergroup->display_teacher_view();
 
 echo '</div>';

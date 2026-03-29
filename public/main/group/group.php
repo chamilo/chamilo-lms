@@ -235,8 +235,8 @@ $actionsRight = GroupManager::getSearchForm();
 $toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
 $categories = GroupManager::get_categories();
 
-echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
+echo $toolbar;
 
 /*  List all categories */
 if ('true' === api_get_setting('allow_group_categories')) {

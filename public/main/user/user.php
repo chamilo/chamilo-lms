@@ -680,6 +680,7 @@ if ($canRead) {
             get_lang('Course sessions').'</a>';
     }
 
+    echo UserManager::getUserSubscriptionTab($selectedTab);
     echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 
     // When the course is full according to the global limit (no session),
@@ -695,7 +696,6 @@ if ($canRead) {
     }
 }
 
-echo UserManager::getUserSubscriptionTab($selectedTab);
 $table->display();
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {

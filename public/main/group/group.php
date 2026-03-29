@@ -58,7 +58,7 @@ if (!empty($my_group_id)) {
     $groupEntity = $groupRepo->find($my_group_id);
 }
 
-$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
+$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(true, false);
 $groupInfo = GroupManager::get_group_properties($my_group_id);
 
 if (isset($_GET['action']) && $is_allowed_in_course) {

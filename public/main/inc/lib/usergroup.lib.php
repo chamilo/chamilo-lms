@@ -46,6 +46,7 @@ class UserGroupModel extends Model
     public $access_url_rel_user;
     public $table_course;
     public $table_user;
+    public $group_rel_usergroup;
     private string $usergroup_table;
 
     public function __construct()
@@ -62,6 +63,7 @@ class UserGroupModel extends Model
         $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $this->group_rel_usergroup = Database::get_course_table(TABLE_GROUP_CLASS);
         $this->useMultipleUrl = api_get_multiple_access_url();
         if ($this->allowTeachers()) {
             $this->columns[] = 'author_id';
@@ -1396,7 +1398,67 @@ class UserGroupModel extends Model
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
+
+        // if in courses some groups are linked to this usergroup, update group users list
+        $groups = self::getGroupsByUsergroup($usergroup_id);
+        foreach ($groups as $groupDatas) {
+            // [groupId, cId]
+            GroupManager::subscribeUsers($new_items, api_get_group_entity($groupDatas['groupId']));
+            GroupManager::unsubscribeUsers($delete_items, api_get_group_entity($groupDatas['groupId']));
+        }
+
     }
+
+    /**
+     * Gets a list of groups ids by user group
+     * @param   int  $id   user group id
+     * @return  array
+     */
+    /**
+     * Gets groups linked to a usergroup, optionally filtered by course, category and session.
+     *
+     * @return array<array{groupId: int, cId: int}>
+     */
+    public function getGroupsByUsergroup(int $id, ?int $c_id = null, ?int $category_id = null, ?int $id_session = null): array
+    {
+        $id_session = $id_session ?? 0;
+        $em = Database::getManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('IDENTITY(rel.group) AS groupId, IDENTITY(rel.course) AS cId')
+            ->from(\Chamilo\CourseBundle\Entity\CGroupRelUsergroup::class, 'rel')
+            ->innerJoin('rel.group', 'g')
+            ->where('rel.usergroup = :ugId')
+            ->andWhere('rel.session = :sid OR (rel.session IS NULL AND :sid = 0)')
+            ->setParameter('ugId', $id, \Doctrine\DBAL\Types\Types::INTEGER)
+            ->setParameter('sid', $id_session, \Doctrine\DBAL\Types\Types::INTEGER)
+        ;
+
+        if (null !== $c_id) {
+            $qb->andWhere('rel.course = :cId')
+                ->setParameter('cId', $c_id, \Doctrine\DBAL\Types\Types::INTEGER);
+        }
+
+        if (null !== $category_id) {
+            $qb->andWhere('g.category = :catId')
+                ->setParameter('catId', $category_id, \Doctrine\DBAL\Types\Types::INTEGER);
+        } else {
+            $qb->andWhere('g.category IS NOT NULL');
+        }
+
+        $results = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $results[] = [
+                'groupId' => (int) $row['groupId'],
+                'cId' => (int) $row['cId'],
+            ];
+        }
+
+        return $results;
+    }
+
+
+
 
     /**
      * @deprecated Use UsergroupRepository::getByTitleInUrl().

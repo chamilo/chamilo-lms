@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
+
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
@@ -11,6 +15,7 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+/** @var CGroup $groupEntity */
 $groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
@@ -237,6 +242,23 @@ if (!empty($searchAlertHtml)) {
 }
 
 $form->setDefaults($defaults);
-$form->display();
+
+// check if group has a CGroupRelUsergroup
+$courseInfo = api_get_course_info_by_id(api_get_course_int_id());
+
+if (GroupManager::isGroupLinkedToUsergroup($groupEntity)) {
+
+    echo '<div class="alert alert-info">'.sprintf(get_lang('This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group.'), $courseInfo['title']).'</div>';
+
+    echo '<h3>'.get_lang('Group members').'</h3>';
+    $memberInfos = GroupManager::get_subscribed_users($groupEntity);
+    echo '<ul>';
+    foreach ($memberInfos as $memberInfo) {
+        echo '<li>'.ucfirst($memberInfo['firstname']).' '.ucfirst($memberInfo['lastname']).' ('.$memberInfo['email'].')'.'</li>';
+    }
+    echo '</ul>';
+} else {
+    $form->display();
+}
 
 Display::display_footer();

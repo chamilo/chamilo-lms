@@ -214,6 +214,7 @@ class CidReqListener
 
                 $sessionHandler->set('group', $group);
                 $sessionHandler->set('gid', $groupId);
+                ChamiloSession::write('gid', $groupId);
             }
 
             $origin = $request->get('origin');

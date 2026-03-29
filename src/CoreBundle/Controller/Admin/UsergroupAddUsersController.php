@@ -9,8 +9,11 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
+use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use GroupManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -185,7 +188,51 @@ class UsergroupAddUsersController extends AbstractController
 
         $this->em->flush();
 
+        // Sync course group members for groups linked to this usergroup.
+        $this->syncLinkedCourseGroups($id, $userIds);
+
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * When a usergroup's member list changes, update all course groups
+     * that are linked to it via CGroupRelUsergroup.
+     */
+    private function syncLinkedCourseGroups(int $usergroupId, array $newUserIds): void
+    {
+        $linkedRels = $this->em->getRepository(CGroupRelUsergroup::class)
+            ->findBy(['usergroup' => $usergroupId])
+        ;
+
+        if (empty($linkedRels)) {
+            return;
+        }
+
+        foreach ($linkedRels as $rel) {
+            $cGroup = $rel->getGroup();
+            $course = $rel->getCourse();
+            if (null === $cGroup || null === $course) {
+                continue;
+            }
+
+            $courseId = $course->getId();
+
+            // Current group member IDs
+            $currentMemberIds = array_map(
+                fn (CGroupRelUser $m) => $m->getUser()->getId(),
+                $cGroup->getMembers()->toArray()
+            );
+
+            $toAdd = array_diff($newUserIds, $currentMemberIds);
+            $toRemove = array_diff($currentMemberIds, $newUserIds);
+
+            if (!empty($toAdd)) {
+                GroupManager::subscribeUsers(array_values($toAdd), $cGroup, $courseId);
+            }
+            if (!empty($toRemove)) {
+                GroupManager::unsubscribeUsers(array_values($toRemove), $cGroup);
+            }
+        }
     }
 
     #[Route('/export', name: 'admin_usergroup_add_users_export', methods: ['GET'])]

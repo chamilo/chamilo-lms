@@ -17,9 +17,22 @@ $current_group = GroupManager::get_group_properties($group_id);
 $groupRepo = Container::getGroupRepository();
 /** @var CGroup $groupEntity */
 $groupEntity = $groupRepo->find($group_id);
-
 if (null === $groupEntity) {
     api_not_allowed(true);
+}
+
+$linkedCategory = GroupManager::get_category_from_group($group_id);
+
+if ('POST' === $_SERVER['REQUEST_METHOD']
+    && isset($_POST['remove_consistent_link'])
+    && api_is_allowed_to_edit(false, true)
+    && Security::check_token('post')
+) {
+    GroupManager::remove_group_consistent_link($groupEntity);
+    Security::clear_token();
+    Display::addFlash(Display::return_message(get_lang('The group is no longer linked to the class'), 'normal'));
+    header('Location: group.php?'.api_get_cidreq(true, false));
+    exit;
 }
 
 $nameTools = get_lang('Edit this group');
@@ -30,6 +43,7 @@ $groupMember = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
+$courseInfo = api_get_course_info_by_id(api_get_course_int_id());
 
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
@@ -59,6 +73,23 @@ $form->addElement('text', 'name', get_lang('Group name'), [
     'autocomplete' => 'off',
 ]);
 $form->addHtml('</div>');
+
+// Message for group rel usergroup
+if (GroupManager::isGroupLinkedToUsergroup($groupEntity)) {
+    $unlinkToken = Security::get_token();
+    $unlinkForm = '<form method="post" action="settings.php?'.api_get_cidreq().'" style="display:inline">'.
+        '<input type="hidden" name="remove_consistent_link" value="1">'.
+        '<input type="hidden" name="sec_token" value="'.$unlinkToken.'">'.
+        '<button type="submit" class="btn p-button-sm p-button p-mr-2 mt-2" onclick="return confirm(\''.addslashes(get_lang('Are you sure?')).'\')">'.
+        get_lang('Remove the group link with the class').
+        '</button></form>';
+    $form->addHtml(
+        '<div class="alert alert-info">'.
+        get_lang('Warning message to warn that the user cannot modify members of linked group').
+        '<br>'.$unlinkForm.
+        '</div>'
+    );
+}
 
 // Category
 if ('true' === api_get_setting('allow_group_categories')) {

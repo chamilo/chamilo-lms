@@ -10,12 +10,13 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository;
 
 /**
  * CGroupRelUsergroup.
  */
 #[ORM\Table(name: 'c_group_rel_usergroup')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CGroupRelUsergroupRepository::class)]
 class CGroupRelUsergroup
 {
     #[ORM\Id]

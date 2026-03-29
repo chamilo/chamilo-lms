@@ -5,6 +5,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -14,6 +15,7 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+/** @var CGroup $groupEntity */
 $groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');

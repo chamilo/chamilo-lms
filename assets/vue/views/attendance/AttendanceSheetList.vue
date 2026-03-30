@@ -117,7 +117,7 @@
                 disabled
               />
             </template>
-            <span>{{ date.label }}</span>
+            <span>{{ formatAttendanceDate(date.dateTime) }}</span>
           </div>
           <div class="flex gap-2">
             <BaseButton
@@ -250,7 +250,7 @@
                     >
                       <div class="flex flex-col items-center">
                         <span class="font-bold">
-                          {{ date.label }}
+                          {{ formatAttendanceDate(date.dateTime) }}
                         </span>
                         <span
                           v-if="date.duration !== undefined && date.duration !== null"
@@ -541,10 +541,15 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
+import { DateTime } from "luxon"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
+
+const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
 const { sid, cid, gid } = useCidReq()
 const isLoading = ref(true)
 const attendanceTitle = ref("")
@@ -591,8 +596,11 @@ const signedCount = computed(
 )
 const totalCount = computed(() => filteredDates.value.length)
 
-const todayDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })
-const isTodayScheduled = computed(() => attendanceDates.value.some((date) => date.label.includes(todayDate)))
+const isTodayScheduled = computed(() => attendanceDates.value.some((date) => {
+  if (!date.dateTime) return false
+  const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
+}))
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -759,15 +767,11 @@ const fetchAttendanceTitle = async () => {
   }
 }
 
-const today = new Date().toISOString().split("T")[0]
-const isoFromDateLabel = (label) => {
-  try {
-    const dateOnly = label.split(" - ")[0]
-    const parsed = new Date(dateOnly)
-    return isNaN(parsed) ? null : parsed.toISOString().split("T")[0]
-  } catch {
-    return null
-  }
+const todayInTz = DateTime.now().setZone(getCurrentTimezone()).toISODate()
+const isoDateFromDateTime = (dateTimeStr) => {
+  if (!dateTimeStr) return null
+  const dt = DateTime.fromISO(dateTimeStr, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid ? dt.toISODate() : null
 }
 
 const filteredDates = ref([])
@@ -782,7 +786,7 @@ const updateAvailableFilters = () => {
   ]
 
   attendanceDates.value.forEach((date) => {
-    availableFilters.value.push({ label: date.label, value: date.id })
+    availableFilters.value.push({ label: formatAttendanceDate(date.dateTime), value: date.id })
   })
 }
 
@@ -791,9 +795,7 @@ const filterAttendanceSheets = () => {
     filteredDates.value = attendanceDates.value
   } else if (selectedFilter.value === "today") {
     const todayEntry = attendanceDates.value.find((date) => {
-      if (!date.label) return false
-      const formatted = isoFromDateLabel(date.label)
-      return formatted === today
+      return isoDateFromDateTime(date.dateTime) === todayInTz
     })
     filteredDates.value = todayEntry ? [todayEntry] : []
   } else if (selectedFilter.value === "done") {

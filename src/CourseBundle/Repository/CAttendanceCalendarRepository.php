@@ -132,7 +132,7 @@ final class CAttendanceCalendarRepository extends ResourceRepository
         $attendanceDates = array_map(function (CAttendanceCalendar $calendar) {
             return [
                 'id' => $calendar->getIid(),
-                'label' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+                'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
                 'done' => true === $calendar->getDoneAttendance(),
             ];
         }, $calendars);

@@ -2787,16 +2787,21 @@ switch ($action) {
                             'url' => api_get_path(WEB_PATH).'user/usergroup_overview?usergroup='.$group['id'].'&course='.$course_id,
                         ],
                         [
+                            'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),
+                            'url' => 'class.php?action=remove_only_usergroup_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class without removing users?')."')) return false;"
+                        ],
+                        [
                             'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
-                            'url' => 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
-                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class')."')) return false;"
+                            'url' => 'class.php?action=remove_usergroup_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class?')."')) return false;"
                         ],
                     ];
                 } else {
                     $actions = [
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
-                            'url' => 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered',
+                            'url' => 'class.php?action=add_usergroup_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered',
                         ]
                     ];
                 }

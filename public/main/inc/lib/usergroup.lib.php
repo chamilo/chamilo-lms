@@ -1255,6 +1255,34 @@ class UserGroupModel extends Model
     }
 
     /**
+     * Remove a usergroup from courses without unsubscribing the individual users.
+     *
+     * Only the usergroup↔course link is deleted; students remain enrolled
+     * in the course independently.
+     */
+    public function unsubscribeOnlyCoursesFromUsergroup(int $usergroup_id, array $delete_items): void
+    {
+        if (empty($delete_items)) {
+            return;
+        }
+
+        foreach ($delete_items as $course_id) {
+            $course_info = api_get_course_info_by_id((int) $course_id);
+            if (!empty($course_info)) {
+                Database::delete(
+                    $this->usergroup_rel_course_table,
+                    [
+                        'usergroup_id = ? AND course_id = ?' => [
+                            $usergroup_id,
+                            (int) $course_id,
+                        ],
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
      * Subscribe users to a group.
      *
      * @param int   $usergroup_id                     usergroup id

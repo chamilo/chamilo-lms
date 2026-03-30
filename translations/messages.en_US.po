@@ -33751,3 +33751,12 @@ msgstr "No course are subscribed to this class"
 
 msgid "Are you sure you want to remove the class"
 msgstr "Are you sure you want to remove the class"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Are you sure you want to remove the class?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Are you sure you want to remove the class without removing users?"
+
+msgid "Remove the class without removing students"
+msgstr "Remove the class without removing students"

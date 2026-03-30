@@ -180,11 +180,11 @@ class PensProcessor
                 case CURLE_COULDNT_RESOLVE_PROXY:
                 case CURLE_COULDNT_RESOLVE_HOST:
                 case CURLE_COULDNT_CONNECT:
-                case CURLE_OPERATION_TIMEOUT:
-                case CURLE_REMOTE_FILE_NOT_FOUND:
+                case CURLE_OPERATION_TIMEOUTED:
+                case 78: //CURLE_REMOTE_FILE_NOT_FOUND
                     throw new PENSException(1310);
 
-                case CURLE_REMOTE_ACCESS_DENIED:
+                case CURLE_FTP_ACCESS_DENIED: //CURLE_REMOTE_ACCESS_DENIED
                     throw new PENSException(1312);
 
                 default:

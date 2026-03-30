@@ -53,7 +53,7 @@ final class UserCollectionStateProvider implements ProviderInterface
         $this->extensions = [$filterExtension, $orderExtension, $paginationExtension];
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!$operation instanceof GetCollection) {
             return $this->collectionProvider->provide($operation, $uriVariables, $context);
@@ -105,7 +105,7 @@ final class UserCollectionStateProvider implements ProviderInterface
                 ),
             )
         )
-            ->setParameter('currentUser', $currentUser)
+            ->setParameter('currentUser', $currentUser->getId())
             ->setParameter('deletedRel', [UserRelUser::USER_RELATION_TYPE_DELETED])
         ;
 

@@ -83,7 +83,7 @@ final class CourseRelUserCollectionStateProvider implements ProviderInterface
                        AND my_cru.user = :currentUser'
                 )
             )
-            ->setParameter('currentUser', $currentUser)
+            ->setParameter('currentUser', $currentUser->getId())
         ;
 
         $queryNameGenerator = new QueryNameGenerator();

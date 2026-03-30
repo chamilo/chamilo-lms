@@ -164,15 +164,16 @@ $(function () {
     e.preventDefault()
 
     var contentUrl = this.href,
-      loadModalContent = $.get(contentUrl),
       self = $(this)
 
-    $.when(loadModalContent).done(function (modalContent) {
-      var dialog = document.getElementById("global-modal")
-      $("#global-modal-title").text(self.data("title") || " ")
-      var $body = $("#global-modal-body")
+    var dialog = document.getElementById("global-modal")
+    $("#global-modal-title").text(self.data("title") || " ")
+    var $body = $("#global-modal-body")
+    $body.html('<div class="flex justify-center py-8"><i class="mdi mdi-loading mdi-spin text-3xl"></i></div>')
+    dialog.showModal()
+
+    $.get(contentUrl).done(function (modalContent) {
       $body.html(modalContent)
-      dialog.showModal()
     })
   })
 

@@ -34,6 +34,7 @@ readonly class AzureAuthenticatorHelper
         'accountEnabled',
         'mailNickname',
         'id',
+        'preferredLanguage',
     ];
     public const QUERY_GROUP_FIELDS = [
         'id',
@@ -79,6 +80,7 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
+            $preferredLanguage,
         ] = $this->formatUserData($azureUserInfo);
 
         $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
@@ -115,6 +117,10 @@ readonly class AzureAuthenticatorHelper
             ->setActive($active)
             ->setRoleFromStatus(STUDENT)
         ;
+
+        if ($preferredLanguage) {
+            $user->setLocale($preferredLanguage);
+        }
 
         $this->userRepository->updateUser($user);
 
@@ -231,6 +237,10 @@ readonly class AzureAuthenticatorHelper
             $phone = $azureUserData['mobilePhone'];
         }
 
+        $preferredLanguage = $azureUserData['preferredLanguage']
+            ? str_replace('-', '_', $azureUserData['preferredLanguage'])
+            : null;
+
         // If the option is set to create users, create it
         $firstName = $azureUserData['givenName'];
         $lastName = $azureUserData['surname'];
@@ -253,6 +263,7 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
+            $preferredLanguage,
         ];
     }
 

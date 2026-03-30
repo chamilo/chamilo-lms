@@ -25,8 +25,6 @@ use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -330,30 +328,6 @@ class ResourceListener
 
         if ($resource instanceof CCalendarEvent) {
             $this->addCCalendarEventGlobalLink($resource, $eventArgs);
-        }
-    }
-
-    public function postPersist(AbstractResource $resource, PostPersistEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultHelper->createAndSaveResourceEvent(
-                $resourceNode,
-                'creation'
-            );
-        }
-    }
-
-    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultHelper->createAndSaveResourceEvent(
-                $resourceNode,
-                'edition'
-            );
         }
     }
 

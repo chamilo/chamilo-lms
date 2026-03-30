@@ -93,7 +93,7 @@ class OpenGraphController extends AbstractController
         }
 
         if (!$this->isDomainAllowed($host)) {
-            return $this->json(['error' => 'Domain not allowed.'], 403);
+            return $this->json(['error' => 'Domain not allowed.'], 422);
         }
 
         if (!$this->isUrlSafe($host)) {

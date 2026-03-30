@@ -78,9 +78,9 @@
 
 {% macro box_widget(name, content, icon) %}
     <div class="card">
-        <div class="card-body">
+        <div class="card-body p-3">
             <div class="stat-widget-five">
-                <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                <i class="mdi mdi-{{ icon }} text-xl mr-2" aria-hidden="true"></i>
                 {{ content }}
                 <div class="box-name">
                     {{ name }}
@@ -92,23 +92,21 @@
 
 {% macro card_widget(name, content, icon, extra) %}
     {% autoescape false %}
-    <div class="card card-first-date">
-        <div class="card-body">
-            <div class="stat-widget-five">
-                <div class="stat-icon">
-                    <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+    <div class="card card-first-date mb-2">
+        <div class="card-body p-3">
+            <div class="stat-widget-five flex items-start gap-3">
+                <div class="stat-icon shrink-0">
+                    <i class="mdi mdi-{{ icon }} text-2xl text-gray-500" aria-hidden="true"></i>
                     {% if extra %}
                         <span class="active-icon">{{ extra }}</span>
                     {% endif %}
                 </div>
-                <div class="stat-content">
-                    <div class="text-left">
-                        <div class="stat-heading">
-                            {{ name }}
-                        </div>
-                        <div class="stat-text">
-                            {{ content }}
-                        </div>
+                <div class="stat-content min-w-0">
+                    <div class="stat-heading text-sm font-semibold text-gray-700">
+                        {{ name }}
+                    </div>
+                    <div class="stat-text text-sm text-gray-900">
+                        {{ content }}
                     </div>
                 </div>
             </div>

@@ -1838,5 +1838,6 @@
     "# attended": "# attended",
     "Dates": "Dates",
     "No documents added yet.": "No documents added yet.",
+    "Reminder for event : %s": "Reminder for event : {0}",
     "No available documents.": "No available documents."
 }

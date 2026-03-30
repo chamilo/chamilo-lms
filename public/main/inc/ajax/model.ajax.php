@@ -62,7 +62,6 @@ $courseActions = [
     'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
-    'get_usergroups_users',
     'get_calendar_users',
     'get_exercise_categories',
     'get_usergroups_teacher',
@@ -91,19 +90,54 @@ if ($isDiagnosisLoadSearch) {
     if (!(api_is_drh() || api_is_student_boss() || api_is_platform_admin())) {
         api_not_allowed(true);
     }
+} elseif ('get_usergroups_users' === $action) {
+    api_block_anonymous_users();
+
+    $usergroupId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+    $usergroupAjax = new UserGroupModel();
+    $userGroupInfoAjax = $usergroupAjax->get($usergroupId);
+
+    if (empty($userGroupInfoAjax)) {
+        api_not_allowed(true);
+    }
+
+    $courseInfoAjax = api_get_course_info();
+    $sessionIdAjax = api_get_session_id();
+    $courseIdAjax = !empty($courseInfoAjax) ? (int) $courseInfoAjax['real_id'] : 0;
+    $canViewUsergroupFromCourse = false;
+
+    if (!empty($courseInfoAjax) && api_is_allowed_to_edit()) {
+        if ($sessionIdAjax > 0) {
+            $table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+            $sql = "SELECT session_id
+                    FROM $table
+                    WHERE usergroup_id = $usergroupId AND session_id = $sessionIdAjax
+                    LIMIT 1";
+            $result = Database::query($sql);
+            $canViewUsergroupFromCourse = Database::num_rows($result) > 0;
+        } else {
+            $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+            $sql = "SELECT course_id
+                    FROM $table
+                    WHERE usergroup_id = $usergroupId AND course_id = $courseIdAjax
+                    LIMIT 1";
+            $result = Database::query($sql);
+            $canViewUsergroupFromCourse = Database::num_rows($result) > 0;
+        }
+    }
+
+    if (!$canViewUsergroupFromCourse) {
+        $usergroupAjax->protectScript($userGroupInfoAjax, true, true);
+    }
 } elseif (in_array($action, $courseActions, true)) {
-    // Must be in a course context.
     api_protect_course_script();
 
-    // In course context, require edit rights (teacher/coach/course admin).
-    // Some actions later check api_is_teacher() explicitly; keep this generic guard.
     if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
     api_protect_admin_script(true);
 } else {
-    // Unknown / not whitelisted actions => block by default.
     api_protect_admin_script(true);
 }
 
@@ -360,10 +394,18 @@ switch ($action) {
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
         break;
     case 'get_usergroups_users':
-        $usergroup = new UserGroupModel();
-        $usergroup->protectScript(null, true, true);
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-        $count = $usergroup->getUserGroupUsers($id, true);
+        $usergroup = isset($usergroupAjax) && $usergroupAjax instanceof UserGroupModel
+            ? $usergroupAjax
+            : new UserGroupModel();
+
+        $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+
+        $count = (int) $usergroup->getUserGroupUsers($id, true);
+
+        if (0 === $count) {
+            $members = $usergroup->get_users_by_usergroup($id);
+            $count = is_array($members) ? count($members) : 0;
+        }
         break;
     case 'get_learning_path_calendars':
         $calendarPlugin = LearningCalendarPlugin::create();
@@ -1138,7 +1180,13 @@ switch ($action) {
         $result = $calendarPlugin->getUsersPerCalendar($id);
         break;
     case 'get_usergroups_users':
+        $usergroup = isset($usergroupAjax) && $usergroupAjax instanceof UserGroupModel
+            ? $usergroupAjax
+            : new UserGroupModel();
+
+        $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
         $columns = ['title', 'actions'];
+
         if ('true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
             $columns = [
                 'title',
@@ -1151,7 +1199,91 @@ switch ($action) {
                 'calendar_id',
             ];
         }
+
         $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
+
+        if (empty($result)) {
+            $members = $usergroup->get_users_by_usergroup($id);
+            $members = is_array($members) ? $members : [];
+
+            $fallbackResult = [];
+            $position = 0;
+
+            foreach ($members as $memberKey => $member) {
+                $userId = 0;
+                $fullName = '';
+
+                if (is_array($member)) {
+                    if (!empty($member['user_id'])) {
+                        $userId = (int) $member['user_id'];
+                    } elseif (!empty($member['id_user'])) {
+                        $userId = (int) $member['id_user'];
+                    } elseif (!empty($member['id'])) {
+                        $userId = (int) $member['id'];
+                    }
+
+                    $fullName = trim($member['complete_name'] ?? '');
+                    if (empty($fullName)) {
+                        $firstName = trim($member['firstname'] ?? '');
+                        $lastName = trim($member['lastname'] ?? '');
+                        $fullName = trim($firstName.' '.$lastName);
+                    }
+
+                    if (empty($fullName)) {
+                        $fullName = trim($member['username'] ?? '');
+                    }
+                } elseif (is_numeric($member)) {
+                    $userId = (int) $member;
+                } elseif (is_string($member)) {
+                    $fullName = trim($member);
+                }
+
+                // Important: preserve user id when it comes as the array key.
+                if ($userId <= 0 && is_numeric($memberKey) && (int) $memberKey > 0) {
+                    $userId = (int) $memberKey;
+                }
+
+                if ($userId > 0) {
+                    $userInfo = api_get_user_info($userId);
+
+                    if (empty($fullName)) {
+                        $fullName = trim($userInfo['complete_name'] ?? '');
+                        if (empty($fullName)) {
+                            $firstName = trim($userInfo['firstname'] ?? '');
+                            $lastName = trim($userInfo['lastname'] ?? '');
+                            $fullName = trim($firstName.' '.$lastName);
+                        }
+                        if (empty($fullName)) {
+                            $fullName = $userInfo['username'] ?? '';
+                        }
+                    }
+                }
+
+                if (empty($fullName)) {
+                    $fullName = $userId > 0 ? 'User #'.$userId : 'User '.($position + 1);
+                }
+
+                $row = [
+                    'id' => $userId > 0 ? $userId : 'member_'.$position,
+                    'title' => $fullName,
+                    'actions' => '',
+                ];
+
+                if ('true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
+                    $row['calendar'] = '';
+                    $row['gradebook_items'] = '';
+                    $row['time_spent'] = '';
+                    $row['lp_day_completed'] = '';
+                    $row['days_diff'] = '';
+                    $row['calendar_id'] = 0;
+                }
+
+                $fallbackResult[] = $row;
+                $position++;
+            }
+
+            $result = array_slice($fallbackResult, $start, $limit);
+        }
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
@@ -2649,13 +2781,24 @@ switch ($action) {
                     $course_id,
                     api_get_session_id()
                 )) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&id_session='.api_get_session_id();
-                    $icon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::VIEW_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
+                            'url' => api_get_path(WEB_PATH).'user/usergroup_overview?usergroup='.$group['id'].'&course='.$course_id,
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
+                            'url' => 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class')."')) return false;"
+                        ],
+                    ];
                 } else {
-                    $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&type=not_registered';
-                    $icon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
+                            'url' => 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered',
+                        ]
+                    ];
                 }
 
                 switch ($group['group_type']) {
@@ -2678,7 +2821,14 @@ switch ($action) {
                                 $urlUserGroup.'&id='.$group['id']
                             ).'&nbsp;';
                     }
-                    $group['actions'] .= Display::url($icon, $url);
+
+                    for ($i = 0; $i < count($actions); $i++) {
+                        $group['actions'] .= Display::url(
+                            $actions[$i]['icon'],
+                            $actions[$i]['url'] ?? null,
+                            ['onclick' => $actions[$i]['onclick'] ?? '']
+                        );
+                    }
                 }
                 $new_result[] = $group;
             }

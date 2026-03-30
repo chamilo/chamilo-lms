@@ -33685,3 +33685,69 @@ msgstr "Required fields"
 
 msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
 msgstr "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+
+msgid "Link classes to created groups ?"
+msgstr "Link classes to created groups ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+
+msgid "New groups creation in category %s"
+msgstr "New groups creation in category %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "This group is linked to a class. Members are managed automatically and cannot be changed here."
+
+msgid "Remove the group link with the class"
+msgstr "Remove the group link with the class"
+
+msgid "Linked class"
+msgstr "Linked class"
+
+msgid "The group is no longer linked to the class"
+msgstr "The group is no longer linked to the class"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Overview students and courses subscribed to the class"
+
+msgid "Overview students subscribed to the class"
+msgstr "Overview students subscribed to the class"
+
+msgid "Overview class"
+msgstr "Overview class"
+
+msgid "Go back to the list of classes"
+msgstr "Go back to the list of classes"
+
+msgid "Go back to course classes"
+msgstr "Go back to course classes"
+
+msgid "Users subscribed to the course"
+msgstr "Users subscribed to the course"
+
+msgid "Users not subscribed to the course"
+msgstr "Users not subscribed to the course"
+
+msgid "Users subscribed to the class"
+msgstr "Users subscribed to the class"
+
+msgid "Courses subscribed to the class"
+msgstr "Courses subscribed to the class"
+
+msgid "No user is subscribed to this class"
+msgstr "No user is subscribed to this class"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "No user and no course are subscribed to this class"
+
+msgid "No user are subscribed to this class"
+msgstr "No user are subscribed to this class"
+
+msgid "No course are subscribed to this class"
+msgstr "No course are subscribed to this class"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Are you sure you want to remove the class"

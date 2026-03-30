@@ -161,7 +161,7 @@ defineExpose({
           :label="t('Course introduction')"
           class="mt-4"
           icon="plus"
-          type="primary"
+          type="success"
           @click="goToIntroCreate"
         />
       </EmptyState>

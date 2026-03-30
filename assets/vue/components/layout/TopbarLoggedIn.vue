@@ -488,7 +488,7 @@ function toggleUserMenu(event) {
 const btnInboxBadge = computed(() => {
   if (!messagingEnabled.value) return null
   const unreadCount = messageRelUserStore.countUnread
-  return unreadCount > 20 ? "20+" : unreadCount > 0 ? unreadCount.toString() : null
+  return unreadCount > 9 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
 })
 
 if (messagingEnabled.value) {

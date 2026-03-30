@@ -68,3 +68,5 @@ $strings['big_blue_button_students_start_conference_in_groups'] = 'Permettre aux
 $strings['delete_recordings_on_course_delete'] = 'Supprimer les enregistrements lors de la suppression du cours';
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilité par défaut sur la page d\'accueil du cours';
 $strings['ViewActivityDashboard'] = 'Afficher le tableau de bord des activités';
+$strings['UpdateAllCourseSettings'] = 'Mettre à jour tous les paramètres des cours';
+$strings['ThisWillUpdateAllSettingsInAllCourses'] = 'Ceci va mettre à jour tous les paramètres dans tous les cours';

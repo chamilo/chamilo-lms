@@ -1570,8 +1570,8 @@ class Exercise
         }
 
         $exercise
-            ->setStartTime(!empty($start_time) ? new \DateTime((string) $start_time) : null)
-            ->setEndTime(!empty($end_time) ? new \DateTime((string) $end_time) : null)
+            ->setStartTime(!empty($start_time) ? new \DateTime((string) $start_time, new \DateTimeZone('UTC')) : null)
+            ->setEndTime(!empty($end_time) ? new \DateTime((string) $end_time, new \DateTimeZone('UTC')) : null)
             ->setTitle($title)
             ->setDescription($description)
             ->setSound($sound)

@@ -62,3 +62,7 @@ $strings['CreatedAt'] = "Erstellt am";
 $strings['delete_recordings_on_course_delete'] = 'Aufzeichnungen löschen, wenn der Kurs gelöscht wird';
 $strings['defaultVisibilityInCourseHomepage'] = 'Standardsichtbarkeit auf der Kursstartseite';
 $strings['ViewActivityDashboard'] = 'Aktivitäts-Dashboard anzeigen';
+$strings['UpdateAllCourseSettings'] = 'Alle Kurseinstellungen aktualisieren';
+$strings['ThisWillUpdateAllSettingsInAllCourses'] = 'Dadurch werden alle Einstellungen in allen Kursen aktualisiert.';
+$strings['bbb_force_record_generation'] = 'Die Erstellung der Aufzeichnung am Ende des Meetings erzwingen.';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Den Lernenden ermöglichen, die Videokonferenzen ihrer Gruppen zu starten.';

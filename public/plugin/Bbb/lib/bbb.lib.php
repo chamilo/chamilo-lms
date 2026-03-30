@@ -1292,7 +1292,7 @@ class Bbb
 
         return $result;
     }
-    
+
     /**
      * @param int $meetingId
      * @param string $formatType
@@ -1872,25 +1872,7 @@ class Bbb
             api_get_session_id()
         );
 
-        /** @var ConferenceRecordingRepository $recordingRepo */
-        $recordingRepo = $em->getRepository(ConferenceRecordingRepository::class);
-        $recordings = $recordingRepo->findByMeetingRemoteId($meetingData['remoteId']);
-
-        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
-            if (!empty($meetingData['internalMeetingId'])) {
-                return $this->api->generateRecording(['recordId' => $meetingData['internalMeetingId']]);
-            }
-
-            return false;
-        }
-
-        if (!empty($recordings['records'])) {
-            foreach ($recordings['records'] as $record) {
-                if ($recordId == $record['recordId']) {
-                    return $this->api->generateRecording(['recordId' => $recordId]);
-                }
-            }
-        }
+        error_log('[BBB] regenerateRecording requested but not supported by current BigBlueButtonBN adapter.');
 
         return false;
     }
@@ -2445,24 +2427,42 @@ class Bbb
             return;
         }
 
-        $this->dlog('registerWebhookForMeeting: start', ['meetingId' => $meetingId]);
+        $callback = $this->buildWebhookCallbackUrl($meetingId);
+        $this->dlog('registerWebhookForMeeting: start', [
+            'meetingId' => $meetingId,
+            'callback' => $callback,
+        ]);
 
         $list = $this->bbbHooksRequest('hooks/list', []);
+
         if (($list['returncode'] ?? '') === 'SUCCESS') {
-            foreach (($list['hooks'] ?? []) as $h) {
-                if (($h['meetingID'] ?? '') === $meetingId) {
-                    $this->dlog('registerWebhookForMeeting: already registered', $h);
+            foreach (($list['hooks'] ?? []) as $hook) {
+                $hookMeetingId = (string) ($hook['meetingID'] ?? '');
+                $hookCallback = (string) ($hook['callbackURL'] ?? '');
+                $hookId = (string) ($hook['id'] ?? '');
+
+                if ($hookMeetingId !== $meetingId) {
+                    continue;
+                }
+
+                if ($hookCallback === $callback) {
+                    $this->dlog('registerWebhookForMeeting: already registered with same callback', $hook);
                     return;
                 }
+
+                $this->dlog('registerWebhookForMeeting: outdated hook found, destroying', $hook);
+                $this->destroyWebhookById($hookId);
             }
         } else {
             $this->dlog('registerWebhookForMeeting: hooks/list failed', $list);
         }
 
-        $callback = $this->buildWebhookCallbackUrl($meetingId);
-        $params = ['callbackURL' => $callback, 'meetingID' => $meetingId];
+        $params = [
+            'callbackURL' => $callback,
+            'meetingID' => $meetingId,
+        ];
 
-        $events = trim((string)$this->plugin->webhooksEventFilter());
+        $events = trim((string) $this->plugin->webhooksEventFilter());
         if ($events !== '') {
             $events = implode(',', array_map('trim', explode(',', strtolower($events))));
             $params['events'] = $events;
@@ -2519,15 +2519,29 @@ class Bbb
             return;
         }
 
-        foreach (($list['hooks'] ?? []) as $h) {
-            if (($h['callbackURL'] ?? '') === $callback && ($h['meetingID'] ?? '') === '') {
-                $this->dlog('ensureGlobalWebhook: global hook already exists', $h);
+        foreach (($list['hooks'] ?? []) as $hook) {
+            $hookMeetingId = (string) ($hook['meetingID'] ?? '');
+            $hookCallback = (string) ($hook['callbackURL'] ?? '');
+            $hookId = (string) ($hook['id'] ?? '');
+
+            if ($hookMeetingId !== '') {
+                continue;
+            }
+
+            if ($hookCallback === $callback) {
+                $this->dlog('ensureGlobalWebhook: global hook already exists', $hook);
                 return;
+            }
+
+            if ($this->isSameWebhookPath($hookCallback, $callback)) {
+                $this->dlog('ensureGlobalWebhook: outdated global hook found, destroying', $hook);
+                $this->destroyWebhookById($hookId);
             }
         }
 
         $params = ['callbackURL' => $callback];
-        $events = trim((string)$this->plugin->webhooksEventFilter());
+
+        $events = trim((string) $this->plugin->webhooksEventFilter());
         if ($events !== '') {
             $events = implode(',', array_map('trim', explode(',', strtolower($events))));
             $params['events'] = $events;
@@ -2577,4 +2591,79 @@ class Bbb
         error_log('[BBB] ' . $msg);
     }
 
+    private function destroyWebhookById(string $hookId): void
+    {
+        if ($hookId === '') {
+            return;
+        }
+
+        $this->dlog('destroyWebhookById: start', ['hookId' => $hookId]);
+
+        $res = $this->bbbHooksRequest('hooks/destroy', ['hookID' => $hookId]);
+
+        if (($res['returncode'] ?? '') !== 'SUCCESS') {
+            $this->dlog('destroyWebhookById: destroy failed', $res);
+        } else {
+            $this->dlog('destroyWebhookById: destroy success', $res);
+        }
+    }
+
+    public function cleanupWebhooks(?string $meetingId = null): array
+    {
+        $result = [
+            'listed' => 0,
+            'deleted' => 0,
+            'failed' => 0,
+            'hooks' => [],
+            'response' => [],
+        ];
+
+        $list = $this->bbbHooksRequest('hooks/list', []);
+        $result['response'] = $list;
+
+        if (($list['returncode'] ?? '') !== 'SUCCESS') {
+            return $result;
+        }
+
+        $callbackPath = '/plugin/Bbb/webhook.php';
+
+        foreach (($list['hooks'] ?? []) as $hook) {
+            $result['listed']++;
+
+            $hookId = (string) ($hook['id'] ?? '');
+            $hookMeetingId = (string) ($hook['meetingID'] ?? '');
+            $hookCallback = (string) ($hook['callbackURL'] ?? '');
+
+            $path = (string) parse_url($hookCallback, PHP_URL_PATH);
+            $isChamiloWebhook = str_ends_with($path, $callbackPath);
+
+            if (!$isChamiloWebhook) {
+                continue;
+            }
+
+            if ($meetingId !== null && $meetingId !== '' && $hookMeetingId !== $meetingId) {
+                continue;
+            }
+
+            $result['hooks'][] = $hook;
+
+            $destroy = $this->bbbHooksRequest('hooks/destroy', ['hookID' => $hookId]);
+
+            if (($destroy['returncode'] ?? '') === 'SUCCESS') {
+                $result['deleted']++;
+            } else {
+                $result['failed']++;
+            }
+        }
+
+        return $result;
+    }
+
+    private function isSameWebhookPath(string $a, string $b): bool
+    {
+        $pathA = (string) parse_url($a, PHP_URL_PATH);
+        $pathB = (string) parse_url($b, PHP_URL_PATH);
+
+        return $pathA !== '' && $pathA === $pathB;
+    }
 }

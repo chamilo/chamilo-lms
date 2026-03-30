@@ -567,7 +567,7 @@ class AttendanceController extends AbstractController
 
             return [
                 'id' => $calendar->getIid(),
-                'label' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+                'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
                 'done' => $calendar->getDoneAttendance(),
                 'presence' => $sheet ? $sheet->getPresence() : null,
                 'sheetId' => $sheet?->getIid(),
@@ -598,7 +598,7 @@ class AttendanceController extends AbstractController
             'attendanceDates' => array_map(
                 static fn ($d) => [
                     'id' => $d['id'],
-                    'label' => $d['label'],
+                    'dateTime' => $d['dateTime'],
                     'done' => $d['done'],
                     'duration' => $d['duration'],
                 ],
@@ -650,7 +650,7 @@ class AttendanceController extends AbstractController
         ], $users);
 
         return $this->json([
-            'dateLabel' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+            'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
             'isLocked' => true === (bool) $calendar->getDoneAttendance(),
             'users' => $formatted,
             'presence' => $presence,

@@ -135,11 +135,14 @@ final class CAttendanceStateProcessor implements ProcessorInterface
     }
 
     /**
-     * Accept only local ISO datetime strings (no ambiguity).
+     * Parse an ISO 8601 datetime string that includes the browser's timezone offset.
      * Examples accepted:
-     * - 2025-12-01T18:55
-     * - 2025-12-01T18:55:00
-     * - 2025-12-01T18:55:00.000Z (timezone part will be ignored safely).
+     * - 2025-12-01T18:55:00+02:00  (local time with offset — preferred)
+     * - 2025-12-01T18:55:00-05:00
+     * - 2025-12-01T18:55:00        (naive string — treated as server timezone)
+     *
+     * The returned DateTimeImmutable preserves the original timezone so that
+     * Doctrine's UTCDateTimeType can convert it to UTC before persisting.
      */
     private function parseLocalIsoDateTime(mixed $value, string $fieldName): DateTimeImmutable
     {
@@ -149,18 +152,14 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
         $raw = trim($value);
 
-        // Extract "YYYY-MM-DDTHH:mm" and optional ":ss" from the beginning, ignore trailing timezone/offset/millis
-        if (!preg_match('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(?::(\d{2}))?/', $raw, $m)) {
-            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Expected local ISO "YYYY-MM-DDTHH:mm(:ss)". Got "%s".', $fieldName, $raw));
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $raw)) {
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Expected ISO "YYYY-MM-DDTHH:mm(...)". Got "%s".', $fieldName, $raw));
         }
 
-        $base = $m[1];
-        $seconds = isset($m[2]) ? $m[2] : '00';
-        $normalized = $base.':'.$seconds;
-
-        $dt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $normalized);
-        if (false === $dt) {
-            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Failed to parse "%s".', $fieldName, $normalized));
+        try {
+            $dt = new DateTimeImmutable($raw);
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Failed to parse "%s".', $fieldName, $raw));
         }
 
         return $dt;

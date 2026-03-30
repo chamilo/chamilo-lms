@@ -222,11 +222,13 @@ import SignaturePad from "signature_pad"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCidReq } from "../../composables/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { cid, sid, gid } = useCidReq()
+const { abbreviatedDatetime } = useFormatDate()
 
 // --------------------------- Permissions / flags -----------------------------
 const securityStore = useSecurityStore()
@@ -422,7 +424,7 @@ const load = async () => {
     // One-day sheet
     const payload = await attendanceService.getDateSheet(attendanceId.value, calendarId.value, { cid, sid, gid })
 
-    dateLabel.value = payload.dateLabel ?? ""
+    dateLabel.value = payload.dateTime ? (abbreviatedDatetime(payload.dateTime) ?? "") : ""
 
     // Lock flag from backend (if any)
     const lockFlag = payload.isLocked ?? payload.locked ?? payload.is_locked

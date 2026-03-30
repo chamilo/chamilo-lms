@@ -38,6 +38,7 @@ $form->addDateRangePicker(
         'format'          => 'YYYY-MM-DD',
         'timePicker'      => 'false',
         'validate_format' => 'Y-m-d',
+        'openOnFocus'     => 'false',
     ]
 );
 

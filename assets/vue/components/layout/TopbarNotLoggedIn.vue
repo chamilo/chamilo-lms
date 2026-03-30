@@ -1,6 +1,9 @@
 <template>
   <div class="app-topbar">
     <Menubar :model="menuItems">
+      <template #buttonicon>
+        <BaseIcon icon="menu" />
+      </template>
       <template #start>
         <PlatformLogo />
       </template>
@@ -17,6 +20,7 @@ import { useLocale } from "../../composables/locale"
 import PlatformLogo from "./PlatformLogo.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import axios from "axios"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const router = useRouter()

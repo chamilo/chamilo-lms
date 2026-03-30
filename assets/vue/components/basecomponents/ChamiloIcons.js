@@ -177,5 +177,6 @@ export const chamiloIconToClass = {
   "shield-star": "mdi mdi-shield-star",
   "assign-users": "mdi mdi-account-child",
   "learning-paths": "mdi mdi-map-marker-path",
-  visible: "mdi mdi-eye",
+  "visible": "mdi mdi-eye",
+  "menu": "mdi mdi-menu",
 }

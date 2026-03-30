@@ -637,11 +637,11 @@ function handlePlugins()
     echo '      <a href="'.htmlspecialchars(api_get_self().'?category=Regions', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
     echo '          <i class="mdi mdi-view-grid-outline"></i> Regions';
     echo '      </a>';
-    if (!shouldShowAllPlugins()) {
+    /*if (!shouldShowAllPlugins()) {
         echo '  <a href="'.htmlspecialchars(api_get_self().'?category=Plugins&show_all_plugins=1', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
         echo '      <i class="mdi mdi-eye-outline"></i> Show all plugins';
         echo '  </a>';
-    }
+    }*/
     echo '  </div>';
     echo '</div>';
 

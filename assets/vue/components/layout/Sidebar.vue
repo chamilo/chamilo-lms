@@ -140,15 +140,23 @@ watch(
 
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
-  if (!header) return
 
-  const contentId = header.getAttribute("aria-controls")
-  const contentPanel = document.getElementById(contentId)
+  if (header) {
+    const contentId = header.getAttribute("aria-controls")
+    const contentPanel = document.getElementById(contentId)
 
-  if (contentPanel && !sidebarIsOpen.value) {
-    expandingDueToPanelClick.value = true
-    sidebarIsOpen.value = true
-    window.localStorage.setItem("sidebarIsOpen", "true")
+    if (contentPanel && !sidebarIsOpen.value) {
+      expandingDueToPanelClick.value = true
+      sidebarIsOpen.value = true
+
+      if (!isMobile()) {
+        window.localStorage.setItem("sidebarIsOpen", "true")
+      }
+    }
+  }
+
+  if (isMobile() && event.target.closest("a[href]")) {
+    sidebarIsOpen.value = false
   }
 }
 

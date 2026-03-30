@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use CourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use UserGroupModel;
@@ -48,12 +48,12 @@ class UserController extends AbstractController
         $data = $usergroupLib->getUsersInAndOutOfCourse($usergroupId, $courseId);
 
         $breadcrumb = json_encode([
-            ['name' => get_lang('My courses'),  'url' => '/courses'],
-            ['name' => $courseName,             'url' => '/course/'.$courseId.'/home'],
-            ['name' => get_lang('Users'),       'url' => '/main/user/user.php?cid='.$courseId],
-            ['name' => get_lang('Classes'),     'url' => '/main/user/class.php?cid='.$courseId],
-            ['name' => $usergroup['title'],     'url' => '#'],
-            ['name' => get_lang('Overview'),    'url' => ''],
+            ['name' => get_lang('My courses'), 'url' => '/courses'],
+            ['name' => $courseName, 'url' => '/course/'.$courseId.'/home'],
+            ['name' => get_lang('Users'), 'url' => '/main/user/user.php?cid='.$courseId],
+            ['name' => get_lang('Classes'), 'url' => '/main/user/class.php?cid='.$courseId],
+            ['name' => $usergroup['title'], 'url' => '#'],
+            ['name' => get_lang('Overview'), 'url' => ''],
         ]);
 
         return $this->render('@ChamiloCore/User/usergroup_overview.html.twig', [
@@ -87,5 +87,4 @@ class UserController extends AbstractController
             'illustration_url' => $url,
         ]);
     }
-
 }

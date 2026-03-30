@@ -29,7 +29,7 @@ class ResourceHelper
         if (!$userId) {
             $user = $this->userHelper->getCurrent();
 
-            if ($user ) {
+            if ($user) {
                 $userId = $user->getId();
             }
         }

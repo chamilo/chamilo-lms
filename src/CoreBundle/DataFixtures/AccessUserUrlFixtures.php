@@ -26,8 +26,10 @@ class AccessUserUrlFixtures extends Fixture
     {
         /** @var User $admin */
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
+
         /** @var User $anon */
         $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE);
+
         /** @var User $fallbackUser */
         $fallbackUser = $this->getReference(AccessUserFixtures::FALLBACK_USER_REFERENCE);
 

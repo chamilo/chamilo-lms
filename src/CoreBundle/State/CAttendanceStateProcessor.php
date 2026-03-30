@@ -16,6 +16,7 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -139,7 +140,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
      * Examples accepted:
      * - 2025-12-01T18:55:00+02:00  (local time with offset — preferred)
      * - 2025-12-01T18:55:00-05:00
-     * - 2025-12-01T18:55:00        (naive string — treated as server timezone)
+     * - 2025-12-01T18:55:00        (naive string — treated as server timezone).
      *
      * The returned DateTimeImmutable preserves the original timezone so that
      * Doctrine's UTCDateTimeType can convert it to UTC before persisting.
@@ -158,7 +159,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
         try {
             $dt = new DateTimeImmutable($raw);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new BadRequestHttpException(\sprintf('[Attendance] Invalid "%s". Failed to parse "%s".', $fieldName, $raw));
         }
 

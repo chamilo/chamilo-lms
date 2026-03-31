@@ -28,6 +28,34 @@ final class MailHelper
         private readonly SettingsManager $settingsManager,
     ) {}
 
+    /**
+     * Resolve the platform FROM address using the configured mail settings.
+     * Priority: mail.mailer_from_email > admin.administrator_email.
+     */
+    public function getPlatformFromAddress(): Address
+    {
+        $fromEmail = $this->settingsManager->getSetting('mail.mailer_from_email');
+        $fromName = $this->settingsManager->getSetting('mail.mailer_from_name');
+
+        if (empty($fromName)) {
+            $fromName = $this->settingsManager->getSetting('platform.site_name') ?: 'Chamilo';
+        }
+
+        if (empty($fromEmail) || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+            $fromEmail = $this->settingsManager->getSetting('admin.administrator_email');
+            if (empty($fromName) || 'Chamilo' === $fromName) {
+                $fromName = api_get_person_name(
+                    $this->settingsManager->getSetting('admin.administrator_name'),
+                    $this->settingsManager->getSetting('admin.administrator_surname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+            }
+        }
+
+        return new Address((string) $fromEmail, (string) $fromName);
+    }
+
     private function setNoreplyAndFromAddress(
         TemplatedEmail $email,
         array $sender,

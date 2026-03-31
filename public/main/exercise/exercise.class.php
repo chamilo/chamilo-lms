@@ -9025,7 +9025,7 @@ class Exercise
         $repo = Container::getQuizRepository();
 
         $trackEExerciseRepo = Container::getTrackEExerciseRepository();
-        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId);
+        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId, $sessionId);
         $pendingAttempts = [];
         foreach ($pendingCorrections as $correction) {
             $pendingAttempts[$correction['exerciseId']] = $correction['pendingCount'];

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -56,6 +57,7 @@ readonly class AzureAuthenticatorHelper
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
+        private LanguageRepository $languageRepository,
         AuthenticationConfigHelper $configHelper,
     ) {
         $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
@@ -85,6 +87,7 @@ readonly class AzureAuthenticatorHelper
 
         $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
+        $existingLanguage = '';
         if (empty($userId)) {
             if (!$this->providerParams['provisioning']) {
                 throw new Exception(\sprintf('User not found when checking the extra fields from %s or %s or %s.', $azureUserInfo['mail'], $azureUserInfo['mailNickname'], $azureUserInfo['id']));
@@ -100,6 +103,8 @@ readonly class AzureAuthenticatorHelper
             if (!$this->providerParams['update_users']) {
                 return $user;
             }
+            // Get existing language config to avoid blanking
+            $existingLanguage = $user->getLocale();
         }
 
         $user
@@ -119,7 +124,12 @@ readonly class AzureAuthenticatorHelper
         ;
 
         if ($preferredLanguage) {
+            // If the language was set in the EntraID input, use it
             $user->setLocale($preferredLanguage);
+        } elseif (!empty($existingLanguage)) {
+            // If no language was set by EntraID *and* we already had the user
+            // with a language set, use that one
+            $user->setLocale($existingLanguage);
         }
 
         $this->userRepository->updateUser($user);
@@ -240,6 +250,13 @@ readonly class AzureAuthenticatorHelper
         $preferredLanguage = $azureUserData['preferredLanguage']
             ? str_replace('-', '_', $azureUserData['preferredLanguage'])
             : null;
+
+        if (null !== $preferredLanguage) {
+            $lang = $this->languageRepository->findByIsoCode($preferredLanguage);
+            if (null === $lang || !$lang->getAvailable()) {
+                $preferredLanguage = $this->languageRepository->getPlatformDefaultIso();
+            }
+        }
 
         // If the option is set to create users, create it
         $firstName = $azureUserData['givenName'];

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeZone;
@@ -33,7 +34,8 @@ class SendCourseExpirationEmailsCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager,
         private readonly MailerInterface $mailer,
-        private readonly Environment $twig
+        private readonly Environment $twig,
+        private readonly MailHelper $mailHelper,
     ) {
         parent::__construct();
     }
@@ -83,9 +85,10 @@ class SendCourseExpirationEmailsCommand extends Command
             return Command::SUCCESS;
         }
 
+        $fromAddress = $this->mailHelper->getPlatformFromAddress();
         $administrator = [
-            'complete_name' => $this->getAdministratorName(),
-            'email' => $this->settingsManager->getSetting('admin.administrator_email'),
+            'complete_name' => $fromAddress->getName(),
+            'email' => $fromAddress->getAddress(),
         ];
 
         foreach ($sessions as $session) {

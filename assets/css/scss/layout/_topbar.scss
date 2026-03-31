@@ -20,6 +20,16 @@
     &.p-menubar-mobile {
       @apply bg-white w-full;
 
+      &.p-menubar-mobile-active {
+        .p-menubar-button {
+          .mdi.mdi-menu {
+            &::before {
+              content: "\F0156";
+            }
+          }
+        }
+      }
+
       .p-menubar-root-list {
         @apply pt-8;
         height: calc(100vh - 4.5rem - 1px);

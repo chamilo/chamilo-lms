@@ -92,9 +92,13 @@ const enrolledStore = useEnrolledStore()
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
 
-const stored = window.localStorage.getItem("sidebarIsOpen")
-const sidebarIsOpen = ref(stored === null ? true : stored === "true")
-if (stored === null) {
+const isMobile = () => window.innerWidth < 640
+
+const storedSidebarState = window.localStorage.getItem("sidebarIsOpen")
+
+const sidebarIsOpen = ref(isMobile() ? false : storedSidebarState === null ? true : storedSidebarState === "true")
+
+if (!isMobile() && storedSidebarState === null) {
   window.localStorage.setItem("sidebarIsOpen", "true")
 }
 const expandingDueToPanelClick = ref(false)
@@ -114,7 +118,9 @@ watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
-    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
+    if (!isMobile()) {
+      window.localStorage.setItem("sidebarIsOpen", newValue.toString())
+    }
     appEl.classList.toggle("app--sidebar-inactive", !newValue)
 
     if (!newValue) {
@@ -122,7 +128,9 @@ watch(
         const expandedHeaders = document.querySelectorAll(".p-panelmenu-header.p-highlight")
         expandedHeaders.forEach((header) => header.click())
         sidebarIsOpen.value = false
-        window.localStorage.setItem("sidebarIsOpen", "false")
+        if (!isMobile()) {
+          window.localStorage.setItem("sidebarIsOpen", "false")
+        }
       }
     }
     expandingDueToPanelClick.value = false
@@ -132,15 +140,23 @@ watch(
 
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
-  if (!header) return
 
-  const contentId = header.getAttribute("aria-controls")
-  const contentPanel = document.getElementById(contentId)
+  if (header) {
+    const contentId = header.getAttribute("aria-controls")
+    const contentPanel = document.getElementById(contentId)
 
-  if (contentPanel && !sidebarIsOpen.value) {
-    expandingDueToPanelClick.value = true
-    sidebarIsOpen.value = true
-    window.localStorage.setItem("sidebarIsOpen", "true")
+    if (contentPanel && !sidebarIsOpen.value) {
+      expandingDueToPanelClick.value = true
+      sidebarIsOpen.value = true
+
+      if (!isMobile()) {
+        window.localStorage.setItem("sidebarIsOpen", "true")
+      }
+    }
+  }
+
+  if (isMobile() && event.target.closest("a[href]")) {
+    sidebarIsOpen.value = false
   }
 }
 

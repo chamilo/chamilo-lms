@@ -913,7 +913,7 @@ echo '<style>
     padding: 1rem 1rem;
 }
 .learner-section-spacing {
-    margin-top: 1.75rem;
+    margin-top: 1.5rem;
 }
 .learner-card h1,
 .learner-card h2,
@@ -955,7 +955,7 @@ echo '<style>
     margin-top: 2rem;
 }
 .learner-page-container h3 {
-    margin-top: 1.25rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.75rem;
 }
 </style>';

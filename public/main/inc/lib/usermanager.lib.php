@@ -1205,13 +1205,6 @@ class UserManager
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $email_admin = api_get_setting('emailAdministrator');
             $url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
@@ -1260,8 +1253,8 @@ class UserManager
                 $email,
                 $emailsubject,
                 $emailBody,
-                $sender_name,
-                $email_admin,
+                '',
+                '',
                 [],
                 [],
                 false,

@@ -117,15 +117,7 @@ class Login
 
         $email_body = get_lang('This is your information to connect to')." ".$portal_url."\n\n$user_account_list";
         // SEND MESSAGE
-        $sender_name = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
-        $email_admin = api_get_setting('emailAdministrator');
-
-        if (1 == api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin)) {
+        if (1 == api_mail_html('', $email_to, $email_subject, $email_body)) {
             return get_lang('Your password has been reset');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
@@ -175,22 +167,13 @@ class Login
             get_lang('Portal Admin')." - ".
             api_get_setting('siteName');
 
-        $sender_name = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
-        $email_admin = api_get_setting('emailAdministrator');
         $email_body = nl2br($email_body);
 
         $result = @api_mail_html(
             '',
             $email_to,
             $email_subject,
-            $email_body,
-            $sender_name,
-            $email_admin
+            $email_body
         );
 
         if (1 == $result) {

@@ -509,9 +509,6 @@ switch ($action) {
                 $em->persist($message);
                 $em->flush();
 
-                $senderName = UserManager::formatUserFullName($currentUser);
-                $emailAdmin = api_get_setting('admin.administrator_email');
-
                 // Send also message to all student bosses
                 $bossList = UserManager::getStudentBossList($studentId);
 
@@ -543,9 +540,7 @@ switch ($action) {
                             UserManager::formatUserFullName(api_get_user_entity($boss['boss_id'])),
                             api_get_user_entity($boss['boss_id'])->getEmail(),
                             sprintf(get_lang('Follow up message about student %s'), $studentFullName),
-                            $contentBoss,
-                            $senderName,
-                            $emailAdmin
+                            $contentBoss
                         );
                     }
 

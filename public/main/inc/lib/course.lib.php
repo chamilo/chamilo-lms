@@ -2918,21 +2918,11 @@ class CourseManager
                 null,
                 PERSON_NAME_EMAIL_ADDRESS
             );
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $email_admin = api_get_setting('emailAdministrator');
-
             api_mail_html(
                 $recipient_name,
                 $emailto,
                 $emailsubject,
-                $emailbody,
-                $sender_name,
-                $email_admin
+                $emailbody
             );
         }
     }

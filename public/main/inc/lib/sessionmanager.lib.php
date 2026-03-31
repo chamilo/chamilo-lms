@@ -2243,12 +2243,7 @@ class SessionManager
                     $user_info['complete_name'],
                     $user_info['mail'],
                     $subject,
-                    $content,
-                    api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    ),
-                    api_get_setting('emailAdministrator')
+                    $content
                 );
 
                 // Record message in system
@@ -2426,9 +2421,7 @@ class SessionManager
             $boss->getFullName(),
             $boss->getEmail(),
             $subject,
-            $content,
-            api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
-            api_get_setting('emailAdministrator')
+            $content
         );
 
         // Record message in system

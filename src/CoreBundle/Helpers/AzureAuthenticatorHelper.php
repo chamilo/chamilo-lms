@@ -85,6 +85,7 @@ readonly class AzureAuthenticatorHelper
 
         $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
+        $existingLanguage = '';
         if (empty($userId)) {
             if (!$this->providerParams['provisioning']) {
                 throw new Exception(\sprintf('User not found when checking the extra fields from %s or %s or %s.', $azureUserInfo['mail'], $azureUserInfo['mailNickname'], $azureUserInfo['id']));
@@ -100,6 +101,8 @@ readonly class AzureAuthenticatorHelper
             if (!$this->providerParams['update_users']) {
                 return $user;
             }
+            // Get existing language config to avoid blanking
+            $existingLanguage = $user->getLocale();
         }
 
         $user
@@ -119,7 +122,12 @@ readonly class AzureAuthenticatorHelper
         ;
 
         if ($preferredLanguage) {
+            // If the language was set in the EntraID input, use it
             $user->setLocale($preferredLanguage);
+        } elseif (!empty($existingLanguage)) {
+            // If no language was set by EntraID *and* we already had the user
+            // with a language set, use that one
+            $user->setLocale($existingLanguage);
         }
 
         $this->userRepository->updateUser($user);

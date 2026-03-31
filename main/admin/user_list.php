@@ -469,10 +469,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
+        $personName = htmlspecialchars(
+            api_get_person_name($user[2], $user[3]),
+            ENT_QUOTES,
+            'UTF-8'
+        );
         $photo = '<img
             src="'.$userPicture.'" width="22" height="22"
-            alt="'.api_get_person_name($user[2], $user[3]).'"
-            title="'.api_get_person_name($user[2], $user[3]).'" />';
+            alt="'.$personName.'"
+            title="'.$personName.'" />';
 
         if (1 == $user[7] && !empty($user['exp'])) {
             // check expiration date

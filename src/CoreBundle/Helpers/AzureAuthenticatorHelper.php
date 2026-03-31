@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -56,6 +57,7 @@ readonly class AzureAuthenticatorHelper
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
+        private LanguageRepository $languageRepository,
         AuthenticationConfigHelper $configHelper,
     ) {
         $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
@@ -248,6 +250,13 @@ readonly class AzureAuthenticatorHelper
         $preferredLanguage = $azureUserData['preferredLanguage']
             ? str_replace('-', '_', $azureUserData['preferredLanguage'])
             : null;
+
+        if (null !== $preferredLanguage) {
+            $lang = $this->languageRepository->findByIsoCode($preferredLanguage);
+            if (null === $lang || !$lang->getAvailable()) {
+                $preferredLanguage = $this->languageRepository->getPlatformDefaultIso();
+            }
+        }
 
         // If the option is set to create users, create it
         $firstName = $azureUserData['givenName'];

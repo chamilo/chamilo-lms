@@ -368,32 +368,10 @@
     return path === '/courses' || path.indexOf('/courses/') === 0;
   }
 
-  function isCoursePath(path) {
-    return path.indexOf('/course/') === 0;
-  }
-
-  function hasCourseQueryContext() {
-    var params = new URLSearchParams(window.location.search || '');
-
-    return params.has('cidReq') || params.has('cid') || params.has('course');
-  }
-
-  function isLegacyCoursePath(path) {
-    if (path.indexOf('/main/') !== 0) {
-      return false;
-    }
-
-    if (path.indexOf('/main/inc/ajax/') === 0) {
-      return false;
-    }
-
-    return hasCourseQueryContext();
-  }
-
   function shouldShowLauncher() {
     var path = getCurrentPath();
 
-    return isCoursesPath(path) || isCoursePath(path) || isLegacyCoursePath(path);
+    return isCoursesPath(path);
   }
 
   function applyLauncherVisibility() {
@@ -525,10 +503,9 @@
     state.modalBody = body;
 
     updateLauncher();
-    renderModalContent();
     applyLauncherVisibility();
-    //installRouteListeners();
-    //scheduleVisibilityRefresh();
+    installRouteListeners();
+    scheduleVisibilityRefresh();
   }
 
   if (!root) {

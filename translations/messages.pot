@@ -33665,3 +33665,12 @@ msgstr ""
 
 msgid "Are you sure you want to remove the class"
 msgstr ""
+
+msgid "Are you sure you want to remove the class?"
+msgstr ""
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr ""
+
+msgid "Remove the class without removing students"
+msgstr ""

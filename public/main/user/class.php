@@ -103,7 +103,7 @@ if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;
 
     switch ($action) {
-        case 'add_class_to_course':
+        case 'add_usergroup_to_course':
             $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
             if (!empty($id) && 0 == $sessionId) {
                 $usergroup->subscribe_courses_to_usergroup(
@@ -123,7 +123,7 @@ if (api_is_allowed_to_edit()) {
             }
             break;
 
-        case 'remove_class_from_course':
+        case 'remove_usergroup_from_course':
             $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
@@ -131,6 +131,17 @@ if (api_is_allowed_to_edit()) {
                     [api_get_course_int_id()]
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
+            break;
+
+        case 'remove_only_usergroup_from_course':
+            $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            if (!empty($id)) {
+                $usergroup->unsubscribeOnlyCoursesFromUsergroup(
+                    $id,
+                    [api_get_course_int_id()]
+                );
+                Display::addFlash(Display::return_message(get_lang('Removed')));
             }
             break;
     }

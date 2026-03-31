@@ -628,15 +628,22 @@ function handlePlugins()
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
+    echo '
+        <div class="section-header section-header--h2">
+            <h2 class="section-header__title">
+                '.get_lang('Manage plugins').'
+            </h2>
+            <div class="section-header__actions">
+                <a href="'.htmlspecialchars(api_get_self().'?category=Regions', ENT_QUOTES).'" class="btn btn--plain-outline">
+                    <i class="mdi mdi-view-grid-outline"></i>'.get_lang('Regions').'
+                </a>
+            </div>
+        </div>
+        <p class="text-body-1 text-gray-50">'.get_lang('Install, activate or deactivate plugins easily.').'</p>
+    ';
+
     echo '<div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">';
-    echo '  <div>';
-    echo '      <h2 class="mb-1 text-2xl font-semibold text-gray-90">'.get_lang('Manage plugins').'</h2>';
-    echo '      <p class="text-sm text-gray-50">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
-    echo '  </div>';
     echo '  <div class="flex flex-wrap gap-2">';
-    echo '      <a href="'.htmlspecialchars(api_get_self().'?category=Regions', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
-    echo '          <i class="mdi mdi-view-grid-outline"></i> Regions';
-    echo '      </a>';
     /*if (!shouldShowAllPlugins()) {
         echo '  <a href="'.htmlspecialchars(api_get_self().'?category=Plugins&show_all_plugins=1', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
         echo '      <i class="mdi mdi-eye-outline"></i> Show all plugins';

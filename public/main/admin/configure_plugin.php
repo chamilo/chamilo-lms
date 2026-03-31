@@ -100,9 +100,9 @@ function c2_style_plugin_settings_form_html(string $html): string
             }
 
             c2_add_tailwind_classes_to_element($fieldset, [
-                'rounded-3xl',
+                'rounded-lg',
                 'border',
-                'border-gray-25',
+                'border-gray-30',
                 'bg-white',
                 'p-6',
                 'shadow-sm',
@@ -135,30 +135,13 @@ function c2_style_plugin_settings_form_html(string $html): string
             }
 
             c2_add_tailwind_classes_to_element($group, [
-                'rounded-2xl',
+                'rounded-lg',
                 'border',
-                'border-gray-25',
+                'border-gray-30',
                 'bg-white',
                 'p-5',
                 'shadow-sm',
                 'space-y-3',
-            ]);
-        }
-    }
-
-    $labels = $xpath->query('.//label', $root);
-    if ($labels) {
-        foreach ($labels as $label) {
-            if (!$label instanceof DOMElement) {
-                continue;
-            }
-
-            c2_add_tailwind_classes_to_element($label, [
-                'mb-2',
-                'block',
-                'text-sm',
-                'font-semibold',
-                'text-gray-90',
             ]);
         }
     }
@@ -186,148 +169,6 @@ function c2_style_plugin_settings_form_html(string $html): string
             }
 
             c2_add_tailwind_classes_to_element($column, ['w-full', 'max-w-none']);
-        }
-    }
-
-    $inputs = $xpath->query('.//input', $root);
-    if ($inputs) {
-        foreach ($inputs as $input) {
-            if (!$input instanceof DOMElement) {
-                continue;
-            }
-
-            $type = strtolower((string) $input->getAttribute('type'));
-
-            if ('hidden' === $type) {
-                continue;
-            }
-
-            if (in_array($type, ['checkbox', 'radio'], true)) {
-                c2_add_tailwind_classes_to_element($input, [
-                    'h-4',
-                    'w-4',
-                    'rounded',
-                    'border-gray-25',
-                    'text-primary',
-                    'focus:ring-primary',
-                ]);
-
-                continue;
-            }
-
-            if (in_array($type, ['submit', 'button'], true)) {
-                c2_add_tailwind_classes_to_element($input, [
-                    'inline-flex',
-                    'items-center',
-                    'justify-center',
-                    'gap-2',
-                    'rounded-xl',
-                    'bg-primary',
-                    'px-4',
-                    'py-2.5',
-                    'text-sm',
-                    'font-semibold',
-                    'text-white',
-                    'shadow-sm',
-                    'transition',
-                    'hover:opacity-90',
-                    'focus:outline-none',
-                    'focus:ring-2',
-                    'focus:ring-primary/30',
-                    'focus:ring-offset-2',
-                ]);
-
-                continue;
-            }
-
-            c2_add_tailwind_classes_to_element($input, [
-                'block',
-                'w-full',
-                'rounded-xl',
-                'border-gray-25',
-                'bg-white',
-                'text-sm',
-                'text-gray-90',
-                'shadow-sm',
-                'placeholder:text-gray-50',
-                'focus:border-primary',
-                'focus:ring-primary',
-            ]);
-        }
-    }
-
-    $selects = $xpath->query('.//select', $root);
-    if ($selects) {
-        foreach ($selects as $select) {
-            if (!$select instanceof DOMElement) {
-                continue;
-            }
-
-            c2_add_tailwind_classes_to_element($select, [
-                'block',
-                'w-full',
-                'rounded-xl',
-                'border-gray-25',
-                'bg-white',
-                'text-sm',
-                'text-gray-90',
-                'shadow-sm',
-                'focus:border-primary',
-                'focus:ring-primary',
-            ]);
-        }
-    }
-
-    $textareas = $xpath->query('.//textarea', $root);
-    if ($textareas) {
-        foreach ($textareas as $textarea) {
-            if (!$textarea instanceof DOMElement) {
-                continue;
-            }
-
-            c2_add_tailwind_classes_to_element($textarea, [
-                'block',
-                'w-full',
-                'rounded-xl',
-                'border-gray-25',
-                'bg-white',
-                'text-sm',
-                'text-gray-90',
-                'shadow-sm',
-                'placeholder:text-gray-50',
-                'focus:border-primary',
-                'focus:ring-primary',
-            ]);
-        }
-    }
-
-    $buttons = $xpath->query('.//button', $root);
-    if ($buttons) {
-        foreach ($buttons as $button) {
-            if (!$button instanceof DOMElement) {
-                continue;
-            }
-
-            c2_add_tailwind_classes_to_element($button, [
-                'inline-flex',
-                'items-center',
-                'justify-center',
-                'gap-2',
-                'rounded-xl',
-                'bg-primary',
-                'px-4',
-                'py-2.5',
-                'text-sm',
-                'font-semibold',
-                'text-white',
-                'shadow-sm',
-                'transition',
-                'hover:opacity-90',
-                'focus:outline-none',
-                'focus:ring-2',
-                'focus:ring-primary/30',
-                'focus:ring-offset-2',
-            ]);
         }
     }
 
@@ -656,9 +497,6 @@ $pluginTitle = $pluginInfo['title'] ?? $plugin->getTitle();
 $pluginTitleEscaped = htmlspecialchars((string) $pluginTitle, ENT_QUOTES, 'UTF-8');
 $pluginNameEscaped = htmlspecialchars((string) $plugin->getTitle(), ENT_QUOTES, 'UTF-8');
 $pluginStatusLabel = $isEnabledNow ? get_lang('Enabled') : get_lang('Disabled');
-$pluginStatusClasses = $isEnabledNow
-    ? 'bg-success text-white'
-    : 'bg-gray-20 text-gray-90';
 
 $settingsCountLabel = (string) count($editableFieldNames);
 $hasSettingsLabel = $hasEditableFields ? get_lang('Yes') : get_lang('No');
@@ -667,38 +505,26 @@ $pluginSummaryText = $hasEditableFields
     : 'This plugin does not expose configurable settings. Activation is managed from the plugins list.';
 
 $content = '
+<div class="section-header section-header--h2">
+    <h2 class="section-header__title">'.$pluginTitleEscaped.'</h2>
+    <div class="section-header__actions">
+        <a href="'.$backUrl.'" class="btn btn--plain-outline">
+            <em class="mdi mdi-arrow-left"></em>
+            '.htmlspecialchars(get_lang('Back to plugins'), ENT_QUOTES, 'UTF-8').'
+        </a>
+    </div>
+</div>
 <div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div class="space-y-3">
-                <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-                    '.htmlspecialchars(get_lang('Plugins'), ENT_QUOTES, 'UTF-8').'
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
-                        '.$pluginTitleEscaped.'
-                    </h1>
-                    <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        '.$pluginSummaryText.'
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-3 sm:flex-row">
-                <a
-                    href="'.$backUrl.'"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
-                    title="'.htmlspecialchars(get_lang('Back'), ENT_QUOTES, 'UTF-8').'"
-                >
-                    <em class="mdi mdi-arrow-left"></em>
-                    '.htmlspecialchars(get_lang('Back to plugins'), ENT_QUOTES, 'UTF-8').'
-                </a>
+    <section class="rounded-lg border border-gray-30 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-x-6 gap-y-3 lg:flex-row lg:items-start lg:justify-between">
+            <p class="text-body-1 text-gray-50">'.$pluginSummaryText.'</p>
+            <div class="badge badge--default">
+                '.htmlspecialchars(get_lang('Plugins'), ENT_QUOTES, 'UTF-8').'
             </div>
         </div>
 
         <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+            <div class="rounded-lg border border-gray-30 bg-support-2 p-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                     '.htmlspecialchars(get_lang('Name'), ENT_QUOTES, 'UTF-8').'
                 </div>
@@ -707,18 +533,18 @@ $content = '
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+            <div class="rounded-lg border border-gray-30 bg-support-2 p-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                     '.htmlspecialchars(get_lang('Status'), ENT_QUOTES, 'UTF-8').'
                 </div>
                 <div class="mt-2">
-                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold '.$pluginStatusClasses.'">
+                    <span class="badge '.($isEnabledNow ? 'badge--success' : 'badge--default').'">
                         '.htmlspecialchars($pluginStatusLabel, ENT_QUOTES, 'UTF-8').'
                     </span>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+            <div class="rounded-lg border border-gray-30 bg-support-2 p-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                     '.htmlspecialchars(get_lang('Settings'), ENT_QUOTES, 'UTF-8').'
                 </div>
@@ -727,7 +553,7 @@ $content = '
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+            <div class="rounded-lg border border-gray-30 bg-support-2 p-4">
                 <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                     '.htmlspecialchars(get_lang('Configuration'), ENT_QUOTES, 'UTF-8').'
                 </div>
@@ -740,13 +566,13 @@ $content = '
 
 if ($hasEditableFields && '' !== trim($styledFormHtml)) {
     $content .= '
-    <section class="rounded-3xl border border-gray-25 bg-gray-10 p-6 shadow-sm">
+    <section class="rounded-lg border border-gray-30 bg-gray-10 p-6 shadow-sm">
         '.$styledFormHtml.'
     </section>';
 } else {
     $content .= '
-    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
-        <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-4 text-sm text-gray-90">
+    <section class="rounded-lg border border-gray-30 bg-white p-6 shadow-sm">
+        <div class="rounded-lg border border-info/20 bg-support-2 px-4 py-4 text-sm text-gray-90">
             <div class="flex items-start gap-3">
                 <div class="mt-0.5 text-primary">
                     <em class="fa fa-info-circle text-lg"></em>

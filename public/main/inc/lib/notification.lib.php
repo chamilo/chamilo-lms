@@ -64,29 +64,25 @@ class Notification extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
+        $this->titlePrefix = '['.api_get_setting('platform.site_name').'] ';
 
-        if ($smtpFromEmail = api_get_setting('mail.mailer_from_email')) {
-            $this->adminEmail = $smtpFromEmail;
+        // Priority: mail.mailer_from_email > admin.administrator_email
+        $fromEmail = api_get_setting('mail.mailer_from_email');
+        $fromName = api_get_setting('mail.mailer_from_name');
 
-            if ($smtpFromName = api_get_setting('mail.mailer_from_name')) {
-                $this->adminName = $smtpFromName;
-            }
+        if (!empty($fromEmail)) {
+            $this->adminEmail = $fromEmail;
+            $this->adminName = !empty($fromName)
+                ? $fromName
+                : (api_get_setting('platform.site_name') ?: 'Chamilo');
         } else {
-            // Default no-reply email
-            $this->adminEmail = api_get_setting('mail.mailer_from_email');
-            $this->adminName = api_get_setting('platform.site_name');
-            $this->titlePrefix = '['.api_get_setting('platform.site_name').'] ';
-
-            // If no-reply email doesn't exist use the admin name/email
-            if (empty($this->adminEmail)) {
-                $this->adminEmail = api_get_setting('admin.administrator_email');
-                $this->adminName = api_get_person_name(
-                    api_get_setting('admin.administrator_name'),
-                    api_get_setting('admin.administrator_surname'),
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-            }
+            $this->adminEmail = api_get_setting('admin.administrator_email');
+            $this->adminName = api_get_person_name(
+                api_get_setting('admin.administrator_name'),
+                api_get_setting('admin.administrator_surname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
         }
     }
 

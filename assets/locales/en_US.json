@@ -1839,5 +1839,8 @@
     "Dates": "Dates",
     "No documents added yet.": "No documents added yet.",
     "Reminder for event : %s": "Reminder for event : {0}",
-    "No available documents.": "No available documents."
+    "No available documents.": "No available documents.",
+    "Are you sure you want to remove the class?": "Are you sure you want to remove the class?",
+    "Are you sure you want to remove the class without removing users?": "Are you sure you want to remove the class without removing users?",
+    "Remove the class without removing students": "Remove the class without removing students"
 }

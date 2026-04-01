@@ -171,6 +171,7 @@ class PlatformConfigurationController extends AbstractController
                 'certificate.allow_general_certificate',
                 'language.show_different_course_language',
                 'workflows.allow_users_to_create_courses',
+                'work.allow_only_one_student_publication_per_user',
             ];
 
             foreach ($variables as $variable) {

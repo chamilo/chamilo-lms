@@ -25,7 +25,7 @@
           @click="goBack"
         />
 
-        <template v-if="forceStudentView && !isAfterEndDate">
+        <template v-if="forceStudentView && !isAfterEndDate && canSubmitMore">
           <BaseButton
             v-if="allowTextFlag && !allowFileFlag"
             icon="edit"
@@ -164,6 +164,7 @@
           :assignment-id="assignmentId"
           :is-after-deadline="isAfterEndDate"
           :flags="{ allowText: allowTextFlag, allowFile: allowFileFlag }"
+          @update:submission-count="studentSubmissionCount = $event"
         />
         <TeacherSubmissionList
           v-else
@@ -215,6 +216,12 @@ const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStor
 const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
+const studentSubmissionCount = ref(0)
+
+const oneSubmissionPerUser = computed(
+  () => platformConfigStore.getSetting("work.allow_only_one_student_publication_per_user") === "true",
+)
+const canSubmitMore = computed(() => !oneSubmissionPerUser.value || studentSubmissionCount.value === 0)
 
 function buildCidParams() {
   return {

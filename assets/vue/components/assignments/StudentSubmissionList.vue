@@ -176,6 +176,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(["update:submissionCount"])
+
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
 const notification = useNotification()
@@ -268,6 +270,7 @@ async function loadData() {
     })
     submissions.value = response["hydra:member"]
     totalRecords.value = response["hydra:totalItems"]
+    emit("update:submissionCount", totalRecords.value)
   } catch (error) {
     notification.showErrorNotification(error)
   } finally {

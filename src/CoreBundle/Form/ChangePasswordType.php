@@ -87,6 +87,7 @@ class ChangePasswordType extends AbstractType
                 ? $form->get('confirm2FACode')->getData()
                 : null;
             $passwordHasher = $form->getConfig()->getOption('password_hasher');
+            $checkPasswordRequirements = 'true' === api_get_setting('security.check_password', true);
 
             // Validate current password and confirmation if user wants to update password
             if (!empty($newPassword)) {
@@ -96,8 +97,10 @@ class ChangePasswordType extends AbstractType
                     $form->get('currentPassword')->addError(new FormError('The current password is incorrect.'));
                 }
 
-                foreach (self::validatePassword($newPassword) as $error) {
-                    $form->get('newPassword')->addError(new FormError($error));
+                if ($checkPasswordRequirements) {
+                    foreach (self::validatePassword($newPassword) as $error) {
+                        $form->get('newPassword')->addError(new FormError($error));
+                    }
                 }
 
                 if (!empty($confirmPassword) && $newPassword !== $confirmPassword) {

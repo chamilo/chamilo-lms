@@ -3099,7 +3099,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'password_requirements',
                     'title' => 'Minimal password syntax requirements',
-                    'comment' => 'Defines the required structure for user passwords.',
+                    'comment' => 'Defines the required structure for user passwords. Example: {"min":{"length":8,"lowercase":1,"uppercase":1,"numeric":1,"specials":1}}. Use "specials" (plural) to require special characters.',
                 ],
                 [
                     'name' => 'allow_online_users_by_status',
@@ -3118,8 +3118,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'check_password',
-                    'title' => 'Check password strength',
-                    'comment' => '',
+                    'title' => 'Check password requirements',
+                    'comment' => 'Enable validation of the password requirements defined above during password creation or password update.',
                 ],
                 [
                     'name' => 'security_block_inactive_users_immediately',

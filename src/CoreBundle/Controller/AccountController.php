@@ -251,6 +251,7 @@ class AccountController extends BaseController
             'qrCode' => $qrCodeBase64,
             'user' => $user,
             'showQRCode' => $showQRCode,
+            'password_check_enabled' => 'true' === $settingsManager->getSetting('security.check_password', true),
             'password_requirements' => Security::getPasswordRequirements()['min'],
         ]);
     }

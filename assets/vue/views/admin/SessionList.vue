@@ -286,7 +286,7 @@
 
 <script setup>
 import { onMounted, reactive, ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
@@ -297,6 +297,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const route = useRoute()
+const router = useRouter()
 
 const items = ref([])
 const total = ref(0)
@@ -305,7 +306,7 @@ const page = ref(1)
 const pageSize = ref(20)
 const sortField = ref("title")
 const sortOrder = ref(1)
-const listType = ref("all")
+const listType = ref("")
 const keyword = ref("")
 const categoryFilter = ref("")
 const selectedItems = ref([])
@@ -325,6 +326,10 @@ const tabs = [
   { label: "Replication", value: "replication" },
 ]
 
+function isValidTab(value) {
+  return tabs.some((tab) => tab.value === value)
+}
+
 function statusClass(status) {
   switch (status) {
     case 1:
@@ -340,6 +345,34 @@ function statusClass(status) {
   }
 }
 
+async function syncRouteState() {
+  const nextQuery = {
+    ...route.query,
+  }
+
+  if (listType.value) {
+    nextQuery.list_type = listType.value
+  } else {
+    delete nextQuery.list_type
+  }
+
+  if (categoryFilter.value) {
+    nextQuery.id_category = String(categoryFilter.value)
+  } else {
+    delete nextQuery.id_category
+  }
+
+  if (keyword.value) {
+    nextQuery.keyword = String(keyword.value)
+  } else {
+    delete nextQuery.keyword
+  }
+
+  await router.replace({
+    query: nextQuery,
+  })
+}
+
 async function load() {
   isLoading.value = true
   try {
@@ -348,8 +381,11 @@ async function load() {
       limit: String(pageSize.value),
       sortField: sortField.value,
       sortOrder: sortOrder.value === 1 ? "ASC" : "DESC",
-      listType: listType.value,
     })
+
+    if (listType.value) {
+      params.set("listType", listType.value)
+    }
 
     if (keyword.value) {
       params.set("keyword", keyword.value)
@@ -359,6 +395,11 @@ async function load() {
     }
 
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
+
+    if (data.currentListType && isValidTab(data.currentListType)) {
+      listType.value = data.currentListType
+    }
+
     items.value = data.items
     total.value = data.total
     csrfToken.value = data.csrfToken || ""
@@ -428,19 +469,26 @@ async function onRowReorder(event) {
   load()
 }
 
-function onSearch() {
+async function onSearch() {
   page.value = 1
   selectedItems.value = []
-  load()
+  await syncRouteState()
+  await load()
 }
 
-function switchTab(tab) {
+async function switchTab(tab) {
+  if (!isValidTab(tab) || listType.value === tab) {
+    return
+  }
+
   listType.value = tab
   page.value = 1
   keyword.value = ""
   categoryFilter.value = ""
   selectedItems.value = []
-  load()
+
+  await syncRouteState()
+  await load()
 }
 
 function confirmDelete(ids) {
@@ -599,8 +647,9 @@ async function confirmDeleteDirect(ids) {
 onMounted(async () => {
   // Read URL query params for backward compatibility with legacy links
   const query = route.query
-  if (query.list_type && tabs.some((tab) => tab.value === query.list_type)) {
-    listType.value = query.list_type
+
+  if (query.list_type && isValidTab(String(query.list_type))) {
+    listType.value = String(query.list_type)
   }
   if (query.id_category) {
     categoryFilter.value = String(query.id_category)
@@ -620,7 +669,8 @@ onMounted(async () => {
   // Handle legacy action params (?action=copy&idChecked=X or ?action=delete&idChecked=X)
   const handled = await handleLegacyAction()
   if (!handled) {
-    load()
+    await load()
+    await syncRouteState()
   }
 })
 </script>

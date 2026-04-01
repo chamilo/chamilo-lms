@@ -381,9 +381,19 @@
             </span>
           </div>
 
-          <span class="text-gray-500 text-xs">
-            {{ relativeDatetime(commentItem.sentAt) }}
-          </span>
+          <div class="flex items-center gap-2">
+            <span class="text-gray-500 text-xs">
+              {{ relativeDatetime(commentItem.sentAt) }}
+            </span>
+            <button
+              v-if="canDeleteComment(commentItem)"
+              class="text-red-500 hover:text-red-700 leading-none"
+              :title="t('Delete comment')"
+              @click="deleteComment(commentItem)"
+            >
+              <i class="mdi mdi-delete text-sm" />
+            </button>
+          </div>
         </div>
 
         <p class="text-gray-900 whitespace-pre-line text-sm">
@@ -456,6 +466,25 @@ const forceStudentView = !isEditor || isStudentView
 
 const { relativeDatetime } = useFormatDate()
 const comments = ref([])
+
+const currentUserId = computed(() => securityStore.user?.id ?? null)
+
+function canDeleteComment(commentItem) {
+  const authorId = commentItem.user?.id ?? null
+  return authorId !== null && authorId === currentUserId.value
+}
+
+async function deleteComment(commentItem) {
+  if (!confirm(t("Are you sure you want to delete this comment?"))) return
+  try {
+    await cStudentPublicationService.deleteComment(commentItem.iid)
+    comments.value = comments.value.filter((c) => c.iid !== commentItem.iid)
+  } catch (e) {
+    console.warn("[Assignments][CorrectAndRateModal] Failed to delete comment", e)
+    notification.showErrorNotification(e)
+  }
+}
+
 const aiAssistedRaw = ref(false)
 const aiAssistedDirty = ref(false)
 const canShowAiAssistedToggle = computed(() => !forceStudentView)

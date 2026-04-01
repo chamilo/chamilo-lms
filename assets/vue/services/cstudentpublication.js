@@ -125,6 +125,12 @@ async function loadComments(submissionId) {
   }
 }
 
+async function deleteComment(commentIid) {
+  await axios.delete(`${ENTRYPOINT}c_student_publication_comments/${commentIid}`, {
+    params: buildCidParams(),
+  })
+}
+
 async function moveSubmission(submissionId, newAssignmentId) {
   const response = await axios.patch(
     `/assignments/submissions/${submissionId}/move`,
@@ -227,6 +233,7 @@ export default {
   updateSubmission,
   uploadComment,
   loadComments,
+  deleteComment,
   moveSubmission,
   getUnsubmittedUsers,
   sendEmailToUnsubmitted,

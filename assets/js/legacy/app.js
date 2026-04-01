@@ -95,22 +95,25 @@ $(function () {
     return false
   })
 
-  if (courseId > 0) {
-    let courseCode = $("body").data("course-code")
-    let logOutUrl = webAjax + "course.ajax.php?a=course_logout&cidReq=" + courseCode
+  function courseLogout() {
+    cid = window.chamiloCidReq.course?.id || 0
+    sid = window.chamiloCidReq.session?.id || 0
+    gid = window.chamiloCidReq.group?.id || 0
 
-    function courseLogout() {
-      $.ajax({
-        async: false,
-        url: logOutUrl,
-        success: function () {
-          return 1
-        },
-      })
+    if (!cid) {
+      return
     }
 
-    addMainEvent(window, "unload", courseLogout, false)
+    $.ajax({
+      async: false,
+      url: "/main/inc/ajax/course.ajax.php?a=course_logout&cid=" + cid + "&sid=" + sid + "&gid=" + gid,
+      success: function () {
+        return 1
+      },
+    })
   }
+
+  addMainEvent(window, "unload", courseLogout, false)
 
   $("#open-view-list").click(function () {
     $("#student-list-work").fadeIn(300)

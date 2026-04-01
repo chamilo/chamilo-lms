@@ -192,6 +192,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_rel_user:read',
         'session:item:read',
         'course_catalogue:read',
+        'student_publication_comment:read',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

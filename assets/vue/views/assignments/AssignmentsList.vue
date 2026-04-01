@@ -9,6 +9,8 @@
         size="normal"
         @click="goToNewAssignment"
         type="black"
+        :label="t('Create Assignment')"
+        :onlyIcon="true"
       />
       <BaseButton
         v-if="isTeacherUI"
@@ -16,6 +18,8 @@
         size="normal"
         @click="openProgressDialog"
         type="black"
+        :label="t('Student progress')"
+        :onlyIcon="true"
       />
     </template>
   </BaseToolbar>

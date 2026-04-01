@@ -47,6 +47,11 @@
             size="normal"
           />
         </h6>
+
+        <p
+          v-if="link.description && link.description.trim()"
+          class="mt-1 text-sm text-gray-500 whitespace-pre-wrap"
+        >{{ link.description.trim() }}</p>
       </div>
     </div>
 

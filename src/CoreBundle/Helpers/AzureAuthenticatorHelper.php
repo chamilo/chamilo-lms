@@ -85,7 +85,7 @@ readonly class AzureAuthenticatorHelper
             $preferredLanguage,
         ] = $this->formatUserData($azureUserInfo);
 
-        $existingUser = $this->getUserIdByVerificationOrder($azureUserInfo);
+        $existingUser = $this->getUserByVerificationOrder($azureUserInfo);
 
         $existingLanguage = '';
         if (null === $existingUser) {
@@ -186,7 +186,7 @@ readonly class AzureAuthenticatorHelper
     /**
      * @throws NonUniqueResultException
      */
-    public function getUserIdByVerificationOrder(array $azureUserData): ?User
+    public function getUserByVerificationOrder(array $azureUserData): ?User
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 

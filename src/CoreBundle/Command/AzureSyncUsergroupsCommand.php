@@ -83,7 +83,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
 
             try {
                 foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
-                    if ($user = $this->azureHelper->getUserIdByVerificationOrder($azureGroupMember)) {
+                    if ($user = $this->azureHelper->getUserByVerificationOrder($azureGroupMember)) {
                         $newGroupMembers[] = $user;
                     }
                 }

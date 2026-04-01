@@ -10226,7 +10226,7 @@ msgid "There are no learners to add results for"
 msgstr "No hay estudiantes para añadir resultados"
 
 msgid "Skills ranking"
-msgstr "Editar las reglas de puntuación"
+msgstr "Clasificación de habilidades"
 
 msgid "Competence thresholds colouring"
 msgstr "Color de la puntuación"

@@ -159,8 +159,6 @@ class CourseRequestManager
         $email_body_admin .= "\n".get_lang('This course request can be approved on the following page:', $email_language).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_edit.php?id='.$last_insert_id."\n";
         $email_body_admin .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-        $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email_teacher = $user_info['mail'];
         $recipient_name_admin = api_get_person_name(
             api_get_setting('administratorName'),
             api_get_setting('administratorSurname'),
@@ -173,9 +171,7 @@ class CourseRequestManager
             $recipient_name_admin,
             $recipient_email_admin,
             $email_subject,
-            $email_body_admin,
-            $sender_name_teacher,
-            $sender_email_teacher
+            $email_body_admin
         );
 
         // Sending an e-mail to the request.

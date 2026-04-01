@@ -68,7 +68,11 @@ services:
 
     # Locale listener
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
-        arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
+        arguments:
+            $defaultLocale: '%locale%'
+            $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
+            $parameterBag: '@parameter_bag'
+            $languageRepository: '@Chamilo\CoreBundle\Repository\LanguageRepository'
 
     Chamilo\CoreBundle\EventSubscriber\TranslatorFallbackLocaleSubscriber:
       arguments:

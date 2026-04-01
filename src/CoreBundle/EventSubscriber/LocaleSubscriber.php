@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,6 +28,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         private ParameterBagInterface $parameterBag,
         private SettingsCourseManager $courseSettingsManager,
         private EntityManagerInterface $em,
+        private LanguageRepository $languageRepository,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -110,7 +112,18 @@ class LocaleSubscriber implements EventSubscriberInterface
             $localeList['user_selected_lang'] = $selected;
         }
 
-        // 5) Honor configured priorities language_priority_1..4
+        // 5) Browser Accept-Language preference (overrides platform default, but not user/course/selected)
+        if (empty($localeList['user_profil_lang'])) {
+            $browserLocale = $this->detectBrowserLanguage($request);
+            if (null !== $browserLocale) {
+                $localeList['browser_lang'] = $browserLocale;
+            }
+        }
+
+        // 6) Honor configured priorities language_priority_1..4
+        // browser_lang silently takes precedence over platform_lang: the browser preference
+        // is more specific than the admin-configured platform default, but less specific
+        // than any user/course/selected override.
         foreach ([
             'language_priority_1',
             'language_priority_2',
@@ -118,20 +131,90 @@ class LocaleSubscriber implements EventSubscriberInterface
             'language_priority_4',
         ] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
-            if (!empty($priority) && !empty($localeList[$priority])) {
-                return $localeList[$priority];
+            if (empty($priority) || empty($localeList[$priority])) {
+                continue;
             }
+            if ('platform_lang' === $priority && !empty($localeList['browser_lang'])) {
+                return $localeList['browser_lang'];
+            }
+
+            return $localeList[$priority];
         }
 
-        // 6) Fallback order when priorities are absent
-        foreach (['platform_lang', 'user_profil_lang', 'course_lang', 'user_selected_lang'] as $key) {
+        // 7) Fallback order when priorities are absent — last non-empty wins (lowest → highest priority)
+        $result = $this->defaultLocale;
+        foreach (['platform_lang', 'browser_lang', 'user_profil_lang', 'course_lang', 'user_selected_lang'] as $key) {
             if (!empty($localeList[$key])) {
-                return $localeList[$key];
+                $result = $localeList[$key];
             }
         }
 
-        // 7) Final fallback to system default
-        return $this->defaultLocale;
+        return $result;
+    }
+
+    /**
+     * Parses the browser's Accept-Language header and returns the best matching
+     * available Chamilo language isocode, or null if none matches.
+     *
+     * Matching order for each browser preference (highest quality first):
+     *   1. Exact isocode match      (e.g. "fr-FR" → "fr_FR")
+     *   2. Bare root exact match    (e.g. "fr-BE" → root "fr" → isocode "fr")
+     *   3. Root prefix match        (e.g. "fr-BE" → root "fr" → first available "fr_XX")
+     */
+    private function detectBrowserLanguage(Request $request): ?string
+    {
+        $acceptLanguage = $request->headers->get('Accept-Language', '');
+        if ('' === $acceptLanguage) {
+            return null;
+        }
+
+        // Build [langTag => quality] map, sorted by quality descending
+        $preferences = [];
+        foreach (explode(',', $acceptLanguage) as $part) {
+            $part = trim($part);
+            if (str_contains($part, ';q=')) {
+                [$tag, $q] = explode(';q=', $part, 2);
+                $preferences[trim($tag)] = (float) $q;
+            } else {
+                $preferences[$part] = 1.0;
+            }
+        }
+        arsort($preferences);
+
+        // Fetch all available isocodes once
+        $availableIsocodes = array_keys($this->languageRepository->getAllAvailableToArray());
+
+        foreach (array_keys($preferences) as $browserTag) {
+            // Normalize "fr-BE" → "fr_BE", "fr" → "fr"
+            $normalized = str_replace('-', '_', $browserTag);
+            if (preg_match('/^([a-z]{2})_([a-z]{2})$/i', $normalized, $m)) {
+                $normalized = strtolower($m[1]).'_'.strtoupper($m[2]);
+            } else {
+                $normalized = strtolower($normalized);
+            }
+
+            // 1. Exact match (e.g. "fr_FR")
+            if (\in_array($normalized, $availableIsocodes, true)) {
+                return $normalized;
+            }
+
+            // Extract root language code ("fr" from "fr_BE" or from bare "fr")
+            $root = substr($normalized, 0, 2);
+
+            // 2. Bare root exact match (e.g. "es" isocode exists)
+            if (\in_array($root, $availableIsocodes, true)) {
+                return $root;
+            }
+
+            // 3. Root prefix match: "fr-BE" → no "fr_BE", no "fr" → first available "fr_XX"
+            foreach ($availableIsocodes as $iso) {
+                if (str_starts_with($iso, $root.'_')) {
+                    return $iso;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static function getSubscribedEvents(): array

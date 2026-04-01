@@ -56,6 +56,14 @@ class SessionListController extends AbstractController
         Session::STATUS_UNKNOWN => 'Unknown',
     ];
 
+    private const ALLOWED_LIST_TYPES = [
+        'all',
+        'active',
+        'close',
+        'custom',
+        'replication',
+    ];
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
@@ -71,7 +79,18 @@ class SessionListController extends AbstractController
         $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $keyword = trim((string) $request->query->get('keyword', ''));
         $categoryFilter = $request->query->get('category');
-        $listType = (string) $request->query->get('listType', 'all');
+
+        $defaultListType = (string) $this->settingsManager->getSetting('session.default_session_list_view', true);
+
+        if (!in_array($defaultListType, self::ALLOWED_LIST_TYPES, true)) {
+            $defaultListType = 'all';
+        }
+
+        $listType = (string) $request->query->get('listType', '');
+
+        if (!in_array($listType, self::ALLOWED_LIST_TYPES, true)) {
+            $listType = $defaultListType;
+        }
 
         $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
 
@@ -202,6 +221,8 @@ class SessionListController extends AbstractController
             'allowCopyWithContent' => $allowCopyWithContent,
             'allowOrder' => $allowOrder,
             'total' => $total,
+            'defaultListType' => $defaultListType,
+            'currentListType' => $listType,
             'statusLabels' => self::STATUS_LABELS,
             'visibilityLabels' => self::VISIBILITY_LABELS,
             'viewer' => [

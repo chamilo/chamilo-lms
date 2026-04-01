@@ -126,89 +126,57 @@ class GroupManager
         }
 
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
+        if (is_string($filterByKeyword)) {
+            $filterByKeyword = trim($filterByKeyword);
+            if ('' === $filterByKeyword) {
+                $filterByKeyword = null;
+            }
+        }
+
         $repo = Container::getGroupRepository();
         $session = api_get_session_entity($sessionId);
-        $qb = $repo->findAllByCourse($course, $session, $filterByKeyword, $status, $categoryId);
 
-        if ($getCount) {
-            return $repo->getCount($qb);
-        }
+        // Do not rely on repository keyword filtering here.
+        $qb = $repo->findAllByCourse($course, $session, null, $status, $categoryId);
 
         if ($returnEntityList) {
-            return $qb->getQuery()->getResult();
-        }
+            $groups = $qb->getQuery()->getResult();
 
-        return $qb->getQuery()->getArrayResult();
+            if (null !== $filterByKeyword) {
+                $keyword = api_strtolower($filterByKeyword);
+                $groups = array_values(array_filter($groups, static function (CGroup $group) use ($keyword) {
+                    $title = api_strtolower((string) $group->getTitle());
+                    $description = api_strtolower((string) $group->getDescription());
 
-        /*$table_group = Database::get_course_table(TABLE_GROUP);
-        $select = ' g.iid,
-                    g.title,
-                    g.description,
-                    g.category_id,
-                    g.max_student maximum_number_of_members,
-                    g.secret_directory,
-                    g.self_registration_allowed,
-                    g.self_unregistration_allowed,
-                    g.status
-                    ';
-        if ($getCount) {
-            $select = ' DISTINCT count(g.iid) as count ';
-        }
-
-        $sql = "SELECT
-                $select
-                FROM $table_group g
-                WHERE 1 = 1 ";
-
-        if (!is_null($categoryId)) {
-            $sql .= " AND g.category_id = '".intval($categoryId)."' ";
-            $session_condition = api_get_session_condition($sessionId);
-            if (!empty($session_condition)) {
-                //$sql .= $session_condition;
+                    return false !== api_strpos($title, $keyword) || false !== api_strpos($description, $keyword);
+                }));
             }
-        } else {
-            $session_condition = api_get_session_condition($sessionId, true);
+
+            if ($getCount) {
+                return count($groups);
+            }
+
+            return $groups;
         }
 
-        $session_condition = '';
+        $groups = $qb->getQuery()->getArrayResult();
 
-        if (!is_null($status)) {
-            $sql .= " AND g.status = '".intval($status)."' ";
+        if (null !== $filterByKeyword) {
+            $keyword = api_strtolower($filterByKeyword);
+            $groups = array_values(array_filter($groups, static function (array $group) use ($keyword) {
+                $title = api_strtolower((string) ($group['title'] ?? ''));
+                $description = api_strtolower((string) ($group['description'] ?? ''));
+
+                return false !== api_strpos($title, $keyword) || false !== api_strpos($description, $keyword);
+            }));
         }
-
-        //$sql .= " AND g.c_id = $course_id ";
-        if ($notInGroup) {
-            $sql .= "  AND (g.category_id IS NULL OR g.category_id = 0) ";
-        }
-
-        if (!empty($session_condition)) {
-            $sql .= $session_condition;
-        }
-        $sql .= ' ORDER BY UPPER(g.title)';
-
-        $result = Database::query($sql);
 
         if ($getCount) {
-            $row = Database::fetch_array($result);
-
-            return $row['count'];
+            return count($groups);
         }
 
-        $groups = [];
-        while ($thisGroup = Database::fetch_array($result)) {
-            $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup));
-            if (0 != $thisGroup['session_id']) {
-                $sql = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
-                        WHERE id='.$thisGroup['session_id'];
-                $rs_session = Database::query($sql);
-                if (Database::num_rows($rs_session) > 0) {
-                    $thisGroup['session_name'] = Database::result($rs_session, 0, 0);
-                }
-            }
-            $groups[] = $thisGroup;
-        }
-
-        return $groups;*/
+        return $groups;
     }
 
     /**
@@ -795,49 +763,76 @@ class GroupManager
         $categoryId = null,
         $documentAccess = 0
     ) {
-        $table_forum = Database::get_course_table(TABLE_FORUM);
-        $categoryId = (int) $categoryId;
+        $tableGroup = Database::get_course_table(TABLE_GROUP);
+        $tableForum = Database::get_course_table(TABLE_FORUM);
+
         $group_id = (int) $group_id;
+        if (empty($group_id)) {
+            return false;
+        }
+
+        $maxStudent = (int) $maxStudent;
+        $docState = (int) $docState;
+        $workState = (int) $workState;
+        $calendarState = (int) $calendarState;
+        $anonuncementState = (int) $anonuncementState;
         $forumState = (int) $forumState;
-        $repo = Container::getGroupRepository();
+        $wikiState = (int) $wikiState;
+        $chatState = (int) $chatState;
+        $selfRegistrationAllowed = (int) $selfRegistrationAllowed;
+        $selfUnRegistrationAllowed = (int) $selfUnRegistrationAllowed;
+        $documentAccess = (int) $documentAccess;
 
-        /** @var CGroup $group */
-        $group = $repo->find($group_id);
+        $resolvedCategoryId = null;
 
-        $category = null;
-        if (!empty($categoryId)) {
-            $category = Container::getGroupCategoryRepository()->find($categoryId);
+        if ('true' === api_get_setting('allow_group_categories')) {
+            if (!empty($categoryId)) {
+                $categoryInfo = self::get_category((int) $categoryId);
+                if (!empty($categoryInfo) && !empty($categoryInfo['iid'])) {
+                    $resolvedCategoryId = (int) $categoryInfo['iid'];
+                }
+            }
+
+            if (null === $resolvedCategoryId) {
+                $currentCategory = self::get_category_from_group($group_id);
+                if (!empty($currentCategory) && !empty($currentCategory['iid'])) {
+                    $resolvedCategoryId = (int) $currentCategory['iid'];
+                }
+            }
         }
 
-        $group
-            ->setTitle($name)
-            ->setCategory($category)
-            ->setMaxStudent($maxStudent)
-            ->setDocState($docState)
-            ->setCalendarState($calendarState)
-            ->setWorkState($workState)
-            ->setForumState($forumState)
-            ->setWikiState($wikiState)
-            ->setAnnouncementsState($anonuncementState)
-            ->setChatState($chatState)
-            ->setSelfRegistrationAllowed($selfRegistrationAllowed)
-            ->setSelfUnregistrationAllowed($selfUnRegistrationAllowed)
-            ->setDocumentAccess($documentAccess)
-        ;
+        $categorySql = 'category_id = NULL, ';
+        if (null !== $resolvedCategoryId) {
+            $categorySql = 'category_id = '.(int) $resolvedCategoryId.', ';
+        }
 
-        $repo->update($group);
+        $sql = "UPDATE $tableGroup SET
+                title = '".Database::escape_string($name)."',
+                description = '".Database::escape_string($description)."',
+                $categorySql
+                max_student = $maxStudent,
+                doc_state = $docState,
+                work_state = $workState,
+                calendar_state = $calendarState,
+                announcements_state = $anonuncementState,
+                forum_state = $forumState,
+                wiki_state = $wikiState,
+                chat_state = $chatState,
+                self_registration_allowed = $selfRegistrationAllowed,
+                self_unregistration_allowed = $selfUnRegistrationAllowed,
+                document_access = $documentAccess
+            WHERE iid = $group_id";
+        Database::query($sql);
 
-        /* Here we are updating a field in the table forum_forum that perhaps
-        duplicates the table group_info.forum_state cvargas*/
-        $sql2 = "UPDATE $table_forum SET ";
+        $sql2 = "UPDATE $tableForum SET ";
         if (1 === $forumState) {
-            $sql2 .= " forum_group_public_private='public' ";
+            $sql2 .= "forum_group_public_private = 'public' ";
         } elseif (2 === $forumState) {
-            $sql2 .= " forum_group_public_private='private' ";
+            $sql2 .= "forum_group_public_private = 'private' ";
         } elseif (0 === $forumState) {
-            $sql2 .= " forum_group_public_private='unavailable' ";
+            $sql2 .= "forum_group_public_private = 'unavailable' ";
         }
-        $sql2 .= ' WHERE forum_of_group='.$group_id;
+        $sql2 .= "WHERE forum_of_group = $group_id";
         Database::query($sql2);
 
         return true;
@@ -3028,20 +3023,29 @@ class GroupManager
 
     public static function getSearchForm(): string
     {
-        $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
-        $form = new FormValidator(
-            'search_groups',
-            'get',
-            $url,
-            null,
-            ['class' => 'form-search'],
-            FormValidator::LAYOUT_INLINE
-        );
-        $form->addElement('text', 'keyword');
-        $form->addCourseHiddenParams();
-        $form->addButtonSearch();
+        $url = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
+        $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 
-        return $form->toHtml();
+        return '
+        <form method="get" action="'.$url.'" class="m-0 flex items-center gap-3">
+            <input
+                type="text"
+                name="keyword"
+                value="'.htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8').'"
+                class="h-10 w-56 rounded-md border border-gray-25 bg-white px-3 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <input type="hidden" name="cid" value="'.api_get_course_int_id().'" />
+            <input type="hidden" name="sid" value="'.api_get_session_id().'" />
+            <input type="hidden" name="gid" value="'.api_get_group_id().'" />
+            <button
+                type="submit"
+                class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+            >
+                '.Display::getMdiIcon("magnify", "ch-tool-icon text-white", null, ICON_SIZE_SMALL, get_lang("Search")).'
+                <span>'.get_lang('Search').'</span>
+            </button>
+        </form>
+    ';
     }
 
     public static function setStatus(CGroup $group, $status)

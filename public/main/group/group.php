@@ -26,6 +26,10 @@ $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
+$keyword = isset($_GET['keyword']) ? trim(Security::remove_XSS($_GET['keyword'])) : null;
+if ('' === $keyword) {
+    $keyword = null;
+}
 
 // Notice for unauthorized people.
 api_protect_course_script(true, false, 'group');
@@ -231,7 +235,7 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 }
 
-$actionsRight = GroupManager::getSearchForm();
+$actionsRight = '<div class="group-search-wrapper">'.GroupManager::getSearchForm().'</div>';
 $toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
 $categories = GroupManager::get_categories();
 
@@ -267,7 +271,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
             null,
             null,
             false,
-            null,
+            $keyword,
             true
         );
         $groupToShow = GroupManager::processGroups($groupList, $categoryId);
@@ -329,7 +333,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
             null,
             null,
             false,
-            null,
+            $keyword,
             true
         )
     );

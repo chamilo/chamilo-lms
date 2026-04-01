@@ -278,12 +278,32 @@ onMounted(async () => {
   loader()
 
   Object.defineProperty(window, "chamiloCidReq", {
-    get: () =>
-      Object.freeze({
-        course: cidReqStore.course ? Object.freeze({ ...cidReqStore.course }) : null,
-        session: cidReqStore.session ? Object.freeze({ ...cidReqStore.session }) : null,
-        group: cidReqStore.group ? Object.freeze({ ...cidReqStore.group }) : null,
-      }),
+    get: () => {
+      const course = cidReqStore.course ? Object.freeze({ ...cidReqStore.course }) : null
+      const session = cidReqStore.session ? Object.freeze({ ...cidReqStore.session }) : null
+      const group = cidReqStore.group ? Object.freeze({ ...cidReqStore.group }) : null
+
+      const params = new URLSearchParams()
+
+      if (course?.id) {
+        params.set("cid", course.id)
+      }
+
+      if (session?.id) {
+        params.set("sid", session.id)
+      }
+
+      if (group?.id) {
+        params.set("gid", group.id)
+      }
+
+      return Object.freeze({
+        course,
+        session,
+        group,
+        queryParams: params.toString(),
+      })
+    },
     configurable: true,
   })
 

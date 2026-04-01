@@ -81,10 +81,6 @@ const mainUrl = homePublicUrl + "main/"
 const webAjax = homePublicUrl + "main/inc/ajax/"
 
 $(function () {
-  let courseId = $("body").attr("data-course-id")
-  let webCidReq = "&cid=" + courseId + "&sid=" + $("body").attr("data-session-id")
-  window.webCidReq = webCidReq
-
   $("#menu_courses").click(function () {
     return false
   })
@@ -96,17 +92,13 @@ $(function () {
   })
 
   function courseLogout() {
-    cid = window.chamiloCidReq.course?.id || 0
-    sid = window.chamiloCidReq.session?.id || 0
-    gid = window.chamiloCidReq.group?.id || 0
-
-    if (!cid) {
+    if (!window.chamiloCidReq.course?.id) {
       return
     }
 
     $.ajax({
       async: false,
-      url: "/main/inc/ajax/course.ajax.php?a=course_logout&cid=" + cid + "&sid=" + sid + "&gid=" + gid,
+      url: "/main/inc/ajax/course.ajax.php?a=course_logout&" + window.chamiloCidReq.queryParams,
       success: function () {
         return 1
       },

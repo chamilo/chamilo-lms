@@ -503,6 +503,7 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -512,6 +513,9 @@ import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const route = useRoute()
+
+const urlParams = new URLSearchParams(window.location.search)
 
 const items = ref([])
 const selectedItems = ref([])
@@ -523,7 +527,7 @@ const sortField = ref("lastname")
 const sortOrder = ref(1)
 const view = ref("all")
 
-const simpleKeyword = ref("")
+const simpleKeyword = ref(urlParams.get("keyword") || String(route.query.keyword || ""))
 const showAdvanced = ref(false)
 
 const advancedFilters = reactive({

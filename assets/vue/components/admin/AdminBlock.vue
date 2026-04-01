@@ -66,6 +66,12 @@
         </li>
       </ul>
     </div>
+    <div
+      v-if="bgImageUrl"
+      aria-hidden="true"
+      class="admin-block__bg-image"
+      :style="{ backgroundImage: `url('${bgImageUrl}')` }"
+    />
   </BaseCard>
 </template>
 
@@ -76,6 +82,8 @@ import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
+import { useVisualTheme } from "../../composables/theme"
+const { getThemeAssetUrl } = useVisualTheme()
 
 const { t } = useI18n()
 
@@ -99,6 +107,7 @@ const props = defineProps({
   description: { type: String, required: false, default: () => null },
   searchUrl: { type: String, required: false, default: () => null },
   items: { type: Array, required: true, default: () => [] },
+  bgImage: { type: String, required: false, default: null },
 })
 
 // computed IDs for search input and button derived from the title
@@ -121,4 +130,6 @@ const visibleItems = computed(() =>
     })
     .filter((item) => item.visible),
 )
+
+const bgImageUrl = computed(() => props.bgImage ? getThemeAssetUrl(props.bgImage) : null)
 </script>

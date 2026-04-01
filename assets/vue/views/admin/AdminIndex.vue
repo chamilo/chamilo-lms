@@ -25,6 +25,7 @@
       :search-url="blockUsers.searchUrl"
       :title="t('User management')"
       icon="account"
+      bg-image="images/bg-block-admin-users.png"
     />
 
     <AdminBlock
@@ -37,6 +38,7 @@
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
       icon="courses"
+      bg-image="images/bg-block-admin-courses.png"
     />
 
     <AdminBlock
@@ -49,6 +51,7 @@
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
       icon="sessions"
+      bg-image="images/bg-block-admin-sessions.png"
     />
 
     <AdminBlock
@@ -61,6 +64,7 @@
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
       icon="admin-settings"
+      bg-image="images/bg-block-admin-platform.png"
     />
 
     <AdminBlock
@@ -72,6 +76,7 @@
       :items="blockTracking.items"
       :title="t('Tracking')"
       icon="tracking"
+      bg-image="images/bg-block-admin-tracking.png"
     />
 
     <AdminBlock
@@ -82,6 +87,7 @@
       :items="blockGradebook.items"
       :title="t('Assessments')"
       icon="gradebook"
+      bg-image="images/bg-block-admin-gradebook.png"
     />
 
     <AdminBlock
@@ -93,6 +99,7 @@
       :items="blockSkills.items"
       :title="t('Skills')"
       icon="gradebook"
+      bg-image="images/bg-block-admin-skills.png"
     />
 
     <AdminBlock
@@ -104,6 +111,7 @@
       :items="blockSettings.items"
       :title="t('System')"
       icon="settings"
+      bg-image="images/bg-block-admin-settings.png"
     />
 
     <AdminBlock
@@ -114,6 +122,7 @@
       :items="blockRooms.items"
       :title="t('Rooms')"
       icon="room"
+      bg-image="images/bg-block-admin-rooms.png"
     />
 
     <AdminBlock
@@ -125,6 +134,7 @@
       :items="blockSecurity.items"
       :title="t('Security')"
       icon="shield-check"
+      bg-image="images/bg-block-admin-security.png"
     />
 
     <AdminBlock
@@ -135,6 +145,7 @@
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
       icon="anonymous"
+      bg-image="images/bg-block-admin-privacy.png"
     />
 
     <AdminBlock
@@ -143,8 +154,19 @@
       :items="blockPlugins.items"
       :title="t('Plugins')"
       icon="plugin"
+      bg-image="images/bg-block-plugins.png"
     />
 
+    <AdminBlock
+      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
+      :id="blockHealthCheck.id"
+      :items="blockHealthCheck.items"
+      :title="t('Health check')"
+      icon="health-check"
+      bg-image="images/bg-block-admin-health-check.png"
+    />
+
+    <!-- Small / secondary blocks: sent to the bottom -->
     <AdminBlock
       v-if="blockChamilo"
       :id="blockChamilo.id"
@@ -154,15 +176,6 @@
       :items="blockChamilo.items"
       icon="promotion"
       title="Chamilo.org"
-    />
-
-    <!-- Small / secondary blocks: sent to the bottom -->
-    <AdminBlock
-      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
-      :id="blockHealthCheck.id"
-      :items="blockHealthCheck.items"
-      :title="t('Health check')"
-      icon="health-check"
     />
 
     <div

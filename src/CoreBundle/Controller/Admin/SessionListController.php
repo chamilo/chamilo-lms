@@ -82,13 +82,13 @@ class SessionListController extends AbstractController
 
         $defaultListType = (string) $this->settingsManager->getSetting('session.default_session_list_view', true);
 
-        if (!in_array($defaultListType, self::ALLOWED_LIST_TYPES, true)) {
+        if (!\in_array($defaultListType, self::ALLOWED_LIST_TYPES, true)) {
             $defaultListType = 'all';
         }
 
         $listType = (string) $request->query->get('listType', '');
 
-        if (!in_array($listType, self::ALLOWED_LIST_TYPES, true)) {
+        if (!\in_array($listType, self::ALLOWED_LIST_TYPES, true)) {
             $listType = $defaultListType;
         }
 

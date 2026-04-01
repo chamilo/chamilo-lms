@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -36,16 +38,14 @@ function activate_end_date() {
 
 /* Constants and variables */
 
-$lpId = (int)($_REQUEST['lp_id'] ?? 0);
+$lpId = (int) ($_REQUEST['lp_id'] ?? 0);
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 // Only treat student view as enabled if it was explicitly passed in the URL.
 // This avoids picking it up from cookies/$_REQUEST.
 $rawQuery = $_SERVER['QUERY_STRING'] ?? '';
-$hasStudentViewInUrl = preg_match('/(?:^|&)isStudentView=/i', $rawQuery) === 1;
-$isStudentView = $hasStudentViewInUrl
-    ? filter_var($_GET['isStudentView'] ?? 'false', FILTER_VALIDATE_BOOLEAN)
-    : false;
+$hasStudentViewInUrl = 1 === preg_match('/(?:^|&)isStudentView=/i', $rawQuery);
+$isStudentView = $hasStudentViewInUrl && filter_var($_GET['isStudentView'] ?? 'false', \FILTER_VALIDATE_BOOLEAN);
 
 if (!$is_allowed_to_edit || $isStudentView) {
     $course = api_get_course_entity(api_get_course_int_id());
@@ -57,9 +57,15 @@ if (!$is_allowed_to_edit || $isStudentView) {
     $sid = (int) ($_REQUEST['sid'] ?? api_get_session_id());
 
     $qs = ['cid' => $cid];
-    if ($sid > 0) $qs['sid'] = $sid;
-    if (isset($_REQUEST['gid']))       $qs['gid'] = (int) $_REQUEST['gid'];
-    if (isset($_REQUEST['gradebook'])) $qs['gradebook'] = (int) $_REQUEST['gradebook'];
+    if ($sid > 0) {
+        $qs['sid'] = $sid;
+    }
+    if (isset($_REQUEST['gid'])) {
+        $qs['gid'] = (int) $_REQUEST['gid'];
+    }
+    if (isset($_REQUEST['gradebook'])) {
+        $qs['gradebook'] = (int) $_REQUEST['gradebook'];
+    }
 
     // Preserve student view only if it was explicitly requested.
     if ($isStudentView) {
@@ -68,6 +74,7 @@ if (!$is_allowed_to_edit || $isStudentView) {
 
     $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
     header('Location: '.$listUrl);
+
     exit;
 }
 
@@ -144,7 +151,7 @@ $form->addElement('html', '<div id="start_date_div" style="display:block;">');
 $form->addDateTimePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
-//End date
+// End date
 $form->addCheckBox(
     'activate_end_date_check',
     null,
@@ -186,15 +193,15 @@ $form->addButtonCreate(get_lang('Continue'));
 
 if ($form->validate()) {
     $published_on = null;
-    if (isset($_REQUEST['activate_start_date_check']) &&
-        1 == $_REQUEST['activate_start_date_check']
+    if (isset($_REQUEST['activate_start_date_check'])
+        && 1 == $_REQUEST['activate_start_date_check']
     ) {
         $published_on = $_REQUEST['published_on'];
     }
 
     $expired_on = null;
-    if (isset($_REQUEST['activate_end_date_check']) &&
-        1 == $_REQUEST['activate_end_date_check']
+    if (isset($_REQUEST['activate_end_date_check'])
+        && 1 == $_REQUEST['activate_end_date_check']
     ) {
         $expired_on = $_REQUEST['expired_on'];
     }
@@ -234,11 +241,13 @@ if ($form->validate()) {
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url&isStudentView=false");
+
         exit;
     }
 
     $url = api_get_self().'?action=list&'.api_get_cidreq();
     header("Location: $url&isStudentView=false");
+
     exit;
 }
 

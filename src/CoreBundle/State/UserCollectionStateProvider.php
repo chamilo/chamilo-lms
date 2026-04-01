@@ -53,7 +53,7 @@ final class UserCollectionStateProvider implements ProviderInterface
         $this->extensions = [$filterExtension, $orderExtension, $paginationExtension];
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if (!$operation instanceof GetCollection) {
             return $this->collectionProvider->provide($operation, $uriVariables, $context);

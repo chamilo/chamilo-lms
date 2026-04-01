@@ -34,7 +34,39 @@
     </div>
 
     <a id="2.0-rc.3"></a>
-    <h1>Chamilo 2.0 RC 3 - (upcoming)</h1>
+    <h1>Chamilo 2.0 RC 3 - Axium, 2026-04-02</h1>
+    <h3>Release notes - summary</h3>
+    <p>
+        Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
+        It is based on Chamilo 1.11.10 and includes tons of backend changes that will make
+        developing Chamilo more "mainstream" and (hopefully) faster in the future,
+        by adopting more widely-known libraries, with the notable inclusions of Symfony 6
+        as a main controller and framework (except for some legacy tools not yet converted),
+        VueJS as our main frontend framework and TailwindCSS as our CSS framework.
+    </p>
+    <p>
+        For the first time in 16 years (since its launch in 2010),
+        Chamilo considerably changes appearance, with a new, foldable left menu (meant
+        to improve space usage on mobile devices), with a streamlined (and Open Source) set of
+        icons, and with a design that will allow more flexibility and speed across devices.
+    </p>
+    <p>
+        This is a Release Candidate (RC), meaning it is NOT finished yet, but it is reasonably stable and can
+        be considered (carefully) for production. It can be used in production but only in a controlled
+        environment with skilled PHP engineers around in case something goes wrong.
+        To install this beta version for testing, please read /README.md.
+    </p>
+    <p>
+        An RC version, to us, means that the database and files structure are fixed until the stable release,
+        meaning integrators can provide or update plugins that will be delivered later on
+        as part of the upcoming Chamilo 2.0 stable.
+        Testers can now also report bugs, as these are the main focus of the Release Candidate phase.
+        The visual design is also important to us in this version.
+    </p>
+
+
+    <h3>Release name</h3>
+    <p><a href="https://fr.wikipedia.org/wiki/Liste_des_camps_romains_d'Ast%C3%A9rix_le_Gaulois#Camps_romains_situ%C3%A9s_en_Corse"></a>Axium (fiction village name, see French art)</p>
 
     <h3>Security fixes</h3>
     <ul aria-live="off">
@@ -239,34 +271,6 @@
 
     <a id="2.0-rc.2"></a>
     <h1>Chamilo 2.0 RC 2 - Pensum, 2026-03-09</h1>
-    <h3>Release notes - summary</h3>
-    <p>
-        Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
-        It is based on Chamilo 1.11.10 and includes tons of backend changes that will make
-        developing Chamilo more "mainstream" and (hopefully) faster in the future,
-        by adopting more widely-known libraries, with the notable inclusions of Symfony 6
-        as a main controller and framework (except for some legacy tools not yet converted),
-        VueJS as our main frontend framework and TailwindCSS as our CSS framework.
-    </p>
-    <p>
-        For the first time in 16 years (since its launch in 2010),
-        Chamilo considerably changes appearance, with a new, foldable left menu (meant
-        to improve space usage on mobile devices), with a streamlined (and Open Source) set of
-        icons, and with a design that will allow more flexibility and speed across devices.
-    </p>
-    <p>
-        This is a Release Candidate (RC), meaning it is NOT finished yet, but it is reasonably stable and can
-        be considered (carefully) for production. It can be used in production but only in a controlled
-        environment with skilled PHP engineers around in case something goes wrong.
-        To install this beta version for testing, please read /README.md.
-    </p>
-    <p>
-        An RC version, to us, means that the database and files structure are fixed until the stable release,
-        meaning integrators can provide or update plugins that will be delivered later on
-        as part of the upcoming Chamilo 2.0 stable.
-        Testers can now also report bugs, as these are the main focus of the Release Candidate phase.
-        The visual design is also important to us in this version.
-    </p>
     <h3>Release name</h3>
     <p><a href="https://fr.wikipedia.org/wiki/Liste_des_camps_romains_d'Ast%C3%A9rix_le_Gaulois#Camps_romains_situ%C3%A9s_en_Corse"></a>Pensum (fiction village name, see French art)</p>
 
@@ -276,7 +280,7 @@
         <li>[2026-01-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/47b287c9b3a6bd1960a96947df1596ebe7d4edab">47b287c9</a>) Social: Fix IDOR authorization in SocialController legal/privacy endpoints</li>
         <li>[2026-01-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/69095d46d0abdf6d8341bc3f5be6567d12d9b672">69095d46</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7407">GH#7407</a>) Security: Add controller voters & tighten access checks</li>
         <li>[2026-02-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/b8daa0372a6bdc57643ee765573145bc576a4827">b8daa037</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7546">GH#7546</a>) Security: Add simple Intrusion Detection System</li>
-        <li>[2026-02-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/fdb1378ba87bd738abc19c0ea09e21a2d6b1fb37">fdb1378b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7546">GH#7546</a>) Security: Add exception for cmdinjection patterns for legacy scripts redirect on session expired</li>
+        <Preparando RC3...li>[2026-02-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/fdb1378ba87bd738abc19c0ea09e21a2d6b1fb37">fdb1378b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7546">GH#7546</a>) Security: Add exception for cmdinjection patterns for legacy scripts redirect on session expired</li>
         <li>[2026-02-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/4f22b18838f62af5d122d4ef6f80ff31a7ec3c5b">4f22b188</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7585">GH#7585</a>) Security: Use HKDF-derived key for 2FA TOTP secrets</li>
         <li>[2026-02-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/17b913c86dd18caf883695872db7f25de51761f1">17b913c8</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7582">GH#7582</a>) Security: Sanitize user HTML rendering in Vue components</li>
         <li>[2026-02-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/f12dfd369efa76397674650e024ab5de558ce16c">f12dfd36</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7586">GH#7586</a>) Security: Harden file uploads with extension policy</li>

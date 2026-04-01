@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Event\Subscriber\Paginate\PaginationSubscriber;
@@ -432,6 +433,80 @@ $getQuestionIdsByExtraFields = static function ($connection, array $formValues) 
     return ['hasFilters' => true, 'ids' => array_values(array_unique($ids))];
 };
 
+/**
+ * Apply active ResourceLink constraints for question-bank course filtering.
+ */
+$applyActiveQuestionBankResourceLinkConstraints = static function ($qb, string $alias): void {
+    $qb->andWhere($alias.'.deletedAt IS NULL');
+    $qb->andWhere($alias.'.endVisibilityAt IS NULL');
+    $qb->andWhere($alias.'.visibility IN (0,2)');
+};
+
+/**
+ * Return question IDs visible in a given course:
+ * - directly linked to the course through the question ResourceLink
+ * - or reused inside a quiz belonging to the course
+ */
+$getQuestionIdsForSelectedCourse = static function ($em, int $courseId) use ($applyActiveQuestionBankResourceLinkConstraints): array {
+    $courseId = (int) $courseId;
+    if ($courseId <= 0) {
+        return [];
+    }
+
+    $qb = $em->createQueryBuilder();
+    $qb->select('DISTINCT qq.iid')
+        ->from(CQuizQuestion::class, 'qq')
+        ->setParameter('courseId', $courseId);
+
+    $questionMeta = $em->getClassMetadata(CQuizQuestion::class);
+
+    $existsViaQuiz = $em->createQueryBuilder();
+    $existsViaQuiz->select('1')
+        ->from(CQuizRelQuestion::class, 'rq')
+        ->innerJoin('rq.quiz', 'q')
+        ->innerJoin('q.resourceNode', 'qRN')
+        ->innerJoin('qRN.resourceLinks', 'qRL')
+        ->where('rq.question = qq')
+        ->andWhere('IDENTITY(qRL.course) = :courseId');
+    $applyActiveQuestionBankResourceLinkConstraints($existsViaQuiz, 'qRL');
+
+    if ($questionMeta->hasAssociation('resourceNode')) {
+        $qb->leftJoin('qq.resourceNode', 'rn');
+
+        $existsQuestionLink = $em->createQueryBuilder();
+        $existsQuestionLink->select('1')
+            ->from(\Chamilo\CoreBundle\Entity\ResourceLink::class, 'rl')
+            ->where('rl.resourceNode = rn')
+            ->andWhere('IDENTITY(rl.course) = :courseId');
+        $applyActiveQuestionBankResourceLinkConstraints($existsQuestionLink, 'rl');
+
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->exists($existsQuestionLink->getDQL()),
+                $qb->expr()->exists($existsViaQuiz->getDQL())
+            )
+        );
+    } else {
+        $qb->andWhere($qb->expr()->exists($existsViaQuiz->getDQL()));
+    }
+
+    try {
+        $rows = $qb->getQuery()->getScalarResult();
+    } catch (\Throwable $e) {
+        return [];
+    }
+
+    $ids = [];
+    foreach ($rows as $row) {
+        $qid = (int) ($row['iid'] ?? (is_array($row) ? reset($row) : 0));
+        if ($qid > 0) {
+            $ids[] = $qid;
+        }
+    }
+
+    return array_values(array_unique($ids));
+};
+
 // -----------------------------
 // Prepare lists for form
 // -----------------------------
@@ -579,14 +654,13 @@ if ($formSent) {
     }
 
     if ($selectedCourse > 0) {
-        /** @var \Chamilo\CoreBundle\Repository\ResourceNodeRepository $resourceNodeRepo */
-        $resourceNodeRepo = $em->getRepository(ResourceNode::class);
-        $resourceNodes = $resourceNodeRepo->findByResourceTypeAndCourse(
-            'questions',
-            api_get_course_entity($selectedCourse)
-        );
+        $questionIdsForSelectedCourse = $getQuestionIdsForSelectedCourse($em, $selectedCourse);
 
-        $criteria->andWhere(Criteria::expr()->in('resourceNode', $resourceNodes));
+        if (empty($questionIdsForSelectedCourse)) {
+            $criteria->andWhere($criteria->expr()->eq('iid', 0));
+        } else {
+            $criteria->andWhere($criteria->expr()->in('iid', $questionIdsForSelectedCourse));
+        }
     }
 
     if (-1 !== $questionLevel) {
@@ -850,10 +924,43 @@ if ($formSent) {
                 );
                 $question->questionData = (string) ob_get_clean();
             } else {
-                $question->questionData = Display::return_message(
-                    get_lang('This question has no course context. Preview is not available.'),
-                    'warning'
-                );
+                // We still want to show the question content instead of blocking preview.
+                $questionObject = Question::read($questionId, [], false);
+
+                if ($questionObject) {
+                    $fallbackHtml = '<div class="space-y-3">';
+                    $fallbackHtml .= Display::return_message(
+                        get_lang('Preview shown without course context. Some course-specific data may be unavailable.'),
+                        'warning'
+                    );
+
+                    $title = $questionObject->selectTitle();
+                    if (!empty($title)) {
+                        $fallbackHtml .= Display::tag(
+                            'div',
+                            $title,
+                            ['class' => 'text-lg font-semibold text-gray-90']
+                        );
+                    }
+
+                    $description = $questionObject->selectDescription();
+                    if (!empty($description)) {
+                        $fallbackHtml .= Display::tag(
+                            'div',
+                            $description,
+                            ['class' => 'ck-content']
+                        );
+                    }
+
+                    $fallbackHtml .= '</div>';
+
+                    $question->questionData = $fallbackHtml;
+                } else {
+                    $question->questionData = Display::return_message(
+                        get_lang('Preview is not available for this question.'),
+                        'warning'
+                    );
+                }
             }
 
             // PDF export: just append content and continue
@@ -995,7 +1102,10 @@ if ($formSent) {
 
             // ---------------------------------------------------------
             // Main actions (edit/delete)
+            // Always show the action area to avoid inconsistent UI.
             // ---------------------------------------------------------
+            $question->questionData .= '<div class="mt-3 flex flex-wrap justify-end gap-2">';
+
             if (!empty($courseInfo) && $resolvedCourseId > 0) {
                 $cid = (int) ($courseInfo['real_id'] ?? $resolvedCourseId);
 
@@ -1007,7 +1117,6 @@ if ($formSent) {
                         'editQuestion' => $questionId,
                     ]);
 
-                $question->questionData .= '<div class="mt-3 flex flex-wrap justify-end gap-2">';
                 $question->questionData .= Display::url(
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).' '.get_lang('Edit'),
                     $editQuestionUrl,
@@ -1016,23 +1125,28 @@ if ($formSent) {
                         'class' => 'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50',
                     ]
                 );
-
-                if (!empty($deleteUrl)) {
-                    $question->questionData .= Display::url(
-                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, get_lang('Delete')).' '.get_lang('Delete'),
-                        $deleteUrl,
-                        [
-                            'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',
-                            'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
-                        ]
-                    );
-                } else {
-                    $question->questionData .= '<span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-400" title="'.api_htmlentities(get_lang('Deletion is not allowed without a course context.')).'">'
-                        .get_lang('Delete').'</span>';
-                }
-
-                $question->questionData .= '</div>';
+            } else {
+                $question->questionData .= '<span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-400" title="'.api_htmlentities(get_lang('Edition is not allowed without a course context.')).'">'
+                    .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).' '
+                    .get_lang('Edit')
+                    .'</span>';
             }
+
+            if (!empty($deleteUrl)) {
+                $question->questionData .= Display::url(
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, get_lang('Delete')).' '.get_lang('Delete'),
+                    $deleteUrl,
+                    [
+                        'class' => 'inline-flex items-center rounded-lg bg-danger px-3 py-1.5 text-sm font-semibold text-white hover:bg-danger/90',
+                        'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
+                    ]
+                );
+            } else {
+                $question->questionData .= '<span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-400" title="'.api_htmlentities(get_lang('Deletion is not allowed without a course context.')).'">'
+                    .get_lang('Delete').'</span>';
+            }
+
+            $question->questionData .= '</div>';
         }
     }
 }

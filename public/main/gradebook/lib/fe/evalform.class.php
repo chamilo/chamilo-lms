@@ -379,12 +379,12 @@ class EvalForm extends FormValidator
             $nr_users++;
 
             $template = '<tr>
-		      <td align="left" >'.$user[4].'</td>
-		      <td align="left" >'.$user[1].'</td>
-		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
-		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-		      </td>
+                <td align="left" >'.$user[4].'</td>
+                <td align="left" >'.$user[1].'</td>
+                '.$user_info.'
+                <td align="left">{element} / '.$this->evaluation_object->get_max().'
+                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+                </td>
             </tr>';
             $renderer->setElementTemplate($template, $element_name);
         }
@@ -393,12 +393,12 @@ class EvalForm extends FormValidator
         $this->addButtonSave(get_lang('Grade learners'), 'submit');
 
         $template_submit = '<tr>
-                <td colspan="4" ></td>
-                <td >
+            <td colspan="4" ></td>
+            <td >
                 {element}
-                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-                </td>
-            </tr>';
+                <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+            </td>
+        </tr>';
         $renderer->setElementTemplate($template_submit, 'submit');
     }
 

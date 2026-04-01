@@ -85,10 +85,10 @@ readonly class AzureAuthenticatorHelper
             $preferredLanguage,
         ] = $this->formatUserData($azureUserInfo);
 
-        $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
+        $existingUser = $this->getUserIdByVerificationOrder($azureUserInfo);
 
         $existingLanguage = '';
-        if (empty($userId)) {
+        if (null === $existingUser) {
             if (!$this->providerParams['provisioning']) {
                 throw new Exception(\sprintf('User not found when checking the extra fields from %s or %s or %s.', $azureUserInfo['mail'], $azureUserInfo['mailNickname'], $azureUserInfo['id']));
             }
@@ -97,8 +97,7 @@ readonly class AzureAuthenticatorHelper
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
             ;
         } else {
-            /** @var User $user */
-            $user = $this->userRepository->find($userId);
+            $user = $existingUser;
 
             if (!$this->providerParams['update_users']) {
                 return $user;
@@ -187,7 +186,7 @@ readonly class AzureAuthenticatorHelper
     /**
      * @throws NonUniqueResultException
      */
-    public function getUserIdByVerificationOrder(array $azureUserData): ?int
+    public function getUserIdByVerificationOrder(array $azureUserData): ?User
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
@@ -204,11 +203,11 @@ readonly class AzureAuthenticatorHelper
 
         foreach ($selectedOrder as $position) {
             if (!empty($positionsAndFields[$position])) {
-                return $positionsAndFields[$position]->getItemId();
+                return $this->userRepository->find($positionsAndFields[$position]->getItemId());
             }
         }
 
-        return null;
+        return $this->userRepository->findOneBy(['email' => $azureUserData['mail']]);
     }
 
     public function getExistingUserVerificationOrder(): array

@@ -188,7 +188,13 @@ if ($isCli) {
     $libraryPath = __DIR__.'/lib/';
     $container = $kernel->getContainer();
 
-    // Symfony uses request_stack now
+    // Symfony uses request_stack now.
+    // When http_cache is active, Kernel::handle() delegates to the HttpCache wrapper which
+    // passes a duplicate of $request to the inner kernel. LocaleSubscriber sets the locale
+    // on that duplicate, not on the original $request. Re-sync from the session so that
+    // getMainRequest()->getLocale() returns the correct locale in legacy code.
+    $resolvedLocale = $request->getSession()->get('_locale') ?: $request->getLocale();
+    $request->setLocale($resolvedLocale);
     $container->get('request_stack')->push($request);
     $container->get('translator')->setLocale($request->getLocale());
 

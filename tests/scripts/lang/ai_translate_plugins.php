@@ -35,6 +35,37 @@ if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
 
+if (in_array('--help', $argv, true) || in_array('-h', $argv, true)) {
+    echo <<<'USAGE'
+Usage:
+  php tests/scripts/lang/ai_translate_plugins.php [options] [lang …]
+
+Arguments:
+  lang               ISO code (fr_FR, de, es) or legacy english_name stem (french, german).
+                     May be repeated. If omitted, existing isocode files across all plugins
+                     are auto-detected and used as the target list.
+
+Options:
+  --all-languages    Target every language in the built-in map (except English).
+                     Useful for bootstrapping a new plugin with all translations at once.
+  --plugin <Name>    Restrict processing to the named plugin directory. Repeatable.
+  --backup           Create a .bak copy of each existing file before modifying it.
+                     Off by default (Git history serves as backup).
+  --test             Send only one API batch per plugin/language (quick smoke-test).
+  --help, -h         Show this help message and exit.
+
+Configuration:
+  Copy tests/scripts/lang/config.dist.php to config.php and set $translationAPIKey.
+
+Examples:
+  php tests/scripts/lang/ai_translate_plugins.php fr_FR de es
+  php tests/scripts/lang/ai_translate_plugins.php --plugin Zoom --all-languages
+  php tests/scripts/lang/ai_translate_plugins.php --test fr_FR
+
+USAGE;
+    exit(0);
+}
+
 $configFile = __DIR__.'/config.php';
 if (!is_file($configFile)) {
     exit('No config.php found. Copy config.dist.php to config.php and fill in your API key.'.PHP_EOL);
@@ -582,17 +613,17 @@ eprintln('Found '.count($plugins).' plugin(s) with translatable lang files.', tr
 // ===================== DETERMINE TARGET LANGUAGES =====================
 
 if ($allLanguages) {
-    // Use every language in the map except English
-    $requestedLangs = array_keys(array_filter($langNameToCode, fn ($code) => 'en_US' !== $code));
+    // Use every isocode in the map except English
+    $requestedLangs = array_values(array_filter($langNameToCode, fn ($code) => 'en_US' !== $code));
     sort($requestedLangs);
     eprintln('--all-languages: targeting '.count($requestedLangs).' language(s): '.implode(', ', $requestedLangs), true);
 } elseif (empty($requestedLangs)) {
-    // Auto-detect: union of all non-English language file stems across all plugins
+    // Auto-detect: union of all non-English isocode file stems across all plugins
     $detected = [];
     foreach ($plugins as $plugin) {
         foreach ((array) glob($plugin['langDir'].'/*.php') as $f) {
             $stem = basename($f, '.php');
-            if ('en_US' !== $stem && isset($langNameToCode[$stem])) {
+            if ('en_US' !== $stem && isset($langCodeToName[$stem])) {
                 $detected[$stem] = true;
             }
         }

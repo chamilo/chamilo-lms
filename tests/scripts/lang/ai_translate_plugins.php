@@ -578,7 +578,7 @@ eprintln('Found '.count($plugins).' plugin(s) with translatable lang files.', tr
 
 if ($allLanguages) {
     // Use every language in the map except English
-    $requestedLangs = array_keys(array_filter($langNameToCode, fn ($code) => 'en_US' !== $code, ARRAY_FILTER_USE_VALUE));
+    $requestedLangs = array_keys(array_filter($langNameToCode, fn ($code) => 'en_US' !== $code));
     sort($requestedLangs);
     eprintln('--all-languages: targeting '.count($requestedLangs).' language(s): '.implode(', ', $requestedLangs), true);
 } elseif (empty($requestedLangs)) {

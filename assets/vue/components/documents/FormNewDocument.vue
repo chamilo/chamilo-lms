@@ -17,8 +17,16 @@
       v-model="item.contentFile"
       :title="t('Content')"
       editor-id="item_content"
+      :editor-config="tinyEditorConfig"
       required
     />
+
+    <div
+      v-if="aiEditorMessage"
+      class="mt-2 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+    >
+      {{ aiEditorMessage }}
+    </div>
 
     <!-- Advanced options: search / indexing -->
     <BaseAdvancedSettingsButton
@@ -76,6 +84,16 @@
         @click.prevent="$emit('submit')"
       />
     </div>
+
+    <DocumentAiMediaDialog
+      v-model:visible="showAiMediaDialog"
+      :parent-resource-node-id="effectiveParentResourceNodeId"
+      :selected-paragraph-text="selectedParagraphText"
+      :course-title="courseContextTitle"
+      :course-language="courseContextLanguage"
+      :suggested-file-name="item.title"
+      @accepted="handleAiMediaAccepted"
+    />
   </form>
 </template>
 
@@ -83,6 +101,7 @@
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import { ref } from "vue"
+import axios from "axios"
 import { usePlatformConfig } from "../../store/platformConfig"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
@@ -90,6 +109,7 @@ import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
 
 export default {
@@ -100,6 +120,7 @@ export default {
     BaseInputTextWithVuelidate,
     BaseAdvancedSettingsButton,
     BaseCheckbox,
+    DocumentAiMediaDialog,
   },
   props: {
     values: { type: Object, required: true },
@@ -110,13 +131,13 @@ export default {
   setup() {
     const platformConfigStore = usePlatformConfig()
     const extraPlugins = ref("")
-    const { t } = useI18n()
+    const { t, locale } = useI18n()
 
     if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
       extraPlugins.value = "translatehtml"
     }
 
-    return { v$: useVuelidate(), extraPlugins, t }
+    return { v$: useVuelidate(), extraPlugins, t, locale }
   },
   data() {
     return {
@@ -124,6 +145,12 @@ export default {
       showAdvancedSettings: false,
       searchFields: [],
       searchValuesLoaded: false,
+      showAiMediaDialog: false,
+      selectedParagraphText: "",
+      selectedParagraphBookmark: null,
+      aiEditorMessage: "",
+      courseContextTitle: "",
+      courseContextLanguage: "",
     }
   },
   computed: {
@@ -133,9 +160,54 @@ export default {
     violations() {
       return this.errors || {}
     },
+    effectiveParentResourceNodeId() {
+      const routeNode = this.normalizeNodeId(this.$route?.params?.node ?? this.$route?.params?.id)
+      const itemNode = this.normalizeNodeId(this.item?.parentResourceNodeId)
+      const resourceNodeId = this.getResourceNodeId()
+      return itemNode || routeNode || resourceNodeId || null
+    },
+    tinyEditorConfig() {
+      return {
+        appendToolbar: "chamiloAiMedia",
+        setup: (editor) => {
+          editor.ui.registry.addIcon(
+            "chamiloRobot",
+            `
+            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="7" y="8" width="10" height="8" rx="2.2" fill="#60A5FA" stroke="#1E3A8A" stroke-width="1.8"/>
+              <path d="M12 5V8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="12" cy="4" r="1.2" fill="#1E3A8A"/>
+              <circle cx="10" cy="11.6" r="1.35" fill="#FFFFFF"/>
+              <circle cx="14" cy="11.6" r="1.35" fill="#FFFFFF"/>
+              <circle cx="10" cy="11.6" r="0.45" fill="#1E3A8A"/>
+              <circle cx="14" cy="11.6" r="0.45" fill="#1E3A8A"/>
+              <path d="M10 14.4H14" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M5.6 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M18.4 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M9.2 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M14.8 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          `,
+          )
+          editor.ui.registry.addButton("chamiloAiMedia", {
+            icon: "chamiloRobot",
+            tooltip: "Generate AI media",
+            onAction: () => {
+              this.openAiMediaFromEditor(editor)
+            },
+          })
+          editor.ui.registry.addMenuItem("chamiloAiMedia", {
+            text: "Generate AI media",
+            icon: "chamiloRobot",
+            onAction: () => {
+              this.openAiMediaFromEditor(editor)
+            },
+          })
+        },
+      }
+    },
   },
   async created() {
-    // Ensure containers exist
     if (!this.item.searchFieldValues || typeof this.item.searchFieldValues !== "object") {
       this.item.searchFieldValues = {}
     }
@@ -143,6 +215,8 @@ export default {
     if (undefined === this.item.indexDocumentContent) {
       this.item.indexDocumentContent = true
     }
+
+    await this.loadCourseContext()
 
     if (!this.searchEnabled) {
       return
@@ -156,6 +230,26 @@ export default {
       return String(code || "")
         .trim()
         .toLowerCase()
+    },
+    normalizeNodeId(value) {
+      if (value == null) return null
+      if (typeof value === "number" && Number.isFinite(value) && value > 0) return value
+
+      if (typeof value === "string") {
+        const trimmed = value.trim()
+        if (!trimmed) return null
+        if (/^\d+$/.test(trimmed)) return Number(trimmed)
+
+        const iriMatch = trimmed.match(/\/api\/resource_nodes\/(\d+)/)
+        if (iriMatch) return Number(iriMatch[1])
+      }
+
+      if (typeof value === "object") {
+        const raw = value?.id ?? value?.["@id"] ?? null
+        return this.normalizeNodeId(raw)
+      }
+
+      return null
     },
     extractIdFromIri(iri) {
       if (!iri || "string" !== typeof iri) return null
@@ -172,6 +266,33 @@ export default {
       if (rn.id) return Number(rn.id)
       if (rn["@id"]) return this.extractIdFromIri(rn["@id"])
       return null
+    },
+    async loadCourseContext() {
+      const cid = Number(this.$route?.query?.cid || 0)
+      this.courseContextTitle = String(this.$route?.query?.course_title || "").trim()
+      this.courseContextLanguage = String(this.$route?.query?.course_language || this.locale || "en").trim()
+
+      if (!cid) {
+        return
+      }
+
+      try {
+        const response = await axios.get(`/api/courses/${cid}`)
+        const data = response?.data || {}
+
+        const apiTitle = String(data?.title || data?.name || "").trim()
+        const apiLanguage = String(data?.language || "").trim()
+
+        if (apiTitle) {
+          this.courseContextTitle = apiTitle
+        }
+
+        if (apiLanguage) {
+          this.courseContextLanguage = apiLanguage
+        }
+      } catch (e) {
+        console.warn("[DocumentsForm] Failed to load course context.", e)
+      }
     },
     async loadSearchEngineFields() {
       try {
@@ -273,18 +394,21 @@ export default {
       console.log("[Search] Loaded search field values for resourceNodeId=", resourceNodeId)
     },
 
-    // Existing methods kept
+    /* --------------------------------------------------------- */
+    /* Legacy browser helper kept for compatibility               */
+    /* --------------------------------------------------------- */
     browser(callback, value, meta) {
-      let nodeId = this.$route.params["node"]
-      let folderParams = this.$route.query
+      const nodeId = this.$route.params["node"] ?? this.$route.params["id"]
+      const folderParams = this.$route.query
       let url = this.$router.resolve({
         name: "DocumentForHtmlEditor",
-        params: { id: nodeId },
+        params: { node: nodeId },
         query: folderParams,
       })
       url = url.fullPath
 
       if (meta.filetype === "image") url = url + "&type=images"
+      else if (meta.filetype === "media") url = url + "&type=media"
       else url = url + "&type=files"
 
       window.addEventListener("message", function (event) {
@@ -296,19 +420,123 @@ export default {
         { url, title: "file manager" },
         {
           oninsert: function (file, fm) {
-            let url = fm.convAbsUrl(file.url)
+            const absoluteUrl = fm.convAbsUrl(file.url)
             const info = file.name + " (" + fm.formatSize(file.size) + ")"
 
-            if (meta.filetype === "file") callback(url, { text: info, title: info })
-            if (meta.filetype === "image") callback(url, { alt: info })
-            if (meta.filetype === "media") callback(url)
+            if (meta.filetype === "file") callback(absoluteUrl, { text: info, title: info })
+            if (meta.filetype === "image") callback(absoluteUrl, { alt: info })
+            if (meta.filetype === "media") callback(absoluteUrl)
           },
         },
       )
       return false
     },
+    getTinyEditor() {
+      try {
+        return window.tinymce.get("item_content") || window.tinymce.activeEditor || null
+      } catch {
+        return null
+      }
+    },
+    getClosestSupportedBlock(node) {
+      let current = node
+
+      while (current) {
+        const nodeName = String(current.nodeName || "").toLowerCase()
+        if (["p", "li", "blockquote", "div"].includes(nodeName)) {
+          return current
+        }
+
+        current = current.parentNode
+      }
+
+      return null
+    },
+    openAiMediaFromEditor(editorInstance = null) {
+      this.aiEditorMessage = ""
+
+      const editor = editorInstance || this.getTinyEditor()
+      if (!editor) {
+        this.aiEditorMessage = this.$t("The editor is not ready yet.")
+        return
+      }
+
+      editor.focus()
+
+      const selectedNode = editor.selection?.getNode?.()
+      const selectedBlock = this.getClosestSupportedBlock(selectedNode)
+
+      if (!selectedBlock) {
+        this.aiEditorMessage = this.$t("Please place the cursor inside a paragraph before generating AI media.")
+        return
+      }
+
+      const paragraphText = String(selectedBlock.innerText || selectedBlock.textContent || "").trim()
+      if (!paragraphText) {
+        this.aiEditorMessage = this.$t("The selected paragraph is empty.")
+        return
+      }
+
+      this.selectedParagraphBookmark = editor.selection.getBookmark(2, true)
+      this.selectedParagraphText = paragraphText
+      this.showAiMediaDialog = true
+    },
+    handleAiMediaAccepted(payload) {
+      this.aiEditorMessage = ""
+      this.insertMediaAfterSelectedBlock(payload)
+    },
+    insertMediaAfterSelectedBlock(payload) {
+      const editor = this.getTinyEditor()
+      if (!editor) {
+        this.aiEditorMessage = this.$t("The editor is not ready yet.")
+        return
+      }
+      const mediaType = String(payload?.type || "image").toLowerCase()
+      const safeUrl = String(payload?.url || "").trim()
+      const safeAlt = String(payload?.title || "Generated media").trim()
+
+      if (!safeUrl) {
+        this.aiEditorMessage = this.$t("The generated media URL is empty.")
+        return
+      }
+
+      let html = ""
+      if (mediaType === "video") {
+        html = `<p><video controls src="${safeUrl}"></video></p>`
+      } else {
+        html = `<p><img src="${safeUrl}" alt="${safeAlt}" /></p>`
+      }
+
+      editor.focus()
+
+      try {
+        editor.undoManager.transact(() => {
+          if (this.selectedParagraphBookmark) {
+            editor.selection.moveToBookmark(this.selectedParagraphBookmark)
+          }
+
+          const node = editor.selection?.getNode?.()
+          const block = this.getClosestSupportedBlock(node)
+
+          if (block && block.parentNode) {
+            const wrapper = editor.dom.create("div", {}, html)
+            const newNode = wrapper.firstChild
+            editor.dom.insertAfter(newNode, block)
+            editor.nodeChanged()
+          } else {
+            editor.insertContent(html)
+          }
+        })
+
+        this.item.contentFile = editor.getContent()
+      } catch (e) {
+        console.error("[DocumentsForm] Failed to insert AI media into TinyMCE.", e)
+        this.aiEditorMessage = this.$t("Failed to insert the generated media into the editor.")
+      }
+    },
     updateContent(content) {
       this.contentFile = content
+      this.item.contentFile = content
     },
   },
   validations: {

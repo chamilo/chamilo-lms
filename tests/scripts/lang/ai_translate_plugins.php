@@ -11,7 +11,7 @@ declare(strict_types=1);
  * Each file defines a $strings array:  $strings['key'] = 'value';
  *
  * This script:
- *  1. Takes english.php as the source of truth for each plugin.
+ *  1. Takes en_US.php as the source of truth for each plugin.
  *  2. Completes missing (or empty) keys in existing language files (leaves
  *     non-empty translations untouched).
  *  3. Creates new language files for languages that are missing from a plugin.
@@ -536,10 +536,10 @@ foreach ($requestedLangs as $lang) {
     }
     if (isset($langCodeToName[$lang])) {
         // Was given as ISO code
-        $normalisedLangs[] = $langCodeToName[$lang];
+        $normalisedLangs[] = $lang;
     } elseif (isset($langNameToCode[$lang])) {
         // Was given as filename stem
-        $normalisedLangs[] = $lang;
+        $normalisedLangs[] = $langNameToCode[$lang];
     } else {
         eprintln("Warning: unknown language '{$lang}' – skipped. Add it to \$langNameToCode if needed.");
     }
@@ -562,7 +562,7 @@ if (!empty($onlyPlugins)) {
 $plugins = [];
 foreach ($allDirs as $dir) {
     $langDir = $dir.'/lang';
-    $english = $langDir.'/english.php';
+    $english = $langDir.'/en_US.php';
     if (is_dir($langDir) && is_file($english)) {
         $plugins[] = [
             'name'    => basename($dir),
@@ -573,7 +573,7 @@ foreach ($allDirs as $dir) {
 }
 
 if (empty($plugins)) {
-    eprintln('No plugins with a lang/english.php found.', true);
+    eprintln('No plugins with a lang/en_US.php found.', true);
     exit(0);
 }
 
@@ -592,7 +592,7 @@ if ($allLanguages) {
     foreach ($plugins as $plugin) {
         foreach ((array) glob($plugin['langDir'].'/*.php') as $f) {
             $stem = basename($f, '.php');
-            if ('english' !== $stem && isset($langNameToCode[$stem])) {
+            if ('en_US' !== $stem && isset($langNameToCode[$stem])) {
                 $detected[$stem] = true;
             }
         }
@@ -626,17 +626,17 @@ foreach ($plugins as $plugin) {
     $totalTerms     = count($sourceStrings);
 
     if (0 === $totalTerms) {
-        eprintln("[{$pluginName}] english.php appears empty – skipping.", true);
+        eprintln("[{$pluginName}] en_US.php appears empty – skipping.", true);
         continue;
     }
 
     eprintln("============================================================");
-    eprintln("[{$pluginName}] {$totalTerms} term(s) in english.php", true);
+    eprintln("[{$pluginName}] {$totalTerms} term(s) in en_US.php", true);
 
-    foreach ($requestedLangs as $langName) {
-        $langCode   = $langNameToCode[$langName];
+    foreach ($requestedLangs as $langCode) {
+        $langName   = $langCodeToName[$langCode];
         $langLabel  = pluginGetLanguageName($langCode);
-        $targetFile = $langDir.'/'.$langName.'.php';
+        $targetFile = $langDir.'/'.$langCode.'.php';
         $fileExists = is_file($targetFile);
         $context    = "{$pluginName}/{$langName}";
 

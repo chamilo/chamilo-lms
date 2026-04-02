@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P import';
+$strings['plugin_comment'] = 'Importeer H5P-inhoud en gebruik deze in leerpaden. Open README.md voor installatie-instructies.';
+$strings['frame'] = 'Frame';
+$strings['frame_help'] = 'Toon frame en knoppen onder H5P';
+$strings['embed'] = 'Insluiten';
+$strings['embed_help'] = 'Toon insluitknop';
+$strings['copyright'] = 'Auteursrecht';
+$strings['copyright_help'] = 'Toon auteursrechtenknop';
+$strings['icon'] = 'Pictogram';
+$strings['icon_help'] = 'Toon H5P-pictogram';
+$strings['attempts'] = 'Aantal pogingen';
+$strings['upload_h5p'] = 'Uploaden';
+$strings['import_h5p_package'] = 'Upload H5P-pakket';
+$strings['h5p_package'] = 'H5P-pakket';
+$strings['h5p_error_loading'] = 'Fout bij laden van het H5P-pakket';
+$strings['h5p_error_invalid_token'] = 'Ongeldig beveiligingstoken';
+$strings['h5p_error_missing_core_asset'] = 'Fout bij laden van H5P-core-assets';
+$strings['h5p_save_content_state'] = 'Gebruikersresultaten opslaan';
+$strings['h5p_save_content_freq'] = 'Opslagfrequentie';
+$strings['h5p_save_freq_help'] = 'Hoe vaak de huidige inhoudstoestand moet worden opgeslagen, in seconden';
+$strings['start_attempt'] = 'Poging starten';

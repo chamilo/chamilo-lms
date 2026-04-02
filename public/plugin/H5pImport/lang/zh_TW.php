@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P 匯入';
+$strings['plugin_comment'] = '匯入 H5P 內容並在學習路徑中使用。請開啟 README.md 查看安裝指示。';
+$strings['frame'] = '框架';
+$strings['frame_help'] = '在 H5P 下方顯示框架和按鈕';
+$strings['embed'] = '嵌入';
+$strings['embed_help'] = '顯示嵌入按鈕';
+$strings['copyright'] = '版權';
+$strings['copyright_help'] = '顯示版權按鈕';
+$strings['icon'] = '圖示';
+$strings['icon_help'] = '顯示 H5P 圖示';
+$strings['attempts'] = '嘗試次數';
+$strings['upload_h5p'] = '上傳';
+$strings['import_h5p_package'] = '上傳 H5P 套件';
+$strings['h5p_package'] = 'H5P 套件';
+$strings['h5p_error_loading'] = '載入 H5P 套件時發生錯誤';
+$strings['h5p_error_invalid_token'] = '無效的安全權杖';
+$strings['h5p_error_missing_core_asset'] = '載入 H5P 核心資產時發生錯誤';
+$strings['h5p_save_content_state'] = '儲存使用者結果';
+$strings['h5p_save_content_freq'] = '儲存頻率';
+$strings['h5p_save_freq_help'] = '目前內容狀態應以秒為單位儲存的頻率';
+$strings['start_attempt'] = '開始嘗試';

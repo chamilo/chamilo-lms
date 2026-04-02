@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Nhập H5P';
+$strings['plugin_comment'] = 'Nhập nội dung H5P và sử dụng trong lộ trình học. Mở README.md để xem hướng dẫn cài đặt.';
+$strings['frame'] = 'Khung';
+$strings['frame_help'] = 'Hiển thị khung và nút dưới H5P';
+$strings['embed'] = 'Nhúng';
+$strings['embed_help'] = 'Hiển thị nút nhúng';
+$strings['copyright'] = 'Bản quyền';
+$strings['copyright_help'] = 'Hiển thị nút bản quyền';
+$strings['icon'] = 'Biểu tượng';
+$strings['icon_help'] = 'Hiển thị biểu tượng H5P';
+$strings['attempts'] = 'Số lần thử';
+$strings['upload_h5p'] = 'Tải lên';
+$strings['import_h5p_package'] = 'Tải lên gói H5P';
+$strings['h5p_package'] = 'Gói H5P';
+$strings['h5p_error_loading'] = 'Lỗi khi tải gói H5P';
+$strings['h5p_error_invalid_token'] = 'Mã bảo mật không hợp lệ';
+$strings['h5p_error_missing_core_asset'] = 'Lỗi khi tải tài nguyên cốt lõi H5P';
+$strings['h5p_save_content_state'] = 'Lưu kết quả người dùng';
+$strings['h5p_save_content_freq'] = 'Tần suất lưu';
+$strings['h5p_save_freq_help'] = 'Tần suất lưu trạng thái nội dung hiện tại, tính bằng giây';
+$strings['start_attempt'] = 'Bắt đầu thử';

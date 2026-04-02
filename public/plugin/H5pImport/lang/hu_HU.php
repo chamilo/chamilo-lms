@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P import';
+$strings['plugin_comment'] = 'H5P tartalmak importálása és használata tanulási útvonalakban. Olvassa el a README.md fájlt a telepítési utasításokért.';
+$strings['frame'] = 'Keret';
+$strings['frame_help'] = 'Keret és gombok megjelenítése az H5P alatt';
+$strings['embed'] = 'Beágyazás';
+$strings['embed_help'] = 'Beágyazás gomb megjelenítése';
+$strings['copyright'] = 'Szerzői jog';
+$strings['copyright_help'] = 'Szerzői jog gomb megjelenítése';
+$strings['icon'] = 'Ikon';
+$strings['icon_help'] = 'H5P ikon megjelenítése';
+$strings['attempts'] = 'Próbálkozások száma';
+$strings['upload_h5p'] = 'Feltöltés';
+$strings['import_h5p_package'] = 'H5P csomag feltöltése';
+$strings['h5p_package'] = 'H5P csomag';
+$strings['h5p_error_loading'] = 'Hiba az H5P csomag betöltésekor';
+$strings['h5p_error_invalid_token'] = 'Érvénytelen biztonsági token';
+$strings['h5p_error_missing_core_asset'] = 'Hiba az H5P magfájlok betöltésekor';
+$strings['h5p_save_content_state'] = 'Felhasználói eredmények mentése';
+$strings['h5p_save_content_freq'] = 'Mentési gyakoriság';
+$strings['h5p_save_freq_help'] = 'Milyen gyakran mentse a jelenlegi tartalom állapotát, másodpercekben';
+$strings['start_attempt'] = 'Próbálkozás indítása';

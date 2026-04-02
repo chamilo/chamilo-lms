@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Εισαγωγή H5P';
+$strings['plugin_comment'] = 'Εισαγωγή περιεχομένων H5P και χρήση τους σε μονοπάτια μάθησης. Ανοίξτε το README.md για οδηγίες εγκατάστασης.';
+$strings['frame'] = 'Πλαίσιο';
+$strings['frame_help'] = 'Εμφάνιση πλαισίου και κουμπιών κάτω από το H5P';
+$strings['embed'] = 'Ενσωμάτωση';
+$strings['embed_help'] = 'Εμφάνιση κουμπιού ενσωμάτωσης';
+$strings['copyright'] = 'Πνευματικά δικαιώματα';
+$strings['copyright_help'] = 'Εμφάνιση κουμπιού πνευματικών δικαιωμάτων';
+$strings['icon'] = 'Εικονίδιο';
+$strings['icon_help'] = 'Εμφάνιση εικονιδίου H5P';
+$strings['attempts'] = 'Αριθμός προσπαθειών';
+$strings['upload_h5p'] = 'Ανέβασμα';
+$strings['import_h5p_package'] = 'Ανέβασμα πακέτου H5P';
+$strings['h5p_package'] = 'Πακέτο H5P';
+$strings['h5p_error_loading'] = 'Σφάλμα φόρτωσης του πακέτου H5P';
+$strings['h5p_error_invalid_token'] = 'Μη έγκυρο διακριτικό ασφαλείας';
+$strings['h5p_error_missing_core_asset'] = 'Σφάλμα φόρτωσης βασικών στοιχείων H5P';
+$strings['h5p_save_content_state'] = 'Αποθήκευση αποτελεσμάτων χρήστη';
+$strings['h5p_save_content_freq'] = 'Συχνότητα αποθήκευσης';
+$strings['h5p_save_freq_help'] = 'Πόσο συχνά να αποθηκεύεται η τρέχουσα κατάσταση περιεχομένου, σε δευτερόλεπτα';
+$strings['start_attempt'] = 'Έναρξη προσπάθειας';

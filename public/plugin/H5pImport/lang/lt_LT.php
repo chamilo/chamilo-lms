@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P importas';
+$strings['plugin_comment'] = 'Importuokite H5P turinį ir naudokite jį mokymosi keliuose. Atidarykite README.md diegimo instrukcijoms.';
+$strings['frame'] = 'Rėmas';
+$strings['frame_help'] = 'Rodyti rėmą ir mygtukus po H5P';
+$strings['embed'] = 'Įterpti';
+$strings['embed_help'] = 'Rodyti įterpimo mygtuką';
+$strings['copyright'] = 'Autoriaus teisės';
+$strings['copyright_help'] = 'Rodyti autoriaus teisių mygtuką';
+$strings['icon'] = 'Piktograma';
+$strings['icon_help'] = 'Rodyti H5P piktogramą';
+$strings['attempts'] = 'Bandymų skaičius';
+$strings['upload_h5p'] = 'Įkelti';
+$strings['import_h5p_package'] = 'Įkelti H5P paketą';
+$strings['h5p_package'] = 'H5P paketas';
+$strings['h5p_error_loading'] = 'Klaida įkeliant H5P paketą';
+$strings['h5p_error_invalid_token'] = 'Neteisingas saugumo prieigos raktas';
+$strings['h5p_error_missing_core_asset'] = 'Klaida įkeliant H5P pagrindinius išteklius';
+$strings['h5p_save_content_state'] = 'Išsaugoti vartotojo rezultatus';
+$strings['h5p_save_content_freq'] = 'Išsaugojimo dažnis';
+$strings['h5p_save_freq_help'] = 'Kaip dažnai išsaugoti dabartinę turinio būseną, sekundėmis';
+$strings['start_attempt'] = 'Pradėti bandymą';

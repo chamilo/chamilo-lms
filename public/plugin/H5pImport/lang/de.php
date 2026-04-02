@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P-Import';
+$strings['plugin_comment'] = 'H5P-Inhalte importieren und in Lernpfaden verwenden. Öffnen Sie README.md für Installationsanweisungen.';
+$strings['frame'] = 'Rahmen';
+$strings['frame_help'] = 'Rahmen und Schaltflächen unter H5P anzeigen';
+$strings['embed'] = 'Einbetten';
+$strings['embed_help'] = 'Einbettungs-Schaltfläche anzeigen';
+$strings['copyright'] = 'Urheberrecht';
+$strings['copyright_help'] = 'Urheberrechts-Schaltfläche anzeigen';
+$strings['icon'] = 'Symbol';
+$strings['icon_help'] = 'H5P-Symbol anzeigen';
+$strings['attempts'] = 'Anzahl der Versuche';
+$strings['upload_h5p'] = 'Hochladen';
+$strings['import_h5p_package'] = 'H5P-Paket hochladen';
+$strings['h5p_package'] = 'H5P-Paket';
+$strings['h5p_error_loading'] = 'Fehler beim Laden des H5P-Pakets';
+$strings['h5p_error_invalid_token'] = 'Ungültiges Sicherheitstoken';
+$strings['h5p_error_missing_core_asset'] = 'Fehler beim Laden der H5P-Core-Assets';
+$strings['h5p_save_content_state'] = 'Benutzerergebnisse speichern';
+$strings['h5p_save_content_freq'] = 'Speicherfrequenz';
+$strings['h5p_save_freq_help'] = 'Wie oft der aktuelle Inhaltszustand in Sekunden gespeichert werden soll';
+$strings['start_attempt'] = 'Versuch starten';

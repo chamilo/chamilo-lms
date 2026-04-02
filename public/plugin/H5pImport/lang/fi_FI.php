@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P-tuonti';
+$strings['plugin_comment'] = 'Tuo H5P-sisältöjä ja käytä niitä oppipoluissa. Avaa README.md asennusohjeita varten.';
+$strings['frame'] = 'Kehyk';
+$strings['frame_help'] = 'Näytä kehys ja painikkeet H5P:n alapuolella';
+$strings['embed'] = 'Upota';
+$strings['embed_help'] = 'Näytä upotuspainike';
+$strings['copyright'] = 'Tekijänoikeus';
+$strings['copyright_help'] = 'Näytä tekijänoikeuspainike';
+$strings['icon'] = 'Kuvake';
+$strings['icon_help'] = 'Näytä H5P-kuvake';
+$strings['attempts'] = 'Yritysten määrä';
+$strings['upload_h5p'] = 'Lataa';
+$strings['import_h5p_package'] = 'Lataa H5P-paketti';
+$strings['h5p_package'] = 'H5P-paketti';
+$strings['h5p_error_loading'] = 'Virhe ladattaessa H5P-pakettia';
+$strings['h5p_error_invalid_token'] = 'Virheellinen turvallisuustunniste';
+$strings['h5p_error_missing_core_asset'] = 'Virhe ladattaessa H5P-ydinresursseja';
+$strings['h5p_save_content_state'] = 'Tallenna käyttäjän tulokset';
+$strings['h5p_save_content_freq'] = 'Tallennetaajuus';
+$strings['h5p_save_freq_help'] = 'Kuinka usein nykyisen sisällön tila tallennetaan sekunneissa';
+$strings['start_attempt'] = 'Aloita yritys';

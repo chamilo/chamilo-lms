@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Import H5P';
+$strings['plugin_comment'] = 'Importovať H5P obsahy a použiť ich v učebných cestách. Otvorte README.md pre inštalačné pokyny.';
+$strings['frame'] = 'Rám';
+$strings['frame_help'] = 'Zobraziť rám a tlačidlá pod H5P';
+$strings['embed'] = 'Vložiť';
+$strings['embed_help'] = 'Zobraziť tlačidlo vloženia';
+$strings['copyright'] = 'Autorské práva';
+$strings['copyright_help'] = 'Zobraziť tlačidlo autorských práv';
+$strings['icon'] = 'Ikona';
+$strings['icon_help'] = 'Zobraziť ikonu H5P';
+$strings['attempts'] = 'Počet pokusov';
+$strings['upload_h5p'] = 'Nahrať';
+$strings['import_h5p_package'] = 'Nahrať H5P balík';
+$strings['h5p_package'] = 'H5P balík';
+$strings['h5p_error_loading'] = 'Chyba pri načítavaní H5P balíka';
+$strings['h5p_error_invalid_token'] = 'Neplatný bezpečnostný token';
+$strings['h5p_error_missing_core_asset'] = 'Chyba pri načítavaní jadrových súborov H5P';
+$strings['h5p_save_content_state'] = 'Uložiť výsledky používateľa';
+$strings['h5p_save_content_freq'] = 'Frekvencia uloženia';
+$strings['h5p_save_freq_help'] = 'Ako často sa má uložiť aktuálny stav obsahu, v sekundách';
+$strings['start_attempt'] = 'Začať pokus';

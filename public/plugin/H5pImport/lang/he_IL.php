@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'ייבוא H5P';
+$strings['plugin_comment'] = 'ייבוא תכנים של H5P ושימוש בהם במסלולי למידה. פתחו את README.md להוראות התקנה.';
+$strings['frame'] = 'מסגרת';
+$strings['frame_help'] = 'הצג מסגרת וכפתורים מתחת ל-H5P';
+$strings['embed'] = 'הטמעה';
+$strings['embed_help'] = 'הצג כפתור הטמעה';
+$strings['copyright'] = 'זכויות יוצרים';
+$strings['copyright_help'] = 'הצג כפתור זכויות יוצרים';
+$strings['icon'] = 'סמל';
+$strings['icon_help'] = 'הצג סמל H5P';
+$strings['attempts'] = 'מספר ניסיונות';
+$strings['upload_h5p'] = 'העלאה';
+$strings['import_h5p_package'] = 'העלאת חבילת H5P';
+$strings['h5p_package'] = 'חבילת H5P';
+$strings['h5p_error_loading'] = 'שגיאה בטעינת חבילת H5P';
+$strings['h5p_error_invalid_token'] = 'אסימון אבטחה לא תקין';
+$strings['h5p_error_missing_core_asset'] = 'שגיאה בטעינת נכסי ליבה של H5P';
+$strings['h5p_save_content_state'] = 'שמור תוצאות משתמש';
+$strings['h5p_save_content_freq'] = 'תדירות שמירה';
+$strings['h5p_save_freq_help'] = 'כמה לעיתים קרובות לשמור את מצב התוכן הנוכחי, בשניות';
+$strings['start_attempt'] = 'התחל ניסיון';

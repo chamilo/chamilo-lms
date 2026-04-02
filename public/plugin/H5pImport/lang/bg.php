@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P внос';
+$strings['plugin_comment'] = 'Внос на H5P съдържание и използване в учебни пътеки. Отворете README.md за инструкции за инсталация.';
+$strings['frame'] = 'Рамка';
+$strings['frame_help'] = 'Показване на рамка и бутони под H5P';
+$strings['embed'] = 'Вграждане';
+$strings['embed_help'] = 'Показване на бутон за вграждане';
+$strings['copyright'] = 'Авторско право';
+$strings['copyright_help'] = 'Показване на бутон за авторско право';
+$strings['icon'] = 'Икона';
+$strings['icon_help'] = 'Показване на H5P икона';
+$strings['attempts'] = 'Брой опити';
+$strings['upload_h5p'] = 'Качване';
+$strings['import_h5p_package'] = 'Качване на H5P пакет';
+$strings['h5p_package'] = 'H5P пакет';
+$strings['h5p_error_loading'] = 'Грешка при зареждане на H5P пакета';
+$strings['h5p_error_invalid_token'] = 'Невалиден токен за сигурност';
+$strings['h5p_error_missing_core_asset'] = 'Грешка при зареждане на H5P основни активи';
+$strings['h5p_save_content_state'] = 'Съхраняване на резултати на потребителя';
+$strings['h5p_save_content_freq'] = 'Честота на съхраняване';
+$strings['h5p_save_freq_help'] = 'Колко често да се съхранява състоянието на текущото съдържание, в секунди';
+$strings['start_attempt'] = 'Започни опит';

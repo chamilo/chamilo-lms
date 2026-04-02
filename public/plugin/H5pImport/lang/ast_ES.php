@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Importación H5P';
+$strings['plugin_comment'] = "Importar conteníos H5P y usalos nos caminos d'aprendizaxe. Abre README.md pa les instrucciones d'instalación.";
+$strings['frame'] = 'Marcu';
+$strings['frame_help'] = 'Amosar marcu y botones debaxo de H5P';
+$strings['embed'] = 'Integrar';
+$strings['embed_help'] = "Amosar botón d'integración";
+$strings['copyright'] = 'Copyright';
+$strings['copyright_help'] = 'Amosar botón de copyright';
+$strings['icon'] = 'Iconu';
+$strings['icon_help'] = 'Amosar iconu H5P';
+$strings['attempts'] = "Númberu d'intentos";
+$strings['upload_h5p'] = 'Subir';
+$strings['import_h5p_package'] = 'Subir paquete H5P';
+$strings['h5p_package'] = 'Paquete H5P';
+$strings['h5p_error_loading'] = "Error cargando'l paquete H5P";
+$strings['h5p_error_invalid_token'] = 'Token de seguridá inválidu';
+$strings['h5p_error_missing_core_asset'] = 'Error cargando los activos core de H5P';
+$strings['h5p_save_content_state'] = "Guardar resultaos de l'usuariu";
+$strings['h5p_save_content_freq'] = 'Frecuencia de guardáu';
+$strings['h5p_save_freq_help'] = "Cuántu de frecuentes se debe guardar l'estáu actual del conteníu, en segundos";
+$strings['start_attempt'] = 'Comenzar intentu';

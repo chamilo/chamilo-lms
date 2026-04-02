@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Importació H5P';
+$strings['plugin_comment'] = "Importeu continguts H5P i utilitzeu-los en itineraris d'aprenentatge. Obriu README.md per a les instruccions d'instal·lació.";
+$strings['frame'] = 'Marc';
+$strings['frame_help'] = 'Mostra el marc i els botons sota H5P';
+$strings['embed'] = 'Incrustar';
+$strings['embed_help'] = "Mostra el botó d'incrustació";
+$strings['copyright'] = 'Copyright';
+$strings['copyright_help'] = 'Mostra el botó de copyright';
+$strings['icon'] = 'Icona';
+$strings['icon_help'] = 'Mostra la icona H5P';
+$strings['attempts'] = "Nombre d'intents";
+$strings['upload_h5p'] = 'Puja';
+$strings['import_h5p_package'] = 'Puja un paquet H5P';
+$strings['h5p_package'] = 'Paquet H5P';
+$strings['h5p_error_loading'] = 'Error en carregar el paquet H5P';
+$strings['h5p_error_invalid_token'] = 'Token de seguretat no vàlid';
+$strings['h5p_error_missing_core_asset'] = 'Error en carregar els actius principals de H5P';
+$strings['h5p_save_content_state'] = "Desa els resultats de l'usuari";
+$strings['h5p_save_content_freq'] = 'Freqüència de desament';
+$strings['h5p_save_freq_help'] = "Amb quina freqüència s'ha de desar l'estat actual del contingut, en segons";
+$strings['start_attempt'] = "Inicia l'intent";

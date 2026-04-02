@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Імпорт H5P';
+$strings['plugin_comment'] = 'Імпорт вмісту H5P та використання в навчальних траєкторіях. Відкрийте README.md для інструкцій з встановлення.';
+$strings['frame'] = 'Рамка';
+$strings['frame_help'] = 'Показати рамку та кнопки під H5P';
+$strings['embed'] = 'Вставка';
+$strings['embed_help'] = 'Показати кнопку вставки';
+$strings['copyright'] = 'Авторське право';
+$strings['copyright_help'] = 'Показати кнопку авторського права';
+$strings['icon'] = 'Піктограма';
+$strings['icon_help'] = 'Показати піктограму H5P';
+$strings['attempts'] = 'Кількість спроб';
+$strings['upload_h5p'] = 'Завантажити';
+$strings['import_h5p_package'] = 'Завантажити пакет H5P';
+$strings['h5p_package'] = 'Пакет H5P';
+$strings['h5p_error_loading'] = 'Помилка завантаження пакета H5P';
+$strings['h5p_error_invalid_token'] = 'Недійсний токен безпеки';
+$strings['h5p_error_missing_core_asset'] = 'Помилка завантаження основних ресурсів H5P';
+$strings['h5p_save_content_state'] = 'Зберегти результати користувача';
+$strings['h5p_save_content_freq'] = 'Частота збереження';
+$strings['h5p_save_freq_help'] = 'Як часто зберігати поточний стан вмісту, у секундах';
+$strings['start_attempt'] = 'Почати спробу';

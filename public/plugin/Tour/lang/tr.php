@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Bu blok, danışmanlık, 
 
 $strings['tour_admin_news_title'] = "Chamilo'dan haberler";
 $strings['tour_admin_news_content'] = 'Bu bölüm Chamilo projesinden son haberleri ve duyuruları görüntüler.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platform logosu';
+$strings['tour_home_topbar_logo_content'] = 'Bu logo sizi platformun ana sayfasına geri götürür.';
+$strings['tour_home_topbar_actions_title'] = 'Hızlı işlemler';
+$strings['tour_home_topbar_actions_content'] = 'Burada rolünüze bağlı olarak kurs oluşturma, rehberli yardım, talepler ve mesajlar gibi kısayol simgelerini bulabilirsiniz.';
+$strings['tour_home_menu_button_title'] = 'Menü düğmesi';
+$strings['tour_home_menu_button_content'] = 'Yan menüyü hızlıca açmak veya kapatmak için bu düğmeyi kullanın.';
+$strings['tour_home_sidebar_title'] = 'Ana menü';
+$strings['tour_home_sidebar_content'] = 'Bu yan menü, yetkilerinize bağlı olarak platformun ana bölümlerine erişim sağlar.';
+$strings['tour_home_user_area_title'] = 'Kullanıcı alanı';
+$strings['tour_home_user_area_content'] = 'Burada profilinize, kişisel seçeneklere erişebilir ve çıkış yapabilirsiniz.';

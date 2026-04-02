@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Tento blok vysvetľuje, a
 
 $strings['tour_admin_news_title'] = 'Novinky z Chamilo';
 $strings['tour_admin_news_content'] = 'Táto sekcia zobrazuje najnovšie novinky a oznamy z projektu Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo platformy';
+$strings['tour_home_topbar_logo_content'] = 'Toto logo vás vráti na domovskú stránku platformy.';
+$strings['tour_home_topbar_actions_title'] = 'Rýchle akcie';
+$strings['tour_home_topbar_actions_content'] = 'Tu nájdete ikony skratiek, ako je vytváranie kurzov, sprievodca pomocou, tikety a správy podľa vašej roly.';
+$strings['tour_home_menu_button_title'] = 'Tlačidlo menu';
+$strings['tour_home_menu_button_content'] = 'Pomocou tohto tlačidla môžete rýchlo otvoriť alebo zavrieť bočné menu.';
+$strings['tour_home_sidebar_title'] = 'Hlavné menu';
+$strings['tour_home_sidebar_content'] = 'Toto bočné menu poskytuje prístup k hlavným sekciám platformy podľa vašich oprávnení.';
+$strings['tour_home_user_area_title'] = 'Používateľská oblasť';
+$strings['tour_home_user_area_content'] = 'Tu môžete pristupovať k svojmu profilu, osobným možnostiam a odhlásiť sa.';

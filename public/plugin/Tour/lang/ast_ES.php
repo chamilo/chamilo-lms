@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Esti cuadru explica cómo
 
 $strings['tour_admin_news_title'] = 'Noves de Chamilo';
 $strings['tour_admin_news_content'] = 'Esta seición amosa noves recientes y anuncies del proyectu Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo de la plataforma';
+$strings['tour_home_topbar_logo_content'] = 'Esti logo llévate de vuelta a la páxina principal de la plataforma.';
+$strings['tour_home_topbar_actions_title'] = 'Acciones rápides';
+$strings['tour_home_topbar_actions_content'] = 'Equí pues atopar iconos d’accesu rápidu como creación de cursos, ayuda guiada, tickets y mensaxes, según el to rol.';
+$strings['tour_home_menu_button_title'] = 'Botón del menú';
+$strings['tour_home_menu_button_content'] = 'Usa esti botón pa abrir o zarrar rápido el menú llateral.';
+$strings['tour_home_sidebar_title'] = 'Menú principal';
+$strings['tour_home_sidebar_content'] = 'Esti menú llateral da accesu a les seiciones principales de la plataforma, según los tos permisos.';
+$strings['tour_home_user_area_title'] = 'Área d’usuariu';
+$strings['tour_home_user_area_content'] = 'Equí pues acceder al to perfil, opciones personales y zarrar sesión.';

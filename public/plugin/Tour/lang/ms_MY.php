@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Blok ini menerangkan cara
 
 $strings['tour_admin_news_title'] = 'Berita dari Chamilo';
 $strings['tour_admin_news_content'] = 'Bahagian ini memaparkan berita dan pengumuman terkini daripada projek Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo platform';
+$strings['tour_home_topbar_logo_content'] = 'Logo ini membawa anda kembali ke halaman utama platform.';
+$strings['tour_home_topbar_actions_title'] = 'Tindakan pantas';
+$strings['tour_home_topbar_actions_content'] = 'Di sini anda boleh menemui ikon pintasan seperti penciptaan kursus, bantuan berpandu, tiket dan mesej, bergantung pada peranan anda.';
+$strings['tour_home_menu_button_title'] = 'Butang menu';
+$strings['tour_home_menu_button_content'] = 'Gunakan butang ini untuk membuka atau menutup menu sisi dengan cepat.';
+$strings['tour_home_sidebar_title'] = 'Menu utama';
+$strings['tour_home_sidebar_content'] = 'Menu sisi ini memberi akses kepada bahagian utama platform, bergantung pada kebenaran anda.';
+$strings['tour_home_user_area_title'] = 'Kawasan pengguna';
+$strings['tour_home_user_area_content'] = 'Di sini anda boleh mengakses profil, pilihan peribadi dan log keluar.';

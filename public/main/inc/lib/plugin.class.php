@@ -422,7 +422,7 @@ class Plugin
             $languageParentId = !empty($interfaceLanguageInfo['parent_id']) ? (int) $interfaceLanguageInfo['parent_id'] : 0;
 
             // 1. Loading english if exists
-            $english_path = $root.$plugin_name."/lang/english.php";
+            $english_path = $root.$plugin_name."/lang/en_US.php";
 
             if (is_readable($english_path)) {
                 $strings = [];

@@ -44,56 +44,53 @@ $includeGlobs = ['*.php', '*.twig', '*.js', '*.ts', '*.vue', '*.yaml', '*.yml'];
 // ---------------------------------------------------------------------------
 
 /**
- * Parse DB credentials from the project .env file.
- * Supports DATABASE_URL=mysql://user:pass@host:port/dbname
+ * Parse DB credentials from an .env-style file.
+ * Reads DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD.
+ * Falls back to .env.local when a variable is missing.
  */
-function parseDatabaseUrl(string $envFile): array
+function parseDatabaseConfig(string $envFile): array
 {
-    if (!is_readable($envFile)) {
-        fwrite(STDERR, "Cannot read {$envFile}\n");
-        exit(1);
-    }
-
-    $dsn = null;
-    foreach (file($envFile) as $line) {
-        $line = trim($line);
-        if (str_starts_with($line, 'DATABASE_URL=')) {
-            $dsn = trim(substr($line, strlen('DATABASE_URL=')), '"\'');
-            break;
+    $load = static function (string $file): array {
+        $vars = [];
+        if (!is_readable($file)) {
+            return $vars;
         }
-    }
-
-    if (null === $dsn) {
-        // Try .env.local as fallback
-        $localEnv = \dirname($envFile).'/.env.local';
-        if (is_readable($localEnv)) {
-            foreach (file($localEnv) as $line) {
-                $line = trim($line);
-                if (str_starts_with($line, 'DATABASE_URL=')) {
-                    $dsn = trim(substr($line, strlen('DATABASE_URL=')), '"\'');
-                    break;
-                }
+        foreach (file($file) as $line) {
+            $line = trim($line);
+            if ('' === $line || str_starts_with($line, '#')) {
+                continue;
             }
+            $eq = strpos($line, '=');
+            if (false === $eq) {
+                continue;
+            }
+            $key = substr($line, 0, $eq);
+            $val = trim(substr($line, $eq + 1), '"\'');
+            $vars[$key] = $val;
         }
+
+        return $vars;
+    };
+
+    $vars = $load($envFile);
+    $local = \dirname($envFile).'/.env.local';
+    if (is_readable($local)) {
+        $vars = array_merge($vars, $load($local));
     }
 
-    if (null === $dsn) {
-        fwrite(STDERR, "DATABASE_URL not found in {$envFile}\n");
-        exit(1);
-    }
-
-    $parsed = parse_url($dsn);
-    if (false === $parsed) {
-        fwrite(STDERR, "Could not parse DATABASE_URL: {$dsn}\n");
+    $keys = ['DATABASE_HOST', 'DATABASE_PORT', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD'];
+    $missing = array_diff($keys, array_keys($vars));
+    if ([] !== $missing) {
+        fwrite(STDERR, 'Missing .env variables: '.implode(', ', $missing)."\n");
         exit(1);
     }
 
     return [
-        'host'   => $parsed['host'] ?? '127.0.0.1',
-        'port'   => $parsed['port'] ?? 3306,
-        'user'   => urldecode($parsed['user'] ?? ''),
-        'pass'   => urldecode($parsed['pass'] ?? ''),
-        'dbname' => ltrim($parsed['path'] ?? '', '/'),
+        'host'   => $vars['DATABASE_HOST'],
+        'port'   => (int) $vars['DATABASE_PORT'],
+        'user'   => $vars['DATABASE_USER'],
+        'pass'   => $vars['DATABASE_PASSWORD'],
+        'dbname' => $vars['DATABASE_NAME'],
     ];
 }
 
@@ -194,7 +191,7 @@ function isImplemented(string $variable, string $repoRoot, array $searchPaths, a
 $outputFile = $argv[1] ?? null;
 
 // Connect to DB
-$db = parseDatabaseUrl($repoRoot.'/.env');
+$db = parseDatabaseConfig($repoRoot.'/.env');
 
 try {
     $pdo = new PDO(

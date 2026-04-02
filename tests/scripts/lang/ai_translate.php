@@ -28,7 +28,7 @@ $apiKey = $translationAPIKey ?? '';
  * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
  *
  * Usage:
- *   php translate.php [--test] [fr_FR es de]
+ *   php translate.php [--test] [--backup] [fr_FR es de]
  *
  * - messages.en.po is used as the source of truth for terms and ordering.
  * - For each requested language (e.g. "fr_FR"), messages.fr_FR.po will be updated. If no language requested, all except English are processed.
@@ -37,6 +37,8 @@ $apiKey = $translationAPIKey ?? '';
  * - The translation is logged to a file for review.
  * - In --test mode, only ONE API request of up to 50 terms is sent, and
  *   the partially translated .po file is written so you can inspect it.
+ * - --backup creates a .bak copy of each file before modifying it.
+ *   Off by default (Git history serves as backup).
  *
  * Notes:
  * - This script rewrites translation .po files (except the header entry),
@@ -707,10 +709,17 @@ $argvCopy = $argv;
 array_shift($argvCopy); // drop the script name
 
 $testMode = false;
+$makeBackups = false;
 $testKey = array_search('--test', $argvCopy, true);
 if ($testKey !== false) {
     $testMode = true;
     unset($argvCopy[$testKey]);
+    $argvCopy = array_values($argvCopy);
+}
+$backupKey = array_search('--backup', $argvCopy, true);
+if ($backupKey !== false) {
+    $makeBackups = true;
+    unset($argvCopy[$backupKey]);
     $argvCopy = array_values($argvCopy);
 }
 
@@ -782,17 +791,18 @@ foreach ($langCodes as $lang) {
     eprintln("Processing language: {$lang} ({$targetLangName})", true);
     eprintln("Target file: {$targetFile}");
 
-    // Backup logic (unchanged)
     if (is_file($targetFile)) {
-        $backupFile = $targetFile . '.bak';
-        if (!is_file($backupFile)) {
-            if (!copy($targetFile, $backupFile)) {
-                eprintln("Warning: Could not create backup file: {$backupFile}");
+        if ($makeBackups) {
+            $backupFile = $targetFile . '.bak';
+            if (!is_file($backupFile)) {
+                if (!copy($targetFile, $backupFile)) {
+                    eprintln("Warning: Could not create backup file: {$backupFile}");
+                } else {
+                    eprintln("Backup created: {$backupFile}");
+                }
             } else {
-                eprintln("Backup created: {$backupFile}");
+                eprintln("Backup already exists: {$backupFile}");
             }
-        } else {
-            eprintln("Backup already exists: {$backupFile}");
         }
     } else {
         eprintln("Target file does not exist; it will be created.");

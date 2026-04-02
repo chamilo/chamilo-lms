@@ -24,6 +24,8 @@ declare(strict_types=1);
  *   --test           Send only one API batch per plugin (for quick smoke-testing).
  *   --all-languages  Target every language in the built-in map instead of auto-detecting
  *                    from existing files. Useful for bootstrapping a new language everywhere.
+ *   --backup         Create a .bak copy of each existing file before modifying it.
+ *                    Off by default (Git history serves as backup).
  *   --plugin N       Restrict to the named plugin directory (repeatable).
  *
  * Requires config.php (copy from config.dist.php) with $translationAPIKey set.
@@ -505,6 +507,7 @@ array_shift($argvCopy);
 
 $testMode       = false;
 $allLanguages   = false;
+$makeBackups    = false;
 $onlyPlugins    = [];
 $requestedLangs = [];
 
@@ -514,6 +517,8 @@ for ($i = 0; $i < count($argvCopy); $i++) {
         $testMode = true;
     } elseif ('--all-languages' === $arg) {
         $allLanguages = true;
+    } elseif ('--backup' === $arg) {
+        $makeBackups = true;
     } elseif ('--plugin' === $arg) {
         if (isset($argvCopy[++$i])) {
             $onlyPlugins[] = $argvCopy[$i];
@@ -638,8 +643,8 @@ foreach ($plugins as $plugin) {
         eprintln("------------------------------------------------------------");
         eprintln("[{$context}] ({$langLabel})".($fileExists ? '' : ' [NEW FILE]'), true);
 
-        // Backup existing file (once only)
-        if ($fileExists) {
+        // Backup existing file (only when --backup is given)
+        if ($fileExists && $makeBackups) {
             $backup = $targetFile.'.bak';
             if (!is_file($backup)) {
                 if (copy($targetFile, $backup)) {

@@ -9,20 +9,20 @@
           <Button
             class="btn btn--success"
             icon="fa fa-folder-plus"
-            label="New folder"
+            :label="t('New folder')"
             @click="openNewDialog"
           />
           <Button
             class="btn btn--primary"
             icon="fa fa-file-upload"
-            label="Upload"
+            :label="t('Upload')"
             @click="uploadDocumentHandler"
           />
           <Button
             v-if="selectedFiles.length"
             class="btn btn--danger"
             icon="mdi mdi-delete"
-            label="Delete"
+            :label="t('Delete')"
             @click="confirmDeleteMultiple"
           />
           <Button
@@ -34,7 +34,7 @@
             v-if="previousFolders.length"
             class="btn btn--primary"
             icon="mdi mdi-arrow-left"
-            label="Back"
+            :label="t('Back')"
             @click="goBack"
           />
         </div>
@@ -126,7 +126,7 @@
               <Button
                 v-if="slotProps.data.resourceNode.firstResourceFile"
                 class="p-button-sm p-button p-mr-2"
-                label="Select"
+                :label="t('Select')"
                 @click="returnToEditor(slotProps.data)"
               />
             </div>
@@ -172,15 +172,15 @@
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="previousPage"
         >
-          Previous
+          {{ t('Previous') }}
         </button>
-        <span class="text-gray-700 font-semibold">Page {{ filters.page }} of {{ totalPages }}</span>
+        <span class="text-gray-700 font-semibold">{{ t('Page') }} {{ filters.page }} {{ t('of') }} {{ totalPages }}</span>
         <button
           :disabled="filters.page === totalPages"
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="nextPage"
         >
-          Next
+          {{ t('Next') }}
         </button>
       </div>
       <BaseContextMenu
@@ -228,13 +228,13 @@
         <Button
           class="p-button-text"
           icon="mdi mdi-close"
-          label="Cancel"
+          :label="t('Cancel')"
           @click="hideDialog"
         />
         <Button
           class="p-button-text"
           icon="mdi mdi-check"
-          label="Save"
+          :label="t('Save')"
           @click="saveItem"
         />
       </template>
@@ -244,29 +244,26 @@
       v-model:visible="deleteDialog"
       :modal="true"
       :style="{ width: '450px' }"
-      header="Confirm"
+      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
           class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
-        <span
-          >Are you sure you want to delete <b>{{ itemToDelete?.title }}</b
-          >?</span
-        >
+        <span>{{ $t("Are you sure you want to delete {title}?", { title: itemToDelete?.title }) }}</span>
       </div>
       <template #footer>
         <Button
           class="p-button-text"
           icon="mdi mdi-close"
-          label="No"
+          :label="t('No')"
           @click="deleteDialog = false"
         />
         <Button
           class="p-button-text"
           icon="mdi mdi-check"
-          label="Yes"
+          :label="t('Yes')"
           @click="deleteItemButton"
         />
       </template>
@@ -276,7 +273,7 @@
       v-model:visible="deleteMultipleDialog"
       :modal="true"
       :style="{ width: '450px' }"
-      header="Confirm"
+      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
@@ -289,13 +286,13 @@
         <Button
           class="p-button-text"
           icon="mdi mdi-close"
-          label="No"
+          :label="t('No')"
           @click="deleteMultipleDialog = false"
         />
         <Button
           class="p-button-text"
           icon="mdi mdi-check"
-          label="Yes"
+          :label="t('Yes')"
           @click="deleteMultipleItems"
         />
       </template>
@@ -303,27 +300,27 @@
 
     <Dialog
       v-model:visible="detailsDialogVisible"
-      :header="selectedItem.title || 'Item Details'"
+      :header="selectedItem.title || t('Item Details')"
       :modal="true"
       :style="{ width: '50%' }"
     >
       <div v-if="Object.keys(selectedItem).length > 0">
-        <p><strong>Title:</strong> {{ selectedItem.title }}</p>
-        <p><strong>Modified:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
-        <p><strong>Size:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
+        <p><strong>{{ $t('Title') }}:</strong> {{ selectedItem.title }}</p>
+        <p><strong>{{ $t('Modified') }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
+        <p><strong>{{ $t('Size') }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
         <p>
           <strong>URL:</strong>
           <a
             :href="selectedItem.contentUrl"
             target="_blank"
-            >Open File</a
+            >{{ $t('Open File') }}</a
           >
         </p>
       </div>
       <template #footer>
         <Button
           class="p-button-text"
-          label="Close"
+          :label="t('Close')"
           @click="closeDetailsDialog"
         />
       </template>

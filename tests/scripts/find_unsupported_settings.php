@@ -39,61 +39,78 @@ $searchPaths = [
 /** File extensions passed to grep via --include. */
 $includeGlobs = ['*.php', '*.twig', '*.js', '*.ts', '*.vue', '*.yaml', '*.yml'];
 
+/**
+ * Files that only define/register/insert settings — not actual usage.
+ * Matches are excluded so a setting appearing only here is still "not implemented".
+ */
+$excludeFiles = [
+    'public/main/admin/settings.php',                          // legacy settings admin UI
+    'src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php', // initial DB fixtures
+];
+
+/**
+ * Directory name patterns excluded from the grep search entirely.
+ * - Migrations: only INSERT/UPDATE settings rows.
+ * - Settings: SettingsManager.php + *Schema.php files define/register settings,
+ *   they do not constitute actual usage of the setting value in application logic.
+ */
+$excludeDirs = [
+    'Migrations',
+    'Settings',
+];
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
 /**
- * Parse DB credentials from the project .env file.
- * Supports DATABASE_URL=mysql://user:pass@host:port/dbname
+ * Parse DB credentials from an .env-style file.
+ * Reads DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD.
+ * Falls back to .env.local when a variable is missing.
  */
-function parseDatabaseUrl(string $envFile): array
+function parseDatabaseConfig(string $envFile): array
 {
-    if (!is_readable($envFile)) {
-        fwrite(STDERR, "Cannot read {$envFile}\n");
-        exit(1);
-    }
-
-    $dsn = null;
-    foreach (file($envFile) as $line) {
-        $line = trim($line);
-        if (str_starts_with($line, 'DATABASE_URL=')) {
-            $dsn = trim(substr($line, strlen('DATABASE_URL=')), '"\'');
-            break;
+    $load = static function (string $file): array {
+        $vars = [];
+        if (!is_readable($file)) {
+            return $vars;
         }
-    }
-
-    if (null === $dsn) {
-        // Try .env.local as fallback
-        $localEnv = \dirname($envFile).'/.env.local';
-        if (is_readable($localEnv)) {
-            foreach (file($localEnv) as $line) {
-                $line = trim($line);
-                if (str_starts_with($line, 'DATABASE_URL=')) {
-                    $dsn = trim(substr($line, strlen('DATABASE_URL=')), '"\'');
-                    break;
-                }
+        foreach (file($file) as $line) {
+            $line = trim($line);
+            if ('' === $line || str_starts_with($line, '#')) {
+                continue;
             }
+            $eq = strpos($line, '=');
+            if (false === $eq) {
+                continue;
+            }
+            $key = substr($line, 0, $eq);
+            $val = trim(substr($line, $eq + 1), '"\'');
+            $vars[$key] = $val;
         }
+
+        return $vars;
+    };
+
+    $vars = $load($envFile);
+    $local = \dirname($envFile).'/.env.local';
+    if (is_readable($local)) {
+        $vars = array_merge($vars, $load($local));
     }
 
-    if (null === $dsn) {
-        fwrite(STDERR, "DATABASE_URL not found in {$envFile}\n");
-        exit(1);
-    }
-
-    $parsed = parse_url($dsn);
-    if (false === $parsed) {
-        fwrite(STDERR, "Could not parse DATABASE_URL: {$dsn}\n");
+    $keys = ['DATABASE_HOST', 'DATABASE_PORT', 'DATABASE_NAME', 'DATABASE_USER', 'DATABASE_PASSWORD'];
+    $missing = array_diff($keys, array_keys($vars));
+    if ([] !== $missing) {
+        fwrite(STDERR, 'Missing .env variables: '.implode(', ', $missing)."\n");
         exit(1);
     }
 
     return [
-        'host'   => $parsed['host'] ?? '127.0.0.1',
-        'port'   => $parsed['port'] ?? 3306,
-        'user'   => urldecode($parsed['user'] ?? ''),
-        'pass'   => urldecode($parsed['pass'] ?? ''),
-        'dbname' => ltrim($parsed['path'] ?? '', '/'),
+        'host'   => $vars['DATABASE_HOST'],
+        'port'   => (int) $vars['DATABASE_PORT'],
+        'user'   => $vars['DATABASE_USER'],
+        'pass'   => $vars['DATABASE_PASSWORD'],
+        'dbname' => $vars['DATABASE_NAME'],
     ];
 }
 
@@ -122,12 +139,30 @@ function isCommentLine(string $line): bool
  *
  * Returns an array of matching lines as strings "file:lineNo:content".
  */
-function grepForVariable(string $needle, string $repoRoot, array $searchPaths, array $includeGlobs): array
-{
+function grepForVariable(
+    string $needle,
+    string $repoRoot,
+    array $searchPaths,
+    array $includeGlobs,
+    array $excludeFiles = [],
+    array $excludeDirs = [],
+): array {
     // Build --include flags
     $includes = implode(' ', array_map(
         static fn(string $g): string => '--include='.escapeshellarg($g),
         $includeGlobs
+    ));
+
+    // Build --exclude flags (basename patterns for specific files)
+    $excludes = implode(' ', array_map(
+        static fn(string $f): string => '--exclude='.escapeshellarg(basename($f)),
+        $excludeFiles
+    ));
+
+    // Build --exclude-dir flags
+    $excludeDirFlags = implode(' ', array_map(
+        static fn(string $d): string => '--exclude-dir='.escapeshellarg($d),
+        $excludeDirs
     ));
 
     // Absolute search paths that actually exist
@@ -146,27 +181,49 @@ function grepForVariable(string $needle, string $repoRoot, array $searchPaths, a
     // -r  recursive
     // -n  line numbers
     // -F  fixed string (not a regex) – safer for variable names with special chars
-    // -l would only list files; we need line content to check for comments
     $cmd = sprintf(
-        'grep -rn -F %s %s %s 2>/dev/null',
+        'grep -rn -F %s %s %s %s %s 2>/dev/null',
         escapeshellarg($needle),
         $includes,
+        $excludes,
+        $excludeDirFlags,
         implode(' ', $paths)
     );
 
     $output = [];
     exec($cmd, $output);
 
-    return $output;
+    // Filter out any remaining excluded files that grep's --exclude may have missed
+    // (e.g. when the same basename appears in multiple directories)
+    $excludeAbsolute = array_map(
+        static fn(string $f): string => realpath($repoRoot.'/'.$f) ?: ($repoRoot.'/'.$f),
+        $excludeFiles
+    );
+
+    return array_values(array_filter(
+        $output,
+        static function (string $line) use ($excludeAbsolute): bool {
+            $file = explode(':', $line, 2)[0];
+            $real = realpath($file) ?: $file;
+
+            return !\in_array($real, $excludeAbsolute, true);
+        }
+    ));
 }
 
 /**
  * Returns true when $variable is genuinely used in the codebase
  * (i.e. at least one non-comment match was found).
  */
-function isImplemented(string $variable, string $repoRoot, array $searchPaths, array $includeGlobs): bool
-{
-    $matches = grepForVariable($variable, $repoRoot, $searchPaths, $includeGlobs);
+function isImplemented(
+    string $variable,
+    string $repoRoot,
+    array $searchPaths,
+    array $includeGlobs,
+    array $excludeFiles = [],
+    array $excludeDirs = [],
+): bool {
+    $matches = grepForVariable($variable, $repoRoot, $searchPaths, $includeGlobs, $excludeFiles, $excludeDirs);
 
     if ([] === $matches) {
         return false;
@@ -194,7 +251,7 @@ function isImplemented(string $variable, string $repoRoot, array $searchPaths, a
 $outputFile = $argv[1] ?? null;
 
 // Connect to DB
-$db = parseDatabaseUrl($repoRoot.'/.env');
+$db = parseDatabaseConfig($repoRoot.'/.env');
 
 try {
     $pdo = new PDO(
@@ -238,7 +295,7 @@ foreach ($settings as $row) {
         fwrite(STDERR, "  {$checked}/".count($settings)."...\n");
     }
 
-    if (!isImplemented($variable, $repoRoot, $searchPaths, $includeGlobs)) {
+    if (!isImplemented($variable, $repoRoot, $searchPaths, $includeGlobs, $excludeFiles, $excludeDirs)) {
         $rows[] = [
             $variable,
             $row['category'] ?? '',

@@ -21,8 +21,10 @@ declare(strict_types=1);
  *
  *   lang         ISO code (fr_FR, de, es) OR filename stem (french, german, spanish).
  *                If omitted, all language files found across existing plugins are used.
- *   --test       Send only one API batch per plugin (for quick smoke-testing).
- *   --plugin N   Restrict to the named plugin directory (repeatable).
+ *   --test           Send only one API batch per plugin (for quick smoke-testing).
+ *   --all-languages  Target every language in the built-in map instead of auto-detecting
+ *                    from existing files. Useful for bootstrapping a new language everywhere.
+ *   --plugin N       Restrict to the named plugin directory (repeatable).
  *
  * Requires config.php (copy from config.dist.php) with $translationAPIKey set.
  */
@@ -502,6 +504,7 @@ $argvCopy = $argv;
 array_shift($argvCopy);
 
 $testMode       = false;
+$allLanguages   = false;
 $onlyPlugins    = [];
 $requestedLangs = [];
 
@@ -509,6 +512,8 @@ for ($i = 0; $i < count($argvCopy); $i++) {
     $arg = $argvCopy[$i];
     if ('--test' === $arg) {
         $testMode = true;
+    } elseif ('--all-languages' === $arg) {
+        $allLanguages = true;
     } elseif ('--plugin' === $arg) {
         if (isset($argvCopy[++$i])) {
             $onlyPlugins[] = $argvCopy[$i];
@@ -571,7 +576,12 @@ eprintln('Found '.count($plugins).' plugin(s) with translatable lang files.', tr
 
 // ===================== DETERMINE TARGET LANGUAGES =====================
 
-if (empty($requestedLangs)) {
+if ($allLanguages) {
+    // Use every language in the map except English
+    $requestedLangs = array_keys(array_filter($langNameToCode, fn ($code) => 'en_US' !== $code, ARRAY_FILTER_USE_VALUES));
+    sort($requestedLangs);
+    eprintln('--all-languages: targeting '.count($requestedLangs).' language(s): '.implode(', ', $requestedLangs), true);
+} elseif (empty($requestedLangs)) {
     // Auto-detect: union of all non-English language file stems across all plugins
     $detected = [];
     foreach ($plugins as $plugin) {

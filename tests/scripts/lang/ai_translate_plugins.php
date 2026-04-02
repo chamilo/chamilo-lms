@@ -121,6 +121,7 @@ function pluginLogAction(string $logFile, string $context, string $key, string $
 /**
  * Include a plugin language PHP file and return the $strings it defines.
  * The include runs in local scope so only $strings is captured.
+ * Use this for both the English source (to get values) and target files (to get existing translations).
  */
 function parsePluginLangFile(string $filePath): array
 {
@@ -134,6 +135,70 @@ function parsePluginLangFile(string $filePath): array
 }
 
 /**
+ * Parse the structural layout of a plugin language PHP file.
+ *
+ * Returns an ordered list of entries, each one of:
+ *   ['type' => 'raw',    'line'  => string]   – comment, blank line, preamble (<?php, declare…)
+ *   ['type' => 'string', 'key'   => string]   – a $strings assignment (value comes from include)
+ *
+ * Multi-line assignments (concatenation, heredoc, literal newlines inside strings) are
+ * collapsed to a single 'string' entry; the actual translated value is supplied at write time.
+ */
+function parseSourceFileStructure(string $filePath): array
+{
+    $lines   = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES | 0);
+    // Re-read without FILE_SKIP_EMPTY_LINES so blank lines are preserved
+    $lines   = file($filePath, FILE_IGNORE_NEW_LINES);
+    $entries = [];
+
+    $inAssignment = false;
+    $currentKey   = null;
+    $depth        = 0; // track open quotes to detect end-of-assignment
+
+    foreach ($lines as $line) {
+        if ($inAssignment) {
+            // Accumulate continuation lines; detect end of the PHP statement.
+            // We look for a line whose trimmed form ends with ; and is not inside
+            // an open string — heuristic: line ends with '; or "; or just ; after closing paren.
+            $trimmed = rtrim($line);
+            if (
+                str_ends_with($trimmed, "';")
+                || str_ends_with($trimmed, '";')
+                || str_ends_with($trimmed, ');')
+                || (str_ends_with($trimmed, ';') && !str_contains($trimmed, "'") && !str_contains($trimmed, '"'))
+            ) {
+                // End of the multi-line assignment — record only the key, not the raw lines
+                $entries[]    = ['type' => 'string', 'key' => $currentKey];
+                $inAssignment = false;
+                $currentKey   = null;
+            }
+            // Continuation lines are intentionally dropped; value comes from include()
+            continue;
+        }
+
+        // Check for start of a $strings assignment
+        if (preg_match('/^\$strings\[([\'"])(.+?)\1\]\s*=/', $line, $m)) {
+            $key = $m[2];
+            // Single-line assignment ends with ; on the same line
+            $trimmed = rtrim($line);
+            if (str_ends_with($trimmed, ';')) {
+                $entries[] = ['type' => 'string', 'key' => $key];
+            } else {
+                // Multi-line assignment — skip continuation lines until ; found
+                $inAssignment = true;
+                $currentKey   = $key;
+            }
+            continue;
+        }
+
+        // Everything else: comments, blank lines, <?php, declare(…)
+        $entries[] = ['type' => 'raw', 'line' => $line];
+    }
+
+    return $entries;
+}
+
+/**
  * Render a PHP string literal.
  * Uses double quotes when the value contains a single quote, single quotes otherwise.
  */
@@ -141,8 +206,8 @@ function formatPhpValue(string $value): string
 {
     if (str_contains($value, "'")) {
         $escaped = str_replace(
-            ['\\',   '"',    '$',    "\r\n", "\r",   "\n"],
-            ['\\\\', '\\"',  '\\$',  '\\n',  '\\n',  '\\n'],
+            ['\\',    '"',    '$',    "\r\n", "\r",   "\n"],
+            ['\\\\',  '\\"',  '\\$',  '\\n',  '\\n',  '\\n'],
             $value
         );
 
@@ -155,32 +220,44 @@ function formatPhpValue(string $value): string
 }
 
 /**
- * Write a plugin language file.
- * Keys are written in the order they appear in the English source ($orderedKeys).
- * Keys present in $strings but absent from $orderedKeys are appended at the end.
+ * Write a plugin language file preserving the structural layout of the English source.
+ *
+ * @param string $filePath       Where to write
+ * @param array  $sourceEntries  Structural entries from parseSourceFileStructure()
+ * @param array  $strings        Final [key => translated value] map
  */
-function writePluginLangFile(string $filePath, array $strings, array $orderedKeys): bool
+function writePluginLangFile(string $filePath, array $sourceEntries, array $strings): bool
 {
-    $lines   = ['<?php', '', 'declare(strict_types=1);'];
-    $written = [];
+    $outputLines = [];
 
-    foreach ($orderedKeys as $key) {
-        if (!array_key_exists($key, $strings)) {
-            continue;
+    foreach ($sourceEntries as $entry) {
+        if ('raw' === $entry['type']) {
+            $outputLines[] = $entry['line'];
+        } else {
+            // 'string' entry: emit translated (or empty) value
+            $key        = $entry['key'];
+            $value      = $strings[$key] ?? '';
+            $escapedKey = str_replace("'", "\\'", $key);
+            $outputLines[] = "\$strings['{$escapedKey}'] = ".formatPhpValue($value).';';
         }
-        $escapedKey = str_replace("'", "\\'", $key);
-        $lines[]    = "\$strings['{$escapedKey}'] = ".formatPhpValue($strings[$key]).';';
-        $written[$key] = true;
+    }
+
+    // Append any keys present in $strings but not in the source structure
+    // (should not normally happen, but guards against edge cases)
+    $structureKeys = [];
+    foreach ($sourceEntries as $entry) {
+        if ('string' === $entry['type']) {
+            $structureKeys[$entry['key']] = true;
+        }
     }
     foreach ($strings as $key => $value) {
-        if (isset($written[$key])) {
-            continue;
+        if (!isset($structureKeys[$key])) {
+            $escapedKey    = str_replace("'", "\\'", $key);
+            $outputLines[] = "\$strings['{$escapedKey}'] = ".formatPhpValue($value).';';
         }
-        $escapedKey = str_replace("'", "\\'", $key);
-        $lines[]    = "\$strings['{$escapedKey}'] = ".formatPhpValue($value).';';
     }
 
-    return file_put_contents($filePath, implode("\n", $lines)."\n") !== false;
+    return file_put_contents($filePath, implode("\n", $outputLines)."\n") !== false;
 }
 
 /**
@@ -529,9 +606,9 @@ foreach ($plugins as $plugin) {
     $pluginName  = $plugin['name'];
     $langDir     = $plugin['langDir'];
 
-    $sourceStrings = parsePluginLangFile($plugin['source']);
-    $orderedKeys   = array_keys($sourceStrings);
-    $totalTerms    = count($sourceStrings);
+    $sourceStrings  = parsePluginLangFile($plugin['source']);
+    $sourceStructure = parseSourceFileStructure($plugin['source']);
+    $totalTerms     = count($sourceStrings);
 
     if (0 === $totalTerms) {
         eprintln("[{$pluginName}] english.php appears empty – skipping.", true);
@@ -618,7 +695,7 @@ foreach ($plugins as $plugin) {
             );
         }
 
-        if (writePluginLangFile($targetFile, $result, $orderedKeys)) {
+        if (writePluginLangFile($targetFile, $sourceStructure, $result)) {
             eprintln("[{$context}] File written: {$targetFile}", true);
         } else {
             eprintln("[{$context}] ERROR: failed to write {$targetFile}!", true);

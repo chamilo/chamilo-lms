@@ -3542,12 +3542,12 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
 
     $courseId = (int) api_get_setting('forum.global_forums_course_id');
     $subject = get_lang('New Post in the forum').' - '.
-        $_course['official_code'].': '.$forum->getTitle().' - '.$thread->getTitle()." <br />\n";
+        $_course['official_code'].': '.$forum->getTitle().' - '.$thread->getTitle();
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId) {
         $subject = get_lang('New Post in the forum').': '.
-            $forum->getTitle().' - '.$thread->getTitle()." <br />\n";
+            $forum->getTitle().' - '.$thread->getTitle();
         $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;

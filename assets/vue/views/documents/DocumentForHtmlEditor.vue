@@ -1,6 +1,5 @@
 <template>
   <BaseToolbar>
-    <!-- Toolbar actions: keep spacing consistent and avoid overlapping icons -->
     <div class="flex items-center gap-2">
       <BaseButton
         v-if="showNewFolderButton"
@@ -247,11 +246,11 @@ export default {
         page: 1,
         itemsPerPage: 20,
       },
-      folderTrail: ref([]), // [{ id, title }]
+      folderTrail: ref([]),
       trailRootId: ref(null),
       currentFolderTitle: ref(""),
       uploadInput: ref(null),
-      nodeCache: new Map(), // id -> { id, title, parentId, resourceTypeTitle }
+      nodeCache: new Map(),
     }
   },
   created() {
@@ -263,7 +262,7 @@ export default {
     this.onUpdateOptions(this.options)
   },
   watch: {
-    async "$route.params.node"(newVal, oldVal) {
+    async currentRouteNodeParam(newVal, oldVal) {
       if (String(newVal) === String(oldVal)) return
 
       if (!this.options || typeof this.options !== "object" || Array.isArray(this.options)) {
@@ -292,6 +291,14 @@ export default {
       totalItems: "totalItems",
       view: "view",
     }),
+    currentRouteNodeParam() {
+      return this.$route?.params?.node ?? this.$route?.params?.id ?? null
+    },
+    routeNodeParamName() {
+      if (this.$route?.params?.node !== undefined) return "node"
+      if (this.$route?.params?.id !== undefined) return "id"
+      return "node"
+    },
     pickerType() {
       const raw = String(this.$route?.query?.type || "files").toLowerCase()
       return ["files", "images", "media"].includes(raw) ? raw : "files"
@@ -335,7 +342,6 @@ export default {
       this.onUpdateOptions(this.options)
     },
 
-    // ---- Picker filtering helpers ----
     isFolderEntry(entry) {
       return !entry?.resourceNode?.firstResourceFile
     },
@@ -366,7 +372,6 @@ export default {
       return true
     },
 
-    // ---- ID normalization (supports numeric, "123", or "/api/resource_nodes/123") ----
     normalizeNodeId(value) {
       if (value == null) return null
       if (typeof value === "number" && Number.isFinite(value) && value > 0) return value
@@ -389,7 +394,7 @@ export default {
     },
 
     getCurrentNodeId() {
-      const raw = this.$route?.params?.node
+      const raw = this.$route?.params?.node ?? this.$route?.params?.id
       const n = this.normalizeNodeId(raw)
       return n || 1
     },
@@ -406,7 +411,6 @@ export default {
       return this.trailRootId || this.folderTrail?.[0]?.id || null
     },
 
-    // ---- Navigation: build breadcrumb from real ResourceNode parents ----
     async fetchNodeInfo(nodeId) {
       const id = this.normalizeNodeId(nodeId)
       if (!id) return null
@@ -427,14 +431,10 @@ export default {
         }
 
         const data = await resp.json()
-
         const title = String(data?.title || "").trim() || `#${id}`
-
-        // parent can be IRI or embedded object
         const parentRaw = data?.parent
         const parentId = this.normalizeNodeId(parentRaw)
 
-        // resourceType can be embedded; we only need title to detect course root
         const rtTitle =
           String(data?.resourceType?.title || data?.resourceType || "")
             .trim()
@@ -462,7 +462,6 @@ export default {
 
         chain.push({ id: info.id, title: info.title, parentId: info.parentId, rt: info.resourceTypeTitle })
 
-        // Stop when we reach the course root (or when there's no parent)
         if (!info.parentId) break
         if (info.resourceTypeTitle === "courses") break
 
@@ -472,7 +471,6 @@ export default {
 
       chain.reverse()
 
-      // Ensure we always have at least the current node
       if (!chain.length) {
         chain.push({ id: currentId, title: `#${currentId}` })
       }
@@ -482,7 +480,6 @@ export default {
       this.currentFolderTitle = this.folderTrail[this.folderTrail.length - 1]?.title || `#${currentId}`
     },
 
-    // ---- Navigation actions ----
     navigateToNode(nodeId) {
       const id = this.normalizeNodeId(nodeId)
       if (!id) return
@@ -491,7 +488,7 @@ export default {
         name: this.$route.name,
         params: {
           ...this.$route.params,
-          node: id,
+          [this.routeNodeParamName]: id,
         },
         query: {
           ...this.$route.query,
@@ -522,7 +519,6 @@ export default {
         return
       }
 
-      // Folder navigation
       if (!entry.resourceNode.firstResourceFile) {
         const nextNodeId = this.normalizeNodeId(entry.resourceNode.id || entry.resourceNode["@id"])
         if (!nextNodeId) {
@@ -565,7 +561,6 @@ export default {
         this.itemDialog = false
         this.item = {}
 
-        // Refresh list and breadcrumb
         await this.refreshNavigation()
         this.onUpdateOptions(this.options)
       } catch (e) {
@@ -592,7 +587,7 @@ export default {
       const payload = {
         title: file.name,
         filetype: "file",
-        uploadFile: file, // createWithFormData should map this to multipart "uploadFile"
+        uploadFile: file,
         parentResourceNodeId: this.getCurrentNodeId(),
         resourceLinkList: JSON.stringify([
           {
@@ -608,10 +603,11 @@ export default {
         await this.create(payload)
         this.showMessage("Saved")
 
-        // Clear input so selecting the same file again triggers change
         try {
           e.target.value = ""
-        } catch {}
+        } catch {
+          // Ignore
+        }
 
         await this.refreshNavigation()
         this.onUpdateOptions(this.options)
@@ -654,16 +650,23 @@ export default {
 
       try {
         window.parent.postMessage(payload, "*")
-      } catch {}
+      } catch {
+        // Ignore
+      }
+
       try {
         window.parent.postMessage({ url }, "*")
-      } catch {}
+      } catch {
+        // Ignore
+      }
 
       try {
         if (parent?.tinymce?.activeEditor?.windowManager) {
           parent.tinymce.activeEditor.windowManager.close()
         }
-      } catch {}
+      } catch {
+        // Ignore
+      }
 
       function getUrlParam(paramName) {
         const reParam = new RegExp("(?:[\\?&]|&amp;)" + paramName + "=([^&]+)", "i")

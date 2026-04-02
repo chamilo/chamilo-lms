@@ -1012,16 +1012,16 @@ class SurveyUtil
         if (!empty($lpItemId)) {
             $tableLp = Database::get_course_table(TABLE_LP_MAIN);
             $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT l.name, li.title
+            $sql = "SELECT l.title as lptitle, li.title as lpititle
                 FROM $tableLpItem li
-                INNER JOIN $tableLp l ON l.iid = li.lp_id AND l.c_id = li.c_id
-                WHERE li.c_id = $course_id AND li.iid = $lpItemId";
+                INNER JOIN $tableLp l ON l.iid = li.lp_id
+                WHERE li.iid = $lpItemId";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
                 $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
                     .get_lang('Learning path')
-                    .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['name'].' : '.$row['title'].'</h3></div></div></div>';
+                    .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['lptitle'].' : '.$row['lpititle'].'</h3></div></div></div>';
             }
         }
 

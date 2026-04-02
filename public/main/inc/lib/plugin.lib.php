@@ -417,17 +417,8 @@ class AppPlugin
 
     /**
      * Loads plugin info.
-     *
-     * @staticvar array $plugin_data
-     *
-     * @param string $pluginName
-     * @param bool   $forced     load from DB or from the static array
-     *
-     * @return array
-     *
-     * @todo filter setting_form
      */
-    public function getPluginInfo($pluginName, $forced = false)
+    public function getPluginInfo(string $pluginName): array
     {
         $plugin_info = [];
         $pluginPath  = api_get_path(SYS_PLUGIN_PATH);

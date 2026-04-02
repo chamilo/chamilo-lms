@@ -383,9 +383,15 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
             'method' => 'POST',
         ]);
 
-        if (isset($pluginInfo['settings'])) {
+        if (isset($pluginInfo['settings']) && is_array($pluginInfo['settings'])) {
             unset($pluginInfo['settings']['tool_enable']);
-            $form->setDefaults($pluginInfo['settings']);
+
+            $storedDefaults = array_filter(
+                $pluginInfo['settings'],
+                static fn ($value): bool => null !== $value
+            );
+
+            $form->setDefaults($storedDefaults);
         }
 
         if ($form->validate()) {

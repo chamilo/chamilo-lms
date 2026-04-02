@@ -14,6 +14,10 @@
                 0 0 0 3px rgba(14, 165, 233, 0.12) !important;
     }
 
+    .introjs-helperNumberLayer {
+        box-sizing: content-box;
+    }
+
     .introjs-tooltip {
         border-radius: 12px !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;

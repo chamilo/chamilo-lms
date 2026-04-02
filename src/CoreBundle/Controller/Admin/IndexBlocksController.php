@@ -949,21 +949,14 @@ class IndexBlocksController extends BaseController
             // getPluginInfo() might fail to build the plugin object; never assume 'obj' exists
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
 
-            // Normalize/fallbacks
-            if (!\is_array($pluginInfo)) {
-                // Defensive: unexpected structure → skip
-                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
-
+            if (empty($pluginInfo)) {
                 continue;
             }
 
             /** @var Plugin|null $objPlugin */
             $objPlugin = $pluginInfo['obj'] ?? null;
 
-            if (!$objPlugin instanceof Plugin) {
-                // Defensive: plugin could not be instantiated (e.g. throws in constructor)
-                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
-
+            if (!$objPlugin) {
                 continue;
             }
 
@@ -971,12 +964,10 @@ class IndexBlocksController extends BaseController
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            if (!$configuration || !isset($configuration['regions'])) {
-                continue;
-            }
-
             // Only show plugins that declare the admin menu region
-            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
+            if (empty($configuration['regions'])
+                || !\in_array('menu_administrator', $configuration['regions'], true)
+            ) {
                 continue;
             }
 

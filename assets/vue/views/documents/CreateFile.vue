@@ -4,7 +4,7 @@
     :handle-reset="resetForm"
   />
 
-  <!-- Quota warning banner (always visible) -->
+  <!-- Quota warning banner -->
   <div
     v-if="quotaWarningMessage"
     class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
@@ -59,8 +59,8 @@
             :key="tag"
             type="button"
             class="text-left px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
-            @click="insertCertificateTag(tag)"
             :title="$t('Click to insert')"
+            @click="insertCertificateTag(tag)"
           >
             <code class="text-sm">{{ tag }}</code>
           </button>
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
@@ -84,8 +85,6 @@ import documentsService from "../../services/documents"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const servicePrefix = "Documents"
-
-// Show warning when remaining quota <= 2%
 const QUOTA_WARNING_THRESHOLD_PERCENT = 2
 
 export default {
@@ -122,26 +121,25 @@ export default {
       item: {
         title: "",
         contentFile: "",
-        newDocument: true, // Used in FormNewDocument.vue to show the editor
+        newDocument: true,
         filetype,
         parentResourceNodeId: null,
         resourceLinkList: null,
 
-        // Search-related flag: default depends on global search setting
+        // Search-related flag
         indexDocumentContent: this.defaultIndexDocumentContent,
-
-        // Ensure container exists for advanced search fields
         searchFieldValues: {},
+
+        // AI disclosure flags
+        ai_assisted: 0,
+        ai_assisted_raw: 0,
       },
 
       templates: [],
       isLoading: false,
       errors: {},
-
-      // Quota banner
       quotaWarningMessage: "",
 
-      // Certificate UI helpers
       certificateTags: [
         "((user_firstname))",
         "((user_lastname))",
@@ -169,7 +167,7 @@ export default {
   },
 
   created() {
-    this.item.parentResourceNodeId = this.$route.params.node
+    this.item.parentResourceNodeId = this.getRouteNodeId()
     this.item.resourceLinkList = JSON.stringify([
       {
         gid: this.$route.query.gid,
@@ -179,11 +177,74 @@ export default {
       },
     ])
 
-    // Show quota warning early (avoid wasting time writing content)
     this.showQuotaWarningIfNeeded()
   },
 
+  mounted() {
+    this.fetchTemplates()
+  },
+
   methods: {
+    getDocumentsListRouteName() {
+      const candidates = ["DocumentsList", "FileManagerList"]
+
+      for (const name of candidates) {
+        if (typeof this.$router?.hasRoute === "function" && this.$router.hasRoute(name)) {
+          return name
+        }
+      }
+
+      return null
+    },
+    async redirectToDocumentsList() {
+      const routeName = this.getDocumentsListRouteName()
+      const nodeId = this.getRouteNodeId()
+
+      if (routeName) {
+        const params = { ...this.$route.params }
+        if (params.node !== undefined) {
+          params.node = nodeId
+        } else if (params.id !== undefined) {
+          params.id = nodeId
+        } else {
+          params.node = nodeId
+        }
+
+        await this.$router.push({
+          name: routeName,
+          params,
+          query: {
+            ...this.$route.query,
+            loadNode: 1,
+          },
+        })
+
+        return
+      }
+
+      this.$router.back()
+    },
+    getRouteNodeId() {
+      return this.$route.params.node ?? this.$route.params.id ?? null
+    },
+
+    normalizeBoolean(value) {
+      const v = String(value ?? "")
+        .trim()
+        .toLowerCase()
+
+      return ["1", "true", "yes", "on"].includes(v)
+    },
+
+    normalizeAiAssistedState() {
+      const currentRaw = this.item?.ai_assisted_raw
+      const current = this.item?.ai_assisted
+      const enabled = this.normalizeBoolean(currentRaw) || this.normalizeBoolean(current)
+
+      this.item.ai_assisted = enabled ? 1 : 0
+      this.item.ai_assisted_raw = enabled ? 1 : 0
+    },
+
     toInt(value, fallback = 0) {
       const n = Number(value)
       return Number.isFinite(n) ? n : fallback
@@ -220,33 +281,17 @@ export default {
     },
 
     addTemplateToEditor(templateContent) {
+      if (this.$refs.createForm && typeof this.$refs.createForm.updateContent === "function") {
+        this.$refs.createForm.updateContent(templateContent)
+        return
+      }
+
       this.item.contentFile = templateContent
     },
 
-    async fetchTemplates() {
-      this.errors = {}
-      const courseId = this.$route.query.cid
-      try {
-        const data = await documentsService.getTemplates(courseId)
-        this.templates = data
-      } catch (error) {
-        console.error("[Documents] Failed to fetch templates:", error)
-        this.errors = error.errors
-      }
-    },
-
-    // ----------------------------
-    // Certificate tag helpers
-    // ----------------------------
-
-    /**
-     * Insert text into TinyMCE at cursor position (preferred).
-     * Fallback: append to item.contentFile.
-     */
     insertIntoEditor(text) {
       try {
         if (window.tinymce) {
-          // BaseTinyEditor uses: editor-id="item_content"
           const editor = window.tinymce.get("item_content") || window.tinymce.activeEditor
           if (editor) {
             editor.focus()
@@ -258,16 +303,10 @@ export default {
         console.warn("[Certificate] Failed to insert into TinyMCE editor:", e)
       }
 
-      // Fallback (not cursor-aware but reliable)
       this.item.contentFile = String(this.item.contentFile || "") + text
       return false
     },
 
-    /**
-     * Copy text to clipboard.
-     * Uses modern Clipboard API when available (secure context),
-     * otherwise falls back to execCommand("copy").
-     */
     async writeToClipboard(text) {
       try {
         if (navigator.clipboard && window.isSecureContext) {
@@ -299,116 +338,56 @@ export default {
       }
     },
 
-    /**
-     * Click on a tag: insert into editor (main behavior).
-     */
     async insertCertificateTag(tag) {
       this.insertIntoEditor(tag)
-      await this.writeToClipboard(tag) // Non-blocking UX
+      await this.writeToClipboard(tag)
     },
 
-    /**
-     * Copy all tags to clipboard (button).
-     */
     async copyAllCertificateTags() {
       const text = this.certificateTags.join("\n")
       const ok = await this.writeToClipboard(text)
 
       if (ok) {
-        this.showMessage("All tags copied to clipboard.")
-      } else {
-        this.showMessage("Copy failed (browser restrictions).")
+        this.showMessage("All tags copied to clipboard")
+        return
       }
+
+      this.showMessage("Failed to copy tags")
     },
 
-    async readErrorMessageSafely(response) {
-      if (!response) return ""
-
-      try {
-        const data = await response.json()
-        const msg =
-          data?.error ||
-          data?.message ||
-          data?.detail ||
-          data?.["hydra:description"] ||
-          (Array.isArray(data?.violations) && data.violations.length ? data.violations[0].message : null)
-
-        return String(msg || "")
-      } catch {
-        try {
-          const txt = await response.text()
-          return String(txt || "")
-        } catch {
-          return ""
-        }
-      }
-    },
-
-    // ----------------------------
-    // Existing create logic (quota-aware)
-    // ----------------------------
-    async createWithFormData(payload) {
-      this.isLoading = true
+    async fetchTemplates() {
       this.errors = {}
+      const courseId = this.$route.query.cid
 
       try {
-        const response = await documentsService.createWithFormData(payload)
-
-        if (!response || !response.ok) {
-          const status = response?.status
-          const msg = await this.readErrorMessageSafely(response)
-
-          if (documentsService.isQuotaError(status, msg)) {
-            const quotaMsg = documentsService.getQuotaUploadErrorMessage(this.$t.bind(this))
-            this.showMessage(quotaMsg)
-            this.errors = { error: quotaMsg }
-            return
-          }
-
-          const generic = msg || `Create failed (HTTP ${status ?? "unknown"}).`
-          this.showMessage(generic)
-          this.errors = { error: generic }
-          return
-        }
-
-        const data = await response.json()
-        console.log("[Documents] Create response:", data)
-        this.onCreated(data)
+        const data = await documentsService.getTemplates(courseId)
+        this.templates = data
       } catch (error) {
-        console.error("[Documents] Create failed:", error)
-
-        const errMsg = this.$t("Error")
-        this.showMessage(errMsg)
-        this.errors = error?.errors || { error: errMsg }
-      } finally {
-        this.isLoading = false
+        console.error("[Documents] Failed to fetch templates:", error)
+        this.errors = error.errors
       }
     },
+    async onSendFormData() {
+      this.normalizeAiAssistedState()
 
-    onCreated(item) {
-      let message
-      if (item["resourceNode"]) {
-        message =
-          this.$i18n && this.$i18n.t
-            ? this.$t("{0} created", [item["resourceNode"].title])
-            : `${item["resourceNode"].title} created`
-      } else {
-        message = this.$i18n && this.$i18n.t ? this.$t("{0} created", [item.title]) : `${item.title} created`
+      if (!CreateMixin?.methods?.onSendFormData) {
+        console.error("[Documents] CreateMixin.onSendFormData is missing.")
+        return null
       }
 
-      this.showMessage(message)
-      const folderParams = this.$route.query
+      const result = await CreateMixin.methods.onSendFormData.call(this)
 
-      this.$router.push({
-        name: `${this.$options.servicePrefix}List`,
-        params: { id: item["@id"] },
-        query: folderParams,
-      })
+      if (this.errors && Object.keys(this.errors).length > 0) {
+        return result
+      }
+
+      await this.redirectToDocumentsList()
+
+      return result
     },
-  },
-
-  mounted() {
-    this.fetchTemplates()
+    ...mapActions("documents", {
+      createWithFormData: "createWithFormData",
+    }),
   },
 }
 </script>

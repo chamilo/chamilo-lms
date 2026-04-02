@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Ĉi tiu bloko klarigas, k
 
 $strings['tour_admin_news_title'] = 'Novaĵoj de Chamilo';
 $strings['tour_admin_news_content'] = 'Ĉi tiu sekcio montras lastatempajn novaĵojn kaj anoncojn de la Chamilo-projekto.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platforma emblemo';
+$strings['tour_home_topbar_logo_content'] = 'Ĉi tiu emblemo revenigas vin al la ĉefpaĝo de la platformo.';
+$strings['tour_home_topbar_actions_title'] = 'Rapidaj agoj';
+$strings['tour_home_topbar_actions_content'] = 'Ĉi tie vi povas trovi rapidajn ikonojn kiel kursokreado, gvidata helpo, biletoj kaj mesaĝoj, laŭ via rolo.';
+$strings['tour_home_menu_button_title'] = 'Menua butono';
+$strings['tour_home_menu_button_content'] = 'Uzu ĉi tiun butonon por rapide malfermi aŭ fermi la flankan menuon.';
+$strings['tour_home_sidebar_title'] = 'Ĉefa menuo';
+$strings['tour_home_sidebar_content'] = 'Ĉi tiu flanka menuo donas aliron al la ĉefaj sekcioj de la platformo laŭ viaj permesoj.';
+$strings['tour_home_user_area_title'] = 'Uzanta areo';
+$strings['tour_home_user_area_content'] = 'Ĉi tie vi povas aliri vian profilon, personajn opciojn kaj elsaluti.';

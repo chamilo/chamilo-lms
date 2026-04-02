@@ -1,56 +1,24 @@
 <div id="ch-tour-root"></div>
-
-<style>
-    .introjs-overlay {
-        opacity: 0.18 !important;
-    }
-
-    .introjs-helperLayer {
-        background: transparent !important;
-        border: 2px solid #0ea5e9 !important;
-        border-radius: 12px !important;
-        box-shadow:
-                0 0 0 9999px rgba(15, 23, 42, 0.18),
-                0 0 0 3px rgba(14, 165, 233, 0.12) !important;
-    }
-
-    .introjs-helperNumberLayer {
-        box-sizing: content-box;
-    }
-
-    .introjs-tooltip {
-        border-radius: 12px !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
-    }
-
-    .introjs-tooltipReferenceLayer {
-        background: transparent !important;
-    }
-
-    .introjs-disableInteraction {
-        background-color: transparent !important;
-    }
-</style>
-
 <script>
   (function () {
-    console.log('[Tour] initialized');
+    console.log('[Tour] initialized force-cache-test-v1');
 
     const TOUR_ROOT_ID = 'ch-tour-root';
-    const TOUR_BUTTON_ID = 'ch-tour-button';
 
     const TOUR_CONFIG = {
-      introCss: '/plugin/Tour/intro.js/introjs.min.css',
+      introCss: '/plugin/Tour/intro.js/introjs.min.css?v=20260402-1',
       introThemeCss: '',
-      introJs: '/plugin/Tour/intro.js/intro.min.js',
-      stepsAjax: '/plugin/Tour/ajax/steps.ajax.php',
-      saveAjax: '/plugin/Tour/ajax/save.ajax.php'
+      introJs: '/plugin/Tour/intro.js/intro.min.js?v=20260402-1',
+      stepsAjax: '/plugin/Tour/ajax/steps.ajax.php?v=20260402-1',
+      saveAjax: '/plugin/Tour/ajax/save.ajax.php?v=20260402-1'
     };
 
     let cachedSteps = [];
     let cachedPageClass = null;
     let lastEvaluationKey = null;
     let reinitTimer = null;
+    let badgeEnforceTimer = null;
+    let badgeObserver = null;
 
     function getRoot() {
       let root = document.getElementById(TOUR_ROOT_ID);
@@ -64,93 +32,6 @@
       }
 
       return root;
-    }
-
-    function removeButton() {
-      const oldButton = document.getElementById(TOUR_BUTTON_ID);
-
-      if (oldButton) {
-        oldButton.remove();
-      }
-    }
-
-    function ensureMdiStyles() {
-      if (document.getElementById('tour-mdi-styles')) {
-        return;
-      }
-
-      const link = document.createElement('link');
-      link.id = 'tour-mdi-styles';
-      link.rel = 'stylesheet';
-      link.href = '/build/assets/materialdesignicons.min.css';
-      document.head.appendChild(link);
-    }
-
-    function createButton() {
-      removeButton();
-      ensureMdiStyles();
-
-      const button = document.createElement('button');
-      button.id = TOUR_BUTTON_ID;
-      button.type = 'button';
-      button.setAttribute('aria-label', 'Start tour');
-      button.setAttribute('title', 'Start tour');
-
-      Object.assign(button.style, {
-        position: 'fixed',
-        top: '50%',
-        right: '18px',
-        transform: 'translateY(-50%)',
-        zIndex: '999999',
-        width: '52px',
-        height: '52px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
-        color: '#ffffff',
-        border: 'none',
-        borderRadius: '999px',
-        boxShadow: '0 10px 24px rgba(0, 0, 0, 0.24)',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease',
-        padding: '0'
-      });
-
-      const icon = document.createElement('i');
-      icon.className = 'mdi mdi-help-circle-outline';
-      icon.setAttribute('aria-hidden', 'true');
-
-      Object.assign(icon.style, {
-        fontSize: '26px',
-        lineHeight: '1'
-      });
-
-      button.appendChild(icon);
-
-      button.addEventListener('mouseenter', function () {
-        button.style.transform = 'translateY(-50%) scale(1.04)';
-        button.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.28)';
-        button.style.filter = 'brightness(1.04)';
-      });
-
-      button.addEventListener('mouseleave', function () {
-        button.style.transform = 'translateY(-50%)';
-        button.style.boxShadow = '0 10px 24px rgba(0, 0, 0, 0.24)';
-        button.style.filter = 'none';
-      });
-
-      button.addEventListener('mousedown', function () {
-        button.style.transform = 'translateY(-50%) scale(0.96)';
-      });
-
-      button.addEventListener('mouseup', function () {
-        button.style.transform = 'translateY(-50%) scale(1.04)';
-      });
-
-      document.body.appendChild(button);
-
-      return button;
     }
 
     function getCurrentPageClass() {
@@ -297,70 +178,212 @@
         return;
       }
 
-      const formData = new FormData();
-      formData.append('page_class', pageClass);
+      const params = new URLSearchParams();
+      params.append('page_class', pageClass);
 
       fetch(TOUR_CONFIG.saveAjax, {
         method: 'POST',
         credentials: 'same-origin',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: params.toString()
       }).catch(function (error) {
         console.warn('[Tour] failed to save tour state', error);
       });
     }
 
+    function applyTourStepBadgeStyle() {
+      const badge = document.querySelector('.introjs-helperNumberLayer');
+
+      if (!badge) {
+        return false;
+      }
+
+      badge.textContent = (badge.textContent || '').trim();
+
+      badge.setAttribute(
+        'style',
+        [
+          'position: absolute !important',
+          'top: -18px !important',
+          'left: -18px !important',
+          'width: 40px !important',
+          'min-width: 40px !important',
+          'height: 40px !important',
+          'margin: 0 !important',
+          'padding: 0 !important',
+          'display: flex !important',
+          'align-items: center !important',
+          'justify-content: center !important',
+          'border-radius: 9999px !important',
+          'background: #dc2626 !important',
+          'color: #ffffff !important',
+          'border: 2px solid #ffffff !important',
+          'font-family: Arial, Verdana, Tahoma, sans-serif !important',
+          'font-size: 15px !important',
+          'font-weight: 700 !important',
+          'line-height: 1 !important',
+          'text-align: center !important',
+          'text-indent: 0 !important',
+          'text-shadow: none !important',
+          'box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important',
+          'box-sizing: border-box !important',
+          'z-index: 999999 !important'
+        ].join('; ')
+      );
+
+      return true;
+    }
+
+    function stopTourBadgeEnforcement() {
+      if (badgeEnforceTimer) {
+        window.clearInterval(badgeEnforceTimer);
+        badgeEnforceTimer = null;
+      }
+
+      if (badgeObserver) {
+        badgeObserver.disconnect();
+        badgeObserver = null;
+      }
+    }
+
+    function enforceTourStepBadgeStyle() {
+      stopTourBadgeEnforcement();
+      applyTourStepBadgeStyle();
+
+      let attempts = 0;
+
+      badgeEnforceTimer = window.setInterval(function () {
+        attempts += 1;
+        applyTourStepBadgeStyle();
+
+        if (attempts >= 40) {
+          window.clearInterval(badgeEnforceTimer);
+          badgeEnforceTimer = null;
+        }
+      }, 50);
+
+      if (typeof MutationObserver !== 'undefined' && document.body) {
+        badgeObserver = new MutationObserver(function () {
+          applyTourStepBadgeStyle();
+        });
+
+        badgeObserver.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+    }
+
     function startTour() {
-      const pageClass = getCurrentPageClass();
+      return new Promise(function (resolve) {
+        const pageClass = getCurrentPageClass();
 
-      console.log('[Tour] start requested for page:', pageClass);
+        console.log('[Tour] start requested for page:', pageClass);
 
-      if (!pageClass) {
-        console.warn('[Tour] page class not detected');
-        return;
-      }
-
-      const validSteps = filterValidSteps(cachedSteps);
-
-      console.log('[Tour] cached steps:', cachedSteps);
-      console.log('[Tour] valid steps:', validSteps);
-
-      if (!validSteps.length) {
-        console.warn('[Tour] no valid steps for page:', pageClass);
-        return;
-      }
-
-      loadIntroJs(function () {
-        if (!window.introJs) {
-          console.warn('[Tour] introJs is not available after load');
+        if (!pageClass) {
+          console.warn('[Tour] page class not detected');
+          resolve(false);
           return;
         }
 
-        const intro = window.introJs();
+        const validSteps = filterValidSteps(cachedSteps);
 
-        intro.setOptions({
-          steps: validSteps,
-          overlayOpacity: 0,
-          exitOnOverlayClick: true,
-          showBullets: true,
-          showProgress: true,
-          scrollToElement: true,
-          disableInteraction: false,
-          nextLabel: 'Next →',
-          prevLabel: '← Back',
-          doneLabel: 'Finish',
-          skipLabel: 'Skip'
+        console.log('[Tour] cached steps:', cachedSteps);
+        console.log('[Tour] valid steps:', validSteps);
+
+        if (!validSteps.length) {
+          console.warn('[Tour] no valid steps for page:', pageClass);
+          resolve(false);
+          return;
+        }
+
+        loadIntroJs(function () {
+          if (!window.introJs) {
+            console.warn('[Tour] introJs is not available after load');
+            resolve(false);
+            return;
+          }
+
+          const intro = window.introJs();
+
+          intro.setOptions({
+            steps: validSteps,
+            overlayOpacity: 0.34,
+            exitOnOverlayClick: true,
+            showBullets: true,
+            showProgress: true,
+            scrollToElement: true,
+            disableInteraction: false,
+            nextLabel: 'Next →',
+            prevLabel: '← Back',
+            doneLabel: 'Finish',
+            skipLabel: 'Skip'
+          });
+
+          intro.oncomplete(function () {
+            stopTourBadgeEnforcement();
+            saveTour(pageClass);
+          });
+
+          intro.onexit(function () {
+            stopTourBadgeEnforcement();
+            saveTour(pageClass);
+          });
+
+          intro.onafterchange(function () {
+            enforceTourStepBadgeStyle();
+          });
+
+          intro.onchange(function () {
+            enforceTourStepBadgeStyle();
+          });
+
+          intro.start();
+
+          window.requestAnimationFrame(function () {
+            enforceTourStepBadgeStyle();
+          });
+
+          setTimeout(function () {
+            enforceTourStepBadgeStyle();
+          }, 80);
+
+          setTimeout(function () {
+            enforceTourStepBadgeStyle();
+          }, 200);
+
+          setTimeout(function () {
+            enforceTourStepBadgeStyle();
+          }, 400);
+
+          resolve(true);
         });
-
-        intro.oncomplete(function () {
-          saveTour(pageClass);
-        });
-
-        intro.onexit(function () {
-          saveTour(pageClass);
-        });
-
-        intro.start();
       });
+    }
+
+    function notifyTourAvailability() {
+      window.dispatchEvent(new CustomEvent('tour:availability-change', {
+        detail: {
+          hasSteps: filterValidSteps(cachedSteps).length > 0,
+          pageClass: getCurrentPageClass()
+        }
+      }));
+    }
+
+    function updateTourApi() {
+      if (!window['ChamiloTour'] || typeof window['ChamiloTour'] !== 'object') {
+        window['ChamiloTour'] = new Object();
+      }
+
+      window['ChamiloTour'].start = startTour;
+      window['ChamiloTour'].hasSteps = function () {
+        return filterValidSteps(cachedSteps).length > 0;
+      };
+      window['ChamiloTour'].getCurrentPageClass = getCurrentPageClass;
+
+      notifyTourAvailability();
     }
 
     function init() {
@@ -372,7 +395,7 @@
         cachedSteps = [];
         cachedPageClass = null;
         lastEvaluationKey = evaluationKey;
-        removeButton();
+        updateTourApi();
         return;
       }
 
@@ -390,19 +413,22 @@
 
         console.log('[Tour] configured steps found:', cachedSteps.length);
 
-        if (!cachedSteps.length) {
-          removeButton();
-          return;
-        }
-
         getRoot();
-
-        const button = createButton();
-
-        button.addEventListener('click', function () {
-          startTour();
-        });
+        updateTourApi();
+      }).catch(function (error) {
+        console.warn('[Tour] failed during init', error);
+        cachedSteps = [];
+        updateTourApi();
       });
+    }
+
+    function forceRefresh(reason) {
+      clearTimeout(reinitTimer);
+
+      reinitTimer = setTimeout(function () {
+        console.log('[Tour] forced refresh:', reason);
+        init();
+      }, 80);
     }
 
     function scheduleReinit(reason) {
@@ -468,9 +494,18 @@
         scheduleReinit('hashchange');
       });
 
+      window.addEventListener('tour:start', function () {
+        startTour();
+      });
+
+      window.addEventListener('tour:refresh-request', function () {
+        forceRefresh('external-request');
+      });
+
       observeBodyClassChanges();
     }
 
+    updateTourApi();
     registerRouteListeners();
 
     window.requestAnimationFrame(function () {

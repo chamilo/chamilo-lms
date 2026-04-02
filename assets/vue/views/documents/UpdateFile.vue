@@ -19,7 +19,6 @@
           :search-enabled="isSearchEnabled"
           @submit="onSendFormData"
         >
-          <!-- AI assisted flag (no extra calls; comes from serializer as ai_assisted_raw) -->
           <div
             v-if="isCurrentTeacher"
             class="mt-4 flex items-center gap-2"
@@ -73,8 +72,8 @@
               :key="tag"
               type="button"
               class="text-left px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
-              @click="insertCertificateTag(tag)"
               :title="$t('Click to insert')"
+              @click="insertCertificateTag(tag)"
             >
               <code class="text-sm">{{ tag }}</code>
             </button>
@@ -94,7 +93,7 @@
 <script>
 import { computed, onMounted, ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { mapActions, mapGetters } from "vuex"
+import { mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
@@ -156,8 +155,6 @@ export default {
       templates: [],
       finalTags,
       filetype,
-
-      // AI assisted flag (synced from item.ai_assisted_raw)
       aiAssistedFlag: false,
 
       certificateTags: [
@@ -200,8 +197,6 @@ export default {
     canEditItem() {
       const resourceLink = this.item?.resourceLinkListFromEntity?.[0]
       const sidFromResourceLink = resourceLink?.session?.["@id"]
-
-      // Normalize sid: undefined -> 0
       const sid = String(this.$route.query.sid ?? "0")
 
       return (
@@ -212,7 +207,6 @@ export default {
   },
 
   watch: {
-    // Sync checkbox when item loads/changes
     item: {
       immediate: true,
       handler(val) {
@@ -220,7 +214,6 @@ export default {
           return
         }
 
-        // Prefer ai_assisted_raw (true/false). Fallback to ai_assisted.
         const raw = val.ai_assisted_raw ?? val.ai_assisted
         this.aiAssistedFlag = raw === true || raw === 1 || raw === "1"
       },
@@ -231,12 +224,29 @@ export default {
     this.fetchTemplates()
     this.checkEditPermissions()
 
-    // Ensure container exists for advanced search fields
     if (this.item && typeof this.item === "object" && !this.item.searchFieldValues) {
       this.item.searchFieldValues = {}
     }
   },
   methods: {
+    normalizeBoolean(value) {
+      const v = String(value ?? "")
+        .trim()
+        .toLowerCase()
+
+      return ["1", "true", "yes", "on"].includes(v)
+    },
+
+    normalizeAiAssistedState() {
+      const currentRaw = this.item?.ai_assisted_raw
+      const current = this.item?.ai_assisted
+      const enabled = this.aiAssistedFlag || this.normalizeBoolean(currentRaw) || this.normalizeBoolean(current)
+
+      this.item.ai_assisted = enabled ? 1 : 0
+      this.item.ai_assisted_raw = enabled ? 1 : 0
+      this.aiAssistedFlag = enabled
+    },
+
     handleBack() {
       this.$router.back()
     },
@@ -253,29 +263,12 @@ export default {
         })
     },
     addTemplateToEditor(templateContent) {
-      // Keep editor behavior consistent
       if (this.$refs.updateForm && typeof this.$refs.updateForm.updateContent === "function") {
         this.$refs.updateForm.updateContent(templateContent)
         return
       }
 
       this.item.contentFile = templateContent
-    },
-
-    // Wrap the mixin submit to include AI flag
-    onSendFormData() {
-      // Ensure the value is present in the submitted payload
-      if (this.item && typeof this.item === "object") {
-        this.item.ai_assisted_raw = this.aiAssistedFlag ? 1 : 0
-      }
-
-      // Delegate to UpdateMixin implementation
-      if (UpdateMixin?.methods?.onSendFormData) {
-        return UpdateMixin.methods.onSendFormData.call(this)
-      }
-
-      console.error("[Documents] UpdateMixin.onSendFormData is missing.")
-      return null
     },
 
     insertIntoEditor(text) {
@@ -337,28 +330,23 @@ export default {
       const ok = await this.writeToClipboard(text)
 
       if (ok) {
-        this.showMessage("All tags copied to clipboard.")
-      } else {
-        this.showMessage("Copy failed (browser restrictions).")
+        this.showMessage("All tags copied to clipboard")
+        return
       }
+
+      this.showMessage("Failed to copy tags")
     },
 
-    getCertificateTags() {
-      let finalTags = ""
-      for (const tag of this.certificateTags) {
-        finalTags += '<p class="m-0">' + tag + "</p>"
-      }
-      return finalTags
-    },
+    onSendFormData() {
+      this.normalizeAiAssistedState()
 
-    ...mapActions("documents", {
-      createReset: "resetCreate",
-      deleteItem: "del",
-      delReset: "resetDelete",
-      retrieve: "load",
-      updateWithFormData: "updateWithFormData",
-      updateReset: "resetUpdate",
-    }),
+      if (UpdateMixin?.methods?.onSendFormData) {
+        return UpdateMixin.methods.onSendFormData.call(this)
+      }
+
+      console.error("[Documents] UpdateMixin.onSendFormData is missing.")
+      return null
+    },
   },
 }
 </script>

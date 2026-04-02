@@ -80,8 +80,9 @@ function resolveParentNodeId() {
 
   // Route override (kept): if URL has a node param, respect it
   const routeNode = route?.params?.node ? Number(route.params.node) : 0
+  const routeId = route?.params?.id ? Number(route.params.id) : 0
 
-  return routeNode || courseNodeId || userNodeId || 0
+  return routeNode || routeId || courseNodeId || userNodeId || 0
 }
 parentResourceNodeId.value = resolveParentNodeId()
 
@@ -128,21 +129,9 @@ const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG
 /* Responsive images support (TinyMCE image dialog)                    */
 /* ------------------------------------------------------------------ */
 
-/**
- * CSS class used to make images responsive.
- * We also enforce inline style on save for maximum compatibility.
- */
 const RESPONSIVE_IMAGE_CLASS = "ch-img-responsive"
-
-/**
- * Editor hook guard: prevents attaching the same handlers multiple times
- * even if setup() is wrapped by other config layers.
- */
 const HOOK_GUARD_KEY = "__chamiloBaseTinyEditorHooksAttached"
 
-/**
- * Normalize items so TinyMCE receives objects: { title: string, value: string }.
- */
 function normalizeImageClassListItem(item) {
   if (!item) return null
 
@@ -156,7 +145,6 @@ function normalizeImageClassListItem(item) {
     const title = String(item.title ?? "").trim()
     const value = String(item.value ?? "").trim()
 
-    // Support alternative keys, just in case.
     const fallbackTitle = String(item.text ?? item.name ?? "").trim()
     const fallbackValue = String(item.class ?? "").trim()
 
@@ -174,12 +162,6 @@ function normalizeImageClassListItem(item) {
   return null
 }
 
-/**
- * Build a safe image class list for the image dialog:
- * - Keep existing entries (base/caller)
- * - Ensure "None" exists
- * - Ensure "Responsive" exists
- */
 function buildImageClassList(baseList) {
   const list = Array.isArray(baseList) ? baseList : []
   const normalized = []
@@ -188,7 +170,6 @@ function buildImageClassList(baseList) {
     const n = normalizeImageClassListItem(item)
     if (!n) continue
 
-    // Deduplicate by value+title
     const key = `${n.value}::${n.title}`
     if (normalized.some((x) => `${x.value}::${x.title}` === key)) continue
 
@@ -206,11 +187,6 @@ function buildImageClassList(baseList) {
   return normalized
 }
 
-/**
- * Ensure editor content_style includes:
- * - Base wrapper styling (tiny-content font family)
- * - Responsive image styling for the preview inside the editor
- */
 function ensureTinyContentStyles(contentStyleRaw) {
   const contentStyle = String(contentStyleRaw ?? "")
 
@@ -229,9 +205,6 @@ function ensureTinyContentStyles(contentStyleRaw) {
   return out
 }
 
-/**
- * Ensure TinyMCE keeps class/style attributes on img tags (in case base config is restrictive).
- */
 function ensureExtendedValidElements(raw) {
   const add = "img[class|style|src|alt|title|width|height]"
   const s = String(raw ?? "").trim()
@@ -240,10 +213,6 @@ function ensureExtendedValidElements(raw) {
   return `${s},${add}`
 }
 
-/**
- * Apply inline responsive styles for images that use the responsive class.
- * This guarantees responsiveness outside the editor even if CSS is missing.
- */
 function applyResponsiveInlineStyles(htmlRaw) {
   const html = String(htmlRaw ?? "")
   if (!html.trim()) return html
@@ -277,9 +246,6 @@ function applyResponsiveInlineStyles(htmlRaw) {
   }
 }
 
-/**
- * Attach Chamilo hooks to the editor (idempotent).
- */
 function attachChamiloHooks(editor) {
   try {
     if (editor && editor[HOOK_GUARD_KEY]) return
@@ -288,7 +254,6 @@ function attachChamiloHooks(editor) {
     // Ignore
   }
 
-  // Debug without relying on console output.
   editor.on("init", () => {
     try {
       window.__chamiloTinyEditorLoaded = true
@@ -315,20 +280,17 @@ function attachChamiloHooks(editor) {
 
     let out = html
 
-    // Ensure wrapper
     const hasWrapper = /^\s*<div[^>]+class=["'][^"']*\btiny-content\b[^"']*["'][^>]*>/i.test(out)
     if (!hasWrapper) {
       out = `<div class="tiny-content">${out}</div>`
     }
 
-    // Ensure responsive images get inline styles when class is used.
     out = applyResponsiveInlineStyles(out)
-
     e.content = out
   })
 }
 
-/* Compose default editor config: use base and add Chamilo-specific bits */
+/* Compose default editor config */
 const defaultEditorConfig = {
   ...base,
   skin: false,
@@ -342,23 +304,13 @@ const defaultEditorConfig = {
     : ["/build/css/editor_content.css"],
   language: languageConfig.language,
   language_url: languageConfig.language_url,
-
-  // Ensure the image dialog shows the Advanced tab (where "Class" lives).
   image_advtab: true,
-
-  // Add "Responsive" as an option in TinyMCE image dialog.
   image_class_list: buildImageClassList(base.image_class_list),
-
-  // Ensure class/style is not stripped from <img>.
   extended_valid_elements: ensureExtendedValidElements(base.extended_valid_elements),
-
-  // Wrapper + responsive preview styling inside the editor.
   content_style: ensureTinyContentStyles(base.content_style ?? ""),
-
   body_class: "tiny-content",
 }
 
-/* Add fullPage when requested (merge with base plugins/toolbar) */
 if (props.fullPage) {
   const basePlugins = String(base.plugins || "")
     .split(/\s+/)
@@ -368,28 +320,28 @@ if (props.fullPage) {
   defaultEditorConfig.toolbar = (base.toolbar ? base.toolbar + " | " : "") + "fullpage"
 }
 
-/**
- * Decide whether we should use the Chamilo file manager.
- */
 const effectiveUseFileManager = computed(() => {
   if (props.useFileManager === true) return true
   return Number(parentResourceNodeId.value || 0) > 0
 })
 
-/* Final config: merge base+local via builder and enforce options AFTER builder */
 const editorConfig = computed(() => {
   const builder = typeof window !== "undefined" ? window.buildTinyMceConfig : null
 
-  const callerHasPicker =
-    props.editorConfig?.file_picker_callback && typeof props.editorConfig.file_picker_callback === "function"
+  const callerConfig = props.editorConfig || {}
+  const callerHasPicker = callerConfig?.file_picker_callback && typeof callerConfig.file_picker_callback === "function"
+
+  const callerSetup = typeof callerConfig.setup === "function" ? callerConfig.setup : null
+  const appendToolbar = String(callerConfig.appendToolbar || "").trim()
+
+  const safeCallerConfig = { ...callerConfig }
+  delete safeCallerConfig.setup
+  delete safeCallerConfig.appendToolbar
 
   const local = {
     ...defaultEditorConfig,
-    ...props.editorConfig,
-
-    // Ensure TinyMCE will call the picker for these types.
-    file_picker_types: props.editorConfig?.file_picker_types || "file image media",
-
+    ...safeCallerConfig,
+    file_picker_types: safeCallerConfig.file_picker_types || "file image media",
     ...(callerHasPicker
       ? {}
       : {
@@ -399,27 +351,25 @@ const editorConfig = computed(() => {
 
   const built = builder ? builder(local) : local
 
-  // Enforce AFTER builder (builder may override/strip config keys).
+  if (appendToolbar) {
+    const currentToolbar = String(built.toolbar || "").trim()
+    built.toolbar = currentToolbar ? `${currentToolbar} | ${appendToolbar}` : appendToolbar
+  }
+
   built.image_advtab = built.image_advtab ?? true
   built.image_class_list = buildImageClassList(built.image_class_list)
   built.extended_valid_elements = ensureExtendedValidElements(built.extended_valid_elements)
   built.content_style = ensureTinyContentStyles(built.content_style)
 
-  // Ensure our hooks survive even if builder replaces setup().
   const prevSetup = built.setup
   built.setup = (editor) => {
     attachChamiloHooks(editor)
+
     if (typeof prevSetup === "function") {
       prevSetup(editor)
     }
-  }
 
-  // If caller provided setup, keep it too (without depending on previous merges).
-  if (props.editorConfig?.setup && typeof props.editorConfig.setup === "function") {
-    const callerSetup = props.editorConfig.setup
-    const currentSetup = built.setup
-    built.setup = (editor) => {
-      currentSetup(editor)
+    if (typeof callerSetup === "function") {
       callerSetup(editor)
     }
   }
@@ -438,14 +388,10 @@ function removeActiveMessageHandler() {
   }
 }
 
-/**
- * Native fallback picker.
- */
 function openNativePicker(callback, meta) {
   const input = document.createElement("input")
   input.type = "file"
 
-  // TinyMCE meta.filetype: "image" | "media" | "file"
   if (meta?.filetype === "image") input.accept = "image/*"
   else if (meta?.filetype === "media") input.accept = "video/*,audio/*"
   else input.accept = "*/*"
@@ -471,7 +417,6 @@ function createCbId() {
 }
 
 function registerTinyPickerCallback(cbId, cb) {
-  // Keep registry in English for easier debugging
   window.__chamiloTinyPickerCallbacks = window.__chamiloTinyPickerCallbacks || {}
   window.__chamiloTinyPickerCallbacks[cbId] = cb
 }
@@ -488,19 +433,13 @@ function appendParams(rawUrl, params) {
   return u.toString()
 }
 
-/**
- * Build a URL for the Chamilo manager.
- * Prefer Documents HTML editor picker route; fallback to FileManagerList.
- */
 function buildManagerUrl(meta) {
-  // TinyMCE meta.filetype: "image" | "media" | "file"
   const ft = String(meta?.filetype || "file").toLowerCase()
 
   let type = "files"
   if (ft === "image") type = "images"
   else if (ft === "media") type = "media"
 
-  // 1) Preferred: Documents HTML editor picker route (if exists)
   try {
     if (typeof router.hasRoute === "function" && router.hasRoute("DocumentForHtmlEditor")) {
       const nodeIdFromRoute =
@@ -519,7 +458,6 @@ function buildManagerUrl(meta) {
     // Not fatal, fallback below
   }
 
-  // 2) Fallback: FileManagerList
   try {
     const hasCourse = Boolean(course.value?.id)
     const resolved = router.resolve({
@@ -537,10 +475,6 @@ function buildManagerUrl(meta) {
   return ""
 }
 
-/**
- * File picker callback for TinyMCE.
- * Uses Chamilo manager when possible; otherwise falls back to native picker.
- */
 async function filePickerCallback(callback, _value, meta) {
   if (!effectiveUseFileManager.value) {
     openNativePicker(callback, meta)
@@ -553,10 +487,8 @@ async function filePickerCallback(callback, _value, meta) {
     return
   }
 
-  // Clean previous listeners (avoid duplicate callbacks).
   removeActiveMessageHandler()
 
-  // Register a direct callback (most reliable way to fill plugin inputs).
   const cbId = createCbId()
   registerTinyPickerCallback(cbId, (pickedUrl) => {
     try {
@@ -568,7 +500,6 @@ async function filePickerCallback(callback, _value, meta) {
 
   const url = appendParams(baseUrl, { cbId })
 
-  // Bridge for postMessage (fallback compatibility).
   const expectedOrigin = window.location.origin
   activeMessageHandler = (event) => {
     try {

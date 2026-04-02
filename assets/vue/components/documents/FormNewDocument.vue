@@ -1,6 +1,5 @@
 <template>
   <form @submit.prevent="$emit('submit')">
-    <!-- Title -->
     <BaseInputTextWithVuelidate
       id="item_title"
       v-model.trim="item.title"
@@ -8,7 +7,6 @@
       :vuelidate-property="v$.item.title"
     />
 
-    <!-- Content editor -->
     <BaseTinyEditor
       v-if="
         (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
@@ -23,18 +21,18 @@
 
     <div
       v-if="aiEditorMessage"
-      class="mt-2 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+      class="mt-3 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
     >
       {{ aiEditorMessage }}
     </div>
 
-    <!-- Advanced options: search / indexing -->
     <BaseAdvancedSettingsButton
       v-if="searchEnabled"
       v-model="showAdvancedSettings"
     >
-      <div class="flex flex-row mb-2">
-        <label class="font-semibold w-40">{{ $t("Options") }}:</label>
+      <div class="mb-2 flex flex-row">
+        <label class="w-40 font-semibold">{{ $t("Options") }}:</label>
+
         <BaseCheckbox
           id="indexDocumentContent"
           v-model="item.indexDocumentContent"
@@ -43,10 +41,9 @@
         />
       </div>
 
-      <!-- Specific search fields -->
       <div
         v-if="searchEnabled && searchFields.length > 0"
-        class="flex flex-col gap-2 mt-3"
+        class="mt-3 flex flex-col gap-2"
       >
         <div
           v-for="field in searchFields"
@@ -54,7 +51,7 @@
           class="flex flex-row items-center gap-3"
         >
           <label
-            class="font-semibold w-40"
+            class="w-40 font-semibold"
             :for="`doc_search_field_${field.code}`"
           >
             {{ field.title }}:
@@ -62,10 +59,10 @@
 
           <input
             :id="`doc_search_field_${field.code}`"
-            :name="`searchFieldValues[${field.code}]`"
             v-model="item.searchFieldValues[field.code]"
+            :name="`searchFieldValues[${field.code}]`"
             type="text"
-            class="w-full border border-gray-300 rounded px-3 py-2"
+            class="w-full rounded border border-gray-300 px-3 py-2"
             :placeholder="field.title"
             autocomplete="off"
           />
@@ -73,10 +70,9 @@
       </div>
     </BaseAdvancedSettingsButton>
 
-    <!-- Extra blocks injected by parent -->
     <slot></slot>
 
-    <div class="flex justify-end mt-2">
+    <div class="mt-4 flex justify-end">
       <BaseButton
         type="primary"
         icon="save"
@@ -102,24 +98,25 @@ import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import { ref } from "vue"
 import axios from "axios"
-import { usePlatformConfig } from "../../store/platformConfig"
-import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
-import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import { useI18n } from "vue-i18n"
-import BaseButton from "../basecomponents/BaseButton.vue"
-import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
-import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
-import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { useCourseSettings } from "../../store/courseSettingStore"
 import { ENTRYPOINT } from "../../config/entrypoint"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
+import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
 
 export default {
   name: "DocumentsForm",
   components: {
     BaseButton,
-    BaseTinyEditor,
-    BaseInputTextWithVuelidate,
-    BaseAdvancedSettingsButton,
     BaseCheckbox,
+    BaseTinyEditor,
+    BaseAdvancedSettingsButton,
+    BaseInputTextWithVuelidate,
     DocumentAiMediaDialog,
   },
   props: {
@@ -130,6 +127,7 @@ export default {
   },
   setup() {
     const platformConfigStore = usePlatformConfig()
+    const courseSettingsStore = useCourseSettings()
     const extraPlugins = ref("")
     const { t, locale } = useI18n()
 
@@ -137,7 +135,14 @@ export default {
       extraPlugins.value = "translatehtml"
     }
 
-    return { v$: useVuelidate(), extraPlugins, t, locale }
+    return {
+      v$: useVuelidate(),
+      extraPlugins,
+      t,
+      locale,
+      platformConfigStore,
+      courseSettingsStore,
+    }
   },
   data() {
     return {
@@ -147,10 +152,17 @@ export default {
       searchValuesLoaded: false,
       showAiMediaDialog: false,
       selectedParagraphText: "",
-      selectedParagraphBookmark: null,
+      tinyBookmark: null,
       aiEditorMessage: "",
       courseContextTitle: "",
       courseContextLanguage: "",
+    }
+  },
+  validations() {
+    return {
+      item: {
+        title: { required },
+      },
     }
   },
   computed: {
@@ -166,7 +178,18 @@ export default {
       const resourceNodeId = this.getResourceNodeId()
       return itemNode || routeNode || resourceNodeId || null
     },
+    showAiMediaButton() {
+      const aiHelpersEnabled = String(this.platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
+      const imageGeneratorEnabled = String(this.courseSettingsStore?.getSetting?.("image_generator")) === "true"
+      const videoGeneratorEnabled = String(this.courseSettingsStore?.getSetting?.("video_generator")) === "true"
+
+      return aiHelpersEnabled && (imageGeneratorEnabled || videoGeneratorEnabled)
+    },
     tinyEditorConfig() {
+      if (!this.showAiMediaButton) {
+        return {}
+      }
+
       return {
         appendToolbar: "chamiloAiMedia",
         setup: (editor) => {
@@ -191,13 +214,13 @@ export default {
           )
           editor.ui.registry.addButton("chamiloAiMedia", {
             icon: "chamiloRobot",
-            tooltip: "Generate AI media",
+            tooltip: this.$t("Generate AI media"),
             onAction: () => {
               this.openAiMediaFromEditor(editor)
             },
           })
           editor.ui.registry.addMenuItem("chamiloAiMedia", {
-            text: "Generate AI media",
+            text: this.$t("Generate AI media"),
             icon: "chamiloRobot",
             onAction: () => {
               this.openAiMediaFromEditor(editor)
@@ -217,6 +240,7 @@ export default {
     }
 
     await this.loadCourseContext()
+    await this.loadCourseSettingsIfPossible()
 
     if (!this.searchEnabled) {
       return
@@ -226,6 +250,20 @@ export default {
     await this.loadSearchEngineFieldValuesForEdit()
   },
   methods: {
+    setAiEditorMessage(message) {
+      this.aiEditorMessage = String(message || "").trim()
+
+      if (!this.aiEditorMessage) {
+        return
+      }
+
+      window.setTimeout(() => {
+        if (this.aiEditorMessage === message) {
+          this.aiEditorMessage = ""
+        }
+      }, 5000)
+    },
+
     normalizeCode(code) {
       return String(code || "")
         .trim()
@@ -233,15 +271,23 @@ export default {
     },
     normalizeNodeId(value) {
       if (value == null) return null
-      if (typeof value === "number" && Number.isFinite(value) && value > 0) return value
+
+      if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+        return value
+      }
 
       if (typeof value === "string") {
         const trimmed = value.trim()
         if (!trimmed) return null
-        if (/^\d+$/.test(trimmed)) return Number(trimmed)
+
+        if (/^\d+$/.test(trimmed)) {
+          return Number(trimmed)
+        }
 
         const iriMatch = trimmed.match(/\/api\/resource_nodes\/(\d+)/)
-        if (iriMatch) return Number(iriMatch[1])
+        if (iriMatch) {
+          return Number(iriMatch[1])
+        }
       }
 
       if (typeof value === "object") {
@@ -290,13 +336,126 @@ export default {
         if (apiLanguage) {
           this.courseContextLanguage = apiLanguage
         }
-      } catch (e) {
-        console.warn("[DocumentsForm] Failed to load course context.", e)
+      } catch (error) {
+        console.warn("[DocumentsForm] Failed to load course context.", error)
       }
+    },
+    async loadCourseSettingsIfPossible() {
+      const cid = Number(this.$route?.query?.cid || 0)
+      const sid = Number(this.$route?.query?.sid || 0)
+
+      if (!cid) {
+        return
+      }
+
+      try {
+        await this.courseSettingsStore.loadCourseSettings(cid, sid)
+      } catch (error) {
+        console.warn("[DocumentsForm] Failed to load course settings.", error)
+      }
+    },
+    getTinyEditor() {
+      try {
+        return window.tinymce?.get("item_content") || window.tinymce?.activeEditor || null
+      } catch {
+        return null
+      }
+    },
+    getClosestSupportedBlock(node) {
+      let current = node
+
+      while (current) {
+        const name = String(current.nodeName || "").toLowerCase()
+
+        if (["p", "li", "blockquote", "div"].includes(name)) {
+          return current
+        }
+
+        current = current.parentNode
+      }
+
+      return null
+    },
+    openAiMediaFromEditor(editorInstance = null) {
+      const editor = editorInstance || this.getTinyEditor()
+
+      if (!editor) {
+        this.setAiEditorMessage(this.t("The editor is not available."))
+        return
+      }
+
+      editor.focus()
+
+      const node = editor.selection?.getNode?.()
+      const block = this.getClosestSupportedBlock(node)
+
+      if (!block) {
+        this.setAiEditorMessage(this.t("Please place the cursor inside a paragraph first."))
+        return
+      }
+
+      const text = String(block.innerText || block.textContent || "").trim()
+
+      if (!text) {
+        this.setAiEditorMessage(this.t("The selected paragraph is empty."))
+        return
+      }
+
+      this.tinyBookmark = editor.selection.getBookmark(2, true)
+      this.selectedParagraphText = text
+      this.aiEditorMessage = ""
+      this.showAiMediaDialog = true
+    },
+    handleAiMediaAccepted(payload) {
+      this.showAiMediaDialog = false
+      this.insertMediaAfterSelectedBlock(payload)
+    },
+    insertMediaAfterSelectedBlock(payload) {
+      const editor = this.getTinyEditor()
+
+      if (!editor || !payload?.url) {
+        return
+      }
+
+      const mediaType = String(payload.type || "image").toLowerCase()
+      const safeUrl = String(payload.url).trim()
+      const safeAlt = String(payload.alt || payload.title || "Generated media").trim()
+
+      let html = ""
+      if ("video" === mediaType) {
+        html = `<p><video controls src="${safeUrl}"></video></p>`
+      } else {
+        html = `<p><img src="${safeUrl}" alt="${safeAlt}" /></p>`
+      }
+
+      editor.focus()
+
+      if (this.tinyBookmark) {
+        editor.selection.moveToBookmark(this.tinyBookmark)
+      }
+
+      const node = editor.selection?.getNode?.()
+      const block = this.getClosestSupportedBlock(node)
+
+      if (block && block.parentNode) {
+        const wrapper = editor.dom.create("div", {}, html)
+        const newNode = wrapper.firstChild
+
+        editor.dom.insertAfter(newNode, block)
+        editor.nodeChanged()
+        this.item.contentFile = editor.getContent()
+        return
+      }
+
+      editor.insertContent(html)
+      this.item.contentFile = editor.getContent()
     },
     async loadSearchEngineFields() {
       try {
-        const response = await fetch(ENTRYPOINT + "search_engine_fields", { credentials: "same-origin" })
+        const response = await fetch(ENTRYPOINT + "search_engine_fields", {
+          credentials: "same-origin",
+        })
+
         if (!response.ok) {
           console.error("[Search] Failed to load search engine fields:", response.status)
           return
@@ -310,8 +469,12 @@ export default {
         }
 
         this.searchFields = rawFields
-          .map((f) => ({ id: f.id, code: this.normalizeCode(f.code), title: f.title }))
-          .filter((f) => f.code)
+          .map((field) => ({
+            id: field.id,
+            code: this.normalizeCode(field.code),
+            title: field.title,
+          }))
+          .filter((field) => field.code)
 
         for (const field of this.searchFields) {
           const code = field.code
@@ -326,8 +489,8 @@ export default {
             this.item.searchFieldValues[code] = ""
           }
         }
-      } catch (e) {
-        console.error("[Search] Failed to fetch search engine fields:", e)
+      } catch (error) {
+        console.error("[Search] Failed to fetch search engine fields:", error)
       }
     },
     async fetchFieldValues(resourceNodeId) {
@@ -354,8 +517,8 @@ export default {
           }
 
           return items
-        } catch (e) {
-          console.warn("[Search] Field values request error:", e)
+        } catch (error) {
+          console.warn("[Search] Field values request error:", error)
         }
       }
 
@@ -370,183 +533,80 @@ export default {
       const items = await this.fetchFieldValues(resourceNodeId)
       if (!items.length) return
 
-      const fieldIdToCode = new Map(this.searchFields.map((f) => [Number(f.id), f.code]))
+      const fieldIdToCode = new Map(this.searchFields.map((field) => [Number(field.id), field.code]))
 
-      for (const v of items) {
+      for (const item of items) {
         let fieldId = null
 
-        if (v.field) {
-          if ("string" === typeof v.field) fieldId = this.extractIdFromIri(v.field)
-          else if (v.field["@id"]) fieldId = this.extractIdFromIri(v.field["@id"])
-          else if (v.field.id) fieldId = Number(v.field.id)
+        if (item.field) {
+          if ("string" === typeof item.field) {
+            fieldId = this.extractIdFromIri(item.field)
+          } else if (item.field["@id"]) {
+            fieldId = this.extractIdFromIri(item.field["@id"])
+          } else if (item.field.id) {
+            fieldId = Number(item.field.id)
+          }
         }
 
-        if (!fieldId && v.field_id) fieldId = Number(v.field_id)
+        if (!fieldId && item.field_id) {
+          fieldId = Number(item.field_id)
+        }
+
         if (!fieldId) continue
 
         const code = fieldIdToCode.get(Number(fieldId))
         if (!code) continue
 
-        this.item.searchFieldValues[code] = String(v.value ?? "")
+        this.item.searchFieldValues[code] = String(item.value ?? "")
       }
 
       this.searchValuesLoaded = true
-      console.log("[Search] Loaded search field values for resourceNodeId=", resourceNodeId)
+      console.log("[Search] Loaded search field values for resource node:", resourceNodeId)
     },
 
-    /* --------------------------------------------------------- */
-    /* Legacy browser helper kept for compatibility               */
-    /* --------------------------------------------------------- */
-    browser(callback, value, meta) {
-      const nodeId = this.$route.params["node"] ?? this.$route.params["id"]
+    browser(callback, _value, meta) {
+      const nodeId = this.$route.params.node ?? this.$route.params.id
       const folderParams = this.$route.query
       let url = this.$router.resolve({
         name: "DocumentForHtmlEditor",
-        params: { node: nodeId },
+        params: { id: nodeId },
         query: folderParams,
-      })
-      url = url.fullPath
+      }).fullPath
 
-      if (meta.filetype === "image") url = url + "&type=images"
-      else if (meta.filetype === "media") url = url + "&type=media"
-      else url = url + "&type=files"
-
-      window.addEventListener("message", function (event) {
-        const data = event.data
-        if (data.url) callback(data.url)
-      })
-
-      tinymce.activeEditor.windowManager.openUrl(
-        { url, title: "file manager" },
-        {
-          oninsert: function (file, fm) {
-            const absoluteUrl = fm.convAbsUrl(file.url)
-            const info = file.name + " (" + fm.formatSize(file.size) + ")"
-
-            if (meta.filetype === "file") callback(absoluteUrl, { text: info, title: info })
-            if (meta.filetype === "image") callback(absoluteUrl, { alt: info })
-            if (meta.filetype === "media") callback(absoluteUrl)
-          },
-        },
-      )
-      return false
-    },
-    getTinyEditor() {
-      try {
-        return window.tinymce.get("item_content") || window.tinymce.activeEditor || null
-      } catch {
-        return null
+      if (meta.filetype === "image") {
+        url += "&type=images"
+      } else if (meta.filetype === "media") {
+        url += "&type=media"
+      } else {
+        url += "&type=files"
       }
-    },
-    getClosestSupportedBlock(node) {
-      let current = node
 
-      while (current) {
-        const nodeName = String(current.nodeName || "").toLowerCase()
-        if (["p", "li", "blockquote", "div"].includes(nodeName)) {
-          return current
+      const onMessage = (event) => {
+        const data = event.data || {}
+        const pickedUrl = data?.content?.url || data?.url || null
+
+        if (!pickedUrl) {
+          return
         }
 
-        current = current.parentNode
+        callback(pickedUrl)
+        window.removeEventListener("message", onMessage)
       }
 
-      return null
-    },
-    openAiMediaFromEditor(editorInstance = null) {
-      this.aiEditorMessage = ""
-
-      const editor = editorInstance || this.getTinyEditor()
-      if (!editor) {
-        this.aiEditorMessage = this.$t("The editor is not ready yet.")
-        return
-      }
-
-      editor.focus()
-
-      const selectedNode = editor.selection?.getNode?.()
-      const selectedBlock = this.getClosestSupportedBlock(selectedNode)
-
-      if (!selectedBlock) {
-        this.aiEditorMessage = this.$t("Please place the cursor inside a paragraph before generating AI media.")
-        return
-      }
-
-      const paragraphText = String(selectedBlock.innerText || selectedBlock.textContent || "").trim()
-      if (!paragraphText) {
-        this.aiEditorMessage = this.$t("The selected paragraph is empty.")
-        return
-      }
-
-      this.selectedParagraphBookmark = editor.selection.getBookmark(2, true)
-      this.selectedParagraphText = paragraphText
-      this.showAiMediaDialog = true
-    },
-    handleAiMediaAccepted(payload) {
-      this.aiEditorMessage = ""
-      this.insertMediaAfterSelectedBlock(payload)
-    },
-    insertMediaAfterSelectedBlock(payload) {
-      const editor = this.getTinyEditor()
-      if (!editor) {
-        this.aiEditorMessage = this.$t("The editor is not ready yet.")
-        return
-      }
-      const mediaType = String(payload?.type || "image").toLowerCase()
-      const safeUrl = String(payload?.url || "").trim()
-      const safeAlt = String(payload?.title || "Generated media").trim()
-
-      if (!safeUrl) {
-        this.aiEditorMessage = this.$t("The generated media URL is empty.")
-        return
-      }
-
-      let html = ""
-      if (mediaType === "video") {
-        html = `<p><video controls src="${safeUrl}"></video></p>`
-      } else {
-        html = `<p><img src="${safeUrl}" alt="${safeAlt}" /></p>`
-      }
-
-      editor.focus()
+      window.addEventListener("message", onMessage)
 
       try {
-        editor.undoManager.transact(() => {
-          if (this.selectedParagraphBookmark) {
-            editor.selection.moveToBookmark(this.selectedParagraphBookmark)
-          }
-
-          const node = editor.selection?.getNode?.()
-          const block = this.getClosestSupportedBlock(node)
-
-          if (block && block.parentNode) {
-            const wrapper = editor.dom.create("div", {}, html)
-            const newNode = wrapper.firstChild
-            editor.dom.insertAfter(newNode, block)
-            editor.nodeChanged()
-          } else {
-            editor.insertContent(html)
-          }
+        window.tinymce?.activeEditor?.windowManager.openUrl({
+          url,
+          title: "File Manager",
+          onClose: () => {
+            window.removeEventListener("message", onMessage)
+          },
         })
-
-        this.item.contentFile = editor.getContent()
-      } catch (e) {
-        console.error("[DocumentsForm] Failed to insert AI media into TinyMCE.", e)
-        this.aiEditorMessage = this.$t("Failed to insert the generated media into the editor.")
+      } catch (error) {
+        console.warn("[DocumentsForm] Legacy browser fallback failed.", error)
       }
     },
-    updateContent(content) {
-      this.contentFile = content
-      this.item.contentFile = content
-    },
   },
-  validations: {
-    item: {
-      title: { required },
-      contentFile: {},
-      parentResourceNodeId: {},
-      resourceNode: {},
-    },
-  },
-  emits: ["submit"],
 }
 </script>

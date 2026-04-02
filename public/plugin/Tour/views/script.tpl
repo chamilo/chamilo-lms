@@ -297,13 +297,13 @@
         return;
       }
 
+      const formData = new FormData();
+      formData.append('page_class', pageClass);
+
       fetch(TOUR_CONFIG.saveAjax, {
         method: 'POST',
         credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ page: pageClass })
+        body: formData
       }).catch(function (error) {
         console.warn('[Tour] failed to save tour state', error);
       });

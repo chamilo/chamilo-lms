@@ -39,6 +39,26 @@ $searchPaths = [
 /** File extensions passed to grep via --include. */
 $includeGlobs = ['*.php', '*.twig', '*.js', '*.ts', '*.vue', '*.yaml', '*.yml'];
 
+/**
+ * Files that only define/register/insert settings — not actual usage.
+ * Matches are excluded so a setting appearing only here is still "not implemented".
+ */
+$excludeFiles = [
+    'public/main/admin/settings.php',                          // legacy settings admin UI
+    'src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php', // initial DB fixtures
+];
+
+/**
+ * Directory name patterns excluded from the grep search entirely.
+ * - Migrations: only INSERT/UPDATE settings rows.
+ * - Settings: SettingsManager.php + *Schema.php files define/register settings,
+ *   they do not constitute actual usage of the setting value in application logic.
+ */
+$excludeDirs = [
+    'Migrations',
+    'Settings',
+];
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -119,12 +139,30 @@ function isCommentLine(string $line): bool
  *
  * Returns an array of matching lines as strings "file:lineNo:content".
  */
-function grepForVariable(string $needle, string $repoRoot, array $searchPaths, array $includeGlobs): array
-{
+function grepForVariable(
+    string $needle,
+    string $repoRoot,
+    array $searchPaths,
+    array $includeGlobs,
+    array $excludeFiles = [],
+    array $excludeDirs = [],
+): array {
     // Build --include flags
     $includes = implode(' ', array_map(
         static fn(string $g): string => '--include='.escapeshellarg($g),
         $includeGlobs
+    ));
+
+    // Build --exclude flags (basename patterns for specific files)
+    $excludes = implode(' ', array_map(
+        static fn(string $f): string => '--exclude='.escapeshellarg(basename($f)),
+        $excludeFiles
+    ));
+
+    // Build --exclude-dir flags
+    $excludeDirFlags = implode(' ', array_map(
+        static fn(string $d): string => '--exclude-dir='.escapeshellarg($d),
+        $excludeDirs
     ));
 
     // Absolute search paths that actually exist
@@ -143,27 +181,49 @@ function grepForVariable(string $needle, string $repoRoot, array $searchPaths, a
     // -r  recursive
     // -n  line numbers
     // -F  fixed string (not a regex) – safer for variable names with special chars
-    // -l would only list files; we need line content to check for comments
     $cmd = sprintf(
-        'grep -rn -F %s %s %s 2>/dev/null',
+        'grep -rn -F %s %s %s %s %s 2>/dev/null',
         escapeshellarg($needle),
         $includes,
+        $excludes,
+        $excludeDirFlags,
         implode(' ', $paths)
     );
 
     $output = [];
     exec($cmd, $output);
 
-    return $output;
+    // Filter out any remaining excluded files that grep's --exclude may have missed
+    // (e.g. when the same basename appears in multiple directories)
+    $excludeAbsolute = array_map(
+        static fn(string $f): string => realpath($repoRoot.'/'.$f) ?: ($repoRoot.'/'.$f),
+        $excludeFiles
+    );
+
+    return array_values(array_filter(
+        $output,
+        static function (string $line) use ($excludeAbsolute): bool {
+            $file = explode(':', $line, 2)[0];
+            $real = realpath($file) ?: $file;
+
+            return !\in_array($real, $excludeAbsolute, true);
+        }
+    ));
 }
 
 /**
  * Returns true when $variable is genuinely used in the codebase
  * (i.e. at least one non-comment match was found).
  */
-function isImplemented(string $variable, string $repoRoot, array $searchPaths, array $includeGlobs): bool
-{
-    $matches = grepForVariable($variable, $repoRoot, $searchPaths, $includeGlobs);
+function isImplemented(
+    string $variable,
+    string $repoRoot,
+    array $searchPaths,
+    array $includeGlobs,
+    array $excludeFiles = [],
+    array $excludeDirs = [],
+): bool {
+    $matches = grepForVariable($variable, $repoRoot, $searchPaths, $includeGlobs, $excludeFiles, $excludeDirs);
 
     if ([] === $matches) {
         return false;
@@ -235,7 +295,7 @@ foreach ($settings as $row) {
         fwrite(STDERR, "  {$checked}/".count($settings)."...\n");
     }
 
-    if (!isImplemented($variable, $repoRoot, $searchPaths, $includeGlobs)) {
+    if (!isImplemented($variable, $repoRoot, $searchPaths, $includeGlobs, $excludeFiles, $excludeDirs)) {
         $rows[] = [
             $variable,
             $row['category'] ?? '',

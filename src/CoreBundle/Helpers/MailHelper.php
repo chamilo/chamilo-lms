@@ -18,6 +18,8 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use const FILTER_VALIDATE_EMAIL;
+
 final class MailHelper
 {
     public function __construct(

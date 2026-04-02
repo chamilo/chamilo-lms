@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -7,7 +9,7 @@ use Chamilo\CoreBundle\Search\Xapian\LpXapianIndexer;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
-/**
+/*
  * Script allowing simple edition of learnpath information (title, description, etc).
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
@@ -42,7 +44,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=add_item&lp_id=".$lpId.'&'.api_get_cidreq(),
+    'url' => api_get_self().'?action=add_item&lp_id='.$lpId.'&'.api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 
@@ -107,7 +109,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
         $themeSelect = $form->addSelectTheme('lp_theme', get_lang('Graphical theme'));
         $form->applyFilter('lp_theme', 'trim');
         $s_theme = $learnPath->get_theme();
-        $themeSelect->setSelected($s_theme); //default
+        $themeSelect->setSelected($s_theme); // default
     }
 }
 
@@ -207,7 +209,7 @@ $form->addElement('html', '<div id="start_date_div" style="display:'.$display_da
 $form->addDateTimePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
-//End date
+// End date
 $form->addCheckBox(
     'activate_end_date_check',
     null,
@@ -388,7 +390,7 @@ if ($form->validate()) {
             } else {
                 $lpIndexer->deleteLpIndex($lp);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Best-effort: do not break form save if search service fails
         }
     }
@@ -400,6 +402,7 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('Update successful')));
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
     header('Location: '.$url);
+
     exit;
 }
 
@@ -417,7 +420,7 @@ echo '</div>';
 echo "
 <script>
     $(function() {
-        $('[name=\'hide_toc_frame\']').on('change', function() {
+        $('[name=\\'hide_toc_frame\\']').on('change', function() {
             $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
             $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
         });

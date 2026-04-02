@@ -47,6 +47,10 @@ final class ChatController extends AbstractController
     use CourseControllerTrait;
     use ResourceControllerTrait;
 
+    private const AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
+    private const AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
+    private const AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
+
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
         private readonly UserHelper $userHelper,
@@ -275,15 +279,6 @@ final class ChatController extends AbstractController
         return new JsonResponse($json);
     }
 
-    /**
-     * ===== GLOBAL CHAT (docked) =====
-     * This is the API used by DockedChat.vue.
-     *
-     * Important:
-     * - DockedChat uses fetch() wrappers that throw on non-2xx responses.
-     * - When global chat is disabled, we must return 200 with a safe payload,
-     *   otherwise the UI may break during startup (contacts/heartbeat/etc).
-     */
     #[Route(path: '/account/chat', name: 'chamilo_core_global_chat_home', options: ['expose' => true])]
     public function globalHome(): Response
     {
@@ -301,8 +296,6 @@ final class ChatController extends AbstractController
             'restrict_to_coach' => false,
             'user' => api_get_user_info($me, true),
             'emoji_smile' => '<span>&#128522;</span>',
-
-            // Keep template vars safe even if not used.
             'ai_enabled' => false,
             'ai_default_provider' => 'openai',
         ]);
@@ -317,7 +310,6 @@ final class ChatController extends AbstractController
         }
 
         if (!$this->isGlobalChatEnabled()) {
-            // Return a safe payload (200) so the frontend does not throw.
             return $this->globalChatDisabledJson([
                 'me' => '',
                 'user_id' => (int) $me,
@@ -329,7 +321,6 @@ final class ChatController extends AbstractController
 
         $chat = new Chat();
 
-        // Some legacy methods echo JSON directly; capture that safely.
         ob_start();
         $ret = $chat->startSession();
         $echoed = ob_get_clean();
@@ -354,7 +345,6 @@ final class ChatController extends AbstractController
         }
 
         if (!$this->isGlobalChatEnabled()) {
-            // Return empty HTML (200) so the frontend can continue without errors.
             return $this->globalChatDisabledHtml();
         }
 
@@ -375,16 +365,11 @@ final class ChatController extends AbstractController
         $mode = (string) $req->query->get('mode', 'min');
         $sinceId = (int) $req->query->get('since_id', 0);
         $peerId = (int) $req->query->get('peer_id', 0);
-
-        // Allow client to ask for presence inside the same heartbeat.
         $presenceRaw = (string) $req->query->get('presence_ids', '');
         $presenceIds = $this->parseIdsFromRaw($presenceRaw);
-
-        // Optional contacts refresh flag.
         $includeContacts = (bool) $req->query->get('include_contacts', false);
 
         if (!$this->isGlobalChatEnabled()) {
-            // Return a minimal heartbeat payload (200) to prevent frontend exceptions.
             $payload = [
                 'error' => 'disabled',
                 'last_id' => $sinceId,
@@ -408,13 +393,11 @@ final class ChatController extends AbstractController
         $chat = new Chat();
         $data = [];
 
-        // Tiny/min modes (recommended fast path).
         if ('tiny' === $mode && $peerId > 0) {
             $data = $chat->heartbeatTiny((int) $me, $peerId, $sinceId);
         } elseif ('min' === $mode) {
             $data = $chat->heartbeatMin((int) $me, $sinceId);
         } else {
-            // Fallback (legacy full heartbeat).
             ob_start();
             $ret = $chat->heartbeat();
             $echoed = ob_get_clean();
@@ -430,12 +413,10 @@ final class ChatController extends AbstractController
             $data = \is_array($ret) ? $ret : [];
         }
 
-        // Attach presence map when requested.
         if (!empty($presenceIds)) {
             $data['presence'] = $this->buildPresenceMap($presenceIds);
         }
 
-        // Attach contacts HTML only when explicitly requested.
         if ($includeContacts) {
             $html = $chat->getContacts();
             $data['contacts_html'] = \is_string($html) ? $html : '';
@@ -466,7 +447,6 @@ final class ChatController extends AbstractController
         }
 
         if (!$this->isGlobalChatEnabled()) {
-            // Return an empty list (200) to avoid frontend exceptions.
             return new JsonResponse([]);
         }
 
@@ -614,8 +594,6 @@ final class ChatController extends AbstractController
             }
 
             $uiLang = $languageHelper->getInterfaceIso();
-
-            // Build course context
             $courseTitle = (string) $course->getTitle();
             $courseLang = $uiLang ?: 'en';
 
@@ -674,6 +652,18 @@ final class ChatController extends AbstractController
                 $now
             );
 
+            if ($this->isAiTutorTemporarilyUnavailable($req)) {
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
+            }
+
+            $this->releaseSessionLock($req);
+
             try {
                 if (null !== $course) {
                     // Persist into ai_tutor_* when course context exists
@@ -695,29 +685,41 @@ final class ChatController extends AbstractController
                 }
             } catch (Throwable $e) {
                 error_log('[AI][chat] Failed to generate assistant reply: '.$e->getMessage());
+                $this->markAiTutorTemporarilyUnavailable($req);
 
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_failed',
-                    'message' => $e->getMessage(),
-                ], 503);
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             $assistantText = \is_string($assistantText) ? trim($assistantText) : '';
             if ('' === $assistantText) {
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_empty_reply',
-                    'message' => 'AI provider returned an empty reply.',
-                ], 503);
+                $this->markAiTutorTemporarilyUnavailable($req);
+
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             if (str_starts_with($assistantText, 'Error:')) {
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_failed',
-                    'message' => $assistantText,
-                ], 503);
+                error_log('[AI][chat] Provider returned an error string: '.$assistantText);
+                $this->markAiTutorTemporarilyUnavailable($req);
+
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             // Store assistant message (-1 -> me) as unread (recd=0)
@@ -768,25 +770,7 @@ final class ChatController extends AbstractController
             return JsonResponse::fromJsonString($echoed);
         }
 
-        /*if (\is_string($ret)) {
-            return JsonResponse::fromJsonString($ret);
-        } */
-
         return new JsonResponse($ret ?? ['id' => 0]);
-    }
-
-    /**
-     * Course setting parser for tutor enablement.
-     * Empty value defaults to enabled (global setting already checked).
-     */
-    private function isCourseTutorEnabled(string $value): bool
-    {
-        $v = trim($value);
-        if ('' === $v) {
-            return true;
-        }
-
-        return 1 === preg_match('/^(1|true|on|yes)$/i', $v);
     }
 
     #[Route(
@@ -835,8 +819,19 @@ final class ChatController extends AbstractController
     }
 
     /**
-     * Try to resolve the course language from entity data; fallback to UI language.
+     * Course setting parser for tutor enablement.
+     * Empty value defaults to enabled (global setting already checked).
      */
+    private function isCourseTutorEnabled(string $value): bool
+    {
+        $v = trim($value);
+        if ('' === $v) {
+            return true;
+        }
+
+        return 1 === preg_match('/^(1|true|on|yes)$/i', $v);
+    }
+
     private function resolveCourseLanguage(Course $course): string
     {
         $tmpLang = '';
@@ -1090,9 +1085,22 @@ final class ChatController extends AbstractController
         $aiEnabledSetting = ('true' === $this->settingsManager->getSetting('ai_helpers.tutor_chatbot'));
         $providers = $aiProviderFactory->getProvidersForType('text');
         $hasTextProvider = !empty($providers);
-
-        // Course context is REQUIRED for the tutor.
         $course = $this->resolveCourseFromRequest($req, $doctrine);
+
+        if ($this->isAiTutorTemporarilyUnavailable($req)) {
+            return new JsonResponse([
+                'enabled' => false,
+                'in_test' => $inTest,
+                'course' => null !== $course ? [
+                    'id' => (int) $course->getId(),
+                    'title' => (string) $course->getTitle(),
+                    'language' => $this->resolveCourseLanguage($course) ?: 'en',
+                ] : null,
+                'mode' => null !== $course ? 'course' : null,
+                'provider' => null,
+                'reason' => 'temporarily_unavailable',
+            ]);
+        }
 
         if (!$aiEnabledSetting) {
             return new JsonResponse([
@@ -1358,7 +1366,6 @@ final class ChatController extends AbstractController
             ?? 0
         );
 
-        // Fallback: try Referer like /course/{id}/...
         if ($cid <= 0) {
             $ref = (string) $req->headers->get('referer', '');
             if ('' !== $ref && preg_match('~/course/(\d+)(/|$)~', $ref, $m)) {
@@ -1397,5 +1404,89 @@ final class ChatController extends AbstractController
     private function globalChatDisabledHtml(): Response
     {
         return new Response('', 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+    }
+
+    private function isAiTutorTemporarilyUnavailable(Request $request): bool
+    {
+        try {
+            if (!$request->hasSession()) {
+                return false;
+            }
+
+            $until = (int) $request->getSession()->get(self::AI_TUTOR_UNAVAILABLE_SESSION_KEY, 0);
+
+            return $until > time();
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    private function markAiTutorTemporarilyUnavailable(Request $request): void
+    {
+        try {
+            if (!$request->hasSession()) {
+                return;
+            }
+
+            $request->getSession()->set(
+                self::AI_TUTOR_UNAVAILABLE_SESSION_KEY,
+                time() + self::AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS
+            );
+        } catch (Throwable) {
+            // Ignore session failures.
+        }
+    }
+
+    private function releaseSessionLock(Request $request): void
+    {
+        try {
+            if (!$request->hasSession()) {
+                return;
+            }
+
+            $request->getSession()->save();
+        } catch (Throwable) {
+            // Ignore session failures.
+        }
+    }
+
+    private function buildAiTutorUnavailableResponse(
+        Chat $chat,
+        ChatRepository $chatRepository,
+        int $userId,
+        int $userMessageId,
+        int $timestamp
+    ): JsonResponse {
+        $assistantSanitized = $chat->sanitize(self::AI_TUTOR_UNAVAILABLE_MESSAGE);
+        $assistantId = $chatRepository->insertChatRow(
+            AiTutorChatService::FRIEND_AI,
+            $userId,
+            $assistantSanitized,
+            1,
+            (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
+        );
+
+        return new JsonResponse([
+            'id' => $userMessageId,
+            'assistant' => [
+                'id' => (int) $assistantId,
+                'message' => Security::remove_XSS($assistantSanitized),
+                'date' => $timestamp,
+                'recd' => 1,
+                'from_user_info' => [
+                    'id' => AiTutorChatService::FRIEND_AI,
+                    'user_id' => AiTutorChatService::FRIEND_AI,
+                    'complete_name' => 'AI Tutor',
+                    'user_is_online_in_chat' => 1,
+                    'user_is_online' => 1,
+                    'online' => 1,
+                    'avatar_small' => '',
+                ],
+                'to_user_info' => api_get_user_info($userId, true),
+            ],
+            'mode' => 'course',
+            'degraded' => true,
+            'temporarily_unavailable' => true,
+        ]);
     }
 }

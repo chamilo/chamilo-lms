@@ -20,7 +20,6 @@ final class UploadFilenamePolicy
     public function filter(string $originalFilename): array
     {
         $filename = $this->sanitizeFilename($originalFilename);
-
         $filename = $this->disableDangerousFile($filename);
 
         return $this->filterExtension($filename);
@@ -73,19 +72,25 @@ final class UploadFilenamePolicy
 
         $ext = $this->getExtension($filename);
 
-        // allow empty extension in both modes
+        // Allow empty extension in both modes
         if ('' === $ext) {
             return ['allowed' => true, 'filename' => $filename];
         }
 
         if ('whitelist' === $listType) {
             $whitelist = $this->splitList((string) $this->settingsManager->getSetting('document.upload_extensions_whitelist', true));
+            $whitelist = $this->mergeWithBuiltInSafeExtensions($whitelist);
+
             if (!\in_array($ext, $whitelist, true)) {
                 if ($skip) {
                     return ['allowed' => false, 'filename' => $filename, 'reason' => 'Extension not in whitelist'];
                 }
 
-                return ['allowed' => true, 'filename' => $this->replaceExtension($filename), 'reason' => 'Extension replaced (whitelist)'];
+                return [
+                    'allowed' => true,
+                    'filename' => $this->replaceExtension($filename),
+                    'reason' => 'Extension replaced (whitelist)',
+                ];
             }
 
             return ['allowed' => true, 'filename' => $filename];
@@ -98,7 +103,11 @@ final class UploadFilenamePolicy
                 return ['allowed' => false, 'filename' => $filename, 'reason' => 'Extension in blacklist'];
             }
 
-            return ['allowed' => true, 'filename' => $this->replaceExtension($filename), 'reason' => 'Extension replaced (blacklist)'];
+            return [
+                'allowed' => true,
+                'filename' => $this->replaceExtension($filename),
+                'reason' => 'Extension replaced (blacklist)',
+            ];
         }
 
         return ['allowed' => true, 'filename' => $filename];
@@ -128,6 +137,26 @@ final class UploadFilenamePolicy
         $parts = array_filter($parts, static fn ($v) => '' !== $v);
 
         return array_values(array_unique($parts));
+    }
+
+    /**
+     * @param string[] $extensions
+     *
+     * @return string[]
+     */
+    private function mergeWithBuiltInSafeExtensions(array $extensions): array
+    {
+        $builtInSafeExtensions = [
+            'png',
+            'jpg',
+            'jpeg',
+            'webp',
+            'gif',
+            'mp4',
+            'webm',
+        ];
+
+        return array_values(array_unique(array_merge($extensions, $builtInSafeExtensions)));
     }
 
     private function replaceExtension(string $filename): string

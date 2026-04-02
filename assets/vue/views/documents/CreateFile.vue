@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
@@ -184,6 +185,45 @@ export default {
   },
 
   methods: {
+    getDocumentsListRouteName() {
+      const candidates = ["DocumentsList", "FileManagerList"]
+
+      for (const name of candidates) {
+        if (typeof this.$router?.hasRoute === "function" && this.$router.hasRoute(name)) {
+          return name
+        }
+      }
+
+      return null
+    },
+    async redirectToDocumentsList() {
+      const routeName = this.getDocumentsListRouteName()
+      const nodeId = this.getRouteNodeId()
+
+      if (routeName) {
+        const params = { ...this.$route.params }
+        if (params.node !== undefined) {
+          params.node = nodeId
+        } else if (params.id !== undefined) {
+          params.id = nodeId
+        } else {
+          params.node = nodeId
+        }
+
+        await this.$router.push({
+          name: routeName,
+          params,
+          query: {
+            ...this.$route.query,
+            loadNode: 1,
+          },
+        })
+
+        return
+      }
+
+      this.$router.back()
+    },
     getRouteNodeId() {
       return this.$route.params.node ?? this.$route.params.id ?? null
     },
@@ -327,17 +367,27 @@ export default {
         this.errors = error.errors
       }
     },
-
-    onSendFormData() {
+    async onSendFormData() {
       this.normalizeAiAssistedState()
 
-      if (CreateMixin?.methods?.onSendFormData) {
-        return CreateMixin.methods.onSendFormData.call(this)
+      if (!CreateMixin?.methods?.onSendFormData) {
+        console.error("[Documents] CreateMixin.onSendFormData is missing.")
+        return null
       }
 
-      console.error("[Documents] CreateMixin.onSendFormData is missing.")
-      return null
+      const result = await CreateMixin.methods.onSendFormData.call(this)
+
+      if (this.errors && Object.keys(this.errors).length > 0) {
+        return result
+      }
+
+      await this.redirectToDocumentsList()
+
+      return result
     },
+    ...mapActions("documents", {
+      createWithFormData: "createWithFormData",
+    }),
   },
 }
 </script>

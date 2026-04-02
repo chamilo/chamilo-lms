@@ -376,6 +376,8 @@ foreach ($userList as $userInfo) {
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
                 src="'.$path.$infoCertificate['logo_right'].'" />';
     }
+    
+    $myContentHtml = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $myContentHtml);
 
     $htmlText .= '<table
         width="'.$workSpace.'mm"

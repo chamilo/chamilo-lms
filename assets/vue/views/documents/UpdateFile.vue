@@ -93,7 +93,7 @@
 <script>
 import { computed, onMounted, ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { mapGetters } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
@@ -347,6 +347,10 @@ export default {
       console.error("[Documents] UpdateMixin.onSendFormData is missing.")
       return null
     },
+
+    ...mapActions("documents", {
+      retrieve: "load",
+    }),
   },
 }
 </script>

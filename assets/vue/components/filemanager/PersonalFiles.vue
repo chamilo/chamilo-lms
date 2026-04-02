@@ -250,7 +250,7 @@
           class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
-        <span>{{ $t("Are you sure you want to delete {title}?", { title: itemToDelete?.title }) }}</span>
+        <span>{{ t("Are you sure you want to delete {0}?", [itemToDelete.title]) }}</span>
       </div>
       <template #footer>
         <Button

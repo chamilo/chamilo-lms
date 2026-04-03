@@ -15,6 +15,10 @@ if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin'
     }
 }
 
+if ('true' === api_get_setting('session.session_classes_tab_disable') && !api_is_platform_admin() && api_get_session_id()) {
+    api_not_allowed(true);
+}
+
 $tool_name = get_lang('Classes');
 
 $interbreadcrumb[] = [

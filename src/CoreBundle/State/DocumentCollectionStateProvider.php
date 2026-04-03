@@ -15,22 +15,39 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Throwable;
 
 /**
  * @implements ProviderInterface<CDocument>
  */
 final class DocumentCollectionStateProvider implements ProviderInterface
 {
+    /**
+     * Lazily resolved installation prefix (first 8 chars of branch_sync.unique_id).
+     * Null until first use; initialised at most once per PHP process.
+     */
+    private ?string $installationPrefix = null;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack $requestStack,
         private readonly SettingsManager $settingsManager,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        #[Autowire(service: 'chamilo.document_list')]
+        private readonly CacheInterface $documentListCache,
+        #[Autowire('%kernel.secret%')]
+        private readonly string $appSecret,
     ) {}
 
     /**
@@ -63,6 +80,15 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $cid = (int) ($query['cid'] ?? 0);
         $sid = (int) ($query['sid'] ?? 0);
         $gid = (int) ($query['gid'] ?? 0);
+
+        $page = max(1, (int) ($query['page'] ?? 1));
+        $itemsPerPage = (int) ($query['itemsPerPage'] ?? 20);
+        if ($itemsPerPage <= 0) {
+            $itemsPerPage = 20;
+        }
+        if ($itemsPerPage > 5000) {
+            $itemsPerPage = 5000;
+        }
 
         $hasContext = $cid > 0 || $sid > 0 || $gid > 0;
 
@@ -312,42 +338,122 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         $qb->orderBy('rn.title', 'ASC');
 
-        $page = isset($query['page']) ? (int) $query['page'] : 1;
-        $itemsPerPage = isset($query['itemsPerPage']) ? (int) $query['itemsPerPage'] : 20;
+        // Build a stable cache key from every value that affects the result set.
+        // Settings-derived booleans are already folded into $hiddenSystemTypes.
+        // The key is scoped to:
+        //   - the Chamilo installation (branch_sync.unique_id prefix) so that
+        //     multiple Chamilo instances on the same server never share APCu entries;
+        //   - the access_url ID so that multi-portal setups within one installation
+        //     are also isolated.
+        $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 1;
+        $sortedTypes = $effectiveFiletypes;
+        sort($sortedTypes);
+        $sortedHidden = $hiddenSystemTypes;
+        sort($sortedHidden);
+        $cacheKey = 'doc_list_'.$this->getInstallationPrefix().'_'.hash('md5', serialize([
+            $accessUrlId, $cid, $sid, $gid, $parentNodeId, $loadNode,
+            $sortedTypes, $sortedHidden, $includeBaseContent,
+            $isGradebook, $showSystemCertificates, $page, $itemsPerPage,
+        ]));
 
-        if ($page < 1) {
-            $page = 1;
+        // Cache the expensive context-filtered count + IID list for up to 120 s.
+        // On cache hit we re-fetch the same page of documents by primary key,
+        // which is a simple indexed lookup — no DISTINCT, no complex WHERE.
+        $cached = $this->documentListCache->get(
+            $cacheKey,
+            static function (ItemInterface $item) use ($qb, $page, $itemsPerPage): array {
+                $item->expiresAfter(120);
+
+                $countQb = clone $qb;
+                $countQb->resetDQLPart('orderBy');
+                $total = (int) $countQb
+                    ->select('COUNT(DISTINCT d.iid)')
+                    ->getQuery()
+                    ->getSingleScalarResult()
+                ;
+
+                $iidQb = clone $qb;
+                $rows = $iidQb
+                    ->select('d.iid')
+                    ->distinct()
+                    ->setFirstResult(($page - 1) * $itemsPerPage)
+                    ->setMaxResults($itemsPerPage)
+                    ->getQuery()
+                    ->getArrayResult()
+                ;
+
+                return ['total' => $total, 'iids' => array_column($rows, 'iid')];
+            }
+        );
+
+        $iids = $cached['iids'];
+
+        if (empty($iids)) {
+            return new TraversablePaginator(new ArrayIterator([]), $page, $itemsPerPage, $cached['total']);
         }
 
-        // Prevent extreme values (frontend sometimes sends huge numbers)
-        if ($itemsPerPage <= 0) {
-            $itemsPerPage = 20;
-        }
-        if ($itemsPerPage > 5000) {
-            $itemsPerPage = 5000;
-        }
-
-        // Count total results before applying pagination limits.
-        $countQb = clone $qb;
-        $countQb->resetDQLPart('orderBy');
-        $totalItems = (int) $countQb
-            ->select('COUNT(DISTINCT d.iid)')
-            ->getQuery()
-            ->getSingleScalarResult()
+        // Fetch the current page of documents by PK with all joins needed for
+        // serialization, including resourceFiles (fixes N+1 on file sizes).
+        $fetchQb = $this->entityManager
+            ->getRepository(CDocument::class)
+            ->createQueryBuilder('d')
+            ->innerJoin('d.resourceNode', 'rn')->addSelect('rn')
+            ->leftJoin('rn.resourceType', 'rt')->addSelect('rt')
+            ->leftJoin('rt.tool', 'tool')->addSelect('tool')
+            ->leftJoin('rn.creator', 'creator')->addSelect('creator')
+            ->leftJoin('rn.resourceLinks', 'rl')->addSelect('rl')
+            ->leftJoin('rn.resourceFiles', 'rf')->addSelect('rf')
+            ->andWhere('d.iid IN (:iids)')
+            ->setParameter('iids', $iids, ArrayParameterType::INTEGER)
         ;
 
-        $qb
-            ->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-        ;
+        $results = $fetchQb->getQuery()->getResult();
 
-        $results = $qb->getQuery()->getResult();
+        // Restore the sort order from the cached IID list (SQL IN has no guaranteed order).
+        $posMap = array_flip($iids);
+        usort(
+            $results,
+            static fn (CDocument $a, CDocument $b): int => ($posMap[$a->getIid()] ?? 0) <=> ($posMap[$b->getIid()] ?? 0)
+        );
 
         return new TraversablePaginator(
             new ArrayIterator($results),
             $page,
             $itemsPerPage,
-            $totalItems
+            $cached['total']
         );
+    }
+
+    /**
+     * Returns the first 8 hex characters of the installation-unique identifier
+     * stored in branch_sync.unique_id (a SHA1 generated at install/migration time).
+     * This prefix distinguishes cache entries between different Chamilo installations
+     * that share the same APCu memory on a single server.
+     *
+     * Falls back to the first 8 chars of %kernel.secret% if the table is empty or
+     * unavailable (e.g. during a fresh install before fixtures run).
+     *
+     * The result is cached in a private property so the DB is queried at most once
+     * per PHP process.
+     */
+    private function getInstallationPrefix(): string
+    {
+        if (null !== $this->installationPrefix) {
+            return $this->installationPrefix;
+        }
+
+        $uniqueId = '';
+
+        try {
+            $uniqueId = (string) $this->entityManager->getConnection()->fetchOne(
+                'SELECT unique_id FROM branch_sync ORDER BY id ASC LIMIT 1'
+            );
+        } catch (Throwable) {
+            // Table may not exist during a fresh install — fall through to fallback.
+        }
+
+        $this->installationPrefix = substr($uniqueId ?: $this->appSecret, 0, 8);
+
+        return $this->installationPrefix;
     }
 }

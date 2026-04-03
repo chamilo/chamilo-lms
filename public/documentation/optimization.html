@@ -101,5 +101,47 @@ This page will contain optimization hints in the future. At this time,
   If so, you would benefit from having someone knowledgeable look into the database and optimize it.<br>
   We will publish suggested optimizations in this guide as we discover them, but we strive to provide the best database structure by default for new systems.
 
+  <h3>Additional indexes for document list performance</h3>
+  <p>
+  On installations with large numbers of documents per course, the documents list page can become slow due to expensive filtering and sorting queries
+  against the <code>resource_link</code> and <code>resource_node</code> tables.
+  The following two indexes significantly reduce query cost and eliminate the filesort for the default title sort:
+  </p>
+  <pre>
+-- Composite index covering the most common document-list filter:
+-- WHERE c_id = ? AND session_id IS NULL AND group_id IS NULL AND parent_id IS NULL
+-- Avoids a full table scan on resource_link when listing documents in a course context.
+ALTER TABLE resource_link
+    ADD INDEX idx_rl_doc_list (c_id, session_id, group_id, parent_id);
+
+-- Composite index to avoid filesort when listing documents sorted by title
+-- within a specific folder (WHERE parent_id = ? ORDER BY title ASC).
+ALTER TABLE resource_node
+    ADD INDEX idx_rn_parent_title (parent_id, title);
+  </pre>
+  <p>
+  These indexes will be added automatically by the Doctrine migrations in the next major release.
+  On existing production systems they can be applied manually with no downtime on MySQL/MariaDB (the
+  <code>ALTER TABLE ... ADD INDEX</code> statement is an online operation in InnoDB).
+  </p>
+  <p>
+  For the Doctrine schema to reflect these indexes (e.g. so that <code>doctrine:schema:validate</code>
+  passes and future <code>doctrine:migrations:diff</code> does not re-create them), the corresponding
+  <code>#[ORM\Index]</code> attributes must also be added to the entity classes:
+  </p>
+  <pre>
+// src/CoreBundle/Entity/ResourceLink.php — add alongside the existing #[ORM\Index] attributes:
+#[ORM\Index(
+    columns: ['c_id', 'session_id', 'group_id', 'parent_id'],
+    name: 'idx_rl_doc_list'
+)]
+
+// src/CoreBundle/Entity/ResourceNode.php — add a new #[ORM\Index] attribute on the class:
+#[ORM\Index(
+    columns: ['parent_id', 'title'],
+    name: 'idx_rn_parent_title'
+)]
+  </pre>
+
 </body>
 </html>

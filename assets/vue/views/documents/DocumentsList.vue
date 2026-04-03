@@ -1035,7 +1035,9 @@ onMounted(async () => {
   options.value.itemsPerPage = resolveDefaultRows(0)
   triggerTableLoad()
   void loadDefaultCertificate()
-  void loadAllFolders()
+  // loadAllFolders() is intentionally deferred: it recursively fetches all
+  // course folders and is only needed when the move dialog is opened.
+  // openMoveDialog() calls it on demand.
 
   void courseSettingsStore
     .loadCourseSettings(cid, sid)

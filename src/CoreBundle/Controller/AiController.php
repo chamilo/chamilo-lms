@@ -443,14 +443,15 @@ class AiController extends AbstractController
     public function generateAiken(Request $request): JsonResponse
     {
         try {
-            try {
-                $this->denyIfNotTeacher();
-            } catch (AccessDeniedException $e) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Access denied.',
-                ], 403);
-            }
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
+        try {
             $data = json_decode($request->getContent(), true);
             if (!\is_array($data)) {
                 return new JsonResponse([
@@ -463,7 +464,7 @@ class AiController extends AbstractController
             $language = (string) ($data['language'] ?? 'en');
             $topic = trim((string) ($data['quiz_name'] ?? ''));
             $questionType = (string) ($data['question_type'] ?? 'multiple_choice');
-            $aiProvider = $data['ai_provider'] ?? null;
+            $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
 
@@ -474,7 +475,19 @@ class AiController extends AbstractController
                 ], 400);
             }
 
+            if ($nQ > 100) {
+                $nQ = 100;
+            }
+
             $aiService = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+
+            if (!\is_object($aiService) || !method_exists($aiService, 'generateQuestions')) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Selected AI provider does not support question generation.',
+                ], 400);
+            }
+
             $questions = $aiService->generateQuestions($topic, $nQ, $questionType, $language);
 
             if (empty($questions)) {
@@ -493,13 +506,20 @@ class AiController extends AbstractController
 
             $questionsText = $this->sanitizeGeneratedAikenText((string) $questions);
 
+            if ('' === $questionsText) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'AI request returned an invalid Aiken response.',
+                ], 500);
+            }
+
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'course:'.$cid.':aiken:'.sha1($topic.'|'.$language.'|'.$nQ.'|'.$questionType),
                 userId: $this->getCurrentUserId(),
                 meta: [
                     'feature' => 'exercise_generator_aiken',
                     'mode' => 'generated',
-                    'provider' => \is_string($aiProvider) && '' !== trim((string) $aiProvider) ? trim((string) $aiProvider) : 'default',
+                    'provider' => $aiProvider ?? 'default',
                     'language' => $language,
                     'question_type' => $questionType,
                     'n' => $nQ,
@@ -513,13 +533,318 @@ class AiController extends AbstractController
                 'text' => $questionsText,
                 'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
             ]);
-        } catch (Exception $e) {
-            error_log('[AI] Aiken generation failed: '.$e->getMessage());
+        } catch (Throwable $e) {
+            error_log('[AI][aiken] Generation failed: '.$e->getMessage());
 
             return new JsonResponse([
                 'success' => false,
                 'text' => 'An error occurred while generating questions. Please contact the administrator.',
             ], 500);
+        }
+    }
+
+    #[Route('/generate_aiken_from_document', name: 'chamilo_core_ai_generate_aiken_from_document', methods: ['POST'])]
+    public function generateAikenFromDocument(Request $request): JsonResponse
+    {
+        $debug = false;
+
+        try {
+            $debug = (bool) $this->getParameter('kernel.debug');
+        } catch (Throwable) {
+            $debug = false;
+        }
+
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid JSON payload.',
+            ], 400);
+        }
+
+        $nQ = (int) ($data['nro_questions'] ?? 0);
+        $language = (string) ($data['language'] ?? 'en');
+        $topicPrompt = trim((string) ($data['quiz_name'] ?? $data['prompt'] ?? ''));
+        $questionType = (string) ($data['question_type'] ?? 'multiple_choice');
+        $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
+
+        $cid = (int) ($data['cid'] ?? 0);
+        $sid = (int) ($data['sid'] ?? 0);
+        $gid = (int) ($data['gid'] ?? 0);
+
+        $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
+        $documentTitle = trim((string) ($data['document_title'] ?? ''));
+
+        if (0 === $cid || 0 === $resourceFileId || $nQ <= 0) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid request parameters.',
+            ], 400);
+        }
+
+        if ($nQ > 100) {
+            $nQ = 100;
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Course not found.',
+            ], 404);
+        }
+
+        /** @var ResourceFile|null $resourceFile */
+        $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+        if (null === $resourceFile) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Resource file not found.',
+            ], 404);
+        }
+
+        $node = $resourceFile->getResourceNode();
+        if (null === $node) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Resource node not found.',
+            ], 404);
+        }
+
+        $belongsToCourse = false;
+        foreach ($node->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if ($linkCourse && (int) $linkCourse->getId() === $cid) {
+                $belongsToCourse = true;
+
+                break;
+            }
+        }
+
+        if (!$belongsToCourse) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Resource does not belong to this course.',
+            ], 403);
+        }
+
+        $fileUri = $this->resourceNodeRepository->getFilename($resourceFile);
+        if (!\is_string($fileUri) || '' === trim($fileUri)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Could not resolve resource file URI.',
+            ], 500);
+        }
+
+        try {
+            $binary = (string) $this->resourceNodeRepository->getFileSystem()->read($fileUri);
+        } catch (Throwable $e) {
+            if ($debug) {
+                error_log('[AI][aiken_document] Failed to read file: '.$e->getMessage());
+            }
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Failed to read file content.',
+            ], 500);
+        }
+
+        if ('' === $binary) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'File is empty.',
+            ], 400);
+        }
+
+        $filename = basename($fileUri);
+
+        $mimeType = (string) $resourceFile->getMimeType();
+        if ('' === trim($mimeType)) {
+            $mimeType = 'application/octet-stream';
+        }
+
+        $ext = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+        $isPdf = ('pdf' === $ext) || ('application/pdf' === $mimeType);
+        $isTxt = ('txt' === $ext) || str_starts_with(strtolower($mimeType), 'text/plain');
+
+        $maxBytesPdf = 10 * 1024 * 1024;
+        $maxBytesTxt = 1 * 1024 * 1024;
+
+        if ($isPdf && \strlen($binary) > $maxBytesPdf) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Document is too large to analyze.',
+            ], 413);
+        }
+
+        if ($isTxt && \strlen($binary) > $maxBytesTxt) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Text file is too large to analyze.',
+            ], 413);
+        }
+
+        if (!$isPdf && !$isTxt) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Unsupported file type. Supported: PDF, TXT.',
+            ], 415);
+        }
+
+        $courseTitle = (string) $course->getTitle();
+        $docLabel = '' !== $documentTitle ? $documentTitle : (string) ($node->getTitle() ?? $filename);
+
+        $basePrompt = $this->buildAikenFromDocumentPrompt(
+            $courseTitle,
+            $docLabel,
+            $topicPrompt,
+            $language,
+            $sid,
+            $nQ,
+            $questionType
+        );
+
+        try {
+            if ($isTxt) {
+                $text = $this->normalizePlainText($binary);
+
+                $maxChars = 20000;
+                $truncated = false;
+                if (mb_strlen($text) > $maxChars) {
+                    $text = mb_substr($text, 0, $maxChars);
+                    $truncated = true;
+                }
+
+                $fullPrompt = $basePrompt
+                    ."\n\nDocument content (plain text):\n"
+                    .$text
+                    .($truncated ? "\n\n[Content truncated]" : '');
+
+                $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+
+                if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Selected AI provider does not support text generation.',
+                    ], 400);
+                }
+
+                try {
+                    $raw = (string) $provider->generateText($fullPrompt, [
+                        'language' => $language,
+                        'tool' => 'exercise_aiken_from_document_txt',
+                        'cid' => $cid,
+                        'sid' => $sid,
+                        'gid' => $gid,
+                        'n' => $nQ,
+                        'question_type' => $questionType,
+                    ]);
+                } catch (TypeError) {
+                    $raw = (string) $provider->generateText($fullPrompt, $language);
+                }
+
+                $result = trim($raw);
+            } else {
+                $provider = $this->aiProviderFactory->getProvider($aiProvider, 'document_process');
+
+                if (!$provider instanceof AiDocumentProcessProviderInterface) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Selected AI provider does not support document processing.',
+                    ], 400);
+                }
+
+                $result = $provider->processDocument(
+                    $basePrompt,
+                    'exercise_aiken_from_document_pdf',
+                    $filename,
+                    'application/pdf',
+                    $binary,
+                    [
+                        'language' => $language,
+                        'cid' => $cid,
+                        'sid' => $sid,
+                        'gid' => $gid,
+                        'n' => $nQ,
+                        'question_type' => $questionType,
+                    ]
+                );
+
+                $result = \is_string($result) ? trim($result) : '';
+            }
+
+            if ('' === $result) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'AI request returned an empty response.',
+                ], 500);
+            }
+
+            if (str_starts_with($result, 'Error:')) {
+                $msg = trim((string) preg_replace('/^Error:\s*/', '', $result));
+                $status = $this->mapDocumentErrorToHttpStatus($msg);
+
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => '' !== $msg ? $msg : $result,
+                ], $status);
+            }
+
+            $questionsText = $this->sanitizeGeneratedAikenText($result);
+
+            if ('' === $questionsText) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'AI request returned an invalid Aiken response.',
+                ], 500);
+            }
+
+            // Do not prepend visible disclosure text here because it would break the Aiken format.
+            $this->aiDisclosureHelper->logAudit(
+                targetKey: 'course:'.$cid.':aiken_document:'.sha1($resourceFileId.'|'.$topicPrompt.'|'.$language.'|'.$nQ.'|'.$questionType),
+                userId: $this->getCurrentUserId(),
+                meta: [
+                    'feature' => 'exercise_generator_aiken_document',
+                    'mode' => 'generated',
+                    'provider' => $aiProvider ?? 'default',
+                    'language' => $language,
+                    'question_type' => $questionType,
+                    'n' => $nQ,
+                    'resource_file_id' => $resourceFileId,
+                    'document_title' => $docLabel,
+                ],
+                courseId: $cid,
+                sessionId: $sid > 0 ? $sid : api_get_session_id()
+            );
+
+            return new JsonResponse([
+                'success' => true,
+                'text' => $questionsText,
+                'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+            ]);
+        } catch (Throwable $e) {
+            $msg = trim($e->getMessage());
+
+            if ($debug) {
+                error_log('[AI][aiken_document] Exception: '.$msg);
+            }
+
+            $status = $this->mapDocumentErrorToHttpStatus($msg);
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => $debug && '' !== $msg ? $msg : 'An error occurred while generating questions from the document.',
+            ], $status);
         }
     }
 
@@ -1673,6 +1998,61 @@ class AiController extends AbstractController
         $base .= "- Use short headings and bullet points with '-'.\n";
 
         return $base;
+    }
+
+    private function buildAikenFromDocumentPrompt(
+        string $courseTitle,
+        string $documentTitle,
+        string $teacherPrompt,
+        string $language,
+        int $sid,
+        int $numberOfQuestions,
+        string $questionType
+    ): string {
+        $teacherPrompt = trim($teacherPrompt);
+        $questionTypeLabel = $this->normalizeAikenQuestionTypeLabel($questionType);
+
+        $prompt = "You are an expert teacher creating a student assessment.\n";
+        $prompt .= "Language: {$language}\n";
+        $prompt .= "Course: {$courseTitle}\n";
+        $prompt .= "Document: {$documentTitle}\n";
+
+        if ($sid > 0) {
+            $prompt .= "Session ID: {$sid}\n";
+        }
+
+        $prompt .= "Requested question count: {$numberOfQuestions}\n";
+        $prompt .= "Question type: {$questionTypeLabel}\n";
+
+        if ('' !== $teacherPrompt) {
+            $prompt .= "Teacher topic hint: {$teacherPrompt}\n";
+        }
+
+        $prompt .= "\nTask:\n";
+        $prompt .= "- Use only the provided document.\n";
+        $prompt .= "- The goal is to evaluate the student's understanding of the document.\n";
+        $prompt .= "- Do not use outside knowledge.\n";
+        $prompt .= "- Generate exactly {$numberOfQuestions} questions.\n";
+        $prompt .= "- Each question must have exactly four answer options: A, B, C, D.\n";
+        $prompt .= "- Each question must have exactly one correct answer.\n";
+
+        $prompt .= "\nOutput rules:\n";
+        $prompt .= "- Return strict AIKEN format only.\n";
+        $prompt .= "- Return plain text only.\n";
+        $prompt .= "- Do not return Markdown, HTML, code fences, headings or explanations.\n";
+        $prompt .= "- Do not number the questions.\n";
+        $prompt .= "- After each question block, add exactly one line in the format ANSWER: X.\n";
+        $prompt .= "- Do not add ANSWER_EXPLANATION lines.\n";
+
+        return $prompt;
+    }
+
+    private function normalizeAikenQuestionTypeLabel(string $questionType): string
+    {
+        return match ($questionType) {
+            'multiple_choice' => 'single-answer multiple choice',
+            default => 'single-answer multiple choice',
+        };
     }
 
     /**

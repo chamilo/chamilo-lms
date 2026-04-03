@@ -357,7 +357,6 @@ class SettingsController extends BaseController
             'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
-            'is_https' => $request->isSecure(),
         ]);
     }
 
@@ -532,7 +531,6 @@ class SettingsController extends BaseController
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             'search_diagnostics' => $searchDiagnostics,
-            'is_https' => $request->isSecure(),
         ]);
     }
 

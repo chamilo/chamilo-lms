@@ -176,6 +176,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.course_creation_form_hide_course_code',
                 'course.course_creation_form_set_course_category_mandatory',
                 'display.hide_logout_button',
+                'document.documents_hide_download_icon',
             ];
 
             foreach ($variables as $variable) {

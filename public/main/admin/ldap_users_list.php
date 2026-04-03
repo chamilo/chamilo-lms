@@ -49,7 +49,7 @@ if (isset($_GET['action'])) {
     if ($check) {
         switch ($_GET['action']) {
             case 'show_message':
-                Display::addFlash(Display::return_message($_GET['message'], 'normal'));
+                Display::addFlash(Display::return_message(htmlspecialchars($_GET['message'], ENT_QUOTES), 'normal'));
                 Display::display_header($tool_name);
                 break;
             case 'delete_user':

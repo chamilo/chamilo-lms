@@ -29,7 +29,7 @@ $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['title', 'nbr_session',
     ? Security::remove_XSS($_GET['sort'])
     : 'title';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
-$order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
+$order = (isset($_REQUEST['order']) && 'DESC' === strtoupper($_REQUEST['order'])) ? 'DESC' : 'ASC';
 $keyword = null;
 
 if ('delete_on_session' === $action || 'delete_off_session' === $action) {

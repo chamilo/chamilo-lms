@@ -229,6 +229,19 @@ switch ($action) {
                 if ($zip->open($fileInfo['tmp_name']) === true) {
                     $extractPath = sys_get_temp_dir() . '/extracted_' . uniqid();
                     mkdir($extractPath);
+                    // Guard against ZIP Slip: reject entries with path traversal
+                    $zipSlip = false;
+                    for ($zi = 0; $zi < $zip->numFiles; $zi++) {
+                        $entryName = str_replace('\\', '/', $zip->getNameIndex($zi));
+                        if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                            $zipSlip = true;
+                            break;
+                        }
+                    }
+                    if ($zipSlip) {
+                        $zip->close();
+                        continue;
+                    }
                     $zip->extractTo($extractPath);
                     $zip->close();
 

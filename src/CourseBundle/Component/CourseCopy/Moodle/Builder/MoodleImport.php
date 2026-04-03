@@ -890,6 +890,14 @@ class MoodleImport
             if (true !== $zip->open($archivePath)) {
                 throw new RuntimeException('Cannot open zip');
             }
+            // Guard against ZIP Slip: reject entries with path traversal
+            for ($zi = 0; $zi < $zip->numFiles; $zi++) {
+                $entryName = str_replace('\\', '/', $zip->getNameIndex($zi));
+                if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                    $zip->close();
+                    throw new RuntimeException('Malicious ZIP entry detected');
+                }
+            }
             if (!$zip->extractTo($base)) {
                 $zip->close();
 
@@ -898,6 +906,15 @@ class MoodleImport
             $zip->close();
         } elseif (\in_array($ext, ['gz', 'tgz'], true)) {
             $phar = new PharData($archivePath);
+            // Guard against ZIP Slip in PHAR/tar
+            foreach (new \RecursiveIteratorIterator($phar) as $pharEntry) {
+                $entryPath = str_replace('\\', '/', $pharEntry->getPathname());
+                $pharBase = str_replace('\\', '/', $archivePath);
+                $relative = ltrim(substr($entryPath, strlen($pharBase)), '/');
+                if (str_contains($relative, '../') || str_starts_with($relative, '/')) {
+                    throw new RuntimeException('Malicious archive entry detected');
+                }
+            }
             $phar->extractTo($base, null, true);
         } else {
             throw new RuntimeException('Unsupported archive type');

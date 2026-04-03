@@ -343,6 +343,7 @@ export default {
 
     ...mapActions("documents", {
       retrieve: "load",
+      updateWithFormData: "updateWithFormData",
     }),
   },
 }

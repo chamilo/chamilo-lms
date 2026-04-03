@@ -40,19 +40,19 @@
 
     // Positional modifiers
     &--top-left {
-      @apply -top-2.5 -left-3;
+      @apply -top-2 -left-2.5;
     }
 
     &--top-right {
-      @apply -top-2.5 -right-3;
+      @apply -top-2 -right-2.5;
     }
 
     &--bottom-left {
-      @apply -bottom-2.5 -left-3;
+      @apply -bottom-1.5 -left-2;
     }
 
     &--bottom-right {
-      @apply -bottom-2.5 -right-3;
+      @apply -bottom-2 -right-2.5;
     }
   }
 

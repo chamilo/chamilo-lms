@@ -71,7 +71,7 @@ const props = defineProps({
   },
   badgePosition: {
     type: String,
-    default: "top-left",
+    default: "bottom-left",
     validator: (value) => ["top-left", "top-right", "bottom-left", "bottom-right"].includes(value),
   },
   tooltip: {

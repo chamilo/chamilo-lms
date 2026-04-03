@@ -46,7 +46,7 @@
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
-        v-if="securityStore.isAuthenticated && !isAnonymous"
+        v-if="securityStore.isAuthenticated && !isAnonymous && !hideLogoutButton"
         class="app-sidebar__logout-link"
         href="/logout"
       >
@@ -79,6 +79,7 @@ import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
+import { usePlatformConfig } from "../../store/platformConfig"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
@@ -88,6 +89,7 @@ import CategoryLinks from "../page/CategoryLinks.vue"
 const { t } = useI18n()
 const securityStore = useSecurityStore()
 const enrolledStore = useEnrolledStore()
+const platformConfigStore = usePlatformConfig()
 
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
@@ -104,6 +106,10 @@ if (!isMobile() && storedSidebarState === null) {
 const expandingDueToPanelClick = ref(false)
 
 const currentYear = new Date().getFullYear()
+
+const hideLogoutButton = computed(() => {
+  return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
 
 const isAnonymous = computed(() => {
   const u = securityStore.user || {}

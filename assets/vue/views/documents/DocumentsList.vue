@@ -92,7 +92,7 @@
       @click="showUsageDialog"
     />
     <BaseButton
-      v-if="showDownloadAllButton"
+      v-if="showDownloadAllButton && !hideDownloadIcon"
       :label="t('Download all')"
       icon="download"
       only-icon
@@ -315,6 +315,7 @@
       @click="showDeleteMultipleDialog"
     />
     <BaseButton
+      v-if="!hideDownloadIcon"
       :disabled="isDownloading || !selectedItems || !selectedItems.length"
       :label="isDownloading ? t('In progress') : t('Download selected items as ZIP')"
       icon="download"
@@ -723,6 +724,10 @@ const allowAccessUrlFiles = computed(
   () => "false" !== platformConfigStore.getSetting("document.access_url_specific_files"),
 )
 
+const hideDownloadIcon = computed(() => {
+  return platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+})
+
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml, isFile } = useFileUtils()
@@ -937,6 +942,7 @@ function openWithOnlyoffice(doc) {
   const url = buildOnlyofficeUrl(doc)
   window.open(url, "_blank", "noopener,noreferrer")
 }
+
 /**
  * Local loading flag to show the table spinner immediately.
  * This prevents the "empty table" impression while the store is still preparing the request.
@@ -961,6 +967,7 @@ watch(isLoading, (val) => {
     tableLoading.value = true
     return
   }
+
   // If we already triggered at least one load and the store is not loading anymore, hide spinner.
   if (hasRequestedList.value) {
     tableLoading.value = false
@@ -978,7 +985,7 @@ watch([items, totalItems], () => {
 function resolveDefaultRows(total = 0) {
   const raw = platformConfigStore.getSetting("display.table_default_row", 10)
   const def = Number(raw)
-  if (def === 0) return total || Number.MAX_SAFE_INTEGER // “All”
+  if (def === 0) return total || Number.MAX_SAFE_INTEGER
   return Number.isFinite(def) && def > 0 ? def : 10
 }
 
@@ -987,8 +994,10 @@ const canEdit = (item) => {
   if (!resourceLink) {
     return false
   }
+
   const isSessionDoc = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
+
   return (isSessionDoc && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
@@ -1008,15 +1017,14 @@ const hasAiVideo = ref(false)
 const hasAiDocumentProcess = ref(false)
 const hasAiTextForAnalyzer = ref(false)
 
-const aiTextProviders = ref([]) // [{ key, label }]
-const aiDocProcessProviders = ref([]) // [{ key, label }]
+const aiTextProviders = ref([])
+const aiDocProcessProviders = ref([])
 
 onMounted(async () => {
   tableLoading.value = true
   filters.value.loadNode = 1
   filters.value.filetype = ["file", "folder", "video"]
 
-  // Set resource node.
   let nodeId = route.params.node
   if (isEmpty(nodeId)) {
     nodeId = route.query.node
@@ -1081,6 +1089,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
   if (!resourceNode.value) {
     return false
   }
+
   return resourceNode.value.resourceType.title !== "courses"
 })
 
@@ -1104,9 +1113,10 @@ function back() {
   if (!resourceNode.value) {
     return
   }
-  let parent = resourceNode.value.parent
+
+  const parent = resourceNode.value.parent
   if (parent) {
-    let queryParams = { cid, sid, gid }
+    const queryParams = { cid, sid, gid }
     router.push({ name: "DocumentsList", params: { node: parent.id }, query: queryParams })
   }
 }
@@ -1134,7 +1144,7 @@ function createNewFolder() {
           gid,
           sid,
           cid,
-          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+          visibility: RESOURCE_LINK_PUBLISHED,
         },
       ])
 
@@ -1144,6 +1154,7 @@ function createNewFolder() {
         triggerTableLoad()
       })
     }
+
     isNewFolderDialogVisible.value = false
     item.value = {}
   }
@@ -1160,6 +1171,7 @@ function showDeleteMultipleDialog() {
 async function confirmDeleteItem(itemToDelete) {
   try {
     const response = await axios.get(`/api/documents/${itemToDelete.iid}/lp-usage`)
+
     if (response.data.usedInLp) {
       lpListWarning.value = response.data.lpList.map((lp) => ({
         ...lp,
@@ -1199,9 +1211,11 @@ function getReplaceButtonTitle(item) {
   if (item.filetype === "file") {
     return t("Replace file")
   }
+
   if (item.filetype === "video") {
     return t("Replace video")
   }
+
   return t("Replace (files or videos only)")
 }
 
@@ -1379,8 +1393,9 @@ function btnEditOnClick(item) {
 }
 
 function showSlideShowWithFirstImage() {
-  let item = items.value.find((i) => isImage(i))
+  const item = items.value.find((i) => isImage(i))
   if (!item) return
+
   document.querySelector(`a[href='${item.contentUrl}']`)?.click()
   document.querySelector("button.fancybox-button--play")?.click()
 }
@@ -1429,11 +1444,9 @@ function normalizeResourceNodeId(value) {
   if (typeof value === "number") return value
 
   if (typeof value === "string") {
-    // Accept IRI like "/api/resource_nodes/123"
     const iriMatch = value.match(/\/api\/resource_nodes\/(\d+)/)
     if (iriMatch) return Number(iriMatch[1])
 
-    // Accept "123"
     if (/^\d+$/.test(value)) return Number(value)
   }
 
@@ -1441,21 +1454,17 @@ function normalizeResourceNodeId(value) {
 }
 
 function getDocumentsRootNodeId() {
-  // We want the top node of this documents tree (usually the course root node).
   let node = resourceNode.value
-
   const fallback = normalizeResourceNodeId(route.params.node || route.query.node)
 
   if (!node) {
     return fallback
   }
 
-  // If current node is already the course root, use it.
   if (node?.resourceType?.title === "courses") {
     return normalizeResourceNodeId(node.id) || fallback
   }
 
-  // Walk up until we reach the course root node.
   let safety = 0
   while (node?.parent && node?.resourceType?.title !== "courses" && safety < 30) {
     node = node.parent
@@ -1471,12 +1480,12 @@ async function fetchFolders(nodeId = null, parentPath = "") {
   const foldersList = [
     {
       label: t("Documents"),
-      value: rootId, // REAL root node id
+      value: rootId,
     },
   ]
 
   try {
-    let nodesToFetch = [{ id: rootId, path: parentPath }]
+    const nodesToFetch = [{ id: rootId, path: parentPath }]
     let depth = 0
     const maxDepth = 10
 
@@ -1553,7 +1562,6 @@ async function moveDocument() {
       return
     }
 
-    // Optional: avoid no-op moves
     const currentParentId =
       normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
       normalizeResourceNodeId(item.value?.resourceNode?.parent)
@@ -1753,11 +1761,9 @@ const submitTemplateForm = async () => {
  * AI: capabilities + provider lists (selector in modal)
  * -----------------------------------------
  */
-
 function normalizeProviders(raw) {
   if (!raw) return []
 
-  // Array: ["openai", ...] OR [{key,label}, ...]
   if (Array.isArray(raw)) {
     return raw
       .map((p) => {
@@ -1771,17 +1777,18 @@ function normalizeProviders(raw) {
           const label = String(p.label ?? key).trim()
           return { key, label: label || key }
         }
+
         return null
       })
       .filter(Boolean)
   }
 
-  // Map/object: { openai: "openai (gpt-4o)", ... }
   if (raw && typeof raw === "object") {
     return Object.entries(raw)
       .map(([k, v]) => {
         const key = String(k || "").trim()
         if (!key) return null
+
         const label = String(v ?? key).trim()
         return { key, label: label || key }
       })
@@ -1812,7 +1819,6 @@ async function loadAiCapabilities() {
     return
   }
 
-  // If nothing is enabled on frontend, skip backend call.
   if (!imageGeneratorEnabled.value && !videoGeneratorEnabled.value && !contentAnalyzerEnabled.value) {
     hasAiImage.value = false
     hasAiVideo.value = false
@@ -1839,10 +1845,8 @@ async function loadAiCapabilities() {
     hasAiImage.value = imageGeneratorEnabled.value && backendHasImage
     hasAiVideo.value = videoGeneratorEnabled.value && backendHasVideo
 
-    // document_process providers come from capabilities.types.document_process (often a map)
     aiDocProcessProviders.value = normalizeProviders(data?.types?.document_process)
 
-    // text providers: only teachers use the AI feedback/analyzer feature, skip for students
     aiTextProviders.value = []
     if (isCurrentTeacher.value) {
       try {
@@ -1854,7 +1858,6 @@ async function loadAiCapabilities() {
       }
     }
 
-    // Analyzer support depends on file mode + provider list availability.
     hasAiDocumentProcess.value =
       contentAnalyzerEnabled.value && backendHasDocProcess && aiDocProcessProviders.value.length > 0
     hasAiTextForAnalyzer.value = contentAnalyzerEnabled.value && backendHasText && aiTextProviders.value.length > 0
@@ -1900,21 +1903,19 @@ function showAiFeedbackButton(doc) {
   if (!aiHelpersEnabled.value) return false
   if (!contentAnalyzerEnabled.value) return false
 
-  // Only analyze items that have a real file attached.
   const rfId = doc?.resourceNode?.firstResourceFile?.id
   if (!rfId) return false
 
-  // Avoid folders.
   const ft = String(doc?.filetype || "")
   if (!["file", "video", "certificate"].includes(ft)) return false
 
   const mode = getAnalyzerMode(doc)
   if (!mode) return false
 
-  // Mode-specific gating so the button appears only when providers exist.
   if (mode === "pdf") {
     return hasAiDocumentProcess.value && aiDocProcessProviders.value.length > 0
   }
+
   if (mode === "txt") {
     return hasAiTextForAnalyzer.value && aiTextProviders.value.length > 0
   }
@@ -1935,7 +1936,6 @@ const aiFeedbackAnswer = ref("")
 const aiFeedbackPrompt = ref("")
 const aiFeedbackDoc = ref(null)
 
-// Selected provider key (string). When null => backend default provider is used.
 const aiFeedbackProvider = ref(null)
 
 const cidReqStore = useCidReqStore()
@@ -1962,11 +1962,9 @@ function openAiFeedback(doc) {
   aiFeedbackError.value = ""
   aiFeedbackAnswer.value = ""
 
-  // Default prompt can be changed by the teacher.
   aiFeedbackPrompt.value =
     "Please provide feedback on clarity, structure, and improvement suggestions. If needed, propose a revised version."
 
-  // Reset provider then set first available provider after DOM/computed updates.
   aiFeedbackProvider.value = null
   isAiFeedbackDialogVisible.value = true
 
@@ -1976,11 +1974,11 @@ function openAiFeedback(doc) {
   })
 }
 
-// If providers are loaded after dialog opens, make sure we have a valid selection.
 watch(
   () => [isAiFeedbackDialogVisible.value, aiFeedbackProviderOptions.value],
   () => {
     if (!isAiFeedbackDialogVisible.value) return
+
     const opts = aiFeedbackProviderOptions.value || []
     if (!opts.length) return
 
@@ -2010,7 +2008,6 @@ function closeAiFeedbackDialog() {
 }
 
 async function runAiFeedback() {
-  // Prevent double-click runs.
   if (aiFeedbackLoading.value) return
 
   aiFeedbackError.value = ""
@@ -2037,7 +2034,6 @@ async function runAiFeedback() {
     return
   }
 
-  // If we have options, require a valid selected provider.
   const opts = aiFeedbackProviderOptions.value || []
   if (opts.length > 0) {
     const selected = String(aiFeedbackProvider.value || "").trim()
@@ -2045,6 +2041,7 @@ async function runAiFeedback() {
       aiFeedbackError.value = "AI provider is required."
       return
     }
+
     const exists = opts.some((p) => p.key === selected)
     if (!exists) {
       aiFeedbackError.value = "Selected AI provider is not available for this file type."
@@ -2065,7 +2062,6 @@ async function runAiFeedback() {
       document_title: aiFeedbackDocTitle.value,
       prompt: aiFeedbackPrompt.value,
       language: String(locale?.value || "en"),
-      // Provider key or null => backend default provider.
       ai_provider: aiFeedbackProvider.value,
     }
 
@@ -2177,7 +2173,6 @@ const usageQuotaSummary = computed(() => {
 })
 
 function consumeAiSavedToast() {
-  // Show toast only once after redirect from AI generator.
   if (String(route.query.ai_saved || "") !== "1") {
     return
   }
@@ -2189,7 +2184,6 @@ function consumeAiSavedToast() {
     notification.showSuccessNotification(t("Saved"))
   }
 
-  // Remove params so it doesn't show again on refresh/back.
   const newQuery = { ...route.query }
   delete newQuery.ai_saved
   delete newQuery.ai_saved_path

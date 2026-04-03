@@ -258,6 +258,17 @@ class SettingsController extends BaseController
             }
         }
 
+        $hideDisabledOnSubUrl = false;
+        if (1 !== $currentUrlId) {
+            foreach ($mainUrlRows as $row) {
+                if ($row instanceof SettingsCurrent && 'multiple_url_hide_disabled_settings' === $row->getVariable()) {
+                    $hideDisabledOnSubUrl = 'true' === $row->getSelectedValue();
+
+                    break;
+                }
+            }
+        }
+
         // Only platform admins on the main URL can toggle the MultiURL flag.
         $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
 
@@ -291,7 +302,9 @@ class SettingsController extends BaseController
                     $var = $parameter->getVariable();
 
                     // Hide locked settings from child URLs (do not show them at all).
-                    if (1 !== $currentUrlId && 1 === (int) ($lockedMap[$var] ?? 0)) {
+                    $isLocked = 1 === (int) ($lockedMap[$var] ?? 0);
+                    $isNonChangeableHidden = $hideDisabledOnSubUrl && 0 === (int) ($changeableMap[$var] ?? 1);
+                    if (1 !== $currentUrlId && ($isLocked || $isNonChangeableHidden)) {
                         continue;
                     }
 
@@ -312,11 +325,12 @@ class SettingsController extends BaseController
                 $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
-                // Keep only keyword-matching variables, and also remove locked ones for child URLs.
+                // Keep only keyword-matching variables, and also remove locked/hidden-disabled ones for child URLs.
                 foreach (array_keys($settings->getParameters()) as $name) {
                     $isLockedForChild = (1 !== $currentUrlId) && (1 === (int) ($lockedMap[$name] ?? 0));
+                    $isNonChangeableHiddenForChild = (1 !== $currentUrlId) && $hideDisabledOnSubUrl && (0 === (int) ($changeableMap[$name] ?? 1));
 
-                    if ($isLockedForChild || !\in_array($name, $variablesInCategory, true)) {
+                    if ($isLockedForChild || $isNonChangeableHiddenForChild || !\in_array($name, $variablesInCategory, true)) {
                         if ($form->has($name)) {
                             $form->remove($name);
                         }
@@ -398,6 +412,17 @@ class SettingsController extends BaseController
             }
         }
 
+        $hideDisabledOnSubUrl = false;
+        if (1 !== $currentUrlId) {
+            foreach ($mainUrlRows as $row) {
+                if ($row instanceof SettingsCurrent && 'multiple_url_hide_disabled_settings' === $row->getVariable()) {
+                    $hideDisabledOnSubUrl = 'true' === $row->getSelectedValue();
+
+                    break;
+                }
+            }
+        }
+
         $settings = $manager->load($namespace);
 
         $form = $this->getSettingsFormFactory()->create(
@@ -406,10 +431,12 @@ class SettingsController extends BaseController
             ['allow_extra_fields' => true]
         );
 
-        // Hide locked settings from child URLs (do not show them at all).
+        // Hide locked and (optionally) non-changeable settings from child URLs.
         if (1 !== $currentUrlId) {
             foreach (array_keys($settings->getParameters()) as $name) {
-                if (1 === (int) ($lockedMap[$name] ?? 0)) {
+                $isLocked = 1 === (int) ($lockedMap[$name] ?? 0);
+                $isNonChangeableHidden = $hideDisabledOnSubUrl && 0 === (int) ($changeableMap[$name] ?? 1);
+                if ($isLocked || $isNonChangeableHidden) {
                     if ($form->has($name)) {
                         $form->remove($name);
                     }

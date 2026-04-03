@@ -2145,6 +2145,11 @@ HOTSPOT;
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'ttte.session_id');
         }
 
+        if (empty($sessionId) && 'true' === api_get_setting('exercise.show_exercise_session_attempts_in_base_course')) {
+            $session_id_and = '';
+            $sessionCondition = '';
+        }
+
         $exercise_where = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';

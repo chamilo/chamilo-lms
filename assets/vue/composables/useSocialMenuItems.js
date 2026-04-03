@@ -26,7 +26,6 @@ export function useSocialMenuItems() {
   const hideSocialGroupBlock = computed(
     () => platformConfigStore.getSetting("social.hide_social_groups_block") === "true",
   )
-  const allowMyFiles = computed(() => platformConfigStore.settings?.["platform.allow_my_files"] !== "false")
 
   const isValidGlobalForumsCourse = computed(() => {
     const courseId = globalForumsCourse.value
@@ -90,13 +89,11 @@ export function useSocialMenuItems() {
     }
 
     // My files
-    if (allowMyFiles.value) {
-      menuItems.push({
-        icon: "mdi mdi-briefcase",
-        label: t("My files"),
-        route: { name: "PersonalFileList", params: { node: securityStore.user.resourceNode.id } },
-      })
-    }
+    menuItems.push({
+      icon: "mdi mdi-briefcase",
+      label: t("My files"),
+      route: { name: "PersonalFileList", params: { node: securityStore.user.resourceNode.id } },
+    })
 
     // Personal data
     menuItems.push({

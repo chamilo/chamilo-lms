@@ -7,8 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use AppPlugin;
+use Plugin;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ class PluginRegionController extends AbstractController
     public function __construct(
         private readonly PluginRepository $pluginRepo,
         private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly PluginHelper $pluginHelper,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     #[Route('/{region}', name: 'chamilo_core_plugin_region', methods: ['GET'])]
@@ -40,33 +41,40 @@ class PluginRegionController extends AbstractController
 
         $installedPlugins = $this->pluginRepo->getInstalledPlugins();
         $appPlugin = new AppPlugin();
+        $context = self::sanitizeContext($request);
+        $courseId = $this->cidReqHelper->getCourseId();
         $blocks = [];
 
         foreach ($installedPlugins as $plugin) {
-            if (!$this->pluginHelper->isPluginEnabled($plugin->getTitle())) {
+            $configByAccessUrl = $plugin->getConfigurationsByAccessUrl($accessUrl);
+
+            if (!$configByAccessUrl?->isActive()) {
                 continue;
             }
 
-            $configByAccessUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
-            $configuration = $configByAccessUrl->getConfiguration();
-            $regions = $configuration['regions'] ?? [];
+            $regions = $configByAccessUrl->getConfiguration()['regions'] ?? [];
 
             if (!\in_array($region, $regions)) {
                 continue;
             }
 
-            $html = $appPlugin->loadRegion(
-                $plugin->getTitle(),
-                $region,
-                self::sanitizeContext($request)
-            );
+            $title = $plugin->getTitle();
+            $pluginInfo = $appPlugin->getPluginInfo($title);
+            $html = $appPlugin->loadRegion($title, $region, $context);
+
+            if (($pluginInfo['is_course_plugin'] ?? false)
+                && $courseId
+                && isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin
+            ) {
+                $html .= $pluginInfo['obj']->renderRegion($region);
+            }
 
             if ('' === trim($html)) {
                 continue;
             }
 
             $blocks[] = [
-                'pluginName' => $plugin->getTitle(),
+                'pluginName' => $title,
                 'region' => $region,
                 'html' => $html,
             ];

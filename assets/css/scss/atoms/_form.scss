@@ -119,15 +119,17 @@ select.form-control {
 }
 
 .html-editor-container {
-  &--focused {
-    @apply border-primary outline-0 outline-none;
-  }
-
-  &--filled {
-  }
-
   & .tox-tinymce {
     @apply border border-solid border-gray-50 transition-colors appearance-none rounded-lg outline-transparent w-full pt-2
       hover:border-primary;
+  }
+
+  &--focused {
+    & .tox-tinymce {
+      @apply border-primary outline-0 outline-none;
+    }
+  }
+
+  &--filled {
   }
 }

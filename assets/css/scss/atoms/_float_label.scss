@@ -69,7 +69,8 @@
   &-on:has(.p-inputwrapper-filled) label,
   &-on:has(input[placeholder]) label,
   &-on:has(textarea[placeholder]) label,
-  &-on:has(.p-datepicker-panel-inline) label {
+  &-on:has(.p-datepicker-panel-inline) label,
+  &-on:has(.tox.tox-tinymce) label {
     @apply -translate-y-1/2;
   }
 }

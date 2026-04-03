@@ -173,6 +173,8 @@ class PlatformConfigurationController extends AbstractController
                 'language.show_different_course_language',
                 'workflows.allow_users_to_create_courses',
                 'work.allow_only_one_student_publication_per_user',
+                'course.course_creation_form_hide_course_code',
+                'course.course_creation_form_set_course_category_mandatory',
             ];
 
             foreach ($variables as $variable) {

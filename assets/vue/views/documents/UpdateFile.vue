@@ -19,22 +19,13 @@
           :search-enabled="isSearchEnabled"
           @submit="onSendFormData"
         >
-          <div
+          <BaseCheckbox
             v-if="isCurrentTeacher"
-            class="mt-4 flex items-center gap-2"
-          >
-            <input
-              id="ai-assisted-flag"
-              v-model="aiAssistedFlag"
-              type="checkbox"
-            />
-            <label
-              for="ai-assisted-flag"
-              class="text-sm"
-            >
-              AI-assisted
-            </label>
-          </div>
+            id="ai-assisted-flag"
+            v-model="aiAssistedFlag"
+            label="AI-assisted"
+            name="ai_assited"
+          />
 
           <EditLinks
             v-model="item"
@@ -106,6 +97,7 @@ import Panel from "primevue/panel"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
 const servicePrefix = "Documents"
 
@@ -116,6 +108,7 @@ export default {
   name: "DocumentsUpdateFile",
   servicePrefix,
   components: {
+    BaseCheckbox,
     TemplateList,
     EditLinks,
     Loading,

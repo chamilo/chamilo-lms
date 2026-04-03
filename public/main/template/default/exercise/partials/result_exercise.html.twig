@@ -46,7 +46,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if data.ip %}
+                            {% if data.ip is defined and data.ip %}
                                 <div class="flex items-center space-x-2">
                                     {{ 'laptop'|mdi_icon }}
                                     <span class="font-semibold">{{ 'IP'|trans }}:</span>

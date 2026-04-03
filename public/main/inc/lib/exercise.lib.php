@@ -2137,6 +2137,7 @@ HOTSPOT;
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
+        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
         $session_id_and = '';
         $sessionCondition = '';
         if (!$showSessionField) {
@@ -2572,14 +2573,17 @@ HOTSPOT;
 
                         // Admin can always delete the attempt
                         if ((false == $locked || api_is_platform_admin()) && !api_is_student_boss()) {
-                            $ip = Tracking::get_ip_from_user_event(
-                                $results[$i]['exe_user_id'],
-                                api_get_utc_datetime(),
-                                false
-                            );
-                            $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
-                                .'</a>';
+                            if (!$hideIp) {
+                                $ip = Tracking::get_ip_from_user_event(
+                                    $results[$i]['exe_user_id'],
+                                    api_get_utc_datetime(),
+                                    false
+                                );
+
+                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
+                                    .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
+                                    .'</a>';
+                            }
 
                             $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
                                 api_get_cidreq().'&'.
@@ -2663,6 +2667,9 @@ HOTSPOT;
                     $exeId = $results[$i]['exe_id'];
                     $results[$i]['id'] = $exeId;
                     $category_list = [];
+                    if ($hideIp) {
+                        unset($results[$i]['user_ip']);
+                    }
                     if ($is_allowedToEdit) {
                         $sessionName = '';
                         $sessionStartAccessDate = '';

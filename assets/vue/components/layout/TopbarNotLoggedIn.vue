@@ -65,11 +65,13 @@ const currentLanguageLabel = computed(() => {
   if (urlLocale) {
     const shortLocale = urlLocale.split("_")[0]
 
-    const match = languageList.find((lang) => {
-      const code = normalizeLocaleCode(lang?.isocode)
-      const shortCode = code.split("_")[0]
-      return code === urlLocale || shortCode === urlLocale || code === shortLocale || shortCode === shortLocale
-    })
+    const match =
+      languageList.find((lang) => normalizeLocaleCode(lang?.isocode) === urlLocale) ||
+      languageList.find((lang) => {
+        const code = normalizeLocaleCode(lang?.isocode)
+        const shortCode = code.split("_")[0]
+        return shortCode === urlLocale || code === shortLocale || shortCode === shortLocale
+      })
 
     if (match?.originalName) {
       return match.originalName

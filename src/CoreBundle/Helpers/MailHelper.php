@@ -233,12 +233,17 @@ final class MailHelper
 
             $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
 
+            $charset = $this->settingsManager->getSetting('mail.mailer_mails_charset') ?: 'UTF-8';
+            $excludeJson = 'true' === $this->settingsManager->getSetting('mail.mailer_exclude_json');
+
             $params = [
                 'mail_header_style' => api_get_setting('mail.mail_header_style'),
                 'mail_content_style' => api_get_setting('mail.mail_content_style'),
                 'link' => $additionalParameters['link'] ?? '',
                 'automatic_email_text' => $automaticEmailText,
                 'content' => $body,
+                'charset' => $charset,
+                'exclude_json' => $excludeJson,
             ];
 
             if (!empty($recipientEmail)) {

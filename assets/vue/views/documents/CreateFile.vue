@@ -25,8 +25,8 @@
       <DocumentsForm
         ref="createForm"
         :errors="errors"
-        :values="item"
         :search-enabled="searchEnabled"
+        :values="item"
         @submit="onSendFormData"
       />
 
@@ -45,8 +45,8 @@
           </p>
 
           <button
-            type="button"
             class="shrink-0 px-3 py-2 rounded-lg border border-gray-25 hover:bg-gray-10 text-sm font-medium"
+            type="button"
             @click="copyAllCertificateTags"
           >
             {{ $t("Copy all") }}
@@ -57,9 +57,9 @@
           <button
             v-for="tag in certificateTags"
             :key="tag"
-            type="button"
-            class="text-left px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
             :title="$t('Click to insert')"
+            class="text-left px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
+            type="button"
             @click="insertCertificateTag(tag)"
           >
             <code class="text-sm">{{ tag }}</code>
@@ -72,322 +72,189 @@
   <Loading :visible="isLoading" />
 </template>
 
-<script>
-import { mapActions } from "vuex"
+<script setup>
+import { onMounted, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
-import CreateMixin from "../../mixins/CreateMixin"
+import TemplateList from "../../components/documents/TemplateList.vue"
+import { useDocumentCreate } from "../../composables/useDocumentCreate"
+import { useNotification } from "../../composables/notification"
+import { useCertificateTags } from "../../composables/useCertificateTags"
+import { useDocumentTemplates } from "../../composables/useDocumentTemplates"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import Panel from "primevue/panel"
-import TemplateList from "../../components/documents/TemplateList.vue"
-import documentsService from "../../services/documents"
 import { usePlatformConfig } from "../../store/platformConfig"
+import documentsService from "../../services/documents"
 
-const servicePrefix = "Documents"
 const QUOTA_WARNING_THRESHOLD_PERCENT = 2
 
-export default {
-  name: "DocumentsCreateFile",
-  servicePrefix,
-  components: {
-    TemplateList,
-    Loading,
-    Toolbar,
-    DocumentsForm,
-    Panel,
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+const { showSuccessNotification } = useNotification()
+
+const { isLoading, created, onSendFormData: dispatchCreate, resetForm: dispatchReset } = useDocumentCreate()
+
+const raw = platformConfigStore.getSetting("search.search_enabled")
+const searchEnabled = raw !== "false"
+
+const createForm = ref(null)
+
+const errors = ref({})
+const quotaWarningMessage = ref("")
+
+const allowedFiletypes = ["file", "video", "certificate"]
+const filetype = allowedFiletypes.includes(route.query.filetype) ? route.query.filetype : "file"
+
+const item = ref({
+  title: "",
+  contentFile: "",
+  newDocument: true,
+  filetype,
+  parentResourceNodeId: null,
+  resourceLinkList: null,
+  indexDocumentContent: searchEnabled,
+  searchFieldValues: {},
+  ai_assisted: 0,
+  ai_assisted_raw: 0,
+})
+
+const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)
+const { templates, fetchTemplates, addTemplateToEditor } = useDocumentTemplates(item, createForm)
+
+watch(created, (val) => {
+  if (!val) {
+    return
+  }
+
+  redirectToDocumentsList()
+})
+
+item.value.parentResourceNodeId = route.params.node ?? route.params.id ?? null
+item.value.resourceLinkList = JSON.stringify([
+  {
+    gid: route.query.gid,
+    sid: route.query.sid,
+    cid: route.query.cid,
+    visibility: RESOURCE_LINK_PUBLISHED,
   },
-  mixins: [CreateMixin],
+])
 
-  setup() {
-    const platformConfigStore = usePlatformConfig()
+onMounted(async () => {
+  await fetchTemplates()
+  await showQuotaWarningIfNeeded()
+})
 
-    const raw = platformConfigStore.getSetting("search.search_enabled")
-    const searchEnabled = raw !== "false"
-    const defaultIndexDocumentContent = searchEnabled
+function getRouteNodeId() {
+  return route.params.node ?? route.params.id ?? null
+}
 
-    return {
-      searchEnabled,
-      defaultIndexDocumentContent,
+function getDocumentsListRouteName() {
+  const candidates = ["DocumentsList", "FileManagerList"]
+
+  for (const name of candidates) {
+    if (typeof router.hasRoute === "function" && router.hasRoute(name)) {
+      return name
     }
-  },
+  }
 
-  data() {
-    const allowedFiletypes = ["file", "video", "certificate"]
-    const filetypeQuery = this.$route.query.filetype
-    const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
+  return null
+}
 
-    return {
-      item: {
-        title: "",
-        contentFile: "",
-        newDocument: true,
-        filetype,
-        parentResourceNodeId: null,
-        resourceLinkList: null,
+async function redirectToDocumentsList() {
+  const routeName = getDocumentsListRouteName()
+  const nodeId = getRouteNodeId()
 
-        // Search-related flag
-        indexDocumentContent: this.defaultIndexDocumentContent,
-        searchFieldValues: {},
+  if (routeName) {
+    const params = { ...route.params }
 
-        // AI disclosure flags
-        ai_assisted: 0,
-        ai_assisted_raw: 0,
-      },
-
-      templates: [],
-      isLoading: false,
-      errors: {},
-      quotaWarningMessage: "",
-
-      certificateTags: [
-        "((user_firstname))",
-        "((user_lastname))",
-        "((user_username))",
-        "((gradebook_institution))",
-        "((gradebook_sitename))",
-        "((teacher_firstname))",
-        "((teacher_lastname))",
-        "((official_code))",
-        "((date_certificate))",
-        "((date_certificate_no_time))",
-        "((course_code))",
-        "((course_title))",
-        "((gradebook_grade))",
-        "((certificate_link))",
-        "((certificate_link_html))",
-        "((certificate_barcode))",
-        "((external_style))",
-        "((time_in_course))",
-        "((time_in_course_in_all_sessions))",
-        "((start_date_and_end_date))",
-        "((course_objectives))",
-      ],
+    if (params.node !== undefined) {
+      params.node = nodeId
+    } else if (params.id !== undefined) {
+      params.id = nodeId
+    } else {
+      params.node = nodeId
     }
-  },
 
-  created() {
-    this.item.parentResourceNodeId = this.getRouteNodeId()
-    this.item.resourceLinkList = JSON.stringify([
-      {
-        gid: this.$route.query.gid,
-        sid: this.$route.query.sid,
-        cid: this.$route.query.cid,
-        visibility: RESOURCE_LINK_PUBLISHED,
+    await router.push({
+      name: routeName,
+      params,
+      query: {
+        ...route.query,
+        loadNode: 1,
       },
-    ])
+    })
 
-    this.showQuotaWarningIfNeeded()
-  },
+    return
+  }
 
-  mounted() {
-    this.fetchTemplates()
-  },
+  router.back()
+}
 
-  methods: {
-    getDocumentsListRouteName() {
-      const candidates = ["DocumentsList", "FileManagerList"]
+function normalizeBoolean(value) {
+  const v = String(value ?? "")
+    .trim()
+    .toLowerCase()
 
-      for (const name of candidates) {
-        if (typeof this.$router?.hasRoute === "function" && this.$router.hasRoute(name)) {
-          return name
-        }
-      }
+  return ["1", "true", "yes", "on"].includes(v)
+}
 
-      return null
-    },
-    async redirectToDocumentsList() {
-      const routeName = this.getDocumentsListRouteName()
-      const nodeId = this.getRouteNodeId()
+function normalizeAiAssistedState() {
+  const currentRaw = item.value?.ai_assisted_raw
+  const current = item.value?.ai_assisted
+  const enabled = normalizeBoolean(currentRaw) || normalizeBoolean(current)
 
-      if (routeName) {
-        const params = { ...this.$route.params }
-        if (params.node !== undefined) {
-          params.node = nodeId
-        } else if (params.id !== undefined) {
-          params.id = nodeId
-        } else {
-          params.node = nodeId
-        }
+  item.value.ai_assisted = enabled ? 1 : 0
+  item.value.ai_assisted_raw = enabled ? 1 : 0
+}
 
-        await this.$router.push({
-          name: routeName,
-          params,
-          query: {
-            ...this.$route.query,
-            loadNode: 1,
-          },
-        })
+function toInt(value, fallback = 0) {
+  const n = Number(value)
 
-        return
-      }
+  return Number.isFinite(n) ? n : fallback
+}
 
-      this.$router.back()
-    },
-    getRouteNodeId() {
-      return this.$route.params.node ?? this.$route.params.id ?? null
-    },
+async function showQuotaWarningIfNeeded() {
+  const courseId = toInt(route.query.cid, 0)
 
-    normalizeBoolean(value) {
-      const v = String(value ?? "")
-        .trim()
-        .toLowerCase()
+  if (!courseId) {
+    return
+  }
 
-      return ["1", "true", "yes", "on"].includes(v)
-    },
+  const sid = toInt(route.query.sid, 0)
+  const gid = toInt(route.query.gid, 0)
 
-    normalizeAiAssistedState() {
-      const currentRaw = this.item?.ai_assisted_raw
-      const current = this.item?.ai_assisted
-      const enabled = this.normalizeBoolean(currentRaw) || this.normalizeBoolean(current)
+  try {
+    const msg = await documentsService.fetchQuotaWarningMessage(t, courseId, {
+      sid,
+      gid,
+      force: true,
+      thresholdPercent: QUOTA_WARNING_THRESHOLD_PERCENT,
+    })
 
-      this.item.ai_assisted = enabled ? 1 : 0
-      this.item.ai_assisted_raw = enabled ? 1 : 0
-    },
+    if (msg) {
+      quotaWarningMessage.value = msg
+      showSuccessNotification(msg)
+    }
+  } catch (e) {
+    console.error("[DocumentsCreateFile] Failed to show quota warning:", e)
+  }
+}
 
-    toInt(value, fallback = 0) {
-      const n = Number(value)
-      return Number.isFinite(n) ? n : fallback
-    },
+function handleBack() {
+  router.back()
+}
 
-    async showQuotaWarningIfNeeded() {
-      const courseId = this.toInt(this.$route.query.cid, 0)
-      if (!courseId) return
+function resetForm() {
+  dispatchReset(createForm.value, item)
+}
 
-      const sid = this.toInt(this.$route.query.sid, 0)
-      const gid = this.toInt(this.$route.query.gid, 0)
-
-      try {
-        const msg = await documentsService.fetchQuotaWarningMessage(this.$t.bind(this), courseId, {
-          sid,
-          gid,
-          force: true,
-          thresholdPercent: QUOTA_WARNING_THRESHOLD_PERCENT,
-        })
-
-        if (msg) {
-          this.quotaWarningMessage = msg
-          if (typeof this.showMessage === "function") {
-            this.showMessage(msg)
-          }
-        }
-      } catch (e) {
-        console.error("[DocumentsCreateFile] Failed to show quota warning:", e)
-      }
-    },
-
-    handleBack() {
-      this.$router.back()
-    },
-
-    addTemplateToEditor(templateContent) {
-      if (this.$refs.createForm && typeof this.$refs.createForm.updateContent === "function") {
-        this.$refs.createForm.updateContent(templateContent)
-        return
-      }
-
-      this.item.contentFile = templateContent
-    },
-
-    insertIntoEditor(text) {
-      try {
-        if (window.tinymce) {
-          const editor = window.tinymce.get("item_content") || window.tinymce.activeEditor
-          if (editor) {
-            editor.focus()
-            editor.selection.setContent(text)
-            return true
-          }
-        }
-      } catch (e) {
-        console.warn("[Certificate] Failed to insert into TinyMCE editor:", e)
-      }
-
-      this.item.contentFile = String(this.item.contentFile || "") + text
-      return false
-    },
-
-    async writeToClipboard(text) {
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text)
-          return true
-        }
-      } catch (e) {
-        console.warn("[Certificate] Clipboard API failed, using fallback:", e)
-      }
-
-      try {
-        const textarea = document.createElement("textarea")
-        textarea.value = text
-        textarea.setAttribute("readonly", "")
-        textarea.style.position = "fixed"
-        textarea.style.top = "-1000px"
-        textarea.style.left = "-1000px"
-        textarea.style.opacity = "0"
-        document.body.appendChild(textarea)
-        textarea.focus()
-        textarea.select()
-
-        const ok = document.execCommand("copy")
-        document.body.removeChild(textarea)
-        return ok
-      } catch (e) {
-        console.warn("[Certificate] Clipboard fallback failed:", e)
-        return false
-      }
-    },
-
-    async insertCertificateTag(tag) {
-      this.insertIntoEditor(tag)
-      await this.writeToClipboard(tag)
-    },
-
-    async copyAllCertificateTags() {
-      const text = this.certificateTags.join("\n")
-      const ok = await this.writeToClipboard(text)
-
-      if (ok) {
-        this.showMessage("All tags copied to clipboard")
-        return
-      }
-
-      this.showMessage("Failed to copy tags")
-    },
-
-    async fetchTemplates() {
-      this.errors = {}
-      const courseId = this.$route.query.cid
-
-      try {
-        const data = await documentsService.getTemplates(courseId)
-        this.templates = data
-      } catch (error) {
-        console.error("[Documents] Failed to fetch templates:", error)
-        this.errors = error.errors
-      }
-    },
-    async onSendFormData() {
-      this.normalizeAiAssistedState()
-
-      if (!CreateMixin?.methods?.onSendFormData) {
-        console.error("[Documents] CreateMixin.onSendFormData is missing.")
-        return null
-      }
-
-      const result = await CreateMixin.methods.onSendFormData.call(this)
-
-      if (this.errors && Object.keys(this.errors).length > 0) {
-        return result
-      }
-
-      await this.redirectToDocumentsList()
-
-      return result
-    },
-    ...mapActions("documents", {
-      createWithFormData: "createWithFormData",
-    }),
-  },
+async function onSendFormData() {
+  normalizeAiAssistedState()
+  await dispatchCreate(createForm.value)
 }
 </script>

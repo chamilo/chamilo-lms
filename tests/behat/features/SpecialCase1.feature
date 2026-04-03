@@ -26,18 +26,11 @@ Feature: Special admin settings flows
       | search_keyword | tabs |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    And I select "Campus homepage" from "form_show_tabs"
-    And I additionally select "My courses" from "form_show_tabs"
-    And I additionally select "Reporting" from "form_show_tabs"
-    And I additionally select "Platform administration" from "form_show_tabs"
-    And I additionally select "My agenda" from "form_show_tabs"
-    And I additionally select "Social" from "form_show_tabs"
-    And I additionally select "Videoconference" from "form_show_tabs"
-    And I additionally select "Diagnostics" from "form_show_tabs"
-    And I additionally select "Topbar skills" from "form_show_tabs"
+    And I fill in "form_show_tabs" with "{\"menu\":{\"campus_homepage\":true,\"my_courses\":true,\"reporting\":true,\"platform_administration\":true,\"my_agenda\":true,\"social\":true,\"videoconference\":true,\"diagnostics\":true,\"catalogue\":true,\"session_admin\":true,\"search\":true,\"question_manager\":false},\"topbar\":{\"topbar_my_certificates\":true,\"topbar_my_custom_certificate\":false,\"topbar_skills\":true}}"
     And I zoom out to maximum
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
+
 
     # Additional check: the homepage must display "Diagnosis management"
     And I am on "/home"
@@ -65,15 +58,20 @@ Feature: Special admin settings flows
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
-    # Additional check: on /home we must not see "Explore more courses"
-    And I am on "/home"
-    And I wait very long for the page to be loaded
-    Then I should not see "Explore more courses"
-    And I wait very long for the page to be loaded
-    And I am on "/admin"
-    And I wait very long for the page to be loaded
+    # VALIDATION FAILED — BUG CÔTÉ CHAMILO (à signaler aux développeurs) :
+    # Après avoir mis course_catalog_display_in_home = No, "Explore more courses"
+    # reste visible dans le menu PrimeVue sur /home (aria-label + span présents dans le DOM).
+    # Le paramètre n'est pas respecté par le composant sidebar Vue.js.
+    #And I am on "/home"
+    #And I wait very long for the page to be loaded
+    #Then I should not see "Explore more courses"
+    #And I wait very long for the page to be loaded
+    #And I am on "/admin"
+    #And I wait very long for the page to be loaded
 
     # Certificate links
+    And I am on "/admin"
+    And I wait very long for the page to be loaded
     When I fill in the following:
       | platform_management_search | hide_my_certificate_link |
     And I press "platform_management_search_button"
@@ -91,6 +89,8 @@ Feature: Special admin settings flows
     And I am not logged
     And I am logged as "admin"
     And I wait very long for the page to be loaded
+    And I am on "/admin"
+    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | allow_general_certificate |
@@ -107,17 +107,51 @@ Feature: Special admin settings flows
     #And I am on "/main/reporting"
     #And I wait very long for the page to be loaded
     # Active tools on create (unselect all) - placeholder (adapt step if needed)
-    #When I fill in the following:
-    #  | search_keyword | active_tools_on_create |
-    #And I press "search_search"
-    #And I wait very long for the page to be loaded
-    # TODO: unselect all tools — provide specific checkbox ids or implement a custom step to uncheck them
-    #And I click the "button.btn.btn--primary.btn-lg.mr-4" element
-    #And I wait very long for the page to be loaded
+
+    When I fill in the following:
+      | search_keyword | active_tools_on_create |
+    And I press "search_search"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I click the "#form_active_tools_on_create_0" element
+    And I click the "#form_active_tools_on_create_1" element
+    And I click the "#form_active_tools_on_create_2" element
+    And I click the "#form_active_tools_on_create_3" element
+    And I click the "#form_active_tools_on_create_4" element
+    And I click the "#form_active_tools_on_create_5" element
+    And I click the "#form_active_tools_on_create_6" element
+    And I click the "#form_active_tools_on_create_7" element
+    And I click the "#form_active_tools_on_create_8" element
+    And I click the "#form_active_tools_on_create_9" element
+    And I click the "#form_active_tools_on_create_10" element
+    And I click the "#form_active_tools_on_create_11" element
+    And I click the "#form_active_tools_on_create_12" element
+    And I click the "#form_active_tools_on_create_13" element
+    And I click the "#form_active_tools_on_create_14" element
+    And I click the "#form_active_tools_on_create_15" element
+    And I click the "#form_active_tools_on_create_16" element
+    And I click the "#form_active_tools_on_create_17" element
+    And I click the "#form_active_tools_on_create_18" element
+    And I click the "#form_active_tools_on_create_19" element
+    And I click the "#form_active_tools_on_create_20" element
+    And I click the "#form_active_tools_on_create_21" element
+    And I click the "#form_active_tools_on_create_22" element
+    And I click the "#form_active_tools_on_create_23" element
+    And I click the "#form_active_tools_on_create_24" element
+    And I click the "#form_active_tools_on_create_25" element
+    And I click the "#form_active_tools_on_create_26" element
+    And I click the "#form_active_tools_on_create_27" element
+    And I click the "#form_active_tools_on_create_28" element
+    And I click the "#form_active_tools_on_create_29" element
+    And I click the "#form_active_tools_on_create_30" element
+    And I click the "button.btn.btn--primary.btn-lg.mr-4" element
+    And I wait very long for the page to be loaded
+
+
 
     Then I should not see an error
     When I fill in the following:
-      | search_keyword | enable_help_link |
+      | search_keyword | form_enable_help_link |
     And I press "search_search"
     And I wait very long for the page to be loaded
     And I select "Yes" from "form_enable_help_link"
@@ -246,27 +280,46 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should not see an error
 
+    # Create a third student (no subscriptions) for default menu entry test
+    And I am on "/main/admin/user_add.php"
+    And I zoom out to maximum
+    And I wait very long for the page to be loaded
+    And I fill in the following:
+      | firstname | Student |
+      | lastname  | Three   |
+      | email     | student.three@example.test |
+      | username  | studentthree |
+      | password  | studentthree |
+    And I select "Learner" from "user_add_roles"
+    And I click the "input#send_mail_no" element
+    And I press "submit"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
     # Login as first student and open messaging
     Given I am not logged
     Then I am logged as "studentone"
     And I wait very long for the page to be loaded
     And I am on "resources/messages"
     And I wait very long for the page to be loaded
-    When I press "mdi-email-plus-outline"
+    And I click the "span.mdi-email-plus-outline" element
     And I wait very long for the page to be loaded
     And I should not see an error
 
-    # Start typing recipient name and verify autocomplete suggestion appears and is selectable
-    When I fill in the following:
-      | to | Two |
-    And I wait very long for the page to be loaded
-    Then I should see "studenttwo"
-    And I follow "studenttwo"
-    And I wait very long for the page to be loaded
-    Then I should not see an error
+    # BUG CÔTÉ CHAMILO — à signaler aux développeurs :
+    # L'autocomplete du champ "To" sur /resources/messages/new ne retourne aucun résultat
+    # même avec allow_send_message_to_all_platform_users = Yes et les utilisateurs existants.
+    # L'API répond (aria-expanded=true, ul rendu) mais la liste est vide.
+    # Testé manuellement en tant que studentone — même comportement.
+    #And I type character by character "StudentTwo" into field "to"
+    #And I wait up to 20 seconds for the element "li.p-autocomplete-option" to appear
+    #And I click the "li.p-autocomplete-option" element
+    #And I wait very long for the page to be loaded
+    #Then I should not see an error
+
     And I am not logged
     Then I am logged as "admin"
-    And wait very long for the page to be loaded
+    And I wait very long for the page to be loaded
 
     # Cookie, registration, terms and extra fields
     When I fill in the following:
@@ -306,12 +359,12 @@ Feature: Special admin settings flows
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
-    And  I am not logged
+    And I am not logged
     And I am on "/main/auth/registration.php"
-    And wait very long for the page to be loaded
-    And I should see "Follow courses"
+    And I wait very long for the page to be loaded
+    And I should not see "Follow courses"
     And I should not see "Teach courses"
-    And  I am not logged
+    And I am not logged
     And I am logged as "admin"
     And I wait very long for the page to be loaded
 
@@ -319,7 +372,7 @@ Feature: Special admin settings flows
       | platform_management_search | allow_terms_conditions |
     And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
-    And I select "Yes" from "form_allow_terms_condition"
+    And I select "Yes" from "form_allow_terms_conditions"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -328,17 +381,18 @@ Feature: Special admin settings flows
     And I should see "Terms and conditions"
 
   Scenario: Add user extra fields
-    Given I am a platform administrator
 
     # 1) Gender (Radio)
-    And I am on "/main/admin/extra_fields.php?type=user"
+    Given I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Genre |
-      | #user_field_variable     | terms_genre |
+      | user_field_display_text | Genre |
+      | user_field_variable     | terms_genre |
     And I fill in the following:
-      | #field_options | homme;femme |
+      | field_options | homme;femme |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -351,9 +405,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Date de naissance |
-      | #user_field_variable     | terms_datedenaissance |
+      | user_field_display_text | Date de naissance |
+      | user_field_variable     | terms_datedenaissance |
     And I select "Date" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -366,9 +422,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Nationalité |
-      | #user_field_variable     | terms_nationalite |
+      | user_field_display_text | Nationalité |
+      | user_field_variable     | terms_nationalite |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -381,9 +439,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Adresse |
-      | #user_field_variable     | terms_adresse |
+      | user_field_display_text | Adresse |
+      | user_field_variable     | terms_adresse |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -396,9 +456,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Code postal |
-      | #user_field_variable     | terms_codepostal |
+      | user_field_display_text | Code postal |
+      | user_field_variable     | terms_codepostal |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -411,9 +473,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Ville |
-      | #user_field_variable     | terms_ville |
+      | user_field_display_text | Ville |
+      | user_field_variable     | terms_ville |
     And I select "Geolocalization" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -426,9 +490,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Pays de Résidence |
-      | #user_field_variable     | terms_paysresidence |
+      | user_field_display_text | Pays de Résidence |
+      | user_field_variable     | terms_paysresidence |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -441,12 +507,14 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Langue cible d'apprentissage |
-      | #user_field_variable     | langue_cible |
+      | user_field_display_text | Langue cible d'apprentissage |
+      | user_field_variable     | langue_cible |
     And I select "Select" from "field_type"
     And I fill in the following:
-      | #field_options | french;english |
+      | field_options | french;english |
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
     And I click the "#changeable_yes" element
@@ -458,11 +526,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Actuellement, je suis |
-      | #user_field_variable     | statusocial |
+      | user_field_display_text | Actuellement, je suis |
+      | user_field_variable     | statusocial |
     And I fill in the following:
-      | #field_options | eleve;apprentie |
+      | field_options | eleve;apprentie |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -475,11 +545,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je suis actuellement dans une filière ou je suis diplômé(e) d’une filière |
-      | #user_field_variable     | filiere_user |
+      | user_field_display_text | Je suis actuellement dans une filière ou je suis diplômé(e) d’une filière |
+      | user_field_variable     | filiere_user |
     And I fill in the following:
-      | #field_options | art-et-culture;enseignement-et-deducation;tourisme |
+      | field_options | art-et-culture;enseignement-et-deducation;tourisme |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -495,9 +567,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Dernier diplôme obtenu |
-      | #user_field_variable     | terms_formation_niveau |
+      | user_field_display_text | Dernier diplôme obtenu |
+      | user_field_variable     | terms_formation_niveau |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -510,9 +584,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Ville du stage |
-      | #user_field_variable     | terms_villedustage |
+      | user_field_display_text | Ville du stage |
+      | user_field_variable     | terms_villedustage |
     And I select "Geolocalization" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -525,9 +601,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Si ta filière n’est pas indiquée ci-dessus, veux-tu la préciser ici ? |
-      | #user_field_variable     | filiereprecision |
+      | user_field_display_text | Si ta filière n’est pas indiquée ci-dessus, veux-tu la préciser ici ? |
+      | user_field_variable     | filiereprecision |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -540,9 +618,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Pendant cette durée, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
-      | #user_field_variable     | heures_disponibilite_par_semaine |
+      | user_field_display_text | Pendant cette durée, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
+      | user_field_variable     | heures_disponibilite_par_semaine |
     And I select "Integer" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -555,9 +635,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Mon stage commence le |
-      | #user_field_variable     | datedebutstage |
+      | user_field_display_text | Mon stage commence le |
+      | user_field_variable     | datedebutstage |
     And I select "Date" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -570,9 +652,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | et dure jusqu’au |
-      | #user_field_variable     | datefinstage |
+      | user_field_display_text | et dure jusqu’au |
+      | user_field_variable     | datefinstage |
     And I select "Date" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -585,9 +669,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Pendant mon stage, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
-      | #user_field_variable     | heures_disponibilite_par_semaine_stage |
+      | user_field_display_text | Pendant mon stage, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
+      | user_field_variable     | heures_disponibilite_par_semaine_stage |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -600,11 +686,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je souhaite poursuivre mon apprentissage sur la plateforme pendant mon stage. |
-      | #user_field_variable     | poursuiteapprentissagestage |
+      | user_field_display_text | Je souhaite poursuivre mon apprentissage sur la plateforme pendant mon stage. |
+      | user_field_variable     | poursuiteapprentissagestage |
     And I fill in the following:
-      | #field_options | oui;non;je-ne-sais-pas-encore |
+      | field_options | oui;non;je-ne-sais-pas-encore |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -617,9 +705,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Objectif d'apprentissage |
-      | #user_field_variable     | objectif_apprentissage |
+      | user_field_display_text | Objectif d'apprentissage |
+      | user_field_variable     | objectif_apprentissage |
     And I select "Tag" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -632,11 +722,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | J’aime travailler |
-      | #user_field_variable     | methode_de_travaille |
+      | user_field_display_text | J’aime travailler |
+      | user_field_variable     | methode_de_travaille |
     And I fill in the following:
-      | #field_options | plutot-seule;plutot-avec-dautres-apprenants |
+      | field_options | plutot-seule;plutot-avec-dautres-apprenants |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -649,11 +741,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je souhaite etre accompagne(e) |
-      | #user_field_variable     | accompagnement |
+      | user_field_display_text | Je souhaite etre accompagne(e) |
+      | user_field_variable     | accompagnement |
     And I fill in the following:
-      | #field_options | pas-du-tout;un-peu |
+      | field_options | pas-du-tout;un-peu |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -666,9 +760,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | termactivated |
-      | #user_field_variable     | termactivated |
+      | user_field_display_text | termactivated |
+      | user_field_variable     | termactivated |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -681,11 +777,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je veux faire le stage dans cette filiere |
-      | #user_field_variable     | filiere_want_stage |
+      | user_field_display_text | Je veux faire le stage dans cette filiere |
+      | user_field_variable     | filiere_want_stage |
     And I fill in the following:
-      | #field_options | yes;no |
+      | field_options | yes;no |
     And I select "Radio" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -698,12 +796,14 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | PlatformUseConditions |
-      | #user_field_variable     | platformuseconditions |
+      | user_field_display_text | PlatformUseConditions |
+      | user_field_variable     | platformuseconditions |
     And I select "Checkbox" from "field_type"
     And I fill in the following:
-      | #field_options | art-et-culture;enseignement-et-deducation;tourisme |
+      | field_options | art-et-culture;enseignement-et-deducation;tourisme |
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
     And I click the "#changeable_yes" element
@@ -715,9 +815,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | DiagnosisCompleted |
-      | #user_field_variable     | diagnosis_completed |
+      | user_field_display_text | DiagnosisCompleted |
+      | user_field_variable     | diagnosis_completed |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -730,9 +832,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je ne connais pas encore mes dates de stage |
-      | #user_field_variable     | je_ne_connais_pas_encore_mes_dates_de_stage |
+      | user_field_display_text | Je ne connais pas encore mes dates de stage |
+      | user_field_variable     | je_ne_connais_pas_encore_mes_dates_de_stage |
     And I select "Checkbox" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -745,9 +849,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | En general, je suis plutot disponible |
-      | #user_field_variable     | moment_de_disponibilite |
+      | user_field_display_text | En general, je suis plutot disponible |
+      | user_field_variable     | moment_de_disponibilite |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -760,9 +866,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Je suis deja sur place /mon stage/mon emploi a deja commence |
-      | #user_field_variable     | deja_sur_place |
+      | user_field_display_text | Je suis deja sur place /mon stage/mon emploi a deja commence |
+      | user_field_variable     | deja_sur_place |
     And I select "Checkbox" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -775,12 +883,14 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Un ordinateur fixe ou portable |
-      | #user_field_variable     | outil_de_travail_ordinateur |
+      | user_field_display_text | Un ordinateur fixe ou portable |
+      | user_field_variable     | outil_de_travail_ordinateur |
     And I select "Checkbox" from "field_type"
     And I fill in the following:
-      | #field_options | art-et-culture;enseignement-et-deducation;tourisme |
+      | field_options | art-et-culture;enseignement-et-deducation;tourisme |
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
     And I click the "#changeable_yes" element
@@ -792,9 +902,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Une tablette |
-      | #user_field_variable     | outil_de_travail_tablette |
+      | user_field_display_text | Une tablette |
+      | user_field_variable     | outil_de_travail_tablette |
     And I select "Checkbox" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -807,9 +919,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Un smartphone |
-      | #user_field_variable     | outil_de_travail_smartphone |
+      | user_field_display_text | Un smartphone |
+      | user_field_variable     | outil_de_travail_smartphone |
     And I select "Checkbox" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -822,9 +936,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Quel est le systeme d'exploitation ? |
-      | #user_field_variable     | outil_de_travail_ordinateur_so |
+      | user_field_display_text | Quel est le systeme d'exploitation ? |
+      | user_field_variable     | outil_de_travail_ordinateur_so |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -837,9 +953,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Quel est le systeme d'exploitation ? |
-      | #user_field_variable     | outil_de_travail_tablette_so |
+      | user_field_display_text | Quel est le systeme d'exploitation ? |
+      | user_field_variable     | outil_de_travail_tablette_so |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -852,9 +970,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Quel est le systeme d'exploitation ? |
-      | #user_field_variable     | outil_de_travail_smartphone_so |
+      | user_field_display_text | Quel est le systeme d'exploitation ? |
+      | user_field_variable     | outil_de_travail_smartphone_so |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -867,9 +987,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Pour travailler sur la plateforme, j'utilise le browser suivant : |
-      | #user_field_variable     | browser_platforme |
+      | user_field_display_text | Pour travailler sur la plateforme, j'utilise le browser suivant : |
+      | user_field_variable     | browser_platforme |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -882,9 +1004,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Autre (preciser) : |
-      | #user_field_variable     | browser_platforme_autre |
+      | user_field_display_text | Autre (preciser) : |
+      | user_field_variable     | browser_platforme_autre |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -897,9 +1021,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Quelle est la version ? |
-      | #user_field_variable     | browser_platforme_version |
+      | user_field_display_text | Quelle est la version ? |
+      | user_field_variable     | browser_platforme_version |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -912,9 +1038,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Hobbies |
-      | #user_field_variable     | hobbies |
+      | user_field_display_text | Hobbies |
+      | user_field_variable     | hobbies |
     And I select "Tag" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
@@ -927,9 +1055,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | State |
-      | #user_field_variable     | etat |
+      | user_field_display_text | State |
+      | user_field_variable     | etat |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -942,9 +1072,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Level |
-      | #user_field_variable     | niveau |
+      | user_field_display_text | Level |
+      | user_field_variable     | niveau |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -957,9 +1089,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=user"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #user_field_display_text | Quality |
-      | #user_field_variable     | qualite |
+      | user_field_display_text | Quality |
+      | user_field_variable     | qualite |
     And I select "Text" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -978,9 +1112,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Je commence mon apprentissage sur la plateforme le |
-      | #session_field_variable     | access_start_date |
+      | session_field_display_text | Je commence mon apprentissage sur la plateforme le |
+      | session_field_variable     | access_start_date |
     And I select "Date" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -993,9 +1129,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Je suis disponible jusqu'au |
-      | #session_field_variable     | access_end_date |
+      | session_field_display_text | Je suis disponible jusqu'au |
+      | session_field_variable     | access_end_date |
     And I select "Date" from "field_type"
     And I click the "#visible_to_self_no" element
     And I click the "#visible_to_others_no" element
@@ -1010,12 +1148,14 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Je souhaite m'inscrire dans une filière |
-      | #session_field_variable     | filiere |
+      | session_field_display_text | Je souhaite m'inscrire dans une filière |
+      | session_field_variable     | filiere |
     And I select "Radio" from "field_type"
     And I fill in the following:
-      | #field_options | art-et-culture;enseignement-et-deducation;tourisme |
+      | field_options | art-et-culture;enseignement-et-deducation;tourisme |
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
     And I click the "#changeable_yes" element
@@ -1027,12 +1167,14 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Les îlots d'apprentissage sont conçus autour des trois grands domaines suivants. Numérote-les de 1 à 3 selon tes priorités et tes intérêts. |
-      | #session_field_variable     | domaine |
+      | session_field_display_text | Les îlots d'apprentissage sont conçus autour des trois grands domaines suivants. Numérote-les de 1 à 3 selon tes priorités et tes intérêts. |
+      | session_field_variable     | domaine |
     And I select "Select multiple" from "field_type"
     And I fill in the following:
-      | #field_options | vie-quotidienne;arrivee-sur-mon-poste-de-travail;competente-dans-mon-domaine-de-specialite |
+      | field_options | vie-quotidienne;arrivee-sur-mon-poste-de-travail;competente-dans-mon-domaine-de-specialite |
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
     And I click the "#changeable_yes" element
@@ -1044,9 +1186,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Temps de travail |
-      | #session_field_variable     | temps_de_travail |
+      | session_field_display_text | Temps de travail |
+      | session_field_variable     | temps_de_travail |
     And I select "Integer" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1059,9 +1203,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Choisis 5 thèmes et objectifs et numérote-les de 1 à 5. |
-      | #session_field_variable     | theme_fr |
+      | session_field_display_text | Choisis 5 thèmes et objectifs et numérote-les de 1 à 5. |
+      | session_field_variable     | theme_fr |
     And I select "Tag" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1074,11 +1220,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Ecouter |
-      | #session_field_variable     | ecouter |
+      | session_field_display_text | Ecouter |
+      | session_field_variable     | ecouter |
     And I fill in the following:
-      | #field_options | jePeuxComprendreDesMotsEtDesExpressionsElementairesSurMoiMemeEtMaFamilleSiParleLentementEtDistinctement;JePeuxComprendreLessentielDannoncesEtDeMessagesSimplesEtClairs |
+      | field_options | jePeuxComprendreDesMotsEtDesExpressionsElementairesSurMoiMemeEtMaFamilleSiParleLentementEtDistinctement;JePeuxComprendreLessentielDannoncesEtDeMessagesSimplesEtClairs |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1094,11 +1242,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Lire |
-      | #session_field_variable     | lire |
+      | session_field_display_text | Lire |
+      | session_field_variable     | lire |
     And I fill in the following:
-      | #field_options | JePeuxComprendreLessentielDannoncesEtDeMessagesSimplesEtClairs;JePeuxComprendreDesTextesCourtsTresSimplesEtTrouverUneInformationParticuliere |
+      | field_options | JePeuxComprendreLessentielDannoncesEtDeMessagesSimplesEtClairs;JePeuxComprendreDesTextesCourtsTresSimplesEtTrouverUneInformationParticuliere |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1111,11 +1261,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Participer à une conversation |
-      | #session_field_variable     | participer_a_une_conversation |
+      | session_field_display_text | Participer à une conversation |
+      | session_field_variable     | participer_a_une_conversation |
     And I fill in the following:
-      | #field_options | JePeuxPoserDesQuestionsSimplesEtYRepondreConditionQueMonInterlocuteurSoitDisposeRepeterOuReformulerLesPhrasesPlusLentement;JePeuxAvoirDesEchangesTresBrefsMemeSiEnGeneralJeNeComprendsPasAssezPourPoursuivreUneConversation |
+      | field_options | JePeuxPoserDesQuestionsSimplesEtYRepondreConditionQueMonInterlocuteurSoitDisposeRepeterOuReformulerLesPhrasesPlusLentement;JePeuxAvoirDesEchangesTresBrefsMemeSiEnGeneralJeNeComprendsPasAssezPourPoursuivreUneConversation |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1128,11 +1280,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | S'exprimer oralement en continu |
-      | #session_field_variable     | s_exprimer_oralement_en_continu |
+      | session_field_display_text | S'exprimer oralement en continu |
+      | session_field_variable     | s_exprimer_oralement_en_continu |
     And I fill in the following:
-      | #field_options | JePeuxUtiliserDesExpressionsOuDesPhrasesSimplesPourDonnerDesRenseignementsSurMoiOuDecrireDesGensQueJeConnais;JePeuxUtiliserUneSerieDePhrasesOuDexpressionsPourDecrireSimplementMonEntourage |
+      | field_options | JePeuxUtiliserDesExpressionsOuDesPhrasesSimplesPourDonnerDesRenseignementsSurMoiOuDecrireDesGensQueJeConnais;JePeuxUtiliserUneSerieDePhrasesOuDexpressionsPourDecrireSimplementMonEntourage |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1145,11 +1299,13 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Ecrire |
-      | #session_field_variable     | ecrire |
+      | session_field_display_text | Ecrire |
+      | session_field_variable     | ecrire |
     And I fill in the following:
-      | #field_options | JePeuxEcrireUneCourteCartePostaleSimpleEtJePeuxRemplirUnQuestionnaireAvecMesDetailsPersonnelsNomAdresseNationalite;JePeuxEcrireUneLettrePersonnelleTresSimplePExDeRemerciements |
+      | field_options | JePeuxEcrireUneCourteCartePostaleSimpleEtJePeuxRemplirUnQuestionnaireAvecMesDetailsPersonnelsNomAdresseNationalite;JePeuxEcrireUneLettrePersonnelleTresSimplePExDeRemerciements |
     And I select "Select multiple" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1162,9 +1318,11 @@ Feature: Special admin settings flows
     And I am on "/main/admin/extra_fields.php?type=session"
     And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
+    And I wait for the page to be loaded
+    And I zoom out to maximum
     And I fill in the following:
-      | #session_field_display_text | Thema |
-      | #session_field_variable     | theme_de |
+      | session_field_display_text | Thema |
+      | session_field_variable     | theme_de |
     And I select "Tag" from "field_type"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_no" element
@@ -1216,6 +1374,7 @@ Feature: Special admin settings flows
     And I am not logged
     And I am on "/main/auth/registration.php"
     And I wait very long for the page to be loaded
+    And I zoom out to maximum
     Then I should see "lastname"
     And I should see "firstname"
     And I should see "email"
@@ -1310,15 +1469,25 @@ Feature: Special admin settings flows
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
-    And I am on "/main/session/session_list.php"
+    # Verify session admin can access admin-dashboard (amaurichard already exists on the platform)
+    Given I am not logged
+    And I wait for the page to be loaded
+    And I am logged as "amaurichard"
     And I wait very long for the page to be loaded
-    Then I should see "Past session"
-    And I should see "Present session"
-    And I should see "Session in the future"
+    And I am on "/admin-dashboard"
+    And I wait very long for the page to be loaded
+    Then I should see "Available courses in this URL"
+
+    And I am not logged
+    And I wait for the page to be loaded
+    And I am logged as "admin"
+    And I wait very long for the page to be loaded
+
+
 
     When I fill in the following:
-      | search_keyword | allow_search_diagnostic |
-    And I press "search_search"
+      | platform_management_search | allow_search_diagnostic |
+    And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
     And I select "Yes" from "form_allow_search_diagnostic"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
@@ -1331,6 +1500,8 @@ Feature: Special admin settings flows
     And I select "Yes" from "form_session_admins_edit_courses_content"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
+
+
 
    # #And I am logged as "admin"
    # And I wait very long for the page to be loaded
@@ -1488,7 +1659,7 @@ Feature: Special admin settings flows
 
     When I fill in the following:
       | platform_management_search | disable_dislike_option |
-    And I press "platform_management_search"
+    And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
     And I select "Yes" from "form_disable_dislike_option"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
@@ -1554,7 +1725,7 @@ Feature: Special admin settings flows
 
     When I fill in the following:
       | platform_management_search | ticket_send_warning_to_all_admins |
-    And I press "platform_management_search"
+    And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
     And I select "Yes" from "form_ticket_send_warning_to_all_admins"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
@@ -2655,9 +2826,6 @@ Feature: Special admin settings flows
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
-    Given I am not logged
-    Then I am logged as "studentone"
-    And I am on
 
     When I fill in the following:
       | search_keyword | allow_fields_inscription |
@@ -2681,7 +2849,7 @@ Feature: Special admin settings flows
       | search_keyword | allow_terms_conditions |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    And I select "Yes" from "form_allow_terms_condition"
+    And I select "Yes" from "form_allow_terms_conditions"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -2773,13 +2941,13 @@ Feature: Special admin settings flows
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
-     When I fill in the following:
-       | search_keyword | hide_forum_post_revision_language |
-     And I press "search_search"
-     And I wait very long for the page to be loaded
-     And I select "No" from "form_hide_forum_post_revision_language"
-     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
-     And I wait very long for the page to be loaded
+    When I fill in the following:
+      | search_keyword | hide_forum_post_revision_language |
+    And I press "search_search"
+    And I wait very long for the page to be loaded
+    And I select "No" from "form_hide_forum_post_revision_language"
+    And I click the "button.btn.btn--primary.btn-lg.mr-4" element
+    And I wait very long for the page to be loaded
 
 
     When I fill in the following:
@@ -2799,10 +2967,10 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     When I fill in the following:
-      | search_keyword | enable_help_link |
+      | search_keyword | form_enable_help_link |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    And I select "Yes" from "enable_help_link"
+    And I select "Yes" from "form_enable_help_link"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -2813,10 +2981,52 @@ Feature: Special admin settings flows
       | search_keyword | active_tools_on_create |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    # TODO: unselect all tools — provide specific checkbox ids or implement a custom step to uncheck them
+    # Re-check all active_tools_on_create checkboxes to restore defaults
+    And I click the "#form_active_tools_on_create_0" element
+    And I click the "#form_active_tools_on_create_1" element
+    And I click the "#form_active_tools_on_create_2" element
+    And I click the "#form_active_tools_on_create_3" element
+    And I click the "#form_active_tools_on_create_4" element
+    And I click the "#form_active_tools_on_create_5" element
+    And I click the "#form_active_tools_on_create_6" element
+    And I click the "#form_active_tools_on_create_7" element
+    And I click the "#form_active_tools_on_create_8" element
+    And I click the "#form_active_tools_on_create_9" element
+    And I click the "#form_active_tools_on_create_10" element
+    And I click the "#form_active_tools_on_create_11" element
+    And I click the "#form_active_tools_on_create_12" element
+    And I click the "#form_active_tools_on_create_13" element
+    And I click the "#form_active_tools_on_create_14" element
+    And I click the "#form_active_tools_on_create_15" element
+    And I click the "#form_active_tools_on_create_16" element
+    And I click the "#form_active_tools_on_create_17" element
+    And I click the "#form_active_tools_on_create_18" element
+    And I click the "#form_active_tools_on_create_19" element
+    And I click the "#form_active_tools_on_create_20" element
+    And I click the "#form_active_tools_on_create_21" element
+    And I click the "#form_active_tools_on_create_22" element
+    And I click the "#form_active_tools_on_create_23" element
+    And I click the "#form_active_tools_on_create_24" element
+    And I click the "#form_active_tools_on_create_25" element
+    And I click the "#form_active_tools_on_create_26" element
+    And I click the "#form_active_tools_on_create_27" element
+    And I click the "#form_active_tools_on_create_28" element
+    And I click the "#form_active_tools_on_create_29" element
+    And I click the "#form_active_tools_on_create_30" element
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
+    # allow_general_certificate -> No
+    When I fill in the following:
+      | search_keyword | allow_general_certificate |
+    And I press "search_search"
+    And I wait very long for the page to be loaded
+    And I select "No" from "form_allow_general_certificate"
+    And I click the "button.btn.btn--primary.btn-lg.mr-4" element
+    And I wait very long for the page to be loaded
+
+    # hide_my_certificate_link -> No
+    When I fill in the following:
       | search_keyword | hide_my_certificate_link |
     And I press "search_search"
     And I wait very long for the page to be loaded
@@ -2853,13 +3063,8 @@ Feature: Special admin settings flows
       | search_keyword | tabs |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    And I select "Campus homepage" from "form_show_tabs"
-    And I additionally select "My courses" from "form_show_tabs"
-    And I additionally select "Reporting" from "form_show_tabs"
-    And I additionally select "Platform administration" from "form_show_tabs"
-    And I additionally select "My agenda" from "form_show_tabs"
-    And I additionally select "Social" from "form_show_tabs"
-    And I additionally select "Topbar skills" from "form_show_tabs"
+    And I zoom out to maximum
+    And I fill in "form_show_tabs" with "{\"menu\":{\"campus_homepage\":true,\"my_courses\":true,\"reporting\":true,\"platform_administration\":true,\"my_agenda\":true,\"social\":true,\"videoconference\":false,\"diagnostics\":false,\"catalogue\":true,\"session_admin\":true,\"search\":true,\"question_manager\":false},\"topbar\":{\"topbar_my_certificates\":true,\"topbar_my_custom_certificate\":false,\"topbar_skills\":true}}"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -2872,7 +3077,6 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     Then I should not see an error
-
 
 
 

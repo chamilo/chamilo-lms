@@ -357,6 +357,7 @@ class SettingsController extends BaseController
             'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -531,6 +532,7 @@ class SettingsController extends BaseController
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             'search_diagnostics' => $searchDiagnostics,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -721,6 +723,115 @@ class SettingsController extends BaseController
             // External converters
             'tools' => $tools,
             'tools_warning' => $toolsWarning,
+        ];
+    }
+
+    /**
+     * Settings that exist in the database but are not yet implemented in Chamilo 2.x.
+     * Rendered as disabled with a "not yet supported" notice in the settings UI.
+     * Format: 'category.variable'.
+     *
+     * @return string[]
+     */
+    private function getUnsupportedSettings(): array
+    {
+        return [
+            'admin.user_status_option_only_for_admin_enabled',
+            'agenda.allow_careers_in_global_agenda',
+            'announcement.course_announcement_scheduled_by_date',
+            'announcement.hide_global_announcements_when_not_connected',
+            'attendance.attendance_calendar_set_duration',
+            'certificate.add_gradebook_certificates_cron_task_enabled',
+            'course.block_registered_users_access_to_open_course_contents',
+            'course.enable_tool_introduction',
+            'course.show_toolshortcuts',
+            'crons.cron_remind_course_finished_activate',
+            'display.display_categories_on_homepage',
+            'display.hide_home_top_when_connected',
+            'display.show_administrator_data',
+            'display.show_teacher_data',
+            'display.show_tutor_data',
+            'document.default_group_quotum',
+            'document.users_copy_files',
+            'dropbox.dropbox_allow_mailing',
+            'editor.block_copy_paste_for_students',
+            'editor.enable_uploadimage_editor',
+            'editor.enabled_insertHtml',
+            'editor.enabled_support_svg',
+            'editor.video_context_menu_hidden',
+            'editor.youtube_for_students',
+            'exercise.exercise_result_end_text_html_strict_filtering',
+            'exercise.my_courses_show_pending_exercise_attempts',
+            'exercise.quiz_discard_orphan_in_course_export',
+            'exercise.quiz_hide_attempts_table_on_start_page',
+            'exercise.quiz_keep_alive_ping_interval',
+            'exercise.quiz_question_delete_automatically_when_deleting_exercise',
+            'exercise.show_exercise_attempts_in_all_user_sessions',
+            'exercise.tracking_my_progress_show_deleted_exercises',
+            'forum.allow_forum_category_language_filter',
+            'forum.subscribe_users_to_forum_notifications_also_in_base_course',
+            'gradebook.gradebook_enable_subcategory_skills_independant_assignement',
+            'gradebook.gradebook_hide_table',
+            'gradebook.my_display_coloring',
+            'language.auto_detect_language_custom_pages',
+            'language.template_activate_language_filter',
+            'lp.allow_import_scorm_package_in_course_builder',
+            'lp.lp_allow_export_to_students',
+            'lp.lp_enable_flow',
+            'lp.lp_item_prerequisite_dates',
+            'lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached',
+            'lp.lp_prerequisite_use_last_attempt_only',
+            'lp.lp_start_and_end_date_visible_in_student_view',
+            'lp.scorm_api_username_as_student_id',
+            'lp.scorm_lms_update_sco_status_all_time',
+            'lp.scorm_upload_from_cache',
+            'lp.show_invisible_exercise_in_lp_list',
+            'lp.show_invisible_lp_in_course_home',
+            'lp.student_follow_page_hide_lp_tests_average',
+            'lp.student_follow_page_include_not_subscribed_lp_students',
+            'mail.mailer_debug_enable',
+            'message.filter_interactivity_messages',
+            'platform.disable_copy_paste',
+            'platform.institution_address',
+            'platform.platform_logo_url',
+            'platform.use_career_external_id_as_identifier_in_diagrams',
+            'platform.use_custom_pages',
+            'platform.use_virtual_keyboard',
+            'platform.user_status_show_options_enabled',
+            'profile.enable_profile_user_address_geolocalization',
+            'profile.hide_username_in_course_chat',
+            'profile.pass_reminder_custom_link',
+            'registration.drh_autosubscribe',
+            'registration.sessionadmin_autosubscribe',
+            'registration.student_autosubscribe',
+            'registration.teacher_autosubscribe',
+            'registration.user_hide_never_expire_option',
+            'security.admins_can_set_users_pass',
+            'security.captcha_number_mistakes_to_block_account',
+            'security.hide_breadcrumb_if_not_allowed',
+            'security.security_session_cookie_samesite_none',
+            'session.assignment_base_course_teacher_access_to_all_session',
+            'session.career_diagram_disclaimer',
+            'session.career_diagram_legend',
+            'session.email_template_subscription_to_session_confirmation_lost_password',
+            'session.email_template_subscription_to_session_confirmation_username',
+            'session.hide_session_graph_in_my_progress',
+            'session.my_progress_session_show_all_courses',
+            'session.session_course_users_subscription_limited_to_session_users',
+            'session.session_days_after_coach_access',
+            'session.session_days_before_coach_access',
+            'session.show_session_data',
+            'skill.badge_assignation_notification',
+            'webservice.allow_download_documents_by_api_key',
+            'webservice.messaging_gdc_project_number',
+            'webservice.webservice_enable_adminonly_api',
+            'webservice.webservice_return_user_field',
+            'work.my_courses_show_pending_work',
+            'workflows.disable_user_conditions_sender_id',
+            'workflows.drh_allow_access_to_all_students',
+            'workflows.usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe',
+            'workflows.usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
+            'workflows.usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
         ];
     }
 }

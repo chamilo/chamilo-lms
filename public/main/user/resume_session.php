@@ -71,7 +71,10 @@ if ('true' === $allowTutors) {
                 $my_temp = [];
                 foreach ($idChecked as $id) {
                     $courseInfo = api_get_course_info($id);
-                    $my_temp[] = $courseInfo['real_id']; // forcing the escape_string
+                    $realId = (int) $courseInfo['real_id'];
+                    if ($realId > 0) {
+                        $my_temp[] = $realId;
+                    }
                 }
                 $idChecked = $my_temp;
                 $idChecked = implode(",", $idChecked);

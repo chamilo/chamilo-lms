@@ -2777,10 +2777,10 @@ function api_get_setting($variable, $isArray = false, $key = null)
                         return ($key !== null && array_key_exists($key, $parts)) ? $parts[$key] : $parts;
                     }
 
-                    // strings starting with "array(" (old PHP config style)
+                    // strings starting with "array(" (old PHP config style) — parse safely without eval()
                     $trim = ltrim($settingValue);
                     if (str_starts_with($trim, 'array(')) {
-                        $legacy = @eval('return ' . $trim . ';');
+                        $legacy = api_parse_legacy_php_array($trim);
                         if (is_array($legacy)) {
                             return ($key !== null && array_key_exists($key, $legacy)) ? $legacy[$key] : $legacy;
                         }
@@ -2797,6 +2797,102 @@ function api_get_setting($variable, $isArray = false, $key = null)
             return $settingValue;
         }
     }
+}
+
+/**
+ * Safely parses a legacy PHP array literal (e.g. "array('key' => 'val')") stored in the
+ * database without using eval(). Uses token_get_all() which tokenises without executing.
+ * Only supports scalar values (string, int, float, bool, null) as keys and values.
+ */
+function api_parse_legacy_php_array(string $code): ?array
+{
+    $tokens = token_get_all('<?php '.$code.';');
+    // Strip T_OPEN_TAG
+    array_shift($tokens);
+
+    $result = [];
+    $state = 'expect_array'; // states: expect_array, expect_open, expect_key_or_value, expect_arrow, expect_value, expect_comma
+    $pendingKey = null;
+    $depth = 0;
+
+    $readScalar = static function ($token): mixed {
+        if (!is_array($token)) {
+            return null;
+        }
+        return match ($token[0]) {
+            T_LNUMBER => (int) $token[1],
+            T_DNUMBER => (float) $token[1],
+            T_CONSTANT_ENCAPSED_STRING => substr($token[1], 1, -1), // strip quotes
+            T_STRING => match (strtolower($token[1])) {
+                'true' => true,
+                'false' => false,
+                'null' => null,
+                default => null,
+            },
+            default => null,
+        };
+    };
+
+    foreach ($tokens as $token) {
+        // Skip whitespace and comments
+        if (is_array($token) && in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+            continue;
+        }
+
+        $tok = is_array($token) ? $token[0] : $token;
+        $val = is_array($token) ? $token[1] : $token;
+
+        switch ($state) {
+            case 'expect_array':
+                if (T_ARRAY === $tok || (T_STRING === $tok && 'array' === strtolower((string) $val))) {
+                    $state = 'expect_open';
+                }
+                break;
+            case 'expect_open':
+                if ('(' === $val) {
+                    $depth++;
+                    $state = 'expect_key_or_value';
+                }
+                break;
+            case 'expect_key_or_value':
+                if (')' === $val) {
+                    return $result; // empty array or trailing comma
+                }
+                $scalar = $readScalar($token);
+                if (null !== $scalar || (is_array($token) && T_STRING === $token[0])) {
+                    $pendingKey = $scalar;
+                    $state = 'expect_arrow';
+                }
+                break;
+            case 'expect_arrow':
+                if (T_DOUBLE_ARROW === $tok) {
+                    $state = 'expect_value';
+                } elseif (',' === $val || ')' === $val) {
+                    // No arrow — positional value
+                    $result[] = $pendingKey;
+                    $pendingKey = null;
+                    $state = ')' === $val ? 'done' : 'expect_key_or_value';
+                }
+                break;
+            case 'expect_value':
+                $scalar = $readScalar($token);
+                $result[$pendingKey] = $scalar;
+                $pendingKey = null;
+                $state = 'expect_comma';
+                break;
+            case 'expect_comma':
+                if (',' === $val) {
+                    $state = 'expect_key_or_value';
+                } elseif (')' === $val) {
+                    return $result;
+                }
+                break;
+            case 'done':
+                return $result;
+        }
+    }
+
+    return empty($result) ? null : $result;
 }
 
 /**

@@ -1131,6 +1131,13 @@ function uploadStylesheet($values, $picture)
 
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
+                // Reject path traversal entries (ZIP Slip)
+                $entryName = str_replace('\\', '/', $file['name']);
+                if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                    $valid = false;
+                    $invalid_files[] = $file['name'];
+                    continue;
+                }
                 if ('/' != substr($file['name'], -1)) {
                     $path_parts = pathinfo($file['name']);
                     if (!in_array($path_parts['extension'], $allowedFiles)) {
@@ -1171,16 +1178,28 @@ function uploadStylesheet($values, $picture)
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
+                        // Guard against ZIP Slip: resolve and verify the destination stays within extraction_path
+                        $destDir = $extraction_path.dirname($entry_without_first_dir);
+                        $destFile = $destDir.'/'.basename($entry);
+                        $realExtraction = realpath($extraction_path);
+                        // realpath() returns false for non-existent paths; build normalised path manually
+                        $normDest = $realExtraction.'/'.ltrim(
+                            str_replace(['\\', '../', './'], ['/', '', ''], $entry_without_first_dir),
+                            '/'
+                        );
+                        if (!str_starts_with($normDest, $realExtraction.'/')) {
+                            continue; // skip malicious entry
+                        }
                         // If there is still a slash, we need to make sure the directories are created.
                         if (false !== strpos($entry_without_first_dir, '/')) {
-                            if (!is_dir($extraction_path.dirname($entry_without_first_dir))) {
+                            if (!is_dir($destDir)) {
                                 // Create it.
-                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode, true);
+                                @mkdir($destDir, $mode, true);
                             }
                         }
 
                         $fp = $zip->getStream($entry);
-                        $ofp = fopen($extraction_path.dirname($entry_without_first_dir).'/'.basename($entry), 'w');
+                        $ofp = fopen($destFile, 'w');
 
                         while (!feof($fp)) {
                             fwrite($ofp, fread($fp, 8192));
@@ -1198,7 +1217,7 @@ function uploadStylesheet($values, $picture)
         }
     } else {
         // Simply move the file.
-        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.$picture['name']);
+        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.basename($picture['name']));
         $result = true;
     }
 

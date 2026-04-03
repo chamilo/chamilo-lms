@@ -80,7 +80,7 @@ switch ($action) {
 
         $commandScript = api_get_path(SYS_CODE_PATH).'gradebook/cli/export_all_certificates.php';
 
-        $userList = implode(',', $userList);
+        $userList = implode(',', array_map('intval', $userList));
 
         shell_exec(sprintf(
             "php %s %s %s %s %s > /dev/null &",

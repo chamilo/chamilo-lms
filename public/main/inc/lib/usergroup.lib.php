@@ -1557,7 +1557,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
-            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
+            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title ".('DESC' === strtoupper((string) $sord) ? 'DESC' : 'ASC')." LIMIT $start, $limit")
         );
 
         $new_result = [];

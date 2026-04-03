@@ -2065,7 +2065,7 @@ class DocumentManager
                 if (0 !== $ret_val) { // shell fail, probably 127 (command not found)
                     return false;
                 }
-                exec("pdftotext $temp_file -", $output, $ret_val);
+                exec("pdftotext ".escapeshellarg($temp_file)." -", $output, $ret_val);
                 unlink($temp_file);
                 break;
             case 'application/msword':

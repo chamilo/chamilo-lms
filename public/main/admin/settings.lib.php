@@ -76,13 +76,13 @@ function handleRegions()
 
     echo '<div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">';
     echo '  <div>';
-    echo '      <h2 class="mb-1 text-2xl font-semibold text-gray-90">Plugin regions</h2>';
-    echo '      <p class="text-body-2 text-gray-50">Choose where each installed plugin should be rendered.</p>';
-    echo '      <p class="mt-1 text-caption text-gray-50">Tip: use Ctrl/Cmd to select multiple regions.</p>';
+    echo '      <h2 class="mb-1 text-2xl font-semibold text-gray-90">'.get_lang('Plugin regions').'</h2>';
+    echo '      <p class="text-body-2 text-gray-50">'.get_lang('Choose where each installed plugin should be rendered.').'</p>';
+    echo '      <p class="mt-1 text-caption text-gray-50">'.get_lang('Tip: use Ctrl/Cmd to select multiple regions.').'</p>';
     echo '  </div>';
     echo '  <div class="flex flex-wrap gap-2">';
     echo '      <a href="'.htmlspecialchars(api_get_self().'?category=Plugins', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
-    echo '          <i class="mdi mdi-puzzle-outline"></i> Plugins';
+    echo '          <i class="mdi mdi-puzzle-outline"></i> '.get_lang('Plugins');
     echo '      </a>';
     echo '      <button class="btn btn--success btn--sm" type="submit" form="plugin-regions-form" name="submit_plugins">';
     echo '          <i class="mdi mdi-content-save-outline"></i> '.get_lang('Save settings');
@@ -91,7 +91,7 @@ function handleRegions()
     echo '</div>';
 
     if (empty($installedPlugins)) {
-        echo Display::return_message('No installed plugins were found.', 'warning', false);
+        echo Display::return_message(get_lang('No installed plugins were found.'), 'warning', false);
 
         return;
     }
@@ -149,7 +149,7 @@ function handleRegions()
 
         echo '      <div>';
         echo '          <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">';
-        echo '              <div class="mb-3 text-body-2 font-semibold text-gray-90">Available regions</div>';
+        echo '              <div class="mb-3 text-body-2 font-semibold text-gray-90">'.get_lang('Available regions').'</div>';
 
         echo Display::select(
             'plugin_'.$pluginName.'[]',
@@ -165,7 +165,7 @@ function handleRegions()
         );
 
         echo '              <p class="mt-3 text-caption text-gray-50">';
-        echo '                  Select one or more regions for this plugin in the current access URL.';
+        echo '                  '.get_lang('Select one or more regions for this plugin in the current access URL.');
         echo '              </p>';
         echo '          </div>';
         echo '      </div>';
@@ -482,13 +482,13 @@ function plugin_get_region_label(string $region): string
 function plugin_get_region_descriptions(): array
 {
     return [
-        'menu_administrator' => 'Recommended for admin-only plugins shown in the administration area.',
-        'course_tool_plugin' => 'Recommended for plugins that must appear as course tools.',
-        'content_top' => 'Displayed above the main page content.',
-        'content_bottom' => 'Displayed below the main page content.',
-        'main_top' => 'Displayed near the top of the main layout shell.',
-        'main_bottom' => 'Displayed near the bottom of the main layout shell.',
-        'pre_footer' => 'Recommended for global floating or persistent plugins shown before the footer.',
+        'menu_administrator' => get_lang('Recommended for admin-only plugins shown in the administration area.'),
+        'course_tool_plugin' => get_lang('Recommended for plugins that must appear as course tools.'),
+        'content_top' => get_lang('Displayed above the main page content.'),
+        'content_bottom' => get_lang('Displayed below the main page content.'),
+        'main_top' => get_lang('Displayed near the top of the main layout shell.'),
+        'main_bottom' => get_lang('Displayed near the bottom of the main layout shell.'),
+        'pre_footer' => get_lang('Recommended for global floating or persistent plugins shown before the footer.'),
     ];
 }
 
@@ -499,7 +499,7 @@ function plugin_get_region_description(string $region): string
 {
     $descriptions = plugin_get_region_descriptions();
 
-    return $descriptions[$region] ?? 'Displayed in the selected plugin region.';
+    return $descriptions[$region] ?? get_lang('Displayed in the selected plugin region.');
 }
 
 /**
@@ -532,15 +532,15 @@ function plugin_render_scope_badges(array $metadata): string
     $badges = [];
 
     if (!empty($metadata['is_admin_plugin'])) {
-        $badges[] = '<span class="badge badge--info">Admin menu</span>';
+        $badges[] = '<span class="badge badge--info">'.get_lang('Admin menu').'</span>';
     }
 
     if (!empty($metadata['is_course_plugin'])) {
-        $badges[] = '<span class="badge badge--success">Course tool</span>';
+        $badges[] = '<span class="badge badge--success">'.get_lang('Course tool').'</span>';
     }
 
     if (empty($badges)) {
-        $badges[] = '<span class="badge badge--default">Global regions</span>';
+        $badges[] = '<span class="badge badge--default">'.get_lang('Global regions').'</span>';
     }
 
     return implode(' ', $badges);
@@ -552,7 +552,7 @@ function plugin_render_scope_badges(array $metadata): string
 function plugin_render_region_badges(array $regions): string
 {
     if (empty($regions)) {
-        return '<span class="badge badge--default">No regions assigned</span>';
+        return '<span class="badge badge--default">'.get_lang('No regions assigned').'</span>';
     }
 
     $html = [];

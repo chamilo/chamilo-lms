@@ -33601,7 +33601,7 @@ msgid "Tags can be copied and pasted inside the text area below and will be dyna
 msgstr ""
 
 msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
-msgstr "" 
+msgstr ""
 
 msgid "Link classes to created groups ?"
 msgstr ""
@@ -33673,4 +33673,58 @@ msgid "Are you sure you want to remove the class without removing users?"
 msgstr ""
 
 msgid "Remove the class without removing students"
+msgstr ""
+
+msgid "This setting is not yet implemented in this version."
+msgstr ""
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr ""
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr ""
+
+msgid "Displayed above the main page content."
+msgstr ""
+
+msgid "Displayed below the main page content."
+msgstr ""
+
+msgid "Displayed near the top of the main layout shell."
+msgstr ""
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr ""
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr ""
+
+msgid "Displayed in the selected plugin region."
+msgstr ""
+
+msgid "Admin menu"
+msgstr ""
+
+msgid "Global regions"
+msgstr ""
+
+msgid "No regions assigned"
+msgstr ""
+
+msgid "Plugin regions"
+msgstr ""
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr ""
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr ""
+
+msgid "No installed plugins were found."
+msgstr ""
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr ""
+
+msgid "Available regions"
 msgstr ""

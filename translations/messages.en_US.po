@@ -33760,3 +33760,57 @@ msgstr "Are you sure you want to remove the class without removing users?"
 
 msgid "Remove the class without removing students"
 msgstr "Remove the class without removing students"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "This setting is not yet implemented in this version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recommended for admin-only plugins shown in the administration area."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recommended for plugins that must appear as course tools."
+
+msgid "Displayed above the main page content."
+msgstr "Displayed above the main page content."
+
+msgid "Displayed below the main page content."
+msgstr "Displayed below the main page content."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Displayed near the top of the main layout shell."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Displayed near the bottom of the main layout shell."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recommended for global floating or persistent plugins shown before the footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Displayed in the selected plugin region."
+
+msgid "Admin menu"
+msgstr "Admin menu"
+
+msgid "Global regions"
+msgstr "Global regions"
+
+msgid "No regions assigned"
+msgstr "No regions assigned"
+
+msgid "Plugin regions"
+msgstr "Plugin regions"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Choose where each installed plugin should be rendered."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: use Ctrl/Cmd to select multiple regions."
+
+msgid "No installed plugins were found."
+msgstr "No installed plugins were found."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Select one or more regions for this plugin in the current access URL."
+
+msgid "Available regions"
+msgstr "Available regions"

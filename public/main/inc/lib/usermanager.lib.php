@@ -1168,8 +1168,12 @@ class UserManager
             ->setExpirationDate($expiration_date)
             ->setActive($active)
             ->setHrDeptId((int) $hr_dept_id)
-            ->removeAuthSources()
         ;
+
+        // Remove auth sources only for the current URL, preserving records for other URLs.
+        foreach ($user->getAuthSourcesByUrl($accessUrl) as $existingSource) {
+            $user->removeAuthSource($existingSource);
+        }
 
         foreach ($auth_sources as $authSource) {
             $user->addAuthSourceByAuthentication($authSource, $accessUrl);

@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Ovaj blok objašnjava kak
 
 $strings['tour_admin_news_title'] = 'Vesti iz Chamilo-a';
 $strings['tour_admin_news_content'] = 'Ova sekcija prikazuje nedavne vesti i najave iz Chamilo projekta.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo platforme';
+$strings['tour_home_topbar_logo_content'] = 'Ovaj logo vas vraća na početnu stranicu platforme.';
+$strings['tour_home_topbar_actions_title'] = 'Brze akcije';
+$strings['tour_home_topbar_actions_content'] = 'Ovde možete pronaći ikone prečica kao što su kreiranje kurseva, vođena pomoć, tiketi i poruke, u zavisnosti od vaše uloge.';
+$strings['tour_home_menu_button_title'] = 'Dugme menija';
+$strings['tour_home_menu_button_content'] = 'Koristite ovo dugme da brzo otvorite ili zatvorite bočni meni.';
+$strings['tour_home_sidebar_title'] = 'Glavni meni';
+$strings['tour_home_sidebar_content'] = 'Ovaj bočni meni daje pristup glavnim sekcijama platforme, u zavisnosti od vaših dozvola.';
+$strings['tour_home_user_area_title'] = 'Korisnička oblast';
+$strings['tour_home_user_area_content'] = 'Ovde možete pristupiti svom profilu, ličnim opcijama i odjaviti se.';

@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Šis blokas paaiškina, k
 
 $strings['tour_admin_news_title'] = 'Naujienos iš Chamilo';
 $strings['tour_admin_news_content'] = 'Ši dalis rodo naujausias Chamilo projekto naujienas ir pranešimus.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platformos logotipas';
+$strings['tour_home_topbar_logo_content'] = 'Šis logotipas grąžina jus į pagrindinį platformos puslapį.';
+$strings['tour_home_topbar_actions_title'] = 'Greiti veiksmai';
+$strings['tour_home_topbar_actions_content'] = 'Čia rasite sparčiųjų nuorodų piktogramas, tokias kaip kursų kūrimas, vedama pagalba, bilietai ir žinutės, priklausomai nuo jūsų vaidmens.';
+$strings['tour_home_menu_button_title'] = 'Meniu mygtukas';
+$strings['tour_home_menu_button_content'] = 'Naudokite šį mygtuką, kad greitai atidarytumėte arba uždarytumėte šoninį meniu.';
+$strings['tour_home_sidebar_title'] = 'Pagrindinis meniu';
+$strings['tour_home_sidebar_content'] = 'Šis šoninis meniu suteikia prieigą prie pagrindinių platformos skyrių pagal jūsų teises.';
+$strings['tour_home_user_area_title'] = 'Naudotojo sritis';
+$strings['tour_home_user_area_content'] = 'Čia galite pasiekti savo profilį, asmenines parinktis ir atsijungti.';

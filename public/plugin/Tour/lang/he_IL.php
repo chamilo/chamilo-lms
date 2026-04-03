@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'בלוק זה מסביר 
 
 $strings['tour_admin_news_title'] = 'חדשות מ-Chamilo';
 $strings['tour_admin_news_content'] = 'סעיף זה מציג חדשות ועדכונים אחרונים מפרויקט Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'לוגו הפלטפורמה';
+$strings['tour_home_topbar_logo_content'] = 'הלוגו הזה מחזיר אותך לעמוד הבית של הפלטפורמה.';
+$strings['tour_home_topbar_actions_title'] = 'פעולות מהירות';
+$strings['tour_home_topbar_actions_content'] = 'כאן אפשר למצוא סמלי קיצור כמו יצירת קורסים, עזרה מודרכת, פניות והודעות, בהתאם לתפקיד שלך.';
+$strings['tour_home_menu_button_title'] = 'כפתור התפריט';
+$strings['tour_home_menu_button_content'] = 'השתמש בכפתור זה כדי לפתוח או לסגור במהירות את התפריט הצדדי.';
+$strings['tour_home_sidebar_title'] = 'התפריט הראשי';
+$strings['tour_home_sidebar_content'] = 'תפריט צד זה נותן גישה לחלקים הראשיים של הפלטפורמה, בהתאם להרשאות שלך.';
+$strings['tour_home_user_area_title'] = 'אזור המשתמש';
+$strings['tour_home_user_area_content'] = 'כאן אפשר לגשת לפרופיל שלך, לאפשרויות האישיות ולהתנתק.';

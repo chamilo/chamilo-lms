@@ -151,6 +151,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import EmptyState from "../../components/EmptyState.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -159,6 +160,8 @@ const cidReqStore = useCidReqStore()
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
+
+const { requireConfirmation } = useConfirmation()
 
 const loading = ref(true)
 const error = ref(null)
@@ -654,11 +657,14 @@ const onTogglePublish = (lp) => {
 }
 const onDelete = (lp) => {
   const label = (lp.title || "").trim() || t("Learning path")
-  const msg = `${t("Are you sure to delete")} ${label}?`
+  const message = `${t("Are you sure to delete")} ${label}?`
 
-  if (confirm(msg)) {
-    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { ...legacyContext.value })
-  }
+  requireConfirmation({
+    message,
+    accept() {
+      window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { ...legacyContext.value })
+    },
+  })
 }
 
 async function onEndUncat() {

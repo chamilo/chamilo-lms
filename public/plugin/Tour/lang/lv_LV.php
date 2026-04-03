@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Šis bloks izskaidro, kā
 
 $strings['tour_admin_news_title'] = 'Ziņas no Chamilo';
 $strings['tour_admin_news_content'] = 'Šī sadaļa parāda jaunākās ziņas un paziņojumus no Chamilo projekta.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platformas logotips';
+$strings['tour_home_topbar_logo_content'] = 'Šis logotips jūs aizved atpakaļ uz platformas sākumlapu.';
+$strings['tour_home_topbar_actions_title'] = 'Ātrās darbības';
+$strings['tour_home_topbar_actions_content'] = 'Šeit varat atrast ātrpiekļuves ikonas, piemēram, kursu izveidi, vadītu palīdzību, biļetes un ziņojumus atkarībā no jūsu lomas.';
+$strings['tour_home_menu_button_title'] = 'Izvēlnes poga';
+$strings['tour_home_menu_button_content'] = 'Izmantojiet šo pogu, lai ātri atvērtu vai aizvērtu sānu izvēlni.';
+$strings['tour_home_sidebar_title'] = 'Galvenā izvēlne';
+$strings['tour_home_sidebar_content'] = 'Šī sānu izvēlne nodrošina piekļuvi galvenajām platformas sadaļām atkarībā no jūsu atļaujām.';
+$strings['tour_home_user_area_title'] = 'Lietotāja zona';
+$strings['tour_home_user_area_content'] = 'Šeit varat piekļūt savam profilam, personiskajām opcijām un izrakstīties.';

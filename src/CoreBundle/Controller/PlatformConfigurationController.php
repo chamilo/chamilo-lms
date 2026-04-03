@@ -100,6 +100,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+        $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
 
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
@@ -172,6 +173,10 @@ class PlatformConfigurationController extends AbstractController
                 'language.show_different_course_language',
                 'workflows.allow_users_to_create_courses',
                 'work.allow_only_one_student_publication_per_user',
+                'course.course_creation_form_hide_course_code',
+                'course.course_creation_form_set_course_category_mandatory',
+                'display.hide_logout_button',
+                'document.documents_hide_download_icon',
             ];
 
             foreach ($variables as $variable) {
@@ -301,9 +306,9 @@ class PlatformConfigurationController extends AbstractController
         }
 
         $configured = $demoEnabled || (
-            '' !== trim($documentServerUrl)
+                '' !== trim($documentServerUrl)
                 && '' !== trim($jwtSecret)
-        );
+            );
 
         return [
             'enabled' => $enabled,
@@ -312,21 +317,48 @@ class PlatformConfigurationController extends AbstractController
         ];
     }
 
+    private function getTourFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('Tour');
+
+        $showTour = $enabled && $this->normalizePluginBoolean(
+                $this->pluginHelper->getPluginConfigValue('Tour', 'show_tour', true)
+            );
+
+        $theme = trim((string) $this->pluginHelper->getPluginConfigValue('Tour', 'theme', ''));
+        $themeCssPath = null;
+
+        if ('' !== $theme) {
+            $themeCssPath = '/plugin/Tour/intro.js/introjs-'.$theme.'.css';
+        }
+
+        return [
+            'enabled' => $enabled,
+            'showTour' => $showTour,
+            'theme' => $theme,
+            'introCss' => '/plugin/Tour/intro.js/introjs.min.css',
+            'introThemeCss' => $themeCssPath,
+            'introJs' => '/plugin/Tour/intro.js/intro.min.js',
+            'stepsAjax' => '/plugin/Tour/ajax/steps.ajax.php',
+            'saveAjax' => '/plugin/Tour/ajax/save.ajax.php',
+        ];
+    }
+
     private function getBuyCoursesFrontendConfig(): array
     {
         $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
 
         $showMainMenuTab = $enabled && $this->normalizePluginBoolean(
-            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
-        );
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
+            );
 
         $publicMainMenuTab = $enabled && $this->normalizePluginBoolean(
-            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
-        );
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
+            );
 
         $allowAnonymousUsers = $enabled && $this->normalizePluginBoolean(
-            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
-        );
+                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
+            );
 
         return [
             'enabled' => $enabled,

@@ -4,6 +4,36 @@
     "name": "home",
     "steps": [
       {
+        "elementSelector": ".app-topbar__start",
+        "titleMessage": "tour_home_topbar_logo_title",
+        "message": "tour_home_topbar_logo_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".app-topbar__items",
+        "titleMessage": "tour_home_topbar_actions_title",
+        "message": "tour_home_topbar_actions_content",
+        "position": "bottom"
+      },
+      {
+        "elementSelector": ".app-sidebar__topbar-button",
+        "titleMessage": "tour_home_menu_button_title",
+        "message": "tour_home_menu_button_content",
+        "position": "left"
+      },
+      {
+        "elementSelector": ".app-sidebar",
+        "titleMessage": "tour_home_sidebar_title",
+        "message": "tour_home_sidebar_content",
+        "position": "right"
+      },
+      {
+        "elementSelector": ".app-topbar__end",
+        "titleMessage": "tour_home_user_area_title",
+        "message": "tour_home_user_area_content",
+        "position": "left"
+      },
+      {
         "elementSelector": "h2",
         "titleMessage": "tour_home_featured_courses_title",
         "message": "tour_home_featured_courses_content",

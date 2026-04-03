@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'This block explains how t
 
 $strings['tour_admin_news_title'] = 'News from Chamilo';
 $strings['tour_admin_news_content'] = 'This section displays recent news and announcements from the Chamilo project.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platform logo';
+$strings['tour_home_topbar_logo_content'] = 'This logo takes you back to the platform homepage.';
+$strings['tour_home_topbar_actions_title'] = 'Quick actions';
+$strings['tour_home_topbar_actions_content'] = 'Here you can find shortcut icons such as course creation, guided help, tickets and messages, depending on your role.';
+$strings['tour_home_menu_button_title'] = 'Menu button';
+$strings['tour_home_menu_button_content'] = 'Use this button to open or close the side menu quickly.';
+$strings['tour_home_sidebar_title'] = 'Main menu';
+$strings['tour_home_sidebar_content'] = 'This side menu gives access to the main platform sections, depending on your permissions.';
+$strings['tour_home_user_area_title'] = 'User area';
+$strings['tour_home_user_area_content'] = 'Here you can access your profile, personal options and sign out.';

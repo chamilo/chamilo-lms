@@ -24,7 +24,8 @@
   &:has(.p-inputwrapper-filled) label,
   &:has(input[placeholder]) label,
   &:has(textarea[placeholder]) label,
-  &:has(.p-datepicker-panel-inline) label {
+  &:has(.p-datepicker-panel-inline) label,
+  &:has(.tox.tox-tinymce) label {
     @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
   }
 
@@ -68,7 +69,8 @@
   &-on:has(.p-inputwrapper-filled) label,
   &-on:has(input[placeholder]) label,
   &-on:has(textarea[placeholder]) label,
-  &-on:has(.p-datepicker-panel-inline) label {
+  &-on:has(.p-datepicker-panel-inline) label,
+  &-on:has(.tox.tox-tinymce) label {
     @apply -translate-y-1/2;
   }
 }

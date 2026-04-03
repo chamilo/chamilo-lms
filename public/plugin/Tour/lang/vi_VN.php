@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Khối này giải thích
 
 $strings['tour_admin_news_title'] = 'Tin tức từ Chamilo';
 $strings['tour_admin_news_content'] = 'Phần này hiển thị tin tức và thông báo gần đây từ dự án Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo nền tảng';
+$strings['tour_home_topbar_logo_content'] = 'Logo này đưa bạn trở lại trang chủ của nền tảng.';
+$strings['tour_home_topbar_actions_title'] = 'Thao tác nhanh';
+$strings['tour_home_topbar_actions_content'] = 'Tại đây bạn có thể tìm thấy các biểu tượng lối tắt như tạo khóa học, trợ giúp hướng dẫn, phiếu yêu cầu và tin nhắn, tùy theo vai trò của bạn.';
+$strings['tour_home_menu_button_title'] = 'Nút menu';
+$strings['tour_home_menu_button_content'] = 'Dùng nút này để mở hoặc đóng nhanh menu bên.';
+$strings['tour_home_sidebar_title'] = 'Menu chính';
+$strings['tour_home_sidebar_content'] = 'Menu bên này cho phép truy cập vào các phần chính của nền tảng, tùy theo quyền của bạn.';
+$strings['tour_home_user_area_title'] = 'Khu vực người dùng';
+$strings['tour_home_user_area_content'] = 'Tại đây bạn có thể truy cập hồ sơ, tùy chọn cá nhân và đăng xuất.';

@@ -696,17 +696,17 @@ class nusoap_client extends nusoap_base
 	* @access   public
 	*/
 	function getProxy() {
-		$r = rand();
-		$evalStr = $this->_getProxyClassCode($r);
-		//$this->debug("proxy class: $evalStr");
-		if ($this->getError()) {
-			$this->debug("Error from _getProxyClassCode, so return NULL");
+		if ($this->endpointType != 'wsdl') {
+			$this->setError('A proxy can only be created for a WSDL client');
 			return null;
 		}
-		// eval the class
-		eval($evalStr);
-		// instantiate proxy object
-		eval("\$proxy = new nusoap_proxy_$r('');");
+		if (is_null($this->wsdl)) {
+			$this->loadWSDL();
+			if ($this->getError()) {
+				return null;
+			}
+		}
+		$proxy = new nusoap_proxy('');
 		// transfer current wsdl data to the proxy thereby avoiding parsing the wsdl twice
 		$proxy->endpointType = 'wsdl';
 		$proxy->wsdlFile = $this->wsdlFile;
@@ -975,6 +975,32 @@ class nusoap_client extends nusoap_base
 			}
 		}
 		return true;
+	}
+}
+
+/**
+ * Proxy class for nusoap_client that dispatches WSDL operations via __call()
+ * instead of using eval() to generate a dynamic class per operation.
+ */
+class nusoap_proxy extends nusoap_client {
+	public function __call(string $name, array $args): mixed {
+		// WSDL operation names may use '.' which was encoded as '__' in the old eval-based proxy
+		$operation = str_replace('__', '.', $name);
+		if (!isset($this->operations[$operation])) {
+			$this->setError("Operation '$operation' not defined in WSDL");
+			return false;
+		}
+		$opData = $this->operations[$operation];
+		$parts  = $opData['input']['parts'] ?? [];
+		$params = [];
+		$i = 0;
+		foreach (array_keys($parts) as $paramName) {
+			$params[$paramName] = $args[$i] ?? null;
+			++$i;
+		}
+		$namespace  = $opData['namespace']  ?? 'http://testuri.com';
+		$soapAction = $opData['soapAction'] ?? '';
+		return $this->call($operation, $params, $namespace, $soapAction);
 	}
 }
 

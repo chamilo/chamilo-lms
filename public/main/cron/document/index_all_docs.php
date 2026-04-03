@@ -10,7 +10,7 @@ require '../../inc/global.inc.php';
 if (empty($_GET['doc'])) {
     echo "To add a document name to search, add ?doc=abc to the URL\n";
 } else {
-    echo "Received param ".$_GET['doc']."<br />\n";
+    echo "Received param ".htmlspecialchars($_GET['doc'], ENT_QUOTES)."<br />\n";
 }
 $allowed_mime_types = DocumentManager::file_get_mime_type(true);
 $allowed_extensions = [
@@ -45,8 +45,9 @@ $td = Database::get_course_table(TABLE_DOCUMENT);
 
 foreach ($courses_list as $course) {
     $course_dir = $course['directory'].'/document';
-    $title = Database::escape_string($_GET['doc']);
-    $sql = "SELECT id, path, session_id FROM $td WHERE c_id = ".$course['id']." AND path LIKE '%$title%' or title LIKE '%$title%'";
+    $rawTitle = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $_GET['doc']);
+    $title = Database::escape_string($rawTitle);
+    $sql = "SELECT id, path, session_id FROM $td WHERE c_id = ".$course['id']." AND (path LIKE '%$title%' OR title LIKE '%$title%')";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         while ($row = Database::fetch_array($res)) {

@@ -134,6 +134,10 @@ const allowUsersToCreateCourses = computed(() => {
   return platformConfigStore.getSetting("workflows.allow_users_to_create_courses") === "true"
 })
 
+const hideLogoutButton = computed(() => {
+  return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
+
 /**
  * Role mapping used by display.show_tabs_per_role.
  * This matches the legacy constants used across the platform.
@@ -476,14 +480,16 @@ const userSubmenuItems = computed(() => {
     })
   }
 
-  items[0].items.push(
-    { separator: true },
-    {
-      label: t("Sign out"),
-      url: "/logout",
-      icon: "mdi mdi-logout-variant",
-    },
-  )
+  if (!hideLogoutButton.value) {
+    items[0].items.push(
+      { separator: true },
+      {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      },
+    )
+  }
 
   return items
 })

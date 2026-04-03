@@ -204,4 +204,28 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
 
         return (int) $result;
     }
+
+    /**
+     * Get the first course access record for a user in a specific session,
+     * ordered by login_course_date ASC to ensure we get the earliest access.
+     */
+    public function findFirstAccessByUserAndSession(User $user, int $sessionId): ?TrackECourseAccess
+    {
+        $userRef = $this->toManagedUser($user);
+        if (null === $userRef) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('a')
+            ->where('a.user = :user AND a.sessionId = :sessionId')
+            ->setParameters([
+                'user' => $userRef,
+                'sessionId' => $sessionId,
+            ])
+            ->orderBy('a.loginCourseDate', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

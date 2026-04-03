@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Dieser Block erklärt, wi
 
 $strings['tour_admin_news_title'] = 'Neuigkeiten von Chamilo';
 $strings['tour_admin_news_content'] = 'Dieser Abschnitt zeigt aktuelle Neuigkeiten und Ankündigungen des Chamilo-Projekts an.';
+
+$strings['tour_home_topbar_logo_title'] = 'Plattformlogo';
+$strings['tour_home_topbar_logo_content'] = 'Dieses Logo bringt Sie zurück zur Startseite der Plattform.';
+$strings['tour_home_topbar_actions_title'] = 'Schnellaktionen';
+$strings['tour_home_topbar_actions_content'] = 'Hier finden Sie Schnellzugriffssymbole wie Kurserstellung, geführte Hilfe, Tickets und Nachrichten, abhängig von Ihrer Rolle.';
+$strings['tour_home_menu_button_title'] = 'Menüschaltfläche';
+$strings['tour_home_menu_button_content'] = 'Verwenden Sie diese Schaltfläche, um das Seitenmenü schnell zu öffnen oder zu schließen.';
+$strings['tour_home_sidebar_title'] = 'Hauptmenü';
+$strings['tour_home_sidebar_content'] = 'Dieses Seitenmenü bietet Zugriff auf die Hauptbereiche der Plattform, abhängig von Ihren Berechtigungen.';
+$strings['tour_home_user_area_title'] = 'Benutzerbereich';
+$strings['tour_home_user_area_content'] = 'Hier können Sie auf Ihr Profil, persönliche Optionen und die Abmeldung zugreifen.';

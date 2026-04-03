@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'این بلوک نحوه 
 
 $strings['tour_admin_news_title'] = 'اخبار Chamilo';
 $strings['tour_admin_news_content'] = 'این بخش اخبار و اطلاعیه‌های اخیر پروژه Chamilo را نمایش می‌دهد.';
+
+$strings['tour_home_topbar_logo_title'] = 'لوگوی پلتفرم';
+$strings['tour_home_topbar_logo_content'] = 'این لوگو شما را به صفحهٔ اصلی پلتفرم بازمی‌گرداند.';
+$strings['tour_home_topbar_actions_title'] = 'اقدام‌های سریع';
+$strings['tour_home_topbar_actions_content'] = 'در اینجا می‌توانید آیکون‌های میانبر مانند ایجاد دوره، راهنمای گام‌به‌گام، تیکت‌ها و پیام‌ها را بسته به نقش خود پیدا کنید.';
+$strings['tour_home_menu_button_title'] = 'دکمهٔ منو';
+$strings['tour_home_menu_button_content'] = 'از این دکمه برای باز یا بسته کردن سریع منوی کناری استفاده کنید.';
+$strings['tour_home_sidebar_title'] = 'منوی اصلی';
+$strings['tour_home_sidebar_content'] = 'این منوی کناری با توجه به مجوزهای شما دسترسی به بخش‌های اصلی پلتفرم را فراهم می‌کند.';
+$strings['tour_home_user_area_title'] = 'بخش کاربر';
+$strings['tour_home_user_area_content'] = 'در اینجا می‌توانید به پروفایل، گزینه‌های شخصی و خروج از حساب دسترسی داشته باشید.';

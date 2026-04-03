@@ -45,19 +45,24 @@ if ('true' === $allowTutors) {
 
     switch ($action) {
         case 'add_user_to_url':
-            $user_id = $_REQUEST['user_id'];
-            $result = UrlManager::add_user_to_url($user_id, $url_id);
-            $user_info = api_get_user_info($user_id);
-            if ($result) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('The user has been added').' '.api_get_person_name(
-                            $user_info['firstname'],
-                            $user_info['lastname']
-                        ),
-                        'confirm'
-                    )
-                );
+            $user_id = (int) $_REQUEST['user_id'];
+            $userInSession = Database::query(
+                "SELECT 1 FROM $tbl_session_rel_user WHERE session_id = $id_session AND user_id = $user_id LIMIT 1"
+            );
+            if ($user_id > 0 && Database::num_rows($userInSession) > 0) {
+                $result = UrlManager::add_user_to_url($user_id, $url_id);
+                $user_info = api_get_user_info($user_id);
+                if ($result) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('The user has been added').' '.api_get_person_name(
+                                $user_info['firstname'],
+                                $user_info['lastname']
+                            ),
+                            'confirm'
+                        )
+                    );
+                }
             }
             break;
         case 'delete':
@@ -69,7 +74,7 @@ if ('true' === $allowTutors) {
                     $my_temp[] = $courseInfo['real_id']; // forcing the escape_string
                 }
                 $idChecked = $my_temp;
-                $idChecked = "'".implode("','", $idChecked)."'";
+                $idChecked = implode(",", $idChecked);
 
                 $result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
                 $nbr_affected_rows = Database::affected_rows($result);

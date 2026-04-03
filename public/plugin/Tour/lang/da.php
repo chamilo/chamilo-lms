@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Denne blok forklarer, hvo
 
 $strings['tour_admin_news_title'] = 'Nyheder fra Chamilo';
 $strings['tour_admin_news_content'] = 'Dette afsnit viser nylige nyheder og annonceringer fra Chamilo-projektet.';
+
+$strings['tour_home_topbar_logo_title'] = 'Platformlogo';
+$strings['tour_home_topbar_logo_content'] = 'Dette logo fører dig tilbage til platformens startside.';
+$strings['tour_home_topbar_actions_title'] = 'Hurtige handlinger';
+$strings['tour_home_topbar_actions_content'] = 'Her finder du genvejsikoner som kursusoprettelse, guidet hjælp, tickets og beskeder afhængigt af din rolle.';
+$strings['tour_home_menu_button_title'] = 'Menuknap';
+$strings['tour_home_menu_button_content'] = 'Brug denne knap til hurtigt at åbne eller lukke sidemenuen.';
+$strings['tour_home_sidebar_title'] = 'Hovedmenu';
+$strings['tour_home_sidebar_content'] = 'Denne sidemenu giver adgang til platformens hovedsektioner afhængigt af dine tilladelser.';
+$strings['tour_home_user_area_title'] = 'Brugerområde';
+$strings['tour_home_user_area_content'] = 'Her kan du få adgang til din profil, personlige indstillinger og logge ud.';

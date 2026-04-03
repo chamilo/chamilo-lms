@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Este bloque explica como 
 
 $strings['tour_admin_news_title'] = 'Novas de Chamilo';
 $strings['tour_admin_news_content'] = 'Esta sección mostra novas e anuncios recentes do proxecto Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logotipo da plataforma';
+$strings['tour_home_topbar_logo_content'] = 'Este logotipo lévate de volta á páxina principal da plataforma.';
+$strings['tour_home_topbar_actions_title'] = 'Accións rápidas';
+$strings['tour_home_topbar_actions_content'] = 'Aquí podes atopar iconas de acceso rápido como creación de cursos, axuda guiada, tickets e mensaxes, segundo o teu rol.';
+$strings['tour_home_menu_button_title'] = 'Botón do menú';
+$strings['tour_home_menu_button_content'] = 'Usa este botón para abrir ou pechar rapidamente o menú lateral.';
+$strings['tour_home_sidebar_title'] = 'Menú principal';
+$strings['tour_home_sidebar_content'] = 'Este menú lateral dá acceso ás seccións principais da plataforma, segundo os teus permisos.';
+$strings['tour_home_user_area_title'] = 'Área de usuario';
+$strings['tour_home_user_area_content'] = 'Aquí podes acceder ao teu perfil, ás opcións persoais e pechar a sesión.';

@@ -26,6 +26,16 @@
       />
       {{ data.title }}
     </BaseAppLink>
+    <div
+      v-else-if="hideDownloadIcon"
+      class="flex align-center"
+    >
+      <ResourceIcon
+        :resource-data="data"
+        class="mr-2"
+      />
+      {{ data.title }}
+    </div>
     <BaseAppLink
       v-else
       :data-type="dataType"
@@ -90,6 +100,10 @@ const onlyofficeSupportedExtensions = new Set([
   "odp",
   "pdf",
 ])
+
+const hideDownloadIcon = computed(() => {
+  return platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+})
 
 const onlyofficePluginEnabled = computed(() => {
   return platformConfigStore.plugins?.onlyoffice?.enabled === true

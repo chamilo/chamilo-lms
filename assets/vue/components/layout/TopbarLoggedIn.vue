@@ -16,6 +16,20 @@
           class="item-button__icon text-success"
         />
       </BaseAppLink>
+      <button
+        v-if="showTourButton"
+        type="button"
+        class="item-button group text-support-5 hover:text-secondary-hover disabled:cursor-wait disabled:opacity-60"
+        :aria-label="t('Tour')"
+        :title="t('Tour')"
+        :disabled="tourBusy"
+        @click="startTourFromTopbar"
+      >
+        <span
+          class="item-button__icon mdi mdi-sign-direction text-[1.8rem] leading-none transition-transform duration-200 group-hover:scale-110"
+          aria-hidden="true"
+        />
+      </button>
       <BaseAppLink
         v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('ticket.show_link_ticket_notification')"
         :title="t('Ticket')"
@@ -81,27 +95,30 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import { useRouter } from "vue-router"
-
+import { useRoute, useRouter } from "vue-router"
 import Avatar from "primevue/avatar"
 import Menu from "primevue/menu"
+import { storeToRefs } from "pinia"
+import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-
+import { useCidReqStore } from "../../store/cidReq"
+import { useSecurityStore } from "../../store/securityStore"
 import { useNotification } from "../../composables/notification"
-import { useI18n } from "vue-i18n"
+import { useTopbarTour } from "../../composables/useTopbarTour"
 import PlatformLogo from "./PlatformLogo.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
-import { useCidReqStore } from "../../store/cidReq"
-import { useSecurityStore } from "../../store/securityStore"
-import { storeToRefs } from "pinia"
 
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
-  currentUser: { required: true, type: Object },
+  currentUser: {
+    required: true,
+    type: Object,
+  },
 })
 
 const platformConfigStore = usePlatformConfig()
@@ -115,6 +132,10 @@ const loginUrl = "/login"
 const elUserSubmenu = ref(null)
 const allowUsersToCreateCourses = computed(() => {
   return platformConfigStore.getSetting("workflows.allow_users_to_create_courses") === "true"
+})
+
+const hideLogoutButton = computed(() => {
+  return platformConfigStore.getSetting("display.hide_logout_button") === "true"
 })
 
 /**
@@ -169,7 +190,10 @@ function safeParseJson(value, warnLabel) {
 }
 
 function makeEmptyConfig() {
-  return { menu: {}, topbar: {} }
+  return {
+    menu: {},
+    topbar: {},
+  }
 }
 
 /**
@@ -190,7 +214,6 @@ function normalizeTopbarKeys(topbar) {
       out.topbar_my_custom_certificate = enabled
     }
   } else {
-    // Build legacy alias from new keys (best-effort)
     const hasNewKeys =
       Object.prototype.hasOwnProperty.call(out, "topbar_my_certificates") ||
       Object.prototype.hasOwnProperty.call(out, "topbar_my_custom_certificate")
@@ -213,7 +236,6 @@ function normalizeConfigObject(obj) {
   return cfg
 }
 
-// Legacy list semantics: only listed tabs are enabled, all known tabs are disabled.
 function configFromLegacyList(list) {
   const cfg = makeEmptyConfig()
 
@@ -229,7 +251,6 @@ function configFromLegacyList(list) {
       continue
     }
 
-    // Legacy alias: enable both new entries when legacy key is present
     if ("topbar_certificate" === key) {
       cfg.topbar.topbar_certificate = true
       cfg.topbar.topbar_my_certificates = true
@@ -242,13 +263,11 @@ function configFromLegacyList(list) {
     }
   }
 
-  // Ensure mapping/alias consistency even for legacy lists
   cfg.topbar = normalizeTopbarKeys(cfg.topbar)
 
   return cfg
 }
 
-// Merge semantics: role config overrides default config (only for keys provided)
 function mergeConfig(baseCfg, overrideCfg) {
   const out = makeEmptyConfig()
 
@@ -256,11 +275,16 @@ function mergeConfig(baseCfg, overrideCfg) {
   out.topbar = { ...(baseCfg?.topbar || {}) }
 
   if (overrideCfg?.menu && "object" === typeof overrideCfg.menu) {
-    for (const [k, v] of Object.entries(overrideCfg.menu)) out.menu[k] = v
+    for (const [k, v] of Object.entries(overrideCfg.menu)) {
+      out.menu[k] = v
+    }
   }
   if (overrideCfg?.topbar && "object" === typeof overrideCfg.topbar) {
     const normalized = normalizeTopbarKeys(overrideCfg.topbar)
-    for (const [k, v] of Object.entries(normalized)) out.topbar[k] = v
+
+    for (const [k, v] of Object.entries(normalized)) {
+      out.topbar[k] = v
+    }
   }
 
   out.topbar = normalizeTopbarKeys(out.topbar)
@@ -268,20 +292,11 @@ function mergeConfig(baseCfg, overrideCfg) {
   return out
 }
 
-/**
- * Resolve the effective display tabs config by combining:
- * - display.show_tabs (default)
- * - display.show_tabs_per_role (role overrides)
- *
- * This keeps the same semantics as sidebarMenu.js so that menu + topbar are consistent.
- */
 function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
-  // display.show_tabs (default)
   const showTabsRaw = platformConfigStore.getSetting("display.show_tabs")
   let defaultCfg = makeEmptyConfig()
 
   if (Array.isArray(showTabsRaw)) {
-    // Very old installations may still provide an array
     defaultCfg = configFromLegacyList(showTabsRaw)
   } else if ("string" === typeof showTabsRaw && showTabsRaw.trim() !== "") {
     const parsed = safeParseJson(showTabsRaw, "[Topbar] Invalid JSON in display.show_tabs")
@@ -292,7 +307,6 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
     }
   }
 
-  // display.show_tabs_per_role (overrides)
   const perRoleRaw = platformConfigStore.getSetting("display.show_tabs_per_role") || ""
   const perRole = safeParseJson(perRoleRaw, "[Topbar] Invalid JSON in display.show_tabs_per_role") || {}
 
@@ -302,9 +316,6 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
     const roleValue = perRole?.[mappedRole]
     if (!roleValue) continue
 
-    // Backward compatible:
-    // - If role value is an array -> full replacement behavior (legacy)
-    // - If role value is an object with menu/topbar -> override behavior (recommended)
     if (Array.isArray(roleValue)) {
       return configFromLegacyList(roleValue)
     }
@@ -328,19 +339,22 @@ const showPendingSurveys = computed(() => {
 
 const pendingSurveysUrl = computed(() => {
   try {
-    const r = router.resolve({ name: "SurveyPending" })
-    if (r?.href) return r.href
+    const resolvedRoute = router.resolve({ name: "SurveyPending" })
+    if (resolvedRoute?.href) return resolvedRoute.href
   } catch {}
   return "/main/survey/pending.php"
 })
 
 const isAnonymous = computed(() => {
-  const u = props.currentUser || securityStore.user || {}
-  const roles = Array.isArray(u.roles) ? u.roles : []
+  const currentUser = props.currentUser || securityStore.user || {}
+  const roles = Array.isArray(currentUser.roles) ? currentUser.roles : []
+
   if (roles.includes("ROLE_ANONYMOUS")) return true
-  if (u.is_anonymous === true || u.isAnonymous === true) return true
-  const st = (u.status || "").toString().toUpperCase()
-  return st === "ANONYMOUS"
+  if (currentUser.is_anonymous === true || currentUser.isAnonymous === true) return true
+
+  const status = (currentUser.status || "").toString().toUpperCase()
+
+  return status === "ANONYMOUS"
 })
 
 const messagingEnabled = computed(() => {
@@ -348,36 +362,39 @@ const messagingEnabled = computed(() => {
 })
 
 const ticketUrl = computed(() => {
-  const searchParms = new URLSearchParams()
-  searchParms.append("project_id", "1")
-  searchParms.append("cid", cidReqStore.course?.id ?? 0)
-  searchParms.append("sid", cidReqStore.session?.id ?? 0)
-  searchParms.append("gid", cidReqStore.group?.id ?? 0)
+  const searchParams = new URLSearchParams()
 
-  return "/main/ticket/tickets.php?" + searchParms.toString()
+  searchParams.append("project_id", "1")
+  searchParams.append("cid", cidReqStore.course?.id ?? 0)
+  searchParams.append("sid", cidReqStore.session?.id ?? 0)
+  searchParams.append("gid", cidReqStore.group?.id ?? 0)
+
+  return "/main/ticket/tickets.php?" + searchParams.toString()
 })
 
 function isSettingTrue(keys, defaultValue = false) {
-  for (const k of keys) {
-    const v = platformConfigStore.getSetting(k)
-    if (v === "true") return true
-    if (v === "false") return false
+  for (const key of keys) {
+    const value = platformConfigStore.getSetting(key)
+
+    if (value === "true") return true
+    if (value === "false") return false
   }
+
   return defaultValue
 }
 
-/**
- * Settings that must now have an effect on the topbar menu.
- * We support both namespaced and legacy keys to stay compatible.
- */
 const skillsToolAllowed = computed(() => {
-  // Legacy installs might still expose "allow_skills_tool" (without prefix) to the frontend.
   return isSettingTrue(["skill.allow_skills_tool", "allow_skills_tool"], true)
 })
 
 const generalCertificateAllowed = computed(() => {
-  // Default should be false on new installs (per decision), so we fallback to false.
   return isSettingTrue(["certificate.allow_general_certificate", "allow_general_certificate"], false)
+})
+
+const { tourBusy, showTourButton, startTourFromTopbar } = useTopbarTour({
+  platformConfigStore,
+  route,
+  isAnonymous,
 })
 
 /**
@@ -392,8 +409,9 @@ async function fetchHasCustomCertificate() {
   if (hasCustomCertificate.value !== null) return
 
   isFetchingCustomCertificate.value = true
+
   try {
-    const r = await fetch("/main/social/my_skills_report.php?a=has_custom_certificate", {
+    const response = await fetch("/main/social/my_skills_report.php?a=has_custom_certificate", {
       method: "GET",
       credentials: "same-origin",
       headers: {
@@ -401,18 +419,18 @@ async function fetchHasCustomCertificate() {
       },
     })
 
-    if (!r.ok) {
-      throw new Error("Request failed: " + r.status)
+    if (!response.ok) {
+      throw new Error("Request failed: " + response.status)
     }
 
-    const data = await r.json()
+    const data = await response.json()
+
     hasCustomCertificate.value = !!(
       data &&
       (data.hasCustomCertificate === true || data.has_custom_certificate === true || data.exists === true)
     )
   } catch (e) {
     console.warn("[Topbar] Failed to check custom certificate existence", e)
-    // Fail-closed: do not show the entry if we cannot confirm it exists.
     hasCustomCertificate.value = false
   } finally {
     isFetchingCustomCertificate.value = false
@@ -439,7 +457,6 @@ const userSubmenuItems = computed(() => {
     })
   }
 
-  // My certificates (gradebook)
   if (isTopbarEnabled("topbar_my_certificates")) {
     items[0].items.push({
       label: t("My certificates"),
@@ -447,7 +464,6 @@ const userSubmenuItems = computed(() => {
     })
   }
 
-  // My custom certificate (PDF)
   if (isTopbarEnabled("topbar_my_custom_certificate") && generalCertificateAllowed.value) {
     if (hasCustomCertificate.value === true) {
       items[0].items.push({
@@ -457,7 +473,6 @@ const userSubmenuItems = computed(() => {
     }
   }
 
-  // My skills
   if (isTopbarEnabled("topbar_skills") && skillsToolAllowed.value) {
     items[0].items.push({
       label: t("My skills"),
@@ -465,15 +480,23 @@ const userSubmenuItems = computed(() => {
     })
   }
 
-  items[0].items.push({ separator: true }, { label: t("Sign out"), url: "/logout", icon: "mdi mdi-logout-variant" })
+  if (!hideLogoutButton.value) {
+    items[0].items.push(
+      { separator: true },
+      {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      },
+    )
+  }
+
   return items
 })
 
 function toggleUserMenu(event) {
-  // Always open immediately (PrimeVue needs the click event to position the popup).
   elUserSubmenu.value?.toggle(event)
 
-  // Fetch in background only when needed.
   const shouldCheck =
     !isAnonymous.value &&
     generalCertificateAllowed.value &&

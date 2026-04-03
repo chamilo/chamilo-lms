@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Αυτό το τμήμα 
 
 $strings['tour_admin_news_title'] = 'Νέα από το Chamilo';
 $strings['tour_admin_news_content'] = 'Αυτή η ενότητα εμφανίζει πρόσφατα νέα και ανακοινώσεις από το έργο Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Λογότυπο πλατφόρμας';
+$strings['tour_home_topbar_logo_content'] = 'Αυτό το λογότυπο σας επιστρέφει στην αρχική σελίδα της πλατφόρμας.';
+$strings['tour_home_topbar_actions_title'] = 'Γρήγορες ενέργειες';
+$strings['tour_home_topbar_actions_content'] = 'Εδώ θα βρείτε εικονίδια συντομεύσεων όπως δημιουργία μαθημάτων, καθοδηγούμενη βοήθεια, tickets και μηνύματα, ανάλογα με τον ρόλο σας.';
+$strings['tour_home_menu_button_title'] = 'Κουμπί μενού';
+$strings['tour_home_menu_button_content'] = 'Χρησιμοποιήστε αυτό το κουμπί για να ανοίξετε ή να κλείσετε γρήγορα το πλευρικό μενού.';
+$strings['tour_home_sidebar_title'] = 'Κύριο μενού';
+$strings['tour_home_sidebar_content'] = 'Αυτό το πλευρικό μενού δίνει πρόσβαση στις κύριες ενότητες της πλατφόρμας, ανάλογα με τα δικαιώματά σας.';
+$strings['tour_home_user_area_title'] = 'Περιοχή χρήστη';
+$strings['tour_home_user_area_content'] = 'Εδώ μπορείτε να έχετε πρόσβαση στο προφίλ σας, στις προσωπικές επιλογές και να αποσυνδεθείτε.';

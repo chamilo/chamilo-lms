@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Ez a blokk elmagyarázza,
 
 $strings['tour_admin_news_title'] = 'Hírek a Chamilo-tól';
 $strings['tour_admin_news_content'] = 'Ez a szakasz a Chamilo projekt legfrissebb híreit és bejelentéseit jeleníti meg.';
+
+$strings['tour_home_topbar_logo_title'] = 'A platform logója';
+$strings['tour_home_topbar_logo_content'] = 'Ez a logó visszavisz a platform kezdőlapjára.';
+$strings['tour_home_topbar_actions_title'] = 'Gyors műveletek';
+$strings['tour_home_topbar_actions_content'] = 'Itt olyan gyorsikonokat talál, mint a kurzuslétrehozás, irányított segítség, jegyek és üzenetek, a szerepkörétől függően.';
+$strings['tour_home_menu_button_title'] = 'Menü gomb';
+$strings['tour_home_menu_button_content'] = 'Ezzel a gombbal gyorsan megnyithatja vagy bezárhatja az oldalsó menüt.';
+$strings['tour_home_sidebar_title'] = 'Főmenü';
+$strings['tour_home_sidebar_content'] = 'Ez az oldalsó menü hozzáférést ad a platform fő részeihez a jogosultságai szerint.';
+$strings['tour_home_user_area_title'] = 'Felhasználói terület';
+$strings['tour_home_user_area_content'] = 'Itt érheti el a profilját, személyes beállításait és kijelentkezhet.';

@@ -3,19 +3,20 @@
     class="field"
     data-chamilo-editor="BaseTinyEditor"
   >
-    <FloatLabel
-      variant="on"
-      :class="{
-        'input-has-content': hasContent,
-        'input-has-focus': isFocused,
-      }"
-    >
-      <TinyEditor
-        :id="editorId"
-        v-model="modelValue"
-        :init="editorConfig"
-        :required="required"
-      />
+    <FloatLabel variant="on">
+      <div
+        :class="[
+          'html-editor-container',
+          { 'html-editor-container--filled': hasContent, 'html-editor-container--focused': isFocused },
+        ]"
+      >
+        <TinyEditor
+          :id="editorId"
+          v-model="modelValue"
+          :init="editorConfig"
+          :required="required"
+        />
+      </div>
       <label
         v-if="title"
         :for="editorId"
@@ -554,15 +555,3 @@ onBeforeUnmount(() => {
   removeActiveMessageHandler()
 })
 </script>
-<style scoped>
-.input-has-content label,
-.input-has-focus label {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-1rem);
-  transition:
-    opacity 0.2s,
-    visibility 0.2s,
-    transform 0.2s;
-}
-</style>

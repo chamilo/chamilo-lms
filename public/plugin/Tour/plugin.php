@@ -9,8 +9,8 @@
  */
 require_once __DIR__.'/config.php';
 
-if (!isset($plugin_info) || !is_array($plugin_info)) {
-    $plugin_info = Tour::create()->get_info();
-}
+$tourPlugin = Tour::create();
 
+$plugin_info = array_merge($plugin_info ?? [], $tourPlugin->get_info());
+$plugin_info['plugin_class'] = Tour::class;
 $plugin_info['templates'] = ['views/script.tpl'];

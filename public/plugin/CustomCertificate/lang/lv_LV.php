@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Pielāgots sertifikāts';
+$strings['plugin_comment'] = 'Šis spraudnis ļauj izveidot pielāgotus sertifikātus katram kursam.';
+$strings['enable_plugin_customcertificate'] = 'Ieslēgt spraudni';
+$strings['customcertificate_course_enable'] = 'Pielāgota sertifikāta ieslēgšana kursā';
+$strings['use_certificate_default'] = 'Izmantot noklusēto pielāgoto sertifikātu';
+$strings['ToolDisabled'] = 'Rīks ir atspējots no administrēšanas';
+$strings['OnlyAdminPlatform'] = 'Rīks tikai administratoriem';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Rīks tikai administratoriem un skolotājiem';
+$strings['TrainingEntity'] = 'Mācību vienība';
+$strings['DescriptionFront'] = 'Apraksts priekšpusē';
+$strings['DescriptionRear'] = 'Apraksts aizmugurē';
+$strings['Certify'] = 'Sertificēt';
+$strings['CertificateType'] = 'Sertifikāta veids';
+$strings['CertifyThat'] = 'SERTIFICĒJAM';
+$strings['StudentCourseInfo'] = 'Studentu un kursa dati';
+$strings['StudentData'] = 'Studentu dati';
+$strings['CourseData'] = 'Kursa dati';
+$strings['Modality'] = 'Modalitāte';
+$strings['Contents'] = 'Saturs';
+$strings['ContentsToShow'] = 'Rādot saturu';
+$strings['ContentsCourseDescription'] = 'Izmantot sadaļu "Kursa apraksts"> "Saturs"';
+$strings['ContentsIndexLearnpath'] = 'Izmantot mācību ceļa indeksu';
+$strings['ContentsCustom'] = 'Izmantot pielāgotu saturu';
+$strings['ContentsHide'] = 'Neierādīt saturu';
+$strings['Dates'] = 'Datumi';
+$strings['CourseDeliveryDates'] = 'Kursa piegādes datumi';
+$strings['Custom'] = 'Pielāgots';
+$strings['UseDateSessionAccess'] = 'Izmantot piekļuves sesijas datumus';
+$strings['ExpectionPlace'] = 'Izdošanas vieta';
+$strings['DateExpediction'] = 'Izdošanas datums';
+$strings['UseDateEndAccessSession'] = 'Izmantot sesijas piekļuves beigu datumu';
+$strings['UseDateDownloadCertificate'] = 'Izmantot sertifikāta lejupielādes datumu';
+$strings['UseDateGenerationCertificate'] = 'Izmantot sertifikāta ģenerēšanas datumu';
+$strings['UseCustomDate'] = 'Izmantot pielāgotu datumu';
+$strings['LogosSeal'] = 'Logotipi / Zīmogu';
+$strings['LogoLeft'] = 'Logotips pa kreisi';
+$strings['LogoCenter'] = 'Logotips centrā';
+$strings['LogoRight'] = 'Logotips pa labi';
+$strings['Seal'] = 'Zīmogs';
+$strings['Signature1'] = 'Paraksts 1';
+$strings['Signature2'] = 'Paraksts 2';
+$strings['Signature3'] = 'Paraksts 3';
+$strings['Signature4'] = 'Paraksts 4';
+$strings['SignatureText1'] = 'Paraksta teksts 1';
+$strings['SignatureText2'] = 'Paraksta teksts 2';
+$strings['SignatureText3'] = 'Paraksta teksts 3';
+$strings['SignatureText4'] = 'Paraksta teksts 4';
+$strings['OtherOptions'] = 'Citas opcijas';
+$strings['MarginRight'] = 'Labā mala';
+$strings['MarginLeft'] = 'Kreisā mala';
+$strings['SetDefaultTemplate'] = 'Iestatīt šablonu kā noklusējumu';
+$strings['MessageDefaultTemplate'] = 'Saglabāt šo noklusējuma pielāgojumu kursiem un sesijām bez
+     definētiem sertifikātiem';
+$strings['None'] = 'Nav';
+$strings['ErrorTemplateCertificate'] = 'Sertifikātam nav definēts šablons.
+     Nav noklusējuma šablona.';
+$strings['DateStartEnd'] = 'Ar sākuma datumu un beigu datumu: ';
+$strings['ExpedictionIn'] = 'Derīguma termiņš';
+$strings['Signatures'] = 'Paraksti';
+$strings['BackgroundCertificate'] = 'Sertifikāta fona attēls';
+$strings['Background'] = 'Fons';
+$strings['CertificateSetting'] = 'Sertifikāta iestatījumi';
+$strings['ToolDisabledCourse'] = 'Rīks atspējots kursa iestatījumos';
+$strings['ToolUseDefaultSettingCourse'] = 'Rīks konfigurēts izmantot noklusējuma sertifikātu. <br>
+     To var rediģēt no Administrēšanas ekrāna -> Spraudņi -> Pielāgots sertifikāts. <br>
+     Vai arī, ja vēlaties, varat atspējot opciju izmantot sertifikātu pēc noklusējuma spraudņa konfigurācijā kursā';
+$strings['CertificateSettingDefault'] = 'Noklusējuma sertifikāta iestatījumi';
+$strings['InfoFromDefaultCertificate'] = 'Sertifikāta saturs balstās uz noklusējuma sertifikātu.
+     Veiktās izmaiņas neietekmēs noklusējuma sertifikātu.';
+$strings['to'] = ' līdz ';
+$strings['formatDownloadDate'] = ' līdz %sth %s, %s';
+$strings['PrintCertificate'] = 'Drukāt sertifikātu';
+$strings['QuestionDelete'] = 'Vai vēlaties dzēst specifisko diplomu un izmantot noklusējuma sertifikātu?';
+$strings['SuccessDelete'] = 'Veiksmīgi dzēsts';
+$strings['ProblemDelete'] = 'Problēma dzēšot sertifikātu';
+$strings['OnlyCustomCertificates'] = 'Eksportēti tikai kursi ar personalizētiem sertifikātiem';

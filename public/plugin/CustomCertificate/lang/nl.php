@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Aangepast certificaat';
+$strings['plugin_comment'] = 'Deze plugin laat u aangepaste certificaten maken voor elke cursus.';
+$strings['enable_plugin_customcertificate'] = 'Plugin inschakelen';
+$strings['customcertificate_course_enable'] = 'Aangepast certificaat inschakelen in cursus';
+$strings['use_certificate_default'] = 'Standaard aangepast certificaat gebruiken';
+$strings['ToolDisabled'] = 'De tool is uitgeschakeld vanuit het beheer';
+$strings['OnlyAdminPlatform'] = 'Tool alleen voor beheerders';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Tool alleen voor beheerders en docenten';
+$strings['TrainingEntity'] = 'Opleidingsinstantie';
+$strings['DescriptionFront'] = 'Beschrijving voorzijde';
+$strings['DescriptionRear'] = 'Beschrijving achterzijde';
+$strings['Certify'] = 'Certificeren';
+$strings['CertificateType'] = 'Certificaat type';
+$strings['CertifyThat'] = 'CERTIFICEREN DAT';
+$strings['StudentCourseInfo'] = 'Gegevens student en cursus';
+$strings['StudentData'] = 'Gegevens student';
+$strings['CourseData'] = 'Gegevens cursus';
+$strings['Modality'] = 'Modaliteit';
+$strings['Contents'] = 'Inhoud';
+$strings['ContentsToShow'] = 'Te tonen inhoud';
+$strings['ContentsCourseDescription'] = 'Gebruik sectie "Cursusbeschrijving" > "Inhoud"';
+$strings['ContentsIndexLearnpath'] = 'Gebruik leerpadindex';
+$strings['ContentsCustom'] = 'Gebruik aangepaste inhoud';
+$strings['ContentsHide'] = 'Geen inhoud tonen';
+$strings['Dates'] = 'Data';
+$strings['CourseDeliveryDates'] = 'Cursusuitvoeringsdata';
+$strings['Custom'] = 'Aangepast';
+$strings['UseDateSessionAccess'] = 'Gebruik toegangsdata tot de sessie';
+$strings['ExpectionPlace'] = 'Expeditieplaats';
+$strings['DateExpediction'] = 'Expeditiedatum';
+$strings['UseDateEndAccessSession'] = 'Gebruik einddatum van sessietoegang';
+$strings['UseDateDownloadCertificate'] = 'Gebruik certificaatdownload-datum';
+$strings['UseDateGenerationCertificate'] = 'Gebruik certificaatgeneratie-datum';
+$strings['UseCustomDate'] = 'Gebruik aangepaste datum';
+$strings['LogosSeal'] = 'Logos / Zegels';
+$strings['LogoLeft'] = 'Logo links';
+$strings['LogoCenter'] = 'Logo centrum';
+$strings['LogoRight'] = 'Logo rechts';
+$strings['Seal'] = 'Zegel';
+$strings['Signature1'] = 'Handtekening 1';
+$strings['Signature2'] = 'Handtekening 2';
+$strings['Signature3'] = 'Handtekening 3';
+$strings['Signature4'] = 'Handtekening 4';
+$strings['SignatureText1'] = 'Handtekeningtekst 1';
+$strings['SignatureText2'] = 'Handtekeningtekst 2';
+$strings['SignatureText3'] = 'Handtekeningtekst 3';
+$strings['SignatureText4'] = 'Handtekeningtekst 4';
+$strings['OtherOptions'] = 'Overige opties';
+$strings['MarginRight'] = 'Rechter marge';
+$strings['MarginLeft'] = 'Linker marge';
+$strings['SetDefaultTemplate'] = 'Sjabloon standaard instellen';
+$strings['MessageDefaultTemplate'] = 'Deze standaard aanpassing opslaan voor cursussen en sessies zonder
+definieerde certificaten';
+$strings['None'] = 'Geen';
+$strings['ErrorTemplateCertificate'] = 'Er is geen sjabloon gedefinieerd voor het certificaat.
+     Er is geen standaard sjabloon.';
+$strings['DateStartEnd'] = 'Met startdatum en einddatum: ';
+$strings['ExpedictionIn'] = 'Uitgifte in';
+$strings['Signatures'] = 'Handtekeningen';
+$strings['BackgroundCertificate'] = 'Achtergrondafbeelding van het certificaat';
+$strings['Background'] = 'Achtergrond';
+$strings['CertificateSetting'] = 'Certificaatinstelling';
+$strings['ToolDisabledCourse'] = 'Tool uitgeschakeld in cursusinstelling';
+$strings['ToolUseDefaultSettingCourse'] = 'Tool geconfigureerd om het standaard certificaat te gebruiken. <br>
+     U kunt het bewerken vanuit het Administratiescherm -> Plugins -> Custom Certificate. <br>
+     Of als u wilt, kunt u de optie om standaard certificaat te gebruiken uitschakelen in de pluginconfiguratie in de cursus';
+$strings['CertificateSettingDefault'] = 'Standaard certificaatinstellingen';
+$strings['InfoFromDefaultCertificate'] = 'De inhoud van het certificaat is gebaseerd op het standaard certificaat.
+     De wijzigingen die u aanbrengt, hebben geen invloed op het standaard certificaat.';
+$strings['to'] = ' tot ';
+$strings['formatDownloadDate'] = ' tot %sth %s, %s';
+$strings['PrintCertificate'] = 'Certificaat afdrukken';
+$strings['QuestionDelete'] = 'Wilt u het specifieke diploma verwijderen en het standaard certificaat gebruiken?';
+$strings['SuccessDelete'] = 'Succesvol verwijderd';
+$strings['ProblemDelete'] = 'Probleem bij het verwijderen van het certificaat';
+$strings['OnlyCustomCertificates'] = 'Alleen cursussen met een gepersonaliseerd certificaat worden geëxporteerd';

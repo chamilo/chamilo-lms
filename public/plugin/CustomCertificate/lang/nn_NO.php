@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Eige serifikat';
+$strings['plugin_comment'] = 'Denne tillegget lar deg oppretta tilpassa serifikat for kvar kurs.';
+$strings['enable_plugin_customcertificate'] = 'Aktiver tillegg';
+$strings['customcertificate_course_enable'] = 'Eige serifikat aktivert i kurs';
+$strings['use_certificate_default'] = 'Bruk standard eige serifikat';
+$strings['ToolDisabled'] = 'Verktyet er deaktivert frå administrasjonen';
+$strings['OnlyAdminPlatform'] = 'Verkty for berre administratorar';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Verkty for berre administratorar og lærarar';
+$strings['TrainingEntity'] = 'Opplæringsenhet';
+$strings['DescriptionFront'] = 'Beskriving fram';
+$strings['DescriptionRear'] = 'Beskriving bak';
+$strings['Certify'] = 'Sertifiser';
+$strings['CertificateType'] = 'Serifikat-type';
+$strings['CertifyThat'] = 'SERTIFISERER AT';
+$strings['StudentCourseInfo'] = 'Student- og kursdata';
+$strings['StudentData'] = 'Studentdata';
+$strings['CourseData'] = 'Kursdata';
+$strings['Modality'] = 'Modalitet';
+$strings['Contents'] = 'Innhald';
+$strings['ContentsToShow'] = 'Innhald å visa';
+$strings['ContentsCourseDescription'] = 'Bruk seksjon "Kursbeskriving"> "Innhald"';
+$strings['ContentsIndexLearnpath'] = 'Bruk læringssti-indeks';
+$strings['ContentsCustom'] = 'Bruk tilpassa innhald';
+$strings['ContentsHide'] = 'Ikkje vis innhald';
+$strings['Dates'] = 'Datoar';
+$strings['CourseDeliveryDates'] = 'Kursleveringsdatoar';
+$strings['Custom'] = 'Tilpassa';
+$strings['UseDateSessionAccess'] = 'Bruk tilgjengelgjeringsdatoar for samlinga';
+$strings['ExpectionPlace'] = 'Utsendingstad';
+$strings['DateExpediction'] = 'Utsendingsdato';
+$strings['UseDateEndAccessSession'] = 'Bruk sluttdato for samlingstilgjengelging';
+$strings['UseDateDownloadCertificate'] = 'Bruk nedlastingdato for serifikat';
+$strings['UseDateGenerationCertificate'] = 'Bruk genereringsdato for serifikat';
+$strings['UseCustomDate'] = 'Bruk tilpassa dato';
+$strings['LogosSeal'] = 'Logoar / segl';
+$strings['LogoLeft'] = 'Logo venstre';
+$strings['LogoCenter'] = 'Logo midten';
+$strings['LogoRight'] = 'Logo høgre';
+$strings['Seal'] = 'Segl';
+$strings['Signature1'] = 'Signatur 1';
+$strings['Signature2'] = 'Signatur 2';
+$strings['Signature3'] = 'Signatur 3';
+$strings['Signature4'] = 'Signatur 4';
+$strings['SignatureText1'] = 'Signaturtekst 1';
+$strings['SignatureText2'] = 'Signaturtekst 2';
+$strings['SignatureText3'] = 'Signaturtekst 3';
+$strings['SignatureText4'] = 'Signaturtekst 4';
+$strings['OtherOptions'] = 'Andre valg';
+$strings['MarginRight'] = 'Høgremarg';
+$strings['MarginLeft'] = 'Vengremarg';
+$strings['SetDefaultTemplate'] = 'Sett mal som standard';
+$strings['MessageDefaultTemplate'] = 'Lagre denne standardtilpassinga for kurs og samlingar utan
+definerte sertifikat';
+$strings['None'] = 'Ingen';
+$strings['ErrorTemplateCertificate'] = 'Det finst ingen mal definert for sertifikatet.
+     Det finst ingen standardmal.';
+$strings['DateStartEnd'] = 'Med startdato og sluttdato: ';
+$strings['ExpedictionIn'] = 'Utskriving om';
+$strings['Signatures'] = 'Signaturar';
+$strings['BackgroundCertificate'] = 'Bakgrunnsbilete for sertifikatet';
+$strings['Background'] = 'Bakgrunn';
+$strings['CertificateSetting'] = 'Sertifikatinnstillingar';
+$strings['ToolDisabledCourse'] = 'Verktøy deaktivert i kursinnstillingar';
+$strings['ToolUseDefaultSettingCourse'] = 'Verktøy konfigurert til å bruke standardsertifikat. <br>
+     Du kan redigere det frå Administrasjonsskjerm -> Tillegg -> Tilpassa sertifikat. <br>
+     Eller om du vil, kan du deaktivere valget for å bruke sertifikat som standard i tilleggskonfigurasjonen i kurset';
+$strings['CertificateSettingDefault'] = 'Standardsertifikatinnstillingar';
+$strings['InfoFromDefaultCertificate'] = 'Innholdet i sertifikatet er basert på standardsertifikatet.
+     Endringane du gjer vil ikkje påverke standardsertifikatet.';
+$strings['to'] = ' til ';
+$strings['formatDownloadDate'] = ' til %sth %s, %s';
+$strings['PrintCertificate'] = 'Skriv ut sertifikat';
+$strings['QuestionDelete'] = 'Vil du slette det spesifikke diplomaet og bruke standardsertifikatet?';
+$strings['SuccessDelete'] = 'Velykkesleg sletta';
+$strings['ProblemDelete'] = 'Problem med å slette sertifikatet';
+$strings['OnlyCustomCertificates'] = 'Berre kurs med eit tilpassa sertifikat blir eksportért';

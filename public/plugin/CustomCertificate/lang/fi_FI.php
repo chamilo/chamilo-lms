@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Mukautettu todistus';
+$strings['plugin_comment'] = 'Tämä lisäosa mahdollistaa mukautettujen todistusten luomisen jokaiselle kurssille.';
+$strings['enable_plugin_customcertificate'] = 'Ota lisäosa käyttöön';
+$strings['customcertificate_course_enable'] = 'Mukautettu todistus käytössä kurssilla';
+$strings['use_certificate_default'] = 'Käytä oletusmukautettua todistusta';
+$strings['ToolDisabled'] = 'Työkalu on poistettu käytöstä hallinnosta';
+$strings['OnlyAdminPlatform'] = 'Työkalu vain ylläpitäjille';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Työkalu vain ylläpitäjille ja opettajille';
+$strings['TrainingEntity'] = 'Koulutusorganisaatio';
+$strings['DescriptionFront'] = 'Kuvaus etupuoli';
+$strings['DescriptionRear'] = 'Kuvaus takapuoli';
+$strings['Certify'] = 'Vahvista';
+$strings['CertificateType'] = 'Todistuksen tyyppi';
+$strings['CertifyThat'] = 'VAHVISTETAAN, ETTÄ';
+$strings['StudentCourseInfo'] = 'Opiskelijan ja kurssin tiedot';
+$strings['StudentData'] = 'Opiskelijan tiedot';
+$strings['CourseData'] = 'Kurssin tiedot';
+$strings['Modality'] = 'Toteutustapa';
+$strings['Contents'] = 'Sisältö';
+$strings['ContentsToShow'] = 'Näytettävät sisällöt';
+$strings['ContentsCourseDescription'] = 'Käytä osiota "Kurssin kuvaus" > "Sisältö"';
+$strings['ContentsIndexLearnpath'] = 'Käytä oppipolkujen hakemistoa';
+$strings['ContentsCustom'] = 'Käytä mukautettua sisältöä';
+$strings['ContentsHide'] = 'Älä näytä sisältöjä';
+$strings['Dates'] = 'Päivämäärät';
+$strings['CourseDeliveryDates'] = 'Kurssin järjestämispäivämäärät';
+$strings['Custom'] = 'Mukautettu';
+$strings['UseDateSessionAccess'] = 'Käytä istunnon pääsypäivämääriä';
+$strings['ExpectionPlace'] = 'Myöntöpaikka';
+$strings['DateExpediction'] = 'Myöntöpäivämäärä';
+$strings['UseDateEndAccessSession'] = 'Käytä istunnon pääsyn loppupäivämäärää';
+$strings['UseDateDownloadCertificate'] = 'Käytä todistuksen latauspäivämäärää';
+$strings['UseDateGenerationCertificate'] = 'Käytä todistuksen luontipäivämäärää';
+$strings['UseCustomDate'] = 'Käytä mukautettua päivämäärää';
+$strings['LogosSeal'] = 'Logot / Sinettejä';
+$strings['LogoLeft'] = 'Logo vasemmalla';
+$strings['LogoCenter'] = 'Logo keskellä';
+$strings['LogoRight'] = 'Logo oikealla';
+$strings['Seal'] = 'Sinettejä';
+$strings['Signature1'] = 'Allekirjoitus 1';
+$strings['Signature2'] = 'Allekirjoitus 2';
+$strings['Signature3'] = 'Allekirjoitus 3';
+$strings['Signature4'] = 'Allekirjoitus 4';
+$strings['SignatureText1'] = 'Allekirjoituksen teksti 1';
+$strings['SignatureText2'] = 'Allekirjoituksen teksti 2';
+$strings['SignatureText3'] = 'Allekirjoituksen teksti 3';
+$strings['SignatureText4'] = 'Allekirjoituksen teksti 4';
+$strings['OtherOptions'] = 'Muut asetukset';
+$strings['MarginRight'] = 'Oikea reuna';
+$strings['MarginLeft'] = 'Vasen reuna';
+$strings['SetDefaultTemplate'] = 'Aseta mallipohja oletukseksi';
+$strings['MessageDefaultTemplate'] = 'Tallenna tämä oletusmukainen mukautus kursseille ja istunnoille, joilla ei ole
+     määriteltyjä todistuksia';
+$strings['None'] = 'Ei mitään';
+$strings['ErrorTemplateCertificate'] = 'Todistukselle ei ole määritelty mallipohjaa.
+     Ei ole oletusmallipohjaa.';
+$strings['DateStartEnd'] = 'Alkamispäivämäärällä ja päättymispäivämäärällä: ';
+$strings['ExpedictionIn'] = 'Voimassa';
+$strings['Signatures'] = 'Allekirjoitukset';
+$strings['BackgroundCertificate'] = 'Todistuksen taustakuva';
+$strings['Background'] = 'Tausta';
+$strings['CertificateSetting'] = 'Todistuksen asetukset';
+$strings['ToolDisabledCourse'] = 'Työkalu poistettu käytöstä kurssin asetuksissa';
+$strings['ToolUseDefaultSettingCourse'] = 'Työkalu on konfiguroitu käyttämään oletustodistusta. <br>
+     Voit muokata sitä Hallintanäkymästä -> Lisäosat -> Mukautettu todistus. <br>
+     Tai jos haluat, voit poistaa käytöstä oletustodistuksen käytön lisäosan asetuksissa kurssilla';
+$strings['CertificateSettingDefault'] = 'Oletustodistuksen asetukset';
+$strings['InfoFromDefaultCertificate'] = 'Todistuksen sisältö perustuu oletustodistukseen.
+     Tekemäsi muutokset eivät vaikuta oletustodistukseen.';
+$strings['to'] = ' – ';
+$strings['formatDownloadDate'] = ' – %s. %s, %s';
+$strings['PrintCertificate'] = 'Tulosta todistus';
+$strings['QuestionDelete'] = 'Haluatko poistaa tämän diplomaattitodistuksen ja käyttää oletustodistusta?';
+$strings['SuccessDelete'] = 'Poistettu onnistuneesti';
+$strings['ProblemDelete'] = 'Ongelma todistuksen poistamisessa';
+$strings['OnlyCustomCertificates'] = 'Vain kursseja, joilla on henkilökohtainen todistus, viedään';

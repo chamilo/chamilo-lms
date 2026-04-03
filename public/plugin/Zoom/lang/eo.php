@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom Videokonferenco';
+$strings['plugin_comment'] = 'Integro de Zoom-videokonferenco en kursoj kaj sesioj';
+
+$strings['apiKey'] = 'API-ŝlosilo';
+$strings['apiSecret'] = 'API-sekreto';
+$strings['verificationToken'] = 'Verifika ĵetono';
+$strings['enableParticipantRegistration'] = 'Ŝalti registron de partoprenantoj';
+$strings['enableCloudRecording'] = 'Aŭtomata tipo de registrado';
+$strings['enableGlobalConference'] = 'Ŝalti ĉefkonferencon';
+$strings['enableGlobalConferencePerUser'] = 'Ŝalti ĉefkonferencon po uzanto';
+$strings['globalConferenceAllowRoles'] = 'Ligo de ĉefkonferenco videbla nur por ĉi tiuj uzantaj roloj';
+$strings['globalConferencePerUserAllowRoles'] = 'Ligo de ĉefkonferenco po uzanto videbla nur por ĉi tiuj uzantaj roloj';
+
+$strings['enableCloudRecording_help'] = 'Necesas paganta Zoom-profilo.
+Ne funkos por <em>baza</em> profilo.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Ĉiuj kurso-studentoj estis registritaj';
+$strings['Agenda'] = 'Agendo';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Ne povas registriĝi sen retpoŝtadreso';
+$strings['CopyingJoinURL'] = 'Kopias aliĝligon';
+$strings['CopyJoinAsURL'] = "Kopiu 'aliĝi kiel' ligon";
+$strings['CopyToCourse'] = 'Kopii al kurso';
+$strings['CouldNotCopyJoinURL'] = 'Ne povis kopii aliĝligon';
+$strings['Course'] = 'Kurso';
+$strings['CreatedAt'] = 'Kreita je';
+$strings['CreateLinkInCourse'] = 'Krei lig(il)on en kurso';
+$strings['CreateUserVideoConference'] = 'Krei uzantan konferencon';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Forigi renkontiĝon';
+$strings['DeleteFile'] = 'Forigi dosier(o)n';
+$strings['Details'] = 'Detaloj';
+$strings['DoIt'] = 'Faru tion';
+$strings['Duration'] = 'Daŭro';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Daŭro (en minutoj)';
+$strings['EndDate'] = 'Fina dato';
+$strings['EnterMeeting'] = 'Eniri renkontiĝon';
+$strings['ViewMeeting'] = 'Vidi renkontiĝon';
+$strings['Files'] = 'Dosieroj';
+$strings['Finished'] = 'finita';
+$strings['FileWasCopiedToCourse'] = 'La dosiero estis kopiita al la kurso';
+$strings['FileWasDeleted'] = 'La dosiero estis forigita';
+$strings['GlobalMeeting'] = 'Ĉefkonferenco';
+$strings['GlobalMeetingPerUser'] = 'Ĉefkonferenco po uzanto';
+$strings['GroupUsersWereRegistered'] = 'Grupanoj estis registritaj';
+$strings['InstantMeeting'] = 'Tuj renkontiĝo';
+$strings['Join'] = 'Aliĝi';
+$strings['JoinGlobalVideoConference'] = 'Aliĝi al ĉefkonferenco';
+$strings['JoinURLCopied'] = 'Aliĝligo kopiita';
+$strings['JoinURLToSendToParticipants'] = 'Aliĝligo por sendi al partoprenantoj';
+$strings['LiveMeetings'] = 'Vivaj renkontiĝoj';
+$strings['LinkToFileWasCreatedInCourse'] = 'Ligo al la dosiero estis aldonita al la kurso';
+$strings['MeetingDeleted'] = 'Renkontiĝo forigita';
+$strings['MeetingsFound'] = 'Trovitaj renkontiĝoj';
+$strings['MeetingUpdated'] = 'Renkontiĝo ĝisdatigita';
+$strings['NewMeetingCreated'] = 'Nova renkontiĝo kreita';
+$strings['Password'] = 'Pasvorto';
+$strings['RecurringWithFixedTime'] = 'Ripiĝanta kun fiksa tempo';
+$strings['RecurringWithNoFixedTime'] = 'Ripiĝanta sen fiksa tempo';
+$strings['RegisterAllCourseUsers'] = 'Registri ĉiujn kurzusanojn';
+$strings['RegisteredUserListWasUpdated'] = 'Listo de registritaj uzantoj ĝisdatigita';
+$strings['RegisteredUsers'] = 'Registritaj uzantoj';
+$strings['RegisterNoUser'] = 'Ne registri uzanton';
+$strings['RegisterTheseGroupMembers'] = 'Registri ĉi tiujn grupanojn';
+$strings['ScheduleAMeeting'] = 'Planigi renkontiĝon';
+$strings['ScheduledMeeting'] = 'Planigita renkontiĝo';
+$strings['ScheduledMeetings'] = 'Planigitaj renkontiĝoj';
+$strings['ScheduleAMeeting'] = 'Planigi renkontiĝon';
+$strings['SearchMeeting'] = 'Serĉi renkontiĝon';
+$strings['Session'] = 'Seanco';
+$strings['StartDate'] = 'Komenca dato';
+$strings['Started'] = 'lanĉita';
+$strings['StartInstantMeeting'] = 'Lanci tujan renkontiĝon';
+$strings['StartMeeting'] = 'Lanci renkontiĝon';
+$strings['StartTime'] = 'Komenca tempo';
+$strings['Topic'] = 'Temo';
+$strings['TopicAndAgenda'] = 'Temo kaj agendo';
+$strings['Type'] = 'Tipo';
+$strings['UpcomingMeetings'] = 'Venontaj renkontiĝoj';
+$strings['UpdateMeeting'] = 'Ĝisdatigi renkontiĝon';
+$strings['UpdateRegisteredUserList'] = 'Ĝisdatigi liston de registritaj uzantoj';
+$strings['UserRegistration'] = 'Uzanta registro';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'atendanta';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s registrado de renkontiĝo %s de %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Vi ne estas registrita al ĉi tiu renkontiĝo';
+$strings['ZoomVideoConferences'] = 'Zoom Videkonferencoj';
+$strings['Recordings'] = 'Registradoj';
+$strings['CreateGlobalVideoConference'] = 'Krei ĉefvidekonferencon';
+$strings['ConferenceNotStarted'] = 'Konferenco ne lanĉita';
+$strings['MeetingNotFound'] = 'Renkontiĝo ne trovita';
+$strings['JoinURLNotAvailable'] = 'URL ne havebla';
+$strings['Meetings'] = 'Renkontiĝoj';
+$strings['ConferenceType'] = 'Tipo de konferenco';
+$strings['ForEveryone'] = 'Ĉiuj';
+$strings['SomeUsers'] = 'Kelkaj uzantoj (Elekti poste)';
+$strings['Activity'] = 'Aktiveco';
+$strings['ConferenceNotAvailable'] = 'Konferenco ne havebla';

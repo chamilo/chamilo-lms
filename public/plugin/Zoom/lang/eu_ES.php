@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom Bideokonferentzia';
+$strings['plugin_comment'] = 'Ikastaro eta saioetan Zoom bideokonferentzia integratzea';
+
+$strings['apiKey'] = 'API Gako';
+$strings['apiSecret'] = 'API Sekretua';
+$strings['verificationToken'] = 'Egiaztapen Tokena';
+$strings['enableParticipantRegistration'] = 'Aktibatu parte-hartzaileen erregistroa';
+$strings['enableCloudRecording'] = 'Grabaketa automatikoko mota';
+$strings['enableGlobalConference'] = 'Aktibatu konferentzia globala';
+$strings['enableGlobalConferencePerUser'] = 'Aktibatu konferentzia globala erabiltzaile bakoitzeko';
+$strings['globalConferenceAllowRoles'] = 'Konferentzia globalaren esteka hauek bakarrik ikusgai erabiltzaile roletarako';
+$strings['globalConferencePerUserAllowRoles'] = 'Erabiltzaile bakoitzeko konferentzia globalaren esteka hauek bakarrik ikusgai erabiltzaile roletarako';
+
+$strings['enableCloudRecording_help'] = 'Zoom profil ordaindu bat behar du.
+<em>oinarrizko</em> profil batekin ez du funtzionatuko.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Ikastaro osoaren ikasleak erregistratu dira';
+$strings['Agenda'] = 'Agenda';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Ezin da erregistratu posta elektroniko helbirik gabe';
+$strings['CopyingJoinURL'] = 'Sartzeko URLa kopiatzen';
+$strings['CopyJoinAsURL'] = "'Sartu bezala' URLa kopiatu";
+$strings['CopyToCourse'] = 'Kopiatu ikastarora';
+$strings['CouldNotCopyJoinURL'] = 'Ezin izan da sartzeko URLa kopiatu';
+$strings['Course'] = 'Ikastaroa';
+$strings['CreatedAt'] = 'Sortua';
+$strings['CreateLinkInCourse'] = 'Sortu esteka(k) ikastaroan';
+$strings['CreateUserVideoConference'] = 'Sortu erabiltzailearen konferentzia';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Ezabatu bilera';
+$strings['DeleteFile'] = 'Ezabatu fitxategi(a)';
+$strings['Details'] = 'Xehetasunak';
+$strings['DoIt'] = 'Egin';
+$strings['Duration'] = 'Iraupena';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Iraupena (minututan)';
+$strings['EndDate'] = 'Amaiera data';
+$strings['EnterMeeting'] = 'Sartu bilerara';
+$strings['ViewMeeting'] = 'Ikusi bilera';
+$strings['Files'] = 'Fitxategiak';
+$strings['Finished'] = 'amaitua';
+$strings['FileWasCopiedToCourse'] = 'Fitxategia ikastarora kopiatu da';
+$strings['FileWasDeleted'] = 'Fitxategia ezabatu da';
+$strings['GlobalMeeting'] = 'Konferentzia globala';
+$strings['GlobalMeetingPerUser'] = 'Erabiltzaile bakoitzeko konferentzia globala';
+$strings['GroupUsersWereRegistered'] = 'Taldeko kideak erregistratu dira';
+$strings['InstantMeeting'] = 'Bileraren unean';
+$strings['Join'] = 'Sartu';
+$strings['JoinGlobalVideoConference'] = 'Sartu konferentzia globalera';
+$strings['JoinURLCopied'] = 'Sartzeko URLa kopiatua';
+$strings['JoinURLToSendToParticipants'] = 'Parte-hartzaileei bidaltzeko sartzeko URLa';
+$strings['LiveMeetings'] = 'Bilerak zuzenean';
+$strings['LinkToFileWasCreatedInCourse'] = 'Fitxategiaren esteka ikastarora gehitu da';
+$strings['MeetingDeleted'] = 'Bilera ezabatu da';
+$strings['MeetingsFound'] = 'Bilerak aurkitu dira';
+$strings['MeetingUpdated'] = 'Bilera eguneratua';
+$strings['NewMeetingCreated'] = 'Bilera berria sortua';
+$strings['Password'] = 'Pasahitza';
+$strings['RecurringWithFixedTime'] = 'Errepikakorrak denbora finkoarekin';
+$strings['RecurringWithNoFixedTime'] = 'Errepikakorrak denbora finko gabekoa';
+$strings['RegisterAllCourseUsers'] = 'Izenbitzi ikastariko erabiltzaile guztiak';
+$strings['RegisteredUserListWasUpdated'] = 'Erregistratutako erabiltzaileen zerrenda eguneratua';
+$strings['RegisteredUsers'] = 'Erregistratutako erabiltzaileak';
+$strings['RegisterNoUser'] = 'Ezizenbitzi erabiltzailerik';
+$strings['RegisterTheseGroupMembers'] = 'Izenbitzi talde honetako kideak';
+$strings['ScheduleAMeeting'] = 'Programatu bilera';
+$strings['ScheduledMeeting'] = 'Programatutako bilera';
+$strings['ScheduledMeetings'] = 'Bilera programatuak';
+$strings['ScheduleAMeeting'] = 'Programatu bilera';
+$strings['SearchMeeting'] = 'Bilera bilatu';
+$strings['Session'] = 'Saioa';
+$strings['StartDate'] = 'Hasierako data';
+$strings['Started'] = 'hasita';
+$strings['StartInstantMeeting'] = 'Hasi bilera berehalakoa';
+$strings['StartMeeting'] = 'Hasi bilera';
+$strings['StartTime'] = 'Hasierako ordua';
+$strings['Topic'] = 'Gaia';
+$strings['TopicAndAgenda'] = 'Gaia eta agenda';
+$strings['Type'] = 'Mota';
+$strings['UpcomingMeetings'] = 'Hurrengo bilerak';
+$strings['UpdateMeeting'] = 'Eguneratu bilera';
+$strings['UpdateRegisteredUserList'] = 'Eguneratu erregistratutako erabiltzaileen zerrenda';
+$strings['UserRegistration'] = 'Erabiltzailearen erregistroa';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'itxaroten';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s grabaketa %s bileraren %s(e)tik (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Ez zaude erregistratua bilera honetan';
+$strings['ZoomVideoConferences'] = 'Zoom Bideo Konferentziak';
+$strings['Recordings'] = 'Grabazioak';
+$strings['CreateGlobalVideoConference'] = 'Sortu bideo konferentzia globala';
+$strings['ConferenceNotStarted'] = 'Konferentzia ez da hasi';
+$strings['MeetingNotFound'] = 'Bilera ez da aurkitu';
+$strings['JoinURLNotAvailable'] = 'URL ez dago eskuragarri';
+$strings['Meetings'] = 'Bilerak';
+$strings['ConferenceType'] = 'Konferentziaren mota';
+$strings['ForEveryone'] = 'Dena';
+$strings['SomeUsers'] = 'Erabiltzaile batzuk (Hautatu geroago)';
+$strings['Activity'] = 'Jarduera';
+$strings['ConferenceNotAvailable'] = 'Konferentzia ez dago eskuragarri';

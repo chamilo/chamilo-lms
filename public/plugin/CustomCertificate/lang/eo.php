@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Propra atestilo';
+$strings['plugin_comment'] = 'Ĉi tiu kromprogramo permesas vin krei proprajn atestilojn por ĉiu kurso.';
+$strings['enable_plugin_customcertificate'] = 'Aktivigi kromprogramon';
+$strings['customcertificate_course_enable'] = 'Propra atestilo aktivigita en kurso';
+$strings['use_certificate_default'] = 'Uzi defaŭltan propran atestilon';
+$strings['ToolDisabled'] = 'La ilo estas malaktivigita el la administrado';
+$strings['OnlyAdminPlatform'] = 'Ilo nur por administrantoj';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Ilo nur por administrantoj kaj instruistoj';
+$strings['TrainingEntity'] = 'Trejnenta ento';
+$strings['DescriptionFront'] = 'Priskribo antaŭa';
+$strings['DescriptionRear'] = 'Priskribo posta';
+$strings['Certify'] = 'Atesti';
+$strings['CertificateType'] = 'Tipo de atestilo';
+$strings['CertifyThat'] = 'ATESTAS KE';
+$strings['StudentCourseInfo'] = 'Datoj de studento kaj kurso';
+$strings['StudentData'] = 'Datoj de studento';
+$strings['CourseData'] = 'Datoj de kurso';
+$strings['Modality'] = 'Modalo';
+$strings['Contents'] = 'Enhavoj';
+$strings['ContentsToShow'] = 'Enhavoj por montri';
+$strings['ContentsCourseDescription'] = 'Uzi sekcion "Priskribo de kurso" > "Enhavoj"';
+$strings['ContentsIndexLearnpath'] = 'Uzi indekson de lernvojo';
+$strings['ContentsCustom'] = 'Uzi propran enhavon';
+$strings['ContentsHide'] = 'Ne montri enhavojn';
+$strings['Dates'] = 'Datoj';
+$strings['CourseDeliveryDates'] = 'Datoj de liverado de kurso';
+$strings['Custom'] = 'Propra';
+$strings['UseDateSessionAccess'] = 'Uzi datojn de aliro al seanco';
+$strings['ExpectionPlace'] = 'Loko de eldonado';
+$strings['DateExpediction'] = 'Dato de eldonado';
+$strings['UseDateEndAccessSession'] = 'Uzi fin-daton de aliro al seanco';
+$strings['UseDateDownloadCertificate'] = 'Uzi daton de elŝuto de atestilo';
+$strings['UseDateGenerationCertificate'] = 'Uzi daton de genero de atestilo';
+$strings['UseCustomDate'] = 'Uzi propran daton';
+$strings['LogosSeal'] = 'Logotipoj / Sigeloj';
+$strings['LogoLeft'] = 'Logotipo maldekstra';
+$strings['LogoCenter'] = 'Logotipo centra';
+$strings['LogoRight'] = 'Logotipo dekstra';
+$strings['Seal'] = 'Sigelo';
+$strings['Signature1'] = 'Subskribo 1';
+$strings['Signature2'] = 'Subskribo 2';
+$strings['Signature3'] = 'Subskribo 3';
+$strings['Signature4'] = 'Subskribo 4';
+$strings['SignatureText1'] = 'Teksto de subskribo 1';
+$strings['SignatureText2'] = 'Teksto de subskribo 2';
+$strings['SignatureText3'] = 'Teksto de subskribo 3';
+$strings['SignatureText4'] = 'Teksto de subskribo 4';
+$strings['OtherOptions'] = 'Aliaj opcioj';
+$strings['MarginRight'] = 'Marĝeno dekstra';
+$strings['MarginLeft'] = 'Marĝeno maldekstra';
+$strings['SetDefaultTemplate'] = 'Ŝablono defaŭlta';
+$strings['MessageDefaultTemplate'] = 'Konservu ĉi tiun defaŭltan agordojn por kursoj kaj sesioj sen
+     difinita atestilo';
+$strings['None'] = 'Neniu';
+$strings['ErrorTemplateCertificate'] = 'Neniu ŝablono estas difinita por la atestilo.
+     Ne estas defaŭlta ŝablono.';
+$strings['DateStartEnd'] = 'Kun datumo de komenco kaj fino: ';
+$strings['ExpedictionIn'] = 'Elsendo en';
+$strings['Signatures'] = 'Subskriboj';
+$strings['BackgroundCertificate'] = 'Fona bildo de la atestilo';
+$strings['Background'] = 'Fono';
+$strings['CertificateSetting'] = 'Agordo de atestilo';
+$strings['ToolDisabledCourse'] = 'Ilo malŝaltita en agordo de kurso';
+$strings['ToolUseDefaultSettingCourse'] = 'Ilo agordita por uzi la defaŭltan atestilon. <br>
+     Vi povas redakti ĝin el la Administra ekrano -> Kromprogramoj -> Propra Atestilo. <br>
+     Aŭ se vi volas, vi povas malŝalti la opcion uzi atestilon defaŭlte en la agordo de la kromprogramo en la kurso';
+$strings['CertificateSettingDefault'] = 'Defaŭltaj agordoj de atestilo';
+$strings['InfoFromDefaultCertificate'] = 'La enhavo de la atestilo bazas sur la defaŭlta atestilo.
+     La modifo kiujn vi faras ne influos la defaŭltan atestilon.';
+$strings['to'] = ' ĝis ';
+$strings['formatDownloadDate'] = ' ĝis %sa %s, %s';
+$strings['PrintCertificate'] = 'Printi atestilon';
+$strings['QuestionDelete'] = 'Ĉu vi volas forigi la specifan diplomon kaj uzi la defaŭltan atestilon?';
+$strings['SuccessDelete'] = 'Sukcese forigita';
+$strings['ProblemDelete'] = 'Problemo forigante la atestilon';
+$strings['OnlyCustomCertificates'] = 'Nur kursoj kun propra atestilo estas eksportitaj';

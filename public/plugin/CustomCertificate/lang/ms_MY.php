@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Sijil tersuai';
+$strings['plugin_comment'] = 'Plugin ini membolehkan anda mencipta sijil tersuai untuk setiap kursus.';
+$strings['enable_plugin_customcertificate'] = 'Aktifkan plugin';
+$strings['customcertificate_course_enable'] = 'Sijil tersuai diaktifkan dalam kursus';
+$strings['use_certificate_default'] = 'Gunakan sijil tersuai lalai';
+$strings['ToolDisabled'] = 'Alat dilumpuhkan dari pentadbiran';
+$strings['OnlyAdminPlatform'] = 'Alat hanya untuk pentadbir';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Alat hanya untuk pentadbir dan guru';
+$strings['TrainingEntity'] = 'Entiti latihan';
+$strings['DescriptionFront'] = 'Penerangan depan';
+$strings['DescriptionRear'] = 'Penerangan belakang';
+$strings['Certify'] = 'Sahkan';
+$strings['CertificateType'] = 'Jenis sijil';
+$strings['CertifyThat'] = 'MENSAHKAN BAHAWA';
+$strings['StudentCourseInfo'] = 'Data pelajar dan kursus';
+$strings['StudentData'] = 'Data pelajar';
+$strings['CourseData'] = 'Data kursus';
+$strings['Modality'] = 'Modaliti';
+$strings['Contents'] = 'Kandungan';
+$strings['ContentsToShow'] = 'Kandungan untuk dipaparkan';
+$strings['ContentsCourseDescription'] = 'Gunakan seksyen "Penerangan kursus"> "Kandungan"';
+$strings['ContentsIndexLearnpath'] = 'Gunakan indeks learnpath';
+$strings['ContentsCustom'] = 'Gunakan kandungan tersuai';
+$strings['ContentsHide'] = 'Jangan paparkan kandungan';
+$strings['Dates'] = 'Tarikh';
+$strings['CourseDeliveryDates'] = 'Tarikh penghantaran kursus';
+$strings['Custom'] = 'Tersuai';
+$strings['UseDateSessionAccess'] = 'Gunakan tarikh akses sesi';
+$strings['ExpectionPlace'] = 'Tempat penghantaran';
+$strings['DateExpediction'] = 'Tarikh penghantaran';
+$strings['UseDateEndAccessSession'] = 'Gunakan tarikh tamat akses sesi';
+$strings['UseDateDownloadCertificate'] = 'Gunakan tarikh muat turun sijil';
+$strings['UseDateGenerationCertificate'] = 'Gunakan tarikh penjanaan sijil';
+$strings['UseCustomDate'] = 'Gunakan tarikh tersuai';
+$strings['LogosSeal'] = 'Logo / Cap';
+$strings['LogoLeft'] = 'Logo kiri';
+$strings['LogoCenter'] = 'Logo tengah';
+$strings['LogoRight'] = 'Logo kanan';
+$strings['Seal'] = 'Cap';
+$strings['Signature1'] = 'Tandatangan 1';
+$strings['Signature2'] = 'Tandatangan 2';
+$strings['Signature3'] = 'Tandatangan 3';
+$strings['Signature4'] = 'Tandatangan 4';
+$strings['SignatureText1'] = 'Teks tandatangan 1';
+$strings['SignatureText2'] = 'Teks tandatangan 2';
+$strings['SignatureText3'] = 'Teks tandatangan 3';
+$strings['SignatureText4'] = 'Teks tandatangan 4';
+$strings['OtherOptions'] = 'Pilihan lain';
+$strings['MarginRight'] = 'Margin kanan';
+$strings['MarginLeft'] = 'Margin kiri';
+$strings['SetDefaultTemplate'] = 'Tetapkan templat sebagai lalai';
+$strings['MessageDefaultTemplate'] = 'Simpan penyesuaian lalai ini untuk kursus dan sesi tanpa
+     sijil yang ditakrifkan';
+$strings['None'] = 'Tiada';
+$strings['ErrorTemplateCertificate'] = 'Tiada templat ditakrifkan untuk sijil ini.
+     Tiada templat lalai.';
+$strings['DateStartEnd'] = 'Dengan Tarikh Mula dan Tarikh Akhir: ';
+$strings['ExpedictionIn'] = 'Dikeluarkan pada';
+$strings['Signatures'] = 'Tandatangan';
+$strings['BackgroundCertificate'] = 'Imej latar belakang sijil';
+$strings['Background'] = 'Latar belakang';
+$strings['CertificateSetting'] = 'Tetapan sijil';
+$strings['ToolDisabledCourse'] = 'Alat dilumpuhkan dalam tetapan kursus';
+$strings['ToolUseDefaultSettingCourse'] = 'Alat dikonfigurasi untuk menggunakan sijil lalai. <br>
+     Anda boleh mengeditnya dari skrin Pentadbiran -> Plugin -> Sijil Tersuai. <br>
+     Atau jika anda mahu, anda boleh lumpuhkan pilihan untuk menggunakan sijil lalai dalam konfigurasi plugin dalam kursus';
+$strings['CertificateSettingDefault'] = 'Tetapan sijil lalai';
+$strings['InfoFromDefaultCertificate'] = 'Kandungan sijil berdasarkan sijil lalai.
+     Pengubahsuaian yang anda buat tidak akan menjejaskan sijil lalai.';
+$strings['to'] = ' kepada ';
+$strings['formatDownloadDate'] = ' kepada %sth %s, %s';
+$strings['PrintCertificate'] = 'Cetak sijil';
+$strings['QuestionDelete'] = 'Adakah anda mahu memadamkan diploma khusus dan menggunakan sijil lalai?';
+$strings['SuccessDelete'] = 'Berjaya dipadamkan';
+$strings['ProblemDelete'] = 'Masalah memadamkan sijil';
+$strings['OnlyCustomCertificates'] = 'Hanya kursus dengan sijil peribadi yang dieksport';

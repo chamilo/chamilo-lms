@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Brugerdefineret certifikat';
+$strings['plugin_comment'] = 'Dette plugin giver dig mulighed for at oprette brugerdefinerede certifikater for hvert kursus.';
+$strings['enable_plugin_customcertificate'] = 'Aktivér plugin';
+$strings['customcertificate_course_enable'] = 'Brugerdefineret certifikat aktiveret i kursus';
+$strings['use_certificate_default'] = 'Brug standard brugerdefineret certifikat';
+$strings['ToolDisabled'] = 'Værktøjet er deaktiveret fra administrationen';
+$strings['OnlyAdminPlatform'] = 'Værktøj kun for administratorer';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Værktøj kun for administratorer og lærere';
+$strings['TrainingEntity'] = 'Uddannelsesenhed';
+$strings['DescriptionFront'] = 'Beskrivelse foran';
+$strings['DescriptionRear'] = 'Beskrivelse bagpå';
+$strings['Certify'] = 'Attester';
+$strings['CertificateType'] = 'Certifikat type';
+$strings['CertifyThat'] = 'ATTESTERER AT';
+$strings['StudentCourseInfo'] = 'Elev- og kursusdata';
+$strings['StudentData'] = 'Elevdata';
+$strings['CourseData'] = 'Kursusdata';
+$strings['Modality'] = 'Modalitet';
+$strings['Contents'] = 'Indhold';
+$strings['ContentsToShow'] = 'Indhold at vise';
+$strings['ContentsCourseDescription'] = 'Brug sektion "Kursusbeskrivelse"> "Indhold"';
+$strings['ContentsIndexLearnpath'] = 'Brug læringssti-indeks';
+$strings['ContentsCustom'] = 'Brug brugerdefineret indhold';
+$strings['ContentsHide'] = 'Vis ikke indhold';
+$strings['Dates'] = 'Datoer';
+$strings['CourseDeliveryDates'] = 'Kursusleveringsdatoer';
+$strings['Custom'] = 'Brugerdefineret';
+$strings['UseDateSessionAccess'] = 'Brug adgangsdatoer til sessionen';
+$strings['ExpectionPlace'] = 'Udstedelsessted';
+$strings['DateExpediction'] = 'Udstedelsesdato';
+$strings['UseDateEndAccessSession'] = 'Brug slutdato for sessionadgang';
+$strings['UseDateDownloadCertificate'] = 'Brug certifikatdownload dato';
+$strings['UseDateGenerationCertificate'] = 'Brug certifikatgenereringsdato';
+$strings['UseCustomDate'] = 'Brug brugerdefineret dato';
+$strings['LogosSeal'] = 'Logoer / segl';
+$strings['LogoLeft'] = 'Logo venstre';
+$strings['LogoCenter'] = 'Logo center';
+$strings['LogoRight'] = 'Logo højre';
+$strings['Seal'] = 'Segl';
+$strings['Signature1'] = 'Underskrift 1';
+$strings['Signature2'] = 'Underskrift 2';
+$strings['Signature3'] = 'Underskrift 3';
+$strings['Signature4'] = 'Underskrift 4';
+$strings['SignatureText1'] = 'Underskriftstekst 1';
+$strings['SignatureText2'] = 'Underskriftstekst 2';
+$strings['SignatureText3'] = 'Underskriftstekst 3';
+$strings['SignatureText4'] = 'Underskriftstekst 4';
+$strings['OtherOptions'] = 'Andre indstillinger';
+$strings['MarginRight'] = 'Højre margen';
+$strings['MarginLeft'] = 'Venstre margen';
+$strings['SetDefaultTemplate'] = 'Sæt skabelon som standard';
+$strings['MessageDefaultTemplate'] = 'Gem denne standardtilpasning for kurser og sessioner uden
+definerede certifikater';
+$strings['None'] = 'Ingen';
+$strings['ErrorTemplateCertificate'] = 'Der er ingen skabelon defineret for certifikatet.
+     Der er ingen standardskabelon.';
+$strings['DateStartEnd'] = 'Med startdato og slutdato: ';
+$strings['ExpedictionIn'] = 'Udstedt inden';
+$strings['Signatures'] = 'Signaturer';
+$strings['BackgroundCertificate'] = 'Baggrundsbillede for certifikatet';
+$strings['Background'] = 'Baggrund';
+$strings['CertificateSetting'] = 'Certifikatindstilling';
+$strings['ToolDisabledCourse'] = 'Værktøj deaktiveret i kursusindstilling';
+$strings['ToolUseDefaultSettingCourse'] = 'Værktøj konfigureret til at bruge standardcertifikatet. <br>
+     Du kan redigere det fra administrationsskærmen -> Plugins -> Custom Certificate. <br>
+     Eller hvis du vil, kan du deaktivere muligheden for at bruge certifikat som standard i plugin-konfigurationen i kurset';
+$strings['CertificateSettingDefault'] = 'Standard certifikatindstillinger';
+$strings['InfoFromDefaultCertificate'] = 'Indholdet af certifikatet er baseret på standardcertifikatet.
+     De ændringer, du foretager, vil ikke påvirke standardcertifikatet.';
+$strings['to'] = ' til ';
+$strings['formatDownloadDate'] = ' til %sth %s, %s';
+$strings['PrintCertificate'] = 'Udskriv certifikat';
+$strings['QuestionDelete'] = 'Vil du slette det specifikke diplom og bruge standardcertifikatet?';
+$strings['SuccessDelete'] = 'Rydt slettet';
+$strings['ProblemDelete'] = 'Problem med at slette certifikatet';
+$strings['OnlyCustomCertificates'] = 'Kun kurser med personlige certifikater eksporteres';

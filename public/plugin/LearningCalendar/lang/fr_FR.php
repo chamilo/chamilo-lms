@@ -5,7 +5,7 @@
 $strings['plugin_title'] = 'Learning calendar';
 $strings['plugin_comment'] = '';
 $strings['enabled'] = 'Enabled';
-$strings['LearningCalendar'] = 'Calendrier d\'apprentissage';
+$strings['LearningCalendar'] = "Calendrier d'apprentissage";
 $strings['NumberDaysAccumulatedInCalendar'] = 'Nombre de jours cumulés dans le calendrier: ';
 $strings['NumberDaysAccumulatedInLp'] = 'Nombre de jours cumulés dans les parcours réalisés: ';
 $strings['NumberDaysInRetard'] = "Nombre de jour de retard ou d'avance à la date d'aujourd'hui: ";

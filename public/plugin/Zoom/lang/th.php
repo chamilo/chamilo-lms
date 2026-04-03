@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'วิดีโอคอนเฟอเรนซ์ Zoom';
+$strings['plugin_comment'] = 'การรวม Zoom วิดีโอคอนเฟอเรนซ์ในหลักสูตรและเซสชัน';
+
+$strings['apiKey'] = 'API Key';
+$strings['apiSecret'] = 'API Secret';
+$strings['verificationToken'] = 'Verification Token';
+$strings['enableParticipantRegistration'] = 'เปิดใช้งานการลงทะเบียนผู้เข้าร่วม';
+$strings['enableCloudRecording'] = 'ประเภทการบันทึกอัตโนมัติ';
+$strings['enableGlobalConference'] = 'เปิดใช้งานการประชุมทั่วไป';
+$strings['enableGlobalConferencePerUser'] = 'เปิดใช้งานการประชุมทั่วไปต่อผู้ใช้';
+$strings['globalConferenceAllowRoles'] = 'ลิงก์การประชุมทั่วไปจะแสดงเฉพาะสำหรับบทบาทผู้ใช้เหล่านี้';
+$strings['globalConferencePerUserAllowRoles'] = 'ลิงก์การประชุมทั่วไปต่อผู้ใช้จะแสดงเฉพาะสำหรับบทบาทผู้ใช้เหล่านี้';
+
+$strings['enableCloudRecording_help'] = 'ต้องใช้โปรไฟล์ Zoom แบบเสียเงิน
+จะไม่ทำงานสำหรับโปรไฟล์ <em>พื้นฐาน</em>';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'นักศึกษาทุกคนในหลักสูตรได้ลงทะเบียนแล้ว';
+$strings['Agenda'] = 'วาระการประชุม';
+$strings['CannotRegisterWithoutEmailAddress'] = 'ไม่สามารถลงทะเบียนได้หากไม่มีที่อยู่อีเมล';
+$strings['CopyingJoinURL'] = 'กำลังคัดลอก URL เข้าร่วม';
+$strings['CopyJoinAsURL'] = "คัดลอก URL 'เข้าร่วมในฐานะ'";
+$strings['CopyToCourse'] = 'คัดลอกไปยังหลักสูตร';
+$strings['CouldNotCopyJoinURL'] = 'ไม่สามารถคัดลอก URL เข้าร่วมได้';
+$strings['Course'] = 'หลักสูตร';
+$strings['CreatedAt'] = 'สร้างเมื่อ';
+$strings['CreateLinkInCourse'] = 'สร้างลิงก์ในหลักสูตร';
+$strings['CreateUserVideoConference'] = 'สร้างการประชุมผู้ใช้';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'ลบการประชุม';
+$strings['DeleteFile'] = 'ลบไฟล์';
+$strings['Details'] = 'รายละเอียด';
+$strings['DoIt'] = 'ทำเลย';
+$strings['Duration'] = 'ระยะเวลา';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'ระยะเวลา (นาที)';
+$strings['EndDate'] = 'วันที่สิ้นสุด';
+$strings['EnterMeeting'] = 'เข้าประชุม';
+$strings['ViewMeeting'] = 'ดูการประชุม';
+$strings['Files'] = 'ไฟล์';
+$strings['Finished'] = 'เสร็จสิ้น';
+$strings['FileWasCopiedToCourse'] = 'ไฟล์ถูกคัดลอกไปยังหลักสูตรแล้ว';
+$strings['FileWasDeleted'] = 'ไฟล์ถูกลบแล้ว';
+$strings['GlobalMeeting'] = 'การประชุมทั่วไป';
+$strings['GlobalMeetingPerUser'] = 'การประชุมทั่วไปต่อผู้ใช้';
+$strings['GroupUsersWereRegistered'] = 'สมาชิกกลุ่มได้ลงทะเบียนแล้ว';
+$strings['InstantMeeting'] = 'การประชุมทันที';
+$strings['Join'] = 'เข้าร่วม';
+$strings['JoinGlobalVideoConference'] = 'เข้าร่วมการประชุมทั่วไป';
+$strings['JoinURLCopied'] = 'คัดลอก URL เข้าร่วมแล้ว';
+$strings['JoinURLToSendToParticipants'] = 'URL เข้าร่วมสำหรับส่งให้ผู้เข้าร่วม';
+$strings['LiveMeetings'] = 'การประชุมสด';
+$strings['LinkToFileWasCreatedInCourse'] = 'เพิ่มลิงก์ไฟล์ไปยังหลักสูตรแล้ว';
+$strings['MeetingDeleted'] = 'ลบการประชุมแล้ว';
+$strings['MeetingsFound'] = 'พบการประชุม';
+$strings['MeetingUpdated'] = 'การประชุมได้รับการอัปเดต';
+$strings['NewMeetingCreated'] = 'สร้างการประชุมใหม่';
+$strings['Password'] = 'รหัสผ่าน';
+$strings['RecurringWithFixedTime'] = 'เกิดซ้ำด้วยเวลาคงที่';
+$strings['RecurringWithNoFixedTime'] = 'เกิดซ้ำโดยไม่มีเวลาคงที่';
+$strings['RegisterAllCourseUsers'] = 'ลงทะเบียนผู้ใช้หลักสูตรทั้งหมด';
+$strings['RegisteredUserListWasUpdated'] = 'รายการผู้ใช้ที่ลงทะเบียนได้รับการอัปเดต';
+$strings['RegisteredUsers'] = 'ผู้ใช้ที่ลงทะเบียน';
+$strings['RegisterNoUser'] = 'ไม่ลงทะเบียนผู้ใช้';
+$strings['RegisterTheseGroupMembers'] = 'ลงทะเบียนสมาชิกกลุ่มเหล่านี้';
+$strings['ScheduleAMeeting'] = 'กำหนดเวลาการประชุม';
+$strings['ScheduledMeeting'] = 'การประชุมที่กำหนดเวลา';
+$strings['ScheduledMeetings'] = 'การประชุมที่กำหนดเวลา';
+$strings['ScheduleAMeeting'] = 'กำหนดเวลาการประชุม';
+$strings['SearchMeeting'] = 'ค้นหาการประชุม';
+$strings['Session'] = 'เซสชัน';
+$strings['StartDate'] = 'วันที่เริ่มต้น';
+$strings['Started'] = 'เริ่มแล้ว';
+$strings['StartInstantMeeting'] = 'เริ่มการประชุมทันที';
+$strings['StartMeeting'] = 'เริ่มการประชุม';
+$strings['StartTime'] = 'เวลาเริ่มต้น';
+$strings['Topic'] = 'หัวข้อ';
+$strings['TopicAndAgenda'] = 'หัวข้อและวาระการประชุม';
+$strings['Type'] = 'ประเภท';
+$strings['UpcomingMeetings'] = 'การประชุมที่กำลังจะเกิดขึ้น';
+$strings['UpdateMeeting'] = 'อัปเดตการประชุม';
+$strings['UpdateRegisteredUserList'] = 'อัปเดตรายการผู้ใช้ที่ลงทะเบียน';
+$strings['UserRegistration'] = 'การลงทะเบียนผู้ใช้';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'กำลังรอ';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s การบันทึกการประชุม %s จาก %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'คุณไม่ได้ลงทะเบียนการประชุมนี้';
+$strings['ZoomVideoConferences'] = 'การประชุมวิดีโอ Zoom';
+$strings['Recordings'] = 'การบันทึก';
+$strings['CreateGlobalVideoConference'] = 'สร้างการประชุมวิดีโอกลุ่ม';
+$strings['ConferenceNotStarted'] = 'การประชุมยังไม่เริ่ม';
+$strings['MeetingNotFound'] = 'ไม่พบการประชุม';
+$strings['JoinURLNotAvailable'] = 'URL ไม่พร้อมใช้งาน';
+$strings['Meetings'] = 'การประชุม';
+$strings['ConferenceType'] = 'ประเภทการประชุม';
+$strings['ForEveryone'] = 'ทุกคน';
+$strings['SomeUsers'] = 'ผู้ใช้บางคน (เลือกภายหลัง)';
+$strings['Activity'] = 'กิจกรรม';
+$strings['ConferenceNotAvailable'] = 'การประชุมไม่พร้อมใช้งาน';

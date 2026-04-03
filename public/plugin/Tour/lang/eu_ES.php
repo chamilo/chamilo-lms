@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Bloke honek Chamilo horni
 
 $strings['tour_admin_news_title'] = 'Chamilo berriak';
 $strings['tour_admin_news_content'] = 'Atal honek Chamilo proiektuaren berriak eta iragarkiak erakusten ditu.';
+
+$strings['tour_home_topbar_logo_title'] = 'Plataformaren logotipoa';
+$strings['tour_home_topbar_logo_content'] = 'Logotipo honek plataformaren hasierako orrira eramaten zaitu berriro.';
+$strings['tour_home_topbar_actions_title'] = 'Ekintza azkarrak';
+$strings['tour_home_topbar_actions_content'] = 'Hemen lasterbide-ikonoak aurki ditzakezu, hala nola ikastaroen sorrera, laguntza gidatua, ticketak eta mezuak, zure rolaren arabera.';
+$strings['tour_home_menu_button_title'] = 'Menuaren botoia';
+$strings['tour_home_menu_button_content'] = 'Erabili botoi hau alboko menua azkar irekitzeko edo ixteko.';
+$strings['tour_home_sidebar_title'] = 'Menu nagusia';
+$strings['tour_home_sidebar_content'] = 'Alboko menu honek plataformaren atal nagusietara sartzeko aukera ematen du, zure baimenen arabera.';
+$strings['tour_home_user_area_title'] = 'Erabiltzailearen eremua';
+$strings['tour_home_user_area_content'] = 'Hemen zure profila, aukera pertsonalak eta saioa ixteko aukerara sar zaitezke.';

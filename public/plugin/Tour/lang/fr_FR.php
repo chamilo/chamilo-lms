@@ -143,3 +143,14 @@ $strings['tour_admin_professional_support_title'] = 'Support professionnel';
 $strings['tour_admin_professional_support_content'] = 'Ce bloc explique comment contacter les fournisseurs officiels de Chamilo pour le conseil, l’hébergement, la formation et le support de développements personnalisés.';
 $strings['tour_admin_news_title'] = 'Actualités de Chamilo';
 $strings['tour_admin_news_content'] = 'Cette section affiche les dernières nouvelles et annonces du projet Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo de la plateforme';
+$strings['tour_home_topbar_logo_content'] = 'Ce logo vous ramène à la page d’accueil de la plateforme.';
+$strings['tour_home_topbar_actions_title'] = 'Actions rapides';
+$strings['tour_home_topbar_actions_content'] = 'Vous trouverez ici des icônes de raccourci comme la création de cours, l’aide guidée, les tickets et les messages, selon votre rôle.';
+$strings['tour_home_menu_button_title'] = 'Bouton du menu';
+$strings['tour_home_menu_button_content'] = 'Utilisez ce bouton pour ouvrir ou fermer rapidement le menu latéral.';
+$strings['tour_home_sidebar_title'] = 'Menu principal';
+$strings['tour_home_sidebar_content'] = 'Ce menu latéral donne accès aux principales sections de la plateforme, selon vos permissions.';
+$strings['tour_home_user_area_title'] = 'Espace utilisateur';
+$strings['tour_home_user_area_content'] = 'Vous pouvez ici accéder à votre profil, à vos options personnelles et vous déconnecter.';

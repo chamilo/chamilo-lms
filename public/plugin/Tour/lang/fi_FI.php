@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Tämä lohko selittää, 
 
 $strings['tour_admin_news_title'] = 'Uutisia Chamiloselta';
 $strings['tour_admin_news_content'] = 'Tämä osio näyttää viimeisimmät uutiset ja tiedotteet Chamilo-projektista.';
+
+$strings['tour_home_topbar_logo_title'] = 'Alustan logo';
+$strings['tour_home_topbar_logo_content'] = 'Tämä logo vie sinut takaisin alustan etusivulle.';
+$strings['tour_home_topbar_actions_title'] = 'Pikatoiminnot';
+$strings['tour_home_topbar_actions_content'] = 'Täältä löydät pikakuvakkeita, kuten kurssin luominen, opastettu apu, tiketit ja viestit, roolisi mukaan.';
+$strings['tour_home_menu_button_title'] = 'Valikkopainike';
+$strings['tour_home_menu_button_content'] = 'Käytä tätä painiketta avataksesi tai sulkeaksesi sivuvalikon nopeasti.';
+$strings['tour_home_sidebar_title'] = 'Päävalikko';
+$strings['tour_home_sidebar_content'] = 'Tämä sivuvalikko antaa pääsyn alustan pääosiin käyttöoikeuksiesi mukaan.';
+$strings['tour_home_user_area_title'] = 'Käyttäjäalue';
+$strings['tour_home_user_area_content'] = 'Täällä voit käyttää profiiliasi, henkilökohtaisia asetuksia ja kirjautua ulos.';

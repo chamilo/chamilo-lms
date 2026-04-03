@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = '이 블록은 컨설팅, 
 
 $strings['tour_admin_news_title'] = 'Chamilo 뉴스';
 $strings['tour_admin_news_content'] = '이 섹션은 Chamilo 프로젝트의 최근 뉴스와 공지 사항을 표시합니다.';
+
+$strings['tour_home_topbar_logo_title'] = '플랫폼 로고';
+$strings['tour_home_topbar_logo_content'] = '이 로고를 클릭하면 플랫폼의 홈 페이지로 돌아갑니다.';
+$strings['tour_home_topbar_actions_title'] = '빠른 작업';
+$strings['tour_home_topbar_actions_content'] = '여기에서는 역할에 따라 과정 생성, 안내 도움말, 티켓, 메시지 등의 바로가기 아이콘을 볼 수 있습니다.';
+$strings['tour_home_menu_button_title'] = '메뉴 버튼';
+$strings['tour_home_menu_button_content'] = '이 버튼으로 사이드 메뉴를 빠르게 열거나 닫을 수 있습니다.';
+$strings['tour_home_sidebar_title'] = '기본 메뉴';
+$strings['tour_home_sidebar_content'] = '이 사이드 메뉴를 통해 권한에 따라 플랫폼의 주요 섹션에 접근할 수 있습니다.';
+$strings['tour_home_user_area_title'] = '사용자 영역';
+$strings['tour_home_user_area_content'] = '여기에서 프로필, 개인 옵션에 접근하고 로그아웃할 수 있습니다.';

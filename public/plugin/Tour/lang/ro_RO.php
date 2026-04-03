@@ -181,3 +181,14 @@ $strings['tour_admin_professional_support_content'] = 'Acest bloc explică cum s
 
 $strings['tour_admin_news_title'] = 'Știri de la Chamilo';
 $strings['tour_admin_news_content'] = 'Această secțiune afișează știri și anunțuri recente de la proiectul Chamilo.';
+
+$strings['tour_home_topbar_logo_title'] = 'Logo-ul platformei';
+$strings['tour_home_topbar_logo_content'] = 'Acest logo vă duce înapoi la pagina principală a platformei.';
+$strings['tour_home_topbar_actions_title'] = 'Acțiuni rapide';
+$strings['tour_home_topbar_actions_content'] = 'Aici puteți găsi pictograme de acces rapid, precum crearea cursurilor, ajutor ghidat, tichete și mesaje, în funcție de rolul dvs.';
+$strings['tour_home_menu_button_title'] = 'Butonul meniului';
+$strings['tour_home_menu_button_content'] = 'Folosiți acest buton pentru a deschide sau închide rapid meniul lateral.';
+$strings['tour_home_sidebar_title'] = 'Meniul principal';
+$strings['tour_home_sidebar_content'] = 'Acest meniu lateral oferă acces la secțiunile principale ale platformei, în funcție de permisiunile dvs.';
+$strings['tour_home_user_area_title'] = 'Zona utilizatorului';
+$strings['tour_home_user_area_content'] = 'Aici puteți accesa profilul, opțiunile personale și vă puteți deconecta.';

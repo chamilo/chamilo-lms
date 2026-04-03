@@ -28842,7 +28842,7 @@ msgid "Submit code"
 msgstr "Enviar código"
 
 msgid "Sign up"
-msgstr "Regístrese"
+msgstr "Registrarse"
 
 msgid "2FA disabled successfully."
 msgstr "Su autenticación de dos factores ha sido desactivada."

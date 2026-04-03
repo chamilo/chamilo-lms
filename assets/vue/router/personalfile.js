@@ -1,6 +1,6 @@
 export default {
   path: "/resources/personal_files",
-  meta: { requiresAuth: true },
+  meta: { requiresAuth: true, requiresMyFiles: true },
   name: "personal_files",
   component: () => import("../views/personalfile/Home.vue"),
   children: [

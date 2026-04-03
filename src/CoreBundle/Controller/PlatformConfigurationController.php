@@ -177,6 +177,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.course_creation_form_set_course_category_mandatory',
                 'display.hide_logout_button',
                 'document.documents_hide_download_icon',
+                'platform.allow_my_files',
             ];
 
             foreach ($variables as $variable) {
@@ -306,9 +307,9 @@ class PlatformConfigurationController extends AbstractController
         }
 
         $configured = $demoEnabled || (
-                '' !== trim($documentServerUrl)
+            '' !== trim($documentServerUrl)
                 && '' !== trim($jwtSecret)
-            );
+        );
 
         return [
             'enabled' => $enabled,
@@ -322,8 +323,8 @@ class PlatformConfigurationController extends AbstractController
         $enabled = $this->pluginHelper->isPluginEnabled('Tour');
 
         $showTour = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('Tour', 'show_tour', true)
-            );
+            $this->pluginHelper->getPluginConfigValue('Tour', 'show_tour', true)
+        );
 
         $theme = trim((string) $this->pluginHelper->getPluginConfigValue('Tour', 'theme', ''));
         $themeCssPath = null;
@@ -349,16 +350,16 @@ class PlatformConfigurationController extends AbstractController
         $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
 
         $showMainMenuTab = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
+        );
 
         $publicMainMenuTab = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
+        );
 
         $allowAnonymousUsers = $enabled && $this->normalizePluginBoolean(
-                $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
-            );
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
+        );
 
         return [
             'enabled' => $enabled,

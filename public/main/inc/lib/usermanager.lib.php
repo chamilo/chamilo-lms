@@ -5056,20 +5056,27 @@ class UserManager
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * Updates all users whose locale matches $fromIsocode to $toIsocode.
+     * Both parameters must be language isocodes (e.g. 'fr', 'en') as stored in user.locale.
+     *
+     * @param string $fromIsocode isocode of the language being disabled
+     * @param string $toIsocode   isocode of the fallback language
      */
-    public static function update_all_user_languages($from, $to)
+    public static function update_all_user_languages(string $fromIsocode, string $toIsocode): void
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $from = Database::escape_string($from);
-        $to = Database::escape_string($to);
-
-        if (!empty($to) && !empty($from)) {
-            $sql = "UPDATE $table_user SET language = '$to'
-                    WHERE language = '$from'";
-            Database::query($sql);
+        if (empty($fromIsocode) || empty($toIsocode) || $fromIsocode === $toIsocode) {
+            return;
         }
+
+        Database::getManager()
+            ->createQuery(
+                'UPDATE '.User::class.' u
+                 SET u.locale = :to
+                 WHERE u.locale = :from'
+            )
+            ->setParameter('from', $fromIsocode)
+            ->setParameter('to', $toIsocode)
+            ->execute();
     }
 
     /**

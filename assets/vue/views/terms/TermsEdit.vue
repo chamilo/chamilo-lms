@@ -289,6 +289,7 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 
 import languageService from "../../services/languageService"
 import legalService from "../../services/legalService"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -482,7 +483,7 @@ const previewTerms = () => {
     parts.push(`<div>${html}</div>`)
     parts.push("<hr/>")
   }
-  previewContent.value = parts.join("")
+  previewContent.value = sanitizeHtml(parts.join(""))
   dialogVisible.value = true
 }
 function backToList() {

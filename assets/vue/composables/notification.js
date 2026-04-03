@@ -1,4 +1,5 @@
 import { useToast } from "primevue/usetoast"
+import { sanitizeHtml } from "../utils/sanitizeHtml"
 
 // Toast timings
 const ERROR_TOAST_LIFE_MS = 30000
@@ -137,7 +138,7 @@ export function useNotification() {
 
     toast.add({
       severity,
-      detail: safeMessage,
+      detail: sanitizeHtml(safeMessage),
       life: "error" === severity ? ERROR_TOAST_LIFE_MS : DEFAULT_TOAST_LIFE_MS,
     })
   }

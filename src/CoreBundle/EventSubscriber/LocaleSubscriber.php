@@ -121,21 +121,25 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         // 6) Honor configured priorities language_priority_1..4
-        // browser_lang silently takes precedence over platform_lang: the browser preference
-        // is more specific than the admin-configured platform default, but less specific
-        // than any user/course/selected override.
-        foreach ([
-            'language_priority_1',
-            'language_priority_2',
-            'language_priority_3',
-            'language_priority_4',
-        ] as $settingKey) {
+        // Collect only the priorities that have a resolved value, preserving order.
+        // browser_lang may substitute platform_lang, but only when platform_lang is the
+        // last matching priority — i.e. no more-specific configured priority follows it.
+        $matchingPriorities = [];
+        foreach (['language_priority_1', 'language_priority_2', 'language_priority_3', 'language_priority_4'] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
-            if (empty($priority) || empty($localeList[$priority])) {
-                continue;
+            if (!empty($priority) && !empty($localeList[$priority])) {
+                $matchingPriorities[] = $priority;
             }
+        }
+
+        foreach ($matchingPriorities as $index => $priority) {
             if ('platform_lang' === $priority && !empty($localeList['browser_lang'])) {
-                return $localeList['browser_lang'];
+                // browser_lang replaces platform_lang only when no subsequent priority matches.
+                if (!isset($matchingPriorities[$index + 1])) {
+                    return $localeList['browser_lang'];
+                }
+                // A more-specific priority follows — skip platform_lang and let it win.
+                continue;
             }
 
             return $localeList[$priority];

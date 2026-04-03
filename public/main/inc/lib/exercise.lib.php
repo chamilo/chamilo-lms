@@ -117,8 +117,14 @@ class ExerciseLib
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
                         // shown at the end of the given time, so hide for now
+                        $readingTitle = get_lang('Reading comprehension');
+
+                        if (1 !== (int) $exercise->getHideQuestionNumber()) {
+                            $readingTitle = $current_item.'. '.$readingTitle;
+                        }
+
                         $titleToDisplay = Display::div(
-                            $current_item.'. '.get_lang('Reading comprehension'),
+                            $readingTitle,
                             ['class' => 'question_title']
                         );
                     }

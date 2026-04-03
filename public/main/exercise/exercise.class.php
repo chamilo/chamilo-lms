@@ -2077,11 +2077,14 @@ class Exercise
             ];
             $form->addGroup($group, null, get_lang('Results page configuration'));
 
-            $group = [
-                $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
-            ];
-            $form->addGroup($group, null, get_lang('Hide question numbering'));
+            $showHideConfiguration = 'true' === api_get_setting('exercise.quiz_hide_question_number');
+            if ($showHideConfiguration) {
+                $group = [
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
+                ];
+                $form->addGroup($group, null, get_lang('Hide question numbering'));
+            }
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2610,7 +2613,10 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setQuizCategoryId($form->getSubmitValue('quiz_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
-        $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
+        $showHideConfiguration = 'true' === api_get_setting('exercise.quiz_hide_question_number');
+        if ($showHideConfiguration) {
+            $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
+        }
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;

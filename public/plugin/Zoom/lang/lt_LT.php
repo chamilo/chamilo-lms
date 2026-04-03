@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom vaizdo konferencija';
+$strings['plugin_comment'] = 'Zoom vaizdo konferencijos integracija kursuose ir sesijose';
+
+$strings['apiKey'] = 'API raktas';
+$strings['apiSecret'] = 'API paslaptis';
+$strings['verificationToken'] = 'Patikrinimo prieigos raktas';
+$strings['enableParticipantRegistration'] = 'Įjungti dalyvių registraciją';
+$strings['enableCloudRecording'] = 'Automatinio įrašymo tipas';
+$strings['enableGlobalConference'] = 'Įjungti bendrąją konferenciją';
+$strings['enableGlobalConferencePerUser'] = 'Įjungti bendrąją konferenciją pagal naudotoją';
+$strings['globalConferenceAllowRoles'] = 'Bendrosios konferencijos nuoroda matoma tik šiems naudotojų vaidmenims';
+$strings['globalConferencePerUserAllowRoles'] = 'Bendrosios konferencijos pagal naudotoją nuoroda matoma tik šiems naudotojų vaidmenims';
+
+$strings['enableCloudRecording_help'] = 'Reikalingas mokamas Zoom profilis.
+< em>bazinis</em> profilis neveiks.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Visi kurso studentai buvo užregistruoti';
+$strings['Agenda'] = 'Darbotvarkė';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Negalima registruotis be el. pašto adreso';
+$strings['CopyingJoinURL'] = 'Kopijuojama prisijungimo URL';
+$strings['CopyJoinAsURL'] = 'Kopijuoti „prisijungti kaip“ URL';
+$strings['CopyToCourse'] = 'Kopijuoti į kursą';
+$strings['CouldNotCopyJoinURL'] = 'Nepavyko nukopijuoti prisijungimo URL';
+$strings['Course'] = 'Kursas';
+$strings['CreatedAt'] = 'Sukurta';
+$strings['CreateLinkInCourse'] = 'Kurti nuorodą(-as) kurse';
+$strings['CreateUserVideoConference'] = 'Kurti naudotojo konferenciją';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Ištrinti susitikimą';
+$strings['DeleteFile'] = 'Ištrinti failą(-us)';
+$strings['Details'] = 'Duomenys';
+$strings['DoIt'] = 'Atlikti';
+$strings['Duration'] = 'Trukmė';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Trukmė (minutėmis)';
+$strings['EndDate'] = 'Pabaigos data';
+$strings['EnterMeeting'] = 'Prisijungti prie susitikimo';
+$strings['ViewMeeting'] = 'Peržiūrėti susitikimą';
+$strings['Files'] = 'Failai';
+$strings['Finished'] = 'baigtas';
+$strings['FileWasCopiedToCourse'] = 'Failas buvo nukopijuotas į kursą';
+$strings['FileWasDeleted'] = 'Failas buvo ištrintas';
+$strings['GlobalMeeting'] = 'Bendra konferencija';
+$strings['GlobalMeetingPerUser'] = 'Bendra konferencija pagal naudotoją';
+$strings['GroupUsersWereRegistered'] = 'Grupės nariai buvo užregistruoti';
+$strings['InstantMeeting'] = 'Momentinis susitikimas';
+$strings['Join'] = 'Prisijungti';
+$strings['JoinGlobalVideoConference'] = 'Prisijungti prie bendrosios konferencijos';
+$strings['JoinURLCopied'] = 'Prisijungimo URL nukopijuota';
+$strings['JoinURLToSendToParticipants'] = 'Prisijungimo URL siųsti dalyviams';
+$strings['LiveMeetings'] = 'Tiesioginiai susitikimai';
+$strings['LinkToFileWasCreatedInCourse'] = 'Nuoroda į failą buvo pridėta prie kurso';
+$strings['MeetingDeleted'] = 'Susitikimas ištrintas';
+$strings['MeetingsFound'] = 'Rasti susitikimai';
+$strings['MeetingUpdated'] = 'Susitikimas atnaujintas';
+$strings['NewMeetingCreated'] = 'Sukurtas naujas susitikimas';
+$strings['Password'] = 'Slaptažodis';
+$strings['RecurringWithFixedTime'] = 'Kartojamas su fiksuotu laiku';
+$strings['RecurringWithNoFixedTime'] = 'Kartojamas be fiksuoto laiko';
+$strings['RegisterAllCourseUsers'] = 'Registruoti visus kurso vartotojus';
+$strings['RegisteredUserListWasUpdated'] = 'Atnaujintas registruotų vartotojų sąrašas';
+$strings['RegisteredUsers'] = 'Registruoti vartotojai';
+$strings['RegisterNoUser'] = 'Neregistruoti nieko';
+$strings['RegisterTheseGroupMembers'] = 'Registruoti šios grupės narius';
+$strings['ScheduleAMeeting'] = 'Suplanuoti susitikimą';
+$strings['ScheduledMeeting'] = 'Suplanuotas susitikimas';
+$strings['ScheduledMeetings'] = 'Suplanuoti susitikimai';
+$strings['ScheduleAMeeting'] = 'Suplanuoti susitikimą';
+$strings['SearchMeeting'] = 'Ieškoti susitikimo';
+$strings['Session'] = 'Sesija';
+$strings['StartDate'] = 'Pradžios data';
+$strings['Started'] = 'pradėtas';
+$strings['StartInstantMeeting'] = 'Pradėti momentinį susitikimą';
+$strings['StartMeeting'] = 'Pradėti susitikimą';
+$strings['StartTime'] = 'Pradžios laikas';
+$strings['Topic'] = 'Tema';
+$strings['TopicAndAgenda'] = 'Tema ir darbotvarkė';
+$strings['Type'] = 'Tipas';
+$strings['UpcomingMeetings'] = 'Artimiausi susitikimai';
+$strings['UpdateMeeting'] = 'Atnaujinti susitikimą';
+$strings['UpdateRegisteredUserList'] = 'Atnaujinti registruotų vartotojų sąrašą';
+$strings['UserRegistration'] = 'Vartotojo registracija';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'laukiantis';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s susitikimo %s įrašas nuo %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Jūs nesate registruotas į šį susitikimą';
+$strings['ZoomVideoConferences'] = 'Zoom vaizdo konferencijos';
+$strings['Recordings'] = 'Įrašai';
+$strings['CreateGlobalVideoConference'] = 'Sukurti globalią vaizdo konferenciją';
+$strings['ConferenceNotStarted'] = 'Konferencija neprasidėjusi';
+$strings['MeetingNotFound'] = 'Susitikimas nerastas';
+$strings['JoinURLNotAvailable'] = 'URL nepasiekiamas';
+$strings['Meetings'] = 'Susitikimai';
+$strings['ConferenceType'] = 'Konferencijos tipas';
+$strings['ForEveryone'] = 'Visi';
+$strings['SomeUsers'] = 'Kai kurie vartotojai (Pasirinkti vėliau)';
+$strings['Activity'] = 'Veikla';
+$strings['ConferenceNotAvailable'] = 'Konferencija nepasiekiama';

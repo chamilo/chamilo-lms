@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Prilagođeni certifikat';
+$strings['plugin_comment'] = 'Ovaj dodatak omogućuje stvaranje prilagođenih certifikata za svaki predmet.';
+$strings['enable_plugin_customcertificate'] = 'Omogući dodatak';
+$strings['customcertificate_course_enable'] = 'Omogući prilagođeni certifikat u predmetu';
+$strings['use_certificate_default'] = 'Koristi zadani prilagođeni certifikat';
+$strings['ToolDisabled'] = 'Alat je onemogućen iz administracije';
+$strings['OnlyAdminPlatform'] = 'Alat samo za administratore';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Alat samo za administratore i nastavnike';
+$strings['TrainingEntity'] = 'Obrazovna institucija';
+$strings['DescriptionFront'] = 'Opis prednja strana';
+$strings['DescriptionRear'] = 'Opis stražnja strana';
+$strings['Certify'] = 'Potvrdi';
+$strings['CertificateType'] = 'Vrsta certifikata';
+$strings['CertifyThat'] = 'POTVRĐUJE DA';
+$strings['StudentCourseInfo'] = 'Podaci o studentu i predmetu';
+$strings['StudentData'] = 'Podaci o studentu';
+$strings['CourseData'] = 'Podaci o predmetu';
+$strings['Modality'] = 'Modalitet';
+$strings['Contents'] = 'Sadržaji';
+$strings['ContentsToShow'] = 'Sadržaji za prikaz';
+$strings['ContentsCourseDescription'] = 'Koristi odjeljak „Opis predmeta“ > „Sadržaji“';
+$strings['ContentsIndexLearnpath'] = 'Koristi indeks staza učenja';
+$strings['ContentsCustom'] = 'Koristi prilagođeni sadržaj';
+$strings['ContentsHide'] = 'Ne prikazuj sadržaje';
+$strings['Dates'] = 'Datumi';
+$strings['CourseDeliveryDates'] = 'Datumi održavanja predmeta';
+$strings['Custom'] = 'Prilagođeno';
+$strings['UseDateSessionAccess'] = 'Koristi datume pristupa sesiji';
+$strings['ExpectionPlace'] = 'Mjesto izdavanja';
+$strings['DateExpediction'] = 'Datum izdavanja';
+$strings['UseDateEndAccessSession'] = 'Koristi datum završetka pristupa sesiji';
+$strings['UseDateDownloadCertificate'] = 'Koristi datum preuzimanja certifikata';
+$strings['UseDateGenerationCertificate'] = 'Koristi datum generiranja certifikata';
+$strings['UseCustomDate'] = 'Koristi prilagođeni datum';
+$strings['LogosSeal'] = 'Logoi / pečati';
+$strings['LogoLeft'] = 'Logo lijevo';
+$strings['LogoCenter'] = 'Logo sredina';
+$strings['LogoRight'] = 'Logo desno';
+$strings['Seal'] = 'Pečat';
+$strings['Signature1'] = 'Potpis 1';
+$strings['Signature2'] = 'Potpis 2';
+$strings['Signature3'] = 'Potpis 3';
+$strings['Signature4'] = 'Potpis 4';
+$strings['SignatureText1'] = 'Tekst potpisa 1';
+$strings['SignatureText2'] = 'Tekst potpisa 2';
+$strings['SignatureText3'] = 'Tekst potpisa 3';
+$strings['SignatureText4'] = 'Tekst potpisa 4';
+$strings['OtherOptions'] = 'Druge opcije';
+$strings['MarginRight'] = 'Margina desno';
+$strings['MarginLeft'] = 'Margina lijevo';
+$strings['SetDefaultTemplate'] = 'Postavi predložak kao zadani';
+$strings['MessageDefaultTemplate'] = 'Spremi ovu zadanu prilagodbu za kurseve i sesije bez
+     definiranih certifikata';
+$strings['None'] = 'Nema';
+$strings['ErrorTemplateCertificate'] = 'Nema definirani predložak za certifikat.
+     Nema zadani predložak.';
+$strings['DateStartEnd'] = 'S datumom početka i završetka: ';
+$strings['ExpedictionIn'] = 'Izdatak u';
+$strings['Signatures'] = 'Potpisi';
+$strings['BackgroundCertificate'] = 'Pozadinska slika certifikata';
+$strings['Background'] = 'Pozadina';
+$strings['CertificateSetting'] = 'Postavke certifikata';
+$strings['ToolDisabledCourse'] = 'Alat onemogućen u postavkama kursa';
+$strings['ToolUseDefaultSettingCourse'] = 'Alat konfiguriran za korištenje zadanog certifikata. <br>
+     Možete ga uređivati iz Administrativnog ekrana -> Dodaci -> Prilagođeni certifikat. <br>
+     Ili ako želite, možete onemogućiti opciju korištenja certifikata po zadanim postavkama u konfiguraciji dodatka u kursu';
+$strings['CertificateSettingDefault'] = 'Postavke zadanog certifikata';
+$strings['InfoFromDefaultCertificate'] = 'Sadržaj certifikata temelji se na zadanom certifikatu.
+     Izmjene koje napravite neće utjecati na zadani certifikat.';
+$strings['to'] = ' do ';
+$strings['formatDownloadDate'] = ' do %sth %s, %s';
+$strings['PrintCertificate'] = 'Ispis certifikata';
+$strings['QuestionDelete'] = 'Želite li izbrisati specifičnu diplomu i koristiti zadani certifikat?';
+$strings['SuccessDelete'] = 'Uspješno izbrisano';
+$strings['ProblemDelete'] = 'Problem s brisanjem certifikata';
+$strings['OnlyCustomCertificates'] = 'Izvoze se samo kursevi s personaliziranim certifikatom';

@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Видеоконференция Zoom';
+$strings['plugin_comment'] = 'Интеграция на видеоконференция Zoom в курсове и сесии';
+
+$strings['apiKey'] = 'API ключ';
+$strings['apiSecret'] = 'API секрет';
+$strings['verificationToken'] = 'Токен за проверка';
+$strings['enableParticipantRegistration'] = 'Разреши регистрация на участници';
+$strings['enableCloudRecording'] = 'Тип на автоматично записване';
+$strings['enableGlobalConference'] = 'Разреши глобална конференция';
+$strings['enableGlobalConferencePerUser'] = 'Разреши глобална конференция на потребител';
+$strings['globalConferenceAllowRoles'] = 'Връзка към глобална конференция, видима само за тези роли на потребители';
+$strings['globalConferencePerUserAllowRoles'] = 'Връзка към глобална конференция на потребител, видима само за тези роли на потребители';
+
+$strings['enableCloudRecording_help'] = 'Изисква платен профил Zoom.
+Не работи за <em>основен</em> профил.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Всички студенти от курса бяха регистрирани';
+$strings['Agenda'] = 'Дневен ред';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Не може да се регистрира без имейл адрес';
+$strings['CopyingJoinURL'] = 'Копиране на URL за присъединяване';
+$strings['CopyJoinAsURL'] = 'Копирай URL „присъедини се като"';
+$strings['CopyToCourse'] = 'Копирай в курса';
+$strings['CouldNotCopyJoinURL'] = 'Не може да се копира URL за присъединяване';
+$strings['Course'] = 'Курс';
+$strings['CreatedAt'] = 'Създадено на';
+$strings['CreateLinkInCourse'] = 'Създай връзка(и) в курса';
+$strings['CreateUserVideoConference'] = 'Създай потребителска конференция';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Изтрий среща';
+$strings['DeleteFile'] = 'Изтрий файл(ове)';
+$strings['Details'] = 'Подробности';
+$strings['DoIt'] = 'Направи го';
+$strings['Duration'] = 'Продължителност';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Продължителност (в минути)';
+$strings['EndDate'] = 'Крайна дата';
+$strings['EnterMeeting'] = 'Влез в срещата';
+$strings['ViewMeeting'] = 'Виж срещата';
+$strings['Files'] = 'Файлове';
+$strings['Finished'] = 'приключена';
+$strings['FileWasCopiedToCourse'] = 'Файлът беше копиран в курса';
+$strings['FileWasDeleted'] = 'Файлът беше изтрит';
+$strings['GlobalMeeting'] = 'Глобална конференция';
+$strings['GlobalMeetingPerUser'] = 'Глобална конференция на потребител';
+$strings['GroupUsersWereRegistered'] = 'Членовете на групата бяха регистрирани';
+$strings['InstantMeeting'] = 'Моментална среща';
+$strings['Join'] = 'Присъедини се';
+$strings['JoinGlobalVideoConference'] = 'Присъедини се към глобална конференция';
+$strings['JoinURLCopied'] = 'URL за присъединяване копиран';
+$strings['JoinURLToSendToParticipants'] = 'URL за присъединяване за изпращане към участниците';
+$strings['LiveMeetings'] = 'Непосредствени срещи';
+$strings['LinkToFileWasCreatedInCourse'] = 'Връзка към файла беше добавена към курса';
+$strings['MeetingDeleted'] = 'Срещата беше изтрита';
+$strings['MeetingsFound'] = 'Намерени срещи';
+$strings['MeetingUpdated'] = 'Срещата е актуализирана';
+$strings['NewMeetingCreated'] = 'Създадена е нова среща';
+$strings['Password'] = 'Парола';
+$strings['RecurringWithFixedTime'] = 'Повтаряща се с фиксирано време';
+$strings['RecurringWithNoFixedTime'] = 'Повтаряща се без фиксирано време';
+$strings['RegisterAllCourseUsers'] = 'Регистрирай всички потребители от курса';
+$strings['RegisteredUserListWasUpdated'] = 'Списъкът с регистрирани потребители е актуализиран';
+$strings['RegisteredUsers'] = 'Регистрирани потребители';
+$strings['RegisterNoUser'] = 'Не регистрирай потребители';
+$strings['RegisterTheseGroupMembers'] = 'Регистрирай тези членове на групата';
+$strings['ScheduleAMeeting'] = 'Заседай среща';
+$strings['ScheduledMeeting'] = 'Заседната среща';
+$strings['ScheduledMeetings'] = 'Заседнати срещи';
+$strings['ScheduleAMeeting'] = 'Заседай среща';
+$strings['SearchMeeting'] = 'Търсене на среща';
+$strings['Session'] = 'Сесия';
+$strings['StartDate'] = 'Начална дата';
+$strings['Started'] = 'стартирана';
+$strings['StartInstantMeeting'] = 'Стартирай незабавна среща';
+$strings['StartMeeting'] = 'Стартирай среща';
+$strings['StartTime'] = 'Час на започване';
+$strings['Topic'] = 'Тема';
+$strings['TopicAndAgenda'] = 'Тема и дневен ред';
+$strings['Type'] = 'Тип';
+$strings['UpcomingMeetings'] = 'Предстоящи срещи';
+$strings['UpdateMeeting'] = 'Актуализирай срещата';
+$strings['UpdateRegisteredUserList'] = 'Актуализирай списъка с регистрирани потребители';
+$strings['UserRegistration'] = 'Регистрация на потребител';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'в очакване';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s запис на срещата %s от %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Не сте регистрирани за тази среща';
+$strings['ZoomVideoConferences'] = 'Видеоконференции Zoom';
+$strings['Recordings'] = 'Записи';
+$strings['CreateGlobalVideoConference'] = 'Създай глобална видеоконференция';
+$strings['ConferenceNotStarted'] = 'Конференцията не е стартирана';
+$strings['MeetingNotFound'] = 'Срещата не е намерена';
+$strings['JoinURLNotAvailable'] = 'URL не е наличен';
+$strings['Meetings'] = 'Срещи';
+$strings['ConferenceType'] = 'Тип конференция';
+$strings['ForEveryone'] = 'Всички';
+$strings['SomeUsers'] = 'Някои потребители (Изберете по-късно)';
+$strings['Activity'] = 'Дейност';
+$strings['ConferenceNotAvailable'] = 'Конференцията не е налична';

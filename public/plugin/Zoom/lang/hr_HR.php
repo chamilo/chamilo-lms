@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom videokonferencija';
+$strings['plugin_comment'] = 'Integracija Zoom videokonferencije u tečajeve i sesije';
+
+$strings['apiKey'] = 'API ključ';
+$strings['apiSecret'] = 'API tajna';
+$strings['verificationToken'] = 'Token za verifikaciju';
+$strings['enableParticipantRegistration'] = 'Omogući registraciju sudionika';
+$strings['enableCloudRecording'] = 'Vrsta automatskog snimanja';
+$strings['enableGlobalConference'] = 'Omogući globalnu konferenciju';
+$strings['enableGlobalConferencePerUser'] = 'Omogući globalnu konferenciju po korisniku';
+$strings['globalConferenceAllowRoles'] = 'Poveznica globalne konferencije vidljiva samo za ove korisničke uloge';
+$strings['globalConferencePerUserAllowRoles'] = 'Poveznica globalne konferencije po korisniku vidljiva samo za ove korisničke uloge';
+
+$strings['enableCloudRecording_help'] = 'Zahtijeva plaćeni Zoom profil.
+Neće raditi za <em>osnovni</em> profil.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Svi studenti tečaja su registrirani';
+$strings['Agenda'] = 'Agenda';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Ne mogu se registrirati bez e-mail adrese';
+$strings['CopyingJoinURL'] = 'Kopiranje URL-a za pridruživanje';
+$strings['CopyJoinAsURL'] = "Kopiraj URL 'pridruži se kao'";
+$strings['CopyToCourse'] = 'Kopiraj u tečaj';
+$strings['CouldNotCopyJoinURL'] = 'Nije moguće kopirati URL za pridruživanje';
+$strings['Course'] = 'Tečaj';
+$strings['CreatedAt'] = 'Stvoreno';
+$strings['CreateLinkInCourse'] = 'Stvori poveznicu(e) u tečaju';
+$strings['CreateUserVideoConference'] = 'Stvori korisničku konferenciju';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Izbriši sastanak';
+$strings['DeleteFile'] = 'Izbriši datoteku(e)';
+$strings['Details'] = 'Pojedinosti';
+$strings['DoIt'] = 'Učini to';
+$strings['Duration'] = 'Trajanje';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Trajanje (u minutama)';
+$strings['EndDate'] = 'Datum završetka';
+$strings['EnterMeeting'] = 'Uđi na sastanak';
+$strings['ViewMeeting'] = 'Pogledaj sastanak';
+$strings['Files'] = 'Datoteke';
+$strings['Finished'] = 'završeno';
+$strings['FileWasCopiedToCourse'] = 'Datoteka je kopirana u tečaj';
+$strings['FileWasDeleted'] = 'Datoteka je izbrisana';
+$strings['GlobalMeeting'] = 'Globalna konferencija';
+$strings['GlobalMeetingPerUser'] = 'Globalna konferencija po korisniku';
+$strings['GroupUsersWereRegistered'] = 'Članovi grupe su registrirani';
+$strings['InstantMeeting'] = 'Trenutni sastanak';
+$strings['Join'] = 'Pridruži se';
+$strings['JoinGlobalVideoConference'] = 'Pridruži se globalnoj konferenciji';
+$strings['JoinURLCopied'] = 'URL za pridruživanje kopiran';
+$strings['JoinURLToSendToParticipants'] = 'URL za pridruživanje za slanje sudionicima';
+$strings['LiveMeetings'] = 'Živi sastanci';
+$strings['LinkToFileWasCreatedInCourse'] = 'Poveznica na datoteku dodana je u tečaj';
+$strings['MeetingDeleted'] = 'Sastanak izbrisan';
+$strings['MeetingsFound'] = 'Pronađeni sastanci';
+$strings['MeetingUpdated'] = 'Sastanak ažuriran';
+$strings['NewMeetingCreated'] = 'Novi sastanak kreiran';
+$strings['Password'] = 'Lozinka';
+$strings['RecurringWithFixedTime'] = 'Ponavljajući s fiksnim vremenom';
+$strings['RecurringWithNoFixedTime'] = 'Ponavljajući bez fiksnog vremena';
+$strings['RegisterAllCourseUsers'] = 'Registriraj sve korisnike kursa';
+$strings['RegisteredUserListWasUpdated'] = 'Popis registriranih korisnika ažuriran';
+$strings['RegisteredUsers'] = 'Registrirani korisnici';
+$strings['RegisterNoUser'] = 'Ne registriraj nikoga';
+$strings['RegisterTheseGroupMembers'] = 'Registriraj članove ove grupe';
+$strings['ScheduleAMeeting'] = 'Zakaži sastanak';
+$strings['ScheduledMeeting'] = 'Zakažani sastanak';
+$strings['ScheduledMeetings'] = 'Zakažani sastanci';
+$strings['ScheduleAMeeting'] = 'Zakaži sastanak';
+$strings['SearchMeeting'] = 'Pretraži sastanak';
+$strings['Session'] = 'Sesija';
+$strings['StartDate'] = 'Datum početka';
+$strings['Started'] = 'pokrenut';
+$strings['StartInstantMeeting'] = 'Pokreni trenutni sastanak';
+$strings['StartMeeting'] = 'Pokreni sastanak';
+$strings['StartTime'] = 'Vrijeme početka';
+$strings['Topic'] = 'Tema';
+$strings['TopicAndAgenda'] = 'Tema i agenda';
+$strings['Type'] = 'Vrsta';
+$strings['UpcomingMeetings'] = 'Nadolazeći sastanci';
+$strings['UpdateMeeting'] = 'Ažuriraj sastanak';
+$strings['UpdateRegisteredUserList'] = 'Ažuriraj popis registriranih korisnika';
+$strings['UserRegistration'] = 'Registracija korisnika';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'u čekanju';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s snimka sastanka %s od %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Niste registrirani za ovaj sastanak';
+$strings['ZoomVideoConferences'] = 'Zoom video konferencije';
+$strings['Recordings'] = 'Snimke';
+$strings['CreateGlobalVideoConference'] = 'Kreiraj globalnu video konferenciju';
+$strings['ConferenceNotStarted'] = 'Konferencija nije pokrenuta';
+$strings['MeetingNotFound'] = 'Sastanak nije pronađen';
+$strings['JoinURLNotAvailable'] = 'URL nije dostupan';
+$strings['Meetings'] = 'Sastanci';
+$strings['ConferenceType'] = 'Vrsta konferencije';
+$strings['ForEveryone'] = 'Svi';
+$strings['SomeUsers'] = 'Nekoliko korisnika (odaberi kasnije)';
+$strings['Activity'] = 'Aktivnost';
+$strings['ConferenceNotAvailable'] = 'Konferencija nije dostupna';

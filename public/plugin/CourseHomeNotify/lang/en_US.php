@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = "Notify in course home";
-$strings['plugin_comment'] = "Show notifications when a user enter in course home page.";
+$strings['plugin_comment'] = "Show notifications when a user enters in course home page.";
 
 $strings['enabled'] = 'Enabled';
 

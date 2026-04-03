@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'וידאו כנס זום';
+$strings['plugin_comment'] = 'שילוב וידאו כנס זום בקורסים ומפגשים';
+
+$strings['apiKey'] = 'מפתח API';
+$strings['apiSecret'] = 'סוד API';
+$strings['verificationToken'] = 'אסימון אימות';
+$strings['enableParticipantRegistration'] = 'אפשר הרשמה של משתתפים';
+$strings['enableCloudRecording'] = 'סוג הקלטה אוטומטית';
+$strings['enableGlobalConference'] = 'אפשר כנס גלובלי';
+$strings['enableGlobalConferencePerUser'] = 'אפשר כנס גלובלי לכל משתמש';
+$strings['globalConferenceAllowRoles'] = 'קישור כנס גלובלי גלוי רק לתפקידי משתמש אלה';
+$strings['globalConferencePerUserAllowRoles'] = 'קישור כנס גלובלי לכל משתמש גלוי רק לתפקידי משתמש אלה';
+
+$strings['enableCloudRecording_help'] = 'דורש פרופיל זום בתשלום.
+לא יעבוד עבור פרופיל <em>בסיסי</em>.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'כל סטודנטי הקורס נרשמו';
+$strings['Agenda'] = 'סדר יום';
+$strings['CannotRegisterWithoutEmailAddress'] = 'לא ניתן להירשם ללא כתובת דוא"ל';
+$strings['CopyingJoinURL'] = 'מעתיק כתובת URL להצטרפות';
+$strings['CopyJoinAsURL'] = "העתק כתובת URL 'הצטרף בתור'";
+$strings['CopyToCourse'] = 'העתק לקורס';
+$strings['CouldNotCopyJoinURL'] = 'לא ניתן להעתיק כתובת URL להצטרפות';
+$strings['Course'] = 'קורס';
+$strings['CreatedAt'] = 'נוצר ב';
+$strings['CreateLinkInCourse'] = 'צור קישור(ים) בקורס';
+$strings['CreateUserVideoConference'] = 'צור כנס משתמש';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'מחק פגישה';
+$strings['DeleteFile'] = 'מחק קובץ(ים)';
+$strings['Details'] = 'פרטים';
+$strings['DoIt'] = 'בצע';
+$strings['Duration'] = 'משך';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'משך (בדקות)';
+$strings['EndDate'] = 'תאריך סיום';
+$strings['EnterMeeting'] = 'היכנס לפגישה';
+$strings['ViewMeeting'] = 'צפה בפגישה';
+$strings['Files'] = 'קבצים';
+$strings['Finished'] = 'מסתיימת';
+$strings['FileWasCopiedToCourse'] = 'הקובץ הועתק לקורס';
+$strings['FileWasDeleted'] = 'הקובץ נמחק';
+$strings['GlobalMeeting'] = 'כנס גלובלי';
+$strings['GlobalMeetingPerUser'] = 'כנס גלובלי לכל משתמש';
+$strings['GroupUsersWereRegistered'] = 'חברי הקבוצה נרשמו';
+$strings['InstantMeeting'] = 'פגישה מיידית';
+$strings['Join'] = 'הצטרף';
+$strings['JoinGlobalVideoConference'] = 'הצטרף לכנס הגלובלי';
+$strings['JoinURLCopied'] = 'כתובת URL להצטרפות הועתקה';
+$strings['JoinURLToSendToParticipants'] = 'כתובת URL להצטרפות לשליחה למשתתפים';
+$strings['LiveMeetings'] = 'פגישות חיות';
+$strings['LinkToFileWasCreatedInCourse'] = 'קישור לקובץ הוסף לקורס';
+$strings['MeetingDeleted'] = 'פגישה נמחקה';
+$strings['MeetingsFound'] = 'פגישות נמצאו';
+$strings['MeetingUpdated'] = 'הפגישה עודכנה';
+$strings['NewMeetingCreated'] = 'פגישה חדשה נוצרה';
+$strings['Password'] = 'סיסמה';
+$strings['RecurringWithFixedTime'] = 'חוזר עם זמן קבוע';
+$strings['RecurringWithNoFixedTime'] = 'חוזר ללא זמן קבוע';
+$strings['RegisterAllCourseUsers'] = 'רשום את כל משתמשי הקורס';
+$strings['RegisteredUserListWasUpdated'] = 'רשימת משתמשים רשומים עודכנה';
+$strings['RegisteredUsers'] = 'משתמשים רשומים';
+$strings['RegisterNoUser'] = 'אל תרשום משתמשים';
+$strings['RegisterTheseGroupMembers'] = 'רשום את חברי הקבוצה הללו';
+$strings['ScheduleAMeeting'] = 'תזמן פגישה';
+$strings['ScheduledMeeting'] = 'פגישה מתוזמנת';
+$strings['ScheduledMeetings'] = 'פגישות מתוזמנות';
+$strings['ScheduleAMeeting'] = 'תזמן פגישה';
+$strings['SearchMeeting'] = 'חפש פגישה';
+$strings['Session'] = 'מפגש';
+$strings['StartDate'] = 'תאריך התחלה';
+$strings['Started'] = 'התחיל';
+$strings['StartInstantMeeting'] = 'התחל פגישה מיידית';
+$strings['StartMeeting'] = 'התחל פגישה';
+$strings['StartTime'] = 'זמן התחלה';
+$strings['Topic'] = 'נושא';
+$strings['TopicAndAgenda'] = 'נושא וסדר יום';
+$strings['Type'] = 'סוג';
+$strings['UpcomingMeetings'] = 'פגישות קרובות';
+$strings['UpdateMeeting'] = 'עדכן פגישה';
+$strings['UpdateRegisteredUserList'] = 'עדכן רשימת משתמשים רשומים';
+$strings['UserRegistration'] = 'הרשמה של משתמש';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'ממתין';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = 'הקלטת %s של הפגישה %s מ-%s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'אינך רשום לפגישה זו';
+$strings['ZoomVideoConferences'] = 'וידאו כנסים Zoom';
+$strings['Recordings'] = 'הקלטות';
+$strings['CreateGlobalVideoConference'] = 'צור וידאו כנס גלובלי';
+$strings['ConferenceNotStarted'] = 'הכנס לא התחיל';
+$strings['MeetingNotFound'] = 'פגישה לא נמצאה';
+$strings['JoinURLNotAvailable'] = 'כתובת URL לא זמינה';
+$strings['Meetings'] = 'פגישות';
+$strings['ConferenceType'] = 'סוג כנס';
+$strings['ForEveryone'] = 'כולם';
+$strings['SomeUsers'] = 'משתמשים מסוימים (בחר מאוחר יותר)';
+$strings['Activity'] = 'פעילות';
+$strings['ConferenceNotAvailable'] = 'כנס לא זמין';

@@ -6654,9 +6654,14 @@ class Exercise
         }
         */
 
+        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
         $data['start_date'] = $start_date;
         $data['duration'] = $duration;
-        $data['ip'] = $ip;
+        $data['ip'] = '';
+
+        if (!$hideIp && !empty($ip)) {
+            $data['ip'] = $ip;
+        }
 
         if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');

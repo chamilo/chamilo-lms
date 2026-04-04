@@ -33835,3 +33835,42 @@ msgstr "Video generated successfully, but saving is disabled because the provide
 
 msgid "The file was saved, but its URL could not be resolved."
 msgstr "The file was saved, but its URL could not be resolved."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generate an Aiken quiz from a topic or from one course document."
+
+msgid "Test from topic"
+msgstr "Test from topic"
+
+msgid "Test from document"
+msgstr "Test from document"
+
+msgid "Generate from topic"
+msgstr "Generate from topic"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Use a topic prompt to generate a new Aiken questionnaire."
+
+msgid "Quiz title"
+msgstr "Quiz title"
+
+msgid "Generate from document"
+msgstr "Generate from document"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Select one course document and generate questions based only on its contents."
+
+msgid "Selected document"
+msgstr "Selected document"
+
+msgid "The document is selected from the course documents list."
+msgstr "The document is selected from the course documents list."
+
+msgid "Choose document"
+msgstr "Choose document"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Optional. Used only as an extra hint for the AI."
+
+msgid "Select a document"
+msgstr "Select a document"

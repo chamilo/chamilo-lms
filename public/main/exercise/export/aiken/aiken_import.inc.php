@@ -798,7 +798,7 @@ function generateAikenForm()
         $html .= '              </div>';
 
         $html .= '              <div class="md:col-span-2">';
-        $html .= '                  <label for="document_topic_prompt" class="'.$fieldLabelClass.'">'.get_lang('Topic prompt').'</label>';
+        $html .= '                  <label for="document_topic_prompt" class="'.$fieldLabelClass.'">'.get_lang('Questions topic').'</label>';
         $html .= '                  <input type="text" id="document_topic_prompt" class="'.$inputClass.'" />';
         $html .= '                  <small class="'.$fieldHintClass.'">'.get_lang('Optional. Used only as an extra hint for the AI.').'</small>';
         $html .= '              </div>';

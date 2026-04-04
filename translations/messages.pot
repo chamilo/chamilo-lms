@@ -33749,3 +33749,42 @@ msgstr ""
 
 msgid "The file was saved, but its URL could not be resolved."
 msgstr ""
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr ""
+
+msgid "Test from topic"
+msgstr ""
+
+msgid "Test from document"
+msgstr ""
+
+msgid "Generate from topic"
+msgstr ""
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr ""
+
+msgid "Quiz title"
+msgstr ""
+
+msgid "Generate from document"
+msgstr ""
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr ""
+
+msgid "Selected document"
+msgstr ""
+
+msgid "The document is selected from the course documents list."
+msgstr ""
+
+msgid "Choose document"
+msgstr ""
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr ""
+
+msgid "Select a document"
+msgstr ""

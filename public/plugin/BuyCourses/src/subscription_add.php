@@ -48,6 +48,36 @@ function getElementInnerHtml(DOMElement $element): string
 }
 
 /**
+ * Normalize subscription frequencies for save/render.
+ *
+ * @return array<int, array{duration:int, price:float}>
+ */
+function normalizeSubscriptionFrequencies(array $rawFrequencies): array
+{
+    $normalized = [];
+
+    foreach ($rawFrequencies as $frequency) {
+        if (!is_array($frequency)) {
+            continue;
+        }
+
+        $duration = isset($frequency['duration']) ? (int) $frequency['duration'] : 0;
+        $price = isset($frequency['price']) ? (float) $frequency['price'] : 0.0;
+
+        if ($duration <= 0 || $price <= 0) {
+            continue;
+        }
+
+        $normalized[] = [
+            'duration' => $duration,
+            'price' => $price,
+        ];
+    }
+
+    return $normalized;
+}
+
+/**
  * Style legacy FormValidator markup with Tailwind utility classes.
  */
 function styleBuyCoursesFormHtml(string $html): string
@@ -105,7 +135,7 @@ function styleBuyCoursesFormHtml(string $html): string
                 'bg-white',
                 'p-5',
                 'shadow-sm',
-                'space-y-3',
+                'space-y-4',
             ]);
         }
     }
@@ -118,7 +148,7 @@ function styleBuyCoursesFormHtml(string $html): string
             }
 
             addTailwindClassesToElement($label, [
-                'mb-2',
+                'mb-3',
                 'block',
                 'text-sm',
                 'font-semibold',
@@ -165,7 +195,6 @@ function styleBuyCoursesFormHtml(string $html): string
                 addTailwindClassesToElement($input, [
                     'h-4',
                     'w-4',
-                    'rounded',
                     'border-gray-25',
                     'text-primary',
                     'focus:ring-primary',
@@ -307,7 +336,7 @@ function styleBuyCoursesFormHtml(string $html): string
             }
 
             addTailwindClassesToElement($helpBlock, [
-                'mt-2',
+                'mt-3',
                 'block',
                 'text-sm',
                 'text-gray-50',
@@ -335,6 +364,185 @@ function getPluginLabelWithFallback($plugin, string $key, string $fallback): str
     }
 
     return $value;
+}
+
+/**
+ * Build the subscription frequency manager script.
+ */
+function buildSubscriptionFrequencyManagerScript(array $prefilledFrequencies, array $frequencyLabels): string
+{
+    $frequenciesJson = json_encode(
+        array_values($prefilledFrequencies),
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
+    $labelsJson = json_encode(
+        $frequencyLabels,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
+
+    if (false === $frequenciesJson) {
+        $frequenciesJson = '[]';
+    }
+
+    if (false === $labelsJson) {
+        $labelsJson = '{}';
+    }
+
+    $script = <<<'HTML'
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addButton = document.getElementById('subscription-add-frequency');
+    const durationSelect = document.getElementById('subscription-frequency-duration');
+    const priceInput = document.getElementById('subscription-frequency-price');
+    const tableBody = document.getElementById('subscription-frequencies-body');
+    const hiddenInputsContainer = document.getElementById('subscription-frequency-hidden-inputs');
+    const form = hiddenInputsContainer ? hiddenInputsContainer.closest('form') : null;
+
+    if (!form || !tableBody || !hiddenInputsContainer) {
+        return;
+    }
+
+    const frequencyLabels = __LABELS_JSON__;
+    let frequencies = __FREQUENCIES_JSON__;
+
+    if (!Array.isArray(frequencies)) {
+        frequencies = [];
+    }
+
+    function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = String(value);
+        return div.innerHTML;
+    }
+
+    function renderFrequencies() {
+        hiddenInputsContainer.innerHTML = '';
+
+        if (!frequencies.length) {
+            tableBody.innerHTML = `
+                <tr id="subscription-empty-row">
+                    <td colspan="3" class="px-4 py-8 text-center text-sm text-gray-50">
+                        No subscription periods added yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        const rows = [];
+
+        frequencies.forEach((item, index) => {
+            const durationLabel = frequencyLabels[item.duration] || item.duration;
+            const safeDurationLabel = escapeHtml(durationLabel);
+            const safePrice = Number(item.price).toFixed(2);
+
+            rows.push(`
+                <tr class="align-middle">
+                    <td class="px-4 py-4 text-sm font-medium text-gray-90">${safeDurationLabel}</td>
+                    <td class="px-4 py-4 text-sm text-gray-90">${safePrice}</td>
+                    <td class="px-4 py-4 text-right">
+                        <button
+                            type="button"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
+                            data-remove-index="${index}"
+                        >
+                            <em class="fa fa-trash fa-fw"></em>
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+            `);
+
+            const durationInput = document.createElement('input');
+            durationInput.type = 'hidden';
+            durationInput.name = `frequencies[${index}][duration]`;
+            durationInput.value = String(item.duration);
+            hiddenInputsContainer.appendChild(durationInput);
+
+            const priceHiddenInput = document.createElement('input');
+            priceHiddenInput.type = 'hidden';
+            priceHiddenInput.name = `frequencies[${index}][price]`;
+            priceHiddenInput.value = String(item.price);
+            hiddenInputsContainer.appendChild(priceHiddenInput);
+        });
+
+        tableBody.innerHTML = rows.join('');
+    }
+
+    function addFrequency() {
+        if (!durationSelect || !priceInput) {
+            return;
+        }
+
+        const duration = parseInt(durationSelect.value, 10);
+        const price = parseFloat(priceInput.value);
+
+        if (!duration || Number.isNaN(duration)) {
+            window.alert('Please select a subscription period.');
+            durationSelect.focus();
+            return;
+        }
+
+        if (!price || Number.isNaN(price) || price <= 0) {
+            window.alert('Please enter a valid price greater than zero.');
+            priceInput.focus();
+            return;
+        }
+
+        const existingIndex = frequencies.findIndex((item) => Number(item.duration) === duration);
+
+        if (existingIndex !== -1) {
+            frequencies[existingIndex].price = price;
+        } else {
+            frequencies.push({
+                duration: duration,
+                price: price,
+            });
+        }
+
+        renderFrequencies();
+
+        durationSelect.value = '';
+        priceInput.value = '';
+        durationSelect.focus();
+    }
+
+    if (addButton) {
+        addButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            addFrequency();
+        });
+    }
+
+    tableBody.addEventListener('click', function (event) {
+        const target = event.target instanceof HTMLElement ? event.target.closest('[data-remove-index]') : null;
+        if (!target) {
+            return;
+        }
+
+        const index = parseInt(target.getAttribute('data-remove-index') || '', 10);
+        if (Number.isNaN(index)) {
+            return;
+        }
+
+        frequencies.splice(index, 1);
+        renderFrequencies();
+    });
+
+    form.addEventListener('submit', function () {
+        renderFrequencies();
+    });
+
+    renderFrequencies();
+});
+</script>
+HTML;
+
+    return str_replace(
+        ['__LABELS_JSON__', '__FREQUENCIES_JSON__'],
+        [$labelsJson, $frequenciesJson],
+        $script
+    );
 }
 
 api_protect_admin_script(true);
@@ -370,6 +578,18 @@ $frequencyMissingMessage = getPluginLabelWithFallback(
     'Subscription periods are not configured yet. Please configure at least one subscription period before creating a subscription.'
 );
 
+$subscriptionSaveErrorMessage = getPluginLabelWithFallback(
+    $plugin,
+    'SubscriptionSaveError',
+    'The subscription could not be saved. Please review the data and try again.'
+);
+
+$subscriptionRequiresPeriodsMessage = getPluginLabelWithFallback(
+    $plugin,
+    'SubscriptionPeriodsRequired',
+    'You must add at least one subscription period before saving.'
+);
+
 if (empty($currency)) {
     Display::addFlash(
         Display::return_message($currencyMissingMessage, 'error')
@@ -384,9 +604,7 @@ if ($editingSession) {
 }
 
 $frequencyConfigUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_frequency.php';
-
-$defaultBackUrl = $subscriptionsListUrl;
-$backUrl = $defaultBackUrl;
+$backUrl = $subscriptionsListUrl;
 
 if ($editingCourse) {
     $course = $entityManager->find(Course::class, $id);
@@ -399,15 +617,12 @@ if ($editingCourse) {
 
     $currencyIso = $courseItem['currency'];
     $formDefaults = [
-        'product_type' => get_lang('Course'),
         'id' => $courseItem['course_id'],
         'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
-        'name' => $courseItem['course_title'],
-        'visible' => $courseItem['visible'],
-        'price' => $courseItem['price'],
         'tax_perc' => $courseItem['tax_perc'],
-        'currency_id' => $currency['id'] ?? null,
     ];
+    $productLabelText = get_lang('Course');
+    $productNameText = (string) $courseItem['course_title'];
 } elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
@@ -423,37 +638,18 @@ if ($editingCourse) {
 
     $currencyIso = $sessionItem['currency'];
     $formDefaults = [
-        'product_type' => get_lang('Session'),
         'id' => $session->getId(),
         'type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
-        'name' => $sessionItem['session_name'],
-        'visible' => $sessionItem['visible'],
-        'price' => $sessionItem['price'],
         'tax_perc' => $sessionItem['tax_perc'],
-        'currency_id' => $currency['id'] ?? null,
     ];
+    $productLabelText = get_lang('Session');
+    $productNameText = (string) $sessionItem['session_name'];
 } else {
     api_not_allowed(true);
 }
 
 $globalSettingsParams = $plugin->getGlobalParameters();
-
-$form = new FormValidator('add_subscription');
-
-$form->addText('product_type', $plugin->get_lang('ProductType'), false);
-$form->addText('name', get_lang('Name'), false);
-
-$form->freeze(['product_type', 'name']);
-
-$form->addElement(
-    'number',
-    'tax_perc',
-    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
-    [
-        'step' => 1,
-        'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault'),
-    ]
-);
+$defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 
 $frequencies = $plugin->getFrequencies();
 $hasFrequencies = !empty($frequencies);
@@ -465,15 +661,39 @@ if (!$hasFrequencies) {
 }
 
 $selectOptions = '<option value="">'.htmlspecialchars(get_lang('Select'), ENT_QUOTES, 'UTF-8').'</option>';
+$frequencyLabels = [];
+
 foreach ($frequencies as $key => $frequency) {
+    $frequencyLabels[(int) $key] = (string) $frequency;
     $selectOptions .= '<option value="'.(int) $key.'">'.htmlspecialchars((string) $frequency, ENT_QUOTES, 'UTF-8').'</option>';
 }
+
+$prefilledFrequencies = [];
+if (isset($_POST['frequencies']) && is_array($_POST['frequencies'])) {
+    $prefilledFrequencies = normalizeSubscriptionFrequencies($_POST['frequencies']);
+}
+
+if (isset($_POST['tax_perc'])) {
+    $formDefaults['tax_perc'] = $_POST['tax_perc'];
+}
+
+$form = new FormValidator('add_subscription', 'post', api_get_self().'?'.$queryString);
+
+$form->addElement(
+    'number',
+    'tax_perc',
+    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
+    [
+        'step' => 1,
+        'placeholder' => $defaultGlobalTax.'% '.$plugin->get_lang('ByDefault'),
+    ]
+);
 
 if ($hasFrequencies) {
     $form->addHtml(
         '
-        <section class="rounded-3xl border border-gray-25 bg-gray-10 p-5 shadow-sm">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <section class="rounded-3xl border border-gray-25 bg-gray-10 p-6 shadow-sm">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                     <h2 class="text-xl font-semibold text-gray-90">'.$plugin->get_lang('FrequencyConfig').'</h2>
                     <p class="mt-2 text-sm leading-6 text-gray-50">
@@ -491,39 +711,37 @@ if ($hasFrequencies) {
 
             <div class="mt-6 grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
                 <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
-                    <div class="space-y-4">
+                    <div class="space-y-5">
                         <div>
-                            <label for="duration" class="mb-2 block text-sm font-semibold text-gray-90">
+                            <label for="subscription-frequency-duration" class="mb-3 block text-sm font-semibold text-gray-90">
                                 '.$plugin->get_lang('Duration').'
                             </label>
                             <select
                                 class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm focus:border-primary focus:ring-primary"
-                                name="duration"
-                                id="duration"
+                                id="subscription-frequency-duration"
                             >
                                 '.$selectOptions.'
                             </select>
                         </div>
 
                         <div>
-                            <label for="price" class="mb-2 block text-sm font-semibold text-gray-90">
+                            <label for="subscription-frequency-price" class="mb-3 block text-sm font-semibold text-gray-90">
                                 '.$plugin->get_lang('Price').'
                             </label>
                             <div class="flex items-center gap-3">
                                 <input
                                     class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
-                                    name="price"
                                     type="number"
                                     step="0.01"
                                     min="0"
-                                    id="price"
+                                    id="subscription-frequency-price"
                                     placeholder="0.00"
                                 >
                                 <span class="shrink-0 text-sm font-semibold text-gray-50">'.htmlspecialchars((string) $currencyIso, ENT_QUOTES, 'UTF-8').'</span>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 pt-1">
                             <button
                                 id="subscription-add-frequency"
                                 type="button"
@@ -561,6 +779,8 @@ if ($hasFrequencies) {
                     </div>
                 </div>
             </div>
+
+            <div id="subscription-frequency-hidden-inputs"></div>
         </section>
         '
     );
@@ -594,8 +814,8 @@ if ($hasFrequencies) {
     );
 }
 
-$form->addHidden('type', null);
-$form->addHidden('id', null);
+$form->addHidden('type', (string) $type);
+$form->addHidden('id', (string) $id);
 $button = $form->addButtonSave(get_lang('Save'));
 
 if (empty($currency) || !$hasFrequencies) {
@@ -616,60 +836,67 @@ if ($form->validate()) {
         ? $formValues['frequencies']
         : [];
 
-    $normalizedFrequencies = [];
-
-    foreach ($rawFrequencies as $frequency) {
-        $duration = isset($frequency['duration']) ? (int) $frequency['duration'] : 0;
-        $price = isset($frequency['price']) ? (float) $frequency['price'] : 0.0;
-
-        if ($duration <= 0 || $price <= 0) {
-            continue;
-        }
-
-        $normalizedFrequencies[] = [
-            'duration' => $duration,
-            'price' => $price,
-        ];
-    }
+    $normalizedFrequencies = normalizeSubscriptionFrequencies($rawFrequencies);
+    $prefilledFrequencies = $normalizedFrequencies;
+    $formDefaults['tax_perc'] = $formValues['tax_perc'] ?? $formDefaults['tax_perc'];
 
     if ($productId <= 0 || $productType <= 0 || $currencyId <= 0) {
         Display::addFlash(
             Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error')
         );
-
-        header('Location: '.api_get_self().'?'.$queryString);
-        exit;
-    }
-
-    if (empty($normalizedFrequencies)) {
+    } elseif (empty($normalizedFrequencies)) {
         Display::addFlash(
-            Display::return_message(
-                'You must add at least one subscription period before saving.',
-                'error'
-            )
+            Display::return_message($subscriptionRequiresPeriodsMessage, 'error')
         );
-
-        header('Location: '.api_get_self().'?'.$queryString);
-        exit;
-    }
-
-    $subscription = [
-        'product_id' => $productId,
-        'product_type' => $productType,
-        'currency_id' => $currencyId,
-        'tax_perc' => $taxPerc,
-        'frequencies' => $normalizedFrequencies,
-    ];
-
-    $result = $plugin->addNewSubscription($subscription);
-
-    if ($result) {
-        header('Location: '.$subscriptionsListUrl);
     } else {
-        header('Location: '.api_get_self().'?'.$queryString);
-    }
+        $currentSubscriptions = $plugin->getSubscriptions($productType, $productId);
+        $existingDurations = [];
 
-    exit;
+        if (is_array($currentSubscriptions)) {
+            foreach ($currentSubscriptions as $currentSubscription) {
+                $existingDurations[] = (int) ($currentSubscription['duration'] ?? 0);
+            }
+        }
+
+        $duplicateDuration = null;
+
+        foreach ($normalizedFrequencies as $frequency) {
+            $duration = (int) ($frequency['duration'] ?? 0);
+
+            if (in_array($duration, $existingDurations, true)) {
+                $duplicateDuration = $duration;
+                break;
+            }
+        }
+
+        if (null !== $duplicateDuration) {
+            Display::addFlash(
+                Display::return_message(
+                    $plugin->get_lang('SubscriptionAlreadyExists').' ('.$duplicateDuration.')',
+                    'error'
+                )
+            );
+        } else {
+            $subscription = [
+                'product_id' => $productId,
+                'product_type' => $productType,
+                'currency_id' => $currencyId,
+                'tax_perc' => $taxPerc,
+                'frequencies' => $normalizedFrequencies,
+            ];
+
+            $result = $plugin->addNewSubscription($subscription);
+
+            if ($result) {
+                header('Location: '.$subscriptionsListUrl);
+                exit;
+            }
+
+            Display::addFlash(
+                Display::return_message($subscriptionSaveErrorMessage, 'error')
+            );
+        }
+    }
 }
 
 $form->setDefaults($formDefaults);
@@ -685,9 +912,10 @@ $interbreadcrumb[] = [
 ];
 
 $formHtml = styleBuyCoursesFormHtml($form->returnForm());
+$formHtml .= buildSubscriptionFrequencyManagerScript($prefilledFrequencies, $frequencyLabels);
 
-$productLabel = htmlspecialchars((string) ($formDefaults['product_type'] ?? ''), ENT_QUOTES, 'UTF-8');
-$productName = htmlspecialchars((string) ($formDefaults['name'] ?? ''), ENT_QUOTES, 'UTF-8');
+$productLabel = htmlspecialchars($productLabelText, ENT_QUOTES, 'UTF-8');
+$productName = htmlspecialchars($productNameText, ENT_QUOTES, 'UTF-8');
 $currencyLabel = htmlspecialchars((string) ($currencyIso ?: get_lang('None')), ENT_QUOTES, 'UTF-8');
 
 $template = new Template($templateName);

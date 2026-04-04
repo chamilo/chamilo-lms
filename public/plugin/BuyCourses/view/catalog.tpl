@@ -53,10 +53,10 @@
         </div>
     </section>
 
-    {% if sessions_are_included or services_are_included %}
+    {% if show_courses_tab|default(true) or show_sessions_tab|default(false) or show_services_tab|default(false) %}
     <nav class="overflow-x-auto">
         <div class="inline-flex min-w-full rounded-2xl border border-gray-25 bg-white p-1 shadow-sm sm:min-w-0">
-            {% if coursesExist %}
+            {% if show_courses_tab|default(true) %}
             <a
                     href="course_catalog.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ showing_courses ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
@@ -65,7 +65,7 @@
             </a>
             {% endif %}
 
-            {% if sessionExist %}
+            {% if show_sessions_tab|default(false) %}
             <a
                     href="session_catalog.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ showing_sessions ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
@@ -74,7 +74,7 @@
             </a>
             {% endif %}
 
-            {% if services_are_included %}
+            {% if show_services_tab|default(false) %}
             <a
                     href="service_catalog.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ showing_services ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
@@ -142,7 +142,6 @@
                 </div>
                 {% endif %}
 
-                {% if not showing_services %}
                 <div class="space-y-2">
                     <label for="catalog_min_price" class="block text-sm font-semibold text-gray-90">
                         {{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -173,6 +172,25 @@
                             placeholder="0.00"
                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                     >
+                </div>
+
+                {% if showing_services %}
+                <div class="space-y-2">
+                    <label for="catalog_applies_to" class="block text-sm font-semibold text-gray-90">
+                        {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </label>
+                    <select
+                            id="catalog_applies_to"
+                            name="applies_to"
+                            class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm focus:border-primary focus:ring-primary"
+                    >
+                        <option value="" {{ applies_to_filter_value|default('') == '' ? 'selected' : '' }}>{{ 'Any'|get_lang }}</option>
+                        <option value="0" {{ applies_to_filter_value|default('') == '0' ? 'selected' : '' }}>{{ 'None'|get_lang }}</option>
+                        <option value="1" {{ applies_to_filter_value|default('') == '1' ? 'selected' : '' }}>{{ 'User'|get_lang }}</option>
+                        <option value="2" {{ applies_to_filter_value|default('') == '2' ? 'selected' : '' }}>{{ 'Course'|get_lang }}</option>
+                        <option value="3" {{ applies_to_filter_value|default('') == '3' ? 'selected' : '' }}>{{ 'Session'|get_lang }}</option>
+                        <option value="4" {{ applies_to_filter_value|default('') == '4' ? 'selected' : '' }}>{{ 'TemplateTitleCertificate'|get_lang }}</option>
+                    </select>
                 </div>
                 {% endif %}
 

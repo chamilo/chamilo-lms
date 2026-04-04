@@ -347,15 +347,6 @@ $interbreadcrumb[] = [
 
 $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscription_sales_report.php';
 $backUrl = $defaultBackUrl;
-$referer = $_SERVER['HTTP_REFERER'] ?? '';
-
-if (is_string($referer) && '' !== $referer) {
-    $allowedFragment = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/';
-
-    if (false !== strpos($referer, $allowedFragment)) {
-        $backUrl = $referer;
-    }
-}
 
 $templateName = $plugin->get_lang('ExportReport');
 $template = new Template($templateName);

@@ -87,6 +87,27 @@
             height: 48px !important;
         }
 
+        .buycourses-coupon-form .form-group {
+            row-gap: 0.5rem;
+        }
+
+        .buycourses-coupon-form .form-group > [class*="col-"] {
+            line-height: 1.6 !important;
+        }
+
+        .buycourses-coupon-form .form-group > [class*="col-"] p,
+        .buycourses-coupon-form .form-group > [class*="col-"] span,
+        .buycourses-coupon-form .form-group > [class*="col-"] div {
+            margin-bottom: 0 !important;
+            line-height: 1.6 !important;
+        }
+
+        form .field .freeze {
+            display: block;
+            padding-top: 15px !important;
+            margin-left: 6px !important;
+        }
+
         @media (max-width: 1200px) {
             .buycourses-coupon-form .buycourses-advmultiselect-grid {
                 grid-template-columns: minmax(280px, 1fr) 64px minmax(280px, 1fr);
@@ -199,30 +220,75 @@
 
     function expandLegacyFormColumns() {
       $(".buycourses-coupon-form .form-group").each(function () {
-        $(this).css({
+        const $group = $(this);
+        const $directCols = $group.find("> [class*='col-'], > .control-label, > label");
+
+        $group.css({
           width: "100%",
           maxWidth: "none",
           marginLeft: "0",
           marginRight: "0"
         });
 
-        $(this)
-          .find("> [class*='col-'], > .control-label, > label")
-          .css({
-            width: "100%",
-            maxWidth: "none",
-            float: "none",
-            flex: "0 0 100%",
-            paddingLeft: "0",
-            paddingRight: "0",
-            textAlign: "left"
-          });
+        $directCols.css({
+          width: "100%",
+          maxWidth: "none",
+          float: "none",
+          flex: "0 0 100%",
+          paddingLeft: "0",
+          paddingRight: "0",
+          textAlign: "left"
+        });
 
-        $(this)
+        $group
           .find("> .control-label, > label, > [class*='col-']:first-child")
           .css({
             marginBottom: "12px"
           });
+
+        const hasInteractiveControls = $group.find(
+          "input:not([type='hidden']):not([type='submit']):not([type='button']), select, textarea, button"
+        ).length > 0;
+
+        if (!hasInteractiveControls) {
+          const $cols = $group.find("> [class*='col-']");
+
+          if ($cols.length >= 2) {
+            $group.css({
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "flex-start",
+              columnGap: "8px",
+              rowGap: "4px"
+            });
+
+            $cols.eq(0).css({
+              flex: "0 0 100%",
+              width: "100%",
+              maxWidth: "100%",
+              marginBottom: "6px"
+            });
+
+            $cols.slice(1).css({
+              flex: "0 0 auto",
+              width: "auto",
+              maxWidth: "100%",
+              display: "inline-flex",
+              alignItems: "center",
+              paddingLeft: "0",
+              paddingRight: "0",
+              margin: "0 8px 0 0",
+              lineHeight: "1.6",
+              fontSize: "16px",
+              color: "rgb(var(--color-gray-90-base))"
+            });
+
+            $cols.slice(1).find("*").css({
+              margin: "0",
+              lineHeight: "1.6"
+            });
+          }
+        }
       });
 
       $(".buycourses-coupon-form form, .buycourses-coupon-form .row, .buycourses-coupon-form .element, .buycourses-coupon-form .form_element").css({

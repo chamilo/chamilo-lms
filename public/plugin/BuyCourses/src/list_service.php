@@ -51,20 +51,42 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('Services');
 
+$defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$backUrl = $defaultBackUrl;
 
 $tpl = new Template($templateName);
 
+$tpl->assign('page_title', $templateName);
+$tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));
+$tpl->assign('back_url', $backUrl);
+
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+$tpl->assign('showing_courses', false);
+$tpl->assign('showing_sessions', false);
+$tpl->assign('showing_services', true);
+
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
 $tpl->assign('courses', []);
 $tpl->assign('sessions', []);
 $tpl->assign('services', $services);
-$tpl->assign('course_pagination', $pagination);
-$tpl->assign('session_pagination', $pagination);
+$tpl->assign('course_pagination', '');
+$tpl->assign('session_pagination', '');
 $tpl->assign('service_pagination', $pagination);
+
+$tpl->assign('course_current_page', 1);
+$tpl->assign('course_pages_count', 1);
+$tpl->assign('course_total_items', 0);
+
+$tpl->assign('session_current_page', 1);
+$tpl->assign('session_pages_count', 1);
+$tpl->assign('session_total_items', 0);
+
+$tpl->assign('service_current_page', $currentPage);
+$tpl->assign('service_pages_count', $pagesCount);
+$tpl->assign('service_total_items', (int) $totalItems);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

@@ -837,7 +837,7 @@ function generateAikenForm()
 
         $html .= '          </div>';
         $html .= '          <div class="mt-8 flex justify-end">';
-        $html .= '              <button type="button" id="generate-aiken-document" class="'.$primaryButtonClass.'">'.get_lang('Generate Aiken from document').'</button>';
+        $html .= '              <button type="button" id="generate-aiken-document" class="'.$primaryButtonClass.'">'.get_lang('Generate Aiken').'</button>';
         $html .= '          </div>';
         $html .= '      </div>';
         $html .= '  </div>';
@@ -906,7 +906,7 @@ function generateAikenForm()
     $genericErrorLabel = json_encode(get_lang('An error occurred.'), JSON_UNESCAPED_SLASHES);
     $unexpectedErrorLabel = json_encode(get_lang('An unexpected error occurred. Please try again later.'), JSON_UNESCAPED_SLASHES);
     $generateAikenLabel = json_encode(get_lang('Generate Aiken'), JSON_UNESCAPED_SLASHES);
-    $generateAikenFromDocumentLabel = json_encode(get_lang('Generate Aiken from document'), JSON_UNESCAPED_SLASHES);
+    $generateAikenFromDocumentLabel = json_encode(get_lang('Generate Aiken'), JSON_UNESCAPED_SLASHES);
     $loadingDocumentsLabel = json_encode(get_lang('Loading documents...'), JSON_UNESCAPED_SLASHES);
     $noDocumentsLabel = json_encode(get_lang('No documents available.'), JSON_UNESCAPED_SLASHES);
     $requestFailedLabel = json_encode(get_lang('Request failed'), JSON_UNESCAPED_SLASHES);

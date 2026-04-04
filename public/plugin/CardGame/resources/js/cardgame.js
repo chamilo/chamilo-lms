@@ -108,7 +108,8 @@
     return fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Requested-With': 'XMLHttpRequest'
       },
       credentials: 'same-origin',
       body: new URLSearchParams(payload).toString()
@@ -315,7 +316,8 @@
 
     postForm(state.endpoint, {
       action: 'reveal',
-      part: String(nextPart)
+      part: String(nextPart),
+      csrf_token: state.csrfToken
     })
       .then(function (payload) {
         state.busy = false;
@@ -516,6 +518,7 @@
 
   state = {
     endpoint: root.dataset.endpoint || '',
+    csrfToken: root.dataset.csrfToken || '',
     canPlayToday: root.dataset.canPlay === '1',
     pan: parseInt(root.dataset.pan, 10) || 1,
     parts: parseParts(root.dataset.parts),

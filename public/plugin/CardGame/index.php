@@ -38,10 +38,15 @@ if ($showPage) {
     $progress = $cardGame->getOrCreateProgress($userId);
     $canPlayToday = $cardGame->canPlayToday($progress);
     $pluginWebPath = api_get_path(WEB_PLUGIN_PATH).'CardGame/resources/';
-    $version = '?v=20260324_03';
+    $version = '?v=20260404_01';
+
+    if (empty($_SESSION['cardgame_csrf_token'])) {
+        $_SESSION['cardgame_csrf_token'] = bin2hex(random_bytes(32));
+    }
 
     $dataAttributes = [
         'endpoint' => $pluginWebPath.'ajax.card.php',
+        'csrf-token' => (string) $_SESSION['cardgame_csrf_token'],
         'can-play' => $canPlayToday ? '1' : '0',
         'pan' => (string) ($progress['pan'] ?? 1),
         'display-pan' => (string) $cardGame->getDisplayPan((int) ($progress['pan'] ?? 1)),

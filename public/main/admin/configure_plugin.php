@@ -440,7 +440,20 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
 
             unset($toPersist['tool_enable']);
 
-            $pluginConfiguration->setConfiguration($toPersist);
+            $currentConfiguration = $pluginConfiguration->getConfiguration();
+            if (!is_array($currentConfiguration)) {
+                $currentConfiguration = [];
+            }
+
+            $preservedConfiguration = $currentConfiguration;
+
+            foreach ($editableFieldNames as $editableFieldName) {
+                unset($preservedConfiguration[$editableFieldName]);
+            }
+
+            $newConfiguration = array_merge($preservedConfiguration, $toPersist);
+
+            $pluginConfiguration->setConfiguration($newConfiguration);
             $em->flush();
 
             Event::addEvent(

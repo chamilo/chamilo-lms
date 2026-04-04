@@ -47,6 +47,134 @@ function bbb_flash_redirect(string $htmlMessage, Bbb $bbb): void
     exit;
 }
 
+function bbb_get_request_action_token(): string
+{
+    $token = $_POST['bbb_token'] ?? $_GET['bbb_token'] ?? '';
+
+    return is_string($token) ? $token : '';
+}
+
+function bbb_has_valid_action_token(): bool
+{
+    $sessionToken = $_SESSION['bbb_action_csrf_token'] ?? '';
+    $requestToken = bbb_get_request_action_token();
+
+    return is_string($sessionToken)
+        && $sessionToken !== ''
+        && $requestToken !== ''
+        && hash_equals($sessionToken, $requestToken);
+}
+
+function bbb_normalize_same_origin_document_url(string $url): ?string
+{
+    $url = trim($url);
+    if ($url === '') {
+        return null;
+    }
+
+    $baseUrl = rtrim(api_get_path(WEB_PATH), '/');
+    $baseParts = parse_url($baseUrl);
+    if (false === $baseParts || empty($baseParts['host'])) {
+        return null;
+    }
+
+    if (str_starts_with($url, '/')) {
+        $baseScheme = $baseParts['scheme'] ?? 'https';
+        $baseHost = $baseParts['host'];
+        $basePort = isset($baseParts['port']) ? ':'.$baseParts['port'] : '';
+        $url = $baseScheme.'://'.$baseHost.$basePort.$url;
+    }
+
+    $parts = parse_url($url);
+    if (false === $parts) {
+        return null;
+    }
+
+    $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+    if (!in_array($scheme, ['http', 'https'], true)) {
+        return null;
+    }
+
+    if (!empty($parts['user']) || !empty($parts['pass']) || empty($parts['host'])) {
+        return null;
+    }
+
+    $baseHost = strtolower((string) $baseParts['host']);
+    $host = strtolower((string) $parts['host']);
+    if ($host !== $baseHost) {
+        return null;
+    }
+
+    if (isset($parts['port']) && isset($baseParts['port']) && (int) $parts['port'] !== (int) $baseParts['port']) {
+        return null;
+    }
+
+    return $url;
+}
+
+function bbb_collect_safe_documents(Bbb $bbb, int $maxTotalMb): array
+{
+    if (empty($_POST['documents']) || !is_array($_POST['documents'])) {
+        return [];
+    }
+
+    $documents = [];
+    $totalBytes = 0;
+
+    foreach ($_POST['documents'] as $raw) {
+        if (!is_string($raw) || $raw === '') {
+            continue;
+        }
+
+        $json = html_entity_decode($raw, ENT_QUOTES, 'UTF-8');
+        $doc = json_decode($json, true);
+        if (!is_array($doc)) {
+            bbb_flash_redirect(
+                Display::return_message(get_lang('One or more selected documents are invalid.'), 'error'),
+                $bbb
+            );
+        }
+
+        $normalizedUrl = bbb_normalize_same_origin_document_url((string) ($doc['url'] ?? ''));
+        if (null === $normalizedUrl) {
+            bbb_flash_redirect(
+                Display::return_message(get_lang('One or more selected documents are not allowed.'), 'error'),
+                $bbb
+            );
+        }
+
+        $filename = (string) ($doc['filename'] ?? basename(parse_url($normalizedUrl, PHP_URL_PATH) ?: 'document'));
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (!in_array($extension, ['pdf', 'ppt', 'pptx', 'odp'], true)) {
+            bbb_flash_redirect(
+                Display::return_message(get_lang('Only PDF, PPT, PPTX and ODP documents can be pre-uploaded.'), 'error'),
+                $bbb
+            );
+        }
+
+        $size = max(0, (int) ($doc['size'] ?? 0));
+        $totalBytes += $size;
+        $documents[] = [
+            'url' => $normalizedUrl,
+            'filename' => basename($filename),
+            'downloadable' => true,
+            'removable' => true,
+        ];
+    }
+
+    if ($totalBytes > ($maxTotalMb * 1024 * 1024)) {
+        bbb_flash_redirect(
+            Display::return_message(
+                sprintf(get_lang('The total size of selected documents exceeds %d MB.'), $maxTotalMb),
+                'error'
+            ),
+            $bbb
+        );
+    }
+
+    return $documents;
+}
+
 $logInfo = [
     'tool' => 'Videoconference',
 ];
@@ -105,57 +233,21 @@ if ($bbb->pluginEnabled) {
                     }
                 } else {
                     if ($bbb->isConferenceManager()) {
-                        if (!empty($_POST['documents']) && is_array($_POST['documents'])) {
-                            $docs = [];
-                            foreach ($_POST['documents'] as $raw) {
-                                $json = html_entity_decode($raw);
-                                $doc  = json_decode($json, true);
-                                if (is_array($doc) && !empty($doc['url'])) {
-                                    $docs[] = [
-                                        'url'         => $doc['url'],
-                                        'filename'    => $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH)),
-                                        'downloadable'=> true,
-                                        'removable'   => true
-                                    ];
-                                }
-                            }
-                            if (!empty($docs)) {
-                                $meetingParams['documents'] = $docs;
-                            }
+                        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !bbb_has_valid_action_token()) {
+                            bbb_flash_redirect(
+                                Display::return_message(get_lang('Your session has expired. Please try again.'), 'error'),
+                                $bbb
+                            );
                         }
 
                         $maxTotalMb = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', api_get_course_info());
-                        if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
+                        if ($maxTotalMb <= 0) {
+                            $maxTotalMb = 20;
+                        }
 
-                        $totalBytes = 0;
-                        if (!empty($_POST['documents']) && is_array($_POST['documents'])) {
-                            $docs = [];
-                            foreach ($_POST['documents'] as $raw) {
-                                $json = html_entity_decode($raw);
-                                $doc  = json_decode($json, true);
-                                if (!is_array($doc) || empty($doc['url'])) { continue; }
-                                $totalBytes += (int)($doc['size'] ?? 0);
-                                $docs[] = [
-                                    'url'         => $doc['url'],
-                                    'filename'    => $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH)),
-                                    'downloadable'=> true,
-                                    'removable'   => true,
-                                ];
-                            }
-
-                            if ($totalBytes > ($maxTotalMb * 1024 * 1024)) {
-                                bbb_flash_redirect(
-                                    Display::return_message(
-                                        sprintf(get_lang('The total size of selected documents exceeds %d MB.'), $maxTotalMb),
-                                        'error'
-                                    ),
-                                    $bbb
-                                );
-                            }
-
-                            if (!empty($docs)) {
-                                $meetingParams['documents'] = $docs;
-                            }
+                        $documents = bbb_collect_safe_documents($bbb, $maxTotalMb);
+                        if (!empty($documents)) {
+                            $meetingParams['documents'] = $documents;
                         }
 
                         $url = $bbb->createMeeting($meetingParams);

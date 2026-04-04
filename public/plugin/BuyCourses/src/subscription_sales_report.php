@@ -464,15 +464,6 @@ $interbreadcrumb[] = [
 
 $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $defaultBackUrl;
-$referer = $_SERVER['HTTP_REFERER'] ?? '';
-
-if (is_string($referer) && '' !== $referer) {
-    $allowedFragment = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/';
-
-    if (false !== strpos($referer, $allowedFragment)) {
-        $backUrl = $referer;
-    }
-}
 
 $filterTypeLabels = [
     '0' => $plugin->get_lang('ByStatus'),

@@ -21,16 +21,16 @@
 
             <div class="flex flex-col gap-3 sm:flex-row">
                 <a
-                        href="{{ back_url }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                    href="{{ back_url }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
                     <em class="fa fa-arrow-left fa-fw"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
                 <a
-                        href="{{ subscriptions_list_url }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                    href="{{ subscriptions_list_url }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
                     <em class="fa fa-repeat fa-fw"></em>
                     {{ 'SubscriptionList'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -100,48 +100,71 @@
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
-                <tr>
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'Name'|get_lang }}
-                    </th>
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'SubscriptionPeriodDuration'|get_plugin_lang('BuyCoursesPlugin') }}
-                    </th>
-                    <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'Options'|get_lang }}
-                    </th>
-                </tr>
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'Name'|get_lang }}
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'SubscriptionPeriodDuration'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'Options'|get_lang }}
+                        </th>
+                    </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-25 bg-white">
-                {% for frequency in frequencies_list %}
-                <tr class="transition hover:bg-support-2">
-                    <td class="px-4 py-4 text-sm font-medium text-gray-90">
-                        {{ frequency.name }}
-                    </td>
-                    <td class="px-4 py-4 text-sm text-gray-90">
-                                <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-                                    {{ frequency.duration }} {{ 'Days'|get_lang }}
-                                </span>
-                    </td>
-                    <td class="px-4 py-4 text-right">
-                        <a
-                                title="{{ 'DeleteFrequency'|get_plugin_lang('BuyCoursesPlugin') }}"
-                                href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_frequency.php?' ~ {'action': 'delete_frequency', 'd': frequency.duration}|url_encode }}"
-                                class="{{ btnDanger }}"
-                                onclick="return confirm('{{ 'AreYouSureToDelete'|get_lang|e('js') }}');"
-                        >
-                            <em class="fa fa-remove fa-fw"></em>
-                            {{ 'Delete'|get_lang }}
-                        </a>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="3" class="px-4 py-10 text-center text-sm text-gray-50">
-                        {{ 'NoResults'|get_lang }}
-                    </td>
-                </tr>
-                {% endfor %}
+                    {% for frequency in frequencies_list %}
+                        <tr class="transition hover:bg-support-2">
+                            <td class="px-4 py-4 text-sm font-medium text-gray-90">
+                                {{ frequency.name }}
+                            </td>
+                            <td class="px-4 py-4 text-sm text-gray-90">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
+                                        {{ frequency.duration }} {{ 'Days'|get_lang }}
+                                    </span>
+                                    {% if frequency.in_use %}
+                                        <span class="inline-flex items-center rounded-full bg-warning/10 px-3 py-1 text-xs font-semibold text-warning">
+                                            In use ({{ frequency.usage_count }})
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-right">
+                                {% if frequency.in_use %}
+                                    <button
+                                        type="button"
+                                        disabled
+                                        class="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-gray-25 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                        title="This subscription period is currently in use and cannot be deleted."
+                                    >
+                                        <em class="fa fa-lock fa-fw"></em>
+                                        {{ 'Delete'|get_lang }}
+                                    </button>
+                                {% else %}
+                                    <form method="post" action="{{ delete_action_url }}" class="inline-flex">
+                                        <input type="hidden" name="action" value="delete_frequency">
+                                        <input type="hidden" name="duration" value="{{ frequency.duration }}">
+                                        <button
+                                            type="submit"
+                                            title="{{ 'DeleteFrequency'|get_plugin_lang('BuyCoursesPlugin') }}"
+                                            class="{{ btnDanger }}"
+                                            onclick="return confirm('{{ 'AreYouSureToDelete'|get_lang|e('js') }}');"
+                                        >
+                                            <em class="fa fa-remove fa-fw"></em>
+                                            {{ 'Delete'|get_lang }}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="px-4 py-10 text-center text-sm text-gray-50">
+                                {{ 'NoResults'|get_lang }}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

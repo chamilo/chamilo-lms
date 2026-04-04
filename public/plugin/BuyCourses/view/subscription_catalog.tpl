@@ -32,23 +32,19 @@
     {% if sessions_are_included %}
     <nav class="overflow-x-auto">
         <div class="inline-flex min-w-full rounded-2xl border border-gray-25 bg-white p-1 shadow-sm sm:min-w-0">
-            {% if coursesExist %}
             <a
                     href="subscription_course_catalog.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ showing_courses ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
             >
                 {{ 'Courses'|get_lang }}
             </a>
-            {% endif %}
 
-            {% if sessionExist %}
             <a
                     href="subscription_session_catalog.php"
                     class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ showing_sessions ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
             >
                 {{ 'Sessions'|get_lang }}
             </a>
-            {% endif %}
         </div>
     </nav>
     {% endif %}

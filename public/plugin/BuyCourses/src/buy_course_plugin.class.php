@@ -136,23 +136,11 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Check if plugin is enabled.
-     *
-     * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
+     * @return string[]
      */
-    public function isEnabled(bool $checkEnabled = false): bool
+    private function getPluginTables(): array
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
-    }
-
-    /**
-     * This method creates the tables required to this plugin.
-     *
-     * @throws \Doctrine\DBAL\Exception
-     */
-    public function install(): void
-    {
-        $tablesToBeCompared = [
+        return [
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
             self::TABLE_CULQI,
@@ -179,14 +167,37 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_STRIPE,
             self::TABLE_TPV_CECABANK,
         ];
+    }
 
-        $em = Database::getManager();
-        $cn = $em->getConnection();
-        $sm = $cn->createSchemaManager();
+    /**
+     * @return string[]
+     */
+    private function getPluginTablesWithPrefix(): array
+    {
+        return array_map(
+            static fn (string $table): string => Database::get_main_table($table),
+            $this->getPluginTables()
+        );
+    }
 
-        if (!$sm->tablesExist($tablesToBeCompared)) {
-            require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/database.php';
-        }
+    /**
+     * Check if plugin is enabled.
+     *
+     * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
+     */
+    public function isEnabled(bool $checkEnabled = false): bool
+    {
+        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
+    }
+
+    /**
+     * This method creates the tables required to this plugin.
+     *
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function install(): void
+    {
+        require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/database.php';
 
         $this->update();
     }
@@ -198,38 +209,13 @@ class BuyCoursesPlugin extends Plugin
      */
     public function uninstall(): void
     {
-        $tablesToBeDeleted = [
-            self::TABLE_PAYPAL,
-            self::TABLE_TRANSFER,
-            self::TABLE_CULQI,
-            self::TABLE_ITEM_BENEFICIARY,
-            self::TABLE_ITEM,
-            self::TABLE_SALE,
-            self::TABLE_CURRENCY,
-            self::TABLE_COMMISSION,
-            self::TABLE_PAYPAL_PAYOUTS,
-            self::TABLE_SERVICES_SALE,
-            self::TABLE_SERVICES,
-            self::TABLE_GLOBAL_CONFIG,
-            self::TABLE_INVOICE,
-            self::TABLE_TPV_REDSYS,
-            self::TABLE_COUPON,
-            self::TABLE_COUPON_ITEM,
-            self::TABLE_COUPON_SERVICE,
-            self::TABLE_SUBSCRIPTION,
-            self::TABLE_SUBSCRIPTION_SALE,
-            self::TABLE_SUBSCRIPTION_PERIOD,
-            self::TABLE_COUPON_SALE,
-            self::TABLE_COUPON_SERVICE_SALE,
-            self::TABLE_COUPON_SUBSCRIPTION_SALE,
-            self::TABLE_STRIPE,
-        ];
+        $tablesToBeDeleted = array_reverse($this->getPluginTablesWithPrefix());
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
-            $table = Database::get_main_table($tableToBeDeleted);
-            $sql = "DROP TABLE IF EXISTS $table";
+            $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
             Database::query($sql);
         }
+
         $this->manageTab(false);
     }
 
@@ -238,7 +224,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function update(): void
     {
-        $table = self::TABLE_GLOBAL_CONFIG;
+        $table = Database::get_main_table(self::TABLE_GLOBAL_CONFIG);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'global_tax_perc'";
         $res = Database::query($sql);
 
@@ -270,7 +256,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $table = self::TABLE_ITEM;
+        $table = Database::get_main_table(self::TABLE_ITEM);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
 
@@ -282,7 +268,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $table = self::TABLE_SERVICES;
+        $table = Database::get_main_table(self::TABLE_SERVICES);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
 
@@ -294,7 +280,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $table = self::TABLE_SALE;
+        $table = Database::get_main_table(self::TABLE_SALE);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
 
@@ -323,7 +309,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $table = self::TABLE_SERVICES_SALE;
+        $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
 
@@ -352,7 +338,7 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
-        $table = self::TABLE_INVOICE;
+        $table = Database::get_main_table(self::TABLE_INVOICE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             sale_id int unsigned NOT NULL,
@@ -365,7 +351,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_TPV_REDSYS;
+        $table = Database::get_main_table(self::TABLE_TPV_REDSYS);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             merchantcode varchar(255) NOT NULL,
@@ -387,7 +373,7 @@ class BuyCoursesPlugin extends Plugin
             ]);
         }
 
-        $table = self::TABLE_COUPON;
+        $table = Database::get_main_table(self::TABLE_COUPON);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             code varchar(255) NOT NULL,
@@ -401,7 +387,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_COUPON_ITEM;
+        $table = Database::get_main_table(self::TABLE_COUPON_ITEM);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
@@ -411,7 +397,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_COUPON_SERVICE;
+        $table = Database::get_main_table(self::TABLE_COUPON_SERVICE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
@@ -420,7 +406,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_SUBSCRIPTION;
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             product_type int unsigned NOT NULL,
             product_id int unsigned NOT NULL,
@@ -432,7 +418,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_SUBSCRIPTION_SALE;
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             currency_id int unsigned NOT NULL,
@@ -457,7 +443,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_SUBSCRIPTION_PERIOD;
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             duration int unsigned NOT NULL,
             name varchar(50) NOT NULL,
@@ -465,7 +451,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_COUPON_SALE;
+        $table = Database::get_main_table(self::TABLE_COUPON_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
@@ -474,7 +460,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_COUPON_SERVICE_SALE;
+        $table = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
@@ -483,7 +469,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_COUPON_SUBSCRIPTION_SALE;
+        $table = Database::get_main_table(self::TABLE_COUPON_SUBSCRIPTION_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
@@ -492,7 +478,7 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
-        $table = self::TABLE_STRIPE;
+        $table = Database::get_main_table(self::TABLE_STRIPE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             account_id varchar(255) NOT NULL,
@@ -512,7 +498,7 @@ class BuyCoursesPlugin extends Plugin
             ]);
         }
 
-        $table = self::TABLE_TPV_CECABANK;
+        $table = Database::get_main_table(self::TABLE_TPV_CECABANK);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
             crypto_key varchar(255) NOT NULL,
@@ -553,12 +539,9 @@ class BuyCoursesPlugin extends Plugin
         $fielddefault = '';
         UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
-        $table = self::TABLE_CURRENCY;
+        $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
 
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses');
-
-        exit;
     }
 
     /**
@@ -1460,7 +1443,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
             'id' => $session->getId(),
-            'name' => $session->getTitle(),
+            'title' => $session->getTitle(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
@@ -1617,7 +1600,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
             'id' => $session->getId(),
-            'name' => $session->getTitle(),
+            'title' => $session->getTitle(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
@@ -2616,7 +2599,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if (!empty($item)) {
-            $sessionItem['item_id'] = $item['iid'];
+            $sessionItem['item_id'] = $item['id'];
             $sessionItem['visible'] = true;
             $sessionItem['currency'] = $item['iso_code'];
             $sessionItem['price'] = $item['price'];
@@ -3395,7 +3378,7 @@ class BuyCoursesPlugin extends Plugin
         $isoCode = $currency['iso_code'];
 
         $servicesSale = Database::select(
-            'ss.*, s.title, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
@@ -3497,7 +3480,7 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.title LIKE %?%'] = $name;
+            $whereConditions['AND s.name LIKE %?%'] = $name;
         }
 
         if (!empty($min)) {
@@ -3709,31 +3692,24 @@ class BuyCoursesPlugin extends Plugin
      */
     public function saveGlobalParameters(array $params)
     {
+        $table = Database::get_main_table(self::TABLE_GLOBAL_CONFIG);
+        $defaultParams = $this->getGlobalParameters();
         $sqlParams = [
-            'terms_and_conditions' => $params['terms_and_conditions'],
-            'sale_email' => $params['sale_email'],
-            'info_email_extra' => '',
+            'terms_and_conditions' => $params['terms_and_conditions'] ?? $defaultParams['terms_and_conditions'],
+            'sale_email' => $params['sale_email'] ?? $defaultParams['sale_email'],
+            'info_email_extra' => $defaultParams['info_email_extra'],
+            'global_tax_perc' => isset($params['global_tax_perc']) ? (int) $params['global_tax_perc'] : (int) $defaultParams['global_tax_perc'],
+            'tax_applies_to' => isset($params['tax_applies_to']) ? (int) $params['tax_applies_to'] : (int) $defaultParams['tax_applies_to'],
+            'tax_name' => $params['tax_name'] ?? $defaultParams['tax_name'],
+            'seller_name' => $params['seller_name'] ?? $defaultParams['seller_name'],
+            'seller_id' => $params['seller_id'] ?? $defaultParams['seller_id'],
+            'seller_address' => $params['seller_address'] ?? $defaultParams['seller_address'],
+            'seller_email' => $params['seller_email'] ?? $defaultParams['seller_email'],
+            'next_number_invoice' => isset($params['next_number_invoice']) ? (int) $params['next_number_invoice'] : (int) $defaultParams['next_number_invoice'],
+            'invoice_series' => $params['invoice_series'] ?? $defaultParams['invoice_series'],
         ];
 
-        if ('true' === $this->get('tax_enable')) {
-            $sqlParams['global_tax_perc'] = $params['global_tax_perc'];
-            $sqlParams['tax_applies_to'] = $params['tax_applies_to'];
-            $sqlParams['tax_name'] = $params['tax_name'];
-        }
-
-        if ('true' === $this->get('invoicing_enable')) {
-            $sqlParams['seller_name'] = $params['seller_name'];
-            $sqlParams['seller_id'] = $params['seller_id'];
-            $sqlParams['seller_address'] = $params['seller_address'];
-            $sqlParams['seller_email'] = $params['seller_email'];
-            $sqlParams['next_number_invoice'] = (int) $params['next_number_invoice'];
-            $sqlParams['invoice_series'] = $params['invoice_series'];
-        }
-
-        return Database::insert(
-            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
-            $sqlParams,
-        );
+        return Database::update($table, $sqlParams, ['id = ?' => 1]);
     }
 
     /**
@@ -3743,12 +3719,37 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getGlobalParameters()
     {
-        return Database::select(
+        $table = Database::get_main_table(self::TABLE_GLOBAL_CONFIG);
+        $defaults = [
+            'id' => 1,
+            'terms_and_conditions' => '',
+            'global_tax_perc' => 0,
+            'tax_applies_to' => 0,
+            'tax_name' => '',
+            'seller_name' => '',
+            'seller_id' => '',
+            'seller_address' => '',
+            'seller_email' => '',
+            'next_number_invoice' => 0,
+            'invoice_series' => '',
+            'sale_email' => '',
+            'info_email_extra' => '',
+        ];
+
+        $globalParameters = Database::select(
             '*',
-            Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
+            $table,
             ['id = ?' => 1],
             'first'
         );
+
+        if (empty($globalParameters)) {
+            Database::insert($table, $defaults);
+
+            return $defaults;
+        }
+
+        return array_merge($defaults, $globalParameters);
     }
 
     /**
@@ -5262,13 +5263,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Search filtered sessions by name, and range of price.
-     *
-     * @param string $name            Optional. The name filter
-     * @param int    $min             Optional. The minimum price filter
-     * @param int    $max             Optional. The maximum price filter
-     * @param string $typeResult      Optional. 'all' and 'count'
-     * @param int    $sessionCategory Optional. Session category id
+     * Search filtered sessions by title and price range.
      *
      * @return array<int, Session>|int
      */
@@ -5284,49 +5279,76 @@ class BuyCoursesPlugin extends Plugin
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $innerJoin = "$itemTable i ON s.id = i.product_id";
-        $whereConditions = [
-            'i.product_type = ? ' => self::PRODUCT_TYPE_SESSION,
-        ];
+        $where = [];
+        $where[] = 'i.product_type = '.self::PRODUCT_TYPE_SESSION;
 
         if (!empty($name)) {
-            $whereConditions['AND s.title LIKE %?%'] = $name;
+            $safeName = Database::escape_string($name);
+            $where[] = "s.title LIKE '%$safeName%'";
         }
 
-        if (!empty($min)) {
-            $whereConditions['AND i.price >= ?'] = $min;
+        if ($min > 0) {
+            $where[] = 'i.price >= '.(int) $min;
         }
 
-        if (!empty($max)) {
-            $whereConditions['AND i.price <= ?'] = $max;
+        if ($max > 0) {
+            $where[] = 'i.price <= '.(int) $max;
         }
 
-        if (0 != $sessionCategory) {
-            $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;
+        if ($sessionCategory > 0) {
+            $where[] = 's.session_category_id = '.(int) $sessionCategory;
         }
 
-        $sessionIds = Database::select(
-            's.id',
-            "$sessionTable s INNER JOIN $innerJoin",
-            ['where' => $whereConditions, 'limit' => "$start, $end"],
-            $typeResult
-        );
+        $whereSql = '';
+        if (!empty($where)) {
+            $whereSql = ' WHERE '.implode(' AND ', $where);
+        }
 
         if ('count' === $typeResult) {
-            return $sessionIds;
+            $countSql = "
+            SELECT COUNT(DISTINCT s.id) AS count
+            FROM $sessionTable s
+            INNER JOIN $itemTable i
+                ON s.id = i.product_id
+            $whereSql
+        ";
+
+            $countResult = Database::query($countSql);
+            $countRow = $countResult ? Database::fetch_array($countResult) : [];
+
+            return (int) ($countRow['count'] ?? 0);
         }
 
-        if (!$sessionIds) {
+        $listSql = "
+        SELECT DISTINCT s.id
+        FROM $sessionTable s
+        INNER JOIN $itemTable i
+            ON s.id = i.product_id
+        $whereSql
+        ORDER BY s.title ASC
+        LIMIT ".(int) $start.', '.(int) $end;
+
+        $result = Database::query($listSql);
+
+        if (!$result) {
             return [];
         }
 
+        $entityManager = Database::getManager();
         $sessions = [];
 
-        foreach ($sessionIds as $sessionId) {
-            $sessions[] = Database::getManager()->find(
-                Session::class,
-                $sessionId
-            );
+        while ($row = Database::fetch_array($result)) {
+            $sessionId = isset($row['id']) ? (int) $row['id'] : 0;
+
+            if ($sessionId <= 0) {
+                continue;
+            }
+
+            $session = $entityManager->find(Session::class, $sessionId);
+
+            if ($session instanceof Session) {
+                $sessions[] = $session;
+            }
         }
 
         return $sessions;
@@ -5629,7 +5651,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         return Database::select(
-            ['cs.service_id as id', 's.title'],
+            ['cs.service_id as id', 's.name'],
             $couponFrom,
             [
                 'where' => [
@@ -6073,11 +6095,16 @@ class BuyCoursesPlugin extends Plugin
             'product_id' => (int) $subscription['product_id'],
             'duration' => (int) $frequency['duration'],
             'currency_id' => (int) $subscription['currency_id'],
-            'tax_perc' => (int) $subscription['tax_perc'],
+            'tax_perc' => null !== $subscription['tax_perc'] ? (int) $subscription['tax_perc'] : null,
             'price' => (float) $frequency['price'],
         ];
 
-        return Database::insert(self::TABLE_SUBSCRIPTION, $values) > 0;
+        $result = Database::insert(
+            Database::get_main_table(self::TABLE_SUBSCRIPTION),
+            $values
+        );
+
+        return false !== $result;
     }
 
     /**

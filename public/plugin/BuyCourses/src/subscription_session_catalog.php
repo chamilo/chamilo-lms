@@ -115,8 +115,12 @@ if (api_is_platform_admin()) {
 }
 $backUrl = $defaultBackUrl;
 
-$courseList = $plugin->getCatalogSubscriptionCourseList($first, $pageSize, $nameFilter);
-$coursesExist = count($courseList) > 0;
+/*
+ * Tabs should depend on the available catalog sections, not on the current
+ * filter results. Otherwise, the Courses tab disappears when the current
+ * search does not return items while browsing the Sessions catalog.
+ */
+$coursesExist = true;
 $sessionExist = true;
 
 $template->assign('page_title', $templateName);

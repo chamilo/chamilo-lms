@@ -101,7 +101,7 @@ function styleBuyCoursesFormHtml(string $html): string
                 'bg-white',
                 'p-5',
                 'shadow-sm',
-                'space-y-3',
+                'space-y-4',
             ]);
         }
     }
@@ -114,7 +114,7 @@ function styleBuyCoursesFormHtml(string $html): string
             }
 
             addTailwindClassesToElement($label, [
-                'mb-2',
+                'mb-3',
                 'block',
                 'text-sm',
                 'font-semibold',
@@ -313,66 +313,105 @@ function styleBuyCoursesFormHtml(string $html): string
     return $result;
 }
 
+/**
+ * Return a translated plugin label with a safe fallback when the key is missing.
+ */
+function getPluginLabelWithFallback($plugin, string $key, string $fallback): string
+{
+    $value = (string) $plugin->get_lang($key);
+
+    if ('' === trim($value) || $value === $key) {
+        return $fallback;
+    }
+
+    return $value;
+}
+
 api_protect_admin_script(true);
 
 $plugin = BuyCoursesPlugin::create();
 
 $subscriptionsListUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php';
+$backUrl = $subscriptionsListUrl;
+$deleteActionUrl = api_get_self();
 
-$defaultBackUrl = $subscriptionsListUrl;
-$backUrl = $defaultBackUrl;
+$frequencyNotRemovedMessage = getPluginLabelWithFallback(
+    $plugin,
+    'FrequencyNotRemoved',
+    'The subscription period could not be removed.'
+);
+$frequencyInUseMessage = getPluginLabelWithFallback(
+    $plugin,
+    'SubscriptionPeriodOnUse',
+    'This subscription period is currently in use and cannot be deleted.'
+);
 
-if (isset($_GET['action'], $_GET['d'])) {
-    if ('delete_frequency' === $_GET['action']) {
-        $duration = (int) $_GET['d'];
+$deleteAction = (string) ($_POST['action'] ?? '');
+$deleteDuration = isset($_POST['duration']) ? (int) $_POST['duration'] : 0;
 
-        if ($duration > 0) {
-            $frequency = $plugin->selectFrequency($duration);
+if ('delete_frequency' === $deleteAction) {
+    if ($deleteDuration > 0) {
+        $frequency = $plugin->selectFrequency($deleteDuration);
 
-            if (!empty($frequency)) {
-                $subscriptionsItems = $plugin->getSubscriptionsItemsByDuration($duration);
+        if (!empty($frequency)) {
+            $subscriptionsItems = $plugin->getSubscriptionsItemsByDuration($deleteDuration);
+            $usageCount = is_array($subscriptionsItems) ? count($subscriptionsItems) : 0;
 
-                if (empty($subscriptionsItems)) {
-                    $plugin->deleteFrequency($duration);
+            if (0 === $usageCount) {
+                $result = $plugin->deleteFrequency($deleteDuration);
 
+                if ($result) {
                     Display::addFlash(
                         Display::return_message($plugin->get_lang('FrequencyRemoved'), 'success')
                     );
                 } else {
                     Display::addFlash(
-                        Display::return_message($plugin->get_lang('SubscriptionPeriodOnUse'), 'error')
+                        Display::return_message($frequencyNotRemovedMessage, 'error')
                     );
                 }
             } else {
                 Display::addFlash(
-                    Display::return_message($plugin->get_lang('FrequencyNotExits'), 'error')
+                    Display::return_message(
+                        sprintf('%s (%d)', $frequencyInUseMessage, $usageCount),
+                        'error'
+                    )
                 );
             }
         } else {
             Display::addFlash(
-                Display::return_message($plugin->get_lang('FrequencyIncorrect'), 'error')
+                Display::return_message($plugin->get_lang('FrequencyNotExits'), 'error')
             );
         }
-
-        header('Location: '.api_get_self());
-
-        exit;
+    } else {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('FrequencyIncorrect'), 'error')
+        );
     }
+
+    header('Location: '.api_get_self());
+    exit;
 }
 
 $frequencies = $plugin->getFrequenciesList();
 
+foreach ($frequencies as &$frequency) {
+    $duration = isset($frequency['duration']) ? (int) $frequency['duration'] : 0;
+    $subscriptionsItems = $plugin->getSubscriptionsItemsByDuration($duration);
+    $usageCount = is_array($subscriptionsItems) ? count($subscriptionsItems) : 0;
+
+    $frequency['usage_count'] = $usageCount;
+    $frequency['in_use'] = $usageCount > 0;
+}
+unset($frequency);
+
 $form = new FormValidator('add_frequency');
-
 $form->addText('name', get_lang('Name'), false);
-
 $form->addElement(
     'number',
     'duration',
     [$plugin->get_lang('Duration'), $plugin->get_lang('Days')],
     ['step' => 1, 'min' => 1, 'placeholder' => $plugin->get_lang('SubscriptionFrequencyValueDays')]
 );
-
 $form->addButtonSave(get_lang('Save'));
 
 if ($form->validate()) {
@@ -387,7 +426,6 @@ if ($form->validate()) {
         );
 
         header('Location: '.api_get_self());
-
         exit;
     }
 
@@ -419,8 +457,7 @@ if ($form->validate()) {
         }
     }
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_frequency.php');
-
+    header('Location: '.api_get_self());
     exit;
 }
 
@@ -440,11 +477,11 @@ $template->assign('page_title', $templateName);
 $template->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $template->assign('back_url', $backUrl);
 $template->assign('subscriptions_list_url', $subscriptionsListUrl);
+$template->assign('delete_action_url', $deleteActionUrl);
 $template->assign('items_form', styleBuyCoursesFormHtml($form->returnForm()));
 $template->assign('frequencies_list', $frequencies);
 $template->assign('frequencies_count', count($frequencies));
 
 $content = $template->fetch('BuyCourses/view/configure_frequency.tpl');
 $template->assign('content', $content);
-
 $template->display_one_col_template();

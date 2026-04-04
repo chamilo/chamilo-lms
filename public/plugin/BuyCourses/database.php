@@ -17,6 +17,26 @@ if (!function_exists('api_get_path')) {
     exit('This script must be loaded through the Chamilo plugin installer sequence');
 }
 
+if (!function_exists('buycourses_plugin_table')) {
+    /**
+     * Return the full table name including the platform prefix when available.
+     */
+    function buycourses_plugin_table(string $table): string
+    {
+        return Database::get_main_table($table);
+    }
+
+    /**
+     * Check whether the given table already contains at least one row.
+     */
+    function buycourses_plugin_table_has_rows(string $table): bool
+    {
+        $result = Database::query("SELECT 1 FROM $table LIMIT 1");
+
+        return false !== $result && Database::num_rows($result) > 0;
+    }
+}
+
 $entityManager = Database::getManager();
 $pluginSchema = new Schema();
 $connection = $entityManager->getConnection();
@@ -24,8 +44,8 @@ $platform = $connection->getDatabasePlatform();
 $sm = $connection->createSchemaManager();
 
 // Create tables
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL)) {
-    $paypalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_PAYPAL))) {
+    $paypalTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_PAYPAL));
     $paypalTable->addColumn(
         'id',
         Types::INTEGER,
@@ -38,8 +58,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL)) {
     $paypalTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TRANSFER)) {
-    $transferTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TRANSFER);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TRANSFER))) {
+    $transferTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TRANSFER));
     $transferTable->addColumn(
         'id',
         Types::INTEGER,
@@ -51,8 +71,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TRANSFER)) {
     $transferTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_REDSYS)) {
-    $tpvRedsysTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_REDSYS);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_REDSYS))) {
+    $tpvRedsysTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_REDSYS));
     $tpvRedsysTable->addColumn(
         'id',
         Types::INTEGER,
@@ -68,8 +88,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_REDSYS)) {
     $tpvRedsysTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
-    $currencyTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CURRENCY);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_CURRENCY))) {
+    $currencyTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_CURRENCY));
     $currencyTable->addColumn(
         'id',
         Types::INTEGER,
@@ -96,8 +116,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
     $currencyTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM)) {
-    $itemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_ITEM))) {
+    $itemTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_ITEM));
     $itemTable->addColumn(
         'id',
         Types::INTEGER,
@@ -126,15 +146,15 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM)) {
     );
     $itemTable->setPrimaryKey(['id']);
     $itemTable->addForeignKeyConstraint(
-        $currencyTable,
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_CURRENCY),
         ['currency_id'],
         ['id'],
         ['onDelete' => 'CASCADE']
     );
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY)) {
-    $itemBeneficiary = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY))) {
+    $itemBeneficiary = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY));
     $itemBeneficiary->addColumn(
         'id',
         Types::INTEGER,
@@ -157,14 +177,14 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY)) {
     );
     $itemBeneficiary->setPrimaryKey(['id']);
     $itemBeneficiary->addForeignKeyConstraint(
-        $itemTable,
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_ITEM),
         ['item_id'],
         ['id'],
         ['onDelete' => 'CASCADE']
     );
 }
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COMMISSION)) {
-    $commissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COMMISSION);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COMMISSION))) {
+    $commissions = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COMMISSION));
     $commissions->addColumn(
         'id',
         Types::INTEGER,
@@ -178,8 +198,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COMMISSION)) {
     $commissions->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS)) {
-    $saleCommissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS))) {
+    $saleCommissions = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS));
     $saleCommissions->addColumn(
         'id',
         Types::INTEGER,
@@ -210,8 +230,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS)) {
     $saleCommissions->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
-    $saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SALE))) {
+    $saleTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SALE));
     $saleTable->addColumn(
         'id',
         Types::INTEGER,
@@ -271,15 +291,15 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
     );
     $saleTable->setPrimaryKey(['id']);
     $saleTable->addForeignKeyConstraint(
-        $currencyTable,
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_CURRENCY),
         ['currency_id'],
         ['id'],
         ['onDelete' => 'CASCADE']
     );
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
-    $servicesTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SERVICES);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES))) {
+    $servicesTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES));
     $servicesTable->addColumn(
         'id',
         Types::INTEGER,
@@ -303,8 +323,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
     $servicesTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
-    $servicesNodeTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SERVICES_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES_SALE))) {
+    $servicesNodeTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES_SALE));
     $servicesNodeTable->addColumn(
         'id',
         Types::INTEGER,
@@ -365,15 +385,15 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
     );
     $servicesNodeTable->setPrimaryKey(['id']);
     $servicesNodeTable->addForeignKeyConstraint(
-        $servicesTable,
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES),
         ['service_id'],
         ['id'],
         ['onDelete' => 'CASCADE']
     );
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CULQI)) {
-    $culqiTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CULQI);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_CULQI))) {
+    $culqiTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_CULQI));
     $culqiTable->addColumn(
         'id',
         Types::INTEGER,
@@ -387,8 +407,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CULQI)) {
 
 $globalConfigNeedsInfoEmailExtra = false;
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
-    $globalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG))) {
+    $globalTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG));
     $globalTable->addColumn(
         'id',
         Types::INTEGER,
@@ -408,12 +428,12 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable->addColumn('info_email_extra', Types::TEXT);
     $globalTable->setPrimaryKey(['id']);
 } else {
-    $globalTable = $sm->introspectTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
+    $globalTable = $sm->introspectTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG));
     $globalConfigNeedsInfoEmailExtra = !$globalTable->hasColumn('info_email_extra');
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
-    $invoiceTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_INVOICE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_INVOICE))) {
+    $invoiceTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_INVOICE));
     $invoiceTable->addColumn(
         'id',
         Types::INTEGER,
@@ -436,8 +456,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
     $invoiceTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON)) {
-    $couponTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON))) {
+    $couponTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON));
     $couponTable->addColumn(
         'id',
         Types::INTEGER,
@@ -453,8 +473,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON)) {
     $couponTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_ITEM)) {
-    $couponItemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_ITEM);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_ITEM))) {
+    $couponItemTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_ITEM));
     $couponItemTable->addColumn(
         'id',
         Types::INTEGER,
@@ -466,8 +486,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_ITEM)) {
     $couponItemTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE)) {
-    $couponService = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SERVICE))) {
+    $couponService = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SERVICE));
     $couponService->addColumn(
         'id',
         Types::INTEGER,
@@ -478,8 +498,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE)) {
     $couponService->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION)) {
-    $subscriptionTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION))) {
+    $subscriptionTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION));
     $subscriptionTable->addColumn(
         'product_type',
         Types::INTEGER,
@@ -501,8 +521,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION)) {
     $subscriptionTable->setPrimaryKey(['product_type', 'product_id', 'duration']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE)) {
-    $subscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE))) {
+    $subscriptionSaleTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE));
     $subscriptionSaleTable->addColumn(
         'id',
         Types::INTEGER,
@@ -529,8 +549,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE)) {
     $subscriptionSaleTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD)) {
-    $subscriptionPeriodTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD))) {
+    $subscriptionPeriodTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD));
     $subscriptionPeriodTable->addColumn(
         'duration',
         Types::INTEGER,
@@ -540,8 +560,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD)) {
     $subscriptionPeriodTable->setPrimaryKey(['duration']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SALE)) {
-    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SALE))) {
+    $couponSaleTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SALE));
     $couponSaleTable->addColumn(
         'id',
         Types::INTEGER,
@@ -552,8 +572,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SALE)) {
     $couponSaleTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE)) {
-    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE))) {
+    $couponSaleTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE));
     $couponSaleTable->addColumn(
         'id',
         Types::INTEGER,
@@ -564,8 +584,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE)) {
     $couponSaleTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_STRIPE)) {
-    $stripeTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_STRIPE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_STRIPE))) {
+    $stripeTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_STRIPE));
     $stripeTable->addColumn(
         'id',
         Types::INTEGER,
@@ -577,8 +597,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_STRIPE)) {
     $stripeTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_CECABANK)) {
-    $tpvCecabankTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_CECABANK);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK))) {
+    $tpvCecabankTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK));
     $tpvCecabankTable->addColumn(
         'id',
         Types::INTEGER,
@@ -595,8 +615,8 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_CECABANK)) {
     $tpvCecabankTable->setPrimaryKey(['id']);
 }
 
-if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE)) {
-    $couponSubscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE);
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE))) {
+    $couponSubscriptionSaleTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE));
     $couponSubscriptionSaleTable->addColumn(
         'id',
         Types::INTEGER,
@@ -657,53 +677,63 @@ if (!$paypalExtraField) {
     );
 }
 
-Database::insert(
-    $paypalTable,
-    [
-        'username' => '',
-        'password' => '',
-        'signature' => '',
-        'sandbox' => true,
-    ]
-);
+if (!buycourses_plugin_table_has_rows($paypalTable)) {
+    Database::insert(
+        $paypalTable,
+        [
+            'username' => '',
+            'password' => '',
+            'signature' => '',
+            'sandbox' => true,
+        ]
+    );
+}
 
-Database::insert(
-    $tpvRedsysTable,
-    [
-        'merchantcode' => '',
-        'terminal' => '',
-        'currency' => '',
-        'kc' => '',
-        'url_redsys' => 'https://sis.redsys.es/sis/realizarPago',
-        'url_redsys_sandbox' => 'https://sis-t.redsys.es:25443/sis/realizarPago',
-        'sandbox' => 1,
-    ]
-);
+if (!buycourses_plugin_table_has_rows($tpvRedsysTable)) {
+    Database::insert(
+        $tpvRedsysTable,
+        [
+            'merchantcode' => '',
+            'terminal' => '',
+            'currency' => '',
+            'kc' => '',
+            'url_redsys' => 'https://sis.redsys.es/sis/realizarPago',
+            'url_redsys_sandbox' => 'https://sis-t.redsys.es:25443/sis/realizarPago',
+            'sandbox' => 1,
+        ]
+    );
+}
 
-Database::insert(
-    $culqiTable,
-    [
-        'commerce_code' => '',
-        'api_key' => '',
-        'integration' => 1,
-    ]
-);
+if (!buycourses_plugin_table_has_rows($culqiTable)) {
+    Database::insert(
+        $culqiTable,
+        [
+            'commerce_code' => '',
+            'api_key' => '',
+            'integration' => 1,
+        ]
+    );
+}
 
-Database::insert(
-    $commissionTable,
-    [
-        'commission' => 0,
-    ]
-);
+if (!buycourses_plugin_table_has_rows($commissionTable)) {
+    Database::insert(
+        $commissionTable,
+        [
+            'commission' => 0,
+        ]
+    );
+}
 
-Database::insert(
-    $stripeTable,
-    [
-        'account_id' => '',
-        'secret_key' => '',
-        'endpoint_secret' => '',
-    ]
-);
+if (!buycourses_plugin_table_has_rows($stripeTable)) {
+    Database::insert(
+        $stripeTable,
+        [
+            'account_id' => '',
+            'secret_key' => '',
+            'endpoint_secret' => '',
+        ]
+    );
+}
 
 $currencies = [
     ['AD', 'Andorra', 'EUR', 'AND', 0],

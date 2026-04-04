@@ -16,4 +16,5 @@ $plugin = BuyCoursesPlugin::create();
 if (!api_is_platform_admin()) {
     exit($plugin->get_lang('AdminPermissionsRequired'));
 }
+
 $plugin->install();

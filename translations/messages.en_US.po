@@ -33814,3 +33814,24 @@ msgstr "Select one or more regions for this plugin in the current access URL."
 
 msgid "Available regions"
 msgstr "Available regions"
+
+msgid "Selected paragraph"
+msgstr "Selected paragraph"
+
+msgid "Destination folder"
+msgstr "Destination folder"
+
+msgid "Generate AI media"
+msgstr "Generate AI media"
+
+msgid "Save and insert"
+msgstr "Save and insert"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generated successfully, but saving is disabled because the provider returned a URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "The file was saved, but its URL could not be resolved."

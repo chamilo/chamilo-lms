@@ -33728,3 +33728,24 @@ msgstr ""
 
 msgid "Available regions"
 msgstr ""
+
+msgid "Selected paragraph"
+msgstr ""
+
+msgid "Destination folder"
+msgstr ""
+
+msgid "Generate AI media"
+msgstr ""
+
+msgid "Save and insert"
+msgstr ""
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr ""
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr ""
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr ""

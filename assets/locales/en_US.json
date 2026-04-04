@@ -1860,5 +1860,19 @@
     "Subscribe users to this session": "Subscribe users to this session",
     "Add courses to this session": "Add courses to this session",
     "Copy": "Copy",
-    "Add a training session": "Add a training session"
+    "Add a training session": "Add a training session",
+    "Image": "Image",
+    "Video": "Video",
+    "Selected paragraph": "Selected paragraph",
+    "Destination folder": "Destination folder",
+    "Generate AI media": "Generate AI media",
+    "Filename": "Filename",
+    "Width": "Width",
+    "Height": "Height",
+    "Generate": "Generate",
+    "Saving...": "Saving...",
+    "Save and insert": "Save and insert",
+    "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.",
+    "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video generated successfully, but saving is disabled because the provider returned a URL.",
+    "The file was saved, but its URL could not be resolved.": "The file was saved, but its URL could not be resolved."
 }

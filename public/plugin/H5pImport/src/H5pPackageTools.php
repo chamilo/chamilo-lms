@@ -113,12 +113,74 @@ class H5pPackageTools
             return '';
         }
 
-        return api_get_path(\WEB_PLUGIN_PATH).'H5pImport/package_asset.php?path='.$relativePath;
+        $params = ['path' => $relativePath];
+        $cid = api_get_course_int_id();
+        $sid = api_get_session_id();
+        $gid = api_get_group_id();
+
+        if ($cid > 0) {
+            $params['cid'] = $cid;
+        }
+
+        if ($sid >= 0) {
+            $params['sid'] = $sid;
+        }
+
+        if ($gid >= 0) {
+            $params['gid'] = $gid;
+        }
+
+        return api_get_path(\WEB_PLUGIN_PATH).'H5pImport/package_asset.php?'.http_build_query($params);
     }
 
-    public static function getCourseLibrariesAssetBaseUrl(Course $course): string
+    public static function getCourseLibrariesAssetBasePath(Course $course): string
     {
-        return self::buildPackageAssetUrl(self::buildCourseRelativePrefix($course));
+        return self::buildCourseRelativePrefix($course);
+    }
+
+    public static function convertDependencyFilesToAssetUrls(array $files, Course $course): array
+    {
+        foreach (['scripts', 'styles'] as $assetType) {
+            if (empty($files[$assetType]) || !is_array($files[$assetType])) {
+                continue;
+            }
+
+            foreach ($files[$assetType] as $index => $asset) {
+                $path = '';
+
+                if (is_object($asset)) {
+                    $path = trim((string) ($asset->path ?? ''));
+                } elseif (is_array($asset)) {
+                    $path = trim((string) ($asset['path'] ?? ''));
+                }
+
+                if ('' === $path) {
+                    continue;
+                }
+
+                $normalizedPath = self::normalizeRelativeStoragePath($path);
+
+                if (null === $normalizedPath) {
+                    continue;
+                }
+
+                if (!str_starts_with($normalizedPath, self::buildCourseRelativePrefix($course).'/')) {
+                    $normalizedPath = self::buildCourseRelativePrefix($course).'/'.$normalizedPath;
+                }
+
+                $assetUrl = self::buildPackageAssetUrl($normalizedPath);
+
+                if (is_object($asset)) {
+                    $asset->path = $assetUrl;
+                    $files[$assetType][$index] = $asset;
+                } elseif (is_array($asset)) {
+                    $asset['path'] = $assetUrl;
+                    $files[$assetType][$index] = $asset;
+                }
+            }
+        }
+
+        return $files;
     }
 
     public static function checkPackageIntegrity(object $h5pJson, string $extractedDir): bool
@@ -324,16 +386,16 @@ class H5pPackageTools
 
     public static function deleteH5pPackage(H5pImport $h5pImport): bool
     {
-        $packagePath = $h5pImport->getPath();
+        $packagePath = rtrim((string) $h5pImport->getPath(), '/');
         $h5pImportId = (int) $h5pImport->getIid();
 
         $entityManager = \Database::getManager();
         $connection = $entityManager->getConnection();
         $filesystem = new Filesystem();
 
-        $connection->beginTransaction();
-
         try {
+            $connection->beginTransaction();
+
             $connection->executeStatement(
                 'DELETE FROM plugin_h5p_import_results WHERE plugin_h5p_import_id = :id',
                 ['id' => $h5pImportId]
@@ -344,11 +406,13 @@ class H5pPackageTools
                 ['id' => $h5pImportId]
             );
 
-            $managed = $entityManager->find(H5pImport::class, $h5pImportId);
+            $deletedRows = $connection->executeStatement(
+                'DELETE FROM plugin_h5p_import WHERE iid = :id',
+                ['id' => $h5pImportId]
+            );
 
-            if (null !== $managed) {
-                $entityManager->remove($managed);
-                $entityManager->flush();
+            if ($deletedRows <= 0) {
+                throw new \RuntimeException('The H5P import row was not deleted.');
             }
 
             $connection->commit();
@@ -357,14 +421,22 @@ class H5pPackageTools
                 $connection->rollBack();
             }
 
+            error_log(
+                '[H5pImport][delete] '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine()
+            );
+            error_log('[H5pImport][delete][trace] '.$e->getTraceAsString());
+
             return false;
         }
 
-        if ($filesystem->exists($packagePath)) {
+        if ('' !== $packagePath && $filesystem->exists($packagePath)) {
             try {
                 $filesystem->remove($packagePath);
             } catch (\Throwable $e) {
-                return false;
+                error_log(
+                    '[H5pImport][delete][cleanup] '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine()
+                );
+                error_log('[H5pImport][delete][cleanup][path] '.$packagePath);
             }
         }
 
@@ -391,7 +463,7 @@ class H5pPackageTools
             ],
             'crossorigin' => false,
             'pluginCacheBuster' => '?0',
-            'libraryUrl' => self::getCourseLibrariesAssetBaseUrl($h5pImport->getCourse()),
+            'libraryUrl' => self::getCourseLibrariesAssetBasePath($h5pImport->getCourse()),
             'contents' => [],
             'loadedJs' => [],
             'loadedCss' => [],

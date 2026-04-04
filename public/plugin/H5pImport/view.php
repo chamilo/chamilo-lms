@@ -2,13 +2,20 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pImplementation;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
-use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
 use ChamiloSession as Session;
 
 $course_plugin = 'h5pimport';
 require_once __DIR__.'/config.php';
+
+if (!function_exists('h5pimport_escape')) {
+    function h5pimport_escape($value): string
+    {
+        return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    }
+}
 
 if (!function_exists('h5pimport_build_view_url')) {
     function h5pimport_build_view_url(string $baseUrl, array $params = []): string
@@ -20,6 +27,71 @@ if (!function_exists('h5pimport_build_view_url')) {
         $separator = '' !== (string) parse_url($baseUrl, PHP_URL_QUERY) ? '&' : '?';
 
         return $baseUrl.$separator.http_build_query($params);
+    }
+}
+
+if (!function_exists('h5pimport_render_view_header')) {
+    function h5pimport_render_view_header(
+        string $title,
+        ?string $description,
+        ?string $backUrl = null
+    ): string {
+        $description = trim((string) $description);
+        $title = Security::remove_XSS($title);
+
+        $descriptionHtml = '';
+        if ('' !== $description) {
+            $descriptionHtml = '
+                <p class="mt-3 max-w-3xl text-body-2 text-gray-50">
+                    '.h5pimport_escape($description).'
+                </p>
+            ';
+        }
+
+        $backButton = '';
+        if (!empty($backUrl)) {
+            $backButton = '
+                <a
+                    href="'.h5pimport_escape($backUrl).'"
+                    class="inline-flex items-center justify-center rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:bg-gray-10"
+                >
+                    '.h5pimport_escape(get_lang('Back')).'
+                </a>
+            ';
+        }
+
+        return '
+            <div class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div>
+                        <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-caption font-semibold text-support-4">
+                            H5P
+                        </div>
+                        <h1 class="mt-3 text-2xl font-semibold text-gray-90">
+                            '.h5pimport_escape($title).'
+                        </h1>
+                        '.$descriptionHtml.'
+                    </div>
+                    '.('' !== $backButton ? '<div class="shrink-0">'.$backButton.'</div>' : '').'
+                </div>
+            </div>
+        ';
+    }
+}
+
+if (!function_exists('h5pimport_render_empty_state')) {
+    function h5pimport_render_empty_state(string $message): string
+    {
+        return '
+            <div class="rounded-2xl border border-gray-25 bg-white p-10 text-center shadow-sm">
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-warning/10 text-warning">
+                    <span class="text-xl font-bold">!</span>
+                </div>
+                <p class="mt-4 text-body-1 font-medium text-gray-90">
+                    '.h5pimport_escape($message).'
+                </p>
+            </div>
+        ';
     }
 }
 
@@ -79,20 +151,19 @@ if (!isset($_REQUEST['view'])) {
     exit;
 }
 
+$backUrl = null;
+$actionsHtml = '';
+
 if (!$originIsLearnpath) {
+    $backUrl = api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq();
+
     $interbreadcrumb[] = [
         'name' => $plugin->getToolTitle(),
-        'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq(),
+        'url' => $backUrl,
     ];
-
-    $actions = Display::url(
-        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq()
-    );
 }
 
 $htmlContent = '';
-
 $launchSessionKey = 'h5p_import_launch_id_'.$h5pImport->getIid();
 
 if (!api_is_anonymous()) {
@@ -159,6 +230,7 @@ $h5pNode = $h5pCore->loadContent($h5pImport->getIid());
 
 if (empty($h5pNode)) {
     Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+    $htmlContent = h5pimport_render_empty_state(get_lang('Error'));
 } else {
     $coreAssets = H5pPackageTools::getCoreAssets();
 
@@ -166,6 +238,8 @@ if (empty($h5pNode)) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('h5p_error_missing_core_asset'), 'danger')
         );
+
+        $htmlContent = h5pimport_render_empty_state($plugin->get_lang('h5p_error_missing_core_asset'));
     } else {
         $packageTools = new H5pPackageTools();
 
@@ -189,8 +263,9 @@ if (empty($h5pNode)) {
         $preloadedDependencies = $h5pCore->loadContentDependencies($h5pNode['id'], 'preloaded');
         $files = $h5pCore->getDependenciesFiles(
             $preloadedDependencies,
-            H5pPackageTools::getCourseLibrariesAssetBaseUrl($course)
+            H5pPackageTools::getCourseLibrariesAssetBasePath($course)
         );
+        $files = H5pPackageTools::convertDependencyFilesToAssetUrls($files, $course);
 
         if ('div' === $embedType) {
             foreach ($files['scripts'] as $script) {
@@ -231,36 +306,54 @@ if (empty($h5pNode)) {
                 $htmlHeadXtra[] = api_get_css($assetPath);
             }
 
-            $htmlContent = '<div class="h5p-content" data-content-id="'.$h5pNode['contentId'].'"></div>';
+            $htmlContent = '
+                <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm sm:p-6">
+                    <div class="overflow-hidden rounded-2xl border border-gray-20 bg-gray-10 p-3 sm:p-4">
+                        <div class="h5p-content" data-content-id="'.(int) $h5pNode['contentId'].'"></div>
+                    </div>
+                </div>
+            ';
         } elseif ('iframe' === $embedType) {
-            $htmlContent = '<div class="h5p-iframe-wrapper">
-                <iframe
-                    id="h5p-iframe-'.$h5pNode['contentId'].'"
-                    class="h5p-iframe"
-                    data-content-id="'.$h5pNode['contentId'].'"
-                    style="height:1px"
-                    src="about:blank"
-                    frameBorder="0"
-                    scrolling="no"
-                    allowfullscreen="allowfullscreen"
-                    allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                    title="'.Security::remove_XSS($h5pNode['title']).'">
-                </iframe>
-            </div>';
+            $safeTitle = Security::remove_XSS((string) $h5pNode['title']);
+
+            $htmlContent = '
+                <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm sm:p-6">
+                    <div class="overflow-hidden rounded-2xl border border-gray-20 bg-gray-10 p-3 sm:p-4">
+                        <div class="h5p-iframe-wrapper overflow-hidden rounded-xl bg-white">
+                            <iframe
+                                id="h5p-iframe-'.(int) $h5pNode['contentId'].'"
+                                class="h5p-iframe block w-full rounded-xl"
+                                data-content-id="'.(int) $h5pNode['contentId'].'"
+                                style="height:1px"
+                                src="about:blank"
+                                frameborder="0"
+                                scrolling="no"
+                                allowfullscreen="allowfullscreen"
+                                allow="geolocation *; microphone *; camera *; midi *; encrypted-media *"
+                                title="'.h5pimport_escape($safeTitle).'">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            ';
         } else {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('h5p_error_loading'), 'danger')
             );
+
+            $htmlContent = h5pimport_render_empty_state($plugin->get_lang('h5p_error_loading'));
         }
     }
 }
 
+$headerHtml = h5pimport_render_view_header(
+    (string) $h5pImport->getName(),
+    $h5pImport->getDescription(),
+    $backUrl
+);
+
 $view = new Template($h5pImport->getName());
 $view->assign('header', $h5pImport->getName());
-
-if (!$originIsLearnpath) {
-    $view->assign('actions', Display::toolbarAction($plugin->get_name(), [$actions]));
-}
-
-$view->assign('content', $htmlContent);
+$view->assign('actions', $actionsHtml);
+$view->assign('content', $headerHtml.$htmlContent);
 $view->display_one_col_template();

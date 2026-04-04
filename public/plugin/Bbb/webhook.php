@@ -21,7 +21,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 require_once dirname(__DIR__, 3).'/public/main/inc/global.inc.php';
 
 // --------- Debug toggle (set from plugin/config if you want) ----------
-$DEBUG = true; // TODO: set to false in production, or read from $plugin->get('debug_webhooks') === 'true'
+$DEBUG = false;
 
 // Small helper
 function dbg($msg){ global $DEBUG; if ($DEBUG) { error_log('[BBB webhook] '.$msg); } }
@@ -114,12 +114,15 @@ try {
         http_json(403, ['ok'=>false,'error'=>'expired_signature']);
     }
 
-    // IMPORTANT: this must match how you generated it in Bbb::buildWebhookCallbackUrl()
-    // If there you used au|mid|ts then keep au|mid|ts here; if you used au|mid, keep that.
-    $payloadForHmac = $au.'|'.$mid;  // sin timestamp
+    $payloadForHmac = $au.'|'.$mid.($ts ? '|'.$ts : '');
     $expected = hash_hmac($hashAlgo, $payloadForHmac, $salt);
-    if (!hash_equals($expected, $sig)) {
-        error_log('[BBB webhook] bad signature: payload='.$payloadForHmac);
+
+    // Backward-compatible fallback for hooks registered before timestamp support.
+    $legacyPayloadForHmac = $au.'|'.$mid;
+    $legacyExpected = hash_hmac($hashAlgo, $legacyPayloadForHmac, $salt);
+
+    if (!hash_equals($expected, $sig) && !hash_equals($legacyExpected, $sig)) {
+        error_log('[BBB webhook] bad signature');
         http_response_code(403);
         echo json_encode(['ok'=>false,'error'=>'bad_signature']);
         exit;

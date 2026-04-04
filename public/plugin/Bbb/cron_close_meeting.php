@@ -10,7 +10,41 @@ use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
+function bbb_is_local_cron_request(): bool
+{
+    $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+
+    return in_array($remoteAddr, ['127.0.0.1', '::1', '::ffff:127.0.0.1'], true);
+}
+
+function bbb_can_run_close_cron(BbbPlugin $plugin): bool
+{
+    if (PHP_SAPI === 'cli') {
+        return true;
+    }
+
+    if (api_is_platform_admin() || bbb_is_local_cron_request()) {
+        return true;
+    }
+
+    $requestToken = $_GET['token'] ?? $_POST['token'] ?? '';
+    $salt = (string) $plugin->get('salt');
+    if (!is_string($requestToken) || $requestToken === '' || $salt === '') {
+        return false;
+    }
+
+    $expectedToken = hash_hmac('sha256', 'bbb_cron|close_meeting', $salt);
+
+    return hash_equals($expectedToken, $requestToken);
+}
+
 $plugin = BbbPlugin::create();
+if (!bbb_can_run_close_cron($plugin)) {
+    http_response_code(403);
+    echo 'Forbidden';
+    exit;
+}
+
 /** @var ConferenceActivityRepository $activityRepo */
 $em = Database::getManager();
 $activityRepo = $em->getRepository(ConferenceActivity::class);

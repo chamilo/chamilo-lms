@@ -1402,7 +1402,144 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id']
+        );
+    }
+
+    /**
+     * Returns the session-bound CSRF token used for state-changing BBB actions.
+     */
+    public function getActionCsrfToken(): string
+    {
+        if (empty($_SESSION['bbb_action_csrf_token']) || !is_string($_SESSION['bbb_action_csrf_token'])) {
+            $_SESSION['bbb_action_csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['bbb_action_csrf_token'];
+    }
+
+    /**
+     * Append the BBB action CSRF token to the provided URL.
+     */
+    public function appendActionCsrfToken(string $url): string
+    {
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url.$separator.'bbb_token='.rawurlencode($this->getActionCsrfToken());
+    }
+
+    /**
+     * Returns a hidden field containing the BBB action CSRF token.
+     */
+    public function getActionCsrfFieldHtml(): string
+    {
+        return '<input type="hidden" name="bbb_token" value="'.htmlspecialchars($this->getActionCsrfToken(), ENT_QUOTES, 'UTF-8').'">';
+    }
+
+    /**
+     * Resolve a meeting only if it belongs to the current BBB context.
+     */
+    private function findAccessibleMeetingEntity(int $id): ?ConferenceMeeting
+    {
+        if ($id <= 0) {
+            return null;
+        }
+
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $qb = $repo->createQueryBuilder('m')
+            ->where('m.id = :id')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->setParameter('id', $id)
+            ->setParameter('accessUrl', $this->accessUrl)
+            ->setMaxResults(1);
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            $qb->andWhere('m.user = :userId')
+                ->setParameter('userId', $this->userId);
+        } elseif ($this->isGlobalConference()) {
+            // Global shared meetings only need to be scoped by access URL.
+        } else {
+            $qb->andWhere('m.course = :courseId')
+                ->andWhere('m.session = :sessionId')
+                ->setParameter('courseId', api_get_course_int_id())
+                ->setParameter('sessionId', api_get_session_id());
+
+            if ($this->hasGroupSupport()) {
+                $qb->andWhere('m.group = :groupId')
+                    ->setParameter('groupId', api_get_group_id());
+            }
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Resolve a meeting by remote ID only if it belongs to the current BBB context.
+     */
+    private function findAccessibleMeetingEntityByRemoteId(string $remoteId): ?ConferenceMeeting
+    {
+        $remoteId = trim($remoteId);
+        if ($remoteId === '') {
+            return null;
+        }
+
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $qb = $repo->createQueryBuilder('m')
+            ->where('m.remoteId = :remoteId')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->setParameter('remoteId', $remoteId)
+            ->setParameter('accessUrl', $this->accessUrl)
+            ->setMaxResults(1);
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            $qb->andWhere('m.user = :userId')
+                ->setParameter('userId', $this->userId);
+        } elseif ($this->isGlobalConference()) {
+            // Global shared meetings only need to be scoped by access URL.
+        } else {
+            $qb->andWhere('m.course = :courseId')
+                ->andWhere('m.session = :sessionId')
+                ->setParameter('courseId', api_get_course_int_id())
+                ->setParameter('sessionId', api_get_session_id());
+
+            if ($this->hasGroupSupport()) {
+                $qb->andWhere('m.group = :groupId')
+                    ->setParameter('groupId', api_get_group_id());
+            }
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Normalize a meeting entity to the array shape used by the legacy plugin code.
+     */
+    private function normalizeMeetingEntity(ConferenceMeeting $meeting): array
+    {
+        return [
+            'id' => $meeting->getId(),
+            'remoteId' => $meeting->getRemoteId(),
+            'remote_id' => $meeting->getRemoteId(),
+            'moderatorPw' => $meeting->getModeratorPw(),
+            'moderator_pw' => $meeting->getModeratorPw(),
+            'attendeePw' => $meeting->getAttendeePw(),
+            'attendee_pw' => $meeting->getAttendeePw(),
+            'title' => $meeting->getTitle(),
+            'status' => $meeting->getStatus(),
+            'visibility' => $meeting->getVisibility(),
+            'videoUrl' => $meeting->getVideoUrl(),
+            'c_id' => $meeting->getCourse()?->getIid(),
+            'session_id' => $meeting->getSession()?->getId() ?? 0,
+            'group_id' => $meeting->getGroup()?->getIid() ?? 0,
+            'user_id' => $meeting->getUser()?->getId() ?? 0,
+        ];
     }
 
     /**
@@ -1417,19 +1554,18 @@ class Bbb
      */
     public function endMeeting($id, $courseCode = null)
     {
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
         $em = Database::getManager();
-
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
-
-        $meetingData = $repo->findOneAsArrayById((int) $id);
-        if (!$meetingData) {
+        $meeting = $this->findAccessibleMeetingEntity($meetingId);
+        if (!$meeting instanceof ConferenceMeeting) {
             return false;
         }
+
+        $meetingData = $this->normalizeMeetingEntity($meeting);
 
         $manager = $this->isConferenceManager();
         $pass = $manager ? $meetingData['moderatorPw'] : $meetingData['attendeePw'];
@@ -1437,7 +1573,7 @@ class Bbb
         Event::addEvent(
             'bbb_end_meeting',
             'meeting_id',
-            (int) $id,
+            $meetingId,
             null,
             api_get_user_id(),
             api_get_course_int_id(),
@@ -1450,12 +1586,14 @@ class Bbb
         ];
         $this->api->endMeetingWithXmlResponseArray($endParams);
 
-        $repo->closeMeeting((int) $id, new \DateTime());
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+        $repo->closeMeeting($meetingId, new \DateTime());
 
         /** @var ConferenceActivityRepository $activityRepo */
         $activityRepo = $em->getRepository(ConferenceActivity::class);
 
-        $activities = $activityRepo->findOpenWithSameInAndOutTime((int) $id);
+        $activities = $activityRepo->findOpenWithSameInAndOutTime($meetingId);
 
         foreach ($activities as $activity) {
             $activity->setOutAt(new \DateTime());
@@ -1463,7 +1601,7 @@ class Bbb
             $em->persist($activity);
         }
 
-        $activityRepo->closeAllByMeetingId((int) $id);
+        $activityRepo->closeAllByMeetingId($meetingId);
 
         $em->flush();
 
@@ -1480,8 +1618,10 @@ class Bbb
     {
         $url = isset($record['playbackFormatUrl']) ? $record['playbackFormatUrl'] : '';
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
-            ).'&action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']).'&url='.$url;
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
+            ).'&action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']).'&url='.$url
+        );
     }
 
     /**
@@ -1635,8 +1775,10 @@ class Bbb
             return null;
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
-            ).'&action=unpublish&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
+            ).'&action=unpublish&id='.$meeting['id']
+        );
     }
 
     /**
@@ -1650,8 +1792,10 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
-            ).'&action=publish&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
+            ).'&action=publish&id='.$meeting['id']
+        );
     }
 
     /**
@@ -1674,8 +1818,10 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
-            '&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
+            '&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId']
+        );
     }
 
     /**
@@ -1693,8 +1839,10 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
-            '&action=regenerate_record&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
+            '&action=regenerate_record&id='.$meeting['id']
+        );
     }
 
     /**
@@ -1708,8 +1856,10 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
-            ).'&action=delete_record&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
+            ).'&action=delete_record&id='.$meeting['id']
+        );
     }
 
     /**
@@ -1723,8 +1873,10 @@ class Bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).
-            'Bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
+        return $this->appendActionCsrfToken(
+            api_get_path(WEB_PLUGIN_PATH).
+            'Bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id']
+        );
     }
 
     /**
@@ -1732,16 +1884,14 @@ class Bbb
      */
     public function publishMeeting($id)
     {
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
         $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
-
-        $meeting = $repo->find($id);
-        if (!$meeting) {
+        $meeting = $this->findAccessibleMeetingEntity($meetingId);
+        if (!$meeting instanceof ConferenceMeeting) {
             return false;
         }
 
@@ -1756,16 +1906,14 @@ class Bbb
      */
     public function unpublishMeeting($id)
     {
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
         $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
-
-        $meeting = $repo->find($id);
-        if (!$meeting) {
+        $meeting = $this->findAccessibleMeetingEntity($meetingId);
+        if (!$meeting instanceof ConferenceMeeting) {
             return false;
         }
 
@@ -1849,16 +1997,12 @@ class Bbb
             return false;
         }
 
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
-        $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
-
-        $meetingData = $repo->findOneAsArrayById((int) $id);
-        if (!$meetingData) {
+        if (!$this->findAccessibleMeetingEntity($meetingId) instanceof ConferenceMeeting) {
             return false;
         }
 
@@ -1889,23 +2033,27 @@ class Bbb
      */
     public function deleteRecording($id)
     {
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
         $em = Database::getManager();
 
-        /** @var ConferenceMeetingRepository $meetingRepo */
-        $meetingRepo = $em->getRepository(ConferenceMeeting::class);
-        $meetingData = $meetingRepo->findOneAsArrayById((int) $id);
-        if (!$meetingData) {
+        $meeting = $this->findAccessibleMeetingEntity($meetingId);
+        if (!$meeting instanceof ConferenceMeeting) {
             return false;
         }
+
+        $meetingData = $this->normalizeMeetingEntity($meeting);
+
+        /** @var ConferenceMeetingRepository $meetingRepo */
+        $meetingRepo = $em->getRepository(ConferenceMeeting::class);
 
         Event::addEvent(
             'bbb_delete_record',
             'meeting_id',
-            $id,
+            $meetingId,
             null,
             api_get_user_id(),
             api_get_course_int_id(),
@@ -1966,12 +2114,9 @@ class Bbb
         if ($delete) {
             /** @var ConferenceActivityRepository $activityRepo */
             $activityRepo = $em->getRepository(ConferenceActivity::class);
-            $activityRepo->closeAllByMeetingId((int) $id);
+            $activityRepo->closeAllByMeetingId($meetingId);
 
-            $meeting = $meetingRepo->find((int) $id);
-            if ($meeting) {
-                $em->remove($meeting);
-            }
+            $em->remove($meeting);
 
             $em->flush();
         }
@@ -1992,16 +2137,18 @@ class Bbb
      */
     public function copyRecordingToLinkTool($id)
     {
-        if (empty($id)) {
+        $meetingId = (int) $id;
+        if ($meetingId <= 0) {
             return false;
         }
 
-        $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
+        $meeting = $this->findAccessibleMeetingEntity($meetingId);
+        if (!$meeting instanceof ConferenceMeeting) {
+            return false;
+        }
 
-        $meetingData = $repo->findOneAsArrayById((int) $id);
-        if (!$meetingData || empty($meetingData['remoteId'])) {
+        $meetingData = $this->normalizeMeetingEntity($meeting);
+        if (empty($meetingData['remoteId'])) {
             return false;
         }
 
@@ -2171,11 +2318,9 @@ class Bbb
      */
     public function getMeeting(int $id): ?array
     {
-        $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
+        $meeting = $this->findAccessibleMeetingEntity($id);
 
-        return $repo->findOneAsArrayById($id);
+        return $meeting instanceof ConferenceMeeting ? $this->normalizeMeetingEntity($meeting) : null;
     }
 
     /**
@@ -2187,11 +2332,9 @@ class Bbb
      */
     public function getMeetingByRemoteId(string $id): ?array
     {
-        $em = Database::getManager();
-        /** @var ConferenceMeetingRepository $repo */
-        $repo = $em->getRepository(ConferenceMeeting::class);
+        $meeting = $this->findAccessibleMeetingEntityByRemoteId($id);
 
-        return $repo->findOneByRemoteIdAndAccessUrl($id, $this->accessUrl);
+        return $meeting instanceof ConferenceMeeting ? $this->normalizeMeetingEntity($meeting) : null;
     }
 
     /**
@@ -2319,23 +2462,25 @@ class Bbb
 
         $au  = (int) $this->accessUrl;              // current access_url_id
         $mid = (string) ($meetingId ?? '');         // meetingID (empty if global)
+        $ts  = time();
 
         $algo   = $this->plugin->webhooksHashAlgo(); // 'sha256' | 'sha1'
         $secret = (string) $this->salt;
 
-        // Stable signature without timestamp (MUST match webhook.php)
-        $payload = $au.'|'.$mid;
+        // Time-bound signature to limit replay attempts.
+        $payload = $au.'|'.$mid.'|'.$ts;
         $sig     = hash_hmac($algo, $payload, $secret);
 
         $qs = [
             'au'  => $au,
             'mid' => $mid,
+            'ts'  => $ts,
             'sig' => $sig,
         ];
 
         $url = $base.'?'.http_build_query($qs);
 
-        error_log('[BBB hooks] callbackURL='.$url);
+        error_log('[BBB hooks] callbackURL generated for accessUrl='.$au.' scope='.($mid === '' ? 'global' : 'meeting'));
 
         return $url;
     }

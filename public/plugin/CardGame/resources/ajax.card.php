@@ -16,21 +16,42 @@ if (api_is_anonymous()) {
     exit;
 }
 
+if ('POST' !== $_SERVER['REQUEST_METHOD']) {
+    http_response_code(405);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Method not allowed.',
+    ]);
+    exit;
+}
+
+$sessionToken = $_SESSION['cardgame_csrf_token'] ?? '';
+$requestToken = (string) ($_POST['csrf_token'] ?? '');
+
+if ('' === $sessionToken || '' === $requestToken || !hash_equals($sessionToken, $requestToken)) {
+    http_response_code(403);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid security token.',
+    ]);
+    exit;
+}
+
 $cardGame = CardGame::create();
 $userId = (int) api_get_user_id();
-$action = $_POST['action'] ?? $_GET['action'] ?? '';
+$action = (string) ($_POST['action'] ?? '');
 
-if ('' === $action && (isset($_POST['part']) || isset($_GET['part']))) {
+if ('' === $action && isset($_POST['part'])) {
     $action = 'reveal';
 }
 
-if ('' === $action && (isset($_POST['loose']) || isset($_GET['loose']))) {
+if ('' === $action && isset($_POST['loose'])) {
     $action = 'lose';
 }
 
 switch ($action) {
     case 'reveal':
-        $part = (int) ($_POST['part'] ?? $_GET['part'] ?? 0);
+        $part = (int) ($_POST['part'] ?? 0);
         $response = $cardGame->revealPart($userId, $part);
         break;
     case 'lose':

@@ -1,59 +1,107 @@
 <template>
   <BaseCard
-    class="my-groups-card bg-white mt-3 mb-3"
     plain
+    class="overflow-hidden bg-white"
   >
     <template #header>
-      <div class="px-4 py-3 bg-gray-200">
-        <h2 class="text-xl font-semibold">{{ t("My communities") }}</h2>
+      <div class="border-b border-gray-25 bg-gray-15 px-4 py-3">
+        <h2 class="text-xl font-semibold text-gray-90">{{ t("My communities") }}</h2>
       </div>
     </template>
-    <hr class="my-2" />
-    <div class="px-4">
-      <ul class="mb-4">
-        <li
-          v-for="group in groups"
-          :key="group.id"
-          class="mb-2"
+
+    <div class="space-y-4 px-4 py-4">
+      <div
+        v-if="!isValidGlobalForumsCourse && isCurrentUser"
+        class="flex items-center"
+      >
+        <input
+          v-model="searchQuery"
+          :placeholder="t('Search')"
+          type="search"
+          class="h-11 min-w-0 flex-grow rounded-l-xl border-gray-25 bg-white px-3 text-body-2 text-gray-90 placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+          @keyup.enter="search"
+        />
+        <button
+          type="button"
+          class="flex h-11 w-11 items-center justify-center rounded-r-xl border border-l-0 border-gray-25 bg-gray-15 text-gray-90 transition hover:bg-gray-20"
+          @click="search"
         >
-          <a
-            v-if="group.url"
-            :href="group.url || '#'"
-            class="text-blue-600 hover:underline"
-            >{{ group.name }}</a
-          >
-          <span v-else>{{ group.name }}</span>
-        </li>
-      </ul>
+          <i
+            class="mdi mdi-magnify text-lg"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
+
       <div
         v-if="isValidGlobalForumsCourse"
-        class="text-center mb-4"
+        class="text-center"
       >
         <a
           :href="goToUrl"
-          class="btn btn-primary"
-          >{{ t("See all communities") }}</a
+          class="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-body-2 font-semibold text-primary-button-text transition hover:opacity-90"
         >
+          {{ t("See all communities") }}
+        </a>
       </div>
-      <div v-else>
-        <div
-          v-if="isCurrentUser"
-          class="flex items-center min-w-0 mb-4"
+
+      <ul
+        v-if="groups.length > 0"
+        class="space-y-2"
+      >
+        <li
+          v-for="group in groups"
+          :key="group.id"
         >
-          <input
-            v-model="searchQuery"
-            :placeholder="t('Search')"
-            class="flex-grow min-w-0 p-2 h-[44px] border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="search"
-          />
-          <button
-            class="p-2 h-[44px] bg-gray-200 border border-gray-300 rounded-r-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="button"
-            @click="search"
+          <a
+            v-if="group.url"
+            :href="group.url"
+            class="group flex items-center gap-3 rounded-2xl border border-gray-25 bg-white px-3 py-3 transition hover:bg-support-2"
           >
-            <i class="mdi mdi-magnify text-gray-700"></i>
-          </button>
-        </div>
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-15 text-primary">
+              <i
+                class="mdi mdi-account-group-outline text-xl"
+                aria-hidden="true"
+              ></i>
+            </span>
+
+            <span class="min-w-0 flex-1 truncate text-body-2 font-medium text-gray-90">
+              {{ group.name }}
+            </span>
+
+            <i
+              class="mdi mdi-chevron-right text-gray-50 transition group-hover:text-gray-90"
+              aria-hidden="true"
+            ></i>
+          </a>
+
+          <div
+            v-else
+            class="flex items-center gap-3 rounded-2xl border border-gray-25 bg-gray-15 px-3 py-3"
+          >
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary">
+              <i
+                class="mdi mdi-account-group-outline text-xl"
+                aria-hidden="true"
+              ></i>
+            </span>
+
+            <span class="min-w-0 flex-1 truncate text-body-2 font-medium text-gray-90">
+              {{ group.name }}
+            </span>
+          </div>
+        </li>
+      </ul>
+
+      <div
+        v-else
+        class="rounded-2xl border border-dashed border-gray-25 bg-gray-15 px-4 py-6 text-center"
+      >
+        <i
+          class="mdi mdi-account-group-outline text-3xl text-gray-50"
+          aria-hidden="true"
+        ></i>
+        <p class="mt-2 text-body-2 text-gray-50">{{ t("No communities") }}</p>
       </div>
     </div>
   </BaseCard>
@@ -75,12 +123,12 @@ const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
+const router = useRouter()
+
 const isValidGlobalForumsCourse = computed(() => {
   const courseId = globalForumsCourse.value
   return courseId !== null && courseId !== undefined && courseId > 0
 })
-
-const router = useRouter()
 
 function search() {
   router.push({ name: "UserGroupSearch", query: { q: searchQuery.value } })
@@ -89,9 +137,10 @@ function search() {
 async function fetchGroups(userId) {
   try {
     const response = await axios.get(`/social-network/groups/${userId}`)
+
     if (response.data) {
-      groups.value = response.data.items
-      goToUrl.value = response.data.go_to
+      groups.value = response.data.items || []
+      goToUrl.value = response.data.go_to || ""
     }
   } catch (error) {
     groups.value = []

@@ -111,6 +111,7 @@ class Plugin
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
         $result['entity'] = $pluginRepo->findOneByTitle($this->get_name());
+        $result['supports_regions'] = false;
 
         if ($form = $this->getSettingsForm()) {
             $result['settings_form'] = $form;

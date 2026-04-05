@@ -1,16 +1,30 @@
 <div id="ch-tour-root"></div>
 <script>
   (function () {
-    console.log('[Tour] initialized force-cache-test-v1');
-
     const TOUR_ROOT_ID = 'ch-tour-root';
+    const injectedSecurityToken = "{{ tour_security_token|default('')|e('js') }}";
+    const injectedStepsAjaxUrl = "{{ web_path.steps_ajax|default('/plugin/Tour/ajax/steps.ajax.php')|e('js') }}";
+    const injectedSaveAjaxUrl = "{{ web_path.save_ajax|default('/plugin/Tour/ajax/save.ajax.php')|e('js') }}";
+    const injectedIntroCssUrl = "{{ web_path.intro_css|default('/plugin/Tour/intro.js/introjs.min.css')|e('js') }}";
+    const injectedIntroThemeCssUrl = "{{ web_path.intro_theme_css|default('')|e('js') }}";
+    const injectedIntroJsUrl = "{{ web_path.intro_js|default('/plugin/Tour/intro.js/intro.min.js')|e('js') }}";
 
     const TOUR_CONFIG = {
-      introCss: '/plugin/Tour/intro.js/introjs.min.css?v=20260402-1',
-      introThemeCss: '',
-      introJs: '/plugin/Tour/intro.js/intro.min.js?v=20260402-1',
-      stepsAjax: '/plugin/Tour/ajax/steps.ajax.php?v=20260402-1',
-      saveAjax: '/plugin/Tour/ajax/save.ajax.php?v=20260402-1'
+      introCss: injectedIntroCssUrl && injectedIntroCssUrl.indexOf('{{') !== 0
+        ? injectedIntroCssUrl
+        : '/plugin/Tour/intro.js/introjs.min.css',
+      introThemeCss: injectedIntroThemeCssUrl && injectedIntroThemeCssUrl.indexOf('{{') !== 0
+        ? injectedIntroThemeCssUrl
+        : '',
+      introJs: injectedIntroJsUrl && injectedIntroJsUrl.indexOf('{{') !== 0
+        ? injectedIntroJsUrl
+        : '/plugin/Tour/intro.js/intro.min.js',
+      stepsAjax: injectedStepsAjaxUrl && injectedStepsAjaxUrl.indexOf('{{') !== 0
+        ? injectedStepsAjaxUrl
+        : '/plugin/Tour/ajax/steps.ajax.php',
+      saveAjax: injectedSaveAjaxUrl && injectedSaveAjaxUrl.indexOf('{{') !== 0
+        ? injectedSaveAjaxUrl
+        : '/plugin/Tour/ajax/save.ajax.php'
     };
 
     let cachedSteps = [];
@@ -19,6 +33,22 @@
     let reinitTimer = null;
     let badgeEnforceTimer = null;
     let badgeObserver = null;
+
+    function getSecurityToken() {
+      if (injectedSecurityToken && injectedSecurityToken.indexOf('{{') !== 0) {
+        return injectedSecurityToken;
+      }
+
+      const hiddenInput = document.querySelector('input[name="sec_token"]');
+
+      if (hiddenInput && hiddenInput.value) {
+        return hiddenInput.value;
+      }
+
+      const bodyToken = document.body ? document.body.getAttribute('data-sec-token') : '';
+
+      return bodyToken || '';
+    }
 
     function getRoot() {
       let root = document.getElementById(TOUR_ROOT_ID);
@@ -91,7 +121,6 @@
       }
 
       if (!TOUR_CONFIG.introJs) {
-        console.warn('[Tour] intro.js URL missing');
         return;
       }
 
@@ -111,27 +140,24 @@
       script.src = TOUR_CONFIG.introJs;
       script.setAttribute('data-tour-intro-js', '1');
       script.onload = callback;
-      script.onerror = function () {
-        console.warn('[Tour] failed to load intro.js');
-      };
-
       document.body.appendChild(script);
     }
 
     function fetchSteps(pageClass) {
       if (!TOUR_CONFIG.stepsAjax) {
-        console.warn('[Tour] steps AJAX URL missing');
         return Promise.resolve([]);
       }
 
       return fetch(TOUR_CONFIG.stepsAjax + '?page=' + encodeURIComponent(pageClass), {
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
       })
         .then(function (response) {
-          return response.json();
+          return response.ok ? response.json() : [];
         })
-        .catch(function (error) {
-          console.warn('[Tour] failed to fetch steps', error);
+        .catch(function () {
           return [];
         });
     }
@@ -173,23 +199,26 @@
     }
 
     function saveTour(pageClass) {
-      if (!TOUR_CONFIG.saveAjax) {
-        console.warn('[Tour] save AJAX URL missing');
+      const securityToken = getSecurityToken();
+
+      if (!TOUR_CONFIG.saveAjax || !securityToken) {
         return;
       }
 
       const params = new URLSearchParams();
       params.append('page_class', pageClass);
+      params.append('sec_token', securityToken);
 
       fetch(TOUR_CONFIG.saveAjax, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest'
         },
         body: params.toString()
-      }).catch(function (error) {
-        console.warn('[Tour] failed to save tour state', error);
+      }).catch(function () {
+        return null;
       });
     }
 
@@ -280,28 +309,20 @@
       return new Promise(function (resolve) {
         const pageClass = getCurrentPageClass();
 
-        console.log('[Tour] start requested for page:', pageClass);
-
         if (!pageClass) {
-          console.warn('[Tour] page class not detected');
           resolve(false);
           return;
         }
 
         const validSteps = filterValidSteps(cachedSteps);
 
-        console.log('[Tour] cached steps:', cachedSteps);
-        console.log('[Tour] valid steps:', validSteps);
-
         if (!validSteps.length) {
-          console.warn('[Tour] no valid steps for page:', pageClass);
           resolve(false);
           return;
         }
 
         loadIntroJs(function () {
           if (!window.introJs) {
-            console.warn('[Tour] introJs is not available after load');
             resolve(false);
             return;
           }
@@ -391,7 +412,6 @@
       const evaluationKey = getEvaluationKey();
 
       if (!pageClass) {
-        console.warn('[Tour] page class not detected during init');
         cachedSteps = [];
         cachedPageClass = null;
         lastEvaluationKey = evaluationKey;
@@ -402,8 +422,6 @@
       cachedPageClass = pageClass;
       lastEvaluationKey = evaluationKey;
 
-      console.log('[Tour] checking configured tour for page:', pageClass);
-
       fetchSteps(pageClass).then(function (steps) {
         if (cachedPageClass !== pageClass) {
           return;
@@ -411,27 +429,23 @@
 
         cachedSteps = Array.isArray(steps) ? steps : [];
 
-        console.log('[Tour] configured steps found:', cachedSteps.length);
-
         getRoot();
         updateTourApi();
-      }).catch(function (error) {
-        console.warn('[Tour] failed during init', error);
+      }).catch(function () {
         cachedSteps = [];
         updateTourApi();
       });
     }
 
-    function forceRefresh(reason) {
+    function forceRefresh() {
       clearTimeout(reinitTimer);
 
       reinitTimer = setTimeout(function () {
-        console.log('[Tour] forced refresh:', reason);
         init();
       }, 80);
     }
 
-    function scheduleReinit(reason) {
+    function scheduleReinit() {
       clearTimeout(reinitTimer);
 
       reinitTimer = setTimeout(function () {
@@ -441,7 +455,6 @@
           return;
         }
 
-        console.log('[Tour] route change detected:', reason);
         init();
       }, 250);
     }
@@ -455,7 +468,7 @@
 
       window.history[methodName] = function () {
         const result = original.apply(this, arguments);
-        scheduleReinit(methodName);
+        scheduleReinit();
         return result;
       };
     }
@@ -470,7 +483,7 @@
       const observer = new MutationObserver(function (mutations) {
         for (const mutation of mutations) {
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            scheduleReinit('body-class');
+            scheduleReinit();
             return;
           }
         }
@@ -487,11 +500,11 @@
       patchHistoryMethod('replaceState');
 
       window.addEventListener('popstate', function () {
-        scheduleReinit('popstate');
+        scheduleReinit();
       });
 
       window.addEventListener('hashchange', function () {
-        scheduleReinit('hashchange');
+        scheduleReinit();
       });
 
       window.addEventListener('tour:start', function () {
@@ -499,7 +512,7 @@
       });
 
       window.addEventListener('tour:refresh-request', function () {
-        forceRefresh('external-request');
+        forceRefresh();
       });
 
       observeBodyClassChanges();

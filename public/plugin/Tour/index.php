@@ -21,18 +21,27 @@ if ($showTour) {
     $pages = [];
 
     foreach ($config as $pageContent) {
+        if (!is_array($pageContent) || empty($pageContent['pageClass'])) {
+            continue;
+        }
+
+        $pageClass = trim((string) $pageContent['pageClass']);
+
+        if ('' === $pageClass) {
+            continue;
+        }
+
         $pages[] = [
-            'pageClass' => $pageContent['pageClass'],
-            'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId),
+            'pageClass' => $pageClass,
+            'show' => $tourPlugin->checkTourForUser($pageClass, $userId),
         ];
     }
 
     $theme = $tourPlugin->get('theme');
 
     $_template['show_tour'] = $showTour;
-
     $_template['pages'] = json_encode($pages);
-
+    $_template['tour_security_token'] = Security::get_existing_token();
     $_template['web_path'] = [
         'intro_css' => "{$pluginWebPath}intro.js/introjs.min.css",
         'intro_theme_css' => null,

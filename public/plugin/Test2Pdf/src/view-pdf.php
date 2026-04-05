@@ -9,6 +9,10 @@ require_once '../config.php';
 
 api_protect_course_script(true);
 
+if (!api_is_allowed_to_edit(false, true)) {
+    api_not_allowed(true);
+}
+
 $plugin = Test2pdfPlugin::create();
 
 if (!test2pdf_is_plugin_active()) {

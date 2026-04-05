@@ -11,6 +11,10 @@ require_once __DIR__.'/config.php';
 
 api_protect_course_script(true);
 
+if (!api_is_allowed_to_edit(false, true)) {
+    api_not_allowed(true);
+}
+
 $tool_name = get_lang('Test2pdf');
 $plugin = Test2pdfPlugin::create();
 

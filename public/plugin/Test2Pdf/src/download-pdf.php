@@ -6,6 +6,10 @@ require_once '../config.php';
 
 api_protect_course_script(true);
 
+if (!api_is_allowed_to_edit(false, true)) {
+    api_not_allowed(true);
+}
+
 $plugin = Test2pdfPlugin::create();
 $letters = test2pdf_get_letters();
 

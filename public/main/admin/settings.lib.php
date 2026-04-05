@@ -73,6 +73,8 @@ function handleRegions()
     $pluginObj = new AppPlugin();
     $installedPlugins = $pluginObj->getInstalledPlugins();
     $selectedPluginName = isset($_GET['name']) ? (string) $_GET['name'] : '';
+    $selectedPluginHasNoRegions = '' !== $selectedPluginName
+        && plugin_has_no_regions($selectedPluginName);
 
     echo '<div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">';
     echo '  <div>';
@@ -96,11 +98,24 @@ function handleRegions()
         return;
     }
 
+    if ($selectedPluginHasNoRegions) {
+        echo Display::return_message(get_lang('This plugin does not use regions.'), 'info', false);
+    }
+
     echo '<form id="plugin-regions-form" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<div class="space-y-4">';
 
+    $renderedPlugins = 0;
+
     foreach ($installedPlugins as $pluginName) {
+        if (plugin_has_no_regions($pluginName)) {
+            continue;
+        }
+
         $metadata = plugin_get_admin_metadata($pluginName);
+
+        $renderedPlugins++;
+
         $pluginTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
         $pluginVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
         $pluginComment = plugin_render_comment_preview((string) $metadata['comment']);
@@ -134,7 +149,7 @@ function handleRegions()
         echo '          <div class="mt-4">';
         echo '              <div class="mb-2 text-caption font-semibold uppercase tracking-wide text-gray-50">Assigned regions</div>';
         echo '              <div class="flex flex-wrap gap-2">'.plugin_render_region_badges($selectedRegions).'</div>';
-        echo                    get_lang(plugin_render_region_descriptions($selectedRegions));
+        echo                    plugin_render_region_descriptions($selectedRegions);
         echo '          </div>';
 
         echo '          <div class="mt-4 flex flex-wrap gap-2">';
@@ -173,6 +188,10 @@ function handleRegions()
         echo '</article>';
     }
 
+    if (0 === $renderedPlugins) {
+        echo Display::return_message(get_lang('No plugins with regions were found.'), 'info', false);
+    }
+
     echo '</div>';
 
     echo '<div class="mt-6 flex justify-end">';
@@ -183,7 +202,7 @@ function handleRegions()
 
     echo '</form>';
 
-    if ('' !== $selectedPluginName) {
+    if ('' !== $selectedPluginName && !$selectedPluginHasNoRegions) {
         $selectedCardId = plugin_get_regions_card_id($selectedPluginName);
         $selectedCardIdJs = json_encode($selectedCardId);
         $selectedHashJs = json_encode('#'.$selectedCardId);
@@ -319,6 +338,14 @@ function pluginShouldBeVisibleInStableList(string $pluginName): bool
     }
 
     return isset($allowedPlugins[$pluginName]);
+}
+
+/**
+ * Tell whether a plugin should be hidden from the Regions UI.
+ */
+function plugin_has_no_regions(string $pluginName): bool
+{
+    return in_array($pluginName, ['Onlyoffice'], true);
 }
 
 /**
@@ -674,13 +701,8 @@ function handlePlugins()
             continue;
         }
 
-        $plugin_info = [];
-        try {
-            require $pluginInfoFile;
-        } catch (\Throwable $e) {
-            error_log('[plugins] failed to read '.$pluginName.' metadata: '.$e->getMessage());
-            $plugin_info = ['title' => $pluginName, 'version' => 'n/a'];
-        }
+        $metadata = plugin_get_admin_metadata($pluginName);
+        $hasNoRegions = plugin_has_no_regions($pluginName);
 
         $plugin = $pluginRepo->findOneByTitle($pluginName);
         $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
@@ -688,9 +710,9 @@ function handlePlugins()
         $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
         $hasReadme = plugin_has_readme($pluginName);
 
-        $pluginDisplayTitle = htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES);
-        $pluginDisplayComment = trim((string) ($plugin_info['comment'] ?? ''));
-        $pluginDisplayVersion = htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES);
+        $pluginDisplayTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
+        $pluginDisplayComment = trim((string) $metadata['comment']);
+        $pluginDisplayVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
         $pluginDataName = htmlspecialchars($pluginName, ENT_QUOTES);
 
         $regionsUrl = api_get_path(WEB_CODE_PATH).'admin/settings.php?'.http_build_query([
@@ -749,9 +771,11 @@ function handlePlugins()
                 echo '  </span>';
             }
 
-            echo '      <a href="'.htmlspecialchars($regionsUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
-            echo '          <i class="mdi mdi-view-grid-plus-outline"></i> Regions';
-            echo '      </a>';
+            if (!$hasNoRegions) {
+                echo '      <a href="'.htmlspecialchars($regionsUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
+                echo '          <i class="mdi mdi-view-grid-plus-outline"></i> '.get_lang('Regions');
+                echo '      </a>';
+            }
 
             echo '      <button class="plugin-action btn btn--danger btn--sm w-full justify-center"
                             data-plugin="'.$pluginDataName.'"
@@ -1255,6 +1279,16 @@ function storeRegions(): void
 
         $pluginInUrl = $entityPlugin->getOrCreatePluginConfiguration($currentAccessUrl);
         $pluginConfiguration = $pluginInUrl->getConfiguration();
+
+        if (!is_array($pluginConfiguration)) {
+            $pluginConfiguration = [];
+        }
+
+        if (plugin_has_no_regions($plugin)) {
+            unset($pluginConfiguration['regions']);
+            $pluginInUrl->setConfiguration($pluginConfiguration);
+            continue;
+        }
 
         $areas_to_install = array_filter(
             $_POST['plugin_'.$plugin] ?? [],

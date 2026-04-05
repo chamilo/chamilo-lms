@@ -1,4 +1,3 @@
-{% autoescape false %}
 <div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
 <div id="service" class="service">
     <div class="mb-6 border-b border-gray-25 pb-4">
@@ -13,7 +12,7 @@
                             {% if service.video_url %}
                             <div class="service-video">
                                 <div class="embed-responsive embed-responsive-16by9">
-                                    {{ essence.replace(service.video_url) }}
+                                    {{ essence.replace(service.video_url)|raw }}
                                 </div>
                             </div>
                             {% elseif service.image %}
@@ -54,7 +53,7 @@
                     <div class="col-md-6">
                         {% if service.description %}
                         <div class="description">
-                            {{ service.description }}
+                            {{ service.description|raw }}
                         </div>
                         {% endif %}
                         <div class="service-details">
@@ -101,7 +100,7 @@
                         <h3>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                     </div>
                     <div class="service-information">
-                        {{ service.service_information }}
+                        {{ service.service_information|raw }}
                     </div>
                 </div>
             </div>
@@ -109,4 +108,3 @@
     </div>
 </div>
 </div>
-{% endautoescape %}

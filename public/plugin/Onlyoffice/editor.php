@@ -21,8 +21,11 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use ChamiloSession as Session;
 
 const ONLYOFFICE_EDITOR_LOG_ENABLED = false;
+
+api_block_anonymous_users();
 
 $plugin = OnlyofficePlugin::create();
 
@@ -79,6 +82,9 @@ $fileId = null;
 $fileUrl = null;
 $callbackUrl = null;
 
+$saveAsCsrfToken = bin2hex(random_bytes(32));
+Session::write('onlyoffice_saveas_csrf_token', $saveAsCsrfToken);
+
 $jwtManager = new OnlyofficeJwtManager($appSettings);
 
 onlyofficeEditorLog('DEBUG', 'Editor entry', [
@@ -102,13 +108,16 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
 ]);
 
 if (!empty($docPath)) {
-    $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
-    if (!file_exists($filePath)) {
-        onlyofficeEditorLog('ERROR', 'Original file not found', [
-            'filePath' => $filePath,
+    $resolvedDocPath = resolveOnlyofficeEditorDocPath($docPath);
+    if (null === $resolvedDocPath) {
+        onlyofficeEditorLog('ERROR', 'Invalid document path', [
+            'docPath' => $docPath,
         ]);
         exit('Error: Document not found.');
     }
+
+    $docPath = $resolvedDocPath['relativePath'];
+    $filePath = $resolvedDocPath['absolutePath'];
 
     $extension = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
     $newDocPath = $docPath;
@@ -569,6 +578,7 @@ sendOnlyofficeEditorNoCacheHeaders();
             const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
             const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
             const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
+            const saveAsCsrfToken = <?php echo json_encode($saveAsCsrfToken); ?>;
             const safeReturnUrl = <?php echo json_encode($returnUrl, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
             const isEmbeddedEditor = <?php echo json_encode((bool) $isLearnpathEmbedded); ?>;
             const fallbackHomeUrl = <?php echo json_encode(api_get_path(WEB_PATH), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
@@ -673,7 +683,9 @@ sendOnlyofficeEditorNoCacheHeaders();
                 fetch(saveAsUrl, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-Onlyoffice-CSRF-Token": saveAsCsrfToken
                     },
                     body: JSON.stringify(payload)
                 })
@@ -1297,6 +1309,65 @@ function isOnlyofficeSafeInternalUrl(string $url): bool
     }
 
     return true;
+}
+
+/**
+ * Resolve and validate a document path inside the current course directory.
+ */
+function resolveOnlyofficeEditorDocPath(string $docPath): ?array
+{
+    $normalizedPath = normalizeOnlyofficeEditorDocPath($docPath);
+    if ('' === $normalizedPath) {
+        return null;
+    }
+
+    $courseBasePath = api_get_path(SYS_COURSE_PATH).api_get_course_path();
+    $realCourseBasePath = realpath($courseBasePath);
+    if (false === $realCourseBasePath || '' === $realCourseBasePath) {
+        return null;
+    }
+
+    $absolutePath = realpath(api_get_path(SYS_COURSE_PATH).$normalizedPath);
+    if (false === $absolutePath || '' === $absolutePath) {
+        return null;
+    }
+
+    $realCourseBasePath = rtrim(str_replace('\\', '/', $realCourseBasePath), '/');
+    $absolutePath = str_replace('\\', '/', $absolutePath);
+
+    if ($absolutePath !== $realCourseBasePath && !str_starts_with($absolutePath, $realCourseBasePath.'/')) {
+        return null;
+    }
+
+    return [
+        'relativePath' => $normalizedPath,
+        'absolutePath' => $absolutePath,
+    ];
+}
+
+/**
+ * Normalize a user-provided document path.
+ */
+function normalizeOnlyofficeEditorDocPath(string $docPath): string
+{
+    $docPath = trim(str_replace('\\', '/', $docPath));
+    $docPath = str_replace(chr(0), '', $docPath);
+
+    if ('' === $docPath) {
+        return '';
+    }
+
+    if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $docPath)) {
+        return '';
+    }
+
+    $docPath = ltrim($docPath, '/');
+
+    if ('' === $docPath || str_contains($docPath, '../') || str_starts_with($docPath, '..')) {
+        return '';
+    }
+
+    return $docPath;
 }
 
 /**

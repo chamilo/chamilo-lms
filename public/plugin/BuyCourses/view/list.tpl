@@ -1,8 +1,8 @@
 {% autoescape false %}
 {% set activeTab = 'courses' %}
-{% if showing_services %}
+{% if showing_services|default(false) %}
 {% set activeTab = 'services' %}
-{% elseif showing_sessions %}
+{% elseif showing_sessions|default(false) %}
 {% set activeTab = 'sessions' %}
 {% endif %}
 
@@ -543,16 +543,7 @@
                     <p class="mt-1 text-sm text-gray-50">
                         {{ 'Service'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
-                </div>
-
-                <a
-                        href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
-                >
-                    <em class="fa fa-cart-plus fa-fw"></em>
-                    {{ 'NewService'|get_plugin_lang('BuyCoursesPlugin') }}
-                </a>
-            </div>
+                </div>            </div>
         </div>
 
         <div class="overflow-x-auto">

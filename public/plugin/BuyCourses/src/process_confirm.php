@@ -28,7 +28,7 @@ if (empty($saleId)) {
 
 $sale = $plugin->getSale($saleId);
 
-if (empty($sale)) {
+if (empty($sale) || (int) $sale['user_id'] !== api_get_user_id()) {
     api_not_allowed(true);
 }
 
@@ -87,7 +87,7 @@ switch ($sale['payment_type']) {
             $extra
         );
 
-        error_log('[BuyCourses][PayPal] SetExpressCheckout response: '.json_encode($expressCheckout));
+        error_log('[BuyCourses][PayPal] SetExpressCheckout completed for sale '.$sale['id']);
 
         $ack = strtoupper((string) ($expressCheckout['ACK'] ?? ''));
 
@@ -132,7 +132,7 @@ switch ($sale['payment_type']) {
             );
         }
 
-        error_log('[BuyCourses][PayPal] Redirecting to PayPal with token '.($expressCheckout['TOKEN'] ?? ''));
+        error_log('[BuyCourses][PayPal] Redirecting to PayPal for sale '.$sale['id']);
         RedirectToPayPal((string) $expressCheckout['TOKEN']);
 
         break;

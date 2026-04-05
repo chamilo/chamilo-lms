@@ -71,15 +71,6 @@ $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
 
 $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $defaultBackUrl;
-$referer = $_SERVER['HTTP_REFERER'] ?? '';
-
-if (is_string($referer) && '' !== $referer) {
-    $allowedFragment = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/';
-
-    if (false !== strpos($referer, $allowedFragment)) {
-        $backUrl = $referer;
-    }
-}
 
 $tpl->assign('page_title', $templateName);
 $tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));

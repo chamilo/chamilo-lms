@@ -96,6 +96,37 @@ class Tour extends Plugin
     }
 
     /**
+     * Resolve a page name or page class to a configured canonical page class.
+     */
+    public function resolveConfiguredPageClass(string $pageName = '', string $pageClass = ''): ?string
+    {
+        $pageName = $this->normalizePageIdentifier($pageName);
+        $pageClass = $this->normalizePageIdentifier($pageClass);
+
+        if ('' !== $pageName) {
+            $tourDefinition = $this->getTourByName($pageName);
+            $resolvedPageClass = is_array($tourDefinition) ? (string) ($tourDefinition['pageClass'] ?? '') : '';
+            $resolvedPageClass = trim($resolvedPageClass);
+
+            if ('' !== $resolvedPageClass) {
+                return $resolvedPageClass;
+            }
+        }
+
+        if ('' !== $pageClass) {
+            $tourDefinition = $this->getTourByPageClass($pageClass);
+            $resolvedPageClass = is_array($tourDefinition) ? (string) ($tourDefinition['pageClass'] ?? '') : '';
+            $resolvedPageClass = trim($resolvedPageClass);
+
+            if ('' !== $resolvedPageClass) {
+                return $resolvedPageClass;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get all configured tours.
      */
     public function getTourConfig(): array
@@ -181,5 +212,16 @@ class Tour extends Plugin
         $sql = "DROP TABLE IF EXISTS $pluginTourLogTable";
 
         Database::query($sql);
+    }
+
+    private function normalizePageIdentifier(string $value): string
+    {
+        $value = trim($value);
+
+        if ('' === $value) {
+            return '';
+        }
+
+        return mb_substr($value, 0, 255);
     }
 }

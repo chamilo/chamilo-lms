@@ -24,7 +24,7 @@ if ($saleId <= 0) {
 
 $sale = $plugin->getSubscriptionSale($saleId);
 
-if (empty($sale)) {
+if (empty($sale) || (int) $sale['user_id'] !== api_get_user_id()) {
     api_not_allowed(true);
 }
 
@@ -111,7 +111,7 @@ switch ((int) $sale['payment_type']) {
             $extra
         );
 
-        error_log('[BuyCourses][Subscription][PayPal] SetExpressCheckout response: '.json_encode($expressCheckout));
+        error_log('[BuyCourses][Subscription][PayPal] SetExpressCheckout completed for subscription sale '.$sale['id']);
 
         $ack = strtoupper((string) ($expressCheckout['ACK'] ?? ''));
 
@@ -156,7 +156,7 @@ switch ((int) $sale['payment_type']) {
             );
         }
 
-        error_log('[BuyCourses][Subscription][PayPal] Redirecting to PayPal with token '.($expressCheckout['TOKEN'] ?? ''));
+        error_log('[BuyCourses][Subscription][PayPal] Redirecting to PayPal for subscription sale '.$sale['id']);
 
         RedirectToPayPal((string) ($expressCheckout['TOKEN'] ?? ''));
         exit;

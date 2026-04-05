@@ -27,6 +27,103 @@ function addTailwindClassesToElement(DOMElement $element, array $classes): void
     $element->setAttribute('class', trim(implode(' ', array_filter($currentClasses))));
 }
 
+
+/**
+ * Append inline styles to a DOM element without removing existing styles.
+ */
+function appendInlineStylesToElement(DOMElement $element, array $styles): void
+{
+    $existing = trim((string) $element->getAttribute('style'));
+    $styleMap = [];
+
+    if ('' !== $existing) {
+        foreach (explode(';', $existing) as $declaration) {
+            $declaration = trim($declaration);
+            if ('' === $declaration || !str_contains($declaration, ':')) {
+                continue;
+            }
+
+            [$property, $value] = array_map('trim', explode(':', $declaration, 2));
+            if ('' !== $property) {
+                $styleMap[$property] = $value;
+            }
+        }
+    }
+
+    foreach ($styles as $property => $value) {
+        $styleMap[$property] = $value;
+    }
+
+    $compiledStyles = [];
+    foreach ($styleMap as $property => $value) {
+        $compiledStyles[] = $property.': '.$value;
+    }
+
+    $element->setAttribute('style', implode('; ', $compiledStyles));
+}
+
+/**
+ * Check whether an element contains meaningful text.
+ */
+function elementHasMeaningfulText(DOMElement $element): bool
+{
+    return '' !== trim(preg_replace('/\s+/', ' ', (string) $element->textContent));
+}
+
+/**
+ * Check whether an element contains interactive form controls.
+ */
+function elementContainsInteractiveControls(DOMElement $element): bool
+{
+    foreach ($element->getElementsByTagName('input') as $input) {
+        if (!$input instanceof DOMElement) {
+            continue;
+        }
+
+        if ('hidden' !== strtolower((string) $input->getAttribute('type'))) {
+            return true;
+        }
+    }
+
+    if ($element->getElementsByTagName('select')->length > 0) {
+        return true;
+    }
+
+    if ($element->getElementsByTagName('textarea')->length > 0) {
+        return true;
+    }
+
+    foreach ($element->getElementsByTagName('button') as $button) {
+        if ($button instanceof DOMElement) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Check whether an element has a CSS class.
+ */
+function elementHasCssClass(DOMElement $element, string $className): bool
+{
+    $classAttribute = ' '.trim((string) $element->getAttribute('class')).' ';
+
+    return str_contains($classAttribute, ' '.$className.' ');
+}
+
+/**
+ * Check whether a form group is read-only after fields were frozen.
+ */
+function isReadOnlyCouponFormGroup(DOMElement $group): bool
+{
+    if (elementContainsInteractiveControls($group)) {
+        return false;
+    }
+
+    return elementHasMeaningfulText($group);
+}
+
 /**
  * Return the inner HTML of a DOM element.
  */
@@ -86,16 +183,75 @@ function styleBuyCoursesCouponFormHtml(string $html): string
     $formGroups = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]', $root);
     if ($formGroups) {
         foreach ($formGroups as $group) {
-            if ($group instanceof DOMElement) {
-                addTailwindClassesToElement($group, [
-                    'rounded-2xl',
-                    'border',
-                    'border-gray-25',
-                    'bg-white',
-                    'p-5',
-                    'shadow-sm',
-                    'space-y-3',
+            if (!$group instanceof DOMElement) {
+                continue;
+            }
+
+            addTailwindClassesToElement($group, [
+                'rounded-2xl',
+                'border',
+                'border-gray-25',
+                'bg-white',
+                'p-5',
+                'shadow-sm',
+                'space-y-3',
+            ]);
+
+            $directColumns = [];
+            foreach ($group->childNodes as $childNode) {
+                if (!$childNode instanceof DOMElement) {
+                    continue;
+                }
+
+                $className = trim((string) $childNode->getAttribute('class'));
+                if ('' !== $className && preg_match('/(^|\s)col-[^\s]+/', $className)) {
+                    $directColumns[] = $childNode;
+                    appendInlineStylesToElement($childNode, [
+                        'width' => '100% !important',
+                        'max-width' => 'none !important',
+                        'padding-left' => '0 !important',
+                        'padding-right' => '0 !important',
+                    ]);
+                }
+            }
+
+            if (!empty($directColumns)) {
+                appendInlineStylesToElement($directColumns[0], [
+                    'margin-bottom' => '0.5rem !important',
                 ]);
+            }
+
+            if (isReadOnlyCouponFormGroup($group) && count($directColumns) >= 2) {
+                addTailwindClassesToElement($group, [
+                    'flex',
+                    'flex-wrap',
+                    'items-start',
+                    'gap-x-2',
+                    'gap-y-2',
+                ]);
+
+                appendInlineStylesToElement($directColumns[0], [
+                    'flex' => '0 0 100% !important',
+                    'width' => '100% !important',
+                    'max-width' => '100% !important',
+                    'margin-bottom' => '0.25rem !important',
+                ]);
+
+                foreach (array_slice($directColumns, 1) as $column) {
+                    addTailwindClassesToElement($column, [
+                        'inline-flex',
+                        'items-center',
+                        'gap-2',
+                    ]);
+
+                    appendInlineStylesToElement($column, [
+                        'flex' => '0 0 auto !important',
+                        'width' => 'auto !important',
+                        'max-width' => '100% !important',
+                        'margin-right' => '0.25rem !important',
+                        'margin-bottom' => '0 !important',
+                    ]);
+                }
             }
         }
     }
@@ -245,6 +401,37 @@ function styleBuyCoursesCouponFormHtml(string $html): string
                     'text-gray-50',
                 ]);
             }
+        }
+    }
+
+    $readOnlyValueNodes = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]//*[self::span or self::p or self::div]', $root);
+    if ($readOnlyValueNodes) {
+        foreach ($readOnlyValueNodes as $node) {
+            if (!$node instanceof DOMElement) {
+                continue;
+            }
+
+            if (!elementHasMeaningfulText($node) || elementContainsInteractiveControls($node)) {
+                continue;
+            }
+
+            if (elementHasCssClass($node, 'form-group')
+                || elementHasCssClass($node, 'help-block')
+                || elementHasCssClass($node, 'form-control-feedback')
+                || elementHasCssClass($node, 'advmultiselect')
+                || elementHasCssClass($node, 'buycourses-advmultiselect-grid')
+                || elementHasCssClass($node, 'buycourses-advmultiselect-column')
+                || elementHasCssClass($node, 'buycourses-advmultiselect-actions')
+                || elementHasCssClass($node, 'checkbox')
+                || elementHasCssClass($node, 'radio')) {
+                continue;
+            }
+
+            addTailwindClassesToElement($node, [
+                'text-base',
+                'leading-6',
+                'text-gray-90',
+            ]);
         }
     }
 

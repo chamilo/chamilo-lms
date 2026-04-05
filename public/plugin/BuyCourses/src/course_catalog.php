@@ -85,6 +85,8 @@ $pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $pluginIndexUrl;
 
 if (api_is_platform_admin()) {
+    $backUrl = 'paymentsetup.php';
+
     $interbreadcrumb[] = [
         'name' => get_lang('Administration'),
         'url' => api_get_path(WEB_PATH).'admin',
@@ -118,25 +120,16 @@ $tpl->assign('showing_courses', true);
 $tpl->assign('showing_sessions', false);
 $tpl->assign('showing_services', false);
 
+$tpl->assign('show_courses_tab', true);
+$tpl->assign('show_sessions_tab', $includeSessions);
+$tpl->assign('show_services_tab', $includeServices);
+
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions', []);
 $tpl->assign('services', []);
 
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
-
-$tpl->assign('coursesExist', true);
-
-$countSessions = (int) $plugin->getCatalogSessionList(
-    0,
-    $pageSize,
-    '' !== $nameFilter ? $nameFilter : null,
-    $minFilter,
-    $maxFilter,
-    'count'
-);
-
-$tpl->assign('sessionExist', $countSessions > 0);
 
 $tpl->assign('name_filter_value', $nameFilter);
 $tpl->assign('min_filter_value', $minFilterValue);

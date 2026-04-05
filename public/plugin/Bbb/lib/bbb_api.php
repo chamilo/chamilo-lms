@@ -64,6 +64,82 @@ class BigBlueButtonBN
 {
     private BigBlueButton $client;
 
+    private function normalizePresentationUrl(string $url): ?string
+    {
+        $url = trim($url);
+        if ($url === '') {
+            return null;
+        }
+
+        $baseUrl = rtrim(api_get_path(WEB_PATH), '/');
+        $baseParts = parse_url($baseUrl);
+        if (false === $baseParts || empty($baseParts['host'])) {
+            return null;
+        }
+
+        if (str_starts_with($url, '/')) {
+            $scheme = $baseParts['scheme'] ?? 'https';
+            $host = $baseParts['host'];
+            $port = isset($baseParts['port']) ? ':'.$baseParts['port'] : '';
+            $url = $scheme.'://'.$host.$port.$url;
+        }
+
+        $parts = parse_url($url);
+        if (false === $parts) {
+            return null;
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return null;
+        }
+
+        if (!empty($parts['user']) || !empty($parts['pass']) || empty($parts['host'])) {
+            return null;
+        }
+
+        if (strtolower((string) $parts['host']) !== strtolower((string) $baseParts['host'])) {
+            return null;
+        }
+
+        if (isset($parts['port']) && isset($baseParts['port']) && (int) $parts['port'] !== (int) $baseParts['port']) {
+            return null;
+        }
+
+        return $url;
+    }
+
+    private function getPresentationContent(array $doc): ?string
+    {
+        if (isset($doc['content']) && is_string($doc['content']) && $doc['content'] !== '') {
+            return $doc['content'];
+        }
+
+        $normalizedUrl = $this->normalizePresentationUrl((string) ($doc['url'] ?? ''));
+        if (null === $normalizedUrl) {
+            return null;
+        }
+
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 15,
+                'follow_location' => 0,
+                'header' => 'Cookie: '.session_name().'='.session_id()."\r\n".
+                    'User-Agent: Chamilo-BBB-Preupload' . "\r\n",
+            ],
+            'https' => [
+                'timeout' => 15,
+                'follow_location' => 0,
+                'header' => 'Cookie: '.session_name().'='.session_id()."\r\n".
+                    'User-Agent: Chamilo-BBB-Preupload' . "\r\n",
+            ],
+        ]);
+
+        $content = @file_get_contents($normalizedUrl, false, $context);
+
+        return is_string($content) && $content !== '' ? $content : null;
+    }
+
     public function __construct(string $baseUrl, string $secret, array $curlOpts = [])
     {
         // Initialize the official BBB client with server URL, secret and optional cURL options
@@ -120,11 +196,16 @@ class BigBlueButtonBN
 
             if (!empty($p['documents']) && is_array($p['documents'])) {
                 foreach ($p['documents'] as $doc) {
+                    $content = $this->getPresentationContent($doc);
+                    if (null === $content) {
+                        throw new \RuntimeException('Invalid presentation source.');
+                    }
+
                     $opts = new DocumentOptionsStore();
                     $opts->addAttribute('removable', (bool)($doc['removable'] ?? true));
                     $cp->addPresentation(
                         $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH) ?: 'document'),
-                        file_get_contents($doc['url']),
+                        $content,
                         $doc['filename'] ?? 'document',
                         $opts
                     );

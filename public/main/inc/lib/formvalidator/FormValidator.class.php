@@ -420,6 +420,11 @@ EOT;
 
     private function registerAsFormAction(string $name): void
     {
+        // In inline layouts the form is already a flex row; wrapping the button in a
+        // block-level div breaks vertical alignment with adjacent inputs.
+        if (self::LAYOUT_INLINE === $this->getLayout() || self::LAYOUT_BOX_SEARCH === $this->getLayout()) {
+            return;
+        }
         $this->defaultRenderer()->setElementTemplate('<div class="form-actions">{label} {element}</div>', $name);
     }
 

@@ -1,20 +1,20 @@
 <template>
   <div
     v-if="!isLoadingPage && hasPermission"
-    class="flex flex-wrap md:flex-nowrap gap-4"
+    class="flex flex-col gap-4 md:flex-row md:items-start"
   >
-    <div class="flex flex-col w-full md:w-1/5">
+    <div class="flex w-full flex-col gap-4 md:w-1/4 xl:w-1/5">
       <UserProfileCard />
       <MyGroupsCard v-if="!hideSocialGroupBlock" />
       <MyFriendsCard />
       <MySkillsCard />
     </div>
-    <div class="flex-grow w-full md:w-4/5">
+    <div class="min-w-0 w-full flex-grow md:w-3/4 xl:w-4/5">
       <component :is="currentComponent" />
     </div>
   </div>
   <div v-if="!isLoadingPage && !hasPermission">
-    <div class="flex flex-wrap md:flex-nowrap gap-4">
+    <div class="flex flex-wrap gap-4 md:flex-nowrap">
       <p>{{ t("You do not have permission to view this page") }}</p>
     </div>
   </div>

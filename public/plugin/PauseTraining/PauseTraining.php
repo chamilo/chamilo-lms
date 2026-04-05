@@ -88,6 +88,14 @@ class PauseTraining extends Plugin
 
     public function runCron($date = '', $isTest = false)
     {
+        $isTest = (bool) $isTest;
+
+        if (!empty($date) && false === api_strtotime((string) $date)) {
+            echo 'Invalid execution date'.PHP_EOL;
+
+            return false;
+        }
+
         $enable = (string) $this->get('tool_enable');
         $senderId = (int) $this->get('sender_id');
         $enableDays = (string) $this->get('cron_alert_users_if_inactive_days');

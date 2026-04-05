@@ -346,7 +346,7 @@ class ProfileType extends AbstractType
 
         $showPauseTrainingFields = $this->shouldShowPauseTrainingFields();
 
-        if ($extraAllowlist) {
+        if ($extraAllowlist || $showPauseTrainingFields) {
             $builder->add('extra_fields', ExtraFieldType::class, [
                 'mapped' => false,
                 'label' => false,

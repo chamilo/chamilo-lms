@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Povinná pole"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tagy lze kopírovat a vkládat do textové oblasti níže a budou dynamicky nahrazeny jejich hodnotou pro každého uživatele individuálně při odesílání."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Tato skupina je propojena s třídou %s.<br>Seznam členů skupiny závisí na členech třídy a nelze jej upravit.<br>Přejděte do nastavení skupiny, abyste přerušili toto propojení, pokud chcete přidat nebo odebrat členy této skupiny."
+
+msgid "Link classes to created groups ?"
+msgstr "Propojit třídy s vytvořenými skupinami?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Pokud je třída propojena se skupinou, uživatelé přidaní do třídy nebo z ní odebraní jsou automaticky přidáni do skupiny nebo z ní odebráni."
+
+msgid "New groups creation in category %s"
+msgstr "Vytvoření nových skupin v kategorii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varovná zpráva upozorňující, že uživatel nemůže upravovat členy propojené skupiny"
+
+msgid "Remove the group link with the class"
+msgstr "Odstranit propojení skupiny s třídou"
+
+msgid "Linked class"
+msgstr "Propojená třída"
+
+msgid "The group is no longer linked to the class"
+msgstr "Skupina již není propojena s třídou"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Přehled studentů a kurzů zapsaných do třídy"
+
+msgid "Overview students subscribed to the class"
+msgstr "Přehled studentů zapsaných do třídy"
+
+msgid "Overview class"
+msgstr "Přehled třídy"
+
+msgid "Go back to the list of classes"
+msgstr "Zpět na seznam tříd"
+
+msgid "Go back to course classes"
+msgstr "Zpět na třídy kurzu"
+
+msgid "Users subscribed to the course"
+msgstr "Uživatelé zapsaní do kurzu"
+
+msgid "Users not subscribed to the course"
+msgstr "Uživatelé nepřihlášení ke kurzům"
+
+msgid "Users subscribed to the class"
+msgstr "Uživatelé přihlášení do třídy"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurzy přihlášené do třídy"
+
+msgid "No user is subscribed to this class"
+msgstr "Žádný uživatel není přihlášen do této třídy"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Žádný uživatel ani kurz nejsou přihlášeni do této třídy"
+
+msgid "No user are subscribed to this class"
+msgstr "Žádný uživatel není přihlášen do této třídy"
+
+msgid "No course are subscribed to this class"
+msgstr "Žádný kurz není přihlášen do této třídy"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Jste si jisti, že chcete odstranit třídu"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Jste si jisti, že chcete odstranit třídu?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Jste si jisti, že chcete odstranit třídu bez odstranění uživatelů?"
+
+msgid "Remove the class without removing students"
+msgstr "Odstranit třídu bez odstranění studentů"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Toto nastavení ještě není v této verzi implementováno."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Doporučeno pro pluginy pouze pro administrátory zobrazené v administrační oblasti."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Doporučeno pro pluginy, které se musí zobrazovat jako nástroje kurzu."
+
+msgid "Displayed above the main page content."
+msgstr "Zobrazeno nad obsahem hlavní stránky."
+
+msgid "Displayed below the main page content."
+msgstr "Zobrazeno pod obsahem hlavní stránky."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Zobrazeno blízko vrcholu hlavního layoutu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Zobrazeno blízko spodu hlavního layoutu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Doporučeno pro globální plovoucí nebo trvalé pluginy zobrazené před patou."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Zobrazeno ve vybrané oblasti pluginu."
+
+msgid "Admin menu"
+msgstr "Administrační menu"
+
+msgid "Global regions"
+msgstr "Globální oblasti"
+
+msgid "No regions assigned"
+msgstr "Žádné oblasti nepřiřazeny"
+
+msgid "Plugin regions"
+msgstr "Oblasti pluginů"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vyberte, kde má být každý nainstalovaný plugin vykreslen."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: použijte Ctrl/Cmd pro výběr více oblastí."
+
+msgid "No installed plugins were found."
+msgstr "Nebyl nalezen žádný nainstalovaný plugin."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vyberte jednu nebo více oblastí pro tento plugin v aktuální přístupové URL."
+
+msgid "Available regions"
+msgstr "Dostupné oblasti"
+
+msgid "Selected paragraph"
+msgstr "Vybraný odstavec"
+
+msgid "Destination folder"
+msgstr "Cílová složka"
+
+msgid "Generate AI media"
+msgstr "Generovat AI média"
+
+msgid "Save and insert"
+msgstr "Uložit a vložit"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ukládání je podporováno pouze pokud poskytovatel vrátí obsah base64. Pokud jste obdrželi pouze URL, je ukládání zakázáno, aby se zabránilo stahování v prohlížeči."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video bylo úspěšně vygenerováno, ale ukládání je zakázáno, protože poskytovatel vrátil URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Soubor byl uložen, ale jeho URL se nepodařilo vyřešit."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Vygenerovat Aiken kvíz z tématu nebo z jednoho dokumentu kurzu."
+
+msgid "Test from topic"
+msgstr "Test z tématu"
+
+msgid "Test from document"
+msgstr "Test z dokumentu"
+
+msgid "Generate from topic"
+msgstr "Generovat z tématu"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Použít výzvu tématu k vygenerování nového Aiken dotazníku."
+
+msgid "Quiz title"
+msgstr "Název kvízu"
+
+msgid "Generate from document"
+msgstr "Generovat z dokumentu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vybrat jeden dokument kurzu a generovat otázky pouze na základě jeho obsahu."
+
+msgid "Selected document"
+msgstr "Vybraný dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument je vybrán ze seznamu dokumentů kurzu."
+
+msgid "Choose document"
+msgstr "Vybrat dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Volitelné. Používá se pouze jako další nápověda pro AI."
+
+msgid "Select a document"
+msgstr "Vybrat dokument"
+

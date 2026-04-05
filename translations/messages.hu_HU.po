@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Kötelező mezők"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "A címkéket be lehet másolni és beilleszteni az alábbi szövegmezőbe, és dinamikusan lecserélődnek egyedi értékükre minden egyes felhasználó számára küldéskor."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ez a csoport a %s osztályhoz van hozzákapcsolva.<br>A csoport taglistája az osztály tagjaitól függ, és nem módosítható.<br>Menjen a csoport beállításaihoz, ha meg szeretné szakítani ezt a kapcsolatot, hogy hozzáadjon vagy eltávolítson tagokat ebből a csoportból."
+
+msgid "Link classes to created groups ?"
+msgstr "Osztályok összekapcsolása a létrehozott csoportokkal?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ha egy osztály hozzá van kapcsolva egy csoporthoz, az osztályhoz hozzáadott vagy eltávolított felhasználók automatikusan hozzáadódnak vagy eltávolításra kerülnek a csoportból."
+
+msgid "New groups creation in category %s"
+msgstr "Új csoportok létrehozása a %s kategóriában"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Figyelmeztető üzenet, amely jelzi, hogy a felhasználó nem módosíthatja a kapcsolódó csoport tagjait"
+
+msgid "Remove the group link with the class"
+msgstr "Csoport kapcsolódásának eltávolítása az osztállyal"
+
+msgid "Linked class"
+msgstr "Kapcsolódó osztály"
+
+msgid "The group is no longer linked to the class"
+msgstr "A csoport már nincs összekapcsolva az osztállyal"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Áttekintés a osztályhoz feliratkozott diákokról és kurzusokról"
+
+msgid "Overview students subscribed to the class"
+msgstr "Áttekintés a osztályhoz feliratkozott diákokról"
+
+msgid "Overview class"
+msgstr "Osztály áttekintése"
+
+msgid "Go back to the list of classes"
+msgstr "Vissza az osztályok listájához"
+
+msgid "Go back to course classes"
+msgstr "Vissza a kurzus osztályaihoz"
+
+msgid "Users subscribed to the course"
+msgstr "A kurzusra feliratkozott felhasználók"
+
+msgid "Users not subscribed to the course"
+msgstr "A kurzusra nem feliratkozott felhasználók"
+
+msgid "Users subscribed to the class"
+msgstr "Az osztályra feliratkozott felhasználók"
+
+msgid "Courses subscribed to the class"
+msgstr "Az osztályra feliratkozott kurzusok"
+
+msgid "No user is subscribed to this class"
+msgstr "Nincs felhasználó feliratkozva erre az osztályra"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Nincs felhasználó és kurzus feliratkozva erre az osztályra"
+
+msgid "No user are subscribed to this class"
+msgstr "Nincsenek felhasználók feliratkozva erre az osztályra"
+
+msgid "No course are subscribed to this class"
+msgstr "Nincsenek kurzusok feliratkozva erre az osztályra"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Biztosan el akarja távolítani az osztályt?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Biztosan el akarja távolítani az osztályt?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Biztosan el akarja távolítani az osztályt a felhasználók eltávolítása nélkül?"
+
+msgid "Remove the class without removing students"
+msgstr "Osztály törlése diákok megtartásával"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ez a beállítás még nincs implementálva ebben a verzióban."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Ajánlott adminisztrátor-kizárólagos bővítményekhez, amelyek a kezelői területen jelennek meg."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Ajánlott azoknak a bővítményeknek, amelyek kurzuseszközként kell hogy jelenjenek meg."
+
+msgid "Displayed above the main page content."
+msgstr "Megjelenik a főoldali tartalom felett."
+
+msgid "Displayed below the main page content."
+msgstr "Megjelenik a főoldali tartalom alatt."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Megjelenik a fő elrendezés külső héjának teteje közelében."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Megjelenik a fő elrendezés külső héjának alja közelében."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Ajánlott globális lebegő vagy kitartó bővítményekhez, amelyek a lábléc előtt jelennek meg."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Megjelenik a kiválasztott bővítmény régióban."
+
+msgid "Admin menu"
+msgstr "Adminisztrátori menü"
+
+msgid "Global regions"
+msgstr "Globális régiók"
+
+msgid "No regions assigned"
+msgstr "Nincsenek hozzárendelt régiók"
+
+msgid "Plugin regions"
+msgstr "Bővítmény régiók"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Válassza ki, hogy minden telepített bővítmény hol jelenjen meg."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tipp: használja a Ctrl/Cmd billentyűt több régió kijelöléséhez."
+
+msgid "No installed plugins were found."
+msgstr "Nem találhatók telepített bővítmények."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Válasszon egy vagy több régiót ehhez a bővítményhez az aktuális hozzáférési URL-ben."
+
+msgid "Available regions"
+msgstr "Elérhető régiók"
+
+msgid "Selected paragraph"
+msgstr "Kiválasztott bekezdés"
+
+msgid "Destination folder"
+msgstr "Célmappa"
+
+msgid "Generate AI media"
+msgstr "AI média generálása"
+
+msgid "Save and insert"
+msgstr "Mentés és beillesztés"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "A mentés csak akkor támogatott, ha a szolgáltató base64 tartalmat ad vissza. Ha csak URL-t kapott, a mentés le van tiltva, hogy elkerülje a letöltést a böngészőben."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "A videó sikeresen létrejött, de a mentés le van tiltva, mert a szolgáltató URL-t adott vissza."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "A fájl elmentésre került, de URL-je nem oldható fel."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Aiken kvíz generálása témából vagy egy kurzusdokumentumból."
+
+msgid "Test from topic"
+msgstr "Teszt témából"
+
+msgid "Test from document"
+msgstr "Teszt dokumentumból"
+
+msgid "Generate from topic"
+msgstr "Generálás témából"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Témakészlet prompt használata új Aiken kérdőív generálásához."
+
+msgid "Quiz title"
+msgstr "Kvíz címe"
+
+msgid "Generate from document"
+msgstr "Generálás dokumentumból"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Válasszon ki egy kurzusdokumentumot, és generáljon kérdéseket kizárólag annak tartalma alapján."
+
+msgid "Selected document"
+msgstr "Kiválasztott dokumentum"
+
+msgid "The document is selected from the course documents list."
+msgstr "A dokumentum a kurzusdokumentumok listájából van kiválasztva."
+
+msgid "Choose document"
+msgstr "Dokumentum kiválasztása"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Választható. Csak extra útmutatóként használatos az AI számára."
+
+msgid "Select a document"
+msgstr "Dokumentum kiválasztása"
+

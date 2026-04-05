@@ -33697,3 +33697,195 @@ msgstr "UID d'EntraID"
 msgid "Required fields"
 msgstr "Camps obligatoris"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Les etiquetes es poden copiar i enganxar a l'àrea de text inferior i es substituiran dinàmicament pel seu valor per a cada usuari individualment en enviar-les."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Aquest grup està vinculat a la classe %s.<br>La llista de membres del grup depèn dels membres de la classe i no es pot modificar.<br>Ves a la configuració del grup per trencar aquest vincle si vols afegir o eliminar membres d'aquest grup."
+
+msgid "Link classes to created groups ?"
+msgstr "Vincular classes als grups creats?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Si una classe està vinculada a un grup, els usuaris afegits o eliminats de la classe s'afegiran o eliminaren automàticament del grup."
+
+msgid "New groups creation in category %s"
+msgstr "Creació de nous grups a la categoria %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Missatge d'advertència per avisar que l'usuari no pot modificar els membres del grup vinculat"
+
+msgid "Remove the group link with the class"
+msgstr "Eliminar el vincle del grup amb la classe"
+
+msgid "Linked class"
+msgstr "Classe vinculada"
+
+msgid "The group is no longer linked to the class"
+msgstr "El grup ja no està vinculat a la classe"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Panorama general d'estudiants i cursos inscrits a la classe"
+
+msgid "Overview students subscribed to the class"
+msgstr "Panorama general d'estudiants inscrits a la classe"
+
+msgid "Overview class"
+msgstr "Panorama general de la classe"
+
+msgid "Go back to the list of classes"
+msgstr "Tornar a la llista de classes"
+
+msgid "Go back to course classes"
+msgstr "Tornar a les classes del curs"
+
+msgid "Users subscribed to the course"
+msgstr "Usuaris inscrits al curs"
+
+msgid "Users not subscribed to the course"
+msgstr "Usuaris no inscrits al curs"
+
+msgid "Users subscribed to the class"
+msgstr "Usuaris inscrits a la classe"
+
+msgid "Courses subscribed to the class"
+msgstr "Cursos inscrits a la classe"
+
+msgid "No user is subscribed to this class"
+msgstr "Cap usuari està inscrit a aquesta classe"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Cap usuari ni cap curs estan inscrits a aquesta classe"
+
+msgid "No user are subscribed to this class"
+msgstr "Cap usuari està inscrit a aquesta classe"
+
+msgid "No course are subscribed to this class"
+msgstr "Cap curs està inscrit a aquesta classe"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Estàs segur que vols eliminar la classe"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Estàs segur que vols eliminar la classe?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Estàs segur que vols eliminar la classe sense eliminar els usuaris?"
+
+msgid "Remove the class without removing students"
+msgstr "Eliminar la classe sense eliminar els estudiants"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Aquesta configuració encara no està implementada en aquesta versió."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recomanat per a connectors només d'administrador mostrats a l'àrea d'administració."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recomanat per a plugins que han d'aparèixer com a eines del curs."
+
+msgid "Displayed above the main page content."
+msgstr "Mostrat a sobre del contingut de la pàgina principal."
+
+msgid "Displayed below the main page content."
+msgstr "Mostrat sota el contingut de la pàgina principal."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Mostrat a prop de la part superior de la closca del disseny principal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Mostrat a prop de la part inferior de la closca del disseny principal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recomanat per a plugins globals flotants o persistents mostrats abans del peu de pàgina."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Mostrat a la regió del plugin seleccionada."
+
+msgid "Admin menu"
+msgstr "Menú d'administrador"
+
+msgid "Global regions"
+msgstr "Regions globals"
+
+msgid "No regions assigned"
+msgstr "No s'ha assignat cap regió"
+
+msgid "Plugin regions"
+msgstr "Regions de plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Trieu on ha de renderitzar-se cada plugin instal·lat."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Consell: utilitzeu Ctrl/Cmd per seleccionar múltiples regions."
+
+msgid "No installed plugins were found."
+msgstr "No s'ha trobat cap plugin instal·lat."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Seleccioneu una o més regions per a aquest plugin en l'URL d'accés actual."
+
+msgid "Available regions"
+msgstr "Regions disponibles"
+
+msgid "Selected paragraph"
+msgstr "Paràgraf seleccionat"
+
+msgid "Destination folder"
+msgstr "Carpeta de destí"
+
+msgid "Generate AI media"
+msgstr "Generar mitjans d'IA"
+
+msgid "Save and insert"
+msgstr "Desar i inserir"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "L'acció de desar només és compatible quan el proveïdor retorna contingut base64. Si només heu rebut una URL, el desament està desactivat per evitar la descàrrega al navegador."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "S'ha generat el vídeo correctament, però el desament està desactivat perquè el proveïdor ha retornat una URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "S'ha desat el fitxer, però no s'ha pogut resoldre la seva URL."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Genera un qüestionari Aiken a partir d'un tema o d'un document del curs."
+
+msgid "Test from topic"
+msgstr "Test des del tema"
+
+msgid "Test from document"
+msgstr "Test des del document"
+
+msgid "Generate from topic"
+msgstr "Genera des del tema"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Utilitza un missatge del tema per generar un nou qüestionari Aiken."
+
+msgid "Quiz title"
+msgstr "Títol del qüestionari"
+
+msgid "Generate from document"
+msgstr "Genera des del document"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Selecciona un document del curs i genera preguntes basades només en el seu contingut."
+
+msgid "Selected document"
+msgstr "Document seleccionat"
+
+msgid "The document is selected from the course documents list."
+msgstr "El document es selecciona de la llista de documents del curs."
+
+msgid "Choose document"
+msgstr "Trieu document"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcional. S'utilitza només com a pista addicional per a la IA."
+
+msgid "Select a document"
+msgstr "Selecciona un document"
+

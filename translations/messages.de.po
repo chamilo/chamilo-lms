@@ -34798,7 +34798,7 @@ msgid "Received"
 msgstr "Erhalten"
 
 msgid "%s min"
-msgstr "%s Min"
+msgstr "%s Min."
 
 msgid "Unlock column"
 msgstr "Spalte freischalten"
@@ -35249,4 +35249,196 @@ msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Pflichtfelder"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags können in das Textfeld unten kopiert und eingefügt werden und werden dynamisch mit ihrem individuellen Wert für jeden Benutzer ersetzt, wenn sie gesendet werden."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Diese Gruppe ist mit der Klasse %s verknüpft.<br>Die Mitgliederliste der Gruppe hängt von den Klassenmitgliedern ab und kann nicht geändert werden.<br>Gehen Sie zu den Gruppeneinstellungen, um diese Verknüpfung zu trennen, falls Sie Mitglieder zu dieser Gruppe hinzufügen oder entfernen möchten."
+
+msgid "Link classes to created groups ?"
+msgstr "Klassen mit erstellten Gruppen verknüpfen?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Wenn eine Klasse mit einer Gruppe verknüpft ist, werden Benutzer, die der Klasse hinzugefügt oder entfernt werden, automatisch der Gruppe hinzugefügt oder entfernt."
+
+msgid "New groups creation in category %s"
+msgstr "Neue Gruppen in Kategorie %s erstellen"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Warnmeldung, dass der Benutzer die Mitglieder der verknüpften Gruppe nicht ändern kann"
+
+msgid "Remove the group link with the class"
+msgstr "Gruppenverknüpfung mit der Klasse entfernen"
+
+msgid "Linked class"
+msgstr "Verknüpfte Klasse"
+
+msgid "The group is no longer linked to the class"
+msgstr "Die Gruppe ist nicht mehr mit der Klasse verknüpft"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Übersicht über Schüler und Kurse, die zur Klasse angemeldet sind"
+
+msgid "Overview students subscribed to the class"
+msgstr "Übersicht über Schüler, die zur Klasse angemeldet sind"
+
+msgid "Overview class"
+msgstr "Klassenübersicht"
+
+msgid "Go back to the list of classes"
+msgstr "Zurück zur Klassenliste"
+
+msgid "Go back to course classes"
+msgstr "Zurück zu den Kurseklassen"
+
+msgid "Users subscribed to the course"
+msgstr "Benutzer, die zum Kurs angemeldet sind"
+
+msgid "Users not subscribed to the course"
+msgstr "Benutzer, die nicht zum Kurs angemeldet sind"
+
+msgid "Users subscribed to the class"
+msgstr "Benutzer, die zur Klasse angemeldet sind"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurse, die zur Klasse angemeldet sind"
+
+msgid "No user is subscribed to this class"
+msgstr "Kein Benutzer ist zu dieser Klasse angemeldet"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Kein Benutzer und kein Kurs sind zu dieser Klasse angemeldet"
+
+msgid "No user are subscribed to this class"
+msgstr "Keine Benutzer sind zu dieser Klasse angemeldet"
+
+msgid "No course are subscribed to this class"
+msgstr "Keine Kurse sind zu dieser Klasse angemeldet"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sind Sie sicher, dass Sie die Klasse entfernen möchten?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sind Sie sicher, dass Sie die Klasse entfernen möchten?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Sind Sie sicher, dass Sie die Klasse ohne Entfernen der Benutzer entfernen möchten?"
+
+msgid "Remove the class without removing students"
+msgstr "Klasse ohne Entfernen der Schüler entfernen"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Diese Einstellung ist in dieser Version noch nicht implementiert."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Empfohlen für Admin-only-Plugins, die im Administrationsbereich angezeigt werden."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Empfohlen für Plugins, die als Kurswerkzeuge erscheinen müssen."
+
+msgid "Displayed above the main page content."
+msgstr "Über dem Hauptseiteninhalt angezeigt."
+
+msgid "Displayed below the main page content."
+msgstr "Unter dem Hauptseiteninhalt angezeigt."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Nahe dem oberen Rand des Hauptlayouts angezeigt."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Wird in der Nähe des unteren Rands der Hauptlayout-Schale angezeigt."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Empfohlen für globale schwimmende oder persistente Plugins, die vor dem Footer angezeigt werden."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Wird in der ausgewählten Plugin-Region angezeigt."
+
+msgid "Admin menu"
+msgstr "Admin-Menü"
+
+msgid "Global regions"
+msgstr "Globale Regionen"
+
+msgid "No regions assigned"
+msgstr "Keine Regionen zugewiesen"
+
+msgid "Plugin regions"
+msgstr "Plugin-Regionen"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Wählen Sie aus, wo jedes installierte Plugin gerendert werden soll."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tipp: Verwenden Sie Ctrl/Cmd, um mehrere Regionen auszuwählen."
+
+msgid "No installed plugins were found."
+msgstr "Keine installierten Plugins gefunden."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Wählen Sie eine oder mehrere Regionen für dieses Plugin in der aktuellen Zugriffs-URL aus."
+
+msgid "Available regions"
+msgstr "Verfügbare Regionen"
+
+msgid "Selected paragraph"
+msgstr "Ausgewählter Absatz"
+
+msgid "Destination folder"
+msgstr "Zielverzeichnis"
+
+msgid "Generate AI media"
+msgstr "KI-Medien generieren"
+
+msgid "Save and insert"
+msgstr "Speichern und einfügen"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Speichern wird nur unterstützt, wenn der Anbieter Base64-Inhalt zurückgibt. Wenn nur eine URL erhalten wurde, ist Speichern deaktiviert, um das Herunterladen im Browser zu vermeiden."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video erfolgreich generiert, aber Speichern deaktiviert, da der Anbieter eine URL zurückgegeben hat."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Die Datei wurde gespeichert, aber ihre URL konnte nicht aufgelöst werden."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Erstellen Sie einen Aiken-Test aus einem Thema oder einem Kursdokument."
+
+msgid "Test from topic"
+msgstr "Test aus Thema"
+
+msgid "Test from document"
+msgstr "Test aus Dokument"
+
+msgid "Generate from topic"
+msgstr "Aus Thema generieren"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Verwenden Sie einen Themenprompt, um ein neues Aiken-Fragebogen zu generieren."
+
+msgid "Quiz title"
+msgstr "Testtitel"
+
+msgid "Generate from document"
+msgstr "Aus Dokument generieren"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Wählen Sie ein Kursdokument aus und generieren Sie Fragen basierend nur auf dessen Inhalt."
+
+msgid "Selected document"
+msgstr "Ausgewähltes Dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Das Dokument wird aus der Liste der Kursdokumente ausgewählt."
+
+msgid "Choose document"
+msgstr "Dokument wählen"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Optional. Wird nur als zusätzlicher Hinweis für die KI verwendet."
+
+msgid "Select a document"
+msgstr "Dokument auswählen"
 

@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":òc:dret d'autor,, non:sens dret d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossiè,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dossiè,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercici:exercici,,      simulacion:simulacion,,      questionari:questionari,,      diagrama:diagrama,,      figura:figura,,      grafic:grafic,,      indèx:indèx,,      diapositiva:diapositiva,,      taula:taula,,      tèxte narratiu:tèxte narratiu,,      examen:examen,,      experiment:experiment,,      enunciat de problèma:enunciat de problèma,,      autoevaluacion:autoevaluacion,,      leçon:leçon"
@@ -33677,4 +33677,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Champs obligatòris"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Los etiquetas se pòdon copiar e collar dins la zòna de tèxte çaïssout e seràn remplaçats dinamicament per lor valor per cada utilizaire individualment quand se los envia."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Aqueste grop es ligat a la classe %s.<br>La lista dels membres del grop depend dels membres de la classe e pòt pas èsser modificada.<br>Vau a las parametres del grop per rompre aquesta ligason se volètz apondre o levar des membres d’aquest grop."
+
+msgid "Link classes to created groups ?"
+msgstr "Ligar las classes als grops creats ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Se una classe es ligada a un grop, los utilizaires aponduts o levats de la classe son automaticament aponduts o levats del grop."
+
+msgid "New groups creation in category %s"
+msgstr "Creacion de novèls grops dins la categoria %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Messatge d’avertiment per avisar que l’utilizaire pòt pas modificar los membres del grop ligat"
+
+msgid "Remove the group link with the class"
+msgstr "Levar la ligason del grop amb la classe"
+
+msgid "Linked class"
+msgstr "Classe ligada"
+
+msgid "The group is no longer linked to the class"
+msgstr "Lo grop es ara pas ligat a la classe"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Aperçu dels estudiants e cors inscrits a la classe"
+
+msgid "Overview students subscribed to the class"
+msgstr "Aperçu dels estudiants inscrits a la classe"
+
+msgid "Overview class"
+msgstr "Aperçu de la classe"
+
+msgid "Go back to the list of classes"
+msgstr "Tornar a la lista de las classes"
+
+msgid "Go back to course classes"
+msgstr "Tornar a las classes del còrs"
+
+msgid "Users subscribed to the course"
+msgstr "Utilizaires inscrits al còrs"
+
+msgid "Users not subscribed to the course"
+msgstr "Utilizaires pas inscrits al cors"
+
+msgid "Users subscribed to the class"
+msgstr "Utilizaires inscrits a la classe"
+
+msgid "Courses subscribed to the class"
+msgstr "Cors inscrits a la classe"
+
+msgid "No user is subscribed to this class"
+msgstr "Cap d'utilizaire es pas inscrit a aquesta classe"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Cap d'utilizaire ni cap de cors son inscrits a aquesta classe"
+
+msgid "No user are subscribed to this class"
+msgstr "Cap d'utilizaire es pas inscrit a aquesta classe"
+
+msgid "No course are subscribed to this class"
+msgstr "Cap de cors es pas inscrit a aquesta classe"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sètz segur que volètz suprimir la classe"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sètz segur que volètz suprimir la classe ?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Sètz segur que volètz suprimir la classe sens suprimir los utilizaires ?"
+
+msgid "Remove the class without removing students"
+msgstr "Suprimir la classe sens suprimir los estudiants"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Aquesta configuracion es pas encara implementada dins aquesta version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recomandat pels plugins administradors unicament, afichats dins l'espaci d'administracion."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recomandat pels plugins que devon aparéisser coma d'aisinas del cors."
+
+msgid "Displayed above the main page content."
+msgstr "Afichat sus lo contengut de la pagina principal."
+
+msgid "Displayed below the main page content."
+msgstr "Afichat jos lo contengut de la pagina principal."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Afichat près del naut de la coquina principal del malh."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Afichat près del bas de la coquina principal del malh."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recomandat pels plugins flotants o persistents globals afichats abans del pè de pagina."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Afichat dins la region del plugin seleccionada."
+
+msgid "Admin menu"
+msgstr "Menú admin"
+
+msgid "Global regions"
+msgstr "Regions globals"
+
+msgid "No regions assigned"
+msgstr "Cap de region assignada"
+
+msgid "Plugin regions"
+msgstr "Regions dels plugins"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Causir ont cada plugin installat se deu afichar."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Astúcia : utilizatz Ctrl/Cmd per seleccionar de regions multiples."
+
+msgid "No installed plugins were found."
+msgstr "Cap de plugin installat es pas estat trobat."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Seleccionatz una o mai de regions per aqueste plugin dins l'URL d'accès actual."
+
+msgid "Available regions"
+msgstr "Regions disponibles"
+
+msgid "Selected paragraph"
+msgstr "Paragrafh seleccionat"
+
+msgid "Destination folder"
+msgstr "Dossiè de destinacion"
+
+msgid "Generate AI media"
+msgstr "Generar mèdia IA"
+
+msgid "Save and insert"
+msgstr "Enregistrar e inserir"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "L'enregistrament es solament suportat quand lo fornidor torna un contengut base64. Se avètz solament recebut una URL, l'enregistrament es desactivat per evitar lo telecargament dins lo navigador."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Vidèu generat amb succès, mas l'enregistrament es desactivat perque lo fornidor a tornat una URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Lo fichièr es estat enregistrat, mas son URL pòt pas èsser resòlutz."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generar un quiz Aiken a partir d’un topic o d’un document de curs."
+
+msgid "Test from topic"
+msgstr "Test a partir del topic"
+
+msgid "Test from document"
+msgstr "Test a partir del document"
+
+msgid "Generate from topic"
+msgstr "Generar a partir del topic"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Utilizar un prompt de topic per generar un novèl questionari Aiken."
+
+msgid "Quiz title"
+msgstr "Títol del quiz"
+
+msgid "Generate from document"
+msgstr "Generar a partir del document"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Seleccionar un document de curs e generar de questions basadas solament sul seu contengut."
+
+msgid "Selected document"
+msgstr "Document seleccionat"
+
+msgid "The document is selected from the course documents list."
+msgstr "Lo document es seleccionat de la lista dels documents del curs."
+
+msgid "Choose document"
+msgstr "Chausir lo document"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcional. Utilizat solament coma indíci suplementari per l’IA."
+
+msgid "Select a document"
+msgstr "Seleccionar un document"
 

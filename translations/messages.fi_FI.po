@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -33683,4 +33683,196 @@ msgstr "EntraID-käyttäjätunnus"
 
 msgid "Required fields"
 msgstr "Pakolliset kentät"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tunnisteita voidaan kopioida ja liittää alla olevaan tekstialueeseen, ja ne korvataan dynaamisesti kunkin käyttäjän arvolla erikseen lähetettäessä."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Tämä ryhmä on linkitetty luokkaan %s.<br>Ryhmän jäsenluettelo riippuu luokan jäsenistä eikä sitä voi muokata.<br>Mene ryhmän asetuksiin katkaaksesi tämän linkin, jos haluat lisätä tai poistaa jäseniä tästä ryhmästä."
+
+msgid "Link classes to created groups ?"
+msgstr "Linkitäkö luokat luotuihin ryhmiin?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Jos luokka on linkitetty ryhmään, luokkaan lisätyt tai poistetut käyttäjät lisätään tai poistetaan automaattisesti ryhmästä."
+
+msgid "New groups creation in category %s"
+msgstr "Uusien ryhmien luonti luokassa %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varoitusviesti, joka ilmoittaa, että käyttäjä ei voi muokata linkitetyn ryhmän jäseniä"
+
+msgid "Remove the group link with the class"
+msgstr "Poista ryhmän linkki luokasta"
+
+msgid "Linked class"
+msgstr "Linkitetty luokka"
+
+msgid "The group is no longer linked to the class"
+msgstr "Ryhmä ei ole enää linkitetty luokkaan"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Yleiskatsaus luokkaan ilmoittautuneisiin opiskelijoihin ja kursseihin"
+
+msgid "Overview students subscribed to the class"
+msgstr "Yleiskatsaus luokkaan ilmoittautuneisiin opiskelijoihin"
+
+msgid "Overview class"
+msgstr "Yleiskatsaus luokkaan"
+
+msgid "Go back to the list of classes"
+msgstr "Palaa luokkien luetteloon"
+
+msgid "Go back to course classes"
+msgstr "Palaa kurssin luokkiin"
+
+msgid "Users subscribed to the course"
+msgstr "Kursseille ilmoittautuneet käyttäjät"
+
+msgid "Users not subscribed to the course"
+msgstr "Kursseille ilmoittautumattomat käyttäjät"
+
+msgid "Users subscribed to the class"
+msgstr "Luokkaan ilmoittautuneet käyttäjät"
+
+msgid "Courses subscribed to the class"
+msgstr "Luokkaan ilmoittautuneet kurssit"
+
+msgid "No user is subscribed to this class"
+msgstr "Yhtään käyttäjää ei ole ilmoittautunut tähän luokkaan"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Yhtään käyttäjää eikä yhtään kurssia ei ole ilmoittautunut tähän luokkaan"
+
+msgid "No user are subscribed to this class"
+msgstr "Yhtään käyttäjää ei ole ilmoittautunut tähän luokkaan"
+
+msgid "No course are subscribed to this class"
+msgstr "Yhtään kurssia ei ole ilmoittautunut tähän luokkaan"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Haluatko varmasti poistaa luokan"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Haluatko varmasti poistaa luokan?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Haluatko varmasti poistaa luokan poistamatta käyttäjiä?"
+
+msgid "Remove the class without removing students"
+msgstr "Poista luokka poistamatta opiskelijoita"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Tätä asetusta ei ole vielä toteutettu tässä versiossa."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Suositellaan vain ylläpitäjän lisäosille, jotka näkyvät hallinta-alueella."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Suositellaan lisäosille, jotka tulee näkyä kurssityökaluina."
+
+msgid "Displayed above the main page content."
+msgstr "Näytetään pääsivun sisällön yläpuolella."
+
+msgid "Displayed below the main page content."
+msgstr "Näytetään pääsivun sisällön alapuolella."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Näytetään pääasettelu-kuoren yläosassa."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Näytetään pääasettelu-kuoren alalaidassa."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Suositellaan globaaleille kelluville tai pysyville lisäosille, jotka näkyvät ennen alatunnistetta."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Näytetään valitussa lisäosien alueessa."
+
+msgid "Admin menu"
+msgstr "Ylläpitovalikko"
+
+msgid "Global regions"
+msgstr "Globaalit alueet"
+
+msgid "No regions assigned"
+msgstr "Ei alueita määritetty"
+
+msgid "Plugin regions"
+msgstr "Lisäosien alueet"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Valitse, missä kussakin asennetussa lisäosassa näytetään."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Vinkki: käytä Ctrl/Cmd useiden alueiden valitsemiseen."
+
+msgid "No installed plugins were found."
+msgstr "Asennettuja lisäosia ei löytynyt."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Valitse yksi tai useampi alue tälle lisäosalle nykyisessä pääsylinkissä."
+
+msgid "Available regions"
+msgstr "Saatavilla olevat alueet"
+
+msgid "Selected paragraph"
+msgstr "Valittu kappale"
+
+msgid "Destination folder"
+msgstr "Kohde kansio"
+
+msgid "Generate AI media"
+msgstr "Luo tekoälymediaa"
+
+msgid "Save and insert"
+msgstr "Tallenna ja lisää"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Tallenus tuetaan vain, kun palveluntarjoaja palauttaa base64-sisältöä. Jos sait vain URL-osoitteen, tallennus on poistettu käytöstä selaimessa lataamisen välttämiseksi."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video luotiin onnistuneesti, mutta tallennus on poistettu käytöstä, koska palveluntarjoaja palautti URL-osoitteen."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Tiedosto tallennettiin, mutta sen URL-osoitetta ei voitu selvittää."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Luo Aiken-kysely aiheesta tai yhdestä kurssin asiakirjasta."
+
+msgid "Test from topic"
+msgstr "Koe aiheesta"
+
+msgid "Test from document"
+msgstr "Koe asiakirjasta"
+
+msgid "Generate from topic"
+msgstr "Luo aiheesta"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Käytä aiheen kehotetta uuden Aiken-kyselylomakkeen luomiseen."
+
+msgid "Quiz title"
+msgstr "Kyselyn otsikko"
+
+msgid "Generate from document"
+msgstr "Luo asiakirjasta"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Valitse yksi kurssin asiakirja ja luo kysymyksiä vain sen sisällön perusteella."
+
+msgid "Selected document"
+msgstr "Valittu asiakirja"
+
+msgid "The document is selected from the course documents list."
+msgstr "Asiakirja valitaan kurssin asiakirjojen luettelosta."
+
+msgid "Choose document"
+msgstr "Valitse asiakirja"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valinnainen. Käytetään vain lisävihjeenä tekoälylle."
+
+msgid "Select a document"
+msgstr "Valitse asiakirja"
 

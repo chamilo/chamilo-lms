@@ -33698,3 +33698,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Câmpuri obligatorii"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Etichetele pot fi copiate și lipite în zona de text de mai jos și vor fi înlocuite dinamic cu valoarea lor pentru fiecare utilizator individual la trimitere."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Acest grup este legat de clasa %s.<br>Lista membrilor grupului depinde de membrii clasei și nu poate fi modificată.<br>Mergeți la setările grupului pentru a rupe această legătură dacă doriți să adăugați sau să eliminați membri din acest grup."
+
+msgid "Link classes to created groups ?"
+msgstr "Leagă clasele de grupurile create?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Dacă o clasă este legată de un grup, utilizatorii adăugați sau eliminați din clasă sunt adăugați sau eliminați automat din grup."
+
+msgid "New groups creation in category %s"
+msgstr "Creare grupuri noi în categoria %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Mesaj de avertizare că utilizatorul nu poate modifica membrii grupului legat"
+
+msgid "Remove the group link with the class"
+msgstr "Elimină legătura grupului cu clasa"
+
+msgid "Linked class"
+msgstr "Clasă legată"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupul nu mai este legat de clasă"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Prezentare generală elevi și cursuri înscrise la clasă"
+
+msgid "Overview students subscribed to the class"
+msgstr "Prezentare generală elevi înscriși la clasă"
+
+msgid "Overview class"
+msgstr "Prezentare generală clasă"
+
+msgid "Go back to the list of classes"
+msgstr "Înapoi la lista claselor"
+
+msgid "Go back to course classes"
+msgstr "Înapoi la clasele cursului"
+
+msgid "Users subscribed to the course"
+msgstr "Utilizatori înscriși la curs"
+
+msgid "Users not subscribed to the course"
+msgstr "Utilizatori neînscriși la curs"
+
+msgid "Users subscribed to the class"
+msgstr "Utilizatori înscriși la clasă"
+
+msgid "Courses subscribed to the class"
+msgstr "Cursuri înscrise la clasă"
+
+msgid "No user is subscribed to this class"
+msgstr "Niciun utilizator nu este înscris la această clasă"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Niciun utilizator și niciun curs nu sunt înscrise la această clasă"
+
+msgid "No user are subscribed to this class"
+msgstr "Niciun utilizator nu este înscris la această clasă"
+
+msgid "No course are subscribed to this class"
+msgstr "Niciun curs nu este înscris la această clasă"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sigur doriți să eliminați clasa"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sigur doriți să eliminați clasa?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ești sigur că vrei să elimini clasa fără să elimini utilizatorii?"
+
+msgid "Remove the class without removing students"
+msgstr "Elimină clasa fără a elimina studenții"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Această setare nu este încă implementată în această versiune."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recomandat pentru pluginurile doar pentru administratori afișate în zona de administrare."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recomandat pentru pluginurile care trebuie să apară ca instrumente de curs."
+
+msgid "Displayed above the main page content."
+msgstr "Afișat deasupra conținutului paginii principale."
+
+msgid "Displayed below the main page content."
+msgstr "Afișat sub conținutul paginii principale."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Afișat în apropierea de sus a carcasei layout-ului principal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Afișat în apropierea de jos a carcasei layout-ului principal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recomandat pentru pluginuri globale plutitoare sau persistente afișate înainte de footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Afișat în regiunea pluginului selectată."
+
+msgid "Admin menu"
+msgstr "Meniu admin"
+
+msgid "Global regions"
+msgstr "Regiuni globale"
+
+msgid "No regions assigned"
+msgstr "Nicio regiune asignată"
+
+msgid "Plugin regions"
+msgstr "Regiuni plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Alege unde ar trebui să fie afișat fiecare plugin instalat."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Sfat: folosește Ctrl/Cmd pentru a selecta mai multe regiuni."
+
+msgid "No installed plugins were found."
+msgstr "Nu au fost găsite pluginuri instalate."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Selectează una sau mai multe regiuni pentru acest plugin în URL-ul de acces curent."
+
+msgid "Available regions"
+msgstr "Regiuni disponibile"
+
+msgid "Selected paragraph"
+msgstr "Paragraf selectat"
+
+msgid "Destination folder"
+msgstr "Folder destinație"
+
+msgid "Generate AI media"
+msgstr "Generează media AI"
+
+msgid "Save and insert"
+msgstr "Salvează și inserează"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Salvarea este suportată doar când furnizorul returnează conținut base64. Dacă ai primit doar un URL, salvarea este dezactivată pentru a evita descărcarea în browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generat cu succes, dar salvarea este dezactivată deoarece furnizorul a returnat un URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Fișierul a fost salvat, dar URL-ul său nu a putut fi rezolvat."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generează un test Aiken dintr-un subiect sau dintr-un document de curs."
+
+msgid "Test from topic"
+msgstr "Test din subiect"
+
+msgid "Test from document"
+msgstr "Test din document"
+
+msgid "Generate from topic"
+msgstr "Generează din subiect"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Folosește un prompt de subiect pentru a genera un chestionar Aiken nou."
+
+msgid "Quiz title"
+msgstr "Titlu test"
+
+msgid "Generate from document"
+msgstr "Generează din document"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Selectează un document de curs și generează întrebări bazate doar pe conținutul său."
+
+msgid "Selected document"
+msgstr "Document selectat"
+
+msgid "The document is selected from the course documents list."
+msgstr "Documentul este selectat din lista documentelor cursului."
+
+msgid "Choose document"
+msgstr "Alege document"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opțional. Folosit doar ca indiciu suplimentar pentru AI."
+
+msgid "Select a document"
+msgstr "Selectează un document"
+

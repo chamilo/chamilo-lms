@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Påkravde felt"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Etikettar kan kopierast og limes inn i tekstområdet under og vil bli dynamisk erstatta med verdien deira for kvar brukar individuelt når dei blir sendt."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Denne gruppa er lenka til klassa %s.<br>Gruppelista avhenger av klassemedlemar og kan ikkje endrast.<br>Gå til gruppeinnstillingane for å bryte denne lenka om du ønsk å legge til eller fjern medlemar for denne gruppa."
+
+msgid "Link classes to created groups ?"
+msgstr "Lenk klassar til oppretta grupper?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Om ein klasse er lenka til ei gruppe, blir brukarar som blir lagt til eller fjerna frå klassa automatisk lagt til eller fjerna frå gruppa."
+
+msgid "New groups creation in category %s"
+msgstr "Ny gruppeoppretting i kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Advarselsmelding for å varsle at brukarar ikkje kan endre medlemar i lenka gruppe"
+
+msgid "Remove the group link with the class"
+msgstr "Fjern gruppelenken med klassa"
+
+msgid "Linked class"
+msgstr "Lenka klasse"
+
+msgid "The group is no longer linked to the class"
+msgstr "Gruppa er ikkje lenger lenka til klassa"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Oversikt over elevar og kurs melda på klassa"
+
+msgid "Overview students subscribed to the class"
+msgstr "Oversikt over elevar melda på klassa"
+
+msgid "Overview class"
+msgstr "Oversikt klasse"
+
+msgid "Go back to the list of classes"
+msgstr "Gå tilbake til lista over klassar"
+
+msgid "Go back to course classes"
+msgstr "Gå tilbake til kursklassar"
+
+msgid "Users subscribed to the course"
+msgstr "Brukarar melda på kurset"
+
+msgid "Users not subscribed to the course"
+msgstr "Brukarar ikkje melda på kurset"
+
+msgid "Users subscribed to the class"
+msgstr "Brukarar melda på klassa"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurs meldt på klassa"
+
+msgid "No user is subscribed to this class"
+msgstr "Ingen brukar er meldt på denne klassa"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ingen brukar og ingen kurs er meldt på denne klassa"
+
+msgid "No user are subscribed to this class"
+msgstr "Ingen brukar er meldt på denne klassa"
+
+msgid "No course are subscribed to this class"
+msgstr "Ingen kurs er meldt på denne klassa"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Er du sikker på at du vil slette klassa"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Er du sikker på at du vil slette klassa?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Er du sikker på at du vil slette klassa utan å slette brukarar?"
+
+msgid "Remove the class without removing students"
+msgstr "Slett klassa utan å slette studentar"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Denne innstillinga er ikkje implementert i denne versjonen enno."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Anbefalt for berre-admin-plugins som visast i administrasjonsområdet."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Anbefalt for plugins som må visast som kursverktøy."
+
+msgid "Displayed above the main page content."
+msgstr "Visast over hovudsida si innhald."
+
+msgid "Displayed below the main page content."
+msgstr "Visast under hovudsida si innhald."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Visast nær toppen av hovudoppsettet."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Visast nær bunnen av hovudoppsettet."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Anbefalt for globale flytande eller varige plugins som visast før bunnteksta."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Visast i det valde plugin-området."
+
+msgid "Admin menu"
+msgstr "Admin-meny"
+
+msgid "Global regions"
+msgstr "Globale område"
+
+msgid "No regions assigned"
+msgstr "Ingen område tildeilt"
+
+msgid "Plugin regions"
+msgstr "Plugin-område"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vel kvar installert plugin skal visast."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tips: bruk Ctrl/Cmd for å velje fleire område."
+
+msgid "No installed plugins were found."
+msgstr "Ingen installerte plugins blei funne."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vel éin eller fleire område for denne pluginen i den nåverande tilgjengeliggjerings-URL-en."
+
+msgid "Available regions"
+msgstr "Tilgjengelege område"
+
+msgid "Selected paragraph"
+msgstr "Valt avsnitt"
+
+msgid "Destination folder"
+msgstr "Målmappe"
+
+msgid "Generate AI media"
+msgstr "Generer KI-media"
+
+msgid "Save and insert"
+msgstr "Lagrar og sett inn"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Lagringsstøtte er berre tilgjengeleg når leverandøren returnerer base64-innhald. Om du berre fekk ein URL, er lagring deaktivert for å unngå nedlasting i nettlesaren."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generert vellykka, men lagring er deaktivert fordi leverandøren returnerte ein URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Fila vart lagra, men URL-en kunne ikkje løysast opp."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generer ein Aiken-kviss frå eit emne eller frå eitt kursdokument."
+
+msgid "Test from topic"
+msgstr "Test frå emne"
+
+msgid "Test from document"
+msgstr "Test frå dokument"
+
+msgid "Generate from topic"
+msgstr "Generer frå emne"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Bruk eit emneprompt for å generere eit nytt Aiken-spørreskjema."
+
+msgid "Quiz title"
+msgstr "Kviss-tittel"
+
+msgid "Generate from document"
+msgstr "Generer frå dokument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vel eitt kursdokument og generer spørsmål basert berre på innhaldet dets."
+
+msgid "Selected document"
+msgstr "Valt dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentet er valt frå lista over kursdokument."
+
+msgid "Choose document"
+msgstr "Vel dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valfritt. Brukt berre som ein ekstra vink for KI-en."
+
+msgid "Select a document"
+msgstr "Vel eit dokument"
+

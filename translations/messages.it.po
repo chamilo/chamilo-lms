@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:senza copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartella,, application/msword:MsWord,, application/octet-stream:Flusso ottetti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercizio,, simulation:simulazione,, questionnaire:questionario,, diagram:diagramma,, figure:figura,, graph:grafico,, index:indice,, slide:slide,, table:tabella,, narrative text:narrazione,, exam:esame,, experiment:esperimento,, problem statement:enunciato di problema,, self assessment:autovalutazione,, lecture:lezione"
@@ -33697,4 +33697,196 @@ msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Campi obbligatori"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "I tag possono essere copiati e incollati nell'area di testo qui sotto e saranno dinamicamente sostituiti con il loro valore per ciascun utente individualmente quando vengono inviati."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Questo gruppo è collegato alla classe %s.<br>L'elenco dei membri del gruppo dipende dai membri della classe e non può essere modificato.<br>Vai alle impostazioni del gruppo per interrompere questo collegamento se desideri aggiungere o rimuovere membri per questo gruppo."
+
+msgid "Link classes to created groups ?"
+msgstr "Collegare classi ai gruppi creati?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Se una classe è collegata a un gruppo, gli utenti aggiunti o rimossi dalla classe vengono automaticamente aggiunti o rimossi dal gruppo."
+
+msgid "New groups creation in category %s"
+msgstr "Creazione di nuovi gruppi nella categoria %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Messaggio di avviso per informare che l'utente non può modificare i membri del gruppo collegato"
+
+msgid "Remove the group link with the class"
+msgstr "Rimuovi il collegamento del gruppo con la classe"
+
+msgid "Linked class"
+msgstr "Classe collegata"
+
+msgid "The group is no longer linked to the class"
+msgstr "Il gruppo non è più collegato alla classe"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Panoramica studenti e corsi iscritti alla classe"
+
+msgid "Overview students subscribed to the class"
+msgstr "Panoramica studenti iscritti alla classe"
+
+msgid "Overview class"
+msgstr "Panoramica classe"
+
+msgid "Go back to the list of classes"
+msgstr "Torna all'elenco delle classi"
+
+msgid "Go back to course classes"
+msgstr "Torna alle classi del corso"
+
+msgid "Users subscribed to the course"
+msgstr "Utenti iscritti al corso"
+
+msgid "Users not subscribed to the course"
+msgstr "Utenti non iscritti al corso"
+
+msgid "Users subscribed to the class"
+msgstr "Utenti iscritti alla classe"
+
+msgid "Courses subscribed to the class"
+msgstr "Corsi iscritti alla classe"
+
+msgid "No user is subscribed to this class"
+msgstr "Nessun utente è iscritto a questa classe"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Nessun utente e nessun corso sono iscritti a questa classe"
+
+msgid "No user are subscribed to this class"
+msgstr "Nessun utente è iscritto a questa classe"
+
+msgid "No course are subscribed to this class"
+msgstr "Nessun corso è iscritto a questa classe"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sei sicuro di voler rimuovere la classe"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sei sicuro di voler rimuovere la classe?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Sei sicuro di voler rimuovere la classe senza rimuovere gli utenti?"
+
+msgid "Remove the class without removing students"
+msgstr "Rimuovi la classe senza rimuovere gli studenti"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Questa impostazione non è ancora implementata in questa versione."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Raccomandato per plugin solo admin mostrati nell'area di amministrazione."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Raccomandato per plugin che devono apparire come strumenti del corso."
+
+msgid "Displayed above the main page content."
+msgstr "Visualizzato sopra il contenuto della pagina principale."
+
+msgid "Displayed below the main page content."
+msgstr "Visualizzato sotto il contenuto della pagina principale."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Visualizzato vicino alla parte superiore del guscio del layout principale."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Visualizzato vicino alla parte inferiore del guscio del layout principale."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Raccomandato per plugin globali flottanti o persistenti mostrati prima del footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Visualizzato nella regione del plugin selezionata."
+
+msgid "Admin menu"
+msgstr "Menu admin"
+
+msgid "Global regions"
+msgstr "Regioni globali"
+
+msgid "No regions assigned"
+msgstr "Nessuna regione assegnata"
+
+msgid "Plugin regions"
+msgstr "Regioni plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Scegli dove ogni plugin installato deve essere renderizzato."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Suggerimento: usa Ctrl/Cmd per selezionare più regioni."
+
+msgid "No installed plugins were found."
+msgstr "Nessun plugin installato trovato."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Seleziona una o più regioni per questo plugin nell'URL di accesso corrente."
+
+msgid "Available regions"
+msgstr "Regioni disponibili"
+
+msgid "Selected paragraph"
+msgstr "Paragrafo selezionato"
+
+msgid "Destination folder"
+msgstr "Cartella di destinazione"
+
+msgid "Generate AI media"
+msgstr "Genera media AI"
+
+msgid "Save and insert"
+msgstr "Salva e inserisci"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Il salvataggio è supportato solo quando il provider restituisce contenuto base64. Se hai ricevuto solo un URL, il salvataggio è disabilitato per evitare il download nel browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generato con successo, ma il salvataggio è disabilitato perché il provider ha restituito un URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Il file è stato salvato, ma il suo URL non poteva essere risolto."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Genera un quiz Aiken da un argomento o da un documento del corso."
+
+msgid "Test from topic"
+msgstr "Test dall'argomento"
+
+msgid "Test from document"
+msgstr "Test dal documento"
+
+msgid "Generate from topic"
+msgstr "Genera dall'argomento"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Usa un prompt di argomento per generare un nuovo questionario Aiken."
+
+msgid "Quiz title"
+msgstr "Titolo quiz"
+
+msgid "Generate from document"
+msgstr "Genera dal documento"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Seleziona un documento del corso e genera domande basate solo sul suo contenuto."
+
+msgid "Selected document"
+msgstr "Documento selezionato"
+
+msgid "The document is selected from the course documents list."
+msgstr "Il documento è selezionato dall'elenco dei documenti del corso."
+
+msgid "Choose document"
+msgstr "Scegli documento"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opzionale. Usato solo come suggerimento extra per l'IA."
+
+msgid "Select a document"
+msgstr "Seleziona un documento"
 

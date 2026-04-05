@@ -33684,3 +33684,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "ช่องที่จำเป็น"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "แท็กสามารถคัดลอกและวางในช่องข้อความด้านล่าง และจะถูกแทนที่ด้วยค่าของแต่ละบุคคลเมื่อส่งให้ผู้ใช้แต่ละคน"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "กลุ่มนี้เชื่อมโยงกับชั้นเรียน %s.<br>รายการสมาชิกกลุ่มขึ้นอยู่กับสมาชิกชั้นเรียนและไม่สามารถแก้ไขได้<br>ไปที่การตั้งค่ากลุ่มเพื่อยกเลิกการเชื่อมโยงนี้หากต้องการเพิ่มหรือลบสมาชิกสำหรับกลุ่มนี้"
+
+msgid "Link classes to created groups ?"
+msgstr "เชื่อมโยงชั้นเรียนกับกลุ่มที่สร้างแล้วหรือไม่?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "หากชั้นเรียนเชื่อมโยงกับกลุ่ม ผู้ใช้ที่เพิ่มหรือลบจากชั้นเรียนจะถูกเพิ่มหรือลบจากกลุ่มโดยอัตโนมัติ"
+
+msgid "New groups creation in category %s"
+msgstr "สร้างกลุ่มใหม่ในหมวดหมู่ %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "ข้อความเตือนแจ้งว่าผู้ใช้ไม่สามารถแก้ไขสมาชิกของกลุ่มที่เชื่อมโยงได้"
+
+msgid "Remove the group link with the class"
+msgstr "ลบการเชื่อมโยงกลุ่มกับชั้นเรียน"
+
+msgid "Linked class"
+msgstr "ชั้นเรียนที่เชื่อมโยง"
+
+msgid "The group is no longer linked to the class"
+msgstr "กลุ่มไม่เชื่อมโยงกับชั้นเรียนอีกต่อไป"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "ภาพรวมนักเรียนและวิชาที่ลงทะเบียนในชั้นเรียน"
+
+msgid "Overview students subscribed to the class"
+msgstr "ภาพรวมนักเรียนที่ลงทะเบียนในชั้นเรียน"
+
+msgid "Overview class"
+msgstr "ภาพรวมชั้นเรียน"
+
+msgid "Go back to the list of classes"
+msgstr "กลับไปที่รายการชั้นเรียน"
+
+msgid "Go back to course classes"
+msgstr "กลับไปที่ชั้นเรียนวิชา"
+
+msgid "Users subscribed to the course"
+msgstr "ผู้ใช้ที่ลงทะเบียนในวิชา"
+
+msgid "Users not subscribed to the course"
+msgstr "ผู้ใช้ที่ไม่ได้ลงทะเบียนในวิชา"
+
+msgid "Users subscribed to the class"
+msgstr "ผู้ใช้ที่ลงทะเบียนในชั้นเรียน"
+
+msgid "Courses subscribed to the class"
+msgstr "วิชาที่ลงทะเบียนในชั้นเรียน"
+
+msgid "No user is subscribed to this class"
+msgstr "ไม่มีผู้ใช้ลงทะเบียนในชั้นเรียนนี้"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "ไม่มีผู้ใช้และไม่มีวิชาที่ลงทะเบียนในชั้นเรียนนี้"
+
+msgid "No user are subscribed to this class"
+msgstr "ไม่มีผู้ใช้ลงทะเบียนในชั้นเรียนนี้"
+
+msgid "No course are subscribed to this class"
+msgstr "ไม่มีวิชาที่ลงทะเบียนในชั้นเรียนนี้"
+
+msgid "Are you sure you want to remove the class"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชั้นเรียน"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชั้นเรียน?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชั้นเรียนโดยไม่ลบผู้ใช้?"
+
+msgid "Remove the class without removing students"
+msgstr "ลบชั้นเรียนโดยไม่ลบนักเรียน"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "การตั้งค่านี้ยังไม่ถูกนำมาใช้ในเวอร์ชันนี้"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "แนะนำสำหรับปลั๊กอินที่แสดงเฉพาะในส่วนผู้ดูแลระบบ"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "แนะนำสำหรับปลั๊กอินที่ต้องปรากฏเป็นเครื่องมือในคอร์ส"
+
+msgid "Displayed above the main page content."
+msgstr "แสดงเหนือเนื้อหาหลักของหน้า"
+
+msgid "Displayed below the main page content."
+msgstr "แสดงใต้เนื้อหาหลักของหน้า"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "แสดงใกล้ด้านบนของโครงสร้างหลัก"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "แสดงใกล้ด้านล่างของโครงสร้างหลัก"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "แนะนำสำหรับปลั๊กอินลอยตัวหรือถาวรที่แสดงก่อนส่วนท้าย"
+
+msgid "Displayed in the selected plugin region."
+msgstr "แสดงในพื้นที่ปลั๊กอินที่เลือก"
+
+msgid "Admin menu"
+msgstr "เมนูผู้ดูแลระบบ"
+
+msgid "Global regions"
+msgstr "พื้นที่ทั่วไป"
+
+msgid "No regions assigned"
+msgstr "ไม่มีพื้นที่ที่กำหนด"
+
+msgid "Plugin regions"
+msgstr "พื้นที่ปลั๊กอิน"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "เลือกตำแหน่งที่ปลั๊กอินที่ติดตั้งแล้วควรแสดงผล"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "เคล็ดลับ: ใช้ Ctrl/Cmd เพื่อเลือกหลายพื้นที่"
+
+msgid "No installed plugins were found."
+msgstr "ไม่พบปลั๊กอินที่ติดตั้ง"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "เลือกหนึ่งหรือหลายพื้นที่สำหรับปลั๊กอินนี้ใน URL เข้าถึงปัจจุบัน"
+
+msgid "Available regions"
+msgstr "พื้นที่ที่มี"
+
+msgid "Selected paragraph"
+msgstr "ย่อหน้ที่เลือก"
+
+msgid "Destination folder"
+msgstr "โฟลเดอร์ปลายทาง"
+
+msgid "Generate AI media"
+msgstr "สร้างสื่อ AI"
+
+msgid "Save and insert"
+msgstr "บันทึกและแทรกลง"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "การบันทึกรองรับเฉพาะเมื่อผู้ให้บริการส่งคืนเนื้อหา base64 หากได้รับเฉพาะ URL การบันทึกจะถูกปิดใช้งานเพื่อหลีกเลี่ยงการดาวน์โหลดในเบราว์เซอร์"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "สร้างวิดีโอสำเร็จแล้ว แต่การบันทึกถูกปิดใช้งานเพราะผู้ให้บริการส่งคืน URL"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "บันทึกไฟล์แล้ว แต่ไม่สามารถแก้ไข URL ได้"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "สร้างแบบทดสอบ Aiken จากหัวข้อหรือจากเอกสารคอร์สหนึ่ง"
+
+msgid "Test from topic"
+msgstr "ทดสอบจากหัวข้อ"
+
+msgid "Test from document"
+msgstr "ทดสอบจากเอกสาร"
+
+msgid "Generate from topic"
+msgstr "สร้างจากหัวข้อ"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "ใช้พรอมต์หัวข้อเพื่อสร้างแบบทดสอบ Aiken ใหม่"
+
+msgid "Quiz title"
+msgstr "ชื่อแบบทดสอบ"
+
+msgid "Generate from document"
+msgstr "สร้างจากเอกสาร"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "เลือกเอกสารคอร์สหนึ่งและสร้างคำถามจากเนื้อหาของมันเท่านั้น"
+
+msgid "Selected document"
+msgstr "เอกสารที่เลือก"
+
+msgid "The document is selected from the course documents list."
+msgstr "เอกสารถูกเลือกจากรายการเอกสารคอร์ส"
+
+msgid "Choose document"
+msgstr "เลือกเอกสาร"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "ไม่บังคับ ใช้เป็นคำใบ้เพิ่มเติมสำหรับ AI เท่านั้น"
+
+msgid "Select a document"
+msgstr "เลือกเอกสาร"
+

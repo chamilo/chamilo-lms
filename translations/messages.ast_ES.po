@@ -33684,3 +33684,195 @@ msgstr "UID d'EntraID"
 msgid "Required fields"
 msgstr "Campos obligatorios"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Les etiquetes puen copiase y pegase nel área de testu d'abaxo y sustituiranse dinámicament coles sos valores pa cada usuariu individualmente al unvielles."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Esti grupu ta enlazáu cola clase %s.<br>La llista de miembros del grupu depende de los miembros de la clase y nun ye posible modificulu.<br>Ve a la configuración del grupu pa romper esti enllace si quies amestar o desaniciar miembros d'esti grupu."
+
+msgid "Link classes to created groups ?"
+msgstr "¿Enllazar les clases coles agrupaciones creáes?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Si una clase ta enlazada a un grupu, los usuarios amestaos o desaniciaos de la clase amestense o desaniciense automáticamente del grupu."
+
+msgid "New groups creation in category %s"
+msgstr "Creación de nueves agrupaciones na categoría %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Mensaxe d'avisu pa avisar que l'usuariu nun pue modificar los miembros del grupu enlazáu"
+
+msgid "Remove the group link with the class"
+msgstr "Desenllazar el grupu de la clase"
+
+msgid "Linked class"
+msgstr "Clase enlazada"
+
+msgid "The group is no longer linked to the class"
+msgstr "El grupu ya nun ta enlazáu cola clase"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Vista xeneral d'alumnos y cursos inscritos na clase"
+
+msgid "Overview students subscribed to the class"
+msgstr "Vista xeneral d'alumnos inscritos na clase"
+
+msgid "Overview class"
+msgstr "Vista xeneral de la clase"
+
+msgid "Go back to the list of classes"
+msgstr "Volver a la llista de clases"
+
+msgid "Go back to course classes"
+msgstr "Volver a les clases del cursu"
+
+msgid "Users subscribed to the course"
+msgstr "Usuarios inscritos nel cursu"
+
+msgid "Users not subscribed to the course"
+msgstr "Usuarios non inscritos nel cursu"
+
+msgid "Users subscribed to the class"
+msgstr "Usuarios inscritos na clase"
+
+msgid "Courses subscribed to the class"
+msgstr "Cursos inscritos na clase"
+
+msgid "No user is subscribed to this class"
+msgstr "Nun hai usuarios inscritos nesta clase"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Nun hai usuarios nin cursos inscritos nesta clase"
+
+msgid "No user are subscribed to this class"
+msgstr "Nun hai usuarios inscritos nesta clase"
+
+msgid "No course are subscribed to this class"
+msgstr "Nun hai cursos inscritos nesta clase"
+
+msgid "Are you sure you want to remove the class"
+msgstr "¿Tas seguru de que quies desaniciar la clase?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "¿Tas seguru de que quies desaniciar la clase?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "¿Tas seguru de que quies desaniciar la clase ensin desaniciar usuarios?"
+
+msgid "Remove the class without removing students"
+msgstr "Desaniciar la clase ensin desaniciar alumnos"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Esta axuste entá nun ta implementáu nesta versión."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recomendáu pa plugins namái d'administrador que amosense na área d'administración."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recomendáu pa plugins que tengan d'aparecer como ferramientes del cursu."
+
+msgid "Displayed above the main page content."
+msgstr "Amosáu enriba del conteníu principal de la páxina."
+
+msgid "Displayed below the main page content."
+msgstr "Amosáu debaxo del conteníu principal de la páxina."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Amosáu cerca de la parte superior del shell del layout principal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Amosáu cerca de la parte inferior del shell del layout principal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recomendáu pa plugins globales flotantes o persistentes amosaos enantes del pie de páxina."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Amosáu na rexón del plugin seleicionáu."
+
+msgid "Admin menu"
+msgstr "Menú d'admin"
+
+msgid "Global regions"
+msgstr "Rexones globales"
+
+msgid "No regions assigned"
+msgstr "Nun hai rexones asignaos"
+
+msgid "Plugin regions"
+msgstr "Rexones de plugins"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Escueye onde se debe renderizar cada plugin instaláu."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Conseyu: usa Ctrl/Cmd pa seleicionar múltiples rexones."
+
+msgid "No installed plugins were found."
+msgstr "Nun s'algún plugin instaláu."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Seleiciona una o más rexones pa esti plugin na URL d'accesu actual."
+
+msgid "Available regions"
+msgstr "Rexones disponibles"
+
+msgid "Selected paragraph"
+msgstr "Párrafu seleicionáu"
+
+msgid "Destination folder"
+msgstr "Carbeta de destín"
+
+msgid "Generate AI media"
+msgstr "Xenerar medios IA"
+
+msgid "Save and insert"
+msgstr "Guardar y inserir"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "El guardáu namái ta soportáu cuando el proveedór devuelve conteníu base64. Si namái recibisti una URL, el guardáu ta desactiváu pa evitar la descarga nel navegador."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Vídeo xeneráu correutamente, pero el guardáu ta desactiváu porque el proveedór devolvió una URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "El ficher guardose, pero nun se pudo resolver la so URL."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Xenerar un cuestionariu Aiken d'un tema o d'un documentu del cursu."
+
+msgid "Test from topic"
+msgstr "Proba del tema"
+
+msgid "Test from document"
+msgstr "Proba del documentu"
+
+msgid "Generate from topic"
+msgstr "Xenerar del tema"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Usar una solicitute de tema pa xenerar un preguntariu Aiken nuevu."
+
+msgid "Quiz title"
+msgstr "Títulu del cuestionariu"
+
+msgid "Generate from document"
+msgstr "Xenerar del documentu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Escoyer un documentu del cursu y xenerar preguntes basáes namái nel so conteníu."
+
+msgid "Selected document"
+msgstr "Documentu seleicionáu"
+
+msgid "The document is selected from the course documents list."
+msgstr "El documentu seleicionase de la llista de documentos del cursu."
+
+msgid "Choose document"
+msgstr "Escoyer documentu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcional. Úsase namái como una pista adicional pa la IA."
+
+msgid "Select a document"
+msgstr "Escoyer un documentu"
+

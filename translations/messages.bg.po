@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток от октети,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -33451,7 +33451,7 @@ msgid "This course will be created using the platform default course template."
 msgstr "Този курс ще бъде създаден с шаблона по подразбиране на платформата за курсове."
 
 msgid "Security breach avoid restart"
-msgstr "Security breach avoid restart"
+msgstr "Избягване на рестарт при пробив в сигурността"
 
 msgid "User deactivated"
 msgstr "Потребителят е деактивиран"
@@ -33683,4 +33683,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Задължителни полета"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Етикетите могат да бъдат копирани и поставени в текстовата област по-долу и ще бъдат динамично заменени с тяхната стойност за всеки потребител индивидуално при изпращането им."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Тази група е свързана с клас %s.<br>Списъкът на членовете на групата зависи от членовете на класа и не може да бъде променен.<br>Отидете на настройките на групата, за да прекъснете тази връзка, ако желаете да добавите или премахнете членове от тази група."
+
+msgid "Link classes to created groups ?"
+msgstr "Свързване на класове със създадените групи?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ако клас е свързан с група, потребителите, добавени към или премахнати от класа, се добавят автоматично към или премахват от групата."
+
+msgid "New groups creation in category %s"
+msgstr "Създаване на нови групи в категория %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Предупредително съобщение, че потребителят не може да променя членовете на свързана група"
+
+msgid "Remove the group link with the class"
+msgstr "Премахване на връзката на групата с класа"
+
+msgid "Linked class"
+msgstr "Свързан клас"
+
+msgid "The group is no longer linked to the class"
+msgstr "Групата вече не е свързана с класа"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Преглед на студенти и курсове, абонирани за класа"
+
+msgid "Overview students subscribed to the class"
+msgstr "Преглед на студенти, абонирани за класа"
+
+msgid "Overview class"
+msgstr "Преглед на клас"
+
+msgid "Go back to the list of classes"
+msgstr "Връщане към списъка с класове"
+
+msgid "Go back to course classes"
+msgstr "Връщане към класовете на курса"
+
+msgid "Users subscribed to the course"
+msgstr "Потребители, абонирани за курса"
+
+msgid "Users not subscribed to the course"
+msgstr "Потребители, неабонати за курса"
+
+msgid "Users subscribed to the class"
+msgstr "Потребители, абонирани за класа"
+
+msgid "Courses subscribed to the class"
+msgstr "Курсове, абонирани за класа"
+
+msgid "No user is subscribed to this class"
+msgstr "Няма абониран потребител за този клас"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Няма абониран потребител и курс за този клас"
+
+msgid "No user are subscribed to this class"
+msgstr "Няма абонирани потребители за този клас"
+
+msgid "No course are subscribed to this class"
+msgstr "Няма абонирани курсове за този клас"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Сигурни ли сте, че искате да премахнете класа"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Сигурни ли сте, че искате да премахнете класа?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Сигурни ли сте, че искате да премахнете класа без да премахвате потребители?"
+
+msgid "Remove the class without removing students"
+msgstr "Премахване на класа без премахване на студентите"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Тази настройка все още не е имплементирана в тази версия."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Препоръчително за добавки само за администратори, показвани в административната област."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Препоръчително за добавки, които трябва да се появяват като инструменти на курса."
+
+msgid "Displayed above the main page content."
+msgstr "Показвано над съдържанието на главната страница."
+
+msgid "Displayed below the main page content."
+msgstr "Показва се под съдържанието на основната страница."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Показва се близо до горната част на основната обвивка на макета."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Показва се близо до долната част на основната обвивка на макета."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Препоръчително за глобални плаващи или постоянни добавъци, показвани преди долната част."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Показва се в избрания регион на добавъка."
+
+msgid "Admin menu"
+msgstr "Административно меню"
+
+msgid "Global regions"
+msgstr "Глобални региони"
+
+msgid "No regions assigned"
+msgstr "Няма назначени региони"
+
+msgid "Plugin regions"
+msgstr "Региони на добавъци"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Изберете къде да се показва всеки инсталиран добавък."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Съвет: използвайте Ctrl/Cmd за избор на множество региони."
+
+msgid "No installed plugins were found."
+msgstr "Не са намерени инсталирани добавъци."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Изберете един или повече региони за този добавък в текущия URL за достъп."
+
+msgid "Available regions"
+msgstr "Налични региони"
+
+msgid "Selected paragraph"
+msgstr "Избрана секция"
+
+msgid "Destination folder"
+msgstr "Папка за запис"
+
+msgid "Generate AI media"
+msgstr "Генериране на AI медия"
+
+msgid "Save and insert"
+msgstr "Запази и вмъкни"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Запазването се поддържа само когато доставчикът връща съдържание в base64 формат. Ако е получен само URL, запазването е забранено, за да се избегне изтегляне в браузъра."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Видеото е генерирано успешно, но запазването е забранено, защото доставчикът върна URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Файлът е запазен, но URL му не може да бъде разпознат."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Генериране на Aiken тест от тема или от един курс document."
+
+msgid "Test from topic"
+msgstr "Тест от тема"
+
+msgid "Test from document"
+msgstr "Тест от документ"
+
+msgid "Generate from topic"
+msgstr "Генериране от тема"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Използвайте подсказка от тема, за да генерирате нов Aiken тест."
+
+msgid "Quiz title"
+msgstr "Заглавие на теста"
+
+msgid "Generate from document"
+msgstr "Генериране от документ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Изберете един курс документ и генерирайте въпроси само на базата на неговото съдържание."
+
+msgid "Selected document"
+msgstr "Избраният документ"
+
+msgid "The document is selected from the course documents list."
+msgstr "Документът се избира от списъка с курс документи."
+
+msgid "Choose document"
+msgstr "Избор на документ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "По избор. Използва се само като допълнителна подсказка за ИИ."
+
+msgid "Select a document"
+msgstr "Изберете документ"
 

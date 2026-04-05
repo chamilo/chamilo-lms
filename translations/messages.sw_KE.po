@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Sehemu zinazohitajika"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Lebo zinaweza kunakiliwa na kubandikwa ndani ya eneo la maandishi hapa chini na zitasimamiwa na kubadilishwa na thamani yao kwa kila mtumiaji mmoja wakati wa kutuma."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Kikundi hiki kimeunganishwa na darasa %s.<br>Serikali ya wanachama wa kikundi inategemea wanachama wa darasa na haiwezi kubadilishwa.<br>Nenda kwenye mipangilio ya kikundi ili kuvunja kiungo hiki ikiwa unataka kuongeza au kuondoa wanachama wa kikundi hiki."
+
+msgid "Link classes to created groups ?"
+msgstr "Unganisha madarasa na vikundi vilivyoundwa?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ikiwa darasa limeunganishwa na kikundi, watumiaji wanaoelezwa au kuondolewa kutoka darasani wataongezwa au kuondolewa kikundi kiotomatiki."
+
+msgid "New groups creation in category %s"
+msgstr "Uundaji wa vikundi vipya katika jamii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Ujumbe wa tahadhari kuonya kuwa mtumiaji hawezi kubadilisha wanachama wa kikundi kilichounganishwa"
+
+msgid "Remove the group link with the class"
+msgstr "Ondoa kiungo cha kikundi na darasa"
+
+msgid "Linked class"
+msgstr "Darasa lililounganishwa"
+
+msgid "The group is no longer linked to the class"
+msgstr "Kikundi hakishauriunganishwa na darasa tena"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Muhtasari wa wanafunzi na kozi zilizojisajili kwenye darasa"
+
+msgid "Overview students subscribed to the class"
+msgstr "Muhtasari wa wanafunzi waliotajiriwa kwenye darasa"
+
+msgid "Overview class"
+msgstr "Muhtasari wa darasa"
+
+msgid "Go back to the list of classes"
+msgstr "Rudi kwenye orodha ya madarasa"
+
+msgid "Go back to course classes"
+msgstr "Rudi kwenye madarasa ya kozi"
+
+msgid "Users subscribed to the course"
+msgstr "Watumiaji waliosajiliwa kwenye kozi"
+
+msgid "Users not subscribed to the course"
+msgstr "Watumiaji ambao hawajasajiliwa kwenye kozi"
+
+msgid "Users subscribed to the class"
+msgstr "Watumiaji waliosajiliwa kwenye darasa"
+
+msgid "Courses subscribed to the class"
+msgstr "Kozi zilizosajiliwa kwenye darasa"
+
+msgid "No user is subscribed to this class"
+msgstr "Hakuna mtumiaji aliyesajiliwa kwenye darasa hili"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Hakuna mtumiaji wala kozi iliyosajiliwa kwenye darasa hili"
+
+msgid "No user are subscribed to this class"
+msgstr "Hakuna mtumiaji aliyesajiliwa kwenye darasa hili"
+
+msgid "No course are subscribed to this class"
+msgstr "Hakuna kozi iliyosajiliwa kwenye darasa hili"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Je, una uhakika unataka kuondoa darasa"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Je, una uhakika unataka kuondoa darasa?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Je, una uhakika unataka kuondoa darasa bila kuondoa watumiaji?"
+
+msgid "Remove the class without removing students"
+msgstr "Ondoa darasa bila kuondoa wanafunzi"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Mpangilio huu haujatekelezwa bado katika toleo hili."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Inapendekezwa kwa programu za ziada za msimamizi pekee zinazoonekana katika eneo la usimamizi."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Inapendekezwa kwa programu za ziada zinazopaswa kuonekana kama zana za kozi."
+
+msgid "Displayed above the main page content."
+msgstr "Inaonyeshwa juu ya maudhui ya ukurasa mkuu."
+
+msgid "Displayed below the main page content."
+msgstr "Inaonyeshwa chini ya maudhui ya ukurasa mkuu."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Inaonyeshwa karibu na juu ya ganda la mpangilio mkuu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Inaonyeshwa karibu na chini ya ganda la mpangilio mkuu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Inapendekezwa kwa programu za ziada zinazosogeza au za kudumu zinazoonekana kabla ya footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Inaonyeshwa katika eneo la programu ya ziada iliyochaguliwa."
+
+msgid "Admin menu"
+msgstr "Menyu ya msimamizi"
+
+msgid "Global regions"
+msgstr "Mikoa ya kimataifa"
+
+msgid "No regions assigned"
+msgstr "Hakuna mikoa iliyotajwa"
+
+msgid "Plugin regions"
+msgstr "Mikoa ya programu za ziada"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Chagua mahali kila programu ya ziada iliyosakinishwa inapaswa kuonyeshwa."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Kidokezo: tumia Ctrl/Cmd kuchagua mikoa mingi."
+
+msgid "No installed plugins were found."
+msgstr "Hakuna programu za ziada zilizosakinishwa zilizopatikana."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Chagua eneo moja au zaidi kwa programu hii katika URL ya sasa ya ufikiaji."
+
+msgid "Available regions"
+msgstr "Mikoa inayopatikana"
+
+msgid "Selected paragraph"
+msgstr "Kifungu kilichochaguliwa"
+
+msgid "Destination folder"
+msgstr "Folda ya marudio"
+
+msgid "Generate AI media"
+msgstr "Tengeneza media ya AI"
+
+msgid "Save and insert"
+msgstr "Hifadhi na ingiza"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Kuhifadhi kunaungwa mkono tu wakati mtoa huduma anarudisha maudhui ya base64. Ikiwa umepokea URL pekee, kuhifadhi kimezimwa ili kuepuka upakuaji kwenye kivinjari."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video imetengenezwa kwa mafanikio, lakini kuhifadhi kimezimwa kwa sababu mtoa huduma alirudisha URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Faili imehifadhiwa, lakini URL yake haikuweza kutatuliwa."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Tengeneza jaribio la Aiken kutoka mada au kutoka hati moja ya kozi."
+
+msgid "Test from topic"
+msgstr "Jaribu kutoka mada"
+
+msgid "Test from document"
+msgstr "Jaribu kutoka hati"
+
+msgid "Generate from topic"
+msgstr "Tengeneza kutoka mada"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Tumia ombi la mada kutengeneza dodoso jipya la Aiken."
+
+msgid "Quiz title"
+msgstr "Jina la jaribio"
+
+msgid "Generate from document"
+msgstr "Tengeneza kutoka hati"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Chagua hati moja ya kozi na tengeneza maswali kulingana na maudhui yake pekee."
+
+msgid "Selected document"
+msgstr "Hati iliyochaguliwa"
+
+msgid "The document is selected from the course documents list."
+msgstr "Hati imechaguliwa kutoka orodha ya hati za kozi."
+
+msgid "Choose document"
+msgstr "Chagua hati"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Hiari. Inatumika tu kama kidokezo cha ziada kwa AI."
+
+msgid "Select a document"
+msgstr "Chagua hati"
+

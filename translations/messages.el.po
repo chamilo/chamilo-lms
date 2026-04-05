@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Ροή οκτέτ,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -33696,4 +33696,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Υποχρεωτικά πεδία"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Οι ετικέτες μπορούν να αντιγραφούν και να επικολληθούν στην παρακάτω περιοχή κειμένου και θα αντικατασταθούν δυναμικά με την τιμή τους για κάθε χρήστη ξεχωριστά κατά την αποστολή."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Αυτή η ομάδα συνδέεται με την τάξη %s.<br>Η λίστα μελών της ομάδας εξαρτάται από τα μέλη της τάξης και δεν μπορεί να τροποποιηθεί.<br>Πηγαίνετε στις ρυθμίσεις της ομάδας για να σπάσετε αυτόν τον σύνδεσμο αν επιθυμείτε να προσθέσετε ή να αφαιρέσετε μέλη από αυτήν την ομάδα."
+
+msgid "Link classes to created groups ?"
+msgstr "Σύνδεση τάξεων με δημιουργημένες ομάδες;"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Αν μια τάξη συνδέεται με μια ομάδα, οι χρήστες που προστίθενται ή αφαιρούνται από την τάξη προστίθενται ή αφαιρούνται αυτόματα από την ομάδα."
+
+msgid "New groups creation in category %s"
+msgstr "Δημιουργία νέων ομάδων στην κατηγορία %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Μήνυμα προειδοποίησης ότι ο χρήστης δεν μπορεί να τροποποιήσει μέλη συνδεδεμένης ομάδας"
+
+msgid "Remove the group link with the class"
+msgstr "Αφαίρεση συνδέσμου ομάδας με την τάξη"
+
+msgid "Linked class"
+msgstr "Συνδεδεμένη τάξη"
+
+msgid "The group is no longer linked to the class"
+msgstr "Η ομάδα δεν συνδέεται πλέον με την τάξη"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Επισκόπηση μαθητών και μαθημάτων εγγεγραμμένων στην τάξη"
+
+msgid "Overview students subscribed to the class"
+msgstr "Επισκόπηση μαθητών εγγεγραμμένων στην τάξη"
+
+msgid "Overview class"
+msgstr "Επισκόπηση τάξης"
+
+msgid "Go back to the list of classes"
+msgstr "Επιστροφή στη λίστα τάξεων"
+
+msgid "Go back to course classes"
+msgstr "Επιστροφή στις τάξεις μαθήματος"
+
+msgid "Users subscribed to the course"
+msgstr "Χρήστες εγγεγραμμένοι στο μάθημα"
+
+msgid "Users not subscribed to the course"
+msgstr "Χρήστες μη εγγεγραμμένοι στο μάθημα"
+
+msgid "Users subscribed to the class"
+msgstr "Χρήστες εγγεγραμμένοι στην τάξη"
+
+msgid "Courses subscribed to the class"
+msgstr "Μαθήματα εγγεγραμμένα στην τάξη"
+
+msgid "No user is subscribed to this class"
+msgstr "Κανένας χρήστης δεν είναι εγγεγραμμένος σε αυτήν την τάξη"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Κανένας χρήστης και κανένα μάθημα δεν είναι εγγεγραμμένα σε αυτήν την τάξη"
+
+msgid "No user are subscribed to this class"
+msgstr "Κανένας χρήστης δεν είναι εγγεγραμμένος σε αυτήν την τάξη"
+
+msgid "No course are subscribed to this class"
+msgstr "Κανένα μάθημα δεν είναι εγγεγραμμένο σε αυτήν την τάξη"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε την τάξη"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε την τάξη;"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε την τάξη χωρίς να αφαιρέσετε χρήστες;"
+
+msgid "Remove the class without removing students"
+msgstr "Αφαίρεση τάξης χωρίς αφαίρεση μαθητών"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Αυτή η ρύθμιση δεν έχει ακόμη υλοποιηθεί σε αυτήν την έκδοση."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Συνιστάται για πρόσθετα μόνο για διαχειριστές που εμφανίζονται στην περιοχή διαχείρισης."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Συνιστάται για πρόσθετα που πρέπει να εμφανίζονται ως εργαλεία μαθήματος."
+
+msgid "Displayed above the main page content."
+msgstr "Εμφανίζεται πάνω από το κύριο περιεχόμενο της σελίδας."
+
+msgid "Displayed below the main page content."
+msgstr "Εμφανίζεται κάτω από το κύριο περιεχόμενο της σελίδας."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Εμφανίζεται κοντά στην κορυφή του κύριου περιβλήματος διάταξης."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Εμφανίζεται κοντά στο κάτω μέρος του κύριου περιβλήματος διάταξης."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Συνιστάται για παγκόσμια πλωτά ή επίμονα πρόσθετα που εμφανίζονται πριν το footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Εμφανίζεται στην επιλεγμένη περιοχή πρόσθετου."
+
+msgid "Admin menu"
+msgstr "Μενου διαχειριστή"
+
+msgid "Global regions"
+msgstr "Παγκόσμιες περιοχές"
+
+msgid "No regions assigned"
+msgstr "Δεν έχουν οριστεί περιοχές"
+
+msgid "Plugin regions"
+msgstr "Περιοχές πρόσθετων"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Επιλέξτε πού θα αποδοθεί κάθε εγκατεστημένο πρόσθετο."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Συμβουλή: χρησιμοποιήστε Ctrl/Cmd για επιλογή πολλαπλών περιοχών."
+
+msgid "No installed plugins were found."
+msgstr "Δεν βρέθηκαν εγκατεστημένα πρόσθετα."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Επιλέξτε μία ή περισσότερες περιοχές για αυτό το πρόσθετο στην τρέχουσα διεύθυνση URL πρόσβασης."
+
+msgid "Available regions"
+msgstr "Διαθέσιμες περιοχές"
+
+msgid "Selected paragraph"
+msgstr "Επιλεγμένη παράγραφος"
+
+msgid "Destination folder"
+msgstr "Φάκελος προορισμού"
+
+msgid "Generate AI media"
+msgstr "Δημιουργία πολυμέσων ΤΝ"
+
+msgid "Save and insert"
+msgstr "Αποθήκευση και εισαγωγή"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Η αποθήκευση υποστηρίζεται μόνο όταν ο πάροχος επιστρέφει περιεχόμενο base64. Αν λάβατε μόνο URL, η αποθήκευση είναι απενεργοποιημένη για αποφυγή λήψης στον περιηγητή."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Το βίντεο δημιουργήθηκε επιτυχώς, αλλά η αποθήκευση είναι απενεργοποιημένη επειδή ο πάροχος επέστρεψε URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Το αρχείο αποθηκεύτηκε, αλλά η διεύθυνσή του URL δεν μπόρεσε να επιλυθεί."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Δημιουργία τεστ Aiken από θέμα ή από έγγραφο μαθήματος."
+
+msgid "Test from topic"
+msgstr "Τεστ από θέμα"
+
+msgid "Test from document"
+msgstr "Τεστ από έγγραφο"
+
+msgid "Generate from topic"
+msgstr "Δημιουργία από θέμα"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Χρήση προτροπής θέματος για δημιουργία νέου ερωτηματολογίου Aiken."
+
+msgid "Quiz title"
+msgstr "Τίτλος τεστ"
+
+msgid "Generate from document"
+msgstr "Δημιουργία από έγγραφο"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Επιλογή ενός εγγράφου μαθήματος και δημιουργία ερωτήσεων βασισμένων μόνο στο περιεχόμενό του."
+
+msgid "Selected document"
+msgstr "Επιλεγμένο έγγραφο"
+
+msgid "The document is selected from the course documents list."
+msgstr "Το έγγραφο επιλέγεται από τη λίστα εγγράφων του μαθήματος."
+
+msgid "Choose document"
+msgstr "Επιλογή εγγράφου"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Προαιρετικό. Χρησιμοποιείται μόνο ως επιπλέον υπόδειξη για την ΤΝ."
+
+msgid "Select a document"
+msgstr "Επιλογή εγγράφου"
 

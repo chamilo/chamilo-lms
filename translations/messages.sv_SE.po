@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettströmm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -33683,4 +33683,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Obligatoriska fält"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Taggar kan kopieras och klistras in i textområdet nedan och kommer dynamiskt att ersättas med deras värde för varje användare individuellt vid sändning."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Denna grupp är länkad till klass %s.<br>Gruppmedlemslistan beror på klassmedlemmar och kan inte ändras.<br>Gå till gruppens inställningar för att bryta denna länk om du vill lägga till eller ta bort medlemmar från denna grupp."
+
+msgid "Link classes to created groups ?"
+msgstr "Länka klasser till skapade grupper?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Om en klass är länkad till en grupp läggs användare som läggs till eller tas bort från klassen automatiskt till eller tas bort från gruppen."
+
+msgid "New groups creation in category %s"
+msgstr "Skapande av nya grupper i kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varningsmeddelande som varnar för att användaren inte kan ändra medlemmar i länkad grupp"
+
+msgid "Remove the group link with the class"
+msgstr "Ta bort gruppens länk med klassen"
+
+msgid "Linked class"
+msgstr "Länkad klass"
+
+msgid "The group is no longer linked to the class"
+msgstr "Gruppen är inte längre länkad till klassen"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Översikt över studenter och kurser anmälda till klassen"
+
+msgid "Overview students subscribed to the class"
+msgstr "Översikt över studenter anmälda till klassen"
+
+msgid "Overview class"
+msgstr "Översikt klass"
+
+msgid "Go back to the list of classes"
+msgstr "Gå tillbaka till listan över klasser"
+
+msgid "Go back to course classes"
+msgstr "Gå tillbaka till kursklasser"
+
+msgid "Users subscribed to the course"
+msgstr "Användare anmälda till kursen"
+
+msgid "Users not subscribed to the course"
+msgstr "Användare inte anmälda till kursen"
+
+msgid "Users subscribed to the class"
+msgstr "Användare anmälda till klassen"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursen anmäld till klassen"
+
+msgid "No user is subscribed to this class"
+msgstr "Ingen användare är anmäld till denna klass"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ingen användare och ingen kurs är anmäld till denna klass"
+
+msgid "No user are subscribed to this class"
+msgstr "Ingen användare är anmäld till denna klass"
+
+msgid "No course are subscribed to this class"
+msgstr "Ingen kurs är anmäld till denna klass"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Är du säker på att du vill ta bort klassen"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Är du säker på att du vill ta bort klassen?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Är du säker på att du vill ta bort klassen utan att ta bort användare?"
+
+msgid "Remove the class without removing students"
+msgstr "Ta bort klassen utan att ta bort studenter"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Denna inställning är inte implementerad i denna version ännu."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Rekommenderas för administratörspluginer som visas i administrationsområdet."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Rekommenderas för pluginer som ska visas som kursverktyg."
+
+msgid "Displayed above the main page content."
+msgstr "Visas ovanför huvudsidans innehåll."
+
+msgid "Displayed below the main page content."
+msgstr "Visas under huvudsidans innehåll."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Visas nära toppen av huvudlayoutens skal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Visas nära botten av huvudlayoutens skal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Rekommenderas för globala flytande eller beständiga pluginer som visas före sidfoten."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Visas i den valda pluginregionen."
+
+msgid "Admin menu"
+msgstr "Adminmeny"
+
+msgid "Global regions"
+msgstr "Globala regioner"
+
+msgid "No regions assigned"
+msgstr "Inga regioner tilldelade"
+
+msgid "Plugin regions"
+msgstr "Pluginregioner"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Välj var varje installerad plugin ska renderas."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tips: använd Ctrl/Cmd för att välja flera regioner."
+
+msgid "No installed plugins were found."
+msgstr "Inga installerade pluginer hittades."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Välj en eller flera regioner för denna plugin i den aktuella åtkomst-URL:en."
+
+msgid "Available regions"
+msgstr "Tillgängliga regioner"
+
+msgid "Selected paragraph"
+msgstr "Vald paragraf"
+
+msgid "Destination folder"
+msgstr "Målmapp"
+
+msgid "Generate AI media"
+msgstr "Generera AI-media"
+
+msgid "Save and insert"
+msgstr "Spara och infoga"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Spara stöds endast när leverantören returnerar base64-innehåll. Om du endast fick en URL är sparande inaktiverat för att undvika nedladdning i webbläsaren."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video genererades framgångsrikt, men sparande är inaktiverat eftersom leverantören returnerade en URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Filen sparades, men dess URL kunde inte lösas upp."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Skapa ett Aiken-kvisto från ett ämne eller från ett kursdokument."
+
+msgid "Test from topic"
+msgstr "Test från ämne"
+
+msgid "Test from document"
+msgstr "Test från dokument"
+
+msgid "Generate from topic"
+msgstr "Skapa från ämne"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Använd ett ämnesprompt för att skapa ett nytt Aiken-frågeformulär."
+
+msgid "Quiz title"
+msgstr "Kvistitel"
+
+msgid "Generate from document"
+msgstr "Skapa från dokument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Välj ett kursdokument och skapa frågor baserat enbart på dess innehåll."
+
+msgid "Selected document"
+msgstr "Valt dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentet väljs från listan över kursdokument."
+
+msgid "Choose document"
+msgstr "Välj dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valfritt. Används endast som en extra hint för AI:n."
+
+msgid "Select a document"
+msgstr "Välj ett dokument"
 

@@ -33684,3 +33684,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Påkrævede felter"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags kan kopieres og indsættes i tekstområdet nedenfor og vil blive dynamisk erstattet med deres værdi for hver bruger individuelt, når de sendes."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Denne gruppe er knyttet til klassen %s.<br>Gruppens medlemsliste afhænger af klassens medlemmer og kan ikke ændres.<br>Gå til gruppeindstillingerne for at bryde denne kobling, hvis du ønsker at tilføje eller fjerne medlemmer for denne gruppe."
+
+msgid "Link classes to created groups ?"
+msgstr "Knyt klasser til oprettede grupper?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Hvis en klasse er knyttet til en gruppe, tilføjes eller fjernes brugere, der tilføjes eller fjernes fra klassen, automatisk til eller fra gruppen."
+
+msgid "New groups creation in category %s"
+msgstr "Oprettelse af nye grupper i kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Advarselsbesked om at brugeren ikke kan ændre medlemmer i knyttet gruppe"
+
+msgid "Remove the group link with the class"
+msgstr "Fjern gruppens kobling til klassen"
+
+msgid "Linked class"
+msgstr "Knyttet klasse"
+
+msgid "The group is no longer linked to the class"
+msgstr "Gruppen er ikke længere knyttet til klassen"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Oversigt over elever og kurser tilmeldt klassen"
+
+msgid "Overview students subscribed to the class"
+msgstr "Oversigt over elever tilmeldt klassen"
+
+msgid "Overview class"
+msgstr "Oversigt over klasse"
+
+msgid "Go back to the list of classes"
+msgstr "Tilbage til listen over klasser"
+
+msgid "Go back to course classes"
+msgstr "Tilbage til kursusklasser"
+
+msgid "Users subscribed to the course"
+msgstr "Brugere tilmeldt kurset"
+
+msgid "Users not subscribed to the course"
+msgstr "Brugere ikke tilmeldt kurset"
+
+msgid "Users subscribed to the class"
+msgstr "Brugere tilmeldt klassen"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurser tilmeldt klassen"
+
+msgid "No user is subscribed to this class"
+msgstr "Ingen bruger er tilmeldt denne klasse"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ingen bruger og intet kursus er tilmeldt denne klasse"
+
+msgid "No user are subscribed to this class"
+msgstr "Ingen brugere er tilmeldt denne klasse"
+
+msgid "No course are subscribed to this class"
+msgstr "Ingen kurser er tilmeldt denne klasse"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Er du sikker på, at du vil fjerne klassen"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Er du sikker på, at du vil fjerne klassen?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Er du sikker på, at du vil fjerne klassen uden at fjerne brugere?"
+
+msgid "Remove the class without removing students"
+msgstr "Fjern klassen uden at fjerne elever"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Denne indstilling er endnu ikke implementeret i denne version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Anbefalet til admin kun-plugins vist i administrationsområdet."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Anbefalet til plugins, der skal vises som kursusværktøjer."
+
+msgid "Displayed above the main page content."
+msgstr "Vises over hovedindholdet på siden."
+
+msgid "Displayed below the main page content."
+msgstr "Vises under hovedindholdet på siden."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Vises nær toppen af hovedlayoutskallen."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Vises nær bunden af hovedlayoutskallen."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Anbefalet til globale flydende eller vedvarende plugins vist før footeren."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Vises i det valgte plugin-område."
+
+msgid "Admin menu"
+msgstr "Admin-menu"
+
+msgid "Global regions"
+msgstr "Globale områder"
+
+msgid "No regions assigned"
+msgstr "Ingen områder tildelt"
+
+msgid "Plugin regions"
+msgstr "Plugin-områder"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vælg, hvor hvert installeret plugin skal renderes."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: brug Ctrl/Cmd til at vælge flere områder."
+
+msgid "No installed plugins were found."
+msgstr "Ingen installerede plugins fundet."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vælg ét eller flere områder for dette plugin i den nuværende adgangs-URL."
+
+msgid "Available regions"
+msgstr "Tilgængelige områder"
+
+msgid "Selected paragraph"
+msgstr "Valgt afsnit"
+
+msgid "Destination folder"
+msgstr "Destinationsmappe"
+
+msgid "Generate AI media"
+msgstr "Generer AI-medie"
+
+msgid "Save and insert"
+msgstr "Gem og indsæt"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Gemning understøttes kun, når udbyderen returnerer base64-indhold. Hvis du kun modtog en URL, er gemning deaktiveret for at undgå download i browseren."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video genereret succesfuldt, men gemning er deaktiveret, fordi udbyderen returnerede en URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Filen blev gemt, men dens URL kunne ikke løses."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generer en Aiken-quiz fra et emne eller fra et kursusdokument."
+
+msgid "Test from topic"
+msgstr "Test fra emne"
+
+msgid "Test from document"
+msgstr "Test fra dokument"
+
+msgid "Generate from topic"
+msgstr "Generer fra emne"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Brug et emne-prompt til at generere et nyt Aiken-spørgeskema."
+
+msgid "Quiz title"
+msgstr "Quiz-titel"
+
+msgid "Generate from document"
+msgstr "Generer fra dokument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vælg et kursusdokument og generer spørgsmål baseret kun på dets indhold."
+
+msgid "Selected document"
+msgstr "Valgt dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentet vælges fra listen over kursusdokumenter."
+
+msgid "Choose document"
+msgstr "Vælg dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valgfrit. Bruges kun som et ekstra hint for AI'en."
+
+msgid "Select a document"
+msgstr "Vælg et dokument"
+

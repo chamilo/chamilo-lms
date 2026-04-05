@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Awọn aaye ti o nilo"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Àwọn àmì (tags) le ṣe ẹ̀dà àti ìlẹ̀kọ̀ sínú agbègbè ọrọ̀ ìsàlẹ̀ yìí, wọ́n yóò yí padà pẹ̀lú ìdíwọ̀n wọn fún olùpẹ̀lò kọ̀ọ̀kan nígbà tí wọ́n bá ń fi rẹ̀ ránṣẹ́."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ẹgbẹ́ yìí so pọ̀ mọ́ kíláàsì %s.<br>Àtòka àwùjọ ẹgbẹ́ gbẹ̀rẹ̀ lórí àwùjọ ẹgbẹ́ kíláàsì kò sì ṣe ìyípadà.<br>Lọ sí ìṣètò ẹgbẹ́ láti ya ìsopọ̀ yìí kúrò tí ìfẹ́ rẹ bá ṣe ìfiwéra pẹ̀lú ìyọ kúrò tàbí ìfokànsí àwùjọ ẹgbẹ́ yìí."
+
+msgid "Link classes to created groups ?"
+msgstr "Ṣe ìsopọ̀ àwùjọ kíláàsì pẹ̀lú àwùjọ tí a ṣẹ̀dá?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Tí kíláàsì kan bá so pọ̀ mọ́ ẹgbẹ́ kan, àwùjọ tí a fi kun tàbí kúrò lọ́nà kíláàsì yóò ṣe ìfokànsí tàbí yọ kúrò láti ẹgbẹ́ yìí."
+
+msgid "New groups creation in category %s"
+msgstr "Ṣẹ̀dá àwùjọ tuntun nínú ẹka %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Ìfọ̀rọ̀ ìdààmú láti fìdí ìdí hàn pé olùpẹ̀lò kò le ṣe ìyípadà àwùjọ ẹgbẹ́ tí ó so pọ̀"
+
+msgid "Remove the group link with the class"
+msgstr "Yọ ìsopọ̀ ẹgbẹ́ pẹ̀lú kíláàsì kúrò"
+
+msgid "Linked class"
+msgstr "Kíláàsì tí ó so pọ̀"
+
+msgid "The group is no longer linked to the class"
+msgstr "Ẹgbẹ́ kò so pọ̀ mọ́ kíláàsì mọ́"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Àkàtì àwùjọ àti àwùjọ ìkẹ́kọ̀ọ́ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Overview students subscribed to the class"
+msgstr "Àkàtì àwùjọ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Overview class"
+msgstr "Àkàtì kíláàsì"
+
+msgid "Go back to the list of classes"
+msgstr "Padà lọ sí àtòka kíláàsì"
+
+msgid "Go back to course classes"
+msgstr "Padà lọ sí kíláàsì ìdàrò"
+
+msgid "Users subscribed to the course"
+msgstr "Àwùjọ tí wọ́n forukọ sí ìdàrò"
+
+msgid "Users not subscribed to the course"
+msgstr "Àwùjọ tí kò forukọ sí ìdàrò"
+
+msgid "Users subscribed to the class"
+msgstr "Àwùjọ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Courses subscribed to the class"
+msgstr "Àwùjọ ìkẹ́kọ̀ọ́ tí wọ́n forukọ sí kíláàsì"
+
+msgid "No user is subscribed to this class"
+msgstr "Kò sẹ́ni tí ó forukọ sí kíláàsì yìí"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Kò sẹ́ni àti kò ìdàrò tí ó forukọ sí kíláàsì yìí"
+
+msgid "No user are subscribed to this class"
+msgstr "Kò sẹ́ni tí ó forukọ sí kíláàsì yìí"
+
+msgid "No course are subscribed to this class"
+msgstr "Kò ìdàrò tí ó forukọ sí kíláàsì yìí"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò láìyọ àwùjọ kúrò?"
+
+msgid "Remove the class without removing students"
+msgstr "Yọ kíláàsì kúrò láìyọ ọmọ ilé-ìwé kúrò"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ètò yìí kò ṣe ìmúṣẹ̀ síbẹ̀ nínú ẹ̀yà ìdàsílẹ̀ yìí."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Fún àwùjọ ìlò ìdarí nìkan tí a ṣe ìrísí nínú agbègbè ìjọba."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Fún àwùjọ ìlò tí ó gbọ́dọ̀ farahan gẹ́gẹ́ ìdàrò."
+
+msgid "Displayed above the main page content."
+msgstr "Àfihàn lókè àkíìkí ojú-ìwòye akọ́kọ́."
+
+msgid "Displayed below the main page content."
+msgstr "Àfihàn ìsàlẹ̀ àkíìkí ojú-ìwòye akọ́kọ́."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Àfihàn nítòsí òkè ìlà ìpapọ̀ akọ́kọ́."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Àfihàn nítòsí ìsàlẹ̀ ìlà ìpapọ̀ akọ́kọ́."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Fún àwùjọ ìlò tí kò ṣe ìdàrú tàbí ìdúróṣinṣin kí a fi hàn ṣáájú ìpìlẹ̀."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Àfihàn nínú agbègbè ìlò tí a yàn."
+
+msgid "Admin menu"
+msgstr "Àkíì ìdarí"
+
+msgid "Global regions"
+msgstr "Àwùjọ agbáyé"
+
+msgid "No regions assigned"
+msgstr "Kò sẹ́ agbègbè kankan tí a yàn"
+
+msgid "Plugin regions"
+msgstr "Àwùjọ ìlò"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Yàn ibi tí ìlò kọ̀ọ̀kan tí a fi sórí yóò ṣe ìdáde."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Ìmọ̀ràn: lo Ctrl/Cmd láti yan àwùjọ pupọ."
+
+msgid "No installed plugins were found."
+msgstr "Kò rí ìlò kankan tí a fi sórí."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Yan agbègbè kan tàbí diẹ̀ sí i fún ìlò yìí nínú URL ìwọle lọ́wọ́ lọ́wọ́."
+
+msgid "Available regions"
+msgstr "Àwùjọ tí ó ṣe ìwàláàyè"
+
+msgid "Selected paragraph"
+msgstr "Àkọsílẹ̀ tí a yàn"
+
+msgid "Destination folder"
+msgstr "Ìpamọ́ ìparí"
+
+msgid "Generate AI media"
+msgstr "Ṣẹ̀dá àwòrán AI"
+
+msgid "Save and insert"
+msgstr "Fipamọ́ kí o fi sii"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Fipamọ́ ṣìṣẹ́ pàtó lásìkò tí ònípè yìí bá ṣe ìdásílẹ̀ àkíì base64. Tí o kò gba URL nìkan, fipamọ́ yàgò láti yẹ̀wò ìgbé ìdàsílẹ̀ nínú ẹ̀rọ ìwòye."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Fídíò ti ṣẹ̀dá yíyọlẹ, ṣùgbọ́n fipamọ́ yàgò nítorí ònípè yìí fi URL padà."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Àìfọwọ́sowọpọ yìí ti fipamọ́, ṣùgbọ́n URL rẹ̀ kò ṣe ìdáhùn."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ṣẹ̀dá ìdọ̀wò Aiken láti kọ̀wé kan tàbí láti ìwé ẹ̀kọ́ ẹ̀kọ́ kan."
+
+msgid "Test from topic"
+msgstr "Ìdọ̀wò láti kọ̀wé"
+
+msgid "Test from document"
+msgstr "Ìdọ̀wò láti ìwé"
+
+msgid "Generate from topic"
+msgstr "Ṣẹ̀dá láti kọ̀wé"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Lo ìdásílẹ̀ kọ̀wé kan láti ṣẹ̀dá ìfọ̀rọ̀wérọ̀ Aiken tuntun."
+
+msgid "Quiz title"
+msgstr "Àkọ́kọ́ ìdọ̀wò"
+
+msgid "Generate from document"
+msgstr "Ṣẹ̀dá láti ìwé"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Yan ìwé ẹ̀kọ́ ẹ̀kọ́ kan ṣùgbọ́n ṣẹ̀dá ìbéèrè lórí àkíìyèsí rẹ̀ nìkan."
+
+msgid "Selected document"
+msgstr "Ìwé yíyà kọ́"
+
+msgid "The document is selected from the course documents list."
+msgstr "Ìwé náà yíyà kọ́ láti ìnọ́kà ìwé ẹ̀kọ́ ẹ̀kọ́."
+
+msgid "Choose document"
+msgstr "Yan ìwé"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Àyàn. Lò nìkan gẹ́gẹ́ ìlò ìtọ́ka àfikún fún ìmọ̀ ìmọ̀."
+
+msgid "Select a document"
+msgstr "Yan ìwé kan"
+

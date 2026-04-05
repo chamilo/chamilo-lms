@@ -33116,34 +33116,34 @@ msgid "Layouts"
 msgstr "Tata letak"
 
 msgid "Relation type"
-msgstr ""
+msgstr "Jenis relasi"
 
 msgid "Add all"
-msgstr ""
+msgstr "Tambah semua"
 
 msgid "Remove all"
-msgstr ""
+msgstr "Hapus semua"
 
 msgid "An error occurred. Please try again."
-msgstr ""
+msgstr "Terjadi kesalahan. Silakan coba lagi."
 
 msgid "%s created"
-msgstr ""
+msgstr "%s dibuat"
 
 msgid "%s updated"
-msgstr ""
+msgstr "%s diperbarui"
 
 msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
-msgstr ""
+msgstr "Jika Anda berencana untuk upgrade dari versi Chamilo yang lebih lama, Anda mungkin ingin"
 
 msgid "have a look at the changelog"
-msgstr ""
+msgstr "melihat changelog"
 
 msgid "to know what's new and what has been changed."
-msgstr ""
+msgstr "untuk mengetahui apa yang baru dan apa yang telah diubah."
 
 msgid "Session Item"
-msgstr ""
+msgstr "Item Sesi"
 
 msgid "Points"
 msgstr "Poin"
@@ -33674,11 +33674,203 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "ID EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Bidang wajib"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tag dapat disalin dan ditempel di area teks di bawah ini dan akan diganti secara dinamis dengan nilai masing-masing pengguna secara individual saat mengirimkannya."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Grup ini terkait dengan kelas %s.<br>Daftar anggota grup bergantung pada anggota kelas dan tidak dapat diubah.<br>Pergi ke pengaturan grup untuk memutuskan tautan ini jika Anda ingin menambah atau menghapus anggota untuk grup ini."
+
+msgid "Link classes to created groups ?"
+msgstr "Tautkan kelas ke grup yang dibuat?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Jika kelas ditautkan ke grup, pengguna yang ditambahkan atau dihapus dari kelas akan secara otomatis ditambahkan atau dihapus dari grup."
+
+msgid "New groups creation in category %s"
+msgstr "Pembuatan grup baru di kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Pesan peringatan untuk memberi tahu bahwa pengguna tidak dapat mengubah anggota grup yang ditautkan"
+
+msgid "Remove the group link with the class"
+msgstr "Hapus tautan grup dengan kelas"
+
+msgid "Linked class"
+msgstr "Kelas yang ditautkan"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grup tidak lagi ditautkan ke kelas"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Ikhtisar siswa dan kursus yang terdaftar di kelas"
+
+msgid "Overview students subscribed to the class"
+msgstr "Ikhtisar siswa yang terdaftar di kelas"
+
+msgid "Overview class"
+msgstr "Ikhtisar kelas"
+
+msgid "Go back to the list of classes"
+msgstr "Kembali ke daftar kelas"
+
+msgid "Go back to course classes"
+msgstr "Kembali ke kelas kursus"
+
+msgid "Users subscribed to the course"
+msgstr "Pengguna yang terdaftar di kursus"
+
+msgid "Users not subscribed to the course"
+msgstr "Pengguna yang tidak terdaftar di kursus"
+
+msgid "Users subscribed to the class"
+msgstr "Pengguna yang terdaftar di kelas"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursus yang terdaftar di kelas"
+
+msgid "No user is subscribed to this class"
+msgstr "Tidak ada pengguna yang terdaftar di kelas ini"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Tidak ada pengguna dan tidak ada kursus yang terdaftar di kelas ini"
+
+msgid "No user are subscribed to this class"
+msgstr "Tidak ada pengguna yang terdaftar di kelas ini"
+
+msgid "No course are subscribed to this class"
+msgstr "Tidak ada kursus yang terdaftar di kelas ini"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Apakah Anda yakin ingin menghapus kelas"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Apakah Anda yakin ingin menghapus kelas?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Apakah Anda yakin ingin menghapus kelas tanpa menghapus pengguna?"
+
+msgid "Remove the class without removing students"
+msgstr "Hapus kelas tanpa menghapus siswa"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Pengaturan ini belum diimplementasikan dalam versi ini."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Direkomendasikan untuk plugin hanya admin yang ditampilkan di area administrasi."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Direkomendasikan untuk plugin yang harus muncul sebagai alat kursus."
+
+msgid "Displayed above the main page content."
+msgstr "Ditampilkan di atas konten halaman utama."
+
+msgid "Displayed below the main page content."
+msgstr "Ditampilkan di bawah konten halaman utama."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Ditampilkan di dekat bagian atas shell tata letak utama."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Ditampilkan di dekat bagian bawah shell tata letak utama."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Direkomendasikan untuk plugin mengambang global atau persisten yang ditampilkan sebelum footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Ditampilkan di wilayah plugin yang dipilih."
+
+msgid "Admin menu"
+msgstr "Menu admin"
+
+msgid "Global regions"
+msgstr "Wilayah global"
+
+msgid "No regions assigned"
+msgstr "Tidak ada wilayah yang ditetapkan"
+
+msgid "Plugin regions"
+msgstr "Wilayah plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Pilih di mana setiap plugin yang terinstal harus dirender."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tips: gunakan Ctrl/Cmd untuk memilih beberapa wilayah."
+
+msgid "No installed plugins were found."
+msgstr "Tidak ditemukan plugin yang terinstal."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Pilih satu atau lebih wilayah untuk plugin ini di URL akses saat ini."
+
+msgid "Available regions"
+msgstr "Wilayah yang tersedia"
+
+msgid "Selected paragraph"
+msgstr "Paragraf yang dipilih"
+
+msgid "Destination folder"
+msgstr "Folder tujuan"
+
+msgid "Generate AI media"
+msgstr "Buat media AI"
+
+msgid "Save and insert"
+msgstr "Simpan dan sisipkan"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Penyimpanan hanya didukung ketika penyedia mengembalikan konten base64. Jika Anda hanya menerima URL, penyimpanan dinonaktifkan untuk menghindari pengunduhan di browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video berhasil dibuat, tetapi penyimpanan dinonaktifkan karena penyedia mengembalikan URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "File berhasil disimpan, tetapi URL-nya tidak dapat diselesaikan."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Buat kuis Aiken dari topik atau dari satu dokumen kursus."
+
+msgid "Test from topic"
+msgstr "Tes dari topik"
+
+msgid "Test from document"
+msgstr "Tes dari dokumen"
+
+msgid "Generate from topic"
+msgstr "Buat dari topik"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Gunakan prompt topik untuk membuat kuesioner Aiken baru."
+
+msgid "Quiz title"
+msgstr "Judul kuis"
+
+msgid "Generate from document"
+msgstr "Buat dari dokumen"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Pilih satu dokumen kursus dan buat pertanyaan berdasarkan isinya saja."
+
+msgid "Selected document"
+msgstr "Dokumen terpilih"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumen dipilih dari daftar dokumen kursus."
+
+msgid "Choose document"
+msgstr "Pilih dokumen"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opsional. Hanya digunakan sebagai petunjuk tambahan untuk AI."
+
+msgid "Select a document"
+msgstr "Pilih dokumen"
 

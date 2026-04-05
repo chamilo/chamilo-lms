@@ -33678,3 +33678,195 @@ msgstr "شناسه کاربری EntraID"
 msgid "Required fields"
 msgstr "فیلدهای الزامی"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "تگ‌ها را می‌توان در ناحیه متنی زیر کپی و جایگذاری کرد و هنگام ارسال برای هر کاربر به صورت جداگانه با مقدار آن‌ها جایگزین می‌شوند."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "این گروه به کلاس %s مرتبط است.<br>لیست اعضای گروه به اعضای کلاس وابسته است و قابل تغییر نیست.<br>برای شکستن این ارتباط و افزودن یا حذف اعضا به تنظیمات گروه بروید."
+
+msgid "Link classes to created groups ?"
+msgstr "کلاس‌ها را به گروه‌های ایجاد شده مرتبط کنید؟"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "اگر کلاسی به گروه مرتبط باشد، کاربرانی که به کلاس اضافه یا حذف شوند، به طور خودکار به گروه اضافه یا حذف می‌شوند."
+
+msgid "New groups creation in category %s"
+msgstr "ایجاد گروه‌های جدید در دسته %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "پیام هشدار برای اطلاع‌رسانی که کاربر نمی‌تواند اعضای گروه مرتبط را تغییر دهد"
+
+msgid "Remove the group link with the class"
+msgstr "حذف ارتباط گروه با کلاس"
+
+msgid "Linked class"
+msgstr "کلاس مرتبط"
+
+msgid "The group is no longer linked to the class"
+msgstr "گروه دیگر به کلاس مرتبط نیست"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "بررسی دانشجویان و دوره‌های ثبت‌نام شده در کلاس"
+
+msgid "Overview students subscribed to the class"
+msgstr "بررسی دانشجویان ثبت‌نام شده در کلاس"
+
+msgid "Overview class"
+msgstr "بررسی کلاس"
+
+msgid "Go back to the list of classes"
+msgstr "بازگشت به لیست کلاس‌ها"
+
+msgid "Go back to course classes"
+msgstr "بازگشت به کلاس‌های دوره"
+
+msgid "Users subscribed to the course"
+msgstr "کاربران ثبت‌نام شده در دوره"
+
+msgid "Users not subscribed to the course"
+msgstr "کاربران ثبت‌نام نشده در دوره"
+
+msgid "Users subscribed to the class"
+msgstr "کاربران ثبت‌نام شده در کلاس"
+
+msgid "Courses subscribed to the class"
+msgstr "دوره‌های ثبت‌نام شده در کلاس"
+
+msgid "No user is subscribed to this class"
+msgstr "هیچ کاربری در این کلاس ثبت‌نام نکرده است"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "هیچ کاربر و دوره‌ای در این کلاس ثبت‌نام نکرده است"
+
+msgid "No user are subscribed to this class"
+msgstr "هیچ کاربری در این کلاس ثبت‌نام نکرده است"
+
+msgid "No course are subscribed to this class"
+msgstr "هیچ دوره‌ای در این کلاس ثبت‌نام نکرده است"
+
+msgid "Are you sure you want to remove the class"
+msgstr "آیا مطمئن هستید که می‌خواهید کلاس را حذف کنید"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "آیا مطمئن هستید که می‌خواهید کلاس را حذف کنید؟"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "آیا مطمئن هستید که می‌خواهید کلاس را بدون حذف کاربران حذف کنید؟"
+
+msgid "Remove the class without removing students"
+msgstr "حذف کلاس بدون حذف دانشجویان"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "این تنظیم هنوز در این نسخه پیاده‌سازی نشده است."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "توصیه شده برای افزونه‌های فقط مدیر که در ناحیه مدیریت نمایش داده می‌شوند."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "توصیه شده برای افزونه‌هایی که باید به عنوان ابزارهای دوره ظاهر شوند."
+
+msgid "Displayed above the main page content."
+msgstr "نمایش داده شده بالای محتوای صفحه اصلی."
+
+msgid "Displayed below the main page content."
+msgstr "نمایش داده شده زیر محتوای صفحه اصلی."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "نمایش داده شده نزدیک بالای پوسته چیدمان اصلی."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "نمایش داده شده نزدیک پایین پوسته چیدمان اصلی."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "توصیه شده برای افزونه‌های شناور یا پایدار جهانی که قبل از فوتر نمایش داده می‌شوند."
+
+msgid "Displayed in the selected plugin region."
+msgstr "نمایش داده شده در ناحیه افزونه انتخاب شده."
+
+msgid "Admin menu"
+msgstr "منوی مدیریت"
+
+msgid "Global regions"
+msgstr "نواحی جهانی"
+
+msgid "No regions assigned"
+msgstr "هیچ ناحیه‌ای اختصاص داده نشده"
+
+msgid "Plugin regions"
+msgstr "نواحی افزونه"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "انتخاب کنید هر افزونه نصب شده کجا رندر شود."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "نکته: از Ctrl/Cmd برای انتخاب چندین ناحیه استفاده کنید."
+
+msgid "No installed plugins were found."
+msgstr "هیچ افزونه نصب‌شده‌ای یافت نشد."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "یکی یا چند ناحیه را برای این افزونه در URL دسترسی فعلی انتخاب کنید."
+
+msgid "Available regions"
+msgstr "نواحی موجود"
+
+msgid "Selected paragraph"
+msgstr "پاراگراف انتخاب‌شده"
+
+msgid "Destination folder"
+msgstr "پوشه مقصد"
+
+msgid "Generate AI media"
+msgstr "تولید رسانه هوش مصنوعی"
+
+msgid "Save and insert"
+msgstr "ذخیره و درج"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "ذخیره‌سازی تنها زمانی پشتیبانی می‌شود که ارائه‌دهنده محتوای base64 بازگرداند. اگر فقط URL دریافت کردید، ذخیره‌سازی غیرفعال است تا از دانلود در مرورگر جلوگیری شود."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ویدیو با موفقیت تولید شد، اما ذخیره‌سازی غیرفعال است زیرا ارائه‌دهنده URL بازگرداند."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "فایل ذخیره شد، اما URL آن قابل حل نبود."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "ایجاد آزمون آیکن از یک موضوع یا از یک سند دوره."
+
+msgid "Test from topic"
+msgstr "آزمون از موضوع"
+
+msgid "Test from document"
+msgstr "آزمون از سند"
+
+msgid "Generate from topic"
+msgstr "ایجاد از موضوع"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "از یک دستور موضوع برای ایجاد پرسشنامه جدید آیکن استفاده کنید."
+
+msgid "Quiz title"
+msgstr "عنوان آزمون"
+
+msgid "Generate from document"
+msgstr "ایجاد از سند"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "یک سند دوره را انتخاب کنید و سؤالاتی فقط بر اساس محتوای آن ایجاد کنید."
+
+msgid "Selected document"
+msgstr "سند انتخاب‌شده"
+
+msgid "The document is selected from the course documents list."
+msgstr "سند از لیست اسناد دوره انتخاب شده است."
+
+msgid "Choose document"
+msgstr "انتخاب سند"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "اختیاری. فقط به عنوان راهنمایی اضافی برای هوش مصنوعی استفاده می‌شود."
+
+msgid "Select a document"
+msgstr "یک سند انتخاب کنید"
+

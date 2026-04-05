@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Fushat e detyrueshme"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Etiketat mund të kopjohen dhe ngjiten brenda zonës së tekstit më poshtë dhe do të zëvendësohen dinamikisht me vlerën e tyre për çdo përdorues individualisht kur dërgohen."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ky grup është i lidhur me klasën %s.<br>Lista e anëtarëve të grupit varet nga anëtarët e klasës dhe nuk mund të modifikohen.<br>Shkoni te cilësimet e grupit për të thyer këtë lidhje nëse dëshironi të shtoni ose hiqni anëtarë për këtë grup."
+
+msgid "Link classes to created groups ?"
+msgstr "Lidhni klasat me grupet e krijuara?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Nëse një klasë është e lidhur me një grup, përdoruesit e shtuar ose hequr nga klasa shtohen ose hiqen automatikisht nga grupi."
+
+msgid "New groups creation in category %s"
+msgstr "Krijimi i grupeve të reja në kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Mesazh paralajmërues për të paralajmëruar se përdoruesi nuk mund të modifikojë anëtarët e grupit të lidhur"
+
+msgid "Remove the group link with the class"
+msgstr "Hiqni lidhjen e grupit me klasën"
+
+msgid "Linked class"
+msgstr "Klasë e lidhur"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupi nuk është më i lidhur me klasën"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Përmbledhje e nxënësve dhe kurseve të regjistruara në klasë"
+
+msgid "Overview students subscribed to the class"
+msgstr "Përmbledhje e nxënësve të regjistruar në klasë"
+
+msgid "Overview class"
+msgstr "Përmbledhje e klasës"
+
+msgid "Go back to the list of classes"
+msgstr "Kthehu te lista e klasave"
+
+msgid "Go back to course classes"
+msgstr "Kthehu te klasat e kursit"
+
+msgid "Users subscribed to the course"
+msgstr "Përdorues të regjistruar në kurs"
+
+msgid "Users not subscribed to the course"
+msgstr "Përdorues jo të regjistruar në kurs"
+
+msgid "Users subscribed to the class"
+msgstr "Përdorues të regjistruar në klasë"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurse të regjistruara në klasë"
+
+msgid "No user is subscribed to this class"
+msgstr "Asnjë përdorues nuk është i regjistruar në këtë klasë"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Asnjë përdorues dhe asnjë kurs nuk janë të regjistruar në këtë klasë"
+
+msgid "No user are subscribed to this class"
+msgstr "Asnjë përdorues nuk është i regjistruar në këtë klasë"
+
+msgid "No course are subscribed to this class"
+msgstr "Asnjë kurs nuk është i regjistruar në këtë klasë"
+
+msgid "Are you sure you want to remove the class"
+msgstr "A jeni të sigurt që dëshironi të fshini klasën"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "A jeni të sigurt që dëshironi të fshini klasën?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "A jeni të sigurt që dëshironi të fshini klasën pa fshirë përdoruesit?"
+
+msgid "Remove the class without removing students"
+msgstr "Fshij klasën pa fshirë studentët"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Kjo cilësim nuk është zbatuar ende në këtë version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Rekomanduar për shtojcat vetëm për admin që shfaqen në zonën e administrimit."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Rekomanduar për shtojcat që duhet të shfaqen si mjete kursi."
+
+msgid "Displayed above the main page content."
+msgstr "Shfaqet mbi përmbajtjen kryesore të faqes."
+
+msgid "Displayed below the main page content."
+msgstr "Shfaqet nën përmbajtjen kryesore të faqes."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Shfaqet pranë pjesës së sipërme të strukturës kryesore të faqes."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Shfaqet pranë pjesës së poshtme të strukturës kryesore të faqes."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Rekomanduar për shtojca globale lëngshme ose të përhershme të shfaqura para footer-it."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Shfaqet në rajonin e zgjedhur të shtojcës."
+
+msgid "Admin menu"
+msgstr "Menuja e adminit"
+
+msgid "Global regions"
+msgstr "Rajonet globale"
+
+msgid "No regions assigned"
+msgstr "Asnjë rajon i caktuar"
+
+msgid "Plugin regions"
+msgstr "Rajonet e shtojcës"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Zgjidhni se ku duhet të renderohet çdo shtojcë e instaluar."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Këshillë: përdorni Ctrl/Cmd për të zgjedhur rajone të shumta."
+
+msgid "No installed plugins were found."
+msgstr "Asnjë shtojcë e instaluar nuk u gjet."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Zgjidhni një ose më shumë rajone për këtë shtojcë në URL-në aktuale të qasjes."
+
+msgid "Available regions"
+msgstr "Rajonet e disponueshme"
+
+msgid "Selected paragraph"
+msgstr "Paragrafi i zgjedhur"
+
+msgid "Destination folder"
+msgstr "Dosja e destinacionit"
+
+msgid "Generate AI media"
+msgstr "Gjenero media me AI"
+
+msgid "Save and insert"
+msgstr "Ruaj dhe fut"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ruajtja mbështetet vetëm kur furnizuesi kthen përmbajtje base64. Nëse keni marrë vetëm një URL, ruajtja është e çaktivizuar për të shmangur shkarkimin në shfletues."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Videoja u gjenerua me sukses, por ruajtja është e çaktivizuar sepse furnizuesi ktheu një URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Skedari u ruajt, por URL-ja e tij nuk mund të zgjidhet."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Gjenero një test Aiken nga një temë ose nga një dokument kursi."
+
+msgid "Test from topic"
+msgstr "Test nga tema"
+
+msgid "Test from document"
+msgstr "Test nga dokumenti"
+
+msgid "Generate from topic"
+msgstr "Gjenero nga tema"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Përdor një udhëzues teme për të gjeneruar një pyetësor të ri Aiken."
+
+msgid "Quiz title"
+msgstr "Titulli i testit"
+
+msgid "Generate from document"
+msgstr "Gjenero nga dokumenti"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Zgjidh një dokument kursi dhe gjenero pyetje vetëm bazuar në përmbajtjen e tij."
+
+msgid "Selected document"
+msgstr "Dokumenti i zgjedhur"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumenti zgjidhet nga lista e dokumenteve të kursit."
+
+msgid "Choose document"
+msgstr "Zgjidh dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opsionale. Përdoret vetëm si një ndihmë shtesë për AI."
+
+msgid "Select a document"
+msgstr "Zgjidh një dokument"
+

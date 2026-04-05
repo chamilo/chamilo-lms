@@ -36020,11 +36020,203 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "ID EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "ຊ່ອງທີ່ຈຳເປັນ"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "ຕາມປ້າຍສາມາດສຳເນົາສຳເລັດ ແລະ ຕິດໄປໃນເຂດຂໍ້ຄວາມຂ້າງລຸ່ມນີ້ ແລະ ຈະຖືກແທນທີ່ດ້ວຍມູນຄ່າຂອງມັນສຳລັບແຕ່ລະຜູ້ໃຊ້ແຍກກັນເມື່ອສົ່ງ."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "ກຸ່ມນີ້ເຊື່ອມຕໍ່ກັບຊັ້ນ %s.<br>ລາຍການສະມາຊິກກຸ່ມຂຶ້ນກັບສະມາຊິກຊັ້ນ ແລະ ບໍ່ສາມາດປ່ຽນແຕ່ງໄດ້.<br>ໄປທີ່ການຕັ້ງຄ່າກຸ່ມເພື່ອຕັດການເຊື່ອມຕໍ່ນີ້ຖ້າທ່ານຕ້ອງການເພີ່ມຫຼືລຶບສະມາຊິກສຳລັບກຸ່ມນີ້."
+
+msgid "Link classes to created groups ?"
+msgstr "ເຊື່ອມຕໍ່ຊັ້ນກັບກຸ່ມທີ່ສ້າງ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "ຖ້າຊັ້ນເຊື່ອມຕໍ່ກັບກຸ່ມ, ຜູ້ໃຊ້ທີ່ເພີ່ມຫຼືຖືກລຶບອອກຈາກຊັ້ນຈະຖືກເພີ່ມຫຼືຖືກລຶບອອກຈາກກຸ່ມອັດຕະໂນມັດ."
+
+msgid "New groups creation in category %s"
+msgstr "ສ້າງກຸ່ມໃໝ່ໃນຫົວຂໍ້ %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "ຂໍ້ຄວາມເຕືອນໃຫ້ຮູ້ວ່າຜູ້ໃຊ້ບໍ່ສາມາດປ່ຽນແຕ່ງສະມາຊິກກຸ່ມທີ່ເຊື່ອມຕໍ່"
+
+msgid "Remove the group link with the class"
+msgstr "ລຶບການເຊື່ອມຕໍ່ກຸ່ມກັບຊັ້ນ"
+
+msgid "Linked class"
+msgstr "ຊັ້ນທີ່ເຊື່ອມຕໍ່"
+
+msgid "The group is no longer linked to the class"
+msgstr "ກຸ່ມບໍ່ເຊື່ອມຕໍ່ກັບຊັ້ນອີກຕໍ່ໄປ"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "ສະຫຼຸບນັກຮຽນ ແລະ ຄອສທີ່ລົງທະບຽນໃນຊັ້ນ"
+
+msgid "Overview students subscribed to the class"
+msgstr "ສະຫຼຸບນັກຮຽນທີ່ລົງທະບຽນໃນຊັ້ນ"
+
+msgid "Overview class"
+msgstr "ສະຫຼຸບຊັ້ນ"
+
+msgid "Go back to the list of classes"
+msgstr "ກັບໄປລາຍການຊັ້ນ"
+
+msgid "Go back to course classes"
+msgstr "ກັບໄປຊັ້ນຄອສ"
+
+msgid "Users subscribed to the course"
+msgstr "ຜູ້ໃຊ້ທີ່ລົງທະບຽນໃນຄອສ"
+
+msgid "Users not subscribed to the course"
+msgstr "ຜູ້ໃຊ້ທີ່ບໍ່ໄດ້ລົງທະບຽນໃນຄອສ"
+
+msgid "Users subscribed to the class"
+msgstr "ຜູ້ໃຊ້ທີ່ລົງທະບຽນໃນຊັ້ນ"
+
+msgid "Courses subscribed to the class"
+msgstr "ຄອສທີ່ລົງທະບຽນໃນຊັ້ນ"
+
+msgid "No user is subscribed to this class"
+msgstr "ບໍ່ມີຜູ້ໃຊ້ໃດລົງທະບຽນໃນຊັ້ນດັ່ງກ່າວ"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "ບໍ່ມີຜູ້ໃຊ້ ແລະ ບໍ່ມີຄອສໃດລົງທະບຽນໃນຊັ້ນດັ່ງກ່າວ"
+
+msgid "No user are subscribed to this class"
+msgstr "ບໍ່ມີຜູ້ໃຊ້ໃດລົງທະບຽນໃນຊັ້ນດັ່ງກ່າວ"
+
+msgid "No course are subscribed to this class"
+msgstr "ບໍ່ມີຄອສໃດລົງທະບຽນໃນຊັ້ນດັ່ງກ່າວ"
+
+msgid "Are you sure you want to remove the class"
+msgstr "ທ່ານຫັ້ນໃຈບໍທີ່ຈະລຶບຊັ້ນ"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "ທ່ານຫັ້ນໃຈບໍທີ່ຈະລຶບຊັ້ນ?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "ທ່ານຫັ້ນໃຈບໍທີ່ຈະລຶບຊັ້ນໂດຍບໍ່ລຶບຜູ້ໃຊ້?"
+
+msgid "Remove the class without removing students"
+msgstr "ລຶບຊັ້ນໂດຍບໍ່ລຶບນັກຮຽນ"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "ການຕັ້ງຄ່ານີ້ຍັງບໍ່ໄດ້ຖືກນຳໃຊ້ໃນສະເຫຼີມນີ້."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "ແນະນຳສຳລັບພລັກອິນເຈົ້າພະນະການທີ່ສະແດງໃນເຂດການຈັດການ."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "ແນະນຳສຳລັບພລັກອິນທີ່ຕ້ອງປະກົດເປັນເຄື່ອງມືຄອສ."
+
+msgid "Displayed above the main page content."
+msgstr "ສະແດງຢູ່ເທິງເນື້ອໃນໜ້າຫຼັກ."
+
+msgid "Displayed below the main page content."
+msgstr "ສະແດງຢູ່ລຸ່ມເນື້ອໃນໜ້າຫຼັກ."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "ສະແດງໃກ້ກັບດ້ານບົນຂອງໂຄງຮ່າງຫຼັກ."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "ສະແດງໃກ້ກັບດ້ານລຸ່ມຂອງໂຄງຮ່າງຫຼັກ."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "ແນະນຳສຳລັບພລັກອິນກ້ຽງທົ່ວໄປຫຼືທີ່ຕໍ່ເນື່ອງສະແດງກ່ອນ footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "ສະແດງໃນເຂດພລັກອິນທີ່ເລືອກ."
+
+msgid "Admin menu"
+msgstr "ເມນູຈັດການ"
+
+msgid "Global regions"
+msgstr "ເຂດທົ່ວໄປ"
+
+msgid "No regions assigned"
+msgstr "ບໍ່ມີເຂດທີ່ກຳນົດ"
+
+msgid "Plugin regions"
+msgstr "ເຂດພລັກອິນ"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "ເລືອກວ່າພລັກອິນທີ່ຕິດຕັ້ງແຕ່ລະອັນຄວນຖືກສະແດງຢູ່ໃສ່."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "ທິດຊີ້: ໃຊ້ Ctrl/Cmd ເພື່ອເລືອກເຂດຫຼາຍອັນ."
+
+msgid "No installed plugins were found."
+msgstr "ບໍ່ພົບພລັກອິນທີ່ຕິດຕັ້ງ."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "ເລືອກເຂດນຶ່ງອັນ ຫຼື ຫຼາຍອັນກຳລັງສຳລັບພລັກອິນດັ່ງກ່າວໃນ URL ເຂົ້າສູ່ລະບົດດັ່ງປະຈຸບັນ."
+
+msgid "Available regions"
+msgstr "ເຂດທີ່ມີຢູ່"
+
+msgid "Selected paragraph"
+msgstr "ປັດສະນິ້ມທີ່ເລືອກ"
+
+msgid "Destination folder"
+msgstr "ໂຟນເດີປາຍທາງ"
+
+msgid "Generate AI media"
+msgstr "ສ້າງສື່ AI"
+
+msgid "Save and insert"
+msgstr "ບັນທຶກ ແລະ ໃສ່"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "ການບັນທຶກຮອງຮັບພຽງແຕ່ເມື່ອຜູ້ສະໜອບສົ່ງກັບເນື້ອໃນ base64. ຖ້າທ່ານໄດ້ຮັບພຽງແຕ່ URL, ການບັນທຶກຖືກປິດເພື່ອຫຼີກເວັ້ນດາວໂຫຼດໃນ browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ວິດີໂອສ້າງສຳເລັດ, ແຕ່ການບັນທຶກຖືກປິດເພາະຜູ້ສະໜອບໃຫ້ສົ່ງກັບ URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "ໄຟລ໌ຖືກບັນທຶກ, ແຕ່ URL ຂອງມັນບໍ່ສາມາດແກ້ໄຂໄດ້."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "ສ້າງກວ້າມສືບທົດລອງ Aiken ຈາກຫົວຂໍ້ ຫຼື ຈາກເອກະສານຫລັກສູດນຶ່ງ."
+
+msgid "Test from topic"
+msgstr "ກວ້າມສືບທົດລອງຈາກຫົວຂໍ້"
+
+msgid "Test from document"
+msgstr "ກວ້າມສືບທົດລອງຈາກເອກະສານ"
+
+msgid "Generate from topic"
+msgstr "ສ້າງຈາກຫົວຂໍ້"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "ໃຊ້ prompt ຂອງຫົວຂໍ້ເພື່ອສ້າງຄຳຖາມ Aiken ໃໝ່."
+
+msgid "Quiz title"
+msgstr "ຊື່ກວ້າມສືບທົດລອງ"
+
+msgid "Generate from document"
+msgstr "ສ້າງຈາກເອກະສານ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "ເລືອກເອກະສານຫລັກສູດນຶ່ງ ແລະ ສ້າງຄຳຖາມຕາມເນື້ອໃນເອກະສານນັ້ນເທົ່ານັ້ນ."
+
+msgid "Selected document"
+msgstr "ເອກະສານທີ່ເລືອກ"
+
+msgid "The document is selected from the course documents list."
+msgstr "ເອກະສານຖືກເລືອກຈາກລາຍການເອກະສານຫລັກສູດ."
+
+msgid "Choose document"
+msgstr "ເລືອກເອກະສານ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "ເລືອກ. ໃຊ້ເປັນຄຳເລີ່ມສ່ວນເພີ່ມເສີມສຳລັບ AI ເທົ່ານັ້ນ."
+
+msgid "Select a document"
+msgstr "ເລືອກເອກະສານ"
 

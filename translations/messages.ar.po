@@ -33696,3 +33696,195 @@ msgstr "معرف مستخدم EntraID"
 msgid "Required fields"
 msgstr "الحقول المطلوبة"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "يمكن نسخ العلامات ولصقها داخل منطقة النص أدناه وسيتم استبدالها ديناميكيًا بقيمتها لكل مستخدم على حدة عند إرسالها."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "هذه المجموعة مرتبطة بالفصل %s.<br>قائمة أعضاء المجموعة تعتمد على أعضاء الفصل ولا يمكن تعديلها.<br>اذهب إلى إعدادات المجموعة لكسر هذا الرابط إذا كنت ترغب في إضافة أو إزالة أعضاء لهذه المجموعة."
+
+msgid "Link classes to created groups ?"
+msgstr "ربط الفصول بالمجموعات المُنشأة؟"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "إذا كان فصل مرتبطًا بمجموعة، فإن المستخدمين المضافين إلى الفصل أو المُزالين منه يتم إضافتهم تلقائيًا إلى المجموعة أو إزالتهم منها."
+
+msgid "New groups creation in category %s"
+msgstr "إنشاء مجموعات جديدة في الفئة %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "رسالة تحذير لإخطار أن المستخدم لا يمكنه تعديل أعضاء المجموعة المرتبطة"
+
+msgid "Remove the group link with the class"
+msgstr "إزالة رابط المجموعة مع الفصل"
+
+msgid "Linked class"
+msgstr "الفصل المرتبط"
+
+msgid "The group is no longer linked to the class"
+msgstr "المجموعة لم تعد مرتبطة بالفصل"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "نظرة عامة على الطلاب والدورات المسجلة في الفصل"
+
+msgid "Overview students subscribed to the class"
+msgstr "نظرة عامة على الطلاب المسجلين في الفصل"
+
+msgid "Overview class"
+msgstr "نظرة عامة على الفصل"
+
+msgid "Go back to the list of classes"
+msgstr "العودة إلى قائمة الفصول"
+
+msgid "Go back to course classes"
+msgstr "العودة إلى فصول الدورة"
+
+msgid "Users subscribed to the course"
+msgstr "المستخدمون المسجلون في الدورة"
+
+msgid "Users not subscribed to the course"
+msgstr "المستخدمون غير المسجلين في الدورة"
+
+msgid "Users subscribed to the class"
+msgstr "المستخدمون المسجلون في الفصل"
+
+msgid "Courses subscribed to the class"
+msgstr "الدورات المسجلة في الفصل"
+
+msgid "No user is subscribed to this class"
+msgstr "لا يوجد مستخدم مسجل في هذا الفصل"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "لا يوجد مستخدم ولا دورة مسجلة في هذا الفصل"
+
+msgid "No user are subscribed to this class"
+msgstr "لا يوجد مستخدمون مسجلون في هذا الفصل"
+
+msgid "No course are subscribed to this class"
+msgstr "لا توجد دورات مسجلة في هذا الفصل"
+
+msgid "Are you sure you want to remove the class"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل؟"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل دون إزالة المستخدمين؟"
+
+msgid "Remove the class without removing students"
+msgstr "إزالة الفصل دون إزالة الطلاب"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "هذا الإعداد غير مُطبق بعد في هذه النسخة."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "مُوصى به للإضافات الخاصة بالمشرفين فقط المعروضة في منطقة الإدارة."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "مُوصى به للإضافات التي يجب أن تظهر كأدوات الدورة."
+
+msgid "Displayed above the main page content."
+msgstr "معروض أعلى محتوى الصفحة الرئيسية."
+
+msgid "Displayed below the main page content."
+msgstr "معروض أسفل محتوى الصفحة الرئيسية."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "معروض بالقرب من أعلى غلاف التخطيط الرئيسي."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "معروض بالقرب من أسفل غلاف التخطيط الرئيسي."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "مُوصى به للإضافات العائمة العامة أو الدائمة المعروضة قبل التذييل."
+
+msgid "Displayed in the selected plugin region."
+msgstr "معروض في منطقة الإضافة المحددة."
+
+msgid "Admin menu"
+msgstr "قائمة الإدارة"
+
+msgid "Global regions"
+msgstr "المناطق العامة"
+
+msgid "No regions assigned"
+msgstr "لا توجد مناطق مُعينة"
+
+msgid "Plugin regions"
+msgstr "مناطق الإضافات"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "اختر المكان الذي يجب أن يتم عرضه فيه كل إضافة مثبتة."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "نصيحة: استخدم Ctrl/Cmd لتحديد مناطق متعددة."
+
+msgid "No installed plugins were found."
+msgstr "لم يتم العثور على إضافات مثبتة."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "حدد منطقة أو أكثر لهذه الإضافة في رابط الوصول الحالي."
+
+msgid "Available regions"
+msgstr "المناطق المتاحة"
+
+msgid "Selected paragraph"
+msgstr "الفقرة المحددة"
+
+msgid "Destination folder"
+msgstr "مجلد الوجهة"
+
+msgid "Generate AI media"
+msgstr "إنشاء وسائط الذكاء الاصطناعي"
+
+msgid "Save and insert"
+msgstr "حفظ وإدراج"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "الحفظ مدعوم فقط عندما يُرجع المزود محتوى base64. إذا تلقيت رابطًا فقط، فإن الحفظ معطل لتجنب التنزيل في المتصفح."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "تم إنشاء الفيديو بنجاح، لكن الحفظ معطل لأن المزود أرجع رابطًا."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "تم حفظ الملف، لكن لم يتمكن من حل رابط URL الخاص به."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "إنشاء اختبار Aiken من موضوع أو من مستند دورة واحد."
+
+msgid "Test from topic"
+msgstr "اختبار من الموضوع"
+
+msgid "Test from document"
+msgstr "اختبار من المستند"
+
+msgid "Generate from topic"
+msgstr "إنشاء من الموضوع"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "استخدم تلميح موضوع لإنشاء استبيان Aiken جديد."
+
+msgid "Quiz title"
+msgstr "عنوان الاختبار"
+
+msgid "Generate from document"
+msgstr "إنشاء من المستند"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "اختر مستند دورة واحد وأنشئ أسئلة بناءً على محتوياته فقط."
+
+msgid "Selected document"
+msgstr "المستند المحدد"
+
+msgid "The document is selected from the course documents list."
+msgstr "يتم اختيار المستند من قائمة مستندات الدورة."
+
+msgid "Choose document"
+msgstr "اختر المستند"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "اختياري. يُستخدم فقط كتلميح إضافي للذكاء الاصطناعي."
+
+msgid "Select a document"
+msgstr "اختر مستندًا"
+

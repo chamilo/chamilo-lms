@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autortiesības,, no:nav autortiesību"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mape,, application/msword:MsWord,, application/octet-stream:Okta straume,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteta plūsma,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:uzdevums,,      simulation:simulācija,,      questionnaire:aptaujā,,      diagram:diagramma,,      figure:attēls,,      graph:diagramma,,      index:indekss,,      slide:slīdrāde,,      table:tabula,,      narrative text:narratīvs teksts,,      exam:eksāmens,,      experiment:eksperiments,,      problem statement:problēmas apraksts,,      self assessment:paškontrole,,      lecture:lekcija"
@@ -33682,4 +33682,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Obligātie lauki"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Birkas var kopēt un ielīmēt teksta laukā zemāk un tās tiks dinamiski aizstātas ar to vērtību katram lietotājam individuāli, nosūtot ziņojumu."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Šī grupa ir saistīta ar klasi %s.<br>Grupas dalībnieku saraksts ir atkarīgs no klases dalībniekiem un to nevar modificēt.<br>Dodieties uz grupas iestatījumiem, lai pārrautu šo saiti, ja vēlaties pievienot vai noņemt dalībniekus šai grupai."
+
+msgid "Link classes to created groups ?"
+msgstr "Saistīt klases ar izveidotajām grupām?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ja klase ir saistīta ar grupu, lietotāji, kas pievienoti vai noņemti no klases, tiek automātiski pievienoti vai noņemti no grupas."
+
+msgid "New groups creation in category %s"
+msgstr "Jaunu grupu izveide kategorijā %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Brīdinājuma ziņojums, lai brīdinātu, ka lietotājs nevar modificēt saistītās grupas dalībniekus"
+
+msgid "Remove the group link with the class"
+msgstr "Noņemt grupas saiti ar klasi"
+
+msgid "Linked class"
+msgstr "Saistītā klase"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupa vairs nav saistīta ar klasi"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Pārskats par studentiem un kursiem, kas abonē klasi"
+
+msgid "Overview students subscribed to the class"
+msgstr "Pārskats par studentiem, kas abonē klasi"
+
+msgid "Overview class"
+msgstr "Klasēs pārskats"
+
+msgid "Go back to the list of classes"
+msgstr "Atpakaļ uz klašu sarakstu"
+
+msgid "Go back to course classes"
+msgstr "Atpakaļ uz kursa klasēm"
+
+msgid "Users subscribed to the course"
+msgstr "Lietotāji, kas abonē kursu"
+
+msgid "Users not subscribed to the course"
+msgstr "Lietotāji, kas neabonē kursu"
+
+msgid "Users subscribed to the class"
+msgstr "Lietotāji, kas abonē klasi"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursi, kas abonē klasi"
+
+msgid "No user is subscribed to this class"
+msgstr "Neviens lietotājs neatbild šai klasei"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Neviens lietotājs un neviens kurss neatbild šai klasei"
+
+msgid "No user are subscribed to this class"
+msgstr "Neviens lietotājs nav abonējis šo klasi"
+
+msgid "No course are subscribed to this class"
+msgstr "Neviens kurss nav abonējis šo klasi"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Vai tiešām vēlaties dzēst klasi"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Vai tiešām vēlaties dzēst klasi?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Vai tiešām vēlaties dzēst klasi, neizdzēšot lietotājus?"
+
+msgid "Remove the class without removing students"
+msgstr "Dzēst klasi, neizdzēšot studentus"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Šī iestatīšana vēl nav ieviesta šajā versijā."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Ieteicams tikai administratora spraudņiem, kas redzami administrēšanas sadaļā."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Ieteicams spraudņiem, kas jāparāda kā kursa rīkiem."
+
+msgid "Displayed above the main page content."
+msgstr "Parādīts virs galvenā lapas satura."
+
+msgid "Displayed below the main page content."
+msgstr "Parādīts zem galvenā lapas satura."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Parādīts galvenā izkārtojuma apvalka augšdaļā."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Parādīts galvenā izkārtojuma apvalka apakšdaļā."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Ieteicams globāliem peldošiem vai pastāvīgiem spraudņiem, kas redzami pirms kājenes."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Parādīts izvēlētajā spraudņa reģionā."
+
+msgid "Admin menu"
+msgstr "Administratora izvēlne"
+
+msgid "Global regions"
+msgstr "Globālie reģioni"
+
+msgid "No regions assigned"
+msgstr "Nav piešķirti reģioni"
+
+msgid "Plugin regions"
+msgstr "Spraudņu reģioni"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Izvēlieties, kur katram instalētam spraudnim jābūt renderētam."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Padoms: izmantojiet Ctrl/Cmd, lai izvēlētos vairākus reģionus."
+
+msgid "No installed plugins were found."
+msgstr "Nav atrasti instalēti spraudņi."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Izvēlieties vienu vai vairākus reģionus šim spraudnim pašreizējā piekļuves URL."
+
+msgid "Available regions"
+msgstr "Pieejamie reģioni"
+
+msgid "Selected paragraph"
+msgstr "Izvēlētais rindkopa"
+
+msgid "Destination folder"
+msgstr "Mērķa mape"
+
+msgid "Generate AI media"
+msgstr "Ģenerēt AI mediju"
+
+msgid "Save and insert"
+msgstr "Saglabāt un ievietot"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Saglabāšana tiek atbalstīta tikai tad, kad nodrošinātājs atgriež base64 saturu. Ja saņemāt tikai URL, saglabāšana ir atspējota, lai izvairītos no lejupielādes pārlūkprogrammā."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video ģenerēts veiksmīgi, bet saglabāšana ir atspējota, jo nodrošinātājs atgrieza URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Datne tika saglabāta, bet tās URL nevarēja atrisināt."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ģenerēt Aiken viktorīnu no tēmas vai no viena kursa dokumenta."
+
+msgid "Test from topic"
+msgstr "Tests no tēmas"
+
+msgid "Test from document"
+msgstr "Tests no dokumenta"
+
+msgid "Generate from topic"
+msgstr "Ģenerēt no tēmas"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Izmantot tēmas uzvedni, lai ģenerētu jaunu Aiken anketu."
+
+msgid "Quiz title"
+msgstr "Viktorīnas nosaukums"
+
+msgid "Generate from document"
+msgstr "Ģenerēt no dokumenta"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Izvēlēties vienu kursa dokumentu un ģenerēt jautājumus tikai balstoties uz tā saturu."
+
+msgid "Selected document"
+msgstr "Izvēlētais dokuments"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokuments ir izvēlēts no kursa dokumentu saraksta."
+
+msgid "Choose document"
+msgstr "Izvēlēties dokumentu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Nav obligāti. Izmanto tikai kā papildu norādi mākslīgajam intelektam."
+
+msgid "Select a document"
+msgstr "Izvēlēties dokumentu"
 

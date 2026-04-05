@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -33116,85 +33116,85 @@ msgid "Layouts"
 msgstr "Susun atur"
 
 msgid "Relation type"
-msgstr ""
+msgstr "Jenis hubungan"
 
 msgid "Add all"
-msgstr ""
+msgstr "Tambah semua"
 
 msgid "Remove all"
-msgstr ""
+msgstr "Alih keluar semua"
 
 msgid "An error occurred. Please try again."
-msgstr ""
+msgstr "Ralat berlaku. Sila cuba lagi."
 
 msgid "%s created"
-msgstr ""
+msgstr "%s dicipta"
 
 msgid "%s updated"
-msgstr ""
+msgstr "%s dikemas kini"
 
 msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
-msgstr ""
+msgstr "Jika anda merancang untuk mengemas kini dari versi Chamilo yang lebih lama, anda mungkin ingin"
 
 msgid "have a look at the changelog"
-msgstr ""
+msgstr "melihat senarai perubahan"
 
 msgid "to know what's new and what has been changed."
-msgstr ""
+msgstr "untuk mengetahui apa yang baru dan apa yang telah diubah."
 
 msgid "Session Item"
-msgstr ""
+msgstr "Item Sesi"
 
 msgid "Points"
-msgstr ""
+msgstr "Mata"
 
 msgid "See notifications"
-msgstr ""
+msgstr "Lihat pemberitahuan"
 
 msgid "New content available for this course."
-msgstr ""
+msgstr "Kandungan baru tersedia untuk kursus ini."
 
 msgid "No new notifications."
-msgstr ""
+msgstr "Tiada pemberitahuan baru."
 
 msgid "No new content found."
-msgstr ""
+msgstr "Tiada kandungan baru ditemui."
 
 msgid "No tool details available yet."
-msgstr ""
+msgstr "Tiada butiran alat tersedia lagi."
 
 msgid "Last access"
-msgstr ""
+msgstr "Akses terakhir"
 
 msgid "Open course"
-msgstr ""
+msgstr "Buka kursus"
 
 msgid "Course completed"
-msgstr ""
+msgstr "Kursus diselesaikan"
 
 msgid "The subscription limit for this course has been reached."
-msgstr ""
+msgstr "Had langganan untuk kursus ini telah dicapai."
 
 msgid "Subscription limit reached"
-msgstr ""
+msgstr "Had langganan dicapai"
 
 msgid "Tertiary alternative"
-msgstr ""
+msgstr "Alternatif tertiar"
 
 msgid "Update SCORM"
-msgstr ""
+msgstr "Kemas kini SCORM"
 
 msgid "AI can draft feedback and a suggested score before you send it."
-msgstr ""
+msgstr "AI boleh mencipta draf maklum balas dan skor cadangan sebelum anda menghantarnya."
 
 msgid "What will be sent to the AI"
-msgstr ""
+msgstr "Apa yang akan dihantar kepada AI"
 
 msgid "Assignment title + instructions"
-msgstr ""
+msgstr "Tajuk tugasan + arahan"
 
 msgid "Student submission (text)"
-msgstr ""
+msgstr "Penyerahan pelajar (teks)"
 
 msgid "Student submission (text): none"
 msgstr "Penyerahan pelajar (teks): tiada"
@@ -33681,4 +33681,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Medan wajib"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tag boleh disalin dan ditempel di dalam kawasan teks di bawah dan akan digantikan secara dinamik dengan nilai masing-masing untuk setiap pengguna secara individu apabila dihantar."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Kumpulan ini dihubungkan kepada kelas %s.<br>Senarai ahli kumpulan bergantung kepada ahli kelas dan tidak boleh diubah suai.<br>Pergi ke tetapan kumpulan untuk memutuskan hubungan ini jika anda mahu menambah atau mengalih keluar ahli untuk kumpulan ini."
+
+msgid "Link classes to created groups ?"
+msgstr "Hubungkan kelas kepada kumpulan yang dibuat?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Jika kelas dihubungkan kepada kumpulan, pengguna yang ditambah atau dialih keluar dari kelas akan ditambah atau dialih keluar dari kumpulan secara automatik."
+
+msgid "New groups creation in category %s"
+msgstr "Penciptaan kumpulan baru dalam kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Mesaj amaran untuk memberitahu bahawa pengguna tidak boleh mengubah suai ahli kumpulan yang dihubungkan"
+
+msgid "Remove the group link with the class"
+msgstr "Alih keluar pautan kumpulan dengan kelas"
+
+msgid "Linked class"
+msgstr "Kelas yang dihubungkan"
+
+msgid "The group is no longer linked to the class"
+msgstr "Kumpulan tidak lagi dihubungkan kepada kelas"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Gambaran pelajar dan kursus yang berlangganan kelas"
+
+msgid "Overview students subscribed to the class"
+msgstr "Gambaran pelajar yang berlangganan kelas"
+
+msgid "Overview class"
+msgstr "Gambaran kelas"
+
+msgid "Go back to the list of classes"
+msgstr "Kembali ke senarai kelas"
+
+msgid "Go back to course classes"
+msgstr "Kembali ke kelas kursus"
+
+msgid "Users subscribed to the course"
+msgstr "Pengguna yang berlangganan kursus"
+
+msgid "Users not subscribed to the course"
+msgstr "Pengguna yang tidak berlangganan kursus"
+
+msgid "Users subscribed to the class"
+msgstr "Pengguna yang berlangganan kelas"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursus yang berlangganan kelas"
+
+msgid "No user is subscribed to this class"
+msgstr "Tiada pengguna berlangganan kelas ini"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Tiada pengguna dan tiada kursus berlangganan kelas ini"
+
+msgid "No user are subscribed to this class"
+msgstr "Tiada pengguna berlangganan kelas ini"
+
+msgid "No course are subscribed to this class"
+msgstr "Tiada kursus berlangganan kelas ini"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Adakah anda pasti mahu mengalih keluar kelas"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Adakah anda pasti mahu mengalih keluar kelas?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Adakah anda pasti mahu mengalih keluar kelas tanpa mengalih keluar pengguna?"
+
+msgid "Remove the class without removing students"
+msgstr "Alih keluar kelas tanpa mengalih keluar pelajar"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Tetapan ini belum dilaksanakan dalam versi ini."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Disyorkan untuk plugin admin sahaja yang ditunjukkan di kawasan pentadbiran."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Disyorkan untuk plugin yang mesti muncul sebagai alat kursus."
+
+msgid "Displayed above the main page content."
+msgstr "Dipaparkan di atas kandungan laman utama."
+
+msgid "Displayed below the main page content."
+msgstr "Dipaparkan di bawah kandungan laman utama."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Dipaparkan berhampiran bahagian atas cengkerang susun atur utama."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Dipaparkan berhampiran bahagian bawah cengkerang susun atur utama."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Disyorkan untuk plugin terapung atau kekal global yang ditunjukkan sebelum footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Dipaparkan dalam rantau plugin yang dipilih."
+
+msgid "Admin menu"
+msgstr "Menu pentadbir"
+
+msgid "Global regions"
+msgstr "Rantau global"
+
+msgid "No regions assigned"
+msgstr "Tiada rantau yang ditetapkan"
+
+msgid "Plugin regions"
+msgstr "Rantau plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Pilih tempat setiap plugin yang dipasang hendaklah dirender."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Petua: gunakan Ctrl/Cmd untuk memilih pelbagai rantau."
+
+msgid "No installed plugins were found."
+msgstr "Tiada plugin yang dipasang ditemui."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Pilih satu atau lebih rantau untuk plugin ini dalam URL akses semasa."
+
+msgid "Available regions"
+msgstr "Rantau yang tersedia"
+
+msgid "Selected paragraph"
+msgstr "Perenggan yang dipilih"
+
+msgid "Destination folder"
+msgstr "Folder destinasi"
+
+msgid "Generate AI media"
+msgstr "Jana media AI"
+
+msgid "Save and insert"
+msgstr "Simpan dan masukkan"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Penyimpanan hanya disokong apabila penyedia mengembalikan kandungan base64. Jika anda hanya menerima URL, penyimpanan dilumpuhkan untuk mengelakkan pemindahan turun dalam pelayar."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video dijana dengan berjaya, tetapi penyimpanan dilumpuhkan kerana penyedia mengembalikan URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Fail disimpan, tetapi URLnya tidak dapat diselesaikan."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Jana kuiz Aiken daripada topik atau daripada satu dokumen kursus."
+
+msgid "Test from topic"
+msgstr "Ujian daripada topik"
+
+msgid "Test from document"
+msgstr "Ujian daripada dokumen"
+
+msgid "Generate from topic"
+msgstr "Jana daripada topik"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Gunakan petunjuk topik untuk menjana soal selidik Aiken baharu."
+
+msgid "Quiz title"
+msgstr "Tajuk kuiz"
+
+msgid "Generate from document"
+msgstr "Jana daripada dokumen"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Pilih satu dokumen kursus dan jana soalan berdasarkan kandungannya sahaja."
+
+msgid "Selected document"
+msgstr "Dokumen dipilih"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumen dipilih daripada senarai dokumen kursus."
+
+msgid "Choose document"
+msgstr "Pilih dokumen"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Pilihan. Digunakan hanya sebagai petunjuk tambahan untuk AI."
+
+msgid "Select a document"
+msgstr "Pilih dokumen"
 

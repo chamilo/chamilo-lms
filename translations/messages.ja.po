@@ -33748,3 +33748,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "必須フィールド"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "以下のテキストエリア内にタグをコピー＆ペーストでき、各ユーザーに送信する際に動的にその値に置き換えられます。"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "このグループはクラス %s にリンクされています。<br>グループメンバーリストはクラスメンバーに依存し、変更できません。<br>グループのメンバーを追加・削除したい場合は、グループ設定からリンクを解除してください。"
+
+msgid "Link classes to created groups ?"
+msgstr "作成したグループにクラスをリンクしますか？"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "クラスがグループにリンクされている場合、クラスに追加または削除されたユーザーは自動的にグループに追加または削除されます。"
+
+msgid "New groups creation in category %s"
+msgstr "カテゴリ %s での新規グループ作成"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "リンクされたグループのメンバーを変更できないことを警告するメッセージ"
+
+msgid "Remove the group link with the class"
+msgstr "クラスとのグループリンクを解除"
+
+msgid "Linked class"
+msgstr "リンクされたクラス"
+
+msgid "The group is no longer linked to the class"
+msgstr "グループはクラスにリンクされなくなりました"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "クラスに登録された学生とコースの概要"
+
+msgid "Overview students subscribed to the class"
+msgstr "クラスに登録された学生の概要"
+
+msgid "Overview class"
+msgstr "クラスの概要"
+
+msgid "Go back to the list of classes"
+msgstr "クラスのリストに戻る"
+
+msgid "Go back to course classes"
+msgstr "コースのクラスに戻る"
+
+msgid "Users subscribed to the course"
+msgstr "コースに登録されたユーザー"
+
+msgid "Users not subscribed to the course"
+msgstr "コースに未登録のユーザー"
+
+msgid "Users subscribed to the class"
+msgstr "クラスに登録されたユーザー"
+
+msgid "Courses subscribed to the class"
+msgstr "クラスに登録されたコース"
+
+msgid "No user is subscribed to this class"
+msgstr "このクラスに登録されたユーザーはいません"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "このクラスに登録されたユーザーやコースはありません"
+
+msgid "No user are subscribed to this class"
+msgstr "このクラスにユーザーは登録されていません"
+
+msgid "No course are subscribed to this class"
+msgstr "このクラスにコースは登録されていません"
+
+msgid "Are you sure you want to remove the class"
+msgstr "クラスを削除してもよろしいですか"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "クラスを削除してもよろしいですか？"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "ユーザーを削除せずにクラスを削除してもよろしいですか"
+
+msgid "Remove the class without removing students"
+msgstr "学生を削除せずにクラスを削除"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "この設定は本バージョンではまだ実装されていません。"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "管理エリアに表示される管理者専用プラグインに推奨。"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "コースツールとして表示される必要があるプラグイン向けに推奨されます。"
+
+msgid "Displayed above the main page content."
+msgstr "メインページコンテンツの上に表示されます。"
+
+msgid "Displayed below the main page content."
+msgstr "メインページコンテンツの下に表示されます。"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "メインレイアウトシェルの上部近くに表示されます。"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "メインレイアウトシェルの下部近くに表示されます。"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "フッター前に表示されるグローバルなフローティングまたは永続的なプラグイン向けに推奨されます。"
+
+msgid "Displayed in the selected plugin region."
+msgstr "選択されたプラグイン領域に表示されます。"
+
+msgid "Admin menu"
+msgstr "管理者メニュー"
+
+msgid "Global regions"
+msgstr "グローバル領域"
+
+msgid "No regions assigned"
+msgstr "領域が割り当てられていません"
+
+msgid "Plugin regions"
+msgstr "プラグイン領域"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "インストールされた各プラグインをどこにレンダリングするかを選択してください。"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "ヒント: 複数の領域を選択するには Ctrl/Cmd を使用してください。"
+
+msgid "No installed plugins were found."
+msgstr "インストールされたプラグインが見つかりませんでした。"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "現在のアクセスURLで、このプラグインの1つ以上の領域を選択してください。"
+
+msgid "Available regions"
+msgstr "利用可能な領域"
+
+msgid "Selected paragraph"
+msgstr "選択された段落"
+
+msgid "Destination folder"
+msgstr "対象フォルダー"
+
+msgid "Generate AI media"
+msgstr "AIメディアを生成"
+
+msgid "Save and insert"
+msgstr "保存して挿入"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "保存は、プロバイダがbase64コンテンツを返す場合のみサポートされます。URLのみ受け取った場合、ブラウザでのダウンロードを避けるため保存が無効になります。"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ビデオは正常に生成されましたが、プロバイダがURLを返したため保存が無効です。"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "ファイルは保存されましたが、そのURLを解決できませんでした。"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "トピックまたはコースの1つのドキュメントからAikenクイズを生成します。"
+
+msgid "Test from topic"
+msgstr "トピックからテスト"
+
+msgid "Test from document"
+msgstr "ドキュメントからテスト"
+
+msgid "Generate from topic"
+msgstr "トピックから生成"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "トピックのプロンプトを使用して新しいAiken問答を作成します。"
+
+msgid "Quiz title"
+msgstr "クイズタイトル"
+
+msgid "Generate from document"
+msgstr "ドキュメントから生成"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "コースの1つのドキュメントを選択し、その内容のみに基づいて質問を生成します。"
+
+msgid "Selected document"
+msgstr "選択されたドキュメント"
+
+msgid "The document is selected from the course documents list."
+msgstr "ドキュメントはコースドキュメントリストから選択されます。"
+
+msgid "Choose document"
+msgstr "ドキュメントを選択"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "オプション。AIへの追加のヒントとしてのみ使用されます。"
+
+msgid "Select a document"
+msgstr "ドキュメントを選択"
+

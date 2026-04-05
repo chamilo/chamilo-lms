@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:저작권,, no:저작권 없음"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:폴더,, application/msword:MsWord,, application/octet-stream:옥텟 스트림,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:폴더,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:연습,,      simulation:시뮬레이션,,      questionnaire:설문조사,,      diagram:다이어그램,,      figure:그림,,      graph:그래프,,      index:색인,,      slide:슬라이드,,      table:표,,      narrative text:서술 텍스트,,      exam:시험,,      experiment:실험,,      problem statement:문제 설명,,      self assessment:자기 평가,,      lecture:강의"
@@ -33681,4 +33681,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "필수 필드"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "아래 텍스트 영역에 태그를 복사하여 붙여넣을 수 있으며, 사용자별로 각 태그가 동적으로 해당 값으로 대체됩니다."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "이 그룹은 %s 반에 연결되어 있습니다.<br>그룹 멤버 목록은 반 멤버에 따라 달라지며 수정할 수 없습니다.<br>이 그룹의 멤버를 추가 또는 제거하려면 그룹 설정으로 이동하여 이 연결을 끊으십시오."
+
+msgid "Link classes to created groups ?"
+msgstr "생성된 그룹에 반을 연결하시겠습니까?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "반이 그룹에 연결된 경우, 반에 추가되거나 제거된 사용자는 자동으로 그룹에 추가되거나 제거됩니다."
+
+msgid "New groups creation in category %s"
+msgstr "%s 카테고리에서 새 그룹 생성"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "연결된 그룹의 멤버를 수정할 수 없음을 알리는 경고 메시지"
+
+msgid "Remove the group link with the class"
+msgstr "반과의 그룹 연결 제거"
+
+msgid "Linked class"
+msgstr "연결된 반"
+
+msgid "The group is no longer linked to the class"
+msgstr "그룹이 더 이상 반에 연결되지 않습니다"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "반에 등록된 학생 및 강좌 개요"
+
+msgid "Overview students subscribed to the class"
+msgstr "반에 등록된 학생 개요"
+
+msgid "Overview class"
+msgstr "반 개요"
+
+msgid "Go back to the list of classes"
+msgstr "반 목록으로 돌아가기"
+
+msgid "Go back to course classes"
+msgstr "강좌 반으로 돌아가기"
+
+msgid "Users subscribed to the course"
+msgstr "강좌에 등록된 사용자"
+
+msgid "Users not subscribed to the course"
+msgstr "강좌에 등록되지 않은 사용자"
+
+msgid "Users subscribed to the class"
+msgstr "반에 등록된 사용자"
+
+msgid "Courses subscribed to the class"
+msgstr "반에 등록된 강좌"
+
+msgid "No user is subscribed to this class"
+msgstr "이 반에 등록된 사용자가 없습니다"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "이 반에 등록된 사용자나 강좌가 없습니다"
+
+msgid "No user are subscribed to this class"
+msgstr "이 반에 등록된 사용자가 없습니다"
+
+msgid "No course are subscribed to this class"
+msgstr "이 반에 등록된 강좌가 없습니다"
+
+msgid "Are you sure you want to remove the class"
+msgstr "반을 제거하시겠습니까?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "반을 제거하시겠습니까?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "사용자를 제거하지 않고 반을 제거하시겠습니까?"
+
+msgid "Remove the class without removing students"
+msgstr "학생을 제거하지 않고 반 제거"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "이 설정은 이 버전에서 아직 구현되지 않았습니다."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "관리 영역에 표시되는 관리자 전용 플러그인에 권장됩니다."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "강좌 도구로 나타나야 하는 플러그인에 권장됩니다."
+
+msgid "Displayed above the main page content."
+msgstr "메인 페이지 콘텐츠 위에 표시됩니다."
+
+msgid "Displayed below the main page content."
+msgstr "메인 페이지 콘텐츠 아래에 표시됩니다."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "메인 레이아웃 쉘 상단 근처에 표시됩니다."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "메인 레이아웃 쉘 하단 근처에 표시됩니다."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "푸터 전에 표시되는 전역 플로팅 또는 지속 플러그인에 권장됩니다."
+
+msgid "Displayed in the selected plugin region."
+msgstr "선택된 플러그인 영역에 표시됩니다."
+
+msgid "Admin menu"
+msgstr "관리자 메뉴"
+
+msgid "Global regions"
+msgstr "전역 영역"
+
+msgid "No regions assigned"
+msgstr "할당된 영역이 없습니다"
+
+msgid "Plugin regions"
+msgstr "플러그인 영역"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "설치된 각 플러그인이 어디에 렌더링되어야 하는지 선택하세요."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "팁: 여러 영역을 선택하려면 Ctrl/Cmd를 사용하세요."
+
+msgid "No installed plugins were found."
+msgstr "설치된 플러그인이 없습니다."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "현재 접근 URL에서 이 플러그인에 하나 이상의 영역을 선택하세요."
+
+msgid "Available regions"
+msgstr "사용 가능한 영역"
+
+msgid "Selected paragraph"
+msgstr "선택된 단락"
+
+msgid "Destination folder"
+msgstr "대상 폴더"
+
+msgid "Generate AI media"
+msgstr "AI 미디어 생성"
+
+msgid "Save and insert"
+msgstr "저장 및 삽입"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "저장은 제공자가 base64 콘텐츠를 반환할 때만 지원됩니다. URL만 받은 경우 브라우저에서 다운로드를 피하기 위해 저장이 비활성화됩니다."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "비디오가 성공적으로 생성되었으나, 제공자가 URL을 반환했기 때문에 저장이 비활성화되었습니다."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "파일이 저장되었으나, URL을 확인할 수 없습니다."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "주제나 코스 문서 하나에서 Aiken 퀴즈를 생성합니다."
+
+msgid "Test from topic"
+msgstr "주제에서 테스트"
+
+msgid "Test from document"
+msgstr "문서에서 테스트"
+
+msgid "Generate from topic"
+msgstr "주제에서 생성"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "주제 프롬프트를 사용하여 새로운 Aiken 설문지를 생성합니다."
+
+msgid "Quiz title"
+msgstr "퀴즈 제목"
+
+msgid "Generate from document"
+msgstr "문서에서 생성"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "코스 문서 하나를 선택하고 그 내용만 기반으로 질문을 생성합니다."
+
+msgid "Selected document"
+msgstr "선택된 문서"
+
+msgid "The document is selected from the course documents list."
+msgstr "문서는 코스 문서 목록에서 선택됩니다."
+
+msgid "Choose document"
+msgstr "문서 선택"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "선택 사항. AI에 대한 추가 힌트로만 사용됩니다."
+
+msgid "Select a document"
+msgstr "문서 선택"
 

@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Camps obligatoriis"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "I tags si podin copî e incolâ dentri l'àree di test sot e a vignaran substituîs dinamicament cu la lur valôr par ogni utent individualment cuant che si mandin."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Chest grup e leigât a classi %s.<br>La liste des membris dal grup dipindi dai membris dla classi e no si po cambiâ.<br>V dai impiestris dal grup par stâcjh chest leam se vûs zontâ o gjavâ membris par chest grup."
+
+msgid "Link classes to created groups ?"
+msgstr "Leigâ clasîs ai grups creâts ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Se une classi e leigade a un grup, j utents zontâts a ou gjavâts de le classi a son automaticament zontâts a ou gjavâts dal grup."
+
+msgid "New groups creation in category %s"
+msgstr "Creazion di nuôfs grups te categorîe %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Messagi di avîs par avvertî che l'utent no po cambiâ membris di grup leigât"
+
+msgid "Remove the group link with the class"
+msgstr "Gjavâ il leam dal grup cu la classi"
+
+msgid "Linked class"
+msgstr "Classi leigade"
+
+msgid "The group is no longer linked to the class"
+msgstr "Il grup nol è plui leigât a la classi"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Panorame des estudiants e corss iscritîs a la classi"
+
+msgid "Overview students subscribed to the class"
+msgstr "Panorame des estudiants iscritîs a la classi"
+
+msgid "Overview class"
+msgstr "Panorame classi"
+
+msgid "Go back to the list of classes"
+msgstr "Torna a la liste des clasîs"
+
+msgid "Go back to course classes"
+msgstr "Torna ai clasîs dal curs"
+
+msgid "Users subscribed to the course"
+msgstr "Utent iscritîs al curs"
+
+msgid "Users not subscribed to the course"
+msgstr "Utents no iscritûts al curs"
+
+msgid "Users subscribed to the class"
+msgstr "Utents iscritûts a la clas"
+
+msgid "Courses subscribed to the class"
+msgstr "Curs iscritûts a la clas"
+
+msgid "No user is subscribed to this class"
+msgstr "Nissun utent è iscritût a cheste clas"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Nissun utent e nissun curs son iscritûts a cheste clas"
+
+msgid "No user are subscribed to this class"
+msgstr "Nissun utent è iscritût a cheste clas"
+
+msgid "No course are subscribed to this class"
+msgstr "Nissun curs è iscritût a cheste clas"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Si sint sigûr che vuêi gjavâ la clas"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Si sint sigûr che vuêi gjavâ la clas?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Si sint sigûr che vuêi gjavâ la clas senz gjavâ lis utents?"
+
+msgid "Remove the class without removing students"
+msgstr "Gjavâ la clas senz gjavâ lis students"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Cheste impuestazion nol è ancó implementade in cheste version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Consigliât pe plugins solo pe admin mostrats in l'àree di aministrazion."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Consigliât pe plugins che dês devesi comparî come struments dal curs."
+
+msgid "Displayed above the main page content."
+msgstr "Mostrât si su il contenut prinçipâl de pâgine."
+
+msgid "Displayed below the main page content."
+msgstr "Mostrât sot il contenut prinçipâl de pâgine."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Mostrât vichint al vert di la structure prinçipâl."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Mostrât vichint al bas di la structure prinçipâl."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Consigliât pe plugins global flotants o persistents mostrats avant il footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Mostrât in la region dal plugin selezionade."
+
+msgid "Admin menu"
+msgstr "Menu admin"
+
+msgid "Global regions"
+msgstr "Regions globâls"
+
+msgid "No regions assigned"
+msgstr "Nissune region asignade"
+
+msgid "Plugin regions"
+msgstr "Regions dal plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Scealt cuind ogni plugin instalât si deve renderî."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Consij: dopre Ctrl/Cmd pe seleccionar plui regions."
+
+msgid "No installed plugins were found."
+msgstr "Nissun plugin instalât je rivât."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Selet un o plui regions pe chest plugin intun l'URL di acès corent."
+
+msgid "Available regions"
+msgstr "Regions disponibis"
+
+msgid "Selected paragraph"
+msgstr "Paragraf selezionât"
+
+msgid "Destination folder"
+msgstr "Cartiele di destinazion"
+
+msgid "Generate AI media"
+msgstr "Generâ media cu IA"
+
+msgid "Save and insert"
+msgstr "Salvi e insete"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Il salvadi al è suportât dome cuind il fornidôr torna contenut base64. Sei ricevis dome un URL, il salvadi al è disabilitât par evità il descargjament tal browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generât cu sucès, ma il salvadi al è disabilitât parcè che il fornidôr al à tornât un URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Il file al è stât salvât, ma il sô URL nol si è pùt risolvi."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generâ un test Aiken da un argoment o da un ducument dal curs."
+
+msgid "Test from topic"
+msgstr "Test dal argoment"
+
+msgid "Test from document"
+msgstr "Test dal ducument"
+
+msgid "Generate from topic"
+msgstr "Generâ dal argoment"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Doi un prompt dal argoment par generâ un gnûv questionari Aiken."
+
+msgid "Quiz title"
+msgstr "Titel dal test"
+
+msgid "Generate from document"
+msgstr "Generâ dal ducument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Sleze un ducument dal curs e generâ domande basadis sole sui sieu contignûts."
+
+msgid "Selected document"
+msgstr "Ducument selezionât"
+
+msgid "The document is selected from the course documents list."
+msgstr "Il ducument è selezionât de liste des ducuments dal curs."
+
+msgid "Choose document"
+msgstr "Sleze ducument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opzionâl. Doprât dome come indici supplementari par l'IA."
+
+msgid "Select a document"
+msgstr "Sleze un ducument"
+

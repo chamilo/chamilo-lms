@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -33683,4 +33683,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "必填欄位"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "標籤可複製並貼上下方的文字區域，並在發送時動態替換為每個使用者的個別值。"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "此群組已連結至班級 %s。<br>群組成員清單取決於班級成員，無法修改。<br>若要新增或移除此群組成員，請前往群組設定解除此連結。"
+
+msgid "Link classes to created groups ?"
+msgstr "將班級連結至已建立的群組？"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "若班級連結至群組，則新增至或移除自班級的使用者將自動新增至或移除自群組。"
+
+msgid "New groups creation in category %s"
+msgstr "類別 %s 中的新群組建立"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "警告訊息，告知使用者無法修改連結群組成員"
+
+msgid "Remove the group link with the class"
+msgstr "移除群組與班級的連結"
+
+msgid "Linked class"
+msgstr "連結班級"
+
+msgid "The group is no longer linked to the class"
+msgstr "群組不再連結至班級"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "概覽訂閱班級的學生與課程"
+
+msgid "Overview students subscribed to the class"
+msgstr "概覽訂閱班級的學生"
+
+msgid "Overview class"
+msgstr "班級概覽"
+
+msgid "Go back to the list of classes"
+msgstr "返回班級清單"
+
+msgid "Go back to course classes"
+msgstr "返回課程班級"
+
+msgid "Users subscribed to the course"
+msgstr "訂閱課程的使用者"
+
+msgid "Users not subscribed to the course"
+msgstr "未訂閱課程的使用者"
+
+msgid "Users subscribed to the class"
+msgstr "訂閱班級的使用者"
+
+msgid "Courses subscribed to the class"
+msgstr "訂閱班級的課程"
+
+msgid "No user is subscribed to this class"
+msgstr "無使用者訂閱此班級"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "無使用者與課程訂閱此班級"
+
+msgid "No user are subscribed to this class"
+msgstr "無使用者訂閱此班級"
+
+msgid "No course are subscribed to this class"
+msgstr "無課程訂閱此班級"
+
+msgid "Are you sure you want to remove the class"
+msgstr "您確定要移除班級嗎"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "您確定要移除班級嗎？"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "您確定要移除班級但不移除使用者嗎？"
+
+msgid "Remove the class without removing students"
+msgstr "移除班級但不移除學生"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "此設定在本版本中尚未實作。"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "建議用於僅在管理區域顯示的管理員專用外掛。"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "建議用於必須作為課程工具顯示的外掛。"
+
+msgid "Displayed above the main page content."
+msgstr "顯示於主要頁面內容上方。"
+
+msgid "Displayed below the main page content."
+msgstr "顯示於主要頁面內容下方。"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "顯示於主要版面外殼頂部附近。"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "顯示於主要版面外殼底部附近。"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "建議用於在頁尾前顯示的全域浮動或持久外掛。"
+
+msgid "Displayed in the selected plugin region."
+msgstr "顯示於選定的外掛區域。"
+
+msgid "Admin menu"
+msgstr "管理選單"
+
+msgid "Global regions"
+msgstr "全域區域"
+
+msgid "No regions assigned"
+msgstr "未指定區域"
+
+msgid "Plugin regions"
+msgstr "外掛區域"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "選擇每個已安裝外掛應渲染的位置。"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "提示：使用 Ctrl/Cmd 選擇多個區域。"
+
+msgid "No installed plugins were found."
+msgstr "未找到已安裝的外掛。"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "在此存取 URL 中為此外掛選擇一個或多個區域。"
+
+msgid "Available regions"
+msgstr "可用區域"
+
+msgid "Selected paragraph"
+msgstr "已選段落"
+
+msgid "Destination folder"
+msgstr "目的地資料夾"
+
+msgid "Generate AI media"
+msgstr "生成 AI 媒體"
+
+msgid "Save and insert"
+msgstr "儲存並插入"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "僅當提供者返回 base64 內容時才支援儲存。如果僅收到 URL，則停用儲存以避免在瀏覽器中下載。"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "影片生成成功，但因提供者返回 URL 而停用儲存。"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "檔案已儲存，但其 URL 無法解析。"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "從主題或單一課程文件產生 Aiken 測驗。"
+
+msgid "Test from topic"
+msgstr "從主題產生測驗"
+
+msgid "Test from document"
+msgstr "從文件產生測驗"
+
+msgid "Generate from topic"
+msgstr "從主題產生"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "使用主題提示產生新的 Aiken 問卷。"
+
+msgid "Quiz title"
+msgstr "測驗標題"
+
+msgid "Generate from document"
+msgstr "從文件產生"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "選擇一門課程文件，並僅依其內容產生問題。"
+
+msgid "Selected document"
+msgstr "已選文件"
+
+msgid "The document is selected from the course documents list."
+msgstr "文件從課程文件清單中選取。"
+
+msgid "Choose document"
+msgstr "選擇文件"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "選填。僅作為 AI 的額外提示。"
+
+msgid "Select a document"
+msgstr "選擇文件"
 

@@ -33684,3 +33684,195 @@ msgstr "UID EntraID"
 msgid "Required fields"
 msgstr "Các trường bắt buộc"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Các thẻ có thể được sao chép và dán vào vùng văn bản bên dưới và sẽ được thay thế động bằng giá trị của chúng cho từng người dùng riêng lẻ khi gửi."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Nhóm này được liên kết với lớp %s.<br>Danh sách thành viên nhóm phụ thuộc vào thành viên lớp và không thể sửa đổi.<br>Chuyển đến cài đặt nhóm để ngắt liên kết này nếu bạn muốn thêm hoặc xóa thành viên cho nhóm này."
+
+msgid "Link classes to created groups ?"
+msgstr "Liên kết các lớp với các nhóm đã tạo?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Nếu một lớp được liên kết với một nhóm, người dùng được thêm vào hoặc xóa khỏi lớp sẽ tự động được thêm vào hoặc xóa khỏi nhóm."
+
+msgid "New groups creation in category %s"
+msgstr "Tạo nhóm mới trong danh mục %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Thông báo cảnh báo rằng người dùng không thể sửa đổi thành viên của nhóm liên kết"
+
+msgid "Remove the group link with the class"
+msgstr "Xóa liên kết nhóm với lớp"
+
+msgid "Linked class"
+msgstr "Lớp liên kết"
+
+msgid "The group is no longer linked to the class"
+msgstr "Nhóm không còn liên kết với lớp"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Tổng quan học sinh và khóa học đăng ký vào lớp"
+
+msgid "Overview students subscribed to the class"
+msgstr "Tổng quan học sinh đăng ký vào lớp"
+
+msgid "Overview class"
+msgstr "Tổng quan lớp"
+
+msgid "Go back to the list of classes"
+msgstr "Quay lại danh sách các lớp"
+
+msgid "Go back to course classes"
+msgstr "Quay lại các lớp khóa học"
+
+msgid "Users subscribed to the course"
+msgstr "Người dùng đăng ký vào khóa học"
+
+msgid "Users not subscribed to the course"
+msgstr "Người dùng chưa đăng ký vào khóa học"
+
+msgid "Users subscribed to the class"
+msgstr "Người dùng đăng ký vào lớp"
+
+msgid "Courses subscribed to the class"
+msgstr "Các khóa học đăng ký vào lớp"
+
+msgid "No user is subscribed to this class"
+msgstr "Không có người dùng nào đăng ký vào lớp này"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Không có người dùng và không có khóa học nào đăng ký vào lớp này"
+
+msgid "No user are subscribed to this class"
+msgstr "Không có người dùng nào đăng ký vào lớp này"
+
+msgid "No course are subscribed to this class"
+msgstr "Không có khóa học nào đăng ký vào lớp này"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Bạn có chắc chắn muốn xóa lớp không"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Bạn có chắc chắn muốn xóa lớp không?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Bạn có chắc chắn muốn xóa lớp mà không xóa người dùng không?"
+
+msgid "Remove the class without removing students"
+msgstr "Xóa lớp mà không xóa học sinh"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Cài đặt này chưa được triển khai trong phiên bản này."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Khuyến nghị cho các plugin chỉ dành cho quản trị viên hiển thị trong khu vực quản trị."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Khuyến nghị cho các plugin phải xuất hiện dưới dạng công cụ khóa học."
+
+msgid "Displayed above the main page content."
+msgstr "Hiển thị phía trên nội dung trang chính."
+
+msgid "Displayed below the main page content."
+msgstr "Hiển thị bên dưới nội dung trang chính."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Hiển thị gần đầu phần vỏ bố cục chính."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Hiển thị gần cuối phần vỏ bố cục chính."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Khuyến nghị cho các plugin nổi toàn cục hoặc liên tục hiển thị trước chân trang."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Hiển thị trong vùng plugin đã chọn."
+
+msgid "Admin menu"
+msgstr "Menu quản trị"
+
+msgid "Global regions"
+msgstr "Vùng toàn cục"
+
+msgid "No regions assigned"
+msgstr "Không có vùng nào được gán"
+
+msgid "Plugin regions"
+msgstr "Vùng plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Chọn nơi render từng plugin đã cài đặt."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Mẹo: sử dụng Ctrl/Cmd để chọn nhiều vùng."
+
+msgid "No installed plugins were found."
+msgstr "Không tìm thấy plugin nào đã cài đặt."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Chọn một hoặc nhiều vùng cho plugin này trong URL truy cập hiện tại."
+
+msgid "Available regions"
+msgstr "Vùng có sẵn"
+
+msgid "Selected paragraph"
+msgstr "Đoạn đã chọn"
+
+msgid "Destination folder"
+msgstr "Thư mục đích"
+
+msgid "Generate AI media"
+msgstr "Tạo phương tiện AI"
+
+msgid "Save and insert"
+msgstr "Lưu và chèn"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Chỉ hỗ trợ lưu khi nhà cung cấp trả về nội dung base64. Nếu chỉ nhận được URL, lưu bị vô hiệu hóa để tránh tải xuống trong trình duyệt."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video được tạo thành công, nhưng lưu bị vô hiệu hóa vì nhà cung cấp trả về URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Tệp đã được lưu, nhưng URL của nó không thể được giải quyết."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Tạo bài kiểm tra Aiken từ một chủ đề hoặc từ một tài liệu khóa học."
+
+msgid "Test from topic"
+msgstr "Kiểm tra từ chủ đề"
+
+msgid "Test from document"
+msgstr "Kiểm tra từ tài liệu"
+
+msgid "Generate from topic"
+msgstr "Tạo từ chủ đề"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Sử dụng gợi ý chủ đề để tạo bảng câu hỏi Aiken mới."
+
+msgid "Quiz title"
+msgstr "Tiêu đề bài kiểm tra"
+
+msgid "Generate from document"
+msgstr "Tạo từ tài liệu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Chọn một tài liệu khóa học và tạo câu hỏi chỉ dựa trên nội dung của nó."
+
+msgid "Selected document"
+msgstr "Tài liệu đã chọn"
+
+msgid "The document is selected from the course documents list."
+msgstr "Tài liệu được chọn từ danh sách tài liệu khóa học."
+
+msgid "Choose document"
+msgstr "Chọn tài liệu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Tùy chọn. Chỉ sử dụng như gợi ý bổ sung cho AI."
+
+msgid "Select a document"
+msgstr "Chọn một tài liệu"
+

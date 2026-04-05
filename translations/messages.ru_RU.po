@@ -33685,3 +33685,195 @@ msgstr "UID EntraID"
 msgid "Required fields"
 msgstr "Обязательные поля"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Теги можно копировать и вставлять в текстовую область ниже, они будут динамически заменены на их значение для каждого пользователя индивидуально при отправке."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Эта группа связана с классом %s.<br>Список участников группы зависит от участников класса и не может быть изменен.<br>Перейдите в настройки группы, чтобы разорвать эту связь, если вы хотите добавить или удалить участников в этой группе."
+
+msgid "Link classes to created groups ?"
+msgstr "Связать классы с созданными группами?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Если класс связан с группой, пользователи, добавленные в класс или удаленные из него, автоматически добавляются в группу или удаляются из нее."
+
+msgid "New groups creation in category %s"
+msgstr "Создание новых групп в категории %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Предупреждающее сообщение о том, что пользователь не может изменять участников связанной группы"
+
+msgid "Remove the group link with the class"
+msgstr "Удалить связь группы с классом"
+
+msgid "Linked class"
+msgstr "Связанный класс"
+
+msgid "The group is no longer linked to the class"
+msgstr "Группа больше не связана с классом"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Обзор студентов и курсов, подписанных на класс"
+
+msgid "Overview students subscribed to the class"
+msgstr "Обзор студентов, подписанных на класс"
+
+msgid "Overview class"
+msgstr "Обзор класса"
+
+msgid "Go back to the list of classes"
+msgstr "Вернуться к списку классов"
+
+msgid "Go back to course classes"
+msgstr "Вернуться к классам курса"
+
+msgid "Users subscribed to the course"
+msgstr "Пользователи, подписанные на курс"
+
+msgid "Users not subscribed to the course"
+msgstr "Пользователи, не подписанные на курс"
+
+msgid "Users subscribed to the class"
+msgstr "Пользователи, подписанные на класс"
+
+msgid "Courses subscribed to the class"
+msgstr "Курсы, подписанные на класс"
+
+msgid "No user is subscribed to this class"
+msgstr "Ни один пользователь не подписан на этот класс"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ни один пользователь и ни один курс не подписаны на этот класс"
+
+msgid "No user are subscribed to this class"
+msgstr "Ни один пользователь не подписан на этот класс"
+
+msgid "No course are subscribed to this class"
+msgstr "Ни один курс не подписан на этот класс"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Вы уверены, что хотите удалить класс?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Вы уверены, что хотите удалить класс?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Вы уверены, что хотите удалить класс без удаления пользователей?"
+
+msgid "Remove the class without removing students"
+msgstr "Удалить класс без удаления студентов"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Эта настройка еще не реализована в этой версии."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Рекомендуется для плагинов только для администратора, отображаемых в административной области."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Рекомендуется для плагинов, которые должны отображаться как инструменты курса."
+
+msgid "Displayed above the main page content."
+msgstr "Отображается над основным содержимым страницы."
+
+msgid "Displayed below the main page content."
+msgstr "Отображается под основным содержимым страницы."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Отображается в верхней части основной оболочки макета."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Отображается в нижней части основной оболочки макета."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Рекомендуется для глобальных плавающих или постоянных плагинов, отображаемых перед нижним колонтитулом."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Отображается в выбранной области плагина."
+
+msgid "Admin menu"
+msgstr "Административное меню"
+
+msgid "Global regions"
+msgstr "Глобальные регионы"
+
+msgid "No regions assigned"
+msgstr "Регионы не назначены"
+
+msgid "Plugin regions"
+msgstr "Регионы плагинов"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Выберите, где должен отображаться каждый установленный плагин."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Подсказка: используйте Ctrl/Cmd для выбора нескольких регионов."
+
+msgid "No installed plugins were found."
+msgstr "Установленные плагины не найдены."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Выберите один или несколько регионов для этого плагина в текущем URL доступа."
+
+msgid "Available regions"
+msgstr "Доступные регионы"
+
+msgid "Selected paragraph"
+msgstr "Выбранный абзац"
+
+msgid "Destination folder"
+msgstr "Папка назначения"
+
+msgid "Generate AI media"
+msgstr "Генерировать медиа ИИ"
+
+msgid "Save and insert"
+msgstr "Сохранить и вставить"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Сохранение поддерживается только когда провайдер возвращает содержимое в формате base64. Если получен только URL, сохранение отключено, чтобы избежать загрузки в браузере."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Видео успешно сгенерировано, но сохранение отключено, поскольку провайдер вернул URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Файл сохранён, но его URL не удалось разрешить."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Создать тест Aiken из темы или из одного документа курса."
+
+msgid "Test from topic"
+msgstr "Тест из темы"
+
+msgid "Test from document"
+msgstr "Тест из документа"
+
+msgid "Generate from topic"
+msgstr "Создать из темы"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Используйте подсказку темы для создания нового теста Aiken."
+
+msgid "Quiz title"
+msgstr "Название теста"
+
+msgid "Generate from document"
+msgstr "Создать из документа"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Выберите один документ курса и создайте вопросы только на основе его содержимого."
+
+msgid "Selected document"
+msgstr "Выбранный документ"
+
+msgid "The document is selected from the course documents list."
+msgstr "Документ выбран из списка документов курса."
+
+msgid "Choose document"
+msgstr "Выбрать документ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Необязательно. Используется только как дополнительная подсказка для ИИ."
+
+msgid "Select a document"
+msgstr "Выберите документ"
+

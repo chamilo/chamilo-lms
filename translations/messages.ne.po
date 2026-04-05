@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "आवश्यक क्षेत्रहरू"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "निम्नको टेक्स्ट क्षेत्रभित्र ट्यागहरू कपी र पेस्ट गर्न सकिन्छ र तिनीहरूलाई प्रत्येक प्रयोगकर्ताको लागि व्यक्तिगत रूपमा तिनको मानले गतिशील रूपमा प्रतिस्थापन गरिनेछ जब पठाइन्छ।"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "यो समूह %s कक्षासँग जोडिएको छ।<br>समूह सदस्य सूची कक्षा सदस्यहरूमा निर्भर हुन्छ र परिमार्जन गर्न सकिँदैन।<br>यदि तपाईं यो समूहका लागि सदस्यहरू थप्न वा हटाउन चाहनुहुन्छ भने समूह सेटिङहरूमा जानुहोस् र यो लिङ्क तोड्नुहोस्।"
+
+msgid "Link classes to created groups ?"
+msgstr "निर्मित समूहहरूसँग कक्षाहरू लिङ्क गर्नुहोस् ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "यदि कुनै कक्षा समूहसँग लिङ्क गरिएको छ भने, कक्षामा थपिएका वा हटाइएका प्रयोगकर्ताहरू स्वतः समूहमा थपिएका वा हटाइएका हुन्छन्।"
+
+msgid "New groups creation in category %s"
+msgstr "%s श्रेणीमा नयाँ समूहहरू निर्माण"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "जोडिएको समूहका सदस्यहरूलाई प्रयोगकर्ताले परिमार्जन गर्न नसक्ने चेतावनी सन्देश"
+
+msgid "Remove the group link with the class"
+msgstr "कक्षासँग समूह लिङ्क हटाउनुहोस्"
+
+msgid "Linked class"
+msgstr "जोडिएको कक्षा"
+
+msgid "The group is no longer linked to the class"
+msgstr "समूह अब कक्षासँग जोडिएको छैन"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "कक्षामा नामांकित विद्यार्थीहरू र कोर्सहरूको अवलोकन"
+
+msgid "Overview students subscribed to the class"
+msgstr "कक्षामा नामांकित विद्यार्थीहरूको अवलोकन"
+
+msgid "Overview class"
+msgstr "कक्षाको अवलोकन"
+
+msgid "Go back to the list of classes"
+msgstr "कक्षाहरूको सूचीमा फर्कनुहोस्"
+
+msgid "Go back to course classes"
+msgstr "कोर्स कक्षाहरूमा फर्कनुहोस्"
+
+msgid "Users subscribed to the course"
+msgstr "कोर्समा नामांकित प्रयोगकर्ताहरू"
+
+msgid "Users not subscribed to the course"
+msgstr "कोर्समा नामांकित नभएका प्रयोगकर्ताहरू"
+
+msgid "Users subscribed to the class"
+msgstr "कक्षामा नामांकित प्रयोगकर्ताहरू"
+
+msgid "Courses subscribed to the class"
+msgstr "कक्षामा नामांकित कोर्सहरू"
+
+msgid "No user is subscribed to this class"
+msgstr "यो कक्षामा कुनै प्रयोगकर्ता नामांकित छैन"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "यो कक्षामा कुनै प्रयोगकर्ता वा कोर्स नामांकित छैन"
+
+msgid "No user are subscribed to this class"
+msgstr "यो कक्षामा कुनै प्रयोगकर्ता नामांकित छैनन्"
+
+msgid "No course are subscribed to this class"
+msgstr "यो कक्षामा कुनै कोर्स नामांकित छैनन्"
+
+msgid "Are you sure you want to remove the class"
+msgstr "के तपाईं कक्षा हटाउन चाहनुहुन्छ भनेर निश्चित हुनुहुन्छ"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "के तपाईं कक्षा हटाउन चाहनुहुन्छ भनेर निश्चित हुनुहुन्छ?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "के तपाईं प्रयोगकर्ताहरू हटाउन नचाहेर कक्षा हटाउन चाहनुहुन्छ भनेर निश्चित हुनुहुन्छ?"
+
+msgid "Remove the class without removing students"
+msgstr "विद्यार्थीहरू हटाउन नचाहेर कक्षा हटाउनुहोस्"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "यो सेटिङ यो संस्करणमा अझै कार्यान्वयन गरिएको छैन।"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "प्रशासन क्षेत्रमा देखाइएका प्रशासक-मात्र प्लगइनहरूका लागि सिफारिस गरिएको।"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "पाठ्यक्रम उपकरणको रूपमा देखिनुपर्ने प्लगइनहरूको लागि सिफारिस गरिएको।"
+
+msgid "Displayed above the main page content."
+msgstr "मुख्य पृष्ठ सामग्रीभन्दा माथि प्रदर्शित।"
+
+msgid "Displayed below the main page content."
+msgstr "मुख्य पृष्ठ सामग्रीभन्दा तल प्रदर्शित।"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "मुख्य लेआउट शेलको माथिल्लो भाग नजिक प्रदर्शित।"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "मुख्य लेआउट शेलको तल्लो भाग नजिक प्रदर्शित।"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "फुटर अघि देखाइने ग्लोबल फ्लोटिङ वा स्थायी प्लगइनहरूको लागि सिफारिस गरिएको।"
+
+msgid "Displayed in the selected plugin region."
+msgstr "चयनित प्लगइन क्षेत्रमा प्रदर्शित।"
+
+msgid "Admin menu"
+msgstr "प्रशासक मेनु"
+
+msgid "Global regions"
+msgstr "ग्लोबल क्षेत्रहरू"
+
+msgid "No regions assigned"
+msgstr "कुनै क्षेत्र नियुक्त गरिएको छैन"
+
+msgid "Plugin regions"
+msgstr "प्लगइन क्षेत्रहरू"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "प्रत्येक स्थापित प्लगइन कहाँ रेन्डर गर्नुपर्छ भनेर छान्नुहोस्।"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "सुझाव: धेरै क्षेत्रहरू चयन गर्न Ctrl/Cmd प्रयोग गर्नुहोस्।"
+
+msgid "No installed plugins were found."
+msgstr "कुनै स्थापित प्लगइन फेला परेन।"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "वर्तमान पहुँच URL मा यो प्लगइनको लागि एक वा बढी क्षेत्रहरू चयन गर्नुहोस्।"
+
+msgid "Available regions"
+msgstr "उपलब्ध क्षेत्रहरू"
+
+msgid "Selected paragraph"
+msgstr "चयनित अनुच्छेद"
+
+msgid "Destination folder"
+msgstr "गन्तव्य फोल्डर"
+
+msgid "Generate AI media"
+msgstr "AI मिडिया उत्पन्न गर्नुहोस्"
+
+msgid "Save and insert"
+msgstr "संग्रह गर्नुहोस् र सम्मिलित गर्नुहोस्"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "प्रोभाइडरले base64 सामग्री फर्काउँदा मात्र संग्रह समर्थित छ। यदि तपाईंले केवल URL प्राप्त गर्नुभयो भने, ब्राउजरमा डाउनलोड नगर्न बचाउन संग्रह निष्क्रिय छ।"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "भिडियो सफलतापूर्वक उत्पन्न भयो, तर प्रोभाइडरले URL फर्काएकाले संग्रह निष्क्रिय छ।"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "फाइल संग्रहित भयो, तर यसको URL समाधान गर्न सकिएन।"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "विषय वा एक कोर्स दस्तवेजबाट Aiken क्विज उत्पन्न गर्नुहोस्।"
+
+msgid "Test from topic"
+msgstr "विषयबाट परीक्षण"
+
+msgid "Test from document"
+msgstr "दस्तवेजबाट परीक्षण"
+
+msgid "Generate from topic"
+msgstr "विषयबाट उत्पन्न गर्नुहोस्"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "नयाँ Aiken प्रश्नावली उत्पन्न गर्न विषय प्रोम्प्ट प्रयोग गर्नुहोस्।"
+
+msgid "Quiz title"
+msgstr "क्विज शीर्षक"
+
+msgid "Generate from document"
+msgstr "दस्तवेजबाट उत्पन्न गर्नुहोस्"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "एक कोर्स दस्तवेज चयन गर्नुहोस् र यसको सामग्रीमा आधारित प्रश्नहरू उत्पन्न गर्नुहोस्।"
+
+msgid "Selected document"
+msgstr "चयनित दस्तवेज"
+
+msgid "The document is selected from the course documents list."
+msgstr "दस्तवेज कोर्स दस्तवेज सूचीबाट चयन गरिएको छ।"
+
+msgid "Choose document"
+msgstr "दस्तवेज चयन गर्नुहोस्"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "वैकल्पिक। AI को लागि अतिरिक्त संकेतको रूपमा मात्र प्रयोग गरिन्छ।"
+
+msgid "Select a document"
+msgstr "दस्तवेज चयन गर्नुहोस्"
+

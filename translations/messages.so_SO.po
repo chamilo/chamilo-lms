@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Goobaha loo baahan yahay"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags-ku waxaa lagu koobiyey oo lagu dhigi karaa aagga qoraalka hoose waxayna si firfircoon isu beddeli doonaan qiimahooda isticmaale kasta si gaar ah marka la dirayo."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Kooxdani waxay ku xidhan tahay fasalka %s.<br>Liiska xubnaha kooxdu waxay ku xidhan tahay xubnaha fasalka oo lama beddeli karo.<br>Tag goosadka kooxda si aad u jebiso xidhiidhkan haddii aad rabto inaad ku darto ama ka saarto xubno kooxdan."
+
+msgid "Link classes to created groups ?"
+msgstr "Xidhiidh fasallada kooxaha la abuuray?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Haddii fasal uu ku xidhan yahay koox, isticmaalka lagu daro ama laga saaro fasalka si toos ah ayaa loogu dari doonaa ama laga saari doonaa kooxda."
+
+msgid "New groups creation in category %s"
+msgstr "Abuurista kooxo cusub ee qaybta %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Farriinta digniinta ee ku wargalinaysa in isticmaaluhu uusan beddeli karin xubnaha kooxda ku xidhan"
+
+msgid "Remove the group link with the class"
+msgstr "Ka saar xidhiidhka kooxda ee fasalka"
+
+msgid "Linked class"
+msgstr "Fasal xidhan"
+
+msgid "The group is no longer linked to the class"
+msgstr "Kooxdu mar dambe kuma xidhnayn fasalka"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Ogeysiis ardayda iyo koorsooyinka la isticmaalo fasalka"
+
+msgid "Overview students subscribed to the class"
+msgstr "Ogeysiis ardayda la isticmaalo fasalka"
+
+msgid "Overview class"
+msgstr "Ogeysiis fasal"
+
+msgid "Go back to the list of classes"
+msgstr "Ku noqo liiska fasallada"
+
+msgid "Go back to course classes"
+msgstr "Ku noqo fasallada koorsada"
+
+msgid "Users subscribed to the course"
+msgstr "Isticmaale yaqay ku qornaa koorsada"
+
+msgid "Users not subscribed to the course"
+msgstr "Isticmaale yaqay aan ku qornayn koorsada"
+
+msgid "Users subscribed to the class"
+msgstr "Isticmaale yaqay ku qornaa fasalka"
+
+msgid "Courses subscribed to the class"
+msgstr "Koorsadyada ku qornaa fasalka"
+
+msgid "No user is subscribed to this class"
+msgstr "Ma jiro isticmaale ku qornayn fasalkaas"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ma jiro isticmaale iyo koorsad ku qornayn fasalkaas"
+
+msgid "No user are subscribed to this class"
+msgstr "Ma jiraan isticmaale ku qornayn fasalkaas"
+
+msgid "No course are subscribed to this class"
+msgstr "Ma jiraan koorsado ku qornayn fasalkaas"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ma hubtaa in aad rabto in aad tirtirto fasalka"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ma hubtaa in aad rabto in aad tirtirto fasalka?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ma hubtaa in aad rabto in aad tirtirto fasalka iyada oo aan tirtirin isticmaale?"
+
+msgid "Remove the class without removing students"
+msgstr "Tirtir fasalka iyada oo aan tirtirin ardayda"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Dejintan wali laguma dhaqan gelin noocaas."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Waxaa lagu talinayaa ku-dawladaha kaliya ee lagu muujiyo aagga maamulka."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Waxaa lagu talinayaa ku-dawladaha ee ay tahay inay u muuqdaan qalabka koorsada."
+
+msgid "Displayed above the main page content."
+msgstr "Waxaa lagu muujiyaa korka waxyaabaha bogga weyn."
+
+msgid "Displayed below the main page content."
+msgstr "Waxaa lagu muujiyaa hoosta waxyaabaha bogga weyn."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Waxaa lagu muujiyaa meel u dhow sare ee qaabka weyn."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Waxaa lagu muujiyaa meel u dhow hoos ee qaabka weyn."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Waxaa lagu talinayaa ku-dawladaha guud ee sabbayn ama joogta ah ee lagu muujiyo ka hor footer-ka."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Waxaa lagu muujiyaa gobolka ku-dawladaha la doortay."
+
+msgid "Admin menu"
+msgstr "Menu maamulka"
+
+msgid "Global regions"
+msgstr "Gobollada guud"
+
+msgid "No regions assigned"
+msgstr "Ma jiraan gobolo la qoray"
+
+msgid "Plugin regions"
+msgstr "Gobollada ku-dawladaha"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Dooro meesha uu ku-dawlad kasta oo la rakibay uu ka muuqdo."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tilmaam: isticmaal Ctrl/Cmd si aad u doorato gobolo badan."
+
+msgid "No installed plugins were found."
+msgstr "Ma jiraan ku-dawlad rakiban."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Dooro hal ama in ka badan gobolo ku-dawladkan ee URL-ka gelitaanka hadda."
+
+msgid "Available regions"
+msgstr "Gobollada la heli karo"
+
+msgid "Selected paragraph"
+msgstr "Cutubka la doortay"
+
+msgid "Destination folder"
+msgstr "Xerada goobta"
+
+msgid "Generate AI media"
+msgstr "Soosaar warbaahinta AI"
+
+msgid "Save and insert"
+msgstr "Kaydi oo gelin"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Kaydinta waxaa lagu taageero oo keliya marka bixiyuhu soo celiyo waxyaabaha base64. Haddii aad heshay URL kaliya, kaydintu waa la joojiyay si looga fogaado soo dejinta biraawsarka."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Fiidiyowgu si guul leh ayaa loo soo saaray, laakiin kaydintu waa la joojiyay sababtoo ah bixiyuhu soo celiyay URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Faylka waa la kaydiyay, laakiin URL-kiisa lama xallin karin."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ka soo saar imtixaan Aiken mawduuc ama hal dukumenti koorska ah."
+
+msgid "Test from topic"
+msgstr "Imtixaan ka soo bax mawduuca"
+
+msgid "Test from document"
+msgstr "Imtixaan ka soo bax dukumentiga"
+
+msgid "Generate from topic"
+msgstr "Ka soo saar mawduuca"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Isticmaal tilmaamaha mawduuca si aad u samayso su'aalo cusub oo Aiken ah."
+
+msgid "Quiz title"
+msgstr "Ciwaanka imtixaanka"
+
+msgid "Generate from document"
+msgstr "Ka soo saar dukumentiga"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Dooro hal dukumenti koorska ah oo soo saar su'aalo ku salaysan waxa ku jira oo keliya."
+
+msgid "Selected document"
+msgstr "Dukumentiga la doortay"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dukumentiga waxa laga doortay liiska dukumentiyada koorska."
+
+msgid "Choose document"
+msgstr "Dooro dukumentiga"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Ikhtiyaari. Waxa loo isticmaalaa oo keliya sida tilmaamo dheeraad ah oo AI ah."
+
+msgid "Select a document"
+msgstr "Dooro dukumentiga"
+

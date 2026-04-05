@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "လိုအပ်သော ဖွဲ့စည်းမှုများ"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "တံဆိပ်များကို အောက်ပါ စာသားဧရိယာထဲသို့ မိတ္တူကူးယူ ကပ်လို့ရပြီး ပေးပို့ချိန်တွင် တစ်ဦးချင်း အသုံးပြုသူတစ်ဦးစီ၏ တန်ဖိုးဖြင့် အလိုအလျောက် အစားထိုးပါလိမ့်မည်။"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "ဤအုပ်စုသည် အတန်း %s နှင့် ချိတ်ဆက်ထားသည်။<br>အုပ်စုအဖွဲ့ဝင်စာရင်းသည် အတန်းအဖွဲ့ဝင်များပေါ်တွင် မူတည်ပြီး ပြုပြင်လို့မရပါ။<br>အုပ်စုအတွက် အဖွဲ့ဝင်များ ထပ်မံထည့်သွင်း သို့မဟုတ် ဖယ်ရှားလိုပါက အုပ်စုဆက်တင်များသို့ သွားပြီး ဤချိတ်ဆက်မှုကို ဖြတ်ပါ။"
+
+msgid "Link classes to created groups ?"
+msgstr "ဖန်တီးထားသော အုပ်စုများနှင့် အတန်းများကို ချိတ်ဆက်မလား။"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "အတန်းတစ်ခုကို အုပ်စုတစ်ခုနှင့် ချိတ်ဆက်ထားပါက အတန်းတွင် ထည့်သွင်းသော သို့မဟုတ် ဖယ်ရှားထားသော အသုံးပြုသူများကို အုပ်စုမှ အလိုအလျောက် ထည့်သွင်း သို့မဟုတ် ဖယ်ရှားပါမည်။"
+
+msgid "New groups creation in category %s"
+msgstr "%s အမျိုးအစားတွင် အုပ်စု အသစ်များ ဖန်တီးခြင်း"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "ချိတ်ဆက်ထားသော အုပ်စု၏ အဖွဲ့ဝင်များကို ပြုပြင်လို့ မရဟု သတိပေးရန် သတိပေးစာတို"
+
+msgid "Remove the group link with the class"
+msgstr "အတန်းနှင့် အုပ်စု ချိတ်ဆက်မှုကို ဖယ်ရှားပါ"
+
+msgid "Linked class"
+msgstr "ချိတ်ဆက်ထားသော အတန်း"
+
+msgid "The group is no longer linked to the class"
+msgstr "အုပ်စုသည် အတန်းနှင့် မချိတ်ဆက်တော့�ါ"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "အတန်းသို့ စာရင်းသွင်းထားသော ကျောင်းသားနှင့် သင်တန်းများ ခြုံငုံသုံးသပ်ချက်"
+
+msgid "Overview students subscribed to the class"
+msgstr "အတန်းသို့ စာရင်းသွင်းထားသော ကျောင်းသားများ ခြုံငုံသုံးသပ်ချက်"
+
+msgid "Overview class"
+msgstr "အတန်း ခြုံငုံသုံးသပ်ချက်"
+
+msgid "Go back to the list of classes"
+msgstr "အတန်းများ စာရင်းသို့ ပြန်သွားပါ"
+
+msgid "Go back to course classes"
+msgstr "သင်တန်း အတန်းများသို့ ပြန်သွားပါ"
+
+msgid "Users subscribed to the course"
+msgstr "သင်တန်းသို့ စာရင်းသွင်းထားသော အသုံးပြုသူများ"
+
+msgid "Users not subscribed to the course"
+msgstr "သင်တန်းသို့ စာရင်းမသွင်းထားသော အသုံးပြုသူများ"
+
+msgid "Users subscribed to the class"
+msgstr "အတန်းသို့ စာရင်းသွင်းထားသော အသုံးပြုသူများ"
+
+msgid "Courses subscribed to the class"
+msgstr "အတန်းသို့ စာရင်းသွင်းထားသော သင်တန်းများ"
+
+msgid "No user is subscribed to this class"
+msgstr "ဤအတန်းသို့ အသုံးပြုသူ မည်သူမျှ စာရင်းမသွင်းထားပါ"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "ဤအတန်းသို့ အသုံးပြုသူ သို့မဟုတ် သင်တန်း မည်သည့်တစ်ခုမျှ စာရင်းမသွင်းထားပါ"
+
+msgid "No user are subscribed to this class"
+msgstr "ဤအတန်းသို့ အသုံးပြုသူ မည်သူမျှ စာရင်းမသွင်းထားပါ"
+
+msgid "No course are subscribed to this class"
+msgstr "ဤအတန်းသို့ သင်တန်း မည်သည့်တစ်ခုမျှ စာရင်းမသွင်းထားပါ"
+
+msgid "Are you sure you want to remove the class"
+msgstr "အတန်းကို ဖယ်ရှားလိုက်မှာ သေချာပါသလား"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "အတန်းကို ဖယ်ရှားလိုက်မှာ သေချာပါသလား။"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "အသုံးပြုသူများကို မဖယ်ရှားဘဲ အတန်းကို ဖယ်ရှားလိုက်မှာ သေချာပါသလား"
+
+msgid "Remove the class without removing students"
+msgstr "ကျောင်းသားများကို မဖယ်ရှားဘဲ အတန်းကို ဖယ်ရှားပါ"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "ဤဆက်တင်ကို ဤဗားရှင်းတွင် မဖော်ဆောင်ရသေးပါ။"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "အုပ်ချုပ်ရေးဧရိယာတွင် ပြသသော အုပ်ချုပ်ရေးအတွက်သာ ပလပ်အင်များအတွက် အကြံပြုထားသည်။"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "သင်တန်းကိရိယာများအနေဖြင့် ပေါ်လာရမည့် ပလပ်အင်များအတွက် အကြံပြုထားသည်။"
+
+msgid "Displayed above the main page content."
+msgstr "အဓိကစာမျက်နှာအကြောင်းအရာအပေါ်တွင် ပြသထားသည်။"
+
+msgid "Displayed below the main page content."
+msgstr "အဓိကစာမျက်နှာအကြောင်းအရာအောက်တွင် ပြသထားသည်။"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "အဓိက အပြင်အဆင်ခွံထည့်မှု၏ ထိပ်ပိုင်းအနီးတွင် ပြသထားသည်။"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "အဓိက အပြင်အဆင်ခွံထည့်မှု၏ အောက်ခြေပိုင်းအနီးတွင် ပြသထားသည်။"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "အောက်ခြေပိုင်းမတိုင်မီ ပြသသော ကမ်းလှမ်းသော သို့မဟုတ် တည်တံ့သော ပလပ်အင်များအတွက် အကြံပြုထားသည်။"
+
+msgid "Displayed in the selected plugin region."
+msgstr "ရွေးချယ်ထားသော ပလပ်အင်ဧရိယာတွင် ပြသထားသည်။"
+
+msgid "Admin menu"
+msgstr "အုပ်ချုပ်ရေး မီနူး"
+
+msgid "Global regions"
+msgstr "ကမ္ဘာလုံးဆိုင်ရာ ဧရိယာများ"
+
+msgid "No regions assigned"
+msgstr "ဧရိယာ မထားခိုးရှင်းပါ"
+
+msgid "Plugin regions"
+msgstr "ပလပ်အင်ဧရိယာများ"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "ထည့်သွင်းထားသော ပလပ်အင်တစ်ခုစီကို မည်မျှတွင် ဖော်ပြရမည်ကို ရွေးချယ်ပါ။"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "အကြံပြုချက်။ ဧရိယာများစွာ ရွေးချယ်ရန် Ctrl/Cmd ကို အသုံးပြုပါ။"
+
+msgid "No installed plugins were found."
+msgstr "ထည့်သွင်းထားသော ပလပ်အင်များ မတွေ့ပါ။"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "လက်ရှိ အသုံးပြုမှု URL တွင် ဤပလပ်အင်အတွက် ဧရိယာ တစ်ခု သို့မဟုတ် များစွာ ရွေးချယ်ပါ။"
+
+msgid "Available regions"
+msgstr "ရရှိနိုင်သော ဧရိယာများ"
+
+msgid "Selected paragraph"
+msgstr "ရွေးချယ်ထားသော စာပိုဒ်"
+
+msgid "Destination folder"
+msgstr "ဦးတည်ရာဖိုင်တွဲ"
+
+msgid "Generate AI media"
+msgstr "AI မီဒီယာ ထုတ်လုပ်ပါ"
+
+msgid "Save and insert"
+msgstr "သိမ်းဆည်းပြီး ထည့်သွင်းပါ"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "base64 အကြောင်းအရာကို ပေးသူက ပြန်ပေးလျှင် သိမ်းဆည်းမှု ပံ့ပိုးထားသည်။ URL သာ ရရှိခဲ့ပါက ဘရောက်ဆာ၌ ဒေါင်းလုဒ်လုပ်ရန် ရှောင်ရှားရန် သိမ်းဆည်းမှု ပိတ်ထားသည်။"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ဗီဒီယိုကို အောင်မြင်စွာ ထုတ်လုပ်ပြီး၊ ပေးသူက URL ပြန်ပေးလို့ သိမ်းဆည်းမှု ပိတ်ထားပါတယ်။"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "ဖိုင်ကို သိမ်းဆည်းပြီး၊ သူ့ရဲ့ URL ကို ဖြေရှင်းလို့ မရပါ။"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "အကြောင်းအရာ သို့မဟုတ် သင်တန်းစာရွက်စာတစ်ခုမှ Aiken ဉာဏ်စမ်းစစ်ဖြေစာမေးပွဲ ထုတ်လုပ်ပါ။"
+
+msgid "Test from topic"
+msgstr "အကြောင်းအရာမှ စမ်းသပ်မှု"
+
+msgid "Test from document"
+msgstr "စာရွက်စာမှ စမ်းသပ်မှု"
+
+msgid "Generate from topic"
+msgstr "အကြောင်းအရာမှ ထုတ်လုပ်ပါ"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "အကြောင်းအရာ prompt ကို အသုံးပြု၍ အသစ် Aiken မေးခွန်းစာမေးပွဲ ထုတ်လုပ်ပါ။"
+
+msgid "Quiz title"
+msgstr "ဉာဏ်စမ်းစစ်ဖြေစာမေးပွဲ ခေါင်းစဉ်"
+
+msgid "Generate from document"
+msgstr "စာရွက်စာမှ ထုတ်လုပ်ပါ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "သင်တန်း စာရွက်စာတစ်ခုကို ရွေးချယ်ပြီး ၎င်း၏ အကြောင်းအရာများကိုသာ အခြေခံ၍ မေးခွန်းများ ထုတ်လုပ်ပါ။"
+
+msgid "Selected document"
+msgstr "ရွေးချယ်ထားသော စာရွက်စာ"
+
+msgid "The document is selected from the course documents list."
+msgstr "စာရွက်စာကို သင်တန်း စာရွက်စာများ စာရင်းမှ ရွေးချယ်ထားသည်။"
+
+msgid "Choose document"
+msgstr "စာရွက်စာ ရွေးချယ်ပါ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "ရွေးချယ်ခွင့်။ AI အတွက် အပိုအကြံပြုချက်အဖြစ်သာ အသုံးပြုသည်။"
+
+msgid "Select a document"
+msgstr "စာရွက်စာ ရွေးချယ်ပါ"
+

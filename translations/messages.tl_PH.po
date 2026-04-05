@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Kailangang mga field"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Maaaring kopyahin at i-paste ang mga tag sa ibaba na text area at awtomatikong papalitan ng kanilang halaga para sa bawat user kapag nagpapadala."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ang grupong ito ay naka-link sa klase %s.<br>Ang listahan ng miyembro ng grupo ay nakadepende sa mga miyembro ng klase at hindi maaaring baguhin.<br>Pumunta sa mga setting ng grupo upang putulin ang link na ito kung nais mong magdagdag o mag-remove ng mga miyembro sa grupong ito."
+
+msgid "Link classes to created groups ?"
+msgstr "I-link ang mga klase sa nilikhang mga grupo?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Kung naka-link ang klase sa grupo, ang mga user na idinagdag o tinanggal sa klase ay awtomatikong idinadagdag o tinatanggal sa grupo."
+
+msgid "New groups creation in category %s"
+msgstr "Paglikha ng bagong mga grupo sa kategorya %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Babala na hindi maaaring baguhin ng user ang mga miyembro ng naka-link na grupo"
+
+msgid "Remove the group link with the class"
+msgstr "Alisin ang link ng grupo sa klase"
+
+msgid "Linked class"
+msgstr "Naka-link na klase"
+
+msgid "The group is no longer linked to the class"
+msgstr "Hindi na naka-link ang grupo sa klase"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Pangkalahatang-ideya ng mga mag-aaral at mga kurso na naka-subscribe sa klase"
+
+msgid "Overview students subscribed to the class"
+msgstr "Pangkalahatang-ideya ng mga mag-aaral na naka-subscribe sa klase"
+
+msgid "Overview class"
+msgstr "Pangkalahatang-ideya ng klase"
+
+msgid "Go back to the list of classes"
+msgstr "Bumalik sa listahan ng mga klase"
+
+msgid "Go back to course classes"
+msgstr "Bumalik sa mga klase ng kurso"
+
+msgid "Users subscribed to the course"
+msgstr "Mga user na naka-subscribe sa kurso"
+
+msgid "Users not subscribed to the course"
+msgstr "Mga user na hindi naka-subscribe sa kurso"
+
+msgid "Users subscribed to the class"
+msgstr "Mga user na naka-subscribe sa klase"
+
+msgid "Courses subscribed to the class"
+msgstr "Mga kurso na naka-subscribe sa klase"
+
+msgid "No user is subscribed to this class"
+msgstr "Walang user na naka-subscribe sa klase na ito"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Walang user at walang kurso na naka-subscribe sa klase na ito"
+
+msgid "No user are subscribed to this class"
+msgstr "Walang user na naka-subscribe sa klase na ito"
+
+msgid "No course are subscribed to this class"
+msgstr "Walang kurso na naka-subscribe sa klase na ito"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sigurado ka bang gustong alisin ang klase"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sigurado ka bang gustong alisin ang klase?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Sigurado ka bang gustong alisin ang klase nang hindi inaalis ang mga user?"
+
+msgid "Remove the class without removing students"
+msgstr "Alisin ang klase nang hindi inaalis ang mga mag-aaral"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ang setting na ito ay hindi pa na-implementa sa bersyong ito."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Inirerekomenda para sa mga plugin na admin-only na ipinapakita sa administration area."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Inirerekomenda para sa mga plugin na dapat lumitaw bilang mga tool ng kurso."
+
+msgid "Displayed above the main page content."
+msgstr "Ipinapakita sa itaas ng pangunahing nilalaman ng pahina."
+
+msgid "Displayed below the main page content."
+msgstr "Ipinapakita sa ibaba ng pangunahing nilalaman ng pahina."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Ipinapakita malapit sa itaas ng pangunahing layout shell."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Ipinapakita malapit sa ibaba ng pangunahing layout shell."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Inirerekomenda para sa global floating o persistent plugins na ipinapakita bago ang footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Ipinapakita sa napiling plugin region."
+
+msgid "Admin menu"
+msgstr "Menu ng Admin"
+
+msgid "Global regions"
+msgstr "Mga rehiyon ng pandaigdig"
+
+msgid "No regions assigned"
+msgstr "Walang na-assign na regions"
+
+msgid "Plugin regions"
+msgstr "Mga rehiyon ng plugin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Piliin kung saan dapat i-render ang bawat naka-install na plugin."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: gumamit ng Ctrl/Cmd upang pumili ng maraming regions."
+
+msgid "No installed plugins were found."
+msgstr "Walang natagpuang naka-install na plugins."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Pumili ng isa o higit pang regions para sa plugin na ito sa kasalukuyang access URL."
+
+msgid "Available regions"
+msgstr "Magagamit na regions"
+
+msgid "Selected paragraph"
+msgstr "Napiling talata"
+
+msgid "Destination folder"
+msgstr "Patutunguhang folder"
+
+msgid "Generate AI media"
+msgstr "Humuta ng AI media"
+
+msgid "Save and insert"
+msgstr "I-save at ipasok"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ang pag-save ay suportado lamang kapag ang provider ay nagbalik ng base64 content. Kung URL lamang ang natanggap mo, ang pag-save ay hindi pinapayagan upang maiwasan ang pag-download sa browser."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Matagumpay na nabuo ang video, ngunit hindi pinapayagan ang pag-save dahil ang provider ay nagbalik ng URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Na-save na ang file, ngunit hindi maresolba ang URL nito."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Lumikha ng pagsusulit Aiken mula sa isang paksa o mula sa isang dokumento ng kurso."
+
+msgid "Test from topic"
+msgstr "Pagsusuri mula sa paksa"
+
+msgid "Test from document"
+msgstr "Pagsusuri mula sa dokumento"
+
+msgid "Generate from topic"
+msgstr "Lumikha mula sa paksa"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Gumamit ng prompt ng paksa upang lumikha ng bagong questionnaire Aiken."
+
+msgid "Quiz title"
+msgstr "Pamagat ng pagsusulit"
+
+msgid "Generate from document"
+msgstr "Lumikha mula sa dokumento"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Piliin ang isang dokumento ng kurso at lumikha ng mga tanong batay lamang sa nilalaman nito."
+
+msgid "Selected document"
+msgstr "Napiling dokumento"
+
+msgid "The document is selected from the course documents list."
+msgstr "Ang dokumento ay napili mula sa listahan ng mga dokumento ng kurso."
+
+msgid "Choose document"
+msgstr "Pumili ng dokumento"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opsyonal. Ginagamit lamang bilang karagdagang pahiwatig para sa AI."
+
+msgid "Select a document"
+msgstr "Pumili ng dokumento"
+

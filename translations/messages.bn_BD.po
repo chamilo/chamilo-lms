@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -33677,4 +33677,196 @@ msgstr "এন্ট্রা আইডি ইউআইডি"
 
 msgid "Required fields"
 msgstr "আবশ্যক ক্ষেত্রসমূহ"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "ট্যাগগুলো নিচের টেক্সট এরিয়াতে কপি-পেস্ট করা যায় এবং প্রত্যেক ব্যবহারকারীর জন্য তাদের মান দিয়ে গতিশীলভাবে প্রতিস্থাপিত হবে যখন পাঠানো হবে।"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "এই গ্রুপটি ক্লাস %s এর সাথে যুক্ত।<br>গ্রুপ সদস্য তালিকা ক্লাস সদস্যদের উপর নির্ভর করে এবং পরিবর্তন করা যায় না।<br>যদি এই গ্রুপের জন্য সদস্য যোগ বা সরাতে চান তাহলে গ্রুপ সেটিংসে গিয়ে এই লিঙ্ক ভাঙুন।"
+
+msgid "Link classes to created groups ?"
+msgstr "তৈরি গ্রুপগুলোর সাথে ক্লাস যুক্ত করবেন?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "যদি কোনো ক্লাস একটি গ্রুপের সাথে যুক্ত থাকে, তাহলে ক্লাসে যোগ বা সরানো ব্যবহারকারীরা স্বয়ংক্রিয়ভাবে গ্রুপে যোগ বা সরানো হবে।"
+
+msgid "New groups creation in category %s"
+msgstr "ক্যাটাগরি %s তে নতুন গ্রুপ তৈরি"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "সংযুক্ত গ্রুপের সদস্য পরিবর্তন করতে না পারার সতর্কতা বার্তা"
+
+msgid "Remove the group link with the class"
+msgstr "ক্লাসের সাথে গ্রুপের লিঙ্ক সরান"
+
+msgid "Linked class"
+msgstr "সংযুক্ত ক্লাস"
+
+msgid "The group is no longer linked to the class"
+msgstr "গ্রুপটি আর ক্লাসের সাথে যুক্ত নেই"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "ক্লাসে নথিভুক্ত ছাত্র এবং কোর্সের সারাংশ"
+
+msgid "Overview students subscribed to the class"
+msgstr "ক্লাসে নথিভুক্ত ছাত্রদের সারাংশ"
+
+msgid "Overview class"
+msgstr "ক্লাসের সারাংশ"
+
+msgid "Go back to the list of classes"
+msgstr "ক্লাসের তালিকায় ফিরে যান"
+
+msgid "Go back to course classes"
+msgstr "কোর্সের ক্লাসে ফিরে যান"
+
+msgid "Users subscribed to the course"
+msgstr "কোর্সে নথিভুক্ত ব্যবহারকারী"
+
+msgid "Users not subscribed to the course"
+msgstr "কোর্সে নথিভুক্ত নয় এমন ব্যবহারকারী"
+
+msgid "Users subscribed to the class"
+msgstr "ক্লাসে নথিভুক্ত ব্যবহারকারী"
+
+msgid "Courses subscribed to the class"
+msgstr "ক্লাসে নথিভুক্ত কোর্স"
+
+msgid "No user is subscribed to this class"
+msgstr "এই ক্লাসে কোনো ব্যবহারকারী নথিভুক্ত নেই"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "এই ক্লাসে কোনো ব্যবহারকারী বা কোর্স নথিভুক্ত নেই"
+
+msgid "No user are subscribed to this class"
+msgstr "এই ক্লাসে কোনো ব্যবহারকারী নথিভুক্ত নেই"
+
+msgid "No course are subscribed to this class"
+msgstr "এই ক্লাসে কোনো কোর্স নথিভুক্ত নেই"
+
+msgid "Are you sure you want to remove the class"
+msgstr "আপনি কি নিশ্চিত যে ক্লাসটি সরাতে চান"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "আপনি কি নিশ্চিত যে ক্লাসটি সরাতে চান?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "আপনি কি নিশ্চিত যে ব্যবহারকারী না সরিয়ে ক্লাসটি সরাতে চান?"
+
+msgid "Remove the class without removing students"
+msgstr "ছাত্র না সরিয়ে ক্লাস সরান"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "এই সেটিং এই সংস্করণে এখনও বাস্তবায়িত হয়নি।"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "প্রশাসন এলাকায় প্রদর্শিত অ্যাডমিন-অনলি প্লাগিনের জন্য সুপারিশকৃত।"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "কোর্স টুলস হিসেবে প্রদর্শিত হতে হবে এমন প্লাগিনের জন্য সুপারিশকৃত।"
+
+msgid "Displayed above the main page content."
+msgstr "মূল পৃষ্ঠার কন্টেন্টের উপরে প্রদর্শিত।"
+
+msgid "Displayed below the main page content."
+msgstr "মূল পৃষ্ঠার কন্টেন্টের নিচে প্রদর্শিত।"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "মূল লেআউট শেলের উপরের দিকে প্রদর্শিত।"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "মূল লেআউট শেলের নিচের দিকে প্রদর্শিত।"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "ফুটারের আগে প্রদর্শিত গ্লোবাল ফ্লোটিং বা স্থায়ী প্লাগিনের জন্য সুপারিশকৃত।"
+
+msgid "Displayed in the selected plugin region."
+msgstr "নির্বাচিত প্লাগইন অঞ্চলে প্রদর্শিত হবে।"
+
+msgid "Admin menu"
+msgstr "প্রশাসক মেনু"
+
+msgid "Global regions"
+msgstr "গ্লোবাল অঞ্চল"
+
+msgid "No regions assigned"
+msgstr "কোন অঞ্চল নির্ধারিত নেই"
+
+msgid "Plugin regions"
+msgstr "প্লাগইন অঞ্চল"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "প্রতিটি ইনস্টল করা প্লাগইন কোথায় রেন্ডার করা উচিত তা নির্বাচন করুন।"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "টিপ: একাধিক অঞ্চল নির্বাচনের জন্য Ctrl/Cmd ব্যবহার করুন।"
+
+msgid "No installed plugins were found."
+msgstr "কোন ইনস্টল করা প্লাগইন পাওয়া যায়নি।"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "বর্তমান অ্যাক্সেস URL-এ এই প্লাগইনের জন্য এক বা একাধিক অঞ্চল নির্বাচন করুন।"
+
+msgid "Available regions"
+msgstr "উপলব্ধ অঞ্চল"
+
+msgid "Selected paragraph"
+msgstr "নির্বাচিত অনুচ্ছেদ"
+
+msgid "Destination folder"
+msgstr "গন্তব্য ফোল্ডার"
+
+msgid "Generate AI media"
+msgstr "এআই মিডিয়া জেনারেট করুন"
+
+msgid "Save and insert"
+msgstr "সংরক্ষণ করুন এবং সন্নিবেশ করুন"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "সংরক্ষণ শুধুমাত্র প্রোভাইডার base64 কন্টেন্ট ফেরত দিলে সমর্থিত। যদি শুধুমাত্র একটি URL পান, তাহলে ব্রাউজারে ডাউনলোড এড়াতে সংরক্ষণ নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ভিডিও সফলভাবে জেনারেট হয়েছে, কিন্তু প্রোভাইডার URL ফেরত দিয়েছে বলে সংরক্ষণ নিষ্ক্রিয়।"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "ফাইলটি সংরক্ষিত হয়েছে, কিন্তু এর URL সমাধান করা যায়নি।"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "একটি বিষয় বা একটি কোর্স ডকুমেন্ট থেকে Aiken কুইজ তৈরি করুন।"
+
+msgid "Test from topic"
+msgstr "বিষয় থেকে পরীক্ষা"
+
+msgid "Test from document"
+msgstr "ডকুমেন্ট থেকে পরীক্ষা"
+
+msgid "Generate from topic"
+msgstr "বিষয় থেকে তৈরি করুন"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "একটি বিষয় প্রম্পট ব্যবহার করে একটি নতুন Aiken প্রশ্নপত্র তৈরি করুন।"
+
+msgid "Quiz title"
+msgstr "কুইজ শিরোনাম"
+
+msgid "Generate from document"
+msgstr "ডকুমেন্ট থেকে তৈরি করুন"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "একটি কোর্স ডকুমেন্ট নির্বাচন করুন এবং শুধুমাত্র তার বিষয়বস্তুর উপর ভিত্তি করে প্রশ্ন তৈরি করুন।"
+
+msgid "Selected document"
+msgstr "নির্বাচিত ডকুমেন্ট"
+
+msgid "The document is selected from the course documents list."
+msgstr "ডকুমেন্টটি কোর্স ডকুমেন্ট তালিকা থেকে নির্বাচিত হয়েছে।"
+
+msgid "Choose document"
+msgstr "ডকুমেন্ট নির্বাচন করুন"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "ঐচ্ছিক। শুধুমাত্র AI-এর জন্য অতিরিক্ত ইঙ্গিত হিসেবে ব্যবহৃত।"
+
+msgid "Select a document"
+msgstr "একটি ডকুমেন্ট নির্বাচন করুন"
 

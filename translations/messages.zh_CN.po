@@ -33684,3 +33684,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "必填字段"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "标签可以复制并粘贴到下面的文本区域中，并在发送时为每个用户单独动态替换为其值。"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "此组已链接到班级 %s。<br>组成员列表取决于班级成员，无法修改。<br>如果希望为此组添加或移除成员，请转到组设置中断开此链接。"
+
+msgid "Link classes to created groups ?"
+msgstr "将班级链接到已创建的组？"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "如果班级链接到组，则添加到班级或从班级移除的用户会自动添加到组或从组移除。"
+
+msgid "New groups creation in category %s"
+msgstr "类别 %s 中的新组创建"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "警告用户无法修改链接组成员的警告消息"
+
+msgid "Remove the group link with the class"
+msgstr "移除组与班级的链接"
+
+msgid "Linked class"
+msgstr "链接的班级"
+
+msgid "The group is no longer linked to the class"
+msgstr "组不再链接到班级"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "概览订阅班级的学生和课程"
+
+msgid "Overview students subscribed to the class"
+msgstr "概览订阅班级的学生"
+
+msgid "Overview class"
+msgstr "班级概览"
+
+msgid "Go back to the list of classes"
+msgstr "返回班级列表"
+
+msgid "Go back to course classes"
+msgstr "返回课程班级"
+
+msgid "Users subscribed to the course"
+msgstr "订阅课程的用户"
+
+msgid "Users not subscribed to the course"
+msgstr "未订阅课程的用户"
+
+msgid "Users subscribed to the class"
+msgstr "订阅班级的用户"
+
+msgid "Courses subscribed to the class"
+msgstr "订阅班级的课程"
+
+msgid "No user is subscribed to this class"
+msgstr "没有用户订阅此班级"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "没有用户和课程订阅此班级"
+
+msgid "No user are subscribed to this class"
+msgstr "没有用户订阅此班级"
+
+msgid "No course are subscribed to this class"
+msgstr "没有课程订阅此班级"
+
+msgid "Are you sure you want to remove the class"
+msgstr "您确定要移除班级吗"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "您确定要移除班级吗？"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "您确定要移除班级而不移除用户吗？"
+
+msgid "Remove the class without removing students"
+msgstr "移除班级而不移除学生"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "此设置在此版本中尚未实现。"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "推荐用于仅管理员可见的管理区域插件。"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "推荐用于必须作为课程工具显示的插件。"
+
+msgid "Displayed above the main page content."
+msgstr "显示在主页面内容上方。"
+
+msgid "Displayed below the main page content."
+msgstr "显示在主页面内容下方。"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "显示在主布局外壳顶部附近。"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "显示在主布局外壳底部附近。"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "推荐用于全局浮动或持久插件，显示在页脚之前。"
+
+msgid "Displayed in the selected plugin region."
+msgstr "显示在选定的插件区域中。"
+
+msgid "Admin menu"
+msgstr "管理员菜单"
+
+msgid "Global regions"
+msgstr "全局区域"
+
+msgid "No regions assigned"
+msgstr "未分配区域"
+
+msgid "Plugin regions"
+msgstr "插件区域"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "选择每个已安装插件的渲染位置。"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "提示：使用 Ctrl/Cmd 选择多个区域。"
+
+msgid "No installed plugins were found."
+msgstr "未找到已安装的插件。"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "为当前访问 URL 中的此插件选择一个或多个区域。"
+
+msgid "Available regions"
+msgstr "可用区域"
+
+msgid "Selected paragraph"
+msgstr "选定的段落"
+
+msgid "Destination folder"
+msgstr "目标文件夹"
+
+msgid "Generate AI media"
+msgstr "生成 AI 媒体"
+
+msgid "Save and insert"
+msgstr "保存并插入"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "仅当提供商返回 base64 内容时支持保存。如果仅收到 URL，则禁用保存以避免在浏览器中下载。"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "视频生成成功，但由于提供商返回 URL，保存已禁用。"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "文件已保存，但其 URL 无法解析。"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "从主题或课程文档生成 Aiken 测验。"
+
+msgid "Test from topic"
+msgstr "从主题生成测验"
+
+msgid "Test from document"
+msgstr "从文档生成测验"
+
+msgid "Generate from topic"
+msgstr "从主题生成"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "使用主题提示生成新的 Aiken 问卷。"
+
+msgid "Quiz title"
+msgstr "测验标题"
+
+msgid "Generate from document"
+msgstr "从文档生成"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "选择一个课程文档，仅基于其内容生成问题。"
+
+msgid "Selected document"
+msgstr "选定文档"
+
+msgid "The document is selected from the course documents list."
+msgstr "文档从课程文档列表中选择。"
+
+msgid "Choose document"
+msgstr "选择文档"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "可选。仅作为 AI 的额外提示。"
+
+msgid "Select a document"
+msgstr "选择文档"
+

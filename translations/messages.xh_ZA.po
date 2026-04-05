@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Esini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -33677,4 +33677,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Iindawo ezifunwayo"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Iithegi zinokukopishwa kwaye zincitshwe ngaphakathi kwendawo yesibhaliwa ngaphantsi kwaye ziya kuthi zibekwe endaweni yazo ixabiso ngamnye kumsebenzisi ngamnye xa zithunyelwa."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Eli qela likhonkene neklasi %s.<br>Uluhlu lwamalungu eqela luxhomekeke kumalungu ekilasi kwaye alunakuguqulwa.<br>Yiya kusetingi zeqela ukuqhawula oluqhagelo ukuba ufuna ukongeza okanye ususe amalungu kula qela."
+
+msgid "Link classes to created groups ?"
+msgstr "Nxibelelana neeklasi kunamaqela adalweyo ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ukuba iklasi likhonkene neqela, abasebenzisi abongezwa okanye basuswe kwiklasi bongezwa ngokuzenzekelayo okanye basuswe eqeleni."
+
+msgid "New groups creation in category %s"
+msgstr "Udalelo lwamaqela amatsha kudidi %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Umyalezo lesilumkiso lokulumkisa ukuba umsebenzisi akakwazi ukuguqula amalungu eqela elikhonkweyo"
+
+msgid "Remove the group link with the class"
+msgstr "Susa unxibelelwano lweqela neklasi"
+
+msgid "Linked class"
+msgstr "Ikilasi elikhonkweyo"
+
+msgid "The group is no longer linked to the class"
+msgstr "Iqela alisaxhungi nemeko neklasi"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Uhlolisiso lwabafundi nezikolo ezibhalisile kwiklasi"
+
+msgid "Overview students subscribed to the class"
+msgstr "Uhlolisiso lwabafundi ababhalisile kwiklasi"
+
+msgid "Overview class"
+msgstr "Uhlolisiso lweklasi"
+
+msgid "Go back to the list of classes"
+msgstr "Buyela kuluhlu lweeklasi"
+
+msgid "Go back to course classes"
+msgstr "Buyela kweeklasi zesifundo"
+
+msgid "Users subscribed to the course"
+msgstr "Abasebenzisi ababhalisile kwisifundo"
+
+msgid "Users not subscribed to the course"
+msgstr "Abasebenzisi abangabhalisanga kwisifundo"
+
+msgid "Users subscribed to the class"
+msgstr "Abasebenzisi ababhalisile kwiklasi"
+
+msgid "Courses subscribed to the class"
+msgstr "Izifundo ezibhalisile kwiklasi"
+
+msgid "No user is subscribed to this class"
+msgstr "Akukho msebenzisi ubhalisile kule klasi"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Akukho msebenzisi okanye isifundo esibhalisile kule klasi"
+
+msgid "No user are subscribed to this class"
+msgstr "Akukho msebenzisi ababhalisile kule klasi"
+
+msgid "No course are subscribed to this class"
+msgstr "Azikho izifundo ezibhalisile kule klasi"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi ngaphandle kokususa abasebenzisi?"
+
+msgid "Remove the class without removing students"
+msgstr "Susa iklasi ngaphandle kokususa abafundi"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Esona setting ayikaphumeleli kule version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Kuyanconyelwa kwiipulgini ze-admin kuphela ezibonakala kwindawo yolawulo."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Kuyanconyelwa kwiipulgini ezifanele zibonakale njengezixhobo zesifundo."
+
+msgid "Displayed above the main page content."
+msgstr "Ibonakaliswa ngaphezulu kwomxholo wiphepha eliphambili."
+
+msgid "Displayed below the main page content."
+msgstr "Ibonakaliswa ngaphantsi kwomxholo wiphepha eliphambili."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Ibonakaliswa kufuphi nephezulu kweshells yokubeka eyintloko."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Ibonakaliswa kufuphi nezinzwe emsebenzini weshells yokubeka eyintloko."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Kuyanconyelwa kwiipulgini ezindayo jikela okanye eziqhubekayo ezibonakala phambi kwesiphelo."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Ibonakaliswa kummandla weplagin ekhethiweyo."
+
+msgid "Admin menu"
+msgstr "Imenyu yolawulo"
+
+msgid "Global regions"
+msgstr "Imimandla yehlabathi"
+
+msgid "No regions assigned"
+msgstr "Akukho mimandla eyehelwe"
+
+msgid "Plugin regions"
+msgstr "Imimandla yepulgini"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Khetha apho iplagin nganye ifakwe khona."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Cecel' : sebenzisa Ctrl/Cmd ukukhetha imimandla ezininzi."
+
+msgid "No installed plugins were found."
+msgstr "Azifunyanwanga iipulgini ezifakwe."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Khetha enye okanye ngaphezulu kwemimandla yale pulgini kwindawo yokufikelela yangoku."
+
+msgid "Available regions"
+msgstr "Imimandla ekhoyo"
+
+msgid "Selected paragraph"
+msgstr "Pagraph ekhethiweyo"
+
+msgid "Destination folder"
+msgstr "Ifolda yokugqibezela"
+
+msgid "Generate AI media"
+msgstr "Yenza imidiya ye-AI"
+
+msgid "Save and insert"
+msgstr "Gcina kwaye faka"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ukugcina kuxhaswa kuphela xa umnikezeli ebuyisela umxholo we-base64. Ukuba ufumene i-URL kuphela, ukugcina akuxhobanga ukuze kuthintelwe ukukhuphela kwisikhangeli."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Ividiyo yenziwe ngempumelelo, kodwa ukugcina akuxhobangi kuba umnikezeli ubuyisele i-URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Ifayili ligciniwe, kodwa i-URL yayo ayiphumelelanga ukugqitywa."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Yenza i-Aiken quiz ukusuka kwisihloko okanye ukusuka kwixwebhu elinye lezifundo."
+
+msgid "Test from topic"
+msgstr "Vavanya ukusuka kwisihloko"
+
+msgid "Test from document"
+msgstr "Vavanya ukusuka kwixwebhu"
+
+msgid "Generate from topic"
+msgstr "Yenza ukusuka kwisihloko"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Sebenzisa isikhokelo sesihloko ukuze wenze i-Aiken questionnaire entsha."
+
+msgid "Quiz title"
+msgstr "Isihloko se-Quiz"
+
+msgid "Generate from document"
+msgstr "Yenza ukusuka kwixwebhu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Khetha ixwebhu elinye lezifundo kwaye wenze imibuzo ngokusekelwe kuphela kwimixholo yayo."
+
+msgid "Selected document"
+msgstr "Ixwebhu ekhethiweyo"
+
+msgid "The document is selected from the course documents list."
+msgstr "Uxwebhu lukhethwe kuluhlu lwamaxwebhu ekhosi."
+
+msgid "Choose document"
+msgstr "Khetha uxwebhu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Ukhetho. Lusetyenziswa kuphela njengomsingelo owongezelelwa i-AI."
+
+msgid "Select a document"
+msgstr "Khetha uxwebhu"
 

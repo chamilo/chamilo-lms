@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "பூரணச் சூத்திரம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர நட样: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -33681,4 +33681,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "தேவையான களங்கள்"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "குறிச்சொற்கள் கீழே உள்ள உரைப் பகுதியில் நகலெடுத்து ஒட்டலாம், அவை அனுப்பும்போது ஒவ்வொரு பயனருக்கும் தனித்தனியாக அவர்களின் மதிப்புடன் புதுமையாக மாற்றப்படும்."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "இந்தக் குழு %s வகுப்புடன் இணைக்கப்பட்டுள்ளது.<br>குழு உறுப்பினர் பட்டியல் வகுப்பு உறுப்பினர்களைப் பொறுத்தது மற்றும் மாற்ற முடியாது.<br>இந்தக் குழுவுக்கு உறுப்பினர்களைச் சேர்க்க அல்லது நீக்க விரும்பினால், குழு அமைப்புகளுக்குச் சென்று இந்த இணைப்பை உடைக்கவும்."
+
+msgid "Link classes to created groups ?"
+msgstr "உருவாக்கப்பட்ட குழுக்களுடன் வகுப்புகளை இணைக்கவா?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "வகுப்புடன் குழு இணைக்கப்பட்டால், வகுப்பில் சேர்க்கப்பட்ட அல்லது நீக்கப்பட்ட பயனர்கள் தானாகவே குழுவில் சேர்க்கப்பட்டு அல்லது நீக்கப்படுவார்கள்."
+
+msgid "New groups creation in category %s"
+msgstr "%s வகையில் புதிய குழுக்கள் உருவாக்கம்"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "இணைக்கப்பட்ட குழுவின் உறுப்பினர்களைப் பயனர் மாற்ற முடியாது என எச்சரிக்கைச் செய்தி"
+
+msgid "Remove the group link with the class"
+msgstr "வகுப்புடன் குழு இணைப்பை நீக்கு"
+
+msgid "Linked class"
+msgstr "இணைக்கப்பட்ட வகுப்பு"
+
+msgid "The group is no longer linked to the class"
+msgstr "குழு வகுப்புடன் இணைக்கப்படவில்லை"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "வகுப்பில் பதிவு செய்யப்பட்ட மாணவர்கள் மற்றும் பாடங்கள் கண்ணோட்டம்"
+
+msgid "Overview students subscribed to the class"
+msgstr "வகுப்பில் பதிவு செய்யப்பட்ட மாணவர்கள் கண்ணோட்டம்"
+
+msgid "Overview class"
+msgstr "வகுப்பு கண்ணோட்டம்"
+
+msgid "Go back to the list of classes"
+msgstr "வகுப்புகள் பட்டியலுக்கு திரும்பு"
+
+msgid "Go back to course classes"
+msgstr "பாட வகுப்புகளுக்கு திரும்பு"
+
+msgid "Users subscribed to the course"
+msgstr "பாடத்தில் பதிவு செய்யப்பட்ட பயனர்கள்"
+
+msgid "Users not subscribed to the course"
+msgstr "பாடத்தில் பதிவு செய்யப்படாத பயனர்கள்"
+
+msgid "Users subscribed to the class"
+msgstr "வகுப்பில் பதிவு செய்யப்பட்ட பயனர்கள்"
+
+msgid "Courses subscribed to the class"
+msgstr "வகுப்பில் பதிவு செய்யப்பட்ட பாடங்கள்"
+
+msgid "No user is subscribed to this class"
+msgstr "இந்த வகுப்பில் எந்தப் பயனரும் பதிவு செய்யப்படவில்லை"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "இந்த வகுப்பில் எந்தப் பயனரும் அல்லது பாடமும் பதிவு செய்யப்படவில்லை"
+
+msgid "No user are subscribed to this class"
+msgstr "இந்த வகுப்பில் எந்தப் பயனரும் பதிவு செய்யப்படவில்லை"
+
+msgid "No course are subscribed to this class"
+msgstr "இந்த வகுப்பில் எந்தப் பாடமும் பதிவு செய்யப்படவில்லை"
+
+msgid "Are you sure you want to remove the class"
+msgstr "வகுப்பை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "வகுப்பை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "பயனர்களை நீக்காமல் வகுப்பை நீக்க விரும்புகிறீர்களா?"
+
+msgid "Remove the class without removing students"
+msgstr "மாணவர்களை நீக்காமல் வகுப்பை நீக்கு"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "இந்த அமைப்பு இந்த பதிப்பில் இன்னும் செயல்படுத்தப்படவில்லை."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "நிர்வாகப் பகுதியில் காட்டப்படும் நிர்வாகர் மட்டும் செருகுபடிகளுக்கு பரிந்துரைக்கப்படுகிறது."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "பாடக் கருவிகளாகத் தோன்ற வேண்டிய செருகுபடிகளுக்கு பரிந்துரைக்கப்படுகிறது."
+
+msgid "Displayed above the main page content."
+msgstr "முதன்மை பக்க உள்ளடக்கத்தின் மேல் காட்டப்படும்."
+
+msgid "Displayed below the main page content."
+msgstr "இந்தப் பக்க உள்ளடக்கத்தின் கீழே காட்டப்படும்."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "முதன்மை அமைப்பு ஷெல்லின் மேற்புறத்திற்கு அருகில் காட்டப்படும்."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "முதன்மை அமைப்பு ஷெல்லின் கீழ்ப்புறத்திற்கு அருகில் காட்டப்படும்."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "ஃபூட்டருக்கு முன் காட்டப்படும் உலகளாவிய மிதக்கும் அல்லது நிலையான பிளகின்களுக்கு பரிந்துரைக்கப்படுகிறது."
+
+msgid "Displayed in the selected plugin region."
+msgstr "தேர்ந்தெடுக்கப்பட்ட பிளகின் பகுதியில் காட்டப்படும்."
+
+msgid "Admin menu"
+msgstr "நிர்வாகி மெனு"
+
+msgid "Global regions"
+msgstr "உலகளாவிய பகுதிகள்"
+
+msgid "No regions assigned"
+msgstr "பகுதிகள் ஒதுக்கப்படவில்லை"
+
+msgid "Plugin regions"
+msgstr "பிளகின் பகுதிகள்"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "ஒவ்வொரு நிறுவப்பட்ட பிளகின் எங்கு அமர்த்தப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "குறிப்பு: பல பகுதிகளைத் தேர்ந்தெடுக்க Ctrl/Cmd பயன்படுத்தவும்."
+
+msgid "No installed plugins were found."
+msgstr "நிறுவப்பட்ட பிளகின்கள் எதுவும் கிடைக்கவில்லை."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "தற்போதைய அணுகல் URL இல் இந்தப் பிளகின் ஒன்று அல்லது அதற்கு மேற்பட்ட பகுதிகளைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Available regions"
+msgstr "கிடைக்கும் பகுதிகள்"
+
+msgid "Selected paragraph"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பத்தி"
+
+msgid "Destination folder"
+msgstr "இலக்கு கோப்புறை"
+
+msgid "Generate AI media"
+msgstr "AI ஊடகம் உருவாக்கு"
+
+msgid "Save and insert"
+msgstr "சேமித்து உள்ளிடு"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "சேமிப்பு வழங்கி base64 உள்ளடக்கத்தைத் திருப்பினால் மட்டுமே ஆதரிக்கப்படுகிறது. URL மட்டும் பெற்றால், உலாவியில் பதிவிறக்கத்தைத் தவிர்க்க சேமிப்பு முடக்கப்பட்டுள்ளது."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "வீடியோ வெற்றிகரமாக உருவாக்கப்பட்டது, ஆனால் வழங்கி URL திருப்பியதால் சேமிப்பு முடக்கப்பட்டுள்ளது."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "கோப்பு சேமிக்கப்பட்டது, ஆனால் அதன் URL பிரித்தெடுக்க முடியவில்லை."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "ஒரு தலைப்பிலிருந்து அல்லது ஒரு பாடநலக் ஆவணத்திலிருந்து Aiken சோதனையை உருவாக்கவும்."
+
+msgid "Test from topic"
+msgstr "தலைப்பிலிருந்து சோதனை"
+
+msgid "Test from document"
+msgstr "ஆவணத்திலிருந்து சோதனை"
+
+msgid "Generate from topic"
+msgstr "தலைப்பிலிருந்து உருவாக்கு"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "புதிய Aiken கேள்வித்தாளை உருவாக்க பயன்படுத்தப்படும் தலைப்பு உந்துதல்."
+
+msgid "Quiz title"
+msgstr "சோதனை தலைப்பு"
+
+msgid "Generate from document"
+msgstr "ஆவணத்திலிருந்து உருவாக்கு"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "ஒரு பாடநல ஆவணத்தைத் தேர்ந்தெடுத்து அதன் உள்ளடக்கத்தின் அடிப்படையில் மட்டுமே கேள்விகளை உருவாக்கவும்."
+
+msgid "Selected document"
+msgstr "தேர்ந்தெடுக்கப்பட்ட ஆவணம்"
+
+msgid "The document is selected from the course documents list."
+msgstr "ஆவணம் பாடநல ஆவணங்கள் பட்டியலிலிருந்து தேர்ந்தெடுக்கப்பட்டது."
+
+msgid "Choose document"
+msgstr "ஆவணத்தைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "விருப்பமானது. AIக்கான கூடுதல் குறிப்பாக மட்டுமே பயன்படுத்தப்படும்."
+
+msgid "Select a document"
+msgstr "ஆவணத்தைத் தேர்ந்தெடுக்கவும்"
 

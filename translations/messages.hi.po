@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "फ़ॉर्मूला नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -33677,4 +33677,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "आवश्यक फ़ील्ड"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "टैग्स को नीचे के टेक्स्ट क्षेत्र में कॉपी और पेस्ट किया जा सकता है और उन्हें भेजते समय प्रत्येक उपयोगकर्ता के लिए व्यक्तिगत रूप से उनके मान से गतिशील रूप से प्रतिस्थापित किया जाएगा।"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "यह समूह कक्षा %s से जुड़ा हुआ है।<br>समूह सदस्य सूची कक्षा सदस्यों पर निर्भर करती है और इसे संशोधित नहीं किया जा सकता।<br>यदि आप इस समूह के लिए सदस्य जोड़ना या हटाना चाहते हैं तो समूह सेटिंग्स पर जाएं और इस लिंक को तोड़ें।"
+
+msgid "Link classes to created groups ?"
+msgstr "बनी हुई समूहों से कक्षाओं को लिंक करें?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "यदि कोई कक्षा किसी समूह से जुड़ी है, तो कक्षा में जोड़े या हटाए गए उपयोगकर्ता स्वचालित रूप से समूह में जोड़े या हटाए जाते हैं।"
+
+msgid "New groups creation in category %s"
+msgstr "श्रेणी %s में नई समूह निर्माण"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "चेतावनी संदेश जो उपयोगकर्ता को जुड़े हुए समूह के सदस्यों को संशोधित न कर सकने की चेतावनी देता है"
+
+msgid "Remove the group link with the class"
+msgstr "कक्षा के साथ समूह लिंक हटाएं"
+
+msgid "Linked class"
+msgstr "जुड़ी हुई कक्षा"
+
+msgid "The group is no longer linked to the class"
+msgstr "समूह अब कक्षा से जुड़ा नहीं है"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "कक्षा से जुड़े छात्रों और पाठ्यक्रमों का अवलोकन"
+
+msgid "Overview students subscribed to the class"
+msgstr "कक्षा से जुड़े छात्रों का अवलोकन"
+
+msgid "Overview class"
+msgstr "कक्षा का अवलोकन"
+
+msgid "Go back to the list of classes"
+msgstr "कक्षाओं की सूची पर वापस जाएं"
+
+msgid "Go back to course classes"
+msgstr "पाठ्यक्रम कक्षाओं पर वापस जाएं"
+
+msgid "Users subscribed to the course"
+msgstr "पाठ्यक्रम से जुड़े उपयोगकर्ता"
+
+msgid "Users not subscribed to the course"
+msgstr "पाठ्यक्रम से न जुड़े उपयोगकर्ता"
+
+msgid "Users subscribed to the class"
+msgstr "कक्षा से जुड़े उपयोगकर्ता"
+
+msgid "Courses subscribed to the class"
+msgstr "कक्षा से जुड़े पाठ्यक्रम"
+
+msgid "No user is subscribed to this class"
+msgstr "इस कक्षा से कोई उपयोगकर्ता जुड़ा नहीं है"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "इस कक्षा से कोई उपयोगकर्ता या पाठ्यक्रम जुड़ा नहीं है"
+
+msgid "No user are subscribed to this class"
+msgstr "इस कक्षा से कोई उपयोगकर्ता जुड़े नहीं हैं"
+
+msgid "No course are subscribed to this class"
+msgstr "इस कक्षा से कोई पाठ्यक्रम जुड़े नहीं हैं"
+
+msgid "Are you sure you want to remove the class"
+msgstr "क्या आप वाकई कक्षा हटाना चाहते हैं"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "क्या आप वाकई कक्षा हटाना चाहते हैं?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "क्या आप वाकई उपयोगकर्ताओं को हटाए बिना कक्षा हटाना चाहते हैं?"
+
+msgid "Remove the class without removing students"
+msgstr "छात्रों को हटाए बिना कक्षा हटाएं"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "यह सेटिंग इस संस्करण में अभी लागू नहीं की गई है।"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "प्रशासन क्षेत्र में दिखाए जाने वाले केवल प्रशासक प्लगइन्स के लिए अनुशंसित।"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "कोर्स टूल्स के रूप में दिखने वाले प्लगइन्स के लिए अनुशंसित।"
+
+msgid "Displayed above the main page content."
+msgstr "मुख्य पृष्ठ सामग्री के ऊपर प्रदर्शित।"
+
+msgid "Displayed below the main page content."
+msgstr "मुख्य पृष्ठ सामग्री के नीचे प्रदर्शित।"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "मुख्य लेआउट शेल के ऊपरी भाग के पास प्रदर्शित।"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "मुख्य लेआउट शेल के निचले भाग के पास प्रदर्शित।"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "फुटर से पहले दिखाए जाने वाले वैश्विक फ्लोटिंग या स्थायी प्लगइन्स के लिए अनुशंसित।"
+
+msgid "Displayed in the selected plugin region."
+msgstr "चयनित प्लगइन क्षेत्र में प्रदर्शित।"
+
+msgid "Admin menu"
+msgstr "प्रशासक मेनू"
+
+msgid "Global regions"
+msgstr "वैश्विक क्षेत्र"
+
+msgid "No regions assigned"
+msgstr "कोई क्षेत्र सौंपा नहीं गया"
+
+msgid "Plugin regions"
+msgstr "प्लगइन क्षेत्र"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "प्रत्येक स्थापित प्लगइन को कहाँ प्रस्तुत किया जाना चाहिए, चुनें।"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "संकेत: एकाधिक क्षेत्र चुनने के लिए Ctrl/Cmd का उपयोग करें।"
+
+msgid "No installed plugins were found."
+msgstr "कोई स्थापित प्लगइन नहीं मिला।"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "वर्तमान पहुँच URL में इस प्लगइन के लिए एक या अधिक क्षेत्र चुनें।"
+
+msgid "Available regions"
+msgstr "उपलब्ध क्षेत्र"
+
+msgid "Selected paragraph"
+msgstr "चयनित अनुच्छेद"
+
+msgid "Destination folder"
+msgstr "गंतव्य फ़ोल्डर"
+
+msgid "Generate AI media"
+msgstr "AI मीडिया उत्पन्न करें"
+
+msgid "Save and insert"
+msgstr "सहेजें और डालें"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "सहेजना केवल तभी समर्थित है जब प्रदाता base64 सामग्री लौटाता है। यदि आपको केवल URL प्राप्त हुआ, तो ब्राउज़र में डाउनलोड से बचने के लिए सहेजना अक्षम है।"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "वीडियो सफलतापूर्वक उत्पन्न हुआ, लेकिन प्रदाता ने URL लौटाया इसलिए सहेजना अक्षम है।"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "फ़ाइल सहेजी गई, लेकिन उसका URL हल नहीं हो सका।"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "किसी विषय या एक कोर्स दस्तावेज़ से Aiken क्विज़ उत्पन्न करें।"
+
+msgid "Test from topic"
+msgstr "विषय से परीक्षा"
+
+msgid "Test from document"
+msgstr "दस्तावेज़ से परीक्षा"
+
+msgid "Generate from topic"
+msgstr "विषय से उत्पन्न करें"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "एक विषय प्रॉम्प्ट का उपयोग करके नया Aiken प्रश्नावली उत्पन्न करें।"
+
+msgid "Quiz title"
+msgstr "क्विज़ शीर्षक"
+
+msgid "Generate from document"
+msgstr "दस्तावेज़ से उत्पन्न करें"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "एक कोर्स दस्तावेज़ चुनें और केवल उसके सामग्री के आधार पर प्रश्न उत्पन्न करें।"
+
+msgid "Selected document"
+msgstr "चयनित दस्तावेज़"
+
+msgid "The document is selected from the course documents list."
+msgstr "दस्तावेज़ कोर्स दस्तावेज़ सूची से चयनित है।"
+
+msgid "Choose document"
+msgstr "दस्तावेज़ चुनें"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "वैकल्पिक। केवल AI के लिए अतिरिक्त संकेत के रूप में उपयोग किया जाता है।"
+
+msgid "Select a document"
+msgstr "दस्तावेज़ चुनें"
 

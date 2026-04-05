@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulur dæmi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formúluprøva: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:upphavsrætt,, nei:ikki upphavsrætt"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappar,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":uppgáva:uppgáva,,      simuleran:simuleran,,      spurnarkanning:spurnarkanning,,      diagram:diagram,,      talva:talva,,      graf:graf,,      indeks:indeks,,      fólka:folka,,      talva:talva,,      frásagnartextur:frásagnartekstur,,      próv:próv,,      tilfar:tilfar,,      trupulleikafrágreiðing:trupulleikafrágreiðing,,      sjálvmatan:sjálvmatan,,      fyrilestrar:fyrilestrar"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Skriva tegstin niðanfyri"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmi um útfylling av eyðskema starv: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongAldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár gammal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongKyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongVekt</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongHædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongBody Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Hædd<sup>2</sup> (Vís til.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmumynd fyri at fylla í eyðskema starvsemi: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár gammal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong:Vektur</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong:Hædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vektur/Hædd<sup>2</sup> (Sí.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Rit upp adressuna"
@@ -16069,13 +16069,13 @@ msgid "Create child skill"
 msgstr "Stovna undirfærøvu"
 
 msgid "This skill can be obtained through:"
-msgstr ""
+msgstr "Hendan færni kann fáast gjøgnum:"
 
 msgid "No course currently allows you to obtain this skill."
-msgstr ""
+msgstr "Einki kursur leypir í løtuni at fáa hesa færnina."
 
 msgid "Add skill to search profile"
-msgstr ""
+msgstr "Legg færni til søkingarprofil"
 
 msgid "Search profile matches"
 msgstr "Leita eftir profilakørslum"
@@ -32587,34 +32587,34 @@ msgid "Current authentication method"
 msgstr "Núverandi innlogingarháttur"
 
 msgid "Branches"
-msgstr ""
+msgstr "Greinar"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Vistar"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Finn tiltøk vistar"
 
 msgid "New branch"
-msgstr ""
+msgstr "Nýggj grein"
 
 msgid "New room"
-msgstr ""
+msgstr "Nýggj vistar"
 
 msgid "Branch"
-msgstr ""
+msgstr "Grein"
 
 msgid "Default room"
-msgstr ""
+msgstr "Vanlig vistar"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Vistarupptøka: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Finn tiltøk vistar"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Tiltøk vistar"
 
 msgid "Occupied rooms"
 msgstr "Uptømdar stovur"
@@ -33677,4 +33677,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Krav til fíldir"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Teg er kunna vera avritað og innsetið í tekstagerjuna niðanfyri og verða dynamiskt skift á við gildini hjá hvørjum einstøkum brúkara, tá ið tey verða send."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Hendan bólkurin er stovnaður við bólkinum %s.<br>Lista yvir bólkurin limir byggir á bólklimum og kann ikki broytast.<br>Far til bólkastillingar fyri at royna tengingina, um tú ynskir at leggja til ella taka burtur limir í hesum bólki."
+
+msgid "Link classes to created groups ?"
+msgstr "Tengja bólkar við uppruttna bólkar?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Um ein bólkur er tengdur við ein bólk, verða brúkarar, sum verða leggdir til ella tiknir burtur frá bólkinum, sjálvvirkandi leggdir til ella tiknir burtur frá bólkinum."
+
+msgid "New groups creation in category %s"
+msgstr "Nýggj bólkaskap í bólkinum %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varslan til at varsla at brúkarin ikki kann broyta limir í tengdum bólki"
+
+msgid "Remove the group link with the class"
+msgstr "Tak burtur tengingina millum bólkin og bólkinn"
+
+msgid "Linked class"
+msgstr "Tengdur bólkur"
+
+msgid "The group is no longer linked to the class"
+msgstr "Bólkurin er ikki longur tengdur við bólkin"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Yvirlit yvir næmingar og líkur, sum eru skrásettir í bólkin"
+
+msgid "Overview students subscribed to the class"
+msgstr "Yvirlit yvir næmingar, sum eru skrásettir í bólkin"
+
+msgid "Overview class"
+msgstr "Yvirlit yvir bólk"
+
+msgid "Go back to the list of classes"
+msgstr "Far aftur til listan yvir bólkar"
+
+msgid "Go back to course classes"
+msgstr "Far aftur til bólkar í líkursins"
+
+msgid "Users subscribed to the course"
+msgstr "Brúkarar skrásettir í líkurnar"
+
+msgid "Users not subscribed to the course"
+msgstr "Brúkarar ikki skrásettir í líkurnar"
+
+msgid "Users subscribed to the class"
+msgstr "Brúkarar skrásettir í bólkin"
+
+msgid "Courses subscribed to the class"
+msgstr "Líkurs skrásettir í bólkin"
+
+msgid "No user is subscribed to this class"
+msgstr "Ongin brúkari er skrásettur í henda bólk"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ongin brúkari og ongin líkur eru skrásettir í henda bólk"
+
+msgid "No user are subscribed to this class"
+msgstr "Ongir brúkarar eru skrásettir í henda bólk"
+
+msgid "No course are subscribed to this class"
+msgstr "Ongar líkur eru skrásettir í henda bólk"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Er tú vís í, at tú ynskir at taka burtur bólkin"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Er tú vís í, at tú ynskir at taka burtur bólkin?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Er tú vís í, at tú ynskir at taka burtur bólkin uttan at taka brúkarar burtur?"
+
+msgid "Remove the class without removing students"
+msgstr "Tak burtur bólkin uttan at taka næmingar burtur"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Hendan stillingin er enn ikki løgd í verk í hesi útgávuni."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Áskild fyri admin-einastandandi pluginir, sum verða vísnir í stýrisøkinum."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Áskild fyri pluginir, sum skulu vísa seg sum líkurverktyg."
+
+msgid "Displayed above the main page content."
+msgstr "Vísur seg omanfyri hovudsíðusamrøðuna."
+
+msgid "Displayed below the main page content."
+msgstr "Vísur seg niðanfyri hovudsíðusamrøðuna."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Vísur seg nær efstu parti av høvuðslayout shellinum."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Vísur seg nær neðstu parti av høvuðslayout shellinum."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Áskild fyri globar flotandi ella varandi pluginir vísnir fyri fótnotuna."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Vísur seg í valda plugin-regiónini."
+
+msgid "Admin menu"
+msgstr "Admin valmynd"
+
+msgid "Global regions"
+msgstr "Globale regionir"
+
+msgid "No regions assigned"
+msgstr "Ongar regionir tilnevndar"
+
+msgid "Plugin regions"
+msgstr "Plugin regionir"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vel, har hvør innsettur plugin skal verða løgd út."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: nýt Ctrl/Cmd at velja fleiri regionir."
+
+msgid "No installed plugins were found."
+msgstr "Ongir innsettir pluginir funnin."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vel ein ella fleiri regionir fyri henda plugin í núverandi atgongd URL."
+
+msgid "Available regions"
+msgstr "Tøk regionir"
+
+msgid "Selected paragraph"
+msgstr "Valdur málsætningur"
+
+msgid "Destination folder"
+msgstr "Markmappa"
+
+msgid "Generate AI media"
+msgstr "Stovna AI miðia"
+
+msgid "Save and insert"
+msgstr "Goym og sett inn"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Goymslan er bert stuðlað, tá ið veitarin sendir base64-innihald. Um tú bert fekk ein URL, er goymslan óvirkin til at forða fyri niðurlestur í kagafranum."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video er væl stovnað, men goymslan er óvirkin, tí at veitarin sendi ein URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Fílan var goymd, men hennara URL kundi ikki verða løst."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr ""
+
+msgid "Test from topic"
+msgstr ""
+
+msgid "Test from document"
+msgstr ""
+
+msgid "Generate from topic"
+msgstr ""
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr ""
+
+msgid "Quiz title"
+msgstr ""
+
+msgid "Generate from document"
+msgstr ""
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr ""
+
+msgid "Selected document"
+msgstr ""
+
+msgid "The document is selected from the course documents list."
+msgstr ""
+
+msgid "Choose document"
+msgstr "Vel dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valfrítt. Bert brúkt sum ein viðbótarhjálp til AI."
+
+msgid "Select a document"
+msgstr "Vel eitt dokument"
 

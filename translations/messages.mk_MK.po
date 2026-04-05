@@ -33682,3 +33682,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Обврзни полиња"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Ознаките можат да се копираат и залепат во текстовото поле подолу и ќе бидат динамички заменети со нивната вредност за секој корисник индивидуално при испраќање."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Оваа група е поврзана со класата %s.<br>Листата на членови на групата зависи од членовите на класата и не може да се модифицира.<br>Оди во поставките на групата за да го прекинеш ова поврзување ако сакаш да додадеш или отстраниш членови за оваа група."
+
+msgid "Link classes to created groups ?"
+msgstr "Поврзи класи со создадените групи?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ако класа е поврзана со група, корисниците додадени или отстранети од класата автоматски се додаваат или отстрануваат од групата."
+
+msgid "New groups creation in category %s"
+msgstr "Создавање нови групи во категорија %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Предупредувачка порака дека корисникот не може да ги модифицира членовите на поврзаната група"
+
+msgid "Remove the group link with the class"
+msgstr "Отстрани го поврзувањето на групата со класата"
+
+msgid "Linked class"
+msgstr "Поврзана класа"
+
+msgid "The group is no longer linked to the class"
+msgstr "Групата повеќе не е поврзана со класата"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Преглед на студенти и курсеви запишани во класата"
+
+msgid "Overview students subscribed to the class"
+msgstr "Преглед на студенти запишани во класата"
+
+msgid "Overview class"
+msgstr "Преглед на класа"
+
+msgid "Go back to the list of classes"
+msgstr "Врати се на листата на класи"
+
+msgid "Go back to course classes"
+msgstr "Врати се на класите на курсот"
+
+msgid "Users subscribed to the course"
+msgstr "Корисници запишани на курсот"
+
+msgid "Users not subscribed to the course"
+msgstr "Корисници не запишани на курсот"
+
+msgid "Users subscribed to the class"
+msgstr "Корисници запишани во класата"
+
+msgid "Courses subscribed to the class"
+msgstr "Курсеви запишани во класата"
+
+msgid "No user is subscribed to this class"
+msgstr "Нема корисник запишан во оваа класа"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Нема корисник и нема курс запишани во оваа класа"
+
+msgid "No user are subscribed to this class"
+msgstr "Нема корисници запишани во оваа класа"
+
+msgid "No course are subscribed to this class"
+msgstr "Нема курсеви запишани во оваа класа"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Дали сте сигурни дека сакате да ја отстраните класата"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Дали сте сигурни дека сакате да ја отстраните класата?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Дали сте сигурни дека сакате да ја отстраните класата без да ги отстраните корисниците?"
+
+msgid "Remove the class without removing students"
+msgstr "Отстрани ја класата без отстранување на студентите"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Оваа поставка сè уште не е имплементирана во оваа верзија."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Препорачано за плугинови само за администратори прикажани во административната област."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Препорачано за плугинови кои мора да се појавуваат како алатки за курс."
+
+msgid "Displayed above the main page content."
+msgstr "Прикажано над содржината на главната страница."
+
+msgid "Displayed below the main page content."
+msgstr "Прикажано под содржината на главната страница."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Прикажано близу врвот на главната обвивка на распоредот."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Прикажано близу дното на главната обвивка на распоредот."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Препорачано за глобални плутливи или постојани плугинови прикажани пред футерот."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Прикажано во избраниот регион на плугин."
+
+msgid "Admin menu"
+msgstr "Мени за администратор"
+
+msgid "Global regions"
+msgstr "Глобални региони"
+
+msgid "No regions assigned"
+msgstr "Нема доделени региони"
+
+msgid "Plugin regions"
+msgstr "Региони на плугин"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Изберете каде секој инсталиран плугин треба да се рендерира."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Совет: користете Ctrl/Cmd за да изберете повеќе региони."
+
+msgid "No installed plugins were found."
+msgstr "Не беа пронајдени инсталирани плугинови."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Изберете еден или повеќе региони за овој плугин во тековната URL на пристап."
+
+msgid "Available regions"
+msgstr "Достапни региони"
+
+msgid "Selected paragraph"
+msgstr "Избран пасус"
+
+msgid "Destination folder"
+msgstr "Папка на одредиште"
+
+msgid "Generate AI media"
+msgstr "Генерирај AI медиуми"
+
+msgid "Save and insert"
+msgstr "Зачувај и вметни"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Зачувувањето е поддржано само кога провајдерот враќа base64 содржина. Ако добивте само URL, зачувувањето е оневозможено за да се избегне преземање во прелистувачот."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Видеото е успешно генерирано, но зачувувањето е оневозможено бидејќи провајдерот врати URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Датотеката е зачувана, но нејзиниот URL не можеше да се реши."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Генерирај Aiken тест од тема или од еден документ од курсот."
+
+msgid "Test from topic"
+msgstr "Тест од тема"
+
+msgid "Test from document"
+msgstr "Тест од документ"
+
+msgid "Generate from topic"
+msgstr "Генерирај од тема"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Користи порака од тема за да генерираш нов Aiken прашалник."
+
+msgid "Quiz title"
+msgstr "Наслов на тестот"
+
+msgid "Generate from document"
+msgstr "Генерирај од документ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Избери еден документ од курсот и генерирај прашања базирани само на неговата содржина."
+
+msgid "Selected document"
+msgstr "Избран документ"
+
+msgid "The document is selected from the course documents list."
+msgstr "Документот е избран од листата со документи од курсот."
+
+msgid "Choose document"
+msgstr "Избери документ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Опционално. Се користи само како дополнителен подсказ за ИИ."
+
+msgid "Select a document"
+msgstr "Избери документ"
+

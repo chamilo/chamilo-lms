@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթապանորդ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Թերթիկ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -33681,4 +33681,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Պարտադիր դաշտեր"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Պիտակները կարող են պատճենվել և տեղադրվել ստորև գտնվող տեքստային տարածքում և կփոխարինվեն իրենց արժեքով յուրաքանչյուր օգտատիրոջ համար անհատապես՝ ուղարկելիս:"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Այս խումբը կապված է %s դասախմբի հետ。<br>Խմբի անդամների ցանկը կախված է դասախմբի անդամներից և չի կարող փոփոխվել。<br>Անցեք խմբի կարգավորումներ՝ կապը խզելու համար, եթե ցանկանում եք ավելացնել կամ հեռացնել անդամներ այս խմբից:"
+
+msgid "Link classes to created groups ?"
+msgstr "Կապել ստեղծված խմբերին դասախմբերի հետ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Եթե դասախումբը կապված է խմբի հետ, դասախմբին ավելացված կամ հեռացված օգտատերերը ավտոմատ կերպով ավելացվում կամ հեռացվում են խմբից:"
+
+msgid "New groups creation in category %s"
+msgstr "%s կատեգորիայում նոր խմբերի ստեղծում"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Զգուշացման հաղորդագրություն՝ օգտատիրոջը զգուշացնելու, որ նա չի կարող փոփոխել կապված խմբի անդամները"
+
+msgid "Remove the group link with the class"
+msgstr "Հեռացնել խմբի կապը դասախմբի հետ"
+
+msgid "Linked class"
+msgstr "Կապված դասախումբ"
+
+msgid "The group is no longer linked to the class"
+msgstr "Խումբը այլևս կապված չէ դասախմբի հետ"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Դասախմբին գրանցված ուսանողների և դասընթացների ակնարկ"
+
+msgid "Overview students subscribed to the class"
+msgstr "Դասախմբին գրանցված ուսանողների ակնարկ"
+
+msgid "Overview class"
+msgstr "Դասախմբի ակնարկ"
+
+msgid "Go back to the list of classes"
+msgstr "Վերադառնալ դասախմբերի ցանկ"
+
+msgid "Go back to course classes"
+msgstr "Վերադառնալ դասընթացի դասախմբեր"
+
+msgid "Users subscribed to the course"
+msgstr "Դասընթացին գրանցված օգտատերեր"
+
+msgid "Users not subscribed to the course"
+msgstr "Դասընթացին չգրանցված օգտատերեր"
+
+msgid "Users subscribed to the class"
+msgstr "Դասախմբին գրանցված օգտատերեր"
+
+msgid "Courses subscribed to the class"
+msgstr "Դասախմբին գրանցված դասընթացներ"
+
+msgid "No user is subscribed to this class"
+msgstr "Այս դասախմբին ոչ մի օգտատեր չի գրանցված"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Այս դասախմբին ոչ մի օգտատեր և ոչ մի դասընթաց չի գրանցված"
+
+msgid "No user are subscribed to this class"
+msgstr "Այս դասախմբին օգտատերեր չեն գրանցված"
+
+msgid "No course are subscribed to this class"
+msgstr "Այս դասախմբին դասընթացներ չեն գրանցված"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Հաստատո՞ւմ եք դասարանի հեռացումը"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Հաստատո՞ւմ եք դասարանի հեռացումը:"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Հաստատո՞ւմ եք դասարանի հեռացումը առանց օգտատերերի հեռացման:"
+
+msgid "Remove the class without removing students"
+msgstr "Հեռացնել դասարանը առանց ուսանողների հեռացման"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Այս параметրը դեռ չի իրականացվել այս տարբերակում:"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Առաջարկվում է միայն ադմինիստրատորական հավելվածների համար, որոնք ցուցադրվում են վարչական բաժնում:"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Առաջարկվում է այն հավելվածների համար, որոնք պետք է ցուցադրվեն որպես դասախոսության գործիքներ:"
+
+msgid "Displayed above the main page content."
+msgstr "Ցուցադրվում է հիմնական էջի բովանդակության վերևում:"
+
+msgid "Displayed below the main page content."
+msgstr "Ցուցադրվում է հիմնական էջի բովանդակության ներքևում:"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Ցուցադրվում է հիմնական макետի շրջանակի վերևում:"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Ցուցադրվում է հիմնական макետի շրջանակի ներքևում:"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Առաջարկվում է գլոբալ շարժվող կամ մշտական հավելվածների համար, որոնք ցուցադրվում են ոտնաձգից առաջ:"
+
+msgid "Displayed in the selected plugin region."
+msgstr "Ցուցադրվում է ընտրված հավելվածի տարածքում:"
+
+msgid "Admin menu"
+msgstr "Ադմինի մենю"
+
+msgid "Global regions"
+msgstr "Գլոբալ տարածքներ"
+
+msgid "No regions assigned"
+msgstr "Տարածքներ չեն նշանակվել"
+
+msgid "Plugin regions"
+msgstr "Հավելվածի տարածքներ"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Ընտրեք, թե որտեղ պետք է ցուցադրվի յուրաքանչյուր տեղադրված հավելվածը:"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Խորհուրդ. օգտագործեք Ctrl/Cmd բազմաթիվ տարածքներ ընտրելու համար:"
+
+msgid "No installed plugins were found."
+msgstr "Տեղադրված հավելվածներ չեն հայտնաբերվել:"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Ընտրեք մեկ կամ ավելի տարածքներ այս հավելվածի համար ընթացիկ մուտքի URL-ում:"
+
+msgid "Available regions"
+msgstr "Հասանելի տարածքներ"
+
+msgid "Selected paragraph"
+msgstr "Ընտրված պարբերություն"
+
+msgid "Destination folder"
+msgstr "Նշանակման պապկա"
+
+msgid "Generate AI media"
+msgstr "Ստեղծել AI մեդիա"
+
+msgid "Save and insert"
+msgstr "Պահպանել և տեղադրել"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Պահպանումը աջակցվում է միայն այն դեպքում, երբ մատակարարիչը վերադարձնում է base64 բովանդակություն: Եթե ստացել եք միայն URL, պահպանումը ան활ացված է՝ խուսափելու բրաուզերում ներբեռնումից:"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Վիդեոն հաջողությամբ ստեղծվել է, սակայն պահպանումը ան활ացված է, քանի որ մատակարարիչը վերադարձրել է URL:"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Ֆայլը պահպանվել է, սակայն նրա URL-ը չի կարողացել լուծվել:"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ստեղծել Aiken թեստ թեմայից կամ մեկ դասընթացի փաստաթղթից:"
+
+msgid "Test from topic"
+msgstr "Թեստ թեմայից"
+
+msgid "Test from document"
+msgstr "Թեստ փաստաթղթից"
+
+msgid "Generate from topic"
+msgstr "Ստեղծել թեմայից"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Օգտագործել թեմայի հրահանգը՝ նոր Aiken հարցաշար ստեղծելու համար:"
+
+msgid "Quiz title"
+msgstr "Թեստի վերնագիր"
+
+msgid "Generate from document"
+msgstr "Ստեղծել փաստաթղթից"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Ընտրել մեկ դասընթացի փաստաթուղթ և ստեղծել հարցեր միայն դրա բովանդակության հիման վրա:"
+
+msgid "Selected document"
+msgstr "Ընտրված փաստաթուղթ"
+
+msgid "The document is selected from the course documents list."
+msgstr "Փաստաթուղթը ընտրվում է դասընթացի փաստաթղթերի ցուցակից:"
+
+msgid "Choose document"
+msgstr "Ընտրել փաստաթուղթ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Նախընտրելի: Օգտագործվում է միայն որպես լրացուցիչ հուշում AI-ի համար:"
+
+msgid "Select a document"
+msgstr "Ընտրել փաստաթուղթ"
 

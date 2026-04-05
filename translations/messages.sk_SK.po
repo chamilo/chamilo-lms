@@ -33697,3 +33697,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Povinné polia"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tagy môžu byť skopírované a vložené do textovej oblasti nižšie a budú dynamicky nahradené ich hodnotou pre každého používateľa individuálne pri odosielaní."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Táto skupina je prepojená s triedou %s.<br>Zoznam členov skupiny závisí od členov triedy a nemôže byť upravený.<br>Prejdite do nastavení skupiny, aby ste zrušili toto prepojenie, ak chcete pridať alebo odstrániť členov tejto skupiny."
+
+msgid "Link classes to created groups ?"
+msgstr "Prepojiť triedy s vytvorenými skupinami?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ak je trieda prepojená so skupinou, používatelia pridaní do alebo odstránení z triedy sú automaticky pridaní do alebo odstránení zo skupiny."
+
+msgid "New groups creation in category %s"
+msgstr "Vytvorenie nových skupín v kategórii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varovná správa, ktorá upozorňuje, že používateľ nemôže meniť členov prepojenej skupiny"
+
+msgid "Remove the group link with the class"
+msgstr "Odstrániť prepojenie skupiny s triedou"
+
+msgid "Linked class"
+msgstr "Prepojená trieda"
+
+msgid "The group is no longer linked to the class"
+msgstr "Skupina už nie je prepojená s triedou"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Prehľad študentov a kurzov zapísaných do triedy"
+
+msgid "Overview students subscribed to the class"
+msgstr "Prehľad študentov zapísaných do triedy"
+
+msgid "Overview class"
+msgstr "Prehľad triedy"
+
+msgid "Go back to the list of classes"
+msgstr "Návrat do zoznamu tried"
+
+msgid "Go back to course classes"
+msgstr "Návrat do tried kurzov"
+
+msgid "Users subscribed to the course"
+msgstr "Používatelia zapísaní do kurzu"
+
+msgid "Users not subscribed to the course"
+msgstr "Používatelia nepřihlášení do kurzu"
+
+msgid "Users subscribed to the class"
+msgstr "Používatelia prihlásení do triedy"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurzy prihlásené do triedy"
+
+msgid "No user is subscribed to this class"
+msgstr "Žiadny používateľ nie je prihlásený do tejto triedy"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Žiadny používateľ ani kurz nie sú prihlásené do tejto triedy"
+
+msgid "No user are subscribed to this class"
+msgstr "Žiadni používatelia nie sú prihlásení do tejto triedy"
+
+msgid "No course are subscribed to this class"
+msgstr "Žiadne kurzy nie sú prihlásené do tejto triedy"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Naozaj chcete odstrániť triedu"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Naozaj chcete odstrániť triedu?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Naozaj chcete odstrániť triedu bez odstránenia používateľov?"
+
+msgid "Remove the class without removing students"
+msgstr "Odstrániť triedu bez odstránenia študentov"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Toto nastavenie ešte nie je implementované v tejto verzii."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Odporúča sa pre pluginy len pre adminov zobrazené v administrácii."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Odporúča sa pre pluginy, ktoré sa majú zobraziť ako nástroje kurzu."
+
+msgid "Displayed above the main page content."
+msgstr "Zobrazené nad obsahom hlavnej stránky."
+
+msgid "Displayed below the main page content."
+msgstr "Zobrazené pod obsahom hlavnej stránky."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Zobrazené blízko vrchu hlavného layoutu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Zobrazené blízko spodku hlavného layoutu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Odporúča sa pre globálne plávajúce alebo trvalé pluginy zobrazené pred pätičkou."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Zobrazené v vybranej oblasti pluginu."
+
+msgid "Admin menu"
+msgstr "Admin menu"
+
+msgid "Global regions"
+msgstr "Globálne oblasti"
+
+msgid "No regions assigned"
+msgstr "Žiadne oblasti nepriradené"
+
+msgid "Plugin regions"
+msgstr "Oblasti pluginov"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vyberte, kde sa má každý nainštalovaný plugin zobraziť."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: použite Ctrl/Cmd na výber viacerých oblastí."
+
+msgid "No installed plugins were found."
+msgstr "Neboli nájdené žiadne nainštalované pluginy."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vyberte jednu alebo viac oblastí pre tento plugin v aktuálnom prístupovom URL."
+
+msgid "Available regions"
+msgstr "Dostupné oblasti"
+
+msgid "Selected paragraph"
+msgstr "Vybraný odsek"
+
+msgid "Destination folder"
+msgstr "Cieľová zložka"
+
+msgid "Generate AI media"
+msgstr "Generovať AI médiá"
+
+msgid "Save and insert"
+msgstr "Uložiť a vložiť"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ukladanie je podporované len ak poskytovateľ vráti base64 obsah. Ak ste dostali iba URL, ukladanie je zakázané, aby sa zabránilo sťahovaniu v prehliadači."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video bolo úspešne vygenerované, ale ukladanie je zakázané, pretože poskytovateľ vrátil URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Súbor bol uložený, ale jeho URL sa nepodarilo rozlíšiť."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Vygenerovať Aiken kvíz z témy alebo z jedného dokumentu kurzu."
+
+msgid "Test from topic"
+msgstr "Test z témy"
+
+msgid "Test from document"
+msgstr "Test z dokumentu"
+
+msgid "Generate from topic"
+msgstr "Generovať z témy"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Použiť prompt témy na generovanie nového Aiken dotazníka."
+
+msgid "Quiz title"
+msgstr "Názov kvízu"
+
+msgid "Generate from document"
+msgstr "Generovať z dokumentu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vybrať jeden dokument kurzu a generovať otázky iba na základe jeho obsahu."
+
+msgid "Selected document"
+msgstr "Vybraný dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument je vybraný zo zoznamu dokumentov kurzu."
+
+msgid "Choose document"
+msgstr "Vybrať dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Voliteľné. Používa sa iba ako dodatočná nápoveda pre AI."
+
+msgid "Select a document"
+msgstr "Vybrať dokument"
+

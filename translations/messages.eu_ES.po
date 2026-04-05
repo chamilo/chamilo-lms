@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr "bai:copyright,, ez: copyright gabe"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpetak,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Karpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ariketa,, simulation:simulazioa,, questionnaire:galdeketa,, diagram:diagrama,, figure:irudia,, graph:grafikoa,, index:indexa,, slide:diapositiba,, table:taula,, narrative text:testu narratiboa,, exam:azterketa,, experiment:saioa,, problem statement:problemaren egoera,, self assessment:autoebaluazioa,, lecture:irakurketa"
@@ -33688,4 +33688,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Eskatutako eremuak"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Etiketak beheko testu-eremuan kopia eta itsatsi daitezke eta dinamikoki ordeztuko dira balioekin norbanako erabiltzaile bakoitzarentzat bidaltzen direnean."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Talde hau %s klasearekin lotuta dago.<br>Taldeko kideen zerrenda klaseko kideekiko mendekoa da eta ezin da aldatu.<br>Joan taldearen ezarpenetara lotura hausteko talde honetarako kideak gehitzeko edo kentzeko nahi baduzu."
+
+msgid "Link classes to created groups ?"
+msgstr "Lotu klaseak sortutako taldeekin?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Klase bat talde bati lotuta badago, klasean gehitu edo kendutako erabiltzaileak automatikoki gehitu edo kenduko dira taldean."
+
+msgid "New groups creation in category %s"
+msgstr "%s kategoriako talde berrien sorta"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Abisua erabiltzaileak ezin duela lotutako taldeko kideak aldatu"
+
+msgid "Remove the group link with the class"
+msgstr "Kendu taldearen lotura klasearekin"
+
+msgid "Linked class"
+msgstr "Lotutako klasea"
+
+msgid "The group is no longer linked to the class"
+msgstr "Taldea ez dago jada klasearekin lotuta"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Ikuspegi ikasle eta klasean izena emandako ikastaroak"
+
+msgid "Overview students subscribed to the class"
+msgstr "Ikuspegi klasean izena emandako ikasleak"
+
+msgid "Overview class"
+msgstr "Ikuspegi klasea"
+
+msgid "Go back to the list of classes"
+msgstr "Itzuli klaseen zerrendara"
+
+msgid "Go back to course classes"
+msgstr "Itzuli ikastaroko klaseetara"
+
+msgid "Users subscribed to the course"
+msgstr "Ikastaroan izena emandako erabiltzaileak"
+
+msgid "Users not subscribed to the course"
+msgstr "Ikastaroan izena emateke dauden erabiltzaileak"
+
+msgid "Users subscribed to the class"
+msgstr "Klasean izena emandako erabiltzaileak"
+
+msgid "Courses subscribed to the class"
+msgstr "Klasean izena emandako ikastaroak"
+
+msgid "No user is subscribed to this class"
+msgstr "Ez dago erabiltzailerik klase honetan izena emanda"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ez dago erabiltzailerik eta ez dago ikastarorik klase honetan izena emanda"
+
+msgid "No user are subscribed to this class"
+msgstr "Ez dago erabiltzailerik klase honetan izena emanda"
+
+msgid "No course are subscribed to this class"
+msgstr "Ez dago ikastaririk klase honetara harpidetuta"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ziur zaude klasea ezabatu nahi duzula"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ziur zaude klasea ezabatu nahi duzula?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ziur zaude klasea erabiltzaileak ezabatu gabe ezabatu nahi duzula?"
+
+msgid "Remove the class without removing students"
+msgstr "Ezabatu klasea ikasleak ezabatu gabe"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ezarpen hau ez dago oraindik ezarpentzat ezarrita bertsio honetan."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Gomendatua kudeatzaileentzako pluginekin administrazio-eremuan erakusten dena."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Gomendatua ikastaro-tresna gisa agertu behar duten pluginekin."
+
+msgid "Displayed above the main page content."
+msgstr "Erakusten da orri nagusiaren edukiaren gainetik."
+
+msgid "Displayed below the main page content."
+msgstr "Erakusten da orri nagusiaren edukiaren azpian."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Erakusten da diseinu nagusiaren goialdean."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Erakusten da diseinu nagusiaren behealdean."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Gomendatua pluginei global floating edo iraunkorrak oihartzaren aurretik erakusten dira."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Erakusten da hautatutako plugineko eskualdean."
+
+msgid "Admin menu"
+msgstr "Kudeatzaile menua"
+
+msgid "Global regions"
+msgstr "Eskualde globalak"
+
+msgid "No regions assigned"
+msgstr "Ez dago eskualderik esleituta"
+
+msgid "Plugin regions"
+msgstr "Plugineko eskualdeak"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Aukeratu non errendatu behar den instalatutako plugineko bakoitza."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Aholkua: erabili Ctrl/Cmd hainbat eskualde hautatzeko."
+
+msgid "No installed plugins were found."
+msgstr "Ez da instalatutako plugincikorik aurkitu."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Hautatu pluginearentzat eskualde bat edo gehiago uneko sarbide URLan."
+
+msgid "Available regions"
+msgstr "Eskualde erabilgarriak"
+
+msgid "Selected paragraph"
+msgstr "Hautatutako paragrafoa"
+
+msgid "Destination folder"
+msgstr "Helburuko karpeta"
+
+msgid "Generate AI media"
+msgstr "Sortu AI multimedia"
+
+msgid "Save and insert"
+msgstr "Gorde eta txertatu"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Gordetzea soilik onartzen da hornitzaileak base64 eduki itzultzen duenean. URL bat soilik jasotzen baduzu, gordetzea desgaituta dago nabigatzailean deskargatzea saihesteko."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Bideoa ondo sortu da, baina gordetzea desgaituta dago hornitzaileak URL bat itzuli duelako."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Fitxategia gorde da, baina haren URL ezin da ebazki."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Gai batetik edo ikastaroko dokumentu batetik Aiken kuestionamendua sortu."
+
+msgid "Test from topic"
+msgstr "Proba gaitik"
+
+msgid "Test from document"
+msgstr "Proba dokumentutik"
+
+msgid "Generate from topic"
+msgstr "Gaietik sortu"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Gaiaren prompt bat erabili Aiken kuestionamendu berria sortzeko."
+
+msgid "Quiz title"
+msgstr "Kuestionamenduaren izenburua"
+
+msgid "Generate from document"
+msgstr "Dokumentutik sortu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Ikastaroko dokumentu bat hautatu eta haren edukiaren arabera soilik galderak sortu."
+
+msgid "Selected document"
+msgstr "Hautatutako dokumentua"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentua ikastaroko dokumentuen zerrendatik hautatzen da."
+
+msgid "Choose document"
+msgstr "Dokumentua hautatu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Aukeratua. AI-rentzat lagungarri bezala soilik erabiltzen da."
+
+msgid "Select a document"
+msgstr "Hautatu dokumentu bat"
 

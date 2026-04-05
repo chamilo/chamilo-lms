@@ -33678,3 +33678,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "اړينه ساحې"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "ټاګونه کیدی شي لاندې متني ساحه کې کاپي او پیسټ شي او د هر کاروونکي لپاره یوازې د دوی ارزښت سره متحرک ډول بدل شي کله چې ورته یې واستول شي."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "دا ډله د %s ټولې سره تړلې ده.<br>د ډلې غړو لیست د ټولې غړو پورې اړه لري او نه کیدی شي بدل شي.<br>د دې تړاو د ماتولو لپاره د ډلې ایښودو ته لاړ شئ که تاسو غواړئ چې د دې ډلې لپاره غړي اضافه یا لرې کړئ."
+
+msgid "Link classes to created groups ?"
+msgstr "د جوړې شوې ډلو سره ټولې تړل؟"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "که یوه ټوله د ډلې سره تړلې وي، کاروونکي چې ټولې ته اضافه یا له ځې څخه لرې کېږي په اتومات ډول ډلې ته اضافه یا لرې کېږي."
+
+msgid "New groups creation in category %s"
+msgstr "په %s کټګورۍ کې نوې ډلې جوړول"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "د خبرداري پیغام چې کاروونکی نشي کولای د تړلې ډلې غړي بدل کړي"
+
+msgid "Remove the group link with the class"
+msgstr "د ډلې تړاو د ټولې سره لرې کول"
+
+msgid "Linked class"
+msgstr "تړلې ټوله"
+
+msgid "The group is no longer linked to the class"
+msgstr "ډله نور د ټولې سره تړلې نه ده"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "د ټولې سره ثبت شوي زده کړیالي او کورسونه لیدل"
+
+msgid "Overview students subscribed to the class"
+msgstr "د ټولې سره ثبت شوي زده کړیالي لیدل"
+
+msgid "Overview class"
+msgstr "د ټولې لید"
+
+msgid "Go back to the list of classes"
+msgstr "د ټولې لیست ته بیرته ورګرځېدل"
+
+msgid "Go back to course classes"
+msgstr "د کورس ټولې ته بیرته ورګرځېدل"
+
+msgid "Users subscribed to the course"
+msgstr "د کورس سره ثبت شوي کاروونکي"
+
+msgid "Users not subscribed to the course"
+msgstr "د کورس سره ثبت شوي نه کاروونکي"
+
+msgid "Users subscribed to the class"
+msgstr "د ټولې سره ثبت شوي کاروونکي"
+
+msgid "Courses subscribed to the class"
+msgstr "د ټولې سره ثبت شوي کورسونه"
+
+msgid "No user is subscribed to this class"
+msgstr "هیڅ کاروونکی د دې ټولې سره ثبت شوی نه دی"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "هیڅ کاروونکی او هیڅ کورس د دې ټولې سره ثبت شوي نه دي"
+
+msgid "No user are subscribed to this class"
+msgstr "هیڅ کاروونکي د دې ټولې سره ثبت شوي نه دي"
+
+msgid "No course are subscribed to this class"
+msgstr "هیڅ کورسونه د دې ټولې سره ثبت شوي نه دي"
+
+msgid "Are you sure you want to remove the class"
+msgstr "آیا تاسو ډاډه یاست چې تاسو غواړئ ټوله لرې کړئ"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "آیا تاسو ډاډه یاست چې تاسو غواړئ ټوله لرې کړئ؟"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "آیا تاسو ډاډه یاست چې تاسو غواړئ ټوله پرته له کاروونکو لرې کړئ؟"
+
+msgid "Remove the class without removing students"
+msgstr "ټوله پرته له زده کړیالانو لرې کول"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "دا ایښودل په دې نسخې کې لا تر اوسه پلي شوی نه دی."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "د ادارې ساحې کې ښودل شويو د اډمین پرته پلاګینونو لپاره وړاندیز شوی."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "د هغو پلاګینونو لپاره وړاندیز شوی چې د کورس وسیلو په توګه ښکاره کېږي."
+
+msgid "Displayed above the main page content."
+msgstr "د اصلي پاڼې محتوا په سر کې ښودل کېږي."
+
+msgid "Displayed below the main page content."
+msgstr "د اصلي پاڼې محتوا لاندې ښودل کېږي."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "د اصلي ترتیب پوښ په سر کې ښودل کېږي."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "د اصلي ترتیب پوښ لاندې ښودل کېږي."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "د فوټر دمخه ښودل شويو عمومي تیر یا دوامداره پلاګینونو لپاره وړاندیز شوی."
+
+msgid "Displayed in the selected plugin region."
+msgstr "په ټاکلې پلاګین ساحې کې ښودل کېږي."
+
+msgid "Admin menu"
+msgstr "اډمین مینو"
+
+msgid "Global regions"
+msgstr "عوامي ساحې"
+
+msgid "No regions assigned"
+msgstr "هیڅ سیمې ټاکل شوې نه دي"
+
+msgid "Plugin regions"
+msgstr "پلاگイン سیمې"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "ټاکئ چې هر نصب شوی پلاگین چیرته ښودل شي."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "لارښوونه: د څو سیمو ټاکلو لپاره Ctrl/Cmd وکاروئ."
+
+msgid "No installed plugins were found."
+msgstr "هیڅ نصب شوی پلاگین موندل شوی نه دی."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "د دې پلاگین لپاره په اوسني لاسرسي URL کې یوه یا څو سیمې ټاکئ."
+
+msgid "Available regions"
+msgstr "شته سیمې"
+
+msgid "Selected paragraph"
+msgstr "ټاکل شوی تېرګت"
+
+msgid "Destination folder"
+msgstr "مقصد فولډر"
+
+msgid "Generate AI media"
+msgstr "AI رسنۍ تولید کړئ"
+
+msgid "Save and insert"
+msgstr "سپما کړئ او واچوئ"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "سپما یوازې هغه وخت ملاتړ کیږي کله چې چمتو کونکی base64 محتوا راکړي. که تاسو یوازې URL ترلاسه کړئ، سپما غیرفعال ده ترڅو د براوزر کې ډاونلوډ مخنیوی وشي."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ويډیو بریالیتوب سره تولید شوی، خو سپما غیرفعال ده ځکه چې چمتو کونکي URL ورکړی."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "فایل سپما شوی، خو د هغه URL حل نشو کیدی."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "د موضوع یا د یو کورس اسنادو څخه د Aiken کویس جوړ کړئ."
+
+msgid "Test from topic"
+msgstr "د موضوع څخه ازموینه"
+
+msgid "Test from document"
+msgstr "د اسنادو څخه ازموینه"
+
+msgid "Generate from topic"
+msgstr "د موضوع څخه جوړ کړئ"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "د موضوع لارښوونې استعمال وکړئ ترڅو نوی Aiken پوښتنامه جوړه کړئ."
+
+msgid "Quiz title"
+msgstr "د کویس سرلیک"
+
+msgid "Generate from document"
+msgstr "د اسنادو څخه جوړ کړئ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "یو کورس سند غوره کړئ او پوښتنې یوازې د هغه محتوياتو پر اساس جوړې کړئ."
+
+msgid "Selected document"
+msgstr "غوره شوی سند"
+
+msgid "The document is selected from the course documents list."
+msgstr "سند د کورس اسنادو لیست څخه غوره شوی دی."
+
+msgid "Choose document"
+msgstr "سند غوره کړئ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "اختیاري. یوازې د AI لپاره اضافي لارښود په توګه کارول کیږي."
+
+msgid "Select a document"
+msgstr "یو سند غوره کړئ"
+

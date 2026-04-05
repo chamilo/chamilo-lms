@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -33681,4 +33681,196 @@ msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Réimsí riachtanacha"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Is féidir clibeanna a chóipeáil agus a phasteáil sa limistéar téacs thíos agus athrófar iad go dinimiciúil lena luach do gach úsáideoir go sonrach nuair a sheoltar iad."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Tá an grúpa seo nasctha leis an rang %s.<br>Liosta na mball grúpa ag brath ar bhaill an ranga agus ní féidir iad a athrú.<br>Téigh go socruithe an ghrúpa chun an nasc seo a bhriseadh má theastaíonn uait baill a chur leis nó a bhaint den ghrúpa."
+
+msgid "Link classes to created groups ?"
+msgstr "Ranganna a nascadh leis na grúpaí cruthaithe?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Má nasctar rang le grúpa, cuirtear úsáideoirí a chuirtear leis an rang nó a mbaintear uaidh go huathoibríoch leis an ngrúpa nó a mbaintear uaidh."
+
+msgid "New groups creation in category %s"
+msgstr "Cruthú grúpaí nua sa chatagóir %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Teachtaireacht rabhaidh chun a thabhairt le fios nach féidir don úsáideoir baill ghrúpa nasctha a athrú"
+
+msgid "Remove the group link with the class"
+msgstr "Bain an nasc grúpa leis an rang"
+
+msgid "Linked class"
+msgstr "Rang nasctha"
+
+msgid "The group is no longer linked to the class"
+msgstr "Níl an grúpa nasctha leis an rang a thuilleadh"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Forbhreathnú ar mhic léinn agus ar chúrsaí atá cláraithe sa rang"
+
+msgid "Overview students subscribed to the class"
+msgstr "Forbhreathnú ar mhic léinn atá cláraithe sa rang"
+
+msgid "Overview class"
+msgstr "Forbhreathnú ranga"
+
+msgid "Go back to the list of classes"
+msgstr "Téigh ar ais chuig liosta na ranganna"
+
+msgid "Go back to course classes"
+msgstr "Téigh ar ais chuig ranganna an chúrsa"
+
+msgid "Users subscribed to the course"
+msgstr "Úsáideoirí cláraithe sa chúrsa"
+
+msgid "Users not subscribed to the course"
+msgstr "Úsáideoirí nach bhfuil cláraithe sa chúrsa"
+
+msgid "Users subscribed to the class"
+msgstr "Úsáideoirí cláraithe sa rang"
+
+msgid "Courses subscribed to the class"
+msgstr "Cúrsaí cláraithe sa rang"
+
+msgid "No user is subscribed to this class"
+msgstr "Níl aon úsáideoir cláraithe sa rang seo"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Níl aon úsáideoir ná aon chúrsa cláraithe sa rang seo"
+
+msgid "No user are subscribed to this class"
+msgstr "Níl aon úsáideoirí cláraithe sa rang seo"
+
+msgid "No course are subscribed to this class"
+msgstr "Níl aon chúrsaí cláraithe sa rang seo"
+
+msgid "Are you sure you want to remove the class"
+msgstr "An bhfuil tú cinnte gur mhaith leat an rang a bhaint"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "An bhfuil tú cinnte gur mhaith leat an rang a bhaint?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "An bhfuil tú cinnte gur mhaith leat an rang a bhaint gan úsáideoirí a bhaint?"
+
+msgid "Remove the class without removing students"
+msgstr "Bain an rang gan mic léinn a bhaint"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Níl an socrú seo curtha chun feidhme fós sa leagan seo."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Moladh le haghaidh pluaimeanna riarthóir amháin a thaispeántar san limistéar riaracháin."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Moladh le haghaidh pluaimeanna a chaithfidh a bheith le fáil mar uirlisí cúrsa."
+
+msgid "Displayed above the main page content."
+msgstr "Taispeántar os cionn ábhar an phríomhleathanaigh."
+
+msgid "Displayed below the main page content."
+msgstr "Taispeántar faoi bhun ábhar an phríomhleathanaigh."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Taispeántar gar do bharr an tshella leagan amach príomh."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Léirithe gar bun an tshella leagan amach príomha."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Moladh le haghaidh pluaideanna comhlán snámhacha nó leanúnacha a thaispeántar roimh an bhuntáiste."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Léirithe sa réigiún plugáin roghnaithe."
+
+msgid "Admin menu"
+msgstr "Roghchlár riarthóra"
+
+msgid "Global regions"
+msgstr "Réigiúin dhomhanda"
+
+msgid "No regions assigned"
+msgstr "Gan aon réigiúin sannta"
+
+msgid "Plugin regions"
+msgstr "Réigiúin plugáin"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Roghnaigh cá háit ar cheart gach plugáin suiteáilte a léiriú."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: úsáid Ctrl/Cmd chun ilréigiúin a roghnú."
+
+msgid "No installed plugins were found."
+msgstr "Níor aimsíodh aon phlugaill suiteáilte."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Roghnaigh réigiún amháin nó níos mó don phlugáin seo san URL rochtana reatha."
+
+msgid "Available regions"
+msgstr "Réigiúin ar fáil"
+
+msgid "Selected paragraph"
+msgstr "Mír roghnaithe"
+
+msgid "Destination folder"
+msgstr "Fillteán cinn sprice"
+
+msgid "Generate AI media"
+msgstr "Giniúint meáin AI"
+
+msgid "Save and insert"
+msgstr "Sábháil agus ionsáigh"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Tá sábháil ach tacaithe nuair a thugann an soláthraí ábhar base64 ar ais. Má fuair tú ach URL, tá sábháil faoi mhíchumas chun íoslódáil sa bhrabhsálaí a sheachaint."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Giniúint físe go rathúil, ach sábháil faoi mhíchumas toisc gur thug an soláthraí URL ar ais."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Sábháladh an comhad, ach níorbh fhéidir a URL a réiteach."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Giniúint trialach Aiken ó ábhar nó ó dhoiciméad cúrsa amháin."
+
+msgid "Test from topic"
+msgstr "Trialach ó ábhar"
+
+msgid "Test from document"
+msgstr "Trialach ó dhoiciméad"
+
+msgid "Generate from topic"
+msgstr "Giniúint ó ábhar"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Úsáid leid ábhair chun ceistneoir Aiken nua a ghiniúint."
+
+msgid "Quiz title"
+msgstr "Teideal an trialach"
+
+msgid "Generate from document"
+msgstr "Giniúint ó dhoiciméad"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Roghnaigh doiciméad cúrsa amháin agus giniúint ceisteanna bunaithe ar a ábhar amháin."
+
+msgid "Selected document"
+msgstr "Doiciméad roghnaithe"
+
+msgid "The document is selected from the course documents list."
+msgstr "Roghnaítear an doiciméad ó liosta doiciméad an chúrsa."
+
+msgid "Choose document"
+msgstr "Roghnaigh doiciméad"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Roghnach. Úsáidtear mar leid bhreise don AI amháin."
+
+msgid "Select a document"
+msgstr "Roghnaigh doiciméad"
 

@@ -33688,3 +33688,195 @@ msgstr "EntraID UID"
 msgid "Required fields"
 msgstr "Wymagane pola"
 
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tagi można kopiować i wklejać w obszarze tekstowym poniżej i będą dynamicznie zastępowane ich wartością dla każdego użytkownika indywidualnie podczas wysyłania."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ta grupa jest powiązana z klasą %s.<br>Lista członków grupy zależy od członków klasy i nie może być modyfikowana.<br>Przejdź do ustawień grupy, aby przerwać to powiązanie, jeśli chcesz dodać lub usunąć członków tej grupy."
+
+msgid "Link classes to created groups ?"
+msgstr "Powiązać klasy z utworzonymi grupami?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Jeśli klasa jest powiązana z grupą, użytkownicy dodani do lub usunięci z klasy są automatycznie dodawani do lub usuwani z grupy."
+
+msgid "New groups creation in category %s"
+msgstr "Tworzenie nowych grup w kategorii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Komunikat ostrzegawczy informujący, że użytkownik nie może modyfikować członków powiązanej grupy"
+
+msgid "Remove the group link with the class"
+msgstr "Usuń powiązanie grupy z klasą"
+
+msgid "Linked class"
+msgstr "Powiązana klasa"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupa nie jest już powiązana z klasą"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Przegląd studentów i kursów zapisanych na klasę"
+
+msgid "Overview students subscribed to the class"
+msgstr "Przegląd studentów zapisanych na klasę"
+
+msgid "Overview class"
+msgstr "Przegląd klasy"
+
+msgid "Go back to the list of classes"
+msgstr "Powrót do listy klas"
+
+msgid "Go back to course classes"
+msgstr "Powrót do klas kursu"
+
+msgid "Users subscribed to the course"
+msgstr "Użytkownicy zapisani na kurs"
+
+msgid "Users not subscribed to the course"
+msgstr "Użytkownicy niezapisani na kurs"
+
+msgid "Users subscribed to the class"
+msgstr "Użytkownicy zapisani na klasę"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursy zapisane na klasę"
+
+msgid "No user is subscribed to this class"
+msgstr "Żaden użytkownik nie jest zapisany na tę klasę"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Żaden użytkownik ani kurs nie jest zapisany na tę klasę"
+
+msgid "No user are subscribed to this class"
+msgstr "Żaden użytkownik nie jest zapisany na tę klasę"
+
+msgid "No course are subscribed to this class"
+msgstr "Żaden kurs nie jest zapisany na tę klasę"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Czy na pewno chcesz usunąć klasę"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Czy na pewno chcesz usunąć klasę?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Czy na pewno chcesz usunąć klasę bez usuwania użytkowników?"
+
+msgid "Remove the class without removing students"
+msgstr "Usuń klasę bez usuwania studentów"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ta opcja nie jest jeszcze zaimplementowana w tej wersji."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Zalecane dla wtyczek tylko dla administratorów wyświetlanych w obszarze administracyjnym."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Zalecane dla wtyczek, które muszą pojawiać się jako narzędzia kursu."
+
+msgid "Displayed above the main page content."
+msgstr "Wyświetlane nad główną zawartością strony."
+
+msgid "Displayed below the main page content."
+msgstr "Wyświetlane pod główną zawartością strony."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Wyświetlane blisko górnej części głównej powłoki układu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Wyświetlane blisko dolnej części głównej powłoki układu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Zalecane dla globalnych pływających lub trwałych wtyczek wyświetlanych przed stopką."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Wyświetlane w wybranym obszarze wtyczki."
+
+msgid "Admin menu"
+msgstr "Menu administratora"
+
+msgid "Global regions"
+msgstr "Obszary globalne"
+
+msgid "No regions assigned"
+msgstr "Brak przypisanych obszarów"
+
+msgid "Plugin regions"
+msgstr "Obszary wtyczek"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Wybierz, gdzie każda zainstalowana wtyczka powinna być renderowana."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Wskazówka: użyj Ctrl/Cmd, aby wybrać wiele obszarów."
+
+msgid "No installed plugins were found."
+msgstr "Nie znaleziono zainstalowanych wtyczek."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Wybierz jeden lub więcej obszarów dla tej wtyczki w bieżącym adresie URL dostępu."
+
+msgid "Available regions"
+msgstr "Dostępne obszary"
+
+msgid "Selected paragraph"
+msgstr "Wybrany akapit"
+
+msgid "Destination folder"
+msgstr "Katalog docelowy"
+
+msgid "Generate AI media"
+msgstr "Generuj media AI"
+
+msgid "Save and insert"
+msgstr "Zapisz i wstaw"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Zapis jest obsługiwany tylko wtedy, gdy dostawca zwraca zawartość base64. Jeśli otrzymano tylko adres URL, zapis jest wyłączony, aby uniknąć pobierania w przeglądarce."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Wideo zostało wygenerowane pomyślnie, ale zapis jest wyłączony, ponieważ dostawca zwrócił adres URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Plik został zapisany, ale jego adres URL nie mógł zostać rozwiązany."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Wygeneruj test Aiken z tematu lub z jednego dokumentu kursu."
+
+msgid "Test from topic"
+msgstr "Test z tematu"
+
+msgid "Test from document"
+msgstr "Test z dokumentu"
+
+msgid "Generate from topic"
+msgstr "Wygeneruj z tematu"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Użyj wskazówki tematycznej do wygenerowania nowego kwestionariusza Aiken."
+
+msgid "Quiz title"
+msgstr "Tytuł testu"
+
+msgid "Generate from document"
+msgstr "Wygeneruj z dokumentu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Wybierz jeden dokument kursu i wygeneruj pytania tylko na podstawie jego zawartości."
+
+msgid "Selected document"
+msgstr "Wybrany dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument jest wybrany z listy dokumentów kursu."
+
+msgid "Choose document"
+msgstr "Wybierz dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcjonalne. Używane tylko jako dodatkowa wskazówka dla AI."
+
+msgid "Select a document"
+msgstr "Wybierz dokument"
+

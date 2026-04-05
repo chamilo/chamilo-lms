@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySQL Server"
+msgstr "MySql Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -33677,4 +33677,196 @@ msgstr "EntraID UID"
 
 msgid "Required fields"
 msgstr "Obavezna polja"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Oznake se mogu kopirati i zalijepiti u tekstualno područje ispod i bit će dinamički zamijenjene njihovom vrijednošću za svakog korisnika pojedinačno prilikom slanja."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ova grupa je povezana s razredom %s.<br>Lista članova grupe ovisi o članovima razreda i ne može se mijenjati.<br>Idite na postavke grupe da prekinete ovu vezu ako želite dodati ili ukloniti članove iz ove grupe."
+
+msgid "Link classes to created groups ?"
+msgstr "Povezati razrede s kreiranim grupama?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ako je razred povezan s grupom, korisnici dodani ili uklonjeni iz razreda automatski se dodaju ili uklanjaju iz grupe."
+
+msgid "New groups creation in category %s"
+msgstr "Kreiranje novih grupa u kategoriji %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Upozorenje da korisnik ne može mijenjati članove povezane grupe"
+
+msgid "Remove the group link with the class"
+msgstr "Ukloniti vezu grupe s razredom"
+
+msgid "Linked class"
+msgstr "Povezani razred"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupa više nije povezana s razredom"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Pregled studenata i kurseva upisanih u razred"
+
+msgid "Overview students subscribed to the class"
+msgstr "Pregled studenata upisanih u razred"
+
+msgid "Overview class"
+msgstr "Pregled razreda"
+
+msgid "Go back to the list of classes"
+msgstr "Povratak na listu razreda"
+
+msgid "Go back to course classes"
+msgstr "Povratak na razrede kursa"
+
+msgid "Users subscribed to the course"
+msgstr "Korisnici upisani u kurs"
+
+msgid "Users not subscribed to the course"
+msgstr "Korisnici koji nisu upisani u kurs"
+
+msgid "Users subscribed to the class"
+msgstr "Korisnici upisani u razred"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursevi upisani u razred"
+
+msgid "No user is subscribed to this class"
+msgstr "Nijedan korisnik nije upisan u ovaj razred"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Nijedan korisnik niti kurs nisu upisani u ovaj razred"
+
+msgid "No user are subscribed to this class"
+msgstr "Nijedan korisnik nije upisan u ovaj razred"
+
+msgid "No course are subscribed to this class"
+msgstr "Nijedan kurs nije upisan u ovaj razred"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Jeste li sigurni da želite ukloniti razred"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Jeste li sigurni da želite ukloniti razred?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Jeste li sigurni da želite ukloniti razred bez uklanjanja korisnika?"
+
+msgid "Remove the class without removing students"
+msgstr "Ukloniti razred bez uklanjanja studenata"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ova postavka još nije implementirana u ovoj verziji."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Preporučeno za dodatke samo za administratore prikazane u administratorskom području."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Preporučeno za dodatke koji se moraju prikazati kao alati kursa."
+
+msgid "Displayed above the main page content."
+msgstr "Prikazano iznad sadržaja glavne stranice."
+
+msgid "Displayed below the main page content."
+msgstr "Prikazano ispod sadržaja glavne stranice."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Prikazano blizu vrha glavnog layout omotača."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Prikazano blizu dna glavnog layout omotača."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Preporučeno za globalne plutajuće ili uporne dodatke prikazane prije podnožja."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Prikazano u odabranoj regiji dodatka."
+
+msgid "Admin menu"
+msgstr "Admin meni"
+
+msgid "Global regions"
+msgstr "Globalne regije"
+
+msgid "No regions assigned"
+msgstr "Nema dodijeljenih regija"
+
+msgid "Plugin regions"
+msgstr "Regije dodatka"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Odaberite gdje svaki instalirani dodatak treba biti renderiran."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Savjet: koristite Ctrl/Cmd za odabir više regija."
+
+msgid "No installed plugins were found."
+msgstr "Nisu pronađeni instalirani dodatci."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Odaberite jednu ili više regija za ovaj dodatak u trenutnom URL-u pristupa."
+
+msgid "Available regions"
+msgstr "Dostupne regije"
+
+msgid "Selected paragraph"
+msgstr "Odabrani odlomak"
+
+msgid "Destination folder"
+msgstr "Odredišni folder"
+
+msgid "Generate AI media"
+msgstr "Generiraj AI medije"
+
+msgid "Save and insert"
+msgstr "Spremi i umetni"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Spremanje je podržano samo kada pružatelj vrati base64 sadržaj. Ako ste primili samo URL, spremanje je onemogućeno kako bi se izbjeglo preuzimanje u pregledniku."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video je uspješno generiran, ali spremanje je onemogućeno jer je pružatelj vratio URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Datoteka je spremljena, ali njezin URL nije moguće razriješiti."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generiraj Aiken kviz iz teme ili iz jednog dokumenta kursa."
+
+msgid "Test from topic"
+msgstr "Test iz teme"
+
+msgid "Test from document"
+msgstr "Test iz dokumenta"
+
+msgid "Generate from topic"
+msgstr "Generiraj iz teme"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Koristi temu kao upit za generiranje novog Aiken upitnika."
+
+msgid "Quiz title"
+msgstr "Naslov kviza"
+
+msgid "Generate from document"
+msgstr "Generiraj iz dokumenta"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Odaberite jedan dokument kursa i generirajte pitanja samo na osnovu njegovog sadržaja."
+
+msgid "Selected document"
+msgstr "Odabrani dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument je odabran iz liste dokumenata kursa."
+
+msgid "Choose document"
+msgstr "Odaberi dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcionalno. Koristi se samo kao dodatna naputka za AI."
+
+msgid "Select a document"
+msgstr "Odaberite dokument"
 

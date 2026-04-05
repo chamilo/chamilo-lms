@@ -12,12 +12,25 @@ header('Content-Type: application/json; charset=utf-8');
 
 api_block_anonymous_users();
 
+if ('GET' !== $_SERVER['REQUEST_METHOD']) {
+    http_response_code(405);
+    echo json_encode([
+        'error' => true,
+        'message' => 'Method not allowed.',
+    ]);
+    exit;
+}
+
 try {
     $tourPlugin = Tour::create();
 
     $page = isset($_GET['page']) ? trim((string) $_GET['page']) : '';
-    $pageName = isset($_REQUEST['page_name']) ? trim((string) $_REQUEST['page_name']) : '';
-    $pageClass = isset($_REQUEST['page_class']) ? trim((string) $_REQUEST['page_class']) : '';
+    $pageName = isset($_GET['page_name']) ? trim((string) $_GET['page_name']) : '';
+    $pageClass = isset($_GET['page_class']) ? trim((string) $_GET['page_class']) : '';
+
+    $page = mb_substr($page, 0, 255);
+    $pageName = mb_substr($pageName, 0, 255);
+    $pageClass = mb_substr($pageClass, 0, 255);
 
     if ('' !== $page && '' === $pageClass) {
         $pageClass = $page;
@@ -42,6 +55,10 @@ try {
     $steps = [];
 
     foreach ($configuredSteps as $step) {
+        if (!is_array($step)) {
+            continue;
+        }
+
         $elementSelector = isset($step['elementSelector'])
             ? trim((string) $step['elementSelector'])
             : '';

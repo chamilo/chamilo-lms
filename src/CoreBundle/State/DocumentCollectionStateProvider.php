@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -22,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -44,6 +46,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         private readonly RequestStack $requestStack,
         private readonly SettingsManager $settingsManager,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly Security $security,
         #[Autowire(service: 'chamilo.document_list')]
         private readonly CacheInterface $documentListCache,
         #[Autowire('%kernel.secret%')]
@@ -346,15 +349,27 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         //   - the access_url ID so that multi-portal setups within one installation
         //     are also isolated.
         $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 1;
+        $viewerProfileBucket = $this->getViewerProfileCacheBucket($cid, $sid);
         $sortedTypes = $effectiveFiletypes;
         sort($sortedTypes);
         $sortedHidden = $hiddenSystemTypes;
         sort($sortedHidden);
         $cacheKey = 'doc_list_'.$this->getInstallationPrefix().'_'.hash('md5', serialize([
-            $accessUrlId, $cid, $sid, $gid, $parentNodeId, $loadNode,
-            $sortedTypes, $sortedHidden, $includeBaseContent,
-            $isGradebook, $showSystemCertificates, $page, $itemsPerPage,
-        ]));
+                $accessUrlId,
+                $viewerProfileBucket,
+                $cid,
+                $sid,
+                $gid,
+                $parentNodeId,
+                $loadNode,
+                $sortedTypes,
+                $sortedHidden,
+                $includeBaseContent,
+                $isGradebook,
+                $showSystemCertificates,
+                $page,
+                $itemsPerPage,
+            ]));
 
         // Cache the expensive context-filtered count + IID list for up to 120 s.
         // On cache hit we re-fetch the same page of documents by primary key,
@@ -455,5 +470,47 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $this->installationPrefix = substr($uniqueId ?: $this->appSecret, 0, 8);
 
         return $this->installationPrefix;
+    }
+
+    private function getViewerProfileCacheBucket(int $cid, int $sid): string
+    {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof User) {
+            return 'anonymous';
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return 'admin';
+        }
+
+        $course = $cid > 0 ? $this->entityManager->getRepository(Course::class)->find($cid) : null;
+        $session = $sid > 0 ? $this->entityManager->getRepository(Session::class)->find($sid) : null;
+
+        if ($session instanceof Session && $course instanceof Course) {
+            $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
+            $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
+            $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
+
+            if ($userIsGeneralCoach || $userIsCourseCoach) {
+                return 'session_teacher';
+            }
+
+            if ($userIsStudent) {
+                return 'session_student';
+            }
+        }
+
+        if ($course instanceof Course) {
+            if ($course->hasUserAsTeacher($user)) {
+                return 'teacher';
+            }
+
+            if ($course->hasSubscriptionByUser($user)) {
+                return 'student';
+            }
+        }
+
+        return 'authenticated';
     }
 }

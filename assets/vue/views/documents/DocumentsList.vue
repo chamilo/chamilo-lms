@@ -111,6 +111,7 @@
   </SectionHeader>
 
   <BaseTable
+    :key="tableRenderKey"
     v-model:filters="filters"
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
@@ -479,7 +480,6 @@
         </div>
       </div>
 
-      <!-- Provider selector (this is what you were missing in UI) -->
       <div class="space-y-1">
         <div class="text-sm font-semibold">AI provider</div>
 
@@ -828,6 +828,11 @@ const isLoading = computed(() => store.getters["documents/isLoading"])
 const totalItems = computed(() => store.getters["documents/getTotalItems"])
 const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
 
+const tableRenderKey = computed(() => {
+  const rawNode = route.params.node || route.query.node || "root"
+  return `documents-table-${String(rawNode)}`
+})
+
 const hasImageInDocumentEntries = computed(() => {
   return items.value.find((i) => isImage(i)) !== undefined
 })
@@ -961,6 +966,19 @@ function triggerTableLoad() {
   onUpdateOptions(options.value)
 }
 
+/**
+ * Reset pagination and selection when changing folders.
+ * This prevents carrying a stale page index into a different folder.
+ */
+function resetTableStateForFolderChange() {
+  options.value = {
+    ...options.value,
+    page: 1,
+  }
+
+  unselectAll()
+}
+
 // Keep local loading in sync with the store loading state.
 watch(isLoading, (val) => {
   if (val) {
@@ -1033,6 +1051,7 @@ onMounted(async () => {
   await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
   options.value.itemsPerPage = resolveDefaultRows(0)
+  options.value.page = 1
   triggerTableLoad()
   void loadDefaultCertificate()
   // loadAllFolders() is intentionally deferred: it recursively fetches all
@@ -1068,20 +1087,30 @@ watch(totalItems, (n) => {
   const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
   if (def === 0 && n) {
     options.value.itemsPerPage = n
+    options.value.page = 1
     tableLoading.value = true
     onUpdateOptions(options.value)
   }
 })
 
 watch(
-  () => route.params,
-  () => {
-    const nodeId = route.params.node
-    const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
+  () => [route.name, route.params.node, route.query.node, unref(cid), unref(sid), unref(gid)],
+  ([routeName]) => {
+    let nodeId = route.params.node
+    if (isEmpty(nodeId)) {
+      nodeId = route.query.node
+    }
 
+    if (isEmpty(nodeId)) {
+      return
+    }
+
+    resetTableStateForFolderChange()
+
+    const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
     store.dispatch("resourcenode/findResourceNode", finderParams)
 
-    if ("DocumentsList" === route.name) {
+    if ("DocumentsList" === routeName) {
       triggerTableLoad()
     }
   },
@@ -1118,6 +1147,8 @@ function back() {
 
   const parent = resourceNode.value.parent
   if (parent) {
+    resetTableStateForFolderChange()
+
     const queryParams = { cid, sid, gid }
     router.push({ name: "DocumentsList", params: { node: parent.id }, query: queryParams })
   }

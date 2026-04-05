@@ -10,4 +10,7 @@
  * Queries.
  */
 require_once __DIR__.'/config.php';
+
+api_protect_admin_script(true);
+
 Test2pdfPlugin::create()->uninstall();

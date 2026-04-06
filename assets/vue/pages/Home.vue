@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-4 items-center">
+  <div class="flex flex-col gap-4">
     <SystemAnnouncementCardList />
-    <PageCardList class="grid gap-4 grid-cols-1" />
+    <PageCardList />
 
     <div
       v-if="showCatalogue && visibleCourses.length"

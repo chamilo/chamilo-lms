@@ -30,10 +30,7 @@ findAllPages()
     <div class="flex-1 md:w-8/12 lg:order-0">
       <SystemAnnouncementCardList />
 
-      <PageCardList
-        :pages="pages"
-        class="grid gap-4 grid-cols-1"
-      />
+      <PageCardList :pages="pages" />
     </div>
   </div>
 </template>

@@ -754,6 +754,10 @@ if (isset($_POST['step2'])) {
                 $input = new ArrayInput([]);
                 $input->setInteractive(false);
                 $command = $application->find('doctrine:fixtures:load');
+                // Set the selected installation language on the Symfony translator
+                // so that fixtures (e.g. TicketFixtures, SysAnnouncementFixtures) store
+                // translated strings in the correct locale instead of the default en_US.
+                $kernel->getContainer()->get('translator')->setLocale($languageForm);
                 $result = $command->run($input, new ConsoleOutput());
 
                 error_log('Delete PHP Session');

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Cache\DocumentListCacheInvalidator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -23,6 +24,7 @@ final class MoveDocumentAction
     public function __construct(
         private EntityManagerInterface $em,
         private ResourceLinkRepository $linkRepo,
+        private DocumentListCacheInvalidator $cacheInvalidator,
     ) {}
 
     public function __invoke(CDocument $document, Request $request): CDocument
@@ -115,6 +117,7 @@ final class MoveDocumentAction
                 $docLink->setParent(null);
                 $this->em->persist($docLink);
                 $this->em->flush();
+                $this->cacheInvalidator->invalidate();
 
                 return $document;
             }
@@ -125,6 +128,7 @@ final class MoveDocumentAction
         }
 
         $this->em->flush();
+        $this->cacheInvalidator->invalidate();
 
         return $document;
     }

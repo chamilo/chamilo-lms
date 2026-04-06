@@ -64,20 +64,15 @@
     }
 
     // Rows-per-page dropdown — keep it compact (just wide enough for 2–3 digits)
-    &-rpp-options,
-    &-rpp {
-      @apply ml-auto;
+    &-rpp-dropdown {
+      @apply ml-auto mt-2 min-w-0 w-20;
 
-      .p-select {
-        @apply w-auto min-w-0;
+      .p-select-label {
+        @apply px-3 py-1.5 text-body-2;
+      }
 
-        .p-select-label {
-          @apply px-3 py-1.5 text-body-2;
-        }
-
-        .p-select-dropdown {
-          @apply pr-2;
-        }
+      .p-select-dropdown {
+        @apply pr-2;
       }
     }
   }

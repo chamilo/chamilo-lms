@@ -281,6 +281,18 @@
   @apply text-error;
 }
 
+.field > small:not(.p-error) {
+  display: block;
+  margin-top: 0.5em;
+}
+
+.field-radiobutton {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
 // tabs
 .tab-content {
   > .tab-pane {

@@ -101,6 +101,7 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useTopbarLoggedIn } from "../../composables/useTopbarLoggedIn"
 import { useTopbarTour } from "../../composables/useTopbarTour"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps({
   currentUser: {
@@ -108,6 +109,8 @@ const props = defineProps({
     type: Object,
   },
 })
+
+const { t } = useI18n()
 
 const {
   loginUrl,

@@ -23,7 +23,7 @@
 
     // "1 – 20 / 56" summary — pinned left
     &-current {
-      @apply mr-auto text-body-2 text-gray-60 tabular-nums;
+      @apply mr-auto text-body-2 text-gray-50 tabular-nums;
     }
 
     // First / Prev / Next / Last navigation buttons
@@ -32,9 +32,9 @@
     &-next,
     &-last {
       @apply flex items-center justify-center w-8 h-8 rounded-md border-0 bg-transparent
-             text-gray-60 text-lg cursor-pointer transition-colors duration-150
+             text-gray-50 text-lg cursor-pointer transition-colors duration-150
              hover:bg-gray-15 hover:text-primary
-             disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-60;
+             disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-50;
 
       .mdi {
         @apply leading-none;
@@ -48,7 +48,7 @@
 
     &-page {
       @apply flex items-center justify-center min-w-[2rem] h-8 px-2 rounded-md border-0 bg-transparent
-             text-body-2 text-gray-70 cursor-pointer font-medium transition-colors duration-150
+             text-body-2 text-gray-90 cursor-pointer font-medium transition-colors duration-150
              hover:bg-gray-15 hover:text-primary;
 
       // Current page — filled primary pill

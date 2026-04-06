@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
@@ -153,33 +154,40 @@ class SecurityController extends AbstractController
             && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
             && 'login' === $this->settingsManager->getSetting('workflows.load_term_conditions_section', true)
         ) {
-            $termAndConditionStatus = false;
-            $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
-            if (!empty($extraValue['value'])) {
-                $result = $extraValue['value'];
-                $userConditions = explode(':', $result);
-                $version = $userConditions[0];
-                $langId = (int) $userConditions[1];
-                $realVersion = $legalTermsRepo->getLastVersion($langId);
-                $termAndConditionStatus = ($version >= $realVersion);
+            // Do not block login if there is no usable legal content to display.
+            if (!ChamiloHelper::hasRenderableTermsConditionsContent()) {
+                $request->getSession()->remove('term_and_condition');
+            } else {
+                $termAndConditionStatus = false;
+                $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
+
+                if (!empty($extraValue['value'])) {
+                    $result = $extraValue['value'];
+                    $userConditions = explode(':', $result);
+                    $version = $userConditions[0] ?? 0;
+                    $langId = (int) ($userConditions[1] ?? 0);
+                    $realVersion = $legalTermsRepo->getLastVersion($langId);
+                    $termAndConditionStatus = ($version >= $realVersion);
+                }
+
+                if (false === $termAndConditionStatus) {
+                    $tempTermAndCondition = ['user_id' => $user->getId()];
+
+                    $this->tokenStorage->setToken(null);
+                    $request->getSession()->invalidate();
+                    $request->getSession()->start();
+                    $request->getSession()->set('term_and_condition', $tempTermAndCondition);
+
+                    $afterLogin = $this->getRedirectAfterLoginPath($user);
+
+                    return $this->json([
+                        'load_terms' => true,
+                        'redirect' => '/main/auth/tc.php?return='.urlencode($afterLogin),
+                    ]);
+                }
+
+                $request->getSession()->remove('term_and_condition');
             }
-
-            if (false === $termAndConditionStatus) {
-                $tempTermAndCondition = ['user_id' => $user->getId()];
-                $this->tokenStorage->setToken(null);
-                $request->getSession()->invalidate();
-                $request->getSession()->start();
-                $request->getSession()->set('term_and_condition', $tempTermAndCondition);
-
-                $afterLogin = $this->getRedirectAfterLoginPath($user);
-
-                return $this->json([
-                    'load_terms' => true,
-                    'redirect' => '/main/auth/tc.php?return='.urlencode($afterLogin),
-                ]);
-            }
-
-            $request->getSession()->remove('term_and_condition');
         }
 
         $redirectUrl = $this->calculateRedirectUrl(

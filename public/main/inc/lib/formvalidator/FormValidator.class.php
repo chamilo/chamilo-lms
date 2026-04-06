@@ -651,7 +651,7 @@ EOT;
             $name,
             $label,
             'check',
-            'primary',
+            'success',
             null,
             null,
             [],

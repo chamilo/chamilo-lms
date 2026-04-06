@@ -2285,7 +2285,7 @@ class ExtraField extends Model
         $actions .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration'));
         $actions .= '</a>';
         $actions .= '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
-        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add'));
+        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add'));
         $actions .= '</a>';
 
         echo Display::toolbarAction('toolbar', [$actions]);

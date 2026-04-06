@@ -1,16 +1,15 @@
 .p-inputgroup {
   @apply flex items-stretch w-full;
 
-  .p-float-label {
+  .p-iconfield,
+  .p-floatlabel,
+  .p-iftalabel {
     @apply flex items-stretch w-full;
+  }
 
-    &:first-child input {
-      @apply rounded-l-lg;
-    }
-
-    &:last-child input {
-       @apply rounded-r-lg;
-    }
+  .p-floatlabel .p-inputwrapper,
+  .p-iftalabel .p-inputwrapper {
+    @apply inline-flex;
   }
 
   .p-inputtext,
@@ -19,47 +18,72 @@
   }
 
   > .p-component,
-  > .p-inputwrapper > .p-inputtext,
-  > .p-float-label > .p-component {
+  > .p-inputwrapper > .p-component,
+  > .p-iconfield > .p-component,
+  > .p-floatlabel > .p-component,
+  > .p-floatlabel > .p-inputwrapper > .p-component,
+  > .p-iftalabel > .p-component,
+  > .p-iftalabel > .p-inputwrapper > .p-component {
     @apply rounded-none m-0;
-
-    + .p-inputgroup-addon {
-      @apply border-l-0;
-    }
-
-    &:focus {
-      @apply z-[1];
-
-      ~ label {
-        @apply z-[1];
-      }
-    }
   }
 
-  button,
-  input {
-    @apply first:rounded-l-lg last:rounded-r-lg;
+  > .p-component:first-child,
+  > .p-inputwrapper:first-child > .p-component,
+  > .p-iconfield:first-child > .p-component,
+  > .p-floatlabel:first-child > .p-component,
+  > .p-floatlabel:first-child > .p-inputwrapper > .p-component,
+  > .p-iftalabel:first-child > .p-component,
+  > .p-iftalabel:first-child > .p-inputwrapper > .p-component {
+    @apply rounded-ss-lg rounded-es-lg;
   }
 
-  > .p-inputwrapper:first-child {
-    @apply rounded-l-lg;
-
-    > .p-inputtext {
-      @apply rounded-l-lg;
-    }
+  > .p-component:last-child,
+  > .p-inputwrapper:last-child > .p-component,
+  > .p-iconfield:last-child > .p-component,
+  > .p-floatlabel:last-child > .p-component,
+  > .p-floatlabel:last-child > .p-inputwrapper > .p-component,
+  > .p-iftalabel:last-child > .p-component,
+  > .p-iftalabel:last-child > .p-inputwrapper > .p-component {
+    @apply rounded-se-lg rounded-ee-lg;
   }
 
-  > .p-inputwrapper:last-child {
-    @apply rounded-r-lg;
+  .p-component:focus,
+  .p-component.p-focus,
+  .p-inputwrapper-focus,
+  .p-component:focus ~ label,
+  .p-component.p-focus ~ label,
+  .p-inputwrapper-focus ~ label,
+  .p-floatlabel .p-inputwrapper ~ label,
+  .p-iftalabel .p-inputwrapper ~ label {
+    @apply z-[1];
+  }
 
-    > .p-inputtext {
-      @apply rounded-r-lg;
-    }
+  > .p-button:not(.p-button-icon-only) {
+    @apply w-auto;
+  }
+
+  .p-iconfield + .p-iconfield .p-inputtext {
+    @apply border-s-0;
   }
 }
 
-.p-inputgroup-addon {
-  @apply flex items-center justify-center bg-white border-t border-l border-b border-support-3 px-4 py-2
-    last:border-r last:rounded-r-lg
-    first:rounded-l-lg;
+.p-inputgroupaddon {
+  @apply flex items-center justify-center px-4 py-2 bg-white text-gray-90 border-t border-b border-gray-50 min-w-[2.5rem];
+
+  &:first-child,
+  & + & {
+    @apply border-s border-gray-50 rounded-ss-lg rounded-es-lg;
+  }
+
+  &:last-child {
+    @apply border-e border-gray-50 rounded-se-lg rounded-ee-lg;
+  }
+
+  &:has(.p-button) {
+    @apply p-0 overflow-hidden;
+  }
+
+  .p-button {
+    @apply rounded-none;
+  }
 }

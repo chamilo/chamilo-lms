@@ -1,23 +1,27 @@
 <template>
-  <div class="p-inputgroup">
+  <InputGroup>
     <InputText
       :id="id"
       :name="inputName"
       :placeholder="inputPlaceholder"
       type="text"
     />
-    <BaseButton
-      :icon="buttonIcon"
-      :label="buttonLabel"
-      :id="buttonId"
-      is-submit
-      type="primary"
-      @click="$emit('button-click', $event)"
-    />
-  </div>
+    <InputGroupAddon>
+      <BaseButton
+        :icon="buttonIcon"
+        :label="buttonLabel"
+        :id="buttonId"
+        is-submit
+        type="primary"
+        @click="$emit('button-click', $event)"
+      />
+    </InputGroupAddon>
+  </InputGroup>
 </template>
 
 <script setup>
+import InputGroup from "primevue/inputgroup"
+import InputGroupAddon from "primevue/inputgroupaddon"
 import InputText from "primevue/inputtext"
 import BaseButton from "./BaseButton.vue"
 

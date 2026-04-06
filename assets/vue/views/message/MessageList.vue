@@ -4,7 +4,7 @@
       <BaseButton
         icon="email-plus"
         only-icon
-        type="black"
+        type="success"
         :title="t('New message')"
         :aria-label="t('New message')"
         @click="goToCompose"
@@ -24,7 +24,7 @@
         :disabled="0 === selectedItems.length || isLoading"
         icon="delete"
         only-icon
-        type="black"
+        type="danger"
         :title="t('Delete')"
         :aria-label="t('Delete')"
         @click="showDlgConfirmDeleteMultiple"
@@ -48,50 +48,6 @@
       />
     </SectionHeader>
 
-    <div class="message-list__actions">
-      <BaseButton
-        :label="t('Inbox')"
-        class="w-full md:w-auto"
-        icon="inbox"
-        type="black"
-        :title="t('Inbox')"
-        :aria-label="t('Inbox')"
-        @click="showInbox"
-      />
-
-      <BaseButton
-        :label="t('Unread')"
-        class="w-full md:w-auto"
-        icon="email-unread"
-        type="black"
-        :title="t('Unread')"
-        :aria-label="t('Unread')"
-        @click="showUnread"
-      />
-
-      <BaseButton
-        :label="t('Sent')"
-        class="w-full md:w-auto"
-        icon="sent"
-        type="black"
-        :title="t('Sent')"
-        :aria-label="t('Sent')"
-        @click="showSent"
-      />
-
-      <BaseButton
-        v-for="tag in tags"
-        :key="tag.id"
-        :label="tag.tag"
-        class="w-full md:w-auto"
-        icon="tag-outline"
-        type="black"
-        :title="tag.tag"
-        :aria-label="tag.tag"
-        @click="showInboxByTag(tag)"
-      />
-    </div>
-
     <div class="hidden md:block overflow-x-auto">
       <BaseTable
         ref="dtMessages"
@@ -109,32 +65,79 @@
         @sort="sortingChanged"
       >
         <template #header>
-          <form
-            class="message-list__searcher-container"
-            @submit.prevent="onSearch"
-          >
-            <InputGroup>
-              <InputText
-                v-model="searchText"
-                :placeholder="t('Search')"
-                type="text"
-              />
+          <div class="flex items-center gap-4">
+            <div class="flex items-stretch self-stretch">
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'inbox'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showInbox"
+              >
+                {{ t("Inbox") }}
+              </button>
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'unread'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showUnread"
+              >
+                {{ t("Unread") }}
+              </button>
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'sent'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showSent"
+              >
+                {{ t("Sent") }}
+              </button>
               <BaseButton
-                icon="search"
-                is-submit
-                type="primary"
-                :title="t('Search')"
-                :aria-label="t('Search')"
+                v-for="tag in tags"
+                :key="tag.id"
+                :label="tag.tag"
+                icon="tag-outline"
+                type="black"
+                :title="tag.tag"
+                :aria-label="tag.tag"
+                @click="showInboxByTag(tag)"
               />
-              <BaseButton
-                icon="close"
-                type="primary"
-                :title="t('Reset')"
-                :aria-label="t('Reset')"
-                @click="onResetSearch"
-              />
-            </InputGroup>
-          </form>
+            </div>
+            <form
+              class="flex-1"
+              @submit.prevent="onSearch"
+            >
+              <InputGroup>
+                <InputText
+                  v-model="searchText"
+                  :placeholder="t('Search')"
+                  type="text"
+                />
+                <BaseButton
+                  icon="search"
+                  is-submit
+                  type="primary"
+                  :title="t('Search')"
+                  :aria-label="t('Search')"
+                />
+                <BaseButton
+                  icon="close"
+                  type="primary"
+                  :title="t('Reset')"
+                  :aria-label="t('Reset')"
+                  @click="onResetSearch"
+                />
+              </InputGroup>
+            </form>
+          </div>
         </template>
 
         <Column selection-mode="multiple" />
@@ -211,6 +214,42 @@
 
     <!-- List for small screens with pagination -->
     <div class="block md:hidden">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <BaseButton
+          :label="t('Inbox')"
+          icon="inbox"
+          type="black"
+          :title="t('Inbox')"
+          :aria-label="t('Inbox')"
+          @click="showInbox"
+        />
+        <BaseButton
+          :label="t('Unread')"
+          icon="email-unread"
+          type="black"
+          :title="t('Unread')"
+          :aria-label="t('Unread')"
+          @click="showUnread"
+        />
+        <BaseButton
+          :label="t('Sent')"
+          icon="sent"
+          type="black"
+          :title="t('Sent')"
+          :aria-label="t('Sent')"
+          @click="showSent"
+        />
+        <BaseButton
+          v-for="tag in tags"
+          :key="tag.id"
+          :label="tag.tag"
+          icon="tag-outline"
+          type="black"
+          :title="tag.tag"
+          :aria-label="tag.tag"
+          @click="showInboxByTag(tag)"
+        />
+      </div>
       <ul class="space-y-4">
         <li
           v-for="item in paginatedItems"
@@ -510,9 +549,11 @@ function loadMessages(reset = true) {
 }
 
 const showingInbox = ref(false)
+const activeFilter = ref("inbox")
 
 function showInbox() {
   showingInbox.value = true
+  activeFilter.value = "inbox"
   title.value = t("Inbox")
   selectedTag.value = null
 
@@ -547,6 +588,7 @@ function showInboxByTag(tag) {
 
 function showUnread() {
   showingInbox.value = true
+  activeFilter.value = "unread"
   title.value = t("Unread")
   selectedTag.value = null
 
@@ -565,6 +607,7 @@ function showUnread() {
 
 function showSent() {
   showingInbox.value = false
+  activeFilter.value = "sent"
   title.value = t("Sent")
   selectedTag.value = null
 

@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -152,10 +151,14 @@ function handleForum($url)
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     // Manually register thread deletion event because the resource is not removed via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(
@@ -170,10 +173,14 @@ function handleForum($url)
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     // Register forum deletion manually as it's not deleted via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
@@ -201,10 +208,14 @@ function handleForum($url)
                     }
 
                     // Manually register thread deletion event because the resource is not removed via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(Display::return_message(get_lang('Thread deleted'), 'confirmation', false));

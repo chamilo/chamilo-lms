@@ -824,10 +824,8 @@ class learnpath
         }
 
         // Tracking event
-        $trackRepo    = Container::$container->get(TrackEDefaultRepository::class);
-        $resourceNode = $lp ? $lp->getResourceNode() : null;
-        if ($resourceNode) {
-            $trackRepo->registerResourceEvent(
+        if ($resourceNode = $lp?->getResourceNode()) {
+            Container::getResourceHelper()->createAndSaveResourceEvent(
                 $resourceNode,
                 'deletion',
                 api_get_user_id(),

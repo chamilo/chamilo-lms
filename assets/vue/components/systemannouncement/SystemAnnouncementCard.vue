@@ -1,14 +1,12 @@
 <template>
-  <BaseCard
-    plain
-    class="mb-2 last:mb-0"
-  >
-    <template #header>
+  <BaseCard plain>
+    <template #title>{{ announcement.title }}</template>
+    <template
+      v-if="securityStore.isAdmin"
+      #header
+    >
       <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
-        <h6 v-text="announcement.title" />
-
         <BaseButton
-          v-if="securityStore.isAdmin"
           icon="edit"
           :label="$t('Edit')"
           type="secondary"

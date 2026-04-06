@@ -1,5 +1,8 @@
 <template>
-  <div v-if="pageList.length">
+  <div
+    v-if="pageList.length"
+    class="flex flex-col gap-4"
+  >
     <PageCard
       v-for="page in pageList"
       :key="page.id"

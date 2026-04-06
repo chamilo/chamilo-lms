@@ -1,10 +1,12 @@
 <template>
   <BaseCard plain>
-    <template #header>
+    <template #title>{{ page.title }}</template>
+    <template
+      v-if="isAdmin"
+      #header
+    >
       <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
-        <h6 v-text="page.title" />
         <BaseButton
-          v-if="isAdmin"
           icon="edit"
           :label="t('Edit')"
           size="small"

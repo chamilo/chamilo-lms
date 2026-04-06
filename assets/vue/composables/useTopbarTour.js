@@ -1,6 +1,10 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { useRoute } from "vue-router"
+import { usePlatformConfig } from "../store/platformConfig"
 
-export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
+export function useTopbarTour({ isAnonymous }) {
+  const platformConfigStore = usePlatformConfig()
+  const route = useRoute()
   const tourBusy = ref(false)
   const tourAvailableForCurrentPage = ref(false)
   let tourRefreshTimerIds = []

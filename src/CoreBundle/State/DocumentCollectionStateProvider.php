@@ -339,7 +339,52 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             }
         }
 
-        $qb->orderBy('rn.title', 'ASC');
+        // Dynamic sort — map API field names to DQL expressions.
+        // When the client sends order[resourceNode.title]=desc etc. we honour it;
+        // fall back to title ASC when no order param is present.
+        $sortMap = [
+            'iid' => 'd.iid',
+            'filetype' => 'd.filetype',
+            'resourceNode.title' => 'rn.title',
+            'resourceNode.createdAt' => 'rn.createdAt',
+            'resourceNode.updatedAt' => 'rn.updatedAt',
+            'resourceNode.firstResourceFile.size' => 'rf.size',
+        ];
+
+        $rawOrder = \is_array($query['order'] ?? null) ? $query['order'] : [];
+        $orderClauses = [];
+        $needsFileJoin = false;
+
+        foreach ($rawOrder as $field => $direction) {
+            $dqlExpr = $sortMap[(string) $field] ?? null;
+            if (null === $dqlExpr) {
+                continue;
+            }
+            $dir = 'DESC' === strtoupper((string) $direction) ? 'DESC' : 'ASC';
+            $orderClauses[] = [$dqlExpr, $dir];
+            if ('rf.size' === $dqlExpr) {
+                $needsFileJoin = true;
+            }
+        }
+
+        if (empty($orderClauses)) {
+            $orderClauses[] = ['rn.title', 'ASC'];
+        }
+
+        // The file-size sort needs an extra join on the filter query (fetchQb already has it).
+        if ($needsFileJoin) {
+            $qb->leftJoin('rn.resourceFiles', 'rf');
+        }
+
+        $first = true;
+        foreach ($orderClauses as [$orderExpr, $orderDir]) {
+            if ($first) {
+                $qb->orderBy($orderExpr, $orderDir);
+                $first = false;
+            } else {
+                $qb->addOrderBy($orderExpr, $orderDir);
+            }
+        }
 
         // Build a stable cache key from every value that affects the result set.
         // Settings-derived booleans are already folded into $hiddenSystemTypes.
@@ -367,6 +412,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                 $includeBaseContent,
                 $isGradebook,
                 $showSystemCertificates,
+                $orderClauses,
                 $page,
                 $itemsPerPage,
             ]));
@@ -376,7 +422,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         // which is a simple indexed lookup — no DISTINCT, no complex WHERE.
         $cached = $this->documentListCache->get(
             $cacheKey,
-            static function (ItemInterface $item) use ($qb, $page, $itemsPerPage): array {
+            static function (ItemInterface $item) use ($qb, $orderClauses, $page, $itemsPerPage): array {
                 $item->expiresAfter(120);
 
                 $countQb = clone $qb;
@@ -387,9 +433,18 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     ->getSingleScalarResult()
                 ;
 
+                // SELECT DISTINCT requires every ORDER BY expression to appear in the SELECT list.
+                // Build a comma-separated select that includes d.iid plus any extra sort columns.
+                $iidSelect = 'd.iid';
+                foreach ($orderClauses as [$orderExpr, $orderDir]) {
+                    if ('d.iid' !== $orderExpr) {
+                        $iidSelect .= ', '.$orderExpr;
+                    }
+                }
+
                 $iidQb = clone $qb;
                 $rows = $iidQb
-                    ->select('d.iid')
+                    ->select($iidSelect)
                     ->distinct()
                     ->setFirstResult(($page - 1) * $itemsPerPage)
                     ->setMaxResults($itemsPerPage)

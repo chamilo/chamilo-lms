@@ -182,8 +182,14 @@
   .ch-toolbar-icon {
     @apply font-extrabold text-primary leading-none;
   }
+  .ch-tool-icon-secondary {
+    @apply font-extrabold text-secondary;
+  }
   .ch-tool-icon-success {
     @apply font-extrabold text-success;
+  }
+  .ch-tool-icon-danger {
+    @apply font-extrabold text-danger;
   }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;

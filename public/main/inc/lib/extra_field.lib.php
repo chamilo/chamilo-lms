@@ -2367,12 +2367,14 @@ class ExtraField extends Model
                 'name' => 'field_order',
                 'index' => 'field_order',
                 'align' => 'center',
+                'width' => 50,
                 'sortable' => 'true',
             ],
             [
                 'name' => 'actions',
                 'index' => 'actions',
                 'align' => 'center',
+                'width' => 70,
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
             ],
@@ -2585,28 +2587,18 @@ class ExtraField extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
-        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
-        $confirmMessage = addslashes(
-            api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)
-        );
-
-        $editButton = <<<JAVASCRIPT
-            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
-                $editIcon\
-            </a>
-JAVASCRIPT;
-        $deleteButton = <<<JAVASCRIPT
-            <a \
-                    onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
-                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
-                class="btn btn-link btn-xs">\
-                $deleteIcon\
-            </a>
-JAVASCRIPT;
+        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-secondary', null, ICON_SIZE_SMALL, get_lang('Edit'));
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-danger', null, ICON_SIZE_SMALL, get_lang('Delete'));
+        $confirmMsg = json_encode(get_lang('Please confirm your choice'));
+        $editIconJs = json_encode($editIcon);
+        $deleteIconJs = json_encode($deleteIcon);
+        $type = $this->type;
 
         return "function action_formatter(cellvalue, options, rowObject) {
-            return '$editButton $deleteButton';
+            var r = options.rowId;
+            var e = '<a href=\"?action=edit&type={$type}&id=' + r + '\">' + {$editIconJs} + '</a>';
+            var d = '<a onclick=\'if (!confirm({$confirmMsg})) {return false;}\' href=\"?sec_token={$token}&type={$type}&id=' + r + '&action=delete\">' + {$deleteIconJs} + '</a>';
+            return e + ' ' + d;
         }";
     }
 

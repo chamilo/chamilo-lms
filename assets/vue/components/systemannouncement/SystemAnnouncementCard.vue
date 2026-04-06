@@ -1,16 +1,17 @@
 <template>
   <BaseCard plain>
-    <template #title>{{ announcement.title }}</template>
-    <template
-      v-if="securityStore.isAdmin"
-      #header
-    >
-      <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
+    <template #title>
+      <div class="flex items-center">
+        {{ announcement.title }}
         <BaseButton
-          icon="edit"
+          v-if="securityStore.isAdmin"
           :label="$t('Edit')"
-          type="secondary"
-          @click="handleAnnouncementClick(announcement)"
+          :to-url="`/main/admin/system_announcements.php?id=${announcement['id']}&action=edit`"
+          class="ml-auto"
+          icon="edit"
+          only-icon
+          size="small"
+          type="secondary-text"
         />
       </div>
     </template>
@@ -32,10 +33,4 @@ defineProps({
     required: true,
   },
 })
-
-function handleAnnouncementClick(announcement) {
-  // until announcement is migrated to vue we need to use a browser action
-  // when announcement is migrated we should use router.push here
-  location.assign(`/main/admin/system_announcements.php?id=${announcement["id"]}&action=edit`)
-}
 </script>

@@ -12,6 +12,7 @@
       :class="[
         slotProps.class,
         { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon, 'p-disabled': disabled },
+        attrs.class,
       ]"
       :title="onlyIcon ? label : undefined"
     >
@@ -47,10 +48,12 @@
 
 <script setup>
 import Button from "primevue/button"
-import { computed } from "vue"
+import { computed, useAttrs } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 import BaseAppLink from "./BaseAppLink.vue"
+
+const attrs = useAttrs()
 
 const props = defineProps({
   label: {

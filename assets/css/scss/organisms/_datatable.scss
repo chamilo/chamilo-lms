@@ -14,23 +14,71 @@
   }
 
   .p-paginator {
-    @apply p-3 gap-3;
+    @apply flex items-center justify-center flex-wrap gap-1 px-4 py-3 bg-white border-t border-gray-30;
 
     &-top,
     &-bottom {
       @apply border-0;
     }
 
+    // "1 – 20 / 56" summary — pinned left
     &-current {
-      @apply mr-auto;
+      @apply mr-auto text-body-2 text-gray-50 tabular-nums;
     }
 
+    // First / Prev / Next / Last navigation buttons
+    &-first,
+    &-prev,
+    &-next,
+    &-last {
+      @apply flex items-center justify-center w-8 h-8 rounded-md border-0 bg-transparent
+             text-gray-50 text-lg cursor-pointer transition-colors duration-150
+             hover:bg-gray-15 hover:text-primary
+             disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-50;
+
+      .mdi {
+        @apply leading-none;
+      }
+    }
+
+    // Numbered page pills
     &-pages {
-      @apply space-x-3;
+      @apply flex items-center gap-1;
     }
 
-    &-rpp-options {
+    &-page {
+      @apply flex items-center justify-center min-w-[2rem] h-8 px-2 rounded-md border-0 bg-transparent
+             text-body-2 text-gray-90 cursor-pointer font-medium transition-colors duration-150
+             hover:bg-gray-15 hover:text-primary;
+
+      // Current page — filled primary pill
+      &[aria-current="page"],
+      &.p-highlight {
+        @apply bg-primary text-white;
+
+        &:hover {
+          @apply bg-primary text-white;
+          filter: brightness(0.9);
+        }
+      }
+    }
+
+    // Rows-per-page dropdown — keep it compact (just wide enough for 2–3 digits)
+    &-rpp-options,
+    &-rpp {
       @apply ml-auto;
+
+      .p-select {
+        @apply w-auto min-w-0;
+
+        .p-select-label {
+          @apply px-3 py-1.5 text-body-2;
+        }
+
+        .p-select-dropdown {
+          @apply pr-2;
+        }
+      }
     }
   }
 

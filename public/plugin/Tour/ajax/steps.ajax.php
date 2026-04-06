@@ -24,6 +24,12 @@ if ('GET' !== $_SERVER['REQUEST_METHOD']) {
 try {
     $tourPlugin = Tour::create();
 
+    // Do not expose steps when the plugin is disabled or the feature is off.
+    if (!$tourPlugin->isTourAvailable()) {
+        echo json_encode([]);
+        exit;
+    }
+
     $page = isset($_GET['page']) ? trim((string) $_GET['page']) : '';
     $pageName = isset($_GET['page_name']) ? trim((string) $_GET['page_name']) : '';
     $pageClass = isset($_GET['page_class']) ? trim((string) $_GET['page_class']) : '';

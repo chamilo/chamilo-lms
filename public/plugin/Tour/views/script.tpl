@@ -1,30 +1,26 @@
+{% if show_tour is defined and show_tour %}
 <div id="ch-tour-root"></div>
 <script>
   (function () {
+    if (window.__ChamiloTourBooted) {
+      return;
+    }
+    window.__ChamiloTourBooted = true;
+
     const TOUR_ROOT_ID = 'ch-tour-root';
     const injectedSecurityToken = "{{ tour_security_token|default('')|e('js') }}";
-    const injectedStepsAjaxUrl = "{{ web_path.steps_ajax|default('/plugin/Tour/ajax/steps.ajax.php')|e('js') }}";
-    const injectedSaveAjaxUrl = "{{ web_path.save_ajax|default('/plugin/Tour/ajax/save.ajax.php')|e('js') }}";
-    const injectedIntroCssUrl = "{{ web_path.intro_css|default('/plugin/Tour/intro.js/introjs.min.css')|e('js') }}";
+    const injectedStepsAjaxUrl = "{{ web_path.steps_ajax|default('')|e('js') }}";
+    const injectedSaveAjaxUrl = "{{ web_path.save_ajax|default('')|e('js') }}";
+    const injectedIntroCssUrl = "{{ web_path.intro_css|default('')|e('js') }}";
     const injectedIntroThemeCssUrl = "{{ web_path.intro_theme_css|default('')|e('js') }}";
-    const injectedIntroJsUrl = "{{ web_path.intro_js|default('/plugin/Tour/intro.js/intro.min.js')|e('js') }}";
+    const injectedIntroJsUrl = "{{ web_path.intro_js|default('')|e('js') }}";
 
     const TOUR_CONFIG = {
-      introCss: injectedIntroCssUrl && injectedIntroCssUrl.indexOf('{{') !== 0
-        ? injectedIntroCssUrl
-        : '/plugin/Tour/intro.js/introjs.min.css',
-      introThemeCss: injectedIntroThemeCssUrl && injectedIntroThemeCssUrl.indexOf('{{') !== 0
-        ? injectedIntroThemeCssUrl
-        : '',
-      introJs: injectedIntroJsUrl && injectedIntroJsUrl.indexOf('{{') !== 0
-        ? injectedIntroJsUrl
-        : '/plugin/Tour/intro.js/intro.min.js',
-      stepsAjax: injectedStepsAjaxUrl && injectedStepsAjaxUrl.indexOf('{{') !== 0
-        ? injectedStepsAjaxUrl
-        : '/plugin/Tour/ajax/steps.ajax.php',
-      saveAjax: injectedSaveAjaxUrl && injectedSaveAjaxUrl.indexOf('{{') !== 0
-        ? injectedSaveAjaxUrl
-        : '/plugin/Tour/ajax/save.ajax.php'
+      introCss: injectedIntroCssUrl,
+      introThemeCss: injectedIntroThemeCssUrl,
+      introJs: injectedIntroJsUrl,
+      stepsAjax: injectedStepsAjaxUrl,
+      saveAjax: injectedSaveAjaxUrl
     };
 
     let cachedSteps = [];
@@ -33,6 +29,10 @@
     let reinitTimer = null;
     let badgeEnforceTimer = null;
     let badgeObserver = null;
+    const pageStepCache = new Map();
+    const pendingStepRequests = new Map();
+    const lastForceRefreshAt = new Map();
+    const FORCE_REFRESH_THROTTLE_MS = 1500;
 
     function getSecurityToken() {
       if (injectedSecurityToken && injectedSecurityToken.indexOf('{{') !== 0) {
@@ -114,14 +114,15 @@
         return;
       }
 
+      if (!TOUR_CONFIG.introCss || !TOUR_CONFIG.introJs) {
+        callback();
+        return;
+      }
+
       loadCssOnce(TOUR_CONFIG.introCss, 'data-tour-intro-css');
 
       if (TOUR_CONFIG.introThemeCss) {
         loadCssOnce(TOUR_CONFIG.introThemeCss, 'data-tour-intro-theme-css');
-      }
-
-      if (!TOUR_CONFIG.introJs) {
-        return;
       }
 
       const existingScript = document.querySelector('script[data-tour-intro-js="1"]');
@@ -144,11 +145,19 @@
     }
 
     function fetchSteps(pageClass) {
-      if (!TOUR_CONFIG.stepsAjax) {
+      if (!TOUR_CONFIG.stepsAjax || !pageClass) {
         return Promise.resolve([]);
       }
 
-      return fetch(TOUR_CONFIG.stepsAjax + '?page=' + encodeURIComponent(pageClass), {
+      if (pageStepCache.has(pageClass)) {
+        return Promise.resolve(pageStepCache.get(pageClass));
+      }
+
+      if (pendingStepRequests.has(pageClass)) {
+        return pendingStepRequests.get(pageClass);
+      }
+
+      const request = fetch(TOUR_CONFIG.stepsAjax + '?page=' + encodeURIComponent(pageClass), {
         credentials: 'same-origin',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
@@ -157,9 +166,20 @@
         .then(function (response) {
           return response.ok ? response.json() : [];
         })
+        .then(function (steps) {
+          const normalized = Array.isArray(steps) ? steps : [];
+          pageStepCache.set(pageClass, normalized);
+          pendingStepRequests.delete(pageClass);
+          return normalized;
+        })
         .catch(function () {
+          pendingStepRequests.delete(pageClass);
           return [];
         });
+
+      pendingStepRequests.set(pageClass, request);
+
+      return request;
     }
 
     function filterValidSteps(steps) {
@@ -419,28 +439,59 @@
         return;
       }
 
+      if (
+        evaluationKey === lastEvaluationKey &&
+        cachedPageClass === pageClass &&
+        (pageStepCache.has(pageClass) || pendingStepRequests.has(pageClass))
+      ) {
+        return;
+      }
+
       cachedPageClass = pageClass;
       lastEvaluationKey = evaluationKey;
 
-      fetchSteps(pageClass).then(function (steps) {
-        if (cachedPageClass !== pageClass) {
-          return;
-        }
+      fetchSteps(pageClass)
+        .then(function (steps) {
+          if (cachedPageClass !== pageClass) {
+            return;
+          }
 
-        cachedSteps = Array.isArray(steps) ? steps : [];
+          cachedSteps = Array.isArray(steps) ? steps : [];
 
-        getRoot();
-        updateTourApi();
-      }).catch(function () {
-        cachedSteps = [];
-        updateTourApi();
-      });
+          getRoot();
+          updateTourApi();
+        })
+        .catch(function () {
+          cachedSteps = [];
+          updateTourApi();
+        });
     }
 
     function forceRefresh() {
       clearTimeout(reinitTimer);
 
       reinitTimer = setTimeout(function () {
+        const pageClass = getCurrentPageClass();
+
+        if (!pageClass) {
+          lastEvaluationKey = null;
+          init();
+          return;
+        }
+
+        const now = Date.now();
+        const lastRun = lastForceRefreshAt.get(pageClass) || 0;
+
+        if (now - lastRun < FORCE_REFRESH_THROTTLE_MS) {
+          return;
+        }
+
+        lastForceRefreshAt.set(pageClass, now);
+
+        // Keep in-flight requests so duplicate refresh events reuse the same promise.
+        pageStepCache.delete(pageClass);
+        lastEvaluationKey = null;
+
         init();
       }, 80);
     }
@@ -526,3 +577,4 @@
     });
   })();
 </script>
+{% endif %}

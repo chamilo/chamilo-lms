@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 use const PHP_URL_PATH;
 
 class PageHelper
@@ -37,7 +39,8 @@ class PageHelper
         PageRepository $pageRepository,
         PageCategoryRepository $pageCategoryRepository,
         SysAnnouncementRepository $sysAnnouncementRepository,
-        AccessUrlHelper $accessUrlHelper
+        AccessUrlHelper $accessUrlHelper,
+        private TranslatorInterface $translator,
     ) {
         $this->pageRepository = $pageRepository;
         $this->pageCategoryRepository = $pageCategoryRepository;
@@ -82,8 +85,8 @@ class PageHelper
         $this->pageCategoryRepository->update($demoCategory);
 
         $page = (new Page())
-            ->setTitle('Welcome')
-            ->setContent('Welcome to Chamilo')
+            ->setTitle($this->translator->trans('Welcome'))
+            ->setContent($this->translator->trans('Welcome to Chamilo'))
             ->setCategory($category)
             ->setCreator($user)
             ->setLocale($locale)
@@ -93,7 +96,7 @@ class PageHelper
         $this->pageRepository->update($page);
 
         $indexPage = (new Page())
-            ->setTitle('Welcome')
+            ->setTitle($this->translator->trans('Welcome'))
             ->setContent('<img src="/img/document/images/mr_chamilo/svg/teaching.svg" />')
             ->setCategory($indexCategory)
             ->setCreator($user)

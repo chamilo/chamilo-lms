@@ -14,11 +14,30 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TrackEAccess;
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
+use Chamilo\CoreBundle\Entity\TrackEDownloads;
+use Chamilo\CoreBundle\Entity\TrackEHotpotatoes;
+use Chamilo\CoreBundle\Entity\TrackELastaccess;
+use Chamilo\CoreBundle\Entity\TrackELinks;
+use Chamilo\CoreBundle\Entity\TrackEOnline;
+use Chamilo\CoreBundle\Entity\TrackEUploads;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -30,8 +49,11 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManager;
 use DocumentManager;
+use Event;
 use Exception;
 use Exercise;
+use ExtraFieldValue;
+use GroupManager;
 use InvalidArgumentException;
 use Link;
 use LogicException;
@@ -47,6 +69,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
+use UrlManager;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -70,6 +93,8 @@ class CourseHelper
         private readonly RequestStack $requestStack,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IllustrationRepository $illustrationRepository,
+        private readonly XapianIndexService $xapianIndexService,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepository
     ) {}
 
@@ -1370,5 +1395,238 @@ class CourseHelper
         }
 
         return $infoMap;
+    }
+
+    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): void
+    {
+        $em = $this->entityManager;
+
+        /** @var SequenceResourceRepository $sequenceRepo */
+        $sequenceRepo = $em->getRepository(SequenceResource::class);
+        $sequenceResource = $sequenceRepo->findRequirementForResource($course->getId(), SequenceResource::COURSE_TYPE);
+
+        if ($sequenceResource) {
+            throw new RuntimeException($this->translator->trans('There is a sequence resource linked to this course. You must delete this link first.'));
+        }
+
+        $exclusiveFiles = [];
+        if ($deleteExclusiveDocuments) {
+            $exclusiveFiles = $this->getExclusiveResourceFilesForCourse($course);
+        }
+
+        $count = 0;
+        if ($this->accessUrlHelper->isMultiple()) {
+            $urlId = $this->accessUrlHelper->getCurrent()->getId();
+            UrlManager::delete_url_rel_course($course->getId(), $urlId);
+            $count = UrlManager::getCountUrlRelCourse($course->getId());
+        }
+
+        if (0 !== $count) {
+            return;
+        }
+
+        $groupCategories = GroupManager::get_categories($course, null);
+        if (!empty($groupCategories)) {
+            foreach ($groupCategories as $category) {
+                GroupManager::delete_category($category['iid'], $course->getCode());
+            }
+        }
+
+        $resourceLink = $course->getFirstResourceLink();
+
+        // Unsubscribe all users from the course
+        $em->createQuery('DELETE FROM '.CourseRelUser::class.' cru WHERE cru.course = :course')
+            ->setParameter('course', $course->getId())
+            ->execute()
+        ;
+
+        // Delete the course from the sessions tables
+        $em->createQuery('DELETE FROM '.SessionRelCourse::class.' src WHERE src.course = :course')
+            ->setParameter('course', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.SessionRelCourseRelUser::class.' srcru WHERE srcru.course = :course')
+            ->setParameter('course', $course->getId())
+            ->execute()
+        ;
+
+        // Delete the course from the stats tables
+        $em->createQuery('DELETE FROM '.TrackEHotpotatoes::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.TrackEAccess::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.TrackELastaccess::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.TrackECourseAccess::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.TrackEOnline::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+
+        // Do not delete rows from track_e_default as these include course
+        // creation and other important things that do not take much space
+        // but give information on the course history
+        if ($resourceLink) {
+            $em->createQuery('DELETE FROM '.TrackEDownloads::class.' t WHERE t.resourceLink = :resourceLink')
+                ->setParameter('resourceLink', $resourceLink->getId())
+                ->execute()
+            ;
+        }
+
+        $em->createQuery('DELETE FROM '.TrackELinks::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.TrackEUploads::class.' t WHERE t.cId = :courseId')
+            ->setParameter('courseId', $course->getId())
+            ->execute()
+        ;
+
+        // Unlink tickets from the course before deletion (preserves ticket history)
+        $em->createQuery('UPDATE '.Ticket::class.' t SET t.course = NULL WHERE t.course = :course')
+            ->setParameter('course', $course->getId())
+            ->execute()
+        ;
+
+        $sequenceRepo->deleteSequenceResource($course->getId(), SequenceResource::COURSE_TYPE);
+
+        // Class
+        $em->createQuery('DELETE FROM '.UsergroupRelCourse::class.' urc WHERE urc.course = :course')
+            ->setParameter('course', $course->getId())
+            ->execute()
+        ;
+
+        // Skills
+        $argumentation = \sprintf(
+            $this->translator->trans('This skill was obtained through course %s which has been removed since then.'),
+            $course->getCode()
+        );
+        $em->createQuery(
+            'UPDATE '.SkillRelUser::class.' sru
+             SET sru.course = NULL, sru.session = NULL, sru.argumentation = :argumentation
+             WHERE sru.course = :course'
+        )
+            ->setParameter('course', $course->getId())
+            ->setParameter('argumentation', $argumentation)
+            ->execute()
+        ;
+
+        $appPlugin = new AppPlugin();
+        $appPlugin->performActionsWhenDeletingItem('course', $course->getId());
+
+        // Purge Xapian index BEFORE deleting the course entity (resource links still exist)
+        try {
+            $this->xapianIndexService->purgeCourseIndex($course->getId());
+        } catch (Throwable $e) {
+            error_log('[Xapian] purgeCourseIndex: failed for courseId='.$course->getId().': '.$e->getMessage());
+        }
+
+        $this->entityManager->remove($course);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        // Delete documents that were exclusively used by this course,
+        // if the administrator explicitly requested it.
+        if ($deleteExclusiveDocuments && !empty($exclusiveFiles)) {
+            $this->deleteExclusiveResourceFiles($exclusiveFiles);
+        }
+
+        // Delete extra course fields
+        $extraFieldValues = new ExtraFieldValue('course');
+        $extraFieldValues->deleteValuesByItem($course->getId());
+
+        // Add event to system log
+        Event::addEvent(
+            LOG_COURSE_DELETE,
+            LOG_COURSE_CODE,
+            $course->getCode(),
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            $course->getId()
+        );
+    }
+
+    /**
+     * Returns ResourceFile entries that are exclusively linked to the given course
+     * (i.e. not shared with any other course via another ResourceLink).
+     *
+     * @return ResourceFile[]
+     */
+    private function getExclusiveResourceFilesForCourse(Course $course): array
+    {
+        $dql = 'SELECT DISTINCT rf
+            FROM Chamilo\CoreBundle\Entity\ResourceFile rf
+            JOIN rf.resourceNode rn
+            JOIN rn.resourceLinks rl
+            WHERE rl.course = :course
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM Chamilo\CoreBundle\Entity\ResourceLink rl2
+                    WHERE rl2.resourceNode = rn
+                    AND rl2.course != :course
+                )
+            ';
+
+        return $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('course', $course)
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Delete the given ResourceFile entries and their physical files
+     * under var/upload/resource.
+     *
+     * @param ResourceFile[] $files
+     */
+    private function deleteExclusiveResourceFiles(array $files): void
+    {
+        if (empty($files)) {
+            return;
+        }
+
+        $em = $this->entityManager;
+
+        $basePath = api_get_path(SYS_PATH).'var/upload/resource';
+
+        foreach ($files as $file) {
+            if (!$file instanceof ResourceFile) {
+                continue;
+            }
+
+            $relativePath = $this->resourceNodeRepository->getFilename($file);
+            $absolutePath = $basePath.$relativePath;
+
+            if (is_file($absolutePath) && is_writable($absolutePath)) {
+                @unlink($absolutePath);
+            }
+
+            if (!$this->entityManager->contains($file)) {
+                $file = $this->entityManager->getReference(ResourceFile::class, $file->getId());
+            }
+
+            $resourceNode = $file->getResourceNode();
+            if ($resourceNode instanceof ResourceNode) {
+                if (!$this->entityManager->contains($resourceNode)) {
+                    $resourceNode = $this->entityManager->getReference(ResourceNode::class, $resourceNode->getId());
+                }
+
+                $this->entityManager->remove($resourceNode);
+            }
+
+            $this->entityManager->remove($file);
+        }
+
+        $this->entityManager->flush();
     }
 }

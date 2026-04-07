@@ -35,7 +35,7 @@
     const FORCE_REFRESH_THROTTLE_MS = 1500;
 
     function getSecurityToken() {
-      if (injectedSecurityToken && injectedSecurityToken.indexOf('{{') !== 0) {
+      if (injectedSecurityToken && injectedSecurityToken.indexOf('a') !== 0) {
         return injectedSecurityToken;
       }
 
@@ -233,7 +233,8 @@
         method: 'POST',
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Charset': 'UTF-8',
           'X-Requested-With': 'XMLHttpRequest'
         },
         body: params.toString()

@@ -11,7 +11,7 @@ const emit = defineEmits(["addClick", "agendaListClick", "myStudentsScheduleClic
 const props = defineProps({
   activeView: {
     type: String,
-    default: "calendar", // "calendar" | "list"
+    default: "", // "calendar" | "list" | "session-planning" | "my-students-schedule"
   },
 })
 
@@ -20,6 +20,8 @@ const { showAddButton, showAgendaListButton, showSessionPlanningButton, showMySt
 
 const isCalendarActive = computed(() => props.activeView === "calendar")
 const isListActive = computed(() => props.activeView === "list")
+const isSessionPlanningActive = computed(() => props.activeView === "session-planning")
+const isMyStudentsScheduleActive = computed(() => props.activeView === "my-students-schedule")
 
 function goCalendar() {
   emit("agendaListClick", "calendar")
@@ -70,6 +72,8 @@ function goList() {
       icon="agenda-plan"
       only-icon
       type="black"
+      :disabled="isSessionPlanningActive"
+      :class="isSessionPlanningActive ? '' : 'opacity-60 hover:opacity-100'"
       @click="emit('sessionPlanningClick')"
     />
 
@@ -79,6 +83,8 @@ function goList() {
       icon="agenda-user-event"
       only-icon
       type="black"
+      :disabled="isMyStudentsScheduleActive"
+      :class="isMyStudentsScheduleActive ? '' : 'opacity-60 hover:opacity-100'"
       @click="emit('myStudentsScheduleClick')"
     />
   </SectionHeader>

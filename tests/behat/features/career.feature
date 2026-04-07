@@ -52,5 +52,9 @@ Feature: Career
       And I confirm the popup
       And I wait for the page to be loaded
       Then I should not see an error
+      When I click the "i.mdi-delete" element
+      And I confirm the popup
+      And I wait for the page to be loaded
+      Then I should not see an error
+      And I should not see "Developer Copy"
       And I should not see "Developer"
-

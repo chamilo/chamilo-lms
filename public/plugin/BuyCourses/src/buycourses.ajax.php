@@ -497,7 +497,7 @@ switch ($action) {
         }
 
         $ajaxCallFile = $plugin->getPath('SRC').'buycourses.ajax.php';
-        $serviceImg = $plugin->getPath('SERVICE_IMAGES').$serviceSale['service']['image'];
+        $serviceImg = $serviceSale['service']['image'] ?: Template::get_icon_path('session_default.png');
         $ajaxCallFileEscaped = bcEscapeHtml((string) $ajaxCallFile);
         $serviceImgEscaped = bcEscapeHtml((string) $serviceImg);
         $html = "<img class='img-responsive text-center' src='$serviceImgEscaped' alt='".bcEscapeHtml((string) $serviceSale['service']['name'])."'>";

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use League\Flysystem\FilesystemOperator;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Intl\Currencies;
@@ -3022,15 +3023,12 @@ class BuyCoursesPlugin extends Plugin
         if ($return && !empty($service['picture_crop_image_base_64'])
             && !empty($service['picture_crop_result'])
         ) {
-            $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $file = api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$return.'.png';
-            file_put_contents($file, $data);
+            $imageName = 'simg-'.$return.'.png';
+            $this->saveServiceImageFromBase64($service['picture_crop_image_base_64'], $imageName);
 
             Database::update(
                 $servicesTable,
-                ['image' => 'simg-'.$return.'.png'],
+                ['image' => $imageName],
                 ['id = ?' => $return]
             );
         }
@@ -3046,12 +3044,10 @@ class BuyCoursesPlugin extends Plugin
     public function updateService(array $service, int $id)
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $imageName = 'simg-'.$id.'.png';
+
         if (!empty($service['picture_crop_image_base_64'])) {
-            $img = str_replace('data:image/png;base64,', '', $service['picture_crop_image_base_64']);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $file = api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$id.'.png';
-            file_put_contents($file, $data);
+            $this->saveServiceImageFromBase64($service['picture_crop_image_base_64'], $imageName);
         }
 
         return Database::update(
@@ -3065,7 +3061,7 @@ class BuyCoursesPlugin extends Plugin
                 'applies_to' => (int) $service['applies_to'],
                 'owner_id' => (int) $service['owner_id'],
                 'visibility' => (int) $service['visibility'],
-                'image' => 'simg-'.$id.'.png',
+                'image' => $imageName,
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
             ],
@@ -3209,7 +3205,7 @@ class BuyCoursesPlugin extends Plugin
         $service['tax_name'] = $globalParameters['tax_name'];
         $service['tax_enable'] = $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_SERVICES);
         $service['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
-        $service['image'] = !empty($service['image']) ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/'.$service['image'] : null;
+        $service['image'] = $this->getServiceImageUrl($service['image'] ?? null);
 
         return $service;
     }
@@ -3402,7 +3398,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['owner']['id'] = $servicesSale['owner_id'];
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
         $servicesSale['service']['visibility'] = $servicesSale['visibility'];
-        $servicesSale['service']['image'] = $servicesSale['image'];
+        $servicesSale['service']['image'] = $this->getServiceImageUrl($servicesSale['image'] ?? null);
         $servicesSale['service']['date_start'] = $servicesSale['date_start'];
         $servicesSale['service']['date_end'] = $servicesSale['date_end'];
         $servicesSale['item'] = $this->getService($servicesSale['service_id']);
@@ -3793,6 +3789,60 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         return $paths[$var];
+    }
+
+    public function getServiceImageUrl(?string $imageName): ?string
+    {
+        if (empty($imageName) || !$this->serviceImageExists($imageName)) {
+            return null;
+        }
+
+        return api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_image.php?f='.rawurlencode($imageName);
+    }
+
+    private function saveServiceImageFromBase64(string $base64Image, string $imageName): void
+    {
+        $img = str_replace('data:image/png;base64,', '', $base64Image);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+
+        if (false === $data) {
+            return;
+        }
+
+        $pluginsFilesystem = $this->getPluginsFilesystem();
+        $directory = $this->getServiceImagesDirectory();
+
+        if (!$pluginsFilesystem->directoryExists($directory)) {
+            $pluginsFilesystem->createDirectory($directory);
+        }
+
+        $pluginsFilesystem->write($this->getServiceImageStoragePath($imageName), $data);
+    }
+
+    private function serviceImageExists(string $imageName): bool
+    {
+        $pluginsFilesystem = $this->getPluginsFilesystem();
+
+        return $pluginsFilesystem->fileExists($this->getServiceImageStoragePath($imageName));
+    }
+
+    private function getServiceImageStoragePath(string $imageName): string
+    {
+        return $this->getServiceImagesDirectory().'/'.$imageName;
+    }
+
+    private function getServiceImagesDirectory(): string
+    {
+        return 'BuyCourses/services/images';
+    }
+
+    private function getPluginsFilesystem(): FilesystemOperator
+    {
+        /** @var FilesystemOperator $pluginsFilesystem */
+        $pluginsFilesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
+
+        return $pluginsFilesystem;
     }
 
     public function getBuyCoursePluginPrice(Session $session): array

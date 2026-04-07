@@ -126,7 +126,7 @@ class H5pImplementation implements \H5PFrameworkInterface
 
     public function getUploadedH5pFolderPath()
     {
-        $path = H5pPackageTools::getCourseStoragePath($this->h5pImport->getCourse()).'/tmp';
+        $path = H5pPackageTools::getCourseTemporaryStoragePath($this->h5pImport->getCourse()).'/uploads';
 
         if (!is_dir($path)) {
             @mkdir($path, api_get_permissions_for_new_directories(), true);
@@ -346,14 +346,9 @@ class H5pImplementation implements \H5PFrameworkInterface
         }
 
         $semanticsFile = rtrim($libraryPath, '/').'/semantics.json';
+        $contents = H5pPackageTools::readTextFromStoredPath($semanticsFile);
 
-        if (!is_file($semanticsFile) || !is_readable($semanticsFile)) {
-            return '';
-        }
-
-        $contents = file_get_contents($semanticsFile);
-
-        return false === $contents ? '' : $contents;
+        return false === $contents ? '' : (string) $contents;
     }
 
     public function alterLibrarySemantics(&$semantics, $machineName, $majorVersion, $minorVersion)
@@ -384,13 +379,13 @@ class H5pImplementation implements \H5PFrameworkInterface
     public function loadContent($id): array
     {
         $packagePath = rtrim($this->h5pImport->getPath(), '/');
-        $contentJson = H5pPackageTools::getJson($packagePath.'/content.json');
+        $contentJson = H5pPackageTools::getJsonFromStoredPath($packagePath.'/content.json');
 
         if (!$contentJson) {
-            $contentJson = H5pPackageTools::getJson($packagePath.'/content/content.json');
+            $contentJson = H5pPackageTools::getJsonFromStoredPath($packagePath.'/content/content.json');
         }
 
-        $h5pJson = H5pPackageTools::getJson($packagePath.'/h5p.json');
+        $h5pJson = H5pPackageTools::getJsonFromStoredPath($packagePath.'/h5p.json');
         $mainLibrary = $this->h5pImport->getMainLibrary();
 
         if (!$contentJson || !$h5pJson || null === $mainLibrary) {

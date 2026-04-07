@@ -220,7 +220,7 @@ if (!api_is_anonymous()) {
 $interface = new H5pImplementation($h5pImport);
 $h5pCore = new H5PCore(
     $interface,
-    $h5pImport->getPath(),
+    H5pPackageTools::getStorageBasePath(),
     api_get_self(),
     'en',
     false

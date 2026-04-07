@@ -425,7 +425,7 @@
                         <img
                                 alt="{{ service.name }}"
                                 class="h-full w-full object-cover"
-                                src="{{ service.image ? _p.web_plugin ~ 'buycourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}"
+                                src="{{ service.image ? service.image : 'session_default.png'|icon() }}"
                         >
                     </div>
 

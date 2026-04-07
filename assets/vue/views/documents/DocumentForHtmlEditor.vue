@@ -1,160 +1,245 @@
 <template>
-  <BaseToolbar>
-    <div class="flex items-center gap-2">
-      <BaseButton
-        v-if="showNewFolderButton"
-        :label="t('New folder')"
-        :title="t('New folder')"
-        icon="folder-plus"
-        only-icon
-        type="success"
-        class="!w-10 !h-10 !p-0 !flex !items-center !justify-center"
-        @click="openNew"
-      />
+  <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+    <BaseToolbar class="border-b border-gray-25 bg-support-2">
+      <div class="flex items-center gap-2">
+        <BaseButton
+          v-if="showNewFolderButton"
+          :label="t('New folder')"
+          :title="t('New folder')"
+          icon="folder-plus"
+          only-icon
+          type="success"
+          class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !p-0"
+          @click="openNew"
+        />
 
-      <BaseButton
-        v-if="showUploadButton"
-        :label="t('Upload')"
-        :title="t('Upload')"
-        icon="file-upload"
-        only-icon
-        type="black"
-        class="!w-10 !h-10 !p-0 !flex !items-center !justify-center"
-        @click="uploadDocumentHandler"
-      />
-      <input
-        ref="uploadInput"
-        type="file"
-        class="hidden"
-        :accept="uploadAccept"
-        @change="handleUploadSelected"
-      />
-    </div>
-  </BaseToolbar>
-  <div class="px-4 pt-2 pb-1 flex items-center justify-between gap-3">
-    <div class="flex items-center gap-2 min-w-0">
-      <BaseButton
-        icon="compass"
-        only-icon
-        type="black"
-        :disabled="isAtRoot"
-        :title="t('Root')"
-        @click="goToRoot"
-      />
-      <BaseButton
-        icon="back"
-        only-icon
-        type="black"
-        :disabled="!canGoUp"
-        :title="t('Up')"
-        @click="goUpOneLevel"
-      />
+        <BaseButton
+          v-if="showUploadButton"
+          :label="t('Upload')"
+          :title="t('Upload')"
+          icon="file-upload"
+          only-icon
+          type="black"
+          class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !p-0"
+          @click="uploadDocumentHandler"
+        />
 
-      <div class="text-sm text-gray-600 truncate">
-        <span class="font-semibold">Location:</span>
-        <span class="ml-2">{{ currentFolderLabel }}</span>
+        <input
+          ref="uploadInput"
+          type="file"
+          class="hidden"
+          :accept="uploadAccept"
+          @change="handleUploadSelected"
+        />
+      </div>
+    </BaseToolbar>
+
+    <div class="border-b border-gray-25 bg-white px-4 py-4">
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <BaseButton
+              icon="compass"
+              only-icon
+              type="black"
+              :disabled="isAtRoot"
+              :title="t('Root')"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              @click="goToRoot"
+            />
+
+            <BaseButton
+              icon="back"
+              only-icon
+              type="black"
+              :disabled="!canGoUp"
+              :title="t('Up')"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              @click="goUpOneLevel"
+            />
+
+            <div class="min-w-0 rounded-xl bg-support-2 px-3 py-2">
+              <div class="text-tiny font-semibold uppercase tracking-wide text-gray-50">
+                {{ t("Location") }}
+              </div>
+              <div class="truncate text-body-2 font-semibold text-gray-90">
+                {{ currentFolderLabel }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-if="folderTrail.length"
+          class="min-w-0 max-w-full rounded-xl border border-gray-25 bg-gray-10 px-3 py-2 text-caption text-gray-50"
+          :title="folderTrail.map((c) => c.title).join(' / ')"
+        >
+          <span
+            v-for="(crumb, idx) in folderTrail"
+            :key="`${crumb.id}-${idx}`"
+            class="inline-flex items-center"
+          >
+            <a
+              v-if="idx < folderTrail.length - 1"
+              class="cursor-pointer font-medium text-support-4 hover:text-primary hover:underline"
+              @click="goToNode(crumb.id)"
+            >
+              {{ crumb.title }}
+            </a>
+
+            <span
+              v-else
+              class="font-semibold text-gray-90"
+            >
+              {{ crumb.title }}
+            </span>
+
+            <span
+              v-if="idx < folderTrail.length - 1"
+              class="mx-2 text-gray-50"
+            >
+              /
+            </span>
+          </span>
+        </div>
       </div>
     </div>
 
     <div
-      v-if="folderTrail.length"
-      class="text-sm text-gray-600 truncate"
-      :title="folderTrail.map((c) => c.title).join(' / ')"
+      v-if="showFilteredEmptyNotice"
+      class="mx-4 mt-4 rounded-xl border border-warning bg-support-6 px-4 py-3 text-body-2 text-gray-90"
     >
-      <span
-        v-for="(crumb, idx) in folderTrail"
-        :key="`${crumb.id}-${idx}`"
-        class="inline-flex items-center"
-      >
-        <a
-          v-if="idx < folderTrail.length - 1"
-          class="cursor-pointer hover:underline"
-          @click="goToNode(crumb.id)"
-        >
-          {{ crumb.title }}
-        </a>
-        <span v-else>{{ crumb.title }}</span>
+      {{ emptyFilterMessage }}
+    </div>
 
-        <span
-          v-if="idx < folderTrail.length - 1"
-          class="mx-2"
+    <div class="px-4 pb-4 pt-4">
+      <BaseTable
+        v-model:filters="filters"
+        v-model:rows="options.itemsPerPage"
+        v-model:selected-items="selectedItems"
+        :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
+        :is-loading="isLoading"
+        :total-items="displayTotalItems"
+        :values="filteredItems"
+        data-key="iid"
+        lazy
+        @page="onPage"
+        @sort="sortingChanged"
+      >
+        <Column
+          :header="$t('Title')"
+          :sortable="true"
+          field="resourceNode.title"
         >
-          /
-        </span>
-      </span>
+          <template #body="slotProps">
+            <div class="py-1">
+              <div class="flex min-w-0 items-center gap-3">
+                <div
+                  :class="getEntryIconContainerClass(slotProps.data)"
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
+                >
+                  <v-icon
+                    :icon="getEntryIcon(slotProps.data)"
+                    class="text-lg"
+                  />
+                </div>
+
+                <div class="min-w-0 flex-1">
+                  <template v-if="slotProps.data?.resourceNode?.firstResourceFile">
+                    <button
+                      type="button"
+                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      @click="returnToEditor(slotProps.data)"
+                    >
+                      {{ slotProps.data.resourceNode.title }}
+                    </button>
+
+                    <div class="mt-1 flex flex-wrap items-center gap-2">
+                      <span
+                        :class="getEntryBadgeClass(slotProps.data)"
+                        class="inline-flex rounded-full px-2.5 py-0.5 text-tiny font-semibold uppercase tracking-wide"
+                      >
+                        {{ getEntryTypeLabel(slotProps.data) }}
+                      </span>
+
+                      <span
+                        v-if="getMimeType(slotProps.data)"
+                        class="truncate text-caption text-gray-50"
+                      >
+                        {{ getMimeType(slotProps.data) }}
+                      </span>
+                    </div>
+                  </template>
+
+                  <template v-else>
+                    <button
+                      type="button"
+                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      @click="handleClick(slotProps.data)"
+                    >
+                      {{ slotProps.data.resourceNode.title }}
+                    </button>
+
+                    <div class="mt-1">
+                      <span
+                        class="inline-flex rounded-full bg-support-1 px-2.5 py-0.5 text-tiny font-semibold uppercase tracking-wide text-support-4"
+                      >
+                        {{ t("Folder") }}
+                      </span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+        </Column>
+
+        <Column
+          :header="$t('Modified')"
+          :sortable="true"
+          field="resourceNode.updatedAt"
+        >
+          <template #body="slotProps">
+            <div class="py-1">
+              <div class="text-body-2 font-medium text-gray-90">
+                {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
+              </div>
+            </div>
+          </template>
+        </Column>
+
+        <Column
+          :header="$t('Size')"
+          :sortable="true"
+          field="resourceNode.firstResourceFile.size"
+        >
+          <template #body="slotProps">
+            <div class="py-1">
+              <span
+                v-if="slotProps.data.resourceNode.firstResourceFile"
+                class="inline-flex rounded-full bg-gray-15 px-2.5 py-1 text-caption font-medium text-gray-90"
+              >
+                {{ prettyBytes(slotProps.data.resourceNode.firstResourceFile.size) }}
+              </span>
+            </div>
+          </template>
+        </Column>
+
+        <Column :exportable="false">
+          <template #body="slotProps">
+            <div class="flex flex-row justify-end py-1">
+              <Button
+                v-if="slotProps.data?.resourceNode?.firstResourceFile"
+                class="!rounded-xl !border-0 !bg-primary !px-4 !py-2 !text-white hover:!bg-primary"
+                :label="t('Select')"
+                @click="returnToEditor(slotProps.data)"
+              />
+            </div>
+          </template>
+        </Column>
+      </BaseTable>
     </div>
   </div>
-  <BaseTable
-    v-model:filters="filters"
-    v-model:rows="options.itemsPerPage"
-    v-model:selected-items="selectedItems"
-    :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :is-loading="isLoading"
-    :total-items="totalItems"
-    :values="filteredItems"
-    data-key="iid"
-    lazy
-    @page="onPage"
-    @sort="sortingChanged"
-  >
-    <Column
-      :header="$t('Title')"
-      :sortable="true"
-      field="resourceNode.title"
-    >
-      <template #body="slotProps">
-        <div v-if="slotProps.data?.resourceNode?.firstResourceFile">
-          <ResourceFileLink :resource="slotProps.data" />
-        </div>
-        <div v-else>
-          <a
-            v-if="slotProps.data"
-            class="cursor-pointer"
-            @click="handleClick(slotProps.data)"
-          >
-            <v-icon icon="mdi-folder" />
-            {{ slotProps.data.resourceNode.title }}
-          </a>
-        </div>
-      </template>
-    </Column>
-    <Column
-      :header="$t('Modified')"
-      :sortable="true"
-      field="resourceNode.updatedAt"
-    >
-      <template #body="slotProps">
-        {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
-      </template>
-    </Column>
-
-    <Column
-      :header="$t('Size')"
-      :sortable="true"
-      field="resourceNode.firstResourceFile.size"
-    >
-      <template #body="slotProps">
-        {{
-          slotProps.data.resourceNode.firstResourceFile
-            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
-            : ""
-        }}
-      </template>
-    </Column>
-
-    <Column :exportable="false">
-      <template #body="slotProps">
-        <div class="flex flex-row gap-2">
-          <Button
-            v-if="slotProps.data?.resourceNode?.firstResourceFile"
-            class="p-button-sm p-button p-mr-2"
-            label="Select"
-            @click="returnToEditor(slotProps.data)"
-          />
-        </div>
-      </template>
-    </Column>
-  </BaseTable>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="itemDialog"
@@ -164,8 +249,13 @@
     @confirm-clicked="saveItem"
     @cancel-clicked="hideDialog"
   >
-    <div class="p-field">
-      <label for="title">{{ $t("Name") }}</label>
+    <div class="space-y-2">
+      <label
+        for="title"
+        class="block text-body-2 font-semibold text-gray-90"
+      >
+        {{ $t("Name") }}
+      </label>
       <InputText
         id="title"
         v-model.trim="item.title"
@@ -173,10 +263,11 @@
         autocomplete="off"
         autofocus
         required="true"
+        class="w-full"
       />
       <small
         v-if="submitted && !item.title"
-        class="p-error"
+        class="block text-caption text-danger"
       >
         {{ $t("Title is required") }}
       </small>
@@ -188,9 +279,7 @@
 import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
-import ActionCell from "../../components/ActionCell.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import ResourceIcon from "../../components/documents/ResourceIcon.vue"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
 import DocumentsFilterForm from "../../components/documents/Filter"
@@ -214,8 +303,6 @@ export default {
     BaseDialogConfirmCancel,
     BaseButton,
     BaseToolbar,
-    ActionCell,
-    ResourceIcon,
     ResourceFileLink,
     DocumentsFilterForm,
     DataFilter,
@@ -305,13 +392,40 @@ export default {
     },
     uploadAccept() {
       if (this.pickerType === "images") return "image/*"
-      if (this.pickerType === "media") return "image/*,video/*,audio/*"
+      if (this.pickerType === "media") return "video/*,audio/*"
       return "*/*"
     },
     filteredItems() {
       const type = this.pickerType
       const list = Array.isArray(this.items) ? this.items : []
       return list.filter((entry) => this.matchesPickerFilter(entry, type))
+    },
+    displayTotalItems() {
+      if (this.pickerType === "files") {
+        return this.totalItems
+      }
+
+      return this.filteredItems.length
+    },
+    showFilteredEmptyNotice() {
+      return (
+        !this.isLoading &&
+        this.pickerType !== "files" &&
+        Array.isArray(this.items) &&
+        this.items.length > 0 &&
+        this.filteredItems.length === 0
+      )
+    },
+    emptyFilterMessage() {
+      if (this.pickerType === "media") {
+        return "No audio or video files were found in this folder."
+      }
+
+      if (this.pickerType === "images") {
+        return "No image files were found in this folder."
+      }
+
+      return "No matching files were found in this folder."
     },
     canGoUp() {
       return Array.isArray(this.folderTrail) && this.folderTrail.length > 1
@@ -356,22 +470,148 @@ export default {
     getMimeType(entry) {
       return String(entry?.resourceNode?.firstResourceFile?.mimeType || "").toLowerCase()
     },
+    getFileExtension(name) {
+      const value = String(name || "").toLowerCase()
+      const parts = value.split(".")
+      return parts.length > 1 ? parts.pop() : ""
+    },
+    isImageLike(entryOrFile) {
+      const mime = String(entryOrFile?.type || this.getMimeType(entryOrFile) || "").toLowerCase()
+      const name = String(entryOrFile?.name || this.getFilename(entryOrFile) || "").toLowerCase()
+      const ext = this.getFileExtension(name)
+
+      return (
+        mime.startsWith("image/") || ["png", "jpg", "jpeg", "gif", "svg", "webp", "bmp", "tif", "tiff"].includes(ext)
+      )
+    },
+    isVideoLike(entryOrFile) {
+      const mime = String(entryOrFile?.type || this.getMimeType(entryOrFile) || "").toLowerCase()
+      const name = String(entryOrFile?.name || this.getFilename(entryOrFile) || "").toLowerCase()
+      const ext = this.getFileExtension(name)
+
+      return mime.startsWith("video/") || ["mp4", "webm", "mov", "avi", "mkv", "ogv"].includes(ext)
+    },
+    isAudioLike(entryOrFile) {
+      const mime = String(entryOrFile?.type || this.getMimeType(entryOrFile) || "").toLowerCase()
+      const name = String(entryOrFile?.name || this.getFilename(entryOrFile) || "").toLowerCase()
+      const ext = this.getFileExtension(name)
+
+      return mime.startsWith("audio/") || ["mp3", "wav", "m4a", "aac", "flac", "oga", "ogg"].includes(ext)
+    },
+    isMediaLike(entryOrFile) {
+      return this.isVideoLike(entryOrFile) || this.isAudioLike(entryOrFile)
+    },
     matchesPickerFilter(entry, type) {
       if (this.isFolderEntry(entry)) return true
       if (type === "files") return true
 
-      const mime = this.getMimeType(entry)
-      const name = String(this.getFilename(entry)).toLowerCase()
+      if (type === "images") return this.isImageLike(entry)
+      if (type === "media") return this.isMediaLike(entry)
 
-      const isImg = mime.startsWith("image/") || /\.(png|jpe?g|gif|svg|webp|bmp|tiff?)$/.test(name)
-      const isMed =
-        mime.startsWith("video/") || mime.startsWith("audio/") || /\.(mp4|webm|ogg|mov|avi|mkv|mp3|wav|m4a)$/.test(name)
-
-      if (type === "images") return isImg
-      if (type === "media") return isMed
       return true
     },
+    matchesSelectedFileForPicker(file) {
+      if (!file) return false
+      if (this.pickerType === "files") return true
+      if (this.pickerType === "images") return this.isImageLike(file)
+      if (this.pickerType === "media") return this.isMediaLike(file)
+      return true
+    },
+    getInvalidUploadMessage() {
+      if (this.pickerType === "images") {
+        return "Only image files are allowed in this picker."
+      }
 
+      if (this.pickerType === "media") {
+        return "Only audio and video files are allowed in this picker."
+      }
+
+      return "The selected file type is not allowed in this picker."
+    },
+    notifyError(message) {
+      if (!message) return
+
+      if (this.$toast?.add) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+          life: 4000,
+        })
+        return
+      }
+
+      console.error("[DOC PICKER]", message)
+
+      if (typeof window !== "undefined" && typeof window.alert === "function") {
+        window.alert(message)
+      }
+    },
+    getEntryType(entry) {
+      if (this.isFolderEntry(entry)) return "folder"
+      if (this.isImageLike(entry)) return "image"
+      if (this.isVideoLike(entry)) return "video"
+      if (this.isAudioLike(entry)) return "audio"
+      return "file"
+    },
+    getEntryTypeLabel(entry) {
+      const type = this.getEntryType(entry)
+
+      if (type === "folder") return this.t("Folder")
+      if (type === "image") return this.t("Image")
+      if (type === "video") return this.t("Video")
+      if (type === "audio") return this.t("Audio")
+
+      return this.t("File")
+    },
+    getEntryIcon(entry) {
+      const type = this.getEntryType(entry)
+
+      if (type === "folder") return "mdi-folder"
+      if (type === "image") return "mdi-file-image-outline"
+      if (type === "video") return "mdi-file-video-outline"
+      if (type === "audio") return "mdi-file-music-outline"
+
+      return "mdi-file-document-outline"
+    },
+    getEntryIconContainerClass(entry) {
+      const type = this.getEntryType(entry)
+
+      if (type === "folder") {
+        return "border-support-3 bg-support-1 text-support-4"
+      }
+
+      if (type === "image") {
+        return "border-info bg-support-2 text-info"
+      }
+
+      if (type === "video") {
+        return "border-secondary bg-support-6 text-secondary"
+      }
+
+      if (type === "audio") {
+        return "border-primary bg-support-2 text-primary"
+      }
+
+      return "border-gray-25 bg-gray-10 text-gray-50"
+    },
+    getEntryBadgeClass(entry) {
+      const type = this.getEntryType(entry)
+
+      if (type === "image") {
+        return "bg-support-2 text-info"
+      }
+
+      if (type === "video") {
+        return "bg-support-6 text-secondary"
+      }
+
+      if (type === "audio") {
+        return "bg-support-2 text-primary"
+      }
+
+      return "bg-gray-15 text-gray-90"
+    },
     normalizeNodeId(value) {
       if (value == null) return null
       if (typeof value === "number" && Number.isFinite(value) && value > 0) return value
@@ -577,10 +817,25 @@ export default {
         console.warn("[DOC PICKER] Upload input click failed", e)
       }
     },
+    resetUploadInput(target) {
+      try {
+        if (target) {
+          target.value = ""
+        }
+      } catch {
+        // Ignore
+      }
+    },
 
     async handleUploadSelected(e) {
       const file = e?.target?.files?.[0]
       if (!file) return
+
+      if (!this.matchesSelectedFileForPicker(file)) {
+        this.notifyError(this.getInvalidUploadMessage())
+        this.resetUploadInput(e?.target)
+        return
+      }
 
       const { cid, sid, gid } = this.getContextIds()
 
@@ -602,12 +857,7 @@ export default {
       try {
         await this.create(payload)
         this.showMessage("Saved")
-
-        try {
-          e.target.value = ""
-        } catch {
-          // Ignore
-        }
+        this.resetUploadInput(e?.target)
 
         await this.refreshNavigation()
         this.onUpdateOptions(this.options)

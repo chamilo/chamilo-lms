@@ -1,5 +1,3 @@
-// var/themes/parkur1/tiny-settings.js
-//
 // ──────────────────────────────────────────────────────────────────────────────
 // TinyMCE – Theme-level shared base configuration (applies to Vue + legacy)
 // ──────────────────────────────────────────────────────────────────────────────
@@ -98,6 +96,7 @@
     statusbar: true,
     toolbar_mode: "wrap",
     language: "auto",
+    media_live_embeds: false,
 
     // Core plugin set. Local configs can add more; we’ll union them below.
     plugins: [
@@ -135,6 +134,11 @@
     content_style: [
       "html,body{font-family: Arial, Helvetica, sans-serif; font-size:12pt;}",
       ".tiny-content{font-family: Arial, Helvetica, sans-serif; font-size:12pt;}",
+      // TinyMCE media fake-object placeholders
+      "img[data-mce-object]{display:inline-block;vertical-align:middle;max-width:100%;border:1px dashed #94a3b8;border-radius:12px;background-color:#f8fafc;background-repeat:no-repeat;background-position:center center;background-size:56px 56px;}",
+      "img[data-mce-object='video'],img.mce-object-video{min-width:300px;min-height:150px;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='52' fill='%230f172ab8'/%3E%3Cpolygon points='50,38 88,60 50,82' fill='white'/%3E%3C/svg%3E\");}",
+      "img[data-mce-object='audio'],img.mce-object-audio{min-width:300px;min-height:72px;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='52' fill='%230f172ab8'/%3E%3Cpath d='M50 46 L68 46 L82 34 L82 86 L68 74 L50 74 Z' fill='white'/%3E%3Cpath d='M88 46 Q98 60 88 74' fill='none' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E\");}",
+      "img[data-mce-selected='1']{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.18);}",
     ].join(" "),
 
     base_url: BASE_URL_TINYMCE,

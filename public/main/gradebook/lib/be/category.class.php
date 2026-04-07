@@ -39,6 +39,7 @@ class Category implements GradebookItem
     private $documentId;
     /** @var int */
     private $gradeBooksToValidateInDependence;
+    private $locked;
 
     /**
      * Consctructor.

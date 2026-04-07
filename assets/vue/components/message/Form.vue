@@ -191,7 +191,7 @@ watch(
 async function asyncFind(query) {
   const { items } = await userService.findBySearchTerm(query)
   return items
-    .filter((member) => member.active === 1)
+    .filter((member) => member.active == null || member.active === 1)
     .map((member) => ({
       name: member.fullName,
       value: member["@id"],

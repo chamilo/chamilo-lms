@@ -26,7 +26,7 @@ class GradebookController extends AbstractController
     ) {}
 
     #[Route('/categories', name: 'chamilo_core_gradebook_categories', methods: ['GET'])]
-    public function getCategories(Request $request): JsonResponse
+    public function getCategories(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         // Extract parameters from the query string
         $courseId = (int) $request->query->get('courseId');
@@ -35,6 +35,14 @@ class GradebookController extends AbstractController
         if (!$courseId) {
             return new JsonResponse(['error' => 'courseId parameter is required'], Response::HTTP_BAD_REQUEST);
         }
+
+        $course = $entityManager->getRepository(Course::class)->find($courseId);
+
+        if (!$course) {
+            return new JsonResponse(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
         // Ensure the default category exists
         $this->gradeBookCategoryRepository->createDefaultCategory($courseId, $sessionId);
@@ -93,6 +101,12 @@ class GradebookController extends AbstractController
     #[Route('/default_certificate/{cid}', name: 'chamilo_core_gradebook_default_certificate')]
     public function getDefaultCertificate(int $cid, EntityManagerInterface $entityManager): JsonResponse
     {
+        $course = $entityManager->getRepository(Course::class)->find($cid);
+        if (!$course) {
+            return new JsonResponse(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
+        }
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
         // Find the gradebook category by course ID
         $gradebookCategory = $entityManager->getRepository(GradebookCategory::class)->findOneBy(['course' => $cid]);
 

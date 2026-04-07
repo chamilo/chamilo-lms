@@ -10,16 +10,19 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\CourseBundle\Entity\CDropboxPerson;
 use Chamilo\CourseBundle\Entity\CDropboxPost;
 use Chamilo\CourseBundle\Repository\CDropboxFileRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -32,7 +35,8 @@ final class CreateDropboxFileAction
         CourseRepository $courseRepo,
         SessionRepository $sessionRepo,
         EntityManagerInterface $em,
-        UserHelper $userHelper
+        UserHelper $userHelper,
+        Security $security
     ): JsonResponse {
         $cid = (int) $request->query->get('cid', 0);
         $sid = (int) $request->query->get('sid', 0);
@@ -43,6 +47,16 @@ final class CreateDropboxFileAction
         $user = $userHelper->getCurrent();
         if (!$user) {
             throw new UnauthorizedHttpException('', 'Unauthorized.');
+        }
+
+        $course = $courseRepo->find($cid);
+
+        if (!$course) {
+            throw new BadRequestHttpException('Course not found.');
+        }
+
+        if (!$security->isGranted(CourseVoter::VIEW, $course)) {
+            throw new AccessDeniedHttpException('You do not have access to this course.');
         }
 
         /** @var UploadedFile|null $file */
@@ -64,8 +78,7 @@ final class CreateDropboxFileAction
 
         $parentId = (int) $request->request->get('parentResourceNodeId', 0);
         if (0 === $parentId) {
-            $course = $courseRepo->find($cid);
-            $parentId = $course?->getResourceNode()?->getId() ?? 0;
+            $parentId = $course->getResourceNode()?->getId() ?? 0;
             if (0 === $parentId) {
                 throw new BadRequestHttpException('parentResourceNodeId (categoryId) is required');
             }

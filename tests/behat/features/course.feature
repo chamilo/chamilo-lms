@@ -27,9 +27,9 @@ Feature: Course tools basic testing
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
-    When I fill in "title" with "TEMP"
-    And I press "submit"
-    Then wait for the page to be loaded
+    And I fill in "title" with "TEMP"
+    When I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "TEMP"
 
 
@@ -50,7 +50,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the documents tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I follow "Documents"
+    When I follow "Documents"
     And I wait for the page to be loaded
     Then I should not see an error
 

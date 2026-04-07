@@ -226,6 +226,6 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
 }

@@ -367,10 +367,10 @@ class UserGroupModel extends Model
         }
 
         $actions .= '<a href="'.api_get_self().'?action=add">'.
-            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
             '</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')),
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Import')),
             'usergroup_import.php'
         );
         $actions .= Display::url(

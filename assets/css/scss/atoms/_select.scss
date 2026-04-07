@@ -1,11 +1,11 @@
 .p-select {
-  @apply inline-flex cursor-pointer relative select-none bg-white border border-gray-50 transition rounded-lg outline-none shadow-none w-full;
+  @apply inline-flex cursor-pointer relative select-none bg-white border border-gray-50 transition rounded-lg outline-none shadow-none w-full outline-transparent;
 
   &:not(.p-disabled) {
-    @apply hover:border-primary hover:text-gray-90;
+    @apply hover:border-primary;
 
     &.p-focus {
-      @apply border-primary text-gray-90 outline-0 outline-none
+      @apply border-primary outline-0 outline-none ring-2 ring-primary/20;
     }
   }
 
@@ -18,23 +18,19 @@
   }
 
   &.p-invalid {
-    @apply border-danger text-danger;
+    @apply border-danger;
   }
 
   &.p-disabled {
-    @apply bg-gray-25 opacity-60;
+    @apply bg-gray-25 opacity-100;
   }
 
   &-clear-icon {
-    @apply absolute top-1/2 -mt-2;
+    @apply self-center text-gray-90;
   }
 
   &-dropdown {
     @apply flex items-center justify-center shrink-0 bg-transparent rounded-r-lg pr-4 py-2 text-gray-90 text-body-2;
-
-    .p-select-sm & .p-icon {}
-
-    .p-select-lg & .p-icon {}
   }
 
   &-label {
@@ -43,7 +39,9 @@
     &.p-placeholder {
       @apply text-gray-50;
 
-      .p-select.p-invalid & {}
+      .p-select.p-invalid & {
+        @apply text-danger;
+      }
     }
 
     .p-select:has(.p-select-clear-icon) & {}
@@ -57,9 +55,12 @@
     }
 
     .p-select-sm & {
+      @apply text-sm px-3 py-1.5;
     }
 
-    .p-select-lg & {}
+    .p-select-lg & {
+      @apply text-lg px-5 py-4;
+    }
   }
 
   input.p-select-label {
@@ -71,10 +72,13 @@
   }
 
   &-overlay {
-    @apply absolute top-0 left-0 mt-2 bg-white text-gray-90 border-0 border-none rounded-lg shadow-xl;
+    @apply absolute overflow-auto top-0 left-0 mt-1 min-w-full bg-white text-gray-90 border-0 border-none rounded-lg shadow-xl
+      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
   }
 
-  &-header {}
+  &-header {
+    @apply p-2;
+  }
 
   &-filter {
     @apply w-full;
@@ -85,20 +89,21 @@
   }
 
   &-option-group {
-
+    @apply cursor-auto m-0 px-4 py-2 bg-white text-gray-50 font-semibold;
   }
 
   &-list {
-    @apply m-0 p-0 list-none gap-0 flex flex-col
-    before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
-    after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
+    @apply m-0 p-0 list-none gap-0 flex flex-col;
   }
 
   &-option {
     @apply cursor-pointer text-body-2 whitespace-nowrap relative overflow-hidden flex items-center px-4 py-2 border-0 border-none text-gray-90 transition;
 
-    &:not(.p-select-option-selected):not(.p-disabled).p-focus {
-      @apply bg-white text-primary;
+    &:not(.p-select-option-selected):not(.p-disabled) {
+      &.p-focus,
+      &:hover {
+        @apply bg-white text-primary;
+      }
     }
 
     &.p-select-option-selected {
@@ -111,7 +116,7 @@
   }
 
   &-option-blank-icon {
-    @apply shrink-0
+    @apply shrink-0;
   }
 
   &-option-check-icon {
@@ -130,4 +135,16 @@
 select.p-select {
   @apply px-4 py-2
     focus:border-primary focus:text-gray-90 focus:outline-0 focus:outline-none;
+}
+
+.p-select-sm .p-select-dropdown .p-icon {
+  @apply text-sm w-4 h-4;
+}
+
+.p-select-lg .p-select-dropdown .p-icon {
+  @apply text-lg w-6 h-6;
+}
+
+.p-floatlabel-in .p-select-filter {
+  @apply py-3;
 }

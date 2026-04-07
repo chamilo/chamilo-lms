@@ -758,6 +758,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user:read',
         'user_json:read',
         'social_post:read',
+        'user:read:public',
         'course:read',
         'course_rel_user:read',
         'message:read',

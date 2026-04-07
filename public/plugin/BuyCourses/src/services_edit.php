@@ -58,10 +58,7 @@ if (empty($service)) {
     exit;
 }
 
-$customImagePath = api_get_path(SYS_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$serviceId.'.png';
-$customImageUrl = is_file($customImagePath)
-    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$serviceId.'.png'
-    : null;
+$customImageUrl = $plugin->getServiceImageUrl('simg-'.$serviceId.'.png');
 
 $formDefaultValues = [
     'name' => $service['name'],

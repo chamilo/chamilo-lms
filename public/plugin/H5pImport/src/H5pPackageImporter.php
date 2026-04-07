@@ -23,7 +23,7 @@ abstract class H5pPackageImporter
     {
         $this->packageFileInfo = $fileInfo;
         $this->course = $course;
-        $this->courseStoragePath = H5pPackageTools::getCourseStoragePath($course);
+        $this->courseStoragePath = H5pPackageTools::getCourseTemporaryStoragePath($course);
     }
 
     /**

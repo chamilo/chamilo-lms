@@ -26,25 +26,26 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
     exit;
 }
 
-if (!Security::check_token('post')) {
-    http_response_code(403);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid security token.',
-    ]);
-    exit;
-}
-
 Security::clear_token();
 
 try {
+    $tourPlugin = Tour::create();
+
+    // Do not allow saving state when the plugin is disabled or the feature is off.
+    if (!$tourPlugin->isTourAvailable()) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Tour feature is disabled.',
+        ]);
+        exit;
+    }
+
     $pageName = isset($_POST['page_name']) ? trim((string) $_POST['page_name']) : '';
     $pageClass = isset($_POST['page_class']) ? trim((string) $_POST['page_class']) : '';
 
     $pageName = mb_substr($pageName, 0, 255);
     $pageClass = mb_substr($pageClass, 0, 255);
 
-    $tourPlugin = Tour::create();
     $resolvedPageClass = $tourPlugin->resolveConfiguredPageClass($pageName, $pageClass);
 
     if (null === $resolvedPageClass) {

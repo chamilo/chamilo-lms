@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
@@ -31,6 +33,14 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         Security $security,
         SettingsManager $settingsManager
     ): CStudentPublication {
+        $cid = (int) $request->query->get('cid', 0);
+        if ($cid > 0) {
+            $course = $em->getRepository(Course::class)->find($cid);
+            if (!$course || !$security->isGranted(CourseVoter::VIEW, $course)) {
+                throw new AccessDeniedHttpException('You do not have access to this course.');
+            }
+        }
+
         $fileExistsOption = $request->get('fileExistsOption', 'rename');
 
         $studentPublication = new CStudentPublication();

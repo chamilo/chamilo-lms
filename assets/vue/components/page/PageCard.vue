@@ -1,15 +1,17 @@
 <template>
   <BaseCard plain>
-    <template #header>
-      <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
-        <h6 v-text="page.title" />
+    <template #title>
+      <div class="flex items-center">
+        {{ page.title }}
         <BaseButton
           v-if="isAdmin"
-          icon="edit"
           :label="t('Edit')"
+          :route="{ name: 'PageUpdate', query: { id: page['@id'] } }"
+          class="ml-auto"
+          icon="edit"
+          only-icon
           size="small"
-          type="black"
-          @click="handleClick(page)"
+          type="secondary-text"
         />
       </div>
     </template>
@@ -46,11 +48,4 @@ const safeContent = computed(() => {
     ADD_ATTR: ["target", "rel"],
   })
 })
-
-const handleClick = (page) => {
-  router.push({
-    name: "PageUpdate",
-    query: { id: page["@id"] },
-  })
-}
 </script>

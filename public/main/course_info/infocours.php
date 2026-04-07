@@ -64,9 +64,10 @@ $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
 
-// Teachers/course admins won't be able to change the visibility when this is enabled.
-// Platform admins can still change it (and also from admin courses list as mentioned in the issue).
+// Teachers/course admins won't be able to change the visibility or subscription when this is enabled.
+// Platform admins can still change both options.
 $canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
+$canChangeCourseSubscription = $canChangeCourseVisibility;
 
 // Build the form
 $form = new FormValidator(
@@ -242,7 +243,7 @@ $aiOptions = [
     'image_generator' => 'Enable image generator',
     'glossary_terms_generator' => 'Enable glossary terms generator',
     'video_generator' => 'Enable video generator',
-    'course_analyser' => 'Enable course analyser',
+    //'course_analyser' => 'Enable course analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block
@@ -312,11 +313,9 @@ if (api_is_platform_admin()) {
 $courseVisibilityHelp = null;
 if (!$canChangeCourseVisibility) {
     foreach ($groupAccess as $radio) {
-        if (\is_object($radio) && method_exists($radio, 'updateAttributes')) {
-            $radio->updateAttributes([
-                'disabled' => 'disabled',
-            ]);
-        }
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
     }
 
     $courseVisibilityHelp = $form->createElement(
@@ -336,6 +335,14 @@ $group2[] = $form->createElement(
     get_lang('This function is only available to trainers'),
     0
 );
+
+if (!$canChangeCourseSubscription) {
+    foreach ($group2 as $radio) {
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
+    }
+}
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -1229,6 +1236,10 @@ if ($form->validate()) {
     $updateValues['subscribe'] = isset($updateValues['subscribe'])
         ? (int) $updateValues['subscribe']
         : $courseEntity->getSubscribe();
+
+    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+        $updateValues['subscribe'] = (int) $courseEntity->getSubscribe();
+    }
 
     $updateValues['unsubscribe'] = isset($updateValues['unsubscribe'])
         ? (int) $updateValues['unsubscribe']

@@ -198,5 +198,18 @@ defineExpose({
     >
       {{ textForEmpty }}
     </template>
+
+    <template #paginatorfirstpagelinkicon>
+      <i class="mdi mdi-page-first" />
+    </template>
+    <template #paginatorprevpagelinkicon>
+      <i class="mdi mdi-chevron-left" />
+    </template>
+    <template #paginatornextpagelinkicon>
+      <i class="mdi mdi-chevron-right" />
+    </template>
+    <template #paginatorlastpagelinkicon>
+      <i class="mdi mdi-page-last" />
+    </template>
   </DataTable>
 </template>

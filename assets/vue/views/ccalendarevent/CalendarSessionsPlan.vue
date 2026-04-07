@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
-      active-view="calendar"
+      active-view="session-planning"
       @addClick="goToAddEvent"
       @agendaListClick="goToAgendaList"
       @sessionPlanningClick="goToSessionsPlan"
@@ -170,20 +170,31 @@ function setYear(nextYear) {
   syncYearToQuery(nextYear)
 }
 
+function buildAgendaNavigationQuery() {
+  const nextQuery = { ...route.query }
+
+  if (!nextQuery.date && year.value) {
+    nextQuery.date = `${year.value}-01-01`
+  }
+
+  return nextQuery
+}
+
 function goToSessionsPlan() {
   router.push({ name: "CalendarSessionsPlan", query: { ...route.query, year: String(year.value) } }).catch(() => {})
 }
 
 function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...route.query } }).catch(() => {})
+  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 
-function goToAgendaList() {
-  router.push({ name: "CCalendarEventListView", query: { ...route.query } }).catch(() => {})
+function goToAgendaList(mode = "list") {
+  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
+  router.push({ name: targetRoute, query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 
 function goToAddEvent() {
-  router.push({ name: "CCalendarEventList", query: { ...route.query, openAdd: "1" } }).catch(() => {})
+  router.push({ name: "CCalendarEventList", query: { ...buildAgendaNavigationQuery(), openAdd: "1" } }).catch(() => {})
 }
 
 const isLoading = ref(false)
@@ -219,8 +230,8 @@ async function fetchPlan() {
       startDate: x.startDate ?? null,
       endDate: x.endDate ?? null,
       humanDate: x.humanDate ?? null,
-      start: Number.isFinite(Number(x.start)) ? Number(x.start) : 0, // 0..51
-      duration: Number.isFinite(Number(x.duration)) ? Math.max(1, Number(x.duration)) : 1, // >=1
+      start: Number.isFinite(Number(x.start)) ? Number(x.start) : 0,
+      duration: Number.isFinite(Number(x.duration)) ? Math.max(1, Number(x.duration)) : 1,
       color: x.color || "rgba(70,130,180,0.9)",
     }))
   } catch (e) {

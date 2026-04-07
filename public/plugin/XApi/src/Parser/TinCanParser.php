@@ -16,8 +16,7 @@ class TinCanParser extends PackageParser
 {
     public function parse(): XApiToolLaunch
     {
-        $content = file_get_contents($this->filePath);
-        $xml = new Crawler($content);
+        $xml = new Crawler($this->readPackageFileContents());
 
         $activityNode = $xml->filter('tincan activities activity')->first();
         $nodeName = $activityNode->filter('name');

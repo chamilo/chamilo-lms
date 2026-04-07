@@ -661,14 +661,21 @@ class ChamiloHelper
         $safeReturnUrl = self::normalizeReturnUrl($returnUrl);
 
         if (!self::isTermsConditionsEnabled()) {
+            Session::write('term_and_condition', null);
             self::redirectTo($safeReturnUrl);
         }
 
-        $term = self::getLastConditionForCurrentOrDefaultLanguage();
+        $payload = self::getRenderableTermsConditionsPayload();
 
-        if (!$term || !self::hasRenderableLegalContent($term)) {
+        // If there is no renderable legal content in the current language
+        // nor in the platform fallback language, do not block the user.
+        if (null === $payload) {
+            Session::write('term_and_condition', null);
             self::redirectTo($safeReturnUrl);
         }
+
+        $term = $payload['term'];
+        $fullHtml = $payload['html'];
 
         Display::display_header(get_lang('Terms and Conditions'));
 
@@ -679,7 +686,7 @@ class ChamiloHelper
             echo '<div class="mb-4">'.$infoMessage.'</div>';
         }
 
-        echo '<div class="prose prose-sm max-w-none mb-6">'.$term['content'].'</div>';
+        echo '<div class="prose prose-sm max-w-none mb-6">'.$fullHtml.'</div>';
 
         $extra = new ExtraFieldValue('terms_and_condition');
         foreach ($extra->getAllValuesByItem($term['id']) as $field) {
@@ -1179,5 +1186,106 @@ class ChamiloHelper
         }
 
         return api_get_path(WEB_PATH).ltrim($returnUrl, '/');
+    }
+
+    public static function hasRenderableTermsConditionsContent(): bool
+    {
+        return null !== self::getRenderableTermsConditionsPayload();
+    }
+
+    private static function getRenderableTermsConditionsPayload(): ?array
+    {
+        $term = self::getLastConditionForCurrentOrDefaultLanguage();
+
+        if (!$term) {
+            return null;
+        }
+
+        $version = (int) ($term['version'] ?? 0);
+        $languageId = (int) ($term['language_id'] ?? 0);
+
+        if ($version <= 0 || $languageId <= 0) {
+            return null;
+        }
+
+        $rows = self::getLegalRowsByLanguageAndVersion($languageId, $version);
+
+        if (empty($rows)) {
+            return null;
+        }
+
+        $fullHtml = '';
+
+        foreach ($rows as $row) {
+            $content = trim((string) ($row['content'] ?? ''));
+            if ('' === $content) {
+                continue;
+            }
+
+            $type = (int) ($row['type'] ?? 0);
+            $dbTitle = trim((string) ($row['title'] ?? ($row['name'] ?? '')));
+            $title = '' !== $dbTitle ? $dbTitle : self::getLegalSectionTitle($type);
+
+            $fullHtml .= '<div class="mt-4">';
+
+            if ('' !== $title) {
+                $fullHtml .= '<h4 class="text-base font-semibold text-gray-90">'
+                    .htmlspecialchars($title, ENT_QUOTES | ENT_HTML5)
+                    .'</h4>';
+            }
+
+            $fullHtml .= '<div class="mt-2 text-sm text-gray-90">'.$content.'</div>';
+            $fullHtml .= '</div>';
+        }
+
+        if ('' === trim(strip_tags($fullHtml))) {
+            return null;
+        }
+
+        return [
+            'term' => $term,
+            'html' => $fullHtml,
+        ];
+    }
+
+    private static function getLegalRowsByLanguageAndVersion(int $languageId, int $version): array
+    {
+        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
+
+        $rows = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'language_id = ? AND version = ?' => [$languageId, $version],
+                ],
+                'order' => 'type ASC, id ASC',
+            ]
+        );
+
+        return \is_array($rows) ? $rows : [];
+    }
+
+    private static function getLegalSectionTitle(int $type): string
+    {
+        $map = [
+            1 => 'Personal data collection',
+            2 => 'Personal data recording',
+            3 => 'Personal data organization',
+            4 => 'Personal data structure',
+            5 => 'Personal data conservation',
+            6 => 'Personal data adaptation or modification',
+            7 => 'Personal data extraction',
+            8 => 'Personal data queries',
+            9 => 'Personal data use',
+            10 => 'Personal data communication and sharing',
+            11 => 'Personal data interconnection',
+            12 => 'Personal data limitation',
+            13 => 'Personal data deletion',
+            14 => 'Personal data destruction',
+            15 => 'Personal data profiling',
+        ];
+
+        return $map[$type] ?? '';
     }
 }

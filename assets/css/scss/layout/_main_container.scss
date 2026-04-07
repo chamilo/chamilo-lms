@@ -1,6 +1,9 @@
 #app {
-  @apply overflow-hidden
-    sm:overflow-auto;
+  @apply overflow-auto;
+
+  &:has(.p-menubar-mobile.p-menubar-mobile-active) {
+    @apply overflow-hidden;
+  }
 }
 
 .app-main {

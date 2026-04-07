@@ -47,35 +47,83 @@ if (null === $relativePath) {
     exit;
 }
 
-$storageBasePath = rtrim(H5pPackageTools::getStorageBasePath(), '/');
-$absolutePath = $storageBasePath.'/'.$relativePath;
-$realStorageBasePath = realpath($storageBasePath);
-$realAbsolutePath = realpath($absolutePath);
+$pluginStoragePath = H5pPackageTools::normalizePluginStorageRelativePath($relativePath);
 
-if (
-    false === $realStorageBasePath
-    || false === $realAbsolutePath
-    || !str_starts_with($realAbsolutePath, $realStorageBasePath.'/')
-    || !is_file($realAbsolutePath)
-    || !is_readable($realAbsolutePath)
-) {
+if (null === $pluginStoragePath) {
     header('HTTP/1.1 404 Not Found');
     exit;
 }
 
-$mimeTypes = new MimeTypes();
-$mimeType = $mimeTypes->guessMimeType($realAbsolutePath) ?: 'application/octet-stream';
+$mimeType = 'application/octet-stream';
+$contentLength = null;
+$stream = false;
 
-if (str_ends_with($realAbsolutePath, '.css')) {
+try {
+    if (H5pPackageTools::persistentFileExists($pluginStoragePath)) {
+        $stream = H5pPackageTools::readPersistentStream($pluginStoragePath);
+        $contentLength = H5pPackageTools::getPersistentFileSize($pluginStoragePath);
+        $mimeType = H5pPackageTools::getPersistentMimeType($pluginStoragePath) ?: $mimeType;
+    }
+} catch (Throwable $e) {
+    error_log('[H5pImport][package_asset][flysystem] '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+    $stream = false;
+}
+
+if (false === $stream) {
+    $storageBasePath = rtrim(H5pPackageTools::getStorageBasePath(), '/');
+    $absolutePath = $storageBasePath.'/'.$relativePath;
+    $realStorageBasePath = realpath($storageBasePath);
+    $realAbsolutePath = realpath($absolutePath);
+
+    if (
+        false === $realStorageBasePath
+        || false === $realAbsolutePath
+        || !str_starts_with($realAbsolutePath, $realStorageBasePath.'/')
+        || !is_file($realAbsolutePath)
+        || !is_readable($realAbsolutePath)
+    ) {
+        header('HTTP/1.1 404 Not Found');
+        exit;
+    }
+
+    $mimeTypes = new MimeTypes();
+    $mimeType = $mimeTypes->guessMimeType($realAbsolutePath) ?: 'application/octet-stream';
+    $contentLength = filesize($realAbsolutePath);
+
+    if (str_ends_with($realAbsolutePath, '.css')) {
+        $mimeType = 'text/css';
+    } elseif (str_ends_with($realAbsolutePath, '.js')) {
+        $mimeType = 'application/javascript';
+    }
+
+    header('Content-Type: '.$mimeType);
+
+    if (false !== $contentLength && null !== $contentLength) {
+        header('Content-Length: '.(string) $contentLength);
+    }
+
+    header('Cache-Control: public, max-age=31536000');
+    header('X-Content-Type-Options: nosniff');
+
+    readfile($realAbsolutePath);
+    exit;
+}
+
+if (str_ends_with($pluginStoragePath, '.css')) {
     $mimeType = 'text/css';
-} elseif (str_ends_with($realAbsolutePath, '.js')) {
+} elseif (str_ends_with($pluginStoragePath, '.js')) {
     $mimeType = 'application/javascript';
 }
 
 header('Content-Type: '.$mimeType);
-header('Content-Length: '.(string) filesize($realAbsolutePath));
+
+if (null !== $contentLength) {
+    header('Content-Length: '.(string) $contentLength);
+}
+
 header('Cache-Control: public, max-age=31536000');
 header('X-Content-Type-Options: nosniff');
 
-readfile($realAbsolutePath);
+fpassthru($stream);
+fclose($stream);
 exit;

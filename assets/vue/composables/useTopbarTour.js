@@ -1,6 +1,10 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { useRoute } from "vue-router"
+import { usePlatformConfig } from "../store/platformConfig"
 
-export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
+export function useTopbarTour({ isAnonymous }) {
+  const platformConfigStore = usePlatformConfig()
+  const route = useRoute()
   const tourBusy = ref(false)
   const tourAvailableForCurrentPage = ref(false)
   let tourRefreshTimerIds = []
@@ -24,15 +28,19 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
     return platformConfigStore.plugins?.tour || {}
   })
 
+  const isTourEnabled = computed(() => {
+    const enabled = normalizeBooleanFlag(tourConfig.value?.enabled, false)
+    const showTour = normalizeBooleanFlag(tourConfig.value?.showTour, true)
+
+    return enabled && showTour
+  })
+
   const showTourButton = computed(() => {
     if (isAnonymous.value) {
       return false
     }
 
-    const enabled = normalizeBooleanFlag(tourConfig.value?.enabled, false)
-    const showTour = normalizeBooleanFlag(tourConfig.value?.showTour, true)
-
-    return enabled && showTour && tourAvailableForCurrentPage.value
+    return isTourEnabled.value && tourAvailableForCurrentPage.value
   })
 
   function getTourConfigValue(key, fallback = "") {
@@ -58,7 +66,7 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   function loadTourCssOnce(href, key) {
-    if (!href) {
+    if (!href || !isTourEnabled.value) {
       return
     }
 
@@ -75,6 +83,11 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
 
   function ensureTourScriptLoaded(src) {
     return new Promise((resolve, reject) => {
+      if (!isTourEnabled.value) {
+        resolve()
+        return
+      }
+
       if (window.introJs) {
         resolve()
         return
@@ -100,6 +113,10 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   async function fetchTourSteps(pageClass) {
+    if (!isTourEnabled.value) {
+      return []
+    }
+
     const stepsAjax = getTourConfigValue("stepsAjax", "/plugin/Tour/ajax/steps.ajax.php")
 
     const response = await fetch(`${stepsAjax}?page=${encodeURIComponent(pageClass)}`, {
@@ -168,6 +185,12 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
 
   function scheduleTourAvailabilityRefresh() {
     clearScheduledTourRefreshes()
+
+    if (!isTourEnabled.value || isAnonymous.value) {
+      tourAvailableForCurrentPage.value = false
+      return
+    }
+
     window.dispatchEvent(new CustomEvent("tour:refresh-request"))
 
     const refreshDelays = [0, 120, 350, 700, 1200]
@@ -182,7 +205,7 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   function registerTourBodyClassObserver() {
-    if (!document.body || typeof MutationObserver === "undefined") {
+    if (!isTourEnabled.value || !document.body || typeof MutationObserver === "undefined") {
       return
     }
 
@@ -206,8 +229,13 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   async function refreshTourAvailability() {
-    if (window["ChamiloTour"] && typeof window["ChamiloTour"].hasSteps === "function") {
-      tourAvailableForCurrentPage.value = !!window["ChamiloTour"].hasSteps()
+    if (!isTourEnabled.value || isAnonymous.value) {
+      tourAvailableForCurrentPage.value = false
+      return
+    }
+
+    if (window.ChamiloTour && typeof window.ChamiloTour.hasSteps === "function") {
+      tourAvailableForCurrentPage.value = !!window.ChamiloTour.hasSteps()
       return
     }
 
@@ -229,6 +257,11 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   function handleTourAvailabilityChange(event) {
+    if (!isTourEnabled.value || isAnonymous.value) {
+      tourAvailableForCurrentPage.value = false
+      return
+    }
+
     if (event?.detail && typeof event.detail.hasSteps !== "undefined") {
       tourAvailableForCurrentPage.value = !!event.detail.hasSteps
       return
@@ -238,29 +271,53 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   function handleTourNavigationSignal() {
+    if (!isTourEnabled.value || isAnonymous.value) {
+      tourAvailableForCurrentPage.value = false
+      return
+    }
+
     scheduleTourAvailabilityRefresh()
   }
 
   async function saveTourCompletion(pageClass) {
+    if (!isTourEnabled.value) {
+      return
+    }
+
     const saveAjax = getTourConfigValue("saveAjax", "/plugin/Tour/ajax/save.ajax.php")
+    const postToken = getTourConfigValue("postToken", "")
     const params = new URLSearchParams()
+
     params.append("page_class", pageClass)
 
+    if (postToken) {
+      params.append("sec_token", postToken)
+    }
+
     try {
-      await fetch(saveAjax, {
+      const response = await fetch(saveAjax, {
         method: "POST",
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          Accept: "application/json",
         },
         body: params.toString(),
       })
+
+      if (!response.ok) {
+        throw new Error(`Tour save request failed: ${response.status}`)
+      }
     } catch (e) {
       console.warn("[Topbar][Tour] Failed to save completion state", e)
     }
   }
 
   async function startTourFallback() {
+    if (!isTourEnabled.value) {
+      return false
+    }
+
     const pageClass = getCurrentTourPageClass()
 
     if (!pageClass) {
@@ -323,15 +380,15 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   async function startTourFromTopbar() {
-    if (tourBusy.value) {
+    if (tourBusy.value || !isTourEnabled.value || isAnonymous.value) {
       return
     }
 
     tourBusy.value = true
 
     try {
-      if (window["ChamiloTour"] && typeof window["ChamiloTour"].start === "function") {
-        await window["ChamiloTour"].start()
+      if (window.ChamiloTour && typeof window.ChamiloTour.start === "function") {
+        await window.ChamiloTour.start()
         return
       }
 
@@ -344,6 +401,11 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   }
 
   onMounted(() => {
+    if (!isTourEnabled.value || isAnonymous.value) {
+      tourAvailableForCurrentPage.value = false
+      return
+    }
+
     scheduleTourAvailabilityRefresh()
 
     window.addEventListener("tour:availability-change", handleTourAvailabilityChange)
@@ -369,9 +431,32 @@ export function useTopbarTour({ platformConfigStore, route, isAnonymous }) {
   watch(
     () => route.fullPath,
     () => {
+      if (!isTourEnabled.value || isAnonymous.value) {
+        tourAvailableForCurrentPage.value = false
+        clearScheduledTourRefreshes()
+        return
+      }
+
       scheduleTourAvailabilityRefresh()
     },
   )
+
+  watch(isTourEnabled, (enabled) => {
+    if (!enabled) {
+      tourAvailableForCurrentPage.value = false
+      clearScheduledTourRefreshes()
+
+      if (tourBodyClassObserver) {
+        tourBodyClassObserver.disconnect()
+        tourBodyClassObserver = null
+      }
+
+      return
+    }
+
+    registerTourBodyClassObserver()
+    scheduleTourAvailabilityRefresh()
+  })
 
   return {
     tourBusy,

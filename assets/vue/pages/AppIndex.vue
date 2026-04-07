@@ -5,13 +5,10 @@
       v-if="!isAuthenticated"
       class="md:w-4/12 lg:order-1"
     />
-    <div class="flex-1 md:w-8/12 lg:order-0">
+    <div class="flex-1 md:w-8/12 lg:order-0 flex flex-col gap-4">
       <SystemAnnouncementCardList />
 
-      <PageCardList
-        :pages="pages"
-        class="grid gap-4 grid-cols-1"
-      />
+      <PageCardList :pages="pages" />
     </div>
   </div>
   <div class="container mt-4">

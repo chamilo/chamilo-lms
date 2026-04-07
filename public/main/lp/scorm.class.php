@@ -39,6 +39,7 @@ class scorm extends learnpath
     public $manifest_encoding = 'UTF-8';
     public $asset = true;
     public $debug = true;
+    private ?string $current_dir;
 
     /**
      * Class constructor. Based on the parent constructor.
@@ -126,7 +127,7 @@ class scorm extends learnpath
                             switch ($child->tagName) {
                                 case 'metadata':
                                     // Parse items from inside the <metadata> element.
-                                    $this->metadata = new scormMetadata('manifest', $child);
+                                    $this->metadata = new scormMetadata($child, 'manifest');
                                     break;
                                 case 'organizations':
                                     // Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest.
@@ -201,7 +202,7 @@ class scorm extends learnpath
                                         $resources_nodes = $child->childNodes;
                                         $i = 0;
                                         foreach ($resources_nodes as $res_node) {
-                                            $oResource = new scormResource('manifest', $res_node);
+                                            $oResource = new scormResource($res_node, 'manifest');
                                             if ('' != $oResource->identifier) {
                                                 $this->resources[$oResource->identifier] = $oResource;
                                                 $i++;

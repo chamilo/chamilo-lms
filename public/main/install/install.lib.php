@@ -438,7 +438,7 @@ function display_requirements(
     $dir_perm_verified = 0777;
 
     foreach ($perms_dir as $perm) {
-        $r = @mkdir($dir, $perm);
+        $r = @mkdir($dir, $perm, true);
         if (true === $r) {
             $dir_perm_verified = $perm;
             $course_test_was_created = true;

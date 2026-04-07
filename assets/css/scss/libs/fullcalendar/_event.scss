@@ -1,0 +1,23 @@
+.fc {
+
+  & .calendar-event--wrapped,
+  & .calendar-event--wrapped .fc-event-main,
+  & .calendar-event--wrapped .fc-event-main-frame,
+  & .calendar-event--wrapped .fc-event-title,
+  & .calendar-event--wrapped .fc-event-time,
+  & .calendar-event--wrapped .fc-list-event-title,
+  & .fc-daygrid-dot-event .fc-event-title,
+  & .fc-daygrid-block-event .fc-event-title,
+  & .fc-timegrid-event .fc-event-title,
+  & .fc-timegrid-event .fc-event-time {
+    @apply whitespace-normal overflow-visible text-clip break-words;
+  }
+
+  & .fc-daygrid-event-harness {
+    @apply mb-0.5;
+  }
+
+  & .fc-timegrid-event .fc-event-main {
+    @apply py-0.5 px-1;
+  }
+}

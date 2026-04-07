@@ -172,7 +172,7 @@
                             <img
                                     alt="{{ service.name }}"
                                     class="h-80 w-full object-cover rounded-3xl"
-                                    src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon }}"
+                                    src="{{ service.image ? service.image : 'session_default.png'|icon }}"
                             >
                         </a>
                         {% endif %}

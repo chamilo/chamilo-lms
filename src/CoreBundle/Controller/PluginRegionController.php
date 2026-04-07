@@ -7,11 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use AppPlugin;
-use Plugin;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use LogicException;
+use Plugin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

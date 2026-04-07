@@ -181,6 +181,82 @@ const allowUserEditAgenda = ref(false)
 
 const timezone = getCurrentTimezone()
 
+function htmlToPlainText(input) {
+  if (!input) return ""
+
+  const raw = String(input)
+
+  if (!/[<>]/.test(raw)) {
+    return raw.replace(/\s+/g, " ").trim()
+  }
+
+  if (typeof document !== "undefined") {
+    const div = document.createElement("div")
+    div.innerHTML = raw
+
+    return (div.textContent || div.innerText || "").replace(/\s+/g, " ").trim()
+  }
+
+  return raw
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function buildEventTooltip(eventLike) {
+  const eventObject = eventLike?.event ?? eventLike ?? {}
+  const extendedProps = eventObject?.extendedProps ?? {}
+
+  const lines = []
+  const title = eventObject?.title || extendedProps?.title || ""
+  const description = htmlToPlainText(extendedProps?.content || extendedProps?.description || "")
+
+  if (title) {
+    lines.push(title)
+  }
+
+  const start = eventObject?.start ? abbreviatedDatetime(eventObject.start) : ""
+  const end = eventObject?.end ? abbreviatedDatetime(eventObject.end) : ""
+
+  if (start && end) {
+    lines.push(`${t("From")} ${start}`)
+    lines.push(`${t("Until")} ${end}`)
+  } else if (start) {
+    lines.push(`${t("From")} ${start}`)
+  }
+
+  if (description) {
+    lines.push(description)
+  }
+
+  return lines.join("\n")
+}
+
+function applyCalendarEventPresentation(info) {
+  const tooltip = buildEventTooltip(info)
+  const el = info?.el
+
+  if (!el) {
+    return
+  }
+
+  if (tooltip) {
+    el.setAttribute("title", tooltip)
+  } else {
+    el.removeAttribute("title")
+  }
+
+  el.classList.add("calendar-event--wrapped")
+
+  el.querySelectorAll("a, .fc-event-title, .fc-list-event-title").forEach((node) => {
+    if (tooltip) {
+      node.setAttribute("title", tooltip)
+    } else {
+      node.removeAttribute("title")
+    }
+  })
+}
+
 // Removes openAdd=1 from the current URL to avoid reopening the dialog.
 function clearOpenAddFlag() {
   if (route.query.openAdd !== "1") return
@@ -261,14 +337,26 @@ function getCalendarQueryState() {
   return { date, view }
 }
 
-function goToAgendaList() {
+function buildAgendaNavigationQuery() {
   const { date, view } = getCalendarQueryState()
-
   const nextQuery = { ...route.query }
-  if (date) nextQuery.date = date
-  if (view) nextQuery.view = view
 
-  router.push({ name: "CCalendarEventListView", query: nextQuery }).catch((e) => {
+  if (date) {
+    nextQuery.date = date
+  }
+
+  if (view) {
+    nextQuery.view = view
+  }
+
+  return nextQuery
+}
+
+function goToAgendaList(mode = "list") {
+  const nextQuery = buildAgendaNavigationQuery()
+  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
+
+  router.push({ name: targetRoute, query: nextQuery }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }
@@ -345,7 +433,7 @@ function defaultColorByContext(ctx) {
 // Build a safe default item for the modal form.
 function buildDefaultEventItem() {
   const now = new Date()
-  const end = new Date(now.getTime() + 60 * 60 * 1000) // +1 hour
+  const end = new Date(now.getTime() + 60 * 60 * 1000)
 
   return {
     title: "",
@@ -407,7 +495,7 @@ const calendarOptions = ref({
     eventClickInfo.jsEvent.preventDefault()
     currentEvent = eventClickInfo.event
 
-    let event = eventClickInfo.event.toPlainObject()
+    const event = eventClickInfo.event.toPlainObject()
 
     if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
       allowToEdit.value =
@@ -504,6 +592,10 @@ const calendarOptions = ref({
 
     getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
+
+  eventDidMount(info) {
+    applyCalendarEventPresentation(info)
+  },
 })
 
 const allowAction = (eventType) => {
@@ -592,15 +684,13 @@ const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 const createForm = ref(null)
 
 function goToSessionsPlan() {
-  console.log("[Calendar] goToSessionsPlan")
-  router.push({ name: "CalendarSessionsPlan", query: { ...route.query } }).catch((e) => {
+  router.push({ name: "CalendarSessionsPlan", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }
 
 function goToMyStudentsSchedule() {
-  console.log("[Calendar] goToMyStudentsSchedule")
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...route.query } }).catch((e) => {
+  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }

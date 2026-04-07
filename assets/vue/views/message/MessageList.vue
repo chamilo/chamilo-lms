@@ -4,7 +4,7 @@
       <BaseButton
         icon="email-plus"
         only-icon
-        type="black"
+        type="success"
         :title="t('New message')"
         :aria-label="t('New message')"
         @click="goToCompose"
@@ -24,7 +24,7 @@
         :disabled="0 === selectedItems.length || isLoading"
         icon="delete"
         only-icon
-        type="black"
+        type="danger"
         :title="t('Delete')"
         :aria-label="t('Delete')"
         @click="showDlgConfirmDeleteMultiple"
@@ -48,51 +48,7 @@
       />
     </SectionHeader>
 
-    <div class="message-list__actions">
-      <BaseButton
-        :label="t('Inbox')"
-        class="w-full md:w-auto"
-        icon="inbox"
-        type="black"
-        :title="t('Inbox')"
-        :aria-label="t('Inbox')"
-        @click="showInbox"
-      />
-
-      <BaseButton
-        :label="t('Unread')"
-        class="w-full md:w-auto"
-        icon="email-unread"
-        type="black"
-        :title="t('Unread')"
-        :aria-label="t('Unread')"
-        @click="showUnread"
-      />
-
-      <BaseButton
-        :label="t('Sent')"
-        class="w-full md:w-auto"
-        icon="sent"
-        type="black"
-        :title="t('Sent')"
-        :aria-label="t('Sent')"
-        @click="showSent"
-      />
-
-      <BaseButton
-        v-for="tag in tags"
-        :key="tag.id"
-        :label="tag.tag"
-        class="w-full md:w-auto"
-        icon="tag-outline"
-        type="black"
-        :title="tag.tag"
-        :aria-label="tag.tag"
-        @click="showInboxByTag(tag)"
-      />
-    </div>
-
-    <div class="hidden md:block overflow-x-auto">
+    <div class="overflow-x-auto">
       <BaseTable
         ref="dtMessages"
         v-model:selected-items="selectedItems"
@@ -109,32 +65,79 @@
         @sort="sortingChanged"
       >
         <template #header>
-          <form
-            class="message-list__searcher-container"
-            @submit.prevent="onSearch"
-          >
-            <InputGroup>
-              <InputText
-                v-model="searchText"
-                :placeholder="t('Search')"
-                type="text"
-              />
+          <div class="flex items-center gap-4">
+            <div class="flex items-stretch self-stretch">
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'inbox'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showInbox"
+              >
+                {{ t("Inbox") }}
+              </button>
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'unread'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showUnread"
+              >
+                {{ t("Unread") }}
+              </button>
+              <button
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap"
+                :class="
+                  activeFilter === 'sent'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                "
+                @click="showSent"
+              >
+                {{ t("Sent") }}
+              </button>
               <BaseButton
-                icon="search"
-                is-submit
-                type="primary"
-                :title="t('Search')"
-                :aria-label="t('Search')"
+                v-for="tag in tags"
+                :key="tag.id"
+                :label="tag.tag"
+                icon="tag-outline"
+                type="black"
+                :title="tag.tag"
+                :aria-label="tag.tag"
+                @click="showInboxByTag(tag)"
               />
-              <BaseButton
-                icon="close"
-                type="primary"
-                :title="t('Reset')"
-                :aria-label="t('Reset')"
-                @click="onResetSearch"
-              />
-            </InputGroup>
-          </form>
+            </div>
+            <form
+              class="flex-1"
+              @submit.prevent="onSearch"
+            >
+              <InputGroup>
+                <InputText
+                  v-model="searchText"
+                  :placeholder="t('Search')"
+                  type="text"
+                />
+                <BaseButton
+                  icon="search"
+                  is-submit
+                  type="primary"
+                  :title="t('Search')"
+                  :aria-label="t('Search')"
+                />
+                <BaseButton
+                  icon="close"
+                  type="primary"
+                  :title="t('Reset')"
+                  :aria-label="t('Reset')"
+                  @click="onResetSearch"
+                />
+              </InputGroup>
+            </form>
+          </div>
         </template>
 
         <Column selection-mode="multiple" />
@@ -207,116 +210,6 @@
           </template>
         </Column>
       </BaseTable>
-    </div>
-
-    <!-- List for small screens with pagination -->
-    <div class="block md:hidden">
-      <ul class="space-y-4">
-        <li
-          v-for="item in paginatedItems"
-          :key="item.id"
-          class="bg-white shadow-md rounded-lg p-4"
-        >
-          <div class="flex items-center space-x-4">
-            <BaseAvatarList
-              v-if="showingInbox && item.sender"
-              :users="[item.sender]"
-            />
-            <div
-              v-else-if="showingInbox && !item.sender"
-              class="text-sm text-gray-600"
-              v-text="t('No sender')"
-            />
-            <BaseAvatarList
-              v-else
-              :users="mapReceiverMixToUsers(item)"
-            />
-            <div class="flex-1">
-              <div
-                v-if="showingInbox && item.sender"
-                class="font-bold text-lg"
-              >
-                {{ item.sender.name }}
-              </div>
-              <div
-                v-if="showingInbox && item.sender"
-                class="text-sm text-gray-600"
-              >
-                {{ item.sender.email }}
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <div class="text-sm font-bold">{{ t("Title") }}:</div>
-            <BaseAppLink
-              :to="{
-                name: 'MessageShow',
-                query: {
-                  id: item['@id'],
-                  receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER,
-                },
-              }"
-              :class="['text-base text-blue-600', { 'font-bold': showingInbox && !findMyReceiver(item)?.read }]"
-            >
-              {{ item.title }}
-            </BaseAppLink>
-          </div>
-
-          <div
-            v-if="findMyReceiver(item)?.tags.length"
-            class="mt-2"
-          >
-            <div class="text-sm font-bold">{{ t("Tags") }}:</div>
-            <div>
-              <BaseTag
-                v-for="tag in findMyReceiver(item)?.tags"
-                :key="tag.id"
-                :label="tag.tag"
-                type="info"
-              />
-            </div>
-          </div>
-
-          <div class="mt-2">
-            <div class="text-sm font-bold">{{ t("Sent date") }}:</div>
-            <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
-          </div>
-
-          <div class="mt-4 flex space-x-2">
-            <BaseButton
-              icon="delete"
-              size="small"
-              type="danger"
-              :title="t('Delete')"
-              :aria-label="t('Delete')"
-              @click="showDlgConfirmDeleteSingle(item)"
-            />
-          </div>
-        </li>
-      </ul>
-
-      <div class="flex justify-between items-center mt-4">
-        <BaseButton
-          :disabled="isPrevDisabled"
-          icon="back"
-          type="black"
-          :title="t('Previous page')"
-          :aria-label="t('Previous page')"
-          @click="prevPage"
-        />
-        <span>
-          {{ t("Page") }} {{ currentPage }} {{ t("of") }} {{ totalPages }} ({{ totalItems }} {{ t("messages") }})
-        </span>
-        <BaseButton
-          :disabled="isNextDisabled"
-          icon="next"
-          type="black"
-          :title="t('Next page')"
-          :aria-label="t('Next page')"
-          @click="nextPage"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -448,40 +341,6 @@ const rowClass = (data) => {
 let fetchPayload = {}
 
 const rows = ref(10)
-const currentPage = ref(1)
-
-const totalPages = computed(() => {
-  return Math.ceil(totalItems.value / rows.value)
-})
-
-const paginatedItems = computed(() => {
-  if (!items.value.length) {
-    return []
-  }
-
-  return items.value
-})
-
-function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
-    fetchPayload.page = currentPage.value
-    fetchPayload.itemsPerPage = rows.value
-    loadMessages(false)
-  }
-}
-
-function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--
-    fetchPayload.page = currentPage.value
-    fetchPayload.itemsPerPage = rows.value
-    loadMessages(false)
-  }
-}
-
-const isPrevDisabled = computed(() => currentPage.value === 1)
-const isNextDisabled = computed(() => currentPage.value === totalPages.value)
 
 function loadMessages(reset = true) {
   if (reset) {
@@ -510,9 +369,11 @@ function loadMessages(reset = true) {
 }
 
 const showingInbox = ref(false)
+const activeFilter = ref("inbox")
 
 function showInbox() {
   showingInbox.value = true
+  activeFilter.value = "inbox"
   title.value = t("Inbox")
   selectedTag.value = null
 
@@ -547,6 +408,7 @@ function showInboxByTag(tag) {
 
 function showUnread() {
   showingInbox.value = true
+  activeFilter.value = "unread"
   title.value = t("Unread")
   selectedTag.value = null
 
@@ -565,6 +427,7 @@ function showUnread() {
 
 function showSent() {
   showingInbox.value = false
+  activeFilter.value = "sent"
   title.value = t("Sent")
   selectedTag.value = null
 

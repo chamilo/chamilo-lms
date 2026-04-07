@@ -134,14 +134,71 @@ const { onCreated } = useUpload()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
 
-// Show warning earlier to make it easier to see.
 const LOW_QUOTA_THRESHOLD_PERCENT = 2
-// Avoid calling the quota endpoint too often while user selects files.
 const QUOTA_STALE_MS = 30_000
 
-const allowedFiletypes = ["file", "video", "certificate"]
-const filetypeQuery = route.query.filetype
-const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
+function normalizePickerType(raw) {
+  const value = String(raw || "")
+    .trim()
+    .toLowerCase()
+
+  if (value === "image" || value === "images") return "image"
+  if (value === "media" || value === "video" || value === "audio") return "media"
+  if (value === "certificate") return "certificate"
+
+  return "file"
+}
+
+function pickerTypeToRouteType(type) {
+  if (type === "image") return "images"
+  if (type === "media") return "media"
+  return "files"
+}
+
+function resolveUploadFiletype(raw, pickerType) {
+  const value = String(raw || "")
+    .trim()
+    .toLowerCase()
+
+  if (pickerType === "certificate") {
+    return "certificate"
+  }
+
+  // Keep legacy compatibility if a caller still explicitly uses "video".
+  if (value === "video") {
+    return "video"
+  }
+
+  return "file"
+}
+
+function getAllowedFileTypes(pickerType) {
+  if (pickerType === "image") {
+    return ["image/*"]
+  }
+
+  if (pickerType === "media") {
+    return ["video/*", "audio/*"]
+  }
+
+  if (pickerType === "certificate") {
+    return [".html"]
+  }
+
+  return null
+}
+
+function buildReturnQuery(overrides = {}) {
+  return {
+    ...route.query,
+    type: pickerTypeToRouteType(pickerType),
+    ...overrides,
+  }
+}
+
+const requestedType = String(route.query.type || route.query.filetype || "file")
+const pickerType = normalizePickerType(requestedType)
+const filetype = resolveUploadFiletype(requestedType, pickerType)
 
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
@@ -243,7 +300,7 @@ async function enforceQuotaForFile(file) {
   if (!file) return true
 
   const info = await refreshQuota(false)
-  if (!info) return true // If quota can't be fetched, let backend decide.
+  if (!info) return true
 
   const availableBytes = Number(info.availableBytes)
   if (!Number.isFinite(availableBytes)) return true
@@ -340,9 +397,9 @@ uppy
     setTimeout(() => {
       if (route.query.returnTo) {
         router.push({
-          name: route.query.returnTo,
+          name: String(route.query.returnTo),
           params: { node: parentNodeId },
-          query: { ...route.query, parentResourceNodeId: parentNodeId },
+          query: buildReturnQuery({ parentResourceNodeId: parentNodeId }),
         })
       } else {
         router.back()
@@ -350,7 +407,6 @@ uppy
     }, 2000)
   })
 
-// Initial meta (do not send searchFieldValues as an object)
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
@@ -360,16 +416,13 @@ uppy.setMeta({
   indexDocumentContent: indexDocumentContent.value,
 })
 
-if (filetype === "certificate") {
-  uppy.setOptions({ restrictions: { allowedFileTypes: [".html"] } })
-} else if (filetype === "video") {
-  uppy.setOptions({ restrictions: { allowedFileTypes: ["video/*"] } })
-} else {
-  uppy.setOptions({ restrictions: { allowedFileTypes: null } })
-}
+uppy.setOptions({
+  restrictions: {
+    allowedFileTypes: getAllowedFileTypes(pickerType),
+  },
+})
 
 onMounted(async () => {
-  // Load quota once on page entry so warnings can appear immediately.
   await refreshQuota(true)
 
   if (!isSearchEnabled.value) return
@@ -431,7 +484,14 @@ watch(
 )
 
 function back() {
-  const queryParams = { cid: toInt(cid, 0), sid: toInt(sid, 0), gid: toInt(gid, 0), filetype, tab: route.query.tab }
+  const queryParams = {
+    ...buildReturnQuery(),
+    cid: toInt(cid, 0),
+    sid: toInt(sid, 0),
+    gid: toInt(gid, 0),
+    tab: route.query.tab,
+  }
+
   if (route.query.tab) {
     router.push({
       name: "FileManagerList",

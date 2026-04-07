@@ -4114,9 +4114,9 @@ class learnpath
         }
         if ($debug) {
             error_log('lp_view_session_id');
-            error_log($this->lp_view_session_id);
+            error_log(($this->lp_view_session_id ?? 'not set'));
             error_log('api session id');
-            error_log(api_get_session_id());
+            error_log((string) api_get_session_id());
             error_log('End of learnpath::start_current_item()');
         }
 

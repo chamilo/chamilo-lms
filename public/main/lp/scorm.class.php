@@ -202,7 +202,7 @@ class scorm extends learnpath
                                         $resources_nodes = $child->childNodes;
                                         $i = 0;
                                         foreach ($resources_nodes as $res_node) {
-                                            $oResource = new scormResource('manifest', $res_node);
+                                            $oResource = new scormResource($res_node, 'manifest');
                                             if ('' != $oResource->identifier) {
                                                 $this->resources[$oResource->identifier] = $oResource;
                                                 $i++;

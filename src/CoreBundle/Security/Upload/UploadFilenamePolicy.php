@@ -155,6 +155,7 @@ final class UploadFilenamePolicy
             'mp4',
             'webm',
             'h5p',
+            'zip',
         ];
 
         return array_values(array_unique(array_merge($extensions, $builtInSafeExtensions)));

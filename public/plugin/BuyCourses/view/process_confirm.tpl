@@ -73,7 +73,7 @@
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <a href='{{ url('index') ~ 'service/' ~ service.id }}'>
                                 <img alt="{{ service.name }}" class="img-responsive"
-                                     src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon }}">
+                                     src="{{ service.image ? service.image : 'session_default.png'|icon }}">
                             </a>
                         </div>
                     </div>

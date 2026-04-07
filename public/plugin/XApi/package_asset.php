@@ -5,6 +5,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use League\Flysystem\FilesystemOperator;
 
 $cidReset = true;
 
@@ -28,6 +29,10 @@ if (null === $relativePath) {
 
 $storageBasePath = rtrim(Container::getProjectDir().'/var/plugins/XApi', '/');
 $absolutePath = $storageBasePath.'/'.$relativePath;
+
+if (!is_file($absolutePath) || !is_readable($absolutePath)) {
+    restore_runtime_file_from_plugins_filesystem($relativePath, $absolutePath);
+}
 
 $realBasePath = realpath($storageBasePath);
 $realFilePath = realpath($absolutePath);
@@ -152,6 +157,62 @@ function is_css_file(string $contentType, string $extension): bool
 }
 
 /**
+ * Restore a runtime file from the persistent plugins filesystem when the local
+ * runtime copy does not exist.
+ */
+function restore_runtime_file_from_plugins_filesystem(string $relativePath, string $absolutePath): void
+{
+    $pluginsFilesystem = get_plugins_filesystem();
+
+    if (null === $pluginsFilesystem) {
+        return;
+    }
+
+    $storagePath = 'XApi/'.ltrim($relativePath, '/');
+
+    try {
+        if (!$pluginsFilesystem->fileExists($storagePath)) {
+            return;
+        }
+
+        $stream = $pluginsFilesystem->readStream($storagePath);
+
+        if (!is_resource($stream)) {
+            return;
+        }
+
+        $directory = dirname($absolutePath);
+        if (!is_dir($directory)) {
+            mkdir($directory, api_get_permissions_for_new_directories(), true);
+        }
+
+        $target = @fopen($absolutePath, 'wb');
+        if (false === $target) {
+            fclose($stream);
+            return;
+        }
+
+        stream_copy_to_stream($stream, $target);
+        fclose($stream);
+        fclose($target);
+        @chmod($absolutePath, api_get_permissions_for_new_files());
+    } catch (Throwable $throwable) {
+        error_log('[XApi][package_asset][restore] '.$throwable->getMessage());
+    }
+}
+
+function get_plugins_filesystem(): ?FilesystemOperator
+{
+    if (!Container::$container->has('oneup_flysystem.plugins_filesystem')) {
+        return null;
+    }
+
+    $filesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
+
+    return $filesystem instanceof FilesystemOperator ? $filesystem : null;
+}
+
+/**
  * Rewrite relative asset URLs inside HTML so they continue to work when served
  * through package_asset.php?path=...
  */
@@ -262,13 +323,14 @@ function build_package_asset_url(string $currentRelativePath, string $assetRefer
         return $assetReference;
     }
 
-    $query = [
-        'path' => $normalizedPath,
-    ];
+    $query = $_GET;
+    unset($query['path']);
+    $query['path'] = $normalizedPath;
 
-    foreach (['cid', 'sid', 'gid', 'gradebook', 'origin'] as $contextKey) {
-        if (isset($_GET[$contextKey])) {
-            $query[$contextKey] = (string) $_GET[$contextKey];
+    if ('' !== $assetQuery) {
+        parse_str($assetQuery, $assetQueryParams);
+        if (!empty($assetQueryParams) && is_array($assetQueryParams)) {
+            $query = array_merge($query, $assetQueryParams);
         }
     }
 
@@ -278,10 +340,6 @@ function build_package_asset_url(string $currentRelativePath, string $assetRefer
             '&',
             PHP_QUERY_RFC3986
         );
-
-    if ('' !== $assetQuery) {
-        $url .= '&'.$assetQuery;
-    }
 
     if ('' !== $assetFragment) {
         $url .= '#'.$assetFragment;

@@ -280,7 +280,7 @@ if (!function_exists('h5pimport_render_add_form')) {
                                 name="file"
                                 accept=".h5p"
                                 required
-                                class="block w-full rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:rounded-xl file:border-0 file:bg-primary file:px-4 file:py-2 file:font-semibold file:text-primary-button-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                class="block w-full rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:rounded-xl file:border-0 file:bg-primary file:px-4 file:py-2 file:font-semibold file:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                             >
                         </div>
 

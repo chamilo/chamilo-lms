@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Importer;
 
-use DocumentManager;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
@@ -84,6 +83,8 @@ class ZipPackageImporter extends PackageImporter
             throw new Exception(sprintf('Manifest file "%s.xml" not found after extraction.', $this->packageType));
         }
 
+        $this->syncRuntimeDirectoryToPersistentStorage($packageDirectoryPath);
+
         return $manifestPath;
     }
 
@@ -92,7 +93,7 @@ class ZipPackageImporter extends PackageImporter
      */
     protected function validateEnoughSpace(int $packageSize): void
     {
-        $baseDirectory = dirname($this->courseDirectoryPath);
+        $baseDirectory = dirname($this->getRuntimeStoragePath());
         $freeSpace = @disk_free_space($baseDirectory);
 
         if (false !== $freeSpace && $packageSize > $freeSpace) {
@@ -121,7 +122,7 @@ class ZipPackageImporter extends PackageImporter
         $directoryPath = implode(
             '/',
             [
-                rtrim($this->courseDirectoryPath, '/'),
+                rtrim($this->getRuntimeStoragePath(), '/'),
                 $this->packageType,
                 api_replace_dangerous_char($name),
             ]

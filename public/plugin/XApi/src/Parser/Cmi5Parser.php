@@ -23,8 +23,8 @@ class Cmi5Parser extends PackageParser
     {
         $dom = new DOMDocument();
 
-        $content = file_get_contents($this->filePath);
-        if (false === $content || '' === trim($content)) {
+        $content = $this->readPackageFileContents();
+        if ('' === trim($content)) {
             throw new Exception('Unable to read cmi5.xml.');
         }
 

@@ -54,7 +54,7 @@ class scormResource
                                             break;
                                         case 'metadata':
                                             //echo "Child is a metadata tag<br />\n";
-                                            $this->metadata = new scormMetadata('manifest', $child);
+                                            $this->metadata = new scormMetadata($child, 'manifest');
                                             break;
                                         case 'dependency':
                                             // Need to get identifierref attribute inside dependency node.

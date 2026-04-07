@@ -3834,6 +3834,10 @@ class learnpathItem
                         }
                     }
 
+                    $suspendData = null === $this->current_data
+                        ? 'NULL'
+                        : "'".Database::escape_string($this->current_data)."'";
+
                     if ('sco' === $this->type) {
                         //IF scorm scorm_update_time has already updated total_time in db
                         //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
@@ -3842,7 +3846,7 @@ class learnpathItem
                                     score = ".$this->get_score().",
                                     $my_status
                                     max_score = '".$this->get_max()."',
-                                    suspend_data = '".Database::escape_string($this->current_data)."',
+                                    suspend_data = $suspendData,
                                     lesson_location = '".$this->lesson_location."'
                                 WHERE
                                     lp_item_id = ".$this->db_id." AND
@@ -3856,7 +3860,7 @@ class learnpathItem
                                     score = ".$this->get_score().",
                                     $my_status
                                     max_score = '".$this->get_max()."',
-                                    suspend_data = '".Database::escape_string($this->current_data)."',
+                                    suspend_data = $suspendData,
                                     lesson_location = '".$this->lesson_location."'
                                 WHERE
                                     lp_item_id = ".$this->db_id." AND

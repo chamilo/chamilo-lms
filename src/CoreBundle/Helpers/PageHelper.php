@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const PHP_URL_PATH;

@@ -138,6 +138,7 @@ class LocaleSubscriber implements EventSubscriberInterface
                 if (!isset($matchingPriorities[$index + 1])) {
                     return $localeList['browser_lang'];
                 }
+
                 // A more-specific priority follows — skip platform_lang and let it win.
                 continue;
             }

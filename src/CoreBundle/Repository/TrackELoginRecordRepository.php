@@ -190,11 +190,11 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
 
         return (int) $conn->executeQuery(
-            "SELECT COUNT(*)
+            'SELECT COUNT(*)
              FROM track_e_login_record
              WHERE username = :username
                AND success = 0
-               AND login_date >= (NOW() - INTERVAL 1 DAY)",
+               AND login_date >= (NOW() - INTERVAL 1 DAY)',
             ['username' => $username]
         )->fetchOne();
     }

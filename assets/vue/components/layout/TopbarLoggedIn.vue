@@ -8,11 +8,12 @@
         v-if="isTeacher && allowUsersToCreateCourses"
         :title="t('Create course')"
         :to="{ name: 'CourseCreate' }"
-        class="item-button"
+        class="item-button group"
       >
         <BaseIcon
           icon="courses"
           badge-icon="plus"
+          zoom-trigger="group"
           class="item-button__icon text-success"
         />
       </BaseAppLink>

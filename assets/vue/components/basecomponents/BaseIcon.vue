@@ -5,7 +5,7 @@
     v-bind="attrs"
   >
     <i
-      :class="iconClass"
+      :class="iconClasses"
       aria-hidden="true"
     />
 
@@ -78,9 +78,21 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  zoomTrigger: {
+    type: String,
+    default: "none",
+    validator: (value) => ["none", "self", "group"].includes(value),
+  },
 })
 
-const iconClass = computed(() => chamiloIconToClass[props.icon])
+const iconClasses = computed(() => [
+  chamiloIconToClass[props.icon],
+  {
+    "transition-transform duration-200": props.zoomTrigger !== "none",
+    "hover:scale-110": props.zoomTrigger === "self",
+    "group-hover:scale-110": props.zoomTrigger === "group",
+  },
+])
 
 const badgeIconClass = computed(() => {
   if (!props.badgeIcon) {

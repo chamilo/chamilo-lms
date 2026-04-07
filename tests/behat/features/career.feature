@@ -34,12 +34,12 @@ Feature: Career
     Given I am a platform administrator
     And I am on "/main/admin/careers.php"
     And I wait for the page to be loaded
-    Then I should not see an error
+    And I should not see an error
     And I should see "Developer"
-    And I click the "i.mdi-text-box-plus" element
+    When I click the "i.mdi-text-box-plus" element
     And I confirm the popup
-    And I wait for the page to be loaded
-    Then I should not see an error
+    Then I wait for the page to be loaded
+    And I should not see an error
     And I should see "Developer Copy"
 
   Scenario: Delete a career
@@ -48,12 +48,7 @@ Feature: Career
       And I wait for the page to be loaded
       Then I should not see an error
       And I should see "Developer"
-      And I click the "i.mdi-delete" element
-      And I confirm the popup
-      And I wait for the page to be loaded
-      Then I should not see an error
-      And I should see "Developer"
-      And I click the "i.mdi-delete" element
+      When I click the "i.mdi-delete" element
       And I confirm the popup
       And I wait for the page to be loaded
       Then I should not see an error

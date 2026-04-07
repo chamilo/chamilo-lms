@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
-      active-view="calendar"
+      active-view="my-students-schedule"
       @addClick="goToAddEvent"
       @agendaListClick="goToAgendaList"
       @sessionPlanningClick="goToSessionsPlan"
@@ -68,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Read-only dialog -->
     <Dialog
       v-model:visible="detailsVisible"
       modal
@@ -148,7 +147,43 @@ function snapshotCalendarState() {
   initialDate.value = DateTime.fromJSDate(api.getDate()).setZone(timezone).toISODate()
 }
 
-// Keep selectedSid synced from route (avoid useless re-assignments)
+function getCalendarQueryState() {
+  const api = cal.value?.getApi?.()
+
+  if (!api) {
+    return {
+      date: initialDate.value ?? route.query.date ?? null,
+      view: initialView.value ?? route.query.view ?? null,
+    }
+  }
+
+  return {
+    date: DateTime.fromJSDate(api.getDate()).setZone(timezone).toISODate(),
+    view: api.view?.type ?? initialView.value ?? route.query.view ?? null,
+  }
+}
+
+function buildAgendaNavigationQuery() {
+  const { date, view } = getCalendarQueryState()
+  const nextQuery = { ...route.query }
+
+  if (selectedSid.value) {
+    nextQuery.sid = selectedSid.value
+  } else {
+    delete nextQuery.sid
+  }
+
+  if (date) {
+    nextQuery.date = date
+  }
+
+  if (view) {
+    nextQuery.view = view
+  }
+
+  return nextQuery
+}
+
 watch(
   () => route.query.sid,
   (sid) => {
@@ -247,6 +282,91 @@ async function fetchSessions() {
   }
 }
 
+function htmlToPlainText(input) {
+  if (!input) return ""
+
+  const raw = String(input)
+
+  if (!/[<>]/.test(raw)) {
+    return raw.replace(/\s+/g, " ").trim()
+  }
+
+  if (typeof document !== "undefined") {
+    const div = document.createElement("div")
+    div.innerHTML = raw
+
+    return (div.textContent || div.innerText || "").replace(/\s+/g, " ").trim()
+  }
+
+  return raw
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function buildEventTooltip(eventLike) {
+  const eventObject = eventLike?.event ?? eventLike ?? {}
+  const extendedProps = eventObject?.extendedProps ?? {}
+
+  const lines = []
+  const title = eventObject?.title || extendedProps?.title || ""
+  const courseTitle = extendedProps?.courseTitle || ""
+  const description = htmlToPlainText(extendedProps?.content || extendedProps?.description || "")
+
+  if (title) {
+    lines.push(title)
+  }
+
+  if (courseTitle) {
+    lines.push(`${t("Course")}: ${courseTitle}`)
+  }
+
+  const start = eventObject?.start
+    ? DateTime.fromJSDate(eventObject.start).setZone(timezone).toFormat("yyyy-LL-dd HH:mm")
+    : ""
+  const end = eventObject?.end
+    ? DateTime.fromJSDate(eventObject.end).setZone(timezone).toFormat("yyyy-LL-dd HH:mm")
+    : ""
+
+  if (start && end) {
+    lines.push(`${t("From")} ${start}`)
+    lines.push(`${t("Until")} ${end}`)
+  } else if (start) {
+    lines.push(`${t("From")} ${start}`)
+  }
+
+  if (description) {
+    lines.push(description)
+  }
+
+  return lines.join("\n")
+}
+
+function applyCalendarEventPresentation(info) {
+  const tooltip = buildEventTooltip(info)
+  const el = info?.el
+
+  if (!el) {
+    return
+  }
+
+  if (tooltip) {
+    el.setAttribute("title", tooltip)
+  } else {
+    el.removeAttribute("title")
+  }
+
+  el.classList.add("calendar-event--wrapped")
+
+  el.querySelectorAll("a, .fc-event-title, .fc-list-event-title").forEach((node) => {
+    if (tooltip) {
+      node.setAttribute("title", tooltip)
+    } else {
+      node.removeAttribute("title")
+    }
+  })
+}
+
 async function fetchEvents(info, successCallback, failureCallback) {
   try {
     const sid = selectedSid.value
@@ -309,19 +429,23 @@ const calendarOptions = computed(() => ({
     info.jsEvent.stopPropagation()
     openReadOnlyDetails(info.event)
   },
+  eventDidMount(info) {
+    applyCalendarEventPresentation(info)
+  },
 }))
 
 function goToSessionsPlan() {
-  router.push({ name: "CalendarSessionsPlan", query: { ...route.query } }).catch(() => {})
+  router.push({ name: "CalendarSessionsPlan", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...route.query } }).catch(() => {})
+  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
-function goToAgendaList() {
-  router.push({ name: "CCalendarEventListView", query: { ...route.query } }).catch(() => {})
+function goToAgendaList(mode = "list") {
+  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
+  router.push({ name: targetRoute, query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 function goToAddEvent() {
-  router.push({ name: "CCalendarEventList", query: { ...route.query, openAdd: "1" } }).catch(() => {})
+  router.push({ name: "CCalendarEventList", query: { ...buildAgendaNavigationQuery(), openAdd: "1" } }).catch(() => {})
 }
 
 onMounted(() => {

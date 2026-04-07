@@ -45,26 +45,3 @@
 .p-togglebutton-checked {
   @apply font-bold underline;
 }
-.fc .calendar-event--wrapped,
-.fc .calendar-event--wrapped .fc-event-main,
-.fc .calendar-event--wrapped .fc-event-main-frame,
-.fc .calendar-event--wrapped .fc-event-title,
-.fc .calendar-event--wrapped .fc-event-time,
-.fc .calendar-event--wrapped .fc-list-event-title,
-.fc .fc-daygrid-dot-event .fc-event-title,
-.fc .fc-daygrid-block-event .fc-event-title,
-.fc .fc-timegrid-event .fc-event-title,
-.fc .fc-timegrid-event .fc-event-time {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-  word-break: break-word;
-}
-
-.fc .fc-daygrid-event-harness {
-  margin-bottom: 2px;
-}
-
-.fc .fc-timegrid-event .fc-event-main {
-  padding: 2px 4px;
-}

@@ -738,6 +738,7 @@ class SettingsController extends BaseController
         return [
             'admin.user_status_option_only_for_admin_enabled',
             'agenda.allow_careers_in_global_agenda',
+            'ai_helpers.course_analyser',
             'announcement.course_announcement_scheduled_by_date',
             'announcement.hide_global_announcements_when_not_connected',
             'attendance.attendance_calendar_set_duration',

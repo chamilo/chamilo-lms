@@ -243,7 +243,7 @@ $aiOptions = [
     'image_generator' => 'Enable image generator',
     'glossary_terms_generator' => 'Enable glossary terms generator',
     'video_generator' => 'Enable video generator',
-    'course_analyser' => 'Enable course analyser',
+    //'course_analyser' => 'Enable course analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block

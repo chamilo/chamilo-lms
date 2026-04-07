@@ -627,6 +627,50 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_C
     $couponSubscriptionSaleTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICE_REL_EXTRA_FIELD))) {
+    $serviceExtraFieldTable = $pluginSchema->createTable(
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICE_REL_EXTRA_FIELD)
+    );
+    $serviceExtraFieldTable->addColumn(
+        'service_id',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $serviceExtraFieldTable->addColumn(
+        'extra_field_id',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $serviceExtraFieldTable->addColumn(
+        'benefit_value',
+        Types::STRING,
+        ['length' => 255, 'default' => '0']
+    );
+    $serviceExtraFieldTable->setPrimaryKey(['service_id', 'extra_field_id']);
+    $serviceExtraFieldTable->addForeignKeyConstraint(
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICES),
+        ['service_id'],
+        ['id'],
+        ['onDelete' => 'CASCADE']
+    );
+}
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_FROZEN_ENROLLMENT))) {
+    $frozenEnrollmentTable = $pluginSchema->createTable(
+        buycourses_plugin_table(BuyCoursesPlugin::TABLE_FROZEN_ENROLLMENT)
+    );
+    $frozenEnrollmentTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $frozenEnrollmentTable->addColumn('course_id', Types::INTEGER, ['unsigned' => true]);
+    $frozenEnrollmentTable->addColumn('user_id', Types::INTEGER, ['unsigned' => true]);
+    $frozenEnrollmentTable->addColumn('frozen_since', Types::DATETIME_MUTABLE);
+    $frozenEnrollmentTable->setPrimaryKey(['id']);
+    $frozenEnrollmentTable->addUniqueIndex(['course_id', 'user_id']);
+}
+
 $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {
@@ -1031,3 +1075,35 @@ $fieldtype = '1';
 $fieldtitle = BuyCoursesPlugin::get_lang('Address');
 $fielddefault = '';
 $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+
+// Service benefit extra fields — non-user-editable, store JSON values set by purchase flow.
+$serviceExtraFields = [
+    'buycourses_max_courses' => 'MaxCoursesPerUser',
+    'buycourses_hosting_limit' => 'HostingLimitPerCourse',
+    'buycourses_document_quota' => 'DocumentQuotaPerCourse',
+];
+foreach ($serviceExtraFields as $variable => $langKey) {
+    $existing = Database::select(
+        'id',
+        $extraFieldTable,
+        ['where' => ['variable = ?' => $variable, 'AND item_type = ?' => 1]],
+        'first'
+    );
+    if (!$existing) {
+        Database::insert(
+            $extraFieldTable,
+            [
+                'item_type' => 1,
+                'value_type' => 1,
+                'variable' => $variable,
+                'display_text' => BuyCoursesPlugin::get_lang($langKey),
+                'default_value' => '',
+                'field_order' => 0,
+                'visible_to_self' => 0,
+                'changeable' => 0,
+                'filter' => 0,
+                'created_at' => api_get_utc_datetime(),
+            ]
+        );
+    }
+}

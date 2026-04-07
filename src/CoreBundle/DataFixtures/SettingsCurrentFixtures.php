@@ -1102,6 +1102,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',
                 ],
                 [
+                    'name' => 'max_courses_per_user',
+                    'title' => 'Maximum courses per user',
+                    'comment' => 'Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase.',
+                ],
+                [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
                     'comment' => 'JSON configuration for Push notifications integration.',

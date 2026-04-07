@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /* For license terms, see /license.txt */
 
-/**
+/*
  * Create new Services for the Buy Courses plugin.
  */
 
@@ -122,19 +122,49 @@ $form->addFile(
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+// R0: extra field benefit links
+$availableBenefitFields = $plugin->getAvailableBenefitExtraFields();
+if (!empty($availableBenefitFields)) {
+    $form->addHtml('<div class="form-group"><label class="col-sm-2 control-label">'.$plugin->get_lang('LinkedExtraFields').'</label><div class="col-sm-8">');
+    foreach ($availableBenefitFields as $ef) {
+        $efId = (int) $ef['id'];
+        $efLabel = htmlspecialchars($ef['display_text'] ?? $ef['variable'], \ENT_QUOTES, 'UTF-8');
+        $form->addHtml('<div class="benefit-field-row" style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">');
+        $form->addHtml('<input type="checkbox" name="benefit_field_enabled[]" value="'.$efId.'" id="bf_'.$efId.'">');
+        $form->addHtml('<label for="bf_'.$efId.'" style="margin:0;font-weight:normal;">'.$efLabel.'</label>');
+        $form->addHtml('<input type="number" name="benefit_value['.$efId.']" placeholder="Value (e.g. 20)" style="width:120px;" min="1">');
+        $form->addHtml('</div>');
+    }
+    $form->addHtml('</div></div>');
+}
+
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
 
-    $plugin->storeService($values);
+    $serviceId = $plugin->storeService($values);
+
+    // R0: save extra field benefit links
+    if ($serviceId && !empty($values['benefit_field_enabled'])) {
+        $links = [];
+        foreach ((array) $values['benefit_field_enabled'] as $efId) {
+            $efId = (int) $efId;
+            $benefitValue = trim((string) ($values['benefit_value'][$efId] ?? ''));
+            if ($efId > 0 && '' !== $benefitValue) {
+                $links[] = ['extra_field_id' => $efId, 'benefit_value' => $benefitValue];
+            }
+        }
+        $plugin->saveServiceExtraFieldLinks($serviceId, $links);
+    }
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ServiceAdded'), 'success')
     );
 
     header('Location: list_service.php');
+
     exit;
 }
 
@@ -168,15 +198,15 @@ function buycoursesBuildServiceFormShell(
     int $defaultGlobalTax,
     ?string $previewImageUrl = null
 ): string {
-    $safePageTitle = htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8');
-    $safePluginTitle = htmlspecialchars($pluginTitle, ENT_QUOTES, 'UTF-8');
-    $safeSubtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
-    $safeBackUrl = htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8');
-    $safeCurrencyCode = htmlspecialchars($currencyCode, ENT_QUOTES, 'UTF-8');
+    $safePageTitle = htmlspecialchars($pageTitle, \ENT_QUOTES, 'UTF-8');
+    $safePluginTitle = htmlspecialchars($pluginTitle, \ENT_QUOTES, 'UTF-8');
+    $safeSubtitle = htmlspecialchars($subtitle, \ENT_QUOTES, 'UTF-8');
+    $safeBackUrl = htmlspecialchars($backUrl, \ENT_QUOTES, 'UTF-8');
+    $safeCurrencyCode = htmlspecialchars($currencyCode, \ENT_QUOTES, 'UTF-8');
 
     $previewHtml = '';
     if (!empty($previewImageUrl)) {
-        $safePreviewImageUrl = htmlspecialchars($previewImageUrl, ENT_QUOTES, 'UTF-8');
+        $safePreviewImageUrl = htmlspecialchars($previewImageUrl, \ENT_QUOTES, 'UTF-8');
         $previewHtml = <<<HTML
             <div class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
                 <div class="border-b border-gray-20 px-5 py-4">

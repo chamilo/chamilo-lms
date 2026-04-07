@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Intl\Currencies;
@@ -54,6 +55,8 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
+    public const TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
+    public const TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
     public const PRODUCT_TYPE_SERVICE = 3;
@@ -193,7 +196,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * This method creates the tables required to this plugin.
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     public function install(): void
     {
@@ -541,7 +544,6 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
-
     }
 
     /**
@@ -782,7 +784,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise, return false
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     public function saveTransferAccount(array $params): int
     {
@@ -832,8 +834,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of transfer accounts.
      *
-     * @return array
-     *
      * @throws Exception
      */
     public function getTransferAccounts(): array
@@ -847,7 +847,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Remove a transfer account.
      *
-     * @param  int  $id  The transfer account ID
+     * @param int $id The transfer account ID
      *
      * @return int Rows affected. Otherwise, return false
      *
@@ -885,8 +885,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param  int  $productId  The item ID
-     * @param  int  $itemType  The item type
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
      *
      * @throws Exception
      */
@@ -954,9 +954,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param  int  $productId  The item ID
-     * @param  int  $itemType  The item type
-     * @param  array  $coupon  Array with at least 'discount_type' and 'discount_amount' elements
+     * @param int   $productId The item ID
+     * @param int   $itemType  The item type
+     * @param array $coupon    Array with at least 'discount_type' and 'discount_amount' elements
      *
      * @throws Exception
      */
@@ -1334,7 +1334,7 @@ class BuyCoursesPlugin extends Plugin
         return $courseCatalog;
     }
 
-    public function getPriceWithCurrencyFromIsoCode(int|float|string $price, string $isoCode): string
+    public function getPriceWithCurrencyFromIsoCode(float|int|string $price, string $isoCode): string
     {
         $useSymbol = 'true' === $this->get('use_currency_symbol');
         $priceValue = (float) $price;
@@ -1354,7 +1354,8 @@ class BuyCoursesPlugin extends Plugin
      * Get course info.
      *
      * @return array
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @throws NonUniqueResultException
      */
     public function getCourseInfo(int $courseId, ?array $coupon = null)
     {
@@ -1507,7 +1508,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get course info.
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getSubscriptionCourseInfo(int $courseId, ?array $coupon = null): array
     {
@@ -3347,7 +3348,7 @@ class BuyCoursesPlugin extends Plugin
             'DISTINCT ss.id ',
             "$servicesSaleTable ss $innerJoins",
             $conditions
-        // , "all", null, true
+            // , "all", null, true
         );
 
         $list = [];
@@ -3453,7 +3454,144 @@ class BuyCoursesPlugin extends Plugin
             $this->setInvoice($serviceSaleId, 1);
         }
 
+        // Write JSON benefit values to buyer's extra fields (R0/R1/R2/R3)
+        $this->applyServiceBenefitsToUser($serviceSale);
+
         return true;
+    }
+
+    /**
+     * Returns buycourses benefit extra field definitions (user-type, non-user-editable).
+     * These are the fields eligible for service linking.
+     *
+     * @return array<int, array{id: int, variable: string, display_text: string}>
+     */
+    public function getAvailableBenefitExtraFields(): array
+    {
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $rows = Database::select(
+            'id, variable, display_text',
+            $table,
+            [
+                'where' => [
+                    'item_type = ? AND changeable = ? AND variable LIKE ?' => [
+                        1, // user type
+                        0, // non-editable
+                        'buycourses_%',
+                    ],
+                ],
+            ],
+            'all'
+        );
+
+        return is_array($rows) ? $rows : [];
+    }
+
+    /**
+     * Returns the linked extra fields (with benefit_value) for a given service.
+     *
+     * @return array<int, array{extra_field_id: int, benefit_value: string, variable: string, display_text: string}>
+     */
+    public function getLinkedExtraFieldsForService(int $serviceId): array
+    {
+        if (empty($serviceId)) {
+            return [];
+        }
+
+        $relTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $efTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+        $sql = "SELECT r.extra_field_id, r.benefit_value, ef.variable, ef.display_text
+                FROM $relTable r
+                INNER JOIN $efTable ef ON r.extra_field_id = ef.id
+                WHERE r.service_id = ".(int) $serviceId;
+
+        $result = Database::query($sql);
+        $rows = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Saves/replaces all extra field links for a service.
+     * $links is an array of ['extra_field_id' => int, 'benefit_value' => string].
+     *
+     * @param array<int, array{extra_field_id: int, benefit_value: string}> $links
+     */
+    public function saveServiceExtraFieldLinks(int $serviceId, array $links): void
+    {
+        $relTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        // Delete existing links for this service
+        Database::delete($relTable, ['service_id = ?' => $serviceId]);
+
+        foreach ($links as $link) {
+            $extraFieldId = (int) ($link['extra_field_id'] ?? 0);
+            $benefitValue = trim((string) ($link['benefit_value'] ?? ''));
+            if ($extraFieldId > 0 && '' !== $benefitValue) {
+                Database::insert($relTable, [
+                    'service_id' => $serviceId,
+                    'extra_field_id' => $extraFieldId,
+                    'benefit_value' => $benefitValue,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Writes JSON benefit values to the buyer's user extra fields after a service purchase.
+     * Each linked extra field gets: {"limit": <benefit_value>, "expiry": "<date_end>"}
+     * For document quota fields: {"quota_mb": <benefit_value>, "expiry": "<date_end>"}.
+     */
+    public function applyServiceBenefitsToUser(array $serviceSale): void
+    {
+        $serviceId = (int) ($serviceSale['service_id'] ?? 0);
+        $buyerId = (int) ($serviceSale['buyer_id'] ?? $serviceSale['buyer']['id'] ?? 0);
+        $dateEnd = $serviceSale['date_end'] ?? null;
+
+        if (empty($serviceId) || empty($buyerId) || empty($dateEnd)) {
+            return;
+        }
+
+        // Normalize date_end to Y-m-d
+        if ($dateEnd instanceof DateTime || $dateEnd instanceof DateTimeInterface) {
+            $expiry = $dateEnd->format('Y-m-d');
+        } else {
+            $expiry = substr((string) $dateEnd, 0, 10);
+        }
+
+        $linkedFields = $this->getLinkedExtraFieldsForService($serviceId);
+        if (empty($linkedFields)) {
+            return;
+        }
+
+        $extraFieldValueManager = new ExtraFieldValue('user');
+
+        foreach ($linkedFields as $link) {
+            $variable = (string) ($link['variable'] ?? '');
+            $benefitValue = (string) ($link['benefit_value'] ?? '0');
+
+            // Build JSON payload based on variable name
+            if ('buycourses_document_quota' === $variable) {
+                $jsonValue = json_encode([
+                    'quota_mb' => (int) $benefitValue,
+                    'expiry' => $expiry,
+                ]);
+            } else {
+                $jsonValue = json_encode([
+                    'limit' => (int) $benefitValue,
+                    'expiry' => $expiry,
+                ]);
+            }
+
+            $extraFieldValueManager->save([
+                'item_id' => $buyerId,
+                'variable' => $variable,
+                'field_value' => $jsonValue,
+            ]);
+        }
     }
 
     /**
@@ -3521,13 +3659,10 @@ class BuyCoursesPlugin extends Plugin
      * @param int $serviceId   The service ID
      * @param int $paymentType The payment type
      * @param int $infoSelect  The ID for Service Type
-     * @param int|null  $couponId
      *
-     * @return int|bool
-     *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
-    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null): int|bool
+    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null): bool|int
     {
         if (!in_array(
             $paymentType,
@@ -4277,8 +4412,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Add a new subscription.
-     *
-     * @return bool
      */
     public function addNewSubscription(array $subscription): bool
     {
@@ -4977,8 +5110,8 @@ class BuyCoursesPlugin extends Plugin
         unset($queryParams['page']);
 
         $url = $baseUrl.'?'.http_build_query(
-                array_merge($queryParams, $extraQueryParams)
-            );
+            array_merge($queryParams, $extraQueryParams)
+        );
 
         return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
@@ -5135,7 +5268,7 @@ class BuyCoursesPlugin extends Plugin
             )
             ->setFirstResult($first)
             ->setMaxResults($maxResults)
-            ;
+        ;
     }
 
     /**
@@ -6076,13 +6209,13 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         return Database::update(
-                self::TABLE_SUBSCRIPTION,
-                $values,
-                [
-                    'product_type = ? AND ' => $productType,
-                    'product_id = ?' => $productId,
-                ]
-            ) > 0;
+            self::TABLE_SUBSCRIPTION,
+            $values,
+            [
+                'product_type = ? AND ' => $productType,
+                'product_id = ?' => $productId,
+            ]
+        ) > 0;
     }
 
     /**

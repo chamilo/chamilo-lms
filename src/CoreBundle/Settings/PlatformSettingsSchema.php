@@ -52,6 +52,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'pdf_img_dpi' => '96',
                     'hosting_limit_users_per_course' => '0',
+                    'max_courses_per_user' => '0',
                     'generate_random_login' => 'false',
                     'timepicker_increment' => '15',
                     'user_status_show_options_enabled' => 'false',
@@ -107,6 +108,14 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('unoconv_binaries', TextType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('hosting_limit_users_per_course', TextType::class)
+            ->add(
+                'max_courses_per_user',
+                TextType::class,
+                [
+                    'label' => 'Max courses per user',
+                    'help' => 'Maximum number of courses a user can create. Set to 0 for unlimited.',
+                ]
+            )
             ->add('generate_random_login', YesNoType::class)
             ->add('timepicker_increment', TextType::class)
             ->add('user_status_show_options_enabled', YesNoType::class)

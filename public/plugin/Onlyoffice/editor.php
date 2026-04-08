@@ -29,7 +29,7 @@ api_block_anonymous_users();
 
 $plugin = OnlyofficePlugin::create();
 
-$isEnabled = 'true' === $plugin->get('enable_onlyoffice_plugin');
+$isEnabled = $plugin->isEnabledForCurrentAccessUrl();
 if (!$isEnabled) {
     exit('Document server is not enabled.');
 }

@@ -16,7 +16,7 @@ $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 $em = Database::getManager();
 
 try {
-    if ($plugin->get('enabled') !== 'true') {
+    if (!$plugin->isEnabledForCurrentAccessUrl()) {
         throw new Exception(get_lang('NotAllowed'));
     }
 
@@ -63,11 +63,11 @@ try {
         $slctCourses,
         [
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
-                [
-                    'a' => 'search_course_by_session_all',
-                    'session_id' => $sessionId,
-                ]
-            ),
+                    [
+                        'a' => 'search_course_by_session_all',
+                        'session_id' => $sessionId,
+                    ]
+                ),
             'multiple' => true,
         ]
     );

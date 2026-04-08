@@ -50,6 +50,14 @@ class OnlyofficeSettingsFormBuilder
         $pluginInfo = $plugin->get_info();
         $form = $pluginInfo['settings_form'];
 
+        if (method_exists($form, 'removeElement')) {
+            try {
+                $form->removeElement('enable_onlyoffice_plugin');
+            } catch (\Throwable $e) {
+                // Ignore missing element. Some form variants no longer include this field.
+            }
+        }
+
         $demoData = $settingsManager->getDemoData();
         $demoAvailable = is_array($demoData) && array_key_exists('available', $demoData)
             ? (bool) $demoData['available']
@@ -127,9 +135,14 @@ class OnlyofficeSettingsFormBuilder
         $anchorNames = ['submit_button', 'submit', 'save', 'save_settings'];
         $anchor = null;
         foreach ($anchorNames as $name) {
-            if (method_exists($form, 'getElement') && $form->getElement($name)) {
-                $anchor = $name;
-                break;
+            try {
+                if (method_exists($form, 'getElement')) {
+                    $form->getElement($name);
+                    $anchor = $name;
+                    break;
+                }
+            } catch (\Throwable $e) {
+                // Ignore missing anchors and continue checking the next possible one.
             }
         }
 
@@ -171,6 +184,14 @@ class OnlyofficeSettingsFormBuilder
         $pluginInfo = $plugin->get_info();
         $form = $pluginInfo['settings_form'];
 
+        if (method_exists($form, 'removeElement')) {
+            try {
+                $form->removeElement('enable_onlyoffice_plugin');
+            } catch (\Throwable $e) {
+                // Ignore missing element. The plugin active state is managed from the plugins list.
+            }
+        }
+
         $result = $form->getSubmitValues();
         if (!is_array($result)) {
             $result = [];
@@ -180,6 +201,7 @@ class OnlyofficeSettingsFormBuilder
         $testing = array_key_exists('test_connection', $result);
 
         $runtimeSettings = self::sanitizeSubmittedValues($result, $form);
+        unset($runtimeSettings['enable_onlyoffice_plugin']);
 
         // Make posted values available as runtime overrides for SettingsManager.
         $settingsManager->newSettings = $runtimeSettings;

@@ -14,7 +14,6 @@ class Tour extends Plugin
     protected function __construct()
     {
         $parameters = [
-            'show_tour' => 'boolean',
             'theme' => 'text',
         ];
 
@@ -44,38 +43,9 @@ class Tour extends Plugin
     /**
      * Return true only when the plugin is enabled for the current access URL.
      */
-    public function isEnabledForCurrentAccessUrl(): bool
-    {
-        try {
-            $pluginEntity = Database::getManager()
-                ->getRepository(\Chamilo\CoreBundle\Entity\Plugin::class)
-                ->findOneBy(['title' => 'Tour']);
-
-            if (!$pluginEntity || !$pluginEntity->isInstalled()) {
-                return false;
-            }
-
-            $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
-            if (null === $currentAccessUrl) {
-                return false;
-            }
-
-            $configuration = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
-
-            return null !== $configuration && $configuration->isActive();
-        } catch (\Throwable $e) {
-            error_log('[Tour] Unable to determine plugin active state: '.$e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Return true only when the plugin is enabled and the feature setting is active.
-     */
     public function isTourAvailable(): bool
     {
-        return $this->isEnabledForCurrentAccessUrl() && 'true' === $this->get('show_tour');
+        return $this->isEnabledForCurrentAccessUrl();
     }
 
     /**

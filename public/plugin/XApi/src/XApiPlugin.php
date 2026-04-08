@@ -82,6 +82,11 @@ class XApiPlugin extends Plugin
         $this->addCourseTools();
     }
 
+    public function ensureCurrentUrlConfigurationDefaults(): void
+    {
+        $this->initializePluginConfigurationForCurrentUrl();
+    }
+
     public function uninstall()
     {
         $this->deleteCourseTools();
@@ -128,16 +133,33 @@ class XApiPlugin extends Plugin
             self::SETTING_CRON_LRS_URL => '',
             self::SETTING_CRON_LRS_AUTH_USERNAME => '',
             self::SETTING_CRON_LRS_AUTH_PASSWORD => '',
-            self::SETTING_LRS_LP_ITEM_ACTIVE => false,
-            self::SETTING_LRS_LP_ACTIVE => false,
-            self::SETTING_LRS_QUIZ_ACTIVE => false,
-            self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => false,
-            self::SETTING_LRS_PORTFOLIO_ACTIVE => false,
+            self::SETTING_LRS_LP_ITEM_ACTIVE => 'false',
+            self::SETTING_LRS_LP_ACTIVE => 'false',
+            self::SETTING_LRS_QUIZ_ACTIVE => 'false',
+            self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => 'false',
+            self::SETTING_LRS_PORTFOLIO_ACTIVE => 'false',
         ];
 
         foreach ($defaults as $key => $value) {
             if (!array_key_exists($key, $configuration) || null === $configuration[$key] || '' === $configuration[$key]) {
                 $configuration[$key] = $value;
+            }
+        }
+
+        $booleanSettings = [
+            self::SETTING_LRS_LP_ITEM_ACTIVE,
+            self::SETTING_LRS_LP_ACTIVE,
+            self::SETTING_LRS_QUIZ_ACTIVE,
+            self::SETTING_LRS_QUIZ_QUESTION_ACTIVE,
+            self::SETTING_LRS_PORTFOLIO_ACTIVE,
+        ];
+
+        foreach ($booleanSettings as $settingName) {
+            if (array_key_exists($settingName, $configuration)) {
+                $configuration[$settingName] = filter_var(
+                    $configuration[$settingName],
+                    FILTER_VALIDATE_BOOLEAN
+                ) ? 'true' : 'false';
             }
         }
 

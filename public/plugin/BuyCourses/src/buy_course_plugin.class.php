@@ -212,9 +212,15 @@ class BuyCoursesPlugin extends Plugin
     {
         $tablesToBeDeleted = array_reverse($this->getPluginTablesWithPrefix());
 
-        foreach ($tablesToBeDeleted as $tableToBeDeleted) {
-            $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
-            Database::query($sql);
+        Database::query('SET FOREIGN_KEY_CHECKS = 0');
+
+        try {
+            foreach ($tablesToBeDeleted as $tableToBeDeleted) {
+                $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
+                Database::query($sql);
+            }
+        } finally {
+            Database::query('SET FOREIGN_KEY_CHECKS = 1');
         }
 
         $this->manageTab(false);

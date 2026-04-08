@@ -10,6 +10,7 @@ use Chamilo\LtiBundle\Entity\LineItem;
 use Chamilo\LtiBundle\Entity\Platform;
 use Chamilo\LtiBundle\Entity\Token;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 
@@ -30,10 +31,12 @@ class ImsLtiPlugin extends Plugin
         $version = '1.9.0';
         $author = 'Angel Fernando Quiroz Campos';
 
-        $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
         $settings = [
-            $message => 'html',
-            'enabled' => 'boolean',
+            Display::return_message(
+                'Platform keys are shown after installation and when the plugin is enabled.',
+                'info',
+                false
+            ) => 'html',
         ];
 
         parent::__construct($version, $author, $settings);
@@ -53,6 +56,74 @@ class ImsLtiPlugin extends Plugin
         static $result = null;
 
         return $result ?: $result = new self();
+    }
+
+    public function syncPlatformKeyPairWithPluginState(): void
+    {
+        $em = Database::getManager();
+
+        try {
+            /** @var Platform|null $platform */
+            $platform = $em->getRepository(Platform::class)->findOneBy([]);
+        } catch (\Throwable $e) {
+            error_log('[ImsLti] Unable to sync platform key pair: '.$e->getMessage());
+
+            return;
+        }
+
+        if ($this->isEnabledForCurrentAccessUrl()) {
+            if (!$platform) {
+                $this->ensurePlatformKeys();
+            }
+
+            return;
+        }
+
+        if ($platform) {
+            $em->remove($platform);
+            $em->flush();
+        }
+    }
+
+    private function getPlatformKeyPairStatusMessage(): string
+    {
+        $platform = null;
+        $platformStateNote = null;
+
+        try {
+            $em = Database::getManager();
+
+            /** @var Platform|null $platform */
+            $platform = $em->getRepository(Platform::class)->findOneBy([]);
+        } catch (\Throwable $e) {
+            error_log('[ImsLti] Unable to read platform key pair status: '.$e->getMessage());
+            $platformStateNote = 'Platform key storage is not available yet.';
+        }
+
+        $isEnabled = $this->isEnabledForCurrentAccessUrl();
+        $kid = $platform ? (string) $platform->getKid() : 'Not generated';
+        $hasPublicKey = $platform && !empty($platform->publicKey);
+        $hasPrivateKey = $platform && '' !== trim((string) $platform->getPrivateKey());
+
+        $rows = [
+            '<li><strong>Status:</strong> '.($isEnabled ? 'Enabled' : 'Disabled').'</li>',
+            '<li><strong>KID:</strong> '.htmlspecialchars($kid, ENT_QUOTES).'</li>',
+            '<li><strong>Public key configured:</strong> '.($hasPublicKey ? 'Yes' : 'No').'</li>',
+            '<li><strong>Private key configured:</strong> '.($hasPrivateKey ? 'Yes' : 'No').'</li>',
+        ];
+
+        if ($platformStateNote) {
+            $rows[] = '<li><strong>Note:</strong> '.htmlspecialchars($platformStateNote, ENT_QUOTES).'</li>';
+        } elseif (!$isEnabled) {
+            $rows[] = '<li><strong>Note:</strong> Keys are generated when the plugin is enabled from the plugins list.</li>';
+        }
+
+        $message = '<div class="space-y-2">'
+            .'<p class="mb-2">Current platform key pair status.</p>'
+            .'<ul class="list-disc pl-5 space-y-1">'.implode('', $rows).'</ul>'
+            .'</div>';
+
+        return Display::return_message($message, $isEnabled ? 'info' : 'warning', false);
     }
 
     /**
@@ -76,32 +147,7 @@ class ImsLtiPlugin extends Plugin
      */
     public function performActionsAfterConfigure()
     {
-        $em = Database::getManager();
-
-        /** @var Platform $platform */
-        $platform = $em
-            ->getRepository(Platform::class)
-            ->findOneBy([]);
-
-        if ($this->get('enabled') === 'true') {
-            if (!$platform) {
-                $platform = new Platform();
-            }
-
-            $keyPair = self::generatePlatformKeys();
-
-            $platform->setKid($keyPair['kid']);
-            $platform->publicKey = $keyPair['public'];
-            $platform->setPrivateKey($keyPair['private']);
-
-            $em->persist($platform);
-        } else {
-            if ($platform) {
-                $em->remove($platform);
-            }
-        }
-
-        $em->flush();
+        $this->syncPlatformKeyPairWithPluginState();
 
         return $this;
     }

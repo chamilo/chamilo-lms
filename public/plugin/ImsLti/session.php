@@ -19,7 +19,7 @@ $ltiToolId = $request->query->getInt('id');
 $em = Database::getManager();
 
 try {
-    if ($plugin->get('enabled') !== 'true') {
+    if (!$plugin->isEnabledForCurrentAccessUrl()) {
         throw new Exception(get_lang('NotAllowed'));
     }
 
@@ -44,10 +44,10 @@ try {
         [],
         [
             'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?'.http_build_query(
-                [
-                    'a' => 'search_session',
-                ]
-            ),
+                    [
+                        'a' => 'search_session',
+                    ]
+                ),
         ]
     );
     $form->addHidden('tool_id', $tool->getId());

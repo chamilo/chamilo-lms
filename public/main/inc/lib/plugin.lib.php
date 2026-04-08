@@ -444,15 +444,29 @@ class AppPlugin
             require $plugin_file;
         }
 
-        if (isset($plugin_info['plugin_class']) && class_exists($plugin_info['plugin_class'], false)) {
-            $cls = $plugin_info['plugin_class'];
-            $instance = method_exists($cls, 'create') ? $cls::create() : new $cls();
-            if (method_exists($instance, 'get_info')) {
-                $plugin_info = array_merge(
-                    $plugin_info,
-                    $instance->get_info()
-                );
+        $repo   = Container::getPluginRepository();
+        $entity = $repo->findOneByTitle($pluginName) ?: $repo->findOneByTitle(ucfirst(strtolower($pluginName)));
+        $isInstalled = $entity?->isInstalled() ?? false;
+
+        if ($isInstalled && isset($plugin_info['plugin_class']) && class_exists($plugin_info['plugin_class'], false)) {
+            try {
+                $cls = $plugin_info['plugin_class'];
+                $instance = method_exists($cls, 'create') ? $cls::create() : new $cls();
+
+                if (method_exists($instance, 'get_info')) {
+                    $plugin_info = array_merge(
+                        $plugin_info,
+                        $instance->get_info()
+                    );
+                }
+            } catch (\Throwable $e) {
+                error_log('[AppPlugin][getPluginInfo]['.$pluginName.'] '.$e->getMessage());
             }
+        }
+
+        if ($entity) {
+            $configByUrl = $entity->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+            $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
         }
 
         $repo   = Container::getPluginRepository();

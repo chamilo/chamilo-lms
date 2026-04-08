@@ -1161,4 +1161,22 @@ class Plugin
 
         return $result;
     }
+
+    public function isEnabledForCurrentAccessUrl(): bool
+    {
+        $pluginName = $this->get_name();
+        $pluginRepository = Container::getPluginRepository();
+
+        $pluginEntity = $pluginRepository->findOneByTitle($pluginName)
+            ?: $pluginRepository->findOneByTitle(ucfirst(strtolower($pluginName)));
+
+        if (!$pluginEntity || !$pluginEntity->isInstalled()) {
+            return false;
+        }
+
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $pluginConfiguration = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
+
+        return $pluginConfiguration?->isActive() ?? false;
+    }
 }

@@ -49,7 +49,7 @@ function c2_get_element_inner_html(DOMElement $element): string
 }
 
 /**
- * Style legacy plugin settings forms with Tailwind utility classes.
+ * Style plugin settings forms with Tailwind utility classes.
  */
 function c2_style_plugin_settings_form_html(string $html): string
 {
@@ -283,11 +283,11 @@ function c2_style_plugin_settings_form_html(string $html): string
 }
 
 /**
- * Optional best-effort loader for a legacy plugin object.
+ * Optional best-effort loader for a plugin object.
  *
  * Returns a Plugin instance or null.
  */
-function c2_try_load_legacy_plugin_obj(string $title): ?Plugin
+function try_load_plugin_obj(string $title): ?Plugin
 {
     $obj = Container::getPluginHelper()->loadLegacyPlugin($title);
 
@@ -328,28 +328,167 @@ function c2_try_load_legacy_plugin_obj(string $title): ?Plugin
     return null;
 }
 
+/**
+ * Return field names that only control plugin state and should not be exposed
+ * as configurable settings in this page.
+ */
+function plugin_get_toggle_field_names(): array
+{
+    return [
+        'tool_enable',
+        'enable_onlyoffice_plugin',
+        'enabled',
+        'enable',
+        'active',
+        'is_active',
+    ];
+}
+
+/**
+ * Remove state toggle fields recursively from submitted values.
+ */
+function plugin_remove_toggle_fields_from_values(array &$values): void
+{
+    $toggleFields = plugin_get_toggle_field_names();
+
+    foreach ($values as $key => &$value) {
+        if (in_array((string) $key, $toggleFields, true)) {
+            unset($values[$key]);
+            continue;
+        }
+
+        if (is_array($value)) {
+            plugin_remove_toggle_fields_from_values($value);
+        }
+    }
+}
+
+/**
+ * Find the most appropriate container node for a form field.
+ */
+function plugin_find_form_field_container(DOMNode $node, DOMElement $root): ?DOMNode
+{
+    $current = $node;
+
+    while ($current && $current !== $root) {
+        if ($current instanceof DOMElement) {
+            $class = ' '.trim((string) $current->getAttribute('class')).' ';
+
+            if (
+                str_contains($class, ' form-group ') ||
+                str_contains($class, ' checkbox ') ||
+                str_contains($class, ' radio ')
+            ) {
+                return $current;
+            }
+
+            if (in_array(strtolower($current->tagName), ['tr', 'li', 'p', 'fieldset'], true)) {
+                return $current;
+            }
+        }
+
+        $current = $current->parentNode;
+    }
+
+    return null;
+}
+
+/**
+ * Remove state toggle fields from the rendered form HTML.
+ */
+function plugin_remove_toggle_fields_from_form_html(string $html): string
+{
+    if (!class_exists(DOMDocument::class) || '' === trim($html)) {
+        return $html;
+    }
+
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+
+    $document = new DOMDocument('1.0', 'UTF-8');
+    $wrappedHtml = '<?xml encoding="utf-8" ?><div id="plugin-settings-clean-root">'.$html.'</div>';
+
+    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    if (!$loaded) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $xpath = new DOMXPath($document);
+    $root = $document->getElementById('plugin-settings-clean-root');
+
+    if (!$root) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $toggleFields = plugin_get_toggle_field_names();
+    $nodesToRemove = [];
+
+    $fields = $xpath->query('.//*[@name]', $root);
+
+    if ($fields) {
+        foreach ($fields as $field) {
+            if (!$field instanceof DOMElement) {
+                continue;
+            }
+
+            $fieldName = (string) $field->getAttribute('name');
+            $normalizedFieldName = preg_replace('/(\[\])+$/', '', $fieldName);
+
+            if (!in_array($normalizedFieldName, $toggleFields, true)) {
+                continue;
+            }
+
+            $container = plugin_find_form_field_container($field, $root);
+
+            if ($container instanceof DOMNode) {
+                $nodesToRemove[spl_object_hash($container)] = $container;
+            } elseif ($field->parentNode instanceof DOMNode) {
+                $nodesToRemove[spl_object_hash($field)] = $field;
+            }
+        }
+    }
+
+    foreach ($nodesToRemove as $nodeToRemove) {
+        if ($nodeToRemove->parentNode) {
+            $nodeToRemove->parentNode->removeChild($nodeToRemove);
+        }
+    }
+
+    $cleanHtml = c2_get_element_inner_html($root);
+
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+
+    return $cleanHtml;
+}
+
 $pluginRepo = Container::getPluginRepository();
 $pluginName = isset($_GET['plugin']) ? (string) $_GET['plugin'] : '';
 $plugin = $pluginRepo->getInstalledByName($pluginName);
 
-if (!$plugin) {
+if (!$plugin || !$plugin->isInstalled()) {
     api_not_allowed(true);
 }
 
 $accessUrl = Container::getAccessUrlUtil()->getCurrent();
-$pluginConfiguration = $plugin->getOrCreatePluginConfiguration($accessUrl);
+$pluginConfiguration = $plugin->getConfigurationsByAccessUrl($accessUrl);
 
 $appPlugin = new AppPlugin();
 $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true) ?? [];
 $prevDefaultVis = $pluginInfo['settings']['defaultVisibilityInCourseHomepage'] ?? null;
-$prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
 
-$legacyObj = $pluginInfo['obj'] ?? null;
-if (!$legacyObj instanceof Plugin) {
-    $legacyObj = c2_try_load_legacy_plugin_obj($plugin->getTitle());
+$pluginObj = $pluginInfo['obj'] ?? null;
+if (!$pluginObj instanceof Plugin) {
+    $pluginObj = try_load_plugin_obj($plugin->getTitle());
 
-    if ($legacyObj instanceof Plugin) {
-        $pluginInfo['obj'] = $legacyObj;
+    if ($pluginObj instanceof Plugin) {
+        $pluginInfo['obj'] = $pluginObj;
     }
 }
 
@@ -366,9 +505,10 @@ $declaredFieldNames = $objPlugin instanceof Plugin
     ? $objPlugin->getFieldNames()
     : (isset($pluginInfo['settings']) && is_array($pluginInfo['settings']) ? array_keys($pluginInfo['settings']) : []);
 
-$editableFieldNames = array_values(array_diff($declaredFieldNames, ['tool_enable']));
+$toggleFields = plugin_get_toggle_field_names();
+$editableFieldNames = array_values(array_diff($declaredFieldNames, $toggleFields));
 $hasEditableFields = count($editableFieldNames) > 0;
-$isEnabledNow = $pluginHelper->isPluginEnabled($plugin->getTitle());
+$isEnabledNow = $pluginConfiguration?->isActive() ?? false;
 
 $form = null;
 $styledFormHtml = '';
@@ -384,7 +524,9 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
         ]);
 
         if (isset($pluginInfo['settings']) && is_array($pluginInfo['settings'])) {
-            unset($pluginInfo['settings']['tool_enable']);
+            foreach ($toggleFields as $toggleField) {
+                unset($pluginInfo['settings'][$toggleField]);
+            }
 
             $storedDefaults = array_filter(
                 $pluginInfo['settings'],
@@ -401,23 +543,7 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
                 $values['global_conference_allow_roles'] = [];
             }
 
-            $stripToolEnable = static function (&$arr) use (&$stripToolEnable): void {
-                if (!is_array($arr)) {
-                    return;
-                }
-
-                foreach ($arr as $key => &$value) {
-                    if ('tool_enable' === $key) {
-                        unset($arr[$key]);
-                        continue;
-                    }
-
-                    if (is_array($value)) {
-                        $stripToolEnable($value);
-                    }
-                }
-            };
-            $stripToolEnable($values);
+            plugin_remove_toggle_fields_from_values($values);
 
             $formName = $form->getAttribute('name') ?: 'form';
             $reservedKeys = ['submit', 'submit_button', '_token', '_qf__'.$formName];
@@ -438,7 +564,13 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
                 $toPersist = $values;
             }
 
-            unset($toPersist['tool_enable']);
+            foreach ($toggleFields as $toggleField) {
+                unset($toPersist[$toggleField]);
+            }
+
+            if (!$pluginConfiguration) {
+                $pluginConfiguration = $plugin->getOrCreatePluginConfiguration($accessUrl);
+            }
 
             $currentConfiguration = $pluginConfiguration->getConfiguration();
             if (!is_array($currentConfiguration)) {
@@ -467,7 +599,7 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
             $newDefaultVis = $values['defaultVisibilityInCourseHomepage'] ?? $prevDefaultVis;
 
             if ($objPlugin instanceof Plugin) {
-                $isEnabledNow = $pluginHelper->isPluginEnabled($plugin->getTitle());
+                $isEnabledNow = $pluginConfiguration->isActive();
                 $objPlugin->get_settings(true);
 
                 if (!empty($objPlugin->isCoursePlugin) && $isEnabledNow) {
@@ -500,6 +632,7 @@ if (isset($pluginInfo['settings_form']) && $hasEditableFields) {
         }
 
         $styledFormHtml = c2_style_plugin_settings_form_html($form->toHtml());
+        $styledFormHtml = plugin_remove_toggle_fields_from_form_html($styledFormHtml);
     }
 }
 

@@ -129,6 +129,15 @@ class Plugin
         return $this;
     }
 
+    public function clearConfigurationsInUrls(): static
+    {
+        foreach ($this->configurationsInUrl->toArray() as $configurationInUrl) {
+            $this->removeConfigurationsInUrl($configurationInUrl);
+        }
+
+        return $this;
+    }
+
     public function getConfigurationsByAccessUrl(AccessUrl $url): ?AccessUrlRelPlugin
     {
         $criteria = Criteria::create()

@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\LtiProvider\Entity\Platform;
 use Chamilo\PluginBundle\LtiProvider\Entity\PlatformKey;
 use Chamilo\PluginBundle\LtiProvider\Entity\Result;
@@ -35,15 +36,9 @@ class LtiProviderPlugin extends Plugin
         $loginUrlHtml = '';
         $redirectUrlHtml = '';
         $jwksUrlHtml = '';
+        $pkHtml = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
 
         if ($this->areTablesCreated()) {
-            $publicKey = $this->getPublicKey();
-
-            $pkHtml = $this->getSettingHtmlReadOnly(
-                $this->get_lang('PublicKey'),
-                'public_key',
-                $publicKey
-            );
             $launchUrlHtml = $this->getSettingHtmlReadOnly(
                 $this->get_lang('LaunchUrl'),
                 'launch_url',
@@ -64,8 +59,15 @@ class LtiProviderPlugin extends Plugin
                 'jwks_url',
                 api_get_path(WEB_PLUGIN_PATH).self::JWKS_URL
             );
-        } else {
-            $pkHtml = $this->get_lang('GenerateKeyPairInfo');
+
+            $platformKey = $this->getExistingPlatformKey();
+            if ($platformKey && $this->isEnabledForCurrentAccessUrl()) {
+                $pkHtml = $this->getSettingHtmlReadOnly(
+                    $this->get_lang('PublicKey'),
+                    'public_key',
+                    $platformKey->getPublicKey()
+                );
+            }
         }
 
         $settings = [
@@ -76,7 +78,6 @@ class LtiProviderPlugin extends Plugin
             $redirectUrlHtml => 'html',
             $jwksUrlHtml => 'html',
             $pkHtml => 'html',
-            'enabled' => 'boolean',
         ];
 
         parent::__construct($version, $author, $settings);
@@ -233,7 +234,7 @@ class LtiProviderPlugin extends Plugin
             return '';
         }
 
-        $platformKey = $this->getOrCreatePlatformKey();
+        $platformKey = $this->getExistingPlatformKey();
 
         return $platformKey ? $platformKey->getPublicKey() : '';
     }
@@ -450,6 +451,38 @@ class LtiProviderPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
+    public function getExistingPlatformKey(): ?PlatformKey
+    {
+        if (!$this->areTablesCreated()) {
+            return null;
+        }
+
+        return $this->getEntityManager()
+            ->getRepository(PlatformKey::class)
+            ->findOneBy([]);
+    }
+
+    public function syncPlatformKeyWithPluginState(): void
+    {
+        if (!$this->areTablesCreated()) {
+            return;
+        }
+
+        $em = $this->getEntityManager();
+        $platformKey = $this->getExistingPlatformKey();
+
+        if ($this->isEnabledForCurrentAccessUrl()) {
+            $this->getOrCreatePlatformKey(true);
+
+            return;
+        }
+
+        if ($platformKey) {
+            $em->remove($platformKey);
+            $em->flush();
+        }
+    }
+
     /**
      * Check whether the current user is a teacher in this context.
      */
@@ -481,8 +514,6 @@ class LtiProviderPlugin extends Plugin
                 $em->getClassMetadata(Result::class),
             ]
         );
-
-        $this->getOrCreatePlatformKey(true);
     }
 
     /**

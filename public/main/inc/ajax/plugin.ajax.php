@@ -340,7 +340,7 @@ try {
 
             $appPlugin->uninstall($pluginTitle);
 
-            $pluginEntity->uninstall($currentAccessUrl);
+            $pluginEntity->setInstalled(false);
             $em->persist($pluginEntity);
             break;
 
@@ -363,7 +363,7 @@ try {
 
     $em->flush();
 
-    if (in_array($action, ['enable','disable','uninstall'], true)) {
+    if (in_array($action, ['enable','disable'], true)) {
         try {
             $info = $appPlugin->getPluginInfo($pluginTitle, true);
             $pluginClass = $info['plugin_class'] ?? null;
@@ -384,6 +384,14 @@ try {
                 }
             }
 
+            if ($instance) {
+                if (method_exists($instance, 'syncPlatformKeyPairWithPluginState')) {
+                    $instance->syncPlatformKeyPairWithPluginState();
+                } elseif (method_exists($instance, 'syncPlatformKeyWithPluginState')) {
+                    $instance->syncPlatformKeyWithPluginState();
+                }
+            }
+
             // If it is a course plugin, propagate enable/disable to all courses
             if ($instance && !empty($instance->isCoursePlugin)) {
                 if ($action === 'enable') {
@@ -395,6 +403,23 @@ try {
         } catch (\Throwable $postEx) {
             error_log('[plugin.ajax post] '.$postEx->getMessage());
         }
+    }
+
+    if ('uninstall' === $action && null !== $pluginEntity->getId()) {
+        $pluginId = $pluginEntity->getId();
+
+        $deletedRows = $em->getConnection()->executeStatement(
+            'DELETE FROM access_url_rel_plugin WHERE plugin_id = :pluginId',
+            ['pluginId' => $pluginId]
+        );
+
+        error_log(
+            sprintf(
+                '[plugin.ajax uninstall] Deleted %d access_url_rel_plugin row(s) for plugin_id %d',
+                $deletedRows,
+                $pluginId
+            )
+        );
     }
 
     echo json_encode([

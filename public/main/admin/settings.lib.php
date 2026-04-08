@@ -761,7 +761,7 @@ function handlePlugins()
                         </button>';
 
             $managementUrl = plugin_get_management_url($pluginName);
-            if (!empty($managementUrl)) {
+            if (!empty($managementUrl) && plugin_has_editable_settings($pluginName)) {
                 echo '  <a href="'.htmlspecialchars($managementUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
                 echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
                 echo '  </a>';
@@ -1027,7 +1027,7 @@ function plugin_has_editable_settings(string $pluginName): bool
 
     try {
         $app  = new AppPlugin();
-        $info = $app->getPluginInfo($pluginName, true) ?? [];
+        $info = $app->getPluginInfo($pluginName) ?? [];
 
         // Collect fields from Plugin object or from 'settings' array
         if (!empty($info['obj']) && $info['obj'] instanceof Plugin) {

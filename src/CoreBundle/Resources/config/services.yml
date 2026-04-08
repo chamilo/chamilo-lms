@@ -173,3 +173,11 @@ services:
     Chamilo\CoreBundle\AiProvider\AiChatCompletionClientInterface:
       class: Chamilo\CoreBundle\AiProvider\DefaultAiChatCompletionClient
       public: true
+
+    Chamilo\CoreBundle\Security\LoginCaptchaManager:
+      arguments:
+        $cache: '@cache.app'
+
+    Chamilo\CoreBundle\EventSubscriber\LoginSuccessSubscriber:
+      tags:
+        - { name: kernel.event_subscriber, dispatcher: security.event_dispatcher.main }

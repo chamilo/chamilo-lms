@@ -808,7 +808,6 @@ class SettingsController extends BaseController
             'registration.teacher_autosubscribe',
             'registration.user_hide_never_expire_option',
             'security.admins_can_set_users_pass',
-            'security.captcha_number_mistakes_to_block_account',
             'security.hide_breadcrumb_if_not_allowed',
             'security.security_session_cookie_samesite_none',
             'session.assignment_base_course_teacher_access_to_all_session',

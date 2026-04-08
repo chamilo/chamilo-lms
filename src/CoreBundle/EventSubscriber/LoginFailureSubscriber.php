@@ -48,7 +48,6 @@ class LoginFailureSubscriber implements EventSubscriberInterface
         $this->trackELoginRecordingRepository->addTrackLogin($username, $userIp, false);
         $this->loginAttemptLoggerHelper->logAttempt(false, $username, $userIp);
 
-        // Disable account after too many failed login attempts.
         $this->checkAndBlockAccount($username);
     }
 

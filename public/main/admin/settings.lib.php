@@ -1078,7 +1078,9 @@ function plugin_get_management_url(string $pluginName): ?string
     $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
     $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
 
-    if ('XApi' === $pluginName && plugin_has_editable_settings($pluginName)) {
+    // Some plugins might have a configure.php file that is not meant for
+    // configuration at the admin level. Make an exception for them.
+    if (in_array($pluginName, ['XApi', 'ImsLti', 'CourseHomeNotify']) && plugin_has_editable_settings($pluginName)) {
         return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
                 'plugin' => $pluginName,
             ]);

@@ -10,12 +10,14 @@
         :to="{ name: 'CourseCreate' }"
         class="item-button group"
       >
-        <BaseIcon
-          icon="courses"
-          badge-icon="plus"
-          zoom-trigger="group"
-          class="item-button__icon text-success"
-        />
+        <span class="inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
+          <BaseIcon
+            icon="courses"
+            badge-icon="plus"
+            zoom-trigger="group"
+            class="item-button__icon text-success scale-[1.08]"
+          />
+        </span>
       </BaseAppLink>
       <button
         v-if="showTourButton"
@@ -47,12 +49,15 @@
         :class="{ 'item-button--unread': !!btnInboxBadge }"
         :title="t('Inbox')"
         :to="{ name: 'MessageList' }"
-        class="item-button"
+        class="item-button group"
       >
-        <BaseIcon
-          class="item-button__icon"
-          icon="inbox"
-        />
+        <span class="inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
+          <BaseIcon
+            icon="inbox"
+            zoom-trigger="group"
+            class="item-button__icon"
+          />
+        </span>
         <span
           v-if="btnInboxBadge"
           class="item-button__badge"

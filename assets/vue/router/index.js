@@ -32,6 +32,7 @@ import blogRoutes from "./blog"
 import blogAdminRoute from "./blogAdmin"
 import courseMaintenanceRoute from "./coursemaintenance"
 import catalogue from "./catalogue"
+import buycoursesRoutes from "./buycourses"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import MyCourseList from "../views/user/courses/List.vue"
@@ -333,6 +334,7 @@ const router = createRouter({
     accessUrlRoutes,
     branchRoutes,
     roomRoutes,
+    ...buycoursesRoutes,
   ],
 })
 

@@ -12,8 +12,6 @@ $cidReset = true;
 
 require_once '../config.php';
 
-api_protect_admin_script();
-
 $plugin = BuyCoursesPlugin::create();
 
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
@@ -21,8 +19,26 @@ if (!$invoicingEnable) {
     api_not_allowed(true, $plugin->get_lang('NoInvoiceEnable'));
 }
 
-$saleId = isset($_GET['invoice']) ? (int) $_GET['invoice'] : 0;
+// Support both ?invoice=N (legacy admin) and ?sale_id=N (user receipt link)
+$saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : (isset($_GET['invoice']) ? (int) $_GET['invoice'] : 0);
 $isService = isset($_GET['is_service']) ? (int) $_GET['is_service'] : 0;
+
+// Access: admins can view any receipt; regular users can only view their own
+$currentUserId = api_get_user_id();
+$isAdmin = api_is_platform_admin();
+if (!$isAdmin) {
+    // Verify the current user is the buyer for this sale
+    $saleTable = $isService
+        ? Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE)
+        : Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+    $buyerRow = Database::fetch_array(
+        Database::query("SELECT buyer_id FROM $saleTable WHERE id = ".(int) $saleId),
+        'ASSOC'
+    );
+    if (empty($buyerRow) || (int) $buyerRow['buyer_id'] !== $currentUserId) {
+        api_not_allowed(true);
+    }
+}
 
 $globalParameters = $plugin->getGlobalParameters();
 $infoSale = $plugin->getDataSaleInvoice($saleId, $isService);

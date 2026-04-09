@@ -389,6 +389,11 @@ export function useTopbarLoggedIn(props) {
       })
     }
 
+    items[0].items.push({
+      label: t("My services"),
+      url: router.resolve({ name: "MyServices" }).href,
+    })
+
     if (!hideLogoutButton.value) {
       items[0].items.push(
         { separator: true },

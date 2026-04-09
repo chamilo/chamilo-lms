@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -218,6 +219,11 @@ class CourseController extends ToolBaseController
 
         $courseCode = $course->getCode();
         $courseId = $course->getId();
+
+        // BuyCourses: block access for frozen enrollments (R2)
+        if ($user && $this->isEnrollmentFrozen($courseId, $userId)) {
+            throw $this->createAccessDeniedException('Your access to this course has been temporarily suspended.');
+        }
 
         if ($user && $user->isInvitee()) {
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1695,5 +1701,24 @@ class CourseController extends ToolBaseController
             'courseId' => $course->getId(),
             'sessionId' => $sessionId,
         ];
+    }
+
+    /**
+     * Returns true if the user's enrollment in this course has been frozen by BuyCourses expiry (R2).
+     */
+    private function isEnrollmentFrozen(int $courseId, int $userId): bool
+    {
+        if ($courseId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        // Table name is a fixed constant — no dynamic interpolation of user data
+        $frozenTable = BuyCoursesPlugin::TABLE_FROZEN_ENROLLMENT;
+        $count = (int) $this->em->getConnection()->fetchOne(
+            "SELECT COUNT(id) FROM {$frozenTable} WHERE course_id = ? AND user_id = ?",
+            [$courseId, $userId]
+        );
+
+        return $count > 0;
     }
 }

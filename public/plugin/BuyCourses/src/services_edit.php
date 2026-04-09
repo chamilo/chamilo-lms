@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /* For license terms, see /license.txt */
 
-/**
+/*
  * Edit services for the Buy Courses plugin.
  */
 
@@ -19,6 +19,7 @@ api_protect_admin_script(true);
 $serviceId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($serviceId <= 0) {
     header('Location: list_service.php');
+
     exit;
 }
 
@@ -53,6 +54,7 @@ $interbreadcrumb[] = [
 $service = $plugin->getService($serviceId);
 if (empty($service)) {
     header('Location: list_service.php');
+
     exit;
 }
 
@@ -141,6 +143,29 @@ $form->addFile(
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+// R0: extra field benefit links
+$availableBenefitFields = $plugin->getAvailableBenefitExtraFields();
+$existingLinks = $plugin->getLinkedExtraFieldsForService($serviceId);
+$existingLinkMap = [];
+foreach ($existingLinks as $el) {
+    $existingLinkMap[(int) $el['extra_field_id']] = $el['benefit_value'];
+}
+if (!empty($availableBenefitFields)) {
+    $form->addHtml('<div class="form-group"><label class="col-sm-2 control-label">'.$plugin->get_lang('LinkedExtraFields').'</label><div class="col-sm-8">');
+    foreach ($availableBenefitFields as $ef) {
+        $efId = (int) $ef['id'];
+        $efLabel = htmlspecialchars($ef['display_text'] ?? $ef['variable'], \ENT_QUOTES, 'UTF-8');
+        $isChecked = isset($existingLinkMap[$efId]) ? ' checked' : '';
+        $currentValue = htmlspecialchars($existingLinkMap[$efId] ?? '', \ENT_QUOTES, 'UTF-8');
+        $form->addHtml('<div class="benefit-field-row" style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">');
+        $form->addHtml('<input type="checkbox" name="benefit_field_enabled[]" value="'.$efId.'" id="bf_'.$efId.'"'.$isChecked.'>');
+        $form->addHtml('<label for="bf_'.$efId.'" style="margin:0;font-weight:normal;">'.$efLabel.'</label>');
+        $form->addHtml('<input type="number" name="benefit_value['.$efId.']" value="'.$currentValue.'" placeholder="Value (e.g. 20)" style="width:120px;" min="1">');
+        $form->addHtml('</div>');
+    }
+    $form->addHtml('</div></div>');
+}
+
 $form->addHidden('id', (string) $serviceId);
 $form->addButtonSave(get_lang('Edit'));
 $form->addButtonDelete($plugin->get_lang('DeleteThisService'), 'delete_service');
@@ -158,12 +183,24 @@ if ($form->validate()) {
     } else {
         $plugin->updateService($values, $serviceId);
 
+        // R0: save extra field benefit links
+        $links = [];
+        foreach ((array) ($values['benefit_field_enabled'] ?? []) as $efId) {
+            $efId = (int) $efId;
+            $benefitValue = trim((string) ($values['benefit_value'][$efId] ?? ''));
+            if ($efId > 0 && '' !== $benefitValue) {
+                $links[] = ['extra_field_id' => $efId, 'benefit_value' => $benefitValue];
+            }
+        }
+        $plugin->saveServiceExtraFieldLinks($serviceId, $links);
+
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
 
     header('Location: list_service.php');
+
     exit;
 }
 
@@ -198,15 +235,15 @@ function buycoursesBuildServiceFormShell(
     int $defaultGlobalTax,
     ?string $previewImageUrl = null
 ): string {
-    $safePageTitle = htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8');
-    $safePluginTitle = htmlspecialchars($pluginTitle, ENT_QUOTES, 'UTF-8');
-    $safeSubtitle = htmlspecialchars($subtitle, ENT_QUOTES, 'UTF-8');
-    $safeBackUrl = htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8');
-    $safeCurrencyCode = htmlspecialchars($currencyCode, ENT_QUOTES, 'UTF-8');
+    $safePageTitle = htmlspecialchars($pageTitle, \ENT_QUOTES, 'UTF-8');
+    $safePluginTitle = htmlspecialchars($pluginTitle, \ENT_QUOTES, 'UTF-8');
+    $safeSubtitle = htmlspecialchars($subtitle, \ENT_QUOTES, 'UTF-8');
+    $safeBackUrl = htmlspecialchars($backUrl, \ENT_QUOTES, 'UTF-8');
+    $safeCurrencyCode = htmlspecialchars($currencyCode, \ENT_QUOTES, 'UTF-8');
 
     $previewHtml = '';
     if (!empty($previewImageUrl)) {
-        $safePreviewImageUrl = htmlspecialchars($previewImageUrl, ENT_QUOTES, 'UTF-8');
+        $safePreviewImageUrl = htmlspecialchars($previewImageUrl, \ENT_QUOTES, 'UTF-8');
         $previewHtml = <<<HTML
             <div class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
                 <div class="border-b border-gray-20 px-5 py-4">

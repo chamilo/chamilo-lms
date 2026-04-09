@@ -12,6 +12,8 @@ use Answer;
 use AppPlugin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -109,6 +111,8 @@ class CourseHelper
         if (empty($params['title'])) {
             throw new InvalidArgumentException('The course title cannot be empty.');
         }
+
+        $this->assertCanCreateCourse();
 
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
@@ -1100,7 +1104,7 @@ class CourseHelper
         }
 
         // Documents tool quota (Documents-only usage, excluding groups if requested by policy)
-        $docsQuotaMb = $this->resolveDocumentsToolQuotaMb();
+        $docsQuotaMb = $this->resolveDocumentQuotaMbForCourse($course);
         $docUsedBytes = $this->getCourseDocumentUsedBytes($course);
 
         if ($docsQuotaMb > 0) {
@@ -1149,6 +1153,29 @@ class CourseHelper
      */
     public function resolveDocumentsToolQuotaMb(): int
     {
+        return $this->resolveDefaultDocumentQuotaMb();
+    }
+
+    /**
+     * Resolves the effective document quota (MB) for a course's documents tool.
+     * BuyCourses override: if the course creator has an active buycourses_document_quota
+     * extra field (not expired), that value takes precedence over the platform default.
+     * On expiry, the global platform quota is applied (no retroactive document hiding).
+     */
+    public function resolveDocumentQuotaMbForCourse(Course $course): int
+    {
+        $creator = $course->getResourceNode()?->getCreator();
+        if ($creator instanceof User) {
+            $json = $this->getUserExtraFieldJson($creator, 'buycourses_document_quota');
+            if (null !== $json) {
+                $expiry = $json['expiry'] ?? null;
+                $quotaMb = isset($json['quota_mb']) ? (int) $json['quota_mb'] : 0;
+                if ($quotaMb > 0 && null !== $expiry && date('Y-m-d') <= $expiry) {
+                    return $quotaMb;
+                }
+            }
+        }
+
         return $this->resolveDefaultDocumentQuotaMb();
     }
 
@@ -1243,6 +1270,100 @@ class CourseHelper
     private function getCourseStorageUsedBytes(Course $course): int
     {
         return $this->documentRepository->getCourseStorageUsedBytes($course);
+    }
+
+    /**
+     * Throws if the current user has reached their course creation limit.
+     * Priority: buycourses_max_courses extra field (if active) > platform.max_courses_per_user > unlimited.
+     */
+    public function assertCanCreateCourse(): void
+    {
+        /** @var User|null $user */
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return; // CLI or anonymous — no restriction
+        }
+
+        $limit = $this->resolveMaxCoursesForUser($user);
+        if (0 === $limit) {
+            return; // unlimited
+        }
+
+        $count = $this->countTeacherCoursesForUser($user);
+        if ($count >= $limit) {
+            throw new RuntimeException(\sprintf('You have reached the maximum number of courses allowed (%d).', $limit));
+        }
+    }
+
+    /**
+     * Resolves the effective course creation limit for a user:
+     *   1. buycourses_max_courses extra field (JSON, if not expired)
+     *   2. platform.max_courses_per_user
+     *   3. 0 = unlimited
+     */
+    public function resolveMaxCoursesForUser(User $user): int
+    {
+        $json = $this->getUserExtraFieldJson($user, 'buycourses_max_courses');
+        if (null !== $json) {
+            $expiry = $json['expiry'] ?? null;
+            $limit = isset($json['limit']) ? (int) $json['limit'] : 0;
+            if ($limit > 0 && null !== $expiry && date('Y-m-d') <= $expiry) {
+                return $limit;
+            }
+        }
+
+        $raw = $this->settingsManager->getSetting('platform.max_courses_per_user', true);
+
+        return max(0, (int) ($raw ?? 0));
+    }
+
+    /**
+     * Counts courses where the user has teacher (status=1) subscription.
+     */
+    public function countTeacherCoursesForUser(User $user): int
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('COUNT(cru.id)')
+            ->from(CourseRelUser::class, 'cru')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', CourseRelUser::TEACHER)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Reads a user extra field value (non-user-editable JSON fields set by BuyCourses).
+     * Returns decoded array or null if not set.
+     *
+     * @return array<string,mixed>|null
+     */
+    private function getUserExtraFieldJson(User $user, string $variable): ?array
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb
+            ->select('v.fieldValue')
+            ->from(ExtraFieldValues::class, 'v')
+            ->innerJoin(ExtraField::class, 'f', 'WITH', 'v.field = f.id')
+            ->andWhere('v.itemId = :userId')
+            ->andWhere('f.variable = :variable')
+            ->andWhere('f.itemType = :itemType')
+            ->setParameter('userId', $user->getId())
+            ->setParameter('variable', $variable)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
+        ;
+
+        $row = $qb->getQuery()->getOneOrNullResult();
+        if (null === $row || '' === ($row['fieldValue'] ?? '')) {
+            return null;
+        }
+
+        $decoded = json_decode((string) $row['fieldValue'], true);
+
+        return \is_array($decoded) ? $decoded : null;
     }
 
     private function debugLog(string $message, array $context = []): void

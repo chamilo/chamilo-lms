@@ -239,7 +239,7 @@ class scorm extends learnpath
      *
      * @return CLp|null
      */
-    public function import_manifest($courseId, $userMaxScore = 1, $sessionId = 0)
+    public function import_manifest($courseId, int $userMaxScore = 1, $sessionId = 0)
     {
         if ($this->debug > 0) {
             error_log('Entered import_manifest('.$courseId.')', 0);

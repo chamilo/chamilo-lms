@@ -92,7 +92,10 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             );
             if (!empty($scorm->manifestToString)) {
                 $scorm->parse_manifest();
-                $lp = $scorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
+                $lp = $scorm->import_manifest(
+                    api_get_course_int_id(),
+                    (int) ($_REQUEST['use_max_score'] ?? 1)
+                );
                 if ($lp) {
                     $lp->setContentLocal($proximity)->setContentMaker($maker);
                     $em->persist($lp);
@@ -192,7 +195,10 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                 $oScorm->parse_manifest();
 
                 // Create the LP entity (CLp)
-                $lp = $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score'] ?? 1);
+                $lp = $oScorm->import_manifest(
+                    api_get_course_int_id(),
+                    (int) ($_REQUEST['use_max_score'] ?? 1)
+                );
 
                 if ($lp) {
                     /** @var CDocumentRepository $docRepo */

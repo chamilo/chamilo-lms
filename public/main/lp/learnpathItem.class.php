@@ -3540,7 +3540,7 @@ class learnpathItem
      * @return bool Query result
      * @throws \Doctrine\DBAL\Exception
      */
-    public function write_to_db()
+    public function write_to_db(): bool
     {
         $debug = self::DEBUG;
         if ($debug) {
@@ -3548,7 +3548,6 @@ class learnpathItem
             error_log('learnpathItem::write_to_db()');
         }
 
-        // Check the session visibility.
         if (!api_is_allowed_to_session_edit()) {
             if ($debug) {
                 error_log('return false api_is_allowed_to_session_edit');
@@ -3556,10 +3555,12 @@ class learnpathItem
 
             return false;
         }
+
         if (api_is_invitee()) {
             if ($debug) {
                 error_log('api_is_invitee');
             }
+
             // If the user is an invitee, we don't write anything to DB
             return true;
         }
@@ -3567,432 +3568,401 @@ class learnpathItem
         $courseId = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
-        $total_time = ' ';
-        $my_status = ' ';
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+
+        // Load current state to determine whether saving is allowed.
         $sql = 'SELECT status, total_time
-                FROM '.$item_view_table.'
+                FROM '.$itemViewTable.'
                 WHERE
-                    lp_item_id="'.$this->db_id.'" AND
-                    lp_view_id="'.$this->view_id.'" AND
-                    view_count="'.$this->get_attempt_id().'" ';
-        $rs_verified = Database::query($sql);
-        $row_verified = Database::fetch_array($rs_verified);
-        $my_case_completed = [
-            'completed',
-            'passed',
-            'browsed',
-            'failed',
-        ];
+                    lp_item_id = "'.$this->db_id.'" AND
+                    lp_view_id = "'.$this->view_id.'" AND
+                    view_count = "'.$this->get_attempt_id().'"';
+        $result = Database::query($sql);
+        $currentRow = Database::fetch_array($result);
 
         $save = true;
-
-        if (!empty($row_verified)) {
-            $oldTotalTime = $row_verified['total_time'];
-            $this->oldTotalTime = $oldTotalTime;
-            if (isset($row_verified['status'])) {
-                if (in_array($row_verified['status'], $my_case_completed)) {
-                    $save = false;
-                }
+        if (!empty($currentRow)) {
+            $this->oldTotalTime = $currentRow['total_time'];
+            if (isset($currentRow['status']) && in_array($currentRow['status'], $completedStatuses)) {
+                $save = false;
             }
         }
 
-        if (((false === $save && 'sco' === $this->type) ||
-           ('sco' === $this->type && ('no-credit' === $credit || 'review' === $mode || 'browse' === $mode))) &&
-           (1 != $this->seriousgame_mode && 'sco' === $this->type)
-        ) {
+        // For SCO items in no-credit / review / browse mode, skip saving.
+        $isSco = 'sco' === $this->type;
+        $shouldSkip = $isSco
+            && 1 != $this->seriousgame_mode
+            && (!$save || 'no-credit' === $credit || 'review' === $mode || 'browse' === $mode);
+
+        if ($shouldSkip) {
             if ($debug) {
-                error_log(
-                    "This info shouldn't be saved as the credit or lesson mode info prevent it"
-                );
+                error_log("This info shouldn't be saved as the credit or lesson mode info prevent it");
                 error_log(
                     'learnpathItem::write_to_db() - credit('.$credit.') or'.
                     ' lesson_mode('.$mode.') prevent recording!',
                     0
                 );
             }
-        } else {
-            // Check the row exists.
-            $inserted = false;
-            // This a special case for multiple attempts and Chamilo exercises.
-            if ('quiz' === $this->type &&
-                0 == $this->get_prevent_reinit() &&
-                'completed' === $this->get_status()
-            ) {
-                // We force the item to be restarted.
-                $this->restart();
-                $params = [
-                    "c_id" => $courseId,
-                    "total_time" => $this->get_total_time(),
-                    "start_time" => $this->current_start_time,
-                    "score" => $this->get_score(),
-                    "status" => $this->get_status(false),
-                    "max_score" => $this->get_max(),
-                    "lp_item_id" => $this->db_id,
-                    "lp_view_id" => $this->view_id,
-                    "view_count" => $this->get_attempt_id(),
-                    "suspend_data" => $this->current_data,
-                    //"max_time_allowed" => ,
-                    "lesson_location" => $this->lesson_location,
-                ];
-                if ($debug) {
-                    error_log('learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1));
-                }
-                $this->db_item_view_id = Database::insert($item_view_table, $params);
-                if ($this->db_item_view_id) {
-                    $inserted = true;
-                }
-            }
 
-            $sql = "SELECT * FROM $item_view_table
-                    WHERE
-                        lp_item_id = ".$this->db_id." AND
-                        lp_view_id = ".$this->view_id." AND
-                        view_count = ".$this->get_attempt_id();
+            return true;
+        }
+
+        $inserted = false;
+
+        // Special case: quiz with multiple attempts — force a new attempt row.
+        if ('quiz' === $this->type && 0 == $this->get_prevent_reinit() && 'completed' === $this->get_status()) {
+            $this->restart();
+            $params = [
+                'c_id'            => $courseId,
+                'total_time'      => $this->get_total_time(),
+                'start_time'      => $this->current_start_time,
+                'score'           => $this->get_score(),
+                'status'          => $this->get_status(false),
+                'max_score'       => $this->get_max(),
+                'lp_item_id'      => $this->db_id,
+                'lp_view_id'      => $this->view_id,
+                'view_count'      => $this->get_attempt_id(),
+                'suspend_data'    => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
             if ($debug) {
-                error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
+                error_log('learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1));
             }
-
-            $check_res = Database::query($sql);
-            // Depending on what we want (really), we'll update or insert a new row
-            // now save into DB.
-            if (!$inserted && Database::num_rows($check_res) < 1) {
-                $params = [
-                    "c_id" => $courseId,
-                    "total_time" => $this->get_total_time(),
-                    "start_time" => $this->current_start_time,
-                    "score" => $this->get_score(),
-                    "status" => $this->get_status(false),
-                    "max_score" => $this->get_max(),
-                    "lp_item_id" => $this->db_id,
-                    "lp_view_id" => $this->view_id,
-                    "view_count" => $this->get_attempt_id(),
-                    "suspend_data" => $this->current_data,
-                    //"max_time_allowed" => ,$this->get_max_time_allowed()
-                    "lesson_location" => $this->lesson_location,
-                ];
-
-                if ($debug) {
-                    error_log(
-                        'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
-                        0
-                    );
-                }
-                $this->db_item_view_id = Database::insert($item_view_table, $params);
-            } else {
-                if ('hotpotatoes' === $this->type) {
-                    $params = [
-                        'total_time' => $this->get_total_time(),
-                        'start_time' => $this->get_current_start_time(),
-                        'score' => $this->get_score(),
-                        'status' => $this->get_status(false),
-                        'max_score' => $this->get_max(),
-                        'suspend_data' => $this->current_data,
-                        'lesson_location' => $this->lesson_location,
-                    ];
-                    $where = [
-                        'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
-                            $courseId,
-                            $this->db_id,
-                            $this->view_id,
-                            $this->get_attempt_id(),
-                        ],
-                    ];
-                    Database::update($item_view_table, $params, $where);
-                } else {
-                    // For all other content types...
-                    if ('quiz' === $this->type) {
-                        $my_status = ' ';
-                        $total_time = ' ';
-                        if (!empty($_REQUEST['exeId'])) {
-                            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-                            $exeId = (int) $_REQUEST['exeId'];
-                            $sql = "SELECT exe_duration
-                                    FROM $table
-                                    WHERE exe_id = $exeId";
-                            $res = Database::query($sql);
-                            $exeRow = Database::fetch_array($res);
-                            $duration = isset($exeRow['exe_duration']) ? (int) $exeRow['exe_duration'] : 0;
-                            $total_time = " total_time = ".$duration.", ";
-                            if ($debug) {
-                                error_log("quiz: $total_time");
-                            }
-                        }
-                    } else {
-                        $my_type_lp = learnpath::get_type_static($this->lp_id);
-                        // This is a array containing values finished
-                        $case_completed = [
-                            'completed',
-                            'passed',
-                            'browsed',
-                            'failed',
-                        ];
-
-                        // Is not multiple attempts
-                        if (1 == $this->seriousgame_mode && 'sco' === $this->type) {
-                            $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                            $my_status = " status = '".$this->get_status(false)."' ,";
-                            if ($debug) {
-                                error_log("seriousgame_mode time changed: $total_time");
-                            }
-                        } elseif (1 == $this->get_prevent_reinit()) {
-                            // Process of status verified into data base.
-                            $sql = 'SELECT status FROM '.$item_view_table.'
-                                    WHERE
-                                        lp_item_id="'.$this->db_id.'" AND
-                                        lp_view_id="'.$this->view_id.'" AND
-                                        view_count="'.$this->get_attempt_id().'"
-                                    ';
-                            $rs_verified = Database::query($sql);
-                            $row_verified = Database::fetch_array($rs_verified);
-
-                            // Get type lp: 1=lp dokeos and  2=scorm.
-                            // If not is completed or passed or browsed and learning path is scorm.
-                            if (!in_array($this->get_status(false), $case_completed) &&
-                                2 == $my_type_lp
-                            ) {
-                                $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("get_prevent_reinit = 1 time changed: $total_time");
-                                }
-                            } else {
-                                // Verified into database.
-                                if (!in_array($row_verified['status'], $case_completed) &&
-                                    2 == $my_type_lp
-                                ) {
-                                    $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                    $my_status = " status = '".$this->get_status(false)."' ,";
-                                    if ($debug) {
-                                        error_log("total_time time changed case 1: $total_time");
-                                    }
-                                } elseif (in_array($row_verified['status'], $case_completed) &&
-                                    2 == $my_type_lp && 'sco' != $this->type
-                                ) {
-                                    $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                    $my_status = " status = '".$this->get_status(false)."' ,";
-                                    if ($debug) {
-                                        error_log("total_time time changed case 2: $total_time");
-                                    }
-                                } else {
-                                    if ((3 == $my_type_lp && 'au' == $this->type) ||
-                                        (1 == $my_type_lp && 'dir' != $this->type)) {
-                                        // Is AICC or Chamilo LP
-                                        $total_time = " total_time = total_time + ".$this->get_total_time().", ";
-                                        $my_status = " status = '".$this->get_status(false)."' ,";
-                                        if ($debug) {
-                                            error_log("total_time time changed case 3: $total_time");
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            // Multiple attempts are allowed.
-                            if (in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
-                                // Reset zero new attempt ?
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 1: $total_time");
-                                }
-                            } elseif (!in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
-                                $total_time = " total_time = ".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 2: $total_time");
-                                }
-                            } else {
-                                // It is chamilo LP.
-                                $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 3: $total_time");
-                                }
-                            }
-
-                            // This code line fixes the problem of wrong status.
-                            if (2 == $my_type_lp) {
-                                // Verify current status in multiples attempts.
-                                $sql = 'SELECT status FROM '.$item_view_table.'
-                                        WHERE
-                                            c_id = '.$courseId.' AND
-                                            lp_item_id="'.$this->db_id.'" AND
-                                            lp_view_id="'.$this->view_id.'" AND
-                                            view_count="'.$this->get_attempt_id().'" ';
-                                $rs_status = Database::query($sql);
-                                $current_status = Database::result($rs_status, 0, 'status');
-                                if (in_array($current_status, $case_completed)) {
-                                    $my_status = '';
-                                    $total_time = '';
-                                } else {
-                                    $total_time = " total_time = total_time + ".$this->get_total_time().", ";
-                                }
-
-                                if ($debug) {
-                                    error_log("total_time time my_type_lp: $total_time");
-                                }
-                            }
-                        }
-                    }
-
-                    $suspendData = null === $this->current_data
-                        ? 'NULL'
-                        : "'".Database::escape_string($this->current_data)."'";
-
-                    if ('sco' === $this->type) {
-                        //IF scorm scorm_update_time has already updated total_time in db
-                        //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
-                        ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                        $sql = "UPDATE $item_view_table SET
-                                    score = ".$this->get_score().",
-                                    $my_status
-                                    max_score = '".$this->get_max()."',
-                                    suspend_data = $suspendData,
-                                    lesson_location = '".$this->lesson_location."'
-                                WHERE
-                                    lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = ".$this->view_id."  AND
-                                    view_count = ".$this->get_attempt_id();
-                    } else {
-                        //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                        $sql = "UPDATE $item_view_table SET
-                                    $total_time
-                                    start_time = ".$this->get_current_start_time().",
-                                    score = ".$this->get_score().",
-                                    $my_status
-                                    max_score = '".$this->get_max()."',
-                                    suspend_data = $suspendData,
-                                    lesson_location = '".$this->lesson_location."'
-                                WHERE
-                                    lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = ".$this->view_id." AND
-                                    view_count = ".$this->get_attempt_id();
-                    }
-                    $this->current_start_time = time();
-                }
-                if ($debug) {
-                    error_log('-------------------------------------------');
-                    error_log('learnpathItem::write_to_db() - Updating item_view:');
-                    error_log($sql);
-                    error_log('-------------------------------------------');
-                }
-                Database::query($sql);
+            $this->db_item_view_id = Database::insert($itemViewTable, $params);
+            if ($this->db_item_view_id) {
+                $inserted = true;
             }
+        }
 
-            if (is_array($this->interactions) &&
-                count($this->interactions) > 0
-            ) {
-                $sql = "SELECT iid FROM $item_view_table
+        // Decide whether to INSERT or UPDATE the item view row.
+        $sql = "SELECT * FROM $itemViewTable
+                WHERE
+                    lp_item_id = ".$this->db_id." AND
+                    lp_view_id = ".$this->view_id." AND
+                    view_count = ".$this->get_attempt_id();
+        if ($debug) {
+            error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
+        }
+
+        $checkResult = Database::query($sql);
+
+        if (!$inserted && Database::num_rows($checkResult) < 1) {
+            $params = [
+                'c_id'            => $courseId,
+                'total_time'      => $this->get_total_time(),
+                'start_time'      => $this->current_start_time,
+                'score'           => $this->get_score(),
+                'status'          => $this->get_status(false),
+                'max_score'       => $this->get_max(),
+                'lp_item_id'      => $this->db_id,
+                'lp_view_id'      => $this->view_id,
+                'view_count'      => $this->get_attempt_id(),
+                'suspend_data'    => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
+            if ($debug) {
+                error_log(
+                    'learnpathItem::write_to_db() - Inserting into item_view: '.print_r($params, 1),
+                    0
+                );
+            }
+            $this->db_item_view_id = Database::insert($itemViewTable, $params);
+        } elseif ('hotpotatoes' === $this->type) {
+            $params = [
+                'total_time'      => $this->get_total_time(),
+                'start_time'      => $this->get_current_start_time(),
+                'score'           => $this->get_score(),
+                'status'          => $this->get_status(false),
+                'max_score'       => $this->get_max(),
+                'suspend_data'    => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
+            $where = [
+                'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
+                    $courseId,
+                    $this->db_id,
+                    $this->view_id,
+                    $this->get_attempt_id(),
+                ],
+            ];
+            Database::update($itemViewTable, $params, $where);
+        } else {
+            [$total_time, $my_status] = $this->resolveUpdateFragments($itemViewTable, $courseId);
+
+            $suspendData = null === $this->current_data
+                ? 'NULL'
+                : "'".Database::escape_string($this->current_data)."'";
+
+            if ($isSco) {
+                // scorm_update_time has already updated total_time in DB via scorm_init_time
+                $sql = "UPDATE $itemViewTable SET
+                            score = ".$this->get_score().",
+                            $my_status
+                            max_score = '".$this->get_max()."',
+                            suspend_data = $suspendData,
+                            lesson_location = '".$this->lesson_location."'
                         WHERE
                             lp_item_id = ".$this->db_id." AND
                             lp_view_id = ".$this->view_id." AND
                             view_count = ".$this->get_attempt_id();
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    $row = Database::fetch_array($res);
-                    $lp_iv_id = $row[0];
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::write_to_db() - Got item_view_id '.
-                            $lp_iv_id.', now checking interactions ',
-                            0
-                        );
-                    }
-                    foreach ($this->interactions as $index => $interaction) {
-                        $correct_resp = '';
-                        if (is_array($interaction[4]) && !empty($interaction[4][0])) {
-                            foreach ($interaction[4] as $resp) {
-                                $correct_resp .= $resp.',';
-                            }
-                            $correct_resp = substr(
-                                $correct_resp,
-                                0,
-                                strlen($correct_resp) - 1
-                            );
-                        }
-                        $iva_table = Database::get_course_table(
-                            TABLE_LP_IV_INTERACTION
-                        );
-
-                        //also check for the interaction ID as it must be unique for this SCO view
-                        $iva_sql = "SELECT iid FROM $iva_table
-                                    WHERE
-                                        c_id = $courseId AND
-                                        lp_iv_id = $lp_iv_id AND
-                                        (
-                                            order_id = $index OR
-                                            interaction_id = '".Database::escape_string($interaction[0])."'
-                                        )
-                                    ";
-                        $iva_res = Database::query($iva_sql);
-
-                        $interaction[0] = $interaction[0] ?? '';
-                        $interaction[1] = $interaction[1] ?? '';
-                        $interaction[2] = $interaction[2] ?? '';
-                        $interaction[3] = $interaction[3] ?? '';
-                        $interaction[4] = $interaction[4] ?? '';
-                        $interaction[5] = $interaction[5] ?? '';
-                        $interaction[6] = $interaction[6] ?? '';
-                        $interaction[7] = $interaction[7] ?? '';
-
-                        // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
-                        if (Database::num_rows($iva_res) > 0) {
-                            // Update (or don't).
-                            $iva_row = Database::fetch_array($iva_res);
-                            $iva_id = $iva_row[0];
-                            // Insert new one.
-                            $params = [
-                                'interaction_id' => $interaction[0],
-                                'interaction_type' => $interaction[1],
-                                'weighting' => $interaction[3],
-                                'completion_time' => $interaction[2],
-                                'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
-                                'result' => $interaction[6],
-                                'latency' => $interaction[7],
-                            ];
-                            Database::update(
-                                $iva_table,
-                                $params,
-                                [
-                                    'c_id = ? AND iid = ?' => [
-                                        $courseId,
-                                        $iva_id,
-                                    ],
-                                ]
-                            );
-                        } else {
-                            // Insert new one.
-                            $params = [
-                                'c_id' => $courseId,
-                                'order_id' => $index,
-                                'lp_iv_id' => $lp_iv_id,
-                                'interaction_id' => $interaction[0],
-                                'interaction_type' => $interaction[1],
-                                'weighting' => $interaction[3],
-                                'completion_time' => $interaction[2],
-                                'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
-                                'result' => $interaction[6],
-                                'latency' => $interaction[7],
-                            ];
-
-                            $insertId = Database::insert($iva_table, $params);
-                            if ($insertId) {
-                                $sql = "UPDATE $iva_table SET id = iid
-                                        WHERE iid = $insertId";
-                                Database::query($sql);
-                            }
-                        }
-                    }
-                }
+            } else {
+                $sql = "UPDATE $itemViewTable SET
+                            $total_time
+                            start_time = ".$this->get_current_start_time().",
+                            score = ".$this->get_score().",
+                            $my_status
+                            max_score = '".$this->get_max()."',
+                            suspend_data = $suspendData,
+                            lesson_location = '".$this->lesson_location."'
+                        WHERE
+                            lp_item_id = ".$this->db_id." AND
+                            lp_view_id = ".$this->view_id." AND
+                            view_count = ".$this->get_attempt_id();
             }
+
+            $this->current_start_time = time();
+
+            if ($debug) {
+                error_log('-------------------------------------------');
+                error_log('learnpathItem::write_to_db() - Updating item_view:');
+                error_log($sql);
+                error_log('-------------------------------------------');
+            }
+            Database::query($sql);
         }
+
+        $this->saveInteractions($courseId, $itemViewTable);
 
         if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }
 
         return true;
+    }
+
+    /**
+     * Resolves the SQL fragment strings for total_time and status used in the UPDATE query.
+     * Returns [string $total_time, string $my_status], each either a space (no-op) or a
+     * comma-terminated SQL SET clause fragment (e.g. " total_time = total_time + 30, ").
+     */
+    private function resolveUpdateFragments(string $itemViewTable, int $courseId): array
+    {
+        $debug = self::DEBUG;
+        $total_time = ' ';
+        $my_status = ' ';
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+
+        if ('quiz' === $this->type) {
+            if (!empty($_REQUEST['exeId'])) {
+                $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+                $exeId = (int) $_REQUEST['exeId'];
+                $sql = "SELECT exe_duration FROM $table WHERE exe_id = $exeId";
+                $res = Database::query($sql);
+                $exeRow = Database::fetch_array($res);
+                $duration = isset($exeRow['exe_duration']) ? (int) $exeRow['exe_duration'] : 0;
+                $total_time = ' total_time = '.$duration.', ';
+                if ($debug) {
+                    error_log("quiz: $total_time");
+                }
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // 1=Chamilo LP, 2=SCORM, 3=AICC
+        $lpType = learnpath::get_type_static($this->lp_id);
+
+        // Serious game SCO: always accumulate time and update status.
+        if (1 == $this->seriousgame_mode && 'sco' === $this->type) {
+            $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("seriousgame_mode time changed: $total_time");
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // Single-attempt mode: check stored status before updating.
+        if (1 == $this->get_prevent_reinit()) {
+            $sql = 'SELECT status FROM '.$itemViewTable.'
+                    WHERE
+                        lp_item_id = "'.$this->db_id.'" AND
+                        lp_view_id = "'.$this->view_id.'" AND
+                        view_count = "'.$this->get_attempt_id().'"';
+            $result = Database::query($sql);
+            $storedRow = Database::fetch_array($result);
+
+            if (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("get_prevent_reinit = 1 time changed: $total_time");
+                }
+            } elseif (!in_array($storedRow['status'], $completedStatuses) && 2 == $lpType) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 1: $total_time");
+                }
+            } elseif (in_array($storedRow['status'], $completedStatuses) && 2 == $lpType && 'sco' !== $this->type) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 2: $total_time");
+                }
+            } elseif ((3 == $lpType && 'au' === $this->type) || (1 == $lpType && 'dir' !== $this->type)) {
+                // AICC or Chamilo LP
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 3: $total_time");
+                }
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // Multiple attempts allowed.
+        if (in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+            // Reset to new attempt — only update status.
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 1: $total_time");
+            }
+        } elseif (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+            $total_time = ' total_time = '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 2: $total_time");
+            }
+        } else {
+            // Chamilo LP
+            $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 3: $total_time");
+            }
+        }
+
+        // Fix wrong status: if the stored status is already completed, don't overwrite it.
+        if (2 == $lpType) {
+            $sql = 'SELECT status FROM '.$itemViewTable.'
+                    WHERE
+                        c_id = '.$courseId.' AND
+                        lp_item_id = "'.$this->db_id.'" AND
+                        lp_view_id = "'.$this->view_id.'" AND
+                        view_count = "'.$this->get_attempt_id().'"';
+            $result = Database::query($sql);
+            $currentStatus = Database::result($result, 0, 'status');
+            if (in_array($currentStatus, $completedStatuses)) {
+                $my_status = '';
+                $total_time = '';
+            } else {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            }
+            if ($debug) {
+                error_log("total_time time my_type_lp: $total_time");
+            }
+        }
+
+        return [$total_time, $my_status];
+    }
+
+    /**
+     * Persists the SCORM interaction data for the current item view attempt.
+     */
+    private function saveInteractions(int $courseId, string $itemViewTable): void
+    {
+        if (!is_array($this->interactions) || 0 === count($this->interactions)) {
+            return;
+        }
+
+        $debug = self::DEBUG;
+        $sql = "SELECT iid FROM $itemViewTable
+                WHERE
+                    lp_item_id = ".$this->db_id." AND
+                    lp_view_id = ".$this->view_id." AND
+                    view_count = ".$this->get_attempt_id();
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) <= 0) {
+            return;
+        }
+
+        $row = Database::fetch_array($result);
+        $lpIvId = $row[0];
+        if ($debug) {
+            error_log(
+                'learnpathItem::write_to_db() - Got item_view_id '.$lpIvId.', now checking interactions ',
+                0
+            );
+        }
+
+        $ivaTable = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+
+        foreach ($this->interactions as $index => $interaction) {
+            $correctResp = '';
+            if (is_array($interaction[4]) && !empty($interaction[4][0])) {
+                foreach ($interaction[4] as $resp) {
+                    $correctResp .= $resp.',';
+                }
+                $correctResp = substr($correctResp, 0, -1);
+            }
+
+            // Check if this interaction already exists for the current SCO view.
+            $ivaSql = "SELECT iid FROM $ivaTable
+                        WHERE
+                            c_id = $courseId AND
+                            lp_iv_id = $lpIvId AND
+                            (
+                                order_id = $index OR
+                                interaction_id = '".Database::escape_string($interaction[0])."'
+                            )";
+            $ivaResult = Database::query($ivaSql);
+
+            // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
+            $interaction[0] = $interaction[0] ?? '';
+            $interaction[1] = $interaction[1] ?? '';
+            $interaction[2] = $interaction[2] ?? '';
+            $interaction[3] = $interaction[3] ?? '';
+            $interaction[4] = $interaction[4] ?? '';
+            $interaction[5] = $interaction[5] ?? '';
+            $interaction[6] = $interaction[6] ?? '';
+            $interaction[7] = $interaction[7] ?? '';
+
+            $params = [
+                'interaction_id'    => $interaction[0],
+                'interaction_type'  => $interaction[1],
+                'weighting'         => $interaction[3],
+                'completion_time'   => $interaction[2],
+                'correct_responses' => $correctResp,
+                'student_response'  => $interaction[5],
+                'result'            => $interaction[6],
+                'latency'           => $interaction[7],
+            ];
+
+            if (Database::num_rows($ivaResult) > 0) {
+                $ivaRow = Database::fetch_array($ivaResult);
+                $ivaId = $ivaRow[0];
+                Database::update(
+                    $ivaTable,
+                    $params,
+                    ['c_id = ? AND iid = ?' => [$courseId, $ivaId]]
+                );
+            } else {
+                $params = array_merge(
+                    ['c_id' => $courseId, 'order_id' => $index, 'lp_iv_id' => $lpIvId],
+                    $params
+                );
+                $insertId = Database::insert($ivaTable, $params);
+                if ($insertId) {
+                    $sql = "UPDATE $ivaTable SET id = iid WHERE iid = $insertId";
+                    Database::query($sql);
+                }
+            }
+        }
     }
 
     /**

@@ -18,13 +18,13 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
+use Chamilo\LtiBundle\Util\OAuth1Helper;
 use Chamilo\LtiBundle\Util\Utils;
 use Display;
 use Doctrine\Persistence\ManagerRegistry;
 use EvalForm;
 use Evaluation;
 use HTML_QuickForm_select;
-use Chamilo\LtiBundle\Util\OAuth1Helper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -429,7 +429,7 @@ class CourseController extends ToolBaseController
             $globalTools = array_values(array_filter(
                 $allTools,
                 fn (ExternalTool $tool): bool => null === $tool->getFirstResourceLink()
-                    && !in_array($tool->getId(), $addedToolIds, true)
+                    && !\in_array($tool->getId(), $addedToolIds, true)
             ));
 
             return $this->render(

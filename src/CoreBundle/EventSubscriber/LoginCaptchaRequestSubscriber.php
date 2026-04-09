@@ -36,7 +36,7 @@ class LoginCaptchaRequestSubscriber implements EventSubscriberInterface
 
         if (
             'POST' !== $request->getMethod()
-            || !in_array($request->getPathInfo(), ['/login_json', '/login/ldap/check'], true)
+            || !\in_array($request->getPathInfo(), ['/login_json', '/login/ldap/check'], true)
         ) {
             return;
         }
@@ -46,7 +46,7 @@ class LoginCaptchaRequestSubscriber implements EventSubscriberInterface
         }
 
         $data = json_decode((string) $request->getContent(), true);
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             $data = [];
         }
 

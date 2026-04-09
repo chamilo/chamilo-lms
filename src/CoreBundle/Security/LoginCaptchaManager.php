@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 class LoginCaptchaManager
 {
@@ -93,7 +96,7 @@ class LoginCaptchaManager
     public function generateCaptchaCode(SessionInterface $session): string
     {
         $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        $maxIndex = strlen($alphabet) - 1;
+        $maxIndex = \strlen($alphabet) - 1;
         $code = '';
 
         for ($i = 0; $i < self::DEFAULT_CODE_LENGTH; $i++) {
@@ -132,7 +135,7 @@ class LoginCaptchaManager
             $y = random_int(48, 62);
             $rotate = random_int(-10, 10);
 
-            $letters .= sprintf(
+            $letters .= \sprintf(
                 '<text x="%d" y="%d" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0F172A" transform="rotate(%d %d %d)">%s</text>',
                 $x,
                 $y,

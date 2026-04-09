@@ -305,7 +305,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
         $privacy = UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
 
-        return is_array($privacy) ? $privacy : [];
+        return \is_array($privacy) ? $privacy : [];
     }
 
     public function isSharingEmail(): bool

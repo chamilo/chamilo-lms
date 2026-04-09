@@ -6,6 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\LtiBundle\Util;
 
+use Throwable;
+
+use const PHP_URL_QUERY;
+use const SORT_STRING;
+
 final class OAuth1Helper
 {
     public static function buildSignedPostParams(
@@ -73,7 +78,7 @@ final class OAuth1Helper
         $pairs = [];
 
         foreach ($allParams as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 sort($value, SORT_STRING);
 
                 foreach ($value as $item) {
@@ -129,7 +134,7 @@ final class OAuth1Helper
     {
         try {
             return bin2hex(random_bytes(16));
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return sha1(uniqid((string) mt_rand(), true));
         }
     }

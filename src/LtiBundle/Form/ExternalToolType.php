@@ -52,7 +52,7 @@ class ExternalToolType extends AbstractType
         $parent = $tool ? $tool->getToolParent() : null;
         $isStandaloneTool = null === $parent;
 
-        $advantageServices = $tool && is_array($tool->getAdvantageServices())
+        $advantageServices = $tool && \is_array($tool->getAdvantageServices())
             ? $tool->getAdvantageServices()
             : [
                 'ags' => self::AGS_NONE,
@@ -464,8 +464,8 @@ class ExternalToolType extends AbstractType
         ]);
 
         if (
-            '' === trim((string) $tool->getConsumerKey()) &&
-            '' === trim((string) $tool->getSharedSecret())
+            '' === trim((string) $tool->getConsumerKey())
+            && '' === trim((string) $tool->getSharedSecret())
         ) {
             $cartridgeUrl = $this->getLaunchUrlFromCartridge((string) $tool->getLaunchUrl());
 
@@ -609,11 +609,11 @@ class ExternalToolType extends AbstractType
             $option = mt_rand(1, 3);
 
             if (1 === $option) {
-                $character = chr(mt_rand(97, 122));
+                $character = \chr(mt_rand(97, 122));
             } elseif (2 === $option) {
-                $character = chr(mt_rand(65, 90));
+                $character = \chr(mt_rand(65, 90));
             } else {
-                $character = substr($hash, mt_rand(0, strlen($hash) - 1), 1);
+                $character = substr($hash, mt_rand(0, \strlen($hash) - 1), 1);
             }
 
             $clientId .= $character;

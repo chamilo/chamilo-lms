@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
-use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;

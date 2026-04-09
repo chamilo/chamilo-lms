@@ -121,7 +121,7 @@ function handleRegions()
         $pluginComment = plugin_render_comment_preview((string) $metadata['comment']);
         $selectedRegions = plugin_get_assigned_regions_safe($pluginName);
         $regionOptions = plugin_get_available_region_options($metadata);
-        $pluginUrl = plugin_get_plugins_admin_url($pluginName);
+        $pluginUrl = plugin_get_management_url($pluginName) ?? plugin_get_plugins_admin_url($pluginName);
 
         $isSelectedPlugin = $selectedPluginName === $pluginName;
         $cardId = plugin_get_regions_card_id($pluginName);
@@ -1026,20 +1026,9 @@ function plugin_has_editable_settings(string $pluginName): bool
     $has = false;
 
     try {
-        $app  = new AppPlugin();
+        $app = new AppPlugin();
         $info = $app->getPluginInfo($pluginName) ?? [];
 
-        // Collect fields from Plugin object or from 'settings' array
-        if (!empty($info['obj']) && $info['obj'] instanceof Plugin) {
-            $fields = (array) $info['obj']->getFieldNames();
-        } elseif (!empty($info['settings']) && is_array($info['settings'])) {
-            $fields = array_keys($info['settings']);
-        } else {
-            $fields = [];
-        }
-
-        // Strip legacy toggles; these do not qualify as "configurable settings".
-        // Keep this list broad to cover plugins that added their own toggle names.
         $legacyToggles = [
             'tool_enable',
             'enable_onlyoffice_plugin',
@@ -1048,12 +1037,66 @@ function plugin_has_editable_settings(string $pluginName): bool
             'active',
             'is_active',
         ];
-        $fields = array_values(array_diff($fields, $legacyToggles));
 
-        // Final decision: at least one real field
-        $has = count($fields) > 0;
+        $metaOnlyKeys = [
+            'regions',
+        ];
+
+        $nonEditableTypes = [
+            'html',
+            'label',
+            'static',
+            'message',
+            'info',
+        ];
+
+        $editableFields = [];
+
+        // IMPORTANT:
+        // If the plugin explicitly defines "settings", even as an empty array,
+        // do not fallback to getFieldNames(), because some plugins return rendered HTML there.
+        if (array_key_exists('settings', $info) && is_array($info['settings'])) {
+            foreach ($info['settings'] as $name => $type) {
+                $name = (string) $name;
+
+                if (in_array($name, $legacyToggles, true) || in_array($name, $metaOnlyKeys, true)) {
+                    continue;
+                }
+
+                if (is_string($type)) {
+                    $normalizedType = strtolower(trim($type));
+
+                    if (in_array($normalizedType, $nonEditableTypes, true)) {
+                        continue;
+                    }
+                }
+
+                $editableFields[] = $name;
+            }
+        } elseif (!empty($info['obj']) && $info['obj'] instanceof Plugin) {
+            $fieldNames = (array) $info['obj']->getFieldNames();
+
+            foreach ($fieldNames as $fieldName) {
+                $fieldName = trim((string) $fieldName);
+
+                if ('' === $fieldName) {
+                    continue;
+                }
+
+                if (str_contains($fieldName, '<')) {
+                    continue;
+                }
+
+                if (in_array($fieldName, $legacyToggles, true) || in_array($fieldName, $metaOnlyKeys, true)) {
+                    continue;
+                }
+
+                $editableFields[] = $fieldName;
+            }
+        }
+
+        $has = count($editableFields) > 0;
     } catch (\Throwable $e) {
-        // Fail closed: if metadata lookup fails, do not show Configure
         $has = false;
     }
 
@@ -1078,15 +1121,8 @@ function plugin_get_management_url(string $pluginName): ?string
     $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
     $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
 
-    // Some plugins might have a configure.php file that is not meant for
-    // configuration at the admin level. Make an exception for them.
-    if (in_array($pluginName, ['XApi', 'ImsLti', 'CourseHomeNotify']) && plugin_has_editable_settings($pluginName)) {
-        return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
-                'plugin' => $pluginName,
-            ]);
-    }
-
     $candidates = [
+        'admin.php',
         'configure.php',
     ];
 

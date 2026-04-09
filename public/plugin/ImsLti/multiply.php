@@ -74,21 +74,42 @@ $renderFormContent = static function (
     );
 
     $html = '';
-    $html .= '<div class="space-y-4">';
-    $html .= '    <div class="mb-3">';
-    $html .= '        <div class="text-body-2 text-gray-50 mb-1">'.$plugin->get_lang('Tool').'</div>';
-    $html .= '        <div class="font-semibold">'.$toolTitle.'</div>';
+    $html .= '<div id="imslti-multiply-form-wrapper" class="space-y-6">';
+    $html .= '    <div class="rounded-2xl border border-gray-25 bg-support-2 p-5">';
+    $html .= '        <div class="mb-2 text-caption font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Tool').'</div>';
+    $html .= '        <div class="text-body-1 font-semibold text-gray-90">'.$toolTitle.'</div>';
+    $html .= '        <p class="mt-3 text-body-2 text-gray-50">'.$plugin->get_lang('SelectCoursesForExternalTool').'</p>';
     $html .= '    </div>';
-    $html .= '    <div class="text-body-2 text-gray-50 mb-3">';
-    $html .=          $plugin->get_lang('SelectCoursesForExternalTool');
-    $html .= '    </div>';
+
     $html .= '    <div class="js-imslti-assigned-courses hidden" data-assigned="'.$assignedCoursesJson.'"></div>';
+
+    if (!empty($assignedCourses)) {
+        $html .= '    <div class="rounded-2xl border border-gray-25 bg-white p-5">';
+        $html .= '        <div class="mb-3 text-caption font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Courses').'</div>';
+        $html .= '        <div class="flex flex-wrap gap-2">';
+
+        foreach ($assignedCourses as $courseItem) {
+            $courseLabel = htmlspecialchars((string) ($courseItem['text'] ?? ''), ENT_QUOTES, 'UTF-8');
+            if ('' === $courseLabel) {
+                continue;
+            }
+
+            $html .= '<span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-caption font-semibold text-primary">'
+                .$courseLabel
+                .'</span>';
+        }
+
+        $html .= '        </div>';
+        $html .= '    </div>';
+    }
 
     if (!empty($message)) {
         $html .= Display::return_message($message, $messageType, false);
     }
 
-    $html .= $form->returnForm();
+    $html .= '    <div class="rounded-2xl border border-gray-25 bg-white p-5">';
+    $html .=          $form->returnForm();
+    $html .= '    </div>';
     $html .= '</div>';
 
     return $html;
@@ -214,9 +235,10 @@ try {
         [
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
             'multiple' => true,
+            'placeholder' => get_lang('Select'),
         ]
     );
-    $form->addButtonExport(get_lang('Save'));
+    $form->addButtonSave(get_lang('Save'));
 
     if ($form->validate()) {
         $formValues = $form->exportValues();

@@ -40,7 +40,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     protected ?string $description;
 
     #[ORM\Column(name: 'public_key', type: 'text', nullable: true)]
-    public ?string $publicKey;
+    public ?string $publicKey = null;
 
     #[ORM\Column(name: 'launch_url', type: 'string')]
     protected string $launchUrl;
@@ -128,6 +128,16 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         $this->title = $title;
 
         return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setName(string $name): static
+    {
+        return $this->setTitle($name);
     }
 
     public function getDescription(): ?string
@@ -282,46 +292,51 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function isSharingName(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        return (bool) $unserialize['share_name'];
+        return (bool) ($privacy['share_name'] ?? false);
     }
 
     public function unserializePrivacy(): array
     {
-        return UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
+        if (empty($this->privacy)) {
+            return [];
+        }
+
+        $privacy = UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
+
+        return is_array($privacy) ? $privacy : [];
     }
 
     public function isSharingEmail(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        if (!$unserialize) {
-            return false;
-        }
-
-        return (bool) $unserialize['share_email'];
+        return (bool) ($privacy['share_email'] ?? false);
     }
 
     public function isSharingPicture(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        if (!$unserialize) {
-            return false;
-        }
-
-        return (bool) $unserialize['share_picture'];
+        return (bool) ($privacy['share_picture'] ?? false);
     }
 
     public function getToolParent(): ?self
     {
-        return $this->parent;
+        $parent = $this->getParent();
+
+        return $parent instanceof self ? $parent : null;
     }
 
     public function setToolParent(self $parent): static
     {
-        $this->resourceNode->setParent($parent->getResourceNode());
+        $this->setParent($parent);
+
+        if ($this->resourceNode && $parent->getResourceNode()) {
+            $this->resourceNode->setParent($parent->getResourceNode());
+        }
+
         $this->sharedSecret = $parent->getSharedSecret();
         $this->consumerKey = $parent->getConsumerKey();
         $this->privacy = $parent->getPrivacy();

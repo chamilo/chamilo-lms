@@ -46,6 +46,14 @@ if (!$isAllowToEdit) {
 
 $router = Container::getRouter();
 $translator = Container::$container->get('translator');
+$imsLtiPluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$imsLtiPluginConfiguration = $imsLtiPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isImsLtiEnabled = $imsLtiPluginEntity
+    && $imsLtiPluginEntity->isInstalled()
+    && $imsLtiPluginConfiguration
+    && $imsLtiPluginConfiguration->isActive();
 
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -1055,19 +1063,32 @@ if ($enableAiHelpers) {
     }
 }
 
-// External tools (LTI) info
-$button = Display::toolbarButton(
-    get_lang('External tools (LTI)'),
-    $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
-    'cog',
-    'primary'
-);
-$html = [
-    $form->createElement(
+if ($isImsLtiEnabled) {
+    $button = Display::toolbarButton(
+        get_lang('External tools (LTI)'),
+        $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $ltiInfo = $form->createElement(
         'html',
-        '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button
-    ),
-];
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.')
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'external_tools_lti',
+        get_lang('External tools (LTI)'),
+        [$ltiInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
 
 // ---------------------------------------------------------------------
 // Default values

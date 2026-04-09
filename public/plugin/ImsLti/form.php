@@ -4,6 +4,7 @@
 use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/OAuth1.php';
 
 api_protect_course_script();
 api_block_anonymous_users(false);
@@ -118,23 +119,12 @@ $params += ImsLti::substituteVariablesInCustomParams(
 $imsLtiPlugin->trimParams($params);
 
 if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
-    $consumer = new OAuthConsumer(
-        $tool->getConsumerKey(),
-        $tool->getSharedSecret(),
-        null
-    );
-    $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
-
-    $request = OAuthRequest::from_consumer_and_token(
-        $consumer,
-        '',
-        'POST',
+    $params = ImsLtiOAuth1::buildSignedPostParams(
         $tool->getLaunchUrl(),
-        $params
+        $params,
+        (string) $tool->getConsumerKey(),
+        (string) $tool->getSharedSecret()
     );
-    $request->sign_request($hmacMethod, $consumer, '');
-
-    $params = $request->get_parameters();
 }
 
 $imsLtiPlugin->removeUrlParamsFromLaunchParams($tool, $params);

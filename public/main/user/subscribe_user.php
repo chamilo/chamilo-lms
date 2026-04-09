@@ -973,7 +973,7 @@ function search_additional_profile_fields($keyword)
 function display_extra_profile_fields_filter()
 {
     // getting all the additional user profile fields
-    $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+    $extra = UserManager::get_extra_fields(0, 50);
     $return = '<option value="">'.get_lang('Select filter').'</option>';
 
     // looping through the additional user profile fields

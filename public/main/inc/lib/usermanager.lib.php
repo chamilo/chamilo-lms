@@ -2205,7 +2205,7 @@ class UserManager
         ];
         $column = (int) $column;
         $sort_direction = '';
-        if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+        if ($direction && in_array(strtoupper($direction), ['ASC', 'DESC'])) {
             $sort_direction = strtoupper($direction);
         }
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;

@@ -788,7 +788,7 @@ class MySpace
             $additionalExportFields = Session::read('additional_export_fields');
             if (!empty($additionalExportFields)) {
                 // get all the defined extra fields
-                $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+                $extrafields = UserManager::get_extra_fields(0, 50);
 
                 foreach ($additionalExportFields as $key => $extra_field_export) {
                     $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
@@ -2425,7 +2425,7 @@ class MySpace
         $csv_row[] = get_lang('Code');
 
         // the additional user defined fields (only those that were selected to be exported)
-        $fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+        $fields = UserManager::get_extra_fields(0, 50);
 
         $additionalExportFields = Session::read('additional_export_fields');
 

@@ -1379,7 +1379,7 @@ switch ($action) {
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );
@@ -1451,7 +1451,7 @@ switch ($action) {
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );

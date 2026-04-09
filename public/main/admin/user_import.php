@@ -550,7 +550,7 @@ $tool_name = get_lang('Import users list');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['reload_import']);
 
-$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
+$extra_fields = UserManager::get_extra_fields();
 $csv_custom_error = '';
 $topStaticErrorHtml = '';
 $fatalError = false;

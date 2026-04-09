@@ -1650,7 +1650,7 @@ class CourseManager
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );

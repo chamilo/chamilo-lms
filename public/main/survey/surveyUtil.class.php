@@ -3611,7 +3611,7 @@ class SurveyUtil
         }
 
         // EXTRA FIELDS
-        $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+        $extra = UserManager::get_extra_fields(0, 50);
 
         foreach ($extra as $id => $field_details) {
             if (0 == $field_details[6]) {

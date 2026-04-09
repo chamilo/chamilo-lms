@@ -68,6 +68,7 @@
           <template #item="{ element }">
             <LpRowItem
               :buildDates="buildDates"
+              :legacyContext="legacyContext"
               :canAutoLaunch="canAutoLaunch"
               :canEdit="canEdit"
               :canExportPdf="canExportPdf"
@@ -75,7 +76,6 @@
               :lp="element"
               :ringDash="ringDash"
               :ringValue="ringValue"
-              @build="onBuild"
               @delete="onDelete"
               @edit="goEdit"
               @open="openLegacy"
@@ -105,7 +105,6 @@
         :ringDash="ringDash"
         :ringValue="ringValue"
         :title="group[0]?.title"
-        @build="onBuild"
         @delete="onDelete"
         @edit="goEdit"
         @open="openLegacy"
@@ -621,13 +620,6 @@ const onReport = (lp) => {
 const onSettings = (lp) => {
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { ...legacyContext.value })
 }
-const onBuild = (lp) => {
-  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
-    ...legacyContext.value,
-    params: { type: "step", isStudentView: "false" },
-  })
-}
-
 function onUpdateScorm(lp) {
   const node = Number(route.params?.node ?? 0) || undefined
   const url = lpService.buildLegacyActionUrl("update_scorm", {

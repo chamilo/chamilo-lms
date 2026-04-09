@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
+import lpService from "../../services/lpService"
 
 const { t } = useI18n()
 
@@ -14,6 +15,7 @@ const props = defineProps({
   canExportPdf: { type: Boolean, default: false },
   canAutoLaunch: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
+  legacyContext: { type: Object, required: true },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
@@ -23,7 +25,6 @@ const emit = defineEmits([
   "edit",
   "report",
   "settings",
-  "build",
   "toggle-visible",
   "toggle-publish",
   "delete",
@@ -57,6 +58,15 @@ const progressTextClass = computed(() => {
 
 const buttonActions = computed(() =>
   [
+    {
+      label: t("Edit learnpath"),
+      icon: "edit",
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
+        ...props.legacyContext,
+        params: { type: "step", isStudentView: "false" },
+      }),
+      visible: true,
+    },
     {
       label: t("Reports"),
       icon: "tracking",
@@ -112,16 +122,8 @@ const buttonActions = computed(() =>
 const mItemActions = ref()
 const itemActions = [
   {
-    label: t("Open"),
-    command: () => emit("open", props.lp),
-  },
-  {
     label: t("Publish / Hide"),
     command: () => emit("toggle-publish", props.lp),
-  },
-  {
-    label: t("Edit learnpath"),
-    command: () => emit("build", props.lp),
   },
   {
     label: t("Update SCORM"),
@@ -137,16 +139,8 @@ const itemActions = [
 const mItemActionsMobile = ref()
 const itemActionsMobile = [
   {
-    label: t("Open"),
-    command: () => emit("open", props.lp),
-  },
-  {
     label: t("Publish / Hide"),
     command: () => emit("toggle-publish", props.lp),
-  },
-  {
-    label: t("Edit learnpath"),
-    command: () => emit("build", props.lp),
   },
   {
     label: t("Export as SCORM"),
@@ -322,6 +316,8 @@ const itemActionsMobile = [
               :class="buttonAction.styleClass"
               :icon="buttonAction.icon"
               :label="buttonAction.label"
+              :route="buttonAction.route"
+              :to-url="buttonAction.toUrl"
               only-icon
               size="small"
               type="tertiary-alternative-text"
@@ -405,7 +401,6 @@ const itemActionsMobile = [
             </button>
 
             <button
-              :aria-label="t('Open')"
               :title="t('Open')"
               class="lp-panel__student-button"
               @click="emit('open', lp)"

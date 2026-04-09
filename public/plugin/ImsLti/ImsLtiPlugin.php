@@ -191,7 +191,7 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $courseTool->setName($ltiTool->getTitle());
+        $courseTool->setTitle($ltiTool->getTitle());
 
         if ('iframe' !== $ltiTool->getDocumentTarget()) {
             $courseTool->setTarget('_blank');
@@ -227,6 +227,12 @@ class ImsLtiPlugin extends Plugin
         $em = Database::getManager();
         $em->persist($cTool);
         $em->flush();
+    }
+
+    private function toolBelongsToCourse(Course $course, ExternalTool $tool): bool
+    {
+        return null !== $this->findCourseToolByLink($course, $tool)
+            || null !== $tool->getFirstResourceLinkFromCourseSession($course);
     }
 
     /**
@@ -417,25 +423,53 @@ class ImsLtiPlugin extends Plugin
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ExternalTool|null $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
+        $newLtiTool = null;
+
+        /** @var ExternalTool[] $candidates */
+        $candidates = $ltiToolRepo->findBy(['launchUrl' => $url]);
+
+        foreach ($candidates as $candidate) {
+            if ($this->toolBelongsToCourse($course, $candidate)) {
+                $newLtiTool = $candidate;
+                break;
+            }
+        }
 
         if (null === $newLtiTool) {
             $newLtiTool = new ExternalTool();
             $newLtiTool
                 ->setLaunchUrl($url)
-                ->setParent(
-                    $baseLtiTool
-                )
+                ->setParent($baseLtiTool)
+                ->setTitle($baseLtiTool->getTitle())
+                ->setDescription($baseLtiTool->getDescription())
+                ->setDocumenTarget($baseLtiTool->getDocumentTarget())
+                ->setVersion($baseLtiTool->getVersion())
+                ->setCustomParams($baseLtiTool->getCustomParams())
                 ->setPrivacy(
                     $baseLtiTool->isSharingName(),
                     $baseLtiTool->isSharingEmail(),
                     $baseLtiTool->isSharingPicture()
                 )
-                ->setCourse($course);
+                ->setReplacementForUserId($baseLtiTool->getReplacementForUserId());
+
+            if ($baseLtiTool->getVersion() === ImsLti::V_1P3) {
+                $newLtiTool
+                    ->setClientId($baseLtiTool->getClientId())
+                    ->setLoginUrl($baseLtiTool->getLoginUrl())
+                    ->setRedirectUrl($baseLtiTool->getRedirectUrl())
+                    ->setAdvantageServices($baseLtiTool->getAdvantageServices())
+                    ->setJwksUrl($baseLtiTool->getJwksUrl());
+
+                $newLtiTool->publicKey = $baseLtiTool->publicKey;
+            } elseif ($baseLtiTool->getVersion() === ImsLti::V_1P1) {
+                $newLtiTool
+                    ->setConsumerKey($baseLtiTool->getConsumerKey())
+                    ->setSharedSecret($baseLtiTool->getSharedSecret());
+            }
         }
 
         $newLtiTool
-            ->setName(
+            ->setTitle(
                 !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getTitle()
             )
             ->setDescription(
@@ -443,10 +477,9 @@ class ImsLtiPlugin extends Plugin
             );
 
         if (!empty($contentItem['custom'])) {
-            $newLtiTool
-                ->setCustomParams(
-                    $newLtiTool->encodeCustomParams($contentItem['custom'])
-                );
+            $newLtiTool->setCustomParams(
+                $newLtiTool->encodeCustomParams($contentItem['custom'])
+            );
         }
 
         $em->persist($newLtiTool);
@@ -487,12 +520,18 @@ class ImsLtiPlugin extends Plugin
     public static function existsToolInCourse($toolId, Course $course)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository(ExternalTool::class);
 
         /** @var ExternalTool|null $tool */
-        $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
+        $tool = $em->find(ExternalTool::class, (int) $toolId);
 
-        return !empty($tool);
+        if (!$tool) {
+            return false;
+        }
+
+        $plugin = self::create();
+
+        return null !== $plugin->findCourseToolByLink($course, $tool)
+            || null !== $tool->getFirstResourceLinkFromCourseSession($course);
     }
 
     /**
@@ -579,16 +618,7 @@ class ImsLtiPlugin extends Plugin
      */
     public function doWhenDeletingCourse($courseId)
     {
-        $em = Database::getManager();
-        $q = $em
-            ->createQuery(
-                'DELETE FROM Chamilo\LtiBundle\ExternalTool tool
-                    WHERE tool.course = :c_id and tool.parent IS NOT NULL'
-            );
-        $q->execute(['c_id' => (int) $courseId]);
-
-        $em->createQuery('DELETE FROM Chamilo\LtiBundle\ExternalTool tool WHERE tool.course = :c_id')
-            ->execute(['c_id' => (int) $courseId]);
+        return;
     }
 
     /**
@@ -603,29 +633,39 @@ class ImsLtiPlugin extends Plugin
 
     public static function getCoursesForParentTool(ExternalTool $tool, Session $session = null)
     {
-        if ($tool->getParent()) {
+        if (!$tool->isGlobal()) {
             return [];
         }
 
-        $children = $tool->getChildren();
+        $resourceNode = $tool->getResourceNode();
 
-        if ($session) {
-            $children = $children->filter(function (ExternalTool $tool) use ($session) {
-                if (null === $tool->getSession()) {
-                    return false;
-                }
-
-                if ($tool->getSession()->getId() !== $session->getId()) {
-                    return false;
-                }
-
-                return true;
-            });
+        if (!$resourceNode) {
+            return [];
         }
 
-        return $children->map(function (ExternalTool $tool) {
-            return $tool->getCourse();
-        });
+        $courses = [];
+
+        foreach ($resourceNode->getChildren() as $childNode) {
+            foreach ($childNode->getResourceLinks() as $link) {
+                $course = $link->getCourse();
+
+                if (!$course) {
+                    continue;
+                }
+
+                if ($session) {
+                    $linkSession = $link->getSession();
+
+                    if (!$linkSession || $linkSession->getId() !== $session->getId()) {
+                        continue;
+                    }
+                }
+
+                $courses[$course->getId()] = $course;
+            }
+        }
+
+        return array_values($courses);
     }
 
     /**

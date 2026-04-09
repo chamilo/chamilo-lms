@@ -2210,17 +2210,33 @@ HTML;
         array $attributes = [],
         $includeText = true
     ) {
-        $buttonClass = "btn btn--secondary-outline";
-        if (!empty($type)) {
-            $buttonClass = "btn btn--$type";
-        }
-        //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $baseClass = 'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-body-2 font-semibold shadow-sm transition hover:opacity-90';
+
+        $colorClasses = [
+            'primary' => 'bg-primary text-white',
+            'secondary' => 'bg-secondary text-secondary-button-text',
+            'success' => 'bg-success text-success-button-text',
+            'danger' => 'bg-danger text-danger-button-text',
+            'warning' => 'bg-warning text-warning-button-text',
+            'info' => 'bg-info text-info-button-text',
+            'secondary-outline' => 'border border-gray-25 bg-white text-gray-90 hover:border-primary hover:text-primary',
+        ];
+
+        $resolvedType = $type ?: 'secondary-outline';
+        $buttonClass = $baseClass.' '.($colorClasses[$resolvedType] ?? $colorClasses['secondary-outline']);
+
         $icon = self::getMdiIcon($icon);
-        $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        $attributes['class'] = isset($attributes['class'])
+            ? $buttonClass.' '.$attributes['class']
+            : $buttonClass;
+
         $attributes['title'] = $attributes['title'] ?? $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">'.$text.'</span>';
+        } else {
+            $text = '<span>'.$text.'</span>';
         }
 
         return self::url("$icon $text", $url, $attributes);

@@ -1,27 +1,87 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-    {% autoescape false %}
-        {{ form }}
-    {% endautoescape %}
+    <section>
+        <div class="mx-auto w-full max-w-6xl px-4 py-8 lg:px-6">
+            {% set backUrl = app.request.basePath ~ '/courses/' ~ course.id ~ '/lti' %}
+
+            <a
+                    href="{{ backUrl }}"
+                    onclick="if (window.history.length > 1) { event.preventDefault(); window.history.back(); }"
+                    class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
+            >
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
+                <span>{{ 'Back'|trans }}</span>
+            </a>
+
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold text-gray-90">
+                    {{ title|default('Add classroom activity'|trans) }}
+                </h1>
+                <p class="mt-2 text-body-2 text-gray-50">
+                    {{ 'Create a gradebook activity linked to an external tool in this course.'|trans }}
+                </p>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl lg:p-8">
+                <div class="lti-gradebook-form">
+                    {% autoescape false %}
+                        {{ form }}
+                    {% endautoescape %}
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        $(function() {
-            $("#hid_category_id").change(function () {
-                $("#hid_category_id option:selected").each(function () {
-                    var cat_id = $(this).val();
+      $(function () {
+        const applyGradebookStyles = function () {
+          const wrapper = $(".lti-gradebook-form");
 
-                    $.ajax({
-                        url: "/main/inc/ajax/course_home.ajax.php?gradebook.ajax.php?a=get_gradebook_weight",
-                        data: "cat_id=" + cat_id,
-                        success: function (return_value) {
-                            if (return_value != 0) {
-                                $("#max_weight").html(return_value);
-                            }
-                        }
-                    });
-                });
+          wrapper.find("form").addClass("space-y-6");
+          wrapper.find(".row").addClass("mb-6");
+          wrapper.find("fieldset").addClass("mb-6 rounded-2xl border border-gray-25 bg-support-2 p-5");
+          wrapper.find("legend").addClass("px-2 text-body-2 font-semibold text-gray-90");
+
+          wrapper.find("label").addClass("mb-2 block text-body-2 font-semibold text-gray-90");
+          wrapper.find(".form_required, .required").addClass("text-danger");
+
+          wrapper.find("input[type='text'], input[type='number'], input[type='email'], input[type='url'], input[type='password'], select, textarea")
+            .addClass("mt-0 block w-full rounded-xl border border-gray-25 bg-white px-4 py-3 text-body-2 text-gray-90 shadow-sm placeholder-gray-50 focus:border-primary focus:ring-2 focus:ring-primary");
+
+          wrapper.find("textarea").addClass("min-h-[120px]");
+
+          wrapper.find("input[type='checkbox'], input[type='radio']")
+            .addClass("h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary");
+
+          wrapper.find(".help-block, .form-text, small")
+            .addClass("mt-2 block text-caption text-gray-50");
+
+          wrapper.find("input[type='submit'], button[type='submit'], .btn, .btn-primary, .btn-success")
+            .addClass("inline-flex items-center justify-center rounded-xl bg-success px-5 py-3 text-body-2 font-semibold text-success-button-text shadow-xl transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success focus:ring-offset-2");
+
+          wrapper.find("table").addClass("w-full");
+          wrapper.find("th").addClass("pb-2 text-left text-body-2 font-semibold text-gray-90");
+          wrapper.find("td").addClass("align-top");
+        };
+
+        applyGradebookStyles();
+
+        $("#hid_category_id").change(function () {
+          $("#hid_category_id option:selected").each(function () {
+            var cat_id = $(this).val();
+
+            $.ajax({
+              url: "/main/inc/ajax/course_home.ajax.php?gradebook.ajax.php?a=get_gradebook_weight",
+              data: "cat_id=" + cat_id,
+              success: function (return_value) {
+                if (return_value != 0) {
+                  $("#max_weight").html(return_value);
+                }
+              }
             });
+          });
         });
+      });
     </script>
 {% endblock %}

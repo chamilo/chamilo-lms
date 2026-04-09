@@ -103,15 +103,16 @@ $interbreadcrumb[] = [
     'name' => get_lang('PlatformAdmin'),
 ];
 
-$htmlHeadXtra[] = api_get_css(
-    api_get_path(WEB_PLUGIN_PATH).'ImsLti/assets/style.css'
-);
+$pageTitle = $plugin->get_title();
+$pageDescription = $plugin->get_lang('ImsLtiDescription');
 
-$template = new Template($plugin->get_title());
+$template = new Template($pageTitle);
 $template->assign('tools', $toolRows);
+$template->assign('page_title', $pageTitle);
+$template->assign('page_description', $pageDescription);
 
 $content = $template->fetch('ImsLti/view/admin.tpl');
 
-$template->assign('header', $plugin->get_title());
+$template->assign('header', $pageTitle);
 $template->assign('content', $content);
 $template->display_one_col_template();

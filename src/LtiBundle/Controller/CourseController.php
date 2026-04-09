@@ -24,9 +24,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use EvalForm;
 use Evaluation;
 use HTML_QuickForm_select;
-use OAuthConsumer;
-use OAuthRequest;
-use OAuthSignatureMethod_HMAC_SHA1;
+use Chamilo\LtiBundle\Util\OAuth1Helper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -224,7 +222,9 @@ class CourseController extends ToolBaseController
         $params['context_label'] = $course->getCode();
         $params['context_title'] = $course->getTitle();
         $params['launch_presentation_locale'] = 'en';
-        $params['launch_presentation_document_target'] = 'iframe';
+        $params['launch_presentation_document_target'] = 'iframe' === $tool->getDocumentTarget()
+            ? 'iframe'
+            : 'window';
         $params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
         $params['tool_consumer_info_version'] = '2.0';
         $params['tool_consumer_instance_guid'] = $institutionDomain;
@@ -246,23 +246,12 @@ class CourseController extends ToolBaseController
         Utils::trimParams($params);
 
         if (!empty($tool->getConsumerKey()) && !empty($tool->getSharedSecret())) {
-            $consumer = new OAuthConsumer(
-                $tool->getConsumerKey(),
-                $tool->getSharedSecret(),
-                null
+            $params = OAuth1Helper::buildSignedPostParams(
+                (string) $tool->getLaunchUrl(),
+                $params,
+                (string) $tool->getConsumerKey(),
+                (string) $tool->getSharedSecret()
             );
-            $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
-
-            $request = OAuthRequest::from_consumer_and_token(
-                $consumer,
-                '',
-                'POST',
-                $tool->getLaunchUrl(),
-                $params
-            );
-            $request->sign_request($hmacMethod, $consumer, '');
-
-            $params = $request->get_parameters();
         }
 
         Utils::removeQueryParamsFromLaunchUrl($tool, $params);
@@ -379,24 +368,21 @@ class CourseController extends ToolBaseController
     {
         $em = $this->managerRegistry->getManager();
         $repo = $em->getRepository(ExternalTool::class);
+        $course = $this->getCourse();
 
         $externalTool = new ExternalTool();
 
         if (null !== $id) {
-            $parentTool = $repo->findOneBy([
-                'id' => $id,
-                'course' => null,
-            ]);
+            /** @var ExternalTool|null $parentTool */
+            $parentTool = $repo->find($id);
 
-            if (empty($parentTool)) {
+            if (empty($parentTool) || null !== $parentTool->getFirstResourceLink()) {
                 throw $this->createNotFoundException('External tool not found');
             }
 
             $externalTool = clone $parentTool;
             $externalTool->setToolParent($parentTool);
         }
-
-        $course = $this->getCourse();
 
         $form = $this->createForm(ExternalToolType::class, $externalTool);
         $form->get('shareName')->setData($externalTool->isSharingName());
@@ -410,28 +396,48 @@ class CourseController extends ToolBaseController
 
             if (!empty($categories)) {
                 $actions .= Display::url(
-                    Display::getMdiIcon(ToolIcon::GRADEBOOK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add to gradebook')),
+                    Display::getMdiIcon(
+                        ToolIcon::GRADEBOOK,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_MEDIUM,
+                        get_lang('Add to gradebook')
+                    ),
                     $this->generateUrl(
                         'chamilo_lti_grade',
                         [
+                            'cid' => $course->getId(),
                             'catId' => $categories[0]->get_id(),
-                            'course_code' => $course->getCode(),
                         ]
                     )
                 );
             }
 
+            /** @var ExternalTool[] $allTools */
+            $allTools = $repo->findAll();
+
+            $addedTools = array_values(array_filter(
+                $allTools,
+                fn (ExternalTool $tool): bool => null !== $tool->getFirstResourceLinkFromCourseSession($course)
+            ));
+
+            $addedToolIds = array_map(
+                static fn (ExternalTool $tool): int => $tool->getId(),
+                $addedTools
+            );
+
+            $globalTools = array_values(array_filter(
+                $allTools,
+                fn (ExternalTool $tool): bool => null === $tool->getFirstResourceLink()
+                    && !in_array($tool->getId(), $addedToolIds, true)
+            ));
+
             return $this->render(
                 '@ChamiloCore/Lti/course_configure.twig',
                 [
                     'title' => $this->trans('Add external tool'),
-                    'added_tools' => $repo->findBy([
-                        'course' => $course,
-                    ]),
-                    'global_tools' => $repo->findBy([
-                        'parent' => null,
-                        'course' => null,
-                    ]),
+                    'added_tools' => $addedTools,
+                    'global_tools' => $globalTools,
                     'form' => $form,
                     'course' => $course,
                     'actions' => $actions,
@@ -441,11 +447,19 @@ class CourseController extends ToolBaseController
 
         /** @var ExternalTool $externalTool */
         $externalTool = $form->getData();
-        $externalTool
-            ->setCourse($course)
-            ->setParent($course)
-            ->addCourseLink($course)
-        ;
+
+        /** @var Course|null $managedCourse */
+        $managedCourse = $em->find(Course::class, $course->getId());
+
+        if (null === $managedCourse) {
+            throw $this->createNotFoundException('Course not found');
+        }
+
+        if (null === $externalTool->getParent()) {
+            $externalTool->setParent($managedCourse);
+        }
+
+        $externalTool->addCourseLink($managedCourse);
 
         $em->persist($externalTool);
         $em->flush();
@@ -455,12 +469,20 @@ class CourseController extends ToolBaseController
         $user = $this->userHelper->getCurrent();
 
         if (!$externalTool->isActiveDeepLinking()) {
-            $this->shortcutRepository->addShortCut($externalTool, $user, $course);
+            $shortcut = $this->shortcutRepository->addShortCut($externalTool, $user, $managedCourse);
+
+            $shortcut->setTitle($externalTool->getTitle());
+            $shortcut->setShortCutNode($externalTool->getResourceNode());
+            $shortcut->target = 'iframe' === $externalTool->getDocumentTarget() ? '_self' : '_blank';
+
+            $em->persist($shortcut);
+            $this->shortcutRepository->setVisibilityPublished($shortcut, $managedCourse, null);
+            $em->flush();
 
             return $this->redirectToRoute(
                 'chamilo_core_course_home',
                 [
-                    'cid' => $course->getId(),
+                    'cid' => $managedCourse->getId(),
                 ]
             );
         }
@@ -468,7 +490,7 @@ class CourseController extends ToolBaseController
         return $this->redirectToRoute(
             'chamilo_lti_configure',
             [
-                'course' => $course->getCode(),
+                'cid' => $managedCourse->getId(),
             ]
         );
     }
@@ -491,10 +513,10 @@ class CourseController extends ToolBaseController
 
         $evaladd = new Evaluation();
         $evaladd->set_user_id($user->getId());
+        $evaladd->setCourseId($course->getId());
 
         if (!empty($catId)) {
             $evaladd->set_category_id($catId);
-            $evaladd->set_course_code($course->getCode());
         } else {
             $evaladd->set_category_id(0);
         }
@@ -503,28 +525,27 @@ class CourseController extends ToolBaseController
             EvalForm::TYPE_ADD,
             $evaladd,
             null,
-            'add_eval_form',
-            null,
-            $this->generateUrl(
-                'chamilo_lti_grade',
-                [
-                    'catId' => $catId,
-                    'code' => $course->getCode(),
-                ]
-            ).'?'.api_get_cidreq()
+            'add_eval_form'
         );
         $form->removeElement('name');
         $form->removeElement('addresult');
 
         /** @var HTML_QuickForm_select $slcLtiTools */
-        $slcLtiTools = $form->createElement('select', 'name', $this->trans('External tool'));
+        $slcLtiTools = $form->createElement(
+            'select',
+            'name',
+            $this->trans('External tool'),
+            [],
+            []
+        );
+
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
         $form->addRule('name', get_lang('Required field'), 'required');
 
-        $tools = $toolRepo->findBy([
-            'course' => $course,
-            'gradebookEval' => null,
-        ]);
+        $tools = array_values(array_filter(
+            $toolRepo->findBy(['gradebookEval' => null]),
+            fn (ExternalTool $tool): bool => null !== $tool->getFirstResourceLinkFromCourseSession($course)
+        ));
 
         /** @var ExternalTool $tool */
         foreach ($tools as $tool) {
@@ -536,6 +557,8 @@ class CourseController extends ToolBaseController
                 '@ChamiloCore/Lti/gradebook.html.twig',
                 [
                     'form' => $form->returnForm(),
+                    'course' => $course,
+                    'title' => $this->trans('Add classroom activity'),
                 ]
             );
         }
@@ -552,12 +575,7 @@ class CourseController extends ToolBaseController
         $eval->set_name($tool->getTitle());
         $eval->set_description($values['description']);
         $eval->set_user_id($values['hid_user_id']);
-
-        if (!empty($values['hid_course_code'])) {
-            $eval->set_course_code($values['hid_course_code']);
-        }
-
-        $eval->set_course_code($course->getCode());
+        $eval->setCourseId($course->getId());
         $eval->set_category_id($values['hid_category_id']);
 
         $values['weight'] = $values['weight_mask'];

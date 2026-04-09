@@ -537,8 +537,6 @@ class EvalForm extends FormValidator
         if (!empty($_GET['editeval']) && 1 == $_GET['editeval']) {
             $form_title = get_lang('Edit evaluation');
         }
-
-        $this->addHeader($form_title);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 

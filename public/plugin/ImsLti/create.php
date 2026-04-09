@@ -126,6 +126,10 @@ $pageTitle = $plugin->get_lang('AddExternalTool');
 
 $template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
+$template->assign('page_title', $pageTitle);
+$template->assign('page_description', 'Create and configure a reusable external tool for the IMS/LTI client plugin.');
+$template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+$template->assign('back_label', 'Back to tools');
 
 $content = $template->fetch('ImsLti/view/add.tpl');
 

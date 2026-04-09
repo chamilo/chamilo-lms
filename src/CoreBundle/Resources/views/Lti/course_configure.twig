@@ -2,109 +2,133 @@
 
 {% block content %}
     <section>
-        <div class="mx-auto w-full max-w-6xl px-4 py-8 lg:px-6">
-            <div class="mb-8">
+        <div class="w-full px-4 py-8 lg:px-6 xl:px-8 2xl:px-10">
+            {% set hasSidebar = (added_tools is not empty) or (global_tools is not empty) %}
+
+            <div class="mb-6">
                 <h1 class="text-2xl font-semibold text-gray-90">{{ title }}</h1>
                 <p class="mt-2 text-body-2 text-gray-50">
                     {{ 'Configure and manage external tools available in this course.'|trans }}
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]">
-                <aside class="space-y-6">
-                    {% if not added_tools is empty %}
-                        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
-                            <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
-                                <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Tools added'|trans }}</h2>
+            <div class="mb-6 flex flex-wrap items-center gap-3">
+                <a
+                        href="{{ path('chamilo_lti_configure', {'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                        class="inline-flex items-center gap-2 rounded-xl bg-success px-4 py-2 text-body-2 font-semibold text-success-button-text shadow-xl transition hover:opacity-90"
+                >
+                    <span class="mdi mdi-plus-circle-outline text-lg" aria-hidden="true"></span>
+                    <span>{{ 'New tool'|trans }}</span>
+                </a>
+
+                {% if first_gradebook_category_id is defined and first_gradebook_category_id %}
+                    <a
+                            href="{{ path('chamilo_lti_grade', {'cid': course.id, 'catId': first_gradebook_category_id}) ~ '?' ~ legacy_context_query }}"
+                            class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-2 font-semibold text-white shadow-xl transition hover:opacity-90"
+                    >
+                        <span class="mdi mdi-book-open-variant text-lg" aria-hidden="true"></span>
+                        <span>{{ 'Add to gradebook'|trans }}</span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                {% if hasSidebar %}
+                    <aside class="space-y-6 lg:col-span-3">
+                        {% if not added_tools is empty %}
+                            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                                <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                                    <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Tools added'|trans }}</h2>
+                                </div>
+
+                                <ul class="divide-y divide-gray-20">
+                                    {% for tool in added_tools %}
+                                        <li class="flex items-center justify-between gap-3 px-5 py-4">
+                                            <div class="min-w-0">
+                                                <p class="truncate text-body-2 font-medium text-gray-90">
+                                                    {{ tool.title }}
+                                                </p>
+
+                                                {% if tool.gradebookEval is not null %}
+                                                    <p class="mt-1 text-caption text-success">
+                                                        {{ 'Linked to gradebook'|trans }}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="flex items-center gap-2">
+                                                {% if tool.isActiveDeepLinking %}
+                                                    <a
+                                                            href="{{ path('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
+                                                            title="{{ 'Configure'|trans }}"
+                                                    >
+                                                        <span class="mdi mdi-cog-outline text-lg" aria-hidden="true"></span>
+                                                        <span class="sr-only">{{ 'Configure'|trans }}</span>
+                                                    </a>
+                                                {% endif %}
+
+                                                <a
+                                                        href="{{ path('chamilo_lti_edit', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-90 text-white shadow-sm transition hover:opacity-90"
+                                                        title="{{ 'Edit'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-pencil-outline text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Edit'|trans }}</span>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
+                        {% endif %}
 
-                            <ul class="divide-y divide-gray-20">
-                                {% for tool in added_tools %}
-                                    <li class="flex items-center justify-between gap-3 px-5 py-4">
-                                        <div class="min-w-0">
-                                            <p class="truncate text-body-2 font-medium text-gray-90">
-                                                {{ tool.title }}
-                                            </p>
-                                        </div>
+                        {% if not global_tools is empty %}
+                            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                                <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                                    <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Available tools'|trans }}</h2>
+                                </div>
 
-                                        <div class="flex items-center gap-2">
-                                            {% if tool.isActiveDeepLinking %}
-                                                <a
-                                                        href="{{ url('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) }}"
-                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-25 bg-white text-gray-90 transition hover:border-primary hover:text-primary"
-                                                        title="{{ 'Configure'|trans }}"
-                                                >
-                                                    <span class="fa fa-rocket" aria-hidden="true"></span>
-                                                    <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                                </a>
-                                            {% endif %}
+                                <ul class="divide-y divide-gray-20">
+                                    {% for tool in global_tools %}
+                                        <li class="flex items-center justify-between gap-3 px-5 py-4">
+                                            <div class="min-w-0">
+                                                <p class="truncate text-body-2 font-medium text-gray-90">
+                                                    {{ tool.title }}
+                                                </p>
+                                            </div>
 
-                                            <a
-                                                    href="{{ url('chamilo_lti_edit', {'id': tool.id, 'cid': course.id}) }}"
-                                                    class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-25 bg-white text-gray-90 transition hover:border-primary hover:text-primary"
-                                                    title="{{ 'Edit'|trans }}"
-                                            >
-                                                <span class="fa fa-edit" aria-hidden="true"></span>
-                                                <span class="sr-only">{{ 'Edit'|trans }}</span>
-                                            </a>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-
-                    {% if not global_tools is empty %}
-                        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
-                            <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
-                                <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Available tools'|trans }}</h2>
+                                            <div class="flex items-center gap-2">
+                                                {% if tool.isActiveDeepLinking %}
+                                                    <a
+                                                            href="{{ path('chamilo_lti_launch', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
+                                                            title="{{ 'Configure'|trans }}"
+                                                    >
+                                                        <span class="mdi mdi-cog-outline text-lg" aria-hidden="true"></span>
+                                                        <span class="sr-only">{{ 'Configure'|trans }}</span>
+                                                    </a>
+                                                {% else %}
+                                                    <a
+                                                            href="{{ path('chamilo_lti_configure_global', {'cid': course.id, 'id': tool.id}) ~ '?' ~ legacy_context_query }}"
+                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-success text-success-button-text shadow-sm transition hover:opacity-90"
+                                                            title="{{ 'Add'|trans }}"
+                                                    >
+                                                        <span class="mdi mdi-plus text-lg" aria-hidden="true"></span>
+                                                        <span class="sr-only">{{ 'Add'|trans }}</span>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
+                        {% endif %}
+                    </aside>
+                {% endif %}
 
-                            <ul class="divide-y divide-gray-20">
-                                {% for tool in global_tools %}
-                                    <li class="flex items-center justify-between gap-3 px-5 py-4">
-                                        <div class="min-w-0">
-                                            <p class="truncate text-body-2 font-medium text-gray-90">
-                                                {{ tool.title }}
-                                            </p>
-                                        </div>
-
-                                        <div class="flex items-center gap-2">
-                                            {% if tool.isActiveDeepLinking %}
-                                                <a
-                                                        href="{{ url('chamilo_lti_launch', {'id': tool.id, 'cid': course.id}) }}"
-                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-25 bg-white text-gray-90 transition hover:border-primary hover:text-primary"
-                                                        title="{{ 'Configure'|trans }}"
-                                                >
-                                                    <span class="fa fa-rocket" aria-hidden="true"></span>
-                                                    <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                                </a>
-                                            {% else %}
-                                                <a
-                                                        href="{{ url('chamilo_lti_configure_global', {'cid': course.id, 'id': tool.id}) }}"
-                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-25 bg-white text-gray-90 transition hover:border-primary hover:text-primary"
-                                                        title="{{ 'Add'|trans }}"
-                                                >
-                                                    <span class="fa fa-plus" aria-hidden="true"></span>
-                                                    <span class="sr-only">{{ 'Add'|trans }}</span>
-                                                </a>
-                                            {% endif %}
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </aside>
-
-                <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl lg:p-8">
-                    {% if actions is defined and actions %}
-                        <div class="mb-6 flex items-center justify-end">
-                            {{ actions|raw }}
-                        </div>
-                    {% endif %}
-
-                    {{ form_start(form, {'attr': {'class': 'space-y-6', 'id': 'course-lti-form'}}) }}
+                <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl {% if hasSidebar %}lg:col-span-9{% else %}lg:col-span-12{% endif %} lg:p-8">
+                    {{ form_start(form, {'action': form_action_url, 'attr': {'class': 'space-y-6', 'id': 'course-lti-form'}}) }}
 
                     <div class="space-y-7">
                         <div class="space-y-2">

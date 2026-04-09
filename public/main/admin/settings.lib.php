@@ -794,10 +794,14 @@ function handlePlugins()
             echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
             echo '  </a>';
 
-            if (!empty($openUrl)) {
+            if ($isEnabled && !empty($openUrl)) {
                 echo '  <a href="'.htmlspecialchars($openUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
                 echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
                 echo '  </a>';
+            } elseif (!empty($openUrl)) {
+                echo '  <span class="btn btn--plain-outline btn--sm w-full justify-center opacity-50 cursor-not-allowed">';
+                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
+                echo '  </span>';
             }
 
             if (!$hasNoRegions) {

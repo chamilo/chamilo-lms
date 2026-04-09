@@ -640,6 +640,33 @@ function plugin_get_available_region_options(array $metadata): array
     ];
 }
 
+function plugin_get_configure_url(string $pluginName): string
+{
+    return api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+            'plugin' => $pluginName,
+        ]);
+}
+
+function plugin_get_open_url(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
+    $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
+
+    foreach (['admin.php', 'configure.php'] as $file) {
+        if (is_file($sysPluginPath.$file)) {
+            return $cache[$pluginName] = $webPluginPath.$file;
+        }
+    }
+
+    return $cache[$pluginName] = null;
+}
+
 /**
  * This function allows easy activating and inactivating of plugins.
  *
@@ -754,21 +781,23 @@ function handlePlugins()
             $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
             $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
-            echo '      <button class="plugin-action btn btn--sm '.$toggleColor.' w-full justify-center"
-                            data-plugin="'.$pluginDataName.'"
-                            data-action="'.$toggleAction.'">
-                            <i class="'.$toggleIcon.'"></i> '.$toggleText.'
-                        </button>';
+            $configureUrl = plugin_get_configure_url($pluginName);
+            $openUrl = plugin_get_open_url($pluginName);
 
-            $managementUrl = plugin_get_management_url($pluginName);
-            if (!empty($managementUrl) && plugin_has_editable_settings($pluginName)) {
-                echo '  <a href="'.htmlspecialchars($managementUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
-                echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
+            echo '      <button class="plugin-action btn btn--sm '.$toggleColor.' w-full justify-center"
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="'.$toggleAction.'">
+                    <i class="'.$toggleIcon.'"></i> '.$toggleText.'
+                </button>';
+
+            echo '  <a href="'.htmlspecialchars($configureUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
+            echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
+            echo '  </a>';
+
+            if (!empty($openUrl)) {
+                echo '  <a href="'.htmlspecialchars($openUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
+                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
                 echo '  </a>';
-            } else {
-                echo '  <span class="btn btn--plain-outline btn--sm w-full justify-center opacity-50 cursor-not-allowed">';
-                echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
-                echo '  </span>';
             }
 
             if (!$hasNoRegions) {
@@ -778,16 +807,16 @@ function handlePlugins()
             }
 
             echo '      <button class="plugin-action btn btn--danger btn--sm w-full justify-center"
-                            data-plugin="'.$pluginDataName.'"
-                            data-action="uninstall">
-                            <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
-                        </button>';
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="uninstall">
+                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
+                </button>';
         } else {
             echo '      <button class="plugin-action btn btn--success btn--sm w-full justify-center"
-                            data-plugin="'.$pluginDataName.'"
-                            data-action="install">
-                            <i class="mdi mdi-download"></i> '.get_lang('Install').'
-                        </button>';
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="install">
+                    <i class="mdi mdi-download"></i> '.get_lang('Install').'
+                </button>';
 
             echo '      <span></span>';
         }
@@ -1121,24 +1150,15 @@ function plugin_get_management_url(string $pluginName): ?string
     $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
     $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
 
-    $candidates = [
-        'admin.php',
-        'configure.php',
-    ];
-
-    foreach ($candidates as $file) {
+    foreach (['admin.php', 'configure.php'] as $file) {
         if (is_file($sysPluginPath.$file)) {
             return $cache[$pluginName] = $webPluginPath.$file;
         }
     }
 
-    if (plugin_has_editable_settings($pluginName)) {
-        return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
-                'plugin' => $pluginName,
-            ]);
-    }
-
-    return $cache[$pluginName] = null;
+    return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+            'plugin' => $pluginName,
+        ]);
 }
 
 /**

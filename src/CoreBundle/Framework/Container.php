@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
@@ -101,6 +102,7 @@ use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
@@ -755,5 +757,10 @@ class Container
     public static function getResourceHelper(): ResourceHelper
     {
         return self::$container->get(ResourceHelper::class);
+    }
+
+    public static function getPluginsFileSystem(): FilesystemOperator
+    {
+        return self::$container->get('oneup_flysystem.plugins_filesystem');
     }
 }

@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tipe",
+          "description": "Verkieslike media om bo die vraag te vertoon."
+        },
+        {
+          "label": "Deaktiveer zoomfunksie by prente"
+        }
+      ]
+    },
+    {
+      "label": "Taak beskrywing",
+      "default": "Vul die ontbrekende woorde in",
+      "description": "'n gids wat die gebruiker vertel hoe om hierdie taak te beantwoord."
+    },
+    {
+      "label": "Teksblokke",
+      "entity": "Teksblok",
+      "field": {
+        "label": "Lyn van teks",
+        "placeholder": "Oslo is die hoofstad van *Noorweë*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Spasies word by gevoeg met 'n asterisk (*) voor en agter die regte woord/frase.</li><li>Alternatiewe antwoorde word geskei met 'n vorentoe-streep (/).</li><li>Jy kan 'n tekswenk byvoeg met 'n duppelpunt (:) voor die wenk.</li></ul>",
+          "example": "H5P kan geredigeer word deur 'n *webleser:Iets wat jy daagliks gebruik*."
+        }
+      }
+    },
+    {
+      "label": "Algemene terugvoer",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Verstek"
+            }
+          ],
+          "label": "Bepaal verstekterugvoer vir enige reeks tellings",
+          "description": "Kliek op die \"Voeg reeks by\" knoppie om so veel as moontlik reekse by te voeg. Byvoorbeeld: 0-20% Swak Punt, 21-91% Gemiddelde Punt, 91-100% Uitstekende Punt!",
+          "entity": "reeks",
+          "field": {
+            "fields": [
+              {
+                "label": "Telling reeks"
+              },
+              {},
+              {
+                "label": "Terugvoer vir gedefinieerde telling reeks",
+                "placeholder": "Vul die terugvoer in"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Teks vir \"Wys antwoord\" knoppie",
+      "default": "Wys antwoord"
+    },
+    {
+      "label": "Teks vir \"Probeer weer\" knoppie",
+      "default": "Probeer weer"
+    },
+    {
+      "label": "Teks vir \"Toets\" knoppie",
+      "default": "Toets"
+    },
+    {
+      "label": "Teks vir \"Nie ingevul\" boodskap",
+      "default": "Vul asb. al die oop spasies in om die antwoord te sien"
+    },
+    {
+      "label": "Teks vir \"':ans' is reg\" boodskap",
+      "default": "':ans' is reg"
+    },
+    {
+      "label": "Teks vir \"':ans' is verkeerd\" boodskap",
+      "default": "':ans' is verkeerd"
+    },
+    {
+      "label": "Teks vir \"Reg geantwoord\" boodskap",
+      "default": "Reg geantwoord"
+    },
+    {
+      "label": "Teks vir \"Verkeerd geantwoord\" boodskap",
+      "default": "Verkeerd geantwoord"
+    },
+    {
+      "label": "Hulptegnologie etiket vir antwoord",
+      "default": "Regte antwoord:"
+    },
+    {
+      "label": "Hulptegnologie etiket vir invoerveld",
+      "description": "Gebruik @num en @total om huidige geslote en totale nommer te vervang",
+      "default": "Blanko invoer @num van @total"
+    },
+    {
+      "label": "Hulptegnologie-etiket wat stel dat invoer aan 'n wenk gekoppel is",
+      "default": "Wenk beskikbaar"
+    },
+    {
+      "label": "Wenk ikoon etiket",
+      "default": "Wenk"
+    },
+    {
+      "label": "Gedragsinstellings.",
+      "description": "Hierdie keuses laat jou beheer hoe die onderskeie take uitgevoer moet word.",
+      "fields": [
+        {
+          "label": "Aktiveer \"Probeer weer\""
+        },
+        {
+          "label": "Aktiveer \"Wys antwoord\" knoppie"
+        },
+        {
+          "label": "Aktiveer \"Toets\" knoppie"
+        },
+        {
+          "label": "Toets antwoorde outomaties na invoer"
+        },
+        {
+          "label": "Hooflettergevoelig",
+          "description": "Maak seker dat die gebruiker se antwoord presies dieselfde as die antwoord is."
+        },
+        {
+          "label": "Vereis dat alle velde beantwoord moet word voordat die antwoord besigtig kan word"
+        },
+        {
+          "label": "Plaas invoervelde op afsonderlike lyntjies"
+        },
+        {
+          "label": "Wys bevestigingdialoog op \"Toets\"",
+          "description": "Hierdie keuses is nie versoenbaar met die opsie \"Gaan antwoorde outomaties na invoer na\" nie"
+        },
+        {
+          "label": "Wys bevestigingdialoog op \"Probeer weer\""
+        },
+        {
+          "label": "Aanvaar geringe spelfoute",
+          "description": "Indien geaktiveer, sal 'n antwoord met geringe spelfoute ook as reg tel (3-9 karakters: 1 spelfout, meer as 9 karakters: 2 spelfoute)"
+        }
+      ]
+    },
+    {
+      "label": "Toets bevestigingsdialoog",
+      "fields": [
+        {
+          "label": "Hoofopskrifteks",
+          "default": "Klaar ?"
+        },
+        {
+          "label": "Liggaamteks",
+          "default": "Is jy seker jy wil klaarmaak ?"
+        },
+        {
+          "label": "Kanseleerknoppie etiket",
+          "default": "Kanseleer"
+        },
+        {
+          "label": "Bevestig knoppie etiket",
+          "default": "Klaar"
+        }
+      ]
+    },
+    {
+      "label": "Probeer weer bevestigingsdialoog",
+      "fields": [
+        {
+          "label": "Hoofopskrifteks",
+          "default": "Probeer weer ?"
+        },
+        {
+          "label": "Liggaamteks",
+          "default": "Is jy seker jy wil weer probeer ?"
+        },
+        {
+          "label": "Kanseleer knoppie etiket",
+          "default": "Kanseleer"
+        },
+        {
+          "label": "Bevestig knoppie etiket",
+          "default": "Bevestig"
+        }
+      ]
+    },
+    {
+      "label": "Tekstuele tentoonstelling van die telkaart vir diegene wat 'n spreekleser gebruik",
+      "default": "Jy het :num uit :total punte gekry"
+    },
+    {
+      "label": "Hulptegnologieë beskrywing vir \"Toets\" knoppie",
+      "default": "Toets die antwoorde. Die antwoorde sal as reg gemerk, verkeerd of onbeantwoord gemerk word."
+    },
+    {
+      "label": "Hulptegnologieë beskrywing vir \"Wys oplossing\" knoppie",
+      "default": "Wys die antwoord. Hierdie taak sal gemerk word met die regte antwoord."
+    },
+    {
+      "label": "Hulptegnologieë beskrywing vir \"Probeer weer\" knoppie",
+      "default": "Probeer die taak weer. Herstel al die antwoorde en probeer die taak weer van die begin af."
+    },
+    {
+      "label": "Hulptegnologie beskrywing om 'n taak te begin",
+      "default": "Toetsmodus"
+    }
+  ]
+}

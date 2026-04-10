@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   viewBox="0 0 646.45 424.61"
+   version="1.0"
+   sodipodi:docname="block_diagram.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview86"
+     showgrid="false"
+     inkscape:zoom="1.3034406"
+     inkscape:cx="405.53724"
+     inkscape:cy="199.14569"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <marker
+       id="Arrow1Lend"
+       refY="0"
+       refX="0"
+       overflow="visible"
+       orient="auto">
+      <path
+         id="path3783"
+         d="m0 0l5-5-17.5 5 17.5 5-5-5z"
+         fill-rule="evenodd"
+         transform="matrix(-.8 0 0 -.8 -10 0)"
+         stroke="#000"
+         stroke-width="1pt" />
+    </marker>
+    <marker
+       id="Arrow1Lstart"
+       refY="0"
+       refX="0"
+       overflow="visible"
+       orient="auto">
+      <path
+         id="path3780"
+         d="m0 0l5-5-17.5 5 17.5 5-5-5z"
+         fill-rule="evenodd"
+         transform="matrix(.8 0 0 .8 10 0)"
+         stroke="#000"
+         stroke-width="1pt" />
+    </marker>
+  </defs>
+  <g
+     id="g3165"
+     stroke="#ff6600"
+     transform="matrix(1.3024091,0,0,1.2766235,-188.90758,-49.842692)">
+    <rect
+       id="rect2385"
+       stroke-linejoin="round"
+       ry="9.5964003"
+       height="88.583"
+       width="141.73"
+       stroke-linecap="round"
+       y="88.583"
+       x="194.88"
+       stroke-width="2.4165"
+       fill="#ff6600" />
+    <path
+       id="path3163"
+       stroke-width="1px"
+       fill-rule="evenodd"
+       fill="#ff7f2a"
+       d="m 200.18,126.43 c 9.97,-15.16 148.31,39.48 132.89,47.19 -10,5 -116.93,3.55 -131.82,1.1 -6.78,-5 -9.28,-35.79 -1.07,-48.29 z" />
+  </g>
+  <g
+     id="g1016"
+     transform="matrix(1.3024091,0,0,1.2766235,6.2937629,15.843545)">
+    <rect
+       id="rect3185"
+       stroke-linejoin="round"
+       ry="9.5964003"
+       height="88.583"
+       width="141.73"
+       stroke="#abc837"
+       stroke-linecap="round"
+       y="191.23836"
+       x="287.88058"
+       stroke-width="2.4165"
+       fill="#abc837" />
+    <path
+       id="path3187"
+       d="m 293.18059,229.08837 c 9.97,-15.16 148.31,39.48 132.89,47.19 -10,5 -116.93,3.55 -131.82,1.1 -6.78,-5 -9.28,-35.79 -1.07,-48.29 z"
+       fill-rule="evenodd"
+       stroke="#bcd35f"
+       stroke-width="1px"
+       fill="#cdde87" />
+  </g>
+  <g
+     id="g3222"
+     transform="matrix(1.3024091,0,0,1.2766235,-332.54219,-48.592147)">
+    <rect
+       id="rect3171"
+       stroke-linejoin="round"
+       ry="9.5964003"
+       height="88.583"
+       width="141.73"
+       stroke="#2ad4ff"
+       stroke-linecap="round"
+       y="88.583"
+       x="549.21002"
+       stroke-width="2.4165"
+       fill="#2ad4ff" />
+    <path
+       id="path3173"
+       d="m 554.51,126.43 c 9.97,-15.16 148.31,39.48 132.89,47.19 -10,5 -116.93,3.55 -131.82,1.1 -6.78,-5 -9.28,-35.79 -1.07,-48.29 z"
+       fill-rule="evenodd"
+       stroke="#55ddff"
+       stroke-width="1px"
+       fill="#80e5ff" />
+    <g
+       id="g3209" />
+  </g>
+  <metadata
+     id="metadata83">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>X86 Generic Block Diagram</dc:title>
+        <dc:date>2009-08-20T05:06:06</dc:date>
+        <dc:description>X86 Generic Block Diagram.</dc:description>
+        <dc:source>https://openclipart.org/detail/183181/X86-Generic-Block-Diagram-by-nebu</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>nebu</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>X86</rdf:li>
+            <rdf:li>architecture</rdf:li>
+            <rdf:li>block</rdf:li>
+            <rdf:li>block diagram</rdf:li>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>diagram</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g1025"
+     transform="translate(6.1376024)">
+    <rect
+       style="fill:#000000;stroke:none;stroke-width:0.311165;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.24466, 1.24466"
+       id="rect1018"
+       width="106.8896"
+       height="4.6297746"
+       x="252.92786"
+       y="117.57597" />
+    <path
+       id="rect1020"
+       style="fill:#000000;stroke:none;stroke-width:0.626914;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2.50765, 2.50765"
+       d="m 369.31387,119.8203 -15.2223,10.49161 -0.0821,-21.25 z"
+       sodipodi:nodetypes="cccc" />
+  </g>
+  <g
+     id="g1025-5"
+     transform="rotate(89.871161,352.19018,240.23131)">
+    <rect
+       style="fill:#000000;stroke:none;stroke-width:0.311165;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.24466, 1.24466"
+       id="rect1018-9"
+       width="66.744019"
+       height="5.081996"
+       x="293.07343"
+       y="117.12376" />
+    <path
+       id="rect1020-1"
+       style="fill:#000000;stroke:none;stroke-width:0.626914;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2.50765, 2.50765"
+       d="m 369.31387,119.8203 -15.2223,10.49161 -0.0821,-21.25 z"
+       sodipodi:nodetypes="cccc" />
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="115.84725"
+     y="112.01125"
+     id="text1050"><tspan
+       sodipodi:role="line"
+       id="tspan1048"
+       x="115.84725"
+       y="112.01125"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">STEP1</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="92.334976"
+     y="146.87314"
+     id="text1050-3"><tspan
+       sodipodi:role="line"
+       id="tspan1048-2"
+       x="92.334976"
+       y="146.87314"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">Comments</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="434.56699"
+     y="112.5638"
+     id="text1050-1"><tspan
+       sodipodi:role="line"
+       id="tspan1048-7"
+       x="434.56699"
+       y="112.5638"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">STEP2</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="411.05472"
+     y="147.42567"
+     id="text1050-3-8"><tspan
+       sodipodi:role="line"
+       id="tspan1048-2-3"
+       x="411.05472"
+       y="147.42567"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">Comments</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="432.26541"
+     y="308.96707"
+     id="text1050-2"><tspan
+       sodipodi:role="line"
+       id="tspan1048-9"
+       x="432.26541"
+       y="308.96707"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">STEP3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:OpenDyslexic;-inkscape-font-specification:OpenDyslexic;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="408.75311"
+     y="343.82895"
+     id="text1050-3-7"><tspan
+       sodipodi:role="line"
+       id="tspan1048-2-6"
+       x="408.75311"
+       y="343.82895"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:Arial;-inkscape-font-specification:Arial">Comments</tspan></text>
+</svg>

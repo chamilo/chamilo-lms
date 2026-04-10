@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "מדיה",
+      "fields": [
+        {
+          "label": "סוג",
+          "description": "ניתן להוסיף תמונה אשר תוצג מעל השאלה."
+        },
+        {
+          "label": "ביטול האפשרות להגדלת תמונה"
+        }
+      ]
+    },
+    {
+      "label": "תיאור תוכן",
+      "default": "מילוי המילים החסרות",
+      "description": "מדריך המסביר למשתמש כיצד לענות על המשימה."
+    },
+    {
+      "label": "משבצות תוכן",
+      "entity": "משבצת תוכן",
+      "field": {
+        "label": "שורה של טקסט",
+        "placeholder": "אוסלו היא בירת *נורווגיה*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Blanks are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Alternative answers are separated with a forward slash (/).</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li></ul>",
+          "example": "ניתן לערוך תוכן H5P בעזרת *דפדפן/דפדפן אינטרנט:משהו שמשתמשים בו כל יום*."
+        }
+      }
+    },
+    {
+      "label": "משוב כללי",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "בררת מחדל"
+            }
+          ],
+          "label": "הגדרת משוב מותאם אישית לכל טווח נקודות שהוא",
+          "description": "לחצו על כפתור \"הוספת טווח\" להוספת טווחים לפי הצורך. לדוגמה: 0-20% ניקוד גרוע, 21-91% ניקוד ממוצע, 91-100% ניקוד מצוין!",
+          "entity": "תחום",
+          "field": {
+            "fields": [
+              {
+                "label": "תחום ציונים"
+              },
+              {},
+              {
+                "label": "משוב לטווח ניקוד מוגדר",
+                "placeholder": "מלאו את המשוב"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "טקסט עבור כפתור \"הצגת פתרונות\"",
+      "default": "הצגת פתרונות"
+    },
+    {
+      "label": "טקסט עבור כפתור \"ניסיון חוזר\"",
+      "default": "ניסיון חוזר"
+    },
+    {
+      "label": "טקסט עבור כפתור \"בדיקה\"",
+      "default": "בדיקה"
+    },
+    {
+      "label": "טקסט עבור הודעת \"לא התמלא\"",
+      "default": "אנא השלימו את המילים החסרות כדי לצפות בפתרון"
+    },
+    {
+      "label": "תוכן עבור הודעת \":ans נכון/ה\"",
+      "default": "':ans' נכון/ה"
+    },
+    {
+      "label": "תוכן עבור הודעת \":ans לא נכון/ה\"",
+      "default": "':ans' לא נכון/ה"
+    },
+    {
+      "label": "טקסט עבור הודעת \"תשובה נכונה\"",
+      "default": "תשובה נכונה"
+    },
+    {
+      "label": "תוכן עבור הודעת \"מענה לא נכון\"",
+      "default": "תשובה לא נכונה"
+    },
+    {
+      "label": "תווית טכנולוגיה מסייעת עבור פתרון",
+      "default": "תשובה נכונה:"
+    },
+    {
+      "label": "תווית טכנולוגיה מסייעת עבור שדה הזנה",
+      "description": "Use @num and @total to replace current cloze number and total cloze number",
+      "default": "קלט ריק @num מתוך @total"
+    },
+    {
+      "label": "תווית טכנולוגיה מסייעת כדי להגיד שצמוד לקלט רמז",
+      "default": "רמז זמין"
+    },
+    {
+      "label": "תווית צלמית רמז",
+      "default": "רמז"
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "אפשרויות אלה יאפשרו לך לשלוט בהתנהגות המשימה.",
+      "fields": [
+        {
+          "label": "הפעלת \"ניסיון חוזר\""
+        },
+        {
+          "label": "הפעלת כפתור \"הצגת פתרון\""
+        },
+        {
+          "label": "הפעלת כפתור \"בדיקה\""
+        },
+        {
+          "label": "בדיקה אוטומטית של תשובות אחרי הזנה"
+        },
+        {
+          "label": "Case sensitive",
+          "description": "מוודא שקלט המשתמש זהה לתשובה."
+        },
+        {
+          "label": "מחייב שכל השדות יהיו עם מענה לפני שניתן לצפות בפתרון"
+        },
+        {
+          "label": "מיקום שדות ההזנה בשורות נפרדות"
+        },
+        {
+          "label": "Show confirmation dialog on \"Check\"",
+          "description": "This options is not compatible with the \"Automatically check answers after input\" option"
+        },
+        {
+          "label": "Show confirmation dialog on \"Retry\""
+        },
+        {
+          "label": "קבלת שגיאות כתיב משניות",
+          "description": "אם מופעל, התשובה תיחשב כנכונה גם עם שגיאות כתיב משניות (3-9 אותיות: שגיאת כתיב אחת, יותר מ-9 אותיות: 2 שגיאות כתיב)"
+        }
+      ]
+    },
+    {
+      "label": "Check confirmation dialog",
+      "fields": [
+        {
+          "label": "תוכן כותרת",
+          "default": "סיימתם?"
+        },
+        {
+          "label": "גוף תוכן",
+          "default": "בטוחים שאתם רוצים לסיים?"
+        },
+        {
+          "label": "תווית כפתור ביטול",
+          "default": "ביטול"
+        },
+        {
+          "label": "תווית כפתור אישור",
+          "default": "סיום"
+        }
+      ]
+    },
+    {
+      "label": "Retry confirmation dialog",
+      "fields": [
+        {
+          "label": "תוכן כותרת",
+          "default": "ניסיון חוזר ?"
+        },
+        {
+          "label": "Body text",
+          "default": "בטוחים שרוצים לנסות שוב?"
+        },
+        {
+          "label": "תווית כפתור ביטול",
+          "default": "ביטול"
+        },
+        {
+          "label": "תווית כפתור אישור",
+          "default": "אישור"
+        }
+      ]
+    },
+    {
+      "label": "ייצוג מילולי של סרגל הניקוד למי שמשתמש בקורא-מסך",
+      "default": "קיבלת :num מתוך :total נקודות"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "בדקו את התשובות. המענים יסומנו כנכון, לא נכון, או ריק."
+    },
+    {
+      "label": "תיאור טכנולוגיה מסייעת עבור כפתור \"הצגת פתרון\"",
+      "default": "הצגת הפתרון. המשימה תסומן עם פתרונה הנכון."
+    },
+    {
+      "label": "תיאור טכנולוגיה מסייעת עבור כפתור \"ניסיון חוזר\"",
+      "default": "ניסיון חוזר. איפוס כל התשובות והתחלת המשימה מחדש."
+    },
+    {
+      "label": "תיאור טכנולוגיה מסייעת עבור משימה התחלתית",
+      "default": "מצב בדיקה"
+    }
+  ]
+}

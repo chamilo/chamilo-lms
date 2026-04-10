@@ -1,0 +1,110 @@
+.h5p-blanks {
+  position: relative;
+}
+.h5p-blanks .h5p-input-wrapper {
+  display: inline-block;
+  position: relative;
+}
+.h5p-blanks .h5p-text-input {
+  font-family: H5PDroidSans, sans-serif;
+  font-size: 1em;
+  border-radius: 0.25em;
+  border: 1px solid #a0a0a0;
+  padding: 0.1875em 1em 0.1875em 0.5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 6em;
+}
+.h5p-blanks .h5p-text-input:focus {
+  outline: none;
+  box-shadow: 0 0 0.5em 0 #7fb8ff;
+  border-color: #7fb8ff;
+}
+.h5p-blanks .h5p-text-input.h5p-not-filled-out {
+  background: #fff0f0;
+}
+.h5p-blanks .h5p-separate-lines .h5p-input-wrapper {
+  display: block;
+}
+.h5p-blanks .h5p-separate-lines .h5p-text-input {
+  width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+/* Correctly answered input */
+.h5p-blanks .h5p-correct .h5p-text-input {
+  background: #9dd8bb;
+  border: 1px solid #9dd8bb;
+  color: #255c41;
+}
+/* Showing solution */
+.h5p-blanks .h5p-correct-answer {
+  color: #255c41;
+  font-weight: bold;
+  border: 1px #255c41 dashed;
+  background-color: #d4f6e6;
+  padding: 0.15em;
+  border-radius: 0.25em;
+  margin-left: .5em;
+}
+.h5p-blanks .h5p-correct:after {
+  position: absolute;
+  right: 0.5em;
+  top: 0;
+  text-decoration: none;
+  content: "\f00c";
+  font-family: 'H5PFontAwesome4';
+  color: #255c41;
+}
+
+/* Wrongly answered input */
+.h5p-blanks .h5p-wrong .h5p-text-input {
+  background-color: #f7d0d0;
+  border: 1px solid #f7d0d0;
+  color: #b71c1c;
+  text-decoration: line-through;
+}
+.h5p-blanks .h5p-wrong:after {
+  position: absolute;
+  right: 0.5em;
+  top: 0;
+  font-family: 'H5PFontAwesome4';
+  text-decoration: none;
+  content: "\f00d";
+  color: #b71c1c;
+}
+
+/* Actual text paragraphs */
+.h5p-blanks .h5p-question-content p {
+  line-height: 1.75em;
+  margin: 0 0 1em;
+}
+
+/* Header and footer blocks (title + evaluation, buttons) */
+.h5p-blanks .joubel-tip-container {
+  position: absolute;
+  right: 0.4em;
+  font-size: 1em;
+}
+.h5p-blanks .joubel-tip-container .joubel-icon-tip-normal {
+  line-height: 1em;
+}
+.h5p-blanks .has-tip .h5p-text-input {
+  padding-right: 2.25em;
+}
+.h5p-blanks .has-tip.h5p-correct:after,
+.h5p-blanks .has-tip.h5p-wrong:after {
+  right: 2.25em;
+}
+.h5p-blanks .has-tip.h5p-correct .h5p-text-input,
+.h5p-blanks .has-tip.h5p-wrong .h5p-text-input {
+  padding-right: 3.5em;
+}
+.h5p-blanks .hidden-but-read {
+  position: absolute;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}

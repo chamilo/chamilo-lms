@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "មេឌា",
+      "fields": [
+        {
+          "label": "ប្រភេទ",
+          "description": "មេឌាដែលត្រូវបង្ហាញនៅលើសំណួរ (មិនមានក៏បាន)"
+        },
+        {
+          "label": "បិទមុខងារពង្រីកបង្រួមរូបភាព"
+        }
+      ]
+    },
+    {
+      "label": "សេចក្តីពណ៌នាពីកិច្ចការ",
+      "default": "បញ្ចូលពាក្យត្រឹមត្រូវក្នុងចន្លោះ",
+      "description": "ជាការពន្យល់ពីអ្វីដែលគេត្រូវធ្វើដើម្បីបំពេញកិច្ចការនេះ។"
+    },
+    {
+      "label": "ប្លុកអត្ថបទ",
+      "entity": "ប្លុកអត្ថបទ",
+      "field": {
+        "label": "ជួរអត្ថបទ",
+        "placeholder": "Oslo is the capital of *Norway*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>ចន្លោះបំពេញនឹងត្រូវបានដាក់ជំនួសពាក្យ/ឃ្លាដែលនៅចន្លោះសញ្ញាផ្កាយពីរ (*)។</li><li>អ្នកអាចប្រើសញ្ញាចែក(/) សម្រាប់កំណត់នូវចម្លើយដែលអាចត្រឹមត្រូវផ្សេងទៀត។</li><li>អ្នកក៏អាចប្រាប់គន្លឺះសម្រាប់ចន្លោះបំពេញនីមួយៗដោយប្រើសញ្ញាចុចពីរ (:) ខាងក្រោយចម្លើយត្រឹមត្រូវ</li></ul>",
+          "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+        }
+      }
+    },
+    {
+      "label": "មូលវិចារណ៍ទូទៅ",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "លំនាំដើម"
+            }
+          ],
+          "label": "កំណត់មូលវិចារណ៍តាមបំណងសម្រាប់ចន្លោះពិន្ទុ",
+          "description": "ចុចប៊ូតុង \"បន្ថែមចន្លោះ\" ដើម្បីបន្ថែមចន្លោះពិន្ទុតាមដែលអ្នកចង់បាន។ ឧទា: 0-20% ពិន្ទុខ្សោយ, 21-91% ពិន្ទុមធ្យម, 91-100% ពិន្ទុល្អប្រសើរ!",
+          "entity": "ចន្លោះ",
+          "field": {
+            "fields": [
+              {
+                "label": "ចន្លោះពិន្ទុ"
+              },
+              {},
+              {
+                "label": "មូលវិចារណ៍សម្រាប់ចន្លោះពិន្ទុដែលបានកំណត់",
+                "placeholder": "បញ្ចូលមូលវិចារណ៍"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text for \"Show solutions\" button",
+      "default": "បង្ហាញចម្លើយត្រឹមត្រូវ"
+    },
+    {
+      "label": "Text for \"Retry\" button",
+      "default": "សាកម្តងទៀត"
+    },
+    {
+      "label": "Text for \"Check\" button",
+      "default": "ពិនិត្យចម្លើយ"
+    },
+    {
+      "label": "Text for \"Not filled out\" message",
+      "default": "សូមបំពេញចន្លោះទាំងអស់ដើម្បីមើលចម្លើយត្រឹមត្រូវ"
+    },
+    {
+      "label": "Text for \"':ans' is correct\" message",
+      "default": "':ans' គឺត្រឹមត្រូវ"
+    },
+    {
+      "label": "Text for \"':ans' is wrong\" message",
+      "default": "':ans' គឺមិនត្រឹមត្រូវ"
+    },
+    {
+      "label": "Text for \"Answered correctly\" message",
+      "default": "បានឆ្លើយត្រឹមត្រូវ"
+    },
+    {
+      "label": "Text for \"Answered incorrectly\" message",
+      "default": "បានឆ្លើយមិនត្រឹមត្រូវ"
+    },
+    {
+      "label": "Assistive technology label for solution",
+      "default": "ចម្លើយត្រឹមត្រូវ:"
+    },
+    {
+      "label": "Assistive technology label for input field",
+      "description": "Use @num and @total to replace current cloze number and total cloze number",
+      "default": "ចន្លោះទី @num ចំណោម @total"
+    },
+    {
+      "label": "Assistive technology label for saying an input has a tip tied to it",
+      "default": "មានគន្លឹះ"
+    },
+    {
+      "label": "Tip icon label",
+      "default": "គន្លឹះ"
+    },
+    {
+      "label": "ការកំណត់មុខងារ",
+      "description": "ជម្រើសទាំងនេះនឹងឲ្យអ្នកអាចកំណត់មុខងារផ្សេងៗរបស់កិច្ចការអ្នក។",
+      "fields": [
+        {
+          "label": "អនុញ្ញាត \"សាកម្តងទៀត\""
+        },
+        {
+          "label": "បង្ហាញប៊ូតុង \"បង្ហាញចម្លើយត្រឹមត្រូវ\""
+        },
+        {
+          "label": "បង្ហាញប៊ូតុង \"ពិនិត្យចម្លើយ\""
+        },
+        {
+          "label": "ពិនិត្យចម្លើយដោយស្វ័យប្រវត្តិបន្ទាប់ពីបញ្ចូលអត្ថបទ"
+        },
+        {
+          "label": "ប្រកាន់អក្សរធំ/តូច (A/a)",
+          "description": "គេត្រូវសរសេរឲ្យដូចបេះបិតនឹងចម្លើយដើម។"
+        },
+        {
+          "label": "ទាមទារឲ្យបំពេញចន្លោះទាំងអស់សិនមុននឹងអាចមើលចម្លើយត្រឹមត្រូវបាន"
+        },
+        {
+          "label": "ដាក់ចន្លោះនៅក្នុងជួរដោយឡែកពីអត្ថបទ"
+        },
+        {
+          "label": "បង្ហាញផ្ទាំងអះអាងនៅពេលចុច \"ពិនិត្យចម្លើយ\"",
+          "description": "ជម្រើសនេះមិនអាចប្រើជាមួយនឹងមុខងារ \"ពិនិត្យចម្លើយដោយស្វ័យប្រវត្តិបន្ទាប់ពីបញ្ចូលអត្ថបទ\" ទេ"
+        },
+        {
+          "label": "បង្ហាញផ្ទាំងអះអាងនៅពេលចុច \"សាកម្តងទៀត\""
+        },
+        {
+          "label": "លើកលែងកំហុសអក្ខរាវិរុទ្ធតិចតួច",
+          "description": "ប្រសិនបើបើក ចម្លើយនឹងចាត់ទុកថាត្រឹមត្រូវប្រសិនបើមានកំហុសអក្ខរាវិរុទ្ធតិចតួច (3-9 តួអក្សរ: 1 កំហុសអក្ខរាវិរុទ្ធ, ច្រើនជាង 9 តួអក្សរ: 2 កំហុសអក្ខរាវិរុទ្ធ)"
+        }
+      ]
+    },
+    {
+      "label": "ផ្ទាំងអះអាងសម្រាប់ការពិនិត្យចម្លើយ",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "បញ្ចប់ ?"
+        },
+        {
+          "label": "Body text",
+          "default": "តើអ្នកពិតជាចង់បញ្ចប់មែនទេ ?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "បោះបង់"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "បញ្ចប់"
+        }
+      ]
+    },
+    {
+      "label": "ផ្ទាំងអះអាងសម្រាប់ការសាកម្តងទៀត",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "សាកម្តងទៀត ?"
+        },
+        {
+          "label": "Body text",
+          "default": "តើអ្នកពិតជាចង់សាកម្តងទៀតមែនទេ ?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "បោះបង់"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "យល់ព្រម"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "អ្នកទទួលបានពិន្ទុ :num លើ :total"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "ពិនិត្យចម្លើយ។ ចម្លើយនឹងត្រូវបានដាក់សម្គាល់ថាត្រឹមត្រូវ មិនត្រឹមត្រូវ ឬមិនបានឆ្លើយ។"
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "បង្ហាញចម្លើយត្រឹមត្រូវ។ កិច្ចការនឹងត្រូវបានដាក់សម្គាល់ដោយចម្លើយត្រឹមត្រូវរបស់វា។"
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "សាកធ្វើកិច្ចការម្តងទៀត។ លុបចម្លើយទាំងអស់ ហើយចាប់ផ្តើមកិច្ចការជាថ្មី។"
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "ម៉ូតពិនិត្យចម្លើយ"
+    }
+  ]
+}

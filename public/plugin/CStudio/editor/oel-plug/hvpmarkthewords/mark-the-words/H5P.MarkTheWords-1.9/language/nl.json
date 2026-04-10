@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Beschrijving taak",
+      "description": "Beschrijf hoe de gebruiker de taak moet uitvoeren.",
+      "placeholder": "Klik in de volgende tekst op alle werkwoorden."
+    },
+    {
+      "label": "Tekstveld",
+      "placeholder": "Dit is een antwoord: *antwoord*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Gemarkeerde woorden worden voorzien van een asterix (*).</li><li>Een asterix mag worden ingesloten door een andere asterix, dit resulteert in ** = *.</li></ul>",
+        "example": "De juiste woorden zijn als volgt gemarkeerd: *juistwoord*, een asterix wordt geschreven als : *juistwoord***."
+      }
+    },
+    {
+      "label": "Algehele feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standaard"
+            }
+          ],
+          "label": "Defineer aangepaste feedback voor elke score reeks",
+          "description": "Druk op de \"Voeg scorereeks toe\" knop om zoveel reeksen toe te voegen als nodig is. Voorbeeld: 0-20% Onvoldoende score, 21-91% Gemiddelde score, 91-100% Uitstekende score!",
+          "entity": "reeks",
+          "field": {
+            "fields": [
+              {
+                "label": "Score reeks"
+              },
+              {},
+              {
+                "label": "Feedback voor de gedefinieerde score reeks",
+                "placeholder": "Vul de aangepaste feedback in"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Tekst voor de \"Controleer\"-knop",
+      "default": "Controleer"
+    },
+    {
+      "label": "Tekst voor de \"Opnieuw proberen\"-knop",
+      "default": "Opnieuw proberen"
+    },
+    {
+      "label": "Tekst voor de \"Toon oplossing\"-knop",
+      "default": "Toon oplossing"
+    },
+    {
+      "label": "Gedragsinstellingen",
+      "description": "Deze opties bepalen hoe de taak op de input reageert.",
+      "fields": [
+        {
+          "label": "Schakel de knop \"Opnieuw\" in"
+        },
+        {
+          "label": "Activeer \"Toon oplossing\" -knop"
+        },
+        {
+          "label": "Activeer \"Controleer\" -knop"
+        },
+        {
+          "label": "Toon scorepunten",
+          "description": "Toon het aantal verdiende punten voor elk antwoord."
+        }
+      ]
+    },
+    {
+      "label": "Tekst voor een juist antwoord",
+      "default": "Juist!",
+      "description": "Deze tekst wordt gebruikt om aan te geven dat een antwoord juist is"
+    },
+    {
+      "label": "Tekst voor een onjuist antwoord",
+      "default": "Onjuist!",
+      "description": "Deze tekst wordt gebruikt om aan te geven dat een antwoord onjuist is"
+    },
+    {
+      "label": "Tekst voor een ontbrekend antwoord",
+      "default": "Ontbreekt!",
+      "description": "Deze tekst wordt gebruikt om aan te geven dat een antwoord ontbreekt"
+    },
+    {
+      "label": "Beschrijving voor de weergave van de oplossing",
+      "default": "De taak is bijgewerkt en bevat nu ook de oplossing.",
+      "description": "Deze tekst vertelt de gebruiker dat de taken zijn bijgewerkt en nu ook de oplossing bevatten."
+    },
+    {
+      "label": "Tekstuele weergave van de scorebalk voor gebruikers van een readspeaker",
+      "default": "Je hebt :num van de :total punten"
+    },
+    {
+      "label": "Label voor de volledige, leesbare tekst voor ondersteunende technologieën",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label voor de tekst waarin woorden kunnen worden gemarkeerd voor ondersteunende technologieën",
+      "default": "Volledige tekst waarin woorden kunnen worden gemarkeerd"
+    },
+    {
+      "label": "Koptekst voor oplossingsmodus voor ondersteunende technologieën",
+      "default": "Oplossingsmodus"
+    },
+    {
+      "label": "Koptekst voor controlemodus voor ondersteunende technologieën",
+      "default": "Controlemodus"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

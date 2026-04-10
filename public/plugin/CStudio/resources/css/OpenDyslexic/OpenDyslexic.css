@@ -1,0 +1,20 @@
+
+@font-face { 
+  font-family : "OpenDyslexicie";
+  src : url(OpenDyslexic-Regular.eot);
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('OpenDyslexic-Regular.ttf');
+  src: url('OpenDyslexic-Regular.otf') format('truetype'),
+      url('OpenDyslexic.woff') format('woff'),
+      url('OpenDyslexic-Regular.eot?#iefix') format('embedded-opentype'),
+      url('OpenDyslexic.svg#OpenDyslexicBold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+	/* font-family: OpenDyslexic , OpenDyslexicie; */
+}

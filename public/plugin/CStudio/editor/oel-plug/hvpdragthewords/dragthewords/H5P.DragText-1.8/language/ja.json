@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "タスクの説明",
+      "description": "ユーザーがタスクを解決する方法について説明してください。",
+      "default": "適切なボックスに単語をドラッグしてください"
+    },
+    {
+      "label": "テキスト",
+      "placeholder": "*オスロ*はノルウェーの首都です。*ストックホルム*はスウェーデンの首都で、*コペンハーゲン*はデンマークの首都です。すべての都市は*スカンジナビア:ヨーロッパの北部*半島に位置しています。",
+      "description": "",
+      "important": {
+        "description": "<ul><li>ドロップできる語句は、アスタリスク (*) を適切な語句の前後に付けて追加します。</li><li>コロン (:) をヒントの前に付けて、テキストのヒントを追加できます。</li><li>各空欄には、一つだけ適切な語句を置けます。</li><li>タスクが完了したときに表示されるフィードバックを追加できます。正解のフィードバックには '\\+'、不正解のフィードバックには '\\-'を使います。</li></ul>",
+        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      }
+    },
+    {
+      "label": "全体のフィードバック",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "デフォルト"
+            }
+          ],
+          "label": "ある得点範囲に対して、カスタムフィードバックを定義します。",
+          "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+          "entity": "範囲",
+          "field": {
+            "fields": [
+              {
+                "label": "得点範囲"
+              },
+              {},
+              {
+                "label": "定義した得点範囲に対するフィードバック",
+                "placeholder": "フィードバックを記入"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "「チェック」ボタンのテキスト",
+      "default": "チェック"
+    },
+    {
+      "label": "「リトライ」ボタンのテキスト",
+      "default": "リトライ"
+    },
+    {
+      "label": "「解を表示」ボタンのテキスト",
+      "default": "解を表示"
+    },
+    {
+      "label": "番号付きのドロップゾーンラベル",
+      "default": "ドロップゾーン @index 。",
+      "description": "アクセシビリティのためのラベルで、リードスピーカーがドロップゾーンのインデックスを読み上げる。利用可能な変数: @index"
+    },
+    {
+      "label": "空のドロップゾーンのラベル",
+      "default": "ドロップゾーン @index は空です。",
+      "description": "アクセシビリティのためのラベルで、リードスピーカーが「ドロップゾーンが空である」ことを読み上げる"
+    },
+    {
+      "label": "ドロップゾーンのラベルが含まれる",
+      "default": "ドロップゾーン @index にはドロップ要素が @draggable 含まれる。",
+      "description": "アクセシビリティのためのラベルで、リードスピーカーが「ドロップゾーンにドラッグ要素が含まれる」ことを読み上げる"
+    },
+    {
+      "label": "ドラッグ要素のラベル",
+      "default": "@index / @ count ドラッグ",
+      "description": "アクセシビリティのためのラベルで、音声読み上げソフトがこれがドラッグ可能な要素であることを読み上げる。利用可能な変数: @index, @count"
+    },
+    {
+      "label": "ヒント表示ボタンのラベル",
+      "default": "ヒントを表示",
+      "description": "アクセシビリティのためのラベルで、ヒントが読まれる前に音声読み上げソフトが読み上げる。"
+    },
+    {
+      "label": "正解のためのリードスピーカー用テキスト",
+      "default": "正解 !"
+    },
+    {
+      "label": "不正解ためのリードスピーカー用テキスト",
+      "default": "不正解 !"
+    },
+    {
+      "label": "ユーザーがドロップ可能なようにリセットする際の確認ダイアログのタイトル",
+      "default": "ドロップをリセット"
+    },
+    {
+      "label": "ユーザーがドロップ可能なようにリセットする際の確認ダイアログの説明",
+      "default": "このドロップゾーンを本当にリセットしますか ?"
+    },
+    {
+      "label": "アクセシビリティのためのラベルで、音声読み上げソフトがドロップが始まったことを示す。",
+      "default": "ドラッグ要素をつかんだ。"
+    },
+    {
+      "label": "アクセシビリティのためのラベルで、音声読み上げソフトがドラッグがキャンセルされたことを示す。",
+      "default": "ドラッグがキャンセルされました。"
+    },
+    {
+      "label": "アクセシビリティのためのラベルで、音声読み上げソフトがテキストが正しい答えであることを示す。",
+      "default": "正解 :"
+    },
+    {
+      "label": "正解/不正解のフィードバックを含むパネルのヘッダー",
+      "default": "フィードバック"
+    },
+    {
+      "label": "動作設定",
+      "description": "これらのオプションでタスクがどのように動作するかを制御できます。",
+      "fields": [
+        {
+          "label": "「リトライ」を有効化"
+        },
+        {
+          "label": "「解を表示」ボタンを有効化"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "即時フィードバック"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

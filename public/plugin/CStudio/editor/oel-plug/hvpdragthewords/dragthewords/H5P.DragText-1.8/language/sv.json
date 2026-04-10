@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Beskrivning av uppgift",
+      "description": "Beskriv hur användaren ska lösa uppgiften.",
+      "default": "Dra orden till rätt boxar"
+    },
+    {
+      "label": "Text",
+      "placeholder": "*Oslo* är Norges huvudstad, *Stockholm* är huvudstaden Sveriges huvudstad och *Köpenhamn* är Danmarks huvudstad. Alla dessa städer ligger i *Skandinavien:Norra delen av Europa*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Ord som kan dras-och-släppas ska markeras med en asterisk (*) framför och efter det rätta ordet, eller den rätta frasen.</li><li>Du kan lägga till en ledtråd, genom att använda kolon (:) framför ledtråden.</li><li>För varje tom box så finns det endast ett rätt ord.</li><li>Du kan lägga till feedback som visas när uppgiften är genomförd. Använd '\\+' för feedback på rätta svar och '\\-' för feedback på felaktiga svar.</li></ul>",
+        "example": "H5P-innehåll kan redigeras med en *webbläsare:Vad är Chrome för typ av programvara?*. </br> H5P-innehåll är *interaktivt\\+Rätt! \\-Inte rätt, försök igen!*"
+      }
+    },
+    {
+      "label": "Samlad feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standard"
+            }
+          ],
+          "label": "Definiera anpassad feedback för olika poängintervall",
+          "description": "Klicka på knappen \"Lägg till intervall\" för att lägga till så många intervall du behöver. Exempel: 0-20% Inte så bra, 21-91% Medel, 91-100% Jättebra!",
+          "entity": "intervall",
+          "field": {
+            "fields": [
+              {
+                "label": "Poängintervall"
+              },
+              {},
+              {
+                "label": "Feedback för definierad poängintervall",
+                "placeholder": "Fyll i feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text för knappen \"Rätta\"",
+      "default": "Rätta"
+    },
+    {
+      "label": "Text för knappen \"Försök igen\"",
+      "default": "Försök igen"
+    },
+    {
+      "label": "Text för knappen \"Visa lösning\"",
+      "default": "Visa lösning"
+    },
+    {
+      "label": "Etikett för numrerad släpp-yta",
+      "default": "Släpp-yta @index.",
+      "description": "Etikett som används för tillgänglighet, där skärmläsare kommer att läsa upp släpp-ytans index. Variabel som finns är: @index"
+    },
+    {
+      "label": "Etikett för tom drag-yta",
+      "default": "Drag-yta @index är tom.",
+      "description": "Etikett som används för tillgänglighet, där skärmläsare kommer att läsa upp att drag-ytan är tom"
+    },
+    {
+      "label": "Etikett för innehåller släpp-yta",
+      "default": "Släpp-yta @index innehåller drag-och-släppbara @draggable.",
+      "description": "Etikett som används för tillgänglighet, där skärmläsare kommer att läsa upp att släpp-ytan innehåller drag-och-släppbart objekt"
+    },
+    {
+      "label": "Etikett för drag-och-släppbara objekt",
+      "default": "@index av @count drag-och-släppbara objekt.",
+      "description": "Etikett som används för tillgänglighet, där skärmläsare kommer att läsa upp att detta är ett drag-och-släppbart objekt. Variabler som finns är: @index, @count"
+    },
+    {
+      "label": "Etikett för knappen Visa ledtråd",
+      "default": "Visa ledtråd",
+      "description": "Etikett som används för tillgänglighet, där skärmläsare kommer att läsa upp texten före själva ledtråden läses upp"
+    },
+    {
+      "label": "Skärmläsartext för rätta svar",
+      "default": "Rätt!"
+    },
+    {
+      "label": "Skärmläsartext för felaktiga svar",
+      "default": "Inte rätt!"
+    },
+    {
+      "label": "Titel på bekräftelse när en användare vill nollställda ett drag-och-släppbart objekt",
+      "default": "Nollställ drag-och-släpp"
+    },
+    {
+      "label": "Bekräftelsedialog när en användare vill nollställa ett drag-och-släppbart objekt",
+      "default": "Är du säker på att du vill nollställa detta objekt"
+    },
+    {
+      "label": "Etikett som används för tillgänglighet, när skärmläsare indikerar att dragning har startats",
+      "default": "Tagit tag i drag-och-släppbart objekt."
+    },
+    {
+      "label": "Etikett som används för tillgänglighet, när skärmläsare indikerar att dragning har avbrutits",
+      "default": "Avbrytit dragning."
+    },
+    {
+      "label": "Etikett som används för tillgänglighet, när skärmläsare indikerar att texten är det rätta svaret",
+      "default": "Rätt svar:"
+    },
+    {
+      "label": "Rubrik för panel som har feedback för rätta/felaktiga svar",
+      "default": "Feedback"
+    },
+    {
+      "label": "Beteende-inställningar.",
+      "description": "Dessa val gör det möjligt för dig att ange hur uppgiften beter sig.",
+      "fields": [
+        {
+          "label": "Aktivera \"Försök igen\""
+        },
+        {
+          "label": "Aktivera knappen \"Visa lösning\""
+        },
+        {
+          "label": "Aktivera knappen \"Rätta\""
+        },
+        {
+          "label": "Omedelbar feedback"
+        }
+      ]
+    },
+    {
+      "label": "Text som kan användas av skärmläsare för att läsa upp användarens poäng",
+      "default": "Du fick :num av :total poäng"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

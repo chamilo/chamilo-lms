@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Разпред. равномерно",
+    "distributeButtonWarning": "Стойностите ще бъдат променени за всички обхвати. Искате ли да продължите?",
+    "rangeOutOfSequenceWarning": "Обхватите на резултатите не са последователни"
+  }
+}

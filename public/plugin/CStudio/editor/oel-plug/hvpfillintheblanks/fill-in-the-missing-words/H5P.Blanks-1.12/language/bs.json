@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Medij",
+      "fields": [
+        {
+          "label": "Tip",
+          "description": "Opcionalni mediji koji mogu biti prikazani iznad zadatka."
+        },
+        {
+          "label": "Deaktivirati zumiranje slike"
+        }
+      ]
+    },
+    {
+      "label": "Opis zadatka",
+      "default": "Unesite riječ koja nedostaje.",
+      "description": "Tekst uputstva korisniku koji mu kazuje kako će odgovoriti na zadatak."
+    },
+    {
+      "label": "Popuni praznine",
+      "entity": "Popuni praznine",
+      "field": {
+        "label": "Tekstualno polje",
+        "placeholder": "Sarajevo je glavni grad *Bosna i Hercegovina*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Blanks are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Alternative answers are separated with a forward slash (/).</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li></ul>",
+          "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+        }
+      }
+    },
+    {
+      "label": "Overall Feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standardno"
+            }
+          ],
+          "label": "Definiraj standardnu pvratnu informaciju za bilo koji raspon rezultata",
+          "description": "Klikni na dugme \"Dodaj raspon\" i dodaj raspona rezultata koliko je potrebno. Primjer: 0-20% Loše, 21-91% Dobro, 91-100% Odlično!",
+          "entity": "raspon",
+          "field": {
+            "fields": [
+              {
+                "label": "Raspon za rezultat"
+              },
+              {},
+              {
+                "label": "Povratna informacija za definirani raspon rezultata",
+                "placeholder": "Popuni povratnu informaciju"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Oznaka za dugme \"Prikaži rješenje\"",
+      "default": "Prikaži rješenje"
+    },
+    {
+      "label": "Oznaka za dugme \"Ponovi\"",
+      "default": "Ponovi"
+    },
+    {
+      "label": "Oznaka za dugme \"Provjeri\"",
+      "default": "Provjeri"
+    },
+    {
+      "label": "Tekst za poruku \"Nije popunjeno\"",
+      "default": "Molimo vas da ispunite sva prazna polja kako bi vidjeli rješenje"
+    },
+    {
+      "label": "Tekst poruke za \"':ans' je tačno\"",
+      "default": "':ans' je tačno"
+    },
+    {
+      "label": "Tekst poruke za \"':ans' nije tačno\"",
+      "default": "':ans' je netačno"
+    },
+    {
+      "label": "Tekst poruke za \"Tačan odgovor\"",
+      "default": "Tačan odgovor"
+    },
+    {
+      "label": "Tekst poruke za \"Netačan odgovor\"",
+      "default": "Netačan odgovor"
+    },
+    {
+      "label": "Tekst za tehničku pomoć kod rješenja",
+      "default": "Tačan odgovor:"
+    },
+    {
+      "label": "Tekst za tehnička sredstva za polje za unos",
+      "description": "Koristi @num i @total kako bi aktuelni broj praznina popunio",
+      "default": "Praznina @num od @total"
+    },
+    {
+      "label": "Text für technische Hilfsmittel, der darauf hinweis, dass ein Tipp verfügbar ist",
+      "default": "Savjet dostupan"
+    },
+    {
+      "label": "Oznaka za dugme savjet",
+      "default": "Savjet"
+    },
+    {
+      "label": "Podešavanje ponašanja.",
+      "description": "Diese Optionen kontrollieren, wie sich die Aufgabe verhält.",
+      "fields": [
+        {
+          "label": "Omogući dugme \"Ponovi\""
+        },
+        {
+          "label": "Omogući dugme \"Prikaži rješenje\""
+        },
+        {
+          "label": "Omogući dugme \"Provjeri\""
+        },
+        {
+          "label": "Odgovore nakon unošenja automatski provjeri"
+        },
+        {
+          "label": "Paziti na Veliko/malo slovo",
+          "description": "Budite sigurni da je odgovor korisnika identičan odgovoru."
+        },
+        {
+          "label": "Sve praznine moraju biti popunjene kako bi se vidjelo rješenje zadatka."
+        },
+        {
+          "label": "Staviti sve praznine u jednu liniju"
+        },
+        {
+          "label": "Prikazati dijalog potvrde nakon klika na dugme \"Provjeri\"",
+          "description": "Ova opcija ne funkcionira zajedno sa \"Odgovore nakon unošenja automatski provjeri\""
+        },
+        {
+          "label": "Prikazati dijalog potvrde nakon klika na dugme \"Ponovi\""
+        },
+        {
+          "label": "Prihvati male greške u pisanju",
+          "description": "Ako je odabrano, odgovori sa malim greškama u pisanju će biti prihvaćeni kao tačni (3-9 characters: 1 spelling error, more than 9 characters: 2 spelling errors)."
+        }
+      ]
+    },
+    {
+      "label": "Dijalog potvrde kod provjere",
+      "fields": [
+        {
+          "label": "Tekst zaglavlja",
+          "default": "Kraj?"
+        },
+        {
+          "label": "Ostatak teksta",
+          "default": "Jeste li sigurni da želite završiti?"
+        },
+        {
+          "label": "Oznaka za dugme \"Otkaži\"",
+          "default": "Otkaži"
+        },
+        {
+          "label": "Oznaka za dugme \"Kraj\"",
+          "default": "Kraj"
+        }
+      ]
+    },
+    {
+      "label": "Dijalog potvrde kod ponavljanja",
+      "fields": [
+        {
+          "label": "Tekst zaglavlja",
+          "default": "Ponovi?"
+        },
+        {
+          "label": "Ostatak teksta",
+          "default": "Jeste li sigurni da želite ponoviti?"
+        },
+        {
+          "label": "Oznaka za dugme \"Otkaži\"",
+          "default": "Otkaži"
+        },
+        {
+          "label": "Oznaka za dugme \"Potvrdi\"",
+          "default": "Potvrdi"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "Postigli ste :num od :total bodova"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

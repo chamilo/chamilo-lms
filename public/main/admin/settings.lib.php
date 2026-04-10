@@ -303,6 +303,7 @@ function getStablePluginAllowList(): array
         'Bbb',
         'BuyCourses',
         'CardGame',
+        'CStudio',
         'H5pImport',
         'ImsLti',
         'LtiProvider',

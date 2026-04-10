@@ -1,12 +1,14 @@
 <script setup>
 import { computed, ref } from "vue"
+import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import lpService from "../../services/lpService"
 
 const { t } = useI18n()
+const route = useRoute()
 
 const props = defineProps({
   lp: { type: Object, required: true },
@@ -21,7 +23,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  "open",
   "edit",
   "report",
   "settings",
@@ -42,6 +43,16 @@ const lpType = computed(() => {
 
 // Only SCORM packages (type = 2 in Chamilo legacy)
 const canUpdateScorm = computed(() => props.canEdit && lpType.value === 2)
+
+const isStudentView = computed(() => route.query?.isStudentView === "true")
+
+const openUrl = computed(() =>
+  lpService.buildLegacyViewUrl(props.lp.iid, {
+    cid: props.legacyContext.cid || 0,
+    sid: props.legacyContext.sid || 0,
+    isStudentView: isStudentView.value ? "true" : "false",
+  }),
+)
 
 const dateText = computed(() => {
   const v = props.buildDates ? props.buildDates(props.lp) : ""
@@ -255,13 +266,13 @@ const itemActionsMobile = [
         </div>
 
         <div class="lp-panel__info">
-          <button
+          <BaseAppLink
             :title="t('Open')"
+            :url="openUrl"
             class="lp-panel__title"
-            @click="emit('open', lp)"
           >
             {{ lp.title || t("Learning path title here") }}
-          </button>
+          </BaseAppLink>
           <p
             v-if="dateText"
             class="lp-panel__dates lp-panel__dates--desktop"
@@ -400,13 +411,13 @@ const itemActionsMobile = [
               <i class="mdi mdi-file-pdf-box text-xl" />
             </button>
 
-            <button
+            <BaseAppLink
               :title="t('Open')"
+              :url="openUrl"
               class="lp-panel__student-button"
-              @click="emit('open', lp)"
             >
               <i class="mdi mdi-open-in-new text-lg" />
-            </button>
+            </BaseAppLink>
           </div>
 
           <span class="lp-panel__progress-label">

@@ -24,7 +24,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  "open",
   "edit",
   "report",
   "settings",
@@ -328,7 +327,6 @@ const toggleOpen = () => {
             @build="emit('build', element)"
             @delete="emit('delete', element)"
             @edit="emit('edit', element)"
-            @open="emit('open', element)"
             @report="emit('report', element)"
             @settings="emit('settings', element)"
             @toggle-auto-launch="emit('toggle-auto-launch', element)"

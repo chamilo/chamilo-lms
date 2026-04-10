@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Meedia",
+      "fields": [
+        {
+          "label": "Tüüp",
+          "description": "Pilt või video küsimuse juures kuvamiseks (ei ole kohustuslik)."
+        },
+        {
+          "label": "Keela pildi suurendamine"
+        }
+      ]
+    },
+    {
+      "label": "Ülesande kirjeldus",
+      "default": "Sisesta puuduvad sõnad",
+      "description": "Ülesande vastamist kirjeldav juhis kasutajale."
+    },
+    {
+      "label": "Tekstiväljad",
+      "entity": "tekstiväli",
+      "field": {
+        "label": "Tekstirida",
+        "placeholder": "Oslo on *Norway* pealinn.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Tühjad kohad märgitakse tärni (*) lisamisega korrektse sõna või fraasi ette ja taha.</li><li>Alternatiivsed vastused eraldatakse kaldkriipsuga (/).</li><li>Tekstivihje lisamiseks kasuta koolonit (:) vihje ees.</li></ul>",
+          "example": "H5P sisu töötlemiseks sobib *brauser/veebibrauser:Midagi, mida kasutad iga päev*."
+        }
+      }
+    },
+    {
+      "label": "Üldine tagasiside",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Vaikimisi"
+            }
+          ],
+          "label": "Määratle kohandatud tagasiside igale punktisumma vahemikule",
+          "description": "Kliki \"Lisa vahemik\" nupule, et lisada vajalik arv vahemikke. Näiteks: 0-20% Halb tulemus, 21-91% Keskmine tulemus, 91-100% Suurepärane tulemus!",
+          "entity": "vahemik",
+          "field": {
+            "fields": [
+              {
+                "label": "Punktisumma vahemik"
+              },
+              {},
+              {
+                "label": "Tagasiside määratletud punktisumma vahemikule",
+                "placeholder": "Sisesta tagasiside"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Nupu \"Näita lahendusi\" tekst",
+      "default": "Näita lahendusi"
+    },
+    {
+      "label": "Nupu \"Proovi uuesti\" tekst",
+      "default": "Proovi uuesti"
+    },
+    {
+      "label": "Nupu \"Kontrolli\" tekst",
+      "default": "Kontrolli"
+    },
+    {
+      "label": "Teate \"Ei ole täidetud\" tekst",
+      "default": "Lahenduse vaatamiseks täida palun kõik tühjad väljad"
+    },
+    {
+      "label": "Teate \"':ans' on õige\" tekst",
+      "default": "':ans' on õige"
+    },
+    {
+      "label": "Teate \"':ans' on õige\" tekst",
+      "default": "':ans' on õige"
+    },
+    {
+      "label": "Teate \"Õigesti vastatud\" tekst",
+      "default": "Õigesti vastatud"
+    },
+    {
+      "label": "Text for \"Valesti vastatud\" message",
+      "default": "Valesti vastatud"
+    },
+    {
+      "label": "Assisteeriva tehnoloogia silt lahendusele",
+      "default": "Õige vastus:"
+    },
+    {
+      "label": "Assisteeriva tehnoloogia silt sisestusväljale",
+      "description": "Kasuta @num ja @total, et asendada jooksev cloze arv ja cloze arvude summa",
+      "default": "Tühi sisend @num / @total"
+    },
+    {
+      "label": "Assisteeriva tehnoloogia silt, mis ütleb, et vastusele on vihje",
+      "default": "Saadaval on vihje"
+    },
+    {
+      "label": "Vihjeikooni silt",
+      "default": "Vihje"
+    },
+    {
+      "label": "Ülesande seadistused.",
+      "description": "Nende seadistustega juhid ülesande toimimist.",
+      "fields": [
+        {
+          "label": "Luba \"Proovi uuesti\" nupp"
+        },
+        {
+          "label": "Luba \"Näit lahendus\" nupp"
+        },
+        {
+          "label": "Luba \"Kontrolli\" nupp"
+        },
+        {
+          "label": "Kontrolli vastused peale sisestamist automaatselt"
+        },
+        {
+          "label": "Tõstutundlik",
+          "description": "Nõuab kasutajalt täpselt sama väike-suurtähtede kasutust nagu on vastuses."
+        },
+        {
+          "label": "Nõuab lahenduse nägemiseks eelnevat kõikide väljade vastamist."
+        },
+        {
+          "label": "Aseta sisendväljad eraldi ridadele"
+        },
+        {
+          "label": "Näita kinnitusdialoogi \"Kontrolli\" nupule vajutamisel",
+          "description": "Seda seadistust ei saa kasutada koos \"Kontrolli vastused peale sisestamist automaatselt\" valikuga"
+        },
+        {
+          "label": "Näita kinnitusdialoogi \"Proovi uuesti\" nupule vajutamisel"
+        },
+        {
+          "label": "Luba vähesed kirjavead",
+          "description": "Seadistuse kasutamisel loetakse õigeks ka kirjavigu sisaldav vastus (3-9 tähemärki: 1 kirjaviga, rohkem, kui 9 tähemärki: 2 kirjaviga)"
+        }
+      ]
+    },
+    {
+      "label": "Kontrolli nupu kinnitusdialoog",
+      "fields": [
+        {
+          "label": "Pealkiri",
+          "default": "Valmis?"
+        },
+        {
+          "label": "Dialoogi tekst",
+          "default": "Oled kindel, et soovid kontrollida?"
+        },
+        {
+          "label": "Tühista nupu silt",
+          "default": "Ei"
+        },
+        {
+          "label": "Kinnita nupu silt",
+          "default": "Jah"
+        }
+      ]
+    },
+    {
+      "label": "Proovi uuesti nupu kinnitusdialoog",
+      "fields": [
+        {
+          "label": "Pealkiri",
+          "default": "Kas proovid uuesti?"
+        },
+        {
+          "label": "Dialoogi tekst",
+          "default": "Oled kindel, et soovid uuesti proovida?"
+        },
+        {
+          "label": "Tühista nupu silt",
+          "default": "Ei"
+        },
+        {
+          "label": "Kinnita nupu silt",
+          "default": "Jah"
+        }
+      ]
+    },
+    {
+      "label": "Punktisumma esitamine tekstilisel kujul neile, kes kasutavad tekstilugerit",
+      "default": "Sa said :num punkti. Maksimaalne punktisumma oli :total punkti"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

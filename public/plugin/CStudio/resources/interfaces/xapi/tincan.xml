@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns="http://projecttincan.com/tincan.xsd">
+    <activities>
+        <activity id="http://id.tincanapi.com/activity/tincan-prototypes/studio" type="http://activitystrea.ms/schema/1.0/game">
+            <name>Tin Can Doc</name>
+            <description lang="en-US">Tin Can Doc</description>
+            <launch lang="en-us">index.html</launch>
+        </activity>
+    </activities>
+</tincan>

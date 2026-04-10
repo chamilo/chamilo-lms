@@ -1,0 +1,71 @@
+
+/*} catch (ConflictException $e) {
+    echo Display::return_message($e->getMessage(), 'error');
+    exit;
+} catch (XApiException $e) {
+    echo Display::return_message($e->getMessage(), 'error');
+    exit;
+}*/
+
+/*
+HookLearningPathEnd::create()
+    ->setEventData(['EditPageStudio' => 'page 1'])
+    ->hookLearningPathEnd();
+*/
+
+//stats_statements.ajax.php
+
+//StatementsApiClientTest.
+
+/* a:6:{
+    s:5:"actor";
+    a:3:{
+        s:4:"mbox";
+        s:23:"mailto:vin'cent@test.fr";
+        s:4:"name";
+        s:11:"Vince Renou";
+        s:10:"objectType";
+        s:5:"Agent";
+    }
+    s:4:"verb";
+
+    a:2:{
+        s:2:"id";
+        s:43:"http://activitystrea.ms/schema/1.0/complete";
+        s:7:"display";
+        a:1:{s:2:"fr";s:9:"Completed";
+    }
+}
+s:6:"object";
+a:3:{
+    s:10:"objectType";
+    s:8:"Activity";
+    s:2:"id";
+    s:157:"http://localhost/chamilo-1.11.16/main/lp/lp_controller.php?action=view&lp_id=83&isStudentView=true&cidReq=OUTILSTNO&id_session=0&gidReq=0&gradebook=0&origin=";
+    s:10:"definition";
+    a:2:{s:4:"name";
+        a:1:{s:2:"fr";s:17:"elearning content";}
+        s:4:"type";
+        s:42:"http://adlnet.gov/expapi/activities/lesson";
+    }
+}
+s:6:"result";
+a:2:{
+    s:5:"score";
+    a:4:{
+        s:6:"scaled";
+        i:1;
+        s:3:"raw";
+        i:100;
+        s:3:"min";
+        i:0;
+        s:3:"max";
+        i:100;
+    }
+    s:10:"completion";
+    b:1;
+}
+s:9:"timestamp";s:25:"2022-08-31T17:01:44+00:00";s:7:"context";a:3:{s:17:"contextActivities";a:1:{s:8:"grouping";a:2:{i:0;a:3:{s:10:"objectType";s:8:"Activity";s:2:"id";s:40:"http://id.tincanapi.com/activitytype/lms";s:10:"definition";a:1:{s:4:"name";a:1:{s:2:"fr";s:27:"My Organisation - My campus";}}}i:1;a:3:{s:10:"objectType";s:8:"Activity";s:2:"id";s:82:"http://localhost/chamilo-1.11.16/courses/OUTILSTNO/index.php?id_session=0&gidReq=0";s:10:"definition";a:2:{s:4:"name";a:1:{s:2:"fr";s:14:"Les outils TNO";}s:4:"type";s:47:"http://id.tincanapi.com/activitytype/lms/course";}}}}
+    s:8:"platform";s:27:"My Organisation - My campus";s:8:"language";s:2:"fr";}}
+
+

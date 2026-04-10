@@ -1,0 +1,48 @@
+
+#planview{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+}
+
+.bigplancontent{
+    position : relative;
+    left : 0.5%;
+    top : 0.5%;
+    width : 99%;
+    height : 99%;
+    border : solid 0px gray;
+}
+
+#myViewport {
+    cursor : grab;
+    display : flex;
+    position : relative;
+    left : 0.5%; top : 0.5%;
+    width : 99%;  height : 99%;
+    border : solid 0px purple;
+    align-items : center;
+    justify-content : center;
+    overflow : hidden;
+}
+
+.infosCloseAlter {
+    position : absolute;
+    background-color : #ffffff;
+    border : solid 1px #808B96;
+    display : none;
+    border-radius : 6px;
+    z-index : 1008;
+    transition: all 0.6s ease-out;
+    opacity : 0.5;
+    background-image : url(return-map.png);
+    background-position : center center;
+    background-repeat : no-repeat;
+    background-size : contain;
+    cursor : pointer;
+}
+.infosCloseAlter:hover {
+    opacity : 1;
+}

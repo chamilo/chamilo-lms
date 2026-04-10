@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Evenredig verdelen",
+    "distributeButtonWarning": "Waarden worden gewijzigd voor alle scorebereieken. Weet u zeker dat u wilt doorgaan?",
+    "rangeOutOfSequenceWarning": "De scorebereiken zijn uit volgorde"
+  }
+}

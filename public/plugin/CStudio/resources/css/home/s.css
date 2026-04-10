@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header-chamidoc {
+    background: white;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-container img{
+    height: 90px;
+    margin-top:15px;
+}
+
+.main-content-chamidoc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    background-color: white;
+}
+
+.welcome-section {
+    margin-bottom: 3rem;
+}
+
+.welcome-title {
+    color: rgb(117, 105, 207);
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-subtitle {
+    color: rgb(49, 49, 49);
+    font-size: 16px;
+}
+
+.actions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    width: 100%;
+}
+
+.action-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(89, 89, 89, 0.5);
+    border-radius: 20px;
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.action-card:hover::before {
+    left: 100%;
+}
+
+.action-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: cornflowerblue;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.action-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+}
+
+.action-title {
+    color: rgb(4, 4, 4);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.action-description {
+    color: rgb(49, 49, 49);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+
+    .logo-text {
+        font-size: 1.4rem;
+    }
+
+    .welcome-subtitle {
+        font-size: 16px;
+    }
+
+    .action-card {
+        padding: 2rem;
+    }
+
+    .actions-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content > * {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.action-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.action-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.form-horizontal {
+    background-color: white;
+}

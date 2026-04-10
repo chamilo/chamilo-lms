@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Descrición da tarefa",
+      "description": "Describe como debería resolver a tarefa o usuario.",
+      "placeholder": "Preme en todos os verbos do texto."
+    },
+    {
+      "label": "Campo de texto",
+      "placeholder": "Esta é unha resposta: *resposta*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>As palabras marcadas engádense cun asterísco (*).</li><li>Pódense engadir asteríscos dentro das palabras marcadas engadindo outro asterísco, *palabracorrecta*** =&gt; palabracorrecta*.</li></ul>",
+        "example": "As palabras correctas márcanse así: *palabracorrecta*, o asterísco escríbese así: *palabracorrecta***."
+      }
+    },
+    {
+      "label": "Retroalimentación Xeral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Por defecto"
+            }
+          ],
+          "label": "Define a retroalimentación personalizada para cada rango de puntuación",
+          "description": "Preme o botón \"Engadir rango\" para engadir todos os rangos que precises. Exemplo: 0-20% Puntuación mala, 21-91% Puntuación media, 91-100% Puntuación xenial!",
+          "entity": "rango",
+          "field": {
+            "fields": [
+              {
+                "label": "Rango de Puntuación"
+              },
+              {},
+              {
+                "label": "Retroalimentación para o rango de puntuación definido",
+                "placeholder": "Escribe a retroalimentación"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botón \"Comprobar\"",
+      "default": "Comprobar"
+    },
+    {
+      "label": "Texto para o botón \"Reintentar\"",
+      "default": "Reintentar"
+    },
+    {
+      "label": "Texto para o botón \"Amosar solución\"",
+      "default": "Amosar solución"
+    },
+    {
+      "label": "Configuración do comportamento.",
+      "description": "Estas opcións permiten controlar como se comporta a tarefa.",
+      "fields": [
+        {
+          "label": "Activar \"Reintentar\""
+        },
+        {
+          "label": "Activar botón \"Amosar solución\""
+        },
+        {
+          "label": "Activar botón \"Comprobar\""
+        },
+        {
+          "label": "Amosar puntuación",
+          "description": "Amosar os puntos gañados por cada resposta."
+        }
+      ]
+    },
+    {
+      "label": "Texto de resposta correcta",
+      "default": "Correcto!",
+      "description": "Texto usado para indicar que unha resposta é correcta"
+    },
+    {
+      "label": "Texto de resposta incorrecta",
+      "default": "Incorrecto!",
+      "description": "Texto usado para indicar que unha resposta é incorrecta"
+    },
+    {
+      "label": "Texto de resposta ausente",
+      "default": "Non se atopou a resposta!",
+      "description": "Texto usado para indicar que falta unha resposta"
+    },
+    {
+      "label": "Descrición para Amosar Solución",
+      "default": "Actualizouse a tarefa coa solución.",
+      "description": "Este texto dille ao usuario que as tarefas actualizáronse coas solucións."
+    },
+    {
+      "label": "Representación textual ba barra de puntuación cando se usa un lector de pantalla",
+      "default": "Conseguiches :num puntos de :total"
+    },
+    {
+      "label": "Etiqueta para texto lexible completo para as tecnoloxías de asistencia",
+      "default": "Texto lexible completo"
+    },
+    {
+      "label": "Etiqueta para o texto no que se poden marcar palabras para as tecnoloxías de asistencia",
+      "default": "Texto completo no que se poden marcar palabras"
+    },
+    {
+      "label": "Cabeceira do modo solución para as tecnoloxías de asistencia",
+      "default": "Modo solución"
+    },
+    {
+      "label": "Cabeceira do modo comprobación para as tecnoloxías de asistencia",
+      "default": "Modo comprobación"
+    },
+    {
+      "label": "Descrición do botón \"Comprobar\" para as tecnoloxías de asistencia",
+      "default": "Comproba as respostas. As respostas marcaranse como correctas, incorrectas ou non contestadas."
+    },
+    {
+      "label": "Descrición do botón \"Amosar solución\" para as tecnoloxías de asistencia",
+      "default": "Amosar a solución. A tarefa marcarase coa súa solución correcta."
+    },
+    {
+      "label": "Descrición do botón \"Reintentar\" para as tecnoloxías de asistencia",
+      "default": "Reintenta a tarefa. Borra todas as respostas e empeza a tarefa de novo."
+    }
+  ]
+}

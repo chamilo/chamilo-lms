@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Obraz do wyświetlenia nad pytaniem (opcjonalny)."
+        },
+        {
+          "label": "Zablokuj powiększanie obrazu"
+        }
+      ]
+    },
+    {
+      "label": "Wstęp",
+      "default": "Uzupełnij brakujące wyrażenia",
+      "description": "Objaśnienie dla użytkownika, co należy zrobić w zadaniu."
+    },
+    {
+      "label": "Fragmenty zadania",
+      "entity": "fragment",
+      "field": {
+        "label": "Fragment zadania",
+        "placeholder": "Stolicą Polski jest *Warszawa*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Pola do wypełnienia wstawia się wpisując gwiazdkę (*) na początku i na końcu poprawnej odpowiedzi.</li><li>Alternatywne poprawne odpowiedzi należy rozdzielić ukośnikiem (/).</li><li>Wewnątrz pola można również dodać podpowiedź, poprzedzoną dwukropkiem (:).</li></ul>",
+          "example": "Zasób H5P można edytować w *przeglądarce/przeglądarka:Aplikacja, której używasz codziennie*."
+        }
+      }
+    },
+    {
+      "label": "Podsumowanie odpowiedzi",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Domyślne"
+            }
+          ],
+          "label": "Określ własne kryteria oceny dla wybranych zakresów poprawnych odpowiedzi",
+          "description": "Klikając przycisk \"Dodaj zakres\" możesz dodać tyle zakresów, ile potrzebujesz. Przykład: 0-20% Słaby wynik, 21-91% Przeciętny wynik, 91-100% Bardzo dobry wynik!",
+          "entity": "zakres",
+          "field": {
+            "fields": [
+              {
+                "label": "Zakres"
+              },
+              {},
+              {
+                "label": "Komunikat dla danego zakresu",
+                "placeholder": "Wprowadź komunikat"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Etykieta przycisku pokazywania poprawnej odpowiedzi",
+      "default": "Pokaż odpowiedź"
+    },
+    {
+      "label": "Etykieta przycisku ponowienia próby odpowiedzi",
+      "default": "Powtórz"
+    },
+    {
+      "label": "Etykieta przycisku sprawdzania odpowiedzi",
+      "default": "Sprawdź"
+    },
+    {
+      "label": "Komunikat o niewypełnionych polach",
+      "default": "Wypełnij wszystkie pola, zanim zobaczysz rozwiązanie."
+    },
+    {
+      "label": "Komunikat o poprawnej odpowiedzi",
+      "default": "':ans' to poprawna odpowiedź"
+    },
+    {
+      "label": "Komunikat o błędnej odpowiedzi",
+      "default": "':ans' to błędna odpowiedź"
+    },
+    {
+      "label": "Komunikat o liczbie poprawnych odpowiedzi",
+      "default": "Poprawne odpowiedzi"
+    },
+    {
+      "label": "Komunikat o liczbie błędnych odpowiedzi",
+      "default": "Błędne odpowiedzi"
+    },
+    {
+      "label": "Opis pola poprawnej odpowiedzi dla czytników ekranu",
+      "default": "Poprawna odpowiedź:"
+    },
+    {
+      "label": "Opis pola wprowadzania dla czytników ekranu",
+      "description": "Wstaw @num oraz @total jako numer aktualnego pola wprowadzania i liczbę wszystkich pól wprowadzania",
+      "default": "Pole wprowadzania @num z @total"
+    },
+    {
+      "label": "Informacja o dostępności podpowiedzi dla czytników ekranu",
+      "default": "Dostępna podpowiedź"
+    },
+    {
+      "label": "Etykieta ikony podpowiedzi",
+      "default": "Podpowiedź"
+    },
+    {
+      "label": "Ustawienia zachowania",
+      "description": "Te opcje pozwalają określić, jak ma przebiegać zadanie.",
+      "fields": [
+        {
+          "label": "Wyświetl przycisk \"Powtórz\""
+        },
+        {
+          "label": "Wyświetl przycisk \"Pokaż odpowiedź\""
+        },
+        {
+          "label": "Wyświetl przycisk \"Sprawdź\""
+        },
+        {
+          "label": "Automatycznie sprawdzaj wynik po wpisaniu"
+        },
+        {
+          "label": "Uwzględniaj wielkość liter",
+          "description": "Jeśli włączysz tę opcję, odpowiedź będzie musiała być wpisana identycznie ze wzorem."
+        },
+        {
+          "label": "Wymagaj wypełnienia wszystkich pól przed pokazaniem odpowiedzi"
+        },
+        {
+          "label": "Poszczególne pola wprowadzania w osobnych liniach"
+        },
+        {
+          "label": "Żądaj potwierdzenia akcji \"Sprawdź\"",
+          "description": "Ta opcja nie może być włączona razem z opcją \"Automatycznie sprawdzaj wynik po wpisaniu\""
+        },
+        {
+          "label": "Żądaj potwierdzenia akcji \"Powtórz\""
+        },
+        {
+          "label": "Akceptuj literówki",
+          "description": "Włączenie tej opcji spowoduje zaliczanie odpowiedzi minimalnie różniących się od wzoru (3-9 znaków: 1 literówka, więcej niż 9 znaków: 2 literówki)"
+        }
+      ]
+    },
+    {
+      "label": "Żądanie sprawdzenia wyniku",
+      "fields": [
+        {
+          "label": "Nagłówek",
+          "default": "Sprawdzić?"
+        },
+        {
+          "label": "Treść",
+          "default": "Czy na pewno sprawdzić swoje odpowiedzi i zakończyć to zadanie?"
+        },
+        {
+          "label": "Etykieta przycisku anulowania",
+          "default": "Anuluj"
+        },
+        {
+          "label": "Etykieta przycisku potwierdzenia",
+          "default": "Sprawdź"
+        }
+      ]
+    },
+    {
+      "label": "Żądanie powtórzenia testu",
+      "fields": [
+        {
+          "label": "Nagłówek",
+          "default": "Powtórzyć?"
+        },
+        {
+          "label": "Treść",
+          "default": "Czy na pewno chcesz powtórzyć to zadanie?"
+        },
+        {
+          "label": "Etykieta przycisku anulowania",
+          "default": "Anuluj"
+        },
+        {
+          "label": "Etykieta przycisku potwierdzenia",
+          "default": "Powtórz"
+        }
+      ]
+    },
+    {
+      "label": "Tekstowy odpowiednik paska wyniku dla czytników ekranu",
+      "default": "Masz :num z :total punktów"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Ponów zadanie. Zresetuj wszystkie odpowiedzi i rozpocznij zadanie od nowa."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Tryb sprawdzania"
+    }
+  ]
+}

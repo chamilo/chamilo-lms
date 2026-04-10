@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "وسائط",
+      "fields": [
+        {
+          "label": "النوع",
+          "description": "وسائط اختيارية لعرضها فوق السؤال."
+        },
+        {
+          "label": "تعطيل تكبير الصورة لصورة السؤال"
+        }
+      ]
+    },
+    {
+      "label": "وصف النشاط",
+      "default": "Fill in the missing words",
+      "description": "دليل يخبر المستخدم عن كيفية الاجابة على هذا النشاط."
+    },
+    {
+      "label": "كتل النص",
+      "entity": "text block",
+      "field": {
+        "label": "سطر من النص",
+        "placeholder": "Oslo is the capital of *Norway*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>تتم إضافة الفراغات بالعلامة النجمية (*) امام وخلف الكلمة / العبارة الصحيحة.</li><li>يتم فصل الإجابات البديلة مع شرطة مائلة للأمام (/).</li><li>يمكنك إضافة تلميح نصي ، باستخدام نقطتين (:) أمام التلميح.</li></ul>",
+          "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+        }
+      }
+    },
+    {
+      "label": "الملاحظات الشاملة",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "افتراضي"
+            }
+          ],
+          "label": "تحديد الملاحظات المخصصة لأي مجال نتيجة",
+          "description": "انقر فوق الزر 'إضافة نطاق' لإضافة أكبر عدد ممكن من النطاقات. مثال: 0-20٪ نتيجة سيئة ، 21-91٪ نتيجة متوسطة ، 91-100٪ نتيجة رائعة!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "مجال النتيجة"
+              },
+              {},
+              {
+                "label": "الملاحظات لمجال نتيجة محددة",
+                "placeholder": "Fill in the feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "نص زر \" اظهار الحلول \"",
+      "default": "Show solution"
+    },
+    {
+      "label": "نص زر \" اعادة المحاولة \"",
+      "default": "Retry"
+    },
+    {
+      "label": "نص زر \" تحقق \"",
+      "default": "Check"
+    },
+    {
+      "label": "نص رسالة \" لم يتم ملؤها \"ئئئئ ",
+      "default": "Please fill in all blanks to view solution"
+    },
+    {
+      "label": "نص رسالة \" الاجابة صحيحة \"",
+      "default": "':ans' is correct"
+    },
+    {
+      "label": "نص رسالة \"ة الاجابة خاطئة \"",
+      "default": "':ans' is wrong"
+    },
+    {
+      "label": "نص رسالة \" اجاب بشكل صحيح \"",
+      "default": "Answered correctly"
+    },
+    {
+      "label": "نص رسالة \" اجاب بشكل خاطئ\"",
+      "default": "Answered incorrectly"
+    },
+    {
+      "label": "لافتة التقنيات المساعدة للحل",
+      "default": "Correct answer:"
+    },
+    {
+      "label": "لافتة التقنيات المساعدة لحقل الادخال",
+      "description": "Use @num and @total to replace current cloze number and total cloze number",
+      "default": "Blank input @num of @total"
+    },
+    {
+      "label": "لافتة التقنيات المساعدة للقول بأن ادخالا ما لديه تلميح مرتبط به ",
+      "default": "Tip available"
+    },
+    {
+      "label": "لافتة ايقونة التلميح",
+      "default": "Tip"
+    },
+    {
+      "label": "الاعدادات السلوكية.",
+      "description": "ستتيح لك هذه الخيارات التحكم في كيفية تصرف المهمة.",
+      "fields": [
+        {
+          "label": "تمكين \" اعادة المحاولة\""
+        },
+        {
+          "label": "زر تمكين \" اظهر الحلول \""
+        },
+        {
+          "label": "زر تمكين \" تحقق \""
+        },
+        {
+          "label": "تحقق من الاجابات بعد الادخال بشكل اتوماتيكي"
+        },
+        {
+          "label": "حساسية الحالة",
+          "description": "تأكد من أن إدخال المستخدم يجب أن يكون بالضبط نفس الإجابة."
+        },
+        {
+          "label": "اطلب من جميع الحقول أن يتم الرد عليها قبل أن يتم عرض الحل"
+        },
+        {
+          "label": "ضع حقول الإدخال على أسطر منفصلة"
+        },
+        {
+          "label": "إظهار مربع حوار التأكيد على  \"تحقق \" ",
+          "description": "هذه الخيارات غير متوافقة مع الخيار 'التحقق التلقائي من الإجابات بعد الإدخال '."
+        },
+        {
+          "label": "اظهار مربع حوار التأكيد على \" اعادة المحاولة\""
+        },
+        {
+          "label": "اقبل أخطاء إملائية بسيطة",
+          "description": "إذا تم تفعيلها ، فستحسب إجابة صحيحة أيضًا مع أخطاء إملائية بسيطة"
+        }
+      ]
+    },
+    {
+      "label": "تحقق من مربع حوار التأكيد",
+      "fields": [
+        {
+          "label": "نص الترويسة",
+          "default": "Finish ?"
+        },
+        {
+          "label": "النص الرئيسي",
+          "default": "Are you sure you wish to finish ?"
+        },
+        {
+          "label": "لافتة زر الالغاء",
+          "default": "Cancel"
+        },
+        {
+          "label": "لافتة زر التأكيد",
+          "default": "Finish"
+        }
+      ]
+    },
+    {
+      "label": "مربع حوار تأكيد اعادة المحاولة",
+      "fields": [
+        {
+          "label": "نص الترويسة",
+          "default": "Retry ?"
+        },
+        {
+          "label": "النص الاساسي",
+          "default": "Are you sure you wish to retry ?"
+        },
+        {
+          "label": "لافتة زر الالغاء",
+          "default": "Cancel"
+        },
+        {
+          "label": "لافتة زر التأكيد",
+          "default": "Confirm"
+        }
+      ]
+    },
+    {
+      "label": "تمثيل نصي لشريط النتيجة لأولئك الذين يستخدمون تقنية تحويل النص الى كلام ",
+      "default": "You got :num out of :total points"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

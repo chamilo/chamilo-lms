@@ -1,0 +1,21 @@
+{
+  "title": "Tether",
+  "description": "Tether is a JavaScript library for efficiently making an absolutely positioned element stay next to another element on the page (http://github.hubspot.com/tether/)",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 2,
+  "runnable": 0,
+  "author": "Hubspot. Wrapped as H5P by Joubel (fnoks)",
+  "license": "MIT",
+  "machineName": "Tether",
+  "preloadedJs": [
+    {
+      "path": "scripts/tether.min.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "styles/tether.min.css"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Multimedia",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Eit valfritt multimediaelement som sjåast over spørsmålet."
+        },
+        {
+          "label": "Slå av bilete zooming"
+        }
+      ]
+    },
+    {
+      "label": "Oppgåvetekst",
+      "default": "Fyll inn teksten som manglar",
+      "description": "Ein tekst som fortel brukaren korleis oppgåva skal løysast"
+    },
+    {
+      "label": "Tekstliner",
+      "entity": "tekstline",
+      "field": {
+        "label": "Tekstline",
+        "placeholder": "Oslo er hovudstaden i *Noreg*",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Opne felt merkast med ei stjerne * foran og bak det korrekte ordet/uttrykket.</li><li>Alternativ angis med ein skråstrek (/)</li><li>Tips angis med eit kolon (:) før tipset</li></ul>",
+          "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+        }
+      }
+    },
+    {
+      "label": "Overall Feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Default"
+            }
+          ],
+          "label": "Define custom feedback for any score range",
+          "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "Score Range"
+              },
+              {},
+              {
+                "label": "Feedback for defined score range",
+                "placeholder": "Fill in the feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Tekst for \"Fasit\"-knapp",
+      "default": "Fasit"
+    },
+    {
+      "label": "Tekst for \"Prøv igjen\"-knapp",
+      "default": "Prøv igjen"
+    },
+    {
+      "label": "Tekst for \"Sjekk\"-knapp",
+      "default": "Sjekk"
+    },
+    {
+      "label": "Tekst for \"Ikkje utfyllt\"-melding",
+      "default": "Fyll ut alle felt for å se fasit"
+    },
+    {
+      "label": "Tekst for \"':ans' er korrekt\"-melding",
+      "default": "':ans' er korrekt"
+    },
+    {
+      "label": "Tekst for \"':ans' er feil\"-melding",
+      "default": "':ans' er feil"
+    },
+    {
+      "label": "Tekst for \"Svar rett\"-melding",
+      "default": "Svar rett"
+    },
+    {
+      "label": "Tekst for \"Svar feil\"-melding",
+      "default": "Svar feil"
+    },
+    {
+      "label": "Merkelapp for løsning brukt av tekniske hjelpemidler",
+      "default": "Svar:"
+    },
+    {
+      "label": "Merkelapp for inntastingsfelt brukt av tekniske hjelpemidler",
+      "description": "Bruk @num og @total for å bytte ut feltnummer og totalt antall felter",
+      "default": "Felt @num av @total"
+    },
+    {
+      "label": "Merkelapp for å fortelle at et inntastingsfelt har et tips knyttet til seg",
+      "default": "Tips tilgjengeleg"
+    },
+    {
+      "label": "Merkelapp for tips ikon",
+      "default": "Tips"
+    },
+    {
+      "label": "Innstillinger for oppgave-åtferd",
+      "description": "Desse instillingene lar deg bestemme hvordan oppgavetypen skal oppføre seg.",
+      "fields": [
+        {
+          "label": "Aktiver \"Prøv igjen\"-knapp"
+        },
+        {
+          "label": "Aktiver \"Fasit\"-knapp"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Gi tilbakemelding med ein gong brukaren har svart"
+        },
+        {
+          "label": "Skil mellom store og små bokstavar",
+          "description": "Syrgjer for at svaret til brukaren må være nøyaktig det same som i oppgåva."
+        },
+        {
+          "label": "Krev at alle felt er besvart før fasit gis"
+        },
+        {
+          "label": "Sett inntastingsfelt på egne linjer"
+        },
+        {
+          "label": "Slå på bruker-bekreftelse for \"Fasit\"",
+          "description": "Denne innstillingen er ikke forenbar med \"Gi tilbakemelding med en gang brukeren har avgitt svar\" alternativet."
+        },
+        {
+          "label": "Slå på bruker-bekreftelse for \"Prøv igjen\""
+        },
+        {
+          "label": "Accept minor spelling errors",
+          "description": "If activated, an answer will also count as correct with minor spelling errors (3-9 characters: 1 spelling error, more than 9 characters: 2 spelling errors)"
+        }
+      ]
+    },
+    {
+      "label": "Bruker-bekreftelse for fasit-visning",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Ferdig ?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du er ferdig?"
+        },
+        {
+          "label": "Avbryt etikett",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Bekreftelse etikett",
+          "default": "Bekreft"
+        }
+      ]
+    },
+    {
+      "label": "Prøv igjen bruker-bekreftelse",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Prøv igjen ?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du vil prøve igjen?"
+        },
+        {
+          "label": "Avbryt etikett",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Bekreft etikett",
+          "default": "Bekreft"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

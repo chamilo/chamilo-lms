@@ -340,6 +340,68 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_TEACHER')]
+    #[Route(path: '/remove/{id}', name: 'chamilo_lti_remove_from_course', requirements: ['id' => '\d+'])]
+    public function removeFromCourse(int $id, Request $request): Response
+    {
+        $em = $this->managerRegistry->getManager();
+
+        /** @var ExternalTool|null $tool */
+        $tool = $em->find(ExternalTool::class, $id);
+
+        if (empty($tool)) {
+            throw $this->createNotFoundException('External tool not found');
+        }
+
+        $course = $this->getCourse();
+
+        if (!$this->isExternalToolAssignedToCourse($tool, $course)) {
+            throw $this->createAccessDeniedException('');
+        }
+
+        $managedCourse = $this->getManagedCourseOrFail($course);
+        $managedSession = $this->getManagedSession($this->getCourseSession());
+
+        $this->shortcutRepository->removeShortCutFromCourse($tool, $managedCourse);
+
+        $linksToRemove = $this->getToolLinksForCurrentCourseContext($tool, $managedCourse, $managedSession);
+
+        foreach ($linksToRemove as $link) {
+            $em->remove($link);
+        }
+
+        $toolWasDeleted = false;
+
+        if ($this->canDeleteToolEntityAfterCourseRemoval($tool, $managedCourse, $managedSession)) {
+            $em->remove($tool);
+            $toolWasDeleted = true;
+        }
+
+        $em->flush();
+
+        if ($toolWasDeleted) {
+            $this->addFlash('success', $this->trans('External tool removed from course'));
+        } elseif (null !== $tool->getGradebookEval()) {
+            $this->addFlash(
+                'warning',
+                $this->trans('External tool was removed from the course, but kept internally because it is linked to the gradebook')
+            );
+        } else {
+            $this->addFlash('success', $this->trans('External tool removed from course'));
+        }
+
+        return $this->redirect(
+            $this->buildRouteUrlWithLegacyContext(
+                'chamilo_lti_configure',
+                [
+                    'cid' => $managedCourse->getId(),
+                ],
+                $request,
+                $managedCourse
+            )
+        );
+    }
+
+    #[IsGranted('ROLE_TEACHER')]
     #[Route(path: '/', name: 'chamilo_lti_configure')]
     #[Route(path: '/add/{id}', name: 'chamilo_lti_configure_global', requirements: ['id' => '\d+'])]
     public function courseConfigure(?int $id, Request $request): Response
@@ -775,9 +837,25 @@ class CourseController extends ToolBaseController
 
         $candidateGlobalTools = array_values(array_filter(
             $allTools,
-            fn (ExternalTool $tool): bool => $this->isGlobalTool($tool)
-                && !in_array($tool->getId(), $addedToolIds, true)
-                && !in_array($this->getExternalToolDedupKey($tool), $addedLaunchKeys, true)
+            function (ExternalTool $tool) use ($course, $addedToolIds, $addedLaunchKeys): bool {
+                if (!$this->isGlobalTool($tool)) {
+                    return false;
+                }
+
+                if (in_array($tool->getId(), $addedToolIds, true)) {
+                    return false;
+                }
+
+                if (in_array($this->getExternalToolDedupKey($tool), $addedLaunchKeys, true)) {
+                    return false;
+                }
+
+                if ($this->shouldHidePreservedCourseToolFromAvailableList($tool, $course)) {
+                    return false;
+                }
+
+                return true;
+            }
         ));
 
         $globalToolsByKey = [];
@@ -807,6 +885,27 @@ class CourseController extends ToolBaseController
             'first_gradebook_category_id' => $firstGradebookCategoryId,
             'legacy_context_query' => $this->getLegacyContextQueryString($request, $course),
         ];
+    }
+
+    private function shouldHidePreservedCourseToolFromAvailableList(ExternalTool $tool, Course $course): bool
+    {
+        if (!$tool->getParent() instanceof Course) {
+            return false;
+        }
+
+        if ($tool->getParent()->getId() !== $course->getId()) {
+            return false;
+        }
+
+        if (null === $tool->getGradebookEval()) {
+            return false;
+        }
+
+        if (null !== $this->getToolLinkInCourse($tool, $course)) {
+            return false;
+        }
+
+        return true;
     }
 
     private function buildGradebookIndexUrl(Course $course, int $categoryId, Request $request): string
@@ -1281,5 +1380,79 @@ class CourseController extends ToolBaseController
         $managedSession = $em->find(Session::class, $session->getId());
 
         return $managedSession;
+    }
+
+    /**
+     * @return ResourceLink[]
+     */
+    private function getToolLinksForCurrentCourseContext(
+        ExternalTool $tool,
+        Course $course,
+        ?Session $session
+    ): array {
+        $resourceNode = $tool->getResourceNode();
+
+        if (null === $resourceNode) {
+            return [];
+        }
+
+        $links = [];
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if ($this->isLinkInCurrentCourseContext($link, $course, $session)) {
+                $links[] = $link;
+            }
+        }
+
+        return $links;
+    }
+
+    private function isLinkInCurrentCourseContext(
+        ResourceLink $link,
+        Course $course,
+        ?Session $session
+    ): bool {
+        $linkCourse = $link->getCourse();
+
+        if (null === $linkCourse || $linkCourse->getId() !== $course->getId()) {
+            return false;
+        }
+
+        $currentSessionId = $session?->getId() ?? 0;
+        $linkSessionId = $link->getSession()?->getId() ?? 0;
+
+        if ($currentSessionId > 0) {
+            return $linkSessionId === $currentSessionId || 0 === $linkSessionId;
+        }
+
+        return 0 === $linkSessionId;
+    }
+
+    private function canDeleteToolEntityAfterCourseRemoval(
+        ExternalTool $tool,
+        Course $course,
+        ?Session $session
+    ): bool {
+        if (!$tool->getParent() instanceof Course || $tool->getParent()->getId() !== $course->getId()) {
+            return false;
+        }
+
+        if (null !== $tool->getGradebookEval()) {
+            return false;
+        }
+
+        $resourceNode = $tool->getResourceNode();
+
+        if (null === $resourceNode) {
+            return true;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if (!$this->isLinkInCurrentCourseContext($link, $course, $session)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -94,6 +94,8 @@ if ($isCli) {
             throw $exception;
         }
 
+        error_log($exception->getTraceAsString());
+
         $event = new ExceptionEvent(
             $kernel,
             $request,
@@ -136,6 +138,8 @@ if ($isCli) {
         ) {
             throw $exception;
         }
+
+        error_log($exception->getTraceAsString());
 
         $event = new ExceptionEvent(
             $kernel,

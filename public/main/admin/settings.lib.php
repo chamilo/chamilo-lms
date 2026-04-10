@@ -826,12 +826,14 @@ function handlePlugins()
         }
 
         if ($hasReadme) {
-            echo '      <button type="button"
-                            class="js-plugin-readme btn btn--plain-outline btn--sm col-span-2 w-full justify-center"
-                            data-plugin="'.$pluginDataName.'"
-                            data-title="'.$pluginDisplayTitle.'">
-                            <i class="mdi mdi-file-document-outline"></i> README
-                        </button>';
+            echo Display::url(
+                Display::getMdiIcon('file-document-outline').' README',
+                api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?'.http_build_query(['a' => 'md_to_html', 'plugin' => $pluginName]),
+                [
+                    'data-title' => $pluginDisplayTitle,
+                    'class' => 'ajax btn btn--plain-outline btn--sm col-span-2 w-full justify-center',
+                ]
+            );
         }
 
         echo '  </div>';
@@ -854,17 +856,10 @@ function handlePlugins()
           </div>';
 
     echo '<div id="plugin-readme-modal" class="hidden fixed inset-0 z-50">
-            <div class="absolute inset-0 bg-black/40 js-plugin-readme-close"></div>
             <div class="relative flex min-h-screen items-start justify-center p-4 md:p-6">
                 <div class="relative flex w-full max-w-4xl flex-col rounded-xl bg-white shadow-xl">
                     <div class="flex items-center justify-between gap-3 border-b border-gray-25 px-5 py-4">
                         <h3 id="plugin-readme-modal-title" class="text-xl font-semibold text-gray-90 mb-0">README</h3>
-                        <button type="button"
-                                class="js-plugin-readme-close inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-50 transition hover:bg-gray-10 hover:text-gray-90"
-                                aria-label="'.htmlspecialchars(get_lang('Close'), ENT_QUOTES).'"
-                                title="'.htmlspecialchars(get_lang('Close'), ENT_QUOTES).'">
-                            <i class="mdi mdi-close"></i>
-                        </button>
                     </div>
                     <div id="plugin-readme-modal-body" class="max-h-[75vh] overflow-y-auto px-5 py-4 text-sm leading-6 text-gray-90"></div>
                 </div>
@@ -993,51 +988,6 @@ function handlePlugins()
               .removeClass("opacity-60 cursor-not-allowed");
         }
       });
-    });
-
-    $(document).on("click", ".js-plugin-readme", function () {
-      var \$button = $(this);
-      var pluginName = \$button.data("plugin");
-      var pluginTitle = \$button.data("title") || pluginName;
-      var modalTitle = pluginTitle + " · " + readmeTitleSuffix;
-
-      showReadmeLoading(modalTitle);
-
-      $.ajax({
-        type: "GET",
-        url: ajaxUrl,
-        data: {
-          a: "md_to_html",
-          plugin: pluginName
-        },
-        dataType: "html",
-        success: function(html) {
-          if ($.trim(html) === "") {
-            html = '<div class="alert alert-warning mb-0">' + readmeMissingText + '</div>';
-          }
-
-          $("#plugin-readme-modal-body").html(
-            '<div class="space-y-4 break-words">' + html + '</div>'
-          );
-        },
-        error: function(xhr) {
-          var html = xhr.responseText;
-          if (!html || $.trim(html) === "") {
-            html = '<div class="alert alert-danger mb-0">' + errorText + ': ' + requestFailedText + '</div>';
-          }
-          $("#plugin-readme-modal-body").html(html);
-        }
-      });
-    });
-
-    $(document).on("click", ".js-plugin-readme-close", function () {
-      closeReadmeModal();
-    });
-
-    $(document).on("keydown", function (e) {
-      if (e.key === "Escape" && !$("#plugin-readme-modal").hasClass("hidden")) {
-        closeReadmeModal();
-      }
     });
   });
 })(jQuery);

@@ -571,13 +571,28 @@ $(function () {
             $submitButtons.prop('disabled', true);
 
             var assignedCourseIds = getAssignedCourseIdsFromHolder($form);
-            var selectedCourseIds = formData.getAll('courses').map(function (value) {
-                return String(value);
-            });
+            var $coursesSelect = $form.find('select[name="courses[]"], select[name="courses"]').first();
+
+            var selectedCourseIds = [];
+
+            if ($coursesSelect.length) {
+                selectedCourseIds = ($coursesSelect.val() || []).map(function (value) {
+                    return String(value);
+                });
+            } else {
+                selectedCourseIds = []
+                    .concat(formData.getAll('courses[]') || [])
+                    .concat(formData.getAll('courses') || [])
+                    .map(function (value) {
+                        return String(value);
+                    });
+            }
 
             var removedCourseIds = assignedCourseIds.filter(function (courseId) {
-                return selectedCourseIds.indexOf(courseId) === -1;
+                return selectedCourseIds.indexOf(String(courseId)) === -1;
             });
+
+            removedCourseIds = Array.from(new Set(removedCourseIds));
 
             if (removedCourseIds.length > 0) {
                 var confirmMessage = 'Removing an activity from a course can have an impact on the assessments of that course. Are you sure you want to remove it?';

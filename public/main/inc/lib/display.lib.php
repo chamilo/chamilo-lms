@@ -1629,9 +1629,12 @@ HTML;
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return $subTitle;
+        return '
+            <div class="section-header section-header--'.$size.'">
+              '.$subTitle = self::tag($size, Security::remove_XSS($title), $attributes).'
+            </div>
+        ';
     }
 
     public static function page_subheader2($title, $second_title = null)

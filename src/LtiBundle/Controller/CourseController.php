@@ -44,10 +44,9 @@ class CourseController extends ToolBaseController
     public function edit(int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
-        $repo = $em->getRepository(ExternalTool::class);
 
         /** @var ExternalTool|null $tool */
-        $tool = $repo->find($id);
+        $tool = $em->find(ExternalTool::class, $id);
 
         if (empty($tool)) {
             throw $this->createNotFoundException('External tool not found');
@@ -55,7 +54,7 @@ class CourseController extends ToolBaseController
 
         $course = $this->getCourse();
 
-        if (!$this->isToolInCourse($tool, $course)) {
+        if (!$this->isExternalToolAssignedToCourse($tool, $course)) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -65,7 +64,19 @@ class CourseController extends ToolBaseController
         $form->get('sharePicture')->setData($tool->isSharingPicture());
         $form->handleRequest($request);
 
+        $formActionUrl = $this->buildRouteUrlWithLegacyContext(
+            'chamilo_lti_edit',
+            [
+                'id' => $tool->getId(),
+                'cid' => $course->getId(),
+            ],
+            $request,
+            $course
+        );
+
         if (!$form->isSubmitted() || !$form->isValid()) {
+            $repo = $em->getRepository(ExternalTool::class);
+
             return $this->render(
                 '@ChamiloCore/Lti/course_configure.twig',
                 $this->buildCourseConfigureViewData(
@@ -74,15 +85,7 @@ class CourseController extends ToolBaseController
                     $form,
                     $this->trans('Edit external tool'),
                     $request,
-                    $this->buildRouteUrlWithLegacyContext(
-                        'chamilo_lti_edit',
-                        [
-                            'id' => $tool->getId(),
-                            'cid' => $course->getId(),
-                        ],
-                        $request,
-                        $course
-                    )
+                    $formActionUrl
                 )
             );
         }
@@ -91,42 +94,11 @@ class CourseController extends ToolBaseController
         $tool = $form->getData();
 
         $em->persist($tool);
-
-        if (!$tool->isActiveDeepLinking()) {
-            $courseTool = $em->getRepository(CTool::class)->findOneBy(
-                [
-                    'course' => $course,
-                    'link' => $this->generateUrl(
-                        'chamilo_lti_show',
-                        [
-                            'cid' => $course->getId(),
-                            'id' => $tool->getId(),
-                        ]
-                    ),
-                ]
-            );
-
-            if (!empty($courseTool)) {
-                $courseTool->setTitle($tool->getTitle());
-                $em->persist($courseTool);
-            }
-        }
-
         $em->flush();
 
         $this->addFlash('success', $this->trans('External tool edited'));
 
-        return $this->redirect(
-            $this->buildRouteUrlWithLegacyContext(
-                'chamilo_lti_edit',
-                [
-                    'id' => $tool->getId(),
-                    'cid' => $course->getId(),
-                ],
-                $request,
-                $course
-            )
-        );
+        return $this->redirect($formActionUrl);
     }
 
     #[Route(path: '/launch/{id}', name: 'chamilo_lti_launch', requirements: ['id' => '\d+'])]
@@ -146,8 +118,9 @@ class CourseController extends ToolBaseController
         $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
         $session = $this->getCourseSession();
+        $toolLink = $this->getToolLinkInCourse($tool, $course);
 
-        if (!$this->isToolInCourse($tool, $course)) {
+        if (null === $toolLink) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -173,7 +146,7 @@ class CourseController extends ToolBaseController
             $params['data'] = 'tool:'.$tool->getId();
         } else {
             $params['lti_message_type'] = 'basic-lti-launch-request';
-            $params['resource_link_id'] = $tool->getId();
+            $params['resource_link_id'] = $toolLink->getId();
             $params['resource_link_title'] = $tool->getTitle();
             $params['resource_link_description'] = $tool->getDescription();
 
@@ -430,12 +403,8 @@ class CourseController extends ToolBaseController
         /** @var ExternalTool $externalTool */
         $externalTool = $form->getData();
 
-        /** @var Course|null $managedCourse */
-        $managedCourse = $em->find(Course::class, $course->getId());
-
-        if (null === $managedCourse) {
-            throw $this->createNotFoundException('Course not found');
-        }
+        $managedCourse = $this->getManagedCourseOrFail($course);
+        $managedSession = $this->getManagedSession($this->getCourseSession());
 
         if (null === $externalTool->getParent()) {
             $externalTool->setParent($managedCourse);
@@ -445,7 +414,7 @@ class CourseController extends ToolBaseController
             $externalTool->setResourceNode(null);
         }
 
-        $externalTool->addCourseLink($managedCourse, $this->getCourseSession());
+        $externalTool->addCourseLink($managedCourse, $managedSession);
 
         $em->persist($externalTool);
         $em->flush();
@@ -455,14 +424,19 @@ class CourseController extends ToolBaseController
         $user = $this->userHelper->getCurrent();
 
         if (!$externalTool->isActiveDeepLinking()) {
-            $shortcut = $this->shortcutRepository->addShortCut($externalTool, $user, $managedCourse);
+            $shortcut = $this->shortcutRepository->addShortCut(
+                $externalTool,
+                $user,
+                $managedCourse,
+                $managedSession
+            );
 
             $shortcut->setTitle($externalTool->getTitle());
             $shortcut->setShortCutNode($externalTool->getResourceNode());
             $shortcut->target = 'iframe' === $externalTool->getDocumentTarget() ? '_self' : '_blank';
 
             $em->persist($shortcut);
-            $this->shortcutRepository->setVisibilityPublished($shortcut, $managedCourse, $this->getCourseSession());
+            $this->shortcutRepository->setVisibilityPublished($shortcut, $managedCourse, $managedSession);
             $em->flush();
 
             return $this->redirect(
@@ -534,7 +508,13 @@ class CourseController extends ToolBaseController
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
         $form->addRule('name', get_lang('Required field'), 'required');
 
-        $tools = $this->getGradeableToolsForCourse($toolRepo, $course);
+        /** @var ExternalTool[] $allTools */
+        $allTools = $toolRepo->findAll();
+
+        $tools = array_values(array_filter(
+            $this->getAssignedExternalToolsForCourse($allTools, $course),
+            static fn (ExternalTool $tool): bool => null === $tool->getGradebookEval()
+        ));
 
         if ($selectedToolId > 0) {
             /** @var ExternalTool|null $selectedTool */
@@ -640,6 +620,7 @@ class CourseController extends ToolBaseController
         }
 
         $gradebookEval = $em->find(GradebookEvaluation::class, $eval->get_id());
+
         if (null === $gradebookEval) {
             $this->addFlash('error', $this->trans('The gradebook evaluation could not be linked'));
 
@@ -655,6 +636,7 @@ class CourseController extends ToolBaseController
         $tool->setGradebookEval($gradebookEval);
         $em->persist($tool);
         $em->flush();
+
         $this->addFlash('success', $this->trans('Evaluation for external tool added'));
 
         return $this->redirect(
@@ -754,7 +736,11 @@ class CourseController extends ToolBaseController
 
     private function isGlobalTool(ExternalTool $tool): bool
     {
-        return null === $tool->getFirstResourceLink() && null === $tool->getToolParent();
+        if (null !== $tool->getToolParent()) {
+            return false;
+        }
+
+        return !$tool->getParent() instanceof Course;
     }
 
     private function buildCourseConfigureViewData(
@@ -772,27 +758,44 @@ class CourseController extends ToolBaseController
             $firstGradebookCategoryId = $categories[0]->get_id();
         }
 
-        $addedTools = $this->getAddedToolsForCourse($repo, $course);
+        /** @var ExternalTool[] $allTools */
+        $allTools = $repo->findAll();
+
+        $addedTools = $this->getAssignedExternalToolsForCourse($allTools, $course);
 
         $addedToolIds = array_map(
             static fn (ExternalTool $tool): int => $tool->getId(),
             $addedTools
         );
 
-        $globalTools = array_values(array_filter(
-            $repo->findAll(),
-            function (ExternalTool $tool) use ($course, $addedToolIds): bool {
-                if (\in_array($tool->getId(), $addedToolIds, true)) {
-                    return false;
-                }
+        $addedLaunchKeys = array_map(
+            fn (ExternalTool $tool): string => $this->getExternalToolDedupKey($tool),
+            $addedTools
+        );
 
-                if ($this->isToolInCourse($tool, $course)) {
-                    return false;
-                }
-
-                return $this->isGlobalTool($tool);
-            }
+        $candidateGlobalTools = array_values(array_filter(
+            $allTools,
+            fn (ExternalTool $tool): bool => $this->isGlobalTool($tool)
+                && !in_array($tool->getId(), $addedToolIds, true)
+                && !in_array($this->getExternalToolDedupKey($tool), $addedLaunchKeys, true)
         ));
+
+        $globalToolsByKey = [];
+
+        foreach ($candidateGlobalTools as $tool) {
+            $key = $this->getExternalToolDedupKey($tool);
+
+            if (!isset($globalToolsByKey[$key])) {
+                $globalToolsByKey[$key] = $tool;
+                continue;
+            }
+
+            if ((int) $tool->getId() < (int) $globalToolsByKey[$key]->getId()) {
+                $globalToolsByKey[$key] = $tool;
+            }
+        }
+
+        $globalTools = array_values($globalToolsByKey);
 
         return [
             'title' => $title,
@@ -844,6 +847,80 @@ class CourseController extends ToolBaseController
         }
 
         return $url.(str_contains($url, '?') ? '&' : '?').$query;
+    }
+
+    private function getAssignedExternalToolsForCourse(array $allTools, Course $course): array
+    {
+        $tools = array_values(array_filter(
+            $allTools,
+            fn (ExternalTool $tool): bool => $this->isExternalToolAssignedToCourse($tool, $course)
+        ));
+
+        return $this->deduplicateExternalToolsByLaunchUrl($tools, $course);
+    }
+
+    private function deduplicateExternalToolsByLaunchUrl(array $tools, Course $course): array
+    {
+        $bestToolsByKey = [];
+
+        foreach ($tools as $tool) {
+            $key = $this->getExternalToolDedupKey($tool);
+
+            if (!isset($bestToolsByKey[$key])) {
+                $bestToolsByKey[$key] = $tool;
+                continue;
+            }
+
+            if (
+                $this->getExternalToolAssignmentPriority($tool, $course)
+                > $this->getExternalToolAssignmentPriority($bestToolsByKey[$key], $course)
+            ) {
+                $bestToolsByKey[$key] = $tool;
+            }
+        }
+
+        return array_values($bestToolsByKey);
+    }
+
+    private function getExternalToolDedupKey(ExternalTool $tool): string
+    {
+        $launchUrl = trim((string) $tool->getLaunchUrl());
+
+        if ('' === $launchUrl) {
+            return 'tool-id:'.$tool->getId();
+        }
+
+        return 'launch-url:'.mb_strtolower(rtrim($launchUrl, '/'));
+    }
+
+    private function getExternalToolAssignmentPriority(ExternalTool $tool, Course $course): int
+    {
+        $priority = 0;
+
+        if (null !== $this->getToolLinkInCourse($tool, $course)) {
+            $priority += 100;
+        }
+
+        if ($tool->getParent() instanceof Course && $tool->getParent()->getId() === $course->getId()) {
+            $priority += 50;
+        }
+
+        if (null !== $tool->getToolParent()) {
+            $priority += 40;
+        }
+
+        if ($tool->hasResourceNode()) {
+            $assignedCourseIds = array_map(
+                'intval',
+                $this->shortcutRepository->getAssignedCourseIdsFromResource($tool)
+            );
+
+            if (in_array($course->getId(), $assignedCourseIds, true)) {
+                $priority += 10;
+            }
+        }
+
+        return $priority;
     }
 
     private function variableSubstitution(
@@ -1001,9 +1078,15 @@ class CourseController extends ToolBaseController
     private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
-        $newTool->setToolParent($baseTool);
         $newTool->setActiveDeepLinking(false);
         $newTool->setResourceNode(null);
+
+        $em = $this->managerRegistry->getManager();
+        $managedCourse = $this->getManagedCourseOrFail($this->getCourse());
+        $managedSession = $this->getManagedSession($this->getCourseSession());
+
+        $newTool->setParent($managedCourse);
+        $newTool->setToolParent($baseTool);
 
         if (!empty($contentItem['title'])) {
             $newTool->setTitle($contentItem['title']);
@@ -1023,18 +1106,180 @@ class CourseController extends ToolBaseController
             );
         }
 
-        $em = $this->managerRegistry->getManager();
-        $course = $this->getCourse();
-        $session = $this->getCourseSession();
-
-        $newTool->addCourseLink($course, $session);
+        $newTool->addCourseLink($managedCourse, $managedSession);
 
         $em->persist($newTool);
         $em->flush();
 
         $user = $this->userHelper->getCurrent();
-        $this->shortcutRepository->addShortCut($newTool, $user, $course);
+
+        if (!$newTool->isActiveDeepLinking()) {
+            $shortcut = $this->shortcutRepository->addShortCut(
+                $newTool,
+                $user,
+                $managedCourse,
+                $managedSession
+            );
+
+            $shortcut->setTitle($newTool->getTitle());
+            $shortcut->setShortCutNode($newTool->getResourceNode());
+            $shortcut->target = 'iframe' === $newTool->getDocumentTarget() ? '_self' : '_blank';
+
+            $em->persist($shortcut);
+            $this->shortcutRepository->setVisibilityPublished($shortcut, $managedCourse, $managedSession);
+            $em->flush();
+        }
 
         return $newTool;
+    }
+
+    private function isExternalToolDirectlyEditableInCourse(ExternalTool $tool, Course $course): bool
+    {
+        if ($tool->getParent() instanceof Course && $tool->getParent()->getId() === $course->getId()) {
+            return true;
+        }
+
+        if (null !== $tool->getToolParent() && null !== $this->getToolLinkInCourse($tool, $course)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isExternalToolAssignedToCourse(ExternalTool $tool, Course $course): bool
+    {
+        if (null !== $this->getToolLinkInCourse($tool, $course)) {
+            return true;
+        }
+
+        if (!$tool->hasResourceNode()) {
+            return false;
+        }
+
+        $assignedCourseIds = array_map(
+            'intval',
+            $this->shortcutRepository->getAssignedCourseIdsFromResource($tool)
+        );
+
+        return in_array($course->getId(), $assignedCourseIds, true);
+    }
+
+    private function createCourseSpecificEditableTool(ExternalTool $tool, Course $course): ExternalTool
+    {
+        $existingTool = $this->findExistingCourseSpecificEditableTool($tool, $course);
+
+        if ($existingTool instanceof ExternalTool) {
+            return $existingTool;
+        }
+
+        $em = $this->managerRegistry->getManager();
+        $managedCourse = $this->getManagedCourseOrFail($course);
+        $managedSession = $this->getManagedSession($this->getCourseSession());
+
+        $parentTool = $tool->getToolParent() ?? $tool;
+
+        $localTool = clone $tool;
+        $localTool->setParent($managedCourse);
+        $localTool->setToolParent($parentTool);
+        $localTool->setResourceNode(null);
+        $localTool->addCourseLink($managedCourse, $managedSession);
+
+        $em->persist($localTool);
+        $em->flush();
+
+        $user = $this->userHelper->getCurrent();
+
+        if (!$localTool->isActiveDeepLinking()) {
+            $this->shortcutRepository->removeShortCutFromCourse($tool, $managedCourse);
+
+            $shortcut = $this->shortcutRepository->addShortCut(
+                $localTool,
+                $user,
+                $managedCourse,
+                $managedSession
+            );
+            $shortcut->setTitle($localTool->getTitle());
+            $shortcut->setShortCutNode($localTool->getResourceNode());
+            $shortcut->target = 'iframe' === $localTool->getDocumentTarget() ? '_self' : '_blank';
+
+            $em->persist($shortcut);
+            $this->shortcutRepository->setVisibilityPublished($shortcut, $managedCourse, $managedSession);
+            $em->flush();
+        }
+
+        return $localTool;
+    }
+
+    private function findExistingCourseSpecificEditableTool(ExternalTool $tool, Course $course): ?ExternalTool
+    {
+        if ($tool->getParent() instanceof Course && $tool->getParent()->getId() === $course->getId()) {
+            return $tool;
+        }
+
+        if (null !== $tool->getToolParent() && null !== $this->getToolLinkInCourse($tool, $course)) {
+            return $tool;
+        }
+
+        $em = $this->managerRegistry->getManager();
+        $repo = $em->getRepository(ExternalTool::class);
+
+        /** @var ExternalTool[] $allTools */
+        $allTools = $repo->findAll();
+
+        $baseTool = $tool->getToolParent() ?? $tool;
+        $baseToolId = $baseTool->getId();
+        $baseToolDedupKey = $this->getExternalToolDedupKey($baseTool);
+
+        foreach ($allTools as $candidate) {
+            if ((int) $candidate->getId() === (int) $tool->getId()) {
+                continue;
+            }
+
+            $candidateParent = $candidate->getToolParent();
+
+            if (!$candidateParent instanceof ExternalTool) {
+                continue;
+            }
+
+            $sameBaseTool = (int) $candidateParent->getId() === (int) $baseToolId;
+            $sameLaunchKey = $this->getExternalToolDedupKey($candidate) === $baseToolDedupKey;
+            $sameCourseParent = $candidate->getParent() instanceof Course
+                && $candidate->getParent()->getId() === $course->getId();
+            $sameCourseLink = null !== $this->getToolLinkInCourse($candidate, $course);
+
+            if (($sameBaseTool || $sameLaunchKey) && ($sameCourseParent || $sameCourseLink)) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private function getManagedCourseOrFail(Course $course): Course
+    {
+        $em = $this->managerRegistry->getManager();
+
+        /** @var Course|null $managedCourse */
+        $managedCourse = $em->find(Course::class, $course->getId());
+
+        if (null === $managedCourse) {
+            throw $this->createNotFoundException('Course not found');
+        }
+
+        return $managedCourse;
+    }
+
+    private function getManagedSession(?Session $session): ?Session
+    {
+        if (null === $session) {
+            return null;
+        }
+
+        $em = $this->managerRegistry->getManager();
+
+        /** @var Session|null $managedSession */
+        $managedSession = $em->find(Session::class, $session->getId());
+
+        return $managedSession;
     }
 }

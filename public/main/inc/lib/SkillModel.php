@@ -39,6 +39,14 @@ class SkillModel extends Model
     ];
     public array $required = ['title'];
 
+    public string $table_user;
+    public string $table_skill_rel_gradebook;
+    public string $table_skill_rel_user;
+    public string $table_course;
+    public string $table_skill_rel_skill;
+    public string $table_gradebook;
+    public string $sessionTable;
+
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),

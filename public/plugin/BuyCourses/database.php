@@ -735,6 +735,11 @@ if (!buycourses_plugin_table_has_rows($stripeTable)) {
     );
 }
 
+$schemaSql = $pluginSchema->toSql($platform);
+foreach ($schemaSql as $sql) {
+    $connection->executeStatement($sql);
+}
+
 $currencies = [
     ['AD', 'Andorra', 'EUR', 'AND', 0],
     ['AE', 'United Arab Emirates', 'AED', 'ARE', 0],
@@ -989,6 +994,30 @@ $currencies = [
     ['ZW', 'Zimbabwe', 'ZWL', 'ZWE', 0],
 ];
 
+
+$serviceRelTableName = buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICE_REL_EXTRA_FIELD);
+if (false === $sm->tablesExist($serviceRelTableName)) {
+    $serviceRelTable = $pluginSchema->createTable($serviceRelTableName);
+    $serviceRelTable->addColumn('service_id', Types::INTEGER, ['unsigned' => true]);
+    $serviceRelTable->addColumn('extra_field_id', Types::INTEGER, ['unsigned' => true]);
+    $serviceRelTable->addColumn('granted_value', Types::INTEGER, ['unsigned' => true, 'default' => 0]);
+    $serviceRelTable->setPrimaryKey(['service_id', 'extra_field_id']);
+    $serviceRelTable->addIndex(['extra_field_id'], 'idx_bc_service_extra_field');
+}
+
+$frozenEnrollmentTableName = buycourses_plugin_table(BuyCoursesPlugin::TABLE_FROZEN_ENROLLMENT);
+if (false === $sm->tablesExist($frozenEnrollmentTableName)) {
+    $frozenEnrollmentTable = $pluginSchema->createTable($frozenEnrollmentTableName);
+    $frozenEnrollmentTable->addColumn('id', Types::INTEGER, ['autoincrement' => true, 'unsigned' => true]);
+    $frozenEnrollmentTable->addColumn('course_id', Types::INTEGER, ['unsigned' => true]);
+    $frozenEnrollmentTable->addColumn('user_id', Types::INTEGER, ['unsigned' => true]);
+    $frozenEnrollmentTable->addColumn('frozen_since', Types::DATETIME_MUTABLE);
+    $frozenEnrollmentTable->setPrimaryKey(['id']);
+    $frozenEnrollmentTable->addUniqueIndex(['course_id', 'user_id'], 'uniq_bc_frozen_course_user');
+    $frozenEnrollmentTable->addIndex(['course_id'], 'idx_bc_frozen_course');
+    $frozenEnrollmentTable->addIndex(['user_id'], 'idx_bc_frozen_user');
+}
+
 foreach ($currencies as $currency) {
     $value = Database::select(
         '*',
@@ -1014,20 +1043,15 @@ foreach ($currencies as $currency) {
     );
 }
 
-$fieldlabel = 'buycourses_company';
-$fieldtype = '1';
-$fieldtitle = BuyCoursesPlugin::get_lang('Company');
-$fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+$baseExtraFields = [
+    BuyCoursesPlugin::EXTRA_FIELD_COMPANY => BuyCoursesPlugin::get_lang('Company'),
+    BuyCoursesPlugin::EXTRA_FIELD_VAT => BuyCoursesPlugin::get_lang('VAT'),
+    BuyCoursesPlugin::EXTRA_FIELD_ADDRESS => BuyCoursesPlugin::get_lang('Address'),
+    BuyCoursesPlugin::EXTRA_FIELD_MAX_COURSES => BuyCoursesPlugin::get_lang('BenefitMaxCoursesTitle'),
+    BuyCoursesPlugin::EXTRA_FIELD_HOSTING_LIMIT => BuyCoursesPlugin::get_lang('BenefitHostingLimitTitle'),
+    BuyCoursesPlugin::EXTRA_FIELD_DOCUMENT_QUOTA => BuyCoursesPlugin::get_lang('BenefitDocumentQuotaTitle'),
+];
 
-$fieldlabel = 'buycourses_vat';
-$fieldtype = '1';
-$fieldtitle = BuyCoursesPlugin::get_lang('VAT');
-$fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
-
-$fieldlabel = 'buycourses_address';
-$fieldtype = '1';
-$fieldtitle = BuyCoursesPlugin::get_lang('Address');
-$fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+foreach ($baseExtraFields as $fieldlabel => $fieldtitle) {
+    UserManager::create_extra_field($fieldlabel, '1', $fieldtitle, '');
+}

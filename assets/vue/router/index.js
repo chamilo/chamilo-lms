@@ -19,6 +19,7 @@ import skillRoutes from "./skill"
 import accessUrlRoutes from "./accessurl"
 import branchRoutes from "./branch"
 import roomRoutes from "./room"
+import buycoursesRoutes from "./buycourses"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"

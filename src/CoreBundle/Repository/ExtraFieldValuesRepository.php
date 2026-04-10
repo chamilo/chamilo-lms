@@ -237,4 +237,22 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function getJsonValueByVariableAndItem(string $variable, int $itemId, int $itemType): ?array
+    {
+        $value = $this->getValueByVariableAndItem($variable, $itemId, $itemType);
+
+        if (!$value instanceof ExtraFieldValues) {
+            return null;
+        }
+
+        $raw = $value->getFieldValue();
+        if (null === $raw || '' === trim($raw)) {
+            return null;
+        }
+
+        $decoded = json_decode($raw, true);
+
+        return is_array($decoded) ? $decoded : null;
+    }
 }

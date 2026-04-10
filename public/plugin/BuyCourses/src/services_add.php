@@ -44,14 +44,14 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('Services'),
 ];
 
-$formDefaultValues = [
+$formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'price' => 0,
     'tax_perc' => $defaultGlobalTax,
     'duration_days' => 0,
     'applies_to' => 0,
     'owner_id' => api_get_user_id(),
     'visibility' => true,
-];
+]);
 
 $form = new FormValidator('Services');
 $form->addText('name', $plugin->get_lang('ServiceName'));
@@ -122,6 +122,26 @@ $form->addFile(
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+$form->addHeader($plugin->get_lang('GrantedBenefits'));
+$form->addElement(
+    'number',
+    'benefit_max_courses',
+    [$plugin->get_lang('BenefitMaxCoursesTitle'), $plugin->get_lang('BenefitMaxCoursesDescription'), $plugin->get_lang('BenefitCoursesUnit')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'benefit_hosting_limit',
+    [$plugin->get_lang('BenefitHostingLimitTitle'), $plugin->get_lang('BenefitHostingLimitDescription'), $plugin->get_lang('BenefitUsersUnit')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'benefit_document_quota',
+    [$plugin->get_lang('BenefitDocumentQuotaTitle'), $plugin->get_lang('BenefitDocumentQuotaDescription'), $plugin->get_lang('BenefitMegabytesUnit')],
+    ['step' => 1, 'min' => 0]
+);
+
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);
 

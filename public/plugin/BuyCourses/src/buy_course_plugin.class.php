@@ -17,6 +17,7 @@ use League\Flysystem\FilesystemOperator;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Intl\Currencies;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -40,6 +41,8 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
     public const TABLE_SERVICES = 'plugin_buycourses_services';
     public const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
+    public const TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
+    public const TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
     public const TABLE_CULQI = 'plugin_buycourses_culqi';
     public const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
     public const TABLE_INVOICE = 'plugin_buycourses_invoices';
@@ -88,6 +91,13 @@ class BuyCoursesPlugin extends Plugin
     public const COUPON_DISCOUNT_TYPE_AMOUNT = 2;
     public const COUPON_STATUS_ACTIVE = 1;
     public const COUPON_STATUS_DISABLE = 0;
+
+    public const EXTRA_FIELD_COMPANY = 'buycourses_company';
+    public const EXTRA_FIELD_VAT = 'buycourses_vat';
+    public const EXTRA_FIELD_ADDRESS = 'buycourses_address';
+    public const EXTRA_FIELD_MAX_COURSES = 'buycourses_max_courses';
+    public const EXTRA_FIELD_HOSTING_LIMIT = 'buycourses_hosting_limit';
+    public const EXTRA_FIELD_DOCUMENT_QUOTA = 'buycourses_document_quota';
 
     /**
      * @var bool
@@ -153,6 +163,8 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES,
             self::TABLE_SERVICES_SALE,
+            self::TABLE_SERVICE_REL_EXTRA_FIELD,
+            self::TABLE_FROZEN_ENROLLMENT,
             self::TABLE_GLOBAL_CONFIG,
             self::TABLE_INVOICE,
             self::TABLE_TPV_REDSYS,
@@ -528,27 +540,674 @@ class BuyCoursesPlugin extends Plugin
             )
         );
 
-        $fieldlabel = 'buycourses_company';
-        $fieldtype = '1';
-        $fieldtitle = $this->get_lang('Company');
-        $fielddefault = '';
-        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
-
-        $fieldlabel = 'buycourses_vat';
-        $fieldtype = '1';
-        $fieldtitle = $this->get_lang('VAT');
-        $fielddefault = '';
-        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
-
-        $fieldlabel = 'buycourses_address';
-        $fieldtype = '1';
-        $fieldtitle = $this->get_lang('Address');
-        $fielddefault = '';
-        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        $this->ensureBaseUserExtraFields();
+        $this->ensureBenefitInfrastructure();
 
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
 
+    }
+
+    public function ensureBenefitInfrastructure(): void
+    {
+        $this->ensureBenefitTables();
+        $this->ensureBenefitExtraFields();
+    }
+
+    private function ensureBenefitTables(): void
+    {
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        Database::query("CREATE TABLE IF NOT EXISTS $serviceRelTable (
+            service_id int unsigned NOT NULL,
+            extra_field_id int unsigned NOT NULL,
+            granted_value int unsigned NOT NULL,
+            PRIMARY KEY (service_id, extra_field_id),
+            KEY idx_bc_service_extra_field (extra_field_id)
+        )");
+
+        $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
+        Database::query("CREATE TABLE IF NOT EXISTS $frozenTable (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            course_id int unsigned NOT NULL,
+            user_id int unsigned NOT NULL,
+            frozen_since datetime NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY uniq_bc_frozen_course_user (course_id, user_id),
+            KEY idx_bc_frozen_course (course_id),
+            KEY idx_bc_frozen_user (user_id)
+        )");
+
+        $columnResult = Database::query("SHOW COLUMNS FROM $serviceRelTable WHERE Field = 'granted_value'");
+        if (false !== $columnResult && 0 === Database::num_rows($columnResult)) {
+            Database::query("ALTER TABLE $serviceRelTable ADD granted_value int unsigned NOT NULL DEFAULT 0");
+        }
+    }
+
+    private function ensureBenefitExtraFields(): void
+    {
+        foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
+            $fieldId = $this->ensureUserExtraField(
+                $definition['variable'],
+                $definition['title'],
+                $definition['description'] ?? ''
+            );
+
+            $this->lockUserExtraFieldVisibility($fieldId);
+        }
+    }
+
+    private function ensureBaseUserExtraFields(): void
+    {
+        $companyId = $this->ensureUserExtraField(self::EXTRA_FIELD_COMPANY, $this->get_lang('Company'));
+        $vatId = $this->ensureUserExtraField(self::EXTRA_FIELD_VAT, $this->get_lang('VAT'));
+        $addressId = $this->ensureUserExtraField(self::EXTRA_FIELD_ADDRESS, $this->get_lang('Address'));
+
+        $this->lockUserExtraFieldVisibility($companyId);
+        $this->lockUserExtraFieldVisibility($vatId);
+        $this->lockUserExtraFieldVisibility($addressId);
+    }
+
+    private function ensureUserExtraField(
+        string $variable,
+        string $displayText,
+        string $description = '',
+        ?string $defaultValue = null
+    ): int {
+        $info = $this->getUserExtraFieldInfo($variable);
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+        $data = [
+            'item_type' => ExtraField::USER_FIELD_TYPE,
+            'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => $variable,
+            'display_text' => $displayText,
+            'description' => $description,
+            'default_value' => $defaultValue,
+            'visible_to_self' => 0,
+            'visible_to_others' => 0,
+            'changeable' => 0,
+            'filter' => 0,
+            'auto_remove' => 0,
+        ];
+
+        if ($info) {
+            Database::update(
+                $table,
+                $data,
+                ['id = ?' => [(int) $info['id']]]
+            );
+
+            return (int) $info['id'];
+        }
+
+        return (int) Database::insert($table, $data);
+    }
+
+    private function lockUserExtraFieldVisibility(int $fieldId): void
+    {
+        if ($fieldId <= 0) {
+            return;
+        }
+
+        $extraFieldTable = $this->getUserExtraFieldTable();
+        if (empty($extraFieldTable)) {
+            return;
+        }
+
+        $columnsResult = Database::query("SHOW COLUMNS FROM $extraFieldTable");
+        if (false === $columnsResult) {
+            return;
+        }
+
+        $availableColumns = [];
+        while ($row = Database::fetch_array($columnsResult)) {
+            if (!empty($row['Field'])) {
+                $availableColumns[$row['Field']] = true;
+            }
+        }
+
+        $values = [];
+        foreach (['visible_to_self', 'visible_to_others', 'changeable', 'filter', 'searchable'] as $column) {
+            if (isset($availableColumns[$column])) {
+                $values[$column] = 0;
+            }
+        }
+
+        if (!empty($values)) {
+            Database::update($extraFieldTable, $values, ['id = ?' => $fieldId]);
+        }
+    }
+
+    private function getUserExtraFieldTable(): string
+    {
+        if (defined('TABLE_EXTRA_FIELD')) {
+            return Database::get_main_table(TABLE_EXTRA_FIELD);
+        }
+
+        return Database::get_main_table('extra_field');
+    }
+
+    private function getUserExtraFieldInfo(string $variable): ?array
+    {
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+        $row = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'variable = ? AND item_type = ?' => [
+                        $variable,
+                        ExtraField::USER_FIELD_TYPE,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if (empty($row) || !is_array($row)) {
+            return null;
+        }
+
+        return $row;
+    }
+
+    public function getBenefitExtraFieldDefinitions(): array
+    {
+        return [
+            self::EXTRA_FIELD_MAX_COURSES => [
+                'variable' => self::EXTRA_FIELD_MAX_COURSES,
+                'title' => $this->get_lang('BenefitMaxCoursesTitle'),
+                'description' => $this->get_lang('BenefitMaxCoursesDescription'),
+                'payload_key' => 'limit',
+                'unit' => $this->get_lang('BenefitCoursesUnit'),
+                'form_field' => 'benefit_max_courses',
+            ],
+            self::EXTRA_FIELD_HOSTING_LIMIT => [
+                'variable' => self::EXTRA_FIELD_HOSTING_LIMIT,
+                'title' => $this->get_lang('BenefitHostingLimitTitle'),
+                'description' => $this->get_lang('BenefitHostingLimitDescription'),
+                'payload_key' => 'limit',
+                'unit' => $this->get_lang('BenefitUsersUnit'),
+                'form_field' => 'benefit_hosting_limit',
+            ],
+            self::EXTRA_FIELD_DOCUMENT_QUOTA => [
+                'variable' => self::EXTRA_FIELD_DOCUMENT_QUOTA,
+                'title' => $this->get_lang('BenefitDocumentQuotaTitle'),
+                'description' => $this->get_lang('BenefitDocumentQuotaDescription'),
+                'payload_key' => 'quota_mb',
+                'unit' => $this->get_lang('BenefitMegabytesUnit'),
+                'form_field' => 'benefit_document_quota',
+            ],
+        ];
+    }
+
+    public function getAvailableBenefitExtraFields(): array
+    {
+        $fields = [];
+        foreach ($this->getBenefitExtraFieldDefinitions() as $variable => $definition) {
+            $fieldInfo = $this->getUserExtraFieldInfo($variable);
+            if (empty($fieldInfo)) {
+                continue;
+            }
+
+            $fields[$variable] = $definition + ['id' => (int) $fieldInfo['id']];
+        }
+
+        return $fields;
+    }
+
+    public function getServiceBenefitConfigurations(int $serviceId): array
+    {
+        if ($serviceId <= 0) {
+            return [];
+        }
+
+        $availableFields = $this->getAvailableBenefitExtraFields();
+        if (empty($availableFields)) {
+            return [];
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $rows = Database::select(
+            '*',
+            $serviceRelTable,
+            [
+                'where' => [
+                    'service_id = ?' => $serviceId,
+                ],
+            ]
+        );
+
+        $byFieldId = [];
+        foreach ($availableFields as $variable => $definition) {
+            $byFieldId[(int) $definition['id']] = $variable;
+        }
+
+        $configurations = [];
+        foreach ($rows as $row) {
+            $fieldId = (int) ($row['extra_field_id'] ?? 0);
+            $variable = $byFieldId[$fieldId] ?? null;
+            if (null === $variable) {
+                continue;
+            }
+
+            $configurations[$variable] = $availableFields[$variable] + [
+                'granted_value' => (int) ($row['granted_value'] ?? 0),
+            ];
+        }
+
+        return $configurations;
+    }
+
+    public function saveServiceBenefitConfigurations(int $serviceId, array $serviceData): void
+    {
+        if ($serviceId <= 0) {
+            return;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        Database::delete($serviceRelTable, ['service_id = ?' => $serviceId]);
+
+        foreach ($this->getAvailableBenefitExtraFields() as $variable => $definition) {
+            $formField = $definition['form_field'];
+            $grantedValue = isset($serviceData[$formField]) ? (int) $serviceData[$formField] : 0;
+
+            if ($grantedValue <= 0) {
+                continue;
+            }
+
+            Database::insert($serviceRelTable, [
+                'service_id' => $serviceId,
+                'extra_field_id' => (int) $definition['id'],
+                'granted_value' => $grantedValue,
+            ]);
+        }
+    }
+
+    public function buildBenefitFormDefaults(int $serviceId = 0): array
+    {
+        $defaults = [];
+        foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
+            $defaults[$definition['form_field']] = 0;
+        }
+
+        if ($serviceId <= 0) {
+            return $defaults;
+        }
+
+        foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
+            $defaults[$configuration['form_field']] = (int) ($configuration['granted_value'] ?? 0);
+        }
+
+        return $defaults;
+    }
+
+    public function applyServiceBenefitsFromSale(int $serviceSaleId): void
+    {
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($serviceSale)) {
+            return;
+        }
+
+        $buyerId = (int) ($serviceSale['buyer']['id'] ?? 0);
+        if ($buyerId <= 0) {
+            return;
+        }
+
+        $configurations = $this->getServiceBenefitConfigurations((int) $serviceSale['service_id']);
+        if (empty($configurations)) {
+            return;
+        }
+
+        $shouldRestoreFrozenEnrollments = false;
+
+        foreach ($configurations as $configuration) {
+            $payload = $this->buildBenefitPayload(
+                $configuration['variable'],
+                (int) $configuration['granted_value'],
+                (string) $serviceSale['date_end']
+            );
+
+            if (null === $payload) {
+                continue;
+            }
+
+            UserManager::update_extra_field_value(
+                $buyerId,
+                $configuration['variable'],
+                json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            );
+
+            if (self::EXTRA_FIELD_HOSTING_LIMIT === $configuration['variable']) {
+                $shouldRestoreFrozenEnrollments = true;
+            }
+        }
+
+        if ($shouldRestoreFrozenEnrollments) {
+            $this->restoreFrozenEnrollmentsForUser($buyerId);
+        }
+    }
+
+    public function restoreFrozenEnrollmentsForUser(int $userId): void
+    {
+        if ($userId <= 0) {
+            return;
+        }
+
+        $teacherCourseRows = Database::select(
+            'c_id',
+            Database::get_main_table(TABLE_MAIN_COURSE_USER),
+            [
+                'where' => [
+                    'user_id = ? AND status = ?' => [
+                        $userId,
+                        COURSEMANAGER,
+                    ],
+                ],
+            ]
+        );
+
+        if (empty($teacherCourseRows)) {
+            return;
+        }
+
+        $courseIds = array_map(static fn (array $row): int => (int) ($row['c_id'] ?? 0), $teacherCourseRows);
+        $courseIds = array_values(array_filter($courseIds));
+
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
+        $placeholders = implode(',', array_fill(0, count($courseIds), '?'));
+
+        Database::query(
+            "DELETE FROM $frozenTable WHERE course_id IN ($placeholders)",
+            $courseIds
+        );
+    }
+
+    private function buildBenefitPayload(string $variable, int $grantedValue, string $expiry): ?array
+    {
+        if ($grantedValue <= 0 || empty($expiry)) {
+            return null;
+        }
+
+        $definitions = $this->getBenefitExtraFieldDefinitions();
+        $definition = $definitions[$variable] ?? null;
+        if (null === $definition) {
+            return null;
+        }
+
+        return [
+            $definition['payload_key'] => $grantedValue,
+            'expiry' => $expiry,
+        ];
+    }
+
+    public function getActiveBenefitPayload(int $userId, string $variable): ?array
+    {
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $extraData = UserManager::get_extra_user_data($userId);
+        $payload = $this->parseBenefitPayload($extraData[$variable] ?? null);
+
+        if (null !== $payload && !$this->isBenefitPayloadExpired($payload)) {
+            return $payload;
+        }
+
+        return $this->refreshBenefitPayloadFromSales($userId, $variable);
+    }
+
+    public function refreshAllBenefitPayloadsFromSales(int $userId): void
+    {
+        foreach (array_keys($this->getBenefitExtraFieldDefinitions()) as $variable) {
+            $this->refreshBenefitPayloadFromSales($userId, $variable);
+        }
+    }
+
+    public function refreshBenefitPayloadFromSales(int $userId, string $variable): ?array
+    {
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $benefitPayload = $this->getLatestActiveBenefitPayloadFromSales($userId, $variable);
+
+        UserManager::update_extra_field_value(
+            $userId,
+            $variable,
+            null === $benefitPayload ? '' : json_encode($benefitPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
+
+        return $benefitPayload;
+    }
+
+    private function getLatestActiveBenefitPayloadFromSales(int $userId, string $variable): ?array
+    {
+        $availableFields = $this->getAvailableBenefitExtraFields();
+        $field = $availableFields[$variable] ?? null;
+        if (null === $field) {
+            return null;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        $fieldId = (int) $field['id'];
+        $userId = (int) $userId;
+        $status = (int) self::SERVICE_STATUS_COMPLETED;
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT rel.granted_value, ss.date_end
+            FROM $serviceRelTable rel
+            INNER JOIN $serviceSaleTable ss
+                ON rel.service_id = ss.service_id
+            WHERE rel.extra_field_id = $fieldId
+              AND ss.buyer_id = $userId
+              AND ss.status = $status
+              AND ss.date_end >= '$now'
+            ORDER BY ss.date_end DESC, ss.id DESC
+            LIMIT 1";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return null;
+        }
+
+        $row = Database::fetch_array($result);
+        if (empty($row)) {
+            return null;
+        }
+
+        return $this->buildBenefitPayload(
+            $variable,
+            (int) ($row['granted_value'] ?? 0),
+            (string) ($row['date_end'] ?? '')
+        );
+    }
+
+    private function parseBenefitPayload($rawValue): ?array
+    {
+        if (empty($rawValue) || !is_string($rawValue)) {
+            return null;
+        }
+
+        $payload = json_decode($rawValue, true);
+        if (!is_array($payload) || empty($payload['expiry'])) {
+            return null;
+        }
+
+        return $payload;
+    }
+
+    private function isBenefitPayloadExpired(array $payload): bool
+    {
+        if (empty($payload['expiry'])) {
+            return true;
+        }
+
+        $expiryTimestamp = strtotime((string) $payload['expiry']);
+        if (false === $expiryTimestamp) {
+            return true;
+        }
+
+        return $expiryTimestamp < time();
+    }
+
+    public function formatBenefitPayloadSummary(string $variable, ?array $payload): ?string
+    {
+        if (null === $payload) {
+            return null;
+        }
+
+        $definitions = $this->getBenefitExtraFieldDefinitions();
+        $definition = $definitions[$variable] ?? null;
+        if (null === $definition) {
+            return null;
+        }
+
+        $value = (int) ($payload[$definition['payload_key']] ?? 0);
+        if ($value <= 0) {
+            return null;
+        }
+
+        $expiry = api_format_date(api_get_local_time((string) $payload['expiry']), DATE_TIME_FORMAT_LONG_24H);
+
+        return sprintf($this->get_lang('BenefitSummaryValueUntil'), $value.' '.$definition['unit'], $expiry);
+    }
+
+    public function getServiceBenefitSummaries(int $serviceId, int $userId = 0): array
+    {
+        $summaries = [];
+        foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
+            $summary = [
+                'title' => $configuration['title'],
+                'description' => $configuration['description'],
+                'granted_value' => (int) $configuration['granted_value'],
+                'unit' => $configuration['unit'],
+            ];
+
+            if ($userId > 0) {
+                $summary['active_payload'] = $this->getActiveBenefitPayload($userId, $configuration['variable']);
+                $summary['active_summary'] = $this->formatBenefitPayloadSummary($configuration['variable'], $summary['active_payload']);
+            }
+
+            $summaries[] = $summary;
+        }
+
+        return $summaries;
+    }
+
+    public function getActiveServicesForUser(int $userId): array
+    {
+        $services = [];
+
+        foreach ($this->getServiceSales($userId, self::SERVICE_STATUS_COMPLETED) as $serviceSale) {
+            if (empty($serviceSale['date_end']) || strtotime((string) $serviceSale['date_end']) < time()) {
+                continue;
+            }
+
+            $benefitSummaries = [];
+            foreach ($this->getServiceBenefitConfigurations((int) $serviceSale['service_id']) as $configuration) {
+                $payload = $this->buildBenefitPayload(
+                    $configuration['variable'],
+                    (int) $configuration['granted_value'],
+                    (string) $serviceSale['date_end']
+                );
+
+                $benefitSummaries[] = [
+                    'title' => $configuration['title'],
+                    'description' => $configuration['description'],
+                    'granted_value' => (int) $configuration['granted_value'],
+                    'unit' => $configuration['unit'],
+                    'active_payload' => $payload,
+                    'active_summary' => $this->formatBenefitPayloadSummary($configuration['variable'], $payload),
+                ];
+            }
+
+            $serviceSale['benefit_summaries'] = $benefitSummaries;
+            $services[] = $serviceSale;
+        }
+
+        usort($services, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date_end'] ?? ''), (string) ($left['date_end'] ?? ''));
+        });
+
+        return $services;
+    }
+
+    public function getPurchaseHistoryForUser(int $userId): array
+    {
+        $history = [];
+
+        $sales = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SALE),
+            [
+                'where' => ['user_id = ?' => $userId],
+                'order' => 'date DESC',
+            ]
+        );
+
+        foreach ($sales as $sale) {
+            $history[] = [
+                'date' => (string) ($sale['date'] ?? ''),
+                'type' => (int) $sale['product_type'] === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
+                'product_name' => (string) ($sale['product_name'] ?? ''),
+                'reference' => (string) ($sale['reference'] ?? ''),
+                'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
+                'status' => (int) ($sale['status'] ?? 0),
+                'receipt_url' => !empty($sale['invoice']) ? $this->getInvoiceUrl((int) $sale['id'], 0) : null,
+            ];
+        }
+
+        foreach ($this->getServiceSales($userId) as $serviceSale) {
+            $history[] = [
+                'date' => (string) ($serviceSale['buy_date'] ?? ''),
+                'type' => $this->get_lang('Service'),
+                'product_name' => (string) ($serviceSale['service']['name'] ?? ''),
+                'reference' => (string) ($serviceSale['reference'] ?? ''),
+                'amount' => (string) ($serviceSale['service']['total_price'] ?? ''),
+                'status' => (int) ($serviceSale['status'] ?? 0),
+                'receipt_url' => !empty($serviceSale['invoice']) ? $this->getInvoiceUrl((int) $serviceSale['id'], 1) : null,
+            ];
+        }
+
+        usort($history, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date'] ?? ''), (string) ($left['date'] ?? ''));
+        });
+
+        return $history;
+    }
+
+    public function getInvoiceUrl(int $saleId, int $isService = 0): string
+    {
+        return api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/invoice.php?sale_id='.$saleId.'&is_service='.$isService;
+    }
+
+    public function canUserAccessInvoice(int $saleId, int $isService = 0, ?int $userId = null): bool
+    {
+        $userId ??= api_get_user_id();
+
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if ($userId <= 0 || $saleId <= 0) {
+            return false;
+        }
+
+        $sale = $this->getDataSaleInvoice($saleId, $isService);
+        if (empty($sale)) {
+            return false;
+        }
+
+        return (int) ($sale['user_id'] ?? 0) === $userId;
     }
 
     /**
@@ -866,6 +1525,10 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(self::TABLE_TRANSFER),
             ['id = ?' => $id]
         );
+
+        $this->saveServiceBenefitConfigurations($id, $service);
+
+        return $result;
     }
 
     /**
@@ -2852,7 +3515,7 @@ class BuyCoursesPlugin extends Plugin
 
         $paypalFieldId = $paypalExtraField['id'];
         $paypalAccount = Database::select(
-            'value',
+            'field_value',
             $extraFieldValues,
             [
                 'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, $userId]],
@@ -2864,7 +3527,7 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        if ('' === $paypalAccount['value']) {
+        if ('' === $paypalAccount['field_value']) {
             return false;
         }
 
@@ -3026,6 +3689,10 @@ class BuyCoursesPlugin extends Plugin
             ]
         );
 
+        if ($return) {
+            $this->saveServiceBenefitConfigurations((int) $return, $service);
+        }
+
         if ($return && !empty($service['picture_crop_image_base_64'])
             && !empty($service['picture_crop_result'])
         ) {
@@ -3056,7 +3723,7 @@ class BuyCoursesPlugin extends Plugin
             $this->saveServiceImageFromBase64($service['picture_crop_image_base_64'], $imageName);
         }
 
-        return Database::update(
+        $result = Database::update(
             $servicesTable,
             [
                 'name' => Security::remove_XSS($service['name']),
@@ -3073,6 +3740,10 @@ class BuyCoursesPlugin extends Plugin
             ],
             ['id = ?' => $id]
         );
+
+        $this->saveServiceBenefitConfigurations($id, $service);
+
+        return $result;
     }
 
     /**
@@ -3093,6 +3764,10 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(self::TABLE_SERVICES),
             ['id = ?' => $id]
         );
+
+        $this->saveServiceBenefitConfigurations($id, $service);
+
+        return $result;
     }
 
     /**
@@ -3212,6 +3887,7 @@ class BuyCoursesPlugin extends Plugin
         $service['tax_enable'] = $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_SERVICES);
         $service['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
         $service['image'] = $this->getServiceImageUrl($service['image'] ?? null);
+        $service['benefit_configurations'] = $this->getServiceBenefitConfigurations($id);
 
         return $service;
     }
@@ -3303,58 +3979,45 @@ class BuyCoursesPlugin extends Plugin
         int $nodeType = 0,
         int $nodeId = 0
     ) {
-        $conditions = null;
-        $groupBy = '';
-
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $defaultOrder = 'ss.id ASC';
 
-        $defaultOrder = 'id ASC';
+        $whereParts = [];
+        $whereValues = [];
 
-        if (!empty($buyerId)) {
-            $conditions = ['WHERE' => ['ss.buyer_id = ?' => $buyerId], 'ORDER' => $defaultOrder];
+        if ($buyerId > 0) {
+            $whereParts[] = 'ss.buyer_id = ?';
+            $whereValues[] = $buyerId;
         }
 
-        if (is_numeric($status)) {
-            $conditions = ['WHERE' => ['ss.status = ?' => $status], 'ORDER' => $defaultOrder];
+        if (func_num_args() > 1) {
+            $whereParts[] = 'ss.status = ?';
+            $whereValues[] = $status;
         }
 
-        if ($buyerId) {
-            $conditions = ['WHERE' => ['ss.buyer_id = ?' => [$buyerId]], 'ORDER' => $defaultOrder];
+        if ($nodeType > 0 && $nodeId > 0) {
+            $whereParts[] = 'ss.node_type = ?';
+            $whereValues[] = $nodeType;
+            $whereParts[] = 'ss.node_id = ?';
+            $whereValues[] = $nodeId;
         }
 
-        if ($nodeType && $nodeId) {
-            $conditions = [
-                'WHERE' => ['ss.node_type = ? AND ss.node_id = ?' => [$nodeType, $nodeId]],
-                'ORDER' => $defaultOrder,
-            ];
+        $conditions = ['order' => $defaultOrder];
+        if (!empty($whereParts)) {
+            $conditions['where'] = [implode(' AND ', $whereParts) => $whereValues];
         }
 
-        if ($nodeType && $nodeId && $buyerId && is_numeric($status)) {
-            $conditions = [
-                'WHERE' => [
-                    'ss.node_type = ? AND ss.node_id = ? AND ss.buyer_id = ? AND ss.status = ?' => [
-                        $nodeType,
-                        $nodeId,
-                        $buyerId,
-                        $status,
-                    ],
-                ],
-                'ORDER' => $defaultOrder,
-            ];
-        }
-
-        $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id $groupBy";
+        $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id";
         $return = Database::select(
-            'DISTINCT ss.id ',
+            'DISTINCT ss.id',
             "$servicesSaleTable ss $innerJoins",
             $conditions
-        // , "all", null, true
         );
 
         $list = [];
         foreach ($return as $service) {
-            $list[] = $this->getServiceSale($service['id']);
+            $list[] = $this->getServiceSale((int) $service['id']);
         }
 
         return $list;
@@ -3454,6 +4117,8 @@ class BuyCoursesPlugin extends Plugin
         if ('true' === $this->get('invoicing_enable')) {
             $this->setInvoice($serviceSaleId, 1);
         }
+
+        $this->applyServiceBenefitsFromSale($serviceSaleId);
 
         return true;
     }
@@ -4877,6 +5542,10 @@ class BuyCoursesPlugin extends Plugin
             ['expired' => 1],
             ['id = ?' => $id]
         );
+
+        $this->saveServiceBenefitConfigurations($id, $service);
+
+        return $result;
     }
 
     /**

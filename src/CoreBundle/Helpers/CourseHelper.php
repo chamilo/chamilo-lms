@@ -12,6 +12,7 @@ use Answer;
 use AppPlugin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -32,6 +33,7 @@ use Chamilo\CoreBundle\Entity\TrackEUploads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -95,7 +97,8 @@ class CourseHelper
         private readonly IllustrationRepository $illustrationRepository,
         private readonly XapianIndexService $xapianIndexService,
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly CDocumentRepository $documentRepository
+        private readonly CDocumentRepository $documentRepository,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -109,6 +112,9 @@ class CourseHelper
         if (empty($params['title'])) {
             throw new InvalidArgumentException('The course title cannot be empty.');
         }
+
+        // Enforce BuyCourses / platform course creation limit before generating the course.
+        $this->assertCanCreateCourse($params);
 
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
@@ -928,7 +934,6 @@ class CourseHelper
         $courseLanguage = !empty($params['course_language']) ? $params['course_language'] : $this->getDefaultSetting('language.platform_language');
         $departmentName = $params['department_name'] ?? null;
         $departmentUrl = $this->fixDepartmentUrl($params['department_url'] ?? '');
-        $diskQuota = $params['disk_quota'] ?? $this->getDefaultSetting('document.default_document_quotum');
         $visibility = $params['visibility'] ?? $this->getDefaultSetting('course.courses_default_creation_visibility', Course::OPEN_PLATFORM);
         $subscribe = $params['subscribe'] ?? (Course::OPEN_PLATFORM == $visibility);
         $unsubscribe = $params['unsubscribe'] ?? false;
@@ -936,6 +941,25 @@ class CourseHelper
         $teachers = $params['teachers'] ?? [];
         $categories = $params['course_categories'] ?? [];
         $notifyAdmins = $this->getDefaultSetting('course.send_email_to_admin_when_create_course');
+
+        /** @var User|null $ownerUser */
+        $ownerUser = $this->security->getUser();
+        if (!$ownerUser instanceof User) {
+            $ownerUser = $this->getFallbackAdminUser();
+        }
+
+        if (!empty($params['user_id'])) {
+            $explicitOwner = $this->userRepository->find((int) $params['user_id']);
+            if ($explicitOwner instanceof User) {
+                $ownerUser = $explicitOwner;
+            }
+        }
+
+        if (array_key_exists('disk_quota', $params)) {
+            $diskQuota = $this->parseQuotaRawToMb((string) $params['disk_quota']);
+        } else {
+            $diskQuota = $this->resolveEffectiveDocumentQuotaMbForUser($ownerUser);
+        }
 
         $errors = [];
         if (empty($code)) {
@@ -1099,8 +1123,8 @@ class CourseHelper
             ]);
         }
 
-        // Documents tool quota (Documents-only usage, excluding groups if requested by policy)
-        $docsQuotaMb = $this->resolveDocumentsToolQuotaMb();
+        // Documents tool quota with BuyCourses benefit fallback
+        $docsQuotaMb = $this->resolveDocumentsToolQuotaMbForCourse($course);
         $docUsedBytes = $this->getCourseDocumentUsedBytes($course);
 
         if ($docsQuotaMb > 0) {
@@ -1154,13 +1178,11 @@ class CourseHelper
 
     private function resolveDefaultDocumentQuotaMb(): int
     {
-        // Prefer canonical keys first (avoid accidental overrides).
         $preferred = [
             'document.default_document_quotum',
-            'default_document_quotum', // legacy / DB variable
+            'default_document_quotum',
         ];
 
-        // Keep old compatibility candidates as fallback (do not break existing installs).
         $compat = [
             'document.default_document_quota',
             'document.default_course_quota',
@@ -1210,15 +1232,12 @@ class CourseHelper
     {
         $s = strtolower(trim($raw));
 
-        // Pure integer?
         if (preg_match('/^\d+$/', $s)) {
             $num = (int) $s;
 
-            // Heuristic: if it looks like bytes (>= 1MB in bytes), convert to MB
             return ($num >= 1048576) ? (int) ceil($num / 1048576) : $num;
         }
 
-        // <number><unit> where unit is m/mb or g/gb
         if (preg_match('/^\s*(\d+)\s*([mg])(?:b)?\s*$/i', $s, $m)) {
             $num = (int) $m[1];
             $unit = strtolower($m[2]);
@@ -1226,7 +1245,6 @@ class CourseHelper
             return 'g' === $unit ? $num * 1024 : $num;
         }
 
-        // Extract digits from noisy strings
         if (preg_match('/(\d+)/', $s, $m)) {
             $num = (int) $m[1];
 
@@ -1628,5 +1646,139 @@ class CourseHelper
         }
 
         $this->entityManager->flush();
+    }
+
+    public function assertCanCreateCourse(array $params = []): void
+    {
+        /** @var User|null $ownerUser */
+        $ownerUser = $this->security->getUser();
+        if (!$ownerUser instanceof User) {
+            $ownerUser = $this->getFallbackAdminUser();
+        }
+
+        if (!empty($params['user_id'])) {
+            $explicitOwner = $this->userRepository->find((int) $params['user_id']);
+            if ($explicitOwner instanceof User) {
+                $ownerUser = $explicitOwner;
+            }
+        }
+
+        $limit = $this->resolveMaxCoursesForUser($ownerUser);
+        if ($limit <= 0) {
+            $this->debugLog('createCourse:limit:unlimited', [
+                'userId' => $ownerUser->getId(),
+            ]);
+
+            return;
+        }
+
+        $count = $this->countTeacherCoursesForUser($ownerUser);
+
+        $this->debugLog('createCourse:limit:check', [
+            'userId' => $ownerUser->getId(),
+            'currentCourses' => $count,
+            'limit' => $limit,
+        ]);
+
+        if ($count >= $limit) {
+            throw new RuntimeException(sprintf('You have reached the maximum number of courses allowed (%d).', $limit));
+        }
+    }
+
+    public function resolveMaxCoursesForUser(User $user): int
+    {
+        $payload = $this->getUserExtraFieldJson($user, 'buycourses_max_courses');
+        if (is_array($payload)) {
+            $expiry = (string) ($payload['expiry'] ?? '');
+            $limit = isset($payload['limit']) ? (int) $payload['limit'] : 0;
+
+            if ($limit > 0 && '' !== $expiry && date('Y-m-d') <= $expiry) {
+                return $limit;
+            }
+        }
+
+        $raw = $this->settingsManager->getSetting('platform.max_courses_per_user', true);
+
+        return max(0, (int) ($raw ?? 0));
+    }
+
+    public function countTeacherCoursesForUser(User $user): int
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb
+            ->select('COUNT(cru.id)')
+            ->from(CourseRelUser::class, 'cru')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', CourseRelUser::TEACHER)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function resolveDocumentsToolQuotaMbForCourse(Course $course): int
+    {
+        $owner = $this->getCourseOwnerForQuota($course);
+        if ($owner instanceof User) {
+            return $this->resolveEffectiveDocumentQuotaMbForUser($owner);
+        }
+
+        return $this->resolveDefaultDocumentQuotaMb();
+    }
+
+    public function resolveEffectiveDocumentQuotaMbForUser(?User $user): int
+    {
+        if ($user instanceof User) {
+            $payload = $this->getUserExtraFieldJson($user, 'buycourses_document_quota');
+
+            if (is_array($payload)) {
+                $expiry = (string) ($payload['expiry'] ?? '');
+                $quotaMb = isset($payload['quota_mb']) ? (int) $payload['quota_mb'] : 0;
+
+                if ($quotaMb <= 0 && isset($payload['limit'])) {
+                    $quotaMb = (int) $payload['limit'];
+                }
+
+                if ($quotaMb > 0 && '' !== $expiry && date('Y-m-d') <= $expiry) {
+                    return $quotaMb;
+                }
+            }
+        }
+
+        return $this->resolveDefaultDocumentQuotaMb();
+    }
+
+    private function getCourseOwnerForQuota(Course $course): ?User
+    {
+        $creator = $course->getCreator();
+        if ($creator instanceof User) {
+            return $creator;
+        }
+
+        $teachers = $course->getTeachersSubscriptions();
+        if ($teachers->isEmpty()) {
+            return null;
+        }
+
+        /** @var CourseRelUser|false $firstTeacherSubscription */
+        $firstTeacherSubscription = $teachers->first();
+        if (!$firstTeacherSubscription instanceof CourseRelUser) {
+            return null;
+        }
+
+        $teacher = $firstTeacherSubscription->getUser();
+
+        return $teacher instanceof User ? $teacher : null;
+    }
+
+    private function getUserExtraFieldJson(User $user, string $variable): ?array
+    {
+        return $this->extraFieldValuesRepository->getJsonValueByVariableAndItem(
+            $variable,
+            $user->getId(),
+            ExtraField::USER_FIELD_TYPE
+        );
     }
 }

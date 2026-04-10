@@ -219,6 +219,10 @@ class CourseController extends ToolBaseController
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
+        if ($user && $this->isEnrollmentFrozen($courseId, $userId)) {
+            throw $this->createAccessDeniedException('Your access to this course has been temporarily suspended.');
+        }
+
         if ($user && $user->isInvitee()) {
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -282,7 +286,6 @@ class CourseController extends ToolBaseController
                 /** @var ExternalTool|null $externalTool */
                 $externalTool = $externalToolRepository->findOneBy(['resourceNode' => $resourceNode]);
                 if ($externalTool) {
-                    // Hide LTI shortcuts when the plugin is disabled.
                     if (!$isImsLtiEnabled) {
                         continue;
                     }
@@ -297,10 +300,8 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
-                // Try as CLink
                 $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cLink) {
-                    // Image (if any)
                     $shortcut->setCustomImageUrl(
                         $cLink->getCustomImage()
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
@@ -316,7 +317,6 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
-                // Try as CBlog
                 $cBlog = $em->getRepository(CBlog::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cBlog) {
                     $qs = http_build_query(array_filter([
@@ -340,7 +340,6 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
-                // Fallback
                 $shortcut->setCustomImageUrl(null);
                 $shortcut->setUrlOverride(null);
                 $shortcut->setIcon(null);
@@ -351,6 +350,7 @@ class CourseController extends ToolBaseController
 
             $shortcuts = $visibleShortcuts;
         }
+
         $responseData = [
             'shortcuts' => $shortcuts,
             'diagram' => '',
@@ -1695,5 +1695,27 @@ class CourseController extends ToolBaseController
             'courseId' => $course->getId(),
             'sessionId' => $sessionId,
         ];
+    }
+
+    private function isEnrollmentFrozen(int $courseId, int $userId): bool
+    {
+        if ($courseId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        $connection = $this->em->getConnection();
+
+        $count = (int) $connection->fetchOne(
+            'SELECT COUNT(id)
+         FROM plugin_buycourses_frozen_enrollment
+         WHERE course_id = :courseId
+           AND user_id = :userId',
+            [
+                'courseId' => $courseId,
+                'userId' => $userId,
+            ]
+        );
+
+        return $count > 0;
     }
 }

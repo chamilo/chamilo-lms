@@ -34,6 +34,8 @@ class IndexController extends BaseController
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
     #[Route('/admin-dashboard', name: 'admin_dashboard_entry', options: ['expose' => true])]
     #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
+    #[Route('/my-services', name: 'my_services_entry', options: ['expose' => true])]
+    #[Route('/my-services/{vueRouting}', name: 'my_services_vue_entry', requirements: ['vueRouting' => '.+'], options: ['expose' => true])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
     #[Route('/skill/ranking', name: 'skill_ranking')]

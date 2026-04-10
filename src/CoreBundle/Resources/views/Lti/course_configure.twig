@@ -57,17 +57,6 @@
                                             </div>
 
                                             <div class="flex items-center gap-2">
-                                                {% if tool.isActiveDeepLinking %}
-                                                    <a
-                                                            href="{{ path('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
-                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
-                                                            title="{{ 'Configure'|trans }}"
-                                                    >
-                                                        <span class="mdi mdi-cog-outline text-lg" aria-hidden="true"></span>
-                                                        <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                                    </a>
-                                                {% endif %}
-
                                                 <a
                                                         href="{{ path('chamilo_lti_edit', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
                                                         class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-90 text-white shadow-sm transition hover:opacity-90"

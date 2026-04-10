@@ -906,8 +906,6 @@ class MoodleExport
      */
     private function getActivities(): array
     {
-        @error_log('[MoodleExport::getActivities] Start');
-
         $activities = [];
         $orderBySection = [];
 

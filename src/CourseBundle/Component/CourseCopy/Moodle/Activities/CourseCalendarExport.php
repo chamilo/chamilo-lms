@@ -29,7 +29,6 @@ final class CourseCalendarExport
 
         $xml = $this->buildEventsXml($events);
         file_put_contents($courseDir . '/events.xml', $xml);
-        @error_log('[CourseCalendarExport] Wrote '.count($events).' events to course/events.xml');
 
         return count($events);
     }

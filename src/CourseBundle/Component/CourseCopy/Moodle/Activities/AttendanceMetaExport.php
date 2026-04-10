@@ -58,8 +58,6 @@ class AttendanceMetaExport extends ActivityExport
             'title'     => (string) ($payload['name'] ?? 'Attendance'),
             'path'      => 'chamilo/attendance/attendance_'.$moduleId.'.json',
         ]);
-
-        @error_log('[AttendanceMetaExport] Exported attendance moduleid='.$moduleId.' sectionid='.$sectionId);
     }
 
     /**

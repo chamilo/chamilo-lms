@@ -54,12 +54,9 @@ class FileExport
      */
     public function exportFiles(array $filesData, string $exportDir): void
     {
-        @error_log('[FileExport::exportFiles] Start. exportDir='.$exportDir.' inputCount='.(int) count($filesData['files'] ?? []));
-
         $filesDir = $exportDir.'/files';
         if (!is_dir($filesDir)) {
             mkdir($filesDir, api_get_permissions_for_new_directories(), true);
-            @error_log('[FileExport::exportFiles] Created dir '.$filesDir);
         }
 
         $this->createPlaceholderFile($filesDir);
@@ -116,12 +113,7 @@ class FileExport
             $copiedHashes[$contenthash] = true;
             $copied++;
         }
-
-        @error_log('[FileExport::exportFiles] Copied payloads='.$copied);
-
         $this->createFilesXml($uniqueRows, $exportDir);
-
-        @error_log('[FileExport::exportFiles] Done.');
     }
 
     /**

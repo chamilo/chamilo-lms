@@ -23,7 +23,6 @@ class FolderExport extends ActivityExport
     {
         $normalizedActivityId = $activityId === self::DOCS_MODULE_ID ? 0 : $activityId;
         $folderDir = $this->prepareActivityDirectory($exportDir, 'folder', $moduleId);
-        @error_log('[FolderExport::export] Activity dir='.$folderDir);
 
         $folderData = $this->getData($normalizedActivityId, $sectionId, $moduleId);
         if (!$folderData) {

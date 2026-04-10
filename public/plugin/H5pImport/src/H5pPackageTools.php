@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
-use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Filesystem\Filesystem;
 
 class H5pPackageTools
@@ -61,11 +60,6 @@ class H5pPackageTools
         return $path;
     }
 
-    public static function getPluginsFilesystem(): FilesystemOperator
-    {
-        return Container::$container->get('oneup_flysystem.plugins_filesystem');
-    }
-
     public static function getPersistentStorageRootPrefix(): string
     {
         return 'H5pImport';
@@ -88,7 +82,7 @@ class H5pPackageTools
 
     public static function ensureCoursePersistentStorage(Course $course): void
     {
-        $filesystem = self::getPluginsFilesystem();
+        $filesystem = Container::getPluginsFileSystem();
         $filesystem->createDirectory(self::getCoursePersistentStoragePrefix($course));
         $filesystem->createDirectory(self::getCoursePersistentContentPrefix($course));
         $filesystem->createDirectory(self::getCoursePersistentLibrariesPrefix($course));
@@ -119,7 +113,7 @@ class H5pPackageTools
             return false;
         }
 
-        return self::getPluginsFilesystem()->fileExists($normalizedPath);
+        return Container::getPluginsFileSystem()->fileExists($normalizedPath);
     }
 
     public static function readPersistentFile(string $path)
@@ -130,7 +124,7 @@ class H5pPackageTools
             return false;
         }
 
-        return self::getPluginsFilesystem()->read($normalizedPath);
+        return Container::getPluginsFileSystem()->read($normalizedPath);
     }
 
     public static function readPersistentStream(string $path)
@@ -141,7 +135,7 @@ class H5pPackageTools
             return false;
         }
 
-        return self::getPluginsFilesystem()->readStream($normalizedPath);
+        return Container::getPluginsFileSystem()->readStream($normalizedPath);
     }
 
     public static function getPersistentFileSize(string $path): ?int
@@ -152,7 +146,7 @@ class H5pPackageTools
             return null;
         }
 
-        return self::getPluginsFilesystem()->fileSize($normalizedPath);
+        return Container::getPluginsFileSystem()->fileSize($normalizedPath);
     }
 
     public static function getPersistentMimeType(string $path): ?string
@@ -163,7 +157,7 @@ class H5pPackageTools
             return null;
         }
 
-        return self::getPluginsFilesystem()->mimeType($normalizedPath);
+        return Container::getPluginsFileSystem()->mimeType($normalizedPath);
     }
 
     public static function writeLocalFileToPersistentStorage(string $sourcePath, string $targetPath): void
@@ -181,7 +175,7 @@ class H5pPackageTools
         }
 
         try {
-            self::getPluginsFilesystem()->writeStream($normalizedTargetPath, $stream);
+            Container::getPluginsFileSystem()->writeStream($normalizedTargetPath, $stream);
         } finally {
             fclose($stream);
         }
@@ -201,7 +195,8 @@ class H5pPackageTools
             throw new \RuntimeException(sprintf('The source directory "%s" does not exist.', $sourceDirectory));
         }
 
-        self::getPluginsFilesystem()->createDirectory($normalizedTargetPrefix);
+        $pluginFileSystem = Container::getPluginsFileSystem();
+        $pluginFileSystem->createDirectory($normalizedTargetPrefix);
 
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($sourceDirectory, \FilesystemIterator::SKIP_DOTS),
@@ -214,7 +209,7 @@ class H5pPackageTools
             $targetPath = $normalizedTargetPrefix.'/'.self::normalizeRelativeStoragePath($relativeItemPath);
 
             if ($item->isDir()) {
-                self::getPluginsFilesystem()->createDirectory($targetPath);
+                $pluginFileSystem->createDirectory($targetPath);
                 continue;
             }
 
@@ -225,7 +220,7 @@ class H5pPackageTools
             }
 
             try {
-                self::getPluginsFilesystem()->writeStream($targetPath, $stream);
+                $pluginFileSystem->writeStream($targetPath, $stream);
             } finally {
                 fclose($stream);
             }
@@ -240,7 +235,7 @@ class H5pPackageTools
             return;
         }
 
-        self::getPluginsFilesystem()->deleteDirectory($normalizedPath);
+        Container::getPluginsFileSystem()->deleteDirectory($normalizedPath);
     }
 
 

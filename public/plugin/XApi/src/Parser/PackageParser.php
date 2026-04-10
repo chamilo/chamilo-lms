@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
 use Exception;
-use League\Flysystem\FilesystemOperator;
 
 /**
  * Class PackageParser.
@@ -54,7 +53,7 @@ abstract class PackageParser
 
         if ($this->isStorageUri($path)) {
             $relativePath = $this->getStorageRelativePath($path);
-            $content = $this->getPluginsFilesystem()->read($relativePath);
+            $content = Container::getPluginsFileSystem()->read($relativePath);
 
             return is_string($content) ? $content : (string) $content;
         }
@@ -145,14 +144,6 @@ abstract class PackageParser
             '&',
             PHP_QUERY_RFC3986
         );
-    }
-
-    protected function getPluginsFilesystem(): FilesystemOperator
-    {
-        /** @var FilesystemOperator $filesystem */
-        $filesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
-
-        return $filesystem;
     }
 
     protected function getPluginStorageBasePath(): string

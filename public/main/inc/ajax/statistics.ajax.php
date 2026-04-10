@@ -1479,8 +1479,7 @@ switch ($action) {
             //$resourceFS = Container::$container->get('oneup_flysystem.resource_filesystem');
             /** @var FilesystemOperator $themesFS */
             //$themesFS = Container::$container->get('oneup_flysystem.themes_filesystem');
-            /** @var FilesystemOperator $pluginsFS */
-            //$pluginsFS = Container::$container->get('oneup_flysystem.plugins_filesystem');
+            //$pluginsFS = Container::getPluginsFileSystem();
 
             $dir = api_get_path(SYMFONY_SYS_PATH).'var/';
             $du = exec('du -s '.$dir, $err);

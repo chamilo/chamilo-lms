@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
-use League\Flysystem\FilesystemOperator;
 
 class ExerciseMonitoringPlugin extends Plugin
 {
@@ -72,8 +71,7 @@ class ExerciseMonitoringPlugin extends Plugin
             ]
         );
 
-        /** @var FilesystemOperator $fs */
-        $fs = Container::$container->get('oneup_flysystem.plugins_filesystem');
+        $fs = Container::getPluginsFileSystem();
 
         if (!$fs->directoryExists('ExerciseMonitoring')) {
             $fs->createDirectory('ExerciseMonitoring');

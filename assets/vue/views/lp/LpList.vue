@@ -151,6 +151,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import EmptyState from "../../components/EmptyState.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { LP_LIST_LOADED } from "../../constants/events"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -441,7 +442,14 @@ const load = async () => {
     loading.value = false
   }
 }
-onMounted(load)
+
+onMounted(async () => {
+  await load()
+
+  await nextTick()
+
+  document.dispatchEvent(new CustomEvent(LP_LIST_LOADED))
+})
 
 /**
  * @param {Object} cat

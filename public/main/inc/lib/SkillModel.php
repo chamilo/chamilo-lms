@@ -330,7 +330,7 @@ class SkillModel extends Model
         /** @var Skill $skill */
         foreach ($skills as $skill) {
             if (!$skill->getIcon()) {
-               continue;
+               //continue;
             }
 
             $skillsInfo[] = [
@@ -345,7 +345,7 @@ class SkillModel extends Model
                 'status' => $skill->getStatus(),
                 'asset_id' => (string) $skill->getAsset()?->getId(),
                 'profile_id' => $skill->getLevelProfile()?->getId(),
-                'icons_small' => sprintf('badges/%s-small.png', sha1($skill['title'])),
+                'icons_small' => sprintf('badges/%s-small.png', sha1($skill->getTitle())),
             ];
         }
 

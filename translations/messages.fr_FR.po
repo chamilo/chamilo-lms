@@ -10627,7 +10627,7 @@ msgid "PDF Report"
 msgstr "Certificat en PDF"
 
 msgid "Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blended learning environment."
-msgstr "Bienvenue dans l'outil de Cahier de notes. Cet outil vous permet de définir des objectifs à atteindre pour un cours, d'introduire des notes obtenues en dehors du portail (en salle) et de valider l'acquisition de compétences par la génération d'un certificat. Cette dernière est soumise à la configuration d'un score minimum de certification et à l'élaboration d'un modèle de certificat (survolez les icônes pour trouver ces options)."
+msgstr "Bienvenue dans l'outil de Cahier de notes. Cet outil vous permet de définir des objectifs à atteindre pour un cours, d'introduire des notes obtenues en dehors du portail (en classe) et de valider l'acquisition de compétences par la génération d'un certificat. Cette dernière est soumise à la configuration d'un score minimum de certification et à l'élaboration d'un modèle de certificat (survolez les icônes pour trouver ces options)."
 
 msgid "Create all the courses categories"
 msgstr "Créer tous les dossiers de cours"
@@ -10747,7 +10747,7 @@ msgid "Previous weight of resource"
 msgstr "Poids de la ressource précédemment"
 
 msgid "Add this classroom activity to the assessment"
-msgstr "Ajouter cette activité en salle au cahier de notes"
+msgstr "Ajouter cette activité en classe au cahier de notes"
 
 msgid "Assessment home"
 msgstr "Accueil Evaluation"

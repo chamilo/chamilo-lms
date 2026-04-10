@@ -14,6 +14,7 @@
           <BaseIcon
             icon="courses"
             badge-icon="plus"
+            badge-class="-translate-x-[4px] translate-y-[4px]"
             zoom-trigger="group"
             class="item-button__icon text-success scale-[1.08]"
           />

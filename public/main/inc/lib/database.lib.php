@@ -506,7 +506,7 @@ class Database
                                 $clean_values[] = $item;
                             }
                         } else {
-                            $value_array = self::escape_string($value_array);
+                            $value_array = $value_array ? self::escape_string($value_array) : null;
                             $clean_values = [$value_array];
                         }
 

@@ -33870,3 +33870,12 @@ msgstr "Hiari. Inatumika tu kama kidokezo cha ziada kwa AI."
 msgid "Select a document"
 msgstr "Chagua hati"
 
+msgid "Welcome"
+msgstr "Karibu"
+
+msgid "Welcome to Chamilo"
+msgstr "Karibu Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Kama ni mara yako ya kwanza kutumia Chamilo, hakikisha unatazama menyu ya upande ili kupata njia katika vipengele vyake vingi. Kama unahitaji msaada, utapata <a href=\"https://docs.chamilo.org\">hati rasmi zetu</a> zinaweza kusaidia kwa hati za kawaida, wakati <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum yetu ya mtandaoni</a> inaweza kusaidia kushiriki mawazo na kupata majibu kutoka kwa watumiaji wengine wa Chamilo."
+

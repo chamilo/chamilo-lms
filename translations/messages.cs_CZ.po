@@ -14647,7 +14647,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povolit rozšířené panely nástrojů, když je WYSIWYG editor maximalizován"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Přejít přímo do kurzu po přihlášení"
@@ -32380,7 +32380,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Smazání selhalo: chybí kontext kurzu nebo neplatné ID otázky."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Rozšíření APCu musí být nainstalováno a povoleno, aby platforma mohla být použita."
@@ -33869,4 +33869,13 @@ msgstr "Volitelné. Používá se pouze jako další nápověda pro AI."
 
 msgid "Select a document"
 msgstr "Vybrat dokument"
+
+msgid "Welcome"
+msgstr "Vítejte"
+
+msgid "Welcome to Chamilo"
+msgstr "Vítejte v Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Pokud používáte Chamilo poprvé, podívejte se na boční menu, abyste se zorientovali v jeho mnoha funkcích. Pokud potřebujete pomoc, naše <a href=\"https://docs.chamilo.org\">oficiální dokumentace</a> vám pomůže se standardní dokumentací, zatímco naše <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online fórum</a> vám pomůže sdílet nápady a najít odpovědi od jiných uživatelů Chamilo."
 

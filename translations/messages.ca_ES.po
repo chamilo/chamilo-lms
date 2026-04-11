@@ -33889,3 +33889,12 @@ msgstr "Opcional. S'utilitza només com a pista addicional per a la IA."
 msgid "Select a document"
 msgstr "Selecciona un document"
 
+msgid "Welcome"
+msgstr "Benvingut"
+
+msgid "Welcome to Chamilo"
+msgstr "Benvingut a Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Si és la primera vegada que utilitzeu Chamilo, assegureu-vos de consultar el menú lateral per trobar el camí a través de les seves moltes funcionalitats. Si necessiteu ajuda, trobareu que <a href=\"https://docs.chamilo.org\">la nostra documentació oficial</a> us pot ajudar per a la documentació estàndard, mentre que el nostre <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">fòrum en línia</a> us pot ajudar a compartir idees i trobar respostes d'altres usuaris de Chamilo."
+

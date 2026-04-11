@@ -33870,3 +33870,12 @@ msgstr "სურვილისამებრ. გამოიყენებ�
 msgid "Select a document"
 msgstr "შეარჩიეთ დოკუმენტი"
 
+msgid "Welcome"
+msgstr "მოგესალმებით"
+
+msgid "Welcome to Chamilo"
+msgstr "მოგესალმებით Chamilo-ში"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> თუ ეს არის თქვენი პირველი ჯერზე Chamilo-ს გამოყენება, დარწმუნდით რომ შეამოწმებთ გვერდით მენიუს მისი მრავალი ფუნქციის საპოვნელად. თუ დაგჭირდებათ დახმარება, <a href=\"https://docs.chamilo.org\"> ჩვენი ოფიციალური დოკუმენტაცია</a> დაგეხმარებათ სტანდარტული დოკუმენტაციისთვის, ხოლო ჩვენი <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ონლაინ ფორუმი</a> დაგეხმარებათ იდეების გაზიარებასა და სხვა Chamilo მომხმარებლებისგან პასუხების მოძიებაში."
+

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula primer: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -33876,4 +33876,13 @@ msgstr "Opcionalno. Koristi se samo kao dodatna napomena za AI."
 
 msgid "Select a document"
 msgstr "Izaberite dokument"
+
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+msgid "Welcome to Chamilo"
+msgstr "Dobrodošli u Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ako je ovo vaš prvi put da koristite Chamilo, proverite bočni meni da biste pronašli put kroz njegove mnoge funkcije. Ako vam je potrebna pomoć, <a href=\"https://docs.chamilo.org\">naša zvanična dokumentacija</a> može pomoći za standardnu dokumentaciju, dok naš <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> može pomoći u razmeni ideja i pronalaženju odgovora od drugih korisnika Chamilo-a."
 

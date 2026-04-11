@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomulka tusaalaha: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -33869,4 +33869,13 @@ msgstr "Ikhtiyaari. Waxa loo isticmaalaa oo keliya sida tilmaamo dheeraad ah oo 
 
 msgid "Select a document"
 msgstr "Dooro dukumentiga"
+
+msgid "Welcome"
+msgstr "Ku soo dhawow"
+
+msgid "Welcome to Chamilo"
+msgstr "Ku soo dhawow Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Haddii kani yahay markii ugu horeysay ee aad isticmaasho Chamilo, hubi inaad ka hubiso menu-ka dhinaca bidix si aad u hesho jidka loo maro astaamihiisa badan. Haddii aad u baahan tahay caawinaad, waxaad ka heli doontaa <a href=\"https://docs.chamilo.org\">dukumentiyada rasmiga ah</a> waxay kaa caawin karaan dukumentiga caadiga ah, halka <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">guddiga online-ka</a> uu kaa caawin karo wadaagista fikradaha iyo helista jawaabaha ka yimaada isticmaale kale ee Chamilo."
 

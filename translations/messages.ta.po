@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர நட样: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "பூரண உதாரணம்: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -33873,4 +33873,13 @@ msgstr "விருப்பமானது. AIக்கான கூடுத�
 
 msgid "Select a document"
 msgstr "ஆவணத்தைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Welcome"
+msgstr "வரவேற்கிறோம்"
+
+msgid "Welcome to Chamilo"
+msgstr "Chamiloக்கு வரவேற்கிறோம்"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Chamilo ஐ முதல் முறையாக பயன்படுத்தினால், அதன் பல அம்சங்களை அறிய பக்கப் பட்டியை சரிபார்க்கவும். உதவி தேவைப்பட்டால், <a href=\"https://docs.chamilo.org\">எங்கள் அதிகாரப்பூர்வ ஆவணங்கள்</a> தரமான ஆவணப்படுத்தலுக்கு உதவும், எங்கள் <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ஆன்லைன் மன்றம்</a> Chamilo பயனர்களிடமிருந்து யோசனைகளைப் பகிர்ந்து பதில்களைக் கண்டுபிடிக்க உதவும்."
 

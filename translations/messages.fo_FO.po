@@ -33870,3 +33870,12 @@ msgstr "Valfrítt. Bert brúkt sum ein viðbótarhjálp til AI."
 msgid "Select a document"
 msgstr "Vel eitt dokument"
 
+msgid "Welcome"
+msgstr "Velkomin"
+
+msgid "Welcome to Chamilo"
+msgstr "Velkomin til Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Um hetta er fyrstu ferð tú brúkar Chamilo, so trygg at tú skoðar síðuna til at finna veg fram gjøgnum harin mongu funktionirnar. Um tú hevur brúk fyri hjálp, so finnur tú <a href=\"https://docs.chamilo.org\">okkara stovnrætta dokumentation</a> hjálpir við vanligum tingum, meðan okkara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> kann hjálpa við at deila hugmyndum og finna svar hjá øðrum Chamilo-brúkarum."
+

@@ -1,0 +1,63 @@
+# Chamilo 2.0 LMS
+
+## Overview
+Chamilo is an open-source Learning Management System (LMS) and e-learning collaboration platform. This is version 2.0, built with Symfony 6.4 (PHP) and Vue.js 3.
+
+## Tech Stack
+- **Backend**: PHP 8.2 + Symfony 6.4 + Doctrine ORM
+- **Frontend**: Vue.js 3, Webpack Encore, Tailwind CSS, SCSS
+- **API**: API Platform 3.0, JWT Authentication
+- **Database**: MySQL 8.0 (running locally)
+- **Package Managers**: Composer (PHP), Yarn 4 (JS)
+
+## Architecture
+- `src/` - Symfony PHP source (CoreBundle, CourseBundle, LtiBundle)
+- `assets/` - Frontend source (Vue components, CSS/SCSS, JS)
+- `public/` - Web root (entry point index.php, legacy PHP, build assets)
+- `config/` - Symfony configuration
+- `translations/` - i18n translation files
+- `var/` - Cache and logs
+
+## Running the App
+The `start.sh` script handles everything:
+1. Starts MySQL 8.0 server on port 3306
+2. Creates the `chamilo` database if not present
+3. Generates JWT keys if missing
+4. Builds frontend assets if not built (first run takes ~3 min)
+5. Starts PHP built-in server on port 5000
+
+## Database Configuration
+- Host: 127.0.0.1 (via socket: /home/runner/mysql_run/mysql.sock)
+- Database: chamilo
+- User: chamilo
+- Password: chamilo_pass
+- MySQL data dir: /home/runner/mysql_data
+
+## Environment Variables (.env)
+- `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`
+- `APP_ENV=dev`, `APP_DEBUG=1`
+- `APP_INSTALLED=0` (set to `1` after installation completes)
+- `APP_SECRET` - Symfony security secret
+- JWT keys in `config/jwt/`
+
+## First-Time Setup
+After starting the workflow, visit the app to use the Chamilo installation wizard:
+1. Step 1: Language selection
+2. Step 2: Requirements check
+3. Step 3: License
+4. Step 4: Database settings (use the values above)
+5. Step 5: Admin configuration
+6. Step 6: Installation overview
+7. Step 7: Install
+
+## Frontend Assets
+Built with Webpack Encore. The first build takes ~3 minutes.
+- Dev: `yarn dev`
+- Production: `yarn build`
+- Watch mode: `yarn watch`
+
+## Notes
+- MySQL 8.0 is installed as a Nix system dependency
+- The `public/build/` directory is gitignored (built at runtime)
+- Frontend assets must be built before the app works properly
+- The installer is a Vue.js SPA served from `public/main/install/index.php`

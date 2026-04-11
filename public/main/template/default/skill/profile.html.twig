@@ -36,9 +36,9 @@
                     {{ "Complete match"|trans }}
                 {% else %}
                     {% if (total_search_skills - count) == 1 %}
-                        {{ "Missing <b>one</b> step to match"|trans }}
+                        {{ "Missing <b>one</b> step to match"|trans|raw }}
                     {% else %}
-                        {{ "Missing <b>%s</b> steps"|trans|format(total_search_skills - count) }}
+                        {{ "Missing <b>%s</b> steps"|trans|format(total_search_skills - count)|raw }}
                     {% endif %}
                 {% endif %}
             </h3>

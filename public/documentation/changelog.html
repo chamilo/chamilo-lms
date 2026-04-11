@@ -35,29 +35,36 @@
     </div>
 
     <a id="2.0-stable"></a>
-    <h1>Chamilo 2.0 stable - [name], 2026-04-?</h1>
+    <h1>Chamilo 2.0 stable - Cadbury, 2026-04-11</h1>
     <h3>Release notes - summary</h3>
     <p>
-        Chamilo 2.0 stable is the first stable release of the new Chamilo 2.0 branch.
+        This is the first stable release of the new Chamilo 2.0 branch.<br>
         It is based on Chamilo 1.11.10 and represents the culmination of years of work
         to modernize the platform's architecture, adopting Symfony 6 as a main controller
         and framework, VueJS as the frontend framework, and TailwindCSS as the CSS framework.
     </p>
     <p>
-        For the first time in 16 years (since its launch in 2010),
+        For the first time in roughly 16 years (since its launch in 2010),
         Chamilo considerably changes appearance, with a new, foldable left menu (meant
         to improve space usage on mobile devices), with a streamlined (and Open Source) set of
         icons, and with a design that will allow more flexibility and speed across devices.
     </p>
     <p>
-        This stable release builds on top of RC 3 (Axium) with a final set of security fixes,
-        restored legacy settings, new features, and various improvements and bug fixes.
-        The database and files structure are now considered stable for plugin development
-        and third-party integrations.
+        This stable release builds on top of Chamilo 1.11, adding considerable structural
+        improvements, new features and visual redesign as well as smart inclusion of AI
+        features.
+    </p>
+    <p>
+        The sections below this *stable* release section (RC, Beta and Alpha versions) 
+        should all be considered part of this same release, as they were but mere steps
+        in the final release of v2.0. So if you want to recompose what's new from 1.11 to 2.0,
+        you should really check all the "Added" sections below.<br>
+        Other, less technical, versions of this change log will be available on
+        our website at <a href="https://chamilo.org">https://chamilo.org</a>.
     </p>
 
     <h3>Release name</h3>
-    <p>[name] (fiction village name, see French art)</p>
+    <p>Cadbury (Somerset, England) is the place most believed to be the mythical ground of the Camelot castle in the Arthurian legend, the legendary place where King Arthur gathered his knights around a round table where everyone was equal, reflecting Chamilo's founding vision of democratizing education by giving everyone equal access to learning, no matter where they are.</p>
 
     <h3>Security fixes</h3>
     <ul aria-live="off">
@@ -115,6 +122,14 @@
         <li>[2026-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/247271c9bd">247271c9</a>) Language: Add all translations to all plugins</li>
         <li>[2026-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/85fe41a8ec">85fe41a8</a>) Language: Fix term translation (es)</li>
         <li>[2026-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/77d79a6426">77d79a64</a>) Internal: Fix document loading in edition form</li>
+    </ul>
+
+    <h3>Known issues</h3>
+    <ul aria-live="off">
+        <li>Updates: Users have reported some issues with images not matching the question in question descriptions after migration from 1.11 to 2.0 (unverified).</li>
+        <li>Plugins: Most plugins from v1.11.* have not been integrated in Chamilo v2.0 at the time of the release. Some (16 of 76) are, but have only been tested mildly. We will improve this with v2.1.</li>
+        <li>Mobile: No mobile app is available at the time of the release. Chamilo v2.0 comes with PWA (Progressive Web Apps) support, and most of the interface can be used through mobile devices as student (it will reasonnably adapt to the screen properties), but some buttons with both an icon and text might still somehow appear slightly too big for the screen size.</li>
+        <li>Chamilo v2.0 also comes with native support for flexible API needs with the adoption of APIPlatform (see /api endpoint if enabled), so developing your own mobile apps or integrations with Chamilo v2.0 should be much simpler than before. Endpoints from v1 API are currently not supported. We will work on these with customers and users as the needs pop up.</li>
     </ul>
 
     <a id="2.0-rc.3"></a>

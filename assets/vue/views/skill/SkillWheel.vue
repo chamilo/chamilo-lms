@@ -136,7 +136,7 @@ async function onSearchProfile(profile) {
 <template>
   <SectionHeader :title="t('Skills wheel')" />
 
-  <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="xl:col-span-1 skill-options flex flex-col gap-4">
       <SkillWheelProfileList
         v-if="canUseProfiles"
@@ -214,14 +214,14 @@ async function onSearchProfile(profile) {
           <li>
             <BaseIcon
               icon="square"
-              style="color: #F89406"
+              style="color: #f89406"
             />
             {{ t("Skills you can learn") }}
           </li>
           <li>
             <BaseIcon
               icon="square"
-              style="color: #B94A48"
+              style="color: #b94a48"
             />
             {{ t("Skills searched for") }}
           </li>
@@ -229,7 +229,7 @@ async function onSearchProfile(profile) {
       </BaseCard>
     </div>
 
-    <div class="xl:col-span-2">
+    <div class="md:col-span-2">
       <SkillWheelGraph
         v-show="!showProfileMatches"
         ref="wheelEl"

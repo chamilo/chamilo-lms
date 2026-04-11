@@ -367,7 +367,7 @@ function resolveSettingsSectionLabel(nsRaw) {
   const ns = String(nsRaw || "").trim()
   // Safer because it's already translated server-side.
   try {
-    const current = document.querySelector(".list-group a.bg-gray-25")
+    const current = document.querySelector(".admin-settings__list a.admin-settings__item--active")
     const domText = current?.textContent?.trim()
     if (domText) {
       return domText

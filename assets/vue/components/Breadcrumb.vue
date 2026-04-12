@@ -4,8 +4,8 @@
     class="app-breadcrumb"
   >
     <Breadcrumb
-      :model="items"
       :home="home"
+      :model="items"
     >
       <template #item="{ item, props }">
         <BaseIcon
@@ -24,8 +24,8 @@
         </BaseAppLink>
         <span
           v-else
-          v-text="item.label"
           v-bind="props.action"
+          v-text="item.label"
         />
       </template>
 
@@ -40,13 +40,13 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, watchEffect, onMounted } from "vue"
+import { computed, onMounted, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { storeToRefs } from "pinia"
+import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
-import { storeToRefs } from "pinia"
-import { useStore } from "vuex"
 import BaseIcon from "./basecomponents/BaseIcon.vue"
 
 const legacyItems = ref([])
@@ -385,7 +385,7 @@ function normalizeLegacyUrl(rawUrl) {
       const full = u.pathname + u.search + u.hash
       const idx = full.indexOf("main/")
       return idx >= 0 ? "/" + full.substring(idx) : full || "#"
-    } catch (e) {
+    } catch {
       return "#"
     }
   }
@@ -396,7 +396,7 @@ function normalizeLegacyUrl(rawUrl) {
     const full = resolved.pathname + resolved.search + resolved.hash
     const idx = full.indexOf("main/")
     return idx >= 0 ? "/" + full.substring(idx) : full || "#"
-  } catch (e) {
+  } catch {
     return "#"
   }
 }
@@ -435,7 +435,7 @@ watchEffect(() => {
 })
 
 function buildAccessUrlDeleteBreadcrumb() {
-  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/.test(route.path)) {
+  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/u.test(route.path)) {
     return false
   }
 
@@ -633,9 +633,8 @@ function handleBreadcrumbClick(item, event) {
   let resolved
   try {
     resolved = router.resolve(item.route)
-  } catch (e) {
+  } catch {
     // Avoid throwing in console when a route is not registered.
-    // console.debug("[Breadcrumb] route resolve failed", e)
     return
   }
 

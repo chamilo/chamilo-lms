@@ -100,15 +100,6 @@ const items = computed(() => {
  */
 const gid = computed(() => getQueryInt("gid", 0))
 
-/**
- * Course/session context from query.
- * Why:
- * - Some pages are legacy and do not populate cidReq store immediately.
- * - We still want consistent breadcrumbs if cid/sid are present.
- */
-const cid = computed(() => getQueryInt("cid", 0))
-const sid = computed(() => getQueryInt("sid", 0))
-
 onMounted(() => {
   const wb = window.breadcrumb
   if (Array.isArray(wb) && wb.length > 0) {
@@ -126,32 +117,24 @@ const formatToolName = (name) => {
 
 /**
  * Decide if current page is inside a course/session context.
- * - Prefer explicit cid/sid query.
- * - Fallback to store data for Vue-only routes like CourseHome.
+ * The cidReq store is guaranteed to be populated by router.beforeResolve before render.
  */
 function isInCourseOrSessionContext() {
-  // Explicit legacy context (most reliable)
-  if (cid.value > 0 || sid.value > 0) return true
+  const routeName = route.name
 
-  // Vue-only / SPA context fallback
-  const routeName = String(route.name || "")
-  if (routeName === "CourseHome") return true
+  if (!routeName) {
+    return false
+  }
 
-  // If store still has a course, we assume context unless this is a top-level route.
-  // This keeps behavior stable for tool pages that might not carry cid in query.
-  if (course.value?.id && !specialRouteNames.includes(routeName)) return true
+  if (routeName === "CourseHome") {
+    return true
+  }
+
+  if (course.value?.id && !specialRouteNames.includes(routeName)) {
+    return true
+  }
 
   return false
-}
-
-/**
- * Determine whether root crumb should be "My sessions" or "My courses".
- * We consider session context if sid is present OR store session exists.
- */
-function isSessionContext() {
-  if (sid.value > 0) return true
-  const sidStore = Number(session.value?.id || 0)
-  return sidStore > 0
 }
 
 /**
@@ -163,18 +146,24 @@ function isSessionContext() {
  * - Avoid duplicates when legacy breadcrumbs already include it.
  */
 function addCourseContextRootBreadcrumbIfNeeded() {
-  if (!isInCourseOrSessionContext()) return
+  if (!isInCourseOrSessionContext()) {
+    return
+  }
 
-  const rootRouteName = isSessionContext() ? "MySessions" : "MyCourses"
-  const rootLabel = t(isSessionContext() ? "My sessions" : "My courses")
+  const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
+  const rootLabel = t(session.value?.id ? "My sessions" : "My courses")
 
   // Avoid duplicates by route name or by label.
   const exists = calculatedList.value.some((it) => {
     const sameRoute = it?.route?.name && it.route.name === rootRouteName
     const sameLabel = stripHtml(it?.label || "") === stripHtml(rootLabel)
+
     return sameRoute || sameLabel
   })
-  if (exists) return
+
+  if (exists) {
+    return
+  }
 
   calculatedList.value.push({
     label: rootLabel,

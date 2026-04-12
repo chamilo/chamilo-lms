@@ -187,11 +187,13 @@ const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName)
     },
   })
 
-  if (route.name === listRouteName) return
+  if (route.name === listRouteName) {
+    return
+  }
 
   if (resourceNode.value?.title) {
     const resourceLabel = resourceNode.value.title
-    const idParam = cleanIdParam(route.params.id)
+    const idParam = route.params.id?.toString().match(/(\d+)$/)?.[1]
 
     calculatedList.value.push({
       label: resourceLabel,
@@ -531,13 +533,6 @@ watchEffect(() => {
 
 // Load resourceNode if not already available
 watchResourceNodeLoader()
-
-// Extracts numeric ID from route param (e.g., "/api/resource_nodes/123" → 123)
-function cleanIdParam(id) {
-  if (!id) return undefined
-  const match = id.toString().match(/(\d+)$/)
-  return match ? id.toString().match(/(\d+)$/)[1] : id
-}
 
 function buildManualBreadcrumbIfNeeded() {
   // If server already injected legacy breadcrumbs, use them.

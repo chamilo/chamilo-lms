@@ -403,89 +403,100 @@ function normalizeLegacyUrl(rawUrl) {
 
 // Watch route changes to dynamically rebuild the breadcrumb trail
 watchEffect(() => {
-  if ("/" === route.fullPath) return
-  calculatedList.value = []
-  // special-case accessurl routes
-  if (/^\/resources\/accessurl\/[^\/]+\/delete(?:\/|$)/.test(route.path)) {
-    calculatedList.value.push({
-      label: t("Administration"),
-      url: "/main/admin/index.php",
-    })
-
-    calculatedList.value.push({
-      label: t("Multiple access URL / Branding"),
-      url: "/main/admin/access_urls.php",
-    })
-
-    calculatedList.value.push({ label: t("Delete access") })
-
+  if ("/" === route.fullPath) {
     return
   }
 
-  if (buildManualBreadcrumbIfNeeded()) return
+  calculatedList.value = []
 
-  // Static route categories (must use "route" or "url" for our slot)
+  if (buildAccessUrlDeleteBreadcrumb()) {
+    return
+  }
+
+  if (buildManualBreadcrumbIfNeeded()) {
+    return
+  }
+
+  addStaticCategoryPrefixes()
+
+  if (specialRouteNames.includes(route.name)) {
+    return
+  }
+
+  addCourseContextRootBreadcrumbIfNeeded()
+  addCourseTitleCrumb()
+  addGroupBreadcrumbIfNeeded()
+
+  if (buildToolBreadcrumb()) {
+    return
+  }
+
+  addRemainingMatchedBreadcrumbs()
+})
+
+function buildAccessUrlDeleteBreadcrumb() {
+  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/.test(route.path)) {
+    return false
+  }
+
+  calculatedList.value.push({
+    label: t("Administration"),
+    url: "/main/admin/index.php",
+  })
+  calculatedList.value.push({
+    label: t("Multiple access URL / Branding"),
+    url: "/main/admin/access_urls.php",
+  })
+  calculatedList.value.push({ label: t("Delete access") })
+
+  return true
+}
+
+function addStaticCategoryPrefixes() {
   if (route.name?.includes("Page")) {
     calculatedList.value.push({ label: t("Pages"), route: { path: "/resources/pages" } })
   }
   if (route.name?.includes("Message")) {
     calculatedList.value.push({ label: t("Messages"), route: { path: "/resources/messages" } })
   }
+}
 
-  // Do not build breadcrumb for top-level routes
-  if (specialRouteNames.includes(route.name)) return
-
-  // NEW: Always add a consistent root crumb in course/session context.
-  // This fixes "My courses/My sessions appears sometimes" inconsistency.
-  addCourseContextRootBreadcrumbIfNeeded()
-
-  // Legacy breadcrumb fallback (Twig pages injecting window.breadcrumb)
-  if (legacyItems.value.length > 0) {
-    legacyItems.value.forEach((item) => {
-      const newUrl = normalizeLegacyUrl(item?.url)
-      calculatedList.value.push({ label: item.name, url: newUrl || undefined })
-    })
-    legacyItems.value = []
-    return
-  }
-
-  // Standard: add course title crumb
+function addCourseTitleCrumb() {
   if (course.value && route.name !== "CourseHome") {
     calculatedList.value.push({
       label: course.value.title,
       route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
     })
   }
+}
 
-  // NEW: Group crumb if gid is present
-  addGroupBreadcrumbIfNeeded()
-
+function buildToolBreadcrumb() {
   const mainToolName = route.matched?.[0]?.name
   const currentRouteName = route.name || ""
   const nodeId = route.params.node || route.query.node
   const isAssignmentRoute = currentRouteName.startsWith("Assignment") && resourceNode.value && nodeId
   const isAttendanceRoute = currentRouteName.startsWith("Attendance") && resourceNode.value && nodeId
 
-  // Documents breadcrumb (based on resourceNode hierarchy)
   if (mainToolName === "documents" && resourceNode.value) {
     addDocumentBreadcrumb()
-    return
+
+    return true
   }
 
-  // Assignments
   if (isAssignmentRoute) {
     addToolWithResourceBreadcrumb("Assignments", "AssignmentsList", "AssignmentDetail")
-    return
+
+    return true
   }
 
-  // Attendance
   if (isAttendanceRoute) {
     addToolWithResourceBreadcrumb("Attendance", "AttendanceList", "AttendanceSheetList")
-    return
+
+    return true
   }
 
-  // Admin resource routes (rooms, branches) — prepend Administration crumb
   const adminResourceRoutes = ["rooms", "branches"]
+
   if (adminResourceRoutes.includes(mainToolName)) {
     calculatedList.value.push({
       label: t("Administration"),
@@ -493,7 +504,6 @@ watchEffect(() => {
     })
   }
 
-  // Generic tool fallback
   if (mainToolName && !["documents", "assignments", "attendance"].includes(mainToolName)) {
     const matchedRoutes = route.matched
     const toolBase = matchedRoutes[0]
@@ -504,17 +514,21 @@ watchEffect(() => {
     if (mainToolName === "ccalendarevent") {
       const cidVal = Number(route.query?.cid || 0)
       const gidVal = Number(route.query?.gid || 0)
+
       toolLabel = gidVal > 0 ? "Group agenda" : cidVal > 0 ? "Agenda" : "Personal agenda"
     }
+
     calculatedList.value.push({
       label: t(toolLabel),
       route: { name: toolBase.name, params: route.params, query: route.query },
     })
 
     const label = currentMatched.meta?.breadcrumb
+
     if (label !== "") {
       const finalLabel = label || formatToolName(currentMatched.name)
       const alreadyShown = calculatedList.value.some((item) => item.label === t(finalLabel))
+
       if (!alreadyShown) {
         calculatedList.value.push({
           label: t(finalLabel),
@@ -522,13 +536,11 @@ watchEffect(() => {
         })
       }
     }
-    return
+    return true
   }
 
-  // Fallback to route hierarchy
-  addRemainingMatchedBreadcrumbs()
-})
-
+  return false
+}
 
 function buildManualBreadcrumbIfNeeded() {
   // If server already injected legacy breadcrumbs, use them.

@@ -14,7 +14,7 @@
           size="small"
         />
         <BaseAppLink
-          v-if="(item.route || item.url) && item !== items[items.length - 1]"
+          v-if="(item.route || item.url) && !item.isLast"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
@@ -89,9 +89,11 @@ const items = computed(() => {
     return []
   }
 
-  return calculatedList.value.slice(1).map((item) => ({
+  const list = calculatedList.value.slice(1)
+  return list.map((item, index) => ({
     ...item,
     label: stripHtml(item.label),
+    isLast: index === list.length - 1,
   }))
 })
 

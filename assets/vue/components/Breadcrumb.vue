@@ -231,34 +231,32 @@ function addRemainingMatchedBreadcrumbs() {
   })
 }
 
-function watchResourceNodeLoader() {
-  watch(
-    () => route.fullPath,
-    async () => {
-      const currentRouteName = route.name || ""
-      const isAssignmentRoute = currentRouteName.startsWith("Assignment")
-      const isAttendanceRoute = currentRouteName.startsWith("Attendance")
-      const isDocumentRoute = currentRouteName.startsWith("Documents")
-      const nodeId = route.params.node || route.query.node
+watch(
+  () => route.fullPath,
+  async () => {
+    const currentRouteName = route.name || ""
+    const isAssignmentRoute = currentRouteName.startsWith("Assignment")
+    const isAttendanceRoute = currentRouteName.startsWith("Attendance")
+    const isDocumentRoute = currentRouteName.startsWith("Documents")
+    const nodeId = route.params.node || route.query.node
 
-      if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
-        try {
-          store.commit("resourcenode/setResourceNode", null)
-          const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
+    if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
+      try {
+        store.commit("resourcenode/setResourceNode", null)
+        const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
 
-          await store.dispatch("resourcenode/findResourceNode", {
-            id: resourceApiId,
-            cid: course.value?.id,
-            sid: session.value?.id,
-          })
-        } catch (e) {
-          console.error("[Breadcrumb] failed to load resourceNode", e)
-        }
+        await store.dispatch("resourcenode/findResourceNode", {
+          id: resourceApiId,
+          cid: course.value?.id,
+          sid: session.value?.id,
+        })
+      } catch (e) {
+        console.error("[Breadcrumb] failed to load resourceNode", e)
       }
-    },
-    { immediate: true },
-  )
-}
+    }
+  },
+  { immediate: true },
+)
 
 function addDocumentBreadcrumb() {
   const folderTrail = []
@@ -531,8 +529,6 @@ watchEffect(() => {
   addRemainingMatchedBreadcrumbs()
 })
 
-// Load resourceNode if not already available
-watchResourceNodeLoader()
 
 function buildManualBreadcrumbIfNeeded() {
   // If server already injected legacy breadcrumbs, use them.

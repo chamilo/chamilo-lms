@@ -110,7 +110,7 @@ const cid = computed(() => getQueryInt("cid", 0))
 const sid = computed(() => getQueryInt("sid", 0))
 
 onMounted(() => {
-  const wb = (window && window.breadcrumb) || []
+  const wb = window.breadcrumb
   if (Array.isArray(wb) && wb.length > 0) {
     legacyItems.value = wb
   }
@@ -333,17 +333,13 @@ function addGroupBreadcrumbIfNeeded() {
  */
 function buildGroupSpaceUrl(currentGid) {
   // Keep 0 values if present (sid=0 is valid)
-  const cidRaw = route.query?.cid ?? course.value?.id ?? 0
-  const sidRaw = route.query?.sid ?? session.value?.id ?? 0
-
-  const cidStr = String(cidRaw ?? "0")
-  const sidStr = String(sidRaw ?? "0")
-  const gidStr = String(currentGid)
+  const cid = route.query?.cid ?? course.value?.id ?? 0
+  const sid = route.query?.sid ?? session.value?.id ?? 0
 
   const qs = new URLSearchParams()
-  qs.set("cid", cidStr)
-  qs.set("sid", sidStr)
-  qs.set("gid", gidStr)
+  qs.set("cid", String(cid))
+  qs.set("sid", String(sid))
+  qs.set("gid", String(currentGid))
 
   return `/main/group/group_space.php?${qs.toString()}`
 }
@@ -418,8 +414,6 @@ watchEffect(() => {
   calculatedList.value = []
   // special-case accessurl routes
   if (/^\/resources\/accessurl\/[^\/]+\/delete(?:\/|$)/.test(route.path)) {
-    calculatedList.value = []
-
     calculatedList.value.push({
       label: t("Administration"),
       url: "/main/admin/index.php",

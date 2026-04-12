@@ -32,7 +32,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "alpinejs": "^3.15.11",
-    "axios": "^1.14.0",
+    "axios": "^1.15.0",
     "blueimp-file-upload": "^10.32.0",
     "blueimp-load-image": "^5.16.0",
     "bootstrap-daterangepicker": "^3.1.0",
@@ -153,7 +153,11 @@
     "yaml": ">=2.8.3",
     "picomatch@^2": "2.3.2",
     "picomatch@>=4.0.0": ">=4.0.4",
-    "lodash": ">=4.18.1"
+    "lodash": ">=4.18.1",
+    "@xmldom/xmldom": ">=0.8.12",
+    "flatted": ">=3.4.2",
+    "path-to-regexp": ">=0.1.13",
+    "preact": ">=10.28.2"
   },
   "license": "GPL-3.0",
   "packageManager": "yarn@4.13.0"

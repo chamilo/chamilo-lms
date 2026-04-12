@@ -168,10 +168,10 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     'variable' => 'push_notification_settings',
                     'json_example' => [
                         'gotify_url' => 'http://localhost:8080',
-                        'gotify_token' => 'A0yWWfe_8YRLv_B',
+                        'gotify_token' => 'your-gotify-token-here',
                         'enabled' => true,
-                        'vapid_public_key' => 'BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=',
-                        'vapid_private_key' => 'UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o',
+                        'vapid_public_key' => 'your-vapid-public-key-here',
+                        'vapid_private_key' => 'your-vapid-private-key-here',
                     ],
                 ],
                 [

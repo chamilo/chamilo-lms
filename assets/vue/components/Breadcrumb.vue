@@ -54,7 +54,7 @@ const legacyItems = ref([])
 const cidReqStore = useCidReqStore()
 const route = useRoute()
 const router = useRouter()
-const { t, te } = useI18n()
+const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 const store = useStore()
@@ -311,7 +311,7 @@ function addGroupBreadcrumbIfNeeded() {
   const currentGid = gid.value
   if (!currentGid || currentGid <= 0) return
 
-  const labelBase = translateOrFallback("Group", "Group")
+  const labelBase = t("Group")
   const padded = String(currentGid).padStart(4, "0")
   const label = `${labelBase} ${padded}`
 
@@ -349,44 +349,16 @@ function buildGroupSpaceUrl(currentGid) {
 }
 
 /**
- * Resolve translated label safely.
- */
-function translateOrFallback(key, fallback) {
-  try {
-    if (typeof te === "function" && te(key)) {
-      return t(key)
-    }
-  } catch (e) {}
-  return fallback
-}
-
-/**
  * Resolve translated label for /admin/settings/:namespace
  */
-function resolveSettingsSectionLabel(nsRaw) {
-  const ns = String(nsRaw || "").trim()
+function resolveSettingsSectionLabel() {
   // Safer because it's already translated server-side.
-  try {
-    const current = document.querySelector(".admin-settings__list a.admin-settings__item--active")
-    const domText = current?.textContent?.trim()
-    if (domText) {
-      return domText
-    }
-  } catch (e) {}
+  const current = document.querySelector(".admin-settings__list a.admin-settings__item--active")
+  const domText = current?.textContent?.trim()
 
-  // i18n candidates
-  const candidates = [
-    `settings_section.${ns}`,
-    `settings_section.${ns.replace(/-/g, "_")}`,
-    ns,
-    ns.replace(/[-_]/g, " "),
-  ]
-  for (const key of candidates) {
-    const has = typeof te === "function" && te(key)
-    if (has) return t(key)
+  if (domText) {
+    return domText
   }
-
-  return ns.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 /**
@@ -609,7 +581,6 @@ function buildManualBreadcrumbIfNeeded() {
   // /admin/settings/<namespace>
   const isAdminSettings = pathSegments[1] === "settings"
   if (isAdminSettings) {
-    const ns = pathSegments[2] || route.params?.namespace || route.query?.namespace || ""
     const adminLabel = t("Admin")
     calculatedList.value.push({
       label: adminLabel,
@@ -619,7 +590,7 @@ function buildManualBreadcrumbIfNeeded() {
       label: t("Settings"),
       route: { path: "/admin/settings" },
     })
-    const section = resolveSettingsSectionLabel(ns)
+    const section = resolveSettingsSectionLabel()
     calculatedList.value.push({ label: section })
     return true
   }

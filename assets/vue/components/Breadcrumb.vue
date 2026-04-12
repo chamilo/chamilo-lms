@@ -20,11 +20,11 @@
           v-bind="props.action"
           @click="handleBreadcrumbClick(item, $event)"
         >
-          {{ stripHtml(item.label) }}
+          {{ item.label }}
         </BaseAppLink>
         <span
           v-else
-          v-text="stripHtml(item.label)"
+          v-text="item.label"
           v-bind="props.action"
         />
       </template>
@@ -75,14 +75,13 @@ const specialRouteNames = [
 const calculatedList = ref([])
 
 const home = computed(() => {
-  if (calculatedList.value.length) {
-    return {
-      ...calculatedList.value[0],
-      icon: "compass",
-    }
+  if (!calculatedList.value.length) {
+    return undefined
   }
 
-  return undefined
+  const first = calculatedList.value[0]
+
+  return { ...first, label: stripHtml(first.label), icon: "compass" }
 })
 
 const items = computed(() => {
@@ -90,7 +89,10 @@ const items = computed(() => {
     return []
   }
 
-  return calculatedList.value.slice(1)
+  return calculatedList.value.slice(1).map((item) => ({
+    ...item,
+    label: stripHtml(item.label),
+  }))
 })
 
 /**

@@ -160,7 +160,7 @@ function addCourseContextRootBreadcrumbIfNeeded() {
   // Avoid duplicates by route name or by label.
   const exists = calculatedList.value.some((it) => {
     const sameRoute = it?.route?.name && it.route.name === rootRouteName
-    const sameLabel = stripHtml(it?.label || "") === stripHtml(rootLabel)
+    const sameLabel = stripHtml(it?.label || "") === rootLabel
 
     return sameRoute || sameLabel
   })
@@ -302,7 +302,10 @@ function addDocumentBreadcrumb() {
  */
 function addGroupBreadcrumbIfNeeded() {
   const currentGid = gid.value
-  if (!currentGid || currentGid <= 0) return
+
+  if (currentGid <= 0) {
+    return
+  }
 
   const labelBase = t("Group")
   const padded = String(currentGid).padStart(4, "0")
@@ -310,15 +313,15 @@ function addGroupBreadcrumbIfNeeded() {
 
   // Avoid duplicates (e.g. if some legacy breadcrumb already includes it)
   const alreadyExists = calculatedList.value.some((it) => stripHtml(it.label) === stripHtml(label))
-  if (alreadyExists) return
+
+  if (alreadyExists) {
+    return
+  }
 
   // Legacy group space URL, works even if there is no Vue route for group space
   const url = buildGroupSpaceUrl(currentGid)
 
-  calculatedList.value.push({
-    label,
-    url: url || undefined,
-  })
+  calculatedList.value.push({ label, url })
 }
 
 /**
@@ -343,11 +346,8 @@ function buildGroupSpaceUrl(currentGid) {
 function resolveSettingsSectionLabel() {
   // Safer because it's already translated server-side.
   const current = document.querySelector(".admin-settings__list a.admin-settings__item--active")
-  const domText = current?.textContent?.trim()
 
-  if (domText) {
-    return domText
-  }
+  return current?.textContent?.trim() || ""
 }
 
 /**
@@ -378,13 +378,17 @@ function normalizeLegacyUrl(rawUrl) {
     return input
   }
 
+  const extractMainPath = (url) => {
+    const full = url.pathname + url.search + url.hash
+    const idx = full.indexOf("main/")
+
+    return idx >= 0 ? "/" + full.substring(idx) : full || "#"
+  }
+
   // If this is an absolute URL, normalize to "/main/..." when possible.
   if (/^https?:\/\//i.test(input)) {
     try {
-      const u = new URL(input)
-      const full = u.pathname + u.search + u.hash
-      const idx = full.indexOf("main/")
-      return idx >= 0 ? "/" + full.substring(idx) : full || "#"
+      return extractMainPath(new URL(input))
     } catch {
       return "#"
     }
@@ -392,10 +396,7 @@ function normalizeLegacyUrl(rawUrl) {
 
   // Relative URL like "lp_controller.php?action=..." -> resolve against current page.
   try {
-    const resolved = new URL(input, window.location.href)
-    const full = resolved.pathname + resolved.search + resolved.hash
-    const idx = full.indexOf("main/")
-    return idx >= 0 ? "/" + full.substring(idx) : full || "#"
+    return extractMainPath(new URL(input, window.location.href))
   } catch {
     return "#"
   }
@@ -545,14 +546,16 @@ function buildToolBreadcrumb() {
 function buildManualBreadcrumbIfNeeded() {
   // If server already injected legacy breadcrumbs, use them.
   // We still inject the root crumb first (consistency).
-  if (Array.isArray(legacyItems.value) && legacyItems.value.length > 0) {
+  if (legacyItems.value.length > 0) {
     addCourseContextRootBreadcrumbIfNeeded()
 
     legacyItems.value.forEach((item) => {
       const newUrl = normalizeLegacyUrl(item?.url)
+
       calculatedList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
+
     return true
   }
 

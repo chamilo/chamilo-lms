@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Prikaži ali skrij blok s povezavo d
 $strings['delete_recordings_on_course_delete'] = 'Izbriši posnetke ob odstranitvi tečaja';
 $strings['defaultVisibilityInCourseHomepage'] = 'Privzete vidnosti na domači strani tečaja';
 $strings['ViewActivityDashboard'] = 'Poglej nadzorno ploščo aktivnosti';
+$strings['Participants'] = 'Udeleženci';
+$strings['CountUsers'] = 'Štej uporabnike';

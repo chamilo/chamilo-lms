@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Prikaži ili sakrij blok sa linkom d
 $strings['delete_recordings_on_course_delete'] = 'Obriši snimke kada se kurs ukloni';
 $strings['defaultVisibilityInCourseHomepage'] = 'Podrazumevana vidljivost na početnoj strani kursa';
 $strings['ViewActivityDashboard'] = 'Pogledaj kontrolnu tablu aktivnosti';
+$strings['Participants'] = 'Učesnici';
+$strings['CountUsers'] = 'Broj korisnika';

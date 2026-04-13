@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'जॉइन बटन के पा
 $strings['delete_recordings_on_course_delete'] = 'पाठ्यक्रम हटाए जाने पर रिकॉर्डिंग्स हटाएँ';
 $strings['defaultVisibilityInCourseHomepage'] = 'पाठ्यक्रम होम पेज में डिफ़ॉल्ट दृश्यता';
 $strings['ViewActivityDashboard'] = 'गतिविधि डैशबोर्ड देखें';
+$strings['Participants'] = 'प्रतिभागी';
+$strings['CountUsers'] = 'उपयोगकर्ताओं की गिनती';

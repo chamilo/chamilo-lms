@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'إظهار أو إخفاء كتلة 
 $strings['delete_recordings_on_course_delete'] = 'حذف التسجيلات عند إزالة المقرر الدراسي';
 $strings['defaultVisibilityInCourseHomepage'] = 'الرؤية الافتراضية في صفحة رئيسية المقرر';
 $strings['ViewActivityDashboard'] = 'عرض لوحة تحكم النشاط';
+$strings['Participants'] = 'المشتركون';
+$strings['CountUsers'] = 'عدد المستخدمين';

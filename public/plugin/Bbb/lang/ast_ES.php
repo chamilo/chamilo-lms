@@ -74,3 +74,5 @@ $strings['hide_conference_link_comment'] = "Amosar o anubrir un cuadru col enlla
 $strings['delete_recordings_on_course_delete'] = "Desaniciar grabaciones cuando s'elimine'l cursu";
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilidá por omisión na páxina principal del cursu';
 $strings['ViewActivityDashboard'] = "Ver panel d'actividá";
+$strings['Participants'] = 'Participants';
+$strings['CountUsers'] = 'Contar usuarios';

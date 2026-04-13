@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Toon of verberg een blok met een lin
 $strings['delete_recordings_on_course_delete'] = 'Opnames verwijderen wanneer cursus wordt verwijderd';
 $strings['defaultVisibilityInCourseHomepage'] = 'Standaard zichtbaarheid op cursus startpagina';
 $strings['ViewActivityDashboard'] = 'Activiteiten-dashboard bekijken';
+$strings['Participants'] = 'Deelnemers';
+$strings['CountUsers'] = 'Tel gebruikers';

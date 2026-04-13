@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Näytä tai piilota lohko, jossa on 
 $strings['delete_recordings_on_course_delete'] = 'Poista tallenteet, kun kurssi poistetaan';
 $strings['defaultVisibilityInCourseHomepage'] = 'Oletusnäkyvyys kurssin etusivulla';
 $strings['ViewActivityDashboard'] = 'Näytä toiminnan koontinäyttö';
+$strings['Participants'] = 'Osallistujat';
+$strings['CountUsers'] = 'Laske käyttäjät';

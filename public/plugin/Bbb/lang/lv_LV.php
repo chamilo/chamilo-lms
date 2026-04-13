@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Rādīt vai paslēpt bloku ar saiti 
 $strings['delete_recordings_on_course_delete'] = 'Dzēst ierakstus, kad kurss tiek dzēsts';
 $strings['defaultVisibilityInCourseHomepage'] = 'Noklusētā redzamība kursa sākumlappā';
 $strings['ViewActivityDashboard'] = 'Skatīt aktivitātes paneli';
+$strings['Participants'] = 'Dalībnieki';
+$strings['CountUsers'] = 'Skaitīt lietotājus';

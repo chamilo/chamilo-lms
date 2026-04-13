@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Rodyti arba slėpti bloką su vaizdo
 $strings['delete_recordings_on_course_delete'] = 'Ištrinti įrašus pašalinus kursą';
 $strings['defaultVisibilityInCourseHomepage'] = 'Numatytasis matomumas kurso pradžios puslapyje';
 $strings['ViewActivityDashboard'] = 'Peržiūrėti veiklos skydelį';
+$strings['Participants'] = 'Dalyviai';
+$strings['CountUsers'] = 'Skaičiuoti vartotojus';

@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Arată sau ascunde un bloc cu un lin
 $strings['delete_recordings_on_course_delete'] = 'Șterge înregistrările când cursul este eliminat';
 $strings['defaultVisibilityInCourseHomepage'] = 'Vizibilitate implicită pe pagina principală a cursului';
 $strings['ViewActivityDashboard'] = 'Vizualizează tabloul de bord al activității';
+$strings['Participants'] = 'Participanți';
+$strings['CountUsers'] = 'Numără utilizatori';

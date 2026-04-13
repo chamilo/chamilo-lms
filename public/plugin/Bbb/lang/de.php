@@ -74,3 +74,5 @@ $strings['hide_conference_link_comment'] = 'Block mit Link zur Videokonferenz ne
 $strings['delete_recordings_on_course_delete'] = 'Aufzeichnungen löschen, wenn der Kurs gelöscht wird';
 $strings['defaultVisibilityInCourseHomepage'] = 'Standardsichtbarkeit auf der Kursstartseite';
 $strings['ViewActivityDashboard'] = 'Aktivitäts-Dashboard anzeigen';
+$strings['Participants'] = 'Teilnehmer';
+$strings['CountUsers'] = 'Benutzer zählen';

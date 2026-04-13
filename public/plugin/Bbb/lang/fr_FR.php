@@ -74,3 +74,5 @@ $strings['hide_conference_link_comment'] = "Afficher ou masquer un bloc avec un 
 $strings['delete_recordings_on_course_delete'] = 'Supprimer les enregistrements lors de la suppression du cours';
 $strings['defaultVisibilityInCourseHomepage'] = "Visibilité par défaut sur la page d'accueil du cours";
 $strings['ViewActivityDashboard'] = 'Afficher le tableau de bord des activités';
+$strings['Participants'] = 'Participants';
+$strings['CountUsers'] = 'Compter les utilisateurs';

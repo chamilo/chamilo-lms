@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Erakutsi edo ezkutatu videoconferent
 $strings['delete_recordings_on_course_delete'] = 'Ezabatu grabazioak ikastaroa kendu bezperan';
 $strings['defaultVisibilityInCourseHomepage'] = 'Ikastaroaren orri nagusian ikusgaitasun lehenetsia';
 $strings['ViewActivityDashboard'] = 'Ikusi jardueraren panela';
+$strings['Participants'] = 'Parte-hartzaileak';
+$strings['CountUsers'] = 'Erabiltzaile kopurua';

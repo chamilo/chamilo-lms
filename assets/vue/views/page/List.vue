@@ -66,12 +66,13 @@
           <BaseButton
             v-if="securityStore.isAuthenticated"
             :label="t('Edit')"
-            icon="delete"
+            icon="edit"
             only-icon
             size="small"
             type="tertiary-text"
             @click="goToEditItem(slotProps.data)"
           />
+
           <BaseButton
             v-if="securityStore.isAuthenticated"
             :label="t('Delete')"
@@ -81,6 +82,7 @@
             type="danger-text"
             @click="confirmDeleteItem(slotProps.data)"
           />
+
           <BaseButton
             v-if="slotProps.data.enabled && slotProps.data.slug"
             :label="t('Show public link')"

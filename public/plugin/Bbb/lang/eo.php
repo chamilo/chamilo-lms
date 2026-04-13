@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Montri aŭ kaŝi blokon kun ligilo a
 $strings['delete_recordings_on_course_delete'] = 'Forigi registritojn kiam kurso forigas';
 $strings['defaultVisibilityInCourseHomepage'] = 'Defaŭlta videbleco en hejmpaĝo de kurso';
 $strings['ViewActivityDashboard'] = 'Vidi paĝon de agadoj';
+$strings['Participants'] = 'Partoprenantoj';
+$strings['CountUsers'] = 'Nombro de uzantoj';

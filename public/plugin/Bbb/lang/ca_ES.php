@@ -74,3 +74,5 @@ $strings['hide_conference_link_comment'] = "Mostra o amaga un bloc amb un enlla√
 $strings['delete_recordings_on_course_delete'] = "Esborra les gravacions quan s'elimini el curs";
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilitat per defecte a la p√†gina principal del curs';
 $strings['ViewActivityDashboard'] = "Veure el tauler d'activitat";
+$strings['Participants'] = 'Participants';
+$strings['CountUsers'] = 'Comptar usuaris';

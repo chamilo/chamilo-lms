@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Visa eller dölj ett block med en l�
 $strings['delete_recordings_on_course_delete'] = 'Ta bort inspelningar när kursen tas bort';
 $strings['defaultVisibilityInCourseHomepage'] = 'Standardvisning på kursens startsida';
 $strings['ViewActivityDashboard'] = 'Visa aktivitetsinstrumentpanel';
+$strings['Participants'] = 'Deltagare';
+$strings['CountUsers'] = 'Räkna användare';

@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Hiển thị hoặc ẩn khối vớ
 $strings['delete_recordings_on_course_delete'] = 'Xóa bản ghi khi khóa học bị xóa';
 $strings['defaultVisibilityInCourseHomepage'] = 'Hiển thị mặc định trên trang chủ khóa học';
 $strings['ViewActivityDashboard'] = 'Xem bảng điều khiển hoạt động';
+$strings['Participants'] = 'Người tham gia';
+$strings['CountUsers'] = 'Đếm người dùng';

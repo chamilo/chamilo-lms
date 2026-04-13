@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Показать или скрыть
 $strings['delete_recordings_on_course_delete'] = 'Удалять записи при удалении курса';
 $strings['defaultVisibilityInCourseHomepage'] = 'Видимость по умолчанию на главной странице курса';
 $strings['ViewActivityDashboard'] = 'Просмотр панели активности';
+$strings['Participants'] = 'Участники';
+$strings['CountUsers'] = 'Подсчёт пользователей';

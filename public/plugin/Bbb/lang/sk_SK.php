@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Zobraziť alebo skryť blok s odkazo
 $strings['delete_recordings_on_course_delete'] = 'Odstrániť nahrávky pri odstránení kurzu';
 $strings['defaultVisibilityInCourseHomepage'] = 'Predvolená viditeľnosť na úvodnej stránke kurzu';
 $strings['ViewActivityDashboard'] = 'Zobraziť dashboard aktivity';
+$strings['Participants'] = 'Účastníci';
+$strings['CountUsers'] = 'Počítať používateľov';

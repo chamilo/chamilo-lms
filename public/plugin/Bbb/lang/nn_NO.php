@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Vis eller skjul ein blokk med lenke 
 $strings['delete_recordings_on_course_delete'] = 'Slett opptak når kurset vert fjerna';
 $strings['defaultVisibilityInCourseHomepage'] = 'Standard synleggje på kurs startsida';
 $strings['ViewActivityDashboard'] = 'Vis aktivitetsdashbord';
+$strings['Participants'] = 'Deltakarar';
+$strings['CountUsers'] = 'Tel brukerar';

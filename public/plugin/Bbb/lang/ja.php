@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = '参加ボタンの横にビデオ会
 $strings['delete_recordings_on_course_delete'] = 'コースが削除されたときに録画を削除';
 $strings['defaultVisibilityInCourseHomepage'] = 'コースホームページでのデフォルトの表示';
 $strings['ViewActivityDashboard'] = 'アクティビティダッシュボードを表示';
+$strings['Participants'] = '参加者';
+$strings['CountUsers'] = 'ユーザー数';

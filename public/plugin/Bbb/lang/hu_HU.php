@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Blokk megjelenítése vagy elrejtés
 $strings['delete_recordings_on_course_delete'] = 'Felvételek törlése, ha a kurzust eltávolítják';
 $strings['defaultVisibilityInCourseHomepage'] = 'Alapértelmezett láthatóság a kurzus főoldalon';
 $strings['ViewActivityDashboard'] = 'Tevékenység dashboard megtekintése';
+$strings['Participants'] = 'Résztvevők';
+$strings['CountUsers'] = 'Felhasználók számolása';

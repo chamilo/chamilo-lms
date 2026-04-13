@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Katılma düğmesinin yanına videoc
 $strings['delete_recordings_on_course_delete'] = 'Ders kaldırıldığında kayıtları sil';
 $strings['defaultVisibilityInCourseHomepage'] = 'Ders ana sayfasında varsayılan görünürlük';
 $strings['ViewActivityDashboard'] = 'Etkinlik panosunu görüntüle';
+$strings['Participants'] = 'Katılımcılar';
+$strings['CountUsers'] = 'Kullanıcıları say';

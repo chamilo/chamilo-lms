@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Tunjuk atau sembunyikan blok dengan 
 $strings['delete_recordings_on_course_delete'] = 'Padam rakaman apabila kursus dialih keluar';
 $strings['defaultVisibilityInCourseHomepage'] = 'Kebolehlihatan lalai di laman utama kursus';
 $strings['ViewActivityDashboard'] = 'Lihat papan pemuka aktiviti';
+$strings['Participants'] = 'Peserta';
+$strings['CountUsers'] = 'Kira pengguna';

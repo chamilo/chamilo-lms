@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = '顯示或隱藏一個包含視訊會
 $strings['delete_recordings_on_course_delete'] = '課程移除時刪除錄影';
 $strings['defaultVisibilityInCourseHomepage'] = '課程首頁預設可見度';
 $strings['ViewActivityDashboard'] = '檢視活動儀表板';
+$strings['Participants'] = '參與者';
+$strings['CountUsers'] = '計數使用者';

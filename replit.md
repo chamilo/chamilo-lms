@@ -61,3 +61,8 @@ Built with Webpack Encore. The first build takes ~3 minutes.
 - The `public/build/` directory is gitignored (built at runtime)
 - Frontend assets must be built before the app works properly
 - The installer is a Vue.js SPA served from `public/main/install/index.php`
+
+## Deployment (Cloud Run)
+- **Data persistence**: The deployment target is Cloud Run, which has an **ephemeral filesystem**. All MySQL data (including the initialized data directory) is wiped on every redeploy. This is acceptable for demos and development previews.
+- For production with persistent data, migrate to an external MySQL or PostgreSQL service and update the `DATABASE_URL` environment variable/secret accordingly.
+- `start.sh` automatically initializes the MySQL data directory (`mysqld --initialize-insecure`) on first run, so a fresh container will always be able to start MySQL from scratch.

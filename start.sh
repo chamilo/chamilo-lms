@@ -2,9 +2,20 @@
 
 # Start MySQL if not already running
 mkdir -p /home/runner/mysql_run
+mkdir -p /home/runner/mysql_data
 if ! pgrep -x mysqld > /dev/null 2>&1; then
     echo "Starting MySQL..."
     rm -f /home/runner/mysql_run/mysql.sock /home/runner/mysql_run/mysql.sock.lock /home/runner/mysql_run/mysql.pid
+
+    # Initialize data directory on first run (empty directory = never initialized)
+    if [ -z "$(ls -A /home/runner/mysql_data 2>/dev/null)" ]; then
+        echo "Initializing MySQL data directory..."
+        mysqld --initialize-insecure \
+               --datadir=/home/runner/mysql_data \
+               --user=runner 2>>/home/runner/mysql_data/mysql.log
+        echo "MySQL data directory initialized."
+    fi
+
     mysqld --datadir=/home/runner/mysql_data \
            --socket=/home/runner/mysql_run/mysql.sock \
            --pid-file=/home/runner/mysql_run/mysql.pid \
@@ -12,7 +23,7 @@ if ! pgrep -x mysqld > /dev/null 2>&1; then
            --mysqlx=OFF \
            --user=runner \
            --bind-address=127.0.0.1 2>>/home/runner/mysql_data/mysql.log &
-    
+
     # Wait for MySQL to be ready
     echo "Waiting for MySQL to start..."
     for i in $(seq 1 30); do

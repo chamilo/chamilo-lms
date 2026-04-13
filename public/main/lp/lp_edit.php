@@ -317,10 +317,7 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
     $em = Database::getManager();
-    $hide_toc_frame = 0;
-    if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
-        $hide_toc_frame = 1;
-    }
+    $hide_toc_frame = 1 == ($_REQUEST['hide_toc_frame'] ?? 0);
 
     $published_on = null;
     if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {

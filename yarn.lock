@@ -1299,41 +1299,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@intlify/core-base@npm:11.3.1":
-  version: 11.3.1
-  resolution: "@intlify/core-base@npm:11.3.1"
+"@intlify/core-base@npm:11.3.2":
+  version: 11.3.2
+  resolution: "@intlify/core-base@npm:11.3.2"
   dependencies:
-    "@intlify/devtools-types": "npm:11.3.1"
-    "@intlify/message-compiler": "npm:11.3.1"
-    "@intlify/shared": "npm:11.3.1"
-  checksum: 10c0/f25b51928299a34403d24df6e9ae73798555a0a766cd4bb48aa7dde687805ad4a0bc32ac598f21de8ea7973578e838ad4188f756a6c8f9da50f7bf43f273d5ef
+    "@intlify/devtools-types": "npm:11.3.2"
+    "@intlify/message-compiler": "npm:11.3.2"
+    "@intlify/shared": "npm:11.3.2"
+  checksum: 10c0/4caffdf92d4a0e76afff40dbf002adf701f275f9ea3b5b37458da82b5d66e2ad2e07248db9b3ea0866243cf6015aeb0a788fc1861f9204c3a0f1d7bd90c76e51
   languageName: node
   linkType: hard
 
-"@intlify/devtools-types@npm:11.3.1":
-  version: 11.3.1
-  resolution: "@intlify/devtools-types@npm:11.3.1"
+"@intlify/devtools-types@npm:11.3.2":
+  version: 11.3.2
+  resolution: "@intlify/devtools-types@npm:11.3.2"
   dependencies:
-    "@intlify/core-base": "npm:11.3.1"
-    "@intlify/shared": "npm:11.3.1"
-  checksum: 10c0/89e73d6a7cab9337d83f7d5bc1dbac749bb4a0d849cfd01a61844b401fa6a0b6653292a52837c6989a5c70c122c8c30035be3459c97190ee3a4f657a8311de4b
+    "@intlify/core-base": "npm:11.3.2"
+    "@intlify/shared": "npm:11.3.2"
+  checksum: 10c0/d93d9ea1d1d92080b8d0b769a5a6bd80550224caafe7d1d628544caf88c1372ba00ff02f05c426cdec8ef95cef8838e4099988d1185abf80c60cf268221e4f66
   languageName: node
   linkType: hard
 
-"@intlify/message-compiler@npm:11.3.1":
-  version: 11.3.1
-  resolution: "@intlify/message-compiler@npm:11.3.1"
+"@intlify/message-compiler@npm:11.3.2":
+  version: 11.3.2
+  resolution: "@intlify/message-compiler@npm:11.3.2"
   dependencies:
-    "@intlify/shared": "npm:11.3.1"
+    "@intlify/shared": "npm:11.3.2"
     source-map-js: "npm:^1.0.2"
-  checksum: 10c0/c90902a876aafe8ae00a6ebd4775f6e95a0311f1cd8614bdf2d11fec758beead7360c4eb875b2da2549532e25abbcb012082bc0ab12aff68937235f0016cc519
+  checksum: 10c0/03d9e73aa6780a1493e3139275d1d63073b7171963c9ea7623fd792fde7bd81bd563ec1b48e96fc33da0beda678263994e343e7f3e0946e94922d4940b1cbbcc
   languageName: node
   linkType: hard
 
-"@intlify/shared@npm:11.3.1":
-  version: 11.3.1
-  resolution: "@intlify/shared@npm:11.3.1"
-  checksum: 10c0/3ad280630c66ddbbd8975369a265678adc551e65eb416e62d70d4779be61e3c1e6fb356efb019aec7c8991f519a74f4b8041d0cf93bf3f58338fae151067a24d
+"@intlify/shared@npm:11.3.2":
+  version: 11.3.2
+  resolution: "@intlify/shared@npm:11.3.2"
+  checksum: 10c0/ffef1c86738493c245d0f8889618cc8fa1c66d76e092f380dd530c39a8d66676ae50b9ac7e7fdd5c4a0f6239bff0014135ae96863a8f5b9f29ed06ee7bb8e300
   languageName: node
   linkType: hard
 
@@ -1913,12 +1913,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeuix/styles@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@primeuix/styles@npm:2.0.2"
+"@primeuix/styles@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@primeuix/styles@npm:2.0.3"
   dependencies:
     "@primeuix/styled": "npm:^0.7.4"
-  checksum: 10c0/e26ac8a23eb3f1248ef620f2275f7a304de42c9b07a2578ed51adc754dbe452a3bf8bb0723bb8973d28d3f94d2eb346f143b19dff137d0c0701702fb9f890d1e
+  checksum: 10c0/d1b0f4b9cb9bad3099dac57efc5dbf2648712ddf914801a43cc21d1bbf4512aec3703e2fb2430fabba70684f73e797e9ff68fe54f60d7b7c2e5a79a1a9a76b7a
   languageName: node
   linkType: hard
 
@@ -1929,25 +1929,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primevue/core@npm:4.5.4":
-  version: 4.5.4
-  resolution: "@primevue/core@npm:4.5.4"
+"@primevue/core@npm:4.5.5":
+  version: 4.5.5
+  resolution: "@primevue/core@npm:4.5.5"
   dependencies:
     "@primeuix/styled": "npm:^0.7.4"
     "@primeuix/utils": "npm:^0.6.2"
   peerDependencies:
     vue: ^3.5.0
-  checksum: 10c0/a76b1cbadee3d03da1dd521b07faafccbb004093a440278ab6d8bda5f7d83fb1721700ffa9eb9b8c0e9a397793760fed63e7904d59032a0704cc158008df37e9
+  checksum: 10c0/42cf6a05324930f2cf8929cf4198ff30e69394da34d237e3da83f065cefb81d2eea527bc0dacc7debaaa243044a225ac5d9813204542d6abcc2a59e26dc1f626
   languageName: node
   linkType: hard
 
-"@primevue/icons@npm:4.5.4":
-  version: 4.5.4
-  resolution: "@primevue/icons@npm:4.5.4"
+"@primevue/icons@npm:4.5.5":
+  version: 4.5.5
+  resolution: "@primevue/icons@npm:4.5.5"
   dependencies:
     "@primeuix/utils": "npm:^0.6.2"
-    "@primevue/core": "npm:4.5.4"
-  checksum: 10c0/7a6eedd20aa395d6ec25a0ceb530e8fca610ff8c8af6dbd4d7f88599c35f1fe82e09c986f473f43b74046a1dc6c4d67d7a5911b7e3d825a5e9d721daf904dd32
+    "@primevue/core": "npm:4.5.5"
+  checksum: 10c0/c5e3dd48553d7c9762bd963e95b7048c577c424d315d7f8b74e434db1e3be220d53db4366ad36331098345e6911a146249205dba58252c0e46a9a58f4104e86c
   languageName: node
   linkType: hard
 
@@ -4043,12 +4043,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"baseline-browser-mapping@npm:^2.10.16":
-  version: 2.10.16
-  resolution: "baseline-browser-mapping@npm:2.10.16"
+"baseline-browser-mapping@npm:^2.10.18":
+  version: 2.10.18
+  resolution: "baseline-browser-mapping@npm:2.10.18"
   bin:
     baseline-browser-mapping: dist/cli.cjs
-  checksum: 10c0/9947243bb8f16db3f8e05397c5c3e7a91243dcf2d1ec6a681ad5ffabeadee36c1061cd18e5f0432088df6798fa0689890ba26db173b9ad23c5650709b7b2e7cf
+  checksum: 10c0/cab0138dd70b3aefe83e27cd03013bfdea772d2329e6458178cceed34b7e3fde72b697c9e4c21fb3c796bcfb831d348bc947b017d8b64417045a34bf014c87b7
   languageName: node
   linkType: hard
 
@@ -4406,9 +4406,9 @@ __metadata:
     "@vuelidate/core": "npm:^2.0.3"
     "@vuelidate/validators": "npm:^2.0.4"
     alpinejs: "npm:^3.15.11"
-    autoprefixer: "npm:^10.4.27"
+    autoprefixer: "npm:^10.5.0"
     axios: "npm:^1.14.0"
-    baseline-browser-mapping: "npm:^2.10.16"
+    baseline-browser-mapping: "npm:^2.10.18"
     blueimp-file-upload: "npm:^10.32.0"
     blueimp-load-image: "npm:^5.16.0"
     bootstrap-daterangepicker: "npm:^3.1.0"
@@ -4420,7 +4420,7 @@ __metadata:
     d3: "npm:^7.9.0"
     datepair.js: "npm:^0.4.17"
     deepmerge: "npm:^4.3.1"
-    dotenv: "npm:^17.4.1"
+    dotenv: "npm:^17.4.2"
     dropzone: "npm:^5.9.3"
     easy-pie-chart: "npm:^2.1.7"
     easytimer.js: "npm:^1.3.2"
@@ -4432,7 +4432,7 @@ __metadata:
     flag-icons: "npm:^6.15.0"
     free-jqgrid: "git+https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: "npm:^1.5.0"
-    globals: "npm:^17.4.0"
+    globals: "npm:^17.5.0"
     highlight.js: "npm:^11.11.1"
     hljs: "npm:^6.2.3"
     html2canvas: "npm:^1.4.1"
@@ -4456,18 +4456,18 @@ __metadata:
     multiselect-two-sides: "npm:^2.5.7"
     path: "npm:^0.12.7"
     pinia: "npm:^3.0.4"
-    postcss: "npm:^8.5.8"
+    postcss: "npm:^8.5.9"
     postcss-loader: "npm:^8.2.1"
     postcss-prefix-selector: "npm:^2.1.1"
-    prettier: "npm:3.8.1"
+    prettier: "npm:3.8.2"
     prettier-plugin-tailwindcss: "npm:^0.7.2"
     pretty-bytes: "npm:^5.6.0"
     primeflex: "npm:^4.0.0"
     primeicons: "npm:^7.0.0"
-    primevue: "npm:^4.5.4"
+    primevue: "npm:^4.5.5"
     purgecss-webpack-plugin: "npm:^8.0.0"
     pwstrength-bootstrap: "npm:3.1.3"
-    qs: "npm:^6.15.0"
+    qs: "npm:^6.15.1"
     qtip2: "npm:3.0.3"
     readmore-js: "npm:^2.2.1"
     recordrtc: "npm:^5.6.2"
@@ -4488,7 +4488,7 @@ __metadata:
     vue: "npm:^3.5.32"
     vue-eslint-parser: "npm:^10.4.0"
     vue-flatpickr-component: "npm:^9.0.8"
-    vue-i18n: "npm:11.3.1"
+    vue-i18n: "npm:11.3.2"
     vue-loader: "npm:^17.4.2"
     vue-multiselect: "npm:^3.5.0"
     vue-perfect-scrollbar: "npm:^0.2.1"
@@ -4497,7 +4497,7 @@ __metadata:
     vuedraggable: "npm:^4.1.0"
     vuex: "npm:^4.1.0"
     vuex-map-fields: "npm:^1.4.1"
-    webpack: "npm:^5.105.4"
+    webpack: "npm:^5.106.1"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.3"
     webpack-notifier: "npm:^1.15.0"
@@ -5648,10 +5648,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.4.1":
-  version: 17.4.1
-  resolution: "dotenv@npm:17.4.1"
-  checksum: 10c0/eb6ae592ee1e8f6b7f62e0f0c2827c4f27bbe9e00abe9d7910e06456e63dccd42f011de94da9450a63c07ccc52c318f527c1b56ad8e2c81a1a16314b53d4fd99
+"dotenv@npm:^17.4.2":
+  version: 17.4.2
+  resolution: "dotenv@npm:17.4.2"
+  checksum: 10c0/164f8e77a646c8446867d5b588d26ea6005c8ea7c5eb41cf926f6113d23f2191355f6e0cfd95ea9bab98394a5b0a3f1e51a8399711b666fe55cc7b0bd745f942
   languageName: node
   linkType: hard
 
@@ -6594,10 +6594,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^17.4.0":
-  version: 17.4.0
-  resolution: "globals@npm:17.4.0"
-  checksum: 10c0/2be9e8c2b9035836f13d420b22f0247a328db82967d3bebfc01126d888ed609305f06c05895914e969653af5c6ba35fd7a0920f3e6c869afa60666c810630feb
+"globals@npm:^17.5.0":
+  version: 17.5.0
+  resolution: "globals@npm:17.5.0"
+  checksum: 10c0/92828102ed2f5637907725f0478038bed02fc83e9fc89300bb753639ba7c022b6c02576fc772117302b431b204591db1f2fa909d26f3f0a9852cc856a941df3f
   languageName: node
   linkType: hard
 
@@ -8984,6 +8984,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:^8.5.9":
+  version: 8.5.9
+  resolution: "postcss@npm:8.5.9"
+  dependencies:
+    nanoid: "npm:^3.3.11"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10c0/7cb2b32202ea1ead03f15cfbb2756a64a0f98942378e99b3dfce33678fe5eaf93e31d675a46e3a0dfb417d7b49b82d8999d0dd42a33c3b128e71ade0f978719a
+  languageName: node
+  linkType: hard
+
 "preact@npm:^10.5.13":
   version: 10.28.1
   resolution: "preact@npm:10.28.1"
@@ -9072,12 +9083,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.8.1":
-  version: 3.8.1
-  resolution: "prettier@npm:3.8.1"
+"prettier@npm:3.8.2":
+  version: 3.8.2
+  resolution: "prettier@npm:3.8.2"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/33169b594009e48f570471271be7eac7cdcf88a209eed39ac3b8d6d78984039bfa9132f82b7e6ba3b06711f3bfe0222a62a1bfb87c43f50c25a83df1b78a2c42
+  checksum: 10c0/2d64bd01d269c8dd6d8c423a2a2e1fb88230a53aac523204b327de40059ccf8bd8e6fe70b8ce6154b97ed4442e9fd878504ff8a5330f3a4f64bd13d1576f7652
   languageName: node
   linkType: hard
 
@@ -9119,16 +9130,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primevue@npm:^4.5.4":
-  version: 4.5.4
-  resolution: "primevue@npm:4.5.4"
+"primevue@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "primevue@npm:4.5.5"
   dependencies:
     "@primeuix/styled": "npm:^0.7.4"
-    "@primeuix/styles": "npm:^2.0.2"
+    "@primeuix/styles": "npm:^2.0.3"
     "@primeuix/utils": "npm:^0.6.2"
-    "@primevue/core": "npm:4.5.4"
-    "@primevue/icons": "npm:4.5.4"
-  checksum: 10c0/1e006ca3851dc2196d37abd32e49381b4bd6f11b89900943a6006775d313d610150daa087bc5cc9126b734f3b7870d0fe0bd0ace41fa8f1941b3942e58b40898
+    "@primevue/core": "npm:4.5.5"
+    "@primevue/icons": "npm:4.5.5"
+  checksum: 10c0/9a12228495314e0fb0069b77e9296e173f5324d11226cba2f0059c4fafc343abb416da966616b1e204dedf65e5c3551ee0433f600b36287e1ddbf98d1857ed78
   languageName: node
   linkType: hard
 
@@ -10837,17 +10848,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-i18n@npm:11.3.1":
-  version: 11.3.1
-  resolution: "vue-i18n@npm:11.3.1"
+"vue-i18n@npm:11.3.2":
+  version: 11.3.2
+  resolution: "vue-i18n@npm:11.3.2"
   dependencies:
-    "@intlify/core-base": "npm:11.3.1"
-    "@intlify/devtools-types": "npm:11.3.1"
-    "@intlify/shared": "npm:11.3.1"
+    "@intlify/core-base": "npm:11.3.2"
+    "@intlify/devtools-types": "npm:11.3.2"
+    "@intlify/shared": "npm:11.3.2"
     "@vue/devtools-api": "npm:^6.5.0"
   peerDependencies:
     vue: ^3.0.0
-  checksum: 10c0/8b87056271b2b6f8be99ffaebcaa1941117aa061bf37ae8b327e499bacddd7fac71a5cc6d0b1f8bfb65cd0810736dbe080ac9e0543c5866eeb04ab962b73f31c
+  checksum: 10c0/bd075b924b27ca64b98bed380d0ce68d196ee7813a42da7b8d124c405451585f614ab19003f9b23c849227cf16af94ab853af2bc4cf920100c44edac8cc9cfd3
   languageName: node
   linkType: hard
 
@@ -11151,7 +11162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:>=5.95.0, webpack@npm:^5.105.4":
+"webpack@npm:>=5.95.0":
   version: 5.105.4
   resolution: "webpack@npm:5.105.4"
   dependencies:
@@ -11186,6 +11197,44 @@ __metadata:
   bin:
     webpack: bin/webpack.js
   checksum: 10c0/e9896d20bac351b119d59942b7efae5b117056ecf203acc0d1a84ecbf0a5a9a80ca733735f96bd163e3530be6ab7f615cd67e5320bd3c47d709c9bfe376c3280
+  languageName: node
+  linkType: hard
+
+"webpack@npm:^5.106.1":
+  version: 5.106.1
+  resolution: "webpack@npm:5.106.1"
+  dependencies:
+    "@types/eslint-scope": "npm:^3.7.7"
+    "@types/estree": "npm:^1.0.8"
+    "@types/json-schema": "npm:^7.0.15"
+    "@webassemblyjs/ast": "npm:^1.14.1"
+    "@webassemblyjs/wasm-edit": "npm:^1.14.1"
+    "@webassemblyjs/wasm-parser": "npm:^1.14.1"
+    acorn: "npm:^8.16.0"
+    acorn-import-phases: "npm:^1.0.3"
+    browserslist: "npm:^4.28.1"
+    chrome-trace-event: "npm:^1.0.2"
+    enhanced-resolve: "npm:^5.20.0"
+    es-module-lexer: "npm:^2.0.0"
+    eslint-scope: "npm:5.1.1"
+    events: "npm:^3.2.0"
+    glob-to-regexp: "npm:^0.4.1"
+    graceful-fs: "npm:^4.2.11"
+    json-parse-even-better-errors: "npm:^2.3.1"
+    loader-runner: "npm:^4.3.1"
+    mime-types: "npm:^2.1.27"
+    neo-async: "npm:^2.6.2"
+    schema-utils: "npm:^4.3.3"
+    tapable: "npm:^2.3.0"
+    terser-webpack-plugin: "npm:^5.3.17"
+    watchpack: "npm:^2.5.1"
+    webpack-sources: "npm:^3.3.4"
+  peerDependenciesMeta:
+    webpack-cli:
+      optional: true
+  bin:
+    webpack: bin/webpack.js
+  checksum: 10c0/eb56ba99564e185c83fb8d898253c0e6b91fcfcab54e3716bc6bc4df2636511686edb79073313ad9394b757c912b9489e28c7a5bd33d4d386d3103ba9608ca47
   languageName: node
   linkType: hard
 

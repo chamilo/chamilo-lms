@@ -4143,7 +4143,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Ejer"
@@ -33875,4 +33875,13 @@ msgstr "Valgfrit. Bruges kun som et ekstra hint for AI'en."
 
 msgid "Select a document"
 msgstr "Vælg et dokument"
+
+msgid "Welcome"
+msgstr "Velkommen"
+
+msgid "Welcome to Chamilo"
+msgstr "Velkommen til Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Hvis dette er din første gang med Chamilo, så tjek venligst side-menuen for at finde vej gennem dens mange funktioner. Hvis du har brug for hjælp, finder du <a href=\"https://docs.chamilo.org\">vores officielle dokumentation</a> til standard dokumentation, mens vores <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> kan hjælpe med at dele idéer og finde svar fra andre Chamilo-brugere."
 

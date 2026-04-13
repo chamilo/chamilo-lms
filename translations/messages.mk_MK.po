@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -33873,4 +33873,13 @@ msgstr "Опционално. Се користи само како дополн
 
 msgid "Select a document"
 msgstr "Избери документ"
+
+msgid "Welcome"
+msgstr "Добредојде"
+
+msgid "Welcome to Chamilo"
+msgstr "Добредојде во Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ако ова е првпат користите Chamilo, проверете го менито на страната за да ги најдете сите негови можности. Ако ви треба помош, нашата <a href=\"https://docs.chamilo.org\">официјална документација</a> може да помогне за стандардна документација, додека нашиот <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">онлајн форум</a> може да помогне за споделување идеи и наоѓање одговори од други корисници на Chamilo."
 

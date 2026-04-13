@@ -33599,7 +33599,7 @@ msgid "Regenerate"
 msgstr "Generer på ny"
 
 msgid "Case insensitive"
-msgstr "Case insensitive"
+msgstr "Skriveleisstor"
 
 msgid "Select a session to load its courses."
 msgstr "Vel ein samling for å laste kursa dens."
@@ -33873,4 +33873,13 @@ msgstr "Valfritt. Brukt berre som ein ekstra vink for KI-en."
 
 msgid "Select a document"
 msgstr "Vel eit dokument"
+
+msgid "Welcome"
+msgstr "Velkommen"
+
+msgid "Welcome to Chamilo"
+msgstr "Velkommen til Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Om dette er første gong du brukar Chamilo, sjekk side-menyen for å finne vegen gjennom mange funksjonar. Om du treng hjelp, finn <a href=\"https://docs.chamilo.org\">offisiell dokumentasjon</a> for standard dokumentasjon, medan <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">nettforumet vårt</a> kan hjelpe med å dele idéar og finne svar frå andre Chamilo-brukarar."
 

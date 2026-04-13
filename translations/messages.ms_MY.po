@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:berhak cipta,, no:tiada hak cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Aliran oktet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:soal selidik,,      diagram:diagram,,      figure:gambar,,      graph:graf,,      index:indeks,,      slide:slaid,,      table:jadual,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:penyata masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -33873,4 +33873,13 @@ msgstr "Pilihan. Digunakan hanya sebagai petunjuk tambahan untuk AI."
 
 msgid "Select a document"
 msgstr "Pilih dokumen"
+
+msgid "Welcome"
+msgstr "Selamat datang"
+
+msgid "Welcome to Chamilo"
+msgstr "Selamat datang ke Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jika ini kali pertama anda menggunakan Chamilo, pastikan anda semak menu sisi untuk mencari jalan melalui banyak ciri-cirinya. Jika anda memerlukan bantuan, anda akan jumpa <a href=\"https://docs.chamilo.org\">dokumentasi rasmi kami</a> boleh membantu untuk dokumentasi standard, manakala <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum dalam talian kami</a> boleh membantu berkongsi idea dan mencari jawapan daripada pengguna Chamilo lain."
 

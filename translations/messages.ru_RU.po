@@ -33877,3 +33877,12 @@ msgstr "Необязательно. Используется только как
 msgid "Select a document"
 msgstr "Выберите документ"
 
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+msgid "Welcome to Chamilo"
+msgstr "Добро пожаловать в Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Если вы впервые используете Chamilo, обязательно проверьте боковое меню, чтобы найти путь через его множество функций. Если вам нужна помощь, вы найдете <a href=\"https://docs.chamilo.org\">официальную документацию</a> для стандартной документации, а наш <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">онлайн-форум</a> поможет поделиться идеями и найти ответы от других пользователей Chamilo."
+

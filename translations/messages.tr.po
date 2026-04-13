@@ -33876,3 +33876,12 @@ msgstr "İsteğe bağlı. Yalnızca AI için ek bir ipucu olarak kullanılır."
 msgid "Select a document"
 msgstr "Bir belge seçin"
 
+msgid "Welcome"
+msgstr "Hoş geldiniz"
+
+msgid "Welcome to Chamilo"
+msgstr "Chamilo'ya Hoş Geldiniz"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Chamilo'yu ilk kez kullanıyorsanız, birçok özelliğini keşfetmek için yan menüyü kontrol ettiğinizden emin olun. Yardıma ihtiyacınız olursa, standart belgeler için <a href=\"https://docs.chamilo.org\">resmi belgelerimiz</a> yardımcı olabilir, fikir paylaşmak ve diğer Chamilo kullanıcılarından cevaplar bulmak için ise <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">çevrimiçi forumumuz</a> yardımcı olabilir."
+

@@ -33876,3 +33876,12 @@ msgstr "可选。仅作为 AI 的额外提示。"
 msgid "Select a document"
 msgstr "选择文档"
 
+msgid "Welcome"
+msgstr "欢迎"
+
+msgid "Welcome to Chamilo"
+msgstr "欢迎使用 Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> 如果这是您第一次使用 Chamilo，请确保查看侧边菜单以了解其众多功能。如果您需要帮助，您会发现<a href=\"https://docs.chamilo.org\">我们的官方文档</a>可用于标准文档，而我们的<a href=\"https://github.com/chamilo/chamilo-lms/discussions\">在线论坛</a>可帮助分享想法并从其他 Chamilo 用户那里找到答案。"
+

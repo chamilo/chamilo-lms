@@ -555,16 +555,26 @@ $globalGroup[get_lang('E-mail users on dropbox file reception')] = $group;
 
 // Exercises notifications
 $emailAlerts = ExerciseLib::getNotificationSettings();
+$validQuizNotificationValues = array_map('strval', array_keys($emailAlerts));
+
+$buildQuizNotificationFieldName = static function (string $itemId): string {
+    return 'email_alert_manager_on_new_quiz_'.$itemId;
+};
+
 $group = [];
+
 foreach ($emailAlerts as $itemId => $label) {
+    $itemId = (string) $itemId;
+
     $group[] = $form->createElement(
         'checkbox',
-        'email_alert_manager_on_new_quiz[]',
+        $buildQuizNotificationFieldName($itemId),
         null,
         $label,
-        ['value' => $itemId]
+        ['value' => 1]
     );
 }
+
 $globalGroup[get_lang('Tests')] = $group;
 
 $group = [];
@@ -1090,6 +1100,45 @@ if ($isImsLtiEnabled) {
     );
 }
 
+$normalizeQuizNotificationSetting = static function ($value) use ($validQuizNotificationValues): array {
+    if (\is_array($value)) {
+        $items = [];
+
+        foreach ($value as $item) {
+            $normalizedValue = trim((string) $item);
+
+            if ('' !== $normalizedValue && \in_array($normalizedValue, $validQuizNotificationValues, true)) {
+                $items[] = $normalizedValue;
+            }
+        }
+
+        return array_values(array_unique($items));
+    }
+
+    if (null === $value || '-1' === (string) $value) {
+        return [];
+    }
+
+    $rawValue = trim((string) $value);
+
+    if ('' === $rawValue) {
+        return [];
+    }
+
+    $items = array_map('trim', explode(',', $rawValue));
+
+    $items = array_values(
+        array_filter(
+            array_map('strval', $items),
+            static function (string $item) use ($validQuizNotificationValues): bool {
+                return '' !== $item && \in_array($item, $validQuizNotificationValues, true);
+            }
+        )
+    );
+
+    return array_values(array_unique($items));
+};
+
 // ---------------------------------------------------------------------
 // Default values
 // When a course setting is not stored yet, api_get_course_setting() returns -1.
@@ -1181,6 +1230,18 @@ foreach ($courseSettings as $setting) {
     }
 }
 
+$selectedQuizNotifications = $normalizeQuizNotificationSetting(
+    api_get_course_setting('email_alert_manager_on_new_quiz')
+);
+
+foreach ($validQuizNotificationValues as $itemId) {
+    $values[$buildQuizNotificationFieldName($itemId)] = \in_array(
+        $itemId,
+        $selectedQuizNotifications,
+        true
+    ) ? 1 : 0;
+}
+
 // Make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
@@ -1244,6 +1305,23 @@ $htmlHeadXtra[] = '
 // Handle form submission
 if ($form->validate()) {
     $updateValues = $form->exportValues();
+
+    $request = Container::getRequest();
+    $submittedValues = $request->request->all();
+
+    $selectedQuizNotifications = [];
+
+    foreach ($validQuizNotificationValues as $itemId) {
+        $fieldName = $buildQuizNotificationFieldName($itemId);
+
+        if (!empty($submittedValues[$fieldName])) {
+            $selectedQuizNotifications[] = $itemId;
+        }
+
+        unset($updateValues[$fieldName]);
+    }
+
+    $updateValues['email_alert_manager_on_new_quiz'] = $selectedQuizNotifications;
 
     $updateValues['visibility'] = isset($updateValues['visibility'])
         ? (int) $updateValues['visibility']
@@ -1428,11 +1506,28 @@ if ($form->validate()) {
     }
 
     // Insert/Update course_settings table
+    $quizNotificationSettingSaved = false;
+
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
+
+        if ('email_alert_manager_on_new_quiz' === $setting) {
+            // Store checkbox values as a stable CSV string.
+            $value = implode(',', $updateValues['email_alert_manager_on_new_quiz']);
+            $quizNotificationSettingSaved = true;
+        }
+
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
+            api_get_course_int_id()
+        );
+    }
+
+    if (!$quizNotificationSettingSaved) {
+        CourseManager::saveCourseConfigurationSetting(
+            'email_alert_manager_on_new_quiz',
+            implode(',', $updateValues['email_alert_manager_on_new_quiz']),
             api_get_course_int_id()
         );
     }

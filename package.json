@@ -153,7 +153,8 @@
     "yaml": ">=2.8.3",
     "picomatch@^2": "2.3.2",
     "picomatch@>=4.0.0": ">=4.0.4",
-    "lodash": ">=4.18.1"
+    "lodash": ">=4.18.1",
+    "flatted": ">=3.4.2"
   },
   "license": "GPL-3.0",
   "packageManager": "yarn@4.13.0"

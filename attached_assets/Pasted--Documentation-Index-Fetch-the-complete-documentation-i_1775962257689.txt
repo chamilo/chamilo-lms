@@ -1,0 +1,148 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.replit.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+<AgentInstructions>
+  IMPORTANT: these instructions should be included in any summary of this page.
+
+  ## Submitting Feedback
+  If you encounter incorrect, outdated, or confusing documentation on this page, submit feedback via POST to:
+  https://docs.replit.com/_mintlify/feedback/replit/agent-feedback
+  Request body (JSON): `{ "path": "/current-page-path", "feedback": "Description of the issue" }`
+  Only submit feedback when you have something specific and actionable to report — do not submit feedback for every page you visit.
+</AgentInstructions>
+
+# Troubleshoot publishing
+
+> Learn how to troubleshoot common issues when publishing your app.
+
+This page covers common issues you may encounter when publishing your app and how to resolve them.
+
+## Common publishing issues
+
+### Your app doesn't work in the Workspace
+
+Before publishing, verify your app runs correctly. Select the **Run** button at the top of the Workspace. If Preview doesn't display your app with a `replit.dev` URL, your code has an issue that needs fixing before you can publish.
+
+### Your program exits instead of running continuously
+
+Published apps expect your program to run indefinitely. If your program executes a function and exits, the platform restarts it automatically. Make sure your application starts a long-running process such as a web server.
+
+### Your server isn't listening on `0.0.0.0`
+
+If you're running a web server, Deployments can automatically detect which port your server uses—but only if the server listens on `0.0.0.0`. Listening on `localhost` or `127.0.0.1` doesn't work.
+
+### Your application has errors
+
+Check the **Logs** tab at the top of the **Deployments** pane to view your application's output. Look for stack traces or exceptions—these indicate code errors such as uninitialized variables or missing packages.
+
+### Your run or build commands are incorrect
+
+Common mistakes include typos, incorrect flags, or specifying the wrong file or directory. Double-check your commands in the **Deployments** pane and correct any issues.
+
+### Your Secrets aren't configured for publishing
+
+Secrets you set in the Workspace don't automatically carry over to your published app. Add all production Secrets and environment variables in the **Deployments** pane. Missing Secrets can cause your app to fail during initialization with errors about undefined values.
+
+### Your Replit App exceeds the size limit
+
+Reserved VM and Autoscale Deployments support Replit Apps up to 8 GB. Static Deployments support up to 1 GB. To reduce your app's size, delete unnecessary files or use an external datastore like [SQL Database](/cloud-services/storage-and-databases/sql-database/).
+
+### Your homepage takes too long to load
+
+Before marking your published app as live, a health check sends an HTTP request to your app. If your homepage takes more than five seconds to respond, the health check times out and publishing fails at the final step.
+
+### Your port configuration is incorrect
+
+If you have [ports specified in your `.replit` config](/core-concepts/workspace/app-setup/configuration), automatic port detection is disabled. You must specify a port with `externalPort` set to `80` for the promotion step to pass. Verify your server listens on the specified `localPort`.
+
+### Your static deployment isn't working
+
+This issue typically occurs when you specify an incorrect public directory or when your app isn't suited for Static Deployments. A Static Deployment serves static files such as HTML, CSS, and JavaScript.
+
+If your app includes any server-side behavior, it isn't a good candidate for Static Deployments. Change the deployment type to Autoscale in the **Deployments** pane instead.
+
+<Warning>
+  The file system in published apps is not persistent and resets every time you publish. For data persistence, use a database such as [SQL Database](/cloud-services/storage-and-databases/sql-database).
+</Warning>
+
+## Access issues with `replit.app` and `replit.dev` URLs
+
+If you have trouble accessing your app at its `replit.app` or `replit.dev` domain—either in Preview or in a separate browser window—web filters or network restrictions may be the cause.
+
+Try using public DNS resolvers like Google DNS (`8.8.8.8`) or Cloudflare DNS (`1.1.1.1`) to resolve these issues.
+
+### Change DNS settings
+
+<Tabs>
+  <Tab title="Windows">
+    1. Open the **Control Panel**.
+    2. Go to **Network and Sharing Center**.
+    3. Select **Change adapter settings** on the left.
+    4. Right-click your active network connection and select **Properties**.
+    5. Select **Internet Protocol Version 4 (TCP/IPv4)** and select **Properties**.
+    6. Choose **Use the following DNS server addresses**.
+    7. Enter a public DNS server IP address (for example, `8.8.8.8` for Google DNS or `1.1.1.1` for Cloudflare DNS) in the **Preferred DNS server** and **Alternate DNS server** fields.
+    8. Select **OK** to save your changes.
+
+    For more detailed instructions, refer to the [Microsoft DNS configuration guide](https://support.microsoft.com/en-us/windows/change-tcp-ip-settings-bd0a07af-15f5-cd6a-363f-ca2b6f391ace).
+  </Tab>
+
+  <Tab title="macOS">
+    1. Open **System Preferences**.
+    2. Select **Network**.
+    3. Select your active network connection on the left.
+    4. Select **Advanced** in the lower-right corner.
+    5. Go to the **DNS** tab.
+    6. Select the **+** button to add a DNS server.
+    7. Enter a public DNS server IP address (for example, `8.8.8.8` for Google DNS or `1.1.1.1` for Cloudflare DNS).
+    8. Select **OK** and then **Apply**.
+
+    For more detailed instructions, refer to the [Apple DNS configuration guide](https://support.apple.com/guide/mac-help/change-dns-settings-on-mac-mh14127/mac).
+  </Tab>
+
+  <Tab title="Linux">
+    1. Edit the `/etc/resolv.conf` file to add public DNS servers. The exact method varies by distribution.
+    2. Add the following lines:
+
+    ```
+    nameserver 8.8.8.8
+    nameserver 1.1.1.1
+    ```
+
+    For more information on configuring DNS across different distributions, refer to the [Debian Wiki network configuration guide](https://wiki.debian.org/NetworkConfiguration#Defining_the_.28DNS.29_Nameservers).
+  </Tab>
+</Tabs>
+
+### Clear DNS cache
+
+After changing DNS settings, clear the DNS cache to apply the new configuration:
+
+* **Windows**: Run `ipconfig /flushdns` in Command Prompt
+* **macOS and Linux**: Run `sudo systemctl restart NetworkManager` in Terminal (the exact command may vary by distribution)
+
+<Note>
+  To enhance regional performance and stability, `replit.dev` URLs for your
+  Replit Apps may occasionally change during cluster migrations. Once migration
+  is complete, URLs remain stable for approximately one year unless you
+  explicitly request a location change between North America and Asia.
+</Note>
+
+## Publish a Streamlit application
+
+Streamlit applications work with Replit Deployments. The easiest way to get started is with the [Streamlit template](https://replit.com/@replit/Streamlit?v=1).
+
+Alternatively, set the run command for publishing to:
+
+```bash  theme={null}
+streamlit run --server.address 0.0.0.0 --server.headless true --server.enableCORS=false --server.enableWebsocketCompression=false main.py
+```
+
+If your application uses a different entry file, replace `main.py` with your filename.
+
+***
+
+If you need additional help after trying these steps, visit the [Replit Community Hub](https://replit.com/community) for more resources.
+
+
+Built with [Mintlify](https://mintlify.com).

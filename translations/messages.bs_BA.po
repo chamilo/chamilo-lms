@@ -33870,3 +33870,12 @@ msgstr "Opcionalno. Koristi se samo kao dodatna naputka za AI."
 msgid "Select a document"
 msgstr "Odaberite dokument"
 
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+msgid "Welcome to Chamilo"
+msgstr "Dobrodošli u Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ako je ovo vaš prvi put da koristite Chamilo, provjerite bočnu traku da biste pronašli put kroz njegove mnoge značajke. Ako vam treba pomoć, <a href=\"https://docs.chamilo.org\">naše službene dokumentacije</a> mogu pomoći za standardnu dokumentaciju, dok naš <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> može pomoći u dijeljenju ideja i pronalaženju odgovora od drugih korisnika Chamila."
+

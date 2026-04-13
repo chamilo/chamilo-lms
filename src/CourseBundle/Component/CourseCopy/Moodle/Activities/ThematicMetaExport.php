@@ -49,8 +49,6 @@ class ThematicMetaExport extends ActivityExport
             'title'     => (string)($payload['title'] ?? 'Thematic'),
             'path'      => 'chamilo/thematic/thematic_' . $moduleId . '.json',
         ]);
-
-        @error_log('[ThematicMetaExport] Exported thematic moduleid=' . $moduleId . ' sectionid=' . $sectionId);
     }
 
     /**

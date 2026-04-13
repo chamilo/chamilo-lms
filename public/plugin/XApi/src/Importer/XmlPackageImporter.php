@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Importer;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Exception;
 
 /**
@@ -29,7 +30,7 @@ class XmlPackageImporter extends PackageImporter
         $persistentPrefix = $this->buildPersistentPackagePrefix($this->packageType, $this->packageType);
         $manifestRelativePath = $persistentPrefix.'/'.$this->packageFileInfo['name'];
 
-        $this->getPluginsFilesystem()->write($manifestRelativePath, $content);
+        Container::getPluginsFileSystem()->write($manifestRelativePath, $content);
 
         return $this->buildStorageUri($manifestRelativePath);
     }

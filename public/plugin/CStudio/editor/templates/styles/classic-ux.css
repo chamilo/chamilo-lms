@@ -1,0 +1,193 @@
+body,html {
+    height : 100%;
+    margin : 0;
+}
+.ui-state-hover{
+border: solid 0px red!important;
+}
+.elfinder-cwd-file{
+border-color: solid 0px red!important;
+}
+.elfinder-cwd-view-icons .elfinder-cwd-file{
+border-color: solid 0px red!important;
+}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+border: 1px solid #999;
+background: #A9BCF5;
+color: white;
+}
+.icon-action{
+background-image : url("../../icon/bouton-video.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-audio{
+position : relative;
+background-image : url("../../icon/audio.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-audio .gjs-block-label{
+position : absolute;
+bottom : 5px;
+left : 4px;
+right : 4px;
+}
+.icon-cmq{
+position : relative;
+background-image : url("../../icon/cmq.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-cmq .gjs-block-label{
+position : absolute;
+bottom : 5px;
+left : 4px;
+right : 4px;
+}
+.icon-h1{
+position : relative;
+background-image : url("../../icon/icon-h1.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-h1 .gjs-block-label{
+position : absolute;
+bottom : 5px;
+left : 4px;
+right : 4px;
+}
+.icon-h2{
+position : relative;
+background-image : url("../../icon/icon-h2.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-h2 .gjs-block-label{
+position : absolute;
+bottom : 5px;
+left : 4px;
+right : 4px;
+}
+.icon-txtteach{
+position : relative;
+background-image : url("../../icon/bloctext.png");
+background-position : center center;
+background-repeat : no-repeat;
+}
+.icon-txtteach .gjs-block-label{
+position : absolute;
+bottom : 5px;
+left : 4px;
+right : 4px;
+}
+
+.icon-btnTeach{
+    position : relative;
+    background-image : url("../../icon/btnTeach.png");
+    background-position : center center;
+    background-repeat : no-repeat;
+}
+.icon-btnTeach .gjs-block-label{
+    position : absolute;
+    bottom : 5px;
+    left : 4px;
+    right : 4px;
+}
+
+.icon-plugTeach{
+    position : relative;
+    background-position : center center;
+    background-repeat : no-repeat;
+}
+.icon-plugTeach .gjs-block-label{
+    position : absolute;
+    bottom : 5px;
+    left : 4px;
+    right : 4px;
+}
+.empty-plugTeach{
+    opacity : 0!important;
+    visibility : hidden!important;
+}
+
+.cell{
+    vertical-align : middle;
+    padding : 10px;
+    width : 8%;
+    min-width : 350px;
+    display : table-cell;
+    min-height : 75px;
+    height : auto;
+}
+@media (max-width: 800px){
+    .cell {
+        min-width : 300px;
+        width : 100%;
+        display: table;
+        height : auto;
+    }
+}
+
+.panel {
+    width: 90%;
+    max-width: 800px;
+    border-radius: 3px;
+    padding: 30px 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+    margin: 50px auto 0px;
+    margin-bottom:30px;
+    background-color: white;
+    border:solid 1px gray;
+    box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.25);
+    color: black;
+    font: caption;
+    font-weight: 100;
+}
+
+h1{
+    text-align:center;
+    font-weight: 100;
+    margin: 0px;
+}
+.logo {
+    width: 70px;
+    height: 70px;
+    vertical-align: middle;
+}
+.logo path {
+    pointer-events: none;
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 7;
+    stroke: #fff
+}
+.big-title {
+    text-align: center;
+    font-size: 3.5rem;
+    margin: 15px 0;
+}
+.description {
+    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+.bandeImg{
+    margin-top:5px;
+    margin-bottom:5px;
+    width: 100%;
+    display: block;
+}
+@media (min-width: 500px){
+    .bandeImg{
+        margin-left:auto;
+        margin-right:auto;
+        max-width: 450px;
+    }
+}

@@ -33876,3 +33876,12 @@ msgstr "Tùy chọn. Chỉ sử dụng như gợi ý bổ sung cho AI."
 msgid "Select a document"
 msgstr "Chọn một tài liệu"
 
+msgid "Welcome"
+msgstr "Chào mừng"
+
+msgid "Welcome to Chamilo"
+msgstr "Chào mừng đến với Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Nếu đây là lần đầu bạn sử dụng Chamilo, hãy kiểm tra menu bên để tìm đường qua nhiều tính năng của nó. Nếu bạn cần trợ giúp, bạn sẽ tìm thấy <a href=\"https://docs.chamilo.org\">tài liệu chính thức của chúng tôi</a> có thể giúp cho tài liệu tiêu chuẩn, trong khi <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">diễn đàn trực tuyến</a> của chúng tôi có thể giúp chia sẻ ý tưởng và tìm câu trả lời từ các người dùng Chamilo khác."
+

@@ -39,6 +39,14 @@ class SkillModel extends Model
     ];
     public array $required = ['title'];
 
+    public string $table_user;
+    public string $table_skill_rel_gradebook;
+    public string $table_skill_rel_user;
+    public string $table_course;
+    public string $table_skill_rel_skill;
+    public string $table_gradebook;
+    public string $sessionTable;
+
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
@@ -322,7 +330,7 @@ class SkillModel extends Model
         /** @var Skill $skill */
         foreach ($skills as $skill) {
             if (!$skill->getIcon()) {
-               continue;
+               //continue;
             }
 
             $skillsInfo[] = [
@@ -337,7 +345,7 @@ class SkillModel extends Model
                 'status' => $skill->getStatus(),
                 'asset_id' => (string) $skill->getAsset()?->getId(),
                 'profile_id' => $skill->getLevelProfile()?->getId(),
-                'icons_small' => sprintf('badges/%s-small.png', sha1($skill['title'])),
+                'icons_small' => sprintf('badges/%s-small.png', sha1($skill->getTitle())),
             ];
         }
 

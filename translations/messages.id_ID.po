@@ -33874,3 +33874,12 @@ msgstr "Opsional. Hanya digunakan sebagai petunjuk tambahan untuk AI."
 msgid "Select a document"
 msgstr "Pilih dokumen"
 
+msgid "Welcome"
+msgstr "Selamat datang"
+
+msgid "Welcome to Chamilo"
+msgstr "Selamat datang di Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jika ini pertama kali Anda menggunakan Chamilo, pastikan Anda memeriksa menu samping untuk menemukan jalan melalui banyak fiturnya. Jika Anda membutuhkan bantuan, Anda akan menemukan <a href=\"https://docs.chamilo.org\">dokumentasi resmi kami</a> dapat membantu untuk dokumentasi standar, sementara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum online kami</a> dapat membantu berbagi ide dan menemukan jawaban dari pengguna Chamilo lainnya."
+

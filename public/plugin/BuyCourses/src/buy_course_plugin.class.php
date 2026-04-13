@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use League\Flysystem\FilesystemOperator;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Intl\Currencies;
@@ -4481,7 +4480,7 @@ class BuyCoursesPlugin extends Plugin
             return;
         }
 
-        $pluginsFilesystem = $this->getPluginsFilesystem();
+        $pluginsFilesystem = Container::getPluginsFileSystem();
         $directory = $this->getServiceImagesDirectory();
 
         if (!$pluginsFilesystem->directoryExists($directory)) {
@@ -4493,9 +4492,7 @@ class BuyCoursesPlugin extends Plugin
 
     private function serviceImageExists(string $imageName): bool
     {
-        $pluginsFilesystem = $this->getPluginsFilesystem();
-
-        return $pluginsFilesystem->fileExists($this->getServiceImageStoragePath($imageName));
+        return Container::getPluginsFileSystem()->fileExists($this->getServiceImageStoragePath($imageName));
     }
 
     private function getServiceImageStoragePath(string $imageName): string
@@ -4506,14 +4503,6 @@ class BuyCoursesPlugin extends Plugin
     private function getServiceImagesDirectory(): string
     {
         return 'BuyCourses/services/images';
-    }
-
-    private function getPluginsFilesystem(): FilesystemOperator
-    {
-        /** @var FilesystemOperator $pluginsFilesystem */
-        $pluginsFilesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
-
-        return $pluginsFilesystem;
     }
 
     public function getBuyCoursePluginPrice(Session $session): array

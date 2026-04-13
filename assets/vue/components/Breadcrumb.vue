@@ -4,8 +4,8 @@
     class="app-breadcrumb"
   >
     <Breadcrumb
-      :model="items"
       :home="home"
+      :model="items"
     >
       <template #item="{ item, props }">
         <BaseIcon
@@ -14,18 +14,18 @@
           size="small"
         />
         <BaseAppLink
-          v-if="(item.route || item.url) && item !== items[items.length - 1]"
+          v-if="(item.route || item.url) && !item.isLast"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
           @click="handleBreadcrumbClick(item, $event)"
         >
-          {{ stripHtml(item.label) }}
+          {{ item.label }}
         </BaseAppLink>
         <span
           v-else
-          v-text="stripHtml(item.label)"
           v-bind="props.action"
+          v-text="item.label"
         />
       </template>
 
@@ -40,13 +40,13 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, watchEffect, onMounted } from "vue"
+import { computed, onMounted, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { storeToRefs } from "pinia"
+import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
-import { storeToRefs } from "pinia"
-import { useStore } from "vuex"
 import BaseIcon from "./basecomponents/BaseIcon.vue"
 
 const legacyItems = ref([])
@@ -54,7 +54,7 @@ const legacyItems = ref([])
 const cidReqStore = useCidReqStore()
 const route = useRoute()
 const router = useRouter()
-const { t, te } = useI18n()
+const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 const store = useStore()
@@ -75,14 +75,13 @@ const specialRouteNames = [
 const calculatedList = ref([])
 
 const home = computed(() => {
-  if (calculatedList.value.length) {
-    return {
-      ...calculatedList.value[0],
-      icon: "compass",
-    }
+  if (!calculatedList.value.length) {
+    return undefined
   }
 
-  return undefined
+  const first = calculatedList.value[0]
+
+  return { ...first, label: stripHtml(first.label), icon: "compass" }
 })
 
 const items = computed(() => {
@@ -90,7 +89,12 @@ const items = computed(() => {
     return []
   }
 
-  return calculatedList.value.slice(1)
+  const list = calculatedList.value.slice(1)
+  return list.map((item, index) => ({
+    ...item,
+    label: stripHtml(item.label),
+    isLast: index === list.length - 1,
+  }))
 })
 
 /**
@@ -100,17 +104,8 @@ const items = computed(() => {
  */
 const gid = computed(() => getQueryInt("gid", 0))
 
-/**
- * Course/session context from query.
- * Why:
- * - Some pages are legacy and do not populate cidReq store immediately.
- * - We still want consistent breadcrumbs if cid/sid are present.
- */
-const cid = computed(() => getQueryInt("cid", 0))
-const sid = computed(() => getQueryInt("sid", 0))
-
 onMounted(() => {
-  const wb = (window && window.breadcrumb) || []
+  const wb = window.breadcrumb
   if (Array.isArray(wb) && wb.length > 0) {
     legacyItems.value = wb
   }
@@ -126,32 +121,24 @@ const formatToolName = (name) => {
 
 /**
  * Decide if current page is inside a course/session context.
- * - Prefer explicit cid/sid query.
- * - Fallback to store data for Vue-only routes like CourseHome.
+ * The cidReq store is guaranteed to be populated by router.beforeResolve before render.
  */
 function isInCourseOrSessionContext() {
-  // Explicit legacy context (most reliable)
-  if (cid.value > 0 || sid.value > 0) return true
+  const routeName = route.name
 
-  // Vue-only / SPA context fallback
-  const routeName = String(route.name || "")
-  if (routeName === "CourseHome") return true
+  if (!routeName) {
+    return false
+  }
 
-  // If store still has a course, we assume context unless this is a top-level route.
-  // This keeps behavior stable for tool pages that might not carry cid in query.
-  if (course.value?.id && !specialRouteNames.includes(routeName)) return true
+  if (routeName === "CourseHome") {
+    return true
+  }
+
+  if (course.value?.id && !specialRouteNames.includes(routeName)) {
+    return true
+  }
 
   return false
-}
-
-/**
- * Determine whether root crumb should be "My sessions" or "My courses".
- * We consider session context if sid is present OR store session exists.
- */
-function isSessionContext() {
-  if (sid.value > 0) return true
-  const sidStore = Number(session.value?.id || 0)
-  return sidStore > 0
 }
 
 /**
@@ -163,18 +150,24 @@ function isSessionContext() {
  * - Avoid duplicates when legacy breadcrumbs already include it.
  */
 function addCourseContextRootBreadcrumbIfNeeded() {
-  if (!isInCourseOrSessionContext()) return
+  if (!isInCourseOrSessionContext()) {
+    return
+  }
 
-  const rootRouteName = isSessionContext() ? "MySessions" : "MyCourses"
-  const rootLabel = t(isSessionContext() ? "My sessions" : "My courses")
+  const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
+  const rootLabel = t(session.value?.id ? "My sessions" : "My courses")
 
   // Avoid duplicates by route name or by label.
   const exists = calculatedList.value.some((it) => {
     const sameRoute = it?.route?.name && it.route.name === rootRouteName
-    const sameLabel = stripHtml(it?.label || "") === stripHtml(rootLabel)
+    const sameLabel = stripHtml(it?.label || "") === rootLabel
+
     return sameRoute || sameLabel
   })
-  if (exists) return
+
+  if (exists) {
+    return
+  }
 
   calculatedList.value.push({
     label: rootLabel,
@@ -194,11 +187,13 @@ const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName)
     },
   })
 
-  if (route.name === listRouteName) return
+  if (route.name === listRouteName) {
+    return
+  }
 
   if (resourceNode.value?.title) {
     const resourceLabel = resourceNode.value.title
-    const idParam = cleanIdParam(route.params.id)
+    const idParam = route.params.id?.toString().match(/(\d+)$/)?.[1]
 
     calculatedList.value.push({
       label: resourceLabel,
@@ -236,34 +231,32 @@ function addRemainingMatchedBreadcrumbs() {
   })
 }
 
-function watchResourceNodeLoader() {
-  watch(
-    () => route.fullPath,
-    async () => {
-      const currentRouteName = route.name || ""
-      const isAssignmentRoute = currentRouteName.startsWith("Assignment")
-      const isAttendanceRoute = currentRouteName.startsWith("Attendance")
-      const isDocumentRoute = currentRouteName.startsWith("Documents")
-      const nodeId = route.params.node || route.query.node
+watch(
+  () => route.fullPath,
+  async () => {
+    const currentRouteName = route.name || ""
+    const isAssignmentRoute = currentRouteName.startsWith("Assignment")
+    const isAttendanceRoute = currentRouteName.startsWith("Attendance")
+    const isDocumentRoute = currentRouteName.startsWith("Documents")
+    const nodeId = route.params.node || route.query.node
 
-      if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
-        try {
-          store.commit("resourcenode/setResourceNode", null)
-          const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
+    if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
+      try {
+        store.commit("resourcenode/setResourceNode", null)
+        const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
 
-          await store.dispatch("resourcenode/findResourceNode", {
-            id: resourceApiId,
-            cid: course.value?.id,
-            sid: session.value?.id,
-          })
-        } catch (e) {
-          console.error("[Breadcrumb] failed to load resourceNode", e)
-        }
+        await store.dispatch("resourcenode/findResourceNode", {
+          id: resourceApiId,
+          cid: course.value?.id,
+          sid: session.value?.id,
+        })
+      } catch (e) {
+        console.error("[Breadcrumb] failed to load resourceNode", e)
       }
-    },
-    { immediate: true },
-  )
-}
+    }
+  },
+  { immediate: true },
+)
 
 function addDocumentBreadcrumb() {
   const folderTrail = []
@@ -309,23 +302,26 @@ function addDocumentBreadcrumb() {
  */
 function addGroupBreadcrumbIfNeeded() {
   const currentGid = gid.value
-  if (!currentGid || currentGid <= 0) return
 
-  const labelBase = translateOrFallback("Group", "Group")
+  if (currentGid <= 0) {
+    return
+  }
+
+  const labelBase = t("Group")
   const padded = String(currentGid).padStart(4, "0")
   const label = `${labelBase} ${padded}`
 
   // Avoid duplicates (e.g. if some legacy breadcrumb already includes it)
   const alreadyExists = calculatedList.value.some((it) => stripHtml(it.label) === stripHtml(label))
-  if (alreadyExists) return
+
+  if (alreadyExists) {
+    return
+  }
 
   // Legacy group space URL, works even if there is no Vue route for group space
   const url = buildGroupSpaceUrl(currentGid)
 
-  calculatedList.value.push({
-    label,
-    url: url || undefined,
-  })
+  calculatedList.value.push({ label, url })
 }
 
 /**
@@ -333,60 +329,25 @@ function addGroupBreadcrumbIfNeeded() {
  */
 function buildGroupSpaceUrl(currentGid) {
   // Keep 0 values if present (sid=0 is valid)
-  const cidRaw = route.query?.cid ?? course.value?.id ?? 0
-  const sidRaw = route.query?.sid ?? session.value?.id ?? 0
-
-  const cidStr = String(cidRaw ?? "0")
-  const sidStr = String(sidRaw ?? "0")
-  const gidStr = String(currentGid)
+  const cid = route.query?.cid ?? course.value?.id ?? 0
+  const sid = route.query?.sid ?? session.value?.id ?? 0
 
   const qs = new URLSearchParams()
-  qs.set("cid", cidStr)
-  qs.set("sid", sidStr)
-  qs.set("gid", gidStr)
+  qs.set("cid", String(cid))
+  qs.set("sid", String(sid))
+  qs.set("gid", String(currentGid))
 
   return `/main/group/group_space.php?${qs.toString()}`
 }
 
 /**
- * Resolve translated label safely.
- */
-function translateOrFallback(key, fallback) {
-  try {
-    if (typeof te === "function" && te(key)) {
-      return t(key)
-    }
-  } catch (e) {}
-  return fallback
-}
-
-/**
  * Resolve translated label for /admin/settings/:namespace
  */
-function resolveSettingsSectionLabel(nsRaw) {
-  const ns = String(nsRaw || "").trim()
+function resolveSettingsSectionLabel() {
   // Safer because it's already translated server-side.
-  try {
-    const current = document.querySelector(".list-group a.bg-gray-25")
-    const domText = current?.textContent?.trim()
-    if (domText) {
-      return domText
-    }
-  } catch (e) {}
+  const current = document.querySelector(".admin-settings__list a.admin-settings__item--active")
 
-  // i18n candidates
-  const candidates = [
-    `settings_section.${ns}`,
-    `settings_section.${ns.replace(/-/g, "_")}`,
-    ns,
-    ns.replace(/[-_]/g, " "),
-  ]
-  for (const key of candidates) {
-    const has = typeof te === "function" && te(key)
-    if (has) return t(key)
-  }
-
-  return ns.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  return current?.textContent?.trim() || ""
 }
 
 /**
@@ -417,116 +378,126 @@ function normalizeLegacyUrl(rawUrl) {
     return input
   }
 
+  const extractMainPath = (url) => {
+    const full = url.pathname + url.search + url.hash
+    const idx = full.indexOf("main/")
+
+    return idx >= 0 ? "/" + full.substring(idx) : full || "#"
+  }
+
   // If this is an absolute URL, normalize to "/main/..." when possible.
   if (/^https?:\/\//i.test(input)) {
     try {
-      const u = new URL(input)
-      const full = u.pathname + u.search + u.hash
-      const idx = full.indexOf("main/")
-      return idx >= 0 ? "/" + full.substring(idx) : full || "#"
-    } catch (e) {
+      return extractMainPath(new URL(input))
+    } catch {
       return "#"
     }
   }
 
   // Relative URL like "lp_controller.php?action=..." -> resolve against current page.
   try {
-    const resolved = new URL(input, window.location.href)
-    const full = resolved.pathname + resolved.search + resolved.hash
-    const idx = full.indexOf("main/")
-    return idx >= 0 ? "/" + full.substring(idx) : full || "#"
-  } catch (e) {
+    return extractMainPath(new URL(input, window.location.href))
+  } catch {
     return "#"
   }
 }
 
 // Watch route changes to dynamically rebuild the breadcrumb trail
 watchEffect(() => {
-  if ("/" === route.fullPath) return
-  calculatedList.value = []
-  // special-case accessurl routes
-  if (/^\/resources\/accessurl\/[^\/]+\/delete(?:\/|$)/.test(route.path)) {
-    calculatedList.value = []
-
-    calculatedList.value.push({
-      label: t("Administration"),
-      url: "/main/admin/index.php",
-    })
-
-    calculatedList.value.push({
-      label: t("Multiple access URL / Branding"),
-      url: "/main/admin/access_urls.php",
-    })
-
-    calculatedList.value.push({ label: t("Delete access") })
-
+  if ("/" === route.fullPath) {
     return
   }
 
-  if (buildManualBreadcrumbIfNeeded()) return
+  calculatedList.value = []
 
-  // Static route categories (must use "route" or "url" for our slot)
+  if (buildAccessUrlDeleteBreadcrumb()) {
+    return
+  }
+
+  if (buildManualBreadcrumbIfNeeded()) {
+    return
+  }
+
+  addStaticCategoryPrefixes()
+
+  if (specialRouteNames.includes(route.name)) {
+    return
+  }
+
+  addCourseContextRootBreadcrumbIfNeeded()
+  addCourseTitleCrumb()
+  addGroupBreadcrumbIfNeeded()
+
+  if (buildToolBreadcrumb()) {
+    return
+  }
+
+  addRemainingMatchedBreadcrumbs()
+})
+
+function buildAccessUrlDeleteBreadcrumb() {
+  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/u.test(route.path)) {
+    return false
+  }
+
+  calculatedList.value.push({
+    label: t("Administration"),
+    url: "/main/admin/index.php",
+  })
+  calculatedList.value.push({
+    label: t("Multiple access URL / Branding"),
+    url: "/main/admin/access_urls.php",
+  })
+  calculatedList.value.push({ label: t("Delete access") })
+
+  return true
+}
+
+function addStaticCategoryPrefixes() {
   if (route.name?.includes("Page")) {
     calculatedList.value.push({ label: t("Pages"), route: { path: "/resources/pages" } })
   }
   if (route.name?.includes("Message")) {
     calculatedList.value.push({ label: t("Messages"), route: { path: "/resources/messages" } })
   }
+}
 
-  // Do not build breadcrumb for top-level routes
-  if (specialRouteNames.includes(route.name)) return
-
-  // NEW: Always add a consistent root crumb in course/session context.
-  // This fixes "My courses/My sessions appears sometimes" inconsistency.
-  addCourseContextRootBreadcrumbIfNeeded()
-
-  // Legacy breadcrumb fallback (Twig pages injecting window.breadcrumb)
-  if (legacyItems.value.length > 0) {
-    legacyItems.value.forEach((item) => {
-      const newUrl = normalizeLegacyUrl(item?.url)
-      calculatedList.value.push({ label: item.name, url: newUrl || undefined })
-    })
-    legacyItems.value = []
-    return
-  }
-
-  // Standard: add course title crumb
+function addCourseTitleCrumb() {
   if (course.value && route.name !== "CourseHome") {
     calculatedList.value.push({
       label: course.value.title,
       route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
     })
   }
+}
 
-  // NEW: Group crumb if gid is present
-  addGroupBreadcrumbIfNeeded()
-
+function buildToolBreadcrumb() {
   const mainToolName = route.matched?.[0]?.name
   const currentRouteName = route.name || ""
   const nodeId = route.params.node || route.query.node
   const isAssignmentRoute = currentRouteName.startsWith("Assignment") && resourceNode.value && nodeId
   const isAttendanceRoute = currentRouteName.startsWith("Attendance") && resourceNode.value && nodeId
 
-  // Documents breadcrumb (based on resourceNode hierarchy)
   if (mainToolName === "documents" && resourceNode.value) {
     addDocumentBreadcrumb()
-    return
+
+    return true
   }
 
-  // Assignments
   if (isAssignmentRoute) {
     addToolWithResourceBreadcrumb("Assignments", "AssignmentsList", "AssignmentDetail")
-    return
+
+    return true
   }
 
-  // Attendance
   if (isAttendanceRoute) {
     addToolWithResourceBreadcrumb("Attendance", "AttendanceList", "AttendanceSheetList")
-    return
+
+    return true
   }
 
-  // Admin resource routes (rooms, branches) — prepend Administration crumb
   const adminResourceRoutes = ["rooms", "branches"]
+
   if (adminResourceRoutes.includes(mainToolName)) {
     calculatedList.value.push({
       label: t("Administration"),
@@ -534,7 +505,6 @@ watchEffect(() => {
     })
   }
 
-  // Generic tool fallback
   if (mainToolName && !["documents", "assignments", "attendance"].includes(mainToolName)) {
     const matchedRoutes = route.matched
     const toolBase = matchedRoutes[0]
@@ -545,17 +515,21 @@ watchEffect(() => {
     if (mainToolName === "ccalendarevent") {
       const cidVal = Number(route.query?.cid || 0)
       const gidVal = Number(route.query?.gid || 0)
+
       toolLabel = gidVal > 0 ? "Group agenda" : cidVal > 0 ? "Agenda" : "Personal agenda"
     }
+
     calculatedList.value.push({
       label: t(toolLabel),
       route: { name: toolBase.name, params: route.params, query: route.query },
     })
 
     const label = currentMatched.meta?.breadcrumb
+
     if (label !== "") {
       const finalLabel = label || formatToolName(currentMatched.name)
       const alreadyShown = calculatedList.value.some((item) => item.label === t(finalLabel))
+
       if (!alreadyShown) {
         calculatedList.value.push({
           label: t(finalLabel),
@@ -563,34 +537,25 @@ watchEffect(() => {
         })
       }
     }
-    return
+    return true
   }
 
-  // Fallback to route hierarchy
-  addRemainingMatchedBreadcrumbs()
-})
-
-// Load resourceNode if not already available
-watchResourceNodeLoader()
-
-// Extracts numeric ID from route param (e.g., "/api/resource_nodes/123" → 123)
-function cleanIdParam(id) {
-  if (!id) return undefined
-  const match = id.toString().match(/(\d+)$/)
-  return match ? id.toString().match(/(\d+)$/)[1] : id
+  return false
 }
 
 function buildManualBreadcrumbIfNeeded() {
   // If server already injected legacy breadcrumbs, use them.
   // We still inject the root crumb first (consistency).
-  if (Array.isArray(legacyItems.value) && legacyItems.value.length > 0) {
+  if (legacyItems.value.length > 0) {
     addCourseContextRootBreadcrumbIfNeeded()
 
     legacyItems.value.forEach((item) => {
       const newUrl = normalizeLegacyUrl(item?.url)
+
       calculatedList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
+
     return true
   }
 
@@ -609,7 +574,6 @@ function buildManualBreadcrumbIfNeeded() {
   // /admin/settings/<namespace>
   const isAdminSettings = pathSegments[1] === "settings"
   if (isAdminSettings) {
-    const ns = pathSegments[2] || route.params?.namespace || route.query?.namespace || ""
     const adminLabel = t("Admin")
     calculatedList.value.push({
       label: adminLabel,
@@ -619,7 +583,7 @@ function buildManualBreadcrumbIfNeeded() {
       label: t("Settings"),
       route: { path: "/admin/settings" },
     })
-    const section = resolveSettingsSectionLabel(ns)
+    const section = resolveSettingsSectionLabel()
     calculatedList.value.push({ label: section })
     return true
   }
@@ -672,9 +636,8 @@ function handleBreadcrumbClick(item, event) {
   let resolved
   try {
     resolved = router.resolve(item.route)
-  } catch (e) {
+  } catch {
     // Avoid throwing in console when a route is not registered.
-    // console.debug("[Breadcrumb] route resolve failed", e)
     return
   }
 

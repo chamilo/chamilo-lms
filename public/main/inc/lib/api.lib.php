@@ -7487,7 +7487,7 @@ function api_is_student_view_active(): bool
  */
 function api_float_val($number)
 {
-    return (float) str_replace(',', '.', trim($number));
+    return (float) str_replace(',', '.', trim((string) $number));
 }
 
 /**

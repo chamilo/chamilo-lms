@@ -212,7 +212,7 @@ class HTML_QuickForm extends HTML_Common
         $this->token = null;
         parent::__construct($attributes);
 
-        $method = strtoupper($method) === 'GET' ? 'get' : 'post';
+        $method = strtoupper((string) $method) === 'GET' ? 'get' : 'post';
         $action = $action == '' ? api_get_self() : $action;
         $target = empty($target) ? [] : ['target' => $target];
         $form_id = $formName;

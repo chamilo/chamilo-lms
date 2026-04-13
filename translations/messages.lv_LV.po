@@ -33875,3 +33875,12 @@ msgstr "Nav obligāti. Izmanto tikai kā papildu norādi mākslīgajam intelekta
 msgid "Select a document"
 msgstr "Izvēlēties dokumentu"
 
+msgid "Welcome"
+msgstr "Laipni lūdzam"
+
+msgid "Welcome to Chamilo"
+msgstr "Laipni lūdzam Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ja tas ir jūsu pirmais reizi, izmantojot Chamilo, pārliecinieties, ka pārbaudāt sānjoslu, lai atrastu ceļu caur daudzo funkciju. Ja nepieciešama palīdzība, mūsu <a href=\"https://docs.chamilo.org\">oficiālā dokumentācija</a> palīdzēs standarta dokumentācijai, savukārt mūsu <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">tiešsaistes forums</a> palīdzēs dalīties idejās un atrast atbildes no citiem Chamilo lietotājiem."
+

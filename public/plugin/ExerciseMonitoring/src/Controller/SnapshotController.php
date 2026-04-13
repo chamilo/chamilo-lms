@@ -8,7 +8,6 @@ namespace Chamilo\PluginBundle\ExerciseMonitoring\Controller;
 
 use Chamilo\CoreBundle\Framework\Container;
 use ExerciseMonitoringPlugin;
-use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -40,8 +39,7 @@ readonly class SnapshotController
             throw new AccessDeniedHttpException(HttpResponse::$statusTexts[HttpResponse::HTTP_FORBIDDEN]);
         }
 
-        /** @var FilesystemOperator $pluginsFilesystem */
-        $pluginsFilesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
+        $pluginsFilesystem = Container::getPluginsFileSystem();
 
         if (!$pluginsFilesystem->fileExists($normalizedPath)) {
             throw new NotFoundHttpException(HttpResponse::$statusTexts[HttpResponse::HTTP_NOT_FOUND]);

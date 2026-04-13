@@ -33874,3 +33874,12 @@ msgstr "Választható. Csak extra útmutatóként használatos az AI számára."
 msgid "Select a document"
 msgstr "Dokumentum kiválasztása"
 
+msgid "Welcome"
+msgstr "Üdvözöljük"
+
+msgid "Welcome to Chamilo"
+msgstr "Üdvözöljük a Chamilo-ban"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ha először használja a Chamilo-t, győződjön meg róla, hogy megnézi a oldalsó menüt, hogy eligazodjon számos funkciójában. Ha segítségre van szüksége, a <a href=\"https://docs.chamilo.org\">hivatalos dokumentációnk</a> segíthet a szabványos dokumentációhoz, míg az <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online fórumunk</a> segíthet ötletek megosztásában és más Chamilo-felhasználóktól származó válaszok megtalálásában."
+

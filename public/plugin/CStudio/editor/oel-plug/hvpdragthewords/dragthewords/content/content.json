@@ -1,0 +1,33 @@
+{
+    "taskDescription":"",
+    "checkAnswer":"Check",
+    "tryAgain":"Retry",
+    "showSolution":"Show Solution",
+    "behaviour":{
+        "enableRetry":true,
+        "enableSolutionsButton":true,
+        "instantFeedback":false,
+        "enableCheckButton":true
+    },
+    "textField":"",
+    "overallFeedback":[
+        {
+            "from":0,
+            "to":100,
+            "feedback":"Score: @score of @total."
+        }
+    ],
+    "dropZoneIndex":"Drop Zone @index.",
+    "empty":"Drop Zone @index is empty.",
+    "contains":"Drop Zone @index contains draggable @draggable.",
+    "tipLabel":"Show tip",
+    "correctText":"Correct!",
+    "incorrectText":"Incorrect!",
+    "resetDropTitle":"Reset drop",
+    "resetDropDescription":"Are you sure you want to reset this drop zone?",
+    "grabbed":"Draggable is grabbed.",
+    "cancelledDragging":"Cancelled dragging.",
+    "correctAnswer":"Correct answer:",
+    "feedbackHeader":"Feedback",
+    "scoreBarLabel":"You got :num out of :total points"
+}

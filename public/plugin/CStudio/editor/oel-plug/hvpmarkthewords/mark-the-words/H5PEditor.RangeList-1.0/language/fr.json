@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Répartir également",
+    "distributeButtonWarning": "Les valeurs seront modifiées pour tous les intervalles. Voulez-vous continuer ?",
+    "rangeOutOfSequenceWarning": "Les valeurs des intervalles doivent être ordonnées (de 0% à 100%)."
+  }
+}

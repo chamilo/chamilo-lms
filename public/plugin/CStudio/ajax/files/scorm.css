@@ -1,0 +1,1114 @@
+/*
+    oel TeachDoc
+*/
+body{
+    background-color: #D8D8D8;
+}
+
+.panel-teachdoc{
+    position : absolute;
+    left : 0px;
+    right : 0px;
+    top : 100px;
+    width : 90%;
+    max-width : 900px;
+    padding-top : 30px;
+    padding-right : 30px;
+    padding-left : 30px;
+    padding-bottom : 30px;
+    margin-top : 50px;
+    margin-right : auto;
+    margin-left : auto;
+    margin-bottom : 30px;
+    background-color : white;
+    box-shadow : rgba(0, 0, 0, 0.25) 0px 3px 10px 0px;
+    color : black;
+    font-style : normal;
+    font-family : Arial;
+    font-stretch : normal;
+    font-variant-caps : normal;
+    font-variant-ligatures : normal;
+    font-variant-numeric : normal;
+    font-variant-east-asian : normal;
+    line-height : normal;
+    font-weight : 100;
+    opacity :0.3;
+    transition: top 0.5s, opacity 1s;
+}
+
+.panel-teachdoc-large{
+    position : absolute;
+    left : 0px;
+    width : 90%;
+    right : 0px;
+    top : 100px;
+    max-width : 900px;
+    padding-top : 30px;
+    padding-right : 20px;
+    padding-left : 20px;
+    padding-bottom : 30px;
+    margin-top : 50px;
+    margin-right : auto;
+    margin-left : auto;
+    margin-bottom : 30px;
+    background-color : white;
+    box-shadow : rgba(0, 0, 0, 0.25) 0px 3px 10px 0px;
+    color : black;
+    font-style : normal;
+    font-family : Arial;
+    font-stretch : normal;
+    font-variant-caps : normal;
+    font-variant-ligatures : normal;
+    font-variant-numeric : normal;
+    font-variant-east-asian : normal;
+    line-height : normal;
+    font-weight : 100;
+    opacity :0.3;
+    transition: top 0.5s, opacity 1s;
+    left:0%;
+    width: 99%;
+}
+
+.panel-teachdoc-box{
+    width : 90%;
+    max-width : 900px;
+    padding-top : 30px;
+    padding-right : 20px;
+    padding-left : 20px;
+    padding-bottom : 30px;
+    background-color : white;
+    color : black;
+    font-style : normal;
+    font-family : Arial;
+    font-stretch : normal;
+    font-variant-caps : normal;
+    font-variant-ligatures : normal;
+    font-variant-numeric : normal;
+    font-variant-east-asian : normal;
+    line-height : normal;
+    font-weight : 100;
+    opacity : 1;
+}
+
+.panel-teachdoc-box .cell{
+    width : 100%;
+    display : table!important;
+}
+
+.deco-teachdoc {
+    position: absolute;
+    top:0px;
+    right:0%;
+    left:0%;
+    height:54px;
+    background-color:#276D99;
+    overflow : visible;
+}
+
+.div-teachdoc-hide {
+    position: fixed;
+    top:0px;
+    bottom:0%;
+    left:-20px;
+    width:10px;
+    overflow: hidden;
+    background-color:#FAFAFA;
+    border-right: 1px solid #ccc;
+    visibility: hidden;
+    opacity : 0;
+}
+
+.div-teachdoc {
+    position: fixed;
+    top:0px;
+    bottom:0%;
+    left:0%;
+    width:24%;
+    background-color:#FAFAFA;
+    border-right: 1px solid #ccc;
+    opacity : 0.9;
+    transition: width 2s, height 2s, left 2s, top 2s,transform 2s;
+    /*opacity 1s, */
+}
+
+.div-teachdoc .logotop-teachdoc {
+    position : relative;
+    margin-top : 54px;
+    width:100%;
+    border : 1px solid #ccc;
+    background-color : white;
+}
+
+.div-teachdoc-full {
+    position: fixed;
+    top: 0px;
+    bottom: 0%;
+    left: 10%;
+    width: 80%;
+    background-color: #FAFAFA;
+    border-right: 0px solid #ccc;
+    opacity: 1;
+    transition: width 1s, height 1s, left 1s, top 1s, transform 1s;
+}
+
+.div-teachdoc-full .deco-teachdoc {
+    background-color: #313537;
+}
+
+.div-teachdoc-full .logotop-teachdoc {
+    position : relative;
+    top : 50%;
+    transform: translateY(-50%);
+    width : 44%;
+    margin-left : 4%;
+    border : 1px solid #ccc;
+    background-color : white;
+    transition: all 0.5s ease-out;
+}
+
+.div-teachdoc-full .logotop-teachdoc-cube {
+    width : 37%;
+    margin-left : 7%;
+}
+
+.div-teachdoc-full .title-mainmenu {
+    position : absolute;
+    top : 64px;
+    width : 44%;
+    left : 4%;
+    transition: all 0.1s ease-out;
+}
+
+.div-teachdoc .title-mainmenu {
+    display : none;
+}
+
+.title-mainmenu-core {
+    position : absolute;
+    bottom : 5px;
+    left : 5px;
+    right : 5px;
+    height : auto;
+    font-size: 32px;
+    text-align: center;
+}
+
+.div-teachdoc-transi {
+    position: fixed;
+    top:0px;
+    bottom:0%;
+    left:0%;
+    width:24%;
+    background-color:#FAFAFA;
+    border-right: 1px solid #ccc;
+    opacity : 1;
+    transition: width 0.5s, height 0.5s, left 0.5s, top 0.5s, transform 0.5s;
+}
+.div-teachdoc-transi .logotop-teachdoc {
+    position : relative;
+    top : 54px;
+    transform: translateY(0%);
+    width : 100%;
+    margin-left : 0%;
+    border : 1px solid #ccc;
+    background-color : white;
+    transition: all 0.5s ease-out;
+}
+
+.div-teachdoc-full  .btnlaunch-teachdoc {
+    position : absolute;
+    top : 50%;
+    left : 25%;
+    transform: translateY(-50%) translateX(-50%);
+    display : inline-block;
+    background : #fff;
+    font-size : 28px;
+    font-weight : 800;
+    line-height : 40px;
+    letter-spacing : .03em;
+    text-decoration : none;
+    transition : opacity .3s;
+    color : #313537;
+    border: 2px solid #313537;
+    padding : 0 1.5rem;
+    margin-right : 1.5rem;
+    border-radius : 2rem;
+    cursor : pointer;
+    -webkit-font-smoothing : antialiased;
+    text-transform : uppercase;
+}
+
+.NodeLvl1{
+    font-weight: bold;
+    font-size: 16px;
+    background-color:#E6E6E6;
+}
+.NodeLvl2{
+    font-size: 15px;
+    background-color:#F2F2F2;
+}
+.NodeLvl3{
+    font-size: 15px;
+    background-color:#F2F2F2;
+}
+.NodeLvl4{
+    font-size: 15px;
+    background-color:#F2F2F2;
+}
+
+/*collapse*/
+.list-teachdoc li .icon-arrow:before {
+    content: '\25BC';
+}
+.list-teachdoc li .icon-arrow {
+    position: absolute;
+    display: block;
+    font-size: 0.7em;
+    color: #565996;
+    top: 9px;
+    right: 10px;
+}
+.list-teachdoc li .icon-arrow.open {
+    -moz-transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+    -moz-transition: -moz-transform 0.6s;
+    -o-transition: -o-transform 0.6s;
+    -webkit-transition: -webkit-transform 0.6s;
+    transition: transform 0.6s;
+}
+.list-teachdoc li .icon-arrow.close {
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -moz-transition: -moz-transform 0.6s;
+    -o-transition: -o-transform 0.6s;
+    -webkit-transition: -webkit-transform 0.6s;
+    transition: transform 0.6s;
+}
+
+
+.loadbarre{
+    height:15px;
+    margin:15px;
+    background:#EAECEE ;
+}
+
+.editRapidIcon{
+    position: absolute;
+    width:0px;
+    height:0px;
+    background-color:transparent;
+    opacity:0;
+}
+
+
+.div-teachdoc .progress-teachdoc{
+    position : relative;
+    width : 100%;
+    height : 70px;
+    border-bottom : 1px solid #ccc;
+    background-color : white;
+}
+
+.div-teachdoc-full .progress-teachdoc{
+    display : none;
+}
+
+.div-teachdoc .list-teachdoc_wrapper {
+    position: relative;
+    left: 0%;
+    right: 0px;
+    border-bottom : 1px solid #ccc;
+    overflow: auto;
+}
+
+.div-teachdoc-full .list-teachdoc_wrapper {
+    position: absolute;
+    top : 50%;
+    transform: translateY(-50%);
+    width : 44%;
+    min-height : 250px;
+    right: 4%;
+    border: 1px solid #313537;
+    overflow: auto;
+}
+.neoload{
+    overflow: hidden;
+}
+
+@media (max-width: 1200px){
+    .div-teachdoc-full {
+        left:2%;
+        width:96%;
+    }
+}
+@media (max-width: 1000px){
+    .div-teachdoc-full {
+        left:0%;
+        width:100%;
+    }
+
+    .div-teachdoc-full .logotop-teachdoc {
+        position : relative;
+        top : 10%;
+        transform: translateY(0%);
+        width : 84%;
+        margin-left : 0px;
+        margin-right : 0px;
+        left: 8%;
+        border : 1px solid #ccc;
+        background-color : white;
+        transition: all 0.5s ease-out;
+        z-index : 100;
+    }
+
+    .div-teachdoc-full .logotop-teachdoc-cube {
+        top : 15%;
+        transform: translateY(0%);
+        width : 52%;
+        margin-left : 0px;
+        margin-right : 0px;
+        left: 24%;
+        border : 1px solid #ccc;
+        background-color : white;
+        transition: all 0.5s ease-out;
+        z-index : 100;
+    }
+
+    .div-teachdoc-full .list-teachdoc_wrapper {
+        position: relative;
+        top : 17%;
+        transform: translateY(0%);
+        width : 84%;
+        margin-left : 0px;
+        margin-right : 0px;
+        min-height : 250px;
+        left: 8%;
+        border: 1px solid #313537;
+        overflow: auto;
+    }
+    .div-teachdoc-full  .btnlaunch-teachdoc {
+        position : absolute;
+        top : 140px;
+        left : 50%;
+        transform: translateY(-50%) translateX(-50%);
+        z-index : 151;
+    }
+    .div-teachdoc-full  .title-mainmenu {
+        position : absolute;
+        top : 54px;
+        width : 84%;
+        left : 8%;
+        z-index : 150;
+    }
+    .div-teachdoc-full  .title-mainmenu-core {
+        position : absolute;
+        bottom : auto;
+        top: 5px;
+        left : 5px;
+        right : 5px;
+        height : auto;
+        font-size: 18px;
+        text-align: center;
+    }
+    .neoload{
+        overflow:auto;
+    }
+}
+
+.list-teachdoc_wrapper::-webkit-scrollbar {
+    width: 8px; /* width of the entire scrollbar */
+}
+.list-teachdoc_wrapper::-webkit-scrollbar-track {
+    background: #E6E6E6; /* color of the tracking area */
+}
+.list-teachdoc_wrapper::-webkit-scrollbar-thumb {
+    background-color: #808B96 ; /* color of the scroll thumb */
+    border-radius: 2px; /* roundness of the scroll thumb */
+    border: 1px solid #E6E6E6; /* creates padding around scroll thumb */
+}
+
+.list-teachdoc {
+    position: relative;
+    left:0%;
+    right:0px;
+    font-size: 18px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    background-color:white;
+}
+.list-teachdoc li {
+    text-align: left;
+    cursor:pointer;
+    padding-bottom: 0;
+    padding: 0.5em;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-top: 1px solid #ccc;
+}
+.list-teachdoc li:hover{
+    background-color:#E0E0F8;
+}
+
+.list-teachdoc li span{
+    /* display: inline-block; */
+    text-align: -webkit-match-parent;
+}
+.list-teachdoc .activeli{
+    background-color:#A9D0F5!important;
+}
+
+.list-teachdoc .badge {
+    background-color: #fff;
+    color:  #0B615E;
+    font-weight: bold;
+    font-size: 80%;
+    border-radius: 10em;
+    min-width: 1.5em;
+    padding: .25em;
+    text-align: center;
+    cursor:pointer;
+}
+.list-teachdoc .miniMenuLudi{
+    cursor:pointer;
+    width: 90%;
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+
+.dotSubLudi{
+    height: 12px;
+    width: 12px;
+    margin: 0;
+    padding: 0;
+    margin-right : 15px;
+    border: solid  0px rgb(102, 85, 85);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.teachdocbtn{
+    width : 100%;
+    text-align : center;
+}
+.teachdocbtn td{
+    width : 100%;
+    text-align : center;
+    padding : 10px;
+}
+
+.btn-btnTeach{
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.teachdocbtnteach{
+    width : 100%;
+}
+.teachdocbtnteach td{
+    width : 100%;
+    text-align : center;
+    padding : 10px;
+}
+
+/*
+    Ludi Nav TeachDoc
+*/
+.left-text-progress{
+    position : absolute;
+    text-align : center;
+    font-size : 18px;
+    font-weight: bold;
+    color : #5D6D7E;
+    top : 38px;
+    left : 10%;
+    width : 80%;
+    height : 24px;
+}
+.left-teach-progress{
+	position: absolute;
+	top : 12px;
+	left : 10%;
+	width : 80%;
+	height : 16px;
+	border-radius : 13px;
+    border: solid 1px #E5E8E8;
+    background-color : #E5E8E8;
+	overflow : hidden;
+}
+.left-barre-progress{
+	position: absolute;
+	top : 0px;
+	left : 0px;
+	width : 10%;
+	height : 18px;
+	background-color: #85929E;
+}
+
+.span-ludi-progress{
+	position: absolute;
+	top : 18px;
+	left : 30%;
+	width : 40%;
+    height : 16px;
+    display : none;
+	border-radius : 8px;
+	border : solid 1px #839192;
+	overflow : hidden;
+}
+.barre-ludi-progress{
+	position: absolute;
+	top : 0px;
+	left : 0px;
+	width : 1%;
+	height : 26px;
+	background-color: #086A87;
+}
+
+
+/*Top NAV */
+.fixed-top-nav {
+    z-index: 1000;
+	background-color: #343a40!important;
+    opacity : 0.9;
+    transition: opacity 0.5s;
+}
+
+.fixed-top-nav-classic {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 24%;
+	height: 54px;
+}
+.fixed-top-nav-large {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0%;
+	height: 54px;
+}
+
+.fixed-top-nav-load {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0%;
+    background-color: #343a40!important;
+	height: 54px;
+}
+
+.vertical-line-load {
+    position: fixed;
+    left: 103px;
+    bottom: -55px;
+    width: 10px;
+    height: 388px;
+    background-color: #086A87;
+    transform: rotate(-40deg);
+}
+
+.vertical-line-load-2 {
+    position: fixed;
+    left: 50px;
+    bottom: -44px;
+    width: 4px;
+    height: 300px;
+    background-color: #086A87;
+    transform: rotate(-40deg);
+}
+
+.loadcontentfram {
+    position: absolute;
+    background-color: #ffffff!important;
+    background-image: url("../img/classique/linear-progressbar.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: dashed 1px #ccc!important;
+    top : 0px;
+    left : 0px;
+    width: 100%;
+	height: 100%;
+}
+
+#btn-next{
+	right : 40px;
+}
+#btn-prev{
+	right : 88px;
+}
+.btn{
+    position : absolute;
+	top : 8px;
+    font-weight : 400;
+    text-align : center;
+    white-space : nowrap;
+    vertical-align : middle;
+    padding : .375rem .75rem;
+    padding-left : .7rem;
+    padding-right : .7rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .30rem;
+    transition: color .20s ease-in-out,background-color .20s ease-in-out,border-color .20s ease-in-out,box-shadow .20s ease-in-out;
+	color: #f8f9fa;
+	background-color: transparent;
+	border: solid 1px #f8f9fa;
+	 -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	cursor:pointer;
+}
+.btn:hover{
+	background-color: #f8f9fa;
+	color: #343a40;
+}
+
+.btninfos {
+    position : fixed;
+    right : 4px; bottom : 2px;
+    width : 30px; height : 30px;
+    font-size : 13px;
+    border-radius : 5px;
+    border : solid 0px gray;
+    cursor: pointer;
+    background-image : url(../img/classique/btninfo.png);
+    background-position : center center;
+    background-repeat : no-repeat;
+    background-size : cover;
+    z-index: 10;
+}
+.scolabelinfos {
+    width : 100px;
+    font-weight : bold;
+}
+
+.scoMenuParams {
+    position : fixed;
+    right : 4px; bottom : 2px;
+    width : 300px; height : 400px;
+    padding : 15px;
+    padding-top : 25px;
+    border-radius : 5px;
+    border : solid 1px gray;
+    background-color : white;
+    z-index : 9;
+}
+.scoMenuParams p {
+    margin-bottom : 5px;
+    margin-top : 5px;
+}
+
+.btninfosparams {
+    position: relative;
+    width : 300px;
+    height : 120px;
+}
+
+.cursordifficulty {
+    position: relative;
+    float : left;
+    width : 120px;
+    height : 26px;
+    margin-top : 3px;
+    margin-bottom : 3px;
+    line-height : 26px;
+    font-size: 13px;
+    border : solid 1px #E5E8E8;
+    border-radius : 8px;
+    text-align : center;
+    cursor : pointer;
+}
+.cursordifficulty:hover {
+    border : solid 1px #086A87;
+}
+
+.btnleveldocs {
+    position: absolute;
+    left: 4px; bottom: 4px;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border : solid 1px gray;
+    opacity : 0.6;
+    cursor: pointer;
+    background-image: url(../img/classique/pyramid-levels.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.btnleveldocs:hover {
+    opacity : 1;
+    border : solid 1px black;
+}
+
+.scoLevelDifficultyTitle {
+    position : absolute;
+    left : 5px; top : 55px;
+    right : 5px; height: 50px;
+    font-size : 20px;
+    color : #424949;
+    text-align: center;
+}
+.scoLevelDifficultyAnimOpac {
+    position : fixed;
+    left : 0px; top : 0px;
+    bottom : 0px; right : 0px;
+    background-color : gray;
+    opacity : 0.9;
+    z-index : 58;
+}
+.scoLevelDifficultyAnim {
+    position : fixed;
+    left : 50%; top : 50%;
+    width : 400px; height : 300px;
+    margin-left : -200px; margin-top : -150px;
+    padding : 15px;
+    border-radius : 5px;
+    border : solid 1px gray;
+    background-color : white;
+    z-index : 59;
+}
+.scoLevelDifficultyAnim .levelinfosparams {
+    position: relative;
+    left : 50%; top : 50%;
+    border : solid 1px gray;
+    width : 300px;
+    height : 30px;
+    margin-left: -150px;
+    margin-top: -15px;
+    border-radius : 15px;
+    overflow : hidden;
+}
+.levelinfoscursor {
+    position: absolute;
+    left : 50%; top : 50%;
+    margin-left : -150px;
+    margin-top : -40px;
+    width : 25px;
+    height : 25px;
+    border-radius : 15px;
+    border : solid 0px red;
+    background-image : url(../img/classique/cursorlevel.png);
+    background-position : center center;
+    background-repeat : no-repeat;
+}
+.barreDifficulty {
+    position : absolute;
+    width : 33.35%;
+    height : 30px;
+}
+.barreDifficultyA {
+    left : 0%;
+    background-color : #52BE80;
+}
+.barreDifficultyB {
+    left : 33.33%;
+    background-color : #3b97e3;
+}
+.barreDifficultyC {
+    left : 66.66%;
+    background-color : #EB984E;
+}
+
+.btnleveldocs {
+    position : absolute;
+    left : 4px; bottom : 4px;
+    width : 20px; height : 20px;
+    border-radius : 5px;
+    border : solid 1px gray;
+    opacity : 0.7;
+    cursor : pointer;
+    background-image : url(../img/classique/pyramid-levels.png);
+    background-position : center center;
+    background-repeat : no-repeat;
+    background-size : cover;
+}
+.btnleveldocs:hover {
+    opacity : 1;
+    border : solid 1px black;
+}
+
+
+.qcmbarre{
+    text-align: left;
+    width:100%;
+}
+.quizzTextqcm{
+    text-align: left;
+}
+
+.ui-life-bar{
+    position: fixed;
+    top : 135px;
+    right : 0px;
+    width : 36px;
+    min-height : 32px;
+    padding : 3px;
+    padding-top:12px;
+    padding-bottom : 0px;
+    border-radius : 18px;;
+    background-color: #f8f9fa;
+    border: solid 1px rgb(97, 96, 97);
+    transition: height 1s ease;
+}
+
+.onelifeopt {
+    margin-top:-6px
+}
+
+#linkdatafile {
+    display : none;
+    background-color: #E5E8E8 ;
+    color: #E5E8E8 ;
+}
+
+.errorflag {
+    position : relative;
+    margin-left : 5px;
+    width : 40px;
+    text-align : center;
+    background-color : #CD6155;
+    border: 1px solid #d43f3a;
+    color : #ffffff;
+    display : inline-block;
+    border-radius: 5px;
+    padding : 0.5em;
+    line-height : 1;
+}
+
+.fixed-top-message {
+    position : fixed;
+    top : 70px;
+    right : 0px;
+    text-align : center;
+    color :white;
+    display: none;
+    font-size: 20px;
+    max-height : 300px;
+    min-height : 40px;
+    line-height : 20px;
+    padding : 20px;
+    z-index : 1000;
+    border-radius: 4px;
+	background-color:#CD6155!important;
+    border: 1px solid #d43f3a;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+}
+
+.agloss {
+    position: relative;
+    border-bottom: dotted 0.5px gray;
+    cursor: pointer;
+}
+.aglossclose {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width : 10px;
+    height : 10px;
+    background-image: url("../img/classique/close.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.toolsGloss {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 14px;
+    margin-bottom: 0px;
+}
+.addGloss {
+    display: inline-block;
+    border: solid 1px #45B39D;
+    color: #45B39D;
+    width: 20px;
+    text-align: center;
+    font-size: 20px;
+    height: 22px;
+    line-height: 20px;
+}
+
+.bubblegloss {
+	position: absolute;
+	width: 300px;
+    margin-left: -140px;
+    top : 38px;left : 0px;
+	background-color: #fff;
+	padding: 12px;
+    padding-top: 17px;
+    padding-bottom: 15px;
+    font-size: 17px;
+	border-radius: 10px;
+	box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.4), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.3);
+    z-index: 60;
+    display : none;
+}
+
+.glossdef2 {
+    display : none;
+}
+
+.bubblegloss p {
+    padding-top: 5px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+.bubblegloss:before {
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	bottom: 100%;
+	left: 145px;
+	border: 0.75rem solid transparent;
+	border-top: none;
+	border-bottom-color: #fff;
+	filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, 0.2));
+}
+
+
+@media (max-width: 800px){
+    .cell {
+        min-width : 300px;
+        width : 100%;
+        display: block;
+        height : auto;
+    }
+}
+@media screen and (max-width:600px){
+    .fixed-top-message{
+        left:0%;
+    }
+    .fixed-top-nav {
+        left:0%;
+    }
+	.span-ludi-progress{
+        left : 27%;
+        width : 40%;
+        display : block;
+	}
+}
+@media screen and (max-width:500px){
+    .span-ludi-progress{
+        left : 25%;
+        width : 40%;
+        display : block;
+	}
+}
+@media screen and (max-width:400px){
+    .span-ludi-progress{
+        left : 20%;
+        width : 40%;
+        display : block;
+	}
+}
+@media screen and (max-width:350px){
+    .span-ludi-progress{
+        left : 10%;
+        width : 40%;
+        display : block;
+	}
+}
+@media screen and (min-width: 900px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:0%;
+        width:30%;
+    }
+    .panel-teachdoc{
+        left:30%;
+        width: 70%;
+    }
+    .fixed-top-nav-classic {
+        left:30%!important;
+    }
+}
+@media screen and (min-width: 1200px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:0%;
+        width:22%;
+    }
+    .panel-teachdoc{
+        left:22%;
+        width:78%;
+    }
+    .fixed-top-nav-classic {
+        left:22%!important;
+    }
+}
+@media screen and (min-width: 1300px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:0%;
+        width:21%;
+    }
+    .panel-teachdoc{
+        left:21%;
+        width:79%;
+    }
+    .fixed-top-nav-classic {
+        left:21%!important;
+    }
+}
+@media screen and (min-width: 1400px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:0%;
+        width:18%;
+    }
+    .panel-teachdoc{
+        left:18%;
+        width:82%;
+    }
+    .fixed-top-nav-classic {
+        left:18%!important;
+    }
+}
+@media screen and (max-width: 900px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:0%;
+        width:30%;
+    }
+    .panel-teachdoc{
+        left:30%;
+        width: 70%;
+    }
+    .fixed-top-nav-classic {
+        left:30%!important;
+    }
+}
+@media screen and (max-width: 800px){
+    .div-teachdoc, .div-teachdoc-transi{
+        left:-24%;
+        width:24%;
+    }
+    .panel-teachdoc{
+        left:0%;
+        width: 99%;
+    }
+    .fixed-top-nav-classic {
+        left:0%!important;
+    }
+}

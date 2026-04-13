@@ -32,7 +32,7 @@ use const PATHINFO_EXTENSION;
 class CourseArchiver
 {
     /** @var bool Global debug flag (true by default) */
-    private static bool $debug = true;
+    private static bool $debug = false;
 
     /** Debug logger (safe JSON, truncated) */
     private static function dlog(string $stage, mixed $payload = null): void

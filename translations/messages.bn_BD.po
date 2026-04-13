@@ -33870,3 +33870,12 @@ msgstr "ঐচ্ছিক। শুধুমাত্র AI-এর জন্য
 msgid "Select a document"
 msgstr "একটি ডকুমেন্ট নির্বাচন করুন"
 
+msgid "Welcome"
+msgstr "স্বাগতম"
+
+msgid "Welcome to Chamilo"
+msgstr "Chamilo-এ স্বাগতম"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> যদি এটি আপনার প্রথমবার Chamilo ব্যবহার করা হয়, তাহলে সাইড মেনু চেক করুন যাতে এর অনেক ফিচারের মধ্যে পথ খুঁজে পান। সাহায্য প্রয়োজন হলে, আপনি <a href=\"https://docs.chamilo.org\">আমাদের অফিসিয়াল ডকুমেন্টেশন</a> স্ট্যান্ডার্ড ডকুমেন্টেশনের জন্য সাহায্য করতে পারে, যখন আমাদের <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">অনলাইন ফোরাম</a> অন্য Chamilo ব্যবহারকারীদের থেকে ধারণা শেয়ার করতে এবং উত্তর খুঁজে পেতে সাহায্য করতে পারে।"
+

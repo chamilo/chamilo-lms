@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+	<version>1.0</version>
+
+	<properties>
+		<type>editor</type>
+		<id>editor-action</id>
+		<title>action</title>
+		<category>editor</category>
+	</properties>
+	
+	<display>
+		<width>550</width>
+		<height>650</height>
+		<sizeText>18</sizeText>
+		<colorText>black</colorText>
+		<textAlign>center</textAlign>
+		<behavior>center</behavior>
+	</display>
+	<windows>
+
+	</windows>
+	<options>
+		<resize>1</resize>
+		<changeImage>0</changeImage>
+		<changeText>0</changeText>
+		<conditionalObject>0</conditionalObject>
+		<docTypeStrict>1</docTypeStrict>
+	</options>
+
+	<fields>
+		<field>
+			<label>Text :</label>
+			<type>text</type>
+			<defaut></defaut>
+		</field>
+	</fields>
+	
+</plugin>

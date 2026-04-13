@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository;
-use League\Flysystem\FilesystemOperator;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -38,8 +37,7 @@ logging(
     sprintf("Deleting snapshots taken before than %s", $timeLimit->format('Y-m-d H:i:s'))
 );
 
-/** @var FilesystemOperator $pluginsFilesystem */
-$pluginsFilesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
+$pluginsFilesystem = Container::getPluginsFileSystem();
 
 $logs = findLogsBeforeThan($timeLimit);
 

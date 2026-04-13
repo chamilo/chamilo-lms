@@ -78,7 +78,6 @@
               :ringValue="ringValue"
               @delete="onDelete"
               @edit="goEdit"
-              @open="openLegacy"
               @report="onReport"
               @settings="onSettings"
               @toggle-auto-launch="onToggleAutoLaunch"
@@ -107,7 +106,6 @@
         :title="group[0]?.title"
         @delete="onDelete"
         @edit="goEdit"
-        @open="openLegacy"
         @reorder="(ids) => onReorderCategory(group[0], ids)"
         @report="onReport"
         @settings="onSettings"
@@ -611,13 +609,6 @@ watch(
   },
 )
 
-const openLegacy = (lp) => {
-  window.location.href = lpService.buildLegacyViewUrl(lp.iid, {
-    cid: legacyContext.value.cid || 0,
-    sid: legacyContext.value.sid || 0,
-    isStudentView: isStudentView.value ? "true" : "false",
-  })
-}
 const goEdit = (lp) => {
   router.push({ name: "LpUpdate", params: { id: lp.iid }, query: route.query })
 }

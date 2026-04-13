@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Tehtävän kuvaus",
+      "description": "Kuvaile, mitä käyttäjän pitää tehdä.",
+      "placeholder": "Valitse klikkaamalla verbit seuraavasta tekstistä."
+    },
+    {
+      "label": "Tekstikenttä",
+      "placeholder": "Tämä on vastaus: *vastaus*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Merkitse valittavat sanat tähtien (*) väliin, esimerkiksi *syön*.</li><li>Jos tarkoituksena on valita sanan sijaan pelkkä *-merkki, niin merkitse se muodossa **.</li></ul>",
+        "example": "Oikeat sanat merkitään seuraavasti: *oikeasana*, asteriskit kirjoitetaan näin: *oikeasana***."
+      }
+    },
+    {
+      "label": "Yleinen palaute",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Oletus"
+            }
+          ],
+          "label": "Määritä muokattu palaute pisterajojen mukaan.",
+          "description": "Klikkaa \"Lisää alue\" painiketta lisätäksesi niin monta pisterajaa kuin tarvit. Esimerkiksi: 0-20% Huono tulos, 21-91% Kelpo tulos, 91-100% Mahtava tulos!",
+          "entity": "alue",
+          "field": {
+            "fields": [
+              {
+                "label": "Pisteraja"
+              },
+              {},
+              {
+                "label": "Palaute määritellylle pisterajalle",
+                "placeholder": "Kirjoita palaute"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Tarkista\" nimi",
+      "default": "Tarkista"
+    },
+    {
+      "label": "Painikkeen \"Yritä uudelleen\" nimi",
+      "default": "Yritä uudelleen"
+    },
+    {
+      "label": "Painikkeen \"Katso vastaus\" nimi",
+      "default": "Katso vastaus"
+    },
+    {
+      "label": "Yleisasetukset",
+      "description": "Näillä valinnoilla voit ohjailla tehtävän toimintoja.",
+      "fields": [
+        {
+          "label": "Salli painike \"Yritä uudelleen\""
+        },
+        {
+          "label": "Salli painike \"Katso vastaus\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Näytä pisteet",
+          "description": "Näytä ansaitut pisteet joka vastaukselle."
+        }
+      ]
+    },
+    {
+      "label": "Oikean vastauksen teksti",
+      "default": "Oikein!",
+      "description": "Teksti oikealle vastaukselle"
+    },
+    {
+      "label": "Väärän vastauksen teksti",
+      "default": "Väärin!",
+      "description": "Teksti väärälle vastaukselle"
+    },
+    {
+      "label": "Ohitetun vastauksen teksti",
+      "default": "Ohi!",
+      "description": "Teksti ohitetulle/puuttuvalle vastaukselle"
+    },
+    {
+      "label": "Painikkeen Näytä vastaukset kuvaus",
+      "default": "Tehtävä on päivitetty vastausten näyttämiseksi",
+      "description": "Tämä teksti kertoo tekijälle, että tehtävä on päivitetty ratkaisulla."
+    },
+    {
+      "label": "Tekstimuotoinen esitys pistepalkista niille jotka käyttävät ruudunlukijasovellusta",
+      "default": "Sait :num pistettä :total pisteestä"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 700 200"
+   xml:space="preserve"
+   sodipodi:docname="white-medium-star.svg"
+   width="700"
+   height="200"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"><metadata
+   id="metadata19"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs17" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1545"
+   inkscape:window-height="803"
+   id="namedview15"
+   showgrid="false"
+   inkscape:zoom="0.79324518"
+   inkscape:cx="318.89398"
+   inkscape:cy="104.70279"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Layer_1" />
+
+  <style
+     id="style2">
+	#star1{
+      position : absolute;
+		animation-name: rotationckw;
+		animation-duration: 16s;
+		animation-iteration-count: infinite;
+		transform-origin: 75px 75px ;
+	}
+   #star2{
+		animation-name: rotationckw;
+		animation-duration: 16s;
+		animation-iteration-count: infinite;
+		transform-origin: 75px 75px ;
+		display: inline-block;
+	}
+   #star3{
+		animation-name: rotationckw;
+		animation-duration: 16s;
+		animation-iteration-count: infinite;
+		transform-origin: 75px 75px ;
+		display: inline-block;
+	}
+
+   @keyframes rotationckw {
+		0% {
+			transform : scale(0.2) rotate(0deg);
+		}
+      8% {
+			transform : scale(0.8) rotate(360deg);
+		}
+      10% {
+			transform : scale(1.1) rotate(360deg);
+		}
+      12% {
+			transform : scale(1) rotate(360deg);
+		}
+      14% {
+			transform : scale(1.1) rotate(360deg);
+		}
+      20% {
+			transform : scale(1) rotate(355deg);
+		}
+      30% {
+			transform : scale(1) rotate(365deg);
+		}
+      32% {
+			transform : scale(1.1) rotate(360deg);
+		}
+      34% {
+			transform : scale(1) rotate(360deg);
+		}
+      36% {
+			transform : scale(1.1) rotate(360deg);
+		}
+
+      99% {
+			transform : scale(0.9) rotate(360deg);
+		}
+		100% {
+			transform : scale(0.2) rotate(0deg);
+		}
+	}
+
+   </style>
+<g transform="translate(284,10)">
+   <g id="star1" >
+      <path
+      style="fill:#fdd835"
+      d="m 68.05,7.23 13.46,30.7 c 1.03,2.35 3.26,3.96 5.82,4.19 l 32.79,2.94 c 3.71,0.54 5.19,5.09 2.5,7.71 l -24.7,20.75 c -2,1.68 -2.91,4.32 -2.36,6.87 l 7.18,33.61 c 0.63,3.69 -3.24,6.51 -6.56,4.76 L 67.56,102 c -2.2,-1.29 -4.92,-1.29 -7.12,0 l -28.62,16.75 c -3.31,1.74 -7.19,-1.07 -6.56,-4.76 l 7.18,-33.61 c 0.54,-2.55 -0.36,-5.19 -2.36,-6.87 L 5.37,52.78 c -2.68,-2.61 -1.2,-7.17 2.5,-7.71 l 32.79,-2.94 c 2.56,-0.23 4.79,-1.84 5.82,-4.19 L 59.94,7.24 c 1.67,-3.36 6.45,-3.36 8.11,-0.01 z"
+      id="path2" />
+      <g
+      id="g6">
+         <path
+      style="fill:#ffff8d"
+      d="M 67.07,39.77 64.79,17.15 c -0.09,-1.26 -0.35,-3.42 1.67,-3.42 1.6,0 2.47,3.33 2.47,3.33 l 6.84,18.16 c 2.58,6.91 1.52,9.28 -0.97,10.68 -2.86,1.6 -7.08,0.35 -7.73,-6.13 z"
+      id="path4" />
+      </g>
+      <g
+      id="g10">
+         <path
+      style="fill:#f4b400"
+      d="M 95.28,71.51 114.9,56.2 c 0.97,-0.81 2.72,-2.1 1.32,-3.57 -1.11,-1.16 -4.11,0.51 -4.11,0.51 l -17.17,6.71 c -5.12,1.77 -8.52,4.39 -8.82,7.69 -0.39,4.4 3.56,7.79 9.16,3.97 z"
+      id="path8" />
+      </g>
+   </g>
+</g>
+
+<g transform="translate(159.74553,47.63799)">
+
+<g id="star2" >
+   <path
+     style="fill:#fdd835"
+     d="m 68.05,7.23 13.46,30.7 c 1.03,2.35 3.26,3.96 5.82,4.19 l 32.79,2.94 c 3.71,0.54 5.19,5.09 2.5,7.71 l -24.7,20.75 c -2,1.68 -2.91,4.32 -2.36,6.87 l 7.18,33.61 c 0.63,3.69 -3.24,6.51 -6.56,4.76 L 67.56,102 c -2.2,-1.29 -4.92,-1.29 -7.12,0 l -28.62,16.75 c -3.31,1.74 -7.19,-1.07 -6.56,-4.76 l 7.18,-33.61 c 0.54,-2.55 -0.36,-5.19 -2.36,-6.87 L 5.37,52.78 c -2.68,-2.61 -1.2,-7.17 2.5,-7.71 l 32.79,-2.94 c 2.56,-0.23 4.79,-1.84 5.82,-4.19 L 59.94,7.24 c 1.67,-3.36 6.45,-3.36 8.11,-0.01 z"
+     id="path2-3" /><g
+     id="g6-1"><path
+       style="fill:#ffff8d"
+       d="M 67.07,39.77 64.79,17.15 c -0.09,-1.26 -0.35,-3.42 1.67,-3.42 1.6,0 2.47,3.33 2.47,3.33 l 6.84,18.16 c 2.58,6.91 1.52,9.28 -0.97,10.68 -2.86,1.6 -7.08,0.35 -7.73,-6.13 z"
+       id="path4-0" /></g><g
+     id="g10-0"><path
+       style="fill:#f4b400"
+       d="M 95.28,71.51 114.9,56.2 c 0.97,-0.81 2.72,-2.1 1.32,-3.57 -1.11,-1.16 -4.11,0.51 -4.11,0.51 l -17.17,6.71 c -5.12,1.77 -8.52,4.39 -8.82,7.69 -0.39,4.4 3.56,7.79 9.16,3.97 z"
+       id="path8-5" /></g>
+   </g>
+</g>
+
+<g transform="translate(416.25535,47.529844)">
+   <g id="star3" >
+      <path
+      style="fill:#fdd835"
+      d="m 68.05,7.23 13.46,30.7 c 1.03,2.35 3.26,3.96 5.82,4.19 l 32.79,2.94 c 3.71,0.54 5.19,5.09 2.5,7.71 l -24.7,20.75 c -2,1.68 -2.91,4.32 -2.36,6.87 l 7.18,33.61 c 0.63,3.69 -3.24,6.51 -6.56,4.76 L 67.56,102 c -2.2,-1.29 -4.92,-1.29 -7.12,0 l -28.62,16.75 c -3.31,1.74 -7.19,-1.07 -6.56,-4.76 l 7.18,-33.61 c 0.54,-2.55 -0.36,-5.19 -2.36,-6.87 L 5.37,52.78 c -2.68,-2.61 -1.2,-7.17 2.5,-7.71 l 32.79,-2.94 c 2.56,-0.23 4.79,-1.84 5.82,-4.19 L 59.94,7.24 c 1.67,-3.36 6.45,-3.36 8.11,-0.01 z"
+      id="path2-3-2" /><g
+      id="g6-1-6"><path
+         style="fill:#ffff8d"
+         d="M 67.07,39.77 64.79,17.15 c -0.09,-1.26 -0.35,-3.42 1.67,-3.42 1.6,0 2.47,3.33 2.47,3.33 l 6.84,18.16 c 2.58,6.91 1.52,9.28 -0.97,10.68 -2.86,1.6 -7.08,0.35 -7.73,-6.13 z"
+         id="path4-0-8" /></g><g
+      id="g10-0-1"><path
+         style="fill:#f4b400"
+         d="M 95.28,71.51 114.9,56.2 c 0.97,-0.81 2.72,-2.1 1.32,-3.57 -1.11,-1.16 -4.11,0.51 -4.11,0.51 l -17.17,6.71 c -5.12,1.77 -8.52,4.39 -8.82,7.69 -0.39,4.4 3.56,7.79 9.16,3.97 z"
+         id="path8-5-9" />
+      </g>
+   </g>
+</g>
+</svg>

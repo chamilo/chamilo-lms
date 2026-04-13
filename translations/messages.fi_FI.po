@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavamalli: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -33875,4 +33875,13 @@ msgstr "Valinnainen. Käytetään vain lisävihjeenä tekoälylle."
 
 msgid "Select a document"
 msgstr "Valitse asiakirja"
+
+msgid "Welcome"
+msgstr "Tervetuloa"
+
+msgid "Welcome to Chamilo"
+msgstr "Tervetuloa Chamilo-opintojärjestelmään"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jos tämä on ensimmäinen kerta, kun käytät Chamiloa, tarkista sivupaneeli löytääksesi tiellesi sen monien ominaisuuksien läpi. Jos tarvitset apua, löydät <a href=\"https://docs.chamilo.org\">viralliset dokumentaatiomme</a> standardidokumentaatiosta, kun taas <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">verkkofoorumimme</a> auttaa jakamaan ideoita ja löytämään vastauksia muilta Chamilo-käyttäjiltä."
 

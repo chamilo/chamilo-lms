@@ -69,7 +69,7 @@ if ($action === 'md_to_html') {
         if ('' === trim((string) $html)) {
             $html = Display::return_message('README file is empty.', 'warning', false);
         }
-        echo $html;
+        echo '<div class="prose">'.$html.'</div>';
     } catch (\Throwable $e) {
         error_log('[plugin.ajax md_to_html] '.$e->getMessage());
         http_response_code(500);

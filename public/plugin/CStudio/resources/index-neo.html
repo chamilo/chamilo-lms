@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Load ...</title>
+        <link rel="preload" as="image" href="img/classique/oel_back-low.jpg" />
+        <link href="css/scorm.css?v=10" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="jq.js?v=10"></script>
+        <script>
+            var pageBindex = 1;
+            var additional_params = '';
+            var logs_params = "";
+            var sendLogsToTableOpt = {sendlogs};
+            var localIdTeachdoc = {localIdTeachdoc};
+            var localactivityid = "{activityid}";
+            var projLang = "{projLang}";
+            var projOptions = "{projOptions}";
+            {basePages}
+        </script>
+        <style>
+            body,html{
+                background-color : white!important;
+                height : 100%;
+                margin : 0;
+            }
+            .thumbPagesContains{
+                display : none!important;
+            }
+        </style>
+    </head>
+    <body class="neoload" style="background-color:white;" >
+        
+        <div class="fixed-top-nav-load"></div>
+        <!--MENU-->
+        <div class="vertical-line-load"></div>
+        <div class="vertical-line-load-2"></div>
+
+        <script>
+            $('.logotop-teachdoc').before("<div id='title-mainmenu' class='title-mainmenu' ><div class='title-mainmenu-core'>{titleplace}</div></div>")
+        </script>
+        
+        <script type="text/javascript" src="interfaces/sco/api.js"></script>
+        <script type="text/javascript" src="ng.js"></script>
+
+        <script>
+            
+            function loadLinkPage() {
+                var v = Math.floor(Math.random() * 2000);
+                var ur = window.location.href;
+                var urF = "teachdoc-{start}.html#load=first#v=" + v;
+                if(ur.indexOf("file://")==-1){
+                    urF = "teachdoc-{start}.html?v=0610" + additional_params + "#load=first#v=" + v;
+                }
+                window.location.href = urF;
+            }
+
+            $('.logotop-teachdoc').after("<a id='btnlaunch-teachdoc' onClick='startCourse(0)' class='btnlaunch-teachdoc noselect' >&#9658;</a>")
+             
+            homeMenuIsOpen = true;
+
+        </script>
+
+        <style>
+            .fixed-top-nav {
+                display : none;
+            }
+        </style>
+        
+    </body>
+</html>

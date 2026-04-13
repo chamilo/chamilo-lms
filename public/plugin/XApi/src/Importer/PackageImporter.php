@@ -9,7 +9,6 @@ namespace Chamilo\PluginBundle\XApi\Importer;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Exception;
-use League\Flysystem\FilesystemOperator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -74,24 +73,6 @@ abstract class PackageImporter
     }
 
     /**
-     * @throws Exception
-     */
-    protected function getPluginsFilesystem(): FilesystemOperator
-    {
-        if (!Container::$container->has('oneup_flysystem.plugins_filesystem')) {
-            throw new Exception('The plugins filesystem service is not available.');
-        }
-
-        $filesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
-
-        if (!$filesystem instanceof FilesystemOperator) {
-            throw new Exception('Invalid plugins filesystem service.');
-        }
-
-        return $filesystem;
-    }
-
-    /**
      * Mirror a locally extracted runtime package into the persistent plugins filesystem.
      *
      * @throws Exception
@@ -112,7 +93,7 @@ abstract class PackageImporter
         $relativeDirectory = ltrim(substr($runtimeDirectoryPath, strlen($runtimeBasePath)), '/');
         $persistentDirectory = $this->joinPersistentPath($relativeDirectory);
 
-        $pluginsFilesystem = $this->getPluginsFilesystem();
+        $pluginsFilesystem = Container::getPluginsFileSystem();
 
         try {
             $pluginsFilesystem->deleteDirectory($persistentDirectory);

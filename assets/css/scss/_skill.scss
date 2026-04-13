@@ -470,3 +470,43 @@
     display: inline-block;
   }
 }
+
+.skills-badges {
+  @apply mb-4;
+
+  &--cards {
+    @apply grid gap-4 grid-cols-2
+      sm:grid-cols-3
+      md:grid-cols-5
+      xl:grid-cols-6;
+
+    .skill-badge-wrapper {
+      @apply rounded-lg bg-white border border-gray-25 transition isolate p-4 flex flex-col
+        hover:shadow-xl;
+
+      a {
+        @apply hover:underline;
+      }
+
+      .item {
+        @apply relative;
+
+        img {
+          @apply rounded-t-lg object-cover w-full h-auto;
+        }
+      }
+
+      .caption {
+        @apply space-y-2;
+
+        &:empty {
+          @apply hidden;
+        }
+      }
+
+      .skill-badge-action {
+        @apply mt-auto rounded-b-lg space-y-2;
+      }
+    }
+  }
+}

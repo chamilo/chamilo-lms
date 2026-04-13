@@ -14,6 +14,8 @@ class CatForm extends FormValidator
     public const TYPE_MOVE = 3;
     public const TYPE_SELECT_COURSE = 4;
 
+    private int $form_type;
+
     /** @var Category */
     private $category_object;
 

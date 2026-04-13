@@ -34,7 +34,7 @@
             <div class="grid grid-cols-1 gap-4 px-6 py-5 lg:grid-cols-3 lg:px-8">
                 <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'External tools'|get_plugin_lang('ImsLtiPlugin') }}
+                        {{ 'Logical tools'|trans }}
                     </div>
                     <div class="mt-2 text-2xl font-semibold text-gray-90">{{ tools|length }}</div>
                 </div>
@@ -50,10 +50,10 @@
 
                 <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'Incomplete'|trans }}
+                        {{ 'With hidden duplicates'|trans }}
                     </div>
                     <div class="mt-2 text-2xl font-semibold text-gray-90">
-                        {{ tools|filter(tool => not tool.is_ready_for_courses)|length }}
+                        {{ tools|filter(tool => tool.has_duplicates)|length }}
                     </div>
                 </div>
             </div>
@@ -72,19 +72,10 @@
                     </div>
                 </div>
             </div>
-
-            <div class="hidden grid-cols-[minmax(0,1.2fr)_6rem_minmax(0,1fr)_minmax(0,1.4fr)_22rem] gap-4 border-b border-gray-25 bg-gray-10 px-6 py-4 lg:grid lg:px-8">
-                <div class="text-body-2 font-semibold text-gray-90">{{ 'Name'|get_lang }}</div>
-                <div class="text-body-2 font-semibold text-gray-90">{{ 'ID'|get_lang }}</div>
-                <div class="text-body-2 font-semibold text-gray-90">{{ 'ClientId'|get_plugin_lang('ImsLtiPlugin') }}</div>
-                <div class="text-body-2 font-semibold text-gray-90">{{ 'LaunchUrl'|get_plugin_lang('ImsLtiPlugin') }}</div>
-                <div class="text-right text-body-2 font-semibold text-gray-90">{{ 'Actions'|get_lang }}</div>
-            </div>
-
             <div class="divide-y divide-gray-20">
                 {% if tools|length > 0 %}
                     {% for tool in tools %}
-                        <div class="grid grid-cols-1 gap-5 px-6 py-5 lg:grid-cols-[minmax(0,1.2fr)_6rem_minmax(0,1fr)_minmax(0,1.4fr)_22rem] lg:items-start lg:px-8">
+                        <div class="grid grid-cols-1 gap-5 px-6 py-5 lg:grid-cols-[minmax(0,1.1fr)_10rem_minmax(0,1.2fr)_minmax(0,1.3fr)_22rem] lg:items-start lg:px-8">
                             <div class="min-w-0">
                                 <div class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
                                     {{ 'Name'|get_lang }}
@@ -110,19 +101,45 @@
                             </div>
 
                             <div>
-                                <div class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
-                                    {{ 'ID'|get_lang }}
+                                <div class="flex flex-col gap-2">
+                                    <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'Tool ID'|trans }}
+                                    </div>
+                                    <div class="text-body-2 font-semibold text-gray-90">#{{ tool.id }}</div>
+
+                                    {% if tool.client_id %}
+                                        <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                                            {{ 'ClientId'|get_plugin_lang('ImsLtiPlugin') }}
+                                        </div>
+                                        <code class="block break-all rounded-xl border border-gray-25 bg-gray-10 px-3 py-2 text-caption text-gray-90">
+                                            {{ tool.client_id }}
+                                        </code>
+                                    {% endif %}
                                 </div>
-                                <div class="text-body-2 text-gray-90">{{ tool.id }}</div>
                             </div>
 
                             <div class="min-w-0">
                                 <div class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
-                                    {{ 'ClientId'|get_plugin_lang('ImsLtiPlugin') }}
+                                    {{ 'Courses'|get_plugin_lang('ImsLtiPlugin') }}
                                 </div>
-                                <code class="block break-all rounded-xl border border-gray-25 bg-gray-10 px-3 py-2 text-caption text-gray-90">
-                                    {{ tool.client_id ?: '—' }}
-                                </code>
+
+                                <div class="flex flex-col gap-3">
+                                    <div class="text-body-2 font-semibold text-gray-90">
+                                        {{ tool.assigned_courses_count }} {{ tool.assigned_courses_count == 1 ? 'course'|trans : 'courses'|trans }}
+                                    </div>
+
+                                    {% if tool.assigned_courses|length > 0 %}
+                                        <div class="flex flex-wrap gap-2">
+                                            {% for courseItem in tool.assigned_courses %}
+                                                <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-caption font-semibold text-primary">
+                                                    {{ courseItem.text }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="text-body-2 text-gray-50">—</div>
+                                    {% endif %}
+                                </div>
                             </div>
 
                             <div class="min-w-0">
@@ -182,15 +199,27 @@
                                         <span>{{ 'Edit'|get_lang }}</span>
                                     </a>
 
-                                    <a
-                                        href="{{ pluginBaseUrl }}delete.php?id={{ tool.id }}"
-                                        class="inline-flex items-center gap-2 rounded-xl bg-danger px-4 py-2 text-body-2 font-semibold text-danger-button-text shadow-sm transition hover:opacity-90"
-                                        title="{{ 'Delete'|get_lang }}"
-                                        onclick="return confirm('{{ 'Please confirm your choice'|get_lang|e('js') }}');"
-                                    >
-                                        <i class="mdi mdi-trash-can-outline" aria-hidden="true"></i>
-                                        <span>{{ 'Delete'|get_lang }}</span>
-                                    </a>
+                                    {% if tool.can_delete %}
+                                        <a
+                                            href="{{ pluginBaseUrl }}delete.php?id={{ tool.id }}"
+                                            class="inline-flex items-center gap-2 rounded-xl bg-danger px-4 py-2 text-body-2 font-semibold text-danger-button-text shadow-sm transition hover:opacity-90"
+                                            title="{{ 'Delete'|get_lang }}"
+                                            onclick="return confirm('{{ 'Please confirm your choice'|get_lang|e('js') }}');"
+                                        >
+                                            <i class="mdi mdi-trash-can-outline" aria-hidden="true"></i>
+                                            <span>{{ 'Delete'|get_lang }}</span>
+                                        </a>
+                                    {% else %}
+                                        <button
+                                            type="button"
+                                            class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-gray-10 px-4 py-2 text-body-2 font-semibold text-gray-50 opacity-70"
+                                            disabled="disabled"
+                                            title="{{ tool.delete_disabled_reason|trans }}"
+                                        >
+                                            <i class="mdi mdi-trash-can-outline" aria-hidden="true"></i>
+                                            <span>{{ 'Delete'|get_lang }}</span>
+                                        </button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -447,8 +476,31 @@ $(function () {
         $form.find('.form-actions, .button-toolbar, .toolbar, .btn-toolbar').addClass('mt-6 flex justify-end');
     }
 
+    function getAssignedCourseIdsFromHolder($form) {
+        var $holder = $form.closest('#imslti-multiply-form-wrapper').find('.js-imslti-assigned-courses').first();
+
+        if (!$holder.length) {
+            return [];
+        }
+
+        var raw = $holder.attr('data-assigned') || '[]';
+        var assigned = [];
+
+        try {
+            assigned = JSON.parse(raw);
+        } catch (e) {
+            assigned = [];
+        }
+
+        return assigned
+            .map(function (item) {
+                return item && item.id ? String(item.id) : null;
+            })
+            .filter(Boolean);
+    }
+
     function applyAssignedCourses($form) {
-        var $holder = $form.closest('.space-y-4').find('.js-imslti-assigned-courses').first();
+        var $holder = $form.closest('#imslti-multiply-form-wrapper').find('.js-imslti-assigned-courses').first();
         if (!$holder.length) {
             return;
         }
@@ -517,6 +569,39 @@ $(function () {
 
             var $submitButtons = $form.find('button[type="submit"], input[type="submit"]');
             $submitButtons.prop('disabled', true);
+
+            var assignedCourseIds = getAssignedCourseIdsFromHolder($form);
+            var $coursesSelect = $form.find('select[name="courses[]"], select[name="courses"]').first();
+
+            var selectedCourseIds = [];
+
+            if ($coursesSelect.length) {
+                selectedCourseIds = ($coursesSelect.val() || []).map(function (value) {
+                    return String(value);
+                });
+            } else {
+                selectedCourseIds = []
+                    .concat(formData.getAll('courses[]') || [])
+                    .concat(formData.getAll('courses') || [])
+                    .map(function (value) {
+                        return String(value);
+                    });
+            }
+
+            var removedCourseIds = assignedCourseIds.filter(function (courseId) {
+                return selectedCourseIds.indexOf(String(courseId)) === -1;
+            });
+
+            removedCourseIds = Array.from(new Set(removedCourseIds));
+
+            if (removedCourseIds.length > 0) {
+                var confirmMessage = 'Removing an activity from a course can have an impact on the assessments of that course. Are you sure you want to remove it?';
+
+                if (!window.confirm(confirmMessage)) {
+                    $submitButtons.prop('disabled', false);
+                    return;
+                }
+            }
 
             $.ajax({
                 url: form.action,

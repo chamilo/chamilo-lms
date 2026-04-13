@@ -57,17 +57,6 @@
                                             </div>
 
                                             <div class="flex items-center gap-2">
-                                                {% if tool.isActiveDeepLinking %}
-                                                    <a
-                                                            href="{{ path('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
-                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
-                                                            title="{{ 'Configure'|trans }}"
-                                                    >
-                                                        <span class="mdi mdi-cog-outline text-lg" aria-hidden="true"></span>
-                                                        <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                                    </a>
-                                                {% endif %}
-
                                                 <a
                                                         href="{{ path('chamilo_lti_edit', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
                                                         class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-90 text-white shadow-sm transition hover:opacity-90"
@@ -75,6 +64,15 @@
                                                 >
                                                     <span class="mdi mdi-pencil-outline text-lg" aria-hidden="true"></span>
                                                     <span class="sr-only">{{ 'Edit'|trans }}</span>
+                                                </a>
+                                                <a
+                                                        href="{{ path('chamilo_lti_remove_from_course', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-danger text-danger-button-text shadow-sm transition hover:opacity-90"
+                                                        title="{{ 'Remove from course'|trans }}"
+                                                        onclick="return confirm('{{ 'Removing an activity from a course can have an impact on the assessments of that course. Are you sure you want to remove it?'|trans|e('js') }}');"
+                                                >
+                                                    <span class="mdi mdi-trash-can-outline text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Remove from course'|trans }}</span>
                                                 </a>
                                             </div>
                                         </li>
@@ -97,11 +95,10 @@
                                                     {{ tool.title }}
                                                 </p>
                                             </div>
-
                                             <div class="flex items-center gap-2">
                                                 {% if tool.isActiveDeepLinking %}
                                                     <a
-                                                            href="{{ path('chamilo_lti_launch', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                            href="{{ path('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
                                                             class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
                                                             title="{{ 'Configure'|trans }}"
                                                     >

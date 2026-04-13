@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Opis zadania",
+      "description": "Opisz sposób rozwiązania zadania.",
+      "default": "Przeciągnij słowa w odpowiednie miejsca"
+    },
+    {
+      "label": "Treść",
+      "placeholder": "*Oslo* jest stolicą Norwegii, *Sztokholm* jest stolicą Szwecji, a *Kopenhaga* jest stolicą Danii. Wszystkie te miasta leżą w *Skandynawii:Północnej Europie*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Słowa, które należy przenieść, powinny być oznakowane gwiazdką (*) z obu stron i muszą pasować gramatycznie do zdania.</li><li>Możesz też dodać podpowiedź po dwukropku (:).</li><li>Do każdego pustego miejsca pasuje tylko jeden element przeciągalny.</li><li>Możesz dodać komentarz, który wyświetli się po ukończeniu zadania. Wpisz go po '\\+' (komentarz do odpowiedzi poprawnej) lub po '\\-' (komentarz do odpowiedzi błędnej).</li></ul>",
+        "example": "Zasoby H5P można tworzyć w *przeglądarce:Na przykład Google Chrome.*. </br> Zasoby H5P są *interaktywne\\+Dobrze! \\-Ależ nie, popraw odpowiedź!*"
+      }
+    },
+    {
+      "label": "Podsumowanie odpowiedzi",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Domyślne"
+            }
+          ],
+          "label": "Określ własne kryteria oceny dla wybranych zakresów poprawnych odpowiedzi",
+          "description": "Klikając przycisk \"Dodaj zakres\" możesz dodać tyle zakresów, ile potrzebujesz. Przykład: 0-20% Słaby wynik, 21-91% Przeciętny wynik, 91-100% Bardzo dobry wynik!",
+          "entity": "zakres",
+          "field": {
+            "fields": [
+              {
+                "label": "Zakres"
+              },
+              {},
+              {
+                "label": "Komunikat dla danego zakresu",
+                "placeholder": "Wprowadź komunikat"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Etykieta przycisku sprawdzania odpowiedzi",
+      "default": "Sprawdź"
+    },
+    {
+      "label": "Etykieta przycisku ponowienia próby odpowiedzi",
+      "default": "Powtórz"
+    },
+    {
+      "label": "Etykieta przycisku pokazywania poprawnej odpowiedzi",
+      "default": "Pokaż odpowiedź"
+    },
+    {
+      "label": "Etykieta numerowanego pola odpowiedzi",
+      "default": "Pole @index.",
+      "description": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, które pole jest aktywne. Użyj zmiennej @index, aby wstawić numer pola."
+    },
+    {
+      "label": "Etykieta pustego pola odpowiedzi",
+      "default": "Pole @index jest puste.",
+      "description": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że aktywne pole jest puste."
+    },
+    {
+      "label": "Etykieta niepustego pola odpowiedzi",
+      "default": "Pole @index zawiera element @draggable.",
+      "description": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że aktywne pole zawiera już element @draggable."
+    },
+    {
+      "label": "Etykieta elementu przeciągalnego",
+      "default": "@index z @count elementów.",
+      "description": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że aktywny jest element przeciągalny. Możesz użyć zmiennych: @index, @count"
+    },
+    {
+      "label": "Etykieta przycisku podpowiedzi",
+      "default": "Pokaż podpowiedź",
+      "description": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że zaraz zostanie przeczytana podpowiedź."
+    },
+    {
+      "label": "Komunikat głosowy dla poprawnej odpowiedzi",
+      "default": "Dobrze!"
+    },
+    {
+      "label": "Komunikat głosowy dla błędnej odpowiedzi",
+      "default": "Źle!"
+    },
+    {
+      "label": "Tytuł okienka z potwierdzeniem wyczyszczenia pola odpowiedzi",
+      "default": "Wyczyść pole"
+    },
+    {
+      "label": "Tekst okienka z potwierdzeniem wyczyszczenia pola odpowiedzi",
+      "default": "Czy na pewno wyczyścić to pole?"
+    },
+    {
+      "label": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że element przeciągalny został podniesiony",
+      "default": "Element podniesiony."
+    },
+    {
+      "label": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że przeciąganie zostało przerwane.",
+      "default": "Przeciąganie przerwane."
+    },
+    {
+      "label": "Etykieta używana przez czytniki ekranu. Informuje użytkownika, że jaka odpowiedź jest poprawna.",
+      "default": "Poprawna odpowiedź:"
+    },
+    {
+      "label": "Nagłówek sekcji komentarzy do poprawnych i niepoprawnych odpowiedzi.",
+      "default": "Podsumowanie"
+    },
+    {
+      "label": "Ustawienia zachowania",
+      "description": "Te opcje pozwalają określić, jak ma przebiegać zadanie.",
+      "fields": [
+        {
+          "label": "Wyświetl przycisk \"Powtórz\""
+        },
+        {
+          "label": "Wyświetl przycisk \"Pokaż odpowiedź\""
+        },
+        {
+          "label": "Wyświetl przycisk \"Sprawdź\""
+        },
+        {
+          "label": "Natychmiastowy komentarz"
+        }
+      ]
+    },
+    {
+      "label": "Tekstowy odpowiednik paska wyniku dla czytników ekranu",
+      "default": "Masz :num z :total punktów"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

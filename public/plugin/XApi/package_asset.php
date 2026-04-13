@@ -5,7 +5,6 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use League\Flysystem\FilesystemOperator;
 
 $cidReset = true;
 
@@ -162,7 +161,7 @@ function is_css_file(string $contentType, string $extension): bool
  */
 function restore_runtime_file_from_plugins_filesystem(string $relativePath, string $absolutePath): void
 {
-    $pluginsFilesystem = get_plugins_filesystem();
+    $pluginsFilesystem = Container::getPluginsFileSystem();
 
     if (null === $pluginsFilesystem) {
         return;
@@ -199,17 +198,6 @@ function restore_runtime_file_from_plugins_filesystem(string $relativePath, stri
     } catch (Throwable $throwable) {
         error_log('[XApi][package_asset][restore] '.$throwable->getMessage());
     }
-}
-
-function get_plugins_filesystem(): ?FilesystemOperator
-{
-    if (!Container::$container->has('oneup_flysystem.plugins_filesystem')) {
-        return null;
-    }
-
-    $filesystem = Container::$container->get('oneup_flysystem.plugins_filesystem');
-
-    return $filesystem instanceof FilesystemOperator ? $filesystem : null;
 }
 
 /**

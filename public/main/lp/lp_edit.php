@@ -317,10 +317,7 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
     $em = Database::getManager();
-    $hide_toc_frame = 0;
-    if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
-        $hide_toc_frame = 1;
-    }
+    $hide_toc_frame = 1 == ($_REQUEST['hide_toc_frame'] ?? 0);
 
     $published_on = null;
     if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
@@ -352,17 +349,17 @@ if ($form->validate()) {
         ->setAuthor($_REQUEST['lp_author'] ?? '')
         ->setTheme($_REQUEST['lp_theme'] ?? '')
         ->setHideTocFrame($hide_toc_frame)
-        ->setPrerequisite($_POST['prerequisites'] ?? 0)
-        ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
+        ->setPrerequisite((int) ($_POST['prerequisites'] ?? 0))
+        ->setAccumulateWorkTime((int) ($_REQUEST['accumulate_work_time'] ?? 0))
         ->setContentMaker($_REQUEST['lp_maker'] ?? '')
         ->setContentLocal($_REQUEST['lp_proximity'] ?? '')
-        ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
+        ->setUseMaxScore((int) isset($_POST['use_max_score']))
         ->setDefaultEncoding($_REQUEST['lp_encoding'])
-        ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? 1 : 0)
+        ->setAccumulateScormTime((int) isset($_REQUEST['accumulate_scorm_time']))
         ->setPublishedOn(api_get_utc_datetime($published_on, true, true))
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)
-        ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
+        ->setSubscribeUsers((int) isset($_REQUEST['subscribe_users']))
     ;
 
     $extraFieldValue = new ExtraFieldValue('lp');

@@ -1,0 +1,302 @@
+[
+  {
+    "label": "Task description",
+    "importance": "high",
+    "name": "taskDescription",
+    "type": "text",
+    "widget": "html",
+    "description": "Describe how the user should solve the task.",
+    "default": "Drag the words into the correct boxes",
+    "enterMode": "p",
+    "tags": [
+      "strong",
+      "em",
+      "u",
+      "a",
+      "ul",
+      "ol",
+      "h2",
+      "h3",
+      "hr",
+      "pre",
+      "code"
+    ]
+  },
+  {
+    "label": "Text",
+    "importance": "high",
+    "name": "textField",
+    "type": "text",
+    "widget": "textarea",
+    "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula.",
+    "description": "",
+    "important": {
+      "description": "<ul><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>",
+      "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+    }
+  },
+  {
+    "name": "overallFeedback",
+    "type": "group",
+    "label": "Overall Feedback",
+    "importance": "low",
+    "expanded": true,
+    "fields": [
+      {
+        "name": "overallFeedback",
+        "type": "list",
+        "widgets": [
+          {
+            "name": "RangeList",
+            "label": "Default"
+          }
+        ],
+        "importance": "high",
+        "label": "Define custom feedback for any score range",
+        "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+        "entity": "range",
+        "min": 1,
+        "defaultNum": 1,
+        "optional": true,
+        "field": {
+          "name": "overallFeedback",
+          "type": "group",
+          "importance": "low",
+          "fields": [
+            {
+              "name": "from",
+              "type": "number",
+              "label": "Score Range",
+              "min": 0,
+              "max": 100,
+              "default": 0,
+              "unit": "%"
+            },
+            {
+              "name": "to",
+              "type": "number",
+              "min": 0,
+              "max": 100,
+              "default": 100,
+              "unit": "%"
+            },
+            {
+              "name": "feedback",
+              "type": "text",
+              "label": "Feedback for defined score range",
+              "importance": "low",
+              "placeholder": "Fill in the feedback",
+              "optional": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "label": "Text for \"Check\" button",
+    "importance": "low",
+    "name": "checkAnswer",
+    "type": "text",
+    "default": "Check",
+    "common": true
+  },
+  {
+    "label": "Text for \"Retry\" button",
+    "importance": "low",
+    "name": "tryAgain",
+    "type": "text",
+    "default": "Retry",
+    "common": true
+  },
+  {
+    "label": "Text for \"Show Solution\" button",
+    "importance": "low",
+    "name": "showSolution",
+    "type": "text",
+    "default": "Show solution",
+    "common": true
+  },
+  {
+    "label": "Numbered Drop zone label",
+    "importance": "low",
+    "name": "dropZoneIndex",
+    "type": "text",
+    "default": "Drop Zone @index.",
+    "description": "Label used for accessibility, where the Read speaker will read the index of a drop zone. Variable available: @index",
+    "common": true
+  },
+  {
+    "label": "Empty Drop Zone label",
+    "importance": "low",
+    "name": "empty",
+    "type": "text",
+    "default": "Drop Zone @index is empty.",
+    "description": "Label used for accessibility, where the Read speaker will read that the drop zone is empty",
+    "common": true
+  },
+  {
+    "label": "Contains Drop Zone label",
+    "importance": "low",
+    "name": "contains",
+    "type": "text",
+    "default": "Drop Zone @index contains draggable @draggable.",
+    "description": "Label used for accessibility, where the Read speaker will read that the drop zone contains a draggable",
+    "common": true
+  },
+  {
+    "label": "Draggable elements label",
+    "importance": "low",
+    "name": "ariaDraggableIndex",
+    "type": "text",
+    "default": "@index of @count draggables.",
+    "description": "Label used for accessibility, where the Read speaker reads that this is a draggable element. Variable available: @index, @count",
+    "common": true
+  },
+  {
+    "label": "Label for show tip button",
+    "importance": "low",
+    "name": "tipLabel",
+    "type": "text",
+    "default": "Show tip",
+    "description": "Label used for accessibility, where the Read speaker reads it before the tip is read out",
+    "common": true
+  },
+  {
+    "name": "correctText",
+    "type": "text",
+    "label": "Readspeaker text for correct answer",
+    "importance": "low",
+    "default": "Correct!",
+    "common": true
+  },
+  {
+    "name": "incorrectText",
+    "type": "text",
+    "label": "Readspeaker text for incorrect answer",
+    "importance": "low",
+    "default": "Incorrect!",
+    "common": true
+  },
+  {
+    "name": "resetDropTitle",
+    "type": "text",
+    "label": "Confirmation dialog title that user wants to reset a droppable",
+    "importance": "low",
+    "default": "Reset drop",
+    "common": true
+  },
+  {
+    "name": "resetDropDescription",
+    "type": "text",
+    "label": "Confirmation dialog description that user wants to reset a droppable",
+    "importance": "low",
+    "default": "Are you sure you want to reset this drop zone?",
+    "common": true
+  },
+  {
+    "name": "grabbed",
+    "type": "text",
+    "label": "Label used for accessibility, where the read speaker indicates that dragging is initiated",
+    "importance": "low",
+    "default": "Draggable is grabbed.",
+    "common": true
+  },
+  {
+    "name": "cancelledDragging",
+    "type": "text",
+    "label": "Label used for accessibility, where the read speaker indicates that dragging is canceled",
+    "importance": "low",
+    "default": "Cancelled dragging.",
+    "common": true
+  },
+  {
+    "name": "correctAnswer",
+    "type": "text",
+    "label": "Label used for accessibility, where the read speaker indicates that a text is the correct answer",
+    "importance": "low",
+    "default": "Correct answer:",
+    "common": true
+  },
+  {
+    "name": "feedbackHeader",
+    "type": "text",
+    "label": "Header for panel containing feedback for correct/incorrect answers",
+    "importance": "low",
+    "default": "Feedback",
+    "common": true
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behavioural settings.",
+    "importance": "low",
+    "description": "These options will let you control how the task behaves.",
+    "optional": true,
+    "fields": [
+      {
+        "label": "Enable \"Retry\"",
+        "importance": "low",
+        "name": "enableRetry",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "label": "Enable \"Show Solution\" button",
+        "importance": "low",
+        "name": "enableSolutionsButton",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "name": "enableCheckButton",
+        "type": "boolean",
+        "label": "Enable \"Check\" button",
+        "widget": "none",
+        "importance": "low",
+        "default": true,
+        "optional": true
+      },
+      {
+        "label": "Instant feedback",
+        "importance": "low",
+        "name": "instantFeedback",
+        "type": "boolean",
+        "default": false,
+        "optional": true
+      }
+    ]
+  },
+  {
+    "name": "scoreBarLabel",
+    "type": "text",
+    "label": "Textual representation of the score bar for those using a readspeaker",
+    "default": "You got :num out of :total points",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "a11yCheck",
+    "type": "text",
+    "label": "Assistive technology label for \"Check\" button",
+    "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "a11yShowSolution",
+    "type": "text",
+    "label": "Assistive technology label for \"Show Solution\" button",
+    "default": "Show the solution. The task will be marked with its correct solution.",
+    "importance": "low",
+    "common": true
+  },
+  {
+    "name": "a11yRetry",
+    "type": "text",
+    "label": "Assistive technology label for \"Retry\" button",
+    "default": "Retry the task. Reset all responses and start the task over again.",
+    "importance": "low",
+    "common": true
+  }
+]

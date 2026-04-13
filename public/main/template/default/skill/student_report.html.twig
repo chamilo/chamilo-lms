@@ -1,5 +1,7 @@
 {% autoescape false %}
-    <h1 class="page-header">{{ 'My skills'|trans }}</h1>
+    <div class="section-header section-header--h2">
+        <h2>{{ 'My skills'|trans }}</h2>
+    </div>
     <p>
         {{ "The skills you have acquired, formally or non-formally, social or technical."|trans }}
     </p>
@@ -9,7 +11,9 @@
                 {{ skill_table }}
             {% endif %}
         </div>
-        <h6 class="table-header">{{ 'Skills History'|trans }}</h6>
+        <div class="section-header section-header--h3">
+            <h3>{{ 'Skills History'|trans }}</h3>
+        </div>
         <table class="table">
             <thead>
             <tr>

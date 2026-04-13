@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Descrição da tarefa",
+      "description": "Descreva como o usuário deve resolver a tarefa.",
+      "default": "Arraste as palavras aos campos corretos"
+    },
+    {
+      "label": "Texto",
+      "placeholder": "*Oslo* é a capital da Noruega, *Estocolmo* é a capital da Suécia e *Copenhague* é a capital da Dinamarca. Todas estas cidades estão localizadas na península *Escandinava:Parte norte da Europa*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Palavras arrastáveis são adicionados com um asterisco(*) na frente e um atrás da palavra/frase correta.</li><li>Você pode adicionar uma dica textual usando dois pontos (:) na frente da dica.</li><li>Para cada espaço vazio há apenas uma palavra correta.</li><li>Você pode feedback para ser exibido quando uma tarefa for completa. Use '\\+' para feedback correto and '\\-' para feedback incorreto.</li></ul>",
+        "example": "Conteúdo H5P pode ser editado usando um *navegador:QUe tipo de programa é o Chrome?*. </br> Conteúdo H5P é  *interativo\\+Correto! \\-Incorreto, tente novamente!*"
+      }
+    },
+    {
+      "label": "Feedback geral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Padrão"
+            }
+          ],
+          "label": "Defina feedback customizado para qualquer faixa de pontuação",
+          "description": "Clique no botão \"Adicionar faixa\" para adicionar quantas faixas de pontuação forem necessárias. Exemplo: 0-20% Pontuação ruim, 21-91% Pontuação média, 91-100% Ótima pontuação!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "Faixa de pontuação"
+              },
+              {},
+              {
+                "label": "Feedback para uma faixa de pontuação determinada",
+                "placeholder": "Preencha o feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto do botão \"Verificar resposta\"",
+      "default": "Verificar resposta"
+    },
+    {
+      "label": "Texto do botão \"Tentar novamente\"",
+      "default": "Tentar novamente"
+    },
+    {
+      "label": "Texto do botão \"Mostrar solução\"",
+      "default": "Mostrar solução"
+    },
+    {
+      "label": "Rótulo da zona de largada numerada",
+      "default": "Zona de largada @index.",
+      "description": "Rótulo usado para acessibilidade, o leitor de tela lerá o índice da zona de largada. Variáveis disponíveis: @index"
+    },
+    {
+      "label": "Rótulo de Zona de largada vazia",
+      "default": "Zona de largada @index está vazia.",
+      "description": "Rótulo usado para acessibilidade, o leitor de tela lerá se a zona de largada estiver vazia"
+    },
+    {
+      "label": "Rótulo de Conteúdo de Zona de largada",
+      "default": "Zona de largada @index contém arrastável @draggable.",
+      "description": "Rótulo usado para acessibilidade, o leitor de tela lerá se a zona de largada conter um arrastável"
+    },
+    {
+      "label": "Rótulo de elemento arrastável",
+      "default": "@index de @count arrastáveis.",
+      "description": "Rótulo usado para acessibilidade, o leitor de tela lerá este texto se for um elemento arrastável. Variáveis disponíveis: @index, @count"
+    },
+    {
+      "label": "Rótulo para botão Mostrar dica",
+      "default": "Mostrar dica",
+      "description": "Rótulo usado para acessibilidade, o leitor de tela lerá isto antes da dica ser lida"
+    },
+    {
+      "label": "Texto de resposta correta para leitores de tela",
+      "default": "Correto!"
+    },
+    {
+      "label": "Texto de resposta correta para leitores de tela",
+      "default": "Incorreto!"
+    },
+    {
+      "label": "Título do diálogo de confirmação que o usuário deseja resetar um arrastável",
+      "default": "Resetar arrastável"
+    },
+    {
+      "label": "Descrição do diálogo de confirmaão que o usuário deseja resetar um arrastável",
+      "default": "Você tem certeza que quer resetar esta zona de largada?"
+    },
+    {
+      "label": "Rótulo usado para acessibilidade, onde o leitor de tela indicará quando o arrastamento é inicializado",
+      "default": "Arrastável foi pego."
+    },
+    {
+      "label": "Rótulo usado para acessibilidade, onde o leitor de tela indica que o arrastamento foi cancelado",
+      "default": "Arrastamento cancelado."
+    },
+    {
+      "label": "Rótulo usado para acessibilidade, onde o leitor de tela indica que um texto é a resposta correta",
+      "default": "Resposta correta:"
+    },
+    {
+      "label": "Cabeçalho para painel contendo feedback para respostas corretas/incorretas",
+      "default": "Feedback"
+    },
+    {
+      "label": "Configurações comportamentais.",
+      "description": "stas opções permitirão que você controle como a tarefa se comporta.",
+      "fields": [
+        {
+          "label": "Habilitar \"Tentar novamente\""
+        },
+        {
+          "label": "Habilitar botão \"Mostrar solução\""
+        },
+        {
+          "label": "Habilitar botão \"Verificar resposta\""
+        },
+        {
+          "label": "Feedback instantâneo"
+        }
+      ]
+    },
+    {
+      "label": "Representação textual da barra de pontuação para aqueles que usam leitores de tela",
+      "default": "Você marcou :num de :total pontos"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

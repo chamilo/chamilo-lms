@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
-
 namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
@@ -21,7 +20,6 @@ class SysAnnouncementFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
-
         $content = $this->translator->trans(
             '<p><img src="/img/document/images/mr_chamilo/svg/collaborative.svg" width="320" height="340" /></p>'
             .' If this is your first time using Chamilo, make sure you check the side menu to find your way through'
@@ -37,9 +35,10 @@ class SysAnnouncementFixtures extends Fixture
             ->setUrl($url)
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime('now +30 days'))
-            ->addRole('ROLE_ANONYMOUS')
-            ->addRole('ROLE_USER') // connected users
+            ->addRole('ROLE_ADMIN')
+            ->addRole('ROLE_GLOBAL_ADMIN')
         ;
+
         $manager->persist($sysAnnouncement);
         $manager->flush();
     }

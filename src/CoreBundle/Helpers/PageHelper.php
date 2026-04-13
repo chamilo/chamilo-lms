@@ -100,7 +100,7 @@ class PageHelper
             ->setCategory($indexCategory)
             ->setCreator($user)
             ->setLocale($locale)
-            ->setEnabled(true)
+            ->setEnabled(false)
             ->setUrl($url)
         ;
         $this->pageRepository->update($indexPage);

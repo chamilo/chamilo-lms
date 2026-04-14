@@ -24,6 +24,10 @@ sed -i "s/^memory_limit\s*=.*/memory_limit = ${_MEM_LIMIT}/" php.ini
 
 export COMPOSER_MEMORY_LIMIT=-1
 
+# Resolve Composer path once so subsequent calls use a fixed reference.
+# $(which composer) may point to a Nix store path that changes across updates.
+_COMPOSER="$(which composer)"
+
 # Informational: report effective memory limit without hard-failing the build.
 # The hard gate was removed because PHP_MEMORY_LIMIT may not be injected as a
 # Secret in all autoscale deployment contexts; the -d flag below guarantees the
@@ -36,7 +40,7 @@ echo "PHP memory_limit efetivo: $(php -d memory_limit=${_MEM_LIMIT} -r 'echo ini
 php -d memory_limit=${_MEM_LIMIT} \
     -d max_execution_time=0 \
     -d date.timezone=America/Sao_Paulo \
-    $(which composer) install --no-dev --optimize-autoloader
+    "${_COMPOSER}" install --no-dev --optimize-autoloader
 
 # Run assets:install explicitly with controlled memory, since assets:install in
 # auto-scripts now uses --no-scripts to skip DI container compilation inside

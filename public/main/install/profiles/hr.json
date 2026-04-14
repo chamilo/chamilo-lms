@@ -1,0 +1,123 @@
+{
+    "id": 1,
+    "name": "HR",
+    "description": "Corporate-ready platform",
+    "parent": "prod",
+    "params": [
+        {
+            "variable": "allow_skills_tool",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "show_hot_courses",
+            "subkey": "",
+            "selected_value": "false"
+        },
+        {
+            "variable": "hide_global_announcements_when_not_connected",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "course_catalog_hide_private",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "catalog_show_courses_sessions",
+            "subkey": "",
+            "selected_value": "1"
+        },
+        {
+            "variable": "go_to_course_after_login",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "enable_quiz_scenario",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "allow_public_certificates",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "hide_scorm_pdf_link",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "hide_scorm_copy_link",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "show_session_description",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "session_course_ordering",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "dropbox",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "users",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "groups",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "chat",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "student_publications",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "wiki",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_create_active_tools",
+            "subkey": "notebook",
+            "selected_value": "false"
+        },
+        {
+            "variable": "allow_captcha",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "prevent_multiple_simultaneous_login",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "user_reset_password",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "courses_default_creation_visibility",
+            "subkey": "",
+            "selected_value": "1"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "id": 1,
+    "name": "Open",
+    "description": "Open platform, like the free campus",
+    "parent": "prod",
+    "params": [
+        {
+            "variable": "allow_skills_tool",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "platform_unsubscribe_allowed",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "course_catalog_published",
+            "subkey": "",
+            "selected_value": "true"
+        }
+    ]
+}

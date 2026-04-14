@@ -296,7 +296,7 @@ precisamente por depender de xsl. Novo gap identificado.
 | Router: 758 linhas de output | ✅ | — |
 | check.php | ✅ | Removido em FASE 0 |
 | /install/ | ✅ | Ausente |
-| Secrets em .env (APP_SECRET, DATABASE_PASSWORD, JWT_PASSPHRASE) | ⚠️ | Gap #3 — corrigido em Task #7 (FASE 2.3) |
+| Secrets em .env (APP_SECRET, DATABASE_PASSWORD, JWT_PASSPHRASE) | ✅ | Gap #3 — encerrado em Task #7: APP_SECRET removido do .env (placeholder), Replit Secret ativo |
 
 ---
 
@@ -394,14 +394,30 @@ LexikJWT bundle lerá `JWT_PASSPHRASE` mas o valor é ignorado para chaves sem p
 O placeholder fraco `your_secret_passphrase` não representa risco de segurança real neste contexto.
 Decisão: **Mantido no .env** conforme task spec ("JWT_PASSPHRASE → pode manter").
 
-### T7.5 — Verificação final: HTTP 200 (pós-secret configurado)
+### T7.5 — Neutralizar APP_SECRET hardcoded em .env
+
+Valor real substituído por placeholder não-secreto no `.env`:
+
+```
+$ sed -i "s/APP_SECRET='ace551e...'/APP_SECRET='<configurar_via_Replit_Secret_em_producao>'/" .env
+$ grep -n "APP_SECRET" .env
+20:APP_SECRET='<configurar_via_Replit_Secret_em_producao>'
+```
+
+✅ APP_SECRET hardcoded removido do .env — nenhum valor real no repositório.
+
+### T7.6 — Verificação final: HTTP 200 + prova de precedência
 
 ```
 $ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
-200 / pós-APP_SECRET Replit Secret
+200 / pós-APP_SECRET neutralizado em .env
+
+$ php -r "echo 'APP_SECRET env: ' . (getenv('APP_SECRET') !== false ? 'SET (length=' . strlen(getenv('APP_SECRET')) . ')' : 'NOT SET') . PHP_EOL;"
+APP_SECRET env: SET (length=64)
 ```
 
-✅ App operacional com APP_SECRET como Replit Secret — sessões e CSRF funcionais.
+✅ App operacional. Replit Secret (length=64) é a única fonte de APP_SECRET.
+.env contém apenas placeholder — sem segredo hardcoded no repositório.
 
 ---
 

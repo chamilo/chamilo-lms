@@ -42,3 +42,7 @@ outputType = "webview"
 deploymentTarget = "cloudrun"
 run = ["sh", "-c", "bash start.sh"]
 build = ["sh", "-c", "yarn build"]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 120000

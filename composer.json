@@ -34,7 +34,6 @@
       "public/main/lp",
       "public/main/inc/lib",
       "public/plugin",
-      "public/main/install",
       "public/main/survey"
     ]
   },

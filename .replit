@@ -47,3 +47,6 @@ APP_ENV = "prod"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[objectStorage]
+defaultBucketID = "replit-objstore-023be920-4f7f-4732-8f41-08729241e402"

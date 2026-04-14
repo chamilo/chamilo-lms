@@ -636,3 +636,144 @@ Todas as tarefas do ciclo de hardening concluídas:
 | Race condition build | FASE 2.1 | #10 | ✅ ENCERRADO | build síncrono + exit code |
 | xsl extension inativa | — | — | ⚠️ ABERTO | replit.nix declara mas não ativa |
 | Migrations version table | — | — | ⚠️ ABERTO | requer autorização explícita |
+
+---
+
+## FASE 2 — Remoção física de public/main/install/ (Task #15)
+
+**Data:** 2026-04-14
+
+### Contexto
+
+O diretório `public/main/install/` havia sido removido do tracking git e do classmap do
+Composer (Task #9 + Task #10), mas o diretório físico persistia no disco.
+A rota `/main/install/` respondia HTTP **409** — ainda acessível.
+Nota: o Estado Final registrado em Task #10 indicou "ENCERRADO" para esse gap com base
+no estado do git/classmap, não no estado do disco. Corrigido aqui com evidência real.
+
+### T15.1 — Estado inicial verificado (output real)
+
+```
+$ test ! -d public/main/install && echo "install_absent" || echo "install_STILL_PRESENT"
+install_STILL_PRESENT
+```
+
+```
+$ curl -s -o /dev/null -w "/main/install/ → %{http_code}\n" http://127.0.0.1:5000/main/install/
+/main/install/ → 409
+```
+
+Classificação: diretório físico PRESENTE; HTTP 409 (rota responde — instalador acessível) ⚠️
+
+### T15.2 — Ação: remoção física
+
+```
+$ rm -rf public/main/install/
+EXIT_RM: 0
+
+$ test ! -d public/main/install && echo "install_absent"
+install_absent
+```
+
+✅ Diretório removido com sucesso. Exit code 0. Ausência confirmada.
+
+### T15.3 — Validação HTTP pós-remoção
+
+```
+$ curl -s -o /dev/null -w "/ → %{http_code}\n" http://127.0.0.1:5000/
+/ → 200
+
+$ curl -s -o /dev/null -w "/main/install/ → %{http_code}\n" http://127.0.0.1:5000/main/install/
+/main/install/ → 404
+```
+
+✅ Homepage continua 200. Instalador retorna 404 — não mais acessível.
+
+### T15.4 — Validação JWT intacto
+
+```
+$ ls -la config/jwt/
+total 8
+drwxr-xr-x 1 runner runner   42 Apr 11 16:29 .
+drwxr-xr-x 1 runner runner  488 Apr 14 09:32 ..
+-rw------- 1 runner runner 1704 Apr 11 16:29 private.pem
+-rw-r--r-- 1 runner runner  451 Apr 11 16:29 public.pem
+```
+
+✅ config/jwt/ writable (drwxr-xr-x). private.pem e public.pem presentes e intactos.
+
+### T15.5 — Confirmação permissões config/ (FASE 3 — aplicadas por start.sh)
+
+```
+$ ls -ld config config/* 2>/dev/null
+drwxr-xr-x  config
+-r-xr-xr-x  config/bundles.php
+drwxr-xr-x  config/jwt        (writable — intencional)
+drwxr-xr-x  config/jwt-test   (writable — intencional)
+dr-xr-xr-x  config/packages   (0555)
+-rw-r--r--  config/plugin.yaml  (writable — intencional)
+-r-xr-xr-x  config/preload.php
+dr-xr-xr-x  config/routes     (0555)
+-r-xr-xr-x  config/routes.yaml
+-rw-r--r--  config/settings_overrides.yaml (writable — intencional)
+-r-xr-xr-x  config/services.yaml
+```
+
+✅ FASE 3 confirmada: config core em 0555; jwt/ e arquivos runtime mutáveis preservados.
+
+### T15.6 — Validação Symfony kernel
+
+```
+$ php -d memory_limit=512M bin/console about --env=dev 2>&1 | head -20
+ -------------------- ---------------------------------
+  Symfony
+ -------------------- ---------------------------------
+  Version              6.4.35
+  Long-Term Support    Yes
+  End of maintenance   11/2026 (in +230 days)
+ -------------------- ---------------------------------
+  Kernel
+ -------------------- ---------------------------------
+  Type                 Chamilo\Kernel
+  Environment          dev
+  Debug                true
+  Charset              UTF-8
+  Cache directory      ./var/cache/dev (30.9 MiB)
+  Log directory        ./var/log (289 KiB)
+ -------------------- ---------------------------------
+  PHP
+ -------------------- ---------------------------------
+  Version              8.2.23
+```
+
+✅ Chamilo\Kernel operacional. Symfony 6.4.35 LTS. Cache presente (30.9 MiB).
+
+---
+
+## Sumário de classificações — FASE 2 (Task #15)
+
+| Verificação | Status | Evidência |
+|-------------|--------|-----------|
+| public/main/install/ presente no disco antes | ⚠️ (estado anterior) | test → install_STILL_PRESENT |
+| rm -rf public/main/install/ | ✅ | exit 0 |
+| install_absent confirmado | ✅ | test ! -d → install_absent |
+| /main/install/ → HTTP | ✅ | 409 → 404 |
+| / → HTTP | ✅ | 200 |
+| config/jwt/ (writable) | ✅ | drwxr-xr-x; private.pem + public.pem |
+| config/packages/, routes/, etc. (0555) | ✅ | ls -ld confirmado |
+| Symfony kernel about | ✅ | 6.4.35, Chamilo\Kernel, cache OK |
+
+---
+
+## Estado Final Revisado — Todos os Gaps (Task #15 — fechamento)
+
+| Gap | Fase | Tarefa | Status | Evidência real |
+|-----|------|--------|--------|----------------|
+| check.php exposto | FASE 0 | #9 | ✅ ENCERRADO | removido; curl → 404 |
+| /install/ físico no disco | FASE 2 | #15 | ✅ ENCERRADO | rm exit 0; test → absent; curl → 404 |
+| APP_SECRET hardcoded | FASE 2.3 | #7 | ✅ ENCERRADO | Replit Secret; .env placeholder |
+| MySQL timezone UTC | FASE 2.2 | #8 | ✅ ENCERRADO | -03:00; diff=0s |
+| Race condition build | FASE 2.1 | #10 | ✅ ENCERRADO | build síncrono + exit code |
+| config/ permissions | FASE 3 | #10 | ✅ ENCERRADO | chmod 0555 via start.sh; jwt/ writable |
+| xsl extension inativa | — | — | ⚠️ ABERTO | replit.nix declara mas não ativa |
+| Migrations version table | — | — | ⚠️ ABERTO | requer autorização explícita |

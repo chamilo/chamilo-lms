@@ -1,8 +1,8 @@
 # Chamilo LMS 2.x — Inventário de Customizações
 
 ---
-Version: 1.4
-Last updated: 2026-04-14 (FASE 2.1 — fechamento)
+Version: 1.5
+Last updated: 2026-04-14 (FASE 2 — remoção física do instalador)
 Status: Active
 Owner: Project maintainer
 
@@ -25,7 +25,8 @@ Owner: Project maintainer
 | 2026-04-13 | `start.sh` — `php -S` flags | Config / Infra | `-d pdo_mysql.default_socket`, `-d mysqli.default_socket`, `-d memory_limit`, `-d upload_max_filesize`, `-d post_max_size`, `-d date.timezone`, `-d max_execution_time` | Baixo | Parte do start.sh |
 | 2026-04-13 | `composer.json` — remoção `twig/inky-extra` | Dependência | Pacote não utilizado; dependência `lorenzo/pinky` exigia `ext-xsl` ausente no Cloud Run build | Baixo | Remover é seguro — nenhum template usa Inky no projeto |
 | 2026-04-13 | `composer.lock` | Dependência | Regenerado após remoção de `twig/inky-extra` e `lorenzo/pinky` | Baixo | Versionar normalmente |
-| 2026-04-14 | `public/main/install/` — remoção | Segurança | Removido pós-instalação para impedir re-execução do wizard | Nenhum — instalação já concluída | Não restaurar; se necessário reinstalar, recriar a partir do upstream |
+| 2026-04-14 | `public/main/install/` — remoção do git/classmap | Segurança | Removido do tracking git e do classmap do Composer (Task #9/#10) para impedir re-execução do wizard e corrigir falha de autoload | Nenhum — instalação já concluída | Não restaurar; se necessário reinstalar, recriar a partir do upstream |
+| 2026-04-14 | `public/main/install/` — **remoção física do disco** (Task #15) | Segurança | Diretório físico removido com `rm -rf`; confirmado ausente (`test ! -d → install_absent`). Rota `/main/install/` era HTTP 409 antes; agora retorna 404. | Nenhum — rm exit 0; HTTP 200 mantido; JWT e config intactos | Permanente — não recriar; qualquer nova instalação deve usar novo ambiente |
 | 2026-04-14 | `config/packages/`, `config/routes/`, `config/routes.yaml`, `config/services.yaml`, `config/bundles.php`, `config/preload.php` — chmod 0555 | Segurança | Hardening pós-instalação: arquivos config core somente leitura | Baixo — aplicado em runtime via start.sh; não é alteração de conteúdo | chmod aplicado a cada inicialização em start.sh |
 | 2026-04-14 | `src/CoreBundle/DataFixtures/SettingsValueTemplateFixtures.php` — linha 171-174 | Segurança | Substituídos valores de exemplo de credenciais realistas por placeholders óbvios (`your-gotify-token-here`, etc.) para eliminar falso positivo de scanner de secrets | Baixo — apenas valores de exemplo, não código de produção | Manter placeholders; não reverter para valores realistas |
 | 2026-04-14 | `public/check.php` — **removido** | Segurança | Symfony Requirements Checker (legado Symfony 2/3/4) exposto publicamente com HTTP 200 via proxy Replit (proteção localhost 127.0.0.1 ineficaz em `php -S` atrás de proxy mTLS). Sem referências internas confirmadas por `grep`. Irrelevante para Symfony 6.4. | Nenhum — nenhuma referência interna encontrada | Não restaurar; se diagnóstico de requisitos for necessário, usar `php bin/console about` |
@@ -71,3 +72,4 @@ Os seguintes arquivos foram **identificados como possíveis candidatos** mas per
 | 1.2 | 2026-04-14 | Agent | FASE 2.3: criação de .env.example; APP_SECRET movido para Replit Secret; JWT_PASSPHRASE analisado e mantido em .env (chave JWT sem passphrase, valor ignorado pelo bundle) |
 | 1.3 | 2026-04-14 | Agent | FASE 2.2: start.sh — bloco timezone MySQL adicionado (`SET GLOBAL time_zone = '-03:00'`); Gap #4 encerrado |
 | 1.4 | 2026-04-14 | Agent | FASE 2.1: start.sh — build síncrono (race condition corrigida); replit.md atualizado; ROADMAP.md gaps fechados |
+| 1.5 | 2026-04-14 | Agent | FASE 2 (Task #15): remoção física de public/main/install/ do disco; HTTP 409 → 404; FASE 3 confirmada (config perms 0555 via start.sh); documentação atualizada com outputs reais |

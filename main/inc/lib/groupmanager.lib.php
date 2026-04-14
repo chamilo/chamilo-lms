@@ -2489,15 +2489,17 @@ class GroupManager
             }
         }
 
+        $hasCheckbox = api_is_allowed_to_edit(false, true) && count($group_list) > 1;
+        $defaultSortColumn = $hasCheckbox ? 1 : 0;
         $table = new SortableTableFromArrayConfig(
             $group_data,
-            1,
+            $defaultSortColumn,
             20,
             'group_category_'.$category_id
         );
         $table->set_additional_parameters(['category' => $category_id]);
         $column = 0;
-        if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
+        if ($hasCheckbox) {
             $table->set_header($column++, '', false);
         }
         $table->set_header($column++, get_lang('Groups'));

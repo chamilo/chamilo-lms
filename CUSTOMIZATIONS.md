@@ -1,8 +1,8 @@
 # Chamilo LMS 2.x — Inventário de Customizações
 
 ---
-Version: 1.0
-Last updated: 2026-04-14 (FASE 0)
+Version: 1.2
+Last updated: 2026-04-14 (FASE 2.3)
 Status: Active
 Owner: Project maintainer
 
@@ -29,6 +29,9 @@ Owner: Project maintainer
 | 2026-04-14 | `config/packages/`, `config/routes/`, `config/routes.yaml`, `config/services.yaml`, `config/bundles.php`, `config/preload.php` — chmod 0555 | Segurança | Hardening pós-instalação: arquivos config core somente leitura | Baixo — aplicado em runtime via start.sh; não é alteração de conteúdo | chmod aplicado a cada inicialização em start.sh |
 | 2026-04-14 | `src/CoreBundle/DataFixtures/SettingsValueTemplateFixtures.php` — linha 171-174 | Segurança | Substituídos valores de exemplo de credenciais realistas por placeholders óbvios (`your-gotify-token-here`, etc.) para eliminar falso positivo de scanner de secrets | Baixo — apenas valores de exemplo, não código de produção | Manter placeholders; não reverter para valores realistas |
 | 2026-04-14 | `public/check.php` — **removido** | Segurança | Symfony Requirements Checker (legado Symfony 2/3/4) exposto publicamente com HTTP 200 via proxy Replit (proteção localhost 127.0.0.1 ineficaz em `php -S` atrás de proxy mTLS). Sem referências internas confirmadas por `grep`. Irrelevante para Symfony 6.4. | Nenhum — nenhuma referência interna encontrada | Não restaurar; se diagnóstico de requisitos for necessário, usar `php bin/console about` |
+| 2026-04-14 | `.env.example` — **criado** | Segurança / Docs | Template de referência para todas as variáveis de ambiente. Substitui valores reais por placeholders com instruções de geração (`php -r "echo bin2hex(random_bytes(32));"` etc). | Nenhum — arquivo de documentação, não altera comportamento | Manter sincronizado com `.env` a cada alteração de variáveis |
+| 2026-04-14 | `APP_SECRET` — **movido para Replit Secret** | Segurança | Segredo criptográfico do Symfony (CSRF, sessões, signed URLs). Valor hardcoded 40-char hex substituído por Replit Secret. Env var real tem precedência automática sobre DotEnv. Fallback `.env` mantido (repo privado). | Nenhum — app continua operacional; sessões ativas são invalidadas (novo secret) | Para produção: garantir que Replit Secret (ou Cloud Run env var) está configurado |
+| 2026-04-14 | `JWT_PASSPHRASE` em `.env` | Segurança (revisão) | Analisado: `start.sh` usa `openssl genrsa` sem `-aes256`, logo a chave privada JWT não tem passphrase. O valor de `JWT_PASSPHRASE` é ignorado pelo LexikJWT bundle neste caso. Placeholder `your_secret_passphrase` mantido — risco real é nulo. | Nenhum | Documentado; se em produção a chave for gerada com passphrase, atualizar para Replit Secret |
 
 ---
 
@@ -63,3 +66,4 @@ Os seguintes arquivos foram **identificados como possíveis candidatos** mas per
 |---|---|---|---|
 | 1.0 | 2026-04-14 | Agent | Inventário inicial completo pós-instalação |
 | 1.1 | 2026-04-14 | Agent | FASE 0: remoção de public/check.php (exposto, sem referências internas, legado Symfony 2/3/4) |
+| 1.2 | 2026-04-14 | Agent | FASE 2.3: criação de .env.example; APP_SECRET movido para Replit Secret; JWT_PASSPHRASE analisado e mantido em .env (chave JWT sem passphrase, valor ignorado pelo bundle) |

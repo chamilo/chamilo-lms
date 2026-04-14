@@ -802,6 +802,11 @@ try {
             Event::addEvent(LOG_WS.$action, 'course_id', $data['id']);
             $restResponse->setData($data);
             break;
+        case Rest::UPDATE_COURSE:
+            $data = $restApi->updateCourse($httpRequest->request);
+            Event::addEvent(LOG_WS.$action, 'course_id', $data['id']);
+            $restResponse->setData($data);
+            break;
         case Rest::DELETE_COURSE:
             if (!api_is_platform_admin()) {
                 throw new Exception(get_lang('NotAllowed'));

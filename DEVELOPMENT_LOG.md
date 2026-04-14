@@ -706,17 +706,24 @@ drwxr-xr-x 1 runner runner  488 Apr 14 09:32 ..
 
 ```
 $ ls -ld config config/* 2>/dev/null
-drwxr-xr-x  config
--r-xr-xr-x  config/bundles.php
-drwxr-xr-x  config/jwt        (writable — intencional)
-drwxr-xr-x  config/jwt-test   (writable — intencional)
-dr-xr-xr-x  config/packages   (0555)
--rw-r--r--  config/plugin.yaml  (writable — intencional)
--r-xr-xr-x  config/preload.php
-dr-xr-xr-x  config/routes     (0555)
--r-xr-xr-x  config/routes.yaml
--rw-r--r--  config/settings_overrides.yaml (writable — intencional)
--r-xr-xr-x  config/services.yaml
+drwxr-xr-x 1 runner runner    488 Apr 14 09:32 config
+-rw-r--r-- 1 runner runner   3948 Apr 11 16:20 config/authentication.dist.yaml
+-rw-r--r-- 1 runner runner   3948 Apr 14 09:32 config/authentication.yaml
+-r-xr-xr-x 1 runner runner   2849 Apr 11 16:20 config/bundles.php
+drwxr-xr-x 1 runner runner     42 Apr 11 16:29 config/jwt
+drwxr-xr-x 1 runner runner     62 Apr 11 16:20 config/jwt-test
+dr-xr-xr-x 1 runner runner   1172 Apr 11 16:20 config/packages
+-rw-r--r-- 1 runner runner    144 Apr 11 16:20 config/plugin.dist.yaml
+-rw-r--r-- 1 runner runner    144 Apr 14 09:32 config/plugin.yaml
+-r-xr-xr-x 1 runner runner    192 Apr 11 16:20 config/preload.php
+-rw-r--r-- 1 runner runner 322698 Apr 11 16:20 config/public_suffix_list.dat
+dr-xr-xr-x 1 runner runner    230 Apr 11 16:20 config/routes
+-r-xr-xr-x 1 runner runner   1020 Apr 11 16:20 config/routes.yaml
+-rw-r--r-- 1 runner runner    296 Apr 11 16:20 config/services_test.yaml
+-r-xr-xr-x 1 runner runner   8905 Apr 11 16:20 config/services.yaml
+-rw-r--r-- 1 runner runner    282 Apr 11 16:20 config/settings_overrides.dist.yaml
+-rw-r--r-- 1 runner runner    282 Apr 14 09:32 config/settings_overrides.yaml
+drwxr-xr-x 1 runner runner     18 Apr 11 16:20 config/storage_keys
 ```
 
 ✅ FASE 3 confirmada: config core em 0555; jwt/ e arquivos runtime mutáveis preservados.
@@ -724,29 +731,38 @@ dr-xr-xr-x  config/routes     (0555)
 ### T15.6 — Validação Symfony kernel
 
 ```
-$ php -d memory_limit=512M bin/console about --env=dev 2>&1 | head -20
- -------------------- ---------------------------------
-  Symfony
- -------------------- ---------------------------------
-  Version              6.4.35
-  Long-Term Support    Yes
-  End of maintenance   11/2026 (in +230 days)
- -------------------- ---------------------------------
-  Kernel
- -------------------- ---------------------------------
-  Type                 Chamilo\Kernel
-  Environment          dev
-  Debug                true
-  Charset              UTF-8
-  Cache directory      ./var/cache/dev (30.9 MiB)
-  Log directory        ./var/log (289 KiB)
- -------------------- ---------------------------------
-  PHP
- -------------------- ---------------------------------
-  Version              8.2.23
+$ php -d memory_limit=512M bin/console about || true
+ -------------------- --------------------------------- 
+  Symfony                                               
+ -------------------- --------------------------------- 
+  Version              6.4.35                           
+  Long-Term Support    Yes                              
+  End of maintenance   11/2026 (in +230 days)           
+  End of life          11/2027 (in +595 days)           
+ -------------------- --------------------------------- 
+  Kernel                                                
+ -------------------- --------------------------------- 
+  Type                 Chamilo\Kernel                   
+  Environment          dev                              
+  Debug                true                             
+  Charset              UTF-8                            
+  Cache directory      ./var/cache/dev (29.6 MiB)       
+  Build directory      ./var/cache/dev (29.6 MiB)       
+  Log directory        ./var/log (299 KiB)              
+ -------------------- --------------------------------- 
+  PHP                                                   
+ -------------------- --------------------------------- 
+  Version              8.2.23                           
+  Architecture         64 bits                          
+  Intl locale          en_US                            
+  Timezone             UTC (2026-04-14T17:00:11+00:00)  
+  OPcache              true                             
+  APCu                 false                            
+  Xdebug               false                            
+ -------------------- --------------------------------- 
 ```
 
-✅ Chamilo\Kernel operacional. Symfony 6.4.35 LTS. Cache presente (30.9 MiB).
+✅ Chamilo\Kernel operacional. Symfony 6.4.35 LTS. OPcache true. Cache presente (29.6 MiB).
 
 ---
 

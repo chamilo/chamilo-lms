@@ -50,7 +50,7 @@ criaria conflito e regressões.
 | Gap | Descrição | Impacto |
 |---|---|---|
 | **Dados MySQL não persistem entre restarts de dev** | A cada reinício do workflow, o banco é re-inicializado | Perda de dados de testes e configurações |
-| **Timezone não configurada no sistema** | PHP usa UTC por padrão; datas/horas aparecem erradas para usuários no Brasil | UX ruim |
+| **System timezone vs PHP runtime timezone** | PHP runtime já configurado como `America/Sao_Paulo` (flag `-d` em `start.sh`), mas o sistema operacional Nix e o MySQL ainda usam UTC. Datas armazenadas no banco estão em UTC — considerar forçar `@@session.time_zone` na connection string | UX / dados |
 | **Sem backup automatizado** | Nenhuma rotina de backup do banco configurada | Risco de perda de dados |
 | **Frontend não otimizado para prod** | `yarn build` gera assets, mas sem cache-busting adequado no PHP built-in | Performance |
 | **Sem monitoramento/alertas** | Nenhum sistema de health check ou alertas configurado | Sem visibilidade de falhas |
@@ -106,7 +106,7 @@ criaria conflito e regressões.
 |---|---|---|
 | Banco de dados externo persistente | Pré-requisito para qualquer dado real de produção | Escolher provedor (PlanetScale, Railway, etc.) |
 | Secrets no Replit Secrets (não no .env) | Eliminar credenciais em texto no repositório | Banco externo configurado |
-| Configurar timezone (America/Sao_Paulo) | Datas erradas para usuários brasileiros | Nenhuma |
+| Alinhar timezone MySQL + sistema com PHP runtime | PHP runtime já em `America/Sao_Paulo`; MySQL e OS ainda em UTC — adicionar `serverVersion` e `charset` na `DATABASE_URL` ou forçar via Doctrine DBAL `driverOptions` | Nenhuma |
 | Ativar e-mail transacional | Notificações de plataforma não funcionam | Escolher provedor SMTP |
 
 ### Later (direcional)

@@ -529,8 +529,110 @@ $ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
 
 ---
 
-## Entradas futuras
+## FASE 2.1 — Race condition yarn build em start.sh (Task #10)
 
-| Tarefa | Fase | Status |
-|--------|------|--------|
-| #10 | FASE 2.1 + FASE 3/4 — Race condition fix + docs sync | Pendente |
+**Data:** 2026-04-14
+
+### T10.0 — Verificação inicial (output real)
+
+```
+$ ls -la public/build/entrypoints.json
+-rw-r--r-- 1 runner runner 5772 Apr 11 16:52 public/build/entrypoints.json
+
+$ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
+200 / pre-fix check
+```
+
+✅ App operacional. entrypoints.json presente.
+
+Bloco problemático identificado em `start.sh` (linhas 99-104, pré-correção):
+
+```bash
+# Build frontend assets in background if not built
+if [ ! -f public/build/entrypoints.json ]; then
+    echo "Building frontend assets in background..."
+    yarn build > /tmp/yarn_build.log 2>&1 &
+    echo "Build started in background (PID: $!). Check /tmp/yarn_build.log for progress."
+fi
+```
+
+Risco: `&` (background job) → PHP server arranca antes do build terminar → 500 errors
+em containers frescos onde `public/build/entrypoints.json` ainda não existe.
+
+### T10.1 — Ação: build síncrono com exit code check
+
+Substituído por (linhas 102-117):
+
+```bash
+# Build frontend assets synchronously if not built.
+# Previously ran as background job (&) which caused a race condition:
+# PHP server could start and serve requests before entrypoints.json was written,
+# resulting in 500 errors on fresh containers.
+if [ ! -f public/build/entrypoints.json ]; then
+    echo "Building frontend assets (synchronous)..."
+    yarn build 2>&1 | tee /tmp/yarn_build.log
+    BUILD_EXIT=${PIPESTATUS[0]}
+    if [ "$BUILD_EXIT" -ne 0 ]; then
+        echo "❌ Frontend build FALHOU (exit $BUILD_EXIT). Ver /tmp/yarn_build.log"
+        exit 1
+    fi
+    echo "✅ Frontend build concluído"
+else
+    echo "✅ Frontend build já presente — pulando"
+fi
+```
+
+### T10.2 — Verificação pós-restart (output real)
+
+Workflow reiniciado. Log real:
+
+```
+MySQL is ready!
+MySQL timezone alinhada: -03:00 (America/Sao_Paulo)
+Clearing Symfony cache...
+ [OK] Cache for the "dev" environment (debug=true) was successfully cleared.
+✅ Frontend build já presente — pulando
+Starting PHP server on port 5000...
+[Tue Apr 14 11:20:55 2026] PHP 8.2.23 Development Server (http://0.0.0.0:5000) started
+[Tue Apr 14 11:21:03 2026] 127.0.0.1:40328 [200]: GET /
+```
+
+```
+$ ls -la public/build/entrypoints.json
+-rw-r--r-- 1 runner runner 5772 Apr 11 16:52 public/build/entrypoints.json
+
+$ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
+200 / HTTP check pós-fix
+```
+
+✅ Race condition eliminada. PHP server só arranca após build confirmar (ou skip).
+✅ Exit code check: build falho → start.sh termina com exit 1 (erro explícito, não silencioso).
+
+---
+
+## Sumário de classificações — FASE 2.1
+
+| Verificação | Status | Ação tomada |
+|-------------|--------|-------------|
+| Race condition `yarn build &` | ✅ | Build síncrono + exit code check |
+| entrypoints.json presente pós-restart | ✅ | `ls -la` confirmado |
+| HTTP 200 pós-fix | ✅ | 200 |
+| Log workflow: build skip message | ✅ | `✅ Frontend build já presente — pulando` |
+
+---
+
+## Estado Final — Hardening FASE 0-2 (Task #10 — fechamento)
+
+**Data:** 2026-04-14
+
+Todas as tarefas do ciclo de hardening concluídas:
+
+| Gap | Fase | Tarefa | Status | Evidência |
+|-----|------|--------|--------|-----------|
+| /install/ exposto | FASE 0 | #9 | ✅ ENCERRADO | curl → 404 |
+| check.php exposto | FASE 0 | #9 | ✅ ENCERRADO | removido; curl → 404 |
+| APP_SECRET hardcoded | FASE 2.3 | #7 | ✅ ENCERRADO | Replit Secret; .env placeholder |
+| MySQL timezone UTC | FASE 2.2 | #8 | ✅ ENCERRADO | -03:00; diff=0s |
+| Race condition build | FASE 2.1 | #10 | ✅ ENCERRADO | build síncrono + exit code |
+| xsl extension inativa | — | — | ⚠️ ABERTO | replit.nix declara mas não ativa |
+| Migrations version table | — | — | ⚠️ ABERTO | requer autorização explícita |

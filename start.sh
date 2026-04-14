@@ -96,11 +96,21 @@ chmod -R 0555 \
 echo "Clearing Symfony cache..."
 php -d memory_limit=512M bin/console cache:clear --env=dev --no-warmup 2>/dev/null || true
 
-# Build frontend assets in background if not built
+# Build frontend assets synchronously if not built.
+# Previously ran as background job (&) which caused a race condition:
+# PHP server could start and serve requests before entrypoints.json was written,
+# resulting in 500 errors on fresh containers.
 if [ ! -f public/build/entrypoints.json ]; then
-    echo "Building frontend assets in background..."
-    yarn build > /tmp/yarn_build.log 2>&1 &
-    echo "Build started in background (PID: $!). Check /tmp/yarn_build.log for progress."
+    echo "Building frontend assets (synchronous)..."
+    yarn build 2>&1 | tee /tmp/yarn_build.log
+    BUILD_EXIT=${PIPESTATUS[0]}
+    if [ "$BUILD_EXIT" -ne 0 ]; then
+        echo "❌ Frontend build FALHOU (exit $BUILD_EXIT). Ver /tmp/yarn_build.log"
+        exit 1
+    fi
+    echo "✅ Frontend build concluído"
+else
+    echo "✅ Frontend build já presente — pulando"
 fi
 
 # Start PHP built-in server on port 5000

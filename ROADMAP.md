@@ -110,7 +110,7 @@ criaria conflito e regressões.
 | Banco de dados externo persistente | Pré-requisito para qualquer dado real de produção | Escolher provedor (PlanetScale, Railway, etc.) |
 | Secrets no Replit Secrets (não no .env) | DATABASE_PASSWORD, APP_SECRET, JWT_PASSPHRASE confirmados hardcoded em auditoria FASE 1 | — (Task #7) |
 | ~~Alinhar timezone MySQL → America/Sao_Paulo~~ | ✅ RESOLVIDO — `SET GLOBAL time_zone = '-03:00'` via start.sh; UNIX_TIMESTAMP diff = 0s | Task #8 concluída |
-| Corrigir race condition `yarn build &` em start.sh | `yarn build` em background; fresh container pode servir 500 se entrypoints.json ausente | — (Task #10) |
+| ~~Corrigir race condition `yarn build &` em start.sh~~ | ✅ RESOLVIDO — build síncrono + `PIPESTATUS` exit code check; PHP server não arranca antes do build | Task #10 concluída |
 | Investigar xsl extension (declarada mas não ativa) | `php --ri xsl` → "not present" apesar de estar em replit.nix | — |
 | Inicializar tabela Doctrine migrations (pós-wizard) | `doctrine:migrations:sync-metadata-storage` + `--add --all` — sem isso updates futuros são arriscados | Autorização explícita necessária |
 | Ativar e-mail transacional | Notificações de plataforma não funcionam (MAILER_DSN=null://null) | Escolher provedor SMTP |
@@ -131,3 +131,4 @@ criaria conflito e regressões.
 | 1.0 | 2026-04-14 | Agent | Criação inicial — pós-auditoria Fase 1 |
 | 1.1 | 2026-04-14 | Agent | FASE 1 auditoria: novos gaps xsl, migrations version table, race condition, CLI timezone |
 | 1.2 | 2026-04-14 | Agent | FASE 2.2 (Task #8): Gap #4 resolvido — MySQL timezone alinhada com PHP via `-03:00` offset em start.sh |
+| 1.3 | 2026-04-14 | Agent | FASE 2.1 (Task #10): Race condition corrigida — build síncrono + exit code check |

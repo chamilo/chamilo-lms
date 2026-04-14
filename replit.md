@@ -23,8 +23,9 @@ The `start.sh` script handles everything:
 1. Starts MySQL 8.0 server on port 3306
 2. Creates the `chamilo` database if not present
 3. Generates JWT keys if missing
-4. Builds frontend assets if not built (first run takes ~3 min)
-5. Starts PHP built-in server on port 5000
+4. Aligns MySQL timezone to America/Sao_Paulo (-03:00)
+5. Builds frontend assets synchronously if not built (first run takes ~3 min; blocks until done before PHP server starts)
+6. Starts PHP built-in server on port 5000
 
 ## Database Configuration
 - Host: 127.0.0.1 (via socket: /home/runner/mysql_run/mysql.sock)

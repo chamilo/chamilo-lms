@@ -56,11 +56,26 @@ Built with Webpack Encore. The first build takes ~3 minutes.
 - Production: `yarn build`
 - Watch mode: `yarn watch`
 
+## PHP Runtime Configuration (php -S flags)
+The PHP built-in server is started with the following flags in `start.sh`:
+- `memory_limit=256M`
+- `upload_max_filesize=100M`
+- `post_max_size=100M`
+- `max_execution_time=300`
+- `date.timezone=America/Sao_Paulo`
+- `pdo_mysql.default_socket` / `mysqli.default_socket` pointing to the local MySQL socket
+
+## Project Documentation
+- `ARCHITECTURE.md` — Full architecture doc: stack, directory structure, extension points, risk zones, infrastructure
+- `CUSTOMIZATIONS.md` — Complete inventory of all changes made since initial setup
+- `ROADMAP.md` — Production gaps, planned extensions, safe update rules
+
 ## Notes
 - MySQL 8.0 is installed as a Nix system dependency
 - The `public/build/` directory is gitignored (built at runtime)
 - Frontend assets must be built before the app works properly
 - `public/main/install/` has been removed post-installation (security hardening)
+- This project is **Chamilo 2.x** (Symfony 6.4 / PHP 8.2), NOT Chamilo 1.11.x — the architectures are completely different
 
 ## Security Hardening (applied post-install)
 - **Installer removed**: `public/main/install/` was deleted after the initial installation to prevent the installer from being accessed again.

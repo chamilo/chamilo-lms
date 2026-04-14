@@ -98,4 +98,9 @@ echo "Starting PHP server on port 5000..."
 exec php \
     -d pdo_mysql.default_socket=/home/runner/mysql_run/mysql.sock \
     -d mysqli.default_socket=/home/runner/mysql_run/mysql.sock \
+    -d memory_limit=256M \
+    -d upload_max_filesize=100M \
+    -d post_max_size=100M \
+    -d max_execution_time=300 \
+    -d date.timezone=America/Sao_Paulo \
     -S 0.0.0.0:5000 -t public/

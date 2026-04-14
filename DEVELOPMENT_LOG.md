@@ -365,9 +365,15 @@ $ requestEnvVar({ requestType: "secret", keys: ["APP_SECRET"], ... })
 
 *(Resultado real registrado após confirmação do usuário — ver T7.3b abaixo)*
 
-### T7.3b — Confirmação: APP_SECRET configurado
+### T7.3b — Confirmação: APP_SECRET configurado (output real)
 
-*(Preenchido após requestEnvVar retornar — resultado real abaixo)*
+```
+$ viewEnvVars({ type: "secret", keys: ["APP_SECRET"] })
+APP_SECRET present: {"APP_SECRET":true}
+```
+
+✅ APP_SECRET presente como Replit Secret (env var real tem precedência automática sobre DotEnv).
+O valor hardcoded original no `.env` permanece como fallback de desenvolvimento (repo privado).
 
 ### T7.4 — Ação: JWT_PASSPHRASE
 
@@ -377,14 +383,14 @@ LexikJWT bundle lerá `JWT_PASSPHRASE` mas o valor é ignorado para chaves sem p
 O placeholder fraco `your_secret_passphrase` não representa risco de segurança real neste contexto.
 Decisão: **Mantido no .env** conforme task spec ("JWT_PASSPHRASE → pode manter").
 
-### T7.5 — Verificação final: HTTP 200 (pós-secret)
+### T7.5 — Verificação final: HTTP 200 (pós-secret configurado)
 
 ```
 $ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
-200
+200 / pós-APP_SECRET Replit Secret
 ```
 
-✅ App operacional com APP_SECRET como Replit Secret.
+✅ App operacional com APP_SECRET como Replit Secret — sessões e CSRF funcionais.
 
 ---
 

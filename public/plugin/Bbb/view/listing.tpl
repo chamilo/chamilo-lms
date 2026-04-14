@@ -77,7 +77,7 @@
                     {{ 'RecordList'|get_plugin_lang('BBBPlugin') }}
                 </h2>
                 <p class="mb-0 text-body-2 text-gray-50">
-                    {{ 'Review meetings, recordings and available actions.'|get_lang }}
+                    {{ 'Review meetings, recordings and available actions.'|get_plugin_lang('BBBPlugin') }}
                 </p>
             </div>
             <div class="inline-flex items-center rounded-full bg-support-2 px-3 py-1 text-caption font-semibold text-support-4">
@@ -180,7 +180,7 @@
                 {{ 'No recording'|get_plugin_lang('BBBPlugin') }}
             </p>
             <p class="mt-2 text-body-2 text-gray-50">
-                {{ 'No meetings or recordings are available yet.'|get_lang }}
+                {{ 'No meetings or recordings are available yet.'|get_plugin_lang('BBBPlugin') }}
             </p>
         </div>
         {% endif %}
@@ -192,7 +192,7 @@
                 {{ 'ServerIsNotRunning'|get_plugin_lang('BBBPlugin') }}
             </h2>
             <p class="mb-0 text-body-2 text-gray-90">
-                {{ 'Check the BigBlueButton server configuration and try again.'|get_lang }}
+                {{ 'Check the BigBlueButton server configuration and try again.'|get_plugin_lang('BBBPlugin') }}
             </p>
         </div>
     </section>

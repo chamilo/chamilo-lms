@@ -790,12 +790,12 @@ if ($conferenceManager && $allowToEdit) {
     $maxTotalMb  = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', $courseInfo);
     if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
 
-    $title      = htmlspecialchars(get_lang('Pre-upload Documents'), ENT_QUOTES);
-    $help       = htmlspecialchars(get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.'), ENT_QUOTES);
+    $title      = htmlspecialchars($plugin->get_lang('Pre-upload Documents'), ENT_QUOTES);
+    $help       = htmlspecialchars($plugin->get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.'), ENT_QUOTES);
     $loadingTxt = htmlspecialchars(get_lang('Loading'), ENT_QUOTES);
-    $noDocsTxt  = htmlspecialchars(get_lang('No documents found'), ENT_QUOTES);
-    $failTxt    = htmlspecialchars(get_lang('Failed to load documents'), ENT_QUOTES);
-    $maxLabel   = htmlspecialchars(sprintf(get_lang('Max total: %d MB'), $maxTotalMb), ENT_QUOTES);
+    $noDocsTxt  = htmlspecialchars($plugin->get_lang('No documents found'), ENT_QUOTES);
+    $failTxt    = htmlspecialchars($plugin->get_lang('Failed to load documents'), ENT_QUOTES);
+    $maxLabel   = htmlspecialchars(sprintf($plugin->get_lang('Max total: %d MB'), $maxTotalMb), ENT_QUOTES);
 
     $iconHtml = Display::getMdiIcon(
         ActionIcon::UPLOAD,

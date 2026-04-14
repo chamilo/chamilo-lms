@@ -1874,5 +1874,6 @@
     "Save and insert": "Enregistrer et ins\u00e9rer",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "L'enregistrement n'est pris en charge que lorsque le fournisseur retourne du contenu base64. Si vous ne recevez qu'une URL, l'enregistrement est d\u00e9sactiv\u00e9 pour \u00e9viter le t\u00e9l\u00e9chargement dans le navigateur.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Vid\u00e9o g\u00e9n\u00e9r\u00e9e avec succ\u00e8s, mais l'enregistrement est d\u00e9sactiv\u00e9 car le fournisseur a retourn\u00e9 une URL.",
-    "The file was saved, but its URL could not be resolved.": "Le fichier a \u00e9t\u00e9 enregistr\u00e9, mais son URL n'a pas pu \u00eatre r\u00e9solue."
+    "The file was saved, but its URL could not be resolved.": "Le fichier a \u00e9t\u00e9 enregistr\u00e9, mais son URL n'a pas pu \u00eatre r\u00e9solue.",
+    "Items": "Éléments"
 }

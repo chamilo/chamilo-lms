@@ -15911,6 +15911,9 @@ msgstr "Date & time"
 msgid "Item"
 msgstr "Item"
 
+msgid "Items"
+msgstr "Items"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Configure Dashboard Plugin"
 

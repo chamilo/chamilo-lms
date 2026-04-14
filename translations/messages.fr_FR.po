@@ -16457,6 +16457,9 @@ msgstr "Date & heure"
 msgid "Item"
 msgstr "Élément"
 
+msgid "Items"
+msgstr "Éléments"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Configurer le plugin de tableau de bord"
 

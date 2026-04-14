@@ -15970,6 +15970,9 @@ msgstr "Datum & Zeit"
 msgid "Item"
 msgstr "Inhalt"
 
+msgid "Items"
+msgstr "Inhalt"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Plugins des Kontroll-Zentrum konfigurieren"
 

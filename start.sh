@@ -64,6 +64,8 @@ SQLEOF
 # which are absent in this Nix environment (no /usr/share/zoneinfo).
 # Brazil abolished DST in 2019, so America/Sao_Paulo is permanently UTC-3.
 # Using the numeric offset '-03:00' avoids the dependency on timezone table population.
+# TODO: migrate to 'America/Sao_Paulo' if mysql.time_zone_name is populated in future
+#       (e.g., via mysql_tzinfo_to_sql after adding tzdata to replit.nix).
 mysql -u root --socket=/home/runner/mysql_run/mysql.sock \
   -e "SET GLOBAL time_zone = '-03:00';" 2>/dev/null || true
 echo "MySQL timezone alinhada: -03:00 (America/Sao_Paulo)"

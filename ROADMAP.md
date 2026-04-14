@@ -2,7 +2,7 @@
 
 ---
 Version: 1.0
-Last updated: 2026-04-14
+Last updated: 2026-04-14 (FASE 1 auditoria)
 Status: Active
 Owner: Project maintainer
 
@@ -50,9 +50,12 @@ criaria conflito e regressões.
 | Gap | Descrição | Impacto |
 |---|---|---|
 | **Dados MySQL não persistem entre restarts de dev** | A cada reinício do workflow, o banco é re-inicializado | Perda de dados de testes e configurações |
-| **System timezone vs PHP runtime timezone** | PHP runtime já configurado como `America/Sao_Paulo` (flag `-d` em `start.sh`), mas o sistema operacional Nix e o MySQL ainda usam UTC. Datas armazenadas no banco estão em UTC — considerar forçar `@@session.time_zone` na connection string | UX / dados |
+| **System timezone vs PHP runtime timezone** | PHP runtime já configurado como `America/Sao_Paulo` (flag `-d` em `start.sh`), mas o sistema operacional Nix e o MySQL ainda usam UTC. `@@global.time_zone = SYSTEM` confirmado em auditoria FASE 1. | UX / dados — divergência de 3h nos timestamps |
+| **xsl extension não carregada** | `pkgs.php82Extensions.xsl` declarado em `replit.nix` mas `php --ri xsl` retorna "Extension 'xsl' not present." Confirmado em FASE 1. `twig/inky-extra` foi removido em Task #5 por depender de xsl. | Qualquer código XSLT falhará silenciosamente |
+| **Doctrine migrations: tabela `version` ausente** | Banco criado pelo wizard (317 tabelas diretas). `doctrine:migrations:status` mostra 0/344 executadas e tabela `version` inexistente. Rodar `doctrine:migrations:migrate` sem preparação causará erros. Ação correta (com autorização): `doctrine:migrations:sync-metadata-storage` + `doctrine:migrations:version --add --all` | Risco de breaking change em updates futuros |
+| **PHP CLI timezone = UTC** | `php -r "echo date_default_timezone_get();"` retorna UTC. `php -S` usa `-d date.timezone=America/Sao_Paulo`. Scripts `bin/console` e cron jobs rodam em UTC. | Timestamps em logs CLI podem divergir do servidor |
+| **Frontend build race condition** | `start.sh` inicia `yarn build ... &` em background enquanto `php -S` já aceita conexões. Se `entrypoints.json` for apagado, primeiras requisições retornam 500. | Instabilidade em fresh containers |
 | **Sem backup automatizado** | Nenhuma rotina de backup do banco configurada | Risco de perda de dados |
-| **Frontend não otimizado para prod** | `yarn build` gera assets, mas sem cache-busting adequado no PHP built-in | Performance |
 | **Sem monitoramento/alertas** | Nenhum sistema de health check ou alertas configurado | Sem visibilidade de falhas |
 
 ### 🟢 Nice-to-have — melhorias futuras
@@ -105,9 +108,12 @@ criaria conflito e regressões.
 | Iniciativa | Por quê agora | Dependência |
 |---|---|---|
 | Banco de dados externo persistente | Pré-requisito para qualquer dado real de produção | Escolher provedor (PlanetScale, Railway, etc.) |
-| Secrets no Replit Secrets (não no .env) | Eliminar credenciais em texto no repositório | Banco externo configurado |
-| Alinhar timezone MySQL + sistema com PHP runtime | PHP runtime já em `America/Sao_Paulo`; MySQL e OS ainda em UTC — adicionar `serverVersion` e `charset` na `DATABASE_URL` ou forçar via Doctrine DBAL `driverOptions` | Nenhuma |
-| Ativar e-mail transacional | Notificações de plataforma não funcionam | Escolher provedor SMTP |
+| Secrets no Replit Secrets (não no .env) | DATABASE_PASSWORD, APP_SECRET, JWT_PASSPHRASE confirmados hardcoded em auditoria FASE 1 | — (Task #7) |
+| Alinhar timezone MySQL → America/Sao_Paulo | `@@global.time_zone = SYSTEM` confirmado em FASE 1 — divergência de 3h nos timestamps | — (Task #8) |
+| Corrigir race condition `yarn build &` em start.sh | `yarn build` em background; fresh container pode servir 500 se entrypoints.json ausente | — (Task #10) |
+| Investigar xsl extension (declarada mas não ativa) | `php --ri xsl` → "not present" apesar de estar em replit.nix | — |
+| Inicializar tabela Doctrine migrations (pós-wizard) | `doctrine:migrations:sync-metadata-storage` + `--add --all` — sem isso updates futuros são arriscados | Autorização explícita necessária |
+| Ativar e-mail transacional | Notificações de plataforma não funcionam (MAILER_DSN=null://null) | Escolher provedor SMTP |
 
 ### Later (direcional)
 - Tema visual customizado
@@ -123,3 +129,4 @@ criaria conflito e regressões.
 | Versão | Data | Autor | Descrição |
 |---|---|---|---|
 | 1.0 | 2026-04-14 | Agent | Criação inicial — pós-auditoria Fase 1 |
+| 1.1 | 2026-04-14 | Agent | FASE 1 auditoria: novos gaps xsl, migrations version table, race condition, CLI timezone |

@@ -75,9 +75,11 @@ class BuyCoursesPlugin extends Plugin
     public const SERVICE_STATUS_PENDING = 0;
     public const SERVICE_STATUS_COMPLETED = 1;
     public const SERVICE_STATUS_CANCELLED = -1;
+    public const SERVICE_TYPE_NONE = 0;
     public const SERVICE_TYPE_USER = 1;
     public const SERVICE_TYPE_COURSE = 2;
     public const SERVICE_TYPE_SESSION = 3;
+    public const SERVICE_TYPE_TEMPLATE_CERTIFICATE = 4;
     public const SERVICE_TYPE_LP_FINAL_ITEM = 4;
     public const CULQI_INTEGRATION_TYPE = 'INTEG';
     public const CULQI_PRODUCTION_TYPE = 'PRODUC';
@@ -793,37 +795,14 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $configurations[$variable] = $availableFields[$variable] + [
-                'granted_value' => (int) ($row['granted_value'] ?? 0),
-            ];
+                    'granted_value' => (int) ($row['granted_value'] ?? 0),
+                ];
         }
 
         return $configurations;
     }
 
-    public function saveServiceBenefitConfigurations(int $serviceId, array $serviceData): void
-    {
-        if ($serviceId <= 0) {
-            return;
-        }
 
-        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
-        Database::delete($serviceRelTable, ['service_id = ?' => $serviceId]);
-
-        foreach ($this->getAvailableBenefitExtraFields() as $variable => $definition) {
-            $formField = $definition['form_field'];
-            $grantedValue = isset($serviceData[$formField]) ? (int) $serviceData[$formField] : 0;
-
-            if ($grantedValue <= 0) {
-                continue;
-            }
-
-            Database::insert($serviceRelTable, [
-                'service_id' => $serviceId,
-                'extra_field_id' => (int) $definition['id'],
-                'granted_value' => $grantedValue,
-            ]);
-        }
-    }
 
     public function buildBenefitFormDefaults(int $serviceId = 0): array
     {
@@ -1524,10 +1503,6 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(self::TABLE_TRANSFER),
             ['id = ?' => $id]
         );
-
-        $this->saveServiceBenefitConfigurations($id, $service);
-
-        return $result;
     }
 
     /**
@@ -3671,17 +3646,19 @@ class BuyCoursesPlugin extends Plugin
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
 
+        $service = $this->normalizeServicePayload($service);
+
         $return = Database::insert(
             $servicesTable,
             [
-                'name' => Security::remove_XSS($service['name']),
-                'description' => Security::remove_XSS($service['description']),
+                'name' => $service['name'],
+                'description' => $service['description'],
                 'price' => $service['price'],
-                'tax_perc' => '' != $service['tax_perc'] ? (int) $service['tax_perc'] : null,
-                'duration_days' => (int) $service['duration_days'],
-                'applies_to' => (int) $service['applies_to'],
-                'owner_id' => (int) $service['owner_id'],
-                'visibility' => (int) $service['visibility'],
+                'tax_perc' => $service['tax_perc'],
+                'duration_days' => $service['duration_days'],
+                'applies_to' => $service['applies_to'],
+                'owner_id' => $service['owner_id'],
+                'visibility' => $service['visibility'],
                 'image' => '',
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
@@ -3692,9 +3669,7 @@ class BuyCoursesPlugin extends Plugin
             $this->saveServiceBenefitConfigurations((int) $return, $service);
         }
 
-        if ($return && !empty($service['picture_crop_image_base_64'])
-            && !empty($service['picture_crop_result'])
-        ) {
+        if ($return && !empty($service['picture_crop_image_base_64']) && !empty($service['picture_crop_result'])) {
             $imageName = 'simg-'.$return.'.png';
             $this->saveServiceImageFromBase64($service['picture_crop_image_base_64'], $imageName);
 
@@ -3708,6 +3683,37 @@ class BuyCoursesPlugin extends Plugin
         return $return;
     }
 
+    public function saveServiceBenefitConfigurations(int $serviceId, array $serviceData): void
+    {
+        if ($serviceId <= 0) {
+            return;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+
+        Database::delete($serviceRelTable, ['service_id = ?' => $serviceId]);
+
+        $appliesTo = isset($serviceData['applies_to']) ? (int) $serviceData['applies_to'] : self::SERVICE_TYPE_NONE;
+        if (self::SERVICE_TYPE_USER !== $appliesTo) {
+            return;
+        }
+
+        foreach ($this->getAvailableBenefitExtraFields() as $definition) {
+            $formField = $definition['form_field'];
+            $grantedValue = isset($serviceData[$formField]) ? (int) $serviceData[$formField] : 0;
+
+            if ($grantedValue <= 0) {
+                continue;
+            }
+
+            Database::insert($serviceRelTable, [
+                'service_id' => $serviceId,
+                'extra_field_id' => (int) $definition['id'],
+                'granted_value' => $grantedValue,
+            ]);
+        }
+    }
+
     /**
      * update a service.
      *
@@ -3716,24 +3722,42 @@ class BuyCoursesPlugin extends Plugin
     public function updateService(array $service, int $id)
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
-        $imageName = 'simg-'.$id.'.png';
+        $existingService = Database::select(
+            '*',
+            $servicesTable,
+            [
+                'where' => ['id = ?' => $id],
+            ],
+            'first'
+        );
 
-        if (!empty($service['picture_crop_image_base_64'])) {
+        if (empty($existingService) || !is_array($existingService)) {
+            return false;
+        }
+
+        $imageName = !empty($existingService['image'])
+            ? (string) $existingService['image']
+            : 'simg-'.$id.'.png';
+
+        $service = $this->normalizeServicePayload($service, $existingService);
+        $service['image'] = $imageName;
+
+        if (!empty($service['picture_crop_image_base_64']) && !empty($service['picture_crop_result'])) {
             $this->saveServiceImageFromBase64($service['picture_crop_image_base_64'], $imageName);
         }
 
         $result = Database::update(
             $servicesTable,
             [
-                'name' => Security::remove_XSS($service['name']),
-                'description' => Security::remove_XSS($service['description']),
+                'name' => $service['name'],
+                'description' => $service['description'],
                 'price' => $service['price'],
-                'tax_perc' => '' != $service['tax_perc'] ? (int) $service['tax_perc'] : null,
-                'duration_days' => (int) $service['duration_days'],
-                'applies_to' => (int) $service['applies_to'],
-                'owner_id' => (int) $service['owner_id'],
-                'visibility' => (int) $service['visibility'],
-                'image' => $imageName,
+                'tax_perc' => $service['tax_perc'],
+                'duration_days' => $service['duration_days'],
+                'applies_to' => $service['applies_to'],
+                'owner_id' => $service['owner_id'],
+                'visibility' => $service['visibility'],
+                'image' => $service['image'],
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
             ],
@@ -3743,6 +3767,41 @@ class BuyCoursesPlugin extends Plugin
         $this->saveServiceBenefitConfigurations($id, $service);
 
         return $result;
+    }
+
+    private function normalizeServicePayload(array $service, ?array $existingService = null): array
+    {
+        $appliesTo = isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE;
+        $visibility = !empty($service['visibility']) ? 1 : 0;
+
+        $payload = [
+            'name' => Security::remove_XSS(trim((string) ($service['name'] ?? ''))),
+            'description' => (string) ($service['description'] ?? ''),
+            'price' => isset($service['price']) ? (float) $service['price'] : 0.0,
+            'tax_perc' => '' !== (string) ($service['tax_perc'] ?? '') ? (int) $service['tax_perc'] : null,
+            'duration_days' => isset($service['duration_days']) ? (int) $service['duration_days'] : 0,
+            'applies_to' => $appliesTo,
+            'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+            'visibility' => $visibility,
+            'video_url' => trim((string) ($service['video_url'] ?? '')),
+            'service_information' => (string) ($service['service_information'] ?? ''),
+            'image' => $existingService['image'] ?? '',
+            'picture_crop_image_base_64' => $service['picture_crop_image_base_64'] ?? '',
+            'picture_crop_result' => $service['picture_crop_result'] ?? '',
+        ];
+
+        foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
+            $field = $definition['form_field'];
+            $payload[$field] = isset($service[$field]) ? max(0, (int) $service[$field]) : 0;
+        }
+
+        if (self::SERVICE_TYPE_USER !== $appliesTo) {
+            foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
+                $payload[$definition['form_field']] = 0;
+            }
+        }
+
+        return $payload;
     }
 
     /**
@@ -3759,14 +3818,15 @@ class BuyCoursesPlugin extends Plugin
             ['service_id = ?' => $id]
         );
 
+        Database::delete(
+            Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD),
+            ['service_id = ?' => $id]
+        );
+
         return Database::delete(
             Database::get_main_table(self::TABLE_SERVICES),
             ['id = ?' => $id]
         );
-
-        $this->saveServiceBenefitConfigurations($id, $service);
-
-        return $result;
     }
 
     /**
@@ -5531,10 +5591,6 @@ class BuyCoursesPlugin extends Plugin
             ['expired' => 1],
             ['id = ?' => $id]
         );
-
-        $this->saveServiceBenefitConfigurations($id, $service);
-
-        return $result;
     }
 
     /**

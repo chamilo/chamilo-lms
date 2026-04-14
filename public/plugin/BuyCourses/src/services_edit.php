@@ -16,7 +16,10 @@ require_once '../../../main/inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-$serviceId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$serviceId = isset($_GET['id'])
+    ? (int) $_GET['id']
+    : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
+
 if ($serviceId <= 0) {
     header('Location: list_service.php');
     exit;
@@ -58,22 +61,23 @@ if (empty($service)) {
 
 $customImageUrl = $plugin->getServiceImageUrl('simg-'.$serviceId.'.png');
 
-$formDefaultValues = array_merge($plugin->buildBenefitFormDefaults($serviceId), [
-    'name' => $service['name'],
-    'description' => $service['description'],
-    'price' => $service['price'],
-    'tax_perc' => $service['tax_perc'],
-    'duration_days' => $service['duration_days'],
-    'owner_id' => (int) $service['owner_id'],
-    'applies_to' => (int) $service['applies_to'],
-    'visibility' => 1 == $service['visibility'],
-    'image' => $customImageUrl ?: api_get_path(WEB_CODE_PATH).'img/session_default.png',
-    'video_url' => $service['video_url'],
-    'service_information' => $service['service_information'],
-]);
+$formDefaultValues = array_merge(
+    $service,
+    $plugin->buildBenefitFormDefaults($serviceId)
+);
 
-$form = new FormValidator('Services');
+if (!isset($formDefaultValues['visibility'])) {
+    $formDefaultValues['visibility'] = !empty($service['visibility']);
+}
+
+$form = new FormValidator(
+    'Services',
+    'post',
+    api_get_self().'?id='.$serviceId
+);
+
 $form->addText('name', $plugin->get_lang('ServiceName'));
+$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addHtmlEditor('description', $plugin->get_lang('Description'));
 $form->addElement(
     'number',
@@ -141,50 +145,88 @@ $form->addFile(
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+
+$form->addHtml('<div class="buycourses-benefits-section">');
 $form->addHeader($plugin->get_lang('GrantedBenefits'));
+
 $form->addElement(
     'number',
     'benefit_max_courses',
-    [$plugin->get_lang('BenefitMaxCoursesTitle'), $plugin->get_lang('BenefitMaxCoursesDescription'), $plugin->get_lang('BenefitCoursesUnit')],
+    [
+        $plugin->get_lang('BenefitMaxCoursesTitle'),
+        $plugin->get_lang('BenefitMaxCoursesDescription'),
+        $plugin->get_lang('BenefitCoursesUnit'),
+    ],
     ['step' => 1, 'min' => 0]
 );
+
 $form->addElement(
     'number',
     'benefit_hosting_limit',
-    [$plugin->get_lang('BenefitHostingLimitTitle'), $plugin->get_lang('BenefitHostingLimitDescription'), $plugin->get_lang('BenefitUsersUnit')],
+    [
+        $plugin->get_lang('BenefitHostingLimitTitle'),
+        $plugin->get_lang('BenefitHostingLimitDescription'),
+        $plugin->get_lang('BenefitUsersUnit'),
+    ],
     ['step' => 1, 'min' => 0]
 );
+
 $form->addElement(
     'number',
     'benefit_document_quota',
-    [$plugin->get_lang('BenefitDocumentQuotaTitle'), $plugin->get_lang('BenefitDocumentQuotaDescription'), $plugin->get_lang('BenefitMegabytesUnit')],
+    [
+        $plugin->get_lang('BenefitDocumentQuotaTitle'),
+        $plugin->get_lang('BenefitDocumentQuotaDescription'),
+        $plugin->get_lang('BenefitMegabytesUnit'),
+    ],
     ['step' => 1, 'min' => 0]
 );
+
+$form->addHtml('</div>');
 
 $form->addHidden('id', (string) $serviceId);
 $form->addButtonSave(get_lang('Edit'));
 $form->addButtonDelete($plugin->get_lang('DeleteThisService'), 'delete_service');
 $form->setDefaults($formDefaultValues);
 
-if ($form->validate()) {
-    $values = $form->getSubmitValues();
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
+    $values = buycoursesBuildPostedServicePayload($serviceId);
 
-    if (isset($values['delete_service'])) {
+    if (isset($_POST['delete_service'])) {
         $plugin->deleteService($serviceId);
 
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')
         );
-    } else {
-        $plugin->updateService($values, $serviceId);
 
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
-        );
+        header('Location: list_service.php');
+        exit;
     }
 
-    header('Location: list_service.php');
-    exit;
+    $errors = buycoursesValidateServicePayload($values, $plugin);
+
+    if (empty($errors)) {
+        $updated = $plugin->updateService($values, $serviceId);
+
+        if (false === $updated) {
+            Display::addFlash(
+                Display::return_message('Service update failed.', 'error')
+            );
+        } else {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
+            );
+
+            header('Location: list_service.php');
+            exit;
+        }
+    }
+
+    foreach ($errors as $errorMessage) {
+        Display::addFlash(Display::return_message($errorMessage, 'warning'));
+    }
+
+    $form->setDefaults(array_replace($formDefaultValues, $values));
 }
 
 $templateName = $plugin->get_lang('EditService');
@@ -333,31 +375,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    form.classList.add('space-y-8');
+    const richFieldNames = ['description', 'service_information'];
 
-    shell.querySelectorAll('.form_required').forEach((requiredText) => {
-        requiredText.classList.add('text-body-2', 'font-semibold', 'text-primary');
-    });
-
-    shell.querySelectorAll('.alert, .warning-message').forEach((alertBox) => {
-        alertBox.classList.add('mb-6', 'rounded-2xl', 'border', 'border-warning', 'bg-support-6', 'px-4', 'py-3', 'text-body-2', 'text-gray-90');
-    });
-
-    shell.querySelectorAll('.form-group, .row, fieldset').forEach((block) => {
-        block.classList.add('space-y-2');
-    });
-
-    shell.querySelectorAll('fieldset').forEach((fieldset) => {
-        fieldset.classList.remove('border', 'border-0');
-        fieldset.classList.add('rounded-2xl', 'border', 'border-gray-20', 'bg-support-2', 'p-4');
-    });
-
-    shell.querySelectorAll('label, .form-label, .col-form-label, legend').forEach((label) => {
-        label.classList.add('mb-2', 'block', 'text-body-2', 'font-semibold', 'text-primary');
-    });
-
-    shell.querySelectorAll('input[type="text"], input[type="number"], input[type="url"], select, textarea').forEach((field) => {
-        if (field.closest('.tox, .tox-tinymce') || field.classList.contains('select2-search__field')) {
+    function styleStandardField(field) {
+        if (field.classList.contains('select2-search__field')) {
             return;
         }
 
@@ -381,6 +402,112 @@ document.addEventListener('DOMContentLoaded', function () {
             'focus:ring-2',
             'focus:ring-primary/20'
         );
+    }
+
+    function findFieldRow(element) {
+        return element.closest('.form-group, .row, fieldset, td, .col-md-9, .col-sm-9, .col-lg-9') || element.parentElement;
+    }
+
+    function findRichEditorNode(row, textarea) {
+        if (!row) {
+            return null;
+        }
+
+        const selectors = [
+            '.tox-tinymce',
+            '.cke',
+            '.cke_chrome',
+            '.ck-editor',
+            '.ck',
+            '.ql-toolbar',
+            '.ql-container',
+            '.fr-box',
+            '.jodit-container',
+            '.sun-editor',
+            '.note-editor',
+            'iframe',
+            '[contenteditable="true"]'
+        ];
+
+        const nodes = Array.from(row.querySelectorAll(selectors.join(', ')));
+
+        return nodes.find((node) => node !== textarea && !textarea.contains(node)) || null;
+    }
+
+    function hideEditorSourceTextarea(fieldName) {
+        const textarea = form.querySelector(`textarea[name="${fieldName}"]`);
+        if (!textarea) {
+            return;
+        }
+
+        const row = findFieldRow(textarea);
+        const editorNode = findRichEditorNode(row, textarea);
+
+        if (!editorNode) {
+            return;
+        }
+
+        textarea.classList.add('buycourses-editor-source');
+        textarea.style.setProperty('display', 'none', 'important');
+        textarea.style.setProperty('visibility', 'hidden', 'important');
+        textarea.style.setProperty('height', '0', 'important');
+        textarea.style.setProperty('min-height', '0', 'important');
+        textarea.style.setProperty('padding', '0', 'important');
+        textarea.style.setProperty('margin', '0', 'important');
+        textarea.style.setProperty('border', '0', 'important');
+        textarea.setAttribute('aria-hidden', 'true');
+        textarea.setAttribute('tabindex', '-1');
+    }
+
+    function syncRichEditorsVisibility() {
+        richFieldNames.forEach((fieldName) => {
+            hideEditorSourceTextarea(fieldName);
+        });
+    }
+
+    form.classList.add('space-y-8');
+
+    shell.querySelectorAll('.form_required').forEach((requiredText) => {
+        requiredText.classList.add('text-body-2', 'font-semibold', 'text-primary');
+    });
+
+    shell.querySelectorAll('.alert, .warning-message').forEach((alertBox) => {
+        alertBox.classList.add(
+            'mb-6',
+            'rounded-2xl',
+            'border',
+            'border-warning',
+            'bg-support-6',
+            'px-4',
+            'py-3',
+            'text-body-2',
+            'text-gray-90'
+        );
+    });
+
+    shell.querySelectorAll('.form-group, .row, fieldset').forEach((block) => {
+        block.classList.add('space-y-2');
+    });
+
+    shell.querySelectorAll('fieldset').forEach((fieldset) => {
+        fieldset.classList.remove('border', 'border-0');
+        fieldset.classList.add('rounded-2xl', 'border', 'border-gray-20', 'bg-support-2', 'p-4');
+    });
+
+    shell.querySelectorAll('label, .form-label, .col-form-label, legend').forEach((label) => {
+        label.classList.add('mb-2', 'block', 'text-body-2', 'font-semibold', 'text-primary');
+    });
+
+    shell.querySelectorAll('input[type="text"], input[type="number"], input[type="url"], select').forEach((field) => {
+        styleStandardField(field);
+    });
+
+    shell.querySelectorAll('textarea').forEach((field) => {
+        if (richFieldNames.includes(field.name)) {
+            return;
+        }
+
+        styleStandardField(field);
     });
 
     shell.querySelectorAll('input[type="file"]').forEach((field) => {
@@ -415,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    shell.querySelectorAll('.tox-tinymce, .cke').forEach((editor) => {
+    shell.querySelectorAll('.tox-tinymce, .cke, .cke_chrome, .ck-editor, .ql-toolbar, .ql-container, .fr-box, .jodit-container, .sun-editor, .note-editor').forEach((editor) => {
         editor.classList.add('mt-2', 'overflow-hidden', 'rounded-2xl', 'border', 'border-gray-25', 'shadow-sm');
     });
 
@@ -423,10 +550,94 @@ document.addEventListener('DOMContentLoaded', function () {
         helpText.classList.add('mt-2', 'text-caption', 'text-gray-50');
     });
 
+    syncRichEditorsVisibility();
+    window.requestAnimationFrame(syncRichEditorsVisibility);
+    setTimeout(syncRichEditorsVisibility, 250);
+    setTimeout(syncRichEditorsVisibility, 1000);
+
+    const appliesToUserRadio = form.querySelector('input[name="applies_to"][value="1"]');
+    const appliesToRadios = form.querySelectorAll('input[name="applies_to"]');
+    const benefitsSection = form.querySelector('.buycourses-benefits-section');
+
+    function toggleBenefitsSection() {
+        if (!benefitsSection || !appliesToUserRadio) {
+            return;
+        }
+
+        const isUserService = appliesToUserRadio.checked;
+        benefitsSection.classList.toggle('hidden', !isUserService);
+
+        benefitsSection.querySelectorAll('input, select, textarea').forEach((field) => {
+            field.disabled = !isUserService;
+        });
+    }
+
+    appliesToRadios.forEach((radio) => {
+        radio.addEventListener('change', toggleBenefitsSection);
+    });
+
+    toggleBenefitsSection();
+
+    const fileInput = form.querySelector('input[type="file"][name="picture"], input[type="file"]');
+    const cropButton = Array.from(form.querySelectorAll('button, .btn, input[type="button"], input[type="submit"]')).find((element) => {
+        const text = (element.textContent || element.value || '').toLowerCase();
+        return text.includes('crop your picture');
+    });
+    const hasCropDataInput = form.querySelector('input[name="picture_crop_result"], input[name="picture_crop_image_base_64"]');
+
+    if (fileInput && cropButton) {
+        const imageRow = findFieldRow(fileInput);
+
+        const actionsWrap = document.createElement('div');
+        actionsWrap.className = 'mt-3 flex items-center gap-3 buycourses-image-actions';
+
+        cropButton.classList.remove('btn', 'btn-primary', 'btn-default');
+        cropButton.classList.add(
+            'inline-flex',
+            'items-center',
+            'justify-center',
+            'rounded-2xl',
+            'bg-primary',
+            'px-5',
+            'py-3',
+            'text-body-2',
+            'font-semibold',
+            'text-white',
+            'shadow-sm',
+            'transition',
+            'hover:opacity-90',
+            'focus:outline-none',
+            'focus:ring-2',
+            'focus:ring-primary/20',
+            'focus:ring-offset-2'
+        );
+
+        actionsWrap.appendChild(cropButton);
+
+        if (imageRow) {
+            imageRow.appendChild(actionsWrap);
+        }
+
+        function shouldShowCropButton() {
+            const hasSelectedFile = !!(fileInput.files && fileInput.files.length > 0);
+            const hasExistingCropData = !!(hasCropDataInput && hasCropDataInput.value && hasCropDataInput.value.trim() !== '');
+            actionsWrap.classList.toggle('hidden', !(hasSelectedFile || hasExistingCropData));
+        }
+
+        fileInput.addEventListener('change', shouldShowCropButton);
+        shouldShowCropButton();
+    }
+
     const buttons = Array.from(shell.querySelectorAll('input[type="submit"], button, .btn')).filter((button) => button.closest('form'));
+
     buttons.forEach((button) => {
         const label = (button.textContent || button.value || '').toLowerCase();
         const isDelete = button.name === 'delete_service' || label.includes('delete');
+        const isCrop = label.includes('crop your picture');
+
+        if (isCrop) {
+            return;
+        }
 
         button.classList.remove('btn', 'btn-primary', 'btn-default', 'btn-danger', 'btn-outline-danger');
         button.classList.add(
@@ -463,7 +674,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const deleteButton = buttons.find((button) => button.name === 'delete_service');
-    const primaryButtons = buttons.filter((button) => button.name !== 'delete_service');
+    const primaryButtons = buttons.filter((button) => {
+        const label = (button.textContent || button.value || '').toLowerCase();
+        return button.name !== 'delete_service' && !label.includes('crop your picture');
+    });
 
     if (primaryButtons.length > 0) {
         const primaryRow = document.createElement('div');
@@ -478,11 +692,59 @@ document.addEventListener('DOMContentLoaded', function () {
         deleteRow.appendChild(deleteButton);
         form.appendChild(deleteRow);
     }
-
-    shell.querySelectorAll('br').forEach((lineBreak) => {
-        lineBreak.remove();
-    });
 });
 </script>
 HTML;
+}
+
+function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugin): array
+{
+    $errors = [];
+
+    $name = trim((string) ($values['name'] ?? ''));
+    $appliesTo = isset($values['applies_to']) ? (int) ($values['applies_to'] ?? BuyCoursesPlugin::SERVICE_TYPE_NONE) : BuyCoursesPlugin::SERVICE_TYPE_NONE;
+    $durationDays = isset($values['duration_days']) ? (int) ($values['duration_days'] ?? 0) : 0;
+    $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) ($values['benefit_max_courses'] ?? 0) : 0;
+    $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) ($values['benefit_hosting_limit'] ?? 0) : 0;
+    $benefitDocumentQuota = isset($values['benefit_document_quota']) ? (int) ($values['benefit_document_quota'] ?? 0) : 0;
+
+    $hasAnyBenefit = $benefitMaxCourses > 0
+        || $benefitHostingLimit > 0
+        || $benefitDocumentQuota > 0;
+
+    if ('' === $name) {
+        $errors[] = get_lang('ThisFieldIsRequired').': '.$plugin->get_lang('ServiceName');
+    }
+
+    if ($hasAnyBenefit && BuyCoursesPlugin::SERVICE_TYPE_USER !== $appliesTo) {
+        $errors[] = 'Granted benefits are only available for services that apply to User.';
+    }
+
+    if ($hasAnyBenefit && $durationDays <= 0) {
+        $errors[] = 'Duration must be greater than 0 when the service grants benefits.';
+    }
+
+    return $errors;
+}
+
+function buycoursesBuildPostedServicePayload(int $serviceId): array
+{
+    return [
+        'id' => $serviceId,
+        'name' => trim((string) ($_POST['name'] ?? '')),
+        'description' => (string) ($_POST['description'] ?? ''),
+        'price' => (string) ($_POST['price'] ?? ''),
+        'tax_perc' => (string) ($_POST['tax_perc'] ?? ''),
+        'duration_days' => (string) ($_POST['duration_days'] ?? ''),
+        'applies_to' => isset($_POST['applies_to']) ? (int) $_POST['applies_to'] : BuyCoursesPlugin::SERVICE_TYPE_NONE,
+        'owner_id' => isset($_POST['owner_id']) ? (int) $_POST['owner_id'] : 0,
+        'visibility' => isset($_POST['visibility']) ? 1 : 0,
+        'video_url' => trim((string) ($_POST['video_url'] ?? '')),
+        'service_information' => (string) ($_POST['service_information'] ?? ''),
+        'benefit_max_courses' => isset($_POST['benefit_max_courses']) ? (int) $_POST['benefit_max_courses'] : 0,
+        'benefit_hosting_limit' => isset($_POST['benefit_hosting_limit']) ? (int) $_POST['benefit_hosting_limit'] : 0,
+        'benefit_document_quota' => isset($_POST['benefit_document_quota']) ? (int) $_POST['benefit_document_quota'] : 0,
+        'picture_crop_image_base_64' => (string) ($_POST['picture_crop_image_base_64'] ?? ''),
+        'picture_crop_result' => (string) ($_POST['picture_crop_result'] ?? ''),
+    ];
 }

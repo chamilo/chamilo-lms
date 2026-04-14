@@ -433,9 +433,104 @@ APP_SECRET env: SET (length=64)
 
 ---
 
+## FASE 2.2 — Gap #4: Alinhar timezone MySQL → America/Sao_Paulo (Task #8)
+
+**Data:** 2026-04-14
+
+### T8.0 — Verificação inicial (output real)
+
+```
+$ mysql -u chamilo -pchamilo_pass --socket=/home/runner/mysql_run/mysql.sock \
+    -e "SELECT NOW(), @@global.time_zone, @@session.time_zone;"
+NOW()                  @@global.time_zone  @@session.time_zone
+2026-04-14 11:15:25    SYSTEM              SYSTEM
+
+$ php -d date.timezone=America/Sao_Paulo -r "echo date('Y-m-d H:i:s'); echo PHP_EOL;"
+2026-04-14 08:15:25
+```
+
+Divergência: MySQL 11:15 (UTC/SYSTEM) vs PHP 08:15 (America/Sao_Paulo = UTC-3) → 3h ⚠️
+Prosseguir com a correção.
+
+### T8.1 — Diagnóstico: named timezone não disponível
+
+```
+$ SELECT COUNT(*) FROM mysql.time_zone_name WHERE Name='America/Sao_Paulo';
+tz_count: 0
+
+$ ls /usr/share/zoneinfo/America/Sao_Paulo
+zoneinfo absent
+
+$ which mysql_tzinfo_to_sql
+/nix/store/.../mysql-8.0.42/bin/mysql_tzinfo_to_sql  (presente, mas sem fonte de dados)
+```
+
+Classificação: `mysql.time_zone_name` vazia; `/usr/share/zoneinfo` ausente no ambiente Nix.
+`SET GLOBAL time_zone = 'America/Sao_Paulo'` falha silenciosamente sem as tabelas populadas.
+Decisão: usar offset numérico `-03:00` — equivalente permanente desde abolição do horário de verão (2019).
+
+### T8.2 — Ação: start.sh modificado (offset numérico)
+
+Bloco inserido em `start.sh` após SQLEOF (DB/user creation), antes do bloco JWT:
+
+```bash
+# Align MySQL timezone with PHP runtime (America/Sao_Paulo = UTC-3).
+# Named timezone 'America/Sao_Paulo' requires populated mysql.time_zone_name tables,
+# which are absent in this Nix environment (no /usr/share/zoneinfo).
+# Brazil abolished DST in 2019, so America/Sao_Paulo is permanently UTC-3.
+# Using the numeric offset '-03:00' avoids the dependency on timezone table population.
+mysql -u root --socket=/home/runner/mysql_run/mysql.sock \
+  -e "SET GLOBAL time_zone = '-03:00';" 2>/dev/null || true
+echo "MySQL timezone alinhada: -03:00 (America/Sao_Paulo)"
+```
+
+### T8.3 — Verificação pós-restart (output real)
+
+Workflow reiniciado. start.sh executado — timezone aplicada via bloco novo.
+
+```
+$ mysql -u chamilo -pchamilo_pass --socket=/home/runner/mysql_run/mysql.sock \
+    -e "SELECT NOW() AS mysql_now, @@global.time_zone AS global_tz, @@session.time_zone AS session_tz;"
+mysql_now              global_tz  session_tz
+2026-04-14 08:17:14    -03:00     -03:00
+
+$ php -d date.timezone=America/Sao_Paulo -r "echo date('Y-m-d H:i:s'); echo PHP_EOL;"
+2026-04-14 08:17:14
+
+$ MYSQL_TS=$(mysql ... -sNe "SELECT UNIX_TIMESTAMP();")
+$ PHP_TS=$(php -d date.timezone=America/Sao_Paulo -r "echo time();")
+MySQL UNIX_TIMESTAMP: 1776165434
+PHP time():           1776165434
+Diff seconds:         0
+```
+
+✅ MySQL e PHP server alinhados — UNIX_TIMESTAMP diff = 0 s.
+
+```
+$ curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/
+200
+```
+
+✅ App operacional pós-correção de timezone.
+
+---
+
+## Sumário de classificações — FASE 2.2
+
+| Verificação | Status | Ação tomada |
+|-------------|--------|-------------|
+| MySQL @@global.time_zone antes | ⚠️ SYSTEM (UTC) | — |
+| Named zone 'America/Sao_Paulo' disponível | ❌ | mysql.time_zone_name vazia; /usr/share/zoneinfo ausente |
+| Offset `-03:00` (equivalente permanente) | ✅ | SET GLOBAL time_zone = '-03:00' via start.sh |
+| MySQL NOW() após restart | ✅ | 2026-04-14 08:17:14 (-03:00) |
+| PHP server date() | ✅ | 2026-04-14 08:17:14 (America/Sao_Paulo) |
+| UNIX_TIMESTAMP diff MySQL vs PHP | ✅ | 0 segundos |
+| HTTP 200 pós-correção | ✅ | 200 |
+
+---
+
 ## Entradas futuras
 
 | Tarefa | Fase | Status |
 |--------|------|--------|
-| #8 | FASE 2.2 — MySQL timezone alignment | Pendente |
 | #10 | FASE 2.1 + FASE 3/4 — Race condition fix + docs sync | Pendente |

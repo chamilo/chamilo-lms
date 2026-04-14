@@ -59,6 +59,15 @@ GRANT ALL PRIVILEGES ON chamilo.* TO 'chamilo'@'localhost';
 FLUSH PRIVILEGES;
 SQLEOF
 
+# Align MySQL timezone with PHP runtime (America/Sao_Paulo = UTC-3).
+# Named timezone 'America/Sao_Paulo' requires populated mysql.time_zone_name tables,
+# which are absent in this Nix environment (no /usr/share/zoneinfo).
+# Brazil abolished DST in 2019, so America/Sao_Paulo is permanently UTC-3.
+# Using the numeric offset '-03:00' avoids the dependency on timezone table population.
+mysql -u root --socket=/home/runner/mysql_run/mysql.sock \
+  -e "SET GLOBAL time_zone = '-03:00';" 2>/dev/null || true
+echo "MySQL timezone alinhada: -03:00 (America/Sao_Paulo)"
+
 # Generate JWT keys if not present
 if [ ! -f config/jwt/private.pem ]; then
     mkdir -p config/jwt

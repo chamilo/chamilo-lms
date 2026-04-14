@@ -1,8 +1,8 @@
 # Chamilo LMS 2.x — Inventário de Customizações
 
 ---
-Version: 1.2
-Last updated: 2026-04-14 (FASE 2.3)
+Version: 1.3
+Last updated: 2026-04-14 (FASE 2.2)
 Status: Active
 Owner: Project maintainer
 
@@ -32,6 +32,7 @@ Owner: Project maintainer
 | 2026-04-14 | `.env.example` — **criado** | Segurança / Docs | Template de referência para todas as variáveis de ambiente. Substitui valores reais por placeholders com instruções de geração (`php -r "echo bin2hex(random_bytes(32));"` etc). | Nenhum — arquivo de documentação, não altera comportamento | Manter sincronizado com `.env` a cada alteração de variáveis |
 | 2026-04-14 | `APP_SECRET` em `.env` — **valor neutralizado** | Segurança | Valor hardcoded 40-char hex (`ace551e0...`) substituído por placeholder `<configurar_via_Replit_Secret_em_producao>`. Replit Secret (length=64) é a única fonte real. Confirmado via `php -r "getenv('APP_SECRET')"` → length=64. | Nenhum — Replit Secret tem precedência automática; HTTP 200 confirmado | Qualquer deploy deve garantir APP_SECRET como env var do servidor (Replit Secret / Cloud Run env) |
 | 2026-04-14 | `JWT_PASSPHRASE` em `.env` | Segurança (revisão) | Analisado: `start.sh` usa `openssl genrsa` sem `-aes256`, logo a chave privada JWT não tem passphrase. O valor de `JWT_PASSPHRASE` é ignorado pelo LexikJWT bundle neste caso. Placeholder `your_secret_passphrase` mantido — risco real é nulo. | Nenhum | Documentado; se em produção a chave for gerada com passphrase, atualizar para Replit Secret |
+| 2026-04-14 | `start.sh` — bloco timezone MySQL (linha 65-72) | Config / Segurança | Adicionado bloco `SET GLOBAL time_zone = '-03:00'` após SQLEOF (DB creation), antes de JWT. Corrige divergência de 3h entre MySQL (SYSTEM/UTC) e PHP server (America/Sao_Paulo). Named zone indisponível (mysql.time_zone_name vazia; /usr/share/zoneinfo ausente no Nix). Brasil aboliu DST em 2019 → `-03:00` é permanentemente correto. UNIX_TIMESTAMP diff = 0s verificado. | Baixo — aplica SET GLOBAL que requer connection root; falha silenciosa com `|| true` | Reaplicar em cada restart via start.sh; se Nix ganhar tzdata, atualizar para 'America/Sao_Paulo' |
 
 ---
 
@@ -67,3 +68,4 @@ Os seguintes arquivos foram **identificados como possíveis candidatos** mas per
 | 1.0 | 2026-04-14 | Agent | Inventário inicial completo pós-instalação |
 | 1.1 | 2026-04-14 | Agent | FASE 0: remoção de public/check.php (exposto, sem referências internas, legado Symfony 2/3/4) |
 | 1.2 | 2026-04-14 | Agent | FASE 2.3: criação de .env.example; APP_SECRET movido para Replit Secret; JWT_PASSPHRASE analisado e mantido em .env (chave JWT sem passphrase, valor ignorado pelo bundle) |
+| 1.3 | 2026-04-14 | Agent | FASE 2.2: start.sh — bloco timezone MySQL adicionado (`SET GLOBAL time_zone = '-03:00'`); Gap #4 encerrado |

@@ -34,6 +34,15 @@ deploymentTarget = "autoscale"
 run = ["sh", "-c", "bash start.sh"]
 build = ["sh", "-c", "bash build.sh"]
 
+# ---------------------------------------------------------------------------
+# [env] é injetado tanto no build quanto no run no autoscale.
+# [userenv.shared] só é injetado no run — NÃO disponível durante o build.
+# Por isso PHP_MEMORY_LIMIT e COMPOSER_MEMORY_LIMIT ficam em AMBOS.
+# ---------------------------------------------------------------------------
+[env]
+PHP_MEMORY_LIMIT = "512M"
+COMPOSER_MEMORY_LIMIT = "-1"
+
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 120000
@@ -43,6 +52,8 @@ timeoutMs = 120000
 [userenv.production]
 APP_INSTALLED = "1"
 APP_ENV = "prod"
+PHP_MEMORY_LIMIT = "512M"
+COMPOSER_MEMORY_LIMIT = "-1"
 
 [userenv.shared]
 PHP_MEMORY_LIMIT = "512M"

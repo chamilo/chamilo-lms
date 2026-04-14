@@ -108,7 +108,7 @@ criaria conflito e regressões.
 | Iniciativa | Por quê agora | Dependência |
 |---|---|---|
 | Banco de dados externo persistente | Pré-requisito para qualquer dado real de produção | Escolher provedor (PlanetScale, Railway, etc.) |
-| Secrets no Replit Secrets (não no .env) | DATABASE_PASSWORD, APP_SECRET, JWT_PASSPHRASE confirmados hardcoded em auditoria FASE 1 | — (Task #7) |
+| ~~Secrets no Replit Secrets (não no .env)~~ | ✅ RESOLVIDO — APP_SECRET → Replit Secret (length=64); .env neutralizado (placeholder); .env.example criado | Task #7 concluída |
 | ~~Alinhar timezone MySQL → America/Sao_Paulo~~ | ✅ RESOLVIDO — `SET GLOBAL time_zone = '-03:00'` via start.sh; UNIX_TIMESTAMP diff = 0s | Task #8 concluída |
 | ~~Corrigir race condition `yarn build &` em start.sh~~ | ✅ RESOLVIDO — build síncrono + `PIPESTATUS` exit code check; PHP server não arranca antes do build | Task #10 concluída |
 | Investigar xsl extension (declarada mas não ativa) | `php --ri xsl` → "not present" apesar de estar em replit.nix | — |

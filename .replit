@@ -5,15 +5,6 @@ expertMode = true
 [nix]
 channel = "stable-25_05"
 
-[[ports]]
-localPort = 3306
-externalPort = 3000
-exposeLocalhost = true
-
-[[ports]]
-localPort = 5000
-externalPort = 80
-
 [workflows]
 runButton = "Project"
 
@@ -52,3 +43,7 @@ timeoutMs = 120000
 [userenv.production]
 APP_INSTALLED = "1"
 APP_ENV = "prod"
+
+[[ports]]
+localPort = 5000
+externalPort = 80

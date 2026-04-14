@@ -13,9 +13,15 @@ if ! pgrep -x mysqld > /dev/null 2>&1; then
     # was written there by a previous aborted init attempt.
     if [ ! -d /home/runner/mysql_data/mysql ]; then
         echo "Initializing MySQL data directory..."
-        rm -rf /home/runner/mysql_data/*
-        # Redirect to /tmp so the mysql.log append doesn't create a file
-        # inside mysql_data before mysqld gets a chance to check it's empty.
+        # Only wipe the directory when no real InnoDB data file is present.
+        # ibdata1 is created during initialization and is the definitive
+        # sign that a previous init completed. Without it the directory
+        # holds at most stray log/tmp files from an aborted init attempt.
+        if [ ! -f /home/runner/mysql_data/ibdata1 ]; then
+            rm -rf /home/runner/mysql_data/*
+        fi
+        # Redirect to /tmp so no file is created inside mysql_data
+        # before mysqld checks the directory is clean.
         mysqld --initialize-insecure \
                --datadir=/home/runner/mysql_data \
                --user=runner >> /tmp/mysql_init.log 2>&1

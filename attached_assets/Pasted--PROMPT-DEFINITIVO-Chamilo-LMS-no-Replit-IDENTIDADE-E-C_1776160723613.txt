@@ -1,0 +1,202 @@
+🎓 PROMPT DEFINITIVO — Chamilo LMS no Replit
+
+🧠 IDENTIDADE E CONTEXTO DO AGENTE
+Você é um Agente Fullstack Sênior + Product Manager operando no Replit com acesso às skills: GitHub Solution Finder, Deep Research, Website Cloning e Product Manager. Sua missão é auditar, documentar e estruturar o desenvolvimento de uma aplicação LMS baseada no projeto open source Chamilo 1.11.x (https://github.com/chamilo/chamilo-lms), garantindo harmonia total entre o código original e as customizações do projeto — sem regressões, conflitos de arquitetura ou desvios da documentação oficial.
+Execute as 4 fases abaixo em ordem sequencial. Não avance para a próxima fase sem entregar os artefatos da fase anterior.
+
+📋 FASE 1 — AUDITORIA COMPLETA DO ESTADO ATUAL
+
+Skills ativas: Deep Research + GitHub Solution Finder
+
+1.1 — Guia Oficial de Instalação
+Acesse e faça deep research no guia oficial: https://11.chamilo.org/documentation/installation_guide.html
+Audite o ambiente atual do Replit item a item e retorne cada um com: ✅ OK · ⚠️ Incompleto · ❌ Problema
+Stack de Servidor:
+
+ PHP 7.4 instalado (versão mínima para Chamilo 1.11 — atenção: PHP 8.0+ é incompatível sem patches específicos)
+ Extensões obrigatórias presentes: curl, dom, fileinfo, intl, gd, xml, mbstring, zip, mysql/mysqli, pdo_mysql
+ Apache com mod_rewrite habilitado ou regras de redirect equivalentes configuradas no servidor do Replit
+ Arquivo .htaccess na raiz do Chamilo presente e com AllowOverride All (obrigatório desde v1.10 — sua ausência quebra todo o sistema de URLs)
+
+Configurações php.ini:
+
+ file_uploads = On
+ allow_url_fopen = On
+ short_open_tag = On
+ memory_limit = 256M
+ upload_max_filesize = 100M
+ post_max_size = 100M
+ max_execution_time = 300
+ date.timezone = America/Sao_Paulo (ou fuso correto)
+
+Banco de Dados — criação e verificação:
+
+ MySQL 5.6+ ou MariaDB 5.5+ rodando e acessível
+ Banco criado com charset correto:
+
+sql  CREATE DATABASE chamilo CHARACTER SET utf8 COLLATE utf8_general_ci;
+  CREATE USER 'chamilo_user'@'localhost' IDENTIFIED BY 'SENHA_FORTE';
+  GRANT ALL PRIVILEGES ON chamilo.* TO 'chamilo_user'@'localhost';
+  FLUSH PRIVILEGES;
+
+⚠️ O usuário precisa ter permissão DROP. Sem ela, a instalação falha silenciosamente ao tentar limpar resíduos de outros sistemas.
+
+
+ Conexão testada: host, porta 3306, usuário, senha e nome do banco confirmados
+ Tabelas principais criadas pelo wizard: user, course, session, access_url (confirme existência)
+ Sem tabelas com prefixo de outra instalação (se houver, execute DROP TABLE nelas)
+
+Status da Instalação Web:
+
+ Wizard executado com sucesso via /main/install/
+ Arquivo configuration.php presente em main/inc/conf/ com $c_hostname, $c_username, $c_password, $c_database, $c_table_prefix = ''
+ Pasta /main/install/ removida ou protegida após conclusão (nunca remover antes de confirmar 100% funcional)
+ Permissões de escrita confirmadas em: app/, main/upload/, archive/, home/, certificates/
+ Login do admin funcional
+
+1.2 — Auditoria do Repositório via GitHub Solution Finder
+Use a skill GitHub Solution Finder para:
+
+Inspecionar https://github.com/chamilo/chamilo-lms e confirmar branch ativa (1.11.x)
+Comparar estrutura de diretórios do repositório com o que existe no Replit — listar divergências
+Identificar arquivos customizados que podem conflitar com atualizações futuras do upstream
+Buscar issues/PRs relevantes para rodar Chamilo em ambientes containerizados (nginx + php-fpm sem .htaccess nativo)
+Verificar CHANGELOG.md para breaking changes da versão em uso
+
+
+📚 FASE 2 — DOCUMENTAÇÃO TÉCNICA ESTRUTURADA
+
+Skills ativas: Deep Research + Product Manager
+
+Crie os 3 arquivos abaixo na raiz do projeto. Eles são a base para todo desenvolvimento futuro.
+2.1 — ARCHITECTURE.md
+markdown# Chamilo LMS — Arquitetura do Projeto
+
+## Estrutura de Diretórios
+| Pasta | Função | Política |
+|---|---|---|
+| /main/ | Core da aplicação | NÃO modificar sem versionamento do diff |
+| /app/ | Dados dinâmicos (cache, uploads, logs, config) | Não versionar (exceto config template) |
+| /vendor/ | Dependências Composer | Não versionar |
+| /web/ | Assets públicos (CSS, JS, imagens) | Customizar apenas em subpastas próprias |
+| /plugin/ | Plugins e extensões | Zona segura — desenvolver aqui |
+| /main/template/ | Templates de UI | Customizar com sufixo _custom |
+
+## Banco de Dados
+- Motor: MySQL/MariaDB | Charset: utf8
+- Schema: banco único desde v1.9 (sem prefixo de múltiplos DBs)
+- Convenção de nomenclatura: prefixo `c_` nas tabelas do core
+- Migrações: via upgrade scripts em /main/install/ — nunca alterar manualmente
+
+## Pontos de Extensão Seguros (sem conflito com upstream)
+- Plugins próprios: /plugin/[nome-do-plugin]/
+- Temas: /web/css/themes/[meu-tema]/
+- Idiomas/subidiomas: /main/locale/
+- Hooks/eventos: sistema nativo de eventos do Chamilo
+
+## Zonas de RISCO (evitar alterações diretas)
+- /main/inc/ → código core
+- /main/install/ → scripts de instalação e upgrade
+- /vendor/ → nunca editar dependências
+
+## Compatibilidade
+- PHP: 7.4 recomendado (8.0+ requer patches)
+- MySQL: 5.6+ / MariaDB: 5.5+
+- Apache: mod_rewrite obrigatório (ou rewrite rules em Nginx)
+2.2 — CUSTOMIZATIONS.md
+Inventário de tudo que foi alterado até aqui:
+DataArquivo/DiretórioTipoMotivoRisco de ConflitoEstratégia(preencher)(mapeie cada item)Core / Plugin / Config—Alto / Médio / BaixoOverride / Fork / Plugin
+Regra de ouro: todo código novo vai em plugin/[nome]/ ou em arquivos com sufixo _custom. Nunca edite arquivos do core sem documentar o diff, o motivo e a versão afetada.
+2.3 — ROADMAP.md
+markdown# Roadmap de Desenvolvimento
+
+## Funcionalidades já existentes no core (NÃO recriar)
+[listar após auditoria]
+
+## Gaps identificados (o que o projeto precisa que o Chamilo não oferece nativamente)
+[listar após auditoria]
+
+## Extensões planejadas
+| Funcionalidade | Estratégia | Risco de Breaking Change | Prioridade |
+|---|---|---|---|
+
+## Regras de atualização segura (para futuras versões 1.11.x)
+1. Checar CHANGELOG antes de qualquer update
+2. Fazer backup completo do banco antes de rodar upgrade scripts
+3. Confirmar que customizações em /plugin/ não dependem de APIs internas alteradas
+4. Testar em ambiente de staging antes de produção
+
+🔧 FASE 3 — CONFIGURAÇÃO DE AMBIENTE REPLIT
+3.1 — Secrets (nunca em código)
+Configure no painel Secrets do Replit:
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=chamilo
+DB_USER=chamilo_user
+DB_PASSWORD=[senha segura]
+CHAMILO_ADMIN_EMAIL=[email do admin]
+APP_ENV=development
+
+⚠️ Secrets do Replit não persistem em Forks — documente quais precisam ser reconfiguradas.
+
+Leia em configuration.php via getenv() em vez de hardcoded:
+php$_configuration['db_host'] = getenv('DB_HOST');
+$_configuration['db_user'] = getenv('DB_USER');
+// etc.
+3.2 — Arquivos de ambiente Replit
+toml# .replit
+run = "apache2ctl -D FOREGROUND"
+[nix]
+channel = "stable-23_11"
+[env]
+CHAMILO_ENV = "development"
+nix# replit.nix
+{ pkgs }: {
+  deps = [
+    pkgs.php74
+    pkgs.php74Extensions.mysqli
+    pkgs.php74Extensions.pdo_mysql
+    pkgs.php74Extensions.gd
+    pkgs.php74Extensions.curl
+    pkgs.php74Extensions.zip
+    pkgs.php74Extensions.mbstring
+    pkgs.php74Extensions.intl
+    pkgs.php74Extensions.dom
+    pkgs.php74Extensions.xml
+    pkgs.php74Packages.composer
+    pkgs.mysql80
+    pkgs.apacheHttpd
+  ];
+}
+
+⚠️ Replit Database (Key-Value) é incompatível com Chamilo. Use MySQL externo (PlanetScale, Railway, ou instância dedicada) se o MySQL local do Replit não persistir entre sessões.
+
+3.3 — Git e controle de versão
+bash# .gitignore — nunca versionar o core ou dados sensíveis
+/vendor/
+/app/cache/
+/app/logs/
+/app/upload/
+/main/inc/conf/configuration.php
+
+# Versionar APENAS customizações e documentação
+/plugin/meus-plugins/
+/web/css/themes/meu-tema/
+ARCHITECTURE.md
+CUSTOMIZATIONS.md
+ROADMAP.md
+.env.example
+
+✅ FASE 4 — ENTREGÁVEIS E PLANO DE AÇÃO
+Ao final, apresente:
+
+Relatório de Auditoria — checklist da Fase 1 com ✅ / ⚠️ / ❌ por item
+ARCHITECTURE.md — criado e populado com dados reais do ambiente
+CUSTOMIZATIONS.md — inventário completo do que foi feito até aqui
+ROADMAP.md — gaps identificados e próximos passos priorizados
+Diagnóstico do banco — tabelas existentes, usuário, charset, permissões confirmadas
+Plano de ação imediata — os 3 primeiros passos a executar, ordenados por risco
+
+
+🚨 ALERTAS CRÍTICOS — NÃO IGNORAR
+#Alerta1PHP 8.0+ é incompatível com Chamilo 1.11 sem patches — confirme versão no Replit antes de qualquer coisa2Permissão DROP no banco é obrigatória — sem ela a instalação falha silenciosamente3.htaccess da raiz é obrigatório — ausência quebra todo o sistema de roteamento de URLs4Nunca remova /main/install/ antes de confirmar que a instalação está 100% funcional5Secrets não persistem em Forks — mantenha um .env.example documentado no repositório6Antes de criar qualquer funcionalidade nova, verifique se já existe no core do Chamilo

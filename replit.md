@@ -60,7 +60,12 @@ Built with Webpack Encore. The first build takes ~3 minutes.
 - MySQL 8.0 is installed as a Nix system dependency
 - The `public/build/` directory is gitignored (built at runtime)
 - Frontend assets must be built before the app works properly
-- The installer is a Vue.js SPA served from `public/main/install/index.php`
+- `public/main/install/` has been removed post-installation (security hardening)
+
+## Security Hardening (applied post-install)
+- **Installer removed**: `public/main/install/` was deleted after the initial installation to prevent the installer from being accessed again.
+- **Config file permissions**: `start.sh` applies `chmod 0555` to core Symfony config files (`config/packages/`, `config/routes/`, `config/routes.yaml`, `config/services.yaml`, `config/bundles.php`, `config/preload.php`) at every startup.
+- **Why not the full `config/` tree**: `config/jwt/` is intentionally left writable because `start.sh` regenerates JWT keys there on fresh containers. `config/settings_overrides.yaml` and `config/plugin.yaml` are also left writable as they may be updated by platform administrators at runtime.
 
 ## Deployment (Cloud Run)
 - **Data persistence**: The deployment target is Cloud Run, which has an **ephemeral filesystem**. All MySQL data (including the initialized data directory) is wiped on every redeploy. This is acceptable for demos and development previews.

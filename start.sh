@@ -67,6 +67,20 @@ if [ ! -f config/jwt/private.pem ]; then
     echo "JWT keys generated"
 fi
 
+# Harden config/ permissions: make core Symfony config files read-only.
+# config/jwt/ and config/jwt-test/ are intentionally left writable so
+# JWT key generation above continues to work on fresh containers.
+# settings_overrides.yaml and plugin.yaml are left writable as they can
+# be updated at runtime by platform administrators.
+chmod -R 0555 \
+    config/packages \
+    config/routes \
+    config/routes.yaml \
+    config/services.yaml \
+    config/bundles.php \
+    config/preload.php \
+    2>/dev/null || true
+
 # Clear Symfony cache
 echo "Clearing Symfony cache..."
 php -d memory_limit=512M bin/console cache:clear --env=dev --no-warmup 2>/dev/null || true

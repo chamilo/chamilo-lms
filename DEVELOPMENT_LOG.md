@@ -304,7 +304,7 @@ precisamente por depender de xsl. Novo gap identificado.
 
 **Data:** 2026-04-14
 
-### T7.0 — Verificação inicial (output real)
+### T7.0 — Verificação inicial (output real — execução 2026-04-14)
 
 ```
 $ grep -E "APP_SECRET|DATABASE_PASSWORD|JWT_PASSPHRASE|DATABASE_URL" .env | sed 's/=.*/=***REDACTED***/'
@@ -314,15 +314,17 @@ $ grep -E "APP_SECRET|DATABASE_PASSWORD|JWT_PASSPHRASE|DATABASE_URL" .env | sed 
 # DATABASE_URL=***REDACTED***
 DATABASE_PASSWORD=***REDACTED***
 APP_SECRET=***REDACTED***
-GOOGLE_MAPS_API_KEY=***REDACTED***
 JWT_PASSPHRASE=***REDACTED***
 ```
 
+Nota: GOOGLE_MAPS_API_KEY **não aparece** no output acima pois o regex não inclui esse padrão.
+A classificação pré-ação registrada na sessão anterior continha essa linha erroneamente — corrigido aqui.
+
 Classificação pré-ação:
 - `APP_SECRET` — 40-char hex hardcoded ⚠️ → mover para Replit Secret
-- `JWT_PASSPHRASE` — placeholder `your_secret_passphrase` ⚠️ → start.sh não gera dinamicamente; avaliar (mantido em .env)
+- `JWT_PASSPHRASE` — placeholder `your_secret_passphrase` ⚠️ → avaliar (chave JWT sem passphrase, ver T7.4)
 - `DATABASE_PASSWORD` — `chamilo_pass` ⚠️ → manter no .env (repo privado, banco local)
-- `GOOGLE_MAPS_API_KEY` — string vazia → nenhuma ação
+- `GOOGLE_MAPS_API_KEY` — string vazia, verificada separadamente → nenhuma ação
 
 ```
 $ viewEnvVars({ type: "all", keys: ["APP_SECRET","JWT_PASSPHRASE","DATABASE_PASSWORD"] })
@@ -330,7 +332,7 @@ Secrets present: {"APP_SECRET":false,"JWT_PASSPHRASE":false,"DATABASE_PASSWORD":
 Env vars: {}
 ```
 
-Classificação: nenhum secret já configurado no Replit Secrets ⚠️
+Classificação: nenhum secret configurado no Replit Secrets antes desta tarefa ⚠️
 
 ### T7.1 — Verificação pré-ação: HTTP 200
 
@@ -373,7 +375,15 @@ $ viewEnvVars({ type: "secret", keys: ["APP_SECRET"] })
 APP_SECRET present: {"APP_SECRET":true}
 ```
 
-✅ APP_SECRET presente como Replit Secret (env var real tem precedência automática sobre DotEnv).
+Prova de precedência — Replit Secret sobrescreve DotEnv (PHP CLI, sem servidor):
+
+```
+$ php -r "echo 'APP_SECRET env: ' . (getenv('APP_SECRET') !== false ? 'SET (from Replit Secret, length=' . strlen(getenv('APP_SECRET')) . ')' : 'NOT SET') . PHP_EOL;"
+APP_SECRET env: SET (from Replit Secret, length=64)
+```
+
+✅ APP_SECRET presente como Replit Secret, length=64 (hex de 32 bytes = forte).
+Env var real tem precedência automática sobre DotEnv — confirmado pelo output do PHP CLI.
 O valor hardcoded original no `.env` permanece como fallback de desenvolvimento (repo privado).
 
 ### T7.4 — Ação: JWT_PASSPHRASE

@@ -7,12 +7,18 @@ if ! pgrep -x mysqld > /dev/null 2>&1; then
     echo "Starting MySQL..."
     rm -f /home/runner/mysql_run/mysql.sock /home/runner/mysql_run/mysql.sock.lock /home/runner/mysql_run/mysql.pid
 
-    # Initialize data directory on first run (empty directory = never initialized)
-    if [ -z "$(ls -A /home/runner/mysql_data 2>/dev/null)" ]; then
+    # Initialize data directory if the mysql system schema is missing.
+    # Checking for the 'mysql' subdirectory is the reliable indicator of a
+    # successful initialization — an empty dir check fails when a log file
+    # was written there by a previous aborted init attempt.
+    if [ ! -d /home/runner/mysql_data/mysql ]; then
         echo "Initializing MySQL data directory..."
+        rm -rf /home/runner/mysql_data/*
+        # Redirect to /tmp so the mysql.log append doesn't create a file
+        # inside mysql_data before mysqld gets a chance to check it's empty.
         mysqld --initialize-insecure \
                --datadir=/home/runner/mysql_data \
-               --user=runner 2>>/home/runner/mysql_data/mysql.log
+               --user=runner >> /tmp/mysql_init.log 2>&1
         echo "MySQL data directory initialized."
     fi
 
@@ -34,6 +40,10 @@ if ! pgrep -x mysqld > /dev/null 2>&1; then
         sleep 1
     done
 fi
+
+# Expose MySQL socket at the path PHP and system tools expect by default
+mkdir -p /run/mysqld
+ln -sf /home/runner/mysql_run/mysql.sock /run/mysqld/mysqld.sock
 
 # Create DB and user if not exists
 mysql -u root --socket=/home/runner/mysql_run/mysql.sock 2>/dev/null << 'SQLEOF'
@@ -63,5 +73,9 @@ if [ ! -f public/build/entrypoints.json ]; then
 fi
 
 # Start PHP built-in server on port 5000
+# Pass the correct socket path so PDO/MySQLi resolve 'localhost' to our socket
 echo "Starting PHP server on port 5000..."
-exec php -S 0.0.0.0:5000 -t public/
+exec php \
+    -d pdo_mysql.default_socket=/home/runner/mysql_run/mysql.sock \
+    -d mysqli.default_socket=/home/runner/mysql_run/mysql.sock \
+    -S 0.0.0.0:5000 -t public/

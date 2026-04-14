@@ -39,9 +39,9 @@ waitForPort = 5000
 outputType = "webview"
 
 [deployment]
-deploymentTarget = "cloudrun"
+deploymentTarget = "autoscale"
 run = ["sh", "-c", "bash start.sh"]
-build = ["sh", "-c", "yarn build"]
+build = ["sh", "-c", "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader && yarn build"]
 
 [postMerge]
 path = "scripts/post-merge.sh"

@@ -1,8 +1,8 @@
 # Chamilo LMS 2.x — Roadmap de Desenvolvimento
 
 ---
-Version: 1.0
-Last updated: 2026-04-14 (FASE 1 auditoria)
+Version: 1.3
+Last updated: 2026-04-14 (FASE 2.1 — fechamento do ciclo de hardening)
 Status: Active
 Owner: Project maintainer
 

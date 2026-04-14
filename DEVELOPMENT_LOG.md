@@ -352,8 +352,9 @@ $ cat .env.example | head -10
 
 Arquivo criado em: `.env.example` (raiz do projeto)
 Conteúdo: todas as variáveis do .env com valores substituídos por placeholders documentados.
+`DATABASE_URL` → `mysql://USER:PASS@127.0.0.1:3306/chamilo?serverVersion=8.0&charset=utf8mb4` (linha ativa, conforme spec)
 `APP_SECRET` → `<gerar_com_php_-r_bin2hex_random_bytes_32>` (instrução inline)
-`JWT_PASSPHRASE` → `<gerar_com_php_-r_bin2hex_random_bytes_24>`
+`JWT_PASSPHRASE` → `<gerado automaticamente pelo start.sh>` (conforme modelo operacional deste ambiente)
 `DATABASE_PASSWORD` → `<sua_senha_do_banco>`
 
 ### T7.3 — Ação: APP_SECRET movido para Replit Secret

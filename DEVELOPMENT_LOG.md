@@ -793,3 +793,128 @@ $ php -d memory_limit=512M bin/console about || true
 | config/ permissions | FASE 3 | #10 | ✅ ENCERRADO | chmod 0555 via start.sh; jwt/ writable |
 | xsl extension inativa | — | — | ⚠️ ABERTO | replit.nix declara mas não ativa |
 | Migrations version table | — | — | ⚠️ ABERTO | requer autorização explícita |
+
+---
+
+## Task #16 — Fix OOM no build (build.sh + composer.json + env vars)
+
+**Data:** 2026-04-14
+
+### Contexto
+
+Build de deployment falhava com OOM em `PhpDumper.php`. Cinco causas simultâneas
+identificadas e corrigidas.
+
+### T16.1 — Estado inicial verificado (output real)
+
+```
+$ grep -n "_EFFECTIVE_MEM\|composer install\|assets:install" build.sh
+29:_EFFECTIVE_MEM="$(php -r 'echo ini_get("memory_limit");')"
+31:if [ "${_EFFECTIVE_MEM}" != "${_MEM_LIMIT}" ]; then
+36:composer install --no-dev --optimize-autoloader
+```
+
+```
+$ grep '"memory-limit"\|"assets:install"' composer.json
+      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+```
+
+```
+$ echo "PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-NOT_SET}"
+PHP_MEMORY_LIMIT=NOT_SET
+```
+
+Classificação: 3 problemas confirmados no código; 2 nas env vars/config ⚠️
+
+### T16.2 — Ação: composer.json (Problemas 2 e 3)
+
+Adicionado `"memory-limit": "-1"` no bloco `config`:
+
+```
+$ grep '"memory-limit"' composer.json
+    "memory-limit": "-1",
+```
+
+Alterado `assets:install` para usar `--no-scripts`:
+
+```
+$ grep 'no-scripts' composer.json
+      "assets:install --no-scripts %PUBLIC_DIR%": "symfony-cmd",
+```
+
+### T16.3 — Ação: build.sh (Problema 1)
+
+Substituída linha `composer install --no-dev --optimize-autoloader` por invocação
+direta com `-d memory_limit` e `$(which composer)`. Bloco "hard gate" `_EFFECTIVE_MEM`
+removido (substituído por echo informativo). Adicionada linha explícita de `assets:install`
+com memória controlada após o composer install.
+
+```
+$ grep -n "which composer\|assets:install" build.sh
+39:    $(which composer) install --no-dev --optimize-autoloader
+44:php -d memory_limit=${_MEM_LIMIT} bin/console assets:install public --no-debug
+```
+
+```
+$ grep "_EFFECTIVE_MEM\|ERROR: PHP memory" build.sh && echo "PRESENT" || echo "hard gate absent"
+hard gate absent
+```
+
+### T16.4 — Ação: env vars PHP_MEMORY_LIMIT e COMPOSER_MEMORY_LIMIT (Problema 4)
+
+Arquivo `.replit` não pode ser editado diretamente; variáveis definidas como env vars
+compartilhadas (shared) via Replit environment API:
+
+```
+PHP_MEMORY_LIMIT = "512M"     → shared env var ✅
+COMPOSER_MEMORY_LIMIT = "-1"  → shared env var ✅
+```
+
+```
+$ echo "PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT}; COMPOSER_MEMORY_LIMIT=${COMPOSER_MEMORY_LIMIT}"
+PHP_MEMORY_LIMIT=512M; COMPOSER_MEMORY_LIMIT=-1
+```
+
+### T16.5 — Verificação de critérios globais (output real)
+
+```
+$ bash -c 'php -d memory_limit=512M -r "echo ini_get(\"memory_limit\");"'
+512M
+```
+
+```
+$ grep '"memory-limit"' composer.json
+    "memory-limit": "-1",
+```
+
+```
+$ grep 'no-scripts' composer.json
+      "assets:install --no-scripts %PUBLIC_DIR%": "symfony-cmd",
+```
+
+```
+$ grep 'assets:install public' build.sh
+php -d memory_limit=${_MEM_LIMIT} bin/console assets:install public --no-debug
+```
+
+```
+$ curl -s -o /dev/null -w "/ → %{http_code}" http://127.0.0.1:5000/
+/ → 200
+```
+
+✅ Todos os critérios de conclusão confirmados.
+
+---
+
+## Sumário de classificações — Task #16
+
+| Problema | Antes | Depois | Evidência |
+|----------|-------|--------|-----------|
+| P1: build.sh composer sem -d | `composer install` direto | `php -d memory_limit=... $(which composer) install` | grep → linha 39 |
+| P1: hard gate _EFFECTIVE_MEM | exit 1 se PHPRC falhar | echo informativo | grep → absent |
+| P1: assets:install explícito | ausente | `php -d ... bin/console assets:install public --no-debug` | grep → linha 44 |
+| P2: composer.json memory-limit | ausente | `"memory-limit": "-1"` | grep → presente |
+| P3: assets:install --no-scripts | `assets:install %PUBLIC_DIR%` | `assets:install --no-scripts %PUBLIC_DIR%` | grep → presente |
+| P4: PHP_MEMORY_LIMIT env var | NOT_SET | `512M` (shared env var) | echo → 512M |
+| P4: COMPOSER_MEMORY_LIMIT env var | NOT_SET | `-1` (shared env var) | echo → -1 |
+| App HTTP status pós-changes | 200 | 200 | curl → 200 |

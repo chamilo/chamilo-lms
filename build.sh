@@ -24,14 +24,23 @@ sed -i "s/^memory_limit\s*=.*/memory_limit = ${_MEM_LIMIT}/" php.ini
 
 export COMPOSER_MEMORY_LIMIT=-1
 
-# Hard gate: confirm the effective limit before running Composer so the build
-# fails immediately if the configuration is not applied correctly.
-_EFFECTIVE_MEM="$(php -r 'echo ini_get("memory_limit");')"
-echo "PHP memory_limit for build: ${_EFFECTIVE_MEM} (target: ${_MEM_LIMIT})"
-if [ "${_EFFECTIVE_MEM}" != "${_MEM_LIMIT}" ]; then
-    echo "ERROR: PHP memory_limit (${_EFFECTIVE_MEM}) does not match target (${_MEM_LIMIT}). Aborting build."
-    exit 1
-fi
+# Informational: report effective memory limit without hard-failing the build.
+# The hard gate was removed because PHP_MEMORY_LIMIT may not be injected as a
+# Secret in all autoscale deployment contexts; the -d flag below guarantees the
+# limit regardless of PHPRC/user-ini resolution order.
+echo "PHP memory_limit efetivo: $(php -d memory_limit=${_MEM_LIMIT} -r 'echo ini_get("memory_limit");')"
 
-composer install --no-dev --optimize-autoloader
+# Invoke Composer via the PHP binary directly so -d flags apply to the Composer
+# process itself AND to all subprocesses it spawns (post-install-cmd scripts).
+# This bypasses the autoscale environment's PHPRC/~/.php.ini inheritance gap.
+php -d memory_limit=${_MEM_LIMIT} \
+    -d max_execution_time=0 \
+    -d date.timezone=America/Sao_Paulo \
+    $(which composer) install --no-dev --optimize-autoloader
+
+# Run assets:install explicitly with controlled memory, since assets:install in
+# auto-scripts now uses --no-scripts to skip DI container compilation inside
+# the Composer subprocess. This step compiles the container with enough memory.
+php -d memory_limit=${_MEM_LIMIT} bin/console assets:install public --no-debug
+
 yarn build

@@ -44,6 +44,10 @@ timeoutMs = 120000
 APP_INSTALLED = "1"
 APP_ENV = "prod"
 
+[userenv.shared]
+PHP_MEMORY_LIMIT = "512M"
+COMPOSER_MEMORY_LIMIT = "-1"
+
 [[ports]]
 localPort = 5000
 externalPort = 80

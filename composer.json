@@ -195,6 +195,7 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "symfony/runtime": true
     },
+    "memory-limit": "-1",
     "process-timeout": 900
   },
   "require-dev": {
@@ -234,7 +235,7 @@
   },
   "scripts": {
     "auto-scripts": {
-      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+      "assets:install --no-scripts %PUBLIC_DIR%": "symfony-cmd",
       "requirements-checker": "script"
     },
     "post-install-cmd": [

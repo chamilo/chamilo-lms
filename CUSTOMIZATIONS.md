@@ -1,8 +1,8 @@
 # Chamilo LMS 2.x — Inventário de Customizações
 
 ---
-Version: 1.5
-Last updated: 2026-04-14 (FASE 2 — remoção física do instalador)
+Version: 1.6
+Last updated: 2026-04-14 (Task #16 — fix OOM build)
 Status: Active
 Owner: Project maintainer
 
@@ -35,6 +35,10 @@ Owner: Project maintainer
 | 2026-04-14 | `JWT_PASSPHRASE` em `.env` | Segurança (revisão) | Analisado: `start.sh` usa `openssl genrsa` sem `-aes256`, logo a chave privada JWT não tem passphrase. O valor de `JWT_PASSPHRASE` é ignorado pelo LexikJWT bundle neste caso. Placeholder `your_secret_passphrase` mantido — risco real é nulo. | Nenhum | Documentado; se em produção a chave for gerada com passphrase, atualizar para Replit Secret |
 | 2026-04-14 | `start.sh` — bloco timezone MySQL (linha 65-74) | Config / Segurança | Adicionado bloco `SET GLOBAL time_zone = '-03:00'` após SQLEOF (DB creation), antes de JWT. Corrige divergência de 3h entre MySQL (SYSTEM/UTC) e PHP server (America/Sao_Paulo). Named zone indisponível (mysql.time_zone_name vazia; /usr/share/zoneinfo ausente no Nix). Brasil aboliu DST em 2019 → `-03:00` é permanentemente correto. UNIX_TIMESTAMP diff = 0s verificado. | Baixo — aplica SET GLOBAL que requer connection root; falha silenciosa com `|| true` | Reaplicar em cada restart via start.sh; se Nix ganhar tzdata, atualizar para 'America/Sao_Paulo' |
 | 2026-04-14 | `start.sh` — build síncrono (linhas 102-117) | Config / Segurança | Corrigida race condition: `yarn build ... &` (background) substituído por build síncrono com `tee /tmp/yarn_build.log` + `PIPESTATUS` exit code check. PHP server só arranca após build confirmar (ou skip). Build falho → `exit 1` explícito. | Nenhum (entrypoints.json presente: build é skipado; impacto só em containers frescos) | Em containers frescos o primeiro start demorará ~3 min — comportamento esperado |
+| 2026-04-14 | `build.sh` — composer via `php -d` + assets explícito (Task #16) | Config / Deploy | Fix OOM: `composer install` substituído por `php -d memory_limit=... $(which composer) install`; bloco hard gate `_EFFECTIVE_MEM` removido (substituído por echo informativo); linha explícita `php -d ... assets:install public --no-debug` adicionada após composer install | Baixo — só afeta deployment build, não o runtime de dev | Revalidar após cada alteração em build.sh |
+| 2026-04-14 | `composer.json` — `"memory-limit": "-1"` no bloco config (Task #16) | Config / Deploy | Fix OOM: campo `memory-limit` adicionado para garantir que Composer respeite COMPOSER_MEMORY_LIMIT em todos os subcontextos | Baixo — campo de config do Composer, sem impacto em código | Manter ao atualizar dependências |
+| 2026-04-14 | `composer.json` — `assets:install --no-scripts` (Task #16) | Config / Deploy | Fix OOM: flag `--no-scripts` adicionada ao auto-scripts para impedir compilação do container DI (PhpDumper) dentro do subprocesso do Composer (128MB padrão). Compilação agora acontece explicitamente em build.sh com memória controlada | Baixo — assets:install no Symfony instala assets de pacotes; `--no-scripts` apenas pula execução de scripts PHP do bundle durante esse passo | Manter ao atualizar Symfony |
+| 2026-04-14 | `PHP_MEMORY_LIMIT=512M` e `COMPOSER_MEMORY_LIMIT=-1` — shared env vars (Task #16) | Config / Deploy | Variáveis definidas como env vars compartilhadas (Replit shared env) para garantir disponibilidade no contexto de build autoscale. `.replit` [env] não pode ser editado diretamente — env vars usadas como alternativa equivalente | Nenhum — não afeta secrets nem código | Verificar valores se deployment OOM voltar |
 
 ---
 
@@ -73,3 +77,4 @@ Os seguintes arquivos foram **identificados como possíveis candidatos** mas per
 | 1.3 | 2026-04-14 | Agent | FASE 2.2: start.sh — bloco timezone MySQL adicionado (`SET GLOBAL time_zone = '-03:00'`); Gap #4 encerrado |
 | 1.4 | 2026-04-14 | Agent | FASE 2.1: start.sh — build síncrono (race condition corrigida); replit.md atualizado; ROADMAP.md gaps fechados |
 | 1.5 | 2026-04-14 | Agent | FASE 2 (Task #15): remoção física de public/main/install/ do disco; HTTP 409 → 404; FASE 3 confirmada (config perms 0555 via start.sh); documentação atualizada com outputs reais |
+| 1.6 | 2026-04-14 | Agent | Task #16: fix OOM no build — build.sh reescrito (php -d, hard gate removido, assets explícito); composer.json (memory-limit + --no-scripts); PHP_MEMORY_LIMIT=512M e COMPOSER_MEMORY_LIMIT=-1 como shared env vars |

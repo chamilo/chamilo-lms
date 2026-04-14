@@ -41,8 +41,14 @@ outputType = "webview"
 [deployment]
 deploymentTarget = "autoscale"
 run = ["sh", "-c", "bash start.sh"]
-build = ["sh", "-c", "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader && yarn build"]
+build = ["sh", "-c", "bash build.sh"]
 
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 120000
+
+[userenv]
+
+[userenv.production]
+APP_INSTALLED = "1"
+APP_ENV = "prod"

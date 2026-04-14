@@ -119,6 +119,7 @@ class Rest extends WebService
     public const SAVE_SESSION = 'save_session';
     public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     public const UPDATE_SESSION = 'update_session';
+    public const DELETE_SESSION = 'delete_session';
     public const GET_SESSIONS = 'get_sessions';
 
     public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
@@ -3250,6 +3251,29 @@ class Rest extends WebService
             'status' => true,
             'message' => get_lang('Updated'),
             'id_session' => $id,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function deleteSession(int $sessionId): array
+    {
+        if (!SessionManager::cantEditSession($sessionId)) {
+            self::throwNotAllowedException();
+        }
+
+        $sessionInfo = api_get_session_info($sessionId);
+
+        if (empty($sessionInfo)) {
+            throw new Exception(get_lang('NoData'));
+        }
+
+        $result = SessionManager::delete($sessionId);
+
+        return [
+            'status' => $result,
+            'message' => $result ? get_lang('Deleted').': '.$sessionInfo['name'] : get_lang('Error'),
         ];
     }
 

@@ -875,6 +875,12 @@ try {
             Event::addEvent(LOG_WS.$action, 'session_id', $data['id_session']);
             $restResponse->setData($data);
             break;
+        case Rest::DELETE_SESSION:
+            $sessionId = (int) ($_REQUEST['session_id'] ?? 0);
+            $data = $restApi->deleteSession($sessionId);
+            Event::addEvent(LOG_WS.$action, 'session_id', $sessionId);
+            $restResponse->setData($data);
+            break;
         case Rest::SUBSCRIBE_USER_TO_COURSE:
             $data = $restApi->subscribeUserToCourse($_POST);
             Event::addEvent(LOG_WS.$action, 'course_id-user_id', (int) $_POST['course_id'].':'.(int) $_POST['user_id']);

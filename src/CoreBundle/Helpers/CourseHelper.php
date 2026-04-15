@@ -113,8 +113,18 @@ class CourseHelper
             throw new InvalidArgumentException('The course title cannot be empty.');
         }
 
-        // Enforce BuyCourses / platform course creation limit before generating the course.
-        $this->assertCanCreateCourse($params);
+        /** @var User|null $currentUser */
+        $currentUser = $this->security->getUser();
+
+        if ($currentUser instanceof User && class_exists('BuyCoursesPlugin')) {
+            $buyCoursesPlugin = \BuyCoursesPlugin::create();
+
+            if (!$buyCoursesPlugin->canUserCreateMoreCourses((int) $currentUser->getId())) {
+                throw new RuntimeException(
+                    $buyCoursesPlugin->getCourseCreationLimitMessage((int) $currentUser->getId())
+                );
+            }
+        }
 
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
@@ -132,6 +142,7 @@ class CourseHelper
 
         $params = array_merge($params, $keys);
         $course = $this->registerCourse($params);
+
         if ($course) {
             $this->debugLog('createCourse:registered', ['courseId' => $course->getId()]);
             $this->handlePostCourseCreation($course, $params);

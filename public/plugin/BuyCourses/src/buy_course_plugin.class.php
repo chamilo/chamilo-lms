@@ -7278,4 +7278,409 @@ class BuyCoursesPlugin extends Plugin
 
         return isset($payload['quota_mb']) ? (int) $payload['quota_mb'] : null;
     }
+
+    /**
+     * Count managed courses for a user.
+     */
+    public function countManagedCoursesByUser(int $userId): int
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0) {
+            return 0;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT COUNT(DISTINCT c_id) AS total
+            FROM $table
+            WHERE user_id = $userId
+              AND status = ".COURSEMANAGER."
+              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_RRHH.")";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Return the effective max courses limit for a user.
+     * Active service benefit wins over the global setting.
+     * Zero means unlimited.
+     */
+    public function getEffectiveMaxCoursesLimitForUser(int $userId): int
+    {
+        $serviceLimit = $this->getActiveMaxCoursesLimit($userId);
+        if (null !== $serviceLimit && $serviceLimit > 0) {
+            return (int) $serviceLimit;
+        }
+
+        $globalLimit = (int) api_get_setting('platform.max_courses_per_user');
+
+        return max(0, $globalLimit);
+    }
+
+    /**
+     * Return whether the user can create one more course.
+     */
+    public function canUserCreateMoreCourses(int $userId): bool
+    {
+        $limit = $this->getEffectiveMaxCoursesLimitForUser($userId);
+        if ($limit <= 0) {
+            return true;
+        }
+
+        return $this->countManagedCoursesByUser($userId) < $limit;
+    }
+
+    /**
+     * Return a detailed status for course creation capability.
+     */
+    public function getCourseCreationCapabilityStatus(int $userId): array
+    {
+        $userId = (int) $userId;
+
+        $currentCount = $this->countManagedCoursesByUser($userId);
+        $serviceLimit = $this->getActiveMaxCoursesLimit($userId);
+        $globalLimit = (int) api_get_setting('platform.max_courses_per_user');
+        $effectiveLimit = $this->getEffectiveMaxCoursesLimitForUser($userId);
+
+        $source = 'unlimited';
+        if (null !== $serviceLimit && $serviceLimit > 0) {
+            $source = 'service';
+        } elseif ($globalLimit > 0) {
+            $source = 'global';
+        }
+
+        $canCreate = $effectiveLimit <= 0 || $currentCount < $effectiveLimit;
+
+        return [
+            'canCreate' => $canCreate,
+            'currentCount' => $currentCount,
+            'effectiveLimit' => $effectiveLimit,
+            'serviceLimit' => $serviceLimit,
+            'globalLimit' => $globalLimit,
+            'limitSource' => $source,
+            'message' => $canCreate ? '' : $this->getCourseCreationLimitMessage($userId),
+        ];
+    }
+
+    /**
+     * Return a clear user-facing message for course creation limit.
+     */
+    public function getCourseCreationLimitMessage(int $userId): string
+    {
+        $status = $this->getCourseCreationCapabilityStatus($userId);
+
+        $limit = (int) $status['effectiveLimit'];
+        $currentCount = (int) $status['currentCount'];
+        $source = (string) $status['limitSource'];
+
+        if ($limit <= 0) {
+            return 'You cannot create more courses at this time.';
+        }
+
+        if ('service' === $source) {
+            return sprintf(
+                'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.',
+                $currentCount,
+                $limit
+            );
+        }
+
+        return sprintf(
+            'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.',
+            $currentCount,
+            $limit
+        );
+    }
+
+    /**
+     * Return all managed course IDs for a user.
+     */
+    public function getManagedCourseIdsByUser(int $userId): array
+    {
+        $userId = (int) $userId;
+
+        if ($userId <= 0) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT DISTINCT c_id
+            FROM $table
+            WHERE user_id = $userId
+              AND status = ".COURSEMANAGER."
+              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+            ORDER BY c_id ASC";
+        $result = Database::query($sql);
+
+        $ids = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $ids[] = (int) $row['c_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Return all course manager IDs for a course.
+     */
+    public function getCourseManagerIdsForCourse(int $courseId): array
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT DISTINCT user_id
+            FROM $table
+            WHERE c_id = $courseId
+              AND status = ".COURSEMANAGER."
+              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+            ORDER BY user_id ASC";
+        $result = Database::query($sql);
+
+        $ids = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $ids[] = (int) $row['user_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Return the effective users-per-course limit for a course.
+     * Highest active service limit among course managers wins over global setting.
+     * Zero means unlimited.
+     */
+    public function getEffectiveUsersPerCourseLimitForCourse(int $courseId): int
+    {
+        $limit = (int) api_get_setting('platform.hosting_limit_users_per_course');
+        $limit = max(0, $limit);
+
+        $managerIds = $this->getCourseManagerIdsForCourse($courseId);
+
+        foreach ($managerIds as $managerId) {
+            $serviceLimit = $this->getActiveHostingLimit($managerId);
+
+            if (null !== $serviceLimit && $serviceLimit > $limit) {
+                $limit = $serviceLimit;
+            }
+        }
+
+        return $limit;
+    }
+
+    /**
+     * Build the user-facing message for course hosting limit.
+     */
+    public function getUsersPerCourseLimitMessage(int $courseId): string
+    {
+        $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
+
+        if ($limit <= 0) {
+            return get_lang('This operation cannot be completed because the course limit is not available.');
+        }
+
+        return sprintf(
+            get_lang('This operation would exceed the limit of %d users allowed for this course.'),
+            $limit
+        );
+    }
+
+    /**
+     * Return the effective document quota in MB for a course.
+     * Highest active service quota among course managers wins over fallback/global quota.
+     * Zero means unlimited.
+     */
+    public function getEffectiveDocumentQuotaMbForCourse(int $courseId, ?int $fallbackQuotaMb = null): int
+    {
+        $limit = max(0, (int) ($fallbackQuotaMb ?? api_get_setting('document.default_document_quotum')));
+
+        $managerIds = $this->getCourseManagerIdsForCourse($courseId);
+
+        foreach ($managerIds as $managerId) {
+            $serviceQuota = $this->getActiveDocumentQuotaMb($managerId);
+
+            if (null !== $serviceQuota && $serviceQuota > $limit) {
+                $limit = $serviceQuota;
+            }
+        }
+
+        return $limit;
+    }
+
+    /**
+     * Check whether a user is frozen in a course.
+     */
+    public function isFrozenEnrollment(int $courseId, int $userId): bool
+    {
+        $courseId = (int) $courseId;
+        $userId = (int) $userId;
+
+        if ($courseId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
+
+        $sql = "SELECT id
+            FROM $table
+            WHERE course_id = $courseId
+              AND user_id = $userId
+            LIMIT 1";
+        $result = Database::query($sql);
+
+        return $result && Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Remove all frozen enrollments for a course.
+     */
+    public function clearFrozenEnrollmentsForCourse(int $courseId): void
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $table = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
+        Database::query("DELETE FROM $table WHERE course_id = $courseId");
+    }
+
+    /**
+     * Freeze excess students for a course according to the given limit.
+     * Teachers are never frozen.
+     */
+    public function freezeExcessEnrollmentsForCourse(int $courseId, int $limit): void
+    {
+        $courseId = (int) $courseId;
+        $limit = (int) $limit;
+
+        if ($courseId <= 0) {
+            return;
+        }
+
+        if ($limit <= 0) {
+            $this->clearFrozenEnrollmentsForCourse($courseId);
+
+            return;
+        }
+
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
+
+        $sql = "SELECT user_id
+            FROM $courseUserTable
+            WHERE c_id = $courseId
+              AND status = ".STUDENT."
+              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+            ORDER BY user_id ASC";
+        $result = Database::query($sql);
+
+        $studentIds = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $studentIds[] = (int) $row['user_id'];
+        }
+
+        $this->clearFrozenEnrollmentsForCourse($courseId);
+
+        if (count($studentIds) <= $limit) {
+            return;
+        }
+
+        $excessIds = array_slice($studentIds, $limit);
+
+        foreach ($excessIds as $studentId) {
+            Database::insert(
+                $frozenTable,
+                [
+                    'course_id' => $courseId,
+                    'user_id' => $studentId,
+                    'frozen_since' => api_get_utc_datetime(),
+                ]
+            );
+        }
+    }
+
+    /**
+     * Process all expired completed service sales.
+     */
+    public function processExpiredServiceBenefits(): int
+    {
+        $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT DISTINCT buyer_id
+            FROM $table
+            WHERE status = ".self::SERVICE_STATUS_COMPLETED."
+              AND date_end IS NOT NULL
+              AND date_end < '$now'";
+        $result = Database::query($sql);
+
+        $processedUsers = 0;
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $userId = (int) ($row['buyer_id'] ?? 0);
+
+            if ($userId <= 0) {
+                continue;
+            }
+
+            $this->processExpiredCourseCreationForUser($userId);
+            $this->processExpiredHostingLimitForUser($userId);
+
+            $processedUsers++;
+        }
+
+        return $processedUsers;
+    }
+
+    /**
+     * Close excess managed courses when the effective limit is exceeded.
+     */
+    private function processExpiredCourseCreationForUser(int $userId): void
+    {
+        $limit = $this->getEffectiveMaxCoursesLimitForUser($userId);
+
+        if ($limit <= 0) {
+            return;
+        }
+
+        $courseIds = $this->getManagedCourseIdsByUser($userId);
+
+        if (count($courseIds) <= $limit) {
+            return;
+        }
+
+        $excessCourseIds = array_slice($courseIds, $limit);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        foreach ($excessCourseIds as $courseId) {
+            Database::query(
+                "UPDATE $courseTable
+             SET visibility = 0
+             WHERE id = ".(int) $courseId
+            );
+        }
+    }
+
+    /**
+     * Freeze excess course students after a hosting benefit expires.
+     */
+    private function processExpiredHostingLimitForUser(int $userId): void
+    {
+        $courseIds = $this->getManagedCourseIdsByUser($userId);
+
+        foreach ($courseIds as $courseId) {
+            $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
+            $this->freezeExcessEnrollmentsForCourse($courseId, $limit);
+        }
+    }
 }

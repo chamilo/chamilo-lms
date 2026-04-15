@@ -1086,11 +1086,18 @@ class CourseController extends ToolBaseController
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
-        $title = $courseData['name'] ?? null;
-        $wantedCode = $courseData['code'] ?? null;
+        if (!is_array($courseData)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => $translator->trans('Invalid request payload.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $title = isset($courseData['name']) ? trim((string) $courseData['name']) : null;
+        $wantedCode = isset($courseData['code']) ? trim((string) $courseData['code']) : null;
         $courseLanguage = $courseData['language'] ?? null;
         $categoryCode = $courseData['category'] ?? null;
-        $exemplaryContent = $courseData['fillDemoContent'] ?? false;
+        $exemplaryContent = !empty($courseData['fillDemoContent']);
         $template = $courseData['template'] ?? '';
 
         $params = [
@@ -1107,6 +1114,7 @@ class CourseController extends ToolBaseController
 
         try {
             $course = $courseHelper->createCourse($params);
+
             if ($course) {
                 return new JsonResponse([
                     'success' => true,
@@ -1121,7 +1129,53 @@ class CourseController extends ToolBaseController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(['success' => false, 'message' => $translator->trans('An error occurred while creating the course.')]);
+        return new JsonResponse([
+            'success' => false,
+            'message' => $translator->trans('An error occurred while creating the course.'),
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
+    public function createCourseCapability(TranslatorInterface $translator): JsonResponse
+    {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user || !method_exists($user, 'getId')) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $translator->trans('Authentication required.'),
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        if (!class_exists('BuyCoursesPlugin')) {
+            return new JsonResponse([
+                'success' => true,
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'unlimited',
+                'message' => '',
+            ]);
+        }
+
+        $plugin = \BuyCoursesPlugin::create();
+        $status = $plugin->getCourseCreationCapabilityStatus((int) $user->getId());
+
+        return new JsonResponse([
+            'success' => true,
+            'canCreate' => (bool) $status['canCreate'],
+            'currentCount' => (int) $status['currentCount'],
+            'effectiveLimit' => (int) $status['effectiveLimit'],
+            'serviceLimit' => null !== $status['serviceLimit'] ? (int) $status['serviceLimit'] : null,
+            'globalLimit' => (int) $status['globalLimit'],
+            'limitSource' => (string) $status['limitSource'],
+            'message' => (string) $status['message'],
+        ]);
     }
 
     #[Route('/{id}/getAutoLaunchExerciseId', name: 'chamilo_core_course_get_auto_launch_exercise_id', methods: ['GET'])]

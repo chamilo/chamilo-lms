@@ -1874,5 +1874,6 @@
     "Save and insert": "Speichern und einf\u00fcgen",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Speichern wird nur unterst\u00fctzt, wenn der Anbieter Base64-Inhalt zur\u00fcckgibt. Wenn nur eine URL erhalten wurde, ist Speichern deaktiviert, um das Herunterladen im Browser zu vermeiden.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video erfolgreich generiert, aber Speichern deaktiviert, da der Anbieter eine URL zur\u00fcckgegeben hat.",
-    "The file was saved, but its URL could not be resolved.": "Die Datei wurde gespeichert, aber ihre URL konnte nicht aufgel\u00f6st werden."
+    "The file was saved, but its URL could not be resolved.": "Die Datei wurde gespeichert, aber ihre URL konnte nicht aufgel\u00f6st werden.",
+    "Items": "Inhalt"
 }

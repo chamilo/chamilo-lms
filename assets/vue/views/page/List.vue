@@ -69,7 +69,7 @@
             icon="edit"
             only-icon
             size="small"
-            type="tertiary-text"
+            type="secondary-text"
             @click="goToEditItem(slotProps.data)"
           />
 

@@ -46,6 +46,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
+use Chamilo\CoreBundle\Validator\Constraints\EmailRfc6531;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
@@ -285,7 +286,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[Assert\NotBlank]
-    #[Assert\Email]
+    #[EmailRfc6531]
     #[ORM\Column(name: 'email', type: 'string', length: 100)]
     protected string $email;
 

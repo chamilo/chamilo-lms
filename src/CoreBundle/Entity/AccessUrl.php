@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Chamilo\CoreBundle\Validator\Constraints\EmailRfc6531;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -159,7 +160,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'limit_disk_space', type: 'integer', nullable: true)]
     protected ?int $limitDiskSpace = null;
 
-    #[Assert\Email]
+    #[EmailRfc6531]
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
     protected ?string $email = null;
 

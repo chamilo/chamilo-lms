@@ -883,7 +883,10 @@ function api_valid_url($url, $absolute = false)
  */
 function api_valid_email($address)
 {
-    return filter_var($address, FILTER_VALIDATE_EMAIL);
+    return 1 === preg_match(
+        '/^[\p{L}\p{N}!#$%&\'*+\-\/=?^_{|}~.]+@[\p{L}\p{N}\-]+(?:\.[\p{L}\p{N}\-]+)+$/u',
+        (string) $address
+    );
 }
 
 /**

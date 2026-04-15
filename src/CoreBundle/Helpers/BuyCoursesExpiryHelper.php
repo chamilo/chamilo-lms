@@ -6,22 +6,28 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 
 final class BuyCoursesExpiryHelper
 {
+    private const TABLE_SETTINGS = 'settings';
+    private const TABLE_COURSE = 'course';
+    private const TABLE_COURSE_REL_USER = 'course_rel_user';
+    private const TABLE_EXTRA_FIELD = 'extra_field';
     private const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
     private const TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
     private const TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
 
     private const SERVICE_STATUS_COMPLETED = 1;
+    private const COURSE_USER_STATUS_TEACHER = 1;
+    private const COURSE_USER_STATUS_STUDENT = 5;
+    private const COURSE_RELATION_TYPE_RRHH = 1;
+    private const COURSE_VISIBILITY_CLOSED = 0;
 
     public function __construct(
         private readonly Connection $connection,
-        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function processExpiredServiceBenefits(): int
@@ -42,6 +48,29 @@ final class BuyCoursesExpiryHelper
         return $processedUsers;
     }
 
+    public function isFrozenEnrollment(int $courseId, int $userId): bool
+    {
+        if ($courseId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        $sql = 'SELECT 1
+                FROM '.self::TABLE_FROZEN_ENROLLMENT.'
+                WHERE course_id = :courseId
+                  AND user_id = :userId
+                LIMIT 1';
+
+        $result = $this->connection->fetchOne(
+            $sql,
+            [
+                'courseId' => $courseId,
+                'userId' => $userId,
+            ]
+        );
+
+        return false !== $result && null !== $result;
+    }
+
     private function processExpiredCourseCreationForUser(int $userId): void
     {
         $limit = $this->getEffectiveMaxCoursesLimitForUser($userId);
@@ -57,12 +86,11 @@ final class BuyCoursesExpiryHelper
         }
 
         $excessCourseIds = \array_slice($courseIds, $limit);
-        $courseTable = $this->mainTable(TABLE_MAIN_COURSE);
 
         foreach ($excessCourseIds as $courseId) {
             $this->connection->update(
-                $courseTable,
-                ['visibility' => 0],
+                self::TABLE_COURSE,
+                ['visibility' => self::COURSE_VISIBILITY_CLOSED],
                 ['id' => (int) $courseId]
             );
         }
@@ -83,14 +111,12 @@ final class BuyCoursesExpiryHelper
      */
     private function getExpiredBuyerIds(): array
     {
-        $table = $this->mainTable(self::TABLE_SERVICES_SALE);
-
-        $sql = "SELECT DISTINCT buyer_id
-                FROM $table
+        $sql = 'SELECT DISTINCT buyer_id
+                FROM '.self::TABLE_SERVICES_SALE.'
                 WHERE status = :status
                   AND date_end IS NOT NULL
                   AND date_end < :now
-                ORDER BY buyer_id ASC";
+                ORDER BY buyer_id ASC';
 
         $result = $this->connection->executeQuery(
             $sql,
@@ -117,21 +143,19 @@ final class BuyCoursesExpiryHelper
             return [];
         }
 
-        $table = $this->mainTable(TABLE_MAIN_COURSE_USER);
-
-        $sql = "SELECT DISTINCT c_id
-                FROM $table
+        $sql = 'SELECT DISTINCT c_id
+                FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE user_id = :userId
                   AND status = :status
                   AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
-                ORDER BY c_id ASC";
+                ORDER BY c_id ASC';
 
         $result = $this->connection->executeQuery(
             $sql,
             [
                 'userId' => $userId,
-                'status' => COURSEMANAGER,
-                'rrhhRelationType' => COURSE_RELATION_TYPE_RRHH,
+                'status' => self::COURSE_USER_STATUS_TEACHER,
+                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
             ]
         )->fetchFirstColumn();
 
@@ -152,21 +176,19 @@ final class BuyCoursesExpiryHelper
             return [];
         }
 
-        $table = $this->mainTable(TABLE_MAIN_COURSE_USER);
-
-        $sql = "SELECT DISTINCT user_id
-                FROM $table
+        $sql = 'SELECT DISTINCT user_id
+                FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE c_id = :courseId
                   AND status = :status
                   AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
-                ORDER BY user_id ASC";
+                ORDER BY user_id ASC';
 
         $result = $this->connection->executeQuery(
             $sql,
             [
                 'courseId' => $courseId,
-                'status' => COURSEMANAGER,
-                'rrhhRelationType' => COURSE_RELATION_TYPE_RRHH,
+                'status' => self::COURSE_USER_STATUS_TEACHER,
+                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
             ]
         )->fetchFirstColumn();
 
@@ -185,12 +207,18 @@ final class BuyCoursesExpiryHelper
             return $serviceLimit;
         }
 
-        return $this->getSettingAsPositiveInt('platform.max_courses_per_user');
+        return $this->getSettingAsPositiveInt(
+            'max_courses_per_user',
+            'platform.max_courses_per_user'
+        );
     }
 
     private function getEffectiveUsersPerCourseLimitForCourse(int $courseId): int
     {
-        $limit = $this->getSettingAsPositiveInt('platform.hosting_limit_users_per_course');
+        $limit = $this->getSettingAsPositiveInt(
+            'hosting_limit_users_per_course',
+            'platform.hosting_limit_users_per_course'
+        );
 
         foreach ($this->getCourseManagerIdsForCourse($courseId) as $managerId) {
             $serviceLimit = $this->getLatestActiveGrantedValueFromSales($managerId, 'buycourses_hosting_limit');
@@ -209,22 +237,18 @@ final class BuyCoursesExpiryHelper
             return null;
         }
 
-        $serviceRelTable = $this->mainTable(self::TABLE_SERVICE_REL_EXTRA_FIELD);
-        $serviceSaleTable = $this->mainTable(self::TABLE_SERVICES_SALE);
-        $extraFieldTable = $this->mainTable(TABLE_EXTRA_FIELD);
-
-        $sql = "SELECT rel.granted_value
-                FROM $serviceRelTable rel
-                INNER JOIN $extraFieldTable ef
+        $sql = 'SELECT rel.granted_value
+                FROM '.self::TABLE_SERVICE_REL_EXTRA_FIELD.' rel
+                INNER JOIN '.self::TABLE_EXTRA_FIELD.' ef
                     ON ef.id = rel.extra_field_id
-                INNER JOIN $serviceSaleTable ss
+                INNER JOIN '.self::TABLE_SERVICES_SALE.' ss
                     ON ss.service_id = rel.service_id
                 WHERE ef.variable = :variable
                   AND ss.buyer_id = :userId
                   AND ss.status = :status
                   AND ss.date_end >= :now
                 ORDER BY ss.date_end DESC, ss.id DESC
-                LIMIT 1";
+                LIMIT 1';
 
         $value = $this->connection->fetchOne(
             $sql,
@@ -251,10 +275,8 @@ final class BuyCoursesExpiryHelper
             return;
         }
 
-        $table = $this->mainTable(self::TABLE_FROZEN_ENROLLMENT);
-
         $this->connection->delete(
-            $table,
+            self::TABLE_FROZEN_ENROLLMENT,
             ['course_id' => $courseId]
         );
     }
@@ -271,22 +293,19 @@ final class BuyCoursesExpiryHelper
             return;
         }
 
-        $courseUserTable = $this->mainTable(TABLE_MAIN_COURSE_USER);
-        $frozenTable = $this->mainTable(self::TABLE_FROZEN_ENROLLMENT);
-
-        $sql = "SELECT user_id
-                FROM $courseUserTable
+        $sql = 'SELECT user_id
+                FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE c_id = :courseId
                   AND status = :status
                   AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
-                ORDER BY user_id ASC";
+                ORDER BY user_id ASC';
 
         $result = $this->connection->executeQuery(
             $sql,
             [
                 'courseId' => $courseId,
-                'status' => STUDENT,
-                'rrhhRelationType' => COURSE_RELATION_TYPE_RRHH,
+                'status' => self::COURSE_USER_STATUS_STUDENT,
+                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
             ]
         )->fetchFirstColumn();
 
@@ -307,7 +326,7 @@ final class BuyCoursesExpiryHelper
 
         foreach ($excessIds as $studentId) {
             $this->connection->insert(
-                $frozenTable,
+                self::TABLE_FROZEN_ENROLLMENT,
                 [
                     'course_id' => $courseId,
                     'user_id' => $studentId,
@@ -317,16 +336,27 @@ final class BuyCoursesExpiryHelper
         }
     }
 
-    private function getSettingAsPositiveInt(string $setting): int
+    private function getSettingAsPositiveInt(string ...$variables): int
     {
-        $raw = $this->settingsManager->getSetting($setting, true);
+        foreach ($variables as $variable) {
+            $value = $this->connection->fetchOne(
+                'SELECT selected_value
+                 FROM '.self::TABLE_SETTINGS.'
+                 WHERE variable = :variable
+                 LIMIT 1',
+                [
+                    'variable' => $variable,
+                ]
+            );
 
-        return max(0, (int) ($raw ?? 0));
-    }
+            if (false === $value || null === $value || '' === (string) $value) {
+                continue;
+            }
 
-    private function mainTable(string $table): string
-    {
-        return \Database::get_main_table($table);
+            return max(0, (int) $value);
+        }
+
+        return 0;
     }
 
     private function getUtcNow(): string

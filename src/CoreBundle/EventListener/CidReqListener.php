@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -20,6 +21,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -53,7 +55,8 @@ class CidReqListener
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TokenStorageInterface $tokenStorage
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly BuyCoursesExpiryHelper $buyCoursesExpiryHelper
     ) {}
 
     /**
@@ -161,10 +164,33 @@ class CidReqListener
             }
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
+                $token = $this->tokenStorage->getToken();
+                $tokenUser = $token?->getUser();
+
+                if (
+                    $tokenUser instanceof User
+                    && $this->buyCoursesExpiryHelper->isFrozenEnrollment(
+                        (int) $course->getId(),
+                        (int) $tokenUser->getId()
+                    )
+                ) {
+                    $this->cleanSessionHandler($request);
+
+                    $event->setResponse(
+                        new Response(
+                            $this->translator->trans('Your access to this course is temporarily suspended. Please contact the course administrator.'),
+                            Response::HTTP_FORBIDDEN
+                        )
+                    );
+
+                    return;
+                }
+
+                throw new NotAllowedException(
+                    $this->translator->trans("You're not allowed in this course")
+                );
             }
 
-            // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
 
             if (empty($sessionId)) {

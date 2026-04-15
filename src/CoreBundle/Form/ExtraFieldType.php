@@ -392,6 +392,10 @@ class ExtraFieldType extends AbstractType
                 }
 
                 foreach (['pause_formation', 'disable_emails'] as $checkboxVariable) {
+                    if (!$event->getForm()->has($checkboxVariable)) {
+                        continue;
+                    }
+
                     if (!\array_key_exists($checkboxVariable, $submittedData)) {
                         $submittedData[$checkboxVariable] = '0';
                     } else {

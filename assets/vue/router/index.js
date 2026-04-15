@@ -129,10 +129,10 @@ const router = createRouter({
       },
     },
     {
-      path: '/resources/accessurl/:id/delete',
-      name: 'AccessUrlDelete',
-      component: () => import('../views/accessurl/DeleteAccessUrl.vue'),
-      props: route => ({ id: Number(route.params.id) })
+      path: "/resources/accessurl/:id/delete",
+      name: "AccessUrlDelete",
+      component: () => import("../views/accessurl/DeleteAccessUrl.vue"),
+      props: (route) => ({ id: Number(route.params.id) }),
     },
     {
       path: "/home",
@@ -334,6 +334,7 @@ const router = createRouter({
     accessUrlRoutes,
     branchRoutes,
     roomRoutes,
+    buycoursesRoutes,
   ],
 })
 

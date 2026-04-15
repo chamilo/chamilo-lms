@@ -1023,20 +1023,6 @@ class BuyCoursesPlugin extends Plugin
         return $payload;
     }
 
-    private function isBenefitPayloadExpired(array $payload): bool
-    {
-        if (empty($payload['expiry'])) {
-            return true;
-        }
-
-        $expiryTimestamp = strtotime((string) $payload['expiry']);
-        if (false === $expiryTimestamp) {
-            return true;
-        }
-
-        return $expiryTimestamp < time();
-    }
-
     public function formatBenefitPayloadSummary(string $variable, ?array $payload): ?string
     {
         if (null === $payload) {
@@ -6993,5 +6979,303 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return 'NO';
+    }
+
+    /**
+     * Return the value column used by extra_field_values in the current schema.
+     */
+    private function getExtraFieldValueColumn(): string
+    {
+        static $column = null;
+
+        if (null !== $column) {
+            return $column;
+        }
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $result = Database::query("SHOW COLUMNS FROM $table");
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $fieldName = (string) ($row['Field'] ?? '');
+
+            if ('field_value' === $fieldName) {
+                $column = 'field_value';
+
+                return $column;
+            }
+
+            if ('value' === $fieldName) {
+                $column = 'value';
+
+                return $column;
+            }
+        }
+
+        throw new RuntimeException('No supported value column found in extra_field_values.');
+    }
+
+    /**
+     * Return all benefit relations configured for a service.
+     */
+    public function getServiceBenefitRelations(int $serviceId): array
+    {
+        $serviceId = (int) $serviceId;
+
+        $relationTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+        $sql = "SELECT
+                rel.service_id,
+                rel.extra_field_id,
+                rel.granted_value,
+                ef.variable,
+                ef.display_text,
+                ef.description
+            FROM $relationTable rel
+            INNER JOIN $extraFieldTable ef
+                ON ef.id = rel.extra_field_id
+            WHERE rel.service_id = $serviceId
+            ORDER BY rel.extra_field_id ASC";
+
+        $result = Database::query($sql);
+        $items = [];
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $items[] = $row;
+        }
+
+        return $items;
+    }
+
+    /**
+     * Save a JSON payload in a user extra field value.
+     */
+    public function saveUserExtraFieldJsonValue(int $userId, int $extraFieldId, array $payload): void
+    {
+        $userId = (int) $userId;
+        $extraFieldId = (int) $extraFieldId;
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $valueColumn = $this->getExtraFieldValueColumn();
+        $jsonValue = Database::escape_string(
+            json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
+
+        $checkSql = "SELECT id
+                 FROM $table
+                 WHERE field_id = $extraFieldId
+                   AND item_id = $userId
+                 LIMIT 1";
+        $checkResult = Database::query($checkSql);
+
+        if ($checkResult && Database::num_rows($checkResult) > 0) {
+            $sql = "UPDATE $table
+                SET $valueColumn = '$jsonValue'
+                WHERE field_id = $extraFieldId
+                  AND item_id = $userId";
+            Database::query($sql);
+
+            return;
+        }
+
+        $insertData = [
+            'field_id' => $extraFieldId,
+            'item_id' => $userId,
+            $valueColumn => $jsonValue,
+        ];
+
+        Database::insert($table, $insertData);
+    }
+
+    /**
+     * Build the JSON payload for a granted benefit relation.
+     */
+    public function buildBenefitPayloadFromRelation(array $relation, string $expiry): ?array
+    {
+        $variable = (string) ($relation['variable'] ?? '');
+        $grantedValue = (int) ($relation['granted_value'] ?? 0);
+
+        if ($grantedValue <= 0 || '' === $variable) {
+            return null;
+        }
+
+        switch ($variable) {
+            case 'buycourses_max_courses':
+                return [
+                    'limit' => $grantedValue,
+                    'expiry' => $expiry,
+                ];
+
+            case 'buycourses_hosting_limit':
+                return [
+                    'limit' => $grantedValue,
+                    'expiry' => $expiry,
+                ];
+
+            case 'buycourses_document_quota':
+                return [
+                    'quota_mb' => $grantedValue,
+                    'expiry' => $expiry,
+                ];
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Activate the benefits granted by a completed service sale.
+     */
+    public function activateServiceBenefitsForSale(int $serviceSaleId): void
+    {
+        $serviceSaleId = (int) $serviceSaleId;
+        $sale = $this->getServiceSale($serviceSaleId);
+
+        if (empty($sale)) {
+            error_log('BuyCourses activateServiceBenefitsForSale: sale not found for ID '.$serviceSaleId);
+            return;
+        }
+
+        $serviceId = (int) ($sale['service_id'] ?? 0);
+        $buyerId = (int) ($sale['buyer']['id'] ?? 0);
+
+        if ($serviceId <= 0 || $buyerId <= 0) {
+            error_log('BuyCourses activateServiceBenefitsForSale: invalid sale data for ID '.$serviceSaleId);
+            return;
+        }
+
+        $service = $this->getService($serviceId);
+
+        if (empty($service)) {
+            error_log('BuyCourses activateServiceBenefitsForSale: service not found for service ID '.$serviceId);
+            return;
+        }
+
+        $durationDays = max(0, (int) ($service['duration_days'] ?? 0));
+
+        $baseDate = !empty($sale['buy_date'])
+            ? new DateTimeImmutable((string) $sale['buy_date'])
+            : new DateTimeImmutable('now');
+
+        $expiry = $durationDays > 0
+            ? $baseDate->modify('+'.$durationDays.' days')->format('Y-m-d H:i:s')
+            : '9999-12-31 23:59:59';
+
+        $relations = $this->getServiceBenefitRelations($serviceId);
+        error_log('BuyCourses benefit relations for service '.$serviceId.': '.json_encode($relations));
+
+        foreach ($relations as $relation) {
+            $payload = $this->buildBenefitPayloadFromRelation($relation, $expiry);
+
+            if (null === $payload) {
+                continue;
+            }
+
+            error_log(
+                'BuyCourses writing benefit for user '.$buyerId.
+                ', field '.$relation['extra_field_id'].
+                ', variable '.$relation['variable'].
+                ', payload '.json_encode($payload)
+            );
+
+            $this->saveUserExtraFieldJsonValue(
+                $buyerId,
+                (int) $relation['extra_field_id'],
+                $payload
+            );
+        }
+    }
+
+    /**
+     * Return a decoded payload by extra field variable.
+     */
+    public function getUserBenefitPayloadByVariable(int $userId, string $variable): ?array
+    {
+        $userId = (int) $userId;
+        $variable = Database::escape_string($variable);
+
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $valueTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $valueColumn = $this->getExtraFieldValueColumn();
+
+        $sql = "SELECT efv.$valueColumn AS benefit_value
+            FROM $extraFieldTable ef
+            INNER JOIN $valueTable efv
+                ON efv.field_id = ef.id
+            WHERE ef.variable = '$variable'
+              AND efv.item_id = $userId
+            LIMIT 1";
+
+        $result = Database::query($sql);
+
+        if (!$result || 0 === Database::num_rows($result)) {
+            return null;
+        }
+
+        $row = Database::fetch_array($result, 'ASSOC');
+        $decoded = json_decode((string) ($row['benefit_value'] ?? ''), true);
+
+        return is_array($decoded) ? $decoded : null;
+    }
+
+    /**
+     * Check whether a stored benefit payload is expired.
+     */
+    public function isBenefitPayloadExpired(?array $payload): bool
+    {
+        if (empty($payload) || empty($payload['expiry'])) {
+            return true;
+        }
+
+        try {
+            $expiry = new DateTimeImmutable((string) $payload['expiry']);
+            $now = new DateTimeImmutable('now');
+
+            return $expiry < $now;
+        } catch (Throwable $exception) {
+            return true;
+        }
+    }
+
+    /**
+     * Return active max courses limit for a user.
+     */
+    public function getActiveMaxCoursesLimit(int $userId): ?int
+    {
+        $payload = $this->getUserBenefitPayloadByVariable($userId, 'buycourses_max_courses');
+
+        if ($this->isBenefitPayloadExpired($payload)) {
+            return null;
+        }
+
+        return isset($payload['limit']) ? (int) $payload['limit'] : null;
+    }
+
+    /**
+     * Return active hosting limit for a user.
+     */
+    public function getActiveHostingLimit(int $userId): ?int
+    {
+        $payload = $this->getUserBenefitPayloadByVariable($userId, 'buycourses_hosting_limit');
+
+        if ($this->isBenefitPayloadExpired($payload)) {
+            return null;
+        }
+
+        return isset($payload['limit']) ? (int) $payload['limit'] : null;
+    }
+
+    /**
+     * Return active document quota in MB for a user.
+     */
+    public function getActiveDocumentQuotaMb(int $userId): ?int
+    {
+        $payload = $this->getUserBenefitPayloadByVariable($userId, 'buycourses_document_quota');
+
+        if ($this->isBenefitPayloadExpired($payload)) {
+            return null;
+        }
+
+        return isset($payload['quota_mb']) ? (int) $payload['quota_mb'] : null;
     }
 }

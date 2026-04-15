@@ -50,10 +50,12 @@ function bcUserOwnsServiceSale(array $serviceSale): bool
 
 $adminActions = [
     'verifyPaypal',
+    'saleInfo',
     'stats',
     'processPayout',
     'proceedPayout',
     'cancelPayout',
+    'service_sale_info',
     'service_sale_confirm',
     'service_sale_cancel',
 ];
@@ -77,9 +79,6 @@ switch ($action) {
     case 'saleInfo':
         $saleId = $httpRequest->request->getInt('id');
         $sale = $plugin->getSale($saleId);
-        if (empty($sale) || (!api_is_platform_admin() && !bcUserOwnsSale($sale))) {
-            api_not_allowed(true);
-        }
         $productType = 1 == $sale['product_type'] ? get_lang('Course') : get_lang('Session');
         $paymentType = 1 == $sale['payment_type'] ? 'Paypal' : $plugin->get_lang('BankTransfer');
         $productInfo = 1 == $sale['product_type']
@@ -218,7 +217,7 @@ switch ($action) {
     case 'proceedPayout':
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = 1 == $paypalParams['sandbox'];
+        $test = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
@@ -493,8 +492,8 @@ switch ($action) {
         $id = $httpRequest->request->getInt('id');
         $serviceSale = $plugin->getServiceSale($id);
         $isAdmin = api_is_platform_admin();
-        if (!$serviceSale || (!$isAdmin && !bcUserOwnsServiceSale($serviceSale))) {
-            api_not_allowed(true);
+        if (!$serviceSale) {
+            break;
         }
 
         $ajaxCallFile = $plugin->getPath('SRC').'buycourses.ajax.php';
@@ -538,16 +537,6 @@ switch ($action) {
 
         if (!empty($nodeName)) {
             $html .= '<li><b>'.$plugin->get_lang('AppliesTo').':</b> '.bcEscapeHtml((string) $nodeType).' - '.bcEscapeHtml((string) $nodeName).'</li> ';
-        }
-
-        $benefitSummaries = $plugin->getServiceBenefitSummaries((int) $serviceSale['service_id'], (int) $serviceSale['buyer']['id']);
-        if (!empty($benefitSummaries)) {
-            $html .= '<li><b>'.$plugin->get_lang('GrantedBenefits').':</b><ul>';
-            foreach ($benefitSummaries as $benefitSummary) {
-                $summaryLine = $benefitSummary['active_summary'] ?? ($benefitSummary['granted_value'].' '.$benefitSummary['unit']);
-                $html .= '<li>'.bcEscapeHtml((string) $benefitSummary['title']).': '.bcEscapeHtml((string) $summaryLine).'</li>';
-            }
-            $html .= '</ul></li>';
         }
 
         $html .= '</ul>';

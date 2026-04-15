@@ -412,22 +412,32 @@ $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
 $taxEnable = 'true' === $plugin->get('tax_enable');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
-if (isset($_GET['action'], $_GET['id'])) {
-    if ('delete_taccount' === $_GET['action']) {
-        try {
-            $plugin->deleteTransferAccount($_GET['id']);
+if (isset($_GET['action'], $_GET['id']) && 'delete_taccount' === $_GET['action']) {
+    $transferAccountId = is_scalar($_GET['id']) ? (int) $_GET['id'] : 0;
 
-            $message = Display::return_message(get_lang('Deleted'), 'success');
-        } catch (Exception $e) {
-            $message = Display::return_message($e->getMessage(), 'error');
-        }
-
-        Display::addFlash($message);
+    if ($transferAccountId <= 0) {
+        Display::addFlash(
+            Display::return_message(get_lang('InvalidId'), 'error')
+        );
 
         header('Location: '.api_get_self());
-
         exit;
     }
+
+    try {
+        $plugin->deleteTransferAccount($transferAccountId);
+
+        Display::addFlash(
+            Display::return_message(get_lang('Deleted'), 'success')
+        );
+    } catch (Exception $e) {
+        Display::addFlash(
+            Display::return_message($e->getMessage(), 'error')
+        );
+    }
+
+    header('Location: '.api_get_self());
+    exit;
 }
 
 $globalSettingForm = new FormValidator('currency');
@@ -780,7 +790,7 @@ $transferInfoForm->addHtmlEditor(
     false,
     ['ToolbarSet' => 'Minimal']
 );
-$transferInfoForm->addButtonCreate(get_lang('Save'));
+$transferInfoForm->addButtonSave(get_lang('Save'));
 $transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
 
 $culqiForm = new FormValidator('culqi_config');
@@ -972,7 +982,7 @@ $tpl->assign('global_config_form', styleBuyCoursesFormHtml($globalSettingForm->r
 $tpl->assign('paypal_form', styleBuyCoursesFormHtml($paypalForm->returnForm()));
 $tpl->assign('commission_form', styleBuyCoursesFormHtml($commissionForm->returnForm()));
 $tpl->assign('transfer_form', styleBuyCoursesFormHtml($transferForm->returnForm()));
-$tpl->assign('transfer_info_form', styleBuyCoursesFormHtml($transferInfoForm->returnForm()));
+$tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
 $tpl->assign('culqi_form', styleBuyCoursesFormHtml($culqiForm->returnForm()));
 $tpl->assign('tpv_redsys_form', styleBuyCoursesFormHtml($htmlTpvRedsys));
 $tpl->assign('stripe_form', styleBuyCoursesFormHtml($stripeForm->returnForm()));

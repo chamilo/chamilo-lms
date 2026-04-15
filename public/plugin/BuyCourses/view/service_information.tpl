@@ -1,110 +1,294 @@
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
-<div id="service" class="service">
-    <div class="mb-6 border-b border-gray-25 pb-4">
-        <h2>{{ service.name }}</h2>
-    </div>
-    <section id="service-info">
-        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
-            <div class="p-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="service-media">
-                            {% if service.video_url %}
-                            <div class="service-video">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    {{ essence.replace(service.video_url)|raw }}
-                                </div>
-                            </div>
-                            {% elseif service.image %}
-                            <div class="service-image">
-                                <a href="{{ url('index') }}service/{{ service.id }}">
-                                    <img alt="{{ service.title }}" class="img-rounded img-responsive"
-                                         src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
-                                </a>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="share-social-media">
-                            <ul class="sharing-buttons">
-                                <li>
-                                    {{ "ShareWithYourFriends"|get_lang }}
-                                </li>
-                                <li>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
-                                       target="_blank" class="btn btn-facebook btn-inverse btn-xs">
-                                        <em class="fa fa-facebook"></em> Facebook
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://twitter.com/home?{{ {'status': session.getTitle() ~ ' ' ~ pageUrl}|url_encode }}"
-                                       target="_blank" class="btn btn-twitter btn-inverse btn-xs">
-                                        <em class="fa fa-twitter"></em> Twitter
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getTitle() }|url_encode }}"
-                                       target="_blank" class="btn btn-linkedin btn-inverse btn-xs">
-                                        <em class="fa fa-linkedin"></em> Linkedin
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        {% if service.description %}
-                        <div class="description">
+{% autoescape false %}
+{% set appliesToLabel = '' %}
+{% if service.applies_to == 1 %}
+    {% set appliesToLabel = 'User'|get_lang %}
+{% elseif service.applies_to == 2 %}
+    {% set appliesToLabel = 'Course'|get_lang %}
+{% elseif service.applies_to == 3 %}
+    {% set appliesToLabel = 'Session'|get_lang %}
+{% elseif service.applies_to == 4 %}
+    {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
+{% endif %}
+
+{% set durationLabel = 'Unlimited' %}
+{% if service.duration_days is defined and service.duration_days and service.duration_days > 0 %}
+    {% set durationLabel = service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+{% endif %}
+
+<div class="mx-auto w-full max-w-screen-2xl px-4 py-6 sm:px-6 lg:px-8">
+    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="min-w-0 space-y-3">
+                <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
+                    {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
+                </div>
+
+                <div class="space-y-2">
+                    <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
+                        {{ service.name }}
+                    </h1>
+
+                    {% if service.description %}
+                        <div class="max-w-3xl text-sm leading-7 text-gray-50">
                             {{ service.description|raw }}
                         </div>
-                        {% endif %}
-                        <div class="service-details">
-                            {% if service.applies_to != 0 %}
-                                <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
-                                    {% if service.applies_to == 1 %}
-                                        {{ 'User'|get_lang }}
-                                    {% elseif service.applies_to == 2 %}
-                                        {{ 'Course'|get_lang }}
-                                    {% elseif service.applies_to == 3 %}
-                                        {{ 'Session'|get_lang }}
-                                    {% elseif service.applies_to == 4 %}
-                                        {{ 'TemplateTitleCertificate'|get_lang }}
-                                    {% endif %}
-                                </p>
-                            {% endif %}
-                        </div>
-                        <div class="service-buy">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="price">
-                                        {{ 'Total'|get_lang }}
-                                        {{ service.total_price_formatted }}
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <a href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?t=4&i=' ~ service.id }}"
-                                       class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2 w-full text-base">
-                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
+            </div>
+
+            <div class="flex shrink-0">
+                <a
+                    href="service_catalog.php"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                >
+                    <em class="fa fa-arrow-left fa-fw"></em>
+                    {{ 'Back'|get_lang }}
+                </a>
             </div>
         </div>
     </section>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
-                <div class="p-6">
-                    <div class="mb-6 border-b border-gray-25 pb-4">
-                        <h3>{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+
+    <div class="mt-6 grid gap-6 xl:grid-cols-3">
+        <section class="min-w-0 w-full space-y-6 xl:col-span-2">
+            <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
+                <div class="grid gap-0 lg:grid-cols-2">
+                    <div class="border-b border-gray-25 bg-support-2 lg:border-b-0 lg:border-r">
+                        {% if service.video_url %}
+                            {% if essence is not null %}
+                                <div class="h-full overflow-hidden">
+                                    {{ essence.replace(service.video_url)|raw }}
+                                </div>
+                            {% else %}
+                                <div class="flex h-64 items-center justify-center p-6">
+                                    <a
+                                        href="{{ service.video_url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
+                                    >
+                                        <em class="fa fa-external-link fa-fw"></em>
+                                        Open video
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% elseif service.image %}
+                            <div class="flex h-64 items-center justify-center p-4 lg:h-full lg:min-h-[320px]">
+                                <img
+                                    alt="{{ service.name }}"
+                                    class="max-h-full w-full rounded-2xl object-cover"
+                                    src="{{ service.image }}"
+                                >
+                            </div>
+                        {% else %}
+                            <div class="flex h-64 items-center justify-center p-6 lg:h-full lg:min-h-[320px]">
+                                <div class="text-center">
+                                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
+                                        <em class="fa fa-briefcase text-2xl"></em>
+                                    </div>
+                                    <p class="mt-4 text-sm text-gray-50">
+                                        {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="service-information">
-                        {{ service.service_information|raw }}
+
+                    <div class="p-6 lg:p-8">
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <h2 class="text-xl font-semibold text-gray-90">
+                                    Overview
+                                </h2>
+                                <p class="text-sm leading-6 text-gray-50">
+                                    Review the main service details before continuing with the purchase.
+                                </p>
+                            </div>
+
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div class="rounded-2xl bg-support-2 p-4">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                        Price
+                                    </div>
+                                    <div class="mt-2 text-2xl font-semibold text-gray-90">
+                                        {{ service.total_price_formatted }}
+                                    </div>
+                                </div>
+
+                                {% if appliesToLabel %}
+                                    <div class="rounded-2xl bg-support-2 p-4">
+                                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                            {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}
+                                        </div>
+                                        <div class="mt-2 text-lg font-semibold text-gray-90">
+                                            {{ appliesToLabel }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="rounded-2xl bg-support-2 p-4">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                        Duration
+                                    </div>
+                                    <div class="mt-2 text-lg font-semibold text-gray-90">
+                                        {{ durationLabel }}
+                                    </div>
+                                </div>
+
+                                {% if service.owner_name is defined and service.owner_name %}
+                                    <div class="rounded-2xl bg-support-2 p-4">
+                                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                            Owner
+                                        </div>
+                                        <div class="mt-2 text-lg font-semibold text-gray-90">
+                                            {{ service.owner_name }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-25 bg-white p-4">
+                                <div class="text-sm font-semibold text-gray-90">
+                                    Purchase readiness
+                                </div>
+                                <ul class="mt-3 space-y-2 text-sm text-gray-50">
+                                    <li class="flex items-start gap-2">
+                                        <em class="fa fa-check-circle text-success mt-0.5"></em>
+                                        <span>The service is available for purchase.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <em class="fa fa-check-circle text-success mt-0.5"></em>
+                                        <span>You can apply a coupon before confirming the order.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <em class="fa fa-check-circle text-success mt-0.5"></em>
+                                        <span>The selected payment method will be configured in the next step.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex flex-col gap-3 sm:flex-row">
+                                <a
+                                    href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-shopping-cart fa-fw"></em>
+                                    {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </a>
+
+                                <a
+                                    href="service_catalog.php"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-3 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-list fa-fw"></em>
+                                    {{ 'BackToList'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-gray-90">
+                        {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </h2>
+
+                    <div class="text-sm leading-7 text-gray-50">
+                        {% if service_details_html %}
+                            {{ service_details_html|raw }}
+                        {% else %}
+                            <p>No additional information is available for this service yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <aside class="w-full space-y-6 xl:col-span-1">
+            <div class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="space-y-5">
+                    <div class="space-y-2">
+                        <h2 class="text-lg font-semibold text-gray-90">
+                            Summary
+                        </h2>
+                        <p class="text-sm leading-6 text-gray-50">
+                            Review the service details before continuing with the purchase.
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl bg-support-2 p-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="text-sm font-semibold text-gray-90">
+                                Total
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
+                                {{ service.total_price_formatted }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if appliesToLabel %}
+                        <div class="rounded-2xl border border-gray-25 bg-white p-4">
+                            <div class="text-sm font-semibold text-gray-90">
+                                {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                            <div class="mt-2 text-sm text-gray-50">
+                                {{ appliesToLabel }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <a
+                        href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
+                        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                    >
+                        <em class="fa fa-shopping-cart fa-fw"></em>
+                        {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-gray-90">
+                        {{ 'ShareWithYourFriends'|get_lang }}
+                    </h2>
+
+                    <div class="grid gap-3">
+                        <a
+                            href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
+                        >
+                            <em class="fa fa-facebook fa-fw"></em>
+                            Facebook
+                        </a>
+
+                        <a
+                            href="https://twitter.com/home?{{ {'status': service.name ~ ' ' ~ pageUrl}|url_encode }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
+                        >
+                            <em class="fa fa-twitter fa-fw"></em>
+                            Twitter
+                        </a>
+
+                        <a
+                            href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': service.name }|url_encode }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
+                        >
+                            <em class="fa fa-linkedin fa-fw"></em>
+                            Linkedin
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
     </div>
 </div>
-</div>
+{% endautoescape %}

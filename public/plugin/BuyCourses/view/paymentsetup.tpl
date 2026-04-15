@@ -353,7 +353,7 @@
                         {{ 'TransferEmailInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h3>
                     <p class="mt-1 text-sm text-gray-50">
-                        {{ 'TransferEmailInformationHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                        Extra instructions appended to the email sent after choosing bank transfer.
                     </p>
                 </div>
 

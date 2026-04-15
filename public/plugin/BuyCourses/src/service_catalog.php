@@ -5,14 +5,14 @@ declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
- * List of services.
+ * Public catalog of services on sale.
  */
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSessions = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 
 if (!$includeServices) {
@@ -89,8 +89,6 @@ $pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $pluginIndexUrl;
 
 if (api_is_platform_admin()) {
-    $backUrl = 'paymentsetup.php';
-
     $interbreadcrumb[] = [
         'name' => get_lang('Administration'),
         'url' => api_get_path(WEB_PATH).'admin',
@@ -100,12 +98,8 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
     ];
     $interbreadcrumb[] = [
-        'url' => 'list.php',
-        'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
-    ];
-    $interbreadcrumb[] = [
-        'url' => 'paymentsetup.php',
-        'name' => $plugin->get_lang('PaymentsConfiguration'),
+        'url' => $pluginIndexUrl,
+        'name' => $plugin->get_lang('plugin_title'),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -115,6 +109,7 @@ if (api_is_platform_admin()) {
 }
 
 $templateName = $plugin->get_lang('ListOfServicesOnSale');
+
 $tpl = new Template($templateName);
 
 $tpl->assign('page_title', $templateName);
@@ -124,15 +119,15 @@ $tpl->assign('showing_courses', false);
 $tpl->assign('showing_sessions', false);
 $tpl->assign('showing_services', true);
 
-$tpl->assign('show_courses_tab', true);
-$tpl->assign('show_sessions_tab', $includeSessions);
-$tpl->assign('show_services_tab', $includeServices);
+$tpl->assign('show_courses_tab', false);
+$tpl->assign('show_sessions_tab', false);
+$tpl->assign('show_services_tab', true);
 
 $tpl->assign('courses', []);
 $tpl->assign('sessions', []);
 $tpl->assign('services', $serviceList);
 
-$tpl->assign('sessions_are_included', $includeSessions);
+$tpl->assign('sessions_are_included', false);
 $tpl->assign('services_are_included', $includeServices);
 
 $tpl->assign('name_filter_value', $nameFilter);

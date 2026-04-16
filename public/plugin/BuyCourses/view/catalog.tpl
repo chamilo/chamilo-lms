@@ -407,10 +407,17 @@
             {% endif %}
 
             {% if showing_services %}
+                {% if buyer_role_notice is defined and buyer_role_notice %}
+                    <div class="rounded-2xl border border-warning bg-support-6 px-4 py-3 text-sm text-gray-90">
+                        <em class="fa fa-info-circle fa-fw"></em>
+                        {{ buyer_role_notice }}
+                    </div>
+                {% endif %}
+
                 {% if services %}
                     <div class="grid gap-6 sm:grid-cols-2 2xl:grid-cols-3">
                         {% for service in services %}
-                            <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md max-w-sm">
+                            <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md">
                                 <div class="aspect-[16/9] overflow-hidden bg-support-2">
                                     <img
                                         alt="{{ service.name }}"
@@ -430,13 +437,14 @@
                                         {{ service.description }}
                                     </div>
 
-                                    {% if service.total_price %}
-                                        <div class="flex items-center justify-between gap-4">
-                                            <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
-                                                {{ service.total_price }}
-                                            </span>
+                                    <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">
+                                        <div class="text-xs font-semibold uppercase tracking-wide text-primary">
+                                            {{ 'Price'|get_lang }}
                                         </div>
-                                    {% endif %}
+                                        <div class="mt-1 text-base font-semibold text-gray-90">
+                                            {{ service.display_price|default(service.total_price|default('')) }}
+                                        </div>
+                                    </div>
 
                                     <div class="flex flex-col gap-3">
                                         <a
@@ -447,13 +455,29 @@
                                             {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </a>
 
-                                        <a
-                                            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                                            href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
-                                        >
-                                            <em class="fa fa-shopping-cart fa-fw"></em>
-                                            {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                        </a>
+                                        {% if service.has_blocking_sale|default(false) %}
+                                            <span
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                            >
+                                                <em class="fa fa-check-circle fa-fw"></em>
+                                                {{ 'Already purchased'|get_lang }}
+                                            </span>
+                                        {% elseif can_buy_services|default(false) %}
+                                            <a
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                                href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
+                                            >
+                                                <em class="fa fa-shopping-cart fa-fw"></em>
+                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                            </a>
+                                        {% else %}
+                                            <span
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                            >
+                                                <em class="fa fa-lock fa-fw"></em>
+                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                            </span>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </article>

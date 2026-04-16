@@ -150,11 +150,15 @@ $normalizePriceFilter = static function ($value, bool $roundUp = false): int {
 $nameFilter = isset($_GET['name']) ? trim((string) $_GET['name']) : '';
 $minFilterValue = isset($_GET['min']) ? trim((string) $_GET['min']) : '';
 $maxFilterValue = isset($_GET['max']) ? trim((string) $_GET['max']) : '';
-$appliesToFilter = isset($_GET['applies_to']) ? (string) $_GET['applies_to'] : '';
+$appliesToFilter = isset($_GET['applies_to'])
+    ? (string) $_GET['applies_to']
+    : (string) BuyCoursesPlugin::SERVICE_TYPE_USER;
 
-$allowedAppliesToValues = ['', '0', '1', '2', '3', '4'];
+$allowedAppliesToValues = [
+    (string) BuyCoursesPlugin::SERVICE_TYPE_USER,
+];
 if (!in_array($appliesToFilter, $allowedAppliesToValues, true)) {
-    $appliesToFilter = '';
+    $appliesToFilter = (string) BuyCoursesPlugin::SERVICE_TYPE_USER;
 }
 
 $minFilter = $normalizePriceFilter($minFilterValue, false);
@@ -178,6 +182,11 @@ $serviceList = $plugin->getCatalogServiceList(
     $appliesToFilter
 );
 
+foreach ($serviceList as &$service) {
+    $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer((int) $service['id']);
+}
+unset($service);
+
 $totalItems = (int) $plugin->getCatalogServiceList(
     0,
     $pageSize,
@@ -187,6 +196,35 @@ $totalItems = (int) $plugin->getCatalogServiceList(
     $appliesToFilter,
     'count'
 );
+
+try {
+    $selectedCurrency = $plugin->getSelectedCurrency();
+} catch (Exception) {
+    $selectedCurrency = [];
+}
+
+$selectedCurrencyIsoCode = (string) ($selectedCurrency['iso_code'] ?? '');
+
+foreach ($serviceList as &$service) {
+    $isoCode = (string) ($service['iso_code'] ?? $selectedCurrencyIsoCode);
+    $priceValue = (float) ($service['total_price'] ?? 0);
+
+    if (!empty($service['total_price_formatted'])) {
+        $service['display_price'] = (string) $service['total_price_formatted'];
+    } elseif ('' !== $isoCode) {
+        $service['display_price'] = $plugin->getPriceWithCurrencyFromIsoCode($priceValue, $isoCode);
+    } else {
+        $service['display_price'] = number_format($priceValue, 2, '.', ',');
+    }
+}
+unset($service);
+
+$canBuyServices = api_is_platform_admin() || api_is_allowed_to_create_course();
+$buyerRoleNotice = null;
+
+if (!$canBuyServices) {
+    $buyerRoleNotice = 'These services are available only for teachers.';
+}
 
 $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
 
@@ -244,6 +282,9 @@ $tpl->assign('pagination_current_page', $currentPage);
 $tpl->assign('pagination_pages_count', $pagesCount);
 $tpl->assign('pagination_total_items', $totalItems);
 $tpl->assign('pagination_base_path', 'service_catalog.php');
+
+$tpl->assign('can_buy_services', $canBuyServices);
+$tpl->assign('buyer_role_notice', $buyerRoleNotice);
 
 $content = $tpl->fetch('BuyCourses/view/catalog.tpl');
 

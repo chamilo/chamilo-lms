@@ -341,8 +341,10 @@ if ($form->validate()) {
     }
 }
 
+$searchLabel = get_lang('Search').' ('.get_lang('User').', '.get_lang('Email').', '.get_lang('Name').', '.$plugin->get_lang('OrderReference').')';
+
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
-$form->addText('user', get_lang('User'), false);
+$form->addText('user', $searchLabel, false);
 $form->addButtonSearch(get_lang('Search'), 'search');
 $form->setDefaults([
     'status' => $selectedStatus,

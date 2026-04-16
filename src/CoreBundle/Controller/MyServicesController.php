@@ -7,17 +7,20 @@ namespace Chamilo\CoreBundle\Controller;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Throwable;
 
 class MyServicesController extends AbstractController
 {
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly PluginHelper $pluginHelper,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -34,13 +37,27 @@ class MyServicesController extends AbstractController
             return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $plugin = BuyCoursesPlugin::create();
-        $userId = $user->getId();
+        try {
+            $plugin = BuyCoursesPlugin::create();
+            $userId = $user->getId();
 
-        return new JsonResponse([
-            'activeServices' => $this->normalizeActiveServices($plugin->getActiveServicesForUser($userId)),
-            'purchaseHistory' => $this->normalizePurchaseHistory($plugin->getPurchaseHistoryForUser($userId)),
-        ]);
+            return new JsonResponse([
+                'activeServices' => $this->normalizeActiveServices($plugin->getActiveServicesForUser($userId)),
+                'purchaseHistory' => $this->normalizePurchaseHistory($plugin->getPurchaseHistoryForUser($userId)),
+            ]);
+        } catch (Throwable $exception) {
+            $this->logger->error('Unable to load my services data.', [
+                'user_id' => $user->getId(),
+                'exception_message' => $exception->getMessage(),
+                'exception_class' => $exception::class,
+            ]);
+
+            return new JsonResponse([
+                'activeServices' => [],
+                'purchaseHistory' => [],
+                'error' => 'Unable to load your services right now.',
+            ]);
+        }
     }
 
     private function normalizeActiveServices(array $rows): array

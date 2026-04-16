@@ -88,23 +88,19 @@ $selectOptions = [
 ];
 
 if ($typeUser) {
-    $users = Container::getUserRepository()->findAll();
-
-    $selectOptions[$userInfo['user_id']] = api_get_person_name(
+    $currentUserLabel = api_get_person_name(
             $userInfo['firstname'],
             $userInfo['lastname']
         ).' ('.get_lang('Myself').')';
 
-    if (!empty($users)) {
-        /** @var User $user */
-        foreach ($users as $user) {
-            if ((int) $userInfo['user_id'] !== (int) $user->getId()) {
-                $selectOptions[$user->getId()] = $user->getFullNameWithUsername();
-            }
-        }
-    }
-
-    $form->addSelect('info_select', get_lang('User'), $selectOptions);
+    $form->addHidden('info_select', (string) $currentUserId);
+    $form->addHtml(
+        '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+        '<div class="text-body-2 font-semibold text-primary">'.get_lang('User').'</div>'.
+        '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentUserLabel.'</div>'.
+        '<div class="mt-1 text-caption text-gray-50">This service will be applied to your account.</div>'.
+        '</div>'
+    );
 } elseif ($typeCourse) {
     /** @var User $user */
     $user = Container::getUserRepository()->find($currentUserId);
@@ -242,11 +238,13 @@ if ($form->validate()) {
         exit;
     }
 
-    $infoSelected = [];
+    $infoSelected = 0;
 
-    if ($infoRequired) {
+    if ($typeUser) {
+        $infoSelected = $currentUserId;
+    } elseif ($infoRequired) {
         if (isset($formValues['info_select'])) {
-            $infoSelected = $formValues['info_select'];
+            $infoSelected = (int) $formValues['info_select'];
         } else {
             Display::addFlash(
                 Display::return_message(

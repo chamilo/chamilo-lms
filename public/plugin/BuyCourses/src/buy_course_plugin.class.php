@@ -1071,9 +1071,13 @@ class BuyCoursesPlugin extends Plugin
 
     public function getActiveServicesForUser(int $userId): array
     {
-        $services = [];
+        $servicesByKey = [];
 
         foreach ($this->getServiceSales($userId, self::SERVICE_STATUS_COMPLETED) as $serviceSale) {
+            if ((int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING) !== self::SERVICE_STATUS_COMPLETED) {
+                continue;
+            }
+
             if (empty($serviceSale['date_end']) || strtotime((string) $serviceSale['date_end']) < time()) {
                 continue;
             }
@@ -1097,8 +1101,33 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $serviceSale['benefit_summaries'] = $benefitSummaries;
-            $services[] = $serviceSale;
+
+            $serviceKey = implode(':', [
+                (int) ($serviceSale['service_id'] ?? 0),
+                (int) ($serviceSale['node_type'] ?? 0),
+                (int) ($serviceSale['node_id'] ?? 0),
+            ]);
+
+            $currentService = $servicesByKey[$serviceKey] ?? null;
+            if (null !== $currentService) {
+                $currentDateEnd = (string) ($currentService['date_end'] ?? '');
+                $candidateDateEnd = (string) ($serviceSale['date_end'] ?? '');
+                $currentId = (int) ($currentService['id'] ?? 0);
+                $candidateId = (int) ($serviceSale['id'] ?? 0);
+
+                if ($candidateDateEnd < $currentDateEnd) {
+                    continue;
+                }
+
+                if ($candidateDateEnd === $currentDateEnd && $candidateId <= $currentId) {
+                    continue;
+                }
+            }
+
+            $servicesByKey[$serviceKey] = $serviceSale;
         }
+
+        $services = array_values($servicesByKey);
 
         usort($services, static function (array $left, array $right): int {
             return strcmp((string) ($right['date_end'] ?? ''), (string) ($left['date_end'] ?? ''));
@@ -4014,6 +4043,54 @@ class BuyCoursesPlugin extends Plugin
         ];
     }
 
+    private function isServiceSaleBlockingForRepurchase(array $serviceSale): bool
+    {
+        $status = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_CANCELLED);
+
+        if (!in_array(
+            $status,
+            [self::SERVICE_STATUS_PENDING, self::SERVICE_STATUS_COMPLETED],
+            true
+        )) {
+            return false;
+        }
+
+        $dateEnd = (string) ($serviceSale['date_end'] ?? '');
+
+        if ('' === $dateEnd) {
+            return true;
+        }
+
+        return strtotime($dateEnd) >= time();
+    }
+
+    private function hasBlockingActiveServiceSale(
+        int $buyerId,
+        int $serviceId,
+        int $nodeType,
+        int $nodeId
+    ): bool {
+        if ($buyerId <= 0 || $serviceId <= 0 || $nodeType <= 0 || $nodeId <= 0) {
+            return false;
+        }
+
+        foreach ([self::SERVICE_STATUS_PENDING, self::SERVICE_STATUS_COMPLETED] as $status) {
+            $serviceSales = $this->getServiceSales($buyerId, $status, $nodeType, $nodeId);
+
+            foreach ($serviceSales as $serviceSale) {
+                if ((int) ($serviceSale['service_id'] ?? 0) !== $serviceId) {
+                    continue;
+                }
+
+                if ($this->isServiceSaleBlockingForRepurchase($serviceSale)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * List services sales.
      *
@@ -4029,11 +4106,11 @@ class BuyCoursesPlugin extends Plugin
         int $status = 0,
         int $nodeType = 0,
         int $nodeId = 0
-    ) {
+    ): array {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $defaultOrder = 'ss.id ASC';
 
+        $defaultOrder = 'ss.id ASC';
         $whereParts = [];
         $whereValues = [];
 
@@ -4042,7 +4119,7 @@ class BuyCoursesPlugin extends Plugin
             $whereValues[] = $buyerId;
         }
 
-        if (func_num_args() > 1) {
+        if (func_num_args() >= 2) {
             $whereParts[] = 'ss.status = ?';
             $whereValues[] = $status;
         }
@@ -4054,9 +4131,14 @@ class BuyCoursesPlugin extends Plugin
             $whereValues[] = $nodeId;
         }
 
-        $conditions = ['order' => $defaultOrder];
+        $conditions = [
+            'ORDER' => $defaultOrder,
+        ];
+
         if (!empty($whereParts)) {
-            $conditions['where'] = [implode(' AND ', $whereParts) => $whereValues];
+            $conditions['WHERE'] = [
+                implode(' AND ', $whereParts) => $whereValues,
+            ];
         }
 
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id";
@@ -4233,6 +4315,32 @@ class BuyCoursesPlugin extends Plugin
         return $services;
     }
 
+    public function hasBlockingUserServiceSaleForCurrentBuyer(int $serviceId): bool
+    {
+        $userId = api_get_user_id();
+        if ($userId <= 0 || $serviceId <= 0) {
+            return false;
+        }
+
+        $service = $this->getService($serviceId);
+        if (empty($service)) {
+            return false;
+        }
+
+        $nodeType = (int) ($service['applies_to'] ?? 0);
+
+        if (self::SERVICE_TYPE_USER !== $nodeType) {
+            return false;
+        }
+
+        return $this->hasBlockingActiveServiceSale(
+            $userId,
+            $serviceId,
+            $nodeType,
+            $userId
+        );
+    }
+
     /**
      * Register a Service sale.
      *
@@ -4258,6 +4366,13 @@ class BuyCoursesPlugin extends Plugin
         $service = $this->getService($serviceId);
 
         if (empty($service)) {
+            return false;
+        }
+
+        $nodeType = (int) ($service['applies_to'] ?? 0);
+        $nodeId = (int) $infoSelect;
+
+        if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
             return false;
         }
 
@@ -4310,8 +4425,8 @@ class BuyCoursesPlugin extends Plugin
             'price_without_tax' => $priceWithoutTax,
             'tax_perc' => $taxPerc,
             'tax_amount' => $taxAmount,
-            'node_type' => $service['applies_to'],
-            'node_id' => $infoSelect,
+            'node_type' => $nodeType,
+            'node_id' => $nodeId,
             'buyer_id' => $userId,
             'buy_date' => api_get_utc_datetime(),
             'date_start' => api_get_utc_datetime(),

@@ -20,6 +20,13 @@
       </div>
     </header>
 
+    <div
+      v-if="loadError"
+      class="rounded-2xl border border-warning bg-support-6 px-5 py-4 text-body-2 text-gray-90"
+    >
+      {{ loadError }}
+    </div>
+
     <section class="space-y-4">
       <div class="flex items-center justify-between gap-4">
         <h2 class="text-xl font-semibold text-gray-90">
@@ -226,6 +233,7 @@ const router = useRouter()
 const platformConfigStore = usePlatformConfig()
 
 const isLoading = ref(false)
+const loadError = ref("")
 const activeServices = ref([])
 const purchaseHistory = ref([])
 const hasResolvedPluginState = ref(false)
@@ -263,18 +271,25 @@ async function redirectToIndex() {
 
 async function loadMyServicesData() {
   isLoading.value = true
+  loadError.value = ""
 
   try {
     const { data } = await axios.get("/my-services-data")
-    activeServices.value = data.activeServices ?? []
-    purchaseHistory.value = data.purchaseHistory ?? []
+
+    activeServices.value = Array.isArray(data?.activeServices) ? data.activeServices : []
+    purchaseHistory.value = Array.isArray(data?.purchaseHistory) ? data.purchaseHistory : []
+    loadError.value = typeof data?.error === "string" ? data.error : ""
   } catch (error) {
-    if (error?.response?.status === 404 || error?.response?.status === 403) {
+    const status = error?.response?.status ?? 0
+
+    if (404 === status) {
       await redirectToIndex()
       return
     }
 
-    throw error
+    activeServices.value = []
+    purchaseHistory.value = []
+    loadError.value = t("Unable to load your services right now.")
   } finally {
     isLoading.value = false
   }

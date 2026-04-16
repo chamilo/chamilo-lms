@@ -59,6 +59,20 @@ if (empty($service)) {
     exit;
 }
 
+$currentAppliesTo = isset($service['applies_to'])
+    ? (int) $service['applies_to']
+    : BuyCoursesPlugin::SERVICE_TYPE_NONE;
+
+$appliesToLabels = [
+    BuyCoursesPlugin::SERVICE_TYPE_NONE => get_lang('None'),
+    BuyCoursesPlugin::SERVICE_TYPE_USER => get_lang('User'),
+    BuyCoursesPlugin::SERVICE_TYPE_COURSE => get_lang('Course'),
+    BuyCoursesPlugin::SERVICE_TYPE_SESSION => get_lang('Session'),
+    BuyCoursesPlugin::SERVICE_TYPE_TEMPLATE_CERTIFICATE => get_lang('TemplateTitleCertificate'),
+];
+
+$currentAppliesToLabel = $appliesToLabels[$currentAppliesTo] ?? get_lang('None');
+
 $customImageUrl = $plugin->getServiceImageUrl('simg-'.$serviceId.'.png');
 
 $formDefaultValues = array_merge(
@@ -97,41 +111,16 @@ $form->addElement(
     [$plugin->get_lang('Duration'), null, get_lang('Days')],
     ['step' => 1]
 );
-$form->addElement(
-    'radio',
-    'applies_to',
-    $plugin->get_lang('AppliesTo'),
-    get_lang('None'),
-    0
+
+$form->addHidden('applies_to', (string) $currentAppliesTo);
+$form->addHtml(
+    '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AppliesTo').'</div>'.
+    '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentAppliesToLabel.'</div>'.
+    '<div class="mt-1 text-caption text-gray-50">This value is read-only in the current implementation to preserve legacy services.</div>'.
+    '</div>'
 );
-$form->addElement(
-    'radio',
-    'applies_to',
-    null,
-    get_lang('User'),
-    1
-);
-$form->addElement(
-    'radio',
-    'applies_to',
-    null,
-    get_lang('Course'),
-    2
-);
-$form->addElement(
-    'radio',
-    'applies_to',
-    null,
-    get_lang('Session'),
-    3
-);
-$form->addElement(
-    'radio',
-    'applies_to',
-    null,
-    get_lang('TemplateTitleCertificate'),
-    4
-);
+
 $form->addSelect(
     'owner_id',
     get_lang('Owner'),
@@ -555,28 +544,36 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(syncRichEditorsVisibility, 250);
     setTimeout(syncRichEditorsVisibility, 1000);
 
-    const appliesToUserRadio = form.querySelector('input[name="applies_to"][value="1"]');
-    const appliesToRadios = form.querySelectorAll('input[name="applies_to"]');
+    const appliesToField = form.querySelector('input[name="applies_to"]');
+    const appliesToRadios = form.querySelectorAll('input[name="applies_to"][type="radio"]');
     const benefitsSection = form.querySelector('.buycourses-benefits-section');
 
     function toggleBenefitsSection() {
-        if (!benefitsSection || !appliesToUserRadio) {
+        if (!benefitsSection || !appliesToField) {
             return;
         }
 
-        const isUserService = appliesToUserRadio.checked;
-        benefitsSection.classList.toggle('hidden', !isUserService);
+        let appliesToValue = appliesToField.value
+
+        if (appliesToRadios.length > 0) {
+            const selectedRadio = form.querySelector('input[name="applies_to"][type="radio"]:checked')
+            appliesToValue = selectedRadio ? selectedRadio.value : appliesToValue
+        }
+
+        const isUserService = '1' === String(appliesToValue)
+
+        benefitsSection.classList.toggle('hidden', !isUserService)
 
         benefitsSection.querySelectorAll('input, select, textarea').forEach((field) => {
-            field.disabled = !isUserService;
-        });
+            field.disabled = !isUserService
+        })
     }
 
     appliesToRadios.forEach((radio) => {
-        radio.addEventListener('change', toggleBenefitsSection);
-    });
+        radio.addEventListener('change', toggleBenefitsSection)
+    })
 
-    toggleBenefitsSection();
+    toggleBenefitsSection()
 
     const fileInput = form.querySelector('input[type="file"][name="picture"], input[type="file"]');
     const cropButton = Array.from(form.querySelectorAll('button, .btn, input[type="button"], input[type="submit"]')).find((element) => {

@@ -5,7 +5,7 @@
     @apply hover:border-primary;
 
     &.p-focus {
-      @apply border-primary outline-0 outline-none ring-2 ring-primary/20;
+      @apply border-primary outline-0 outline-none;
     }
   }
 
@@ -73,7 +73,8 @@
 
   &-overlay {
     @apply absolute overflow-auto top-0 left-0 mt-1 min-w-full bg-white text-gray-90 border-0 border-none rounded-lg shadow-xl
-      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
+    before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-b-lg before:rounded-t-none
+    after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
   }
 
   &-header {
@@ -134,7 +135,7 @@
 
 select.p-select {
   @apply px-4 py-2
-    focus:border-primary focus:text-gray-90 focus:outline-0 focus:outline-none;
+  focus:border-primary focus:text-gray-90 focus:outline-0 focus:outline-none;
 }
 
 .p-select-sm .p-select-dropdown .p-icon {

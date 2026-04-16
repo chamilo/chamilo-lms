@@ -10,6 +10,7 @@
     "Title": "C\u00edm",
     "Content": "Tartalom",
     "Invitees": "Megh\u00edvottak",
+    "Invitee": "Megh\u00edvott",
     "Are you sure you want to delete this item?": "Biztosan t\u00f6r\u00f6lni szeretn\u00e9 ezt az elemet?",
     "Search": "Keres\u00e9s",
     "User list": "Felhaszn\u00e1l\u00f3lista",
@@ -119,6 +120,7 @@
     "Edit profile": "Profil szerkeszt\u00e9se",
     "Clear filter results": "Sz\u0171r\u00e9si eredm\u00e9nyek t\u00f6rl\u00e9se",
     "Teachers": "Kurzus tan\u00e1rok",
+    "Teacher": "Edz\u0151",
     "Category": "Kateg\u00f3ria",
     "Language": "Nyelv",
     "Go to the course": "Ugr\u00e1s a kurzusra",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URL",
     "Path": "\u00datvonal",
     "Administrator": "Adminisztr\u00e1tor",
+    "Superior (n+1)": "Fels\u0151bb szint\u0171 (n+1)",
     "Administrator login": "Adminisztr\u00e1tor login",
     "Administrator password": "Adminisztr\u00e1tor jelsz\u00f3",
     "You may want to change this": "Ezt \u00e9rdemes megv\u00e1ltoztatni",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} friss\u00edtve",
     "Course sessions": "Munkamenetek",
     "Learners": "Hallgat\u00f3k",
+    "Learner": "Hallgat\u00f3",
     "Progress": "Halad\u00e1s",
     "Diagnosis": "Diagn\u00f3zis",
     "Add user": "Felhaszn\u00e1l\u00f3 hozz\u00e1ad\u00e1sa",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Ment\u00e9s \u00e9s beilleszt\u00e9s",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "A ment\u00e9s csak akkor t\u00e1mogatott, ha a szolg\u00e1ltat\u00f3 base64 tartalmat ad vissza. Ha csak URL-t kapott, a ment\u00e9s le van tiltva, hogy elker\u00fclje a let\u00f6lt\u00e9st a b\u00f6ng\u00e9sz\u0151ben.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "A vide\u00f3 sikeresen l\u00e9trej\u00f6tt, de a ment\u00e9s le van tiltva, mert a szolg\u00e1ltat\u00f3 URL-t adott vissza.",
-    "The file was saved, but its URL could not be resolved.": "A f\u00e1jl elment\u00e9sre ker\u00fclt, de URL-je nem oldhat\u00f3 fel."
+    "The file was saved, but its URL could not be resolved.": "A f\u00e1jl elment\u00e9sre ker\u00fclt, de URL-je nem oldhat\u00f3 fel.",
+    "Items": "Items"
 }

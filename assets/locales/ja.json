@@ -10,6 +10,7 @@
     "Title": "\u30bf\u30a4\u30c8\u30eb",
     "Content": "\u5185\u5bb9",
     "Invitees": "\u62db\u5f85\u8005",
+    "Invitee": "\u62db\u5f85\u8005",
     "Are you sure you want to delete this item?": "\u3053\u306e\u9805\u76ee\u3092\u524a\u9664\u3057\u3066\u3082\u3088\u308d\u3057\u3044\u3067\u3059\u304b\uff1f",
     "Search": "\u691c\u7d22",
     "User list": "\u30e6\u30fc\u30b6\u30fc\u4e00\u89a7",
@@ -119,6 +120,7 @@
     "Edit profile": "\u30d7\u30ed\u30d5\u30a1\u30a4\u30eb\u3092\u7de8\u96c6",
     "Clear filter results": "\u30d5\u30a3\u30eb\u30bf\u30fc\u7d50\u679c\u3092\u30af\u30ea\u30a2",
     "Teachers": "\u6559\u54e1",
+    "Teacher": "\u6559\u5e2b",
     "Category": "\u6c60\u5f69",
     "Language": "\u8a00\u8a9e",
     "Go to the course": "\u30b3\u30fc\u30b9\u3078\u79fb\u52d5",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URL",
     "Path": "\u30d1\u30b9",
     "Administrator": "\u7ba1\u7406\u8005",
+    "Superior (n+1)": "\u4e0a\u4f4d\uff08n+1\uff09",
     "Administrator login": "\u7ba1\u7406\u8005\u30ed\u30b0\u30a4\u30f3",
     "Administrator password": "\u7ba1\u7406\u8005\u30d1\u30b9\u30ef\u30fc\u30c9",
     "You may want to change this": "\u3053\u308c\u3092\u5909\u66f4\u3059\u308b\u3053\u3068\u3092\u304a\u52e7\u3081\u3057\u307e\u3059",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} \u304c\u66f4\u65b0\u3055\u308c\u307e\u3057\u305f",
     "Course sessions": "\u30b3\u30fc\u30b9\u306e\u30bb\u30c3\u30b7\u30e7\u30f3",
     "Learners": "\u5b66\u751f",
+    "Learner": "\u5b66\u751f",
     "Progress": "\u9032\u6357",
     "Diagnosis": "\u8a3a\u65ad",
     "Add user": "\u30e6\u30fc\u30b6\u30fc\u3092\u8ffd\u52a0",
@@ -1874,5 +1878,6 @@
     "Save and insert": "\u4fdd\u5b58\u3057\u3066\u633f\u5165",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "\u4fdd\u5b58\u306f\u3001\u30d7\u30ed\u30d0\u30a4\u30c0\u304cbase64\u30b3\u30f3\u30c6\u30f3\u30c4\u3092\u8fd4\u3059\u5834\u5408\u306e\u307f\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u307e\u3059\u3002URL\u306e\u307f\u53d7\u3051\u53d6\u3063\u305f\u5834\u5408\u3001\u30d6\u30e9\u30a6\u30b6\u3067\u306e\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9\u3092\u907f\u3051\u308b\u305f\u3081\u4fdd\u5b58\u304c\u7121\u52b9\u306b\u306a\u308a\u307e\u3059\u3002",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "\u30d3\u30c7\u30aa\u306f\u6b63\u5e38\u306b\u751f\u6210\u3055\u308c\u307e\u3057\u305f\u304c\u3001\u30d7\u30ed\u30d0\u30a4\u30c0\u304cURL\u3092\u8fd4\u3057\u305f\u305f\u3081\u4fdd\u5b58\u304c\u7121\u52b9\u3067\u3059\u3002",
-    "The file was saved, but its URL could not be resolved.": "\u30d5\u30a1\u30a4\u30eb\u306f\u4fdd\u5b58\u3055\u308c\u307e\u3057\u305f\u304c\u3001\u305d\u306eURL\u3092\u89e3\u6c7a\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002"
+    "The file was saved, but its URL could not be resolved.": "\u30d5\u30a1\u30a4\u30eb\u306f\u4fdd\u5b58\u3055\u308c\u307e\u3057\u305f\u304c\u3001\u305d\u306eURL\u3092\u89e3\u6c7a\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002",
+    "Items": "Items"
 }

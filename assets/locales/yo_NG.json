@@ -10,6 +10,7 @@
     "Title": "Ak\u1ecdle",
     "Content": "\u00c0k\u00f3\u00f3n\u00fa",
     "Invitees": "\u00c0w\u00f9j\u1ecd",
+    "Invitee": "Olupil\u1eb9\u1e63\u1eb9",
     "Are you sure you want to delete this item?": "\u1e62e o m\u1ecd\u0300 p\u00e9 o f\u1eb9\u0301 pa ohun y\u00ec\u00ed run?",
     "Search": "\u1e62\u00e0w\u00e1r\u00ed",
     "User list": "Akoj\u1ecd olumulo",
@@ -118,6 +119,7 @@
     "Edit profile": "\u1e62\u00e0t\u00fan\u1e63e profaili",
     "Clear filter results": "Pa aw\u1ecdn abajade \u00e0l\u1eb9\u0300 \u00e0f\u1eb9\u0301 k\u00far\u00f2",
     "Teachers": "Oluk\u1ecd",
+    "Teacher": "Ol\u00f9k\u1ecd",
     "Category": "\u1eb8ka",
     "Language": "\u00c8d\u00e8",
     "Go to the course": "L\u1ecd s\u00ed \u1eb9k\u1ecd",
@@ -247,6 +249,7 @@
     "Chamilo URL": "URL Chamilo",
     "Path": "\u1eccna",
     "Administrator": "Alakoso",
+    "Superior (n+1)": "Ti o ga jul\u1ecd (n+1)",
     "Administrator login": "\u00ccw\u1ecdle Olut\u1ecdju",
     "Administrator password": "\u1eccr\u1ecd igbaniw\u1ecdle olut\u1ecdju",
     "You may want to change this": "O le f\u1eb9 lati yi eyi pada",
@@ -331,6 +334,7 @@
     "{0} updated": "{0} ti \u1e63e imudojuiw\u1ecdn",
     "Course sessions": "Aw\u1ecdn igba \u1eb9k\u1ecd",
     "Learners": "Aw\u1ecdn ak\u1eb9k\u1ecd",
+    "Learner": "Ak\u1eb9\u0301k\u1ecd\u0300\u1ecd\u0301",
     "Progress": "Il\u1ecdsiwaju",
     "Diagnosis": "\u00ccd\u00ed\u00e0y\u00e8 ay\u1eb9wo",
     "Add user": "\u1e62\u00e0fik\u00fan ol\u00f9p\u1eb9\u0300l\u00f2",
@@ -1871,5 +1875,6 @@
     "Save and insert": "Fipam\u1ecd\u0301 k\u00ed o fi sii",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Fipam\u1ecd\u0301 \u1e63\u00ec\u1e63\u1eb9\u0301 p\u00e0t\u00f3 l\u00e1s\u00eck\u00f2 t\u00ed \u00f2n\u00edp\u00e8 y\u00ec\u00ed b\u00e1 \u1e63e \u00ecd\u00e1s\u00edl\u1eb9\u0300 \u00e0k\u00ed\u00ec base64. T\u00ed o k\u00f2 gba URL n\u00eckan, fipam\u1ecd\u0301 y\u00e0g\u00f2 l\u00e1ti y\u1eb9\u0300w\u00f2 \u00ecgb\u00e9 \u00ecd\u00e0s\u00edl\u1eb9\u0300 n\u00edn\u00fa \u1eb9\u0300r\u1ecd \u00ecw\u00f2ye.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "F\u00edd\u00ed\u00f2 ti \u1e63\u1eb9\u0300d\u00e1 y\u00edy\u1ecdl\u1eb9, \u1e63\u00f9gb\u1ecd\u0301n fipam\u1ecd\u0301 y\u00e0g\u00f2 n\u00edtor\u00ed \u00f2n\u00edp\u00e8 y\u00ec\u00ed fi URL pad\u00e0.",
-    "The file was saved, but its URL could not be resolved.": "\u00c0\u00ecf\u1ecdw\u1ecd\u0301sow\u1ecdp\u1ecd y\u00ec\u00ed ti fipam\u1ecd\u0301, \u1e63\u00f9gb\u1ecd\u0301n URL r\u1eb9\u0300 k\u00f2 \u1e63e \u00ecd\u00e1h\u00f9n."
+    "The file was saved, but its URL could not be resolved.": "\u00c0\u00ecf\u1ecdw\u1ecd\u0301sow\u1ecdp\u1ecd y\u00ec\u00ed ti fipam\u1ecd\u0301, \u1e63\u00f9gb\u1ecd\u0301n URL r\u1eb9\u0300 k\u00f2 \u1e63e \u00ecd\u00e1h\u00f9n.",
+    "Items": "Items"
 }

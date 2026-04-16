@@ -10,6 +10,7 @@
     "Title": "T\u00edtulu",
     "Content": "Conten\u00edu",
     "Invitees": "Convid\u00e1os",
+    "Invitee": "Convid\u00e1u",
     "Are you sure you want to delete this item?": "\u00bfTas seguru de que quies desaniciar esti elementu?",
     "Search": "Buscar",
     "User list": "Llista d'usuarios",
@@ -119,6 +120,7 @@
     "Edit profile": "Editar informaci\u00f3n",
     "Clear filter results": "Desaniciar resultaos del filtru",
     "Teachers": "Profesores del cursu",
+    "Teacher": "Mayestru",
     "Category": "Categor\u00eda",
     "Language": "Idioma",
     "Go to the course": "Ir al cursu",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL de Chamilo",
     "Path": "Cam\u00edn",
     "Administrator": "Alministrador",
+    "Superior (n+1)": "Superior (n+1)",
     "Administrator login": "Nome d'usuariu del alministrador",
     "Administrator password": "Contrase\u00f1a d'administrador",
     "You may want to change this": "Pues ye posible que quies camudar esto",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} actualiz\u00e1u",
     "Course sessions": "Sesiones",
     "Learners": "Estudiantes",
+    "Learner": "Estudiante",
     "Progress": "Progresu",
     "Diagnosis": "Diagn\u00f3sticu",
     "Add user": "Amestar usuariu",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Guardar y inserir",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "El guard\u00e1u nam\u00e1i ta soport\u00e1u cuando el proveed\u00f3r devuelve conten\u00edu base64. Si nam\u00e1i recibisti una URL, el guard\u00e1u ta desactiv\u00e1u pa evitar la descarga nel navegador.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "V\u00eddeo xener\u00e1u correutamente, pero el guard\u00e1u ta desactiv\u00e1u porque el proveed\u00f3r devolvi\u00f3 una URL.",
-    "The file was saved, but its URL could not be resolved.": "El ficher guardose, pero nun se pudo resolver la so URL."
+    "The file was saved, but its URL could not be resolved.": "El ficher guardose, pero nun se pudo resolver la so URL.",
+    "Items": "Items"
 }

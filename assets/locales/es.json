@@ -10,6 +10,7 @@
     "Title": "T\u00edtulo",
     "Content": "Contenido",
     "Invitees": "Invitados",
+    "Invitee": "Invitado",
     "Are you sure you want to delete this item?": "\u00bfEst\u00e1s seguro de que quieres eliminar este elemento?",
     "Search": "Buscar",
     "User list": "Lista de usuarios",
@@ -119,6 +120,7 @@
     "Edit profile": "Editar informaci\u00f3n",
     "Clear filter results": "Limpiar resultados",
     "Teachers": "Profesores del curso",
+    "Teacher": "Profesor",
     "Category": "Categor\u00eda",
     "Language": "Idioma",
     "Go to the course": "Ir al curso",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL de Chamilo",
     "Path": "Ruta",
     "Administrator": "Administrador",
+    "Superior (n+1)": "Superior (n+1)",
     "Administrator login": "Nombre de usuario del administrador",
     "Administrator password": "Contrase\u00f1a del administrador",
     "You may want to change this": "Es probable que quiera cambiar este valor",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} actualizado",
     "Course sessions": "Sesiones de formaci\u00f3n",
     "Learners": "Estudiantes",
+    "Learner": "Estudiante",
     "Progress": "Progreso",
     "Diagnosis": "Diagn\u00f3stico",
     "Add user": "A\u00f1adir usuario",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Guardar e insertar",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "El guardado solo est\u00e1 soportado cuando el proveedor devuelve contenido base64. Si solo recibi\u00f3 una URL, el guardado est\u00e1 deshabilitado para evitar la descarga en el navegador.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video generado exitosamente, pero el guardado est\u00e1 deshabilitado porque el proveedor devolvi\u00f3 una URL.",
-    "The file was saved, but its URL could not be resolved.": "El archivo se guard\u00f3, pero no se pudo resolver su URL."
+    "The file was saved, but its URL could not be resolved.": "El archivo se guard\u00f3, pero no se pudo resolver su URL.",
+    "Items": "Items"
 }

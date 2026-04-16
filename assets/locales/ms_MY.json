@@ -10,6 +10,7 @@
     "Title": "Tajuk",
     "Content": "Kandungan",
     "Invitees": "Jemputan",
+    "Invitee": "Jemputan",
     "Are you sure you want to delete this item?": "Adakah anda pasti ingin memadam item ini?",
     "Search": "Cari",
     "User list": "Senarai pengguna",
@@ -119,6 +120,7 @@
     "Edit profile": "Edit profil",
     "Clear filter results": "Kosongkan hasil penapis",
     "Teachers": "Guru",
+    "Teacher": "Guru",
     "Category": "Pusat Pengajian",
     "Language": "Bahasa",
     "Go to the course": "Pergi ke kursus",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL Chamilo",
     "Path": "Laluan",
     "Administrator": "Pentadbir",
+    "Superior (n+1)": "Atasan (n+1)",
     "Administrator login": "Log masuk Pentadbir",
     "Administrator password": "Kata laluan pentadbir",
     "You may want to change this": "Anda mungkin mahu mengubahnya",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} dikemas kini",
     "Course sessions": "Sesi kursus",
     "Learners": "Pelajar",
+    "Learner": "Pelajar",
     "Progress": "Kemajuan",
     "Diagnosis": "Diagnosis",
     "Add user": "Tambah pengguna",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Simpan dan masukkan",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Penyimpanan hanya disokong apabila penyedia mengembalikan kandungan base64. Jika anda hanya menerima URL, penyimpanan dilumpuhkan untuk mengelakkan pemindahan turun dalam pelayar.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video dijana dengan berjaya, tetapi penyimpanan dilumpuhkan kerana penyedia mengembalikan URL.",
-    "The file was saved, but its URL could not be resolved.": "Fail disimpan, tetapi URLnya tidak dapat diselesaikan."
+    "The file was saved, but its URL could not be resolved.": "Fail disimpan, tetapi URLnya tidak dapat diselesaikan.",
+    "Items": "Items"
 }

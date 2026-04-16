@@ -253,6 +253,17 @@ export function useTopbarLoggedIn(props) {
     return "/main/survey/pending.php"
   })
 
+  const myServicesUrl = computed(() => {
+    try {
+      const resolvedRoute = router.resolve({ name: "MyServices" })
+
+      if (resolvedRoute?.href) {
+        return resolvedRoute.href
+      }
+    } catch {}
+    return "/my-services"
+  })
+
   const isAnonymous = computed(() => {
     const currentUser = props.currentUser || securityStore.user || {}
     const roles = Array.isArray(currentUser.roles) ? currentUser.roles : []
@@ -284,6 +295,27 @@ export function useTopbarLoggedIn(props) {
 
     return "/main/ticket/tickets.php?" + searchParams.toString()
   })
+
+  const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+
+  function normalizeBooleanFlag(value) {
+    if (typeof value === "boolean") {
+      return value
+    }
+
+    if (typeof value === "number") {
+      return value === 1
+    }
+
+    if (typeof value === "string") {
+      const normalized = value.trim().toLowerCase()
+      return ["1", "true", "yes", "on"].includes(normalized)
+    }
+
+    return false
+  }
+
+  const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
 
   function isSettingTrue(keys, defaultValue = false) {
     for (const key of keys) {
@@ -363,6 +395,13 @@ export function useTopbarLoggedIn(props) {
       items[0].items.push({
         label: t("Pending surveys"),
         url: pendingSurveysUrl.value,
+      })
+    }
+
+    if (!isAnonymous.value && showMyServicesLink.value) {
+      items[0].items.push({
+        label: t("My services"),
+        url: myServicesUrl.value,
       })
     }
 

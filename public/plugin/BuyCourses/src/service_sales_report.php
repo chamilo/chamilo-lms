@@ -9,6 +9,7 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Throwable;
 
 $cidReset = true;
 
@@ -293,6 +294,24 @@ function styleBuyCoursesFormHtml(string $html): string
     return $result;
 }
 
+/**
+ * Format a monetary amount without breaking the page when the sale has a missing or invalid ISO currency code.
+ */
+function formatServiceSaleAmount(BuyCoursesPlugin $plugin, float $amount, mixed $isoCode): string
+{
+    $normalizedIsoCode = strtoupper(trim((string) $isoCode));
+
+    if ('' === $normalizedIsoCode) {
+        return number_format($amount, 2, '.', ',');
+    }
+
+    try {
+        return $plugin->getPriceWithCurrencyFromIsoCode($amount, $normalizedIsoCode);
+    } catch (Throwable) {
+        return number_format($amount, 2, '.', ',').' '.$normalizedIsoCode;
+    }
+}
+
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
@@ -340,15 +359,17 @@ foreach ($servicesSales as &$sale) {
         $sale['lastname'] ?? ''
     );
     $sale['status_label'] = $saleStatuses[$sale['status']] ?? ($sale['status'] ?? '');
-    $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode(
+    $sale['total_price'] = formatServiceSaleAmount(
+        $plugin,
         (float) ($sale['price'] ?? 0),
-        $sale['iso_code'] ?? ''
+        $sale['iso_code'] ?? null
     );
 
-    if (isset($sale['discount_amount']) && 0 != $sale['discount_amount']) {
-        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode(
-            (float) $sale['discount_amount'],
-            $sale['iso_code']
+    if (0.0 !== (float) ($sale['discount_amount'] ?? 0)) {
+        $sale['total_discount'] = formatServiceSaleAmount(
+            $plugin,
+            (float) ($sale['discount_amount'] ?? 0),
+            $sale['iso_code'] ?? null
         );
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }

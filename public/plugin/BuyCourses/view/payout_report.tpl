@@ -1,5 +1,5 @@
 {% autoescape false %}
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+<div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6">
 {{ form }}
 <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
     <table class="min-w-full divide-y divide-gray-25">

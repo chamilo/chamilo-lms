@@ -412,22 +412,32 @@ $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
 $taxEnable = 'true' === $plugin->get('tax_enable');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
-if (isset($_GET['action'], $_GET['id'])) {
-    if ('delete_taccount' === $_GET['action']) {
-        try {
-            $plugin->deleteTransferAccount($_GET['id']);
+if (isset($_GET['action'], $_GET['id']) && 'delete_taccount' === $_GET['action']) {
+    $transferAccountId = is_scalar($_GET['id']) ? (int) $_GET['id'] : 0;
 
-            $message = Display::return_message(get_lang('Deleted'), 'success');
-        } catch (Exception $e) {
-            $message = Display::return_message($e->getMessage(), 'error');
-        }
-
-        Display::addFlash($message);
+    if ($transferAccountId <= 0) {
+        Display::addFlash(
+            Display::return_message(get_lang('InvalidId'), 'error')
+        );
 
         header('Location: '.api_get_self());
-
         exit;
     }
+
+    try {
+        $plugin->deleteTransferAccount($transferAccountId);
+
+        Display::addFlash(
+            Display::return_message(get_lang('Deleted'), 'success')
+        );
+    } catch (Exception $e) {
+        Display::addFlash(
+            Display::return_message($e->getMessage(), 'error')
+        );
+    }
+
+    header('Location: '.api_get_self());
+    exit;
 }
 
 $globalSettingForm = new FormValidator('currency');
@@ -485,12 +495,15 @@ foreach ($currencies as $currency) {
     }
 }
 
-$globalSettingForm->addTextarea(
+$globalSettingForm->addHtmlEditor(
     'terms_and_conditions',
     [
-        get_lang('TermsAndConditions'),
+        $plugin->get_lang('TermsAndConditions'),
         $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'),
-    ]
+    ],
+    false,
+    false,
+    ['ToolbarSet' => 'Minimal']
 );
 
 $globalSettingForm->addElement(
@@ -706,7 +719,16 @@ $commissionForm->addElement(
     'number',
     'commission',
     [$plugin->get_lang('Commission'), null, '%'],
-    ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
+    [
+        'step' => 1,
+        'min' => 0,
+        'max' => 100,
+        'placeholder' => '0',
+        'inputmode' => 'numeric',
+        'style' => 'max-width: 6rem;',
+        'class' => 'js-buycourses-commission-input',
+        'cols-size' => [3, 3, 1],
+    ]
 );
 $commissionForm->addButtonSave(get_lang('Save'));
 $commissionForm->setDefaults($plugin->getPlatformCommission());
@@ -780,7 +802,7 @@ $transferInfoForm->addHtmlEditor(
     false,
     ['ToolbarSet' => 'Minimal']
 );
-$transferInfoForm->addButtonCreate(get_lang('Save'));
+$transferInfoForm->addButtonSave(get_lang('Save'));
 $transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
 
 $culqiForm = new FormValidator('culqi_config');
@@ -968,11 +990,11 @@ $tpl->assign('invoicing_enable', $invoicingEnable);
 $tpl->assign('enabled_payment_method_labels', $enabledPaymentMethodLabels);
 $tpl->assign('enabled_payment_method_count', count($enabledPaymentMethodLabels));
 
-$tpl->assign('global_config_form', styleBuyCoursesFormHtml($globalSettingForm->returnForm()));
+$tpl->assign('global_config_form', $globalSettingForm->returnForm());
 $tpl->assign('paypal_form', styleBuyCoursesFormHtml($paypalForm->returnForm()));
 $tpl->assign('commission_form', styleBuyCoursesFormHtml($commissionForm->returnForm()));
 $tpl->assign('transfer_form', styleBuyCoursesFormHtml($transferForm->returnForm()));
-$tpl->assign('transfer_info_form', styleBuyCoursesFormHtml($transferInfoForm->returnForm()));
+$tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
 $tpl->assign('culqi_form', styleBuyCoursesFormHtml($culqiForm->returnForm()));
 $tpl->assign('tpv_redsys_form', styleBuyCoursesFormHtml($htmlTpvRedsys));
 $tpl->assign('stripe_form', styleBuyCoursesFormHtml($stripeForm->returnForm()));

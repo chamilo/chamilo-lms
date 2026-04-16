@@ -11,6 +11,7 @@ use ChamiloSession as Session;
  */
 $plugin = BuyCoursesPlugin::create();
 $allowAnonymousUsers = 'true' === $plugin->get('unregistered_users_enable');
+$includeServices = 'true' === $plugin->get('include_services');
 $userIsAnonymous = api_is_anonymous();
 
 $registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
@@ -36,6 +37,8 @@ if ($userIsAnonymous && !$allowAnonymousUsers) {
 }
 
 $tpl = new Template();
+$tpl->assign('services_are_included', $includeServices);
+
 $content = $tpl->fetch('BuyCourses/view/index.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template(false);

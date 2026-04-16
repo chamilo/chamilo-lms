@@ -33,16 +33,14 @@ final class DocumentUsageAction extends AbstractController
             return new JsonResponse(['error' => 'Course not found'], 404);
         }
 
-        $courseQuotaMb = (int) $this->courseHelper->resolveCourseStorageQuotaMbForCourse($course); // 0 => unlimited
-        $docsQuotaMb = (int) $this->courseHelper->resolveDocumentsToolQuotaMb(); // 0 => unlimited
+        $courseQuotaMb = (int) $this->courseHelper->resolveCourseStorageQuotaMbForCourse($course);
+        $docsQuotaMb = (int) $this->courseHelper->resolveDocumentsToolQuotaMbForCourse($course);
 
         $courseQuotaBytes = $courseQuotaMb > 0 ? $courseQuotaMb * 1024 * 1024 : 0;
         $docsQuotaBytes = $docsQuotaMb > 0 ? $docsQuotaMb * 1024 * 1024 : 0;
 
-        // Global course storage usage (all tools)
         $courseStorageUsedBytes = (int) $this->documentRepository->getCourseStorageUsedBytes($course);
 
-        // Documents usage breakdown (deduplicated)
         $usage = $this->documentRepository->getDocumentUsageBreakdownByCourse($course);
         $bytesCourse = (int) ($usage['course'] ?? 0);
         $bytesSessions = (int) ($usage['sessions'] ?? 0);
@@ -53,7 +51,6 @@ final class DocumentUsageAction extends AbstractController
         $availableDocsBytes = $docsQuotaBytes > 0 ? max($docsQuotaBytes - $docsUsedBytes, 0) : PHP_INT_MAX;
         $availableBytes = min($availableCourseBytes, $availableDocsBytes);
 
-        // Determine which quota is limiting (for percent)
         $limiterQuotaBytes = 0;
         $limiter = 'unlimited';
 
@@ -72,8 +69,11 @@ final class DocumentUsageAction extends AbstractController
             $availablePercent = round(($availableBytes / $limiterQuotaBytes) * 100, 4);
         }
 
-        $totalForChart = ($limiterQuotaBytes > 0) ? $limiterQuotaBytes : max($docsUsedBytes + max((int) $availableBytes, 0), 1);
-        $availableBytesForChart = (PHP_INT_MAX === $availableBytes) ? 0 : (int) $availableBytes;
+        $totalForChart = $limiterQuotaBytes > 0
+            ? $limiterQuotaBytes
+            : max($docsUsedBytes + max((int) $availableBytes, 0), 1);
+
+        $availableBytesForChart = PHP_INT_MAX === $availableBytes ? 0 : (int) $availableBytes;
 
         $labels = [];
         $data = [];
@@ -93,7 +93,7 @@ final class DocumentUsageAction extends AbstractController
             $data[] = $this->pct($bytesGroups, $totalForChart);
         }
 
-        $labels[] = \sprintf(
+        $labels[] = sprintf(
             (string) $this->translator->trans('Available space (%s)'),
             $this->formatBytes($availableBytesForChart)
         );
@@ -105,24 +105,14 @@ final class DocumentUsageAction extends AbstractController
             ],
             'labels' => $labels,
             'quota' => [
-                'limiter' => $limiter, // 'course' | 'documents' | 'unlimited'
-
-                // Total quotas (null = unlimited)
+                'limiter' => $limiter,
                 'courseQuotaBytes' => $courseQuotaBytes > 0 ? $courseQuotaBytes : null,
                 'documentsQuotaBytes' => $docsQuotaBytes > 0 ? $docsQuotaBytes : null,
-
-                // Used
                 'courseStorageUsedBytes' => $courseStorageUsedBytes,
                 'documentsUsedBytes' => $docsUsedBytes,
-
-                // Remaining per quota (null = unlimited)
-                'availableCourseBytes' => (PHP_INT_MAX === $availableCourseBytes) ? null : (int) $availableCourseBytes,
-                'availableDocumentsBytes' => (PHP_INT_MAX === $availableDocsBytes) ? null : (int) $availableDocsBytes,
-
-                // Remaining actually applicable to uploads (min(course, documents))
-                'availableBytes' => (PHP_INT_MAX === $availableBytes) ? null : (int) $availableBytes,
-
-                // Percent of the LIMITING quota (for your <1% warning)
+                'availableCourseBytes' => PHP_INT_MAX === $availableCourseBytes ? null : (int) $availableCourseBytes,
+                'availableDocumentsBytes' => PHP_INT_MAX === $availableDocsBytes ? null : (int) $availableDocsBytes,
+                'availableBytes' => PHP_INT_MAX === $availableBytes ? null : (int) $availableBytes,
                 'availablePercent' => $availablePercent,
             ],
         ]);
@@ -142,8 +132,8 @@ final class DocumentUsageAction extends AbstractController
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $size = (float) max($bytes, 0);
         $i = 0;
-
         $max = \count($units) - 1;
+
         while ($size >= 1024 && $i < $max) {
             $size /= 1024;
             $i++;

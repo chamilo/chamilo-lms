@@ -400,3 +400,23 @@ $strings['DeleteFrequency'] = 'Delete period';
 $strings['Invoicing'] = 'Invoicing';
 $strings['Teachers'] = 'Teachers';
 $strings['TermsAndConditions'] = 'Terms and conditions';
+
+
+$strings['GrantedBenefits'] = 'Granted benefits';
+$strings['BenefitMaxCoursesTitle'] = 'Maximum courses';
+$strings['BenefitMaxCoursesDescription'] = 'Additional courses the buyer can keep active or create while the service is valid.';
+$strings['BenefitHostingLimitTitle'] = 'Hosting limit per course';
+$strings['BenefitHostingLimitDescription'] = 'Maximum number of students allowed in the buyer\'s courses while the service is active.';
+$strings['BenefitDocumentQuotaTitle'] = 'Document quota';
+$strings['BenefitDocumentQuotaDescription'] = 'Maximum document quota granted to the buyer\'s courses while the service is active.';
+$strings['BenefitCoursesUnit'] = 'courses';
+$strings['BenefitUsersUnit'] = 'users';
+$strings['BenefitMegabytesUnit'] = 'MB';
+$strings['BenefitSummaryValueUntil'] = '%s until %s';
+$strings['Receipt'] = 'Receipt';
+$strings['PurchaseHistory'] = 'Purchase history';
+$strings['PurchaseHistoryDescription'] = 'Review your completed purchases and download the related receipts when available.';
+$strings['ActiveServices'] = 'Active services';
+$strings['ActiveServicesDescription'] = 'These services are still valid and currently applied to your account.';
+$strings['NoActiveServicesYet'] = 'You do not have active services yet.';
+$strings['NoPurchasesYet'] = 'You do not have purchases yet.';

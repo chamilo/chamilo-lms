@@ -1,5 +1,8 @@
 <template>
-  <div class="mx-auto w-full max-w-[1600px] space-y-8 px-4 py-8 sm:px-6 lg:px-8 2xl:px-10">
+  <div
+    v-if="buyCoursesEnabled === true"
+    class="mx-auto w-full max-w-[1600px] space-y-8 px-4 py-8 sm:px-6 lg:px-8 2xl:px-10"
+  >
     <header class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm lg:p-8">
       <div class="space-y-3">
         <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
@@ -55,7 +58,7 @@
                 </h3>
 
                 <div
-                  class="inline-flex items-center rounded-full bg-support-2 px-3 py-1 text-xs font-semibold text-gray-70"
+                  class="inline-flex items-center rounded-full bg-support-2 px-3 py-1 text-xs font-semibold text-gray-50"
                 >
                   {{ t("Valid until") }}: {{ formatDate(service.dateEnd || service.date_end) }}
                 </div>
@@ -137,22 +140,22 @@
           <table class="min-w-full text-left text-sm">
             <thead class="bg-support-2">
               <tr>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Date") }}
                 </th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Type") }}
                 </th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Product") }}
                 </th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Reference") }}
                 </th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Amount") }}
                 </th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-70">
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">
                   {{ t("Receipt") }}
                 </th>
               </tr>
@@ -164,7 +167,7 @@
                 :key="getPurchaseKey(purchase)"
                 class="align-top"
               >
-                <td class="whitespace-nowrap px-4 py-3 text-gray-70">
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">
                   {{ formatDate(purchase.date) }}
                 </td>
 
@@ -176,7 +179,7 @@
                   {{ purchase.productName || purchase.product_name || "—" }}
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-3 text-gray-70">
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">
                   {{ purchase.reference || "—" }}
                 </td>
 
@@ -213,24 +216,88 @@
 
 <script setup>
 import axios from "axios"
-import { onMounted, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRouter } from "vue-router"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
+const router = useRouter()
+const platformConfigStore = usePlatformConfig()
 
-const isLoading = ref(true)
+const isLoading = ref(false)
 const activeServices = ref([])
 const purchaseHistory = ref([])
+const hasResolvedPluginState = ref(false)
 
-onMounted(async () => {
+function normalizeBooleanFlag(value) {
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  if (typeof value === "number") {
+    return value === 1
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase()
+    return ["1", "true", "yes", "on"].includes(normalized)
+  }
+
+  return false
+}
+
+const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses ?? null)
+
+const buyCoursesEnabled = computed(() => {
+  if (buyCoursesConfig.value === null) {
+    return null
+  }
+
+  return normalizeBooleanFlag(buyCoursesConfig.value.enabled)
+})
+
+async function redirectToIndex() {
+  await router.replace({ name: "Index" })
+}
+
+async function loadMyServicesData() {
+  isLoading.value = true
+
   try {
     const { data } = await axios.get("/my-services-data")
     activeServices.value = data.activeServices ?? []
     purchaseHistory.value = data.purchaseHistory ?? []
+  } catch (error) {
+    if (error?.response?.status === 404 || error?.response?.status === 403) {
+      await redirectToIndex()
+      return
+    }
+
+    throw error
   } finally {
     isLoading.value = false
   }
-})
+}
+
+watch(
+  buyCoursesEnabled,
+  async (enabled) => {
+    if (enabled === null || hasResolvedPluginState.value) {
+      return
+    }
+
+    hasResolvedPluginState.value = true
+
+    if (!enabled) {
+      await redirectToIndex()
+      return
+    }
+
+    await loadMyServicesData()
+  },
+  { immediate: true },
+)
 
 function formatDate(dateValue) {
   if (!dateValue) {

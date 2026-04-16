@@ -296,6 +296,27 @@ export function useTopbarLoggedIn(props) {
     return "/main/ticket/tickets.php?" + searchParams.toString()
   })
 
+  const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+
+  function normalizeBooleanFlag(value) {
+    if (typeof value === "boolean") {
+      return value
+    }
+
+    if (typeof value === "number") {
+      return value === 1
+    }
+
+    if (typeof value === "string") {
+      const normalized = value.trim().toLowerCase()
+      return ["1", "true", "yes", "on"].includes(normalized)
+    }
+
+    return false
+  }
+
+  const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
+
   function isSettingTrue(keys, defaultValue = false) {
     for (const key of keys) {
       const value = platformConfigStore.getSetting(key)
@@ -377,7 +398,7 @@ export function useTopbarLoggedIn(props) {
       })
     }
 
-    if (!isAnonymous.value) {
+    if (!isAnonymous.value && showMyServicesLink.value) {
       items[0].items.push({
         label: t("My services"),
         url: myServicesUrl.value,

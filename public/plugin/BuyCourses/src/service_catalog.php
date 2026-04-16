@@ -19,6 +19,111 @@ if (!$includeServices) {
     api_not_allowed(true);
 }
 
+$paymentStatus = isset($_GET['payment_status']) ? trim((string) $_GET['payment_status']) : '';
+$paymentReason = isset($_GET['payment_reason']) ? trim((string) $_GET['payment_reason']) : '';
+$serviceName = isset($_GET['service_name']) ? Security::remove_XSS((string) $_GET['service_name']) : '';
+
+$getPendingReasonMessage = static function (BuyCoursesPlugin $plugin, string $pendingReason): string {
+    switch ($pendingReason) {
+        case 'address':
+            return $plugin->get_lang('PendingReasonByAddress');
+        case 'authorization':
+            return $plugin->get_lang('PendingReasonByAuthorization');
+        case 'echeck':
+            return $plugin->get_lang('PendingReasonByEcheck');
+        case 'intl':
+            return $plugin->get_lang('PendingReasonByIntl');
+        case 'multicurrency':
+            return $plugin->get_lang('PendingReasonByMulticurrency');
+        case 'order':
+            return $plugin->get_lang('PendingReasonByOrder');
+        case 'paymentreview':
+            return $plugin->get_lang('PendingReasonByPaymentReview');
+        case 'regulatoryreview':
+            return $plugin->get_lang('PendingReasonByRegulatoryReview');
+        case 'unilateral':
+            return $plugin->get_lang('PendingReasonByUnilateral');
+        case 'upgrade':
+            return $plugin->get_lang('PendingReasonByUpgrade');
+        case 'verify':
+            return $plugin->get_lang('PendingReasonByVerify');
+        case 'other':
+        default:
+            return $plugin->get_lang('PendingReasonByOther');
+    }
+};
+
+switch ($paymentStatus) {
+    case 'completed':
+        if ('' !== $serviceName) {
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        $plugin->get_lang('SubscriptionToServiceXSuccessful'),
+                        $serviceName
+                    ),
+                    'success',
+                    false
+                )
+            );
+        } else {
+            Display::addFlash(
+                Display::return_message(
+                    'Service purchase completed successfully.',
+                    'success',
+                    false
+                )
+            );
+        }
+        break;
+
+    case 'cancelled':
+        Display::addFlash(
+            Display::return_message(
+                $plugin->get_lang('OrderCancelled'),
+                'warning',
+                false
+            )
+        );
+        break;
+
+    case 'pending':
+        Display::addFlash(
+            Display::return_message(
+                'PayPal payment is pending: '.$getPendingReasonMessage($plugin, $paymentReason),
+                'warning',
+                false
+            )
+        );
+        break;
+
+    case 'error':
+        switch ($paymentReason) {
+            case 'paypal_credentials':
+                $message = 'PayPal credentials are incomplete.';
+                break;
+            case 'paypal_ack':
+                $message = 'PayPal payment could not be confirmed.';
+                break;
+            case 'complete_service_sale':
+                $message = $plugin->get_lang('ErrorContactPlatformAdmin');
+                break;
+            case 'unexpected_status':
+            default:
+                $message = 'Unexpected PayPal payment status.';
+                break;
+        }
+
+        Display::addFlash(
+            Display::return_message(
+                $message,
+                'error',
+                false
+            )
+        );
+        break;
+}
+
 /**
  * Normalize a price filter coming from the query string.
  */

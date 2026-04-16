@@ -183,6 +183,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_I
         ['onDelete' => 'CASCADE']
     );
 }
+
 if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COMMISSION))) {
     $commissions = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_COMMISSION));
     $commissions->addColumn(
@@ -735,11 +736,6 @@ if (!buycourses_plugin_table_has_rows($stripeTable)) {
     );
 }
 
-$schemaSql = $pluginSchema->toSql($platform);
-foreach ($schemaSql as $sql) {
-    $connection->executeStatement($sql);
-}
-
 $currencies = [
     ['AD', 'Andorra', 'EUR', 'AND', 0],
     ['AE', 'United Arab Emirates', 'AED', 'ARE', 0],
@@ -993,7 +989,6 @@ $currencies = [
     ['ZM', 'Zambia', 'ZMK', 'ZMB', 0],
     ['ZW', 'Zimbabwe', 'ZWL', 'ZWE', 0],
 ];
-
 
 $serviceRelTableName = buycourses_plugin_table(BuyCoursesPlugin::TABLE_SERVICE_REL_EXTRA_FIELD);
 if (false === $sm->tablesExist($serviceRelTableName)) {

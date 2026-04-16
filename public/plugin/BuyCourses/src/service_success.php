@@ -61,13 +61,19 @@ $paypalUsername = (string) ($paypalParams['username'] ?? '');
 $paypalPassword = (string) ($paypalParams['password'] ?? '');
 $paypalSignature = (string) ($paypalParams['signature'] ?? '');
 
-if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
-    Display::addFlash(
-        Display::return_message('PayPal credentials are incomplete.', 'error', false)
-    );
+$redirectToCatalog = static function (string $catalogUrl, array $params = []): void {
+    $query = http_build_query($params);
+    $redirectUrl = '' !== $query ? $catalogUrl.'?'.$query : $catalogUrl;
 
-    header('Location: '.$catalogUrl);
+    header('Location: '.$redirectUrl);
     exit;
+};
+
+if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
+    $redirectToCatalog($catalogUrl, [
+        'payment_status' => 'error',
+        'payment_reason' => 'paypal_credentials',
+    ]);
 }
 
 require_once 'paypalfunctions.php';
@@ -99,12 +105,9 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
         unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
 
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('OrderCancelled'), 'error', false)
-        );
-
-        header('Location: '.$catalogUrl);
-        exit;
+        $redirectToCatalog($catalogUrl, [
+            'payment_status' => 'cancelled',
+        ]);
     }
 
     if ('confirm' === $action) {
@@ -128,98 +131,47 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
                 ' | message='.$errorMessage
             );
 
-            Display::addFlash(
-                Display::return_message(
-                    'PayPal ACK: '.$ack.' | Code: '.$errorCode.' | Message: '.$errorMessage,
-                    'error',
-                    false
-                )
-            );
+            unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
 
-            header('Location: '.$catalogUrl);
-            exit;
+            $redirectToCatalog($catalogUrl, [
+                'payment_status' => 'error',
+                'payment_reason' => 'paypal_ack',
+            ]);
         }
 
         switch ($paymentStatus) {
             case 'COMPLETED':
             case 'PROCESSED':
                 $serviceSaleIsCompleted = $plugin->completeServiceSale((int) $serviceSale['id']);
+
                 error_log(
                     'BuyCourses completeServiceSale result for sale '.$serviceSale['id'].': '.
                     var_export($serviceSaleIsCompleted, true)
                 );
 
+                unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
+
                 if ($serviceSaleIsCompleted) {
-                    Display::addFlash(
-                        Display::return_message(
-                            sprintf(
-                                $plugin->get_lang('SubscriptionToServiceXSuccessful'),
-                                $serviceSale['service']['name']
-                            ),
-                            'success',
-                            false
-                        )
-                    );
-                } else {
-                    Display::addFlash(
-                        Display::return_message(
-                            $plugin->get_lang('ErrorContactPlatformAdmin'),
-                            'error',
-                            false
-                        )
-                    );
+                    $redirectToCatalog($catalogUrl, [
+                        'payment_status' => 'completed',
+                        'service_name' => (string) ($serviceSale['service']['name'] ?? ''),
+                    ]);
                 }
+
+                $redirectToCatalog($catalogUrl, [
+                    'payment_status' => 'error',
+                    'payment_reason' => 'complete_service_sale',
+                ]);
 
                 break;
 
             case 'PENDING':
-                switch ($pendingReason) {
-                    case 'address':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByAddress');
-                        break;
-                    case 'authorization':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByAuthorization');
-                        break;
-                    case 'echeck':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByEcheck');
-                        break;
-                    case 'intl':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByIntl');
-                        break;
-                    case 'multicurrency':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByMulticurrency');
-                        break;
-                    case 'order':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByOrder');
-                        break;
-                    case 'paymentreview':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByPaymentReview');
-                        break;
-                    case 'regulatoryreview':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByRegulatoryReview');
-                        break;
-                    case 'unilateral':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByUnilateral');
-                        break;
-                    case 'upgrade':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByUpgrade');
-                        break;
-                    case 'verify':
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
-                        break;
-                    case 'other':
-                    default:
-                        $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
-                        break;
-                }
+                unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
 
-                Display::addFlash(
-                    Display::return_message(
-                        'PayPal payment is pending: '.$purchaseStatus,
-                        'warning',
-                        false
-                    )
-                );
+                $redirectToCatalog($catalogUrl, [
+                    'payment_status' => 'pending',
+                    'payment_reason' => $pendingReason,
+                ]);
 
                 break;
 
@@ -228,21 +180,15 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
                     'BuyCourses unexpected PayPal payment status for sale '.$serviceSale['id'].': '.$paymentStatus
                 );
 
-                Display::addFlash(
-                    Display::return_message(
-                        'Unexpected PayPal payment status: '.$paymentStatus,
-                        'error',
-                        false
-                    )
-                );
+                unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
+
+                $redirectToCatalog($catalogUrl, [
+                    'payment_status' => 'error',
+                    'payment_reason' => 'unexpected_status',
+                ]);
 
                 break;
         }
-
-        unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
-
-        header('Location: '.$catalogUrl);
-        exit;
     }
 }
 

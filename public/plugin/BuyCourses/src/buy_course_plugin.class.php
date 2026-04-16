@@ -891,19 +891,21 @@ class BuyCoursesPlugin extends Plugin
             return;
         }
 
-        $courseIds = array_map(static fn (array $row): int => (int) ($row['c_id'] ?? 0), $teacherCourseRows);
-        $courseIds = array_values(array_filter($courseIds));
+        $courseIds = array_map(
+            static fn (array $row): int => (int) ($row['c_id'] ?? 0),
+            $teacherCourseRows
+        );
+        $courseIds = array_values(array_unique(array_filter($courseIds)));
 
         if (empty($courseIds)) {
             return;
         }
 
         $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
-        $placeholders = implode(',', array_fill(0, count($courseIds), '?'));
+        $courseIdsSql = implode(',', $courseIds);
 
         Database::query(
-            "DELETE FROM $frozenTable WHERE course_id IN ($placeholders)",
-            $courseIds
+            "DELETE FROM $frozenTable WHERE course_id IN ($courseIdsSql)"
         );
     }
 

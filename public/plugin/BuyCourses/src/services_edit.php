@@ -288,7 +288,7 @@ function buycoursesBuildServiceFormShell(
     $enhancerScript = buycoursesBuildServiceFormEnhancerScript();
 
     return <<<HTML
-        <div class="buycourses-service-shell mx-auto max-w-7xl space-y-6 px-4 pb-10">
+        <div class="buycourses-service-shell mx-auto w-full space-y-6 px-4 pb-10">
             <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-3">

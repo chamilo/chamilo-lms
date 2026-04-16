@@ -495,12 +495,15 @@ foreach ($currencies as $currency) {
     }
 }
 
-$globalSettingForm->addTextarea(
+$globalSettingForm->addHtmlEditor(
     'terms_and_conditions',
     [
-        get_lang('TermsAndConditions'),
+        $plugin->get_lang('TermsAndConditions'),
         $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'),
-    ]
+    ],
+    false,
+    false,
+    ['ToolbarSet' => 'Minimal']
 );
 
 $globalSettingForm->addElement(
@@ -716,7 +719,16 @@ $commissionForm->addElement(
     'number',
     'commission',
     [$plugin->get_lang('Commission'), null, '%'],
-    ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
+    [
+        'step' => 1,
+        'min' => 0,
+        'max' => 100,
+        'placeholder' => '0',
+        'inputmode' => 'numeric',
+        'style' => 'max-width: 6rem;',
+        'class' => 'js-buycourses-commission-input',
+        'cols-size' => [3, 3, 1],
+    ]
 );
 $commissionForm->addButtonSave(get_lang('Save'));
 $commissionForm->setDefaults($plugin->getPlatformCommission());
@@ -978,7 +990,7 @@ $tpl->assign('invoicing_enable', $invoicingEnable);
 $tpl->assign('enabled_payment_method_labels', $enabledPaymentMethodLabels);
 $tpl->assign('enabled_payment_method_count', count($enabledPaymentMethodLabels));
 
-$tpl->assign('global_config_form', styleBuyCoursesFormHtml($globalSettingForm->returnForm()));
+$tpl->assign('global_config_form', $globalSettingForm->returnForm());
 $tpl->assign('paypal_form', styleBuyCoursesFormHtml($paypalForm->returnForm()));
 $tpl->assign('commission_form', styleBuyCoursesFormHtml($commissionForm->returnForm()));
 $tpl->assign('transfer_form', styleBuyCoursesFormHtml($transferForm->returnForm()));

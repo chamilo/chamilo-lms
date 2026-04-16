@@ -3409,15 +3409,16 @@ class BuyCoursesPlugin extends Plugin
         int $payoutId = 0,
         int $userId = 0
     ) {
-        $condition = ($payoutId) ? 'AND p.id = '.($payoutId) : '';
-        $condition2 = ($userId) ? ' AND p.user_id = '.($userId) : '';
-        $typeResult = ($condition) ? 'first' : 'all';
+        $condition = $payoutId ? 'AND p.id = '.((int) $payoutId) : '';
+        $condition2 = $userId ? ' AND p.user_id = '.((int) $userId) : '';
+        $typeResult = $payoutId ? 'first' : 'all';
+
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $saleTable = Database::get_main_table(self::TABLE_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $paypalExtraField = Database::select(
             '*',
@@ -3429,19 +3430,21 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if (!$paypalExtraField) {
-            return false;
+            return 'first' === $typeResult ? [] : [];
         }
 
+        $paypalFieldId = (int) $paypalExtraField['id'];
+
         $innerJoins = "
-            INNER JOIN $userTable u ON p.user_id = u.id
-            INNER JOIN $saleTable s ON s.id = p.sale_id
-            INNER JOIN $currencyTable c ON s.currency_id = c.id
-            LEFT JOIN  $extraFieldValues efv ON p.user_id = efv.item_id
-            AND field_id = ".((int) $paypalExtraField['id']).'
-        ';
+        INNER JOIN $userTable u ON p.user_id = u.id
+        INNER JOIN $saleTable s ON s.id = p.sale_id
+        INNER JOIN $currencyTable c ON s.currency_id = c.id
+        LEFT JOIN $extraFieldValuesTable efv ON p.user_id = efv.item_id
+        AND efv.field_id = $paypalFieldId
+    ";
 
         return Database::select(
-            'p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code',
+            'p.*, u.firstname, u.lastname, efv.field_value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code',
             "$payoutsTable p $innerJoins",
             [
                 'where' => ['p.status = ? '.$condition.' '.$condition2 => $status],
@@ -3458,7 +3461,7 @@ class BuyCoursesPlugin extends Plugin
     public function verifyPaypalAccountByBeneficiary(int $userId)
     {
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $paypalExtraField = Database::select(
             '*',
@@ -3473,12 +3476,13 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        $paypalFieldId = $paypalExtraField['id'];
+        $paypalFieldId = (int) $paypalExtraField['id'];
+
         $paypalAccount = Database::select(
             'field_value',
-            $extraFieldValues,
+            $extraFieldValuesTable,
             [
-                'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, $userId]],
+                'where' => ['field_id = ? AND item_id = ?' => [$paypalFieldId, $userId]],
             ],
             'first'
         );
@@ -3487,7 +3491,7 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        if ('' === $paypalAccount['field_value']) {
+        if ('' === trim((string) $paypalAccount['field_value'])) {
             return false;
         }
 

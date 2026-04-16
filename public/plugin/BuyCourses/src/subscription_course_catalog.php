@@ -36,12 +36,7 @@ $totalItems = $plugin->getCatalogSubscriptionCourseList(
 $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
 
 // Keep a safe back target.
-if (api_is_platform_admin()) {
-    $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php';
-} else {
-    $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
-}
-
+$defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $defaultBackUrl;
 
 // View.

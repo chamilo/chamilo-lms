@@ -1,5 +1,5 @@
 {% autoescape false %}
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+<div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6">
 <script type="text/javascript" src="../resources/js/modals.js"></script>
 
 <div id="buy-courses-tabs" class="space-y-6">

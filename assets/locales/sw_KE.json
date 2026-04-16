@@ -10,6 +10,7 @@
     "Title": "Kichwa",
     "Content": "Yaliyomo",
     "Invitees": "Waliokaiwa",
+    "Invitee": "Mwalikiwao",
     "Are you sure you want to delete this item?": "Je, una uhakika unataka kufuta kipengee hiki?",
     "Search": "Tafuta",
     "User list": "Orodha ya watumiaji",
@@ -119,6 +120,7 @@
     "Edit profile": "Hariri profaili",
     "Clear filter results": "Futa matokeo ya kichuja",
     "Teachers": "Walimu",
+    "Teacher": "Mwalimu",
     "Category": "Jamii",
     "Language": "Lugha",
     "Go to the course": "Nenda kwenye kozi",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL ya Chamilo",
     "Path": "Njia",
     "Administrator": "Msimamizi",
+    "Superior (n+1)": "Wa juu (n+1)",
     "Administrator login": "Kuingia kwa msimamizi",
     "Administrator password": "Nenosiri la msimamizi",
     "You may want to change this": "Unaweza kutaka kubadilisha hii",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} imesasishwa",
     "Course sessions": "Mikakati ya kozi",
     "Learners": "Wanafunzi",
+    "Learner": "Mwanafunzi",
     "Progress": "Maendeleo",
     "Diagnosis": "Uchunguzi",
     "Add user": "Ongeza mtumiaji",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Hifadhi na ingiza",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Kuhifadhi kunaungwa mkono tu wakati mtoa huduma anarudisha maudhui ya base64. Ikiwa umepokea URL pekee, kuhifadhi kimezimwa ili kuepuka upakuaji kwenye kivinjari.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video imetengenezwa kwa mafanikio, lakini kuhifadhi kimezimwa kwa sababu mtoa huduma alirudisha URL.",
-    "The file was saved, but its URL could not be resolved.": "Faili imehifadhiwa, lakini URL yake haikuweza kutatuliwa."
+    "The file was saved, but its URL could not be resolved.": "Faili imehifadhiwa, lakini URL yake haikuweza kutatuliwa.",
+    "Items": "Items"
 }

@@ -6,78 +6,51 @@
 {% set activeTab = 'sessions' %}
 {% endif %}
 
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div class="space-y-2">
-                <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-                    {{ plugin_title|default('plugin_title'|get_plugin_lang('BuyCoursesPlugin')) }}
+<div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
+                        {{ plugin_title|default('plugin_title'|get_plugin_lang('BuyCoursesPlugin')) }}
+                    </div>
+
+                    <div>
+                        <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
+                            {{ page_title|default('AvailableCourses'|get_lang) }}
+                        </h1>
+                        <p class="mt-2 text-sm leading-6 text-gray-50">
+                            {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </p>
+                    </div>
                 </div>
 
-                <div>
-                    <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
-                        {{ page_title|default('AvailableCourses'|get_lang) }}
-                    </h1>
-                    <p class="mt-2 text-sm leading-6 text-gray-50">
-                        {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}
-                    </p>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    {% if back_url is defined and back_url %}
+                        <a
+                            href="{{ back_url }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                        >
+                            <em class="fa fa-arrow-left fa-fw"></em>
+                            {{ 'Back'|get_lang }}
+                        </a>
+                    {% endif %}
+
+                    {% if activeTab == 'services' %}
+                        <a
+                            href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                        >
+                            <em class="fa fa-cart-plus fa-fw"></em>
+                            {{ 'NewService'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </a>
+                    {% endif %}
                 </div>
             </div>
-
-            {% if activeTab == 'services' %}
-            <div class="flex items-center">
-                <a
-                        href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
-                >
-                    <em class="fa fa-cart-plus fa-fw"></em>
-                    {{ 'NewService'|get_plugin_lang('BuyCoursesPlugin') }}
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </section>
+        </section>
 
     {% if sessions_are_included or services_are_included %}
     <nav class="overflow-x-auto">
-        <div class="inline-flex min-w-full rounded-2xl border border-gray-25 bg-white p-1 shadow-sm sm:min-w-0">
-            <a
-                    href="{{ url('index') ~ 'plugin/BuyCourses/src/list.php' }}"
-                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition
-                    {{ activeTab == 'courses'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-gray-90 hover:bg-support-2 hover:text-primary'
-                    }}"
-            >
-                {{ 'Courses'|get_lang }}
-            </a>
 
-            {% if sessions_are_included %}
-            <a
-                    href="{{ url('index') ~ 'plugin/BuyCourses/src/list_session.php' }}"
-                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition
-                        {{ activeTab == 'sessions'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-gray-90 hover:bg-support-2 hover:text-primary'
-                    }}"
-            >
-                {{ 'Sessions'|get_lang }}
-            </a>
-            {% endif %}
-
-            {% if services_are_included %}
-            <a
-                    href="{{ url('index') ~ 'plugin/BuyCourses/src/list_service.php' }}"
-                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition
-                        {{ activeTab == 'services'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-gray-90 hover:bg-support-2 hover:text-primary'
-                    }}"
-            >
-                {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
-            </a>
-            {% endif %}
-        </div>
     </nav>
     {% endif %}
 

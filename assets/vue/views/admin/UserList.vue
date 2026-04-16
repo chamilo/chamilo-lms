@@ -111,7 +111,7 @@
                 :key="code"
                 :value="code"
               >
-                {{ label }}
+                {{ t(label) }}
               </option>
             </select>
           </div>
@@ -561,7 +561,7 @@ const roleOptions = {
 function formatRole(role) {
   const upper = role.toUpperCase()
   const label = roleLabelsMap.value[upper] || roleLabelsMap.value[role]
-  if (label) return label
+  if (label) return t(label)
   return role
     .replace(/^ROLE_/, "")
     .replace(/_/g, " ")

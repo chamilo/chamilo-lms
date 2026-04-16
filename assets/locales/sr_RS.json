@@ -10,6 +10,7 @@
     "Title": "naslov",
     "Content": "\u0421\u0430\u0434\u0440\u0436\u0430\u0458",
     "Invitees": "Pozvani",
+    "Invitee": "Pozvani",
     "Are you sure you want to delete this item?": "Da li ste sigurni da \u017eelite da obri\u0161ete ovu stavku?",
     "Search": "\u041f\u0440\u0435\u0442\u0440\u0430\u0433\u0430",
     "User list": "Lista korisnika",
@@ -119,6 +120,7 @@
     "Edit profile": "Izmeni profil",
     "Clear filter results": "O\u010disti rezultate filtera",
     "Teachers": "Nastavnici",
+    "Teacher": "Nastavnik",
     "Category": "Kategorije",
     "Language": "Jezik",
     "Go to the course": "Idi na kurs",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URL",
     "Path": "Putanja",
     "Administrator": "Administrator",
+    "Superior (n+1)": "Vi\u0161i (n+1)",
     "Administrator login": "Korisni\u010dko ime administratora",
     "Administrator password": "Administrator lozinka",
     "You may want to change this": "Mo\u017eda \u0107ete hteti da promenite ovo",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} a\u017euriran",
     "Course sessions": "\u0421\u0435\u0441\u0438\u0458\u0435 \u043a\u0443\u0440\u0441\u0430",
     "Learners": "\u0423\u0447\u0435\u043d\u0438\u0446\u0438",
+    "Learner": "Polaznik",
     "Progress": "\u041d\u0430\u043f\u0440\u0435\u0434\u0430\u043a",
     "Diagnosis": "Dijagnoza",
     "Add user": "Dodaj korisnika",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Sa\u010duvaj i ubaci",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "\u010cuvanje je podr\u017eano samo kada pru\u017ealac vra\u0107a base64 sadr\u017eaj. Ako ste dobili samo URL, \u010duvanje je onemogu\u0107eno da bi se izbeglo preuzimanje u pretra\u017eiva\u010du.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video je uspe\u0161no generisan, ali \u010duvanje je onemogu\u0107eno jer je pru\u017ealac vratio URL.",
-    "The file was saved, but its URL could not be resolved.": "Datoteka je sa\u010duvana, ali njen URL nije mogu\u0107e re\u0161iti."
+    "The file was saved, but its URL could not be resolved.": "Datoteka je sa\u010duvana, ali njen URL nije mogu\u0107e re\u0161iti.",
+    "Items": "Items"
 }

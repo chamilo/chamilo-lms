@@ -401,3 +401,23 @@ $strings['Invoicing'] = 'Facturación';
 $strings['Teachers'] = 'Docentes';
 $strings['TermsAndConditions'] = 'Términos y condiciones';
 $strings['DiscountCoupons'] = 'Cupones descuento';
+
+
+$strings['GrantedBenefits'] = 'Beneficios otorgados';
+$strings['BenefitMaxCoursesTitle'] = 'Máximo de cursos';
+$strings['BenefitMaxCoursesDescription'] = 'Cursos adicionales que el comprador puede mantener activos o crear mientras el servicio esté vigente.';
+$strings['BenefitHostingLimitTitle'] = 'Límite de usuarios por curso';
+$strings['BenefitHostingLimitDescription'] = 'Número máximo de estudiantes permitido en los cursos del comprador mientras el servicio esté activo.';
+$strings['BenefitDocumentQuotaTitle'] = 'Cuota de documentos';
+$strings['BenefitDocumentQuotaDescription'] = 'Cuota máxima de documentos otorgada a los cursos del comprador mientras el servicio esté activo.';
+$strings['BenefitCoursesUnit'] = 'cursos';
+$strings['BenefitUsersUnit'] = 'usuarios';
+$strings['BenefitMegabytesUnit'] = 'MB';
+$strings['BenefitSummaryValueUntil'] = '%s hasta %s';
+$strings['Recibo'] = 'Recibo';
+$strings['PurchaseHistory'] = 'Historial de compras';
+$strings['PurchaseHistoryDescription'] = 'Revisa tus compras completadas y descarga los recibos relacionados cuando estén disponibles.';
+$strings['ActiveServices'] = 'Servicios activos';
+$strings['ActiveServicesDescription'] = 'Estos servicios siguen vigentes y actualmente se aplican a tu cuenta.';
+$strings['NoActiveServicesYet'] = 'Aún no tienes servicios activos.';
+$strings['NoPurchasesYet'] = 'Aún no tienes compras registradas.';

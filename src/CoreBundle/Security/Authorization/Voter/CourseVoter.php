@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,6 +35,7 @@ class CourseVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly TranslatorInterface $translator,
+        private readonly BuyCoursesExpiryHelper $buyCoursesExpiryHelper,
         RequestStack $requestStack,
         EntityManagerInterface $entityManager
     ) {
@@ -87,13 +89,23 @@ class CourseVoter extends Voter
                     return false;
                 }
 
+                // Hard deny frozen users before any visibility branch grants access
+                // or adds contextual course roles to the token.
+                if ($tokenUser instanceof User && $this->isFrozenCourseAccessDenied($tokenUser, $course, $session)) {
+                    return false;
+                }
+
                 // Course::OPEN_WORLD
                 if ($course->isPublic()) {
                     if ($tokenUser instanceof User) {
                         $user = $this->getTokenSafeUser($token, $tokenUser);
                         if ($this->isStudent($user, $course, $session)) {
                             if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
+                                throw new NotAllowedException(
+                                    $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                    'warning',
+                                    403
+                                );
                             }
                         }
 
@@ -119,7 +131,11 @@ class CourseVoter extends Voter
 
                         if ($this->isStudent($user, $course, $session)) {
                             if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
+                                throw new NotAllowedException(
+                                    $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                    'warning',
+                                    403
+                                );
                             }
                         }
 
@@ -154,7 +170,11 @@ class CourseVoter extends Voter
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
 
                         if ($this->isCourseLockedForUser($user, $course, $session->getId())) {
-                            throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
+                            throw new NotAllowedException(
+                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                'warning',
+                                403
+                            );
                         }
 
                         $token->setUser($user);
@@ -174,7 +194,11 @@ class CourseVoter extends Voter
                     }
 
                     if ($this->isCourseLockedForUser($user, $course)) {
-                        throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
+                        throw new NotAllowedException(
+                            $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                            'warning',
+                            403
+                        );
                     }
 
                     $token->setUser($user);
@@ -249,5 +273,23 @@ class CourseVoter extends Voter
         }
 
         return $course->hasUserAsStudent($user);
+    }
+
+    private function isFrozenCourseAccessDenied(User $user, Course $course, ?Session $session): bool
+    {
+        if ($course->hasUserAsTeacher($user)) {
+            return false;
+        }
+
+        if (null !== $session) {
+            if ($session->hasUserAsGeneralCoach($user) || $session->hasCourseCoachInCourse($user, $course)) {
+                return false;
+            }
+        }
+
+        return $this->buyCoursesExpiryHelper->isFrozenEnrollment(
+            (int) $course->getId(),
+            (int) $user->getId()
+        );
     }
 }

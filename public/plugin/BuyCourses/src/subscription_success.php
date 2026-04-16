@@ -76,7 +76,7 @@ if ($buyingSession && !empty($session)) {
 }
 
 $paypalParams = $plugin->getPaypalParams();
-$pruebas = 1 == ($paypalParams['sandbox'] ?? 0);
+$test = 1 == ($paypalParams['sandbox'] ?? 0);
 $paypalUsername = $paypalParams['username'] ?? '';
 $paypalPassword = $paypalParams['password'] ?? '';
 $paypalSignature = $paypalParams['signature'] ?? '';

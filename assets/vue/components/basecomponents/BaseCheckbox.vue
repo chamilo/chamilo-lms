@@ -2,9 +2,10 @@
   <div class="field-checkbox">
     <Checkbox
       v-model="modelValue"
-      :binary="true"
+      :binary="value === undefined"
       :inputId="id"
       :name="name"
+      :value="value"
     />
     <label
       :for="id"
@@ -18,7 +19,7 @@
 import Checkbox from "primevue/checkbox"
 
 const modelValue = defineModel({
-  type: Boolean,
+  type: [Boolean, Array],
   required: true,
 })
 
@@ -34,6 +35,10 @@ defineProps({
   label: {
     type: String,
     required: true,
+  },
+  value: {
+    type: [String, Number, Object],
+    default: undefined,
   },
 })
 </script>

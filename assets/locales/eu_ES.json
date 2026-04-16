@@ -10,6 +10,7 @@
     "Title": "Titulua",
     "Content": "Edukia",
     "Invitees": "Gonbidatuak",
+    "Invitee": "Gonbidatua",
     "Are you sure you want to delete this item?": "Ziur zaude elementu hau ezabatu nahi duzula?",
     "Search": "Bilatu",
     "User list": "Erabiltzaile zerrenda",
@@ -119,6 +120,7 @@
     "Edit profile": "Editatu informazioa",
     "Clear filter results": "Garbitu iragazitako emaitzak",
     "Teachers": "Ikastaroko irakasleak",
+    "Teacher": "Irakaslea",
     "Category": "Kategoria",
     "Language": "Hizkuntza",
     "Go to the course": "Joan ikastarora",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URLa",
     "Path": "Ibilbidea",
     "Administrator": "Kudeatzailea",
+    "Superior (n+1)": "Gainbehera (n+1)",
     "Administrator login": "Kudeatzailearen erabiltzaile izena",
     "Administrator password": "Administratzailearen pasahitza",
     "You may want to change this": "Alderantziz alda dezakezu hau",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} eguneratua",
     "Course sessions": "Saioak",
     "Learners": "Ikasleak",
+    "Learner": "Ikaslea",
     "Progress": "Aurrerapena",
     "Diagnosis": "Diagnostikoa",
     "Add user": "Erabiltzailea gehitu",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Gorde eta txertatu",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Gordetzea soilik onartzen da hornitzaileak base64 eduki itzultzen duenean. URL bat soilik jasotzen baduzu, gordetzea desgaituta dago nabigatzailean deskargatzea saihesteko.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Bideoa ondo sortu da, baina gordetzea desgaituta dago hornitzaileak URL bat itzuli duelako.",
-    "The file was saved, but its URL could not be resolved.": "Fitxategia gorde da, baina haren URL ezin da ebazki."
+    "The file was saved, but its URL could not be resolved.": "Fitxategia gorde da, baina haren URL ezin da ebazki.",
+    "Items": "Items"
 }

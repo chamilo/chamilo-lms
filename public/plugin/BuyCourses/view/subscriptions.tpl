@@ -4,7 +4,7 @@
 {% set activeTab = 'sessions' %}
 {% endif %}
 
-<div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+<div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-3">

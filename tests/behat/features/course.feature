@@ -13,20 +13,16 @@ Feature: Course tools basic testing
 
   Scenario: See the courses list
     Given I am on "/admin/course-list"
-    And I wait for the page to be loaded
     And I should not see "not authorized"
 
 
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
-    And I wait for the page to be loaded
-    And I wait for the page to be loaded
     Then I should see "Add course"
 
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
-    And I wait for the page to be loaded
     And I fill in "title" with "TEMP"
     When I press "submit"
     And wait very long for the page to be loaded
@@ -35,21 +31,17 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the course exists
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the course description tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/course_description/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the documents tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     When I follow "Documents"
     And I wait for the page to be loaded
     Then I should not see an error
@@ -57,39 +49,30 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the learning path tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/lp/lp_controller.php?action=list&cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the links tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/link/link.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the tests tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/exercise/exercise.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the announcements tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/announcements/announcements.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the assessments tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/gradebook/index.php?cid=1"
     And wait the page to be loaded when ready
     Then I should not see an error
@@ -97,63 +80,48 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the glossary tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/glossary/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the attendances tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the course progress tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/course_progress/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the agenda tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/calendar/agenda_js.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the forums tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/forum/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the dropbox tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/dropbox/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the users tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/user/user.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the groups tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/group/group.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
@@ -161,15 +129,12 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the chat tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/resources/chat/?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the assignments tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And I wait for the page to be loaded
     Then I should not see an error
@@ -177,31 +142,24 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the surveys tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/survey/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the wiki tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/wiki/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the notebook tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/notebook/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the projects tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I click the "button.p-button-icon-only" element
     And I wait for the page to be loaded
     Then I follow "Blog"
@@ -211,30 +169,23 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the reporting tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/tracking/courseLog.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the settings tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/course_info/infocours.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
 
   Scenario: Make sure the backup tool is available
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/course_info/maintenance.php?cid=1"
-    And I wait for the page to be loaded
     Then I should not see an error
 
   Scenario: Enter to public password-protected course
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I click the "button.p-button-icon-only" element
     And I wait for the page to be loaded
     Then I follow "Course settings"
@@ -249,7 +200,6 @@ Feature: Course tools basic testing
 
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"
-    And I wait for the page to be loaded
     Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
     Then I check the "Private access (access authorized to group members only)" radio button

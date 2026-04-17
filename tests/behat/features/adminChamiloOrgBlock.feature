@@ -5,11 +5,9 @@ Feature: Admin Chamilo.org block navigation
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
   Scenario: Open Chamilo homepage
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Chamilo homepage"
     And I wait for the page to be loaded
@@ -17,7 +15,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open User guides
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "User guides"
     And I wait for the page to be loaded
@@ -25,7 +22,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Chamilo forum
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Chamilo forum"
     And I wait for the page to be loaded
@@ -33,7 +29,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Installation guide
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Installation guide"
     And I wait for the page to be loaded
@@ -41,7 +36,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Changes in last version
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Changes in last version"
     And I wait for the page to be loaded
@@ -49,7 +43,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Contributors list
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Contributors list"
     And I wait for the page to be loaded
@@ -57,7 +50,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Security guide
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Security guide"
     And I wait for the page to be loaded
@@ -65,7 +57,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Optimization guide
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Optimization guide"
     And I wait for the page to be loaded
@@ -81,7 +72,6 @@ Feature: Admin Chamilo.org block navigation
 
   Scenario: Open Chamilo official services providers
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Chamilo official services providers"
     And I wait for the page to be loaded

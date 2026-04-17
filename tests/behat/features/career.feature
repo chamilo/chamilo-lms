@@ -8,7 +8,6 @@ Feature: Career
       And I am on "/main/admin/career_dashboard.php"
       Then I should not see an error
       And I am on "/main/admin/careers.php?action=add"
-      And wait for the page to be loaded
       When I fill in the following:
           | career_title          | Developer               |
       And I fill in editor field "description" with "Description"
@@ -20,7 +19,6 @@ Feature: Career
   Scenario: Edit a career
     Given I am a platform administrator
     And I am on "/main/admin/careers.php"
-    And I wait for the page to be loaded
     Then I should not see an error
     And I should see "Developer"
     And I click the "i.mdi-pencil" element
@@ -33,7 +31,6 @@ Feature: Career
   Scenario: Copy a career
     Given I am a platform administrator
     And I am on "/main/admin/careers.php"
-    And I wait for the page to be loaded
     And I should not see an error
     And I should see "Developer"
     When I click the "i.mdi-text-box-plus" element
@@ -45,7 +42,6 @@ Feature: Career
   Scenario: Delete a career
       Given I am a platform administrator
       And I am on "/main/admin/careers.php"
-      And I wait for the page to be loaded
       Then I should not see an error
       And I should see "Developer"
       When I click the "i.mdi-delete" element

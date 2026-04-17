@@ -9,13 +9,11 @@ Feature: Users management as admin
 
   Scenario: See the users list link on the admin page
     Given I am on "/main/admin/index.php"
-    And wait very long for the page to be loaded
     Then I should see "Users list"
     And I should see "Add a user"
 
   Scenario: Create a user with only basic info
     And I am on "/main/admin/user_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Sammy                 |
       | lastname  | Marshall              |
@@ -29,7 +27,6 @@ Feature: Users management as admin
 
   Scenario: Create a user with wrong username
     And I am on "/main/admin/user_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | NIÑO                  |
       | lastname  | NIÑO                  |
@@ -44,7 +41,6 @@ Feature: Users management as admin
 
   Scenario: Create a user with wrong email
     And I am on "/main/admin/user_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Juls                  |
       | lastname  | Juls                  |
@@ -70,7 +66,6 @@ Feature: Users management as admin
 
   Scenario: Delete a user
     Given I am on "/main/admin/user_list.php?keyword=smarshall"
-    And wait very long for the page to be loaded
     And I click the "i.mdi-delete" element
     And I confirm the popup
     And wait very long for the page to be loaded
@@ -78,7 +73,6 @@ Feature: Users management as admin
 
   Scenario: Create a HRM user
     Given I am on "/main/admin/user_add.php"
-    And wait very long for the page to be loaded
     And I fill in the following:
       | firstname | HRM firstname|
       | lastname  | HRM lastname |
@@ -95,7 +89,6 @@ Feature: Users management as admin
 
   Scenario: Create a teacher user
     And I am on "/main/admin/user_add.php"
-    And I wait for the page to be loaded
     And I fill in the following:
       | firstname | teacher firstname|
       | lastname  | teacher lastname |
@@ -111,7 +104,6 @@ Feature: Users management as admin
 
   Scenario: Create a student user
     Given I am on "/main/admin/user_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | student firstname|
       | lastname  | student lastname |

@@ -91,7 +91,6 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepage($courseCode): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
-        $this->waitForThePageToBeLoaded();
         //$this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
@@ -103,7 +102,6 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
-        $this->waitForThePageToBeLoaded();
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -113,7 +111,6 @@ class FeatureContext extends MinkContext
     public function iAmOnTheHomepageOfCourseX($courseId): void
     {
         $this->visit('/course/'.$courseId.'/home');
-        $this->waitForThePageToBeLoaded();
         //$this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
@@ -124,7 +121,6 @@ class FeatureContext extends MinkContext
     public function iAmOnTheHomepageOfCourseXInSessionY($courseId, $sessionId): void
     {
         $this->visit('/course/'.$courseId.'&sid='.$sessionId);
-        $this->waitForThePageToBeLoaded();
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -142,14 +138,12 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        //$this->visit('/logout');
+        $this->visit('/logout');
         $this->visit('/login');
-        $this->waitForThePageToBeLoaded();
         $this->fillField('login', $username);
         $this->fillField('password', $username);
         $this->pressButton('Sign in');
-        $this->waitForThePageToBeLoaded();
-        //$this->waitForThePageToBeLoaded();
+        $this->waitForSelector('.app-topbar');
     }
 
     /**
@@ -525,26 +519,34 @@ class FeatureContext extends MinkContext
     /**
      * @When /^(?:|I )wait for the page to be loaded$/
      */
-    public function waitForThePageToBeLoaded()
+    public function waitForThePageToBeLoaded(): void
     {
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(8000, "document.readyState === 'complete'");
     }
 
     /**
      * @When /^(?:|I )wait very long for the page to be loaded$/
      */
-    public function waitVeryLongForThePageToBeLoaded()
+    public function waitVeryLongForThePageToBeLoaded(): void
     {
-        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(14000);
+        $this->getSession()->wait(14000, "document.readyState === 'complete'");
     }
 
     /**
      * @When /^(?:|I )wait for the page to be loaded when ready$/
      */
-    public function waitForThePageToBeLoadedWhenReady()
+    public function waitForThePageToBeLoadedWhenReady(): void
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
+    }
+
+    /**
+     * @When /^(?:|I )wait for the "([^"]*)" element$/
+     */
+    public function waitForSelector(string $css, int $timeoutMs = 8000): void
+    {
+        $escaped = addslashes($css);
+        $this->getSession()->wait($timeoutMs, "document.querySelector('$escaped') !== null");
     }
 
     /**
@@ -692,7 +694,7 @@ class FeatureContext extends MinkContext
         $this->pressButton('Next step');
         $this->assertPageContainsText('Update successful');
         $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
+        $this->getSession()->wait(3000); // wait for autocomplete results, not page load
         $this->clickLink('Costea Andrea (acostea)');
         $this->pressButton('Finish session creation');
         $this->assertPageContainsText('Session overview');

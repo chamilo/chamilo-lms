@@ -7,7 +7,6 @@ Feature: Social Group
   Scenario: Create a social group
     Given I am a platform administrator
     And I am on "/main/social/group_add.php"
-    And I wait for the page to be loaded
     When I fill in the following:
       | title          | Behat Test Group                   |
     Then I fill in editor field "description" with "This is a group created by Behat"

@@ -8,7 +8,6 @@ Feature: System Announcements
 
   Scenario: Create a system announcement
     Given I am on "/main/admin/system_announcements.php?action=add"
-    And wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement system test                       |
     And I fill in editor field "content" with "Announcement system description"
@@ -20,7 +19,6 @@ Feature: System Announcements
 
   Scenario: Delete system announcement
     Given I am on "/main/admin/system_announcements.php"
-    And I wait for the page to be loaded
     When I click the "i.mdi-delete" element
     Then I confirm the popup
     And wait for the page to be loaded

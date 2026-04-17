@@ -7,12 +7,10 @@ Feature: Reporting tool
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
 
   Scenario: Admin navigates reporting pages and checks them
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Reporting"
     And I wait for the page to be loaded

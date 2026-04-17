@@ -5,7 +5,6 @@ Feature: Course category
 
   Scenario: Add a course category
     Given I am on "/main/admin/course_category.php?action=add"
-    And I wait for the page to be loaded
     And I should see "Add category"
     When I fill in the following:
       | code | COURSE_CATEGORY |
@@ -18,7 +17,6 @@ Feature: Course category
 
   Scenario: Edit a course category
     Given I am on "/main/admin/course_category.php"
-    And I wait for the page to be loaded
     Then I should see "Course category"
     And I click the "i.mdi-pencil" element
     And I wait for the page to be loaded
@@ -33,7 +31,6 @@ Feature: Course category
 
   Scenario: Delete course category
     Given I am on "/main/admin/course_category.php"
-    And I wait for the page to be loaded
     Then I should see "Course category edited"
     Then I click the "i.mdi-delete" element
     Then confirm the popup

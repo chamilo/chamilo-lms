@@ -5,11 +5,9 @@ Feature: Special admin settings flows
 
   Background:
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
   Scenario: Initial platform searches and basic settings
     Given I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Diagnostic search
     When I fill in the following:
@@ -41,10 +39,8 @@ Feature: Special admin settings flows
 
     # Additional check: the homepage must display "Diagnosis management"
     And I am on "/home"
-    And I wait very long for the page to be loaded
     Then I should see "Diagnosis management"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Multiple anonymous users
     When I fill in the following:
@@ -67,11 +63,8 @@ Feature: Special admin settings flows
 
     # Additional check: on /home we must not see "Explore more courses"
     And I am on "/home"
-    And I wait very long for the page to be loaded
     Then I should not see "Explore more courses"
-    And I wait very long for the page to be loaded
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Certificate links
     When I fill in the following:
@@ -86,11 +79,9 @@ Feature: Special admin settings flows
     And I am not logged
     And I am logged as "acostea"
     And I am on "/home"
-    And I wait very long for the page to be loaded
     Then I should not see "My certificates"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | allow_general_certificate |
@@ -249,9 +240,7 @@ Feature: Special admin settings flows
     # Login as first student and open messaging
     Given I am not logged
     Then I am logged as "studentone"
-    And I wait very long for the page to be loaded
     And I am on "resources/messages"
-    And I wait very long for the page to be loaded
     When I press "mdi-email-plus-outline"
     And I wait very long for the page to be loaded
     And I should not see an error
@@ -266,7 +255,6 @@ Feature: Special admin settings flows
     Then I should not see an error
     And I am not logged
     Then I am logged as "admin"
-    And wait very long for the page to be loaded
 
     # Cookie, registration, terms and extra fields
     When I fill in the following:
@@ -288,7 +276,6 @@ Feature: Special admin settings flows
     # Verify that, when logged out, the homepage offers a "Sign up" button to main/auth/registration.php
     Given I am not logged
     And I am on "/home"
-    And I wait very long for the page to be loaded
     Then I should see "Sign up"
     When I follow "Sign up"
     And I wait very long for the page to be loaded
@@ -296,7 +283,6 @@ Feature: Special admin settings flows
     And I should not see an error
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | allow_registration_as_teacher |
@@ -308,12 +294,10 @@ Feature: Special admin settings flows
 
     And  I am not logged
     And I am on "/main/auth/registration.php"
-    And wait very long for the page to be loaded
     And I should see "Follow courses"
     And I should not see "Teach courses"
     And  I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | allow_terms_conditions |
@@ -332,7 +316,6 @@ Feature: Special admin settings flows
 
     # 1) Gender (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Genre |
@@ -349,7 +332,6 @@ Feature: Special admin settings flows
 
     # 2) Date of birth (Date)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Date de naissance |
@@ -364,7 +346,6 @@ Feature: Special admin settings flows
 
     # 3) Nationality (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Nationalité |
@@ -379,7 +360,6 @@ Feature: Special admin settings flows
 
     # 4) Address (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Adresse |
@@ -394,7 +374,6 @@ Feature: Special admin settings flows
 
     # 5) Postal code (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Code postal |
@@ -409,7 +388,6 @@ Feature: Special admin settings flows
 
     # 6) City (Geolocalization)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Ville |
@@ -424,7 +402,6 @@ Feature: Special admin settings flows
 
     # 7) Country of residence (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Pays de Résidence |
@@ -439,7 +416,6 @@ Feature: Special admin settings flows
 
     # 8) Target learning language (Select)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Langue cible d'apprentissage |
@@ -456,7 +432,6 @@ Feature: Special admin settings flows
 
     # 9) Currently, I am (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Actuellement, je suis |
@@ -473,7 +448,6 @@ Feature: Special admin settings flows
 
     # 10) Field of study (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je suis actuellement dans une filière ou je suis diplômé(e) d’une filière |
@@ -493,7 +467,6 @@ Feature: Special admin settings flows
 
     # 11) Last diploma obtained (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Dernier diplôme obtenu |
@@ -508,7 +481,6 @@ Feature: Special admin settings flows
 
     # 12) Internship city (Geolocalization)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Ville du stage |
@@ -523,7 +495,6 @@ Feature: Special admin settings flows
 
     # 13) If your field is not indicated... (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Si ta filière n’est pas indiquée ci-dessus, veux-tu la préciser ici ? |
@@ -538,7 +509,6 @@ Feature: Special admin settings flows
 
     # 14) During this period... hours per week (Integer)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Pendant cette durée, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
@@ -553,7 +523,6 @@ Feature: Special admin settings flows
 
     # 15) My internship starts on (Date)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Mon stage commence le |
@@ -568,7 +537,6 @@ Feature: Special admin settings flows
 
     # 16) and ends on (Date)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | et dure jusqu’au |
@@ -583,7 +551,6 @@ Feature: Special admin settings flows
 
     # 17) During my internship... hours per week (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Pendant mon stage, je peux / je veux consacrer en moyenne en heures par semaine à mon apprentissage sur la plateforme. |
@@ -598,7 +565,6 @@ Feature: Special admin settings flows
 
     # 18) I wish to continue... during my internship (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je souhaite poursuivre mon apprentissage sur la plateforme pendant mon stage. |
@@ -615,7 +581,6 @@ Feature: Special admin settings flows
 
     # 19) Learning objective (Tag)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Objectif d'apprentissage |
@@ -630,7 +595,6 @@ Feature: Special admin settings flows
 
     # 20) I like to work (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | J’aime travailler |
@@ -647,7 +611,6 @@ Feature: Special admin settings flows
 
     # 21) I wish to be supported (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je souhaite etre accompagne(e) |
@@ -664,7 +627,6 @@ Feature: Special admin settings flows
 
     # 22) termactivated (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | termactivated |
@@ -679,7 +641,6 @@ Feature: Special admin settings flows
 
     # 23) I want to do the internship in this field (Radio)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je veux faire le stage dans cette filiere |
@@ -696,7 +657,6 @@ Feature: Special admin settings flows
 
     # 24) PlatformUseConditions (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | PlatformUseConditions |
@@ -713,7 +673,6 @@ Feature: Special admin settings flows
 
     # 25) DiagnosisCompleted (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | DiagnosisCompleted |
@@ -728,7 +687,6 @@ Feature: Special admin settings flows
 
     # 26) Je ne connais pas encore mes dates de stage (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je ne connais pas encore mes dates de stage |
@@ -743,7 +701,6 @@ Feature: Special admin settings flows
 
     # 27) En general, je suis plutot disponible (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | En general, je suis plutot disponible |
@@ -758,7 +715,6 @@ Feature: Special admin settings flows
 
     # 28) Je suis deja sur place /mon stage/mon emploi a deja commence (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Je suis deja sur place /mon stage/mon emploi a deja commence |
@@ -773,7 +729,6 @@ Feature: Special admin settings flows
 
     # 29) Un ordinateur fixe ou portable (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Un ordinateur fixe ou portable |
@@ -790,7 +745,6 @@ Feature: Special admin settings flows
 
     # 30) Une tablette (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Une tablette |
@@ -805,7 +759,6 @@ Feature: Special admin settings flows
 
     # 31) Un smartphone (Checkbox)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Un smartphone |
@@ -820,7 +773,6 @@ Feature: Special admin settings flows
 
     # 32) Quel est le systeme d'exploitation ? (computer) (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Quel est le systeme d'exploitation ? |
@@ -835,7 +787,6 @@ Feature: Special admin settings flows
 
     # 33) Quel est le systeme d'exploitation ? (tablet) (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Quel est le systeme d'exploitation ? |
@@ -850,7 +801,6 @@ Feature: Special admin settings flows
 
     # 34) Quel est le systeme d'exploitation ? (smartphone) (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Quel est le systeme d'exploitation ? |
@@ -865,7 +815,6 @@ Feature: Special admin settings flows
 
     # 35) Pour travailler sur la plateforme, j'utilise le browser suivant : (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Pour travailler sur la plateforme, j'utilise le browser suivant : |
@@ -880,7 +829,6 @@ Feature: Special admin settings flows
 
     # 36) Autre (preciser) : (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Autre (preciser) : |
@@ -895,7 +843,6 @@ Feature: Special admin settings flows
 
     # 37) Quelle est la version ? (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Quelle est la version ? |
@@ -910,7 +857,6 @@ Feature: Special admin settings flows
 
     # 38) Hobbies (Tag)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Hobbies |
@@ -925,7 +871,6 @@ Feature: Special admin settings flows
 
     # 39) State (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | State |
@@ -940,7 +885,6 @@ Feature: Special admin settings flows
 
     # 40) Level (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Level |
@@ -955,7 +899,6 @@ Feature: Special admin settings flows
 
     # 41) Quality (Text)
     And I am on "/main/admin/extra_fields.php?type=user"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #user_field_display_text | Quality |
@@ -972,11 +915,9 @@ Feature: Special admin settings flows
 
   Scenario: Add minimal session extra fields
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
     # 1) Je commence mon apprentissage sur la plateforme le (Date)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Je commence mon apprentissage sur la plateforme le |
@@ -991,7 +932,6 @@ Feature: Special admin settings flows
 
     # 2) Je suis disponible jusqu'au (Date)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Je suis disponible jusqu'au |
@@ -1008,7 +948,6 @@ Feature: Special admin settings flows
 
     # 3) Je souhaite m'inscrire dans une filière (Radio)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Je souhaite m'inscrire dans une filière |
@@ -1025,7 +964,6 @@ Feature: Special admin settings flows
 
     # 4) Les îlots d'apprentissage (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Les îlots d'apprentissage sont conçus autour des trois grands domaines suivants. Numérote-les de 1 à 3 selon tes priorités et tes intérêts. |
@@ -1042,7 +980,6 @@ Feature: Special admin settings flows
 
     # 5) Temps de travail (Integer)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Temps de travail |
@@ -1057,7 +994,6 @@ Feature: Special admin settings flows
 
     # 6) Choisis 5 thèmes et objectifs (Tag)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Choisis 5 thèmes et objectifs et numérote-les de 1 à 5. |
@@ -1072,7 +1008,6 @@ Feature: Special admin settings flows
 
     # 7) Ecouter (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Ecouter |
@@ -1087,12 +1022,10 @@ Feature: Special admin settings flows
     And I press "user_field_submit"
     Then I should not see an error
 
-    And I wait very long for the page to be loaded
 
 
     # 8) Lire (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Lire |
@@ -1109,7 +1042,6 @@ Feature: Special admin settings flows
 
     # 9) Participer a une conversation (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Participer à une conversation |
@@ -1126,7 +1058,6 @@ Feature: Special admin settings flows
 
     # 10) S'exprimer oralement en continu (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | S'exprimer oralement en continu |
@@ -1143,7 +1074,6 @@ Feature: Special admin settings flows
 
     # 11) Ecrire (Select multiple)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Ecrire |
@@ -1160,7 +1090,6 @@ Feature: Special admin settings flows
 
     # 12) Thema (Tag)
     And I am on "/main/admin/extra_fields.php?type=session"
-    And I wait very long for the page to be loaded
     When I click the "i.mdi-plus-box" element
     And I fill in the following:
       | #session_field_display_text | Thema |
@@ -1175,7 +1104,6 @@ Feature: Special admin settings flows
 
     Then I should not see an error
 
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | search_keyword | required_extra_fields_in_inscription |
     And I press "search_search"
@@ -1201,7 +1129,6 @@ Feature: Special admin settings flows
     And I should see "langue_cible"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     # Registration fields and messages
     When I fill in the following:
@@ -1215,7 +1142,6 @@ Feature: Special admin settings flows
 
     And I am not logged
     And I am on "/main/auth/registration.php"
-    And I wait very long for the page to be loaded
     Then I should see "lastname"
     And I should see "firstname"
     And I should see "email"
@@ -1239,7 +1165,6 @@ Feature: Special admin settings flows
     And I should see "langue_cible"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | send_inscription_msg_to_inbox |
@@ -1261,11 +1186,9 @@ Feature: Special admin settings flows
 
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
     Then I should see "My sessions"
     And I should not see "Platform administration"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Legal accept, captcha limits and session toggles
     When I fill in the following:
@@ -1311,7 +1234,6 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/session/session_list.php"
-    And I wait very long for the page to be loaded
     Then I should see "Past session"
     And I should see "Present session"
     And I should see "Session in the future"
@@ -1357,12 +1279,10 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/admin/session_list.php"
-    And I wait very long for the page to be loaded
     Then I should see "Students"
     And I should see "#sessions"
     And I should see "ID"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | session_admins_access_all_content |
@@ -1393,10 +1313,8 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/admin/session_list.php"
-    And I wait very long for the page to be loaded
     Then I should see "Custom"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Badges, skills and social
     When I fill in the following:
@@ -1434,7 +1352,6 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "main/skills/skill_create.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | title      | NewSkill |
       | short_code | NS       |
@@ -1445,7 +1362,6 @@ Feature: Special admin settings flows
     Then I should see "NewSkill"
 
     And I am on "main/skills/skill_create.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | title      | SubSkill |
       | short_code | SS       |
@@ -1458,12 +1374,10 @@ Feature: Special admin settings flows
 
     # Assign parent skill and check subskill list appears for user
     And I am on "main/skills/assign.php?user=1"
-    And I wait very long for the page to be loaded
     When I select "NewSkill" from "skill"
     And I wait very long for the page to be loaded
     Then I should see "SubSkill"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | social_enable_messages_feedback |
@@ -1475,7 +1389,6 @@ Feature: Special admin settings flows
 
 
     And I am on "/main/social/home.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | post_text | This is a test post created by behat |
     And I press "submit"
@@ -1484,7 +1397,6 @@ Feature: Special admin settings flows
     And I should see "Like"
     And I should see "Dislike"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | disable_dislike_option |
@@ -1495,12 +1407,10 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/social/home.php"
-    And I wait very long for the page to be loaded
     # (environment must have dislike disabled for this check)
     Then I should see "Like"
     And I should not see "Dislike"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | social_show_language_flag_in_profile |
@@ -1511,10 +1421,8 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/social/home.php"
-    And I wait very long for the page to be loaded
     Then I should not see "My communities"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     # Ticket settings
     When I fill in the following:
@@ -1526,13 +1434,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     And I am on "/main/ticket/projects.php?project_id=1"
-    And I wait very long for the page to be loaded
     When I follow "Categories"
     And I wait very long for the page to be loaded
     Then I should see "Enrollment"
     And I should see "i.mdi-pencil"
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | ticket_allow_student_add |
@@ -1543,14 +1449,11 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     Given I am logged as "studentone"
-    And I wait very long for the page to be loaded
     And I am on "/main/ticket/new_ticket.php?project_id=1"
-    And I wait very long for the page to be loaded
     Then I should see "Send message"
     And I should not see an error
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | ticket_send_warning_to_all_admins |
@@ -1646,14 +1549,12 @@ Feature: Special admin settings flows
 
     Given I am logged as "studentone"
     And I am on "/main/auth/profile.php"
-    And I wait very long for the page to be loaded
     Then I should see "language"
     And I should see "picture"
     And I should not see "firstname"
     And I should not see "lastname"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | visible_options |
@@ -1669,14 +1570,12 @@ Feature: Special admin settings flows
 
     Then I am logged as "studentone"
     And I am on "/main/auth/profile.php"
-    And I wait very long for the page to be loaded
     Then I should see "official_code"
     And I should see "email"
     And I should see "picture"
     And I should see "language"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | use_users_timezone |
@@ -1707,7 +1606,6 @@ Feature: Special admin settings flows
     And I am not logged
     And I am logged as "studentone"
     And I am on "/main/auth/profile.php"
-    And I wait very long for the page to be loaded
     Then I should see "firstname"
     And I should see "lastname"
     And I should see "picture"
@@ -1715,7 +1613,6 @@ Feature: Special admin settings flows
     And I should see "terms_ville"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | allow_social_map_fields |
@@ -1738,13 +1635,11 @@ Feature: Special admin settings flows
     And I am not logged
     Then I am logged as "studenttwo"
     And I am on "/main/auth/terms.php"
-    And I wait very long for the page to be loaded
     Then I should see "complete your profile before accepting the terms"
     And I should see "Accept"
     # Note: step to check the Accept button is disabled may require an extra step definition; we assert the message appears above.
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | load_term_conditions_section |
@@ -1756,14 +1651,11 @@ Feature: Special admin settings flows
 
     And I am logged as "studenttwo"
     And I am on "/home"
-    And I wait very long for the page to be loaded
     Then I should not see "Terms and conditions"
     When I am on "/course/TEMPPRIVATE/home"
-    And I wait very long for the page to be loaded
     Then I should see "Terms and conditions"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
 
     When I fill in the following:
@@ -1777,13 +1669,11 @@ Feature: Special admin settings flows
 
     Given I am logged as "studentone"
     And I am on "/"
-    And I wait very long for the page to be loaded
     When I follow "Home"
     And I wait very long for the page to be loaded
     Then I should see "My sessions"
     And I am not logged
     And I am logged as "admin"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | platform_management_search | default_menu_entry_for_course_or_session |
@@ -1797,16 +1687,13 @@ Feature: Special admin settings flows
     Then I should not see an error
 
     And I am logged as "studentthree"
-    And I wait very long for the page to be loaded
     Then I should see "My sessions"
 
   Scenario: Create courses, multilingual documents, exercises, forum, learning path and assessment activity
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
   # Create courses
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | title      | Testing course en |
     And I select "English" from "language"
@@ -1815,7 +1702,6 @@ Feature: Special admin settings flows
     Then I should see "Testing course en"
 
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | title      | Special |
     And I click the "#special_course" element
@@ -1824,7 +1710,6 @@ Feature: Special admin settings flows
     Then I should see "Special"
 
     When I am on "/main/admin/course_add.php"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | title      | Testing course fr |
     And I select "French" from "language"
@@ -2010,11 +1895,9 @@ Feature: Special admin settings flows
 
   Scenario: Create teacher and configure "Present session" with settings and include course
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
     # Create a teacher account
     When I am on "/main/admin/user_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Teacher |
       | lastname  | Teacher |
@@ -2029,7 +1912,6 @@ Feature: Special admin settings flows
 
     # Create session Present session with start = 2026-01-20 and end = 2026-02-03
     When I am on "/main/session/session_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | name       | Present session |
       | start_date | 2026-01-20 |
@@ -2043,18 +1925,15 @@ Feature: Special admin settings flows
     When I press "Advanced settings"
     And I wait very long for the page to be loaded
     And I select "In progress" from "status"
-    And I wait very long for the page to be loaded
 
     # Set extra fields for the session
     When I fill in the following:
       | domaine  | vie-quotidienne |
     And I select "vie-quotidienne" from "domaine"
-    And I wait very long for the page to be loaded
 
     When I fill in the following:
       | filiere  | art-et-culture |
     And I select "art-et-culture" from "filiere"
-    And I wait very long for the page to be loaded
 
     # theme_fr and theme_de: type and select the suggested option
     When I fill in "theme_fr" with "theme1"
@@ -2073,7 +1952,6 @@ Feature: Special admin settings flows
     And I select "1" from "participer_a_une_conversation"
     And I select "1" from "s_exprimer_oralement_en_continu"
     And I select "1" from "ecrire"
-    And I wait very long for the page to be loaded
 
     # Go to next step and include Testing course fr
     When I press "Next step"
@@ -2091,11 +1969,9 @@ Feature: Special admin settings flows
 
   Scenario: Create future session "Session in the futur" and include course
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
     # Create session Session in the futur with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | name       | Session in the futur |
       | start_date | 2026-02-03 |
@@ -2109,13 +1985,10 @@ Feature: Special admin settings flows
     When I press "Advanced settings"
     And I wait very long for the page to be loaded
     And I select "Planned" from "status"
-    And I wait very long for the page to be loaded
 
     # Set extra fields for the session
     And I select "arrivee-sur-mon-poste-de-travail" from "domaine"
-    And I wait very long for the page to be loaded
     And I select "art-et-culture" from "filiere"
-    And I wait very long for the page to be loaded
 
     # theme_fr and theme_de: type and select the suggested option
     When I fill in "theme_fr" with "theme1"
@@ -2134,7 +2007,6 @@ Feature: Special admin settings flows
     And I select "1" from "participer_a_une_conversation"
     And I select "1" from "s_exprimer_oralement_en_continu"
     And I select "1" from "ecrire"
-    And I wait very long for the page to be loaded
 
     # Go to next step and include Testing course fr
     When I press "Next step"
@@ -2152,11 +2024,9 @@ Feature: Special admin settings flows
 
   Scenario: Create past session "Past session" and include course
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
     # Create session Past session with start = 2026-01-06 and end = 2026-01-20
     When I am on "/main/session/session_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | name       | Past session |
       | start_date | 2026-01-06 |
@@ -2170,13 +2040,10 @@ Feature: Special admin settings flows
     When I press "Advanced settings"
     And I wait very long for the page to be loaded
     And I select "Finished" from "status"
-    And I wait very long for the page to be loaded
 
     # Set extra fields for the session
     And I select "competente-dans-mon-domaine-de-specialite" from "domaine"
-    And I wait very long for the page to be loaded
     And I select "art-et-culture" from "filiere"
-    And I wait very long for the page to be loaded
 
     # theme_fr and theme_de: type and select the suggested option (theme2)
     When I fill in "theme_fr" with "theme2"
@@ -2195,7 +2062,6 @@ Feature: Special admin settings flows
     And I select "1" from "participer_a_une_conversation"
     And I select "1" from "s_exprimer_oralement_en_continu"
     And I select "1" from "ecrire"
-    And I wait very long for the page to be loaded
 
     # Go to next step and include Testing course fr
     When I press "Next step"
@@ -2213,11 +2079,9 @@ Feature: Special admin settings flows
 
   Scenario: Create future English session "Session in the futur en" and include course
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
 
     # Create session Session in the futur en with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
-    And I wait very long for the page to be loaded
     And I fill in the following:
       | name       | Session in the futur en |
       | start_date | 2026-02-03 |
@@ -2231,13 +2095,10 @@ Feature: Special admin settings flows
     When I press "Advanced settings"
     And I wait very long for the page to be loaded
     And I select "Planned" from "status"
-    And I wait very long for the page to be loaded
 
     # Set extra fields for the session
     And I select "arrivee-sur-mon-poste-de-travail" from "domaine"
-    And I wait very long for the page to be loaded
     And I select "art-et-culture" from "filiere"
-    And I wait very long for the page to be loaded
 
     # theme_fr and theme_de: type and select the suggested option
     When I fill in "theme_fr" with "theme1"
@@ -2256,7 +2117,6 @@ Feature: Special admin settings flows
     And I select "1" from "participer_a_une_conversation"
     And I select "1" from "s_exprimer_oralement_en_continu"
     And I select "1" from "ecrire"
-    And I wait very long for the page to be loaded
 
     # Go to next step and include Testing course en
     When I press "Next step"
@@ -2275,9 +2135,7 @@ Feature: Special admin settings flows
 
   Scenario: Tare Down
     Given I am a platform administrator
-    And I wait very long for the page to be loaded
     And I am on "/admin"
-    And I wait very long for the page to be loaded
 
 
     When I fill in the following:

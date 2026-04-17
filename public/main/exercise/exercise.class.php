@@ -5538,18 +5538,16 @@ class Exercise
                             break;
                         case ORAL_EXPRESSION:
                             /** @var OralExpression $objQuestionTmp */
-                            echo '<tr>
-                                <td valign="top">'.
-                                ExerciseShowFunctions::display_oral_expression_answer(
-                                    $feedback_type,
-                                    $choice,
-                                    $exeId,
-                                    $questionId,
-                                    $results_disabled,
-                                    $questionScore
-                                ).'</td>
-                                </tr>
-                                </table>';
+                            echo '<tr><td valign="top">';
+                            ExerciseShowFunctions::display_oral_expression_answer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $results_disabled,
+                                $questionScore
+                            );
+                            echo '</td></tr>';
                             break;
                         case HOT_SPOT:
                         case HOT_SPOT_COMBINATION:

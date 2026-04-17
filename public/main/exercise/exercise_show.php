@@ -664,8 +664,7 @@ foreach ($questionList as $questionId) {
 
             echo '</div>';
 
-            echo '<div id="'.$name.'" class="row hidden">';
-            echo '<div class="col-sm-'.($allowTeacherCommentAudio ? 7 : 12).'">';
+            echo '<div id="'.$name.'" class="hidden">';
 
             $arrid[] = $questionId;
             $feedback_form = new FormValidator('frmcomments'.$questionId);
@@ -697,12 +696,8 @@ foreach ($questionList as $questionId) {
             $feedback_form->setDefaults($default);
             $feedback_form->display();
 
-            echo '</div>';
-
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
-                echo '<div class="col-sm-5">';
                 echo ExerciseLib::getOralFeedbackForm($id, $questionId, $exercise_id);
-                echo '</div>';
             }
             echo '</div>';
         } else {

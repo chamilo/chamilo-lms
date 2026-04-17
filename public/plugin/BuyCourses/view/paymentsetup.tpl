@@ -12,7 +12,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Configure the global e-commerce settings, choose the active payment methods, and update the credentials required by each gateway.
+                        {{ 'PaymentSetupIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                     {{ 'GlobalConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure currency, terms and conditions, sales contact email, tax rules, and invoicing data.
+                    {{ 'GeneralSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -190,7 +190,7 @@
                     {{ 'PayPalConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure the API credentials required to process payments through PayPal.
+                    {{ 'PayPalSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -232,7 +232,7 @@
                     {{ 'TpvRedsysConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure the Redsys terminal credentials and sandbox settings.
+                    {{ 'RedsysSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -251,7 +251,7 @@
                     {{ 'CommissionsConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Set the platform commission percentage used by the marketplace.
+                    {{ 'CommissionsSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -278,7 +278,7 @@
                     {{ 'TransfersConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Manage bank accounts for manual transfers and the extra message sent by email after a transfer purchase.
+                    {{ 'BankTransferSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -355,7 +355,7 @@
                         {{ 'TransferEmailInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h3>
                     <p class="mt-1 text-sm text-gray-50">
-                        Extra instructions appended to the email sent after choosing bank transfer.
+                        {{ 'TransferEmailHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
 
@@ -373,7 +373,7 @@
                     {{ 'CulqiConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure the API credentials required to process payments through Culqi.
+                    {{ 'CulqiSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -398,7 +398,7 @@
                     {{ 'StripeConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure your Stripe account ID, secret key and webhook endpoint secret.
+                    {{ 'StripeSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -423,7 +423,7 @@
                     {{ 'CecabankConfig'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Configure the keys and merchant identifiers required by Cecabank.
+                    {{ 'CecabankSettingsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>

@@ -205,7 +205,7 @@
                 {% else %}
                 <tr>
                     <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) ? 6 : 5 }}" class="px-6 py-10 text-center text-sm text-gray-50">
-                        {{ 'NoResults'|get_lang }}
+                        {{ 'No Results'|get_lang }}
                     </td>
                 </tr>
                 {% endfor %}
@@ -406,7 +406,7 @@
                 {% else %}
                 <tr>
                     <td colspan="{{ tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) ? 7 : 6 }}" class="px-6 py-10 text-center text-sm text-gray-50">
-                        {{ 'NoResults'|get_lang }}
+                        {{ 'No Results'|get_lang }}
                     </td>
                 </tr>
                 {% endfor %}

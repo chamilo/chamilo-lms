@@ -14,7 +14,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review subscription sales, filter the report by status, user, date or email, and manage pending subscription orders.
+                        {{ 'SubscriptionSalesReportIntroFull'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                     {{ 'Subscriptions'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Review the sales returned by the current filter and process pending subscription orders.
+                    {{ 'SubscriptionSalesTableIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -323,7 +323,7 @@
                                 {{ 'NoResults'|get_lang }}
                             </h3>
                             <p class="text-sm text-gray-50">
-                                No subscription sales were found for the selected filter.
+                                {{ 'NoSubscriptionSalesFound'|get_plugin_lang('BuyCoursesPlugin') }}
                             </p>
                         </div>
                     </td>

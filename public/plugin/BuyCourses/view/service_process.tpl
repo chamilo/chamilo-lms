@@ -27,7 +27,7 @@
                         {{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h1>
                     <p class="max-w-3xl text-sm leading-6 text-gray-50">
-                        Review the service details, apply a coupon if you have one, choose the payment method, and confirm the order.
+                        {{ 'ServiceProcessIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                             {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            Add a valid coupon code before confirming the purchase.
+                            {{ 'ServiceCouponCodeHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
                     </div>
 
@@ -171,7 +171,7 @@
                             {{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            Choose the payment method and complete the required information to apply the service correctly.
+                            {{ 'ServicePaymentMethodHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
                     </div>
 
@@ -187,10 +187,10 @@
                 <div class="space-y-5">
                     <div class="space-y-2">
                         <h2 class="text-lg font-semibold text-gray-90">
-                            Summary
+                            {{ 'ServiceProcessSummaryTitle'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            Check the final amount and service conditions before placing the order.
+                            {{ 'ServiceProcessSummaryHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
                     </div>
 

@@ -446,7 +446,7 @@
                             {{ 'SelecSubscription'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-50">
-                            Choose the frequency that best fits this subscription.
+                            {{ 'SubscriptionFrequencyHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
 
                         <div class="mt-5">
@@ -459,7 +459,7 @@
                             {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-50">
-                            Enter your coupon code to update the subscription total before paying.
+                            {{ 'SubscriptionCouponCodeHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
 
                         <div class="mt-5">

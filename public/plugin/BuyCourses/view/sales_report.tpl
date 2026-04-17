@@ -14,7 +14,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review course and session sales, filter the report by status, user, date or email, and export the current report when needed.
+                        {{ 'SalesReportIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                     {{ 'SalesReport'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Interactive report generated from the current filter.
+                    {{ 'SalesReportTableIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>

@@ -67,7 +67,7 @@
                                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
                                     >
                                         <em class="fa fa-external-link fa-fw"></em>
-                                        Open video
+                                        {{ 'OpenVideo'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </a>
                                 </div>
                             {% endif %}
@@ -97,17 +97,17 @@
                         <div class="space-y-6">
                             <div class="space-y-2">
                                 <h2 class="text-xl font-semibold text-gray-90">
-                                    Overview
+                                    {{ 'ServiceInfoOverview'|get_plugin_lang('BuyCoursesPlugin') }}
                                 </h2>
                                 <p class="text-sm leading-6 text-gray-50">
-                                    Review the main service details before continuing with the purchase.
+                                    {{ 'ServiceInfoOverviewHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                                 </p>
                             </div>
 
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <div class="rounded-2xl bg-support-2 p-4">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                        Price
+                                        {{ 'ServiceInfoPriceLabel'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </div>
                                     <div class="mt-2 text-2xl font-semibold text-gray-90">
                                         {{ service.total_price_formatted }}
@@ -127,7 +127,7 @@
 
                                 <div class="rounded-2xl bg-support-2 p-4">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                        Duration
+                                        {{ 'ServiceInfoDurationLabel'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </div>
                                     <div class="mt-2 text-lg font-semibold text-gray-90">
                                         {{ durationLabel }}
@@ -137,7 +137,7 @@
                                 {% if service.owner_name is defined and service.owner_name %}
                                     <div class="rounded-2xl bg-support-2 p-4">
                                         <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                            Owner
+                                            {{ 'ServiceInfoOwnerLabel'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </div>
                                         <div class="mt-2 text-lg font-semibold text-gray-90">
                                             {{ service.owner_name }}
@@ -148,20 +148,20 @@
 
                             <div class="rounded-2xl border border-gray-25 bg-white p-4">
                                 <div class="text-sm font-semibold text-gray-90">
-                                    Purchase readiness
+                                    {{ 'ServiceInfoPurchaseReadiness'|get_plugin_lang('BuyCoursesPlugin') }}
                                 </div>
                                 <ul class="mt-3 space-y-2 text-sm text-gray-50">
                                     <li class="flex items-start gap-2">
                                         <em class="fa fa-check-circle text-success mt-0.5"></em>
-                                        <span>The service is available for purchase.</span>
+                                        <span>{{ 'ServiceAvailableForPurchase'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                     </li>
                                     <li class="flex items-start gap-2">
                                         <em class="fa fa-check-circle text-success mt-0.5"></em>
-                                        <span>You can apply a coupon before confirming the order.</span>
+                                        <span>{{ 'ServiceCouponApplicable'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                     </li>
                                     <li class="flex items-start gap-2">
                                         <em class="fa fa-check-circle text-success mt-0.5"></em>
-                                        <span>The selected payment method will be configured in the next step.</span>
+                                        <span>{{ 'ServicePaymentMethodNextStep'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -198,7 +198,7 @@
                         {% if service_details_html %}
                             {{ service_details_html|raw }}
                         {% else %}
-                            <p>No additional information is available for this service yet.</p>
+                            <p>{{ 'ServiceNoAdditionalInfo'|get_plugin_lang('BuyCoursesPlugin') }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -210,17 +210,17 @@
                 <div class="space-y-5">
                     <div class="space-y-2">
                         <h2 class="text-lg font-semibold text-gray-90">
-                            Summary
+                            {{ 'ServiceSummaryTitle'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            Review the service details before continuing with the purchase.
+                            {{ 'ServiceSummaryHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
                     </div>
 
                     <div class="rounded-2xl bg-support-2 p-4">
                         <div class="flex items-center justify-between gap-4">
                             <span class="text-sm font-semibold text-gray-90">
-                                Total
+                                {{ 'ServiceTotalLabel'|get_plugin_lang('BuyCoursesPlugin') }}
                             </span>
                             <span class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
                                 {{ service.total_price_formatted }}
@@ -263,7 +263,7 @@
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
                         >
                             <em class="fa fa-facebook fa-fw"></em>
-                            Facebook
+                            {{ 'ShareOnFacebook'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
 
                         <a
@@ -273,7 +273,7 @@
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
                         >
                             <em class="fa fa-twitter fa-fw"></em>
-                            Twitter
+                            {{ 'ShareOnTwitter'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
 
                         <a
@@ -283,7 +283,7 @@
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
                         >
                             <em class="fa fa-linkedin fa-fw"></em>
-                            Linkedin
+                            {{ 'ShareOnLinkedin'|get_plugin_lang('BuyCoursesPlugin') }}
                         </a>
                     </div>
                 </div>

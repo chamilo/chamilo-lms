@@ -17,7 +17,7 @@
                         {{ page_title|default('AvailableCourses'|get_lang) }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Configure which products offer subscriptions and open each item to manage periods and availability.
+                        {{ 'SubscriptionsPageIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>

@@ -42,7 +42,7 @@
                     {{ 'Format'|get_lang }}
                 </div>
                 <div class="mt-2 text-base font-semibold text-gray-90">
-                    Excel
+                    {{ 'ExcelFormat'|get_plugin_lang('BuyCoursesPlugin') }}
                 </div>
             </div>
 

@@ -7887,6 +7887,11 @@ class Tracking
         $debug = false
     ) {
         // Begin with the import process
+        if (empty($course_info)) {
+            echo Display::return_message(get_lang('CourseNotFound'), 'error');
+
+            return;
+        }
         $origin_course_code = $course_info['code'];
         $course_id = $course_info['real_id'];
         $user_id = (int) $user_id;
@@ -8075,7 +8080,7 @@ class Tracking
         // 4c. track_e_access_complete
         $sql = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'track_e_access_complete'";
         $res = Database::query($sql);
-        $row = Database::fetch_row($result);
+        $row = Database::fetch_row($res);
         if ($row[0] > 0) {
             $sql = "SELECT id FROM $TBL_TRACK_E_ACCESS_COMPLETE
                     WHERE
@@ -8186,8 +8191,8 @@ class Tracking
                         $origin_session_id
                     );
                     $result_message['LP_VIEW'][$data['lp_id']] = [
-                        'score' => $score,
-                        'progress' => $progress,
+                        'score' => is_null($score) ? 0 : $score,
+                        'progress' => ($progress === false || is_null($progress)) ? 0 : $progress,
                     ];
                 }
             }
@@ -8227,8 +8232,8 @@ class Tracking
                         $new_session_id
                     );
                     $result_message_compare['LP_VIEW'][$data['lp_id']] = [
-                        'score' => $score,
-                        'progress' => $progress,
+                        'score' => is_null($score) ? 0 : $score,
+                        'progress' => ($progress === false || is_null($progress)) ? 0 : $progress,
                     ];
                 }
             }

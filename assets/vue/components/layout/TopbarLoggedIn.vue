@@ -90,22 +90,21 @@
     </div>
   </div>
 
-  <Menu
+  <BaseMenu
     v-if="!isAnonymous"
     id="user-submenu"
     ref="elUserSubmenu"
     :model="userSubmenuItems"
-    :popup="true"
     class="app-topbar__user-submenu"
   />
 </template>
 
 <script setup>
 import Avatar from "primevue/avatar"
-import Menu from "primevue/menu"
 import PlatformLogo from "./PlatformLogo.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import BaseMenu from "../basecomponents/BaseMenu.vue"
 import { useTopbarLoggedIn } from "../../composables/useTopbarLoggedIn"
 import { useTopbarTour } from "../../composables/useTopbarTour"
 import { useI18n } from "vue-i18n"

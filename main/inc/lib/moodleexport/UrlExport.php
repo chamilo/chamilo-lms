@@ -47,48 +47,48 @@ class UrlExport extends ActivityExport
     /**
      * Get URL data for the course.
      */
-    public function getData(int $activityId, int $sectionId, ?int $moduleId = null): ?array
+    public function getData(int $activityId, int $sectionId): ?array
     {
-        if (empty($this->course->resources['link'][$activityId])) {
-            return null;
+        $url = $this->course->resources['link'][$activityId] ?? null;
+
+        if (null === $url) {
+            return [
+                'id' => $activityId,
+                'moduleid' => $activityId,
+                'modulename' => 'url',
+                'contextid' => (int) ($this->course->info['real_id'] ?? 0),
+                'name' => 'URL '.$activityId,
+                'description' => '',
+                'externalurl' => '',
+                'display' => 6,
+                'displayoptions' => $this->buildUrlDisplayOptions(),
+                'timecreated' => time(),
+                'timemodified' => time(),
+                'sectionid' => $sectionId,
+                'sectionnumber' => 0,
+                'users' => [],
+                'files' => [],
+            ];
         }
 
-        $url = $this->course->resources['link'][$activityId];
-
-        $effectiveModuleId = (int) ($moduleId ?? $activityId);
-        if ($effectiveModuleId <= 0) {
-            $effectiveModuleId = $activityId;
-        }
-
-        $name = (string) ($url->title ?? '');
-        if ($sectionId > 0) {
-            $name = $this->lpItemTitle($sectionId, RESOURCE_LINK, $activityId, $name);
-        }
-        $name = $this->sanitizeMoodleActivityName($name, 255);
-
-        $descriptionResult = $this->extractEmbeddedFilesAndNormalizeContent(
-            (string) ($url->description ?? ''),
-            $effectiveModuleId,
-            'mod_url',
-            'intro',
-            0,
-            fn (int $sequence): int => $this->buildUrlEmbeddedFileId($effectiveModuleId, $sequence)
-        );
+        $src = isset($url->obj) ? $url->obj : $url;
 
         return [
-            'id' => $activityId,
-            'moduleid' => $effectiveModuleId,
+            'id' => (int) $activityId,
+            'moduleid' => (int) $activityId,
             'modulename' => 'url',
-            'contextid' => $effectiveModuleId,
-            'name' => $name,
-            'description' => $descriptionResult['content'],
-            'externalurl' => (string) ($url->url ?? ''),
+            'contextid' => (int) $this->course->info['real_id'],
+            'name' => (string) ($src->title ?: $src->url),
+            'description' => (string) ($src->description ?? ''),
+            'externalurl' => (string) $src->url,
+            'display' => 6,
+            'displayoptions' => $this->buildUrlDisplayOptions(),
             'timecreated' => time(),
             'timemodified' => time(),
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
             'users' => [],
-            'files' => $descriptionResult['files'],
+            'files' => [],
         ];
     }
 
@@ -97,21 +97,21 @@ class UrlExport extends ActivityExport
      */
     private function createUrlXml(array $urlData, string $urlDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xmlContent .= '<activity id="'.$urlData['id'].'" moduleid="'.$urlData['moduleid'].'" modulename="'.$urlData['modulename'].'" contextid="'.$urlData['contextid'].'">'.PHP_EOL;
-        $xmlContent .= '  <url id="'.$urlData['id'].'">'.PHP_EOL;
-        $xmlContent .= '    <name>'.htmlspecialchars((string) $urlData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '    <intro><![CDATA['.(string) $urlData['description'].']]></intro>'.PHP_EOL;
-        $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
-        $xmlContent .= '    <externalurl>'.htmlspecialchars((string) $urlData['externalurl']).'</externalurl>'.PHP_EOL;
-        $xmlContent .= '    <display>0</display>'.PHP_EOL;
-        $xmlContent .= '    <displayoptions>a:1:{s:10:"printintro";i:1;}</displayoptions>'.PHP_EOL;
-        $xmlContent .= '    <parameters>a:0:{}</parameters>'.PHP_EOL;
-        $xmlContent .= '    <timemodified>'.$urlData['timemodified'].'</timemodified>'.PHP_EOL;
-        $xmlContent .= '  </url>'.PHP_EOL;
-        $xmlContent .= '</activity>';
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xml .= '<activity id="'.$urlData['id'].'" moduleid="'.$urlData['moduleid'].'" modulename="url" contextid="'.$urlData['contextid'].'">'.PHP_EOL;
+        $xml .= '  <url id="'.$urlData['id'].'">'.PHP_EOL;
+        $xml .= '    <name>'.htmlspecialchars((string) $urlData['name']).'</name>'.PHP_EOL;
+        $xml .= '    <intro></intro>'.PHP_EOL;
+        $xml .= '    <introformat>1</introformat>'.PHP_EOL;
+        $xml .= '    <externalurl>'.htmlspecialchars((string) $urlData['externalurl']).'</externalurl>'.PHP_EOL;
+        $xml .= '    <display>'.(int) ($urlData['display'] ?? 6).'</display>'.PHP_EOL;
+        $xml .= '    <displayoptions>'.htmlspecialchars((string) ($urlData['displayoptions'] ?? 'a:0:{}')).'</displayoptions>'.PHP_EOL;
+        $xml .= '    <parameters>a:0:{}</parameters>'.PHP_EOL;
+        $xml .= '    <timemodified>'.(int) $urlData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xml .= '  </url>'.PHP_EOL;
+        $xml .= '</activity>'.PHP_EOL;
 
-        $this->createXmlFile('url', $xmlContent, $urlDir);
+        $this->createXmlFile('url', $xml, $urlDir);
     }
 
     /**
@@ -120,5 +120,13 @@ class UrlExport extends ActivityExport
     private function buildUrlEmbeddedFileId(int $moduleId, int $sequence): int
     {
         return 1200000000 + max(0, $moduleId) + max(1, $sequence);
+    }
+
+    private function buildUrlDisplayOptions(): string
+    {
+        return serialize([
+            'popupwidth' => 1024,
+            'popupheight' => 768,
+        ]);
     }
 }

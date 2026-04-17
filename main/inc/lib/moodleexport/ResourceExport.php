@@ -44,46 +44,63 @@ class ResourceExport extends ActivityExport
      */
     public function getData(int $resourceId, int $sectionId, ?int $moduleId = null): array
     {
-        if (empty($this->course->resources[RESOURCE_DOCUMENT][$resourceId])) {
-            return [];
+        $docBucket = $this->course->resources[\defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document']
+            ?? $this->course->resources['document']
+            ?? [];
+
+        $resource = $docBucket[$resourceId] ?? null;
+
+        if (null === $resource) {
+            return [
+                'id' => $resourceId,
+                'moduleid' => $resourceId,
+                'modulename' => 'resource',
+                'contextid' => 0,
+                'name' => 'Resource '.$resourceId,
+                'intro' => '',
+                'display' => 0,
+                'sectionid' => $sectionId,
+                'sectionnumber' => 1,
+                'timemodified' => time(),
+                'users' => [],
+                'files' => [],
+            ];
         }
 
-        $resource = $this->course->resources[RESOURCE_DOCUMENT][$resourceId];
+        $documentPath = (string) ($resource->path ?? '');
+        $effectiveModuleId = (int) ($moduleId ?? ($resource->source_id ?? 0));
 
-        $name = (string) ($resource->title ?? '');
-        if ($sectionId > 0) {
-            $name = $this->lpItemTitle($sectionId, RESOURCE_DOCUMENT, $resourceId, $name);
-        }
-        $name = $this->sanitizeMoodleActivityName($name, 255);
-
-        $effectiveModuleId = (int) ($moduleId ?? $resource->source_id);
         if ($effectiveModuleId <= 0) {
-            $effectiveModuleId = (int) $resource->source_id;
+            $effectiveModuleId = (int) ($resource->source_id ?? 0);
         }
 
+        $name = (string) ($resource->title ?? ('Resource '.$resourceId));
+
+        if ($sectionId > 0) {
+            $name = $this->lpItemTitle(
+                $sectionId,
+                \defined('RESOURCE_DOCUMENT') ? (string) RESOURCE_DOCUMENT : 'document',
+                $resourceId,
+                $name
+            );
+        }
+
+        $name = $this->sanitizeMoodleActivityName($name, 255);
         $resourceFile = $this->buildResourceFileEntry($resource, $effectiveModuleId);
 
-        $introResult = $this->extractEmbeddedFilesAndNormalizeContent(
-            (string) ($resource->comment ?? ''),
-            $effectiveModuleId,
-            'mod_resource',
-            'intro',
-            0,
-            fn (int $sequence): int => $this->buildResourceIntroFileId($effectiveModuleId, $sequence)
-        );
-
         return [
-            'id' => $resourceId,
+            'id' => (int) ($resource->source_id ?? $resourceId),
             'moduleid' => $effectiveModuleId,
             'modulename' => 'resource',
             'contextid' => $effectiveModuleId,
             'name' => $name,
-            'intro' => $introResult['content'],
+            'intro' => (string) ($resource->comment ?? ''),
+            'display' => $this->resolveResourceDisplay($documentPath),
             'sectionid' => $sectionId,
             'sectionnumber' => 1,
             'timemodified' => time(),
             'users' => [],
-            'files' => array_merge([$resourceFile], $introResult['files']),
+            'files' => [$resourceFile],
         ];
     }
 
@@ -222,19 +239,24 @@ class ResourceExport extends ActivityExport
         $xmlContent .= '<activity id="'.$resourceData['id'].'" moduleid="'.$resourceData['moduleid'].'" modulename="resource" contextid="'.$resourceData['contextid'].'">'.PHP_EOL;
         $xmlContent .= '  <resource id="'.$resourceData['id'].'">'.PHP_EOL;
         $xmlContent .= '    <name>'.htmlspecialchars((string) $resourceData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= '    <intro><![CDATA['.(string) $resourceData['intro'].']]></intro>'.PHP_EOL;
+        $xmlContent .= '    <intro>'.htmlspecialchars((string) $resourceData['intro']).'</intro>'.PHP_EOL;
         $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
         $xmlContent .= '    <tobemigrated>0</tobemigrated>'.PHP_EOL;
         $xmlContent .= '    <legacyfiles>0</legacyfiles>'.PHP_EOL;
         $xmlContent .= '    <legacyfileslast>$@NULL@$</legacyfileslast>'.PHP_EOL;
-        $xmlContent .= '    <display>0</display>'.PHP_EOL;
+        $xmlContent .= '    <display>'.(int) ($resourceData['display'] ?? 0).'</display>'.PHP_EOL;
         $xmlContent .= '    <displayoptions>a:1:{s:10:"printintro";i:1;}</displayoptions>'.PHP_EOL;
         $xmlContent .= '    <filterfiles>0</filterfiles>'.PHP_EOL;
         $xmlContent .= '    <revision>1</revision>'.PHP_EOL;
-        $xmlContent .= '    <timemodified>'.$resourceData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '    <timemodified>'.(int) $resourceData['timemodified'].'</timemodified>'.PHP_EOL;
         $xmlContent .= '  </resource>'.PHP_EOL;
         $xmlContent .= '</activity>'.PHP_EOL;
 
         $this->createXmlFile('resource', $xmlContent, $resourceDir);
+    }
+
+    private function resolveResourceDisplay(string $documentPath): int
+    {
+        return 'application/pdf' === $this->guessMimeType($documentPath) ? 1 : 0;
     }
 }

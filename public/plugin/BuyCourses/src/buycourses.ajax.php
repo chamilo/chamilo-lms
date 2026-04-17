@@ -21,7 +21,7 @@ if (api_is_anonymous()) {
 $plugin = BuyCoursesPlugin::create();
 $httpRequest = Container::getRequest();
 
-$culqiEnable = $plugin->get('culqi_enable');
+$culqiEnable = 'true' === $plugin->get('culqi_enable');
 $action = $httpRequest->query->get('a');
 
 $em = Database::getManager();
@@ -387,105 +387,194 @@ switch ($action) {
         break;
 
     case 'culqi_cargo_service':
+        header('Content-Type: application/json');
+
         if (!$culqiEnable) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi is disabled.',
+            ]);
             break;
         }
 
-        $tokenId = $httpRequest->query->get(
-            'token_id',
-            $httpRequest->request->get('token_id')
-        );
-        $serviceSaleId = $httpRequest->query->get(
-            'service_sale_id',
-            $httpRequest->request->get('service_sale_id')
-        );
+        $tokenId = trim((string) $httpRequest->request->get('token_id', ''));
+        $serviceSaleId = $httpRequest->request->getInt('service_sale_id');
 
-        if (!$tokenId || !$serviceSaleId) {
+        if ('' === $tokenId || $serviceSaleId <= 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Missing Culqi token or service sale ID.',
+            ]);
             break;
         }
 
-        $serviceSale = $plugin->getServiceSale((int) $serviceSaleId);
+        $serviceSale = $plugin->getServiceSale($serviceSaleId);
 
-        if (!$serviceSale || !bcUserOwnsServiceSale($serviceSale)) {
+        if (empty($serviceSale) || !bcUserOwnsServiceSale($serviceSale)) {
             api_not_allowed(true);
         }
 
-        require_once 'Requests.php';
-        Requests::register_autoloader();
-
-        require_once 'culqi.php';
-        $culqiParams = $plugin->getCulqiParams();
-
-        // API Key y autenticación
-        $SECRET_API_KEY = $culqiParams['api_key'];
-        $culqi = new Culqi\Culqi(['api_key' => $SECRET_API_KEY]);
-
-        $environment = $culqiParams['integration'];
-        $environment = $environment
-            ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE
-            : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
-
-        $culqi->setEnv($environment);
-        $user = api_get_user_info();
-
-        try {
-            $cargo = $culqi->Cargos->create([
-                'moneda' => $serviceSale['currency'],
-                'monto' => (int) ((float) $serviceSale['price'] * 100),
-                'usuario' => $user['username'],
-                'descripcion' => $serviceSale['service']['name'],
-                'pedido' => $serviceSale['reference'],
-                'codigo_pais' => 'PE',
-                'direccion' => get_lang('None'),
-                'ciudad' => get_lang('None'),
-                'telefono' => 0,
-                'nombres' => $user['firstname'],
-                'apellidos' => $user['lastname'],
-                'correo_electronico' => $user['email'],
-                'token' => $tokenId,
+        if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) !== BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'This service sale is no longer pending.',
             ]);
-
-            if (is_object($cargo)) {
-                $saleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
-                if ($saleIsCompleted) {
-                    Display::addFlash(
-                        Display::return_message(
-                            sprintf(
-                                $plugin->get_lang('SubscriptionToCourseXSuccessful'),
-                                $serviceSale['service']['name']
-                            ),
-                            'success'
-                        )
-                    );
-                }
-            }
-
-            echo json_encode($cargo);
-        } catch (Exception $e) {
-            $cargo = json_decode($e->getMessage(), true);
-            $plugin->cancelServiceSale($serviceSale['id']);
-
-            unset($_SESSION['bc_sale_id']);
-
-            if (is_array($cargo)) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
-                        'error',
-                        false
-                    )
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message(
-                        $plugin->get_lang('ErrorContactPlatformAdmin'),
-                        'error',
-                        false
-                    )
-                );
-            }
+            break;
         }
 
+        $culqiParams = $plugin->getCulqiParams();
+        $culqiSecretKey = trim((string) ($culqiParams['api_key'] ?? ''));
+
+        if ('' === $culqiSecretKey) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi secret key is not configured.',
+            ]);
+            break;
+        }
+
+        $currency = $plugin->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
+        $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? 'PEN')));
+        $amountInCents = (int) round((float) ($serviceSale['price'] ?? 0) * 100);
+
+        if ($amountInCents <= 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid service sale amount.',
+            ]);
+            break;
+        }
+
+        $buyerId = (int) ($serviceSale['buyer']['id'] ?? 0);
+        $buyerInfo = api_get_user_info($buyerId);
+        $buyerEmail = trim((string) ($buyerInfo['email'] ?? ''));
+
+        if ('' === $buyerEmail) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Buyer email is required to process the payment.',
+            ]);
+            break;
+        }
+
+        $payload = [
+            'amount' => $amountInCents,
+            'currency_code' => $currencyCode,
+            'email' => $buyerEmail,
+            'source_id' => $tokenId,
+            'capture' => true,
+            'description' => (string) ($serviceSale['service']['name'] ?? 'Service purchase'),
+            'metadata' => [
+                'service_sale_id' => (string) $serviceSaleId,
+                'reference' => (string) ($serviceSale['reference'] ?? ''),
+            ],
+        ];
+
+        $ch = curl_init('https://api.culqi.com/v2/charges');
+
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Bearer '.$culqiSecretKey,
+            ],
+            CURLOPT_TIMEOUT => 30,
+        ]);
+
+        $rawResponse = curl_exec($ch);
+        $curlError = curl_error($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        if (false === $rawResponse || '' !== $curlError) {
+            error_log(
+                'BuyCourses Culqi service charge request failed | service_sale_id='
+                .$serviceSaleId
+                .' | curl_error='
+                .$curlError
+            );
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi charge request failed.',
+            ]);
+            break;
+        }
+
+        $response = json_decode($rawResponse, true);
+
+        if (!is_array($response)) {
+            error_log(
+                'BuyCourses Culqi service charge returned invalid JSON | service_sale_id='
+                .$serviceSaleId
+                .' | http_code='
+                .$httpCode
+                .' | response='
+                .$rawResponse
+            );
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid Culqi response.',
+            ]);
+            break;
+        }
+
+        if ($httpCode >= 200 && $httpCode < 300 && !empty($response['id'])) {
+            $saleCompleted = $plugin->completeServiceSale($serviceSaleId);
+
+            if (!$saleCompleted) {
+                error_log(
+                    'BuyCourses Culqi payment succeeded but service sale completion failed | service_sale_id='
+                    .$serviceSaleId
+                    .' | charge_id='
+                    .(string) $response['id']
+                );
+
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'The payment was processed but the service sale could not be completed.',
+                ]);
+                break;
+            }
+
+            unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
+
+            echo json_encode([
+                'success' => true,
+                'redirect_url' => api_get_path(WEB_PLUGIN_PATH)
+                    .'BuyCourses/src/service_catalog.php?payment_status=completed&service_name='
+                    .urlencode((string) ($serviceSale['service']['name'] ?? '')),
+                'charge_id' => (string) $response['id'],
+            ]);
+            break;
+        }
+
+        error_log(
+            'BuyCourses Culqi service charge failed | service_sale_id='
+            .$serviceSaleId
+            .' | http_code='
+            .$httpCode
+            .' | response='
+            .$rawResponse
+        );
+
+        $errorMessage = (string) (
+            $response['user_message']
+            ?? $response['merchant_message']
+            ?? $response['message']
+            ?? 'Culqi charge failed.'
+        );
+
+        echo json_encode([
+            'success' => false,
+            'message' => $errorMessage,
+            'response_code' => $httpCode,
+        ]);
         break;
 
     case 'service_sale_info':

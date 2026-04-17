@@ -214,7 +214,7 @@
                         <div class="w-full max-w-5xl">
                             <div class="flex w-full flex-col gap-6 xl:flex-row xl:items-center">
                                 <div class="min-w-0 flex-1 space-y-3">
-                                    <div class="text-sm font-semibold text-gray-90">Available items</div>
+                                    <div class="text-sm font-semibold text-gray-90">{{ 'AvailableItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                     <input
                                         type="text"
                                         id="courses_available_search"
@@ -248,7 +248,7 @@
                                 </div>
 
                                 <div class="min-w-0 flex-1 space-y-3">
-                                    <div class="text-sm font-semibold text-gray-90">Selected items</div>
+                                    <div class="text-sm font-semibold text-gray-90">{{ 'SelectedItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                     <input
                                         type="text"
                                         id="courses_selected_search"
@@ -279,7 +279,7 @@
                             <div class="w-full max-w-5xl">
                                 <div class="flex w-full flex-col gap-6 xl:flex-row xl:items-center">
                                     <div class="min-w-0 flex-1 space-y-3">
-                                        <div class="text-sm font-semibold text-gray-90">Available items</div>
+                                        <div class="text-sm font-semibold text-gray-90">{{ 'AvailableItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <input
                                             type="text"
                                             id="sessions_available_search"
@@ -313,7 +313,7 @@
                                     </div>
 
                                     <div class="min-w-0 flex-1 space-y-3">
-                                        <div class="text-sm font-semibold text-gray-90">Selected items</div>
+                                        <div class="text-sm font-semibold text-gray-90">{{ 'SelectedItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <input
                                             type="text"
                                             id="sessions_selected_search"
@@ -345,7 +345,7 @@
                             <div class="w-full max-w-5xl">
                                 <div class="flex w-full flex-col gap-6 xl:flex-row xl:items-center">
                                     <div class="min-w-0 flex-1 space-y-3">
-                                        <div class="text-sm font-semibold text-gray-90">Available items</div>
+                                        <div class="text-sm font-semibold text-gray-90">{{ 'AvailableItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <input
                                             type="text"
                                             id="services_available_search"
@@ -379,7 +379,7 @@
                                     </div>
 
                                     <div class="min-w-0 flex-1 space-y-3">
-                                        <div class="text-sm font-semibold text-gray-90">Selected items</div>
+                                        <div class="text-sm font-semibold text-gray-90">{{ 'SelectedItems'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <input
                                             type="text"
                                             id="services_selected_search"

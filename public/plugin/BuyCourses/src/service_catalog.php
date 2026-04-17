@@ -100,17 +100,17 @@ switch ($paymentStatus) {
     case 'error':
         switch ($paymentReason) {
             case 'paypal_credentials':
-                $message = 'PayPal credentials are incomplete.';
+                $message = $plugin->get_lang('PayPalCredentialsIncomplete');
                 break;
             case 'paypal_ack':
-                $message = 'PayPal payment could not be confirmed.';
+                $message = $plugin->get_lang('PayPalPaymentNotConfirmed');
                 break;
             case 'complete_service_sale':
                 $message = $plugin->get_lang('ErrorContactPlatformAdmin');
                 break;
             case 'unexpected_status':
             default:
-                $message = 'Unexpected PayPal payment status.';
+                $message = $plugin->get_lang('PayPalUnexpectedStatus');
                 break;
         }
 
@@ -223,7 +223,7 @@ $canBuyServices = api_is_platform_admin() || api_is_allowed_to_create_course();
 $buyerRoleNotice = null;
 
 if (!$canBuyServices) {
-    $buyerRoleNotice = 'These services are available only for teachers.';
+    $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
 }
 
 $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;

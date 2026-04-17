@@ -85,7 +85,7 @@ $form->addHtml(
     '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
     '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AppliesTo').'</div>'.
     '<div class="mt-2 text-body-2 font-medium text-gray-90">'.get_lang('User').'</div>'.
-    '<div class="mt-1 text-caption text-gray-50">This service type is fixed to user level in the current implementation.</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceTypeFixedToUser').'</div>'.
     '</div>'
 );
 
@@ -178,9 +178,10 @@ $pageContent = buycoursesBuildServiceFormShell(
     $form->returnForm(),
     'list_service.php',
     $plugin->get_lang('plugin_title'),
-    'Create a service, define pricing, and choose who it applies to.',
+    $plugin->get_lang('ServiceAddSubtitle'),
     (string) ($currency['iso_code'] ?? ''),
-    $defaultGlobalTax
+    $defaultGlobalTax,
+    $plugin
 );
 
 $tpl->assign('header', $templateName);
@@ -198,6 +199,7 @@ function buycoursesBuildServiceFormShell(
     string $subtitle,
     string $currencyCode,
     int $defaultGlobalTax,
+    BuyCoursesPlugin $plugin,
     ?string $previewImageUrl = null
 ): string {
     $safePageTitle = htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8');
@@ -212,12 +214,12 @@ function buycoursesBuildServiceFormShell(
         $previewHtml = <<<HTML
             <div class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
                 <div class="border-b border-gray-20 px-5 py-4">
-                    <h3 class="text-body-1 font-semibold text-gray-90">Current image</h3>
+                    <h3 class="text-body-1 font-semibold text-gray-90">{$plugin->get_lang('CurrentImageLabel')}</h3>
                 </div>
                 <div class="bg-support-2 p-4">
                     <img
                         src="{$safePreviewImageUrl}"
-                        alt="Service image"
+                        alt="{$plugin->get_lang('CurrentImageLabel')}"
                         class="h-auto w-full rounded-2xl border border-gray-20 object-cover shadow-sm"
                     >
                 </div>
@@ -249,7 +251,7 @@ function buycoursesBuildServiceFormShell(
                             href="{$safeBackUrl}"
                             class="inline-flex items-center justify-center rounded-2xl border border-gray-25 bg-white px-5 py-3 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:bg-support-1 hover:text-primary"
                         >
-                            Back to services
+                            {$plugin->get_lang('BackToServices')}
                         </a>
                     </div>
                 </div>
@@ -259,19 +261,19 @@ function buycoursesBuildServiceFormShell(
                 <aside class="space-y-6">
                     <div class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
                         <div class="border-b border-gray-20 px-5 py-4">
-                            <h2 class="text-body-1 font-semibold text-gray-90">Quick summary</h2>
+                            <h2 class="text-body-1 font-semibold text-gray-90">{$plugin->get_lang('QuickSummary')}</h2>
                         </div>
                         <dl class="space-y-3 bg-white p-5">
                             <div class="rounded-2xl border border-gray-20 bg-support-2 px-4 py-3">
-                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">Currency</dt>
+                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">{$plugin->get_lang('ServiceCurrencyLabel')}</dt>
                                 <dd class="mt-1 text-body-2 font-semibold text-gray-90">{$safeCurrencyCode}</dd>
                             </div>
                             <div class="rounded-2xl border border-gray-20 bg-support-2 px-4 py-3">
-                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">Default tax</dt>
+                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">{$plugin->get_lang('DefaultTaxLabel')}</dt>
                                 <dd class="mt-1 text-body-2 font-semibold text-gray-90">{$defaultGlobalTax}%</dd>
                             </div>
                             <div class="rounded-2xl border border-gray-20 bg-support-2 px-4 py-3">
-                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">Image crop</dt>
+                                <dt class="text-tiny font-semibold uppercase tracking-wide text-primary">{$plugin->get_lang('ImageCropLabel')}</dt>
                                 <dd class="mt-1 text-body-2 font-semibold text-gray-90">16:9</dd>
                             </div>
                         </dl>
@@ -282,9 +284,9 @@ function buycoursesBuildServiceFormShell(
 
                 <section class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
                     <div class="border-b border-gray-20 px-6 py-5 lg:px-8">
-                        <h2 class="text-body-1 font-semibold text-gray-90">Service form</h2>
+                        <h2 class="text-body-1 font-semibold text-gray-90">{$plugin->get_lang('ServiceFormTitle')}</h2>
                         <p class="mt-1 text-body-2 text-gray-50">
-                            Fill in the basic information, price, visibility, and optional media.
+                            {$plugin->get_lang('ServiceFormSubtitle')}
                         </p>
                     </div>
                     <div class="px-6 py-6 lg:px-8">
@@ -316,11 +318,11 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     }
 
     if ($hasAnyBenefit && BuyCoursesPlugin::SERVICE_TYPE_USER !== $appliesTo) {
-        $errors[] = 'Granted benefits are only available for services that apply to User.';
+        $errors[] = $plugin->get_lang('GrantedBenefitsOnlyForUserServices');
     }
 
     if ($hasAnyBenefit && $durationDays <= 0) {
-        $errors[] = 'Duration must be greater than 0 when the service grants benefits.';
+        $errors[] = $plugin->get_lang('DurationMustBePositiveForBenefits');
     }
 
     return $errors;

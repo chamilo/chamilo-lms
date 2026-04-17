@@ -23,7 +23,7 @@
                         {{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review the product details, apply a coupon if you have one, and confirm the payment method to continue.
+                        {{ 'ProcessIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                                 {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
                             </h2>
                             <p class="mt-1 text-sm text-gray-50">
-                                Enter your code to update the total before confirming the order.
+                                {{ 'CouponCodeHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                             </p>
                         </div>
 
@@ -312,7 +312,7 @@
                         {{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h2>
                     <p class="mt-1 text-sm text-gray-50">
-                        Select the available method and confirm the order to continue to the next step.
+                        {{ 'PaymentMethodHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
 

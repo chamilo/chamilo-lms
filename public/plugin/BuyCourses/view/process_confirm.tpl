@@ -27,7 +27,7 @@
                         {{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review the purchase details and confirm the order.
+                        {{ 'ProcessConfirmIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -159,7 +159,7 @@
                                 {{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                             </h2>
                             <p class="text-sm leading-6 text-gray-50">
-                                Review the bank account details before confirming the order.
+                                {{ 'BankAccountReviewHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                             </p>
                         </div>
 
@@ -186,7 +186,7 @@
                             </div>
                         {% else %}
                             <div class="rounded-2xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                                No bank accounts are configured yet.
+                                {{ 'NoBankAccountsConfigured'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                         {% endif %}
 
@@ -205,7 +205,7 @@
                                 {{ 'TermsAndConditions'|get_plugin_lang('BuyCoursesPlugin') }}
                             </h2>
                             <p class="text-sm leading-6 text-gray-50">
-                                Review and accept the terms before placing the order.
+                                {{ 'TermsReviewHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                             </p>
                         </div>
 
@@ -223,7 +223,7 @@
                     <div class="space-y-2">
                         <h2 class="text-lg font-semibold text-gray-90">Summary</h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            Confirm the final details before continuing.
+                            {{ 'ConfirmFinalDetails'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
                     </div>
 
@@ -306,16 +306,20 @@
 
                         {% if is_bank_transfer %}
                             <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                                Bank transfer orders remain pending until payment is verified.
+                                {{ 'BankTransferPendingNotice'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                         {% elseif is_culqi_payment %}
                             <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                                You will be prompted to complete the card payment in the next step.
+                                {{ 'CardPaymentNextStepNotice'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                         {% elseif is_cecabank_payment %}
                             <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                                You will be redirected to Cecabank to complete the payment.
+                                {{ 'CecabankRedirectNotice'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
+                        {% endif %}
+
+                        {% if is_culqi_payment %}
+                            <div id="culqi-error-box" class="hidden rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-gray-90"></div>
                         {% endif %}
 
                         <div class="flex flex-col gap-3 sm:flex-row">
@@ -377,11 +381,34 @@
         }
 
         {% if is_culqi_payment|default(false) %}
-        const confirmCulqiButton = document.getElementById('confirm');
-        const cancelCulqiButton = document.getElementById('cancel');
+        function showCulqiError(message) {
+            const errorBox = document.getElementById('culqi-error-box');
 
-        if (confirmCulqiButton) {
-            confirmCulqiButton.addEventListener('click', function (event) {
+            if (!errorBox) {
+                return;
+            }
+
+            errorBox.textContent = message || 'Culqi payment failed.';
+            errorBox.classList.remove('hidden');
+        }
+
+        async function sendCulqiToken(tokenId) {
+            const response = await fetch('{{ culqi_charge_url|e('js') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                },
+                body: new URLSearchParams({
+                    token_id: tokenId,
+                    service_sale_id: '{{ service_sale.id|e('js') }}',
+                }).toString(),
+            });
+
+            return response.json();
+        }
+
+        if (confirmButton) {
+            confirmButton.addEventListener('click', function (event) {
                 event.preventDefault();
 
                 {% if terms %}
@@ -390,62 +417,70 @@
                 }
                 {% endif %}
 
-                const price = {{ service_sale.price|default(0) }} * 100;
+                const errorBox = document.getElementById('culqi-error-box');
+                if (errorBox) {
+                    errorBox.classList.add('hidden');
+                    errorBox.textContent = '';
+                }
 
-                Culqi.codigoComercio = '{{ culqi_params.commerce_code }}';
-                Culqi.configurar({
-                    nombre: '{{ _s.institution|e('js') }}',
-                    orden: '{{ service_sale.reference|e('js') }}',
-                    moneda: '{{ currency.iso_code|e('js') }}',
-                    descripcion: '{{ service.name|e('js') }}',
-                    monto: price
+                if (typeof Culqi === 'undefined') {
+                    showCulqiError('Culqi checkout is not available.');
+                    return;
+                }
+
+                Culqi.publicKey = '{{ culqi_public_key|e('js') }}';
+
+                Culqi.settings({
+                    title: '{{ service.name|e('js') }}',
+                    currency: '{{ culqi_currency_code|e('js') }}',
+                    amount: {{ culqi_amount_cents|default(0) }},
                 });
 
-                Culqi.abrir();
-
-                const watcher = window.setInterval(function () {
-                    const modal = document.querySelector('.culqi_checkout');
-
-                    if (!modal) {
-                        return;
+                Culqi.options({
+                    lang: 'auto',
+                    installments: false,
+                    paymentMethods: {
+                        tarjeta: true,
+                        yape: false,
+                        bancaMovil: false,
+                        agente: false,
+                        billetera: false,
+                        cuotealo: false
                     }
+                });
 
-                    if (Culqi.error) {
-                        const alertContainer = document.getElementById('message-alert');
-
-                        if (alertContainer) {
-                            alertContainer.innerHTML =
-                                '<div class="rounded-2xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-gray-90">' +
-                                '{{ 'ErrorOccurred'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}'.replace('%s', Culqi.error.codigo).replace('%s', Culqi.error.mensaje) +
-                                '</div>';
-                        }
-
-                        window.clearInterval(watcher);
-                        return;
-                    }
-
-                    if (Culqi.token) {
-                        const ajaxUrl = '{{ culqi_charge_url|e('js') }}' + encodeURIComponent(Culqi.token.id) + '&service_sale_id={{ service_sale.id }}';
-
-                        $.ajax({
-                            type: 'POST',
-                            url: ajaxUrl,
-                            beforeSend: function () {
-                                confirmCulqiButton.disabled = true;
-                                cancelCulqiButton.disabled = true;
-                                confirmCulqiButton.classList.add('opacity-50', 'cursor-not-allowed');
-                                cancelCulqiButton.classList.add('opacity-50', 'cursor-not-allowed');
-                            },
-                            success: function () {
-                                window.location = '{{ catalog_url|e('js') }}';
-                            }
-                        });
-
-                        window.clearInterval(watcher);
-                    }
-                }, 700);
+                Culqi.open();
             });
         }
+
+        window.culqi = async function () {
+            if (Culqi.token && Culqi.token.id) {
+                try {
+                    const result = await sendCulqiToken(Culqi.token.id);
+                    Culqi.close();
+
+                    if (result.success && result.redirect_url) {
+                        window.location.href = result.redirect_url;
+                        return;
+                    }
+
+                    showCulqiError(result.message || 'Culqi payment failed.');
+                } catch (error) {
+                    Culqi.close();
+                    showCulqiError('Culqi charge request failed.');
+                }
+
+                return;
+            }
+
+            if (Culqi.error) {
+                showCulqiError(
+                    Culqi.error.user_message
+                    || Culqi.error.merchant_message
+                    || 'Culqi checkout failed.'
+                );
+            }
+        };
         {% endif %}
     })();
 </script>

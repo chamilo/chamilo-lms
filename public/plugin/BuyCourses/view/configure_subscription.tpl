@@ -16,7 +16,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 text-sm text-gray-50">
-                        Configure tax and subscription periods for this product.
+                        {{ 'ConfigureSubscriptionIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 {{ 'Subscription settings'|default('Subscription settings') }}
             </h3>
             <p class="mt-1 text-sm text-gray-50">
-                Update the tax rate applied to this subscription product.
+                {{ 'UpdateTaxRateHelp'|get_plugin_lang('BuyCoursesPlugin') }}
             </p>
         </div>
 
@@ -80,7 +80,7 @@
                 {{ 'FrequencyConfig'|get_plugin_lang('BuyCoursesPlugin') }}
             </h3>
             <p class="mt-1 text-sm text-gray-50">
-                Add or remove subscription periods for this product.
+                {{ 'ManagePeriodsHelp'|get_plugin_lang('BuyCoursesPlugin') }}
             </p>
         </div>
 

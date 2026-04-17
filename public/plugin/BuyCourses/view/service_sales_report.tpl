@@ -14,7 +14,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review service sales, filter them by status, and optionally narrow the results by user, email, service name or reference.
+                        {{ 'ServiceSalesReportIntroFull'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                     {{ 'Search'|get_lang }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Filter by service order status and search by user, email, service name or order reference.
+                    {{ 'ServiceSalesFilterHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -150,7 +150,7 @@
                     {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h2>
                 <p class="text-sm text-gray-50">
-                    Review the sales returned by the current filters.
+                    {{ 'ServiceSalesTableIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
             </div>
         </div>
@@ -308,7 +308,7 @@
                                         {{ 'NoResults'|get_lang }}
                                     </h3>
                                     <p class="text-sm text-gray-50">
-                                        No service sales were found for the selected filters.
+                                        {{ 'NoServiceSalesFound'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </p>
                                 </div>
                             </td>
@@ -479,7 +479,7 @@
                 <div class="space-y-4">
                     ${imageHtml}
                     <div class="rounded-2xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                        No details available.
+                        {{ 'NoDetailsAvailable'|get_plugin_lang('BuyCoursesPlugin') }}
                     </div>
                 </div>
             `

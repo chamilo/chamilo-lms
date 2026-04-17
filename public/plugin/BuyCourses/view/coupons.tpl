@@ -12,7 +12,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Manage discount coupons, filter them by status, and open each coupon to configure or update it.
+                        {{ 'CouponsPageIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>

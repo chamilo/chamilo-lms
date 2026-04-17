@@ -69,7 +69,7 @@ switch ($serviceSale['payment_type']) {
         if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
             Display::addFlash(
                 Display::return_message(
-                    'PayPal credentials are incomplete.',
+                    \$plugin->get_lang('PayPalCredentialsIncomplete'),
                     'error',
                     false
                 )
@@ -255,19 +255,16 @@ switch ($serviceSale['payment_type']) {
         exit;
 
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
-        $htmlHeadXtra[] = '<script src="//integ-pago.culqi.com/js/v1"></script>';
-
         if ('POST' === $_SERVER['REQUEST_METHOD']) {
             $action = trim((string) ($_POST['action'] ?? ''));
 
             if ('cancel' === $action) {
                 $plugin->cancelServiceSale($serviceSale['id']);
-
                 unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
 
                 Display::addFlash(
                     Display::return_message(
-                        $plugin->get_lang('OrderCanceled'),
+                        $plugin->get_lang('OrderCancelled'),
                         'warning',
                         false
                     )
@@ -278,6 +275,40 @@ switch ($serviceSale['payment_type']) {
             }
         }
 
+        $culqiParams = $plugin->getCulqiParams();
+        $culqiPublicKey = trim((string) ($culqiParams['commerce_code'] ?? ''));
+
+        if ('' === $culqiPublicKey) {
+            Display::addFlash(
+                Display::return_message(
+                    'Culqi public key is not configured.',
+                    'error',
+                    false
+                )
+            );
+
+            header('Location: '.$catalogUrl);
+            exit;
+        }
+
+        $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? 'PEN')));
+        $amountInCents = (int) round((float) ($serviceSale['price'] ?? 0) * 100);
+
+        if ($amountInCents <= 0) {
+            Display::addFlash(
+                Display::return_message(
+                    'Invalid service sale amount.',
+                    'error',
+                    false
+                )
+            );
+
+            header('Location: '.$catalogUrl);
+            exit;
+        }
+
+        $htmlHeadXtra[] = '<script src="https://checkout.culqi.com/js/v4"></script>';
+
         $template = new Template($templateName);
         $template->assign('header', $templateName);
         $template->assign('back_url', $catalogUrl);
@@ -286,18 +317,20 @@ switch ($serviceSale['payment_type']) {
         $template->assign('service_sale', $serviceSale);
         $template->assign('service', $service);
         $template->assign('service_item', $serviceItem);
-        $template->assign('currency', $plugin->getSelectedCurrency());
+        $template->assign('currency', $currency);
         $template->assign('user', $userInfo);
         $template->assign('transfer_accounts', []);
         $template->assign('is_bank_transfer', false);
         $template->assign('is_culqi_payment', true);
         $template->assign('is_cecabank_payment', false);
-        $template->assign('culqi_params', $plugin->getCulqiParams());
+        $template->assign('culqi_public_key', $culqiPublicKey);
         $template->assign(
             'culqi_charge_url',
-            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/buycourses.ajax.php?a=culqi_cargo_service&token_id='
+            api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/buycourses.ajax.php?a=culqi_cargo_service'
         );
         $template->assign('catalog_url', $catalogUrl);
+        $template->assign('culqi_amount_cents', $amountInCents);
+        $template->assign('culqi_currency_code', $currencyCode);
 
         $content = $template->fetch('BuyCourses/view/process_confirm.tpl');
         $template->assign('content', $content);

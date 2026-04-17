@@ -121,9 +121,9 @@
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
                             {% if is_granted('ROLE_ADMIN') %}
-                                Manage premium services and granted benefits
+                                {{ 'ManagePremiumServicesAdmin'|get_plugin_lang('BuyCoursesPlugin') }}
                             {% else %}
-                                Browse premium services and granted benefits
+                                {{ 'BrowsePremiumServicesUser'|get_plugin_lang('BuyCoursesPlugin') }}
                             {% endif %}
                         </p>
                     </div>

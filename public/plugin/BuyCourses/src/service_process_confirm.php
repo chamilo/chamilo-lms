@@ -69,7 +69,7 @@ switch ($serviceSale['payment_type']) {
         if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
             Display::addFlash(
                 Display::return_message(
-                    \$plugin->get_lang('PayPalCredentialsIncomplete'),
+                    $plugin->get_lang('PayPalCredentialsIncomplete'),
                     'error',
                     false
                 )

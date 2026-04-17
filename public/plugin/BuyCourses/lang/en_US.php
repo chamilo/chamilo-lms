@@ -420,8 +420,6 @@ $strings['ActiveServices'] = 'Active services';
 $strings['ActiveServicesDescription'] = 'These services are still valid and currently applied to your account.';
 $strings['NoActiveServicesYet'] = 'You do not have active services yet.';
 $strings['NoPurchasesYet'] = 'You do not have purchases yet.';
-
-// ── New i18n strings added for untranslated hardcoded text ──────────────────
 $strings['BackToServices'] = 'Back to services';
 $strings['QuickSummary'] = 'Quick summary';
 $strings['ServiceCurrencyLabel'] = 'Currency';

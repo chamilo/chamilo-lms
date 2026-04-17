@@ -512,8 +512,6 @@ $strings['FrequencyInUse'] = 'En uso (%s)';
 $strings['AvailableItems'] = 'Elementos disponibles';
 $strings['SelectedItems'] = 'Elementos seleccionados';
 $strings['ExcelFormat'] = 'Excel';
-
-// ── Nuevas claves i18n para texto hardcodeado ────────────────────────────────
 $strings['BackToServices'] = 'Volver a servicios';
 $strings['QuickSummary'] = 'Resumen rápido';
 $strings['ServiceCurrencyLabel'] = 'Moneda';

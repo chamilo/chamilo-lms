@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -1087,18 +1088,114 @@ class CourseController extends ToolBaseController
         $courseData = json_decode($request->getContent(), true);
 
         if (!is_array($courseData)) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => $translator->trans('Invalid request payload.'),
-            ], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $translator->trans('Invalid request payload.'),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        $title = isset($courseData['name']) ? trim((string) $courseData['name']) : null;
-        $wantedCode = isset($courseData['code']) ? trim((string) $courseData['code']) : null;
-        $courseLanguage = $courseData['language'] ?? null;
-        $categoryCode = $courseData['category'] ?? null;
+        $debugValue = static function (mixed $value): string {
+            $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            return false !== $encoded ? $encoded : '[unserializable]';
+        };
+
+        $normalizeScalar = static function (mixed $value): ?string {
+            if (null === $value || '' === $value) {
+                return null;
+            }
+
+            if (is_scalar($value)) {
+                return trim((string) $value);
+            }
+
+            if (is_array($value)) {
+                foreach (['code', 'id', 'value', 'name'] as $key) {
+                    if (isset($value[$key]) && is_scalar($value[$key])) {
+                        return trim((string) $value[$key]);
+                    }
+                }
+
+                $first = reset($value);
+
+                if (is_scalar($first)) {
+                    return trim((string) $first);
+                }
+
+                if (is_array($first)) {
+                    foreach (['code', 'id', 'value', 'name'] as $key) {
+                        if (isset($first[$key]) && is_scalar($first[$key])) {
+                            return trim((string) $first[$key]);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        };
+
+        $normalizeIntArray = static function (mixed $value): array {
+            if (null === $value || '' === $value) {
+                return [];
+            }
+
+            if (is_scalar($value)) {
+                $intValue = (int) $value;
+
+                return $intValue > 0 ? [$intValue] : [];
+            }
+
+            if (!is_array($value)) {
+                return [];
+            }
+
+            $normalized = [];
+
+            foreach ($value as $item) {
+                if (is_scalar($item)) {
+                    $intValue = (int) $item;
+                    if ($intValue > 0) {
+                        $normalized[] = $intValue;
+                    }
+
+                    continue;
+                }
+
+                if (is_array($item)) {
+                    foreach (['id', 'value', 'code'] as $key) {
+                        if (isset($item[$key]) && is_scalar($item[$key])) {
+                            $intValue = (int) $item[$key];
+                            if ($intValue > 0) {
+                                $normalized[] = $intValue;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return array_values(array_unique($normalized));
+        };
+
+        $title = $normalizeScalar($courseData['name'] ?? null);
+        $wantedCode = $normalizeScalar($courseData['code'] ?? null);
+        $courseLanguage = $normalizeScalar($courseData['language'] ?? null);
+        $template = $normalizeScalar($courseData['template'] ?? null) ?? '';
+        $categoryIds = $normalizeIntArray($courseData['category'] ?? null);
         $exemplaryContent = !empty($courseData['fillDemoContent']);
-        $template = $courseData['template'] ?? '';
+
+        if (empty($title)) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $translator->trans('The course title is required.'),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
         $params = [
             'title' => $title,
@@ -1108,13 +1205,12 @@ class CourseController extends ToolBaseController
             'course_template' => $template,
         ];
 
-        if ($categoryCode) {
-            $params['course_categories'] = $categoryCode;
+        if (!empty($categoryIds)) {
+            $params['course_categories'] = $categoryIds;
         }
 
         try {
             $course = $courseHelper->createCourse($params);
-
             if ($course) {
                 return new JsonResponse([
                     'success' => true,
@@ -1122,17 +1218,32 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
-        } catch (Exception $e) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => $translator->trans($e->getMessage()),
-            ], Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            error_log(
+                '[course.create] throwable='.
+                $exception::class.
+                ' message='.$exception->getMessage().
+                ' file='.$exception->getFile().
+                ' line='.(string) $exception->getLine().
+                ' peak='.memory_get_peak_usage(true)
+            );
+
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $translator->trans('An error occurred while creating the course.'),
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
-        return new JsonResponse([
-            'success' => false,
-            'message' => $translator->trans('An error occurred while creating the course.'),
-        ], Response::HTTP_BAD_REQUEST);
+        return new JsonResponse(
+            [
+                'success' => false,
+                'message' => $translator->trans('An error occurred while creating the course.'),
+            ],
+            Response::HTTP_BAD_REQUEST
+        );
     }
 
     #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
@@ -1150,31 +1261,17 @@ class CourseController extends ToolBaseController
             );
         }
 
-        if (!class_exists('BuyCoursesPlugin')) {
-            return new JsonResponse([
-                'success' => true,
-                'canCreate' => true,
-                'currentCount' => 0,
-                'effectiveLimit' => 0,
-                'serviceLimit' => null,
-                'globalLimit' => 0,
-                'limitSource' => 'unlimited',
-                'message' => '',
-            ]);
-        }
-
-        $plugin = \BuyCoursesPlugin::create();
-        $status = $plugin->getCourseCreationCapabilityStatus((int) $user->getId());
+        $status = $this->resolveCourseCreateCapabilityStatus((int) $user->getId(), $translator);
 
         return new JsonResponse([
-            'success' => true,
-            'canCreate' => (bool) $status['canCreate'],
-            'currentCount' => (int) $status['currentCount'],
-            'effectiveLimit' => (int) $status['effectiveLimit'],
-            'serviceLimit' => null !== $status['serviceLimit'] ? (int) $status['serviceLimit'] : null,
-            'globalLimit' => (int) $status['globalLimit'],
-            'limitSource' => (string) $status['limitSource'],
-            'message' => (string) $status['message'],
+            'success' => 'error' !== (string) ($status['limitSource'] ?? ''),
+            'canCreate' => (bool) ($status['canCreate'] ?? false),
+            'currentCount' => (int) ($status['currentCount'] ?? 0),
+            'effectiveLimit' => (int) ($status['effectiveLimit'] ?? 0),
+            'serviceLimit' => isset($status['serviceLimit']) ? (int) $status['serviceLimit'] : null,
+            'globalLimit' => (int) ($status['globalLimit'] ?? 0),
+            'limitSource' => (string) ($status['limitSource'] ?? 'error'),
+            'message' => (string) ($status['message'] ?? ''),
         ]);
     }
 
@@ -1771,5 +1868,74 @@ class CourseController extends ToolBaseController
         );
 
         return $count > 0;
+    }
+
+    private function resolveCourseCreateCapabilityStatus(int $userId, TranslatorInterface $translator): array
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'admin',
+                'message' => '',
+            ];
+        }
+
+        if (!class_exists('BuyCoursesPlugin')) {
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'unlimited',
+                'message' => '',
+            ];
+        }
+
+        try {
+            $plugin = BuyCoursesPlugin::create();
+
+            if (method_exists($plugin, 'isEnabled') && !$plugin->isEnabled(true)) {
+                return [
+                    'canCreate' => true,
+                    'currentCount' => 0,
+                    'effectiveLimit' => 0,
+                    'serviceLimit' => null,
+                    'globalLimit' => 0,
+                    'limitSource' => 'unlimited',
+                    'message' => '',
+                ];
+            }
+
+            $status = $plugin->getCourseCreationCapabilityStatus($userId);
+
+            return [
+                'canCreate' => (bool) ($status['canCreate'] ?? true),
+                'currentCount' => (int) ($status['currentCount'] ?? 0),
+                'effectiveLimit' => (int) ($status['effectiveLimit'] ?? 0),
+                'serviceLimit' => isset($status['serviceLimit']) ? (int) $status['serviceLimit'] : null,
+                'globalLimit' => (int) ($status['globalLimit'] ?? 0),
+                'limitSource' => (string) ($status['limitSource'] ?? 'unlimited'),
+                'message' => (string) ($status['message'] ?? ''),
+            ];
+        } catch (Throwable $exception) {
+            error_log('[BuyCourses] Failed to resolve course creation capability: '.$exception->getMessage());
+
+            return [
+                'canCreate' => false,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'error',
+                'message' => $translator->trans(
+                    'Unable to verify whether you can create a new course right now. Please try again later or contact the administrator.'
+                ),
+            ];
+        }
     }
 }

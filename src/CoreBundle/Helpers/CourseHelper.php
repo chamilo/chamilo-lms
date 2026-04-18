@@ -113,17 +113,58 @@ class CourseHelper
             throw new InvalidArgumentException('The course title cannot be empty.');
         }
 
-        /** @var User|null $currentUser */
-        $currentUser = $this->security->getUser();
-
-        if ($currentUser instanceof User && class_exists('BuyCoursesPlugin')) {
-            $buyCoursesPlugin = \BuyCoursesPlugin::create();
-
-            if (!$buyCoursesPlugin->canUserCreateMoreCourses((int) $currentUser->getId())) {
-                throw new RuntimeException(
-                    $buyCoursesPlugin->getCourseCreationLimitMessage((int) $currentUser->getId())
-                );
+        $normalizeCategoryValues = static function (mixed $value): array {
+            if (null === $value || '' === $value) {
+                return [];
             }
+
+            if (is_scalar($value)) {
+                $intValue = (int) $value;
+
+                return $intValue > 0 ? [$intValue] : [];
+            }
+
+            if (!is_array($value)) {
+                return [];
+            }
+
+            $normalized = [];
+
+            foreach ($value as $item) {
+                if (is_scalar($item)) {
+                    $intValue = (int) $item;
+
+                    if ($intValue > 0) {
+                        $normalized[] = $intValue;
+                    }
+
+                    continue;
+                }
+
+                if (is_array($item)) {
+                    foreach (['id', 'value', 'code'] as $key) {
+                        if (isset($item[$key]) && is_scalar($item[$key])) {
+                            $intValue = (int) $item[$key];
+
+                            if ($intValue > 0) {
+                                $normalized[] = $intValue;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return array_values(array_unique($normalized));
+        };
+
+        if (array_key_exists('course_categories', $params)) {
+            $params['course_categories'] = $normalizeCategoryValues($params['course_categories']);
+        }
+
+        if (array_key_exists('categories', $params)) {
+            $params['categories'] = $normalizeCategoryValues($params['categories']);
         }
 
         if (empty($params['wanted_code'])) {
@@ -138,16 +179,14 @@ class CourseHelper
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);
-        $this->debugLog('createCourse:keys', $keys);
-
         $params = array_merge($params, $keys);
         $course = $this->registerCourse($params);
 
-        if ($course) {
-            $this->debugLog('createCourse:registered', ['courseId' => $course->getId()]);
-            $this->handlePostCourseCreation($course, $params);
-            $this->debugLog('createCourse:done', ['courseId' => $course->getId()]);
+        if (!$course) {
+            return null;
         }
+
+        $this->handlePostCourseCreation($course, $params);
 
         return $course;
     }
@@ -194,15 +233,16 @@ class CourseHelper
             ;
             $course->addAccessUrl($accessUrl);
 
-            if (!empty($params['categories'])) {
-                $this->debugLog('registerCourse:categoriesAttach', ['count' => \count($params['categories'])]);
-                foreach ($params['categories'] as $categoryId) {
-                    $category = $this->courseCategoryRepository->find($categoryId);
-                    if ($category) {
-                        $course->addCategory($category);
-                    }
-                }
+            if (isset($params['categories']) && !is_array($params['categories'])) {
+                $params['categories'] = [(int) $params['categories']];
             }
+
+            $params['categories'] = array_values(
+                array_filter(
+                    array_map(static fn ($value): int => (int) $value, $params['categories'] ?? []),
+                    static fn (int $value): bool => $value > 0
+                )
+            );
 
             $addTeacher = $params['add_user_as_teacher'] ?? true;
             $user = $currentUser ?? $this->getFallbackAdminUser();

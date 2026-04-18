@@ -17,24 +17,22 @@
     <h1 class="page-title text-xl text-gray-90">{{ t("Add a new course") }}</h1>
     <hr class="mb-6" />
 
-    <div
-      v-if="capabilityStatus === 'checking'"
-      class="space-y-4"
-    >
-      <Message severity="info">
+    <div class="space-y-4 mb-6">
+      <Message
+        v-if="capabilityStatus === 'checking'"
+        severity="info"
+      >
         <div class="space-y-2 text-blue-900">
           <p class="font-semibold">
             {{ t("Checking whether you can create a new course.") }}
           </p>
         </div>
       </Message>
-    </div>
 
-    <div
-      v-else-if="capabilityStatus === 'blocked'"
-      class="space-y-4"
-    >
-      <Message severity="warn">
+      <Message
+        v-else-if="capabilityStatus === 'blocked'"
+        severity="warn"
+      >
         <div class="space-y-2 text-amber-900">
           <p class="font-semibold">
             {{ t("You cannot create more courses right now.") }}
@@ -61,18 +59,16 @@
           </p>
         </div>
       </Message>
-    </div>
 
-    <div
-      v-else-if="capabilityStatus === 'error'"
-      class="space-y-4"
-    >
-      <Message severity="error">
-        <div class="space-y-2 text-red-900">
+      <Message
+        v-else-if="capabilityStatus === 'error'"
+        severity="warn"
+      >
+        <div class="space-y-2 text-amber-900">
           <p class="font-semibold">
             {{
               t(
-                "Unable to verify whether you can create a new course right now. Please try again later or contact the administrator.",
+                "Unable to verify whether you can create a new course right now. You can still fill the form and try to submit.",
               )
             }}
           </p>
@@ -81,7 +77,6 @@
     </div>
 
     <CourseForm
-      v-else
       ref="createForm"
       :errors="violations"
       :values="item"
@@ -132,6 +127,10 @@ const limitSourceLabel = computed(() => {
     return t("Platform setting")
   }
 
+  if (limitSource.value === "admin") {
+    return t("Administrator")
+  }
+
   return ""
 })
 
@@ -157,7 +156,7 @@ function sanitizeCoursePayload(data) {
   return payload
 }
 
-function withTimeout(promise, timeout = 8000) {
+function withTimeout(promise, timeout = 2500) {
   return Promise.race([
     promise,
     new Promise((_, reject) => {
@@ -178,9 +177,9 @@ async function loadCreateCapability() {
   try {
     const data = await withTimeout(
       courseService.getCreateCourseCapability({
-        timeout: 8000,
+        timeout: 2000,
       }),
-      8500,
+      2500,
     )
 
     createCapabilityMessage.value = data.message || t("You cannot create more courses right now.")
@@ -190,13 +189,18 @@ async function loadCreateCapability() {
 
     capabilityStatus.value = true === data.canCreate ? "allowed" : "blocked"
   } catch (error) {
-    console.error("Failed to load create course capability.", error)
+    console.warn("Failed to load create course capability.", error)
     capabilityStatus.value = "error"
   }
 }
 
 async function submitCourse(formData) {
   violations.value = null
+
+  if (capabilityStatus.value === "blocked") {
+    showErrorNotification(createCapabilityMessage.value || t("You cannot create more courses right now."))
+    return
+  }
 
   try {
     const payload = sanitizeCoursePayload(formData)
@@ -214,23 +218,17 @@ async function submitCourse(formData) {
   } catch (error) {
     console.error(error)
 
-    const errorMessage =
-      error.message ||
-      (error.response && error.response.data && error.response.data.message
-        ? error.response.data.message
-        : t("An unexpected error occurred."))
+    const errorMessage = error?.response?.data?.message || error?.message || t("An unexpected error occurred.")
 
     showErrorNotification(errorMessage)
 
-    if (error.response && error.response.data && error.response.data.violations) {
+    if (error?.response?.data?.violations) {
       violations.value = error.response.data.violations
     }
-
-    await loadCreateCapability()
   }
 }
 
-onMounted(async () => {
-  await loadCreateCapability()
+onMounted(() => {
+  loadCreateCapability()
 })
 </script>

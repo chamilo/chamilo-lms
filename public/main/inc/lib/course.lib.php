@@ -901,7 +901,7 @@ class CourseManager
         }
 
         if (STUDENT === $status) {
-            if (self::wouldOperationExceedUsersPerCourseLimit($courseId, [$userId])) {
+            if (!api_is_platform_admin() && self::wouldOperationExceedUsersPerCourseLimit($courseId, [$userId])) {
                 return $finish(
                     false,
                     self::getUsersPerCourseLimitCancelMessage($courseId)

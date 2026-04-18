@@ -7431,12 +7431,22 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getEffectiveMaxCoursesLimitForUser(int $userId): int
     {
-        $serviceLimit = $this->getActiveMaxCoursesLimit($userId);
-        if (null !== $serviceLimit && $serviceLimit > 0) {
-            return (int) $serviceLimit;
+        $userId = (int) $userId;
+
+        if ($this->isPlatformAdminUser($userId)) {
+            return 0;
         }
 
+        $serviceLimit = $this->getActiveMaxCoursesLimit($userId);
         $globalLimit = (int) api_get_setting('platform.max_courses_per_user');
+
+        if (null !== $serviceLimit && $serviceLimit > 0 && $globalLimit > 0) {
+            return max($globalLimit, $serviceLimit);
+        }
+
+        if (null !== $serviceLimit && $serviceLimit > 0) {
+            return $serviceLimit;
+        }
 
         return max(0, $globalLimit);
     }
@@ -7460,6 +7470,18 @@ class BuyCoursesPlugin extends Plugin
     public function getCourseCreationCapabilityStatus(int $userId): array
     {
         $userId = (int) $userId;
+
+        if ($this->isPlatformAdminUser($userId)) {
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'admin',
+                'message' => '',
+            ];
+        }
 
         $currentCount = $this->countManagedCoursesByUser($userId);
         $serviceLimit = $this->getActiveMaxCoursesLimit($userId);
@@ -7803,5 +7825,25 @@ class BuyCoursesPlugin extends Plugin
             $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
             $this->freezeExcessEnrollmentsForCourse($courseId, $limit);
         }
+    }
+
+    private function shouldApplyCourseCreationLimitForUser(int $userId): bool
+    {
+        if ($userId <= 0) {
+            return false;
+        }
+
+        if (function_exists('api_is_platform_admin_by_id') && api_is_platform_admin_by_id($userId)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isPlatformAdminUser(int $userId): bool
+    {
+        return $userId > 0
+            && function_exists('api_is_platform_admin_by_id')
+            && api_is_platform_admin_by_id($userId);
     }
 }

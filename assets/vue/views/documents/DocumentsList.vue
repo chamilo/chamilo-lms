@@ -190,6 +190,14 @@
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
           <BaseButton
+            v-if="canShowCopyToMyFiles(slotProps.data)"
+            :title="t('Copy to My Files')"
+            icon="copy"
+            size="small"
+            type="secondary-text"
+            @click="copyToMyFiles(slotProps.data)"
+          />
+          <BaseButton
             v-if="canEdit(slotProps.data)"
             :title="t('Move')"
             icon="folder-move"
@@ -2227,5 +2235,56 @@ function consumeAiSavedToast() {
     params: route.params,
     query: newQuery,
   })
+}
+
+async function copyToMyFiles(item) {
+  const documentId = item?.iid
+
+  if (!documentId) {
+    notification.showErrorNotification(t("Could not copy the file to My Files"))
+    return
+  }
+
+  try {
+    await axios.post(
+      `/api/documents/${documentId}/copy-to-personal-files`,
+      {},
+      {
+        params: {
+          cid: unref(cid),
+          sid: unref(sid),
+          gid: unref(gid),
+        },
+      },
+    )
+
+    notification.showSuccessNotification(t("File copied to My Files"))
+  } catch (error) {
+    console.error("[Documents] Error copying file to My Files:", error)
+    notification.showErrorNotification(t("Could not copy the file to My Files"))
+  }
+}
+
+const canCopyToMyFiles = computed(() => {
+  const allowMyFiles = platformConfigStore.getSetting("platform.allow_my_files")
+  const usersCopyFiles = platformConfigStore.getSetting("document.users_copy_files")
+
+  console.log("[Documents] copy-to-my-files config", {
+    isAuthenticated: securityStore.isAuthenticated,
+    allowMyFiles,
+    usersCopyFiles,
+  })
+
+  return securityStore.isAuthenticated && "true" === String(allowMyFiles) && "true" === String(usersCopyFiles)
+})
+
+function canShowCopyToMyFiles(item) {
+  console.log("[Documents] copy-to-my-files row", {
+    iid: item?.iid,
+    title: item?.title,
+    filetype: item?.filetype,
+  })
+
+  return canCopyToMyFiles.value && "file" === item?.filetype
 }
 </script>

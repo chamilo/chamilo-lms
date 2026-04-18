@@ -178,6 +178,7 @@ class PlatformConfigurationController extends AbstractController
                 'display.hide_logout_button',
                 'document.documents_hide_download_icon',
                 'platform.allow_my_files',
+                'document.users_copy_files',
             ];
 
             foreach ($variables as $variable) {

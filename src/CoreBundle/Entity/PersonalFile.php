@@ -103,6 +103,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             description: 'CDocument identifier',
         ),
     ],
+    normalizationContext: ['groups' => ['personal_file:read', 'resource_node:read']],
     security: "is_granted('ROLE_USER')",
     processor: CopyDocumentToPersonalFileProcessor::class,
 )]

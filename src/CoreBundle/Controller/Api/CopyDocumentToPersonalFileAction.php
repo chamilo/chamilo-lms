@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class CopyDocumentToPersonalFileAction extends AbstractController
 {
     private string $uploadBasePath;
+    private string $temporaryBasePath;
 
     public function __construct(
         private readonly SettingsManager $settingsManager,
@@ -29,6 +30,7 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
         KernelInterface $kernel,
     ) {
         $this->uploadBasePath = $kernel->getProjectDir().'/var/upload/resource';
+        $this->temporaryBasePath = $kernel->getCacheDir().'/copy_to_my_files';
     }
 
     public function __invoke(
@@ -55,7 +57,7 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
 
         $resourceNode = $document->getResourceNode();
         if (null === $resourceNode) {
-            throw new BadRequestHttpException('ResourceNode not found.');
+            throw new BadRequestHttpException('Resource node not found.');
         }
 
         $resourceFile = $resourceNode->getFirstResourceFile();
@@ -70,14 +72,11 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
 
         $filePath = $this->uploadBasePath.$rel;
 
-        if (!file_exists($filePath) || !is_readable($filePath)) {
+        if (!is_file($filePath) || !is_readable($filePath)) {
             throw new BadRequestHttpException('Document source file was not found in storage: '.$filePath);
         }
 
-        $tmpPath = tempnam(sys_get_temp_dir(), 'doc_copy_');
-        if (false === $tmpPath) {
-            throw new BadRequestHttpException('Could not create a temporary file.');
-        }
+        $tmpPath = $this->createTemporaryFile();
 
         if (!@copy($filePath, $tmpPath)) {
             @unlink($tmpPath);
@@ -120,9 +119,34 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
                 'personalFileId' => $personalFile->getId(),
             ], JsonResponse::HTTP_CREATED);
         } finally {
-            if (file_exists($tmpPath)) {
+            if (is_file($tmpPath)) {
                 @unlink($tmpPath);
             }
+        }
+    }
+
+    private function createTemporaryFile(): string
+    {
+        $this->prepareTemporaryDirectory();
+
+        $tmpPath = tempnam($this->temporaryBasePath, 'doc_copy_');
+        if (false === $tmpPath) {
+            throw new BadRequestHttpException('Could not create a temporary file.');
+        }
+
+        return $tmpPath;
+    }
+
+    private function prepareTemporaryDirectory(): void
+    {
+        if (!is_dir($this->temporaryBasePath)) {
+            if (!mkdir($this->temporaryBasePath, 0775, true) && !is_dir($this->temporaryBasePath)) {
+                throw new BadRequestHttpException('Could not create the temporary directory.');
+            }
+        }
+
+        if (!is_writable($this->temporaryBasePath)) {
+            throw new BadRequestHttpException('Temporary directory is not writable.');
         }
     }
 }

@@ -179,6 +179,7 @@ class PlatformConfigurationController extends AbstractController
                 'document.documents_hide_download_icon',
                 'platform.allow_my_files',
                 'document.users_copy_files',
+                'agenda.allow_careers_in_global_agenda',
             ];
 
             foreach ($variables as $variable) {

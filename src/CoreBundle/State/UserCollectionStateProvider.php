@@ -15,8 +15,12 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Doctrine\DBAL\Types\Types;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -103,10 +107,35 @@ final class UserCollectionStateProvider implements ProviderInterface
                        AND uru2.user = u
                        AND uru2.relationType NOT IN (:deletedRel)'
                 ),
+                // Students of courses where the current user is a teacher.
+                $qb->expr()->exists(
+                    'SELECT 1 FROM '.CourseRelUser::class.' cru_t
+                     WHERE cru_t.user = :currentUser
+                       AND cru_t.status = :teacherStatus
+                       AND EXISTS (
+                           SELECT 1 FROM '.CourseRelUser::class.' cru_s
+                           WHERE cru_s.user = u
+                             AND cru_s.course = cru_t.course
+                       )'
+                ),
+                // Students of session-courses where the current user is a course coach.
+                $qb->expr()->exists(
+                    'SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_c
+                     WHERE srcru_c.user = :currentUser
+                       AND srcru_c.status = :courseCoachStatus
+                       AND EXISTS (
+                           SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_s
+                           WHERE srcru_s.user = u
+                             AND srcru_s.session = srcru_c.session
+                             AND srcru_s.course = srcru_c.course
+                       )'
+                ),
             )
         )
             ->setParameter('currentUser', $currentUser->getId())
             ->setParameter('deletedRel', [UserRelUser::USER_RELATION_TYPE_DELETED])
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER, Types::INTEGER)
+            ->setParameter('courseCoachStatus', Session::COURSE_COACH, Types::INTEGER)
         ;
 
         $queryNameGenerator = new QueryNameGenerator();

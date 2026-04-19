@@ -4,38 +4,40 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Controller\Api;
+namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-final class CopyDocumentToPersonalFileAction extends AbstractController
+/**
+ * @implements ProcessorInterface<CDocument, PersonalFile>
+ */
+final class CopyDocumentToPersonalFileProcessor implements ProcessorInterface
 {
     private string $uploadBasePath;
 
     public function __construct(
         private readonly SettingsManager $settingsManager,
         private readonly Security $security,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly EntityManagerInterface $entityManager,
         KernelInterface $kernel,
     ) {
         $this->uploadBasePath = $kernel->getProjectDir().'/var/upload/resource';
     }
 
-    public function __invoke(
-        CDocument $document,
-        ResourceNodeRepository $resourceNodeRepository,
-        EntityManagerInterface $entityManager,
-    ): JsonResponse {
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PersonalFile
+    {
         if ('false' === $this->settingsManager->getSetting('platform.allow_my_files', true)) {
             throw new AccessDeniedHttpException('Personal files are disabled.');
         }
@@ -45,25 +47,31 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
         }
 
         $user = $this->security->getUser();
+
         if (!$user || !method_exists($user, 'getResourceNode')) {
             throw new AccessDeniedHttpException('Authentication is required.');
         }
 
-        if ('file' !== $document->getFiletype()) {
+        \assert($data instanceof CDocument);
+
+        if ('file' !== $data->getFiletype()) {
             throw new BadRequestHttpException('Only files can be copied to personal files.');
         }
 
-        $resourceNode = $document->getResourceNode();
+        $resourceNode = $data->getResourceNode();
+
         if (null === $resourceNode) {
             throw new BadRequestHttpException('ResourceNode not found.');
         }
 
         $resourceFile = $resourceNode->getFirstResourceFile();
+
         if (null === $resourceFile) {
             throw new BadRequestHttpException('No file found in the resource node.');
         }
 
-        $rel = (string) $resourceNodeRepository->getFilename($resourceFile);
+        $rel = (string) $this->resourceNodeRepository->getFilename($resourceFile);
+
         if ('' === $rel) {
             throw new BadRequestHttpException('File path could not be resolved.');
         }
@@ -75,6 +83,7 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
         }
 
         $tmpPath = tempnam(sys_get_temp_dir(), 'doc_copy_');
+
         if (false === $tmpPath) {
             throw new BadRequestHttpException('Could not create a temporary file.');
         }
@@ -85,9 +94,10 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
             throw new BadRequestHttpException('Could not copy the source document.');
         }
 
-        $originalName = $resourceFile->getOriginalName() ?: $document->getTitle();
+        $originalName = $resourceFile->getOriginalName() ?: $data->getTitle();
 
         $mimeType = $resourceFile->getMimeType();
+
         if (null === $mimeType || '' === $mimeType) {
             $detectedMimeType = mime_content_type($tmpPath);
             $mimeType = false !== $detectedMimeType ? $detectedMimeType : 'application/octet-stream';
@@ -111,14 +121,10 @@ final class CopyDocumentToPersonalFileAction extends AbstractController
             $personalFile->setComment('');
             $personalFile->setUploadFile($uploadedFile);
 
-            $entityManager->persist($personalFile);
-            $entityManager->flush();
+            $this->entityManager->persist($personalFile);
+            $this->entityManager->flush();
 
-            return new JsonResponse([
-                'success' => true,
-                'message' => 'File copied to My Files.',
-                'personalFileId' => $personalFile->getId(),
-            ], JsonResponse::HTTP_CREATED);
+            return $personalFile;
         } finally {
             if (file_exists($tmpPath)) {
                 @unlink($tmpPath);

@@ -49,7 +49,6 @@ use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Chamilo\CoreBundle\Controller\Api\CopyDocumentToPersonalFileAction;
 
 #[ApiResource(
     shortName: 'Document',
@@ -236,16 +235,6 @@ use Chamilo\CoreBundle\Controller\Api\CopyDocumentToPersonalFileAction;
             ),
             security: "is_granted('ROLE_USER')",
             deserialize: false
-        ),
-        new Post(
-            uriTemplate: '/documents/{iid}/copy-to-personal-files',
-            controller: CopyDocumentToPersonalFileAction::class,
-            openapi: new Operation(
-                summary: 'Copy a document file to the current user personal files',
-            ),
-            security: "is_granted('VIEW', object.resourceNode)",
-            deserialize: false,
-            name: 'api_documents_copy_to_personal_files',
         ),
         new GetCollection(
             openapi: new Operation(

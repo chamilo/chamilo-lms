@@ -2246,8 +2246,8 @@ async function copyToMyFiles(item) {
   }
 
   try {
-    await axios.post(
-      `/api/documents/${documentId}/copy-to-personal-files`,
+    await baseService.post(
+      `/api/documents/${documentId}/personal_files`,
       {},
       {
         params: {

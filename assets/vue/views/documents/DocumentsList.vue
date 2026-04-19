@@ -2246,17 +2246,7 @@ async function copyToMyFiles(item) {
   }
 
   try {
-    await baseService.post(
-      `/api/documents/${documentId}/personal_files`,
-      {},
-      {
-        params: {
-          cid: unref(cid),
-          sid: unref(sid),
-          gid: unref(gid),
-        },
-      },
-    )
+    await baseService.post(`/api/documents/${documentId}/personal_files?cid=${cid}&sid=${sid}&gid=${gid}`)
 
     notification.showSuccessNotification(t("File copied to My Files"))
   } catch (error) {

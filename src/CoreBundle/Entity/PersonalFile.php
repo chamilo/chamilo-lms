@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ArrayObject;
@@ -92,6 +93,31 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriTemplate: '/documents/{document_id}/personal_files',
     operations: [
         new Post(
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course identifier',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session identifier',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'gid',
+                        in: 'query',
+                        description: 'Group identifier',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
+                ],
+            ),
             read: true, // Explicit true forces the provider to run and sets $data in the pipeline
             deserialize: false, // No request body; the CDocument is resolved from the URI variable via the provider
             provider: DocumentProvider::class,

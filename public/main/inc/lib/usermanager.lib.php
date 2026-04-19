@@ -6380,4 +6380,126 @@ SQL;
         }
     }
 
+    public static function getAllowedUserStatusesForUserForm(): array
+    {
+        $userStatusConfig = [];
+
+        if ('true' === api_get_setting('platform.user_status_show_options_enabled')) {
+            $userStatusConfig = self::normalizeUserStatusSetting(
+                api_get_setting('platform.user_status_show_option')
+            );
+        }
+
+        if (
+            'true' === api_get_setting('admin.user_status_option_only_for_admin_enabled') &&
+            api_is_platform_admin()
+        ) {
+            $adminOnlyConfig = self::normalizeUserStatusSetting(
+                api_get_setting('admin.user_status_option_show_only_for_admin')
+            );
+
+            if (!empty($adminOnlyConfig)) {
+                $userStatusConfig = $adminOnlyConfig;
+            }
+        }
+
+        $statusList = [];
+
+        if (!empty($userStatusConfig)) {
+            foreach ($userStatusConfig as $role => $enabled) {
+                if (!$enabled) {
+                    continue;
+                }
+
+                if (!defined($role)) {
+                    continue;
+                }
+
+                $statusList[] = constant($role);
+            }
+        } else {
+            $statusList = [
+                COURSEMANAGER,
+                STUDENT,
+                DRH,
+                SESSIONADMIN,
+                STUDENT_BOSS,
+                INVITEE,
+            ];
+        }
+
+        return array_values(array_unique(array_map('intval', $statusList)));
+    }
+
+    public static function getAllowedRoleOptionsForUserForm(): array
+    {
+        $roleOptions = api_get_roles();
+        $allowedStatuses = self::getAllowedUserStatusesForUserForm();
+        $knownStatuses = [
+            COURSEMANAGER,
+            STUDENT,
+            DRH,
+            SESSIONADMIN,
+            STUDENT_BOSS,
+            INVITEE,
+        ];
+
+        $filtered = [];
+
+        foreach ($roleOptions as $roleCode => $label) {
+            $normalizedRole = api_normalize_role_code((string) $roleCode);
+            $mappedStatus = (int) api_status_from_roles([$normalizedRole]);
+
+            if (in_array($mappedStatus, $knownStatuses, true)) {
+                if (in_array($mappedStatus, $allowedStatuses, true)) {
+                    $filtered[$roleCode] = $label;
+                }
+
+                continue;
+            }
+
+            $filtered[$roleCode] = $label;
+        }
+
+        return $filtered;
+    }
+
+    public static function areRolesAllowedInUserForm(array $roles): bool
+    {
+        $allowedRoles = array_keys(self::getAllowedRoleOptionsForUserForm());
+        $allowedRoles = array_map('api_normalize_role_code', $allowedRoles);
+
+        foreach ($roles as $role) {
+            $normalizedRole = api_normalize_role_code((string) $role);
+
+            if (!in_array($normalizedRole, $allowedRoles, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static function normalizeUserStatusSetting($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (!is_string($value) || '' === trim($value)) {
+            return [];
+        }
+
+        $decoded = json_decode($value, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        $unserialized = @unserialize($value);
+        if (is_array($unserialized)) {
+            return $unserialized;
+        }
+
+        return [];
+    }
 }

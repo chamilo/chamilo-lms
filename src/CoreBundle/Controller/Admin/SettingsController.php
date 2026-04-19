@@ -737,8 +737,6 @@ class SettingsController extends BaseController
     {
         return [
             'ai_helpers.course_analyser',
-            'announcement.course_announcement_scheduled_by_date',
-            'announcement.hide_global_announcements_when_not_connected',
             'attendance.attendance_calendar_set_duration',
             'certificate.add_gradebook_certificates_cron_task_enabled',
             'course.block_registered_users_access_to_open_course_contents',

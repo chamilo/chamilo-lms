@@ -1551,11 +1551,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide option to send announcements to HR users',
                     'comment' => 'Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool).',
                 ],
-                [
-                    'name' => 'hide_global_announcements_when_not_connected',
-                    'title' => 'Hide global announcements for anonymous',
-                    'comment' => 'Hide platform announcements from anonymous users, and only show them to authenticated users.',
-                ],
             ],
             'ticket' => [
                 [

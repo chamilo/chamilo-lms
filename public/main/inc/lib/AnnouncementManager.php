@@ -931,23 +931,56 @@ class AnnouncementManager
         $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
         $courseEntity = api_get_course_entity();
-        $sessionEntity = api_get_session_entity();
         $groupEntity = api_get_group_entity();
 
-        if (!empty($sessionList)) {
-            foreach ($sessionList as $sessionInfo) {
-                $sessionId = $sessionInfo['id'];
-                $userList = CourseManager::get_user_list_from_course_code(
-                    $courseCode,
-                    $sessionId
-                );
+        if (empty($sessionList)) {
+            return;
+        }
 
-                if (!empty($userList)) {
-                    foreach ($userList as $user) {
-                        $user = api_get_user_entity($user);
-                        $announcement->addUserLink($user, $courseEntity, $sessionEntity, $groupEntity);
-                    }
+        foreach ($sessionList as $sessionInfo) {
+            $sessionId = (int) ($sessionInfo['id'] ?? 0);
+            if ($sessionId <= 0) {
+                continue;
+            }
+
+            $sessionEntity = api_get_session_entity($sessionId);
+            if (null === $sessionEntity) {
+                continue;
+            }
+
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId
+            );
+
+            if (empty($userList)) {
+                continue;
+            }
+
+            foreach ($userList as $userData) {
+                $userId = 0;
+
+                if (is_array($userData)) {
+                    $userId = (int) ($userData['user_id'] ?? $userData['id'] ?? 0);
+                } else {
+                    $userId = (int) $userData;
                 }
+
+                if ($userId <= 0) {
+                    continue;
+                }
+
+                $userEntity = api_get_user_entity($userId);
+                if (null === $userEntity) {
+                    continue;
+                }
+
+                $announcement->addUserLink(
+                    $userEntity,
+                    $courseEntity,
+                    $sessionEntity,
+                    $groupEntity
+                );
             }
         }
     }

@@ -225,11 +225,13 @@ $group[] = $form->createElement(
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
 
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
+
 $form->addElement(
     'select',
     'roles',
     get_lang('Roles'),
-    api_get_roles(),
+    $roleOptions,
     [
         'multiple' => 'multiple',
         'size' => 9,
@@ -373,7 +375,7 @@ if (!$hideFields) {
     }
 }
 
-$roleOptions = api_get_roles();
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 $optionKeyByCanon = [];
 foreach ($roleOptions as $optKey => $label) {
     $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = $optKey;
@@ -403,6 +405,15 @@ if ($form->validate()) {
 
     $roles = $user['roles'] ?? [];
     $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
+    if (!UserManager::areRolesAllowedInUserForm($roles)) {
+        Display::addFlash(
+            Display::return_message(get_lang('Error'), 'error')
+        );
+
+        header('Location: '.api_get_self().'?user_id='.$user_id);
+        exit;
+    }
+
     $newStatus = api_status_from_roles($roles);
     if ($newStatus === DRH && CourseManager::is_user_subscribed_in_course((int) $user_id)) {
         $error_drh = true;

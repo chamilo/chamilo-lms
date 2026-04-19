@@ -752,7 +752,6 @@ class SettingsController extends BaseController
             'display.show_teacher_data',
             'display.show_tutor_data',
             'document.default_group_quotum',
-            'document.users_copy_files',
             'dropbox.dropbox_allow_mailing',
             'editor.block_copy_paste_for_students',
             'editor.enable_uploadimage_editor',

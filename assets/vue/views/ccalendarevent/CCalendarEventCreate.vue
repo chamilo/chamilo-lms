@@ -2,6 +2,10 @@
   <CCalendarEventForm
     ref="createForm"
     :values="item"
+    :is-global="effectiveIsGlobal"
+    :allow-career-promotion-fields="effectiveAllowCareerPromotionFields"
+    :career-options="careerOptions"
+    :promotion-options="promotionOptions"
   />
 
   <BaseButton
@@ -15,99 +19,141 @@
 </template>
 
 <script setup>
+import { computed, onMounted, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { useStore } from "vuex"
+import isEmpty from "lodash/isEmpty"
 import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventForm.vue"
 import Loading from "../../components/Loading.vue"
-import { onMounted, ref, watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import isEmpty from "lodash/isEmpty"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink.js"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink.js"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
-
-//const { DateTime } = require("luxon");
+import baseService from "../../services/baseService"
 
 const item = ref({})
+const careerOptions = ref([])
+const promotionOptions = ref([])
+
 const store = useStore()
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const route = useRoute()
 const router = useRouter()
+const notification = useNotification()
 const { t } = useI18n()
 
 const createForm = ref(null)
+const isLoading = ref(true)
+
+const routeIsGlobalContext = computed(() => {
+  return "global" === String(route.query.type || "")
+})
+
+const effectiveIsGlobal = computed(() => {
+  return routeIsGlobalContext.value
+})
+
+const effectiveAllowCareerPromotionFields = computed(() => {
+  return effectiveIsGlobal.value && "true" === platformConfigStore.getSetting("agenda.allow_careers_in_global_agenda")
+})
 
 let id = route.params.id
 if (isEmpty(id)) {
   id = route.query.id
 }
 
-const isLoading = ref(true)
-
 onMounted(async () => {
   isLoading.value = true
 
-  const response = await store.dispatch("message/load", id)
-  const currentUser = securityStore.user
-  item.value = await response
+  try {
+    const response = await store.dispatch("message/load", id)
+    const currentUser = securityStore.user
 
-  isLoading.value = false
+    item.value = await response
 
-  // Remove unused properties:
-  delete item.value["status"]
-  delete item.value["msgType"]
-  delete item.value["@type"]
-  delete item.value["@context"]
-  delete item.value["@id"]
-  delete item.value["id"]
-  delete item.value["firstReceiver"]
-  //delete item.value['receivers'];
-  delete item.value["sendDate"]
+    delete item.value.status
+    delete item.value.msgType
+    delete item.value["@type"]
+    delete item.value["@context"]
+    delete item.value["@id"]
+    delete item.value.id
+    delete item.value.firstReceiver
+    delete item.value.sendDate
 
-  item.value.parentResourceNodeId = currentUser.resourceNode["id"]
-  //item.value['startDate'] = date.now();
-  //item.value['endDate'] = new Date();
-  //item.value['originalSender'] = item.value['sender'];
-  // New sender.
-  //item.value['sender'] = currentUser['@id'];
+    item.value.parentResourceNodeId = currentUser.resourceNode.id
+    item.value.resourceLinkListFromEntity = []
 
-  item.value.resourceLinkListFromEntity = []
-  const receivers = [...item.value.receiversTo, ...item.value.receiversCc]
-  let itemsAdded = []
-  receivers.forEach((receiver) => {
-    // Skip current user.
-    if (currentUser["@id"] === receiver.receiver["@id"]) {
+    const receivers = [...item.value.receiversTo, ...item.value.receiversCc]
+    const itemsAdded = []
+
+    receivers.forEach((receiver) => {
+      if (currentUser["@id"] === receiver.receiver["@id"]) {
+        return
+      }
+
+      item.value.resourceLinkListFromEntity.push({
+        uid: receiver.receiver.id,
+        user: { username: receiver.receiver.username },
+        visibility: RESOURCE_LINK_PUBLISHED,
+      })
+
+      itemsAdded.push(receiver.receiver.username)
+    })
+
+    if (!itemsAdded.includes(item.value.sender.username)) {
+      item.value.resourceLinkListFromEntity.push({
+        uid: item.value.sender.id,
+        user: { username: item.value.sender.username },
+        visibility: RESOURCE_LINK_PUBLISHED,
+      })
+    }
+
+    delete item.value.sender
+
+    if (undefined === item.value.career) {
+      item.value.career = null
+    }
+
+    if (undefined === item.value.promotion) {
+      item.value.promotion = null
+    }
+
+    await loadCareerAndPromotionOptions()
+  } catch (e) {
+    notification.showErrorNotification(e)
+  } finally {
+    isLoading.value = false
+  }
+})
+
+watch(
+  () => effectiveAllowCareerPromotionFields.value,
+  async (enabled) => {
+    if (!enabled && item.value) {
+      item.value.career = null
+      item.value.promotion = null
+      careerOptions.value = []
+      promotionOptions.value = []
+
       return
     }
-    item.value.resourceLinkListFromEntity.push({
-      uid: receiver.receiver["id"],
-      user: { username: receiver.receiver["username"] },
-      visibility: RESOURCE_LINK_PUBLISHED,
-    })
-    itemsAdded.push(receiver.receiver["username"])
-  })
 
-  // Sender is not added to the list.
-  if (!itemsAdded.includes(item.value["sender"]["username"])) {
-    // Set the sender too.
-    item.value["resourceLinkListFromEntity"].push({
-      uid: item.value["sender"]["id"],
-      user: { username: item.value["sender"]["username"] },
-      visibility: RESOURCE_LINK_PUBLISHED,
-    })
-  }
-
-  delete item.value["sender"]
-})
+    await loadCareerAndPromotionOptions()
+  },
+)
 
 const onClickCreateEvent = async () => {
   if (createForm.value.v$.$invalid) {
+    createForm.value.v$.$touch()
+
     return
   }
 
   isLoading.value = true
-  const itemModel = createForm.value.v$.item.$model
+  const itemModel = { ...createForm.value.v$.item.$model }
 
   const cid = Number(route.query.cid ?? 0)
   const sid = Number(route.query.sid ?? 0)
@@ -124,22 +170,55 @@ const onClickCreateEvent = async () => {
     ]
   }
 
+  itemModel.isGlobal = effectiveIsGlobal.value
+
+  if (!effectiveAllowCareerPromotionFields.value) {
+    itemModel.career = null
+    itemModel.promotion = null
+  }
+
   try {
     await store.dispatch("ccalendarevent/create", itemModel)
+    await router.push({ name: "CCalendarEventList", query: route.query })
   } catch (e) {
-    isLoading.value = false
     notification.showErrorNotification(e)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+async function loadCareerAndPromotionOptions() {
+  if (!effectiveAllowCareerPromotionFields.value) {
+    careerOptions.value = []
+    promotionOptions.value = []
+
     return
   }
 
-  await router.push({ name: "CCalendarEventList", query: route.query })
-}
+  try {
+    const data = await baseService.get("/calendar/career-promotion-options")
 
-const notification = useNotification()
+    careerOptions.value = Array.isArray(data.careers) ? data.careers : []
+    promotionOptions.value = Array.isArray(data.promotions)
+      ? data.promotions.map((promotion) => ({
+          id: promotion.id,
+          title: promotion.title,
+          career: promotion.careerId,
+        }))
+      : []
+  } catch (e) {
+    careerOptions.value = []
+    promotionOptions.value = []
+  }
+}
 
 watch(
   () => store.state.ccalendarevent.created,
   (created) => {
+    if (!created?.resourceNode?.title) {
+      return
+    }
+
     notification.showSuccessNotification(t("{0} created", [created.resourceNode.title]))
   },
 )

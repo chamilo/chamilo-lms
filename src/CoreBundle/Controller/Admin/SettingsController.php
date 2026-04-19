@@ -736,7 +736,6 @@ class SettingsController extends BaseController
     private function getUnsupportedSettings(): array
     {
         return [
-            'agenda.allow_careers_in_global_agenda',
             'ai_helpers.course_analyser',
             'announcement.course_announcement_scheduled_by_date',
             'announcement.hide_global_announcements_when_not_connected',

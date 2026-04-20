@@ -6516,7 +6516,7 @@ document.addEventListener("DOMContentLoaded", function () {
             false,
             [],
             [],
-            ['file', 'folder'],
+            ['file', 'html', 'folder'],
             true
         );
 

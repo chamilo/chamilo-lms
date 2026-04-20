@@ -319,11 +319,11 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
 
     <?php
 
-  if (file_exists(__DIR__.'/../vendor/elfinder/elfinder.php')) {
+  /*if (file_exists(__DIR__.'/../vendor/elfinder/elfinder.php')) {
       require_once __DIR__.'/../vendor/elfinder/elfinder.php';
   } else {
       echo "<script>console.log('Vendor elfinder not find !');</script>";
-  }
+  }*/
 
 echo "<script>
         var _p = {

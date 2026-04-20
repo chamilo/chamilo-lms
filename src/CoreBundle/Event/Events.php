@@ -49,4 +49,5 @@ final class Events
     public const NOTIFICATION_TITLE_FORMATTED = 'chamilo_hook_event.notification_title_formatted';
 
     public const ADMIN_BLOCK_DISPLAYED = 'chamilo.event.admin_block_displayed';
+    public const COURSE_ACCESS_CHECK = 'chamilo.course_access_check';
 }

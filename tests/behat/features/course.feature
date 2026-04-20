@@ -158,13 +158,10 @@ Feature: Course tools basic testing
     And I am on "/main/course_info/maintenance.php"
     Then I should not see an ".alert-danger" element
 
-#  Scenario: Enter to public password-protected course
-#    Given I have a public password-protected course named "PASSWORDPROTECTED" with password "123456"
-#    And I am not logged
-#    And I am on "/courses/PASSWORDPROTECTED/index.php"
-#    When I fill in "course_password" with "123456"
-#    And I press "submit"
-#    Then I should not see "The course password is incorrect"
-
-
-
+  Scenario: Enter to public password-protected course
+    Given I have a public password-protected course named "PASSWORDPROTECTED" with password "123456"
+    And I am not logged
+    And I am on "/courses/PASSWORDPROTECTED/index.php"
+    When I fill in "course_password" with "123456"
+    And I press "submit"
+    Then I should not see "The course password is incorrect"

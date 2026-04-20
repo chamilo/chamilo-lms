@@ -10,57 +10,62 @@
   filter:alpha(opacity=50);-webkit-transition:all .3s ease-out;-moz-transition:all .3s ease-out;-ms-transition:all .3s ease-out;-o-transition:all .3s ease-out;transition:all .3s ease-out
 }
 .introjs-fixParent {
-  z-index: auto !important;
-  opacity: 1.0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
-.introjs-showElement, tr.introjs-showElement>td, tr.introjs-showElement>th {
-  z-index: 9999999 !important;
+.introjs-showElement,
+tr.introjs-showElement>td,
+tr.introjs-showElement>th {
+    z-index: 9999999 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
 }
 .introjs-relativePosition, tr.introjs-showElement>td, tr.introjs-showElement>th {
   position: relative;
 }
 .introjs-helperLayer {
-  position: absolute;
-  z-index: 9999998;
-  background-color: #FFF;
-  background-color: rgba(255, 255, 255, .9);
-  border: 1px solid #777;
-  border: 1px solid rgba(0, 0, 0, .5);
-  border-radius: 4px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, .4);
-  -webkit-transition: all .3s ease-out;
-  -moz-transition: all .3s ease-out;
-  -ms-transition: all .3s ease-out;
-  -o-transition: all .3s ease-out;
-  transition: all .3s ease-out;
+    position: absolute;
+    z-index: 9999998;
+    background-color: transparent;
+    border: 3px solid #dc2626;
+    border-radius: 14px;
+    box-shadow:
+            0 0 0 9999px rgba(15, 23, 42, .34),
+            0 0 0 4px rgba(220, 38, 38, .14);
+    overflow: visible;
+    transition: all .3s ease-out;
 }
 .introjs-helperNumberLayer {
-  position: absolute;
-  top: -16px;
-  left: -16px;
-  z-index: 9999999999 !important;
-  padding: 2px;
-  font-family: Arial, verdana, tahoma;
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
-  background: #ff3019;
-  background: -webkit-linear-gradient(top, #ff3019 0, #cf0404 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff3019), color-stop(100%, #cf0404));
-  background: -moz-linear-gradient(top, #ff3019 0, #cf0404 100%);
-  background: -ms-linear-gradient(top, #ff3019 0, #cf0404 100%);
-  background: -o-linear-gradient(top, #ff3019 0, #cf0404 100%);
-  background: linear-gradient(to bottom, #ff3019 0, #cf0404 100%);
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  border: 3px solid white;
-  border-radius: 50%;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0);
-  filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    z-index: 9999999999 !important;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, verdana, tahoma;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    text-indent: 0;
+    text-shadow: none;
+    background: #dc2626;
+    border: 2px solid #ffffff;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .28);
 }
 .introjs-arrow {
   border: 5px solid white;
@@ -286,4 +291,77 @@ fieldset[disabled] .tour-warning.active {
 .tour-warning .badge {
   color: #f1c40f;
   background-color: #fff;
+}
+.introjs-overlay {
+    opacity: 0.34 !important;
+    background: rgba(15, 23, 42, 0.34) !important;
+}
+
+.introjs-helperLayer {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 3px solid #dc2626 !important;
+    border-radius: 14px !important;
+    box-shadow:
+            0 0 0 9999px rgba(15, 23, 42, 0.34),
+            0 0 0 4px rgba(220, 38, 38, 0.14) !important;
+    overflow: visible !important;
+}
+
+.introjs-helperNumberLayer {
+    position: absolute !important;
+    top: -18px !important;
+    left: -18px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 9999px !important;
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    font-family: Arial, Verdana, Tahoma, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-indent: 0 !important;
+    text-shadow: none !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+    box-sizing: border-box !important;
+    z-index: 999999 !important;
+}
+
+.introjs-tooltip {
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
+}
+
+.introjs-tooltipReferenceLayer {
+    background: transparent !important;
+}
+
+.introjs-disableInteraction {
+    background-color: transparent !important;
+}
+
+.introjs-showElement,
+tr.introjs-showElement > td,
+tr.introjs-showElement > th {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+.introjs-fixParent {
+    opacity: 1 !important;
+    transform: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }

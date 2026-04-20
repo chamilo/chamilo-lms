@@ -79,13 +79,13 @@
         <Button
           :label="t('No')"
           class="p-button-outlined p-button-plain"
-          icon="pi pi-times"
+          icon="mdi mdi-close"
           @click="deleteDialog = false"
         />
         <Button
           :label="t('Yes')"
           class="p-button-secondary"
-          icon="pi pi-check"
+          icon="mdi mdi-check"
           @click="performDelete"
         />
       </template>
@@ -112,7 +112,7 @@
           :key="course.id"
           class="py-2 border-b border-gray-100 last:border-0"
         >
-          <router-link
+          <BaseAppLink
             :to="{ name: 'CourseHome', params: { id: course.id } }"
             class="text-primary hover:underline"
           >
@@ -121,7 +121,7 @@
               v-if="course.code"
               class="text-gray-400 text-sm ml-1"
             >({{ course.code }})</span>
-          </router-link>
+          </BaseAppLink>
         </li>
       </ul>
     </Dialog>

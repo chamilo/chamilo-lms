@@ -1,15 +1,15 @@
 <?php
 
-/* For licensing terms, see /license.txt */
-
 declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Event;
 
 class LearningPathEndedEvent extends AbstractEvent
 {
-    public function getLpViewId(): array
+    public function getLpViewId(): int
     {
-        return $this->data['lp_view_id'] ?? [];
+        return (int) ($this->data['lp_view_id'] ?? 0);
     }
 }

@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Import H5P';
+$strings['plugin_comment'] = 'Importujte obsahy H5P a použijte je v učebních cestách. Otevřete README.md pro pokyny k instalaci.';
+$strings['frame'] = 'Rám';
+$strings['frame_help'] = 'Zobrazit rám a tlačítka pod H5P';
+$strings['embed'] = 'Vložit';
+$strings['embed_help'] = 'Zobrazit tlačítko vložení';
+$strings['copyright'] = 'Autorská práva';
+$strings['copyright_help'] = 'Zobrazit tlačítko autorských práv';
+$strings['icon'] = 'Ikona';
+$strings['icon_help'] = 'Zobrazit ikonu H5P';
+$strings['attempts'] = 'Počet pokusů';
+$strings['upload_h5p'] = 'Nahrát';
+$strings['import_h5p_package'] = 'Nahrát balíček H5P';
+$strings['h5p_package'] = 'Balíček H5P';
+$strings['h5p_error_loading'] = 'Chyba při načítání balíčku H5P';
+$strings['h5p_error_invalid_token'] = 'Neplatný bezpečnostní token';
+$strings['h5p_error_missing_core_asset'] = 'Chyba při načítání jádra H5P';
+$strings['h5p_save_content_state'] = 'Uložit výsledky uživatele';
+$strings['h5p_save_content_freq'] = 'Frekvence uložení';
+$strings['h5p_save_freq_help'] = 'Jak často má být uložen aktuální stav obsahu, v sekundách';
+$strings['start_attempt'] = 'Začít pokus';

@@ -51,6 +51,18 @@ function safeParseJson(value, warnLabel) {
   }
 }
 
+function normalizeBooleanFlag(value) {
+  if (typeof value === "boolean") return value
+  if (typeof value === "number") return value === 1
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase()
+    return ["1", "true", "yes", "on"].includes(normalized)
+  }
+
+  return false
+}
+
 function makeEmptyConfig() {
   return { menu: {}, topbar: {} }
 }
@@ -212,6 +224,21 @@ export function useSidebarMenu() {
   const isAnonymous = !securityStore.isAuthenticated
   const isPrivilegedUser =
     securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+
+  const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+
+  const showBuyCoursesMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(buyCoursesConfig.value?.visibleForAuthenticatedUsers)
+  })
+
+  const buyCoursesIndexPath = computed(() => {
+    return buyCoursesConfig.value?.indexPath || "/plugin/BuyCourses/index.php"
+  })
+
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
       return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
@@ -231,6 +258,8 @@ export function useSidebarMenu() {
   const isActive = (item) => {
     if (item.route) {
       return route.path === item.route || (item.route.name && route.name === item.route.name)
+    } else if (item.url) {
+      return window.location.pathname.startsWith(item.url)
     } else if (item.items) {
       return item.items.some((subItem) => isActive(subItem))
     }
@@ -289,6 +318,7 @@ export function useSidebarMenu() {
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
+          expanded: courseItems.length > 1 ? isActive({ items: courseItems }) : undefined,
         })
       }
     }
@@ -310,7 +340,15 @@ export function useSidebarMenu() {
       }
     }
 
-    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
+    if (showBuyCoursesMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-cart-outline",
+        label: t("Buy courses"),
+        url: buyCoursesIndexPath.value,
+      })
+    }
+
+    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Agenda", "CCalendarEventList"))
 
     if (allowSearchFeature.value && isMenuTabEnabled("search")) {
       items.push({
@@ -480,6 +518,7 @@ export function useSidebarMenu() {
         icon: "mdi mdi-account-cog",
         label: t("Session administrator"),
         items: sessionAdminItems,
+        expanded: isActive({ items: sessionAdminItems }),
       })
     }
 
@@ -490,9 +529,9 @@ export function useSidebarMenu() {
           ...(securityStore.isSessionAdmin &&
           "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
             ? [{ label: t("Add user"), url: "/main/admin/user_add.php" }]
-            : [{ label: t("Users"), url: "/main/admin/user_list.php" }]),
-          { label: t("Courses"), url: "/main/admin/course_list.php" },
-          { label: t("Sessions"), url: "/main/session/session_list.php" },
+            : [{ label: t("Users"), route: { name: "AdminUserList" } }]),
+          { label: t("Courses"), route: { name: "AdminCourseList" } },
+          { label: t("Sessions"), route: { name: "AdminSessionList" } },
           ...(securityStore.isAdmin ? [{ label: t("Settings"), url: "/admin/settings" }] : []),
         ]
 
@@ -500,6 +539,7 @@ export function useSidebarMenu() {
           icon: "mdi mdi-cog",
           items: adminItems,
           label: t("Administration"),
+          expanded: isActive({ items: adminItems }),
         })
       }
     }

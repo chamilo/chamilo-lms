@@ -14725,7 +14725,7 @@ msgstr ""
 msgid "Sorry no results"
 msgstr ""
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr ""
 
 msgid "Closed"
@@ -16067,6 +16067,15 @@ msgid "Short code"
 msgstr ""
 
 msgid "Create child skill"
+msgstr ""
+
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
 msgstr ""
 
 msgid "Search profile matches"
@@ -32665,4 +32674,1126 @@ msgid "Current badge set"
 msgstr ""
 
 msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr ""
+
+msgid "Read-only view"
+msgstr ""
+
+msgid "Events list"
+msgstr ""
+
+msgid "Personal"
+msgstr ""
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr ""
+
+msgid "No tutored sessions found"
+msgstr ""
+
+msgid "Content search"
+msgstr ""
+
+msgid "Search indexed content across all courses."
+msgstr ""
+
+msgid "Enter a keyword..."
+msgstr ""
+
+msgid "Search error"
+msgstr ""
+
+msgid "Enter a keyword to search indexed documents."
+msgstr ""
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr ""
+
+msgid "Restricted"
+msgstr ""
+
+msgid "You do not have access to this resource."
+msgstr ""
+
+msgid "Create group"
+msgstr ""
+
+msgid "My custom certificate"
+msgstr ""
+
+msgid "Select permission"
+msgstr ""
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr ""
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr ""
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr ""
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr ""
+
+msgid "You have access to multiple URLs"
+msgstr ""
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr ""
+
+msgid "You do not currently have access to any URL"
+msgstr ""
+
+msgid "Maximum number of subscriptions allowed"
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
+msgid "You don't have any course content yet"
+msgstr ""
+
+msgid "This course is locked"
+msgstr ""
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr ""
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr ""
+
+msgid "An update is available"
+msgstr ""
+
+msgid "to know what's new and what has been changed"
+msgstr ""
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr ""
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr ""
+
+msgid "Some files or folders don't have writing permission"
+msgstr ""
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr ""
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr ""
+
+msgid "The form contains incorrect or incomplete data"
+msgstr ""
+
+msgid "Your contact information could not be sent"
+msgstr ""
+
+msgid "Please contact support with the error details"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr ""
+
+msgid "Checking push subscription"
+msgstr ""
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr ""
+
+msgid "Push notifications are not enabled in this browser"
+msgstr ""
+
+msgid "Data exchange successfully saved"
+msgstr ""
+
+msgid "Error saving data exchange"
+msgstr ""
+
+msgid "No documents added yet"
+msgstr ""
+
+msgid "No additional details available for this skill."
+msgstr ""
+
+msgid "No available documents"
+msgstr ""
+
+msgid "No users added yet"
+msgstr ""
+
+msgid "No available users"
+msgstr ""
+
+msgid "You can no longer submit"
+msgstr ""
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr ""
+
+msgid "Email sent to all unsubmitted users"
+msgstr ""
+
+msgid "Failed to send email"
+msgstr ""
+
+msgid "Write your answer here"
+msgstr ""
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr ""
+
+msgid "Loading attendance data"
+msgstr ""
+
+msgid "No attendance assigned yet"
+msgstr ""
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr ""
+
+msgid "No attendance data for today"
+msgstr ""
+
+msgid "Saving"
+msgstr ""
+
+msgid "No attendance data to save"
+msgstr ""
+
+msgid "Failed to save attendance"
+msgstr ""
+
+msgid "Loading more courses"
+msgstr ""
+
+msgid "Loading more sessions"
+msgstr ""
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr ""
+
+msgid "The learning path auto-launch setting is ON"
+msgstr ""
+
+msgid "The forum's auto-launch setting is on"
+msgstr ""
+
+msgid "Course ID is missing"
+msgstr ""
+
+msgid "Course created successfully"
+msgstr ""
+
+msgid "Error deleting document(s)"
+msgstr ""
+
+msgid "Template successfully deleted"
+msgstr ""
+
+msgid "Error deleting the template"
+msgstr ""
+
+msgid "The title and thumbnail are required"
+msgstr ""
+
+msgid "Template created successfully"
+msgstr ""
+
+msgid "Error creating the template"
+msgstr ""
+
+msgid "Error submitting the form"
+msgstr ""
+
+msgid "Loading templates"
+msgstr ""
+
+msgid "Loading layout"
+msgstr ""
+
+msgid "Loading courses"
+msgstr ""
+
+msgid "No courses available"
+msgstr ""
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr ""
+
+msgid "User not found"
+msgstr ""
+
+msgid "An error occurred while sending the course"
+msgstr ""
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr ""
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr ""
+
+msgid "You don't have any course yet"
+msgstr ""
+
+msgid "You have received a new friend request"
+msgstr ""
+
+msgid "Diagnosis Management"
+msgstr ""
+
+msgid "Tracking"
+msgstr ""
+
+msgid "View reports, statistics and tracking data"
+msgstr ""
+
+msgid "System activity audit"
+msgstr ""
+
+msgid "Learning analytics"
+msgstr ""
+
+msgid "Administrative activity auditing"
+msgstr ""
+
+msgid "List icons"
+msgstr ""
+
+msgid "Constant name"
+msgstr ""
+
+msgid "MDI icon name"
+msgstr ""
+
+msgid "Assign authentication sources"
+msgstr ""
+
+msgid "Assignment details"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Icons"
+msgstr ""
+
+msgid "Create backup"
+msgstr ""
+
+msgid "Create file"
+msgstr ""
+
+msgid "Create link"
+msgstr ""
+
+msgid "Edit template"
+msgstr ""
+
+msgid "Shared files"
+msgstr ""
+
+msgid "Skill wheel"
+msgstr ""
+
+msgid "Favourite courses"
+msgstr ""
+
+msgid "Restart courses"
+msgstr ""
+
+msgid "Generate terms"
+msgstr ""
+
+msgid "Add variation"
+msgstr ""
+
+msgid "Editor demo"
+msgstr ""
+
+msgid "Tool introduction"
+msgstr ""
+
+msgid "Data exchanges"
+msgstr ""
+
+msgid "Third parties"
+msgstr ""
+
+msgid "Layouts"
+msgstr ""
+
+msgid "Relation type"
+msgstr ""
+
+msgid "Add all"
+msgstr ""
+
+msgid "Remove all"
+msgstr ""
+
+msgid "An error occurred. Please try again."
+msgstr ""
+
+msgid "%s created"
+msgstr ""
+
+msgid "%s updated"
+msgstr ""
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr ""
+
+msgid "have a look at the changelog"
+msgstr ""
+
+msgid "to know what's new and what has been changed."
+msgstr ""
+
+msgid "Session Item"
+msgstr ""
+
+msgid "Points"
+msgstr ""
+
+msgid "See notifications"
+msgstr ""
+
+msgid "New content available for this course."
+msgstr ""
+
+msgid "No new notifications."
+msgstr ""
+
+msgid "No new content found."
+msgstr ""
+
+msgid "No tool details available yet."
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "Open course"
+msgstr ""
+
+msgid "Course completed"
+msgstr ""
+
+msgid "The subscription limit for this course has been reached."
+msgstr ""
+
+msgid "Subscription limit reached"
+msgstr ""
+
+msgid "Tertiary alternative"
+msgstr ""
+
+msgid "Update SCORM"
+msgstr ""
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr ""
+
+msgid "What will be sent to the AI"
+msgstr ""
+
+msgid "Assignment title + instructions"
+msgstr ""
+
+msgid "Student submission (text)"
+msgstr ""
+
+msgid "Student submission (text): none"
+msgstr ""
+
+msgid "Student attachment"
+msgstr ""
+
+msgid "supported"
+msgstr ""
+
+msgid "not supported for document analysis"
+msgstr ""
+
+msgid "Student attachment: none"
+msgstr ""
+
+msgid "No text AI providers available."
+msgstr ""
+
+msgid "AI-assisted"
+msgstr ""
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr ""
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Received"
+msgstr ""
+
+msgid "%s min"
+msgstr ""
+
+msgid "Unlock column"
+msgstr ""
+
+msgid "Lock column"
+msgstr ""
+
+msgid "Set all Present"
+msgstr ""
+
+msgid "Set all Absent"
+msgstr ""
+
+msgid "Auto (recommended)"
+msgstr ""
+
+msgid "Error downloading all documents."
+msgstr ""
+
+msgid "Open with ONLYOFFICE"
+msgstr ""
+
+msgid "Limiting quota"
+msgstr ""
+
+msgid "Remaining space"
+msgstr ""
+
+msgid "Course catalogue"
+msgstr ""
+
+msgid "Drag links to reorder"
+msgstr ""
+
+msgid "Drop links here to keep them without category"
+msgstr ""
+
+msgid "Could not export"
+msgstr ""
+
+msgid "Link moved"
+msgstr ""
+
+msgid "Could not move link"
+msgstr ""
+
+msgid "Category reordering is not enabled"
+msgstr ""
+
+msgid "Showing %s posts"
+msgstr ""
+
+msgid "Showing %s tasks"
+msgstr ""
+
+msgid "Page %s of %s"
+msgstr ""
+
+msgid "Tutors"
+msgstr ""
+
+msgid "selected"
+msgstr ""
+
+msgid "No data to export"
+msgstr ""
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr ""
+
+msgid "Standard list"
+msgstr ""
+
+msgid "Management list"
+msgstr ""
+
+msgid "Open platform"
+msgstr ""
+
+msgid "Teacher user ID"
+msgstr ""
+
+msgid "Are you sure you want to delete this course?"
+msgstr ""
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr ""
+
+msgid "Search by name, username, email"
+msgstr ""
+
+msgid "contains %s items"
+msgstr ""
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr ""
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr ""
+
+msgid "Your account deletion request is pending review."
+msgstr ""
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr ""
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr ""
+
+msgid "Submitting request..."
+msgstr ""
+
+msgid "Request withdrawal of legal consent"
+msgstr ""
+
+msgid "Submitting your account deletion request..."
+msgstr ""
+
+msgid "Submitting your acceptance..."
+msgstr ""
+
+msgid "Event details"
+msgstr ""
+
+msgid "You cannot access the linked course from this view."
+msgstr ""
+
+msgid "Failed to load sessions"
+msgstr ""
+
+msgid "Failed to load events"
+msgstr ""
+
+msgid "No events found"
+msgstr ""
+
+msgid "Group image"
+msgstr ""
+
+msgid "SearchTCC"
+msgstr ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Firstname"
+msgstr ""
+
+msgid "Lastname"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Last login in platform"
+msgstr ""
+
+msgid "Export as CSV"
+msgstr ""
+
+msgid "Export as XLS"
+msgstr ""
+
+msgid "Deactivate this user?"
+msgstr ""
+
+msgid "Enable this user?"
+msgstr ""
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr ""
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr ""
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr ""
+
+msgid "This action cannot be undone."
+msgstr ""
+
+msgid "Unify"
+msgstr ""
+
+msgid "SessionAdmin"
+msgstr ""
+
+msgid "Drh"
+msgstr ""
+
+msgid "Student"
+msgstr ""
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr ""
+
+msgid "Helper text"
+msgstr ""
+
+msgid "NotAllowed"
+msgstr ""
+
+msgid "Use the filters above to load the learner access details."
+msgstr ""
+
+msgid "Start date must be before end date"
+msgstr ""
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr ""
+
+msgid "This course will be created using the platform default course template."
+msgstr ""
+
+msgid "Security breach avoid restart"
+msgstr ""
+
+msgid "User deactivated"
+msgstr ""
+
+msgid "InvalidId"
+msgstr ""
+
+msgid "User enabled"
+msgstr ""
+
+msgid "No other duplicates found for this user."
+msgstr ""
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr ""
+
+msgid "No accounts were merged."
+msgstr ""
+
+msgid "An error occurred while unifying users."
+msgstr ""
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr ""
+
+msgid "Duplicate users"
+msgstr ""
+
+msgid "Years"
+msgstr ""
+
+msgid "All time visits outside sessions"
+msgstr ""
+
+msgid "All time visits in sessions"
+msgstr ""
+
+msgid "All time visits total"
+msgstr ""
+
+msgid "Student visits per period, per course"
+msgstr ""
+
+msgid "By email"
+msgstr ""
+
+msgid "By extra field"
+msgstr ""
+
+msgid "Select an option"
+msgstr ""
+
+msgid "Profile field"
+msgstr ""
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr ""
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr ""
+
+msgid "How to use this report"
+msgstr ""
+
+msgid "Disable / Enable"
+msgstr ""
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "Next week"
+msgstr ""
+
+msgid "Loading report..."
+msgstr ""
+
+msgid "Failed to load this report. Please try again."
+msgstr ""
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr ""
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr ""
+
+msgid "Choose the destination course"
+msgstr ""
+
+msgid "You can select multiple items"
+msgstr ""
+
+msgid "Use the search box to find courses quickly"
+msgstr ""
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr ""
+
+msgid "Select destination sessions"
+msgstr ""
+
+msgid "You can select multiple users"
+msgstr ""
+
+msgid "Use the search box to find users quickly"
+msgstr ""
+
+msgid "Error while creating the document"
+msgstr ""
+
+msgid "Not a SCORM learning path"
+msgstr ""
+
+msgid "Final item"
+msgstr ""
+
+msgid "Edit item"
+msgstr ""
+
+msgid "No AI text providers configured."
+msgstr ""
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr ""
+
+msgid "Update failed. No file received by the server."
+msgstr ""
+
+msgid "Update failed. %s"
+msgstr ""
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr ""
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr ""
+
+msgid "Update failed"
+msgstr ""
+
+msgid "Question lower case"
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Case insensitive"
+msgstr ""
+
+msgid "Select a session to load its courses."
+msgstr ""
+
+msgid "Select the source course."
+msgstr ""
+
+msgid "Select a destination session."
+msgstr ""
+
+msgid "Select the destination course."
+msgstr ""
+
+msgid "Copy the full course content from the selected session course."
+msgstr ""
+
+msgid "Select which tools/items to copy."
+msgstr ""
+
+msgid "Do not include the base (non-session) course content."
+msgstr ""
+
+msgid "An error occurred while copying the course"
+msgstr ""
+
+msgid "Please select a different destination"
+msgstr ""
+
+msgid "You must select a destination course"
+msgstr ""
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr ""
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr ""
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr ""
+
+msgid "GeneralResourcesCourse"
+msgstr ""
+
+msgid "Password must be at least %length% characters long."
+msgstr ""
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr ""
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr ""
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr ""
+
+msgid "Password must contain at least %count% special characters."
+msgstr ""
+
+msgid "Invalid login request."
+msgstr ""
+
+msgid "Authentication failed."
+msgstr ""
+
+msgid "Login %status% for username %username%"
+msgstr ""
+
+msgid "Co-generated with AI"
+msgstr ""
+
+msgid "GDPRTitle"
+msgstr ""
+
+msgid "EntraID ID"
+msgstr ""
+
+msgid "EntraID UID"
+msgstr ""
+
+msgid "Required fields"
+msgstr ""
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr ""
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr ""
+
+msgid "Link classes to created groups ?"
+msgstr ""
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr ""
+
+msgid "New groups creation in category %s"
+msgstr ""
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr ""
+
+msgid "Remove the group link with the class"
+msgstr ""
+
+msgid "Linked class"
+msgstr ""
+
+msgid "The group is no longer linked to the class"
+msgstr ""
+
+msgid "Overview students and courses subscribed to the class"
+msgstr ""
+
+msgid "Overview students subscribed to the class"
+msgstr ""
+
+msgid "Overview class"
+msgstr ""
+
+msgid "Go back to the list of classes"
+msgstr ""
+
+msgid "Go back to course classes"
+msgstr ""
+
+msgid "Users subscribed to the course"
+msgstr ""
+
+msgid "Users not subscribed to the course"
+msgstr ""
+
+msgid "Users subscribed to the class"
+msgstr ""
+
+msgid "Courses subscribed to the class"
+msgstr ""
+
+msgid "No user is subscribed to this class"
+msgstr ""
+
+msgid "No user and no course are subscribed to this class"
+msgstr ""
+
+msgid "No user are subscribed to this class"
+msgstr ""
+
+msgid "No course are subscribed to this class"
+msgstr ""
+
+msgid "Are you sure you want to remove the class"
+msgstr ""
+
+msgid "Are you sure you want to remove the class?"
+msgstr ""
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr ""
+
+msgid "Remove the class without removing students"
+msgstr ""
+
+msgid "This setting is not yet implemented in this version."
+msgstr ""
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr ""
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr ""
+
+msgid "Displayed above the main page content."
+msgstr ""
+
+msgid "Displayed below the main page content."
+msgstr ""
+
+msgid "Displayed near the top of the main layout shell."
+msgstr ""
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr ""
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr ""
+
+msgid "Displayed in the selected plugin region."
+msgstr ""
+
+msgid "Admin menu"
+msgstr ""
+
+msgid "Global regions"
+msgstr ""
+
+msgid "No regions assigned"
+msgstr ""
+
+msgid "Plugin regions"
+msgstr ""
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr ""
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr ""
+
+msgid "No installed plugins were found."
+msgstr ""
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr ""
+
+msgid "Available regions"
+msgstr ""
+
+msgid "Selected paragraph"
+msgstr ""
+
+msgid "Destination folder"
+msgstr ""
+
+msgid "Generate AI media"
+msgstr ""
+
+msgid "Save and insert"
+msgstr ""
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr ""
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr ""
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr ""
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr ""
+
+msgid "Test from topic"
+msgstr ""
+
+msgid "Test from document"
+msgstr ""
+
+msgid "Generate from topic"
+msgstr ""
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr ""
+
+msgid "Quiz title"
+msgstr ""
+
+msgid "Generate from document"
+msgstr ""
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr ""
+
+msgid "Selected document"
+msgstr ""
+
+msgid "The document is selected from the course documents list."
+msgstr ""
+
+msgid "Choose document"
+msgstr ""
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr ""
+
+msgid "Select a document"
+msgstr ""
+
+msgid "Welcome"
+msgstr ""
+
+msgid "Welcome to Chamilo"
+msgstr ""
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr ""

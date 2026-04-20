@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Chamilo" /></a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="license.html">License</a></li>
+            <li><a href="credits.html">Credits</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </div>
+</nav>
+<div>
   <h1>Optimization guide for Chamilo 2</h1>
   <p>
 Although we strive to make Chamilo as lightweight and fast as possible
@@ -57,7 +70,8 @@ This page will contain optimization hints in the future. At this time,
   Once you have done this, you will need to restart PHP for the changes to take effect.<br>
 
   <h2>Enabling APCu</h2>
-  APCu is a userland caching extension for PHP.<br>
+
+  APCu is a userland caching extension for PHP.<br><br>
   It works at a different level than OpCache and allows you to *share* values between PHP processes.<br>
   So in fact it allows Chamilo to share pre-calculated values between users of the same PHP server.<br>
   This is particularly useful when some data is not fixed but is particularly heavy to calculate.<br>
@@ -67,7 +81,9 @@ This page will contain optimization hints in the future. At this time,
   so for now it's a very mild optimization, but as new versions come out, we plan to use it more heavily.<br>
 
   APCu is normally enabled by default when you install it in your PHP setup, so there's nothing else to do.<br>
-  You can check if APCu is enabled by running <code>php -i | grep apcu</code>
+  You can check if APCu is enabled by running <code>php -i | grep apcu</code><br>
+  <br>
+  Once APCu is enabled, you can benefit from it directly by editing the <em>config/packages/cache.yaml</em> file and following the instructions in the file.<br>
 
   <h2>PHP-FPM and MPM_EVENT</h2>
   This is more complex to setup and requires some knowledge of the PHP internals, but it is possible to use PHP-FPM with the MPM_EVENT mode to improve performance.<br>
@@ -88,5 +104,47 @@ This page will contain optimization hints in the future. At this time,
   If so, you would benefit from having someone knowledgeable look into the database and optimize it.<br>
   We will publish suggested optimizations in this guide as we discover them, but we strive to provide the best database structure by default for new systems.
 
+  <h3>Additional indexes for document list performance</h3>
+  <p>
+  On installations with large numbers of documents per course, the documents list page can become slow due to expensive filtering and sorting queries
+  against the <code>resource_link</code> and <code>resource_node</code> tables.
+  The following two indexes significantly reduce query cost and eliminate the filesort for the default title sort:
+  </p>
+  <pre>
+-- Composite index covering the most common document-list filter:
+-- WHERE c_id = ? AND session_id IS NULL AND group_id IS NULL AND parent_id IS NULL
+-- Avoids a full table scan on resource_link when listing documents in a course context.
+ALTER TABLE resource_link
+    ADD INDEX idx_rl_doc_list (c_id, session_id, group_id, parent_id);
+
+-- Composite index to avoid filesort when listing documents sorted by title
+-- within a specific folder (WHERE parent_id = ? ORDER BY title ASC).
+ALTER TABLE resource_node
+    ADD INDEX idx_rn_parent_title (parent_id, title);
+  </pre>
+  <p>
+  These indexes will be added automatically by the Doctrine migrations in the next major release.
+  On existing production systems they can be applied manually with no downtime on MySQL/MariaDB (the
+  <code>ALTER TABLE ... ADD INDEX</code> statement is an online operation in InnoDB).
+  </p>
+  <p>
+  For the Doctrine schema to reflect these indexes (e.g. so that <code>doctrine:schema:validate</code>
+  passes and future <code>doctrine:migrations:diff</code> does not re-create them), the corresponding
+  <code>#[ORM\Index]</code> attributes must also be added to the entity classes:
+  </p>
+  <pre>
+// src/CoreBundle/Entity/ResourceLink.php — add alongside the existing #[ORM\Index] attributes:
+#[ORM\Index(
+    columns: ['c_id', 'session_id', 'group_id', 'parent_id'],
+    name: 'idx_rl_doc_list'
+)]
+
+// src/CoreBundle/Entity/ResourceNode.php — add a new #[ORM\Index] attribute on the class:
+#[ORM\Index(
+    columns: ['parent_id', 'title'],
+    name: 'idx_rn_parent_title'
+)]
+  </pre>
+</div>
 </body>
 </html>

@@ -1,24 +1,17 @@
 <template>
   <div>
-    <SectionHeader :title="t('Links')">
-      <template #end>
-        <StudentViewButton
-          v-if="securityStore.isAuthenticated"
-          @change="refreshForViewToggle"
-        />
-      </template>
-    </SectionHeader>
+    <SectionHeader :title="t('Links')" />
     <BaseToolbar v-if="securityStore.isAuthenticated && canEditLinks">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
-        type="black"
+        type="success"
         @click="redirectToCreateLink"
       />
       <BaseButton
         :label="t('Add a category')"
         icon="folder-plus"
-        type="black"
+        type="success"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
@@ -50,7 +43,7 @@
           :label="t('Add a link')"
           class="mt-4"
           icon="link-add"
-          type="primary"
+          type="success"
           @click="redirectToCreateLink"
         />
       </EmptyState>
@@ -148,25 +141,28 @@
                 v-if="securityStore.isAuthenticated && canEditLinks"
                 class="flex items-center gap-3 text-gray-700"
               >
-                <BaseIcon
+                <BaseButton
+                  :label="t('Edit')"
                   icon="edit"
-                  size="normal"
-                  :title="t('Edit')"
-                  class="hover:text-black"
+                  only-icon
+                  size="small"
+                  type="secondary"
                   @click="editCategory(category)"
                 />
-                <BaseIcon
+                <BaseButton
                   :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
-                  size="normal"
-                  :title="t('Change visibility')"
-                  class="hover:text-black"
+                  :label="t('Change visibility')"
+                  only-icon
+                  size="small"
+                  type="black"
                   @click="toggleCategoryVisibility(category)"
                 />
-                <BaseIcon
+                <BaseButton
+                  :label="t('Delete')"
                   icon="delete"
-                  size="normal"
-                  :title="t('Delete')"
-                  class="hover:text-black"
+                  only-icon
+                  size="small"
+                  type="danger"
                   @click="confirmDeleteCategory(category)"
                 />
               </div>
@@ -245,25 +241,28 @@
                   v-if="securityStore.isAuthenticated && canEditLinks"
                   class="flex items-center gap-3 text-gray-700"
                 >
-                  <BaseIcon
+                  <BaseButton
+                    :label="t('Edit')"
                     icon="edit"
-                    size="normal"
-                    :title="t('Edit')"
-                    class="hover:text-black"
+                    only-icon
+                    size="small"
+                    type="black"
                     @click="editCategory(category)"
                   />
-                  <BaseIcon
+                  <BaseButton
                     :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
-                    size="normal"
-                    :title="t('Change visibility')"
-                    class="hover:text-black"
+                    :label="t('Change visibility')"
+                    only-icon
+                    size="small"
+                    type="black"
                     @click="toggleCategoryVisibility(category)"
                   />
-                  <BaseIcon
+                  <BaseButton
+                    :label="t('Delete')"
                     icon="delete"
-                    size="normal"
-                    :title="t('Delete')"
-                    class="hover:text-black"
+                    only-icon
+                    size="small"
+                    type="danger"
                     @click="confirmDeleteCategory(category)"
                   />
                 </div>
@@ -347,7 +346,6 @@ import LinkItem from "../../components/links/LinkItem.vue"
 import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 
 import Skeleton from "primevue/skeleton"
 import Draggable from "vuedraggable"
@@ -361,7 +359,7 @@ import { useNotification } from "../../composables/notification"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReq } from "../../composables/cidReq"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const route = useRoute()
@@ -388,11 +386,15 @@ const linkValidationResults = ref({})
 const isToggling = ref({})
 const isMoving = ref(false)
 
-const isAllowedToEdit = ref(securityStore.isAdmin || securityStore.isCurrentTeacher)
-const canEditLinks = computed(() => {
-  if (platform.isStudentViewActive) return false
-  return Boolean(isAllowedToEdit.value || securityStore.isAdmin || securityStore.isCurrentTeacher)
+const { isAllowedToEdit: isAllowedToEditFromServer } = useIsAllowedToEdit({
+  tutor: true,
+  coach: true,
+  sessionCoach: true,
 })
+const isAllowedToEdit = computed(
+  () => isAllowedToEditFromServer.value || securityStore.isAdmin || securityStore.isCurrentTeacher,
+)
+const canEditLinks = computed(() => !platform.isStudentViewActive && isAllowedToEdit.value)
 
 const canMoveCategories = false
 const parentId = computed(() => Number(route.query.parent || 0))
@@ -404,27 +406,12 @@ const showGeneralCard = computed(() => {
   return Boolean(canEditLinks.value)
 })
 
-onMounted(async () => {
-  await reconcileEditGate()
-  await fetchLinks()
-})
+onMounted(() => fetchLinks())
 
-watch(() => platform.isStudentViewActive, refreshForViewToggle)
-
-async function reconcileEditGate() {
-  try {
-    const allowed = await checkIsAllowedToEdit(true, true, true)
-    isAllowedToEdit.value = Boolean(allowed || securityStore.isAdmin || securityStore.isCurrentTeacher)
-  } catch (error) {
-    console.error("Error checking edit permission:", error)
-    isAllowedToEdit.value = Boolean(securityStore.isAdmin || securityStore.isCurrentTeacher)
-  }
-}
-
-async function refreshForViewToggle() {
-  await reconcileEditGate()
-  await fetchLinks()
-}
+watch(
+  () => platform.isStudentViewActive,
+  () => fetchLinks(),
+)
 
 async function fetchLinks() {
   isLoading.value = true

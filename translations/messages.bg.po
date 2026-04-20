@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "E-mail съобщение до новия потребител"
 
 msgid "Portfolio"
-msgstr "Разширен профил"
+msgstr "Портфолио"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "При стойност \"Да\" на тази настройка, потребителят ще може да попълни в профила си следните незадължителни полета: \"Моята квалификация\", \"Моите дипломи\", \"Какво мога да преподавам\", \"Моите работи\" и \"Моята лична страница\"."
@@ -14729,7 +14729,7 @@ msgstr "Потребители, групи"
 msgid "Sorry no results"
 msgstr "Няма резултати."
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Разрешения на групата"
 
 msgid "Closed"
@@ -16072,6 +16072,15 @@ msgstr "Кратък код"
 
 msgid "Create child skill"
 msgstr "Създаване на дъщерно умение"
+
+msgid "This skill can be obtained through:"
+msgstr "Този умение може да се получи чрез:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Няма курс, който в момента позволява да получите това умение."
+
+msgid "Add skill to search profile"
+msgstr "Добави умение към профил за търсене"
 
 msgid "Search profile matches"
 msgstr "Търсене на съвпадения в профила"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Създайте първата си бележка, за да започнете."
 
 msgid "F d, Y"
-msgstr "d M, Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Не може да се зареди информация за поддръжка в момента."
@@ -32750,4 +32759,1129 @@ msgstr "Качете изображение или създайте едно с 
 
 msgid "Current badge set"
 msgstr "Текущ комплект значки"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "В този раздел, когато кликнете върху 'Регистрирай студент' за курс, на следващата страница ще трябва да изберете потребител. След валидиране ще се създаде нова сесия с избрания курс и потребител и ще се изпрати известие за абонамент на потребителя."
+
+msgid "Read-only view"
+msgstr "Само за четене"
+
+msgid "Events list"
+msgstr "Списък събития"
+
+msgid "Personal"
+msgstr "Лично"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Седмиците се показват от 1 до 52"
+
+msgid "No tutored sessions found"
+msgstr "Не са намерени сесии с tutor"
+
+msgid "Content search"
+msgstr "Търсене на съдържание"
+
+msgid "Search indexed content across all courses."
+msgstr "Търсене на индексирано съдържание във всички курсове."
+
+msgid "Enter a keyword..."
+msgstr "Въведете ключова дума..."
+
+msgid "Search error"
+msgstr "Грешка при търсене"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Въведете ключова дума за търсене на индексирани документи."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Резултатите, към които нямате достъп, са скрити от конфигурацията."
+
+msgid "Restricted"
+msgstr "Ограничен"
+
+msgid "You do not have access to this resource."
+msgstr "Нямате достъп до този ресурс."
+
+msgid "Create group"
+msgstr "Създай група"
+
+msgid "My custom certificate"
+msgstr "Моят персонализиран сертификат"
+
+msgid "Select permission"
+msgstr "Избери разрешение"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "При приемане на това покана ще бъдете свързани с заявителя по начин, който ще направи част или цялата ви профилна информация достъпна за четене от заявителя"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Показва се %d от приблизително %d резултат(и) за %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Показва се %d достъпен(и) резултат(и) за %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Затова ще бъдете автоматично пренасочени към този URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Имате достъп до множество URL адреси"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Моля, кликнете върху връзката по-долу, съответстваща на URL адреса, към който желаете да получите достъп"
+
+msgid "You do not currently have access to any URL"
+msgstr "В момента нямате достъп до нито един URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Максимален брой разрешени абонаменти"
+
+msgid "An error occurred"
+msgstr "Грешка"
+
+msgid "You don't have any course content yet"
+msgstr "Все още нямате съдържание на курса"
+
+msgid "This course is locked"
+msgstr "Този курс е заключен"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Имейл адресът, от който ще се изпращат имейли, когато платформата изпраща имейл, също използван като 'reply-to' заглавка"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Не намирате ли езика си в списъка? Свържете се с нас на %s, за да допринесете като преводач"
+
+msgid "An update is available"
+msgstr "Има налично обновление"
+
+msgid "to know what's new and what has been changed"
+msgstr "за да научите какво е ново и какво е променено"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Открихме, че вашата PHP инсталация не дефинира датата"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Вашата PHP версия не отговаря на изискванията за този софтуер"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Някои файлове или папки нямат права за запис"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Внимание! Инсталаторът откри съществуваща Chamilo платформа във вашата система"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Тъй като директориите <code>newscorm</code> и <code>exercice</code> бяха преименувани на <code>lp</code> и <code>exercise</code> съответно, е необходимо да ги изтриете или преименувате на <code>newscorm_old</code> и <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Формата съдържа неверни или непълни данни"
+
+msgid "Your contact information could not be sent"
+msgstr "Контактната ви информация не може да бъде изпратена"
+
+msgid "Please contact support with the error details"
+msgstr "Моля, свържете се със поддръжката с детайлите на грешката"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Кликнете върху изображението, за да го изрежете (соотношение 1:1, препоръчително 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Използвайте инструмента за изрязване, за да изберете област 1:1"
+
+msgid "Checking push subscription"
+msgstr "Проверява се абонаментът за push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Абонирани сте за push известия в този браузър"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push известията не са активирани в този браузър"
+
+msgid "Data exchange successfully saved"
+msgstr "Данните за обмен са запазени успешно"
+
+msgid "Error saving data exchange"
+msgstr "Грешка при запазване на данните за обмен"
+
+msgid "No documents added yet"
+msgstr "Все още не са добавени документи"
+
+msgid "No additional details available for this skill."
+msgstr "Няма налични допълнителни детайли за това умение."
+
+msgid "No available documents"
+msgstr "Няма налични документи"
+
+msgid "No users added yet"
+msgstr "Все още не са добавени потребители"
+
+msgid "No available users"
+msgstr "Няма налични потребители"
+
+msgid "You can no longer submit"
+msgstr "Вече не можете да изпратите"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Не са намерени липсващи изпращания за това задание или данните не са налични"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Имейлът е изпратен до всички потребители без изпращане"
+
+msgid "Failed to send email"
+msgstr "Грешка при изпращане на имейл"
+
+msgid "Write your answer here"
+msgstr "Напишете отговора си тук"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Календарът за присъствие ви позволява да регистрирате списъци с присъствие (по един за всяка реална сесия, на която студентите трябва да присъстват)"
+
+msgid "Loading attendance data"
+msgstr "Зареждане на данни за присъствие"
+
+msgid "No attendance assigned yet"
+msgstr "Още няма зададено присъствие"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Днес няма планиран час, опитайте с друг ден или добавете записа за присъствие сами чрез иконите за действия"
+
+msgid "No attendance data for today"
+msgstr "Няма данни за присъствие за днес"
+
+msgid "Saving"
+msgstr "Съхраняване"
+
+msgid "No attendance data to save"
+msgstr "Няма данни за присъствие за съхранение"
+
+msgid "Failed to save attendance"
+msgstr "Грешка при съхраняване на присъствието"
+
+msgid "Loading more courses"
+msgstr "Зареждане на още курсове"
+
+msgid "Loading more sessions"
+msgstr "Зареждане на още сесии"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Конфигурацията за автоматично стартиране на документи е активирана"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Конфигурацията за автоматично стартиране на упражнения е активирана"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Настройката за автоматично стартиране на учебни пътеки е ВКЛЮЧЕНА"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Настройката за автоматично стартиране на форума е включена"
+
+msgid "Course ID is missing"
+msgstr "Липсва ID на курс"
+
+msgid "Course created successfully"
+msgstr "Курсът е създаден успешно"
+
+msgid "Error deleting document(s)"
+msgstr "Грешка при изтриване на документ(и)"
+
+msgid "Template successfully deleted"
+msgstr "Шаблонът е изтрит успешно"
+
+msgid "Error deleting the template"
+msgstr "Грешка при изтриване на шаблона"
+
+msgid "The title and thumbnail are required"
+msgstr "Заглавието и миниатюрата са задължителни"
+
+msgid "Template created successfully"
+msgstr "Шаблонът е създаден успешно"
+
+msgid "Error creating the template"
+msgstr "Грешка при създаване на шаблона"
+
+msgid "Error submitting the form"
+msgstr "Грешка при изпращане на формата"
+
+msgid "Loading templates"
+msgstr "Зареждане на шаблони"
+
+msgid "Loading layout"
+msgstr "Зареждане на оформление"
+
+msgid "Loading courses"
+msgstr "Зареждане на курсове"
+
+msgid "No courses available"
+msgstr "Няма налични курсове"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Този списък показва потребители от всички URL адреси за достъп, защото настройката \"session_admin_access_to_all_users_on_all_urls\" е активирана."
+
+msgid "User not found"
+msgstr "Потребителят не е намерен"
+
+msgid "An error occurred while sending the course"
+msgstr "Грешка при изпращане на курса"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Имайте предвид, че промените в условията, свързани с GDPR, изискват да съобщите тези промени на трети страни, на които сте предоставили лична информация за вашите потребители, както е посочено в член 19 от GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Трябва да създадете \"Условия и правила\" за всички налични езици"
+
+msgid "You don't have any course yet"
+msgstr "Още нямате курсове"
+
+msgid "You have received a new friend request"
+msgstr "Получихте нова заявка за приятелство"
+
+msgid "Diagnosis Management"
+msgstr "Управление на диагностика"
+
+msgid "Tracking"
+msgstr "Проследяване"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Преглед на отчети, статистики и данни за проследяване"
+
+msgid "System activity audit"
+msgstr "Аудит на системната активност"
+
+msgid "Learning analytics"
+msgstr "Анализ на обучението"
+
+msgid "Administrative activity auditing"
+msgstr "Аудит на административната активност"
+
+msgid "List icons"
+msgstr "Икони на списък"
+
+msgid "Constant name"
+msgstr "Име на константа"
+
+msgid "MDI icon name"
+msgstr "Име на MDI икона"
+
+msgid "Assign authentication sources"
+msgstr "Назначаване на източници за автентикация"
+
+msgid "Assignment details"
+msgstr "Подробности за заданието"
+
+msgid "Terms and conditions"
+msgstr "Условия и правила"
+
+msgid "Icons"
+msgstr "Иконки"
+
+msgid "Create backup"
+msgstr "Създай резервно копие"
+
+msgid "Create file"
+msgstr "Създай файл"
+
+msgid "Create link"
+msgstr "Създай връзка"
+
+msgid "Edit template"
+msgstr "Редактирай шаблон"
+
+msgid "Shared files"
+msgstr "Споделени файлове"
+
+msgid "Skill wheel"
+msgstr "Колело на уменията"
+
+msgid "Favourite courses"
+msgstr "Потребителски курсове"
+
+msgid "Restart courses"
+msgstr "Рестартирай курсове"
+
+msgid "Generate terms"
+msgstr "Генерирай условия"
+
+msgid "Add variation"
+msgstr "Добави вариант"
+
+msgid "Editor demo"
+msgstr "Демо на редактора"
+
+msgid "Tool introduction"
+msgstr "Встъпителен текст"
+
+msgid "Data exchanges"
+msgstr "Обмен на данни"
+
+msgid "Third parties"
+msgstr "Трети страни"
+
+msgid "Layouts"
+msgstr "Макети"
+
+msgid "Relation type"
+msgstr "Тип на връзката"
+
+msgid "Add all"
+msgstr "Добави всички"
+
+msgid "Remove all"
+msgstr "Премахни всички"
+
+msgid "An error occurred. Please try again."
+msgstr "Грешка. Моля, опитайте отново."
+
+msgid "%s created"
+msgstr "%s създаден"
+
+msgid "%s updated"
+msgstr "%s актуализиран"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ако планирате ъпгрейд от по-стара версия на Chamilo, може би ще искате да"
+
+msgid "have a look at the changelog"
+msgstr "прегледате changelog-а"
+
+msgid "to know what's new and what has been changed."
+msgstr "за да знаете какво е ново и какво е променено."
+
+msgid "Session Item"
+msgstr "Елемент на сесия"
+
+msgid "Points"
+msgstr "Точки"
+
+msgid "See notifications"
+msgstr "Вижте известията"
+
+msgid "New content available for this course."
+msgstr "Ново съдържание е налично за този курс."
+
+msgid "No new notifications."
+msgstr "Няма нови известия."
+
+msgid "No new content found."
+msgstr "Няма намерено ново съдържание."
+
+msgid "No tool details available yet."
+msgstr "Все още няма налични детайли за инструмента."
+
+msgid "Last access"
+msgstr "Последен достъп"
+
+msgid "Open course"
+msgstr "Отвори курс"
+
+msgid "Course completed"
+msgstr "Курс завършен"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Достигнат е лимитът за абонамент за този курс."
+
+msgid "Subscription limit reached"
+msgstr "Достигнат е лимитът за абонамент"
+
+msgid "Tertiary alternative"
+msgstr "Трети алтернативен"
+
+msgid "Update SCORM"
+msgstr "Актуализирай SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "ИИ може да създаде чернова на обратна връзка и предложена оценка преди да я изпратите."
+
+msgid "What will be sent to the AI"
+msgstr "Какво ще бъде изпратено към ИИ"
+
+msgid "Assignment title + instructions"
+msgstr "Заглавие на задание + инструкции"
+
+msgid "Student submission (text)"
+msgstr "Студентско изпращане (текст)"
+
+msgid "Student submission (text): none"
+msgstr "Студентско изпращане (текст): няма"
+
+msgid "Student attachment"
+msgstr "Прикачен файл на студент"
+
+msgid "supported"
+msgstr "поддържано"
+
+msgid "not supported for document analysis"
+msgstr "неподдържано за анализ на документи"
+
+msgid "Student attachment: none"
+msgstr "Прикачен файл на студент: няма"
+
+msgid "No text AI providers available."
+msgstr "Няма налични доставчици на текстови ИИ."
+
+msgid "AI-assisted"
+msgstr "С помощта на ИИ"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Това решение се запазва с корекцията (ExtraField) и не може да се промени по-късно."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Допълнително прикачване към корекцията (това не е предаденото от студента)."
+
+msgid "AI"
+msgstr "ИИ"
+
+msgid "Received"
+msgstr "Получен"
+
+msgid "%s min"
+msgstr "%s мин"
+
+msgid "Unlock column"
+msgstr "Отключване на колона"
+
+msgid "Lock column"
+msgstr "Заключване на колона"
+
+msgid "Set all Present"
+msgstr "Задаване на всички Присъстващи"
+
+msgid "Set all Absent"
+msgstr "Задаване на всички Отсъстващи"
+
+msgid "Auto (recommended)"
+msgstr "Автоматично (препоръчително)"
+
+msgid "Error downloading all documents."
+msgstr "Грешка при сваляне на всички документи."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Отваряне с ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Ограничение на квотата"
+
+msgid "Remaining space"
+msgstr "Оставащо място"
+
+msgid "Course catalogue"
+msgstr "Каталог на курсовете"
+
+msgid "Drag links to reorder"
+msgstr "Плъзнете връзките, за да ги прередите"
+
+msgid "Drop links here to keep them without category"
+msgstr "Пуснете връзките тук, за да ги запазите без категория"
+
+msgid "Could not export"
+msgstr "Не може да се изнесе"
+
+msgid "Link moved"
+msgstr "Връзката е преместена"
+
+msgid "Could not move link"
+msgstr "Не може да се премести връзката"
+
+msgid "Category reordering is not enabled"
+msgstr "Пререждането на категории не е разрешено"
+
+msgid "Showing %s posts"
+msgstr "Показва се %s публикации"
+
+msgid "Showing %s tasks"
+msgstr "Показва се %s задачи"
+
+msgid "Page %s of %s"
+msgstr "Страница %s от %s"
+
+msgid "Tutors"
+msgstr "Туторът"
+
+msgid "selected"
+msgstr "избрани"
+
+msgid "No data to export"
+msgstr "Няма данни за износ"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Заглавна PNG трябва да е ≤ %spx."
+
+msgid "Standard list"
+msgstr "Стандартен списък"
+
+msgid "Management list"
+msgstr "Списък за управление"
+
+msgid "Open platform"
+msgstr "Отворена платформа"
+
+msgid "Teacher user ID"
+msgstr "ID на потребител учител"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Сигурни ли сте, че искате да изтриете този курс?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Сигурни ли сте, че искате да изтриете избраните курсове?"
+
+msgid "Search by name, username, email"
+msgstr "Търсене по име, потребителско име, имейл"
+
+msgid "contains %s items"
+msgstr "съдържа %s елемента"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Вашето споразумение за легално съгласие остава активно, докато заявката за отказ не бъде прегледана и обработена."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Заявката ви за отказ от легалното съгласие е в очакване на преглед."
+
+msgid "Your account deletion request is pending review."
+msgstr "Заявката ви за изтриване на акаунт е в очакване на преглед."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Защо искате да поискате отказ от вашето легално съгласие?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Изпращане на заявката ви за отказ от легалното съгласие..."
+
+msgid "Submitting request..."
+msgstr "Изпращане на заявката..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Поискайте отказ от легалното съгласие"
+
+msgid "Submitting your account deletion request..."
+msgstr "Изпращане на заявката ви за изтриване на акаунт..."
+
+msgid "Submitting your acceptance..."
+msgstr "Изпращане на вашето съгласие..."
+
+msgid "Event details"
+msgstr "Подробности за събитието"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Не можете да получите достъп до свързания курс от това гледане."
+
+msgid "Failed to load sessions"
+msgstr "Неуспешно зареждане на сесии"
+
+msgid "Failed to load events"
+msgstr "Неуспешно зареждане на събития"
+
+msgid "No events found"
+msgstr "Няма намерени събития"
+
+msgid "Group image"
+msgstr "Изображение на група"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Забранено"
+
+msgid "Distribution"
+msgstr "Разпределение"
+
+msgid "Firstname"
+msgstr "Собствено име"
+
+msgid "Lastname"
+msgstr "Фамилно име"
+
+msgid "Email"
+msgstr "Имейл"
+
+msgid "Last login in platform"
+msgstr "Последен вход в платформата"
+
+msgid "Export as CSV"
+msgstr "Експорт като CSV"
+
+msgid "Export as XLS"
+msgstr "Експорт като XLS"
+
+msgid "Deactivate this user?"
+msgstr "Да деактивирате ли този потребител?"
+
+msgid "Enable this user?"
+msgstr "Да активирате ли този потребител?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Да обедините ли тази дублирана група в потребител #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Това ще обедини всички други акаунти от същата група в този акаунт."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Обединените акаунти ще бъдат постоянно изтрити и ще изчезнат от този отчет."
+
+msgid "This action cannot be undone."
+msgstr "Това действие не може да бъде отменено."
+
+msgid "Unify"
+msgstr "Обедини"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Студент"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Общо заето място от портала %s лимит %s MB"
+
+msgid "Helper text"
+msgstr "Помощен текст"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Използвайте филтрите по-горе, за да заредите детайлите за достъп на обучаващите се."
+
+msgid "Start date must be before end date"
+msgstr "Началната дата трябва да е преди крайната дата"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Изберете период от дати и тип групиране, за да прегледате детайлите за достъп на обучаващите се."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Този курс ще бъде създаден с шаблона по подразбиране на платформата за курсове."
+
+msgid "Security breach avoid restart"
+msgstr "Избягване на рестарт при пробив в сигурността"
+
+msgid "User deactivated"
+msgstr "Потребителят е деактивиран"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Потребителят е активиран"
+
+msgid "No other duplicates found for this user."
+msgstr "Няма намерени други дубликати за този потребител."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Потребители обединени: обединени %s акаунт(а) в потребител #%s. Обединените акаунти са постоянно изтрити."
+
+msgid "No accounts were merged."
+msgstr "Няма обединени акаунти."
+
+msgid "An error occurred while unifying users."
+msgstr "Грешка при обединяване на потребители."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Потребители обединени: потребител #%s е обединен в потребител #%s. Обединеният акаунт е постоянно изтрит."
+
+msgid "Duplicate users"
+msgstr "Дублирани потребители"
+
+msgid "Years"
+msgstr "Години"
+
+msgid "All time visits outside sessions"
+msgstr "Посещения извън сесии за всички времена"
+
+msgid "All time visits in sessions"
+msgstr "Посещения в сесии за всички времена"
+
+msgid "All time visits total"
+msgstr "Общо посещения за всички времена"
+
+msgid "Student visits per period, per course"
+msgstr "Посещения на студенти на период, на курс"
+
+msgid "By email"
+msgstr "По имейл"
+
+msgid "By extra field"
+msgstr "По допълнително поле"
+
+msgid "Select an option"
+msgstr "Изберете опция"
+
+msgid "Profile field"
+msgstr "Поле на профила"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Този отчет показва само потребители с един и същ имейл адрес."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Този отчет показва само потребители, които споделят еднаква стойност за избраното поле на профила."
+
+msgid "How to use this report"
+msgstr "Как да използвате този отчет"
+
+msgid "Disable / Enable"
+msgstr "Изключване / Включване"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Само блокира или възстановява входа. Не изтрива потребителя и не премахва абонаментите."
+
+msgid "Last week"
+msgstr "Миналата седмица"
+
+msgid "Next week"
+msgstr "Следващата седмица"
+
+msgid "Loading report..."
+msgstr "Зареждане на отчет..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Неуспешно зареждане на отчета. Моля, опитайте отново."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Изберете една или повече сесии за копиране на треньори от тях и изберете целевия курс"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Задръжте Ctrl (или Cmd) за избор на множество елементи"
+
+msgid "Choose the destination course"
+msgstr "Изберете целевия курс"
+
+msgid "You can select multiple items"
+msgstr "Можете да изберете множество елементи"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Използвайте полето за търсене, за да намерите курсове бързо"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Изберете една или повече източни сесии и една или повече целеви сесии за копиране на студенти"
+
+msgid "Select destination sessions"
+msgstr "Изберете целеви сесии"
+
+msgid "You can select multiple users"
+msgstr "Можете да изберете множество потребители"
+
+msgid "Use the search box to find users quickly"
+msgstr "Използвайте полето за търсене, за да намерите потребители бързо"
+
+msgid "Error while creating the document"
+msgstr "Грешка при създаването на документа"
+
+msgid "Not a SCORM learning path"
+msgstr "Не е SCORM учебен път"
+
+msgid "Final item"
+msgstr "Краен елемент"
+
+msgid "Edit item"
+msgstr "Редактиране на елемент"
+
+msgid "No AI text providers configured."
+msgstr "Няма конфигурирани доставчици на AI текст."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Качването неуспешно. Файлът вероятно е по-голям от лимита на сървъра (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Актуализацията неуспешна. Сървърът не получи файл."
+
+msgid "Update failed. %s"
+msgstr "Актуализацията неуспешна. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Актуализацията неуспешна. Невалиден качен файл."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Актуализацията неуспешна. Името на качения ZIP файл трябва да съвпада с оригиналното име на SCORM пакета."
+
+msgid "Update failed"
+msgstr "Актуализацията неуспешна"
+
+msgid "Question lower case"
+msgstr "въпрос с малка буква"
+
+msgid "Regenerate"
+msgstr "Регенериране"
+
+msgid "Case insensitive"
+msgstr "Без различаване на регистъра"
+
+msgid "Select a session to load its courses."
+msgstr "Изберете сесия, за да заредите курсовете ѝ."
+
+msgid "Select the source course."
+msgstr "Изберете източния курс."
+
+msgid "Select a destination session."
+msgstr "Изберете целева сесия."
+
+msgid "Select the destination course."
+msgstr "Изберете целевия курс."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Копирайте пълното съдържание на курса от избрания курс на сесията."
+
+msgid "Select which tools/items to copy."
+msgstr "Изберете кои инструменти/елементи да копирате."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Не включвайте базовото (несесионно) съдържание на курса."
+
+msgid "An error occurred while copying the course"
+msgstr "Грешка при копиране на курса"
+
+msgid "Please select a different destination"
+msgstr "Моля, изберете различен пункт на назначения"
+
+msgid "You must select a destination course"
+msgstr "Трябва да изберете целевия курс"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "За износ на курсове с тестове трябва да изберете тестовете"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ако вашите учебни пътища включват звукови файлове, трябва да ги изберете от документите"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ако вашите тестове включват въпроси с hotspot, трябва да изберете изображенията от документите"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Паролата трябва да е поне %length% символа дълга."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Паролата трябва да съдържа поне %count% малки букви."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Паролата трябва да съдържа поне %count% главни букви."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Паролата трябва да съдържа поне %count% цифри (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Паролата трябва да съдържа поне %count% специални символи."
+
+msgid "Invalid login request."
+msgstr "Невалидна заявка за вход."
+
+msgid "Authentication failed."
+msgstr "Удостоверяването неуспешно."
+
+msgid "Login %status% for username %username%"
+msgstr "Вход %status% за потребителско име %username%"
+
+msgid "Co-generated with AI"
+msgstr "Създадено с помощта на изкуствен интелект"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Задължителни полета"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Етикетите могат да бъдат копирани и поставени в текстовата област по-долу и ще бъдат динамично заменени с тяхната стойност за всеки потребител индивидуално при изпращането им."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Тази група е свързана с клас %s.<br>Списъкът на членовете на групата зависи от членовете на класа и не може да бъде променен.<br>Отидете на настройките на групата, за да прекъснете тази връзка, ако желаете да добавите или премахнете членове от тази група."
+
+msgid "Link classes to created groups ?"
+msgstr "Свързване на класове със създадените групи?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ако клас е свързан с група, потребителите, добавени към или премахнати от класа, се добавят автоматично към или премахват от групата."
+
+msgid "New groups creation in category %s"
+msgstr "Създаване на нови групи в категория %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Предупредително съобщение, че потребителят не може да променя членовете на свързана група"
+
+msgid "Remove the group link with the class"
+msgstr "Премахване на връзката на групата с класа"
+
+msgid "Linked class"
+msgstr "Свързан клас"
+
+msgid "The group is no longer linked to the class"
+msgstr "Групата вече не е свързана с класа"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Преглед на студенти и курсове, абонирани за класа"
+
+msgid "Overview students subscribed to the class"
+msgstr "Преглед на студенти, абонирани за класа"
+
+msgid "Overview class"
+msgstr "Преглед на клас"
+
+msgid "Go back to the list of classes"
+msgstr "Връщане към списъка с класове"
+
+msgid "Go back to course classes"
+msgstr "Връщане към класовете на курса"
+
+msgid "Users subscribed to the course"
+msgstr "Потребители, абонирани за курса"
+
+msgid "Users not subscribed to the course"
+msgstr "Потребители, неабонати за курса"
+
+msgid "Users subscribed to the class"
+msgstr "Потребители, абонирани за класа"
+
+msgid "Courses subscribed to the class"
+msgstr "Курсове, абонирани за класа"
+
+msgid "No user is subscribed to this class"
+msgstr "Няма абониран потребител за този клас"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Няма абониран потребител и курс за този клас"
+
+msgid "No user are subscribed to this class"
+msgstr "Няма абонирани потребители за този клас"
+
+msgid "No course are subscribed to this class"
+msgstr "Няма абонирани курсове за този клас"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Сигурни ли сте, че искате да премахнете класа"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Сигурни ли сте, че искате да премахнете класа?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Сигурни ли сте, че искате да премахнете класа без да премахвате потребители?"
+
+msgid "Remove the class without removing students"
+msgstr "Премахване на класа без премахване на студентите"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Тази настройка все още не е имплементирана в тази версия."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Препоръчително за добавки само за администратори, показвани в административната област."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Препоръчително за добавки, които трябва да се появяват като инструменти на курса."
+
+msgid "Displayed above the main page content."
+msgstr "Показвано над съдържанието на главната страница."
+
+msgid "Displayed below the main page content."
+msgstr "Показва се под съдържанието на основната страница."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Показва се близо до горната част на основната обвивка на макета."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Показва се близо до долната част на основната обвивка на макета."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Препоръчително за глобални плаващи или постоянни добавъци, показвани преди долната част."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Показва се в избрания регион на добавъка."
+
+msgid "Admin menu"
+msgstr "Административно меню"
+
+msgid "Global regions"
+msgstr "Глобални региони"
+
+msgid "No regions assigned"
+msgstr "Няма назначени региони"
+
+msgid "Plugin regions"
+msgstr "Региони на добавъци"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Изберете къде да се показва всеки инсталиран добавък."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Съвет: използвайте Ctrl/Cmd за избор на множество региони."
+
+msgid "No installed plugins were found."
+msgstr "Не са намерени инсталирани добавъци."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Изберете един или повече региони за този добавък в текущия URL за достъп."
+
+msgid "Available regions"
+msgstr "Налични региони"
+
+msgid "Selected paragraph"
+msgstr "Избрана секция"
+
+msgid "Destination folder"
+msgstr "Папка за запис"
+
+msgid "Generate AI media"
+msgstr "Генериране на AI медия"
+
+msgid "Save and insert"
+msgstr "Запази и вмъкни"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Запазването се поддържа само когато доставчикът връща съдържание в base64 формат. Ако е получен само URL, запазването е забранено, за да се избегне изтегляне в браузъра."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Видеото е генерирано успешно, но запазването е забранено, защото доставчикът върна URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Файлът е запазен, но URL му не може да бъде разпознат."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Генериране на Aiken тест от тема или от един курс document."
+
+msgid "Test from topic"
+msgstr "Тест от тема"
+
+msgid "Test from document"
+msgstr "Тест от документ"
+
+msgid "Generate from topic"
+msgstr "Генериране от тема"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Използвайте подсказка от тема, за да генерирате нов Aiken тест."
+
+msgid "Quiz title"
+msgstr "Заглавие на теста"
+
+msgid "Generate from document"
+msgstr "Генериране от документ"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Изберете един курс документ и генерирайте въпроси само на базата на неговото съдържание."
+
+msgid "Selected document"
+msgstr "Избраният документ"
+
+msgid "The document is selected from the course documents list."
+msgstr "Документът се избира от списъка с курс документи."
+
+msgid "Choose document"
+msgstr "Избор на документ"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "По избор. Използва се само като допълнителна подсказка за ИИ."
+
+msgid "Select a document"
+msgstr "Изберете документ"
+
+msgid "Welcome"
+msgstr "Добре дошли"
+
+msgid "Welcome to Chamilo"
+msgstr "Добре дошли в Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ако това е първият ви път с Chamilo, уверете се, че проверите страничното меню, за да се ориентирате в многото му функции. Ако ви трябва помощ, <a href=\"https://docs.chamilo.org\">нашата официална документация</a> ще ви помогне за стандартната документация, докато нашият <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">онлайн форум</a> може да помогне за споделяне на идеи и намиране на отговори от други потребители на Chamilo."
 

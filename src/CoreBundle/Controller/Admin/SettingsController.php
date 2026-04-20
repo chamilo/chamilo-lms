@@ -258,6 +258,17 @@ class SettingsController extends BaseController
             }
         }
 
+        $hideDisabledOnSubUrl = false;
+        if (1 !== $currentUrlId) {
+            foreach ($mainUrlRows as $row) {
+                if ($row instanceof SettingsCurrent && 'multiple_url_hide_disabled_settings' === $row->getVariable()) {
+                    $hideDisabledOnSubUrl = 'true' === $row->getSelectedValue();
+
+                    break;
+                }
+            }
+        }
+
         // Only platform admins on the main URL can toggle the MultiURL flag.
         $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
 
@@ -291,7 +302,9 @@ class SettingsController extends BaseController
                     $var = $parameter->getVariable();
 
                     // Hide locked settings from child URLs (do not show them at all).
-                    if (1 !== $currentUrlId && 1 === (int) ($lockedMap[$var] ?? 0)) {
+                    $isLocked = 1 === (int) ($lockedMap[$var] ?? 0);
+                    $isNonChangeableHidden = $hideDisabledOnSubUrl && 0 === (int) ($changeableMap[$var] ?? 1);
+                    if (1 !== $currentUrlId && ($isLocked || $isNonChangeableHidden)) {
                         continue;
                     }
 
@@ -312,11 +325,12 @@ class SettingsController extends BaseController
                 $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
-                // Keep only keyword-matching variables, and also remove locked ones for child URLs.
+                // Keep only keyword-matching variables, and also remove locked/hidden-disabled ones for child URLs.
                 foreach (array_keys($settings->getParameters()) as $name) {
                     $isLockedForChild = (1 !== $currentUrlId) && (1 === (int) ($lockedMap[$name] ?? 0));
+                    $isNonChangeableHiddenForChild = (1 !== $currentUrlId) && $hideDisabledOnSubUrl && (0 === (int) ($changeableMap[$name] ?? 1));
 
-                    if ($isLockedForChild || !\in_array($name, $variablesInCategory, true)) {
+                    if ($isLockedForChild || $isNonChangeableHiddenForChild || !\in_array($name, $variablesInCategory, true)) {
                         if ($form->has($name)) {
                             $form->remove($name);
                         }
@@ -343,6 +357,7 @@ class SettingsController extends BaseController
             'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -398,6 +413,17 @@ class SettingsController extends BaseController
             }
         }
 
+        $hideDisabledOnSubUrl = false;
+        if (1 !== $currentUrlId) {
+            foreach ($mainUrlRows as $row) {
+                if ($row instanceof SettingsCurrent && 'multiple_url_hide_disabled_settings' === $row->getVariable()) {
+                    $hideDisabledOnSubUrl = 'true' === $row->getSelectedValue();
+
+                    break;
+                }
+            }
+        }
+
         $settings = $manager->load($namespace);
 
         $form = $this->getSettingsFormFactory()->create(
@@ -406,10 +432,12 @@ class SettingsController extends BaseController
             ['allow_extra_fields' => true]
         );
 
-        // Hide locked settings from child URLs (do not show them at all).
+        // Hide locked and (optionally) non-changeable settings from child URLs.
         if (1 !== $currentUrlId) {
             foreach (array_keys($settings->getParameters()) as $name) {
-                if (1 === (int) ($lockedMap[$name] ?? 0)) {
+                $isLocked = 1 === (int) ($lockedMap[$name] ?? 0);
+                $isNonChangeableHidden = $hideDisabledOnSubUrl && 0 === (int) ($changeableMap[$name] ?? 1);
+                if ($isLocked || $isNonChangeableHidden) {
                     if ($form->has($name)) {
                         $form->remove($name);
                     }
@@ -504,6 +532,7 @@ class SettingsController extends BaseController
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             'search_diagnostics' => $searchDiagnostics,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -694,6 +723,103 @@ class SettingsController extends BaseController
             // External converters
             'tools' => $tools,
             'tools_warning' => $toolsWarning,
+        ];
+    }
+
+    /**
+     * Settings that exist in the database but are not yet implemented in Chamilo 2.x.
+     * Rendered as disabled with a "not yet supported" notice in the settings UI.
+     * Format: 'category.variable'.
+     *
+     * @return string[]
+     */
+    private function getUnsupportedSettings(): array
+    {
+        return [
+            'ai_helpers.course_analyser',
+            'course.block_registered_users_access_to_open_course_contents',
+            'course.enable_tool_introduction',
+            'course.show_toolshortcuts',
+            'crons.cron_remind_course_finished_activate',
+            'display.display_categories_on_homepage',
+            'document.default_group_quotum',
+            'dropbox.dropbox_allow_mailing',
+            'editor.block_copy_paste_for_students',
+            'editor.enable_uploadimage_editor',
+            'editor.enabled_insertHtml',
+            'editor.enabled_support_svg',
+            'editor.video_context_menu_hidden',
+            'editor.youtube_for_students',
+            'exercise.exercise_result_end_text_html_strict_filtering',
+            'exercise.my_courses_show_pending_exercise_attempts',
+            'exercise.quiz_discard_orphan_in_course_export',
+            'exercise.quiz_hide_attempts_table_on_start_page',
+            'exercise.quiz_keep_alive_ping_interval',
+            'exercise.quiz_question_delete_automatically_when_deleting_exercise',
+            'exercise.show_exercise_attempts_in_all_user_sessions',
+            'exercise.tracking_my_progress_show_deleted_exercises',
+            'forum.allow_forum_category_language_filter',
+            'forum.subscribe_users_to_forum_notifications_also_in_base_course',
+            'gradebook.gradebook_enable_subcategory_skills_independant_assignement',
+            'gradebook.gradebook_hide_table',
+            'gradebook.my_display_coloring',
+            'language.auto_detect_language_custom_pages',
+            'language.template_activate_language_filter',
+            'lp.allow_import_scorm_package_in_course_builder',
+            'lp.lp_allow_export_to_students',
+            'lp.lp_enable_flow',
+            'lp.lp_item_prerequisite_dates',
+            'lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached',
+            'lp.lp_prerequisite_use_last_attempt_only',
+            'lp.lp_start_and_end_date_visible_in_student_view',
+            'lp.scorm_api_username_as_student_id',
+            'lp.scorm_lms_update_sco_status_all_time',
+            'lp.scorm_upload_from_cache',
+            'lp.show_invisible_exercise_in_lp_list',
+            'lp.show_invisible_lp_in_course_home',
+            'lp.student_follow_page_hide_lp_tests_average',
+            'lp.student_follow_page_include_not_subscribed_lp_students',
+            'mail.mailer_debug_enable',
+            'message.filter_interactivity_messages',
+            'platform.disable_copy_paste',
+            'platform.institution_address',
+            'platform.platform_logo_url',
+            'platform.use_career_external_id_as_identifier_in_diagrams',
+            'platform.use_custom_pages',
+            'platform.use_virtual_keyboard',
+            'profile.enable_profile_user_address_geolocalization',
+            'profile.hide_username_in_course_chat',
+            'profile.pass_reminder_custom_link',
+            'registration.drh_autosubscribe',
+            'registration.sessionadmin_autosubscribe',
+            'registration.student_autosubscribe',
+            'registration.teacher_autosubscribe',
+            'registration.user_hide_never_expire_option',
+            'security.admins_can_set_users_pass',
+            'security.hide_breadcrumb_if_not_allowed',
+            'security.security_session_cookie_samesite_none',
+            'session.assignment_base_course_teacher_access_to_all_session',
+            'session.career_diagram_disclaimer',
+            'session.career_diagram_legend',
+            'session.email_template_subscription_to_session_confirmation_lost_password',
+            'session.email_template_subscription_to_session_confirmation_username',
+            'session.hide_session_graph_in_my_progress',
+            'session.my_progress_session_show_all_courses',
+            'session.session_course_users_subscription_limited_to_session_users',
+            'session.session_days_after_coach_access',
+            'session.session_days_before_coach_access',
+            'session.show_session_data',
+            'skill.badge_assignation_notification',
+            'webservice.allow_download_documents_by_api_key',
+            'webservice.messaging_gdc_project_number',
+            'webservice.webservice_enable_adminonly_api',
+            'webservice.webservice_return_user_field',
+            'work.my_courses_show_pending_work',
+            'workflows.disable_user_conditions_sender_id',
+            'workflows.drh_allow_access_to_all_students',
+            'workflows.usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe',
+            'workflows.usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
+            'workflows.usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
         ];
     }
 }

@@ -6,7 +6,7 @@
             <div>
                 <h1 class="text-2xl font-semibold">{{ 'Content search'|trans }}</h1>
                 <p class="text-gray-600 mt-1">
-                    {{ 'Search indexed content across your courses.'|trans }}
+                    {{ 'Search indexed content across all courses.'|trans }}
                 </p>
             </div>
 
@@ -39,7 +39,7 @@
             </div>
         {% elseif visible_total == 0 %}
             <div class="p-4 rounded-lg bg-gray-20 border border-gray-20 text-gray-700">
-                {{ 'No results found for'|trans }} "<strong>{{ query }}</strong>".
+                {{ 'No results found'|trans }} "<strong>{{ query }}</strong>".
             </div>
         {% endif %}
 
@@ -47,12 +47,9 @@
             <div class="flex items-center justify-between mt-4 mb-4">
                 <div class="text-sm text-gray-600">
                     {% if show_unlinked %}
-                        {{ 'Showing'|trans }} <strong>{{ visible_total }}</strong>
-                        {{ 'of approximately'|trans }} <strong>{{ estimated_total }}</strong>
-                        {{ 'result(s) for'|trans }} "<strong>{{ query }}</strong>".
+                        {{ 'Showing %d of approximately %d result(s) for %s.'|trans({'%d': visible_total, '%d': estimated_total, '%s': query}) }}
                     {% else %}
-                        {{ 'Showing'|trans }} <strong>{{ visible_total }}</strong>
-                        {{ 'accessible result(s) for'|trans }} "<strong>{{ query }}</strong>".
+                        {{ 'Showing %d accessible result(s) for %s.'|trans({'%d': visible_total, '%s': query}) }}
                     {% endif %}
                 </div>
 
@@ -95,7 +92,7 @@
                     {% set isLpResult          = (kind == 'learnpath') or (tool == 'learnpath') %}
 
                     {% set openUrl = null %}
-                    {% set actionLabel = 'Open'|trans %}
+                    {% set actionLabel = 'View'|trans %}
                     {% set actionIcon  = 'mdi-open-in-new' %}
 
                     {% if isCourseDescResult %}

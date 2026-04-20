@@ -2,12 +2,13 @@
   <Topbar />
   <Sidebar v-if="securityStore.isAuthenticated" />
   <div
+    ref="appMainRef"
     :class="{ 'app-main--no-sidebar': !securityStore.isAuthenticated }"
     class="app-main"
   >
     <Breadcrumb v-if="showBreadcrumb" />
-    <slot />
     <router-view />
+    <slot />
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import Breadcrumb from "../../components/Breadcrumb.vue"
 import Topbar from "../../components/layout/Topbar.vue"
 import Sidebar from "../../components/layout/Sidebar.vue"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePageBackground } from "../../composables/pageBackground"
 
 defineProps({
   showBreadcrumb: {
@@ -25,4 +27,5 @@ defineProps({
 })
 
 const securityStore = useSecurityStore()
+const { appMainRef } = usePageBackground()
 </script>

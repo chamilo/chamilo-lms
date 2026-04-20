@@ -152,7 +152,6 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 {
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
-    public const AICC_TYPE = 3;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

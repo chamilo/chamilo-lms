@@ -9,11 +9,11 @@ import Skeleton from "primevue/skeleton"
 import * as skillProfileService from "../../services/skillProfileService"
 
 import { useNotification } from "../../composables/notification"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(true)
 
@@ -42,10 +42,9 @@ onMounted(() => {
 })
 
 async function onClickDeleteProfile(profile) {
-  confirm.require({
+  requireConfirmation({
+    title: t("Delete skill profile"),
     message: t('Are you sure you want to delete {0}?', [profile.title]),
-    header: t("Delete skill profile"),
-    icon: "mdi mdi-alert",
     async accept() {
       if (!profile) {
         return

@@ -40,7 +40,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     protected ?string $description;
 
     #[ORM\Column(name: 'public_key', type: 'text', nullable: true)]
-    public ?string $publicKey;
+    public ?string $publicKey = null;
 
     #[ORM\Column(name: 'launch_url', type: 'string')]
     protected string $launchUrl;
@@ -130,6 +130,16 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this;
     }
 
+    public function getName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setName(string $name): static
+    {
+        return $this->setTitle($name);
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -190,11 +200,19 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getCustomParamsAsArray(): array
     {
+        if (empty($this->customParams)) {
+            return [];
+        }
+
         $params = [];
         $lines = explode("\n", $this->customParams);
         $lines = array_filter($lines);
 
         foreach ($lines as $line) {
+            if (!str_contains($line, '=')) {
+                continue;
+            }
+
             [$key, $value] = explode('=', $line, 2);
 
             $key = self::filterSpecialChars($key);
@@ -274,46 +292,51 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function isSharingName(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        return (bool) $unserialize['share_name'];
+        return (bool) ($privacy['share_name'] ?? false);
     }
 
     public function unserializePrivacy(): array
     {
-        return UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
+        if (empty($this->privacy)) {
+            return [];
+        }
+
+        $privacy = UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
+
+        return \is_array($privacy) ? $privacy : [];
     }
 
     public function isSharingEmail(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        if (!$unserialize) {
-            return false;
-        }
-
-        return (bool) $unserialize['share_email'];
+        return (bool) ($privacy['share_email'] ?? false);
     }
 
     public function isSharingPicture(): bool
     {
-        $unserialize = $this->unserializePrivacy();
+        $privacy = $this->unserializePrivacy();
 
-        if (!$unserialize) {
-            return false;
-        }
-
-        return (bool) $unserialize['share_picture'];
+        return (bool) ($privacy['share_picture'] ?? false);
     }
 
     public function getToolParent(): ?self
     {
-        return $this->parent;
+        $parent = $this->getParent();
+
+        return $parent instanceof self ? $parent : null;
     }
 
     public function setToolParent(self $parent): static
     {
-        $this->resourceNode->setParent($parent->getResourceNode());
+        $this->setParent($parent);
+
+        if ($this->resourceNode && $parent->getResourceNode()) {
+            $this->resourceNode->setParent($parent->getResourceNode());
+        }
+
         $this->sharedSecret = $parent->getSharedSecret();
         $this->consumerKey = $parent->getConsumerKey();
         $this->privacy = $parent->getPrivacy();
@@ -501,8 +524,16 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->launchPresentation;
     }
 
-    public function setReplacementForUserId(string $replacement): static
+    public function setReplacementForUserId(?string $replacement): static
     {
+        $replacement = null !== $replacement ? trim($replacement) : null;
+
+        if (empty($replacement)) {
+            unset($this->replacementParams['user_id']);
+
+            return $this;
+        }
+
         $this->replacementParams['user_id'] = $replacement;
 
         return $this;
@@ -510,11 +541,13 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getReplacementForUserId(): ?string
     {
-        if (!empty($this->replacementParams['user_id'])) {
-            return $this->replacementParams['user_id'];
+        $replacement = $this->replacementParams['user_id'] ?? null;
+
+        if (null === $replacement || '' === trim((string) $replacement)) {
+            return null;
         }
 
-        return null;
+        return $replacement;
     }
 
     // @TODO: move it to repository

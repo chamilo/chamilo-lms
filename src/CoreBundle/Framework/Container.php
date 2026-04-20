@@ -12,7 +12,9 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\UserAnonymizationHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
@@ -70,6 +72,7 @@ use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
+use Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -98,6 +101,7 @@ use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
@@ -695,6 +699,11 @@ class Container
         return self::$container->get(ThemeHelper::class);
     }
 
+    public static function getGroupRelUsergroupRepository(): CGroupRelUsergroupRepository
+    {
+        return self::$container->get(CGroupRelUsergroupRepository::class);
+    }
+
     public static function getPluginHelper(): PluginHelper
     {
         return self::$container->get(PluginHelper::class);
@@ -737,5 +746,20 @@ class Container
     public static function getResourceFileRepository(): ResourceFileRepository
     {
         return self::$container->get(ResourceFileRepository::class);
+    }
+
+    public static function getUserAnonymizationHelper(): UserAnonymizationHelper
+    {
+        return self::$container->get(UserAnonymizationHelper::class);
+    }
+
+    public static function getResourceHelper(): ResourceHelper
+    {
+        return self::$container->get(ResourceHelper::class);
+    }
+
+    public static function getPluginsFileSystem(): FilesystemOperator
+    {
+        return self::$container->get('oneup_flysystem.plugins_filesystem');
     }
 }

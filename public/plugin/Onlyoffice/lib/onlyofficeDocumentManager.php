@@ -30,13 +30,24 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function getDocumentKey(string $fileId, $courseCode, bool $embedded = false)
     {
-        if (!isset($this->docInfo['absolute_path'])) {
-            return null;
-        }
-        $mtime = filemtime($this->docInfo['absolute_path']);
-        $key = $mtime.$courseCode.$fileId;
+        $parts = [
+            (string) $courseCode,
+            (string) $fileId,
+            (string) ($this->docInfo['title'] ?? ''),
+            (string) ($this->docInfo['path'] ?? ''),
+            (string) ($this->docInfo['iid'] ?? ''),
+        ];
 
-        return self::generateRevisionId($key);
+        if (!empty($this->docInfo['absolute_path']) && is_file($this->docInfo['absolute_path'])) {
+            $mtime = @filemtime($this->docInfo['absolute_path']);
+            if (false !== $mtime) {
+                $parts[] = (string) $mtime;
+            }
+        }
+
+        $rawKey = implode('|', $parts);
+
+        return self::generateRevisionId($rawKey);
     }
 
     public function getDocumentName(string $fileId = '')

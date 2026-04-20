@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'وارد کردن H5P';
+$strings['plugin_comment'] = 'وارد کردن محتوای H5P و استفاده از آن در مسیرهای یادگیری. README.md را برای دستورالعمل‌های نصب باز کنید.';
+$strings['frame'] = 'قاب';
+$strings['frame_help'] = 'نمایش قاب و دکمه‌ها زیر H5P';
+$strings['embed'] = 'جاسازی';
+$strings['embed_help'] = 'نمایش دکمه جاسازی';
+$strings['copyright'] = 'کپی‌رایت';
+$strings['copyright_help'] = 'نمایش دکمه کپی‌رایت';
+$strings['icon'] = 'آیکون';
+$strings['icon_help'] = 'نمایش آیکون H5P';
+$strings['attempts'] = 'تعداد تلاش‌ها';
+$strings['upload_h5p'] = 'بارگذاری';
+$strings['import_h5p_package'] = 'بارگذاری بسته H5P';
+$strings['h5p_package'] = 'بسته H5P';
+$strings['h5p_error_loading'] = 'خطا در بارگذاری بسته H5P';
+$strings['h5p_error_invalid_token'] = 'توکن امنیتی نامعتبر';
+$strings['h5p_error_missing_core_asset'] = 'خطا در بارگذاری دارایی‌های هسته H5P';
+$strings['h5p_save_content_state'] = 'ذخیره نتایج کاربر';
+$strings['h5p_save_content_freq'] = 'فرکانس ذخیره';
+$strings['h5p_save_freq_help'] = 'به چه دفعاتی وضعیت فعلی محتوا باید ذخیره شود، بر حسب ثانیه';
+$strings['start_attempt'] = 'شروع تلاش';

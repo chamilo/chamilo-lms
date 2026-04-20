@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Send e-mail til ny bruger"
 
 msgid "Portfolio"
-msgstr "Udvidet profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Hvis denne indstilling er sat til 'Sand', kan en bruger udfylde følgende (valgfrie) felter: 'Mine kompetencer', 'Mine diplomer', 'Hvad jeg kan undervise i', og 'Mit personlige åbne område'"
@@ -14729,7 +14729,7 @@ msgstr "Brugere, Grupper"
 msgid "Sorry no results"
 msgstr "Undskyld, ingen resultater"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppebevisninger"
 
 msgid "Closed"
@@ -16072,6 +16072,15 @@ msgstr "Kortkode"
 
 msgid "Create child skill"
 msgstr "Opret underfærdighed"
+
+msgid "This skill can be obtained through:"
+msgstr "Denne færdighed kan opnås gennem:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ingen kursus tillader dig i øjeblikket at opnå denne færdighed."
+
+msgid "Add skill to search profile"
+msgstr "Tilføj færdighed til søgeprofil"
 
 msgid "Search profile matches"
 msgstr "Søg profilmuligheder"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Opret din første note for at komme i gang."
 
 msgid "F d, Y"
-msgstr "d. d. M, ÅÅÅÅ"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Kunne ikke indlæse support-info lige nu."
@@ -32743,11 +32752,1136 @@ msgid "URI"
 msgstr "URI"
 
 msgid "%s (current)"
-msgstr ""
+msgstr "%s (nuværende)"
 
 msgid "Upload an image or create one with Badge Studio."
-msgstr ""
+msgstr "Upload et billede eller opret et med Badge Studio."
 
 msgid "Current badge set"
 msgstr "Nuværende badge-sæt"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "I dette afsnit, når du klikker på 'Tilmeld elev' for et kursus, vil du blive bedt om at vælge brugeren på næste side. Når det er valideret, oprettes en ny session med det valgte kursus og bruger, og en tilmeldingsbesked sendes til brugeren."
+
+msgid "Read-only view"
+msgstr "Skrivebeskyttet visning"
+
+msgid "Events list"
+msgstr "Begivenhedsliste"
+
+msgid "Personal"
+msgstr "Personlig"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Uger vises fra 1 til 52"
+
+msgid "No tutored sessions found"
+msgstr "Ingen vejledte sessioner fundet"
+
+msgid "Content search"
+msgstr "Indholdssøgning"
+
+msgid "Search indexed content across all courses."
+msgstr "Søg indekseret indhold på tværs af alle kurser."
+
+msgid "Enter a keyword..."
+msgstr "Indtast et søgeord..."
+
+msgid "Search error"
+msgstr "Søgefejl"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Indtast et søgeord for at søge i indekserede dokumenter."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultater, du ikke har adgang til, er skjult via konfiguration."
+
+msgid "Restricted"
+msgstr "Begrænset"
+
+msgid "You do not have access to this resource."
+msgstr "Du har ikke adgang til denne ressource."
+
+msgid "Create group"
+msgstr "Opret gruppe"
+
+msgid "My custom certificate"
+msgstr "Mit brugerdefinerede certifikat"
+
+msgid "Select permission"
+msgstr "Vælg tilladelse"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ved at acceptere denne invitation vil du blive knyttet til den anmodende bruger på en måde, der gør nogle eller alle dine profiloplysninger tilgængelige for læsning af den anmodende bruger"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Viser %d af ca. %d resultat(er) for %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Viser %d tilgængelige resultat(er) for %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Du vil derfor blive automatisk omdirigeret til denne URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Du har adgang til flere URL'er"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klik venligst på linket nedenfor, der svarer til den URL, du ønsker at tilgå"
+
+msgid "You do not currently have access to any URL"
+msgstr "Du har i øjeblikket ikke adgang til nogen URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalt antal tilladte abonnementer"
+
+msgid "An error occurred"
+msgstr "Der opstod en fejl"
+
+msgid "You don't have any course content yet"
+msgstr "Du har endnu ikke noget kursusindhold"
+
+msgid "This course is locked"
+msgstr "Dette kursus er låst"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mailadressen, som e-mails vil blive sendt fra, når platformen sender en e-mail, også brugt som 'reply-to'-header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Kan ikke finde dit sprog i listen? Kontakt os på %s for at bidrage som oversætter"
+
+msgid "An update is available"
+msgstr "En opdatering er tilgængelig"
+
+msgid "to know what's new and what has been changed"
+msgstr "for at vide, hvad der er nyt og hvad der er ændret"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vi har opdaget, at din PHP-installation ikke definerer datoen"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Din PHP-version opfylder ikke kravene til denne software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Nogle filer eller mapper har ikke skrivetilladelse"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Advarsel! Installationsprogrammet har opdaget en eksisterende Chamilo-platform på dit system"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Fordi mapperne <code>newscorm</code> og <code>exercice</code> blev omdøbt til <code>lp</code> og <code>exercise</code> henholdsvis, er det nødvendigt at slette eller omdøbe til <code>newscorm_old</code> og <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Skemaet indeholder forkert eller ufuldstændige data"
+
+msgid "Your contact information could not be sent"
+msgstr "Dine kontaktoplysninger kunne ikke sendes"
+
+msgid "Please contact support with the error details"
+msgstr "Kontakt venligst support med fejldetaljerne"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klik på billedet for at beskjære det (1:1 forhold, 120x120 px anbefalet)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Brug beskjæring værktøjet til at vælge et 1:1 område"
+
+msgid "Checking push subscription"
+msgstr "Kontrollerer push-abonnement"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Du er abonneret på push-meddelelser i denne browser"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-meddelelser er ikke aktiveret i denne browser"
+
+msgid "Data exchange successfully saved"
+msgstr "Datadeling gemt succesfuldt"
+
+msgid "Error saving data exchange"
+msgstr "Fejl ved gemning af datadeling"
+
+msgid "No documents added yet"
+msgstr "Ingen dokumenter tilføjet endnu"
+
+msgid "No additional details available for this skill."
+msgstr "Ingen yderligere detaljer tilgængelige for denne færdighed."
+
+msgid "No available documents"
+msgstr "Ingen tilgængelige dokumenter"
+
+msgid "No users added yet"
+msgstr "Ingen brugere tilføjet endnu"
+
+msgid "No available users"
+msgstr "Ingen tilgængelige brugere"
+
+msgid "You can no longer submit"
+msgstr "Du kan ikke længere indsende"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Ingen manglende indsendelser fundet for denne opgave, eller data er ikke tilgængelige"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail sendt til alle ikke-indsendte brugere"
+
+msgid "Failed to send email"
+msgstr "Fejl ved afsendelse af e-mail"
+
+msgid "Write your answer here"
+msgstr "Skriv dit svar her"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Denne fremmødekalender giver dig mulighed for at registrere fremmødelister (en pr. rigtig session, som eleverne skal deltage i)"
+
+msgid "Loading attendance data"
+msgstr "Indlæser fremmødedata"
+
+msgid "No attendance assigned yet"
+msgstr "Ingen fremmøde tildelt endnu"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Der er ingen time planlagt i dag, prøv at vælge en anden dag eller tilføj din fremmødeindgang selv ved hjælp af handlingsikonerne"
+
+msgid "No attendance data for today"
+msgstr "Ingen fremmødedata for i dag"
+
+msgid "Saving"
+msgstr "Gemmer"
+
+msgid "No attendance data to save"
+msgstr "Ingen fremmødedata at gemme"
+
+msgid "Failed to save attendance"
+msgstr "Fejl ved gemning af fremmøde"
+
+msgid "Loading more courses"
+msgstr "Indlæser flere kurser"
+
+msgid "Loading more sessions"
+msgstr "Indlæser flere sessioner"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurationen af dokumentets auto-start-funktion er aktiveret"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurationen af øvelsernes auto-start-funktion er aktiveret"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Læringssti auto-start-indstillingen er TÆNDT"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumets auto-start-indstilling er tændt"
+
+msgid "Course ID is missing"
+msgstr "Kursus-ID mangler"
+
+msgid "Course created successfully"
+msgstr "Kursus oprettet succesfuldt"
+
+msgid "Error deleting document(s)"
+msgstr "Fejl ved sletning af dokument(er)"
+
+msgid "Template successfully deleted"
+msgstr "Skabelon slettet succesfuldt"
+
+msgid "Error deleting the template"
+msgstr "Fejl ved sletning af skabelonen"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel og miniaturebillede er påkrævet"
+
+msgid "Template created successfully"
+msgstr "Skabelon oprettet succesfuldt"
+
+msgid "Error creating the template"
+msgstr "Fejl ved oprettelse af skabelonen"
+
+msgid "Error submitting the form"
+msgstr "Fejl ved indsendelse af formularen"
+
+msgid "Loading templates"
+msgstr "Indlæser skabeloner"
+
+msgid "Loading layout"
+msgstr "Indlæser layout"
+
+msgid "Loading courses"
+msgstr "Indlæser kurser"
+
+msgid "No courses available"
+msgstr "Ingen kurser tilgængelige"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Denne liste viser brugere fra alle adgangs-URL'er, fordi indstillingen \"session_admin_access_to_all_users_on_all_urls\" er aktiveret."
+
+msgid "User not found"
+msgstr "Bruger ikke fundet"
+
+msgid "An error occurred while sending the course"
+msgstr "Der opstod en fejl under afsendelse af kurset"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Husk, at ændringer i betingelserne relateret til GDPR kræver, at du rapporterer disse ændringer til tredjeparter, som du har givet personlige oplysninger om dine brugere, som angivet i artikel 19 i GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Du bør oprette \"Villkor og Betingelser\" for alle tilgængelige sprog"
+
+msgid "You don't have any course yet"
+msgstr "Du har endnu ikke nogen kursus"
+
+msgid "You have received a new friend request"
+msgstr "Du har modtaget en ny venskabsanmodning"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoseadministration"
+
+msgid "Tracking"
+msgstr "Sporing"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Vis rapporter, statistik og sporingsdata"
+
+msgid "System activity audit"
+msgstr "Systemaktivitet revision"
+
+msgid "Learning analytics"
+msgstr "Læringsanalytik"
+
+msgid "Administrative activity auditing"
+msgstr "Administrativ aktivitetsrevision"
+
+msgid "List icons"
+msgstr "Liste ikoner"
+
+msgid "Constant name"
+msgstr "Konstantnavn"
+
+msgid "MDI icon name"
+msgstr "MDI-ikonnavn"
+
+msgid "Assign authentication sources"
+msgstr "Tildel godkendelseskilder"
+
+msgid "Assignment details"
+msgstr "Opgavedetaljer"
+
+msgid "Terms and conditions"
+msgstr "Vilår og betingelser"
+
+msgid "Icons"
+msgstr "Ikoner"
+
+msgid "Create backup"
+msgstr "Opret backup"
+
+msgid "Create file"
+msgstr "Opret fil"
+
+msgid "Create link"
+msgstr "Opret link"
+
+msgid "Edit template"
+msgstr "Rediger skabelon"
+
+msgid "Shared files"
+msgstr "Delte filer"
+
+msgid "Skill wheel"
+msgstr "Kompetencehjul"
+
+msgid "Favourite courses"
+msgstr "Favoritkurser"
+
+msgid "Restart courses"
+msgstr "Genstart kurser"
+
+msgid "Generate terms"
+msgstr "Generer vilkår"
+
+msgid "Add variation"
+msgstr "Tilføj variation"
+
+msgid "Editor demo"
+msgstr "Editor demo"
+
+msgid "Tool introduction"
+msgstr "Introduktioner til værktøjer på siden"
+
+msgid "Data exchanges"
+msgstr "Datudvekslinger"
+
+msgid "Third parties"
+msgstr "Tredjeparter"
+
+msgid "Layouts"
+msgstr "Layout"
+
+msgid "Relation type"
+msgstr "Relations type"
+
+msgid "Add all"
+msgstr "Tilføj alle"
+
+msgid "Remove all"
+msgstr "Fjern alle"
+
+msgid "An error occurred. Please try again."
+msgstr "Der opstod en fejl. Prøv igen."
+
+msgid "%s created"
+msgstr "%s oprettet"
+
+msgid "%s updated"
+msgstr "%s opdateret"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Hvis du planlægger at opgradere fra en ældre version af Chamilo, vil du måske have lyst til at"
+
+msgid "have a look at the changelog"
+msgstr "kigge på ændringsloggen"
+
+msgid "to know what's new and what has been changed."
+msgstr "for at vide, hvad der er nyt og hvad der er ændret."
+
+msgid "Session Item"
+msgstr "Sessionspunktum"
+
+msgid "Points"
+msgstr "Point"
+
+msgid "See notifications"
+msgstr "Se notifikationer"
+
+msgid "New content available for this course."
+msgstr "Nyt indhold tilgængeligt for dette kursus."
+
+msgid "No new notifications."
+msgstr "Ingen nye notifikationer."
+
+msgid "No new content found."
+msgstr "Intet nyt indhold fundet."
+
+msgid "No tool details available yet."
+msgstr "Ingen værktøjsdetaljer tilgængelige endnu."
+
+msgid "Last access"
+msgstr "Sidste adgang"
+
+msgid "Open course"
+msgstr "Åbn kursus"
+
+msgid "Course completed"
+msgstr "Kursus gennemført"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Tilmeldingsgrænsen for dette kursus er nået."
+
+msgid "Subscription limit reached"
+msgstr "Tilmeldingsgrænse nået"
+
+msgid "Tertiary alternative"
+msgstr "Tertiært alternativ"
+
+msgid "Update SCORM"
+msgstr "Opdater SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI kan udarbejde feedback og et foreslået punkt-tal, før du sender det."
+
+msgid "What will be sent to the AI"
+msgstr "Hvad der sendes til AI'en"
+
+msgid "Assignment title + instructions"
+msgstr "Opgavetitel + instruktioner"
+
+msgid "Student submission (text)"
+msgstr "Elevindsendelse (tekst)"
+
+msgid "Student submission (text): none"
+msgstr "Elevindsendelse (tekst): ingen"
+
+msgid "Student attachment"
+msgstr "Elevvedhæftning"
+
+msgid "supported"
+msgstr "understøttet"
+
+msgid "not supported for document analysis"
+msgstr "ikke understøttet til dokumentanalyse"
+
+msgid "Student attachment: none"
+msgstr "Elevvedhæftning: ingen"
+
+msgid "No text AI providers available."
+msgstr "Ingen tekst-AI-udbydere tilgængelige."
+
+msgid "AI-assisted"
+msgstr "AI-assisteret"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Denne beslutning gemmes med rettelsen (ExtraField) og kan ikke ændres senere."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Valgfri rettelsesvedhæftning (dette er ikke elevens indsendelse)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Modtaget"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Lås kolonne op"
+
+msgid "Lock column"
+msgstr "Lås kolonne"
+
+msgid "Set all Present"
+msgstr "Sæt alle Til stede"
+
+msgid "Set all Absent"
+msgstr "Sæt alle Fraværende"
+
+msgid "Auto (recommended)"
+msgstr "Auto (anbefalet)"
+
+msgid "Error downloading all documents."
+msgstr "Fejl ved hentning af alle dokumenter."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Åbn med ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Begrænsende kvote"
+
+msgid "Remaining space"
+msgstr "Gjenstående plads"
+
+msgid "Course catalogue"
+msgstr "Kurser katalog"
+
+msgid "Drag links to reorder"
+msgstr "Træk links for at omarrangere"
+
+msgid "Drop links here to keep them without category"
+msgstr "Slip links her for at beholde dem uden kategori"
+
+msgid "Could not export"
+msgstr "Kunne ikke eksportere"
+
+msgid "Link moved"
+msgstr "Link flyttet"
+
+msgid "Could not move link"
+msgstr "Kunne ikke flytte link"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategorisortering er ikke aktiveret"
+
+msgid "Showing %s posts"
+msgstr "Viser %s opslag"
+
+msgid "Showing %s tasks"
+msgstr "Viser %s opgaver"
+
+msgid "Page %s of %s"
+msgstr "Side %s af %s"
+
+msgid "Tutors"
+msgstr "Undervisere"
+
+msgid "selected"
+msgstr "valgt"
+
+msgid "No data to export"
+msgstr "Ingen data at eksportere"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG skal være \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Standardliste"
+
+msgid "Management list"
+msgstr "Administrationsliste"
+
+msgid "Open platform"
+msgstr "Åben platform"
+
+msgid "Teacher user ID"
+msgstr "Lærer bruger-ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Er du sikker på, at du vil slette dette kursus?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Er du sikker på, at du vil slette de valgte kurser?"
+
+msgid "Search by name, username, email"
+msgstr "Søg efter navn, brugernavn, e-mail"
+
+msgid "contains %s items"
+msgstr "indeholder %s elementer"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Din juridiske aftale forbliver aktiv, indtil en tilbagetrækningsanmodning er gennemgået og behandlet."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Din anmodning om tilbagetrækning af juridisk samtykke afventer gennemgang."
+
+msgid "Your account deletion request is pending review."
+msgstr "Din anmodning om sletning af konto afventer gennemgang."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Hvorfor vil du anmode om tilbagetrækning af dit juridiske samtykke?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Indsender din anmodning om tilbagetrækning af juridisk samtykke..."
+
+msgid "Submitting request..."
+msgstr "Indsender anmodning..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Anmod om tilbagetrækning af juridisk samtykke"
+
+msgid "Submitting your account deletion request..."
+msgstr "Indsender din anmodning om sletning af konto..."
+
+msgid "Submitting your acceptance..."
+msgstr "Indsender din accept..."
+
+msgid "Event details"
+msgstr "Begivenhedsdetaljer"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Du kan ikke tilgå det linkede kursus fra denne visning."
+
+msgid "Failed to load sessions"
+msgstr "Kunne ikke indlæse sessioner"
+
+msgid "Failed to load events"
+msgstr "Kunne ikke indlæse begivenheder"
+
+msgid "No events found"
+msgstr "Ingen begivenheder fundet"
+
+msgid "Group image"
+msgstr "Gruppebillede"
+
+msgid "SearchTCC"
+msgstr "SøgTCC"
+
+msgid "Forbidden"
+msgstr "Forbudt"
+
+msgid "Distribution"
+msgstr "Fordeling"
+
+msgid "Firstname"
+msgstr "Fornavn"
+
+msgid "Lastname"
+msgstr "Efternavn"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Last login in platform"
+msgstr "Sidste login på platformen"
+
+msgid "Export as CSV"
+msgstr "Eksporter som CSV"
+
+msgid "Export as XLS"
+msgstr "Eksporter som XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivere denne bruger?"
+
+msgid "Enable this user?"
+msgstr "Aktivere denne bruger?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Flette denne dublerede gruppe ind i bruger #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Dette vil samle alle andre konti i samme gruppe ind i denne konto."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Sammenslåede konti vil blive permanent slettet og forsvinde fra denne rapport."
+
+msgid "This action cannot be undone."
+msgstr "Denne handling kan ikke fortrydes."
+
+msgid "Unify"
+msgstr "Sammenfør"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Elev"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Samlet plads brugt af portal %s grænse er %s MB"
+
+msgid "Helper text"
+msgstr "Hjælpetekst"
+
+msgid "NotAllowed"
+msgstr "IkkeTilladt"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Brug filtrene ovenfor til at indlæse elevadgangsdetaljer."
+
+msgid "Start date must be before end date"
+msgstr "Startdato skal være før slutdato"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Vælg et datointerval og grupperingstype for at gennemse elevadgangsdetaljer."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Dette kursus oprettes ved hjælp af platformens standard kursus skabelon."
+
+msgid "Security breach avoid restart"
+msgstr "Sikkerhedsbrud undgå genstart"
+
+msgid "User deactivated"
+msgstr "Bruger deaktiveret"
+
+msgid "InvalidId"
+msgstr "UgyldigtId"
+
+msgid "User enabled"
+msgstr "Bruger aktiveret"
+
+msgid "No other duplicates found for this user."
+msgstr "Ingen andre dubletter fundet for denne bruger."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Brugere sammenslået: %s konto(er) flettet ind i bruger #%s. Sammenslåede konti blev permanent slettet."
+
+msgid "No accounts were merged."
+msgstr "Ingen konti blev sammenslået."
+
+msgid "An error occurred while unifying users."
+msgstr "Der opstod en fejl under sammenslåing af brugere."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Brugere sammenslået: bruger #%s flettet ind i bruger #%s. Sammenslået konto blev permanent slettet."
+
+msgid "Duplicate users"
+msgstr "Dublerede brugere"
+
+msgid "Years"
+msgstr "År"
+
+msgid "All time visits outside sessions"
+msgstr "Besøg uden for sessioner hele tiden"
+
+msgid "All time visits in sessions"
+msgstr "Besøg i sessioner hele tiden"
+
+msgid "All time visits total"
+msgstr "Samlede besøg hele tiden"
+
+msgid "Student visits per period, per course"
+msgstr "Elevebesøg pr. periode, pr. kursus"
+
+msgid "By email"
+msgstr "Efter e-mail"
+
+msgid "By extra field"
+msgstr "Efter ekstra felt"
+
+msgid "Select an option"
+msgstr "Vælg et valg"
+
+msgid "Profile field"
+msgstr "Profilfelt"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Denne rapport viser kun brugere, der har samme e-mailadresse."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Denne rapport viser kun brugere, der deler samme værdi for det valgte profilfelt."
+
+msgid "How to use this report"
+msgstr "Sådan bruger du denne rapport"
+
+msgid "Disable / Enable"
+msgstr "Deaktiver / Aktiver"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Blokerer eller genopretter kun login. Sletter ikke brugeren og fjerner ikke tilmeldinger."
+
+msgid "Last week"
+msgstr "Sidste uge"
+
+msgid "Next week"
+msgstr "Næste uge"
+
+msgid "Loading report..."
+msgstr "Indlæser rapport..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Kunne ikke indlæse denne rapport. Prøv igen."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Vælg en eller flere sessioner at kopiere undervisere fra og vælg destinationskursus"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Hold Ctrl (eller Cmd) nede for at vælge flere elementer"
+
+msgid "Choose the destination course"
+msgstr "Vælg destinationskursus"
+
+msgid "You can select multiple items"
+msgstr "Du kan vælge flere elementer"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Brug søgeboksen til hurtigt at finde kurser"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Vælg en eller flere kildesessioner og en eller flere destinationssessioner for at kopiere elever"
+
+msgid "Select destination sessions"
+msgstr "Vælg destinationssessioner"
+
+msgid "You can select multiple users"
+msgstr "Du kan vælge flere brugere"
+
+msgid "Use the search box to find users quickly"
+msgstr "Brug søgeboksen til hurtigt at finde brugere"
+
+msgid "Error while creating the document"
+msgstr "Fejl under oprettelse af dokumentet"
+
+msgid "Not a SCORM learning path"
+msgstr "Ikke en SCORM læringssti"
+
+msgid "Final item"
+msgstr "Sidste element"
+
+msgid "Edit item"
+msgstr "Rediger element"
+
+msgid "No AI text providers configured."
+msgstr "Ingen AI-tekstudbydere konfigureret."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Upload mislykkedes. Filen er sandsynligvis større end servergrænsen (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Opdatering mislykkedes. Ingen fil modtaget af serveren."
+
+msgid "Update failed. %s"
+msgstr "Opdatering mislykkedes. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Opdatering mislykkedes. Ugyldig uploadet filpayload."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Opdatering mislykkedes. Det uploadede ZIP-filnavn skal matche det originale SCORM-pakkenavn."
+
+msgid "Update failed"
+msgstr "Opdatering mislykkedes"
+
+msgid "Question lower case"
+msgstr "Spørgsmål små bogstaver"
+
+msgid "Regenerate"
+msgstr "Regenerer"
+
+msgid "Case insensitive"
+msgstr "Ufølsom over for store/små bogstaver"
+
+msgid "Select a session to load its courses."
+msgstr "Vælg en session for at indlæse dens kurser."
+
+msgid "Select the source course."
+msgstr "Vælg kildens kursus."
+
+msgid "Select a destination session."
+msgstr "Vælg en destinationssession."
+
+msgid "Select the destination course."
+msgstr "Vælg destinationskursus."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopiér hele kursusindholdet fra det valgte sessionkursus."
+
+msgid "Select which tools/items to copy."
+msgstr "Vælg hvilke værktøjer/elementer der skal kopieres."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Medtag ikke det basale (ikke-session) kursusindhold."
+
+msgid "An error occurred while copying the course"
+msgstr "Der opstod en fejl under kopiering af kurset"
+
+msgid "Please select a different destination"
+msgstr "Vælg en anden destination"
+
+msgid "You must select a destination course"
+msgstr "Du skal vælge et destinationskursus"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "For at eksportere kurser med quiz skal du vælge quiz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Hvis dine LP'er indeholder lydfiler, skal du vælge dem fra dokumenterne"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Hvis din quiz indeholder hotspot-spørgsmål, skal du vælge billederne fra dokumenterne"
+
+msgid "GeneralResourcesCourse"
+msgstr "GenerelleKursusRessourcer"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Adgangskoden skal være mindst %length% tegn lang."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Adgangskoden skal indeholde mindst %count% små bogstaver."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Adgangskoden skal indeholde mindst %count% store bogstaver."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Adgangskoden skal indeholde mindst %count% numeriske (0-9) tegn."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Adgangskoden skal indeholde mindst %count% specialtegn."
+
+msgid "Invalid login request."
+msgstr "Ugyldigt loginforsøg."
+
+msgid "Authentication failed."
+msgstr "Godkendelse mislykkedes."
+
+msgid "Login %status% for username %username%"
+msgstr "Login %status% for brugernavn %username%"
+
+msgid "Co-generated with AI"
+msgstr "Medgenereret med AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Påkrævede felter"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags kan kopieres og indsættes i tekstområdet nedenfor og vil blive dynamisk erstattet med deres værdi for hver bruger individuelt, når de sendes."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Denne gruppe er knyttet til klassen %s.<br>Gruppens medlemsliste afhænger af klassens medlemmer og kan ikke ændres.<br>Gå til gruppeindstillingerne for at bryde denne kobling, hvis du ønsker at tilføje eller fjerne medlemmer for denne gruppe."
+
+msgid "Link classes to created groups ?"
+msgstr "Knyt klasser til oprettede grupper?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Hvis en klasse er knyttet til en gruppe, tilføjes eller fjernes brugere, der tilføjes eller fjernes fra klassen, automatisk til eller fra gruppen."
+
+msgid "New groups creation in category %s"
+msgstr "Oprettelse af nye grupper i kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Advarselsbesked om at brugeren ikke kan ændre medlemmer i knyttet gruppe"
+
+msgid "Remove the group link with the class"
+msgstr "Fjern gruppens kobling til klassen"
+
+msgid "Linked class"
+msgstr "Knyttet klasse"
+
+msgid "The group is no longer linked to the class"
+msgstr "Gruppen er ikke længere knyttet til klassen"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Oversigt over elever og kurser tilmeldt klassen"
+
+msgid "Overview students subscribed to the class"
+msgstr "Oversigt over elever tilmeldt klassen"
+
+msgid "Overview class"
+msgstr "Oversigt over klasse"
+
+msgid "Go back to the list of classes"
+msgstr "Tilbage til listen over klasser"
+
+msgid "Go back to course classes"
+msgstr "Tilbage til kursusklasser"
+
+msgid "Users subscribed to the course"
+msgstr "Brugere tilmeldt kurset"
+
+msgid "Users not subscribed to the course"
+msgstr "Brugere ikke tilmeldt kurset"
+
+msgid "Users subscribed to the class"
+msgstr "Brugere tilmeldt klassen"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurser tilmeldt klassen"
+
+msgid "No user is subscribed to this class"
+msgstr "Ingen bruger er tilmeldt denne klasse"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ingen bruger og intet kursus er tilmeldt denne klasse"
+
+msgid "No user are subscribed to this class"
+msgstr "Ingen brugere er tilmeldt denne klasse"
+
+msgid "No course are subscribed to this class"
+msgstr "Ingen kurser er tilmeldt denne klasse"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Er du sikker på, at du vil fjerne klassen"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Er du sikker på, at du vil fjerne klassen?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Er du sikker på, at du vil fjerne klassen uden at fjerne brugere?"
+
+msgid "Remove the class without removing students"
+msgstr "Fjern klassen uden at fjerne elever"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Denne indstilling er endnu ikke implementeret i denne version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Anbefalet til admin kun-plugins vist i administrationsområdet."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Anbefalet til plugins, der skal vises som kursusværktøjer."
+
+msgid "Displayed above the main page content."
+msgstr "Vises over hovedindholdet på siden."
+
+msgid "Displayed below the main page content."
+msgstr "Vises under hovedindholdet på siden."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Vises nær toppen af hovedlayoutskallen."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Vises nær bunden af hovedlayoutskallen."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Anbefalet til globale flydende eller vedvarende plugins vist før footeren."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Vises i det valgte plugin-område."
+
+msgid "Admin menu"
+msgstr "Admin-menu"
+
+msgid "Global regions"
+msgstr "Globale områder"
+
+msgid "No regions assigned"
+msgstr "Ingen områder tildelt"
+
+msgid "Plugin regions"
+msgstr "Plugin-områder"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vælg, hvor hvert installeret plugin skal renderes."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: brug Ctrl/Cmd til at vælge flere områder."
+
+msgid "No installed plugins were found."
+msgstr "Ingen installerede plugins fundet."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vælg ét eller flere områder for dette plugin i den nuværende adgangs-URL."
+
+msgid "Available regions"
+msgstr "Tilgængelige områder"
+
+msgid "Selected paragraph"
+msgstr "Valgt afsnit"
+
+msgid "Destination folder"
+msgstr "Destinationsmappe"
+
+msgid "Generate AI media"
+msgstr "Generer AI-medie"
+
+msgid "Save and insert"
+msgstr "Gem og indsæt"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Gemning understøttes kun, når udbyderen returnerer base64-indhold. Hvis du kun modtog en URL, er gemning deaktiveret for at undgå download i browseren."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video genereret succesfuldt, men gemning er deaktiveret, fordi udbyderen returnerede en URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Filen blev gemt, men dens URL kunne ikke løses."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generer en Aiken-quiz fra et emne eller fra et kursusdokument."
+
+msgid "Test from topic"
+msgstr "Test fra emne"
+
+msgid "Test from document"
+msgstr "Test fra dokument"
+
+msgid "Generate from topic"
+msgstr "Generer fra emne"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Brug et emne-prompt til at generere et nyt Aiken-spørgeskema."
+
+msgid "Quiz title"
+msgstr "Quiz-titel"
+
+msgid "Generate from document"
+msgstr "Generer fra dokument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vælg et kursusdokument og generer spørgsmål baseret kun på dets indhold."
+
+msgid "Selected document"
+msgstr "Valgt dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentet vælges fra listen over kursusdokumenter."
+
+msgid "Choose document"
+msgstr "Vælg dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valgfrit. Bruges kun som et ekstra hint for AI'en."
+
+msgid "Select a document"
+msgstr "Vælg et dokument"
+
+msgid "Welcome"
+msgstr "Velkommen"
+
+msgid "Welcome to Chamilo"
+msgstr "Velkommen til Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Hvis dette er din første gang med Chamilo, så tjek venligst side-menuen for at finde vej gennem dens mange funktioner. Hvis du har brug for hjælp, finder du <a href=\"https://docs.chamilo.org\">vores officielle dokumentation</a> til standard dokumentation, mens vores <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> kan hjælpe med at dele idéer og finde svar fra andre Chamilo-brugere."
 

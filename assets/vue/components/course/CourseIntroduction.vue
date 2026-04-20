@@ -7,8 +7,10 @@ import EmptyState from "../EmptyState.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
+import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
 import courseService from "../../services/courseService"
+import { filterTranslatedHtml } from "../../../js/translatehtml.js"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -34,7 +36,20 @@ defineProps({
   },
 })
 
+const platformConfigStore = usePlatformConfig()
+
 courseService.loadHomeIntro(course.value.id, session.value?.id).then((data) => (intro.value = data))
+
+const displayedIntroText = computed(() => {
+  const text = intro.value?.introText
+  if (!text) return null
+
+  if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
+    return filterTranslatedHtml(text, window.user?.locale)
+  }
+
+  return text
+})
 
 async function updateIntroLinks() {
   if (!intro.value?.introText || !currentSessionId) return
@@ -126,7 +141,7 @@ defineExpose({
     class="mb-4"
   >
     <div v-if="intro.introText">
-      <div v-html="intro.introText" />
+      <div v-html="displayedIntroText" />
       <BaseButton
         v-if="isAllowedToEdit && hasMismatchedSidLinks"
         :label="t('Update introduction links')"
@@ -146,7 +161,7 @@ defineExpose({
           :label="t('Course introduction')"
           class="mt-4"
           icon="plus"
-          type="primary"
+          type="success"
           @click="goToIntroCreate"
         />
       </EmptyState>

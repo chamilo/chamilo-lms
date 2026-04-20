@@ -51,7 +51,6 @@ if (!in_array($sord, ['asc', 'desc'])) {
 $courseActions = [
     'get_exercise_results',
     'get_exercise_pending_results',
-    'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_work_teacher',
     'get_work_student',
@@ -63,7 +62,6 @@ $courseActions = [
     'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
-    'get_usergroups_users',
     'get_calendar_users',
     'get_exercise_categories',
     'get_usergroups_teacher',
@@ -71,12 +69,12 @@ $courseActions = [
 ];
 
 $adminActions = [
-    'get_user_skill_ranking',
     'get_usergroups',
     'get_user_course_report_resumed',
     'get_user_course_report',
     'get_sessions_tracking',
     'get_sessions',
+    'get_exercise_results_report',
 ];
 
 $origin = $_REQUEST['origin'] ?? '';
@@ -92,19 +90,54 @@ if ($isDiagnosisLoadSearch) {
     if (!(api_is_drh() || api_is_student_boss() || api_is_platform_admin())) {
         api_not_allowed(true);
     }
+} elseif ('get_usergroups_users' === $action) {
+    api_block_anonymous_users();
+
+    $usergroupId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+    $usergroupAjax = new UserGroupModel();
+    $userGroupInfoAjax = $usergroupAjax->get($usergroupId);
+
+    if (empty($userGroupInfoAjax)) {
+        api_not_allowed(true);
+    }
+
+    $courseInfoAjax = api_get_course_info();
+    $sessionIdAjax = api_get_session_id();
+    $courseIdAjax = !empty($courseInfoAjax) ? (int) $courseInfoAjax['real_id'] : 0;
+    $canViewUsergroupFromCourse = false;
+
+    if (!empty($courseInfoAjax) && api_is_allowed_to_edit()) {
+        if ($sessionIdAjax > 0) {
+            $table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+            $sql = "SELECT session_id
+                    FROM $table
+                    WHERE usergroup_id = $usergroupId AND session_id = $sessionIdAjax
+                    LIMIT 1";
+            $result = Database::query($sql);
+            $canViewUsergroupFromCourse = Database::num_rows($result) > 0;
+        } else {
+            $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+            $sql = "SELECT course_id
+                    FROM $table
+                    WHERE usergroup_id = $usergroupId AND course_id = $courseIdAjax
+                    LIMIT 1";
+            $result = Database::query($sql);
+            $canViewUsergroupFromCourse = Database::num_rows($result) > 0;
+        }
+    }
+
+    if (!$canViewUsergroupFromCourse) {
+        $usergroupAjax->protectScript($userGroupInfoAjax, true, true);
+    }
 } elseif (in_array($action, $courseActions, true)) {
-    // Must be in a course context.
     api_protect_course_script();
 
-    // In course context, require edit rights (teacher/coach/course admin).
-    // Some actions later check api_is_teacher() explicitly; keep this generic guard.
     if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
     api_protect_admin_script(true);
 } else {
-    // Unknown / not whitelisted actions => block by default.
     api_protect_admin_script(true);
 }
 
@@ -361,10 +394,18 @@ switch ($action) {
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
         break;
     case 'get_usergroups_users':
-        $usergroup = new UserGroupModel();
-        $usergroup->protectScript(null, true, true);
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-        $count = $usergroup->getUserGroupUsers($id, true);
+        $usergroup = isset($usergroupAjax) && $usergroupAjax instanceof UserGroupModel
+            ? $usergroupAjax
+            : new UserGroupModel();
+
+        $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+
+        $count = (int) $usergroup->getUserGroupUsers($id, true);
+
+        if (0 === $count) {
+            $members = $usergroup->get_users_by_usergroup($id);
+            $count = is_array($members) ? count($members) : 0;
+        }
         break;
     case 'get_learning_path_calendars':
         $calendarPlugin = LearningCalendarPlugin::create();
@@ -602,12 +643,6 @@ switch ($action) {
         session_write_close();
         $count = Question::get_count_course_medias($course_id);
         break;
-    case 'get_user_skill_ranking':
-        // Close the session as we don't need it any further
-        session_write_close();
-        $skill = new SkillModel();
-        $count = $skill->getUserListSkillRankingCount();
-        break;
     case 'get_course_announcements':
         $courseId = !empty($cid) ? $cid : api_get_course_int_id();
         $sessionId = !empty($sid) ? $sid : api_get_session_id();
@@ -782,34 +817,42 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         api_protect_admin_script();
-        $exerciseId = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : 0;
-        $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
 
-        if (empty($exerciseId)) {
-            exit;
-        }
+        $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $courseInfo = [];
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $courseId = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : '';
-            if (!empty($courseId)) {
-                $courseInfo = api_get_course_info_by_id($courseId);
+            $fallbackCourseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0;
+            if (!empty($fallbackCourseId)) {
+                $courseInfo = api_get_course_info_by_id($fallbackCourseId);
             }
         }
 
-        if (empty($courseInfo)) {
-            exit;
+        if (empty($exerciseId) || empty($courseInfo)) {
+            $count = 0;
+            break;
         }
 
-        $startDate = Database::escape_string($_REQUEST['start_date']);
+        $startDate = isset($_REQUEST['start_date']) ? Database::escape_string($_REQUEST['start_date']) : '';
+
+        $reportWhereCondition = '';
+
         if (!empty($whereCondition)) {
-            $whereCondition = " AND $whereCondition";
+            $reportWhereCondition .= " AND ($whereCondition) ";
         }
-        $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
+
+        if (!empty($startDate)) {
+            $reportWhereCondition .= " AND exe_date > '$startDate' ";
+        }
+
+        $reportWhereCondition .= " AND te.status = '' ";
+
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
-            $whereCondition,
+            $reportWhereCondition,
             $courseInfo['real_id'],
             true
         );
@@ -1137,7 +1180,13 @@ switch ($action) {
         $result = $calendarPlugin->getUsersPerCalendar($id);
         break;
     case 'get_usergroups_users':
+        $usergroup = isset($usergroupAjax) && $usergroupAjax instanceof UserGroupModel
+            ? $usergroupAjax
+            : new UserGroupModel();
+
+        $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
         $columns = ['title', 'actions'];
+
         if ('true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
             $columns = [
                 'title',
@@ -1150,7 +1199,91 @@ switch ($action) {
                 'calendar_id',
             ];
         }
+
         $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
+
+        if (empty($result)) {
+            $members = $usergroup->get_users_by_usergroup($id);
+            $members = is_array($members) ? $members : [];
+
+            $fallbackResult = [];
+            $position = 0;
+
+            foreach ($members as $memberKey => $member) {
+                $userId = 0;
+                $fullName = '';
+
+                if (is_array($member)) {
+                    if (!empty($member['user_id'])) {
+                        $userId = (int) $member['user_id'];
+                    } elseif (!empty($member['id_user'])) {
+                        $userId = (int) $member['id_user'];
+                    } elseif (!empty($member['id'])) {
+                        $userId = (int) $member['id'];
+                    }
+
+                    $fullName = trim($member['complete_name'] ?? '');
+                    if (empty($fullName)) {
+                        $firstName = trim($member['firstname'] ?? '');
+                        $lastName = trim($member['lastname'] ?? '');
+                        $fullName = trim($firstName.' '.$lastName);
+                    }
+
+                    if (empty($fullName)) {
+                        $fullName = trim($member['username'] ?? '');
+                    }
+                } elseif (is_numeric($member)) {
+                    $userId = (int) $member;
+                } elseif (is_string($member)) {
+                    $fullName = trim($member);
+                }
+
+                // Important: preserve user id when it comes as the array key.
+                if ($userId <= 0 && is_numeric($memberKey) && (int) $memberKey > 0) {
+                    $userId = (int) $memberKey;
+                }
+
+                if ($userId > 0) {
+                    $userInfo = api_get_user_info($userId);
+
+                    if (empty($fullName)) {
+                        $fullName = trim($userInfo['complete_name'] ?? '');
+                        if (empty($fullName)) {
+                            $firstName = trim($userInfo['firstname'] ?? '');
+                            $lastName = trim($userInfo['lastname'] ?? '');
+                            $fullName = trim($firstName.' '.$lastName);
+                        }
+                        if (empty($fullName)) {
+                            $fullName = $userInfo['username'] ?? '';
+                        }
+                    }
+                }
+
+                if (empty($fullName)) {
+                    $fullName = $userId > 0 ? 'User #'.$userId : 'User '.($position + 1);
+                }
+
+                $row = [
+                    'id' => $userId > 0 ? $userId : 'member_'.$position,
+                    'title' => $fullName,
+                    'actions' => '',
+                ];
+
+                if ('true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
+                    $row['calendar'] = '';
+                    $row['gradebook_items'] = '';
+                    $row['time_spent'] = '';
+                    $row['lp_day_completed'] = '';
+                    $row['days_diff'] = '';
+                    $row['calendar_id'] = 0;
+                }
+
+                $fallbackResult[] = $row;
+                $position++;
+            }
+
+            $result = array_slice($fallbackResult, $start, $limit);
+        }
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
@@ -1246,7 +1379,7 @@ switch ($action) {
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );
@@ -1318,7 +1451,7 @@ switch ($action) {
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );
@@ -1396,51 +1529,6 @@ switch ($action) {
             }
         }
 
-        break;
-    case 'get_user_skill_ranking':
-        $columns = [
-            'photo',
-            'firstname',
-            'lastname',
-            'skills_acquired',
-            'currently_learning',
-            'rank',
-        ];
-        if ('1 = 1' === trim($whereCondition)) {
-            $whereCondition = '';
-        }
-        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
-        $result = $skill->getUserListSkillRanking(
-            $start,
-            $limit,
-            $sidx,
-            $sord,
-            $whereCondition
-        );
-        $result = msort($result, 'skills_acquired', 'asc');
-
-        $skills_in_course = [];
-        if (!empty($result)) {
-            foreach ($result as &$item) {
-                $user_info = api_get_user_info($item['user_id']);
-                $personal_course_list = UserManager::get_personal_session_course_list(
-                    $item['user_id']
-                );
-                $count_skill_by_course = [];
-                foreach ($personal_course_list as $course_item) {
-                    if (!isset($skills_in_course[$course_item['code']])) {
-                        $count_skill_by_course[$course_item['code']] = $skill->getCountSkillsByCourse(
-                            $course_item['code']
-                        );
-                        $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
-                    } else {
-                        $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
-                    }
-                }
-                $item['photo'] = Display::img($user_info['avatar_small'], $user_info['complete_name'], [], false);
-                $item['currently_learning'] = !empty($count_skill_by_course) ? array_sum($count_skill_by_course) : 0;
-            }
-        }
         break;
     case 'get_course_announcements':
         $columns = [
@@ -1761,6 +1849,24 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
+        $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $courseInfo = [];
+
+        if (!empty($courseId)) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+        } else {
+            $fallbackCourseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0;
+            if (!empty($fallbackCourseId)) {
+                $courseInfo = api_get_course_info_by_id($fallbackCourseId);
+            }
+        }
+
+        if (empty($exerciseId) || empty($courseInfo)) {
+            $result = [];
+            break;
+        }
+
         $columns = [
             'firstname',
             'lastname',
@@ -1838,7 +1944,19 @@ switch ($action) {
             $columns[] = 'actions';
         }
 
-        $whereCondition .= " AND te.status = '' ";
+        $startDate = isset($_REQUEST['start_date']) ? Database::escape_string($_REQUEST['start_date']) : '';
+
+        $reportWhereCondition = '';
+
+        if (!empty($whereCondition)) {
+            $reportWhereCondition .= " AND ($whereCondition) ";
+        }
+
+        if (!empty($startDate)) {
+            $reportWhereCondition .= " AND exe_date > '$startDate' ";
+        }
+
+        $reportWhereCondition .= " AND te.status = '' ";
 
         $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
         $result = ExerciseLib::get_exam_results_data(
@@ -1847,7 +1965,7 @@ switch ($action) {
             $sidx,
             $sord,
             $exerciseId,
-            $whereCondition,
+            $reportWhereCondition,
             false,
             $courseInfo['real_id'],
             true,
@@ -2663,13 +2781,29 @@ switch ($action) {
                     $course_id,
                     api_get_session_id()
                 )) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&id_session='.api_get_session_id();
-                    $icon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::VIEW_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
+                            'url' => api_get_path(WEB_PATH).'user/usergroup_overview?usergroup='.$group['id'].'&course='.$course_id,
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),
+                            'url' => 'class.php?action=remove_only_usergroup_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class without removing users?')."')) return false;"
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
+                            'url' => 'class.php?action=remove_usergroup_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class?')."')) return false;"
+                        ],
+                    ];
                 } else {
-                    $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&type=not_registered';
-                    $icon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
+                            'url' => 'class.php?action=add_usergroup_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered',
+                        ]
+                    ];
                 }
 
                 switch ($group['group_type']) {
@@ -2692,7 +2826,14 @@ switch ($action) {
                                 $urlUserGroup.'&id='.$group['id']
                             ).'&nbsp;';
                     }
-                    $group['actions'] .= Display::url($icon, $url);
+
+                    for ($i = 0; $i < count($actions); $i++) {
+                        $group['actions'] .= Display::url(
+                            $actions[$i]['icon'],
+                            $actions[$i]['url'] ?? null,
+                            ['onclick' => $actions[$i]['onclick'] ?? '']
+                        );
+                    }
                 }
                 $new_result[] = $group;
             }
@@ -2736,7 +2877,6 @@ $allowed_actions = [
     'get_work_pending_list',
     'get_timelines',
     'get_grade_models',
-    'get_user_skill_ranking',
     'get_extra_fields',
     'get_extra_field_options',
     //'get_course_exercise_medias',

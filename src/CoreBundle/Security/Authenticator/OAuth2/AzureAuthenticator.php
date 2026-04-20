@@ -18,7 +18,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use TheNetworg\OAuth2\Client\Provider\Azure;
@@ -65,15 +65,15 @@ class AzureAuthenticator extends AbstractAuthenticator
         );
 
         if (empty($me['mail'])) {
-            throw new UnauthorizedHttpException('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
+            throw new BadRequestHttpException('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
         }
 
         if (empty($me['mailNickname'])) {
-            throw new UnauthorizedHttpException('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
+            throw new BadRequestHttpException('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
         }
 
         if (empty($me['id'])) {
-            throw new UnauthorizedHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
+            throw new BadRequestHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
         }
 
         $providerParams = $this->authenticationConfigHelper->getOAuthProviderConfig($this->providerName);

@@ -2,29 +2,31 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
 use Chamilo\CoreBundle\Entity\User;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Definition;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
 
+/**
+ * Class Portfolio.
+ */
 class Portfolio extends BaseActivity
 {
-    /**
-     * @var User
-     */
-    private $owner;
+    private User $owner;
 
     public function __construct(User $owner)
     {
         $this->owner = $owner;
     }
 
-    public function generate(): Activity
+    public function generate(): array
     {
-        $langIso = api_get_language_isocode();
+        $languageIso = $this->resolveLanguageIso();
+        $title = sprintf(
+            get_lang("%s's portfolio items"),
+            $this->owner->getFullNameWithUsername()
+        );
 
         $iri = $this->generateIri(
             WEB_CODE_PATH,
@@ -35,20 +37,11 @@ class Portfolio extends BaseActivity
             ]
         );
 
-        return new Activity(
-            IRI::fromString($iri),
-            new Definition(
-                LanguageMap::create(
-                    [
-                        $langIso => sprintf(
-                            get_lang("%s's portfolio items"),
-                            $this->owner->getFullNameWithUsername()
-                        ),
-                    ]
-                ),
-                null,
-                IRI::fromString('http://id.tincanapi.com/activitytype/collection-simple')
-            )
+        return $this->buildActivity(
+            $iri,
+            $title,
+            null,
+            'http://id.tincanapi.com/activitytype/collection-simple'
         );
     }
 }

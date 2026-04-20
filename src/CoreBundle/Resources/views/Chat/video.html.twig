@@ -53,7 +53,7 @@
                 var isCompatible = !!Modernizr.prefixed('RTCPeerConnection', window);
 
                 var notifyNotSupport = function () {
-                    $.get('{{ url('web_ajax') }}chat.ajax.php', {
+                    $.get('/main/inc/ajax/course_home.ajax.php?chat.ajax.php', {
                         action: 'notify_not_support',
                         to:{{ chat_user.id }}
                     });

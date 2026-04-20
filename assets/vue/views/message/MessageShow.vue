@@ -13,49 +13,44 @@
 
     <SectionHeader :title="item.title">
       <BaseButton
+        :label="t('Back')"
         icon="back"
         only-icon
         type="black"
-        :title="t('Back')"
-        :aria-label="t('Back')"
         @click="goBackToList"
       />
 
       <BaseButton
         :disabled="isLoading"
+        :label="t('Reply to this message')"
         icon="reply"
         only-icon
         type="black"
-        :title="t('Reply to this message')"
-        :aria-label="t('Reply to this message')"
         @click="reply"
       />
 
       <BaseButton
         :disabled="isLoading"
+        :label="t('Reply to all')"
         icon="reply-all"
         only-icon
         type="black"
-        :title="t('Reply to all')"
-        :aria-label="t('Reply to all')"
         @click="replyAll"
       />
 
       <BaseButton
+        :label="t('Add to calendar')"
         icon="calendar-plus"
         only-icon
         type="black"
-        :title="t('Add to calendar')"
-        :aria-label="t('Add to calendar')"
         @click="createEvent"
       />
 
       <BaseButton
+        :label="t('Delete')"
         icon="delete"
         only-icon
         type="black"
-        :title="t('Delete')"
-        :aria-label="t('Delete')"
         @click="confirmDelete"
       />
     </SectionHeader>
@@ -118,7 +113,10 @@
 
     <p v-text="abbreviatedDatetime(item.sendDate)" />
 
-    <div v-html="item.content" />
+    <div
+      class="tiny-content"
+      v-html="item.content"
+    />
 
     <template v-if="item.attachments && item.attachments.length > 0">
       <BaseCard>
@@ -138,14 +136,13 @@
               <source :src="attachment.downloadUrl" />
             </audio>
 
-            <a
+            <BaseButton
               v-else
-              :href="attachment.downloadUrl"
-              class="btn btn--plain"
-            >
-              <BaseIcon icon="attachment" />
-              {{ attachment.resourceNode.firstResourceFile.originalName }}
-            </a>
+              :label="attachment.resourceNode.firstResourceFile.originalName"
+              :to-url="attachment.downloadUrl"
+              icon="attachment"
+              type="black"
+            />
           </li>
         </ul>
       </BaseCard>
@@ -161,7 +158,7 @@ import { computed, ref } from "vue"
 import isEmpty from "lodash/isEmpty"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useI18n } from "vue-i18n"
 import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
@@ -172,14 +169,13 @@ import messageRelUserService from "../../services/messagereluser"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const { t } = useI18n()
 
 const isLoadingSelect = ref(false)
@@ -274,8 +270,7 @@ async function deleteMessage(message) {
 }
 
 function confirmDelete() {
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t(`Are you sure you want to delete {0}?`, [item.value.title]),
     accept: async () => {
       await deleteMessage(item.value)

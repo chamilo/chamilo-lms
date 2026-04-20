@@ -4,7 +4,7 @@ declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
- * List of courses.
+ * List of sessions.
  */
 $cidReset = true;
 
@@ -18,110 +18,110 @@ if (!$includeSessions) {
     api_not_allowed(true);
 }
 
-$nameFilter = null;
-$minFilter = 0;
-$maxFilter = 0;
-$sessionCategory = isset($_GET['session_category']) ? (int) $_GET['session_category'] : 0;
-$form = new FormValidator(
-    'search_filter_form',
-    'get',
-    null,
-    null,
-    [],
-    FormValidator::LAYOUT_INLINE
-);
-
-$form->removeAttribute('class');
-
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
-    $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
-    $minFilter = isset($formValues['min']) ? $formValues['min'] : 0;
-    $maxFilter = isset($formValues['max']) ? $formValues['max'] : 0;
-    $sessionCategory = isset($formValues['session_category']) ? $formValues['session_category'] : $sessionCategory;
-}
-
-$form->addHeader($plugin->get_lang('SearchFilter'));
-
-$categoriesOptions = [
-    '0' => get_lang('AllCategories'),
-];
-$categoriesList = SessionManager::get_all_session_category();
-if (false != $categoriesList) {
-    foreach ($categoriesList as $categoryItem) {
-        $categoriesOptions[$categoryItem['id']] = $categoryItem['name'];
+/**
+ * Normalize a price filter coming from the query string.
+ */
+$normalizePriceFilter = static function ($value, bool $roundUp = false): int {
+    if (null === $value || '' === $value) {
+        return 0;
     }
+
+    $normalized = str_replace(',', '.', trim((string) $value));
+
+    if ('' === $normalized || !is_numeric($normalized)) {
+        return 0;
+    }
+
+    $amount = (float) $normalized;
+
+    if ($roundUp) {
+        return max(0, (int) ceil($amount));
+    }
+
+    return max(0, (int) floor($amount));
+};
+
+$nameFilter = isset($_GET['name']) ? trim((string) $_GET['name']) : '';
+$minFilterValue = isset($_GET['min']) ? trim((string) $_GET['min']) : '';
+$maxFilterValue = isset($_GET['max']) ? trim((string) $_GET['max']) : '';
+$sessionCategory = isset($_GET['session_category']) ? max(0, (int) $_GET['session_category']) : 0;
+
+$minFilter = $normalizePriceFilter($minFilterValue, false);
+$maxFilter = $normalizePriceFilter($maxFilterValue, true);
+
+if ($minFilter > 0 && $maxFilter > 0 && $minFilter > $maxFilter) {
+    [$minFilter, $maxFilter] = [$maxFilter, $minFilter];
+    [$minFilterValue, $maxFilterValue] = [$maxFilterValue, $minFilterValue];
 }
-$form->addSelect(
-    'session_category',
-    get_lang('SessionCategory'),
-    $categoriesOptions,
-    [
-        'id' => 'session_category',
-    ]
-);
 
-$form->addText('name', get_lang('SessionName'), false);
+$categoriesList = SessionManager::get_all_session_category();
+if (false === $categoriesList) {
+    $categoriesList = [];
+}
 
-$form->addElement(
-    'number',
-    'min',
-    $plugin->get_lang('MinimumPrice'),
-    ['step' => '0.01', 'min' => '0']
-);
-$form->addElement(
-    'number',
-    'max',
-    $plugin->get_lang('MaximumPrice'),
-    ['step' => '0.01', 'min' => '0']
-);
-$form->addHtml('<hr>');
-$form->addButtonFilter(get_lang('Search'));
-
-$form->setDefaults(
-    [
-        'session_category' => $sessionCategory,
-    ]
-);
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$currentPage = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 $first = $pageSize * ($currentPage - 1);
-$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', $sessionCategory);
-$totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count', $sessionCategory);
-$pagesCount = ceil($totalItems / $pageSize);
-$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
-// View
-if (api_is_platform_admin()) {
-    $interbreadcrumb[] = [
-        'url' => 'list.php',
-        'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
-    ];
-    $interbreadcrumb[] = [
-        'url' => 'paymentsetup.php',
-        'name' => $plugin->get_lang('PaymentsConfiguration'),
-    ];
-}
+$sessionList = $plugin->getCatalogSessionList(
+    $first,
+    $pageSize,
+    '' !== $nameFilter ? $nameFilter : null,
+    $minFilter,
+    $maxFilter,
+    'all',
+    $sessionCategory
+);
+
+$totalItems = (int) $plugin->getCatalogSessionList(
+    0,
+    $pageSize,
+    '' !== $nameFilter ? $nameFilter : null,
+    $minFilter,
+    $maxFilter,
+    'count',
+    $sessionCategory
+);
+
+$pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+
+$pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$backUrl = $pluginIndexUrl;
 
 $templateName = $plugin->get_lang('CourseListOnSale');
+$tpl = new Template($templateName);
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
+$tpl->assign('page_title', $templateName);
+$tpl->assign('back_url', $backUrl);
 
-$template = new Template($templateName);
-$template->assign('search_filter_form', $form->returnForm());
-$template->assign('sessions_are_included', $includeSessions);
-$template->assign('services_are_included', $includeServices);
-$template->assign('showing_sessions', true);
-$template->assign('sessions', $sessionList);
-$template->assign('pagination', $pagination);
+$tpl->assign('showing_courses', false);
+$tpl->assign('showing_sessions', true);
+$tpl->assign('showing_services', false);
 
-$countCourses = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
+$tpl->assign('show_courses_tab', true);
+$tpl->assign('show_sessions_tab', $includeSessions);
+$tpl->assign('show_services_tab', false);
 
-$template->assign('coursesExist', $countCourses > 0);
-$template->assign('sessionExist', true);
+$tpl->assign('courses', []);
+$tpl->assign('sessions', $sessionList);
+$tpl->assign('services', []);
 
-$content = $template->fetch('BuyCourses/view/catalog.tpl');
+$tpl->assign('sessions_are_included', $includeSessions);
+$tpl->assign('services_are_included', $includeServices);
 
-$template->assign('header', $templateName);
-$template->assign('content', $content);
-$template->display_one_col_template();
+$tpl->assign('name_filter_value', $nameFilter);
+$tpl->assign('min_filter_value', $minFilterValue);
+$tpl->assign('max_filter_value', $maxFilterValue);
+$tpl->assign('session_category_value', $sessionCategory);
+$tpl->assign('session_categories', $categoriesList);
+
+$tpl->assign('pagination_current_page', $currentPage);
+$tpl->assign('pagination_pages_count', $pagesCount);
+$tpl->assign('pagination_total_items', $totalItems);
+$tpl->assign('pagination_base_path', 'session_catalog.php');
+
+$content = $tpl->fetch('BuyCourses/view/catalog.tpl');
+
+$tpl->assign('header', $templateName);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

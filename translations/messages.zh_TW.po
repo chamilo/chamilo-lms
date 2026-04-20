@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版權,, 否:無版權"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組串流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:資料夾,, application/msword:MsWord,, application/octet-stream:八位元組流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":練習:練習,, 類比:類比,, 問卷:問卷,, 圖表:圖表,, 圖:圖,, 圖:圖,, 索引:索引,, 幻燈:幻燈,, 表:表,, 描述文本:描述文本,, 考試:考試,, 實驗:實驗,, 問題聲明:問題聲明,, 自我評價:自我評價,, 演講:演講"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "向新使用者發送電郵"
 
 msgid "Portfolio"
-msgstr "詳細個人資料"
+msgstr "作品集"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "若選「是」，使用者可自選填寫以下項目：個人能力、我的證書、可任教科目、個人開放區域"
@@ -9528,7 +9528,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "檔案上傳失敗：檔案的類型或延伸檔名不被接受"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID 網址"
 
 msgid "The file is too big to upload."
 msgstr "檔案太大不能上傳"
@@ -14729,7 +14729,7 @@ msgstr "使用者、群組"
 msgid "Sorry no results"
 msgstr "抱歉，無結果"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "群組權限"
 
 msgid "Closed"
@@ -16072,6 +16072,15 @@ msgstr "簡短代碼"
 
 msgid "Create child skill"
 msgstr "建立子技能"
+
+msgid "This skill can be obtained through:"
+msgstr "此技能可透過以下方式取得："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "目前無課程可讓您取得此技能。"
+
+msgid "Add skill to search profile"
+msgstr "新增技能至搜尋設定檔"
 
 msgid "Search profile matches"
 msgstr "搜尋個人檔案匹配"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "建立您的第一個筆記以開始使用。"
 
 msgid "F d, Y"
-msgstr "Y 年 M 月 d 日"
+msgstr "Y 年 m 月 d 日"
 
 msgid "Could not load support info at this time."
 msgstr "目前無法載入支援資訊。"
@@ -32750,4 +32759,1129 @@ msgstr "上傳圖片或使用 Badge Studio 建立一個。"
 
 msgid "Current badge set"
 msgstr "目前徽章組"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "在本節中，點選課程的「註冊學生」時，將在下一頁要求您選擇使用者。驗證後，將建立包含選定課程及使用者的新工作階段，並向使用者發送註冊通知。"
+
+msgid "Read-only view"
+msgstr "唯讀檢視"
+
+msgid "Events list"
+msgstr "活動清單"
+
+msgid "Personal"
+msgstr "個人"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "週數顯示為 1 至 52"
+
+msgid "No tutored sessions found"
+msgstr "未找到輔導工作階段"
+
+msgid "Content search"
+msgstr "內容搜尋"
+
+msgid "Search indexed content across all courses."
+msgstr "搜尋所有課程中的索引內容。"
+
+msgid "Enter a keyword..."
+msgstr "輸入關鍵字…"
+
+msgid "Search error"
+msgstr "搜尋錯誤"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "輸入關鍵字以搜尋索引文件。"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "依設定隱藏您無法存取的結果。"
+
+msgid "Restricted"
+msgstr "受限"
+
+msgid "You do not have access to this resource."
+msgstr "您無權存取此資源。"
+
+msgid "Create group"
+msgstr "建立群組"
+
+msgid "My custom certificate"
+msgstr "我的自訂證書"
+
+msgid "Select permission"
+msgstr "選擇權限"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "接受此邀請後，您將與請求使用者連結，使請求使用者能夠讀取您的部分或全部個人資料"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "顯示約 %d 個結果中的 %d 個，搜尋 %s。"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "顯示 %s 的 %d 個可存取結果。"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "因此您將自動重新導向至此網址"
+
+msgid "You have access to multiple URLs"
+msgstr "您可存取多個網址"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "請點選下方對應您欲存取網址的連結"
+
+msgid "You do not currently have access to any URL"
+msgstr "目前您無法存取任何網址"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "訂閱數量上限"
+
+msgid "An error occurred"
+msgstr "發生錯誤"
+
+msgid "You don't have any course content yet"
+msgstr "您尚未有任何課程內容"
+
+msgid "This course is locked"
+msgstr "此課程已鎖定"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "平台寄送電子郵件時使用的寄件人電子郵件地址，亦用作「回覆至」標頭"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "找不到您的語言？請聯絡 %s 貢獻翻譯"
+
+msgid "An update is available"
+msgstr "有更新可用"
+
+msgid "to know what's new and what has been changed"
+msgstr "了解新功能與變更內容"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "偵測到您的 PHP 安裝未定義日期"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "您的 PHP 版本不符合此軟體需求"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "部分檔案或資料夾無寫入權限"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "警告！安裝程式偵測到系統中已存在 Chamilo 平臺"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "因為 <code>newscorm</code> 和 <code>exercice</code> 資料夾已分別重新命名為 <code>lp</code> 和 <code>exercise</code>，因此需刪除或重新命名為 <code>newscorm_old</code> 和 <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "表單包含不正確或不完整資料"
+
+msgid "Your contact information could not be sent"
+msgstr "無法傳送您的聯絡資訊"
+
+msgid "Please contact support with the error details"
+msgstr "請聯絡支援人員並提供錯誤詳細資訊"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "點選圖片裁剪（1:1 比例，建議 120x120 像素）"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "使用裁剪工具選取 1:1 區域"
+
+msgid "Checking push subscription"
+msgstr "檢查推播訂閱"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "您已在此瀏覽器訂閱推播通知"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "此瀏覽器未啟用推播通知"
+
+msgid "Data exchange successfully saved"
+msgstr "資料交換已成功儲存"
+
+msgid "Error saving data exchange"
+msgstr "儲存資料交換發生錯誤"
+
+msgid "No documents added yet"
+msgstr "尚未新增文件"
+
+msgid "No additional details available for this skill."
+msgstr "此技能無額外詳細資訊。"
+
+msgid "No available documents"
+msgstr "沒有可用的文件"
+
+msgid "No users added yet"
+msgstr "尚未新增使用者"
+
+msgid "No available users"
+msgstr "沒有可用的使用者"
+
+msgid "You can no longer submit"
+msgstr "您無法再提交"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "此作業未找到缺少提交，或資料不可用"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "已將電子郵件發送給所有未提交的使用者"
+
+msgid "Failed to send email"
+msgstr "發送電子郵件失敗"
+
+msgid "Write your answer here"
+msgstr "在此輸入您的答案"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "點名行事曆可讓您註冊點名清單（每個學生需參加的實際課程一筆）"
+
+msgid "Loading attendance data"
+msgstr "正在載入點名資料"
+
+msgid "No attendance assigned yet"
+msgstr "尚未指派點名"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "今天沒有排程課程，請試著選擇另一天，或使用動作圖示自行新增點名記錄"
+
+msgid "No attendance data for today"
+msgstr "今天沒有點名資料"
+
+msgid "Saving"
+msgstr "儲存中"
+
+msgid "No attendance data to save"
+msgstr "沒有點名資料可儲存"
+
+msgid "Failed to save attendance"
+msgstr "儲存點名失敗"
+
+msgid "Loading more courses"
+msgstr "正在載入更多課程"
+
+msgid "Loading more sessions"
+msgstr "正在載入更多課程期間"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "文件自動啟動功能設定已啟用"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "測驗自動啟動功能設定已啟用"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "學習路徑自動啟動設定已開啟"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "論壇自動啟動設定已開啟"
+
+msgid "Course ID is missing"
+msgstr "缺少課程 ID"
+
+msgid "Course created successfully"
+msgstr "課程建立成功"
+
+msgid "Error deleting document(s)"
+msgstr "刪除文件發生錯誤"
+
+msgid "Template successfully deleted"
+msgstr "範本已成功刪除"
+
+msgid "Error deleting the template"
+msgstr "刪除範本發生錯誤"
+
+msgid "The title and thumbnail are required"
+msgstr "標題與縮圖為必填"
+
+msgid "Template created successfully"
+msgstr "範本建立成功"
+
+msgid "Error creating the template"
+msgstr "建立範本發生錯誤"
+
+msgid "Error submitting the form"
+msgstr "提交表單發生錯誤"
+
+msgid "Loading templates"
+msgstr "正在載入範本"
+
+msgid "Loading layout"
+msgstr "正在載入版面配置"
+
+msgid "Loading courses"
+msgstr "正在載入課程"
+
+msgid "No courses available"
+msgstr "沒有可用的課程"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "此清單顯示所有存取網址的使用者，因為設定「session_admin_access_to_all_users_on_all_urls」已啟用。"
+
+msgid "User not found"
+msgstr "找不到使用者"
+
+msgid "An error occurred while sending the course"
+msgstr "發送課程時發生錯誤"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "請記住，與 GDPR 相關條款的修改需要您向已提供使用者個人資訊的第三方報告這些修改，如 GDPR 第 19 條所述"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "您應為所有可用語言建立「條款與條件」"
+
+msgid "You don't have any course yet"
+msgstr "您尚未有任何課程"
+
+msgid "You have received a new friend request"
+msgstr "您收到新的好友請求"
+
+msgid "Diagnosis Management"
+msgstr "診斷管理"
+
+msgid "Tracking"
+msgstr "追蹤"
+
+msgid "View reports, statistics and tracking data"
+msgstr "檢視報告、統計資料和追蹤資料"
+
+msgid "System activity audit"
+msgstr "系統活動審核"
+
+msgid "Learning analytics"
+msgstr "學習分析"
+
+msgid "Administrative activity auditing"
+msgstr "管理活動審核"
+
+msgid "List icons"
+msgstr "清單圖示"
+
+msgid "Constant name"
+msgstr "常數名稱"
+
+msgid "MDI icon name"
+msgstr "MDI 圖示名稱"
+
+msgid "Assign authentication sources"
+msgstr "指派驗證來源"
+
+msgid "Assignment details"
+msgstr "作業詳情"
+
+msgid "Terms and conditions"
+msgstr "條款與條件"
+
+msgid "Icons"
+msgstr "圖示"
+
+msgid "Create backup"
+msgstr "建立備份"
+
+msgid "Create file"
+msgstr "建立檔案"
+
+msgid "Create link"
+msgstr "建立連結"
+
+msgid "Edit template"
+msgstr "編輯範本"
+
+msgid "Shared files"
+msgstr "共用檔案"
+
+msgid "Skill wheel"
+msgstr "技能輪"
+
+msgid "Favourite courses"
+msgstr "最愛課程"
+
+msgid "Restart courses"
+msgstr "重新開始課程"
+
+msgid "Generate terms"
+msgstr "產生條款"
+
+msgid "Add variation"
+msgstr "新增變體"
+
+msgid "Editor demo"
+msgstr "編輯器示範"
+
+msgid "Tool introduction"
+msgstr "工具簡介"
+
+msgid "Data exchanges"
+msgstr "資料交換"
+
+msgid "Third parties"
+msgstr "第三方"
+
+msgid "Layouts"
+msgstr "版面配置"
+
+msgid "Relation type"
+msgstr "關係類型"
+
+msgid "Add all"
+msgstr "全選新增"
+
+msgid "Remove all"
+msgstr "全數移除"
+
+msgid "An error occurred. Please try again."
+msgstr "發生錯誤。請再試一次。"
+
+msgid "%s created"
+msgstr "%s 已建立"
+
+msgid "%s updated"
+msgstr "%s 已更新"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "如果您計劃從舊版 Chamilo 升級，您可能想要"
+
+msgid "have a look at the changelog"
+msgstr "查看變更記錄"
+
+msgid "to know what's new and what has been changed."
+msgstr "以了解新功能與變更內容。"
+
+msgid "Session Item"
+msgstr "課程工作"
+
+msgid "Points"
+msgstr "分數"
+
+msgid "See notifications"
+msgstr "查看通知"
+
+msgid "New content available for this course."
+msgstr "此課程有新的內容可用。"
+
+msgid "No new notifications."
+msgstr "無新通知。"
+
+msgid "No new content found."
+msgstr "未找到新內容。"
+
+msgid "No tool details available yet."
+msgstr "尚未有工具詳細資訊。"
+
+msgid "Last access"
+msgstr "最後存取"
+
+msgid "Open course"
+msgstr "開啟課程"
+
+msgid "Course completed"
+msgstr "課程已完成"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "此課程的註冊上限已達。"
+
+msgid "Subscription limit reached"
+msgstr "註冊上限已達"
+
+msgid "Tertiary alternative"
+msgstr "第三選擇"
+
+msgid "Update SCORM"
+msgstr "更新 SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI 可在您發送前起草回饋與建議分數。"
+
+msgid "What will be sent to the AI"
+msgstr "將傳送給 AI 的內容"
+
+msgid "Assignment title + instructions"
+msgstr "作業標題 + 指示"
+
+msgid "Student submission (text)"
+msgstr "學生提交（文字）"
+
+msgid "Student submission (text): none"
+msgstr "學生提交（文字）：無"
+
+msgid "Student attachment"
+msgstr "學生附件"
+
+msgid "supported"
+msgstr "支援"
+
+msgid "not supported for document analysis"
+msgstr "不支援文件分析"
+
+msgid "Student attachment: none"
+msgstr "學生附件：無"
+
+msgid "No text AI providers available."
+msgstr "沒有可用的文字 AI 提供者。"
+
+msgid "AI-assisted"
+msgstr "AI 輔助"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "此決定會與批改一起儲存（額外欄位），之後無法變更。"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "選修批改附件（這不是學生的提交內容）。"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "已接收"
+
+msgid "%s min"
+msgstr "%s 分"
+
+msgid "Unlock column"
+msgstr "解鎖欄位"
+
+msgid "Lock column"
+msgstr "鎖定欄位"
+
+msgid "Set all Present"
+msgstr "全部設為出席"
+
+msgid "Set all Absent"
+msgstr "全部設為缺席"
+
+msgid "Auto (recommended)"
+msgstr "自動（建議）"
+
+msgid "Error downloading all documents."
+msgstr "下載所有文件時發生錯誤。"
+
+msgid "Open with ONLYOFFICE"
+msgstr "使用 ONLYOFFICE 開啟"
+
+msgid "Limiting quota"
+msgstr "限制配額"
+
+msgid "Remaining space"
+msgstr "剩餘空間"
+
+msgid "Course catalogue"
+msgstr "課程目錄"
+
+msgid "Drag links to reorder"
+msgstr "拖曳連結重新排序"
+
+msgid "Drop links here to keep them without category"
+msgstr "將連結拖曳至此以移除分類"
+
+msgid "Could not export"
+msgstr "無法匯出"
+
+msgid "Link moved"
+msgstr "連結已移動"
+
+msgid "Could not move link"
+msgstr "無法移動連結"
+
+msgid "Category reordering is not enabled"
+msgstr "未啟用分類重新排序"
+
+msgid "Showing %s posts"
+msgstr "顯示 %s 篇文章"
+
+msgid "Showing %s tasks"
+msgstr "顯示 %s 個任務"
+
+msgid "Page %s of %s"
+msgstr "第 %s 頁，共 %s 頁"
+
+msgid "Tutors"
+msgstr "導師"
+
+msgid "selected"
+msgstr "已選取"
+
+msgid "No data to export"
+msgstr "沒有資料可匯出"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "標題 PNG 必須 ≤ %spx。"
+
+msgid "Standard list"
+msgstr "標準清單"
+
+msgid "Management list"
+msgstr "管理清單"
+
+msgid "Open platform"
+msgstr "開放平台"
+
+msgid "Teacher user ID"
+msgstr "教師使用者 ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "您確定要刪除此課程嗎？"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "您確定要刪除選取的課程嗎？"
+
+msgid "Search by name, username, email"
+msgstr "依名稱、使用者名稱、電子郵件搜尋"
+
+msgid "contains %s items"
+msgstr "包含 %s 項"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "您的法律協議將保持有效，直到撤回請求經審核並處理。"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "您的法律同意撤回請求正在審核中。"
+
+msgid "Your account deletion request is pending review."
+msgstr "您的帳戶刪除請求正在審核中。"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "您為何要請求撤回法律同意？"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "正在提交您的法律同意撤回請求…"
+
+msgid "Submitting request..."
+msgstr "正在提交請求…"
+
+msgid "Request withdrawal of legal consent"
+msgstr "請求撤回法律同意"
+
+msgid "Submitting your account deletion request..."
+msgstr "正在提交您的帳戶刪除請求…"
+
+msgid "Submitting your acceptance..."
+msgstr "正在提交您的接受…"
+
+msgid "Event details"
+msgstr "活動詳情"
+
+msgid "You cannot access the linked course from this view."
+msgstr "您無法從此檢視存取連結的課程。"
+
+msgid "Failed to load sessions"
+msgstr "載入工作階段失敗"
+
+msgid "Failed to load events"
+msgstr "載入活動失敗"
+
+msgid "No events found"
+msgstr "未找到活動"
+
+msgid "Group image"
+msgstr "群組圖像"
+
+msgid "SearchTCC"
+msgstr "搜尋TCC"
+
+msgid "Forbidden"
+msgstr "禁止"
+
+msgid "Distribution"
+msgstr "分發"
+
+msgid "Firstname"
+msgstr "名字"
+
+msgid "Lastname"
+msgstr "姓氏"
+
+msgid "Email"
+msgstr "電子郵件"
+
+msgid "Last login in platform"
+msgstr "平台上次登入"
+
+msgid "Export as CSV"
+msgstr "匯出為 CSV"
+
+msgid "Export as XLS"
+msgstr "匯出為 XLS"
+
+msgid "Deactivate this user?"
+msgstr "停用此使用者？"
+
+msgid "Enable this user?"
+msgstr "啟用此使用者？"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "將此重複群組合併至使用者 #%s？"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "這將把同一群組中的所有其他帳戶合併至此帳戶。"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "合併的帳戶將被永久刪除，並從此報告中消失。"
+
+msgid "This action cannot be undone."
+msgstr "此動作無法復原。"
+
+msgid "Unify"
+msgstr "合併"
+
+msgid "SessionAdmin"
+msgstr "工作階段管理員"
+
+msgid "Drh"
+msgstr "人力資源主管"
+
+msgid "Student"
+msgstr "學生"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "入口網站 %s 使用的總空間限制為 %s MB"
+
+msgid "Helper text"
+msgstr "輔助文字"
+
+msgid "NotAllowed"
+msgstr "不允許"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "使用上方篩選器載入學習者存取詳情。"
+
+msgid "Start date must be before end date"
+msgstr "開始日期必須早於結束日期"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "選擇日期範圍和分組類型以檢視學習者存取詳情。"
+
+msgid "This course will be created using the platform default course template."
+msgstr "此課程將使用平台預設課程範本建立。"
+
+msgid "Security breach avoid restart"
+msgstr "安全漏洞避免重新啟動"
+
+msgid "User deactivated"
+msgstr "使用者已停用"
+
+msgid "InvalidId"
+msgstr "無效 ID"
+
+msgid "User enabled"
+msgstr "使用者已啟用"
+
+msgid "No other duplicates found for this user."
+msgstr "未找到此使用者的其他重複項目。"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "使用者已合併：將 %s 個帳戶合併至使用者 #%s。合併的帳戶已永久刪除。"
+
+msgid "No accounts were merged."
+msgstr "未合併任何帳戶。"
+
+msgid "An error occurred while unifying users."
+msgstr "合併使用者時發生錯誤。"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "使用者已合併：將使用者 #%s 合併至使用者 #%s。合併的帳戶已永久刪除。"
+
+msgid "Duplicate users"
+msgstr "重複使用者"
+
+msgid "Years"
+msgstr "年"
+
+msgid "All time visits outside sessions"
+msgstr "工作階段外全時段訪次"
+
+msgid "All time visits in sessions"
+msgstr "工作階段內全時段訪次"
+
+msgid "All time visits total"
+msgstr "全時段訪次總計"
+
+msgid "Student visits per period, per course"
+msgstr "每期間每課程學生訪次"
+
+msgid "By email"
+msgstr "依電子郵件"
+
+msgid "By extra field"
+msgstr "依額外欄位"
+
+msgid "Select an option"
+msgstr "選擇選項"
+
+msgid "Profile field"
+msgstr "個人檔案欄位"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "此報告僅列出具有相同電子郵件地址的使用者。"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "此報告僅列出具有相同所選個人檔案欄位值的使用者。"
+
+msgid "How to use this report"
+msgstr "如何使用此報告"
+
+msgid "Disable / Enable"
+msgstr "停用 / 啟用"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "僅封鎖或恢復登入。不刪除使用者且不移除訂閱。"
+
+msgid "Last week"
+msgstr "上週"
+
+msgid "Next week"
+msgstr "下週"
+
+msgid "Loading report..."
+msgstr "正在載入報告…"
+
+msgid "Failed to load this report. Please try again."
+msgstr "載入此報告失敗。請再試一次。"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "選擇一個或多個工作坊以複製其教師，並選擇目的地課程"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "按住 Ctrl (或 Cmd) 以選擇多個項目"
+
+msgid "Choose the destination course"
+msgstr "選擇目的地課程"
+
+msgid "You can select multiple items"
+msgstr "您可以選擇多個項目"
+
+msgid "Use the search box to find courses quickly"
+msgstr "使用搜尋框快速查找課程"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "選擇一個或多個來源工作坊和一個或多個目的地工作坊以複製學生"
+
+msgid "Select destination sessions"
+msgstr "選擇目的地工作坊"
+
+msgid "You can select multiple users"
+msgstr "您可以選擇多個使用者"
+
+msgid "Use the search box to find users quickly"
+msgstr "使用搜尋框快速查找使用者"
+
+msgid "Error while creating the document"
+msgstr "建立文件時發生錯誤"
+
+msgid "Not a SCORM learning path"
+msgstr "不是 SCORM 學習路徑"
+
+msgid "Final item"
+msgstr "最後項目"
+
+msgid "Edit item"
+msgstr "編輯項目"
+
+msgid "No AI text providers configured."
+msgstr "未配置 AI 文字提供者。"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "上傳失敗。檔案可能超過伺服器限制 (post_max_size)。"
+
+msgid "Update failed. No file received by the server."
+msgstr "更新失敗。伺服器未收到檔案。"
+
+msgid "Update failed. %s"
+msgstr "更新失敗。%s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "更新失敗。無效的上傳檔案負載。"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "更新失敗。上傳的 ZIP 檔案名稱必須與原始 SCORM 套件名稱相符。"
+
+msgid "Update failed"
+msgstr "更新失敗"
+
+msgid "Question lower case"
+msgstr "問題小寫"
+
+msgid "Regenerate"
+msgstr "重新產生"
+
+msgid "Case insensitive"
+msgstr "不區分大小寫"
+
+msgid "Select a session to load its courses."
+msgstr "選擇工作坊以載入其課程。"
+
+msgid "Select the source course."
+msgstr "選擇來源課程。"
+
+msgid "Select a destination session."
+msgstr "選擇目的地工作坊。"
+
+msgid "Select the destination course."
+msgstr "選擇目的地課程。"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "從所選工作坊課程複製完整課程內容。"
+
+msgid "Select which tools/items to copy."
+msgstr "選擇要複製的工具／項目。"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "不包含基礎 (非工作坊) 課程內容。"
+
+msgid "An error occurred while copying the course"
+msgstr "複製課程時發生錯誤"
+
+msgid "Please select a different destination"
+msgstr "請選擇不同的目的地"
+
+msgid "You must select a destination course"
+msgstr "您必須選擇目的地課程"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "若要匯出包含測驗的課程，您必須選擇測驗"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "如果您的學習路徑包含音訊檔案，您應從文件選擇它們"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "如果您的測驗包含熱點問題，您應從文件選擇圖像"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "密碼至少必須 %length% 個字元長。"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "密碼至少必須包含 %count% 個小寫字元。"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "密碼至少必須包含 %count% 個大寫字元。"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "密碼必須至少包含 %count% 個數字 (0-9) 字元。"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "密碼必須至少包含 %count% 個特殊字元。"
+
+msgid "Invalid login request."
+msgstr "無效的登入請求。"
+
+msgid "Authentication failed."
+msgstr "認證失敗。"
+
+msgid "Login %status% for username %username%"
+msgstr "使用者名稱 %username% 的登入 %status%"
+
+msgid "Co-generated with AI"
+msgstr "與 AI 共同產生"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "必填欄位"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "標籤可複製並貼上下方的文字區域，並在發送時動態替換為每個使用者的個別值。"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "此群組已連結至班級 %s。<br>群組成員清單取決於班級成員，無法修改。<br>若要新增或移除此群組成員，請前往群組設定解除此連結。"
+
+msgid "Link classes to created groups ?"
+msgstr "將班級連結至已建立的群組？"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "若班級連結至群組，則新增至或移除自班級的使用者將自動新增至或移除自群組。"
+
+msgid "New groups creation in category %s"
+msgstr "類別 %s 中的新群組建立"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "警告訊息，告知使用者無法修改連結群組成員"
+
+msgid "Remove the group link with the class"
+msgstr "移除群組與班級的連結"
+
+msgid "Linked class"
+msgstr "連結班級"
+
+msgid "The group is no longer linked to the class"
+msgstr "群組不再連結至班級"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "概覽訂閱班級的學生與課程"
+
+msgid "Overview students subscribed to the class"
+msgstr "概覽訂閱班級的學生"
+
+msgid "Overview class"
+msgstr "班級概覽"
+
+msgid "Go back to the list of classes"
+msgstr "返回班級清單"
+
+msgid "Go back to course classes"
+msgstr "返回課程班級"
+
+msgid "Users subscribed to the course"
+msgstr "訂閱課程的使用者"
+
+msgid "Users not subscribed to the course"
+msgstr "未訂閱課程的使用者"
+
+msgid "Users subscribed to the class"
+msgstr "訂閱班級的使用者"
+
+msgid "Courses subscribed to the class"
+msgstr "訂閱班級的課程"
+
+msgid "No user is subscribed to this class"
+msgstr "無使用者訂閱此班級"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "無使用者與課程訂閱此班級"
+
+msgid "No user are subscribed to this class"
+msgstr "無使用者訂閱此班級"
+
+msgid "No course are subscribed to this class"
+msgstr "無課程訂閱此班級"
+
+msgid "Are you sure you want to remove the class"
+msgstr "您確定要移除班級嗎"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "您確定要移除班級嗎？"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "您確定要移除班級但不移除使用者嗎？"
+
+msgid "Remove the class without removing students"
+msgstr "移除班級但不移除學生"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "此設定在本版本中尚未實作。"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "建議用於僅在管理區域顯示的管理員專用外掛。"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "建議用於必須作為課程工具顯示的外掛。"
+
+msgid "Displayed above the main page content."
+msgstr "顯示於主要頁面內容上方。"
+
+msgid "Displayed below the main page content."
+msgstr "顯示於主要頁面內容下方。"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "顯示於主要版面外殼頂部附近。"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "顯示於主要版面外殼底部附近。"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "建議用於在頁尾前顯示的全域浮動或持久外掛。"
+
+msgid "Displayed in the selected plugin region."
+msgstr "顯示於選定的外掛區域。"
+
+msgid "Admin menu"
+msgstr "管理選單"
+
+msgid "Global regions"
+msgstr "全域區域"
+
+msgid "No regions assigned"
+msgstr "未指定區域"
+
+msgid "Plugin regions"
+msgstr "外掛區域"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "選擇每個已安裝外掛應渲染的位置。"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "提示：使用 Ctrl/Cmd 選擇多個區域。"
+
+msgid "No installed plugins were found."
+msgstr "未找到已安裝的外掛。"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "在此存取 URL 中為此外掛選擇一個或多個區域。"
+
+msgid "Available regions"
+msgstr "可用區域"
+
+msgid "Selected paragraph"
+msgstr "已選段落"
+
+msgid "Destination folder"
+msgstr "目的地資料夾"
+
+msgid "Generate AI media"
+msgstr "生成 AI 媒體"
+
+msgid "Save and insert"
+msgstr "儲存並插入"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "僅當提供者返回 base64 內容時才支援儲存。如果僅收到 URL，則停用儲存以避免在瀏覽器中下載。"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "影片生成成功，但因提供者返回 URL 而停用儲存。"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "檔案已儲存，但其 URL 無法解析。"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "從主題或單一課程文件產生 Aiken 測驗。"
+
+msgid "Test from topic"
+msgstr "從主題產生測驗"
+
+msgid "Test from document"
+msgstr "從文件產生測驗"
+
+msgid "Generate from topic"
+msgstr "從主題產生"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "使用主題提示產生新的 Aiken 問卷。"
+
+msgid "Quiz title"
+msgstr "測驗標題"
+
+msgid "Generate from document"
+msgstr "從文件產生"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "選擇一門課程文件，並僅依其內容產生問題。"
+
+msgid "Selected document"
+msgstr "已選文件"
+
+msgid "The document is selected from the course documents list."
+msgstr "文件從課程文件清單中選取。"
+
+msgid "Choose document"
+msgstr "選擇文件"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "選填。僅作為 AI 的額外提示。"
+
+msgid "Select a document"
+msgstr "選擇文件"
+
+msgid "Welcome"
+msgstr "歡迎"
+
+msgid "Welcome to Chamilo"
+msgstr "歡迎來到 Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> 如果這是您第一次使用 Chamilo，請檢查側邊選單來探索其眾多功能。如果您需要幫助，您會發現 <a href=\"https://docs.chamilo.org\">我們的官方文件</a> 可提供標準文件，而我們的 <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">線上論壇</a> 可幫助分享想法並從其他 Chamilo 使用者那裡找到答案。"
 

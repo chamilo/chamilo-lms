@@ -226,7 +226,7 @@ class Evaluation implements GradebookItem
      * @param ?int  $visible Whether it is visible or not
      * @param ?int  $locked  Whether it is locked or not
      *
-     * @return array
+     * @return array<int, Evaluation>
      * @throws Exception
      */
     public static function load(
@@ -236,7 +236,7 @@ class Evaluation implements GradebookItem
         ?int $categoryId = 0,
         ?int $visible = -1,
         ?int $locked = -1
-    ) {
+    ): array {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'SELECT * FROM '.$table;
         $parametersCount = 0;
@@ -950,9 +950,9 @@ class Evaluation implements GradebookItem
     /**
      * @param array $result
      *
-     * @return array
+     * @return array<int, Evaluation>
      */
-    private static function create_evaluation_objects_from_sql_result($result)
+    private static function create_evaluation_objects_from_sql_result($result): array
     {
         $alleval = [];
         $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));

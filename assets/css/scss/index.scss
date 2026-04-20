@@ -1,4 +1,3 @@
-@use "sass:meta";
 //@import "base_theme";
 //
 //// Tools
@@ -12,6 +11,7 @@
 @forward "atoms/autocomplete";
 @forward "atoms/avatar";
 @forward "atoms/buttons";
+@forward "atoms/icon";
 @forward "atoms/calendar";
 @forward "atoms/checkbox";
 @forward "atoms/color_picker";
@@ -19,7 +19,9 @@
 @forward "atoms/fieldset";
 @forward "atoms/float_label";
 @forward "atoms/inline_message";
+@forward "atoms/inplace";
 @forward "atoms/inputgroup";
+@forward "atoms/input_icon";
 @forward "atoms/input_switch";
 @forward "atoms/input_text";
 @forward "atoms/input_number";
@@ -34,6 +36,7 @@
 @forward "atoms/select";
 @forward "atoms/skeleton";
 @forward "atoms/tags";
+@forward "atoms/textarea";
 @forward "atoms/toast";
 @forward "atoms/wysiwyg";
 
@@ -50,6 +53,8 @@
 @forward "organisms/dataview";
 @forward "organisms/external_logins";
 @forward "organisms/dialog";
+@forward "organisms/legacy_modal";
+@forward "organisms/lp_panel";
 @forward "organisms/menu";
 @forward "organisms/sidebar";
 @forward "organisms/section_header";
@@ -64,6 +69,7 @@
 @forward "layout/main_container";
 
 @forward "admin_index";
+@forward "admin_settings";
 @forward "calendar";
 @forward "course_home";
 

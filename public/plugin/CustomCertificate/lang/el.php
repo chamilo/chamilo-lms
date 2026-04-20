@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Προσαρμοσμένο πιστοποιητικό';
+$strings['plugin_comment'] = 'Αυτό το πρόσθετο σας επιτρέπει να δημιουργείτε προσαρμοσμένα πιστοποιητικά για κάθε μάθημα.';
+$strings['enable_plugin_customcertificate'] = 'Ενεργοποίηση πρόσθετου';
+$strings['customcertificate_course_enable'] = 'Ενεργοποίηση προσαρμοσμένου πιστοποιητικού στο μάθημα';
+$strings['use_certificate_default'] = 'Χρήση προεπιλεγμένου προσαρμοσμένου πιστοποιητικού';
+$strings['ToolDisabled'] = 'Το εργαλείο είναι απενεργοποιημένο από τη διαχείριση';
+$strings['OnlyAdminPlatform'] = 'Εργαλείο μόνο για διαχειριστές';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Εργαλείο μόνο για διαχειριστές και εκπαιδευτές';
+$strings['TrainingEntity'] = 'Οντότητα εκπαίδευσης';
+$strings['DescriptionFront'] = 'Περιγραφή μπροστά';
+$strings['DescriptionRear'] = 'Περιγραφή πίσω';
+$strings['Certify'] = 'Πιστοποιώ';
+$strings['CertificateType'] = 'Τύπος πιστοποιητικού';
+$strings['CertifyThat'] = 'ΠΙΣΤΟΠΟΙΩ ΟΤΙ';
+$strings['StudentCourseInfo'] = 'Δεδομένα μαθητή και μαθήματος';
+$strings['StudentData'] = 'Δεδομένα μαθητή';
+$strings['CourseData'] = 'Δεδομένα μαθήματος';
+$strings['Modality'] = 'Τρόπος';
+$strings['Contents'] = 'Περιεχόμενα';
+$strings['ContentsToShow'] = 'Περιεχόμενα προς εμφάνιση';
+$strings['ContentsCourseDescription'] = 'Χρήση ενότητας «Περιγραφή μαθήματος» > «Περιεχόμενα»';
+$strings['ContentsIndexLearnpath'] = 'Χρήση ευρετηρίου διαδρομής μάθησης';
+$strings['ContentsCustom'] = 'Χρήση προσαρμοσμένου περιεχομένου';
+$strings['ContentsHide'] = 'Μη εμφάνιση περιεχομένων';
+$strings['Dates'] = 'Ημερομηνίες';
+$strings['CourseDeliveryDates'] = 'Ημερομηνίες παροχής μαθήματος';
+$strings['Custom'] = 'Προσαρμοσμένο';
+$strings['UseDateSessionAccess'] = 'Χρήση ημερομηνιών πρόσβασης στη συνεδρία';
+$strings['ExpectionPlace'] = 'Τόπος έκδοσης';
+$strings['DateExpediction'] = 'Ημερομηνία έκδοσης';
+$strings['UseDateEndAccessSession'] = 'Χρήση ημερομηνίας λήξης πρόσβασης συνεδρίας';
+$strings['UseDateDownloadCertificate'] = 'Χρήση ημερομηνίας λήψης πιστοποιητικού';
+$strings['UseDateGenerationCertificate'] = 'Χρήση ημερομηνίας δημιουργίας πιστοποιητικού';
+$strings['UseCustomDate'] = 'Χρήση προσαρμοσμένης ημερομηνίας';
+$strings['LogosSeal'] = 'Λογότυπα / Σφραγίδες';
+$strings['LogoLeft'] = 'Λογότυπο αριστερά';
+$strings['LogoCenter'] = 'Λογότυπο κέντρο';
+$strings['LogoRight'] = 'Λογότυπο δεξιά';
+$strings['Seal'] = 'Σφραγίδα';
+$strings['Signature1'] = 'Υπογραφή 1';
+$strings['Signature2'] = 'Υπογραφή 2';
+$strings['Signature3'] = 'Υπογραφή 3';
+$strings['Signature4'] = 'Υπογραφή 4';
+$strings['SignatureText1'] = 'Κείμενο υπογραφής 1';
+$strings['SignatureText2'] = 'Κείμενο υπογραφής 2';
+$strings['SignatureText3'] = 'Κείμενο υπογραφής 3';
+$strings['SignatureText4'] = 'Κείμενο υπογραφής 4';
+$strings['OtherOptions'] = 'Άλλες επιλογές';
+$strings['MarginRight'] = 'Περιθώριο δεξιά';
+$strings['MarginLeft'] = 'Περιθώριο αριστερά';
+$strings['SetDefaultTemplate'] = 'Ορισμός προτύπου ως προεπιλογή';
+$strings['MessageDefaultTemplate'] = 'Αποθήκευση αυτής της προεπιλεγμένης προσαρμογής για μαθήματα και συνεδρίες χωρίς
+     ορισμένα πιστοποιητικά';
+$strings['None'] = 'Κανένα';
+$strings['ErrorTemplateCertificate'] = 'Δεν έχει οριστεί πρότυπο για το πιστοποιητικό.
+     Δεν υπάρχει πρότυπο προεπιλογής.';
+$strings['DateStartEnd'] = 'Με ημερομηνία Έναρξης και Λήξης: ';
+$strings['ExpedictionIn'] = 'Έκδοση σε';
+$strings['Signatures'] = 'Υπογραφές';
+$strings['BackgroundCertificate'] = 'Εικόνα φόντου του πιστοποιητικού';
+$strings['Background'] = 'Φόντο';
+$strings['CertificateSetting'] = 'Ρυθμίσεις πιστοποιητικού';
+$strings['ToolDisabledCourse'] = 'Εργαλείο απενεργοποιημένο στις ρυθμίσεις μαθήματος';
+$strings['ToolUseDefaultSettingCourse'] = 'Εργαλείο ρυθμισμένο να χρησιμοποιεί το προεπιλεγμένο πιστοποιητικό. <br>
+     Μπορείτε να το επεξεργαστείτε από την οθόνη Διαχείρισης -> Πρόσθετα -> Custom Certificate. <br>
+     Ή αν θέλετε μπορείτε να απενεργοποιήσετε την επιλογή χρήσης πιστοποιητικού προεπιλογής στη διαμόρφωση του πρόσθετου στο μάθημα';
+$strings['CertificateSettingDefault'] = 'Ρυθμίσεις προεπιλεγμένου πιστοποιητικού';
+$strings['InfoFromDefaultCertificate'] = 'Το περιεχόμενο του πιστοποιητικού βασίζεται στο προεπιλεγμένο πιστοποιητικό.
+     Οι τροποποιήσεις που κάνετε δεν θα επηρεάσουν το προεπιλεγμένο πιστοποιητικό.';
+$strings['to'] = ' έως ';
+$strings['formatDownloadDate'] = ' έως %sth %s, %s';
+$strings['PrintCertificate'] = 'Εκτύπωση πιστοποιητικού';
+$strings['QuestionDelete'] = 'Θέλετε να διαγράψετε το συγκεκριμένο δίπλωμα και να χρησιμοποιήσετε το προεπιλεγμένο πιστοποιητικό;';
+$strings['SuccessDelete'] = 'Διαγράφηκε επιτυχώς';
+$strings['ProblemDelete'] = 'Πρόβλημα διαγραφής του πιστοποιητικού';
+$strings['OnlyCustomCertificates'] = 'Εξάγονται μόνο μαθήματα με εξατομικευμένο πιστοποιητικό';

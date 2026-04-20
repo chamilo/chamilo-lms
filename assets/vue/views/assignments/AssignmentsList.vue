@@ -1,12 +1,5 @@
 <template>
-  <SectionHeader :title="t('Assignments')">
-    <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Assignments')" />
 
   <BaseToolbar>
     <template #start>
@@ -16,6 +9,8 @@
         size="normal"
         @click="goToNewAssignment"
         type="black"
+        :label="t('Create Assignment')"
+        :onlyIcon="true"
       />
       <BaseButton
         v-if="isTeacherUI"
@@ -23,6 +18,8 @@
         size="normal"
         @click="openProgressDialog"
         type="black"
+        :label="t('Student progress')"
+        :onlyIcon="true"
       />
     </template>
   </BaseToolbar>
@@ -89,10 +86,10 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import { onMounted, ref, computed } from "vue"
+import { ref, computed } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import cstudentpublicationService from "../../services/cstudentpublication"
 
 const { t } = useI18n()
@@ -101,10 +98,7 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
-const isAllowedToEdit = ref(false)
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const isTeacherUI = computed(
   () =>
@@ -118,10 +112,6 @@ const selectedAssignmentId = ref(null)
 const isDialogVisible = ref(false)
 const loadingProgress = ref(false)
 const studentProgress = ref([])
-
-function onStudentViewChange() {
-  // Intentionally empty: child components read from the reactive store
-}
 
 function goToNewAssignment() {
   router.push({

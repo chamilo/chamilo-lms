@@ -8,6 +8,9 @@
  */
 class Gradebook extends Model
 {
+    public string $table_skill = '';
+    public string $table_skill_rel_gradebook = '';
+
     public $columns = [
         'id',
         'name',

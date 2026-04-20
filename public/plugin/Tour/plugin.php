@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
  * Show the JavaScript template in the web pages.
  *
@@ -8,6 +9,13 @@
  */
 require_once __DIR__.'/config.php';
 
-$plugin_info = Tour::create()->get_info();
+$tourPlugin = Tour::create();
 
-$plugin_info['templates'] = ['views/script.tpl'];
+$plugin_info = array_merge($plugin_info ?? [], $tourPlugin->get_info());
+$plugin_info['plugin_class'] = Tour::class;
+
+// Only register the frontend template when the plugin is enabled
+// for the current access URL and the feature flag is active.
+if ($tourPlugin->isTourAvailable()) {
+    $plugin_info['templates'] = ['views/script.tpl'];
+}

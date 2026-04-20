@@ -299,6 +299,11 @@ export default {
     })
     return data
   },
+
+  getCreateCourseCapability: async (config = {}) => {
+    const { data } = await api.get("/course/create-capability", config)
+    return data
+  },
 }
 
 export async function getStickyCourses() {

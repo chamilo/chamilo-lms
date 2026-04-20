@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Média",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Média à afficher au-dessus de la question (facultatif)."
+        },
+        {
+          "label": "Désactiver l'agrandissement de l'image"
+        }
+      ]
+    },
+    {
+      "label": "Consigne",
+      "default": "Complétez les blancs.",
+      "description": "La consigne indique à l'utilisateur comment faire l'exercice."
+    },
+    {
+      "label": "Blocs de texte",
+      "entity": "bloc de texte",
+      "field": {
+        "label": "Ligne de texte",
+        "placeholder": "Paris est la capitale de la *France*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Ajoutez les blancs dans le texte entre deux astérisques (*).</li><li>Séparez des réponses alternatives correctes avec un slash (/).</li><li>Vous pouvez ajouter un indice en utilisant 2 points (:) avant cet élément.</li></ul>",
+          "example": "Un contenu H5P peut être édité en utilisant un *navigateur/navigateur web:Quelque chose que vous êtes en train d'utiliser*."
+        }
+      }
+    },
+    {
+      "label": "Feedback général",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Par défaut"
+            }
+          ],
+          "label": "Définissez des feedbacks pour différents intervalles de scores",
+          "description": "Cliquez sur le bouton \"Ajouter Intervalle\" pour ajouter autant d'intervalles de score que vous souhaitez. Exemple: 0-20% Mauvais score, 21-91% Score moyen, 91-100% Score excellent !",
+          "entity": "intervalle",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalle de scores"
+              },
+              {},
+              {
+                "label": "Feedback pour cet intervalle de scores",
+                "placeholder": "Remplissez le feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texte du bouton \"Voir la correction\"",
+      "default": "Voir la correction"
+    },
+    {
+      "label": "Texte du bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte du bouton \"Vérifier\"",
+      "default": "Vérifier"
+    },
+    {
+      "label": "Texte pour le message \"Tout n'est pas complété\"",
+      "default": "Vous devez avoir rempli tous les blancs avant de voir la correction"
+    },
+    {
+      "label": "Texte du message \"':ans' est une réponse exacte\"",
+      "default": "':ans' est une réponse exacte"
+    },
+    {
+      "label": "Texte du message \"':ans' est une réponse inexacte\"",
+      "default": "':ans' est une réponse inexacte"
+    },
+    {
+      "label": "Texte du message \"Réponse exacte\"",
+      "default": "Réponse exacte"
+    },
+    {
+      "label": "Texte du message \"Mauvaise réponse\"",
+      "default": "Mauvaise réponse"
+    },
+    {
+      "label": "Texte de la correction (technologie d'assistance)",
+      "default": "Réponse correcte :"
+    },
+    {
+      "label": "Texte du blanc (technologie d'assistance)",
+      "description": "Utilisez @num et @total pour désigner respectivement le blanc courant et le nombre total de blancs",
+      "default": "Blanc @num sur @total"
+    },
+    {
+      "label": "Texte qui indique qu'un blanc dispose d'un indice (technologie d'assistance)",
+      "default": "Indice disponible"
+    },
+    {
+      "label": "Intitulé de l'icône de l'indice",
+      "default": "Indice"
+    },
+    {
+      "label": "Options générales.",
+      "description": "Ces options vous permettent de paramétrer le déroulement de l'exercice.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Activer le bouton \"Voir la correction\""
+        },
+        {
+          "label": "Activer le bouton \"Vérifier\""
+        },
+        {
+          "label": "Vérifier les réponses instantanément dès la saisie."
+        },
+        {
+          "label": "Sensible à la casse",
+          "description": "La saisie de l'utilisateur devra être exactement identique à la réponse attendue."
+        },
+        {
+          "label": "Obliger l'utilisateur à remplir tous les blancs avant de voir la correction."
+        },
+        {
+          "label": "Afficher les blancs sur des lignes séparées."
+        },
+        {
+          "label": "Afficher la fenêtre de confirmation pour \"Vérifier\"",
+          "description": "Cette option n'est pas compatible avec l'option \"Vérifier les réponses instantanément dès la saisie.\""
+        },
+        {
+          "label": "Afficher la fenêtre de confirmation pour \"Recommencer\""
+        },
+        {
+          "label": "Accepter de petites fautes d'orthopraphe",
+          "description": "Si cette option est activée, la réponse avec des fautes d'orthographe va également être considérée comme correcte (de 3 à 9 caractères : 1 faute acceptée, plus que 9 caractères : 2 fautes acceptées)."
+        }
+      ]
+    },
+    {
+      "label": "Fenêtre de confirmation pour \"Vérifier\"",
+      "fields": [
+        {
+          "label": "Titre",
+          "default": "Terminer ?"
+        },
+        {
+          "label": "Contenu",
+          "default": "Êtes-vous sûr de vouloir terminer ?"
+        },
+        {
+          "label": "Intitulé du bouton d'annulation",
+          "default": "Annuler"
+        },
+        {
+          "label": "Intitulé du bouton de confirmation",
+          "default": "Terminer"
+        }
+      ]
+    },
+    {
+      "label": "Fenêtre de confirmation pour \"Recommencer\"",
+      "fields": [
+        {
+          "label": "Titre",
+          "default": "Recommencer ?"
+        },
+        {
+          "label": "Contenu",
+          "default": "Êtes-vous sûr de vouloir recommencer ?"
+        },
+        {
+          "label": "Intitulé du bouton d'annulation",
+          "default": "Annuler"
+        },
+        {
+          "label": "Intitulé du bouton de confirmation",
+          "default": "Confirmer"
+        }
+      ]
+    },
+    {
+      "label": "Représentation textuelle du panneau du score pour les utilisateurs d'outils de synthèse vocale (comme ReadSpeaker)",
+      "default": "Vous avez obtenu :num points sur un total de :points"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

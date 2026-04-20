@@ -1900,7 +1900,6 @@ class SurveyManager
         $startDate = $survey->getAvailFrom();
         $endDate = $survey->getAvailTill();
         $currentDate = new DateTime('now', $utcZone);
-        $currentDate->modify('today');
 
         $returnMessage = false;
         if ($currentDate < $startDate) {

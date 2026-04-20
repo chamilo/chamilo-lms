@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -152,10 +151,14 @@ function handleForum($url)
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     // Manually register thread deletion event because the resource is not removed via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(
@@ -170,10 +173,14 @@ function handleForum($url)
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     // Register forum deletion manually as it's not deleted via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
@@ -201,10 +208,14 @@ function handleForum($url)
                     }
 
                     // Manually register thread deletion event because the resource is not removed via Doctrine
-                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
-                    $node = $resource->getResourceNode();
-                    if ($node) {
-                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    if ($node = $resource->getResourceNode()) {
+                        Container::getResourceHelper()->createAndSaveResourceEvent(
+                            $node,
+                            'deletion',
+                            api_get_user_id(),
+                            api_get_course_int_id(),
+                            api_get_session_id()
+                        );
                     }
 
                     Display::addFlash(Display::return_message(get_lang('Thread deleted'), 'confirmation', false));
@@ -274,7 +285,9 @@ function getForumCategoryAddForm(int $lp_id = null): string
             saveForumCategory($values);
         }
         Security::clear_token();
-        return '';
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -466,12 +479,15 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
             $defaults['forum_category'] = Security::remove_XSS($_GET['forumcategory']);
         }
     } else {
-        // the default values when editing = the data in the table
+        // The default values when editing = the data stored in the entity.
+        $startTime = $forum->getStartTime();
+        $endTime = $forum->getEndTime();
+
         $defaults['forum_id'] = $forum->getIid();
         $defaults['forum_title'] = prepare4display($forum->getTitle());
         $defaults['forum_comment'] = prepare4display($forum->getForumComment());
-        $defaults['start_time'] = api_get_local_time($forum->getStartTime());
-        $defaults['end_time'] = api_get_local_time($forum->getEndTime());
+        $defaults['start_time'] = $startTime ? api_get_local_time($startTime) : '';
+        $defaults['end_time'] = $endTime ? api_get_local_time($endTime) : '';
         $defaults['moderated']['moderated'] = $forum->isModerated();
         $defaults['forum_category'] = $forum->getForumCategory()->getIid();
         $defaults['allow_anonymous_group']['allow_anonymous'] = $forum->getAllowAnonymous();
@@ -588,6 +604,9 @@ function editForumCategoryForm(CForumCategory $category): string
             saveForumCategory($values);
         }
         Security::clear_token();
+        $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -595,8 +614,6 @@ function editForumCategoryForm(CForumCategory $category): string
 
         return $form->returnForm();
     }
-
-    return '';
 }
 
 /**
@@ -3536,12 +3553,12 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
 
     $courseId = (int) api_get_setting('forum.global_forums_course_id');
     $subject = get_lang('New Post in the forum').' - '.
-        $_course['official_code'].': '.$forum->getTitle().' - '.$thread->getTitle()." <br />\n";
+        $_course['official_code'].': '.$forum->getTitle().' - '.$thread->getTitle();
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId) {
         $subject = get_lang('New Post in the forum').': '.
-            $forum->getTitle().' - '.$thread->getTitle()." <br />\n";
+            $forum->getTitle().' - '.$thread->getTitle();
         $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;
@@ -5632,4 +5649,68 @@ function getVisibleForumsInCategory($categoryId, $courseId, $sessionId): array
     }
 
     return $visibleForums;
+}
+
+/**
+ * Batch-fetch thread counts for multiple forums in a single query.
+ *
+ * @param int[] $forumIds
+ *
+ * @return array<int, int> forumId => threadCount
+ */
+function getThreadCountBatch(array $forumIds, int $courseId = 0, int $sessionId = 0): array
+{
+    if (empty($forumIds)) {
+        return [];
+    }
+
+    $repo = Container::getForumThreadRepository();
+    $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($course, $session);
+    $qb->select('IDENTITY(resource.forum) AS forumId, COUNT(resource.iid) AS cnt')
+        ->andWhere('resource.forum IN (:forumIds)')
+        ->setParameter('forumIds', $forumIds)
+        ->groupBy('resource.forum');
+
+    $map = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $map[(int) $row['forumId']] = (int) $row['cnt'];
+    }
+
+    return $map;
+}
+
+/**
+ * Batch-fetch waiting-moderation post counts for multiple forums in a single query.
+ *
+ * @param int   $status   e.g. CForumPost::STATUS_WAITING_MODERATION
+ * @param int[] $forumIds
+ *
+ * @return array<int, int> forumId => count
+ */
+function getCountPostsWithStatusBatch(int $status, array $forumIds): array
+{
+    if (empty($forumIds)) {
+        return [];
+    }
+
+    $em = Database::getManager();
+    $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
+    $qb->select('IDENTITY(p.forum) AS forumId, COUNT(p.iid) AS cnt')
+        ->where('p.status = :status')
+        ->andWhere('p.visible = 1')
+        ->andWhere('p.forum IN (:forumIds)')
+        ->setParameter('status', $status)
+        ->setParameter('forumIds', $forumIds)
+        ->groupBy('p.forum');
+
+    $map = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $map[(int) $row['forumId']] = (int) $row['cnt'];
+    }
+
+    return $map;
 }

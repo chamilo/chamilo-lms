@@ -869,7 +869,7 @@ function isQtiManifest($data): bool
  */
 function qtiProcessManifest($data)
 {
-    $xml = simplexml_load_string($data);
+    $xml = simplexml_load_string($data, SimpleXMLElement::class, LIBXML_NONET);
     $course = api_get_course_info();
     $sessionId = api_get_session_id();
     $exercisesSysPath = '/';

@@ -83,7 +83,7 @@ function get_count_users()
 function get_users($from, $limit, $column, $direction)
 {
     global $export_csv;
-    $active = isset($_GET['active']) ? $_GET['active'] : 1;
+    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -331,6 +331,32 @@ if (api_is_student_boss()) {
     );
 }
 
+$params = [
+    'keyword' => $keyword,
+    'active' => $active,
+    'sleeping_days' => $sleepingDays,
+];
+
+foreach (['id_session', 'id_coach', 'user_id', 'type'] as $extraParam) {
+    if (isset($_GET[$extraParam]) && '' !== (string) $_GET[$extraParam]) {
+        $params[$extraParam] = $_GET[$extraParam];
+    }
+}
+
+$exportParams = array_merge(
+    ['export' => 'csv'],
+    $params
+);
+
+$exportUrl = api_get_self().'?'.http_build_query(
+        array_filter(
+            $exportParams,
+            static function ($value) {
+                return null !== $value && '' !== $value;
+            }
+        )
+    );
+
 // Right side: print + CSV export.
 $actionsRight = Display::url(
     Display::getMdiIcon(
@@ -352,7 +378,7 @@ $actionsRight .= Display::url(
         ICON_SIZE_MEDIUM,
         get_lang('CSV export')
     ),
-    api_get_self().'?export=csv&keyword='.$keyword
+    $exportUrl
 );
 
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
@@ -371,11 +397,6 @@ $table = new SortableTable(
     $itemPerPage
 );
 
-$params = [
-    'keyword' => $keyword,
-    'active' => $active,
-    'sleeping_days' => $sleepingDays,
-];
 $table->set_additional_parameters($params);
 
 if ($is_western_name_order) {

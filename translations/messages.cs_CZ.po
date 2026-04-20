@@ -4615,7 +4615,7 @@ msgid "Send mail to new user"
 msgstr "Poslat email novému uživateli"
 
 msgid "Portfolio"
-msgstr "Rozšířený profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Toto nastavení je dáno na 'Povolit', uživatel může vyplnit následující(nepovinné) pole: 'Má kvalifikace', 'Mé certifikáty', 'Co jsem schopný vyučovat' a 'Můj osobní obsah'"
@@ -14647,7 +14647,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povolit rozšířené panely nástrojů, když je WYSIWYG editor maximalizován"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Přejít přímo do kurzu po přihlášení"
@@ -14724,7 +14724,7 @@ msgstr "Uživatelé, Skupiny"
 msgid "Sorry no results"
 msgstr "Omlouváme se, žádné výsledky"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Oprávnění skupiny"
 
 msgid "Closed"
@@ -16067,6 +16067,15 @@ msgstr "Krátký kód"
 
 msgid "Create child skill"
 msgstr "Vytvořit podřízenou dovednost"
+
+msgid "This skill can be obtained through:"
+msgstr "Tuto dovednost lze získat prostřednictvím:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Žádný kurz v současnosti neumožňuje získat tuto dovednost."
+
+msgid "Add skill to search profile"
+msgstr "Přidat dovednost do vyhledávacího profilu"
 
 msgid "Search profile matches"
 msgstr "Vyhledat shody profilu"
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Vytvořte svou první poznámku pro začátek."
 
 msgid "F d, Y"
-msgstr "j n, RRRR"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nelze načíst informace o podpoře."
@@ -32371,7 +32380,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Smazání selhalo: chybí kontext kurzu nebo neplatné ID otázky."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Rozšíření APCu musí být nainstalováno a povoleno, aby platforma mohla být použita."
@@ -32744,4 +32753,1129 @@ msgstr "Nahrát obrázek nebo vytvořit pomocí Badge Studio."
 
 msgid "Current badge set"
 msgstr "Aktuální sada odznaků"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "V této sekci, po kliknutí na „Registrovat studenta“ pro kurz, budete na další stránce požádáni o výběr uživatele. Po ověření vytvoří novou sezení s vybraným kurzem a uživatelem a odešle uživateli notifikaci o přihlášení."
+
+msgid "Read-only view"
+msgstr "Pohled pro čtení"
+
+msgid "Events list"
+msgstr "Seznam událostí"
+
+msgid "Personal"
+msgstr "Osobní"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Týdny jsou zobrazeny od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Nebyly nalezeny vedené sezení"
+
+msgid "Content search"
+msgstr "Vyhledávání obsahu"
+
+msgid "Search indexed content across all courses."
+msgstr "Vyhledávejte indexovaný obsah napříč všemi kurzy."
+
+msgid "Enter a keyword..."
+msgstr "Zadejte klíčové slovo..."
+
+msgid "Search error"
+msgstr "Chyba vyhledávání"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Zadejte klíčové slovo pro vyhledání indexovaných dokumentů."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Výsledky, ke kterým nemáte přístup, jsou skryty konfigurací."
+
+msgid "Restricted"
+msgstr "Omezený"
+
+msgid "You do not have access to this resource."
+msgstr "K tomuto zdroji nemáte přístup."
+
+msgid "Create group"
+msgstr "Vytvořit skupinu"
+
+msgid "My custom certificate"
+msgstr "Můj vlastní certifikát"
+
+msgid "Select permission"
+msgstr "Vybrat oprávnění"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Přijetím tohoto pozvánky se spojíte s žádajícím uživatelem způsobem, který umožní žádajícímu uživateli číst některá nebo všechna vaše data profilu"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Zobrazuji %d z přibližně %d výsledků pro %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Zobrazuji %d dostupných výsledků pro %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Proto budete automaticky přesměrováni na tuto URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Máte přístup k více URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klikněte prosím na odkaz níže odpovídající URL, ke které chcete získat přístup"
+
+msgid "You do not currently have access to any URL"
+msgstr "V současnosti nemáte přístup k žádné URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximální povolený počet odběrů"
+
+msgid "An error occurred"
+msgstr "Došlo k chybě"
+
+msgid "You don't have any course content yet"
+msgstr "Nemáte ještě žádný obsah kurzu"
+
+msgid "This course is locked"
+msgstr "Tento kurz je zamknutý"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-mailová adresa, ze které budou e-maily odesílány, když platforma pošle e-mail, také používaná jako hlavička 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nenajdete svůj jazyk v seznamu? Kontaktujte nás na %s, abyste přispěli jako překladatel"
+
+msgid "An update is available"
+msgstr "Je k dispozici aktualizace"
+
+msgid "to know what's new and what has been changed"
+msgstr "zobrazit novinky a změny"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Zjišťujeme, že vaše PHP instalace nedefinuje datum"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vaše verze PHP neodpovídá požadavkům tohoto softwaru"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Některé soubory nebo složky nemají oprávnění k zápisu"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Varování! Instalátor detekoval existující platformu Chamilo na vašem systému"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Protože adresáře <code>newscorm</code> a <code>exercice</code> byly přejmenovány na <code>lp</code> a <code>exercise</code>, je nutné je smazat nebo přejmenovat na <code>newscorm_old</code> a <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formulář obsahuje nesprávná nebo neúplná data"
+
+msgid "Your contact information could not be sent"
+msgstr "Vaše kontaktní informace nemohly být odeslány"
+
+msgid "Please contact support with the error details"
+msgstr "Kontaktujte prosím podporu s podrobnostmi chyby"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klikněte na obrázek pro oříznutí (poměr 1:1, doporučeno 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Použijte nástroj pro oříznutí k výběru oblasti 1:1"
+
+msgid "Checking push subscription"
+msgstr "Kontrola odběru push notifikací"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jste přihlášeni k push notifikacím v tomto prohlížeči"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push notifikace nejsou v tomto prohlížeči povoleny"
+
+msgid "Data exchange successfully saved"
+msgstr "Výměna dat byla úspěšně uložena"
+
+msgid "Error saving data exchange"
+msgstr "Chyba při ukládání výměny dat"
+
+msgid "No documents added yet"
+msgstr "Zatím nebyly přidány žádné dokumenty"
+
+msgid "No additional details available for this skill."
+msgstr "Žádné další podrobnosti k této dovednosti nejsou k dispozici."
+
+msgid "No available documents"
+msgstr "Žádné dostupné dokumenty"
+
+msgid "No users added yet"
+msgstr "Zatím nebyli přidáni žádní uživatelé"
+
+msgid "No available users"
+msgstr "Žádní dostupní uživatelé"
+
+msgid "You can no longer submit"
+msgstr "Už nemůžete odeslat"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Pro toto zadání nebyly nalezeny chybějící odevzdání nebo data nejsou k dispozici"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-mail odeslán všem uživatelům, kteří neodevzidali"
+
+msgid "Failed to send email"
+msgstr "Odeslání e-mailu selhalo"
+
+msgid "Write your answer here"
+msgstr "Napište sem svou odpověď"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalendář docházky vám umožňuje registrovat seznamy docházky (jeden pro každou skutečnou sezení, které studenti musí navštívit)"
+
+msgid "Loading attendance data"
+msgstr "Načítání dat docházky"
+
+msgid "No attendance assigned yet"
+msgstr "Zatím nepřiřazena žádná docházka"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Dnes není naplánována žádná lekce, zkuste zvolit jiný den nebo přidejte záznam docházky sami pomocí ikon akcí"
+
+msgid "No attendance data for today"
+msgstr "Žádná data docházky pro dnešek"
+
+msgid "Saving"
+msgstr "Ukládání"
+
+msgid "No attendance data to save"
+msgstr "Žádná data docházky k uložení"
+
+msgid "Failed to save attendance"
+msgstr "Uložení docházky selhalo"
+
+msgid "Loading more courses"
+msgstr "Načítání dalších kurzů"
+
+msgid "Loading more sessions"
+msgstr "Načítání dalších sezení"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Konfigurace funkce automatického spuštění dokumentu je povolena"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurace funkce automatického spuštění cvičení je povolena"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Nastavení automatického spuštění učební cesty je ZAPNUTÉ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Nastavení automatického spuštění fóra je zapnuté"
+
+msgid "Course ID is missing"
+msgstr "Chybí ID kurzu"
+
+msgid "Course created successfully"
+msgstr "Kurz byl úspěšně vytvořen"
+
+msgid "Error deleting document(s)"
+msgstr "Chyba při mazání dokumentu(ů)"
+
+msgid "Template successfully deleted"
+msgstr "Šablona byla úspěšně smazána"
+
+msgid "Error deleting the template"
+msgstr "Chyba při mazání šablony"
+
+msgid "The title and thumbnail are required"
+msgstr "Název a náhled jsou povinné"
+
+msgid "Template created successfully"
+msgstr "Šablona byla úspěšně vytvořena"
+
+msgid "Error creating the template"
+msgstr "Chyba při vytváření šablony"
+
+msgid "Error submitting the form"
+msgstr "Chyba při odesílání formuláře"
+
+msgid "Loading templates"
+msgstr "Načítání šablon"
+
+msgid "Loading layout"
+msgstr "Načítání rozložení"
+
+msgid "Loading courses"
+msgstr "Načítání kurzů"
+
+msgid "No courses available"
+msgstr "Žádné dostupné kurzy"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Tento seznam zobrazuje uživatele ze všech přístupových URL, protože je povoleno nastavení \"session_admin_access_to_all_users_on_all_urls\"."
+
+msgid "User not found"
+msgstr "Uživatel nenalezen"
+
+msgid "An error occurred while sending the course"
+msgstr "Došlo k chybě při odesílání kurzu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Pamatujte, že změny podmínek souvisejících s GDPR vyžadují, abyste tyto změny nahlásili třetím stranám, kterým jste poskytli osobní údaje o svých uživatelích, jak je uvedeno v článku 19 GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Měli byste vytvořit \"Podmínky a pravidla\" pro všechny dostupné jazyky"
+
+msgid "You don't have any course yet"
+msgstr "Nemáte ještě žádný kurz"
+
+msgid "You have received a new friend request"
+msgstr "Obdrželi jste novou žádost o přátelství"
+
+msgid "Diagnosis Management"
+msgstr "Správa diagnostiky"
+
+msgid "Tracking"
+msgstr "Sledování"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Zobrazit zprávy, statistiky a sledovací data"
+
+msgid "System activity audit"
+msgstr "Audit aktivity systému"
+
+msgid "Learning analytics"
+msgstr "Analýza učení"
+
+msgid "Administrative activity auditing"
+msgstr "Audit administrativní aktivity"
+
+msgid "List icons"
+msgstr "Ikony seznamu"
+
+msgid "Constant name"
+msgstr "Název konstanty"
+
+msgid "MDI icon name"
+msgstr "Název ikony MDI"
+
+msgid "Assign authentication sources"
+msgstr "Přiřadit zdroje autentizace"
+
+msgid "Assignment details"
+msgstr "Podrobnosti úkolu"
+
+msgid "Terms and conditions"
+msgstr "Všeobecné podmínky"
+
+msgid "Icons"
+msgstr "Ikony"
+
+msgid "Create backup"
+msgstr "Vytvořit zálohu"
+
+msgid "Create file"
+msgstr "Vytvořit soubor"
+
+msgid "Create link"
+msgstr "Vytvořit odkaz"
+
+msgid "Edit template"
+msgstr "Upravit šablonu"
+
+msgid "Shared files"
+msgstr "Sdílené soubory"
+
+msgid "Skill wheel"
+msgstr "Kolo dovedností"
+
+msgid "Favourite courses"
+msgstr "Oblíbené kurzy"
+
+msgid "Restart courses"
+msgstr "Restartovat kurzy"
+
+msgid "Generate terms"
+msgstr "Generovat podmínky"
+
+msgid "Add variation"
+msgstr "Přidat variantu"
+
+msgid "Editor demo"
+msgstr "Demo editoru"
+
+msgid "Tool introduction"
+msgstr "Představení nástroje"
+
+msgid "Data exchanges"
+msgstr "Výměna dat"
+
+msgid "Third parties"
+msgstr "Třetí strany"
+
+msgid "Layouts"
+msgstr "Rozložení"
+
+msgid "Relation type"
+msgstr "Typ relace"
+
+msgid "Add all"
+msgstr "Přidat vše"
+
+msgid "Remove all"
+msgstr "Odebrat vše"
+
+msgid "An error occurred. Please try again."
+msgstr "Došlo k chybě. Zkuste to prosím znovu."
+
+msgid "%s created"
+msgstr "%s vytvořeno"
+
+msgid "%s updated"
+msgstr "%s aktualizováno"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Pokud plánujete upgrade ze starší verze Chamilo, možná si chcete"
+
+msgid "have a look at the changelog"
+msgstr "prohlédnout změny"
+
+msgid "to know what's new and what has been changed."
+msgstr "abyste věděli, co je nového a co se změnilo."
+
+msgid "Session Item"
+msgstr "Položka relace"
+
+msgid "Points"
+msgstr "Body"
+
+msgid "See notifications"
+msgstr "Zobrazit notifikace"
+
+msgid "New content available for this course."
+msgstr "Pro tento kurz je dostupný nový obsah."
+
+msgid "No new notifications."
+msgstr "Žádné nové notifikace."
+
+msgid "No new content found."
+msgstr "Nebyl nalezen žádný nový obsah."
+
+msgid "No tool details available yet."
+msgstr "Detaily nástroje ještě nejsou k dispozici."
+
+msgid "Last access"
+msgstr "Poslední přístup"
+
+msgid "Open course"
+msgstr "Otevřít kurz"
+
+msgid "Course completed"
+msgstr "Kurz dokončen"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Byl dosažen limit přihlášek pro tento kurz."
+
+msgid "Subscription limit reached"
+msgstr "Dosazen limit přihlášek"
+
+msgid "Tertiary alternative"
+msgstr "Třetí alternativa"
+
+msgid "Update SCORM"
+msgstr "Aktualizovat SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI může navrhnout zpětnou vazbu a doporučené skóre před odesláním."
+
+msgid "What will be sent to the AI"
+msgstr "Co bude odesláno AI"
+
+msgid "Assignment title + instructions"
+msgstr "Název úkolu + instrukce"
+
+msgid "Student submission (text)"
+msgstr "Odevzdání studenta (text)"
+
+msgid "Student submission (text): none"
+msgstr "Odevzdání studenta (text): žádné"
+
+msgid "Student attachment"
+msgstr "Příloha studenta"
+
+msgid "supported"
+msgstr "podporováno"
+
+msgid "not supported for document analysis"
+msgstr "nepodporováno pro analýzu dokumentu"
+
+msgid "Student attachment: none"
+msgstr "Příloha studenta: žádná"
+
+msgid "No text AI providers available."
+msgstr "Žádní poskytovatelé textové AI nejsou k dispozici."
+
+msgid "AI-assisted"
+msgstr "S podporou AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Toto rozhodnutí je uloženo s opravou (ExtraField) a nelze jej později změnit."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Volitelná příloha opravy (není odevzdání studenta)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Přijato"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Odemknout sloupec"
+
+msgid "Lock column"
+msgstr "Zamknout sloupec"
+
+msgid "Set all Present"
+msgstr "Nastavit všechny Přítomni"
+
+msgid "Set all Absent"
+msgstr "Nastavit všechny Nepřítomni"
+
+msgid "Auto (recommended)"
+msgstr "Automaticky (doporučeno)"
+
+msgid "Error downloading all documents."
+msgstr "Chyba při stahování všech dokumentů."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Otevřít v ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Omezení kvóty"
+
+msgid "Remaining space"
+msgstr "Zbývající prostor"
+
+msgid "Course catalogue"
+msgstr "Katalog kurzů"
+
+msgid "Drag links to reorder"
+msgstr "Přetáhněte odkazy pro přeřazení"
+
+msgid "Drop links here to keep them without category"
+msgstr "Přetáhněte odkazy sem pro ponechání bez kategorie"
+
+msgid "Could not export"
+msgstr "Nelze exportovat"
+
+msgid "Link moved"
+msgstr "Odkaz přesunut"
+
+msgid "Could not move link"
+msgstr "Nelze přesunout odkaz"
+
+msgid "Category reordering is not enabled"
+msgstr "Přeřazování kategorií není povoleno"
+
+msgid "Showing %s posts"
+msgstr "Zobrazuji %s příspěvků"
+
+msgid "Showing %s tasks"
+msgstr "Zobrazuji %s úkolů"
+
+msgid "Page %s of %s"
+msgstr "Strana %s z %s"
+
+msgid "Tutors"
+msgstr "Tutoři"
+
+msgid "selected"
+msgstr "vybráno"
+
+msgid "No data to export"
+msgstr "Žádná data k exportu"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Záhlaví PNG musí být ≤ %spx."
+
+msgid "Standard list"
+msgstr "Standardní seznam"
+
+msgid "Management list"
+msgstr "Správní seznam"
+
+msgid "Open platform"
+msgstr "Otevřená platforma"
+
+msgid "Teacher user ID"
+msgstr "ID uživatele učitele"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Opravdu chcete smazat tento kurz?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Opravdu chcete smazat vybrané kurzy?"
+
+msgid "Search by name, username, email"
+msgstr "Hledat podle jména, uživatelského jména, e-mailu"
+
+msgid "contains %s items"
+msgstr "obsahuje %s položek"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Vaše právní souhlas zůstává aktivní, dokud nebude žádost o odvolání posouzena a zpracována."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Vaše žádost o odvolání právního souhlasu čeká na posouzení."
+
+msgid "Your account deletion request is pending review."
+msgstr "Vaše žádost o smazání účtu čeká na posouzení."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Proč chcete požádat o odvolání svého právního souhlasu?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Odesílá se žádost o odvolání právního souhlasu..."
+
+msgid "Submitting request..."
+msgstr "Odesílá se žádost..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Požádat o odvolání právního souhlasu"
+
+msgid "Submitting your account deletion request..."
+msgstr "Odesílá se žádost o smazání účtu..."
+
+msgid "Submitting your acceptance..."
+msgstr "Odesílá se vaše přijetí..."
+
+msgid "Event details"
+msgstr "Podrobnosti události"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Z tohoto pohledu nemůžete přistoupit k propojenému kurzu."
+
+msgid "Failed to load sessions"
+msgstr "Nepodařilo se načíst sezení"
+
+msgid "Failed to load events"
+msgstr "Nepodařilo se načíst události"
+
+msgid "No events found"
+msgstr "Nebyly nalezeny žádné události"
+
+msgid "Group image"
+msgstr "Obrázek skupiny"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Zakázáno"
+
+msgid "Distribution"
+msgstr "Distribuce"
+
+msgid "Firstname"
+msgstr "Křestní jméno"
+
+msgid "Lastname"
+msgstr "Příjmení"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Last login in platform"
+msgstr "Poslední přihlášení na platformě"
+
+msgid "Export as CSV"
+msgstr "Exportovat jako CSV"
+
+msgid "Export as XLS"
+msgstr "Exportovat jako XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivovat tohoto uživatele?"
+
+msgid "Enable this user?"
+msgstr "Aktivovat tohoto uživatele?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Sloučit tuto duplicitní skupinu do uživatele #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Tím se sloučí všechny ostatní účty ve stejné skupině do tohoto účtu."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Sloučené účty budou trvale smazány a zmizí z této zprávy."
+
+msgid "This action cannot be undone."
+msgstr "Tuto akci nelze vrátit zpět."
+
+msgid "Unify"
+msgstr "Sloučit"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Celkový prostor použitý portálem %s limit je %s MB"
+
+msgid "Helper text"
+msgstr "Pomocný text"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Použijte filtry výše k načtení podrobností o přístupu studenta."
+
+msgid "Start date must be before end date"
+msgstr "Datum zahájení musí být před datem ukončení"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Vyberte časové rozmezí a typ seskupení pro kontrolu podrobností o přístupu studenta."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Tento kurz bude vytvořen pomocí výchozí šablony kurzu platformy."
+
+msgid "Security breach avoid restart"
+msgstr "Bezpečnostní porušení, vyhnout se restartu"
+
+msgid "User deactivated"
+msgstr "Uživatel deaktivován"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Uživatel aktivován"
+
+msgid "No other duplicates found for this user."
+msgstr "Pro tohoto uživatele nebyly nalezeny žádné další duplicity."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Uživatelé sloučeni: sloučeno %s účtů do uživatele #%s. Sloučené účty byly trvale smazány."
+
+msgid "No accounts were merged."
+msgstr "Nebyly sloučeny žádné účty."
+
+msgid "An error occurred while unifying users."
+msgstr "Došlo k chybě při sjednocování uživatelů."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Uživatelé sjednoceni: uživatel #%s sloučen do uživatele #%s. Sloučený účet byl trvale smazán."
+
+msgid "Duplicate users"
+msgstr "Duplicitní uživatelé"
+
+msgid "Years"
+msgstr "Léta"
+
+msgid "All time visits outside sessions"
+msgstr "Návštěvy mimo relace za celou dobu"
+
+msgid "All time visits in sessions"
+msgstr "Návštěvy v relacích za celou dobu"
+
+msgid "All time visits total"
+msgstr "Celkové návštěvy za celou dobu"
+
+msgid "Student visits per period, per course"
+msgstr "Návštěvy studentů za období, podle kurzu"
+
+msgid "By email"
+msgstr "Podle e-mailu"
+
+msgid "By extra field"
+msgstr "Podle extra pole"
+
+msgid "Select an option"
+msgstr "Vyberte možnost"
+
+msgid "Profile field"
+msgstr "Pole profilu"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Tato zpráva uvádí pouze uživatele se stejnou e-mailovou adresou."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Tato zpráva uvádí pouze uživatele se stejnou hodnotou vybraného pole profilu."
+
+msgid "How to use this report"
+msgstr "Jak použít tuto zprávu"
+
+msgid "Disable / Enable"
+msgstr "Deaktivovat / Aktivovat"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Pouze blokuje nebo obnovuje přihlášení. Neodstraní uživatele a neodstraní odběry."
+
+msgid "Last week"
+msgstr "Minulý týden"
+
+msgid "Next week"
+msgstr "Příští týden"
+
+msgid "Loading report..."
+msgstr "Načítání zprávy..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Nepodařilo se načíst zprávu. Zkuste to prosím znovu."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Vyberte jednu nebo více relací pro kopírování trenérů a zvolte cílový kurz"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Stiskněte Ctrl (nebo Cmd) pro výběr více položek"
+
+msgid "Choose the destination course"
+msgstr "Zvolte cílový kurz"
+
+msgid "You can select multiple items"
+msgstr "Můžete vybrat více položek"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Použijte vyhledávací pole pro rychlé nalezení kurzů"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Vyberte jednu nebo více zdrojových relací a jednu nebo více cílových relací pro kopírování studentů"
+
+msgid "Select destination sessions"
+msgstr "Vyberte cílové relace"
+
+msgid "You can select multiple users"
+msgstr "Můžete vybrat více uživatelů"
+
+msgid "Use the search box to find users quickly"
+msgstr "Použijte vyhledávací pole pro rychlé nalezení uživatelů"
+
+msgid "Error while creating the document"
+msgstr "Chyba při vytváření dokumentu"
+
+msgid "Not a SCORM learning path"
+msgstr "Není to SCORM výuková cesta"
+
+msgid "Final item"
+msgstr "Konečná položka"
+
+msgid "Edit item"
+msgstr "Upravit položku"
+
+msgid "No AI text providers configured."
+msgstr "Nejsou nakonfigurováni žádní poskytovatelé AI textu."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Nahrání selhalo. Soubor je pravděpodobně větší než limit serveru (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Aktualizace selhala. Server neobdržel žádný soubor."
+
+msgid "Update failed. %s"
+msgstr "Aktualizace selhala. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Aktualizace selhala. Neplatná zátěž nahraného souboru."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Aktualizace selhala. Název nahraného ZIP souboru musí odpovídat původnímu názvu SCORM balíčku."
+
+msgid "Update failed"
+msgstr "Aktualizace selhala"
+
+msgid "Question lower case"
+msgstr "Otázka malými písmeny"
+
+msgid "Regenerate"
+msgstr "Regenerovat"
+
+msgid "Case insensitive"
+msgstr "Nerozlišovat velikost písmen"
+
+msgid "Select a session to load its courses."
+msgstr "Vyberte relaci pro načtení jejích kurzů."
+
+msgid "Select the source course."
+msgstr "Vyberte zdrojový kurz."
+
+msgid "Select a destination session."
+msgstr "Vyberte cílovou relaci."
+
+msgid "Select the destination course."
+msgstr "Vyberte cílový kurz."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Zkopírovat celý obsah kurzu z vybraného kurzu relace."
+
+msgid "Select which tools/items to copy."
+msgstr "Vyberte, které nástroje/položky kopírovat."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Nezahrňovat základní (ne-seskvenční) obsah kurzu."
+
+msgid "An error occurred while copying the course"
+msgstr "Při kopírování kurzu došlo k chybě."
+
+msgid "Please select a different destination"
+msgstr "Vyberte prosím jiné cílové místo."
+
+msgid "You must select a destination course"
+msgstr "Musíte vybrat cílový kurz."
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Pro export kurzů s kvízy musíte vybrat kvíz."
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Pokud vaše LP obsahují audio soubory, měli byste je vybrat z dokumentů."
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Pokud váš kvíz obsahuje otázky typu hotspot, měli byste vybrat obrázky z dokumentů."
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Heslo musí mít nejméně %length% znaků."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Heslo musí obsahovat nejméně %count% malých písmen."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Heslo musí obsahovat nejméně %count% velkých písmen."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Heslo musí obsahovat nejméně %count% číselných (0-9) znaků."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Heslo musí obsahovat nejméně %count% speciálních znaků."
+
+msgid "Invalid login request."
+msgstr "Neplatná žádost o přihlášení."
+
+msgid "Authentication failed."
+msgstr "Ověření selhalo."
+
+msgid "Login %status% for username %username%"
+msgstr "Přihlášení %status% pro uživatele %username%"
+
+msgid "Co-generated with AI"
+msgstr "Společně generováno s AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Povinná pole"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tagy lze kopírovat a vkládat do textové oblasti níže a budou dynamicky nahrazeny jejich hodnotou pro každého uživatele individuálně při odesílání."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Tato skupina je propojena s třídou %s.<br>Seznam členů skupiny závisí na členech třídy a nelze jej upravit.<br>Přejděte do nastavení skupiny, abyste přerušili toto propojení, pokud chcete přidat nebo odebrat členy této skupiny."
+
+msgid "Link classes to created groups ?"
+msgstr "Propojit třídy s vytvořenými skupinami?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Pokud je třída propojena se skupinou, uživatelé přidaní do třídy nebo z ní odebraní jsou automaticky přidáni do skupiny nebo z ní odebráni."
+
+msgid "New groups creation in category %s"
+msgstr "Vytvoření nových skupin v kategorii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varovná zpráva upozorňující, že uživatel nemůže upravovat členy propojené skupiny"
+
+msgid "Remove the group link with the class"
+msgstr "Odstranit propojení skupiny s třídou"
+
+msgid "Linked class"
+msgstr "Propojená třída"
+
+msgid "The group is no longer linked to the class"
+msgstr "Skupina již není propojena s třídou"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Přehled studentů a kurzů zapsaných do třídy"
+
+msgid "Overview students subscribed to the class"
+msgstr "Přehled studentů zapsaných do třídy"
+
+msgid "Overview class"
+msgstr "Přehled třídy"
+
+msgid "Go back to the list of classes"
+msgstr "Zpět na seznam tříd"
+
+msgid "Go back to course classes"
+msgstr "Zpět na třídy kurzu"
+
+msgid "Users subscribed to the course"
+msgstr "Uživatelé zapsaní do kurzu"
+
+msgid "Users not subscribed to the course"
+msgstr "Uživatelé nepřihlášení ke kurzům"
+
+msgid "Users subscribed to the class"
+msgstr "Uživatelé přihlášení do třídy"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurzy přihlášené do třídy"
+
+msgid "No user is subscribed to this class"
+msgstr "Žádný uživatel není přihlášen do této třídy"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Žádný uživatel ani kurz nejsou přihlášeni do této třídy"
+
+msgid "No user are subscribed to this class"
+msgstr "Žádný uživatel není přihlášen do této třídy"
+
+msgid "No course are subscribed to this class"
+msgstr "Žádný kurz není přihlášen do této třídy"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Jste si jisti, že chcete odstranit třídu"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Jste si jisti, že chcete odstranit třídu?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Jste si jisti, že chcete odstranit třídu bez odstranění uživatelů?"
+
+msgid "Remove the class without removing students"
+msgstr "Odstranit třídu bez odstranění studentů"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Toto nastavení ještě není v této verzi implementováno."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Doporučeno pro pluginy pouze pro administrátory zobrazené v administrační oblasti."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Doporučeno pro pluginy, které se musí zobrazovat jako nástroje kurzu."
+
+msgid "Displayed above the main page content."
+msgstr "Zobrazeno nad obsahem hlavní stránky."
+
+msgid "Displayed below the main page content."
+msgstr "Zobrazeno pod obsahem hlavní stránky."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Zobrazeno blízko vrcholu hlavního layoutu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Zobrazeno blízko spodu hlavního layoutu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Doporučeno pro globální plovoucí nebo trvalé pluginy zobrazené před patou."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Zobrazeno ve vybrané oblasti pluginu."
+
+msgid "Admin menu"
+msgstr "Administrační menu"
+
+msgid "Global regions"
+msgstr "Globální oblasti"
+
+msgid "No regions assigned"
+msgstr "Žádné oblasti nepřiřazeny"
+
+msgid "Plugin regions"
+msgstr "Oblasti pluginů"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Vyberte, kde má být každý nainstalovaný plugin vykreslen."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tip: použijte Ctrl/Cmd pro výběr více oblastí."
+
+msgid "No installed plugins were found."
+msgstr "Nebyl nalezen žádný nainstalovaný plugin."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Vyberte jednu nebo více oblastí pro tento plugin v aktuální přístupové URL."
+
+msgid "Available regions"
+msgstr "Dostupné oblasti"
+
+msgid "Selected paragraph"
+msgstr "Vybraný odstavec"
+
+msgid "Destination folder"
+msgstr "Cílová složka"
+
+msgid "Generate AI media"
+msgstr "Generovat AI média"
+
+msgid "Save and insert"
+msgstr "Uložit a vložit"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ukládání je podporováno pouze pokud poskytovatel vrátí obsah base64. Pokud jste obdrželi pouze URL, je ukládání zakázáno, aby se zabránilo stahování v prohlížeči."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video bylo úspěšně vygenerováno, ale ukládání je zakázáno, protože poskytovatel vrátil URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Soubor byl uložen, ale jeho URL se nepodařilo vyřešit."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Vygenerovat Aiken kvíz z tématu nebo z jednoho dokumentu kurzu."
+
+msgid "Test from topic"
+msgstr "Test z tématu"
+
+msgid "Test from document"
+msgstr "Test z dokumentu"
+
+msgid "Generate from topic"
+msgstr "Generovat z tématu"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Použít výzvu tématu k vygenerování nového Aiken dotazníku."
+
+msgid "Quiz title"
+msgstr "Název kvízu"
+
+msgid "Generate from document"
+msgstr "Generovat z dokumentu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Vybrat jeden dokument kurzu a generovat otázky pouze na základě jeho obsahu."
+
+msgid "Selected document"
+msgstr "Vybraný dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument je vybrán ze seznamu dokumentů kurzu."
+
+msgid "Choose document"
+msgstr "Vybrat dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Volitelné. Používá se pouze jako další nápověda pro AI."
+
+msgid "Select a document"
+msgstr "Vybrat dokument"
+
+msgid "Welcome"
+msgstr "Vítejte"
+
+msgid "Welcome to Chamilo"
+msgstr "Vítejte v Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Pokud používáte Chamilo poprvé, podívejte se na boční menu, abyste se zorientovali v jeho mnoha funkcích. Pokud potřebujete pomoc, naše <a href=\"https://docs.chamilo.org\">oficiální dokumentace</a> vám pomůže se standardní dokumentací, zatímco naše <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online fórum</a> vám pomůže sdílet nápady a najít odpovědi od jiných uživatelů Chamilo."
 

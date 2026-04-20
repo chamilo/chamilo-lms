@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P आयात';
+$strings['plugin_comment'] = 'H5P सामग्री आयात करें और लर्नपाथ में उपयोग करें। स्थापना निर्देशों के लिए README.md खोलें।';
+$strings['frame'] = 'फ़्रेम';
+$strings['frame_help'] = 'H5P के नीचे फ़्रेम और बटन दिखाएं';
+$strings['embed'] = 'एम्बेड';
+$strings['embed_help'] = 'एम्बेड बटन प्रदर्शित करें';
+$strings['copyright'] = 'कॉपीराइट';
+$strings['copyright_help'] = 'कॉपीराइट बटन प्रदर्शित करें';
+$strings['icon'] = 'आइकन';
+$strings['icon_help'] = 'H5P आइकन प्रदर्शित करें';
+$strings['attempts'] = 'प्रयासों की संख्या';
+$strings['upload_h5p'] = 'अपलोड';
+$strings['import_h5p_package'] = 'H5P पैकेज अपलोड करें';
+$strings['h5p_package'] = 'H5P पैकेज';
+$strings['h5p_error_loading'] = 'H5P पैकेज लोड करने में त्रुटि';
+$strings['h5p_error_invalid_token'] = 'अमान्य सुरक्षा टोकन';
+$strings['h5p_error_missing_core_asset'] = 'H5P कोर एसेट्स लोड करने में त्रुटि';
+$strings['h5p_save_content_state'] = 'उपयोगकर्ता परिणाम सहेजें';
+$strings['h5p_save_content_freq'] = 'सहेजने की आवृत्ति';
+$strings['h5p_save_freq_help'] = 'वर्तमान सामग्री स्थिति कितनी बार सहेजी जानी चाहिए, सेकंड में';
+$strings['start_attempt'] = 'प्रयास शुरू करें';

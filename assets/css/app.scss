@@ -1,14 +1,19 @@
 @use "./tailwind" as *;
 @use "scss/index";
 
-@import '~cropper/dist/cropper.css';
-//@import "~flag-icons/sass/flag-icons.scss";
-@import "~select2/dist/css/select2.css";
-@import "~bootstrap-daterangepicker/daterangepicker.css";
-//@import '~jquery-ui/themes/base/all.css';
+@use 'cropper/dist/cropper.css' as cropper;
+//@use "flag-icons/sass/flag-icons.scss";
+@use "select2/dist/css/select2.css" as select2;
+@use "bootstrap-daterangepicker/daterangepicker.css" as daterangepicker;
+//@use 'jquery-ui/themes/base/all.css';
+@use "tinymce/skins/ui/oxide/skin.css" as tinymce-skin;
 
-@import "~tinymce/skins/ui/oxide/skin.css";
-@import './editor_content.css';
+@use './editor_content';
+
+@use "@fancyapps/fancybox/dist/jquery.fancybox.css" as fancybox;
+@use "timepicker/jquery.timepicker.min.css" as timepicker;
+@use "qtip2/dist/jquery.qtip.min.css" as qtip;
+
 
 @layer utilities {
   .border-gray-300 {
@@ -23,7 +28,7 @@
 
 @layer components {
   .card {
-    @apply rounded bg-white shadow-lg w-full;
+    @apply rounded-lg bg-white shadow-sm w-full;
   }
 
   // Buttons with icons.
@@ -66,11 +71,11 @@
     @apply border-collapse w-full mt-2;
 
     thead th {
-      @apply bg-gray-20 text-gray-90 font-semibold text-left px-4 py-3 border-b border-gray-30 border-t border-l border-r border-gray-30 text-center;
+      @apply bg-gray-20 text-gray-90 font-semibold text-left p-2 border-b border-gray-30 border-t border-l border-r;
     }
 
     tbody td {
-      @apply px-4 py-3 border-b border-gray-30 border-l border-r border-gray-30;
+      @apply p-2 border-b border-gray-30 border-l border-r;
     }
 
     tbody tr:nth-child(odd) {
@@ -107,41 +112,6 @@
     @apply bg-white border-l border-b border-r border-support-1 rounded-b shadow-xl;
   }
 
-  .card .flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .card .flex .relative {
-    position: relative;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .card .flex a {
-    margin-left: 10px;
-    font-size: 18px;
-    color: #333;
-  }
-
-  .card .sectioncomment {
-    padding: 15px;
-    background-color: #f7f7f7;
-  }
-
-  .card span.float-right {
-    float: right;
-    margin-right: 15px;
-    font-size: 14px;
-    color: #666;
-  }
-
-  .card .stat-content {
-    padding: 10px;
-  }
-
-  // Alerts
 
   .alert {
     @apply p-3.5 mb-5 border border-transparent rounded;
@@ -175,11 +145,11 @@
   // Tabs
 
   .tab_wrapper nav {
-    @apply card flex flex-row justify-between gap-4;
+    @apply card flex flex-row justify-between gap-2.5;
   }
 
   .tab_wrapper nav a {
-    @apply p-4;
+    @apply px-4 py-2 rounded-lg text-primary transition-colors;
   }
 
   // Calendar
@@ -212,6 +182,15 @@
   .ch-toolbar-icon {
     @apply font-extrabold text-primary leading-none;
   }
+  .ch-tool-icon-secondary {
+    @apply font-extrabold text-secondary;
+  }
+  .ch-tool-icon-success {
+    @apply font-extrabold text-success;
+  }
+  .ch-tool-icon-danger {
+    @apply font-extrabold text-danger;
+  }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;
   }
@@ -227,6 +206,10 @@
   }
 
   // Form
+  .form-actions {
+    @apply flex justify-end gap-2 mt-2;
+  }
+
   .has-error input, .has-error select {
     border-color: red !important;
   }
@@ -279,6 +262,13 @@
   }
 }
 
+.studentview-button {
+  .p-button-label {
+    @apply hidden
+      sm:block;
+  }
+}
+
 .mdi {
   @apply font-normal text-base leading-none;
 
@@ -291,13 +281,25 @@
   @apply text-error;
 }
 
+.field > small:not(.p-error) {
+  display: block;
+  margin-top: 0.5em;
+}
+
+.field-radiobutton {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
 // tabs
 .tab-content {
   > .tab-pane {
     display: none;
   }
   > .active {
-    display: block;
+    @apply block;
   }
 }
 
@@ -380,14 +382,8 @@
   color: #0a0a0a;
 }
 
-#global-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .documents-layout {
-  display: flex;
+  @apply flex;
   justify-content: space-between;
 }
 
@@ -414,15 +410,15 @@
 }
 
 .template-list {
-  display: flex;
+  @apply flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .template-item {
-  display: flex;
+  @apply flex;
   flex-direction: column;
-  align-items: center;
+  @apply items-center;
   text-align: center;
   padding: 10px;
   border: 1px solid #ccc;
@@ -446,7 +442,7 @@
 
 .ul-tablist {
   .nav-tabs {
-    display: flex;
+    @apply flex;
     list-style-type: none;
     padding: 0;
     border-bottom: 1px solid #ddd;
@@ -458,7 +454,7 @@
   }
 
   .nav-tabs .nav-link {
-    display: block;
+    @apply block;
     padding: 0.5rem 1rem;
     margin-right: 0.1rem;
     background: #f8f8f8;
@@ -474,7 +470,7 @@
 
   .nav-tabs .nav-link.active {
     color: #495057;
-    background-color: #fff;
+    @apply bg-white;
     border-color: #ddd #ddd #fff;
     border-bottom-color: transparent;
     font-weight: bolder;
@@ -483,8 +479,8 @@
 
 form .field {
   .freeze {
-    display: block;
-    padding-top: 10px;
+    @apply block;
+    padding-top: 20px;
   }
 
   .freeze + label,
@@ -510,17 +506,16 @@ form .field {
 }
 
 .easy-donut {
-  display: flex;
+  @apply flex;
   flex-direction: column;
-  align-items: center;
+  @apply items-center;
 }
 .easy-donut .percent {
   font-size: 1.25rem;
   font-weight: bold;
 }
 .stat-widget-five {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
 }
 .stat-widget-five .fa, .stat-widget-five .mdi-icon {
   margin-right: 1rem;
@@ -531,8 +526,7 @@ form .field {
   top: 65% !important;
   transform: translateY(-50%);
   right: 0.75rem;
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   cursor: pointer;
 }
 
@@ -553,7 +547,7 @@ form .field {
   }
 
   .exercise-draggable-answer.list-inline {
-    display: flex;
+    @apply flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
@@ -703,7 +697,7 @@ form .field {
   }
 
   .thumbnails {
-    display: flex;
+    @apply flex;
     flex-wrap: wrap;
     gap: 10px;
   }
@@ -728,7 +722,7 @@ form .field {
 
   .thumbnail-actions {
     margin-top: 10px;
-    display: flex;
+    @apply flex;
     justify-content: center;
     gap: 5px;
   }
@@ -744,7 +738,7 @@ form .field {
   canvas {
     width: 100%;
     height: 100%;
-    display: block;
+    @apply block;
   }
 
   tr {
@@ -757,28 +751,8 @@ form .field {
     vertical-align: middle;
   }
 
-  .flex {
-    display: flex;
-  }
-
-  .flex-col {
-    flex-direction: column;
-  }
-
   .align-middle {
     vertical-align: middle;
-  }
-
-  .mt-1 {
-    margin-top: 4px;
-  }
-
-  .gap-2 {
-    gap: 8px;
-  }
-
-  .opacity-50 {
-    opacity: 0.5;
   }
 
   .cursor-not-allowed {
@@ -904,52 +878,52 @@ img.course-tool__icon {
 .media-children    { margin-left:1rem; }
 .media-group h4   { margin-top:0; color:#23527c; }
 
-#tool-wiki { display:flex; flex-direction:column; min-height:100%; }
+#tool-wiki { @apply flex; flex-direction:column; min-height:100%; }
 #tool-wiki .wiki-wrap { flex: 1 0 auto; }
 #tool-wiki #wikicontent { display: flow-root; }
 #tool-wiki .wiki-footer { clear: both; margin-top: 1rem; }
 .wiki-stats-grid .panel {height:100%}
-.wiki-stats-grid .panel-body a {display:block; padding:6px 0}
+.wiki-stats-grid .panel-body a {@apply block; padding:6px 0}
 .wiki-stats-grid .panel-body a .mdi {vertical-align:middle; margin-right:6px}
 .wiki-breadcrumb {margin:10px 0 15px}
 .wiki-bc-wrap{margin:12px 0}
-.breadcrumb--wiki{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.breadcrumb--wiki{@apply flex items-center; flex-wrap:wrap; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
 .breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
 .breadcrumb--wiki .mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
-.breadcrumb-actions{margin-left:auto; display:flex; gap:.5rem}
-.breadcrumb-actions .btn{padding:6px 10px; border:1px solid #e7eaef; border-radius:10px; background:#fff;}
+.breadcrumb-actions{margin-left:auto; @apply flex; gap:.5rem}
+.breadcrumb-actions .btn{padding:6px 10px; border:1px solid #e7eaef; border-radius:10px; @apply bg-white;}
 .wiki-bc-wrap{margin:12px 0}
-.breadcrumb--wiki{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.breadcrumb--wiki{@apply flex items-center; flex-wrap:wrap; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
 .breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
 .mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
-.wiki-pills{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 16px}
-.wiki-pills .pill{display:inline-flex; align-items:center; gap:6px;padding:6px 10px; background:#fff; border:1px solid #e7eaef;border-radius:999px; text-decoration:none; font-weight:600;}
+.wiki-pills{@apply flex; flex-wrap:wrap; gap:8px; margin:8px 0 16px}
+.wiki-pills .pill{display:inline-flex; gap:6px;padding:6px 10px; @apply bg-white items-center; border:1px solid #e7eaef;border-radius:999px; text-decoration:none; font-weight:600;}
 .wiki-pills .pill.active{ background:#eef4ff; border-color:#cddcff; }
 .wiki-discuss{
   .wd-wrap{ margin:0 auto; padding:12px 14px; }
-  .wd-header{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:12px; padding:8px 10px; border:1px solid #dfe3e7; border-radius:4px; background:linear-gradient(#f8f8f8, #eeeeee); }
+  .wd-header{ @apply flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:12px; padding:8px 10px; border:1px solid #dfe3e7; border-radius:4px; background:linear-gradient(#f8f8f8, #eeeeee); }
   .wd-title{ margin:0; font-size:20px; line-height:1.2; font-weight:600; }
   .wd-meta{ margin-top:2px; font-size:12px; color:#6c757d; }
   .wd-toolbar a{ display:inline-block; margin-left:8px; }
-  .wd-card{ margin-top:12px; border:1px solid #e5e7eb; border-radius:4px; background:#fff; }
+  .wd-card{ margin-top:12px; border:1px solid #e5e7eb; border-radius:4px; @apply bg-white; }
   .wd-card .panel-body{ padding:14px; }
-  .wd-form .form-group{ display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+  .wd-form .form-group{ @apply flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
   .wd-form .control-label{ width:140px; padding-top:7px; margin:0; font-weight:600; text-align:left; }
   .wd-form .col-sm-10{ flex:1 1 auto; min-width:0; }
   .wd-form .form-control{ width:100%; }
   .wd-form .wd-rating{ max-width:160px; }
   .btn--primary{ background:#2d6cdf; border:1px solid #2257b6; color:#fff; padding:6px 14px; border-radius:4px; font-weight:600; }
   .btn--primary:hover{ background:#255bc3; }
-  .wd-stats{ margin:12px 0 6px; padding:8px 10px; display:flex; gap:8px; flex-wrap:wrap; color:#606c76; background:#fafafa; border:1px solid #e5e7eb; border-radius:4px; }
+  .wd-stats{ margin:12px 0 6px; padding:8px 10px; @apply flex; gap:8px; flex-wrap:wrap; color:#606c76; background:#fafafa; border:1px solid #e5e7eb; border-radius:4px; }
   .wd-empty{ margin-top:8px; }
-  .wd-comment{ display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; }
+  .wd-comment{ @apply flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; }
   .wd-comment:last-child{ border-bottom:none; }
   .wd-avatar{ width:40px; height:50px; border-radius:4px; background:#e9ecef; flex:none; object-fit:cover; }
-  .wd-avatar.wd-avatar--ph{ display:block; }
+  .wd-avatar.wd-avatar--ph{ @apply block; }
   .wd-comment-body{ flex:1 1 auto; min-width:0; }
-  .wd-comment-meta{ font-size:12px; color:#6c757d; display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+ .wd-comment-meta{ font-size:12px; color:#6c757d; @apply flex items-center; gap:6px; flex-wrap:wrap; }
   .wd-dot{ color:#c0c4c8; }
   .wd-comment-text{ white-space:pre-wrap; margin-top:4px; font-size:14px; }
   .form-horizontal .control-label{ text-align:left; }
@@ -1004,8 +978,3 @@ img.course-tool__icon {
   max-width: 100%;
   height: auto;
 }
-
-@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
-@import "~timepicker/jquery.timepicker.min.css";
-@import "~qtip2/dist/jquery.qtip.min.css";
-@import "primeicons/primeicons.css";

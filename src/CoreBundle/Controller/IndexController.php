@@ -34,8 +34,11 @@ class IndexController extends BaseController
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
     #[Route('/admin-dashboard', name: 'admin_dashboard_entry', options: ['expose' => true])]
     #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
+    #[Route('/my-services', name: 'my_services_entry', options: ['expose' => true])]
+    #[Route('/my-services/{vueRouting}', name: 'my_services_vue_entry', requirements: ['vueRouting' => '.+'], options: ['expose' => true])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
+    #[Route('/skill/ranking', name: 'skill_ranking')]
     #[Route('/access-url/auth-sources', methods: ['GET'])]
     public function index(): Response
     {
@@ -53,15 +56,16 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        // Default to teacher view when not set, then flip to student view on first click.
+        // Default to teacher view when not set, then flip to student view on the first click.
         // This ensures the *first* click really enters Student View.
-        $current = (string) $request->getSession()->get('studentview', 'teacherview');
+        $sessionHandler = $request->getSession();
+        $current = $sessionHandler->get('studentview', 'teacherview');
 
         $next = ('studentview' === $current) ? 'teacherview' : 'studentview';
 
-        $request->getSession()->set('studentview', $next);
+        $sessionHandler->set('studentview', $next);
 
-        // Keep plain text response to avoid breaking existing callers.
+        // Keep a plain text response to avoid breaking existing callers.
         return new Response($next);
     }
 }

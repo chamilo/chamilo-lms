@@ -32,7 +32,7 @@ use const PATHINFO_EXTENSION;
 class CourseArchiver
 {
     /** @var bool Global debug flag (true by default) */
-    private static bool $debug = true;
+    private static bool $debug = false;
 
     /** Debug logger (safe JSON, truncated) */
     private static function dlog(string $stage, mixed $payload = null): void
@@ -380,11 +380,24 @@ class CourseArchiver
         if (true !== $zip->open($zipPath)) {
             throw new RuntimeException('Cannot open zip: ' . $filename);
         }
-        if (!$zip->extractTo($tmp)) {
+        if (!$zip->extractTo(rtrim($tmp, '/'))) {
             $zip->close();
             throw new RuntimeException('Cannot extract zip: ' . $filename);
         }
         $zip->close();
+
+        // Preserve a local copy of the uploaded zip inside the extracted temp directory.
+        // This allows later fallback extraction of individual assets even if the original
+        // uploaded zip gets deleted after readCourse().
+        $preservedZipPath = $tmp . '__source_backup.zip';
+        $preservedZipOk = @copy($zipPath, $preservedZipPath);
+
+        self::dlog('readCourse.preserve_zip', [
+            'originalZip' => $zipPath,
+            'preservedZipPath' => $preservedZipPath,
+            'copied' => $preservedZipOk,
+            'preservedExists' => is_file($preservedZipPath),
+        ]);
 
         // 2) Read course_info.dat (search nested if necessary)
         $courseInfoDat = $tmp . 'course_info.dat';
@@ -500,16 +513,31 @@ class CourseArchiver
             throw new RuntimeException('Could not unserialize legacy course');
         }
 
-        // 7) Normalize numeric identifiers post-unserialize (safe)
+        // 7) Normalize numeric identifiers post-unserialize
         self::normalizeIds($course);
 
-        // 8) Optionally delete uploaded file (compat with v1)
+        // 8) Expose extraction metadata for downstream restore helpers
+        $effectiveZipPath = is_file($preservedZipPath) ? $preservedZipPath : $zipPath;
+
+        if (!isset($course->resources) || !is_array($course->resources)) {
+            $course->resources = [];
+        }
+        if (!isset($course->resources['__meta']) || !is_array($course->resources['__meta'])) {
+            $course->resources['__meta'] = [];
+        }
+
+        $course->resources['__meta']['archiver_root'] = rtrim($tmp, '/');
+        $course->resources['__meta']['backup_zip_path'] = $effectiveZipPath;
+        $course->resources['__meta']['course_info_dat'] = $courseInfoDat;
+
+        $course->backup_path = rtrim($tmp, '/');
+        $course->backup_zip_path = $effectiveZipPath;
+
+        // 9) Optionally delete the original uploaded zip
         if ($delete && is_file($zipPath)) {
             @unlink($zipPath);
             self::dlog('readCourse.deleted_zip', ['path' => $zipPath]);
         }
-
-        self::dlog('readCourse.end', ['ok' => true]);
 
         // Keep temp dir; some restore flows need extracted files
         return $course;
@@ -615,10 +643,16 @@ class CourseArchiver
      */
     private static function deincomplete(mixed $v): mixed
     {
-        // Handle leaf
         if ($v instanceof \__PHP_Incomplete_Class) {
             $o = new \stdClass();
             foreach (get_object_vars($v) as $k => $vv) {
+                if (is_string($k) && str_contains($k, "\0")) {
+                    $parts = explode("\0", $k);
+                    $k = end($parts); // e.g. "\0Course\0code" → "code"
+                    if ($k === '' || $k === false) {
+                        continue; // degenerate key — skip
+                    }
+                }
                 $o->{$k} = self::deincomplete($vv);
             }
             return $o;
@@ -630,10 +664,22 @@ class CourseArchiver
             }
             return $v;
         }
-        // Recurse stdClass or any object
+        // Recurse stdClass or any object (non-incomplete)
         if (is_object($v)) {
             foreach (get_object_vars($v) as $k => $vv) {
-                $v->{$k} = self::deincomplete($vv);
+                // Same guard for any object that may have been partially incomplete.
+                if (is_string($k) && str_contains($k, "\0")) {
+                    $parts = explode("\0", $k);
+                    $k = end($parts);
+                    if ($k === '' || $k === false) {
+                        continue;
+                    }
+                }
+                try {
+                    $v->{$k} = self::deincomplete($vv);
+                } catch (\Throwable) {
+                    // Read-only or inaccessible property — skip silently.
+                }
             }
             return $v;
         }

@@ -44,7 +44,7 @@ abstract class BaseController
         string $content,
         ?string $header = null,
         array $actions = []
-    ): Response {
+    ): never {
         if (!$header) {
             $header = $title;
         }
@@ -54,11 +54,8 @@ abstract class BaseController
         $this->template->assign('actions', implode(PHP_EOL, $actions));
         $this->template->assign('content', $content);
 
-        ob_start();
         $this->template->display_one_col_template();
-        $html = ob_get_contents();
-        ob_end_clean();
 
-        return new Response($html);
+        exit;
     }
 }

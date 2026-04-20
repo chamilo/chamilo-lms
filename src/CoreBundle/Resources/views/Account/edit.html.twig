@@ -5,11 +5,8 @@
         <link rel="stylesheet" href="{{ asset('build/flatpickr/flatpickr.min.css') }}"/>
         <script>
           document.addEventListener("DOMContentLoaded", function () {
-            $('.select2_user_rel_tag').each(function(i, obj) {
+            $('.select2_user_rel_tag').each(function() {
               let fieldId = '&field_id=' + $(this).attr('data.field_id');
-
-              // Legacy CSRF token for old Chamilo AJAX endpoints.
-              // This prevents "CSRF error" warnings coming from legacy token checks.
               let legacyToken = '&sec_token={{ legacy_token }}';
 
               $(this).select2({
@@ -31,10 +28,10 @@
               });
 
               $(this).on('select2:unselect', function (e) {
-                let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
+                let tagId = '&tag_id=' + e.params.data.element.dataset.id;
                 $.ajax({
-                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId + legacyToken,
-                  success: function(data) {}
+                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + tagId + legacyToken,
+                  success: function() {}
                 });
               });
             });
@@ -53,21 +50,121 @@
                 />
             </div>
             <div class="flex-grow">
-                {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
-                {# Legacy Chamilo CSRF token used by old token checks (sec_token). #}
+                <div class="mb-4 flex justify-end">
+                    <a href="{{ path('chamilo_core_account_change_password') }}" class="btn btn--secondary">
+                        {{ 'Change password'|trans }}
+                    </a>
+                </div>
+
+                {{ form_start(form, {
+                    'action': path('chamilo_core_account_edit'),
+                    'attr': {
+                        'class': 'edit',
+                        'novalidate': 'novalidate'
+                    }
+                }) }}
+
                 <input type="hidden" name="sec_token" value="{{ legacy_token }}" />
-                {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
+
+                {{ form_errors(form) }}
+
+                <div class="flex flex-col gap-4">
+                    {% for child in form %}
+                        {% if child.vars.name not in ['extra_fields', '_token'] %}
+                            {{ form_row(child) }}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if form.extra_fields is defined %}
+                        {% set pause_training_fields = ['pause_formation', 'start_pause_date', 'end_pause_date', 'disable_emails'] %}
+                        {% set has_pause_training =
+                            form.extra_fields.pause_formation is defined
+                            or form.extra_fields.start_pause_date is defined
+                            or form.extra_fields.end_pause_date is defined
+                            or form.extra_fields.disable_emails is defined
+                        %}
+
+                        {% if has_pause_training %}
+                            <div class="pause-training-panel rounded-2xl border border-gray-50 bg-white p-5">
+                                <div class="mb-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">
+                                        {{ 'Pause training'|trans }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mt-1">
+                                        {{ 'Temporarily pause inactivity follow-up and related reminders for your account.'|trans }}
+                                    </p>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    {% if form.extra_fields.pause_formation is defined %}
+                                        <div class="pause-option-card">
+                                            <div class="flex items-start gap-3">
+                                                {{ form_widget(form.extra_fields.pause_formation, {'attr': {'class': 'mt-1'}}) }}
+                                                <div class="min-w-0">
+                                                    <label for="{{ form.extra_fields.pause_formation.vars.id }}" class="pause-option-label">
+                                                        {{ form.extra_fields.pause_formation.vars.label|trans }}
+                                                    </label>
+                                                    {% if form.extra_fields.pause_formation.vars.help %}
+                                                        <p class="pause-option-help">{{ form.extra_fields.pause_formation.vars.help|trans }}</p>
+                                                    {% endif %}
+                                                    {{ form_errors(form.extra_fields.pause_formation) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if form.extra_fields.disable_emails is defined %}
+                                        <div class="pause-option-card">
+                                            <div class="flex items-start gap-3">
+                                                {{ form_widget(form.extra_fields.disable_emails, {'attr': {'class': 'mt-1'}}) }}
+                                                <div class="min-w-0">
+                                                    <label for="{{ form.extra_fields.disable_emails.vars.id }}" class="pause-option-label">
+                                                        {{ form.extra_fields.disable_emails.vars.label|trans }}
+                                                    </label>
+                                                    {% if form.extra_fields.disable_emails.vars.help %}
+                                                        <p class="pause-option-help">{{ form.extra_fields.disable_emails.vars.help|trans }}</p>
+                                                    {% endif %}
+                                                    {{ form_errors(form.extra_fields.disable_emails) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if form.extra_fields.start_pause_date is defined %}
+                                        {{ form_row(form.extra_fields.start_pause_date) }}
+                                    {% endif %}
+
+                                    {% if form.extra_fields.end_pause_date is defined %}
+                                        {{ form_row(form.extra_fields.end_pause_date) }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            {% for child in form.extra_fields %}
+                                {% if child.vars.name not in pause_training_fields %}
+                                    {{ form_row(child) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-2 mb-4 text-sm text-gray-600">
+                    <span class="required-marker">*</span> {{ 'Required fields'|trans }}
+                </div>
 
                 <div>
-                    <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+                    <button class="btn btn--primary" name="update_profile" type="submit">
+                        {{ 'Update profile'|trans }}
+                    </button>
                 </div>
                 {{ form_end(form) }}
             </div>
         </div>
 
-        {# Flatpickr JS from /build #}
         <script src="{{ asset('build/flatpickr/flatpickr.min.js') }}"></script>
-        {# Optional locale example: <script src="/build/flatpickr/l10n/fr.js"></script> #}
         <script>
           document.addEventListener('DOMContentLoaded', function () {
             if (window.flatpickr) {
@@ -76,14 +173,97 @@
                 allowInput: true,
                 altInput: true,
                 altFormat: 'd/m/Y',
-                maxDate: new Date().toISOString().slice(0,10),
-                // locale: 'fr',
+                maxDate: new Date().toISOString().slice(0, 10),
               });
+
+              flatpickr('.js-pause-training-datetime', {
+                enableTime: true,
+                time_24hr: true,
+                dateFormat: 'Y-m-d H:i',
+                altInput: true,
+                altFormat: 'd/m/Y H:i',
+                allowInput: true,
+              });
+            }
+
+            const pauseCheckbox = document.querySelector('input[name$="[pause_formation]"]');
+            const startPauseField = document.querySelector('input[name$="[start_pause_date]"]');
+            const endPauseField = document.querySelector('input[name$="[end_pause_date]"]');
+
+            const togglePauseDateFields = function () {
+              if (!pauseCheckbox) {
+                return;
+              }
+
+              const active = pauseCheckbox.checked;
+
+              [startPauseField, endPauseField].forEach(function (field) {
+                if (!field) {
+                  return;
+                }
+
+                // Keep the real inputs enabled so values are always submitted and rehydrated.
+                field.disabled = false;
+
+                const wrapper = field.closest('.field') || field.parentElement;
+                if (wrapper) {
+                  wrapper.classList.toggle('opacity-60', !active);
+                }
+              });
+            };
+
+            if (pauseCheckbox) {
+              pauseCheckbox.addEventListener('change', togglePauseDateFields);
+              togglePauseDateFields();
             }
           });
         </script>
         <style>
-            form.edit .p-float-label > ul, form.edit .field > ul { margin-top: .25rem; color: #dc2626; font-size: .875rem; padding-left: 1.25rem; list-style: disc; }
+            form.edit .p-float-label > ul,
+            form.edit .field > ul {
+                margin-top: .25rem;
+                color: #dc2626;
+                font-size: .875rem;
+                padding-left: 1.25rem;
+                list-style: disc;
+            }
+
+            .required-marker {
+                color: #dc2626;
+                font-weight: 700;
+            }
+
+            form.edit label.required::after {
+                content: ' *';
+                color: #dc2626;
+                font-weight: 700;
+            }
+
+            .pause-training-panel {
+                box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+            }
+
+            .pause-option-card {
+                border: 1px solid #e5e7eb;
+                border-radius: 0.75rem;
+                padding: 0.875rem 1rem;
+                background: #f9fafb;
+            }
+
+            .pause-option-label {
+                display: block;
+                font-weight: 600;
+                color: #111827;
+                margin-bottom: 0.25rem;
+                cursor: pointer;
+            }
+
+            .pause-option-help {
+                color: #4b5563;
+                font-size: 0.875rem;
+                line-height: 1.4;
+                margin: 0;
+            }
         </style>
     {% endautoescape %}
 {% endblock %}

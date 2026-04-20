@@ -170,7 +170,7 @@ switch ($action) {
         }
 
         $paypalParams = $plugin->getPaypalParams();
-        $pruebas = 1 == $paypalParams['sandbox'];
+        $test = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];

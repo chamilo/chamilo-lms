@@ -1,8 +1,8 @@
-{% if exercisefocused.show_region %}
-    {% set enable_time_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_time_limit') %}
-    {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
-    {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
-    {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
+{% if ExerciseFocused.show_region %}
+    {% set enable_time_limit = 'true' == ExerciseFocused.plugin_info.obj.get('enable_time_limit') %}
+    {% set time_limit = ExerciseFocused.plugin_info.obj.get('time_limit') %}
+    {% set enable_outfocused_limit = 'true' == ExerciseFocused.plugin_info.obj.get('enable_outfocused_limit') %}
+    {% set outfocused_limit = ExerciseFocused.plugin_info.obj.get('outfocused_limit') %}
 
     <div id="exercisefocused-block" style="display: none;">
         <div class="exercisefocused-block__container">

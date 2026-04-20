@@ -5,7 +5,7 @@
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +15,14 @@ class StartController
     public function __construct(
         private readonly ExerciseMonitoringPlugin $plugin,
         private readonly Request $request,
-        private readonly EntityManager $em
+        private readonly EntityManager $em,
+        private readonly FilesystemOperator $pluginsFilesystem
     ) {}
 
     public function __invoke(): Response
     {
-        $userDirName = $this->createDirectory();
+        $userId = api_get_user_id();
+        $dirPath = 'ExerciseMonitoring/'.$userId;
 
         /** @var UploadedFile $imgIddoc */
         $imgIddoc = $this->request->files->get('iddoc');
@@ -33,34 +35,36 @@ class StartController
 
         if ($imgIddoc) {
             $newFilename = uniqid().'_iddoc.jpg';
-            $fileNamesToUpdate[] = $newFilename;
+            $filePath = $dirPath.'/'.$newFilename;
 
-            $imgIddoc->move($userDirName, $newFilename);
+            $this->pluginsFilesystem->write($filePath, $imgIddoc->getContent());
 
             $log = new Log();
             $log
                 ->setExercise($exercise)
                 ->setLevel(-1)
-                ->setImageFilename($newFilename)
+                ->setImageFilename($filePath)
             ;
 
             $this->em->persist($log);
+            $fileNamesToUpdate[] = $filePath;
         }
 
         if ($imgLearner) {
             $newFilename = uniqid().'_learner.jpg';
-            $fileNamesToUpdate[] = $newFilename;
+            $filePath = $dirPath.'/'.$newFilename;
 
-            $imgLearner->move($userDirName, $newFilename);
+            $this->pluginsFilesystem->write($filePath, $imgLearner->getContent());
 
             $log = new Log();
             $log
                 ->setExercise($exercise)
                 ->setLevel(-1)
-                ->setImageFilename($newFilename)
+                ->setImageFilename($filePath)
             ;
 
             $this->em->persist($log);
+            $fileNamesToUpdate[] = $filePath;
         }
 
         $this->em->flush();
@@ -68,21 +72,5 @@ class StartController
         ChamiloSession::write($this->plugin->get_name().'_orphan_snapshots', $fileNamesToUpdate);
 
         return new Response();
-    }
-
-    private function createDirectory(): string
-    {
-        $user = api_get_user_entity(api_get_user_id());
-
-        $pluginDirName = api_get_path(SYS_UPLOAD_PATH).'plugins/ExerciseMonitoring';
-        $userDirName = $pluginDirName.'/'.$user->getId();
-
-        $fs = new Filesystem();
-        $fs->mkdir(
-            [$pluginDirName, $userDirName],
-            api_get_permissions_for_new_directories()
-        );
-
-        return $userDirName;
     }
 }

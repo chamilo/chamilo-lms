@@ -1,61 +1,72 @@
 <?php
 /* For license terms, see /license.txt */
 
+declare(strict_types=1);
+
+use ChamiloSession as Session;
+
 require_once __DIR__.'/../../../../main/inc/global.inc.php';
 require_once __DIR__.'/../../src/LtiProvider.php';
+require_once __DIR__.'/../../LtiProviderPlugin.php';
 
-$launch = LtiProvider::create()->launch(true, $_REQUEST['launch_id']);
+header('Content-Type: application/json');
 
-if (!$launch->hasAgs()) {
-    throw new Exception("Don't have grades!");
-}
+try {
+    $launchId = $_REQUEST['lti_launch_id'] ?? $_REQUEST['launch_id'] ?? null;
+    $launchId = is_string($launchId) ? trim($launchId) : '';
 
-if (!isset($_REQUEST['lti_result_id'])) {
-    throw new Exception("Any tool result");
-}
+    if ('' === $launchId) {
+        $ltiSession = Session::read('_ltiProvider');
 
-$launchData = $launch->getLaunchData();
-
-$courseCode = $_REQUEST['cidReq'];
-$courseId = api_get_course_int_id($courseCode);
-$toolName = $_REQUEST['lti_tool'];
-
-if (in_array($toolName, ['quiz', 'lp'])) {
-    if ('quiz' == $toolName) {
-        $objExercise = new Exercise($courseId);
-        $trackInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($_REQUEST['lti_result_id']);
-        $score = $trackInfo['exe_result'];
-        $weight = $trackInfo['exe_weighting'];
-        $timestamp = date(DATE_ISO8601);
-    } else {
-        $lpId = (int) $_REQUEST['lti_result_id'];
-        $lpProgress = learnpath::getProgress(
-            $lpId,
-            api_get_user_id(),
-            api_get_course_int_id(),
-            api_get_session_id()
-        );
-        $score = $lpProgress;
-        $weight = 100;
-        $timestamp = date(DATE_ISO8601);
+        if (is_array($ltiSession) && !empty($ltiSession['lti_launch_id'])) {
+            $launchId = (string) $ltiSession['lti_launch_id'];
+        }
     }
 
-    $grades = $launch->getAgs();
-    $scoreGrade = Packback\Lti1p3\LtiGrade::new()
-        ->setScoreGiven($score)
-        ->setScoreMaximum($weight)
-        ->setTimestamp($timestamp)
-        ->setActivityProgress('Completed')
-        ->setGradingProgress('FullyGraded')
-        ->setUserId($launchData['sub']);
-    $grades->putGrade($scoreGrade);
+    $toolName = $_REQUEST['lti_tool'] ?? null;
+    $toolName = is_string($toolName) ? trim($toolName) : '';
 
-    $plugin = LtiProviderPlugin::create();
-    $values = [];
-    $values['score'] = $score;
-    $values['progress'] = 0;
-    $values['duration'] = 0;
-    $plugin->saveResult($values, $_REQUEST['launch_id']);
+    if ('' === $toolName) {
+        $ltiSession = Session::read('_ltiProvider');
 
-    echo '{"success" : true}';
+        if (is_array($ltiSession) && !empty($ltiSession['tool_name'])) {
+            $toolName = (string) $ltiSession['tool_name'];
+        }
+    }
+
+    $resultId = $_REQUEST['lti_result_id'] ?? null;
+    $resultId = is_scalar($resultId) ? (int) $resultId : 0;
+
+    $courseCode = $_REQUEST['cidReq'] ?? null;
+    $courseCode = is_string($courseCode) ? trim($courseCode) : '';
+
+    $result = LtiProvider::create()->publishScoreToPlatform(
+        $launchId,
+        $toolName,
+        $resultId,
+        $courseCode,
+        (int) api_get_user_id(),
+        (int) api_get_session_id()
+    );
+
+    echo json_encode([
+            'success' => true,
+        ] + $result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    exit;
+} catch (Throwable $exception) {
+    error_log('[LtiProvider score] Score request failed. | '.json_encode([
+            'message' => $exception->getMessage(),
+            'launch_id' => $_REQUEST['lti_launch_id'] ?? $_REQUEST['launch_id'] ?? null,
+            'tool' => $_REQUEST['lti_tool'] ?? null,
+            'result_id' => $_REQUEST['lti_result_id'] ?? null,
+            'course_code' => $_REQUEST['cidReq'] ?? null,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+    http_response_code(500);
+
+    echo json_encode([
+        'success' => false,
+        'message' => $exception->getMessage(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    exit;
 }

@@ -30,7 +30,7 @@
         <BaseButton
           class="self-end"
           icon="search"
-          label="Search"
+          :label="t('Search')"
           type="secondary"
           @click="handleFormSearch"
         />
@@ -58,14 +58,14 @@
               v-if="user.showInvitationButton"
               class="mr-2"
               icon="account"
-              label="Send invitation"
+              :label="t('Send invitation')"
               type="secondary"
               @click="openInvitationModal(user)"
             />
 
             <BaseButton
               icon="email"
-              label="Send message"
+              :label="t('Send message')"
               type="primary"
               @click="openMessageModal(user)"
             />
@@ -89,7 +89,12 @@
             <h3>{{ group.name }}</h3>
             <p>{{ group.description }}</p>
             <a :href="group.url">
-              <BaseButton class="mt-2" icon="" label="See more" type="secondary" />
+              <BaseButton
+                :label="t('See more')"
+                class="mt-2"
+                icon="link-external"
+                type="secondary"
+              />
             </a>
           </div>
         </div>

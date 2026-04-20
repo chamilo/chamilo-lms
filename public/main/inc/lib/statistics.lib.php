@@ -1310,10 +1310,11 @@ class Statistics
     {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $columns[0] = 'c_id';
-        $columns[1] = 'access_date';
+        $columns[1] = 'c_id';
+        $columns[2] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
-        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
+        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 50;
         $page_nr = isset($_GET['page_nr']) ? intval($_GET['page_nr']) : 1;
         $column = isset($_GET['column']) ? intval($_GET['column']) : 0;
         $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
@@ -1366,14 +1367,17 @@ class Statistics
             while ($obj = Database::fetch_object($res)) {
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
                 $course = [];
-                $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
+                $course[] = $obj->c_id;
+                $courseTitle = htmlspecialchars($courseInfo['title'] ?? $courseInfo['code'] ?? '', ENT_QUOTES, 'UTF-8');
+                $course[] = '<a href="/course/'.(int) $obj->c_id.'/home">'.$courseTitle.'</a>';
                 // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = [get_lang("Course code"), true];
+            $table_header[] = [get_lang("Id"), true];
+            $table_header[] = [get_lang("Course title"), true];
             $table_header[] = [get_lang("Latest access"), true];
 
             ob_start();
@@ -2104,6 +2108,8 @@ class Statistics
      */
     public static function getNewUserRegistrations(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
             FROM user
             WHERE created_at BETWEEN '$startDate' AND '$endDate'
@@ -2125,6 +2131,8 @@ class Statistics
      */
     public static function getUserRegistrationsByCreator(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
                 FROM user u
                 LEFT JOIN user c ON u.creator_id = c.id

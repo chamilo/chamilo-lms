@@ -35,6 +35,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -60,7 +61,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ManagerRegistry $registry,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly TranslatorInterface $translator,
-        private readonly QueryCacheHelper $queryCacheHelper
+        private readonly QueryCacheHelper $queryCacheHelper,
+        private readonly ?LoggerInterface $logger = null,
     ) {
         parent::__construct($registry, User::class);
     }
@@ -130,7 +132,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         /** @var User $user */
+        $this->logger?->info('Legacy password hash upgraded for user {username} (ID {id}).', [
+            'username' => $user->getUsername(),
+            'id' => $user->getId(),
+        ]);
+
         $user->setPassword($newHashedPassword);
+        $user->setPasswordUpdatedAt(new Datetime());
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
@@ -1134,7 +1142,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     ) {
         $user = $this->find($userId);
         if (!$user) {
-            return '/img/icons/64/unknown.png';
+            return '/img/user_default.svg';
         }
 
         switch ($size) {

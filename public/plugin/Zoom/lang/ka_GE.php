@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom ვიდეოკონფერენცია';
+$strings['plugin_comment'] = 'Zoom ვიდეოკონფერენციის ინტეგრაცია კურსებსა და სესიებში';
+
+$strings['apiKey'] = 'API გასაღები';
+$strings['apiSecret'] = 'API საიდუმლო';
+$strings['verificationToken'] = 'ვერიფიკაციის ნიშანი';
+$strings['enableParticipantRegistration'] = 'საწევროების რეგისტრაციის ჩართვა';
+$strings['enableCloudRecording'] = 'ავტომატური ჩაწერის ტიპი';
+$strings['enableGlobalConference'] = 'გლობალური კონფერენციის ჩართვა';
+$strings['enableGlobalConferencePerUser'] = 'გლობალური კონფერენციის ჩართვა მომხმარებელზე ცალ-ცალკე';
+$strings['globalConferenceAllowRoles'] = 'გლობალური კონფერენციის ბმული ხილულია მხოლოდ ამ მომხმარებელთა როლებისთვის';
+$strings['globalConferencePerUserAllowRoles'] = 'გლობალური კონფერენციის მომხმარებელზე ცალ-ცალკე ბმული ხილულია მხოლოდ ამ მომხმარებელთა როლებისთვის';
+
+$strings['enableCloudRecording_help'] = 'საჭიროა ფასიანი Zoom პროფილი.
+არ იმუშავებს <em>ძირითადი</em> პროფილისთვის.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'ყველა კურსის სტუდენტი დარეგისტრირდა';
+$strings['Agenda'] = 'დღის წესრიგი';
+$strings['CannotRegisterWithoutEmailAddress'] = 'არ შეიძლება რეგისტრაცია ელფოსტის მისალმებით';
+$strings['CopyingJoinURL'] = 'შეუერთების URL-ის კოპირება';
+$strings['CopyJoinAsURL'] = '"შეუერთება როგორც" URL-ის კოპირება';
+$strings['CopyToCourse'] = 'კოპირება კურსში';
+$strings['CouldNotCopyJoinURL'] = 'შეუერთების URL-ის კოპირება ვერ მოხერხდა';
+$strings['Course'] = 'კურსი';
+$strings['CreatedAt'] = 'შექმნილია';
+$strings['CreateLinkInCourse'] = 'ბმულის(ების) შექმნა კურსში';
+$strings['CreateUserVideoConference'] = 'მომხმარებლის კონფერენციის შექმნა';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'შეხვედრის წაშლა';
+$strings['DeleteFile'] = 'ფაილ(ებ)ის წაშლა';
+$strings['Details'] = 'დეტალები';
+$strings['DoIt'] = 'გააკეთე';
+$strings['Duration'] = 'ხანგრძლივობა';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'ხანგრძლივობა (წუთებში)';
+$strings['EndDate'] = 'დამთავრების თარიღი';
+$strings['EnterMeeting'] = 'შეხვედრაში შესვლა';
+$strings['ViewMeeting'] = 'შეხვედრის ნახვა';
+$strings['Files'] = 'ფაილები';
+$strings['Finished'] = 'დასრულებული';
+$strings['FileWasCopiedToCourse'] = 'ფაილი გადაკოპირდა კურსში';
+$strings['FileWasDeleted'] = 'ფაილი წაიშალა';
+$strings['GlobalMeeting'] = 'გლობალური კონფერენცია';
+$strings['GlobalMeetingPerUser'] = 'გლობალური კონფერენცია მომხმარებელზე ცალ-ცალკე';
+$strings['GroupUsersWereRegistered'] = 'ჯგუფის წევრები დარეგისტრირდნენ';
+$strings['InstantMeeting'] = 'შეხვედრა დაუყოვნებლივ';
+$strings['Join'] = 'შეუერთება';
+$strings['JoinGlobalVideoConference'] = 'გლობალურ კონფერენციაში შეუერთება';
+$strings['JoinURLCopied'] = 'შეუერთების URL გადაკოპირდა';
+$strings['JoinURLToSendToParticipants'] = 'შეუერთების URL მონაწილეებისთვის გასაგზავნად';
+$strings['LiveMeetings'] = 'ცოცხალი შეხვედრები';
+$strings['LinkToFileWasCreatedInCourse'] = 'ფაილის ბმული დაემატა კურსს';
+$strings['MeetingDeleted'] = 'შეხვედრა წაიშალა';
+$strings['MeetingsFound'] = 'შეხვედრები მოიძებნა';
+$strings['MeetingUpdated'] = 'შეხვედრა განახლდა';
+$strings['NewMeetingCreated'] = 'ახალი შეხვედრა შექმნილია';
+$strings['Password'] = 'პაროლი';
+$strings['RecurringWithFixedTime'] = 'განმეორებადი ფიქსირებული დროით';
+$strings['RecurringWithNoFixedTime'] = 'განმეორებადი ფიქსირებული დროის გარეშე';
+$strings['RegisterAllCourseUsers'] = 'ყველა კურსის მომხმარებლის რეგისტრაცია';
+$strings['RegisteredUserListWasUpdated'] = 'დარეგისტრირებული მომხმარებელთა სია განახლდა';
+$strings['RegisteredUsers'] = 'დარეგისტრირებული მომხმარებლები';
+$strings['RegisterNoUser'] = 'არც ერთი მომხმარებლის რეგისტრაცია';
+$strings['RegisterTheseGroupMembers'] = 'ამ ჯგუფის წევრების რეგისტრაცია';
+$strings['ScheduleAMeeting'] = 'შეხვედრის დაგეგმვა';
+$strings['ScheduledMeeting'] = 'დაგეგმილი შეხვედრა';
+$strings['ScheduledMeetings'] = 'დაგეგმილი შეხვედრები';
+$strings['ScheduleAMeeting'] = 'შეხვედრის დაგეგმვა';
+$strings['SearchMeeting'] = 'შეხვედრის ძიება';
+$strings['Session'] = 'სესია';
+$strings['StartDate'] = 'დაწყების თარიღი';
+$strings['Started'] = 'დაწყებული';
+$strings['StartInstantMeeting'] = 'სწრაფი შეხვედრის დაწყება';
+$strings['StartMeeting'] = 'შეხვედრის დაწყება';
+$strings['StartTime'] = 'დაწყების დრო';
+$strings['Topic'] = 'თემა';
+$strings['TopicAndAgenda'] = 'თემა და დღის წესრიგი';
+$strings['Type'] = 'ტიპი';
+$strings['UpcomingMeetings'] = 'მომავალი შეხვედრები';
+$strings['UpdateMeeting'] = 'შეხვედრის განახლება';
+$strings['UpdateRegisteredUserList'] = 'დარეგისტრირებული მომხმარებელთა სიის განახლება';
+$strings['UserRegistration'] = 'მომხმარებლის რეგისტრაცია';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'ლოდინი';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s შეხვედრის %s ჩაწერა %s-დან (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'თქვენ არ ხართ რეგისტრირებული ამ შეხვედრაზე';
+$strings['ZoomVideoConferences'] = 'Zoom ვიდეოკონფერენციები';
+$strings['Recordings'] = 'ჩაწერები';
+$strings['CreateGlobalVideoConference'] = 'გლობალური ვიდეოკონფერენციის შექმნა';
+$strings['ConferenceNotStarted'] = 'კონფერენცია არ დაწყებულა';
+$strings['MeetingNotFound'] = 'შეხვედრა ვერ მოიძებნა';
+$strings['JoinURLNotAvailable'] = 'URL არ არის ხელმისაწვდომი';
+$strings['Meetings'] = 'შეხვედრები';
+$strings['ConferenceType'] = 'კონფერენციის ტიპი';
+$strings['ForEveryone'] = 'ყველა';
+$strings['SomeUsers'] = 'ზოგიერთი მომხმარებელი (შერჩევა მოგვიანებით)';
+$strings['Activity'] = 'აქტივობა';
+$strings['ConferenceNotAvailable'] = 'კონფერენცია არ არის ხელმისაწვდომი';

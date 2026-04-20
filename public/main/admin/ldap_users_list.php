@@ -24,8 +24,8 @@ api_protect_admin_script();
 $ldapHelper = Container::$container->get(LdapAuthenticatorHelper::class);
 $userRepo = Container::getUserRepository();
 
-$action = @$_GET["action"] ?: null;
-$login_as_user_id = @$_GET["user_id"] ?: null;
+$action = $_GET["action"] ?? null;
+$login_as_user_id = $_GET["user_id"] ?? null;
 
 // Login as ...
 if ("login_as" == $action && !empty($login_as_user_id)) {
@@ -49,7 +49,7 @@ if (isset($_GET['action'])) {
     if ($check) {
         switch ($_GET['action']) {
             case 'show_message':
-                Display::addFlash(Display::return_message($_GET['message'], 'normal'));
+                Display::addFlash(Display::return_message(htmlspecialchars($_GET['message'], ENT_QUOTES), 'normal'));
                 Display::display_header($tool_name);
                 break;
             case 'delete_user':
@@ -178,15 +178,15 @@ $type["student"] = get_lang('Learner');
 
 $form->addSelect('keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
-$form->addElement('submit', 'submit', get_lang('Validate'));
+$form->addButtonSearch(get_lang('Validate'));
 //$defaults['keyword_active'] = 1;
 //$defaults['keyword_inactive'] = 1;
 //$form->setDefaults($defaults);
 $form->display();
-$parameters['keyword_username'] = @$_GET['keyword_username'] ?: null;
-$parameters['keyword_firstname'] = @$_GET['keyword_firstname'] ?: null;
-$parameters['keyword_lastname'] = @$_GET['keyword_lastname'] ?: null;
-$parameters['keyword_email'] = @$_GET['keyword_email'] ?: null;
+$parameters['keyword_username'] = $_GET['keyword_username'] ?? null;
+$parameters['keyword_firstname'] = $_GET['keyword_firstname'] ?? null;
+$parameters['keyword_lastname'] = $_GET['keyword_lastname'] ?? null;
+$parameters['keyword_email'] = $_GET['keyword_email'] ?? null;
 if (isset($_GET['id_session'])) {
     $parameters['id_session'] = $_GET['id_session'];
 }
@@ -239,6 +239,11 @@ $table->set_column_filter(
     }
 );
 $table->set_form_actions(['add_user' => get_lang('Add LDAP users')]);
-$table->display();
+
+try {
+    $table->display();
+} catch (Exception $exception) {
+    echo Display::return_message($exception->getMessage());
+}
 
 Display::display_footer();

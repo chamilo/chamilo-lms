@@ -1,0 +1,75 @@
+// =============================================================================
+// BaseIcon
+// Modular stylesheet for the BaseIcon Vue component.
+//
+// Structure
+//   .base-icon                  — root wrapper
+//   .base-icon--{size}          — size modifier (big | normal | small)
+//   .base-icon--has-tooltip     — enables group-hover behaviour for tooltip
+//   .base-icon__badge           — floating badge overlay
+//   .base-icon__badge--{pos}    — badge position (top-left | top-right | bottom-left | bottom-right)
+//   .base-icon__tooltip         — tooltip shown on hover
+// =============================================================================
+
+.base-icon {
+  @apply relative inline-flex cursor-pointer;
+
+  // ---------------------------------------------------------------------------
+  // Size variants — applied to the inner <i> element
+  // ---------------------------------------------------------------------------
+  &--big i {
+    font-size: 1.875rem; // text-3xl
+    line-height: 1;
+  }
+
+  &--normal i {
+    font-size: 1.25rem; // text-xl
+    line-height: 1;
+  }
+
+  &--small i {
+    font-size: 1rem; // text-base
+    line-height: 1;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Badge
+  // ---------------------------------------------------------------------------
+  &__badge {
+    @apply absolute text-base font-bold leading-none w-5 h-5 text-center;
+
+    // Positional modifiers
+    &--top-left {
+      @apply -top-2 -left-2.5;
+    }
+
+    &--top-right {
+      @apply -top-2 -right-2.5;
+    }
+
+    &--bottom-left {
+      @apply -bottom-1.5 -left-2;
+    }
+
+    &--bottom-right {
+      @apply -bottom-2 -right-2.5;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tooltip
+  // ---------------------------------------------------------------------------
+  &--has-tooltip {
+    // Tailwind's group utility enables child group-hover selectors.
+    // We replicate the hover behaviour here without relying on the class.
+    &:hover .base-icon__tooltip {
+      @apply opacity-100;
+    }
+  }
+
+  &__tooltip {
+    @apply absolute top-full left-1/2 -translate-x-1/2 mt-1 px-2 py-1
+      text-xs text-white bg-gray-90 rounded whitespace-nowrap
+      opacity-0 transition-opacity pointer-events-none z-10;
+  }
+}

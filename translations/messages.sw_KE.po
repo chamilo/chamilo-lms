@@ -14724,7 +14724,7 @@ msgstr "Watumiaji, Makundi"
 msgid "Sorry no results"
 msgstr "Samahani hakuna matokeo"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Ruhusa za Kikundi"
 
 msgid "Closed"
@@ -16067,6 +16067,15 @@ msgstr "Kodi fupi"
 
 msgid "Create child skill"
 msgstr "Unda ustadi wa mtoto"
+
+msgid "This skill can be obtained through:"
+msgstr "Uwezo huu unaweza kupatikana kupitia:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Hakuna kozi yoyote kwa sasa inayakuruhusu kupata uwezo huu."
+
+msgid "Add skill to search profile"
+msgstr "Ongeza uwezo kwenye wasifu wa utafutaji"
 
 msgid "Search profile matches"
 msgstr "Tafuta milingano ya wasifu"
@@ -32744,4 +32753,1129 @@ msgstr "Pakia picha au tengeneza moja kwa Badge Studio."
 
 msgid "Current badge set"
 msgstr "Seti ya badge ya sasa"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Katika sehemu hii, unapobonyeza 'Sajili mwanafunzi' kwa kozi, utaulizwa kuchagua mtumiaji kwenye ukurasa unaofuata. Wakati imethibitishwa, itaunda kipindi kipya na kozi na mtumiaji aliyechaguliwa, na kutuma taarifa ya usajili kwa mtumiaji."
+
+msgid "Read-only view"
+msgstr "Muonekano wa kusoma tu"
+
+msgid "Events list"
+msgstr "Orodha ya matukio"
+
+msgid "Personal"
+msgstr "Binafsi"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Wiki zinaonyeshwa kutoka 1 hadi 52"
+
+msgid "No tutored sessions found"
+msgstr "Hakuna vipindi vya usimamizi vilivyopatikana"
+
+msgid "Content search"
+msgstr "Tafuta maudhui"
+
+msgid "Search indexed content across all courses."
+msgstr "Tafuta maudhui yaliyo na indeksia katika kozi zote."
+
+msgid "Enter a keyword..."
+msgstr "Ingiza neno la msingi..."
+
+msgid "Search error"
+msgstr "Hitilafu ya utafutaji"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ingiza neno la msingi kutafuta hati zilizoorodheshwa."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Matokeo ambayo huwezi kufikia yamefichwa kwa mipangilio."
+
+msgid "Restricted"
+msgstr "Imezuiliwa"
+
+msgid "You do not have access to this resource."
+msgstr "Huna ruhusa ya kufikia rasilimali hii."
+
+msgid "Create group"
+msgstr "Unda kikundi"
+
+msgid "My custom certificate"
+msgstr "Cheti changu cha kibinafsi"
+
+msgid "Select permission"
+msgstr "Chagua ruhusa"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Kukubali mwaliko huu, utaunganishwa na mtumiaji aliyeomba kwa njia ambayo itafanya baadhi au yote ya data ya wasifu wako iweze kusomwa na mtumiaji aliyeomba"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Inaonyesha %d ya takriban %d matokeo kwa %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Inaonyesha %d matokeo yanayopatikana kwa %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Kwa hivyo utaelekezwa kiotomatiki kwenye URL hii"
+
+msgid "You have access to multiple URLs"
+msgstr "Una ufikiaji wa URL nyingi"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Tafadhali bofya kiungo hapa chini kinacholingana na URL unayotaka kufikia"
+
+msgid "You do not currently have access to any URL"
+msgstr "Huna ufikiaji wa URL yoyote kwa sasa"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Idadi ya juu zaidi ya usajili inaruhusiwa"
+
+msgid "An error occurred"
+msgstr "Hitilafu imetokea"
+
+msgid "You don't have any course content yet"
+msgstr "Huna maudhui yoyote ya kozi bado"
+
+msgid "This course is locked"
+msgstr "Kozi hii imefungwa"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Anwani ya barua pepe ambayo barua pepe zitatumwa wakati jukwaa linatuma barua pepe, pia inatumika kama kichwa cha 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Haukuona lugha yako katika orodha? Wasiliana nasi kwa %s ili kuchangia kama mtafsiri"
+
+msgid "An update is available"
+msgstr " sasisho lipo"
+
+msgid "to know what's new and what has been changed"
+msgstr "kujua vipya na yaliyobadilishwa"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Tumegundua kuwa usakinishaji wako wa PHP haujeainisha tarehe"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Toleo lako la PHP halilingani na mahitaji ya programu hii"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Faili au folda zingine hazina ruhusa ya kuandika"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Onyo! Installeri imegundua jukwaa la Chamilo lililopo kwenye mfumo wako"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Kwa sababu majukwaa ya <code>newscorm</code> na <code>exercice</code> yalibadilishwa jina hadi <code>lp</code> na <code>exercise</code> mtawalia, ni lazima kufuta au kubadilisha jina hadi <code>newscorm_old</code> na <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Fomu ina data isiyofaa au isiyokamilika"
+
+msgid "Your contact information could not be sent"
+msgstr "Taarifa zako za mawasiliano hazikuweza kutumwa"
+
+msgid "Please contact support with the error details"
+msgstr "Tafadhali wasiliana na msaada na maelezo ya hitilafu"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Bonyeza picha iliikate (uwiano wa 1:1, 120x120 px inashauriwa)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Tumia zana ya kukata kuchagua eneo la 1:1"
+
+msgid "Checking push subscription"
+msgstr "Inaangalia usajili wa push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Umejiandikisha kwa arifa za push katika kivinjari hiki"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Arifa za push hazijawezeshwa katika kivinjari hiki"
+
+msgid "Data exchange successfully saved"
+msgstr "Uuzaji wa data umehifadhiwa kwa mafanikio"
+
+msgid "Error saving data exchange"
+msgstr "Hitilafu ya kuhifadhi uuzaji wa data"
+
+msgid "No documents added yet"
+msgstr "Hakuna hati zilizongezwa bado"
+
+msgid "No additional details available for this skill."
+msgstr "Hakuna maelezo ya ziada yanayopatikana kwa uwezo huu."
+
+msgid "No available documents"
+msgstr "Hakuna hati zinazopatikana"
+
+msgid "No users added yet"
+msgstr "Hakuna watumiaji waliyoongezwa bado"
+
+msgid "No available users"
+msgstr "Hakuna watumiaji wanaopatikana"
+
+msgid "You can no longer submit"
+msgstr "Huwezi tena kuwasilisha"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Hakuna wasilisho uliopotea uliopatikana kwa kazi hii au data haipatikani"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Barua pepe imetumwa kwa watumiaji wote ambao hawajawasilisha"
+
+msgid "Failed to send email"
+msgstr "Imeshindwa kutuma barua pepe"
+
+msgid "Write your answer here"
+msgstr "Andika jibu lako hapa"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kalenda ya mahubiri inakuruhusu kusajili orodha za mahubiri (moja kwa kila kikao cha kweli ambacho wanafunzi wanahitaji kuhudhuria)"
+
+msgid "Loading attendance data"
+msgstr "Inapakia data ya mahubiri"
+
+msgid "No attendance assigned yet"
+msgstr "Hakuna mahubiri yaliyotengwa bado"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Hakuna darasa lililopangwa leo, jaribu kuchagua siku nyingine au ongeza ingizo lako la mahubiri mwenyewe kwa kutumia ikoni za kitendo"
+
+msgid "No attendance data for today"
+msgstr "Hakuna data ya mahubiri ya leo"
+
+msgid "Saving"
+msgstr "Inahifadhi"
+
+msgid "No attendance data to save"
+msgstr "Hakuna data ya mahubiri ya kuhifadhi"
+
+msgid "Failed to save attendance"
+msgstr "Imeshindwa kuhifadhi mahubiri"
+
+msgid "Loading more courses"
+msgstr "Inapakia kozi zaidi"
+
+msgid "Loading more sessions"
+msgstr "Inapakia vikao zaidi"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Mpangilio wa kipengele cha kuanza kiotomatiki cha hati umewashwa"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Mpangilio wa kipengele cha kuanza kiotomatiki cha mazoezi umewashwa"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mpangilio wa kuanza kiotomatiki wa njia ya kujifunza uko IMEWASHWA"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Mpangilio wa kuanza kiotomatiki wa forum uko umewashwa"
+
+msgid "Course ID is missing"
+msgstr "Kitambulisho cha kozi kinakosekana"
+
+msgid "Course created successfully"
+msgstr "Kozi imeundwa kwa mafanikio"
+
+msgid "Error deleting document(s)"
+msgstr "Hitilafu ya kufuta hati"
+
+msgid "Template successfully deleted"
+msgstr "Tembelea imefutwa kwa mafanikio"
+
+msgid "Error deleting the template"
+msgstr "Hitilafu ya kufuta tembelea"
+
+msgid "The title and thumbnail are required"
+msgstr "Kichwa na picha ndogo zinahitajika"
+
+msgid "Template created successfully"
+msgstr "Tembelea imetengenezwa kwa mafanikio"
+
+msgid "Error creating the template"
+msgstr "Kosa la kuunda tembelea"
+
+msgid "Error submitting the form"
+msgstr "Kosa la kutuma fomu"
+
+msgid "Loading templates"
+msgstr "Inapakia templea"
+
+msgid "Loading layout"
+msgstr "Inapakia mpangilio"
+
+msgid "Loading courses"
+msgstr "Inapakia kozi"
+
+msgid "No courses available"
+msgstr "Hakuna kozi zinazopatikana"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Orodha hii inaonyesha watumiaji kutoka URL zote za ufikiaji kwa sababu mpangilio \"session_admin_access_to_all_users_on_all_urls\" umewashwa."
+
+msgid "User not found"
+msgstr "Mtumiaji hajapatikana"
+
+msgid "An error occurred while sending the course"
+msgstr "Kosa limetokea wakati wa kutuma kozi"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Tafadhali kumbuka kuwa marekebisho ya masharti yanayohusiana na GDPR yanahitaji kuripoti marekebisho hayo kwa washirika wa tatu ambao umewapa taarifa za kibinafsi kuhusu watumiaji wako, kama ilivyoelezwa katika Kifungu cha 19 cha GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Unapaswa kuunda \"Masharti na Mazingira\" kwa lugha zote zinazopatikana"
+
+msgid "You don't have any course yet"
+msgstr "Bado huna kozi yoyote"
+
+msgid "You have received a new friend request"
+msgstr "Ume pokea ombi jipya la urafiki"
+
+msgid "Diagnosis Management"
+msgstr "Usimamizi wa Uchunguzi"
+
+msgid "Tracking"
+msgstr "Ufuatiliaji"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Tazama ripoti, takwimu na data ya ufuatiliaji"
+
+msgid "System activity audit"
+msgstr "Uchunguzi wa shughuli za mfumo"
+
+msgid "Learning analytics"
+msgstr " Uchambuzi wa kujifunza"
+
+msgid "Administrative activity auditing"
+msgstr "Uchunguzi wa shughuli za utawala"
+
+msgid "List icons"
+msgstr "Orodha ya ikoni"
+
+msgid "Constant name"
+msgstr "Jina la konstanti"
+
+msgid "MDI icon name"
+msgstr "Jina la ikoni MDI"
+
+msgid "Assign authentication sources"
+msgstr "Panga vyanzo vya uthibitisho"
+
+msgid "Assignment details"
+msgstr "Maelezo ya kazi"
+
+msgid "Terms and conditions"
+msgstr "Sheria na masharti"
+
+msgid "Icons"
+msgstr "Ikoni"
+
+msgid "Create backup"
+msgstr "Unda nakala ya hrabari"
+
+msgid "Create file"
+msgstr "Unda faili"
+
+msgid "Create link"
+msgstr "Unda kiungo"
+
+msgid "Edit template"
+msgstr "Hariri templeti"
+
+msgid "Shared files"
+msgstr "Faili zilizoshirikiwa"
+
+msgid "Skill wheel"
+msgstr "Roda ya ustadi"
+
+msgid "Favourite courses"
+msgstr "Kozi zinazopendwa"
+
+msgid "Restart courses"
+msgstr "Anza upya kozi"
+
+msgid "Generate terms"
+msgstr "Tengeneza maneno"
+
+msgid "Add variation"
+msgstr "Ongeza tofauti"
+
+msgid "Editor demo"
+msgstr "Onyesho la mhariri"
+
+msgid "Tool introduction"
+msgstr "Utangulizi wa zana"
+
+msgid "Data exchanges"
+msgstr "Ubade wa data"
+
+msgid "Third parties"
+msgstr "Wengine wa tatu"
+
+msgid "Layouts"
+msgstr "Muundo"
+
+msgid "Relation type"
+msgstr "Aina ya uhusiano"
+
+msgid "Add all"
+msgstr "Ongeza zote"
+
+msgid "Remove all"
+msgstr "Ondoa zote"
+
+msgid "An error occurred. Please try again."
+msgstr "Hitilafu imetokea. Tafadhali jaribu tena."
+
+msgid "%s created"
+msgstr "%s imeundwa"
+
+msgid "%s updated"
+msgstr "%s imesasishwa"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Kama unapanga kusasisha kutoka toleo la zamani la Chamilo, unaweza kutaka"
+
+msgid "have a look at the changelog"
+msgstr "angalia changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "kujua ni nini kipya na kilichobadilishwa."
+
+msgid "Session Item"
+msgstr "Kipengee cha Kikao"
+
+msgid "Points"
+msgstr "Pointi"
+
+msgid "See notifications"
+msgstr "Tazama taarifa"
+
+msgid "New content available for this course."
+msgstr "Yaliyomo mapya yanapatikana kwa kozi hii."
+
+msgid "No new notifications."
+msgstr "Hakuna taarifa mpya."
+
+msgid "No new content found."
+msgstr "Hakuna yaliyomo mapya yaliyopatikana."
+
+msgid "No tool details available yet."
+msgstr "Hakuna maelezo ya zana bado."
+
+msgid "Last access"
+msgstr "Ufikiaji wa mwisho"
+
+msgid "Open course"
+msgstr "Fungua kozi"
+
+msgid "Course completed"
+msgstr "Kozi imekamilika"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Kikomo cha usajili kwa kozi hii kimefikishwa."
+
+msgid "Subscription limit reached"
+msgstr "Kikomo cha usajili kimefikishwa"
+
+msgid "Tertiary alternative"
+msgstr "Chaguo la tatu mbadala"
+
+msgid "Update SCORM"
+msgstr "Sasisha SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI inaweza kuandaa maoni na alama inayopendekezwa kabla ya kutuma."
+
+msgid "What will be sent to the AI"
+msgstr "Yatichomwa kwa AI"
+
+msgid "Assignment title + instructions"
+msgstr "Jina la kazi + maagizo"
+
+msgid "Student submission (text)"
+msgstr "Uwasilishaji wa mwanafunzi ( maandishi)"
+
+msgid "Student submission (text): none"
+msgstr "Uwasilishaji wa mwanafunzi (maandishi): hakuna"
+
+msgid "Student attachment"
+msgstr "Kiambatanisho cha mwanafunzi"
+
+msgid "supported"
+msgstr "inasaidiwa"
+
+msgid "not supported for document analysis"
+msgstr "haijaungwa mkono kwa uchambuzi wa hati"
+
+msgid "Student attachment: none"
+msgstr "Kiambatanisho cha mwanafunzi: hakuna"
+
+msgid "No text AI providers available."
+msgstr "Hakuna watoa huduma wa AI ya maandishi."
+
+msgid "AI-assisted"
+msgstr "Inasaidiwa na AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Uamuzi huu umehifadhiwa na marekebisho (ExtraField) na hauwezi kubadilishwa baadaye."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Kiambatanisho cha marekebisho cha hiari (hii si uwasilishaji wa mwanafunzi)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Imepokelewa"
+
+msgid "%s min"
+msgstr "%s dakika"
+
+msgid "Unlock column"
+msgstr "Fungua nguzo"
+
+msgid "Lock column"
+msgstr "Funga nguzo"
+
+msgid "Set all Present"
+msgstr "Weka wote Wapo"
+
+msgid "Set all Absent"
+msgstr "Weka wote Hawapo"
+
+msgid "Auto (recommended)"
+msgstr "Otomatiki (inapendekezwa)"
+
+msgid "Error downloading all documents."
+msgstr "Hitilafu ya kupakua hati zote."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Fungua na ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Kikomo cha kiasi"
+
+msgid "Remaining space"
+msgstr "Nahema nafasi"
+
+msgid "Course catalogue"
+msgstr "Orodha ya kozi"
+
+msgid "Drag links to reorder"
+msgstr "Buruta viungo ili kuyapanga upya"
+
+msgid "Drop links here to keep them without category"
+msgstr "Achana viungo hapa kuyahifadhi bila jamii"
+
+msgid "Could not export"
+msgstr "Haikuweza kusafirisha"
+
+msgid "Link moved"
+msgstr "Uunganisho umehama"
+
+msgid "Could not move link"
+msgstr "Haikuweza kuhamisha uunganisho"
+
+msgid "Category reordering is not enabled"
+msgstr "Upangaji upya wa jamii haujawezeshwa"
+
+msgid "Showing %s posts"
+msgstr "Inayoonyesha %s machapisho"
+
+msgid "Showing %s tasks"
+msgstr "Inayoonyesha %s kazi"
+
+msgid "Page %s of %s"
+msgstr "Ukurasa %s wa %s"
+
+msgid "Tutors"
+msgstr "Walimu wasaidizi"
+
+msgid "selected"
+msgstr "imechaguliwa"
+
+msgid "No data to export"
+msgstr "Hakuna data ya kusafirisha"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Kichwa cha PNG kinapaswa kuwa \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Orodha ya kawaida"
+
+msgid "Management list"
+msgstr "Orodha ya usimamizi"
+
+msgid "Open platform"
+msgstr "Jukwaa la wazi"
+
+msgid "Teacher user ID"
+msgstr "Kitambulisho cha mtumiaji mwalimu"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Je, una uhakika unataka kufuta kozi hii?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Je, una uhakika unataka kufuta kozi zilizochaguliwa?"
+
+msgid "Search by name, username, email"
+msgstr "Tafuta kwa jina, jina la mtumiaji, barua pepe"
+
+msgid "contains %s items"
+msgstr "ina vitu %s"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Makubaliano yako ya kisheria yatabaki yatendakayo hadi ombi lolote la kujiondoa limetathminiwa na kusindikwa."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ombi lako la kujiondoa kwa idhini yako ya kisheria linangoja ukaguzi."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ombi lako la kufutwa kwa akaunti linangoja ukaguzi."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kwa nini unataka kuomba kujiondoa kwa idhini yako ya kisheria?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Inawasilishwa ombi lako la kujiondoa kwa idhini ya kisheria..."
+
+msgid "Submitting request..."
+msgstr "Inawasilishwa ombi..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Omba kujiondoa kwa idhini ya kisheria"
+
+msgid "Submitting your account deletion request..."
+msgstr "Inawasilishwa ombi lako la kufutwa kwa akaunti..."
+
+msgid "Submitting your acceptance..."
+msgstr "Inawasilishwa kukubali kwako..."
+
+msgid "Event details"
+msgstr "Maelezo ya tukio"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Huwezi kufikia kozi iliyounganishwa kutoka mwonekano huu."
+
+msgid "Failed to load sessions"
+msgstr "Imeshindwa kupakia vikao"
+
+msgid "Failed to load events"
+msgstr "Imeshindwa kupakia matukio"
+
+msgid "No events found"
+msgstr "Matukio hayapatikani"
+
+msgid "Group image"
+msgstr "Picha ya kikundi"
+
+msgid "SearchTCC"
+msgstr "TafutaTCC"
+
+msgid "Forbidden"
+msgstr "Imezuiliwa"
+
+msgid "Distribution"
+msgstr "Usambazaji"
+
+msgid "Firstname"
+msgstr "Jina la kwanza"
+
+msgid "Lastname"
+msgstr "Jina la mwisho"
+
+msgid "Email"
+msgstr "Barua pepe"
+
+msgid "Last login in platform"
+msgstr "Ingizo la mwisho kwenye jukwaa"
+
+msgid "Export as CSV"
+msgstr "Safirisha kama CSV"
+
+msgid "Export as XLS"
+msgstr "Safirisha kama XLS"
+
+msgid "Deactivate this user?"
+msgstr "Zima mtumiaji huyu?"
+
+msgid "Enable this user?"
+msgstr "Washisha mtumiaji huyu?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Unganisha kikundi hiki chenye nakala katika mtumiaji #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Hii itaunganisha akaunti zote zilizopo katika kikundi hicho kwenye akaunti hii."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Akaunti zilizounganishwa zitafutwa kabisa na zitaondoka kwenye ripoti hii."
+
+msgid "This action cannot be undone."
+msgstr "Kitendo hiki hakiwezi kurekebishwa."
+
+msgid "Unify"
+msgstr "Unganisha"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Mwanafunzi"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Nauli ya jumla inayotumiwa na lango %s kikomo ni %s MB"
+
+msgid "Helper text"
+msgstr " maandishi ya msaidizi"
+
+msgid "NotAllowed"
+msgstr "Hauruhusiwi"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Tumia uchunguzi hapo juu upakie maelezo ya upatikanaji wa mwanafunzi."
+
+msgid "Start date must be before end date"
+msgstr "Tarehe ya mwanzo lazima iwe kabla ya tarehe ya mwisho"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Chagua kipindi cha tarehe na aina ya ugawaji ili kukagua maelezo ya upatikanaji wa mwanafunzi."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Kozi hii itaundwa kwa kutumia templeti ya kozi ya chaguo-msingi ya jukwaa."
+
+msgid "Security breach avoid restart"
+msgstr "Ukiukaji wa usalama epuka kurudisha"
+
+msgid "User deactivated"
+msgstr "Mtumiaji amezimwa"
+
+msgid "InvalidId"
+msgstr "Kitambulisho kisichofaa"
+
+msgid "User enabled"
+msgstr "Mtumiaji amewezeshwa"
+
+msgid "No other duplicates found for this user."
+msgstr "Hakuna mara nyingine za nakili zilizopatikana kwa mtumiaji huyu."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Watumiaji wameunganishwa: akaunti %s zimeunganishwa kwenye mtumiaji #%s. Akaunti zilizounganishwa zimefutwa kabisa."
+
+msgid "No accounts were merged."
+msgstr "Hakuna akaunti zilizounganishwa."
+
+msgid "An error occurred while unifying users."
+msgstr "Hitilafu ilitokea wakati wa kuunganisha watumiaji."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Watumiaji wameunganishwa: mtumiaji #%s ameunganishwa kwenye mtumiaji #%s. Akaunti iliyounganishwa imefutwa kabisa."
+
+msgid "Duplicate users"
+msgstr "Watumiaji wanaofanana"
+
+msgid "Years"
+msgstr "Makaazi"
+
+msgid "All time visits outside sessions"
+msgstr "Ziara zote wakati wote nje ya vipindi"
+
+msgid "All time visits in sessions"
+msgstr "Ziara zote wakati wote katika vipindi"
+
+msgid "All time visits total"
+msgstr "Ziara zote wakati wote jumla"
+
+msgid "Student visits per period, per course"
+msgstr "Ziara za wanafunzi kwa kipindi, kwa kozi"
+
+msgid "By email"
+msgstr "Kwa barua pepe"
+
+msgid "By extra field"
+msgstr "Kwa uwanja wa ziada"
+
+msgid "Select an option"
+msgstr "Chagua chaguo"
+
+msgid "Profile field"
+msgstr "Uwanja wa wasifu"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Ripoti hii inaorodhesha tu watumiaji walio na anwani ya barua pepe sawa."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Ripoti hii inaorodhesha tu watumiaji wanaoshiriki thamani sawa ya uwanja wa wasifu uliochaguliwa."
+
+msgid "How to use this report"
+msgstr "Jinsi ya kutumia ripoti hii"
+
+msgid "Disable / Enable"
+msgstr "Zima / Washa"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Inazuia au inarudisha kuingia tu. Haiifuti mtumiaji na hairuhusu usajili."
+
+msgid "Last week"
+msgstr "Wiki iliyopita"
+
+msgid "Next week"
+msgstr "Wiki ijayo"
+
+msgid "Loading report..."
+msgstr "Inapakia ripoti..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Imeshindwa kupakia ripoti hii. Tafadhali jaribu tena."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Chagua vipindi moja au zaidi vya kunakili walimu kutoka na chagua kozi ya marudio"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Bonyeza Ctrl (au Cmd) kuchagua vitu vingi"
+
+msgid "Choose the destination course"
+msgstr "Chagua kozi ya marudio"
+
+msgid "You can select multiple items"
+msgstr "Unaweza kuchagua vitu vingi"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Tumia sanduku la utafutaji kupata kozi haraka"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Chagua vipindi vya chanzo moja au zaidi na vipindi vya marudio moja au zaidi vya kunakili wanafunzi"
+
+msgid "Select destination sessions"
+msgstr "Chagua vipindi vya marudio"
+
+msgid "You can select multiple users"
+msgstr "Unaweza kuchagua watumiaji wengi"
+
+msgid "Use the search box to find users quickly"
+msgstr "Tumia sanduku la utafutaji kupata watumiaji haraka"
+
+msgid "Error while creating the document"
+msgstr "Hitilafu wakati wa kuunda hati"
+
+msgid "Not a SCORM learning path"
+msgstr "Sio njia ya kujifunza ya SCORM"
+
+msgid "Final item"
+msgstr "Kitu cha mwisho"
+
+msgid "Edit item"
+msgstr "Hariri kitu"
+
+msgid "No AI text providers configured."
+msgstr "Hakuna watoa huduma wa maandishi ya AI yaliyosanidiwa."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Upakiaji umeshindwa. Faili labda ni kubwa kuliko kikomo cha seva (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Usasishaji umeshindwa. Hakuna faili iliyopokelewa na seva."
+
+msgid "Update failed. %s"
+msgstr "Usasishaji umeshindwa. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Usasishaji umeshindwa. Payload ya faili iliyopakiwa ni batili."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Usasishaji umeshindwa. Jina la faili ya ZIP iliyopakiwa lazima lifanane na jina la paketi asili ya SCORM."
+
+msgid "Update failed"
+msgstr "Usasishaji umeshindwa"
+
+msgid "Question lower case"
+msgstr "Swali la chini"
+
+msgid "Regenerate"
+msgstr "Tengeneza upya"
+
+msgid "Case insensitive"
+msgstr "Haitumii kubwa na ndogo"
+
+msgid "Select a session to load its courses."
+msgstr "Chagua kikao ili kupakia kozi zake."
+
+msgid "Select the source course."
+msgstr "Chagua kozi ya chanzo."
+
+msgid "Select a destination session."
+msgstr "Chagua kikao cha marudio."
+
+msgid "Select the destination course."
+msgstr "Chagua kozi ya marudio."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Nakili maudhui kamili ya kozi kutoka kozi ya kikao iliyochaguliwa."
+
+msgid "Select which tools/items to copy."
+msgstr "Chagua zana/vitu vya kunakili."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Usijumuishwe maudhui ya msingi (sio ya kikao) ya kozi."
+
+msgid "An error occurred while copying the course"
+msgstr "Kosa limetokea wakati wa kunakili kozi"
+
+msgid "Please select a different destination"
+msgstr "Tafadhali chagua marudio tofauti"
+
+msgid "You must select a destination course"
+msgstr "Lazima uchague kozi ya marudio"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Ili kuhamisha kozi zenye jaribio lazima uchague jaribio"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ikiwa LP zako zina faili za sauti zilizojumuishwa unapaswa kuzichagua kutoka hati"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ikiwa jaribio lako lina maswali ya hotspot yaliyojumuishwa unapaswa kuchagua picha kutoka hati"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Nenosiri lazima liwe na angalau %length% herufi."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi ndogo."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi kubwa."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Nenosiri lazima liwe na angalau %count% nambari (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Nenosiri lazima liwe na angalau %count% herufi maalum."
+
+msgid "Invalid login request."
+msgstr "Ombi la kuingia batili."
+
+msgid "Authentication failed."
+msgstr "Uthibitisho ulishindwa."
+
+msgid "Login %status% for username %username%"
+msgstr "Ingia %status% kwa jina la mtumiaji %username%"
+
+msgid "Co-generated with AI"
+msgstr "Imeundwa pamoja na AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Sehemu zinazohitajika"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Lebo zinaweza kunakiliwa na kubandikwa ndani ya eneo la maandishi hapa chini na zitasimamiwa na kubadilishwa na thamani yao kwa kila mtumiaji mmoja wakati wa kutuma."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Kikundi hiki kimeunganishwa na darasa %s.<br>Serikali ya wanachama wa kikundi inategemea wanachama wa darasa na haiwezi kubadilishwa.<br>Nenda kwenye mipangilio ya kikundi ili kuvunja kiungo hiki ikiwa unataka kuongeza au kuondoa wanachama wa kikundi hiki."
+
+msgid "Link classes to created groups ?"
+msgstr "Unganisha madarasa na vikundi vilivyoundwa?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ikiwa darasa limeunganishwa na kikundi, watumiaji wanaoelezwa au kuondolewa kutoka darasani wataongezwa au kuondolewa kikundi kiotomatiki."
+
+msgid "New groups creation in category %s"
+msgstr "Uundaji wa vikundi vipya katika jamii %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Ujumbe wa tahadhari kuonya kuwa mtumiaji hawezi kubadilisha wanachama wa kikundi kilichounganishwa"
+
+msgid "Remove the group link with the class"
+msgstr "Ondoa kiungo cha kikundi na darasa"
+
+msgid "Linked class"
+msgstr "Darasa lililounganishwa"
+
+msgid "The group is no longer linked to the class"
+msgstr "Kikundi hakishauriunganishwa na darasa tena"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Muhtasari wa wanafunzi na kozi zilizojisajili kwenye darasa"
+
+msgid "Overview students subscribed to the class"
+msgstr "Muhtasari wa wanafunzi waliotajiriwa kwenye darasa"
+
+msgid "Overview class"
+msgstr "Muhtasari wa darasa"
+
+msgid "Go back to the list of classes"
+msgstr "Rudi kwenye orodha ya madarasa"
+
+msgid "Go back to course classes"
+msgstr "Rudi kwenye madarasa ya kozi"
+
+msgid "Users subscribed to the course"
+msgstr "Watumiaji waliosajiliwa kwenye kozi"
+
+msgid "Users not subscribed to the course"
+msgstr "Watumiaji ambao hawajasajiliwa kwenye kozi"
+
+msgid "Users subscribed to the class"
+msgstr "Watumiaji waliosajiliwa kwenye darasa"
+
+msgid "Courses subscribed to the class"
+msgstr "Kozi zilizosajiliwa kwenye darasa"
+
+msgid "No user is subscribed to this class"
+msgstr "Hakuna mtumiaji aliyesajiliwa kwenye darasa hili"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Hakuna mtumiaji wala kozi iliyosajiliwa kwenye darasa hili"
+
+msgid "No user are subscribed to this class"
+msgstr "Hakuna mtumiaji aliyesajiliwa kwenye darasa hili"
+
+msgid "No course are subscribed to this class"
+msgstr "Hakuna kozi iliyosajiliwa kwenye darasa hili"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Je, una uhakika unataka kuondoa darasa"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Je, una uhakika unataka kuondoa darasa?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Je, una uhakika unataka kuondoa darasa bila kuondoa watumiaji?"
+
+msgid "Remove the class without removing students"
+msgstr "Ondoa darasa bila kuondoa wanafunzi"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Mpangilio huu haujatekelezwa bado katika toleo hili."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Inapendekezwa kwa programu za ziada za msimamizi pekee zinazoonekana katika eneo la usimamizi."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Inapendekezwa kwa programu za ziada zinazopaswa kuonekana kama zana za kozi."
+
+msgid "Displayed above the main page content."
+msgstr "Inaonyeshwa juu ya maudhui ya ukurasa mkuu."
+
+msgid "Displayed below the main page content."
+msgstr "Inaonyeshwa chini ya maudhui ya ukurasa mkuu."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Inaonyeshwa karibu na juu ya ganda la mpangilio mkuu."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Inaonyeshwa karibu na chini ya ganda la mpangilio mkuu."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Inapendekezwa kwa programu za ziada zinazosogeza au za kudumu zinazoonekana kabla ya footer."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Inaonyeshwa katika eneo la programu ya ziada iliyochaguliwa."
+
+msgid "Admin menu"
+msgstr "Menyu ya msimamizi"
+
+msgid "Global regions"
+msgstr "Mikoa ya kimataifa"
+
+msgid "No regions assigned"
+msgstr "Hakuna mikoa iliyotajwa"
+
+msgid "Plugin regions"
+msgstr "Mikoa ya programu za ziada"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Chagua mahali kila programu ya ziada iliyosakinishwa inapaswa kuonyeshwa."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Kidokezo: tumia Ctrl/Cmd kuchagua mikoa mingi."
+
+msgid "No installed plugins were found."
+msgstr "Hakuna programu za ziada zilizosakinishwa zilizopatikana."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Chagua eneo moja au zaidi kwa programu hii katika URL ya sasa ya ufikiaji."
+
+msgid "Available regions"
+msgstr "Mikoa inayopatikana"
+
+msgid "Selected paragraph"
+msgstr "Kifungu kilichochaguliwa"
+
+msgid "Destination folder"
+msgstr "Folda ya marudio"
+
+msgid "Generate AI media"
+msgstr "Tengeneza media ya AI"
+
+msgid "Save and insert"
+msgstr "Hifadhi na ingiza"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Kuhifadhi kunaungwa mkono tu wakati mtoa huduma anarudisha maudhui ya base64. Ikiwa umepokea URL pekee, kuhifadhi kimezimwa ili kuepuka upakuaji kwenye kivinjari."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video imetengenezwa kwa mafanikio, lakini kuhifadhi kimezimwa kwa sababu mtoa huduma alirudisha URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Faili imehifadhiwa, lakini URL yake haikuweza kutatuliwa."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Tengeneza jaribio la Aiken kutoka mada au kutoka hati moja ya kozi."
+
+msgid "Test from topic"
+msgstr "Jaribu kutoka mada"
+
+msgid "Test from document"
+msgstr "Jaribu kutoka hati"
+
+msgid "Generate from topic"
+msgstr "Tengeneza kutoka mada"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Tumia ombi la mada kutengeneza dodoso jipya la Aiken."
+
+msgid "Quiz title"
+msgstr "Jina la jaribio"
+
+msgid "Generate from document"
+msgstr "Tengeneza kutoka hati"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Chagua hati moja ya kozi na tengeneza maswali kulingana na maudhui yake pekee."
+
+msgid "Selected document"
+msgstr "Hati iliyochaguliwa"
+
+msgid "The document is selected from the course documents list."
+msgstr "Hati imechaguliwa kutoka orodha ya hati za kozi."
+
+msgid "Choose document"
+msgstr "Chagua hati"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Hiari. Inatumika tu kama kidokezo cha ziada kwa AI."
+
+msgid "Select a document"
+msgstr "Chagua hati"
+
+msgid "Welcome"
+msgstr "Karibu"
+
+msgid "Welcome to Chamilo"
+msgstr "Karibu Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Kama ni mara yako ya kwanza kutumia Chamilo, hakikisha unatazama menyu ya upande ili kupata njia katika vipengele vyake vingi. Kama unahitaji msaada, utapata <a href=\"https://docs.chamilo.org\">hati rasmi zetu</a> zinaweza kusaidia kwa hati za kawaida, wakati <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum yetu ya mtandaoni</a> inaweza kusaidia kushiriki mawazo na kupata majibu kutoka kwa watumiaji wengine wa Chamilo."
 

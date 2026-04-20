@@ -379,12 +379,12 @@ class EvalForm extends FormValidator
             $nr_users++;
 
             $template = '<tr>
-		      <td align="left" >'.$user[4].'</td>
-		      <td align="left" >'.$user[1].'</td>
-		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
-		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-		      </td>
+                <td align="left" >'.$user[4].'</td>
+                <td align="left" >'.$user[1].'</td>
+                '.$user_info.'
+                <td align="left">{element} / '.$this->evaluation_object->get_max().'
+                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+                </td>
             </tr>';
             $renderer->setElementTemplate($template, $element_name);
         }
@@ -393,12 +393,12 @@ class EvalForm extends FormValidator
         $this->addButtonSave(get_lang('Grade learners'), 'submit');
 
         $template_submit = '<tr>
-                <td colspan="4" ></td>
-                <td >
+            <td colspan="4" ></td>
+            <td >
                 {element}
-                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-                </td>
-            </tr>';
+                <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+            </td>
+        </tr>';
         $renderer->setElementTemplate($template_submit, 'submit');
     }
 
@@ -537,8 +537,6 @@ class EvalForm extends FormValidator
         if (!empty($_GET['editeval']) && 1 == $_GET['editeval']) {
             $form_title = get_lang('Edit evaluation');
         }
-
-        $this->addHeader($form_title);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 
@@ -693,7 +691,6 @@ class EvalForm extends FormValidator
 
         $this->addElement('textarea', 'description', get_lang('Description'));
         $this->addRule('hid_category_id', get_lang('Required field'), 'required');
-        $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         $this->addRule('max', get_lang('Only numbers'), 'numeric');
         $this->addRule(
             'max',
@@ -716,13 +713,6 @@ class EvalForm extends FormValidator
         );
         $this->addRule('min_score', get_lang('Only numbers'), 'numeric');
         $this->addRule('min_score', get_lang('Negative value'), 'compare', '>=', 'server', false, false, 0);
-        $tools = api_get_setting('course.active_tools_on_create', true);
-
-        $visibility_default = 1;
-        if (!in_array('gradebook', $tools, true)) {
-            $visibility_default = 0;
-        }
-        $this->setDefaults(['visible' => $visibility_default]);
     }
 
     /**

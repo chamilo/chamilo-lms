@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa ifomu lomsebenzi : bala iBody Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokugcwalisa ifomu lomsebenzi : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -14724,7 +14724,7 @@ msgstr "Abasebenzisi, Amagruphu"
 msgid "Sorry no results"
 msgstr "Umxolo akukho ziphumo"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Iimvume zeqela"
 
 msgid "Closed"
@@ -16067,6 +16067,15 @@ msgstr "Ikhowudi emfutshane"
 
 msgid "Create child skill"
 msgstr "Yenza isakhono somntwana"
+
+msgid "This skill can be obtained through:"
+msgstr "Esi khono sinokufunyanwa ngokw:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Akukho khosi ngoku elikuvumela ukufumana esi khono."
+
+msgid "Add skill to search profile"
+msgstr "Faka isakhono kwiprofile yokukhangela"
 
 msgid "Search profile matches"
 msgstr "Khangela ukufanana kweprofayili"
@@ -31819,7 +31828,7 @@ msgid "Repeat end date must be after start date."
 msgstr "Umhla wokuphindaphinda ekugqibeleni kufuneka ube emva komhla wokuqala."
 
 msgid "Index document content?"
-msgstr "Index document content?"
+msgstr "Ngaba uyafuna ukugxininisa umxholo wexwebhu leshoko?"
 
 msgid "Upload SVG logo to platform header"
 msgstr "Layisha ilogo ye-SVG kwintloko yeqonga"
@@ -32744,4 +32753,1129 @@ msgstr "Layisha umfanekiso okanye wenze ngokusebenzisa iBadge Studio."
 
 msgid "Current badge set"
 msgstr "Iseti yeebhedji zangoku"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Kwala eli candelo, xa ucofa ku 'Bhalisa umfundi' kwizifundo, uya kucelwa ukuba ukhethe umsebenzisi kwiphepha elandelayo. Xa kuqinisekisiwe, iya kudala iseshini entsha enezifundo ezikhethiweyo kunye nomsebenzisi, kwaye ithumele isaziso sobhaliso kumsebenzisi."
+
+msgid "Read-only view"
+msgstr "Umbono wokufunda kuphela"
+
+msgid "Events list"
+msgstr "Uluhlu lwezinto"
+
+msgid "Personal"
+msgstr "Zobuntu"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Iiveki zibonakaliswa ukusuka 1 ukuya 52"
+
+msgid "No tutored sessions found"
+msgstr "Akukho seshini ezinobuqeqeshi ezifunyanwayo"
+
+msgid "Content search"
+msgstr "Gqalisela umxholo"
+
+msgid "Search indexed content across all courses."
+msgstr "Gqalisela umxholo owenziwe index kuzo zonke izifundo."
+
+msgid "Enter a keyword..."
+msgstr "Faka igama elingundoqo..."
+
+msgid "Search error"
+msgstr "Impazamo yokugqalisela"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Faka igama elingundoqo ukuze ukhangele amaxwebhu abhalisiweyo."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Iziphumo ongenakho ukufikelela kuzo zifihliwe ngolungelelwaniso."
+
+msgid "Restricted"
+msgstr "Ikhethekileyo"
+
+msgid "You do not have access to this resource."
+msgstr "Awunakho ukufikelela kulo mxholo."
+
+msgid "Create group"
+msgstr "Yenza iqela"
+
+msgid "My custom certificate"
+msgstr "Isatifikethi sam esiqulathiweyo"
+
+msgid "Select permission"
+msgstr "Khetha imvume"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Ngokwamkela isimemo esi, uya kuba nexande nomsebenzisi ocela ngendlela eya kwenza ukuba ezinye okanye zonke iinkcukacha zeprofayili yakho zifikeleleke kumsebenzisi ocela"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Kuboniswa %d kweziphiwa-ngqo %d iziphumo ze-%s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Kuboniswa %d iziphumo ezifikelelekayo ze-%s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Ke uya kuphuma ngokuzenzekelayo kule URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Unofikelelo lwe-URL ezininzi"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Nceda ucofe ikhonkco elingezantsi elihambelana ne-URL ofuna ukuyifikelela"
+
+msgid "You do not currently have access to any URL"
+msgstr "Okwangoku awunafikelelo kwi-URL nayiphi na"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Inani eliphezulu leendatshana ezivunyelweyo"
+
+msgid "An error occurred"
+msgstr "Kwavela impazamo"
+
+msgid "You don't have any course content yet"
+msgstr "Awunayo umxholo wesifundo okwangoku"
+
+msgid "This course is locked"
+msgstr "Eli khosi litsekile"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Idilesi ye-imeyile apho iimeyile ziya kuthunyelwa xa i-platform ithumela i-imeyile, ikwasetyenziswa njenge-'reply-to' header"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Awuyifumani ulwimi lwakho kuluhlu? Qhagamshelana nathi kwi-%s ukuze unikele njengomguqulelo"
+
+msgid "An update is available"
+msgstr "Kukhona uhlaziyo olufumanekayo"
+
+msgid "to know what's new and what has been changed"
+msgstr "ukwazi izinto ezintsha kunye nezintathu"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Sifumanise ukuba ufakelo lwakho lwe-PHP aluchazi umhla"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Inguqulelo yakho ye-PHP ayihambelani neemfuno zeso sofwewe"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Ezinye iifayile okanye iifoldara azinayo imvume yokubhala"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Isaziso! Umfaki-sicelo ufumanise i-platform ye-Chamilo esele ikhona kwisistim yakho"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Kuba i-<code>newscorm</code> ne-<code>exercice</code> directories ziguqulwe igama zaba <code>lp</code> ne-<code>exercise</code> ngokulandelelanayo, kuyafuneka ukucima okanye ukuguqula igama laba <code>newscorm_old</code> ne-<code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Ifomu linayo data engafanelekanga okanye engaphelelanga"
+
+msgid "Your contact information could not be sent"
+msgstr "Ulwazi lwakho lwenxibelelwano alukwazanga ukuthunyelwa"
+
+msgid "Please contact support with the error details"
+msgstr "Nceda uqhagamshelane nenkxaso kunye neenkcukacha zempazamo"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Cofa umfanekiso ukuze uwugqibe (umlinganiselo 1:1, 120x120 px kukunconyelwa)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Sebenzisa isixhobo sokugqiba ukukhetha ummandla 1:1"
+
+msgid "Checking push subscription"
+msgstr "Ukujonga ubhaliso lwe-push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Ubhalisiwe kwizaziso ze-push kwisikhangeli esi"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Izaziso ze-push azivulwanga kwisikhangeli esi"
+
+msgid "Data exchange successfully saved"
+msgstr "Utshintshiselwano lwedatha lugciniwe ngempumelelo"
+
+msgid "Error saving data exchange"
+msgstr "Impazamo yokugcina utshintshiselwano lwedatha"
+
+msgid "No documents added yet"
+msgstr "Akukho maxwebhu adityiwelosana"
+
+msgid "No additional details available for this skill."
+msgstr "Akukho nkcukacha eyongezelelweyo ekhona kwesi sakhono."
+
+msgid "No available documents"
+msgstr "Akukho maxwebhu akhona"
+
+msgid "No users added yet"
+msgstr "Akukho basebenzisi badityiwelosana"
+
+msgid "No available users"
+msgstr "Akukho basebenzisi abakhona"
+
+msgid "You can no longer submit"
+msgstr "Ungenakwazi ukuhambisa"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Akukho hlandho olungileyo lwezingeniso olufunyanwa kulo msebenzi okanye idatha ayikhona"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "I-imeyile ithunyelwe kubo bonke abasebenzisi abangayingenanga"
+
+msgid "Failed to send email"
+msgstr "Impazamo yokuthumela i-imeyile"
+
+msgid "Write your answer here"
+msgstr "Bhala impendulo yakho apha"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Ikhalenda yokuzimela ikuvumela ukubhalisa uluhlu lwabazimelayo (enye ngaseshini eyiyo abafundi kufuneka baye kuyo)"
+
+msgid "Loading attendance data"
+msgstr "Ukulayisha idatha yokuzimela"
+
+msgid "No attendance assigned yet"
+msgstr "Akukho zimelo zabelwelosana"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Akukho kiklasi elicwangciswe namhlanje, zama ukukhetha olunye usuku okanye ongeza ushicilelo lwakho ngokwakho usebenzisa ii-ayikoni zenzo"
+
+msgid "No attendance data for today"
+msgstr "Akukho data yokuzimela namhlanje"
+
+msgid "Saving"
+msgstr "Ukugcina"
+
+msgid "No attendance data to save"
+msgstr "Akukho data yokuzimela ecinwa"
+
+msgid "Failed to save attendance"
+msgstr "Impazamo yokugcina ukuzimela"
+
+msgid "Loading more courses"
+msgstr "Ukulayisha izifundo ezongezelelweyo"
+
+msgid "Loading more sessions"
+msgstr "Ukulayisha iiseshini ezongezelelweyo"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Uqulunqo lwendalo yokuziqalisa ummaxwebhu luyavuliwe"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Uqulunqo lwendalo yokuziqalisa imisebenzi luyavuliwe"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Usetingo lokuziqalisa indlela yokufunda luyavuliwe"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Usetingo lokuziqalisa iforamu luyavuliwe"
+
+msgid "Course ID is missing"
+msgstr "Ikhowudi yekhosi ayikhona"
+
+msgid "Course created successfully"
+msgstr "Ikhosi yenziwe ngempumelelo"
+
+msgid "Error deleting document(s)"
+msgstr "Impazamo yokucima um(x)webhu"
+
+msgid "Template successfully deleted"
+msgstr "Itemplate icinyiwe ngempumelelo"
+
+msgid "Error deleting the template"
+msgstr "Impazamo yokucima itemplate"
+
+msgid "The title and thumbnail are required"
+msgstr "Isihloko kunye nomfanekiso omncinci kuyimfuneko"
+
+msgid "Template created successfully"
+msgstr "Itemplate yenziwe ngempumelelo"
+
+msgid "Error creating the template"
+msgstr "Impazamo yokudala ithemplethi"
+
+msgid "Error submitting the form"
+msgstr "Impazamo yokungenisa ifomu"
+
+msgid "Loading templates"
+msgstr "Ukulayisha iithemplethi"
+
+msgid "Loading layout"
+msgstr "Ukulayisha uyilo"
+
+msgid "Loading courses"
+msgstr "Ukulayisha izifundo"
+
+msgid "No courses available"
+msgstr "Akukho zifundo zikhona"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Olu luhlu lubonisa abasebenzisi kubo bonke ii-URLs zokufikelela kuba isetingi \"session_admin_access_to_all_users_on_all_urls\" ivuliwe."
+
+msgid "User not found"
+msgstr "Umsebenzisi akafunyanwa"
+
+msgid "An error occurred while sending the course"
+msgstr "Kwenzeke impazamo xa kuthunyelwa isifundo"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Nceda ukhumbule ukuba utshintsho kwizifundo ezinxulumene ne-GDPR kufuna ukuba ubike ezo tshintsho kumaqela esithathu apho uwanikezela khona ulwazi lomntu ngabasebenzisi bakho, njengoko kuchaziwe kwi-Article 19 ye-GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Kufuneka wenze i\"Term and Conditions\" kuzo zonke iilwimi ezikhona"
+
+msgid "You don't have any course yet"
+msgstr "Awunayo nayiphi na isifundo okwangoku"
+
+msgid "You have received a new friend request"
+msgstr "Ufumene isicelo somhlobo omtsha"
+
+msgid "Diagnosis Management"
+msgstr "Ulawulo lwe-Diagnosis"
+
+msgid "Tracking"
+msgstr "Ukulandelela"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Jonga iingxelo, iinkcukacha-manani kunye nedatha yokulandelela"
+
+msgid "System activity audit"
+msgstr "Uhlolisiso lomsebenzi wenkqubo"
+
+msgid "Learning analytics"
+msgstr "Uhlalutyo lokufunda"
+
+msgid "Administrative activity auditing"
+msgstr "Uhlolisiso lomsebenzi wolawulo"
+
+msgid "List icons"
+msgstr "Uluhlu lwee-ayikoni"
+
+msgid "Constant name"
+msgstr "Igama eliqhubekayo"
+
+msgid "MDI icon name"
+msgstr "Igama le-ayikoni ye-MDI"
+
+msgid "Assign authentication sources"
+msgstr "Yabela imithombo yoqinisekiso"
+
+msgid "Assignment details"
+msgstr "Iinkcukacha zesabelo"
+
+msgid "Terms and conditions"
+msgstr "Imiqathango nemigaqo"
+
+msgid "Icons"
+msgstr "Iicons"
+
+msgid "Create backup"
+msgstr "Yenza isuphu"
+
+msgid "Create file"
+msgstr "Yenza ifayile"
+
+msgid "Create link"
+msgstr "Yenza ikhonkco"
+
+msgid "Edit template"
+msgstr "Hlela ithemplethi"
+
+msgid "Shared files"
+msgstr "Iifayile ezabelwana"
+
+msgid "Skill wheel"
+msgstr "Ivili lesakhono"
+
+msgid "Favourite courses"
+msgstr "Izifundo ezithandwayo"
+
+msgid "Restart courses"
+msgstr "Qala ngokutsha izifundo"
+
+msgid "Generate terms"
+msgstr "Yenza imigaqo"
+
+msgid "Add variation"
+msgstr "Faka umahluko"
+
+msgid "Editor demo"
+msgstr "Ubonakalo lomhleli"
+
+msgid "Tool introduction"
+msgstr "Intshayelelo yesixhobo"
+
+msgid "Data exchanges"
+msgstr "Utshintshiselwano lwedatha"
+
+msgid "Third parties"
+msgstr "Amaqela esithathu"
+
+msgid "Layouts"
+msgstr "Uyilo"
+
+msgid "Relation type"
+msgstr "Uhlobo lobudlelwane"
+
+msgid "Add all"
+msgstr "Faka zonke"
+
+msgid "Remove all"
+msgstr "Susa zonke"
+
+msgid "An error occurred. Please try again."
+msgstr "Kwavela impazamo. Nceda zama kwakhona."
+
+msgid "%s created"
+msgstr "%s idaliwe"
+
+msgid "%s updated"
+msgstr "%s ilungisiwe"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ukuba uceba ukuphucula ukusuka kwiveresani endala yeChamilo, usenokuthanda ukuba"
+
+msgid "have a look at the changelog"
+msgstr "ujonge changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "uazi izinto ezintsha kunye neziguqulwayo."
+
+msgid "Session Item"
+msgstr "Into yeseshini"
+
+msgid "Points"
+msgstr "Amanqaku"
+
+msgid "See notifications"
+msgstr "Jonga izaziso"
+
+msgid "New content available for this course."
+msgstr "Umxholo omtsha uyafumaneka kule khosi."
+
+msgid "No new notifications."
+msgstr "Akukho zaziso zintsha."
+
+msgid "No new content found."
+msgstr "Akukho mxholo omtsha ofunyanisayo."
+
+msgid "No tool details available yet."
+msgstr "Akukho nkcukacha zethuluzi ezifumanekayo okwangoku."
+
+msgid "Last access"
+msgstr "Ufikelo wokugqibela"
+
+msgid "Open course"
+msgstr "Vula ikhosi"
+
+msgid "Course completed"
+msgstr "Ikhosi igqityiwe"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Umda wokubhalisela kule khosi ufikile."
+
+msgid "Subscription limit reached"
+msgstr "Umda wokubhalisela ufikile"
+
+msgid "Tertiary alternative"
+msgstr "Ialternative yezinye iyunivesithi"
+
+msgid "Update SCORM"
+msgstr "Hlaziya i-SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "I-AI inokuyila ingxelo-mbuyekezo kunye namanqaku acelekileyo phambi kokuba uyithumele."
+
+msgid "What will be sent to the AI"
+msgstr "Into eza kuthunyelwa kwi-AI"
+
+msgid "Assignment title + instructions"
+msgstr "Isihloko sesabelo + imiyalelo"
+
+msgid "Student submission (text)"
+msgstr "Ugenelo lomfundi (umbhalo)"
+
+msgid "Student submission (text): none"
+msgstr "Ugenelo lomfundi (umbhalo): akukho"
+
+msgid "Student attachment"
+msgstr "Isiqeliso somfundi"
+
+msgid "supported"
+msgstr "ixhaswa"
+
+msgid "not supported for document analysis"
+msgstr "ayixhaswanga ukuze kuhlalutywe gxininiso lomqulu"
+
+msgid "Student attachment: none"
+msgstr "Isiqeliso somfundi: akukho"
+
+msgid "No text AI providers available."
+msgstr "Akukho baboneleli be-AI yombhalo abakhoyo."
+
+msgid "AI-assisted"
+msgstr "I-AI inceda"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Esi sigqibo sigcinwe kunye nolungiso (ExtraField) kwaye asinakuqholwa kamva."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Isiqeliso solungiso oluzikhethelayo (esi asiyiyo imisebenzi yomfundi)."
+
+msgid "AI"
+msgstr "I-AI"
+
+msgid "Received"
+msgstr "Efunyanweyo"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Vula ikholamu"
+
+msgid "Lock column"
+msgstr "Vala ikholamu"
+
+msgid "Set all Present"
+msgstr "Zeka zonke zikhona"
+
+msgid "Set all Absent"
+msgstr "Zeka zonke azikho"
+
+msgid "Auto (recommended)"
+msgstr "Ngokuzenzekelayo (kuyacekelwa phantsi)"
+
+msgid "Error downloading all documents."
+msgstr "Impazamo yokukhuphela amaxwebhu onke."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Vula ngo-ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Umda wokulinganisa"
+
+msgid "Remaining space"
+msgstr "Indawo eseleyo"
+
+msgid "Course catalogue"
+msgstr "Ikhatalogu yezifundo"
+
+msgid "Drag links to reorder"
+msgstr "Rhuqa iilinki ukuze uzilungelelanise ngokutsha"
+
+msgid "Drop links here to keep them without category"
+msgstr "Lahla iilinki apha ukuze zihlale ngaphandle kwedileshe"
+
+msgid "Could not export"
+msgstr "Ayiphumelelanga ukuthunyelwa ngaphandle"
+
+msgid "Link moved"
+msgstr "Ilinki ihliselwe"
+
+msgid "Could not move link"
+msgstr "Ayiphumelelanga ukuhambisa ilinki"
+
+msgid "Category reordering is not enabled"
+msgstr "Ukulungelelaniswa ngokutsha kwedileshe akavulwanga"
+
+msgid "Showing %s posts"
+msgstr "Kuboniswa iiposti %s"
+
+msgid "Showing %s tasks"
+msgstr "Kuboniswa imisebenzi %s"
+
+msgid "Page %s of %s"
+msgstr "Iphepha %s kwezokulandelayo %s"
+
+msgid "Tutors"
+msgstr "Abafundisi"
+
+msgid "selected"
+msgstr "ekhethiweyo"
+
+msgid "No data to export"
+msgstr "Akukho data ekufuneka ithunyelwe ngaphandle"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Intloko ye-PNG kufuneka i\\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Uluhlu oluqhelekileyo"
+
+msgid "Management list"
+msgstr "Uluhlu lolawulo"
+
+msgid "Open platform"
+msgstr "Iqonga elivulelekileyo"
+
+msgid "Teacher user ID"
+msgstr "ID yomsebenzisi wotitshala"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Uqinisekile ukuba ufuna ukucima esi sifundo?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Uqinisekile ukuba ufuna ukucima izifundo ezikhethiweyo?"
+
+msgid "Search by name, username, email"
+msgstr "Gqiba ngokwe gama, igama lomsebenzisi, i-imeyile"
+
+msgid "contains %s items"
+msgstr "iqaqambile %s izinto"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Isivumelwano sakho semthetho sihlala sisebenza de kube kuqatshelwe isicelo sokurhoxa kwaye sigqitywe."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Isicelo sakho sokurhoxa imvume yomthetho silindile ukuhlolwa."
+
+msgid "Your account deletion request is pending review."
+msgstr "Isicelo sakho sokucima i-akhawunti silindile ukuhlolwa."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kutheni ufuna ukucela ukuhoxiswa kwemvume yakho yomthetho?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Kuthunyelwa isicelo sakho sokurhoxa imvume yomthetho..."
+
+msgid "Submitting request..."
+msgstr "Kuthunyelwa isicelo..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Cela ukuhoxiswa kwemvume yomthetho"
+
+msgid "Submitting your account deletion request..."
+msgstr "Kuthunyelwa isicelo sakho sokucima i-akhawunti..."
+
+msgid "Submitting your acceptance..."
+msgstr "Kuthunyelwa ukwamkela kwakho..."
+
+msgid "Event details"
+msgstr "Iinkcukacha zesiganeko"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Awunakho ukufikelela kwisifundo esinxibeleleneyo kule mbono."
+
+msgid "Failed to load sessions"
+msgstr "Akuphumelelanga ukulayisha iiseshini"
+
+msgid "Failed to load events"
+msgstr "Akuphumelelanga ukulayisha iziganeko"
+
+msgid "No events found"
+msgstr "Akukho ziganeko zifunyanwayo"
+
+msgid "Group image"
+msgstr "Umfanekiso weqela"
+
+msgid "SearchTCC"
+msgstr "GqibaTCC"
+
+msgid "Forbidden"
+msgstr "Akavunyelwe"
+
+msgid "Distribution"
+msgstr "Ukusasazwa"
+
+msgid "Firstname"
+msgstr "Igama lokuqala"
+
+msgid "Lastname"
+msgstr "Ifani"
+
+msgid "Email"
+msgstr "I-imeyile"
+
+msgid "Last login in platform"
+msgstr "Ukungena kokugqibela kwiqonga"
+
+msgid "Export as CSV"
+msgstr "Thumela njengeCSV"
+
+msgid "Export as XLS"
+msgstr "Thumela njengeXLS"
+
+msgid "Deactivate this user?"
+msgstr "Yeka ukusebenza kulo msebenzisi?"
+
+msgid "Enable this user?"
+msgstr "Vula lo msebenzisi?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Hlanganisa eli qela eliphindiweyo kumsebenzisi #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Oku kuya kuhlanganisa zonke ezinye ii-akhawunti eqeleni kweli akhawunti."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Ii-akhawunti ezihlanganisiweyo ziya kucimbwa ngokusisigxina kwaye ziya kunyamalala kule ngxelo."
+
+msgid "This action cannot be undone."
+msgstr "Esenzo lesi alinakubuyiselwa."
+
+msgid "Unify"
+msgstr "Hlanganisa"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Umfundi"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Indawo epheleleyo esetyenzisiweyo yiportal %s umda yi %s MB"
+
+msgid "Helper text"
+msgstr "Isichasi sombhalo"
+
+msgid "NotAllowed"
+msgstr "Akavunyelwe"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Sebenzisa izihluzi ezنگaphezulu ukulayisha iinkcukacha zokufikelela komfundi."
+
+msgid "Start date must be before end date"
+msgstr "Umhla wokuqala kufuneka ube phambi komhla wokugqibela"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Khetha uluhlu lwemihla kunye nohlobo lokuhlanganisa ukuze uhlole iinkcukacha zokufikelela komfundi."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Esi sifundo siza kwakhiwa kusetyenziswa ithemplethi eqhelekileyo yeqonga lesifundo."
+
+msgid "Security breach avoid restart"
+msgstr "Utyando lokhuseleko lwathintwa qalisa ngokutsha"
+
+msgid "User deactivated"
+msgstr "Umsebenzisi ukhutshelwe"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Umsebenzisi uvuliwe"
+
+msgid "No other duplicates found for this user."
+msgstr "Akukho zinto eziphindaphindayo ezinye zifunyanwe kulo msebenzisi."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Abasebenzisi badityaniswe: iiakhawunti %s zidityaniswe kumsebenzisi #%s. Iiakhawunti ezidityanisiweyo zacinywa ngokusisigxina."
+
+msgid "No accounts were merged."
+msgstr "Akukho iiakhawunti zidityanisiweyo."
+
+msgid "An error occurred while unifying users."
+msgstr "Kwavela impazamo ngexesha lokudibanisa abasebenzisi."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Abasebenzisi badityaniswe: umsebenzisi #%s udityaniswe kumsebenzisi #%s. Iakhawunti edityanisiweyo icinyiwe ngokusisigxina."
+
+msgid "Duplicate users"
+msgstr "Abasebenzisi bephindaphindayo"
+
+msgid "Years"
+msgstr "Iminyaka"
+
+msgid "All time visits outside sessions"
+msgstr "Utyando lonke ngaphandle kweeseshini"
+
+msgid "All time visits in sessions"
+msgstr "Utyando lonke lweeseshini"
+
+msgid "All time visits total"
+msgstr "Utyando lonke jikelele"
+
+msgid "Student visits per period, per course"
+msgstr "Utyando lwabafundi ngexesha, ngesifundo ngasinye"
+
+msgid "By email"
+msgstr "Ngemail"
+
+msgid "By extra field"
+msgstr "Ngesakhiwo esongezelelweyo"
+
+msgid "Select an option"
+msgstr "Khetha iniketho"
+
+msgid "Profile field"
+msgstr "Intsimi yephrofayili"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Le ngxelo idwelisa kuphela abasebenzisi abanefani yemail."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Le ngxelo idwelisa kuphela abasebenzisi ababelana ngexabiso elinye lentsimi yephrofayili ekhethiweyo."
+
+msgid "How to use this report"
+msgstr "Indlela yokusebenzisa le ngxelo"
+
+msgid "Disable / Enable"
+msgstr "Cima / Vula"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Ithintela okanye ibuyisela ukungena. Ayisusi umsebenzisi kwaye ayisusi ezobhala."
+
+msgid "Last week"
+msgstr "Veki edlulileyo"
+
+msgid "Next week"
+msgstr "Veki ezayo"
+
+msgid "Loading report..."
+msgstr "Ukulayisha ingxelo..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Akukwazanga kulayisha le ngxelo. Nceda zama kwakhona."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Khetha enye okanye ezininzi iiseshini ukuze ukope abaqeqeshi kuzo kwaye ukhethe isifundo sokuya khona"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Bamba Ctrl (okanye Cmd) ukukhetha izinto ezininzi"
+
+msgid "Choose the destination course"
+msgstr "Khetha isifundo sokuya khona"
+
+msgid "You can select multiple items"
+msgstr "Ungakhetha izinto ezininzi"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Sebenzisa ibhokisi lokukhangela ukufumana izifundo ngokukhawuleza"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Khetha enye okanye ezininzi iiseshini zemvelaphi kunye neenye okanye ezininzi iiseshini zokuya khona ukuze ukope abafundi"
+
+msgid "Select destination sessions"
+msgstr "Khetha iiseshini zokuya khona"
+
+msgid "You can select multiple users"
+msgstr "Ungakhetha abasebenzisi abaninzi"
+
+msgid "Use the search box to find users quickly"
+msgstr "Sebenzisa ibhokisi lokukhangela ukufumana abasebenzisi ngokukhawuleza"
+
+msgid "Error while creating the document"
+msgstr "Impazamo ngexesha lokudala uxwebhu"
+
+msgid "Not a SCORM learning path"
+msgstr "Ayisiyo indlela yokufunda ye-SCORM"
+
+msgid "Final item"
+msgstr "Into yokugqibela"
+
+msgid "Edit item"
+msgstr "Hlela into"
+
+msgid "No AI text providers configured."
+msgstr "Akukho banikezeli bezishumbezi ze-AI abalungiselelweyo."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Ukulayisha kwaphumelela. Ifayile mhlawumbi inkulu kunezithintelo zeseva (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Uhlaziyo lwasilela. Akukho fayile lifunyanwe liseva."
+
+msgid "Update failed. %s"
+msgstr "Uhlaziyo lwasilela. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Uhlaziyo lwasilela. Ipayload yefayile elayishiweyo ayisebenzi."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Uhlaziyo lwasilela. Igama lefayile le-ZIP elayishiweyo kufuneka lihambelane negama lepakheji ye-SCORM yoqobo."
+
+msgid "Update failed"
+msgstr "Uhlaziyo lwasilela"
+
+msgid "Question lower case"
+msgstr "Umbuzo osezantsi"
+
+msgid "Regenerate"
+msgstr "Yenza kwakhona"
+
+msgid "Case insensitive"
+msgstr "Ayichaphazeli udumo"
+
+msgid "Select a session to load its courses."
+msgstr "Khetha iseshoni ukuze ulayishe izifundo zayo."
+
+msgid "Select the source course."
+msgstr "Khetha isifundo somthombo."
+
+msgid "Select a destination session."
+msgstr "Khetha iseshoni yokuya kuyo."
+
+msgid "Select the destination course."
+msgstr "Khetha isifundo sokuya kuso."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopa umxholo opheleleyo wesifundo seseshoni ekhethiweyo."
+
+msgid "Select which tools/items to copy."
+msgstr "Khetha izixhobo/izinto ezokukopishwa."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Ungayibandakanyi umxholo wesifundo esisisiseko (hangekho seseshoni)."
+
+msgid "An error occurred while copying the course"
+msgstr "Kwenzeke impazamo ngexesha lokukopisha isifundo"
+
+msgid "Please select a different destination"
+msgstr "Nceda ukhethe indawo eyahlukileyo yokuya kuyo"
+
+msgid "You must select a destination course"
+msgstr "Kufuneka ukhethe isifundo sokuya kuso"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Ukuze uphumele izifundo ezinequiz kufuneka ukhethe iquiz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ukuba iiLP zakho zineefayile zomsindo ezibandakanyiweyo kufuneka uzikhethe kwiidokyumenti"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ukuba iquiz yakho inemibuzo ye-hotspot ebhandakanyiweyo kufuneka ukhethe imifanekiso kwiidokyumenti"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Iphasiwedi kufuneka ibe neenani eziziminithi %length% ubude."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Iphasiwedi kufuneka iquke ubuncinci %count% abalingwa abancinci."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Iphasiwedi kufuneka iquke ubuncinci %count% abalingwa abakhulu."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Iphasiwedi kufuneka iquke ubuncinci %count% amanani (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Iphasiwedi kufuneka iquke ubuncinci %count% iimpawu ezikhethekileyo."
+
+msgid "Invalid login request."
+msgstr "Isicelo sokungena singasebenzi."
+
+msgid "Authentication failed."
+msgstr "Uqinisekiso lwasile."
+
+msgid "Login %status% for username %username%"
+msgstr "Ngena %status% segama %username%"
+
+msgid "Co-generated with AI"
+msgstr "Yenziwe kunye ne-AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Iindawo ezifunwayo"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Iithegi zinokukopishwa kwaye zincitshwe ngaphakathi kwendawo yesibhaliwa ngaphantsi kwaye ziya kuthi zibekwe endaweni yazo ixabiso ngamnye kumsebenzisi ngamnye xa zithunyelwa."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Eli qela likhonkene neklasi %s.<br>Uluhlu lwamalungu eqela luxhomekeke kumalungu ekilasi kwaye alunakuguqulwa.<br>Yiya kusetingi zeqela ukuqhawula oluqhagelo ukuba ufuna ukongeza okanye ususe amalungu kula qela."
+
+msgid "Link classes to created groups ?"
+msgstr "Nxibelelana neeklasi kunamaqela adalweyo ?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ukuba iklasi likhonkene neqela, abasebenzisi abongezwa okanye basuswe kwiklasi bongezwa ngokuzenzekelayo okanye basuswe eqeleni."
+
+msgid "New groups creation in category %s"
+msgstr "Udalelo lwamaqela amatsha kudidi %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Umyalezo lesilumkiso lokulumkisa ukuba umsebenzisi akakwazi ukuguqula amalungu eqela elikhonkweyo"
+
+msgid "Remove the group link with the class"
+msgstr "Susa unxibelelwano lweqela neklasi"
+
+msgid "Linked class"
+msgstr "Ikilasi elikhonkweyo"
+
+msgid "The group is no longer linked to the class"
+msgstr "Iqela alisaxhungi nemeko neklasi"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Uhlolisiso lwabafundi nezikolo ezibhalisile kwiklasi"
+
+msgid "Overview students subscribed to the class"
+msgstr "Uhlolisiso lwabafundi ababhalisile kwiklasi"
+
+msgid "Overview class"
+msgstr "Uhlolisiso lweklasi"
+
+msgid "Go back to the list of classes"
+msgstr "Buyela kuluhlu lweeklasi"
+
+msgid "Go back to course classes"
+msgstr "Buyela kweeklasi zesifundo"
+
+msgid "Users subscribed to the course"
+msgstr "Abasebenzisi ababhalisile kwisifundo"
+
+msgid "Users not subscribed to the course"
+msgstr "Abasebenzisi abangabhalisanga kwisifundo"
+
+msgid "Users subscribed to the class"
+msgstr "Abasebenzisi ababhalisile kwiklasi"
+
+msgid "Courses subscribed to the class"
+msgstr "Izifundo ezibhalisile kwiklasi"
+
+msgid "No user is subscribed to this class"
+msgstr "Akukho msebenzisi ubhalisile kule klasi"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Akukho msebenzisi okanye isifundo esibhalisile kule klasi"
+
+msgid "No user are subscribed to this class"
+msgstr "Akukho msebenzisi ababhalisile kule klasi"
+
+msgid "No course are subscribed to this class"
+msgstr "Azikho izifundo ezibhalisile kule klasi"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Uqinisekile ukuba ufuna ukususa iklasi ngaphandle kokususa abasebenzisi?"
+
+msgid "Remove the class without removing students"
+msgstr "Susa iklasi ngaphandle kokususa abafundi"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Esona setting ayikaphumeleli kule version."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Kuyanconyelwa kwiipulgini ze-admin kuphela ezibonakala kwindawo yolawulo."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Kuyanconyelwa kwiipulgini ezifanele zibonakale njengezixhobo zesifundo."
+
+msgid "Displayed above the main page content."
+msgstr "Ibonakaliswa ngaphezulu kwomxholo wiphepha eliphambili."
+
+msgid "Displayed below the main page content."
+msgstr "Ibonakaliswa ngaphantsi kwomxholo wiphepha eliphambili."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Ibonakaliswa kufuphi nephezulu kweshells yokubeka eyintloko."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Ibonakaliswa kufuphi nezinzwe emsebenzini weshells yokubeka eyintloko."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Kuyanconyelwa kwiipulgini ezindayo jikela okanye eziqhubekayo ezibonakala phambi kwesiphelo."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Ibonakaliswa kummandla weplagin ekhethiweyo."
+
+msgid "Admin menu"
+msgstr "Imenyu yolawulo"
+
+msgid "Global regions"
+msgstr "Imimandla yehlabathi"
+
+msgid "No regions assigned"
+msgstr "Akukho mimandla eyehelwe"
+
+msgid "Plugin regions"
+msgstr "Imimandla yepulgini"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Khetha apho iplagin nganye ifakwe khona."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Cecel' : sebenzisa Ctrl/Cmd ukukhetha imimandla ezininzi."
+
+msgid "No installed plugins were found."
+msgstr "Azifunyanwanga iipulgini ezifakwe."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Khetha enye okanye ngaphezulu kwemimandla yale pulgini kwindawo yokufikelela yangoku."
+
+msgid "Available regions"
+msgstr "Imimandla ekhoyo"
+
+msgid "Selected paragraph"
+msgstr "Pagraph ekhethiweyo"
+
+msgid "Destination folder"
+msgstr "Ifolda yokugqibezela"
+
+msgid "Generate AI media"
+msgstr "Yenza imidiya ye-AI"
+
+msgid "Save and insert"
+msgstr "Gcina kwaye faka"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Ukugcina kuxhaswa kuphela xa umnikezeli ebuyisela umxholo we-base64. Ukuba ufumene i-URL kuphela, ukugcina akuxhobanga ukuze kuthintelwe ukukhuphela kwisikhangeli."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Ividiyo yenziwe ngempumelelo, kodwa ukugcina akuxhobangi kuba umnikezeli ubuyisele i-URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Ifayili ligciniwe, kodwa i-URL yayo ayiphumelelanga ukugqitywa."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Yenza i-Aiken quiz ukusuka kwisihloko okanye ukusuka kwixwebhu elinye lezifundo."
+
+msgid "Test from topic"
+msgstr "Vavanya ukusuka kwisihloko"
+
+msgid "Test from document"
+msgstr "Vavanya ukusuka kwixwebhu"
+
+msgid "Generate from topic"
+msgstr "Yenza ukusuka kwisihloko"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Sebenzisa isikhokelo sesihloko ukuze wenze i-Aiken questionnaire entsha."
+
+msgid "Quiz title"
+msgstr "Isihloko se-Quiz"
+
+msgid "Generate from document"
+msgstr "Yenza ukusuka kwixwebhu"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Khetha ixwebhu elinye lezifundo kwaye wenze imibuzo ngokusekelwe kuphela kwimixholo yayo."
+
+msgid "Selected document"
+msgstr "Ixwebhu ekhethiweyo"
+
+msgid "The document is selected from the course documents list."
+msgstr "Uxwebhu lukhethwe kuluhlu lwamaxwebhu ekhosi."
+
+msgid "Choose document"
+msgstr "Khetha uxwebhu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Ukhetho. Lusetyenziswa kuphela njengomsingelo owongezelelwa i-AI."
+
+msgid "Select a document"
+msgstr "Khetha uxwebhu"
+
+msgid "Welcome"
+msgstr "Wamkelekile"
+
+msgid "Welcome to Chamilo"
+msgstr "Wamkelekile eChamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ukuba oku kuqala ukusebenzisa iChamilo, qinisekisa ukuba ujonge imenyu esecaleni ukuze ufumane indlela yokuhamba ngezinto ezininzi zayo. Ukuba ufuna uncedo, uya kufumana <a href=\"https://docs.chamilo.org\">amashicilelo ethu ase-official</a> anokunceda kuxwebhu oluqhelekileyo, ngelixa <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">iforum yethu ye-online</a> inokunceda ukwabelana ngezimvo kwaye ufumane iimpendulo abanye abasebenzisi beChamilo."
 

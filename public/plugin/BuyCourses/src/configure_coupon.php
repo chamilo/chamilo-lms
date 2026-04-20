@@ -1,45 +1,131 @@
 <?php
 
 declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 
 /**
- * Configuration script for the Buy Courses plugin.
+ * Configure an existing coupon with a clean Tailwind form contract.
  */
 require_once '../config.php';
 
 api_protect_admin_script();
 
-$couponId = $_REQUEST['id'];
+$rawCouponId = $_REQUEST['id'] ?? 0;
+$couponId = is_scalar($rawCouponId) ? (int) $rawCouponId : 0;
 
-if (!isset($couponId)) {
+if ($couponId <= 0) {
     api_not_allowed();
 }
 
 $plugin = BuyCoursesPlugin::create();
-
 $coupon = $plugin->getCouponInfo($couponId);
 
-if (!isset($coupon)) {
+if (empty($coupon)) {
     api_not_allowed();
 }
-
-$couponDateRangeFrom = $coupon['valid_start'];
-$couponDateRangeTo = $coupon['valid_end'];
 
 $includeSession = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 
-$entityManager = Database::getManager();
 $currency = $plugin->getSelectedCurrency();
+$currencyIso = $currency['iso_code'] ?? '';
 
-if (empty($currency)) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('CurrencyIsNotConfigured'), 'error')
+/**
+ * Normalize datetime-local input to database format.
+ */
+function normalizeConfiguredCouponDateTime(?string $value): ?string
+{
+    if (null === $value || '' === trim($value)) {
+        return null;
+    }
+
+    $value = trim($value);
+
+    $formats = [
+        'Y-m-d\TH:i',
+        'Y-m-d H:i:s',
+        'Y-m-d H:i',
+    ];
+
+    foreach ($formats as $format) {
+        $dateTime = DateTime::createFromFormat($format, $value);
+
+        if ($dateTime instanceof DateTime) {
+            return $dateTime->format('Y-m-d H:i:s');
+        }
+    }
+
+    try {
+        $dateTime = new DateTime($value);
+
+        return $dateTime->format('Y-m-d H:i:s');
+    } catch (Throwable $exception) {
+        return null;
+    }
+}
+
+/**
+ * Format a database datetime for datetime-local inputs.
+ */
+function formatConfiguredCouponDateTimeInput(?string $value): string
+{
+    if (null === $value || '' === trim($value)) {
+        return '';
+    }
+
+    try {
+        return (new DateTime($value))->format('Y-m-d\TH:i');
+    } catch (Throwable $exception) {
+        return '';
+    }
+}
+
+/**
+ * Sanitize selected ids using available options.
+ *
+ * @param mixed $values
+ */
+function sanitizeConfiguredCouponSelectedIds($values, array $available): array
+{
+    $values = is_array($values) ? $values : [];
+
+    return array_values(
+        array_unique(
+            array_filter(
+                array_map('intval', $values),
+                static fn (int $id): bool => $id > 0 && isset($available[$id])
+            )
+        )
     );
 }
 
-$currencyIso = null;
+/**
+ * Build a lookup map for Twig.
+ */
+function buildConfiguredCouponLookup(array $ids): array
+{
+    $lookup = [];
+
+    foreach ($ids as $id) {
+        $lookup[(int) $id] = true;
+    }
+
+    return $lookup;
+}
+
+$courses = [];
+$sessions = [];
+$services = [];
+$messages = [];
+
+if (empty($currency)) {
+    $messages[] = Display::return_message(
+        $plugin->get_lang('CurrencyIsNotConfigured'),
+        'error',
+        false
+    );
+}
 
 $coursesList = CourseManager::get_courses_list(
     0,
@@ -48,11 +134,21 @@ $coursesList = CourseManager::get_courses_list(
     'asc',
     -1,
     null,
-    api_get_current_access_url_id()
+    api_get_current_access_url_id(),
+    false,
+    [],
+    []
 );
 
 foreach ($coursesList as $course) {
-    $courses[$course['id']] = $course['title'];
+    $courseId = isset($course['id']) ? (int) $course['id'] : 0;
+    $courseTitle = isset($course['title']) ? trim((string) $course['title']) : '';
+
+    if ($courseId <= 0 || '' === $courseTitle) {
+        continue;
+    }
+
+    $courses[$courseId] = $courseTitle;
 }
 
 $sessionsList = SessionManager::get_sessions_list(
@@ -60,130 +156,180 @@ $sessionsList = SessionManager::get_sessions_list(
     [],
     null,
     null,
-    api_get_current_access_url_id()
+    api_get_current_access_url_id(),
+    []
 );
 
 foreach ($sessionsList as $session) {
-    $sessions[$session['id']] = $session['name'];
+    $sessionId = isset($session['id']) ? (int) $session['id'] : 0;
+
+    $sessionName = '';
+    if (isset($session['name']) && '' !== trim((string) $session['name'])) {
+        $sessionName = trim((string) $session['name']);
+    } elseif (isset($session['session_name']) && '' !== trim((string) $session['session_name'])) {
+        $sessionName = trim((string) $session['session_name']);
+    } elseif (isset($session['title']) && '' !== trim((string) $session['title'])) {
+        $sessionName = trim((string) $session['title']);
+    } elseif (isset($session['name_and_dates']) && '' !== trim((string) $session['name_and_dates'])) {
+        $sessionName = trim((string) $session['name_and_dates']);
+    }
+
+    if ($sessionId <= 0 || '' === $sessionName) {
+        continue;
+    }
+
+    $sessions[$sessionId] = $sessionName;
 }
 
 $servicesList = $plugin->getAllServices();
 
 foreach ($servicesList as $service) {
-    $services[$service['id']] = $service['name'];
+    $serviceId = isset($service['id']) ? (int) $service['id'] : 0;
+    $serviceName = isset($service['name']) ? trim((string) $service['name']) : '';
+
+    if ($serviceId <= 0 || '' === $serviceName) {
+        continue;
+    }
+
+    $services[$serviceId] = $serviceName;
 }
 
 $discountTypes = $plugin->getCouponDiscountTypes();
 
-// Build the form
-$form = new FormValidator('add_coupon');
-$form->addText('code', $plugin->get_lang('CouponCode'), false);
-$form->addText('discount_type', $plugin->get_lang('CouponDiscountType'), false);
-$form->addText('discount_amount', $plugin->get_lang('CouponDiscount'), false);
-$form->addDateRangePicker(
-    'date',
-    get_lang('Date'),
-    true,
-    [
-        'value' => "$couponDateRangeFrom / $couponDateRangeTo",
-    ]
-);
+$coursesAdded = !empty($coupon['courses'])
+    ? array_values(array_map('intval', array_column($coupon['courses'], 'id')))
+    : [];
 
-$form->addCheckBox('active', $plugin->get_lang('CouponActive'));
-$form->addElement(
-    'advmultiselect',
-    'courses',
-    get_lang('Courses'),
-    $courses
-);
+$sessionsAdded = !empty($coupon['sessions'])
+    ? array_values(array_map('intval', array_column($coupon['sessions'], 'id')))
+    : [];
 
-if ($includeSession) {
-    $form->addElement(
-        'advmultiselect',
-        'sessions',
-        get_lang('Sessions'),
-        $sessions
-    );
-}
+$servicesAdded = !empty($coupon['services'])
+    ? array_values(array_map('intval', array_column($coupon['services'], 'id')))
+    : [];
 
-if ($includeServices) {
-    $form->addElement(
-        'advmultiselect',
-        'services',
-        get_lang('Services'),
-        $services
-    );
-}
-
-$form->addHidden('id', null);
-
-$coursesAdded = $coupon['courses'];
-if (!empty($coursesAdded)) {
-    $coursesAdded = array_column($coursesAdded, 'id');
-}
-
-$sessionsAdded = $coupon['sessions'];
-if (!empty($sessionsAdded)) {
-    $sessionsAdded = array_column($sessionsAdded, 'id');
-}
-
-$servicesAdded = $coupon['services'];
-if (!empty($servicesAdded)) {
-    $servicesAdded = array_column($servicesAdded, 'id');
-}
-
-$formDefaults = [
-    'id' => $coupon['id'],
-    'code' => $coupon['code'],
-    'discount_type' => $discountTypes[$coupon['discount_type']],
-    'discount_amount' => $coupon['discount_amount'],
-    'date' => "$couponDateRangeFrom / $couponDateRangeTo",
-    'active' => $coupon['active'],
-    'courses' => $coursesAdded,
-    'sessions' => $sessionsAdded,
-    'services' => $servicesAdded,
+$formData = [
+    'id' => $couponId,
+    'code' => (string) ($coupon['code'] ?? ''),
+    'discount_type' => (string) ((int) ($coupon['discount_type'] ?? 0)),
+    'discount_type_label' => (string) ($discountTypes[(int) ($coupon['discount_type'] ?? 0)] ?? ''),
+    'discount_amount' => (string) ($coupon['discount_amount'] ?? '0'),
+    'date_start_input' => formatConfiguredCouponDateTimeInput((string) ($coupon['valid_start'] ?? '')),
+    'date_end_input' => formatConfiguredCouponDateTimeInput((string) ($coupon['valid_end'] ?? '')),
+    'active' => !empty($coupon['active']),
+    'courses' => sanitizeConfiguredCouponSelectedIds($coursesAdded, $courses),
+    'courses_lookup' => [],
+    'sessions' => sanitizeConfiguredCouponSelectedIds($sessionsAdded, $sessions),
+    'sessions_lookup' => [],
+    'services' => sanitizeConfiguredCouponSelectedIds($servicesAdded, $services),
+    'services_lookup' => [],
 ];
 
-$button = $form->addButtonSave(get_lang('Save'));
-if (empty($currency)) {
-    $button->setAttribute('disabled');
+$formData['courses_lookup'] = buildConfiguredCouponLookup($formData['courses']);
+$formData['sessions_lookup'] = buildConfiguredCouponLookup($formData['sessions']);
+$formData['services_lookup'] = buildConfiguredCouponLookup($formData['services']);
+
+$csrfSessionKey = 'buycourses_configure_coupon_token_'.$couponId;
+
+if (empty($_SESSION[$csrfSessionKey])) {
+    $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
 }
 
-$form->freeze(['code', 'discount_type', 'discount_amount']);
+$csrfToken = (string) $_SESSION[$csrfSessionKey];
 
-if ($form->validate()) {
-    $formValues = $form->exportValues();
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
+    $formData['active'] = isset($_POST['active']);
+    $formData['date_start_input'] = trim((string) ($_POST['date_start'] ?? $formData['date_start_input']));
+    $formData['date_end_input'] = trim((string) ($_POST['date_end'] ?? $formData['date_end_input']));
+    $formData['courses'] = sanitizeConfiguredCouponSelectedIds($_POST['courses'] ?? [], $courses);
+    $formData['sessions'] = sanitizeConfiguredCouponSelectedIds($_POST['sessions'] ?? [], $sessions);
+    $formData['services'] = sanitizeConfiguredCouponSelectedIds($_POST['services'] ?? [], $services);
 
-    $coupon['id'] = $formValues['id'];
-    $coupon['valid_start'] = $formValues['date_start'];
-    $coupon['valid_end'] = $formValues['date_end'];
-    $coupon['active'] = $formValues['active'];
-    $coupon['courses'] = $formValues['courses'] ?? [];
-    $coupon['sessions'] = $formValues['sessions'] ?? [];
-    $coupon['services'] = $formValues['services'] ?? [];
+    $formData['courses_lookup'] = buildConfiguredCouponLookup($formData['courses']);
+    $formData['sessions_lookup'] = buildConfiguredCouponLookup($formData['sessions']);
+    $formData['services_lookup'] = buildConfiguredCouponLookup($formData['services']);
 
-    $result = $plugin->updateCouponData($coupon);
+    $hasError = false;
 
-    if ($result) {
-        Display::addFlash(
-            Display::return_message(
-                $plugin->get_lang('CouponUpdate'),
-                'success',
-                false
-            )
+    $submittedToken = (string) ($_POST['csrf_token'] ?? '');
+    if ('' === $submittedToken || !hash_equals($csrfToken, $submittedToken)) {
+        $messages[] = Display::return_message(
+            'Invalid form token. Please refresh the page and try again.',
+            'error',
+            false
         );
-
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_coupon.php?id='.$coupon['id']);
-    } else {
-        header('Location:'.api_get_self().'?'.$queryString);
+        $hasError = true;
     }
 
-    exit;
+    $submittedId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+    if ($submittedId !== $couponId) {
+        $messages[] = Display::return_message(
+            'Invalid coupon identifier.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    $validStart = normalizeConfiguredCouponDateTime($formData['date_start_input']);
+    $validEnd = normalizeConfiguredCouponDateTime($formData['date_end_input']);
+
+    if (null === $validStart || null === $validEnd) {
+        $messages[] = Display::return_message(
+            'Both start and end dates are required.',
+            'error',
+            false
+        );
+        $hasError = true;
+    } elseif ($validStart > $validEnd) {
+        $messages[] = Display::return_message(
+            'The start date cannot be later than the end date.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    if (empty($currency)) {
+        $hasError = true;
+    }
+
+    if (!$hasError) {
+        $couponToUpdate = $coupon;
+        $couponToUpdate['id'] = $couponId;
+        $couponToUpdate['valid_start'] = (string) $validStart;
+        $couponToUpdate['valid_end'] = (string) $validEnd;
+        $couponToUpdate['active'] = $formData['active'] ? 1 : 0;
+        $couponToUpdate['courses'] = $formData['courses'];
+        $couponToUpdate['sessions'] = $formData['sessions'];
+        $couponToUpdate['services'] = $formData['services'];
+
+        $result = $plugin->updateCouponData($couponToUpdate);
+
+        if ($result) {
+            Display::addFlash(
+                Display::return_message(
+                    $plugin->get_lang('CouponUpdate'),
+                    'success',
+                    false
+                )
+            );
+
+            $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_coupon.php?id='.$couponId);
+            exit;
+        }
+
+        $messages[] = Display::return_message(
+            $plugin->get_lang('ErrorContactPlatformAdmin'),
+            'error',
+            false
+        );
+    }
 }
 
-$form->setDefaults($formDefaults);
-
 $templateName = $plugin->get_lang('ConfigureCoupon');
+
 $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
@@ -195,5 +341,27 @@ $interbreadcrumb[] = [
 
 $template = new Template($templateName);
 $template->assign('header', $templateName);
-$template->assign('content', $form->returnForm());
+$template->assign('page_title', $templateName);
+$template->assign('plugin_title', $plugin->get_lang('plugin_title'));
+$template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/coupons.php');
+$template->assign('messages', $messages);
+$template->assign('csrf_token', $csrfToken);
+$template->assign('currency_iso', $currencyIso);
+$template->assign('discount_types', $discountTypes);
+$template->assign('include_sessions', $includeSession);
+$template->assign('include_services', $includeServices);
+$template->assign('courses_options', $courses);
+$template->assign('sessions_options', $sessions);
+$template->assign('services_options', $services);
+$template->assign('form_data', $formData);
+$template->assign('submit_disabled', empty($currency));
+$template->assign('form_mode', 'configure');
+$template->assign('action_url', api_get_self().'?id='.$couponId);
+$template->assign('read_only_code', true);
+$template->assign('read_only_discount_type', true);
+$template->assign('read_only_discount_amount', true);
+$template->assign('submit_label', get_lang('Save'));
+
+$content = $template->fetch('BuyCourses/view/coupon_add.tpl');
+$template->assign('content', $content);
 $template->display_one_col_template();

@@ -29,7 +29,7 @@ SessionManager::protectSession($session);
 $codePath = api_get_path(WEB_CODE_PATH);
 $tool_name = get_lang('Session overview');
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 

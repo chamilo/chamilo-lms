@@ -14793,7 +14793,7 @@ msgstr "ユーザー、グループ"
 msgid "Sorry no results"
 msgstr "結果がありません"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "グループ権限"
 
 msgid "Closed"
@@ -16136,6 +16136,15 @@ msgstr "短縮コード"
 
 msgid "Create child skill"
 msgstr "子スキルの作成"
+
+msgid "This skill can be obtained through:"
+msgstr "このスキルを習得できる方法："
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "現在、このスキルを習得できるコースはありません。"
+
+msgid "Add skill to search profile"
+msgstr "検索プロファイルにスキルを追加"
 
 msgid "Search profile matches"
 msgstr "プロフィール一致の検索"
@@ -32814,4 +32823,1129 @@ msgstr "画像をアップロードするか、Badge Studioで作成してくだ
 
 msgid "Current badge set"
 msgstr "現在のバッジセット"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "このセクションでコースの「学生登録」をクリックすると、次のページでユーザーを選択するよう求められます。検証すると、選択したコースとユーザーの新しいセッションが作成され、ユーザーに登録通知が送信されます。"
+
+msgid "Read-only view"
+msgstr "読み取り専用ビュー"
+
+msgid "Events list"
+msgstr "イベント一覧"
+
+msgid "Personal"
+msgstr "個人"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "週は1から52まで表示されます"
+
+msgid "No tutored sessions found"
+msgstr "指導付きセッションが見つかりません"
+
+msgid "Content search"
+msgstr "コンテンツ検索"
+
+msgid "Search indexed content across all courses."
+msgstr "すべてのコースでインデックスされたコンテンツを検索します。"
+
+msgid "Enter a keyword..."
+msgstr "キーワードを入力..."
+
+msgid "Search error"
+msgstr "検索エラー"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "インデックスされたドキュメントを検索するにはキーワードを入力してください。"
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "アクセスできない結果は設定により非表示です。"
+
+msgid "Restricted"
+msgstr "制限付き"
+
+msgid "You do not have access to this resource."
+msgstr "このリソースにアクセスする権限がありません。"
+
+msgid "Create group"
+msgstr "グループ作成"
+
+msgid "My custom certificate"
+msgstr "マイカスタム証明書"
+
+msgid "Select permission"
+msgstr "権限を選択"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "この招待を受け入れると、リクエストしたユーザーとリンクされ、プロフィールデータのいくつかまたはすべてがそのユーザーによって読み取り可能になります"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%s の約 %d 件中 %d 件を表示しています。"
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%s のアクセス可能な結果 %d 件を表示しています。"
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "したがって、この URL に自動的にリダイレクトされます"
+
+msgid "You have access to multiple URLs"
+msgstr "複数の URL にアクセス権があります"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "アクセスしたい URL に対応する下記のリンクをクリックしてください"
+
+msgid "You do not currently have access to any URL"
+msgstr "現在、どの URL にもアクセス権がありません"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "許可された最大購読数です"
+
+msgid "An error occurred"
+msgstr "エラーが発生しました"
+
+msgid "You don't have any course content yet"
+msgstr "コースコンテンツがまだありません"
+
+msgid "This course is locked"
+msgstr "このコースはロックされています"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "プラットフォームがメールを送信する際に使用される送信元メールアドレス。「返信先」ヘッダーとしても使用されます"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "リストに言語が見つかりませんか？翻訳者として貢献するために %s までご連絡ください"
+
+msgid "An update is available"
+msgstr "更新が利用可能です"
+
+msgid "to know what's new and what has been changed"
+msgstr "新機能と変更点を知るために"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "PHP インストールで日付が定義されていません"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "PHP バージョンがこのソフトウェアの要件に一致しません"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "一部のファイルまたはフォルダに書き込み権限がありません"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "警告！インストーラーがシステムに既存の Chamilo プラットフォームを検出しました"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "<code>newscorm</code> と <code>exercice</code> ディレクトリがそれぞれ <code>lp</code> と <code>exercise</code> に名前変更されたため、<code>newscorm_old</code> と <code>exercice_old</code> に削除または名前変更する必要があります"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "フォームに不正または不完全なデータが含まれています"
+
+msgid "Your contact information could not be sent"
+msgstr "連絡先情報が送信できませんでした"
+
+msgid "Please contact support with the error details"
+msgstr "エラー詳細をサポートに連絡してください"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "画像をクリックしてトリミングしてください（1:1 比率、120x120 px を推奨）"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "トリミングツールを使用して 1:1 の領域を選択してください"
+
+msgid "Checking push subscription"
+msgstr "プッシュ購読をチェック中"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "このブラウザでプッシュ通知に購読済みです"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "このブラウザでプッシュ通知が有効になっていません"
+
+msgid "Data exchange successfully saved"
+msgstr "データ交換が正常に保存されました"
+
+msgid "Error saving data exchange"
+msgstr "データ交換の保存中にエラーが発生しました"
+
+msgid "No documents added yet"
+msgstr "まだドキュメントが追加されていません"
+
+msgid "No additional details available for this skill."
+msgstr "このスキルに追加の詳細はありません。"
+
+msgid "No available documents"
+msgstr "利用可能なドキュメントがありません"
+
+msgid "No users added yet"
+msgstr "まだユーザーが追加されていません"
+
+msgid "No available users"
+msgstr "利用可能なユーザーがありません"
+
+msgid "You can no longer submit"
+msgstr "これ以上提出できません"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "この課題に未提出の提出物が見つかりません、またはデータが利用できません"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "未提出ユーザーの全員にメールを送信しました"
+
+msgid "Failed to send email"
+msgstr "メール送信に失敗しました"
+
+msgid "Write your answer here"
+msgstr "ここに回答を記入してください"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "出席カレンダーでは、学生が出席する必要がある実際のセッションごとに出席リストを登録できます"
+
+msgid "Loading attendance data"
+msgstr "出席データを読み込み中"
+
+msgid "No attendance assigned yet"
+msgstr "まだ出席が割り当てられていません"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "今日は授業が予定されていません。別の日を選択するか、アクションボタンを使用して出席を自分で登録してください"
+
+msgid "No attendance data for today"
+msgstr "今日の出席データがありません"
+
+msgid "Saving"
+msgstr "保存中"
+
+msgid "No attendance data to save"
+msgstr "保存する出席データがありません"
+
+msgid "Failed to save attendance"
+msgstr "出席の保存に失敗しました"
+
+msgid "Loading more courses"
+msgstr "コースをさらに読み込み中"
+
+msgid "Loading more sessions"
+msgstr "セッションをさらに読み込み中"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "ドキュメントの自動起動機能が有効です"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "演習の自動起動機能が有効です"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "学習パスの自動起動設定がオンです"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "フォーラムの自動起動設定がオンです"
+
+msgid "Course ID is missing"
+msgstr "コースIDが不足しています"
+
+msgid "Course created successfully"
+msgstr "コースが正常に作成されました"
+
+msgid "Error deleting document(s)"
+msgstr "ドキュメントの削除エラー"
+
+msgid "Template successfully deleted"
+msgstr "テンプレートが正常に削除されました"
+
+msgid "Error deleting the template"
+msgstr "テンプレートの削除エラー"
+
+msgid "The title and thumbnail are required"
+msgstr "タイトルとサムネイルが必要です"
+
+msgid "Template created successfully"
+msgstr "テンプレートが正常に作成されました"
+
+msgid "Error creating the template"
+msgstr "テンプレートの作成エラー"
+
+msgid "Error submitting the form"
+msgstr "フォームの送信エラー"
+
+msgid "Loading templates"
+msgstr "テンプレートを読み込み中"
+
+msgid "Loading layout"
+msgstr "レイアウトを読み込み中"
+
+msgid "Loading courses"
+msgstr "コースを読み込み中"
+
+msgid "No courses available"
+msgstr "利用可能なコースがありません"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "設定「session_admin_access_to_all_users_on_all_urls」が有効のため、全アクセスURLのユーザーが表示されます。"
+
+msgid "User not found"
+msgstr "ユーザーが見つかりません"
+
+msgid "An error occurred while sending the course"
+msgstr "コース送信中にエラーが発生しました"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "GDPR関連の利用規約の変更は、GDPR第19条で規定されている通り、ユーザーの個人情報を提供した第三者にその変更を通知する必要があります"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "利用可能な全言語で「利用規約」を作成してください"
+
+msgid "You don't have any course yet"
+msgstr "まだコースがありません"
+
+msgid "You have received a new friend request"
+msgstr "新しい友達リクエストを受け取りました"
+
+msgid "Diagnosis Management"
+msgstr "診断管理"
+
+msgid "Tracking"
+msgstr "トラッキング"
+
+msgid "View reports, statistics and tracking data"
+msgstr "レポート、統計、トラッキングデータを表示"
+
+msgid "System activity audit"
+msgstr "システム活動監査"
+
+msgid "Learning analytics"
+msgstr "学習分析"
+
+msgid "Administrative activity auditing"
+msgstr "管理活動監査"
+
+msgid "List icons"
+msgstr "アイコン一覧"
+
+msgid "Constant name"
+msgstr "定数名"
+
+msgid "MDI icon name"
+msgstr "MDI アイコン名"
+
+msgid "Assign authentication sources"
+msgstr "認証ソースの割り当て"
+
+msgid "Assignment details"
+msgstr "割り当て詳細"
+
+msgid "Terms and conditions"
+msgstr "利用規約"
+
+msgid "Icons"
+msgstr "アイコン"
+
+msgid "Create backup"
+msgstr "バックアップを作成"
+
+msgid "Create file"
+msgstr "ファイルを作成"
+
+msgid "Create link"
+msgstr "リンクを作成"
+
+msgid "Edit template"
+msgstr "テンプレートを編集"
+
+msgid "Shared files"
+msgstr "共有ファイル"
+
+msgid "Skill wheel"
+msgstr "スキルホイール"
+
+msgid "Favourite courses"
+msgstr "お気に入りコース"
+
+msgid "Restart courses"
+msgstr "コースを再開"
+
+msgid "Generate terms"
+msgstr "規約を生成"
+
+msgid "Add variation"
+msgstr "バリエーションを追加"
+
+msgid "Editor demo"
+msgstr "エディターのデモ"
+
+msgid "Tool introduction"
+msgstr "ツールの概要"
+
+msgid "Data exchanges"
+msgstr "データ交換"
+
+msgid "Third parties"
+msgstr "サードパーティ"
+
+msgid "Layouts"
+msgstr "レイアウト"
+
+msgid "Relation type"
+msgstr "関係タイプ"
+
+msgid "Add all"
+msgstr "すべて追加"
+
+msgid "Remove all"
+msgstr "すべて削除"
+
+msgid "An error occurred. Please try again."
+msgstr "エラーが発生しました。もう一度お試しください。"
+
+msgid "%s created"
+msgstr "%s が作成されました"
+
+msgid "%s updated"
+msgstr "%s が更新されました"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "古いバージョンの Chamilo からアップグレードする予定の場合、変更履歴を確認することをお勧めします"
+
+msgid "have a look at the changelog"
+msgstr "変更履歴を確認する"
+
+msgid "to know what's new and what has been changed."
+msgstr "新機能と変更点を把握するために。"
+
+msgid "Session Item"
+msgstr "セッション項目"
+
+msgid "Points"
+msgstr "ポイント"
+
+msgid "See notifications"
+msgstr "通知を表示"
+
+msgid "New content available for this course."
+msgstr "このコースに新しいコンテンツが利用可能です。"
+
+msgid "No new notifications."
+msgstr "新しい通知はありません。"
+
+msgid "No new content found."
+msgstr "新しいコンテンツは見つかりませんでした。"
+
+msgid "No tool details available yet."
+msgstr "ツールの詳細はまだ利用できません。"
+
+msgid "Last access"
+msgstr "最終アクセス"
+
+msgid "Open course"
+msgstr "コースを開く"
+
+msgid "Course completed"
+msgstr "コース完了"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "このコースの登録限度数に達しました。"
+
+msgid "Subscription limit reached"
+msgstr "登録限度数に達しました"
+
+msgid "Tertiary alternative"
+msgstr "第3代替"
+
+msgid "Update SCORM"
+msgstr "SCORM を更新"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI が送信前にフィードバックと提案スコアの下書きを作成できます。"
+
+msgid "What will be sent to the AI"
+msgstr "AI に送信される内容"
+
+msgid "Assignment title + instructions"
+msgstr "課題タイトル + 指示"
+
+msgid "Student submission (text)"
+msgstr "学生の提出物 (テキスト)"
+
+msgid "Student submission (text): none"
+msgstr "学生の提出物 (テキスト): なし"
+
+msgid "Student attachment"
+msgstr "学生の添付ファイル"
+
+msgid "supported"
+msgstr "対応"
+
+msgid "not supported for document analysis"
+msgstr "ドキュメント分析には対応していません"
+
+msgid "Student attachment: none"
+msgstr "学生添付ファイル: なし"
+
+msgid "No text AI providers available."
+msgstr "利用可能なテキストAIプロバイダーがありません。"
+
+msgid "AI-assisted"
+msgstr "AI支援"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "この決定は修正（ExtraField）と一緒に保存され、後で変更できません。"
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "オプションの修正添付ファイル（これは学生の提出物ではありません）。"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "受領済み"
+
+msgid "%s min"
+msgstr "%s分"
+
+msgid "Unlock column"
+msgstr "列のロック解除"
+
+msgid "Lock column"
+msgstr "列のロック"
+
+msgid "Set all Present"
+msgstr "すべて出席に設定"
+
+msgid "Set all Absent"
+msgstr "すべて欠席に設定"
+
+msgid "Auto (recommended)"
+msgstr "自動（推奨）"
+
+msgid "Error downloading all documents."
+msgstr "すべてのドキュメントのダウンロード中にエラーが発生しました。"
+
+msgid "Open with ONLYOFFICE"
+msgstr "ONLYOFFICEで開く"
+
+msgid "Limiting quota"
+msgstr "制限クォータ"
+
+msgid "Remaining space"
+msgstr "残り容量"
+
+msgid "Course catalogue"
+msgstr "コースカタログ"
+
+msgid "Drag links to reorder"
+msgstr "リンクをドラッグして並べ替え"
+
+msgid "Drop links here to keep them without category"
+msgstr "カテゴリなしで保持するにはここにリンクをドロップ"
+
+msgid "Could not export"
+msgstr "エクスポートできませんでした"
+
+msgid "Link moved"
+msgstr "リンクが移動されました"
+
+msgid "Could not move link"
+msgstr "リンクを移動できませんでした"
+
+msgid "Category reordering is not enabled"
+msgstr "カテゴリの並べ替えは有効になっていません"
+
+msgid "Showing %s posts"
+msgstr "%s件の投稿を表示中"
+
+msgid "Showing %s tasks"
+msgstr "%s件のタスクを表示中"
+
+msgid "Page %s of %s"
+msgstr "%s / %s ページ"
+
+msgid "Tutors"
+msgstr "チューター"
+
+msgid "selected"
+msgstr "選択済み"
+
+msgid "No data to export"
+msgstr "エクスポートするデータがありません"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "ヘッダーPNGは%s px以下でなければなりません。"
+
+msgid "Standard list"
+msgstr "標準リスト"
+
+msgid "Management list"
+msgstr "管理リスト"
+
+msgid "Open platform"
+msgstr "オープン・プラットフォーム"
+
+msgid "Teacher user ID"
+msgstr "教師ユーザーID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "このコースを削除してもよろしいですか？"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "選択したコースを削除してもよろしいですか？"
+
+msgid "Search by name, username, email"
+msgstr "名前、ユーザー名、メールで検索"
+
+msgid "contains %s items"
+msgstr "%s項目を含みます"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "法的同意は、撤回リクエストが審査・処理されるまで有効です。"
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "法的同意撤回リクエストは審査待ちです。"
+
+msgid "Your account deletion request is pending review."
+msgstr "アカウント削除リクエストは審査待ちです。"
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "法的同意の撤回をリクエストする理由は何ですか？"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "法的同意撤回リクエストを送信中…"
+
+msgid "Submitting request..."
+msgstr "リクエストを送信中…"
+
+msgid "Request withdrawal of legal consent"
+msgstr "法的同意の撤回をリクエスト"
+
+msgid "Submitting your account deletion request..."
+msgstr "アカウント削除リクエストを送信中…"
+
+msgid "Submitting your acceptance..."
+msgstr "承認を送信中…"
+
+msgid "Event details"
+msgstr "イベント詳細"
+
+msgid "You cannot access the linked course from this view."
+msgstr "このビューからリンクされたコースにアクセスできません。"
+
+msgid "Failed to load sessions"
+msgstr "セッションの読み込みに失敗しました"
+
+msgid "Failed to load events"
+msgstr "イベントの読み込みに失敗しました"
+
+msgid "No events found"
+msgstr "イベントが見つかりません"
+
+msgid "Group image"
+msgstr "グループ画像"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "禁止"
+
+msgid "Distribution"
+msgstr "配布"
+
+msgid "Firstname"
+msgstr "名"
+
+msgid "Lastname"
+msgstr "姓"
+
+msgid "Email"
+msgstr "メール"
+
+msgid "Last login in platform"
+msgstr "プラットフォームでの最終ログイン"
+
+msgid "Export as CSV"
+msgstr "CSVとしてエクスポート"
+
+msgid "Export as XLS"
+msgstr "XLSとしてエクスポート"
+
+msgid "Deactivate this user?"
+msgstr "このユーザーを無効にしますか？"
+
+msgid "Enable this user?"
+msgstr "このユーザーを有効にしますか？"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "重複グループをユーザー #%s に統合しますか？"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "これにより、同じグループ内の他のすべてのアカウントがこのアカウントにマージされます。"
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "マージされたアカウントは永久に削除され、このレポートから消えます。"
+
+msgid "This action cannot be undone."
+msgstr "この操作は元に戻せません。"
+
+msgid "Unify"
+msgstr "統合"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "学生"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "ポータル %s の総使用容量 %s MB / 制限 %s MB"
+
+msgid "Helper text"
+msgstr "ヘルプテキスト"
+
+msgid "NotAllowed"
+msgstr "許可されていません"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "上記のフィルターを使用して学習者のアクセス詳細を読み込んでください。"
+
+msgid "Start date must be before end date"
+msgstr "開始日付は終了日付より前でなければなりません"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "日付範囲とグループ化タイプを選択して学習者のアクセス詳細を確認してください。"
+
+msgid "This course will be created using the platform default course template."
+msgstr "このコースはプラットフォームのデフォルトコーステンプレートを使用して作成されます。"
+
+msgid "Security breach avoid restart"
+msgstr "セキュリティ侵害、再起動を回避"
+
+msgid "User deactivated"
+msgstr "ユーザーが無効になりました"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "ユーザーが有効になりました"
+
+msgid "No other duplicates found for this user."
+msgstr "このユーザーに対する他の重複が見つかりません。"
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "ユーザーの統合: %s 個のアカウントをユーザー #%s にマージしました。マージされたアカウントは永久に削除されました。"
+
+msgid "No accounts were merged."
+msgstr "アカウントはマージされませんでした。"
+
+msgid "An error occurred while unifying users."
+msgstr "ユーザーの統合中にエラーが発生しました。"
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "ユーザーの統合: ユーザー #%s をユーザー #%s にマージしました。マージされたアカウントは永久に削除されました。"
+
+msgid "Duplicate users"
+msgstr "重複ユーザー"
+
+msgid "Years"
+msgstr "年"
+
+msgid "All time visits outside sessions"
+msgstr "セッション外の全期間訪問数"
+
+msgid "All time visits in sessions"
+msgstr "セッション内の全期間訪問数"
+
+msgid "All time visits total"
+msgstr "全期間訪問数合計"
+
+msgid "Student visits per period, per course"
+msgstr "期間ごと、コースごとの学生訪問数"
+
+msgid "By email"
+msgstr "メールで"
+
+msgid "By extra field"
+msgstr "追加フィールドで"
+
+msgid "Select an option"
+msgstr "オプションを選択"
+
+msgid "Profile field"
+msgstr "プロフィールフィールド"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "このレポートは、同じメールアドレスを持つユーザーのみを表示します。"
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "このレポートは、選択したプロフィールフィールドで同じ値を持つユーザーのみを表示します。"
+
+msgid "How to use this report"
+msgstr "このレポートの使い方"
+
+msgid "Disable / Enable"
+msgstr "無効化 / 有効化"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "ログインをブロックまたは復元するだけです。ユーザーを削除したり、登録を解除したりしません。"
+
+msgid "Last week"
+msgstr "先週"
+
+msgid "Next week"
+msgstr "来週"
+
+msgid "Loading report..."
+msgstr "レポートを読み込み中…"
+
+msgid "Failed to load this report. Please try again."
+msgstr "このレポートの読み込みに失敗しました。もう一度お試しください。"
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "トレーナーをコピーするセッションを1つ以上選択し、移動先コースを選択してください"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "複数の項目を選択するには Ctrl (または Cmd) を押したままにしてください"
+
+msgid "Choose the destination course"
+msgstr "移動先コースを選択"
+
+msgid "You can select multiple items"
+msgstr "複数の項目を選択できます"
+
+msgid "Use the search box to find courses quickly"
+msgstr "検索ボックスを使用してコースを素早く検索"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "学生をコピーする元セッションと移動先セッションを1つ以上選択"
+
+msgid "Select destination sessions"
+msgstr "移動先セッションを選択"
+
+msgid "You can select multiple users"
+msgstr "複数のユーザーを選択できます"
+
+msgid "Use the search box to find users quickly"
+msgstr "検索ボックスを使用してユーザーを素早く検索"
+
+msgid "Error while creating the document"
+msgstr "ドキュメントの作成中にエラーが発生しました"
+
+msgid "Not a SCORM learning path"
+msgstr "SCORM ラーニングパスではありません"
+
+msgid "Final item"
+msgstr "最終項目"
+
+msgid "Edit item"
+msgstr "項目を編集"
+
+msgid "No AI text providers configured."
+msgstr "AI テキストプロバイダーが設定されていません。"
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "アップロードに失敗しました。ファイルがサーバーの制限 (post_max_size) を超えている可能性があります。"
+
+msgid "Update failed. No file received by the server."
+msgstr "更新に失敗しました。サーバーにファイルが受信されませんでした。"
+
+msgid "Update failed. %s"
+msgstr "更新に失敗しました。%s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "更新に失敗しました。無効なアップロードファイルペイロードです。"
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "更新に失敗しました。アップロードされた ZIP ファイル名が元の SCORM パッケージ名と一致する必要があります。"
+
+msgid "Update failed"
+msgstr "更新に失敗しました"
+
+msgid "Question lower case"
+msgstr "質問（小文字）"
+
+msgid "Regenerate"
+msgstr "再生成"
+
+msgid "Case insensitive"
+msgstr "大文字小文字を区別しない"
+
+msgid "Select a session to load its courses."
+msgstr "セッションを選択してそのコースを読み込み"
+
+msgid "Select the source course."
+msgstr "元コースを選択"
+
+msgid "Select a destination session."
+msgstr "移動先セッションを選択"
+
+msgid "Select the destination course."
+msgstr "移動先コースを選択"
+
+msgid "Copy the full course content from the selected session course."
+msgstr "選択したセッションのコースから完全なコースコンテンツをコピー"
+
+msgid "Select which tools/items to copy."
+msgstr "コピーするツール／項目を選択"
+
+msgid "Do not include the base (non-session) course content."
+msgstr "基本（セッション外）のコースコンテンツを含めない"
+
+msgid "An error occurred while copying the course"
+msgstr "コースのコピ中にエラーが発生しました"
+
+msgid "Please select a different destination"
+msgstr "別の移動先を選択してください"
+
+msgid "You must select a destination course"
+msgstr "移動先コースを選択する必要があります"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "クイズを含むコースをエクスポートするにはクイズを選択する必要があります"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "LP にオーディオファイルが含まれている場合、ドキュメントからそれらを選択してください"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "クイズにホットスポット質問が含まれている場合、ドキュメントから画像を選択してください"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "パスワードは少なくとも %length% 文字である必要があります。"
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "パスワードには少なくとも %count% 個の小文字を含める必要があります。"
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "パスワードには少なくとも %count% 個の大文字を含める必要があります。"
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "パスワードには少なくとも %count% 個の数字 (0-9) を含める必要があります。"
+
+msgid "Password must contain at least %count% special characters."
+msgstr "パスワードには少なくとも %count% 個の特殊文字を含める必要があります。"
+
+msgid "Invalid login request."
+msgstr "無効なログイン要求です。"
+
+msgid "Authentication failed."
+msgstr "認証に失敗しました。"
+
+msgid "Login %status% for username %username%"
+msgstr "ユーザー名 %username% のログイン %status%"
+
+msgid "Co-generated with AI"
+msgstr "AI と共同生成"
+
+msgid "GDPRTitle"
+msgstr "GDPRタイトル"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "必須フィールド"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "以下のテキストエリア内にタグをコピー＆ペーストでき、各ユーザーに送信する際に動的にその値に置き換えられます。"
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "このグループはクラス %s にリンクされています。<br>グループメンバーリストはクラスメンバーに依存し、変更できません。<br>グループのメンバーを追加・削除したい場合は、グループ設定からリンクを解除してください。"
+
+msgid "Link classes to created groups ?"
+msgstr "作成したグループにクラスをリンクしますか？"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "クラスがグループにリンクされている場合、クラスに追加または削除されたユーザーは自動的にグループに追加または削除されます。"
+
+msgid "New groups creation in category %s"
+msgstr "カテゴリ %s での新規グループ作成"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "リンクされたグループのメンバーを変更できないことを警告するメッセージ"
+
+msgid "Remove the group link with the class"
+msgstr "クラスとのグループリンクを解除"
+
+msgid "Linked class"
+msgstr "リンクされたクラス"
+
+msgid "The group is no longer linked to the class"
+msgstr "グループはクラスにリンクされなくなりました"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "クラスに登録された学生とコースの概要"
+
+msgid "Overview students subscribed to the class"
+msgstr "クラスに登録された学生の概要"
+
+msgid "Overview class"
+msgstr "クラスの概要"
+
+msgid "Go back to the list of classes"
+msgstr "クラスのリストに戻る"
+
+msgid "Go back to course classes"
+msgstr "コースのクラスに戻る"
+
+msgid "Users subscribed to the course"
+msgstr "コースに登録されたユーザー"
+
+msgid "Users not subscribed to the course"
+msgstr "コースに未登録のユーザー"
+
+msgid "Users subscribed to the class"
+msgstr "クラスに登録されたユーザー"
+
+msgid "Courses subscribed to the class"
+msgstr "クラスに登録されたコース"
+
+msgid "No user is subscribed to this class"
+msgstr "このクラスに登録されたユーザーはいません"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "このクラスに登録されたユーザーやコースはありません"
+
+msgid "No user are subscribed to this class"
+msgstr "このクラスにユーザーは登録されていません"
+
+msgid "No course are subscribed to this class"
+msgstr "このクラスにコースは登録されていません"
+
+msgid "Are you sure you want to remove the class"
+msgstr "クラスを削除してもよろしいですか"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "クラスを削除してもよろしいですか？"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "ユーザーを削除せずにクラスを削除してもよろしいですか"
+
+msgid "Remove the class without removing students"
+msgstr "学生を削除せずにクラスを削除"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "この設定は本バージョンではまだ実装されていません。"
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "管理エリアに表示される管理者専用プラグインに推奨。"
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "コースツールとして表示される必要があるプラグイン向けに推奨されます。"
+
+msgid "Displayed above the main page content."
+msgstr "メインページコンテンツの上に表示されます。"
+
+msgid "Displayed below the main page content."
+msgstr "メインページコンテンツの下に表示されます。"
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "メインレイアウトシェルの上部近くに表示されます。"
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "メインレイアウトシェルの下部近くに表示されます。"
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "フッター前に表示されるグローバルなフローティングまたは永続的なプラグイン向けに推奨されます。"
+
+msgid "Displayed in the selected plugin region."
+msgstr "選択されたプラグイン領域に表示されます。"
+
+msgid "Admin menu"
+msgstr "管理者メニュー"
+
+msgid "Global regions"
+msgstr "グローバル領域"
+
+msgid "No regions assigned"
+msgstr "領域が割り当てられていません"
+
+msgid "Plugin regions"
+msgstr "プラグイン領域"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "インストールされた各プラグインをどこにレンダリングするかを選択してください。"
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "ヒント: 複数の領域を選択するには Ctrl/Cmd を使用してください。"
+
+msgid "No installed plugins were found."
+msgstr "インストールされたプラグインが見つかりませんでした。"
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "現在のアクセスURLで、このプラグインの1つ以上の領域を選択してください。"
+
+msgid "Available regions"
+msgstr "利用可能な領域"
+
+msgid "Selected paragraph"
+msgstr "選択された段落"
+
+msgid "Destination folder"
+msgstr "対象フォルダー"
+
+msgid "Generate AI media"
+msgstr "AIメディアを生成"
+
+msgid "Save and insert"
+msgstr "保存して挿入"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "保存は、プロバイダがbase64コンテンツを返す場合のみサポートされます。URLのみ受け取った場合、ブラウザでのダウンロードを避けるため保存が無効になります。"
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "ビデオは正常に生成されましたが、プロバイダがURLを返したため保存が無効です。"
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "ファイルは保存されましたが、そのURLを解決できませんでした。"
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "トピックまたはコースの1つのドキュメントからAikenクイズを生成します。"
+
+msgid "Test from topic"
+msgstr "トピックからテスト"
+
+msgid "Test from document"
+msgstr "ドキュメントからテスト"
+
+msgid "Generate from topic"
+msgstr "トピックから生成"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "トピックのプロンプトを使用して新しいAiken問答を作成します。"
+
+msgid "Quiz title"
+msgstr "クイズタイトル"
+
+msgid "Generate from document"
+msgstr "ドキュメントから生成"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "コースの1つのドキュメントを選択し、その内容のみに基づいて質問を生成します。"
+
+msgid "Selected document"
+msgstr "選択されたドキュメント"
+
+msgid "The document is selected from the course documents list."
+msgstr "ドキュメントはコースドキュメントリストから選択されます。"
+
+msgid "Choose document"
+msgstr "ドキュメントを選択"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "オプション。AIへの追加のヒントとしてのみ使用されます。"
+
+msgid "Select a document"
+msgstr "ドキュメントを選択"
+
+msgid "Welcome"
+msgstr "ようこそ"
+
+msgid "Welcome to Chamilo"
+msgstr "Chamiloへようこそ"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Chamiloを初めてお使いの場合、サイドメニューを確認して多くの機能を探してください。ヘルプが必要な場合は、<a href=\"https://docs.chamilo.org\">公式ドキュメント</a>が標準的なドキュメントを提供し、<a href=\"https://github.com/chamilo/chamilo-lms/discussions\">オンラインフォーラム</a>で他のChamiloユーザーからアイデアや回答を得ることができます。"
 

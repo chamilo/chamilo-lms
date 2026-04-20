@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 /**
  * Class FormValidator
@@ -91,7 +92,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
-            $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
+            $templateSimpleRight = '<div class="form-actions">{label} {element}</div>';
             $renderer->setElementTemplate($templateSimpleRight, 'buttons_in_action_right');
         }
 
@@ -260,7 +261,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $label
+     * @param string|array<int, string> $label
      * @param array  $attributes
      *
      * @return mixed
@@ -372,6 +373,7 @@ EOT;
      * @param string $class         Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
      * @param bool   $createElement
+     * @param bool   $isFormAction  Whether to wrap in form-actions (right-aligned). Pass false for mid-form buttons.
      *
      * @return HTML_QuickForm_button
      */
@@ -383,7 +385,8 @@ EOT;
         $size = 'default',
         $class = null,
         $attributes = [],
-        $createElement = false
+        $createElement = false,
+        $isFormAction = true
     ) {
         if ($createElement) {
             return $this->createElement(
@@ -398,7 +401,7 @@ EOT;
             );
         }
 
-        return $this->addElement(
+        $element = $this->addElement(
             'button',
             $name,
             $label,
@@ -408,6 +411,21 @@ EOT;
             $class,
             $attributes
         );
+        if ($isFormAction) {
+            $this->registerAsFormAction($name);
+        }
+
+        return $element;
+    }
+
+    private function registerAsFormAction(string $name): void
+    {
+        // In inline layouts the form is already a flex row; wrapping the button in a
+        // block-level div breaks vertical alignment with adjacent inputs.
+        if (self::LAYOUT_INLINE === $this->getLayout() || self::LAYOUT_BOX_SEARCH === $this->getLayout()) {
+            return;
+        }
+        $this->defaultRenderer()->setElementTemplate('<div class="form-actions">{label} {element}</div>', $name);
     }
 
     /**
@@ -473,7 +491,7 @@ EOT;
             $name,
             $label,
             'plus',
-            'primary',
+            'success',
             null,
             null,
             $attributes,
@@ -496,7 +514,7 @@ EOT;
             $name,
             $label,
             'pencil',
-            'primary',
+            'secondary',
             null,
             null,
             [],
@@ -542,7 +560,7 @@ EOT;
             $name,
             $label,
             'arrow-right-bold-circle',
-            'primary',
+            'secondary',
             null,
             null,
             [],
@@ -566,7 +584,7 @@ EOT;
             $name,
             $label,
             'send',
-            'primary',
+            'success',
             null,
             null,
             $attributes,
@@ -588,7 +606,12 @@ EOT;
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'magnify', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'magnify',
+            'primary'
+        );
     }
 
     /**
@@ -628,7 +651,7 @@ EOT;
             $name,
             $label,
             'check',
-            'primary',
+            'success',
             null,
             null,
             [],
@@ -712,7 +735,7 @@ EOT;
             );
         }
 
-        return $this->addElement(
+        $element = $this->addElement(
             'reset',
             $name,
             $label,
@@ -722,6 +745,9 @@ EOT;
             $class,
             $attributes
         );
+        $this->registerAsFormAction($name);
+
+        return $element;
     }
 
     /**
@@ -975,22 +1001,21 @@ EOT;
                 }
                 $this->addHtml(
                     '
-                <div class="form-group row" id="' . $id . '-form-group" style="display: none;">
-                    <div class="offset-md-2 col-sm-8">
-                        <div class="card-cropper">
-                            <div id="' . $id . '_crop_image" class="cropCanvas">
-                                <img id="' . $id . '_preview_image">
-                            </div>
-                            <button class="btn btn--primary" type="button" name="cropButton" id="' . $id . '_crop_button">
-                                <em class="fa fa-crop"></em> ' . get_lang('Crop your picture') . '
-                            </button>
+                <div class="form-group field" id="'.$id.'-form-group" style="display: none;">
+                    <div class="card-cropper">
+                        <div id="'.$id.'_crop_image" class="cropCanvas mb-2">
+                            <img id="'.$id.'_preview_image">
                         </div>
+                        <button class="btn btn--primary" type="button" name="cropButton" id="'.$id.'_crop_button">'
+                    .Display::getMdiIcon(ActionIcon::CROP)
+                    .' '.get_lang('Crop your picture').'
+                        </button>
                     </div>
                 </div>'
                 );
-                $this->addHidden($id . '_crop_result', '');
-                $this->addHidden($id . '_crop_result_for_resource', '');
-                $this->addHidden($id . '_crop_image_base_64', '');
+                $this->addHidden($id.'_crop_result', '');
+                $this->addHidden($id.'_crop_result_for_resource', '');
+                $this->addHidden($id.'_crop_image_base_64', '');
             }
         } catch (HTML_Quick|Form_Error $e) {
             var_dump($e->getMessage());
@@ -1019,50 +1044,39 @@ EOT;
         $javascript = '
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const buttons = document.querySelectorAll("#card_' . $id . ' a");
-                const menus = document.querySelectorAll("#collapse_' . $id . '");
+                const button = document.querySelector("#card_'.$id.' a");
+                const menu = document.querySelector("#collapse_'.$id.'");
 
-                buttons.forEach((button, index) => {
-                    button.addEventListener("click", function() {
-                        menus.forEach((menu, menuIndex) => {
-                            if (index === menuIndex) {
-                                button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "false" : "true")
-                                button.classList.toggle("mdi-chevron-down")
-                                button.classList.toggle("mdi-chevron-up")
-                                menu.classList.toggle("active");
-                            } else {
-                                menu.classList.remove("active");
-                            }
-                        });
-                    });
+                button.addEventListener("click", () => {
+                    button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "false" : "true")
+                    button.classList.toggle("mdi-chevron-down")
+                    button.classList.toggle("mdi-chevron-up")
+                    menu.classList.toggle("active");
                 });
             });
         </script>';
 
         $this->addHtml($javascript);
 
-        $htmlIcon = '';
-        if ($icon) {
-            $htmlIcon = Display::getMdiIcon($icon, 'ch-tool-icon', 'float:left;', ICON_SIZE_SMALL);
-        }
+        $htmlIcon = $icon ? Display::getMdiIcon($icon) : '';
         $html = '
         <div class="display-panel-collapse field">
-            <div class="display-panel-collapse__header" id="card_' . $id . '">
+            <div class="display-panel-collapse__header" id="card_'.$id.'">
                 <a role="button"
-                    class="mdi mdi-chevron-down"
+                    class="mdi '.($open ? 'mdi-chevron-up' : 'mdi-chevron-down').'"
                     data-toggle="collapse"
-                    data-target="#collapse_' . $id . '"
-                    aria-expanded="' . (($open) ? 'true' : 'false') . '"
-                    aria-controls="collapse_' . $id . '"
+                    data-target="#collapse_'.$id .'"
+                    aria-expanded="'.(($open) ? 'true' : 'false').'"
+                    aria-controls="collapse_'.$id.'"
                 >
-                    ' . $htmlIcon . '&nbsp;' . $title . '
+                    '.$htmlIcon.'<span>'.$title.'</span>
                 </a>
             </div>
             <div
-                id="collapse_' . $id . '"
-                class="display-panel-collapse__collapsible ' . (($open) ? 'active' : '') . '"
+                id="collapse_'.$id.'"
+                class="display-panel-collapse__collapsible '.(($open) ? 'active' : '').'"
             >
-                <div id="collapse_contant_' . $id . '"  class="card-body ">';
+                <div id="collapse_contant_'.$id.'">';
 
         $this->addHtml($html);
     }

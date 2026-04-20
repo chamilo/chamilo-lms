@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           id="item_title"
           v-model="v$.item.title.$model"
@@ -11,7 +11,7 @@
           v-text="t('Title')"
           for="item_title"
         />
-      </div>
+      </FloatLabel>
       <small
         v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
         v-text="v$.item.title.required.$message"
@@ -35,6 +35,7 @@
 </template>
 
 <script setup>
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import useVuelidate from "@vuelidate/core"

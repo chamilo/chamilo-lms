@@ -3,6 +3,10 @@
 
   &__block-container {
     @apply h-full;
+    position: relative;
+    .p-card-body {
+      padding-bottom: 60px;
+    }
   }
 
   &__block-container--full {
@@ -30,4 +34,16 @@
   &__preview {
     @apply flex w-full md:w-2/5;
   }
+}
+.admin-block__bg-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  background-size: auto 50px;
+  opacity: 0.20;
+  pointer-events: none;
 }

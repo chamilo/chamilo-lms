@@ -4631,7 +4631,7 @@ msgid "Send mail to new user"
 msgstr "Enviar un e-mail al nuevo usuario"
 
 msgid "Portfolio"
-msgstr "Perfil extendido"
+msgstr "Portafolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Si se configura como 'Verdadero', un usuario puede rellenar los siguientes campos (opcionales): 'Mis competencias', 'Mis títulos', '¿Qué puedo enseñar?' y 'Mi área personal pública'"
@@ -10226,7 +10226,7 @@ msgid "There are no learners to add results for"
 msgstr "No hay estudiantes para añadir resultados"
 
 msgid "Skills ranking"
-msgstr "Editar las reglas de puntuación"
+msgstr "Clasificación de habilidades"
 
 msgid "Competence thresholds colouring"
 msgstr "Color de la puntuación"
@@ -14740,7 +14740,7 @@ msgstr "Usuarios, Grupos"
 msgid "Sorry no results"
 msgstr "No hay resultados"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Permisos del grupo"
 
 msgid "Closed"
@@ -16083,6 +16083,15 @@ msgstr "Código corto"
 
 msgid "Create child skill"
 msgstr "Crear competencia hija"
+
+msgid "This skill can be obtained through:"
+msgstr "Esta competencia se puede obtener a través de:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ningún curso permite actualmente obtener esta competencia."
+
+msgid "Add skill to search profile"
+msgstr "Añadir competencia al perfil de búsqueda"
 
 msgid "Search profile matches"
 msgstr "Buscar perfiles que correspondan"
@@ -28833,7 +28842,7 @@ msgid "Submit code"
 msgstr "Enviar código"
 
 msgid "Sign up"
-msgstr "Regístrese"
+msgstr "Registrarse"
 
 msgid "2FA disabled successfully."
 msgstr "Su autenticación de dos factores ha sido desactivada."
@@ -32144,7 +32153,7 @@ msgid "Create your first note to get started."
 msgstr "Cree su primera nota para comenzar."
 
 msgid "F d, Y"
-msgstr "d F, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "No se pudo cargar la información de soporte en este momento."
@@ -33888,4 +33897,1129 @@ msgstr "Subir una imagen o crear una con Badge Studio."
 
 msgid "Current badge set"
 msgstr "Conjunto de insignias actual"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "En esta sección, al hacer clic en 'Registrar estudiante' para un curso, se le pedirá seleccionar al usuario en la página siguiente. Al validar, se creará una nueva sesión con el curso y usuario seleccionados, y se enviará una notificación de inscripción al usuario."
+
+msgid "Read-only view"
+msgstr "Vista de solo lectura"
+
+msgid "Events list"
+msgstr "Lista de eventos"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Las semanas se muestran del 1 al 52"
+
+msgid "No tutored sessions found"
+msgstr "No se encontraron sesiones tutorizadas"
+
+msgid "Content search"
+msgstr "Búsqueda de contenido"
+
+msgid "Search indexed content across all courses."
+msgstr "Buscar contenido indexado en todos los cursos."
+
+msgid "Enter a keyword..."
+msgstr "Introduzca una palabra clave..."
+
+msgid "Search error"
+msgstr "Error de búsqueda"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Introduzca una palabra clave para buscar documentos indexados."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Los resultados a los que no tiene acceso están ocultos por configuración."
+
+msgid "Restricted"
+msgstr "Restringido"
+
+msgid "You do not have access to this resource."
+msgstr "No tiene acceso a este recurso."
+
+msgid "Create group"
+msgstr "Crear grupo"
+
+msgid "My custom certificate"
+msgstr "Mi certificado personalizado"
+
+msgid "Select permission"
+msgstr "Seleccionar permiso"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Al aceptar esta invitación, se vinculará con el usuario solicitante de manera que algunos o todos sus datos de perfil estarán disponibles para su lectura por el usuario solicitante"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Mostrando %d de aproximadamente %d resultado(s) para %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Mostrando %d resultado(s) accesible(s) para %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Por lo tanto, será redirigido automáticamente a esta URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Tienes acceso a múltiples URLs"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Por favor, haz clic en el enlace de abajo correspondiente a la URL que deseas acceder"
+
+msgid "You do not currently have access to any URL"
+msgstr "Actualmente no tienes acceso a ninguna URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Número máximo de suscripciones permitidas"
+
+msgid "An error occurred"
+msgstr "Ocurrió un error"
+
+msgid "You don't have any course content yet"
+msgstr "No tienes contenido de curso todavía"
+
+msgid "This course is locked"
+msgstr "Este curso está bloqueado"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "La dirección de correo electrónico desde la que se enviarán los correos cuando la plataforma envíe un correo, también usada como cabecera 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "¿No encuentras tu idioma en la lista? Contáctanos en %s para contribuir como traductor"
+
+msgid "An update is available"
+msgstr "Hay una actualización disponible"
+
+msgid "to know what's new and what has been changed"
+msgstr "para conocer qué hay de nuevo y qué ha cambiado"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Hemos detectado que tu instalación de PHP no define la fecha"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Tu versión de PHP no cumple con los requisitos de este software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Algunos archivos o carpetas no tienen permisos de escritura"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "¡Advertencia! El instalador ha detectado una plataforma Chamilo existente en tu sistema"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Dado que los directorios <code>newscorm</code> y <code>exercice</code> fueron renombrados a <code>lp</code> y <code>exercise</code> respectivamente, es necesario eliminarlos o renombrarlos a <code>newscorm_old</code> y <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "El formulario contiene datos incorrectos o incompletos"
+
+msgid "Your contact information could not be sent"
+msgstr "No se pudo enviar tu información de contacto"
+
+msgid "Please contact support with the error details"
+msgstr "Por favor, contacta con soporte con los detalles del error"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Haz clic en la imagen para recortarla (relación 1:1, 120x120 px recomendado)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Usa la herramienta de recorte para seleccionar una región 1:1"
+
+msgid "Checking push subscription"
+msgstr "Comprobando suscripción push"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Estás suscrito a notificaciones push en este navegador"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Las notificaciones push no están habilitadas en este navegador"
+
+msgid "Data exchange successfully saved"
+msgstr "Intercambio de datos guardado exitosamente"
+
+msgid "Error saving data exchange"
+msgstr "Error al guardar el intercambio de datos"
+
+msgid "No documents added yet"
+msgstr "No se han agregado documentos todavía"
+
+msgid "No additional details available for this skill."
+msgstr "No hay detalles adicionales disponibles para esta competencia."
+
+msgid "No available documents"
+msgstr "No hay documentos disponibles"
+
+msgid "No users added yet"
+msgstr "No se han agregado usuarios todavía"
+
+msgid "No available users"
+msgstr "No hay usuarios disponibles"
+
+msgid "You can no longer submit"
+msgstr "Ya no puedes enviar"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "No se encontraron envíos faltantes para esta tarea o los datos no están disponibles"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "Correo enviado a todos los usuarios sin enviar"
+
+msgid "Failed to send email"
+msgstr "Error al enviar el correo"
+
+msgid "Write your answer here"
+msgstr "Escribe tu respuesta aquí"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "El calendario de asistencia te permite registrar listas de asistencia (una por sesión real a la que los estudiantes deben asistir)"
+
+msgid "Loading attendance data"
+msgstr "Cargando datos de asistencia"
+
+msgid "No attendance assigned yet"
+msgstr "No hay asistencia asignada aún"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "No hay clase programada hoy, prueba seleccionando otro día o agrega tu entrada de asistencia tú mismo usando los iconos de acción"
+
+msgid "No attendance data for today"
+msgstr "No hay datos de asistencia para hoy"
+
+msgid "Saving"
+msgstr "Guardando"
+
+msgid "No attendance data to save"
+msgstr "No hay datos de asistencia para guardar"
+
+msgid "Failed to save attendance"
+msgstr "Error al guardar la asistencia"
+
+msgid "Loading more courses"
+msgstr "Cargando más cursos"
+
+msgid "Loading more sessions"
+msgstr "Cargando más sesiones"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "La configuración de auto-lanzamiento de documentos está habilitada"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "La configuración de auto-lanzamiento de ejercicios está habilitada"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "La configuración de auto-lanzamiento del camino de aprendizaje está ACTIVADA"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "La configuración de auto-lanzamiento del foro está activada"
+
+msgid "Course ID is missing"
+msgstr "Falta el ID del curso"
+
+msgid "Course created successfully"
+msgstr "Curso creado exitosamente"
+
+msgid "Error deleting document(s)"
+msgstr "Error al eliminar documento(s)"
+
+msgid "Template successfully deleted"
+msgstr "Plantilla eliminada exitosamente"
+
+msgid "Error deleting the template"
+msgstr "Error al eliminar la plantilla"
+
+msgid "The title and thumbnail are required"
+msgstr "El título y la miniatura son obligatorios"
+
+msgid "Template created successfully"
+msgstr "Plantilla creada exitosamente"
+
+msgid "Error creating the template"
+msgstr "Error al crear la plantilla"
+
+msgid "Error submitting the form"
+msgstr "Error al enviar el formulario"
+
+msgid "Loading templates"
+msgstr "Cargando plantillas"
+
+msgid "Loading layout"
+msgstr "Cargando diseño"
+
+msgid "Loading courses"
+msgstr "Cargando cursos"
+
+msgid "No courses available"
+msgstr "No hay cursos disponibles"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Esta lista muestra usuarios de todas las URLs de acceso porque la configuración \"session_admin_access_to_all_users_on_all_urls\" está habilitada."
+
+msgid "User not found"
+msgstr "Usuario no encontrado"
+
+msgid "An error occurred while sending the course"
+msgstr "Ocurrió un error al enviar el curso"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Recuerda que las modificaciones a los términos relacionados con el RGPD requieren que informes esas modificaciones a terceros a quienes hayas proporcionado información personal sobre tus usuarios, como se establece en el Artículo 19 del RGPD"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Debes crear los \"Términos y Condiciones\" para todos los idiomas disponibles"
+
+msgid "You don't have any course yet"
+msgstr "Aún no tienes ningún curso"
+
+msgid "You have received a new friend request"
+msgstr "Has recibido una nueva solicitud de amistad"
+
+msgid "Diagnosis Management"
+msgstr "Gestión de Diagnóstico"
+
+msgid "Tracking"
+msgstr "Seguimiento"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Ver informes, estadísticas y datos de seguimiento"
+
+msgid "System activity audit"
+msgstr "Auditoría de actividad del sistema"
+
+msgid "Learning analytics"
+msgstr "Analítica del aprendizaje"
+
+msgid "Administrative activity auditing"
+msgstr "Auditoría de actividad administrativa"
+
+msgid "List icons"
+msgstr "Iconos de lista"
+
+msgid "Constant name"
+msgstr "Nombre de la constante"
+
+msgid "MDI icon name"
+msgstr "Nombre del icono MDI"
+
+msgid "Assign authentication sources"
+msgstr "Asignar fuentes de autenticación"
+
+msgid "Assignment details"
+msgstr "Detalles de la tarea"
+
+msgid "Terms and conditions"
+msgstr "Términos y condiciones"
+
+msgid "Icons"
+msgstr "Iconos"
+
+msgid "Create backup"
+msgstr "Crear copia de seguridad"
+
+msgid "Create file"
+msgstr "Crear archivo"
+
+msgid "Create link"
+msgstr "Crear enlace"
+
+msgid "Edit template"
+msgstr "Editar plantilla"
+
+msgid "Shared files"
+msgstr "Archivos compartidos"
+
+msgid "Skill wheel"
+msgstr "Rueda de habilidades"
+
+msgid "Favourite courses"
+msgstr "Cursos favoritos"
+
+msgid "Restart courses"
+msgstr "Reiniciar cursos"
+
+msgid "Generate terms"
+msgstr "Generar términos"
+
+msgid "Add variation"
+msgstr "Añadir variación"
+
+msgid "Editor demo"
+msgstr "Demo del editor"
+
+msgid "Tool introduction"
+msgstr "Textos de introducción"
+
+msgid "Data exchanges"
+msgstr "Intercambios de datos"
+
+msgid "Third parties"
+msgstr "Terceros"
+
+msgid "Layouts"
+msgstr "Diseños"
+
+msgid "Relation type"
+msgstr "Tipo de relación"
+
+msgid "Add all"
+msgstr "Añadir todo"
+
+msgid "Remove all"
+msgstr "Quitar todo"
+
+msgid "An error occurred. Please try again."
+msgstr "Se produjo un error. Por favor, inténtelo de nuevo."
+
+msgid "%s created"
+msgstr "%s creado"
+
+msgid "%s updated"
+msgstr "%s actualizado"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Si planea actualizar desde una versión anterior de Chamilo, podría querer"
+
+msgid "have a look at the changelog"
+msgstr "echar un vistazo al registro de cambios"
+
+msgid "to know what's new and what has been changed."
+msgstr "para saber qué hay de nuevo y qué ha cambiado."
+
+msgid "Session Item"
+msgstr "Elemento de sesión"
+
+msgid "Points"
+msgstr "Puntos"
+
+msgid "See notifications"
+msgstr "Ver notificaciones"
+
+msgid "New content available for this course."
+msgstr "Nuevo contenido disponible para este curso."
+
+msgid "No new notifications."
+msgstr "No hay nuevas notificaciones."
+
+msgid "No new content found."
+msgstr "No se encontró nuevo contenido."
+
+msgid "No tool details available yet."
+msgstr "No hay detalles de herramientas disponibles aún."
+
+msgid "Last access"
+msgstr "Último acceso"
+
+msgid "Open course"
+msgstr "Abrir curso"
+
+msgid "Course completed"
+msgstr "Curso completado"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Se ha alcanzado el límite de suscripción para este curso."
+
+msgid "Subscription limit reached"
+msgstr "Límite de suscripción alcanzado"
+
+msgid "Tertiary alternative"
+msgstr "Alternativa terciaria"
+
+msgid "Update SCORM"
+msgstr "Actualizar SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "La IA puede redactar retroalimentación y una puntuación sugerida antes de enviarla."
+
+msgid "What will be sent to the AI"
+msgstr "Qué se enviará a la IA"
+
+msgid "Assignment title + instructions"
+msgstr "Título de la tarea + instrucciones"
+
+msgid "Student submission (text)"
+msgstr "Entrega del estudiante (texto)"
+
+msgid "Student submission (text): none"
+msgstr "Entrega del estudiante (texto): ninguna"
+
+msgid "Student attachment"
+msgstr "Adjunto del estudiante"
+
+msgid "supported"
+msgstr "soportado"
+
+msgid "not supported for document analysis"
+msgstr "no soportado para análisis de documentos"
+
+msgid "Student attachment: none"
+msgstr "Adjunto del estudiante: ninguno"
+
+msgid "No text AI providers available."
+msgstr "No hay proveedores de IA de texto disponibles."
+
+msgid "AI-assisted"
+msgstr "Asistido por IA"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Esta decisión se guarda con la corrección (ExtraField) y no se puede cambiar después."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Adjunto opcional de corrección (esto no es la entrega del estudiante)."
+
+msgid "AI"
+msgstr "IA"
+
+msgid "Received"
+msgstr "Recibido"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Desbloquear columna"
+
+msgid "Lock column"
+msgstr "Bloquear columna"
+
+msgid "Set all Present"
+msgstr "Establecer todo Presente"
+
+msgid "Set all Absent"
+msgstr "Establecer todo Ausente"
+
+msgid "Auto (recommended)"
+msgstr "Automático (recomendado)"
+
+msgid "Error downloading all documents."
+msgstr "Error al descargar todos los documentos."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Abrir con ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Cuota límite"
+
+msgid "Remaining space"
+msgstr "Espacio restante"
+
+msgid "Course catalogue"
+msgstr "Catálogo de cursos"
+
+msgid "Drag links to reorder"
+msgstr "Arrastra los enlaces para reordenarlos"
+
+msgid "Drop links here to keep them without category"
+msgstr "Suelta los enlaces aquí para mantenerlos sin categoría"
+
+msgid "Could not export"
+msgstr "No se pudo exportar"
+
+msgid "Link moved"
+msgstr "Enlace movido"
+
+msgid "Could not move link"
+msgstr "No se pudo mover el enlace"
+
+msgid "Category reordering is not enabled"
+msgstr "El reordenamiento de categorías no está habilitado"
+
+msgid "Showing %s posts"
+msgstr "Mostrando %s publicaciones"
+
+msgid "Showing %s tasks"
+msgstr "Mostrando %s tareas"
+
+msgid "Page %s of %s"
+msgstr "Página %s de %s"
+
+msgid "Tutors"
+msgstr "Tutores"
+
+msgid "selected"
+msgstr "seleccionado"
+
+msgid "No data to export"
+msgstr "No hay datos para exportar"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "El encabezado PNG debe ser \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Lista estándar"
+
+msgid "Management list"
+msgstr "Lista de gestión"
+
+msgid "Open platform"
+msgstr "Plataforma abierta"
+
+msgid "Teacher user ID"
+msgstr "ID de usuario del profesor"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "¿Está seguro de que desea eliminar este curso?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "¿Está seguro de que desea eliminar los cursos seleccionados?"
+
+msgid "Search by name, username, email"
+msgstr "Buscar por nombre, nombre de usuario, correo electrónico"
+
+msgid "contains %s items"
+msgstr "contiene %s elementos"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Su acuerdo legal permanece activo hasta que se revise y procese cualquier solicitud de retirada."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Su solicitud de retirada del consentimiento legal está pendiente de revisión."
+
+msgid "Your account deletion request is pending review."
+msgstr "Su solicitud de eliminación de cuenta está pendiente de revisión."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "¿Por qué desea solicitar la retirada de su consentimiento legal?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Enviando su solicitud de retirada del consentimiento legal..."
+
+msgid "Submitting request..."
+msgstr "Enviando solicitud..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Solicitar retirada del consentimiento legal"
+
+msgid "Submitting your account deletion request..."
+msgstr "Enviando su solicitud de eliminación de cuenta..."
+
+msgid "Submitting your acceptance..."
+msgstr "Enviando su aceptación..."
+
+msgid "Event details"
+msgstr "Detalles del evento"
+
+msgid "You cannot access the linked course from this view."
+msgstr "No puede acceder al curso enlazado desde esta vista."
+
+msgid "Failed to load sessions"
+msgstr "Error al cargar sesiones"
+
+msgid "Failed to load events"
+msgstr "Error al cargar eventos"
+
+msgid "No events found"
+msgstr "No se encontraron eventos"
+
+msgid "Group image"
+msgstr "Imagen del grupo"
+
+msgid "SearchTCC"
+msgstr "BuscarTCC"
+
+msgid "Forbidden"
+msgstr "Prohibido"
+
+msgid "Distribution"
+msgstr "Distribución"
+
+msgid "Firstname"
+msgstr "Nombre"
+
+msgid "Lastname"
+msgstr "Apellido"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Last login in platform"
+msgstr "Último acceso a la plataforma"
+
+msgid "Export as CSV"
+msgstr "Exportar como CSV"
+
+msgid "Export as XLS"
+msgstr "Exportar como XLS"
+
+msgid "Deactivate this user?"
+msgstr "¿Desactivar este usuario?"
+
+msgid "Enable this user?"
+msgstr "¿Activar este usuario?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "¿Unificar este grupo duplicado en el usuario #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Esto fusionará todas las otras cuentas del mismo grupo en esta cuenta."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Las cuentas fusionadas serán eliminadas permanentemente y desaparecerán de este informe."
+
+msgid "This action cannot be undone."
+msgstr "Esta acción no se puede deshacer."
+
+msgid "Unify"
+msgstr "Unificar"
+
+msgid "SessionAdmin"
+msgstr "AdminSesión"
+
+msgid "Drh"
+msgstr "DRH"
+
+msgid "Student"
+msgstr "Estudiante"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Espacio total usado por el portal %s límite es %s MB"
+
+msgid "Helper text"
+msgstr "Texto de ayuda"
+
+msgid "NotAllowed"
+msgstr "NoPermitido"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Use los filtros superiores para cargar los detalles de acceso del aprendiz."
+
+msgid "Start date must be before end date"
+msgstr "La fecha de inicio debe ser anterior a la fecha de fin"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Seleccione un rango de fechas y tipo de agrupación para revisar los detalles de acceso del aprendiz."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Este curso se creará usando la plantilla predeterminada de cursos de la plataforma."
+
+msgid "Security breach avoid restart"
+msgstr "Incumplimiento de seguridad evitar reinicio"
+
+msgid "User deactivated"
+msgstr "Usuario desactivado"
+
+msgid "InvalidId"
+msgstr "IdInválido"
+
+msgid "User enabled"
+msgstr "Usuario activado"
+
+msgid "No other duplicates found for this user."
+msgstr "No se encontraron otros duplicados para este usuario."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Usuarios unificados: fusionadas %s cuenta(s) en el usuario #%s. Las cuentas fusionadas fueron eliminadas permanentemente."
+
+msgid "No accounts were merged."
+msgstr "No se fusionaron cuentas."
+
+msgid "An error occurred while unifying users."
+msgstr "Ocurrió un error al unificar usuarios."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Usuarios unificados: usuario #%s fusionado en el usuario #%s. La cuenta fusionada fue eliminada permanentemente."
+
+msgid "Duplicate users"
+msgstr "Usuarios duplicados"
+
+msgid "Years"
+msgstr "Años"
+
+msgid "All time visits outside sessions"
+msgstr "Visitas totales fuera de sesiones"
+
+msgid "All time visits in sessions"
+msgstr "Visitas totales en sesiones"
+
+msgid "All time visits total"
+msgstr "Visitas totales"
+
+msgid "Student visits per period, per course"
+msgstr "Visitas de estudiantes por período, por curso"
+
+msgid "By email"
+msgstr "Por correo electrónico"
+
+msgid "By extra field"
+msgstr "Por campo extra"
+
+msgid "Select an option"
+msgstr "Seleccionar una opción"
+
+msgid "Profile field"
+msgstr "Campo de perfil"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Este informe solo lista usuarios que tienen la misma dirección de correo electrónico."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Este informe solo lista usuarios que comparten el mismo valor para el campo de perfil seleccionado."
+
+msgid "How to use this report"
+msgstr "Cómo usar este informe"
+
+msgid "Disable / Enable"
+msgstr "Desactivar / Activar"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Solo bloquea o restaura el inicio de sesión. No elimina al usuario ni quita las suscripciones."
+
+msgid "Last week"
+msgstr "Semana pasada"
+
+msgid "Next week"
+msgstr "Semana próxima"
+
+msgid "Loading report..."
+msgstr "Cargando informe..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "No se pudo cargar este informe. Por favor, inténtelo de nuevo."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Seleccione una o más sesiones de las que copiar formadores y elija el curso de destino"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Mantenga presionada Ctrl (o Cmd) para seleccionar varios elementos"
+
+msgid "Choose the destination course"
+msgstr "Elija el curso de destino"
+
+msgid "You can select multiple items"
+msgstr "Puede seleccionar varios elementos"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Use el cuadro de búsqueda para encontrar cursos rápidamente"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Seleccione una o más sesiones de origen y una o más sesiones de destino para copiar estudiantes"
+
+msgid "Select destination sessions"
+msgstr "Seleccione sesiones de destino"
+
+msgid "You can select multiple users"
+msgstr "Puede seleccionar varios usuarios"
+
+msgid "Use the search box to find users quickly"
+msgstr "Use el cuadro de búsqueda para encontrar usuarios rápidamente"
+
+msgid "Error while creating the document"
+msgstr "Error al crear el documento"
+
+msgid "Not a SCORM learning path"
+msgstr "No es un camino de aprendizaje SCORM"
+
+msgid "Final item"
+msgstr "Elemento final"
+
+msgid "Edit item"
+msgstr "Editar elemento"
+
+msgid "No AI text providers configured."
+msgstr "No hay proveedores de texto de IA configurados."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Error en la carga. El archivo probablemente es más grande que el límite del servidor (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Actualización fallida. No se recibió ningún archivo en el servidor."
+
+msgid "Update failed. %s"
+msgstr "Actualización fallida. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Actualización fallida. Carga de archivo inválida."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Actualización fallida. El nombre del archivo ZIP cargado debe coincidir con el nombre del paquete SCORM original."
+
+msgid "Update failed"
+msgstr "Actualización fallida"
+
+msgid "Question lower case"
+msgstr "Pregunta en minúscula"
+
+msgid "Regenerate"
+msgstr "Regenerar"
+
+msgid "Case insensitive"
+msgstr "Insensible a mayúsculas y minúsculas"
+
+msgid "Select a session to load its courses."
+msgstr "Seleccione una sesión para cargar sus cursos."
+
+msgid "Select the source course."
+msgstr "Seleccione el curso de origen."
+
+msgid "Select a destination session."
+msgstr "Seleccione una sesión de destino."
+
+msgid "Select the destination course."
+msgstr "Seleccione el curso de destino."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Copie el contenido completo del curso de la sesión seleccionada."
+
+msgid "Select which tools/items to copy."
+msgstr "Seleccione qué herramientas/elementos copiar."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "No incluya el contenido del curso base (no de sesión)."
+
+msgid "An error occurred while copying the course"
+msgstr "Ocurrió un error al copiar el curso"
+
+msgid "Please select a different destination"
+msgstr "Por favor, seleccione un destino diferente"
+
+msgid "You must select a destination course"
+msgstr "Debe seleccionar un curso de destino"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Para exportar cursos con cuestionarios debe seleccionar cuestionarios"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Si sus LPs incluyen archivos de audio debe seleccionarlos desde los documentos"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Si sus cuestionarios incluyen preguntas de hotspot debe seleccionar las imágenes desde los documentos"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "La contraseña debe tener al menos %length% caracteres."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "La contraseña debe contener al menos %count% caracteres en minúscula."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "La contraseña debe contener al menos %count% caracteres en mayúscula."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "La contraseña debe contener al menos %count% caracteres numéricos (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "La contraseña debe contener al menos %count% caracteres especiales."
+
+msgid "Invalid login request."
+msgstr "Solicitud de inicio de sesión inválida."
+
+msgid "Authentication failed."
+msgstr "Falla en la autenticación."
+
+msgid "Login %status% for username %username%"
+msgstr "Inicio de sesión %status% para el usuario %username%"
+
+msgid "Co-generated with AI"
+msgstr "Co-generado con IA"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "ID de EntraID"
+
+msgid "EntraID UID"
+msgstr "UID de EntraID"
+
+msgid "Required fields"
+msgstr "Campos obligatorios"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Las etiquetas pueden copiarse y pegarse en el área de texto inferior y se reemplazarán dinámicamente con su valor para cada usuario individualmente al enviarlas."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Este grupo está vinculado a la clase %s.<br>La lista de miembros del grupo depende de los miembros de la clase y no puede modificarse.<br>Vaya a la configuración del grupo para romper este vínculo si desea agregar o eliminar miembros de este grupo."
+
+msgid "Link classes to created groups ?"
+msgstr "¿Vincular clases a los grupos creados?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Si una clase está vinculada a un grupo, los usuarios agregados o eliminados de la clase se agregan o eliminan automáticamente del grupo."
+
+msgid "New groups creation in category %s"
+msgstr "Creación de nuevos grupos en la categoría %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Mensaje de advertencia para informar que el usuario no puede modificar miembros del grupo vinculado"
+
+msgid "Remove the group link with the class"
+msgstr "Eliminar el vínculo del grupo con la clase"
+
+msgid "Linked class"
+msgstr "Clase vinculada"
+
+msgid "The group is no longer linked to the class"
+msgstr "El grupo ya no está vinculado a la clase"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Resumen de estudiantes y cursos inscritos en la clase"
+
+msgid "Overview students subscribed to the class"
+msgstr "Resumen de estudiantes inscritos en la clase"
+
+msgid "Overview class"
+msgstr "Resumen de la clase"
+
+msgid "Go back to the list of classes"
+msgstr "Volver a la lista de clases"
+
+msgid "Go back to course classes"
+msgstr "Volver a las clases del curso"
+
+msgid "Users subscribed to the course"
+msgstr "Usuarios inscritos en el curso"
+
+msgid "Users not subscribed to the course"
+msgstr "Usuarios no inscritos en el curso"
+
+msgid "Users subscribed to the class"
+msgstr "Usuarios inscritos en la clase"
+
+msgid "Courses subscribed to the class"
+msgstr "Cursos inscritos en la clase"
+
+msgid "No user is subscribed to this class"
+msgstr "No hay usuarios inscritos en esta clase"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "No hay usuarios ni cursos inscritos en esta clase"
+
+msgid "No user are subscribed to this class"
+msgstr "No hay usuarios inscritos en esta clase"
+
+msgid "No course are subscribed to this class"
+msgstr "No hay cursos inscritos en esta clase"
+
+msgid "Are you sure you want to remove the class"
+msgstr "¿Está seguro de que desea eliminar la clase?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "¿Está seguro de que desea eliminar la clase?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "¿Está seguro de que desea eliminar la clase sin eliminar usuarios?"
+
+msgid "Remove the class without removing students"
+msgstr "Eliminar la clase sin eliminar estudiantes"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Esta configuración aún no está implementada en esta versión."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Recomendado para plugins solo de administrador mostrados en el área de administración."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Recomendado para plugins que deben aparecer como herramientas del curso."
+
+msgid "Displayed above the main page content."
+msgstr "Mostrado encima del contenido principal de la página."
+
+msgid "Displayed below the main page content."
+msgstr "Mostrado debajo del contenido principal de la página."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Mostrado cerca de la parte superior del shell del diseño principal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Mostrado cerca de la parte inferior del shell del diseño principal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Recomendado para plugins flotantes o persistentes globales mostrados antes del pie de página."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Mostrado en la región de plugin seleccionada."
+
+msgid "Admin menu"
+msgstr "Menú de administrador"
+
+msgid "Global regions"
+msgstr "Regiones globales"
+
+msgid "No regions assigned"
+msgstr "No hay regiones asignadas"
+
+msgid "Plugin regions"
+msgstr "Regiones de plugins"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Elija dónde debe renderizarse cada plugin instalado."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Consejo: use Ctrl/Cmd para seleccionar múltiples regiones."
+
+msgid "No installed plugins were found."
+msgstr "No se encontraron plugins instalados."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Seleccione una o más regiones para este plugin en la URL de acceso actual."
+
+msgid "Available regions"
+msgstr "Regiones disponibles"
+
+msgid "Selected paragraph"
+msgstr "Párrafo seleccionado"
+
+msgid "Destination folder"
+msgstr "Carpeta de destino"
+
+msgid "Generate AI media"
+msgstr "Generar medios con IA"
+
+msgid "Save and insert"
+msgstr "Guardar e insertar"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "El guardado solo está soportado cuando el proveedor devuelve contenido base64. Si solo recibió una URL, el guardado está deshabilitado para evitar la descarga en el navegador."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video generado exitosamente, pero el guardado está deshabilitado porque el proveedor devolvió una URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "El archivo se guardó, pero no se pudo resolver su URL."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generar un cuestionario Aiken desde un tema o desde un documento del curso."
+
+msgid "Test from topic"
+msgstr "Prueba desde tema"
+
+msgid "Test from document"
+msgstr "Prueba desde documento"
+
+msgid "Generate from topic"
+msgstr "Generar desde tema"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Usar un prompt de tema para generar un nuevo cuestionario Aiken."
+
+msgid "Quiz title"
+msgstr "Título del cuestionario"
+
+msgid "Generate from document"
+msgstr "Generar desde documento"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Seleccionar un documento del curso y generar preguntas basadas solo en su contenido."
+
+msgid "Selected document"
+msgstr "Documento seleccionado"
+
+msgid "The document is selected from the course documents list."
+msgstr "El documento se selecciona de la lista de documentos del curso."
+
+msgid "Choose document"
+msgstr "Elegir documento"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Opcional. Usado solo como pista extra para la IA."
+
+msgid "Select a document"
+msgstr "Seleccionar un documento"
+
+msgid "Welcome"
+msgstr "Bienvenido"
+
+msgid "Welcome to Chamilo"
+msgstr "Bienvenido(a) a Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Si es tu primera vez usando Chamilo, asegúrate de revisar el menú lateral para encontrar todas sus funciones. Si necesitas ayuda, <a href=\"https://docs.chamilo.org\">nuestra documentación oficial</a> puede ayudarte con la documentación estándar, mientras que nuestro <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">foro en línea</a> puede ayudarte a compartir ideas y encontrar respuestas de otros usuarios de Chamilo."
 

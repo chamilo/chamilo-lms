@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P 导入';
+$strings['plugin_comment'] = '导入 H5P 内容并在学习路径中使用。打开 README.md 查看安装说明。';
+$strings['frame'] = '框架';
+$strings['frame_help'] = '在 H5P 下方显示框架和按钮';
+$strings['embed'] = '嵌入';
+$strings['embed_help'] = '显示嵌入按钮';
+$strings['copyright'] = '版权';
+$strings['copyright_help'] = '显示版权按钮';
+$strings['icon'] = '图标';
+$strings['icon_help'] = '显示 H5P 图标';
+$strings['attempts'] = '尝试次数';
+$strings['upload_h5p'] = '上传';
+$strings['import_h5p_package'] = '上传 H5P 包';
+$strings['h5p_package'] = 'H5P 包';
+$strings['h5p_error_loading'] = '加载 H5P 包出错';
+$strings['h5p_error_invalid_token'] = '无效的安全令牌';
+$strings['h5p_error_missing_core_asset'] = '加载 H5P 核心资源出错';
+$strings['h5p_save_content_state'] = '保存用户结果';
+$strings['h5p_save_content_freq'] = '保存频率';
+$strings['h5p_save_freq_help'] = '当前内容状态的保存频率（秒）';
+$strings['start_attempt'] = '开始尝试';

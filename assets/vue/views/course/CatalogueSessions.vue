@@ -18,14 +18,14 @@
         <Button
           :label="$t('Clear filter results')"
           class="p-button-outlined"
-          icon="pi pi-filter-slash"
+          icon="mdi mdi-filter-off"
           @click="clearFilter()"
         />
         <span
           v-if="activeSearchFields.length"
           class="p-input-icon-left"
         >
-          <i class="pi pi-search" />
+          <i class="mdi mdi-magnify" />
           <InputText
             v-model="filters['global'].value"
             :placeholder="$t('Search')"

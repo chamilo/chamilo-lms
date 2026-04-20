@@ -657,12 +657,14 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
             }
-            echo ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+            $audioHtml = ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+            if (!empty($audioHtml)) {
+                echo '<div>'.$audioHtml.'</div>';
+            }
 
             echo '</div>';
 
-            echo '<div id="'.$name.'" class="row hidden">';
-            echo '<div class="col-sm-'.($allowTeacherCommentAudio ? 7 : 12).'">';
+            echo '<div id="'.$name.'" class="hidden">';
 
             $arrid[] = $questionId;
             $feedback_form = new FormValidator('frmcomments'.$questionId);
@@ -694,12 +696,8 @@ foreach ($questionList as $questionId) {
             $feedback_form->setDefaults($default);
             $feedback_form->display();
 
-            echo '</div>';
-
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
-                echo '<div class="col-sm-5">';
                 echo ExerciseLib::getOralFeedbackForm($id, $questionId, $exercise_id);
-                echo '</div>';
             }
             echo '</div>';
         } else {
@@ -708,7 +706,10 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
                 echo ExerciseLib::getFeedbackText($comnt);
-                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+                $audioHtml = ExerciseLib::getOralFeedbackAudio($id, $questionId, false);
+                if (!empty($audioHtml)) {
+                    echo '<div>'.$audioHtml.'</div>';
+                }
             }
         }
 

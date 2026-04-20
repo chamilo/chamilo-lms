@@ -4,8 +4,11 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * Responses to AJAX calls.
@@ -17,6 +20,12 @@ $action = $_REQUEST['a'] ?? '';
 if ($action === 'md_to_html') {
     header('Content-Type: text/html; charset=utf-8');
     api_block_anonymous_users();
+
+    if (!api_is_platform_admin()) {
+        http_response_code(403);
+        echo Display::return_message(get_lang('Forbidden'), 'error', false);
+        exit;
+    }
 
     try {
         $plugin = $_GET['plugin'] ?? '';
@@ -32,17 +41,35 @@ if ($action === 'md_to_html') {
             exit;
         }
 
-        $pluginInfo = $appPlugin->getPluginInfo($plugin);
+        $readmeFile = null;
+        $basePath = rtrim(api_get_path(SYS_PLUGIN_PATH).$plugin, '/').'/';
+        $candidates = [
+            'README.md',
+            'Readme.md',
+            'readme.md',
+            'README.MD',
+        ];
 
-        $html = '';
-        if (!empty($pluginInfo)) {
-            $file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
-            if (file_exists($file)) {
-                $content = file_get_contents($file);
-                $html = MarkdownExtra::defaultTransform($content);
+        foreach ($candidates as $candidate) {
+            $fullPath = $basePath.$candidate;
+            if (is_file($fullPath) && is_readable($fullPath)) {
+                $readmeFile = $fullPath;
+                break;
             }
         }
-        echo $html;
+
+        if (null === $readmeFile) {
+            echo Display::return_message('README file not found for this plugin.', 'warning', false);
+            exit;
+        }
+
+        $content = file_get_contents($readmeFile);
+        $html = MarkdownExtra::defaultTransform($content);
+
+        if ('' === trim((string) $html)) {
+            $html = Display::return_message('README file is empty.', 'warning', false);
+        }
+        echo '<div class="prose">'.$html.'</div>';
     } catch (\Throwable $e) {
         error_log('[plugin.ajax md_to_html] '.$e->getMessage());
         http_response_code(500);
@@ -64,7 +91,7 @@ if ($action === 'list_documents') {
         $courseId = api_get_course_int_id();
         $isAdmin  = api_is_platform_admin();
 
-        // Require edit rights inside a course; otherwise only admins can list globally
+        // Require edit rights inside a course; otherwise check BBB conference manager for global context
         if ($courseId > 0) {
             if (!api_is_allowed_to_edit()) {
                 http_response_code(403);
@@ -73,33 +100,52 @@ if ($action === 'list_documents') {
             }
         } else {
             if (!$isAdmin) {
-                http_response_code(403);
-                echo json_encode(['error' => 'Forbidden (admin required for global listing)']);
-                exit;
+                $allowed = false;
+                $isGlobal = isset($_GET['global']);
+                $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+                if ($isGlobal || $isGlobalPerUser) {
+                    $bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
+                    $allowed = $bbb->isConferenceManager();
+                }
+                if (!$allowed) {
+                    http_response_code(403);
+                    echo json_encode(['error' => 'Forbidden']);
+                    exit;
+                }
             }
         }
 
         $em   = Database::getManager();
         $repo = $em->getRepository(ResourceNode::class);
 
-        $qb = $em->createQueryBuilder()
-            ->select('DISTINCT d')
-            ->from(CDocument::class, 'd')
-            ->innerJoin('d.resourceNode', 'rn')
-            ->innerJoin('rn.resourceFiles', 'rf')
-            ->innerJoin('rn.resourceLinks', 'rl')
-            ->where('d.filetype = :type')
-            ->setParameter('type', 'file');
-
         if ($courseId > 0) {
-            $qb->andWhere('IDENTITY(rl.course) = :cId')
-                ->setParameter('cId', (int)$courseId);
+            // Course context: list course documents
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT d')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->innerJoin('rn.resourceFiles', 'rf')
+                ->innerJoin('rn.resourceLinks', 'rl')
+                ->where('d.filetype = :type')
+                ->andWhere('IDENTITY(rl.course) = :cId')
+                ->setParameter('type', 'file')
+                ->setParameter('cId', (int) $courseId);
+        } else {
+            // Global context: list only the current user's personal files
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT d')
+                ->from(PersonalFile::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->innerJoin('rn.resourceFiles', 'rf')
+                ->where('rn.creator = :userId')
+                ->setParameter('userId', api_get_user_id());
         }
 
         $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
         $limit = max(1, min($limit, 2000));
+        $orderField = $courseId > 0 ? 'd.iid' : 'd.id';
         $qb->setMaxResults($limit)
-            ->orderBy('d.iid', 'DESC');
+            ->orderBy($orderField, 'DESC');
 
         $docs = $qb->getQuery()->getResult();
         $out  = [];
@@ -126,8 +172,9 @@ if ($action === 'list_documents') {
                 continue;
             }
 
+            $docId = $doc instanceof CDocument ? $doc->getIid() : $doc->getId();
             $out[] = [
-                'id'       => $doc->getIid(),
+                'id'       => $docId,
                 'url'      => $diskPath,
                 'filename' => $orig,
                 'size'     => @filesize($diskPath) ?: null,
@@ -141,6 +188,80 @@ if ($action === 'list_documents') {
         echo json_encode(['error' => 'Internal error']);
     }
     exit;
+}
+
+/**
+ * Normalize a DB id list to unique positive integers.
+ */
+function plugin_normalize_int_ids(array $ids): array
+{
+    $ids = array_map('intval', $ids);
+    $ids = array_filter($ids, static fn (int $id): bool => $id > 0);
+
+    return array_values(array_unique($ids));
+}
+
+/**
+ * Remove all IMS/LTI shortcuts and tool resource nodes before uninstalling the plugin.
+ *
+ * This keeps disable non-destructive, while uninstall performs a real cleanup.
+ */
+function plugin_cleanup_imslti_data_before_uninstall(Connection $connection): void
+{
+    $externalToolNodeIds = $connection->fetchFirstColumn(
+        'SELECT resource_node_id
+         FROM lti_external_tool
+         WHERE resource_node_id IS NOT NULL'
+    );
+
+    $externalToolNodeIds = plugin_normalize_int_ids($externalToolNodeIds);
+
+    if (empty($externalToolNodeIds)) {
+        return;
+    }
+
+    $shortcutNodeIds = $connection->fetchFirstColumn(
+        'SELECT resource_node_id
+         FROM c_shortcut
+         WHERE shortcut_node_id IN (?)',
+        [$externalToolNodeIds],
+        [ArrayParameterType::INTEGER]
+    );
+
+    $shortcutNodeIds = plugin_normalize_int_ids($shortcutNodeIds);
+
+    $connection->beginTransaction();
+
+    try {
+        // Remove shortcut rows first.
+        if (!empty($shortcutNodeIds)) {
+            $connection->executeStatement(
+                'DELETE FROM c_shortcut WHERE resource_node_id IN (?)',
+                [$shortcutNodeIds],
+                [ArrayParameterType::INTEGER]
+            );
+
+            // Remove the resource nodes that belonged to those shortcuts.
+            $connection->executeStatement(
+                'DELETE FROM resource_node WHERE id IN (?)',
+                [$shortcutNodeIds],
+                [ArrayParameterType::INTEGER]
+            );
+        }
+
+        // Remove LTI tool resource nodes.
+        // This will also cascade-delete lti_external_tool rows.
+        $connection->executeStatement(
+            'DELETE FROM resource_node WHERE id IN (?)',
+            [$externalToolNodeIds],
+            [ArrayParameterType::INTEGER]
+        );
+
+        $connection->commit();
+    } catch (\Throwable $e) {
+        $connection->rollBack();
+        throw $e;
+    }
 }
 
 try {
@@ -213,9 +334,13 @@ try {
             break;
 
         case 'uninstall':
+            if ('ImsLti' === $pluginTitle) {
+                plugin_cleanup_imslti_data_before_uninstall($em->getConnection());
+            }
+
             $appPlugin->uninstall($pluginTitle);
 
-            $pluginEntity->uninstall($currentAccessUrl);
+            $pluginEntity->setInstalled(false);
             $em->persist($pluginEntity);
             break;
 
@@ -238,7 +363,7 @@ try {
 
     $em->flush();
 
-    if (in_array($action, ['enable','disable','uninstall'], true)) {
+    if (in_array($action, ['enable','disable'], true)) {
         try {
             $info = $appPlugin->getPluginInfo($pluginTitle, true);
             $pluginClass = $info['plugin_class'] ?? null;
@@ -259,6 +384,14 @@ try {
                 }
             }
 
+            if ($instance) {
+                if (method_exists($instance, 'syncPlatformKeyPairWithPluginState')) {
+                    $instance->syncPlatformKeyPairWithPluginState();
+                } elseif (method_exists($instance, 'syncPlatformKeyWithPluginState')) {
+                    $instance->syncPlatformKeyWithPluginState();
+                }
+            }
+
             // If it is a course plugin, propagate enable/disable to all courses
             if ($instance && !empty($instance->isCoursePlugin)) {
                 if ($action === 'enable') {
@@ -270,6 +403,23 @@ try {
         } catch (\Throwable $postEx) {
             error_log('[plugin.ajax post] '.$postEx->getMessage());
         }
+    }
+
+    if ('uninstall' === $action && null !== $pluginEntity->getId()) {
+        $pluginId = $pluginEntity->getId();
+
+        $deletedRows = $em->getConnection()->executeStatement(
+            'DELETE FROM access_url_rel_plugin WHERE plugin_id = :pluginId',
+            ['pluginId' => $pluginId]
+        );
+
+        error_log(
+            sprintf(
+                '[plugin.ajax uninstall] Deleted %d access_url_rel_plugin row(s) for plugin_id %d',
+                $deletedRows,
+                $pluginId
+            )
+        );
     }
 
     echo json_encode([

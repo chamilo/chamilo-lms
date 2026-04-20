@@ -1,67 +1,114 @@
 <template>
   <BaseCard
-    class="my-skills-card bg-white"
     plain
+    class="overflow-hidden bg-white"
   >
     <template #header>
-      <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t("Skills") }}</h2>
+      <div class="border-b border-gray-25 bg-gray-15 px-4 py-3">
+        <h2 class="text-xl font-semibold text-gray-90">{{ t("Skills") }}</h2>
       </div>
     </template>
-    <hr class="-mt-2 mb-4 -mx-4" />
-    <div v-if="skills.length > 0">
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+
+    <div class="px-4 py-4">
+      <div
+        v-if="skills.length > 0"
+        class="grid grid-cols-2 gap-3"
+      >
         <a
           v-for="skill in skills"
           :key="skill.id"
           :href="issuedAllUrl(skill.id)"
-          class="group flex flex-col items-center text-center p-3 rounded-2xl border border-gray-100 bg-white hover:bg-gray-15 hover:border-gray-200 transition"
           :title="skill.name"
+          class="group flex flex-col items-center rounded-2xl border border-gray-25 bg-white p-3 text-center transition hover:bg-support-2"
         >
-          <div
-            class="w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center rounded-2xl bg-gray-15 border border-gray-100 shadow-sm overflow-hidden"
+          <span
+            class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-gray-25 bg-gray-15 shadow-sm"
           >
             <img
               :src="skill.image || defaultBadge"
               :alt="skill.name"
-              class="w-12 h-12 sm:w-14 sm:h-14 object-contain"
+              class="h-12 w-12 object-contain"
               loading="lazy"
               @error="onBadgeError"
             />
-          </div>
+          </span>
 
-          <div class="mt-2 text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
+          <span class="mt-2 line-clamp-2 text-body-2 font-semibold leading-snug text-gray-90">
             {{ skill.name }}
-          </div>
+          </span>
 
-          <div class="mt-1 text-xs text-gray-600 group-hover:text-gray-700">
+          <span class="mt-1 text-tiny text-gray-50 transition group-hover:text-gray-90">
             {{ t("View badge") }}
-          </div>
+          </span>
         </a>
       </div>
-    </div>
 
-    <div
-      v-else
-      class="py-2"
-    >
-      <p class="text-sm text-gray-600">{{ t("Without achieved skills") }}</p>
-    </div>
-    <div class="mt-4 flex flex-col sm:flex-row gap-2">
-      <a
-        v-if="canSeeSkillWheel"
-        :href="skillsWheelUrl"
-        class="inline-flex items-center justify-center w-full px-3 py-2 rounded-xl text-sm font-semibold border border-gray-200 bg-white hover:bg-gray-15 transition"
+      <div
+        v-else
+        class="rounded-2xl border border-dashed border-gray-25 bg-gray-15 px-4 py-7 text-center"
       >
-        {{ t("Skills wheel") }}
-      </a>
+        <div
+          class="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-gray-25 bg-white shadow-sm"
+        >
+          <i
+            class="mdi mdi-star-circle-outline text-2xl text-gray-50"
+            aria-hidden="true"
+          ></i>
+        </div>
 
-      <a
-        :href="skillsRankingUrl"
-        class="inline-flex items-center justify-center w-full px-3 py-2 rounded-xl text-sm font-semibold border border-gray-200 bg-white hover:bg-gray-15 transition"
-      >
-        {{ t("Your skill ranking") }}
-      </a>
+        <p class="mt-3 text-body-2 text-gray-50">
+          {{ t("Without achieved skills") }}
+        </p>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 gap-3">
+        <a
+          v-if="canSeeSkillWheel"
+          :href="skillsWheelUrl"
+          :title="t('Skills wheel')"
+          class="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-gray-25 bg-gray-15 px-4 py-3 transition hover:bg-support-2"
+        >
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-sm">
+            <i
+              class="mdi mdi-chart-donut text-xl"
+              aria-hidden="true"
+            ></i>
+          </span>
+
+          <span class="min-w-0 text-left">
+            <span class="block text-body-2 font-semibold leading-snug text-gray-90">
+              {{ t("Skills wheel") }}
+            </span>
+            <span class="mt-1 block text-tiny text-gray-50">
+              {{ t("Visual overview of your skills") }}
+            </span>
+          </span>
+        </a>
+
+        <a
+          :href="skillsRankingUrl"
+          :title="t('Your skill ranking')"
+          class="group flex min-h-[84px] items-center gap-3 rounded-2xl border border-gray-25 bg-gray-15 px-4 py-3 transition hover:bg-support-2"
+        >
+          <span
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-secondary shadow-sm"
+          >
+            <i
+              class="mdi mdi-podium-gold text-xl"
+              aria-hidden="true"
+            ></i>
+          </span>
+
+          <span class="min-w-0 text-left">
+            <span class="block text-body-2 font-semibold leading-snug text-gray-90">
+              {{ t("Your skill ranking") }}
+            </span>
+            <span class="mt-1 block text-tiny text-gray-50">
+              {{ t("Compare your progress") }}
+            </span>
+          </span>
+        </a>
+      </div>
     </div>
   </BaseCard>
 </template>
@@ -84,15 +131,9 @@ const { isAdmin, isHRM, isSessionAdmin } = storeToRefs(securityStore)
 
 const canSeeSkillWheel = computed(() => isAdmin.value || isHRM.value || isSessionAdmin.value)
 const defaultBadge = "/img/icons/32/badges-default.png"
-const skillsRankingUrl = computed(() => {
-  const origin = `${window.location.pathname}${window.location.search}`
-  const params = new URLSearchParams({ origin, from: "social" })
-  return `/main/social/skills_ranking.php?${params.toString()}`
-})
+const skillsRankingUrl = computed(() => "/skill/ranking")
 
-// Wheel URL with origin so the wheel can return back
 const skillsWheelUrl = computed(() => {
-  // Use current path+query as origin (no hash)
   const origin = `${window.location.pathname}${window.location.search}`
   const params = new URLSearchParams({ origin })
   return `/skill/wheel?${params.toString()}`
@@ -103,6 +144,8 @@ watch(
   (userId) => {
     if (userId) {
       fetchSkills(userId)
+    } else {
+      skills.value = []
     }
   },
   { immediate: true },
@@ -118,15 +161,20 @@ function issuedAllUrl(skillId) {
 }
 
 function normalizeImageUrl(url) {
-  if (!url || typeof url !== "string") return ""
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) return url
+  if (!url || typeof url !== "string") {
+    return ""
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+    return url
+  }
+
   return `/${url}`
 }
 
-function onBadgeError(e) {
-  // Prevent infinite loop if default badge is missing
-  if (e?.target?.src && !e.target.src.endsWith(defaultBadge)) {
-    e.target.src = defaultBadge
+function onBadgeError(event) {
+  if (event?.target?.src && !event.target.src.endsWith(defaultBadge)) {
+    event.target.src = defaultBadge
   }
 }
 
@@ -135,10 +183,10 @@ async function fetchSkills(userId) {
     const response = await axios.get(`${ENTRYPOINT}users/${userId}/skills`)
     const data = Array.isArray(response.data) ? response.data : []
 
-    skills.value = data.map((s) => {
-      const id = s.id ?? s.skillId ?? s.skill_id
-      const name = s.name ?? s.title ?? ""
-      const image = normalizeImageUrl(s.image ?? s.badge ?? s.illustrationUrl ?? "")
+    skills.value = data.map((skill) => {
+      const id = skill.id ?? skill.skillId ?? skill.skill_id
+      const name = skill.name ?? skill.title ?? ""
+      const image = normalizeImageUrl(skill.image ?? skill.badge ?? skill.illustrationUrl ?? "")
 
       return { id, name, image }
     })

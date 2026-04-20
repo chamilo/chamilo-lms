@@ -1,12 +1,15 @@
 #app {
-  @apply overflow-hidden
-    sm:overflow-auto;
+  @apply overflow-auto;
+
+  &:has(.p-menubar-mobile.p-menubar-mobile-active) {
+    @apply overflow-hidden;
+  }
 }
 
 .app-main {
   @apply flex flex-col h-screen transition-[margin-left] duration-150 pb-4 px-4
-    sm:min-h-screen
-    md:h-auto md:pb-8 md:px-8;
+    sm:h-auto sm:min-h-dvh
+    md:pb-8 md:px-8;
   padding-top: calc(4.5rem + 1rem + 1px);
 
   &:not(.app-main--no-sidebar) {
@@ -18,7 +21,7 @@
   @apply overflow-auto;
 
   .app-main {
-    @apply h-auto;
+    @apply min-h-dvh h-auto;
   }
 
   .app-main:not(.app-main--no-sidebar) {

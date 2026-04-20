@@ -456,6 +456,30 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function getResourcesIgnoringLinks(?ResourceNode $parentNode = null): QueryBuilder
+    {
+        $resourceTypeName = $this->getResourceTypeName();
+
+        $qb = $this->createQueryBuilder('resource')
+            ->select('resource')
+            ->innerJoin('resource.resourceNode', 'node')
+            ->innerJoin('node.resourceType', 'type')
+            ->leftJoin('node.resourceFiles', 'file')
+            ->where('type.title = :type')
+            ->setParameter('type', $resourceTypeName, Types::STRING)
+            ->addSelect('node')
+            ->addSelect('type')
+            ->addSelect('file')
+        ;
+
+        if (null !== $parentNode) {
+            $qb->andWhere('node.parent = :parentNode');
+            $qb->setParameter('parentNode', $parentNode);
+        }
+
+        return $qb;
+    }
+
     public function getResourcesByCourse(
         ?Course $course = null,
         ?Session $session = null,

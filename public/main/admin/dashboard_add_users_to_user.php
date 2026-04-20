@@ -25,7 +25,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -460,18 +460,18 @@ $result = Database::query($sql);
         <?php if ($ajax_search) {
                             ?>
             <div class="separate-action">
-                <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+                <button class="btn btn--secondary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
             </div>
         <?php
                         } else {
                             ?>
             <div class="separate-action">
-                <button id="add_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button id="add_user_button" class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
             </div>
             <div class="separate-action">
-                <button id="remove_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button id="remove_user_button" class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>

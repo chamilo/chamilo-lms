@@ -9,7 +9,7 @@
       :disabled="loadingFriends"
       :label="t('Add friend')"
       icon="user-add"
-      type="black"
+      type="success"
       @click="goToAdd"
     />
 
@@ -106,7 +106,7 @@ import Skeleton from "primevue/skeleton"
 import DataView from "primevue/dataview"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import userRelUserService from "../../services/userreluser"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
@@ -119,7 +119,7 @@ const loadingFriends = ref(true)
 const notification = useNotification()
 const { relativeDatetime } = useFormatDate()
 const router = useRouter()
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 
 const requestList = ref()
 
@@ -244,9 +244,7 @@ const goToAdd = () => {
 }
 
 function onClickDeleteFriend(friendship) {
-  confirm.require({
-    icon: "mdi mdi-alert-outline",
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t("Are you sure to delete the friendship?"),
     accept: async () => {
       await userRelUserService.del(friendship)

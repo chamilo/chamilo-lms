@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
+use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1236,6 +1237,90 @@ switch ($action) {
 
         echo $html;
         break;
+    case 'list_aiken_documents':
+        header('Content-Type: application/json');
+
+        if (!api_is_allowed_to_edit(null, true)) {
+            echo json_encode(['documents' => [], 'error' => 'Forbidden']);
+            exit;
+        }
+
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        $courseId = api_get_course_int_id();
+        if (empty($courseId)) {
+            echo json_encode(['documents' => []]);
+            exit;
+        }
+
+        $em = Database::getManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb
+            ->select('DISTINCT d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->innerJoin('rn.resourceFiles', 'rf')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('d.filetype = :fileType')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->setParameter('fileType', 'file')
+            ->setParameter('courseId', (int) $courseId)
+            ->orderBy('d.iid', 'DESC')
+        ;
+
+        $documents = [];
+        $results = $qb->getQuery()->getResult();
+
+        foreach ($results as $doc) {
+            if (!$doc instanceof CDocument) {
+                continue;
+            }
+
+            $node = $doc->getResourceNode();
+            if (null === $node) {
+                continue;
+            }
+
+            $files = $node->getResourceFiles();
+            if ($files->isEmpty()) {
+                continue;
+            }
+
+            /** @var ResourceFile|null $file */
+            $file = $files->first();
+            if (null === $file) {
+                continue;
+            }
+
+            $filename = (string) $file->getOriginalName();
+            $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+            // Aiken from document currently supports PDF/TXT in the backend flow.
+            if (!in_array($extension, ['pdf', 'txt'], true)) {
+                continue;
+            }
+
+            $title = trim((string) $node->getTitle());
+            if ('' === $title) {
+                $title = $filename;
+            }
+
+            $documents[] = [
+                'document_id' => (int) $doc->getIid(),
+                'resource_file_id' => (int) $file->getId(),
+                'resource_node_id' => (int) $node->getId(),
+                'title' => $title,
+                'filename' => $filename,
+                'mime_type' => (string) $file->getMimeType(),
+                'extension' => $extension,
+                'size' => null,
+            ];
+        }
+
+        echo json_encode(['documents' => $documents]);
+        exit;
     default:
         echo '';
 }

@@ -38,6 +38,7 @@ $form->addDateRangePicker(
         'format'          => 'YYYY-MM-DD',
         'timePicker'      => 'false',
         'validate_format' => 'Y-m-d',
+        'openOnFocus'     => 'false',
     ]
 );
 
@@ -105,7 +106,7 @@ if ($form->validate()) {
     // Result table
     // -------------------------------------------------------------------------
     $table = new HTML_Table([
-        'class' => 'min-w-full text-sm border border-gray-200 rounded-xl overflow-hidden',
+        'class' => 'table table-bordered',
     ]);
 
     $headers = [
@@ -127,7 +128,7 @@ if ($form->validate()) {
         $table->updateCellAttributes(
             $row,
             $column,
-            'class="bg-slate-50 text-xs font-semibold text-gray-700 text-center px-2 py-1 whitespace-nowrap"'
+            'style="background:#f8fafc; font-size:0.75rem; font-weight:600; text-align:center; padding:4px 8px; white-space:nowrap;"'
         );
         $column++;
     }
@@ -143,7 +144,7 @@ if ($form->validate()) {
         $table->updateCellAttributes(
             $row,
             $column,
-            'class="align-top px-2 py-1 text-sm text-gray-900 whitespace-nowrap"'
+            'style="vertical-align:top; padding:4px 8px; font-size:0.875rem; white-space:nowrap;"'
         );
         $column++;
 
@@ -152,7 +153,7 @@ if ($form->validate()) {
         $table->updateCellAttributes(
             $row,
             $column,
-            'class="align-top px-2 py-1 text-center text-sm text-gray-900 whitespace-nowrap"'
+            'style="vertical-align:top; padding:4px 8px; text-align:center; font-size:0.875rem; white-space:nowrap;"'
         );
         $column++;
 
@@ -180,7 +181,7 @@ if ($form->validate()) {
                         $name,
                         $url.'id_session='.$session['session_id'],
                         [
-                            'class'  => 'inline-flex items-center justify-center rounded-full bg-emerald-500 px-2 py-1 text-xs text-white',
+                            'style'  => 'display:inline-block; background:green; color:#fff; padding:2px 6px; border-radius:3px; font-size:0.75rem; word-break:break-word;',
                             'target' => '_blank',
                             'title'  => addslashes($session['title']),
                         ]
@@ -189,7 +190,7 @@ if ($form->validate()) {
 
                 $value = implode('<br /><br />', $sessionArray);
 
-                $value = '<div class="inline-block w-32 overflow-hidden text-ellipsis text-xs text-white">'.
+                $value = '<div style="width:120px; overflow:hidden;">'.
                     $value.
                     '</div>';
 
@@ -197,18 +198,18 @@ if ($form->validate()) {
                 $table->updateCellAttributes(
                     $row,
                     $i,
-                    'class="bg-emerald-50 align-top px-2 py-1 text-center"'
+                    'style="background:green; vertical-align:top; padding:4px 8px; text-align:center;"'
                 );
             } else {
                 $table->setCellContents(
                     $row,
                     $i,
-                    '<div class="inline-block w-32 h-4"></div>'
+                    '<div style="width:120px;"></div>'
                 );
                 $table->updateCellAttributes(
                     $row,
                     $i,
-                    'class="align-top px-2 py-1 text-center"'
+                    'style="vertical-align:top; padding:4px 8px; text-align:center;"'
                 );
             }
 

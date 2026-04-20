@@ -1040,7 +1040,7 @@ HTML;
         $i = 1;
         foreach ($headers as $item) {
             $isActive = (empty($selected) && 1 === $i) || (!empty($selected) && (int) $selected === $i);
-            $activeClass = $isActive ? ' active' : '';
+            $activeClass = $isActive ? 'active' : '';
             $ariaSelected = $isActive ? 'true' : 'false';
 
             $item = self::tag(
@@ -1048,7 +1048,7 @@ HTML;
                 $item,
                 [
                     'href' => 'javascript:void(0)',
-                    'class' => 'nav-item nav-link text-primary'.$activeClass,
+                    'class' => 'nav-item nav-link '.$activeClass,
                     '@click' => "openTab = $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
@@ -1067,7 +1067,7 @@ HTML;
             $lis,
             [
                 'id' => 'nav_'.$id,
-                'class' => 'nav nav-tabs bg-white px-3 pt-3 border-bottom-0',
+                'class' => 'nav nav-tabs bg-white',
                 'role' => 'tablist',
             ]
         );
@@ -1113,7 +1113,7 @@ HTML;
             $attributes['class'] = '';
         }
         // Shadow, rounded corners, small top margin
-        $attributes['class'] .= ' tab_wrapper shadow-sm rounded mt-3';
+        $attributes['class'] .= ' tab_wrapper shadow-sm rounded';
 
         $initialTab = !empty($selected) ? (int) $selected : 1;
         $attributes['x-data'] = '{ openTab: '.$initialTab.' }';
@@ -1629,9 +1629,12 @@ HTML;
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return $subTitle;
+        return '
+            <div class="section-header section-header--'.$size.'">
+              '.$subTitle = self::tag($size, Security::remove_XSS($title), $attributes).'
+            </div>
+        ';
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -1796,32 +1799,36 @@ HTML;
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
         $id = uniqid('dropdown', false);
+        $menuPositionClass = $alignToRight ? 'right-0' : 'left-0';
+
         $html = '
-        <div class="dropdown inline-block relative grow">
-            <button
-                id="'.$id.'"
-                type="button"
-                class="btn btn--plain-outline btn--sm"
-                aria-expanded="false"
-                aria-haspopup="true"
-                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
-            >
-              '.$title.'
-              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <div class="dropdown inline-block relative">
+        <button
+            id="'.$id.'"
+            type="button"
+            class="btn btn--plain-outline btn--sm whitespace-nowrap"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
+        >
+            <span class="whitespace-nowrap">'.$title.'</span>
+            <svg class="h-5 w-5 inline-block align-middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </button>
-            <div
-                id="'.$id.'_menu"
-                class="dropdown-menu hidden absolute mt-1 py-2 bg-white border-0 shadow-xl rounded-lg "
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="menu-button"
-                tabindex="-1"
-            >';
+            </svg>
+        </button>
+        <div
+            id="'.$id.'_menu"
+            class="dropdown-menu hidden absolute '.$menuPositionClass.' mt-1 py-2 bg-white border-0 shadow-xl rounded-lg z-50 flex flex-col items-stretch"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="'.$id.'"
+            tabindex="-1"
+            style="min-width: 360px; max-width: 90vw;"
+        >';
+
         foreach ($elements as $item) {
             $attrs = [
-                'class' => 'rounded-none py-1 px-4 transition-none select-none w-full text-start text-body-2 gap-1 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1',
+                'class' => 'block w-full rounded-none py-2 px-4 transition-none text-start text-body-2 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1 whitespace-nowrap',
                 'role' => 'menuitem',
                 'onclick' => $item['onclick'] ?? '',
                 'data-action' => $item['data-action'] ?? '',
@@ -1829,17 +1836,25 @@ HTML;
             ];
 
             if (empty($item['type'])) {
-                $html .= self::url($item['title'], $item['href'], $attrs);
-            } elseif('button' === $item['type']) {
+                $html .= self::url(
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
+                    $item['href'],
+                    $attrs
+                );
+            } elseif ('button' === $item['type']) {
                 $attrs['type'] = 'button';
-
-                $html .= self::button('', $item['title'], $attrs);
+                $html .= self::button(
+                    '',
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
+                    $attrs
+                );
             }
         }
+
         $html .= '
-            </div>
-            </div>
-        ';
+        </div>
+    </div>
+    ';
 
         return $html;
     }
@@ -2198,17 +2213,33 @@ HTML;
         array $attributes = [],
         $includeText = true
     ) {
-        $buttonClass = "btn btn--secondary-outline";
-        if (!empty($type)) {
-            $buttonClass = "btn btn--$type";
-        }
-        //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $baseClass = 'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-body-2 font-semibold shadow-sm transition hover:opacity-90';
+
+        $colorClasses = [
+            'primary' => 'bg-primary text-white',
+            'secondary' => 'bg-secondary text-secondary-button-text',
+            'success' => 'bg-success text-success-button-text',
+            'danger' => 'bg-danger text-danger-button-text',
+            'warning' => 'bg-warning text-warning-button-text',
+            'info' => 'bg-info text-info-button-text',
+            'secondary-outline' => 'border border-gray-25 bg-white text-gray-90 hover:border-primary hover:text-primary',
+        ];
+
+        $resolvedType = $type ?: 'secondary-outline';
+        $buttonClass = $baseClass.' '.($colorClasses[$resolvedType] ?? $colorClasses['secondary-outline']);
+
         $icon = self::getMdiIcon($icon);
-        $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        $attributes['class'] = isset($attributes['class'])
+            ? $buttonClass.' '.$attributes['class']
+            : $buttonClass;
+
         $attributes['title'] = $attributes['title'] ?? $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">'.$text.'</span>';
+        } else {
+            $text = '<span>'.$text.'</span>';
         }
 
         return self::url("$icon $text", $url, $attributes);
@@ -2702,7 +2733,7 @@ HTML;
         $content .= self::url(
             '<em class="fa fa-plus"></em> '.$buttonTitle,
             $url,
-            ['class' => 'btn btn--primary']
+            ['class' => 'btn btn--success']
         );
         $content .= '</div>';
         $content .= '</div>';

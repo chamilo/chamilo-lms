@@ -31,6 +31,7 @@ final class Events
 
     public const EXERCISE_QUESTION_ANSWERED = 'chamilo.event.question_answered';
     public const EXERCISE_ENDED = 'chamilo.event.exercise_ended';
+    public const EXERCISE_REPORT_ACTION = 'chamilo.event.exercise_report_action';
 
     public const PORTFOLIO_ITEM_ADDED = 'chamilo.event.portfolio_item_added';
     public const PORTFOLIO_ITEM_EDITED = 'chamilo.event.portfolio_item_edited';
@@ -48,4 +49,5 @@ final class Events
     public const NOTIFICATION_TITLE_FORMATTED = 'chamilo_hook_event.notification_title_formatted';
 
     public const ADMIN_BLOCK_DISPLAYED = 'chamilo.event.admin_block_displayed';
+    public const COURSE_ACCESS_CHECK = 'chamilo.course_access_check';
 }

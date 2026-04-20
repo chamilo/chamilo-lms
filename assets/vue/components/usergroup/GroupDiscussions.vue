@@ -5,7 +5,7 @@
         :label="t('Create thread')"
         class="create-thread-btn absolute right-0"
         icon="add-topic"
-        type="button"
+        type="success"
         @click="showCreateThreadDialog = true"
       />
     </div>
@@ -73,7 +73,7 @@
       <BaseButton
         class="mt-8"
         icon="save"
-        label="Send message"
+        :label="t('Send message')"
         type="button"
         @click="handleSubmit"
       />

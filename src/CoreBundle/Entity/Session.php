@@ -143,6 +143,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Table(name: 'session')]
 #[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
+#[ORM\Index(columns: ['access_end_date'], name: 'idx_session_access_end_date')]
+#[ORM\Index(columns: ['status'], name: 'idx_session_status')]
+#[ORM\Index(columns: ['parent_id'], name: 'idx_session_parent_id')]
+#[ORM\Index(columns: ['session_category_id'], name: 'idx_session_category_id')]
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('title')]
@@ -1534,11 +1538,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return (int) round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
     }
 
-    private function getAccessVisibilityByDuration(User $user): int
+    private function getAccessVisibilityByDuration(User $user, bool $coachAccessAfterDurationEnd = false): int
     {
         // Session duration per student.
         if ($this->getDuration() > 0) {
-            if ($this->hasCoach($user)) {
+            // If the setting is enabled, coaches always have access regardless of duration end.
+            if ($coachAccessAfterDurationEnd && $this->hasCoach($user)) {
                 return self::AVAILABLE;
             }
 
@@ -1595,13 +1600,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return self::AVAILABLE;
     }
 
-    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true): int
+    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true, bool $coachAccessAfterDurationEnd = false): int
     {
         if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
             $this->accessVisibility = self::AVAILABLE;
         } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
             // I don't care the session visibility.
-            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user, $coachAccessAfterDurationEnd);
         } else {
             $this->accessVisibility = $this->getAcessVisibilityByDates($user);
         }

@@ -18,7 +18,7 @@ $request = Container::getRequest();
 $response = new JsonResponse();
 
 try {
-    if ($plugin->get('enabled') !== 'true' ||
+    if (!$plugin->isEnabledForCurrentAccessUrl() ||
         $request->getMethod() !== Request::METHOD_POST ||
         $request->server->get('CONTENT_TYPE') !== 'application/x-www-form-urlencoded'
     ) {

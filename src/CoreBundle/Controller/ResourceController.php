@@ -29,9 +29,11 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use enshrined\svgSanitize\Sanitizer as SvgSanitizer;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,6 +43,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
@@ -48,6 +51,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
 use const PHP_EOL;
 
 /**
@@ -195,11 +202,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
-    public function link(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository): RedirectResponse
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $id = $request->get('id');
+    public function link(
+        Request $request,
+        RouterInterface $router,
+        CLinkRepository $cLinkRepository,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse {
+        $tool = (string) $request->get('tool');
+        $type = (string) $request->get('type');
+        $id = (int) $request->get('id');
+
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -208,24 +220,48 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         if ('course_tool' === $tool && 'links' === $type) {
             $cLink = $cLinkRepository->findOneBy(['resourceNode' => $resourceNode]);
-            if ($cLink) {
-                $url = $cLink->getUrl();
 
-                return $this->redirect($url);
+            if ($cLink) {
+                return $this->redirect($cLink->getUrl());
             }
 
             throw new FileNotFoundException('CLink not found for the given resource node');
-        } else {
-            $repo = $this->getRepositoryFromRequest($request);
-            if ($repo instanceof ResourceWithLinkInterface) {
-                $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
-                $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
+        }
+
+        if ('external_tools' === $type) {
+            /** @var ExternalTool|null $externalTool */
+            $externalTool = $entityManager
+                ->getRepository(ExternalTool::class)
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
+
+            if ($externalTool) {
+                $query = array_filter(
+                    array_merge(
+                        ['id' => $externalTool->getId()],
+                        $this->getCourseUrlQueryToArray()
+                    ),
+                    static fn ($value): bool => null !== $value && '' !== $value
+                );
+
+                $url = api_get_path(WEB_PLUGIN_PATH).'ImsLti/start.php?'.http_build_query($query);
 
                 return $this->redirect($url);
             }
 
             $this->abort('No redirect');
         }
+
+        $repo = $this->getRepositoryFromRequest($request);
+
+        if ($repo instanceof ResourceWithLinkInterface) {
+            $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
+            $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
+
+            return $this->redirect($url);
+        }
+
+        $this->abort('No redirect');
     }
 
     /**
@@ -562,6 +598,32 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         }
 
+        // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
+        // This covers files uploaded before the MIME-type allowlist was introduced.
+        $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
+
+        // SVG: sanitize before serving in any mode (view or download).
+        // Glide is raster-only and cannot process SVG; sanitization strips embedded scripts regardless of how the file was stored.
+        if ('image/svg+xml' === $mimeType) {
+            $raw = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
+            $content = (new SvgSanitizer())->sanitize((string) $raw);
+
+            if (false === $content || '' === $content) {
+                throw new BadRequestHttpException('Invalid SVG file');
+            }
+
+            $response = new Response($content);
+            $dispositionMode = 'download' === $mode
+                ? ResponseHeaderBag::DISPOSITION_ATTACHMENT
+                : ResponseHeaderBag::DISPOSITION_INLINE;
+            $disposition = $response->headers->makeDisposition($dispositionMode, $fileName);
+            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set('Content-Type', 'image/svg+xml');
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+
+            return $response;
+        }
+
         switch ($mode) {
             case 'download':
                 $forceDownload = true;
@@ -571,6 +633,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             case 'show':
             default:
                 $forceDownload = false;
+
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {
                     $glide = $this->getGlide();
@@ -603,7 +666,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 }
 
                 // Modify the HTML content before displaying it.
-                if (str_contains($mimeType, 'html')) {
+                if (str_contains($mimeType, 'html') && !$isSocialAttachment) {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
 
                     if (null !== $allUserInfo) {
@@ -622,18 +685,113 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // Existing translate_html logic
+                    // Translate HTML: show only spans matching the user language.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
+
                         if (null !== $user) {
-                            // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
-                            $userJson = json_encode(['locale' => $user->getLocale()]);
-                            $js = $this->renderView(
-                                '@ChamiloCore/Layout/document.html.twig',
-                                ['breadcrumb' => '', 'user_json' => $userJson]
+                            $locale = (string) $user->getLocale();
+                            $localeJson = json_encode(
+                                $locale,
+                                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
                             );
-                            // Insert inside the head tag.
-                            $content = str_replace('</head>', $js.'</head>', $content);
+
+                            $js = <<<HTML
+                    <script>
+                    (function () {
+                        var userLocale = {$localeJson};
+
+                        function normalizeLocale(locale) {
+                            return String(locale || "").replace("-", "_");
+                        }
+
+                        function buildLocaleCandidates(locale) {
+                            var normalizedLocale = normalizeLocale(locale);
+                            var isoCode = normalizedLocale.split("_")[0];
+                            var candidates = [];
+
+                            function addCandidate(value) {
+                                if (value && candidates.indexOf(value) === -1) {
+                                    candidates.push(value);
+                                }
+                            }
+
+                            addCandidate(isoCode);
+                            addCandidate(normalizedLocale);
+                            addCandidate(normalizedLocale.replace("_", "-"));
+
+                            return candidates;
+                        }
+
+                        function findByLang(selector, candidates) {
+                            for (var i = 0; i < candidates.length; i++) {
+                                var matches = document.querySelectorAll(
+                                    selector.replace("{lang}", candidates[i])
+                                );
+
+                                if (matches.length > 0) {
+                                    return matches;
+                                }
+                            }
+
+                            return [];
+                        }
+
+                        function hideMatches(matches) {
+                            for (var i = 0; i < matches.length; i++) {
+                                matches[i].style.display = "none";
+                            }
+                        }
+
+                        function showMatches(matches) {
+                            for (var i = 0; i < matches.length; i++) {
+                                matches[i].classList.remove("hidden");
+                                matches[i].style.display = "";
+                            }
+                        }
+
+                        function applyTranslateHtml() {
+                            var localeCandidates = buildLocaleCandidates(userLocale);
+                            var translateElements = document.querySelectorAll(".mce-translatehtml");
+
+                            if (translateElements.length > 0) {
+                                hideMatches(translateElements);
+                                showMatches(
+                                    findByLang('[lang="{lang}"].mce-translatehtml', localeCandidates)
+                                );
+                            }
+
+                            var legacyElements = document.querySelectorAll(
+                                'span[lang]:not(.mce-translatehtml)'
+                            );
+
+                            if (legacyElements.length > 0) {
+                                hideMatches(legacyElements);
+                                showMatches(
+                                    findByLang(
+                                        'span[lang="{lang}"]:not(.mce-translatehtml)',
+                                        localeCandidates
+                                    )
+                                );
+                            }
+                        }
+
+                        if (document.readyState === "loading") {
+                            document.addEventListener("DOMContentLoaded", applyTranslateHtml);
+                        } else {
+                            applyTranslateHtml();
+                        }
+                    })();
+                    </script>
+                    HTML;
+
+                            if (false !== stripos($content, '</head>')) {
+                                $content = str_ireplace('</head>', $js.'</head>', $content);
+                            } elseif (false !== stripos($content, '</body>')) {
+                                $content = str_ireplace('</body>', $js.'</body>', $content);
+                            } else {
+                                $content .= $js;
+                            }
                         }
                     }
                     $response->setContent($content);

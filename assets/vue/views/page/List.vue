@@ -63,23 +63,33 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="text-right space-x-2">
-          <Button
+          <BaseButton
             v-if="securityStore.isAuthenticated"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-pencil"
+            :label="t('Edit')"
+            icon="edit"
+            only-icon
+            size="small"
+            type="secondary-text"
             @click="goToEditItem(slotProps.data)"
           />
-          <Button
+
+          <BaseButton
             v-if="securityStore.isAuthenticated"
-            class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-            icon="mdi mdi-delete"
+            :label="t('Delete')"
+            icon="delete"
+            only-icon
+            size="small"
+            type="danger-text"
             @click="confirmDeleteItem(slotProps.data)"
           />
-          <Button
+
+          <BaseButton
             v-if="slotProps.data.enabled && slotProps.data.slug"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            icon="mdi mdi-link-variant"
-            :title="t('Show public link')"
+            :label="t('Show public link')"
+            icon="link"
+            only-icon
+            size="small"
+            type="tertiary-text"
             @click="showPublicLinkDialog(slotProps.data)"
           />
         </div>
@@ -95,7 +105,7 @@
     class="p-fluid"
   >
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           id="title"
           v-model.trim="item.title"
@@ -108,7 +118,7 @@
           v-text="t('Name')"
           for="title"
         />
-      </div>
+      </FloatLabel>
       <small
         v-if="submitted && !item.title"
         v-text="t('Title is required')"
@@ -117,17 +127,21 @@
     </div>
 
     <template #footer>
-      <Button
+      <BaseButton
         v-if="securityStore.isAuthenticated"
-        class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-        icon="mdi mdi-pencil"
+        :label="t('Edit')"
+        icon="edit"
+        size="small"
+        type="teratiry"
         @click="goToEditItem(slotProps.data)"
       />
 
-      <Button
+      <BaseButton
         v-if="securityStore.isAuthenticated"
-        class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
-        icon="mdi mdi-delete"
+        :label="t('Delete')"
+        icon="delete"
+        size="small"
+        type="danger"
         @click="confirmDeleteItem(slotProps.data)"
       />
     </template>
@@ -141,24 +155,22 @@
   >
     <div class="confirmation-content">
       <i
-        class="pi pi-exclamation-triangle p-mr-3"
+        class="mdi mdi-alert p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item"
-        >{{ t('Are you sure you want to delete {0}?', [item.title]) }}</span
-      >
+      <span v-if="item">{{ t("Are you sure you want to delete {0}?", [item.title]) }}</span>
     </div>
     <template #footer>
-      <Button
+      <BaseButton
         :label="t('No')"
-        class="p-button-outlined p-button-plain"
-        icon="pi pi-times"
+        type="teratiry-text"
+        icon="xmark"
         @click="deleteItemDialog = false"
       />
-      <Button
+      <BaseButton
         :label="t('Yes')"
-        class="p-button-secondary"
-        icon="pi pi-check"
+        type="secondary"
+        icon="check"
         @click="btnCofirmSingleDeleteOnClick"
       />
     </template>
@@ -172,7 +184,7 @@
   >
     <div class="confirmation-content">
       <i
-        class="pi pi-exclamation-triangle p-mr-3"
+        class="mdi mdi-alert p-mr-3"
         style="font-size: 2rem"
       />
       <span
@@ -181,15 +193,15 @@
       />
     </div>
     <template #footer>
-      <Button
+      <BaseButton
         class="p-button-text"
-        icon="pi pi-times"
+        icon="mdi mdi-close"
         label="No"
         @click="deleteMultipleDialog = false"
       />
-      <Button
+      <BaseButton
         class="p-button-text"
-        icon="pi pi-check"
+        icon="mdi mdi-check"
         label="Yes"
         @click="deleteMultipleItems"
       />
@@ -225,6 +237,8 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import FloatLabel from "primevue/floatlabel"
 
 const router = useRouter()
 const store = useStore()

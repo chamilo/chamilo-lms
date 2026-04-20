@@ -9,11 +9,12 @@ use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Define the H5pImportPlugin class as an extension of Plugin
- * install/uninstall the plugin.
+ * H5P import plugin bootstrap.
  */
 class H5pImportPlugin extends Plugin
 {
+    public $isCoursePlugin = true;
+
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
     public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
     public const TBL_H5P_IMPORT_RESULTS = 'plugin_h5p_import_results';
@@ -28,26 +29,26 @@ class H5pImportPlugin extends Plugin
         ];
 
         parent::__construct(
-            '0.1',
+            '0.4',
             'Borja Sanchez',
             $settings
         );
     }
 
-    public static function create(): ?H5pImportPlugin
+    public static function create(): self
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
+    }
+
+    public function get_name(): string
+    {
+        return 'H5pImport';
     }
 
     /**
      * Updates and returns the total duration in the view of an H5P learning path item in a course.
-     *
-     * @param int $lpItemId The ID of the learning path item
-     * @param int $userId   The user ID
-     *
-     * @return int The updated total duration in the learning path item view
      */
     public static function fixTotalTimeInLpItemView(
         int $lpItemId,
@@ -57,41 +58,37 @@ class H5pImportPlugin extends Plugin
 
         $sql = "SELECT iid, score
             FROM $lpItemViewTable
-            WHERE
-                iid = $lpItemId
+            WHERE iid = $lpItemId
             ORDER BY view_count DESC
             LIMIT 1";
         $responseItemView = Database::query($sql);
         $lpItemView = Database::fetch_array($responseItemView);
 
-        // Get the total execution duration of the user in the learning path item view
+        if (empty($lpItemView['iid'])) {
+            return 0;
+        }
+
         $sql = 'SELECT SUM(total_time) AS exe_duration
-            FROM plugin_h5p_import_results
-            WHERE
-                user_id = '.$userId.' AND
-                c_lp_item_view_id = '.$lpItemView['iid'].
-            ' ORDER BY total_time DESC';
+            FROM '.self::TBL_H5P_IMPORT_RESULTS.'
+            WHERE user_id = '.$userId.' AND c_lp_item_view_id = '.$lpItemView['iid'];
         $sumScoreResult = Database::query($sql);
         $durationRow = Database::fetch_assoc($sumScoreResult);
 
         if (!empty($durationRow['exe_duration'])) {
-            // Update the total duration in the learning path item view
             $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
                 SET total_time = '.$durationRow['exe_duration'].'
                 WHERE iid = '.$lpItemView['iid'];
             Database::query($sqlUpdate);
 
             return (int) $durationRow['exe_duration'];
-        } else {
-            // Update c_lp_item_view status
-            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
-                SET status = "not attempted",
-                total_time = 0
-                WHERE iid = '.$lpItemView['iid'];
-            Database::query($sqlUpdate);
-
-            return 0;
         }
+
+        $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
+            SET status = "not attempted", total_time = 0
+            WHERE iid = '.$lpItemView['iid'];
+        Database::query($sqlUpdate);
+
+        return 0;
     }
 
     public function getToolTitle(): string
@@ -105,50 +102,37 @@ class H5pImportPlugin extends Plugin
         return $this->get_title();
     }
 
+    public function isToolEnabled(): bool
+    {
+        return 'true' === (string) $this->get('tool_enable');
+    }
+
     /**
-     * @throws ToolsException
+     * Create only the plugin schema.
      *
+     * Course tool propagation is handled by the Chamilo 2 course-plugin flow.
+     *
+     * @throws ToolsException
      * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
-        if ($em->getConnection()
-            ->createSchemaManager()
-            ->tablesExist(
-                [
-                    self::TBL_H5P_IMPORT,
-                    self::TBL_H5P_IMPORT_LIBRARY,
-                    self::TBL_H5P_IMPORT_RESULTS,
-                ]
-            )
-        ) {
+
+        if ($em->getConnection()->createSchemaManager()->tablesExist([
+            self::TBL_H5P_IMPORT,
+            self::TBL_H5P_IMPORT_LIBRARY,
+            self::TBL_H5P_IMPORT_RESULTS,
+        ])) {
             return;
         }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(H5pImport::class),
-                $em->getClassMetadata(H5pImportLibrary::class),
-                $em->getClassMetadata(H5pImportResults::class),
-            ]
-        );
-        $this->addCourseTools();
-    }
-
-    public function addCourseTool(int $courseId)
-    {
-        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
-        // Otherwise, the link en the course tool will link to "/main/" URL.
-        $this->createLinkToCourseTool(
-            $this->get_lang('plugin_title'),
-            $courseId,
-            'plugin_h5p_import.png',
-            '../plugin/H5pImport/start.php',
-            0,
-            'authoring'
-        );
+        $schemaTool->createSchema([
+            $em->getClassMetadata(H5pImport::class),
+            $em->getClassMetadata(H5pImportLibrary::class),
+            $em->getClassMetadata(H5pImportResults::class),
+        ]);
     }
 
     /**
@@ -158,76 +142,59 @@ class H5pImportPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()
-            ->createSchemaManager()
-            ->tablesExist(
-                [
-                    self::TBL_H5P_IMPORT,
-                    self::TBL_H5P_IMPORT_LIBRARY,
-                    self::TBL_H5P_IMPORT_RESULTS,
-                ]
-            )
-        ) {
-            return;
-        }
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema(
-            [
+        if ($em->getConnection()->createSchemaManager()->tablesExist([
+            self::TBL_H5P_IMPORT,
+            self::TBL_H5P_IMPORT_LIBRARY,
+            self::TBL_H5P_IMPORT_RESULTS,
+        ])) {
+            $schemaTool = new SchemaTool($em);
+            $schemaTool->dropSchema([
                 $em->getClassMetadata(H5pImport::class),
                 $em->getClassMetadata(H5pImportLibrary::class),
                 $em->getClassMetadata(H5pImportResults::class),
-            ]
-        );
-        $this->deleteCourseToolLinks();
+            ]);
+        }
+
+        $this->uninstall_course_fields_in_all_courses();
         $this->removeH5pDirectories();
     }
 
     /**
-     * Perform actions after configuring the H5P import plugin.
-     *
-     * @return H5pImportPlugin The H5P import plugin instance.
+     * Keep course tool links synchronized with the current plugin state.
      */
-    public function performActionsAfterConfigure(): H5pImportPlugin
+    public function performActionsAfterConfigure(): self
     {
-        $this->deleteCourseToolLinks();
-
-        if ('true' === $this->get('tool_enable')) {
-            $this->addCourseTools();
-        }
+        $this->syncCourseToolLinks();
 
         return $this;
     }
 
     /**
-     * Get the view URL for an H5P import.
-     *
-     * @param H5pImport $h5pImport The H5P import object.
-     *
-     * @return string The view URL for the H5P import.
+     * Compatibility helper for manual propagation or event subscribers.
      */
-    public function getViewUrl(H5pImport $h5pImport): string
+    public function addCourseTool(int $courseId): void
     {
-        return api_get_path(WEB_PLUGIN_PATH).'H5pImport/view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
+        $this->install_course_fields($courseId, true);
     }
 
-    /**
-     * Generates the LP resource block for H5P imports.
-     *
-     * @param int $lpId The LP ID.
-     *
-     * @return string The HTML for the LP resource block.
-     */
+    public function getViewUrl(H5pImport $h5pImport): string
+    {
+        return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
+    }
+
     public function getLpResourceBlock(int $lpId): string
     {
         $cidReq = api_get_cidreq(true, true, 'lp');
-        $webPath = api_get_path(WEB_PLUGIN_PATH).'H5pImport/';
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/';
         $course = api_get_course_entity();
         $session = api_get_session_entity();
 
         $tools = Database::getManager()
             ->getRepository(H5pImport::class)
-            ->findBy(['course' => $course, 'session' => $session]);
+            ->findBy([
+                'course' => $course,
+                'session' => $session,
+            ]);
 
         $importIcon = Display::return_icon('plugin_h5p_import_upload.png');
         $moveIcon = Display::url(
@@ -241,7 +208,7 @@ class H5pImportPlugin extends Plugin
         $return .= $importIcon;
         $return .= Display::url(
             get_lang('Import'),
-            $webPath."start.php?action=add&$cidReq&".http_build_query(['lp_id' => $lpId])
+            $webPath.'start.php?action=add&'.$cidReq.'&'.http_build_query(['lp_id' => $lpId])
         );
         $return .= '</li>';
 
@@ -249,10 +216,12 @@ class H5pImportPlugin extends Plugin
         foreach ($tools as $tool) {
             $toolAnchor = Display::url(
                 Security::remove_XSS($tool->getName()),
-                api_get_self()."?$cidReq&"
-                .http_build_query(
-                    ['action' => 'add_item', 'type' => TOOL_H5P, 'file' => $tool->getIid(), 'lp_id' => $lpId]
-                ),
+                api_get_self().'?'.$cidReq.'&'.http_build_query([
+                    'action' => 'add_item',
+                    'type' => TOOL_H5P,
+                    'file' => $tool->getIid(),
+                    'lp_id' => $lpId,
+                ]),
                 ['class' => 'moved']
             );
 
@@ -273,39 +242,27 @@ class H5pImportPlugin extends Plugin
         return $return;
     }
 
-    /**
-     * Add course tools for all courses.
-     */
-    private function addCourseTools(): void
+    private function syncCourseToolLinks(): void
     {
-        $courses = Database::getManager()
-            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
-            ->getResult();
+        $this->uninstall_course_fields_in_all_courses();
 
-        foreach ($courses as $course) {
-            $this->addCourseTool($course['id']);
+        if ($this->isToolEnabled()) {
+            $this->install_course_fields_in_all_courses();
         }
     }
 
-    private function deleteCourseToolLinks(): void
-    {
-        $em = Database::getManager();
-        $em->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.title = :title')
-            ->execute(['title' => 'H5P import']);
-    }
-
-    /**
-     * Removes H5P directories for all courses.
-     */
     private function removeH5pDirectories(): void
     {
         $fs = new Filesystem();
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
+
         while ($row = Database::fetch_assoc($res)) {
             $courseInfo = api_get_course_info_by_id($row['id']);
-            $fs->remove($courseInfo['course_sys_path'].'/h5p');
+            if (!empty($courseInfo['course_sys_path'])) {
+                $fs->remove($courseInfo['course_sys_path'].'/h5p');
+            }
         }
     }
 }

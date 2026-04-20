@@ -43,6 +43,7 @@ class FillBlanks extends Question
             if ($listAnswersInfo['switchable']) {
                 $defaults['multiple_answer'] = 1;
             }
+            $defaults['case_insensitive'] = ('case:false' === $this->extra) ? 1 : 0;
             // Take the complete string except after the last '::'
             $defaults['answer'] = $listAnswersInfo['text'];
             $defaults['select_separator'] = $listAnswersInfo['blank_separator_number'];
@@ -381,6 +382,7 @@ class FillBlanks extends Question
 
         //added multiple answers
         $form->addCheckBox('multiple_answer', '', get_lang('Allow answers order switches'));
+        $form->addCheckBox('case_insensitive', '', get_lang('Case insensitive'));
         $form->addSelect(
             'select_separator',
             get_lang('Select a blanks marker'),
@@ -533,6 +535,9 @@ class FillBlanks extends Question
         // Allow answers order switches
         $is_multiple = $form->getSubmitValue('multiple_answer');
         $answer .= '@'.$is_multiple;
+
+        // Case insensitive option
+        $this->extra = $form->getSubmitValue('case_insensitive') ? 'case:false' : '';
 
         $this->save($exercise);
         $objAnswer = new Answer($this->id);
@@ -712,18 +717,25 @@ class FillBlanks extends Question
      *
      * @return bool
      */
-    public static function isStudentAnswerGood($studentAnswer, $correctAnswer, $fromDatabase = false)
+    public static function isStudentAnswerGood($studentAnswer, $correctAnswer, $fromDatabase = false, $caseInsensitive = false)
     {
         $result = false;
+
+        if ($caseInsensitive) {
+            $studentAnswer = api_strtolower($studentAnswer);
+        }
+
         switch (self::getFillTheBlankAnswerType($correctAnswer)) {
             case self::FILL_THE_BLANK_MENU:
                 $listMenu = self::getFillTheBlankMenuAnswers($correctAnswer, false);
                 if ('' != $studentAnswer && isset($listMenu[0])) {
                     // First item is always the correct one.
                     $item = $listMenu[0];
+                    if ($caseInsensitive) {
+                        $item = api_strtolower($item);
+                    }
                     if (!$fromDatabase) {
                         $item = sha1($item);
-                        //$studentAnswer = sha1($studentAnswer);
                     }
                     if ($item === $studentAnswer) {
                         $result = true;
@@ -735,20 +747,23 @@ class FillBlanks extends Question
                 // the answer must be one of the choice made
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
                 $listSeveral = array_map(
-                    function ($item) {
-                        return self::trimOption(api_html_entity_decode($item));
+                    function ($item) use ($caseInsensitive) {
+                        $item = self::trimOption(api_html_entity_decode($item));
+
+                        return $caseInsensitive ? api_strtolower($item) : $item;
                     },
                     $listSeveral
                 );
-                //$studentAnswer = htmlspecialchars($studentAnswer);
                 $result = in_array($studentAnswer, $listSeveral);
 
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                $correctAnswer = api_html_entity_decode($correctAnswer);
-                //$studentAnswer = htmlspecialchars($studentAnswer);
-                $result = $studentAnswer == self::trimOption($correctAnswer);
+                $correctAnswer = self::trimOption(api_html_entity_decode($correctAnswer));
+                if ($caseInsensitive) {
+                    $correctAnswer = api_strtolower($correctAnswer);
+                }
+                $result = $studentAnswer == $correctAnswer;
 
                 break;
         }
@@ -965,6 +980,11 @@ class FillBlanks extends Question
         ';
 
         $res = Database::query($sql);
+
+        // Check if case insensitive is enabled for this question
+        $questionObj = Question::read($questionId);
+        $caseInsensitive = $questionObj && 'case:false' === $questionObj->extra;
+
         $userResult = [];
         // foreach attempts for all students starting with his older attempt
         while ($data = Database::fetch_array($res)) {
@@ -988,7 +1008,9 @@ class FillBlanks extends Question
                         default:
                             if (self::isStudentAnswerGood(
                                 $answer['student_answer'][$bracketNumber],
-                                $answer['words'][$bracketNumber]
+                                $answer['words'][$bracketNumber],
+                                false,
+                                $caseInsensitive
                             )
                             ) {
                                 $userResult[$data['user_id']][$bracketNumber] = 0; //  right answer
@@ -1401,7 +1423,7 @@ class FillBlanks extends Question
      *
      * @return bool
      */
-    public static function isCorrect($answerText)
+    public static function isCorrect($answerText, $caseInsensitive = false)
     {
         $answerInfo = self::getAnswerInfo($answerText, true);
         $correctAnswerList = $answerInfo['words'];
@@ -1409,7 +1431,7 @@ class FillBlanks extends Question
         $isCorrect = true;
 
         foreach ($correctAnswerList as $i => $correctAnswer) {
-            $value = self::isStudentAnswerGood($studentAnswer[$i], $correctAnswer);
+            $value = self::isStudentAnswerGood($studentAnswer[$i], $correctAnswer, false, $caseInsensitive);
             $isCorrect = $isCorrect && $value;
         }
 

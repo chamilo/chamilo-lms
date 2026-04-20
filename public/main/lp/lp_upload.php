@@ -92,7 +92,10 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             );
             if (!empty($scorm->manifestToString)) {
                 $scorm->parse_manifest();
-                $lp = $scorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
+                $lp = $scorm->import_manifest(
+                    api_get_course_int_id(),
+                    (int) ($_REQUEST['use_max_score'] ?? 1)
+                );
                 if ($lp) {
                     $lp->setContentLocal($proximity)->setContentMaker($maker);
                     $em->persist($lp);
@@ -117,15 +120,6 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
 
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                 }
-            }
-            break;
-        case 'aicc':
-            $oAICC = new aicc();
-            $config_dir = $oAICC->import_package($_FILES['user_file']);
-            if (!empty($config_dir)) {
-                $oAICC->parse_config_files($config_dir);
-                $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             break;
         case 'oogie':
@@ -201,7 +195,10 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                 $oScorm->parse_manifest();
 
                 // Create the LP entity (CLp)
-                $lp = $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score'] ?? 1);
+                $lp = $oScorm->import_manifest(
+                    api_get_course_int_id(),
+                    (int) ($_REQUEST['use_max_score'] ?? 1)
+                );
 
                 if ($lp) {
                     /** @var CDocumentRepository $docRepo */
@@ -215,37 +212,6 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                 }
             }
-            break;
-        case 'aicc':
-            $oAICC  = new aicc();
-            $entity = $oAICC->getEntity();
-            $config_dir = $oAICC->import_local_package($s, $current_dir);
-
-            if (is_file($s)) {
-                unlink($s);
-            }
-
-            if (!empty($config_dir)) {
-                $oAICC->parse_config_files($config_dir);
-                $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
-            }
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) {
-                $proximity = $_REQUEST['content_proximity'];
-            }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) {
-                $maker = $_REQUEST['content_maker'];
-            }
-
-            $entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('aicc_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();
             break;
         case '':
         default:

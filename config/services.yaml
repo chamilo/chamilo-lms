@@ -62,9 +62,17 @@ services:
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
+    Symfony\Component\Security\Csrf\CsrfTokenManagerInterface:
+        alias: security.csrf.token_manager
+        public: true
+
     # Locale listener
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
-        arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
+        arguments:
+            $defaultLocale: '%locale%'
+            $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
+            $parameterBag: '@parameter_bag'
+            $languageRepository: '@Chamilo\CoreBundle\Repository\LanguageRepository'
 
     Chamilo\CoreBundle\EventSubscriber\TranslatorFallbackLocaleSubscriber:
       arguments:
@@ -83,6 +91,12 @@ services:
         tags:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
+
+    Chamilo\CoreBundle\Serializer\UserSerializerContextBuilder:
+        decorates: api_platform.serializer.context_builder
+        arguments:
+            - '@.inner'
+            - '@security.helper'
 
     Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor:
         bind:
@@ -113,6 +127,10 @@ services:
         - { name: 'api_platform.state_processor' }
 
     Chamilo\CoreBundle\State\ColorThemeStateProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+
+    Chamilo\CoreBundle\State\CourseRelUserStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 

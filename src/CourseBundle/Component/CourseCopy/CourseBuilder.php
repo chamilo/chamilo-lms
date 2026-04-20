@@ -57,6 +57,7 @@ use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Closure;
 use Countable;
@@ -64,6 +65,7 @@ use Database;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ObjectRepository;
 use DocumentManager;
 use ReflectionProperty;
 use stdClass;
@@ -403,18 +405,10 @@ class CourseBuilder
         $iids = [];
 
         foreach ($docs as $doc) {
-            $node = $doc->getResourceNode();
-            if (!$node instanceof ResourceNode) {
-                continue;
-            }
-
-            $rel = '';
-            if ($documentsRoot instanceof ResourceNode) {
-                $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
-            } else {
-                $rel = (string) $node->convertPathForDisplay((string) $node->getPath());
-                $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
-            }
+            $rel = $this->getLogicalDocumentRelativePath(
+                $doc,
+                $documentsRoot instanceof ResourceNode ? $documentsRoot : null
+            );
 
             $rel = $this->normalizeDocumentRelPath($rel);
 
@@ -522,103 +516,114 @@ class CourseBuilder
                     continue;
                 }
             }
+            try {
+                if ('documents' === $toolKey) {
+                    $ids = $this->specific_id_list['documents'] ?? [];
+                    $this->build_documents_with_repo($courseEntity, $sessionEntity, $withBaseContent, $ids);
+                }
 
-            if ('documents' === $toolKey) {
-                $ids = $this->specific_id_list['documents'] ?? [];
-                $this->build_documents_with_repo($courseEntity, $sessionEntity, $withBaseContent, $ids);
-            }
+                if ('forums' === $toolKey || 'forum' === $toolKey) {
+                    $ids = $this->specific_id_list['forums'] ?? $this->specific_id_list['forum'] ?? [];
+                    $this->build_forum_category($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                    $this->build_forums($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                    $this->build_forum_topics($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                    $this->build_forum_posts($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('forums' === $toolKey || 'forum' === $toolKey) {
-                $ids = $this->specific_id_list['forums'] ?? $this->specific_id_list['forum'] ?? [];
-                $this->build_forum_category($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                $this->build_forums($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                $this->build_forum_topics($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                $this->build_forum_posts($legacyCourse, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('tool_intro' === $toolKey) {
+                    $this->build_tool_intro($legacyCourse, $courseEntity, $sessionEntity);
+                }
 
-            if ('tool_intro' === $toolKey) {
-                $this->build_tool_intro($legacyCourse, $courseEntity, $sessionEntity);
-            }
+                if ('links' === $toolKey) {
+                    $ids = $this->specific_id_list['links'] ?? [];
+                    $this->build_links($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('links' === $toolKey) {
-                $ids = $this->specific_id_list['links'] ?? [];
-                $this->build_links($legacyCourse, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('quizzes' === $toolKey || 'quiz' === $toolKey) {
+                    $ids = $this->specific_id_list['quizzes'] ?? $this->specific_id_list['quiz'] ?? [];
+                    $neededQuestionIds = $this->build_quizzes($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                    $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $neededQuestionIds);
+                }
 
-            if ('quizzes' === $toolKey || 'quiz' === $toolKey) {
-                $ids = $this->specific_id_list['quizzes'] ?? $this->specific_id_list['quiz'] ?? [];
-                $neededQuestionIds = $this->build_quizzes($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                // Always export question bucket required by the quizzes
-                $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $neededQuestionIds);
-            }
+                if ('quiz_questions' === $toolKey) {
+                    $ids = $this->specific_id_list['quiz_questions'] ?? [];
+                    $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('quiz_questions' === $toolKey) {
-                $ids = $this->specific_id_list['quiz_questions'] ?? [];
-                $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('surveys' === $toolKey || 'survey' === $toolKey) {
+                    $ids = $this->specific_id_list['surveys'] ?? $this->specific_id_list['survey'] ?? [];
+                    $neededQ = $this->build_surveys($this->course, $courseEntity, $sessionEntity, $ids);
+                    $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, $neededQ);
+                }
 
-            if ('surveys' === $toolKey || 'survey' === $toolKey) {
-                $ids = $this->specific_id_list['surveys'] ?? $this->specific_id_list['survey'] ?? [];
-                $neededQ = $this->build_surveys($this->course, $courseEntity, $sessionEntity, $ids);
-                $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, $neededQ);
-            }
+                if ('survey_questions' === $toolKey) {
+                    $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, []);
+                }
 
-            if ('survey_questions' === $toolKey) {
-                $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, []);
-            }
+                if ('announcements' === $toolKey) {
+                    $ids = $this->specific_id_list['announcements'] ?? [];
+                    $this->build_announcements($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('announcements' === $toolKey) {
-                $ids = $this->specific_id_list['announcements'] ?? [];
-                $this->build_announcements($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('events' === $toolKey) {
+                    $ids = $this->specific_id_list['events'] ?? [];
+                    $this->build_events($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('events' === $toolKey) {
-                $ids = $this->specific_id_list['events'] ?? [];
-                $this->build_events($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('course_descriptions' === $toolKey) {
+                    $ids = $this->specific_id_list['course_descriptions'] ?? [];
+                    $this->build_course_descriptions($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('course_descriptions' === $toolKey) {
-                $ids = $this->specific_id_list['course_descriptions'] ?? [];
-                $this->build_course_descriptions($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('glossary' === $toolKey) {
+                    $ids = $this->specific_id_list['glossary'] ?? [];
+                    $this->build_glossary($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('glossary' === $toolKey) {
-                $ids = $this->specific_id_list['glossary'] ?? [];
-                $this->build_glossary($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('wiki' === $toolKey) {
+                    $ids = $this->specific_id_list['wiki'] ?? [];
+                    $this->build_wiki($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('wiki' === $toolKey) {
-                $ids = $this->specific_id_list['wiki'] ?? [];
-                $this->build_wiki($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('thematic' === $toolKey) {
+                    $ids = $this->specific_id_list['thematic'] ?? [];
+                    $this->build_thematic($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('thematic' === $toolKey) {
-                $ids = $this->specific_id_list['thematic'] ?? [];
-                $this->build_thematic($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('attendance' === $toolKey) {
+                    $ids = $this->specific_id_list['attendance'] ?? [];
+                    $this->build_attendance($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('attendance' === $toolKey) {
-                $ids = $this->specific_id_list['attendance'] ?? [];
-                $this->build_attendance($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('works' === $toolKey) {
+                    $ids = $this->specific_id_list['works'] ?? [];
+                    $this->build_works($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('works' === $toolKey) {
-                $ids = $this->specific_id_list['works'] ?? [];
-                $this->build_works($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('gradebook' === $toolKey) {
+                    $this->build_gradebook($this->course, $courseEntity, $sessionEntity);
+                }
 
-            if ('gradebook' === $toolKey) {
-                $this->build_gradebook($this->course, $courseEntity, $sessionEntity);
-            }
+                if ('learnpath_category' === $toolKey) {
+                    $ids = $this->specific_id_list['learnpath_category'] ?? [];
+                    $this->build_learnpath_category($this->course, $courseEntity, $sessionEntity, $ids);
+                }
 
-            if ('learnpath_category' === $toolKey) {
-                $ids = $this->specific_id_list['learnpath_category'] ?? [];
-                $this->build_learnpath_category($this->course, $courseEntity, $sessionEntity, $ids);
-            }
+                if ('learnpaths' === $toolKey) {
+                    $ids = $this->specific_id_list['learnpaths'] ?? [];
+                    $this->build_learnpaths($this->course, $courseEntity, $sessionEntity, $ids, true);
+                }
+            } catch (Throwable $e) {
+                error_log(sprintf(
+                    '[MOODLE EXPORT] FAIL tool=%s message="%s" class="%s" file="%s" line=%d',
+                    $toolKey,
+                    $e->getMessage(),
+                    get_class($e),
+                    $e->getFile(),
+                    $e->getLine()
+                ));
 
-            if ('learnpaths' === $toolKey) {
-                $ids = $this->specific_id_list['learnpaths'] ?? [];
-                $this->build_learnpaths($this->course, $courseEntity, $sessionEntity, $ids, true);
+                throw $e;
             }
         }
 
@@ -1079,7 +1084,8 @@ class CourseBuilder
     public function build_works(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
-        ?SessionEntity $sessionEntity
+        ?SessionEntity $sessionEntity,
+        array $ids = []
     ): void {
         if (!$courseEntity instanceof CourseEntity) {
             return;
@@ -1123,6 +1129,13 @@ class CourseBuilder
             ->orderBy('w.iid', 'ASC')
         ;
 
+        if (!empty($ids)) {
+            $qb
+                ->andWhere('w.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))))
+            ;
+        }
+
         // Force strict session links when copying only session items.
         if ($copyOnlySessionItems && $sessionEntity) {
             $qb
@@ -1160,8 +1173,8 @@ class CourseBuilder
                 'student_delete_own_publication' => (bool) ($pub->getStudentDeleteOwnPublication() ?? false),
 
                 'extensions' => (string) ($pub->getExtensions() ?? ''),
-                'group_category_work_id' => (int) ($pub->getGroupCategoryWorkId() ?? 0),
-                'post_group_id' => (int) ($pub->getPostGroupId() ?? 0),
+                'group_category_work_id' => 0,
+                'post_group_id' => 0,
             ];
 
             try {
@@ -1298,6 +1311,97 @@ class CourseBuilder
         /** @var CThematic[] $rows */
         $rows = $qb->getQuery()->getResult();
 
+        if (!$rows) {
+            try {
+                $meta = $this->em->getClassMetadata(CThematic::class);
+                $fallbackQb = $this->em->createQueryBuilder()
+                    ->select('resource')
+                    ->from(CThematic::class, 'resource')
+                    ->orderBy('resource.iid', 'ASC');
+
+                $courseApplied = false;
+                if ($meta->hasAssociation('course')) {
+                    $fallbackQb
+                        ->andWhere('resource.course = :course')
+                        ->setParameter('course', $courseEntity);
+                    $courseApplied = true;
+                } elseif ($meta->hasField('cId')) {
+                    $fallbackQb
+                        ->andWhere('resource.cId = :cid')
+                        ->setParameter('cid', (int) $courseEntity->getId());
+                    $courseApplied = true;
+                }
+
+                if (!$courseApplied) {
+                    error_log('[MOODLE EXPORT] Thematic fallback skipped: no mapped course field found on CThematic.');
+                    $rows = [];
+                } else {
+                    $sessionId = (int) ($sessionEntity?->getId() ?? 0);
+
+                    if ($meta->hasAssociation('session')) {
+                        if ($sessionId > 0) {
+                            if ($this->withBaseContent) {
+                                $fallbackQb
+                                    ->andWhere(
+                                        $fallbackQb->expr()->orX(
+                                            'resource.session = :session',
+                                            'resource.session IS NULL'
+                                        )
+                                    )
+                                    ->setParameter('session', $sessionEntity);
+                            } else {
+                                $fallbackQb
+                                    ->andWhere('resource.session = :session')
+                                    ->setParameter('session', $sessionEntity);
+                            }
+                        } else {
+                            $fallbackQb->andWhere('resource.session IS NULL');
+                        }
+                    } elseif ($meta->hasField('sessionId')) {
+                        if ($sessionId > 0) {
+                            if ($this->withBaseContent) {
+                                $fallbackQb
+                                    ->andWhere(
+                                        $fallbackQb->expr()->orX(
+                                            'resource.sessionId = :sid',
+                                            'resource.sessionId IS NULL',
+                                            'resource.sessionId = 0'
+                                        )
+                                    )
+                                    ->setParameter('sid', $sessionId);
+                            } else {
+                                $fallbackQb
+                                    ->andWhere('resource.sessionId = :sid')
+                                    ->setParameter('sid', $sessionId);
+                            }
+                        } else {
+                            $fallbackQb->andWhere(
+                                $fallbackQb->expr()->orX(
+                                    'resource.sessionId IS NULL',
+                                    'resource.sessionId = 0'
+                                )
+                            );
+                        }
+                    }
+
+                    if (!empty($ids)) {
+                        $fallbackQb->andWhere('resource.iid IN (:ids)')
+                            ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+                    }
+
+                    /** @var CThematic[] $rows */
+                    $rows = $fallbackQb->getQuery()->getResult();
+                }
+            } catch (Throwable $e) {
+                error_log(sprintf(
+                    '[MOODLE EXPORT] Thematic fallback failed. message="%s" class="%s"',
+                    $e->getMessage(),
+                    get_class($e)
+                ));
+                $rows = [];
+            }
+        }
+
         foreach ($rows as $row) {
             $iid = (int) $row->getIid();
             $title = (string) $row->getTitle();
@@ -1328,7 +1432,6 @@ class CourseBuilder
                         }
                     }
                 } catch (Throwable) {
-                    // keep $attendanceId = 0
                 }
 
                 $advArr = [
@@ -1379,6 +1482,9 @@ class CourseBuilder
         }
 
         $repo = Container::getWikiRepository();
+
+        /** @var ObjectRepository $confRepo */
+        $confRepo = $this->em->getRepository(CWikiConf::class);
 
         $ids = array_values(array_unique(array_map('intval', $ids)));
         $keep = $this->makeIdFilter($ids);
@@ -1444,6 +1550,8 @@ class CourseBuilder
                     );
                 }
 
+                $qb2->andWhere('COALESCE(resource.groupId, 0) = 0');
+
                 if (!empty($ids)) {
                     $qb2->andWhere(
                         $qb2->expr()->orX(
@@ -1479,7 +1587,7 @@ class CourseBuilder
                 continue;
             }
 
-            $groupId = (int) ($page->getGroupId() ?? 0);
+            $groupId = 0;
             $reflink = (string) $page->getReflink();
 
             $key = $pageId.'|'.$groupId.'|'.$reflink;
@@ -1497,9 +1605,9 @@ class CourseBuilder
             $pageId = (int) ($page->getPageId() ?? $iid);
             $reflink = (string) $page->getReflink();
             $title = (string) $page->getTitle();
-            $content = (string) $page->getContent();
+            $content = $this->normalizeWikiHtmlForExport((string) $page->getContent());
             $userId = (int) $page->getUserId();
-            $groupId = (int) ($page->getGroupId() ?? 0);
+            $groupId = 0;
             $progress = (string) ($page->getProgress() ?? '');
             $version = (int) ($page->getVersion() ?? 1);
             $dtime = $page->getDtime()?->format('Y-m-d H:i:s') ?? '';
@@ -1508,17 +1616,52 @@ class CourseBuilder
                 $this->findAndSetDocumentsInText($content);
             }
 
+            $conf = $confRepo->findOneBy([
+                'cId' => (int) $courseEntity->getId(),
+                'pageId' => $pageId,
+            ]);
+
             $payload = [
                 'title' => $title,
+                'name' => $title,
                 'reflink' => $reflink,
                 'content' => $content,
+                'comment' => (string) ($page->getComment() ?? ''),
                 'user_id' => $userId,
-                'group_id' => $groupId,
+                'group_id' => 0,
                 'dtime' => $dtime,
                 'progress' => $progress,
                 'version' => $version,
                 'page_id' => $pageId,
-                'name' => $title,
+                'hits' => (int) ($page->getHits() ?? 0),
+                'addlock' => (int) ($page->getAddlock() ?? 1),
+                'editlock' => (int) ($page->getEditlock() ?? 0),
+                'visibility' => (int) ($page->getVisibility() ?? 1),
+                'addlock_disc' => (int) ($page->getAddlockDisc() ?? 1),
+                'visibility_disc' => (int) ($page->getVisibilityDisc() ?? 1),
+                'ratinglock_disc' => (int) ($page->getRatinglockDisc() ?? 1),
+                'assignment' => (int) ($page->getAssignment() ?? 0),
+                'score' => (int) ($page->getScore() ?? 0),
+                'linksto' => (string) ($page->getLinksto() ?? ''),
+                'tag' => (string) ($page->getTag() ?? ''),
+                'user_ip' => (string) ($page->getUserIp() ?? ''),
+                'task' => $conf ? (string) ($conf->getTask() ?? '') : '',
+                'feedback1' => $conf ? (string) ($conf->getFeedback1() ?? '') : '',
+                'feedback2' => $conf ? (string) ($conf->getFeedback2() ?? '') : '',
+                'feedback3' => $conf ? (string) ($conf->getFeedback3() ?? '') : '',
+                'fprogress1' => $conf ? (string) ($conf->getFprogress1() ?? '') : '',
+                'fprogress2' => $conf ? (string) ($conf->getFprogress2() ?? '') : '',
+                'fprogress3' => $conf ? (string) ($conf->getFprogress3() ?? '') : '',
+                'max_size' => $conf ? (int) ($conf->getMaxSize() ?? 0) : 0,
+                'max_text' => $conf ? (int) ($conf->getMaxText() ?? 0) : 0,
+                'max_version' => $conf ? (int) ($conf->getMaxVersion() ?? 0) : 0,
+                'startdate_assig' => ($conf && $conf->getStartdateAssig())
+                    ? $conf->getStartdateAssig()->format('Y-m-d H:i:s')
+                    : '',
+                'enddate_assig' => ($conf && $conf->getEnddateAssig())
+                    ? $conf->getEnddateAssig()->format('Y-m-d H:i:s')
+                    : '',
+                'delayedsubmit' => $conf ? (int) ($conf->getDelayedsubmit() ?? 0) : 0,
             ];
 
             $legacyCourse->resources[RESOURCE_WIKI][$iid] =
@@ -1748,13 +1891,14 @@ class CourseBuilder
         foreach ($anns as $a) {
             $iid = (int) $a->getIid();
             $title = (string) $a->getTitle();
-            $html = (string) ($a->getContent() ?? '');
+            $html = $this->normalizeWikiHtmlForExport((string) ($a->getContent() ?? ''));
             $date = $a->getEndDate()?->format('Y-m-d H:i:s') ?? '';
             $email = (bool) $a->getEmailSent();
 
+            $this->findAndSetDocumentsInText($html);
+
             $firstPath = $firstName = $firstComment = '';
             $firstSize = 0;
-
             $attachmentsArr = [];
 
             /** @var CAnnouncementAttachment $att */
@@ -2687,8 +2831,8 @@ class CourseBuilder
                 'allow_attachments' => (int) ($f->getAllowAttachments() ?? 1),
                 'allow_new_threads' => (int) ($f->getAllowNewThreads() ?? 1),
                 'default_view' => (string) ($f->getDefaultView() ?? 'flat'),
-                'forum_of_group' => (string) ($f->getForumOfGroup() ?? '0'),
-                'forum_group_public_private' => (string) ($f->getForumGroupPublicPrivate() ?? 'public'),
+                'forum_of_group' => '0',
+                'forum_group_public_private' => 'public',
                 'moderated' => (int) ($f->isModerated() ? 1 : 0),
                 'start_time' => $this->fmtDate($f->getStartTime()),
                 'end_time' => $this->fmtDate($f->getEndTime()),
@@ -2933,37 +3077,77 @@ class CourseBuilder
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
 
         foreach ($docs as $doc) {
-            $node     = $doc->getResourceNode();
-            $filetype = $doc->getFiletype(); // 'file' | 'folder' | ...
-            $title    = $doc->getTitle();
-            $comment  = $doc->getComment() ?? '';
-            $iid      = (int) $doc->getIid();
+            $node = $doc->getResourceNode();
+            $filetype = (string) ($doc->getFiletype() ?? '');
+            $title = trim((string) ($doc->getTitle() ?? ''));
+            $comment = (string) ($doc->getComment() ?? '');
+            $iid = (int) $doc->getIid();
+
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
 
             $size = 0;
             if ('folder' === $filetype) {
                 $size = $this->docRepo->getFolderSize($node, $course, $session);
             } else {
-                $files = $node?->getResourceFiles();
+                $files = $node->getResourceFiles();
                 if ($files && $files->count() > 0) {
-                    /** @var ResourceFile $first */
                     $first = $files->first();
-                    $size  = (int) $first->getSize();
+                    if ($first instanceof ResourceFile) {
+                        $size = (int) $first->getSize();
+                    }
                 }
             }
 
-            $rel = '';
-            if ($node instanceof ResourceNode) {
-                if ($documentsRoot instanceof ResourceNode) {
-                    $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
-                } else {
-                    $rel = (string) $node->convertPathForDisplay((string) $node->getPath());
-                    $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
+            $logicalRel = '';
+            try {
+                $logicalRel = $this->getLogicalDocumentRelativePath(
+                    $doc,
+                    $documentsRoot instanceof ResourceNode ? $documentsRoot : null
+                );
+            } catch (Throwable $e) {
+                error_log(sprintf(
+                    '[MOODLE EXPORT] Failed to resolve logical document path. doc_iid=%d node_id=%d title="%s" error="%s"',
+                    $iid,
+                    (int) $node->getId(),
+                    $title,
+                    $e->getMessage()
+                ));
+            }
+
+            $rel = trim((string) $logicalRel, '/');
+
+            if ('' === $rel) {
+                try {
+                    $rel = $this->normalizeDocumentRelativePathForMoodleExport(
+                        (string) ($node->getPath() ?? ''),
+                        $course,
+                        $documentsRoot instanceof ResourceNode ? (string) ($documentsRoot->getPath() ?? '') : '',
+                        $title,
+                        'folder' === $filetype
+                    );
+                } catch (Throwable $e) {
+                    error_log(sprintf(
+                        '[MOODLE EXPORT] Failed to normalize document relative path. doc_iid=%d node_id=%d title="%s" error="%s"',
+                        $iid,
+                        (int) $node->getId(),
+                        $title,
+                        $e->getMessage()
+                    ));
                 }
             }
 
             $rel = trim((string) $rel, '/');
+            if ('' === $rel && 'folder' === $filetype && '' !== $title) {
+                $rel = trim($title, '/');
+            }
 
-            $pathForSelector = 'document'.($rel !== '' ? '/'.$rel : '');
+            if ('' === $rel) {
+                continue;
+            }
+
+            $pathForSelector = 'document/'.$rel;
             if ('folder' === $filetype) {
                 $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
@@ -3298,5 +3482,401 @@ class CourseBuilder
         }
 
         error_log($message);
+    }
+
+    /**
+     * Resolve the logical relative document path.
+     *
+     * Priority:
+     * 1. CDocument logical path
+     * 2. ResourceNode display path as fallback
+     */
+    private function getLogicalDocumentRelativePath(
+        CDocument $doc,
+        ?ResourceNode $documentsRoot = null
+    ): string {
+        $docPath = $this->readDocumentLogicalPath($doc);
+
+        if ('' !== $docPath) {
+            $docPath = preg_replace('~^/?document/?~i', '', $docPath) ?? $docPath;
+
+            return $this->normalizeDocumentRelPath($docPath);
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return '';
+        }
+
+        try {
+            if ($documentsRoot instanceof ResourceNode) {
+                $rel = (string) $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath());
+            } else {
+                $rel = (string) $node->convertPathForDisplay((string) ($node->getPath() ?? ''));
+                $rel = preg_replace('~^/?Documents/?~i', '', $rel) ?? $rel;
+            }
+        } catch (Throwable) {
+            return '';
+        }
+
+        return $this->normalizeDocumentRelPath($rel);
+    }
+
+    /**
+     * Resolve a document relative path from a modern resource URL UUID.
+     */
+    private function resolveDocumentRelPathFromResourceUuid(string $uuid): string
+    {
+        $uuid = trim($uuid);
+        if ('' === $uuid) {
+            return '';
+        }
+
+        try {
+            $resourceNodeRepo = $this->em->getRepository(ResourceNode::class);
+
+            /** @var ResourceNode|null $resourceNode */
+            $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => $uuid]);
+            if (!$resourceNode instanceof ResourceNode && class_exists(Uuid::class)) {
+                try {
+                    $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => Uuid::fromString($uuid)]);
+                } catch (Throwable) {
+                    $resourceNode = null;
+                }
+            }
+
+            if (!$resourceNode instanceof ResourceNode) {
+                return '';
+            }
+
+            /** @var CDocument|null $doc */
+            $doc = $this->docRepo->findOneBy(['resourceNode' => $resourceNode]);
+            if (!$doc instanceof CDocument) {
+                return '';
+            }
+
+            return $this->getLogicalDocumentRelativePath($doc);
+        } catch (Throwable) {
+            return '';
+        }
+    }
+
+    private function normalizeDocumentRelativePathForMoodleExport(
+        string $rawPath,
+        CourseEntity $course,
+        string $documentsRootPath = '',
+        string $title = '',
+        bool $isFolder = false
+    ): string {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $root = trim(str_replace('\\', '/', $documentsRootPath));
+        $root = preg_replace('#/+#', '/', $root);
+        $root = trim((string) $root, '/');
+
+        if ('' !== $root) {
+            if ($path === $root) {
+                return '';
+            }
+
+            if (str_starts_with($path, $root.'/')) {
+                $path = substr($path, strlen($root) + 1);
+            }
+        }
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        // Drop host-like prefix: localhost, localhost-4, domain, IP
+        if (isset($segments[0]) && $this->looksLikeExportHostSegment((string) $segments[0])) {
+            array_shift($segments);
+        }
+
+        $courseCode = trim((string) $course->getCode());
+        if ('' !== $courseCode && isset($segments[0])) {
+            $first = (string) $segments[0];
+            $courseCodeLower = mb_strtolower($courseCode);
+            $firstLower = mb_strtolower($first);
+
+            if (
+                $firstLower === $courseCodeLower ||
+                str_starts_with($firstLower, $courseCodeLower.'-')
+            ) {
+                array_shift($segments);
+            }
+        }
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        $lastIndex = array_key_last($segments);
+
+        foreach ($segments as $index => $segment) {
+            $segment = trim((string) $segment);
+
+            if ('' === $segment) {
+                unset($segments[$index]);
+                continue;
+            }
+
+            // Folders in Chamilo paths often carry "-nodeId"
+            if (!str_contains($segment, '.') && preg_match('~^(.+)-\d+$~', $segment, $matches)) {
+                $segment = (string) $matches[1];
+            }
+
+            // For the final folder segment, prefer the document title if available
+            if ($isFolder && $index === $lastIndex && '' !== trim($title)) {
+                $segment = trim($title);
+            }
+
+            $segments[$index] = $segment;
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part): bool => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
+    private function looksLikeExportHostSegment(string $segment): bool
+    {
+        $segment = trim($segment);
+
+        if ('' === $segment) {
+            return false;
+        }
+
+        if (preg_match('~^localhost(?:-\d+)?$~i', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^\d{1,3}(?:\.\d{1,3}){3}$~', $segment)) {
+            return true;
+        }
+
+        if (preg_match('~^[a-z0-9.-]+\.[a-z]{2,}$~i', $segment)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function normalizeWikiHtmlForExport(string $html): string
+    {
+        if ('' === trim($html)) {
+            return $html;
+        }
+
+        $rewrite = function (string $url): string {
+            return $this->normalizeWikiEmbeddedUrlForExport($url);
+        };
+
+        // src, href, poster, data
+        $html = (string) preg_replace_callback(
+            '~\b(src|href|poster|data)\s*=\s*([\'"])([^\'"]+)\2~i',
+            static function (array $m) use ($rewrite): string {
+                return $m[1].'='.$m[2].$rewrite((string) $m[3]).$m[2];
+            },
+            $html
+        );
+
+        // srcset
+        $html = (string) preg_replace_callback(
+            '~\bsrcset\s*=\s*([\'"])(.*?)\1~is',
+            static function (array $m) use ($rewrite): string {
+                $quote = $m[1];
+                $value = (string) $m[2];
+                $parts = array_map('trim', explode(',', $value));
+
+                foreach ($parts as &$part) {
+                    if ('' === $part) {
+                        continue;
+                    }
+
+                    $tokens = preg_split('/\s+/', $part, -1, PREG_SPLIT_NO_EMPTY);
+                    if (!$tokens || empty($tokens[0])) {
+                        continue;
+                    }
+
+                    $tokens[0] = $rewrite((string) $tokens[0]);
+                    $part = implode(' ', $tokens);
+                }
+
+                return 'srcset='.$quote.implode(', ', $parts).$quote;
+            },
+            $html
+        );
+
+        // inline style url(...)
+        $html = (string) preg_replace_callback(
+            '~\bstyle\s*=\s*([\'"])(.*?)\1~is',
+            static function (array $m) use ($rewrite): string {
+                $quote = $m[1];
+                $style = (string) $m[2];
+
+                $style = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    static function (array $mm) use ($rewrite): string {
+                        return 'url('.$mm[1].$rewrite((string) $mm[2]).$mm[1].')';
+                    },
+                    $style
+                );
+
+                return 'style='.$quote.$style.$quote;
+            },
+            $html
+        );
+
+        // <style> blocks
+        $html = (string) preg_replace_callback(
+            '~(<style\b[^>]*>)(.*?)(</style>)~is',
+            static function (array $m) use ($rewrite): string {
+                $open = $m[1];
+                $css = (string) $m[2];
+                $close = $m[3];
+
+                $css = (string) preg_replace_callback(
+                    '~url\((["\']?)([^)\'"]+)\1\)~i',
+                    static function (array $mm) use ($rewrite): string {
+                        return 'url('.$mm[1].$rewrite((string) $mm[2]).$mm[1].')';
+                    },
+                    $css
+                );
+
+                return $open.$css.$close;
+            },
+            $html
+        );
+
+        return $html;
+    }
+
+    private function normalizeWikiEmbeddedUrlForExport(string $url): string
+    {
+        $url = trim(html_entity_decode($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        if ('' === $url) {
+            return $url;
+        }
+
+        if (str_starts_with($url, 'data:') || str_contains($url, '@@PLUGINFILE@@')) {
+            return $url;
+        }
+
+        $decodedUrl = urldecode($url);
+        $path = (string) (parse_url($decodedUrl, PHP_URL_PATH) ?? '');
+        $query = (string) (parse_url($decodedUrl, PHP_URL_QUERY) ?? '');
+
+        if ('' === $path) {
+            $path = $decodedUrl;
+        }
+
+        $trimmedPath = trim($path, '/');
+
+        if (preg_match('~^(?:r/)?document/files/(?P<uuid>[A-Za-z0-9-]{16,64})/(?:view|download|link)/?$~i', $trimmedPath, $matches)) {
+            $relativePath = $this->resolveDocumentRelPathFromResourceUuid((string) $matches['uuid']);
+            if ('' !== $relativePath) {
+                return '/document/'.$relativePath;
+            }
+        }
+
+        if (preg_match('~^document/view$~i', $trimmedPath)) {
+            $params = [];
+            parse_str($query, $params);
+
+            $candidate = (string) ($params['file'] ?? $params['path'] ?? '');
+            $candidate = $this->normalizeDocumentRelPath($candidate);
+            if ('' !== $candidate) {
+                return '/document/'.$candidate;
+            }
+        }
+
+        $candidate = $this->normalizeDocumentRelPath($this->extractRelativeDocumentPathFromUrl($decodedUrl));
+        if ('' !== $candidate) {
+            if (preg_match('~^files/(?P<uuid>[A-Za-z0-9-]{16,64})/(?:view|download|link)$~i', $candidate, $matches)) {
+                $relativePath = $this->resolveDocumentRelPathFromResourceUuid((string) $matches['uuid']);
+                if ('' !== $relativePath) {
+                    return '/document/'.$relativePath;
+                }
+
+                return $url;
+            }
+
+            return '/document/'.$candidate;
+        }
+
+        return $url;
+    }
+
+    private function readDocumentLogicalPath(CDocument $doc): string
+    {
+        // Preferred getters when available in the current entity version.
+        foreach (['getPath', 'getFilePath', 'getFilepath'] as $method) {
+            if (method_exists($doc, $method)) {
+                try {
+                    $value = (string) $doc->{$method}();
+                    $value = trim(str_replace('\\', '/', $value), '/');
+
+                    if ('' !== $value) {
+                        return $value;
+                    }
+                } catch (Throwable) {
+                }
+            }
+        }
+
+        // Direct property access if the entity exposes it publicly.
+        foreach (['path', 'filePath', 'filepath'] as $property) {
+            try {
+                if (isset($doc->{$property})) {
+                    $value = (string) $doc->{$property};
+                    $value = trim(str_replace('\\', '/', $value), '/');
+
+                    if ('' !== $value) {
+                        return $value;
+                    }
+                }
+            } catch (Throwable) {
+            }
+        }
+
+        // Reflection fallback for protected/private mapped properties.
+        foreach (['path', 'filePath', 'filepath'] as $property) {
+            try {
+                if (!property_exists($doc, $property)) {
+                    continue;
+                }
+
+                $rp = new ReflectionProperty($doc, $property);
+                $rp->setAccessible(true);
+                $value = (string) $rp->getValue($doc);
+                $value = trim(str_replace('\\', '/', $value), '/');
+
+                if ('' !== $value) {
+                    return $value;
+                }
+            } catch (Throwable) {
+            }
+        }
+
+        return '';
     }
 }

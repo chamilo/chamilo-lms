@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
@@ -1435,46 +1434,6 @@ class Exercise
     }
 
     /**
-     * changes the exercise sound file.
-     *
-     * @param string $sound  - exercise sound file
-     * @param string $delete - ask to delete the file
-     *
-     * @author Olivier Brouckaert
-     */
-    public function updateSound($sound, $delete)
-    {
-        global $audioPath, $documentPath;
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        if ($sound['size'] &&
-            (strstr($sound['type'], 'audio') || strstr($sound['type'], 'video'))
-        ) {
-            $this->sound = $sound['name'];
-
-            if (@move_uploaded_file($sound['tmp_name'], $audioPath.'/'.$this->sound)) {
-                $sql = "SELECT 1 FROM $TBL_DOCUMENT
-                        WHERE
-                            c_id = ".$this->course_id." AND
-                            path = '".str_replace($documentPath, '', $audioPath).'/'.$this->sound."'";
-                $result = Database::query($sql);
-
-                if (!Database::num_rows($result)) {
-                    DocumentManager::addDocument(
-                        $this->course,
-                        str_replace($documentPath, '', $audioPath).'/'.$this->sound,
-                        'file',
-                        $sound['size'],
-                        $sound['name']
-                    );
-                }
-            }
-        } elseif ($delete && is_file($audioPath.'/'.$this->sound)) {
-            $this->sound = '';
-        }
-    }
-
-    /**
      * changes the exercise type.
      *
      * @param int $type - exercise type
@@ -1611,8 +1570,8 @@ class Exercise
         }
 
         $exercise
-            ->setStartTime(!empty($start_time) ? new \DateTime((string) $start_time) : null)
-            ->setEndTime(!empty($end_time) ? new \DateTime((string) $end_time) : null)
+            ->setStartTime(!empty($start_time) ? new \DateTime((string) $start_time, new \DateTimeZone('UTC')) : null)
+            ->setEndTime(!empty($end_time) ? new \DateTime((string) $end_time, new \DateTimeZone('UTC')) : null)
             ->setTitle($title)
             ->setDescription($description)
             ->setSound($sound)
@@ -1846,11 +1805,9 @@ class Exercise
 
         // Register resource deletion manually because this is a soft delete (active = -1)
         // and Doctrine does not trigger postRemove in this case.
-        /* @var TrackEDefaultRepository $trackRepo */
-        $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
         $resourceNode = $exercise->getResourceNode();
         if ($resourceNode) {
-            $trackRepo->registerResourceEvent(
+            Container::getResourceHelper()->createAndSaveResourceEvent(
                 $resourceNode,
                 'deletion',
                 api_get_user_id(),
@@ -2120,11 +2077,14 @@ class Exercise
             ];
             $form->addGroup($group, null, get_lang('Results page configuration'));
 
-            $group = [
-                $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
-            ];
-            $form->addGroup($group, null, get_lang('Hide question numbering'));
+            $showHideConfiguration = 'true' === api_get_setting('exercise.quiz_hide_question_number');
+            if ($showHideConfiguration) {
+                $group = [
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
+                ];
+                $form->addGroup($group, null, get_lang('Hide question numbering'));
+            }
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2653,7 +2613,10 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setQuizCategoryId($form->getSubmitValue('quiz_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
-        $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
+        $showHideConfiguration = 'true' === api_get_setting('exercise.quiz_hide_question_number');
+        if ($showHideConfiguration) {
+            $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
+        }
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
@@ -3471,6 +3434,7 @@ class Exercise
         $answerType = $objQuestionTmp->selectType();
         $quesId = $objQuestionTmp->getId();
         $extra = $objQuestionTmp->extra;
+        $fillBlanksCaseInsensitive = ('case:false' === $extra);
         $next = 1; //not for now
         $totalWeighting = 0;
         $totalScore = 0;
@@ -4088,7 +4052,7 @@ class Exercise
                                 }
 
                                 $isAnswerCorrect = 0;
-                                if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
+                                if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive)) {
                                     // gives the related weighting to the student
                                     $questionScore += $answerWeighting[$i];
                                     // increments total score
@@ -4152,7 +4116,8 @@ class Exercise
                                         if (FillBlanks::isStudentAnswerGood(
                                             $studentAnswer,
                                             $correctAnswer,
-                                            $from_database
+                                            $from_database,
+                                            $fillBlanksCaseInsensitive
                                         )) {
                                             $questionScore += $answerWeighting[$i];
                                             $totalScore += $answerWeighting[$i];
@@ -4898,7 +4863,7 @@ class Exercise
                                     }
                                 }
 
-                                $ok = FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database);
+                                $ok = FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive);
                                 $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
                                 $listCorrectAnswers['student_score'][$i]  = $ok ? 1 : 0;
                             }
@@ -4921,7 +4886,7 @@ class Exercise
                                         if ($found) {
                                             continue;
                                         }
-                                        if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
+                                        if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database, $fillBlanksCaseInsensitive)) {
                                             // consume this teacher slot
                                             $teacherTemp[$j] = '';
                                             $found = true;
@@ -5573,18 +5538,16 @@ class Exercise
                             break;
                         case ORAL_EXPRESSION:
                             /** @var OralExpression $objQuestionTmp */
-                            echo '<tr>
-                                <td valign="top">'.
-                                ExerciseShowFunctions::display_oral_expression_answer(
-                                    $feedback_type,
-                                    $choice,
-                                    $exeId,
-                                    $questionId,
-                                    $results_disabled,
-                                    $questionScore
-                                ).'</td>
-                                </tr>
-                                </table>';
+                            echo '<tr><td valign="top">';
+                            ExerciseShowFunctions::display_oral_expression_answer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $results_disabled,
+                                $questionScore
+                            );
+                            echo '</td></tr>';
                             break;
                         case HOT_SPOT:
                         case HOT_SPOT_COMBINATION:
@@ -6689,9 +6652,14 @@ class Exercise
         }
         */
 
+        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
         $data['start_date'] = $start_date;
         $data['duration'] = $duration;
-        $data['ip'] = $ip;
+        $data['ip'] = '';
+
+        if (!$hideIp && !empty($ip)) {
+            $data['ip'] = $ip;
+        }
 
         if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $data['title'] = $this->get_formated_title().get_lang('Result');
@@ -9066,7 +9034,7 @@ class Exercise
         $repo = Container::getQuizRepository();
 
         $trackEExerciseRepo = Container::getTrackEExerciseRepository();
-        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId);
+        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId, $sessionId);
         $pendingAttempts = [];
         foreach ($pendingCorrections as $correction) {
             $pendingAttempts[$correction['exerciseId']] = $correction['pendingCount'];

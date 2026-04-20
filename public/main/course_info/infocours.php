@@ -46,6 +46,14 @@ if (!$isAllowToEdit) {
 
 $router = Container::getRouter();
 $translator = Container::$container->get('translator');
+$imsLtiPluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$imsLtiPluginConfiguration = $imsLtiPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isImsLtiEnabled = $imsLtiPluginEntity
+    && $imsLtiPluginEntity->isInstalled()
+    && $imsLtiPluginConfiguration
+    && $imsLtiPluginConfiguration->isActive();
 
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -64,9 +72,10 @@ $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
 
-// Teachers/course admins won't be able to change the visibility when this is enabled.
-// Platform admins can still change it (and also from admin courses list as mentioned in the issue).
+// Teachers/course admins won't be able to change the visibility or subscription when this is enabled.
+// Platform admins can still change both options.
 $canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
+$canChangeCourseSubscription = $canChangeCourseVisibility;
 
 // Build the form
 $form = new FormValidator(
@@ -75,24 +84,16 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-$image = '';
-$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
-if (!empty($illustrationUrl)) {
-    $image = '<div class="row">
-                <label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                <div class="col-md-8">
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" />
-                </div>
-            </div>';
-}
-
-$form->addElement('html', '<div id="course-main-settings-legacy-start"></div>');
-
 // --- Main course settings fields (legacy block) ---
+$form->addStartPanel(
+    'course_main',
+    get_lang('Course settings'),
+    true,
+    ActionIcon::INFORMATION
+);
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
-
 $form->addSelectLanguage(
     'course_language',
     [get_lang('Language'), get_lang('This language will be valid for every visitor of your courses portal')]
@@ -102,7 +103,6 @@ $group = [
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
 ];
-
 $form->addGroup($group, null, [get_lang('Show course in user\'s language')]);
 
 $form->addText('department_name', get_lang('Department'), false);
@@ -162,15 +162,13 @@ $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_
 
 if (!empty($illustrationUrl)) {
     $image = '
-        <div class="row course-picture-preview-row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="course-picture-preview ml-4">
-                    <span class="help-block small">'.get_lang('Current picture').'</span>
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
-                </div>
+        <div class="field course-picture-preview-row">
+            <div class="course-picture-preview">
+                <small class="help-block">'.get_lang('Current picture').'</small>
+                <img class="w-full" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
             </div>
-        </div>';
+        </div>'
+    ;
 }
 
 // Picture file input
@@ -253,30 +251,13 @@ $aiOptions = [
     'image_generator' => 'Enable image generator',
     'glossary_terms_generator' => 'Enable glossary terms generator',
     'video_generator' => 'Enable video generator',
-    'course_analyser' => 'Enable course analyser',
+    //'course_analyser' => 'Enable course analyser',
 ];
 
 // This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
 
-// Marker: end of legacy main settings block
-$form->addElement('html', '<div id="course-main-settings-legacy-end"></div>');
-$mainPanelGroup = [
-    '' => [
-        $form->createElement(
-            'html',
-            '<!-- Main course settings will be moved into this panel via JavaScript -->'
-        ),
-    ],
-];
-
-$form->addPanelOption(
-    'course_main',
-    get_lang('Course settings'),
-    $mainPanelGroup,
-    ActionIcon::INFORMATION,
-    true
-);
+$form->addEndPanel();
 
 // --- End of legacy block, from here panels start as usual ---
 
@@ -340,11 +321,9 @@ if (api_is_platform_admin()) {
 $courseVisibilityHelp = null;
 if (!$canChangeCourseVisibility) {
     foreach ($groupAccess as $radio) {
-        if (\is_object($radio) && method_exists($radio, 'updateAttributes')) {
-            $radio->updateAttributes([
-                'disabled' => 'disabled',
-            ]);
-        }
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
     }
 
     $courseVisibilityHelp = $form->createElement(
@@ -364,6 +343,14 @@ $group2[] = $form->createElement(
     get_lang('This function is only available to trainers'),
     0
 );
+
+if (!$canChangeCourseSubscription) {
+    foreach ($group2 as $radio) {
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
+    }
+}
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -568,16 +555,26 @@ $globalGroup[get_lang('E-mail users on dropbox file reception')] = $group;
 
 // Exercises notifications
 $emailAlerts = ExerciseLib::getNotificationSettings();
+$validQuizNotificationValues = array_map('strval', array_keys($emailAlerts));
+
+$buildQuizNotificationFieldName = static function (string $itemId): string {
+    return 'email_alert_manager_on_new_quiz_'.$itemId;
+};
+
 $group = [];
+
 foreach ($emailAlerts as $itemId => $label) {
+    $itemId = (string) $itemId;
+
     $group[] = $form->createElement(
         'checkbox',
-        'email_alert_manager_on_new_quiz[]',
+        $buildQuizNotificationFieldName($itemId),
         null,
         $label,
-        ['value' => $itemId]
+        ['value' => 1]
     );
 }
+
 $globalGroup[get_lang('Tests')] = $group;
 
 $group = [];
@@ -1076,19 +1073,71 @@ if ($enableAiHelpers) {
     }
 }
 
-// External tools (LTI) info
-$button = Display::toolbarButton(
-    get_lang('External tools (LTI)'),
-    $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
-    'cog',
-    'primary'
-);
-$html = [
-    $form->createElement(
+if ($isImsLtiEnabled) {
+    $button = Display::toolbarButton(
+        get_lang('External tools (LTI)'),
+        $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $ltiInfo = $form->createElement(
         'html',
-        '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button
-    ),
-];
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.')
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'external_tools_lti',
+        get_lang('External tools (LTI)'),
+        [$ltiInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+$normalizeQuizNotificationSetting = static function ($value) use ($validQuizNotificationValues): array {
+    if (\is_array($value)) {
+        $items = [];
+
+        foreach ($value as $item) {
+            $normalizedValue = trim((string) $item);
+
+            if ('' !== $normalizedValue && \in_array($normalizedValue, $validQuizNotificationValues, true)) {
+                $items[] = $normalizedValue;
+            }
+        }
+
+        return array_values(array_unique($items));
+    }
+
+    if (null === $value || '-1' === (string) $value) {
+        return [];
+    }
+
+    $rawValue = trim((string) $value);
+
+    if ('' === $rawValue) {
+        return [];
+    }
+
+    $items = array_map('trim', explode(',', $rawValue));
+
+    $items = array_values(
+        array_filter(
+            array_map('strval', $items),
+            static function (string $item) use ($validQuizNotificationValues): bool {
+                return '' !== $item && \in_array($item, $validQuizNotificationValues, true);
+            }
+        )
+    );
+
+    return array_values(array_unique($items));
+};
 
 // ---------------------------------------------------------------------
 // Default values
@@ -1181,6 +1230,18 @@ foreach ($courseSettings as $setting) {
     }
 }
 
+$selectedQuizNotifications = $normalizeQuizNotificationSetting(
+    api_get_course_setting('email_alert_manager_on_new_quiz')
+);
+
+foreach ($validQuizNotificationValues as $itemId) {
+    $values[$buildQuizNotificationFieldName($itemId)] = \in_array(
+        $itemId,
+        $selectedQuizNotifications,
+        true
+    ) ? 1 : 0;
+}
+
 // Make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
@@ -1224,53 +1285,8 @@ if ($enableAiHelpers) {
 
 $form->setDefaults($values);
 
-// JS helpers: move legacy main block into the "Course settings" panel
-$htmlHeadXtra[] = '
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("update_course");
-    if (!form) {
-        return;
-    }
-
-    // Move legacy main settings into the "Course settings" panel body
-    var start = document.getElementById("course-main-settings-legacy-start");
-    var end = document.getElementById("course-main-settings-legacy-end");
-    var panelBody = document.getElementById("collapse_course_main");
-
-    if (start && end && panelBody) {
-        var nodesToMove = [];
-        var node = start.nextSibling;
-
-        // Collect nodes between start and end (exclusive)
-        while (node && node !== end) {
-            var next = node.nextSibling;
-            nodesToMove.push(node);
-            node = next;
-        }
-
-        // Move nodes into the panel body
-        nodesToMove.forEach(function (n) {
-            panelBody.appendChild(n);
-        });
-
-        // Remove markers to keep DOM clean
-        if (start.parentNode) {
-            start.parentNode.removeChild(start);
-        }
-        if (end.parentNode) {
-            end.parentNode.removeChild(end);
-        }
-    }
-});
-</script>
-';
 $htmlHeadXtra[] = '
 <style>
-    .course-picture-preview-row {
-        margin-top: 0.5rem;
-    }
-
     .course-picture-preview img {
         max-width: 320px;
         height: auto;
@@ -1290,6 +1306,23 @@ $htmlHeadXtra[] = '
 if ($form->validate()) {
     $updateValues = $form->exportValues();
 
+    $request = Container::getRequest();
+    $submittedValues = $request->request->all();
+
+    $selectedQuizNotifications = [];
+
+    foreach ($validQuizNotificationValues as $itemId) {
+        $fieldName = $buildQuizNotificationFieldName($itemId);
+
+        if (!empty($submittedValues[$fieldName])) {
+            $selectedQuizNotifications[] = $itemId;
+        }
+
+        unset($updateValues[$fieldName]);
+    }
+
+    $updateValues['email_alert_manager_on_new_quiz'] = $selectedQuizNotifications;
+
     $updateValues['visibility'] = isset($updateValues['visibility'])
         ? (int) $updateValues['visibility']
         : $courseEntity->getVisibility();
@@ -1302,6 +1335,10 @@ if ($form->validate()) {
     $updateValues['subscribe'] = isset($updateValues['subscribe'])
         ? (int) $updateValues['subscribe']
         : $courseEntity->getSubscribe();
+
+    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+        $updateValues['subscribe'] = (int) $courseEntity->getSubscribe();
+    }
 
     $updateValues['unsubscribe'] = isset($updateValues['unsubscribe'])
         ? (int) $updateValues['unsubscribe']
@@ -1469,11 +1506,28 @@ if ($form->validate()) {
     }
 
     // Insert/Update course_settings table
+    $quizNotificationSettingSaved = false;
+
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
+
+        if ('email_alert_manager_on_new_quiz' === $setting) {
+            // Store checkbox values as a stable CSV string.
+            $value = implode(',', $updateValues['email_alert_manager_on_new_quiz']);
+            $quizNotificationSettingSaved = true;
+        }
+
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
+            api_get_course_int_id()
+        );
+    }
+
+    if (!$quizNotificationSettingSaved) {
+        CourseManager::saveCourseConfigurationSetting(
+            'email_alert_manager_on_new_quiz',
+            implode(',', $updateValues['email_alert_manager_on_new_quiz']),
             api_get_course_int_id()
         );
     }

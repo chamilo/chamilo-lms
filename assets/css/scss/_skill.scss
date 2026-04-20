@@ -8,7 +8,7 @@
   }
 
   .row {
-    display: flex;
+    @apply flex;
     flex-wrap: wrap;
     margin-right: calc(var(--bs-gutter-x, .75rem) / -2);
     margin-left: calc(var(--bs-gutter-x, .75rem) / -2);
@@ -151,7 +151,7 @@
     width: 100%;
     text-align: center;
     justify-content: center;
-    align-items: center;
+    @apply items-center;
   }
   .skills-badges a .caption{
     text-align: center;
@@ -173,7 +173,7 @@
     width: 100%;
     text-align: center;
     justify-content: center;
-    align-items: center;
+    @apply items-center;
   }
   .skill-options .legend {
     border: 1px dashed #cccccc;
@@ -183,7 +183,7 @@
     border-radius: 10px;
     margin-bottom: 1em;
     margin-top: 1em;
-    background-color: #FFFFFF;
+    @apply bg-white;
   }
 
   .skill-options .skill-home {
@@ -193,7 +193,7 @@
 
   .skill-options .btn-block {
     box-sizing: border-box;
-    display: block;
+    @apply block;
     padding-left: 0;
     padding-right: 0;
     width: 100%;
@@ -201,7 +201,7 @@
 
   .skill-options .accordion-inner {
     padding: 9px 15px;
-    background-color: #FFFFFF;
+    @apply bg-white;
   }
 
   .skill-options .skill-winner {
@@ -318,7 +318,7 @@
   .skill_child {
     box-shadow: 2px 2px 19px #aaa;
     border-radius: 6px;
-    background-color: white;
+    @apply bg-white;
     border: 0.1em dotted #D4E06B;
     color: black;
     font-size: 0.9em;
@@ -365,7 +365,7 @@
 
   .modal-content {
     position: relative;
-    background-color: #fff;
+    @apply bg-white;
     border: 1px solid #999;
     border-radius: 3px;
     outline: 0;
@@ -376,7 +376,7 @@
   }
 
   .modal.in {
-    display: block;
+    @apply block;
     opacity: 1;
   }
 
@@ -387,7 +387,7 @@
 
   .panel {
     margin-bottom: 20px;
-    background-color: #fff;
+    @apply bg-white;
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
@@ -418,7 +418,7 @@
 
   .panel-title a {
     text-decoration: none;
-    display: block;
+    @apply block;
     padding: 10px 15px;
   }
 
@@ -430,7 +430,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     text-align: center;
-    background-color: #fff;
+    @apply bg-white;
     padding: 15px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
     min-height: 300px;
@@ -441,7 +441,7 @@
   }
 
   .skill-profile-block img {
-    display: block;
+    @apply block;
     margin: 10px auto;
     border-radius: 50%;
   }
@@ -451,7 +451,7 @@
   }
 
   .skill-profile-block .btn--plain {
-    display: block;
+    @apply block;
     margin: 20px auto;
     font-size: 1rem;
     color: #007bff;
@@ -468,5 +468,45 @@
   .skill-profile-block img[width="64"] {
     margin: 5px;
     display: inline-block;
+  }
+}
+
+.skills-badges {
+  @apply mb-4;
+
+  &--cards {
+    @apply grid gap-4 grid-cols-2
+      sm:grid-cols-3
+      md:grid-cols-5
+      xl:grid-cols-6;
+
+    .skill-badge-wrapper {
+      @apply rounded-lg bg-white border border-gray-25 transition isolate p-4 flex flex-col
+        hover:shadow-xl;
+
+      a {
+        @apply hover:underline;
+      }
+
+      .item {
+        @apply relative;
+
+        img {
+          @apply rounded-t-lg object-cover w-full h-auto;
+        }
+      }
+
+      .caption {
+        @apply space-y-2;
+
+        &:empty {
+          @apply hidden;
+        }
+      }
+
+      .skill-badge-action {
+        @apply mt-auto rounded-b-lg space-y-2;
+      }
+    }
   }
 }

@@ -14724,7 +14724,7 @@ msgstr "Awọn olumulo, Awọn ẹgbẹ"
 msgid "Sorry no results"
 msgstr "Ma binu ko si awọn abajade"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Awọn igbanilaaye ẹgbẹ"
 
 msgid "Closed"
@@ -16067,6 +16067,15 @@ msgstr "Kọ́ọ̀dù kùkù"
 
 msgid "Create child skill"
 msgstr "Ṣẹ̀dá ìmọ̀ ìbáṣepọ̀ ọmọ"
+
+msgid "This skill can be obtained through:"
+msgstr ""
+
+msgid "No course currently allows you to obtain this skill."
+msgstr ""
+
+msgid "Add skill to search profile"
+msgstr ""
 
 msgid "Search profile matches"
 msgstr "Ṣàwádìí ìbámu profaili"
@@ -25780,88 +25789,88 @@ msgid "For tests with many questions, use pagination if the number of questions 
 msgstr ""
 
 msgid "Question pagination length for teachers"
-msgstr ""
+msgstr "Gigun pagination ibeere fun olukọ"
 
 msgid "Number of questions to show on every page when using the question pagination for teachers option."
-msgstr ""
+msgstr "Nọmba awọn ibeere lati ṣafihan lori gbogbo oju-iwe nigba lilo aṣayan pagination ibeere fun olukọ."
 
 msgid "Limit teachers' permissions over tests"
-msgstr ""
+msgstr "Idinku awọn igbanilaaye olukọ lori awọn idanwo"
 
 msgid "When enabled, teachers cannot delete tests nor questions, change tests visibility, download to QTI, clean results, etc."
-msgstr ""
+msgstr "Nigbati a ba ṣiṣẹ, awọn olukọ ko le paarẹ awọn idanwo tabi awọn ibeere, yi hihan idanwo pada, ṣe igbasilẹ si QTI, nu awọn abajade, abbl."
 
 msgid "Lock questions of previous categories in a test"
-msgstr ""
+msgstr "Titiipa awọn ibeere ti awọn ẹka iṣaaju ninu idanwo kan"
 
 msgid "When using this option, an additional option will appear in the test's configuration. When using a test with multiple question categories and asking for a distribution by category, this will allow the user to navigate questions per category. Once a category is finished, (s)he moves to the next category and cannot return to the previous category."
-msgstr ""
+msgstr "Nigbati lilo aṣayan yii, aṣayan afikun yoo han ni iṣeto idanwo naa. Nigbati lilo idanwo pẹlu awọn ẹka ibeere pupọ ati bibeere fun pinpin nipasẹ ẹka, eyi yoo gba olumulo laaye lati lilọ kiri awọn ibeere fun ẹka kan. Ni kete ti ẹka kan ti pari, (o) yoo lọ si ẹka atẹle ko si le pada si ẹka iṣaaju."
 
 msgid "Tests score format"
-msgstr ""
+msgstr "Ọna kika ami idanwo"
 
 msgid "Select between the following forms for the display of users' score in various reports: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Use the numerical ID of the form you want to use."
-msgstr ""
+msgstr "Yan laarin awọn fọọmu wọnyi fun ifihan ami awọn olumulo ni awọn ijabọ oriṣiriṣi: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Lo ID oni nọmba ti fọọmu ti o fẹ lo."
 
 msgid "Additional links for teachers in tests list"
-msgstr ""
+msgstr "Awọn ọna asopọ afikun fun awọn olukọ ni akojọ awọn idanwo"
 
 msgid "Configure callback elements to generate new action icons for teachers to the right side of the tests list, in the form of an array, e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
-msgstr ""
+msgstr "Ṣeto awọn eroja callback lati ṣẹda awọn aami igbese tuntun fun awọn olukọ si apa ọtun ti akojọ awọn idanwo, ni irisi ohun elo, fun apẹẹrẹ ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
 
 msgid "Add checkbox for answers count confirmation"
-msgstr ""
+msgstr "Fi apoti idaniloju fun iṣiro awọn idahun kun"
 
 msgid "This option adds a checkbox at the end of each test asking the user to confirm the number of answers saved. This provides better auditing data for critical tests."
-msgstr ""
+msgstr "Aṣayan yii fi apoti idaniloju kun ni opin idanwo kọọkan ti n beere lọwọ olumulo lati jẹrisi nọmba awọn idahun ti a fipamọ. Eyi pese data ṣayẹwo to dara julọ fun awọn idanwo to ṣe pataki."
 
 msgid "Enable test categories"
-msgstr ""
+msgstr "Ṣiṣẹ awọn ẹka idanwo"
 
 msgid "Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear."
-msgstr ""
+msgstr "Awọn ẹka idanwo ko ṣiṣẹ nipasẹ aiyipada nitori wọn ṣafikun ipele ti idiwọn. Ṣiṣẹ ẹya yii lati ṣafihan gbogbo awọn aami iṣakoso ti o ni ibatan si awọn ẹka idanwo."
 
 msgid "Enable test results page configuration"
-msgstr ""
+msgstr "Ṣiṣẹ iṣeto oju-iwe awọn abajade idanwo"
 
 msgid "Define an array of settings you want to apply to all tests results pages. Settings can be 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' and possibly more in the future. Look for ‘getPageConfigurationAttribute’ in the code to see what’s in use."
-msgstr ""
+msgstr "Ṣalaye ohun elo ti awọn eto ti o fẹ lo si gbogbo awọn oju-iwe awọn abajade idanwo. Awọn eto le jẹ 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' ati boya diẹ sii ni ọjọ iwaju. Wa ‘getPageConfigurationAttribute’ ninu koodu lati rii kini o wa ni lilo."
 
 msgid "Enable test images zooming"
-msgstr ""
+msgstr "Ṣiṣẹ titunse awọn aworan idanwo"
 
 msgid "Enable this feature to allow users to zoom on images used in the tests."
-msgstr ""
+msgstr "Ṣiṣẹ ẹya yii lati gba awọn olumulo laaye lati titun awọn aworan ti a lo ninu awọn idanwo."
 
 msgid "Enable extra test answers recording"
-msgstr ""
+msgstr "Ṣiṣẹ igbasilẹ awọn idahun idanwo afikun"
 
 msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
-msgstr ""
+msgstr "Ṣiṣẹ igbasilẹ gbogbo awọn idahun (ani igba diẹ) ni tabili track_e_attempt_recording. Ẹya yii jẹ idanwo ati le ṣẹda awọn iṣoro ni awọn oju-iwe ijabọ nigbati o ngbiyanju lati ṣe ami idanwo kan."
 
 msgid "Enable selecting mandatory questions"
-msgstr ""
+msgstr "Ṣiṣẹ yiyan awọn ibeere ti o gbọdọ"
 
 msgid "Enable the selection of mandatory questions in a test when using random categories."
-msgstr ""
+msgstr "Ṣiṣẹ yiyan awọn ibeere ti o gbọdọ ninu idanwo nigbati lilo awọn ẹka laileto."
 
 msgid "Enable display of best score attempt"
-msgstr ""
+msgstr "Ṣiṣẹ ifihan igbiyanju ami ti o dara julọ"
 
 msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
-msgstr ""
+msgstr "Pese akojọ awọn akoko-ẹkọ ati awọn ID idanwo ti yoo ṣafihan igbiyanju ami ti o dara julọ fun eyikeyi akẹkọ ni awọn ijabọ."
 
 msgid "Add user extra fields in exercise category report"
-msgstr ""
+msgstr "Fi awọn aaye afikun olumulo kun ni ijabọ ẹka adaṣe"
 
 msgid "Define an array with the list of user extra fields to add to the report."
-msgstr ""
+msgstr "Ṣalaye ohun elo pẹlu akojọ awọn aaye afikun olumulo lati fi kun si ijabọ."
 
 msgid "Score grades model"
-msgstr ""
+msgstr "Awoṣe ami ami"
 
 msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
-msgstr ""
+msgstr "Ṣalaye ohun elo ti awọn iwọn ami ati awọn awọ lati ṣafihan awọn ijabọ nipa lilo awoṣe yii. Eyi gba ọ laaye lati ṣafihan awọn awọ dipo awọn ami oni nọmba."
 
 msgid "Enable time per question in tests"
 msgstr "Ṣiṣẹ akoko fun ibeere kọọkan ninu awọn idanwo"
@@ -26842,13 +26851,13 @@ msgid "Check password strength"
 msgstr "Ṣayẹwo agbara ọrọ igbaniwọle"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "HTTP Ìdúróṣinṣin Ìgbé Lọ́nà Ìkọ́kọ́"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security jẹ ẹya ti o dara julọ lati ṣe atilẹyin lori aaye rẹ ati o mu imulo TLS rẹ lagbara nipa gbigba Agent Olumulo lati fi ipa mu lilo HTTPS. Iye ti a ṣe iṣeduro: 'strict-transport-security: max-age=63072000; includeSubDomains'. Wo https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. O le fi 'preload' suffix kun, ṣugbọn eyi ni awọn ipa lori agbegbe ipele oke (TLD), nitorinaa boya ko ṣe laifọwọsi. Wo https://hstspreload.org/. Fi si空白 lati pa."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Ètò Ìdílé Ìdààmú Àkóónù"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy jẹ iwọn ti o munadoko lati daabobo aaye rẹ lati awọn ikọlu XSS. Nipa whitelisting awọn orisun ti akoonu ti a fọwọsi, o le ṣe idena fun ẹrọ aṣawe lati gbe awọn ohun-ini buburu. Eyi ṣeto jẹ idiwọn pataki pẹlu awọn olootu WYSIWYG, ṣugbọn ti o ba fi gbogbo awọn aaye-orisun ti o fẹ lati yọọda fun ifilelẹ iframes kun ninu alaye child-src, apẹẹrẹ yii yẹ ki o ṣiṣẹ fun ọ. O le ṣe idena JavaScript lati ṣiṣẹ lati awọn orisun ita (pẹlu inu awọn aworan SVG) nipa lilo akojọ ti o muna ni 'script-src' ariyanjiyan. Fi si空白 lati pa. Apẹẹrẹ ṣeto: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26860,7 +26869,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Eyi ṣeto gba ọ laaye lati ṣe idanwo nipa ijabọ ṣugbọn ko fi ipa mu diẹ ninu Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "HTTP Ìpìlẹ̀ Kọ́kọ́ Ìkọ́kọ́"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning daabobo aaye rẹ lati awọn ikọlu MiTM nipa lilo awọn iwe-ẹri X.509 rogue. Nipa whitelisting awọn idaniloju nikan ti ẹrọ aṣawe yẹ ki o gbẹkẹle, awọn olumulo rẹ ni aabo ni iṣẹlẹ ti alaṣẹ iwe-ẹri kan ba bajẹ."
@@ -31000,7 +31009,7 @@ msgid "Create your first note to get started."
 msgstr "Ṣẹ̀dá akọsilẹ̀ àkọ́kọ́ rẹ láti bẹ̀rẹ̀."
 
 msgid "F d, Y"
-msgstr "Ọjọ́ F, Ọdún Y"
+msgstr "F d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "A kò le gbe alaye atilẹyin ni akoko yi."
@@ -32578,61 +32587,61 @@ msgid "Current authentication method"
 msgstr "Ọ̀nà ìdáwò lọ́wọ́ lọ́wọ́"
 
 msgid "Branches"
-msgstr ""
+msgstr "Ẹka"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Yara"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Olufun wa yara ti o wa"
 
 msgid "New branch"
-msgstr ""
+msgstr "Ẹka tuntun"
 
 msgid "New room"
-msgstr ""
+msgstr "Yara tuntun"
 
 msgid "Branch"
-msgstr ""
+msgstr "Ẹka"
 
 msgid "Default room"
-msgstr ""
+msgstr "Yara aiyipada"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Iṣẹ yara: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Wa awọn yara ti o wa"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Awọn yara ti o wa"
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Awọn yara ti a ti gba"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Ko si awọn yara ti o wa ti a ri fun akoko yii"
 
 msgid "No rooms have been created yet"
-msgstr ""
+msgstr "Ko si awọn yara ti a ṣẹda sibẹsibẹ"
 
 msgid "Courses linked to %s"
-msgstr ""
+msgstr "Awọn akoko-ẹkọ ti a so pọ si %s"
 
 msgid "No branches have been created yet"
-msgstr ""
+msgstr "Ko si awọn ẹka ti a ṣẹda sibẹsibẹ"
 
 msgid "Occupation"
-msgstr ""
+msgstr "Iṣẹ"
 
 msgid "Cannot delete branch with rooms attached"
-msgstr ""
+msgstr "Ko ṣee pa ẹka pẹ̀lú awọn yara ti a so mọ́ rẹ̀"
 
 msgid "Cannot delete room with courses attached"
-msgstr ""
+msgstr "Ko ṣee pa yara pẹ̀lú awọn ẹkọ ti a so mọ́ rẹ̀"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Awọn ija"
 
 msgid "Geolocation"
 msgstr "Ipo Geo"
@@ -32744,4 +32753,1129 @@ msgstr "Gbe aworan kan soke tabi ṣẹda ọkan pẹlu Badge Studio."
 
 msgid "Current badge set"
 msgstr "Eto baaji lọwọlọwọ"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Ni apakan yii, nigbati o ba tẹ 'Forukọsilẹ ọmọ ile-iwe' fun iṣẹ-ẹkọ kan, wọn yoo beere lọwọ rẹ lati yan olumulo ni oju-iwe atẹle. Nigbati a ba ṣe idaniloju, yoo ṣẹda igba tuntun pẹlu iṣẹ-ẹkọ ti a yan ati olumulo, ati firanse ifitonileti ṣiṣe akọsilẹ si olumulo."
+
+msgid "Read-only view"
+msgstr "Wiwo kika-nikan"
+
+msgid "Events list"
+msgstr "Akojọ awọn iṣẹlẹ"
+
+msgid "Personal"
+msgstr "Ti ara ẹni"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Awọn ọsẹ ti han lati 1 si 52"
+
+msgid "No tutored sessions found"
+msgstr "Ko si awọn akoko ikọni ti a ri"
+
+msgid "Content search"
+msgstr "Wiwa akoonu"
+
+msgid "Search indexed content across all courses."
+msgstr "Wa akoonu ti a ṣe atọka kọja gbogbo awọn iṣẹ-ẹkọ."
+
+msgid "Enter a keyword..."
+msgstr "Tẹ ọrọ-ìpìlẹ kan wọle..."
+
+msgid "Search error"
+msgstr "Aṣiṣe wiwa"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Tẹ ọrọ-ìpìlẹ kan wọle lati wa awọn iwe-ipamọ ti a ṣe atọka."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Awọn abajade ti o ko le wọle si ti fi pamọ nipasẹ eto."
+
+msgid "Restricted"
+msgstr "Ihamọ"
+
+msgid "You do not have access to this resource."
+msgstr "O ko ni iraye si orisun yii."
+
+msgid "Create group"
+msgstr "Ṣẹda ẹgbẹ"
+
+msgid "My custom certificate"
+msgstr "Iwe-ẹri aṣa mi"
+
+msgid "Select permission"
+msgstr "Yan igbanilaaye"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Nipasẹ gbigba ìpè yìí, yóò ṣe ìsọpọ̀ pẹ̀lú olùbéèrè ní ọ̀nà tí yóò jẹ́ kí àwùṣe pìlì yìí tàbí gbogbo àwùṣe yí ṣe àfihàn fún olùbéèrè láti kà"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Àfihàn %d nínú ìdàbọ̀bù %d ìdíje fún %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Àfihàn %d ìdíje tí a ṣe ìrírí fún %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Nítorí náà, yóò ṣe ìdarí rẹ̀ lọ́nà ìdásílẹ̀ sí URL yìí"
+
+msgid "You have access to multiple URLs"
+msgstr "O ni ìwọ̀pọ̀ URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Jọ̀wọ́ tẹ ìdọ́gba ìsọ́nà ìsàlẹ̀ tí ó bá URL tí o fẹ́ ìwọ̀pọ̀"
+
+msgid "You do not currently have access to any URL"
+msgstr "O kò ní ìwọ̀pọ̀ sí URL kankan lọ́nà yìí"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Nọ́mbà ìpàdépọ̀ púpọ̀ jù lọ"
+
+msgid "An error occurred"
+msgstr "Ìṣòro kan ṣẹlẹ̀"
+
+msgid "You don't have any course content yet"
+msgstr "Kò sí àkòkò ìkẹ́kọ̀ọ́ kankan rẹ̀ lọ́nà yìí"
+
+msgid "This course is locked"
+msgstr "Ìkẹ́kọ̀ọ́ yìí ti di ìdílé"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Àwùrẹ́ e-mail tí a fi rán àwùrẹ́ e-mail rẹ̀, tí a tún ṣe ìlò gẹ́gẹ́ bí ìpìlẹ̀ 'ìdáhùn-sí'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Kò rí èdè rẹ nínú àtòkọ? Ṣe ìfọwérànṣẹ́ sí wa ní %s láti ṣe ìdàsílẹ̀ gẹ́gẹ́ bí olùtumọ̀"
+
+msgid "An update is available"
+msgstr "Ìmú ìdàsílẹ̀ ṣe pàtàkì"
+
+msgid "to know what's new and what has been changed"
+msgstr "láti mọ ìdí tí ó ṣe ìyàtọ̀ àti ìyípadà"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "A ti ṣàwárí pé ìdásílẹ̀ PHP rẹ kò ṣàpèjúwe ọjọ́"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Àwòdúrá PHP rẹ kò bá ìbeere fún ìdàbọ̀bù yìí mu"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Àwọn ìwé tàbí àwùnà kò ní ìyọ̀nda kíkọ"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Ìkìlọ̀! Olùdásílẹ̀ ti ṣàwárí ìpìlẹ̀ Chamilo tí ó wà lórí ìṣètò rẹ"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Nítorí tí àwùnà <code>newscorm</code> àti <code>exercice</code> ti yí orúkọ sí <code>lp</code> àti <code>exercise</code> lọ́nà ìyàtọ̀, ó ṣe pàtàkì láti pa tàbí yí orúkọ sí <code>newscorm_old</code> àti <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Fọ́ọ̀mù náà ni ìròyìn tí kò tọ́ tàbí kò pé"
+
+msgid "Your contact information could not be sent"
+msgstr "Ìròyìn ìfọwọ̀kan rẹ kò le fi ránṣẹ́"
+
+msgid "Please contact support with the error details"
+msgstr "Jọ̀wọ́ kan si ìdàá jìnnà pẹ̀lú ìròyìn ìṣòro"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Tẹ àwòrán náà láti gé e (ipín 1:1, 120x120 px tí a fọwósílẹ̀)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Lo ohun èlò gé láti yan agbègbè 1:1"
+
+msgid "Checking push subscription"
+msgstr "Ṣàyẹ̀wò ìdàsọlẹ̀ ìtẹ̀wọ́"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "O ti ṣàpèwà sí ìfìfọ́hùn ìtẹ̀wọ́ nínú ẹ̀rín ìwò yìí"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Ìfìfọ́hùn ìtẹ̀wọ́ kò ṣiṣẹ́ nínú ẹ̀rín ìwò yìí"
+
+msgid "Data exchange successfully saved"
+msgstr "Pàṣípààrọ̀ ìròyìn ti fipamọ́ dáadáa"
+
+msgid "Error saving data exchange"
+msgstr "Ìṣòro fipamọ́ ìpàṣípààrọ̀ ìròyìn"
+
+msgid "No documents added yet"
+msgstr "Kò sí ìwé tí a fi kun"
+
+msgid "No additional details available for this skill."
+msgstr "Ko si alaye afikun ti o wa fun ogbon yii."
+
+msgid "No available documents"
+msgstr "Kò sí ìwé tí o ṣe ìwọ̀pọ̀"
+
+msgid "No users added yet"
+msgstr "Kò sí olùpẹ̀yìndà tí a fi kun"
+
+msgid "No available users"
+msgstr "Kò sí olùpẹ̀yìndà tí o ṣe ìwọ̀pọ̀"
+
+msgid "You can no longer submit"
+msgstr "O kò le fiwọ́silẹ̀ mọ́"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Kò sí ìfiwọ́silẹ̀ tí ó ṣòfo fún iṣẹ́ yìí tàbí ìròyìn kò ṣe ìwọ̀pọ̀"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "A ti fi e-mail ránṣẹ́ sí gbogbo àwùn olùpẹ̀yìndà tí kò fiwọ́silẹ̀"
+
+msgid "Failed to send email"
+msgstr "Kùnà sí ìfifi e-mail ránṣẹ́"
+
+msgid "Write your answer here"
+msgstr "Kọ ìdáhùn rẹ níbí"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Kìlẹ́ndà ìdàhùn jẹ́ kí o ṣe ìdàsílẹ̀ àwùn ìdàhùn (ọ̀kan fún ìpàdé gidi tí àwùn akẹ́kọ̀ọ́ gbọ́dọ̀ wà)"
+
+msgid "Loading attendance data"
+msgstr "Ṣe ìdọ̀tí ìròyìn ìdàhùn"
+
+msgid "No attendance assigned yet"
+msgstr "Kò sí ìdàhùn tí a yàn lọ́nà yìí"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Kò sí ìdàhùn kí òrùn, gbìyànjú yan ọjọ́ mìíràn tàbí ṣàfikún ìdàhùn rẹ fúnra rẹ pẹ̀lú àwùn ìdí ìdàsílẹ̀"
+
+msgid "No attendance data for today"
+msgstr "Kò sí ìròyìn ìdàhùn fún òní"
+
+msgid "Saving"
+msgstr "Fipamọ́"
+
+msgid "No attendance data to save"
+msgstr "Kò sí ìròyìn ìdàhùn láti fipamọ́"
+
+msgid "Failed to save attendance"
+msgstr "Kùnà sí ìfipamọ́ ìdàhùn"
+
+msgid "Loading more courses"
+msgstr "Ṣe ìdọ̀tí ìkẹ́kọ̀ọ́ púpọ̀ sí i"
+
+msgid "Loading more sessions"
+msgstr "Ṣe ìdọ̀tí ìpàdé púpọ̀ sí i"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Ìdàsílẹ̀ ìdàsílẹ̀ ìdàsílẹ̀ ìwé ṣiṣẹ́"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Ìfìdàsílẹ̀ ìdàgbàsókè ìdàsílẹ̀ àwọn ìdàsílẹ̀ ti ṣiṣẹ́ pẹ̀lú"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Ètò ìdàsílẹ̀ àwùpù ìdàsílẹ̀ ìmọ̀ ti ṣiṣẹ́"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Ètò ìdàsílẹ̀ àwùpù ìdàsílẹ̀ fọ́ọ̀lùmù ti ṣiṣẹ́"
+
+msgid "Course ID is missing"
+msgstr "ID Ẹ̀kọ́ kò sí"
+
+msgid "Course created successfully"
+msgstr "Ẹ̀kọ́ ti ṣẹ̀dá yíyọ̀ọ́nù"
+
+msgid "Error deleting document(s)"
+msgstr "Àṣìṣe ìparẹ́ ìwé ìpamọ́"
+
+msgid "Template successfully deleted"
+msgstr "Àpẹẹrẹ ti yọ kúrò yíyọ̀ọ́nù"
+
+msgid "Error deleting the template"
+msgstr "Àṣìṣe ìparẹ́ àpẹẹrẹ"
+
+msgid "The title and thumbnail are required"
+msgstr "Àkọ́kọ́ àti àwòrán ìkọ́kọ́ jẹ́ ìdí pàtàkì"
+
+msgid "Template created successfully"
+msgstr "Àpẹẹrẹ ti ṣẹ̀dá yíyọ̀ọ́nù"
+
+msgid "Error creating the template"
+msgstr "Àṣìṣe ìdá àpẹẹrẹ"
+
+msgid "Error submitting the form"
+msgstr "Àṣìṣe ìfiwà fọ́ọ̀mù"
+
+msgid "Loading templates"
+msgstr "Ṣiṣe ìdùdù àpẹẹrẹ"
+
+msgid "Loading layout"
+msgstr "Ṣiṣe ìdùdù ìfòyebánilẹ̀kòò"
+
+msgid "Loading courses"
+msgstr "Ṣiṣe ìdùdù àwùjọ ẹ̀kọ́"
+
+msgid "No courses available"
+msgstr "Kò sí ẹ̀kọ́ kankan"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Àtòjọ yìí ṣàfihàn àwùjọ oníṣe ìwòye láti gbogbo URL ìwọle nítorí ìdàsílẹ̀ \"session_admin_access_to_all_users_on_all_urls\" ti ṣiṣẹ́."
+
+msgid "User not found"
+msgstr "Olùṣe ìwòye kò rí"
+
+msgid "An error occurred while sending the course"
+msgstr "Àṣìṣe ṣẹlẹ̀ lákòòkan ìfiwísí ẹ̀kọ́"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Jọ̀wọ́ ranti pé ìyípadà sí àwùjọ ìlànà ìjọba GDPR ń béèrè kí o fi àwùjọ ìyípadà yìí hàn àwùjọ ẹgbẹ́ kẹta tí o ti pèsè ìròyìn ìdàrúkọ lọ́dọ̀ àwùjọ oníṣe ìwòye rẹ, gẹ́gẹ́ Ìpín 19 ti GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "O yẹ kí o ṣẹ̀dá \"Ìlànà àti Ìpinnu\" fún gbogbo èdè tí ó ṣeé ṣe"
+
+msgid "You don't have any course yet"
+msgstr "O kò ní ẹ̀kọ́ kankan síbẹ̀"
+
+msgid "You have received a new friend request"
+msgstr "O ti gba ìfẹ́ràn ọrẹ́ tuntun"
+
+msgid "Diagnosis Management"
+msgstr "Ìdarí Ìdíje"
+
+msgid "Tracking"
+msgstr "Ìtúpalẹ̀"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Wo àwọn ìròyìn, ìṣirò àti ìtúpalẹ̀ dátà"
+
+msgid "System activity audit"
+msgstr "Àyẹ̀wò ìgbòkànṣe eto"
+
+msgid "Learning analytics"
+msgstr "Àyẹ̀wò ìmọ̀"
+
+msgid "Administrative activity auditing"
+msgstr "Àyẹ̀wò ìgbòkànṣe ìṣàkadì"
+
+msgid "List icons"
+msgstr "Awọn aami akojọ"
+
+msgid "Constant name"
+msgstr "Orukọ igbagbogbo"
+
+msgid "MDI icon name"
+msgstr "Orukọ aami MDI"
+
+msgid "Assign authentication sources"
+msgstr "Yà sọ́nà ìdáàbòbò"
+
+msgid "Assignment details"
+msgstr "Àwòrán Ìyà sọ"
+
+msgid "Terms and conditions"
+msgstr "Àwùjọ àti Ìlànà"
+
+msgid "Icons"
+msgstr "Àwòrán àmì"
+
+msgid "Create backup"
+msgstr "Ṣẹ̀dá ìṣàpẹẹrẹ"
+
+msgid "Create file"
+msgstr "Ṣẹ̀dá ìwé"
+
+msgid "Create link"
+msgstr "Ṣẹ̀dá ìnọ́nnìbò"
+
+msgid "Edit template"
+msgstr "Ṣàtúnṣe àwòrán ìtumọ̀"
+
+msgid "Shared files"
+msgstr "Àwọn ìwé tí a pín"
+
+msgid "Skill wheel"
+msgstr "Kẹ̀kẹ́ ìbáwí"
+
+msgid "Favourite courses"
+msgstr "Àwọn kọlẹẹ̀jì a fẹ́ràn"
+
+msgid "Restart courses"
+msgstr "Ṣàtúnṣe ìbẹ̀rẹ̀ kọlẹẹ̀jì"
+
+msgid "Generate terms"
+msgstr "Ṣẹ̀dá àwùjọ"
+
+msgid "Add variation"
+msgstr "Ṣàfikún ìyàtọ̀"
+
+msgid "Editor demo"
+msgstr "Àwò ìwòrán olùdàbí"
+
+msgid "Tool introduction"
+msgstr "Ìdọ̀tí ìgbòòlù"
+
+msgid "Data exchanges"
+msgstr "Pàṣípààrọ̀ dátà"
+
+msgid "Third parties"
+msgstr "Àwùjọ kẹta"
+
+msgid "Layouts"
+msgstr "Àwùrẹ̀"
+
+msgid "Relation type"
+msgstr "Iru ibatan"
+
+msgid "Add all"
+msgstr "Fi gbogbo kun"
+
+msgid "Remove all"
+msgstr "Yọ gbogbo kuro"
+
+msgid "An error occurred. Please try again."
+msgstr "Aṣiṣe kan ṣẹlẹ. Jọwọ gbiyanju lẹẹkansi."
+
+msgid "%s created"
+msgstr "%s ti ṣẹda"
+
+msgid "%s updated"
+msgstr "%s ti ṣe imudojuiwọn"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ti o ba gbero lati ṣe igbesoke lati ẹya agbalẹ ti Chamilo, o le fẹ"
+
+msgid "have a look at the changelog"
+msgstr "wo changelog"
+
+msgid "to know what's new and what has been changed."
+msgstr "lati mọ kini tuntun ati ohun ti a ti yipada."
+
+msgid "Session Item"
+msgstr "Ohun elo igba"
+
+msgid "Points"
+msgstr "Awọn aaye"
+
+msgid "See notifications"
+msgstr "Wo awọn ifitonilẹyin"
+
+msgid "New content available for this course."
+msgstr "Akoonu tuntun wa fun iṣẹ-ẹkọ yii."
+
+msgid "No new notifications."
+msgstr "Ko si awọn ifitonilẹyin tuntun."
+
+msgid "No new content found."
+msgstr "Ko si akoonu tuntun ti a rii."
+
+msgid "No tool details available yet."
+msgstr "Ko si awọn alaye ohun elo ti o wa sibẹsibẹ."
+
+msgid "Last access"
+msgstr "Wiwọle ti o kẹhin"
+
+msgid "Open course"
+msgstr "Ṣii iṣẹ-ẹkọ"
+
+msgid "Course completed"
+msgstr "Iṣẹ-ẹkọ ti pari"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Aaye iforukọsilẹ fun iṣẹ-ẹkọ yii ti de."
+
+msgid "Subscription limit reached"
+msgstr "Aaye iforukọsilẹ ti de"
+
+msgid "Tertiary alternative"
+msgstr "Aṣayan ẹẹta"
+
+msgid "Update SCORM"
+msgstr "Ṣe imudojuiwọn SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI le ṣe akọsilẹ esi ati aaye ti a daba ṣaaju ki o to fi ranṣẹ."
+
+msgid "What will be sent to the AI"
+msgstr "Ohun ti yoo fi ranṣẹ si AI"
+
+msgid "Assignment title + instructions"
+msgstr "Akọle iṣẹ + awọn ilana"
+
+msgid "Student submission (text)"
+msgstr "Ifisilẹ ọmọ ile-iwe (ọrọ)"
+
+msgid "Student submission (text): none"
+msgstr "Ifisilẹ ọmọ ile-iwe (ọrọ): ko si"
+
+msgid "Student attachment"
+msgstr "Ifọwọsi ọmọ ile-iwe"
+
+msgid "supported"
+msgstr "ti ni atilẹyin"
+
+msgid "not supported for document analysis"
+msgstr "ko ni atilẹyin fun itupalẹ iwe-ipamọ"
+
+msgid "Student attachment: none"
+msgstr "Ifọwọsi ọmọ ile-iwe: ko si"
+
+msgid "No text AI providers available."
+msgstr "Ko si awọn olupese AI ọrọ ti o wa."
+
+msgid "AI-assisted"
+msgstr "Iranlọwọ AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Ipinnu yii ti fipamọ pẹlu atunṣe (ExtraField) ati pe ko le yipada nigbamii."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Ifọwọsi atunṣe ti a fẹ (eyii kii ṣe ifisilẹ ọmọ ile-iwe)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Ti gba"
+
+msgid "%s min"
+msgstr "%s iṣẹju"
+
+msgid "Unlock column"
+msgstr "Ṣii iwe-ọrọ"
+
+msgid "Lock column"
+msgstr "Titi pa iwe-ọrọ"
+
+msgid "Set all Present"
+msgstr "Ṣeto gbogbo Wa"
+
+msgid "Set all Absent"
+msgstr "Ṣeto gbogbo Kò wa"
+
+msgid "Auto (recommended)"
+msgstr "Aifọwọyi (ti a fọwosi)"
+
+msgid "Error downloading all documents."
+msgstr "Aṣiṣe nigbati o ṣe igbasilẹ gbogbo awọn iwe-ipamọ."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Ṣii pẹlu ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Aaye idiwọn"
+
+msgid "Remaining space"
+msgstr "Aaye ti o kù"
+
+msgid "Course catalogue"
+msgstr "Àkójọ ìdàbọ̀bù"
+
+msgid "Drag links to reorder"
+msgstr "Fa awọn ìsopọ̀ lati ṣe atunto"
+
+msgid "Drop links here to keep them without category"
+msgstr "Fi awọn ìsopọ̀ silẹ̀ nibi lati tọju wọn laisi ẹka"
+
+msgid "Could not export"
+msgstr "Ko ṣee ṣe ìtàn jade"
+
+msgid "Link moved"
+msgstr "Ìsopọ̀ ti gbe"
+
+msgid "Could not move link"
+msgstr "Ko ṣee gbe ìsopọ̀"
+
+msgid "Category reordering is not enabled"
+msgstr "Atunto ẹka ko ṣiṣẹ"
+
+msgid "Showing %s posts"
+msgstr "Nfihan %s awọn ifiweranṣẹ"
+
+msgid "Showing %s tasks"
+msgstr "Nfihan %s awọn iṣẹ́-ṣiṣe"
+
+msgid "Page %s of %s"
+msgstr "Oju-iwe %s ti %s"
+
+msgid "Tutors"
+msgstr "Awọn olùkọ́ ìdàrọ̀"
+
+msgid "selected"
+msgstr "yànyan"
+
+msgid "No data to export"
+msgstr "Ko si data lati ṣe ìtàn jade"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Akọsori PNG gbọdọ jẹ \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Àkójọ ìpìlẹ̀"
+
+msgid "Management list"
+msgstr "Àkójọ ìdarí"
+
+msgid "Open platform"
+msgstr "Pẹpẹ ṣiṣi"
+
+msgid "Teacher user ID"
+msgstr "ID olùdàrọ ìdàbọ̀bù"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Ṣe o daju pe o fẹ̀ pa ìdàbọ̀bù yìí run?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Ṣe o daju pe o fẹ̀ pa awọn ìdàbọ̀bù yìí run?"
+
+msgid "Search by name, username, email"
+msgstr "Ṣàwárí nipasẹ orúkọ, orúkọ olùwò, imeeli"
+
+msgid "contains %s items"
+msgstr "ní %s awọn ohun kan"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ìfọwọ́sowọ́pọ̀ ìjọba rẹ yoo ṣiṣẹ títí di ìgbà tí ìbéèrè ìyọlẹ̀ kankan ti ṣàyẹ̀wò àti ìlò."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ìbéèrè ìyọlẹ̀ ìfọwọ́sowọ́pọ̀ ìjọba rẹ ṣe ìdúró ìdàbọ̀bù."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ìbéèrè ìparun àkọọlẹ rẹ ṣe ìdúró ìdàbọ̀bù."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kini ìdí tí o fẹ̀ béèrè ìyọlẹ̀ ìfọwọ́sowọ́pọ̀ ìjọba rẹ?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Nfiranṣẹ ìbéèrè ìyọlẹ̀ ìfọwọ́sowọ́pọ̀ ìjọba rẹ..."
+
+msgid "Submitting request..."
+msgstr "Nfiranṣẹ ìbéèrè..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Béèrè ìyọlẹ̀ ìfọwọ́sowọ́pọ̀ ìjọba"
+
+msgid "Submitting your account deletion request..."
+msgstr "Nfiranṣẹ ìbéèrè ìparun àkọọlẹ rẹ..."
+
+msgid "Submitting your acceptance..."
+msgstr "Nfiranṣẹ ìdáwò rẹ..."
+
+msgid "Event details"
+msgstr "Awọn alaye ìṣẹ́lẹ̀"
+
+msgid "You cannot access the linked course from this view."
+msgstr "O ko le wọ ìdàbọ̀bù ìsopọ̀ lati ìrisi yii."
+
+msgid "Failed to load sessions"
+msgstr "Kùnà lati gbe awọn akoko"
+
+msgid "Failed to load events"
+msgstr "Kùnà lati gbe awọn ìṣẹ́lẹ̀"
+
+msgid "No events found"
+msgstr "Ko si awọn ìṣẹ́lẹ̀ ti a rí"
+
+msgid "Group image"
+msgstr "Àwòrán ẹgbẹ́"
+
+msgid "SearchTCC"
+msgstr "ṢàwáríTCC"
+
+msgid "Forbidden"
+msgstr "Èèyàn kò yọ̀ọda"
+
+msgid "Distribution"
+msgstr "Pinpin"
+
+msgid "Firstname"
+msgstr "Orúkọ ìdí"
+
+msgid "Lastname"
+msgstr "Orúkọ ìdí ìkẹhin"
+
+msgid "Email"
+msgstr "Imeeli"
+
+msgid "Last login in platform"
+msgstr "Ìwọle ìkẹhin sínú pẹpẹ"
+
+msgid "Export as CSV"
+msgstr "Ìtàn jade gẹgẹbi CSV"
+
+msgid "Export as XLS"
+msgstr "Ìtàn jade gẹgẹbi XLS"
+
+msgid "Deactivate this user?"
+msgstr "Pa olùwò yìí ku?"
+
+msgid "Enable this user?"
+msgstr "Ṣiṣẹ olùwò yìí?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Ṣàpapọ ẹgbẹ́ ìlikọra yìí sinu olùwò #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Eyi yoo ṣe idapọ gbogbo awọn akọọlẹ miiran ni ẹgbẹ kanna sinu akọọlẹ yii."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Awọn akọọlẹ ti a ṣe idapọ yoo parun patapata ati pe wọn yoo parẹ kuro ninu ijabọ yii."
+
+msgid "This action cannot be undone."
+msgstr "Iṣe yii ko le ṣe fa atunṣe."
+
+msgid "Unify"
+msgstr "Ṣe Ìdàpọ̀"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Akẹkọ"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Aaye lapapọ ti a lo nipasẹ ọdẹ %s opin jẹ %s MB"
+
+msgid "Helper text"
+msgstr "Ọrọ Iranlọwọ"
+
+msgid "NotAllowed"
+msgstr "Ko Gba laaye"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Lo awọn àlẹ̀dì loke lati ṣe gbe awọn alaye iraye si ẹkọ."
+
+msgid "Start date must be before end date"
+msgstr "Ọjọ ibẹrẹ gbọdọ wa ṣaaju ọjọ ipari"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Yan iwọn ọjọ kan ati iru akojọpọ lati ṣe ayẹwo awọn alaye iraye si ẹkọ."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Ile-ẹkọ yii yoo ṣẹda nipasẹ awoṣe ẹkọ aiyipada ti pẹpẹ."
+
+msgid "Security breach avoid restart"
+msgstr "Idiwọ aabo yago fun atunbere"
+
+msgid "User deactivated"
+msgstr "Olumulo ti a ṣe aiṣiṣẹ"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Olumulo ti ṣe ṣiṣẹ"
+
+msgid "No other duplicates found for this user."
+msgstr "Ko si awọn ẹda miiran ti a rii fun olumulo yii."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Awọn olumulo ti a ṣe ìdàpọ̀: ìdàpọ̀ %s akọọlẹ(àwùjọ) sinu olumulo #%s. Awọn akọọlẹ ti a ṣe ìdàpọ̀ ti parun patapata."
+
+msgid "No accounts were merged."
+msgstr "Ko si awọn akọọlẹ ti a ṣe ìdàpọ̀."
+
+msgid "An error occurred while unifying users."
+msgstr "Aṣiṣe waye lakoko ṣiṣe ìdàpọ̀ awọn olumulo."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Awọn olumulo ti a ṣe ìdàpọ̀: ìdàpọ̀ olumulo #%s sinu olumulo #%s. Akọọlẹ ti a ṣe ìdàpọ̀ ti parun patapata."
+
+msgid "Duplicate users"
+msgstr "Awọn olumulo ti o ṣe ìdàpọ̀"
+
+msgid "Years"
+msgstr "Ọdún"
+
+msgid "All time visits outside sessions"
+msgstr "Gbogbo awọn abẹwo akoko ni ita awọn akoko"
+
+msgid "All time visits in sessions"
+msgstr "Gbogbo awọn abẹwo akoko ninu awọn akoko"
+
+msgid "All time visits total"
+msgstr "Gbogbo awọn abẹwo akoko lapapọ"
+
+msgid "Student visits per period, per course"
+msgstr "Awọn abẹwo ọmọ ile-iwe fun akoko, fun iṣẹ-ẹkọ"
+
+msgid "By email"
+msgstr "Nipasẹ imeeli"
+
+msgid "By extra field"
+msgstr "Nipasẹ aaye afikun"
+
+msgid "Select an option"
+msgstr "Yan aṣayan kan"
+
+msgid "Profile field"
+msgstr "Aaye profaili"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Ijabọ yii ṣe atokọ awọn olumulo ti o ni adirẹsi imeeli kanna nikan."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Ijabọ yii ṣe atokọ awọn olumulo ti o pin iye kanna fun aaye profaili ti a yan."
+
+msgid "How to use this report"
+msgstr "Bí a ṣe ń lo ìròyìn yìí"
+
+msgid "Disable / Enable"
+msgstr "Pa / Ṣiṣẹ"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Awọn bulọọki tabi mu pada sii wiwọle nikan. Ko pa olumulo ati ko yọ awọn ṣe idọsilẹ kuro."
+
+msgid "Last week"
+msgstr "Ọsẹ to kọja"
+
+msgid "Next week"
+msgstr "Ọsẹ ti n bọ"
+
+msgid "Loading report..."
+msgstr "Nsisilẹ ìròyìn..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Kuna lati gbe ìròyìn yii. Jọwọ gbiyanju lẹẹkansi."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Yan awọn akoko kan tabi diẹ sii lati daakọ awọn olukọni lati ati yan iṣẹ-ẹkọ ibi-ibọ"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Mu Ctrl (tài Cmd) lati yan awọn ohun pupọ"
+
+msgid "Choose the destination course"
+msgstr "Yan iṣẹ-ẹkọ ibi-ibọ"
+
+msgid "You can select multiple items"
+msgstr "O le yan awọn ohun pupọ"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Lo apoti iwadi lati wa awọn iṣẹ-ẹkọ ni kiakia"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Yan awọn akoko orisun kan tabi diẹ sii ati awọn akoko ibi-ibọ kan tabi diẹ sii lati daakọ awọn ọmọ ile-iwe"
+
+msgid "Select destination sessions"
+msgstr "Yan awọn akoko ibi-ibọ"
+
+msgid "You can select multiple users"
+msgstr "O le yan awọn olumulo pupọ"
+
+msgid "Use the search box to find users quickly"
+msgstr "Lo apoti wiwa lati ri awọn olumulo ni kiakia"
+
+msgid "Error while creating the document"
+msgstr "Aṣiṣe nigba ṣiṣẹda iwe-ipamọ"
+
+msgid "Not a SCORM learning path"
+msgstr "Kii ṣe ọna ẹkọ SCORM"
+
+msgid "Final item"
+msgstr "Ohun ikẹhin"
+
+msgid "Edit item"
+msgstr "Ṣatunkọ ohun kan"
+
+msgid "No AI text providers configured."
+msgstr "Ko si awọn olupese ọrọ AI ti a ṣeto."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Idaṣe kuna. Faili naa le tobi ju opin olupin (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Ṣiṣe imudojuiwọn kuna. Ko si faili ti a gba nipasẹ olupin."
+
+msgid "Update failed. %s"
+msgstr "Ṣiṣe imudojuiwọn kuna. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Ṣiṣe imudojuiwọn kuna. Ìdíwò faili ti a gbe soke kò tọ."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Ṣiṣe imudojuiwọn kuna. Orukọ faili ZIP ti a gbe soke gbọdọ baamu orukọ package SCORM atilẹba."
+
+msgid "Update failed"
+msgstr "Ṣiṣe imudojuiwọn kuna"
+
+msgid "Question lower case"
+msgstr "Ibeere kekere"
+
+msgid "Regenerate"
+msgstr "Ṣe atunṣe"
+
+msgid "Case insensitive"
+msgstr "Aifẹsowona kọja"
+
+msgid "Select a session to load its courses."
+msgstr "Yan igba kan lati gbe awọn iṣẹ-ẹkọ rẹ soke."
+
+msgid "Select the source course."
+msgstr "Yan iṣẹ-ẹkọ orisun."
+
+msgid "Select a destination session."
+msgstr "Yan igba ibi-ibọ."
+
+msgid "Select the destination course."
+msgstr "Yan iṣẹ-ẹkọ ibi-ibọ."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Daakọ akoonu iṣẹ-ẹkọ pipe lati iṣẹ-ẹkọ igba ti a yan."
+
+msgid "Select which tools/items to copy."
+msgstr "Yan awọn irinṣẹ/awọn ohun kan lati daakọ."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Maṣe fi akoonu iṣẹ-ẹkọ ipilẹ (ti kii ṣe igba) kun."
+
+msgid "An error occurred while copying the course"
+msgstr "Aṣiṣe waye nigba didakọ iṣẹ-ẹkọ"
+
+msgid "Please select a different destination"
+msgstr "Jọwọ yan ibi-ibọ ti o yatọ"
+
+msgid "You must select a destination course"
+msgstr "O gbọdọ yan iṣẹ-ẹkọ ibi-ibọ"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Lati ṣe okeere awọn iṣẹ-ẹkọ pẹlu adanwo o ni lati yan adanwo"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ti awọn LP rẹ ba ni awọn faili ohun kun o yẹ ki o yan wọn lati awọn iwe-ipamọ"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ti adanwo rẹ ba ni awọn ibeere hotspot ti o wa pẹlu o yẹ ki o yan awọn aworan lati awọn iwe-ipamọ"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Ọrọigbani gbọdọ jẹ o kere ju %length% awọn ohun kikọ gigun."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Ọrọigbani gbọdọ ni o kere ju %count% awọn ohun kikọ kekere."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Ọrọigbani gbọdọ ni o kere ju %count% awọn ohun kikọ ti o ga."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Ọrọigbani gbọdọ ni o kere ju %count% awọn ohun kikọ nọmba (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Ọrọigbani gbọdọ ni o kere ju %count% awọn ohun kikọ pataki."
+
+msgid "Invalid login request."
+msgstr "Ibeere iwọle kò tọ."
+
+msgid "Authentication failed."
+msgstr "Ìdáwò ìdáhùn kùnà."
+
+msgid "Login %status% for username %username%"
+msgstr "Iwọle %status% fun orukọ olumulo %username%"
+
+msgid "Co-generated with AI"
+msgstr "A ṣẹda pẹlu AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Awọn aaye ti o nilo"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Àwọn àmì (tags) le ṣe ẹ̀dà àti ìlẹ̀kọ̀ sínú agbègbè ọrọ̀ ìsàlẹ̀ yìí, wọ́n yóò yí padà pẹ̀lú ìdíwọ̀n wọn fún olùpẹ̀lò kọ̀ọ̀kan nígbà tí wọ́n bá ń fi rẹ̀ ránṣẹ́."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ẹgbẹ́ yìí so pọ̀ mọ́ kíláàsì %s.<br>Àtòka àwùjọ ẹgbẹ́ gbẹ̀rẹ̀ lórí àwùjọ ẹgbẹ́ kíláàsì kò sì ṣe ìyípadà.<br>Lọ sí ìṣètò ẹgbẹ́ láti ya ìsopọ̀ yìí kúrò tí ìfẹ́ rẹ bá ṣe ìfiwéra pẹ̀lú ìyọ kúrò tàbí ìfokànsí àwùjọ ẹgbẹ́ yìí."
+
+msgid "Link classes to created groups ?"
+msgstr "Ṣe ìsopọ̀ àwùjọ kíláàsì pẹ̀lú àwùjọ tí a ṣẹ̀dá?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Tí kíláàsì kan bá so pọ̀ mọ́ ẹgbẹ́ kan, àwùjọ tí a fi kun tàbí kúrò lọ́nà kíláàsì yóò ṣe ìfokànsí tàbí yọ kúrò láti ẹgbẹ́ yìí."
+
+msgid "New groups creation in category %s"
+msgstr "Ṣẹ̀dá àwùjọ tuntun nínú ẹka %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Ìfọ̀rọ̀ ìdààmú láti fìdí ìdí hàn pé olùpẹ̀lò kò le ṣe ìyípadà àwùjọ ẹgbẹ́ tí ó so pọ̀"
+
+msgid "Remove the group link with the class"
+msgstr "Yọ ìsopọ̀ ẹgbẹ́ pẹ̀lú kíláàsì kúrò"
+
+msgid "Linked class"
+msgstr "Kíláàsì tí ó so pọ̀"
+
+msgid "The group is no longer linked to the class"
+msgstr "Ẹgbẹ́ kò so pọ̀ mọ́ kíláàsì mọ́"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Àkàtì àwùjọ àti àwùjọ ìkẹ́kọ̀ọ́ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Overview students subscribed to the class"
+msgstr "Àkàtì àwùjọ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Overview class"
+msgstr "Àkàtì kíláàsì"
+
+msgid "Go back to the list of classes"
+msgstr "Padà lọ sí àtòka kíláàsì"
+
+msgid "Go back to course classes"
+msgstr "Padà lọ sí kíláàsì ìdàrò"
+
+msgid "Users subscribed to the course"
+msgstr "Àwùjọ tí wọ́n forukọ sí ìdàrò"
+
+msgid "Users not subscribed to the course"
+msgstr "Àwùjọ tí kò forukọ sí ìdàrò"
+
+msgid "Users subscribed to the class"
+msgstr "Àwùjọ tí wọ́n forukọ sí kíláàsì"
+
+msgid "Courses subscribed to the class"
+msgstr "Àwùjọ ìkẹ́kọ̀ọ́ tí wọ́n forukọ sí kíláàsì"
+
+msgid "No user is subscribed to this class"
+msgstr "Kò sẹ́ni tí ó forukọ sí kíláàsì yìí"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Kò sẹ́ni àti kò ìdàrò tí ó forukọ sí kíláàsì yìí"
+
+msgid "No user are subscribed to this class"
+msgstr "Kò sẹ́ni tí ó forukọ sí kíláàsì yìí"
+
+msgid "No course are subscribed to this class"
+msgstr "Kò ìdàrò tí ó forukọ sí kíláàsì yìí"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ṣe o mọ̀ pé o fẹ́ yọ kíláàsì kúrò láìyọ àwùjọ kúrò?"
+
+msgid "Remove the class without removing students"
+msgstr "Yọ kíláàsì kúrò láìyọ ọmọ ilé-ìwé kúrò"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ètò yìí kò ṣe ìmúṣẹ̀ síbẹ̀ nínú ẹ̀yà ìdàsílẹ̀ yìí."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Fún àwùjọ ìlò ìdarí nìkan tí a ṣe ìrísí nínú agbègbè ìjọba."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Fún àwùjọ ìlò tí ó gbọ́dọ̀ farahan gẹ́gẹ́ ìdàrò."
+
+msgid "Displayed above the main page content."
+msgstr "Àfihàn lókè àkíìkí ojú-ìwòye akọ́kọ́."
+
+msgid "Displayed below the main page content."
+msgstr "Àfihàn ìsàlẹ̀ àkíìkí ojú-ìwòye akọ́kọ́."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Àfihàn nítòsí òkè ìlà ìpapọ̀ akọ́kọ́."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Àfihàn nítòsí ìsàlẹ̀ ìlà ìpapọ̀ akọ́kọ́."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Fún àwùjọ ìlò tí kò ṣe ìdàrú tàbí ìdúróṣinṣin kí a fi hàn ṣáájú ìpìlẹ̀."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Àfihàn nínú agbègbè ìlò tí a yàn."
+
+msgid "Admin menu"
+msgstr "Àkíì ìdarí"
+
+msgid "Global regions"
+msgstr "Àwùjọ agbáyé"
+
+msgid "No regions assigned"
+msgstr "Kò sẹ́ agbègbè kankan tí a yàn"
+
+msgid "Plugin regions"
+msgstr "Àwùjọ ìlò"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Yàn ibi tí ìlò kọ̀ọ̀kan tí a fi sórí yóò ṣe ìdáde."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Ìmọ̀ràn: lo Ctrl/Cmd láti yan àwùjọ pupọ."
+
+msgid "No installed plugins were found."
+msgstr "Kò rí ìlò kankan tí a fi sórí."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Yan agbègbè kan tàbí diẹ̀ sí i fún ìlò yìí nínú URL ìwọle lọ́wọ́ lọ́wọ́."
+
+msgid "Available regions"
+msgstr "Àwùjọ tí ó ṣe ìwàláàyè"
+
+msgid "Selected paragraph"
+msgstr "Àkọsílẹ̀ tí a yàn"
+
+msgid "Destination folder"
+msgstr "Ìpamọ́ ìparí"
+
+msgid "Generate AI media"
+msgstr "Ṣẹ̀dá àwòrán AI"
+
+msgid "Save and insert"
+msgstr "Fipamọ́ kí o fi sii"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Fipamọ́ ṣìṣẹ́ pàtó lásìkò tí ònípè yìí bá ṣe ìdásílẹ̀ àkíì base64. Tí o kò gba URL nìkan, fipamọ́ yàgò láti yẹ̀wò ìgbé ìdàsílẹ̀ nínú ẹ̀rọ ìwòye."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Fídíò ti ṣẹ̀dá yíyọlẹ, ṣùgbọ́n fipamọ́ yàgò nítorí ònípè yìí fi URL padà."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Àìfọwọ́sowọpọ yìí ti fipamọ́, ṣùgbọ́n URL rẹ̀ kò ṣe ìdáhùn."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ṣẹ̀dá ìdọ̀wò Aiken láti kọ̀wé kan tàbí láti ìwé ẹ̀kọ́ ẹ̀kọ́ kan."
+
+msgid "Test from topic"
+msgstr "Ìdọ̀wò láti kọ̀wé"
+
+msgid "Test from document"
+msgstr "Ìdọ̀wò láti ìwé"
+
+msgid "Generate from topic"
+msgstr "Ṣẹ̀dá láti kọ̀wé"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Lo ìdásílẹ̀ kọ̀wé kan láti ṣẹ̀dá ìfọ̀rọ̀wérọ̀ Aiken tuntun."
+
+msgid "Quiz title"
+msgstr "Àkọ́kọ́ ìdọ̀wò"
+
+msgid "Generate from document"
+msgstr "Ṣẹ̀dá láti ìwé"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Yan ìwé ẹ̀kọ́ ẹ̀kọ́ kan ṣùgbọ́n ṣẹ̀dá ìbéèrè lórí àkíìyèsí rẹ̀ nìkan."
+
+msgid "Selected document"
+msgstr "Ìwé yíyà kọ́"
+
+msgid "The document is selected from the course documents list."
+msgstr "Ìwé náà yíyà kọ́ láti ìnọ́kà ìwé ẹ̀kọ́ ẹ̀kọ́."
+
+msgid "Choose document"
+msgstr "Yan ìwé"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Àyàn. Lò nìkan gẹ́gẹ́ ìlò ìtọ́ka àfikún fún ìmọ̀ ìmọ̀."
+
+msgid "Select a document"
+msgstr "Yan ìwé kan"
+
+msgid "Welcome"
+msgstr "Kaabọ"
+
+msgid "Welcome to Chamilo"
+msgstr "Kaabọ si Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ti o ba jẹ akoko akọkọ rẹ lati lo Chamilo, rii daju pe o ṣayẹwo akojọ ẹwa ẹgbẹ lati wa ọna rẹ nipasẹ awọn ẹya ọpọlọpọ rẹ. Ti o ba nilo iranlọwọ, iwọ yoo rii <a href=\"https://docs.chamilo.org\">awọn iwe itọnisọna osise wa</a> le ṣe iranlọwọ fun awọn iwe itọnisọna boṣewa, lakoko ti <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">apejọ ori ayelujara wa</a> le ṣe iranlọwọ lati pin awọn imọran ati ri awọn idahun lati ọdọ awọn olummo Chamilo miiran."
 

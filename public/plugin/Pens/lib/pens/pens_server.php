@@ -128,7 +128,10 @@ class PENSServer extends PENSController
                             // Process package
                             $this->processPackage($request, $path_to_package);
                         }
-                        unlink($path_to_package);
+
+                        if (is_string($path_to_package) && is_file($path_to_package)) {
+                            unlink($path_to_package);
+                        }
                     }
                 } else {
                     // Then, send a success response to the client
@@ -206,12 +209,12 @@ class PENSServer extends PENSController
                 case CURLE_COULDNT_RESOLVE_PROXY:
                 case CURLE_COULDNT_RESOLVE_HOST:
                 case CURLE_COULDNT_CONNECT:
-                case CURLE_OPERATION_TIMEOUT:
-                case CURLE_REMOTE_FILE_NOT_FOUND:
+                case CURLE_OPERATION_TIMEOUTED:
+                case 78: //CURLE_REMOTE_FILE_NOT_FOUND
                     throw new PENSException(1310);
 
                     break;
-                case CURLE_REMOTE_ACCESS_DENIED:
+                case CURLE_FTP_ACCESS_DENIED: //CURLE_REMOTE_ACCESS_DENIED
                     throw new PENSException(1312);
 
                     break;

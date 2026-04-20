@@ -14736,7 +14736,7 @@ msgstr "משתמשים, קבוצות"
 msgid "Sorry no results"
 msgstr "סליחה, אין תוצאות."
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "הרשאות קבוצה"
 
 msgid "Closed"
@@ -16079,6 +16079,15 @@ msgstr "קוד קצר"
 
 msgid "Create child skill"
 msgstr "צור מיומנות ילד"
+
+msgid "This skill can be obtained through:"
+msgstr "מיומנות זו ניתן להשיג באמצעות:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "אין קורס כיום המאפשר לך להשיג מיומנות זו."
+
+msgid "Add skill to search profile"
+msgstr "הוסף מיומנות לפרופיל חיפוש"
 
 msgid "Search profile matches"
 msgstr "חיפוש התאמת פרופיל"
@@ -31017,7 +31026,7 @@ msgid "Create your first note to get started."
 msgstr "צור את ההערה הראשונה שלך כדי להתחיל."
 
 msgid "F d, Y"
-msgstr "D, d ב-M Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "לא ניתן לטעון מידע תמיכה כרגע."
@@ -32761,4 +32770,1129 @@ msgstr "העלה תמונה או צור אחת עם Badge Studio."
 
 msgid "Current badge set"
 msgstr "קבוצת תגיות נוכחית"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "במקטע זה, כאשר תלחץ על 'הרשם סטודנט' לקורס, תתבקש לבחור את המשתמש בדף הבא. לאחר אימות, ייווצר מפגש חדש עם הקורס והמשתמש שנבחרו, ויישלח הודעת הרשמה למשתמש."
+
+msgid "Read-only view"
+msgstr "תצוגת קריאה בלבד"
+
+msgid "Events list"
+msgstr "רשימת אירועים"
+
+msgid "Personal"
+msgstr "אישי"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "שבועות מוצגים מ-1 עד 52"
+
+msgid "No tutored sessions found"
+msgstr "לא נמצאו מפגשים עם הדרכה"
+
+msgid "Content search"
+msgstr "חיפוש תוכן"
+
+msgid "Search indexed content across all courses."
+msgstr "חפש תוכן מיועד בכל הקורסים."
+
+msgid "Enter a keyword..."
+msgstr "הזן מילת מפתח..."
+
+msgid "Search error"
+msgstr "שגיאת חיפוש"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "הזן מילת מפתח לחיפוש מסמכים מיועדים."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "תוצאות שאין לך גישה אליהן מוסתרות על פי הגדרה."
+
+msgid "Restricted"
+msgstr "מוגבל"
+
+msgid "You do not have access to this resource."
+msgstr "אין לך גישה למשאב זה."
+
+msgid "Create group"
+msgstr "צור קבוצה"
+
+msgid "My custom certificate"
+msgstr "תעודת הסמכה מותאמת אישית שלי"
+
+msgid "Select permission"
+msgstr "בחר הרשאה"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "על ידי קבלת הזמנה זו, תהפוך למקושר למשתמש המבקש בדרך שתאפשר למשתמש המבקש לקרוא חלק או את כל נתוני הפרופיל שלך"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "מציג %d מתוך כ-%d תוצאה(ות) עבור %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "מציג %d תוצאה(ות) נגישות עבור %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "לכן תופנה אוטומטית לכתובת URL זו"
+
+msgid "You have access to multiple URLs"
+msgstr "יש לך גישה לכמה כתובות URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "אנא לחץ על הקישור למטה המתאים לכתובת ה-URL שברצונך לגשת אליה"
+
+msgid "You do not currently have access to any URL"
+msgstr "כרגע אין לך גישה לאף כתובת URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "מספר המנויים המרבי המותר"
+
+msgid "An error occurred"
+msgstr "אירעה שגיאה"
+
+msgid "You don't have any course content yet"
+msgstr "עדיין אין לך תוכן קורס"
+
+msgid "This course is locked"
+msgstr "קורס זה נעול"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "כתובת הדוא\"ל שממנה יישלחו הדוא\"לים כאשר הפלטפורמה שולחת דוא\"ל, משמשת גם ככותרת 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "לא מצאת את שפתך ברשימה? צור קשר איתנו ב-%s כדי לתרום כמתרגם"
+
+msgid "An update is available"
+msgstr "עדכון זמין"
+
+msgid "to know what's new and what has been changed"
+msgstr "לדעת מה חדש ומה השתנה"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "זיהינו שההתקנה של PHP שלך אינה מגדירה את התאריך"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "גרסת ה-PHP שלך אינה תואמת לדרישות התוכנה הזו"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "חלק מהקבצים או התיקיות אין להם הרשאת כתיבה"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "אזהרה! המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "מכיוון שהספריות <code>newscorm</code> ו-<code>exercice</code> שונו שם ל-<code>lp</code> ו-<code>exercise</code> בהתאמה, יש למחוק או לשנות שם ל-<code>newscorm_old</code> ו-<code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "הטופס מכיל נתונים שגויים או חלקיים"
+
+msgid "Your contact information could not be sent"
+msgstr "לא ניתן היה לשלוח את פרטי הקשר שלך"
+
+msgid "Please contact support with the error details"
+msgstr "אנא פנה לתמיכה עם פרטי השגיאה"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "לחץ על התמונה כדי לגזור אותה (יחס 1:1, 120x120 פיקסלים מומלץ)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "השתמש בכלי הגיזום כדי לבחור אזור 1:1"
+
+msgid "Checking push subscription"
+msgstr "בודק מנוי דחיפה"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "אתה מנוי להתראות דחיפה בדפדפן זה"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "התראות דחיפה אינן מופעלות בדפדפן זה"
+
+msgid "Data exchange successfully saved"
+msgstr "החלפת נתונים נשמרה בהצלחה"
+
+msgid "Error saving data exchange"
+msgstr "שגיאה בשמירת החלפת נתונים"
+
+msgid "No documents added yet"
+msgstr "עדיין לא נוספו מסמכים"
+
+msgid "No additional details available for this skill."
+msgstr "אין פרטים נוספים זמינים עבור מיומנות זו."
+
+msgid "No available documents"
+msgstr "אין מסמכים זמינים"
+
+msgid "No users added yet"
+msgstr "עדיין לא נוספו משתמשים"
+
+msgid "No available users"
+msgstr "אין משתמשים זמינים"
+
+msgid "You can no longer submit"
+msgstr "אינך יכול להגיש עוד"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "לא נמצאו הגשות חסרות למטלה זו או שהנתונים אינם זמינים"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "דוא\"ל נשלח לכל המשתמשים שלא הגישו"
+
+msgid "Failed to send email"
+msgstr "נכשל בשליחת הדוא\"ל"
+
+msgid "Write your answer here"
+msgstr "כתוב את תשובתך כאן"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "לוח השנה של נוכחות מאפשר לך לרשום רשימות נוכחות (אחת לכל מפגש אמיתי שהתלמידים צריכים להשתתף בו)"
+
+msgid "Loading attendance data"
+msgstr "טוען נתוני נוכחות"
+
+msgid "No attendance assigned yet"
+msgstr "לא הוקצתה נוכחות עדיין"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "אין שיעור מתוכנן להיום, נסה לבחור יום אחר או הוסף את רישום הנוכחות בעצמך באמצעות סמלי הפעולה"
+
+msgid "No attendance data for today"
+msgstr "אין נתוני נוכחות להיום"
+
+msgid "Saving"
+msgstr "שומר"
+
+msgid "No attendance data to save"
+msgstr "אין נתוני נוכחות לשמירה"
+
+msgid "Failed to save attendance"
+msgstr "נכשל בשמירת הנוכחות"
+
+msgid "Loading more courses"
+msgstr "טוען קורסים נוספים"
+
+msgid "Loading more sessions"
+msgstr "טוען מפגשים נוספים"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "הגדרת הפעלת מסמכים אוטומטית מופעלת"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "הגדרת הפעלת תרגילים אוטומטית מופעלת"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "הגדרת הפעלה אוטומטית של מסלול למידה פועלת"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "הגדרת הפעלה אוטומטית של הפורום פועלת"
+
+msgid "Course ID is missing"
+msgstr "מזהה קורס חסר"
+
+msgid "Course created successfully"
+msgstr "הקורס נוצר בהצלחה"
+
+msgid "Error deleting document(s)"
+msgstr "שגיאה במחיקת מסמך(ים)"
+
+msgid "Template successfully deleted"
+msgstr "תבנית נמחקה בהצלחה"
+
+msgid "Error deleting the template"
+msgstr "שגיאה במחיקת התבנית"
+
+msgid "The title and thumbnail are required"
+msgstr "הכותרת והתמונה מיניאטורה נדרשות"
+
+msgid "Template created successfully"
+msgstr "תבנית נוצרה בהצלחה"
+
+msgid "Error creating the template"
+msgstr "שגיאה ביצירת התבנית"
+
+msgid "Error submitting the form"
+msgstr "שגיאה בשליחת הטופס"
+
+msgid "Loading templates"
+msgstr "טוען תבניות"
+
+msgid "Loading layout"
+msgstr "טוען פריסה"
+
+msgid "Loading courses"
+msgstr "טוען קורסים"
+
+msgid "No courses available"
+msgstr "אין קורסים זמינים"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "רשימה זו מציגה משתמשים מכל כתובות הגישה כי ההגדרה \"session_admin_access_to_all_users_on_all_urls\" מופעלת."
+
+msgid "User not found"
+msgstr "משתמש לא נמצא"
+
+msgid "An error occurred while sending the course"
+msgstr "אירעה שגיאה בשליחת הקורס"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "זכור כי שינויים בתנאים הקשורים ל-GDPR מחייבים אותך לדווח על שינויים אלה לצדדים שלישיים שסיפקת להם מידע אישי על המשתמשים שלך, כפי שמצוין בסעיף 19 של GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "אתה צריך ליצור את \"תנאי השימוש\" לכל השפות הזמינות"
+
+msgid "You don't have any course yet"
+msgstr "אין לך קורסים עדיין"
+
+msgid "You have received a new friend request"
+msgstr "קיבלת בקשת חברות חדשה"
+
+msgid "Diagnosis Management"
+msgstr "ניהול אבחון"
+
+msgid "Tracking"
+msgstr "מעקב"
+
+msgid "View reports, statistics and tracking data"
+msgstr "צפייה בדוחות, סטטיסטיקות וניטור נתונים"
+
+msgid "System activity audit"
+msgstr "ביקורת פעילות המערכת"
+
+msgid "Learning analytics"
+msgstr "ניתוח למידה"
+
+msgid "Administrative activity auditing"
+msgstr "ביקורת פעילות ניהולית"
+
+msgid "List icons"
+msgstr "רשימת אייקונים"
+
+msgid "Constant name"
+msgstr "שם קבועה"
+
+msgid "MDI icon name"
+msgstr "שם אייקון MDI"
+
+msgid "Assign authentication sources"
+msgstr "הקצאת מקורות אימות"
+
+msgid "Assignment details"
+msgstr "פרטי המטלה"
+
+msgid "Terms and conditions"
+msgstr "תנאים וכללים"
+
+msgid "Icons"
+msgstr "אייקונים"
+
+msgid "Create backup"
+msgstr "יצירת גיבוי"
+
+msgid "Create file"
+msgstr "יצירת קובץ"
+
+msgid "Create link"
+msgstr "יצירת קישור"
+
+msgid "Edit template"
+msgstr "עריכת תבנית"
+
+msgid "Shared files"
+msgstr "קבצים משותפים"
+
+msgid "Skill wheel"
+msgstr "גלגל כישורים"
+
+msgid "Favourite courses"
+msgstr "קורסים מועדפים"
+
+msgid "Restart courses"
+msgstr "הפעלת קורסים מחדש"
+
+msgid "Generate terms"
+msgstr "יצירת תנאים"
+
+msgid "Add variation"
+msgstr "הוספת וריאציה"
+
+msgid "Editor demo"
+msgstr "הדגמת עורך"
+
+msgid "Tool introduction"
+msgstr "מבוא לכלי"
+
+msgid "Data exchanges"
+msgstr "החלפת נתונים"
+
+msgid "Third parties"
+msgstr "צדדים שלישיים"
+
+msgid "Layouts"
+msgstr "פריסות"
+
+msgid "Relation type"
+msgstr "סוג יחס"
+
+msgid "Add all"
+msgstr "הוסף הכל"
+
+msgid "Remove all"
+msgstr "הסר הכל"
+
+msgid "An error occurred. Please try again."
+msgstr "אירעה שגיאה. נסה שוב."
+
+msgid "%s created"
+msgstr "%s נוצר"
+
+msgid "%s updated"
+msgstr "%s עודכן"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "אם אתה מתכנן לשדרג מגרסה ישנה יותר של Chamilo, ייתכן שתרצה"
+
+msgid "have a look at the changelog"
+msgstr "להציץ ביומן השינויים"
+
+msgid "to know what's new and what has been changed."
+msgstr "כדי לדעת מה חדש ומה השתנה."
+
+msgid "Session Item"
+msgstr "פריט מפגש"
+
+msgid "Points"
+msgstr "נקודות"
+
+msgid "See notifications"
+msgstr "הצג התראות"
+
+msgid "New content available for this course."
+msgstr "תוכן חדש זמין לקורס זה."
+
+msgid "No new notifications."
+msgstr "אין התראות חדשות."
+
+msgid "No new content found."
+msgstr "לא נמצא תוכן חדש."
+
+msgid "No tool details available yet."
+msgstr "פרטי כלי לא זמינים עדיין."
+
+msgid "Last access"
+msgstr "גישה אחרונה"
+
+msgid "Open course"
+msgstr "פתח קורס"
+
+msgid "Course completed"
+msgstr "קורס הושלם"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "מגבלת ההרשמה לקורס זה נתקלה."
+
+msgid "Subscription limit reached"
+msgstr "מגבלת הרשמה נתקלה"
+
+msgid "Tertiary alternative"
+msgstr "חלופה שלישונית"
+
+msgid "Update SCORM"
+msgstr "עדכן SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI יכול לשרטט משוב וציון מוצע לפני שאתה שולח אותו."
+
+msgid "What will be sent to the AI"
+msgstr "מה ישלח ל-AI"
+
+msgid "Assignment title + instructions"
+msgstr "כותרת המטלה + הוראות"
+
+msgid "Student submission (text)"
+msgstr "הגשת התלמיד (טקסט)"
+
+msgid "Student submission (text): none"
+msgstr "הגשת התלמיד (טקסט): אין"
+
+msgid "Student attachment"
+msgstr "קובץ מצורף של התלמיד"
+
+msgid "supported"
+msgstr "נתמך"
+
+msgid "not supported for document analysis"
+msgstr "לא נתמך לניתוח מסמכים"
+
+msgid "Student attachment: none"
+msgstr "קובץ מצורף של התלמיד: אין"
+
+msgid "No text AI providers available."
+msgstr "אין ספקי AI טקסט זמינים."
+
+msgid "AI-assisted"
+msgstr "בעזרת AI"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "ההחלטה הזו נשמרת עם התיקון (ExtraField) ואינה ניתנת לשינוי מאוחר יותר."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "קובץ מצורף לתיקון אופציונלי (זה לא ההגשה של התלמיד)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "קיבל"
+
+msgid "%s min"
+msgstr "%s דקות"
+
+msgid "Unlock column"
+msgstr "פתח עמודה"
+
+msgid "Lock column"
+msgstr "נעל עמודה"
+
+msgid "Set all Present"
+msgstr "הגדר הכל נוכח"
+
+msgid "Set all Absent"
+msgstr "הגדר הכל נעדר"
+
+msgid "Auto (recommended)"
+msgstr "אוטומטי (מומלץ)"
+
+msgid "Error downloading all documents."
+msgstr "שגיאה בהורדת כל המסמכים."
+
+msgid "Open with ONLYOFFICE"
+msgstr "פתח עם ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "מגבלת מכסה"
+
+msgid "Remaining space"
+msgstr "שטח פנוי"
+
+msgid "Course catalogue"
+msgstr "קטלוג קורסים"
+
+msgid "Drag links to reorder"
+msgstr "גרור קישורים לסידור מחדש"
+
+msgid "Drop links here to keep them without category"
+msgstr "שחרר קישורים כאן כדי לשמור אותם ללא קטגוריה"
+
+msgid "Could not export"
+msgstr "לא ניתן לייצא"
+
+msgid "Link moved"
+msgstr "קישור הועבר"
+
+msgid "Could not move link"
+msgstr "לא ניתן להעביר קישור"
+
+msgid "Category reordering is not enabled"
+msgstr "סידור קטגוריות אינו מופעל"
+
+msgid "Showing %s posts"
+msgstr "מציג %s פוסטים"
+
+msgid "Showing %s tasks"
+msgstr "מציג %s משימות"
+
+msgid "Page %s of %s"
+msgstr "עמוד %s מתוך %s"
+
+msgid "Tutors"
+msgstr "מדריכים"
+
+msgid "selected"
+msgstr "נבחר"
+
+msgid "No data to export"
+msgstr "אין נתונים לייצוא"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "כותרת PNG חייבת להיות ≤ %spx."
+
+msgid "Standard list"
+msgstr "רשימה סטנדרטית"
+
+msgid "Management list"
+msgstr "רשימת ניהול"
+
+msgid "Open platform"
+msgstr "פלטפורמה פתוחה"
+
+msgid "Teacher user ID"
+msgstr "מזהה משתמש מורה"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "האם אתה בטוח שברצונך למחוק קורס זה?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "האם אתה בטוח שברצונך למחוק את הקורסים הנבחרים?"
+
+msgid "Search by name, username, email"
+msgstr "חפש לפי שם, שם משתמש, דוא\"ל"
+
+msgid "contains %s items"
+msgstr "מכיל %s פריטים"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "הסכמתך המשפטית נשארת פעילה עד שתבקשת משיכה ותיבדק ותטופל."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "בקשתך למשיכת הסכמה משפטית ממתינה לבדיקה."
+
+msgid "Your account deletion request is pending review."
+msgstr "בקשת מחיקת חשבונך ממתינה לבדיקה."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "למה ברצונך לבקש משיכת הסכמה משפטית?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "שולח את בקשת משיכת הסכמה משפטית שלך..."
+
+msgid "Submitting request..."
+msgstr "שולח בקשה..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "בקש משיכת הסכמה משפטית"
+
+msgid "Submitting your account deletion request..."
+msgstr "שולח את בקשת מחיקת חשבונך..."
+
+msgid "Submitting your acceptance..."
+msgstr "שולח את קבלתך..."
+
+msgid "Event details"
+msgstr "פרטי אירוע"
+
+msgid "You cannot access the linked course from this view."
+msgstr "אינך יכול לגשת לקורס המקושר מנקודת מבט זו."
+
+msgid "Failed to load sessions"
+msgstr "נכשל בטעינת המפגשים"
+
+msgid "Failed to load events"
+msgstr "נכשל בטעינת האירועים"
+
+msgid "No events found"
+msgstr "לא נמצאו אירועים"
+
+msgid "Group image"
+msgstr "תמונת קבוצה"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "אסור"
+
+msgid "Distribution"
+msgstr "הפצה"
+
+msgid "Firstname"
+msgstr "שם פרטי"
+
+msgid "Lastname"
+msgstr "שם משפחה"
+
+msgid "Email"
+msgstr "דוא\"ל"
+
+msgid "Last login in platform"
+msgstr "כניסה אחרונה לפלטפורמה"
+
+msgid "Export as CSV"
+msgstr "ייצוא כ-CSV"
+
+msgid "Export as XLS"
+msgstr "ייצוא כ-XLS"
+
+msgid "Deactivate this user?"
+msgstr "להשבית משתמש זה?"
+
+msgid "Enable this user?"
+msgstr "להפעיל משתמש זה?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "לאחד קבוצה כפולה זו למשתמש #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "פעולה זו תאחד את כל החשבונות האחרים בקבוצה לחשבון זה."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "חשבונות מאוחדים יימחקו לצמיתות וייעלמו מדוח זה."
+
+msgid "This action cannot be undone."
+msgstr "פעולה זו אינה ניתנת לביטול."
+
+msgid "Unify"
+msgstr "איחוד"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "תלמיד"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "שטח כולל בשימוש בפורטל %s מגבלה היא %s MB"
+
+msgid "Helper text"
+msgstr "טקסט עזר"
+
+msgid "NotAllowed"
+msgstr "לא מורשה"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "השתמש במסננים למעלה כדי לטעון פרטי גישה של הלומד."
+
+msgid "Start date must be before end date"
+msgstr "תאריך התחלה חייב להיות לפני תאריך סיום"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "בחר טווח תאריכים וסוג קיבוץ כדי לבדוק פרטי גישה של הלומד."
+
+msgid "This course will be created using the platform default course template."
+msgstr "קורס זה ייווצר באמצעות תבנית קורס ברירת המחדל של הפלטפורמה."
+
+msgid "Security breach avoid restart"
+msgstr "פרצת אבטחה הימנע מהפעלה מחדש"
+
+msgid "User deactivated"
+msgstr "משתמש הושבת"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "משתמש הופעל"
+
+msgid "No other duplicates found for this user."
+msgstr "לא נמצאו כפילויות נוספות למשתמש זה."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "משתמשים אוחדו: אוחדו %s חשבון(ות) למשתמש #%s. חשבונות מאוחדים נמחקו לצמיתות."
+
+msgid "No accounts were merged."
+msgstr "לא אוחדו חשבונות."
+
+msgid "An error occurred while unifying users."
+msgstr "אירעה שגיאה בעת איחוד המשתמשים."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "משתמשים אוחדו: משתמש #%s אוחד למשתמש #%s. חשבון מאוחד נמחק לצמיתות."
+
+msgid "Duplicate users"
+msgstr "משתמשים כפולים"
+
+msgid "Years"
+msgstr "שנים"
+
+msgid "All time visits outside sessions"
+msgstr "ביקורים מכל הזמנים מחוץ להפעלות"
+
+msgid "All time visits in sessions"
+msgstr "ביקורים מכל הזמנים בהפעלות"
+
+msgid "All time visits total"
+msgstr "סה\"כ ביקורים מכל הזמנים"
+
+msgid "Student visits per period, per course"
+msgstr "ביקורי תלמידים לפי תקופה, לקורס"
+
+msgid "By email"
+msgstr "לפי דוא\"ל"
+
+msgid "By extra field"
+msgstr "לפי שדה נוסף"
+
+msgid "Select an option"
+msgstr "בחר אפשרות"
+
+msgid "Profile field"
+msgstr "שדה פרופיל"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "דוח זה מציג רק משתמשים עם אותה כתובת דוא\"ל."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "דוח זה מציג רק משתמשים שחולקים אותו ערך בשדה הפרופיל שנבחר."
+
+msgid "How to use this report"
+msgstr "איך להשתמש בדוח זה"
+
+msgid "Disable / Enable"
+msgstr "השבתה / הפעלה"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "חוסם או משחזר כניסה בלבד. אינו מוחק את המשתמש ואינו מבטל הרשמות."
+
+msgid "Last week"
+msgstr "שבוע שעבר"
+
+msgid "Next week"
+msgstr "שבוע הבא"
+
+msgid "Loading report..."
+msgstr "טוען דוח..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "נכשל בטעינת הדוח. נסה שוב."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "בחר מפגש אחד או יותר להעתקת מנחים ממנו ובחר את קורס היעד"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "החזק Ctrl (או Cmd) לבחירת פריטים מרובים"
+
+msgid "Choose the destination course"
+msgstr "בחר את קורס היעד"
+
+msgid "You can select multiple items"
+msgstr "ניתן לבחור פריטים מרובים"
+
+msgid "Use the search box to find courses quickly"
+msgstr "השתמש בתיבת החיפוש כדי למצוא קורסים במהירות"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "בחר מפגשי מקור אחד או יותר ומפגשי יעד אחד או יותר להעתקת סטודנטים"
+
+msgid "Select destination sessions"
+msgstr "בחר מפגשי יעד"
+
+msgid "You can select multiple users"
+msgstr "ניתן לבחור משתמשים מרובים"
+
+msgid "Use the search box to find users quickly"
+msgstr "השתמש בתיבת החיפוש כדי למצוא משתמשים במהירות"
+
+msgid "Error while creating the document"
+msgstr "שגיאה ביצירת המסמך"
+
+msgid "Not a SCORM learning path"
+msgstr "לא מסלול למידה SCORM"
+
+msgid "Final item"
+msgstr "פריט סופי"
+
+msgid "Edit item"
+msgstr "ערוך פריט"
+
+msgid "No AI text providers configured."
+msgstr "אין ספקי טקסט AI מוגדרים."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "העלאה נכשלה. הקובץ כנראה גדול מגבול השרת (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "עדכון נכשל. השרת לא קיבל קובץ."
+
+msgid "Update failed. %s"
+msgstr "עדכון נכשל. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "עדכון נכשל. נתוני קובץ ההעלאה לא תקינים."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "עדכון נכשל. שם קובץ ה-ZIP שהועלה חייב להתאים לשם חבילת ה-SCORM המקורית."
+
+msgid "Update failed"
+msgstr "עדכון נכשל"
+
+msgid "Question lower case"
+msgstr "שאלה באותיות קטנות"
+
+msgid "Regenerate"
+msgstr "צור מחדש"
+
+msgid "Case insensitive"
+msgstr "לא רגיש לאותיות גדולות/קטנות"
+
+msgid "Select a session to load its courses."
+msgstr "בחר מפגש כדי לטעון את הקורסים שלו."
+
+msgid "Select the source course."
+msgstr "בחר את קורס המקור."
+
+msgid "Select a destination session."
+msgstr "בחר מפגש יעד."
+
+msgid "Select the destination course."
+msgstr "בחר את קורס היעד."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "העתק את תוכן הקורס המלא מקורס המפגש שנבחר."
+
+msgid "Select which tools/items to copy."
+msgstr "בחר אילו כלים/פריטים להעתיק."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "אל תכלול את תוכן קורס הבסיס (לא-מפגש)."
+
+msgid "An error occurred while copying the course"
+msgstr "אירעה שגיאה בעת העתקת הקורס"
+
+msgid "Please select a different destination"
+msgstr "בחר יעד שונה"
+
+msgid "You must select a destination course"
+msgstr "עליך לבחור קורס יעד"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "כדי לייצא קורסים עם חידונים עליך לבחור את החידונים"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "אם למסלולי הלמידה שלך יש קבצי שמע כלולים עליך לבחור אותם מהמסמכים"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "אם לחידונים שלך יש שאלות נקודת חמות כלולות עליך לבחור את התמונות מהמסמכים"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "הסיסמה חייבת להיות באורך של לפחות %length% תווים."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "הסיסמה חייבת להכיל לפחות %count% תווים באותיות קטנות."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "הסיסמה חייבת להכיל לפחות %count% תווים באותיות גדולות."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "הסיסמה חייבת להכיל לפחות %count% תווים מספריים (0-9)."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "הסיסמה חייבת להכיל לפחות %count% תווים מיוחדים."
+
+msgid "Invalid login request."
+msgstr "בקשת כניסה לא תקינה."
+
+msgid "Authentication failed."
+msgstr "אימות נכשל."
+
+msgid "Login %status% for username %username%"
+msgstr "התחברות %status% עבור שם המשתמש %username%"
+
+msgid "Co-generated with AI"
+msgstr "נוצר יחד עם AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "מזהה EntraID"
+
+msgid "EntraID UID"
+msgstr "UID של EntraID"
+
+msgid "Required fields"
+msgstr "שדות נדרשים"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "תגיות ניתן להעתיק ולהדביק באזור הטקסט למטה ויוחלפו באופן דינמי בערכן עבור כל משתמש בנפרד בעת שליחתן."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "קבוצה זו מקושרת לכיתה %s.<br>רשימת חברי הקבוצה תלויה בחברי הכיתה ואינה ניתנת לשינוי.<br>עבור להגדרות הקבוצה כדי לבטל קישור זה אם ברצונך להוסיף או להסיר חברים מקבוצה זו."
+
+msgid "Link classes to created groups ?"
+msgstr "לקשר כיתות לקבוצות שנוצרו?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "אם כיתה מקושרת לקבוצה, משתמשים שהתווספו או הוסרו מהכיתה יתווספו או יוסרו אוטומטית מהקבוצה."
+
+msgid "New groups creation in category %s"
+msgstr "יצירת קבוצות חדשות בקטגוריה %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "הודעת אזהרה המזהירה שהמשתמש אינו יכול לשנות חברים של קבוצה מקושרת"
+
+msgid "Remove the group link with the class"
+msgstr "הסר את קישור הקבוצה עם הכיתה"
+
+msgid "Linked class"
+msgstr "כיתה מקושרת"
+
+msgid "The group is no longer linked to the class"
+msgstr "הקבוצה כבר אינה מקושרת לכיתה"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "סקירה של תלמידים וקורסים הרשומים לכיתה"
+
+msgid "Overview students subscribed to the class"
+msgstr "סקירה של תלמידים הרשומים לכיתה"
+
+msgid "Overview class"
+msgstr "סקירת כיתה"
+
+msgid "Go back to the list of classes"
+msgstr "חזור לרשימת הכיתות"
+
+msgid "Go back to course classes"
+msgstr "חזור לכיתות הקורס"
+
+msgid "Users subscribed to the course"
+msgstr "משתמשים הרשומים לקורס"
+
+msgid "Users not subscribed to the course"
+msgstr "משתמשים שאינם רשומים לקורס"
+
+msgid "Users subscribed to the class"
+msgstr "משתמשים הרשומים לכיתה"
+
+msgid "Courses subscribed to the class"
+msgstr "קורסים הרשומים לכיתה"
+
+msgid "No user is subscribed to this class"
+msgstr "אין משתמש רשום לכיתה זו"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "אין משתמש ואין קורס רשומים לכיתה זו"
+
+msgid "No user are subscribed to this class"
+msgstr "אין משתמשים רשומים לכיתה זו"
+
+msgid "No course are subscribed to this class"
+msgstr "אין קורסים רשומים לכיתה זו"
+
+msgid "Are you sure you want to remove the class"
+msgstr "האם אתה בטוח שברצונך להסיר את הכיתה"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "האם אתה בטוח שברצונך להסיר את הכיתה?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "האם אתה בטוח שברצונך להסיר את הכיתה מבלי להסיר משתמשים?"
+
+msgid "Remove the class without removing students"
+msgstr "הסר את הכיתה מבלי להסיר תלמידים"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "הגדרה זו טרם מומשה בגרסה זו."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "מומלץ עבור תוספים המיועדים למנהלים בלבד המוצגים באזור הניהול."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "מומלץ עבור תוספים שחייבים להופיע ככלי קורס."
+
+msgid "Displayed above the main page content."
+msgstr "מוצג מעל תוכן עמוד ראשי."
+
+msgid "Displayed below the main page content."
+msgstr "מוצג מתחת לתוכן עמוד ראשי."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "מוצג קרוב לחלק העליון של מעטפת הפריסה הראשית."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "מוצג קרוב לחלק התחתון של מעטפת הפריסה הראשית."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "מומלץ עבור תוספים צפים או קבועים גלובליים המוצגים לפני הפוטר."
+
+msgid "Displayed in the selected plugin region."
+msgstr "מוצג באזור התוסף שנבחר."
+
+msgid "Admin menu"
+msgstr "תפריט ניהול"
+
+msgid "Global regions"
+msgstr "אזורים גלובליים"
+
+msgid "No regions assigned"
+msgstr "אין אזורים מוקצים"
+
+msgid "Plugin regions"
+msgstr "אזורי תוספים"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "בחרו היכן כל תוסף מותקן יוצג."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "טיפ: השתמשו ב-Ctrl/Cmd לבחירת אזורים מרובים."
+
+msgid "No installed plugins were found."
+msgstr "לא נמצאו תוספים מותקנים."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "בחרו אזור אחד או יותר עבור תוסף זה בכתובת URL הנוכחית."
+
+msgid "Available regions"
+msgstr "אזורים זמינים"
+
+msgid "Selected paragraph"
+msgstr "פסקה נבחרת"
+
+msgid "Destination folder"
+msgstr "תיקיית יעד"
+
+msgid "Generate AI media"
+msgstr "יצירת מדיה מבוססת AI"
+
+msgid "Save and insert"
+msgstr "שמירה והכנסה"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "שמירה נתמכת רק כאשר הספק מחזיר תוכן base64. אם קיבלתם רק URL, השמירה מושבתת כדי למנוע הורדה בדפדפן."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "הווידאו נוצר בהצלחה, אך השמירה מושבתת כי הספק החזיר URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "הקובץ נשמר, אך כתובת ה-URL שלו לא ניתנה לפתרון."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "צור מבחן Aiken מנושא או ממסמך קורס אחד."
+
+msgid "Test from topic"
+msgstr "מבחן מנושא"
+
+msgid "Test from document"
+msgstr "מבחן ממסמך"
+
+msgid "Generate from topic"
+msgstr "צור מנושא"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "השתמש בהנחיית נושא כדי ליצור שאלון Aiken חדש."
+
+msgid "Quiz title"
+msgstr "כותרת מבחן"
+
+msgid "Generate from document"
+msgstr "צור ממסמך"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "בחר מסמך קורס אחד וצור שאלות על בסיס תוכנו בלבד."
+
+msgid "Selected document"
+msgstr "מסמך נבחר"
+
+msgid "The document is selected from the course documents list."
+msgstr "המסמך נבחר מרשימת מסמכי הקורס."
+
+msgid "Choose document"
+msgstr "בחר מסמך"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "אופציונלי. משמש רק כרמז נוסף ל-AI."
+
+msgid "Select a document"
+msgstr "בחר מסמך"
+
+msgid "Welcome"
+msgstr "ברוכים הבאים"
+
+msgid "Welcome to Chamilo"
+msgstr "ברוכים הבאים ל-Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> אם זו הפעם הראשונה שלך בשימוש ב-Chamilo, ודא שאתה בודק את תפריט הצד כדי למצוא את דרכך בין כל התכונות הרבות שלו. אם אתה זקוק לעזרה, תמצא ש-<a href=\"https://docs.chamilo.org\">התיעוד הרשמי שלנו</a> יכול לעזור עבור תיעוד סטנדרטי, בעוד <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">הפורום המקוון שלנו</a> יכול לעזור לשתף רעיונות ולמצוא תשובות ממשתמשי Chamilo אחרים."
 

@@ -1,67 +1,23 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-90">{{ t("Learning path") }}</h1>
-      <div class="relative flex items-center gap-2">
-        <StudentViewButton
-          :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"
-          @change="onStudentViewChange"
-        />
-        <BaseDropdownMenu
-          v-if="canEdit"
-          :dropdown-id="'top-menu'"
-          class="relative flex items-center gap-2"
-        >
-          <template #button>
-            <button
-              :aria-label="t('More actions')"
-              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-            >
-              <i
-                aria-hidden="true"
-                class="mdi mdi-dots-vertical text-lg"
-              ></i>
-            </button>
-          </template>
-          <template #menu>
-            <div class="absolute right-0 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1">
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('new', $event)"
-              >
-                {{ t("Create new learning path") }}
-              </button>
-              <button
-                v-if="canUseAi"
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('ai', $event)"
-              >
-                {{ t("AI learning path generator") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('import', $event)"
-              >
-                {{ t("Import") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('rapid', $event)"
-              >
-                {{ t("Chamilo RAPID") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('category', $event)"
-              >
-                {{ t("Add category") }}
-              </button>
-            </div>
-          </template>
-        </BaseDropdownMenu>
-      </div>
-    </div>
+  <div class="lp-list flex flex-col">
+    <SectionHeader :title="t('Learning paths')">
+      <BaseButton
+        :label="t('More actions')"
+        icon="dots-vertical"
+        only-icon
+        popup-identifier="lp-list-tmenu"
+        type="black"
+        @click="mLpList.toggle($event)"
+      />
+      <BaseMenu
+        id="lp-list-tmenu"
+        ref="mLpList"
+        :model="mItems"
+      />
+    </SectionHeader>
+  </div>
 
+  <div class="flex flex-col gap-4 flex-1 min-h-0">
     <div
       v-if="loading"
       class="space-y-4 animate-pulse"
@@ -78,39 +34,20 @@
       {{ t("Error loading learning paths.") }}
     </div>
 
-    <div
+    <EmptyState
       v-else-if="!hasAnyVisible"
-      class="flex flex-col items-center justify-center py-20 text-center"
+      :detail="t('Create your first learning path to start organizing course content.')"
+      :summary="t('You don\'t have any learning path.')"
+      icon="learning-paths"
     >
-      <div class="w-24 h-24 rounded-full bg-support-1 flex items-center justify-center mb-4 text-support-3">
-        <svg
-          fill="none"
-          height="36"
-          viewBox="0 0 24 24"
-          width="36"
-        >
-          <path
-            d="M4 17l6-6 4 4 6-6"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-      </div>
-      <h3 class="text-base font-semibold">{{ t("You don't have any learning path.") }}</h3>
-      <p
+      <BaseButton
         v-if="canEdit"
-        class="text-body-2 text-gray-50 max-w-sm"
-      >
-        {{ t("Create your first learning path to start organizing course content.") }}
-      </p>
-      <button
-        v-if="canEdit"
-        class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
-        @click="handleTopMenu('new', $event)"
-      >
-        + {{ t("Create new learning path") }}
-      </button>
-    </div>
+        :label="t('Create new learning path')"
+        class="mt-4"
+        icon="plus"
+        @click="goCreateLp"
+      />
+    </EmptyState>
 
     <template v-else>
       <div v-if="uncatList.length">
@@ -119,7 +56,7 @@
           :animation="180"
           :disabled="!canEdit"
           chosen-class="chosen"
-          class="space-y-3"
+          class="space-y-6"
           drag-class="dragging"
           ghost-class="ghosting"
           handle=".drag-handle"
@@ -131,6 +68,7 @@
           <template #item="{ element }">
             <LpRowItem
               :buildDates="buildDates"
+              :legacyContext="legacyContext"
               :canAutoLaunch="canAutoLaunch"
               :canEdit="canEdit"
               :canExportPdf="canExportPdf"
@@ -138,10 +76,8 @@
               :lp="element"
               :ringDash="ringDash"
               :ringValue="ringValue"
-              @build="onBuild"
               @delete="onDelete"
               @edit="goEdit"
-              @open="openLegacy"
               @report="onReport"
               @settings="onSettings"
               @toggle-auto-launch="onToggleAutoLaunch"
@@ -168,10 +104,8 @@
         :ringDash="ringDash"
         :ringValue="ringValue"
         :title="group[0]?.title"
-        @build="onBuild"
         @delete="onDelete"
         @edit="goEdit"
-        @open="openLegacy"
         @reorder="(ids) => onReorderCategory(group[0], ids)"
         @report="onReport"
         @settings="onSettings"
@@ -184,6 +118,7 @@
       />
     </template>
   </div>
+
   <ExportPdfDialog
     v-if="showExportDialog && exportTarget"
     :cid="course?.id"
@@ -195,7 +130,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -205,12 +140,16 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import Draggable from "vuedraggable"
 import LpRowItem from "../../components/lp/LpRowItem.vue"
 import LpCategorySection from "../../components/lp/LpCategorySection.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
-import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import ExportPdfDialog from "../../components/lp/ExportPdfDialog.vue"
 import { storeToRefs } from "pinia"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
+import EmptyState from "../../components/EmptyState.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { LP_LIST_LOADED } from "../../constants/events"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -220,6 +159,8 @@ const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
+const { requireConfirmation } = useConfirmation()
+
 const loading = ref(true)
 const error = ref(null)
 const draggingUncat = ref(false)
@@ -227,6 +168,58 @@ const draggingUncat = ref(false)
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
+
+const mLpList = ref(null)
+const mItems = computed(() => {
+  const items = []
+
+  items.push({
+    label: t("Create new learning path"),
+    url: lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }),
+  })
+
+  if (canUseAi.value) {
+    items.push({
+      label: t("AI learning path generator"),
+      url: lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value }),
+    })
+  }
+
+  items.push({
+    label: t("Import"),
+    url: `/main/upload/index.php?${new URLSearchParams({
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid,
+      tool: "learnpath",
+      curdirpath: "/",
+      node: legacyContext.value.node,
+      gid: legacyContext.value.gid,
+      gradebook: legacyContext.value.gradebook,
+      origin: legacyContext.value.origin,
+    }).toString()}`,
+  })
+
+  items.push({
+    label: t("Chamilo RAPID"),
+    url: `/main/upload/upload_ppt.php?${new URLSearchParams({
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid,
+      tool: "learnpath",
+      curdirpath: "/",
+      node: legacyContext.value.node,
+      gid: legacyContext.value.gid,
+      gradebook: legacyContext.value.gradebook,
+      origin: legacyContext.value.origin,
+    }).toString()}`,
+  })
+
+  items.push({
+    label: t("Add category"),
+    url: lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value }),
+  })
+
+  return items
+})
 
 const { course, session } = storeToRefs(cidReqStore)
 
@@ -269,6 +262,14 @@ const canExportPdf = computed(() => {
   return !hidden
 })
 
+// Uses a click handler instead of :to-url so the URL (including cid/sid) is
+// built at click time, when the course store is guaranteed to be populated.
+// A static :to-url binding can render before the store resolves, producing a
+// link without cid that the legacy controller rejects as "Not allowed".
+const goCreateLp = () => {
+  window.location.assign(lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }))
+}
+
 // --- Auto-launch enable (course setting) ---
 const enableLpAutoLaunch = computed(() => {
   const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
@@ -301,7 +302,7 @@ const catLists = ref({})
 const visibilityMap = ref({})
 
 onMounted(() => {
-  platformConfig.studentView = route.query?.isStudentView === "true"
+  platformConfig.setStudentViewEnabled(route.query?.isStudentView === "true")
 })
 
 const hasImageRF = (lp) => {
@@ -403,9 +404,8 @@ const load = async () => {
     }
 
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
-    const roles = securityStore.user?.roles ?? []
 
-    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
+    if (!allowed && securityStore.isAdmin) {
       allowed = true
     }
 
@@ -440,7 +440,14 @@ const load = async () => {
     loading.value = false
   }
 }
-onMounted(load)
+
+onMounted(async () => {
+  await load()
+
+  await nextTick()
+
+  document.dispatchEvent(new CustomEvent(LP_LIST_LOADED))
+})
 
 /**
  * @param {Object} cat
@@ -591,76 +598,19 @@ const ringDash = (val) => {
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
 
-const onStudentViewChange = async (val) => {
-  if (val) {
+watch(
+  () => platformConfig.isStudentViewActive,
+  async (val) => {
     await router.replace({
       name: route.name,
       params: route.params,
-      query: { ...route.query, isStudentView: "true" },
+      query: { ...route.query, isStudentView: val ? "true" : "false" },
     })
-  } else {
-    const q = new URLSearchParams(window.location.search)
-    q.delete("isStudentView")
+  },
+)
 
-    const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
-    window.location.replace(newUrl)
-  }
-}
-
-const openLegacy = (lp) => {
-  window.location.href = lpService.buildLegacyViewUrl(lp.iid, {
-    cid: legacyContext.value.cid || 0,
-    sid: legacyContext.value.sid || 0,
-    isStudentView: isStudentView.value ? "true" : "false",
-  })
-}
 const goEdit = (lp) => {
   router.push({ name: "LpUpdate", params: { id: lp.iid }, query: route.query })
-}
-
-const handleTopMenu = (action, ev) => {
-  ev?.preventDefault?.()
-  ev?.stopPropagation?.()
-  ev?.stopImmediatePropagation?.()
-
-  if (!canEdit.value) {
-    return
-  }
-
-  const url =
-    action === "new"
-      ? lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value })
-      : action === "category"
-        ? lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value })
-        : action === "import"
-          ? `/main/upload/index.php?${new URLSearchParams({
-              cid: legacyContext.value.cid,
-              sid: legacyContext.value.sid,
-              tool: "learnpath",
-              curdirpath: "/",
-              node: legacyContext.value.node,
-              gid: legacyContext.value.gid,
-              gradebook: legacyContext.value.gradebook,
-              origin: legacyContext.value.origin,
-            }).toString()}`
-          : action === "rapid"
-            ? `/main/upload/upload_ppt.php?${new URLSearchParams({
-                cid: legacyContext.value.cid,
-                sid: legacyContext.value.sid,
-                tool: "learnpath",
-                curdirpath: "/",
-                node: legacyContext.value.node,
-                gid: legacyContext.value.gid,
-                gradebook: legacyContext.value.gradebook,
-                origin: legacyContext.value.origin,
-              }).toString()}`
-            : action === "ai"
-              ? lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value })
-              : null
-
-  if (url) {
-    window.location.assign(url)
-  }
 }
 
 const onReport = (lp) => {
@@ -669,13 +619,6 @@ const onReport = (lp) => {
 const onSettings = (lp) => {
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { ...legacyContext.value })
 }
-const onBuild = (lp) => {
-  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
-    ...legacyContext.value,
-    params: { type: "step", isStudentView: "false" },
-  })
-}
-
 function onUpdateScorm(lp) {
   const node = Number(route.params?.node ?? 0) || undefined
   const url = lpService.buildLegacyActionUrl("update_scorm", {
@@ -705,11 +648,14 @@ const onTogglePublish = (lp) => {
 }
 const onDelete = (lp) => {
   const label = (lp.title || "").trim() || t("Learning path")
-  const msg = `${t("Are you sure to delete")} ${label}?`
+  const message = `${t("Are you sure to delete")} ${label}?`
 
-  if (confirm(msg)) {
-    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { ...legacyContext.value })
-  }
+  requireConfirmation({
+    message,
+    accept() {
+      window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { ...legacyContext.value })
+    },
+  })
 }
 
 async function onEndUncat() {

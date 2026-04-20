@@ -69,7 +69,7 @@ class IndexBlocksController extends BaseController
 
         $json['users'] = [
             'id' => 'block-admin-users',
-            'searchUrl' => '/main/admin/user_list.php',
+            'searchUrl' => '/admin/user-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsUsers(),
             'extraContent' => $this->getExtraContent('block-admin-users'),
@@ -78,7 +78,7 @@ class IndexBlocksController extends BaseController
         if ($this->isAdmin) {
             $json['courses'] = [
                 'id' => 'block-admin-courses',
-                'searchUrl' => '/main/admin/course_list.php',
+                'searchUrl' => '/admin/course-list',
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
@@ -96,6 +96,13 @@ class IndexBlocksController extends BaseController
                 'editable' => true,
                 'items' => $this->getItemsPlatform(),
                 'extraContent' => $this->getExtraContent('block-admin-platform'),
+            ];
+
+            $json['tracking'] = [
+                'id' => 'block-admin-tracking',
+                'editable' => false,
+                'items' => $this->getItemsTracking(),
+                'extraContent' => $this->getExtraContent('block-admin-tracking'),
             ];
 
             /* Settings */
@@ -167,7 +174,7 @@ class IndexBlocksController extends BaseController
         /* Sessions */
         $json['sessions'] = [
             'id' => 'block-admin-sessions',
-            'searchUrl' => '/main/session/session_list.php',
+            'searchUrl' => '/admin/session-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
@@ -203,7 +210,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => '/main/admin/user_list.php',
+            'route' => ['name' => 'AdminUserList'],
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -275,7 +282,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
                 $items = array_filter($items, function (array $item) {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                         '/main/admin/user_add.php',
                     ];
 
@@ -286,7 +293,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                     ];
 
                     return !\in_array($item['url'], $urls, true);
@@ -341,7 +348,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => '/main/admin/course_list.php',
+            'route' => ['name' => 'AdminCourseList'],
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [
@@ -492,22 +499,6 @@ class IndexBlocksController extends BaseController
             'url' => '/main/auth/registration.php?'.http_build_query(['create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
-        $items[] = [
-            'class' => 'item-stats',
-            'url' => '/main/admin/statistics/index.php',
-            'label' => $this->translator->trans('Statistics'),
-        ];
-        $items[] = [
-            'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
-            'label' => $this->translator->trans('Reports'),
-        ];
-        $items[] = [
-            'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
-            'label' => $this->translator->trans('Teachers time report'),
-        ];
-
         if (api_get_configuration_value('chamilo_cms')) {
             $items[] = [
                 'class' => 'item-cms',
@@ -593,6 +584,53 @@ class IndexBlocksController extends BaseController
         return $items;
     }
 
+    private function getItemsTracking(): array
+    {
+        $items = [];
+        $items[] = [
+            'class' => 'item-stats',
+            'url' => '/main/admin/statistics/index.php',
+            'label' => $this->translator->trans('Global statistics'),
+        ];
+        $items[] = [
+            'class' => 'item-my-space',
+            'url' => '/main/my_space/index.php',
+            'label' => $this->translator->trans('Learning analytics'),
+        ];
+        $items[] = [
+            'class' => 'item-quarterly-report',
+            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'quarterly_report']),
+            'label' => $this->translator->trans('Quarterly report'),
+        ];
+        $items[] = [
+            'class' => 'item-teacher-time-report',
+            'url' => '/main/admin/teacher_time_report.php',
+            'label' => $this->translator->trans('Teachers time report'),
+        ];
+        $items[] = [
+            'class' => 'item-stats-report',
+            'url' => '/main/my_space/company_reports.php',
+            'label' => $this->translator->trans('Corporate report'),
+        ];
+        $items[] = [
+            'class' => 'item-special-export',
+            'url' => '/main/admin/special_exports.php',
+            'label' => $this->translator->trans('Special exports'),
+        ];
+        $items[] = [
+            'class' => 'item-activity-audit',
+            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'activities']),
+            'label' => $this->translator->trans('Administrative activity auditing'),
+        ];
+        $items[] = [
+            'class' => 'item-ticket-system',
+            'url' => '/main/ticket/tickets.php',
+            'label' => $this->translator->trans('Tickets'),
+        ];
+
+        return $items;
+    }
+
     private function getItemsSettings(): array
     {
         $items = [];
@@ -602,11 +640,6 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Clean temporary files'),
         ];
 
-        $items[] = [
-            'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
-            'label' => $this->translator->trans('Special exports'),
-        ];
         /*$items[] = [
             'url' => '/main/admin/periodic_export.php',
             'label' => $this->translator->$this->trans('Periodic export'),
@@ -632,12 +665,6 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        $items[] = [
-            'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
-            'label' => $this->translator->trans('Tickets'),
-        ];
-
         // Disabled until it is reemplemented to work with Chamilo 2
         /*
         $items[] = [
@@ -661,6 +688,12 @@ class IndexBlocksController extends BaseController
             'class' => 'item-resources-info',
             'url' => '/admin/resources_info',
             'label' => $this->translator->trans('Resources by type'),
+        ];
+
+        $items[] = [
+            'class' => 'item-list-icons',
+            'route' => ['name' => 'AdminListIcons'],
+            'label' => $this->translator->trans('List icons'),
         ];
 
         return $items;
@@ -692,7 +725,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-skill-ranking',
-            'url' => '/main/social/skills_ranking.php?origin=admin',
+            'url' => '/skill/ranking',
             'label' => $this->translator->trans('Skills ranking'),
         ];
         $items[] = [
@@ -819,7 +852,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-session-list',
-            'url' => '/main/session/session_list.php',
+            'url' => '/admin/session-list',
             'label' => $this->translator->trans('Training sessions list'),
         ];
         $items[] = [
@@ -916,21 +949,14 @@ class IndexBlocksController extends BaseController
             // getPluginInfo() might fail to build the plugin object; never assume 'obj' exists
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
 
-            // Normalize/fallbacks
-            if (!\is_array($pluginInfo)) {
-                // Defensive: unexpected structure → skip
-                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
-
+            if (empty($pluginInfo)) {
                 continue;
             }
 
             /** @var Plugin|null $objPlugin */
             $objPlugin = $pluginInfo['obj'] ?? null;
 
-            if (!$objPlugin instanceof Plugin) {
-                // Defensive: plugin could not be instantiated (e.g. throws in constructor)
-                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
-
+            if (!$objPlugin) {
                 continue;
             }
 
@@ -938,12 +964,10 @@ class IndexBlocksController extends BaseController
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            if (!$configuration || !isset($configuration['regions'])) {
-                continue;
-            }
-
             // Only show plugins that declare the admin menu region
-            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
+            if (empty($configuration['regions'])
+                || !\in_array('menu_administrator', $configuration['regions'], true)
+            ) {
                 continue;
             }
 

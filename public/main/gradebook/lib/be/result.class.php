@@ -87,9 +87,9 @@ class Result
      * @param $user_id user id (student)
      * @param $evaluation_id evaluation where this is a result for
      *
-     * @return array
+     * @return array<int, Result>
      */
-    public static function load($id = null, $user_id = null, $evaluation_id = null, $loadEvalUsers = false)
+    public static function load($id = null, $user_id = null, $evaluation_id = null, $loadEvalUsers = false): array
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);

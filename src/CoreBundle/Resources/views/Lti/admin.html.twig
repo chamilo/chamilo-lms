@@ -1,55 +1,101 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-    <section class="bg-white p-4">
-        <div class="row">
-            <div class="col-12">
-                <h2>{{ 'External tools'|trans }}</h2>
-                <p>
-                    {{ 'LTI intro tool'|trans }}
-                </p>
+    <section>
+        <div class="mx-auto w-full max-w-7xl px-4 py-8 lg:px-6">
+            <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <h1 class="text-2xl font-semibold text-gray-90">{{ 'External tools'|trans }}</h1>
+                    <p class="mt-2 max-w-3xl text-body-2 text-gray-50">
+                        {{ 'LTI intro tool'|trans }}
+                    </p>
+                </div>
 
-                <div class="btn-toolbar" role="toolbar" aria-label="{{ 'LTI Toolbar'|trans }}">
-                    <a href="{{ url('chamilo_lti_admin_add') }}" class="btn btn--primary">
-                        <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'Add external tool'|trans }}
+                <div class="flex items-center gap-3">
+                    <a
+                            href="{{ url('chamilo_lti_admin_add') }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-5 py-3 text-body-2 font-semibold text-success-button-text shadow-xl transition hover:opacity-90"
+                    >
+                        <span class="fa fa-plus fa-fw" aria-hidden="true"></span>
+                        <span>{{ 'Add external tool'|trans }}</span>
                     </a>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                        <tr>
-                            <th>{{ 'Name'|trans }}</th>
-                            <th>{{ 'Launch URL'|trans }}</th>
-                            <th class="text-center">{{ 'Is global'|trans }}</th>
-                            <th class="text-right">{{ 'Actions'|trans }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for tool in tools %}
-                            <tr>
-                                <td>{{ tool.title }}</td>
-                                <td>{{ tool.launchUrl }}</td>
-                                <td class="text-center">
-                                    {% if tool.isGlobal() %}
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                <div class="hidden grid-cols-[minmax(0,1.2fr)_minmax(0,1.5fr)_10rem_12rem] gap-4 border-b border-gray-25 bg-support-2 px-6 py-4 lg:grid">
+                    <div class="text-body-2 font-semibold text-gray-90">{{ 'Name'|trans }}</div>
+                    <div class="text-body-2 font-semibold text-gray-90">{{ 'Launch URL'|trans }}</div>
+                    <div class="text-center text-body-2 font-semibold text-gray-90">{{ 'Is global'|trans }}</div>
+                    <div class="text-right text-body-2 font-semibold text-gray-90">{{ 'Actions'|trans }}</div>
+                </div>
+
+                <div class="divide-y divide-gray-20">
+                    {% for tool in tools %}
+                        <div class="grid grid-cols-1 gap-4 px-6 py-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.5fr)_10rem_12rem] lg:items-center">
+                            <div>
+                                <p class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
+                                    {{ 'Name'|trans }}
+                                </p>
+                                <p class="break-words text-body-2 font-medium text-gray-90">
+                                    {{ tool.title }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <p class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
+                                    {{ 'Launch URL'|trans }}
+                                </p>
+                                <p class="break-all text-body-2 text-gray-90">
+                                    {{ tool.launchUrl }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <p class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
+                                    {{ 'Is global'|trans }}
+                                </p>
+
+                                {% if tool.isGlobal() %}
+                                    <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-caption font-semibold text-primary">
                                         {{ 'Yes'|trans }}
-                                    {% else %}
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center rounded-full bg-gray-20 px-3 py-1 text-caption font-semibold text-gray-90">
                                         {{ 'No'|trans }}
-                                    {% endif %}
-                                </td>
-                                <td class="text-right">
-                                    <a href="{{ url('chamilo_lti_admin_edit', {'toolId': tool.id}) }}"
-                                       class="btn btn--success mb-1 mb-lg-0">
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <p class="text-caption font-semibold uppercase tracking-wide text-gray-50 lg:hidden">
+                                    {{ 'Actions'|trans }}
+                                </p>
+
+                                <div class="flex flex-wrap items-center gap-2 lg:justify-end">
+                                    <a
+                                            href="{{ url('chamilo_lti_admin_edit', {'toolId': tool.id}) }}"
+                                            class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-body-2 font-semibold text-primary-button-text shadow-sm transition hover:opacity-90"
+                                    >
                                         {{ 'Edit'|trans }}
                                     </a>
-                                    <a href="{{ url('chamilo_lti_admin_delete', {'toolId': tool.id}) }}"
-                                       class="btn btn--danger">
+
+                                    <a
+                                            href="{{ url('chamilo_lti_admin_delete', {'toolId': tool.id}) }}"
+                                            class="inline-flex items-center justify-center rounded-xl bg-danger px-4 py-2 text-body-2 font-semibold text-danger-button-text shadow-sm transition hover:opacity-90"
+                                    >
                                         {{ 'Delete'|trans }}
                                     </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="px-6 py-10 text-center">
+                            <p class="text-body-2 text-gray-50">
+                                {{ 'No external tools available yet.'|trans }}
+                            </p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

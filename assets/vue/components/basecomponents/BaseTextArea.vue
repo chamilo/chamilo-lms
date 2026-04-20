@@ -1,6 +1,6 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <Textarea
         :id="id"
         :aria-label="label"
@@ -11,16 +11,20 @@
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label :for="id">{{ t(label) }}</label>
-    </div>
+    </FloatLabel>
     <slot name="errors">
-      <small v-if="isInvalid" class="p-error">
-        {{ t(errorText || 'Error message') }}
+      <small
+        v-if="isInvalid"
+        class="p-error"
+      >
+        {{ t(errorText || "Error message") }}
       </small>
     </slot>
   </div>
 </template>
 
 <script setup>
+import FloatLabel from "primevue/floatlabel"
 import Textarea from "primevue/textarea"
 import { useI18n } from "vue-i18n"
 

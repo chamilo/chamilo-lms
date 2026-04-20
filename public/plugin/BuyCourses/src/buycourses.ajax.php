@@ -21,17 +21,51 @@ if (api_is_anonymous()) {
 $plugin = BuyCoursesPlugin::create();
 $httpRequest = Container::getRequest();
 
-$culqiEnable = $plugin->get('culqi_enable');
+$culqiEnable = 'true' === $plugin->get('culqi_enable');
 $action = $httpRequest->query->get('a');
 
 $em = Database::getManager();
 
+function bcEscapeHtml(?string $value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function bcRequireAdminAjax(): void
+{
+    if (!api_is_platform_admin()) {
+        api_not_allowed(true);
+    }
+}
+
+function bcUserOwnsSale(array $sale): bool
+{
+    return isset($sale['user_id']) && (int) $sale['user_id'] === api_get_user_id();
+}
+
+function bcUserOwnsServiceSale(array $serviceSale): bool
+{
+    return isset($serviceSale['buyer']['id']) && (int) $serviceSale['buyer']['id'] === api_get_user_id();
+}
+
+$adminActions = [
+    'verifyPaypal',
+    'saleInfo',
+    'stats',
+    'processPayout',
+    'proceedPayout',
+    'cancelPayout',
+    'service_sale_info',
+    'service_sale_confirm',
+    'service_sale_cancel',
+];
+
+if (in_array((string) $action, $adminActions, true)) {
+    bcRequireAdminAjax();
+}
+
 switch ($action) {
     case 'verifyPaypal':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         $userId = $httpRequest->request->getInt('id');
         $isUserHavePaypalAccount = $plugin->verifyPaypalAccountByBeneficiary($userId);
         if ($isUserHavePaypalAccount) {
@@ -43,10 +77,6 @@ switch ($action) {
         break;
 
     case 'saleInfo':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         $saleId = $httpRequest->request->getInt('id');
         $sale = $plugin->getSale($saleId);
         $productType = 1 == $sale['product_type'] ? get_lang('Course') : get_lang('Session');
@@ -64,24 +94,23 @@ switch ($action) {
 
         $userInfo = api_get_user_info($sale['user_id']);
 
-        $html = '<h2>'.$sale['product_name'].'</h2>';
+        $html = '<h2>'.bcEscapeHtml((string) $sale['product_name']).'</h2>';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-6 col-md-6">';
         $html .= '<ul>';
-        $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.$sale['total_price'].'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.$currency['iso_code'].'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.$productType.'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.
-            api_format_date(
-                $sale['date'],
-                DATE_TIME_FORMAT_LONG_24H
-            ).'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.$userInfo['complete_name'].'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.$paymentType.'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.bcEscapeHtml((string) $sale['total_price']).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.bcEscapeHtml((string) $currency['iso_code']).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.bcEscapeHtml((string) $productType).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.bcEscapeHtml((string) api_format_date(
+            $sale['date'],
+            DATE_TIME_FORMAT_LONG_24H
+        )).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.bcEscapeHtml((string) $userInfo['complete_name']).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.bcEscapeHtml((string) $paymentType).'</li>';
         $html .= '</ul>';
         $html .= '</div>';
         $html .= '<div class="col-sm-6 col-md-6">';
-        $html .= '<img class="thumbnail" src="'.$productImage.'" >';
+        $html .= '<img class="thumbnail" src="'.bcEscapeHtml((string) $productImage).'" alt="'.bcEscapeHtml((string) $sale['product_name']).'">';
         $html .= '</div>';
         $html .= '</div>';
 
@@ -90,10 +119,6 @@ switch ($action) {
         break;
 
     case 'stats':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         $stats = [];
         $stats['completed_count'] = 0;
         $stats['completed_total_amount'] = 0;
@@ -145,10 +170,6 @@ switch ($action) {
         break;
 
     case 'processPayout':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         $html = '';
         $allPays = [];
         $totalAccounts = 0;
@@ -194,13 +215,9 @@ switch ($action) {
         break;
 
     case 'proceedPayout':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = 1 == $paypalParams['sandbox'];
+        $test = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
@@ -251,8 +268,9 @@ switch ($action) {
             );
         } else {
             echo Display::return_message(
-                '<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0']
-                .'<br /><ul><li>'.$result['L_LONGMESSAGE0'].'</li></ul>',
+                '<b>'.bcEscapeHtml((string) ($result['L_SEVERITYCODE0'] ?? '')).' '.bcEscapeHtml((string) ($result['L_ERRORCODE0'] ?? '')).'</b> - '
+                .bcEscapeHtml((string) ($result['L_SHORTMESSAGE0'] ?? ''))
+                .'<br /><ul><li>'.bcEscapeHtml((string) ($result['L_LONGMESSAGE0'] ?? '')).'</li></ul>',
                 'error',
                 false
             );
@@ -261,10 +279,6 @@ switch ($action) {
         break;
 
     case 'cancelPayout':
-        if (api_is_anonymous()) {
-            break;
-        }
-
         // $payoutId only gets used in setStatusPayout(), where it is filtered
         $payoutId = $httpRequest->request->getInt('id');
         $plugin->setStatusPayouts(
@@ -293,9 +307,9 @@ switch ($action) {
         if (!$tokenId || !$saleId) {
             break;
         }
-        $sale = $plugin->getSale($saleId);
-        if (!$sale) {
-            break;
+        $sale = $plugin->getSale((int) $saleId);
+        if (!$sale || !bcUserOwnsSale($sale)) {
+            api_not_allowed(true);
         }
 
         require_once 'Requests.php';
@@ -373,105 +387,194 @@ switch ($action) {
         break;
 
     case 'culqi_cargo_service':
+        header('Content-Type: application/json');
+
         if (!$culqiEnable) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi is disabled.',
+            ]);
             break;
         }
 
-        $tokenId = $httpRequest->query->get(
-            'token_id',
-            $httpRequest->request->get('token_id')
-        );
-        $serviceSaleId = $httpRequest->query->get(
-            'service_sale_id',
-            $httpRequest->request->get('service_sale_id')
-        );
+        $tokenId = trim((string) $httpRequest->request->get('token_id', ''));
+        $serviceSaleId = $httpRequest->request->getInt('service_sale_id');
 
-        if (!$tokenId || !$serviceSaleId) {
+        if ('' === $tokenId || $serviceSaleId <= 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Missing Culqi token or service sale ID.',
+            ]);
             break;
         }
 
         $serviceSale = $plugin->getServiceSale($serviceSaleId);
 
-        if (!$serviceSale) {
+        if (empty($serviceSale) || !bcUserOwnsServiceSale($serviceSale)) {
+            api_not_allowed(true);
+        }
+
+        if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) !== BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'This service sale is no longer pending.',
+            ]);
             break;
         }
 
-        require_once 'Requests.php';
-        Requests::register_autoloader();
-
-        require_once 'culqi.php';
         $culqiParams = $plugin->getCulqiParams();
+        $culqiSecretKey = trim((string) ($culqiParams['api_key'] ?? ''));
 
-        // API Key y autenticación
-        $SECRET_API_KEY = $culqiParams['api_key'];
-        $culqi = new Culqi\Culqi(['api_key' => $SECRET_API_KEY]);
-
-        $environment = $culqiParams['integration'];
-        $environment = $environment
-            ? BuyCoursesPlugin::CULQI_INTEGRATION_TYPE
-            : BuyCoursesPlugin::CULQI_PRODUCTION_TYPE;
-
-        $culqi->setEnv($environment);
-        $user = api_get_user_info();
-
-        try {
-            $cargo = $culqi->Cargos->create([
-                'moneda' => $serviceSale['currency'],
-                'monto' => (int) ((float) $serviceSale['price'] * 100),
-                'usuario' => $user['username'],
-                'descripcion' => $serviceSale['service']['name'],
-                'pedido' => $serviceSale['reference'],
-                'codigo_pais' => 'PE',
-                'direccion' => get_lang('None'),
-                'ciudad' => get_lang('None'),
-                'telefono' => 0,
-                'nombres' => $user['firstname'],
-                'apellidos' => $user['lastname'],
-                'correo_electronico' => $user['email'],
-                'token' => $tokenId,
+        if ('' === $culqiSecretKey) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi secret key is not configured.',
             ]);
-
-            if (is_object($cargo)) {
-                $saleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
-                if ($saleIsCompleted) {
-                    Display::addFlash(
-                        Display::return_message(
-                            sprintf(
-                                $plugin->get_lang('SubscriptionToCourseXSuccessful'),
-                                $serviceSale['service']['name']
-                            ),
-                            'success'
-                        )
-                    );
-                }
-            }
-
-            echo json_encode($cargo);
-        } catch (Exception $e) {
-            $cargo = json_decode($e->getMessage(), true);
-            $plugin->cancelServiceSale($serviceSale['id']);
-
-            unset($_SESSION['bc_sale_id']);
-
-            if (is_array($cargo)) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
-                        'error',
-                        false
-                    )
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message(
-                        $plugin->get_lang('ErrorContactPlatformAdmin'),
-                        'error',
-                        false
-                    )
-                );
-            }
+            break;
         }
 
+        $currency = $plugin->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
+        $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? 'PEN')));
+        $amountInCents = (int) round((float) ($serviceSale['price'] ?? 0) * 100);
+
+        if ($amountInCents <= 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid service sale amount.',
+            ]);
+            break;
+        }
+
+        $buyerId = (int) ($serviceSale['buyer']['id'] ?? 0);
+        $buyerInfo = api_get_user_info($buyerId);
+        $buyerEmail = trim((string) ($buyerInfo['email'] ?? ''));
+
+        if ('' === $buyerEmail) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Buyer email is required to process the payment.',
+            ]);
+            break;
+        }
+
+        $payload = [
+            'amount' => $amountInCents,
+            'currency_code' => $currencyCode,
+            'email' => $buyerEmail,
+            'source_id' => $tokenId,
+            'capture' => true,
+            'description' => (string) ($serviceSale['service']['name'] ?? 'Service purchase'),
+            'metadata' => [
+                'service_sale_id' => (string) $serviceSaleId,
+                'reference' => (string) ($serviceSale['reference'] ?? ''),
+            ],
+        ];
+
+        $ch = curl_init('https://api.culqi.com/v2/charges');
+
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Bearer '.$culqiSecretKey,
+            ],
+            CURLOPT_TIMEOUT => 30,
+        ]);
+
+        $rawResponse = curl_exec($ch);
+        $curlError = curl_error($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        if (false === $rawResponse || '' !== $curlError) {
+            error_log(
+                'BuyCourses Culqi service charge request failed | service_sale_id='
+                .$serviceSaleId
+                .' | curl_error='
+                .$curlError
+            );
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Culqi charge request failed.',
+            ]);
+            break;
+        }
+
+        $response = json_decode($rawResponse, true);
+
+        if (!is_array($response)) {
+            error_log(
+                'BuyCourses Culqi service charge returned invalid JSON | service_sale_id='
+                .$serviceSaleId
+                .' | http_code='
+                .$httpCode
+                .' | response='
+                .$rawResponse
+            );
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid Culqi response.',
+            ]);
+            break;
+        }
+
+        if ($httpCode >= 200 && $httpCode < 300 && !empty($response['id'])) {
+            $saleCompleted = $plugin->completeServiceSale($serviceSaleId);
+
+            if (!$saleCompleted) {
+                error_log(
+                    'BuyCourses Culqi payment succeeded but service sale completion failed | service_sale_id='
+                    .$serviceSaleId
+                    .' | charge_id='
+                    .(string) $response['id']
+                );
+
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'The payment was processed but the service sale could not be completed.',
+                ]);
+                break;
+            }
+
+            unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
+
+            echo json_encode([
+                'success' => true,
+                'redirect_url' => api_get_path(WEB_PLUGIN_PATH)
+                    .'BuyCourses/src/service_catalog.php?payment_status=completed&service_name='
+                    .urlencode((string) ($serviceSale['service']['name'] ?? '')),
+                'charge_id' => (string) $response['id'],
+            ]);
+            break;
+        }
+
+        error_log(
+            'BuyCourses Culqi service charge failed | service_sale_id='
+            .$serviceSaleId
+            .' | http_code='
+            .$httpCode
+            .' | response='
+            .$rawResponse
+        );
+
+        $errorMessage = (string) (
+            $response['user_message']
+            ?? $response['merchant_message']
+            ?? $response['message']
+            ?? 'Culqi charge failed.'
+        );
+
+        echo json_encode([
+            'success' => false,
+            'message' => $errorMessage,
+            'response_code' => $httpCode,
+        ]);
         break;
 
     case 'service_sale_info':
@@ -483,13 +586,15 @@ switch ($action) {
         }
 
         $ajaxCallFile = $plugin->getPath('SRC').'buycourses.ajax.php';
-        $serviceImg = $plugin->getPath('SERVICE_IMAGES').$serviceSale['service']['image'];
-        $html = "<img class='img-responsive text-center' src='$serviceImg'>";
+        $serviceImg = $serviceSale['service']['image'] ?: Template::get_icon_path('session_default.png');
+        $ajaxCallFileEscaped = bcEscapeHtml((string) $ajaxCallFile);
+        $serviceImgEscaped = bcEscapeHtml((string) $serviceImg);
+        $html = "<img class='img-responsive text-center' src='$serviceImgEscaped' alt='".bcEscapeHtml((string) $serviceSale['service']['name'])."'>";
         $html .= '<br />';
         $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
         $html .= '<ul>';
-        $html .= "<li><b>{$plugin->get_lang('ServiceName')}:</b> {$serviceSale['service']['name']}</li> ";
-        $html .= "<li><b>{$plugin->get_lang('Description')}:</b> {$serviceSale['service']['description']}</li> ";
+        $html .= '<li><b>'.$plugin->get_lang('ServiceName').':</b> '.bcEscapeHtml((string) $serviceSale['service']['name']).'</li> ';
+        $html .= '<li><b>'.$plugin->get_lang('Description').':</b> '.bcEscapeHtml((string) $serviceSale['service']['description']).'</li> ';
         $nodeType = $serviceSale['node_type'];
         $nodeName = '';
         switch ($nodeType) {
@@ -519,21 +624,25 @@ switch ($action) {
                 break;
         }
 
+        if (!empty($nodeName)) {
+            $html .= '<li><b>'.$plugin->get_lang('AppliesTo').':</b> '.bcEscapeHtml((string) $nodeType).' - '.bcEscapeHtml((string) $nodeName).'</li> ';
+        }
+
         $html .= '</ul>';
         $html .= "<legend>{$plugin->get_lang('SaleInfo')}</legend>";
         $html .= '<ul>';
-        $html .= "<li><b>{$plugin->get_lang('BoughtBy')}:</b> {$serviceSale['buyer']['name']}</li> ";
-        $html .= "<li><b>{$plugin->get_lang('PurchaserUser')}:</b> {$serviceSale['buyer']['username']}</li> ";
-        $html .= "<li><b>{$plugin->get_lang('Total')}:</b> {$serviceSale['service']['total_price']}</li> ";
+        $html .= '<li><b>'.$plugin->get_lang('BoughtBy').':</b> '.bcEscapeHtml((string) $serviceSale['buyer']['name']).'</li> ';
+        $html .= '<li><b>'.$plugin->get_lang('PurchaserUser').':</b> '.bcEscapeHtml((string) $serviceSale['buyer']['username']).'</li> ';
+        $html .= '<li><b>'.$plugin->get_lang('Total').':</b> '.bcEscapeHtml((string) $serviceSale['service']['total_price']).'</li> ';
         $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
-        $html .= "<li><b>{$plugin->get_lang('OrderDate')}:</b> $orderDate</li> ";
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.bcEscapeHtml((string) $orderDate).'</li> ';
         $paymentType = match ($serviceSale['payment_type']) {
             BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'PayPal',
             BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER => $plugin->get_lang('BankTransfer'),
             BuyCoursesPlugin::PAYMENT_TYPE_CULQI => 'Culqi',
             default => $serviceSale['payment_type'],
         };
-        $html .= "<li><b>{$plugin->get_lang('PaymentMethod')}:</b> $paymentType</li> ";
+        $html .= '<li><b>'.$plugin->get_lang('PaymentMethod').':</b> '.bcEscapeHtml((string) $paymentType).'</li> ';
         $status = $serviceSale['status'];
         $buttons = '';
         if (BuyCoursesPlugin::SERVICE_STATUS_COMPLETED == $status) {
@@ -541,13 +650,13 @@ switch ($action) {
         } elseif (BuyCoursesPlugin::SERVICE_STATUS_PENDING == $status) {
             $status = $plugin->get_lang('Pending');
             if ($isAdmin) {
-                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn--success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
-                $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn--danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
+                $buttons .= "<a id='".bcEscapeHtml((string) $serviceSale['id'])."' tag='service_sale_confirm' class='btn btn--success pull-left'>".$plugin->get_lang('ConfirmOrder')."</a>";
+                $buttons .= "<a id='".bcEscapeHtml((string) $serviceSale['id'])."' tag='service_sale_cancel' class='btn btn--danger pull-right'>".$plugin->get_lang('CancelOrder')."</a>";
             }
         } elseif (BuyCoursesPlugin::SERVICE_STATUS_CANCELLED == $status) {
             $status = $plugin->get_lang('Cancelled');
         }
-        $html .= "<li><b>{$plugin->get_lang('Status')}:</b> $status</li> ";
+        $html .= '<li><b>'.$plugin->get_lang('Status').':</b> '.bcEscapeHtml((string) $status).'</li> ';
         $html .= '</ul>';
         $html .= '<br />';
         $html .= "<div class='row'>";
@@ -564,13 +673,13 @@ switch ($action) {
         $html .= "var action = $(this).attr('tag');";
         $html .= '$.ajax({';
         $html .= "data: 'id='+id,";
-        $html .= "url: '$ajaxCallFile?a='+action,";
+        $html .= "url: '$ajaxCallFileEscaped?a='+action,";
         $html .= "type: 'POST',";
         $html .= 'beforeSend: function() {';
-        $processingLoaderText = $plugin->get_lang('ProcessingDontCloseThisWindow');
+        $processingLoaderText = json_encode($plugin->get_lang('ProcessingDontCloseThisWindow'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
         $html .= "$('.bootbox-close-button').remove();";
         $html .= "$('.btn--plain').attr('disabled', true);";
-        $html .= "$('.bc-action-buttons').html('<div class=\"wobblebar-loader\"></div><p> $processingLoaderText</p>');";
+        $html .= "$('.bc-action-buttons').html('<div class=\"wobblebar-loader\"></div><p>' + $processingLoaderText + '</p>');";
         $html .= '},';
         $html .= 'success: function(response) {';
         $html .= "$('.bc-action-buttons').html(response);";
@@ -586,16 +695,22 @@ switch ($action) {
     case 'service_sale_confirm':
         $id = $httpRequest->request->getInt('id');
         $serviceSale = $plugin->getServiceSale($id);
+        if (empty($serviceSale)) {
+            echo Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+
+            break;
+        }
+
         $response = $plugin->completeServiceSale($id);
         $html = "<div class='text-center'>";
 
         if ($response) {
             $html .= Display::return_message(
-                sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['title']),
+                sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), bcEscapeHtml((string) ($serviceSale['service']['title'] ?? $serviceSale['service']['name']))),
                 'success'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish').'</a>';
@@ -611,6 +726,13 @@ switch ($action) {
 
     case 'service_sale_cancel':
         $id = $httpRequest->request->getInt('id');
+        $serviceSale = $plugin->getServiceSale($id);
+        if (empty($serviceSale)) {
+            echo Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+
+            break;
+        }
+
         $response = $plugin->cancelServiceSale($id);
         $html = '';
         $html .= "<div class='text-center'>";
@@ -621,7 +743,7 @@ switch ($action) {
                 'warning'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish').'</a>';

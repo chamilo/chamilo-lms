@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\StandardizationService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 /**
  * Class UserGroup.
@@ -46,6 +49,7 @@ class UserGroupModel extends Model
     public $access_url_rel_user;
     public $table_course;
     public $table_user;
+    public $group_rel_usergroup;
     private string $usergroup_table;
 
     public function __construct()
@@ -62,6 +66,7 @@ class UserGroupModel extends Model
         $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $this->group_rel_usergroup = Database::get_course_table(TABLE_GROUP_CLASS);
         $this->useMultipleUrl = api_get_multiple_access_url();
         if ($this->allowTeachers()) {
             $this->columns[] = 'author_id';
@@ -362,10 +367,10 @@ class UserGroupModel extends Model
         }
 
         $actions .= '<a href="'.api_get_self().'?action=add">'.
-            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
             '</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')),
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Import')),
             'usergroup_import.php'
         );
         $actions .= Display::url(
@@ -1245,11 +1250,34 @@ class UserGroupModel extends Model
                         ]
                     );
                 }
-                if (0 != $sessionId && 0 != $groupId) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
-                }
+            }
+        }
+    }
+
+    /**
+     * Remove a usergroup from courses without unsubscribing the individual users.
+     *
+     * Only the usergroup↔course link is deleted; students remain enrolled
+     * in the course independently.
+     */
+    public function unsubscribeOnlyCoursesFromUsergroup(int $usergroup_id, array $delete_items): void
+    {
+        if (empty($delete_items)) {
+            return;
+        }
+
+        foreach ($delete_items as $course_id) {
+            $course_info = api_get_course_info_by_id((int) $course_id);
+            if (!empty($course_info)) {
+                Database::delete(
+                    $this->usergroup_rel_course_table,
+                    [
+                        'usergroup_id = ? AND course_id = ?' => [
+                            $usergroup_id,
+                            (int) $course_id,
+                        ],
+                    ]
+                );
             }
         }
     }
@@ -1396,7 +1424,67 @@ class UserGroupModel extends Model
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
+
+        // if in courses some groups are linked to this usergroup, update group users list
+        $groups = self::getGroupsByUsergroup($usergroup_id);
+        foreach ($groups as $groupDatas) {
+            // [groupId, cId]
+            GroupManager::subscribeUsers($new_items, api_get_group_entity($groupDatas['groupId']));
+            GroupManager::unsubscribeUsers($delete_items, api_get_group_entity($groupDatas['groupId']));
+        }
+
     }
+
+    /**
+     * Gets a list of groups ids by user group
+     * @param   int  $id   user group id
+     * @return  array
+     */
+    /**
+     * Gets groups linked to a usergroup, optionally filtered by course, category and session.
+     *
+     * @return array<array{groupId: int, cId: int}>
+     */
+    public function getGroupsByUsergroup(int $id, ?int $c_id = null, ?int $category_id = null, ?int $id_session = null): array
+    {
+        $id_session = $id_session ?? 0;
+        $em = Database::getManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('IDENTITY(rel.group) AS groupId, IDENTITY(rel.course) AS cId')
+            ->from(\Chamilo\CourseBundle\Entity\CGroupRelUsergroup::class, 'rel')
+            ->innerJoin('rel.group', 'g')
+            ->where('rel.usergroup = :ugId')
+            ->andWhere('rel.session = :sid OR (rel.session IS NULL AND :sid = 0)')
+            ->setParameter('ugId', $id, \Doctrine\DBAL\Types\Types::INTEGER)
+            ->setParameter('sid', $id_session, \Doctrine\DBAL\Types\Types::INTEGER)
+        ;
+
+        if (null !== $c_id) {
+            $qb->andWhere('rel.course = :cId')
+                ->setParameter('cId', $c_id, \Doctrine\DBAL\Types\Types::INTEGER);
+        }
+
+        if (null !== $category_id) {
+            $qb->andWhere('g.category = :catId')
+                ->setParameter('catId', $category_id, \Doctrine\DBAL\Types\Types::INTEGER);
+        } else {
+            $qb->andWhere('g.category IS NOT NULL');
+        }
+
+        $results = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $results[] = [
+                'groupId' => (int) $row['groupId'],
+                'cId' => (int) $row['cId'],
+            ];
+        }
+
+        return $results;
+    }
+
+
+
 
     /**
      * @deprecated Use UsergroupRepository::getByTitleInUrl().
@@ -1469,7 +1557,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
-            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
+            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title ".('DESC' === strtoupper((string) $sord) ? 'DESC' : 'ASC')." LIMIT $start, $limit")
         );
 
         $new_result = [];
@@ -1956,7 +2044,7 @@ class UserGroupModel extends Model
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 
-        $form->addSelect('visibility', get_lang('Group Permissions'), $this->getGroupStatusList());
+        $form->addSelect('visibility', get_lang('Group permissions'), $this->getGroupStatusList());
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>');
         $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('Allow members to leave group'));
 
@@ -3203,6 +3291,90 @@ class UserGroupModel extends Model
 
         return Database::store_result($result, 'ASSOC');
     }
+
+    public function getUsersInAndOutOfCourse(int $usergroupId, int $courseId): array
+    {
+        $usersInUsergroup = $this->get_users_by_usergroup($usergroupId);
+
+        $data = [
+            'error' => null,
+            'warning' => null,
+            'usersSubscribedToCourse' => [],
+            'usersNotSubscribedToCourse' => [],
+        ];
+
+        if (count($usersInUsergroup) > 0) {
+            $courseCode = \CourseManager::get_course_code_from_course_id($courseId);
+            $usersInCourse = \CourseManager::get_user_list_from_course_code($courseCode);
+            $em = Container::getEntityManager();
+
+            $usersSubscribedToCourse = [];
+            $usersNotSubscribedToCourse = [];
+            foreach ($usersInUsergroup as $userId) {
+                $user = $em->getRepository(User::class)->find($userId);
+                if (array_key_exists($userId, $usersInCourse)) {
+                    $usersSubscribedToCourse[] = $user;
+                } else {
+                    $usersNotSubscribedToCourse[] = $user;
+                }
+            }
+
+            $data['usersSubscribedToCourse'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersSubscribedToCourse, true);
+            $data['usersNotSubscribedToCourse'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersNotSubscribedToCourse, true);;
+        } else {
+            $data['warning'] = get_lang('No user is subscribed to this class');
+        }
+
+        return $data;
+    }
+
+    public function getUsersAndCoursesSubscribedToAUserGroup(int $usergroupId): array
+    {
+        $data = [
+            'error' => null,
+            'warning' => null,
+            'usersSubscribedToUsergroup' => [],
+            'coursesSubscribedToUsergroup' => [],
+        ];
+
+        $em = Container::getEntityManager();
+
+        $usersSubscribedToUsergroupIds = $this->get_users_by_usergroup($usergroupId);
+        if (!empty($usersSubscribedToUsergroupIds)) {
+            $usersSubscribedToUsergroup = [];
+            foreach ($usersSubscribedToUsergroupIds as $userId) {
+                $user = $em->getRepository(User::class)->find($userId);
+                if (null !== $user) {
+                    $usersSubscribedToUsergroup[] = $user;
+                }
+            }
+            $data['usersSubscribedToUsergroup'] = StandardizationService::sortByNameByCountryAndStandardizeName($usersSubscribedToUsergroup, true);
+        }
+
+        $coursesSubscribedToUsergroupIds = $this->get_courses_by_usergroup($usergroupId);
+        if (!empty($coursesSubscribedToUsergroupIds)) {
+            $coursesSubscribedToUsergroup = [];
+            foreach ($coursesSubscribedToUsergroupIds as $courseId) {
+                $code = \CourseManager::get_course_code_from_course_id($courseId);
+                $coursesSubscribedToUsergroup[] = [
+                    'code' => $code,
+                    'name' => \CourseManager::getCourseNameFromCode($code),
+                ];
+            }
+            $data['coursesSubscribedToUsergroup'] = StandardizationService::sort($coursesSubscribedToUsergroup);
+        }
+
+        if (0 === count($usersSubscribedToUsergroupIds) + count($coursesSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No user and no course are subscribed to this class');
+        } elseif (0 === count($usersSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No user are subscribed to this class');
+        } elseif (0 === count($coursesSubscribedToUsergroupIds)) {
+            $data['warning'] = get_lang('No course are subscribed to this class');
+        }
+
+        return $data;
+    }
+
 
     public static function getRoleName($relation)
     {

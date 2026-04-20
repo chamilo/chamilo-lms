@@ -1,0 +1,134 @@
+
+.actionseditzone{
+    position : absolute;
+    border : dotted 1px purple;
+    margin-left : 0px;
+    margin-top : 0px;
+    width : 650px;
+    height : 440px;
+}
+
+.actionslistehelp{
+	position : absolute;
+	right : 40px;
+	top  : 55px;
+	width : 285px;
+	text-align : center;
+	z-index : 102;
+}
+
+.actionsThemes{
+	position : absolute;
+	left:5px;top:5px;
+	width : 310px;
+	height : 36px;
+}
+.tabBtn{
+	display: inline-block;
+	position : relative;
+	background-color: beige;
+	bottom: 0px;
+	margin-right: 5px;
+	width : 60px;
+	height : 28px;
+	line-height: 28px;
+	text-align: center;
+	border-bottom :none;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	cursor: pointer;
+}
+
+.tabMain{
+	background-color: #BDBDBD;
+}
+.tabGame{
+	background-color: #A9E2F3;
+}
+.tabFx{
+	background-color: #D4EFDF;
+}
+.actionsliste{
+	float:left;
+	width : 315px;
+	height : 400px;
+	list-style-type: none; 
+	border-top:none;
+	padding : 0px;
+	margin : 0px;
+	margin-top  : 33px;
+	margin-left : 5px;
+	padding-top:5px;
+	z-index:103;
+}
+.actionsliste li{
+	width : 306px;
+	list-style-type: none; 
+	z-index : 104;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor : move;
+}
+.minAction{
+	width : 256px;
+	font-size : 16px;
+	padding : 4px;
+	margin : 2px;
+	margin-left : 50px;
+	background : #F8ECE0;
+	border : solid 1px gray;
+	border-radius : 10px;
+	text-align : center;
+}
+.minCondi{
+	width : 306px;
+	font-size : 16px;
+	padding : 4px;
+	margin : 2px;
+	border : solid 1px gray;
+	border-radius : 10px;
+	text-align : left;
+	background-image : url(../img/arrow.png);
+	background-position : right 10px center;
+	background-repeat : no-repeat;
+}
+
+.minFct{
+	background : white;
+	max-width : 150px;
+	padding : 2px;
+	padding-left : 4px;
+	padding-right : 4px;
+	margin-left : 5px;
+	border-radius : 5px;
+	cursor : pointer;
+}
+
+.numFct{
+	background : white;
+	max-width : 80px;
+	padding : 2px;
+	padding-left : 4px;
+	padding-right : 4px;
+	margin-left : 5px;
+	border-radius : 5px;
+	cursor : pointer;
+}
+
+.Pos{
+	background-color : #D0F5A9;
+}
+.Neg{
+	background-color : #F6CECE;
+}
+
+.placeholder{
+	height: 15px !important;
+	border : solid 1px rgb(8, 99, 31);
+	background-color: rgb(8, 99, 31);
+	box-sizing:none;
+}

@@ -1,12 +1,5 @@
 <template>
-  <SectionHeader :title="t('Attendance')">
-    <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Attendance')" />
 
   <div class="attendance-page p-4">
     <!-- Toolbar -->
@@ -124,7 +117,7 @@
                 disabled
               />
             </template>
-            <span>{{ date.label }}</span>
+            <span>{{ formatAttendanceDate(date.dateTime) }}</span>
           </div>
           <div class="flex gap-2">
             <BaseButton
@@ -257,7 +250,7 @@
                     >
                       <div class="flex flex-col items-center">
                         <span class="font-bold">
-                          {{ date.label }}
+                          {{ formatAttendanceDate(date.dateTime) }}
                         </span>
                         <span
                           v-if="date.duration !== undefined && date.duration !== null"
@@ -270,32 +263,38 @@
                           class="flex gap-2 mt-1"
                           v-if="isTeacherUI"
                         >
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('View for tablet')"
                             icon="view-table"
-                            size="normal"
+                            only-icon
+                            size="small"
+                            type="black"
                             @click="viewForTablet(date.id)"
-                            class="cursor-pointer text-primary"
-                            title="View for tablet"
                           />
-                          <BaseIcon
-                            v-if="isAdmin"
+                          <BaseButton
+                            v-if="canManageLocks"
                             :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
-                            size="normal"
+                            :label="isColumnLocked(date.id) ? t('Unlock column') : t('Lock column')"
+                            only-icon
+                            size="small"
+                            type="warning"
                             @click="toggleLock(date.id)"
-                            :class="isColumnLocked(date.id) ? 'text-gray-500' : 'text-warning'"
-                            :title="isColumnLocked(date.id) ? 'Unlock column' : 'Lock column'"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Present')"
                             icon="account-check"
+                            only-icon
+                            size="small"
+                            type="success"
                             @click="setAllAttendance(date.id, 1)"
-                            class="text-success"
-                            title="Set all Present"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Absent')"
                             icon="account-cancel"
+                            only-icon
+                            size="small"
+                            type="danger"
                             @click="setAllAttendance(date.id, 0)"
-                            class="text-danger"
-                            title="Set all Absent"
                           />
                         </div>
                       </div>
@@ -396,19 +395,23 @@
                         v-if="canEdit"
                         class="absolute top-2 right-2 flex gap-3"
                       >
-                        <BaseIcon
+                        <BaseButton
                           v-if="allowComments && !isColumnLocked(date.id)"
+                          :label="t('Comment')"
                           icon="comment"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="info"
                           @click="openCommentDialog(user.id, date.id)"
-                          class="cursor-pointer text-info"
                         />
-                        <BaseIcon
+                        <BaseButton
                           v-if="enableSignature && !isColumnLocked(date.id)"
+                          :label="t('Sign')"
                           icon="drawing"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="success"
                           @click="openSignatureDialog(user.id, date.id)"
-                          class="cursor-pointer text-success"
                         />
                       </div>
                     </td>
@@ -420,7 +423,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="mt-4 flex justify-end">
+        <div class="mt-2 flex justify-end">
           <BaseButton
             v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
             :label="isSaving ? t('Saving...') : t('Save attendance')"
@@ -532,17 +535,21 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
+import { DateTime } from "luxon"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
+
+const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
 const { sid, cid, gid } = useCidReq()
 const isLoading = ref(true)
 const attendanceTitle = ref("")
@@ -563,7 +570,8 @@ function onStudentViewChange() {
   }
 }
 
-const isAdmin = computed(() => securityStore.isAdmin)
+watch(() => platformConfigStore.isStudentViewActive, onStudentViewChange)
+
 const currentUserId = computed(() => securityStore.user?.id)
 
 const cidReqStore = useCidReqStore()
@@ -581,13 +589,18 @@ const canEdit = computed(() => {
   return !readonly && isTeacherUI.value
 })
 
+const canManageLocks = computed(() => canEdit.value)
+
 const signedCount = computed(
   () => filteredDates.value.filter((d) => attendanceData.value[`${currentUserId.value}-${d.id}`] === 1).length,
 )
 const totalCount = computed(() => filteredDates.value.length)
 
-const todayDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })
-const isTodayScheduled = computed(() => attendanceDates.value.some((date) => date.label.includes(todayDate)))
+const isTodayScheduled = computed(() => attendanceDates.value.some((date) => {
+  if (!date.dateTime) return false
+  const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
+}))
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -668,9 +681,9 @@ const saveAttendanceSheet = async () => {
   isSaving.value = true
   try {
     await attendanceService.saveAttendanceSheet({
-      courseId: parseInt(cid),
-      sessionId: sid ? parseInt(sid) : null,
-      groupId: gid ? parseInt(gid) : null,
+      courseId: parseInt(cid, 10),
+      sessionId: sid ? parseInt(sid, 10) : null,
+      groupId: gid ? parseInt(gid, 10) : null,
       attendanceData: preparedData,
     })
 
@@ -754,15 +767,11 @@ const fetchAttendanceTitle = async () => {
   }
 }
 
-const today = new Date().toISOString().split("T")[0]
-const isoFromDateLabel = (label) => {
-  try {
-    const dateOnly = label.split(" - ")[0]
-    const parsed = new Date(dateOnly)
-    return isNaN(parsed) ? null : parsed.toISOString().split("T")[0]
-  } catch {
-    return null
-  }
+const todayInTz = DateTime.now().setZone(getCurrentTimezone()).toISODate()
+const isoDateFromDateTime = (dateTimeStr) => {
+  if (!dateTimeStr) return null
+  const dt = DateTime.fromISO(dateTimeStr, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid ? dt.toISODate() : null
 }
 
 const filteredDates = ref([])
@@ -777,7 +786,7 @@ const updateAvailableFilters = () => {
   ]
 
   attendanceDates.value.forEach((date) => {
-    availableFilters.value.push({ label: date.label, value: date.id })
+    availableFilters.value.push({ label: formatAttendanceDate(date.dateTime), value: date.id })
   })
 }
 
@@ -786,9 +795,7 @@ const filterAttendanceSheets = () => {
     filteredDates.value = attendanceDates.value
   } else if (selectedFilter.value === "today") {
     const todayEntry = attendanceDates.value.find((date) => {
-      if (!date.label) return false
-      const formatted = isoFromDateLabel(date.label)
-      return formatted === today
+      return isoDateFromDateTime(date.dateTime) === todayInTz
     })
     filteredDates.value = todayEntry ? [todayEntry] : []
   } else if (selectedFilter.value === "done") {
@@ -818,10 +825,14 @@ const initializeColumnLocks = (dates) => {
 
 const isToggling = ref(false)
 const toggleLock = (dateId) => {
-  if (!isTeacherUI.value) return
+  if (!canManageLocks.value) return
   if (isToggling.value) return
   isToggling.value = true
-  columnLocks.value = { ...columnLocks.value, [dateId]: !columnLocks.value[dateId] }
+  columnLocks.value = {
+    ...columnLocks.value,
+    [dateId]: !columnLocks.value[dateId],
+  }
+
   setTimeout(() => {
     isToggling.value = false
   }, 100)
@@ -907,7 +918,8 @@ const toggleAttendanceState = (userId, dateId) => {
 }
 
 const setAllAttendance = (dateId, stateId) => {
-  if (!canEdit.value) return
+  if (!canEdit.value || isColumnLocked(dateId)) return
+
   filteredAttendanceSheets.value.forEach((user) => {
     attendanceData.value[`${user.id}-${dateId}`] = stateId
   })

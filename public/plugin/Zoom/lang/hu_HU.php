@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom Videokonferencia';
+$strings['plugin_comment'] = 'Zoom Videokonferencia integráció kurzusokban és foglalkozásokban';
+
+$strings['apiKey'] = 'API kulcs';
+$strings['apiSecret'] = 'API titok';
+$strings['verificationToken'] = 'Ellenőrzési token';
+$strings['enableParticipantRegistration'] = 'Résztvevői regisztráció engedélyezése';
+$strings['enableCloudRecording'] = 'Automatikus felvétel típusa';
+$strings['enableGlobalConference'] = 'Globális konferencia engedélyezése';
+$strings['enableGlobalConferencePerUser'] = 'Globális konferencia engedélyezése felhasználónként';
+$strings['globalConferenceAllowRoles'] = 'Globális konferencia hivatkozás csak ezeknek a felhasználói szerepeknek látható';
+$strings['globalConferencePerUserAllowRoles'] = 'Globális konferencia felhasználónkénti hivatkozás csak ezeknek a felhasználói szerepeknek látható';
+
+$strings['enableCloudRecording_help'] = 'Fizetős Zoom profilt igényel.
+<em>alap</em> profil esetén nem működik.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'A kurzus összes hallgatója regisztrálva lett';
+$strings['Agenda'] = 'Napirend';
+$strings['CannotRegisterWithoutEmailAddress'] = 'E-mail cím nélkül nem lehet regisztrálni';
+$strings['CopyingJoinURL'] = 'Csatlakozási URL másolása';
+$strings['CopyJoinAsURL'] = "'Csatlakozz mint' URL másolása";
+$strings['CopyToCourse'] = 'Másolás a kurzusba';
+$strings['CouldNotCopyJoinURL'] = 'Nem sikerült másolni a csatlakozási URL-t';
+$strings['Course'] = 'Kurzus';
+$strings['CreatedAt'] = 'Létrehozva';
+$strings['CreateLinkInCourse'] = 'Hivatkozás(ok) létrehozása a kurzusban';
+$strings['CreateUserVideoConference'] = 'Felhasználói konferencia létrehozása';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Találkozó törlése';
+$strings['DeleteFile'] = 'Fájl(ok) törlése';
+$strings['Details'] = 'Részletek';
+$strings['DoIt'] = 'Megteszem';
+$strings['Duration'] = 'Időtartam';
+$strings['DurationFormat'] = '%ó%p';
+$strings['DurationInMinutes'] = 'Időtartam (percben)';
+$strings['EndDate'] = 'Befejezési dátum';
+$strings['EnterMeeting'] = 'Találkozóhoz csatlakozás';
+$strings['ViewMeeting'] = 'Találkozó megtekintése';
+$strings['Files'] = 'Fájlok';
+$strings['Finished'] = 'befejezve';
+$strings['FileWasCopiedToCourse'] = 'A fájl másolva lett a kurzusba';
+$strings['FileWasDeleted'] = 'A fájl törölve lett';
+$strings['GlobalMeeting'] = 'Globális konferencia';
+$strings['GlobalMeetingPerUser'] = 'Globális konferencia felhasználónként';
+$strings['GroupUsersWereRegistered'] = 'A csoport tagjai regisztrálva lettek';
+$strings['InstantMeeting'] = 'Azonnali találkozó';
+$strings['Join'] = 'Csatlakozás';
+$strings['JoinGlobalVideoConference'] = 'Csatlakozás a globális konferenciához';
+$strings['JoinURLCopied'] = 'Csatlakozási URL másolva';
+$strings['JoinURLToSendToParticipants'] = 'Csatlakozási URL a résztvevőknek küldendő';
+$strings['LiveMeetings'] = 'Élő találkozók';
+$strings['LinkToFileWasCreatedInCourse'] = 'A fájlra mutató hivatkozás hozzáadva a kurzusba';
+$strings['MeetingDeleted'] = 'Találkozó törölve';
+$strings['MeetingsFound'] = 'Találkozók találva';
+$strings['MeetingUpdated'] = 'Találkozó frissítve';
+$strings['NewMeetingCreated'] = 'Új találkozó létrehozva';
+$strings['Password'] = 'Jelszó';
+$strings['RecurringWithFixedTime'] = 'Ismétlődő fix idővel';
+$strings['RecurringWithNoFixedTime'] = 'Ismétlődő fix idő nélkül';
+$strings['RegisterAllCourseUsers'] = 'Összes kurzushasználó regisztrálása';
+$strings['RegisteredUserListWasUpdated'] = 'Regisztrált felhasználói lista frissítve';
+$strings['RegisteredUsers'] = 'Regisztrált felhasználók';
+$strings['RegisterNoUser'] = 'Senki sem regisztrál';
+$strings['RegisterTheseGroupMembers'] = 'Ezen csoporttagok regisztrálása';
+$strings['ScheduleAMeeting'] = 'Találkozó ütemezése';
+$strings['ScheduledMeeting'] = 'Ütemezett találkozó';
+$strings['ScheduledMeetings'] = 'Ütemezett találkozók';
+$strings['ScheduleAMeeting'] = 'Találkozó ütemezése';
+$strings['SearchMeeting'] = 'Találkozó keresése';
+$strings['Session'] = 'Foglalkozás';
+$strings['StartDate'] = 'Kezdő dátum';
+$strings['Started'] = 'elindult';
+$strings['StartInstantMeeting'] = 'Azonnali találkozó indítása';
+$strings['StartMeeting'] = 'Találkozó indítása';
+$strings['StartTime'] = 'Kezdő idő';
+$strings['Topic'] = 'Téma';
+$strings['TopicAndAgenda'] = 'Téma és napirend';
+$strings['Type'] = 'Típus';
+$strings['UpcomingMeetings'] = 'Közeledő találkozók';
+$strings['UpdateMeeting'] = 'Találkozó frissítése';
+$strings['UpdateRegisteredUserList'] = 'Regisztrált felhasználói lista frissítése';
+$strings['UserRegistration'] = 'Felhasználói regisztráció';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'várakozás';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s felvétel a %s találkozóról %s-tól (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Nincs regisztrálva erre a találkozóra';
+$strings['ZoomVideoConferences'] = 'Zoom videokonferenciák';
+$strings['Recordings'] = 'Felvételek';
+$strings['CreateGlobalVideoConference'] = 'Globális videokonferencia létrehozása';
+$strings['ConferenceNotStarted'] = 'A konferencia még nem indult el';
+$strings['MeetingNotFound'] = 'Találkozó nem található';
+$strings['JoinURLNotAvailable'] = 'URL nem elérhető';
+$strings['Meetings'] = 'Találkozók';
+$strings['ConferenceType'] = 'Konferencia típusa';
+$strings['ForEveryone'] = 'Mindenki';
+$strings['SomeUsers'] = 'Néhány felhasználó (később kiválasztható)';
+$strings['Activity'] = 'Tevékenység';
+$strings['ConferenceNotAvailable'] = 'A konferencia nem elérhető';

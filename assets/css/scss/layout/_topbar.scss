@@ -20,6 +20,16 @@
     &.p-menubar-mobile {
       @apply bg-white w-full;
 
+      &.p-menubar-mobile-active {
+        .p-menubar-button {
+          .mdi.mdi-menu {
+            &::before {
+              content: "\F0156";
+            }
+          }
+        }
+      }
+
       .p-menubar-root-list {
         @apply pt-8;
         height: calc(100vh - 4.5rem - 1px);
@@ -110,14 +120,22 @@
     .item-button {
       @apply w-8 h-8 relative text-center;
 
+      & > .base-icon > .mdi {
+        @apply text-2xl leading-6 w-6 h-6;
+      }
+
+      > .base-icon {
+        @apply w-8 h-8 items-center justify-center text-gray-50
+          hover:text-gray-90;
+      }
+
+      .base-icon__badge--top-left {
+        @apply -top-1.5 -left-2;
+      }
+
       .mdi,
       &__icon {
-        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
-        hover:text-gray-90;
-
-        &::before {
-          @apply text-2xl leading-6;
-        }
+        @apply inline-flex transition-colors align-middle;
       }
 
       &__badge {
@@ -146,7 +164,7 @@
 
       .mdi,
       &__icon {
-        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
+        @apply text-gray-50 inline-flex transition-colors align-middle text-2xl leading-6 w-6 h-6
           hover:text-gray-90;
 
         &::before {
@@ -157,33 +175,6 @@
   }
 
   &__user-submenu {
-    @apply mt-1 border-0 shadow-xl rounded-lg;
-
-
-    ul.p-menu-list {
-      @apply outline-none;
-    }
-
-    .p-menu-submenu-label {
-      @apply text-body-1 font-semibold py-1 px-4;
-    }
-
-    .p-menu-item-link {
-      @apply rounded-none py-1 px-4 transition-none select-none flex gap-1;
-
-      &:focus {
-        @apply outline-none outline-offset-0;
-      }
-
-      &:hover,
-      &:focus {
-        @apply text-primary bg-support-1;
-      }
-
-      .p-menu-item-label {
-        @apply text-body-1;
-      }
-    }
   }
 }
 

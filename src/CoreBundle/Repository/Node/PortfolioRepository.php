@@ -16,6 +16,9 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<Portfolio>
+ */
 class PortfolioRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

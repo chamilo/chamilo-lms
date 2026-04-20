@@ -1,7 +1,8 @@
 {% autoescape false %}
+<div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6">
 {{ form }}
-<div class="table-responsive">
-    <table class="table table-striped table-hover">
+<div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+    <table class="min-w-full divide-y divide-gray-25">
         <thead>
         <tr>
             <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
@@ -14,18 +15,18 @@
         <tbody>
         {% for payout in payout_list %}
             <tr>
-                <td class="text-center" style="vertical-align:middle"><a id="{{ payout.sale_id }}" class="saleInfo"
+                <td class="text-center"><a id="{{ payout.sale_id }}" class="saleInfo"
                                                                          data-toggle="modal" data-target="#saleInfo"
                                                                          href="#">{{ payout.reference }}</a></td>
-                <td class="text-center" style="vertical-align:middle">{{ payout.payout_date }}</td>
+                <td class="text-center">{{ payout.payout_date }}</td>
                 <td class="text-right"
-                    style="vertical-align:middle">{{ payout.currency ~ ' ' ~ payout.commission }}</td>
-                <td class="text-right" style="vertical-align:middle">{{ payout.beneficiary }}</td>
+                   >{{ payout.currency ~ ' ' ~ payout.commission }}</td>
+                <td class="text-right">{{ payout.beneficiary }}</td>
                 {% if payout.paypal_account %}
-                    <td class="text-right" style="vertical-align:middle">{{ payout.paypal_account }}</td>
+                    <td class="text-right">{{ payout.paypal_account }}</td>
                 {% else %}
                     <td class="text-right"
-                        style="vertical-align:middle">{{ 'NoPayPalAccountDetected'| get_plugin_lang('BuyCoursesPlugin') }}</td>
+                       >{{ 'NoPayPalAccountDetected'| get_plugin_lang('BuyCoursesPlugin') }}</td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -41,7 +42,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
+                    <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
                 </div>
             </div>
         </div>
@@ -57,7 +58,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
+                    <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2" data-dismiss="modal">{{ 'Close'|get_lang }}</button>
                 </div>
             </div>
         </div>
@@ -98,4 +99,5 @@
 
     });
 </script>
+</div>
 {% endautoescape %}

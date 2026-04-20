@@ -80,11 +80,11 @@ provide("isCustomizing", isCustomizing)
           type="tertiary"
         />
         <BaseButton
-          :label="t('Black')"
+          :label="t('Tertiary alternative')"
           icon="search"
           only-icon
           size="small"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :label="t('Success')"
@@ -135,6 +135,12 @@ provide("isCustomizing", isCustomizing)
           type="tertiary-text"
         />
         <BaseButton
+          :label="t('Tertiary alternative')"
+          icon="search"
+          size="small"
+          type="tertiary-alternative-text"
+        />
+        <BaseButton
           :label="t('Success')"
           icon="search"
           size="small"
@@ -167,6 +173,12 @@ provide("isCustomizing", isCustomizing)
           type="primary"
         />
         <BaseButton
+          :label="t('Primary alternative')"
+          icon="search"
+          size="small"
+          type="primary-alternative"
+        />
+        <BaseButton
           :label="t('Secondary')"
           icon="search"
           size="small"
@@ -177,6 +189,12 @@ provide("isCustomizing", isCustomizing)
           icon="search"
           size="small"
           type="tertiary"
+        />
+        <BaseButton
+          :label="t('Tertiary alternative')"
+          icon="search"
+          size="small"
+          type="tertiary-alternative"
         />
         <BaseButton
           :label="t('Success')"
@@ -201,20 +219,6 @@ provide("isCustomizing", isCustomizing)
           icon="search"
           size="small"
           type="danger"
-        />
-      </div>
-      <div class="flex gap-2 flex-wrap">
-        <BaseButton
-          :label="t('Primary alternative')"
-          icon="search"
-          size="small"
-          type="primary-alternative"
-        />
-        <BaseButton
-          :label="t('Black')"
-          icon="search"
-          size="small"
-          type="black"
         />
       </div>
       <div class="flex gap-2 flex-wrap">
@@ -226,6 +230,13 @@ provide("isCustomizing", isCustomizing)
           type="primary"
         />
         <BaseButton
+          :label="t('Primary alternative')"
+          disabled
+          icon="search"
+          size="small"
+          type="primary-alternative"
+        />
+        <BaseButton
           :label="t('Secondary')"
           disabled
           icon="search"
@@ -238,6 +249,13 @@ provide("isCustomizing", isCustomizing)
           icon="search"
           size="small"
           type="tertiary"
+        />
+        <BaseButton
+          :label="t('Tertiary alternative')"
+          disabled
+          icon="search"
+          size="small"
+          type="tertiary-alternative"
         />
         <BaseButton
           :label="t('Success')"
@@ -266,22 +284,6 @@ provide("isCustomizing", isCustomizing)
           icon="search"
           size="small"
           type="danger"
-        />
-      </div>
-      <div class="flex gap-2 flex-wrap">
-        <BaseButton
-          :label="t('Primary alternative')"
-          disabled
-          icon="search"
-          size="small"
-          type="primary-alternative"
-        />
-        <BaseButton
-          :label="t('Black')"
-          disabled
-          icon="search"
-          size="small"
-          type="black"
         />
       </div>
     </div>

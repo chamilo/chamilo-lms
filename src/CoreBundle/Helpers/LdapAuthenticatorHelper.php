@@ -12,6 +12,9 @@ use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Ldap\Exception\InvalidCredentialsException;
 use Symfony\Component\Ldap\Ldap;
 
+use const LDAP_ESCAPE_DN;
+use const LDAP_ESCAPE_FILTER;
+
 readonly class LdapAuthenticatorHelper
 {
     protected array $ldapConfig;
@@ -48,19 +51,19 @@ readonly class LdapAuthenticatorHelper
         ];
 
         if ($keywordUsername) {
-            $ldapQuery[] = "(uid=$keywordUsername)";
+            $ldapQuery[] = '(uid='.ldap_escape($keywordUsername, '', LDAP_ESCAPE_FILTER).')';
         }
 
         if ($keywordLastname) {
-            $ldapQuery[] = "({$dataCorrespondence['lastname']}=$keywordLastname*)";
+            $ldapQuery[] = '('.$dataCorrespondence['lastname'].'='.ldap_escape($keywordLastname, '', LDAP_ESCAPE_FILTER).'*)';
         }
 
         if ($keywordFirstname) {
-            $ldapQuery[] = "({$dataCorrespondence['firstname']}=$keywordFirstname*)";
+            $ldapQuery[] = '('.$dataCorrespondence['firstname'].'='.ldap_escape($keywordFirstname, '', LDAP_ESCAPE_FILTER).'*)';
         }
 
         if ($keywordType && 'all' !== $keywordType) {
-            $ldapQuery[] = "(employeeType=$keywordType)";
+            $ldapQuery[] = '(employeeType='.ldap_escape($keywordType, '', LDAP_ESCAPE_FILTER).')';
         }
 
         $query = \count($ldapQuery) > 1 ? '(& '.implode(' ', $ldapQuery).' )' : $ldapQuery[0];
@@ -85,7 +88,7 @@ readonly class LdapAuthenticatorHelper
 
         return $this->ldap
             ->query(
-                "ou=$ou,".$this->ldapConfig['base_dn'],
+                'ou='.ldap_escape($ou, '', LDAP_ESCAPE_DN).','.$this->ldapConfig['base_dn'],
                 "(objectClass={$this->ldapConfig['object_class']})"
             )
             ->execute()

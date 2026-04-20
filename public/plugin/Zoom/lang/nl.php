@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom-videoconferentie';
+$strings['plugin_comment'] = 'Zoom-videoconferentie integratie in cursussen en sessies';
+
+$strings['apiKey'] = 'API-sleutel';
+$strings['apiSecret'] = 'API-geheim';
+$strings['verificationToken'] = 'Verificatie-token';
+$strings['enableParticipantRegistration'] = 'Deelnemersregistratie inschakelen';
+$strings['enableCloudRecording'] = 'Automatisch opnametype';
+$strings['enableGlobalConference'] = 'Globale conferentie inschakelen';
+$strings['enableGlobalConferencePerUser'] = 'Globale conferentie per gebruiker inschakelen';
+$strings['globalConferenceAllowRoles'] = 'Link globale conferentie alleen zichtbaar voor deze gebruikersrollen';
+$strings['globalConferencePerUserAllowRoles'] = 'Link globale conferentie per gebruiker alleen zichtbaar voor deze gebruikersrollen';
+
+$strings['enableCloudRecording_help'] = 'Vereist een betalend Zoom-profiel.
+Werkt niet voor een <em>basic</em> profiel.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Alle cursusstudenten zijn geregistreerd';
+$strings['Agenda'] = 'Agenda';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Kan niet registreren zonder e-mailadres';
+$strings['CopyingJoinURL'] = 'Deel-URL wordt gekopieerd';
+$strings['CopyJoinAsURL'] = "'Deelnemen als'-URL kopiëren";
+$strings['CopyToCourse'] = 'Kopiëren naar cursus';
+$strings['CouldNotCopyJoinURL'] = 'Deel-URL kon niet worden gekopieerd';
+$strings['Course'] = 'Cursus';
+$strings['CreatedAt'] = 'Aangemaakt op';
+$strings['CreateLinkInCourse'] = 'Link(s) aanmaken in cursus';
+$strings['CreateUserVideoConference'] = 'Gebruikersconferentie aanmaken';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Vergadering verwijderen';
+$strings['DeleteFile'] = 'Bestand(en) verwijderen';
+$strings['Details'] = 'Details';
+$strings['DoIt'] = 'Uitvoeren';
+$strings['Duration'] = 'Duur';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Duur (in minuten)';
+$strings['EndDate'] = 'Einddatum';
+$strings['EnterMeeting'] = 'Vergadering betreden';
+$strings['ViewMeeting'] = 'Vergadering bekijken';
+$strings['Files'] = 'Bestanden';
+$strings['Finished'] = 'afgewerkt';
+$strings['FileWasCopiedToCourse'] = 'Het bestand is naar de cursus gekopieerd';
+$strings['FileWasDeleted'] = 'Het bestand is verwijderd';
+$strings['GlobalMeeting'] = 'Globale conferentie';
+$strings['GlobalMeetingPerUser'] = 'Globale conferentie per gebruiker';
+$strings['GroupUsersWereRegistered'] = 'Groepsleden zijn geregistreerd';
+$strings['InstantMeeting'] = 'Directe vergadering';
+$strings['Join'] = 'Deelnemen';
+$strings['JoinGlobalVideoConference'] = 'Deelnemen aan globale conferentie';
+$strings['JoinURLCopied'] = 'Deel-URL gekopieerd';
+$strings['JoinURLToSendToParticipants'] = 'Deel-URL om naar deelnemers te sturen';
+$strings['LiveMeetings'] = 'Live vergaderingen';
+$strings['LinkToFileWasCreatedInCourse'] = 'Een link naar het bestand is toegevoegd aan de cursus';
+$strings['MeetingDeleted'] = 'Vergadering verwijderd';
+$strings['MeetingsFound'] = 'Vergaderingen gevonden';
+$strings['MeetingUpdated'] = 'Vergadering bijgewerkt';
+$strings['NewMeetingCreated'] = 'Nieuwe vergadering aangemaakt';
+$strings['Password'] = 'Wachtwoord';
+$strings['RecurringWithFixedTime'] = 'Herhalend met vaste tijd';
+$strings['RecurringWithNoFixedTime'] = 'Herhalend zonder vaste tijd';
+$strings['RegisterAllCourseUsers'] = 'Alle cursusgebruikers registreren';
+$strings['RegisteredUserListWasUpdated'] = 'Lijst geregistreerde gebruikers bijgewerkt';
+$strings['RegisteredUsers'] = 'Geregistreerde gebruikers';
+$strings['RegisterNoUser'] = 'Geen gebruiker registreren';
+$strings['RegisterTheseGroupMembers'] = 'Deze groepsleden registreren';
+$strings['ScheduleAMeeting'] = 'Vergadering plannen';
+$strings['ScheduledMeeting'] = 'Geplande vergadering';
+$strings['ScheduledMeetings'] = 'Geplande vergaderingen';
+$strings['ScheduleAMeeting'] = 'Vergadering plannen';
+$strings['SearchMeeting'] = 'Vergadering zoeken';
+$strings['Session'] = 'Sessie';
+$strings['StartDate'] = 'Startdatum';
+$strings['Started'] = 'gestart';
+$strings['StartInstantMeeting'] = 'Directe vergadering starten';
+$strings['StartMeeting'] = 'Vergadering starten';
+$strings['StartTime'] = 'Starttijd';
+$strings['Topic'] = 'Onderwerp';
+$strings['TopicAndAgenda'] = 'Onderwerp en agenda';
+$strings['Type'] = 'Type';
+$strings['UpcomingMeetings'] = 'Aankomende vergaderingen';
+$strings['UpdateMeeting'] = 'Vergadering bijwerken';
+$strings['UpdateRegisteredUserList'] = 'Lijst geregistreerde gebruikers bijwerken';
+$strings['UserRegistration'] = 'Gebruikersregistratie';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'wachten';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s-opname van vergadering %s van %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'U bent niet geregistreerd voor deze vergadering';
+$strings['ZoomVideoConferences'] = 'Zoom-videoconferenties';
+$strings['Recordings'] = 'Opnames';
+$strings['CreateGlobalVideoConference'] = 'Globale videoconferentie aanmaken';
+$strings['ConferenceNotStarted'] = 'Conferentie nog niet gestart';
+$strings['MeetingNotFound'] = 'Vergadering niet gevonden';
+$strings['JoinURLNotAvailable'] = 'URL niet beschikbaar';
+$strings['Meetings'] = 'Vergaderingen';
+$strings['ConferenceType'] = 'Conferentietype';
+$strings['ForEveryone'] = 'Iedereen';
+$strings['SomeUsers'] = 'Enkele gebruikers (later selecteren)';
+$strings['Activity'] = 'Activiteit';
+$strings['ConferenceNotAvailable'] = 'Conferentie niet beschikbaar';

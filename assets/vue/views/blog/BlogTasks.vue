@@ -6,7 +6,7 @@
       </template>
       <template #end>
         <BaseButton
-          type="primary"
+          type="success"
           icon="plus"
           :label="t('New task')"
           @click="openCreate"
@@ -44,7 +44,7 @@
                     :label="t('Edit')"
                     icon="edit"
                     only-icon
-                    type="black"
+                    type="secondary"
                     @click="openEdit(task)"
                   />
                   <BaseButton

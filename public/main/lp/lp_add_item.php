@@ -106,5 +106,5 @@ $lp_theme_css = $learnPath->get_theme();
 $tpl = new Template();
 $tpl->assign('actions', $learnPath->build_action_menu(true));
 $tpl->assign('left', $learnPath->showBuildSideBar(null, true, $type));
-$tpl->assign('right', $learnPath->displayResources());
+$tpl->assign('right', '<div id="doc_form">'.$learnPath->displayResources().'</div>');
 $tpl->displayTwoColTemplate();

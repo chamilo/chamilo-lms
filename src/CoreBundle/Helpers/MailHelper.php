@@ -18,6 +18,8 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use const FILTER_VALIDATE_EMAIL;
+
 final class MailHelper
 {
     public function __construct(
@@ -27,6 +29,34 @@ final class MailHelper
         private readonly ValidatorInterface $validator,
         private readonly SettingsManager $settingsManager,
     ) {}
+
+    /**
+     * Resolve the platform FROM address using the configured mail settings.
+     * Priority: mail.mailer_from_email > admin.administrator_email.
+     */
+    public function getPlatformFromAddress(): Address
+    {
+        $fromEmail = $this->settingsManager->getSetting('mail.mailer_from_email');
+        $fromName = $this->settingsManager->getSetting('mail.mailer_from_name');
+
+        if (empty($fromName)) {
+            $fromName = $this->settingsManager->getSetting('platform.site_name') ?: 'Chamilo';
+        }
+
+        if (empty($fromEmail) || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+            $fromEmail = $this->settingsManager->getSetting('admin.administrator_email');
+            if (empty($fromName) || 'Chamilo' === $fromName) {
+                $fromName = api_get_person_name(
+                    $this->settingsManager->getSetting('admin.administrator_name'),
+                    $this->settingsManager->getSetting('admin.administrator_surname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+            }
+        }
+
+        return new Address((string) $fromEmail, (string) $fromName);
+    }
 
     private function setNoreplyAndFromAddress(
         TemplatedEmail $email,
@@ -203,12 +233,17 @@ final class MailHelper
 
             $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
 
+            $charset = $this->settingsManager->getSetting('mail.mailer_mails_charset') ?: 'UTF-8';
+            $excludeJson = 'true' === $this->settingsManager->getSetting('mail.mailer_exclude_json');
+
             $params = [
                 'mail_header_style' => api_get_setting('mail.mail_header_style'),
                 'mail_content_style' => api_get_setting('mail.mail_content_style'),
                 'link' => $additionalParameters['link'] ?? '',
                 'automatic_email_text' => $automaticEmailText,
                 'content' => $body,
+                'charset' => $charset,
+                'exclude_json' => $excludeJson,
             ];
 
             if (!empty($recipientEmail)) {

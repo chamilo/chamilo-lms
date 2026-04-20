@@ -33,7 +33,7 @@
             class="inline-flex items-center gap-2 rounded-full border bg-gray-10 px-3 py-1 text-xs text-gray-700"
             :title="submissionFilename"
           >
-            <i class="pi pi-paperclip text-gray-600"></i>
+            <i class="mdi mdi-paperclip text-gray-600"></i>
             <span class="truncate max-w-[280px]">{{ submissionFilename }}</span>
           </span>
         </div>
@@ -78,7 +78,7 @@
           <Button
             :label="aiBusy ? t('Generate') + '…' : t('Generate')"
             :disabled="!aiCanGenerate"
-            icon="pi pi-bolt"
+            icon="mdi mdi-lightning-bolt"
             class="p-button-sm"
             @click="runAiTaskGrader"
           />
@@ -89,7 +89,7 @@
           <!-- What will be sent -->
           <div class="rounded-lg border bg-gray-10 p-3 text-xs text-gray-700">
             <div class="flex items-center gap-2 font-medium text-gray-800 mb-2">
-              <i class="pi pi-info-circle text-gray-600"></i>
+              <i class="mdi mdi-information text-gray-600"></i>
               <span>{{ t("What will be sent to the AI") }}</span>
             </div>
 
@@ -215,7 +215,7 @@
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <Button
                 :label="t('Apply to comment')"
-                icon="pi pi-arrow-down"
+                icon="mdi mdi-arrow-down"
                 class="p-button-sm"
                 :disabled="aiBusy || !aiFeedback.trim()"
                 @click="applyAiFeedbackToComment"
@@ -223,7 +223,7 @@
 
               <Button
                 :label="t('Clear')"
-                icon="pi pi-times"
+                icon="mdi mdi-close"
                 class="p-button-sm p-button-text"
                 :disabled="aiBusy"
                 @click="clearAiFeedback"
@@ -232,7 +232,7 @@
               <Button
                 v-if="aiSuggestedScore !== null && !forceStudentView"
                 :label="t('Apply score')"
-                icon="pi pi-check"
+                icon="mdi mdi-check"
                 class="p-button-sm p-button-secondary"
                 type="button"
                 :disabled="aiBusy"
@@ -381,9 +381,19 @@
             </span>
           </div>
 
-          <span class="text-gray-500 text-xs">
-            {{ relativeDatetime(commentItem.sentAt) }}
-          </span>
+          <div class="flex items-center gap-2">
+            <span class="text-gray-500 text-xs">
+              {{ relativeDatetime(commentItem.sentAt) }}
+            </span>
+            <button
+              v-if="canDeleteComment(commentItem)"
+              class="text-red-500 hover:text-red-700 leading-none"
+              :title="t('Delete comment')"
+              @click="deleteComment(commentItem)"
+            >
+              <i class="mdi mdi-delete text-sm" />
+            </button>
+          </div>
         </div>
 
         <p class="text-gray-900 whitespace-pre-line text-sm">
@@ -393,7 +403,7 @@
           v-if="commentItem.file && commentItem.downloadUrl"
           class="flex items-center gap-1 text-sm"
         >
-          <i class="pi pi-paperclip text-gray-600"></i>
+          <i class="mdi mdi-paperclip text-gray-600"></i>
           <a
             :href="commentItem.downloadUrl"
             target="_blank"
@@ -456,6 +466,25 @@ const forceStudentView = !isEditor || isStudentView
 
 const { relativeDatetime } = useFormatDate()
 const comments = ref([])
+
+const currentUserId = computed(() => securityStore.user?.id ?? null)
+
+function canDeleteComment(commentItem) {
+  const authorId = commentItem.user?.id ?? null
+  return authorId !== null && authorId === currentUserId.value
+}
+
+async function deleteComment(commentItem) {
+  if (!confirm(t("Are you sure you want to delete this comment?"))) return
+  try {
+    await cStudentPublicationService.deleteComment(commentItem.iid)
+    comments.value = comments.value.filter((c) => c.iid !== commentItem.iid)
+  } catch (e) {
+    console.warn("[Assignments][CorrectAndRateModal] Failed to delete comment", e)
+    notification.showErrorNotification(e)
+  }
+}
+
 const aiAssistedRaw = ref(false)
 const aiAssistedDirty = ref(false)
 const canShowAiAssistedToggle = computed(() => !forceStudentView)
@@ -891,12 +920,18 @@ async function submit() {
 
   if (!hasComment && !hasFile && hasQualificationChange) {
     try {
-      await cStudentPublicationService.updateScore(props.item.iid, currentQ)
+      const formData = new FormData()
+      formData.append("submissionId", props.item.iid)
+      formData.append("qualification", currentQ === null ? "" : String(currentQ))
+      formData.append("ai_assisted_raw", aiAssistedRaw.value ? "1" : "0")
+
+      await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, false)
+
       notification.showSuccessNotification(t("Score updated successfully"))
       emit("commentSent")
       close()
     } catch (e) {
-      console.warn("[Assignments][CorrectAndRateModal] Failed to update score", e)
+      console.warn("[Assignments][CorrectAndRateModal] Failed to update score through correction endpoint", e)
       notification.showErrorNotification(e)
     } finally {
       submitting.value = false

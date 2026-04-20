@@ -166,7 +166,7 @@
       </div>
     </div>
 
-    <div class="text-right mt-4">
+    <div class="flex justify-end mt-2">
       <Button
         :disabled="v$.item.$invalid"
         :label="t('Save')"

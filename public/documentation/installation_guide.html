@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Chamilo" /></a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="license.html">License</a></li>
+            <li><a href="credits.html">Credits</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </div>
+</nav>
+<div>
 <h1>Chamilo 2 installation guide</h1>
 
       This is the official Chamilo installation guide for version 2+.
@@ -30,7 +43,7 @@
   <ul>
       <li>Apache 2.4+ (with mod-rewrite enabled)</li>
       <li>MariaDB 10+ or MySQL 5+</li>
-      <li>PHP 8.2+</li>
+      <li>PHP 8.2 or 8.3 (8.4 not completely covered currently)</li>
       <li>Optional: A local Redis server</li>
   </ul>
   Within PHP, Chamilo requires or benefits from the following modules, which might already be included in PHP on your system:<br/>
@@ -53,9 +66,9 @@
       <li>zip</li>
       <li>zlib</li>
       <li>ldap</li>
-      <li>apcu (optional)</li>
-      <li>redis (optional)</li>
-      <li>xapian (optional)</li>
+      <li>apcu (optional, for performance - userland cache)</li>
+      <li>redis (optional, for performance of PHP sessions management)</li>
+      <li>xapian (optional, for integrated fuzzy search)</li>
   </ul>
   <h2>2. Web-panel installation</h2>
   <a id="web-install" class="anchor"></a>
@@ -86,7 +99,10 @@
       or temporarily give write permissions to the web server on the entire Chamilo folder
       ("/home/elearning.yourdomain.com/public_html/chamilo2/"). If you do the whole folder,
       don't forget to write down the permissions it had initially, and return it to its original
-      permissions when the installation is over.
+      permissions when the installation is over.<br><br>
+      WARNING: Folders permissions are the most common and most critical way for hackers to
+      damage a Chamilo system. Make sure to follow the "Clean up" steps below.
+
     <h3>2.4. PHP settings</h3>
     <a id="web-install-php" class="anchor"></a>
 
@@ -98,9 +114,9 @@
         <li><a href="https://php.net/manual/ref.session.php#ini.session.auto-start">session.auto_start</a> off</li>
         <li><a href="https://php.net/manual/ini.core.php#ini.short-open-tag">short_open_tag</a> off</li>
         <li><a href="https://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">session.cookie_httponly</a> on</li>
-        <li><a href="https://php.net/manual/ini.core.php#ini.upload-max-filesize">upload_max_filesize</a> >100M</li>
-        <li><a href="https://php.net/manual/ini.core.php#ini.post-max-size">post_max_size</a> >100M</li>
-        <li><a href="https://www.php.net/manual/en/ini.core.php#ini.memory-limit">memory_limit</a> >128M</li>
+        <li><a href="https://php.net/manual/ini.core.php#ini.upload-max-filesize">upload_max_filesize</a> &gt;100M</li>
+        <li><a href="https://php.net/manual/ini.core.php#ini.post-max-size">post_max_size</a> &gt;100M</li>
+        <li><a href="https://www.php.net/manual/en/ini.core.php#ini.memory-limit">memory_limit</a> &gt;128M</li>
       </ul>
     <h3>2.5. Installation wizard</h3>
     <a id="web-install-wizard" class="anchor"></a>
@@ -110,9 +126,9 @@
     <a id="web-install-sessions" class="anchor"></a>
       Redis is an in-memory non-relational database server that can be used to manage PHP sessions. Under high loads, PHP sessions management can be a bottleneck. Using Redis can considerably alleviate that bottleneck but should not be an issue for low to moderate uses (up to 10 *simultaneous* users or so). Check the command line instructions for more about this.
 
-    <h3>2.7. Clean up</h3>h3>
+    <h3>2.7. Clean up</h3>
     <a id="web-cleanup" class="anchor"></a>
-    As recommended by the installer's last page, make sure you change permissions on the config/ dir and the .env file, and you delete the public/main/install/ folder.
+    Important: As recommended by the installer's last page, make sure you change permissions on the config/ dir and the .env file, and you delete the public/main/install/ folder.
     <pre>
         sudo chown -R root: config/ .env
         sudo rm -r public/main/install/
@@ -130,7 +146,7 @@
 </p>
 <pre>
 sudo -s
-apt update && apt -y upgrade
+apt update &amp;&amp; apt -y upgrade
 apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{apcu,bcmath,curl,exif,gd,iconv,intl,ldap,mbstring,mysql,opcache,soap,xml,zip,redis}
 a2enmod rewrite
 cd /var/www/
@@ -156,9 +172,9 @@ currently only supports MariaDB and MySQL.<br>
 Setup a new user in your database system either through visual tools or directly in the terminal. If you have followed the command lines above, you can skip this.<br>
 </p>
   <pre>
-mysql> GRANT ALL PRIVILEGES ON [db-name].* TO [db-user]@[db-host] IDENTIFIED BY '[db-password]';
-mysql> FLUSH PRIVILEGES;
-mysql> exit;</pre>
+mysql&gt; GRANT ALL PRIVILEGES ON [db-name].* TO [db-user]@[db-host] IDENTIFIED BY '[db-password]';
+mysql&gt; FLUSH PRIVILEGES;
+mysql&gt; exit;</pre>
 where:
 <ul>
     <li>[db-name] is the name of your database</li>
@@ -196,8 +212,8 @@ vim [my.chamilo.local].conf
     php_value upload_max_filesize 100M
     php_value post_max_size 100M
     php_value memory_limit 128M
-    php_value session.save_handler "redis"
-    php_value session.save_path "tcp://127.0.0.1:6379"
+    #php_value session.save_handler "redis"
+    #php_value session.save_path "tcp://127.0.0.1:6379"
 &lt;/VirtualHost&gt;</pre>
 After setting up this virtual host, don't forget to enable it (example here on Debian/Ubuntu's command line):
   <pre>
@@ -559,7 +575,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
   If you have reasons to seek professional assistance and warranties, please
   contact <a href="https://chamilo.org/providers">one of our official providers</a>. They contribute heavily to the project and will be able to help you out quickly and efficiently, for configurations from 10 to 1M users.<br>
   <hr />
-  Last updated: 2025-11-16
+  Last updated: 2026-04-11
   <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
   <a href="http://jigsaw.w3.org/css-validator/">
       <img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />

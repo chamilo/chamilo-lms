@@ -1,180 +1,230 @@
 <?php
 
 /* For license terms, see /license.txt */
-/**
- * Functions.
- */
-$letters = [
-    'a',
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'h',
-    'i',
-    'j',
-    'k',
-    'l',
-    'm',
-    'n',
-    'o',
-    'p',
-    'q',
-    'r',
-    's',
-    't',
-    'u',
-    'v',
-    'w',
-    'x',
-    'y',
-    'z',
-];
 
 /**
- * List exercises.
+ * Return the answer letters used in multiple-choice exports.
+ */
+function test2pdf_get_letters(): array
+{
+    return [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+    ];
+}
+
+/**
+ * Build the session condition for resource_link in Chamilo 2.
+ *
+ * In session context, include both:
+ * - resources linked specifically to the current session
+ * - resources linked only to the base course
+ *
+ * In non-session context, include only base-course resources.
+ */
+function test2pdf_get_resource_link_session_condition(int $sessionId, string $alias = 'rl'): string
+{
+    if ($sessionId > 0) {
+        return " AND ($alias.session_id = $sessionId OR $alias.session_id IS NULL)";
+    }
+
+    return " AND $alias.session_id IS NULL";
+}
+
+/**
+ * List exercises available in the current course/session context.
  *
  * @param int $courseId  Course ID
  * @param int $sessionId Session ID
  *
- * @throws Exception
- *
- * @return array Results (list of exercise details)
+ * @return array
  */
 function showExerciseCourse($courseId, $sessionId = 0)
 {
-    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
     $courseId = (int) $courseId;
     $sessionId = (int) $sessionId;
-    $conditionSession = api_get_session_condition($sessionId, true, true, 'a.session_id');
-    $sql = "SELECT a.*
-            FROM $tableQuiz a
-            LEFT JOIN $tableLpItem b ON a.iid = b.path AND a.c_id = b.c_id
-            WHERE a.c_id = $courseId
-            AND (a.active = 1 OR (item_type = 'quiz' AND b.c_id = $courseId))
-            $conditionSession
-            ORDER BY a.title ASC;";
+
+    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    $tableResourceLink = Database::get_main_table('resource_link');
+
+    $sessionCondition = test2pdf_get_resource_link_session_condition($sessionId, 'rl');
+
+    $sql = "SELECT DISTINCT q.*
+            FROM $tableQuiz q
+            INNER JOIN $tableResourceLink rl
+                ON rl.resource_node_id = q.resource_node_id
+            WHERE
+                rl.c_id = $courseId
+                AND rl.deleted_at IS NULL
+                $sessionCondition
+            ORDER BY q.title ASC";
+
     $res = Database::query($sql);
-    $aux = [];
+    $items = [];
+
     while ($row = Database::fetch_assoc($res)) {
-        $aux[] = $row;
+        $items[] = $row;
     }
 
-    return $aux;
+    return $items;
 }
 
 /**
- * List quiz details.
+ * Get quiz information in the current course/session context.
  *
- * @throws Exception
+ * @param int $courseId  Course ID
+ * @param int $id        Quiz ID
+ * @param int $sessionId Session ID
  *
- * @return array Results (list of quiz details)
+ * @return array|false
  */
-function getInfoQuiz($courseId, $id)
+function getInfoQuiz($courseId, $id, $sessionId = 0)
 {
     $courseId = (int) $courseId;
     $id = (int) $id;
+    $sessionId = (int) $sessionId;
+
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT * FROM $tableQuiz WHERE c_id = $courseId AND iid = $id";
+    $tableResourceLink = Database::get_main_table('resource_link');
+
+    $sessionCondition = test2pdf_get_resource_link_session_condition($sessionId, 'rl');
+
+    $sql = "SELECT DISTINCT q.*
+            FROM $tableQuiz q
+            INNER JOIN $tableResourceLink rl
+                ON rl.resource_node_id = q.resource_node_id
+            WHERE
+                q.iid = $id
+                AND rl.c_id = $courseId
+                AND rl.deleted_at IS NULL
+                $sessionCondition
+            LIMIT 1";
+
     $res = Database::query($sql);
 
     return Database::fetch_assoc($res);
 }
 
 /**
- * List question_id.
+ * List question IDs for a quiz.
  *
- * @throws Exception
+ * @param int $courseId
+ * @param int $quizId
+ * @param int $sessionId
  *
- * @return array Results (list question ID)
+ * @return array
  */
 function getQuestionsFromCourse($courseId, $quizId, $sessionId = 0)
 {
-    $courseId = (int) $courseId;
     $quizId = (int) $quizId;
-    $sessionId = (int) $sessionId;
 
     $tableQuizQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $conditionSession = api_get_session_condition($sessionId, true, true, 'q.session_id');
 
-    $sql = "SELECT a.question_id AS question_id
-            FROM $tableQuizQuestion a
-            INNER JOIN $tableQuestion b
-            ON a.question_id = b.iid
-            INNER JOIN $tableQuiz q
-            ON q.iid = a.quiz_id
+    $sql = "SELECT qr.question_id AS question_id
+            FROM $tableQuizQuestion qr
+            INNER JOIN $tableQuestion q
+                ON q.iid = qr.question_id
             WHERE
-                a.c_id = $courseId AND
-                b.c_id = a.c_id AND
-                a.quiz_id = $quizId AND
-                (b.type IN (1, 2, 9, 10, 11, 12, 14))
-                $conditionSession
-            ORDER BY question_order ASC;";
+                qr.quiz_id = $quizId
+                AND q.type IN (1, 2, 3, 9, 10, 11, 12, 14)
+            ORDER BY qr.question_order ASC, qr.iid ASC";
+
     $res = Database::query($sql);
-    $aux = [];
+    $items = [];
+
     while ($row = Database::fetch_assoc($res)) {
-        $aux[] = $row['question_id'];
+        $items[] = $row['question_id'];
     }
 
-    return $aux;
+    return $items;
 }
 
 /**
- * List question details.
+ * Get question information.
  *
- * @throws Exception
+ * @param int $courseId
+ * @param int $id
  *
- * @return array Results (list of question details)
+ * @return array|false
  */
 function getInfoQuestion($courseId, $id)
 {
-    $courseId = (int) $courseId;
     $id = (int) $id;
+
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    $sql = "SELECT * FROM $tableQuestion
-            WHERE c_id = $courseId
-            AND iid = $id
-            AND (type IN (1, 2, 9, 10, 11, 12, 14))";
+
+    $sql = "SELECT *
+            FROM $tableQuestion
+            WHERE
+                iid = $id
+                AND type IN (1, 2, 3, 9, 10, 11, 12, 14)
+            LIMIT 1";
+
     $res = Database::query($sql);
 
     return Database::fetch_assoc($res);
 }
 
 /**
- * List answer details.
+ * List answers by question ID.
  *
- * @throws Exception
+ * @param int $courseId
+ * @param int $id
  *
- * @return array Results (list of answer by question_id)
+ * @return array
  */
 function getAnswers($courseId, $id)
 {
-    $courseId = (int) $courseId;
     $id = (int) $id;
+
     $tableQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-    $sql = "SELECT * FROM $tableQuizAnswer
-    	    WHERE c_id = $courseId AND question_id = $id
-    	    ORDER BY position ASC;";
+
+    $sql = "SELECT *
+            FROM $tableQuizAnswer
+            WHERE question_id = $id
+            ORDER BY position ASC, iid ASC";
+
     $res = Database::query($sql);
-    $aux = [];
+    $items = [];
+
     while ($row = Database::fetch_assoc($res)) {
-        $aux[] = $row;
+        $items[] = $row;
     }
 
-    return $aux;
+    return $items;
 }
 
 /**
- * Remove all html tag.
+ * Remove all HTML tags.
  *
  * @param string $string The string to be stripped of HTML
  *
- * @return string clean of html tag
+ * @return string
  */
 function removeHtml($string)
 {
@@ -221,11 +271,11 @@ function removeHtml($string)
 }
 
 /**
- * Remove all html tag.
+ * Replace HTML entities while preserving basic HTML.
  *
- * @param string $string The string to be stripped of accents
+ * @param string $string The string to normalize
  *
- * @return string clean of html tag
+ * @return string
  */
 function removeQuotes($string)
 {
@@ -258,5 +308,5 @@ function removeQuotes($string)
     $txt = str_replace('&uuml;', 'ü', $txt);
     $txt = str_replace('&Uuml;', 'Ü', $txt);
 
-    return str_replace('uml;', '¨', $txt);
+    return str_replace('&uml;', '¨', $txt);
 }

@@ -9,13 +9,13 @@
         </div>
       </template>
       <template #end>
-        <RouterLink :to="returnRoute">
+        <BaseAppLink :to="returnRoute">
           <BaseButton
             type="black"
             icon="arrow-left"
             :label="t('Back')"
           />
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </BaseToolbar>
 
@@ -129,14 +129,14 @@
               {{ t("Please select at least one recipient (“— Just upload —” or any user)") }}
             </div>
 
-            <div class="flex justify-end gap-2 mt-6">
-              <RouterLink :to="returnRoute">
+            <div class="flex justify-end gap-2 mt-2">
+              <BaseAppLink :to="returnRoute">
                 <BaseButton
                   type="black"
                   icon="xmark"
                   :label="t('Cancel')"
                 />
-              </RouterLink>
+              </BaseAppLink>
               <BaseButton
                 type="primary"
                 icon="check"

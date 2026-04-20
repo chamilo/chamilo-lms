@@ -58,8 +58,6 @@ class AttendanceMetaExport extends ActivityExport
             'title'     => (string) ($payload['name'] ?? 'Attendance'),
             'path'      => 'chamilo/attendance/attendance_'.$moduleId.'.json',
         ]);
-
-        @error_log('[AttendanceMetaExport] Exported attendance moduleid='.$moduleId.' sectionid='.$sectionId);
     }
 
     /**
@@ -105,14 +103,28 @@ class AttendanceMetaExport extends ActivityExport
      */
     private function buildPayloadFromLegacy(object $att, int $moduleId, int $sectionId): array
     {
-        $name = $this->firstNonEmptyString($att, ['title','name'], 'Attendance');
-        $intro = $this->firstNonEmptyString($att, ['description','intro','introtext'], '');
-        $active = (int) ($att->active ?? 1);
+        $params = [];
+        if (isset($att->params)) {
+            if (\is_array($att->params)) {
+                $params = $att->params;
+            } elseif (\is_object($att->params)) {
+                $params = (array) $att->params;
+            }
+        }
 
-        $qualTitle = $this->firstNonEmptyString($att, ['attendance_qualify_title','grade_title'], '');
-        $qualMax   = (int) ($att->attendance_qualify_max ?? $att->grade_max ?? 0);
-        $weight    = (float) ($att->attendance_weight ?? 0.0);
-        $locked    = (int) ($att->locked ?? 0);
+        $name = $this->firstNonEmptyStringFromAttendance($att, $params, ['title', 'name'], 'Attendance');
+        $intro = $this->firstNonEmptyStringFromAttendance($att, $params, ['description', 'intro', 'introtext'], '');
+        $active = (int) ($params['active'] ?? $att->active ?? 1);
+
+        $qualTitle = $this->firstNonEmptyStringFromAttendance(
+            $att,
+            $params,
+            ['attendance_qualify_title', 'grade_title'],
+            ''
+        );
+        $qualMax = (int) ($params['attendance_qualify_max'] ?? $att->attendance_qualify_max ?? $att->grade_max ?? 0);
+        $weight = (float) ($params['attendance_weight'] ?? $att->attendance_weight ?? 0.0);
+        $locked = (int) ($params['locked'] ?? $att->locked ?? 0);
 
         $calendars = $this->extractCalendars($att);
 
@@ -121,17 +133,44 @@ class AttendanceMetaExport extends ActivityExport
             'moduleid'    => $moduleId,
             'sectionid'   => $sectionId,
             'name'        => $name,
+            'title'       => $name,
             'intro'       => $intro,
+            'description' => $intro,
             'active'      => $active,
             'qualify'     => [
-                'title' => $qualTitle,
-                'max'   => $qualMax,
-                'weight'=> $weight,
+                'title'  => $qualTitle,
+                'max'    => $qualMax,
+                'weight' => $weight,
             ],
             'locked'      => $locked,
             'calendars'   => $calendars,
             '_exportedAt' => date('c'),
         ];
+    }
+
+    private function firstNonEmptyStringFromAttendance(
+        object $attendance,
+        array $params,
+        array $keys,
+        string $fallback = ''
+    ): string {
+        foreach ($keys as $key) {
+            if (isset($params[$key]) && \is_string($params[$key])) {
+                $value = trim((string) $params[$key]);
+                if ('' !== $value) {
+                    return $value;
+                }
+            }
+
+            if (isset($attendance->{$key}) && \is_string($attendance->{$key})) {
+                $value = trim((string) $attendance->{$key});
+                if ('' !== $value) {
+                    return $value;
+                }
+            }
+        }
+
+        return $fallback;
     }
 
     /** Extract calendars list from different possible shapes. */

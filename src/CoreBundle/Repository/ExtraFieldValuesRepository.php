@@ -151,11 +151,15 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
      */
     public function findByVariableAndValue(
         ExtraField $extraField,
-        int|string $value,
+        int|string|null $value,
         bool $last = false,
         bool $all = false,
         bool $useLike = false,
     ): array|ExtraFieldValues|null {
+        if (null === $value) {
+            return null;
+        }
+
         $qb = $this->createQueryBuilder('s');
 
         if ($useLike) {
@@ -232,5 +236,23 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function getJsonValueByVariableAndItem(string $variable, int $itemId, int $itemType): ?array
+    {
+        $value = $this->getValueByVariableAndItem($variable, $itemId, $itemType);
+
+        if (!$value instanceof ExtraFieldValues) {
+            return null;
+        }
+
+        $raw = $value->getFieldValue();
+        if (null === $raw || '' === trim($raw)) {
+            return null;
+        }
+
+        $decoded = json_decode($raw, true);
+
+        return is_array($decoded) ? $decoded : null;
     }
 }

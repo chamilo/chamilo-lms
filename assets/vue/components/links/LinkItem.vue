@@ -14,6 +14,7 @@
         <h6 class="min-w-0">
           <a
             :href="link.url"
+            :target="link.target || '_self'"
             class="inline-flex items-center gap-2 min-w-0"
           >
             <BaseIcon
@@ -25,10 +26,10 @@
 
           <BaseIcon
             v-if="isAllowedToEdit && link.sessionId && Number(link.sessionId) === sidValue"
+            :title="t('Session Item')"
             class="ml-2"
             icon="session-star"
             size="normal"
-            title="Session Item"
           />
 
           <BaseIcon
@@ -46,40 +47,49 @@
             size="normal"
           />
         </h6>
+
+        <p
+          v-if="link.description && link.description.trim()"
+          class="mt-1 text-sm text-gray-500 whitespace-pre-wrap"
+        >{{ link.description.trim() }}</p>
       </div>
     </div>
 
     <!-- Icon-only actions (same style as categories) -->
     <div
       v-if="securityStore.isAuthenticated && canEdit(link)"
-      class="flex items-center gap-3 text-gray-700"
+      class="flex items-center gap-2 text-gray-700"
     >
-      <BaseIcon
+      <BaseButton
+        :label="t('Check link')"
         icon="check"
-        size="normal"
-        :title="t('Check link')"
-        class="hover:text-black"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('check', link)"
       />
-      <BaseIcon
+      <BaseButton
+        :label="t('Edit')"
         icon="edit"
-        size="normal"
-        :title="t('Edit')"
-        class="hover:text-black"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('edit', link)"
       />
-      <BaseIcon
+      <BaseButton
         :icon="isVisible(link.linkVisible) ? 'eye-on' : 'eye-off'"
-        size="normal"
-        :title="t('Toggle visibility')"
-        class="hover:text-black"
+        :label="t('Toggle visibility')"
+        only-icon
+        size="small"
+        type="black"
         @click="emit('toggle', link)"
       />
-      <BaseIcon
+      <BaseButton
+        :label="t('Delete')"
         icon="delete"
-        size="normal"
-        :title="t('Delete')"
-        class="hover:text-red-600"
+        only-icon
+        size="small"
+        type="danger"
         @click="emit('delete', link)"
       />
     </div>
@@ -88,11 +98,12 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { computed, onMounted, ref } from "vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { computed } from "vue"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 
@@ -116,7 +127,7 @@ defineProps({
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEdit = (item) => {
   const sessionId = item.sessionId ? Number(item.sessionId) : 0
@@ -126,12 +137,4 @@ const canEdit = (item) => {
   return (isSessionItem && isAllowedToEdit.value) || (isBaseCourseItem && !sidValue.value && isCurrentTeacher.value)
 }
 
-onMounted(async () => {
-  try {
-    isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-  } catch (error) {
-    console.error("Error checking edit permission for link item:", error)
-    isAllowedToEdit.value = false
-  }
-})
 </script>

@@ -1,206 +1,195 @@
-/** CSS used to show a 5x3 table of cells hiding a big image */
-#home-card {
-    overflow: hidden;
+/* CardGame C2 widget */
+.cardgame-launcher {
+    position: fixed;
+    right: 24px;
+    bottom: 110px;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 999px;
+    background: #1d4ed8 url('card-acces.svg') center center / 28px 28px no-repeat;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+    cursor: pointer;
+    z-index: 1080;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.enjoy-cardgame-active {
-    position: relative;
-    left: 50%;
-    top: 90%;
-    width: 40px;
-    height: 40px;
-    margin-top: -35px;
-    margin-left: 10px;
+.cardgame-launcher:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.28);
+}
+
+.cardgame-launcher--active {
     background-image: url('card-acces-active.svg');
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center fixed;
-    -webkit-background-size: cover;
-    background-size: cover;
-    cursor: pointer;
-    z-index: 1000;
+    background-color: #7c3aed;
 }
 
-.enjoy-cardgame {
-    position: relative;
-    left: 50%;
-    top: 90%;
-    width: 40px;
-    height: 40px;
-    margin-top: -35px;
-    margin-left: 10px;
-    background-image: url('card-acces.svg');
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center fixed;
-    -webkit-background-size: cover;
-    background-size: cover;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-.card-one {
+.cardgame-launcher__badge {
     position: absolute;
-    transform: rotate(160deg);
-    background-image: url('card1.jpg');
-    background-position: center center;
-    left: 130%;
-    top: 50px;
-    width: 220px;
-    height: 330px;
-    margin-left: -110px;
-    background-color: #CECEF6;
-    border: solid 2px green;
-    cursor: pointer;
+    top: 6px;
+    right: 8px;
+    color: #facc15;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.cardgame-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 1090;
+}
+
+.cardgame-overlay.is-visible {
+    display: flex;
+}
+
+.cardgame-modal {
+    width: min(960px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
     border-radius: 20px;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
-    opacity: 0.1;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
 }
 
-.card-one-2 {
-    transform: rotate(0deg);
-    left: 50%;
-    opacity: 1;
+.cardgame-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-.cardgame-pack {
-    position: relative;
-    width: 100%;
-    height: 450px;
-    background-image: url('cardpack450.jpg');
-    background-color: transparent;
-    background-position: -500px bottom;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
-}
-
-.cardgame-open {
-    background-position: 0px 0px;
-}
-
-.linescissors {
-    position: absolute;
-    left: 60px;
-    top: 135px;
-    width: 220px;
-    height: 6px;
-    transform: rotate(-26deg);
-    border-top: dotted 3px gray;
-}
-
-.messagePackDeck {
-    position: absolute;
-    text-align: center;
-    right: 20px;
-    top: 30px;
-    width: 200px;
-    padding: 20px;
+.cardgame-modal__title {
+    margin: 0;
     font-size: 22px;
-    border-radius: 15px;
-    background-color: #8A0886;
-    color: white;
+    font-weight: 700;
+    color: #0f172a;
 }
 
-.viewDeckBottom {
-    position: absolute;
-    left: 3px;
-    bottom: 5px;
-    width: 73px;
-    height: 60px;
-    background-image: url('galerie.png');
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center fixed;
-    -webkit-background-size: cover;
-    background-size: cover;
-    display: none;
+.cardgame-modal__close {
+    border: 0;
+    background: transparent;
+    color: #475569;
+    font-size: 28px;
+    line-height: 1;
     cursor: pointer;
 }
 
-.messagePackDeckBottom {
-    position: absolute;
-    text-align: center;
-    left: 85px;
-    bottom: 10px;
-    right: 20px;
-    padding: 14px;
+.cardgame-modal__body {
+    display: grid;
+    gap: 20px;
+    padding: 24px;
+}
+
+.cardgame-current {
+    display: grid;
+    gap: 12px;
+}
+
+.cardgame-current__header {
     font-size: 16px;
-    border-radius: 15px;
-    background-color: #8A0886;
-    color: white;
+    font-weight: 600;
+    color: #334155;
 }
 
-.scissorsrightinit {
-    transform: rotate(160deg);
-    position: absolute;
-    left: 260px;
-    top: 50px;
-    width: 60px;
-    height: 60px;
-    background-image: url('scissorsright.gif');
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center fixed;
-    -webkit-background-size: cover;
-    background-size: cover;
-    cursor: pointer;
-    z-index: 1000;
-    -webkit-transition: all 3s ease-in-out;
-    transition: all 3s ease-in-out;
-}
-
-.scissorsrightinitfinal {
-    left: 10px;
-    top: 170px;
-}
-
-.puzzlecardone {
-    position: absolute;
-    display: none;
-    left: 5%;
-    top: 2%;
-    width: 90%;
-    height: 80%;
-    background-color: gray;
-    background-repeat: no-repeat;
-    background-position: center fixed;
-    -webkit-background-size: cover;
-    background-size: cover;
-    border: solid 1px green;
+.cardgame-current__board {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    min-height: 420px;
     overflow: hidden;
-}
-
-.puzzleMin {
-    float: left;
-    position: relative;
-    left: 10px;
-    top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    width: 150px;
-    height: 100px;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
-}
-
-.puzzleMinOther {
-    float: left;
-    position: relative;
-    left: 10px;
-    top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    width: 150px;
-    height: 100px;
-    background-image: url('b-back.jpg');
+    border-radius: 18px;
+    background-color: #e2e8f0;
     background-repeat: no-repeat;
     background-position: center center;
-    -webkit-background-size: cover;
     background-size: cover;
-    display: none;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+.cardgame-piece-mask {
+    min-height: 140px;
+    border-right: 1px dashed rgba(15, 23, 42, 0.2);
+    border-bottom: 1px dashed rgba(15, 23, 42, 0.2);
+    background: url('b-back.jpg') center center / cover no-repeat;
+    transition: opacity 0.25s ease;
+}
+
+.cardgame-piece-mask--revealed {
+    opacity: 0;
+}
+
+.cardgame-archive {
+    display: grid;
+    gap: 10px;
+}
+
+.cardgame-archive__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.cardgame-archive__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.cardgame-archive__item {
+    min-height: 100px;
+    border-radius: 14px;
+    background: #e2e8f0 url('b-back.jpg') center center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
+}
+
+.cardgame-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.cardgame-status {
+    flex: 1 1 280px;
+    min-height: 48px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    background: #eff6ff;
+    color: #1e3a8a;
+}
+
+.cardgame-status--muted {
+    background: #f8fafc;
+    color: #475569;
+}
+
+.cardgame-status--success {
+    background: #ecfdf5;
+    color: #166534;
+}
+
+.cardgame-status--warning {
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+.cardgame-status--error {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.cardgame-button {
+    min-width: 170px;
 }
 
 .pimg01 {
@@ -219,20 +208,30 @@
     background-image: url('img04.jpg');
 }
 
-.puzzlepart1 {
-    position: relative;
-    border-right: dotted 3px green;
-    border-bottom: dotted 3px green;
-    float: left;
-    left: 0%;
-    top: 0%;
-    width: 20%;
-    height: 33.34%;
-    background-image: url('b-back.jpg');
-    background-color: transparent;
-    background-position: center center;
-}
+@media (max-width: 768px) {
+    .cardgame-launcher {
+        right: 16px;
+        bottom: 96px;
+    }
 
-.puzzlepartstar {
-    background-image: url('animstar.png');
+    .cardgame-overlay {
+        padding: 12px;
+    }
+
+    .cardgame-modal__header,
+    .cardgame-modal__body {
+        padding: 16px;
+    }
+
+    .cardgame-current__board {
+        min-height: 300px;
+    }
+
+    .cardgame-piece-mask {
+        min-height: 100px;
+    }
+
+    .cardgame-archive__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }

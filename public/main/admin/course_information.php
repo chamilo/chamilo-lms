@@ -99,7 +99,7 @@ function get_course_usage($course, $session_id = 0)
 
 $courseUrl = api_get_course_url($courseId);
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Courses')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Courses')];
 
 Display::display_header($course->getTitleAndCode());
 
@@ -172,7 +172,7 @@ if (Database::num_rows($res) > 0) {
     $table = new SortableTableFromArray($users, 0, 20, 'user_table');
     $table->set_additional_parameters(['code' => $course->getCode()]);
     $table->set_other_tables(['usage_table', 'class_table']);
-    $table->set_header(0, get_lang('Code'), true);
+    $table->set_header(0, get_lang('Official code'), true);
     if ($is_western_name_order) {
         $table->set_header(1, get_lang('First name'), true);
         $table->set_header(2, get_lang('Last name'), true);

@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:avtorske pravice,, ne:brez avtorskih pravic"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Oktečni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapa,, application/msword:MsWord,, application/octet-stream:Okteatni tok,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":vaja:vaja,,      simulacija:simulacija,,      vprašalnik:vprašalnik,,      diagram:diagram,,      slika:slika,,      graf:graf,,      kazalo:kazalo,,      diapozitiv:diapozitiv,,      tabela:tabela,,      pripovedno besedilo:narrativno besedilo,,      izpit:izpit,,      poskus:poskus,,      izjava problema:izjava problema,,      samopredstavitev:samopredstavitev,,      predavanje:predavanje"
@@ -4629,7 +4629,7 @@ msgid "Send mail to new user"
 msgstr "Pošlji sporočilo novemu uporabniku"
 
 msgid "Portfolio"
-msgstr "Razširjen profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Z omogočeno nastavitvijo ('True'), uporabnik lahko izpolni (opcija) še naslednja vnosna polja: 'Moje kvalifikacije', 'Kaj lahko učim' in 'Osebna interesna področja'"
@@ -14738,7 +14738,7 @@ msgstr "Uporabniki, skupine"
 msgid "Sorry no results"
 msgstr "Oprostite, ni rezultatov"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Zasebnost skupine"
 
 msgid "Closed"
@@ -16081,6 +16081,15 @@ msgstr "Kratka koda"
 
 msgid "Create child skill"
 msgstr "Ustvari podrejeno veščino"
+
+msgid "This skill can be obtained through:"
+msgstr "To spretnost lahko pridobite prek:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Trenutno noben tečaj ne omogoča pridobitve te spretnosti."
+
+msgid "Add skill to search profile"
+msgstr "Dodaj spretnost v iskalni profil"
 
 msgid "Search profile matches"
 msgstr "Iskani profil ustreza"
@@ -31020,7 +31029,7 @@ msgid "Create your first note to get started."
 msgstr "Ustvarite svojo prvo opombo za začetek."
 
 msgid "F d, Y"
-msgstr "d. d, L"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "Ni mogoče naložiti informacij o podpori."
@@ -32764,4 +32773,1129 @@ msgstr "Naložite sliko ali ustvarite eno z Badge Studio."
 
 msgid "Current badge set"
 msgstr "Trenutni nabor značk"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "V tem razdelku, ko kliknete na 'Vpiši študenta' za tečaj, boste na naslednji strani pozvani k izbiri uporabnika. Ko potrdite, bo ustvarjena nova seja s izbranim tečajem in uporabnikom ter uporabniku poslano obvestilo o vpisu."
+
+msgid "Read-only view"
+msgstr "Le za branje"
+
+msgid "Events list"
+msgstr "Seznam dogodkov"
+
+msgid "Personal"
+msgstr "Osebno"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Teden je prikazan od 1 do 52"
+
+msgid "No tutored sessions found"
+msgstr "Ni najdenih sej z mentorjem"
+
+msgid "Content search"
+msgstr "Iskanje vsebine"
+
+msgid "Search indexed content across all courses."
+msgstr "Iskanje indeksirane vsebine po vseh tečajih."
+
+msgid "Enter a keyword..."
+msgstr "Vnesite ključno besedo..."
+
+msgid "Search error"
+msgstr "Napaka iskanja"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Vnesite ključno besedo za iskanje indeksiranih dokumentov."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultati, do katerih nimate dostopa, so skriti zaradi nastavitev."
+
+msgid "Restricted"
+msgstr "Omejeno"
+
+msgid "You do not have access to this resource."
+msgstr "Do tega vira nimate dostopa."
+
+msgid "Create group"
+msgstr "Ustvari skupino"
+
+msgid "My custom certificate"
+msgstr "Moj prilagojen certifikat"
+
+msgid "Select permission"
+msgstr "Izberite dovoljenje"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "S sprejetjem tega vabila boste povezani z uporabnikom, ki je vabilo poslal, na način, ki bo zahtevanemu uporabniku omogočil branje nekaterih ali vseh vaših podatkov profila"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Prikazujem %d od približno %d rezultatov za %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Prikazujem %d dostopnih rezultatov za %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Zato boste samodejno preusmerjeni na ta URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Imate dostop do več URL-jev"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Kliknite na spodnjo povezavo, ki ustreza URL-ju, do katerega želite dostopati"
+
+msgid "You do not currently have access to any URL"
+msgstr "Trenutno nimate dostopa do nobenega URL-ja"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Največje dovoljeno število naročnin"
+
+msgid "An error occurred"
+msgstr "Pojavila se je napaka"
+
+msgid "You don't have any course content yet"
+msgstr "Še nimate nobene vsebine tečaja"
+
+msgid "This course is locked"
+msgstr "Ta tečaj je zaklenjen"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-poštni naslov, s katerega bodo poslana e-poštna sporočila, ko platforma pošlje e-pošto, uporabljen tudi kot glava 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ne najdete svojega jezika na seznamu? Stopite v stik z nami na %s, da prispevate kot prevajalec"
+
+msgid "An update is available"
+msgstr "Na voljo je posodobitev"
+
+msgid "to know what's new and what has been changed"
+msgstr "za spoznavanje novosti in sprememb"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Zaznali smo, da vaša namestitev PHP ne določa datuma"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Vaša različica PHP ne ustreza zahtevam te programske opreme"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Nekatere datoteke ali mape nimajo pravice pisanja"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Opozorilo! Namestitveni program je zaznal obstoječo Chamilo platformo na vašem sistemu"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Ker sta bili imenika <code>newscorm</code> in <code>exercice</code> preimenovana v <code>lp</code> in <code>exercise</code>, je treba izbrisati ali preimenovati v <code>newscorm_old</code> in <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Obrazec vsebuje napačne ali nepopolne podatke"
+
+msgid "Your contact information could not be sent"
+msgstr "Vaših kontaktnih podatkov ni mogoče poslati"
+
+msgid "Please contact support with the error details"
+msgstr "Kontaktirajte podporo z detajli napake"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Kliknite sliko, da jo obrežete (razmerje 1:1, priporočeno 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Uporabite orodje za obrezovanje, da izberete regijo 1:1"
+
+msgid "Checking push subscription"
+msgstr "Preverjanje naročnine na potisna obvestila"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Naročeni ste na potisna obvestila v tem brskalniku"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Potisna obvestila niso omogočena v tem brskalniku"
+
+msgid "Data exchange successfully saved"
+msgstr "Izmenjava podatkov je uspešno shranjena"
+
+msgid "Error saving data exchange"
+msgstr "Napaka pri shranjevanju izmenjave podatkov"
+
+msgid "No documents added yet"
+msgstr "Noben dokument še ni dodan"
+
+msgid "No additional details available for this skill."
+msgstr "Za to spretnost ni dodatnih podrobnosti."
+
+msgid "No available documents"
+msgstr "Ni na voljo nobenega dokumenta"
+
+msgid "No users added yet"
+msgstr "Noben uporabnik še ni dodan"
+
+msgid "No available users"
+msgstr "Ni na voljo nobenega uporabnika"
+
+msgid "You can no longer submit"
+msgstr "Ne morete več oddati"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Za to nalogo ni najdenih manjkajočih oddaj ali podatki niso na voljo"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-pošta je poslana vsem uporabnikom, ki še niso oddali"
+
+msgid "Failed to send email"
+msgstr "Napaka pri pošiljanju e-pošte"
+
+msgid "Write your answer here"
+msgstr "Napišite svoj odgovor tukaj"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Koledar prisotnosti vam omogoča registracijo seznamov prisotnosti (en za vsako dejansko sejo, ki se je morajo udeležiti študenti)"
+
+msgid "Loading attendance data"
+msgstr "Nalaganje podatkov o prisotnosti"
+
+msgid "No attendance assigned yet"
+msgstr "Prisotnost še ni dodeljena"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Danes ni predvidenih ur, poskusite izbrati drug dan ali dodajte vnos prisotnosti sami z uporabo ikonic dejanj"
+
+msgid "No attendance data for today"
+msgstr "Ni podatkov o prisotnosti za danes"
+
+msgid "Saving"
+msgstr "Shranjevanje"
+
+msgid "No attendance data to save"
+msgstr "Ni podatkov o prisotnosti za shraniti"
+
+msgid "Failed to save attendance"
+msgstr "Napaka pri shranjevanju prisotnosti"
+
+msgid "Loading more courses"
+msgstr "Nalaganje več tečajev"
+
+msgid "Loading more sessions"
+msgstr "Nalaganje več sej"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Nastavitev samodejnega zagon dokumenta je omogočena"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Nastavitev samodejnega zagon vaj je omogočena"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Nastavitev samodejnega zagon učne poti je VKLOP"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Nastavitev samodejnega zagon foruma je vklopljena"
+
+msgid "Course ID is missing"
+msgstr "Manjka ID tečaja"
+
+msgid "Course created successfully"
+msgstr "Tečaj je uspešno ustvarjen"
+
+msgid "Error deleting document(s)"
+msgstr "Napaka pri brisanju dokumenta(-ov)"
+
+msgid "Template successfully deleted"
+msgstr "Predloga je uspešno izbrisan"
+
+msgid "Error deleting the template"
+msgstr "Napaka pri brisanju predloge"
+
+msgid "The title and thumbnail are required"
+msgstr "Naslov in sličica sta obvezna"
+
+msgid "Template created successfully"
+msgstr "Predloga je uspešno ustvarjena"
+
+msgid "Error creating the template"
+msgstr "Napaka pri ustvarjanju predloge"
+
+msgid "Error submitting the form"
+msgstr "Napaka pri oddaji obrazca"
+
+msgid "Loading templates"
+msgstr "Nalaganje predlog"
+
+msgid "Loading layout"
+msgstr "Nalaganje postavitve"
+
+msgid "Loading courses"
+msgstr "Nalaganje tečajev"
+
+msgid "No courses available"
+msgstr "Ni na voljo nobenega tečaja"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Ta seznam prikazuje uporabnike iz vseh dostopnih URL-jev, ker je nastavitev \"session_admin_access_to_all_users_on_all_urls\" omogočena."
+
+msgid "User not found"
+msgstr "Uporabnik ni najden"
+
+msgid "An error occurred while sending the course"
+msgstr "Prišlo je do napake pri pošiljanju tečaja"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Upoštevajte, da spremembe pogojev v zvezi z GDPR zahtevajo, da te spremembe sporočite tretjim osebam, katerim ste posredovali osebne podatke o vaših uporabnikih, kot je navedeno v 19. členu GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Ustvariti morate \"Pogoje in določila\" za vse razpoložljive jezike"
+
+msgid "You don't have any course yet"
+msgstr "Še nimate nobenega tečaja"
+
+msgid "You have received a new friend request"
+msgstr "Prejeli ste novo zahtevo za prijateljstvo"
+
+msgid "Diagnosis Management"
+msgstr "Upravljanje diagnostike"
+
+msgid "Tracking"
+msgstr "Sledenje"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Ogled poročil, statistik in podatkov o sledenju"
+
+msgid "System activity audit"
+msgstr "Revizija sistemskih aktivnosti"
+
+msgid "Learning analytics"
+msgstr "Učne analitike"
+
+msgid "Administrative activity auditing"
+msgstr "Revizija administrativnih aktivnosti"
+
+msgid "List icons"
+msgstr "Seznam ikon"
+
+msgid "Constant name"
+msgstr "Ime konstante"
+
+msgid "MDI icon name"
+msgstr "Ime MDI ikone"
+
+msgid "Assign authentication sources"
+msgstr "Dodeli vire preverjanja pristnosti"
+
+msgid "Assignment details"
+msgstr "Podrobnosti naloge"
+
+msgid "Terms and conditions"
+msgstr "Pogoji in določila"
+
+msgid "Icons"
+msgstr "Ikone"
+
+msgid "Create backup"
+msgstr "Ustvari varnostno kopijo"
+
+msgid "Create file"
+msgstr "Ustvari datoteko"
+
+msgid "Create link"
+msgstr "Ustvari povezavo"
+
+msgid "Edit template"
+msgstr "Uredi predlogo"
+
+msgid "Shared files"
+msgstr "Skupne datoteke"
+
+msgid "Skill wheel"
+msgstr "Kolo spretnosti"
+
+msgid "Favourite courses"
+msgstr "Priljubljeni tečaji"
+
+msgid "Restart courses"
+msgstr "Ponovi tečaje"
+
+msgid "Generate terms"
+msgstr "Ustvari pogoje"
+
+msgid "Add variation"
+msgstr "Dodaj variacijo"
+
+msgid "Editor demo"
+msgstr "Predstavitev urejevalnika"
+
+msgid "Tool introduction"
+msgstr "Predstavitev orodja"
+
+msgid "Data exchanges"
+msgstr "Izmenjave podatkov"
+
+msgid "Third parties"
+msgstr "Tretje strani"
+
+msgid "Layouts"
+msgstr "Postavitve"
+
+msgid "Relation type"
+msgstr "Vrsta relacije"
+
+msgid "Add all"
+msgstr "Dodaj vse"
+
+msgid "Remove all"
+msgstr "Odstrani vse"
+
+msgid "An error occurred. Please try again."
+msgstr "Pojavila se je napaka. Poskusite znova."
+
+msgid "%s created"
+msgstr "%s ustvarjeno"
+
+msgid "%s updated"
+msgstr "%s posodobljeno"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Če nameravate nadgraditi iz starejše različice Chamila, boste morda želeli"
+
+msgid "have a look at the changelog"
+msgstr "ogledati si dnevnik sprememb"
+
+msgid "to know what's new and what has been changed."
+msgstr "da boste izvedeli, kaj je novega in kaj se je spremenilo."
+
+msgid "Session Item"
+msgstr "Predmet seje"
+
+msgid "Points"
+msgstr "Tocke"
+
+msgid "See notifications"
+msgstr "Poglej obvestila"
+
+msgid "New content available for this course."
+msgstr "Nova vsebina je na voljo za ta tečaj."
+
+msgid "No new notifications."
+msgstr "Ni novih obvestil."
+
+msgid "No new content found."
+msgstr "Ni najdenih novih vsebin."
+
+msgid "No tool details available yet."
+msgstr "Podrobnosti orodja še niso na voljo."
+
+msgid "Last access"
+msgstr "Zadnji dostop"
+
+msgid "Open course"
+msgstr "Odpri tečaj"
+
+msgid "Course completed"
+msgstr "Tečaj končan"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Dosežena je omejitev naročnine za ta tečaj."
+
+msgid "Subscription limit reached"
+msgstr "Dosežena omejitev naročnine"
+
+msgid "Tertiary alternative"
+msgstr "Tretja alternativa"
+
+msgid "Update SCORM"
+msgstr "Posodobi SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "UM lahko pripravi osnutek povratnih informacij in predlagano oceno, preden ga pošljete."
+
+msgid "What will be sent to the AI"
+msgstr "Kaj bo poslano UM"
+
+msgid "Assignment title + instructions"
+msgstr "Naslov naloge + navodila"
+
+msgid "Student submission (text)"
+msgstr "Oddaja študenta (besedilo)"
+
+msgid "Student submission (text): none"
+msgstr "Oddaja študenta (besedilo): nobena"
+
+msgid "Student attachment"
+msgstr "Priloga študenta"
+
+msgid "supported"
+msgstr "podprto"
+
+msgid "not supported for document analysis"
+msgstr "ni podprto za analizo dokumentov"
+
+msgid "Student attachment: none"
+msgstr "Priloga študenta: nobena"
+
+msgid "No text AI providers available."
+msgstr "Noben ponudnik besedilnega UM ni na voljo."
+
+msgid "AI-assisted"
+msgstr "Z pomočjo UM"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Ta odločitev je shranjena z popravkom (ExtraField) in je pozneje ni mogoče spremeniti."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Neobvezna priložena popravek (to ni oddaja študenta)."
+
+msgid "AI"
+msgstr "UM"
+
+msgid "Received"
+msgstr "Prejeto"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Odkleni stolpec"
+
+msgid "Lock column"
+msgstr "Zakleni stolpec"
+
+msgid "Set all Present"
+msgstr "Nastavi vse prisotne"
+
+msgid "Set all Absent"
+msgstr "Nastavi vse odsotne"
+
+msgid "Auto (recommended)"
+msgstr "Samodejno (priporočeno)"
+
+msgid "Error downloading all documents."
+msgstr "Napaka pri prenosu vseh dokumentov."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Odpri z ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Omejevalna kvota"
+
+msgid "Remaining space"
+msgstr "Preostali prostor"
+
+msgid "Course catalogue"
+msgstr "Katalog tečajev"
+
+msgid "Drag links to reorder"
+msgstr "Povlecite povezave za ponovno razvrščanje"
+
+msgid "Drop links here to keep them without category"
+msgstr "Spustite povezave tukaj, da jih obdržite brez kategorije"
+
+msgid "Could not export"
+msgstr "Ni mogoče izvoziti"
+
+msgid "Link moved"
+msgstr "Povezava premaknjena"
+
+msgid "Could not move link"
+msgstr "Povezave ni mogoče premakniti"
+
+msgid "Category reordering is not enabled"
+msgstr "Ponovno razvrščanje kategorij ni omogočeno"
+
+msgid "Showing %s posts"
+msgstr "Prikazujem %s objav"
+
+msgid "Showing %s tasks"
+msgstr "Prikazujem %s nalog"
+
+msgid "Page %s of %s"
+msgstr "Stran %s od %s"
+
+msgid "Tutors"
+msgstr "Tutorji"
+
+msgid "selected"
+msgstr "izbrano"
+
+msgid "No data to export"
+msgstr "Ni podatkov za izvoz"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Glavni PNG mora biti \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Standardni seznam"
+
+msgid "Management list"
+msgstr "Upravni seznam"
+
+msgid "Open platform"
+msgstr "Odprta platforma"
+
+msgid "Teacher user ID"
+msgstr "Uporabniško ID učitelja"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Ste prepričani, da želite izbrisati ta tečaj?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Ste prepričani, da želite izbrisati izbrane tečaje?"
+
+msgid "Search by name, username, email"
+msgstr "Išči po imenu, uporabniškem imenu, e-pošti"
+
+msgid "contains %s items"
+msgstr "vsebuje %s elementov"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Vaša pravna pogodba ostane aktivna, dokler zahteva za umik ni pregledana in obdelana."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Vaša zahteva za umik pravnega soglasja je v čakanju na pregled."
+
+msgid "Your account deletion request is pending review."
+msgstr "Vaša zahteva za brisanje računa je v čakanju na pregled."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Zakaj želite zahtevati umik svoje pravne privolitve?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Oddajanje zahteve za umik pravne privolitve..."
+
+msgid "Submitting request..."
+msgstr "Oddajanje zahteve..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Zahtevaj umik pravne privolitve"
+
+msgid "Submitting your account deletion request..."
+msgstr "Oddajanje zahteve za izbris računa..."
+
+msgid "Submitting your acceptance..."
+msgstr "Oddajanje vaše potrditve..."
+
+msgid "Event details"
+msgstr "Podrobnosti dogodka"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Do povezanega tečaja v tem pogledu ne morete dostopati."
+
+msgid "Failed to load sessions"
+msgstr "Napaka pri nalaganju sej"
+
+msgid "Failed to load events"
+msgstr "Napaka pri nalaganju dogodkov"
+
+msgid "No events found"
+msgstr "Ni najdenih dogodkov"
+
+msgid "Group image"
+msgstr "Slika skupine"
+
+msgid "SearchTCC"
+msgstr "IščiTCC"
+
+msgid "Forbidden"
+msgstr "Prepovedano"
+
+msgid "Distribution"
+msgstr "Distribucija"
+
+msgid "Firstname"
+msgstr "Ime"
+
+msgid "Lastname"
+msgstr "Priimek"
+
+msgid "Email"
+msgstr "E-pošta"
+
+msgid "Last login in platform"
+msgstr "Zadnja prijava v platformo"
+
+msgid "Export as CSV"
+msgstr "Izvozi kot CSV"
+
+msgid "Export as XLS"
+msgstr "Izvozi kot XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivirati tega uporabnika?"
+
+msgid "Enable this user?"
+msgstr "Aktivirati tega uporabnika?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Združi to podvojeno skupino v uporabnika #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "To bo združilo vse ostale račune v isti skupini v ta račun."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Združeni računi bodo trajno izbrisani in bodo izginili iz tega poročila."
+
+msgid "This action cannot be undone."
+msgstr "Te akcije ni mogoče razveljaviti."
+
+msgid "Unify"
+msgstr "Združi"
+
+msgid "SessionAdmin"
+msgstr "Upravitelj sej"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Študent"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Skupni prostor, uporabljen s portalom %s, meja je %s MB"
+
+msgid "Helper text"
+msgstr "Pomožni besedilo"
+
+msgid "NotAllowed"
+msgstr "Ni dovoljeno"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Uporabite filtre zgoraj za nalaganje podrobnosti dostopa učečega."
+
+msgid "Start date must be before end date"
+msgstr "Začetni datum mora biti pred končnim datumom"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Izberite razpon datumov in vrsto združevanja za pregled podrobnosti dostopa učečega."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Ta tečaj bo ustvarjen z uporabo privzete predloge tečaja platforme."
+
+msgid "Security breach avoid restart"
+msgstr "Varnostni prekršek, izogibanje ponovnemu zagonu"
+
+msgid "User deactivated"
+msgstr "Uporabnik deaktiviran"
+
+msgid "InvalidId"
+msgstr "Neveljaven ID"
+
+msgid "User enabled"
+msgstr "Uporabnik aktiviran"
+
+msgid "No other duplicates found for this user."
+msgstr "Za tega uporabnika ni najdenih drugih dvojin."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Uporabniki združeni: združeno %s računov v uporabnika #%s. Združeni računi so bili trajno izbrisani."
+
+msgid "No accounts were merged."
+msgstr "Noben račun ni bil združen."
+
+msgid "An error occurred while unifying users."
+msgstr "Napaka se je zgodila med združevanjem uporabnikov."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Uporabniki združeni: združen uporabnik #%s v uporabnika #%s. Združeni račun je bil trajno izbrisan."
+
+msgid "Duplicate users"
+msgstr "Podvojeni uporabniki"
+
+msgid "Years"
+msgstr "Leta"
+
+msgid "All time visits outside sessions"
+msgstr "Obiski vseh časov zunaj sej"
+
+msgid "All time visits in sessions"
+msgstr "Obiski v sejah vseh časov"
+
+msgid "All time visits total"
+msgstr "Skupni obiski vseh časov"
+
+msgid "Student visits per period, per course"
+msgstr "Obiski študentov na obdobje, na tečaj"
+
+msgid "By email"
+msgstr "Po e-pošti"
+
+msgid "By extra field"
+msgstr "Po dodatnem polju"
+
+msgid "Select an option"
+msgstr "Izberite možnost"
+
+msgid "Profile field"
+msgstr "Polje profila"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "To poročilo prikazuje samo uporabnike z enakim e-poštnim naslovom."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "To poročilo prikazuje samo uporabnike z enako vrednostjo izbranega polja profila."
+
+msgid "How to use this report"
+msgstr "Kako uporabiti to poročilo"
+
+msgid "Disable / Enable"
+msgstr "Onemogoči / Omogoči"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Samo blokira ali obnovi prijavo. Ne izbriše uporabnika in ne odstrani naročnin."
+
+msgid "Last week"
+msgstr "Prejšnji teden"
+
+msgid "Next week"
+msgstr "Naslednji teden"
+
+msgid "Loading report..."
+msgstr "Nalagam poročilo..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Napaka pri nalaganju poročila. Poskusite znova."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Izberite eno ali več sej za kopiranje trenerjev in izberite ciljni tečaj"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Držite Ctrl (ali Cmd) za izbor več predmetov"
+
+msgid "Choose the destination course"
+msgstr "Izberite ciljni tečaj"
+
+msgid "You can select multiple items"
+msgstr "Izberete lahko več predmetov"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Uporabite iskalno polje za hitro iskanje tečajev"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Izberite eno ali več izvornih sej in eno ali več ciljnih sej za kopiranje študentov"
+
+msgid "Select destination sessions"
+msgstr "Izberite ciljne seje"
+
+msgid "You can select multiple users"
+msgstr "Izberete lahko več uporabnikov"
+
+msgid "Use the search box to find users quickly"
+msgstr "Uporabite iskalno polje za hitro iskanje uporabnikov"
+
+msgid "Error while creating the document"
+msgstr "Napaka pri ustvarjanju dokumenta"
+
+msgid "Not a SCORM learning path"
+msgstr "Ni SCORM učne poti"
+
+msgid "Final item"
+msgstr "Končni predmet"
+
+msgid "Edit item"
+msgstr "Uredi predmet"
+
+msgid "No AI text providers configured."
+msgstr "Ni konfiguriranih ponudnikov AI besedila."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Nalaganje ni uspelo. Datoteka je verjetno večja od omejitve strežnika (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Posodobitev ni uspela. Strežnik ni prejel datoteke."
+
+msgid "Update failed. %s"
+msgstr "Posodobitev ni uspela. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Posodobitev ni uspela. Neveljaven payload naložene datoteke."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Posodobitev ni uspela. Ime naložene ZIP datoteke se mora ujemati z imenom originalnega SCORM paketa."
+
+msgid "Update failed"
+msgstr "Posodobitev ni uspela"
+
+msgid "Question lower case"
+msgstr "Vprašanje z malimi črkami"
+
+msgid "Regenerate"
+msgstr "Regeneriraj"
+
+msgid "Case insensitive"
+msgstr "Neobčutljivo na velike/male črke"
+
+msgid "Select a session to load its courses."
+msgstr "Izberite sejo za nalaganje njenih tečajev."
+
+msgid "Select the source course."
+msgstr "Izberite izvorni tečaj."
+
+msgid "Select a destination session."
+msgstr "Izberite ciljno sejo."
+
+msgid "Select the destination course."
+msgstr "Izberite ciljni tečaj."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopiraj celotno vsebino tečaja iz izbranega tečaja seje."
+
+msgid "Select which tools/items to copy."
+msgstr "Izberite, katere alate/predmete kopirati."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Ne vključuj osnovne (ne-sejne) vsebine tečaja."
+
+msgid "An error occurred while copying the course"
+msgstr "Napaka pri kopiranju tečaja"
+
+msgid "Please select a different destination"
+msgstr "Izberite drug cilj"
+
+msgid "You must select a destination course"
+msgstr "Izbrati morate ciljni tečaj"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Za izvoz tečajev z kvizom morate izbrati kviz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Če vaši LP vsebujejo zvočne datoteke, jih izberite iz dokumentov"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Če vaš kviz vsebuje vprašanja s točkami vročine, izberite slike iz dokumentov"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Geslo mora imeti vsaj %length% znakov."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Geslo mora vsebovati vsaj %count% malih črk."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Geslo mora vsebovati vsaj %count% velikih črk."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Geslo mora vsebovati vsaj %count% številskih (0-9) znakov."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Geslo mora vsebovati vsaj %count% posebnih znakov."
+
+msgid "Invalid login request."
+msgstr "Neveljavna zahteva za prijavo."
+
+msgid "Authentication failed."
+msgstr "Preverjanje pristnosti ni uspelo."
+
+msgid "Login %status% for username %username%"
+msgstr "Prijavljenje %status% za uporabniško ime %username%"
+
+msgid "Co-generated with AI"
+msgstr "Sovojno ustvarjeno z AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Obvezna polja"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Oznake je mogoče kopirati in prilepiti v spodnje besedilno območje in bodo dinamično zamenjane z njihovo vrednostjo za vsakega uporabnika posebej ob pošiljanju."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ta skupina je povezana s skupino %s.<br>Seznam članov skupine je odvisen od članov razreda in ga ni mogoče spreminjati.<br>Pojdite na nastavitve skupine, da prekinete to povezavo, če želite dodati ali odstraniti člane te skupine."
+
+msgid "Link classes to created groups ?"
+msgstr "Povezati razrede z ustvarjenimi skupinami?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Če je razred povezan s skupino, se uporabniki, dodani ali odstranjeni iz razreda, samodejno dodajo ali odstranijo iz skupine."
+
+msgid "New groups creation in category %s"
+msgstr "Ustvarjanje novih skupin v kategoriji %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Opozorilno sporočilo, ki opozarja, da uporabnik ne more spreminjati članov povezane skupine"
+
+msgid "Remove the group link with the class"
+msgstr "Odstrani povezavo skupine z razredom"
+
+msgid "Linked class"
+msgstr "Povezani razred"
+
+msgid "The group is no longer linked to the class"
+msgstr "Skupina ni več povezana z razredom"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Pregled študentov in tečajev, prijavljenih na razred"
+
+msgid "Overview students subscribed to the class"
+msgstr "Pregled študentov, prijavljenih na razred"
+
+msgid "Overview class"
+msgstr "Pregled razreda"
+
+msgid "Go back to the list of classes"
+msgstr "Nazaj na seznam razredov"
+
+msgid "Go back to course classes"
+msgstr "Nazaj na razrede tečaja"
+
+msgid "Users subscribed to the course"
+msgstr "Uporabniki, prijavljeni na tečaj"
+
+msgid "Users not subscribed to the course"
+msgstr "Uporabniki, ki niso prijavljeni na tečaj"
+
+msgid "Users subscribed to the class"
+msgstr "Uporabniki, prijavljeni na razred"
+
+msgid "Courses subscribed to the class"
+msgstr "Tečaji, prijavljeni na razred"
+
+msgid "No user is subscribed to this class"
+msgstr "Noben uporabnik ni prijavljen na ta razred"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Noben uporabnik in noben tečaj nista prijavljena na ta razred"
+
+msgid "No user are subscribed to this class"
+msgstr "Noben uporabnik ni prijavljen na ta razred"
+
+msgid "No course are subscribed to this class"
+msgstr "Noben tečaj ni prijavljen na ta razred"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ste prepričani, da želite odstraniti razred"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ste prepričani, da želite odstraniti razred?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ste prepričani, da želite odstraniti razred brez odstranjevanja uporabnikov?"
+
+msgid "Remove the class without removing students"
+msgstr "Odstrani razred brez odstranjevanja študentov"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Ta nastavitev še ni implementirana v tej različici."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Priporočeno za vtičnike samo za administratorje, prikazane v administratorskem območju."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Priporočeno za vtičnike, ki se morajo prikazati kot orodja tečaja."
+
+msgid "Displayed above the main page content."
+msgstr "Prikazano nad vsebino glavne strani."
+
+msgid "Displayed below the main page content."
+msgstr "Prikazano pod vsebino glavne strani."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Prikazano blizu vrha glavne lupine postavitve."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Prikazano blizu dna glavne lupine postavitve."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Priporočeno za globalne plavajoče ali trajne vtičnike, prikazane pred nogo."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Prikazano v izbrani regiji vtičnika."
+
+msgid "Admin menu"
+msgstr " Administratorski meni"
+
+msgid "Global regions"
+msgstr "Globalne regije"
+
+msgid "No regions assigned"
+msgstr "Nobene regije niso dodeljene"
+
+msgid "Plugin regions"
+msgstr "Regije vtičnikov"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Izberite, kje naj se vsak nameščen vtičnik prikaže."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Nasvet: uporabite Ctrl/Cmd za izbor več regij."
+
+msgid "No installed plugins were found."
+msgstr "Noben nameščen vtičnik ni bil najden."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Izberite eno ali več regij za ta vtičnik v trenutnem URL dostopa."
+
+msgid "Available regions"
+msgstr "Na voljo regije"
+
+msgid "Selected paragraph"
+msgstr "Izbrani odstavek"
+
+msgid "Destination folder"
+msgstr "Ciljna mapa"
+
+msgid "Generate AI media"
+msgstr "Ustvari AI medijo"
+
+msgid "Save and insert"
+msgstr "Shrani in vstavi"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Shranjevanje je podprto samo, ko ponudnik vrne base64 vsebino. Če ste prejeli samo URL, je shranjevanje onemogočeno, da se izognete prenosu v brskalniku."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video je bil uspešno ustvarjen, vendar je shranjevanje onemogočeno, ker je ponudnik vrnil URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Datoteka je bila shranjena, vendar njen URL ni mogel biti razrešen."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ustvari Aiken kviz iz teme ali iz enega dokumenta tečaja."
+
+msgid "Test from topic"
+msgstr "Test iz teme"
+
+msgid "Test from document"
+msgstr "Test iz dokumenta"
+
+msgid "Generate from topic"
+msgstr "Ustvari iz teme"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Uporabi poziv teme za ustvarjanje novega Aiken vprašalnika."
+
+msgid "Quiz title"
+msgstr "Naslov kviza"
+
+msgid "Generate from document"
+msgstr "Ustvari iz dokumenta"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Izberite en dokument tečaja in ustvarite vprašanja samo na podlagi njegove vsebine."
+
+msgid "Selected document"
+msgstr "Izbrani dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokument je izbran iz seznama dokumentov tečaja."
+
+msgid "Choose document"
+msgstr "Izberi dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Neobvezno. Uporabljeno samo kot dodatna namig za AI."
+
+msgid "Select a document"
+msgstr "Izberi dokument"
+
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+msgid "Welcome to Chamilo"
+msgstr "Dobrodošli v Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Če je to vaš prvič, ko uporabljate Chamilo, preverite stranski meni, da najdete pot do njegovih številnih funkcij. Če potrebujete pomoč, vam bodo <a href=\"https://docs.chamilo.org\">naši uradni dokumenti</a> pomagali pri standardni dokumentaciji, medtem ko vam bo naša <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">spletna forum</a> pomagal deliti ideje in najti odgovore drugih uporabnikov Chamila."
 

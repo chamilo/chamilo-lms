@@ -9,11 +9,11 @@
     <!-- Name -->
     <Column
       field="title"
-      header="Name"
+      :header="t('Name')"
       sortable
     >
       <template #body="slotProps">
-        <RouterLink
+        <BaseAppLink
           :to="{
             name: 'AttendanceSheetList',
             params: {
@@ -29,14 +29,14 @@
           class="text-blue-500 underline"
         >
           {{ slotProps.data.title }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </Column>
 
     <!-- Description -->
     <Column
       field="description"
-      header="Description"
+      :header="t('Description')"
       sortable
     >
       <template #body="slotProps">
@@ -47,7 +47,7 @@
     <!-- # attended -->
     <Column
       field="doneCalendars"
-      header="# attended"
+      :header="t('# attended')"
       sortable
     >
       <template #body="slotProps">
@@ -58,12 +58,12 @@
     <!-- Detail -->
     <Column
       v-if="showActions"
-      header="Detail"
+      :header="t('Dates')"
     >
       <template #body="slotProps">
         <div class="flex gap-2 justify-center">
           <Button
-            icon="pi pi-pencil"
+            icon="mdi mdi-pencil"
             class="p-button-rounded p-button-sm p-button-info"
             @click="onEdit(slotProps.data)"
             tooltip="Edit"
@@ -76,7 +76,7 @@
             :tooltip="getVisibilityTooltip(slotProps.data)"
           />
           <Button
-            icon="pi pi-trash"
+            icon="mdi mdi-delete"
             class="p-button-rounded p-button-sm p-button-danger"
             @click="onDelete(slotProps.data)"
             tooltip="Delete"
@@ -88,10 +88,12 @@
 </template>
 <script setup>
 import { useRoute } from "vue-router"
-import { computed } from "vue"
+import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import DOMPurify from "dompurify"
+import { useLocale } from "../../composables/locale"
 
 const route = useRoute()
 const securityStore = useSecurityStore()
@@ -123,7 +125,7 @@ const sanitizeHtml = (html, options = {}) => {
 
 const getVisibilityIcon = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "pi pi-eye" : "pi pi-eye-slash"
+  return visibility === 2 ? "mdi mdi-eye" : "mdi mdi-eye-off"
 }
 
 const getVisibilityClass = (attendance) => {
@@ -134,6 +136,15 @@ const getVisibilityClass = (attendance) => {
 const getVisibilityTooltip = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
   return visibility === 2 ? "Visible" : "Hidden"
+}
+
+const { t } = useI18n()
+const { appLocale } = useLocale()
+const localePrefix = ref(getLocalePrefix(appLocale.value))
+
+function getLocalePrefix(locale) {
+  const defaultLang = "en"
+  return typeof locale === "string" ? locale.split("_")[0] : defaultLang
 }
 
 function getNodeId(resourceNode) {

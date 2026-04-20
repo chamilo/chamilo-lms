@@ -76,8 +76,12 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) {
-    $_POST['name'] = trim($_POST['name']);
     if ('addgroup' === $action) {
+        if (!Security::check_token('post')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+        $_POST['name'] = trim($_POST['name']);
         if (!empty($_POST['group_id'])) {
             Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -91,6 +95,10 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
     }
 
     if ('deletegroup' === $action) {
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);
@@ -452,8 +460,10 @@ if ($is_survey_type_1) {
     }
     echo '<table border="0">
             <tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
+    $sec_token = Security::get_existing_token();
     echo '<form
         action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
+    echo '<input type="hidden" name="sec_token" value="'.htmlspecialchars($sec_token, ENT_QUOTES).'">';
     if ('editgroup' === $_GET['action']) {
         $sql = 'SELECT title, description FROM '.$table_survey_question_group.'
                 WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
@@ -495,7 +505,7 @@ if ($is_survey_type_1) {
             '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a> '.
             '<a
-            href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup"
+            href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup&sec_token='.htmlspecialchars($sec_token, ENT_QUOTES).'"
             onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Are you sure you want to delete %s?'), $row['title']).'?', ENT_QUOTES)).'\')) return false;">'.
             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
             '</td></tr>';

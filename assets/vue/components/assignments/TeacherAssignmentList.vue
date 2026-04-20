@@ -20,12 +20,12 @@
       field="title"
     >
       <template #body="slotProps">
-        <RouterLink
+        <BaseAppLink
           class="text-blue-600 hover:underline"
           :to="getAssignmentDetailLink(slotProps.data)"
         >
           {{ slotProps.data.title }}
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </Column>
 
@@ -88,16 +88,16 @@
             "
             :label="t('Visibility')"
             only-icon
-            size="normal"
-            type="black"
+            size="small"
+            type="tertiary-text"
             @click="onClickVisibility(slotProps.data)"
           />
           <BaseButton
             :label="t('Upload corrections package')"
             icon="zip-unpack"
             only-icon
-            size="normal"
-            type="success"
+            size="small"
+            type="success-text"
             :title="`${t('Upload corrections package')} — ${t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')}`"
             @click="() => uploadCorrections(slotProps.data)"
           />
@@ -106,8 +106,8 @@
             :label="t('Download assignments package')"
             icon="zip-pack"
             only-icon
-            size="normal"
-            type="primary"
+            size="small"
+            type="primary-text"
             :title="t('Download assignments package')"
             @click="() => downloadAssignments(slotProps.data)"
           />
@@ -115,8 +115,8 @@
             :label="t('Edit')"
             icon="edit"
             only-icon
-            size="normal"
-            type="black"
+            size="small"
+            type="tertiary-text"
             @click="onClickEdit(slotProps.data)"
           />
         </div>
@@ -128,7 +128,8 @@
         :disabled="0 === selected.length || loading"
         :label="t('Delete selected')"
         icon="delete"
-        type="danger"
+        size="small"
+        type="danger-text"
         @click="onClickMultipleDelete()"
       />
     </template>
@@ -137,7 +138,7 @@
 
 <script setup>
 import Column from "primevue/column"
-import { computed, onMounted, reactive, ref, watch } from "vue"
+import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useCidReq } from "../../composables/cidReq"
@@ -147,10 +148,10 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t, locale } = useI18n()
@@ -166,7 +167,7 @@ const { cid, sid, gid } = useCidReq()
 
 const notification = useNotification()
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const securityStore = useSecurityStore()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
@@ -178,11 +179,7 @@ const loadParams = reactive({
   itemsPerPage: null,
 })
 
-const isAllowedToEdit = ref(false)
-
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 watch(
   loadParams,
@@ -233,8 +230,7 @@ const onSort = (event) => {
 }
 
 function onClickMultipleDelete() {
-  confirm.require({
-    header: t("Confirmation"),
+  requireConfirmation({
     message: t("Are you sure you want to delete the selected items?"),
     accept: async () => {
       loading.value = true

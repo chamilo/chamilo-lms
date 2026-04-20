@@ -15,10 +15,8 @@ export async function findAll(params = {}) {
  * @returns {Promise<{totalItems, items}>}
  */
 export async function searchUserTags(searchTerm) {
-  const { items } = await findAll({
+  return await findAll({
     tag: searchTerm,
     pagination: false,
   })
-
-  return items
 }

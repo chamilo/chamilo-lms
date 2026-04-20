@@ -1430,8 +1430,6 @@ final class WikiManager
 
             $nameTo  = $uInfo['complete_name'];
             $emailTo = $uInfo['email'];
-            $from    = (string) api_get_setting('emailAdministrator');
-
             $subject = get_lang('Notify Wiki changes').' - '.$courseTitle;
 
             $body  = get_lang('Dear user').' '.api_get_person_name($uInfo['firstname'] ?? '', $uInfo['lastname'] ?? '').',<br /><br />';
@@ -1454,8 +1452,8 @@ final class WikiManager
                 $emailTo,
                 $subject,
                 $body,
-                $from,
-                $from,
+                '',
+                '',
                 [],
                 [],
                 false,
@@ -6341,8 +6339,9 @@ mpdf-->'.$contentPdf;
         $t = html_entity_decode($t, ENT_QUOTES);
         $t = strip_tags(trim($t));
         $t = mb_strtolower($t);
-        $t = strtr($t, [' ' => '_', '-' => '_']);
+        $t = strtr($t, [' ' => '_']);
         $t = preg_replace('/_+/', '_', $t);
+
         return $t;
     }
 

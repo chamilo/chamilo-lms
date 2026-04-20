@@ -140,18 +140,17 @@ class ExerciseFocusedPlugin extends Plugin
             return '';
         }
 
-        $icon = Display::return_icon(
-            'window_list_slide.png',
-            $this->get_lang('ReportByAttempts'),
-            [],
-            ICON_SIZE_MEDIUM
-        );
+        $icon = Display::getMdiIcon('image-filter-center-focus', null, null, ICON_SIZE_MEDIUM);
 
         $url = api_get_path(WEB_PLUGIN_PATH)
             .'ExerciseFocused/pages/reporting.php?'
             .api_get_cidreq().'&'.http_build_query(['id' => $exerciseId]);
 
-        return Display::url($icon, $url);
+        return Display::url(
+            $icon,
+            $url,
+            ['class' => 'text-primary', 'title' => $this->get_lang('ReportByAttempts')]
+        );
     }
 
     public function getSessionFieldList(): array
@@ -163,10 +162,10 @@ class ExerciseFocusedPlugin extends Plugin
         return array_map('trim', $fields);
     }
 
-    public function isEnableForExercise(int $exerciseId): bool
+    public function isEnableForExercise(int $exerciseId, \Symfony\Component\HttpFoundation\Request $request): bool
     {
         $renderRegion = $this->isEnabled(true)
-            && str_contains($_SERVER['SCRIPT_NAME'], '/main/exercise/exercise_submit.php');
+            && '/main/exercise/exercise_submit.php' === $request->query->get('_route');
 
         if (!$renderRegion) {
             return false;

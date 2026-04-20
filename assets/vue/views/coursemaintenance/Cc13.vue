@@ -226,7 +226,7 @@
           </div>
 
           <!-- Export button -->
-          <div class="mt-3 flex justify-end">
+          <div class="mt-2 flex justify-end">
             <button
               class="btn-primary"
               :disabled="loadingExport || (scope === 'selected' && selectedCount === 0)"
@@ -256,7 +256,7 @@
             @change="onFile"
             class="w-full rounded border border-gray-300 p-2 text-sm"
           />
-          <div class="mt-3 flex justify-end">
+          <div class="mt-2 flex justify-end">
             <button
               class="btn-primary"
               :disabled="!file || loadingImport"

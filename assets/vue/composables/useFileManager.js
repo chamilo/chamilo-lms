@@ -260,7 +260,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     onUpdateOptions()
   }
 
-  const viewModeIcon = computed(() => (viewMode.value === "list" ? "pi pi-th-large" : "pi pi-list"))
+  const viewModeIcon = computed(() => (viewMode.value === "list" ? "mdi mdi-view-grid" : "mdi mdi-view-list"))
 
   const isImage = (file) => {
     const fileExtensions = ["jpeg", "jpg", "png", "gif", "svg", "webp"]

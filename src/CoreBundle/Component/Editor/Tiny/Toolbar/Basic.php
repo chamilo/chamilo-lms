@@ -203,10 +203,9 @@ class Basic extends Toolbar
     {
         $url = api_get_path(WEB_PATH);
         $sysUrl = api_get_path(SYS_PATH);
+        $langsDir = $sysUrl.'libs/editor/langs/';
         $defaultLang = 'en';
         $defaultLangFile = "libs/editor/langs/{$defaultLang}.js";
-        $specificLangFile = "libs/editor/langs/{$iso}.js";
-        $generalLangFile = null;
 
         // Default to English
         $config = [
@@ -214,19 +213,35 @@ class Basic extends Toolbar
             'language_url' => $defaultLangFile,
         ];
 
-        if ('en_US' !== $iso) {
-            if (str_contains($iso, '_')) {
-                // Extract general language code (e.g., "de" from "de_DE")
-                [$generalLangCode] = explode('_', $iso, 2);
-                $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
+        if ('en_US' === $iso) {
+            return $config;
+        }
+
+        // 1. Exact match: e.g. fr_FR.js
+        if (file_exists($langsDir.$iso.'.js')) {
+            $config['language'] = $iso;
+            $config['language_url'] = $url."libs/editor/langs/{$iso}.js";
+
+            return $config;
+        }
+
+        if (str_contains($iso, '_')) {
+            [$generalLangCode] = explode('_', $iso, 2);
+
+            // 2. General code: e.g. fr.js (exists for de, es, …)
+            if (file_exists($langsDir.$generalLangCode.'.js')) {
+                $config['language'] = $generalLangCode;
+                $config['language_url'] = $url."libs/editor/langs/{$generalLangCode}.js";
+
+                return $config;
             }
 
-            if (file_exists($sysUrl.$specificLangFile)) {
-                $config['language'] = $iso;
-                $config['language_url'] = $url.$specificLangFile;
-            } elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
-                $config['language'] = $generalLangCode;
-                $config['language_url'] = $url.$generalLangFile;
+            // 3. Any variant: e.g. fr_FR.js when only fr_FR exists but user has fr_BE
+            $candidates = glob($langsDir.$generalLangCode.'_*.js');
+            if (!empty($candidates)) {
+                $langFile = basename((string) $candidates[0], '.js');
+                $config['language'] = $langFile;
+                $config['language_url'] = $url."libs/editor/langs/{$langFile}.js";
             }
         }
 

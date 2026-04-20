@@ -4629,7 +4629,7 @@ msgid "Send mail to new user"
 msgstr " أرسل بريدا إلى مستخدم جديد"
 
 msgid "Portfolio"
-msgstr " واجهة ممتدة"
+msgstr "بورتفوليو"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr " '/إذا تم وضع /'صح/'، في هذه الإاعدادات فإنّه يمكن للمستخدم ملأ (اختياري) الحقول التالية: /'قدراتي/'، /'الدبلوماسية الخاصة بي/'، /'ماذا أستطيع أن أدرس/'، و /'الحيز الشخصي المفتوح"
@@ -14738,7 +14738,7 @@ msgstr "المستخدمين. المجموعات"
 msgid "Sorry no results"
 msgstr "للاسف، لا يوجد نتائج"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "صلاحيات المجموعة"
 
 msgid "Closed"
@@ -16081,6 +16081,15 @@ msgstr "رمز مختصر"
 
 msgid "Create child skill"
 msgstr "انشاء مهارة فرعية"
+
+msgid "This skill can be obtained through:"
+msgstr "يمكن الحصول على هذه المهارة من خلال:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "لا يوجد مساق حاليًا يسمح لك بالحصول على هذه المهارة."
+
+msgid "Add skill to search profile"
+msgstr "إضافة مهارة إلى ملف البحث"
 
 msgid "Search profile matches"
 msgstr "تطابقات البحث عن الحساب الشخصي"
@@ -31018,7 +31027,7 @@ msgid "Create your first note to get started."
 msgstr "أنشئ ملاحظتك الأولى لبدء العمل."
 
 msgid "F d, Y"
-msgstr "j d، Y"
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr "تعذر تحميل معلومات الدعم في الوقت الحالي."
@@ -32762,4 +32771,1129 @@ msgstr "رفع صورة أو إنشاء واحدة باستخدام Badge Studio
 
 msgid "Current badge set"
 msgstr "مجموعة الشارات الحالية"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "في هذا القسم، عند النقر على 'تسجيل طالب' لدورة، سيُطلب منك اختيار المستخدم في الصفحة التالية. عند التحقق، سيتم إنشاء جلسة جديدة مع الدورة والمستخدم المحددين، وإرسال إشعار اشتراك إلى المستخدم."
+
+msgid "Read-only view"
+msgstr "عرض للقراءة فقط"
+
+msgid "Events list"
+msgstr "قائمة الأحداث"
+
+msgid "Personal"
+msgstr "شخصي"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "يتم عرض الأسابيع من 1 إلى 52"
+
+msgid "No tutored sessions found"
+msgstr "لم يتم العثور على جلسات بإشراف"
+
+msgid "Content search"
+msgstr "بحث المحتوى"
+
+msgid "Search indexed content across all courses."
+msgstr "البحث في المحتوى المفهرس عبر جميع الدورات."
+
+msgid "Enter a keyword..."
+msgstr "أدخل كلمة مفتاحية..."
+
+msgid "Search error"
+msgstr "خطأ في البحث"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "أدخل كلمة مفتاحية للبحث في الوثائق المفهرسة."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "النتائج التي لا يمكنك الوصول إليها مخفية بواسطة الإعدادات."
+
+msgid "Restricted"
+msgstr "مقيد"
+
+msgid "You do not have access to this resource."
+msgstr "ليس لديك صلاحية الوصول إلى هذا المورد."
+
+msgid "Create group"
+msgstr "إنشاء مجموعة"
+
+msgid "My custom certificate"
+msgstr "شهادتي المخصصة"
+
+msgid "Select permission"
+msgstr "اختر الصلاحية"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "بتقبلك لهذه الدعوة، ستصبح مرتبطًا بالمستخدم الطالب بطريقة تجعل بعض أو كل بيانات ملفك الشخصي متاحة للقراءة من قبل المستخدم الطالب"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "عرض %d من حوالي %d نتيجة(ات) لـ %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "عرض %d نتيجة(ات) متاحة لـ %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "لذلك سيتم توجيهك تلقائيًا إلى هذا الرابط"
+
+msgid "You have access to multiple URLs"
+msgstr "لديك وصول إلى عدة روابط"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "يرجى النقر على الرابط أدناه المقابل للرابط الذي ترغب في الوصول إليه"
+
+msgid "You do not currently have access to any URL"
+msgstr "لا تملك حاليًا وصولاً إلى أي رابط"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "الحد الأقصى لعدد الاشتراكات المسموح بها"
+
+msgid "An error occurred"
+msgstr "حدث خطأ"
+
+msgid "You don't have any course content yet"
+msgstr "لا يوجد لديك محتوى للدورة بعد"
+
+msgid "This course is locked"
+msgstr "هذه الدورة مقفلة"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "عنوان البريد الإلكتروني الذي سيتم إرسال الرسائل الإلكترونية منه عندما ترسل المنصة بريدًا إلكترونيًا، يُستخدم أيضًا كرأس 'reply-to'"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "لا يمكنك العثور على لغتك في القائمة؟ اتصل بنا على %s للمساهمة كمترجم"
+
+msgid "An update is available"
+msgstr "تحديث متاح"
+
+msgid "to know what's new and what has been changed"
+msgstr "لمعرفة الجديد وما تم تغييره"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "لقد اكتشفنا أن تثبيت PHP الخاص بك لا يحدد التاريخ"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "إصدار PHP الخاص بك لا يتوافق مع متطلبات هذا البرنامج"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "بعض الملفات أو المجلدات لا تملك صلاحية الكتابة"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "تحذير! اكتشف المثبت وجود منصة Chamilo موجودة على نظامك"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "بما أن مجلدي <code>newscorm</code> و <code>exercice</code> تم تغيير أسمائهما إلى <code>lp</code> و <code>exercise</code> على التوالي، فمن الضروري حذفها أو إعادة تسميتها إلى <code>newscorm_old</code> و <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "النموذج يحتوي على بيانات غير صحيحة أو غير كاملة"
+
+msgid "Your contact information could not be sent"
+msgstr "لم يتم إرسال معلومات الاتصال الخاصة بك"
+
+msgid "Please contact support with the error details"
+msgstr "يرجى الاتصال بالدعم مع تفاصيل الخطأ"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "انقر على الصورة لقصها (نسبة 1:1، 120x120 بكسل موصى بها)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "استخدم أداة القص لتحديد منطقة بنسبة 1:1"
+
+msgid "Checking push subscription"
+msgstr "فحص اشتراك الدفع"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "أنت مشترك في إشعارات الدفع في هذا المتصفح"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "إشعارات الدفع غير مفعلة في هذا المتصفح"
+
+msgid "Data exchange successfully saved"
+msgstr "تم حفظ تبادل البيانات بنجاح"
+
+msgid "Error saving data exchange"
+msgstr "خطأ في حفظ تبادل البيانات"
+
+msgid "No documents added yet"
+msgstr "لم يتم إضافة وثائق بعد"
+
+msgid "No additional details available for this skill."
+msgstr "لا توجد تفاصيل إضافية متاحة لهذه المهارة."
+
+msgid "No available documents"
+msgstr "لا توجد وثائق متاحة"
+
+msgid "No users added yet"
+msgstr "لم يتم إضافة مستخدمين بعد"
+
+msgid "No available users"
+msgstr "لا يوجد مستخدمون متاحون"
+
+msgid "You can no longer submit"
+msgstr "لا يمكنك الإرسال بعد الآن"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "لم يتم العثور على تقديمات مفقودة لهذه المهمة أو البيانات غير متاحة"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "تم إرسال البريد الإلكتروني إلى جميع المستخدمين غير المقدمين"
+
+msgid "Failed to send email"
+msgstr "فشل في إرسال البريد الإلكتروني"
+
+msgid "Write your answer here"
+msgstr "اكتب إجابتك هنا"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "يسمح تقويم الحضور بتسجيل قوائم الحضور (واحدة لكل جلسة حقيقية يجب على الطلاب الحضور إليها)"
+
+msgid "Loading attendance data"
+msgstr "جارٍ تحميل بيانات الحضور"
+
+msgid "No attendance assigned yet"
+msgstr "لم يتم تعيين حضور بعد"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "لا توجد فصل دراسي مجدول اليوم، جرب اختيار يوم آخر أو أضف إدخال الحضور بنفسك باستخدام أيقونات الإجراء"
+
+msgid "No attendance data for today"
+msgstr "لا توجد بيانات حضور لليوم"
+
+msgid "Saving"
+msgstr "جارٍ الحفظ"
+
+msgid "No attendance data to save"
+msgstr "لا توجد بيانات حضور لحفظها"
+
+msgid "Failed to save attendance"
+msgstr "فشل في حفظ الحضور"
+
+msgid "Loading more courses"
+msgstr "جارٍ تحميل المزيد من المقررات الدراسية"
+
+msgid "Loading more sessions"
+msgstr "جارٍ تحميل المزيد من الجلسات"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "تم تفعيل إعدادات ميزة الإطلاق التلقائي للوثيقة"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "تم تفعيل إعدادات ميزة الإطلاق التلقائي للتمارين"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "إعداد الإطلاق التلقائي لمسار التعلم مفعّل"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "إعداد الإطلاق التلقائي للمنتدى مفعّل"
+
+msgid "Course ID is missing"
+msgstr "معرف المقرر الدراسي مفقود"
+
+msgid "Course created successfully"
+msgstr "تم إنشاء المقرر الدراسي بنجاح"
+
+msgid "Error deleting document(s)"
+msgstr "خطأ في حذف الوثيقة(ات)"
+
+msgid "Template successfully deleted"
+msgstr "تم حذف القالب بنجاح"
+
+msgid "Error deleting the template"
+msgstr "خطأ في حذف القالب"
+
+msgid "The title and thumbnail are required"
+msgstr "العنوان والصورة المصغرة مطلوبان"
+
+msgid "Template created successfully"
+msgstr "تم إنشاء القالب بنجاح"
+
+msgid "Error creating the template"
+msgstr "خطأ في إنشاء القالب"
+
+msgid "Error submitting the form"
+msgstr "خطأ في إرسال النموذج"
+
+msgid "Loading templates"
+msgstr "جارٍ تحميل القوالب"
+
+msgid "Loading layout"
+msgstr "جارٍ تحميل التخطيط"
+
+msgid "Loading courses"
+msgstr "جارٍ تحميل المقررات الدراسية"
+
+msgid "No courses available"
+msgstr "لا توجد مقررات دراسية متاحة"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "تعرض هذه القائمة المستخدمين من جميع عناوين URL للوصول لأن الإعداد \"session_admin_access_to_all_users_on_all_urls\" مفعّل."
+
+msgid "User not found"
+msgstr "المستخدم غير موجود"
+
+msgid "An error occurred while sending the course"
+msgstr "حدث خطأ أثناء إرسال المقرر الدراسي"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "تذكر أن التعديلات على الشروط المتعلقة بـ GDPR تتطلب منك الإبلاغ عن هذه التعديلات إلى الجهات الثالثة التي قدمت إليها معلومات شخصية عن مستخدميك، كما هو منصوص عليه في المادة 19 من GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "يجب إنشاء \"شروط الاستخدام\" لجميع اللغات المتاحة"
+
+msgid "You don't have any course yet"
+msgstr "ليس لديك أي مقرر دراسي بعد"
+
+msgid "You have received a new friend request"
+msgstr "لقد تلقيت طلب صداقة جديد"
+
+msgid "Diagnosis Management"
+msgstr "إدارة التشخيص"
+
+msgid "Tracking"
+msgstr "التتبع"
+
+msgid "View reports, statistics and tracking data"
+msgstr "عرض التقارير والإحصاءات وبيانات التتبع"
+
+msgid "System activity audit"
+msgstr "تدقيق نشاط النظام"
+
+msgid "Learning analytics"
+msgstr "تحليلات التعلم"
+
+msgid "Administrative activity auditing"
+msgstr "تدقيق نشاط الإدارة"
+
+msgid "List icons"
+msgstr "قائمة الأيقونات"
+
+msgid "Constant name"
+msgstr "اسم الثابت"
+
+msgid "MDI icon name"
+msgstr "اسم أيقونة MDI"
+
+msgid "Assign authentication sources"
+msgstr "تعيين مصادر المصادقة"
+
+msgid "Assignment details"
+msgstr "تفاصيل المهمة"
+
+msgid "Terms and conditions"
+msgstr "الشروط والأحكام"
+
+msgid "Icons"
+msgstr "الأيقونات"
+
+msgid "Create backup"
+msgstr "إنشاء نسخة احتياطية"
+
+msgid "Create file"
+msgstr "إنشاء ملف"
+
+msgid "Create link"
+msgstr "إنشاء رابط"
+
+msgid "Edit template"
+msgstr "تحرير القالب"
+
+msgid "Shared files"
+msgstr "الملفات المشتركة"
+
+msgid "Skill wheel"
+msgstr "عجلة المهارات"
+
+msgid "Favourite courses"
+msgstr "الدورات المفضلة"
+
+msgid "Restart courses"
+msgstr "إعادة تشغيل الدورات"
+
+msgid "Generate terms"
+msgstr "توليد الشروط"
+
+msgid "Add variation"
+msgstr "إضافة تباين"
+
+msgid "Editor demo"
+msgstr "عرض تجريبي للمحرر"
+
+msgid "Tool introduction"
+msgstr " تعريف بالأداة"
+
+msgid "Data exchanges"
+msgstr "تبادل البيانات"
+
+msgid "Third parties"
+msgstr "الأطراف الثالثة"
+
+msgid "Layouts"
+msgstr "التخطيطات"
+
+msgid "Relation type"
+msgstr "نوع العلاقة"
+
+msgid "Add all"
+msgstr "إضافة الكل"
+
+msgid "Remove all"
+msgstr "إزالة الكل"
+
+msgid "An error occurred. Please try again."
+msgstr "حدث خطأ. يرجى المحاولة مرة أخرى."
+
+msgid "%s created"
+msgstr "%s تم إنشاؤه"
+
+msgid "%s updated"
+msgstr "%s تم تحديثه"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "إذا كنت تخطط للترقية من إصدار أقدم من Chamilo، قد ترغب في"
+
+msgid "have a look at the changelog"
+msgstr "الاطلاع على سجل التغييرات"
+
+msgid "to know what's new and what has been changed."
+msgstr "لمعرفة ما هو جديد وما تم تغييره."
+
+msgid "Session Item"
+msgstr "عنصر الجلسة"
+
+msgid "Points"
+msgstr "النقاط"
+
+msgid "See notifications"
+msgstr "عرض الإشعارات"
+
+msgid "New content available for this course."
+msgstr "محتوى جديد متاح لهذا المقرر."
+
+msgid "No new notifications."
+msgstr "لا توجد إشعارات جديدة."
+
+msgid "No new content found."
+msgstr "لم يتم العثور على محتوى جديد."
+
+msgid "No tool details available yet."
+msgstr "لا تتوفر تفاصيل الأداة بعد."
+
+msgid "Last access"
+msgstr "آخر وصول"
+
+msgid "Open course"
+msgstr "فتح المقرر"
+
+msgid "Course completed"
+msgstr "المقرر مكتمل"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "تم الوصول إلى حد الاشتراك لهذا المقرر."
+
+msgid "Subscription limit reached"
+msgstr "تم الوصول إلى حد الاشتراك"
+
+msgid "Tertiary alternative"
+msgstr "البديل الثالثي"
+
+msgid "Update SCORM"
+msgstr "تحديث SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "يمكن للذكاء الاصطناعي صياغة تعليقات ودرجة مقترحة قبل إرسالها."
+
+msgid "What will be sent to the AI"
+msgstr "ما سيتم إرساله إلى الذكاء الاصطناعي"
+
+msgid "Assignment title + instructions"
+msgstr "عنوان المهمة + التعليمات"
+
+msgid "Student submission (text)"
+msgstr "تقديم الطالب (نص)"
+
+msgid "Student submission (text): none"
+msgstr "تقديم الطالب (نص): لا يوجد"
+
+msgid "Student attachment"
+msgstr "مرفق الطالب"
+
+msgid "supported"
+msgstr "مدعوم"
+
+msgid "not supported for document analysis"
+msgstr "غير مدعوم لتحليل الوثائق"
+
+msgid "Student attachment: none"
+msgstr "مرفق الطالب: لا يوجد"
+
+msgid "No text AI providers available."
+msgstr "لا توجد مزودي ذكاء اصطناعي نصي متاحون."
+
+msgid "AI-assisted"
+msgstr "مدعوم بالذكاء الاصطناعي"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "يتم حفظ هذا القرار مع التصحيح (ExtraField) ولا يمكن تغييره لاحقًا."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "مرفق تصحيح اختياري (هذا ليس تقديم الطالب)."
+
+msgid "AI"
+msgstr "الذكاء الاصطناعي"
+
+msgid "Received"
+msgstr "تم الاستلام"
+
+msgid "%s min"
+msgstr "%s دقيقة"
+
+msgid "Unlock column"
+msgstr "فتح العمود"
+
+msgid "Lock column"
+msgstr "قفل العمود"
+
+msgid "Set all Present"
+msgstr "تعيين الجميع حاضرين"
+
+msgid "Set all Absent"
+msgstr "تعيين الجميع غائبين"
+
+msgid "Auto (recommended)"
+msgstr "تلقائي (موصى به)"
+
+msgid "Error downloading all documents."
+msgstr "خطأ في تنزيل جميع المستندات."
+
+msgid "Open with ONLYOFFICE"
+msgstr "فتح باستخدام ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "حد الحصة"
+
+msgid "Remaining space"
+msgstr "المساحة المتبقية"
+
+msgid "Course catalogue"
+msgstr "كتالوج المقررات"
+
+msgid "Drag links to reorder"
+msgstr "اسحب الروابط لإعادة ترتيبها"
+
+msgid "Drop links here to keep them without category"
+msgstr "أسقط الروابط هنا للاحتفاظ بها بدون فئة"
+
+msgid "Could not export"
+msgstr "تعذر التصدير"
+
+msgid "Link moved"
+msgstr "تم نقل الرابط"
+
+msgid "Could not move link"
+msgstr "تعذر نقل الرابط"
+
+msgid "Category reordering is not enabled"
+msgstr "إعادة ترتيب الفئات غير مفعلة"
+
+msgid "Showing %s posts"
+msgstr "عرض %s منشور"
+
+msgid "Showing %s tasks"
+msgstr "عرض %s مهمة"
+
+msgid "Page %s of %s"
+msgstr "صفحة %s من %s"
+
+msgid "Tutors"
+msgstr "المشرفون"
+
+msgid "selected"
+msgstr "مُحدد"
+
+msgid "No data to export"
+msgstr "لا توجد بيانات للتصدير"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "رأس PNG يجب أن يكون \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "قائمة قياسية"
+
+msgid "Management list"
+msgstr "قائمة إدارية"
+
+msgid "Open platform"
+msgstr "المنصة مفتوحة"
+
+msgid "Teacher user ID"
+msgstr "معرف مستخدم المعلم"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "هل أنت متأكد من رغبتك في حذف هذا المقرر؟"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "هل أنت متأكد من رغبتك في حذف المقررات المحددة؟"
+
+msgid "Search by name, username, email"
+msgstr "البحث بالاسم أو اسم المستخدم أو البريد الإلكتروني"
+
+msgid "contains %s items"
+msgstr "يحتوي على %s عنصر"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "يظل اتفاقك القانوني ساريًا حتى يتم مراجعة طلب السحب ومعالجته."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "طلب سحب موافقتك القانونية قيد المراجعة."
+
+msgid "Your account deletion request is pending review."
+msgstr "طلب حذف حسابك قيد المراجعة."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "لماذا ترغب في طلب سحب موافقتك القانونية؟"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "جاري إرسال طلب سحب الموافقة القانونية..."
+
+msgid "Submitting request..."
+msgstr "جاري إرسال الطلب..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "طلب سحب الموافقة القانونية"
+
+msgid "Submitting your account deletion request..."
+msgstr "جاري إرسال طلب حذف الحساب..."
+
+msgid "Submitting your acceptance..."
+msgstr "جاري إرسال قبولك..."
+
+msgid "Event details"
+msgstr "تفاصيل الحدث"
+
+msgid "You cannot access the linked course from this view."
+msgstr "لا يمكنك الوصول إلى المقرر المرتبط من هذا العرض."
+
+msgid "Failed to load sessions"
+msgstr "فشل في تحميل الجلسات"
+
+msgid "Failed to load events"
+msgstr "فشل في تحميل الأحداث"
+
+msgid "No events found"
+msgstr "لم يتم العثور على أحداث"
+
+msgid "Group image"
+msgstr "صورة المجموعة"
+
+msgid "SearchTCC"
+msgstr "بحثTCC"
+
+msgid "Forbidden"
+msgstr "ممنوع"
+
+msgid "Distribution"
+msgstr "التوزيع"
+
+msgid "Firstname"
+msgstr "الاسم الأول"
+
+msgid "Lastname"
+msgstr "الاسم الأخير"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Last login in platform"
+msgstr "آخر تسجيل دخول في المنصة"
+
+msgid "Export as CSV"
+msgstr "تصدير كـ CSV"
+
+msgid "Export as XLS"
+msgstr "تصدير كـ XLS"
+
+msgid "Deactivate this user?"
+msgstr "تعطيل هذا المستخدم؟"
+
+msgid "Enable this user?"
+msgstr "تفعيل هذا المستخدم؟"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "دمج هذه المجموعة المكررة في المستخدم #%s؟"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "سيتم دمج جميع الحسابات الأخرى في نفس المجموعة في هذا الحساب."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "ستُحذف الحسابات المدموجة نهائيًا وستختفي من هذا التقرير."
+
+msgid "This action cannot be undone."
+msgstr "لا يمكن التراجع عن هذا الإجراء."
+
+msgid "Unify"
+msgstr "دمج"
+
+msgid "SessionAdmin"
+msgstr "مدير الجلسة"
+
+msgid "Drh"
+msgstr "مدير الموارد البشرية"
+
+msgid "Student"
+msgstr "طالب"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "إجمالي المساحة المستخدمة من قبل البوابة %s الحد الأقصى %s ميغابايت"
+
+msgid "Helper text"
+msgstr "نص مساعد"
+
+msgid "NotAllowed"
+msgstr "غير مسموح"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "استخدم الفلاتر أعلاه لتحميل تفاصيل وصول المتعلم."
+
+msgid "Start date must be before end date"
+msgstr "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "حدد نطاق تاريخ ونوع تجميع لمراجعة تفاصيل وصول المتعلم."
+
+msgid "This course will be created using the platform default course template."
+msgstr "سيتم إنشاء هذه الدورة باستخدام نموذج الدورة الافتراضي للمنصة."
+
+msgid "Security breach avoid restart"
+msgstr "انتهاك أمني تجنب إعادة التشغيل"
+
+msgid "User deactivated"
+msgstr "تم تعطيل المستخدم"
+
+msgid "InvalidId"
+msgstr "معرف غير صالح"
+
+msgid "User enabled"
+msgstr "تم تفعيل المستخدم"
+
+msgid "No other duplicates found for this user."
+msgstr "لم يتم العثور على تكرارات أخرى لهذا المستخدم."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "تم دمج المستخدمين: دُمج %s حساب(ات) في المستخدم #%s. تم حذف الحسابات المدموجة نهائيًا."
+
+msgid "No accounts were merged."
+msgstr "لم يتم دمج أي حسابات."
+
+msgid "An error occurred while unifying users."
+msgstr "حدث خطأ أثناء دمج المستخدمين."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "تم دمج المستخدمين: دُمج المستخدم #%s في المستخدم #%s. تم حذف الحساب المدموج نهائيًا."
+
+msgid "Duplicate users"
+msgstr "مستخدمون مكررون"
+
+msgid "Years"
+msgstr "سنوات"
+
+msgid "All time visits outside sessions"
+msgstr "زيارات كل الوقت خارج الجلسات"
+
+msgid "All time visits in sessions"
+msgstr "زيارات كل الوقت داخل الجلسات"
+
+msgid "All time visits total"
+msgstr "إجمالي زيارات كل الوقت"
+
+msgid "Student visits per period, per course"
+msgstr "زيارات الطلاب حسب الفترة، حسب الدورة"
+
+msgid "By email"
+msgstr "حسب البريد الإلكتروني"
+
+msgid "By extra field"
+msgstr "حسب الحقل الإضافي"
+
+msgid "Select an option"
+msgstr "حدد خيارًا"
+
+msgid "Profile field"
+msgstr "حقل الملف الشخصي"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "هذا التقرير يسرد فقط المستخدمين الذين لديهم نفس عنوان البريد الإلكتروني."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "هذا التقرير يسرد فقط المستخدمين الذين يشتركون في نفس القيمة لحقل الملف الشخصي المحدد."
+
+msgid "How to use this report"
+msgstr "كيفية استخدام هذا التقرير"
+
+msgid "Disable / Enable"
+msgstr "تعطيل / تفعيل"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "يقوم فقط بحظر أو استعادة تسجيل الدخول. لا يحذف المستخدم ولا يزيل الاشتراكات."
+
+msgid "Last week"
+msgstr "الأسبوع الماضي"
+
+msgid "Next week"
+msgstr "الأسبوع القادم"
+
+msgid "Loading report..."
+msgstr "جارٍ تحميل التقرير..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "فشل في تحميل هذا التقرير. يرجى المحاولة مرة أخرى."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "حدد جلسة واحدة أو أكثر لنسخ المدربين منها واختر المقرر الهدف"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "اضغط Ctrl (أو Cmd) لتحديد عناصر متعددة"
+
+msgid "Choose the destination course"
+msgstr "اختر المقرر الهدف"
+
+msgid "You can select multiple items"
+msgstr "يمكنك تحديد عناصر متعددة"
+
+msgid "Use the search box to find courses quickly"
+msgstr "استخدم مربع البحث للعثور على المقررات بسرعة"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "حدد جلسة مصدر واحدة أو أكثر وجلسة هدف واحدة أو أكثر لنسخ الطلاب"
+
+msgid "Select destination sessions"
+msgstr "حدد الجلسات الهدف"
+
+msgid "You can select multiple users"
+msgstr "يمكنك تحديد مستخدمين متعددين"
+
+msgid "Use the search box to find users quickly"
+msgstr "استخدم مربع البحث للعثور على المستخدمين بسرعة"
+
+msgid "Error while creating the document"
+msgstr "خطأ أثناء إنشاء المستند"
+
+msgid "Not a SCORM learning path"
+msgstr "ليس مسار تعلم SCORM"
+
+msgid "Final item"
+msgstr "العنصر النهائي"
+
+msgid "Edit item"
+msgstr "تعديل العنصر"
+
+msgid "No AI text providers configured."
+msgstr "لا توجد مزودي نصوص الذكاء الاصطناعي مُعَدَّة."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "فشل الرفع. الملف أكبر من حد الخادم (post_max_size) على الأرجح."
+
+msgid "Update failed. No file received by the server."
+msgstr "فشل التحديث. لم يتلقَ الخادم أي ملف."
+
+msgid "Update failed. %s"
+msgstr "فشل التحديث. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "فشل التحديث. حمولة ملف الرفع غير صالحة."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "فشل التحديث. يجب أن يطابق اسم ملف ZIP المرفوع اسم حزمة SCORM الأصلية."
+
+msgid "Update failed"
+msgstr "فشل التحديث"
+
+msgid "Question lower case"
+msgstr "سؤال بحرف صغير"
+
+msgid "Regenerate"
+msgstr "إعادة توليد"
+
+msgid "Case insensitive"
+msgstr "غير حساس لحالة الأحرف"
+
+msgid "Select a session to load its courses."
+msgstr "حدد جلسة لتحميل مقرراتها."
+
+msgid "Select the source course."
+msgstr "حدد المقرر المصدر."
+
+msgid "Select a destination session."
+msgstr "حدد جلسة هدف."
+
+msgid "Select the destination course."
+msgstr "حدد المقرر الهدف."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "انسخ محتوى المقرر الكامل من مقرر الجلسة المحددة."
+
+msgid "Select which tools/items to copy."
+msgstr "حدد الأدوات/العناصر التي سيتم نسخها."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "لا تتضمن محتوى المقرر الأساسي (غير الجلسة)."
+
+msgid "An error occurred while copying the course"
+msgstr "حدث خطأ أثناء نسخ المقرر"
+
+msgid "Please select a different destination"
+msgstr "يرجى تحديد هدف مختلف"
+
+msgid "You must select a destination course"
+msgstr "يجب عليك تحديد مقرر هدف"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "لتصدير المقررات مع الاختبارات يجب تحديد الاختبارات"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "إذا كانت مسارات التعلم تحتوي على ملفات صوتية يجب تحديدها من المستندات"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "إذا كانت الاختبارات تحتوي على أسئلة نقطة ساخنة يجب تحديد الصور من المستندات"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "يجب أن تكون كلمة المرور %length% حرفًا على الأقل."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف صغير على الأقل."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف كبير على الأقل."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% رقم (0-9) على الأقل."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "يجب أن تحتوي كلمة المرور على %count% حرف خاص على الأقل."
+
+msgid "Invalid login request."
+msgstr "طلب تسجيل دخول غير صالح."
+
+msgid "Authentication failed."
+msgstr "فشل المصادقة."
+
+msgid "Login %status% for username %username%"
+msgstr "تسجيل الدخول %status% لاسم المستخدم %username%"
+
+msgid "Co-generated with AI"
+msgstr "تم إنشاؤه بالاشتراك مع الذكاء الاصطناعي"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "معرف EntraID"
+
+msgid "EntraID UID"
+msgstr "معرف مستخدم EntraID"
+
+msgid "Required fields"
+msgstr "الحقول المطلوبة"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "يمكن نسخ العلامات ولصقها داخل منطقة النص أدناه وسيتم استبدالها ديناميكيًا بقيمتها لكل مستخدم على حدة عند إرسالها."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "هذه المجموعة مرتبطة بالفصل %s.<br>قائمة أعضاء المجموعة تعتمد على أعضاء الفصل ولا يمكن تعديلها.<br>اذهب إلى إعدادات المجموعة لكسر هذا الرابط إذا كنت ترغب في إضافة أو إزالة أعضاء لهذه المجموعة."
+
+msgid "Link classes to created groups ?"
+msgstr "ربط الفصول بالمجموعات المُنشأة؟"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "إذا كان فصل مرتبطًا بمجموعة، فإن المستخدمين المضافين إلى الفصل أو المُزالين منه يتم إضافتهم تلقائيًا إلى المجموعة أو إزالتهم منها."
+
+msgid "New groups creation in category %s"
+msgstr "إنشاء مجموعات جديدة في الفئة %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "رسالة تحذير لإخطار أن المستخدم لا يمكنه تعديل أعضاء المجموعة المرتبطة"
+
+msgid "Remove the group link with the class"
+msgstr "إزالة رابط المجموعة مع الفصل"
+
+msgid "Linked class"
+msgstr "الفصل المرتبط"
+
+msgid "The group is no longer linked to the class"
+msgstr "المجموعة لم تعد مرتبطة بالفصل"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "نظرة عامة على الطلاب والدورات المسجلة في الفصل"
+
+msgid "Overview students subscribed to the class"
+msgstr "نظرة عامة على الطلاب المسجلين في الفصل"
+
+msgid "Overview class"
+msgstr "نظرة عامة على الفصل"
+
+msgid "Go back to the list of classes"
+msgstr "العودة إلى قائمة الفصول"
+
+msgid "Go back to course classes"
+msgstr "العودة إلى فصول الدورة"
+
+msgid "Users subscribed to the course"
+msgstr "المستخدمون المسجلون في الدورة"
+
+msgid "Users not subscribed to the course"
+msgstr "المستخدمون غير المسجلين في الدورة"
+
+msgid "Users subscribed to the class"
+msgstr "المستخدمون المسجلون في الفصل"
+
+msgid "Courses subscribed to the class"
+msgstr "الدورات المسجلة في الفصل"
+
+msgid "No user is subscribed to this class"
+msgstr "لا يوجد مستخدم مسجل في هذا الفصل"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "لا يوجد مستخدم ولا دورة مسجلة في هذا الفصل"
+
+msgid "No user are subscribed to this class"
+msgstr "لا يوجد مستخدمون مسجلون في هذا الفصل"
+
+msgid "No course are subscribed to this class"
+msgstr "لا توجد دورات مسجلة في هذا الفصل"
+
+msgid "Are you sure you want to remove the class"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل؟"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "هل أنت متأكد من أنك تريد إزالة الفصل دون إزالة المستخدمين؟"
+
+msgid "Remove the class without removing students"
+msgstr "إزالة الفصل دون إزالة الطلاب"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "هذا الإعداد غير مُطبق بعد في هذه النسخة."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "مُوصى به للإضافات الخاصة بالمشرفين فقط المعروضة في منطقة الإدارة."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "مُوصى به للإضافات التي يجب أن تظهر كأدوات الدورة."
+
+msgid "Displayed above the main page content."
+msgstr "معروض أعلى محتوى الصفحة الرئيسية."
+
+msgid "Displayed below the main page content."
+msgstr "معروض أسفل محتوى الصفحة الرئيسية."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "معروض بالقرب من أعلى غلاف التخطيط الرئيسي."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "معروض بالقرب من أسفل غلاف التخطيط الرئيسي."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "مُوصى به للإضافات العائمة العامة أو الدائمة المعروضة قبل التذييل."
+
+msgid "Displayed in the selected plugin region."
+msgstr "معروض في منطقة الإضافة المحددة."
+
+msgid "Admin menu"
+msgstr "قائمة الإدارة"
+
+msgid "Global regions"
+msgstr "المناطق العامة"
+
+msgid "No regions assigned"
+msgstr "لا توجد مناطق مُعينة"
+
+msgid "Plugin regions"
+msgstr "مناطق الإضافات"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "اختر المكان الذي يجب أن يتم عرضه فيه كل إضافة مثبتة."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "نصيحة: استخدم Ctrl/Cmd لتحديد مناطق متعددة."
+
+msgid "No installed plugins were found."
+msgstr "لم يتم العثور على إضافات مثبتة."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "حدد منطقة أو أكثر لهذه الإضافة في رابط الوصول الحالي."
+
+msgid "Available regions"
+msgstr "المناطق المتاحة"
+
+msgid "Selected paragraph"
+msgstr "الفقرة المحددة"
+
+msgid "Destination folder"
+msgstr "مجلد الوجهة"
+
+msgid "Generate AI media"
+msgstr "إنشاء وسائط الذكاء الاصطناعي"
+
+msgid "Save and insert"
+msgstr "حفظ وإدراج"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "الحفظ مدعوم فقط عندما يُرجع المزود محتوى base64. إذا تلقيت رابطًا فقط، فإن الحفظ معطل لتجنب التنزيل في المتصفح."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "تم إنشاء الفيديو بنجاح، لكن الحفظ معطل لأن المزود أرجع رابطًا."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "تم حفظ الملف، لكن لم يتمكن من حل رابط URL الخاص به."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "إنشاء اختبار Aiken من موضوع أو من مستند دورة واحد."
+
+msgid "Test from topic"
+msgstr "اختبار من الموضوع"
+
+msgid "Test from document"
+msgstr "اختبار من المستند"
+
+msgid "Generate from topic"
+msgstr "إنشاء من الموضوع"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "استخدم تلميح موضوع لإنشاء استبيان Aiken جديد."
+
+msgid "Quiz title"
+msgstr "عنوان الاختبار"
+
+msgid "Generate from document"
+msgstr "إنشاء من المستند"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "اختر مستند دورة واحد وأنشئ أسئلة بناءً على محتوياته فقط."
+
+msgid "Selected document"
+msgstr "المستند المحدد"
+
+msgid "The document is selected from the course documents list."
+msgstr "يتم اختيار المستند من قائمة مستندات الدورة."
+
+msgid "Choose document"
+msgstr "اختر المستند"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "اختياري. يُستخدم فقط كتلميح إضافي للذكاء الاصطناعي."
+
+msgid "Select a document"
+msgstr "اختر مستندًا"
+
+msgid "Welcome"
+msgstr "مرحباً"
+
+msgid "Welcome to Chamilo"
+msgstr "مرحباً بك في Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> إذا كانت هذه هي المرة الأولى التي تستخدم فيها Chamilo، تأكد من التحقق من القائمة الجانبية للعثور على طريقك عبر ميزاته العديدة. إذا كنت بحاجة إلى مساعدة، ستجد <a href=\"https://docs.chamilo.org\">وثائقنا الرسمية</a> مفيدة للوثائق القياسية، بينما يمكن لـ <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">منتدى الإنترنت</a> مشاركة الأفكار والعثور على إجابات من مستخدمي Chamilo الآخرين."
 

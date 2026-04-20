@@ -24,7 +24,7 @@
   &__logout-link {
     @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
 
-    .mdi {
+    .base-icon {
       @apply leading-normal text-body-2;
     }
 
@@ -185,7 +185,8 @@
     }
   }
 
-  .router-link-active {
+  .router-link-exact-active,
+  .router-link-url-active {
     @apply text-primary;
   }
 }
@@ -238,7 +239,7 @@
     .app-sidebar__topbar-button {
       .mdi.mdi-close {
         &::before {
-          content: "\F035C";
+          content: "󰍜";
         }
       }
     }

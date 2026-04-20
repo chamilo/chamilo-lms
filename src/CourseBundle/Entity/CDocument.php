@@ -25,6 +25,7 @@ use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
+use Chamilo\CoreBundle\Controller\Api\DownloadAllDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
@@ -198,6 +199,42 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ),
             security: "is_granted('ROLE_USER')",
+        ),
+        new Post(
+            uriTemplate: '/documents/download-all',
+            outputFormats: ['zip' => DownloadAllDocumentsAction::CONTENT_TYPE],
+            controller: DownloadAllDocumentsAction::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course group identifier',
+                ),
+            ],
+            openapi: new Operation(
+                summary: 'Download all documents as a ZIP file.',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'rootNodeId' => ['type' => 'integer'],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_USER')",
+            deserialize: false
         ),
         new GetCollection(
             openapi: new Operation(

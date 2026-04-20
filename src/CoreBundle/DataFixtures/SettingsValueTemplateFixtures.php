@@ -853,6 +853,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'uppercase' => 2,
                             'numeric' => 2,
                             'length' => 8,
+                            'specials' => 1,
                         ],
                     ],
                 ],

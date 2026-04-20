@@ -1,69 +1,16 @@
-{% if exercisemonitoring.show_submit_region and exercisemonitoring.enabled and exercisemonitoring.enable_snapshots %}
-    {% set ALL_ON_ONE_PAGE = exercisemonitoring.exercise_type == 1 %}
-    {% set ONE_PER_PAGE = exercisemonitoring.exercise_type == 2 %}
+{% autoescape false %}
+{% if ExerciseMonitoring.show_submit_region and ExerciseMonitoring.enabled and ExerciseMonitoring.enable_snapshots %}
+    {% set ALL_ON_ONE_PAGE = ExerciseMonitoring.exercise_type == 1 %}
+    {% set ONE_PER_PAGE = ExerciseMonitoring.exercise_type == 2 %}
 
-    <div id="monitoring-camera"></div>
+    <div
+        id="monitoring-camera"
+        data-exercise-id="{{ ExerciseMonitoring.exercise_id }}"
+        data-exercise-type="{{ ExerciseMonitoring.exercise_type }}"
+    ></div>
 
-    <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
-    <script>
-        $(function () {
-            var $btnSaveNow = $('button[name="save_now"]');
-            var $btnEndTest = $('button[name="validate_all"]');
-
-            Webcam.set({
-                height: 480,
-                width: 640,
-            });
-            Webcam.attach('#monitoring-camera');
-            Webcam.on('live', function () {
-                {% if ALL_ON_ONE_PAGE %}
-                    snapAndSendData(0);
-                {% elseif ONE_PER_PAGE %}
-                    snapByQuestion();
-                {% endif %}
-            });
-
-            {% if ALL_ON_ONE_PAGE %}
-                $btnEndTest.on('click', function () {
-                    snapAndSendData(0);
-                });
-            {% elseif ONE_PER_PAGE %}
-                $btnSaveNow.on('click', function () {
-                    snapByQuestion();
-                });
-            {% endif %}
-
-            function snapAndSendData(levelId) {
-                Webcam.snap(function (dataUri) {
-                    sendData(levelId, dataUri);
-                });
-            }
-
-            function snapByQuestion() {
-                var questionId = $btnSaveNow.data('question') || 0;
-
-                snapAndSendData(questionId);
-            }
-
-            function sendData(questionId, imageUri) {
-                var rawImgIdDoc = imageUri.replace(/^data:image\/\w+;base64,/, '');
-                var blobImgIdDoc = new Blob( [ Webcam.base64DecToArr(rawImgIdDoc) ], {type: 'image/jpeg'} );
-
-                var formData = new FormData();
-                formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
-                formData.append('level_id', questionId);
-                formData.append('snapshot', blobImgIdDoc, 'snapshot.jpg');
-
-                return $.ajax({
-                    url: '{{ _p.web_plugin }}ExerciseMonitoring/pages/exercise_submit.ajax.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                });
-            }
-        });
-    </script>
+    <script src="/plugin/ExerciseMonitoring/assets/js/webcamjs-1.0.6/webcam.min.js"></script>
+    <script src="/plugin/ExerciseMonitoring/assets/js/exercise-submit.js"></script>
     <style>
         #plugin_pre_footer {
             position: relative;
@@ -82,3 +29,4 @@
         }
     </style>
 {% endif %}
+{% endautoescape %}

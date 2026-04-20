@@ -583,6 +583,7 @@ $tools = [
         'report=tool_usage' => get_lang('Tool-based resource count'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
+        'report=courses_usage' => get_lang('Courses usage'),
     ],
     get_lang('Users') => [
         'report=users' => get_lang('Number of users'),
@@ -618,6 +619,94 @@ $tools = [
 $content = '';
 
 switch ($report) {
+    case 'courses_usage':
+        $table = new SortableTableFromArray(
+            [],
+            0,
+            20,
+            'table_courses_usage',
+            null,
+            'table_courses_usage'
+        );
+
+        $perPage = (int) $table->per_page;
+        if ($perPage <= 0) {
+            $perPage = 20;
+        }
+
+        $first = max(0, ((int) $table->page_nr - 1) * $perPage);
+
+        $courses = CourseManager::get_course_list();
+        $coursesTotal = count($courses);
+        $endDate = (new DateTime())->format('Y-m-d');
+        $dateRanges = [
+            'day' => (new DateTime())->modify('-1 day')->format('Y-m-d'),
+            'week' => (new DateTime())->modify('-1 week')->format('Y-m-d'),
+            'month' => (new DateTime())->modify('-1 month')->format('Y-m-d'),
+            '6month' => (new DateTime())->modify('-6 month')->format('Y-m-d'),
+            'year' => (new DateTime())->modify('-1 year')->format('Y-m-d'),
+            '2year' => (new DateTime())->modify('-2 year')->format('Y-m-d'),
+            'total' => null,
+        ];
+
+        $data = [];
+        $index = 0;
+        foreach ($courses as $course) {
+            if ($index >= $first && $index < $first + $perPage) {
+                $courseId = (int) $course['id'];
+                $item = [];
+                $courseTotal = 0;
+                $sessions = 0;
+                foreach ($dateRanges as $key => $rangeStart) {
+                    $courseTotal = count(CourseManager::getAccessCourse($courseId, 0, 0, $rangeStart, $endDate));
+                    $sessions = count(CourseManager::getAccessCourse($courseId, 1, 0, $rangeStart, $endDate));
+                    $visit = count(CourseManager::getAccessCourse($courseId, 3, 0, $rangeStart, $endDate));
+                    $item[$key] = $sessions + $courseTotal;
+                }
+                $data[] = [
+                    Security::remove_XSS($course['title']),
+                    $item['day'],
+                    $item['week'],
+                    $item['month'],
+                    $item['6month'],
+                    $item['year'],
+                    $item['2year'],
+                    $courseTotal,
+                    $sessions,
+                    $item['total'],
+                ];
+            }
+            $index++;
+        }
+
+        $headers = [
+            get_lang('Course'),
+            get_lang('Today'),
+            get_lang('This week'),
+            get_lang('This month'),
+            '6 '.get_lang('months'),
+            '1 '.get_lang('Year'),
+            '2 '.get_lang('Years'),
+            get_lang('All time visits outside sessions'),
+            get_lang('All time visits in sessions'),
+            get_lang('All time visits total'),
+        ];
+
+        $table->total_number_of_items = $coursesTotal;
+        $table->table_data = $data;
+        $table->set_additional_parameters(['report' => 'courses_usage']);
+        $table->handlePagination = true;
+
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->set_header($column, $header, false);
+            $column++;
+        }
+
+        $content = '<h4>'.get_lang('Student visits per period, per course').'</h4>';
+        $content .= $table->return_table();
+
+        break;
     case 'duplicated_users':
         $dupMode = (string) ($_REQUEST['dup_mode'] ?? 'name');
         $allowedModes = ['name', 'email', 'extra'];

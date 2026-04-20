@@ -1,37 +1,57 @@
 .p-menu {
-  @apply bg-white px-0 py-2 border border-gray-25 rounded-sm w-52;
+  @apply bg-white px-0 py-2 border border-gray-25 rounded-lg min-w-52;
 
-  .p-menuitem-link {
-    @apply p-3 duration-150 select-none flex cursor-pointer items-center;
+  &-list {
+    @apply m-0 p-0 outline-none list-none flex flex-col gap-0;
+  }
 
-    .p-menuitem-text {
-      @apply text-body-2;
+  &-item {
+    &-content {
+      @apply overflow-hidden transition-colors text-gray-90;
     }
 
-    .p-menuitem-icon {
-      @apply mr-2 leading-none;
+    &-link {
+      @apply cursor-pointer flex items-center no-underline overflow-hidden relative select-none outline-none py-1 px-4 gap-1;
     }
 
-    .p-submenu-icon {
+    &-label {
+      @apply text-body-1;
     }
 
-    &:not(.p-disabled) {
-      &:hover {
-        @apply bg-gray-15;
+    &-icon {
+      @apply text-gray-90;
+    }
 
-        .p-menuitem-text {
-        }
+    &.p-focus {
+      .p-menu-item-content {
+        @apply bg-gray-15 text-gray-90;
+      }
 
-        .p-menuitem-icon {
-        }
-
-        .p-submenu-icon {
-        }
+      .p-menu-item-icon {
+        @apply text-gray-90;
       }
     }
 
-    &:focus {
-      @apply outline-0 outline-offset-0 shadow-none;
+    &:not(.p-disabled) {
+      .p-menu-item-content:hover {
+        @apply text-primary bg-support-1;
+
+        .p-menu-item-icon {
+          @apply text-primary;
+        }
+      }
     }
+  }
+
+  &-overlay {
+    @apply mt-1 border-0 rounded-lg shadow-xl;
+  }
+
+  &-submenu-label {
+    @apply p-3 text-body-1 font-semibold py-1 px-4 bg-white text-gray-90;
+  }
+
+  &-separator {
+    @apply border-t border-t-gray-50 my-1;
   }
 }

@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'ज़ूम वीडियो कॉन्फ्रेंस';
+$strings['plugin_comment'] = 'कोर्स और सत्रों में ज़ूम वीडियो कॉन्फ्रेंस एकीकरण';
+
+$strings['apiKey'] = 'API कुंजी';
+$strings['apiSecret'] = 'API गुप्त कुंजी';
+$strings['verificationToken'] = 'सत्यापन टोकन';
+$strings['enableParticipantRegistration'] = 'प्रतिभागी पंजीकरण सक्षम करें';
+$strings['enableCloudRecording'] = 'स्वचालित रिकॉर्डिंग प्रकार';
+$strings['enableGlobalConference'] = 'वैश्विक कॉन्फ्रेंस सक्षम करें';
+$strings['enableGlobalConferencePerUser'] = 'प्रति उपयोगकर्ता वैश्विक कॉन्फ्रेंस सक्षम करें';
+$strings['globalConferenceAllowRoles'] = 'वैश्विक कॉन्फ्रेंस लिंक केवल इन उपयोगकर्ता भूमिकाओं के लिए दृश्यमान';
+$strings['globalConferencePerUserAllowRoles'] = 'प्रति उपयोगकर्ता वैश्विक कॉन्फ्रेंस लिंक केवल इन उपयोगकर्ता भूमिकाओं के लिए दृश्यमान';
+
+$strings['enableCloudRecording_help'] = 'भुगतान वाले ज़ूम प्रोफ़ाइल की आवश्यकता है।
+<em>मूलभूत</em> प्रोफ़ाइल के लिए काम नहीं करेगा।';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'सभी कोर्स छात्र पंजीकृत हो गए';
+$strings['Agenda'] = 'कार्यसूची';
+$strings['CannotRegisterWithoutEmailAddress'] = 'ईमेल पते के बिना पंजीकरण नहीं हो सकता';
+$strings['CopyingJoinURL'] = 'जॉइन URL कॉपी हो रहा है';
+$strings['CopyJoinAsURL'] = "'जॉइन ऐज़' URL कॉपी करें";
+$strings['CopyToCourse'] = 'कोर्स में कॉपी करें';
+$strings['CouldNotCopyJoinURL'] = 'जॉइन URL कॉपी नहीं हो सका';
+$strings['Course'] = 'कोर्स';
+$strings['CreatedAt'] = 'निर्मित तिथि';
+$strings['CreateLinkInCourse'] = 'कोर्स में लिंक बनाएं';
+$strings['CreateUserVideoConference'] = 'उपयोगकर्ता कॉन्फ्रेंस बनाएं';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'मीटिंग हटाएं';
+$strings['DeleteFile'] = 'फ़ाइल(ें) हटाएं';
+$strings['Details'] = 'विवरण';
+$strings['DoIt'] = 'इसे करें';
+$strings['Duration'] = 'अवधि';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'अवधि (मिनटों में)';
+$strings['EndDate'] = 'समाप्ति तिथि';
+$strings['EnterMeeting'] = 'मीटिंग में प्रवेश करें';
+$strings['ViewMeeting'] = 'मीटिंग देखें';
+$strings['Files'] = 'फ़ाइलें';
+$strings['Finished'] = 'समाप्त';
+$strings['FileWasCopiedToCourse'] = 'फ़ाइल कोर्स में कॉपी हो गई';
+$strings['FileWasDeleted'] = 'फ़ाइल हटा दी गई';
+$strings['GlobalMeeting'] = 'वैश्विक कॉन्फ्रेंस';
+$strings['GlobalMeetingPerUser'] = 'प्रति उपयोगकर्ता वैश्विक कॉन्फ्रेंस';
+$strings['GroupUsersWereRegistered'] = 'समूह सदस्य पंजीकृत हो गए';
+$strings['InstantMeeting'] = 'तात्कालिक मीटिंग';
+$strings['Join'] = 'जॉइन करें';
+$strings['JoinGlobalVideoConference'] = 'वैश्विक कॉन्फ्रेंस में जॉइन करें';
+$strings['JoinURLCopied'] = 'जॉइन URL कॉपी हो गया';
+$strings['JoinURLToSendToParticipants'] = 'प्रतिभागियों को भेजने के लिए जॉइन URL';
+$strings['LiveMeetings'] = 'लाइव मीटिंग्स';
+$strings['LinkToFileWasCreatedInCourse'] = 'फ़ाइल का लिंक कोर्स में जोड़ा गया';
+$strings['MeetingDeleted'] = 'मीटिंग हटा दी गई';
+$strings['MeetingsFound'] = 'मीटिंग्स मिलीं';
+$strings['MeetingUpdated'] = 'मीटिंग अपडेट हुई';
+$strings['NewMeetingCreated'] = 'नई मीटिंग बनाई गई';
+$strings['Password'] = 'पासवर्ड';
+$strings['RecurringWithFixedTime'] = 'निश्चित समय के साथ आवर्ती';
+$strings['RecurringWithNoFixedTime'] = 'निश्चित समय के बिना आवर्ती';
+$strings['RegisterAllCourseUsers'] = 'सभी कोर्स उपयोगकर्ताओं को पंजीकृत करें';
+$strings['RegisteredUserListWasUpdated'] = 'पंजीकृत उपयोगकर्ता सूची अपडेट हुई';
+$strings['RegisteredUsers'] = 'पंजीकृत उपयोगकर्ता';
+$strings['RegisterNoUser'] = 'कोई उपयोगकर्ता पंजीकृत न करें';
+$strings['RegisterTheseGroupMembers'] = 'इन समूह सदस्यों को पंजीकृत करें';
+$strings['ScheduleAMeeting'] = 'मीटिंग शेड्यूल करें';
+$strings['ScheduledMeeting'] = 'शेड्यूल्ड मीटिंग';
+$strings['ScheduledMeetings'] = 'शेड्यूल्ड मीटिंग्स';
+$strings['ScheduleAMeeting'] = 'मीटिंग शेड्यूल करें';
+$strings['SearchMeeting'] = 'मीटिंग खोजें';
+$strings['Session'] = 'सत्र';
+$strings['StartDate'] = 'प्रारंभ तिथि';
+$strings['Started'] = 'शुरू हुई';
+$strings['StartInstantMeeting'] = 'तत्काल मीटिंग शुरू करें';
+$strings['StartMeeting'] = 'मीटिंग शुरू करें';
+$strings['StartTime'] = 'प्रारंभ समय';
+$strings['Topic'] = 'विषय';
+$strings['TopicAndAgenda'] = 'विषय और एजेंडा';
+$strings['Type'] = 'प्रकार';
+$strings['UpcomingMeetings'] = 'आगामी मीटिंग्स';
+$strings['UpdateMeeting'] = 'मीटिंग अपडेट करें';
+$strings['UpdateRegisteredUserList'] = 'पंजीकृत उपयोगकर्ता सूची अपडेट करें';
+$strings['UserRegistration'] = 'उपयोगकर्ता पंजीकरण';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'प्रतीक्षा';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s मीटिंग %s की %s से रिकॉर्डिंग (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'आप इस मीटिंग में पंजीकृत नहीं हैं';
+$strings['ZoomVideoConferences'] = 'ज़ूम वीडियो कॉन्फ्रेंस';
+$strings['Recordings'] = 'रिकॉर्डिंग्स';
+$strings['CreateGlobalVideoConference'] = 'वैश्विक वीडियो कॉन्फ्रेंस बनाएं';
+$strings['ConferenceNotStarted'] = 'कॉन्फ्रेंस शुरू नहीं हुई';
+$strings['MeetingNotFound'] = 'मीटिंग नहीं मिली';
+$strings['JoinURLNotAvailable'] = 'URL उपलब्ध नहीं';
+$strings['Meetings'] = 'मीटिंग्स';
+$strings['ConferenceType'] = 'कॉन्फ्रेंस प्रकार';
+$strings['ForEveryone'] = 'सभी';
+$strings['SomeUsers'] = 'कुछ उपयोगकर्ता (बाद में चुनें)';
+$strings['Activity'] = 'गतिविधि';
+$strings['ConferenceNotAvailable'] = 'कॉन्फ्रेंस उपलब्ध नहीं';

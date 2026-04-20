@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
- * Class learnpathItem
  * lp_item defines items belonging to a learnpath. Each item has a name,
  * a score, a use time and additional information that enables tracking a user's
  * progress in a learning path.
@@ -27,9 +26,10 @@ class learnpathItem
     public $current_stop_time;
     public $current_data = '';
     public $db_id;
-    public $db_item_view_id = '';
+    public ?int $db_item_view_id;
     public $description = '';
     public $file;
+
     /**
      * At the moment, interactions are just an array of arrays with a structure
      * of 8 text fields: id(0), type(1), time(2), weighting(3),
@@ -68,9 +68,10 @@ class learnpathItem
     public $seriousgame_mode;
     public $ref;
     public $save_on_close = true;
-    public $search_did = null;
+    public $search_did;
     public $status;
     public $title;
+
     /**
      * Type attribute can contain one of
      * link|student_publication|dir|quiz|document|forum|thread.
@@ -81,7 +82,7 @@ class learnpathItem
     public $view_max_score;
     public $courseInfo;
     public $courseId;
-    //var used if absolute session time mode is used
+    // var used if absolute session time mode is used
     private $last_scorm_session_time = 0;
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
@@ -162,7 +163,7 @@ class learnpathItem
         $this->oldTotalTime = 0;
         $this->view_max_score = 0;
         $this->seriousgame_mode = 0;
-        //$this->audio = self::fixAudio($row['audio']);
+        // $this->audio = self::fixAudio($row['audio']);
         $this->audio = $row['audio'];
         $this->launch_data = $row['launch_data'];
         $this->save_on_close = true;
@@ -181,38 +182,38 @@ class learnpathItem
                 }
             }
 
-/*
-	    // Xapian full text search does not work
-	    // and if the option is activated it generates an error
-	    // So I comment this part of the code to avoid unnecesary errors
-            // Get search_did.
-            if ('true' === api_get_setting('search_enabled')) {
-                $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-                $sql = 'SELECT *
-                        FROM %s
-                        WHERE
-                            course_code=\'%s\' AND
-                            tool_id=\'%s\' AND
-                            ref_id_high_level=%s AND
-                            ref_id_second_level=%d
-                        LIMIT 1';
-                // TODO: Verify if it's possible to assume the actual course instead
-                // of getting it from db.
-                $sql = sprintf(
-                    $sql,
-                    $tbl_se_ref,
-                    api_get_course_id(),
-                    TOOL_LEARNPATH,
-                    $this->lp_id,
-                    $id
-                );
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    $se_ref = Database::fetch_array($res);
-                    $this->search_did = (int) $se_ref['search_did'];
-                }
-            }
-*/
+            /*
+                    // Xapian full text search does not work
+                    // and if the option is activated it generates an error
+                    // So I comment this part of the code to avoid unnecesary errors
+                        // Get search_did.
+                        if ('true' === api_get_setting('search_enabled')) {
+                            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
+                            $sql = 'SELECT *
+                                    FROM %s
+                                    WHERE
+                                        course_code=\'%s\' AND
+                                        tool_id=\'%s\' AND
+                                        ref_id_high_level=%s AND
+                                        ref_id_second_level=%d
+                                    LIMIT 1';
+                            // TODO: Verify if it's possible to assume the actual course instead
+                            // of getting it from db.
+                            $sql = sprintf(
+                                $sql,
+                                $tbl_se_ref,
+                                api_get_course_id(),
+                                TOOL_LEARNPATH,
+                                $this->lp_id,
+                                $id
+                            );
+                            $res = Database::query($sql);
+                            if (Database::num_rows($res) > 0) {
+                                $se_ref = Database::fetch_array($res);
+                                $this->search_did = (int) $se_ref['search_did'];
+                            }
+                        }
+            */
         }
     }
 
@@ -228,9 +229,8 @@ class learnpathItem
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
         if (file_exists($file)) {
             $audio = '/audio/'.$audio;
-            $audio = str_replace('//', '/', $audio);
 
-            return $audio;
+            return str_replace('//', '/', $audio);
         }
 
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$audio;
@@ -250,7 +250,7 @@ class learnpathItem
      *                      id(0), type(1), time(2), weighting(3), correct_responses(4),
      *                      student_response(5), result(6), latency(7)
      */
-    public function add_interaction($index, $params)
+    public function add_interaction($index, $params): void
     {
         $this->interactions[$index] = $params;
         // Take the current maximum index to generate the interactions_count.
@@ -264,6 +264,8 @@ class learnpathItem
      *
      * @param    array    Array of parameters:
      * id(0), status(1), score_raw(2), score_max(3), score_min(4)
+     * @param mixed $index
+     * @param mixed $params
      */
     public function add_objective($index, $params)
     {
@@ -281,8 +283,6 @@ class learnpathItem
      * Closes/stops the item viewing. Finalises runtime values.
      * If required, save to DB.
      *
-     * @param bool $prerequisitesCheck Needed to check if asset can be set as completed or not
-     *
      * @return bool True on success, false otherwise
      */
     public function close()
@@ -292,8 +292,8 @@ class learnpathItem
         $type = $this->get_type();
         if ($debug) {
             error_log('Start - learnpathItem:close');
-            error_log("Type: ".$type);
-            error_log("get_id: ".$this->get_id());
+            error_log('Type: '.$type);
+            error_log('get_id: '.$this->get_id());
         }
         if ('sco' !== $type) {
             if (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type) {
@@ -301,12 +301,11 @@ class learnpathItem
                     true,
                     true
                 ); // Update status (second option forces the update).
-            } else {
-                /*$this->status = $this->possible_status[2];
-                if (self::DEBUG) {
-                    error_log("STATUS changed to: ".$this->status);
-                }*/
             }
+            /*$this->status = $this->possible_status[2];
+            if (self::DEBUG) {
+                error_log("STATUS changed to: ".$this->status);
+            }*/
         }
         if ($this->save_on_close) {
             if ($debug) {
@@ -348,7 +347,7 @@ class learnpathItem
         Database::query($sql);
 
         if ('true' == api_get_setting('search_enabled')) {
-            if (!is_null($this->search_did)) {
+            if (null !== $this->search_did) {
                 $di = new ChamiloIndexer();
                 $di->remove_document($this->search_did);
             }
@@ -362,7 +361,7 @@ class learnpathItem
      *
      * @return int attempt_id for this item view by this user or 1 if none defined
      */
-    public function get_attempt_id()
+    public function get_attempt_id(): int
     {
         $res = 1;
         if (!empty($this->attempt_id)) {
@@ -429,9 +428,9 @@ class learnpathItem
                     0
                 );
             }
-            //0=not attempted - 1 = incomplete
-            if ($status != $this->possible_status[0] &&
-                $status != $this->possible_status[1]
+            // 0=not attempted - 1 = incomplete
+            if ($status != $this->possible_status[0]
+                && $status != $this->possible_status[1]
             ) {
                 $credit = 'no-credit';
             }
@@ -489,14 +488,16 @@ class learnpathItem
         if (empty($path)) {
             if ('dir' == $type) {
                 return '';
-            } else {
-                return '-1';
             }
-        } elseif ($path == strval(intval($path))) {
+
+            return '-1';
+        }
+        if ($path == (string) ((int) $path)) {
             // The path is numeric, so it is a reference to a Chamilo object.
             switch ($type) {
                 case 'dir':
                     return '';
+
                 case TOOL_DOCUMENT:
                 case 'video':
                     $table_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -505,9 +506,9 @@ class learnpathItem
                             WHERE iid = '.$path;
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
-                    $real_path = 'document'.$row['path'];
 
-                    return $real_path;
+                    return 'document'.$row['path'];
+
                 case TOOL_STUDENTPUBLICATION:
                 case TOOL_QUIZ:
                 case TOOL_FORUM:
@@ -535,6 +536,7 @@ class learnpathItem
         if (!empty($this->db_id)) {
             return $this->db_id;
         }
+
         // TODO: Check this return value is valid for children classes (SCORM?).
         return 0;
     }
@@ -544,16 +546,16 @@ class learnpathItem
      * If object interactions exist, they will be overwritten by this function,
      * using the database elements only.
      */
-    public function load_interactions()
+    public function load_interactions(): void
     {
         $this->interactions = [];
         $courseId = $this->courseId;
         $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = "SELECT id FROM $tbl
                 WHERE
-                    lp_item_id = ".$this->db_id." AND
-                    lp_view_id = ".$this->view_id." AND
-                    view_count = ".$this->get_view_count();
+                    lp_item_id = ".$this->db_id.' AND
+                    lp_view_id = '.$this->view_id.' AND
+                    view_count = '.$this->get_view_count();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -595,9 +597,9 @@ class learnpathItem
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT iid FROM $tbl
                     WHERE
-                        lp_item_id = ".$this->db_id." AND
-                        lp_view_id = ".$this->view_id." AND
-                        view_count = ".$this->get_attempt_id();
+                        lp_item_id = ".$this->db_id.' AND
+                        lp_view_id = '.$this->view_id.' AND
+                        view_count = '.$this->get_attempt_id();
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -765,20 +767,18 @@ class learnpathItem
         if ('sco' === $this->type) {
             if (!empty($this->view_max_score) && $this->view_max_score > 0) {
                 return $this->view_max_score;
-            } else {
-                if (!empty($this->max_score)) {
-                    return $this->max_score;
-                }
-
-                return 100;
             }
-        } else {
             if (!empty($this->max_score)) {
                 return $this->max_score;
             }
 
             return 100;
         }
+        if (!empty($this->max_score)) {
+            return $this->max_score;
+        }
+
+        return 100;
     }
 
     /**
@@ -820,6 +820,7 @@ class learnpathItem
         if (!empty($this->parent)) {
             return $this->parent;
         }
+
         // TODO: Check this return value is valid for children classes (SCORM?).
         return null;
     }
@@ -879,10 +880,10 @@ class learnpathItem
                     }
 
                     return false;
-                } else {
-                    $row = Database::fetch_array($res);
-                    $this->prevent_reinit = $row['prevent_reinit'];
                 }
+
+                $row = Database::fetch_array($res);
+                $this->prevent_reinit = $row['prevent_reinit'];
             } else {
                 // Prevent reinit is always 1 by default - see learnpath.class.php
                 $this->prevent_reinit = 1;
@@ -917,12 +918,12 @@ class learnpathItem
                     $this->error = 'Could not find parent learnpath in learnpath table';
 
                     return false;
-                } else {
-                    $row = Database::fetch_array($res);
-                    $this->seriousgame_mode = isset($row['seriousgame_mode']) ? $row['seriousgame_mode'] : 0;
                 }
+
+                $row = Database::fetch_array($res);
+                $this->seriousgame_mode = isset($row['seriousgame_mode']) ? $row['seriousgame_mode'] : 0;
             } else {
-                $this->seriousgame_mode = 0; //SeriousGame mode is always off by default
+                $this->seriousgame_mode = 0; // SeriousGame mode is always off by default
             }
         }
 
@@ -973,6 +974,7 @@ class learnpathItem
         }
 
         $files_list = [];
+
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
@@ -1017,17 +1019,17 @@ class learnpathItem
 
                                 foreach ($sources as $source) {
                                     // Skip what is obviously not a resource.
-                                    if (strpos($source, "+this.")) {
+                                    if (strpos($source, '+this.')) {
                                         continue;
                                     } // javascript code - will still work unaltered.
-                                    if (false === strpos($source, '.')) {
+                                    if (!str_contains($source, '.')) {
                                         continue;
                                     } // No dot, should not be an external file anyway.
                                     if (strpos($source, 'mailto:')) {
                                         continue;
                                     } // mailto link.
-                                    if (strpos($source, ';') &&
-                                        !strpos($source, '&amp;')
+                                    if (strpos($source, ';')
+                                        && !strpos($source, '&amp;')
                                     ) {
                                         continue;
                                     } // Avoid code - that should help.
@@ -1066,7 +1068,7 @@ class learnpathItem
                                                     'rel',
                                                 ];
                                             }
-                                        } elseif (0 === strpos($source, 'flv=')) {
+                                        } elseif (str_starts_with($source, 'flv=')) {
                                             $source = substr($source, 4);
                                             if (strpos($source, '&') > 0) {
                                                 $source = substr(
@@ -1076,7 +1078,7 @@ class learnpathItem
                                                 );
                                             }
                                             if (strpos($source, '://') > 0) {
-                                                if (false !== strpos($source, api_get_path(WEB_PATH))) {
+                                                if (str_contains($source, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $source,
@@ -1098,8 +1100,9 @@ class learnpathItem
                                                     'abs',
                                                 ];
                                             }
+
                                             continue; // Skipping anything else to avoid two entries
-                                            //(while the others can have sub-files in their url, flv's can't).
+                                            // (while the others can have sub-files in their url, flv's can't).
                                         }
                                     }
 
@@ -1126,7 +1129,7 @@ class learnpathItem
                                                     $pos1 + 1,
                                                     $pos2 - ($pos1 + 1)
                                                 );
-                                                if (false !== strpos($second_part, api_get_path(WEB_PATH))) {
+                                                if (str_contains($second_part, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $second_part,
@@ -1235,7 +1238,7 @@ class learnpathItem
                                                 strpos($source, '?')
                                             );
                                             if (strpos($source, '://') > 0) {
-                                                if (false !== strpos($source, api_get_path(WEB_PATH))) {
+                                                if (str_contains($source, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $source,
@@ -1340,7 +1343,7 @@ class learnpathItem
                                         }
 
                                         // Found some protocol there.
-                                        if (false !== strpos($source, api_get_path(WEB_PATH))) {
+                                        if (str_contains($source, api_get_path(WEB_PATH))) {
                                             // We found the current portal url.
                                             $files_list[] = [
                                                 $source,
@@ -1410,8 +1413,8 @@ class learnpathItem
                                             }
                                         } else {
                                             // No starting '/', making it relative to current document's path.
-                                            if (strpos($source, 'width=') ||
-                                                strpos($source, 'autostart=')
+                                            if (strpos($source, 'width=')
+                                                || strpos($source, 'autostart=')
                                             ) {
                                                 continue;
                                             }
@@ -1447,12 +1450,15 @@ class learnpathItem
                                 }
                             }
                         }
+
                         break;
+
                     default:
                         break;
                 }
 
                 break;
+
             default: // Ignore.
                 break;
         }
@@ -1495,8 +1501,10 @@ class learnpathItem
      *                           value with what's been found in DB
      *
      * @return string Current status or 'Not attempted' if no status set yet
+     *
+     * @throws Exception
      */
-    public function get_status($check_db = true, $update_local = false)
+    public function get_status(?bool $check_db = true, ?bool $update_local = false): string
     {
         $debug = self::DEBUG;
         if ($debug) {
@@ -1510,8 +1518,8 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE
-                            iid = '".$this->db_item_view_id."' AND
-                            view_count = '".$this->get_attempt_id()."'";
+                            iid = ".$this->db_item_view_id.' AND
+                            view_count = '.$this->get_attempt_id();
                 $res = Database::query($sql);
                 if (1 == Database::num_rows($res)) {
                     $row = Database::fetch_array($res);
@@ -1605,7 +1613,7 @@ class learnpathItem
                 $sql = "SELECT start_time, total_time
                         FROM $table
                         WHERE
-                            iid = '".$this->db_item_view_id."' AND
+                            iid = ".$this->db_item_view_id." AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
@@ -1631,9 +1639,8 @@ class learnpathItem
                 0
             );
         }
-        $time = api_format_time($time, $origin);
 
-        return $time;
+        return api_format_time($time, $origin);
     }
 
     /**
@@ -1645,7 +1652,7 @@ class learnpathItem
     {
         $table = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $table
-                WHERE iid = ".intval($this->db_id);
+                WHERE iid = ".(int) $this->db_id;
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -1693,8 +1700,8 @@ class learnpathItem
             $this->current_start_time = time();
         }
 
-        if (time() < $this->current_stop_time ||
-            0 == $this->current_stop_time
+        if (time() < $this->current_stop_time
+            || 0 == $this->current_stop_time
         ) {
             if ($debug) {
                 error_log(
@@ -1720,17 +1727,16 @@ class learnpathItem
             }
 
             return 0;
-        } else {
-            $time = $this->fixAbusiveTime($time);
-            if ($debug) {
-                error_log(
-                    'Current start time = '.$this->current_start_time.', current stop time = '.
-                    $this->current_stop_time.' Returning '.$time."-----------\n"
-                );
-            }
-
-            return $time;
         }
+        $time = $this->fixAbusiveTime($time);
+        if ($debug) {
+            error_log(
+                'Current start time = '.$this->current_start_time.', current stop time = '.
+                $this->current_stop_time.' Returning '.$time."-----------\n"
+            );
+        }
+
+        return $time;
     }
 
     /**
@@ -1755,58 +1761,57 @@ class learnpathItem
             $fixedAddedMinute = 5 * 60; // Add only 5 minutes
             if ($time > $sessionLifetime) {
                 error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
-                $time = $fixedAddedMinute;
-            }
-
-            return $time;
-        } else {
-            // Calulate minimum and accumulated time
-            $user_id = api_get_user_id();
-            $myLP = learnpath::getLpFromSession(api_get_course_int_id(), $this->lp_id, $user_id);
-            $timeLp = $myLP->getAccumulateWorkTime();
-            $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
-            /*
-            $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
-            $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
-            */
-            // Minimum connection percentage
-            $perc = 100;
-            // Time from the course
-            $tc = $timeTotalCourse;
-            /*if (!empty($sessionId) && $sessionId != 0) {
-                $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    $aux = Database::fetch_assoc($res);
-                    $perc = $aux['perc'];
-                    $tc = $aux['hours'] * 60;
-                }
-            }*/
-            // Percentage of the learning paths
-            $pl = 0;
-            if (!empty($timeTotalCourse)) {
-                $pl = $timeLp / $timeTotalCourse;
-            }
-
-            // Minimum time for each learning path
-            $accumulateWorkTime = ($pl * $tc * $perc / 100);
-            $time_seg = intval($accumulateWorkTime * 60);
-
-            if ($time_seg < $sessionLifetime) {
-                $sessionLifetime = $time_seg;
-            }
-
-            if ($time > $sessionLifetime) {
-                $fixedAddedMinute = $time_seg + mt_rand(0, 300);
-                if (self::DEBUG > 2) {
-                    error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
-                }
+                error_log('item_id : '.$this->db_id.' lp_item_view.iid: '.$this->db_item_view_id);
                 $time = $fixedAddedMinute;
             }
 
             return $time;
         }
+        // Calulate minimum and accumulated time
+        $user_id = api_get_user_id();
+        $myLP = learnpath::getLpFromSession(api_get_course_int_id(), $this->lp_id, $user_id);
+        $timeLp = $myLP->getAccumulateWorkTime();
+        $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
+        /*
+        $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+        $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+        */
+        // Minimum connection percentage
+        $perc = 100;
+        // Time from the course
+        $tc = $timeTotalCourse;
+        /*if (!empty($sessionId) && $sessionId != 0) {
+            $sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                $aux = Database::fetch_assoc($res);
+                $perc = $aux['perc'];
+                $tc = $aux['hours'] * 60;
+            }
+        }*/
+        // Percentage of the learning paths
+        $pl = 0;
+        if (!empty($timeTotalCourse)) {
+            $pl = $timeLp / $timeTotalCourse;
+        }
+
+        // Minimum time for each learning path
+        $accumulateWorkTime = ($pl * $tc * $perc / 100);
+        $time_seg = (int) ($accumulateWorkTime * 60);
+
+        if ($time_seg < $sessionLifetime) {
+            $sessionLifetime = $time_seg;
+        }
+
+        if ($time > $sessionLifetime) {
+            $fixedAddedMinute = $time_seg + mt_rand(0, 300);
+            if (self::DEBUG > 2) {
+                error_log("Total time is too big: $time replaced with: $fixedAddedMinute");
+            }
+            $time = $fixedAddedMinute;
+        }
+
+        return $time;
     }
 
     /**
@@ -1876,7 +1881,7 @@ class learnpathItem
             // If status is not attempted or incomplete, authorize retaking (of the same) anyway. Otherwise:
             if ($mystatus != $this->possible_status[0] && $mystatus != $this->possible_status[1]) {
                 $restart = -1;
-            } else { //status incompleted or not attempted
+            } else { // status incompleted or not attempted
                 $restart = 0;
             }
         } else {
@@ -1911,7 +1916,7 @@ class learnpathItem
             // loaded (for example as part of the table of contents).
             $stat = $this->get_status(true);
             if ($allow_new_attempt && isset($stat) && ($stat != $this->possible_status[0])) {
-                $this->attempt_id = $this->attempt_id + 1; // Open a new attempt.
+                ++$this->attempt_id; // Open a new attempt.
             }
             $this->status = $this->possible_status[1];
         } else {
@@ -1931,7 +1936,7 @@ class learnpathItem
      */
     public function output()
     {
-        if (!empty($this->path) and is_file($this->path)) {
+        if (!empty($this->path) && is_file($this->path)) {
             $output = '';
             $output .= file_get_contents($this->path);
 
@@ -1986,7 +1991,7 @@ class learnpathItem
             return false;
         }
 
-        while (false !== strpos($prereqs_string, '(')) {
+        while (str_contains($prereqs_string, '(')) {
             // Remove any () set and replace with its value.
             $matches = [];
             $res = preg_match_all(
@@ -2021,11 +2026,11 @@ class learnpathItem
 
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
-        if (false === strpos($prereqs_string, '|')) {
+        if (!str_contains($prereqs_string, '|')) {
             if ($debug) {
                 error_log('New LP - Didnt find any OR, looking for AND', 0);
             }
-            if (false !== strpos($prereqs_string, '&')) {
+            if (str_contains($prereqs_string, '&')) {
                 $list = explode('&', $prereqs_string);
                 if (count($list) > 1) {
                     $andstatus = true;
@@ -2044,6 +2049,7 @@ class learnpathItem
                                     0
                                 );
                             }
+
                             break;
                         }
                     }
@@ -2053,10 +2059,40 @@ class learnpathItem
                     }
 
                     return $andstatus;
-                } else {
-                    if (isset($items[$refs_list[$list[0]]])) {
-                        $status = $items[$refs_list[$list[0]]]->get_status(true);
-                        $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
+                }
+
+                if (isset($items[$refs_list[$list[0]]])) {
+                    $status = $items[$refs_list[$list[0]]]->get_status(true);
+                    $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
+                    if (empty($this->prereq_alert) && !$returnstatus) {
+                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                    }
+
+                    return $returnstatus;
+                }
+
+                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+
+                return false;
+            }
+            // No ORs found, now look for ANDs.
+            if ($debug) {
+                error_log('New LP - Didnt find any AND, looking for =', 0);
+            }
+
+            if (str_contains($prereqs_string, '=')) {
+                if ($debug) {
+                    error_log('New LP - Found =, looking into it', 0);
+                }
+
+                // We assume '=' signs only appear when there's nothing else around.
+                $params = explode('=', $prereqs_string);
+                if (2 == count($params)) {
+                    // Right number of operands.
+                    if (isset($items[$refs_list[$params[0]]])) {
+                        $status = $items[$refs_list[$params[0]]]->get_status(true);
+                        $returnstatus = $status == $params[1];
+
                         if (empty($this->prereq_alert) && !$returnstatus) {
                             $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                         }
@@ -2068,272 +2104,261 @@ class learnpathItem
                     return false;
                 }
             } else {
-                // No ORs found, now look for ANDs.
+                // No ANDs found, look for <>
                 if ($debug) {
-                    error_log('New LP - Didnt find any AND, looking for =', 0);
+                    error_log(
+                        'New LP - Didnt find any =, looking for <>',
+                        0
+                    );
                 }
 
-                if (false !== strpos($prereqs_string, '=')) {
+                if (str_contains($prereqs_string, '<>')) {
                     if ($debug) {
-                        error_log('New LP - Found =, looking into it', 0);
+                        error_log('New LP - Found <>, looking into it', 0);
                     }
-                    // We assume '=' signs only appear when there's nothing else around.
-                    $params = explode('=', $prereqs_string);
+
+                    // We assume '<>' signs only appear when there's nothing else around.
+                    $params = explode('<>', $prereqs_string);
                     if (2 == count($params)) {
                         // Right number of operands.
                         if (isset($items[$refs_list[$params[0]]])) {
                             $status = $items[$refs_list[$params[0]]]->get_status(true);
-                            $returnstatus = $status == $params[1];
+                            $returnstatus = $status != $params[1];
+
                             if (empty($this->prereq_alert) && !$returnstatus) {
                                 $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                             }
 
                             return $returnstatus;
                         }
+
                         $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
 
                         return false;
                     }
                 } else {
-                    // No ANDs found, look for <>
+                    // No <> found, look for ~ (unary)
                     if ($debug) {
                         error_log(
-                            'New LP - Didnt find any =, looking for <>',
+                            'New LP - Didnt find any =, looking for ~',
                             0
                         );
                     }
 
-                    if (false !== strpos($prereqs_string, '<>')) {
-                        if ($debug) {
-                            error_log('New LP - Found <>, looking into it', 0);
-                        }
-                        // We assume '<>' signs only appear when there's nothing else around.
-                        $params = explode('<>', $prereqs_string);
-                        if (2 == count($params)) {
-                            // Right number of operands.
-                            if (isset($items[$refs_list[$params[0]]])) {
-                                $status = $items[$refs_list[$params[0]]]->get_status(true);
-                                $returnstatus = $status != $params[1];
-                                if (empty($this->prereq_alert) && !$returnstatus) {
-                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                }
-
-                                return $returnstatus;
-                            }
-                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-
-                            return false;
-                        }
-                    } else {
-                        // No <> found, look for ~ (unary)
+                    // Only remains: ~ and X*{}
+                    if (str_contains($prereqs_string, '~')) {
+                        // Found NOT.
                         if ($debug) {
                             error_log(
-                                'New LP - Didnt find any =, looking for ~',
+                                'New LP - Found ~, looking into it',
                                 0
                             );
                         }
-                        // Only remains: ~ and X*{}
-                        if (false !== strpos($prereqs_string, '~')) {
-                            // Found NOT.
-                            if ($debug) {
-                                error_log(
-                                    'New LP - Found ~, looking into it',
-                                    0
-                                );
-                            }
-                            $list = [];
-                            $myres = preg_match(
-                                '/~([^(\d+\*)\{]*)/',
-                                $prereqs_string,
-                                $list
-                            );
-                            if ($myres) {
-                                $returnstatus = !$this->parse_prereq(
-                                    $list[1],
-                                    $items,
-                                    $refs_list,
-                                    $user_id
-                                );
-                                if (empty($this->prereq_alert) && !$returnstatus) {
-                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                }
 
-                                return $returnstatus;
-                            } else {
-                                // Strange...
+                        $list = [];
+                        $myres = preg_match(
+                            '/~([^(\d+\*)\{]*)/',
+                            $prereqs_string,
+                            $list
+                        );
+
+                        if ($myres) {
+                            $returnstatus = !$this->parse_prereq(
+                                $list[1],
+                                $items,
+                                $refs_list,
+                                $user_id
+                            );
+
+                            if (empty($this->prereq_alert) && !$returnstatus) {
+                                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                            }
+
+                            return $returnstatus;
+                        }
+
+                        // Strange...
+                        if ($debug) {
+                            error_log(
+                                'New LP - Found ~ but strange string: '.$prereqs_string,
+                                0
+                            );
+                        }
+                    } else {
+                        // Finally, look for sets/groups
+                        if ($debug) {
+                            error_log(
+                                'New LP - Didnt find any ~, looking for groups',
+                                0
+                            );
+                        }
+
+                        // Only groups here.
+                        $groups = [];
+                        $groups_there = preg_match_all(
+                            '/((\d+\*)?\{([^\}]+)\}+)/',
+                            $prereqs_string,
+                            $groups
+                        );
+
+                        if ($groups_there) {
+                            foreach ($groups[1] as $gr) {
+                                // Only take the results that correspond to
+                                //  the big brackets-enclosed condition.
                                 if ($debug) {
                                     error_log(
-                                        'New LP - Found ~ but strange string: '.$prereqs_string,
+                                        'New LP - Dealing with group '.$gr,
                                         0
                                     );
                                 }
-                            }
-                        } else {
-                            // Finally, look for sets/groups
-                            if ($debug) {
-                                error_log(
-                                    'New LP - Didnt find any ~, looking for groups',
-                                    0
-                                );
-                            }
-                            // Only groups here.
-                            $groups = [];
-                            $groups_there = preg_match_all(
-                                '/((\d+\*)?\{([^\}]+)\}+)/',
-                                $prereqs_string,
-                                $groups
-                            );
-
-                            if ($groups_there) {
-                                foreach ($groups[1] as $gr) {
-                                    // Only take the results that correspond to
-                                    //  the big brackets-enclosed condition.
+                                $multi = [];
+                                $mycond = false;
+                                if (preg_match(
+                                    '/(\d+)\*\{([^\}]+)\}/',
+                                    $gr,
+                                    $multi
+                                )) {
                                     if ($debug) {
                                         error_log(
-                                            'New LP - Dealing with group '.$gr,
+                                            'New LP - Found multiplier '.$multi[0],
                                             0
                                         );
                                     }
-                                    $multi = [];
-                                    $mycond = false;
-                                    if (preg_match(
-                                        '/(\d+)\*\{([^\}]+)\}/',
-                                        $gr,
-                                        $multi
-                                    )
-                                    ) {
-                                        if ($debug) {
-                                            error_log(
-                                                'New LP - Found multiplier '.$multi[0],
-                                                0
-                                            );
-                                        }
-                                        $count = $multi[1];
-                                        $list = explode(',', $multi[2]);
-                                        $mytrue = 0;
-                                        foreach ($list as $cond) {
-                                            if (isset($items[$refs_list[$cond]])) {
-                                                $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] ||
-                                                    $status == $this->possible_status[3]
-                                                ) {
-                                                    $mytrue++;
-                                                    if ($debug) {
-                                                        error_log(
-                                                            'New LP - Found true item, counting.. ('.($mytrue).')',
-                                                            0
-                                                        );
-                                                    }
-                                                }
-                                            } else {
+
+                                    $count = $multi[1];
+                                    $list = explode(',', $multi[2]);
+                                    $mytrue = 0;
+                                    foreach ($list as $cond) {
+                                        if (isset($items[$refs_list[$cond]])) {
+                                            $status = $items[$refs_list[$cond]]->get_status(true);
+                                            if ($status == $this->possible_status[2]
+                                                || $status == $this->possible_status[3]
+                                            ) {
+                                                $mytrue++;
+
                                                 if ($debug) {
                                                     error_log(
-                                                        'New LP - item '.$cond.' does not exist in items list',
+                                                        'New LP - Found true item, counting.. ('.$mytrue.')',
                                                         0
                                                     );
                                                 }
                                             }
-                                        }
-                                        if ($mytrue >= $count) {
-                                            if ($debug) {
-                                                error_log(
-                                                    'New LP - Got enough true results, return true',
-                                                    0
-                                                );
-                                            }
-                                            $mycond = true;
                                         } else {
                                             if ($debug) {
                                                 error_log(
-                                                    'New LP - Not enough true results',
+                                                    'New LP - item '.$cond.' does not exist in items list',
                                                     0
                                                 );
                                             }
                                         }
-                                    } else {
+                                    }
+                                    if ($mytrue >= $count) {
                                         if ($debug) {
                                             error_log(
-                                                'New LP - No multiplier',
+                                                'New LP - Got enough true results, return true',
                                                 0
                                             );
                                         }
-                                        $list = explode(',', $gr);
                                         $mycond = true;
-                                        foreach ($list as $cond) {
-                                            if (isset($items[$refs_list[$cond]])) {
-                                                $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] ||
-                                                    $status == $this->possible_status[3]
-                                                ) {
-                                                    $mycond = true;
-                                                    if ($debug) {
-                                                        error_log(
-                                                            'New LP - Found true item',
-                                                            0
-                                                        );
-                                                    }
-                                                } else {
-                                                    if ($debug) {
-                                                        error_log(
-                                                            'New LP - '.
-                                                            ' Found false item, the set is not true, return false',
-                                                            0
-                                                        );
-                                                    }
-                                                    $mycond = false;
-                                                    break;
+                                    } else {
+                                        if ($debug) {
+                                            error_log(
+                                                'New LP - Not enough true results',
+                                                0
+                                            );
+                                        }
+                                    }
+                                } else {
+                                    if ($debug) {
+                                        error_log(
+                                            'New LP - No multiplier',
+                                            0
+                                        );
+                                    }
+                                    $list = explode(',', $gr);
+                                    $mycond = true;
+
+                                    foreach ($list as $cond) {
+                                        if (isset($items[$refs_list[$cond]])) {
+                                            $status = $items[$refs_list[$cond]]->get_status(true);
+
+                                            if ($status == $this->possible_status[2]
+                                                || $status == $this->possible_status[3]
+                                            ) {
+                                                $mycond = true;
+
+                                                if ($debug) {
+                                                    error_log(
+                                                        'New LP - Found true item',
+                                                        0
+                                                    );
                                                 }
                                             } else {
                                                 if ($debug) {
                                                     error_log(
-                                                        'New LP - item '.$cond.' does not exist in items list',
+                                                        'New LP - '.
+                                                        ' Found false item, the set is not true, return false',
                                                         0
                                                     );
                                                 }
-                                                if ($debug) {
-                                                    error_log(
-                                                        'New LP - Found false item, the set is not true, return false',
-                                                        0
-                                                    );
-                                                }
+
                                                 $mycond = false;
+
                                                 break;
                                             }
+                                        } else {
+                                            if ($debug) {
+                                                error_log(
+                                                    'New LP - item '.$cond.' does not exist in items list',
+                                                    0
+                                                );
+                                            }
+
+                                            if ($debug) {
+                                                error_log(
+                                                    'New LP - Found false item, the set is not true, return false',
+                                                    0
+                                                );
+                                            }
+
+                                            $mycond = false;
+
+                                            break;
                                         }
                                     }
-                                    if (!$mycond && empty($this->prereq_alert)) {
-                                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                    }
-
-                                    return $mycond;
                                 }
-                            } else {
-                                // Nothing found there either. Now return the
-                                // value of the corresponding resource completion status.
-                                if (isset($refs_list[$prereqs_string]) &&
-                                    isset($items[$refs_list[$prereqs_string]])
-                                ) {
-                                    /** @var learnpathItem $itemToCheck */
-                                    $itemToCheck = $items[$refs_list[$prereqs_string]];
+                                if (!$mycond && empty($this->prereq_alert)) {
+                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                }
 
-                                    if ('quiz' === $itemToCheck->type) {
-                                        // 1. Checking the status in current items.
-                                        $status = $itemToCheck->get_status(true);
-                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                                return $mycond;
+                            }
+                        } else {
+                            // Nothing found there either. Now return the
+                            // value of the corresponding resource completion status.
+                            if (isset($refs_list[$prereqs_string], $items[$refs_list[$prereqs_string]])
+                            ) {
+                                /** @var learnpathItem $itemToCheck */
+                                $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                        if (!$returnstatus) {
-                                            $explanation = sprintf(
-                                                get_lang('Item %s blocks this step'),
-                                                $itemToCheck->get_title()
-                                            );
-                                            $this->prereq_alert = $explanation;
-                                        }
+                                if ('quiz' === $itemToCheck->type) {
+                                    // 1. Checking the status in current items.
+                                    $status = $itemToCheck->get_status(true);
+                                    $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
-                                        // For one and first attempt.
-                                        if (1 == $this->prevent_reinit) {
-                                            // 2. If is completed we check the results in the DB of the quiz.
-                                            if ($returnstatus) {
-                                                $sql = 'SELECT score, max_score
+                                    if (!$returnstatus) {
+                                        $explanation = sprintf(
+                                            get_lang('Item %s blocks this step'),
+                                            $itemToCheck->get_title()
+                                        );
+                                        $this->prereq_alert = $explanation;
+                                    }
+
+                                    // For one and first attempt.
+                                    if (1 == $this->prevent_reinit) {
+                                        // 2. If is completed we check the results in the DB of the quiz.
+                                        if ($returnstatus) {
+                                            $sql = 'SELECT score, max_score
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
                                                             exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
@@ -2344,51 +2369,51 @@ class learnpathItem
                                                             c_id = '.$courseId.'
                                                         ORDER BY exe_date DESC
                                                         LIMIT 0, 1';
-                                                $rs_quiz = Database::query($sql);
-                                                if ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    /** @var learnpathItem $myItemToCheck */
-                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
-                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
-                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+                                            $rs_quiz = Database::query($sql);
+                                            if ($quiz = Database::fetch_array($rs_quiz)) {
+                                                /** @var learnpathItem $myItemToCheck */
+                                                $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                    if (isset($minScore) && isset($minScore)) {
-                                                        // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['score'] >= $minScore &&
-                                                            $quiz['score'] <= $maxScore
-                                                        ) {
-                                                            $returnstatus = true;
-                                                        } else {
-                                                            $explanation = sprintf(
-                                                                get_lang('Your result at %s blocks this step'),
-                                                                $itemToCheck->get_title()
-                                                            );
-                                                            $this->prereq_alert = $explanation;
-                                                            $returnstatus = false;
-                                                        }
+                                                if (isset($minScore, $minScore)) {
+                                                    // Taking min/max prerequisites values see BT#5776
+                                                    if ($quiz['score'] >= $minScore
+                                                        && $quiz['score'] <= $maxScore
+                                                    ) {
+                                                        $returnstatus = true;
                                                     } else {
-                                                        // Classic way
-                                                        if ($quiz['score'] >=
-                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
-                                                        ) {
-                                                            $returnstatus = true;
-                                                        } else {
-                                                            $explanation = sprintf(
-                                                                get_lang('Your result at %s blocks this step'),
-                                                                $itemToCheck->get_title()
-                                                            );
-                                                            $this->prereq_alert = $explanation;
-                                                            $returnstatus = false;
-                                                        }
+                                                        $explanation = sprintf(
+                                                            get_lang('Your result at %s blocks this step'),
+                                                            $itemToCheck->get_title()
+                                                        );
+                                                        $this->prereq_alert = $explanation;
+                                                        $returnstatus = false;
                                                     }
                                                 } else {
-                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                                    $returnstatus = false;
+                                                    // Classic way
+                                                    if ($quiz['score'] >=
+                                                        $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                    ) {
+                                                        $returnstatus = true;
+                                                    } else {
+                                                        $explanation = sprintf(
+                                                            get_lang('Your result at %s blocks this step'),
+                                                            $itemToCheck->get_title()
+                                                        );
+                                                        $this->prereq_alert = $explanation;
+                                                        $returnstatus = false;
+                                                    }
                                                 }
+                                            } else {
+                                                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                                $returnstatus = false;
                                             }
-                                        } else {
-                                            // 3. For multiple attempts we check that there are minimum 1 item completed
-                                            // Checking in the database.
-                                            $sql = 'SELECT score, max_score
+                                        }
+                                    } else {
+                                        // 3. For multiple attempts we check that there are minimum 1 item completed
+                                        // Checking in the database.
+                                        $sql = 'SELECT score, max_score
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
                                                         c_id = '.$courseId.' AND
@@ -2397,152 +2422,162 @@ class learnpathItem
                                                         orig_lp_id = '.$this->lp_id.' AND
                                                         orig_lp_item_id = '.$prereqs_string;
 
-                                            $rs_quiz = Database::query($sql);
-                                            if (Database::num_rows($rs_quiz) > 0) {
-                                                while ($quiz = Database::fetch_array($rs_quiz)) {
-                                                    /** @var learnpathItem $myItemToCheck */
-                                                    $myItemToCheck = $items[$refs_list[$this->get_id()]];
-                                                    $minScore = $myItemToCheck->getPrerequisiteMinScore();
-                                                    $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
+                                        $rs_quiz = Database::query($sql);
+                                        if (Database::num_rows($rs_quiz) > 0) {
+                                            while ($quiz = Database::fetch_array($rs_quiz)) {
+                                                /** @var learnpathItem $myItemToCheck */
+                                                $myItemToCheck = $items[$refs_list[$this->get_id()]];
+                                                $minScore = $myItemToCheck->getPrerequisiteMinScore();
+                                                $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                    if (empty($minScore)) {
-                                                        // Try with mastery_score
-                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
-                                                        if (!empty($masteryScoreAsMin)) {
-                                                            $minScore = $masteryScoreAsMin;
-                                                        }
-                                                    }
+                                                if (empty($minScore)) {
+                                                    // Try with mastery_score
+                                                    $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
 
-                                                    if (isset($minScore) && isset($minScore)) {
-                                                        // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
-                                                            $returnstatus = true;
-                                                            break;
-                                                        } else {
-                                                            $explanation = sprintf(
-                                                                get_lang('Your result at %s blocks this step'),
-                                                                $itemToCheck->get_title()
-                                                            );
-                                                            $this->prereq_alert = $explanation;
-                                                            $returnstatus = false;
-                                                        }
-                                                    } else {
-                                                        if ($quiz['score'] >=
-                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
-                                                        ) {
-                                                            $returnstatus = true;
-                                                            break;
-                                                        } else {
-                                                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                                            $returnstatus = false;
-                                                        }
+                                                    if (!empty($masteryScoreAsMin)) {
+                                                        $minScore = $masteryScoreAsMin;
                                                     }
                                                 }
-                                            } else {
-                                                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                                $returnstatus = false;
-                                            }
-                                        }
 
-                                        if (false === $returnstatus) {
-                                            // Check results from another sessions.
-                                            $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
-                                            if ($checkOtherSessions) {
-                                                $returnstatus = $this->getStatusFromOtherSessions(
-                                                    $user_id,
-                                                    $prereqs_string,
-                                                    $refs_list
-                                                );
-                                            }
-                                        }
+                                                if (isset($minScore, $minScore)) {
+                                                    // Taking min/max prerequisites values see BT#5776
+                                                    if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
+                                                        $returnstatus = true;
 
-                                        return $returnstatus;
-                                    } elseif ('student_publication' === $itemToCheck->type) {
-                                        $workId = $items[$refs_list[$prereqs_string]]->path;
-                                        $count = get_work_count_by_student($user_id, $workId);
-                                        if ($count >= 1) {
-                                            $returnstatus = true;
+                                                        break;
+                                                    }
+
+                                                    $explanation = sprintf(
+                                                        get_lang('Your result at %s blocks this step'),
+                                                        $itemToCheck->get_title()
+                                                    );
+                                                    $this->prereq_alert = $explanation;
+                                                    $returnstatus = false;
+                                                } else {
+                                                    if ($quiz['score'] >=
+                                                        $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                    ) {
+                                                        $returnstatus = true;
+
+                                                        break;
+                                                    }
+
+                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                                    $returnstatus = false;
+                                                }
+                                            }
                                         } else {
-                                            $returnstatus = false;
                                             $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                            $returnstatus = false;
                                         }
+                                    }
 
-                                        return $returnstatus;
-                                    } else {
-                                        $status = $itemToCheck->get_status(true);
-                                        if (self::DEBUG) {
-                                            error_log('Status:'.$status);
-                                        }
-                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
-
+                                    if (false === $returnstatus) {
                                         // Check results from another sessions.
                                         $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
-                                        if ($checkOtherSessions && !$returnstatus) {
+                                        if ($checkOtherSessions) {
                                             $returnstatus = $this->getStatusFromOtherSessions(
                                                 $user_id,
                                                 $prereqs_string,
                                                 $refs_list
                                             );
                                         }
+                                    }
 
-                                        if (!$returnstatus) {
-                                            $explanation = sprintf(
-                                                get_lang('Item %s blocks this step'),
-                                                $itemToCheck->get_title()
-                                            );
-                                            $this->prereq_alert = $explanation;
-                                        }
+                                    return $returnstatus;
+                                }
 
-                                        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                                        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+                                if ('student_publication' === $itemToCheck->type) {
+                                    $workId = $items[$refs_list[$prereqs_string]]->path;
+                                    $count = get_work_count_by_student($user_id, $workId);
 
-                                        if ($returnstatus && 1 == $this->prevent_reinit) {
-                                            $sql = "SELECT iid FROM $lp_view
+                                    if ($count >= 1) {
+                                        $returnstatus = true;
+                                    } else {
+                                        $returnstatus = false;
+                                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                    }
+
+                                    return $returnstatus;
+                                }
+
+                                $status = $itemToCheck->get_status(true);
+
+                                if (self::DEBUG) {
+                                    error_log('Status:'.$status);
+                                }
+
+                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+
+                                // Check results from another sessions.
+                                $checkOtherSessions = ('true' === api_get_setting('lp.validate_lp_prerequisite_from_other_session'));
+
+                                if ($checkOtherSessions && !$returnstatus) {
+                                    $returnstatus = $this->getStatusFromOtherSessions(
+                                        $user_id,
+                                        $prereqs_string,
+                                        $refs_list
+                                    );
+                                }
+
+                                if (!$returnstatus) {
+                                    $explanation = sprintf(
+                                        get_lang('Item %s blocks this step'),
+                                        $itemToCheck->get_title()
+                                    );
+                                    $this->prereq_alert = $explanation;
+                                }
+
+                                $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                                $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+
+                                if ($returnstatus && 1 == $this->prevent_reinit) {
+                                    $sql = "SELECT iid FROM $lp_view
                                                     WHERE
                                                         c_id = $courseId AND
                                                         user_id = $user_id  AND
                                                         lp_id = $this->lp_id AND
                                                         session_id = $sessionId
                                                     LIMIT 0, 1";
-                                            $rs_lp = Database::query($sql);
-                                            if (Database::num_rows($rs_lp)) {
-                                                $lp_id = Database::fetch_row($rs_lp);
-                                                $my_lp_id = $lp_id[0];
+                                    $rs_lp = Database::query($sql);
 
-                                                $sql = "SELECT status FROM $lp_item_view
+                                    if (Database::num_rows($rs_lp)) {
+                                        $lp_id = Database::fetch_row($rs_lp);
+                                        $my_lp_id = $lp_id[0];
+
+                                        $sql = "SELECT status FROM $lp_item_view
                                                         WHERE
                                                             lp_view_id = $my_lp_id AND
                                                             lp_item_id = $refs_list[$prereqs_string]
                                                         LIMIT 0, 1";
-                                                $rs_lp = Database::query($sql);
-                                                $status_array = Database::fetch_row($rs_lp);
-                                                $status = $status_array[0];
+                                        $rs_lp = Database::query($sql);
+                                        $status_array = Database::fetch_row($rs_lp);
+                                        $status = $status_array[0];
 
-                                                $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
-                                                if (!$returnstatus && empty($this->prereq_alert)) {
-                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                                                }
-                                            }
+                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
-                                            if ($checkOtherSessions && false === $returnstatus) {
-                                                $returnstatus = $returnstatus = $this->getStatusFromOtherSessions(
-                                                    $user_id,
-                                                    $prereqs_string,
-                                                    $refs_list
-                                                );
-                                            }
+                                        if (!$returnstatus && empty($this->prereq_alert)) {
+                                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                         }
+                                    }
 
-                                        return $returnstatus;
+                                    if ($checkOtherSessions && false === $returnstatus) {
+                                        $returnstatus = $returnstatus = $this->getStatusFromOtherSessions(
+                                            $user_id,
+                                            $prereqs_string,
+                                            $refs_list
+                                        );
                                     }
                                 }
+
+                                return $returnstatus;
                             }
                         }
                     }
                 }
             }
         } else {
-            $list = explode("\|", $prereqs_string);
+            $list = explode('\\|', $prereqs_string);
             if (count($list) > 1) {
                 if (self::DEBUG > 1) {
                     error_log('New LP - Found OR, looking into it', 0);
@@ -2569,6 +2604,7 @@ class learnpathItem
                                 0
                             );
                         }
+
                         break;
                     }
                 }
@@ -2577,24 +2613,27 @@ class learnpathItem
                 }
 
                 return $orstatus;
-            } else {
-                if (self::DEBUG > 1) {
-                    error_log(
-                        'New LP - OR was found but only one elem present !?',
-                        0
-                    );
-                }
-                if (isset($items[$refs_list[$list[0]]])) {
-                    $status = $items[$refs_list[$list[0]]]->get_status(true);
-                    $returnstatus = 'completed' == $status || 'passed' == $status;
-                    if (!$returnstatus && empty($this->prereq_alert)) {
-                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-                    }
+            }
 
-                    return $returnstatus;
+            if (self::DEBUG > 1) {
+                error_log(
+                    'New LP - OR was found but only one elem present !?',
+                    0
+                );
+            }
+
+            if (isset($items[$refs_list[$list[0]]])) {
+                $status = $items[$refs_list[$list[0]]]->get_status(true);
+                $returnstatus = 'completed' == $status || 'passed' == $status;
+
+                if (!$returnstatus && empty($this->prereq_alert)) {
+                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                 }
+
+                return $returnstatus;
             }
         }
+
         if (empty($this->prereq_alert)) {
             $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
         }
@@ -2620,12 +2659,12 @@ class learnpathItem
             error_log('learnpathItem::restart()', 0);
         }
         $seriousGame = $this->get_seriousgame_mode();
-        //For serious game  : We reuse same attempt_id
+        // For serious game  : We reuse same attempt_id
         if (1 == $seriousGame && 'sco' == $this->type) {
             // If this is a sco, Chamilo can't update the time without an
             //  explicit scorm call
             $this->current_start_time = 0;
-            $this->current_stop_time = 0; //Those 0 value have this effect
+            $this->current_stop_time = 0; // Those 0 value have this effect
             $this->last_scorm_session_time = 0;
             $this->save();
 
@@ -2639,7 +2678,7 @@ class learnpathItem
             // Nothing allowed, do nothing.
         } elseif (1 === $allowed) {
             // Restart as new attempt is allowed, record a new attempt.
-            $this->attempt_id = $this->attempt_id + 1; // Simply reuse the previous attempt_id.
+            ++$this->attempt_id; // Simply reuse the previous attempt_id.
             $this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
@@ -2656,7 +2695,7 @@ class learnpathItem
         } else {
             // Restart current element is allowed (because it's not finished yet),
             // reinit current.
-            //$this->current_score = 0;
+            // $this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
             $this->interactions_count = $this->get_interactions_count(true);
@@ -2684,9 +2723,9 @@ class learnpathItem
         // in case it's a SCORM, we should get:
         if ('sco' === $this->type || 'au' === $this->type) {
             $status = $this->get_status(true);
-            if (1 == $this->prevent_reinit &&
-                $status != $this->possible_status[0] && // not attempted
-                $status != $this->possible_status[1]    //incomplete
+            if (1 == $this->prevent_reinit
+                && $status != $this->possible_status[0] // not attempted
+                && $status != $this->possible_status[1]    // incomplete
             ) {
                 if ($debug) {
                     error_log(
@@ -2694,8 +2733,8 @@ class learnpathItem
                         0
                     );
                 }
-                // Do nothing because the status has already been set. Don't allow it to change.
-                // TODO: Check there isn't a special circumstance where this should be saved.
+            // Do nothing because the status has already been set. Don't allow it to change.
+            // TODO: Check there isn't a special circumstance where this should be saved.
             } else {
                 if ($debug) {
                     error_log(
@@ -2721,7 +2760,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'max':
                                 $this->set_max_score($value);
                                 if ($debug) {
@@ -2730,7 +2771,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'min':
                                 $this->min_score = $value;
                                 if ($debug) {
@@ -2739,7 +2782,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'lesson_status':
                                 if (!empty($value)) {
                                     $this->set_status($value);
@@ -2750,7 +2795,9 @@ class learnpathItem
                                         );
                                     }
                                 }
+
                                 break;
+
                             case 'time':
                                 $this->set_time($value);
                                 if ($debug) {
@@ -2759,7 +2806,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'suspend_data':
                                 $this->current_data = $value;
                                 if ($debug) {
@@ -2768,7 +2817,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'lesson_location':
                                 $this->set_lesson_location($value);
                                 if ($debug) {
@@ -2777,7 +2828,9 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'core_exit':
                                 $this->set_core_exit($value);
                                 if ($debug) {
@@ -2786,11 +2839,15 @@ class learnpathItem
                                         0
                                     );
                                 }
+
                                 break;
+
                             case 'interactions':
                                 break;
+
                             case 'objectives':
                                 break;
+
                             default:
                                 // Ignore.
                                 break;
@@ -2818,18 +2875,24 @@ class learnpathItem
                     if ($prereqs_complete) {
                         $this->set_status($this->possible_status[2]);
                     }
+
                     break;
+
                 case TOOL_HOTPOTATOES:
                     break;
+
                 case TOOL_QUIZ:
                     return false;
+
                     break;
+
                 default:
                     // For now, everything that is not sco and not asset is set to
                     // completed when saved.
                     if ($prereqs_complete) {
                         $this->set_status($this->possible_status[2]);
                     }
+
                     break;
             }
         }
@@ -2850,7 +2913,7 @@ class learnpathItem
      */
     public function set_attempt_id($num)
     {
-        if ($num == strval(intval($num)) && $num >= 0) {
+        if ($num == (string) ((int) $num) && $num >= 0) {
             $this->attempt_id = $num;
 
             return true;
@@ -2862,19 +2925,26 @@ class learnpathItem
     /**
      * Sets the core_exit value to the one given.
      *
-     * @return bool $value  True (always)
+     * @param mixed $value
+     *
+     * @return bool True (always)
      */
     public function set_core_exit($value)
     {
         switch ($value) {
             case '':
                 $this->core_exit = '';
+
                 break;
+
             case 'suspend':
                 $this->core_exit = 'suspend';
+
                 break;
+
             default:
                 $this->core_exit = 'none';
+
                 break;
         }
 
@@ -2886,7 +2956,7 @@ class learnpathItem
      *
      * @param string $string Description
      */
-    public function set_description($string = '')
+    public function set_description($string = ''): void
     {
         if (!empty($string)) {
             $this->description = $string;
@@ -2916,7 +2986,7 @@ class learnpathItem
      *
      * @param int $int Level
      */
-    public function set_level($int = 0)
+    public function set_level($int = 0): void
     {
         $this->level = (int) $int;
     }
@@ -3012,7 +3082,7 @@ class learnpathItem
      *
      * @param string $string Path
      */
-    public function set_path($string = '')
+    public function set_path($string = ''): void
     {
         if (!empty($string)) {
             $this->path = $string;
@@ -3027,8 +3097,9 @@ class learnpathItem
      *
      * @param int 1 for "prevent", 0 for "don't prevent"
      * saving freshened values (new "not attempted" status etc)
+     * @param mixed $prevent
      */
-    public function set_prevent_reinit($prevent)
+    public function set_prevent_reinit($prevent): void
     {
         $this->prevent_reinit = 0;
         if ($prevent) {
@@ -3158,14 +3229,14 @@ class learnpathItem
         $i_terms = preg_split('/,/', $this->get_terms());
         foreach ($i_terms as $term) {
             if (!in_array($term, $a_terms)) {
-                array_push($a_terms, $term);
+                $a_terms[] = $term;
             }
         }
         $new_terms = $a_terms;
         $new_terms_string = implode(',', $new_terms);
 
         // TODO: Validate csv string.
-        $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES));
+        $terms = Database::escape_string(api_htmlentities($new_terms_string, \ENT_QUOTES));
         $sql = "UPDATE $lp_item
                 SET terms = '$terms'
                 WHERE iid=".$this->get_id();
@@ -3195,19 +3266,20 @@ class learnpathItem
      *
      * @param    string    Time as given by SCORM
      * @param string $format
+     * @param mixed  $scorm_time
      */
-    public function set_time($scorm_time, $format = 'scorm')
+    public function set_time($scorm_time, $format = 'scorm'): void
     {
         $debug = self::DEBUG;
         if ($debug) {
             error_log("learnpathItem::set_time($scorm_time, $format)");
-            error_log("this->type: ".$this->type);
-            error_log("this->current_start_time: ".$this->current_start_time);
+            error_log('this->type: '.$this->type);
+            error_log('this->current_start_time: '.$this->current_start_time);
         }
 
-        if ('0' == $scorm_time &&
-            'sco' !== $this->type &&
-            0 != $this->current_start_time
+        if ('0' == $scorm_time
+            && 'sco' !== $this->type
+            && 0 != $this->current_start_time
         ) {
             $myTime = time() - $this->current_start_time;
             if ($myTime > 0) {
@@ -3237,17 +3309,20 @@ class learnpathItem
                         $totalSec = $hour * 3600 + $min * 60 + $sec;
                         if ($debug) {
                             error_log("totalSec : $totalSec");
-                            error_log("Now calling to scorm_update_time()");
+                            error_log('Now calling to scorm_update_time()');
                         }
                         $this->scorm_update_time($totalSec);
                     }
+
                     break;
+
                 case 'int':
                     if ($debug) {
                         error_log("scorm_time = $scorm_time");
-                        error_log("Now calling to scorm_update_time()");
+                        error_log('Now calling to scorm_update_time()');
                     }
                     $this->scorm_update_time($scorm_time);
+
                     break;
             }
         }
@@ -3258,7 +3333,7 @@ class learnpathItem
      *
      * @param string $string Title
      */
-    public function set_title($string = '')
+    public function set_title($string = ''): void
     {
         if (!empty($string)) {
             $this->title = $string;
@@ -3270,7 +3345,7 @@ class learnpathItem
      *
      * @param string $string Type
      */
-    public function set_type($string = '')
+    public function set_type($string = ''): void
     {
         if (!empty($string)) {
             $this->type = $string;
@@ -3311,9 +3386,8 @@ class learnpathItem
                         0
                     );
                 }
-                $found = true;
 
-                return $found;
+                return true;
             }
         }
         if (self::DEBUG > 2) {
@@ -3332,7 +3406,7 @@ class learnpathItem
      *
      * @param int $totalSec Time in seconds
      */
-    public function update_time($totalSec = 0)
+    public function update_time($totalSec = 0): void
     {
         if (self::DEBUG > 0) {
             error_log('learnpathItem::update_time('.$totalSec.')');
@@ -3353,7 +3427,7 @@ class learnpathItem
      *
      * @param int $total_sec Total number of seconds
      */
-    public function scorm_update_time($total_sec = 0)
+    public function scorm_update_time($total_sec = 0): void
     {
         $debug = self::DEBUG;
         if ($debug) {
@@ -3404,7 +3478,7 @@ class learnpathItem
             if ($debug) {
                 error_log("after fix abusive: $total_sec");
                 error_log("total_time: $total_time");
-                error_log("this->last_scorm_session_time: ".$this->last_scorm_session_time);
+                error_log('this->last_scorm_session_time: '.$this->last_scorm_session_time);
             }
 
             $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
@@ -3429,8 +3503,8 @@ class learnpathItem
             'failed',
         ];
 
-        if (1 != $this->seriousgame_mode ||
-            !in_array($row['status'], $case_completed)
+        if (1 != $this->seriousgame_mode
+            || !in_array($row['status'], $case_completed)
         ) {
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'
@@ -3469,9 +3543,9 @@ class learnpathItem
             $sql = "SELECT iid
                     FROM $tbl
                     WHERE
-                        lp_item_id = ".$this->db_id." AND
-                        lp_view_id = ".$this->view_id." AND
-                        view_count = ".$this->attempt_id;
+                        lp_item_id = ".$this->db_id.' AND
+                        lp_view_id = '.$this->view_id.' AND
+                        view_count = '.$this->attempt_id;
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -3537,8 +3611,10 @@ class learnpathItem
      * Writes the current data to the database.
      *
      * @return bool Query result
+     *
+     * @throws Doctrine\DBAL\Exception
      */
-    public function write_to_db()
+    public function write_to_db(): bool
     {
         $debug = self::DEBUG;
         if ($debug) {
@@ -3546,7 +3622,6 @@ class learnpathItem
             error_log('learnpathItem::write_to_db()');
         }
 
-        // Check the session visibility.
         if (!api_is_allowed_to_session_edit()) {
             if ($debug) {
                 error_log('return false api_is_allowed_to_session_edit');
@@ -3554,10 +3629,12 @@ class learnpathItem
 
             return false;
         }
+
         if (api_is_invitee()) {
             if ($debug) {
                 error_log('api_is_invitee');
             }
+
             // If the user is an invitee, we don't write anything to DB
             return true;
         }
@@ -3565,428 +3642,401 @@ class learnpathItem
         $courseId = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
-        $total_time = ' ';
-        $my_status = ' ';
-        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+
+        // Load current state to determine whether saving is allowed.
         $sql = 'SELECT status, total_time
-                FROM '.$item_view_table.'
+                FROM '.$itemViewTable.'
                 WHERE
-                    lp_item_id="'.$this->db_id.'" AND
-                    lp_view_id="'.$this->view_id.'" AND
-                    view_count="'.$this->get_attempt_id().'" ';
-        $rs_verified = Database::query($sql);
-        $row_verified = Database::fetch_array($rs_verified);
-        $my_case_completed = [
-            'completed',
-            'passed',
-            'browsed',
-            'failed',
-        ];
+                    lp_item_id = "'.$this->db_id.'" AND
+                    lp_view_id = "'.$this->view_id.'" AND
+                    view_count = "'.$this->get_attempt_id().'"';
+        $result = Database::query($sql);
+        $currentRow = Database::fetch_array($result);
 
         $save = true;
-
-        if (!empty($row_verified)) {
-            $oldTotalTime = $row_verified['total_time'];
-            $this->oldTotalTime = $oldTotalTime;
-            if (isset($row_verified['status'])) {
-                if (in_array($row_verified['status'], $my_case_completed)) {
-                    $save = false;
-                }
+        if (!empty($currentRow)) {
+            $this->oldTotalTime = $currentRow['total_time'];
+            if (isset($currentRow['status']) && in_array($currentRow['status'], $completedStatuses)) {
+                $save = false;
             }
         }
 
-        if (((false === $save && 'sco' === $this->type) ||
-           ('sco' === $this->type && ('no-credit' === $credit || 'review' === $mode || 'browse' === $mode))) &&
-           (1 != $this->seriousgame_mode && 'sco' === $this->type)
-        ) {
+        // For SCO items in no-credit / review / browse mode, skip saving.
+        $isSco = 'sco' === $this->type;
+        $shouldSkip = $isSco
+            && 1 != $this->seriousgame_mode
+            && (!$save || 'no-credit' === $credit || 'review' === $mode || 'browse' === $mode);
+
+        if ($shouldSkip) {
             if ($debug) {
-                error_log(
-                    "This info shouldn't be saved as the credit or lesson mode info prevent it"
-                );
+                error_log("This info shouldn't be saved as the credit or lesson mode info prevent it");
                 error_log(
                     'learnpathItem::write_to_db() - credit('.$credit.') or'.
                     ' lesson_mode('.$mode.') prevent recording!',
                     0
                 );
             }
-        } else {
-            // Check the row exists.
-            $inserted = false;
-            // This a special case for multiple attempts and Chamilo exercises.
-            if ('quiz' === $this->type &&
-                0 == $this->get_prevent_reinit() &&
-                'completed' === $this->get_status()
-            ) {
-                // We force the item to be restarted.
-                $this->restart();
-                $params = [
-                    "c_id" => $courseId,
-                    "total_time" => $this->get_total_time(),
-                    "start_time" => $this->current_start_time,
-                    "score" => $this->get_score(),
-                    "status" => $this->get_status(false),
-                    "max_score" => $this->get_max(),
-                    "lp_item_id" => $this->db_id,
-                    "lp_view_id" => $this->view_id,
-                    "view_count" => $this->get_attempt_id(),
-                    "suspend_data" => $this->current_data,
-                    //"max_time_allowed" => ,
-                    "lesson_location" => $this->lesson_location,
-                ];
-                if ($debug) {
-                    error_log('learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1));
-                }
-                $this->db_item_view_id = Database::insert($item_view_table, $params);
-                if ($this->db_item_view_id) {
-                    $inserted = true;
-                }
-            }
 
-            $sql = "SELECT * FROM $item_view_table
-                    WHERE
-                        lp_item_id = ".$this->db_id." AND
-                        lp_view_id = ".$this->view_id." AND
-                        view_count = ".$this->get_attempt_id();
+            return true;
+        }
+
+        $inserted = false;
+
+        // Special case: quiz with multiple attempts — force a new attempt row.
+        if ('quiz' === $this->type && 0 == $this->get_prevent_reinit() && 'completed' === $this->get_status()) {
+            $this->restart();
+            $params = [
+                'c_id' => $courseId,
+                'total_time' => $this->get_total_time(),
+                'start_time' => $this->current_start_time,
+                'score' => $this->get_score(),
+                'status' => $this->get_status(false),
+                'max_score' => $this->get_max(),
+                'lp_item_id' => $this->db_id,
+                'lp_view_id' => $this->view_id,
+                'view_count' => $this->get_attempt_id(),
+                'suspend_data' => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
             if ($debug) {
-                error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
+                error_log('learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1));
             }
-
-            $check_res = Database::query($sql);
-            // Depending on what we want (really), we'll update or insert a new row
-            // now save into DB.
-            if (!$inserted && Database::num_rows($check_res) < 1) {
-                $params = [
-                    "c_id" => $courseId,
-                    "total_time" => $this->get_total_time(),
-                    "start_time" => $this->current_start_time,
-                    "score" => $this->get_score(),
-                    "status" => $this->get_status(false),
-                    "max_score" => $this->get_max(),
-                    "lp_item_id" => $this->db_id,
-                    "lp_view_id" => $this->view_id,
-                    "view_count" => $this->get_attempt_id(),
-                    "suspend_data" => $this->current_data,
-                    //"max_time_allowed" => ,$this->get_max_time_allowed()
-                    "lesson_location" => $this->lesson_location,
-                ];
-
-                if ($debug) {
-                    error_log(
-                        'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
-                        0
-                    );
-                }
-                $this->db_item_view_id = Database::insert($item_view_table, $params);
-            } else {
-                if ('hotpotatoes' === $this->type) {
-                    $params = [
-                        'total_time' => $this->get_total_time(),
-                        'start_time' => $this->get_current_start_time(),
-                        'score' => $this->get_score(),
-                        'status' => $this->get_status(false),
-                        'max_score' => $this->get_max(),
-                        'suspend_data' => $this->current_data,
-                        'lesson_location' => $this->lesson_location,
-                    ];
-                    $where = [
-                        'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
-                            $courseId,
-                            $this->db_id,
-                            $this->view_id,
-                            $this->get_attempt_id(),
-                        ],
-                    ];
-                    Database::update($item_view_table, $params, $where);
-                } else {
-                    // For all other content types...
-                    if ('quiz' === $this->type) {
-                        $my_status = ' ';
-                        $total_time = ' ';
-                        if (!empty($_REQUEST['exeId'])) {
-                            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-                            $exeId = (int) $_REQUEST['exeId'];
-                            $sql = "SELECT exe_duration
-                                    FROM $table
-                                    WHERE exe_id = $exeId";
-                            $res = Database::query($sql);
-                            $exeRow = Database::fetch_array($res);
-                            $duration = isset($exeRow['exe_duration']) ? (int) $exeRow['exe_duration'] : 0;
-                            $total_time = " total_time = ".$duration.", ";
-                            if ($debug) {
-                                error_log("quiz: $total_time");
-                            }
-                        }
-                    } else {
-                        $my_type_lp = learnpath::get_type_static($this->lp_id);
-                        // This is a array containing values finished
-                        $case_completed = [
-                            'completed',
-                            'passed',
-                            'browsed',
-                            'failed',
-                        ];
-
-                        // Is not multiple attempts
-                        if (1 == $this->seriousgame_mode && 'sco' === $this->type) {
-                            $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                            $my_status = " status = '".$this->get_status(false)."' ,";
-                            if ($debug) {
-                                error_log("seriousgame_mode time changed: $total_time");
-                            }
-                        } elseif (1 == $this->get_prevent_reinit()) {
-                            // Process of status verified into data base.
-                            $sql = 'SELECT status FROM '.$item_view_table.'
-                                    WHERE
-                                        lp_item_id="'.$this->db_id.'" AND
-                                        lp_view_id="'.$this->view_id.'" AND
-                                        view_count="'.$this->get_attempt_id().'"
-                                    ';
-                            $rs_verified = Database::query($sql);
-                            $row_verified = Database::fetch_array($rs_verified);
-
-                            // Get type lp: 1=lp dokeos and  2=scorm.
-                            // If not is completed or passed or browsed and learning path is scorm.
-                            if (!in_array($this->get_status(false), $case_completed) &&
-                                2 == $my_type_lp
-                            ) {
-                                $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("get_prevent_reinit = 1 time changed: $total_time");
-                                }
-                            } else {
-                                // Verified into database.
-                                if (!in_array($row_verified['status'], $case_completed) &&
-                                    2 == $my_type_lp
-                                ) {
-                                    $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                    $my_status = " status = '".$this->get_status(false)."' ,";
-                                    if ($debug) {
-                                        error_log("total_time time changed case 1: $total_time");
-                                    }
-                                } elseif (in_array($row_verified['status'], $case_completed) &&
-                                    2 == $my_type_lp && 'sco' != $this->type
-                                ) {
-                                    $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                    $my_status = " status = '".$this->get_status(false)."' ,";
-                                    if ($debug) {
-                                        error_log("total_time time changed case 2: $total_time");
-                                    }
-                                } else {
-                                    if ((3 == $my_type_lp && 'au' == $this->type) ||
-                                        (1 == $my_type_lp && 'dir' != $this->type)) {
-                                        // Is AICC or Chamilo LP
-                                        $total_time = " total_time = total_time + ".$this->get_total_time().", ";
-                                        $my_status = " status = '".$this->get_status(false)."' ,";
-                                        if ($debug) {
-                                            error_log("total_time time changed case 3: $total_time");
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            // Multiple attempts are allowed.
-                            if (in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
-                                // Reset zero new attempt ?
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 1: $total_time");
-                                }
-                            } elseif (!in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
-                                $total_time = " total_time = ".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 2: $total_time");
-                                }
-                            } else {
-                                // It is chamilo LP.
-                                $total_time = " total_time = total_time +".$this->get_total_time().", ";
-                                $my_status = " status = '".$this->get_status(false)."' ,";
-                                if ($debug) {
-                                    error_log("total_time time changed Multiple attempt case 3: $total_time");
-                                }
-                            }
-
-                            // This code line fixes the problem of wrong status.
-                            if (2 == $my_type_lp) {
-                                // Verify current status in multiples attempts.
-                                $sql = 'SELECT status FROM '.$item_view_table.'
-                                        WHERE
-                                            c_id = '.$courseId.' AND
-                                            lp_item_id="'.$this->db_id.'" AND
-                                            lp_view_id="'.$this->view_id.'" AND
-                                            view_count="'.$this->get_attempt_id().'" ';
-                                $rs_status = Database::query($sql);
-                                $current_status = Database::result($rs_status, 0, 'status');
-                                if (in_array($current_status, $case_completed)) {
-                                    $my_status = '';
-                                    $total_time = '';
-                                } else {
-                                    $total_time = " total_time = total_time + ".$this->get_total_time().", ";
-                                }
-
-                                if ($debug) {
-                                    error_log("total_time time my_type_lp: $total_time");
-                                }
-                            }
-                        }
-                    }
-
-                    if ('sco' === $this->type) {
-                        //IF scorm scorm_update_time has already updated total_time in db
-                        //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
-                        ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                        $sql = "UPDATE $item_view_table SET
-                                    score = ".$this->get_score().",
-                                    $my_status
-                                    max_score = '".$this->get_max()."',
-                                    suspend_data = '".Database::escape_string($this->current_data)."',
-                                    lesson_location = '".$this->lesson_location."'
-                                WHERE
-                                    lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = ".$this->view_id."  AND
-                                    view_count = ".$this->get_attempt_id();
-                    } else {
-                        //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                        $sql = "UPDATE $item_view_table SET
-                                    $total_time
-                                    start_time = ".$this->get_current_start_time().",
-                                    score = ".$this->get_score().",
-                                    $my_status
-                                    max_score = '".$this->get_max()."',
-                                    suspend_data = '".Database::escape_string($this->current_data)."',
-                                    lesson_location = '".$this->lesson_location."'
-                                WHERE
-                                    lp_item_id = ".$this->db_id." AND
-                                    lp_view_id = ".$this->view_id." AND
-                                    view_count = ".$this->get_attempt_id();
-                    }
-                    $this->current_start_time = time();
-                }
-                if ($debug) {
-                    error_log('-------------------------------------------');
-                    error_log('learnpathItem::write_to_db() - Updating item_view:');
-                    error_log($sql);
-                    error_log('-------------------------------------------');
-                }
-                Database::query($sql);
-            }
-
-            if (is_array($this->interactions) &&
-                count($this->interactions) > 0
-            ) {
-                $sql = "SELECT iid FROM $item_view_table
-                        WHERE
-                            lp_item_id = ".$this->db_id." AND
-                            lp_view_id = ".$this->view_id." AND
-                            view_count = ".$this->get_attempt_id();
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    $row = Database::fetch_array($res);
-                    $lp_iv_id = $row[0];
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::write_to_db() - Got item_view_id '.
-                            $lp_iv_id.', now checking interactions ',
-                            0
-                        );
-                    }
-                    foreach ($this->interactions as $index => $interaction) {
-                        $correct_resp = '';
-                        if (is_array($interaction[4]) && !empty($interaction[4][0])) {
-                            foreach ($interaction[4] as $resp) {
-                                $correct_resp .= $resp.',';
-                            }
-                            $correct_resp = substr(
-                                $correct_resp,
-                                0,
-                                strlen($correct_resp) - 1
-                            );
-                        }
-                        $iva_table = Database::get_course_table(
-                            TABLE_LP_IV_INTERACTION
-                        );
-
-                        //also check for the interaction ID as it must be unique for this SCO view
-                        $iva_sql = "SELECT iid FROM $iva_table
-                                    WHERE
-                                        c_id = $courseId AND
-                                        lp_iv_id = $lp_iv_id AND
-                                        (
-                                            order_id = $index OR
-                                            interaction_id = '".Database::escape_string($interaction[0])."'
-                                        )
-                                    ";
-                        $iva_res = Database::query($iva_sql);
-
-                        $interaction[0] = $interaction[0] ?? '';
-                        $interaction[1] = $interaction[1] ?? '';
-                        $interaction[2] = $interaction[2] ?? '';
-                        $interaction[3] = $interaction[3] ?? '';
-                        $interaction[4] = $interaction[4] ?? '';
-                        $interaction[5] = $interaction[5] ?? '';
-                        $interaction[6] = $interaction[6] ?? '';
-                        $interaction[7] = $interaction[7] ?? '';
-
-                        // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
-                        if (Database::num_rows($iva_res) > 0) {
-                            // Update (or don't).
-                            $iva_row = Database::fetch_array($iva_res);
-                            $iva_id = $iva_row[0];
-                            // Insert new one.
-                            $params = [
-                                'interaction_id' => $interaction[0],
-                                'interaction_type' => $interaction[1],
-                                'weighting' => $interaction[3],
-                                'completion_time' => $interaction[2],
-                                'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
-                                'result' => $interaction[6],
-                                'latency' => $interaction[7],
-                            ];
-                            Database::update(
-                                $iva_table,
-                                $params,
-                                [
-                                    'c_id = ? AND iid = ?' => [
-                                        $courseId,
-                                        $iva_id,
-                                    ],
-                                ]
-                            );
-                        } else {
-                            // Insert new one.
-                            $params = [
-                                'c_id' => $courseId,
-                                'order_id' => $index,
-                                'lp_iv_id' => $lp_iv_id,
-                                'interaction_id' => $interaction[0],
-                                'interaction_type' => $interaction[1],
-                                'weighting' => $interaction[3],
-                                'completion_time' => $interaction[2],
-                                'correct_responses' => $correct_resp,
-                                'student_response' => $interaction[5],
-                                'result' => $interaction[6],
-                                'latency' => $interaction[7],
-                            ];
-
-                            $insertId = Database::insert($iva_table, $params);
-                            if ($insertId) {
-                                $sql = "UPDATE $iva_table SET id = iid
-                                        WHERE iid = $insertId";
-                                Database::query($sql);
-                            }
-                        }
-                    }
-                }
+            $this->db_item_view_id = Database::insert($itemViewTable, $params);
+            if ($this->db_item_view_id) {
+                $inserted = true;
             }
         }
+
+        // Decide whether to INSERT or UPDATE the item view row.
+        $sql = "SELECT * FROM $itemViewTable
+                WHERE
+                    lp_item_id = ".$this->db_id.' AND
+                    lp_view_id = '.$this->view_id.' AND
+                    view_count = '.$this->get_attempt_id();
+        if ($debug) {
+            error_log('learnpathItem::write_to_db() - Querying item_view: '.$sql);
+        }
+
+        $checkResult = Database::query($sql);
+
+        if (!$inserted && Database::num_rows($checkResult) < 1) {
+            $params = [
+                'c_id' => $courseId,
+                'total_time' => $this->get_total_time(),
+                'start_time' => $this->current_start_time,
+                'score' => $this->get_score(),
+                'status' => $this->get_status(false),
+                'max_score' => $this->get_max(),
+                'lp_item_id' => $this->db_id,
+                'lp_view_id' => $this->view_id,
+                'view_count' => $this->get_attempt_id(),
+                'suspend_data' => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
+            if ($debug) {
+                error_log(
+                    'learnpathItem::write_to_db() - Inserting into item_view: '.print_r($params, 1),
+                    0
+                );
+            }
+            $this->db_item_view_id = Database::insert($itemViewTable, $params);
+        } elseif ('hotpotatoes' === $this->type) {
+            $params = [
+                'total_time' => $this->get_total_time(),
+                'start_time' => $this->get_current_start_time(),
+                'score' => $this->get_score(),
+                'status' => $this->get_status(false),
+                'max_score' => $this->get_max(),
+                'suspend_data' => $this->current_data,
+                'lesson_location' => $this->lesson_location,
+            ];
+            $where = [
+                'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
+                    $courseId,
+                    $this->db_id,
+                    $this->view_id,
+                    $this->get_attempt_id(),
+                ],
+            ];
+            Database::update($itemViewTable, $params, $where);
+        } else {
+            [$total_time, $my_status] = $this->resolveUpdateFragments($itemViewTable, $courseId);
+
+            $suspendData = null === $this->current_data
+                ? 'NULL'
+                : "'".Database::escape_string($this->current_data)."'";
+
+            if ($isSco) {
+                // scorm_update_time has already updated total_time in DB via scorm_init_time
+                $sql = "UPDATE $itemViewTable SET
+                            score = ".$this->get_score().",
+                            $my_status
+                            max_score = '".$this->get_max()."',
+                            suspend_data = $suspendData,
+                            lesson_location = '".$this->lesson_location."'
+                        WHERE
+                            lp_item_id = ".$this->db_id.' AND
+                            lp_view_id = '.$this->view_id.' AND
+                            view_count = '.$this->get_attempt_id();
+            } else {
+                $sql = "UPDATE $itemViewTable SET
+                            $total_time
+                            start_time = ".$this->get_current_start_time().',
+                            score = '.$this->get_score().",
+                            $my_status
+                            max_score = '".$this->get_max()."',
+                            suspend_data = $suspendData,
+                            lesson_location = '".$this->lesson_location."'
+                        WHERE
+                            lp_item_id = ".$this->db_id.' AND
+                            lp_view_id = '.$this->view_id.' AND
+                            view_count = '.$this->get_attempt_id();
+            }
+
+            $this->current_start_time = time();
+
+            if ($debug) {
+                error_log('-------------------------------------------');
+                error_log('learnpathItem::write_to_db() - Updating item_view:');
+                error_log($sql);
+                error_log('-------------------------------------------');
+            }
+            Database::query($sql);
+        }
+
+        $this->saveInteractions($courseId, $itemViewTable);
 
         if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }
 
         return true;
+    }
+
+    /**
+     * Resolves the SQL fragment strings for total_time and status used in the UPDATE query.
+     * Returns [string $total_time, string $my_status], each either a space (no-op) or a
+     * comma-terminated SQL SET clause fragment (e.g. " total_time = total_time + 30, ").
+     */
+    private function resolveUpdateFragments(string $itemViewTable, int $courseId): array
+    {
+        $debug = self::DEBUG;
+        $total_time = ' ';
+        $my_status = ' ';
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+
+        if ('quiz' === $this->type) {
+            if (!empty($_REQUEST['exeId'])) {
+                $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+                $exeId = (int) $_REQUEST['exeId'];
+                $sql = "SELECT exe_duration FROM $table WHERE exe_id = $exeId";
+                $res = Database::query($sql);
+                $exeRow = Database::fetch_array($res);
+                $duration = isset($exeRow['exe_duration']) ? (int) $exeRow['exe_duration'] : 0;
+                $total_time = ' total_time = '.$duration.', ';
+                if ($debug) {
+                    error_log("quiz: $total_time");
+                }
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // 1=Chamilo LP, 2=SCORM, 3=AICC
+        $lpType = learnpath::get_type_static($this->lp_id);
+
+        // Serious game SCO: always accumulate time and update status.
+        if (1 == $this->seriousgame_mode && 'sco' === $this->type) {
+            $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("seriousgame_mode time changed: $total_time");
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // Single-attempt mode: check stored status before updating.
+        if (1 == $this->get_prevent_reinit()) {
+            $sql = 'SELECT status FROM '.$itemViewTable.'
+                    WHERE
+                        lp_item_id = "'.$this->db_id.'" AND
+                        lp_view_id = "'.$this->view_id.'" AND
+                        view_count = "'.$this->get_attempt_id().'"';
+            $result = Database::query($sql);
+            $storedRow = Database::fetch_array($result);
+
+            if (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("get_prevent_reinit = 1 time changed: $total_time");
+                }
+            } elseif (!in_array($storedRow['status'], $completedStatuses) && 2 == $lpType) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 1: $total_time");
+                }
+            } elseif (in_array($storedRow['status'], $completedStatuses) && 2 == $lpType && 'sco' !== $this->type) {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 2: $total_time");
+                }
+            } elseif ((3 == $lpType && 'au' === $this->type) || (1 == $lpType && 'dir' !== $this->type)) {
+                // AICC or Chamilo LP
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+                $my_status = " status = '".$this->get_status(false)."' ,";
+                if ($debug) {
+                    error_log("total_time time changed case 3: $total_time");
+                }
+            }
+
+            return [$total_time, $my_status];
+        }
+
+        // Multiple attempts allowed.
+        if (in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+            // Reset to new attempt — only update status.
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 1: $total_time");
+            }
+        } elseif (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+            $total_time = ' total_time = '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 2: $total_time");
+            }
+        } else {
+            // Chamilo LP
+            $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            $my_status = " status = '".$this->get_status(false)."' ,";
+            if ($debug) {
+                error_log("total_time time changed Multiple attempt case 3: $total_time");
+            }
+        }
+
+        // Fix wrong status: if the stored status is already completed, don't overwrite it.
+        if (2 == $lpType) {
+            $sql = 'SELECT status FROM '.$itemViewTable.'
+                    WHERE
+                        c_id = '.$courseId.' AND
+                        lp_item_id = "'.$this->db_id.'" AND
+                        lp_view_id = "'.$this->view_id.'" AND
+                        view_count = "'.$this->get_attempt_id().'"';
+            $result = Database::query($sql);
+            $currentStatus = Database::result($result, 0, 'status');
+            if (in_array($currentStatus, $completedStatuses)) {
+                $my_status = '';
+                $total_time = '';
+            } else {
+                $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
+            }
+            if ($debug) {
+                error_log("total_time time my_type_lp: $total_time");
+            }
+        }
+
+        return [$total_time, $my_status];
+    }
+
+    /**
+     * Persists the SCORM interaction data for the current item view attempt.
+     */
+    private function saveInteractions(int $courseId, string $itemViewTable): void
+    {
+        if (!is_array($this->interactions) || 0 === count($this->interactions)) {
+            return;
+        }
+
+        $debug = self::DEBUG;
+        $sql = "SELECT iid FROM $itemViewTable
+                WHERE
+                    lp_item_id = ".$this->db_id.' AND
+                    lp_view_id = '.$this->view_id.' AND
+                    view_count = '.$this->get_attempt_id();
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) <= 0) {
+            return;
+        }
+
+        $row = Database::fetch_array($result);
+        $lpIvId = $row[0];
+        if ($debug) {
+            error_log(
+                'learnpathItem::write_to_db() - Got item_view_id '.$lpIvId.', now checking interactions ',
+                0
+            );
+        }
+
+        $ivaTable = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+
+        foreach ($this->interactions as $index => $interaction) {
+            $correctResp = '';
+            if (is_array($interaction[4]) && !empty($interaction[4][0])) {
+                foreach ($interaction[4] as $resp) {
+                    $correctResp .= $resp.',';
+                }
+                $correctResp = substr($correctResp, 0, -1);
+            }
+
+            // Check if this interaction already exists for the current SCO view.
+            $ivaSql = "SELECT iid FROM $ivaTable
+                        WHERE
+                            c_id = $courseId AND
+                            lp_iv_id = $lpIvId AND
+                            (
+                                order_id = $index OR
+                                interaction_id = '".Database::escape_string($interaction[0])."'
+                            )";
+            $ivaResult = Database::query($ivaSql);
+
+            // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
+            $interaction[0] = $interaction[0] ?? '';
+            $interaction[1] = $interaction[1] ?? '';
+            $interaction[2] = $interaction[2] ?? '';
+            $interaction[3] = $interaction[3] ?? '';
+            $interaction[4] = $interaction[4] ?? '';
+            $interaction[5] = $interaction[5] ?? '';
+            $interaction[6] = $interaction[6] ?? '';
+            $interaction[7] = $interaction[7] ?? '';
+
+            $params = [
+                'interaction_id' => $interaction[0],
+                'interaction_type' => $interaction[1],
+                'weighting' => $interaction[3],
+                'completion_time' => $interaction[2],
+                'correct_responses' => $correctResp,
+                'student_response' => $interaction[5],
+                'result' => $interaction[6],
+                'latency' => $interaction[7],
+            ];
+
+            if (Database::num_rows($ivaResult) > 0) {
+                $ivaRow = Database::fetch_array($ivaResult);
+                $ivaId = $ivaRow[0];
+                Database::update(
+                    $ivaTable,
+                    $params,
+                    ['c_id = ? AND iid = ?' => [$courseId, $ivaId]]
+                );
+            } else {
+                $params = array_merge(
+                    ['c_id' => $courseId, 'order_id' => $index, 'lp_iv_id' => $lpIvId],
+                    $params
+                );
+                $insertId = Database::insert($ivaTable, $params);
+                if ($insertId) {
+                    $sql = "UPDATE $ivaTable SET id = iid WHERE iid = $insertId";
+                    Database::query($sql);
+                }
+            }
+        }
     }
 
     /**
@@ -4054,7 +4104,7 @@ class learnpathItem
             $table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $table SET
                         audio = '".Database::escape_string($name)."'
-                    WHERE iid = ".intval($this->db_id);
+                    WHERE iid = ".(int) $this->db_id;
             Database::query($sql);
 
             return true;
@@ -4115,7 +4165,6 @@ class learnpathItem
      * Transform the SCORM status to a string that can be translated by Chamilo
      * in different user languages.
      *
-     * @param $status
      * @param bool   $decorate
      * @param string $type     classic|simple
      *
@@ -4138,18 +4187,27 @@ class learnpathItem
             case 'completed':
             case 'browsed':
                 $classStatus = 'info';
+
                 break;
+
             case 'incomplete':
                 $classStatus = 'warning';
+
                 break;
+
             case 'passed':
                 $classStatus = 'success';
+
                 break;
+
             case 'failed':
                 $classStatus = 'important';
+
                 break;
+
             default:
                 $classStatus = 'default';
+
                 break;
         }
 
@@ -4179,7 +4237,7 @@ class learnpathItem
     /**
      * @param float $prerequisiteMaxScore
      */
-    public function setPrerequisiteMaxScore($prerequisiteMaxScore)
+    public function setPrerequisiteMaxScore($prerequisiteMaxScore): void
     {
         $this->prerequisiteMaxScore = $prerequisiteMaxScore;
     }
@@ -4195,7 +4253,7 @@ class learnpathItem
     /**
      * @param float $prerequisiteMinScore
      */
-    public function setPrerequisiteMinScore($prerequisiteMinScore)
+    public function setPrerequisiteMinScore($prerequisiteMinScore): void
     {
         $this->prerequisiteMinScore = $prerequisiteMinScore;
     }
@@ -4257,6 +4315,7 @@ class learnpathItem
                     $checked = $status == $this->possible_status[2] || $status == $this->possible_status[3];
                     if ($checked) {
                         $resultFromOtherSessions = true;
+
                         break;
                     }
                 }
@@ -4285,7 +4344,7 @@ class learnpathItem
             }
 
             return $helper->decorateTitleText($title, 'lp_item', (int) $this->get_id());
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return $title;
         }
     }

@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Impor H5P';
+$strings['plugin_comment'] = 'Impor konten H5P dan gunakan dalam jalur pembelajaran. Buka README.md untuk petunjuk instalasi.';
+$strings['frame'] = 'Bingkai';
+$strings['frame_help'] = 'Tampilkan bingkai dan tombol di bawah H5P';
+$strings['embed'] = 'Tanam';
+$strings['embed_help'] = 'Tampilkan tombol tanam';
+$strings['copyright'] = 'Hak cipta';
+$strings['copyright_help'] = 'Tampilkan tombol hak cipta';
+$strings['icon'] = 'Ikon';
+$strings['icon_help'] = 'Tampilkan ikon H5P';
+$strings['attempts'] = 'Jumlah percobaan';
+$strings['upload_h5p'] = 'Unggah';
+$strings['import_h5p_package'] = 'Unggah paket H5P';
+$strings['h5p_package'] = 'Paket H5P';
+$strings['h5p_error_loading'] = 'Kesalahan memuat paket H5P';
+$strings['h5p_error_invalid_token'] = 'Token keamanan tidak valid';
+$strings['h5p_error_missing_core_asset'] = 'Kesalahan memuat aset inti H5P';
+$strings['h5p_save_content_state'] = 'Simpan hasil pengguna';
+$strings['h5p_save_content_freq'] = 'Frekuensi simpan';
+$strings['h5p_save_freq_help'] = 'Seberapa sering status konten saat ini harus disimpan, dalam detik';
+$strings['start_attempt'] = 'Mulai percobaan';

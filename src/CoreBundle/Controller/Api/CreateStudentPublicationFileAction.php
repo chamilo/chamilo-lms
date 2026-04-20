@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
@@ -14,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -26,8 +30,17 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         EntityManager $em,
         KernelInterface $kernel,
         TranslatorInterface $translator,
-        Security $security
+        Security $security,
+        SettingsManager $settingsManager
     ): CStudentPublication {
+        $cid = (int) $request->query->get('cid', 0);
+        if ($cid > 0) {
+            $course = $em->getRepository(Course::class)->find($cid);
+            if (!$course || !$security->isGranted(CourseVoter::VIEW, $course)) {
+                throw new AccessDeniedHttpException('You do not have access to this course.');
+            }
+        }
+
         $fileExistsOption = $request->get('fileExistsOption', 'rename');
 
         $studentPublication = new CStudentPublication();
@@ -66,6 +79,23 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         if ($parentId > 0) {
             $parentEntity = $repo->find($parentId);
             if ($parentEntity) {
+                if ('true' === $settingsManager->getSetting('work.allow_only_one_student_publication_per_user')) {
+                    $existingCount = (int) $em->createQueryBuilder()
+                        ->select('COUNT(sp.iid)')
+                        ->from(CStudentPublication::class, 'sp')
+                        ->where('sp.publicationParent = :parent')
+                        ->andWhere('sp.user = :user')
+                        ->setParameter('parent', $parentEntity)
+                        ->setParameter('user', $managedUser)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
+
+                    if ($existingCount > 0) {
+                        throw new AccessDeniedHttpException('You have already submitted a document for this assignment.');
+                    }
+                }
+
                 $studentPublication->setPublicationParent($parentEntity);
             }
         }

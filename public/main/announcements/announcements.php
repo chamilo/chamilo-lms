@@ -722,6 +722,7 @@ switch ($action) {
         }
         $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
         $form->addElement('html', '<div id="tags_options" style="display:none">');
+        $form->addElement('html', '<p class="text-sm text-gray-600 mt-1 mb-2">'.get_lang('Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them.').'</p>');
         $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
         $form->addElement('html', '</div>');
         $form->addHtmlEditor(
@@ -783,14 +784,72 @@ switch ($action) {
 
 
     $form->addHidden('sec_token', $token);
+    $announcementScheduledByDate = 'true' === api_get_setting('announcement.course_announcement_scheduled_by_date');
 
-        if (empty($sessionId)) {
+    $dateToSendNotificationDefault = '';
+    if ($announcementScheduledByDate) {
+        if (!empty($id)) {
+            $scheduledExtraFieldValue = new ExtraFieldValue('course_announcement');
+            $storedScheduledDate = $scheduledExtraFieldValue->get_values_by_handler_and_field_variable(
+                $id,
+                'date_to_send_notification'
+            );
+
+            $dateToSendNotificationDefault = (string) (
+                $storedScheduledDate['field_value'] ??
+                $storedScheduledDate['value'] ??
+                ''
+            );
+        }
+
+        if (empty($dateToSendNotificationDefault)) {
+            $dateToSendNotificationDefault = date('Y-m-d', strtotime('+1 day'));
+        }
+    }
+
+    if (empty($sessionId)) {
+        if ($announcementScheduledByDate) {
+            $extraField = new ExtraField('course_announcement');
+            $extraField->addElements(
+                $form,
+                $id ?: 0,
+                [],
+                false,
+                false,
+                [
+                    'send_to_users_in_session',
+                    'send_notification_at_a_specific_date',
+                ],
+                [],
+                [],
+                false,
+                true
+            );
+
+            $form->addHtml(
+                '<div class="form-group">'.
+                '<label class="control-label" for="scheduled_date_to_send_notification">'.
+                get_lang('Date to send notification').
+                '</label>'.
+                '<div>'.
+                '<input
+                type="date"
+                id="scheduled_date_to_send_notification"
+                name="scheduled_date_to_send_notification"
+                class="form-control"
+                value="'.api_htmlentities($dateToSendNotificationDefault).'"
+            >'.
+                '</div>'.
+                '</div>'
+            );
+        } else {
             $form->addCheckBox(
                 'send_to_users_in_session',
                 null,
                 get_lang('Send to users in all sessions of this course')
             );
         }
+    }
 
         $config = api_get_setting('announcement.announcements_hide_send_to_hrm_users');
 
@@ -875,8 +934,41 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = $data['users'] ?? [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']);
+
+            if ($announcementScheduledByDate) {
+                $sendToUsersInSessionValue = $data['extra_send_to_users_in_session'] ?? 0;
+                if (is_array($sendToUsersInSessionValue)) {
+                    $sendToUsersInSessionValue = $sendToUsersInSessionValue['extra_send_to_users_in_session'] ?? 0;
+                }
+
+                $sendToUsersInSession = 1 === (int) $sendToUsersInSessionValue;
+            } else {
+                $sendToUsersInSession = isset($data['send_to_users_in_session']);
+            }
+
             $sendMeCopy = isset($data['send_me_a_copy_by_email']);
+
+            $scheduleAnnouncementNotification = false;
+            $dateToSendNotification = null;
+
+            if ($announcementScheduledByDate) {
+                $scheduleAnnouncementValue = $data['extra_send_notification_at_a_specific_date'] ?? 0;
+                if (is_array($scheduleAnnouncementValue)) {
+                    $scheduleAnnouncementValue = $scheduleAnnouncementValue['extra_send_notification_at_a_specific_date'] ?? 0;
+                }
+
+                $scheduleAnnouncementNotification = 1 === (int) $scheduleAnnouncementValue;
+
+                $dateToSendNotification = isset($_POST['scheduled_date_to_send_notification'])
+                    ? trim((string) $_POST['scheduled_date_to_send_notification'])
+                    : null;
+
+                if (empty($dateToSendNotification) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateToSendNotification)) {
+                    $dateToSendNotification = null;
+                }
+
+                $data['extra_date_to_send_notification'] = $dateToSendNotification;
+            }
 
             $notificationCount = $data['notification_count'] ?? [];
             $notificationPeriod = $data['notification_period'] ?? [];
@@ -895,8 +987,35 @@ switch ($action) {
                     $sendToUsersInSession
                 );
 
+                if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
+                    $extraFieldValues = new ExtraFieldValue('course_announcement');
+                    $data['item_id'] = $announcement->getIid();
+
+                    $extraFieldValues->saveFieldValues(
+                        $data,
+                        false,
+                        false,
+                        [
+                            'send_notification_at_a_specific_date',
+                            'date_to_send_notification',
+                            'send_to_users_in_session',
+                        ]
+                    );
+
+                    if ($scheduleAnnouncementNotification) {
+                        $announcement->setEmailSent(false);
+                        $em = Database::getManager();
+                        $em->persist($announcement);
+                        $em->flush();
+                    }
+                }
+
                 $messageSentTo = [];
-                if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                if (
+                    isset($_POST['email_ann']) &&
+                    empty($_POST['onlyThoseMails']) &&
+                    false === $scheduleAnnouncementNotification
+                ) {
                     $messageSentTo = AnnouncementManager::sendEmail(
                         api_get_course_info(),
                         api_get_session_id(),
@@ -950,6 +1069,29 @@ switch ($action) {
                 }
 
                 if ($announcement) {
+                    if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
+                        $extraFieldValues = new ExtraFieldValue('course_announcement');
+                        $data['item_id'] = $announcement->getIid();
+
+                        $extraFieldValues->saveFieldValues(
+                            $data,
+                            false,
+                            false,
+                            [
+                                'send_notification_at_a_specific_date',
+                                'date_to_send_notification',
+                                'send_to_users_in_session',
+                            ]
+                        );
+
+                        if ($scheduleAnnouncementNotification) {
+                            $announcement->setEmailSent(false);
+                            $em = Database::getManager();
+                            $em->persist($announcement);
+                            $em->flush();
+                        }
+                    }
+
                     if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
                         Container::getCalendarEventRepository()
                             ->createFromAnnouncement(
@@ -972,7 +1114,11 @@ switch ($action) {
                     );
 
                     $messageSentTo = [];
-                    if (isset($data['email_ann']) && $data['email_ann']) {
+                    if (
+                        isset($data['email_ann']) &&
+                        $data['email_ann'] &&
+                        false === $scheduleAnnouncementNotification
+                    ) {
                         $messageSentTo = AnnouncementManager::sendEmail(
                             api_get_course_info(),
                             api_get_session_id(),

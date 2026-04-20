@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom videokonference';
+$strings['plugin_comment'] = 'Integrace Zoom videokonference do kurzů a sezení';
+
+$strings['apiKey'] = 'API klíč';
+$strings['apiSecret'] = 'API tajný klíč';
+$strings['verificationToken'] = 'Ověřovací token';
+$strings['enableParticipantRegistration'] = 'Povolit registraci účastníků';
+$strings['enableCloudRecording'] = 'Typ automatického nahrávání';
+$strings['enableGlobalConference'] = 'Povolit globální konferenci';
+$strings['enableGlobalConferencePerUser'] = 'Povolit globální konferenci pro uživatele';
+$strings['globalConferenceAllowRoles'] = 'Odkaz na globální konferenci viditelný pouze pro tyto role uživatelů';
+$strings['globalConferencePerUserAllowRoles'] = 'Odkaz na globální konferenci pro uživatele viditelný pouze pro tyto role uživatelů';
+
+$strings['enableCloudRecording_help'] = 'Vyžaduje placený Zoom profil.
+Nebude fungovat pro <em>základní</em> profil.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Všichni studenti kurzu byli zaregistrováni';
+$strings['Agenda'] = 'Program';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Nelze se registrovat bez e-mailové adresy';
+$strings['CopyingJoinURL'] = 'Kopírování URL pro připojení';
+$strings['CopyJoinAsURL'] = 'Kopírovat URL „připojit se jako“';
+$strings['CopyToCourse'] = 'Kopírovat do kurzu';
+$strings['CouldNotCopyJoinURL'] = 'Nelze zkopírovat URL pro připojení';
+$strings['Course'] = 'Kurz';
+$strings['CreatedAt'] = 'Vytvořeno';
+$strings['CreateLinkInCourse'] = 'Vytvořit odkaz(y) v kurzu';
+$strings['CreateUserVideoConference'] = 'Vytvořit uživatelskou konferenci';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Smazat schůzku';
+$strings['DeleteFile'] = 'Smazat soubor(y)';
+$strings['Details'] = 'Podrobnosti';
+$strings['DoIt'] = 'Provedení';
+$strings['Duration'] = 'Doba trvání';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Doba trvání (v minutách)';
+$strings['EndDate'] = 'Datum ukončení';
+$strings['EnterMeeting'] = 'Vstoupit do schůzky';
+$strings['ViewMeeting'] = 'Zobrazit schůzku';
+$strings['Files'] = 'Soubory';
+$strings['Finished'] = 'dokončeno';
+$strings['FileWasCopiedToCourse'] = 'Soubor byl zkopírován do kurzu';
+$strings['FileWasDeleted'] = 'Soubor byl smazán';
+$strings['GlobalMeeting'] = 'Globální konference';
+$strings['GlobalMeetingPerUser'] = 'Globální konference pro uživatele';
+$strings['GroupUsersWereRegistered'] = 'Členové skupiny byli zaregistrováni';
+$strings['InstantMeeting'] = 'Okamžitá schůzka';
+$strings['Join'] = 'Připojit se';
+$strings['JoinGlobalVideoConference'] = 'Připojit se k globální konferenci';
+$strings['JoinURLCopied'] = 'URL pro připojení zkopírováno';
+$strings['JoinURLToSendToParticipants'] = 'URL pro připojení k odeslání účastníkům';
+$strings['LiveMeetings'] = 'Živé schůzky';
+$strings['LinkToFileWasCreatedInCourse'] = 'Odkaz na soubor byl přidán do kurzu';
+$strings['MeetingDeleted'] = 'Schůzka smazána';
+$strings['MeetingsFound'] = 'Nalezené schůzky';
+$strings['MeetingUpdated'] = 'Schůzka aktualizována';
+$strings['NewMeetingCreated'] = 'Nová schůzka vytvořena';
+$strings['Password'] = 'Heslo';
+$strings['RecurringWithFixedTime'] = 'Opakující se s pevným časem';
+$strings['RecurringWithNoFixedTime'] = 'Opakující se bez pevného času';
+$strings['RegisterAllCourseUsers'] = 'Registrovat všechny uživatele kurzu';
+$strings['RegisteredUserListWasUpdated'] = 'Seznam registrovaných uživatelů aktualizován';
+$strings['RegisteredUsers'] = 'Registrovaní uživatelé';
+$strings['RegisterNoUser'] = 'Neregistrovat žádného uživatele';
+$strings['RegisterTheseGroupMembers'] = 'Registrovat členy této skupiny';
+$strings['ScheduleAMeeting'] = 'Naplánovat schůzku';
+$strings['ScheduledMeeting'] = 'Naplánovaná schůzka';
+$strings['ScheduledMeetings'] = 'Naplánované schůzky';
+$strings['ScheduleAMeeting'] = 'Naplánovat schůzku';
+$strings['SearchMeeting'] = 'Hledat schůzku';
+$strings['Session'] = 'Relace';
+$strings['StartDate'] = 'Datum zahájení';
+$strings['Started'] = 'spuštěno';
+$strings['StartInstantMeeting'] = 'Spustit okamžitou schůzku';
+$strings['StartMeeting'] = 'Spustit schůzku';
+$strings['StartTime'] = 'Čas zahájení';
+$strings['Topic'] = 'Téma';
+$strings['TopicAndAgenda'] = 'Téma a agenda';
+$strings['Type'] = 'Typ';
+$strings['UpcomingMeetings'] = 'Nadcházející schůzky';
+$strings['UpdateMeeting'] = 'Aktualizovat schůzku';
+$strings['UpdateRegisteredUserList'] = 'Aktualizovat seznam registrovaných uživatelů';
+$strings['UserRegistration'] = 'Registrace uživatele';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'čeká';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s nahrávka schůzky %s z %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Nejste registrováni na tuto schůzku';
+$strings['ZoomVideoConferences'] = 'Zoom videokonference';
+$strings['Recordings'] = 'Nahrávky';
+$strings['CreateGlobalVideoConference'] = 'Vytvořit globální videokonferenci';
+$strings['ConferenceNotStarted'] = 'Konference nebyla spuštěna';
+$strings['MeetingNotFound'] = 'Schůzka nenalezena';
+$strings['JoinURLNotAvailable'] = 'URL není k dispozici';
+$strings['Meetings'] = 'Schůzky';
+$strings['ConferenceType'] = 'Typ konference';
+$strings['ForEveryone'] = 'Všichni';
+$strings['SomeUsers'] = 'Někteří uživatelé (vybrat později)';
+$strings['Activity'] = 'Aktivita';
+$strings['ConferenceNotAvailable'] = 'Konference není k dispozici';

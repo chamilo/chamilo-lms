@@ -31,6 +31,29 @@ api_protect_course_script(true);
 
 $origin = api_get_origin();
 
+$ltiSession = Session::read('_ltiProvider');
+$ltiLaunchId = '';
+
+if (isset($_REQUEST['lti_launch_id']) && is_string($_REQUEST['lti_launch_id'])) {
+    $ltiLaunchId = trim($_REQUEST['lti_launch_id']);
+}
+
+if ('' === $ltiLaunchId && is_array($ltiSession) && !empty($ltiSession['lti_launch_id'])) {
+    $ltiLaunchId = (string) $ltiSession['lti_launch_id'];
+}
+
+$ltiProviderToken = '';
+if (isset($_REQUEST['lti_provider_token']) && is_string($_REQUEST['lti_provider_token'])) {
+    $ltiProviderToken = trim($_REQUEST['lti_provider_token']);
+}
+
+$isLtiLaunchContext = '' !== $ltiLaunchId || '' !== $ltiProviderToken || !empty($ltiSession);
+$isLtiEmbeddable = 'embeddable' === $origin && $isLtiLaunchContext;
+
+if (!$isLtiLaunchContext && !empty($ltiSession)) {
+    Session::erase('_ltiProvider');
+}
+
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
@@ -38,16 +61,32 @@ if (empty($objExercise)) {
 
 $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
+/** @var Exercise $objExercise */
 if (empty($objExercise)) {
-    // Redirect to the exercise overview
-    // Check if the exe_id exists
-    $objExercise = new Exercise();
-    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-    if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-        header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
-        exit;
+    $exercise_stat_info = [];
+
+    if ($exeId > 0) {
+        $exerciseLoader = new Exercise();
+        $exercise_stat_info = $exerciseLoader->get_stat_track_exercise_info_by_exe_id($exeId);
+
+        if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
+            $objExercise = new Exercise();
+            $objExercise->read((int) $exercise_stat_info['exe_exo_id']);
+        }
     }
-    api_not_allowed(true);
+
+    if (empty($objExercise) || empty($objExercise->id)) {
+        if (
+            !$isLtiLaunchContext
+            && !empty($exercise_stat_info)
+            && isset($exercise_stat_info['exe_exo_id'])
+        ) {
+            header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq().'&origin='.$origin);
+            exit;
+        }
+
+        api_not_allowed(true);
+    }
 }
 
 if (api_is_in_gradebook()) {
@@ -196,9 +235,9 @@ if (!empty($exercise_stat_info)) {
 
 $maxScore = $objExercise->getMaxScore();
 
-if ('embeddable' === $origin) {
+if ('embeddable' === $origin && !$isLtiEmbeddable) {
     $pageTop .= showEmbeddableFinishButton();
-} else {
+} elseif ('embeddable' !== $origin) {
     Display::addFlash(
         Display::return_message(get_lang('Saved.'), 'normal', false)
     );
@@ -263,6 +302,34 @@ Container::getEventDispatcher()->dispatch(
     Events::EXERCISE_ENDED
 );
 
+$courseCodeForLtiScore = $courseInfo['code'] ?? api_get_course_id();
+
+if ('' !== $ltiLaunchId && $exeId > 0 && !empty($courseCodeForLtiScore)) {
+    $scoreUrl = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/tool/api/score.php?'.http_build_query([
+            'lti_launch_id' => $ltiLaunchId,
+            'lti_tool' => 'quiz',
+            'lti_result_id' => $exeId,
+            'cidReq' => $courseCodeForLtiScore,
+        ]);
+
+    $pageBottom .= '<script>
+(function () {
+    var url = '.json_encode($scoreUrl).';
+    try {
+        if (window.fetch) {
+            fetch(url, {
+                credentials: "same-origin",
+                keepalive: true
+            }).catch(function () {});
+        } else {
+            (new Image()).src = url;
+        }
+    } catch (error) {
+    }
+})();
+</script>';
+}
+
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
@@ -324,7 +391,12 @@ $template->assign('allow_signature', $allowSignature);
 $template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
 $template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
-$template->display_one_col_template();
+
+if ('embeddable' === $origin) {
+    $template->display_blank_template();
+} else {
+    $template->display_one_col_template();
+}
 
 function showEmbeddableFinishButton()
 {

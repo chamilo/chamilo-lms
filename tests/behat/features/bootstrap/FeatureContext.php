@@ -70,7 +70,7 @@ class FeatureContext extends MinkContext
     public function courseExists($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
+        $this->visit('/admin/course-list?keyword='.$argument);
         $this->assertPageContainsText($argument);
     }
 
@@ -80,7 +80,7 @@ class FeatureContext extends MinkContext
     public function courseIsDeleted($argument): void
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
+        $this->visit('/admin/course-list?keyword='.$argument);
         $this->clickLink('Delete');
     }
 
@@ -527,7 +527,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(4000);
+        $this->getSession()->wait(8000);
     }
 
     /**
@@ -536,7 +536,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(7000);
+        $this->getSession()->wait(14000);
     }
 
     /**

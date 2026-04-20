@@ -22,6 +22,327 @@ if ($isGlobalPerUser || $isGlobal) {
 }
 require_once __DIR__.'/config.php';
 
+function bbb_request_value(string $key, mixed $default = null): mixed
+{
+    if (array_key_exists($key, $_POST)) {
+        return $_POST[$key];
+    }
+
+    if (array_key_exists($key, $_GET)) {
+        return $_GET[$key];
+    }
+
+    return $default;
+}
+
+function bbb_get_request_action(): string
+{
+    $action = bbb_request_value('action', '');
+
+    return is_string($action) ? $action : '';
+}
+
+function bbb_has_valid_action_token(): bool
+{
+    $sessionToken = $_SESSION['bbb_action_csrf_token'] ?? '';
+    $requestToken = bbb_request_value('bbb_token', '');
+
+    return is_string($sessionToken)
+        && $sessionToken !== ''
+        && is_string($requestToken)
+        && $requestToken !== ''
+        && hash_equals($sessionToken, $requestToken);
+}
+
+function bbb_require_action_token(Bbb $bbb): void
+{
+    if (bbb_has_valid_action_token()) {
+        return;
+    }
+
+    Display::addFlash(Display::return_message(get_lang('Your session has expired. Please try again.'), 'error'));
+    header('Location: '.$bbb->getListingUrl());
+    exit;
+}
+
+function bbb_listing_add_classes_to_element(DOMElement $element, array $classes): void
+{
+    $existing = trim((string) $element->getAttribute('class'));
+    $currentClasses = '' === $existing ? [] : preg_split('/\s+/', $existing);
+    $currentClasses = is_array($currentClasses) ? $currentClasses : [];
+
+    foreach ($classes as $class) {
+        if (!in_array($class, $currentClasses, true)) {
+            $currentClasses[] = $class;
+        }
+    }
+
+    $element->setAttribute('class', trim(implode(' ', array_filter($currentClasses))));
+}
+
+function bbb_listing_get_element_inner_html(DOMElement $element): string
+{
+    $html = '';
+
+    foreach ($element->childNodes as $childNode) {
+        $html .= $element->ownerDocument->saveHTML($childNode);
+    }
+
+    return $html;
+}
+
+function bbb_listing_style_form_html(string $html): string
+{
+    if (!class_exists(DOMDocument::class) || '' === trim($html)) {
+        return $html;
+    }
+
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+
+    $document = new DOMDocument('1.0', 'UTF-8');
+    $wrappedHtml = '<?xml encoding="utf-8" ?><div id="bbb-listing-form-root">'.$html.'</div>';
+
+    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    if (!$loaded) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $xpath = new DOMXPath($document);
+    $root = $document->getElementById('bbb-listing-form-root');
+
+    if (!$root) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        return $html;
+    }
+
+    $forms = $xpath->query('.//form', $root);
+    if ($forms) {
+        foreach ($forms as $form) {
+            if ($form instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($form, ['space-y-5']);
+            }
+        }
+    }
+
+    $fieldsets = $xpath->query('.//fieldset', $root);
+    if ($fieldsets) {
+        foreach ($fieldsets as $fieldset) {
+            if ($fieldset instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($fieldset, [
+                    'rounded-2xl',
+                    'border',
+                    'border-gray-25',
+                    'bg-white',
+                    'p-5',
+                    'shadow-sm',
+                    'space-y-4',
+                ]);
+            }
+        }
+    }
+
+    $formGroups = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]', $root);
+    if ($formGroups) {
+        foreach ($formGroups as $group) {
+            if ($group instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($group, [
+                    'rounded-xl',
+                    'border',
+                    'border-gray-25',
+                    'bg-support-2',
+                    'p-4',
+                    'space-y-3',
+                ]);
+            }
+        }
+    }
+
+    $labels = $xpath->query('.//label', $root);
+    if ($labels) {
+        foreach ($labels as $label) {
+            if ($label instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($label, [
+                    'block',
+                    'text-body-2',
+                    'font-semibold',
+                    'text-gray-90',
+                ]);
+            }
+        }
+    }
+
+    $inputs = $xpath->query('.//input[not(@type="hidden") and not(@type="submit") and not(@type="button") and not(@type="checkbox") and not(@type="radio")] | .//select | .//textarea', $root);
+    if ($inputs) {
+        foreach ($inputs as $input) {
+            if ($input instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($input, [
+                    'mt-2',
+                    'block',
+                    'w-full',
+                    'rounded-lg',
+                    'border',
+                    'border-gray-25',
+                    'bg-white',
+                    'px-3',
+                    'py-2',
+                    'text-body-2',
+                    'text-gray-90',
+                    'shadow-sm',
+                    'focus:border-primary',
+                    'focus:ring-primary',
+                ]);
+            }
+        }
+    }
+
+    $checkboxes = $xpath->query('.//input[@type="checkbox"] | .//input[@type="radio"]', $root);
+    if ($checkboxes) {
+        foreach ($checkboxes as $checkbox) {
+            if ($checkbox instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($checkbox, [
+                    'h-4',
+                    'w-4',
+                    'rounded',
+                    'border-gray-25',
+                    'text-primary',
+                    'focus:ring-primary',
+                ]);
+            }
+        }
+    }
+
+    $helpBlocks = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " help-block ") or contains(concat(" ", normalize-space(@class), " "), " form-control-feedback ")]', $root);
+    if ($helpBlocks) {
+        foreach ($helpBlocks as $helpBlock) {
+            if ($helpBlock instanceof DOMElement) {
+                bbb_listing_add_classes_to_element($helpBlock, [
+                    'mt-2',
+                    'block',
+                    'text-caption',
+                    'text-gray-50',
+                ]);
+            }
+        }
+    }
+
+    $buttons = $xpath->query('.//button | .//input[@type="submit"] | .//input[@type="button"]', $root);
+    if ($buttons) {
+        foreach ($buttons as $button) {
+            if (!$button instanceof DOMElement) {
+                continue;
+            }
+
+            $type = strtolower((string) $button->getAttribute('type'));
+            $buttonId = (string) $button->getAttribute('id');
+
+            if ('bbb-pre-btn' === $buttonId) {
+                bbb_listing_add_classes_to_element($button, [
+                    'inline-flex',
+                    'h-12',
+                    'w-12',
+                    'items-center',
+                    'justify-center',
+                    'rounded-xl',
+                    'border',
+                    'border-gray-25',
+                    'bg-white',
+                    'text-primary',
+                    'shadow-sm',
+                    'transition',
+                    'hover:bg-support-2',
+                ]);
+                continue;
+            }
+
+            if (in_array($type, ['submit', 'button'], true) || '' === $type) {
+                bbb_listing_add_classes_to_element($button, [
+                    'inline-flex',
+                    'items-center',
+                    'justify-center',
+                    'rounded-xl',
+                    'border',
+                    'border-primary',
+                    'bg-primary',
+                    'px-5',
+                    'py-3',
+                    'text-body-2',
+                    'font-semibold',
+                    'text-white',
+                    'shadow-sm',
+                    'transition',
+                    'hover:opacity-90',
+                    'disabled:cursor-not-allowed',
+                    'disabled:border-primary-borderdisabled',
+                    'disabled:bg-primary-bgdisabled',
+                    'disabled:text-fontdisabled',
+                ]);
+            }
+        }
+    }
+
+    $result = bbb_listing_get_element_inner_html($root);
+
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+
+    return $result;
+}
+
+function bbb_listing_build_header_html(BbbPlugin $plugin, bool $status, int $usersOnline, int $meetingsCount): string
+{
+    $statusLabel = $status ? get_lang('Enabled') : get_lang('Disabled');
+    $statusClasses = $status
+        ? 'badge--success'
+        : 'badge--warning';
+
+    $usersLabel = htmlspecialchars((string) $usersOnline, ENT_QUOTES);
+    $meetingsLabel = htmlspecialchars((string) $meetingsCount, ENT_QUOTES);
+
+    return '
+<div class="mx-auto max-w-7xl px-4 pt-6">
+    <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="space-y-2">
+                <div class="inline-flex items-center rounded-full bg-support-2 px-3 py-1 text-caption font-semibold text-support-4">
+                    <em class="mdi mdi-video-outline mr-2"></em>'.htmlspecialchars($plugin->get_lang('Videoconference'), ENT_QUOTES).'
+                </div>
+                <h2 class="mb-0 text-2xl font-semibold text-gray-90">'.htmlspecialchars($plugin->get_lang('Videoconference'), ENT_QUOTES).'</h2>
+                <p class="mb-0 text-body-2 text-gray-50">'.htmlspecialchars($plugin->get_lang('RecordList'), ENT_QUOTES).'</p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-3">
+                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3">
+                    <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">'.htmlspecialchars(get_lang('Status'), ENT_QUOTES).'</div>
+                    <div class="mt-2"><span class="badge '.$statusClasses.'">'.htmlspecialchars($statusLabel, ENT_QUOTES).'</span></div>
+                </div>
+                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3">
+                    <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">'.htmlspecialchars(get_lang('Users'), ENT_QUOTES).'</div>
+                    <div class="mt-2 text-xl font-semibold text-gray-90">'.$usersLabel.'</div>
+                </div>
+                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3">
+                    <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">'.htmlspecialchars($plugin->get_lang('RecordList'), ENT_QUOTES).'</div>
+                    <div class="mt-2 text-xl font-semibold text-gray-90">'.$meetingsLabel.'</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>';
+}
+
+function bbb_listing_build_action_button(string $url, string $label, string $icon): string
+{
+    return '<a href="'.htmlspecialchars($url, ENT_QUOTES).'" class="inline-flex items-center justify-center gap-2 rounded-xl border border-primary bg-primary px-4 py-3 text-body-2 font-semibold text-white shadow-sm transition hover:opacity-90">'
+        .'<em class="mdi mdi-'.htmlspecialchars($icon, ENT_QUOTES).'"></em>'
+        .htmlspecialchars($label, ENT_QUOTES)
+        .'</a>';
+}
+
+
 $plugin = BbbPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $em = Database::getManager();
@@ -30,7 +351,7 @@ $activityRepo = $em->getRepository(ConferenceActivity::class);
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'Bbb/resources/utils.js');
 
-$action = $_GET['action'] ?? '';
+$action = bbb_get_request_action();
 $userId = api_get_user_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
@@ -78,17 +399,22 @@ $message = '';
 if ($conferenceManager && $allowToEdit) {
     switch ($action) {
         case 'add_to_calendar':
+            bbb_require_action_token($bbb);
             if ($bbb->isGlobalConference()) {
                 return false;
             }
             $courseInfo = api_get_course_info();
             $agenda = new Agenda('course');
-            $id = (int) ($_GET['id'] ?? 0);
+            $id = (int) bbb_request_value('id', 0);
             $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $course->getTitle());
-            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url'] ?? '#');
+            $calendarUrl = (string) bbb_request_value('url', '#');
+            if (!filter_var($calendarUrl, FILTER_VALIDATE_URL)) {
+                $calendarUrl = '#';
+            }
+            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $calendarUrl);
 
             $eventId = $agenda->addEvent(
-                $_REQUEST['start'] ?? null,
+                bbb_request_value('start'),
                 null,
                 'true',
                 $title,
@@ -102,7 +428,8 @@ if ($conferenceManager && $allowToEdit) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copyRecordingToLinkTool($_GET['id'] ?? '');
+            bbb_require_action_token($bbb);
+            $result = $bbb->copyRecordingToLinkTool(bbb_request_value('id', ''));
             if ($result) {
                 $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -110,11 +437,12 @@ if ($conferenceManager && $allowToEdit) {
             }
             break;
         case 'regenerate_record':
+            bbb_require_action_token($bbb);
             if ('true' !== $plugin->get('allow_regenerate_recording')) {
                 api_not_allowed(true);
             }
-            $recordId = $_GET['record_id'] ?? '';
-            $result = $bbb->regenerateRecording($_GET['id'] ?? '', $recordId);
+            $recordId = (string) bbb_request_value('record_id', '');
+            $result = $bbb->regenerateRecording(bbb_request_value('id', ''), $recordId);
             if ($result) {
                 $message = Display::return_message(get_lang('Success'), 'success');
             } else {
@@ -126,7 +454,8 @@ if ($conferenceManager && $allowToEdit) {
             exit;
 
         case 'delete_record':
-            $result = $bbb->deleteRecording($_GET['id'] ?? '');
+            bbb_require_action_token($bbb);
+            $result = $bbb->deleteRecording(bbb_request_value('id', ''));
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -138,7 +467,8 @@ if ($conferenceManager && $allowToEdit) {
             exit;
 
         case 'end':
-            $bbb->endMeeting($_GET['id'] ?? '');
+            bbb_require_action_token($bbb);
+            $bbb->endMeeting(bbb_request_value('id', ''));
             $message = Display::return_message(
                 $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang('MeetingClosedComment'),
                 'success',
@@ -163,13 +493,15 @@ if ($conferenceManager && $allowToEdit) {
             exit;
 
         case 'publish':
-            $bbb->publishMeeting($_GET['id'] ?? '');
+            bbb_require_action_token($bbb);
+            $bbb->publishMeeting(bbb_request_value('id', ''));
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
 
         case 'unpublish':
-            $bbb->unpublishMeeting($_GET['id'] ?? '');
+            bbb_require_action_token($bbb);
+            $bbb->unpublishMeeting(bbb_request_value('id', ''));
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
@@ -179,7 +511,7 @@ if ($conferenceManager && $allowToEdit) {
                 $setting = api_get_course_plugin_setting('bbb', 'bbb_force_record_generation', $courseInfo);
                 $allow = (int) $setting === 1;
                 if ($allow) {
-                    $result = $bbb->getMeetingByRemoteId($_GET['remote_id'] ?? '');
+                    $result = $bbb->getMeetingByRemoteId((string) bbb_request_value('remote_id', ''));
                     if (!empty($result)) {
                         $result = $bbb->regenerateRecording($result['id'] ?? null);
                         if ($result) {
@@ -191,8 +523,8 @@ if ($conferenceManager && $allowToEdit) {
                 }
             }
 
-            $remoteId = Database::escape_string($_GET['remote_id'] ?? '');
-            $meetingData = $meetingRepository->findOneByRemoteIdAndAccessUrl($remoteId, api_get_current_access_url_id());
+            $remoteId = Database::escape_string((string) bbb_request_value('remote_id', ''));
+            $meetingData = $bbb->getMeetingByRemoteId($remoteId);
 
             if (empty($meetingData) || !is_array($meetingData)) {
                 error_log("meeting does not exist - remote_id: $remoteId");
@@ -295,8 +627,8 @@ if ($conferenceManager && $allowToEdit) {
 } else {
     // Non-manager logout path: close any open activity for the user.
     if ('logout' == $action) {
-        $remoteId = Database::escape_string($_GET['remote_id'] ?? '');
-        $meetingData = $meetingRepository->findOneByRemoteIdAndAccessUrl($remoteId, api_get_current_access_url_id());
+        $remoteId = Database::escape_string((string) bbb_request_value('remote_id', ''));
+        $meetingData = $bbb->getMeetingByRemoteId($remoteId);
 
         if (empty($meetingData) || !is_array($meetingData)) {
             error_log("meeting does not exist - remote_id: $remoteId");
@@ -447,16 +779,23 @@ $urlList = [];
 if ($conferenceManager && $allowToEdit) {
     $form = new FormValidator('start_conference', 'post', $conferenceUrl);
     $form->addElement('hidden', 'action', 'start');
+    $form->addElement('hidden', 'bbb_token', $bbb->getActionCsrfToken());
     $ajaxUrl     = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents&'.api_get_cidreq();
+    if ($isGlobal) {
+        $ajaxUrl .= '&global=1';
+    }
+    if ($isGlobalPerUser) {
+        $ajaxUrl .= '&user_id='.(int) $isGlobalPerUser;
+    }
     $maxTotalMb  = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', $courseInfo);
     if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
 
-    $title      = htmlspecialchars(get_lang('Pre-upload Documents'), ENT_QUOTES);
-    $help       = htmlspecialchars(get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.'), ENT_QUOTES);
+    $title      = htmlspecialchars($plugin->get_lang('Pre-upload Documents'), ENT_QUOTES);
+    $help       = htmlspecialchars($plugin->get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.'), ENT_QUOTES);
     $loadingTxt = htmlspecialchars(get_lang('Loading'), ENT_QUOTES);
-    $noDocsTxt  = htmlspecialchars(get_lang('No documents found'), ENT_QUOTES);
-    $failTxt    = htmlspecialchars(get_lang('Failed to load documents'), ENT_QUOTES);
-    $maxLabel   = htmlspecialchars(sprintf(get_lang('Max total: %d MB'), $maxTotalMb), ENT_QUOTES);
+    $noDocsTxt  = htmlspecialchars($plugin->get_lang('No documents found'), ENT_QUOTES);
+    $failTxt    = htmlspecialchars($plugin->get_lang('Failed to load documents'), ENT_QUOTES);
+    $maxLabel   = htmlspecialchars(sprintf($plugin->get_lang('Max total: %d MB'), $maxTotalMb), ENT_QUOTES);
 
     $iconHtml = Display::getMdiIcon(
         ActionIcon::UPLOAD,
@@ -584,20 +923,20 @@ if ($conferenceManager && $allowToEdit) {
         'submit',
         'start_meeting',
         $plugin->get_lang('EnterConference'),
-        'class="btn btn--primary btn-large"'
+        'class="btn btn--primary btn-large text-white"'
     );
     $formHtml = $form->returnForm();
     if (!empty($messagesAboveForm)) {
         $formHtml = $messagesAboveForm.$formHtml;
         $messagesAboveForm = '';
     }
-    $formToString = $formHtml;
+    $formToString = bbb_listing_style_form_html($formHtml);
 } else {
     // Fallback: plain "Enter conference" link for non-managers (if allowed by context/template).
     $urlList[] = Display::url(
         $plugin->get_lang('EnterConference'),
         $conferenceUrl,
-        ['target' => '_blank', 'class' => 'btn btn--primary btn-large']
+        ['target' => '_blank', 'class' => 'btn btn--primary btn-large text-white']
     );
 }
 
@@ -619,28 +958,30 @@ $tpl->assign('plugin', $plugin);
 $tpl->assign('message', $message);
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 
-// Admin toolbar.
-$actionLinks = '';
+$headerHtml = bbb_listing_build_header_html($plugin, $status, $usersOnline, count($meetings));
+
+$actionsHtml = '';
 if (api_is_platform_admin()) {
     $dashboardUrl = api_get_path(WEB_PLUGIN_PATH).'Bbb/webhook_dashboard.php';
-    $actionLinks .= Display::toolbarButton(
-        $plugin->get_lang('AdminView'),
+    $actionButtons = [];
+    $actionButtons[] = bbb_listing_build_action_button(
         api_get_path(WEB_PLUGIN_PATH).'Bbb/admin.php',
-        'list',
-        'primary'
+        $plugin->get_lang('AdminView'),
+        'view-dashboard-outline'
     );
 
     if ($plugin->webhooksEnabled()) {
-        $actionLinks .= Display::toolbarButton(
-            $plugin->get_lang('ViewActivityDashboard'),
+        $actionButtons[] = bbb_listing_build_action_button(
             $dashboardUrl,
-            'chart-line',
-            'primary'
+            $plugin->get_lang('ViewActivityDashboard'),
+            'chart-line'
         );
     }
 
-    $tpl->assign('actions', Display::toolbarAction('toolbar', [$actionLinks]));
+    if (!empty($actionButtons)) {
+        $actionsHtml = '<div class="mx-auto max-w-7xl px-4 pt-4"><div class="flex flex-wrap gap-3">'.implode('', $actionButtons).'</div></div>';
+    }
 }
 
-$tpl->assign('content', $content);
+$tpl->assign('content', $headerHtml.$actionsHtml.$content);
 $tpl->display_one_col_template();

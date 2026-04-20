@@ -1,0 +1,334 @@
+
+body{
+    background-color :white!important;
+    font-family : sans-serif;
+}
+
+.bigtitleprint {
+    font-weight: 100;
+    font-size : 26px;
+    text-align: center;
+    padding : 10px;
+    border : 1px solid #212F3D;
+}
+.bigtitlelogo {
+    position : relative;
+    width : 50%;
+    margin-left : 25%;
+    margin-right : 25%;
+    padding : 10px;
+}
+.teachdoctextContent {
+    line-height: 1.4;
+}
+
+
+h1 {
+    text-align : left!important;
+    font-weight: 100;
+    font-size : 26px;
+    margin : 0px!important;
+    padding : 5px!important;
+    margin-bottom : 20px!important;
+    color : black;
+    border-bottom : 1px solid #212F3D;
+}
+h2 {
+    text-align : left;
+    font-weight : 100;
+    font-size : 20px;
+    margin : 0px!important;
+    margin-left : 4px!important;
+    padding : 6px!important;
+    color : #1B2631;
+    border-bottom : 2px solid #99A3A4;
+}
+.sectioncollapse {
+    text-align : center;
+    font-size : 22px;
+    background-color : #717D7E;
+    color:white;
+    padding : 10px;
+    margin : 10px;
+    margin-left : 0px;
+    margin-right : 0px;
+    background-image : url({abspath}img/classique/arrow-collapsel.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    cursor : pointer;
+}
+
+blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+
+/*button only*/
+.btnteachgreen{
+    color: #fff;
+    background-color: #229954;
+    border-color: #1E8449 ;
+    padding: 7px 13px;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btnteachblue{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    padding: 7px 13px;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btnroundblue{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url({abspath}img/btn/mat-right.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+.btnroundblueprev{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url({abspath}img/btn/mat-left.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+.btnroundbluecheck{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url({abspath}img/btn/mat-check.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+
+.btn-btnTeach{
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.btn-btnTeach:hover{
+    transform: scale(0.96);
+}
+/*button only*/
+.qcmbarre{
+    text-align: left;
+    width:100%;
+}
+.quizzTextqcm{
+    text-align: left;
+}
+.qcmbarre{
+    background-color : #FBFCFC;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding-bottom : 20px;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+.qcmbarre td{
+    padding : 1px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextqcm{
+    padding : 20px;
+    padding-bottom : 20px;
+    padding-left:20px;
+}
+.qcmbarre .quizzTextqcm p{
+    padding : 0px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextTd{
+    width: 54px;
+    padding : 0px;
+}
+.checkboxqcm{
+    padding : 0px;
+    margin : 0px;
+    width:30px;
+    height:30px;
+    margin-left:15px;
+}
+
+.videoByLudi{
+    max-width:960px;
+    min-height:100px;
+    max-height:540px;
+    width:98%;
+    margin-left:1%;
+}
+
+.audioByLudi{
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+.teachdoctext{
+    width:100%;
+}
+.teachdoctext tr td{
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+.audioByLudi{
+    display: block;
+    margin-top:5px;
+    margin-bottom:5px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.bandeImg{
+    margin-top : 5px;
+    margin-bottom : 5px;
+    width : 100%;
+    display : block;
+    position : relative;
+}
+
+.videoByLudi{
+    margin:5px;
+}
+.teachdocbtn{
+    width : 100%;
+    text-align : center;
+}
+.teachdocbtn td{
+    width : 100%;
+    text-align : center;
+    padding : 10px;
+}
+
+.teachdocbtnteach td{
+    width : 100%;
+    text-align : center;
+    padding : 10px;
+}
+
+.teachdocplugteach{
+    position : relative;
+    width : 100%;
+}
+.teachdocplugteach td{
+    position : relative;
+    width : 100%;
+}
+.teachdocplugteach a{
+    display: none;
+}
+.plugteachcontain{
+    position : relative;
+    display: inline-block;
+    width : 99%;
+    margin : 0.5%;
+    min-height : 150px;
+    border : dotted 0px gray;
+}
+.plugteachuicontain{
+    position : relative;
+    display: inline-block;
+    width : 100%;
+    margin : 0px;
+    background-color: #E8DAEF;
+    padding : 7px;
+    min-height : 30px;
+    border : dotted 1px rgb(204, 26, 174);
+}
+
+.topinactiveteach{
+    position : absolute;
+    right : 0px;
+    top : 0px;
+    bottom : 10px;
+    left : 20px;
+    background-color: transparent;
+}
+img{
+    max-width : 100%;
+}
+.bandeImg{
+    margin-top : 5px;
+    margin-bottom : 5px;
+    width : 100%;
+    max-width :460px;
+    display : block;
+    position : relative;
+}
+.cell{
+    border:dashed 1px #A9CCE3;
+    vertical-align: middle;
+    padding:10px;
+    width: 8%;
+    min-width: 250px;
+    display: table-cell;
+    height: 0;
+    height: auto!important;
+    min-height: 75px;
+}
+.row {
+    display: table;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    width: 100%;
+    height: 0;
+    height: auto!important;
+    min-height: 75px;
+}
+.cell{
+    vertical-align: middle;
+}
+
+ 

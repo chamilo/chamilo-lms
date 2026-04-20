@@ -113,7 +113,7 @@ $tool_name = get_lang('Import skills from a CSV file');
 $interbreadcrumb[] = ["url" => api_get_path(WEB_CODE_PATH).'admin/index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
-$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
+$extra_fields = UserManager::get_extra_fields();
 $user_id_error = [];
 $error_message = '';
 $csvCustomError = '';

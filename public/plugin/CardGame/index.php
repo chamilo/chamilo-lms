@@ -2,104 +2,80 @@
 
 /* For license terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
- * This is the main script of the Card Game plugin.
- * It is loaded on every page through the inclusion of the plugin in the
- * pre_footer region (a mandatory step of the installation).
+ * CardGame widget entry point.
  *
- * @author Damien Renou
+ * The plugin is injected globally through a region.
+ * Visibility is handled on the frontend so the widget can survive SPA-like
+ * navigation without requiring a full backend re-render on each route change.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-// This plugin doesn't work for anonymous users
-if (!api_is_anonymous()) {
-    require_once 'CardGame.php';
-    $cardGame = CardGame::create();
+if (api_is_anonymous()) {
+    return;
+}
 
-    $version = '?v=041';
-    $interface = 'localhost';
-    $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
-    $parsedUrlpath = $parsedUrl['path'];
-    $pluginPath = api_get_path(WEB_PLUGIN_PATH).'CardGame/resources/';
+if (defined('CARDGAME_WIDGET_RENDERED')) {
+    return;
+}
 
-    $fh = '<script type="text/javascript" src="'.$pluginPath.'js/cardgame.js'.$version.'" ></script>';
-    $fh .= '<link href="'.$pluginPath.'css/cardgame.css'.$version.'" rel="stylesheet" type="text/css">';
+define('CARDGAME_WIDGET_RENDERED', true);
 
-    $fh .= '<div id="cardgamemessage" style="display:none;" >'.$cardGame->get_lang('openDeckCardGame').'</div>';
-    $fh .= '<div id="cardgameengage" style="display:none;" >'.$cardGame->get_lang('engageDeckCardGame').'</div>';
-    $fh .= '<div id="cardgameloose" style="display:none;" >'.$cardGame->get_lang('cardgameloose').'</div>';
+require_once __DIR__.'/CardGame.php';
 
-    $fh .= '<div id="linkcardgame" style="display:none;" >'.$pluginPath.'ajax.card.php</div>';
+$request = Container::getRequest();
+$requestRouteName = $request->query->get('_route_name');
 
-    $userId = api_get_user_id();
+$cardGame = CardGame::create();
+$userId = (int) api_get_user_id();
 
-    // Look if the user can still try playing today
-    $cardGameSession = Session::read('cardgame');
-    if (!empty($cardGameSession)) {
-        // If we've already loaded the cardgame in this session, then there's
-        // a chance we've already played
-        if (isset($userId)) {
-            $sqlCount = "SELECT access_date FROM plugin_card_game WHERE user_id = $userId";
-            $resultCount = Database::query($sqlCount)->rowCount();
+$showPage = $userId > 0 && in_array($requestRouteName, ['MyCourses', 'MySessions']);
 
-            if (0 === $resultCount) {
-                // If there is no database entry for this user, insert one
-                // without the 'parts' field (because he has not played yet)
-                // @todo change date call
-                $sql = "INSERT INTO plugin_card_game (user_id, access_date, pan) 
-                        VALUES ($userId, DATE_ADD(CURDATE(), INTERVAL -1 DAY), 1);";
-                $resultInsert = Database::query($sql);
-                Session::write('cardgame', 'havedeck');
-            } else {
-                // If there is already one or more records in the database,
-                // get the number of records for today
-                // @todo change date call
-                $sqlDate = "SELECT access_date 
-                          FROM plugin_card_game 
-                          WHERE access_date = CURDATE() 
-                          AND user_id = $userId";
-                $resultDate = Database::query($sqlDate)->rowCount();
+if ($showPage) {
+    $progress = $cardGame->getOrCreateProgress($userId);
+    $canPlayToday = $cardGame->canPlayToday($progress);
+    $pluginWebPath = api_get_path(WEB_PLUGIN_PATH).'CardGame/resources/';
+    $version = '?v=20260404_01';
 
-                if (0 == $resultDate) {
-                    // If there are records, but none for today, set the
-                    // 'cardgame' session variable and add the
-                    // #havedeckcardgame element to the page (it will get
-                    // picked up by JS later on)
-                    Session::write('cardgame', 'havedeck');
-                    $fh .= '<div id="havedeckcardgame" ></div>';
-                } else {
-                    // If the user already played today, set the session
-                    // 'cardgame' variable to 'done' and do not add
-                    // an #havedeckcardgame element
-                    Session::write('cardgame', 'done');
-                }
-            }
-        }
-    } else {
-        Session::write('cardgame', 'havedeck');
-        $fh .= '<div id="havedeckcardgame" ></div>';
+    if (empty($_SESSION['cardgame_csrf_token'])) {
+        $_SESSION['cardgame_csrf_token'] = bin2hex(random_bytes(32));
     }
 
-    $parts = '1';
-    $pan = '1';
+    $dataAttributes = [
+        'endpoint' => $pluginWebPath.'ajax.card.php',
+        'csrf-token' => (string) $_SESSION['cardgame_csrf_token'],
+        'can-play' => $canPlayToday ? '1' : '0',
+        'pan' => (string) ($progress['pan'] ?? 1),
+        'display-pan' => (string) $cardGame->getDisplayPan((int) ($progress['pan'] ?? 1)),
+        'parts' => CardGame::serializeParts($progress['parts'] ?? []),
+        'title' => $cardGame->get_lang('cardGameTitle'),
+        'open-message' => $cardGame->get_lang('openDeckCardGame'),
+        'engage-message' => $cardGame->get_lang('engageDeckCardGame'),
+        'duplicate-message' => $cardGame->get_lang('cardgameloose'),
+        'reveal-label' => $cardGame->get_lang('revealPieceCardGame'),
+        'close-label' => $cardGame->get_lang('closeCardGame'),
+        'completed-label' => $cardGame->get_lang('completedPanelsCardGame'),
+        'piece-revealed-label' => $cardGame->get_lang('pieceRevealedCardGame'),
+        'panel-completed-label' => $cardGame->get_lang('panelCompletedCardGame'),
+        'loading-error-label' => $cardGame->get_lang('cardGameLoadingError'),
+    ];
 
-    if (isset($userId)) {
-        try {
-            $sqlParts = "SELECT parts, pan FROM plugin_card_game WHERE user_id = $userId";
-            $resultParts = Database::query($sqlParts);
-            while ($part = Database::fetch_array($resultParts)) {
-                $parts = $part['parts'];
-                $pan = $part['pan'];
-            }
-        } catch (Exception $e) {
-            echo 'Exception: ', $e->getMessage(), "\n";
-        }
+    $attributesHtml = '';
+    foreach ($dataAttributes as $name => $value) {
+        $attributesHtml .= ' data-'.htmlspecialchars($name, ENT_QUOTES, 'UTF-8').'="'
+            .htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8').'"';
     }
 
-    echo '<div id="memocardgame" style="display:none;" >'.$parts.'</div>';
-    echo '<div id="pancardgame" style="display:none;" >'.$pan.'</div>';
+    echo '<link href="'
+        .htmlspecialchars($pluginWebPath.'css/cardgame.css'.$version, ENT_QUOTES, 'UTF-8')
+        .'" rel="stylesheet" type="text/css">';
 
-    echo $fh;
+    echo '<div id="cardgame-root"'.$attributesHtml.'></div>';
+
+    echo '<script type="text/javascript" src="'
+        .htmlspecialchars($pluginWebPath.'js/cardgame.js'.$version, ENT_QUOTES, 'UTF-8')
+        .'"></script>';
 }

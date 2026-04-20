@@ -225,7 +225,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
@@ -242,7 +242,7 @@ const { course } = storeToRefs(cidReqStore)
 
 const { cid, sid } = useCidReq()
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEditGlossary = computed(() => {
   const inSession = !!route.query.sid
@@ -541,8 +541,6 @@ watch(n, async () => {
 })
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-
   await loadProviders()
   await applyDefaultPrompt(false)
 })

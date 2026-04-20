@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
-      active-view="calendar"
+      active-view="session-planning"
       @addClick="goToAddEvent"
       @agendaListClick="goToAgendaList"
       @sessionPlanningClick="goToSessionsPlan"
@@ -51,7 +51,7 @@
         class="absolute inset-0 z-10 bg-white/70 flex items-center justify-center"
       >
         <div class="flex items-center gap-3 text-gray-700">
-          <i class="pi pi-spin pi-spinner text-2xl" />
+          <i class="mdi mdi-loading mdi-spin text-2xl" />
           <span class="text-sm">{{ t("Loading") }}</span>
         </div>
       </div>
@@ -76,7 +76,7 @@
             v-if="!isLoading && sessions.length === 0 && !errorMessage"
             class="p-4 text-sm text-gray-600"
           >
-            {{ t("No sessions found") }}
+            {{ t("No session available") }}
           </div>
 
           <!-- Rows -->
@@ -93,7 +93,7 @@
                 {{ s.title }}
               </div>
               <div class="text-xs text-gray-600">
-                {{ t("From") }} {{ s.startDate || "—" }} • {{ t("Until") }} {{ s.endDate || "—" }}
+                {{ t("From {0} to {1}", [s.startDate || "—", s.endDate || "—"]) }}
               </div>
               <div
                 v-if="s.humanDate"
@@ -170,20 +170,31 @@ function setYear(nextYear) {
   syncYearToQuery(nextYear)
 }
 
+function buildAgendaNavigationQuery() {
+  const nextQuery = { ...route.query }
+
+  if (!nextQuery.date && year.value) {
+    nextQuery.date = `${year.value}-01-01`
+  }
+
+  return nextQuery
+}
+
 function goToSessionsPlan() {
   router.push({ name: "CalendarSessionsPlan", query: { ...route.query, year: String(year.value) } }).catch(() => {})
 }
 
 function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...route.query } }).catch(() => {})
+  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 
-function goToAgendaList() {
-  router.push({ name: "CCalendarEventListView", query: { ...route.query } }).catch(() => {})
+function goToAgendaList(mode = "list") {
+  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
+  router.push({ name: targetRoute, query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 
 function goToAddEvent() {
-  router.push({ name: "CCalendarEventList", query: { ...route.query, openAdd: "1" } }).catch(() => {})
+  router.push({ name: "CCalendarEventList", query: { ...buildAgendaNavigationQuery(), openAdd: "1" } }).catch(() => {})
 }
 
 const isLoading = ref(false)
@@ -202,7 +213,7 @@ async function fetchPlan() {
       const text = await resp.text().catch(() => "")
       console.error("[SessionsPlan] Request failed", resp.status, text)
       if (resp.status === 403) {
-        errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in planification")
+        errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in your plan")
       } else {
         errorMessage.value = tOrFallback("Failed to load sessions plan", "Failed to load sessions plan")
       }
@@ -219,8 +230,8 @@ async function fetchPlan() {
       startDate: x.startDate ?? null,
       endDate: x.endDate ?? null,
       humanDate: x.humanDate ?? null,
-      start: Number.isFinite(Number(x.start)) ? Number(x.start) : 0, // 0..51
-      duration: Number.isFinite(Number(x.duration)) ? Math.max(1, Number(x.duration)) : 1, // >=1
+      start: Number.isFinite(Number(x.start)) ? Number(x.start) : 0,
+      duration: Number.isFinite(Number(x.duration)) ? Math.max(1, Number(x.duration)) : 1,
       color: x.color || "rgba(70,130,180,0.9)",
     }))
   } catch (e) {

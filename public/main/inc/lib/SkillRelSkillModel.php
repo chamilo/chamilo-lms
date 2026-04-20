@@ -5,6 +5,7 @@
 class SkillRelSkillModel extends Model
 {
     public $columns = ['skill_id', 'parent_id', 'relation_type', 'level'];
+    public string $tableSkill;
 
     /**
      * Constructor.

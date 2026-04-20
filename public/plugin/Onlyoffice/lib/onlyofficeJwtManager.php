@@ -1,28 +1,17 @@
 <?php
-/**
- * (c) Copyright Ascensio System SIA 2025.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Onlyoffice\DocsIntegrationSdk\Manager\Security\JwtManager;
 
 class OnlyofficeJwtManager extends JwtManager
 {
-    public function __construct($settingsManager)
+    private OnlyofficeAppsettings $appSettings;
+
+    public function __construct(OnlyofficeAppsettings $settingsManager)
     {
         parent::__construct($settingsManager);
+        $this->appSettings = $settingsManager;
     }
 
     public function encode($payload, $key, $algorithm = 'HS256')
@@ -32,13 +21,60 @@ class OnlyofficeJwtManager extends JwtManager
 
     public function decode($token, $key, $algorithm = 'HS256')
     {
-        $payload = JWT::decode($token, new Key($key, $algorithm));
-
-        return $payload;
+        return JWT::decode($token, new Key($key, $algorithm));
     }
 
     public function getHash($object)
     {
-        return $this->encode($object, api_get_security_key());
+        return $this->encode($object, $this->getSigningKey());
+    }
+
+    public function getSigningKey(): string
+    {
+        $platformKey = $this->getPlatformSecurityKey();
+        if ('' !== $platformKey) {
+            return $platformKey;
+        }
+
+        $pluginKey = $this->getPluginJwtSecret();
+        if ('' !== $pluginKey) {
+            return $pluginKey;
+        }
+
+        throw new \RuntimeException('OnlyOffice signing key is not configured.');
+    }
+
+    private function getPlatformSecurityKey(): string
+    {
+        global $_configuration;
+
+        if (isset($_configuration['security_key']) && is_string($_configuration['security_key'])) {
+            $value = trim($_configuration['security_key']);
+            if ('' !== $value) {
+                return $value;
+            }
+        }
+
+        return '';
+    }
+
+    private function getPluginJwtSecret(): string
+    {
+        $candidates = [
+            $this->appSettings->getSetting('jwt_secret'),
+            $this->appSettings->getSetting('onlyoffice_jwt_secret'),
+            $this->appSettings->getSetting('secret'),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (is_string($candidate)) {
+                $candidate = trim($candidate);
+                if ('' !== $candidate) {
+                    return $candidate;
+                }
+            }
+        }
+
+        return '';
     }
 }

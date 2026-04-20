@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -7,7 +9,7 @@ use Chamilo\CoreBundle\Search\Xapian\LpXapianIndexer;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
-/**
+/*
  * Script allowing simple edition of learnpath information (title, description, etc).
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
@@ -18,11 +20,11 @@ api_protect_course_script();
 $learnPath = Session::read('oLP');
 $lpRepo = Container::getLpRepository();
 
-$lpId = $_REQUEST['lp_id'] ?? 0;
+$request = Container::getRequest();
+$lpId = $request->query->getInt('lp_id');
 if (empty($lpId)) {
     api_not_allowed(true);
 }
-$lpId = (int) $lpId;
 
 /** @var CLp $lp */
 $lp = $lpRepo->find($lpId);
@@ -42,7 +44,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=add_item&lp_id=".$lpId.'&'.api_get_cidreq(),
+    'url' => api_get_self().'?action=add_item&lp_id='.$lpId.'&'.api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 
@@ -107,7 +109,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
         $themeSelect = $form->addSelectTheme('lp_theme', get_lang('Graphical theme'));
         $form->applyFilter('lp_theme', 'trim');
         $s_theme = $learnPath->get_theme();
-        $themeSelect->setSelected($s_theme); //default
+        $themeSelect->setSelected($s_theme); // default
     }
 }
 
@@ -207,7 +209,7 @@ $form->addElement('html', '<div id="start_date_div" style="display:'.$display_da
 $form->addDateTimePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
-//End date
+// End date
 $form->addCheckBox(
     'activate_end_date_check',
     null,
@@ -315,22 +317,19 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
     $em = Database::getManager();
-    $hide_toc_frame = 0;
-    if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
-        $hide_toc_frame = 1;
-    }
+    $hide_toc_frame = 1 === $request->request->getInt('hide_toc_frame');
 
     $published_on = null;
-    if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
-        $published_on = $_REQUEST['published_on'];
+    if (1 === $request->request->getInt('activate_start_date_check')) {
+        $published_on = $request->request->get('published_on');
     }
 
     $expired_on = null;
-    if (isset($_REQUEST['activate_end_date_check']) && 1 == $_REQUEST['activate_end_date_check']) {
-        $expired_on = $_REQUEST['expired_on'];
+    if (1 === $request->request->getInt('activate_end_date_check')) {
+        $expired_on = $request->request->get('expired_on');
     }
 
-    if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
+    if ($request->request->get('remove_picture')) {
         $resourceFiles = $lp->getResourceNode()->getResourceFiles();
 
         foreach ($resourceFiles as $resourceFile) {
@@ -341,33 +340,33 @@ if ($form->validate()) {
 
     $lpCategoryRepo = Container::getLpCategoryRepository();
     $category = null;
-    if (isset($_REQUEST['category_id'])) {
-        $category = $lpCategoryRepo->find($_REQUEST['category_id']);
+    $categoryId = $request->request->getInt('category_id');
+    if ($categoryId) {
+        $category = $lpCategoryRepo->find($categoryId);
     }
 
     $lp
-        ->setTitle($_REQUEST['lp_name'])
-        ->setAuthor($_REQUEST['lp_author'] ?? '')
-        ->setTheme($_REQUEST['lp_theme'] ?? '')
+        ->setTitle($request->request->get('lp_name'))
+        ->setAuthor($request->request->get('lp_author', ''))
+        ->setTheme($request->request->get('lp_theme', ''))
         ->setHideTocFrame($hide_toc_frame)
-        ->setPrerequisite($_POST['prerequisites'] ?? 0)
-        ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)
-        ->setContentMaker($_REQUEST['lp_maker'] ?? '')
-        ->setContentLocal($_REQUEST['lp_proximity'] ?? '')
-        ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
-        ->setDefaultEncoding($_REQUEST['lp_encoding'])
-        ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? 1 : 0)
+        ->setPrerequisite($request->request->getInt('prerequisites'))
+        ->setAccumulateWorkTime($request->request->getInt('accumulate_work_time'))
+        ->setContentMaker($request->request->get('lp_maker', ''))
+        ->setContentLocal($request->request->get('lp_proximity', ''))
+        ->setUseMaxScore((int) (null !== $request->request->get('use_max_score')))
+        ->setDefaultEncoding($request->request->get('lp_encoding'))
+        ->setAccumulateScormTime((int) (null !== $request->request->get('accumulate_scorm_time')))
         ->setPublishedOn(api_get_utc_datetime($published_on, true, true))
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)
-        ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
+        ->setSubscribeUsers((int) (null !== $request->request->get('subscribe_users')))
     ;
 
     $extraFieldValue = new ExtraFieldValue('lp');
-    $_REQUEST['item_id'] = $lpId;
-    $extraFieldValue->saveFieldValues($_REQUEST);
+    $requestData = array_merge($request->request->all(), ['item_id' => $lpId]);
+    $extraFieldValue->saveFieldValues($requestData);
 
-    $request = Container::getRequest();
     if ($request->files->has('lp_preview_image')) {
         $file = $request->files->get('lp_preview_image');
         if (!empty($file)) {
@@ -383,12 +382,12 @@ if ($form->validate()) {
             /** @var LpXapianIndexer $lpIndexer */
             $lpIndexer = Container::$container->get('chamilo_core.search.lp_xapian_indexer');
 
-            if (!empty($_REQUEST['search_index_enabled'])) {
+            if ($request->request->get('search_index_enabled')) {
                 $lpIndexer->indexLp($lp);
             } else {
                 $lpIndexer->deleteLpIndex($lp);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Best-effort: do not break form save if search service fails
         }
     }
@@ -400,6 +399,7 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('Update successful')));
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
     header('Location: '.$url);
+
     exit;
 }
 
@@ -417,7 +417,7 @@ echo '</div>';
 echo "
 <script>
     $(function() {
-        $('[name=\'hide_toc_frame\']').on('change', function() {
+        $('[name=\\'hide_toc_frame\\']').on('change', function() {
             $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
             $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
         });

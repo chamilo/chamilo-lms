@@ -4619,7 +4619,7 @@ msgid "Send mail to new user"
 msgstr "Sūtīt e-pastu jaunam lietotājam"
 
 msgid "Portfolio"
-msgstr "Izvērstie lietotāja dati"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Ja šis ir ieslēgts, Lietotāji var aizpildīt papildus datus par sevi: Sadaļās: Mani sertifikāti / Mani diplomi / Ko es varu papildus darīt ... un  Personīgie sasniegumi."
@@ -14728,7 +14728,7 @@ msgstr "Lietotājus, Grupas"
 msgid "Sorry no results"
 msgstr "Diemžēl bez rezultāta :("
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Grupas statuss"
 
 msgid "Closed"
@@ -16071,6 +16071,15 @@ msgstr "Īss kods"
 
 msgid "Create child skill"
 msgstr "Izveidot apakšprasmju"
+
+msgid "This skill can be obtained through:"
+msgstr "Šo prasmi var iegūt caur:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Pašlaik neviens kurss neļauj jums iegūt šo prasmju."
+
+msgid "Add skill to search profile"
+msgstr "Pievienot prasmju meklēšanas profilam"
 
 msgid "Search profile matches"
 msgstr "Meklēt profila atbilstības"
@@ -31005,7 +31014,7 @@ msgid "Create your first note to get started."
 msgstr "Izveidojiet savu pirmo piezīmi, lai sāktu."
 
 msgid "F d, Y"
-msgstr "D d, Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nevarēja ielādēt atbalsta informāciju šobrīd."
@@ -32749,4 +32758,1129 @@ msgstr "Augšupielādējiet attēlu vai izveidojiet ar Badge Studio."
 
 msgid "Current badge set"
 msgstr "Pašreizējais nozīmes zīmes komplekts"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Šajā sadaļā, noklikšķinot uz 'Reģistrēt studentu' kursam, nākamajā lapā tiks prasīts izvēlēties lietotāju. Apstiprinot, tiks izveidota jauna sesija ar izvēlēto kursu un lietotāju, un lietotājam tiks nosūtīts paziņojums par reģistrāciju."
+
+msgid "Read-only view"
+msgstr "Tikai lasīšanas skats"
+
+msgid "Events list"
+msgstr "Notikumu saraksts"
+
+msgid "Personal"
+msgstr "Personīgais"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Nedēļas tiek rādītas no 1 līdz 52"
+
+msgid "No tutored sessions found"
+msgstr "Nav atrastas vadītās sesijas"
+
+msgid "Content search"
+msgstr "Satura meklēšana"
+
+msgid "Search indexed content across all courses."
+msgstr "Meklēt indeksēto saturu visos kursos."
+
+msgid "Enter a keyword..."
+msgstr "Ievadiet atslēgvārdu..."
+
+msgid "Search error"
+msgstr "Meklēšanas kļūda"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ievadiet atslēgvārdu, lai meklētu indeksētus dokumentus."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultāti, kuriem nav piekļuves, ir paslēpti pēc konfigurācijas."
+
+msgid "Restricted"
+msgstr "Ierobežots"
+
+msgid "You do not have access to this resource."
+msgstr "Jums nav piekļuves šim resursam."
+
+msgid "Create group"
+msgstr "Izveidot grupu"
+
+msgid "My custom certificate"
+msgstr "Mans pielāgots sertifikāts"
+
+msgid "Select permission"
+msgstr "Izvēlēties atļauju"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Pieņemot šo ielūgumu, jūs tiksiet saistīts ar pieprasītāju tā, ka daļa vai visa jūsu profila informācija būs pieejama lasīšanai pieprasītājam"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Tiek rādīti %d no aptuveni %d rezultātiem '%s'."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Tiek rādīti %d pieejamie rezultāti '%s'."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Tāpēc jūs tiksiet automātiski novirzīts uz šo URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Jums ir pieeja vairākiem URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Lūdzu, noklikšķiniet uz saites zemāk, kas atbilst URL, uz kuru vēlaties piekļūt"
+
+msgid "You do not currently have access to any URL"
+msgstr "Pašlaik jums nav pieejams neviens URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Atļautais abonementu skaita maksimums"
+
+msgid "An error occurred"
+msgstr "Radās kļūda"
+
+msgid "You don't have any course content yet"
+msgstr "Jums vēl nav kursa satura"
+
+msgid "This course is locked"
+msgstr "Šis kurss ir bloķēts"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-pasta adrese, no kuras tiks sūtītas e-pasta ziņas, kad platforma sūta e-pastu, ko izmanto arī kā 'reply-to' galveni"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nevarat atrast savu valodu sarakstā? Sazinieties ar mums %s, lai iegūtu iespēju kļūt par tulkotāju"
+
+msgid "An update is available"
+msgstr "Ir pieejams atjauninājums"
+
+msgid "to know what's new and what has been changed"
+msgstr "lai uzzinātu, kas jauns un kas ir mainījies"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Mēs konstatējām, ka jūsu PHP instalācija neatbalsta datumu"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Jūsu PHP versija neatbilst šīs programmatūras prasībām"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Dažiem failiem vai mapēm nav rakstīšanas atļaujas"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Brīdinājums! Instalētājs konstatēja esošu Chamilo platformu jūsu sistēmā"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Tā kā mapes <code>newscorm</code> un <code>exercice</code> tika pārdēvētas par <code>lp</code> un <code>exercise</code>, ir nepieciešams dzēst vai pārdēvēt tās par <code>newscorm_old</code> un <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formā ir nepareizi vai nepilnīgi dati"
+
+msgid "Your contact information could not be sent"
+msgstr "Jūsu kontaktinformāciju nevarēja nosūtīt"
+
+msgid "Please contact support with the error details"
+msgstr "Lūdzu, sazinieties ar atbalstu, norādot kļūdas detaļas"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Noklikšķiniet uz attēla, lai to apgrieztu (1:1 attiecība, ieteicams 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Izmantojiet apgriešanas rīku, lai izvēlētos 1:1 reģionu"
+
+msgid "Checking push subscription"
+msgstr "Pārbauda push abonementu"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jūs esat abonējis push paziņojumus šajā pārlūkprogrammā"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push paziņojumi nav iespējoti šajā pārlūkprogrammā"
+
+msgid "Data exchange successfully saved"
+msgstr "Datu apmaiņa veiksmīgi saglabāta"
+
+msgid "Error saving data exchange"
+msgstr "Kļūda saglabājot datu apmaiņu"
+
+msgid "No documents added yet"
+msgstr "Vēl nav pievienoti dokumenti"
+
+msgid "No additional details available for this skill."
+msgstr "Šai prasmei nav pieejami papildu dati."
+
+msgid "No available documents"
+msgstr "Nav pieejami dokumenti"
+
+msgid "No users added yet"
+msgstr "Vēl nav pievienoti lietotāji"
+
+msgid "No available users"
+msgstr "Nav pieejami lietotāji"
+
+msgid "You can no longer submit"
+msgstr "Jūs vairs nevarat iesniegt"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Šim uzdevumam nav atrasti trūkstošie iesniegumi vai dati nav pieejami"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-pasts nosūtīts visiem neiesniegušajiem lietotājiem"
+
+msgid "Failed to send email"
+msgstr "Neizdevās nosūtīt e-pastu"
+
+msgid "Write your answer here"
+msgstr "Rakstiet savu atbildi šeit"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Apmeklētības kalendārs ļauj reģistrēt apmeklētības sarakstus (viens par katru reālo sesiju, kurā studenti jāapmeklē)"
+
+msgid "Loading attendance data"
+msgstr "Ielādē apmeklētības datus"
+
+msgid "No attendance assigned yet"
+msgstr "Vēl nav piešķirta apmeklētība"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Šodien nav plānotu nodarbību, mēģiniet izvēlēties citu dienu vai pievienojiet savu apmeklētības ierakstu pats, izmantojot darbības ikonas"
+
+msgid "No attendance data for today"
+msgstr "Šodien nav apmeklētības datu"
+
+msgid "Saving"
+msgstr "Saglabā"
+
+msgid "No attendance data to save"
+msgstr "Nav apmeklētības datu, ko saglabāt"
+
+msgid "Failed to save attendance"
+msgstr "Neizdevās saglabāt apmeklētību"
+
+msgid "Loading more courses"
+msgstr "Ielādē vairāk kursu"
+
+msgid "Loading more sessions"
+msgstr "Ielādē vairāk sesiju"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Dokumentu automātiskās palaišanas funkcijas konfigurācija ir iespējota"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Uzdevumu automātiskās palaišanas funkcijas konfigurācija ir iespējota"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mācību ceļa automātiskās palaišanas iestatījums ir IESLĒGTS"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Foruma automātiskās palaišanas iestatījums ir ieslēgts"
+
+msgid "Course ID is missing"
+msgstr "Trūkst kursa ID"
+
+msgid "Course created successfully"
+msgstr "Kurss veiksmīgi izveidots"
+
+msgid "Error deleting document(s)"
+msgstr "Kļūda dzēšot dokumentu(s)"
+
+msgid "Template successfully deleted"
+msgstr "Veidne veiksmīgi dzēsta"
+
+msgid "Error deleting the template"
+msgstr "Kļūda dzēšot veidni"
+
+msgid "The title and thumbnail are required"
+msgstr "Nosaukums un sīktēls ir obligāti"
+
+msgid "Template created successfully"
+msgstr "Veidne veiksmīgi izveidota"
+
+msgid "Error creating the template"
+msgstr "Kļūda izveidojot veidni"
+
+msgid "Error submitting the form"
+msgstr "Kļūda iesniedzot formu"
+
+msgid "Loading templates"
+msgstr "Ielādē veidnes"
+
+msgid "Loading layout"
+msgstr "Ielādē izkārtojumu"
+
+msgid "Loading courses"
+msgstr "Ielādē kursus"
+
+msgid "No courses available"
+msgstr "Nav pieejami kursi"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Šis saraksts parāda lietotājus no visām piekļuves URL, jo iestatījums \"session_admin_access_to_all_users_on_all_urls\" ir iespējots."
+
+msgid "User not found"
+msgstr "Lietotājs nav atrasts"
+
+msgid "An error occurred while sending the course"
+msgstr "Radās kļūda nosūtot kursu"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Atcerieties, ka izmaiņas noteikumos, kas saistīti ar GDPR, prasa jums ziņot par šīm izmaiņām trešajām pusēm, kurām esat nodrošinājis personisko informāciju par saviem lietotājiem, kā norādīts GDPR 19. pantā"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Jums vajadzētu izveidot \"Noteikumus un nosacījumus\" visām pieejamajām valodām"
+
+msgid "You don't have any course yet"
+msgstr "Jums vēl nav neviena kursa"
+
+msgid "You have received a new friend request"
+msgstr "Jūs esat saņēmis jaunu drauga pieprasījumu"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostikas pārvaldība"
+
+msgid "Tracking"
+msgstr "Sekojums"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Skatīt pārskatus, statistiku un sekošanas datus"
+
+msgid "System activity audit"
+msgstr "Sistēmas darbības audits"
+
+msgid "Learning analytics"
+msgstr "Mācīšanās analītika"
+
+msgid "Administrative activity auditing"
+msgstr "Administratīvās darbības audits"
+
+msgid "List icons"
+msgstr "Saraksta ikonas"
+
+msgid "Constant name"
+msgstr "Konstantes nosaukums"
+
+msgid "MDI icon name"
+msgstr "MDI ikonas nosaukums"
+
+msgid "Assign authentication sources"
+msgstr "Piešķirt autentifikācijas avotus"
+
+msgid "Assignment details"
+msgstr "Uzdevuma detaļas"
+
+msgid "Terms and conditions"
+msgstr "Lietošanas noteikumi un nosacījumi"
+
+msgid "Icons"
+msgstr "Ikonas"
+
+msgid "Create backup"
+msgstr "Izveidot dublējumu"
+
+msgid "Create file"
+msgstr "Izveidot failu"
+
+msgid "Create link"
+msgstr "Izveidot saiti"
+
+msgid "Edit template"
+msgstr "Rediģēt veidni"
+
+msgid "Shared files"
+msgstr "Koplietotie faili"
+
+msgid "Skill wheel"
+msgstr "Prasmju rats"
+
+msgid "Favourite courses"
+msgstr "Iemīļotie kursi"
+
+msgid "Restart courses"
+msgstr "Atsākt kursus"
+
+msgid "Generate terms"
+msgstr "Ģenerēt noteikumus"
+
+msgid "Add variation"
+msgstr "Pievienot variāciju"
+
+msgid "Editor demo"
+msgstr "Redaktora demonstrācija"
+
+msgid "Tool introduction"
+msgstr "Apgūt rīku izmantošanas iespējas"
+
+msgid "Data exchanges"
+msgstr "Datu apmaiņas"
+
+msgid "Third parties"
+msgstr "Trešās puses"
+
+msgid "Layouts"
+msgstr "Maketi"
+
+msgid "Relation type"
+msgstr "Attiecību tips"
+
+msgid "Add all"
+msgstr "Pievienot visus"
+
+msgid "Remove all"
+msgstr "Noņemt visus"
+
+msgid "An error occurred. Please try again."
+msgstr "Radās kļūda. Lūdzu, mēģiniet vēlreiz."
+
+msgid "%s created"
+msgstr "%s izveidots"
+
+msgid "%s updated"
+msgstr "%s atjaunināts"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Ja plānojat atjaunināt no vecākas Chamilo versijas, iespējams, vēlēsities"
+
+msgid "have a look at the changelog"
+msgstr "apskatīt izmaiņu žurnālu"
+
+msgid "to know what's new and what has been changed."
+msgstr "lai uzzinātu, kas jauns un kas ir mainījies."
+
+msgid "Session Item"
+msgstr "Sesijas vienība"
+
+msgid "Points"
+msgstr "Punkti"
+
+msgid "See notifications"
+msgstr "Apskatīt paziņojumus"
+
+msgid "New content available for this course."
+msgstr "Šim kursam ir pieejams jauns saturs."
+
+msgid "No new notifications."
+msgstr "Nav jaunu paziņojumu."
+
+msgid "No new content found."
+msgstr "Nav atrasts jauns saturs."
+
+msgid "No tool details available yet."
+msgstr "Vēl nav pieejami rīka dati."
+
+msgid "Last access"
+msgstr "Pēdējā piekļuve"
+
+msgid "Open course"
+msgstr "Atvērt kursu"
+
+msgid "Course completed"
+msgstr "Kurss pabeigts"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Šim kursam ir sasniegts abonēšanas limits."
+
+msgid "Subscription limit reached"
+msgstr "Abonēšanas limits sasniegts"
+
+msgid "Tertiary alternative"
+msgstr "Trešā alternatīva"
+
+msgid "Update SCORM"
+msgstr "Atjaunināt SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI var sagatavot atsauksmi un ieteikto punktu skaitu pirms nosūtīšanas."
+
+msgid "What will be sent to the AI"
+msgstr "Kas tiks nosūtīts AI"
+
+msgid "Assignment title + instructions"
+msgstr "Darba nosaukums + instrukcijas"
+
+msgid "Student submission (text)"
+msgstr "Studentu iesniegums (teksts)"
+
+msgid "Student submission (text): none"
+msgstr "Studentu iesniegums (teksts): nav"
+
+msgid "Student attachment"
+msgstr "Studentu pielikums"
+
+msgid "supported"
+msgstr "atbalstīts"
+
+msgid "not supported for document analysis"
+msgstr "nav atbalstīts dokumentu analīzei"
+
+msgid "Student attachment: none"
+msgstr "Studentu pielikums: nav"
+
+msgid "No text AI providers available."
+msgstr "Nav pieejamu tekstu AI sniedzēju."
+
+msgid "AI-assisted"
+msgstr "Ar AI palīdzību"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Šis lēmums tiek saglabāts ar labojumu (ExtraField) un vēlāk nevar tikt mainīts."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Papildu labojuma pielikums (tas nav studentu iesniegums)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Saņemts"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Atbloķēt kolonnu"
+
+msgid "Lock column"
+msgstr "Bloķēt kolonnu"
+
+msgid "Set all Present"
+msgstr "Iestatīt visus Klāt"
+
+msgid "Set all Absent"
+msgstr "Iestatīt visus Neklāt"
+
+msgid "Auto (recommended)"
+msgstr "Automātiski (ieteicams)"
+
+msgid "Error downloading all documents."
+msgstr "Kļūda lejupielādējot visus dokumentus."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Atvērt ar ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Kvotas ierobežojums"
+
+msgid "Remaining space"
+msgstr "Atlikusī vieta"
+
+msgid "Course catalogue"
+msgstr "Kursa katalogs"
+
+msgid "Drag links to reorder"
+msgstr "Velciet saites, lai pārkārtotu"
+
+msgid "Drop links here to keep them without category"
+msgstr "Nometiet saites šeit, lai saglabātu tās bez kategorijas"
+
+msgid "Could not export"
+msgstr "Nevar eksportēt"
+
+msgid "Link moved"
+msgstr "Saite pārvietota"
+
+msgid "Could not move link"
+msgstr "Nevar pārvietot saiti"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategoriju pārkārtošana nav iespējota"
+
+msgid "Showing %s posts"
+msgstr "Rāda %s ierakstus"
+
+msgid "Showing %s tasks"
+msgstr "Rāda %s uzdevumus"
+
+msgid "Page %s of %s"
+msgstr "Lapa %s no %s"
+
+msgid "Tutors"
+msgstr "Skolotāji"
+
+msgid "selected"
+msgstr "izvēlēts"
+
+msgid "No data to export"
+msgstr "Nav datu eksportēšanai"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Virsraksta PNG jābūt \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Standarta saraksts"
+
+msgid "Management list"
+msgstr "Pārvaldības saraksts"
+
+msgid "Open platform"
+msgstr "Atvērta platforma"
+
+msgid "Teacher user ID"
+msgstr "Skolotāja lietotāja ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Vai tiešām vēlaties dzēst šo kursu?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Vai tiešām vēlaties dzēst izvēlētos kursus?"
+
+msgid "Search by name, username, email"
+msgstr "Meklēt pēc vārda, lietotājvārda, e-pasta"
+
+msgid "contains %s items"
+msgstr "satur %s vienības"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Jūsu juridiskā vienošanās paliek aktīva, kamēr jebkura izstāšanās pieprasījuma pārskatīšana un apstrāde nav pabeigta."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Jūsu juridiskās piekrišanas izstāšanās pieprasījums gaida pārskatīšanu."
+
+msgid "Your account deletion request is pending review."
+msgstr "Jūsu konta dzēšanas pieprasījums gaida pārskatīšanu."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kāpēc jūs vēlaties pieprasīt juridiskās piekrišanas atsaukšanu?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Jūsu juridiskās piekrišanas atsaukšanas pieprasījums tiek iesniegts..."
+
+msgid "Submitting request..."
+msgstr "Pieprasījums tiek iesniegts..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Pieprasīt juridiskās piekrišanas atsaukšanu"
+
+msgid "Submitting your account deletion request..."
+msgstr "Jūsu konta dzēšanas pieprasījums tiek iesniegts..."
+
+msgid "Submitting your acceptance..."
+msgstr "Jūsu piekrišana tiek iesniegta..."
+
+msgid "Event details"
+msgstr "Notikuma detaļas"
+
+msgid "You cannot access the linked course from this view."
+msgstr "No šī skata nevar piekļūt saistītajam kursam."
+
+msgid "Failed to load sessions"
+msgstr "Neizdevās ielādēt sesijas"
+
+msgid "Failed to load events"
+msgstr "Neizdevās ielādēt notikumus"
+
+msgid "No events found"
+msgstr "Nav atrasti notikumi"
+
+msgid "Group image"
+msgstr "Grupas attēls"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Aizliegts"
+
+msgid "Distribution"
+msgstr "Izplatīšana"
+
+msgid "Firstname"
+msgstr "Vārds"
+
+msgid "Lastname"
+msgstr "Uzvārds"
+
+msgid "Email"
+msgstr "E-pasts"
+
+msgid "Last login in platform"
+msgstr "Pēdējā pieteikšanās platformā"
+
+msgid "Export as CSV"
+msgstr "Eksportēt kā CSV"
+
+msgid "Export as XLS"
+msgstr "Eksportēt kā XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktivizēt šo lietotāju?"
+
+msgid "Enable this user?"
+msgstr "Aktivizēt šo lietotāju?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Apvienot šo dublikāto grupu lietotājā #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Tas apvienos visus citus kontus tajā pašā grupā šajā kontā."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Apvienotie konti tiks pastāvīgi dzēsti un pazudīs no šī ziņojuma."
+
+msgid "This action cannot be undone."
+msgstr "Šo darbību nevar atcelt."
+
+msgid "Unify"
+msgstr "Apvienot"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Students"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Portāla %s kopējais izmantotais vietas apjoms ierobežojums ir %s MB"
+
+msgid "Helper text"
+msgstr "Palīginformācija"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Izmantojiet augstāk esošos filtrus, lai ielādētu mācīšanās piekļuves detaļas."
+
+msgid "Start date must be before end date"
+msgstr "Sākuma datumam jābūt pirms beigu datuma"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Izvēlieties datuma diapazonu un grupēšanas veidu, lai pārskatītu mācīšanās piekļuves detaļas."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Šis kurss tiks izveidots, izmantojot platformas noklusējuma kursa veidni."
+
+msgid "Security breach avoid restart"
+msgstr "Drošības pārkāpums, izvairīties no restartēšanas"
+
+msgid "User deactivated"
+msgstr "Lietotājs deaktivizēts"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Lietotājs aktivizēts"
+
+msgid "No other duplicates found for this user."
+msgstr "Šim lietotājam nav atrasti citi dublikāti."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Lietotāji apvienoti: apvienoti %s konti lietotājā #%s. Apvienotie konti tika pastāvīgi dzēsti."
+
+msgid "No accounts were merged."
+msgstr "Nav apvienoti konti."
+
+msgid "An error occurred while unifying users."
+msgstr "Radās kļūda, apvienojot lietotājus."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Lietotāji apvienoti: apvienots lietotājs #%s lietotājā #%s. Apvienotais konts tika pastāvīgi dzēsts."
+
+msgid "Duplicate users"
+msgstr "Dublikāti lietotāji"
+
+msgid "Years"
+msgstr "Gadi"
+
+msgid "All time visits outside sessions"
+msgstr "Viss laiks apmeklējumi ārpus sesijām"
+
+msgid "All time visits in sessions"
+msgstr "Visas sesiju apmeklējumu reizes"
+
+msgid "All time visits total"
+msgstr "Kopējais apmeklējumu skaits"
+
+msgid "Student visits per period, per course"
+msgstr "Studentu apmeklējumi periodā, pa kursiem"
+
+msgid "By email"
+msgstr "Pēc e-pasta"
+
+msgid "By extra field"
+msgstr "Pēc papildu lauka"
+
+msgid "Select an option"
+msgstr "Izvēlieties opciju"
+
+msgid "Profile field"
+msgstr "Profila lauks"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Šis ziņojums saraksta tikai lietotājus ar tādu pašu e-pasta adresi."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Šis ziņojums saraksta tikai lietotājus, kuri dalās tajā pašā atlasītā profila lauka vērtībā."
+
+msgid "How to use this report"
+msgstr "Kā izmantot šo ziņojumu"
+
+msgid "Disable / Enable"
+msgstr "Deaktivizēt / Aktivizēt"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Tikai bloķē vai atjauno pieteikšanos. Neizdzēš lietotāju un neizņem abonementus."
+
+msgid "Last week"
+msgstr "Pagājušā nedēļa"
+
+msgid "Next week"
+msgstr "Nākamā nedēļa"
+
+msgid "Loading report..."
+msgstr "Ielādē ziņojumu..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Neizdevās ielādēt ziņojumu. Lūdzu, mēģiniet vēlreiz."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Izvēlieties vienu vai vairākas sesijas, no kurām kopēt trenerus, un izvēlieties mērķa kursu"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Turiet Ctrl (vai Cmd), lai izvēlētos vairākus vienumus"
+
+msgid "Choose the destination course"
+msgstr "Izvēlieties mērķa kursu"
+
+msgid "You can select multiple items"
+msgstr "Varat izvēlēties vairākus vienumus"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Izmantojiet meklēšanas lauku, lai ātri atrastu kursus"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Izvēlieties vienu vai vairākas avota sesijas un vienu vai vairākas mērķa sesijas, lai kopētu studentus"
+
+msgid "Select destination sessions"
+msgstr "Izvēlieties mērķa sesijas"
+
+msgid "You can select multiple users"
+msgstr "Varat izvēlēties vairākus lietotājus"
+
+msgid "Use the search box to find users quickly"
+msgstr "Izmantojiet meklēšanas lauku, lai ātri atrastu lietotājus"
+
+msgid "Error while creating the document"
+msgstr "Kļūda, izveidojot dokumentu"
+
+msgid "Not a SCORM learning path"
+msgstr "Nav SCORM mācību ceļa"
+
+msgid "Final item"
+msgstr "Pēdējais vienums"
+
+msgid "Edit item"
+msgstr "Rediģēt vienumu"
+
+msgid "No AI text providers configured."
+msgstr "Nav konfigurēti AI teksta nodrošinātāji."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Augšupielāde neizdevās. Fails, iespējams, ir lielāks par servera limitu (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Atjaunināšana neizdevās. Servers nesaņēma failu."
+
+msgid "Update failed. %s"
+msgstr "Atjaunināšana neizdevās. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Atjaunināšana neizdevās. Nederīgs augšupielādētā faila saturs."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Atjaunināšana neizdevās. Augšupielādētā ZIP faila nosaukumam jāatbilst oriģinālā SCORM paketes nosaukumam."
+
+msgid "Update failed"
+msgstr "Atjaunināšana neizdevās"
+
+msgid "Question lower case"
+msgstr "Jautājums ar mazajiem burtiem"
+
+msgid "Regenerate"
+msgstr "Ģenerēt atkārtoti"
+
+msgid "Case insensitive"
+msgstr "Neatkarīgi no reģistra"
+
+msgid "Select a session to load its courses."
+msgstr "Izvēlieties sesiju, lai ielādētu tās kursus."
+
+msgid "Select the source course."
+msgstr "Izvēlieties avota kursu."
+
+msgid "Select a destination session."
+msgstr "Izvēlieties mērķa sesiju."
+
+msgid "Select the destination course."
+msgstr "Izvēlieties mērķa kursu."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopējiet pilnu kursa saturu no atlasītā sesijas kursa."
+
+msgid "Select which tools/items to copy."
+msgstr "Izvēlieties, kurus rīkus/vienumus kopēt."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Neiekļaujiet bāzes (ne sesijas) kursa saturu."
+
+msgid "An error occurred while copying the course"
+msgstr "Radās kļūda, kopējot kursu"
+
+msgid "Please select a different destination"
+msgstr "Lūdzu, izvēlieties citu mērķi"
+
+msgid "You must select a destination course"
+msgstr "Jums jāizvēlas mērķa kurss"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Lai eksportētu kursus ar testiem, jums jāizvēlas tests"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Ja jūsu LM satur iekļautas audio failus, jums tās jāizvēlas no dokumentiem"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Ja jūsu viktorīnā ir iekļauti karstpukšu jautājumi, jums jāizvēlas attēli no dokumentiem"
+
+msgid "GeneralResourcesCourse"
+msgstr "VispārējiResursiKursa"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Parolei jābūt vismaz %length% rakstzīmju garumā."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Parolei jāietver vismaz %count% mazie burti."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Parolei jāietver vismaz %count% lielie burti."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Parolei jāietver vismaz %count% ciparu (0-9) rakstzīmes."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Parolei jāietver vismaz %count% speciālās rakstzīmes."
+
+msgid "Invalid login request."
+msgstr "Nederīgs pieteikums pieteikumam."
+
+msgid "Authentication failed."
+msgstr "Autentifikācija neizdevās."
+
+msgid "Login %status% for username %username%"
+msgstr "Pieteikšanās %status% lietotājvārdam %username%"
+
+msgid "Co-generated with AI"
+msgstr "Līdzradīts ar AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRNosaukums"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Obligātie lauki"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Birkas var kopēt un ielīmēt teksta laukā zemāk un tās tiks dinamiski aizstātas ar to vērtību katram lietotājam individuāli, nosūtot ziņojumu."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Šī grupa ir saistīta ar klasi %s.<br>Grupas dalībnieku saraksts ir atkarīgs no klases dalībniekiem un to nevar modificēt.<br>Dodieties uz grupas iestatījumiem, lai pārrautu šo saiti, ja vēlaties pievienot vai noņemt dalībniekus šai grupai."
+
+msgid "Link classes to created groups ?"
+msgstr "Saistīt klases ar izveidotajām grupām?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Ja klase ir saistīta ar grupu, lietotāji, kas pievienoti vai noņemti no klases, tiek automātiski pievienoti vai noņemti no grupas."
+
+msgid "New groups creation in category %s"
+msgstr "Jaunu grupu izveide kategorijā %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Brīdinājuma ziņojums, lai brīdinātu, ka lietotājs nevar modificēt saistītās grupas dalībniekus"
+
+msgid "Remove the group link with the class"
+msgstr "Noņemt grupas saiti ar klasi"
+
+msgid "Linked class"
+msgstr "Saistītā klase"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupa vairs nav saistīta ar klasi"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Pārskats par studentiem un kursiem, kas abonē klasi"
+
+msgid "Overview students subscribed to the class"
+msgstr "Pārskats par studentiem, kas abonē klasi"
+
+msgid "Overview class"
+msgstr "Klasēs pārskats"
+
+msgid "Go back to the list of classes"
+msgstr "Atpakaļ uz klašu sarakstu"
+
+msgid "Go back to course classes"
+msgstr "Atpakaļ uz kursa klasēm"
+
+msgid "Users subscribed to the course"
+msgstr "Lietotāji, kas abonē kursu"
+
+msgid "Users not subscribed to the course"
+msgstr "Lietotāji, kas neabonē kursu"
+
+msgid "Users subscribed to the class"
+msgstr "Lietotāji, kas abonē klasi"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursi, kas abonē klasi"
+
+msgid "No user is subscribed to this class"
+msgstr "Neviens lietotājs neatbild šai klasei"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Neviens lietotājs un neviens kurss neatbild šai klasei"
+
+msgid "No user are subscribed to this class"
+msgstr "Neviens lietotājs nav abonējis šo klasi"
+
+msgid "No course are subscribed to this class"
+msgstr "Neviens kurss nav abonējis šo klasi"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Vai tiešām vēlaties dzēst klasi"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Vai tiešām vēlaties dzēst klasi?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Vai tiešām vēlaties dzēst klasi, neizdzēšot lietotājus?"
+
+msgid "Remove the class without removing students"
+msgstr "Dzēst klasi, neizdzēšot studentus"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Šī iestatīšana vēl nav ieviesta šajā versijā."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Ieteicams tikai administratora spraudņiem, kas redzami administrēšanas sadaļā."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Ieteicams spraudņiem, kas jāparāda kā kursa rīkiem."
+
+msgid "Displayed above the main page content."
+msgstr "Parādīts virs galvenā lapas satura."
+
+msgid "Displayed below the main page content."
+msgstr "Parādīts zem galvenā lapas satura."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Parādīts galvenā izkārtojuma apvalka augšdaļā."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Parādīts galvenā izkārtojuma apvalka apakšdaļā."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Ieteicams globāliem peldošiem vai pastāvīgiem spraudņiem, kas redzami pirms kājenes."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Parādīts izvēlētajā spraudņa reģionā."
+
+msgid "Admin menu"
+msgstr "Administratora izvēlne"
+
+msgid "Global regions"
+msgstr "Globālie reģioni"
+
+msgid "No regions assigned"
+msgstr "Nav piešķirti reģioni"
+
+msgid "Plugin regions"
+msgstr "Spraudņu reģioni"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Izvēlieties, kur katram instalētam spraudnim jābūt renderētam."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Padoms: izmantojiet Ctrl/Cmd, lai izvēlētos vairākus reģionus."
+
+msgid "No installed plugins were found."
+msgstr "Nav atrasti instalēti spraudņi."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Izvēlieties vienu vai vairākus reģionus šim spraudnim pašreizējā piekļuves URL."
+
+msgid "Available regions"
+msgstr "Pieejamie reģioni"
+
+msgid "Selected paragraph"
+msgstr "Izvēlētais rindkopa"
+
+msgid "Destination folder"
+msgstr "Mērķa mape"
+
+msgid "Generate AI media"
+msgstr "Ģenerēt AI mediju"
+
+msgid "Save and insert"
+msgstr "Saglabāt un ievietot"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Saglabāšana tiek atbalstīta tikai tad, kad nodrošinātājs atgriež base64 saturu. Ja saņemāt tikai URL, saglabāšana ir atspējota, lai izvairītos no lejupielādes pārlūkprogrammā."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video ģenerēts veiksmīgi, bet saglabāšana ir atspējota, jo nodrošinātājs atgrieza URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Datne tika saglabāta, bet tās URL nevarēja atrisināt."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Ģenerēt Aiken viktorīnu no tēmas vai no viena kursa dokumenta."
+
+msgid "Test from topic"
+msgstr "Tests no tēmas"
+
+msgid "Test from document"
+msgstr "Tests no dokumenta"
+
+msgid "Generate from topic"
+msgstr "Ģenerēt no tēmas"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Izmantot tēmas uzvedni, lai ģenerētu jaunu Aiken anketu."
+
+msgid "Quiz title"
+msgstr "Viktorīnas nosaukums"
+
+msgid "Generate from document"
+msgstr "Ģenerēt no dokumenta"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Izvēlēties vienu kursa dokumentu un ģenerēt jautājumus tikai balstoties uz tā saturu."
+
+msgid "Selected document"
+msgstr "Izvēlētais dokuments"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokuments ir izvēlēts no kursa dokumentu saraksta."
+
+msgid "Choose document"
+msgstr "Izvēlēties dokumentu"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Nav obligāti. Izmanto tikai kā papildu norādi mākslīgajam intelektam."
+
+msgid "Select a document"
+msgstr "Izvēlēties dokumentu"
+
+msgid "Welcome"
+msgstr "Laipni lūdzam"
+
+msgid "Welcome to Chamilo"
+msgstr "Laipni lūdzam Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ja tas ir jūsu pirmais reizi, izmantojot Chamilo, pārliecinieties, ka pārbaudāt sānjoslu, lai atrastu ceļu caur daudzo funkciju. Ja nepieciešama palīdzība, mūsu <a href=\"https://docs.chamilo.org\">oficiālā dokumentācija</a> palīdzēs standarta dokumentācijai, savukārt mūsu <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">tiešsaistes forums</a> palīdzēs dalīties idejās un atrast atbildes no citiem Chamilo lietotājiem."
 

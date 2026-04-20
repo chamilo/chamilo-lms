@@ -709,27 +709,128 @@ class DocumentManager
      */
     public static function get_document_id($courseInfo, $path, $sessionId = 0)
     {
-        $table = Database::get_course_table(TABLE_DOCUMENT);
-        $courseId = $courseInfo['real_id'];
+        if (empty($courseInfo) || empty($path)) {
+            return false;
+        }
 
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-        $sessionCondition = api_get_session_condition($sessionId, true);
+        $groupId = (int) api_get_group_id();
 
-        $path = Database::escape_string($path);
-        if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT iid FROM $table
-                    WHERE
-                        c_id = $courseId AND
-                        path LIKE BINARY '$path'
-                        $sessionCondition
-                    LIMIT 1";
+        $normalizePath = static function (string $value): string {
+            $value = html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $value = urldecode($value);
+            $value = str_replace('\\', '/', trim($value));
 
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return (int) $row['iid'];
+            $parsedPath = (string) (parse_url($value, PHP_URL_PATH) ?? '');
+            if ('' !== $parsedPath) {
+                $value = $parsedPath;
             }
+
+            $value = preg_replace('#/+#', '/', $value) ?? $value;
+            $value = preg_replace('#^/?courses/[^/]+/document/#i', '', $value) ?? $value;
+            $value = preg_replace('#^/?document/#i', '', $value) ?? $value;
+            $value = preg_replace('#^/?Documents/#i', '', $value) ?? $value;
+
+            return trim($value, '/');
+        };
+
+        $targetPath = $normalizePath((string) $path);
+        if ('' === $targetPath) {
+            return false;
+        }
+
+        try {
+            /** @var EntityManagerInterface $em */
+            $em = Database::getManager();
+
+            /** @var Course|null $course */
+            $course = null;
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            if ($courseId > 0) {
+                $course = $em->getRepository(Course::class)->find($courseId);
+            }
+            if (!$course instanceof Course && !empty($courseInfo['code'])) {
+                $course = $em->getRepository(Course::class)->findOneBy(['code' => $courseInfo['code']]);
+            }
+            if (!$course instanceof Course) {
+                return false;
+            }
+
+            /** @var Session|null $session */
+            $session = $sessionId > 0 ? $em->getRepository(Session::class)->find($sessionId) : null;
+
+            /** @var CGroup|null $group */
+            $group = $groupId > 0 ? $em->getRepository(CGroup::class)->find($groupId) : null;
+
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT d, rn, rl')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->innerJoin('rn.resourceLinks', 'rl')
+                ->andWhere('rl.course = :course')
+                ->setParameter('course', $course);
+
+            if ($session instanceof Session) {
+                $qb
+                    ->andWhere(
+                        $qb->expr()->orX(
+                            'rl.session = :session',
+                            'rl.session IS NULL'
+                        )
+                    )
+                    ->setParameter('session', $session);
+            } else {
+                $qb->andWhere('rl.session IS NULL');
+            }
+
+            if ($group instanceof CGroup) {
+                $qb
+                    ->andWhere(
+                        $qb->expr()->orX(
+                            'rl.group = :group',
+                            'rl.group IS NULL'
+                        )
+                    )
+                    ->setParameter('group', $group);
+            } else {
+                $qb->andWhere('rl.group IS NULL');
+            }
+
+            /** @var CDocument[] $documents */
+            $documents = $qb->getQuery()->getResult();
+
+            foreach ($documents as $document) {
+                if (!$document instanceof CDocument) {
+                    continue;
+                }
+
+                $candidatePaths = [];
+
+                $node = $document->getResourceNode();
+                if ($node instanceof ResourceNode) {
+                    try {
+                        $rawPath = (string) ($node->getPath() ?? '');
+                        if ('' !== $rawPath) {
+                            $displayPath = (string) $node->convertPathForDisplay($rawPath);
+                            $candidatePaths[] = $normalizePath($displayPath);
+                        }
+                    } catch (\Throwable) {
+                        // Ignore and continue with other candidates.
+                    }
+                }
+
+                $candidatePaths[] = $normalizePath((string) $document->getFullPath());
+                $candidatePaths[] = $normalizePath((string) $document->getTitle());
+                $candidatePaths = array_values(array_unique(array_filter($candidatePaths)));
+
+                foreach ($candidatePaths as $candidatePath) {
+                    if ($candidatePath === $targetPath || strtolower($candidatePath) === strtolower($targetPath)) {
+                        return (int) $document->getIid();
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            error_log('[DOC_COMPAT] get_document_id failed: '.$e->getMessage());
         }
 
         return false;
@@ -1956,27 +2057,27 @@ class DocumentManager
                 fclose($handle);
                 break;
             case 'application/pdf':
-                exec("pdftotext $doc_path -", $output, $ret_val);
+                exec("pdftotext ".escapeshellarg($doc_path)." -", $output, $ret_val);
                 break;
             case 'application/postscript':
                 $temp_file = tempnam(sys_get_temp_dir(), 'chamilo');
-                exec("ps2pdf $doc_path $temp_file", $output, $ret_val);
+                exec("ps2pdf ".escapeshellarg($doc_path)." ".escapeshellarg($temp_file), $output, $ret_val);
                 if (0 !== $ret_val) { // shell fail, probably 127 (command not found)
                     return false;
                 }
-                exec("pdftotext $temp_file -", $output, $ret_val);
+                exec("pdftotext ".escapeshellarg($temp_file)." -", $output, $ret_val);
                 unlink($temp_file);
                 break;
             case 'application/msword':
-                exec("catdoc $doc_path", $output, $ret_val);
+                exec("catdoc ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'text/html':
-                exec("html2text $doc_path", $output, $ret_val);
+                exec("html2text ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'text/rtf':
                 // Note: correct handling of code pages in unrtf
                 // on debian lenny unrtf v0.19.2 can not, but unrtf v0.20.5 can
-                exec("unrtf --text $doc_path", $output, $ret_val);
+                exec("unrtf --text ".escapeshellarg($doc_path), $output, $ret_val);
                 if (127 == $ret_val) { // command not found
                     return false;
                 }
@@ -1994,10 +2095,10 @@ class DocumentManager
                 }
                 break;
             case 'application/vnd.ms-powerpoint':
-                exec("catppt $doc_path", $output, $ret_val);
+                exec("catppt ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
             case 'application/vnd.ms-excel':
-                exec("xls2csv -c\" \" $doc_path", $output, $ret_val);
+                exec("xls2csv -c\" \" ".escapeshellarg($doc_path), $output, $ret_val);
                 break;
         }
 
@@ -3307,12 +3408,14 @@ This folder contains all sessions that have been opened in the chat. Although th
         self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
 
         $repo = Container::getDocumentRepository();
-        if (!empty($content)) {
-            $repo->addFileFromString($document, $title, 'text/html', $content, true);
-        } else {
-            if (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
-                $repo->addFileFromPath($document, $title, $realPath);
-            }
+        $isHtmlDocument = in_array(strtolower((string) $fileType), ['html', 'htm'], true);
+
+        if ($isHtmlDocument) {
+            $repo->addFileFromString($document, $title, 'text/html', (string) $content, true);
+        } elseif (!empty($content)) {
+            $repo->addFileFromString($document, $title, 'text/html', (string) $content, true);
+        } elseif (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
+            $repo->addFileFromPath($document, $title, $realPath);
         }
 
         if ($document) {

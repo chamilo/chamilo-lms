@@ -20,7 +20,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use stdClass;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,20 +66,44 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     ];
 
     private const MOODLE_EXPORT_DEFAULT_TOOLS = [
-        'documents', 'links', 'forums',
-        'quizzes', 'quiz_questions',
-        'surveys', 'survey_questions',
-        'learnpaths', 'learnpath_category',
-        'works', 'glossary',
+        'documents',
+        'links',
+        'forums',
+        'announcements',
+        'events',
+        'attendance',
+        'gradebook',
+        'wiki',
+        'thematic',
+        'quizzes',
+        'quiz_questions',
+        'surveys',
+        'survey_questions',
+        'learnpaths',
+        'learnpath_category',
+        'works',
+        'glossary',
         'course_descriptions',
     ];
 
     private const MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
-        'documents', 'links', 'forums',
-        'quizzes', 'quiz_questions',
-        'surveys', 'survey_questions',
-        'learnpaths', 'learnpath_category',
-        'works', 'glossary',
+        'documents',
+        'links',
+        'forums',
+        'announcements',
+        'events',
+        'attendance',
+        'gradebook',
+        'wiki',
+        'thematic',
+        'quizzes',
+        'quiz_questions',
+        'surveys',
+        'survey_questions',
+        'learnpaths',
+        'learnpath_category',
+        'works',
+        'glossary',
         'tool_intro',
         'course_descriptions',
     ];
@@ -269,80 +292,37 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 }
             }
 
-            // NON-MOODLE -> CourseRestorer
-            if (!$isMoodle) {
-                $this->logDebug('[importRestore] non-Moodle backup -> using CourseRestorer');
+            // Use the same restore pipeline for Chamilo backups, Moodle backups and course copies.
+            $this->logDebug('[importRestore] unified restore pipeline -> using CourseRestorer', [
+                'import_source' => $importSource,
+                'isMoodle' => $isMoodle,
+            ]);
 
-                $this->normalizeBucketsForRestorer($course);
+            $this->normalizeBucketsForRestorer($course);
 
-                $restorer = new CourseRestorer($course);
-                $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
+            $this->logDebug(
+                '[importRestore] normalized bucket counts',
+                array_map(
+                    static fn ($bucket) => \is_array($bucket) ? \count($bucket) : 0,
+                    (array) ($course->resources ?? [])
+                )
+            );
 
-                if (method_exists($restorer, 'setResourcesAllSnapshot')) {
-                    $restorer->setResourcesAllSnapshot($resourcesAll);
-                }
-                if (method_exists($restorer, 'setDebug')) {
-                    $restorer->setDebug($this->debug);
-                }
-
-                $restorer->restore();
-                CourseArchiver::cleanBackupDir();
-
-                $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
-                $redirectUrl = \sprintf('/course/%d/home?sid=0&gid=0', $courseId);
-
-                return $this->json([
-                    'ok' => true,
-                    'message' => 'Import finished',
-                    'redirectUrl' => $redirectUrl,
-                ]);
-            }
-
-            // MOODLE -> MoodleImport restore* family
-            $this->logDebug('[importRestore] Moodle backup -> using MoodleImport.*');
-
-            $backupPath = $this->resolveBackupPath($backupId);
-
-            $ci = api_get_course_info();
-            $cid = (int) ($ci['real_id'] ?? 0);
-            $sid = 0;
-
-            $wantedGroups = $this->computeWantedMoodleGroups($course);
-            if (empty($wantedGroups)) {
-                CourseArchiver::cleanBackupDir();
-
-                return $this->json([
-                    'ok' => true,
-                    'message' => 'Nothing to import for Moodle (no supported resource groups present)',
-                    'stats' => new stdClass(),
-                ]);
-            }
-
-            $importer = new MoodleImport(debug: $this->debug);
-            $stats = [];
-
-            if (!empty($wantedGroups['links']) && method_exists($importer, 'restoreLinks')) {
-                $stats['links'] = $importer->restoreLinks($backupPath, $em, $cid, $sid, $course);
-            }
-            if (!empty($wantedGroups['forums']) && method_exists($importer, 'restoreForums')) {
-                $stats['forums'] = $importer->restoreForums($backupPath, $em, $cid, $sid, $course);
-            }
-            if (!empty($wantedGroups['documents']) && method_exists($importer, 'restoreDocuments')) {
-                $stats['documents'] = $importer->restoreDocuments($backupPath, $em, $cid, $sid, $sameFileNameOption, $course);
-            }
-            if (!empty($wantedGroups['quizzes']) && method_exists($importer, 'restoreQuizzes')) {
-                $stats['quizzes'] = $importer->restoreQuizzes($backupPath, $em, $cid, $sid);
-            }
-            if (!empty($wantedGroups['scorm']) && method_exists($importer, 'restoreScorm')) {
-                $stats['scorm'] = $importer->restoreScorm($backupPath, $em, $cid, $sid);
-            }
+            $restorer = new CourseRestorer($course);
+            $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
+            $restorer->setResourcesAllSnapshot($resourcesAll);
+            $restorer->setDebug($this->debug);
+            $restorer->restore();
 
             CourseArchiver::cleanBackupDir();
 
+            $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
+            $redirectUrl = \sprintf('/course/%d/home?sid=0&gid=0', $courseId);
+
             return $this->json([
                 'ok' => true,
-                'message' => 'Moodle import finished',
-                'stats' => $stats,
+                'message' => 'Import finished',
+                'redirectUrl' => $redirectUrl,
             ]);
         } catch (Throwable $e) {
             $this->logDebug('[importRestore] exception', [
@@ -623,6 +603,12 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             ['value' => 'documents', 'label' => 'Documents (files & root HTML pages)'],
             ['value' => 'links', 'label' => 'Links (URL)'],
             ['value' => 'forums', 'label' => 'Forums'],
+            ['value' => 'announcements', 'label' => 'Announcements'],
+            ['value' => 'events', 'label' => 'Events'],
+            ['value' => 'attendance', 'label' => 'Attendance'],
+            ['value' => 'gradebook', 'label' => 'Gradebook'],
+            ['value' => 'wiki', 'label' => 'Wiki'],
+            ['value' => 'thematic', 'label' => 'Thematic'],
             ['value' => 'quizzes', 'label' => 'Quizzes', 'implies' => ['quiz_questions']],
             ['value' => 'surveys', 'label' => 'Surveys', 'implies' => ['survey_questions']],
             ['value' => 'works', 'label' => 'Tasks'],
@@ -656,8 +642,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 ? $selectedTools
                 : self::MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS;
 
-            // Policy: never show gradebook, always include tool_intro.
-            $toolsToBuild = array_values(array_diff($toolsToBuild, ['gradebook']));
+            // Always include tool_intro.
             if (!\in_array('tool_intro', $toolsToBuild, true)) {
                 $toolsToBuild[] = 'tool_intro';
             }
@@ -735,8 +720,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $tools = $this->normalizeSelectedTools(array_merge($tools, $inferred));
         }
 
-        // Remove unsupported tools + dedupe
-        $tools = array_values(array_unique(array_diff($tools, ['gradebook'])));
+        // Dedupe tools
+        $tools = array_values(array_unique($tools));
 
         $clientSentNoTools = empty($toolsInput);
         $toolsToBuild = ('full' === $scope && $clientSentNoTools) ? self::MOODLE_EXPORT_DEFAULT_TOOLS : $tools;
@@ -764,6 +749,16 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         $cb = new CourseBuilder();
         $cb->set_tools_to_build($toolsToBuild);
         $course = $cb->build(0, $courseId);
+
+        $this->logDebug('[moodleExportExecute] built resource keys', array_keys((array) ($course->resources ?? [])));
+
+        $this->logDebug('[moodleExportExecute] built resource counts', [
+            'announcements' => isset($course->resources['announcements']) && \is_array($course->resources['announcements']) ? \count($course->resources['announcements']) : 0,
+            'events' => isset($course->resources['events']) && \is_array($course->resources['events']) ? \count($course->resources['events']) : 0,
+            'attendance' => isset($course->resources['attendance']) && \is_array($course->resources['attendance']) ? \count($course->resources['attendance']) : 0,
+            'gradebook' => isset($course->resources['gradebook']) && \is_array($course->resources['gradebook']) ? \count($course->resources['gradebook']) : 0,
+            'wiki' => isset($course->resources['wiki']) && \is_array($course->resources['wiki']) ? \count($course->resources['wiki']) : 0,
+        ]);
 
         if ('selected' === $scope) {
             $course = $this->filterLegacyCourseBySelection($course, $selected);
@@ -1385,35 +1380,64 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             'documents' => 'document',
             'document ' => 'document',
             'Document' => 'document',
-
             'tool introduction' => 'tool_intro',
             'tool_introduction' => 'tool_intro',
             'tool/introduction' => 'tool_intro',
             'tool intro' => 'tool_intro',
             'Tool introduction' => 'tool_intro',
-
             'forums' => 'forum',
             'Forum' => 'forum',
+            'forum_category' => 'forum_category',
             'Forum_Category' => 'forum_category',
             'forumcategory' => 'forum_category',
             'thread' => 'forum_topic',
             'Thread' => 'forum_topic',
             'forumtopic' => 'forum_topic',
+            'forum_topic' => 'forum_topic',
             'post' => 'forum_post',
             'Post' => 'forum_post',
             'forumpost' => 'forum_post',
-
+            'forum_post' => 'forum_post',
             'links' => 'link',
             'link category' => 'link_category',
-
-            'Exercise_Question' => 'exercise_question',
-            'exercisequestion' => 'exercise_question',
-
+            'link_category' => 'link_category',
+            'Link_Category' => 'link_category',
+            'quizzes' => 'quiz',
+            'quiz_questions' => 'Exercise_Question',
+            'quiz question' => 'Exercise_Question',
+            'quiz/questions' => 'Exercise_Question',
+            'exercise_questions' => 'Exercise_Question',
+            'exercisequestion' => 'Exercise_Question',
+            'quiz_question' => 'Exercise_Question',
+            'exercise_question' => 'Exercise_Question',
             'surveys' => 'survey',
+            'survey_questions' => 'survey_question',
+            'survey question' => 'survey_question',
+            'survey/questions' => 'survey_question',
             'surveyquestion' => 'survey_question',
-
             'announcements' => 'announcement',
+            'announcement' => 'announcement',
+            'news' => 'announcement',
             'Announcements' => 'announcement',
+            'events' => 'event',
+            'event' => 'event',
+            'calendar_event' => 'event',
+            'calendar events' => 'event',
+            'course_descriptions' => 'course_description',
+            'course descriptions' => 'course_description',
+            'glossaries' => 'glossary',
+            'works' => 'work',
+            'learnpaths' => 'learnpath',
+            'learnpath categories' => 'learnpath_category',
+            'learnpath_categories' => 'learnpath_category',
+            'assets' => 'asset',
+            'attendance' => 'attendance',
+            'gradebook' => 'gradebook',
+            'Gradebook' => 'gradebook',
+            'wiki' => 'wiki',
+            'scorm' => 'scorm',
+            'scorm_documents' => 'scorm_documents',
+            'thematic' => 'thematic',
         ];
 
         foreach ($all as $rawKey => $bucket) {
@@ -1444,12 +1468,32 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         }
 
         $order = [
-            'announcement', 'document', 'link', 'link_category',
-            'forum', 'forum_category', 'forum_topic', 'forum_post',
-            'quiz', 'exercise_question',
-            'survey', 'survey_question',
-            'learnpath', 'tool_intro',
+            'announcement',
+            'document',
+            'link',
+            'link_category',
+            'forum',
+            'forum_category',
+            'forum_topic',
+            'forum_post',
+            'quiz',
+            'Exercise_Question',
+            'survey',
+            'survey_question',
+            'event',
+            'course_description',
+            'glossary',
             'work',
+            'learnpath_category',
+            'learnpath',
+            'tool_intro',
+            'attendance',
+            'gradebook',
+            'wiki',
+            'thematic',
+            'scorm',
+            'scorm_documents',
+            'asset',
         ];
 
         $weights = [];
@@ -1466,7 +1510,18 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
         $course->resources = $meta + $out;
 
-        $this->logDebug('[normalizeBucketsForRestorer] final keys', array_keys((array) $course->resources));
+        $this->logDebug(
+            '[normalizeBucketsForRestorer] final keys',
+            array_keys((array) $course->resources)
+        );
+
+        $this->logDebug(
+            '[normalizeBucketsForRestorer] final counts',
+            array_map(
+                static fn ($bucket) => \is_array($bucket) ? \count($bucket) : 0,
+                (array) $course->resources
+            )
+        );
     }
 
     private function getImportSource(object $course): string

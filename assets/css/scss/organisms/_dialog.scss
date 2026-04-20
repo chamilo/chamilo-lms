@@ -17,6 +17,14 @@
     }
   }
 
+  &-header-actions {
+    .p-button {
+      @apply border-0 border-none text-gray-50
+        hover:text-secondary;
+      padding: 0 calc(.25rem + 1px);
+    }
+  }
+
   &-header-icons {
     @apply flex gap-4 items-center;
   }

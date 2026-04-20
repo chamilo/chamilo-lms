@@ -1,0 +1,236 @@
+
+:root {
+    --main-color-1: #52BE80;
+}
+
+body {
+    background-image : url(img/classique/leafs.png);
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-color :#E8F6F3!important;
+    background-attachment: fixed;
+    font-family: sans-serif;
+}
+.teachdoctextContent {line-height: 1.4;}
+
+h1{
+    text-align:center;
+    font-weight: 100;
+    margin: 0px;
+}
+h2{
+    text-align : left;
+    font-weight : 100;
+    font-size : 20px;
+    margin : 0px;
+    margin-top : 10px;
+    margin-left : -40px;
+    margin-right : 25px;
+    margin-bottom: 10px;
+    padding-left : 25px;
+    padding-top : 5px;
+    padding-bottom : 5px;
+    background-color : #52BE80;
+    color : white;
+    border-radius: 9px;
+    -webkit-box-shadow: 5px 5px 0px 0px #D0ECE7, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 5px 5px 0px 0px #D0ECE7, 5px 5px 15px 5px rgba(0,0,0,0);
+}
+
+.sectioncollapse{
+    text-align : center;
+    font-size : 22px;
+    background-color : #52BE80;
+    color:white;
+    padding : 10px;
+    margin : 10px;
+    margin-left : 0px;
+    margin-right : 0px;
+    background-image : url(img/classique/arrow-collapsel.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    cursor : pointer;
+}
+
+/* Notices */
+samp {
+    font-family: 'Hahmlet', serif;
+    font-size : 17px;
+    background-color : #aad8f6;
+    padding: 5px;
+    padding-left: 35px;
+    background-image : url(img/classique/infos.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+}
+address {
+    font-family: 'Hahmlet', serif;
+    font-size : 17px;
+    color: #9F6000;
+    background-color: #FEEFB3;
+    padding: 5px;
+    padding-left: 35px;
+    background-image : url(img/classique/warning.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+}
+blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+.oelAlignLeft{text-align:left;}
+.oelAligncenter{text-align:center;}
+.oelAlignright{text-align:right;}
+.oelAlignjustify{text-align:justify;}
+
+/*button only*/
+.btnteachgreen{
+    color: #fff;
+    background-color: #229954;
+    border-color: #1E8449 ;
+    padding: 7px 13px;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btnteachblue{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    padding: 7px 13px;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btnroundblue{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url(img/btn/mat-right.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+.btnroundblueprev{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url(img/btn/mat-left.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+.btnroundbluecheck{
+    color: transparent;
+    background-color : rgb(0, 151, 169);
+    border: 1px solid #2e6da4;
+    background-image : url(img/btn/mat-check.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    padding: 0px 0px;
+    margin-bottom : 0;
+    font-size : 15px;
+    font-weight : 400;
+    line-height : 56px;
+    border-radius: 50%;
+}
+.btnicondownload{
+    background-image : url(img/btn/mat-down.png);
+}
+.btniconhelp{
+    background-image : url(img/btn/mat-help.png);
+}
+.btniconattach{
+    background-image : url(img/btn/mat-attach.png);
+}
+
+.btn-btnTeach{
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.btn-btnTeach:hover{
+    transform: scale(0.96);
+}
+/*button only*/
+
+.videoByLudi{
+    max-width : 960px;
+    min-height : 100px;
+    max-height : 540px;
+    width : 98%;
+    margin-left : 1%;
+}
+
+.audioByLudi{
+    width : 90%;
+    margin-left : auto;
+    margin-right : auto;
+}
+
+.spaceteach{
+    height : 20px;
+    width : 100%;
+    border: 1px dotted gray;
+}
+
+.separatorteach {
+    position : relative;
+    width:98%;
+    margin-left:1%;
+    margin-right:1%;
+    height : 32px;
+    border: 0px solid gray;
+}
+.separatorteach:before {
+    content : "";
+    position : absolute;
+    height : 6px;
+    background-color : var(--main-color-1, #b3b3b3);
+    margin-left:1%;
+    width : 98%;
+    top : 12px;
+    border-radius : 3px;
+}
+
+.svgschema {
+    width : 100%;
+    z-index : 1;
+}

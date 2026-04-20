@@ -62,7 +62,7 @@
                 {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
               </td>
             </tr>
-            <tr v-if="item.resourceNode.firstResourceFile">
+            <tr v-if="item.resourceNode.firstResourceFile && !hideDownloadIcon">
               <th v-text="$t('File')" />
               <td>
                 <a
@@ -90,12 +90,11 @@ import { mapFields } from "vuex-map-fields"
 import Loading from "../../components/Loading.vue"
 import ShowMixin from "../../mixins/ShowMixin"
 import Toolbar from "../../components/Toolbar.vue"
-
 import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
-
 import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 
 const servicePrefix = "Documents"
@@ -109,11 +108,17 @@ export default {
     ShowLinks,
   },
   mixins: [ShowMixin],
+  setup() {
+    const platformConfigStore = usePlatformConfig()
+
+    return {
+      platformConfigStore,
+    }
+  },
   data() {
     const { relativeDatetime } = useFormatDate()
 
     const securityStore = useSecurityStore()
-
     const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
 
     return {
@@ -128,6 +133,9 @@ export default {
       isLoading: "isLoading",
     }),
     ...mapGetters("documents", ["find"]),
+    hideDownloadIcon() {
+      return this.platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+    },
   },
   methods: {
     ...mapActions("documents", {

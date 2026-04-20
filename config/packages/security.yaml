@@ -22,6 +22,7 @@ security:
             algorithm: auto
             migrate_from:
                 - bcrypt
+                - legacy_md5
                 - legacy_sha1
                 - legacy_bcrypt
 

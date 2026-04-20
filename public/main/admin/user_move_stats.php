@@ -779,9 +779,9 @@ if (!empty($user_list)) {
             }
         }
 
-        foreach ($course_list_registered as &$course) {
+        foreach ($course_list_registered as $i => $course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
-            $course['name'] = $courseInfo['name'];
+            $course_list_registered[$i]['name'] = $courseInfo['name'];
         }
 
         $course_list = $course_list_registered;
@@ -832,7 +832,7 @@ if (!empty($user_list)) {
                 echo '</select>';
                 echo '<br />';
                 echo '<button type="submit" class="btn btn--success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
-                echo '<button type="submit" class="btn btn--success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
+                echo '<button type="submit" class="btn btn--secondary" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
                 echo '<div id ="reponse_'.$unique_id.'"></div>';
                 echo '</td>';
             }

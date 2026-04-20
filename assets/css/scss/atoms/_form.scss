@@ -55,7 +55,8 @@
 }
 
 .field {
-  @apply mb-5;
+  @apply mb-5
+    last:mb-0;
 
   > small,
   .help-text {
@@ -104,41 +105,31 @@
   @apply text-error text-caption;
 }
 
-.p-float-label {
-  @apply block relative;
+// Plain HTML form controls sized to match .btn height and rounding.
+.form-control {
+  @apply border border-solid border-gray-300 rounded-md leading-normal;
+  padding: calc(0.5rem - 1px) calc(1rem - 1px);
+}
 
-  label {
-    @apply absolute top-1/2 -mt-2 pointer-events-none leading-none left-4 text-support-3 bg-transparent transition-all duration-200;
+select.form-control {
+  @apply pr-8 appearance-none bg-no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center;
+  background-size: 12px;
+}
+
+.html-editor-container {
+  & .tox-tinymce {
+    @apply border border-solid border-gray-50 transition-colors appearance-none rounded-lg outline-transparent w-full pt-2
+      hover:border-primary;
   }
 
-  &:has(input:focus) label,
-  &:has(input.p-filled) label,
-  &:has(input:-webkit-autofill) label,
-  &:has(textarea:focus) label,
-  &:has(textarea.p-filled) label,
-  &:has(.p-inputwrapper-focus) label,
-  &:has(.p-inputwrapper-filled) label,
-  &:has(.tox.tox-tinymce) label {
-    @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
-  }
-
-  .html-editor-container > div,
-  .tox.tox-tinymce {
-    @apply pt-2 border-support-3 rounded-lg;
-  }
-
-  .p-invalid ~ label {
-    @apply text-error;
-  }
-
-  input:focus,
-  input.p-filled,
-  textarea:focus,
-  textarea.p-filled,
-  .p-inputwrapper-focus,
-  .p-inputwrapper-filled {
-    &.p-invalid ~ label {
-      @apply text-error;
+  &--focused {
+    & .tox-tinymce {
+      @apply border-primary outline-0 outline-none;
     }
+  }
+
+  &--filled {
   }
 }

@@ -16,7 +16,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
@@ -105,7 +105,7 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 
 $sessionTitle = $session ? (string) $session->getTitle() : '';
 $backUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
-$listUrl = api_get_path(WEB_CODE_PATH).'session/session_list.php';
+$listUrl = '/admin/session-list';
 
 echo '<div class="mx-auto w-full p-4 space-y-4">';
 

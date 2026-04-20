@@ -461,6 +461,11 @@ class SessionManager
         $order = empty($conditions['order']) ? ' ORDER BY s.title ASC' : $conditions['order'];
         $limit = $conditions['limit'];
 
+        // When session_list_order is enabled, sort by position by default
+        if ('true' === api_get_setting('session.session_list_order') && empty($conditions['order'])) {
+            $order = ' ORDER BY s.position ASC';
+        }
+
         $isMakingOrder = false;
         $showCountUsers = false;
 
@@ -2238,12 +2243,7 @@ class SessionManager
                     $user_info['complete_name'],
                     $user_info['mail'],
                     $subject,
-                    $content,
-                    api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    ),
-                    api_get_setting('emailAdministrator')
+                    $content
                 );
 
                 // Record message in system
@@ -2421,9 +2421,7 @@ class SessionManager
             $boss->getFullName(),
             $boss->getEmail(),
             $subject,
-            $content,
-            api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
-            api_get_setting('emailAdministrator')
+            $content
         );
 
         // Record message in system
@@ -6093,7 +6091,7 @@ class SessionManager
 
         $content = file_get_contents($file);
         $content = api_utf8_encode_xml($content);
-        $root = @simplexml_load_string($content);
+        $root = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
 
         if (!is_object($root)) {
             $errorMessage .= get_lang('XML document is not valid');
@@ -6560,7 +6558,7 @@ class SessionManager
 
         if (isset($active)) {
             $active = (int) $active;
-            $userConditions .= " AND active = $active";
+            $userConditions .= " AND u.active = $active";
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
@@ -6644,7 +6642,12 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND (
+            u.last_login IS NULL OR
+            u.last_login = '0000-00-00 00:00:00' OR
+            u.last_login = '0000-00-00' OR
+            u.last_login <= '$lastConnectionDate'
+        ) ";
         }
 
         if (!empty($keyword)) {
@@ -10234,23 +10237,23 @@ class SessionManager
         $tabs = [
             [
                 'content' => get_lang('All sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+                'url' => '/admin/session-list?list_type=all',
             ],
             [
                 'content' => get_lang('Active sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+                'url' => '/admin/session-list?list_type=active',
             ],
             [
                 'content' => get_lang('Closed sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+                'url' => '/admin/session-list?list_type=close',
             ],
             [
                 'content' => get_lang('Custom list'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
+                'url' => '/admin/session-list?list_type=custom',
             ],
             [
                 'content' => get_lang('Replication'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=replication',
+                'url' => '/admin/session-list?list_type=replication',
             ],
         ];
         $default = null;
@@ -10851,7 +10854,7 @@ class SessionManager
         $rawCsvContent = ChamiloSession::read('csv_content');
 
         if (empty($rawCsvContent)) {
-            throw new \RuntimeException("No CSV content found in session for course $courseCode and session $sessionId.");
+            return [$csvHeaders, []];
         }
 
         $csvContent = [];

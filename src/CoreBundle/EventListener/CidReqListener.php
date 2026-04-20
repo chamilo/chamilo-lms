@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -53,7 +54,7 @@ class CidReqListener
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TokenStorageInterface $tokenStorage
+        private readonly TokenStorageInterface $tokenStorage,
     ) {}
 
     /**
@@ -145,11 +146,27 @@ class CidReqListener
             // Setting variables for the twig templates.
             $twig->addGlobal('course', $course);
 
-            if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
+            $ltiAccessRestored = true === $request->attributes->get('_lti_provider_access_restored');
+
+            if ($ltiAccessRestored) {
+                $ltiUserId = (int) $request->attributes->get('_lti_provider_user_id', 0);
+                $ltiCourseId = (int) $request->attributes->get('_lti_provider_course_id', 0);
+
+                if (
+                    $ltiUserId > 0
+                    && $ltiCourseId > 0
+                    && $ltiCourseId === (int) $course->getId()
+                ) {
+                    return;
+                }
             }
 
-            // Checking if sid is used.
+            if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+                throw new NotAllowedException(
+                    $this->translator->trans("You're not allowed in this course")
+                );
+            }
+
             $sessionId = (int) $request->get('sid');
 
             if (empty($sessionId)) {
@@ -199,6 +216,7 @@ class CidReqListener
 
                 $sessionHandler->set('group', $group);
                 $sessionHandler->set('gid', $groupId);
+                ChamiloSession::write('gid', $groupId);
             }
 
             $origin = $request->get('origin');

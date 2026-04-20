@@ -28,7 +28,7 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : -1;
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report&session_id='.$sessionId;
 
-$extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+$extra_fields = UserManager::get_extra_fields(0, 100, null, 'ASC', true, true);
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [

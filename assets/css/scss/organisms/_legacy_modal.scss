@@ -1,0 +1,31 @@
+.legacy-modal {
+  @apply max-h-[90%] scale-100 shadow-xl rounded-lg border-0 border-none bg-white overflow-hidden;
+
+  &[open] {
+    @apply flex flex-col;
+  }
+
+  &::backdrop {
+    @apply bg-gray-30;
+  }
+
+  &__content {
+    @apply overflow-y-auto bg-white overscroll-contain;
+  }
+
+  &__header {
+    @apply flex-shrink-0 flex items-center bg-white border-b border-solid border-gray-30 gap-4 rounded-t-lg p-4;
+  }
+
+  &__title {
+    @apply text-body-1 font-semibold mr-auto;
+  }
+
+  &__body {
+    @apply flex-1 min-h-0 overflow-y-auto bg-white overscroll-contain p-4;
+  }
+
+  &__footer {
+    @apply flex-shrink-0 bg-gray-15 flex gap-4 justify-end rounded-b-lg p-4;
+  }
+}

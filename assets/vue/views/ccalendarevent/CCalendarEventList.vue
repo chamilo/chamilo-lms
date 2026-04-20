@@ -15,7 +15,7 @@
 
     <Loading :visible="isLoading" />
 
-    <!-- Add form-->
+    <!-- Add form -->
     <Dialog
       v-model:visible="dialog"
       :header="item['@id'] ? t('Edit event') : t('Add event')"
@@ -24,8 +24,11 @@
       <CCalendarEventForm
         v-if="dialog"
         ref="createForm"
-        :is-global="isGlobal"
+        :is-global="effectiveIsGlobal"
         :values="item"
+        :allow-career-promotion-fields="effectiveAllowCareerPromotionFields"
+        :career-options="careerOptions"
+        :promotion-options="promotionOptions"
       />
       <template #footer>
         <BaseButton
@@ -43,7 +46,7 @@
       </template>
     </Dialog>
 
-    <!-- Show form-->
+    <!-- Show form -->
     <Dialog
       v-model:visible="dialogShow"
       :header="t('Event')"
@@ -87,12 +90,12 @@
           :label="t('Edit')"
           icon="edit"
           type="secondary"
-          @click="dialog = true"
+          @click="openEditDialog"
         />
       </template>
     </Dialog>
 
-    <!-- Show form-->
+    <!-- Session dialog -->
     <Dialog
       v-model:visible="sessionState.showSessionDialog"
       :header="t('Session')"
@@ -126,7 +129,7 @@
 import { computed, reactive, ref, watch } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRoute, useRouter } from "vue-router"
 import { DateTime } from "luxon"
@@ -151,10 +154,13 @@ import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { usePlatformConfig } from "../../store/platformConfig"
+import baseService from "../../services/baseService"
 
 const store = useStore()
 const securityStore = useSecurityStore()
-const confirm = useConfirm()
+const platformConfigStore = usePlatformConfig()
+const { requireConfirmation } = useConfirmation()
 const cidReqStore = useCidReqStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
@@ -170,18 +176,107 @@ const allowToEdit = ref(false)
 const allowToSubscribe = ref(false)
 const allowToUnsubscribe = ref(false)
 
+const careerOptions = ref([])
+const promotionOptions = ref([])
+
 const { t } = useI18n()
 const { appLocale } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const isGlobal = ref(route.query.type === "global")
 
+const effectiveIsGlobal = computed(() => {
+  return isGlobal.value
+})
+
+const effectiveAllowCareerPromotionFields = computed(() => {
+  return (
+    effectiveIsGlobal.value &&
+    "true" === String(platformConfigStore.getSetting("agenda.allow_careers_in_global_agenda"))
+  )
+})
+
 const courseSettingsStore = useCourseSettings()
 const allowUserEditAgenda = ref(false)
 
 const timezone = getCurrentTimezone()
 
-// Removes openAdd=1 from the current URL to avoid reopening the dialog.
+function htmlToPlainText(input) {
+  if (!input) return ""
+
+  const raw = String(input)
+
+  if (!/[<>]/.test(raw)) {
+    return raw.replace(/\s+/g, " ").trim()
+  }
+
+  if (typeof document !== "undefined") {
+    const div = document.createElement("div")
+    div.innerHTML = raw
+
+    return (div.textContent || div.innerText || "").replace(/\s+/g, " ").trim()
+  }
+
+  return raw
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function buildEventTooltip(eventLike) {
+  const eventObject = eventLike?.event ?? eventLike ?? {}
+  const extendedProps = eventObject?.extendedProps ?? {}
+
+  const lines = []
+  const title = eventObject?.title || extendedProps?.title || ""
+  const description = htmlToPlainText(extendedProps?.content || extendedProps?.description || "")
+
+  if (title) {
+    lines.push(title)
+  }
+
+  const start = eventObject?.start ? abbreviatedDatetime(eventObject.start) : ""
+  const end = eventObject?.end ? abbreviatedDatetime(eventObject.end) : ""
+
+  if (start && end) {
+    lines.push(`${t("From")} ${start}`)
+    lines.push(`${t("Until")} ${end}`)
+  } else if (start) {
+    lines.push(`${t("From")} ${start}`)
+  }
+
+  if (description) {
+    lines.push(description)
+  }
+
+  return lines.join("\n")
+}
+
+function applyCalendarEventPresentation(info) {
+  const tooltip = buildEventTooltip(info)
+  const el = info?.el
+
+  if (!el) {
+    return
+  }
+
+  if (tooltip) {
+    el.setAttribute("title", tooltip)
+  } else {
+    el.removeAttribute("title")
+  }
+
+  el.classList.add("calendar-event--wrapped")
+
+  el.querySelectorAll("a, .fc-event-title, .fc-list-event-title").forEach((node) => {
+    if (tooltip) {
+      node.setAttribute("title", tooltip)
+    } else {
+      node.removeAttribute("title")
+    }
+  })
+}
+
 function clearOpenAddFlag() {
   if (route.query.openAdd !== "1") return
 
@@ -228,7 +323,7 @@ watch(
     if (!userNodeId) return
 
     handledOpenAdd.value = true
-    showAddEventDialog()
+    void showAddEventDialog()
     clearOpenAddFlag()
   },
   { immediate: true },
@@ -239,14 +334,34 @@ watch(
   (visible) => {
     if (!visible) {
       clearOpenAddFlag()
+      return
+    }
+
+    void prepareCareerPromotionFieldsForDialog()
+  },
+)
+
+watch(
+  () => effectiveAllowCareerPromotionFields.value,
+  async (enabled) => {
+    if (!enabled) {
+      careerOptions.value = []
+      promotionOptions.value = []
+
+      if (item.value) {
+        item.value.career = null
+        item.value.promotion = null
+      }
+
+      return
+    }
+
+    if (dialog.value) {
+      await prepareCareerPromotionFieldsForDialog()
     }
   },
 )
 
-/**
- * Read the current calendar state to keep list and calendar coherent.
- * This provides both the current anchor date and the current view type.
- */
 function getCalendarQueryState() {
   const api = cal.value?.getApi?.()
   if (!api) {
@@ -261,14 +376,26 @@ function getCalendarQueryState() {
   return { date, view }
 }
 
-function goToAgendaList() {
+function buildAgendaNavigationQuery() {
   const { date, view } = getCalendarQueryState()
-
   const nextQuery = { ...route.query }
-  if (date) nextQuery.date = date
-  if (view) nextQuery.view = view
 
-  router.push({ name: "CCalendarEventListView", query: nextQuery }).catch((e) => {
+  if (date) {
+    nextQuery.date = date
+  }
+
+  if (view) {
+    nextQuery.view = view
+  }
+
+  return nextQuery
+}
+
+function goToAgendaList(mode = "list") {
+  const nextQuery = buildAgendaNavigationQuery()
+  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
+
+  router.push({ name: targetRoute, query: nextQuery }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }
@@ -311,22 +438,31 @@ const calendarLocale = allLocales.find(
 
 const HEX6 = /^#([0-9a-f]{6})$/i
 const HEX3 = /^#([0-9a-f]{3})$/i
+
 function normalizeHex(c) {
   if (!c) return null
+
   const s = String(c).trim()
+
   if (HEX6.test(s)) return s.toUpperCase()
+
   const m3 = s.match(HEX3)
   if (m3) {
     const [r, g, b] = m3[1].toUpperCase().split("")
     return `#${r}${r}${g}${g}${b}${b}`
   }
+
   const mRgb = s.match(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i)
   if (mRgb) {
     const r = Math.min(255, +mRgb[1])
     const g = Math.min(255, +mRgb[2])
     const b = Math.min(255, +mRgb[3])
-    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase()
+
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b
+      .toString(16)
+      .padStart(2, "0")}`.toUpperCase()
   }
+
   const names = {
     YELLOW: "#FFFF00",
     BLUE: "#0000FF",
@@ -335,6 +471,7 @@ function normalizeHex(c) {
     STEELBLUE: "#4682B4",
     "STEEL BLUE": "#4682B4",
   }
+
   return names[s.toUpperCase()] || null
 }
 
@@ -342,10 +479,9 @@ function defaultColorByContext(ctx) {
   return ctx === "global" ? "#FF0000" : ctx === "course" ? "#458B00" : ctx === "session" ? "#00496D" : "#4682B4"
 }
 
-// Build a safe default item for the modal form.
 function buildDefaultEventItem() {
   const now = new Date()
-  const end = new Date(now.getTime() + 60 * 60 * 1000) // +1 hour
+  const end = new Date(now.getTime() + 60 * 60 * 1000)
 
   return {
     title: "",
@@ -355,12 +491,126 @@ function buildDefaultEventItem() {
     endDate: end,
     parentResourceNode: securityStore.user?.resourceNode?.["id"] ?? null,
     color: defaultColorByContext(currentContext?.value ?? "personal"),
+    career: null,
+    promotion: null,
   }
 }
 
-// Hoisted function declaration to be safe with immediate watchers.
-function showAddEventDialog() {
+function normalizeRelationValueForSelect(value) {
+  if (!value) {
+    return null
+  }
+
+  if (typeof value === "number") {
+    return value
+  }
+
+  if (typeof value === "string") {
+    const match = value.match(/(\d+)$/)
+
+    return match ? Number(match[1]) : value
+  }
+
+  if (typeof value === "object" && value.id) {
+    return Number(value.id)
+  }
+
+  if (typeof value === "object" && value["@id"]) {
+    const match = String(value["@id"]).match(/(\d+)$/)
+
+    return match ? Number(match[1]) : value["@id"]
+  }
+
+  return null
+}
+
+async function loadCareerAndPromotionOptions() {
+  if (!effectiveAllowCareerPromotionFields.value) {
+    careerOptions.value = []
+    promotionOptions.value = []
+
+    return
+  }
+
+  try {
+    const data = await baseService.get("/calendar/career-promotion-options")
+
+    careerOptions.value = Array.isArray(data.careers) ? data.careers : []
+    promotionOptions.value = Array.isArray(data.promotions)
+      ? data.promotions.map((promotion) => ({
+          id: promotion.id,
+          title: promotion.title,
+          career: promotion.careerId,
+        }))
+      : []
+  } catch (e) {
+    console.error("Failed to load career and promotion options.", e)
+    careerOptions.value = []
+    promotionOptions.value = []
+  }
+}
+
+async function prepareCareerPromotionFieldsForDialog() {
+  if (!effectiveAllowCareerPromotionFields.value) {
+    careerOptions.value = []
+    promotionOptions.value = []
+
+    if (item.value) {
+      item.value.career = null
+      item.value.promotion = null
+    }
+
+    return
+  }
+
+  await loadCareerAndPromotionOptions()
+
+  if (undefined === item.value.career) {
+    item.value.career = null
+  }
+
+  if (undefined === item.value.promotion) {
+    item.value.promotion = null
+  }
+}
+
+async function hydrateEventForEdition() {
+  const eventIri = item.value?.["@id"]
+  if (!eventIri) {
+    return
+  }
+
+  try {
+    const fullEvent = await baseService.get(eventIri)
+
+    item.value = {
+      ...item.value,
+      ...fullEvent,
+      title: fullEvent.title ?? item.value.title ?? "",
+      content: fullEvent.content ?? item.value.content ?? "",
+      color: normalizeHex(fullEvent.color ?? item.value.color) || defaultColorByContext(currentContext.value),
+      room: normalizeRelationValueForSelect(fullEvent.room ?? item.value.room),
+      career: normalizeRelationValueForSelect(fullEvent.career ?? item.value.career),
+      promotion: normalizeRelationValueForSelect(fullEvent.promotion ?? item.value.promotion),
+      startDate: fullEvent.startDate ? new Date(fullEvent.startDate) : item.value.startDate,
+      endDate: fullEvent.endDate ? new Date(fullEvent.endDate) : item.value.endDate,
+    }
+  } catch (error) {
+    console.error("Failed to hydrate calendar event before editing.", error)
+  }
+}
+
+async function showAddEventDialog() {
   item.value = buildDefaultEventItem()
+  await prepareCareerPromotionFieldsForDialog()
+  dialog.value = true
+}
+
+async function openEditDialog() {
+  await prepareCareerPromotionFieldsForDialog()
+  await hydrateEventForEdition()
+
+  dialogShow.value = false
   dialog.value = true
 }
 
@@ -380,10 +630,6 @@ const calendarOptions = ref({
   endParam: "endDate[before]",
   selectable: true,
 
-  /**
-   * Keep query date+view in sync so list view can use the same range.
-   * This does not change any existing behavior, it only updates the URL.
-   */
   datesSet(arg) {
     const api = arg?.view?.calendar
     if (!api) return
@@ -395,7 +641,6 @@ const calendarOptions = ref({
     if (date) nextQuery.date = date
     if (view) nextQuery.view = view
 
-    // Avoid infinite loops: only replace when something changed
     const sameDate = String(route.query.date || "") === String(nextQuery.date || "")
     const sameView = String(route.query.view || "") === String(nextQuery.view || "")
     if (sameDate && sameView) return
@@ -407,7 +652,7 @@ const calendarOptions = ref({
     eventClickInfo.jsEvent.preventDefault()
     currentEvent = eventClickInfo.event
 
-    let event = eventClickInfo.event.toPlainObject()
+    const event = eventClickInfo.event.toPlainObject()
 
     if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
       allowToEdit.value =
@@ -420,13 +665,14 @@ const calendarOptions = ref({
     item.value = { ...event.extendedProps }
 
     item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
-    item.value["title"] = event.title
-    item.value["startDate"] = event.start ? new Date(event.start) : null
-    item.value["endDate"] = event.end ? new Date(event.end) : null
-    item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
+    item.value.title = event.title
+    item.value.startDate = event.start ? new Date(event.start) : null
+    item.value.endDate = event.end ? new Date(event.end) : null
+    item.value.parentResourceNodeId = event.extendedProps?.resourceNode?.creator?.id
 
     const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
-    item.value["color"] = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
+    item.value.color = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
+
     if (
       !(route.query.sid === "0" && item.value.type === "session") &&
       !(route.query.sid !== "0" && item.value.type === "course") &&
@@ -469,13 +715,17 @@ const calendarOptions = ref({
       endDate = new Date(info.end)
     }
 
-    item.value = {}
-    item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
-    item.value["allDay"] = info.allDay
-    item.value["startDate"] = startDate
-    item.value["endDate"] = endDate
-    item.value["color"] = defaultColorByContext(currentContext.value)
+    item.value = {
+      career: null,
+      promotion: null,
+    }
+    item.value.parentResourceNode = securityStore.user.resourceNode["id"]
+    item.value.allDay = info.allDay
+    item.value.startDate = startDate
+    item.value.endDate = endDate
+    item.value.color = defaultColorByContext(currentContext.value)
 
+    void prepareCareerPromotionFieldsForDialog()
     dialog.value = true
   },
 
@@ -503,6 +753,10 @@ const calendarOptions = ref({
     }
 
     getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
+  },
+
+  eventDidMount(info) {
+    applyCalendarEventPresentation(info)
   },
 })
 
@@ -534,17 +788,13 @@ function reFetch() {
 }
 
 function confirmDelete() {
-  confirm.require({
+  requireConfirmation({
+    title: t("Delete"),
     message: t("Are you sure you want to delete"),
-    header: t("Delete"),
-    icon: "pi pi-exclamation-triangle",
-    acceptClass: "p-button-danger",
-    rejectClass: "p-button-plain p-button-outlined",
-    acceptLabel: t("Yes"),
-    rejectLabel: t("Cancel"),
     accept() {
-      const isOwner = item.value["parentResourceNodeId"] === securityStore.user["id"]
+      const isOwner = item.value.parentResourceNodeId === securityStore.user.id
       const isAdmin = securityStore.isCourseAdmin || securityStore.isSessionAdmin
+
       if (isOwner || isAdmin) {
         store.dispatch("ccalendarevent/del", item.value).then(() => {
           dialogShow.value = false
@@ -552,16 +802,16 @@ function confirmDelete() {
           reFetch()
         })
       } else {
-        const resourceLinks = Array.isArray(item.value["resourceLinkListFromEntity"])
-          ? item.value["resourceLinkListFromEntity"]
+        const resourceLinks = Array.isArray(item.value.resourceLinkListFromEntity)
+          ? item.value.resourceLinkListFromEntity
           : []
 
-        const userLink = resourceLinks.find((link) => link?.user?.id === securityStore.user["id"])
+        const userLink = resourceLinks.find((link) => link?.user?.id === securityStore.user.id)
 
         if (userLink) {
           store
             .dispatch("resourcelink/del", {
-              "@id": `/api/resource_links/${userLink["id"]}`,
+              "@id": `/api/resource_links/${userLink.id}`,
             })
             .then(() => {
               currentEvent.remove()
@@ -572,7 +822,6 @@ function confirmDelete() {
         }
       }
     },
-    reject() {},
   })
 }
 
@@ -598,15 +847,13 @@ const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 const createForm = ref(null)
 
 function goToSessionsPlan() {
-  console.log("[Calendar] goToSessionsPlan")
-  router.push({ name: "CalendarSessionsPlan", query: { ...route.query } }).catch((e) => {
+  router.push({ name: "CalendarSessionsPlan", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }
 
 function goToMyStudentsSchedule() {
-  console.log("[Calendar] goToMyStudentsSchedule")
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...route.query } }).catch((e) => {
+  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
     console.error("[Calendar] Navigation error", e)
   })
 }
@@ -614,6 +861,7 @@ function goToMyStudentsSchedule() {
 async function onCreateEventForm() {
   try {
     if (createForm.value.v$.$invalid) {
+      createForm.value.v$.$touch()
       return
     }
 
@@ -623,12 +871,15 @@ async function onCreateEventForm() {
       itemModel = { ...itemModel, content: "" }
     }
 
-    if (isGlobal.value) {
-      itemModel.isGlobal = true
-    }
+    itemModel.isGlobal = effectiveIsGlobal.value
 
     if (!itemModel.color) {
       itemModel.color = defaultColorByContext(currentContext.value)
+    }
+
+    if (!effectiveAllowCareerPromotionFields.value) {
+      itemModel.career = null
+      itemModel.promotion = null
     }
 
     if (itemModel["@id"]) {
@@ -638,6 +889,7 @@ async function onCreateEventForm() {
         const gidFromRoute = Number(route.query.gid ?? 0)
         const gidFromStore = Number(group.value?.id ?? 0)
         const effectiveGid = gidFromStore > 0 ? gidFromStore : gidFromRoute
+
         itemModel.resourceLinkList = [
           {
             cid: course.value.id,
@@ -647,6 +899,7 @@ async function onCreateEventForm() {
           },
         ]
       }
+
       await store.dispatch("ccalendarevent/create", itemModel)
     }
 
@@ -671,6 +924,10 @@ watch(
 watch(
   () => store.state.ccalendarevent.created,
   (created) => {
+    if (!created?.resourceNode?.title) {
+      return
+    }
+
     toast.add({
       severity: "success",
       detail: t("{0} created", [created.resourceNode.title]),
@@ -684,6 +941,10 @@ watch(
 watch(
   () => store.state.ccalendarevent.updated,
   (updated) => {
+    if (!updated?.resourceNode?.title) {
+      return
+    }
+
     toast.add({
       severity: "success",
       detail: t("{0} updated", [updated.resourceNode.title]),

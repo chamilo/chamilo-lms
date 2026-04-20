@@ -1,24 +1,75 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
- * Get the intro steps for the web page.
+ * Save the completion state of a configured page tour.
+ *
+ * This endpoint is intentionally restricted to authenticated POST requests
+ * protected by a CSRF token.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-/**
- * Init.
- */
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+
 require_once __DIR__.'/../config.php';
 
-if (!api_is_anonymous()) {
-    $currentPageClass = isset($_POST['page_class']) ? $_POST['page_class'] : '';
+header('Content-Type: application/json; charset=utf-8');
 
-    if (!empty($currentPageClass)) {
-        $userId = api_get_user_id();
+api_block_anonymous_users();
 
-        $tourPlugin = Tour::create();
-        $tourPlugin->saveCompletedTour($currentPageClass, $userId);
+if ('POST' !== $_SERVER['REQUEST_METHOD']) {
+    http_response_code(405);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Method not allowed.',
+    ]);
+    exit;
+}
+
+Security::clear_token();
+
+try {
+    $tourPlugin = Tour::create();
+
+    // Do not allow saving state when the plugin is disabled or the feature is off.
+    if (!$tourPlugin->isTourAvailable()) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Tour feature is disabled.',
+        ]);
+        exit;
     }
+
+    $pageName = isset($_POST['page_name']) ? trim((string) $_POST['page_name']) : '';
+    $pageClass = isset($_POST['page_class']) ? trim((string) $_POST['page_class']) : '';
+
+    $pageName = mb_substr($pageName, 0, 255);
+    $pageClass = mb_substr($pageClass, 0, 255);
+
+    $resolvedPageClass = $tourPlugin->resolveConfiguredPageClass($pageName, $pageClass);
+
+    if (null === $resolvedPageClass) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid page identifier.',
+        ]);
+        exit;
+    }
+
+    $saved = $tourPlugin->saveCompletedTour($resolvedPageClass, api_get_user_id());
+
+    echo json_encode([
+        'success' => true,
+        'saved' => $saved,
+        'page' => $resolvedPageClass,
+    ]);
+} catch (\Throwable $e) {
+    error_log('[Tour][save.ajax] '.$e->getMessage());
+
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unable to save tour state.',
+    ]);
 }

@@ -157,12 +157,15 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_in_active_sessions_in_tracking', YesNoType::class)
             ->add('session_coach_access_after_duration_end', YesNoType::class)
             ->add('session_course_users_subscription_limited_to_session_users', YesNoType::class)
+            ->add('session_classes_tab_disable', YesNoType::class)
             ->add('email_template_subscription_to_session_confirmation_username', YesNoType::class)
             ->add('email_template_subscription_to_session_confirmation_lost_password', YesNoType::class)
             ->add('session_creation_user_course_extra_field_relation_to_prefill', TextareaType::class)
             ->add('session_creation_form_set_extra_fields_mandatory', TextareaType::class)
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
             ->add('duplicate_specific_session_content_on_session_copy', YesNoType::class)
+            ->add('enable_auto_reinscription', YesNoType::class)
+            ->add('enable_session_replication', YesNoType::class)
             ->add('session_list_view_remaining_days', YesNoType::class)
             ->add('user_session_display_mode', ChoiceType::class, [
                 'choices' => [

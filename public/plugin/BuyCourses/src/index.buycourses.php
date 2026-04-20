@@ -4,47 +4,41 @@ declare(strict_types=1);
 
 /* For license terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
- * Index of the Buy Courses plugin courses list.
+ * Entry point of the Buy Courses plugin landing page.
  */
 $plugin = BuyCoursesPlugin::create();
-$allow = $plugin->get('unregistered_users_enable');
+$allowAnonymousUsers = 'true' === $plugin->get('unregistered_users_enable');
+$includeServices = 'true' === $plugin->get('include_services');
+$userIsAnonymous = api_is_anonymous();
 
-$userIsAdmin = api_is_platform_admin();
+$registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
 
-if (('true' === $allow && api_is_anonymous()) || !api_is_anonymous()) {
-    $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/';
+$normalizeRelativePath = static function (string $url): string {
+    $path = (string) parse_url($url, PHP_URL_PATH);
+    $query = (string) parse_url($url, PHP_URL_QUERY);
 
-    $countCourses = $plugin->getCatalogCourseList(
-        0,
-        BuyCoursesPlugin::PAGINATION_PAGE_SIZE,
-        null,
-        0,
-        0,
-        'count'
-    );
-
-    if ($countCourses > 0 && !$userIsAdmin) {
-        api_location($webPluginPath.'src/course_catalog.php');
+    if ('' === $path) {
+        $path = '/plugin/BuyCourses/index.php';
     }
 
-    $countSessions = $plugin->getCatalogSessionList(
-        0,
-        BuyCoursesPlugin::PAGINATION_PAGE_SIZE,
-        null,
-        0,
-        0,
-        'count'
-    );
+    return '' !== $query ? $path.'?'.$query : $path;
+};
 
-    if ($countSessions > 0 && !$userIsAdmin) {
-        api_location($webPluginPath.'src/session_catalog.php');
-    }
+$pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$pluginIndexPath = $normalizeRelativePath($pluginIndexUrl);
 
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
-
-    $tpl = new Template();
-    $content = $tpl->fetch('BuyCourses/view/index.tpl');
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template(false);
+if ($userIsAnonymous && !$allowAnonymousUsers) {
+    Session::write('buy_course_redirect', $pluginIndexPath);
+    header('Location: '.$registrationUrl);
+    exit;
 }
+
+$tpl = new Template();
+$tpl->assign('services_are_included', $includeServices);
+
+$content = $tpl->fetch('BuyCourses/view/index.tpl');
+$tpl->assign('content', $content);
+$tpl->display_one_col_template(false);

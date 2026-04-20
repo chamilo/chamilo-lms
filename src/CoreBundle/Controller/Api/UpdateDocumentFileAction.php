@@ -7,18 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 final class UpdateDocumentFileAction extends BaseResourceFileAction
 {
     public function __construct(
-        private readonly TrackEDefaultRepository $trackRepo,
-        private readonly Security $security,
+        private readonly ResourceHelper $trackHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
@@ -38,11 +36,7 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
 
         $node = $document->getResourceNode();
         if ($node) {
-            $this->trackRepo->registerResourceEvent(
-                $node,
-                'edition',
-                $this->security->getUser()?->getId()
-            );
+            $this->trackHelper->createAndSaveResourceEvent($node, 'edition');
         }
 
         return $document;

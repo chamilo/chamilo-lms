@@ -117,8 +117,14 @@ class ExerciseLib
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
                         // shown at the end of the given time, so hide for now
+                        $readingTitle = get_lang('Reading comprehension');
+
+                        if (1 !== (int) $exercise->getHideQuestionNumber()) {
+                            $readingTitle = $current_item.'. '.$readingTitle;
+                        }
+
                         $titleToDisplay = Display::div(
-                            $current_item.'. '.get_lang('Reading comprehension'),
+                            $readingTitle,
                             ['class' => 'question_title']
                         );
                     }
@@ -2113,6 +2119,8 @@ HOTSPOT;
             return [];
         }
 
+        $extra_where_conditions = (string) $extra_where_conditions;
+
         $sessionId = api_get_session_id();
         $exercise_id = (int) $exercise_id;
 
@@ -2129,11 +2137,17 @@ HOTSPOT;
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
+        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
         $session_id_and = '';
         $sessionCondition = '';
         if (!$showSessionField) {
             $session_id_and = api_get_session_condition($sessionId, true, false, 'te.session_id');
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'ttte.session_id');
+        }
+
+        if (empty($sessionId) && 'true' === api_get_setting('exercise.show_exercise_session_attempts_in_base_course')) {
+            $session_id_and = '';
+            $sessionCondition = '';
         }
 
         $exercise_where = '';
@@ -2158,7 +2172,7 @@ HOTSPOT;
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
             // Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
-            if (strpos($extra_where_conditions, 'group_id')) {
+            if (strpos($extra_where_conditions, 'group_id') !== false) {
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
@@ -2179,7 +2193,7 @@ HOTSPOT;
                 )";
             }
 
-            if (strpos($extra_where_conditions, 'group_all')) {
+            if (strpos($extra_where_conditions, 'group_all') !== false) {
                 $extra_where_conditions = str_replace(
                     "AND (  group_id = 'group_all'  )",
                     '',
@@ -2213,7 +2227,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = null;
             }
 
-            if (strpos($extra_where_conditions, 'group_none')) {
+            if (strpos($extra_where_conditions, 'group_none') !== false) {
                 $extra_where_conditions = str_replace(
                     "AND (  group_id = 'group_none'  )",
                     "AND (  group_id is null  )",
@@ -2363,9 +2377,18 @@ HOTSPOT;
             }
         }
 
-        $lp_list_obj = new LearnpathList(api_get_user_id());
-        $lp_list = $lp_list_obj->get_flat_list();
-        $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+        $lp_list = [];
+        $oldIds = [];
+        $loadLearningPathData = false === $showExerciseCategories;
+
+        if ($loadLearningPathData) {
+            $lp_list_obj = new LearnpathList(api_get_user_id());
+            $lp_list = $lp_list_obj->get_flat_list();
+
+            if (!empty($lp_list)) {
+                $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+            }
+        }
 
         if (is_array($results)) {
             $users_array_id = [];
@@ -2417,23 +2440,31 @@ HOTSPOT;
                     $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
                 }
 
-                $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
-                if (empty($lp_obj)) {
-                    // Try to get the old id (id instead of iid)
-                    $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
-                    if ($lpNewId) {
-                        $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
-                    }
-                }
                 $lp_name = null;
-                if ($lp_obj) {
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
-                    $lp_name = Display::url(
-                        $lp_obj['lp_name'],
-                        $url,
-                        ['target' => '_blank']
-                    );
+                if ($loadLearningPathData) {
+                    $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']])
+                        ? $lp_list[$results[$i]['orig_lp_id']]
+                        : null;
+
+                    if (empty($lp_obj)) {
+                        // Try to get the old id (id instead of iid)
+                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']])
+                            ? $oldIds[$results[$i]['orig_lp_id']]
+                            : null;
+                        if ($lpNewId) {
+                            $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
+                        }
+                    }
+
+                    if ($lp_obj) {
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                        $lp_name = Display::url(
+                            $lp_obj['lp_name'],
+                            $url,
+                            ['target' => '_blank']
+                        );
+                    }
                 }
 
                 // Add all groups by user
@@ -2547,14 +2578,17 @@ HOTSPOT;
 
                         // Admin can always delete the attempt
                         if ((false == $locked || api_is_platform_admin()) && !api_is_student_boss()) {
-                            $ip = Tracking::get_ip_from_user_event(
-                                $results[$i]['exe_user_id'],
-                                api_get_utc_datetime(),
-                                false
-                            );
-                            $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
-                                .'</a>';
+                            if (!$hideIp) {
+                                $ip = Tracking::get_ip_from_user_event(
+                                    $results[$i]['exe_user_id'],
+                                    api_get_utc_datetime(),
+                                    false
+                                );
+
+                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
+                                    .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
+                                    .'</a>';
+                            }
 
                             $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
                                 api_get_cidreq().'&'.
@@ -2638,6 +2672,9 @@ HOTSPOT;
                     $exeId = $results[$i]['exe_id'];
                     $results[$i]['id'] = $exeId;
                     $category_list = [];
+                    if ($hideIp) {
+                        unset($results[$i]['user_ip']);
+                    }
                     if ($is_allowedToEdit) {
                         $sessionName = '';
                         $sessionStartAccessDate = '';
@@ -2735,8 +2772,8 @@ HOTSPOT;
                                 $result['total'],
                                 true,
                                 true,
-                                true, // $show_only_percentage = false
-                                true, // hide % sign
+                                true,
+                                true,
                                 $decimalSeparator,
                                 $thousandSeparator,
                                 $roundValues
@@ -2761,8 +2798,8 @@ HOTSPOT;
                         );
 
                         if ($roundValues) {
-                            $whole = floor($my_res); // 1
-                            $fraction = $my_res - $whole; // .25
+                            $whole = floor($my_res);
+                            $fraction = $my_res - $whole;
                             if ($fraction >= 0.5) {
                                 $onlyScore = ceil($my_res);
                             } else {
@@ -2780,8 +2817,8 @@ HOTSPOT;
                         $results[$i]['only_score'] = $onlyScore;
 
                         if ($roundValues) {
-                            $whole = floor($my_total); // 1
-                            $fraction = $my_total - $whole; // .25
+                            $whole = floor($my_total);
+                            $fraction = $my_total - $whole;
                             if ($fraction >= 0.5) {
                                 $onlyTotal = ceil($my_total);
                             } else {
@@ -4793,7 +4830,8 @@ EOT;
             &$showQuestionScore,
             &$counter,
             &$attemptResult,
-            &$category_list
+            &$category_list,
+            $showTotalScoreAndUserChoicesInLastAttempt
         ) {
             // Start buffering rendering for this question
             ob_start();
@@ -4818,7 +4856,7 @@ EOT;
                 $show_results,
                 $objExercise->selectPropagateNeg(),
                 $delineationChoice,
-                true // keep user choices in last attempt when applicable
+                $showTotalScoreAndUserChoicesInLastAttempt
             );
 
             if (empty($result)) {
@@ -4889,7 +4927,7 @@ EOT;
                     echo self::getFeedbackText($comnt);
                 }
                 if ($teacherAudio) {
-                    echo $teacherAudio;
+                    echo '<div>'.$teacherAudio.'</div>';
                 }
             }
 

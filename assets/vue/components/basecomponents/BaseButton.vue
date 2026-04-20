@@ -1,5 +1,35 @@
 <template>
   <Button
+    v-if="route || toUrl"
+    v-slot="slotProps"
+    :severity="primeSeverityProperty"
+    :variant="primerVariantProperty"
+    as-child
+  >
+    <BaseAppLink
+      :to="route ? route : null"
+      :url="toUrl ? toUrl : null"
+      :class="[
+        slotProps.class,
+        { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon, 'p-disabled': disabled },
+        attrs.class,
+      ]"
+      :title="onlyIcon ? label : undefined"
+    >
+      <span
+        v-if="icon"
+        class="p-button-icon"
+        :class="chamiloIconToClass[icon]"
+      />
+      <span
+        v-if="!onlyIcon"
+        class="p-button-label"
+        v-text="label"
+      />
+    </BaseAppLink>
+  </Button>
+  <Button
+    v-else
     :aria-label="onlyIcon ? label : undefined"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
@@ -18,9 +48,12 @@
 
 <script setup>
 import Button from "primevue/button"
-import { computed } from "vue"
+import { computed, useAttrs } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
+import BaseAppLink from "./BaseAppLink.vue"
+
+const attrs = useAttrs()
 
 const props = defineProps({
   label: {
@@ -79,14 +112,19 @@ const props = defineProps({
   route: {
     type: Object,
     required: false,
-    default: () => ({ name: "", params: {} }),
+    default: null,
+  },
+  toUrl: {
+    type: String,
+    required: false,
+    default: null,
   },
 })
 
 defineEmits(["click"])
 
 const primeSeverityProperty = computed(() => {
-  const type = props.type.replace("-text", "")
+  let type = props.type.replace("-text", "")
 
   if (["primary", "secondary", "success", "danger", "info"].includes(type)) {
     return type
@@ -97,11 +135,15 @@ const primeSeverityProperty = computed(() => {
   }
 
   if ("black" === type) {
-    return "contrast"
+    type = "tertiary-alternative"
+  }
+
+  if ("tertiary-alternative" === type) {
+    return "help"
   }
 
   if ("tertiary" === type) {
-    return "help"
+    return "contrast"
   }
 
   return undefined
@@ -114,6 +156,7 @@ const primerVariantProperty = computed(() => {
 
   switch (props.type) {
     case "primary-alternative":
+    case "tertiary-alternative":
     case "black":
       return "outlined"
     default:

@@ -595,8 +595,8 @@ if (isset($_POST['step2'])) {
 
         set_file_folder_permissions();
 
-        // Sanitize database name: only letters, numbers and underscore
-        $dbNameForm = preg_replace('/[^a-zA-Z0-9_]/', '', $dbNameForm);
+        // Sanitize database name: only letters, numbers and underscore/hyphen
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
         error_log("Connect to DB server as user {$dbUsernameForm}");
 
@@ -754,6 +754,10 @@ if (isset($_POST['step2'])) {
                 $input = new ArrayInput([]);
                 $input->setInteractive(false);
                 $command = $application->find('doctrine:fixtures:load');
+                // Set the selected installation language on the Symfony translator
+                // so that fixtures (e.g. TicketFixtures, SysAnnouncementFixtures) store
+                // translated strings in the correct locale instead of the default en_US.
+                $kernel->getContainer()->get('translator')->setLocale($languageForm);
                 $result = $command->run($input, new ConsoleOutput());
 
                 error_log('Delete PHP Session');

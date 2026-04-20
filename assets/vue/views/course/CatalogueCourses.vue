@@ -31,7 +31,6 @@
       </div>
     </div>
 
-    <!-- Advanced search form -->
     <div
       v-if="showAdvancedSearch"
       class="p-4 border border-gray-300 rounded bg-white mb-6"
@@ -80,6 +79,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import api from "../../config/api"
@@ -143,13 +143,11 @@ watch(allowCatalogueAccess, async (newValue) => {
 
   if (!securityStore.isAuthenticated) {
     await router.push({ name: "Login" })
-
     return
   }
 
   if (securityStore.isStudent) {
     await router.push({ name: "Home" })
-
     return
   }
 
@@ -169,10 +167,28 @@ const { showErrorNotification } = useNotification()
 const loadExtraFields = async () => {
   try {
     const { data } = await api.get("/catalogue/course-extra-fields")
-
     extraFields.value = data
   } catch (error) {
     console.error("Error loading extra fields", error)
+  }
+}
+
+const loadCourseSubscriptionStatuses = async (courseIds) => {
+  if (!courseIds.length) {
+    return {}
+  }
+
+  try {
+    const { data } = await api.get("/catalogue/api/course-subscription-statuses", {
+      params: {
+        ids: courseIds.join(","),
+      },
+    })
+
+    return data || {}
+  } catch (error) {
+    console.error("Error loading course subscription statuses", error)
+    return {}
   }
 }
 
@@ -201,16 +217,29 @@ const load = async () => {
       totalCourses.value = courseCatalogue.totalItems
     }
 
-    const ids = courseCatalogue.items.map((c) => c.id).join(",")
+    const courseIds = courseCatalogue.items.map((c) => c.id)
+    const ids = courseIds.join(",")
 
     if (ids) {
-      const res = await fetch(`/catalogue/course-extra-field-values?ids=${ids}`)
-      const extraByCourse = await res.json()
+      const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
+        fetch(`/catalogue/course-extra-field-values?ids=${ids}`).then((res) => res.json()),
+        loadCourseSubscriptionStatuses(courseIds),
+      ])
+
       courses.value.push(
-        ...courseCatalogue.items.map((c) => ({
-          ...c,
-          extra_fields: extraByCourse[c.id] || {},
-        })),
+        ...courseCatalogue.items.map((c) => {
+          const limitInfo = subscriptionStatuses[c.id] || {}
+
+          return {
+            ...c,
+            extra_fields: extraFieldsResponse[c.id] || {},
+            subscriptionLimitEnabled: Boolean(limitInfo.subscriptionLimitEnabled),
+            subscriptionLimit: Number(limitInfo.subscriptionLimit || 0),
+            subscriptionCount: Number(limitInfo.subscriptionCount || 0),
+            subscriptionLimitReached: Boolean(limitInfo.subscriptionLimitReached),
+            subscriptionLimitTooltip: limitInfo.subscriptionLimitTooltip || "",
+          }
+        }),
       )
     }
 
@@ -294,6 +323,7 @@ function onAdvancedApply(payload) {
   }
 
   courses.value = []
+  totalCourses.value = 0
 
   load()
 }
@@ -308,8 +338,8 @@ const visibleCoursesBase = computed(() => {
     const order = sortOpt.order
 
     list = list.slice().sort((a, b) => {
-      let valA = null,
-        valB = null
+      let valA = null
+      let valB = null
 
       if (sortOpt.type === "standard") {
         if (field.startsWith("point_info/")) {
@@ -328,7 +358,6 @@ const visibleCoursesBase = computed(() => {
         valB = b.extra_fields?.[field] ?? ""
       }
 
-      // Natural compare for strings; numeric compare otherwise
       const cmp =
         typeof valA === "string" || typeof valB === "string"
           ? natural.compare(String(valA), String(valB))
@@ -425,10 +454,16 @@ function onUserSubscribed({ courseId, newUser }) {
   const index = courses.value.findIndex((c) => c.id === courseId)
   if (index !== -1) {
     const oldCourse = courses.value[index]
+    const nextCount = Number(oldCourse.subscriptionCount || 0) + 1
+    const subscriptionLimit = Number(oldCourse.subscriptionLimit || 0)
+    const subscriptionLimitReached = subscriptionLimit > 0 ? nextCount >= subscriptionLimit : false
+
     const updatedCourse = {
       ...oldCourse,
       subscribed: true,
       users: [...(oldCourse.users || []), newUser],
+      subscriptionCount: nextCount,
+      subscriptionLimitReached,
     }
 
     courses.value[index] = updatedCourse

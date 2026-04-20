@@ -1,16 +1,18 @@
 <template>
   <div>
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
 
     <hr />
-    <h1 class="text-2xl font-bold">{{ t("Add users") }} - {{ publicationTitle }}</h1>
+    <h1 class="text-2xl font-bold">{{ t("Assign users") }} - {{ publicationTitle }}</h1>
 
     <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users added") }}</h2>
@@ -44,7 +46,7 @@
       </p>
     </div>
 
-    <div>
+    <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users to add") }}</h2>
 
       <div class="mb-2 flex items-center gap-2">
@@ -84,12 +86,14 @@
             :disabled="currentPage === 1"
             @click="prevPage"
             :label="t('Previous')"
+            icon="arrow-left"
           />
           <span>{{ t("Page") }} {{ currentPage }}</span>
           <BaseButton
             :disabled="!hasNextPage"
             @click="nextPage"
             :label="t('Next')"
+            icon="arrow-right"
           />
         </div>
       </div>
@@ -112,7 +116,6 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import debounce from "lodash/debounce"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const route = useRoute()

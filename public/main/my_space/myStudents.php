@@ -141,7 +141,7 @@ if (!empty($details)) {
         } else {
             if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
-                    'url' => '../session/session_list.php',
+                    'url' => '/admin/session-list',
                     'name' => get_lang('Session list'),
                 ];
                 $interbreadcrumb[] = [
@@ -179,7 +179,7 @@ if (!empty($details)) {
 } else {
     if ('resume_session' === $origin) {
         $interbreadcrumb[] = [
-            'url' => '../session/session_list.php',
+            'url' => '/admin/session-list',
             'name' => get_lang('Session list'),
         ];
         if (!empty($sessionId)) {
@@ -509,9 +509,6 @@ switch ($action) {
                 $em->persist($message);
                 $em->flush();
 
-                $senderName = UserManager::formatUserFullName($currentUser);
-                $emailAdmin = api_get_setting('admin.administrator_email');
-
                 // Send also message to all student bosses
                 $bossList = UserManager::getStudentBossList($studentId);
 
@@ -520,6 +517,9 @@ switch ($action) {
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
+                        if ((int) $boss['boss_id'] === (int) $currentUser->getId()) {
+                            continue;
+                        }
                         $studentFullName = UserManager::formatUserFullName($student);
                         $contentBoss = sprintf(
                             get_lang('Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s'),
@@ -540,9 +540,7 @@ switch ($action) {
                             UserManager::formatUserFullName(api_get_user_entity($boss['boss_id'])),
                             api_get_user_entity($boss['boss_id'])->getEmail(),
                             sprintf(get_lang('Follow up message about student %s'), $studentFullName),
-                            $contentBoss,
-                            $senderName,
-                            $emailAdmin
+                            $contentBoss
                         );
                     }
 
@@ -550,12 +548,14 @@ switch ($action) {
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));
+                header('Location: '.$currentUrl);
+                exit;
             } else {
+                $sendMessageError = true;
+                $sendMessageSubject = $subject;
+                $sendMessageContent = $content;
                 Display::addFlash(Display::return_message(get_lang('all fields required'), 'warning'));
             }
-
-            header('Location: '.$currentUrl);
-            exit;
         }
 
         break;
@@ -908,7 +908,7 @@ echo '<style>
     padding: 1rem 1rem;
 }
 .learner-section-spacing {
-    margin-top: 1.75rem;
+    margin-top: 1.5rem;
 }
 .learner-card h1,
 .learner-card h2,
@@ -950,7 +950,7 @@ echo '<style>
     margin-top: 2rem;
 }
 .learner-page-container h3 {
-    margin-top: 1.25rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.75rem;
 }
 </style>';
@@ -975,7 +975,13 @@ $actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_
 
 $actions .= Display::url(
     Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details')),
-    api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?user_id='.$studentId
+    api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?'.http_build_query([
+        'user_id' => $studentId,
+        'cid' => $courseId,
+        'course' => $courseCode,
+        'origin' => $origin,
+        'sid' => $sessionId,
+    ])
 );
 $email = $user->getEmail();
 if (!empty($email)) {
@@ -2394,17 +2400,25 @@ if ($allowMessages) {
         ]
     );
 
+    $hasMessageError = !empty($sendMessageError);
     $form = new FormValidator(
         'messages',
         'post',
         $currentUrl.'&action=send_message'
     );
-    $form->addHtml('<div id="compose_message" style="display:none;">');
+    $composeStyle = $hasMessageError ? '' : ' style="display:none;"';
+    $form->addHtml('<div id="compose_message"'.$composeStyle.'>');
     $form->addText('subject', get_lang('Subject'));
     $form->addHtmlEditor('message', get_lang('Message'));
     $form->addButtonSend(get_lang('Send message'));
     $form->addHidden('sec_token', $token);
     $form->addHtml('</div>');
+    if ($hasMessageError) {
+        $form->setDefaults([
+            'subject' => $sendMessageSubject ?? '',
+            'message' => $sendMessageContent ?? '',
+        ]);
+    }
     $form->display();
     echo '</section>';
 }

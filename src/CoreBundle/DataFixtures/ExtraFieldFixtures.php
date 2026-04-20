@@ -139,7 +139,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'variable' => 'send_notification_at_a_specific_date',
                 'display_text' => 'Send notification at a specific date',
                 'item_type' => ExtraField::COURSE_ANNOUNCEMENT,
-                'value_type' => ExtraField::FIELD_TYPE_DATE,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
             [
                 'variable' => 'date_to_send_notification',
@@ -150,7 +150,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             [
                 'variable' => 'send_to_users_in_session',
                 'display_text' => 'Send to users in session',
-                'item_type' => ExtraField::SESSION_FIELD_TYPE,
+                'item_type' => ExtraField::COURSE_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
             [
@@ -596,13 +596,13 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_ID,
-                'display_text' => 'Azure ID (mailNickname)',
+                'display_text' => 'EntraID ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
                 'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_UID,
-                'display_text' => 'Azure UID (internal ID)',
+                'display_text' => 'EntraID UID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],

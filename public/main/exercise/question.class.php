@@ -196,21 +196,28 @@ abstract class Question
         if (empty($course_info)) {
             $course_info = api_get_course_info();
         }
-        $course_id = $course_info['real_id'];
 
-        if (empty($course_id) || -1 == $course_id) {
-            return false;
+        if (!is_array($course_info)) {
+            $course_info = [];
         }
+
+        $course_info += [
+            'real_id' => 0,
+            'code' => '',
+            'id' => 0,
+        ];
+
+        $course_id = (int) $course_info['real_id'];
 
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $sql = "SELECT *
-                FROM $TBL_QUESTIONS
-                WHERE iid = $id ";
+        FROM $TBL_QUESTIONS
+        WHERE iid = $id ";
         $result = Database::query($sql);
 
-        // if the question has been found
+// if the question has been found
         if ($object = Database::fetch_object($result)) {
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
@@ -225,35 +232,40 @@ abstract class Question
                 $objQuestion->level = (int) $object->level;
                 $objQuestion->extra = $object->extra;
                 $objQuestion->course = $course_info;
-                $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
-                $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
-                $objQuestion->code = isset($object->code) ? $object->code : '';
-                $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
+                $objQuestion->feedback = $object->feedback ?? '';
+                $objQuestion->category = 0;
+                $objQuestion->code = $object->code ?? '';
 
-                if (!empty($categoryInfo)) {
-                    if (isset($categoryInfo['category_id'])) {
-                        $objQuestion->category = (int) $categoryInfo['category_id'];
-                    }
+                if ($course_id > 0) {
+                    $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
+                    $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
 
-                    if (('true' === api_get_setting('exercise.allow_mandatory_question_in_category')) &&
-                        isset($categoryInfo['mandatory'])
-                    ) {
-                        $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                    if (!empty($categoryInfo)) {
+                        if (isset($categoryInfo['category_id'])) {
+                            $objQuestion->category = (int) $categoryInfo['category_id'];
+                        }
+
+                        if (
+                            'true' === api_get_setting('exercise.allow_mandatory_question_in_category') &&
+                            isset($categoryInfo['mandatory'])
+                        ) {
+                            $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                        }
                     }
                 }
 
-                if ($getExerciseList) {
-                    $tblQuiz   = Database::get_course_table(TABLE_QUIZ_TEST);
+                if ($getExerciseList && $course_id > 0) {
+                    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                     $sessionId = (int) api_get_session_id();
                     $sessionJoin = $sessionId > 0 ? "rl.session_id = $sessionId" : "rl.session_id IS NULL";
 
                     $sql = "SELECT DISTINCT q.quiz_id
-            FROM $TBL_EXERCISE_QUESTION q
-            INNER JOIN $tblQuiz e  ON e.iid = q.quiz_id
-            INNER JOIN resource_node rn ON rn.id = e.resource_node_id
-            INNER JOIN resource_link rl ON rl.resource_node_id = rn.id AND $sessionJoin
-            WHERE q.question_id = $id
-              AND rl.deleted_at IS NULL";
+                    FROM $TBL_EXERCISE_QUESTION q
+                    INNER JOIN $tblQuiz e ON e.iid = q.quiz_id
+                    INNER JOIN resource_node rn ON rn.id = e.resource_node_id
+                    INNER JOIN resource_link rl ON rl.resource_node_id = rn.id AND $sessionJoin
+                    WHERE q.question_id = $id
+                      AND rl.deleted_at IS NULL";
                     $result = Database::query($sql);
                     while ($obj = Database::fetch_object($result)) {
                         $objQuestion->exerciseList[] = (int) $obj->quiz_id;
@@ -1331,7 +1343,7 @@ abstract class Question
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('Image URL'));
             $form->addElement('text', 'imageWidth', get_lang('px width'));
-            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link');
+            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link', [], false, false);
         }
 
         $form->addHtmlEditor(

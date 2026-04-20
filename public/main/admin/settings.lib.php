@@ -22,6 +22,32 @@ use Symfony\Component\Filesystem\Filesystem;
 define('CSS_UPLOAD_PATH', api_get_path(SYMFONY_SYS_PATH).'var/themes/');
 
 /**
+ * Safely read plugin metadata for the Regions page.
+ */
+function plugin_get_region_metadata(string $pluginName): array
+{
+    $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+    $plugin_info = [];
+
+    if (is_file($pluginInfoFile)) {
+        try {
+            require $pluginInfoFile;
+        } catch (\Throwable $e) {
+            error_log('[regions] failed to read '.$pluginName.' metadata: '.$e->getMessage());
+            $plugin_info = [];
+        }
+    }
+
+    return [
+        'title' => (string) ($plugin_info['title'] ?? $plugin_info['name'] ?? $pluginName),
+        'version' => (string) ($plugin_info['version'] ?? '0.0.0'),
+        'comment' => (string) ($plugin_info['comment'] ?? ''),
+        'is_admin_plugin' => !empty($plugin_info['is_admin_plugin']),
+        'is_course_plugin' => !empty($plugin_info['is_course_plugin']),
+    ];
+}
+
+/**
  * This function allows easy activating and inactivating of regions.
  *
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
@@ -30,7 +56,7 @@ function handleRegions()
 {
     if (isset($_POST['submit_plugins'])) {
         storeRegions();
-        // Add event to the system log.
+
         $user_id = api_get_user_id();
         $category = $_GET['category'];
         Event::addEvent(
@@ -40,84 +66,606 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
+
         echo Display::return_message(get_lang('The settings have been stored'), 'confirmation');
     }
 
-    $plugin_obj = new AppPlugin();
-    $installed_plugins = $plugin_obj->getInstalledPlugins();
+    $pluginObj = new AppPlugin();
+    $installedPlugins = $pluginObj->getInstalledPlugins();
+    $selectedPluginName = isset($_GET['name']) ? (string) $_GET['name'] : '';
+    $selectedPluginHasNoRegions = '' !== $selectedPluginName
+        && plugin_has_no_regions($selectedPluginName);
 
-    echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<table class="data_table">';
-    echo '<tr>';
-    echo '<th width="400px">';
-    echo get_lang('Plugin');
-    echo '</th><th>';
-    echo get_lang('Regions');
-    echo '</th>';
-    echo '</th>';
-    echo '</tr>';
+    echo '<div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">';
+    echo '  <div>';
+    echo '      <h2 class="mb-1 text-2xl font-semibold text-gray-90">'.get_lang('Plugin regions').'</h2>';
+    echo '      <p class="text-body-2 text-gray-50">'.get_lang('Choose where each installed plugin should be rendered.').'</p>';
+    echo '      <p class="mt-1 text-caption text-gray-50">'.get_lang('Tip: use Ctrl/Cmd to select multiple regions.').'</p>';
+    echo '  </div>';
+    echo '  <div class="flex flex-wrap gap-2">';
+    echo '      <a href="'.htmlspecialchars(api_get_self().'?category=Plugins', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
+    echo '          <i class="mdi mdi-puzzle-outline"></i> '.get_lang('Plugins');
+    echo '      </a>';
+    echo '      <button class="btn btn--success btn--sm" type="submit" form="plugin-regions-form" name="submit_plugins">';
+    echo '          <i class="mdi mdi-content-save-outline"></i> '.get_lang('Save settings');
+    echo '      </button>';
+    echo '  </div>';
+    echo '</div>';
 
-    /* We display all the possible plugins and the checkboxes */
-    $plugin_region_list = [];
-    $my_plugin_list = $plugin_obj->getPluginRegions();
-    foreach ($my_plugin_list as $plugin_item) {
-        $plugin_region_list[$plugin_item] = $plugin_item;
+    if (empty($installedPlugins)) {
+        echo Display::return_message(get_lang('No installed plugins were found.'), 'warning', false);
+
+        return;
     }
 
-    // Removing course tool
-    unset($plugin_region_list['course_tool_plugin']);
+    if ($selectedPluginHasNoRegions) {
+        echo Display::return_message(get_lang('This plugin does not use regions.'), 'info', false);
+    }
 
-    foreach ($installed_plugins as $pluginName) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+    echo '<form id="plugin-regions-form" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<div class="space-y-4">';
 
-        if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
-            require $plugin_info_file;
-            if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
-                echo '<tr class="row_selected">';
-            } else {
-                echo '<tr>';
-            }
-            echo '<td>';
-            echo '<h4>'.$plugin_info['title'].' <small>v'.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '</td><td>';
-            $selected_plugins = $plugin_obj->getAreasByPlugin($pluginName);
-            $region_list = [];
-            $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
-            $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
+    $renderedPlugins = 0;
 
-            if (!$isAdminPlugin && !$isCoursePlugin) {
-                $region_list = $plugin_region_list;
-            } else {
-                if ($isAdminPlugin) {
-                    $region_list['menu_administrator'] = 'menu_administrator';
-                }
-                if ($isCoursePlugin) {
-                    $region_list['course_tool_plugin'] = 'course_tool_plugin';
-                }
-            }
-
-            echo Display::select(
-                'plugin_'.$pluginName.'[]',
-                $region_list,
-                $selected_plugins,
-                ['multiple' => 'multiple', 'style' => 'width:500px'],
-                true,
-                get_lang('none')
-            );
-            echo '</td></tr>';
+    foreach ($installedPlugins as $pluginName) {
+        if (plugin_has_no_regions($pluginName)) {
+            continue;
         }
+
+        $metadata = plugin_get_admin_metadata($pluginName);
+
+        $renderedPlugins++;
+
+        $pluginTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
+        $pluginVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
+        $pluginComment = plugin_render_comment_preview((string) $metadata['comment']);
+        $selectedRegions = plugin_get_assigned_regions_safe($pluginName);
+        $regionOptions = plugin_get_available_region_options($metadata);
+        $pluginUrl = plugin_get_management_url($pluginName) ?? plugin_get_plugins_admin_url($pluginName);
+
+        $isSelectedPlugin = $selectedPluginName === $pluginName;
+        $cardId = plugin_get_regions_card_id($pluginName);
+
+        $cardClasses = 'rounded-2xl border bg-white p-5 shadow-sm transition hover:shadow-md';
+        $cardClasses .= $isSelectedPlugin
+            ? ' border-primary'
+            : ' border-gray-25';
+
+        echo '<article id="'.htmlspecialchars($cardId, ENT_QUOTES).'" class="'.$cardClasses.'" style="scroll-margin-top: 110px;">';
+        echo '  <div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">';
+        echo '      <div class="min-w-0">';
+        echo '          <div class="flex flex-wrap items-center gap-2">';
+        echo '              <h3 class="mb-0 text-lg font-semibold text-gray-90">'.$pluginTitle.'</h3>';
+        echo '              <span class="badge badge--default">v'.$pluginVersion.'</span>';
+        echo '          </div>';
+        echo '          <div class="mt-2 flex flex-wrap gap-2">';
+        echo                plugin_render_scope_badges($metadata);
+        echo '          </div>';
+
+        if ('' !== $pluginComment) {
+            echo $pluginComment;
+        }
+
+        echo '          <div class="mt-4">';
+        echo '              <div class="mb-2 text-caption font-semibold uppercase tracking-wide text-gray-50">Assigned regions</div>';
+        echo '              <div class="flex flex-wrap gap-2">'.plugin_render_region_badges($selectedRegions).'</div>';
+        echo                    plugin_render_region_descriptions($selectedRegions);
+        echo '          </div>';
+
+        echo '          <div class="mt-4 flex flex-wrap gap-2">';
+        echo '              <a href="'.htmlspecialchars($pluginUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
+        echo '                  <i class="mdi mdi-arrow-left"></i> Back to plugin';
+        echo '              </a>';
+        echo '              <button class="btn btn--success btn--sm" type="submit" name="submit_plugins">';
+        echo '                  <i class="mdi mdi-content-save-outline"></i> '.get_lang('Save settings');
+        echo '              </button>';
+        echo '          </div>';
+        echo '      </div>';
+
+        echo '      <div>';
+        echo '          <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">';
+        echo '              <div class="mb-3 text-body-2 font-semibold text-gray-90">'.get_lang('Available regions').'</div>';
+
+        echo Display::select(
+            'plugin_'.$pluginName.'[]',
+            $regionOptions,
+            $selectedRegions,
+            [
+                'multiple' => 'multiple',
+                'size' => max(6, min(10, count($regionOptions) + 1)),
+                'class' => 'w-full max-w-full rounded-lg border border-gray-25 bg-white p-2 text-body-2 text-gray-90',
+            ],
+            true,
+            get_lang('none')
+        );
+
+        echo '              <p class="mt-3 text-caption text-gray-50">';
+        echo '                  '.get_lang('Select one or more regions for this plugin in the current access URL.');
+        echo '              </p>';
+        echo '          </div>';
+        echo '      </div>';
+        echo '  </div>';
+        echo '</article>';
     }
-    echo '</table>';
-    echo '<br />';
-    echo '<button class="btn btn--success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
+
+    if (0 === $renderedPlugins) {
+        echo Display::return_message(get_lang('No plugins with regions were found.'), 'info', false);
+    }
+
+    echo '</div>';
+
+    echo '<div class="mt-6 flex justify-end">';
+    echo '  <button class="btn btn--success" type="submit" name="submit_plugins">';
+    echo '      <i class="mdi mdi-content-save-outline"></i> '.get_lang('Save settings');
+    echo '  </button>';
+    echo '</div>';
+
+    echo '</form>';
+
+    if ('' !== $selectedPluginName && !$selectedPluginHasNoRegions) {
+        $selectedCardId = plugin_get_regions_card_id($selectedPluginName);
+        $selectedCardIdJs = json_encode($selectedCardId);
+        $selectedHashJs = json_encode('#'.$selectedCardId);
+
+        echo <<<JS
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var targetId = {$selectedCardIdJs};
+    var targetHash = {$selectedHashJs};
+    var attempts = 0;
+    var maxAttempts = 12;
+
+    function focusSelectedCard() {
+        var card = document.getElementById(targetId);
+
+        if (!card) {
+            attempts++;
+            if (attempts < maxAttempts) {
+                window.setTimeout(focusSelectedCard, 250);
+            }
+            return;
+        }
+
+        if (window.location.hash !== targetHash && window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', targetHash);
+        }
+
+        card.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+
+        card.classList.add('shadow-md');
+
+        window.setTimeout(function () {
+            card.classList.remove('shadow-md');
+        }, 1800);
+    }
+
+    focusSelectedCard();
+    window.setTimeout(focusSelectedCard, 400);
+    window.setTimeout(focusSelectedCard, 900);
+});
+</script>
+JS;
+    }
 }
 
 function handleExtensions()
 {
     echo Display::page_subheader(get_lang('Configure extensions'));
     echo '<a class="btn btn--success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Chamilo RAPID').'</a>';
+}
+
+/**
+ * Return the first readable README file path for a plugin.
+ */
+function plugin_get_readme_path(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $basePath = rtrim(api_get_path(SYS_PLUGIN_PATH).$pluginName, '/').'/';
+    $candidates = [
+        'README.md',
+        'Readme.md',
+        'readme.md',
+        'README.MD',
+    ];
+
+    foreach ($candidates as $candidate) {
+        $fullPath = $basePath.$candidate;
+        if (is_file($fullPath) && is_readable($fullPath)) {
+            return $cache[$pluginName] = $fullPath;
+        }
+    }
+
+    return $cache[$pluginName] = null;
+}
+
+/**
+ * Check whether the plugin exposes a README file.
+ */
+function plugin_has_readme(string $pluginName): bool
+{
+    return null !== plugin_get_readme_path($pluginName);
+}
+
+/**
+ * Return the plugin folder names allowed in the stable plugins list.
+ */
+function getStablePluginAllowList(): array
+{
+    return [
+        'Bbb',
+        'BuyCourses',
+        'CardGame',
+        'CStudio',
+        'H5pImport',
+        'ImsLti',
+        'LtiProvider',
+        'Onlyoffice',
+        'PauseTraining',
+        'Pens',
+        'Positioning',
+        'Test2Pdf',
+        'Tour',
+        'XApi',
+        'ExerciseFocused',
+        'ExerciseMonitoring',
+    ];
+}
+
+/**
+ * Allow administrators to temporarily display every plugin from the URL.
+ */
+function shouldShowAllPlugins(): bool
+{
+    return isset($_GET['show_all_plugins']) && '1' === (string) $_GET['show_all_plugins'];
+}
+
+/**
+ * Check whether a plugin should be visible in the stable plugins list.
+ */
+function pluginShouldBeVisibleInStableList(string $pluginName): bool
+{
+    static $allowedPlugins = null;
+
+    if (null === $allowedPlugins) {
+        $allowedPlugins = array_flip(getStablePluginAllowList());
+    }
+
+    return isset($allowedPlugins[$pluginName]);
+}
+
+/**
+ * Tell whether a plugin should be hidden from the Regions UI.
+ */
+function plugin_has_no_regions(string $pluginName): bool
+{
+    return in_array($pluginName, ['Onlyoffice'], true);
+}
+
+/**
+ * Read plugin metadata in a safe way for admin UIs.
+ */
+function plugin_get_admin_metadata(string $pluginName): array
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+    $plugin_info = [];
+
+    if (is_file($pluginInfoFile)) {
+        try {
+            require $pluginInfoFile;
+        } catch (\Throwable $e) {
+            error_log('[plugins.admin] failed to read '.$pluginName.' metadata: '.$e->getMessage());
+            $plugin_info = [];
+        }
+    }
+
+    return $cache[$pluginName] = [
+        'title' => (string) ($plugin_info['title'] ?? $plugin_info['name'] ?? $pluginName),
+        'version' => (string) ($plugin_info['version'] ?? '0.0.0'),
+        'comment' => (string) ($plugin_info['comment'] ?? ''),
+        'is_admin_plugin' => !empty($plugin_info['is_admin_plugin']),
+        'is_course_plugin' => !empty($plugin_info['is_course_plugin']),
+    ];
+}
+
+/**
+ * Return current regions safely for a plugin in the current URL.
+ */
+function plugin_get_assigned_regions_safe(string $pluginName): array
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    try {
+        $pluginEntity = Container::getPluginRepository()->getInstalledByName($pluginName);
+
+        if (!$pluginEntity) {
+            return $cache[$pluginName] = [];
+        }
+
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $pluginConfigurationInUrl = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
+
+        if (!$pluginConfigurationInUrl) {
+            return $cache[$pluginName] = [];
+        }
+
+        $configuration = $pluginConfigurationInUrl->getConfiguration();
+        $regions = $configuration['regions'] ?? [];
+
+        if (!is_array($regions)) {
+            $regions = [];
+        }
+
+        $regions = array_values(array_unique(array_filter(array_map('strval', $regions))));
+        sort($regions);
+
+        return $cache[$pluginName] = $regions;
+    } catch (\Throwable $e) {
+        error_log('[plugins.admin] failed to read regions for '.$pluginName.': '.$e->getMessage());
+
+        return $cache[$pluginName] = [];
+    }
+}
+
+/**
+ * Return the Regions admin URL focused on one plugin.
+ */
+function plugin_get_regions_admin_url(string $pluginName): string
+{
+    return api_get_path(WEB_CODE_PATH).'admin/settings.php?'.http_build_query([
+            'category' => 'Regions',
+            'name' => $pluginName,
+        ]).'#'.plugin_get_regions_card_id($pluginName);
+}
+
+/**
+ * Return the Plugins admin URL focused on one plugin.
+ */
+function plugin_get_plugins_admin_url(string $pluginName): string
+{
+    return api_get_path(WEB_CODE_PATH).'admin/settings.php?'.http_build_query([
+            'category' => 'Plugins',
+            'name' => $pluginName,
+        ]);
+}
+
+/**
+ * Build a stable DOM id for a plugin regions card.
+ */
+function plugin_get_regions_card_id(string $pluginName): string
+{
+    $sanitized = preg_replace('/[^A-Za-z0-9_-]/', '-', $pluginName);
+
+    return 'plugin-region-card-'.$sanitized;
+}
+
+/**
+ * Render a compact status badge for the plugin list.
+ */
+function plugin_render_status_badge(bool $isInstalled, bool $isEnabled): string
+{
+    if (!$isInstalled) {
+        return '<span class="inline-flex items-center rounded-full border border-slate-200 bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">'
+            .get_lang('Not installed')
+            .'</span>';
+    }
+
+    if ($isEnabled) {
+        return '<span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">'
+            .get_lang('Enabled')
+            .'</span>';
+    }
+
+    return '<span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">'
+        .get_lang('Disabled')
+        .'</span>';
+}
+
+/**
+ * Return human-friendly labels for supported plugin regions.
+ */
+function plugin_get_region_labels(): array
+{
+    return [
+        'menu_administrator' => 'Admin menu',
+        'course_tool_plugin' => 'Course tool',
+        'content_top' => 'Above page content',
+        'content_bottom' => 'Below page content',
+        'main_top' => 'Top of main layout',
+        'main_bottom' => 'Bottom of main layout',
+        'pre_footer' => 'Before footer',
+    ];
+}
+
+/**
+ * Return a readable label for a region name.
+ */
+function plugin_get_region_label(string $region): string
+{
+    $labels = plugin_get_region_labels();
+
+    return $labels[$region] ?? $region;
+}
+
+/**
+ * Return human-friendly descriptions for supported plugin regions.
+ */
+function plugin_get_region_descriptions(): array
+{
+    return [
+        'menu_administrator' => get_lang('Recommended for admin-only plugins shown in the administration area.'),
+        'course_tool_plugin' => get_lang('Recommended for plugins that must appear as course tools.'),
+        'content_top' => get_lang('Displayed above the main page content.'),
+        'content_bottom' => get_lang('Displayed below the main page content.'),
+        'main_top' => get_lang('Displayed near the top of the main layout shell.'),
+        'main_bottom' => get_lang('Displayed near the bottom of the main layout shell.'),
+        'pre_footer' => get_lang('Recommended for global floating or persistent plugins shown before the footer.'),
+    ];
+}
+
+/**
+ * Return a readable description for a region name.
+ */
+function plugin_get_region_description(string $region): string
+{
+    $descriptions = plugin_get_region_descriptions();
+
+    return $descriptions[$region] ?? get_lang('Displayed in the selected plugin region.');
+}
+
+/**
+ * Render descriptions for assigned regions.
+ */
+function plugin_render_region_descriptions(array $regions): string
+{
+    if (empty($regions)) {
+        return '';
+    }
+
+    $items = [];
+
+    foreach ($regions as $region) {
+        $regionKey = (string) $region;
+        $label = htmlspecialchars(plugin_get_region_label($regionKey), ENT_QUOTES);
+        $description = htmlspecialchars(plugin_get_region_description($regionKey), ENT_QUOTES);
+
+        $items[] = '<div><span class="font-semibold text-gray-90">'.$label.':</span> '.$description.'</div>';
+    }
+
+    return '<div class="mt-3 space-y-1 text-caption text-gray-50">'.implode('', $items).'</div>';
+}
+
+/**
+ * Render scope badges for admin/course/global usage.
+ */
+function plugin_render_scope_badges(array $metadata): string
+{
+    $badges = [];
+
+    if (!empty($metadata['is_admin_plugin'])) {
+        $badges[] = '<span class="badge badge--info">'.get_lang('Admin menu').'</span>';
+    }
+
+    if (!empty($metadata['is_course_plugin'])) {
+        $badges[] = '<span class="badge badge--success">'.get_lang('Course tool').'</span>';
+    }
+
+    if (empty($badges)) {
+        $badges[] = '<span class="badge badge--default">'.get_lang('Global regions').'</span>';
+    }
+
+    return implode(' ', $badges);
+}
+
+/**
+ * Render assigned region badges.
+ */
+function plugin_render_region_badges(array $regions): string
+{
+    if (empty($regions)) {
+        return '<span class="badge badge--default">'.get_lang('No regions assigned').'</span>';
+    }
+
+    $html = [];
+    foreach ($regions as $region) {
+        $regionKey = (string) $region;
+        $regionLabel = htmlspecialchars(plugin_get_region_label($regionKey), ENT_QUOTES);
+        $regionTechnical = htmlspecialchars($regionKey, ENT_QUOTES);
+
+        $html[] = '<span class="badge badge--info" title="'.$regionTechnical.'">'.$regionLabel.'</span>';
+    }
+
+    return implode(' ', $html);
+}
+
+/**
+ * Render a clamped plugin description.
+ */
+function plugin_render_comment_preview(string $comment): string
+{
+    $comment = trim($comment);
+    if ('' === $comment) {
+        return '';
+    }
+
+    $escapedComment = htmlspecialchars($comment, ENT_QUOTES);
+
+    return '<p class="mt-2 text-body-2 text-gray-50" title="'.$escapedComment.'" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'
+        .$escapedComment
+        .'</p>';
+}
+
+/**
+ * Build the selectable region list according to plugin type.
+ */
+function plugin_get_available_region_options(array $metadata): array
+{
+    $labels = plugin_get_region_labels();
+
+    if (!empty($metadata['is_admin_plugin'])) {
+        return [
+            'menu_administrator' => $labels['menu_administrator'].' (menu_administrator)',
+        ];
+    }
+
+    if (!empty($metadata['is_course_plugin'])) {
+        return [
+            'course_tool_plugin' => $labels['course_tool_plugin'].' (course_tool_plugin)',
+        ];
+    }
+
+    return [
+        'menu_administrator' => $labels['menu_administrator'].' (menu_administrator)',
+        'content_top' => $labels['content_top'].' (content_top)',
+        'content_bottom' => $labels['content_bottom'].' (content_bottom)',
+        'main_top' => $labels['main_top'].' (main_top)',
+        'main_bottom' => $labels['main_bottom'].' (main_bottom)',
+        'pre_footer' => $labels['pre_footer'].' (pre_footer)',
+    ];
+}
+
+function plugin_get_configure_url(string $pluginName): string
+{
+    return api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+            'plugin' => $pluginName,
+        ]);
+}
+
+function plugin_get_open_url(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
+    $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
+
+    foreach (['admin.php', 'configure.php'] as $file) {
+        if (is_file($sysPluginPath.$file)) {
+            return $cache[$pluginName] = $webPluginPath.$file;
+        }
+    }
+
+    return $cache[$pluginName] = null;
 }
 
 /**
@@ -135,91 +683,169 @@ function handlePlugins()
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
-    // Header
-    echo '<div class="mb-4 flex items-center justify-between">';
-    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage plugins').'</h2>';
-    echo '<p class="text-gray-50 text-sm">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
+    echo '
+        <div class="section-header section-header--h2">
+            <h2 class="section-header__title">
+                '.get_lang('Manage plugins').'
+            </h2>
+            <div class="section-header__actions">
+                <a href="'.htmlspecialchars(api_get_self().'?category=Regions', ENT_QUOTES).'" class="btn btn--plain-outline">
+                    <i class="mdi mdi-view-grid-outline"></i>'.get_lang('Regions').'
+                </a>
+            </div>
+        </div>
+        <p class="text-body-1 text-gray-50">'.get_lang('Install, activate or deactivate plugins easily.').'</p>
+    ';
+
+    echo '<div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">';
+    echo '  <div class="flex flex-wrap gap-2">';
+    /*if (!shouldShowAllPlugins()) {
+        echo '  <a href="'.htmlspecialchars(api_get_self().'?category=Plugins&show_all_plugins=1', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
+        echo '      <i class="mdi mdi-eye-outline"></i> Show all plugins';
+        echo '  </a>';
+    }*/
+    echo '  </div>';
     echo '</div>';
 
-    echo '<table class="w-full border border-gray-25 rounded-lg shadow-md">';
+    echo '<div class="overflow-x-auto rounded-xl border border-gray-25 bg-white shadow-sm">';
+    echo '<table class="w-full min-w-[980px] table-fixed">';
     echo '<thead>';
     echo '<tr class="bg-gray-10 text-left">';
-    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
-    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Version').'</th>';
-    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Status').'</th>';
-    echo '<th class="p-3 border-b border-gray-25 text-center">'.get_lang('Actions').'</th>';
+    echo '<th class="w-[46%] p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
+    echo '<th class="w-[10%] p-3 border-b border-gray-25">'.get_lang('Version').'</th>';
+    echo '<th class="w-[12%] p-3 border-b border-gray-25">'.get_lang('Status').'</th>';
+    echo '<th class="w-[32%] p-3 border-b border-gray-25 text-center">'.get_lang('Actions').'</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
 
     foreach ($allPlugins as $pluginName) {
+        if (!shouldShowAllPlugins() && !pluginShouldBeVisibleInStableList($pluginName)) {
+            continue;
+        }
+
         $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (!file_exists($pluginInfoFile)) {
             continue;
         }
 
-        $plugin_info = [];
-        try {
-            require $pluginInfoFile;
-        } catch (\Throwable $e) {
-            error_log('[plugins] failed to read '.$pluginName.' metadata: '.$e->getMessage());
-            $plugin_info = ['title' => $pluginName, 'version' => 'n/a'];
-        }
+        $metadata = plugin_get_admin_metadata($pluginName);
+        $hasNoRegions = plugin_has_no_regions($pluginName);
 
         $plugin = $pluginRepo->findOneByTitle($pluginName);
         $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
-        $isEnabled   = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+        $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+        $hasReadme = plugin_has_readme($pluginName);
 
-        // Status badge
+        $pluginDisplayTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
+        $pluginDisplayComment = trim((string) $metadata['comment']);
+        $pluginDisplayVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
+        $pluginDataName = htmlspecialchars($pluginName, ENT_QUOTES);
+
+        $regionsUrl = api_get_path(WEB_CODE_PATH).'admin/settings.php?'.http_build_query([
+                'category' => 'Regions',
+                'name' => $pluginName,
+            ]);
+
         $statusBadge = $isInstalled
             ? ($isEnabled
                 ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
                 : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
             : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
-        echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
-        echo '<td class="p-3 font-medium">'.htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES).'</td>';
-        echo '<td class="p-3">'.htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES).'</td>';
+        echo '<tr class="border-t border-gray-25 align-top transition hover:bg-gray-15">';
+
+        echo '<td class="p-3">';
+        echo '  <div class="min-w-0">';
+        echo '      <div class="font-bold text-gray-90">'.$pluginDisplayTitle.'</div>';
+
+        if ('' !== $pluginDisplayComment) {
+            $escapedComment = htmlspecialchars($pluginDisplayComment, ENT_QUOTES);
+            echo '  <p class="mt-1 text-caption text-gray-50" title="'.$escapedComment.'" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'
+                .$escapedComment
+                .'</p>';
+        }
+
+        echo '  </div>';
+        echo '</td>';
+
+        echo '<td class="p-3 text-sm text-gray-90">'.$pluginDisplayVersion.'</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
-        echo '<td class="p-3 text-center"><div class="flex justify-center gap-2">';
+
+        echo '<td class="p-3">';
+        echo '  <div class="mx-auto grid max-w-[360px] grid-cols-2 gap-2">';
 
         if ($isInstalled) {
             $toggleAction = $isEnabled ? 'disable' : 'enable';
-            $toggleText   = $isEnabled ? get_lang('Disable') : get_lang('Enable');
-            $toggleColor  = $isEnabled ? 'btn--plain' : 'btn--warning';
-            $toggleIcon   = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
+            $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
+            $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
+            $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
-            echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="'.$toggleAction.'">
+            $configureUrl = plugin_get_configure_url($pluginName);
+            $openUrl = plugin_get_open_url($pluginName);
+
+            echo '      <button class="plugin-action btn btn--sm '.$toggleColor.' w-full justify-center"
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="'.$toggleAction.'">
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
-                  </button>';
+                </button>';
 
-            echo '<button class="plugin-action btn btn--sm btn--danger"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="uninstall">
-                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
-                  </button>';
+            echo '  <a href="'.htmlspecialchars($configureUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
+            echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
+            echo '  </a>';
 
-            // Show "Configure" only if the plugin is ENABLED and actually has editable settings.
-            if ($isEnabled && plugin_has_editable_settings($pluginName)) {
-                $configureUrl = '/main/admin/configure_plugin.php?'.http_build_query(['plugin' => $pluginName]);
-                echo Display::url(
-                    get_lang('Configure'),
-                    $configureUrl,
-                    ['class' => 'btn btn--info btn--sm']
-                );
+            if ($isEnabled && !empty($openUrl)) {
+                echo '  <a href="'.htmlspecialchars($openUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
+                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
+                echo '  </a>';
+            } elseif (!empty($openUrl)) {
+                echo '  <span class="btn btn--plain-outline btn--sm w-full justify-center opacity-50 cursor-not-allowed">';
+                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
+                echo '  </span>';
             }
+
+            if (!$hasNoRegions) {
+                echo '      <a href="'.htmlspecialchars($regionsUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
+                echo '          <i class="mdi mdi-view-grid-plus-outline"></i> '.get_lang('Regions');
+                echo '      </a>';
+            }
+
+            echo '      <button class="plugin-action btn btn--danger btn--sm w-full justify-center"
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="uninstall">
+                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
+                </button>';
         } else {
-            echo '<button class="plugin-action btn btn--sm btn--success"
-                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="install">
+            echo '      <button class="plugin-action btn btn--success btn--sm w-full justify-center"
+                    data-plugin="'.$pluginDataName.'"
+                    data-action="install">
                     <i class="mdi mdi-download"></i> '.get_lang('Install').'
-                  </button>';
+                </button>';
+
+            echo '      <span></span>';
         }
 
-        echo '</div></td></tr>';
+        if ($hasReadme) {
+            echo Display::url(
+                Display::getMdiIcon('file-document-outline').' README',
+                api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?'.http_build_query(['a' => 'md_to_html', 'plugin' => $pluginName]),
+                [
+                    'data-title' => $pluginDisplayTitle,
+                    'class' => 'ajax btn btn--plain-outline btn--sm col-span-2 w-full justify-center',
+                ]
+            );
+        }
+
+        echo '  </div>';
+        echo '</td>';
+
+        echo '</tr>';
     }
 
-    echo '</tbody></table>';
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
 
     echo '<div id="page-loader" class="hidden fixed inset-0 bg-black/30 z-40">
             <div class="absolute inset-0 flex items-center justify-center">
@@ -230,68 +856,135 @@ function handlePlugins()
             </div>
           </div>';
 
-    echo '<script>
+    echo '<div id="plugin-readme-modal" class="hidden fixed inset-0 z-50">
+            <div class="relative flex min-h-screen items-start justify-center p-4 md:p-6">
+                <div class="relative flex w-full max-w-4xl flex-col rounded-xl bg-white shadow-xl">
+                    <div class="flex items-center justify-between gap-3 border-b border-gray-25 px-5 py-4">
+                        <h3 id="plugin-readme-modal-title" class="text-xl font-semibold text-gray-90 mb-0">README</h3>
+                    </div>
+                    <div id="plugin-readme-modal-body" class="max-h-[75vh] overflow-y-auto px-5 py-4 text-sm leading-6 text-gray-90"></div>
+                </div>
+            </div>
+          </div>';
+
+    $ajaxUrl = json_encode(api_get_path(WEB_AJAX_PATH).'plugin.ajax.php');
+    $loadingText = json_encode(get_lang('Loading').'…');
+    $errorText = json_encode(get_lang('Error'));
+    $requestFailedText = json_encode(get_lang('Request failed'));
+    $doneText = json_encode(get_lang('Done'));
+    $processingText = json_encode(get_lang('Processing'));
+    $installingText = json_encode(get_lang('Installing'));
+    $uninstallingText = json_encode(get_lang('Uninstalling'));
+    $enablingText = json_encode(get_lang('Enabling'));
+    $disablingText = json_encode(get_lang('Disabling'));
+    $readmeMissingText = json_encode('README file not found for this plugin.');
+    $readmeTitleSuffix = json_encode('README');
+
+    echo <<<JS
+<script>
 (function($){
+  var ajaxUrl = {$ajaxUrl};
+  var loadingText = {$loadingText};
+  var errorText = {$errorText};
+  var requestFailedText = {$requestFailedText};
+  var doneText = {$doneText};
+  var processingText = {$processingText};
+  var installingText = {$installingText};
+  var uninstallingText = {$uninstallingText};
+  var enablingText = {$enablingText};
+  var disablingText = {$disablingText};
+  var readmeMissingText = {$readmeMissingText};
+  var readmeTitleSuffix = {$readmeTitleSuffix};
+
   function showToast(message, type) {
     var bg = type === "success" ? "bg-green-600" : (type === "warning" ? "bg-yellow-600" : "bg-red-600");
-    var $toast = $("<div/>", {
+    var \$toast = $("<div/>", {
       class: "fixed top-4 right-4 z-50 text-white px-4 py-3 rounded shadow " + bg,
       text: message
     }).appendTo("body");
-    setTimeout(function(){ $toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
+    setTimeout(function(){ \$toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
   }
-  function actionLabel(a) {
-    switch(a){
-      case "install": return "'.get_lang('Installing').'";
-      case "uninstall": return "'.get_lang('Uninstalling').'";
-      case "enable": return "'.get_lang('Enabling').'";
-      case "disable": return "'.get_lang('Disabling').'";
-      default: return "'.get_lang('Processing').'";
+
+  function actionLabel(action) {
+    switch (action) {
+      case "install": return installingText;
+      case "uninstall": return uninstallingText;
+      case "enable": return enablingText;
+      case "disable": return disablingText;
+      default: return processingText;
     }
   }
-  function showPageLoader(show){ $("#page-loader").toggleClass("hidden", !show); }
+
+  function openReadmeModal(title) {
+    $("#plugin-readme-modal-title").text(title);
+    $("#plugin-readme-modal").removeClass("hidden");
+    $("body").addClass("overflow-hidden");
+  }
+
+  function closeReadmeModal() {
+    $("#plugin-readme-modal").addClass("hidden");
+    $("#plugin-readme-modal-body").empty();
+    $("body").removeClass("overflow-hidden");
+  }
+
+  function showReadmeLoading(title) {
+    openReadmeModal(title);
+    $("#plugin-readme-modal-body").html(
+      '<div class="flex flex-col items-center justify-center gap-3 py-8 text-gray-50">' +
+      '<i class="mdi mdi-loading mdi-spin text-3xl"></i>' +
+      '<div>' + loadingText + '</div>' +
+      '</div>'
+    );
+  }
 
   $(document).ready(function () {
-    $(".plugin-action").on("click", function () {
-      var $btn = $(this);
-      if ($btn.data("busy")) return;
+    $(document).on("click", ".plugin-action", function () {
+      var \$btn = $(this);
+      if (\$btn.data("busy")) {
+        return;
+      }
 
-      var pluginName = $btn.data("plugin");
-      var action = $btn.data("action");
-      var originalHtml = $btn.html();
+      var pluginName = \$btn.data("plugin");
+      var action = \$btn.data("action");
+      var originalHtml = \$btn.html();
 
-      $btn.data("busy", true)
+      \$btn.data("busy", true)
           .attr("aria-busy", "true")
           .addClass("opacity-60 cursor-not-allowed")
-          .html(\'<i class="mdi mdi-loading mdi-spin"></i> \' + actionLabel(action) + "...");
+          .html('<i class="mdi mdi-loading mdi-spin"></i> ' + actionLabel(action) + "...");
+
       $.ajax({
         type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php",
+        url: ajaxUrl,
         data: { a: action, plugin: pluginName },
         dataType: "json",
         timeout: 120000,
-        beforeSend: function(){ showToast(actionLabel(action) + "…", "warning"); },
-        success: function(data){
+        beforeSend: function() {
+          showToast(actionLabel(action) + "…", "warning");
+        },
+        success: function(data) {
           if (data && data.success) {
-            showToast("'.get_lang('Done').': " + action.toUpperCase(), "success");
+            showToast(doneText + ": " + action.toUpperCase(), "success");
             setTimeout(function(){ location.reload(); }, 500);
           } else {
-            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : "'.get_lang('Error').'";
-            showToast("'.get_lang('Error').': " + msg, "error");
-            $btn.html(originalHtml);
+            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : errorText;
+            showToast(errorText + ": " + msg, "error");
+            \$btn.html(originalHtml);
           }
         },
-        error: function(xhr){
-          var msg = "'.get_lang('Request failed').'";
+        error: function(xhr) {
+          var msg = requestFailedText;
           try {
-            var j = JSON.parse(xhr.responseText);
-            if (j && (j.error || j.message)) msg = j.error || j.message;
-          } catch(e) {}
-          showToast("'.get_lang('Error').': " + msg, "error");
-          $btn.html(originalHtml);
+            var json = JSON.parse(xhr.responseText);
+            if (json && (json.error || json.message)) {
+              msg = json.error || json.message;
+            }
+          } catch (e) {}
+          showToast(errorText + ": " + msg, "error");
+          \$btn.html(originalHtml);
         },
-        complete: function(){
-          $btn.data("busy", false)
+        complete: function() {
+          \$btn.data("busy", false)
               .removeAttr("aria-busy")
               .removeClass("opacity-60 cursor-not-allowed");
         }
@@ -299,7 +992,8 @@ function handlePlugins()
     });
   });
 })(jQuery);
-</script>';
+</script>
+JS;
 }
 
 /**
@@ -316,20 +1010,9 @@ function plugin_has_editable_settings(string $pluginName): bool
     $has = false;
 
     try {
-        $app  = new AppPlugin();
-        $info = $app->getPluginInfo($pluginName, true) ?? [];
+        $app = new AppPlugin();
+        $info = $app->getPluginInfo($pluginName) ?? [];
 
-        // Collect fields from Plugin object or from 'settings' array
-        if (!empty($info['obj']) && $info['obj'] instanceof Plugin) {
-            $fields = (array) $info['obj']->getFieldNames();
-        } elseif (!empty($info['settings']) && is_array($info['settings'])) {
-            $fields = array_keys($info['settings']);
-        } else {
-            $fields = [];
-        }
-
-        // Strip legacy toggles; these do not qualify as "configurable settings".
-        // Keep this list broad to cover plugins that added their own toggle names.
         $legacyToggles = [
             'tool_enable',
             'enable_onlyoffice_plugin',
@@ -338,16 +1021,99 @@ function plugin_has_editable_settings(string $pluginName): bool
             'active',
             'is_active',
         ];
-        $fields = array_values(array_diff($fields, $legacyToggles));
 
-        // Final decision: at least one real field
-        $has = count($fields) > 0;
+        $metaOnlyKeys = [
+            'regions',
+        ];
+
+        $nonEditableTypes = [
+            'html',
+            'label',
+            'static',
+            'message',
+            'info',
+        ];
+
+        $editableFields = [];
+
+        // IMPORTANT:
+        // If the plugin explicitly defines "settings", even as an empty array,
+        // do not fallback to getFieldNames(), because some plugins return rendered HTML there.
+        if (array_key_exists('settings', $info) && is_array($info['settings'])) {
+            foreach ($info['settings'] as $name => $type) {
+                $name = (string) $name;
+
+                if (in_array($name, $legacyToggles, true) || in_array($name, $metaOnlyKeys, true)) {
+                    continue;
+                }
+
+                if (is_string($type)) {
+                    $normalizedType = strtolower(trim($type));
+
+                    if (in_array($normalizedType, $nonEditableTypes, true)) {
+                        continue;
+                    }
+                }
+
+                $editableFields[] = $name;
+            }
+        } elseif (!empty($info['obj']) && $info['obj'] instanceof Plugin) {
+            $fieldNames = (array) $info['obj']->getFieldNames();
+
+            foreach ($fieldNames as $fieldName) {
+                $fieldName = trim((string) $fieldName);
+
+                if ('' === $fieldName) {
+                    continue;
+                }
+
+                if (str_contains($fieldName, '<')) {
+                    continue;
+                }
+
+                if (in_array($fieldName, $legacyToggles, true) || in_array($fieldName, $metaOnlyKeys, true)) {
+                    continue;
+                }
+
+                $editableFields[] = $fieldName;
+            }
+        }
+
+        $has = count($editableFields) > 0;
     } catch (\Throwable $e) {
-        // Fail closed: if metadata lookup fails, do not show Configure
         $has = false;
     }
 
     return $cache[$pluginName] = $has;
+}
+
+/**
+ * Return the best management URL for a plugin.
+ * Priority:
+ * 1. plugin admin.php
+ * 2. plugin configure.php
+ * 3. legacy configure_plugin.php when the plugin exposes editable settings
+ */
+function plugin_get_management_url(string $pluginName): ?string
+{
+    static $cache = [];
+
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
+    $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
+
+    foreach (['admin.php', 'configure.php'] as $file) {
+        if (is_file($sysPluginPath.$file)) {
+            return $cache[$pluginName] = $webPluginPath.$file;
+        }
+    }
+
+    return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
+            'plugin' => $pluginName,
+        ]);
 }
 
 /**
@@ -402,6 +1168,13 @@ function uploadStylesheet($values, $picture)
 
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
+                // Reject path traversal entries (ZIP Slip)
+                $entryName = str_replace('\\', '/', $file['name']);
+                if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                    $valid = false;
+                    $invalid_files[] = $file['name'];
+                    continue;
+                }
                 if ('/' != substr($file['name'], -1)) {
                     $path_parts = pathinfo($file['name']);
                     if (!in_array($path_parts['extension'], $allowedFiles)) {
@@ -442,16 +1215,28 @@ function uploadStylesheet($values, $picture)
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
+                        // Guard against ZIP Slip: resolve and verify the destination stays within extraction_path
+                        $destDir = $extraction_path.dirname($entry_without_first_dir);
+                        $destFile = $destDir.'/'.basename($entry);
+                        $realExtraction = realpath($extraction_path);
+                        // realpath() returns false for non-existent paths; build normalised path manually
+                        $normDest = $realExtraction.'/'.ltrim(
+                            str_replace(['\\', '../', './'], ['/', '', ''], $entry_without_first_dir),
+                            '/'
+                        );
+                        if (!str_starts_with($normDest, $realExtraction.'/')) {
+                            continue; // skip malicious entry
+                        }
                         // If there is still a slash, we need to make sure the directories are created.
                         if (false !== strpos($entry_without_first_dir, '/')) {
-                            if (!is_dir($extraction_path.dirname($entry_without_first_dir))) {
+                            if (!is_dir($destDir)) {
                                 // Create it.
-                                @mkdir($extraction_path.dirname($entry_without_first_dir), $mode, true);
+                                @mkdir($destDir, $mode, true);
                             }
                         }
 
                         $fp = $zip->getStream($entry);
-                        $ofp = fopen($extraction_path.dirname($entry_without_first_dir).'/'.basename($entry), 'w');
+                        $ofp = fopen($destFile, 'w');
 
                         while (!feof($fp)) {
                             fwrite($ofp, fread($fp, 8192));
@@ -469,7 +1254,7 @@ function uploadStylesheet($values, $picture)
         }
     } else {
         // Simply move the file.
-        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.$picture['name']);
+        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.basename($picture['name']));
         $result = true;
     }
 
@@ -499,19 +1284,6 @@ function storeRegions(): void
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
-        if (!isset($_POST['plugin_'.$plugin])) {
-            continue;
-        }
-
-        $areas_to_installed = array_filter(
-            $_POST['plugin_'.$plugin] ?? [],
-            fn ($region) => !empty($region) && '-1' != $region
-        );
-
-        if (empty($areas_to_installed)) {
-            continue;
-        }
-
         $entityPlugin = $pluginRepo->getInstalledByName($plugin);
 
         if (!$entityPlugin) {
@@ -519,14 +1291,28 @@ function storeRegions(): void
         }
 
         $pluginInUrl = $entityPlugin->getOrCreatePluginConfiguration($currentAccessUrl);
-
         $pluginConfiguration = $pluginInUrl->getConfiguration();
-        $pluginConfiguration['regions'] = $areas_to_installed;
 
+        if (!is_array($pluginConfiguration)) {
+            $pluginConfiguration = [];
+        }
+
+        if (plugin_has_no_regions($plugin)) {
+            unset($pluginConfiguration['regions']);
+            $pluginInUrl->setConfiguration($pluginConfiguration);
+            continue;
+        }
+
+        $areas_to_install = array_filter(
+            $_POST['plugin_'.$plugin] ?? [],
+            static fn ($region) => !empty($region) && '-1' !== (string) $region
+        );
+
+        $pluginConfiguration['regions'] = array_values($areas_to_install);
         $pluginInUrl->setConfiguration($pluginConfiguration);
-
-        $em->flush();
     }
+
+    $em->flush();
 }
 
 /**

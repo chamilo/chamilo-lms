@@ -101,7 +101,14 @@ export function useLogin() {
   const isLoading = ref(false)
   const requires2FA = ref(false)
 
-  async function performLogin({ login, password, _remember_me, totp = null, isLoginLdap = false }) {
+  async function performLogin({
+    login,
+    password,
+    _remember_me,
+    totp = null,
+    captcha_code = null,
+    isLoginLdap = false,
+  }) {
     isLoading.value = true
     requires2FA.value = false
 
@@ -112,6 +119,7 @@ export function useLogin() {
         password,
         _remember_me,
         totp,
+        captcha_code,
       }
 
       // Add returnUrl if exists in query param, but sanitize it first
@@ -143,7 +151,14 @@ export function useLogin() {
       // Backend explicit error
       if (responseData.error) {
         showErrorNotification(responseData.error)
-        return { success: false, error: responseData.error }
+
+        return {
+          success: false,
+          error: responseData.error,
+          captchaRequired: !!responseData.captchaRequired,
+          captchaBlocked: !!responseData.captchaBlocked,
+          captchaBlockedSeconds: responseData.captchaBlockedSeconds || 0,
+        }
       }
 
       // Terms and conditions redirect (apply locale before navigating)
@@ -234,8 +249,8 @@ export function useLogin() {
             default:
               target = `/${String(value).replace(/^\/+/, "")}`
           }
-        } catch (e) {
-          console.warn("[redirect_after_login] Malformed JSON:", e)
+        } catch (error) {
+          console.warn("[redirect_after_login] Malformed JSON:", error)
         }
       }
 
@@ -251,7 +266,14 @@ export function useLogin() {
     } catch (error) {
       const errorMessage = error.response?.data?.error || "An error occurred during login."
       showErrorNotification(errorMessage)
-      return { success: false, error: errorMessage }
+
+      return {
+        success: false,
+        error: errorMessage,
+        captchaRequired: !!error.response?.data?.captchaRequired,
+        captchaBlocked: !!error.response?.data?.captchaBlocked,
+        captchaBlockedSeconds: error.response?.data?.captchaBlockedSeconds || 0,
+      }
     } finally {
       isLoading.value = false
     }

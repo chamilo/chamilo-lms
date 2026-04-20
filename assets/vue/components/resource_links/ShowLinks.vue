@@ -45,7 +45,7 @@
     <div v-if="showStatus">{{ $t("Status") }}: {{ link.visibilityName }}</div>
 
     <div v-if="editStatus">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <Dropdown
           v-model="link.visibility"
           :input-id="`link-${link.id}-status`"
@@ -54,7 +54,7 @@
           option-value="value"
         />
         <label for="`link-${link.id}-status`">{{ $t("Status") }}</label>
-      </div>
+      </FloatLabel>
     </div>
   </div>
 </template>
@@ -62,6 +62,7 @@
 <script setup>
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
+import FloatLabel from "primevue/floatlabel"
 
 const { t } = useI18n()
 const courseId = (course) => {

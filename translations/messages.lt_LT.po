@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas ,, application/msword:MsWord,, application/octet-stream:Okto duomenų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Siūsti laišką naujam vartotojui"
 
 msgid "Portfolio"
-msgstr "Išplėstinis profilis"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Šis nustatymas leidžia vartotojui užpildyti šiuos nebūtinus laukelius: 'Mano kompetencijos', 'Mano diplomai', 'Ką aš galėčiau išmokti' ir 'Mano privati informacija'"
@@ -14729,7 +14729,7 @@ msgstr "Vartotojai, Grupės"
 msgid "Sorry no results"
 msgstr "Atsiprašome, rezultatų nėra"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Grupės teisės"
 
 msgid "Closed"
@@ -16072,6 +16072,15 @@ msgstr "Trumpasis kodas"
 
 msgid "Create child skill"
 msgstr "Sukurti vaiko įgūdį"
+
+msgid "This skill can be obtained through:"
+msgstr "Šį įgūdį galima įgyti per:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Šiuo metu nėra kurso, leidžiančio įgyti šį įgūdį."
+
+msgid "Add skill to search profile"
+msgstr "Pridėti įgūdį prie paieškos profilio"
 
 msgid "Search profile matches"
 msgstr "Ieškoti atitinkančių profilių"
@@ -31005,7 +31014,7 @@ msgid "Create your first note to get started."
 msgstr "Sukurkite savo pirmąjį užrašą, kad pradėtumėte."
 
 msgid "F d, Y"
-msgstr "MMM d, Y"
+msgstr "m d, Y"
 
 msgid "Could not load support info at this time."
 msgstr "Nepavyko įkelti pagalbos informacijos šiuo metu."
@@ -32749,4 +32758,1129 @@ msgstr "Įkelti paveikslėlį arba sukurti su Badge Studio."
 
 msgid "Current badge set"
 msgstr "Dabartinis ženklelių rinkinys"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "Šiame skyriuje spustelėjus „Registruoti studentą“ kursui, bus paprašyta pasirinkti vartotoją kitame puslapyje. Patvirtinus, bus sukurta nauja sesija su pasirinktu kursu ir vartotoju bei išsiųstas prenumeratos pranešimas vartotojui."
+
+msgid "Read-only view"
+msgstr "Tik skaitymo vaizdas"
+
+msgid "Events list"
+msgstr "Renginių sąrašas"
+
+msgid "Personal"
+msgstr "Asmeniniai"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Savaitės rodomos nuo 1 iki 52"
+
+msgid "No tutored sessions found"
+msgstr "Nerasta mentoriuojamų sesijų"
+
+msgid "Content search"
+msgstr "Turinio paieška"
+
+msgid "Search indexed content across all courses."
+msgstr "Ieškoti indeksuoto turinio visuose kursuose."
+
+msgid "Enter a keyword..."
+msgstr "Įveskite raktažodį..."
+
+msgid "Search error"
+msgstr "Paieškos klaida"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Įveskite raktažodį, kad ieškotumėte indeksuotų dokumentų."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Rezultatai, prie kurių neturite prieigos, yra paslėpti pagal konfigūraciją."
+
+msgid "Restricted"
+msgstr "Apribota"
+
+msgid "You do not have access to this resource."
+msgstr "Neturite prieigos prie šio ištekliaus."
+
+msgid "Create group"
+msgstr "Kurti grupę"
+
+msgid "My custom certificate"
+msgstr "Mano pasirinktinis pažymėjimas"
+
+msgid "Select permission"
+msgstr "Pasirinkti leidimą"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Priimdami šį pakvietimą, būsite susietas su prašančiu vartotoju taip, kad dalis arba visi jūsų profilio duomenys bus prieinami prašančiam vartotojui skaityti"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Rodoma %d iš maždaug %d rezultatų(-ų) pagal %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Rodoma %d prieinamų rezultatų(-ų) pagal %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Todėl būsite automatiškai nukreipti į šį URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Jūs turite prieigą prie kelių URL"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Spustelėkite žemiau esančią nuorodą, atitinkančią URL, prie kurio norite prisijungti"
+
+msgid "You do not currently have access to any URL"
+msgstr "Šiuo metu neturite prieigos prie jokio URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maksimalus leidžiamų prenumeratų skaičius"
+
+msgid "An error occurred"
+msgstr "Įvyko klaida"
+
+msgid "You don't have any course content yet"
+msgstr "Jūs dar neturite kurso turinio"
+
+msgid "This course is locked"
+msgstr "Šis kursas užrakintas"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "El. pašto adresas, iš kurio bus siunčiami el. laiškai, kai platforma siunčia el. laišką, taip pat naudojamas kaip 'atsakymo-i' antraštė"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Nematau savo kalbos sąraše? Susisiekite su mumis adresu %s, kad prisidėtumėte kaip vertėjas"
+
+msgid "An update is available"
+msgstr "Yra prieinamas atnaujinimas"
+
+msgid "to know what's new and what has been changed"
+msgstr "sužinoti, kas nauja ir kas buvo pakeista"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Mes nustatėme, kad jūsų PHP įdiegimas nedefiniuoja datos"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Jūsų PHP versija neatitinka šios programinės įrangos reikalavimų"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Kai kurie failai ar aplankai neturi rašymo teisių"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Įspėjimas! Diegimo programa nustatė esamą Chamilo platformą jūsų sistemoje"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Kadangi <code>newscorm</code> ir <code>exercice</code> katalogai buvo pervadinti į <code>lp</code> ir <code>exercise</code> atitinkamai, būtina ištrinti arba pervadinti į <code>newscorm_old</code> ir <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Forma pateikia neteisingus ar neišsamus duomenis"
+
+msgid "Your contact information could not be sent"
+msgstr "Jūsų kontaktinė informacija negalėjo būti išsiųsta"
+
+msgid "Please contact support with the error details"
+msgstr "Susisiekite su pagalbos tarnyba dėl klaidos detalių"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Spustelėkite paveikslėlį, kad jį apkirptumėte (1:1 santykis, rekomenduojama 120x120 px)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Naudokite apkarpymo įrankį, kad pasirinktumėte 1:1 sritį"
+
+msgid "Checking push subscription"
+msgstr "Tikrinama stūmimo prenumerata"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Jūs prenumeruojate stūmimo pranešimus šiame naršyklės įskiepyje"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Stūmimo pranešimai šioje naršyklėje neįjungti"
+
+msgid "Data exchange successfully saved"
+msgstr "Duomenų mainai sėkmingai išsaugoti"
+
+msgid "Error saving data exchange"
+msgstr "Klaida saugant duomenų mainus"
+
+msgid "No documents added yet"
+msgstr "Dar neįkelta jokių dokumentų"
+
+msgid "No additional details available for this skill."
+msgstr "Šiam įgūdžiui nėra papildomų detalių."
+
+msgid "No available documents"
+msgstr "Nėra prieinamų dokumentų"
+
+msgid "No users added yet"
+msgstr "Dar nepridėta jokių naudotojų"
+
+msgid "No available users"
+msgstr "Nėra prieinamų naudotojų"
+
+msgid "You can no longer submit"
+msgstr "Jūs nebegalite pateikti"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Šiam uždaviniui nerasta nepateiktų darbų arba duomenys neprieinami"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "El. laiškas išsiųstas visiems nepateikusiems naudotojams"
+
+msgid "Failed to send email"
+msgstr "Nepavyko išsiųsti el. laiško"
+
+msgid "Write your answer here"
+msgstr "Parašykite savo atsakymą čia"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Apsilankymų kalendorius leidžia registruoti apsilankymų sąrašus (vieną kiekvienai realiai sesijai, kurioje studentai turi dalyvauti)"
+
+msgid "Loading attendance data"
+msgstr "Įkeliami apsilankymų duomenys"
+
+msgid "No attendance assigned yet"
+msgstr "Dar nepriskirta jokių apsilankymų"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Šiandien nėra suplanuotų užsiėmimų, pabandykite pasirinkti kitą dieną arba pridėkite apsilankymų įrašą patys naudodami veiksmų piktogramas"
+
+msgid "No attendance data for today"
+msgstr "Šiandien nėra apsilankymų duomenų"
+
+msgid "Saving"
+msgstr "Išsaugoma"
+
+msgid "No attendance data to save"
+msgstr "Nėra apsilankymų duomenų išsaugojimui"
+
+msgid "Failed to save attendance"
+msgstr "Nepavyko išsaugoti apsilankymų"
+
+msgid "Loading more courses"
+msgstr "Įkeliami daugiau kursų"
+
+msgid "Loading more sessions"
+msgstr "Įkeliamos daugiau sesijų"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Dokumentų automatinio paleidimo funkcijos konfigūracija įjungta"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Užduočių automatinio paleidimo funkcijos konfigūracija įjungta"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Mokymosi kelio automatinio paleidimo nustatymas ĮJUNGTAS"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumo automatinio paleidimo nustatymas įjungtas"
+
+msgid "Course ID is missing"
+msgstr "Trūksta kurso ID"
+
+msgid "Course created successfully"
+msgstr "Kursas sėkmingai sukurtas"
+
+msgid "Error deleting document(s)"
+msgstr "Klaida ištrinant dokumentą/us"
+
+msgid "Template successfully deleted"
+msgstr "Šablonas sėkmingai ištrintas"
+
+msgid "Error deleting the template"
+msgstr "Klaida ištrinant šabloną"
+
+msgid "The title and thumbnail are required"
+msgstr "Pavadinimas ir miniatiūra yra privalomi"
+
+msgid "Template created successfully"
+msgstr "Šablonas sėkmingai sukurtas"
+
+msgid "Error creating the template"
+msgstr "Klaida kuriant šabloną"
+
+msgid "Error submitting the form"
+msgstr "Klaida pateikiant formą"
+
+msgid "Loading templates"
+msgstr "Įkeliami šablonai"
+
+msgid "Loading layout"
+msgstr "Įkeliamas išdėstymas"
+
+msgid "Loading courses"
+msgstr "Įkeliami kursai"
+
+msgid "No courses available"
+msgstr "Nėra prieinamų kursų"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Šis sąrašas rodo naudotojus iš visų prieigos URL, nes nustatymas \"session_admin_access_to_all_users_on_all_urls\" įjungtas."
+
+msgid "User not found"
+msgstr "Naudotojas nerastas"
+
+msgid "An error occurred while sending the course"
+msgstr "Įvyko klaida siunčiant kursą"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Prisiminkite, kad pakeitimai sąlygose, susijusiose su BDAR, reikalauja pranešti apie tuos pakeitimus trečiosioms šalims, kurioms pateikėte savo naudotojų asmeninius duomenis, kaip nurodyta BDAR 19 straipsnyje"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Turėtumėte sukurti \"Sąlygas ir taisykles\" visomis prieinamomis kalbomis"
+
+msgid "You don't have any course yet"
+msgstr "Jūs dar neturite jokių kursų"
+
+msgid "You have received a new friend request"
+msgstr "Jūs gavote naują draugo užklausą"
+
+msgid "Diagnosis Management"
+msgstr "Diagnostikos valdymas"
+
+msgid "Tracking"
+msgstr "Stebėjimas"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Peržiūrėti ataskaitas, statistiką ir stebėjimo duomenis"
+
+msgid "System activity audit"
+msgstr "Sistemos veiklos auditas"
+
+msgid "Learning analytics"
+msgstr "Mokymosi analitika"
+
+msgid "Administrative activity auditing"
+msgstr "Administracinės veiklos auditas"
+
+msgid "List icons"
+msgstr "Piktogramų sąrašas"
+
+msgid "Constant name"
+msgstr "Konstantos pavadinimas"
+
+msgid "MDI icon name"
+msgstr "MDI piktogramos pavadinimas"
+
+msgid "Assign authentication sources"
+msgstr "Priskirti autentifikacijos šaltinius"
+
+msgid "Assignment details"
+msgstr "Užduoties detalės"
+
+msgid "Terms and conditions"
+msgstr "Naudotojo sąlygos"
+
+msgid "Icons"
+msgstr "Piktogramos"
+
+msgid "Create backup"
+msgstr "Sukurti atsarginę kopiją"
+
+msgid "Create file"
+msgstr "Sukurti failą"
+
+msgid "Create link"
+msgstr "Sukurti nuorodą"
+
+msgid "Edit template"
+msgstr "Redaguoti šabloną"
+
+msgid "Shared files"
+msgstr "Bendrinami failai"
+
+msgid "Skill wheel"
+msgstr "Įgūdžių ratas"
+
+msgid "Favourite courses"
+msgstr "Mėgstami kursai"
+
+msgid "Restart courses"
+msgstr "Perkrauti kursus"
+
+msgid "Generate terms"
+msgstr "Generuoti sąlygas"
+
+msgid "Add variation"
+msgstr "Pridėti variantą"
+
+msgid "Editor demo"
+msgstr "Redaktoriaus demonstracija"
+
+msgid "Tool introduction"
+msgstr "Įrankio apibūdinimas"
+
+msgid "Data exchanges"
+msgstr "Duomenų mainai"
+
+msgid "Third parties"
+msgstr "Trečiosios šalys"
+
+msgid "Layouts"
+msgstr "Maketai"
+
+msgid "Relation type"
+msgstr "Sąryšio tipas"
+
+msgid "Add all"
+msgstr "Pridėti viską"
+
+msgid "Remove all"
+msgstr "Pašalinti viską"
+
+msgid "An error occurred. Please try again."
+msgstr "Įvyko klaida. Pabandykite dar kartą."
+
+msgid "%s created"
+msgstr "%s sukurtas"
+
+msgid "%s updated"
+msgstr "%s atnaujintas"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Jei planuojate atnaujinti iš senesnės Chamilo versijos, galite norėti"
+
+msgid "have a look at the changelog"
+msgstr "peržiūrėti keitimų žurnalą"
+
+msgid "to know what's new and what has been changed."
+msgstr "norėdami sužinoti, kas nauja ir kas buvo pakeista."
+
+msgid "Session Item"
+msgstr "Sesijos elementas"
+
+msgid "Points"
+msgstr "Taškai"
+
+msgid "See notifications"
+msgstr "Žiūrėti pranešimus"
+
+msgid "New content available for this course."
+msgstr "Šiam kursui prieinamas naujas turinys."
+
+msgid "No new notifications."
+msgstr "Nėra naujų pranešimų."
+
+msgid "No new content found."
+msgstr "Nerastas naujas turinys."
+
+msgid "No tool details available yet."
+msgstr "Dar nėra įrankio informacijos."
+
+msgid "Last access"
+msgstr "Paskutinis prisijungimas"
+
+msgid "Open course"
+msgstr "Atverti kursą"
+
+msgid "Course completed"
+msgstr "Kursas užbaigtas"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Šio kurso prenumeratos limitas pasiektas."
+
+msgid "Subscription limit reached"
+msgstr "Prenumeratos limitas pasiektas"
+
+msgid "Tertiary alternative"
+msgstr "Trečiasis pasirinkimas"
+
+msgid "Update SCORM"
+msgstr "Atnaujinti SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "DI gali parengti atsiliepimą ir pasiūlymą balą prieš jums jį išsiunčiant."
+
+msgid "What will be sent to the AI"
+msgstr "Kas bus siunčiama DI"
+
+msgid "Assignment title + instructions"
+msgstr "Užduoties pavadinimas + instrukcijos"
+
+msgid "Student submission (text)"
+msgstr "Studento pateiktis (tekstas)"
+
+msgid "Student submission (text): none"
+msgstr "Studento pateiktis (tekstas): nėra"
+
+msgid "Student attachment"
+msgstr "Studento priedas"
+
+msgid "supported"
+msgstr "palaikoma"
+
+msgid "not supported for document analysis"
+msgstr "nepalaikoma dokumentų analizei"
+
+msgid "Student attachment: none"
+msgstr "Studento priedas: nė vienas"
+
+msgid "No text AI providers available."
+msgstr "Jokių teksto DI teikėjų nėra."
+
+msgid "AI-assisted"
+msgstr "DI pagalba"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Šis sprendimas išsaugomas kartu su pataisymu (ExtraField) ir vėliau negali būti pakeistas."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Neprivalomas pataisymo priedas (tai nėra studento pateiktas darbas)."
+
+msgid "AI"
+msgstr "DI"
+
+msgid "Received"
+msgstr "Gautas"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Atrakinti stulpelį"
+
+msgid "Lock column"
+msgstr "Užrakinti stulpelį"
+
+msgid "Set all Present"
+msgstr "Pažymėti visus kaip Esantys"
+
+msgid "Set all Absent"
+msgstr "Pažymėti visus kaip Nedalyvaujantys"
+
+msgid "Auto (recommended)"
+msgstr "Automatiškai (rekomenduojama)"
+
+msgid "Error downloading all documents."
+msgstr "Klaida atsisiunčiant visus dokumentus."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Atverti su ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Ribojama kvota"
+
+msgid "Remaining space"
+msgstr "Liko vietos"
+
+msgid "Course catalogue"
+msgstr "Kurso katalogas"
+
+msgid "Drag links to reorder"
+msgstr "Vilkite nuorodas, kad pertvarkytumėte"
+
+msgid "Drop links here to keep them without category"
+msgstr "Numetkite nuorodas čia, kad jos liktų be kategorijos"
+
+msgid "Could not export"
+msgstr "Nepavyko eksportuoti"
+
+msgid "Link moved"
+msgstr "Nuoroda perkelta"
+
+msgid "Could not move link"
+msgstr "Nepavyko perkelti nuorodos"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategorijų pertvarkymas neįjungtas"
+
+msgid "Showing %s posts"
+msgstr "Rodoma %s įrašų"
+
+msgid "Showing %s tasks"
+msgstr "Rodoma %s užduočių"
+
+msgid "Page %s of %s"
+msgstr "Puslapis %s iš %s"
+
+msgid "Tutors"
+msgstr "Tutorai"
+
+msgid "selected"
+msgstr "pažymėta"
+
+msgid "No data to export"
+msgstr "Nėra duomenų eksportuoti"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Antraštės PNG turi būti \\u2264 %spx."
+
+msgid "Standard list"
+msgstr "Standartinis sąrašas"
+
+msgid "Management list"
+msgstr "Valdymo sąrašas"
+
+msgid "Open platform"
+msgstr "Atvira platforma"
+
+msgid "Teacher user ID"
+msgstr "Mokytojo vartotojo ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Ar tikrai norite ištrinti šį kursą?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Ar tikrai norite ištrinti pažymėtus kursus?"
+
+msgid "Search by name, username, email"
+msgstr "Ieškoti pagal vardą, vartotojo vardą, el. paštą"
+
+msgid "contains %s items"
+msgstr "apima %s elementus"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Jūsų teisinė sutartis lieka aktyvi, kol bet koks sutikimo atsiėmimo prašymas bus peržiūrėtas ir apdorotas."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Jūsų teisinio sutikimo atsiėmimo prašymas laukia peržiūros."
+
+msgid "Your account deletion request is pending review."
+msgstr "Jūsų paskyros ištrynimo prašymas laukia peržiūros."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Kodėl norite prašyti atsiimti savo teisinį sutikimą?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Teikiamas jūsų teisinio sutikimo atsiėmimo prašymas..."
+
+msgid "Submitting request..."
+msgstr "Teikiamas prašymas..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Prašyti atsiimti teisinį sutikimą"
+
+msgid "Submitting your account deletion request..."
+msgstr "Teikiamas jūsų paskyros ištrynimo prašymas..."
+
+msgid "Submitting your acceptance..."
+msgstr "Teikiamas jūsų sutikimas..."
+
+msgid "Event details"
+msgstr "Renginio detalės"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Iš šio vaizdo negalite pasiekti susieto kurso."
+
+msgid "Failed to load sessions"
+msgstr "Nepavyko įkelti sesijų"
+
+msgid "Failed to load events"
+msgstr "Nepavyko įkelti įvykių"
+
+msgid "No events found"
+msgstr "Įvykių nerasta"
+
+msgid "Group image"
+msgstr "Grupės paveikslėlis"
+
+msgid "SearchTCC"
+msgstr "PaieškaTCC"
+
+msgid "Forbidden"
+msgstr "Uždrausta"
+
+msgid "Distribution"
+msgstr "Platinimas"
+
+msgid "Firstname"
+msgstr "Vardas"
+
+msgid "Lastname"
+msgstr "Pavardė"
+
+msgid "Email"
+msgstr "El. paštas"
+
+msgid "Last login in platform"
+msgstr "Paskutinis prisijungimas prie platformos"
+
+msgid "Export as CSV"
+msgstr "Eksportuoti kaip CSV"
+
+msgid "Export as XLS"
+msgstr "Eksportuoti kaip XLS"
+
+msgid "Deactivate this user?"
+msgstr "Deaktyvuoti šį vartotoją?"
+
+msgid "Enable this user?"
+msgstr "Aktyvuoti šį vartotoją?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Sujungti šią dublikato grupę į vartotoją #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Tai sujungs visas kitas tos pačios grupės paskyras į šią paskyrą."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Sujungtos paskyros bus visam laikui ištrintos ir dings iš šios ataskaitos."
+
+msgid "This action cannot be undone."
+msgstr "Šio veiksmo negalima atšaukti."
+
+msgid "Unify"
+msgstr "Sujungti"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Studentas"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Portalas %s naudoja iš viso %s MB iš limito"
+
+msgid "Helper text"
+msgstr "Pagalbinis tekstas"
+
+msgid "NotAllowed"
+msgstr "Neleidžiama"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Naudokite aukščiau esančius filtrus, kad įkeltumėte mokinio prieigos detales."
+
+msgid "Start date must be before end date"
+msgstr "Pradžios data turi būti prieš pabaigos datą"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Pasirinkite datos intervalą ir grupavimo tipą, kad peržiūrėtumėte mokinio prieigos detales."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Šis kursas bus sukurtas naudojant platformos numatytąjį kurso šabloną."
+
+msgid "Security breach avoid restart"
+msgstr "Saugumo pažeidimas, vengti perkrovimo"
+
+msgid "User deactivated"
+msgstr "Vartotojas deaktyvuotas"
+
+msgid "InvalidId"
+msgstr "NeteisingasId"
+
+msgid "User enabled"
+msgstr "Vartotojas aktyvuotas"
+
+msgid "No other duplicates found for this user."
+msgstr "Šiam vartotojui kitų dublikatų nerasta."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Vartotojai sujungti: sujungta %s paskyra(s) į vartotoją #%s. Sujungtos paskyros buvo visam laikui ištrintos."
+
+msgid "No accounts were merged."
+msgstr "Paskyros nebuvo sujungtos."
+
+msgid "An error occurred while unifying users."
+msgstr "Įvyko klaida sujungiant vartotojus."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Vartotojai sujungti: sujungtas vartotojas #%s į vartotoją #%s. Sujungta paskyra buvo visam laikui ištrinta."
+
+msgid "Duplicate users"
+msgstr "Dublikato vartotojai"
+
+msgid "Years"
+msgstr "Metai"
+
+msgid "All time visits outside sessions"
+msgstr "Visų laikų apsilankymai už sesijų ribų"
+
+msgid "All time visits in sessions"
+msgstr "Visų laikų apsilankymai sesijose"
+
+msgid "All time visits total"
+msgstr "Visų laikų apsilankymų iš viso"
+
+msgid "Student visits per period, per course"
+msgstr "Mokinio apsilankymai per laikotarpį, per kursą"
+
+msgid "By email"
+msgstr "Pagal el. paštą"
+
+msgid "By extra field"
+msgstr "Pagal papildomą lauką"
+
+msgid "Select an option"
+msgstr "Pasirinkite parinktį"
+
+msgid "Profile field"
+msgstr "Profilio laukas"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Ši ataskaita rodo tik vartotojus, turinčius tą patį el. pašto adresą."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Ši ataskaita rodo tik vartotojus, turinčius tą pačią pasirinkto profilio lauko reikšmę."
+
+msgid "How to use this report"
+msgstr "Kaip naudoti šią ataskaitą"
+
+msgid "Disable / Enable"
+msgstr "Išjungti / Įjungti"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Tik blokuoja arba atkuria prisijungimą. Neištrina vartotojo ir nepašalina prenumeratų."
+
+msgid "Last week"
+msgstr "Praėjusią savaitę"
+
+msgid "Next week"
+msgstr "Kitos savaitės"
+
+msgid "Loading report..."
+msgstr "Įkeliama ataskaita..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Nepavyko įkelti šios ataskaitos. Pabandykite dar kartą."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Pasirinkite vieną ar daugiau sesijų, iš kurių kopijuoti dėstytojus, ir pasirinkite paskirties kursą"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Laikykite Ctrl (arba Cmd), kad pasirinktumėte kelis elementus"
+
+msgid "Choose the destination course"
+msgstr "Pasirinkite paskirties kursą"
+
+msgid "You can select multiple items"
+msgstr "Galite pasirinkti kelis elementus"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Naudokite paieškos laukelį, kad greitai rastumėte kursus"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Pasirinkite vieną ar daugiau šaltinio sesijų ir vieną ar daugiau paskirties sesijų, kad nukopijuotų studentus"
+
+msgid "Select destination sessions"
+msgstr "Pasirinkite paskirties sesijas"
+
+msgid "You can select multiple users"
+msgstr "Galite pasirinkti kelis vartotojus"
+
+msgid "Use the search box to find users quickly"
+msgstr "Naudokite paieškos laukelį, kad greitai rastumėte vartotojus"
+
+msgid "Error while creating the document"
+msgstr "Klaida kuriant dokumentą"
+
+msgid "Not a SCORM learning path"
+msgstr "Ne SCORM mokymosi kelias"
+
+msgid "Final item"
+msgstr "Paskutinis elementas"
+
+msgid "Edit item"
+msgstr "Redaguoti elementą"
+
+msgid "No AI text providers configured."
+msgstr "Nėra sukonfigūruotų AI teksto teikėjų."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Įkėlimas nepavyko. Failas greičiausiai didesnis už serverio ribą (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Atnaujinimas nepavyko. Serveris negavo failo."
+
+msgid "Update failed. %s"
+msgstr "Atnaujinimas nepavyko. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Atnaujinimas nepavyko. Neteisingas įkelta failo duomenų paketas."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Atnaujinimas nepavyko. Įkeltino ZIP failo pavadinimas turi sutapti su originaliu SCORM paketo pavadinimu."
+
+msgid "Update failed"
+msgstr "Atnaujinimas nepavyko"
+
+msgid "Question lower case"
+msgstr "Klausimas mažosiomis raidėmis"
+
+msgid "Regenerate"
+msgstr "Regeneruoti"
+
+msgid "Case insensitive"
+msgstr "Nėra atskiriama raidžių dydis"
+
+msgid "Select a session to load its courses."
+msgstr "Pasirinkite sesiją, kad įkeltumėte jos kursus."
+
+msgid "Select the source course."
+msgstr "Pasirinkite šaltinio kursą."
+
+msgid "Select a destination session."
+msgstr "Pasirinkite paskirties sesiją."
+
+msgid "Select the destination course."
+msgstr "Pasirinkite paskirties kursą."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Nukopijuoti visą kurso turinį iš pasirinkto sesijos kurso."
+
+msgid "Select which tools/items to copy."
+msgstr "Pasirinkite, kuriuos įrankius/elementus kopijuoti."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Neįtraukti bazinio (ne sesijos) kurso turinio."
+
+msgid "An error occurred while copying the course"
+msgstr "Kopijuojant kursą įvyko klaida"
+
+msgid "Please select a different destination"
+msgstr "Prašome pasirinkti kitą paskirtį"
+
+msgid "You must select a destination course"
+msgstr "Turite pasirinkti paskirties kursą"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Norėdami eksportuoti kursus su testais, turite pasirinkti testą"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Jei jūsų MP yra įtraukti garso failai, turėtumėte juos pasirinkti iš dokumentų"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Jei jūsų teste yra karštųjų taškų klausimai, turėtumėte pasirinkti paveikslėlius iš dokumentų"
+
+msgid "GeneralResourcesCourse"
+msgstr "BendriejiResursaiKursas"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Slaptažodis turi būti bent %length% simbolių ilgio."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Slaptažodis turi turėti bent %count% mažųjų raidžių."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Slaptažodis turi turėti bent %count% didžiųjų raidžių."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Slaptažodis turi turėti bent %count% skaitmeninių (0-9) simbolių."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Slaptažodis turi turėti bent %count% specialiųjų simbolių."
+
+msgid "Invalid login request."
+msgstr "Neteisingas prisijungimo užklausimas."
+
+msgid "Authentication failed."
+msgstr "Autentifikacija nepavyko."
+
+msgid "Login %status% for username %username%"
+msgstr "Prisijungimas %status% vartotojui %username%"
+
+msgid "Co-generated with AI"
+msgstr "Sukurta bendrai su DI"
+
+msgid "GDPRTitle"
+msgstr "GDPRPavadinimas"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Privalomi laukai"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Žymas galima kopijuoti ir įklijuoti žemiau esančioje teksto srityje, jos bus dinamiškai pakeistos atitinkamomis reikšmėmis kiekvienam vartotojui individualiai siunčiant."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Ši grupė susieta su klase %s.<br>Grupės narių sąrašas priklauso nuo klasės narių ir negali būti keičiamas.<br>Eikite į grupės nustatymus, kad nutrauktumėte šį ryšį, jei norite pridėti ar pašalinti narius iš šios grupės."
+
+msgid "Link classes to created groups ?"
+msgstr "Susieti klases su sukurtomis grupėmis?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Jei klasė susieta su grupe, vartotojai, pridėti prie klasės ar pašalinti iš jos, automatiškai pridedami prie grupės ar pašalinami iš jos."
+
+msgid "New groups creation in category %s"
+msgstr "Naujų grupių kūrimas kategorijoje %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Įspėjimo pranešimas, kad vartotojas negali keisti susietos grupės narių"
+
+msgid "Remove the group link with the class"
+msgstr "Pašalinti grupės ryšį su klase"
+
+msgid "Linked class"
+msgstr "Susieta klasė"
+
+msgid "The group is no longer linked to the class"
+msgstr "Grupė nebėra susieta su klase"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Peržiūrėti studentus ir kursus, užsiregistravusius į klasę"
+
+msgid "Overview students subscribed to the class"
+msgstr "Peržiūrėti studentus, užsiregistravusius į klasę"
+
+msgid "Overview class"
+msgstr "Klasės apžvalga"
+
+msgid "Go back to the list of classes"
+msgstr "Grįžti į klasių sąrašą"
+
+msgid "Go back to course classes"
+msgstr "Grįžti į kurso klases"
+
+msgid "Users subscribed to the course"
+msgstr "Vartotojai, užsiregistravę į kursą"
+
+msgid "Users not subscribed to the course"
+msgstr "Vartotojai, neužsiregistravę į kursą"
+
+msgid "Users subscribed to the class"
+msgstr "Vartotojai, užsiregistravę į klasę"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursai, užsiregistravę į klasę"
+
+msgid "No user is subscribed to this class"
+msgstr "Jokia vartotojas nėra užsiregistravęs į šią klasę"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Joks vartotojas ir joks kursas nėra užsiregistravęs į šią klasę"
+
+msgid "No user are subscribed to this class"
+msgstr "Jokie vartotojai nėra užsiregistravę į šią klasę"
+
+msgid "No course are subscribed to this class"
+msgstr "Jokie kursai nėra užsiregistravę į šią klasę"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Ar tikrai norite pašalinti klasę"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Ar tikrai norite pašalinti klasę?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Ar tikrai norite pašalinti klasę nepašalinant vartotojų?"
+
+msgid "Remove the class without removing students"
+msgstr "Pašalinti klasę nepašalinant studentų"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Šis nustatymas dar nėra įdiegtas šioje versijoje."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Rekomenduojama tik administratoriui skirtoms įskiepiams, rodomiems administravimo srityje."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Rekomenduojama papildiniams, kurie turi būti rodomi kaip kurso įrankiai."
+
+msgid "Displayed above the main page content."
+msgstr "Rodoma virš pagrindinio puslapio turinio."
+
+msgid "Displayed below the main page content."
+msgstr "Rodoma žemiau pagrindinio puslapio turinio."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Rodoma netoli pagrindinio išdėstymo apvalkalo viršaus."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Rodoma netoli pagrindinio išdėstymo apvalkalo apačios."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Rekomenduojama globaliems plaukiojantiems ar nuolatiniams papildiniams, rodomiems prieš porastą."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Rodoma pasirinktoje papildinio srityje."
+
+msgid "Admin menu"
+msgstr "Administratoriaus meniu"
+
+msgid "Global regions"
+msgstr "Globalios sritys"
+
+msgid "No regions assigned"
+msgstr "Neprikurtos sritys"
+
+msgid "Plugin regions"
+msgstr "Papildinio sritys"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Pasirinkite, kur turėtų būti rodomas kiekvienas įdiegtas papildinys."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Patarimas: naudokite Ctrl/Cmd norėdami pasirinkti kelias sritis."
+
+msgid "No installed plugins were found."
+msgstr "Nerasta įdiegtų papildinių."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Pasirinkite vieną ar daugiau sričių šiam papildiniui esamoje prieigos URL."
+
+msgid "Available regions"
+msgstr "Galimos sritys"
+
+msgid "Selected paragraph"
+msgstr "Pasirinktas pastraipa"
+
+msgid "Destination folder"
+msgstr "Paskirties aplankas"
+
+msgid "Generate AI media"
+msgstr "Generuoti DI mediją"
+
+msgid "Save and insert"
+msgstr "Išsaugoti ir įterpti"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Išsaugojimas palaikomas tik tada, kai teikėjas grąžina base64 turinį. Jei gavote tik URL, išsaugojimas išjungtas, kad būtų išvengta atsisiuntimo naršyklėje."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Vaizdo įrašas sėkmingai sugeneruotas, bet išsaugojimas išjungtas, nes teikėjas grąžino URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Failas buvo išsaugotas, bet jo URL nepavyko išspręsti."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Generuoti Aiken testą iš temos arba iš vieno kurso dokumento."
+
+msgid "Test from topic"
+msgstr "Testas iš temos"
+
+msgid "Test from document"
+msgstr "Testas iš dokumento"
+
+msgid "Generate from topic"
+msgstr "Generuoti iš temos"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Naudoti temos užklausą, kad sugeneruotumėte naują Aiken klausimyną."
+
+msgid "Quiz title"
+msgstr "Testo pavadinimas"
+
+msgid "Generate from document"
+msgstr "Generuoti iš dokumento"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Pasirinkite vieną kurso dokumentą ir generuokite klausimus tik pagal jo turinį."
+
+msgid "Selected document"
+msgstr "Pasirinktas dokumentas"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentas pasirenkamas iš kurso dokumentų sąrašo."
+
+msgid "Choose document"
+msgstr "Pasirinkti dokumentą"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Neprivaloma. Naudojama tik kaip papildoma užuomina DI."
+
+msgid "Select a document"
+msgstr "Pasirinkite dokumentą"
+
+msgid "Welcome"
+msgstr "Sveiki"
+
+msgid "Welcome to Chamilo"
+msgstr "Sveiki atvykę į Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jei tai pirmas kartas naudojant Chamilo, įsitikinkite, kad patikrinote šoninį meniu, kad rastumėte kelią per daugybę jo funkcijų. Jei reikia pagalbos, rasite <a href=\"https://docs.chamilo.org\">mūsų oficialią dokumentaciją</a> standartinei dokumentacijai, o mūsų <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">internetinį forumą</a> idėjoms dalintis ir atsakymams iš kitų Chamilo naudotojų rasti."
 

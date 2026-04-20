@@ -31,11 +31,14 @@
       </div>
     </Transition>
 
-    <slot />
     <div
       id="legacy_content"
       ref="legacyContainer"
     />
+
+    <PluginRegion region="content_bottom" />
+    <PluginRegion region="pre_footer" />
+
     <ConfirmDialog />
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
 
@@ -71,7 +74,17 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
+import {
+  computed,
+  defineAsyncComponent,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  provide,
+  ref,
+  watch,
+  watchEffect,
+} from "vue"
 import { useRoute, useRouter } from "vue-router"
 import axios from "axios"
 import { capitalize, isEmpty } from "lodash"
@@ -93,8 +106,11 @@ import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
 import { useStore } from "vuex"
+import PluginRegion from "./components/layout/PluginRegion.vue"
+import { useCidReqStore } from "./store/cidReq"
 
 const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000
+const cidReqStore = useCidReqStore()
 const vuex = useStore()
 const forbiddenMsg = computed(() => vuex.state.ux?.forbiddenMessage)
 
@@ -162,10 +178,7 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  if (
-    (qp.has("lp_id") && "view" === qp.get("action")) ||
-    (qp.has("origin") && "learnpath" === qp.get("origin"))
-  ) {
+  if ((qp.has("lp_id") && "view" === qp.get("action")) || (qp.has("origin") && "learnpath" === qp.get("origin"))) {
     return EmptyLayout
   }
 
@@ -264,6 +277,36 @@ onMounted(async () => {
   const { loader } = useMediaElementLoader()
   loader()
 
+  Object.defineProperty(window, "chamiloCidReq", {
+    get: () => {
+      const course = cidReqStore.course ? Object.freeze({ ...cidReqStore.course }) : null
+      const session = cidReqStore.session ? Object.freeze({ ...cidReqStore.session }) : null
+      const group = cidReqStore.group ? Object.freeze({ ...cidReqStore.group }) : null
+
+      const params = new URLSearchParams()
+
+      if (course?.id) {
+        params.set("cid", course.id)
+      }
+
+      if (session?.id) {
+        params.set("sid", session.id)
+      }
+
+      if (group?.id) {
+        params.set("gid", group.id)
+      }
+
+      return Object.freeze({
+        course,
+        session,
+        group,
+        queryParams: params.toString(),
+      })
+    },
+    configurable: true,
+  })
+
   await securityStore.checkSession()
 
   if ("serviceWorker" in navigator) {
@@ -337,5 +380,7 @@ onBeforeUnmount(() => {
     window.clearTimeout(forbiddenBannerTimer)
     forbiddenBannerTimer = null
   }
+
+  delete window.chamiloCidReq
 })
 </script>

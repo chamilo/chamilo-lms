@@ -1,12 +1,5 @@
 <template>
-  <SectionHeader :title="t('Assignment')">
-    <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Assignment')" />
 
   <div>
     <div
@@ -22,95 +15,106 @@
     >
       <div class="flex items-center flex-wrap gap-2">
         <!-- Back -->
-        <BaseIcon
+        <BaseButton
           v-if="!fromLearnpath"
+          :label="t('Back')"
           icon="back"
-          size="big"
+          only-icon
+          size="small"
+          type="black"
           @click="goBack"
         />
 
-        <template v-if="forceStudentView && !isAfterEndDate">
-          <div class="ml-auto flex gap-2">
+        <template v-if="forceStudentView && !isAfterEndDate && canSubmitMore">
+          <BaseButton
+            v-if="allowTextFlag && !allowFileFlag"
+            icon="edit"
+            :label="t('Write my submission')"
+            type="primary"
+            @click="goToSubmit({ text: true })"
+          />
+          <BaseButton
+            v-else-if="allowFileFlag && !allowTextFlag"
+            icon="upload"
+            :label="t('Upload file')"
+            type="primary"
+            @click="goToSubmit({ file: true })"
+          />
+          <template v-else>
             <BaseButton
-              v-if="allowTextFlag && !allowFileFlag"
+              v-if="allowTextFlag"
               icon="edit"
               :label="t('Write my submission')"
               type="primary"
               @click="goToSubmit({ text: true })"
             />
             <BaseButton
-              v-else-if="allowFileFlag && !allowTextFlag"
+              v-if="allowFileFlag"
               icon="upload"
               :label="t('Upload file')"
               type="primary"
               @click="goToSubmit({ file: true })"
             />
-            <template v-else>
-              <BaseButton
-                v-if="allowTextFlag"
-                icon="edit"
-                :label="t('Write my submission')"
-                type="primary"
-                @click="goToSubmit({ text: true })"
-              />
-              <BaseButton
-                v-if="allowFileFlag"
-                icon="upload"
-                :label="t('Upload file')"
-                type="primary"
-                @click="goToSubmit({ file: true })"
-              />
-            </template>
-          </div>
+          </template>
         </template>
 
         <template v-else-if="isTeacherUI">
-          <BaseIcon
+          <BaseButton
+            :label="t('Add document')"
             icon="file-add"
-            size="big"
-            :title="t('Add document')"
+            only-icon
+            size="small"
+            type="success"
             @click="addDocument"
           />
-          <BaseIcon
+          <BaseButton
+            :label="t('Assign users')"
             icon="user-add"
-            size="big"
-            :title="t('Add users')"
+            only-icon
+            size="small"
+            type="success"
             @click="addUsers"
           />
-          <BaseIcon
+          <BaseButton
+            :label="t('Export to PDF')"
             icon="file-pdf"
-            size="big"
-            :title="t('Export to PDF')"
+            only-icon
+            size="small"
+            type="black"
             @click="exportPdf"
           />
-          <BaseIcon
+          <BaseButton
+            :label="t('Edit assignment')"
             icon="edit"
-            size="big"
-            :title="t('Edit assignment')"
+            only-icon
+            size="small"
+            type="black"
             @click="editAssignment"
           />
-          <BaseIcon
+          <BaseButton
+            :label="t('Users without submission')"
             icon="list"
-            size="big"
-            :title="t('Users without submission')"
+            only-icon
+            size="small"
+            type="black"
             @click="showUnsubmittedUsers"
           />
           <BaseButton
-            icon="zip-pack"
             :label="t('Download assignments package')"
+            icon="zip-pack"
             type="primary"
             @click="downloadAssignments"
           />
           <BaseButton
-            icon="zip-unpack"
             :label="t('Upload corrections package')"
-            type="success"
             :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
+            icon="zip-unpack"
+            type="success"
             @click="uploadCorrections"
           />
           <BaseButton
-            icon="delete"
             :label="t('Delete all corrections')"
+            icon="delete"
             type="danger"
             @click="deleteAllCorrections"
           />
@@ -160,6 +164,7 @@
           :assignment-id="assignmentId"
           :is-after-deadline="isAfterEndDate"
           :flags="{ allowText: allowTextFlag, allowFile: allowFileFlag }"
+          @update:submission-count="studentSubmissionCount = $event"
         />
         <TeacherSubmissionList
           v-else
@@ -184,10 +189,8 @@ import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useNotification } from "../../composables/notification"
 
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 
@@ -210,11 +213,15 @@ const isTeacherUI = computed(
 
 const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
 
-function onStudentViewChange() {}
-
 const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
+const studentSubmissionCount = ref(0)
+
+const oneSubmissionPerUser = computed(
+  () => platformConfigStore.getSetting("work.allow_only_one_student_publication_per_user") === "true",
+)
+const canSubmitMore = computed(() => !oneSubmissionPerUser.value || studentSubmissionCount.value === 0)
 
 function buildCidParams() {
   return {

@@ -2,6 +2,8 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\PluginBundle\Form\FrmEdit;
+use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -13,14 +15,32 @@ $em = Database::getManager();
 $toolsRepo = $em->getRepository(ExternalTool::class);
 
 /** @var ExternalTool|null $baseTool */
-$baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
+$baseTool = isset($_REQUEST['type']) ? $toolsRepo->find((int) $_REQUEST['type']) : null;
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'add';
 
 $course = api_get_course_entity(api_get_course_int_id());
-$addedTools = $toolsRepo->findBy(['course' => $course]);
-$globalTools = $toolsRepo->findBy(['parent' => null, 'course' => null]);
 
-if ($baseTool && !$baseTool->isGlobal()) {
+/** @var ExternalTool[] $allTools */
+$allTools = $toolsRepo->findAll();
+
+$addedTools = array_values(array_filter(
+    $allTools,
+    fn (ExternalTool $tool): bool => null !== $plugin->findCourseToolByLink($course, $tool)
+        || null !== $tool->getFirstResourceLinkFromCourseSession($course)
+));
+
+$addedToolIds = array_map(
+    static fn (ExternalTool $tool): int => $tool->getId(),
+    $addedTools
+);
+
+$globalTools = array_values(array_filter(
+    $allTools,
+    fn (ExternalTool $tool): bool => null === $tool->getFirstResourceLink()
+        && !in_array($tool->getId(), $addedToolIds, true)
+));
+
+if ($baseTool && null !== $baseTool->getFirstResourceLink()) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
     );
@@ -33,7 +53,7 @@ $categories = Category::load(null, null, $course->getCode());
 
 switch ($action) {
     case 'add':
-        $form = new \Chamilo\PluginBundle\ImsLti\Form\FrmAdd('ims_lti_add_tool', [], $baseTool);
+        $form = new FrmAdd('ims_lti_add_tool', [], $baseTool);
         $form->build();
 
         if ($baseTool) {
@@ -51,7 +71,7 @@ switch ($action) {
             }
 
             $tool
-                ->setName($formValues['name'])
+                ->setTitle($formValues['name'])
                 ->setDescription(
                     empty($formValues['description']) ? null : $formValues['description']
                 )
@@ -59,7 +79,6 @@ switch ($action) {
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
                 ->setDocumenTarget($formValues['document_target'])
-                ->setCourse($course)
                 ->setPrivacy(
                     !empty($formValues['share_name']),
                     !empty($formValues['share_email']),
@@ -86,8 +105,9 @@ switch ($action) {
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
-                        ->setJwksUrl($formValues['jwks_url'])
-                        ->publicKey = $formValues['public_key'];
+                        ->setJwksUrl($formValues['jwks_url']);
+
+                    $tool->publicKey = $formValues['public_key'];
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
                     if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
                         try {
@@ -111,13 +131,10 @@ switch ($action) {
                 }
             }
 
-            if (null === $baseTool ||
-                ($baseTool && !$baseTool->isActiveDeepLinking())
-            ) {
-                $tool
-                    ->setActiveDeepLinking(
-                        !empty($formValues['deep_linking'])
-                    );
+            if (null === $baseTool || ($baseTool && !$baseTool->isActiveDeepLinking())) {
+                $tool->setActiveDeepLinking(
+                    !empty($formValues['deep_linking'])
+                );
             }
 
             $em->persist($tool);
@@ -132,7 +149,7 @@ switch ($action) {
                         $course->getId()
                     );
                     $lineItemResource->createLineItem(
-                        ['label' => $tool->getName(), 'scoreMaximum' => 100]
+                        ['label' => $tool->getTitle(), 'scoreMaximum' => 100]
                     );
 
                     Display::addFlash(
@@ -163,9 +180,13 @@ switch ($action) {
             $tool = $em->find(ExternalTool::class, (int) $_REQUEST['id']);
         }
 
-        if (empty($tool) ||
-            !ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)
-        ) {
+        $toolBelongsToCourse = $tool
+            && (
+                null !== $plugin->findCourseToolByLink($course, $tool)
+                || null !== $tool->getFirstResourceLinkFromCourseSession($course)
+            );
+
+        if (empty($tool) || !$toolBelongsToCourse) {
             api_not_allowed(
                 true,
                 Display::return_message($plugin->get_lang('ToolNotAvailable'), 'error')
@@ -174,14 +195,14 @@ switch ($action) {
             break;
         }
 
-        $form = new \Chamilo\PluginBundle\Form\FrmEdit('ims_lti_edit_tool', [], $tool);
+        $form = new FrmEdit('ims_lti_edit_tool', [], $tool);
         $form->build(false);
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
 
             $tool
-                ->setName($formValues['name'])
+                ->setTitle($formValues['name'])
                 ->setDescription(
                     empty($formValues['description']) ? null : $formValues['description']
                 )
@@ -214,8 +235,9 @@ switch ($action) {
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
-                        ->setJwksUrl($formValues['jwks_url'])
-                        ->publicKey = $formValues['public_key'];
+                        ->setJwksUrl($formValues['jwks_url']);
+
+                    $tool->publicKey = $formValues['public_key'];
                 } elseif ($tool->getVersion() === ImsLti::V_1P1) {
                     $tool
                         ->setLaunchUrl($formValues['launch_url'])

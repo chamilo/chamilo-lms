@@ -1168,8 +1168,12 @@ class UserManager
             ->setExpirationDate($expiration_date)
             ->setActive($active)
             ->setHrDeptId((int) $hr_dept_id)
-            ->removeAuthSources()
         ;
+
+        // Remove auth sources only for the current URL, preserving records for other URLs.
+        foreach ($user->getAuthSourcesByUrl($accessUrl) as $existingSource) {
+            $user->removeAuthSource($existingSource);
+        }
 
         foreach ($auth_sources as $authSource) {
             $user->addAuthSourceByAuthentication($authSource, $accessUrl);
@@ -1205,13 +1209,6 @@ class UserManager
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $email_admin = api_get_setting('emailAdministrator');
             $url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
@@ -1260,8 +1257,8 @@ class UserManager
                 $email,
                 $emailsubject,
                 $emailBody,
-                $sender_name,
-                $email_admin,
+                '',
+                '',
                 [],
                 [],
                 false,
@@ -2208,7 +2205,7 @@ class UserManager
         ];
         $column = (int) $column;
         $sort_direction = '';
-        if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+        if ($direction && in_array(strtoupper($direction), ['ASC', 'DESC'])) {
             $sort_direction = strtoupper($direction);
         }
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
@@ -3519,7 +3516,7 @@ class UserManager
             return false;
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $md5 = md5((time() + ($user_id * 5)) - rand(10000, 10000)); //generate some kind of random key
+        $md5 = bin2hex(random_bytes(32));
         $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
         $res = Database::query($sql);
         if (false === $res) {
@@ -4509,7 +4506,12 @@ class UserManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND (
+            u.last_login IS NULL OR
+            u.last_login = '0000-00-00 00:00:00' OR
+            u.last_login = '0000-00-00' OR
+            u.last_login <= '$lastConnectionDate'
+        ) ";
         }
 
         $sessionConditionsCoach = null;
@@ -4549,12 +4551,6 @@ class UserManager
 					";
                 }
 
-                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
-                /*
-                INNER JOIN $tbl_session_rel_user sru
-                ON (sru.user_id = u.id)
-                INNER JOIN $tbl_session_rel_course_rel_user scu
-                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -4643,7 +4639,6 @@ class UserManager
             }
 
             if (!empty($column) && !empty($direction)) {
-                // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
                 $orderBy = " ORDER BY `$column` $direction ";
             }
@@ -5065,20 +5060,27 @@ class UserManager
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * Updates all users whose locale matches $fromIsocode to $toIsocode.
+     * Both parameters must be language isocodes (e.g. 'fr', 'en') as stored in user.locale.
+     *
+     * @param string $fromIsocode isocode of the language being disabled
+     * @param string $toIsocode   isocode of the fallback language
      */
-    public static function update_all_user_languages($from, $to)
+    public static function update_all_user_languages(string $fromIsocode, string $toIsocode): void
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $from = Database::escape_string($from);
-        $to = Database::escape_string($to);
-
-        if (!empty($to) && !empty($from)) {
-            $sql = "UPDATE $table_user SET language = '$to'
-                    WHERE language = '$from'";
-            Database::query($sql);
+        if (empty($fromIsocode) || empty($toIsocode) || $fromIsocode === $toIsocode) {
+            return;
         }
+
+        Database::getManager()
+            ->createQuery(
+                'UPDATE '.User::class.' u
+                 SET u.locale = :to
+                 WHERE u.locale = :from'
+            )
+            ->setParameter('from', $fromIsocode)
+            ->setParameter('to', $toIsocode)
+            ->execute();
     }
 
     /**
@@ -5496,11 +5498,18 @@ SQL;
                     'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
                     'content' => get_lang('Groups'),
                 ],
-                [
+                'classes' => [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
                 ],
             ];
+
+            if ('true' === api_get_setting('session.session_classes_tab_disable')
+                && !api_is_platform_admin()
+                && api_get_session_id()
+            ) {
+                unset($headers['classes']);
+            }
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
@@ -5700,149 +5709,11 @@ SQL;
     }
 
     /**
-     * Anonymize a user. Replace personal info by anonymous info.
-     *
-     * @param int  $userId   User id
-     * @param bool $deleteIP Whether to replace the IP address in logs tables by 127.0.0.1 or to leave as is
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     * @assert (0) === false
-     */
-    public static function anonymize($userId, $deleteIP = true)
-    {
-        global $debug;
-
-        $userId = (int) $userId;
-
-        if (empty($userId)) {
-            return false;
-        }
-
-        $em = Database::getManager();
-        $user = api_get_user_entity($userId);
-        $uniqueId = uniqid('anon', true);
-        $user
-            ->setFirstname($uniqueId)
-            ->setLastname($uniqueId)
-            ->setBiography('')
-            ->setAddress('')
-            //->setCurriculumItems(null)
-            ->setDateOfBirth(null)
-            ->setCompetences('')
-            ->setDiplomas('')
-            ->setOpenarea('')
-            ->setTeach('')
-            ->setProductions(null)
-            ->setOpenid('')
-            ->setEmailCanonical($uniqueId.'@example.com')
-            ->setEmail($uniqueId.'@example.com')
-            ->setUsername($uniqueId)
-            ->setUsernameCanonical($uniqueId)
-            ->setPhone('')
-            ->setOfficialCode('')
-        ;
-
-        self::deleteUserPicture($userId);
-        self::cleanUserRequestsOfRemoval($userId);
-
-        // The IP address is a border-case personal data, as it does
-        // not directly allow for personal identification (it is not
-        // a completely safe value in most countries - the IP could
-        // be used by neighbours and crackers)
-        if ($deleteIP) {
-            $substitute = '127.0.0.1';
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE access_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE exe_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
-            $sql = "UPDATE $table set ip_address = '$substitute' WHERE sys_insert_user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-
-            $table = Database::get_course_table(TABLE_WIKI);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE user_id = $userId";
-            $res = Database::query($sql);
-            if (false === $res && $debug > 0) {
-                error_log("Could not anonymize IP address for user $userId ($sql)");
-            }
-        }
-
-        $extraFieldRepository = $em->getRepository(EntityExtraField::class);
-        $autoRemoveFields = $extraFieldRepository->findBy([
-            'autoRemove' => 1,
-            'itemType' => EntityExtraField::USER_FIELD_TYPE
-        ]);
-
-        foreach ($autoRemoveFields as $field) {
-            $extraFieldValueRepository = $em->getRepository(EntityExtraFieldValues::class);
-            $extraFieldValue = $extraFieldValueRepository->findOneBy([
-                'field' => $field,
-                'itemId' => $userId
-            ]);
-
-            if ($extraFieldValue) {
-                $em->remove($extraFieldValue);
-            }
-        }
-
-        $em->persist($user);
-        $em->flush();
-        Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
-
-        return true;
-    }
-
-    /**
      * @param int $userId
      *
      * @throws Exception
-     *
-     * @return string
      */
-    public static function anonymizeUserWithVerification($userId)
+    public static function anonymizeUserWithVerification($userId): string
     {
         $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
 
@@ -5850,28 +5721,28 @@ SQL;
         if (api_is_platform_admin() ||
             ($allowDelete && api_is_session_admin())
         ) {
-            $userToUpdateInfo = api_get_user_info($userId);
+            $userEntity = api_get_user_entity($userId);
             $currentUserId = api_get_user_id();
 
-            if ($userToUpdateInfo &&
+            if ($userEntity &&
                 api_global_admin_can_edit_admin($userId, null, $allowDelete)
             ) {
                 if ($userId != $currentUserId &&
-                    self::anonymize($userId)
+                    Container::getUserAnonymizationHelper()->anonymize($userEntity)
                 ) {
                     $message = Display::return_message(
-                        sprintf(get_lang("User %s's information anonymized."), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("User %s's information anonymized."), $userEntity->getFullNameWithUsername()),
                         'confirmation'
                     );
                 } else {
                     $message = Display::return_message(
-                        sprintf(get_lang("We could not anonymize user %s's information. Please try again or check the logs."), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("We could not anonymize user %s's information. Please try again or check the logs."), $userEntity->getFullNameWithUsername()),
                         'error'
                     );
                 }
             } else {
                 $message = Display::return_message(
-                    sprintf(get_lang('You don\'t have permissions to anonymize user %s. You need the same permissions as to delete users.'), $userToUpdateInfo['complete_name_with_username']),
+                    sprintf(get_lang('You don\'t have permissions to anonymize user %s. You need the same permissions as to delete users.'), $userEntity->getFullNameWithUsername()),
                     'error'
                 );
             }
@@ -6509,4 +6380,126 @@ SQL;
         }
     }
 
+    public static function getAllowedUserStatusesForUserForm(): array
+    {
+        $userStatusConfig = [];
+
+        if ('true' === api_get_setting('platform.user_status_show_options_enabled')) {
+            $userStatusConfig = self::normalizeUserStatusSetting(
+                api_get_setting('platform.user_status_show_option')
+            );
+        }
+
+        if (
+            'true' === api_get_setting('admin.user_status_option_only_for_admin_enabled') &&
+            api_is_platform_admin()
+        ) {
+            $adminOnlyConfig = self::normalizeUserStatusSetting(
+                api_get_setting('admin.user_status_option_show_only_for_admin')
+            );
+
+            if (!empty($adminOnlyConfig)) {
+                $userStatusConfig = $adminOnlyConfig;
+            }
+        }
+
+        $statusList = [];
+
+        if (!empty($userStatusConfig)) {
+            foreach ($userStatusConfig as $role => $enabled) {
+                if (!$enabled) {
+                    continue;
+                }
+
+                if (!defined($role)) {
+                    continue;
+                }
+
+                $statusList[] = constant($role);
+            }
+        } else {
+            $statusList = [
+                COURSEMANAGER,
+                STUDENT,
+                DRH,
+                SESSIONADMIN,
+                STUDENT_BOSS,
+                INVITEE,
+            ];
+        }
+
+        return array_values(array_unique(array_map('intval', $statusList)));
+    }
+
+    public static function getAllowedRoleOptionsForUserForm(): array
+    {
+        $roleOptions = api_get_roles();
+        $allowedStatuses = self::getAllowedUserStatusesForUserForm();
+        $knownStatuses = [
+            COURSEMANAGER,
+            STUDENT,
+            DRH,
+            SESSIONADMIN,
+            STUDENT_BOSS,
+            INVITEE,
+        ];
+
+        $filtered = [];
+
+        foreach ($roleOptions as $roleCode => $label) {
+            $normalizedRole = api_normalize_role_code((string) $roleCode);
+            $mappedStatus = (int) api_status_from_roles([$normalizedRole]);
+
+            if (in_array($mappedStatus, $knownStatuses, true)) {
+                if (in_array($mappedStatus, $allowedStatuses, true)) {
+                    $filtered[$roleCode] = $label;
+                }
+
+                continue;
+            }
+
+            $filtered[$roleCode] = $label;
+        }
+
+        return $filtered;
+    }
+
+    public static function areRolesAllowedInUserForm(array $roles): bool
+    {
+        $allowedRoles = array_keys(self::getAllowedRoleOptionsForUserForm());
+        $allowedRoles = array_map('api_normalize_role_code', $allowedRoles);
+
+        foreach ($roles as $role) {
+            $normalizedRole = api_normalize_role_code((string) $role);
+
+            if (!in_array($normalizedRole, $allowedRoles, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static function normalizeUserStatusSetting($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (!is_string($value) || '' === trim($value)) {
+            return [];
+        }
+
+        $decoded = json_decode($value, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        $unserialized = @unserialize($value);
+        if (is_array($unserialized)) {
+            return $unserialized;
+        }
+
+        return [];
+    }
 }

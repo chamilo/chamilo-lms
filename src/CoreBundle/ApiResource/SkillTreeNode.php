@@ -44,4 +44,7 @@ class SkillTreeNode
 
     #[Groups(['skill:tree:read'])]
     public bool $isAchievedByUser = false;
+
+    #[Groups(['skill:tree:read'])]
+    public ?string $description = null;
 }

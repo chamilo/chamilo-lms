@@ -55,7 +55,7 @@ if ($form->validate()) {
     // Normalize numeric inputs
     $weight = isset($values['weight_mask']) && $values['weight_mask'] !== '' ? (float) $values['weight_mask'] : 0.0;
     $max = isset($values['max']) && $values['max'] !== '' ? (float) $values['max'] : 0.0;
-    $visible = empty($values['visible']) ? 0 : 1;
+    $visible = 1;
 
     // Min score can be empty => store NULL
     $minScore = null;

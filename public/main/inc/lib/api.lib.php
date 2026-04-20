@@ -727,12 +727,32 @@ function api_get_path($path = '', $configuration = [])
     $root_sys = Container::getProjectDir();
     $root_web = '';
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate(
+        $router = Container::$container->get('router');
+        $root_web = $router->generate(
             'index',
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+	// Sometimes the protocol is not ready soon enough.
+	// This can lead to inconsistencies in protocol in setups behing a reverse proxy.
+	// Double check the protocol, but only if it's not 'https://' already
+        if (str_starts_with($root_web, 'http://')) {
+            $requestStack = Container::$container->get('request_stack');
+            $request = $requestStack->getCurrentRequest();
+	    $isSecure = false;
+            if ($request) {
+                if ($request->getScheme() === 'https') {
+                    $isSecure = true;
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+                    $isSecure = true;
+                }
+            }
+            if ($isSecure) {
+                $root_web = preg_replace('/^http:/i', 'https:', $root_web);
+            }
+        }
     }
+
 
     /*if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -2203,9 +2223,10 @@ function api_get_session_entity($id = 0): ?SessionEntity
 }
 
 /**
- * @param int $id
+ * @param ?int $id
+ * @return CGroup|null
  */
-function api_get_group_entity($id = 0): ?CGroup
+function api_get_group_entity(?int $id = null): ?CGroup
 {
     if (empty($id)) {
         $id = api_get_group_id();
@@ -2776,10 +2797,10 @@ function api_get_setting($variable, $isArray = false, $key = null)
                         return ($key !== null && array_key_exists($key, $parts)) ? $parts[$key] : $parts;
                     }
 
-                    // strings starting with "array(" (old PHP config style)
+                    // strings starting with "array(" (old PHP config style) — parse safely without eval()
                     $trim = ltrim($settingValue);
                     if (str_starts_with($trim, 'array(')) {
-                        $legacy = @eval('return ' . $trim . ';');
+                        $legacy = api_parse_legacy_php_array($trim);
                         if (is_array($legacy)) {
                             return ($key !== null && array_key_exists($key, $legacy)) ? $legacy[$key] : $legacy;
                         }
@@ -2796,6 +2817,102 @@ function api_get_setting($variable, $isArray = false, $key = null)
             return $settingValue;
         }
     }
+}
+
+/**
+ * Safely parses a legacy PHP array literal (e.g. "array('key' => 'val')") stored in the
+ * database without using eval(). Uses token_get_all() which tokenises without executing.
+ * Only supports scalar values (string, int, float, bool, null) as keys and values.
+ */
+function api_parse_legacy_php_array(string $code): ?array
+{
+    $tokens = token_get_all('<?php '.$code.';');
+    // Strip T_OPEN_TAG
+    array_shift($tokens);
+
+    $result = [];
+    $state = 'expect_array'; // states: expect_array, expect_open, expect_key_or_value, expect_arrow, expect_value, expect_comma
+    $pendingKey = null;
+    $depth = 0;
+
+    $readScalar = static function ($token): mixed {
+        if (!is_array($token)) {
+            return null;
+        }
+        return match ($token[0]) {
+            T_LNUMBER => (int) $token[1],
+            T_DNUMBER => (float) $token[1],
+            T_CONSTANT_ENCAPSED_STRING => substr($token[1], 1, -1), // strip quotes
+            T_STRING => match (strtolower($token[1])) {
+                'true' => true,
+                'false' => false,
+                'null' => null,
+                default => null,
+            },
+            default => null,
+        };
+    };
+
+    foreach ($tokens as $token) {
+        // Skip whitespace and comments
+        if (is_array($token) && in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+            continue;
+        }
+
+        $tok = is_array($token) ? $token[0] : $token;
+        $val = is_array($token) ? $token[1] : $token;
+
+        switch ($state) {
+            case 'expect_array':
+                if (T_ARRAY === $tok || (T_STRING === $tok && 'array' === strtolower((string) $val))) {
+                    $state = 'expect_open';
+                }
+                break;
+            case 'expect_open':
+                if ('(' === $val) {
+                    $depth++;
+                    $state = 'expect_key_or_value';
+                }
+                break;
+            case 'expect_key_or_value':
+                if (')' === $val) {
+                    return $result; // empty array or trailing comma
+                }
+                $scalar = $readScalar($token);
+                if (null !== $scalar || (is_array($token) && T_STRING === $token[0])) {
+                    $pendingKey = $scalar;
+                    $state = 'expect_arrow';
+                }
+                break;
+            case 'expect_arrow':
+                if (T_DOUBLE_ARROW === $tok) {
+                    $state = 'expect_value';
+                } elseif (',' === $val || ')' === $val) {
+                    // No arrow — positional value
+                    $result[] = $pendingKey;
+                    $pendingKey = null;
+                    $state = ')' === $val ? 'done' : 'expect_key_or_value';
+                }
+                break;
+            case 'expect_value':
+                $scalar = $readScalar($token);
+                $result[$pendingKey] = $scalar;
+                $pendingKey = null;
+                $state = 'expect_comma';
+                break;
+            case 'expect_comma':
+                if (',' === $val) {
+                    $state = 'expect_key_or_value';
+                } elseif (')' === $val) {
+                    return $result;
+                }
+                break;
+            case 'done':
+                return $result;
+        }
+    }
+
+    return empty($result) ? null : $result;
 }
 
 /**
@@ -3484,7 +3601,6 @@ function api_detect_feature_context(): string
     $script = basename($script);
 
     $map = [
-        'user_list.php' => 'user',
         'user_add.php' => 'user',
         'user_edit.php' => 'user',
         'session_list.php' => 'session',
@@ -3802,7 +3918,7 @@ function api_get_languages_with_platform_default(): array
     $sql = "SELECT isocode, original_name
             FROM $langTable
             WHERE available = '1'
-            ORDER BY english_name ASC";
+            ORDER BY original_name ASC";
     $res = Database::query($sql);
 
     $languages = [];
@@ -5644,12 +5760,18 @@ function api_global_admin_can_edit_admin(
         return true;
     }
 
-    // If i'm a simple admin
+    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
+    if (!$is_platform_admin) {
+        $userEntity = api_get_user_entity($userId);
+        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
+            $is_platform_admin = true;
+        }
+    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
-        $is_platform_admin = $user->isSessionAdmin();
+        $is_platform_admin = $user !== null && $user->isSessionAdmin();
     }
 
     if ($is_platform_admin) {
@@ -7385,7 +7507,7 @@ function api_is_student_view_active(): bool
  */
 function api_float_val($number)
 {
-    return (float) str_replace(',', '.', trim($number));
+    return (float) str_replace(',', '.', trim((string) $number));
 }
 
 /**

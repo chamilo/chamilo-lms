@@ -232,7 +232,7 @@
       />
       <Button
         :label="t('Apply advanced filters')"
-        icon="pi pi-filter"
+        icon="mdi mdi-filter"
         type="submit"
       />
     </div>

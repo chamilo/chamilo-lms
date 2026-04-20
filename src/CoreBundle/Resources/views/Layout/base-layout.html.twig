@@ -19,8 +19,10 @@
 <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
 {%- block chamilo_wrap -%}
     <div class="page-marker {{ page_type_classes|join(' ') }}" aria-hidden="true"></div>
+
     {%- block page_content %}
     {% endblock %}
+
 {% endblock -%}
 
 {%- block chamilo_footer -%}

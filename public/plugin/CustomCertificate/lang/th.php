@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'ใบรับรองแบบกำหนดเอง';
+$strings['plugin_comment'] = 'ส่วนเสริมนี้ช่วยให้คุณสร้างใบรับรองแบบกำหนดเองสำหรับแต่ละหลักสูตร';
+$strings['enable_plugin_customcertificate'] = 'เปิดใช้งานส่วนเสริม';
+$strings['customcertificate_course_enable'] = 'เปิดใช้งานใบรับรองแบบกำหนดเองในหลักสูตร';
+$strings['use_certificate_default'] = 'ใช้ใบรับรองแบบกำหนดเองเริ่มต้น';
+$strings['ToolDisabled'] = 'เครื่องมือถูกปิดใช้งานจากส่วนบริหาร';
+$strings['OnlyAdminPlatform'] = 'เครื่องมือสำหรับผู้ดูแลระบบเท่านั้น';
+$strings['OnlyAdminPlatformOrTeacher'] = 'เครื่องมือสำหรับผู้ดูแลระบบและครูเท่านั้น';
+$strings['TrainingEntity'] = 'หน่วยงานฝึกอบรม';
+$strings['DescriptionFront'] = 'คำอธิบายด้านหน้า';
+$strings['DescriptionRear'] = 'คำอธิบายด้านหลัง';
+$strings['Certify'] = 'รับรอง';
+$strings['CertificateType'] = 'ประเภทใบรับรอง';
+$strings['CertifyThat'] = 'รับรองว่า';
+$strings['StudentCourseInfo'] = 'ข้อมูลนักเรียนและหลักสูตร';
+$strings['StudentData'] = 'ข้อมูลนักเรียน';
+$strings['CourseData'] = 'ข้อมูลหลักสูตร';
+$strings['Modality'] = 'รูปแบบ';
+$strings['Contents'] = 'เนื้อหา';
+$strings['ContentsToShow'] = 'เนื้อหาที่จะแสดง';
+$strings['ContentsCourseDescription'] = 'ใช้ส่วน "คำอธิบายหลักสูตร" > "เนื้อหา"';
+$strings['ContentsIndexLearnpath'] = 'ใช้ดัชนีเส้นทางการเรียนรู้';
+$strings['ContentsCustom'] = 'ใช้เนื้อหาแบบกำหนดเอง';
+$strings['ContentsHide'] = 'ไม่แสดงเนื้อหา';
+$strings['Dates'] = 'วันที่';
+$strings['CourseDeliveryDates'] = 'วันที่จัดส่งหลักสูตร';
+$strings['Custom'] = 'กำหนดเอง';
+$strings['UseDateSessionAccess'] = 'ใช้วันที่เข้าถึงเซสชัน';
+$strings['ExpectionPlace'] = 'สถานที่ออกใบรับรอง';
+$strings['DateExpediction'] = 'วันที่ออกใบรับรอง';
+$strings['UseDateEndAccessSession'] = 'ใช้ค่าวันที่สิ้นสุดการเข้าถึงเซสชัน';
+$strings['UseDateDownloadCertificate'] = 'ใช้ค่าวันที่ดาวน์โหลดใบรับรอง';
+$strings['UseDateGenerationCertificate'] = 'ใช้ค่าวันที่สร้างใบรับรอง';
+$strings['UseCustomDate'] = 'ใช้ค่าวันที่กำหนดเอง';
+$strings['LogosSeal'] = 'โลโก้ / ตราประทับ';
+$strings['LogoLeft'] = 'โลโก้ซ้าย';
+$strings['LogoCenter'] = 'โลโก้กลาง';
+$strings['LogoRight'] = 'โลโก้ขวา';
+$strings['Seal'] = 'ตราประทับ';
+$strings['Signature1'] = 'ลายเซ็น 1';
+$strings['Signature2'] = 'ลายเซ็น 2';
+$strings['Signature3'] = 'ลายเซ็น 3';
+$strings['Signature4'] = 'ลายเซ็น 4';
+$strings['SignatureText1'] = 'ข้อความลายเซ็น 1';
+$strings['SignatureText2'] = 'ข้อความลายเซ็น 2';
+$strings['SignatureText3'] = 'ข้อความลายเซ็น 3';
+$strings['SignatureText4'] = 'ข้อความลายเซ็น 4';
+$strings['OtherOptions'] = 'ตัวเลือกอื่นๆ';
+$strings['MarginRight'] = 'ขอบขวา';
+$strings['MarginLeft'] = 'ขอบซ้าย';
+$strings['SetDefaultTemplate'] = 'ตั้งค่าเทมเพลตเป็นค่าเริ่มต้น';
+$strings['MessageDefaultTemplate'] = 'บันทึกการปรับแต่งเริ่มต้นนี้สำหรับคอร์สและเซสชันที่ไม่มี
+     ใบรับรองที่กำหนดไว้';
+$strings['None'] = 'ไม่มี';
+$strings['ErrorTemplateCertificate'] = 'ไม่มีเทมเพลตที่กำหนดไว้สำหรับใบรับรอง
+     ไม่มีเทมเพลตเริ่มต้น';
+$strings['DateStartEnd'] = 'พร้อมวันที่เริ่มต้นและวันที่สิ้นสุด: ';
+$strings['ExpedictionIn'] = 'ออกให้ใน';
+$strings['Signatures'] = 'ลายเซ็น';
+$strings['BackgroundCertificate'] = 'ภาพพื้นหลังของใบรับรอง';
+$strings['Background'] = 'พื้นหลัง';
+$strings['CertificateSetting'] = 'การตั้งค่าใบรับรอง';
+$strings['ToolDisabledCourse'] = 'เครื่องมือถูกปิดใช้งานในตั้งค่าคอร์ส';
+$strings['ToolUseDefaultSettingCourse'] = 'เครื่องมือถูกตั้งค่าให้ใช้ใบรับรองเริ่มต้น <br>
+     คุณสามารถแก้ไขได้จากหน้าจอการดูแลระบบ -> ปลั๊กอิน -> ใบรับรองกำหนดเอง <br>
+     หรือหากคุณต้องการ คุณสามารถปิดตัวเลือกการใช้ใบรับรองเริ่มต้นในโครงสร้างปลั๊กอินของคอร์ส';
+$strings['CertificateSettingDefault'] = 'การตั้งค่าใบรับรองเริ่มต้น';
+$strings['InfoFromDefaultCertificate'] = 'เนื้อหาของใบรับรองขึ้นอยู่กับใบรับรองเริ่มต้น
+     การเปลี่ยนแปลงที่คุณทำจะไม่ส่งผลต่อใบรับรองเริ่มต้น';
+$strings['to'] = ' ถึง ';
+$strings['formatDownloadDate'] = ' ถึง %s%s %s, %s';
+$strings['PrintCertificate'] = 'พิมพ์ใบรับรอง';
+$strings['QuestionDelete'] = 'คุณต้องการลบประกาศนียบัตรเฉพาะและใช้ใบรับรองเริ่มต้นหรือไม่?';
+$strings['SuccessDelete'] = 'ลบสำเร็จ';
+$strings['ProblemDelete'] = 'เกิดปัญหาในการลบใบรับรอง';
+$strings['OnlyCustomCertificates'] = 'ส่งออกเฉพาะคอร์สที่มีใบรับรองเฉพาะบุคคล';

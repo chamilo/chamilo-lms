@@ -25,10 +25,35 @@ final class CCourseDescriptionRepository extends ResourceRepository
         $qb = $this->getResourcesByCourse($course, $session, $group)
             ->andWhere('resource.descriptionType = :description_type')
             ->setParameter('description_type', $type)
+            ->addOrderBy('resource.progress', 'ASC')
+            ->addOrderBy('resource.iid', 'ASC')
         ;
 
-        $query = $qb->getQuery();
+        return $qb->getQuery()->getResult();
+    }
 
-        return $query->getResult();
+    public function findAllInCourse(Course $course, ?Session $session = null, ?CGroup $group = null): array
+    {
+        $qb = $this->getResourcesByCourse($course, $session, $group)
+            ->addOrderBy('resource.progress', 'ASC')
+            ->addOrderBy('resource.iid', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all course descriptions without visibility filtering.
+     * Used by the public catalogue where course descriptions should be
+     * visible to any visitor regardless of their role.
+     */
+    public function findAllInCourseForCatalogue(Course $course): array
+    {
+        $qb = $this->getResourcesByCourseIgnoreVisibility($course)
+            ->addOrderBy('resource.progress', 'ASC')
+            ->addOrderBy('resource.iid', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 }

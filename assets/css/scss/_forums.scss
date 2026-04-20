@@ -96,8 +96,7 @@
     background-color: #f8f8f8;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
   }
 
   .custom-panel-heading .open {
@@ -123,12 +122,12 @@
 
   .custom-panel-body {
     padding: 15px;
-    background-color: #fff;
+    @apply bg-white;
   }
 }
 
 .forum_display {
-  display: flex;
+  @apply flex;
   width: 100%;
   margin-bottom: 15px;
   border: 1px solid #ddd;
@@ -140,12 +139,11 @@
   }
 
   .card-forum {
-    display: flex;
+    @apply flex bg-white;
     flex-direction: row;
     width: 100%;
     padding: 10px;
     align-items: flex-start;
-    background-color: #fff;
   }
 
   .number-post {
@@ -154,9 +152,9 @@
     padding: 30px;
     border-right: 1px solid #ddd;
     background-color: #f5f5f5;
-    display: flex;
+    @apply flex;
     flex-direction: column;
-    align-items: center;
+    @apply items-center;
     margin-right: 20px;
   }
 
@@ -171,7 +169,7 @@
   }
 
   .content-forum {
-    display: flex;
+    @apply flex;
     flex-direction: column;
     flex-grow: 1;
     padding-left: 15px;
@@ -190,8 +188,7 @@
 
   .actions-forum {
     margin-left: auto;
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
     justify-content: flex-end;
   }
 
@@ -225,9 +222,9 @@
 
 .forum-post {
   .post-col1 {
-    display: flex;
+    @apply flex;
     flex-direction: column;
-    align-items: center;
+    @apply items-center;
     padding: 10px;
       width: 15% !important;
   }
@@ -251,7 +248,7 @@
   }
 
   .flex-row {
-    display: flex;
+    @apply flex;
     margin-top: 10px;
   }
 
@@ -274,6 +271,6 @@
   }
 
   .boot-tooltip:hover::before {
-    display: block;
+    @apply block;
   }
 }

@@ -90,7 +90,6 @@ const wallTitle = computed(() => {
   return `${t("Wall of {0}", [wallName.value])}`.trim()
 })
 
-// Remount children when wall id or filter changes
 const wallKey = computed(() => `wall:${wallIdFromRoute.value || "me"}:${filterType.value || "all"}`)
 
 async function loadWallUser() {
@@ -105,7 +104,6 @@ async function loadWallUser() {
     return
   }
 
-  // Stub user to prevent null-access while loading
   wallUser.value = {
     id: targetId,
     "@id": `/api/users/${targetId}`,
@@ -123,7 +121,9 @@ async function loadWallUser() {
   }
 }
 
-watch([() => wallIdFromRoute.value, () => currentUserIri.value], () => loadWallUser(), { immediate: true })
+watch([() => wallIdFromRoute.value, () => currentUserIri.value], () => loadWallUser(), {
+  immediate: true,
+})
 
 const canWriteOnOtherWall = ref(null)
 let permissionSeq = 0
@@ -183,13 +183,11 @@ watch(
   () => route.query.filterType,
   (newFilterType) => {
     filterType.value = newFilterType || null
-    postListRef.value?.refreshPosts()
   },
 )
 
 const canShowPostForm = computed(() => {
   if (props.hidePostForm) return false
-
   if (!wallUser.value?.["@id"]) return false
   if (filterType.value === "promoted") {
     return isOwnWallByRoute.value && isAdmin.value

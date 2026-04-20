@@ -7,22 +7,22 @@
       <div class="p-4 flex flex-row gap-1 mb-2">
         <div class="flex flex-row gap-2">
           <Button
-            class="btn btn--primary"
+            class="btn btn--success"
             icon="fa fa-folder-plus"
-            label="New folder"
+            :label="t('New folder')"
             @click="openNewDialog"
           />
           <Button
             class="btn btn--primary"
             icon="fa fa-file-upload"
-            label="Upload"
+            :label="t('Upload')"
             @click="uploadDocumentHandler"
           />
           <Button
             v-if="selectedFiles.length"
             class="btn btn--danger"
-            icon="pi pi-trash"
-            label="Delete"
+            icon="mdi mdi-delete"
+            :label="t('Delete')"
             @click="confirmDeleteMultiple"
           />
           <Button
@@ -33,8 +33,8 @@
           <Button
             v-if="previousFolders.length"
             class="btn btn--primary"
-            icon="pi pi-arrow-left"
-            label="Back"
+            icon="mdi mdi-arrow-left"
+            :label="t('Back')"
             @click="goBack"
           />
         </div>
@@ -112,7 +112,7 @@
               <Button
                 v-if="isAuthenticated"
                 class="btn btn--danger"
-                icon="pi pi-trash"
+                icon="mdi mdi-delete"
                 @click="confirmDeleteItem(slotProps.data)"
               />
             </div>
@@ -125,7 +125,7 @@
               <Button
                 v-if="slotProps.data.resourceNode.firstResourceFile"
                 class="p-button-sm p-button p-mr-2"
-                label="Select"
+                :label="t('Select')"
                 @click="returnToEditor(slotProps.data)"
               />
             </div>
@@ -171,15 +171,15 @@
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="previousPage"
         >
-          Previous
+          {{ t('Previous') }}
         </button>
-        <span class="text-gray-700 font-semibold">Page {{ filters.page }} of {{ totalPages }}</span>
+        <span class="text-gray-700 font-semibold">{{ t('Page') }} {{ filters.page }} {{ t('of') }} {{ totalPages }}</span>
         <button
           :disabled="filters.page === totalPages"
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="nextPage"
         >
-          Next
+          {{ t('Next') }}
         </button>
       </div>
       <BaseContextMenu
@@ -190,11 +190,11 @@
         <ul>
           <li @click="selectFile(contextMenuFile)">
             <span class="mdi mdi-file-check-outline"></span>
-            Select
+            {{ t('Select') }}
           </li>
           <li @click="confirmDeleteItem(contextMenuFile)">
             <span class="mdi mdi-delete-outline"></span>
-            Delete
+            {{ t('Delete') }}
           </li>
         </ul>
       </BaseContextMenu>
@@ -226,14 +226,14 @@
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
-          label="Cancel"
+          icon="mdi mdi-close"
+          :label="t('Cancel')"
           @click="hideDialog"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
-          label="Save"
+          icon="mdi mdi-check"
+          :label="t('Save')"
           @click="saveItem"
         />
       </template>
@@ -243,29 +243,26 @@
       v-model:visible="deleteDialog"
       :modal="true"
       :style="{ width: '450px' }"
-      header="Confirm"
+      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
-          class="pi pi-exclamation-triangle p-mr-3"
+          class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
-        <span
-          >Are you sure you want to delete <b>{{ itemToDelete?.title }}</b
-          >?</span
-        >
+        <span>{{ t("Are you sure you want to delete {0}?", [itemToDelete.title]) }}</span>
       </div>
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
-          label="No"
+          icon="mdi mdi-close"
+          :label="t('No')"
           @click="deleteDialog = false"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
-          label="Yes"
+          icon="mdi mdi-check"
+          :label="t('Yes')"
           @click="deleteItemButton"
         />
       </template>
@@ -275,11 +272,11 @@
       v-model:visible="deleteMultipleDialog"
       :modal="true"
       :style="{ width: '450px' }"
-      header="Confirm"
+      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
-          class="pi pi-exclamation-triangle p-mr-3"
+          class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
         <span>{{ $t("Are you sure you want to delete the selected items?") }}</span>
@@ -287,14 +284,14 @@
       <template #footer>
         <Button
           class="p-button-text"
-          icon="pi pi-times"
-          label="No"
+          icon="mdi mdi-close"
+          :label="t('No')"
           @click="deleteMultipleDialog = false"
         />
         <Button
           class="p-button-text"
-          icon="pi pi-check"
-          label="Yes"
+          icon="mdi mdi-check"
+          :label="t('Yes')"
           @click="deleteMultipleItems"
         />
       </template>
@@ -302,27 +299,27 @@
 
     <Dialog
       v-model:visible="detailsDialogVisible"
-      :header="selectedItem.title || 'Item Details'"
+      :header="selectedItem.title || t('Item Details')"
       :modal="true"
       :style="{ width: '50%' }"
     >
       <div v-if="Object.keys(selectedItem).length > 0">
-        <p><strong>Title:</strong> {{ selectedItem.title }}</p>
-        <p><strong>Modified:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
-        <p><strong>Size:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
+        <p><strong>{{ $t('Title') }}:</strong> {{ selectedItem.title }}</p>
+        <p><strong>{{ $t('Modified') }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
+        <p><strong>{{ $t('Size') }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
         <p>
           <strong>URL:</strong>
           <a
             :href="selectedItem.contentUrl"
             target="_blank"
-            >Open File</a
+            >{{ $t('Open File') }}</a
           >
         </p>
       </div>
       <template #footer>
         <Button
           class="p-button-text"
-          label="Close"
+          :label="t('Close')"
           @click="closeDetailsDialog"
         />
       </template>

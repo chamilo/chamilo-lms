@@ -93,7 +93,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             if (!empty($icon)) {
                 $icon = '<em class="'.$this->getIcon().'"></em> ';
             }
-            $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
+            $isInline = \in_array($this->getLayout(), ['inline', 'box_search'], true);
+            $class = ($isInline ? '' : 'mt-2 ').$this->getClass().' '.$this->getStyle().' '.$this->getSize();
 
             return
                 $this->_getTabs() . '

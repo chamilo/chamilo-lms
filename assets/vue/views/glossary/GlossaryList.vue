@@ -1,19 +1,13 @@
 <template>
   <div>
-    <SectionHeader :title="t('Glossary')">
-      <template #end>
-        <StudentViewButton
-          v-if="securityStore.isAuthenticated"
-          @change="onStudentViewChange"
-        />
-      </template>
-    </SectionHeader>
+    <SectionHeader :title="t('Glossary')" />
+
     <BaseToolbar v-if="securityStore.isAuthenticated">
       <template v-if="canEditGlossary">
         <BaseButton
           :label="t('Add new glossary term')"
           icon="plus"
-          type="black"
+          type="success"
           @click="addNewTerm"
         />
         <BaseButton
@@ -83,7 +77,7 @@
           :label="t('Add new glossary term')"
           class="mt-4"
           icon="plus"
-          type="primary"
+          type="success"
           @click="addNewTerm"
         />
       </EmptyState>
@@ -137,13 +131,12 @@ import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -184,7 +177,7 @@ const termToDeleteString = computed(() => {
   return termToDelete.value.title
 })
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEditGlossary = computed(() => {
   const inSession = !!route.query.sid
@@ -212,7 +205,6 @@ onMounted(async () => {
 
   await loadCourseSettingsIfPossible()
   await fetchGlossaries()
-  await onStudentViewChange()
 })
 
 watch(
@@ -224,16 +216,8 @@ watch(
 
 watch(
   () => platform.isStudentViewActive,
-  async () => {
-    await onStudentViewChange()
-    await fetchGlossaries()
-    await onStudentViewChange()
-  },
+  () => fetchGlossaries(),
 )
-
-async function onStudentViewChange() {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-}
 
 const debouncedSearch = debounce(() => {
   searchBoxTouched.value = true

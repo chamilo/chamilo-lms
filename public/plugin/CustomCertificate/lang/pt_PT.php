@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Certificado personalizado';
+$strings['plugin_comment'] = 'Este plugin permite criar certificados personalizados para cada curso.';
+$strings['enable_plugin_customcertificate'] = 'Ativar plugin';
+$strings['customcertificate_course_enable'] = 'Certificado personalizado ativado no curso';
+$strings['use_certificate_default'] = 'Usar certificado personalizado padrão';
+$strings['ToolDisabled'] = 'A ferramenta está desativada na administração';
+$strings['OnlyAdminPlatform'] = 'Ferramenta apenas para administradores';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Ferramenta apenas para administradores e professores';
+$strings['TrainingEntity'] = 'Entidade formadora';
+$strings['DescriptionFront'] = 'Descrição frente';
+$strings['DescriptionRear'] = 'Descrição verso';
+$strings['Certify'] = 'Certificar';
+$strings['CertificateType'] = 'Tipo de certificado';
+$strings['CertifyThat'] = 'CERTIFICA QUE';
+$strings['StudentCourseInfo'] = 'Dados do aluno e do curso';
+$strings['StudentData'] = 'Dados do aluno';
+$strings['CourseData'] = 'Dados do curso';
+$strings['Modality'] = 'Modalidade';
+$strings['Contents'] = 'Conteúdos';
+$strings['ContentsToShow'] = 'Conteúdos a mostrar';
+$strings['ContentsCourseDescription'] = 'Usar secção "Descrição do curso"> "Conteúdos"';
+$strings['ContentsIndexLearnpath'] = 'Usar índice de percurso de aprendizagem';
+$strings['ContentsCustom'] = 'Usar conteúdo personalizado';
+$strings['ContentsHide'] = 'Não mostrar conteúdos';
+$strings['Dates'] = 'Datas';
+$strings['CourseDeliveryDates'] = 'Datas de realização do curso';
+$strings['Custom'] = 'Personalizado';
+$strings['UseDateSessionAccess'] = 'Usar datas de acesso à sessão';
+$strings['ExpectionPlace'] = 'Local de expedição';
+$strings['DateExpediction'] = 'Data de expedição';
+$strings['UseDateEndAccessSession'] = 'Usar data final de acesso à sessão';
+$strings['UseDateDownloadCertificate'] = 'Usar data de download do certificado';
+$strings['UseDateGenerationCertificate'] = 'Usar data de geração do certificado';
+$strings['UseCustomDate'] = 'Usar data personalizada';
+$strings['LogosSeal'] = 'Logótipos / Selos';
+$strings['LogoLeft'] = 'Logótipo esquerdo';
+$strings['LogoCenter'] = 'Logótipo central';
+$strings['LogoRight'] = 'Logótipo direito';
+$strings['Seal'] = 'Selo';
+$strings['Signature1'] = 'Assinatura 1';
+$strings['Signature2'] = 'Assinatura 2';
+$strings['Signature3'] = 'Assinatura 3';
+$strings['Signature4'] = 'Assinatura 4';
+$strings['SignatureText1'] = 'Texto da assinatura 1';
+$strings['SignatureText2'] = 'Texto da assinatura 2';
+$strings['SignatureText3'] = 'Texto da assinatura 3';
+$strings['SignatureText4'] = 'Texto da assinatura 4';
+$strings['OtherOptions'] = 'Outras opções';
+$strings['MarginRight'] = 'Margem direita';
+$strings['MarginLeft'] = 'Margem esquerda';
+$strings['SetDefaultTemplate'] = 'Definir modelo por padrão';
+$strings['MessageDefaultTemplate'] = 'Guardar esta personalização padrão para cursos e sessões sem
+     certificados definidos';
+$strings['None'] = 'Nenhum';
+$strings['ErrorTemplateCertificate'] = 'Não há modelo definido para o certificado.
+     Não há modelo por padrão.';
+$strings['DateStartEnd'] = 'Com Data de início e Data de fim: ';
+$strings['ExpedictionIn'] = 'Emissão em';
+$strings['Signatures'] = 'Assinaturas';
+$strings['BackgroundCertificate'] = 'Imagem de fundo do certificado';
+$strings['Background'] = 'Fundo';
+$strings['CertificateSetting'] = 'Definições do certificado';
+$strings['ToolDisabledCourse'] = 'Ferramenta desativada nas definições do curso';
+$strings['ToolUseDefaultSettingCourse'] = 'Ferramenta configurada para usar o certificado padrão. <br>
+     Pode editá-lo a partir do ecrã de Administração -> Plugins -> Certificado Personalizado. <br>
+     Ou, se quiser, pode desativar a opção de usar certificado por padrão na configuração do plugin no curso';
+$strings['CertificateSettingDefault'] = 'Definições do certificado padrão';
+$strings['InfoFromDefaultCertificate'] = 'O conteúdo do certificado baseia-se no certificado padrão.
+     As modificações que fizer não afetarão o certificado padrão.';
+$strings['to'] = ' a ';
+$strings['formatDownloadDate'] = ' a %sº %s, %s';
+$strings['PrintCertificate'] = 'Imprimir certificado';
+$strings['QuestionDelete'] = 'Deseja eliminar o diploma específico e usar o certificado padrão?';
+$strings['SuccessDelete'] = 'Eliminado com sucesso';
+$strings['ProblemDelete'] = 'Problema ao eliminar o certificado';
+$strings['OnlyCustomCertificates'] = 'Apenas cursos com certificado personalizado são exportados';

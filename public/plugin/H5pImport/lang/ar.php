@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'استيراد H5P';
+$strings['plugin_comment'] = 'استيراد محتويات H5P واستخدامها في مسارات التعلم. افتح README.md للحصول على تعليمات التثبيت.';
+$strings['frame'] = 'إطار';
+$strings['frame_help'] = 'عرض الإطار والأزرار أسفل H5P';
+$strings['embed'] = 'تضمين';
+$strings['embed_help'] = 'عرض زر التضمين';
+$strings['copyright'] = 'حقوق الطبع والنشر';
+$strings['copyright_help'] = 'عرض زر حقوق الطبع والنشر';
+$strings['icon'] = 'أيقونة';
+$strings['icon_help'] = 'عرض أيقونة H5P';
+$strings['attempts'] = 'عدد المحاولات';
+$strings['upload_h5p'] = 'رفع';
+$strings['import_h5p_package'] = 'رفع حزمة H5P';
+$strings['h5p_package'] = 'حزمة H5P';
+$strings['h5p_error_loading'] = 'خطأ في تحميل حزمة H5P';
+$strings['h5p_error_invalid_token'] = 'رمز أمان غير صالح';
+$strings['h5p_error_missing_core_asset'] = 'خطأ في تحميل أصول نواة H5P';
+$strings['h5p_save_content_state'] = 'حفظ نتائج المستخدم';
+$strings['h5p_save_content_freq'] = 'تكرار الحفظ';
+$strings['h5p_save_freq_help'] = 'مدى تكرار حفظ حالة المحتوى الحالية، بالثواني';
+$strings['start_attempt'] = 'بدء المحاولة';

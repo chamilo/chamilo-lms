@@ -1,21 +1,20 @@
 <?php
 
-// For licensing terms, see /license.txt
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 /**
- * Class ZipPackageImporter.
+ * ZIP importer for H5P packages.
  */
 class ZipPackageImporter extends H5pPackageImporter
 {
-    /*
-     * Allowed file extensions
-     * List obtained from H5P: https://h5p.org/allowed-file-extensions
-     * */
     private const ALLOWED_EXTENSIONS = [
         'json',
         'png',
@@ -39,144 +38,148 @@ class ZipPackageImporter extends H5pPackageImporter
         'wav',
         'txt',
         'pdf',
-        'rtf',
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'ppt',
-        'pptx',
-        'odt',
-        'ods',
-        'odp',
         'xml',
         'csv',
-        'diff',
-        'patch',
-        'swf',
         'md',
-        'textile',
         'vtt',
         'webvtt',
-        'gltf',
-        'gl',
         'js',
         'css',
     ];
 
     /**
-     * Import an H5P package. No DB change.
-     *
-     * @return string The path to the extracted package directory.
-     *
-     * @throws Exception When the H5P package is invalid.
+     * @throws Exception
      */
     public function import(): string
     {
-        $zipFile = new \PclZip($this->packageFileInfo['tmp_name']);
-        $zipContent = $zipFile->listContent();
-
-        if ($this->validateH5pPackageContent($zipContent)) {
-            $packageSize = array_reduce(
-                $zipContent,
-                function ($accumulator, $zipEntry) {
-                    return $accumulator + $zipEntry['size'];
-                }
-            );
-
-            $this->validateEnoughSpace($packageSize);
-
-            $pathInfo = pathinfo($this->packageFileInfo['name']);
-
-            $packageDirectoryPath = $this->generatePackageDirectory($pathInfo['filename']);
-            $zipFile->extract($packageDirectoryPath);
-
-            return "{$packageDirectoryPath}";
+        if (!class_exists(ZipArchive::class)) {
+            throw new Exception('ZipArchive extension is not available.');
         }
 
-        throw new Exception('Invalid H5P package');
+        $zipFile = new ZipArchive();
+        $openResult = $zipFile->open($this->packageFileInfo['tmp_name']);
+
+        if (true !== $openResult) {
+            throw new Exception('Unable to open H5P package.');
+        }
+
+        $packageSize = 0;
+        $hasH5pJson = false;
+        $hasContentJson = false;
+
+        for ($i = 0; $i < $zipFile->numFiles; ++$i) {
+            $stat = $zipFile->statIndex($i);
+
+            if (false === $stat || empty($stat['name'])) {
+                continue;
+            }
+
+            $entryName = str_replace('\\', '/', (string) $stat['name']);
+
+            $this->validateZipEntryName($entryName);
+
+            if (str_ends_with($entryName, '/')) {
+                continue;
+            }
+
+            if (preg_match('~\.(php[0-9]?|phtml|phar)$~i', $entryName)) {
+                $zipFile->close();
+
+                throw new Exception(sprintf('File "%s" contains a PHP script.', $entryName));
+            }
+
+            $extension = strtolower((string) pathinfo($entryName, PATHINFO_EXTENSION));
+
+            if ('' !== $extension && !in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
+                $zipFile->close();
+
+                throw new Exception(sprintf('File "%s" has an invalid extension.', $entryName));
+            }
+
+            if ('h5p.json' === $entryName) {
+                $hasH5pJson = true;
+            }
+
+            if ('content/content.json' === $entryName || 'content.json' === $entryName) {
+                $hasContentJson = true;
+            }
+
+            $packageSize += (int) ($stat['size'] ?? 0);
+        }
+
+        if (!$hasH5pJson || !$hasContentJson) {
+            $zipFile->close();
+
+            throw new Exception('Invalid H5P package.');
+        }
+
+        $this->validateEnoughSpace($packageSize);
+
+        $pathInfo = pathinfo((string) ($this->packageFileInfo['name'] ?? 'package.h5p'));
+        $packageName = $pathInfo['filename'] ?? ('package_'.uniqid());
+
+        $packageDirectoryPath = $this->generatePackageDirectory($packageName);
+
+        if (!$zipFile->extractTo($packageDirectoryPath)) {
+            $zipFile->close();
+
+            throw new Exception('Unable to extract H5P package.');
+        }
+
+        $zipFile->close();
+
+        return $packageDirectoryPath;
     }
 
     /**
      * @throws Exception
      */
-    protected function validateEnoughSpace(int $packageSize)
+    protected function validateEnoughSpace(int $packageSize): void
     {
-        $courseSpaceQuota = \DocumentManager::get_course_quota($this->course->getCode());
+        $freeSpace = @disk_free_space($this->courseStoragePath);
 
-        if (!enough_size($packageSize, $this->courseDirectoryPath, $courseSpaceQuota)) {
-            throw new Exception('Not enough space to store package.');
+        if (false !== $freeSpace && $packageSize > $freeSpace) {
+            throw new Exception('Not enough disk space to store package.');
         }
     }
 
     /**
-     * Validate an H5P package.
-     * Check if 'h5p.json' or 'content/content.json' files exist
-     * and if the files are in a file whitelist (ALLOWED_EXTENSIONS).
-     *
-     * @param array $h5pPackageContent the content of the H5P package
-     *
-     * @return bool whether the H5P package is valid or not
+     * @throws Exception
      */
-    private function validateH5pPackageContent(array $h5pPackageContent): bool
+    private function validateZipEntryName(string $entryName): void
     {
-        $validPackage = false;
-
-        if (!empty($h5pPackageContent)) {
-            foreach ($h5pPackageContent as $content) {
-                $filename = $content['filename'];
-
-                if (0 !== preg_match('/(^[\._]|\/[\._]|\\\[\._])/', $filename)) {
-                    // Skip any file or folder starting with a . or _
-                    continue;
-                }
-
-                $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
-
-                if (in_array($fileExtension, self::ALLOWED_EXTENSIONS)) {
-                    $validPackage = 'h5p.json' === $filename || 'content/content.json' === $filename;
-                    if ($validPackage) {
-                        break;
-                    }
-                }
-            }
+        if (str_starts_with($entryName, '/')) {
+            throw new Exception(sprintf('Invalid ZIP entry "%s".', $entryName));
         }
 
-        return $validPackage;
+        if (str_contains($entryName, '../') || str_contains($entryName, '..\\')) {
+            throw new Exception(sprintf('ZIP entry "%s" contains an invalid relative path.', $entryName));
+        }
     }
 
     private function generatePackageDirectory(string $name): string
     {
-        $baseDirectory = $this->courseDirectoryPath.'/h5p/content/';
+        $baseDirectory = rtrim($this->courseStoragePath, '/').'/content';
         $safeName = api_replace_dangerous_char($name);
-        $directoryPath = $baseDirectory.$safeName;
+        $directoryPath = $baseDirectory.'/'.$safeName;
 
-        $fs = new Filesystem();
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($baseDirectory, api_get_permissions_for_new_directories());
+        $filesystem->mkdir(
+            rtrim($this->courseStoragePath, '/').'/libraries',
+            api_get_permissions_for_new_directories()
+        );
 
-        if ($fs->exists($directoryPath)) {
+        if ($filesystem->exists($directoryPath)) {
             $counter = 1;
 
-            // Add numeric suffix to the name until a unique directory name is found
-            while ($fs->exists($directoryPath)) {
-                $modifiedName = $safeName.'_'.$counter;
-                $directoryPath = $baseDirectory.$modifiedName;
+            while ($filesystem->exists($directoryPath)) {
+                $directoryPath = $baseDirectory.'/'.$safeName.'_'.$counter;
                 ++$counter;
             }
         }
 
-        $fs->mkdir(
-            $directoryPath,
-            api_get_permissions_for_new_directories()
-        );
-
-        $sharedLibrariesDir = $this->courseDirectoryPath.'/h5p/libraries';
-
-        if (!$fs->exists($sharedLibrariesDir)) {
-            $fs->mkdir(
-                $sharedLibrariesDir,
-                api_get_permissions_for_new_directories()
-            );
-        }
+        $filesystem->mkdir($directoryPath, api_get_permissions_for_new_directories());
 
         return $directoryPath;
     }

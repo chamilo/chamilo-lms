@@ -1,20 +1,70 @@
 <?php
 
 declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
-use Knp\Component\Pager\Paginator;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+
+/**
+ * Check whether the launch belongs to the current course/session context.
+ */
+function xapi_stats_matches_current_context(XApiToolLaunch $toolLaunch): bool
+{
+    $currentCourse = api_get_course_entity();
+    $currentSession = api_get_session_entity();
+
+    if (null === $currentCourse || null === $toolLaunch->getCourse()) {
+        return false;
+    }
+
+    if ($toolLaunch->getCourse()->getId() !== $currentCourse->getId()) {
+        return false;
+    }
+
+    $toolSession = $toolLaunch->getSession();
+
+    if (null === $currentSession && null === $toolSession) {
+        return true;
+    }
+
+    if (null === $currentSession || null === $toolSession) {
+        return false;
+    }
+
+    return $currentSession->getId() === $toolSession->getId();
+}
+
+/**
+ * Render a simple pagination bar.
+ */
+function xapi_render_stats_pagination(int $currentPage, int $pageCount, string $baseUrl): string
+{
+    if ($pageCount <= 1) {
+        return '';
+    }
+
+    $items = '';
+
+    for ($i = 1; $i <= $pageCount; $i++) {
+        if ($i === $currentPage) {
+            $items .= '<li class="active"><a href="#">'.$i.'</a></li>';
+            continue;
+        }
+
+        $items .= '<li><a href="'.$baseUrl.'&page='.$i.'">'.$i.'</a></li>';
+    }
+
+    return '<ul class="pagination">'.$items.'</ul>';
+}
 
 api_protect_course_script(true);
 api_protect_teacher_script();
 
 $request = Container::getRequest();
-
 $em = Database::getManager();
 
 $toolLaunch = $em->find(
@@ -22,22 +72,32 @@ $toolLaunch = $em->find(
     $request->query->getInt('id')
 );
 
-if (null === $toolLaunch) {
-    header('Location: '.api_get_course_url());
+if (null === $toolLaunch || !xapi_stats_matches_current_context($toolLaunch)) {
+    api_not_allowed(true);
+}
 
+$normalizedActivityType = strtolower(trim((string) $toolLaunch->getActivityType()));
+
+// This page is intended for TinCan-style launches.
+// Only block explicit cmi5 activities here.
+if ('cmi5' === $normalizedActivityType) {
+    Display::addFlash(
+        Display::return_message('Reporting is not available for this activity type on this page.', 'warning')
+    );
+
+    header('Location: ../start.php?'.api_get_cidreq());
     exit;
 }
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
-
 $cidReq = api_get_cidreq();
-
 $plugin = XApiPlugin::create();
 
 $length = 20;
-$page = $request->query->getInt('page', 1);
+$page = max(1, $request->query->getInt('page', 1));
 $start = ($page - 1) * $length;
+
 $countStudentList = CourseManager::get_student_list_from_course_code(
     $course->getCode(),
     (bool) $session,
@@ -49,29 +109,8 @@ $countStudentList = CourseManager::get_student_list_from_course_code(
     true
 );
 
-$statsUrl = api_get_self().'?'.api_get_cidreq().'&id='.$toolLaunch->getId();
-
-$paginator = new Paginator();
-$pagination = $paginator->paginate([]);
-$pagination->setTotalItemCount($countStudentList);
-$pagination->setItemNumberPerPage($length);
-$pagination->setCurrentPageNumber($page);
-$pagination->renderer = function ($data) use ($statsUrl) {
-    $render = '';
-    if ($data['pageCount'] > 1) {
-        $render = '<ul class="pagination">';
-        for ($i = 1; $i <= $data['pageCount']; $i++) {
-            $pageContent = '<li><a href="'.$statsUrl.'&page='.$i.'">'.$i.'</a></li>';
-            if ($data['current'] == $i) {
-                $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
-            }
-            $render .= $pageContent;
-        }
-        $render .= '</ul>';
-    }
-
-    return $render;
-};
+$pageCount = (int) ceil($countStudentList / $length);
+$statsUrl = api_get_self().'?'.$cidReq.'&id='.$toolLaunch->getId();
 
 $students = CourseManager::get_student_list_from_course_code(
     $course->getCode(),
@@ -86,39 +125,46 @@ $students = CourseManager::get_student_list_from_course_code(
     $length
 );
 
-$content = '';
-$content .= '<div class="xapi-students">';
-
 $loadingMessage = Display::returnFontAwesomeIcon('spinner', '', true, 'fa-pulse').' '.get_lang('Loading');
 
-foreach ($students as $studentInfo) {
-    $content .= Display::panelCollapse(
-        api_get_person_name($studentInfo['firstname'], $studentInfo['lastname']),
-        $loadingMessage,
-        "pnl-student-{$studentInfo['id']}",
-        [
-            'class' => 'pnl-student',
-            'data-student' => $studentInfo['id'],
-            'data-tool' => $toolLaunch->getId(),
-        ],
-        "pnl-student-{$studentInfo['id']}-accordion",
-        "pnl-student-{$studentInfo['id']}-collapse",
-        false
+if ($countStudentList <= 0 || empty($students)) {
+    $content = Display::return_message(
+        'No learners found in this course/session for reporting.',
+        'info'
     );
+} else {
+    $content = '<div class="xapi-students">';
+
+    foreach ($students as $studentInfo) {
+        $studentId = (int) $studentInfo['id'];
+
+        $content .= Display::panelCollapse(
+            api_get_person_name($studentInfo['firstname'], $studentInfo['lastname']),
+            $loadingMessage,
+            "pnl-student-$studentId",
+            [
+                'class' => 'pnl-student',
+                'data-student' => $studentId,
+                'data-tool' => $toolLaunch->getId(),
+            ],
+            "pnl-student-$studentId-accordion",
+            "pnl-student-$studentId-collapse",
+            false
+        );
+    }
+
+    $content .= '</div>';
+    $content .= xapi_render_stats_pagination($page, $pageCount, $statsUrl);
 }
 
-$content .= '</div>';
-$content .= $pagination;
-
-// View
 $interbreadcrumb[] = [
     'name' => $plugin->get_title(),
-    'url' => '../start.php',
+    'url' => '../start.php?'.$cidReq,
 ];
 
 $htmlHeadXtra[] = "<script>
     $(function () {
-        $('.pnl-student').on('show.bs.collapse', function (e) {
+        $('.pnl-student').on('show.bs.collapse', function () {
             var \$self = \$(this);
             var \$body = \$self.find('.panel-body');
 
@@ -149,12 +195,12 @@ $htmlHeadXtra[] = "<script>
                 }
             );
         });
-    })
+    });
 </script>";
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    "../start.php?$cidReq"
+    '../start.php?'.$cidReq
 );
 
 $view = new Template($toolLaunch->getTitle());

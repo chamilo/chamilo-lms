@@ -2,6 +2,19 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
+use Fhaculty\Graph\Edge\Directed;
+use Fhaculty\Graph\Edge\Undirected;
+use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Set\Edges;
+use Fhaculty\Graph\Set\Vertices;
+use Fhaculty\Graph\Set\VerticesMap;
+use Fhaculty\Graph\Vertex;
+
 class UnserializeApi
 {
     /**
@@ -18,21 +31,22 @@ class UnserializeApi
             case 'career':
             case 'sequence_graph':
                 $allowedClasses = [
-                    \Fhaculty\Graph\Graph::class,
-                    \Fhaculty\Graph\Set\VerticesMap::class,
-                    \Fhaculty\Graph\Set\Vertices::class,
-                    \Fhaculty\Graph\Set\Edges::class,
-                    \Fhaculty\Graph\Vertex::class,
+                    Graph::class,
+                    VerticesMap::class,
+                    Vertices::class,
+                    Edges::class,
+                    Vertex::class,
                     \Fhaculty\Graph\Edge\Base::class,
-                    \Fhaculty\Graph\Edge\Directed::class,
-                    \Fhaculty\Graph\Edge\Undirected::class,
+                    Directed::class,
+                    Undirected::class,
                 ];
                 break;
+
             case 'course':
                 $allowedClasses = [
                     \Chamilo\CourseBundle\Component\CourseCopy\Course::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement::class,
-                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset::class,
+                    Asset::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath::class,
@@ -46,7 +60,7 @@ class UnserializeApi
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup::class,
-                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory::class,
+                    LearnPathCategory::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Link::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz::class,
@@ -60,32 +74,19 @@ class UnserializeApi
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Work::class,
-                    \Chamilo\CourseBundle\Entity\CLpCategory::class,
+                    CLpCategory::class,
+                    PersistentCollection::class,
+                    ArrayCollection::class,
                     stdClass::class,
-                    Category::class,
-                    AttendanceLink::class,
-                    DropboxLink::class,
-                    Evaluation::class,
-                    ExerciseLink::class,
-                    ForumThreadLink::class,
-                    LearnpathLink::class,
-                    LinkFactory::class,
-                    Result::class,
-                    StudentPublicationLink::class,
-                    SurveyLink::class,
                 ];
             // no break
+
             case 'lp':
                 $allowedClasses = array_merge(
                     $allowedClasses,
                     [
                         learnpath::class,
                         learnpathItem::class,
-                        aicc::class,
-                        aiccBlock::class,
-                        aiccItem::class,
-                        aiccObjective::class,
-                        aiccResource::class,
                         scorm::class,
                         scormItem::class,
                         scormMetadata::class,
@@ -95,21 +96,119 @@ class UnserializeApi
                     ]
                 );
                 break;
+
             case 'not_allowed_classes':
             default:
                 $allowedClasses = false;
         }
 
-        if ($ignoreErrors) {
-            return @unserialize(
+        try {
+            $result = @unserialize(
                 $serialized,
                 ['allowed_classes' => $allowedClasses]
             );
+        } catch (Throwable $e) {
+            if ($ignoreErrors) {
+                return false;
+            }
+
+            throw $e;
         }
 
-        return @unserialize(
-            $serialized,
-            ['allowed_classes' => $allowedClasses]
-        );
+        if ('course' === $type) {
+            $visited = [];
+            $result = self::normalizeCourseBackup($result, $visited);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Normalize legacy course backup objects after unserialize.
+     * This avoids keeping Doctrine runtime collections from old backups.
+     */
+    private static function normalizeCourseBackup(mixed $node, array &$visited = []): mixed
+    {
+        if (is_array($node)) {
+            foreach ($node as $key => $value) {
+                $node[$key] = self::normalizeCourseBackup($value, $visited);
+            }
+
+            return $node;
+        }
+
+        if (!is_object($node)) {
+            return $node;
+        }
+
+        $objectId = spl_object_id($node);
+        if (isset($visited[$objectId])) {
+            return $visited[$objectId];
+        }
+
+        if ($node instanceof \__PHP_Incomplete_Class) {
+            $normalized = new stdClass();
+            $visited[$objectId] = $normalized;
+
+            foreach (get_object_vars($node) as $property => $value) {
+                if ('__PHP_Incomplete_Class_Name' === $property) {
+                    continue;
+                }
+
+                $normalizedProperty = self::normalizeSerializedPropertyName((string) $property);
+                $normalized->{$normalizedProperty} = self::normalizeCourseBackup($value, $visited);
+            }
+
+            return $normalized;
+        }
+
+        $visited[$objectId] = $node;
+
+        if ($node instanceof CLpCategory) {
+            self::resetClpCategoryUsers($node);
+        }
+
+        foreach (get_object_vars($node) as $property => $value) {
+            $normalizedProperty = self::normalizeSerializedPropertyName($property);
+
+            try {
+                $node->{$normalizedProperty} = self::normalizeCourseBackup($value, $visited);
+            } catch (\Throwable) {
+                // Read-only or otherwise inaccessible property — skip silently.
+            }
+        }
+
+        return $node;
+    }
+
+    /**
+     * Legacy backups may contain a Doctrine PersistentCollection in CLpCategory::$users.
+     * The relation is not needed for restore, so replace it with an empty collection.
+     */
+    private static function resetClpCategoryUsers(CLpCategory $category): void
+    {
+        $reflection = new ReflectionClass($category);
+
+        while ($reflection) {
+            if ($reflection->hasProperty('users')) {
+                $property = $reflection->getProperty('users');
+                $property->setValue($category, new ArrayCollection());
+
+                return;
+            }
+
+            $reflection = $reflection->getParentClass();
+        }
+    }
+
+    private static function normalizeSerializedPropertyName(string $property): string
+    {
+        if ('' !== $property && "\0" === $property[0]) {
+            $parts = explode("\0", $property);
+
+            return (string) end($parts);
+        }
+
+        return $property;
     }
 }

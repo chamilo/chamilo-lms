@@ -23,7 +23,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -260,12 +260,12 @@ if (!empty($msg)) {
         </div>
         <div class="control-course">
             <div class="separate-action">
-                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                     <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
                 </button>
             </div>
             <div class="separate-action">
-                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                     <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
                 </button>
             </div>

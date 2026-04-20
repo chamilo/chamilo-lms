@@ -46,7 +46,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if data.ip %}
+                            {% if data.ip is defined and data.ip %}
                                 <div class="flex items-center space-x-2">
                                     {{ 'laptop'|mdi_icon }}
                                     <span class="font-semibold">{{ 'IP'|trans }}:</span>
@@ -144,7 +144,7 @@
                         checkbox.prop('disabled', true);
 
                         $.post(
-                            '{{ url('web_ajax') }}exercise.ajax.php?a=quiz_confirm_saved_answers',
+                            '/main/inc/ajax/exercise.ajax.php?a=quiz_confirm_saved_answers',
                             xhrData
                         ).done(function () {
                             button.parents('.form-group').remove();

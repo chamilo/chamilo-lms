@@ -2,35 +2,28 @@
   <div class="grid gap-4 md:grid-cols-[280px,1fr] blog-posts">
     <!-- LEFT SIDEBAR -->
     <aside class="space-y-4">
-      <div class="rounded-lg border bg-white shadow-sm">
-        <div class="p-3 border-b text-sm font-semibold">{{ t("Calendar") }}</div>
-        <div class="p-3">
-          <CalendarMini
-            :year="calendarYear"
-            :month="calendarMonth"
-            :selected="selectedDate"
-            @select="onSelectDate"
-            @prev="prevMonth"
-            @next="nextMonth"
-          />
-        </div>
-      </div>
+      <BaseCalendar
+        id="cal-test"
+        v-model="dateFilter"
+        :label="t('Calendar')"
+        show-inline
+      />
 
       <div class="rounded-lg border bg-white shadow-sm">
         <div class="p-3 border-b text-sm font-semibold">{{ t("Search") }}</div>
         <div class="p-3 space-y-2">
           <BaseInputText
-            v-model="q"
             id="blog-q"
+            v-model="q"
             :placeholder="t('Search')"
             class="w-full"
             label=""
           />
           <BaseButton
-            type="black"
-            icon="search"
             :label="t('Search')"
             class="w-full"
+            icon="search"
+            type="black"
             @click="reload()"
           />
         </div>
@@ -39,7 +32,10 @@
       <div class="rounded-lg border bg-white shadow-sm">
         <div class="p-3 border-b text-sm font-semibold">{{ t("My tasks") }}</div>
         <div class="p-3">
-          <MyTasksPanel :assignments="assignments" :tasks="tasks" />
+          <MyTasksPanel
+            :assignments="assignments"
+            :tasks="tasks"
+          />
         </div>
       </div>
     </aside>
@@ -50,13 +46,19 @@
         <template #start>
           <div class="flex items-center gap-3">
             <h3 class="font-semibold text-lg m-0">
-              {{ t(viewMode === 'posts' ? "Posts" : "Tasks") }}
+              {{ t(viewMode === "posts" ? "Posts" : "Tasks") }}
             </h3>
             <span class="text-gray-400">·</span>
-            <span class="text-sm text-gray-500" v-if="viewMode==='posts'">
+            <span
+              v-if="viewMode === 'posts'"
+              class="text-sm text-gray-500"
+            >
               {{ t("Browse and publish new posts") }}
             </span>
-            <span class="text-sm text-gray-500" v-else>
+            <span
+              v-else
+              class="text-sm text-gray-500"
+            >
               {{ t("Create and assign tasks") }}
             </span>
           </div>
@@ -65,50 +67,50 @@
           <div class="flex items-center gap-2">
             <div class="segmented">
               <button
-                :class="['seg-btn', viewMode==='posts' && 'active']"
-                @click="setMode('posts')"
+                :class="['seg-btn', viewMode === 'posts' && 'active']"
                 :title="t('Posts')"
+                @click="setMode('posts')"
               >
                 {{ t("Posts") }}
               </button>
               <button
-                :class="['seg-btn', viewMode==='tasks' && 'active']"
-                @click="setMode('tasks')"
+                :class="['seg-btn', viewMode === 'tasks' && 'active']"
                 :title="t('Tasks')"
+                @click="setMode('tasks')"
               >
                 {{ t("Tasks") }}
               </button>
             </div>
 
             <BaseSelect
-              v-if="viewMode==='posts'"
+              v-if="viewMode === 'posts'"
               v-model="sort"
               :options="sortOptions"
+              label=""
               optionLabel="label"
               optionValue="value"
-              label=""
             />
             <BaseSelect
               v-else
               v-model="taskSort"
               :options="taskSortOptions"
+              label=""
               optionLabel="label"
               optionValue="value"
-              label=""
             />
 
             <BaseButton
-              v-if="viewMode==='posts'"
-              type="primary"
-              icon="plus"
+              v-if="viewMode === 'posts'"
               :label="t('New post')"
+              icon="plus"
+              type="success"
               @click="openCreate"
             />
             <BaseButton
               v-else
-              type="primary"
-              icon="plus"
               :label="t('New task')"
+              icon="plus"
+              type="success"
               @click="showCreateTask = true"
             />
           </div>
@@ -118,12 +120,15 @@
       <div class="rounded-lg border bg-white shadow-sm">
         <div class="p-3 border-b flex items-center justify-between">
           <div class="text-sm text-gray-600">
-            <template v-if="loading">{{ t('Loading...') }}</template>
+            <template v-if="loading">{{ t("Loading...") }}</template>
             <template v-else>
-              <span v-if="viewMode==='posts'">
+              <span v-if="viewMode === 'posts'">
                 {{ t("Showing {n} posts", { n: total }) }}
-                <span v-if="selectedDate" class="text-gray-400">
-                  — {{ t("Filtered by {0}", [selectedDate]) }}
+                <span
+                  v-if="dateFilter"
+                  class="text-gray-400"
+                >
+                  — {{ t("Filtered by {0}", [abbreviatedDate(dateFilter)]) }}
                 </span>
               </span>
               <span v-else>
@@ -132,29 +137,42 @@
             </template>
           </div>
           <BaseSelect
-            v-if="viewMode==='posts'"
+            v-if="viewMode === 'posts'"
             v-model="pageSize"
             :options="pageSizeOptions"
+            label=""
             optionLabel="label"
             optionValue="value"
-            label=""
           />
         </div>
 
         <!-- POSTS MODE -->
-        <template v-if="viewMode==='posts'">
-          <div v-if="loading" class="p-4 space-y-3">
-            <div v-for="i in 3" :key="i" class="animate-pulse space-y-2">
+        <template v-if="viewMode === 'posts'">
+          <div
+            v-if="loading"
+            class="p-4 space-y-3"
+          >
+            <div
+              v-for="i in 3"
+              :key="i"
+              class="animate-pulse space-y-2"
+            >
               <div class="h-4 w-56 bg-gray-20 rounded"></div>
               <div class="h-3 w-80 bg-gray-10 rounded"></div>
             </div>
           </div>
 
-          <div v-else-if="!rows.length" class="p-6 text-center text-gray-500">
+          <div
+            v-else-if="!rows.length"
+            class="p-6 text-center text-gray-500"
+          >
             {{ t("No posts") }}
           </div>
 
-          <ul v-else class="divide-y">
+          <ul
+            v-else
+            class="divide-y"
+          >
             <li
               v-for="row in rows"
               :key="row.id"
@@ -167,10 +185,13 @@
                     {{ row.title }}
                   </div>
                   <div class="text-sm text-gray-500 mt-0.5 flex items-center gap-3">
-                    <span>{{ t("By") }} {{ row.author }} · {{ row.date }}</span>
-                    <span v-if="row.tags?.length" class="text-xs text-gray-400">
+                    <span
+                      v-if="row.tags?.length"
+                      class="text-xs text-gray-400"
+                    >
                       — {{ row.tags.join(", ") }}
                     </span>
+                    <span>{{ t("By") }} {{ row.author }} · {{ abbreviatedDatetime(row.date) }}</span>
 
                     <!-- Attachments indicator -->
                     <span
@@ -200,17 +221,17 @@
             </div>
             <div class="flex gap-2">
               <BaseButton
-                type="black"
-                icon="arrow-left"
+                :disabled="page <= 1"
                 :label="t('Prev')"
-                :disabled="page<=1"
+                icon="arrow-left"
+                type="black"
                 @click="page--"
               />
               <BaseButton
-                type="black"
-                icon="arrow-right"
+                :disabled="page >= pages"
                 :label="t('Next')"
-                :disabled="page>=pages"
+                icon="arrow-right"
+                type="black"
                 @click="page++"
               />
             </div>
@@ -219,10 +240,16 @@
 
         <!-- TASKS MODE -->
         <template v-else>
-          <div v-if="!tasksFiltered.length" class="p-6 text-center text-gray-500">
+          <div
+            v-if="!tasksFiltered.length"
+            class="p-6 text-center text-gray-500"
+          >
             {{ t("No tasks") }}
           </div>
-          <div v-else class="p-4 space-y-3">
+          <div
+            v-else
+            class="p-4 space-y-3"
+          >
             <div
               v-for="task in tasksFiltered"
               :key="task.id"
@@ -232,7 +259,10 @@
                 <div class="font-semibold">{{ task.title }}</div>
                 <div class="text-sm text-gray-600">{{ task.description }}</div>
               </div>
-              <span class="px-2 py-1 text-white text-xs rounded" :style="{ background: task.color }">
+              <span
+                :style="{ background: task.color }"
+                class="px-2 py-1 text-white text-xs rounded"
+              >
                 {{ task.status }}
               </span>
             </div>
@@ -249,7 +279,7 @@
     />
     <TaskCreateDialog
       v-if="showCreateTask"
-      @close="showCreateTask=false"
+      @close="showCreateTask = false"
       @created="reloadTasks"
     />
   </div>
@@ -258,21 +288,23 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRouter, useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
+import { DateTime } from "luxon"
 
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
-import CalendarMini from "../../components/blog/CalendarMini.vue"
 import MyTasksPanel from "../../components/blog/MyTasksPanel.vue"
 import PostCreateDialog from "../../components/blog/PostCreateDialog.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import TaskCreateDialog from "../../components/blog/TaskCreateDialog.vue"
 
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReqStore } from "../../store/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -280,10 +312,12 @@ const route = useRoute()
 
 // Course/session context + current user
 const cidReqStore = useCidReqStore()
-const { course, session } = storeToRefs(cidReqStore)
+const { session } = storeToRefs(cidReqStore)
 
 const securityStore = useSecurityStore()
 const currentUser = computed(() => securityStore.user)
+
+const { abbreviatedDatetime, abbreviatedDate } = useFormatDate()
 
 // Blog metadata
 const blogTitle = ref("")
@@ -307,7 +341,6 @@ async function loadBlogMeta() {
     blogTitle.value = meta?.title || ""
     blogSubtitle.value = meta?.subtitle || ""
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn("loadBlogMeta() failed", e)
     blogTitle.value = ""
     blogSubtitle.value = ""
@@ -315,17 +348,18 @@ async function loadBlogMeta() {
 }
 
 // Sidebar state
-const today = new Date()
-const calendarYear = ref(today.getFullYear())
-const calendarMonth = ref(today.getMonth() + 1) // 1-12
-const selectedDate = ref("") // YYYY-MM-DD
-function onSelectDate(iso){ selectedDate.value = iso; page.value = 1; reload() }
-function prevMonth(){ const d=new Date(calendarYear.value, calendarMonth.value-2, 1); calendarYear.value=d.getFullYear(); calendarMonth.value=d.getMonth()+1 }
-function nextMonth(){ const d=new Date(calendarYear.value, calendarMonth.value, 1); calendarYear.value=d.getFullYear(); calendarMonth.value=d.getMonth()+1 }
+const dateFilter = ref(new Date())
+
+watch(dateFilter, () => {
+  page.value = 1
+  reload()
+})
 
 // Top filters
 const viewMode = ref("posts") // 'posts' | 'tasks'
-function setMode(m){ viewMode.value = m }
+function setMode(m) {
+  viewMode.value = m
+}
 const q = ref("")
 const sort = ref("dateCreation:desc") // API field is dateCreation
 const taskSort = ref("title:asc")
@@ -339,8 +373,8 @@ const pages = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)
 // Posts data
 const rows = ref([])
 const loading = ref(false)
-const ratings = ref({})         // { [postId]: { average, count } }
-const attachCount = ref({})     // { [postId]: number }
+const ratings = ref({}) // { [postId]: { average, count } }
+const attachCount = ref({}) // { [postId]: number }
 
 const sortOptions = [
   { label: "Newest first", value: "dateCreation:desc" },
@@ -359,7 +393,7 @@ const pageSizeOptions = [
 ]
 
 // Load posts from API
-async function loadPosts(){
+async function loadPosts() {
   loading.value = true
   const blogId = Number(route.params.blogId)
   try {
@@ -372,32 +406,36 @@ async function loadPosts(){
     })
 
     // Optional date filter (client-side)
-    const filtered = selectedDate.value
-      ? data.filter(p => (p.date || "").startsWith(selectedDate.value))
+    const filtered = dateFilter.value
+      ? data.filter((p) => {
+          const d = DateTime.fromISO(p.date)
+
+          return d.hasSame(dateFilter.value, "day")
+        })
       : data
 
     rows.value = filtered
-    total.value = selectedDate.value ? filtered.length : tot
+    total.value = dateFilter.value ? filtered.length : tot
 
     // Ratings prefetch
-    const ids = filtered.map(p => p.id)
+    const ids = filtered.map((p) => p.id)
     ratings.value = await service.getManyPostRatingsApi(blogId, ids)
 
     // Attachments count (use provided count if present, otherwise fetch)
     attachCount.value = {}
     await Promise.all(
       filtered.map(async (p) => {
-        if (typeof p.attachmentsCount === 'number') {
+        if (typeof p.attachmentsCount === "number") {
           attachCount.value[p.id] = p.attachmentsCount
           return
         }
         const list = await service.listPostAttachmentsApi(p.id)
         attachCount.value[p.id] = Array.isArray(list) ? list.length : 0
-      })
+      }),
     )
   } catch (e) {
     // Keep UI clean when API fails: no mock data.
-    // eslint-disable-next-line no-console
+
     console.warn("loadPosts() error", e)
     rows.value = []
     total.value = 0
@@ -408,40 +446,49 @@ async function loadPosts(){
   }
 }
 
-async function reload(){ if (viewMode.value==='posts') await loadPosts() }
+async function reload() {
+  if (viewMode.value === "posts") await loadPosts()
+}
 
-watch([q, sort, page, pageSize], () => { if(viewMode.value==='posts') loadPosts() })
+watch([q, sort, page, pageSize], () => {
+  if (viewMode.value === "posts") loadPosts()
+})
 watch(viewMode, () => {
-  if (viewMode.value === 'posts') {
+  if (viewMode.value === "posts") {
     loadPosts()
   } else {
     reloadTasks()
   }
 })
 
-function go(row){
+function go(row) {
   router.push({
     name: "BlogPostDetail",
     params: { blogId: route.params.blogId, postId: row.id },
-    query: route.query
+    query: route.query,
   })
 }
 
 // Create post dialog
 const showCreate = ref(false)
-function openCreate(){ showCreate.value = true }
-async function onCreated(){ showCreate.value = false; page.value = 1; await loadPosts() }
+function openCreate() {
+  showCreate.value = true
+}
+async function onCreated() {
+  showCreate.value = false
+  page.value = 1
+  await loadPosts()
+}
 
 // Tasks (only for current user and current session)
 const tasks = ref([])
 const assignments = ref([])
 
-async function reloadTasks(){
+async function reloadTasks() {
   const blogId = Number(route.params.blogId)
   try {
     tasks.value = await service.listTasks(blogId)
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn("reloadTasks() error", e)
     tasks.value = []
   }
@@ -449,12 +496,12 @@ async function reloadTasks(){
 
 const tasksFiltered = computed(() => {
   let out = [...tasks.value]
-  const [f,d] = (taskSort.value || "title:asc").split(":")
-  out.sort((a,b) => (a[f] > b[f] ? 1 : -1) * (d==="desc" ? -1 : 1))
+  const [f, d] = (taskSort.value || "title:asc").split(":")
+  out.sort((a, b) => (a[f] > b[f] ? 1 : -1) * (d === "desc" ? -1 : 1))
   return out
 })
 
-async function reloadAssignments(){
+async function reloadAssignments() {
   const blogId = Number(route.params.blogId)
   const sid = session.value?.id || 0
   try {
@@ -469,7 +516,6 @@ async function reloadAssignments(){
       assignments.value = await service.listAssignments({ blogId, sessionId: sid })
     }
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn("reloadAssignments() error", e)
     assignments.value = []
   }

@@ -39,6 +39,14 @@ class SkillModel extends Model
     ];
     public array $required = ['title'];
 
+    public string $table_user;
+    public string $table_skill_rel_gradebook;
+    public string $table_skill_rel_user;
+    public string $table_course;
+    public string $table_skill_rel_skill;
+    public string $table_gradebook;
+    public string $sessionTable;
+
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
@@ -322,7 +330,7 @@ class SkillModel extends Model
         /** @var Skill $skill */
         foreach ($skills as $skill) {
             if (!$skill->getIcon()) {
-               continue;
+               //continue;
             }
 
             $skillsInfo[] = [
@@ -337,7 +345,7 @@ class SkillModel extends Model
                 'status' => $skill->getStatus(),
                 'asset_id' => (string) $skill->getAsset()?->getId(),
                 'profile_id' => $skill->getLevelProfile()?->getId(),
-                'icons_small' => sprintf('badges/%s-small.png', sha1($skill['title'])),
+                'icons_small' => sprintf('badges/%s-small.png', sha1($skill->getTitle())),
             ];
         }
 
@@ -919,7 +927,7 @@ class SkillModel extends Model
         $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
-        $tableResult = '<div id="skillList" class="bg-white p-6 shadow-lg rounded-lg mt-4 mb-4">';
+        $tableResult = '<div id="skillList" class="text-left">';
         if ($isHierarchicalTable) {
             $tableResult = '<div class="table-responsive">';
         }
@@ -1815,6 +1823,26 @@ class SkillModel extends Model
     }
 
     /**
+     * Collect all descendant skill IDs for a given skill using the flat
+     * skills list returned by getAllSkills() (each entry has a parent_id key).
+     *
+     * @return int[]
+     */
+    private function getDescendantIds(int $skillId, array $allSkills): array
+    {
+        $descendants = [];
+        foreach ($allSkills as $skill) {
+            if ((int) $skill['parent_id'] === $skillId) {
+                $childId = (int) $skill['id'];
+                $descendants[] = $childId;
+                $descendants = array_merge($descendants, $this->getDescendantIds($childId, $allSkills));
+            }
+        }
+
+        return $descendants;
+    }
+
+    /**
      * @param array $skillInfo
      *
      * @return array
@@ -1824,10 +1852,18 @@ class SkillModel extends Model
         $allSkills = $this->getAllSkills();
         $objGradebook = new Gradebook();
 
+        // Collect the current skill and all its descendants so they cannot
+        // be selected as parent (which would create a cycle).
+        $excludeIds = [];
+        if (!empty($skillInfo['id'])) {
+            $excludeIds = $this->getDescendantIds((int) $skillInfo['id'], $allSkills);
+            $excludeIds[] = (int) $skillInfo['id'];
+        }
+
         $skillList = [0 => get_lang('None')];
 
         foreach ($allSkills as $skill) {
-            if (isset($skillInfo['id']) && $skill['id'] == $skillInfo['id']) {
+            if (in_array((int) $skill['id'], $excludeIds, true)) {
                 continue;
             }
 

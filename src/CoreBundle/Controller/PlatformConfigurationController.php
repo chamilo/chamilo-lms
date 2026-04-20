@@ -1,13 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -21,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Throwable;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -32,6 +32,7 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
+        private readonly PluginHelper $pluginHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -46,11 +47,20 @@ class PlatformConfigurationController extends AbstractController
         $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
-            if (\in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
+            if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {
                 $enabledOAuthProviders = [$forcedLoginMethod => $enabledOAuthProviders[$forcedLoginMethod]];
             } else {
                 $enabledOAuthProviders = [];
             }
+        }
+
+        $oauth2Providers = [];
+        foreach ($enabledOAuthProviders as $providerName => $providerParams) {
+            $oauth2Providers[] = [
+                'name' => $providerName,
+                'title' => $providerParams['title'] ?? ucwords($providerName),
+                'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
+            ];
         }
 
         $configuration = [
@@ -58,15 +68,7 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
-            'oauth2_providers' => array_map(
-                fn ($providerName, $providerParams) => [
-                    'name' => $providerName,
-                    'title' => $providerParams['title'] ?? ucwords($providerName),
-                    'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
-                ],
-                array_keys($enabledOAuthProviders),
-                $enabledOAuthProviders
-            ),
+            'oauth2_providers' => $oauth2Providers,
             'ldap_auth' => null,
             'forced_login_method' => $forcedLoginMethod,
         ];
@@ -88,19 +90,17 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['catalog.allow_students_to_browse_courses'] = $settingsManager->getSetting('catalog.allow_students_to_browse_courses', true);
         $configuration['settings']['catalog.allow_session_auto_subscription'] = $settingsManager->getSetting('catalog.allow_session_auto_subscription', true);
         $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
-        $rawCourseCatalogSetting = $settingsManager->getSetting('catalog.course_catalog_settings', true);
-        $configuration['settings']['catalog.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
-        $rawSessionCatalogSetting = $settingsManager->getSetting('catalog.session_catalog_settings', true);
-        $configuration['settings']['catalog.session_catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['catalog.course_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.course_catalog_settings', true));
+        $configuration['settings']['catalog.session_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.session_catalog_settings', true));
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
-        $rawCourseStudentInfoSetting = $settingsManager->getSetting('course.course_student_info', true);
-        $configuration['settings']['course.course_student_info'] = 'false' !== $rawCourseStudentInfoSetting ? $this->decodeSettingArray($rawCourseStudentInfoSetting) : 'false';
+        $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
 
-        $variables = [];
+        $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+        $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
 
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
@@ -170,7 +170,21 @@ class PlatformConfigurationController extends AbstractController
                 'search.search_prefilter_prefix',
                 'search.search_show_unlinked_results',
                 'certificate.allow_general_certificate',
+                'language.show_different_course_language',
+                'workflows.allow_users_to_create_courses',
+                'work.allow_only_one_student_publication_per_user',
+                'course.course_creation_form_hide_course_code',
+                'course.course_creation_form_set_course_category_mandatory',
+                'display.hide_logout_button',
+                'document.documents_hide_download_icon',
+                'platform.allow_my_files',
+                'document.users_copy_files',
+                'agenda.allow_careers_in_global_agenda',
             ];
+
+            foreach ($variables as $variable) {
+                $configuration['settings'][$variable] = $settingsManager->getSetting($variable, true);
+            }
 
             $user = $this->userHelper->getCurrent();
 
@@ -193,12 +207,8 @@ class PlatformConfigurationController extends AbstractController
                 ]),
                 'listingURL' => (new Bbb('', '', true, $user->getId()))->getListingUrl(),
             ];
-        }
 
-        foreach ($variables as $variable) {
-            $value = $settingsManager->getSetting($variable, true);
-
-            $configuration['settings'][$variable] = $value;
+            $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
         }
 
         return new JsonResponse($configuration);
@@ -241,40 +251,145 @@ class PlatformConfigurationController extends AbstractController
     }
 
     /**
-     * Attempts to decode a setting value that may be stored as:
-     * - native PHP array
-     * - JSON string
-     * - PHP array code string
+     * Decodes a setting stored as a JSON string or native array.
+     * Returns the string 'false' unchanged (used as a sentinel by the settings system).
      */
-    private function decodeSettingArray(mixed $setting): array
+    private function decodeSetting(mixed $setting): mixed
     {
-        // Already an array, return as is
+        if ('false' === $setting) {
+            return 'false';
+        }
+
         if (\is_array($setting)) {
             return $setting;
         }
 
-        // Try to decode JSON string
         if (\is_string($setting)) {
             $json = json_decode($setting, true);
+
             if (\is_array($json)) {
                 return $json;
             }
-
-            // Try to evaluate PHP-style array string
-            $trimmed = rtrim($setting, ';');
-
-            try {
-                $evaluated = eval("return $trimmed;");
-                if (\is_array($evaluated)) {
-                    return $evaluated;
-                }
-            } catch (Throwable $e) {
-                // Log error and continue
-                error_log('Failed to eval setting value: '.$e->getMessage());
-            }
         }
 
-        // Return empty array as fallback
         return [];
+    }
+
+    private function getOnlyofficeFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('Onlyoffice');
+
+        $documentServerUrl = (string) $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'document_server_url',
+            ''
+        );
+
+        $jwtSecret = (string) $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'jwt_secret',
+            ''
+        );
+
+        $demoData = $this->pluginHelper->getPluginConfigValue(
+            'Onlyoffice',
+            'onlyoffice_connect_demo_data',
+            null
+        );
+
+        $demoEnabled = false;
+
+        if (\is_string($demoData) && '' !== trim($demoData)) {
+            $decodedDemo = json_decode($demoData, true);
+            if (\is_array($decodedDemo)) {
+                $demoEnabled = !empty($decodedDemo['enabled']);
+            }
+        } elseif (\is_array($demoData)) {
+            $demoEnabled = !empty($demoData['enabled']);
+        }
+
+        $configured = $demoEnabled || (
+            '' !== trim($documentServerUrl)
+                && '' !== trim($jwtSecret)
+        );
+
+        return [
+            'enabled' => $enabled,
+            'configured' => $configured,
+            'editorPath' => '/plugin/Onlyoffice/editor.php',
+        ];
+    }
+
+    private function getTourFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('Tour');
+
+        $showTour = $enabled && $this->normalizePluginBoolean(
+            $this->pluginHelper->getPluginConfigValue('Tour', 'show_tour', true)
+        );
+
+        $theme = trim((string) $this->pluginHelper->getPluginConfigValue('Tour', 'theme', ''));
+        $themeCssPath = null;
+
+        if ('' !== $theme) {
+            $themeCssPath = '/plugin/Tour/intro.js/introjs-'.$theme.'.css';
+        }
+
+        return [
+            'enabled' => $enabled,
+            'showTour' => $showTour,
+            'theme' => $theme,
+            'introCss' => '/plugin/Tour/intro.js/introjs.min.css',
+            'introThemeCss' => $themeCssPath,
+            'introJs' => '/plugin/Tour/intro.js/intro.min.js',
+            'stepsAjax' => '/plugin/Tour/ajax/steps.ajax.php',
+            'saveAjax' => '/plugin/Tour/ajax/save.ajax.php',
+        ];
+    }
+
+    private function getBuyCoursesFrontendConfig(): array
+    {
+        $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
+
+        $showMainMenuTab = $enabled && $this->normalizePluginBoolean(
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'show_main_menu_tab', false)
+        );
+
+        $publicMainMenuTab = $enabled && $this->normalizePluginBoolean(
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'public_main_menu_tab', false)
+        );
+
+        $allowAnonymousUsers = $enabled && $this->normalizePluginBoolean(
+            $this->pluginHelper->getPluginConfigValue('BuyCourses', 'unregistered_users_enable', false)
+        );
+
+        return [
+            'enabled' => $enabled,
+            'showMainMenuTab' => $showMainMenuTab,
+            'publicMainMenuTab' => $publicMainMenuTab,
+            'allowAnonymousUsers' => $allowAnonymousUsers,
+            'visibleForAuthenticatedUsers' => $enabled && $showMainMenuTab,
+            'visibleForAnonymousUsers' => $enabled && $showMainMenuTab && $publicMainMenuTab,
+            'indexPath' => '/plugin/BuyCourses/index.php',
+        ];
+    }
+
+    private function normalizePluginBoolean(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value)) {
+            return 1 === $value;
+        }
+
+        if (\is_string($value)) {
+            $normalized = strtolower(trim($value));
+
+            return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+        }
+
+        return false;
     }
 }

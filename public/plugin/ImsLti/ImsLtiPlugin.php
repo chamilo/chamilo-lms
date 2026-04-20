@@ -10,6 +10,7 @@ use Chamilo\LtiBundle\Entity\LineItem;
 use Chamilo\LtiBundle\Entity\Platform;
 use Chamilo\LtiBundle\Entity\Token;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 
@@ -30,10 +31,12 @@ class ImsLtiPlugin extends Plugin
         $version = '1.9.0';
         $author = 'Angel Fernando Quiroz Campos';
 
-        $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
         $settings = [
-            $message => 'html',
-            'enabled' => 'boolean',
+            Display::return_message(
+                'Platform keys are shown after installation and when the plugin is enabled.',
+                'info',
+                false
+            ) => 'html',
         ];
 
         parent::__construct($version, $author, $settings);
@@ -53,6 +56,74 @@ class ImsLtiPlugin extends Plugin
         static $result = null;
 
         return $result ?: $result = new self();
+    }
+
+    public function syncPlatformKeyPairWithPluginState(): void
+    {
+        $em = Database::getManager();
+
+        try {
+            /** @var Platform|null $platform */
+            $platform = $em->getRepository(Platform::class)->findOneBy([]);
+        } catch (\Throwable $e) {
+            error_log('[ImsLti] Unable to sync platform key pair: '.$e->getMessage());
+
+            return;
+        }
+
+        if ($this->isEnabledForCurrentAccessUrl()) {
+            if (!$platform) {
+                $this->ensurePlatformKeys();
+            }
+
+            return;
+        }
+
+        if ($platform) {
+            $em->remove($platform);
+            $em->flush();
+        }
+    }
+
+    private function getPlatformKeyPairStatusMessage(): string
+    {
+        $platform = null;
+        $platformStateNote = null;
+
+        try {
+            $em = Database::getManager();
+
+            /** @var Platform|null $platform */
+            $platform = $em->getRepository(Platform::class)->findOneBy([]);
+        } catch (\Throwable $e) {
+            error_log('[ImsLti] Unable to read platform key pair status: '.$e->getMessage());
+            $platformStateNote = 'Platform key storage is not available yet.';
+        }
+
+        $isEnabled = $this->isEnabledForCurrentAccessUrl();
+        $kid = $platform ? (string) $platform->getKid() : 'Not generated';
+        $hasPublicKey = $platform && !empty($platform->publicKey);
+        $hasPrivateKey = $platform && '' !== trim((string) $platform->getPrivateKey());
+
+        $rows = [
+            '<li><strong>Status:</strong> '.($isEnabled ? 'Enabled' : 'Disabled').'</li>',
+            '<li><strong>KID:</strong> '.htmlspecialchars($kid, ENT_QUOTES).'</li>',
+            '<li><strong>Public key configured:</strong> '.($hasPublicKey ? 'Yes' : 'No').'</li>',
+            '<li><strong>Private key configured:</strong> '.($hasPrivateKey ? 'Yes' : 'No').'</li>',
+        ];
+
+        if ($platformStateNote) {
+            $rows[] = '<li><strong>Note:</strong> '.htmlspecialchars($platformStateNote, ENT_QUOTES).'</li>';
+        } elseif (!$isEnabled) {
+            $rows[] = '<li><strong>Note:</strong> Keys are generated when the plugin is enabled from the plugins list.</li>';
+        }
+
+        $message = '<div class="space-y-2">'
+            .'<p class="mb-2">Current platform key pair status.</p>'
+            .'<ul class="list-disc pl-5 space-y-1">'.implode('', $rows).'</ul>'
+            .'</div>';
+
+        return Display::return_message($message, $isEnabled ? 'info' : 'warning', false);
     }
 
     /**
@@ -76,32 +147,7 @@ class ImsLtiPlugin extends Plugin
      */
     public function performActionsAfterConfigure()
     {
-        $em = Database::getManager();
-
-        /** @var Platform $platform */
-        $platform = $em
-            ->getRepository(Platform::class)
-            ->findOneBy([]);
-
-        if ($this->get('enabled') === 'true') {
-            if (!$platform) {
-                $platform = new Platform();
-            }
-
-            $keyPair = self::generatePlatformKeys();
-
-            $platform->setKid($keyPair['kid']);
-            $platform->publicKey = $keyPair['public'];
-            $platform->setPrivateKey($keyPair['private']);
-
-            $em->persist($platform);
-        } else {
-            if ($platform) {
-                $em->remove($platform);
-            }
-        }
-
-        $em->flush();
+        $this->syncPlatformKeyPairWithPluginState();
 
         return $this;
     }
@@ -145,7 +191,7 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $courseTool->setName($ltiTool->getName());
+        $courseTool->setTitle($ltiTool->getTitle());
 
         if ('iframe' !== $ltiTool->getDocumentTarget()) {
             $courseTool->setTarget('_blank');
@@ -167,7 +213,7 @@ class ImsLtiPlugin extends Plugin
     public function addCourseTool(Course $course, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getName(),
+            $ltiTool->getTitle(),
             $course->getId(),
             null,
             self::generateToolLink($ltiTool)
@@ -183,6 +229,12 @@ class ImsLtiPlugin extends Plugin
         $em->flush();
     }
 
+    private function toolBelongsToCourse(Course $course, ExternalTool $tool): bool
+    {
+        return null !== $this->findCourseToolByLink($course, $tool)
+            || null !== $tool->getFirstResourceLinkFromCourseSession($course);
+    }
+
     /**
      * Add the course session tool.
      *
@@ -193,7 +245,7 @@ class ImsLtiPlugin extends Plugin
     public function addCourseSessionTool(Course $course, Session $session, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getName(),
+            $ltiTool->getTitle(),
             $course->getId(),
             null,
             self::generateToolLink($ltiTool),
@@ -371,36 +423,63 @@ class ImsLtiPlugin extends Plugin
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
         /** @var ExternalTool|null $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
+        $newLtiTool = null;
+
+        /** @var ExternalTool[] $candidates */
+        $candidates = $ltiToolRepo->findBy(['launchUrl' => $url]);
+
+        foreach ($candidates as $candidate) {
+            if ($this->toolBelongsToCourse($course, $candidate)) {
+                $newLtiTool = $candidate;
+                break;
+            }
+        }
 
         if (null === $newLtiTool) {
             $newLtiTool = new ExternalTool();
             $newLtiTool
                 ->setLaunchUrl($url)
-                ->setParent(
-                    $baseLtiTool
-                )
+                ->setParent($baseLtiTool)
+                ->setTitle($baseLtiTool->getTitle())
+                ->setDescription($baseLtiTool->getDescription())
+                ->setDocumenTarget($baseLtiTool->getDocumentTarget())
+                ->setVersion($baseLtiTool->getVersion())
+                ->setCustomParams($baseLtiTool->getCustomParams())
                 ->setPrivacy(
                     $baseLtiTool->isSharingName(),
                     $baseLtiTool->isSharingEmail(),
                     $baseLtiTool->isSharingPicture()
                 )
-                ->setCourse($course);
+                ->setReplacementForUserId($baseLtiTool->getReplacementForUserId());
+
+            if ($baseLtiTool->getVersion() === ImsLti::V_1P3) {
+                $newLtiTool
+                    ->setClientId($baseLtiTool->getClientId())
+                    ->setLoginUrl($baseLtiTool->getLoginUrl())
+                    ->setRedirectUrl($baseLtiTool->getRedirectUrl())
+                    ->setAdvantageServices($baseLtiTool->getAdvantageServices())
+                    ->setJwksUrl($baseLtiTool->getJwksUrl());
+
+                $newLtiTool->publicKey = $baseLtiTool->publicKey;
+            } elseif ($baseLtiTool->getVersion() === ImsLti::V_1P1) {
+                $newLtiTool
+                    ->setConsumerKey($baseLtiTool->getConsumerKey())
+                    ->setSharedSecret($baseLtiTool->getSharedSecret());
+            }
         }
 
         $newLtiTool
-            ->setName(
-                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getName()
+            ->setTitle(
+                !empty($contentItem['title']) ? $contentItem['title'] : $baseLtiTool->getTitle()
             )
             ->setDescription(
                 !empty($contentItem['text']) ? $contentItem['text'] : null
             );
 
         if (!empty($contentItem['custom'])) {
-            $newLtiTool
-                ->setCustomParams(
-                    $newLtiTool->encodeCustomParams($contentItem['custom'])
-                );
+            $newLtiTool->setCustomParams(
+                $newLtiTool->encodeCustomParams($contentItem['custom'])
+            );
         }
 
         $em->persist($newLtiTool);
@@ -441,12 +520,18 @@ class ImsLtiPlugin extends Plugin
     public static function existsToolInCourse($toolId, Course $course)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository(ExternalTool::class);
 
         /** @var ExternalTool|null $tool */
-        $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
+        $tool = $em->find(ExternalTool::class, (int) $toolId);
 
-        return !empty($tool);
+        if (!$tool) {
+            return false;
+        }
+
+        $plugin = self::create();
+
+        return null !== $plugin->findCourseToolByLink($course, $tool)
+            || null !== $tool->getFirstResourceLinkFromCourseSession($course);
     }
 
     /**
@@ -478,7 +563,13 @@ class ImsLtiPlugin extends Plugin
             throw new Exception($this->get_lang('NoAccessToUrl'));
         }
 
-        $xml = new SimpleXMLElement($content);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
+
+        if ($xml === false) {
+            throw new Exception($this->get_lang('LaunchUrlNotFound'));
+        }
+
         $result = $xml->xpath('blti:launch_url');
 
         if (empty($result)) {
@@ -527,16 +618,7 @@ class ImsLtiPlugin extends Plugin
      */
     public function doWhenDeletingCourse($courseId)
     {
-        $em = Database::getManager();
-        $q = $em
-            ->createQuery(
-                'DELETE FROM Chamilo\LtiBundle\ExternalTool tool
-                    WHERE tool.course = :c_id and tool.parent IS NOT NULL'
-            );
-        $q->execute(['c_id' => (int) $courseId]);
-
-        $em->createQuery('DELETE FROM Chamilo\LtiBundle\ExternalTool tool WHERE tool.course = :c_id')
-            ->execute(['c_id' => (int) $courseId]);
+        return;
     }
 
     /**
@@ -551,29 +633,39 @@ class ImsLtiPlugin extends Plugin
 
     public static function getCoursesForParentTool(ExternalTool $tool, Session $session = null)
     {
-        if ($tool->getParent()) {
+        if (!$tool->isGlobal()) {
             return [];
         }
 
-        $children = $tool->getChildren();
+        $resourceNode = $tool->getResourceNode();
 
-        if ($session) {
-            $children = $children->filter(function (ExternalTool $tool) use ($session) {
-                if (null === $tool->getSession()) {
-                    return false;
-                }
-
-                if ($tool->getSession()->getId() !== $session->getId()) {
-                    return false;
-                }
-
-                return true;
-            });
+        if (!$resourceNode) {
+            return [];
         }
 
-        return $children->map(function (ExternalTool $tool) {
-            return $tool->getCourse();
-        });
+        $courses = [];
+
+        foreach ($resourceNode->getChildren() as $childNode) {
+            foreach ($childNode->getResourceLinks() as $link) {
+                $course = $link->getCourse();
+
+                if (!$course) {
+                    continue;
+                }
+
+                if ($session) {
+                    $linkSession = $link->getSession();
+
+                    if (!$linkSession || $linkSession->getId() !== $session->getId()) {
+                        continue;
+                    }
+                }
+
+                $courses[$course->getId()] = $course;
+            }
+        }
+
+        return array_values($courses);
     }
 
     /**
@@ -581,25 +673,60 @@ class ImsLtiPlugin extends Plugin
      *
      * @return mixed|string|null
      */
-    public static function getToolPublicKey(ExternalTool $tool)
+    public function getToolPublicKey($tool): string
     {
-        $publicKey = '';
-        if (!empty($tool->getJwksUrl())) {
-            $publicKeySet = json_decode(file_get_contents($tool->getJwksUrl()), true);
-            $pk = [];
-            foreach ($publicKeySet['keys'] as $key) {
-                $pk = openssl_pkey_get_details(
-                    JWK::parseKeySet(['keys' => [$key]])[$key['kid']]
-                );
-            }
-            if (!empty($pk)) {
-                $publicKey = $pk['key'];
-            }
-        } else {
-            $publicKey = $tool->publicKey;
-        };
+        if (empty($tool)) {
+            return '';
+        }
 
-        return $publicKey;
+        if (!empty($tool->publicKey)) {
+            return (string) $tool->publicKey;
+        }
+
+        if (empty($tool->getJwksUrl())) {
+            return '';
+        }
+
+        $jwksRaw = @file_get_contents($tool->getJwksUrl());
+        if (false === $jwksRaw || '' === trim($jwksRaw)) {
+            return '';
+        }
+
+        $publicKeySet = json_decode($jwksRaw, true);
+        if (
+            !is_array($publicKeySet) ||
+            empty($publicKeySet['keys']) ||
+            !is_array($publicKeySet['keys'])
+        ) {
+            return '';
+        }
+
+        $keys = \Firebase\JWT\JWK::parseKeySet($publicKeySet);
+
+        if (empty($keys) || !is_array($keys)) {
+            return '';
+        }
+
+        foreach ($keys as $kid => $parsedKey) {
+            if (!$parsedKey instanceof \Firebase\JWT\Key) {
+                continue;
+            }
+
+            $keyMaterial = $parsedKey->getKeyMaterial();
+
+            if (is_string($keyMaterial) && '' !== trim($keyMaterial)) {
+                return $keyMaterial;
+            }
+
+            if ($keyMaterial instanceof \OpenSSLAsymmetricKey) {
+                $details = openssl_pkey_get_details($keyMaterial);
+                if (!empty($details['key'])) {
+                    return $details['key'];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -625,19 +752,18 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        $metadata = $this->getLtiMetadata();
+        $tableNames = array_map(
+            static fn ($classMetadata) => $classMetadata->getTableName(),
+            $metadata
+        );
+
+        if ($em->getConnection()->createSchemaManager()->tablesExist($tableNames)) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(ExternalTool::class),
-                $em->getClassMetadata(LineItem::class),
-                $em->getClassMetadata(Platform::class),
-                $em->getClassMetadata(Token::class),
-            ]
-        );
+        $schemaTool->updateSchema($metadata, true);
     }
 
     /**
@@ -647,19 +773,18 @@ class ImsLtiPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        $metadata = $this->getLtiMetadata();
+        $tableNames = array_map(
+            static fn ($classMetadata) => $classMetadata->getTableName(),
+            $metadata
+        );
+
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([$tableNames[0]])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema(
-            [
-                $em->getClassMetadata(ExternalTool::class),
-                $em->getClassMetadata(LineItem::class),
-                $em->getClassMetadata(Platform::class),
-                $em->getClassMetadata(Token::class),
-            ]
-        );
+        $schemaTool->dropSchema($metadata);
     }
 
     private function removeTools()
@@ -708,7 +833,10 @@ class ImsLtiPlugin extends Plugin
             return null;
         }
 
-        return new SimpleXMLElement($request);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($request, SimpleXMLElement::class, LIBXML_NONET);
+
+        return $xml !== false ? $xml : null;
     }
 
     /**
@@ -741,5 +869,42 @@ class ImsLtiPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
+    }
+
+    private function getLtiMetadata(): array
+    {
+        $em = Database::getManager();
+
+        return [
+            $em->getClassMetadata(ExternalTool::class),
+            $em->getClassMetadata(LineItem::class),
+            $em->getClassMetadata(Platform::class),
+            $em->getClassMetadata(Token::class),
+        ];
+    }
+
+    public function ensurePlatformKeys(): Platform
+    {
+        $em = Database::getManager();
+
+        /** @var Platform|null $platform */
+        $platform = $em->getRepository(Platform::class)->findOneBy([]);
+
+        if ($platform) {
+            return $platform;
+        }
+
+        $platform = new Platform();
+
+        $keyPair = self::generatePlatformKeys();
+
+        $platform->setKid($keyPair['kid']);
+        $platform->publicKey = $keyPair['public'];
+        $platform->setPrivateKey($keyPair['private']);
+
+        $em->persist($platform);
+        $em->flush();
+
+        return $platform;
     }
 }

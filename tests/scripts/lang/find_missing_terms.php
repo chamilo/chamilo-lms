@@ -26,12 +26,20 @@ if (!file_exists($root . '/.git')) {
 
 $potPath = $root . '/translations/messages.pot';
 
+// Regex fragment for matching quoted string content, handling escaped characters.
+// Use with a captured opening quote in group N: (["']) then QUOTED_CONTENT then \N
+// The content group handles:
+//   - \\. (any escaped character, including \', \", \\)
+//   - (?!\N). (any character that is not the closing quote)
+define('QUOTED_CONTENT', '((?:\\\\.|(?!\\1)[^\\\\])*)');
+
 // Parse messages.pot to get all msgids
 $msgids = parsePotFile($potPath);
 
 $missing = [];
 
-$dirsToScan = ['assets', 'public', 'src', 'tests'];
+//$dirsToScan = ['assets', 'public', 'src', 'tests'];
+$dirsToScan = ['assets', 'public', 'src'];
 $dirsToAvoid = ['public/plugin'];
 
 $termIndex = 1;
@@ -70,20 +78,22 @@ foreach ($dirsToScan as $dir) {
             $terms = extractTermsFromLine($line, $isVue);
             $hiddenTerms = extractHiddenTermsFromLine($line, $isVue);
             foreach ($terms as $term) {
-                $isMissing = !isset($msgids[$term]);
+                $lookupTerm = normalizePlaceholders($term, $isVue);
+                $isMissing = !isset($msgids[$lookupTerm]);
                 if ($showAll || $isMissing) {
                     echo "[".str_pad($termIndex,5, ' ', STR_PAD_LEFT)."] Found \"{$term}\" in {$path}:" . ($num + 1) . "\n";
                 }
                 $termIndex++;
                 if ($isMissing) {
                     echo "\033[31m Missing in messages.pot\033[0m\n";
-                    $missing[$term] = true;
+                    $missing[$lookupTerm] = true;
                 }
             }
             foreach ($hiddenTerms as $term) {
-                $isMissing = !isset($msgids[$term]);
+                $lookupTerm = normalizePlaceholders($term, $isVue);
+                $isMissing = !isset($msgids[$lookupTerm]);
                 if ($isMissing) {
-                    $missing[$term] = true;
+                    $missing[$lookupTerm] = true;
                 }
             }
         }
@@ -94,7 +104,8 @@ foreach ($dirsToScan as $dir) {
 if (!empty($missing)) {
     $output = '';
     foreach (array_keys($missing) as $term) {
-        $output .= "msgid \"{$term}\"\nmsgstr \"\"\n\n";
+        $escaped = escape_pot($term);
+        $output .= "msgid \"{$escaped}\"\nmsgstr \"\"\n\n";
     }
     file_put_contents('/tmp/missing_terms.txt', $output);
 }
@@ -115,8 +126,7 @@ function parsePotFile(string $filePath): array
 
         if (strpos($line, 'msgid ') === 0) {
             if ($currentMsgid !== null && $currentMsgid !== '') {
-                $currentMsgid = unescape_double($currentMsgid);
-                $msgids[$currentMsgid] = true;
+                registerPotMsgid($msgids, $currentMsgid);
             }
             if (preg_match('/msgid\s+"(.*)"/', $line, $matches)) {
                 $currentMsgid = $matches[1];
@@ -128,8 +138,7 @@ function parsePotFile(string $filePath): array
             $currentMsgid .= $matches[1];
         } elseif ($currentMsgid !== null && (strpos($line, 'msgstr') === 0 || $line === '')) {
             if ($currentMsgid !== null && $currentMsgid !== '') {
-                $currentMsgid = unescape_double($currentMsgid);
-                $msgids[$currentMsgid] = true;
+                registerPotMsgid($msgids, $currentMsgid);
             }
             $currentMsgid = null;
             $isMsgid = false;
@@ -138,11 +147,26 @@ function parsePotFile(string $filePath): array
 
     // Handle last one if no empty line at end
     if ($currentMsgid !== null && $currentMsgid !== '') {
-        $currentMsgid = unescape_double($currentMsgid);
-        $msgids[$currentMsgid] = true;
+        registerPotMsgid($msgids, $currentMsgid);
     }
 
     return $msgids;
+}
+
+/**
+ * Register a .pot msgid under both its unescaped form (for double-quoted source
+ * strings where \t is a real tab) and its raw escaped form (for single-quoted
+ * source strings where \t stays as literal backslash + t).
+ */
+function registerPotMsgid(array &$msgids, string $rawMsgid): void
+{
+    $unescaped = unescape_double($rawMsgid);
+    $msgids[$unescaped] = true;
+    // Also register the raw form so that single-quoted PHP sources
+    // like get_lang('Substraction:\t\t\t-') match the .pot entry
+    if ($rawMsgid !== $unescaped) {
+        $msgids[$rawMsgid] = true;
+    }
 }
 
 function extractTermsFromLine(string $line, bool $isVue): array
@@ -151,32 +175,36 @@ function extractTermsFromLine(string $line, bool $isVue): array
 
     if ($isVue) {
         // 1. v-t="'term'" or v-t='"term"'
-        preg_match_all('/\bv-t\s*=\s*(["\'])(.*?)(?<!\\\\)\1/x', $line, $matches);
+        preg_match_all('/\bv-t\s*=\s*(["\'])'.QUOTED_CONTENT.'\1/', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 2. {{ $t("term") }}
-        preg_match_all('/\{\{\s*\$t\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)\s*\}\}/x', $line, $matches);
+        preg_match_all('/\{\{\s*\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)\s*\}\}/', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 3. :label="$t('term')"
-        preg_match_all('/:\w+\s*=\s*["\']\$t\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)["\']/x', $line, $matches);
+        preg_match_all('/:\w+\s*=\s*["\']\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)["\']/', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 4. t("term") - exact t(
-        preg_match_all('/\bt\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
+        preg_match_all('/\bt\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)/', $line, $matches);
         addUnescapedTerms($matches, $terms);
     } else {
         // get_lang("term")
-        preg_match_all('/(?<!\$this->)(?<!\$plugin->)\bget_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*(?:,.*)?\)/x', $line, $matches);
+        preg_match_all('/(?<!\$this->)(?<!\$plugin->)\bget_lang\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // trans("term"), ->trans("term"), .trans("term")
-        preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
+        preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 'display_text' => 'term',
-        preg_match_all('/.*\'display_text\'\s\=\>\s(\')(.*?)\'/x', $line, $matches);
-        addUnescapedTerms($matches, $terms);
+        preg_match_all('/\'display_text\'\s*=>\s*\'((?:[^\'\\\\]|\\\\.)*)\'/', $line, $matches);
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $term) {
+                $terms[] = unescape_single($term);
+            }
+        }
     }
 
     return $terms;
@@ -191,10 +219,47 @@ function extractHiddenTermsFromLine(string $line, bool $isVue): array
     }
 
     // $this->get_lang("term") or $plugin->get_lang("term")
-    preg_match_all('/\$(this|plugin)->get_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*(?:,.*)?\)/x', $line, $matches);
-    addUnescapedTerms($matches, $terms);
+    // Group 1: this|plugin, Group 2: quote, Group 3: term content
+    preg_match_all('/\$(this|plugin)->get_lang\s*\(\s*(["\'])((?:\\\\.|(?!\2)[^\\\\])*)\2\s*(?:,.*)?\)/', $line, $matches);
+    // Shift groups: addUnescapedTerms expects group 1=quote, group 2=term
+    if (!empty($matches[0])) {
+        $shifted = [
+            $matches[0],
+            $matches[2], // quote character
+            $matches[3], // term content
+        ];
+        addUnescapedTerms($shifted, $terms);
+    }
 
     return $terms;
+}
+
+/**
+ * Normalize placeholders so Vue {0},{1},... match .pot %s,%d,... entries.
+ * Also handles named Vue i18n placeholders like {count} → %s.
+ */
+function normalizePlaceholders(string $term, bool $isVue): string
+{
+    if ($isVue) {
+        // Convert {0}, {1}, {n}, {count}, {name}, etc. to %s for .pot lookup
+        return preg_replace('/\{[0-9a-z_]+\}/i', '%s', $term);
+    }
+
+    return $term;
+}
+
+/**
+ * Escape a term for .pot msgid output (double-quoted string).
+ */
+function escape_pot(string $str): string
+{
+    return strtr($str, [
+        '\\' => '\\\\',
+        '"' => '\\"',
+        "\n" => '\\n',
+        "\r" => '\\r',
+        "\t" => '\\t',
+    ]);
 }
 
 function addUnescapedTerms(array $matches, array &$terms): void

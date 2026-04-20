@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:copyright,, nej:ingen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Octetströmmar,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mapp,, application/msword:MsWord,, application/octet-stream:Okettströmm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
@@ -4620,7 +4620,7 @@ msgid "Send mail to new user"
 msgstr "Skicka e-post till ny användare"
 
 msgid "Portfolio"
-msgstr "Utökad profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Om inställningar står på \"Sant\" kan användaren fylla i följande (frivilliga) fält: 'Mina kompetenser', 'Mina diplom', 'Vad jag kan undervisa i' och 'Mitt personliga öppna utrymme'"
@@ -5808,7 +5808,7 @@ msgid "Find a training session"
 msgstr "Hitta en utbildningssession"
 
 msgid "Session session"
-msgstr "Session session"
+msgstr "Sessionssession"
 
 msgid "Add URL"
 msgstr "Lägg till URL"
@@ -14729,7 +14729,7 @@ msgstr "Användare, grupper"
 msgid "Sorry no results"
 msgstr "Tyvärr inga resultat"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppbehörigheter"
 
 msgid "Closed"
@@ -16072,6 +16072,15 @@ msgstr "Kortkod"
 
 msgid "Create child skill"
 msgstr "Skapa underfärdighet"
+
+msgid "This skill can be obtained through:"
+msgstr "Denna färdighet kan erhållas genom:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Ingen kurs tillåter för närvarande att du erhåller denna färdighet."
+
+msgid "Add skill to search profile"
+msgstr "Lägg till färdighet i sökprofil"
 
 msgid "Search profile matches"
 msgstr "Sök profilträffar"
@@ -31006,7 +31015,7 @@ msgid "Create your first note to get started."
 msgstr "Skapa din första anteckning för att komma igång."
 
 msgid "F d, Y"
-msgstr "D d M Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Kunde inte ladda supportinformation just nu."
@@ -32584,70 +32593,70 @@ msgid "Current authentication method"
 msgstr "Nuvarande autentiseringsmetod"
 
 msgid "Branches"
-msgstr ""
+msgstr "Kontor"
 
 msgid "Rooms"
-msgstr ""
+msgstr "Rum"
 
 msgid "Room availability finder"
-msgstr ""
+msgstr "Sök rumstillgänglighet"
 
 msgid "New branch"
-msgstr ""
+msgstr "Nytt kontor"
 
 msgid "New room"
-msgstr ""
+msgstr "Nytt rum"
 
 msgid "Branch"
-msgstr ""
+msgstr "Kontor"
 
 msgid "Default room"
-msgstr ""
+msgstr "Standardsal"
 
 msgid "Room occupation: %s"
-msgstr ""
+msgstr "Rumsbeläggning: %s"
 
 msgid "Find available rooms"
-msgstr ""
+msgstr "Hitta lediga rum"
 
 msgid "Available rooms"
-msgstr ""
+msgstr "Lediga rum"
 
 msgid "Occupied rooms"
-msgstr ""
+msgstr "Belagda rum"
 
 msgid "No available rooms found for this time range"
-msgstr ""
+msgstr "Inga lediga rum hittades för detta tidsintervall"
 
 msgid "No rooms have been created yet"
-msgstr ""
+msgstr "Inga rum har skapats ännu"
 
 msgid "Courses linked to %s"
-msgstr ""
+msgstr "Kurser länkade till %s"
 
 msgid "No branches have been created yet"
-msgstr ""
+msgstr "Inga kontor har skapats ännu"
 
 msgid "Occupation"
-msgstr ""
+msgstr "Beläggning"
 
 msgid "Cannot delete branch with rooms attached"
-msgstr ""
+msgstr "Kan inte radera kontor med rum kopplade till det"
 
 msgid "Cannot delete room with courses attached"
-msgstr ""
+msgstr "Kan inte radera rum med kurser kopplade till det"
 
 msgid "Conflicts"
-msgstr ""
+msgstr "Konflikter"
 
 msgid "Geolocation"
-msgstr ""
+msgstr "Geolokalisering"
 
 msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
-msgstr ""
+msgstr "Latitud, Longitud (t.ex. 48.8566, 2.3522)"
 
 msgid "IPv4 or IPv6"
-msgstr ""
+msgstr "IPv4 eller IPv6"
 
 msgid "IP mask"
 msgstr "IP-mask"
@@ -32750,4 +32759,1129 @@ msgstr "Ladda upp en bild eller skapa en med Badge Studio."
 
 msgid "Current badge set"
 msgstr "Nuvarande märkeuppsättning"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "I denna sektion, när du klickar på 'Registrera student' för en kurs, kommer du att ombedas att välja användaren på nästa sida. När det validerats skapas en ny session med den valda kursen och användaren, och en prenumerationsnotifikation skickas till användaren."
+
+msgid "Read-only view"
+msgstr "Skrivskyddad vy"
+
+msgid "Events list"
+msgstr "Händelselista"
+
+msgid "Personal"
+msgstr "Personligt"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Veckor visas från 1 till 52"
+
+msgid "No tutored sessions found"
+msgstr "Inga handledda sessioner hittades"
+
+msgid "Content search"
+msgstr "Innehållssökning"
+
+msgid "Search indexed content across all courses."
+msgstr "Sök indexerat innehåll i alla kurser."
+
+msgid "Enter a keyword..."
+msgstr "Ange ett nyckelord..."
+
+msgid "Search error"
+msgstr "Sökfel"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Ange ett nyckelord för att söka indexerade dokument."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Resultat du inte har tillgång till är dolda via konfiguration."
+
+msgid "Restricted"
+msgstr "Begränsad"
+
+msgid "You do not have access to this resource."
+msgstr "Du har inte tillgång till denna resurs."
+
+msgid "Create group"
+msgstr "Skapa grupp"
+
+msgid "My custom certificate"
+msgstr "Mitt anpassade intyg"
+
+msgid "Select permission"
+msgstr "Välj behörighet"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Genom att acceptera denna inbjudan kommer du att kopplas till den begärande användaren på ett sätt som gör viss eller all din profilinformation tillgänglig för läsning av den begärande användaren"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "Visar %d av cirka %d resultat för %s."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "Visar %d tillgängliga resultat för %s."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Du kommer därför att omdirigeras automatiskt till denna URL"
+
+msgid "You have access to multiple URLs"
+msgstr "Du har tillgång till flera URL:er"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klicka på länken nedan som motsvarar den URL du vill komma åt"
+
+msgid "You do not currently have access to any URL"
+msgstr "Du har för närvarande inte tillgång till någon URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximalt antal prenumerationer tillåtna"
+
+msgid "An error occurred"
+msgstr "Ett fel uppstod"
+
+msgid "You don't have any course content yet"
+msgstr "Du har inget kursinnehåll än"
+
+msgid "This course is locked"
+msgstr "Denna kurs är låst"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "E-postadressen från vilken e-postmeddelanden skickas när plattformen skickar ett e-postmeddelande, även använd som 'reply-to'-rubrik"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Hittar du inte ditt språk i listan? Kontakta oss på %s för att bidra som översättare"
+
+msgid "An update is available"
+msgstr "En uppdatering är tillgänglig"
+
+msgid "to know what's new and what has been changed"
+msgstr "för att veta vad som är nytt och vad som har ändrats"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Vi har upptäckt att din PHP-installation inte definierar datumet"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Din PHP-version uppfyller inte kraven för denna programvara"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Vissa filer eller mappar har inte skrivrättigheter"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Varning! Installationsprogrammet har upptäckt en befintlig Chamilo-plattform på ditt system"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Eftersom katalogerna <code>newscorm</code> och <code>exercice</code> har bytt namn till <code>lp</code> respektive <code>exercise</code>, är det nödvändigt att radera eller byta namn på dem till <code>newscorm_old</code> och <code>exercice_old</code>"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Formuläret innehåller felaktiga eller ofullständiga uppgifter"
+
+msgid "Your contact information could not be sent"
+msgstr "Din kontaktinformation kunde inte skickas"
+
+msgid "Please contact support with the error details"
+msgstr "Kontakta support med felinformationen"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klicka på bilden för att beskära den (förhållande 1:1, 120x120 px rekommenderas)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Använd beskärningsverktyget för att välja ett område med förhållande 1:1"
+
+msgid "Checking push subscription"
+msgstr "Kontrollerar push-prenumeration"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Du är prenumererad på push-notiser i denna webbläsare"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-notiser är inte aktiverade i denna webbläsare"
+
+msgid "Data exchange successfully saved"
+msgstr "Datautbyte sparat framgångsrikt"
+
+msgid "Error saving data exchange"
+msgstr "Fel vid sparande av datautbyte"
+
+msgid "No documents added yet"
+msgstr "Inga dokument tillagda än"
+
+msgid "No additional details available for this skill."
+msgstr "Inga ytterligare detaljer tillgängliga för denna färdighet."
+
+msgid "No available documents"
+msgstr "Inga tillgängliga dokument"
+
+msgid "No users added yet"
+msgstr "Inga användare tillagda än"
+
+msgid "No available users"
+msgstr "Inga tillgängliga användare"
+
+msgid "You can no longer submit"
+msgstr "Du kan inte längre skicka in"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Inga saknade inlämningar hittades för denna uppgift eller data är inte tillgänglig"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-post skickad till alla icke-inlämnade användare"
+
+msgid "Failed to send email"
+msgstr "Kunde inte skicka e-post"
+
+msgid "Write your answer here"
+msgstr "Skriv ditt svar här"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Närvarokalendern låter dig registrera närvarolistor (en per verklig session som studenterna behöver delta i)"
+
+msgid "Loading attendance data"
+msgstr "Laddar närvdata"
+
+msgid "No attendance assigned yet"
+msgstr "Ingen närvaro tilldelad än"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Det finns ingen lektion schemalagd idag, prova att välja en annan dag eller lägg till din närvaro manuellt med hjälp av åtgärdsikonerna"
+
+msgid "No attendance data for today"
+msgstr "Ingen närvdata för idag"
+
+msgid "Saving"
+msgstr "Sparar"
+
+msgid "No attendance data to save"
+msgstr "Ingen närvdata att spara"
+
+msgid "Failed to save attendance"
+msgstr "Kunde inte spara närvaro"
+
+msgid "Loading more courses"
+msgstr "Laddar fler kurser"
+
+msgid "Loading more sessions"
+msgstr "Laddar fler sessioner"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Funktionen för automatisk start av dokument är aktiverad"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Konfigurationen för övningarnas autostartfunktion är aktiverad"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Inställningen för autostart av inlärningsväg är PÅ"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Forumets inställning för autostart är på"
+
+msgid "Course ID is missing"
+msgstr "Kurs-ID saknas"
+
+msgid "Course created successfully"
+msgstr "Kurs skapad framgångsrikt"
+
+msgid "Error deleting document(s)"
+msgstr "Fel vid radering av dokument"
+
+msgid "Template successfully deleted"
+msgstr "Mall raderad framgångsrikt"
+
+msgid "Error deleting the template"
+msgstr "Fel vid radering av mallen"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel och miniatyrbild krävs"
+
+msgid "Template created successfully"
+msgstr "Mall skapad framgångsrikt"
+
+msgid "Error creating the template"
+msgstr "Fel vid skapande av mallen"
+
+msgid "Error submitting the form"
+msgstr "Fel vid inskickning av formuläret"
+
+msgid "Loading templates"
+msgstr "Laddar mallar"
+
+msgid "Loading layout"
+msgstr "Laddar layout"
+
+msgid "Loading courses"
+msgstr "Laddar kurser"
+
+msgid "No courses available"
+msgstr "Inga kurser tillgängliga"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Denna lista visar användare från alla åtkomst-URL:er eftersom inställningen \"session_admin_access_to_all_users_on_all_urls\" är aktiverad."
+
+msgid "User not found"
+msgstr "Användare hittades inte"
+
+msgid "An error occurred while sending the course"
+msgstr "Ett fel uppstod vid sändning av kursen"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Kom ihåg att ändringar i villkoren relaterade till GDPR kräver att du rapporterar dessa ändringar till tredje parter till vilka du har tillhandahållit personuppgifter om dina användare, enligt artikel 19 i GDPR"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Du bör skapa \"Villkor och avtal\" för alla tillgängliga språk"
+
+msgid "You don't have any course yet"
+msgstr "Du har inga kurser än"
+
+msgid "You have received a new friend request"
+msgstr "Du har mottagit en ny vänförfrågan"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoshantering"
+
+msgid "Tracking"
+msgstr "Spårning"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Visa rapporter, statistik och spårningsdata"
+
+msgid "System activity audit"
+msgstr "Systemaktivitetsgranskning"
+
+msgid "Learning analytics"
+msgstr "Lärandeanalys"
+
+msgid "Administrative activity auditing"
+msgstr "Administrativ aktivitetsgranskning"
+
+msgid "List icons"
+msgstr "Listikoner"
+
+msgid "Constant name"
+msgstr "Konstantnamn"
+
+msgid "MDI icon name"
+msgstr "MDI-ikonnamn"
+
+msgid "Assign authentication sources"
+msgstr "Tilldela autentiseringskällor"
+
+msgid "Assignment details"
+msgstr "Uppgiftens detaljer"
+
+msgid "Terms and conditions"
+msgstr "Villkor och användarvillkor"
+
+msgid "Icons"
+msgstr "Ikoner"
+
+msgid "Create backup"
+msgstr "Skapa säkerhetskopia"
+
+msgid "Create file"
+msgstr "Skapa fil"
+
+msgid "Create link"
+msgstr "Skapa länk"
+
+msgid "Edit template"
+msgstr "Redigera mall"
+
+msgid "Shared files"
+msgstr "Delade filer"
+
+msgid "Skill wheel"
+msgstr "Kompetenshjul"
+
+msgid "Favourite courses"
+msgstr "Favoritkurser"
+
+msgid "Restart courses"
+msgstr "Starta om kurser"
+
+msgid "Generate terms"
+msgstr "Generera villkor"
+
+msgid "Add variation"
+msgstr "Lägg till variation"
+
+msgid "Editor demo"
+msgstr "Redigeringsdemo"
+
+msgid "Tool introduction"
+msgstr "Verktygsintroduktion"
+
+msgid "Data exchanges"
+msgstr "Datautbyten"
+
+msgid "Third parties"
+msgstr "Tredjeparter"
+
+msgid "Layouts"
+msgstr "Layouter"
+
+msgid "Relation type"
+msgstr "Relationstyp"
+
+msgid "Add all"
+msgstr "Lägg till alla"
+
+msgid "Remove all"
+msgstr "Ta bort alla"
+
+msgid "An error occurred. Please try again."
+msgstr "Ett fel uppstod. Försök igen."
+
+msgid "%s created"
+msgstr "%s skapad"
+
+msgid "%s updated"
+msgstr "%s uppdaterad"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Om du planerar att uppgradera från en äldre version av Chamilo, kanske du vill"
+
+msgid "have a look at the changelog"
+msgstr "ta en titt på ändringsloggen"
+
+msgid "to know what's new and what has been changed."
+msgstr "för att veta vad som är nytt och vad som har ändrats."
+
+msgid "Session Item"
+msgstr "Sessionselement"
+
+msgid "Points"
+msgstr "Poäng"
+
+msgid "See notifications"
+msgstr "Visa notiser"
+
+msgid "New content available for this course."
+msgstr "Nytt innehåll tillgängligt för denna kurs."
+
+msgid "No new notifications."
+msgstr "Inga nya notiser."
+
+msgid "No new content found."
+msgstr "Inget nytt innehåll hittat."
+
+msgid "No tool details available yet."
+msgstr "Inga verktygsdetaljer tillgängliga än."
+
+msgid "Last access"
+msgstr "Senast åtkomst"
+
+msgid "Open course"
+msgstr "Öppna kurs"
+
+msgid "Course completed"
+msgstr "Kursen slutförd"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Prenumerationsgränsen för denna kurs har uppnåtts."
+
+msgid "Subscription limit reached"
+msgstr "Prenumerationsgräns uppnådd"
+
+msgid "Tertiary alternative"
+msgstr "Tertiärt alternativ"
+
+msgid "Update SCORM"
+msgstr "Uppdatera SCORM"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "AI kan skapa utkast till feedback och föreslagen poäng innan du skickar det."
+
+msgid "What will be sent to the AI"
+msgstr "Vad som skickas till AI"
+
+msgid "Assignment title + instructions"
+msgstr "Uppgiftstitel + instruktioner"
+
+msgid "Student submission (text)"
+msgstr "Elevinsänding (text)"
+
+msgid "Student submission (text): none"
+msgstr "Elevinsänding (text): ingen"
+
+msgid "Student attachment"
+msgstr "Elevbilaga"
+
+msgid "supported"
+msgstr "stöttas"
+
+msgid "not supported for document analysis"
+msgstr "stöttas inte för dokumentanalys"
+
+msgid "Student attachment: none"
+msgstr "Elevbilaga: ingen"
+
+msgid "No text AI providers available."
+msgstr "Inga text-AI-leverantörer tillgängliga."
+
+msgid "AI-assisted"
+msgstr "AI-assisterad"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Detta beslut sparas med rättelsen (ExtraField) och kan inte ändras senare."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Valfri rättelsebilaga (detta är inte elevens insänding)."
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Received"
+msgstr "Mottagen"
+
+msgid "%s min"
+msgstr "%s min"
+
+msgid "Unlock column"
+msgstr "Lås upp kolumn"
+
+msgid "Lock column"
+msgstr "Lås kolumn"
+
+msgid "Set all Present"
+msgstr "Sätt alla Närvarande"
+
+msgid "Set all Absent"
+msgstr "Sätt alla Frånvarande"
+
+msgid "Auto (recommended)"
+msgstr "Auto (rekommenderas)"
+
+msgid "Error downloading all documents."
+msgstr "Fel vid nedladdning av alla dokument."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Öppna med ONLYOFFICE"
+
+msgid "Limiting quota"
+msgstr "Begränsad kvot"
+
+msgid "Remaining space"
+msgstr "Återstående utrymme"
+
+msgid "Course catalogue"
+msgstr "Kurskatalog"
+
+msgid "Drag links to reorder"
+msgstr "Dra länkar för att omordna"
+
+msgid "Drop links here to keep them without category"
+msgstr "Släpp länkar här för att behålla dem utan kategori"
+
+msgid "Could not export"
+msgstr "Kunde inte exportera"
+
+msgid "Link moved"
+msgstr "Länk flyttad"
+
+msgid "Could not move link"
+msgstr "Kunde inte flytta länk"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategorisortering är inte aktiverad"
+
+msgid "Showing %s posts"
+msgstr "Visar %s inlägg"
+
+msgid "Showing %s tasks"
+msgstr "Visar %s uppgifter"
+
+msgid "Page %s of %s"
+msgstr "Sida %s av %s"
+
+msgid "Tutors"
+msgstr "Handledare"
+
+msgid "selected"
+msgstr "vald"
+
+msgid "No data to export"
+msgstr "Inga data att exportera"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG måste vara ≤ %spx."
+
+msgid "Standard list"
+msgstr "Standardlista"
+
+msgid "Management list"
+msgstr "Hanteringlista"
+
+msgid "Open platform"
+msgstr "Öppen plattform"
+
+msgid "Teacher user ID"
+msgstr "Lärarens användar-ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Är du säker på att du vill radera denna kurs?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Är du säker på att du vill radera de valda kurserna?"
+
+msgid "Search by name, username, email"
+msgstr "Sök efter namn, användarnamn, e-post"
+
+msgid "contains %s items"
+msgstr "innehåller %s objekt"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ditt juridiska avtal förblir aktivt tills en begäran om utträde har granskats och behandlats."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Din begäran om uttag av juridiskt samtycke väntar på granskning."
+
+msgid "Your account deletion request is pending review."
+msgstr "Din begäran om radering av konto väntar på granskning."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Varför vill du begära uttag av ditt juridiska samtycke?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Skickar din begäran om uttag av juridiskt samtycke..."
+
+msgid "Submitting request..."
+msgstr "Skickar begäran..."
+
+msgid "Request withdrawal of legal consent"
+msgstr "Begär uttag av juridiskt samtycke"
+
+msgid "Submitting your account deletion request..."
+msgstr "Skickar din begäran om radering av konto..."
+
+msgid "Submitting your acceptance..."
+msgstr "Skickar ditt godkännande..."
+
+msgid "Event details"
+msgstr "Händelsedetaljer"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Du kan inte komma åt den länkade kursen från den här vyn."
+
+msgid "Failed to load sessions"
+msgstr "Kunde inte ladda sessioner"
+
+msgid "Failed to load events"
+msgstr "Kunde inte ladda händelser"
+
+msgid "No events found"
+msgstr "Inga händelser hittades"
+
+msgid "Group image"
+msgstr "Gruppbild"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Förbjudet"
+
+msgid "Distribution"
+msgstr "Distribution"
+
+msgid "Firstname"
+msgstr "Förnamn"
+
+msgid "Lastname"
+msgstr "Efternamn"
+
+msgid "Email"
+msgstr "E-post"
+
+msgid "Last login in platform"
+msgstr "Senaste inloggning på plattformen"
+
+msgid "Export as CSV"
+msgstr "Exportera som CSV"
+
+msgid "Export as XLS"
+msgstr "Exportera som XLS"
+
+msgid "Deactivate this user?"
+msgstr "Avaktivera denna användare?"
+
+msgid "Enable this user?"
+msgstr "Aktivera denna användare?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Slå samman denna dubblettgrupp till användare #%s?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Detta kommer att slå samman alla andra konton i samma grupp till detta konto."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Sammanslagna konton kommer att raderas permanent och försvinna från denna rapport."
+
+msgid "This action cannot be undone."
+msgstr "Denna åtgärd kan inte ångras."
+
+msgid "Unify"
+msgstr "Slå samman"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Totalt utrymme använt av portal %s gräns är %s MB"
+
+msgid "Helper text"
+msgstr "Hjälptext"
+
+msgid "NotAllowed"
+msgstr "NotAllowed"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Använd filtren ovan för att ladda detaljer om elevens åtkomst."
+
+msgid "Start date must be before end date"
+msgstr "Startdatum måste vara före slutdatum"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Välj ett datumintervall och grupperingstyp för att granska detaljer om elevens åtkomst."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Denna kurs kommer att skapas med plattformens standardkursmall."
+
+msgid "Security breach avoid restart"
+msgstr "Säkerhetsbrott undvik omstart"
+
+msgid "User deactivated"
+msgstr "Användare avaktiverad"
+
+msgid "InvalidId"
+msgstr "InvalidId"
+
+msgid "User enabled"
+msgstr "Användare aktiverad"
+
+msgid "No other duplicates found for this user."
+msgstr "Inga andra dubbletter hittades för denna användare."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Användare sammanslagna: slogs samman %s konto(n) till användare #%s. Sammanslagna konton raderades permanent."
+
+msgid "No accounts were merged."
+msgstr "Inga konton sammanslogs."
+
+msgid "An error occurred while unifying users."
+msgstr "Ett fel uppstod vid sammanslagning av användare."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Användare sammanslagna: slogs samman användare #%s till användare #%s. Sammanslaget konto raderades permanent."
+
+msgid "Duplicate users"
+msgstr "Dubletterade användare"
+
+msgid "Years"
+msgstr "År"
+
+msgid "All time visits outside sessions"
+msgstr "Besök utanför sessioner alla tider"
+
+msgid "All time visits in sessions"
+msgstr "Besök i sessioner alla tider"
+
+msgid "All time visits total"
+msgstr "Totala besök alla tider"
+
+msgid "Student visits per period, per course"
+msgstr "Studentbesök per period, per kurs"
+
+msgid "By email"
+msgstr "Efter e-post"
+
+msgid "By extra field"
+msgstr "Efter extra fält"
+
+msgid "Select an option"
+msgstr "Välj ett alternativ"
+
+msgid "Profile field"
+msgstr "Profilfält"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Denna rapport listar endast användare som har samma e-postadress."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Denna rapport listar endast användare som delar samma värde för det valda profilfältet."
+
+msgid "How to use this report"
+msgstr "Så här använder du denna rapport"
+
+msgid "Disable / Enable"
+msgstr "Inaktivera / Aktivera"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Blockerar eller återställer endast inloggning. Raderar inte användaren och tar inte bort prenumerationer."
+
+msgid "Last week"
+msgstr "Förra veckan"
+
+msgid "Next week"
+msgstr "Nästa vecka"
+
+msgid "Loading report..."
+msgstr "Laddar rapport..."
+
+msgid "Failed to load this report. Please try again."
+msgstr "Kunde inte ladda rapporten. Försök igen."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Välj en eller flera sessioner att kopiera tränare från och välj målkursen"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Håll nere Ctrl (eller Cmd) för att välja flera objekt"
+
+msgid "Choose the destination course"
+msgstr "Välj målkursen"
+
+msgid "You can select multiple items"
+msgstr "Du kan välja flera objekt"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Använd sökrutan för att snabbt hitta kurser"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Välj en eller flera källsessioner och en eller flera målsessioner för att kopiera studenter"
+
+msgid "Select destination sessions"
+msgstr "Välj målsessioner"
+
+msgid "You can select multiple users"
+msgstr "Du kan välja flera användare"
+
+msgid "Use the search box to find users quickly"
+msgstr "Använd sökrutan för att snabbt hitta användare"
+
+msgid "Error while creating the document"
+msgstr "Fel vid skapande av dokumentet"
+
+msgid "Not a SCORM learning path"
+msgstr "Inte en SCORM-inlärningsbana"
+
+msgid "Final item"
+msgstr "Sista objektet"
+
+msgid "Edit item"
+msgstr "Redigera objekt"
+
+msgid "No AI text providers configured."
+msgstr "Inga AI-textleverantörer konfigurerade."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Uppladdning misslyckades. Filen är troligen större än servergränsen (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Uppdatering misslyckades. Ingen fil mottagen av servern."
+
+msgid "Update failed. %s"
+msgstr "Uppdatering misslyckades. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Uppdatering misslyckades. Ogiltig uppladdad filpayload."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Uppdatering misslyckades. Namnet på den uppladdade ZIP-filen måste matcha det ursprungliga SCORM-paketnamnet."
+
+msgid "Update failed"
+msgstr "Uppdatering misslyckades"
+
+msgid "Question lower case"
+msgstr "Fråga gemener"
+
+msgid "Regenerate"
+msgstr "Återskapa"
+
+msgid "Case insensitive"
+msgstr "Skiftlägesokänslig"
+
+msgid "Select a session to load its courses."
+msgstr "Välj en session för att ladda dess kurser."
+
+msgid "Select the source course."
+msgstr "Välj källkursen."
+
+msgid "Select a destination session."
+msgstr "Välj en målsession."
+
+msgid "Select the destination course."
+msgstr "Välj målkursen."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopiera hela kursinnehållet från den valda sessionens kurs."
+
+msgid "Select which tools/items to copy."
+msgstr "Välj vilka verktyg/objekt som ska kopieras."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Inkludera inte bas-(icke-session) kursinnehåll."
+
+msgid "An error occurred while copying the course"
+msgstr "Ett fel uppstod vid kopiering av kursen"
+
+msgid "Please select a different destination"
+msgstr "Välj en annan destination"
+
+msgid "You must select a destination course"
+msgstr "Du måste välja en målkurs"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "För att exportera kurser med quiz måste du välja quiz"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Om dina LP:er innehåller ljudfiler ska du välja dem från dokumenten"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Om ditt quiz innehåller hotspot-frågor ska du välja bilderna från dokumenten"
+
+msgid "GeneralResourcesCourse"
+msgstr "AllmännaResurserKurs"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Lösenordet måste vara minst %length% tecken långt."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Lösenordet måste innehålla minst %count% gemena bokstäver."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Lösenordet måste innehålla minst %count% versala bokstäver."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Lösenordet måste innehålla minst %count% numeriska (0-9) tecken."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Lösenordet måste innehålla minst %count% specialtecken."
+
+msgid "Invalid login request."
+msgstr "Ogiltig inloggningsförfrågan."
+
+msgid "Authentication failed."
+msgstr "Autentisering misslyckades."
+
+msgid "Login %status% for username %username%"
+msgstr "Inloggning %status% för användarnamn %username%"
+
+msgid "Co-generated with AI"
+msgstr "Co-genererat med AI"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID ID"
+
+msgid "EntraID UID"
+msgstr "EntraID UID"
+
+msgid "Required fields"
+msgstr "Obligatoriska fält"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Taggar kan kopieras och klistras in i textområdet nedan och kommer dynamiskt att ersättas med deras värde för varje användare individuellt vid sändning."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Denna grupp är länkad till klass %s.<br>Gruppmedlemslistan beror på klassmedlemmar och kan inte ändras.<br>Gå till gruppens inställningar för att bryta denna länk om du vill lägga till eller ta bort medlemmar från denna grupp."
+
+msgid "Link classes to created groups ?"
+msgstr "Länka klasser till skapade grupper?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Om en klass är länkad till en grupp läggs användare som läggs till eller tas bort från klassen automatiskt till eller tas bort från gruppen."
+
+msgid "New groups creation in category %s"
+msgstr "Skapande av nya grupper i kategori %s"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Varningsmeddelande som varnar för att användaren inte kan ändra medlemmar i länkad grupp"
+
+msgid "Remove the group link with the class"
+msgstr "Ta bort gruppens länk med klassen"
+
+msgid "Linked class"
+msgstr "Länkad klass"
+
+msgid "The group is no longer linked to the class"
+msgstr "Gruppen är inte längre länkad till klassen"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Översikt över studenter och kurser anmälda till klassen"
+
+msgid "Overview students subscribed to the class"
+msgstr "Översikt över studenter anmälda till klassen"
+
+msgid "Overview class"
+msgstr "Översikt klass"
+
+msgid "Go back to the list of classes"
+msgstr "Gå tillbaka till listan över klasser"
+
+msgid "Go back to course classes"
+msgstr "Gå tillbaka till kursklasser"
+
+msgid "Users subscribed to the course"
+msgstr "Användare anmälda till kursen"
+
+msgid "Users not subscribed to the course"
+msgstr "Användare inte anmälda till kursen"
+
+msgid "Users subscribed to the class"
+msgstr "Användare anmälda till klassen"
+
+msgid "Courses subscribed to the class"
+msgstr "Kursen anmäld till klassen"
+
+msgid "No user is subscribed to this class"
+msgstr "Ingen användare är anmäld till denna klass"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Ingen användare och ingen kurs är anmäld till denna klass"
+
+msgid "No user are subscribed to this class"
+msgstr "Ingen användare är anmäld till denna klass"
+
+msgid "No course are subscribed to this class"
+msgstr "Ingen kurs är anmäld till denna klass"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Är du säker på att du vill ta bort klassen"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Är du säker på att du vill ta bort klassen?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Är du säker på att du vill ta bort klassen utan att ta bort användare?"
+
+msgid "Remove the class without removing students"
+msgstr "Ta bort klassen utan att ta bort studenter"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Denna inställning är inte implementerad i denna version ännu."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Rekommenderas för administratörspluginer som visas i administrationsområdet."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Rekommenderas för pluginer som ska visas som kursverktyg."
+
+msgid "Displayed above the main page content."
+msgstr "Visas ovanför huvudsidans innehåll."
+
+msgid "Displayed below the main page content."
+msgstr "Visas under huvudsidans innehåll."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Visas nära toppen av huvudlayoutens skal."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Visas nära botten av huvudlayoutens skal."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Rekommenderas för globala flytande eller beständiga pluginer som visas före sidfoten."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Visas i den valda pluginregionen."
+
+msgid "Admin menu"
+msgstr "Adminmeny"
+
+msgid "Global regions"
+msgstr "Globala regioner"
+
+msgid "No regions assigned"
+msgstr "Inga regioner tilldelade"
+
+msgid "Plugin regions"
+msgstr "Pluginregioner"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Välj var varje installerad plugin ska renderas."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tips: använd Ctrl/Cmd för att välja flera regioner."
+
+msgid "No installed plugins were found."
+msgstr "Inga installerade pluginer hittades."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Välj en eller flera regioner för denna plugin i den aktuella åtkomst-URL:en."
+
+msgid "Available regions"
+msgstr "Tillgängliga regioner"
+
+msgid "Selected paragraph"
+msgstr "Vald paragraf"
+
+msgid "Destination folder"
+msgstr "Målmapp"
+
+msgid "Generate AI media"
+msgstr "Generera AI-media"
+
+msgid "Save and insert"
+msgstr "Spara och infoga"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Spara stöds endast när leverantören returnerar base64-innehåll. Om du endast fick en URL är sparande inaktiverat för att undvika nedladdning i webbläsaren."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video genererades framgångsrikt, men sparande är inaktiverat eftersom leverantören returnerade en URL."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Filen sparades, men dess URL kunde inte lösas upp."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Skapa ett Aiken-kvisto från ett ämne eller från ett kursdokument."
+
+msgid "Test from topic"
+msgstr "Test från ämne"
+
+msgid "Test from document"
+msgstr "Test från dokument"
+
+msgid "Generate from topic"
+msgstr "Skapa från ämne"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Använd ett ämnesprompt för att skapa ett nytt Aiken-frågeformulär."
+
+msgid "Quiz title"
+msgstr "Kvistitel"
+
+msgid "Generate from document"
+msgstr "Skapa från dokument"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Välj ett kursdokument och skapa frågor baserat enbart på dess innehåll."
+
+msgid "Selected document"
+msgstr "Valt dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Dokumentet väljs från listan över kursdokument."
+
+msgid "Choose document"
+msgstr "Välj dokument"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Valfritt. Används endast som en extra hint för AI:n."
+
+msgid "Select a document"
+msgstr "Välj ett dokument"
+
+msgid "Welcome"
+msgstr "Välkommen"
+
+msgid "Welcome to Chamilo"
+msgstr "Välkommen till Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Om detta är första gången du använder Chamilo, se till att du kollar sidomenyn för att hitta vägen genom alla dess funktioner. Om du behöver hjälp hittar du <a href=\"https://docs.chamilo.org\">vår officiella dokumentation</a> för standarddokumentation, medan vårt <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">onlineforum</a> kan hjälpa till att dela idéer och hitta svar från andra Chamilo-användare."
 

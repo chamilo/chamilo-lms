@@ -51,7 +51,7 @@ if (!empty($_GET['message'])) {
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('User list')];
+$interbreadcrumb[] = ["url" => '/admin/user-list', "name" => get_lang('User list')];
 $tool_name = get_lang('Add a user');
 
 // Create the form
@@ -212,19 +212,13 @@ $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
 
 // Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Trainer');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Human Resources Manager');
-$status[SESSIONADMIN] = get_lang('Sessions administrator');
-$status[STUDENT_BOSS] = get_lang('Student\'s superior');
-$status[INVITEE] = get_lang('Invitee');
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 
 $form->addElement(
     'select',
     'roles',
     get_lang('Roles'),
-    api_get_roles(),
+    $roleOptions,
     [
         'multiple' => 'multiple',
         'size' => 9,
@@ -376,6 +370,15 @@ if ($form->validate()) {
 
         $roles = $user['roles'] ?? [];
         $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
+        if (!UserManager::areRolesAllowedInUserForm($roles)) {
+            Display::addFlash(
+                Display::return_message(get_lang('Error'), 'error')
+            );
+
+            header('Location: user_add.php?sec_token='.Security::get_token());
+            exit;
+        }
+
         $status = api_status_from_roles($roles);
 
         $user_id = UserManager::create_user(
@@ -465,7 +468,7 @@ if ($form->validate()) {
             exit;
         } else {
             $tok = Security::get_token();
-            header('Location: user_list.php?sec_token='.$tok);
+            header('Location: /admin/user-list');
             exit;
         }
     }

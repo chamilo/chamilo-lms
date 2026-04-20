@@ -56,8 +56,7 @@ if ($form->validate()) {
         '',
         api_get_setting('emailAdministrator'),
         $values['email_title'],
-        $message,
-        get_lang('Anonymous')
+        $message
     );
 
     Display::addFlash(Display::return_message(get_lang('Message Sent')));

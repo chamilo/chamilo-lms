@@ -1,27 +1,184 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-    {% autoescape false %}
-        {{ form }}
-    {% endautoescape %}
+    <section>
+        <div class="w-full px-4 py-8 lg:px-6 xl:px-8 2xl:px-10">
+            {% set backUrl = path('chamilo_lti_configure', {'cid': course.id}) ~ '?' ~ legacy_context_query %}
+            {% set hasSidebar = course_tools is defined and course_tools is not empty %}
+
+            <a
+                    href="{{ backUrl }}"
+                    class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
+            >
+                <span class="mdi mdi-arrow-left text-lg" aria-hidden="true"></span>
+                <span>{{ 'Back'|trans }}</span>
+            </a>
+
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold text-gray-90">
+                    {{ title|default('Add classroom activity'|trans) }}
+                </h1>
+                <p class="mt-2 text-body-2 text-gray-50">
+                    {{ 'Create a gradebook activity linked to an external tool in this course.'|trans }}
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                {% if hasSidebar %}
+                    <aside class="space-y-6 lg:col-span-3">
+                        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                            <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                                <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Tools in this course'|trans }}</h2>
+                            </div>
+
+                            <ul class="divide-y divide-gray-20">
+                                {% for tool in course_tools %}
+                                    {% set isSelectedTool = selected_tool is defined and selected_tool and selected_tool.id == tool.id %}
+                                    {% set isGradeableTool = tool.gradebookEval is null %}
+
+                                    <li class="flex items-center justify-between gap-3 px-5 py-4">
+                                        <div class="min-w-0">
+                                            <p class="truncate text-body-2 font-medium text-gray-90">
+                                                {{ tool.title }}
+                                            </p>
+
+                                            {% if isSelectedTool %}
+                                                <p class="mt-1 text-caption text-primary">
+                                                    {{ 'Selected in this form'|trans }}
+                                                </p>
+                                            {% elseif isGradeableTool %}
+                                                <p class="mt-1 text-caption text-gray-50">
+                                                    {{ 'Available for gradebook'|trans }}
+                                                </p>
+                                            {% else %}
+                                                <p class="mt-1 text-caption text-success">
+                                                    {{ 'Linked to gradebook'|trans }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="flex items-center gap-2">
+                                            {% if isGradeableTool %}
+                                                <a
+                                                        href="{{ path('chamilo_lti_grade', {'cid': course.id, 'catId': selected_category_id|default(0), 'toolId': tool.id}) ~ '&' ~ legacy_context_query }}"
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl shadow-sm transition hover:opacity-90 {% if isSelectedTool %}bg-primary text-white{% else %}bg-gray-90 text-white{% endif %}"
+                                                        title="{{ 'Select tool'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-book-open-variant text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Select tool'|trans }}</span>
+                                                </a>
+                                            {% else %}
+                                                <span
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-success text-success-button-text shadow-sm"
+                                                        title="{{ 'In gradebook'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-check text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'In gradebook'|trans }}</span>
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </aside>
+                {% endif %}
+
+                <div class="{% if hasSidebar %}lg:col-span-9{% else %}lg:col-span-12{% endif %}">
+                    {% if selected_tool is defined and selected_tool %}
+                        <div class="mb-6 rounded-2xl border border-gray-25 bg-support-2 px-5 py-4 shadow-sm">
+                            <p class="text-body-2 font-semibold text-gray-90">
+                                {{ 'Selected tool'|trans }}: {{ selected_tool.title }}
+                            </p>
+                            <p class="mt-1 text-caption text-gray-50">
+                                {{ 'You can still change it from the list on the left before creating the evaluation.'|trans }}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl lg:p-8">
+                        <div class="lti-gradebook-form">
+                            {% autoescape false %}
+                                {{ form }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        $(function() {
-            $("#hid_category_id").change(function () {
-                $("#hid_category_id option:selected").each(function () {
-                    var cat_id = $(this).val();
+      $(function () {
+        const applyGradebookStyles = function () {
+          const wrapper = $(".lti-gradebook-form");
+          const form = wrapper.find("form").first();
+          form.attr("action", "{{ form_action_url|e('js') }}");
 
-                    $.ajax({
-                        url: "{{ url('web_ajax') }}gradebook.ajax.php?a=get_gradebook_weight",
-                        data: "cat_id=" + cat_id,
-                        success: function (return_value) {
-                            if (return_value != 0) {
-                                $("#max_weight").html(return_value);
-                            }
-                        }
-                    });
-                });
+          form.addClass("space-y-6");
+
+          wrapper.find("fieldset").addClass("mb-6 rounded-2xl border border-gray-25 bg-support-2 p-5");
+          wrapper.find("legend").addClass("px-2 text-body-2 font-semibold text-gray-90");
+
+          wrapper.find(".form_required, .required").addClass("text-danger");
+          wrapper.find(".help-block, .form-text, small").addClass("mt-2 block text-caption text-gray-50");
+
+          wrapper.find("table").removeClass("table-fixed").addClass("w-full table-auto border-separate border-spacing-y-4");
+          wrapper.find("tr").addClass("align-top");
+          wrapper.find("th").addClass("pb-2 text-left text-body-2 font-semibold text-gray-90");
+          wrapper.find("td").addClass("align-top");
+
+          wrapper.find("table tr td:first-child").addClass("w-64 pr-6 align-top text-body-2 font-semibold text-gray-90");
+          wrapper.find("table tr td:last-child").addClass("align-top");
+
+          wrapper.find("table tr:first-child td").addClass("pt-3");
+          wrapper.find("table tr:first-child td:first-child").addClass("leading-6");
+          wrapper.find("table tr:first-child td:last-child").addClass("pt-2");
+
+          wrapper.find("table tr td:first-child label").addClass("mb-2 inline-block leading-6");
+          wrapper.find("table tr td:first-child .form_required, table tr td:first-child .required").addClass("align-middle");
+
+          wrapper.find("input[type='text'], input[type='number'], input[type='email'], input[type='url'], input[type='password'], select, textarea")
+            .addClass("mt-0 block w-full rounded-xl border border-gray-25 bg-white px-4 py-3 text-body-2 text-gray-90 shadow-sm placeholder-gray-50 focus:border-primary focus:ring-2 focus:ring-primary");
+
+          wrapper.find("select").addClass("min-h-[3rem]");
+          wrapper.find("textarea").addClass("min-h-[120px]");
+
+          wrapper.find("input[type='checkbox'], input[type='radio']")
+            .addClass("h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary");
+
+          wrapper.find("input[type='submit'], button[type='submit'], .btn, .btn-primary, .btn-success")
+            .addClass("inline-flex items-center justify-center rounded-xl bg-success px-5 py-3 text-body-2 font-semibold text-success-button-text shadow-xl transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success focus:ring-offset-2");
+
+          wrapper.find("label").addClass("text-body-2 font-semibold text-gray-90");
+
+          wrapper.find("table tr").each(function () {
+            const row = $(this);
+            const cells = row.children("td");
+
+            if (cells.length === 1) {
+              cells.eq(0).addClass("w-full");
+            }
+          });
+        };
+
+        applyGradebookStyles();
+
+        $("#hid_category_id").change(function () {
+          $("#hid_category_id option:selected").each(function () {
+            var cat_id = $(this).val();
+
+            $.ajax({
+              url: "/main/inc/ajax/course_home.ajax.php?gradebook.ajax.php?a=get_gradebook_weight",
+              data: "cat_id=" + cat_id,
+              success: function (return_value) {
+                if (return_value != 0) {
+                  $("#max_weight").html(return_value);
+                }
+              }
             });
+          });
         });
+      });
     </script>
 {% endblock %}

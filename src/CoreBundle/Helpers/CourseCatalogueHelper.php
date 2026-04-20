@@ -15,6 +15,8 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -179,6 +181,47 @@ readonly class CourseCatalogueHelper
             )
             ->setParameter('selected_categories', $selectedCategories)
         ;
+    }
+
+    /**
+     * Returns true if the given course passes all catalogue filters (visibility, show-in-catalogue,
+     * avoided-courses, selected-categories) that the public catalogue endpoint applies.
+     */
+    public function isCourseInPublicCatalogue(Course $course): bool
+    {
+        $courseRepo = $this->entityManager->getRepository(Course::class);
+        $qb = $courseRepo->createQueryBuilder('c');
+
+        $qb
+            ->select('COUNT(c.id)')
+            ->andWhere('c.id = :courseId')
+            ->setParameter('courseId', $course->getId())
+        ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $qb
+                ->innerJoin(
+                    'c.urls',
+                    'aurc',
+                    Join::WITH,
+                    $qb->expr()->eq('aurc.url', ':accessUrl')
+                )
+                ->setParameter('accessUrl', $this->accessUrlHelper->getCurrent()->getId())
+            ;
+        }
+
+        $this->addAvoidedCoursesCondition($qb);
+        $this->addOnlySelectedCategoriesCondition($qb);
+        $this->addShowInCatalogueCondition($qb);
+        $this->addVisibilityCondition($qb, true);
+
+        try {
+            return (int) $qb->getQuery()->getSingleScalarResult() > 0;
+        } catch (NoResultException) {
+            return false;
+        } catch (NonUniqueResultException) {
+            return true;
+        }
     }
 
     public function addAvoidedCoursesCondition(QueryBuilder $qb): void

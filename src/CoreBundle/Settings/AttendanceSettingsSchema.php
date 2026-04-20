@@ -19,7 +19,6 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
                 [
                     'allow_delete_attendance' => 'true',
                     'enable_sign_attendance_sheet' => 'false',
-                    'attendance_calendar_set_duration' => 'false',
                     'attendance_allow_comments' => 'false',
                     'multilevel_grading' => 'false',
                 ]
@@ -32,7 +31,6 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('allow_delete_attendance', YesNoType::class)
             ->add('enable_sign_attendance_sheet', YesNoType::class)
-            ->add('attendance_calendar_set_duration', YesNoType::class)
             ->add('attendance_allow_comments', YesNoType::class)
             ->add('multilevel_grading', YesNoType::class)
         ;

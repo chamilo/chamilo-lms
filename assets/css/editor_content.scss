@@ -1,0 +1,202 @@
+@use "tailwind";
+
+// Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
+
+// Reset styles
+.tiny-content {
+  @apply block w-full;
+}
+
+.tiny-content * {
+  @apply box-border;
+}
+
+// Specific styles for TinyMCE content
+.tiny-content img {
+  @apply block mx-auto;
+}
+
+.tiny-content table {
+  @apply m-auto border-collapse;
+}
+
+.tiny-content td {
+  @apply text-sm leading-4;
+}
+
+.tiny-content td,
+.tiny-content th {
+  @apply p-1;
+}
+
+.tiny-content a {
+  @apply text-primary underline;
+}
+
+.tiny-content caption {
+  caption-side: top !important;
+  text-align: center !important;
+  font-weight: bold !important;
+}
+
+.tiny-content .ck-texte {
+  @apply text-sm leading-relaxed;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+.tiny-content .font-arial {
+  font-family: Arial, sans-serif;
+}
+
+.tiny-content .font-times-new-roman {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+// Hack for show Bootstrap alerts in CKEditor' style select
+.cke_panel_listItem a > :first-child {
+  @apply mb-0;
+}
+
+.ck {
+  @apply block font-normal leading-none;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-language-override: normal;
+  font-size-adjust: none;
+  font-stretch: normal;
+  font-synthesis: weight style;
+  font-variant: normal;
+}
+
+.ck-article {
+  @apply font-bold uppercase;
+  color: #E95839;
+  //background: url(#{$img-path}/document/border-title.png) repeat-x 0 80%;
+  margin-bottom: 10px;
+  padding-bottom: 2%;
+
+  &:before {
+    content: "\f15c";
+    font-family: FontAwesome;
+    @apply font-normal mr-1;
+  }
+}
+
+.ck-paragraph-box {
+  @apply leading-5;
+  background-color: #F5EEE2;
+  padding: 2% 3%;
+}
+
+.ck-title {
+  @apply block font-bold text-black;
+}
+
+.ck-title2 {
+  @apply font-medium text-black relative mt-0 pt-0;
+
+  &:after {
+    @apply block;
+    background-color: #E95839;
+    content: "";
+    height: 2px;
+    margin: 10px 0 0;
+    width: 50px;
+  }
+}
+
+.ck-stand-out {
+  background-color: yellow;
+}
+
+.ck-style1 {
+  //background: url(#{$img-path}document/hr-1.png) repeat-x 0 0;
+  @apply border-0;
+  height: 6px;
+}
+
+.ck-style2 {
+  //background: url(#{$img-path}document/hr-2.png) repeat-x 0 0;
+  @apply border-0;
+  height: 6px;
+}
+
+.ck-style3 {
+  border-top: 1px dashed #8c8b8b;
+
+  &:after {
+    @apply inline-block relative bg-white;
+    color: #8c8b8b;
+    content: '\002702';
+    font-size: 18px;
+    left: 40px;
+    padding: 0 3px;
+    top: -12px;
+  }
+}
+
+.img-va-baseline {
+  @apply align-baseline;
+}
+
+.img-va-top {
+  @apply align-top;
+}
+
+.img-va-bottom {
+  @apply align-bottom;
+}
+
+.img-va-middle {
+  @apply align-middle;
+}
+
+.img-va-super {
+  vertical-align: super;
+}
+
+.img-va-sub {
+  vertical-align: sub;
+}
+
+.img-va-text-top {
+  @apply align-text-top;
+}
+
+.img-va-text-bottom {
+  @apply align-text-bottom;
+}
+
+figure.image {
+  @apply inline-block rounded-md mb-4 p-1 border border-support-1;
+}
+
+.cke_widget_image.pull-right,
+img.pull-right,
+figure.image.pull-right {
+  @apply ml-4;
+}
+
+.cke_widget_image.pull-left,
+img.pull-left,
+figure.image.pull-left {
+  @apply mr-4;
+}
+
+.text-center .img-responsive {
+  @apply mx-auto;
+}
+
+.cke_widget_image.pull-left figure.image,
+.cke_widget_image.pull-right figure.image,
+figure.image.pull-left,
+figure.image.pull-right {
+  @apply block;
+}
+
+figure.image figcaption {
+  @apply m-0 pl-1 pt-0 text-left;
+  background-color: #f3f3f3;
+  border-radius: 0;
+}

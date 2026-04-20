@@ -19,15 +19,12 @@ use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -50,7 +47,7 @@ class ResourceListener
         protected ToolChain $toolChain,
         protected RequestStack $request,
         protected Security $security,
-        protected TrackEDefaultRepository $trackEDefaultRepository
+        protected ResourceHelper $trackEDefaultHelper
     ) {}
 
     /**
@@ -232,10 +229,33 @@ class ResourceListener
                 throw new UserNotFoundException('PersonalFile validation requires a user context (creator or parent node creator).');
             }
 
+            // Ensure the user is managed by this EntityManager so lazy associations resolve.
+            if (!$em->contains($currentUser)) {
+                $managedUser = $em->find(User::class, $currentUser->getId());
+                if ($managedUser instanceof User) {
+                    $currentUser = $managedUser;
+                }
+            }
+
             $currentUserNode = $currentUser->getResourceNode();
 
             $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
                 || (null !== $currentUserNode && $parentNode->getId() === $currentUserNode->getId());
+
+            // Walk up the parent tree to check if the target belongs to the user's personal space.
+            if (!$valid && null !== $currentUserNode) {
+                $node = $parentNode->getParent();
+                while (null !== $node) {
+                    if ($node->getId() === $currentUserNode->getId()
+                        || $node->getCreator()->getUsername() === $currentUser->getUsername()
+                    ) {
+                        $valid = true;
+
+                        break;
+                    }
+                    $node = $node->getParent();
+                }
+            }
 
             if (!$valid) {
                 $msg = \sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
@@ -311,56 +331,24 @@ class ResourceListener
         }
     }
 
-    public function postPersist(AbstractResource $resource, PostPersistEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'creation',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
-    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'edition',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
-    public function postRemove(AbstractResource $resource, PostRemoveEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'deletion',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
     /**
      * When updating a Resource.
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
         $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
         $parentResourceNode = $resource->getParent()?->resourceNode;
 
         if ($parentResourceNode) {
             $resourceNode->setParent($parentResourceNode);
         }
+
+        $this->updateResourceName($resource);
 
         // error_log('Resource listener preUpdate');
         // $this->setLinks($resource, $eventArgs->getEntityManager());
@@ -374,11 +362,16 @@ class ResourceListener
             throw new InvalidArgumentException('Resource needs a name');
         }
 
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             // $slug = $this->slugify->slugify($resourceName);
         }
-        $resource->getResourceNode()->setTitle($resourceName);
+        $resourceNode->setTitle($resourceName);
     }
 
     private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void

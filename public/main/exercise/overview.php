@@ -324,7 +324,9 @@ if (!empty($attempts)) {
         )
         ) {
             if ($blockShowAnswers &&
-                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK != $objExercise->results_disabled
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK != $objExercise->results_disabled &&
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT != $objExercise->results_disabled &&
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK != $objExercise->results_disabled
             ) {
                 $attempt_link = '';
             }
@@ -367,17 +369,13 @@ if (!empty($attempts)) {
             break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
-            if ($blockShowAnswers) {
-                $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
-            } else {
-                $header_names = [
-                    get_lang('Attempt'),
-                    get_lang('Start Date'),
-                    get_lang('IP'),
-                    get_lang('Score'),
-                    get_lang('Details'),
-                ];
-            }
+            $header_names = [
+                get_lang('Attempt'),
+                get_lang('Start Date'),
+                get_lang('IP'),
+                get_lang('Score'),
+                get_lang('Details'),
+            ];
 
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:

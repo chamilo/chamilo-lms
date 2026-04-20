@@ -585,52 +585,21 @@ class nusoap_server extends nusoap_base
 		$this->debug('in invoke_method, params:');
 		$this->appendDebug($this->varDump($this->methodparams));
 		$this->debug("in invoke_method, calling '$this->methodname'");
-		if (!function_exists('call_user_func_array')) {
-			if ($class == '') {
-				$this->debug('in invoke_method, calling function using eval()');
-				$funcCall = "\$this->methodreturn = $this->methodname(";
-			} else {
-				if ($delim == '..') {
-					$this->debug('in invoke_method, calling class method using eval()');
-					$funcCall = "\$this->methodreturn = ".$class."::".$method."(";
-				} else {
-					$this->debug('in invoke_method, calling instance method using eval()');
-					// generate unique instance name
-					$instname = "\$inst_".time();
-					$funcCall = $instname." = new ".$class."(); ";
-					$funcCall .= "\$this->methodreturn = ".$instname."->".$method."(";
-				}
-			}
-			if ($this->methodparams) {
-				foreach ($this->methodparams as $param) {
-					if (is_array($param) || is_object($param)) {
-						$this->fault('SOAP-ENV:Client', 'NuSOAP does not handle complexType parameters correctly when using eval; call_user_func_array must be available');
-						return;
-					}
-					$funcCall .= "\"$param\",";
-				}
-				$funcCall = substr($funcCall, 0, -1);
-			}
-			$funcCall .= ');';
-			$this->debug('in invoke_method, function call: '.$funcCall);
-			@eval($funcCall);
+		if ($class == '') {
+			$this->debug('in invoke_method, calling function using call_user_func_array()');
+			$call_arg = "$this->methodname";	// straight assignment changes $this->methodname to lower case after call_user_func_array()
+		} elseif ($delim == '..') {
+			$this->debug('in invoke_method, calling class method using call_user_func_array()');
+			$call_arg = array ($class, $method);
 		} else {
-			if ($class == '') {
-				$this->debug('in invoke_method, calling function using call_user_func_array()');
-				$call_arg = "$this->methodname";	// straight assignment changes $this->methodname to lower case after call_user_func_array()
-			} elseif ($delim == '..') {
-				$this->debug('in invoke_method, calling class method using call_user_func_array()');
-				$call_arg = array ($class, $method);
-			} else {
-				$this->debug('in invoke_method, calling instance method using call_user_func_array()');
-				$instance = new $class ();
-				$call_arg = array(&$instance, $method);
-			}
-			if (is_array($this->methodparams)) {
-				$this->methodreturn = call_user_func_array($call_arg, array_values($this->methodparams));
-			} else {
-				$this->methodreturn = call_user_func_array($call_arg, array());
-			}
+			$this->debug('in invoke_method, calling instance method using call_user_func_array()');
+			$instance = new $class ();
+			$call_arg = array(&$instance, $method);
+		}
+		if (is_array($this->methodparams)) {
+			$this->methodreturn = call_user_func_array($call_arg, array_values($this->methodparams));
+		} else {
+			$this->methodreturn = call_user_func_array($call_arg, array());
 		}
         $this->debug('in invoke_method, methodreturn:');
         $this->appendDebug($this->varDump($this->methodreturn));

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -36,16 +38,13 @@ function activate_end_date() {
 
 /* Constants and variables */
 
-$lpId = (int)($_REQUEST['lp_id'] ?? 0);
+$request = Container::getRequest();
+$lpId = $request->query->getInt('lp_id', $request->request->getInt('lp_id'));
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
-// Only treat student view as enabled if it was explicitly passed in the URL.
-// This avoids picking it up from cookies/$_REQUEST.
-$rawQuery = $_SERVER['QUERY_STRING'] ?? '';
-$hasStudentViewInUrl = preg_match('/(?:^|&)isStudentView=/i', $rawQuery) === 1;
-$isStudentView = $hasStudentViewInUrl
-    ? filter_var($_GET['isStudentView'] ?? 'false', FILTER_VALIDATE_BOOLEAN)
-    : false;
+// Only treat student view as enabled if it was explicitly passed in the URL query string.
+// $request->query reads only from GET params, not cookies, so no further guard is needed.
+$isStudentView = filter_var($request->query->get('isStudentView', 'false'), FILTER_VALIDATE_BOOLEAN);
 
 if (!$is_allowed_to_edit || $isStudentView) {
     $course = api_get_course_entity(api_get_course_int_id());
@@ -53,13 +52,19 @@ if (!$is_allowed_to_edit || $isStudentView) {
         ? (int) $course->getResourceNode()->getId()
         : 0;
 
-    $cid = (int) ($_REQUEST['cid'] ?? api_get_course_int_id());
-    $sid = (int) ($_REQUEST['sid'] ?? api_get_session_id());
+    $cid = $request->query->getInt('cid', $request->request->getInt('cid', api_get_course_int_id()));
+    $sid = $request->query->getInt('sid', $request->request->getInt('sid', api_get_session_id()));
 
     $qs = ['cid' => $cid];
-    if ($sid > 0) $qs['sid'] = $sid;
-    if (isset($_REQUEST['gid']))       $qs['gid'] = (int) $_REQUEST['gid'];
-    if (isset($_REQUEST['gradebook'])) $qs['gradebook'] = (int) $_REQUEST['gradebook'];
+    if ($sid > 0) {
+        $qs['sid'] = $sid;
+    }
+    if ($request->query->has('gid') || $request->request->has('gid')) {
+        $qs['gid'] = $request->query->getInt('gid', $request->request->getInt('gid'));
+    }
+    if ($request->query->has('gradebook') || $request->request->has('gradebook')) {
+        $qs['gradebook'] = $request->query->getInt('gradebook', $request->request->getInt('gradebook'));
+    }
 
     // Preserve student view only if it was explicitly requested.
     if ($isStudentView) {
@@ -68,6 +73,7 @@ if (!$is_allowed_to_edit || $isStudentView) {
 
     $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
     header('Location: '.$listUrl);
+
     exit;
 }
 
@@ -144,7 +150,7 @@ $form->addElement('html', '<div id="start_date_div" style="display:block;">');
 $form->addDateTimePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
-//End date
+// End date
 $form->addCheckBox(
     'activate_end_date_check',
     null,
@@ -186,29 +192,25 @@ $form->addButtonCreate(get_lang('Continue'));
 
 if ($form->validate()) {
     $published_on = null;
-    if (isset($_REQUEST['activate_start_date_check']) &&
-        1 == $_REQUEST['activate_start_date_check']
-    ) {
-        $published_on = $_REQUEST['published_on'];
+    if (1 === $request->request->getInt('activate_start_date_check')) {
+        $published_on = $request->request->get('published_on');
     }
 
     $expired_on = null;
-    if (isset($_REQUEST['activate_end_date_check']) &&
-        1 == $_REQUEST['activate_end_date_check']
-    ) {
-        $expired_on = $_REQUEST['expired_on'];
+    if (1 === $request->request->getInt('activate_end_date_check')) {
+        $expired_on = $request->request->get('expired_on');
     }
 
     $lp = learnpath::add_lp(
         api_get_course_id(),
-        $_REQUEST['lp_name'],
+        $request->request->get('lp_name'),
         '',
         'chamilo',
         'manual',
         '',
         $published_on,
         $expired_on,
-        $_REQUEST['category_id']
+        $request->request->get('category_id')
     );
     $lpId = $lp->getIid();
     if ($lpId) {
@@ -218,8 +220,8 @@ if ($form->validate()) {
         SkillModel::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
 
         $extraFieldValue = new ExtraFieldValue('lp');
-        $_REQUEST['item_id'] = $lpId;
-        $extraFieldValue->saveFieldValues($_REQUEST);
+        $requestData = array_merge($request->request->all(), ['item_id' => $lpId]);
+        $extraFieldValue->saveFieldValues($requestData);
 
         // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
         /*$_SESSION['oLP'] = new learnpath(
@@ -228,17 +230,19 @@ if ($form->validate()) {
             api_get_user_id()
         );*/
 
-        $lp->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0);
-        $lp->setAccumulateScormTime(1 === (int) $_REQUEST['accumulate_scorm_time'] ? 1 : 0);
+        $lp->setSubscribeUsers((int) (null !== $request->request->get('subscribe_users')));
+        $lp->setAccumulateScormTime((int) (null !== $request->request->get('accumulate_scorm_time')));
         $lpRepo->update($lp);
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url&isStudentView=false");
+
         exit;
     }
 
     $url = api_get_self().'?action=list&'.api_get_cidreq();
     header("Location: $url&isStudentView=false");
+
     exit;
 }
 
@@ -257,7 +261,7 @@ echo Display::return_message(
     false
 );
 
-if ($_POST && empty($_REQUEST['lp_name'])) {
+if ($request->isMethod('POST') && empty($request->request->get('lp_name'))) {
     echo Display::return_message(
         get_lang('The form contains incorrect or incomplete data. Please check your input.'),
         'error',

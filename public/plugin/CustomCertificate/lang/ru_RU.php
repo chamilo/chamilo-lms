@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Пользовательский сертификат';
+$strings['plugin_comment'] = 'Этот плагин позволяет создавать пользовательские сертификаты для каждого курса.';
+$strings['enable_plugin_customcertificate'] = 'Включить плагин';
+$strings['customcertificate_course_enable'] = 'Включить пользовательский сертификат в курсе';
+$strings['use_certificate_default'] = 'Использовать сертификат по умолчанию';
+$strings['ToolDisabled'] = 'Инструмент отключен в администрировании';
+$strings['OnlyAdminPlatform'] = 'Инструмент только для администраторов';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Инструмент только для администраторов и преподавателей';
+$strings['TrainingEntity'] = 'Обучающая организация';
+$strings['DescriptionFront'] = 'Описание лицевой стороны';
+$strings['DescriptionRear'] = 'Описание обратной стороны';
+$strings['Certify'] = 'Сертифицировать';
+$strings['CertificateType'] = 'Тип сертификата';
+$strings['CertifyThat'] = 'СЕРТИФИЦИРУЕТ, ЧТО';
+$strings['StudentCourseInfo'] = 'Данные студента и курса';
+$strings['StudentData'] = 'Данные студента';
+$strings['CourseData'] = 'Данные курса';
+$strings['Modality'] = 'Форма обучения';
+$strings['Contents'] = 'Содержание';
+$strings['ContentsToShow'] = 'Содержание для показа';
+$strings['ContentsCourseDescription'] = 'Использовать раздел «Описание курса» > «Содержание»';
+$strings['ContentsIndexLearnpath'] = 'Использовать индекс учебного пути';
+$strings['ContentsCustom'] = 'Использовать пользовательское содержание';
+$strings['ContentsHide'] = 'Не показывать содержание';
+$strings['Dates'] = 'Даты';
+$strings['CourseDeliveryDates'] = 'Даты проведения курса';
+$strings['Custom'] = 'Пользовательская';
+$strings['UseDateSessionAccess'] = 'Использовать даты доступа к сессии';
+$strings['ExpectionPlace'] = 'Место выдачи';
+$strings['DateExpediction'] = 'Дата выдачи';
+$strings['UseDateEndAccessSession'] = 'Использовать дату окончания доступа к сессии';
+$strings['UseDateDownloadCertificate'] = 'Использовать дату скачивания сертификата';
+$strings['UseDateGenerationCertificate'] = 'Использовать дату генерации сертификата';
+$strings['UseCustomDate'] = 'Использовать пользовательскую дату';
+$strings['LogosSeal'] = 'Логотипы / Печати';
+$strings['LogoLeft'] = 'Логотип слева';
+$strings['LogoCenter'] = 'Логотип по центру';
+$strings['LogoRight'] = 'Логотип справа';
+$strings['Seal'] = 'Печать';
+$strings['Signature1'] = 'Подпись 1';
+$strings['Signature2'] = 'Подпись 2';
+$strings['Signature3'] = 'Подпись 3';
+$strings['Signature4'] = 'Подпись 4';
+$strings['SignatureText1'] = 'Текст подписи 1';
+$strings['SignatureText2'] = 'Текст подписи 2';
+$strings['SignatureText3'] = 'Текст подписи 3';
+$strings['SignatureText4'] = 'Текст подписи 4';
+$strings['OtherOptions'] = 'Другие опции';
+$strings['MarginRight'] = 'Поле справа';
+$strings['MarginLeft'] = 'Поле слева';
+$strings['SetDefaultTemplate'] = 'Установить шаблон по умолчанию';
+$strings['MessageDefaultTemplate'] = 'Сохранить эту настройку по умолчанию для курсов и сессий без
+     определённых сертификатов';
+$strings['None'] = 'Нет';
+$strings['ErrorTemplateCertificate'] = 'Для сертификата не определён шаблон.
+     Шаблон по умолчанию отсутствует.';
+$strings['DateStartEnd'] = 'С датой начала и датой окончания: ';
+$strings['ExpedictionIn'] = 'Выдан';
+$strings['Signatures'] = 'Подписи';
+$strings['BackgroundCertificate'] = 'Фоновое изображение сертификата';
+$strings['Background'] = 'Фон';
+$strings['CertificateSetting'] = 'Настройки сертификата';
+$strings['ToolDisabledCourse'] = 'Инструмент отключён в настройках курса';
+$strings['ToolUseDefaultSettingCourse'] = 'Инструмент настроен на использование сертификата по умолчанию. <br>
+     Вы можете отредактировать его на экране Администрирование -> Плагины -> Пользовательский сертификат. <br>
+     Или, если хотите, можете отключить опцию использования сертификата по умолчанию в конфигурации плагина в курсе';
+$strings['CertificateSettingDefault'] = 'Настройки сертификата по умолчанию';
+$strings['InfoFromDefaultCertificate'] = 'Содержимое сертификата основано на сертификате по умолчанию.
+     Изменения, которые вы внесёте, не повлияют на сертификат по умолчанию.';
+$strings['to'] = ' по ';
+$strings['formatDownloadDate'] = ' по %sth %s, %s';
+$strings['PrintCertificate'] = 'Печать сертификата';
+$strings['QuestionDelete'] = 'Вы хотите удалить персональный диплом и использовать сертификат по умолчанию?';
+$strings['SuccessDelete'] = 'Успешно удалено';
+$strings['ProblemDelete'] = 'Проблема при удалении сертификата';
+$strings['OnlyCustomCertificates'] = 'Экспортируются только курсы с персонализированным сертификатом';

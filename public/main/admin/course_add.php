@@ -13,7 +13,7 @@ api_protect_admin_script();
 
 $tool_name = get_lang('Create a course');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
 $em = Database::getManager();
 $accessUrlId = (int) api_get_current_access_url_id();
@@ -28,6 +28,9 @@ $globalTemplateId = is_numeric($globalTemplateSetting) ? (int) $globalTemplateSe
 
 $teacherCanSelectSetting = api_get_setting('workflows.teacher_can_select_course_template');
 $teacherCanSelectCourseTemplate = ('true' === strtolower($teacherCanSelectSetting));
+
+$hideCourseCode = 'true' === strtolower((string) api_get_setting('course.course_creation_form_hide_course_code'));
+$isCourseCategoryMandatory = 'true' === strtolower((string) api_get_setting('course.course_creation_form_set_course_category_mandatory'));
 
 // Build the form.
 $form = new FormValidator('update_course');
@@ -46,23 +49,32 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->addText(
-    'visual_code',
-    [
-        get_lang('Code'),
-        get_lang('Only letters (a-z) and numbers (0-9)'),
-    ],
-    false,
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
-        'id' => 'visual_code',
-    ]
-);
+if (!$hideCourseCode) {
+    $form->addText(
+        'visual_code',
+        [
+            get_lang('Code'),
+            get_lang('Only letters (a-z) and numbers (0-9)'),
+        ],
+        false,
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
+            'id' => 'visual_code',
+        ]
+    );
 
-$form->applyFilter('visual_code', 'api_strtoupper');
-$form->applyFilter('visual_code', 'html_filter');
+    $form->applyFilter('visual_code', 'api_strtoupper');
+    $form->applyFilter('visual_code', 'html_filter');
+    $form->addRule(
+        'visual_code',
+        get_lang('max. 20 characters, e.g. <i>INNOV21</i>'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
+
 $form->addSelectAjax(
     'course_categories',
     get_lang('Categories'),
@@ -73,12 +85,13 @@ $form->addSelectAjax(
     ]
 );
 
-$form->addRule(
-    'visual_code',
-    get_lang('max. 20 characters, e.g. <i>INNOV21</i>'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
+if ($isCourseCategoryMandatory) {
+    $form->addRule(
+        'course_categories',
+        get_lang('This field is required'),
+        'required'
+    );
+}
 
 $currentTeacher = api_get_user_entity(api_get_user_id());
 
@@ -221,7 +234,7 @@ if ('true' === api_get_setting('course.show_course_duration')) {
     $form->addRule('duration', get_lang('This field should be numeric'), 'numeric');
 }
 
-//Extra fields
+// Extra fields
 $extra_field = new ExtraField('course');
 $extra = $extra_field->addElements($form);
 
@@ -265,7 +278,7 @@ if ($form->validate()) {
     $course_teachers = isset($courseData['course_teachers']) ? $courseData['course_teachers'] : null;
     $courseData['exemplary_content'] = empty($courseData['exemplary_content']) ? false : true;
     $courseData['teachers'] = $course_teachers;
-    $courseData['wanted_code'] = $courseData['visual_code'];
+    $courseData['wanted_code'] = $hideCourseCode ? '' : ($courseData['visual_code'] ?? '');
     $courseData['gradebook_model_id'] = isset($courseData['gradebook_model_id']) ? $courseData['gradebook_model_id'] : null;
     if ($globalTemplateId > 0) {
         $courseData['course_template'] = $globalTemplateId;
@@ -290,11 +303,11 @@ if ($form->validate()) {
                 $em->flush();
             }
         }
-        header('Location: course_list.php?new_course_id=' . $course->getId());
+        header('Location: /admin/course-list');
         exit;
     }
 
-    header('Location: course_list.php');
+    header('Location: /admin/course-list');
     exit;
 }
 

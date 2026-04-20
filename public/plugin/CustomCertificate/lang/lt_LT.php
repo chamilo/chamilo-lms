@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Adaptuotas pažymėjimas';
+$strings['plugin_comment'] = 'Šis įskiepis leidžia kurti individualius pažymėjimus kiekvienam kursui.';
+$strings['enable_plugin_customcertificate'] = 'Įjungti įskiepį';
+$strings['customcertificate_course_enable'] = 'Įjungti adaptuotą pažymėjimą kurse';
+$strings['use_certificate_default'] = 'Naudoti numatytąjį adaptuotą pažymėjimą';
+$strings['ToolDisabled'] = 'Įrankis išjungtas administracijoje';
+$strings['OnlyAdminPlatform'] = 'Įrankis tik administratoriams';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Įrankis tik administratoriams ir dėstytojams';
+$strings['TrainingEntity'] = 'Mokymo institucija';
+$strings['DescriptionFront'] = 'Aprašymas priekyje';
+$strings['DescriptionRear'] = 'Aprašymas gale';
+$strings['Certify'] = 'Patvirtinti';
+$strings['CertificateType'] = 'Pažymėjimo tipas';
+$strings['CertifyThat'] = 'PATVIRTINAMA, KAD';
+$strings['StudentCourseInfo'] = 'Studento ir kurso duomenys';
+$strings['StudentData'] = 'Studento duomenys';
+$strings['CourseData'] = 'Kurso duomenys';
+$strings['Modality'] = 'Forma';
+$strings['Contents'] = 'Turinys';
+$strings['ContentsToShow'] = 'Rodomo turinio';
+$strings['ContentsCourseDescription'] = 'Naudoti skyrių „Kursų aprašymas“ > „Turinys“';
+$strings['ContentsIndexLearnpath'] = 'Naudoti mokymosi kelio indeksą';
+$strings['ContentsCustom'] = 'Naudoti individualų turinį';
+$strings['ContentsHide'] = 'Nerodyti turinio';
+$strings['Dates'] = 'Datos';
+$strings['CourseDeliveryDates'] = 'Kurso teikimo datos';
+$strings['Custom'] = 'Individualu';
+$strings['UseDateSessionAccess'] = 'Naudoti prieigos prie sesijos datas';
+$strings['ExpectionPlace'] = 'Išdavimo vieta';
+$strings['DateExpediction'] = 'Išdavimo data';
+$strings['UseDateEndAccessSession'] = 'Naudoti sesijos prieigos pabaigos datą';
+$strings['UseDateDownloadCertificate'] = 'Naudoti pažymėjimo atsisiuntimo datą';
+$strings['UseDateGenerationCertificate'] = 'Naudoti pažymėjimo generavimo datą';
+$strings['UseCustomDate'] = 'Naudoti individualią datą';
+$strings['LogosSeal'] = 'Logotipai / Antspaudai';
+$strings['LogoLeft'] = 'Logotipas kairėje';
+$strings['LogoCenter'] = 'Logotipas centre';
+$strings['LogoRight'] = 'Logotipas dešinėje';
+$strings['Seal'] = 'Antspaudas';
+$strings['Signature1'] = 'Parašas 1';
+$strings['Signature2'] = 'Parašas 2';
+$strings['Signature3'] = 'Parašas 3';
+$strings['Signature4'] = 'Parašas 4';
+$strings['SignatureText1'] = 'Parašo tekstas 1';
+$strings['SignatureText2'] = 'Parašo tekstas 2';
+$strings['SignatureText3'] = 'Parašo tekstas 3';
+$strings['SignatureText4'] = 'Parašo tekstas 4';
+$strings['OtherOptions'] = 'Kitos parinktys';
+$strings['MarginRight'] = 'Dešinysis kraštinis';
+$strings['MarginLeft'] = 'Kairysis kraštinis';
+$strings['SetDefaultTemplate'] = 'Nustatyti šabloną kaip numatytąjį';
+$strings['MessageDefaultTemplate'] = 'Įrašyti šį numatytąjį pritaikymą kursams ir sesijoms be
+     apibrėžtų pažymėjimų';
+$strings['None'] = 'Nėra';
+$strings['ErrorTemplateCertificate'] = 'Pažymėjimui nėra apibrėžto šablono.
+     Nėra numatytojo šablono.';
+$strings['DateStartEnd'] = 'Su pradžios data ir pabaigos data: ';
+$strings['ExpedictionIn'] = 'Išrašymo iki';
+$strings['Signatures'] = 'Parašai';
+$strings['BackgroundCertificate'] = 'Pažymėjimo fono paveikslėlis';
+$strings['Background'] = 'Fonas';
+$strings['CertificateSetting'] = 'Pažymėjimo nustatymai';
+$strings['ToolDisabledCourse'] = 'Įrankis išjungtas kurso nustatymuose';
+$strings['ToolUseDefaultSettingCourse'] = 'Įrankis sukonfigūruotas naudoti numatytąjį pažymėjimą. <br>
+     Jį galite redaguoti iš Administravimo ekrano -> Įskiepiai -> Pažymėjimas pagal užsakymą. <br>
+     Arba jei norite, galite išjungti parinktį naudoti pažymėjimą pagal numatytuosius kursų įskiepio konfigūracijoje';
+$strings['CertificateSettingDefault'] = 'Numatytieji pažymėjimo nustatymai';
+$strings['InfoFromDefaultCertificate'] = 'Pažymėjimo turinys remiasi numatytuoju pažymėjimu.
+     Jūsų atliekami pakeitimai nepaveiks numatytojo pažymėjimo.';
+$strings['to'] = ' iki ';
+$strings['formatDownloadDate'] = ' iki %s %s, %s';
+$strings['PrintCertificate'] = 'Spausdinti pažymėjimą';
+$strings['QuestionDelete'] = 'Ar norite ištrinti konkretų diplomą ir naudoti numatytąjį pažymėjimą?';
+$strings['SuccessDelete'] = 'Sėkmingai ištrinta';
+$strings['ProblemDelete'] = 'Problema ištrinant pažymėjimą';
+$strings['OnlyCustomCertificates'] = 'Eksportuojami tik kursai su pritaikytu pažymėjimu';

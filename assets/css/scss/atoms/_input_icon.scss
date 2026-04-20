@@ -1,0 +1,30 @@
+.p-iconfield {
+  @apply relative block;
+
+  .p-inputtext:not(:first-child),
+  .p-inputwrapper:not(:first-child) .p-inputtext {
+    @apply ps-12;
+  }
+
+  .p-inputtext:not(:last-child) {
+    @apply pe-12;
+  }
+
+  &:has(.p-inputfield-sm) .p-inputicon {
+    @apply text-sm w-[0.875rem] h-[0.875rem] -mt-[0.4375rem];
+  }
+
+  &:has(.p-inputfield-lg) .p-inputicon {
+    @apply text-lg w-[1.125rem] h-[1.125rem] -mt-[0.5625rem];
+  }
+}
+
+.p-inputicon {
+  @apply absolute top-1/2 -mt-2 text-gray-90 leading-none z-[1];
+
+  .p-iconfield & {
+      @apply
+        first:start-4
+        last:end-4;
+  }
+}

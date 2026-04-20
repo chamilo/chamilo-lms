@@ -12,7 +12,7 @@
       />
 
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.rootWeb"
             input-id="loginForm"
@@ -24,11 +24,11 @@
             v-text="t('Chamilo URL')"
             for="loginForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.rootSys"
             input-id="loginForm"
@@ -40,11 +40,11 @@
             v-text="t('Path')"
             for="loginForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.systemVersion"
             input-id="loginForm"
@@ -56,7 +56,7 @@
             v-text="t('Path')"
             for="loginForm"
           />
-        </div>
+        </FloatLabel>
       </div>
     </div>
 
@@ -71,7 +71,7 @@
         v-if="'update' !== installerData.installType"
         class="field"
       >
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.loginForm"
             input-id="loginForm"
@@ -83,7 +83,7 @@
             v-text="t('Administrator login')"
             for="loginForm"
           />
-        </div>
+        </FloatLabel>
       </div>
       <div
         v-else
@@ -102,7 +102,7 @@
         v-if="'update' !== installerData.installType"
         class="field"
       >
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <Password
             v-model="installerData.stepData.passForm"
             :feedback="false"
@@ -114,7 +114,7 @@
             v-text="t('Administrator password')"
             for="passForm"
           />
-        </div>
+        </FloatLabel>
         <small
           v-text="t('You may want to change this')"
           class="text-error"
@@ -123,7 +123,7 @@
 
       <!-- Parameters 3 and 4: administrator's names -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.adminFirstName"
             input-id="adminFirstName"
@@ -135,11 +135,11 @@
             v-text="t('Administrator first name')"
             for="adminFirstName"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.adminLastName"
             input-id="adminLastName"
@@ -151,12 +151,12 @@
             v-text="t('Administrator last name')"
             for="adminLastName"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Parameter 5: administrator's email -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.emailForm"
             input-id="emailForm"
@@ -168,12 +168,12 @@
             v-text="t('Administrator e-mail')"
             for="emailForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Parameter 6: administrator's telephone -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.adminPhoneForm"
             input-id="adminPhoneForm"
@@ -185,7 +185,7 @@
             v-text="t('Administrator telephone')"
             for="adminPhoneForm"
           />
-        </div>
+        </FloatLabel>
       </div>
     </div>
 
@@ -197,7 +197,7 @@
 
       <!-- First parameter: language. -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <Select
             v-if="'update' !== installerData.installType"
             v-model="installerData.stepData.languageForm"
@@ -222,7 +222,7 @@
             name="languageForm"
             type="hidden"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Second parameter: Chamilo URL -->
@@ -230,7 +230,7 @@
         v-if="'install' === installerData.installType"
         class="field"
       >
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.urlForm"
             input-id="urlForm"
@@ -242,12 +242,12 @@
             v-text="t('Chamilo URL')"
             for="urlForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Parameter 9: campus name -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.campusForm"
             input-id="campusForm"
@@ -259,12 +259,12 @@
             v-text="t('Your portal name')"
             for="campusForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Parameter 10: institute (short) name -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.institutionForm"
             input-id="institutionForm"
@@ -276,12 +276,12 @@
             v-text="t('Your company short name')"
             for="institutionForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <!-- Parameter 11: institute URL -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.institutionUrlForm"
             input-id="institutionUrlForm"
@@ -293,7 +293,7 @@
             v-text="t('URL of this company')"
             for="institutionUrlForm"
           />
-        </div>
+        </FloatLabel>
       </div>
 
       <label v-text="t('Encryption method')" />
@@ -507,6 +507,7 @@
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Select from "primevue/select"

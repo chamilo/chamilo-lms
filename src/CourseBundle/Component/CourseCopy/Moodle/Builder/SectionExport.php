@@ -6,19 +6,21 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AssignExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FeedbackExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FolderExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ForumExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\GlossaryExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\LabelExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\PageExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ResourceExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\UrlExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\WikiExport;
 use DocumentManager;
 use Exception;
 
-use const PATHINFO_EXTENSION;
 use const PHP_EOL;
 
 /**
@@ -32,11 +34,18 @@ class SectionExport
     private $course;
 
     /**
-     * @param object $course the course object to be exported
+     * @var array<int,array<int,array<string,mixed>>>
      */
-    public function __construct(object $course)
+    private array $activitiesBySection = [];
+
+    /**
+     * @param object $course the course object to be exported
+     * @param array<int,array<int,array<string,mixed>>> $activitiesBySection
+     */
+    public function __construct(object $course, array $activitiesBySection = [])
     {
         $this->course = $course;
+        $this->activitiesBySection = $activitiesBySection;
     }
 
     /**
@@ -44,7 +53,8 @@ class SectionExport
      */
     public function exportSection(int $sectionId, string $exportDir): void
     {
-        $sectionDir = $exportDir."/sections/section_{$sectionId}";
+        $sectionDir = $exportDir.'/sections/section_'.$sectionId;
+
         if (!is_dir($sectionDir)) {
             mkdir($sectionDir, api_get_permissions_for_new_directories(), true);
         }
@@ -52,7 +62,7 @@ class SectionExport
         if ($sectionId > 0) {
             $learnpath = $this->getLearnpathById($sectionId);
             if (null === $learnpath) {
-                throw new Exception("Learnpath with ID $sectionId not found.");
+                throw new Exception('Learnpath with ID '.$sectionId.' not found.');
             }
             $sectionData = $this->getSectionData($learnpath);
         } else {
@@ -60,7 +70,7 @@ class SectionExport
                 'id' => 0,
                 'number' => 0,
                 'name' => get_lang('General'),
-                'summary' => get_lang('General course resources'),
+                'summary' => get_lang('GeneralResourcesCourse'),
                 'sequence' => 0,
                 'visible' => 1,
                 'timemodified' => time(),
@@ -68,13 +78,13 @@ class SectionExport
             ];
         }
 
-        $this->exportActivities($sectionData['activities'], $exportDir, (int) $sectionData['id']);
         $this->createSectionXml($sectionData, $sectionDir);
         $this->createInforefXml($sectionData, $sectionDir);
+        $this->exportActivities($sectionData['activities'], $exportDir, $sectionId);
     }
 
     /**
-     * Get all general items not linked to any learnpath.
+     * Get all general items not linked to any lesson.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -82,65 +92,46 @@ class SectionExport
     {
         $generalItems = [];
 
-        // Map legacy resource types to their primary identifier field
         $resourceTypes = [
-            RESOURCE_DOCUMENT    => 'source_id',
-            RESOURCE_QUIZ        => 'source_id',
-            RESOURCE_GLOSSARY    => 'glossary_id',
-            RESOURCE_LINK        => 'source_id',
-            RESOURCE_WORK        => 'source_id',
-            RESOURCE_FORUM       => 'source_id',
-            RESOURCE_SURVEY      => 'source_id',
-            RESOURCE_TOOL_INTRO  => 'source_id',
+            \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document' => 'source_id',
+            \defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz' => 'source_id',
+            \defined('RESOURCE_GLOSSARY') ? RESOURCE_GLOSSARY : 'glossary' => 'glossary_id',
+            \defined('RESOURCE_LINK') ? RESOURCE_LINK : 'link' => 'source_id',
+            \defined('RESOURCE_WORK') ? RESOURCE_WORK : 'work' => 'source_id',
+            \defined('RESOURCE_FORUM') ? RESOURCE_FORUM : 'forum' => 'source_id',
+            \defined('RESOURCE_SURVEY') ? RESOURCE_SURVEY : 'survey' => 'source_id',
+            \defined('RESOURCE_TOOL_INTRO') ? RESOURCE_TOOL_INTRO : 'tool_intro' => 'source_id',
+            \defined('RESOURCE_COURSEDESCRIPTION') ? RESOURCE_COURSEDESCRIPTION : 'course_description' => 'source_id',
+            \defined('RESOURCE_WIKI') ? RESOURCE_WIKI : 'wiki' => 'source_id',
         ];
 
         foreach ($resourceTypes as $resourceType => $idKey) {
-            if (empty($this->course->resources[$resourceType]) || !\is_array($this->course->resources[$resourceType])) {
+            $bucket = $this->course->resources[$resourceType] ?? null;
+            if (!is_array($bucket) || empty($bucket)) {
                 continue;
             }
 
-            foreach ($this->course->resources[$resourceType] as $bagKey => $resource) {
-                // Skip items that are already part of a learnpath
+            foreach ($bucket as $id => $resource) {
+                if (!is_object($resource)) {
+                    continue;
+                }
+
                 if ($this->isItemInLearnpath($resource, (string) $resourceType)) {
                     continue;
                 }
 
-                // --- Special case: Tool intro as course homepage → export as Moodle "page" (id=0) ---
-                if (RESOURCE_TOOL_INTRO === $resourceType) {
-                    // We rely on obj->id === 'course_homepage'
-                    $objId = (string) ($resource->obj->id ?? '');
-                    if ('course_homepage' === $objId) {
-                        $generalItems[] = [
-                            // Keep this literal so downstream code can detect it easily
-                            'id'        => 'course_homepage',
-                            'item_type' => 'page', // already normalized for addActivityToList()
-                            'path'      => 0,      // PageExport::getData(0, ...) will read intro HTML
-                            'title'     => get_lang('Introduction'),
-                        ];
-                    }
-                    // Do not add any other tool-intro variants here
-                    continue;
-                }
-
-                // --- Default handling for other resource types ---
-                // Robust title resolution (avoid notices if properties are missing)
-                $title =
-                    (RESOURCE_WORK === $resourceType)
-                        ? (string) ($resource->params['title'] ?? ($resource->title ?? ''))
-                        : (string) ($resource->title ?? ($resource->name ?? ''));
-
-                // Resolve the primary id safely; skip if missing (defensive)
-                $primaryId = $resource->{$idKey} ?? null;
-                if (null === $primaryId) {
-                    // Defensive log could be added here if needed
-                    continue;
+                $title = '';
+                if ((string) $resourceType === (\defined('RESOURCE_WORK') ? RESOURCE_WORK : 'work')) {
+                    $title = (string) ($resource->params['title'] ?? '');
+                } else {
+                    $title = (string) ($resource->title ?? $resource->name ?? '');
                 }
 
                 $generalItems[] = [
-                    'id'        => $primaryId,
-                    'item_type' => $resourceType,
-                    'path'      => $bagKey,
-                    'title'     => $title,
+                    'id' => $resource->$idKey ?? $id,
+                    'item_type' => (string) $resourceType,
+                    'path' => $id,
+                    'title' => $title,
                 ];
             }
         }
@@ -155,6 +146,10 @@ class SectionExport
      */
     public function getActivitiesForGeneral(): array
     {
+        if (isset($this->activitiesBySection[0]) && is_array($this->activitiesBySection[0])) {
+            return $this->activitiesBySection[0];
+        }
+
         $generalLearnpath = (object) [
             'items' => $this->getGeneralItems(),
             'source_id' => 0,
@@ -162,12 +157,21 @@ class SectionExport
 
         $activities = $this->getActivitiesForSection($generalLearnpath, true);
 
-        if (!\in_array('folder', array_column($activities, 'modulename'), true)) {
+        $hasFolder = false;
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') === 'folder') {
+                $hasFolder = true;
+                break;
+            }
+        }
+
+        if (!$hasFolder) {
             $activities[] = [
-                'id' => 0,
-                'moduleid' => 0,
+                'id' => ActivityExport::DOCS_MODULE_ID,
+                'moduleid' => ActivityExport::DOCS_MODULE_ID,
                 'modulename' => 'folder',
                 'name' => 'Documents',
+                'title' => 'Documents',
                 'sectionid' => 0,
             ];
         }
@@ -180,9 +184,26 @@ class SectionExport
      */
     public function getLearnpathById(int $sectionId): ?object
     {
-        foreach (($this->course->resources[RESOURCE_LEARNPATH] ?? []) as $learnpath) {
-            if (($learnpath->source_id ?? null) == $sectionId) {
-                return $learnpath;
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!is_array($learnpaths)) {
+            return null;
+        }
+
+        foreach ($learnpaths as $learnpath) {
+            $lp = (\is_object($learnpath) && isset($learnpath->obj) && \is_object($learnpath->obj))
+                ? $learnpath->obj
+                : $learnpath;
+
+            if (!is_object($lp)) {
+                continue;
+            }
+
+            if ((int) ($lp->source_id ?? $lp->id ?? 0) === $sectionId) {
+                return $lp;
             }
         }
 
@@ -196,16 +217,86 @@ class SectionExport
      */
     public function getSectionData(object $learnpath): array
     {
+        $sectionId = (int) ($learnpath->source_id ?? $learnpath->id ?? 0);
+
+        $sectionName = trim((string) ($learnpath->name ?? $learnpath->title ?? ''));
+        if ('' === $sectionName) {
+            $sectionName = 'Section '.$sectionId;
+        }
+
         return [
-            'id' => $learnpath->source_id,
-            'number' => $learnpath->display_order,
-            'name' => $learnpath->name,
-            'summary' => $learnpath->description,
-            'sequence' => $learnpath->source_id,
-            'visible' => $learnpath->visibility,
-            'timemodified' => strtotime($learnpath->modified_on),
+            'id' => $sectionId,
+            'number' => $this->resolveSectionNumber($sectionId),
+            'name' => $sectionName,
+            'summary' => (string) ($learnpath->description ?? ''),
+            'sequence' => $sectionId,
+            'visible' => (int) ($learnpath->visibility ?? 1),
+            'timemodified' => !empty($learnpath->modified_on) ? strtotime((string) $learnpath->modified_on) : time(),
             'activities' => $this->getActivitiesForSection($learnpath),
         ];
+    }
+
+
+    /**
+     * Resolve a stable sequential section number for Moodle topics format.
+     */
+    private function resolveSectionNumber(int $sectionId): int
+    {
+        if ($sectionId <= 0) {
+            return 0;
+        }
+
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!\is_array($learnpaths) || empty($learnpaths)) {
+            return 1;
+        }
+
+        $ordered = [];
+        foreach ($learnpaths as $learnpathWrap) {
+            $learnpath = (\is_object($learnpathWrap) && isset($learnpathWrap->obj) && \is_object($learnpathWrap->obj))
+                ? $learnpathWrap->obj
+                : $learnpathWrap;
+
+            if (!\is_object($learnpath) || (int) ($learnpath->lp_type ?? 0) !== 1) {
+                continue;
+            }
+
+            $ordered[] = $learnpath;
+        }
+
+        usort(
+            $ordered,
+            static function (object $a, object $b): int {
+                $oa = (int) ($a->display_order ?? 0);
+                $ob = (int) ($b->display_order ?? 0);
+                if ($oa !== $ob) {
+                    if ($oa <= 0) {
+                        return 1;
+                    }
+                    if ($ob <= 0) {
+                        return -1;
+                    }
+
+                    return $oa <=> $ob;
+                }
+
+                return ((int) ($a->source_id ?? $a->id ?? 0)) <=> ((int) ($b->source_id ?? $b->id ?? 0));
+            }
+        );
+
+        $position = 1;
+        foreach ($ordered as $learnpath) {
+            if ((int) ($learnpath->source_id ?? $learnpath->id ?? 0) === $sectionId) {
+                return $position;
+            }
+            $position++;
+        }
+
+        return 1;
     }
 
     /**
@@ -215,10 +306,18 @@ class SectionExport
      */
     public function getActivitiesForSection(object $learnpath, bool $isGeneral = false): array
     {
-        $activities = [];
-        $sectionId = $isGeneral ? 0 : (int) $learnpath->source_id;
+        $sectionId = $isGeneral ? 0 : (int) ($learnpath->source_id ?? $learnpath->id ?? 0);
 
-        foreach ($learnpath->items as $item) {
+        if (isset($this->activitiesBySection[$sectionId]) && is_array($this->activitiesBySection[$sectionId])) {
+            return $this->activitiesBySection[$sectionId];
+        }
+
+        $activities = [];
+        foreach ((array) ($learnpath->items ?? []) as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
             $this->addActivityToList($item, $sectionId, $activities);
         }
 
@@ -242,17 +341,52 @@ class SectionExport
             'resource' => ResourceExport::class,
             'folder' => FolderExport::class,
             'feedback' => FeedbackExport::class,
+            'label' => LabelExport::class,
+            'wiki' => WikiExport::class,
         ];
 
         foreach ($activities as $activity) {
-            $moduleName = $activity['modulename'];
-            if (isset($exportClasses[$moduleName])) {
-                $exportClass = $exportClasses[$moduleName];
-                $exporter = new $exportClass($this->course);
-                $exporter->export((int) $activity['id'], $exportDir, (int) $activity['moduleid'], $sectionId);
-            } else {
-                throw new Exception("Export for module '$moduleName' is not supported.");
+            $moduleName = (string) ($activity['modulename'] ?? '');
+            if (!isset($exportClasses[$moduleName])) {
+                throw new Exception("Export for module '".$moduleName."' is not supported.");
             }
+
+            $exportClass = $exportClasses[$moduleName];
+            $exportInstance = new $exportClass($this->course);
+            $exportInstance->export(
+                (int) ($activity['id'] ?? 0),
+                $exportDir,
+                (int) ($activity['moduleid'] ?? 0),
+                $sectionId
+            );
+        }
+    }
+
+    /**
+     * Normalize resource / LP item types for reliable comparison.
+     */
+    private function normalizeItemTypeForLpComparison(string $type): string
+    {
+        switch ($type) {
+            case 'student_publication':
+            case 'work':
+            case 'assign':
+                return 'work';
+
+            case 'link':
+            case 'url':
+                return 'link';
+
+            case 'survey':
+            case 'feedback':
+                return 'survey';
+
+            case 'page':
+            case 'resource':
+                return 'document';
+
+            default:
+                return $type;
         }
     }
 
@@ -261,11 +395,55 @@ class SectionExport
      */
     private function isItemInLearnpath(object $item, string $type): bool
     {
-        foreach (($this->course->resources[RESOURCE_LEARNPATH] ?? []) as $learnpath) {
-            foreach (($learnpath->items ?? []) as $learnpathItem) {
-                $lpType = ($learnpathItem['item_type'] ?? '') === 'student_publication' ? 'work' : ($learnpathItem['item_type'] ?? '');
-                if ($lpType === $type && (string) ($learnpathItem['path'] ?? '') === (string) ($item->source_id ?? '')) {
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!is_array($learnpaths) || empty($learnpaths)) {
+            return false;
+        }
+
+        $normalizedType = $this->normalizeItemTypeForLpComparison($type);
+        $itemSourceId = isset($item->source_id) ? (string) $item->source_id : '';
+
+        foreach ($learnpaths as $learnpath) {
+            $lp = (\is_object($learnpath) && isset($learnpath->obj) && \is_object($learnpath->obj))
+                ? $learnpath->obj
+                : $learnpath;
+
+            if (!is_object($lp) || empty($lp->items)) {
+                continue;
+            }
+
+            foreach ((array) $lp->items as $learnpathItem) {
+                if (!is_array($learnpathItem)) {
+                    continue;
+                }
+
+                $lpType = isset($learnpathItem['item_type'])
+                    ? $this->normalizeItemTypeForLpComparison((string) $learnpathItem['item_type'])
+                    : '';
+
+                if ($lpType !== $normalizedType) {
+                    continue;
+                }
+
+                $lpPath = isset($learnpathItem['path']) ? (string) $learnpathItem['path'] : '';
+
+                if ('' !== $itemSourceId && $lpPath === $itemSourceId) {
                     return true;
+                }
+
+                if ('document' === $normalizedType && '' !== $itemSourceId && ctype_digit($itemSourceId)) {
+                    $doc = DocumentManager::get_document_data_by_id((int) $itemSourceId, (string) ($this->course->code ?? ''));
+                    if (!empty($doc['path'])) {
+                        foreach ($this->buildDocumentLpCandidates((string) $doc['path']) as $candidate) {
+                            if ($lpPath === $candidate) {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -276,21 +454,21 @@ class SectionExport
     /**
      * Add an activity to the activities list.
      *
-     * @param array<string,mixed>            $item
-     * @param array<int,array<string,mixed>> $activities (by ref)
+     * @param array<string,mixed> $item
+     * @param array<int,array<string,mixed>> $activities
      */
     private function addActivityToList(array $item, int $sectionId, array &$activities): void
     {
-        static $documentsFolderAdded = false;
-        if (!$documentsFolderAdded && 0 === $sectionId) {
+        if (0 === $sectionId && !$this->hasFolderActivity($activities)) {
             $activities[] = [
-                'id' => 0,
-                'moduleid' => 0,
+                'id' => ActivityExport::DOCS_MODULE_ID,
+                'moduleid' => ActivityExport::DOCS_MODULE_ID,
                 'type' => 'folder',
                 'modulename' => 'folder',
                 'name' => 'Documents',
+                'title' => 'Documents',
+                'sectionid' => 0,
             ];
-            $documentsFolderAdded = true;
         }
 
         $activityData = null;
@@ -298,22 +476,32 @@ class SectionExport
         $activityClassMap = [
             'quiz' => QuizExport::class,
             'glossary' => GlossaryExport::class,
-            'url' => UrlExport::class,
             'assign' => AssignExport::class,
+            'url' => UrlExport::class,
             'forum' => ForumExport::class,
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
             'feedback' => FeedbackExport::class,
+            'label' => LabelExport::class,
+            'wiki' => WikiExport::class,
         ];
 
-        if ('course_homepage' == $item['id']) {
+        if (($item['id'] ?? null) === 'course_homepage' || ($item['path'] ?? null) === 'course_homepage') {
             $item['item_type'] = 'page';
             $item['path'] = 0;
         }
 
-        $itemType = 'link' === $item['item_type'] ? 'url'
-            : (('work' === $item['item_type'] || 'student_publication' === $item['item_type']) ? 'assign'
-                : ('survey' === $item['item_type'] ? 'feedback' : $item['item_type']));
+        $itemType = (string) ($item['item_type'] ?? '');
+
+        if ('link' === $itemType) {
+            $itemType = 'url';
+        } elseif ('work' === $itemType || 'student_publication' === $itemType) {
+            $itemType = 'assign';
+        } elseif ('survey' === $itemType) {
+            $itemType = 'feedback';
+        } elseif ('coursedescription' === $itemType || 'course_description' === $itemType) {
+            $itemType = 'label';
+        }
 
         switch ($itemType) {
             case 'quiz':
@@ -323,40 +511,52 @@ class SectionExport
             case 'forum':
             case 'feedback':
             case 'page':
-                $activityId = 'glossary' === $itemType ? 1 : (int) $item['path'];
+            case 'label':
+            case 'wiki':
+                $activityId = 'glossary' === $itemType ? 1 : (int) ($item['path'] ?? 0);
+                if ('wiki' === $itemType && $activityId <= 0) {
+                    $activityId = 48000003;
+                }
+
                 $exportClass = $activityClassMap[$itemType];
                 $exportInstance = new $exportClass($this->course);
                 $activityData = $exportInstance->getData($activityId, $sectionId);
-
                 break;
 
             case 'document':
-                $documentId = (int) $item['path'];
-                $document = DocumentManager::get_document_data_by_id($documentId, $this->course->code);
+                $documentId = (int) ($item['path'] ?? 0);
+                $document = DocumentManager::get_document_data_by_id($documentId, (string) ($this->course->code ?? ''));
 
-                if ($document) {
-                    $isRoot = 1 === substr_count($document['path'], '/');
-                    $documentType = $this->getDocumentType($document['filetype'], $document['path']);
-                    if ('page' === $documentType && $isRoot) {
-                        $exportInstance = new PageExport($this->course);
-                        $activityData = $exportInstance->getData((int) $item['path'], $sectionId);
-                    } elseif ($sectionId > 0 && $documentType && isset($activityClassMap[$documentType])) {
-                        $exportClass = $activityClassMap[$documentType];
-                        $exportInstance = new $exportClass($this->course);
-                        $activityData = $exportInstance->getData((int) $item['path'], $sectionId);
+                if (!empty($document)) {
+                    $documentType = $this->getDocumentType((string) ($document['filetype'] ?? ''), (string) ($document['path'] ?? ''));
+
+                    if ($documentType && isset($activityClassMap[$documentType])) {
+                        $activityClass = $activityClassMap[$documentType];
+                        $exportInstance = new $activityClass($this->course);
+                        $activityData = $exportInstance->getData($documentId, $sectionId);
                     }
                 }
-
                 break;
+        }
+
+        if (!empty($activityData) && $sectionId > 0) {
+            $lpItemId = isset($item['id']) ? (int) $item['id'] : 0;
+            $modName = (string) ($activityData['modulename'] ?? '');
+
+            if ($lpItemId > 0 && !in_array($modName, ['folder', 'glossary'], true)) {
+                $activityData['moduleid'] = 900000000 + $lpItemId;
+            }
         }
 
         if ($activityData) {
             $activities[] = [
-                'id' => (int) $activityData['id'],
-                'moduleid' => (int) $activityData['moduleid'],
-                'type' => (string) $item['item_type'],
-                'modulename' => (string) $activityData['modulename'],
-                'name' => (string) $activityData['name'],
+                'id' => (int) ($activityData['id'] ?? 0),
+                'moduleid' => (int) ($activityData['moduleid'] ?? 0),
+                'type' => (string) ($item['item_type'] ?? ''),
+                'modulename' => (string) ($activityData['modulename'] ?? ''),
+                'name' => (string) ($activityData['name'] ?? ''),
+                'title' => (string) ($activityData['name'] ?? ''),
+                'sectionid' => $sectionId,
             ];
         }
     }
@@ -366,14 +566,16 @@ class SectionExport
      */
     private function getDocumentType(string $filetype, string $path): ?string
     {
-        if ('html' === pathinfo($path, PATHINFO_EXTENSION)) {
+        $extension = strtolower((string) pathinfo($path, PATHINFO_EXTENSION));
+
+        if (in_array($extension, ['html', 'htm'], true)) {
             return 'page';
         }
+
         if ('file' === $filetype) {
             return 'resource';
         }
 
-        // if ('folder' === $filetype) return 'folder';
         return null;
     }
 
@@ -384,33 +586,20 @@ class SectionExport
      */
     private function createSectionXml(array $sectionData, string $destinationDir): void
     {
-        $seen = [];
-        $cmIds = [];
-        foreach ($sectionData['activities'] as $a) {
-            $name = (string) ($a['modulename'] ?? '');
-            $mid = isset($a['moduleid']) ? (int) $a['moduleid'] : null;
-            if ('' === $name || null === $mid || $mid < 0) {
-                continue;
-            }
-
-            $key = $name.':'.$mid;
-            if (isset($seen[$key])) {
-                continue;
-            }
-            $seen[$key] = true;
-
-            $cmIds[] = (string) $mid;
-        }
+        $sequence = array_map(
+            static fn (array $activity): string => (string) ((int) ($activity['moduleid'] ?? 0)),
+            (array) ($sectionData['activities'] ?? [])
+        );
 
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xmlContent .= '<section id="'.$sectionData['id'].'">'.PHP_EOL;
-        $xmlContent .= ' <number>'.$sectionData['number'].'</number>'.PHP_EOL;
-        $xmlContent .= ' <name>'.htmlspecialchars((string) $sectionData['name']).'</name>'.PHP_EOL;
-        $xmlContent .= ' <summary>'.htmlspecialchars((string) $sectionData['summary']).'</summary>'.PHP_EOL;
-        $xmlContent .= ' <summaryformat>1</summaryformat>'.PHP_EOL;
-        $xmlContent .= ' <sequence>'.implode(',', $cmIds).'</sequence>'.PHP_EOL;
-        $xmlContent .= ' <visible>'.$sectionData['visible'].'</visible>'.PHP_EOL;
-        $xmlContent .= ' <timemodified>'.$sectionData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '<section id="'.(int) $sectionData['id'].'">'.PHP_EOL;
+        $xmlContent .= '  <number>'.(int) $sectionData['number'].'</number>'.PHP_EOL;
+        $xmlContent .= '  <name>'.htmlspecialchars((string) $sectionData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '  <summary>'.htmlspecialchars((string) $sectionData['summary']).'</summary>'.PHP_EOL;
+        $xmlContent .= '  <summaryformat>1</summaryformat>'.PHP_EOL;
+        $xmlContent .= '  <sequence>'.implode(',', $sequence).'</sequence>'.PHP_EOL;
+        $xmlContent .= '  <visible>'.(int) $sectionData['visible'].'</visible>'.PHP_EOL;
+        $xmlContent .= '  <timemodified>'.(int) $sectionData['timemodified'].'</timemodified>'.PHP_EOL;
         $xmlContent .= '</section>'.PHP_EOL;
 
         file_put_contents($destinationDir.'/section.xml', $xmlContent);
@@ -426,13 +615,47 @@ class SectionExport
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<inforef>'.PHP_EOL;
 
-        foreach ($sectionData['activities'] as $activity) {
-            $xmlContent .= '  <activity id="'.(int) $activity['id'].'">'
-                .htmlspecialchars((string) $activity['name']).'</activity>'.PHP_EOL;
+        foreach ((array) ($sectionData['activities'] ?? []) as $activity) {
+            $refId = isset($activity['moduleid']) ? (int) $activity['moduleid'] : (int) ($activity['id'] ?? 0);
+            $xmlContent .= '  <activity id="'.$refId.'">'.htmlspecialchars((string) ($activity['name'] ?? '')).'</activity>'.PHP_EOL;
         }
 
         $xmlContent .= '</inforef>'.PHP_EOL;
 
         file_put_contents($destinationDir.'/inforef.xml', $xmlContent);
+    }
+
+    /**
+     * Build normalized document path candidates for LP comparisons.
+     *
+     * @return array<int,string>
+     */
+    private function buildDocumentLpCandidates(string $documentPath): array
+    {
+        $normalized = ltrim(str_replace('\\', '/', $documentPath), '/');
+        $normalized = (string) preg_replace('#^document/#', '', $normalized);
+
+        return array_values(array_unique([
+            $normalized,
+            '/'.$normalized,
+            'document/'.$normalized,
+            '/document/'.$normalized,
+        ]));
+    }
+
+    /**
+     * Returns true when the section activity list already contains the virtual folder.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     */
+    private function hasFolderActivity(array $activities): bool
+    {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') === 'folder') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

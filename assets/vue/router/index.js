@@ -19,6 +19,7 @@ import skillRoutes from "./skill"
 import accessUrlRoutes from "./accessurl"
 import branchRoutes from "./branch"
 import roomRoutes from "./room"
+import buycoursesRoutes from "./buycourses"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
@@ -33,6 +34,7 @@ import blogAdminRoute from "./blogAdmin"
 import courseMaintenanceRoute from "./coursemaintenance"
 import catalogue from "./catalogue"
 import { useSecurityStore } from "../store/securityStore"
+import { usePlatformConfig } from "../store/platformConfig"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -97,7 +99,7 @@ function derivePageTypeClasses(to) {
   if (p.startsWith("/catalogue")) return ["page-catalogue"]
   if (p.startsWith("/social")) return ["page-social"]
   if (p.startsWith("/account")) return ["page-account-security"]
-  if (p.startsWith("/admin-dashboard")) return ["page-administration", "page-administration-session"]
+  if (p.startsWith("/admin-dashboard")) return ["page-administration-session"]
   if (p.startsWith("/admin")) return ["page-administration", "page-administration-platform"]
   if (p.startsWith("/tracking")) return ["page-tracking"]
 
@@ -127,10 +129,10 @@ const router = createRouter({
       },
     },
     {
-      path: '/resources/accessurl/:id/delete',
-      name: 'AccessUrlDelete',
-      component: () => import('../views/accessurl/DeleteAccessUrl.vue'),
-      props: route => ({ id: Number(route.params.id) })
+      path: "/resources/accessurl/:id/delete",
+      name: "AccessUrlDelete",
+      component: () => import("../views/accessurl/DeleteAccessUrl.vue"),
+      props: (route) => ({ id: Number(route.params.id) }),
     },
     {
       path: "/home",
@@ -332,6 +334,7 @@ const router = createRouter({
     accessUrlRoutes,
     branchRoutes,
     roomRoutes,
+    buycoursesRoutes,
   ],
 })
 
@@ -411,6 +414,19 @@ router.beforeEach(async (to, from, next) => {
 
     if (!allowed) {
       // Authenticated but not enough privileges
+      next({ name: "Home", replace: true })
+      return
+    }
+  }
+
+  // Feature-flag guard: platform.allow_my_files
+  const requiresMyFiles = to.matched.some((record) => record.meta?.requiresMyFiles === true)
+  if (requiresMyFiles) {
+    const platformConfigStore = usePlatformConfig()
+    if (null === platformConfigStore.getSetting("platform.allow_my_files")) {
+      await platformConfigStore.initialize()
+    }
+    if ("false" === platformConfigStore.getSetting("platform.allow_my_files")) {
       next({ name: "Home", replace: true })
       return
     }

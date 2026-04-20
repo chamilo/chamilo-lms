@@ -125,12 +125,27 @@ function get_lang(string $variable, ?string $locale = null): string
         $fallbacksByLocale[$effectiveLocale] = $fallbacks;
     }
 
+    // If the key is explicitly defined in this locale's catalogue, use it directly —
+    // even when msgstr equals msgid (intentional identity translation like "Feedback" → "Feedback").
+    // Without this guard, the fallback chain would wrongly override it with the parent language.
+    if ($translator instanceof \Symfony\Component\Translation\TranslatorBagInterface
+        && $translator->getCatalogue($effectiveLocale)->defines($variable, $domain)
+    ) {
+        return $translator->trans($variable, [], $domain, $effectiveLocale);
+    }
+
     $translation = $translator->trans($variable, [], $domain, $effectiveLocale);
     if ($translation !== $variable) {
         return $translation;
     }
 
     foreach ($fallbacksByLocale[$effectiveLocale] as $fb) {
+        if ($translator instanceof \Symfony\Component\Translation\TranslatorBagInterface
+            && $translator->getCatalogue($fb)->defines($variable, $domain)
+        ) {
+            return $translator->trans($variable, [], $domain, $fb);
+        }
+
         $t = $translator->trans($variable, [], $domain, $fb);
         if ($t !== $variable) {
             return $t;

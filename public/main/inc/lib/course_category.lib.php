@@ -422,9 +422,9 @@ class CourseCategory
                 $baseParams['id'] = (int) $categorySource['id'];
             }
 
-            $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+            $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-secondary', null, ICON_SIZE_SMALL, get_lang('Edit'));
             $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CSV export'));
-            $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
+            $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-danger', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $urlId = api_get_current_access_url_id();
 
             $positions = array_map(fn($c) => $c->getTreePos(), $categories);

@@ -23,21 +23,33 @@ $serviceSaleStatuses['status_cancelled'] = BuyCoursesPlugin::SERVICE_STATUS_CANC
 $serviceSaleStatuses['status_pending'] = BuyCoursesPlugin::SERVICE_STATUS_PENDING;
 $serviceSaleStatuses['status_completed'] = BuyCoursesPlugin::SERVICE_STATUS_COMPLETED;
 
-$serviceSales = $plugin->getServiceSales($userInfo['user_id']);
-$saleList = [];
-
-foreach ($serviceSales as $sale) {
-    $saleList[] = [
+$activeServices = [];
+foreach ($plugin->getActiveServicesForUser($userInfo['user_id']) as $sale) {
+    $activeServices[] = [
         'id' => $sale['id'],
         'name' => $sale['service']['name'],
-        'service_type' => $serviceTypes[$sale['service']['applies_to']],
-        'applies_to' => $sale['service']['applies_to'],
+        'service_type' => $serviceTypes[$sale['service']['applies_to']] ?? get_lang('None'),
         'reference' => $sale['reference'],
-        'date' => api_format_date(api_get_local_time($sale['buy_date']), DATE_TIME_FORMAT_LONG_24H),
+        'date_start' => api_format_date(api_get_local_time($sale['date_start']), DATE_TIME_FORMAT_LONG_24H),
         'date_end' => api_format_date(api_get_local_time($sale['date_end']), DATE_TIME_FORMAT_LONG_24H),
-        'currency' => $sale['currency'],
-        'price' => $sale['price'],
-        'status' => $sale['status'],
+        'image' => $sale['service']['image'] ?: Template::get_icon_path('session_default.png'),
+        'benefit_summaries' => array_values(array_filter(array_map(static function (array $benefit): ?string {
+            return $benefit['active_summary'] ?? null;
+        }, $sale['benefit_summaries'] ?? []))),
+        'receipt_url' => !empty($sale['invoice']) ? $plugin->getInvoiceUrl((int) $sale['id'], 1) : null,
+    ];
+}
+
+$purchaseHistory = [];
+foreach ($plugin->getPurchaseHistoryForUser($userInfo['user_id']) as $purchase) {
+    $purchaseHistory[] = [
+        'date' => !empty($purchase['date']) ? api_format_date(api_get_local_time($purchase['date']), DATE_TIME_FORMAT_LONG_24H) : '',
+        'type' => $purchase['type'],
+        'product_name' => $purchase['product_name'],
+        'reference' => $purchase['reference'],
+        'amount' => $purchase['amount'],
+        'status' => $purchase['status'],
+        'receipt_url' => $purchase['receipt_url'],
     ];
 }
 
@@ -50,7 +62,6 @@ $toolbar = Display::toolbarButton(
 );
 
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
-$htmlHeadXtra[] = api_get_css($webPluginPath.'BuyCourses/resources/css/style.css');
 $htmlHeadXtra[] = api_get_js_simple($webPluginPath.'BuyCourses/resources/js/modals.js');
 
 $templateName = $plugin->get_lang('TabsDashboard');
@@ -59,7 +70,8 @@ $tpl->assign('showing_courses', true);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('service_sale_statuses', $serviceSaleStatuses);
-$tpl->assign('sale_list', $saleList);
+$tpl->assign('active_service_list', $activeServices);
+$tpl->assign('purchase_history', $purchaseHistory);
 if ($servicesOnly) {
     $tpl->assign('show_services_only', true);
 }

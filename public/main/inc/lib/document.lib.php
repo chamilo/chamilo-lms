@@ -2297,7 +2297,7 @@ class DocumentManager
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
-            ->innerJoin('node.resourceFiles', 'files')
+            ->leftJoin('node.resourceFiles', 'files')
             ->innerJoin(
                 CDocument::class,
                 'doc',
@@ -2310,8 +2310,15 @@ class DocumentManager
             ->setParameters([
                 'type' => $type,
                 'course' => $course,
-            ])
-            ->orderBy('node.parent', 'ASC');
+            ]);
+
+        if ($flattenRoot) {
+            $qb->orderBy('node.parent', 'ASC');
+        } else {
+            $qb
+                ->orderBy('node.path', 'ASC')
+                ->addOrderBy('node.id', 'ASC');
+        }
 
         $sessionId = api_get_session_id();
         if (empty($sessionId)) {

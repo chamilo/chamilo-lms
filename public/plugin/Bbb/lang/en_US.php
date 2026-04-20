@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Show or hide a block with a link to 
 $strings['delete_recordings_on_course_delete'] = 'Delete recordings when course is removed';
 $strings['defaultVisibilityInCourseHomepage'] = 'Default visibility in course home page';
 $strings['ViewActivityDashboard'] = 'View activity dashboard';
+$strings['Participants'] = 'Participants';
+$strings['CountUsers'] = 'Count users';

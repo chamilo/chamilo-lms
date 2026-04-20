@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'نمایش یا مخفی کردن ب
 $strings['delete_recordings_on_course_delete'] = 'حذف ضبط‌ها هنگام حذف درس';
 $strings['defaultVisibilityInCourseHomepage'] = 'نمایش پیش‌فرض در صفحه اصلی درس';
 $strings['ViewActivityDashboard'] = 'مشاهده داشبورد فعالیت';
+$strings['Participants'] = 'شرکت‌کنندگان';
+$strings['CountUsers'] = 'شمارش کاربران';

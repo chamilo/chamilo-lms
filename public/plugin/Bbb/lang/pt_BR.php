@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Mostrar ou ocultar um bloco com um l
 $strings['delete_recordings_on_course_delete'] = 'Excluir gravações quando o curso for removido';
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilidade padrão na página inicial do curso';
 $strings['ViewActivityDashboard'] = 'Ver painel de atividades';
+$strings['Participants'] = 'Participantes';
+$strings['CountUsers'] = 'Contar usuários';

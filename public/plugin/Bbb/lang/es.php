@@ -74,4 +74,6 @@ $strings['hide_conference_link_comment'] = 'Mostrar u ocultar un bloque con un e
 $strings['delete_recordings_on_course_delete'] = 'Eliminar las grabaciones al eliminar el curso';
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilidad predeterminada en la página de inicio del curso';
 $strings['ViewActivityDashboard'] = 'Ver el panel de actividades';
+$strings['Participants'] = 'Participantes';
+$strings['CountUsers'] = 'Contar usuarios';
 $strings['RoomExit'] = 'Ha salido de la sesión de Videoconferencia';

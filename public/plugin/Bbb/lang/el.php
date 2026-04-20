@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Εμφάνιση ή απόκρυψη
 $strings['delete_recordings_on_course_delete'] = 'Διαγραφή εγγραφών όταν αφαιρείται το μάθημα';
 $strings['defaultVisibilityInCourseHomepage'] = 'Προεπιλεγμένη ορατότητα στην αρχική σελίδα μαθήματος';
 $strings['ViewActivityDashboard'] = 'Προβολή πίνακα ελέγχου δραστηριότητας';
+$strings['Participants'] = 'Συνεργάτες';
+$strings['CountUsers'] = 'Μέτρηση χρηστών';

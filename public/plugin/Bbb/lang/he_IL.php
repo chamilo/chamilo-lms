@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'הצגה או הסתרה של בלו
 $strings['delete_recordings_on_course_delete'] = 'מחיקת הקלטות כאשר הקורס מוסר';
 $strings['defaultVisibilityInCourseHomepage'] = 'נראות ברירת מחדל בדף הבית של הקורס';
 $strings['ViewActivityDashboard'] = 'תצוגת לוח מחוונים של פעילות';
+$strings['Participants'] = 'משתתפים';
+$strings['CountUsers'] = 'ספירת משתמשים';

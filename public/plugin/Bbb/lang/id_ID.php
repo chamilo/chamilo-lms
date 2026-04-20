@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'Tampilkan atau sembunyikan blok deng
 $strings['delete_recordings_on_course_delete'] = 'Hapus rekaman saat mata kuliah dihapus';
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilitas default di halaman beranda mata kuliah';
 $strings['ViewActivityDashboard'] = 'Lihat dasbor aktivitas';
+$strings['Participants'] = 'Peserta';
+$strings['CountUsers'] = 'Hitung pengguna';

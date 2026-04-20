@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = '显示或隐藏加入按钮旁边的
 $strings['delete_recordings_on_course_delete'] = '课程删除时删除录像';
 $strings['defaultVisibilityInCourseHomepage'] = '课程首页默认可见性';
 $strings['ViewActivityDashboard'] = '查看活动仪表板';
+$strings['Participants'] = '参与者';
+$strings['CountUsers'] = '统计用户';

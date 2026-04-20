@@ -75,3 +75,5 @@ $strings['hide_conference_link_comment'] = 'แสดงหรือซ่อน
 $strings['delete_recordings_on_course_delete'] = 'ลบการบันทึกเมื่อลบหลักสูตร';
 $strings['defaultVisibilityInCourseHomepage'] = 'การมองเห็นเริ่มต้นในหน้าหลักสูตร';
 $strings['ViewActivityDashboard'] = 'ดูแดชบอร์ดกิจกรรม';
+$strings['Participants'] = 'ผู้เข้าร่วม';
+$strings['CountUsers'] = 'นับผู้ใช้';

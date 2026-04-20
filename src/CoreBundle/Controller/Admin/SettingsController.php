@@ -737,17 +737,11 @@ class SettingsController extends BaseController
     {
         return [
             'ai_helpers.course_analyser',
-            'attendance.attendance_calendar_set_duration',
-            'certificate.add_gradebook_certificates_cron_task_enabled',
             'course.block_registered_users_access_to_open_course_contents',
             'course.enable_tool_introduction',
             'course.show_toolshortcuts',
             'crons.cron_remind_course_finished_activate',
             'display.display_categories_on_homepage',
-            'display.hide_home_top_when_connected',
-            'display.show_administrator_data',
-            'display.show_teacher_data',
-            'display.show_tutor_data',
             'document.default_group_quotum',
             'dropbox.dropbox_allow_mailing',
             'editor.block_copy_paste_for_students',

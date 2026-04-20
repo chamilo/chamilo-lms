@@ -727,12 +727,32 @@ function api_get_path($path = '', $configuration = [])
     $root_sys = Container::getProjectDir();
     $root_web = '';
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate(
+        $router = Container::$container->get('router');
+        $root_web = $router->generate(
             'index',
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+	// Sometimes the protocol is not ready soon enough.
+	// This can lead to inconsistencies in protocol in setups behing a reverse proxy.
+	// Double check the protocol, but only if it's not 'https://' already
+        if (str_starts_with($root_web, 'http://')) {
+            $requestStack = Container::$container->get('request_stack');
+            $request = $requestStack->getCurrentRequest();
+	    $isSecure = false;
+            if ($request) {
+                if ($request->getScheme() === 'https') {
+                    $isSecure = true;
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+                    $isSecure = true;
+                }
+            }
+            if ($isSecure) {
+                $root_web = preg_replace('/^http:/i', 'https:', $root_web);
+            }
+        }
     }
+
 
     /*if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -121,6 +122,46 @@ final readonly class LanguageHelper
 
         // Otherwise, reduce to 2 letters
         return substr(strtolower($raw), 0, 2);
+    }
+
+    public function getPlatformDefaultIso(): ?string
+    {
+        return $this->languageRepository->getPlatformDefaultIso();
+    }
+
+    /**
+     * Resolves an ISO code (e.g. "fr_BE") to the best available Language:
+     * 1. Exact match ("fr_BE")
+     * 2. Short 2-letter code ("fr")
+     * 3. Canonical variant where language = country ("fr_FR")
+     * 4. Any available language sharing the same 2-letter prefix ("fr_*")
+     */
+    public function findBestAvailableMatch(string $isoCode): ?Language
+    {
+        $isoCode = str_replace('-', '_', $isoCode);
+
+        if (preg_match('/^([a-zA-Z]{2})_([a-zA-Z]{2})$/', $isoCode, $m)) {
+            $isoCode = strtolower($m[1]).'_'.strtoupper($m[2]);
+        }
+
+        $lang = $this->languageRepository->findByIsoCode($isoCode);
+        if ($lang?->getAvailable()) {
+            return $lang;
+        }
+
+        $short = strtolower(substr($isoCode, 0, 2));
+
+        $lang = $this->languageRepository->findByIsoCode($short);
+        if ($lang?->getAvailable()) {
+            return $lang;
+        }
+
+        $lang = $this->languageRepository->findByIsoCode($short.'_'.strtoupper($short));
+        if ($lang?->getAvailable()) {
+            return $lang;
+        }
+
+        return $this->languageRepository->findFirstAvailableByIsoPrefix($short);
     }
 
     private function toShortIso(string $iso): string

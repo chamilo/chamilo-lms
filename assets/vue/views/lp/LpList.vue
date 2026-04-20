@@ -27,13 +27,6 @@
       </div>
     </div>
 
-    <div
-      v-else-if="error"
-      class="text-body-2 text-danger"
-    >
-      {{ t("Error loading learning paths.") }}
-    </div>
-
     <EmptyState
       v-else-if="!hasAnyVisible"
       :detail="t('Create your first learning path to start organizing course content.')"
@@ -150,6 +143,7 @@ import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import EmptyState from "../../components/EmptyState.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { LP_LIST_LOADED } from "../../constants/events"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -160,9 +154,9 @@ const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
 const { requireConfirmation } = useConfirmation()
+const { showErrorNotification } = useNotification()
 
 const loading = ref(true)
-const error = ref(null)
 const draggingUncat = ref(false)
 
 const rawCanEdit = ref(false)
@@ -392,7 +386,6 @@ const withCidSid = (url) => {
 
 const load = async () => {
   loading.value = true
-  error.value = null
 
   try {
     const node = Number(route.params.node)
@@ -400,7 +393,7 @@ const load = async () => {
     try {
       await courseSettingsStore.loadCourseSettings(legacyContext.value.cid, legacyContext.value.sid)
     } catch (err) {
-      console.error("[LPList] loadCourseSettings FAILED:", err)
+      showErrorNotification(err)
     }
 
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
@@ -434,8 +427,7 @@ const load = async () => {
     await loadVisibilityFor(items.value.map((lp) => lp.iid))
     rebuildListsFromItems()
   } catch (e) {
-    console.error(e)
-    error.value = e
+    showErrorNotification(e)
   } finally {
     loading.value = false
   }
@@ -568,7 +560,8 @@ async function onReorderCategory(cat, ids) {
   try {
     await sendReorder(ids, { categoryId: cat.iid })
   } catch (e) {
-    console.error(e)
+    showErrorNotification(e)
+
     await load()
     alert(t("Could not save the new category order."))
   }
@@ -671,7 +664,8 @@ async function onEndUncat() {
   try {
     await sendReorder(ids, { categoryId: null })
   } catch (e) {
-    console.error(e)
+    showErrorNotification(e)
+
     await load()
     alert(t("Could not save the new order."))
   } finally {

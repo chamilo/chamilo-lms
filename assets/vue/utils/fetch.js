@@ -92,10 +92,11 @@ export default function (id, options = {}) {
 
   console.log("ready to fetch")
 
-  const url = new URL(id, entryPoint)
-  // Force the current page's protocol to prevent mixed-content errors caused by
-  // server-generated http:// IRIs or redirects when behind a TLS-terminating
-  // reverse proxy whose IP is not listed in TRUSTED_PROXIES.
+  // Resolve the entrypoint against the page origin at call time so ENTRYPOINT
+  // can be a relative path ("/api/"). Then force the page protocol to prevent
+  // mixed-content from server-generated http:// IRIs behind a reverse proxy.
+  const base = new URL(entryPoint, window.location.origin)
+  const url = new URL(id, base)
   url.protocol = window.location.protocol
 
   return global.fetch(url, options).then((response) => {

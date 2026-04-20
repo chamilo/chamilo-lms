@@ -175,33 +175,6 @@
   }
 
   &__user-submenu {
-    @apply mt-1 border-0 shadow-xl rounded-lg;
-
-
-    ul.p-menu-list {
-      @apply outline-none;
-    }
-
-    .p-menu-submenu-label {
-      @apply text-body-1 font-semibold py-1 px-4;
-    }
-
-    .p-menu-item-link {
-      @apply rounded-none py-1 px-4 transition-none select-none flex gap-1;
-
-      &:focus {
-        @apply outline-none outline-offset-0;
-      }
-
-      &:hover,
-      &:focus {
-        @apply text-primary bg-support-1;
-      }
-
-      .p-menu-item-label {
-        @apply text-body-1;
-      }
-    }
   }
 }
 

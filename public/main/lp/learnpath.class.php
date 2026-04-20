@@ -5120,9 +5120,32 @@ class learnpath
      */
     public static function generate_learning_path_folder($course, $creatorId = 0)
     {
-        // Creating learning_path folder
-        $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
+
+        $courseEntity = api_get_course_entity($course['real_id']);
+        $courseNode = $courseEntity ? $courseEntity->getResourceNode() : null;
+
+        if ($courseNode) {
+            $em = Database::getManager();
+            $qb = $em
+                ->createQueryBuilder()
+                ->select('doc')
+                ->from(Chamilo\CourseBundle\Entity\CDocument::class, 'doc')
+                ->innerJoin('doc.resourceNode', 'node')
+                ->where('doc.filetype = :filetype')
+                ->andWhere('doc.title = :title')
+                ->andWhere('node.parent = :parent')
+                ->setParameter('filetype', 'folder')
+                ->setParameter('title', 'learning_path')
+                ->setParameter('parent', $courseNode)
+                ->setMaxResults(1);
+
+            $document = $qb->getQuery()->getOneOrNullResult();
+
+            if ($document) {
+                return $document;
+            }
+        }
 
         return create_unexisting_directory(
             $course,
@@ -5131,8 +5154,8 @@ class learnpath
             null,
             0,
             '',
-            $dir,
-            get_lang('Learning paths'),
+            'learning_path',
+            'learning_path',
             0
         );
     }

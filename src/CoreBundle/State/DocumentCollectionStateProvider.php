@@ -400,22 +400,22 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $sortedHidden = $hiddenSystemTypes;
         sort($sortedHidden);
         $cacheKey = 'doc_list_'.$this->getInstallationPrefix().'_'.hash('md5', serialize([
-            $accessUrlId,
-            $viewerProfileBucket,
-            $cid,
-            $sid,
-            $gid,
-            $parentNodeId,
-            $loadNode,
-            $sortedTypes,
-            $sortedHidden,
-            $includeBaseContent,
-            $isGradebook,
-            $showSystemCertificates,
-            $orderClauses,
-            $page,
-            $itemsPerPage,
-        ]));
+                $accessUrlId,
+                $viewerProfileBucket,
+                $cid,
+                $sid,
+                $gid,
+                $parentNodeId,
+                $loadNode,
+                $sortedTypes,
+                $sortedHidden,
+                $includeBaseContent,
+                $isGradebook,
+                $showSystemCertificates,
+                $orderClauses,
+                $page,
+                $itemsPerPage,
+            ]));
 
         // Cache the expensive context-filtered count + IID list for up to 120 s.
         // On cache hit we re-fetch the same page of documents by primary key,
@@ -479,6 +479,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         $results = $fetchQb->getQuery()->getResult();
 
+        $this->translateSystemFolderTitles($results);
+
         // Restore the sort order from the cached IID list (SQL IN has no guaranteed order).
         $posMap = array_flip($iids);
         usort(
@@ -492,6 +494,39 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             $itemsPerPage,
             $cached['total']
         );
+    }
+
+    /**
+     * Translate canonical system folder titles for display without changing persisted values.
+     *
+     * @param array<int, mixed> $documents
+     */
+    private function translateSystemFolderTitles(array $documents): void
+    {
+        foreach ($documents as $document) {
+            if (!$document instanceof CDocument) {
+                continue;
+            }
+
+            if ('folder' !== $document->getFiletype()) {
+                continue;
+            }
+
+            if ('learning_path' !== $document->getTitle()) {
+                continue;
+            }
+
+            $translatedTitle = get_lang('Learning paths');
+
+            $document->setTitle($translatedTitle);
+
+            $resourceNode = $document->getResourceNode();
+            if (null === $resourceNode) {
+                continue;
+            }
+
+            $resourceNode->setTitle($translatedTitle);
+        }
     }
 
     /**

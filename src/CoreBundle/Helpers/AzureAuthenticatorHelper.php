@@ -207,7 +207,8 @@ readonly class AzureAuthenticatorHelper
             }
         }
 
-        return $this->userRepository->findOneBy(['email' => $azureUserData['mail']]);
+        return $this->userRepository->findByEmailCaseInsensitive($azureUserData['mail'])
+            ?? $this->userRepository->findByUsernameCaseInsensitive($azureUserData['userPrincipalName']);
     }
 
     public function getExistingUserVerificationOrder(): array

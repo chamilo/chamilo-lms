@@ -24,7 +24,7 @@ final readonly class LanguageHelper
      */
     public function getWcagIso(): string
     {
-        $locale = $this->resolveLocaleCandidate();
+        $locale = $this->requestStack->getMainRequest()?->getLocale();
 
         if ('' !== $locale) {
             $language = $this->languageRepository->findByIsoCode($locale);

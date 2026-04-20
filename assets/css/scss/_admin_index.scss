@@ -15,6 +15,27 @@
 
   .p-menu {
     @apply border-none m-0 p-0 w-full;
+
+    &-item {
+      &-content {
+      }
+
+      &-link {
+        @apply px-3 py-2;
+      }
+
+      &-label {
+        @apply text-body-2;
+      }
+    }
+  }
+
+  .block-admin-version__form {
+    @apply space-y-3;
+
+    p {
+      @apply text-body-2;
+    }
   }
 }
 

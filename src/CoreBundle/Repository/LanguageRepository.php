@@ -146,4 +146,22 @@ class LanguageRepository extends ServiceEntityRepository
             return null;
         }
     }
+
+    public function findFirstAvailableByIsoPrefix(string $prefix): ?Language
+    {
+        try {
+            return $this->createQueryBuilder('l')
+                ->where('l.isocode LIKE :prefix')
+                ->andWhere('l.available = true')
+                ->orderBy('l.isocode', 'ASC')
+                ->setMaxResults(1)
+                ->setParameter('prefix', $prefix.'_%')
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        } catch (NonUniqueResultException) {
+            return null;
+        }
+    }
 }
+

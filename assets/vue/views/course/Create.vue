@@ -1,82 +1,40 @@
 <template>
   <div class="create-course-page m-10">
-    <div class="message-container mb-4">
-      <Message severity="info">
-        <div class="space-y-2 text-blue-900">
-          <p class="font-medium">
-            {{
-              t(
-                'Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.',
-              )
-            }}
-          </p>
-        </div>
-      </Message>
-    </div>
-
     <h1 class="page-title text-xl text-gray-90">{{ t("Add a new course") }}</h1>
     <hr class="mb-6" />
 
-    <div class="space-y-4 mb-6">
-      <Message
-        v-if="capabilityStatus === 'checking'"
-        severity="info"
-      >
-        <div class="space-y-2 text-blue-900">
-          <p class="font-semibold">
-            {{ t("Checking whether you can create a new course.") }}
-          </p>
-        </div>
-      </Message>
+    <Message
+      v-if="capabilityStatus === 'blocked'"
+      severity="warn"
+    >
+      <div class="space-y-2">
+        <p class="font-medium">
+          {{ t("You cannot create a new course right now.") }}
+        </p>
 
-      <Message
-        v-else-if="capabilityStatus === 'blocked'"
-        severity="warn"
-      >
-        <div class="space-y-2 text-amber-900">
-          <p class="font-semibold">
-            {{ t("You cannot create more courses right now.") }}
-          </p>
+        <p v-if="createCapabilityMessage">
+          {{ createCapabilityMessage }}
+        </p>
+      </div>
+    </Message>
 
-          <p class="text-sm leading-6">
-            {{ createCapabilityMessage }}
-          </p>
+    <Message
+      v-else-if="capabilityStatus === 'error'"
+      severity="error"
+    >
+      <div class="space-y-2">
+        <p class="font-medium">
+          {{ t("Unable to verify whether you can create a new course right now.") }}
+        </p>
 
-          <p
-            v-if="effectiveLimit > 0"
-            class="text-sm leading-6"
-          >
-            {{ t("Current courses") }}: <strong>{{ currentCount }}</strong>
-            —
-            {{ t("Allowed limit") }}: <strong>{{ effectiveLimit }}</strong>
-          </p>
-
-          <p
-            v-if="limitSourceLabel"
-            class="text-sm leading-6"
-          >
-            {{ t("Limit source") }}: <strong>{{ limitSourceLabel }}</strong>
-          </p>
-        </div>
-      </Message>
-
-      <Message
-        v-else-if="capabilityStatus === 'error'"
-        severity="warn"
-      >
-        <div class="space-y-2 text-amber-900">
-          <p class="font-semibold">
-            {{
-              t(
-                "Unable to verify whether you can create a new course right now. You can still fill the form and try to submit.",
-              )
-            }}
-          </p>
-        </div>
-      </Message>
-    </div>
+        <p>
+          {{ t("Please try again later or contact the administrator.") }}
+        </p>
+      </div>
+    </Message>
 
     <CourseForm
+      v-else-if="capabilityStatus === 'allowed'"
       ref="createForm"
       :errors="violations"
       :values="item"
@@ -86,7 +44,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
@@ -111,28 +69,8 @@ const item = ref({
 })
 
 const violations = ref(null)
-
-const capabilityStatus = ref("checking")
+const capabilityStatus = ref("pending")
 const createCapabilityMessage = ref("")
-const currentCount = ref(0)
-const effectiveLimit = ref(0)
-const limitSource = ref("unlimited")
-
-const limitSourceLabel = computed(() => {
-  if (limitSource.value === "service") {
-    return t("Active service")
-  }
-
-  if (limitSource.value === "global") {
-    return t("Platform setting")
-  }
-
-  if (limitSource.value === "admin") {
-    return t("Administrator")
-  }
-
-  return ""
-})
 
 function sanitizeCoursePayload(data) {
   const payload = { ...data }
@@ -168,39 +106,27 @@ function withTimeout(promise, timeout = 2500) {
 }
 
 async function loadCreateCapability() {
-  capabilityStatus.value = "checking"
+  capabilityStatus.value = "pending"
   createCapabilityMessage.value = ""
-  currentCount.value = 0
-  effectiveLimit.value = 0
-  limitSource.value = "unlimited"
 
   try {
-    const data = await withTimeout(
-      courseService.getCreateCourseCapability({
-        timeout: 2000,
-      }),
-      2500,
-    )
+    const data = await withTimeout(courseService.getCreateCourseCapability(), 2500)
 
+    if (true === data.canCreate) {
+      capabilityStatus.value = "allowed"
+      return
+    }
+
+    capabilityStatus.value = "blocked"
     createCapabilityMessage.value = data.message || t("You cannot create more courses right now.")
-    currentCount.value = Number(data.currentCount || 0)
-    effectiveLimit.value = Number(data.effectiveLimit || 0)
-    limitSource.value = data.limitSource || "unlimited"
-
-    capabilityStatus.value = true === data.canCreate ? "allowed" : "blocked"
   } catch (error) {
-    console.warn("Failed to load create course capability.", error)
+    console.error("[course.create-capability] request failed", error)
     capabilityStatus.value = "error"
   }
 }
 
 async function submitCourse(formData) {
   violations.value = null
-
-  if (capabilityStatus.value === "blocked") {
-    showErrorNotification(createCapabilityMessage.value || t("You cannot create more courses right now."))
-    return
-  }
 
   try {
     const payload = sanitizeCoursePayload(formData)

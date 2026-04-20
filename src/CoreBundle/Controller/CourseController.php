@@ -220,10 +220,6 @@ class CourseController extends ToolBaseController
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
-        if ($user && $this->isEnrollmentFrozen($courseId, $userId)) {
-            throw $this->createAccessDeniedException('Your access to this course has been temporarily suspended.');
-        }
-
         if ($user && $user->isInvitee()) {
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -1097,11 +1093,32 @@ class CourseController extends ToolBaseController
             );
         }
 
-        $debugValue = static function (mixed $value): string {
-            $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $user = $this->userHelper->getCurrent();
 
-            return false !== $encoded ? $encoded : '[unserializable]';
-        };
+        if (!$user || !method_exists($user, 'getId')) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $translator->trans('Authentication required.'),
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $capabilityStatus = $this->resolveCourseCreateCapabilityStatus((int) $user->getId(), $translator);
+
+        if (!$capabilityStatus['canCreate']) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => (string) $capabilityStatus['message'],
+                    'limitSource' => (string) $capabilityStatus['limitSource'],
+                    'effectiveLimit' => (int) $capabilityStatus['effectiveLimit'],
+                    'currentCount' => (int) $capabilityStatus['currentCount'],
+                ],
+                Response::HTTP_FORBIDDEN
+            );
+        }
 
         $normalizeScalar = static function (mixed $value): ?string {
             if (null === $value || '' === $value) {
@@ -1846,28 +1863,6 @@ class CourseController extends ToolBaseController
             'courseId' => $course->getId(),
             'sessionId' => $sessionId,
         ];
-    }
-
-    private function isEnrollmentFrozen(int $courseId, int $userId): bool
-    {
-        if ($courseId <= 0 || $userId <= 0) {
-            return false;
-        }
-
-        $connection = $this->em->getConnection();
-
-        $count = (int) $connection->fetchOne(
-            'SELECT COUNT(id)
-         FROM plugin_buycourses_frozen_enrollment
-         WHERE course_id = :courseId
-           AND user_id = :userId',
-            [
-                'courseId' => $courseId,
-                'userId' => $userId,
-            ]
-        );
-
-        return $count > 0;
     }
 
     private function resolveCourseCreateCapabilityStatus(int $userId, TranslatorInterface $translator): array

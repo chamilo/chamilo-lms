@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
-use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -56,7 +55,6 @@ class CidReqListener
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
-        private readonly BuyCoursesExpiryHelper $buyCoursesExpiryHelper
     ) {}
 
     /**
@@ -164,28 +162,6 @@ class CidReqListener
             }
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                $token = $this->tokenStorage->getToken();
-                $tokenUser = $token?->getUser();
-
-                if (
-                    $tokenUser instanceof User
-                    && $this->buyCoursesExpiryHelper->isFrozenEnrollment(
-                        (int) $course->getId(),
-                        (int) $tokenUser->getId()
-                    )
-                ) {
-                    $this->cleanSessionHandler($request);
-
-                    $event->setResponse(
-                        new Response(
-                            $this->translator->trans('Your access to this course is temporarily suspended. Please contact the course administrator.'),
-                            Response::HTTP_FORBIDDEN
-                        )
-                    );
-
-                    return;
-                }
-
                 throw new NotAllowedException(
                     $this->translator->trans("You're not allowed in this course")
                 );

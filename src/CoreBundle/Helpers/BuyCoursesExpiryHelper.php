@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Helpers;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
 final class BuyCoursesExpiryHelper
 {
@@ -26,12 +27,19 @@ final class BuyCoursesExpiryHelper
     private const COURSE_RELATION_TYPE_RRHH = 1;
     private const COURSE_VISIBILITY_CLOSED = 0;
 
+    private ?bool $buyCoursesAvailable = null;
+
     public function __construct(
         private readonly Connection $connection,
+        private readonly PluginHelper $pluginHelper,
     ) {}
 
     public function processExpiredServiceBenefits(): int
     {
+        if (!$this->isBuyCoursesAvailable()) {
+            return 0;
+        }
+
         $processedUsers = 0;
 
         foreach ($this->getExpiredBuyerIds() as $userId) {
@@ -54,6 +62,10 @@ final class BuyCoursesExpiryHelper
             return false;
         }
 
+        if (!$this->isBuyCoursesAvailable()) {
+            return false;
+        }
+
         $sql = 'SELECT 1
                 FROM '.self::TABLE_FROZEN_ENROLLMENT.'
                 WHERE course_id = :courseId
@@ -69,6 +81,35 @@ final class BuyCoursesExpiryHelper
         );
 
         return false !== $result && null !== $result;
+    }
+
+    private function isBuyCoursesAvailable(): bool
+    {
+        if (null !== $this->buyCoursesAvailable) {
+            return $this->buyCoursesAvailable;
+        }
+
+        if (!$this->pluginHelper->isPluginEnabled('BuyCourses')) {
+            return $this->buyCoursesAvailable = false;
+        }
+
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+
+            foreach ([
+                         self::TABLE_SERVICES_SALE,
+                         self::TABLE_SERVICE_REL_EXTRA_FIELD,
+                         self::TABLE_FROZEN_ENROLLMENT,
+                     ] as $tableName) {
+                if (!$schemaManager->tablesExist([$tableName])) {
+                    return $this->buyCoursesAvailable = false;
+                }
+            }
+        } catch (Exception) {
+            return $this->buyCoursesAvailable = false;
+        }
+
+        return $this->buyCoursesAvailable = true;
     }
 
     private function processExpiredCourseCreationForUser(int $userId): void

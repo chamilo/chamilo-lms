@@ -728,29 +728,7 @@ function api_get_path($path = '', $configuration = [])
     $root_web = '';
     if (isset(Container::$container)) {
         $router = Container::$container->get('router');
-        $root_web = $router->generate(
-            'index',
-            [],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-	// Sometimes the protocol is not ready soon enough.
-	// This can lead to inconsistencies in protocol in setups behing a reverse proxy.
-	// Double check the protocol, but only if it's not 'https://' already
-        if (str_starts_with($root_web, 'http://')) {
-            $requestStack = Container::$container->get('request_stack');
-            $request = $requestStack->getCurrentRequest();
-	    $isSecure = false;
-            if ($request) {
-                if ($request->getScheme() === 'https') {
-                    $isSecure = true;
-                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
-                    $isSecure = true;
-                }
-            }
-            if ($isSecure) {
-                $root_web = preg_replace('/^http:/i', 'https:', $root_web);
-            }
-        }
+        $root_web = $router->generate('index');
     }
 
 

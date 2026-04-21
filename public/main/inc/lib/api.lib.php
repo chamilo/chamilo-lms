@@ -727,11 +727,8 @@ function api_get_path($path = '', $configuration = [])
     $root_sys = Container::getProjectDir();
     $root_web = '';
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate(
-            'index',
-            [],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        $router = Container::$container->get('router');
+        $root_web = $router->generate('index');
     }
 
     /*if (api_get_multiple_access_url()) {

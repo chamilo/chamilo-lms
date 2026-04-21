@@ -737,7 +737,6 @@ class SettingsController extends BaseController
     {
         return [
             'ai_helpers.course_analyser',
-            'course.block_registered_users_access_to_open_course_contents',
             'course.enable_tool_introduction',
             'course.show_toolshortcuts',
             'crons.cron_remind_course_finished_activate',

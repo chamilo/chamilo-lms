@@ -69,28 +69,8 @@ class LocaleSubscriber implements EventSubscriberInterface
             $localeList['user_profil_lang'] = $userLocale;
         }
 
-        // 3) Course language, or user language if course allows it
-        // First try: course already in session
-        $course = $session->get('course');
-
-        // Fallback: resolve course from request if not in session yet
-        if (!$course instanceof Course) {
-            // Accept both numeric id (?cid=123) and code (?cid=ABC) as well as legacy ?cidReq=CODE
-            $cid = $request->query->get('cid');
-            $cidReq = $request->query->get('cidReq');
-
-            if ($cid) {
-                if (ctype_digit((string) $cid)) {
-                    $course = $this->em->getRepository(Course::class)->find((int) $cid);
-                } else {
-                    $course = $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cid]);
-                }
-            }
-
-            if (!$course && $cidReq) {
-                $course = $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cidReq]);
-            }
-        }
+        // 3) Course language only when the current request is in course context
+        $course = $this->resolveCourseFromRequest($request);
 
         if ($course instanceof Course) {
             $userLocale = $localeList['user_profil_lang'] ?? null;
@@ -121,9 +101,6 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         // 6) Honor configured priorities language_priority_1..4
-        // Collect only the priorities that have a resolved value, preserving order.
-        // browser_lang may substitute platform_lang, but only when platform_lang is the
-        // last matching priority — i.e. no more-specific configured priority follows it.
         $matchingPriorities = [];
         foreach (['language_priority_1', 'language_priority_2', 'language_priority_3', 'language_priority_4'] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
@@ -146,7 +123,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             return $localeList[$priority];
         }
 
-        // 7) Fallback order when priorities are absent — last non-empty wins (lowest → highest priority)
+        // 7) Fallback order when priorities are absent — last non-empty wins
         $result = $this->defaultLocale;
         foreach (['platform_lang', 'browser_lang', 'user_profil_lang', 'course_lang', 'user_selected_lang'] as $key) {
             if (!empty($localeList[$key])) {
@@ -155,6 +132,37 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Resolve course context only from the current request.
+     * Do not reuse a course stored in session for global pages.
+     */
+    private function resolveCourseFromRequest(Request $request): ?Course
+    {
+        $cid = $request->attributes->get('cid');
+        if (!$cid) {
+            $cid = $request->query->get('cid');
+        }
+
+        $cidReq = $request->attributes->get('cidReq');
+        if (!$cidReq) {
+            $cidReq = $request->query->get('cidReq');
+        }
+
+        if ($cid) {
+            if (ctype_digit((string) $cid)) {
+                return $this->em->getRepository(Course::class)->find((int) $cid);
+            }
+
+            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cid]);
+        }
+
+        if ($cidReq) {
+            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cidReq]);
+        }
+
+        return null;
     }
 
     /**
@@ -198,20 +206,20 @@ class LocaleSubscriber implements EventSubscriberInterface
                 $normalized = strtolower($normalized);
             }
 
-            // 1. Exact match (e.g. "fr_FR")
+            // 1. Exact match
             if (\in_array($normalized, $availableIsocodes, true)) {
                 return $normalized;
             }
 
-            // Extract root language code ("fr" from "fr_BE" or from bare "fr")
+            // Extract root language code
             $root = substr($normalized, 0, 2);
 
-            // 2. Bare root exact match (e.g. "es" isocode exists)
+            // 2. Bare root exact match
             if (\in_array($root, $availableIsocodes, true)) {
                 return $root;
             }
 
-            // 3. Root prefix match: "fr-BE" → no "fr_BE", no "fr" → first available "fr_XX"
+            // 3. Root prefix match
             foreach ($availableIsocodes as $iso) {
                 if (str_starts_with($iso, $root.'_')) {
                     return $iso;

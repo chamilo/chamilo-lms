@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -44,14 +43,14 @@ class SendCourseExpirationEmailsCommand extends Command
     {
         $this
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends an email to users whose course session is expiring today.')
-        ;
+            ->setHelp('This command sends an email to users whose course session is finished today.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $debug = $input->getOption('debug');
+        $debug = true === $input->getOption('debug');
+
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $endDate = $now->format('Y-m-d');
 
@@ -60,32 +59,36 @@ class SendCourseExpirationEmailsCommand extends Command
             $io->note('Debug mode activated');
         }
 
-        $isActive = 'true' === $this->settingsManager->getSetting('crons.cron_remind_course_expiration_activate');
+        $isActive = 'true' === $this->settingsManager->getSetting(
+                'crons.cron_remind_course_finished_activate'
+            );
 
-        if (!$isActive) {
+        if (false === $isActive) {
             if ($debug) {
-                error_log('Cron job for course expiration emails is not active.');
-                $io->note('Cron job for course expiration emails is not active.');
+                error_log('Cron job for course finished emails is not active.');
+                $io->note('Cron job for course finished emails is not active.');
             }
 
             return Command::SUCCESS;
         }
 
         $sessionRepo = $this->entityManager->getRepository(Session::class);
+
+        /** @var Session[] $sessions */
         $sessions = $sessionRepo->createQueryBuilder('s')
             ->where('s.accessEndDate LIKE :date')
-            ->setParameter('date', "$endDate%")
+            ->setParameter('date', $endDate.'%')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         if (empty($sessions)) {
-            $io->success("No sessions finishing today $endDate");
+            $io->success('No sessions finishing today '.$endDate);
 
             return Command::SUCCESS;
         }
 
         $fromAddress = $this->mailHelper->getPlatformFromAddress();
+
         $administrator = [
             'complete_name' => $fromAddress->getName(),
             'email' => $fromAddress->getAddress(),
@@ -94,7 +97,7 @@ class SendCourseExpirationEmailsCommand extends Command
         foreach ($sessions as $session) {
             $sessionUsers = $session->getUsers();
 
-            if (empty($sessionUsers)) {
+            if (0 === $sessionUsers->count()) {
                 $io->warning('No users to send mail for session: '.$session->getTitle());
 
                 continue;
@@ -106,7 +109,7 @@ class SendCourseExpirationEmailsCommand extends Command
             }
         }
 
-        $io->success('Emails sent successfully for sessions expiring today.');
+        $io->success('Emails sent successfully for sessions finishing today.');
 
         return Command::SUCCESS;
     }
@@ -121,8 +124,13 @@ class SendCourseExpirationEmailsCommand extends Command
         );
     }
 
-    private function sendEmailToUser(User $user, Session $session, array $administrator, SymfonyStyle $io, bool $debug): void
-    {
+    private function sendEmailToUser(
+        User $user,
+        Session $session,
+        array $administrator,
+        SymfonyStyle $io,
+        bool $debug,
+    ): void {
         $siteName = $this->settingsManager->getSetting('platform.site_name');
 
         $subject = $this->twig->render('@ChamiloCore/Mailer/Legacy/cron_course_finished_subject.html.twig', [
@@ -139,16 +147,15 @@ class SendCourseExpirationEmailsCommand extends Command
             ->from($administrator['email'])
             ->to($user->getEmail())
             ->subject($subject)
-            ->html($body)
-        ;
+            ->html($body);
 
         $this->mailer->send($email);
 
         if ($debug) {
-            error_log('Email sent to: '.UserManager::formatUserFullName($user)." ({$user->getEmail()})");
-            $io->note('Email sent to: '.UserManager::formatUserFullName($user)." ({$user->getEmail()})");
-            $io->note("Session: {$session->getTitle()}");
-            $io->note("End date: {$session->getAccessEndDate()->format('Y-m-d h:i')}");
+            error_log('Email sent to: '.UserManager::formatUserFullName($user).' ('.$user->getEmail().')');
+            $io->note('Email sent to: '.UserManager::formatUserFullName($user).' ('.$user->getEmail().')');
+            $io->note('Session: '.$session->getTitle());
+            $io->note('End date: '.$session->getAccessEndDate()->format('Y-m-d h:i'));
         }
     }
 }

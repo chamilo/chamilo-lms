@@ -3,7 +3,7 @@ import { ENTRYPOINT } from "../config/entrypoint"
 
 const legalExtensions = {
   async findAllAvailable() {
-    const url = new URL(`${ENTRYPOINT}languages`)
+    const url = new URL(`${ENTRYPOINT}languages`, window.location.origin)
     url.searchParams.append("available", "true")
     try {
       const response = await fetch(url.toString())

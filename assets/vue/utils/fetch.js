@@ -92,7 +92,14 @@ export default function (id, options = {}) {
 
   console.log("ready to fetch")
 
-  return global.fetch(new URL(id, entryPoint), options).then((response) => {
+  // Resolve the entrypoint against the page origin at call time so ENTRYPOINT
+  // can be a relative path ("/api/"). Then force the page protocol to prevent
+  // mixed-content from server-generated http:// IRIs behind a reverse proxy.
+  const base = new URL(entryPoint, window.location.origin)
+  const url = new URL(id, base)
+  url.protocol = window.location.protocol
+
+  return global.fetch(url, options).then((response) => {
     console.log(response, "global.fetch")
 
     if (response.ok) {

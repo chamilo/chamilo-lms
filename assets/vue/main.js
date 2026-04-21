@@ -263,6 +263,18 @@ installHttpErrors({
   on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),
 })
 
+// Fix mixed-content caused by server-generated http:// URLs when behind a
+// TLS-terminating reverse proxy whose IP is not listed in TRUSTED_PROXIES.
+// If the page was loaded over HTTPS, force every absolute http:// request URL
+// to use https:// so the browser does not block it as mixed content.
+axios.interceptors.request.use((config) => {
+  if (window.location.protocol === "https:" && config.url && config.url.startsWith("http://")) {
+    config.url = config.url.replace(/^http:\/\//, "https://")
+  }
+
+  return config
+})
+
 // Add cid/sid/gid automatically to every axios request to /api/*
 axios.interceptors.request.use((config) => {
   const sp = new URLSearchParams(window.location.search)

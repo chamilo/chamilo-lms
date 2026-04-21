@@ -242,6 +242,13 @@ export default {
     return response.data
   },
 
+  saveStudentSignature: async ({ calendarId, signature }) => {
+    const response = await axios.post(`/attendance/sign-self`, { calendarId, signature }, {
+      headers: { "Content-Type": "application/json" },
+    })
+    return response.data
+  },
+
   saveAttendanceSheet: async (data) => {
     try {
       const response = await axios.post(`/attendance/sheet/save`, data, {

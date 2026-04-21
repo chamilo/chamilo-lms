@@ -474,11 +474,10 @@
       >
         <div class="relative w-full h-48">
           <canvas
-            ref="signaturePad"
+            ref="signaturePadCanvas"
             class="border border-gray-300 rounded w-full h-full"
           ></canvas>
           <button
-            v-if="isTeacherUI && canEdit"
             @click="clearSignature"
             class="mt-2 text-primary"
           >
@@ -487,7 +486,6 @@
         </div>
         <template #footer>
           <BaseButton
-            v-if="isTeacherUI && canEdit"
             :label="t('Save')"
             icon="save"
             type="success"
@@ -701,6 +699,7 @@ const saveAttendanceSheet = async () => {
 const showCommentDialog = ref(false)
 const showSignatureDialog = ref(false)
 const currentComment = ref("")
+const signaturePadCanvas = ref(null)
 const signaturePad = ref(null)
 
 const fetchAttendanceSheetUsers = async (attendanceId) => {
@@ -963,7 +962,7 @@ const openSignatureDialog = (userId, dateId) => {
   showSignatureDialog.value = true
 
   nextTick(() => {
-    const canvas = document.querySelector("canvas")
+    const canvas = signaturePadCanvas.value
     if (canvas) {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
@@ -988,12 +987,24 @@ const saveComment = () => {
   closeCommentDialog()
 }
 
-const saveSignature = () => {
-  if (!canEdit.value) return
-  if (signaturePad.value) {
-    const key = `${dialogUserId.value}-${dialogDateId.value}`
-    signatures.value[key] = signaturePad.value.toDataURL()
+const saveSignature = async () => {
+  if (!signaturePad.value) return
+  const key = `${dialogUserId.value}-${dialogDateId.value}`
+  signatures.value[key] = signaturePad.value.toDataURL()
+
+  if (isStudentUI.value) {
+    try {
+      await attendanceService.saveStudentSignature({
+        calendarId: dialogDateId.value,
+        signature: signatures.value[key],
+      })
+    } catch (error) {
+      console.error("Error saving student signature:", error)
+      alert(t("Failed to save signature. Please try again."))
+      return
+    }
   }
+
   closeSignatureDialog()
 }
 

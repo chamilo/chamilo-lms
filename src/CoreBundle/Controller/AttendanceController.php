@@ -547,6 +547,44 @@ class AttendanceController extends AbstractController
         }
     }
 
+    #[Route('/sign-self', name: 'chamilo_core_attendance_sign_self', methods: ['POST'])]
+    public function signSelf(
+        Request $request,
+        CAttendanceSheetRepository $sheetRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $calendarId = isset($data['calendarId']) ? (int) $data['calendarId'] : null;
+        $signature = $data['signature'] ?? null;
+
+        if (!$calendarId || !$signature) {
+            return $this->json(['error' => 'Missing required parameters'], 400);
+        }
+
+        $calendar = $this->attendanceCalendarRepository->find($calendarId);
+        if (!$calendar) {
+            return $this->json(['error' => 'Attendance calendar not found'], 404);
+        }
+
+        $sheet = $sheetRepository->findOneBy([
+            'user' => $user,
+            'attendanceCalendar' => $calendar,
+        ]);
+
+        if (!$sheet) {
+            return $this->json(['error' => 'No attendance sheet found for this user and date'], 404);
+        }
+
+        $sheet->setSignature($signature);
+        $this->em->flush();
+
+        return $this->json(['message' => $this->translator->trans('Signature saved successfully')]);
+    }
+
     #[Route('/{id}/student-dates', name: 'attendance_student_dates', methods: ['GET'])]
     public function getStudentDates(int $id): JsonResponse
     {

@@ -1,17 +1,16 @@
-import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 import baseService from "./baseService"
 
 /** Lists learning paths filtered by course/session/title. */
 const getLearningPaths = async (params) => {
-  const response = await axios.get(`${ENTRYPOINT}learning_paths/`, { params })
+  const { items } = await baseService.getCollection(`/api/learning_paths`, params)
 
-  return response.data
+  return items
 }
 
 /** Fetches a learning path by ID (iid). */
 const getLearningPath = async (lpId) => {
-  const response = await axios.get(`${ENTRYPOINT}learning_paths/${lpId}/`)
+  const response = await axios.get(`/api/learning_paths/${lpId}/`)
 
   return response.data
 }
@@ -112,6 +111,27 @@ const goLegacyAction = (lpId, action, opts = {}) => {
 }
 
 /**
+ * Persists the display order of learning paths.
+ *
+ * @param {Object} params
+ * @param {number} params.courseId
+ * @param {number} params.sessionId
+ * @param {number|null} params.categoryId
+ * @param {number[]} params.ids
+ * @returns {Promise<void>}
+ */
+const reorder = async ({ courseId, sessionId, categoryId = null, ids }) => {
+  await baseService.post("/api/learning_paths/reorder", {
+    courseId,
+    sessionId,
+    sid: sessionId,
+    categoryId,
+    ids,
+    order: ids,
+  })
+}
+
+/**
  * Lists LP categories for a course (empty included).
  *
  * @param {Object} searchParams
@@ -130,4 +150,5 @@ export default {
   buildLegacyUploadUrl,
   goLegacyAction,
   getLpCategories,
+  reorder,
 }

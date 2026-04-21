@@ -113,7 +113,6 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import debounce from "lodash/debounce"
 
@@ -156,7 +155,7 @@ function nextPage() {
 
 async function loadPublication() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+    const response = await axios.get(`/api/c_student_publications/${publicationId}`, {
       params: { cid, ...(sid && { sid }) },
     })
     publicationTitle.value = response.data.title
@@ -168,7 +167,7 @@ async function loadPublication() {
 async function loadAddedUsers() {
   isLoadingAdded.value = true
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_users`, {
+    const response = await axios.get(`/api/c_student_publication_rel_users`, {
       params: {
         publication: `/api/c_student_publications/${publicationId}`,
       },
@@ -194,7 +193,7 @@ async function loadAvailableUsers() {
     if (sid > 0) {
       params.session = sid
       params.course = cid
-      const response = await axios.get(`${ENTRYPOINT}session_rel_course_rel_users`, { params })
+      const response = await axios.get(`/api/session_rel_course_rel_users`, { params })
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
@@ -209,7 +208,7 @@ async function loadAvailableUsers() {
       hasNextPage.value = !!response.data["hydra:view"]?.["hydra:next"]
     } else if (cid > 0) {
       params.course = cid
-      const response = await axios.get(`${ENTRYPOINT}course_rel_users`, { params })
+      const response = await axios.get(`/api/course_rel_users`, { params })
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
@@ -240,7 +239,7 @@ const debouncedSearch = debounce(() => {
 
 async function addUser(userId) {
   try {
-    await axios.post(`${ENTRYPOINT}c_student_publication_rel_users`, {
+    await axios.post(`/api/c_student_publication_rel_users`, {
       publication: `/api/c_student_publications/${publicationId}`,
       user: `/api/users/${userId}`,
     })
@@ -254,7 +253,7 @@ async function addUser(userId) {
 
 async function removeUser(relId) {
   try {
-    await axios.delete(`${ENTRYPOINT}c_student_publication_rel_users/${relId}`)
+    await axios.delete(`/api/c_student_publication_rel_users/${relId}`)
     notification.showSuccessNotification(t("User removed"))
     await loadAddedUsers()
     await loadAvailableUsers()

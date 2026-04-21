@@ -1,7 +1,6 @@
 import fetch from "../utils/fetch"
 import makeService from "./api"
 import baseService from "./baseService"
-import { ENTRYPOINT } from "../config/entrypoint"
 import prettyBytes from "pretty-bytes"
 
 const oldService = makeService("documents")
@@ -87,7 +86,7 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
   }
 
   try {
-    const url = `${ENTRYPOINT}documents/${cid}/usage?sid=${s}&gid=${g}`
+    const url = `/api/documents/${cid}/usage?sid=${s}&gid=${g}`
     const response = await window.fetch(url, {
       credentials: "same-origin",
       headers: { Accept: "application/json" },

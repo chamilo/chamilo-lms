@@ -36,7 +36,6 @@ import SocialWallPost from "./SocialWallPost.vue"
 import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import Loading from "../Loading"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useRoute } from "vue-router"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { ref as vueRef } from "vue"
@@ -149,7 +148,7 @@ async function loadPostsPage(page, replace = false) {
       params.type = SOCIAL_TYPE_PROMOTED_MESSAGE
     }
 
-    const { data } = await axios.get(ENTRYPOINT + "social_posts", { params })
+    const { data } = await axios.get("/api/social_posts", { params })
 
     if (seq !== requestSeq) {
       return

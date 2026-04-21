@@ -1,5 +1,4 @@
 import axios from "axios"
-import { ENTRYPOINT } from "../config/entrypoint"
 
 function withCourseParams(params = {}) {
   const merged = { ...params }
@@ -90,9 +89,8 @@ function resolveParentResourceNode() {
 
 /** Returns relative IRI like "/api/c_blogs/1" */
 function iri(resource, id) {
-  const basePath = new URL(ENTRYPOINT, window.location.origin).pathname.replace(/\/$/, "")
   const res = String(resource).replace(/^\//, "")
-  return `${basePath}/${res}/${id}`
+  return `/api/${res}/${id}`
 }
 
 /** Best-effort display name for user objects */
@@ -129,7 +127,7 @@ async function ensureUserInfo(userRef) {
 async function fetchUserBasic(id) {
   try {
     if (!id) return { id: null, name: "User", avatar: null }
-    const resp = await axios.get(`${ENTRYPOINT}users/${id}`, { params: withCourseParams() })
+    const resp = await axios.get(`/api/users/${id}`, { params: withCourseParams() })
     const u = resp?.data || {}
     return { id: extractId(u) || id, name: displayName(u), avatar: avatarFromUser(u) }
   } catch {
@@ -170,7 +168,7 @@ async function listProjects({ q = "", order = "dateCreation:desc" } = {}) {
     ...(q ? { title: q } : {}),
     ...buildOrderParams(order),
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blogs`, { params })
+  const resp = await axios.get(`/api/c_blogs`, { params })
   return hydraMembers(resp, mapBlogToProject)
 }
 
@@ -191,7 +189,7 @@ async function createProject({
   }
   if (showOnHomepage) payload.showOnHomepage = true
 
-  const resp = await axios.post(`${ENTRYPOINT}c_blogs`, payload, {
+  const resp = await axios.post(`/api/c_blogs`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -201,7 +199,7 @@ async function createProject({
 /** PATCH /c_blogs/{id} */
 async function renameProject(id, newTitle) {
   await axios.patch(
-    `${ENTRYPOINT}c_blogs/${id}`,
+    `/api/c_blogs/${id}`,
     { title: newTitle },
     {
       headers: { "Content-Type": "application/merge-patch+json" },
@@ -216,13 +214,13 @@ async function toggleProjectVisibility(id) {
   const params = withCourseParams({
     parentResourceNodeId: resolveParentResourceNode(),
   })
-  await axios.put(`${ENTRYPOINT}c_blogs/${id}/toggle_visibility`, null, { params })
+  await axios.put(`/api/c_blogs/${id}/toggle_visibility`, null, { params })
   return { ok: true }
 }
 
 /** DELETE /c_blogs/{id} */
 async function deleteProject(id) {
-  await axios.delete(`${ENTRYPOINT}c_blogs/${id}`, {
+  await axios.delete(`/api/c_blogs/${id}`, {
     params: withCourseParams(),
   })
   return { ok: true }
@@ -230,7 +228,7 @@ async function deleteProject(id) {
 
 /** GET /c_blogs/{id} */
 async function getProject(id) {
-  const resp = await axios.get(`${ENTRYPOINT}c_blogs/${id}`, {
+  const resp = await axios.get(`/api/c_blogs/${id}`, {
     params: withCourseParams(),
   })
   const raw = resp?.data || {}
@@ -332,7 +330,7 @@ async function listPostsApi({ blogId, page = 1, pageSize = 10, q = "", order = "
     page,
     itemsPerPage: pageSize,
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_posts`, { params })
+  const resp = await axios.get(`/api/c_blog_posts`, { params })
   return hydraMembers(resp, mapPostRow)
 }
 
@@ -343,7 +341,7 @@ async function createPostApi({ blogId, title, fullText }) {
     fullText,
     blog: iri("c_blogs", blogId),
   }
-  const resp = await axios.post(`${ENTRYPOINT}c_blog_posts`, payload, {
+  const resp = await axios.post(`/api/c_blog_posts`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -352,39 +350,39 @@ async function createPostApi({ blogId, title, fullText }) {
 
 /** GET /c_blog_posts/{postId} */
 async function getPostApi(postId) {
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_posts/${postId}`, {
+  const resp = await axios.get(`/api/c_blog_posts/${postId}`, {
     params: withCourseParams(),
   })
   return mapPostDetail(resp.data)
 }
 
 async function updatePost(postId, payload) {
-  return axios.patch(`${ENTRYPOINT}c_blog_posts/${postId}`, payload, {
+  return axios.patch(`/api/c_blog_posts/${postId}`, payload, {
     params: withCourseParams(),
     headers: { "Content-Type": "application/merge-patch+json" },
   })
 }
 
 async function deletePost(postId) {
-  return axios.delete(`${ENTRYPOINT}c_blog_posts/${postId}`, { params: withCourseParams() })
+  return axios.delete(`/api/c_blog_posts/${postId}`, { params: withCourseParams() })
 }
 
 async function updateComment(commentId, payload) {
-  return axios.patch(`${ENTRYPOINT}c_blog_comments/${commentId}`, payload, {
+  return axios.patch(`/api/c_blog_comments/${commentId}`, payload, {
     params: withCourseParams(),
     headers: { "Content-Type": "application/merge-patch+json" },
   })
 }
 
 async function deleteComment(commentId) {
-  return axios.delete(`${ENTRYPOINT}c_blog_comments/${commentId}`, { params: withCourseParams() })
+  return axios.delete(`/api/c_blog_comments/${commentId}`, { params: withCourseParams() })
 }
 
 /* === Attachments (CBlogAttachment) === */
 async function listPostAttachmentsApi(postId) {
   try {
     const params = withCourseParams({ post: iri("c_blog_posts", postId) })
-    const resp = await axios.get(`${ENTRYPOINT}c_blog_attachments`, { params })
+    const resp = await axios.get(`/api/c_blog_attachments`, { params })
     const data = resp?.data ?? {}
     const arr = data["hydra:member"] || []
     return arr.map((a) => ({
@@ -408,7 +406,7 @@ async function ratePostApi(blogId, postId, score) {
     rating: Number(score),
     ratingType: "post",
   }
-  await axios.post(`${ENTRYPOINT}c_blog_ratings`, payload, {
+  await axios.post(`/api/c_blog_ratings`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -420,7 +418,7 @@ async function getPostRatingApi(blogId, postId) {
     blog: iri("c_blogs", blogId),
     post: iri("c_blog_posts", postId),
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_ratings`, { params })
+  const resp = await axios.get(`/api/c_blog_ratings`, { params })
   const arr = resp?.data?.["hydra:member"] ?? []
   const count = arr.length
   const average = count ? arr.reduce((s, it) => s + Number(it.rating || 0), 0) / count : 0
@@ -446,7 +444,7 @@ async function getManyPostRatingsApi(blogId, postIds = []) {
 async function uploadResourceFileApi(file) {
   const fd = new FormData()
   fd.append("file", file, file.name)
-  const resp = await axios.post(`${ENTRYPOINT}resource_files`, fd, {
+  const resp = await axios.post(`/api/resource_files`, fd, {
     headers: { "Content-Type": "multipart/form-data" },
     params: withCourseParams(),
   })
@@ -468,7 +466,7 @@ async function createAttachmentForPostApi({ blogId, postId, fileInfo, comment = 
     size: Number(fileInfo.size || 0),
     comment,
   }
-  await axios.post(`${ENTRYPOINT}c_blog_attachments`, payload, {
+  await axios.post(`/api/c_blog_attachments`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -481,7 +479,7 @@ async function uploadBlogAttachmentApi({ blogId, postId, file, comment = "" }) {
   fd.append("blog", iri("c_blogs", blogId))
   fd.append("post", iri("c_blog_posts", postId))
   if (comment) fd.append("comment", comment)
-  const resp = await axios.post(`${ENTRYPOINT}c_blog_attachments/upload`, fd, {
+  const resp = await axios.post(`/api/c_blog_attachments/upload`, fd, {
     headers: { "Content-Type": "multipart/form-data" },
     params: courseContextParams(),
   })
@@ -498,7 +496,7 @@ async function listBlogMembers(blogId) {
     blog: iri("c_blogs", blogId),
     itemsPerPage: 1000,
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_rel_users`, { params })
+  const resp = await axios.get(`/api/c_blog_rel_users`, { params })
   const arr = resp?.data?.["hydra:member"] ?? []
   const hydrated = await Promise.all(
     arr.map(async (row) => {
@@ -516,7 +514,7 @@ async function addBlogMember(blogId, userId) {
     blog: iri("c_blogs", blogId),
     user: iri("users", userId),
   }
-  await axios.post(`${ENTRYPOINT}c_blog_rel_users`, payload, {
+  await axios.post(`/api/c_blog_rel_users`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -525,7 +523,7 @@ async function addBlogMember(blogId, userId) {
 
 /** DELETE /c_blog_rel_users/{relId} */
 async function removeBlogMember(relId) {
-  await axios.delete(`${ENTRYPOINT}c_blog_rel_users/${relId}`, {
+  await axios.delete(`/api/c_blog_rel_users/${relId}`, {
     params: withCourseParams(),
   })
   return { ok: true }
@@ -554,7 +552,7 @@ async function listCourseOrSessionUsers() {
       course: iri("courses", cid),
       itemsPerPage: 1000,
     })
-    const resp = await axios.get(`${ENTRYPOINT}course_rel_users`, { params })
+    const resp = await axios.get(`/api/course_rel_users`, { params })
     await addUsers(resp?.data?.["hydra:member"] ?? [], "course")
   }
 
@@ -563,7 +561,7 @@ async function listCourseOrSessionUsers() {
       session: iri("sessions", sid),
       itemsPerPage: 1000,
     })
-    const resp = await axios.get(`${ENTRYPOINT}session_rel_users`, { params })
+    const resp = await axios.get(`/api/session_rel_users`, { params })
     await addUsers(resp?.data?.["hydra:member"] ?? [], "session")
   }
 
@@ -610,14 +608,14 @@ async function listTasks(blogId = resolveBlogIdFromPath()) {
     blog: iri("c_blogs", blogId),
     itemsPerPage: 1000,
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_tasks`, { params })
+  const resp = await axios.get(`/api/c_blog_tasks`, { params })
   const arr = resp?.data?.["hydra:member"] ?? []
   return arr.map(mapTaskRow)
 }
 
 /** PATCH /c_blog_tasks/{id} */
 async function updateTask(taskId, payload) {
-  await axios.patch(`${ENTRYPOINT}c_blog_tasks/${taskId}`, payload, {
+  await axios.patch(`/api/c_blog_tasks/${taskId}`, payload, {
     params: withCourseParams(),
     headers: { "Content-Type": "application/merge-patch+json" },
   })
@@ -626,13 +624,13 @@ async function updateTask(taskId, payload) {
 
 /** DELETE /c_blog_tasks/{id} */
 async function deleteTask(taskId) {
-  await axios.delete(`${ENTRYPOINT}c_blog_tasks/${taskId}`, { params: withCourseParams() })
+  await axios.delete(`/api/c_blog_tasks/${taskId}`, { params: withCourseParams() })
   return { ok: true }
 }
 
 /** PATCH /c_blog_task_rel_users/{id} */
 async function updateAssignment(assignmentId, payload) {
-  await axios.patch(`${ENTRYPOINT}c_blog_task_rel_users/${assignmentId}`, payload, {
+  await axios.patch(`/api/c_blog_task_rel_users/${assignmentId}`, payload, {
     params: withCourseParams(),
     headers: { "Content-Type": "application/merge-patch+json" },
   })
@@ -652,7 +650,7 @@ async function createTask(
     systemTask: !!systemTask,
     blog: iri("c_blogs", blogId),
   }
-  const resp = await axios.post(`${ENTRYPOINT}c_blog_tasks`, payload, {
+  const resp = await axios.post(`/api/c_blog_tasks`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -665,7 +663,7 @@ async function listAssignments(blogId = resolveBlogIdFromPath()) {
     blog: iri("c_blogs", blogId),
     itemsPerPage: 1000,
   })
-  const resp = await axios.get(`${ENTRYPOINT}c_blog_task_rel_users`, { params })
+  const resp = await axios.get(`/api/c_blog_task_rel_users`, { params })
   const arr = resp?.data?.["hydra:member"] ?? []
   return Promise.all(arr.map(mapAssignmentRow))
 }
@@ -678,7 +676,7 @@ async function assignTask({ taskId, userId, targetDate }, blogId = resolveBlogId
     blog: iri("c_blogs", blogId),
     targetDate, // ISO "YYYY-MM-DD"
   }
-  await axios.post(`${ENTRYPOINT}c_blog_task_rel_users`, payload, {
+  await axios.post(`/api/c_blog_task_rel_users`, payload, {
     headers: { "Content-Type": "application/json" },
     params: withCourseParams(),
   })
@@ -745,7 +743,7 @@ export default {
         post: iri("c_blog_posts", postId),
         "order[dateCreation]": "asc",
       })
-      const resp = await axios.get(`${ENTRYPOINT}c_blog_comments`, { params })
+      const resp = await axios.get(`/api/c_blog_comments`, { params })
       return (resp?.data?.["hydra:member"] ?? []).map(mapCommentRow)
     } catch (e) {
       if (e?.response?.status === 404) return []
@@ -758,7 +756,7 @@ export default {
       comment: String(text ?? "").trim(),
     }
     if (blogId) payload.blog = iri("c_blogs", blogId)
-    await axios.post(`${ENTRYPOINT}c_blog_comments`, payload, {
+    await axios.post(`/api/c_blog_comments`, payload, {
       headers: { "Content-Type": "application/json" },
       params: withCourseParams(),
     })

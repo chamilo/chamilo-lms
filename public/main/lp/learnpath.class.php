@@ -6540,7 +6540,7 @@ document.addEventListener("DOMContentLoaded", function () {
             [],
             [],
             ['file', 'html', 'folder'],
-            true
+            false
         );
 
         $form = new FormValidator(

@@ -1,4 +1,3 @@
-import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 
 export default {
@@ -6,48 +5,44 @@ export default {
   // Glossary CRUD (API entrypoint)
   // ---------------------------
   getGlossaryTerms: async (params) => {
-    const response = await axios.get(ENTRYPOINT + "glossaries", { params })
+    const response = await axios.get("/api/glossaries", { params })
     return response.data
   },
 
   getGlossaryTerm: async (termId) => {
-    const response = await axios.get(ENTRYPOINT + `glossaries/${termId}`)
+    const response = await axios.get(`/api/glossaries/${termId}`)
     return response.data
   },
 
   createGlossaryTerm: async (data) => {
-    const response = await axios.post(ENTRYPOINT + "glossaries", data)
+    const response = await axios.post("/api/glossaries", data)
     return response.data
   },
 
   updateGlossaryTerm: async (termId, data) => {
-    const response = await axios.put(ENTRYPOINT + `glossaries/${termId}`, data)
+    const response = await axios.put(`/api/glossaries/${termId}`, data)
     return response.data
   },
 
   export: async (formData) => {
-    const endpoint = `${ENTRYPOINT}glossaries/export`
-    const response = await axios.post(endpoint, formData, { responseType: "blob" })
+    const response = await axios.post("/api/glossaries/export", formData, { responseType: "blob" })
     return response.data
   },
 
   import: async (formData) => {
-    const endpoint = `${ENTRYPOINT}glossaries/import`
-    const response = await axios.post(endpoint, formData, {
+    const response = await axios.post("/api/glossaries/import", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     return response.data
   },
 
   exportToDocuments: async (data) => {
-    const endpoint = `${ENTRYPOINT}glossaries/export_to_documents`
-    const response = await axios.post(endpoint, data)
+    const response = await axios.post("/api/glossaries/export_to_documents", data)
     return response.data
   },
 
   deleteTerm: async (termId) => {
-    const endpoint = `${ENTRYPOINT}glossaries/${termId}`
-    const response = await axios.delete(endpoint)
+    const response = await axios.delete(`/api/glossaries/${termId}`)
     return response.data
   },
 

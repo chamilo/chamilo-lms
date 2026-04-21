@@ -122,7 +122,6 @@ import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import XHRUpload from "@uppy/xhr-upload"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 
@@ -144,7 +143,7 @@ const allowedExtensions = ref([])
 onMounted(loadPublicationTitle)
 async function loadPublicationTitle() {
   try {
-    const { data } = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+    const { data } = await axios.get(`/api/c_student_publications/${publicationId}`, {
       params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
     })
     publicationTitle.value = data.title

@@ -1,5 +1,3 @@
-import { ENTRYPOINT } from "../../config/entrypoint"
-
 // From
 // https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/upload-adapter.html
 
@@ -36,7 +34,7 @@ export default class MyUploadAdapter {
     // integration to choose the right communication channel. This example uses
     // a POST request with JSON as a data structure but your configuration
     // could be different.
-    xhr.open("POST", ENTRYPOINT + "documents", true)
+    xhr.open("POST", "/api/documents", true)
     xhr.responseType = "json"
   }
 

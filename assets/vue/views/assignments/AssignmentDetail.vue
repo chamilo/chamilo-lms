@@ -186,7 +186,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useNotification } from "../../composables/notification"
 
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -252,7 +251,7 @@ const allowFileFlag = computed(
 
 async function loadAddedDocuments() {
   try {
-    const resp = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
+    const resp = await axios.get(`/api/c_student_publication_rel_documents`, {
       params: {
         ...buildCidParams(),
         publication: `/api/c_student_publications/${assignmentId}`,

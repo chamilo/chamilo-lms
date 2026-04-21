@@ -1,4 +1,3 @@
-import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 
 export const ATTENDANCE_STATES = {
@@ -16,7 +15,7 @@ export default {
    * @returns {Promise<Object>} - Data of the attendance lists.
    */
   getAttendances: async (params) => {
-    const response = await axios.get(`${ENTRYPOINT}attendances/`, { params })
+    const response = await axios.get(`/api/attendances/`, { params })
     return response.data
   },
 
@@ -26,7 +25,7 @@ export default {
    * @returns {Promise<Object>} - Data of the specific attendance list.
    */
   getAttendance: async (attendanceId) => {
-    const response = await axios.get(`${ENTRYPOINT}attendances/${attendanceId}/`)
+    const response = await axios.get(`/api/attendances/${attendanceId}/`)
     return response.data
   },
 
@@ -37,7 +36,7 @@ export default {
    */
   fetchGroups: async (parentNodeId) => {
     try {
-      const response = await axios.get(`${ENTRYPOINT}groups`, {
+      const response = await axios.get(`/api/groups`, {
         params: { "resourceNode.parent": parentNodeId },
       })
       return response.data["hydra:member"].map((group) => ({
@@ -56,7 +55,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created attendance list.
    */
   createAttendance: async (data) => {
-    const response = await axios.post(`${ENTRYPOINT}attendances`, data)
+    const response = await axios.post(`/api/attendances`, data)
     return response.data
   },
 
@@ -67,7 +66,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated attendance list.
    */
   updateAttendance: async (attendanceId, data) => {
-    const response = await axios.put(`${ENTRYPOINT}attendances/${attendanceId}`, data)
+    const response = await axios.put(`/api/attendances/${attendanceId}`, data)
     return response.data
   },
 
@@ -77,7 +76,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAttendance: async (attendanceId) => {
-    const response = await axios.delete(`${ENTRYPOINT}attendances/${attendanceId}`)
+    const response = await axios.delete(`/api/attendances/${attendanceId}`)
     return response.data
   },
 
@@ -87,7 +86,7 @@ export default {
    * @returns {Promise<void>} - Result of the toggle action.
    */
   toggleVisibility: async (attendanceId) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/toggle_visibility`
+    const endpoint = `/api/attendances/${attendanceId}/toggle_visibility`
     await axios.put(endpoint, {}, { headers: { "Content-Type": "application/json" } })
   },
 
@@ -97,7 +96,7 @@ export default {
    * @returns {Promise<void>} - Result of the soft delete action.
    */
   softDelete: async (attendanceId) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/soft_delete`
+    const endpoint = `/api/attendances/${attendanceId}/soft_delete`
     await axios.put(endpoint, {}, { headers: { "Content-Type": "application/json" } })
   },
 
@@ -108,7 +107,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created calendar event.
    */
   addCalendarEvent: async (attendanceId, data) => {
-    const response = await axios.post(`${ENTRYPOINT}attendances/${attendanceId}/calendars`, data)
+    const response = await axios.post(`/api/attendances/${attendanceId}/calendars`, data)
     return response.data
   },
 
@@ -119,7 +118,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar event.
    */
   updateCalendarEvent: async (calendarId, data) => {
-    const response = await axios.put(`${ENTRYPOINT}c_attendance_calendars/${calendarId}`, data)
+    const response = await axios.put(`/api/c_attendance_calendars/${calendarId}`, data)
     return response.data
   },
 
@@ -129,7 +128,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteCalendarEvent: async (calendarId) => {
-    const response = await axios.delete(`${ENTRYPOINT}c_attendance_calendars/${calendarId}`)
+    const response = await axios.delete(`/api/c_attendance_calendars/${calendarId}`)
     return response.data
   },
 
@@ -140,7 +139,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created calendar entry.
    */
   addAttendanceCalendar: async (attendanceId, data) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/calendars`
+    const endpoint = `/api/attendances/${attendanceId}/calendars`
     const response = await axios.post(endpoint, data, {
       headers: { "Content-Type": "application/json" },
     })
@@ -182,7 +181,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar entry.
    */
   updateAttendanceCalendar: async (attendanceId, calendarId, data) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/calendars/${calendarId}`
+    const endpoint = `/api/attendances/${attendanceId}/calendars/${calendarId}`
     const response = await axios.put(endpoint, data)
     return response.data
   },
@@ -194,7 +193,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAttendanceCalendar: async (attendanceId, calendarId) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/calendars/${calendarId}`
+    const endpoint = `/api/attendances/${attendanceId}/calendars/${calendarId}`
     const response = await axios.delete(endpoint)
     return response.data
   },
@@ -205,7 +204,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAllAttendanceCalendars: async (attendanceId) => {
-    const endpoint = `${ENTRYPOINT}attendances/${attendanceId}/calendars`
+    const endpoint = `/api/attendances/${attendanceId}/calendars`
     const response = await axios.delete(endpoint)
     return response.data
   },

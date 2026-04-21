@@ -1,5 +1,4 @@
 import { isObject } from "lodash"
-import { ENTRYPOINT } from "../config/entrypoint"
 import SubmissionError from "../error/SubmissionError"
 import { normalize } from "./hydra"
 
@@ -36,7 +35,8 @@ export default function (id, options = {}) {
     console.log("URL", id)
   }
 
-  const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith("/") ? "" : "/")
+  const entryPoint = "/api/"
+  const resolvedUrl = id.startsWith("/api/") ? id : entryPoint + id
 
   if ("PUT" === options.method) {
     const payload = options.body && JSON.parse(options.body)
@@ -92,7 +92,7 @@ export default function (id, options = {}) {
 
   console.log("ready to fetch")
 
-  return global.fetch(new URL(id, entryPoint), options).then((response) => {
+  return global.fetch(resolvedUrl, options).then((response) => {
     console.log(response, "global.fetch")
 
     if (response.ok) {

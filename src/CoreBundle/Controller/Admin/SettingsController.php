@@ -739,8 +739,6 @@ class SettingsController extends BaseController
             'ai_helpers.course_analyser',
             'course.enable_tool_introduction',
             'course.show_toolshortcuts',
-            'crons.cron_remind_course_finished_activate',
-            'display.display_categories_on_homepage',
             'document.default_group_quotum',
             'dropbox.dropbox_allow_mailing',
             'editor.block_copy_paste_for_students',

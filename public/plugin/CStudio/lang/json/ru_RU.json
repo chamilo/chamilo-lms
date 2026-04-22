@@ -111,6 +111,10 @@
     "Section collapse": "Свернуть раздел",
     "Index Table": "Оглавление",
     "fxTools": "fxИнструменты",
+    "Tools": "Инструменты",
+    "Project theme": "Тема проекта",
+    "Page style": "Стиль страницы",
+    "Quiz style": "Стиль теста",
     "Content elements": "Элементы содержимого",
     "Button": "Кнопка",
     "Insert": "Вставить",
@@ -124,5 +128,15 @@
     "Edition filltext": "Редактирование заполнитьтекст",
     "Edition findwords": "Редактирование найтислова",
     "Edition markwords": "Редактирование отметитьслова",
-    "Edition sorttheparagraphs": "Редактирование сортировать_абзацы"
+    "Edition sorttheparagraphs": "Редактирование сортировать_абзацы",
+    "tpl_demo_content_note": "Это демонстрационный контент для Chamilo Studio. Для разработки вы не должны редактировать этот файл, вместо этого вы можете изменить и переименовать его.",
+    "tpl_start": "Начать",
+    "tpl_put_your_title_here": "Введите здесь заголовок",
+    "tpl_title_a": "Заголовок A",
+    "tpl_target_audience_and_prerequisites": "Целевая аудитория и предварительные требования",
+    "tpl_who_is_this_training_for": "Для кого предназначено это обучение?",
+    "tpl_objectives_of_the_course": "Цели курса",
+    "tpl_objective_read_and_analyse": "Чтение и анализ бухгалтерских и финансовых документов",
+    "tpl_objective_conducting_project": "Проведение проекта для выполнения работ",
+    "tpl_objective_mastering_tools": "Освоение инструментов"
 }

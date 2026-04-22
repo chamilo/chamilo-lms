@@ -111,6 +111,10 @@
     "Section collapse": "Sutraukti sekciją",
     "Index Table": "Turinio lentelė",
     "fxTools": "fxĮrankiai",
+    "Tools": "Įrankiai",
+    "Project theme": "Projekto tema",
+    "Page style": "Puslapio stilius",
+    "Quiz style": "Testo stilius",
     "Content elements": "Turinio elementai",
     "Button": "Mygtukas",
     "Insert": "Įterpti",
@@ -124,5 +128,15 @@
     "Edition filltext": "Redagavimas užpildymas",
     "Edition findwords": "Redagavimas rastižodžius",
     "Edition markwords": "Redagavimas pažymėtižodžius",
-    "Edition sorttheparagraphs": "Redagavimas rūšioti pastraipas"
+    "Edition sorttheparagraphs": "Redagavimas rūšioti pastraipas",
+    "tpl_demo_content_note": "Tai yra demonstracinis turinys Chamilo Studio. Programuojant neturėtumėte redaguoti šio failo, vietoj to galite jį modifikuoti ir pervadinti.",
+    "tpl_start": "Pradėti",
+    "tpl_put_your_title_here": "Įveskite čia pavadinimą",
+    "tpl_title_a": "Pavadinimas A",
+    "tpl_target_audience_and_prerequisites": "Tikslinė auditorija ir išankstinės sąlygos",
+    "tpl_who_is_this_training_for": "Kam skirtas šis mokymas?",
+    "tpl_objectives_of_the_course": "Kurso tikslai",
+    "tpl_objective_read_and_analyse": "Skaityti ir analizuoti apskaitos ir finansinius dokumentus",
+    "tpl_objective_conducting_project": "Vykdyti projektą darbui atlikti",
+    "tpl_objective_mastering_tools": "Įvaldyti įrankius"
 }

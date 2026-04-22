@@ -111,6 +111,10 @@
     "Section collapse": "खंड संकुचित करें",
     "Index Table": "सूची तालिका",
     "fxTools": "fx उपकरण",
+    "Tools": "उपकरण",
+    "Project theme": "प्रोजेक्ट थीम",
+    "Page style": "पृष्ठ शैली",
+    "Quiz style": "क्विज़ शैली",
     "Content elements": "सामग्री तत्व",
     "Button": "बटन",
     "Insert": "दिएँ",
@@ -124,5 +128,15 @@
     "Edition filltext": "संपादन पाठभराव",
     "Edition findwords": "संपादन शब्दखोज",
     "Edition markwords": "संपादन शब्दचिह्नन",
-    "Edition sorttheparagraphs": "संपादन अनुच्छेदक्रमबद्ध"
+    "Edition sorttheparagraphs": "संपादन अनुच्छेदक्रमबद्ध",
+    "tpl_demo_content_note": "यह Chamilo Studio के लिए एक डेमो सामग्री है। विकास के लिए, आपको इस फाइल को संपादित नहीं करना चाहिए, इसके बजाय आप इसे संशोधित और पुनर्नामित कर सकते हैं।",
+    "tpl_start": "शुरू करें",
+    "tpl_put_your_title_here": "यहाँ अपना शीर्षक डालें",
+    "tpl_title_a": "शीर्षक ए",
+    "tpl_target_audience_and_prerequisites": "लक्षित दर्शक और पूर्वापेक्षाएँ",
+    "tpl_who_is_this_training_for": "यह प्रशिक्षण किसके लिए है?",
+    "tpl_objectives_of_the_course": "कोर्स के उद्देश्य",
+    "tpl_objective_read_and_analyse": "लेखा और वित्तीय दस्तावेज़ पढ़ें और विश्लेषण करें",
+    "tpl_objective_conducting_project": "कार्य करने के लिए एक परियोजना का संचालन",
+    "tpl_objective_mastering_tools": "उपकरणों का आधिपत्य प्राप्त करना"
 }

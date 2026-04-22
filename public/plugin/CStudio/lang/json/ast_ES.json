@@ -111,6 +111,10 @@
     "Section collapse": "Contraer seición",
     "Index Table": "Índiz de tabla",
     "fxTools": "fxTools",
+    "Tools": "Ferramientes",
+    "Project theme": "Tema del proyeutu",
+    "Page style": "Estilu de la páxina",
+    "Quiz style": "Estilu del cuestionariu",
     "Content elements": "Elementos de conteníu",
     "Button": "Botón",
     "Insert": "Inserir",
@@ -124,5 +128,15 @@
     "Edition filltext": "Edición rellenu testu",
     "Edition findwords": "Edición atopar pallabres",
     "Edition markwords": "Edición marcar pallabres",
-    "Edition sorttheparagraphs": "Edición ordenar párrafos"
+    "Edition sorttheparagraphs": "Edición ordenar párrafos",
+    "tpl_demo_content_note": "Esti ye un conteníu de demostración pa Chamilo Studio. Pa'l desendolcamentu, nun quies editar esti ficheru, en cambiu pues modificálo y renominalu.",
+    "tpl_start": "Entamar",
+    "tpl_put_your_title_here": "Pon el to títulu equí",
+    "tpl_title_a": "Títulu A",
+    "tpl_target_audience_and_prerequisites": "Audiencia objectivu y precondiciones",
+    "tpl_who_is_this_training_for": "¿Pa quién ye esta formación?",
+    "tpl_objectives_of_the_course": "Objectivos del cursu",
+    "tpl_objective_read_and_analyse": "Lleer y analizar documentos contables y finances",
+    "tpl_objective_conducting_project": "Realizar un proyectu pa llevar a cabu'l trabayu",
+    "tpl_objective_mastering_tools": "Dominar les ferramientes"
 }

@@ -111,6 +111,10 @@
     "Section collapse": "Seksjon kollaps",
     "Index Table": "Innhaldsfortegnelse",
     "fxTools": "fxVerktøy",
+    "Tools": "Verktøy",
+    "Project theme": "Prosjekttema",
+    "Page style": "Sidestil",
+    "Quiz style": "Kvisitstil",
     "Content elements": "Innhaldelement",
     "Button": "Knapp",
     "Insert": "Sett inn",
@@ -124,5 +128,15 @@
     "Edition filltext": "Rediger fylltekst",
     "Edition findwords": "Rediger finnord",
     "Edition markwords": "Rediger markerord",
-    "Edition sorttheparagraphs": "Rediger sorteravsnitt"
+    "Edition sorttheparagraphs": "Rediger sorteravsnitt",
+    "tpl_demo_content_note": "Dette er demo-innhald for Chamilo Studio. Under utvikling skal du ikkje endre denne fila, men i staden kan du modifisere og omskrive ho.",
+    "tpl_start": "Start",
+    "tpl_put_your_title_here": "Skriv tittelen din her",
+    "tpl_title_a": "Tittel A",
+    "tpl_target_audience_and_prerequisites": "Målgruppe og forutsetningar",
+    "tpl_who_is_this_training_for": "Kven er denne opplæringa for?",
+    "tpl_objectives_of_the_course": "Mål for kurset",
+    "tpl_objective_read_and_analyse": "Les og analyser regnskaps- og finansdokument",
+    "tpl_objective_conducting_project": "Gjennomføring av eit prosjekt for å utføre arbeid",
+    "tpl_objective_mastering_tools": "Meistring av verktøya"
 }

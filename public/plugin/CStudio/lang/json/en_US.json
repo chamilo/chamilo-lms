@@ -111,6 +111,10 @@
     "Section collapse": "Section collapse",
     "Index Table": "Index Table",
     "fxTools": "fxTools",
+    "Tools": "Tools",
+    "Project theme": "Project theme",
+    "Page style": "Page style",
+    "Quiz style": "Quiz style",
     "Content elements": "Content elements",
     "Button": "Button",
     "Insert": "Insert",
@@ -124,5 +128,15 @@
     "Edition filltext": "Edition filltext",
     "Edition findwords": "Edition findwords",
     "Edition markwords": "Edition markwords",
-    "Edition sorttheparagraphs": "Edition sorttheparagraphs"
+    "Edition sorttheparagraphs": "Edition sorttheparagraphs",
+    "tpl_demo_content_note": "This is a demo content for Chamilo Studio. For the development, you shouldn't edit this file, instead you can modify and rename it.",
+    "tpl_start": "Start",
+    "tpl_put_your_title_here": "Put your title here",
+    "tpl_title_a": "Title A",
+    "tpl_target_audience_and_prerequisites": "Target audience and prerequisites",
+    "tpl_who_is_this_training_for": "Who is this training for?",
+    "tpl_objectives_of_the_course": "Objectives of the course",
+    "tpl_objective_read_and_analyse": "Read and analyse accounting and financial documents",
+    "tpl_objective_conducting_project": "Conducting a project to carry out work",
+    "tpl_objective_mastering_tools": "Mastering the tools"
 }

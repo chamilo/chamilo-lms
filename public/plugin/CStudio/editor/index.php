@@ -65,6 +65,8 @@ if (isset($_GET['id'])) {
 
     include __DIR__.'/inc/getoptions.php';
 
+    require_once __DIR__.'/inc/template-lang.php';
+
     require_once __DIR__.'/../ajax/inc/teachdoc-render-prepare.php';
 
     $localFolder = get_local_folder($idPage);
@@ -164,6 +166,12 @@ if (isset($_GET['id'])) {
             $base_css = '';
         }
 
+        // Cookie cstudio_lang is written by the JS language switcher (setCstudioLangCookie)
+        // on every page load, making it the most reliable source for the user's chosen UI language.
+        $cstudioInterfaceLocale = (!empty($_COOKIE['cstudio_lang']) ? $_COOKIE['cstudio_lang'] : null)
+            ?? Container::getSession()?->get('_locale')
+            ?? 'en_US';
+
         if ('' == $base_html) {
             if (isset($_GET['pty'])) {
                 $pathFile = 'templates/pages/'.$_GET['pty'].'.html';
@@ -188,11 +196,13 @@ if (isset($_GET['id'])) {
                 $base_html = file_get_contents('templates/pages/p0.html');
             }
             $base_html = str_replace('###TITLE###', $title, $base_html);
+            $base_html = apply_cstudio_template_lang($base_html, $cstudioInterfaceLocale);
         }
 
         if (isset($_GET['resetall'])) {
             $base_html = file_get_contents('templates/pages/p0.html');
             $base_html = str_replace('###TITLE###', $title, $base_html);
+            $base_html = apply_cstudio_template_lang($base_html, $cstudioInterfaceLocale);
         }
 
         oel_add_ctr_rights($idPage);

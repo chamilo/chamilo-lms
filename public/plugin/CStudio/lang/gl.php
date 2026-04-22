@@ -1,8 +1,8 @@
 <?php
 
 declare(strict_types=1);
-$strings['plugin_title'] = '';
-$strings['plugin_comment'] = '';
+$strings['plugin_title'] = 'Ferramentas abertas de eLearning C-Studio';
+$strings['plugin_comment'] = 'Ferramentas OeL (z p_f)';
 
 $strings['Term'] = 'Termo';
 $strings['Definition'] = 'Definición';
@@ -120,6 +120,10 @@ $strings['Table Bloc'] = 'Bloque de táboa';
 $strings['Section collapse'] = 'Seción colapsable';
 $strings['Index Table'] = 'Índice da táboa';
 $strings['fxTools'] = 'fxTools';
+$strings['Tools'] = 'Ferramentas';
+$strings['Project theme'] = 'Tema do proxecto';
+$strings['Page style'] = 'Estilo da páxina';
+$strings['Quiz style'] = 'Estilo do cuestionario';
 $strings['Content elements'] = 'Elementos de contido';
 $strings['Button'] = 'Botón';
 $strings['Insert'] = 'Inserir';
@@ -134,3 +138,13 @@ $strings['Edition filltext'] = 'Edición enchetexto';
 $strings['Edition findwords'] = 'Edición atoparpalabras';
 $strings['Edition markwords'] = 'Edición marcarpalabras';
 $strings['Edition sorttheparagraphs'] = 'Edición ordenarparágrafos';
+$strings['tpl_demo_content_note'] = 'Este é un contido de mostra para Chamilo Studio. Para o desenvolvemento, non deberías editar este ficheiro, en cambio podes modificalo e renominalo.';
+$strings['tpl_start'] = 'Iniciar';
+$strings['tpl_put_your_title_here'] = 'Poña o seu título aquí';
+$strings['tpl_title_a'] = 'Título A';
+$strings['tpl_target_audience_and_prerequisites'] = 'Público obxectivo e requisitos previos';
+$strings['tpl_who_is_this_training_for'] = 'Para quen é esta formación?';
+$strings['tpl_objectives_of_the_course'] = 'Obxectivos do curso';
+$strings['tpl_objective_read_and_analyse'] = 'Ler e analizar documentos contables e financeiros';
+$strings['tpl_objective_conducting_project'] = 'Realizar un proxecto para levar a cabo o traballo';
+$strings['tpl_objective_mastering_tools'] = 'Dominar as ferramentas';

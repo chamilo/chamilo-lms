@@ -111,6 +111,10 @@
     "Section collapse": "Thu gọn phần",
     "Index Table": "Bảng Mục Lục",
     "fxTools": "fxTools",
+    "Tools": "Công cụ",
+    "Project theme": "Chủ đề dự án",
+    "Page style": "Phong cách trang",
+    "Quiz style": "Phong cách bài kiểm tra",
     "Content elements": "Yếu tố nội dung",
     "Button": "Nút",
     "Insert": "Chèn",
@@ -124,5 +128,15 @@
     "Edition filltext": "Chỉnh sửa điền văn bản",
     "Edition findwords": "Chỉnh sửa tìm từ",
     "Edition markwords": "Chỉnh sửa đánh dấu từ",
-    "Edition sorttheparagraphs": "Chỉnh sửa sắp xếp đoạn văn"
+    "Edition sorttheparagraphs": "Chỉnh sửa sắp xếp đoạn văn",
+    "tpl_demo_content_note": "Đây là nội dung demo cho Chamilo Studio. Để phát triển, bạn không nên chỉnh sửa tệp này, thay vào đó bạn có thể sửa đổi và đổi tên nó.",
+    "tpl_start": "Bắt đầu",
+    "tpl_put_your_title_here": "Đặt tiêu đề của bạn ở đây",
+    "tpl_title_a": "Tiêu đề A",
+    "tpl_target_audience_and_prerequisites": "Đối tượng mục tiêu và điều kiện tiên quyết",
+    "tpl_who_is_this_training_for": "Khóa đào tạo này dành cho ai?",
+    "tpl_objectives_of_the_course": "Mục tiêu của khóa học",
+    "tpl_objective_read_and_analyse": "Đọc và phân tích tài liệu kế toán và tài chính",
+    "tpl_objective_conducting_project": "Thực hiện dự án để tiến hành công việc",
+    "tpl_objective_mastering_tools": "Làm chủ các công cụ"
 }

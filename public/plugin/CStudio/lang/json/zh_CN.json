@@ -111,6 +111,10 @@
     "Section collapse": "折叠部分",
     "Index Table": "索引表",
     "fxTools": "特效工具",
+    "Tools": "工具",
+    "Project theme": "项目主题",
+    "Page style": "页面样式",
+    "Quiz style": "测验样式",
     "Content elements": "内容元素",
     "Button": "按钮",
     "Insert": "插入",
@@ -124,5 +128,15 @@
     "Edition filltext": "编辑填空",
     "Edition findwords": "编辑查找单词",
     "Edition markwords": "编辑标记单词",
-    "Edition sorttheparagraphs": "编辑排序段落"
+    "Edition sorttheparagraphs": "编辑排序段落",
+    "tpl_demo_content_note": "这是 Chamilo Studio 的演示内容。开发时，您不应编辑此文件，而是可以修改并重命名它。",
+    "tpl_start": "开始",
+    "tpl_put_your_title_here": "在此输入您的标题",
+    "tpl_title_a": "标题 A",
+    "tpl_target_audience_and_prerequisites": "目标受众和先决条件",
+    "tpl_who_is_this_training_for": "本培训适用于谁？",
+    "tpl_objectives_of_the_course": "课程目标",
+    "tpl_objective_read_and_analyse": "阅读和分析会计和财务文件",
+    "tpl_objective_conducting_project": "开展项目执行工作",
+    "tpl_objective_mastering_tools": "掌握工具"
 }

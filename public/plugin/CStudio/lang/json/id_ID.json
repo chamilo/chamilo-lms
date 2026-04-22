@@ -111,6 +111,10 @@
     "Section collapse": "Lipat bagian",
     "Index Table": "Tabel Indeks",
     "fxTools": "fxTools",
+    "Tools": "Alat",
+    "Project theme": "Tema proyek",
+    "Page style": "Gaya halaman",
+    "Quiz style": "Gaya kuis",
     "Content elements": "Elemen konten",
     "Button": "Tombol",
     "Insert": "Sisipkan",
@@ -124,5 +128,15 @@
     "Edition filltext": "Edit isi teks",
     "Edition findwords": "Edit cari kata",
     "Edition markwords": "Edit tandai kata",
-    "Edition sorttheparagraphs": "Edit urutkan paragraf"
+    "Edition sorttheparagraphs": "Edit urutkan paragraf",
+    "tpl_demo_content_note": "Ini adalah konten demo untuk Chamilo Studio. Untuk pengembangan, Anda tidak boleh mengedit file ini, sebaliknya Anda dapat memodifikasi dan mengganti namanya.",
+    "tpl_start": "Mulai",
+    "tpl_put_your_title_here": "Masukkan judul Anda di sini",
+    "tpl_title_a": "Judul A",
+    "tpl_target_audience_and_prerequisites": "Target audiens dan prasyarat",
+    "tpl_who_is_this_training_for": "Siapa yang ditujukan pelatihan ini?",
+    "tpl_objectives_of_the_course": "Tujuan kursus",
+    "tpl_objective_read_and_analyse": "Membaca dan menganalisis dokumen akuntansi dan keuangan",
+    "tpl_objective_conducting_project": "Melaksanakan proyek untuk melakukan pekerjaan",
+    "tpl_objective_mastering_tools": "Menguasai alat-alat"
 }

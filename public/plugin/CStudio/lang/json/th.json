@@ -111,6 +111,10 @@
     "Section collapse": "ยุบส่วน",
     "Index Table": "ตารางสารบัญ",
     "fxTools": "เครื่องมือเอฟเฟกต์",
+    "Tools": "เครื่องมือ",
+    "Project theme": "ธีมโครงการ",
+    "Page style": "รูปแบบหน้า",
+    "Quiz style": "รูปแบบควิซ",
     "Content elements": "องค์ประกอบเนื้อหา",
     "Button": "ปุ่ม",
     "Insert": "แทรกลง",
@@ -124,5 +128,15 @@
     "Edition filltext": "แก้ไขกรอกข้อความ",
     "Edition findwords": "แก้ไขค้นหาคำ",
     "Edition markwords": "แก้ไขทำเครื่องหมายคำ",
-    "Edition sorttheparagraphs": "แก้ไขเรียงย่อหน้า"
+    "Edition sorttheparagraphs": "แก้ไขเรียงย่อหน้า",
+    "tpl_demo_content_note": "นี่เป็นเนื้อหาตัวอย่างสำหรับ Chamilo Studio สำหรับการพัฒนา คุณไม่ควรแก้ไขไฟล์นี้ แต่สามารถคัดลอก แก้ไข และเปลี่ยนชื่อได้",
+    "tpl_start": "เริ่มต้น",
+    "tpl_put_your_title_here": "ใส่ชื่อเรื่องของคุณที่นี่",
+    "tpl_title_a": "ชื่อเรื่อง A",
+    "tpl_target_audience_and_prerequisites": "กลุ่มเป้าหมายและข้อกำหนดเบื้องต้น",
+    "tpl_who_is_this_training_for": "การฝึกอบรมนี้สำหรับใคร?",
+    "tpl_objectives_of_the_course": "วัตถุประสงค์ของหลักสูตร",
+    "tpl_objective_read_and_analyse": "อ่านและวิเคราะห์เอกสารบัญชีและการเงิน",
+    "tpl_objective_conducting_project": "ดำเนินโครงการเพื่อปฏิบัติงาน",
+    "tpl_objective_mastering_tools": "เชี่ยวชาญเครื่องมือ"
 }

@@ -111,6 +111,10 @@
     "Section collapse": "Sadaļas aizvēršana",
     "Index Table": "Satura rādītājs",
     "fxTools": "fxRīki",
+    "Tools": "Rīki",
+    "Project theme": "Projekta tēma",
+    "Page style": "Lapas stils",
+    "Quiz style": "Testa stils",
     "Content elements": "Satura elementi",
     "Button": "Poga",
     "Insert": "Ievietot",
@@ -124,5 +128,15 @@
     "Edition filltext": "Rediģēšana aizpildteksts",
     "Edition findwords": "Rediģēšana atrastvārdus",
     "Edition markwords": "Rediģēšana atzīmēt vārdus",
-    "Edition sorttheparagraphs": "Rediģēšana sakārtot rindkopas"
+    "Edition sorttheparagraphs": "Rediģēšana sakārtot rindkopas",
+    "tpl_demo_content_note": "Šis ir demonstrācijas saturs Chamilo Studio. Attīstībai nevajadzētu rediģēt šo failu, tā vietā varat to modificēt un pārdēvēt.",
+    "tpl_start": "Sākt",
+    "tpl_put_your_title_here": "Ievietojiet šeit savu nosaukumu",
+    "tpl_title_a": "Nosaukums A",
+    "tpl_target_audience_and_prerequisites": "Mērķauditorija un priekšnosacījumi",
+    "tpl_who_is_this_training_for": "Kam ir paredzēts šis apmācība?",
+    "tpl_objectives_of_the_course": "Kursa mērķi",
+    "tpl_objective_read_and_analyse": "Lasīt un analizēt grāmatvedības un finanšu dokumentus",
+    "tpl_objective_conducting_project": "Projekta veikšana darba izpildei",
+    "tpl_objective_mastering_tools": "Rīku apguve"
 }

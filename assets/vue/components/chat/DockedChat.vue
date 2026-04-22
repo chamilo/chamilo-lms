@@ -328,7 +328,9 @@ watch(
     return `${r.cid}:${r.sid}:${r.gid}`
   },
   async (nv, ov) => {
-    if (nv === ov)
+    if (nv === ov) {
+      return
+    }
   },
 )
 
@@ -1419,7 +1421,6 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
-
     }
   } catch {
     // keep pending bubble

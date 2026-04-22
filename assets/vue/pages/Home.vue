@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4">
     <SystemAnnouncementCardList />
     <PageCardList />
-
+    <HomeCourseCategoryList v-if="showCategories" />
     <div
       v-if="showCatalogue && visibleCourses.length"
       class="w-full mt-8"
@@ -43,6 +43,7 @@ import { useRouter } from "vue-router"
 import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
 import CatalogueCourseCard from "../components/course/CatalogueCourseCard.vue"
+import HomeCourseCategoryList from "../components/course/HomeCourseCategoryList.vue"
 import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList.vue"
 import PageCardList from "../components/page/PageCardList.vue"
 import Button from "primevue/button"
@@ -60,6 +61,11 @@ if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
 const showCatalogue = computed(
   () => platformConfigStore.getSetting("catalog.course_catalog_display_in_home") === "true",
 )
+
+const showCategories = computed(
+  () => platformConfigStore.getSetting("display.display_categories_on_homepage") === "true",
+)
+
 const allCourses = ref([])
 const visibleCourses = ref([])
 const pageSize = 8

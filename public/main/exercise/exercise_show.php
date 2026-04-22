@@ -664,7 +664,7 @@ foreach ($questionList as $questionId) {
 
             echo '</div>';
 
-            echo '<div id="'.$name.'" class="hidden">';
+            echo '<div id="'.$name.'" class="hidden mt-3">';
 
             $arrid[] = $questionId;
             $feedback_form = new FormValidator('frmcomments'.$questionId);

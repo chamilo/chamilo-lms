@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeUnmount } from "vue"
+import { computed, onBeforeUnmount, ref } from "vue"
 import TinyEditor from "../../components/Editor"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
@@ -429,9 +429,12 @@ function unregisterTinyPickerCallback(cbId) {
 }
 
 function appendParams(rawUrl, params) {
-  const u = new URL(rawUrl, window.location.origin)
-  Object.entries(params).forEach(([k, v]) => u.searchParams.set(k, String(v)))
-  return u.toString()
+  const [path, existingQuery] = rawUrl.split("?")
+  const sp = new URLSearchParams(existingQuery || "")
+  Object.entries(params).forEach(([k, v]) => sp.set(k, String(v)))
+  const qs = sp.toString()
+
+  return qs ? `${path}?${qs}` : path
 }
 
 function buildManagerUrl(meta) {

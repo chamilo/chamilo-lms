@@ -93,11 +93,11 @@
     />
     <BaseButton
       v-if="showDownloadAllButton && !hideDownloadIcon"
+      :disabled="isDownloadingAll"
       :label="t('Download all')"
       icon="download"
       only-icon
       type="primary"
-      :disabled="isDownloadingAll"
       @click="downloadAllItems"
     />
     <BaseButton
@@ -113,10 +113,10 @@
   <BaseTable
     :key="tableRenderKey"
     v-model:filters="filters"
+    v-model:rows="options.itemsPerPage"
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :is-loading="tableIsLoading"
-    v-model:rows="options.itemsPerPage"
     :total-items="totalItems"
     :values="items"
     data-key="iid"
@@ -145,9 +145,9 @@
           <!-- AI badge at the end of the title -->
           <span
             v-if="slotProps.data?.ai_assisted"
+            aria-label="AI-assisted"
             class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
             title="AI-assisted"
-            aria-label="AI-assisted"
           >
             <span aria-hidden="true">🤖</span>
             <span class="font-semibold">AI</span>
@@ -244,10 +244,10 @@
 
           <BaseButton
             v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data) && securityStore.isAdmin"
+            :title="t('Add file variation')"
             icon="file-replace"
             size="small"
             type="secondary-text"
-            :title="t('Add file variation')"
             @click="goToAddVariation(slotProps.data)"
           />
 
@@ -360,14 +360,14 @@
         required="true"
       />
       <label
-        v-text="t('Name')"
         for="title"
+        v-text="t('Name')"
       />
     </FloatLabel>
     <small
       v-if="submitted && !item.title"
-      v-text="t('Title is required')"
       class="p-error"
+      v-text="t('Title is required')"
     />
   </BaseDialogConfirmCancel>
 
@@ -464,9 +464,9 @@
   <!-- AI feedback dialog -->
   <BaseDialogConfirmCancel
     v-model:is-visible="isAiFeedbackDialogVisible"
-    :title="t('Get AI feedback')"
-    :confirm-label="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
     :cancel-label="t('Close')"
+    :confirm-label="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
+    :title="t('Get AI feedback')"
     @confirm-clicked="runAiFeedback"
     @cancel-clicked="closeAiFeedbackDialog"
   >
@@ -485,8 +485,8 @@
 
         <select
           v-model="aiFeedbackProvider"
-          class="w-full rounded border border-gray-300 p-2 text-sm"
           :disabled="aiFeedbackLoading || aiFeedbackSaving || aiFeedbackProviderOptions.length === 0"
+          class="w-full rounded border border-gray-300 p-2 text-sm"
         >
           <option
             v-for="p in aiFeedbackProviderOptions"
@@ -515,10 +515,10 @@
         <div class="text-sm font-semibold">Prompt</div>
         <textarea
           v-model="aiFeedbackPrompt"
-          class="w-full rounded border border-gray-300 p-2 text-sm"
-          rows="4"
-          placeholder="Write your question for the AI..."
           :disabled="aiFeedbackLoading || aiFeedbackSaving"
+          class="w-full rounded border border-gray-300 p-2 text-sm"
+          placeholder="Write your question for the AI..."
+          rows="4"
         />
       </div>
 
@@ -576,14 +576,14 @@
           required
         />
         <label
-          v-text="t('Name')"
           for="templateTitle"
+          v-text="t('Name')"
         />
       </FloatLabel>
       <small
         v-if="submitted && !templateFormData.title"
-        v-text="t('Title is required')"
         class="p-error"
+        v-text="t('Title is required')"
       />
       <BaseFileUpload
         id="post-file"
@@ -925,22 +925,24 @@ function getOnlyofficeButtonTitle() {
 }
 
 function buildOnlyofficeUrl(doc) {
-  const url = new URL(onlyofficeEditorPath.value, window.location.origin)
+  const sp = new URLSearchParams({
+    cid: String(unref(cid) || 0),
+    sid: String(unref(sid) || 0),
+    docId: String(doc.iid),
+    returnUrl: window.location.href,
+  })
 
-  url.searchParams.set("cid", String(unref(cid) || 0))
-  url.searchParams.set("sid", String(unref(sid) || 0))
   const currentGroupId = Number(unref(gid) || 0)
+
   if (currentGroupId > 0) {
-    url.searchParams.set("groupId", String(currentGroupId))
+    sp.set("groupId", String(currentGroupId))
   }
-  url.searchParams.set("docId", String(doc.iid))
-  url.searchParams.set("returnUrl", window.location.href)
 
   if (isOnlyofficeViewOnly(doc) || !canEdit(doc)) {
-    url.searchParams.set("readOnly", "1")
+    sp.set("readOnly", "1")
   }
 
-  return url.toString()
+  return `${onlyofficeEditorPath.value}?${sp.toString()}`
 }
 
 function openWithOnlyoffice(doc) {

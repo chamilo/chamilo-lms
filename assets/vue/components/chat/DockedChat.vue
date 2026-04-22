@@ -6,10 +6,10 @@
     >
       <!-- FAB -->
       <button
-        class="chd-fab"
         :class="{ 'has-unread': fabHasUnread }"
         :title="t('Chat')"
         aria-label="Open chat"
+        class="chd-fab"
         @click="toggleDock(true)"
       >
         <i class="mdi mdi-message-text-outline" />
@@ -18,9 +18,9 @@
       <!-- Dock -->
       <div
         v-if="open"
+        aria-label="Chat dock"
         class="chd-dock"
         role="dialog"
-        aria-label="Chat dock"
       >
         <header class="chd-header">
           <div class="chd-title">
@@ -33,15 +33,15 @@
               @click="toggleStatus"
             >
               <span
-                class="chd-dot"
                 :class="userStatus === 1 ? 'chd-dot--on' : 'chd-dot--off'"
+                class="chd-dot"
               />
               {{ userStatus === 1 ? t("Online") : t("Offline") }}
             </button>
             <button
+              aria-label="Close"
               class="chd-btn chd-btn--ghost"
               @click="toggleDock(false)"
-              aria-label="Close"
             >
               <i class="mdi mdi-close" />
             </button>
@@ -54,9 +54,9 @@
             <div class="chd-sidebar__head">
               <strong>{{ t("Contacts") }}</strong>
               <button
+                :disabled="loadingContacts"
                 class="chd-btn chd-btn--ghost chd-btn--xs"
                 @click="loadContacts"
-                :disabled="loadingContacts"
               >
                 <i class="mdi mdi-refresh" />
               </button>
@@ -68,17 +68,17 @@
               class="chd-ai"
             >
               <button
-                class="chd-ai__btn"
                 :class="{ 'is-active': Number(activePeer?.id || 0) === AI_PEER_ID }"
-                @click="openConversation({ id: AI_PEER_ID, name: t('AI Tutor'), image: '' })"
                 :disabled="tutorCtx.inTest"
                 :title="tutorCtx.inTest ? t('AI tutor is disabled during tests') : t('AI Tutor')"
+                class="chd-ai__btn"
+                @click="openConversation({ id: AI_PEER_ID, name: t('AI Tutor'), image: '' })"
               >
                 <i class="mdi mdi-robot-outline" />
                 <span class="chd-truncate">{{ t("AI Tutor") }}</span>
                 <span
-                  class="chd-presence on"
                   aria-hidden="true"
+                  class="chd-presence on"
                 />
               </button>
 
@@ -118,19 +118,19 @@
                   <img
                     v-if="activePeerAvatar"
                     :src="activePeerAvatar"
-                    class="chd-avatar"
                     alt=""
+                    class="chd-avatar"
                   />
                   <i
                     v-else
-                    class="mdi mdi-account chd-avatar chd-avatar--fallback"
                     aria-hidden="true"
+                    class="mdi mdi-account chd-avatar chd-avatar--fallback"
                   />
                   <div class="chd-peer__meta">
                     <strong class="chd-truncate">{{ activePeer.name }}</strong>
                     <span
-                      class="chd-presence"
                       :class="activePeer.online ? 'on' : 'off'"
+                      class="chd-presence"
                     />
                   </div>
                 </template>
@@ -142,8 +142,8 @@
 
             <!-- Scrollable messages area -->
             <div
-              class="chd-chat__body"
               ref="scrollBox"
+              class="chd-chat__body"
               @scroll.passive="handleScroll"
             >
               <template v-if="activePeer">
@@ -153,8 +153,8 @@
                   :class="bubbleClass(msg)"
                 >
                   <div
-                    class="chd-bubble"
                     :class="{ 'is-pending': msg.pending }"
+                    class="chd-bubble"
                   >
                     <div
                       class="chd-bubble__content"
@@ -164,8 +164,8 @@
                       <span class="chd-bubble__date">{{ formatTs(msg.date) }}</span>
                       <span
                         v-if="isMine(msg)"
-                        class="chd-bubble__ack"
                         :title="ackTitle(msg)"
+                        class="chd-bubble__ack"
                       >
                         {{ ackGlyph(msg) }}
                       </span>
@@ -189,13 +189,13 @@
 
             <!-- Composer -->
             <div
-              class="chd-composer"
               v-if="activePeer"
+              class="chd-composer"
             >
               <textarea
                 v-model.trim="draft"
-                class="chd-input"
                 :placeholder="composerPlaceholder"
+                class="chd-input"
                 rows="2"
                 @keydown="onComposerKeydown"
                 @keydown.enter.prevent.exact="send"
@@ -205,16 +205,16 @@
                 <span class="chd-hint">{{ t("Enter to send · Shift+Enter for newline") }}</span>
                 <div class="chd-spacer" />
                 <button
+                  :disabled="sending || clearing"
                   class="chd-btn chd-btn--danger-outline"
                   @click="clearConversation"
-                  :disabled="sending || clearing"
                 >
                   {{ t("Reset") }}
                 </button>
                 <button
+                  :disabled="sendDisabled"
                   class="chd-btn chd-btn--primary"
                   @click="send"
-                  :disabled="sendDisabled"
                 >
                   <i class="mdi mdi-send" /> {{ t("Send") }}
                 </button>
@@ -228,7 +228,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onBeforeUnmount, watch, onMounted } from "vue"
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
@@ -328,7 +328,7 @@ watch(
     return `${r.cid}:${r.sid}:${r.gid}`
   },
   async (nv, ov) => {
-    if (nv === ov) return
+    if (nv === ov)
   },
 )
 
@@ -474,10 +474,15 @@ function withCidReq(params) {
 
 function addCidReqToUrl(url) {
   try {
-    const u = new URL(url, window.location.origin)
+    const [path, existingQuery] = url.split("?")
+    const sp = new URLSearchParams(existingQuery || "")
     const p = runtimeCidReqParams()
-    Object.entries(p).forEach(([k, v]) => u.searchParams.set(k, String(v)))
-    return u.toString()
+
+    Object.entries(p).forEach(([k, v]) => sp.set(k, String(v)))
+
+    const qs = sp.toString()
+
+    return qs ? `${path}?${qs}` : path
   } catch {
     return url
   }
@@ -804,16 +809,13 @@ function extractPeerIdFromNode(node) {
   if (cand) return cand
   if (node.matches?.("a[href]")) {
     try {
-      const u = new URL(node.getAttribute("href"), window.location.origin)
-      const p = Number(
-        u.searchParams.get("user") ||
-          u.searchParams.get("id") ||
-          u.searchParams.get("uid") ||
-          u.searchParams.get("friend") ||
-          u.searchParams.get("contact") ||
-          0,
-      )
-      if (p) return p
+      const href = node.getAttribute("href") || ""
+      const sp = new URLSearchParams(href.includes("?") ? href.slice(href.indexOf("?") + 1) : "")
+      const p = Number(sp.get("user") || sp.get("id") || sp.get("uid") || sp.get("friend") || sp.get("contact") || 0)
+
+      if (p) {
+        return p
+      }
     } catch {
       // ignore
     }
@@ -1013,10 +1015,13 @@ function onContactsClick(e) {
 
   if (a) {
     try {
-      const u = new URL(a.getAttribute("href"), window.location.origin)
-      const id = Number(u.searchParams.get("user") || u.searchParams.get("id") || 0)
+      const href = a.getAttribute("href") || ""
+      const sp = new URLSearchParams(href.includes("?") ? href.slice(href.indexOf("?") + 1) : "")
+      const id = Number(sp.get("user") || sp.get("id") || 0)
+
       if (id) {
         const name = a.getAttribute("data-name") || a.textContent?.trim() || "User"
+
         return openConversation({ id, name })
       }
     } catch {
@@ -1414,7 +1419,7 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
-      return
+
     }
   } catch {
     // keep pending bubble

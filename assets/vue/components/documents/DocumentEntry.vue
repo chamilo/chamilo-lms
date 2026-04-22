@@ -4,8 +4,8 @@
       v-if="isOnlyofficeSupported"
       :href="onlyofficeUrl"
       class="flex align-center"
-      target="_blank"
       rel="noopener noreferrer"
+      target="_blank"
     >
       <ResourceIcon
         :resource-data="data"
@@ -40,8 +40,8 @@
       v-else
       :data-type="dataType"
       :url="data.contentUrl"
-      download
       class="flex align-center"
+      download
     >
       <ResourceIcon
         :resource-data="data"
@@ -185,14 +185,14 @@ const isOnlyofficeSupported = computed(() => {
 })
 
 const onlyofficeUrl = computed(() => {
-  const url = new URL(onlyofficeEditorPath.value, window.location.origin)
+  const sp = new URLSearchParams({
+    cid: String(cidQuery.cid || 0),
+    sid: String(cidQuery.sid || 0),
+    groupId: String(cidQuery.gid || 0),
+    docId: String(props.data.iid),
+    returnUrl: window.location.href,
+  })
 
-  url.searchParams.set("cid", String(cidQuery.cid || 0))
-  url.searchParams.set("sid", String(cidQuery.sid || 0))
-  url.searchParams.set("groupId", String(cidQuery.gid || 0))
-  url.searchParams.set("docId", String(props.data.iid))
-  url.searchParams.set("returnUrl", window.location.href)
-
-  return url.toString()
+  return `${onlyofficeEditorPath.value}?${sp.toString()}`
 })
 </script>

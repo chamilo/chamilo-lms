@@ -7,22 +7,22 @@
       <div class="p-4 flex flex-row gap-1 mb-2">
         <div class="flex flex-row gap-2">
           <Button
+            :label="t('New folder')"
             class="btn btn--success"
             icon="fa fa-folder-plus"
-            :label="t('New folder')"
             @click="openNewDialog"
           />
           <Button
+            :label="t('Upload')"
             class="btn btn--primary"
             icon="fa fa-file-upload"
-            :label="t('Upload')"
             @click="uploadDocumentHandler"
           />
           <Button
             v-if="selectedFiles.length"
+            :label="t('Delete')"
             class="btn btn--danger"
             icon="mdi mdi-delete"
-            :label="t('Delete')"
             @click="confirmDeleteMultiple"
           />
           <Button
@@ -32,9 +32,9 @@
           />
           <Button
             v-if="previousFolders.length"
+            :label="t('Back')"
             class="btn btn--primary"
             icon="mdi mdi-arrow-left"
-            :label="t('Back')"
             @click="goBack"
           />
         </div>
@@ -124,8 +124,8 @@
             <div class="flex flex-row gap-2">
               <Button
                 v-if="slotProps.data.resourceNode.firstResourceFile"
-                class="p-button-sm p-button p-mr-2"
                 :label="t('Select')"
+                class="p-button-sm p-button p-mr-2"
                 @click="returnToEditor(slotProps.data)"
               />
             </div>
@@ -171,15 +171,17 @@
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="previousPage"
         >
-          {{ t('Previous') }}
+          {{ t("Previous") }}
         </button>
-        <span class="text-gray-700 font-semibold">{{ t('Page') }} {{ filters.page }} {{ t('of') }} {{ totalPages }}</span>
+        <span class="text-gray-700 font-semibold">
+          {{ t("Page") }} {{ filters.page }} {{ t("of") }} {{ totalPages }}
+        </span>
         <button
           :disabled="filters.page === totalPages"
           class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300"
           @click="nextPage"
         >
-          {{ t('Next') }}
+          {{ t("Next") }}
         </button>
       </div>
       <BaseContextMenu
@@ -190,11 +192,11 @@
         <ul>
           <li @click="selectFile(contextMenuFile)">
             <span class="mdi mdi-file-check-outline"></span>
-            {{ t('Select') }}
+            {{ t("Select") }}
           </li>
           <li @click="confirmDeleteItem(contextMenuFile)">
             <span class="mdi mdi-delete-outline"></span>
-            {{ t('Delete') }}
+            {{ t("Delete") }}
           </li>
         </ul>
       </BaseContextMenu>
@@ -225,15 +227,15 @@
       </div>
       <template #footer>
         <Button
+          :label="t('Cancel')"
           class="p-button-text"
           icon="mdi mdi-close"
-          :label="t('Cancel')"
           @click="hideDialog"
         />
         <Button
+          :label="t('Save')"
           class="p-button-text"
           icon="mdi mdi-check"
-          :label="t('Save')"
           @click="saveItem"
         />
       </template>
@@ -241,9 +243,9 @@
 
     <Dialog
       v-model:visible="deleteDialog"
+      :header="t('Confirm')"
       :modal="true"
       :style="{ width: '450px' }"
-      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
@@ -254,15 +256,15 @@
       </div>
       <template #footer>
         <Button
+          :label="t('No')"
           class="p-button-text"
           icon="mdi mdi-close"
-          :label="t('No')"
           @click="deleteDialog = false"
         />
         <Button
+          :label="t('Yes')"
           class="p-button-text"
           icon="mdi mdi-check"
-          :label="t('Yes')"
           @click="deleteItemButton"
         />
       </template>
@@ -270,9 +272,9 @@
 
     <Dialog
       v-model:visible="deleteMultipleDialog"
+      :header="t('Confirm')"
       :modal="true"
       :style="{ width: '450px' }"
-      :header="t('Confirm')"
     >
       <div class="confirmation-content">
         <i
@@ -283,15 +285,15 @@
       </div>
       <template #footer>
         <Button
+          :label="t('No')"
           class="p-button-text"
           icon="mdi mdi-close"
-          :label="t('No')"
           @click="deleteMultipleDialog = false"
         />
         <Button
+          :label="t('Yes')"
           class="p-button-text"
           icon="mdi mdi-check"
-          :label="t('Yes')"
           @click="deleteMultipleItems"
         />
       </template>
@@ -304,22 +306,28 @@
       :style="{ width: '50%' }"
     >
       <div v-if="Object.keys(selectedItem).length > 0">
-        <p><strong>{{ $t('Title') }}:</strong> {{ selectedItem.title }}</p>
-        <p><strong>{{ $t('Modified') }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
-        <p><strong>{{ $t('Size') }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
+        <p>
+          <strong>{{ $t("Title") }}:</strong> {{ selectedItem.title }}
+        </p>
+        <p>
+          <strong>{{ $t("Modified") }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}
+        </p>
+        <p>
+          <strong>{{ $t("Size") }}:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}
+        </p>
         <p>
           <strong>URL:</strong>
           <a
             :href="selectedItem.contentUrl"
             target="_blank"
-            >{{ $t('Open File') }}</a
+            >{{ $t("Open File") }}</a
           >
         </p>
       </div>
       <template #footer>
         <Button
-          class="p-button-text"
           :label="t('Close')"
+          class="p-button-text"
           @click="closeDetailsDialog"
         />
       </template>
@@ -403,18 +411,11 @@ const filterType = computed(() => {
   return ["files", "images", "media"].includes(raw) ? raw : "files"
 })
 
-function toAbsoluteUrl(raw) {
-  const v = String(raw || "").trim()
-  if (!v) return ""
-  try {
-    return new URL(v, window.location.origin).href
-  } catch {
-    return v
-  }
-}
-
 function resolveItemUrl(entry) {
-  if (!entry?.resourceNode?.firstResourceFile) return ""
+  if (!entry?.resourceNode?.firstResourceFile) {
+    return ""
+  }
+
   return (
     entry?.contentUrl || entry?.downloadUrl || entry?.url || entry?.resourceNode?.firstResourceFile?.contentUrl || ""
   )
@@ -459,7 +460,8 @@ const filteredFiles = computed(() => {
 })
 
 function returnToEditor(entry) {
-  const url = toAbsoluteUrl(resolveItemUrl(entry))
+  const url = resolveItemUrl(entry)
+
   if (!url) {
     console.warn("[FILEMANAGER PICKER] No URL found for the selected entry")
     return

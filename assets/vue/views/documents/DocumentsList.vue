@@ -1429,7 +1429,7 @@ function btnEditOnClick(item) {
     return
   }
 
-  if ("file" === item.filetype || "certificate" === item.filetype) {
+  if ("file" === item.filetype || "certificate" === item.filetype || "html" === item.filetype) {
     folderParams.getFile = true
     router.push({ name: "DocumentsUpdateFile", params: { id: item["@id"] }, query: folderParams })
   }

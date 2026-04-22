@@ -111,6 +111,10 @@
     "Section collapse": "Atal kolapsagarria",
     "Index Table": "Indize Taula",
     "fxTools": "fxTresnak",
+    "Tools": "Tresnak",
+    "Project theme": "Proiektuaren gaia",
+    "Page style": "Orrialdearen estiloa",
+    "Quiz style": "Galdeketa estiloa",
     "Content elements": "Eduki elementuak",
     "Button": "Botoia",
     "Insert": "Txertatu",
@@ -124,5 +128,15 @@
     "Edition filltext": "Edizio bete-testua",
     "Edition findwords": "Edizio aurkitu-hitzak",
     "Edition markwords": "Edizio markatu-hitzak",
-    "Edition sorttheparagraphs": "Edizio ordenatu-paragrafoak"
+    "Edition sorttheparagraphs": "Edizio ordenatu-paragrafoak",
+    "tpl_demo_content_note": "Hau Chamilo Studio-rako demo edukia da. Garapenerako, ez aldatu fitxategi hau, aldatu eta berrizendatu dezakezu.",
+    "tpl_start": "Hasi",
+    "tpl_put_your_title_here": "Ipini zure izenburua hemen",
+    "tpl_title_a": "Izenburu A",
+    "tpl_target_audience_and_prerequisites": "Helduen publikoa eta aurrebaldintzak",
+    "tpl_who_is_this_training_for": "Nork osatzen du prestakuntza hau?",
+    "tpl_objectives_of_the_course": "Ikastaroaren helburuak",
+    "tpl_objective_read_and_analyse": "Irakurri eta analizatu kontabilitate eta finantza dokumentuak",
+    "tpl_objective_conducting_project": "Proiektu bat egitea lanak burutzeko",
+    "tpl_objective_mastering_tools": "Tresnak menderatzea"
 }

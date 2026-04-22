@@ -24,8 +24,8 @@
       :items="blockUsers.items"
       :search-url="blockUsers.searchUrl"
       :title="t('User management')"
-      icon="account"
       bg-image="images/bg-block-admin-users.png"
+      icon="account"
     />
 
     <AdminBlock
@@ -37,8 +37,8 @@
       :items="blockCourses.items"
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
-      icon="courses"
       bg-image="images/bg-block-admin-courses.png"
+      icon="courses"
     />
 
     <AdminBlock
@@ -50,8 +50,8 @@
       :items="blockSessions.items"
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
-      icon="sessions"
       bg-image="images/bg-block-admin-sessions.png"
+      icon="sessions"
     />
 
     <AdminBlock
@@ -63,8 +63,8 @@
       :items="blockPlatform.items"
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
-      icon="admin-settings"
       bg-image="images/bg-block-admin-platform.png"
+      icon="admin-settings"
     />
 
     <AdminBlock
@@ -75,8 +75,8 @@
       :editable="blockTracking.editable"
       :items="blockTracking.items"
       :title="t('Tracking')"
-      icon="tracking"
       bg-image="images/bg-block-admin-tracking.png"
+      icon="tracking"
     />
 
     <AdminBlock
@@ -86,8 +86,8 @@
       :editable="blockGradebook.editable"
       :items="blockGradebook.items"
       :title="t('Assessments')"
-      icon="gradebook"
       bg-image="images/bg-block-admin-gradebook.png"
+      icon="gradebook"
     />
 
     <AdminBlock
@@ -98,8 +98,8 @@
       :editable="blockSkills.editable"
       :items="blockSkills.items"
       :title="t('Skills')"
-      icon="gradebook"
       bg-image="images/bg-block-admin-skills.png"
+      icon="gradebook"
     />
 
     <AdminBlock
@@ -110,8 +110,8 @@
       :editable="blockSettings.editable"
       :items="blockSettings.items"
       :title="t('System')"
-      icon="settings"
       bg-image="images/bg-block-admin-settings.png"
+      icon="settings"
     />
 
     <AdminBlock
@@ -121,8 +121,8 @@
       :editable="blockRooms.editable"
       :items="blockRooms.items"
       :title="t('Rooms')"
-      icon="room"
       bg-image="images/bg-block-admin-rooms.png"
+      icon="room"
     />
 
     <AdminBlock
@@ -133,8 +133,8 @@
       :editable="blockSecurity.editable"
       :items="blockSecurity.items"
       :title="t('Security')"
-      icon="shield-check"
       bg-image="images/bg-block-admin-security.png"
+      icon="shield-check"
     />
 
     <AdminBlock
@@ -144,8 +144,8 @@
       :editable="blockPrivacy.editable"
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
-      icon="anonymous"
       bg-image="images/bg-block-admin-privacy.png"
+      icon="anonymous"
     />
 
     <AdminBlock
@@ -153,8 +153,8 @@
       :id="blockPlugins.id"
       :items="blockPlugins.items"
       :title="t('Plugins')"
-      icon="plugin"
       bg-image="images/bg-block-plugins.png"
+      icon="plugin"
     />
 
     <AdminBlock
@@ -162,8 +162,8 @@
       :id="blockHealthCheck.id"
       :items="blockHealthCheck.items"
       :title="t('Health check')"
-      icon="health-check"
       bg-image="images/bg-block-admin-health-check.png"
+      icon="health-check"
     />
 
     <!-- Small / secondary blocks: sent to the bottom -->
@@ -183,11 +183,24 @@
       class="p-card p-component block-admin-version admin-index__block-container"
     >
       <div class="p-card-body">
-        <h4><i class="mdi mdi-checkbox-multiple-marked text-xl" /> {{t('Version check')}}</h4>
+        <div class="p-card-caption">
+          <div class="p-card-title">
+            <span
+              aria-hidden="true"
+              class="base-icon base-icon--normal"
+            >
+              <i
+                aria-hidden="true"
+                class="mdi mdi-checkbox-multiple-marked"
+              />
+            </span>
+            {{ t("Version check") }}
+          </div>
+        </div>
 
         <div
           v-if="blockVersionStatusEl"
-          class="block-admin-version__status"
+          class="block-admin-version__status text-body-2"
           v-html="blockVersionStatusEl"
         />
         <div
@@ -195,7 +208,6 @@
           class="block-admin-version__form"
         >
           <i18n-t
-            class="mb-3"
             keypath="In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
             tag="p"
           >
@@ -218,91 +230,89 @@
             name="VersionCheck"
             @submit.prevent="checkVersionOnSubmit"
           >
-            <div class="field-checkbox">
-              <Checkbox
-                v-model="doNotListCampus"
-                binary
-                input-id="checkbox"
-                name="donotlistcampus"
-              />
-              <label
-                v-text="t('Hide campus from public platforms list')"
-                for="checkbox"
-              />
-            </div>
+            <BaseCheckbox
+              id="checkbox"
+              v-model="doNotListCampus"
+              :label="t('Hide campus from public platforms list')"
+              name="donotlistcampus"
+              class="text-body-2"
+            />
 
-            <Button
+            <BaseButton
               id="register"
               :label="t('Enable version check')"
+              icon="check"
+              isSubmit
               name="Register"
-              severity="secondary"
-              type="submit"
+              type="secondary"
             />
           </form>
         </div>
       </div>
     </div>
 
-    <div
+    <BaseCard
       v-if="securityStore.isAdmin"
-      class="p-card p-component block-admin-support admin-index__block-container"
+      class="block-admin-support admin-index__block-container"
     >
-      <div class="p-card-body">
-        <h4><i class="mdi mdi-face-agent text-xl" /> {{t('Professional support')}}</h4>
-
-        <div
-          v-if="blockSupportStatusEl"
-          class="block-admin-support__status"
-          v-html="blockSupportStatusEl"
+      <template #title>
+        <i
+          class="mdi mdi-face-agent"
+          aria-hidden="true"
         />
-        <div
-          v-else
-          class="block-admin-news__status"
-        >
-          <i18n-t
-            class="mb-3"
-            keypath="Disabled"
-            tag="p"
-          >
-          </i18n-t>
-        </div>
-      </div>
-    </div>
+        {{ t("Professional support") }}
+      </template>
 
-    <div
+      <div
+        v-if="blockSupportStatusEl"
+        class="block-admin-support__status text-body-2"
+        v-html="blockSupportStatusEl"
+      />
+      <div
+        v-else
+        class="block-admin-news__status"
+      >
+        <p class="mb-3">{{ t("Disabled") }}</p>
+      </div>
+    </BaseCard>
+
+    <BaseCard
       v-if="securityStore.isAdmin"
-      class="p-card p-component block-admin-news admin-index__block-container"
+      class="block-admin-news admin-index__block-container"
     >
-      <div class="p-card-body">
-        <h4><i class="mdi mdi-bullhorn text-xl" /> {{t('News from Chamilo')}}</h4>
+      <template #title>
+        <i
+          class="mdi mdi-bullhorn"
+          aria-hidden="true"
+        />
+        {{ t("News from Chamilo") }}
+      </template>
 
-        <div
-          v-if="blockNewsStatusEl"
-          class="block-admin-news__status"
-          v-html="blockNewsStatusEl"
-        />
-        <div
-          v-else
-          v-text="t('Disabled')"
-          class="block-admin-news__status"
-        />
-      </div>
-    </div>
+      <div
+        v-if="blockNewsStatusEl"
+        class="block-admin-news__status"
+        v-html="blockNewsStatusEl"
+      />
+      <div
+        v-else
+        class="block-admin-news__status"
+        v-text="t('Disabled')"
+      />
+    </BaseCard>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import Button from "primevue/button"
-import Checkbox from "primevue/checkbox"
 import Skeleton from "primevue/skeleton"
+import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import AdminBlock from "../../components/admin/AdminBlock"
 
 import { useSecurityStore } from "../../store/securityStore"
-
 import { useIndexBlocks } from "../../composables/admin/indexBlocks"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 

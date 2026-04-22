@@ -19,8 +19,11 @@ use RuntimeException;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -233,7 +236,7 @@ class SessionListController extends AbstractController
     }
 
     #[Route('-action', name: 'admin_session_list_action', methods: ['POST'])]
-    public function action(Request $request): JsonResponse
+    public function action(Request $request): Response
     {
         $action = (string) $request->request->get('action', '');
         $sessionIds = $request->request->all('sessionIds');
@@ -352,14 +355,16 @@ class SessionListController extends AbstractController
                 }
 
                 try {
-                    // This method sends headers and calls exit() on success
-                    SessionManager::exportSessionsAsZip($sessionIds);
-                } catch (RuntimeException) {
-                    return $this->json(['error' => 'No data to export.'], 400);
+                    $zipPath = SessionManager::exportSessionsAsZip($sessionIds);
+                } catch (RuntimeException $e) {
+                    return $this->json(['error' => $e->getMessage()], 400);
                 }
 
-                // Fallback — should not be reached
-                return $this->json(['error' => 'No data to export.'], 400);
+                $response = new BinaryFileResponse($zipPath);
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'sessions_courses_reports.zip');
+                $response->deleteFileAfterSend(true);
+
+                return $response;
 
             default:
                 return $this->json(['error' => 'Unknown action.'], 400);

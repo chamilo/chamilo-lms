@@ -10749,56 +10749,81 @@ class SessionManager
     /**
      * Exports session data as a ZIP file with CSVs and sends it for download.
      */
-    public static function exportSessionsAsZip(array $sessionList): void
+    public static function exportSessionsAsZip(array $sessionList): string
     {
-        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH) . api_get_unique_id() . '.zip';
-        $tempDir = dirname($tempZipFile);
+        $archivePath = api_get_path(SYS_ARCHIVE_PATH);
+        $tempZipFile = $archivePath.api_get_unique_id().'.zip';
 
-        if (!is_dir($tempDir) || !is_writable($tempDir)) {
-            exit("The directory for creating the ZIP file does not exist or lacks write permissions: $tempDir");
+        if (!is_dir($archivePath) || !is_writable($archivePath)) {
+            throw new \RuntimeException("Archive directory is not writable: $archivePath");
         }
 
         $zip = new \ZipArchive();
-        if ($zip->open($tempZipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            exit("Unable to open the ZIP file for writing: $tempZipFile");
+        if (true !== $zip->open($tempZipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
+            throw new \RuntimeException("Unable to open ZIP for writing: $tempZipFile");
         }
+
+        $tempCsvFiles = [];
 
         foreach ($sessionList as $sessionItemId) {
             $courses = SessionManager::get_course_list_by_session_id($sessionItemId);
 
-            if (!empty($courses)) {
-                foreach ($courses as $course) {
-                    $courseCode = $course['course_code'];
-                    $courseId = $course['id'];
-                    $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionItemId);
-                    $userIds = array_keys($studentList);
+            if (empty($courses)) {
+                continue;
+            }
 
-                    [$csvHeaders, $csvContent] = self::generateSessionCourseReportData($sessionItemId, $courseId, $userIds);
-                    array_unshift($csvContent, $csvHeaders);
+            $sessionInfo = api_get_session_info($sessionItemId);
 
-                    $sessionInfo = api_get_session_info($sessionItemId);
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $csvFileName = $sessionInfo['name'] . '_' . $courseInfo['name'] . '.csv';
+            foreach ($courses as $course) {
+                $courseCode = $course['course_code'];
+                $courseId = $course['id'];
+                $courseInfo = api_get_course_info_by_id($courseId);
 
-                    $csvFilePath = Export::arrayToCsvSimple($csvContent, $csvFileName, true);
+                $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionItemId);
+                $userIds = array_keys($studentList);
 
-                    if ($csvFilePath && file_exists($csvFilePath)) {
-                        $zip->addFile($csvFilePath, $csvFileName);
-                    }
+                [$csvHeaders, $csvContent] = self::generateSessionCourseReportData($sessionItemId, $courseId, $userIds);
+                array_unshift($csvContent, $csvHeaders);
+
+                // Use a unique temp path to avoid collisions from special characters in names
+                $tempCsvPath = $archivePath.api_get_unique_id().'.csv';
+                $handle = fopen($tempCsvPath, 'w');
+                if (false === $handle) {
+                    continue;
+                }
+                foreach ($csvContent as $row) {
+                    fputcsv($handle, (array) $row, ',');
+                }
+                fclose($handle);
+
+                // Build a safe internal ZIP filename from the human-readable names
+                $safeName = preg_replace('/[\/\\\:\*\?"<>\|]/', '_', $sessionInfo['name'].'_'.$courseInfo['name']);
+                $internalName = $safeName.'.csv';
+
+                if ($zip->addFile($tempCsvPath, $internalName)) {
+                    $tempCsvFiles[] = $tempCsvPath;
+                } else {
+                    unlink($tempCsvPath);
                 }
             }
         }
 
         if (!$zip->close()) {
-            exit("Could not close the ZIP file correctly.");
+            foreach ($tempCsvFiles as $f) {
+                @unlink($f);
+            }
+            throw new \RuntimeException('Could not close the ZIP archive.');
         }
 
-        if (file_exists($tempZipFile)) {
-            DocumentManager::file_send_for_download($tempZipFile, true);
-            unlink($tempZipFile);
-        } else {
-            exit("The ZIP file was not created correctly.");
+        foreach ($tempCsvFiles as $f) {
+            @unlink($f);
         }
+
+        if (!file_exists($tempZipFile)) {
+            throw new \RuntimeException('ZIP file was not created. The selected sessions may have no courses.');
+        }
+
+        return $tempZipFile;
     }
 
     private static function generateSessionCourseReportData($sessionId, $courseId, $userIds): array

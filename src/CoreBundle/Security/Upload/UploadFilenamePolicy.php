@@ -77,9 +77,15 @@ final class UploadFilenamePolicy
             return ['allowed' => true, 'filename' => $filename];
         }
 
+        $svgEnabled = $this->isSvgUploadEnabled();
+
         if ('whitelist' === $listType) {
             $whitelist = $this->splitList((string) $this->settingsManager->getSetting('document.upload_extensions_whitelist', true));
             $whitelist = $this->mergeWithBuiltInSafeExtensions($whitelist);
+
+            if ($svgEnabled && !\in_array('svg', $whitelist, true)) {
+                $whitelist[] = 'svg';
+            }
 
             if (!\in_array($ext, $whitelist, true)) {
                 if ($skip) {
@@ -98,6 +104,11 @@ final class UploadFilenamePolicy
 
         // Default: blacklist mode
         $blacklist = $this->splitList((string) $this->settingsManager->getSetting('document.upload_extensions_blacklist', true));
+
+        if (!$svgEnabled && !\in_array('svg', $blacklist, true)) {
+            $blacklist[] = 'svg';
+        }
+
         if (\in_array($ext, $blacklist, true)) {
             if ($skip) {
                 return ['allowed' => false, 'filename' => $filename, 'reason' => 'Extension in blacklist'];
@@ -111,6 +122,11 @@ final class UploadFilenamePolicy
         }
 
         return ['allowed' => true, 'filename' => $filename];
+    }
+
+    private function isSvgUploadEnabled(): bool
+    {
+        return 'true' === strtolower((string) $this->settingsManager->getSetting('editor.enabled_support_svg', true));
     }
 
     private function getExtension(string $filename): string

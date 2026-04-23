@@ -446,6 +446,14 @@ class learnpath
             $exercise->disable();
             $exercise->save();
             $title = $exercise->get_formated_title();
+
+            // Update the ResourceLink visibility to DRAFT so students cannot access the quiz directly
+            $quizRepo = Container::getQuizRepository();
+            $quizEntity = $quizRepo->find($id);
+            if (null !== $quizEntity) {
+                $courseEntity = api_get_course_entity($course_id);
+                $quizRepo->setVisibilityDraft($quizEntity, $courseEntity);
+            }
         }
 
         $lpItem = (new CLpItem())

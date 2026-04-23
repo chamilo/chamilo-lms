@@ -6,8 +6,10 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import lpService from "../../services/lpService"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const route = useRoute()
 
 const props = defineProps({
@@ -22,18 +24,7 @@ const props = defineProps({
   ringValue: { type: Function, required: true },
 })
 
-const emit = defineEmits([
-  "edit",
-  "report",
-  "settings",
-  "toggle-visible",
-  "toggle-publish",
-  "delete",
-  "export-scorm",
-  "export-pdf",
-  "toggle-auto-launch",
-  "update-scorm",
-])
+const emit = defineEmits(["export-pdf"])
 
 const lpType = computed(() => {
   const v = props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0
@@ -53,6 +44,50 @@ const openUrl = computed(() =>
     isStudentView: isStudentView.value ? "true" : "false",
   }),
 )
+
+const exportScormUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "export", { ...props.legacyContext }),
+)
+
+const updateScormUrl = computed(() =>
+  lpService.buildLegacyActionUrl("update_scorm", {
+    ...props.legacyContext,
+    params: { lp_id: props.lp.iid },
+  }),
+)
+
+const togglePublishUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
+    ...props.legacyContext,
+    params: { new_status: props.lp.published === "v" ? "i" : "v" },
+  }),
+)
+
+const toggleVisibleUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
+    ...props.legacyContext,
+    params: { new_status: typeof props.lp.visible !== "undefined" ? (props.lp.visible ? 0 : 1) : 1 },
+  }),
+)
+
+const toggleAutoLaunchUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "auto_launch", {
+    ...props.legacyContext,
+    params: { status: Number(props.lp.autolaunch) === 1 ? 0 : 1 },
+  }),
+)
+
+const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", { ...props.legacyContext }))
+
+const onDelete = () => {
+  const label = (props.lp.title || "").trim() || t("Learning path")
+  requireConfirmation({
+    message: `${t("Are you sure to delete")} ${label}?`,
+    accept: () => {
+      window.location.href = deleteUrl.value
+    },
+  })
+}
 
 const dateText = computed(() => {
   const v = props.buildDates ? props.buildDates(props.lp) : ""
@@ -81,25 +116,25 @@ const buttonActions = computed(() =>
     {
       label: t("Reports"),
       icon: "tracking",
-      command: () => emit("report", props.lp),
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "report", { ...props.legacyContext }),
       visible: true,
     },
     {
       label: t("Visibility"),
       icon: "visible",
-      command: () => emit("toggle-visible", props.lp),
+      toUrl: toggleVisibleUrl.value,
       visible: true,
     },
     {
       label: t("Settings"),
       icon: "cog",
-      command: () => emit("settings", props.lp),
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "edit", { ...props.legacyContext }),
       visible: true,
     },
     {
       label: t("Export as SCORM"),
       icon: "zip-pack",
-      command: () => emit("export-scorm", props.lp),
+      toUrl: exportScormUrl.value,
       visible: props.canExportScorm,
       styleClass: "hidden md:flex",
     },
@@ -107,7 +142,7 @@ const buttonActions = computed(() =>
       label: t("Update SCORM"),
       visible: canUpdateScorm.value,
       icon: "upload",
-      command: () => emit("update-scorm", props.lp),
+      toUrl: updateScormUrl.value,
       styleClass: "hidden md:flex",
     },
     {
@@ -124,7 +159,7 @@ const buttonActions = computed(() =>
           : t("Enable learning path auto-launch"),
       icon: Number(props.lp.autolaunch) === 1 ? "autolunch" : "autolunch-off",
       visible: props.canAutoLaunch,
-      command: () => emit("toggle-auto-launch", props.lp),
+      toUrl: toggleAutoLaunchUrl.value,
       styleClass: "hidden md:flex",
     },
   ].filter((a) => a.visible),
@@ -134,16 +169,16 @@ const mItemActions = ref()
 const itemActions = [
   {
     label: t("Publish / Hide"),
-    command: () => emit("toggle-publish", props.lp),
+    url: togglePublishUrl.value,
   },
   {
     label: t("Update SCORM"),
     visible: canUpdateScorm.value,
-    command: () => emit("update-scorm", props.lp),
+    url: updateScormUrl.value,
   },
   {
     label: t("Delete"),
-    command: () => emit("delete", props.lp),
+    command: onDelete,
   },
 ]
 
@@ -151,25 +186,25 @@ const mItemActionsMobile = ref()
 const itemActionsMobile = [
   {
     label: t("Publish / Hide"),
-    command: () => emit("toggle-publish", props.lp),
+    url: togglePublishUrl.value,
   },
   {
     label: t("Export as SCORM"),
-    command: () => emit("export-scorm", props.lp),
+    url: exportScormUrl.value,
     visible: props.canExportScorm,
   },
   {
     label: t("Update SCORM"),
     visible: canUpdateScorm.value,
-    command: () => emit("update-scorm", props.lp),
+    url: updateScormUrl.value,
   },
   {
     label: t("Settings"),
-    command: () => emit("settings", props.lp),
+    url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext),
   },
   {
     label: t("Delete"),
-    command: () => emit("delete", props.lp),
+    command: onDelete,
   },
 ]
 </script>
@@ -290,13 +325,13 @@ const itemActionsMobile = [
 
         <BaseButton
           :label="t('More actions')"
+          class="lp-panel__mobile-dropdown"
           icon="dots-vertical"
           only-icon
           popup-identifier="lp-menu-mobile"
           size="small"
           type="tertiary-alternative-text"
           @click="mItemActionsMobile.toggle($event)"
-          class="lp-panel__mobile-dropdown"
         />
         <BaseMenu
           id="lp-menu-mobile"
@@ -337,13 +372,13 @@ const itemActionsMobile = [
 
             <BaseButton
               :label="t('More actions')"
+              class="hidden md:flex"
               icon="dots-vertical"
               only-icon
               popup-identifier="lp-menu"
               size="small"
               type="tertiary-alternative-text"
               @click="mItemActions.toggle($event)"
-              class="hidden md:flex"
             />
             <BaseMenu
               id="lp-menu"

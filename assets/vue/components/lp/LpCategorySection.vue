@@ -23,20 +23,7 @@ const props = defineProps({
   isSessionCategory: { type: Boolean, default: false },
 })
 
-const emit = defineEmits([
-  "edit",
-  "report",
-  "settings",
-  "build",
-  "toggle-visible",
-  "toggle-publish",
-  "delete",
-  "export-scorm",
-  "export-pdf",
-  "update-scorm",
-  "reorder",
-  "toggle-auto-launch",
-])
+const emit = defineEmits(["export-pdf", "reorder"])
 
 const displayTitle = computed(() => props.title || t("Learning path categories"))
 
@@ -317,24 +304,13 @@ const toggleOpen = () => {
         <template #item="{ element }">
           <LpCardItem
             :buildDates="buildDates"
-            :canAutoLaunch="canAutoLaunch"
             :canEdit="canEdit"
             :canExportPdf="canExportPdf"
             :canExportScorm="canExportScorm"
             :lp="element"
             :ringDash="ringDash"
             :ringValue="ringValue"
-            @build="emit('build', element)"
-            @delete="emit('delete', element)"
-            @edit="emit('edit', element)"
-            @report="emit('report', element)"
-            @settings="emit('settings', element)"
-            @toggle-auto-launch="emit('toggle-auto-launch', element)"
-            @toggle-visible="emit('toggle-visible', element)"
-            @toggle-publish="emit('toggle-publish', element)"
-            @export-scorm="emit('export-scorm', element)"
             @export-pdf="emit('export-pdf', element)"
-            @update-scorm="emit('update-scorm', element)"
           />
         </template>
       </Draggable>

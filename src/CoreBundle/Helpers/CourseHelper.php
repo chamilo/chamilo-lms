@@ -1762,7 +1762,7 @@ class CourseHelper
             ->from(CourseRelUser::class, 'cru')
             ->andWhere('cru.user = :user')
             ->andWhere('cru.status = :status')
-            ->setParameter('user', $user)
+            ->setParameter('user', $user->getId())
             ->setParameter('status', CourseRelUser::TEACHER)
         ;
 

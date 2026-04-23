@@ -190,15 +190,13 @@ const progressTextClass = computed(() =>
 
       <div class="min-w-0 flex ml-2 md:ml-0">
         <div class="flex-1">
-          <h3 class="font-semibold text-gray-90 leading-none md:truncate text-lg md:text-xl leading-none">
-            <BaseAppLink
-              :title="t('Open')"
-              :url="openUrl"
-              class="lp-panel__title"
-            >
-              {{ lp.title || t("Learning path title here") }}
-            </BaseAppLink>
-          </h3>
+          <BaseAppLink
+            :title="t('Open')"
+            :url="openUrl"
+            class="lp-panel__title"
+          >
+            {{ lp.title || t("Learning path title here") }}
+          </BaseAppLink>
           <div
             v-if="lp.prerequisiteName"
             class="mt-1 text-caption text-support-5 flex items-center gap-1.5"

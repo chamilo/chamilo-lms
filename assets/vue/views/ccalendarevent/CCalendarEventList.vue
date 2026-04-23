@@ -112,10 +112,11 @@
       </div>
 
       <template #footer>
-        <a
-          v-text="t('Go to session')"
-          :href="sessionState.sessionAsEvent.url"
-          class="btn btn--secondary"
+        <BaseButton
+          :label="t('Go to session')"
+          :to-url="sessionState.sessionAsEvent.url"
+          icon="sessions"
+          type="secondary"
         />
       </template>
     </Dialog>

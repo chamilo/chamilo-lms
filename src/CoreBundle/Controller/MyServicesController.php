@@ -21,8 +21,7 @@ class MyServicesController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly PluginHelper $pluginHelper,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     #[Route('/my-services-data', name: 'chamilo_core_my_services_data', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]

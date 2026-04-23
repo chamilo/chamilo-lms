@@ -46,7 +46,7 @@ final readonly class CopyDocumentToPersonalFileProcessor implements ProcessorInt
             throw new AccessDeniedHttpException('Authentication is required.');
         }
 
-        assert($data instanceof CDocument);
+        \assert($data instanceof CDocument);
 
         if ('file' !== $data->getFiletype()) {
             throw new BadRequestHttpException('Only files can be copied to personal files.');

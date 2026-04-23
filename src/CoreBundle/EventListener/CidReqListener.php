@@ -20,7 +20,6 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -162,9 +161,7 @@ class CidReqListener
             }
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new NotAllowedException(
-                    $this->translator->trans("You're not allowed in this course")
-                );
+                throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
             }
 
             $sessionId = (int) $request->get('sid');

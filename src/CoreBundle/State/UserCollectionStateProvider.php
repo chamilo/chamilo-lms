@@ -20,9 +20,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Doctrine\DBAL\Types\Types;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**

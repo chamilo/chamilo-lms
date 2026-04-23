@@ -118,20 +118,20 @@ class CourseHelper
                 return [];
             }
 
-            if (is_scalar($value)) {
+            if (\is_scalar($value)) {
                 $intValue = (int) $value;
 
                 return $intValue > 0 ? [$intValue] : [];
             }
 
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 return [];
             }
 
             $normalized = [];
 
             foreach ($value as $item) {
-                if (is_scalar($item)) {
+                if (\is_scalar($item)) {
                     $intValue = (int) $item;
 
                     if ($intValue > 0) {
@@ -141,9 +141,9 @@ class CourseHelper
                     continue;
                 }
 
-                if (is_array($item)) {
+                if (\is_array($item)) {
                     foreach (['id', 'value', 'code'] as $key) {
-                        if (isset($item[$key]) && is_scalar($item[$key])) {
+                        if (isset($item[$key]) && \is_scalar($item[$key])) {
                             $intValue = (int) $item[$key];
 
                             if ($intValue > 0) {
@@ -159,11 +159,11 @@ class CourseHelper
             return array_values(array_unique($normalized));
         };
 
-        if (array_key_exists('course_categories', $params)) {
+        if (\array_key_exists('course_categories', $params)) {
             $params['course_categories'] = $normalizeCategoryValues($params['course_categories']);
         }
 
-        if (array_key_exists('categories', $params)) {
+        if (\array_key_exists('categories', $params)) {
             $params['categories'] = $normalizeCategoryValues($params['categories']);
         }
 
@@ -233,7 +233,7 @@ class CourseHelper
             ;
             $course->addAccessUrl($accessUrl);
 
-            if (isset($params['categories']) && !is_array($params['categories'])) {
+            if (isset($params['categories']) && !\is_array($params['categories'])) {
                 $params['categories'] = [(int) $params['categories']];
             }
 
@@ -1006,7 +1006,7 @@ class CourseHelper
             }
         }
 
-        if (array_key_exists('disk_quota', $params)) {
+        if (\array_key_exists('disk_quota', $params)) {
             $diskQuota = $this->parseQuotaRawToMb((string) $params['disk_quota']);
         } else {
             $diskQuota = $this->resolveEffectiveDocumentQuotaMbForUser($ownerUser);
@@ -1732,14 +1732,14 @@ class CourseHelper
         ]);
 
         if ($count >= $limit) {
-            throw new RuntimeException(sprintf('You have reached the maximum number of courses allowed (%d).', $limit));
+            throw new RuntimeException(\sprintf('You have reached the maximum number of courses allowed (%d).', $limit));
         }
     }
 
     public function resolveMaxCoursesForUser(User $user): int
     {
         $payload = $this->getUserExtraFieldJson($user, 'buycourses_max_courses');
-        if (is_array($payload)) {
+        if (\is_array($payload)) {
             $expiry = (string) ($payload['expiry'] ?? '');
             $limit = isset($payload['limit']) ? (int) $payload['limit'] : 0;
 
@@ -1784,7 +1784,7 @@ class CourseHelper
         if ($user instanceof User) {
             $payload = $this->getUserExtraFieldJson($user, 'buycourses_document_quota');
 
-            if (is_array($payload)) {
+            if (\is_array($payload)) {
                 $expiry = (string) ($payload['expiry'] ?? '');
                 $quotaMb = isset($payload['quota_mb']) ? (int) $payload['quota_mb'] : 0;
 

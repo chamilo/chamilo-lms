@@ -57,7 +57,6 @@ use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
-use Exception;
 use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
@@ -1083,7 +1082,7 @@ class CourseController extends ToolBaseController
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
-        if (!is_array($courseData)) {
+        if (!\is_array($courseData)) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1125,26 +1124,26 @@ class CourseController extends ToolBaseController
                 return null;
             }
 
-            if (is_scalar($value)) {
+            if (\is_scalar($value)) {
                 return trim((string) $value);
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach (['code', 'id', 'value', 'name'] as $key) {
-                    if (isset($value[$key]) && is_scalar($value[$key])) {
+                    if (isset($value[$key]) && \is_scalar($value[$key])) {
                         return trim((string) $value[$key]);
                     }
                 }
 
                 $first = reset($value);
 
-                if (is_scalar($first)) {
+                if (\is_scalar($first)) {
                     return trim((string) $first);
                 }
 
-                if (is_array($first)) {
+                if (\is_array($first)) {
                     foreach (['code', 'id', 'value', 'name'] as $key) {
-                        if (isset($first[$key]) && is_scalar($first[$key])) {
+                        if (isset($first[$key]) && \is_scalar($first[$key])) {
                             return trim((string) $first[$key]);
                         }
                     }
@@ -1159,20 +1158,20 @@ class CourseController extends ToolBaseController
                 return [];
             }
 
-            if (is_scalar($value)) {
+            if (\is_scalar($value)) {
                 $intValue = (int) $value;
 
                 return $intValue > 0 ? [$intValue] : [];
             }
 
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 return [];
             }
 
             $normalized = [];
 
             foreach ($value as $item) {
-                if (is_scalar($item)) {
+                if (\is_scalar($item)) {
                     $intValue = (int) $item;
                     if ($intValue > 0) {
                         $normalized[] = $intValue;
@@ -1181,13 +1180,14 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
-                if (is_array($item)) {
+                if (\is_array($item)) {
                     foreach (['id', 'value', 'code'] as $key) {
-                        if (isset($item[$key]) && is_scalar($item[$key])) {
+                        if (isset($item[$key]) && \is_scalar($item[$key])) {
                             $intValue = (int) $item[$key];
                             if ($intValue > 0) {
                                 $normalized[] = $intValue;
                             }
+
                             break;
                         }
                     }

@@ -93,7 +93,7 @@ final class DocumentUsageAction extends AbstractController
             $data[] = $this->pct($bytesGroups, $totalForChart);
         }
 
-        $labels[] = sprintf(
+        $labels[] = \sprintf(
             (string) $this->translator->trans('Available space (%s)'),
             $this->formatBytes($availableBytesForChart)
         );

@@ -20,6 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<CCalendarEvent, CCalendarEvent>
@@ -84,9 +85,9 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
     private function applyCareerAndPromotionRules(CCalendarEvent $event): void
     {
         $allowCareerAgenda = 'true' === $this->settingsManager->getSetting(
-                'agenda.allow_careers_in_global_agenda',
-                true
-            );
+            'agenda.allow_careers_in_global_agenda',
+            true
+        );
 
         $isGlobalEvent = $this->isGlobalEventFromRequest();
 
@@ -124,9 +125,9 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
         }
 
         if (
-            null !== $promotion &&
-            null !== $career &&
-            (int) $promotion->getCareer()->getId() !== (int) $career->getId()
+            null !== $promotion
+            && null !== $career
+            && (int) $promotion->getCareer()->getId() !== (int) $career->getId()
         ) {
             throw new BadRequestHttpException('Promotion does not belong to the selected career.');
         }
@@ -168,7 +169,7 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
             $payload = $request->toArray();
 
             return \is_array($payload) ? $payload : [];
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
     }

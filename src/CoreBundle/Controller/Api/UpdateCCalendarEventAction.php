@@ -83,9 +83,9 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         SettingsManager $settingsManager,
     ): void {
         $allowCareerAgenda = 'true' === $settingsManager->getSetting(
-                'agenda.allow_careers_in_global_agenda',
-                true
-            );
+            'agenda.allow_careers_in_global_agenda',
+            true
+        );
 
         if (!$allowCareerAgenda || 'global' !== $calendarEvent->determineType()) {
             $calendarEvent->setCareer(null);
@@ -119,9 +119,9 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         }
 
         if (
-            null !== $promotion &&
-            null !== $career &&
-            (int) $promotion->getCareer()->getId() !== (int) $career->getId()
+            null !== $promotion
+            && null !== $career
+            && (int) $promotion->getCareer()->getId() !== (int) $career->getId()
         ) {
             throw new BadRequestHttpException('Promotion does not belong to the selected career.');
         }

@@ -253,6 +253,6 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 
         $decoded = json_decode($raw, true);
 
-        return is_array($decoded) ? $decoded : null;
+        return \is_array($decoded) ? $decoded : null;
     }
 }

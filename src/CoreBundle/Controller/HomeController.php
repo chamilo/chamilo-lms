@@ -26,8 +26,7 @@ class HomeController extends AbstractController
         private readonly CourseCatalogueHelper $courseCatalogueHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     #[Route('/home-categories-data', name: 'home_categories_data', methods: ['GET'])]
     public function categories(): JsonResponse
@@ -62,7 +61,8 @@ class HomeController extends AbstractController
             ->select('COUNT(DISTINCT c.id)')
             ->innerJoin('c.categories', 'cat')
             ->andWhere('cat.id = :categoryId')
-            ->setParameter('categoryId', $category->getId(), Types::INTEGER);
+            ->setParameter('categoryId', $category->getId(), Types::INTEGER)
+        ;
 
         if ($this->accessUrlHelper->isMultiple()) {
             $qb
@@ -72,7 +72,8 @@ class HomeController extends AbstractController
                     'WITH',
                     $qb->expr()->eq('aurc.url', ':accessUrl'),
                 )
-                ->setParameter('accessUrl', $accessUrlId, Types::INTEGER);
+                ->setParameter('accessUrl', $accessUrlId, Types::INTEGER)
+            ;
         }
 
         $this->courseCatalogueHelper->addAvoidedCoursesCondition($qb);

@@ -97,10 +97,10 @@ final class BuyCoursesExpiryHelper
             $schemaManager = $this->connection->createSchemaManager();
 
             foreach ([
-                         self::TABLE_SERVICES_SALE,
-                         self::TABLE_SERVICE_REL_EXTRA_FIELD,
-                         self::TABLE_FROZEN_ENROLLMENT,
-                     ] as $tableName) {
+                self::TABLE_SERVICES_SALE,
+                self::TABLE_SERVICE_REL_EXTRA_FIELD,
+                self::TABLE_FROZEN_ENROLLMENT,
+            ] as $tableName) {
                 if (!$schemaManager->tablesExist([$tableName])) {
                     return $this->buyCoursesAvailable = false;
                 }
@@ -167,9 +167,9 @@ final class BuyCoursesExpiryHelper
             ]
         )->fetchFirstColumn();
 
-        return \array_values(
-            \array_filter(
-                \array_map('intval', $result),
+        return array_values(
+            array_filter(
+                array_map('intval', $result),
                 static fn (int $userId): bool => $userId > 0
             )
         );
@@ -200,9 +200,9 @@ final class BuyCoursesExpiryHelper
             ]
         )->fetchFirstColumn();
 
-        return \array_values(
-            \array_filter(
-                \array_map('intval', $result),
+        return array_values(
+            array_filter(
+                array_map('intval', $result),
                 static fn (int $courseId): bool => $courseId > 0
             )
         );
@@ -233,9 +233,9 @@ final class BuyCoursesExpiryHelper
             ]
         )->fetchFirstColumn();
 
-        return \array_values(
-            \array_filter(
-                \array_map('intval', $result),
+        return array_values(
+            array_filter(
+                array_map('intval', $result),
                 static fn (int $userId): bool => $userId > 0
             )
         );
@@ -350,9 +350,9 @@ final class BuyCoursesExpiryHelper
             ]
         )->fetchFirstColumn();
 
-        $studentIds = \array_values(
-            \array_filter(
-                \array_map('intval', $result),
+        $studentIds = array_values(
+            array_filter(
+                array_map('intval', $result),
                 static fn (int $studentId): bool => $studentId > 0
             )
         );
@@ -403,6 +403,7 @@ final class BuyCoursesExpiryHelper
     private function getUtcNow(): string
     {
         return (new DateTimeImmutable('now', new DateTimeZone('UTC')))
-            ->format('Y-m-d H:i:s');
+            ->format('Y-m-d H:i:s')
+        ;
     }
 }

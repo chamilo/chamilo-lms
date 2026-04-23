@@ -400,22 +400,22 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $sortedHidden = $hiddenSystemTypes;
         sort($sortedHidden);
         $cacheKey = 'doc_list_'.$this->getInstallationPrefix().'_'.hash('md5', serialize([
-                $accessUrlId,
-                $viewerProfileBucket,
-                $cid,
-                $sid,
-                $gid,
-                $parentNodeId,
-                $loadNode,
-                $sortedTypes,
-                $sortedHidden,
-                $includeBaseContent,
-                $isGradebook,
-                $showSystemCertificates,
-                $orderClauses,
-                $page,
-                $itemsPerPage,
-            ]));
+            $accessUrlId,
+            $viewerProfileBucket,
+            $cid,
+            $sid,
+            $gid,
+            $parentNodeId,
+            $loadNode,
+            $sortedTypes,
+            $sortedHidden,
+            $includeBaseContent,
+            $isGradebook,
+            $showSystemCertificates,
+            $orderClauses,
+            $page,
+            $itemsPerPage,
+        ]));
 
         // Cache the expensive context-filtered count + IID list for up to 120 s.
         // On cache hit we re-fetch the same page of documents by primary key,

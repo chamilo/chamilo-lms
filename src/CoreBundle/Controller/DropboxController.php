@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxCategory;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
 use Chamilo\CourseBundle\Repository\CDropboxCategoryRepository;
@@ -28,9 +31,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Throwable;
 use ZipArchive;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 
 use const DATE_ATOM;
 use const PATHINFO_EXTENSION;

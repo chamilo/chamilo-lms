@@ -20,6 +20,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const FILTER_VALIDATE_BOOLEAN;
+
 /**
  * @extends Voter<'VIEW'|'EDIT'|'DELETE', Course>
  */
@@ -95,11 +97,7 @@ class CourseVoter extends Voter
                         $user = $this->getTokenSafeUser($token, $tokenUser);
                         if ($this->isStudent($user, $course, $session)) {
                             if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                throw new NotAllowedException(
-                                    $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                    'warning',
-                                    403
-                                );
+                                throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                             }
                         }
 
@@ -126,11 +124,7 @@ class CourseVoter extends Voter
                             $user = $this->getTokenSafeUser($token, $tokenUser);
                             if ($this->isStudent($user, $course, $session)) {
                                 if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                    throw new NotAllowedException(
-                                        $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                        'warning',
-                                        403
-                                    );
+                                    throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                                 }
                             }
 
@@ -167,11 +161,7 @@ class CourseVoter extends Voter
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
 
                         if ($this->isCourseLockedForUser($user, $course, $session->getId())) {
-                            throw new NotAllowedException(
-                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                'warning',
-                                403
-                            );
+                            throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                         }
 
                         $token->setUser($user);
@@ -191,11 +181,7 @@ class CourseVoter extends Voter
                     }
 
                     if ($this->isCourseLockedForUser($user, $course)) {
-                        throw new NotAllowedException(
-                            $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                            'warning',
-                            403
-                        );
+                        throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                     }
 
                     $token->setUser($user);

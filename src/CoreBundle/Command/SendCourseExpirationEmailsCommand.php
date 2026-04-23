@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -43,7 +44,8 @@ class SendCourseExpirationEmailsCommand extends Command
     {
         $this
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends an email to users whose course session is finished today.');
+            ->setHelp('This command sends an email to users whose course session is finished today.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,8 +62,8 @@ class SendCourseExpirationEmailsCommand extends Command
         }
 
         $isActive = 'true' === $this->settingsManager->getSetting(
-                'crons.cron_remind_course_finished_activate'
-            );
+            'crons.cron_remind_course_finished_activate'
+        );
 
         if (false === $isActive) {
             if ($debug) {
@@ -79,7 +81,8 @@ class SendCourseExpirationEmailsCommand extends Command
             ->where('s.accessEndDate LIKE :date')
             ->setParameter('date', $endDate.'%')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         if (empty($sessions)) {
             $io->success('No sessions finishing today '.$endDate);
@@ -147,7 +150,8 @@ class SendCourseExpirationEmailsCommand extends Command
             ->from($administrator['email'])
             ->to($user->getEmail())
             ->subject($subject)
-            ->html($body);
+            ->html($body)
+        ;
 
         $this->mailer->send($email);
 

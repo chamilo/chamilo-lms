@@ -25,6 +25,8 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Throwable;
 
+use const FILTER_VALIDATE_EMAIL;
+
 #[AsCommand(
     name: 'app:send-scheduled-announcements',
     description: 'Send scheduled announcements to all users.',
@@ -53,7 +55,8 @@ class SendScheduledAnnouncementsCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, an internal message will also be created for each recipient.'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -429,6 +432,7 @@ class SendScheduledAnnouncementsCommand extends Command
 
             if ($userId > 0) {
                 $this->appendRecipientsByUserIds($connection, [$userId], $recipients);
+
                 continue;
             }
 
@@ -447,6 +451,7 @@ class SendScheduledAnnouncementsCommand extends Command
                 );
 
                 $this->appendRecipientsByUserIds($connection, $userIds, $recipients);
+
                 continue;
             }
 
@@ -463,6 +468,7 @@ class SendScheduledAnnouncementsCommand extends Command
                 );
 
                 $this->appendRecipientsByUserIds($connection, $userIds, $recipients);
+
                 continue;
             }
 
@@ -507,6 +513,7 @@ class SendScheduledAnnouncementsCommand extends Command
                 );
 
                 $this->appendRecipientsByUserIds($connection, $userIds, $recipients);
+
                 continue;
             }
 
@@ -663,7 +670,8 @@ class SendScheduledAnnouncementsCommand extends Command
                     ->to('' !== $recipientName ? new Address($recipientEmail, $recipientName) : new Address($recipientEmail))
                     ->subject($subject)
                     ->html($htmlBody)
-                    ->text($textBody);
+                    ->text($textBody)
+                ;
 
                 $this->mailer->send($email);
                 ++$emailSentCount;

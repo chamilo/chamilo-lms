@@ -31,7 +31,7 @@ class BuyCoursesExpiryCommand extends Command
             $processedUsers = $this->expiryHelper->processExpiredServiceBenefits();
 
             $output->writeln(
-                sprintf(
+                \sprintf(
                     '<info>BuyCourses expiry process completed. Processed users: %d</info>',
                     $processedUsers
                 )
@@ -40,7 +40,7 @@ class BuyCoursesExpiryCommand extends Command
             return Command::SUCCESS;
         } catch (Throwable $exception) {
             $output->writeln(
-                sprintf(
+                \sprintf(
                     '<error>BuyCourses expiry process failed: %s</error>',
                     $exception->getMessage()
                 )

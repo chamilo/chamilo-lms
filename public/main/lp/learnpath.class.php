@@ -1247,7 +1247,7 @@ class learnpath
 
             $this->last = $this->current;
             // current is
-            $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
+            $this->current = $this->ordered_items[$index] ?? null;
             $this->index = $index;
             if ($this->debug > 2) {
                 error_log('$index '.$index);
@@ -2815,7 +2815,7 @@ class learnpath
      *
      * @return string $provided_toc Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = 0, $provided_toc = false)
+    public function get_link(string $type = 'http', $item_id = 0, $provided_toc = false)
     {
         $course_id = $this->get_course_int_id();
         $item_id = (int) $item_id;
@@ -2857,7 +2857,7 @@ class learnpath
             $lp_item_type = $row['litype'];
             $lp_item_path = $row['lipath'];
             $lp_item_params = $row['liparams'];
-            if (empty($lp_item_params) && false !== strpos($lp_item_path, '?')) {
+            if (empty($lp_item_params) && str_contains($lp_item_path, '?')) {
                 [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             //$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
@@ -3188,9 +3188,9 @@ class learnpath
                         }
 
                         // We want to use parameters if they were defined in the imsmanifest
-                        if (false === strpos($file, 'blank.php')) {
+                        if (!str_contains($file, 'blank.php')) {
                             $lp_item_params = ltrim($lp_item_params, '?');
-                            $file .= (false === strstr($file, '?') ? '?' : '').$lp_item_params;
+                            $file .= (!str_contains($file, '?') ? '?' : '').$lp_item_params;
                         }
                     } else {
                         $file = 'lp_content.php?type=dir';
@@ -8154,24 +8154,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * Check if URL is not allowed to be show in a iframe.
-     *
-     * @param string $src
-     *
-     * @return string
      */
-    public function fixBlockedLinks($src)
+    public function fixBlockedLinks(string $src): string
     {
         $urlInfo = parse_url($src);
 
         $platformProtocol = 'https';
-        if (false === strpos(api_get_path(WEB_CODE_PATH), 'https')) {
+        if (!str_contains(api_get_path(WEB_CODE_PATH), 'https')) {
             $platformProtocol = 'http';
         }
 
         $protocolFixApplied = false;
         //Scheme validation to avoid "Notices" when the lesson doesn't contain a valid scheme
-        $scheme = isset($urlInfo['scheme']) ? $urlInfo['scheme'] : null;
-        $host = isset($urlInfo['host']) ? $urlInfo['host'] : null;
+        $scheme = $urlInfo['scheme'] ?? null;
+        $host = $urlInfo['host'] ?? null;
 
         if ($platformProtocol != $scheme) {
             Session::write('x_frame_source', $src);
@@ -8179,8 +8175,8 @@ document.addEventListener("DOMContentLoaded", function () {
             $protocolFixApplied = true;
         }
 
-        if (false == $protocolFixApplied) {
-            if (false === strpos(api_get_path(WEB_PATH), $host)) {
+        if (!$protocolFixApplied) {
+            if (!str_contains(api_get_path(WEB_PATH), $host)) {
                 // Check X-Frame-Options
                 $ch = curl_init();
                 $options = [

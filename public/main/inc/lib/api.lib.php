@@ -728,7 +728,9 @@ function api_get_path($path = '', $configuration = [])
     $root_web = '';
     if (isset(Container::$container)) {
         $router = Container::$container->get('router');
-        $root_web = $router->generate('index');
+        $relPath = $router->generate('index');
+        $request = Container::getRequest();
+        $root_web = $request ? $request->getSchemeAndHttpHost().$relPath : $relPath;
     }
 
 

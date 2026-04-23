@@ -295,12 +295,6 @@ const load = async () => {
   loading.value = true
 
   try {
-    await courseSettingsStore.loadCourseSettings(legacyContext.value.cid, legacyContext.value.sid)
-  } catch (err) {
-    showErrorNotification(err)
-  }
-
-  try {
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
 
     if (!allowed && securityStore.isAdmin) {

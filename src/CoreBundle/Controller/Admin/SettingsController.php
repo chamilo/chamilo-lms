@@ -746,7 +746,6 @@ class SettingsController extends BaseController
             'exercise.quiz_discard_orphan_in_course_export',
             'exercise.quiz_hide_attempts_table_on_start_page',
             'exercise.quiz_keep_alive_ping_interval',
-            'exercise.quiz_question_delete_automatically_when_deleting_exercise',
             'exercise.show_exercise_attempts_in_all_user_sessions',
             'exercise.tracking_my_progress_show_deleted_exercises',
             'forum.allow_forum_category_language_filter',

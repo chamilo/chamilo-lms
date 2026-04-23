@@ -138,7 +138,8 @@ const reorder = async ({ courseId, sessionId, categoryId = null, ids }) => {
  * @returns {Promise<Object[]>}
  */
 const getLpCategories = async (searchParams) => {
-  const { items } = await baseService.getCollection("/api/learning_path_categories/", searchParams)
+  const { items } = await baseService.getCollection("/api/learning_path_categories", searchParams)
+
   return items
 }
 

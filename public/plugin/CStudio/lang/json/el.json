@@ -111,6 +111,10 @@
     "Section collapse": "Σύμπτυξη ενότητας",
     "Index Table": "Πίνακας Περιεχομένων",
     "fxTools": "fxTools",
+    "Tools": "Εργαλεία",
+    "Project theme": "Θέμα έργου",
+    "Page style": "Στυλ σελίδας",
+    "Quiz style": "Στυλ κουίζ",
     "Content elements": "Στοιχεία περιεχομένου",
     "Button": "Κουμπί",
     "Insert": "Εισαγωγή",
@@ -124,5 +128,15 @@
     "Edition filltext": "Επεξεργασία συμπλήρωσης κειμένου",
     "Edition findwords": "Επεξεργασία εύρεσης λέξεων",
     "Edition markwords": "Επεξεργασία σήμανσης λέξεων",
-    "Edition sorttheparagraphs": "Επεξεργασία ταξινόμησης παραγράφων"
+    "Edition sorttheparagraphs": "Επεξεργασία ταξινόμησης παραγράφων",
+    "tpl_demo_content_note": "Αυτό είναι δείγμα περιεχομένου για το Chamilo Studio. Για την ανάπτυξη, δεν πρέπει να επεξεργαστείτε αυτό το αρχείο, αντ' αυτού μπορείτε να το τροποποιήσετε και να το μετονομάσετε.",
+    "tpl_start": "Έναρξη",
+    "tpl_put_your_title_here": "Βάλτε τον τίτλο σας εδώ",
+    "tpl_title_a": "Τίτλος Α",
+    "tpl_target_audience_and_prerequisites": "Στοχευμένο κοινό και προαπαιτούμενα",
+    "tpl_who_is_this_training_for": "Για ποιον προορίζεται αυτή η εκπαίδευση;",
+    "tpl_objectives_of_the_course": "Στόχοι του μαθήματος",
+    "tpl_objective_read_and_analyse": "Διαβάστε και αναλύστε λογιστικά και οικονομικά έγγραφα",
+    "tpl_objective_conducting_project": "Διεξαγωγή έργου για την εκτέλεση εργασιών",
+    "tpl_objective_mastering_tools": "Κατάκτηση των εργαλείων"
 }

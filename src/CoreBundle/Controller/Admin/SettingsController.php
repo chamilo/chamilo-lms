@@ -740,7 +740,6 @@ class SettingsController extends BaseController
             'course.enable_tool_introduction',
             'course.show_toolshortcuts',
             'document.default_group_quotum',
-            'dropbox.dropbox_allow_mailing',
             'editor.video_context_menu_hidden',
             'exercise.exercise_result_end_text_html_strict_filtering',
             'exercise.my_courses_show_pending_exercise_attempts',

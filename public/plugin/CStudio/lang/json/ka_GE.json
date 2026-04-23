@@ -111,6 +111,10 @@
     "Section collapse": "სექციის შეკუმშვა",
     "Index Table": "ინდექსის ცხრილი",
     "fxTools": "fxTools",
+    "Tools": "ხელსაწყოები",
+    "Project theme": "პროექტის თემა",
+    "Page style": "გვერდის სტილი",
+    "Quiz style": "ვიქტორინის სტილი",
     "Content elements": "კონტენტის ელემენტები",
     "Button": "ღილაკი",
     "Insert": "ჩასმა",
@@ -124,5 +128,15 @@
     "Edition filltext": "რედაქტირება შევსებით",
     "Edition findwords": "რედაქტირება სიტყვების მოძებნით",
     "Edition markwords": "რედაქტირება სიტყვების მონიშვნით",
-    "Edition sorttheparagraphs": "რედაქტირება აბზაცების შეწყობით"
+    "Edition sorttheparagraphs": "რედაქტირება აბზაცების შეწყობით",
+    "tpl_demo_content_note": "ეს არის Chamilo Studio-სთვის დემო შინაარსი. განვითარებისთვის არ უნდა შეცვალოთ ეს ფაილი, უმჯობესია შეცვალოთ და გადარქვათ იგი.",
+    "tpl_start": "დაწყება",
+    "tpl_put_your_title_here": "აქ მიუთითეთ სათაური",
+    "tpl_title_a": "სათაური A",
+    "tpl_target_audience_and_prerequisites": "სამიზნე აუდიტორია და წინაპირობები",
+    "tpl_who_is_this_training_for": "ვისთვისაა ეს ტრენინგი?",
+    "tpl_objectives_of_the_course": "კურსის მიზნები",
+    "tpl_objective_read_and_analyse": "ბუღალტრუთა და ფინანსური დოკუმენტების წაკითხვა და ანალიზი",
+    "tpl_objective_conducting_project": "პროექტის ჩატარება სამუშაოს შესრულებისთვის",
+    "tpl_objective_mastering_tools": "ხელსაწყოების შეოსვა"
 }

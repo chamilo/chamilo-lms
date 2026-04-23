@@ -111,6 +111,10 @@
     "Section collapse": "Osion tiivistäminen",
     "Index Table": "Sisällysluettelo",
     "fxTools": "fxTyökalut",
+    "Tools": "Työkalut",
+    "Project theme": "Projektin teema",
+    "Page style": "Sivun tyyli",
+    "Quiz style": "Kyselytyyli",
     "Content elements": "Sisältöelementit",
     "Button": "Painike",
     "Insert": "Lisää",
@@ -124,5 +128,15 @@
     "Edition filltext": "Muokkaus täyttöteksti",
     "Edition findwords": "Muokkaus ets sanat",
     "Edition markwords": "Muokkaus merkitse sanat",
-    "Edition sorttheparagraphs": "Muokkaus järjestä kappaleet"
+    "Edition sorttheparagraphs": "Muokkaus järjestä kappaleet",
+    "tpl_demo_content_note": "Tämä on demo-sisältöä Chamilo Studiolle. Kehityksessä et saisi muokata tätä tiedostoa, vaan voit muokata ja nimetä sen uudelleen.",
+    "tpl_start": "Aloita",
+    "tpl_put_your_title_here": "Laita otsikkosi tähän",
+    "tpl_title_a": "Otsikko A",
+    "tpl_target_audience_and_prerequisites": "Kohderyhmä ja edellytykset",
+    "tpl_who_is_this_training_for": "Kenelle tämä koulutus on tarkoitettu?",
+    "tpl_objectives_of_the_course": "Kurssin tavoitteet",
+    "tpl_objective_read_and_analyse": "Lue ja analysoi kirjanpito- ja talousasiakirjoja",
+    "tpl_objective_conducting_project": "Projektin toteuttaminen työn suorittamiseksi",
+    "tpl_objective_mastering_tools": "Työkalujen hallinta"
 }

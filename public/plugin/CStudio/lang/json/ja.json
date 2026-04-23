@@ -111,6 +111,10 @@
     "Section collapse": "セクション折りたたみ",
     "Index Table": "目次テーブル",
     "fxTools": "fxツール",
+    "Tools": "ツール",
+    "Project theme": "プロジェクトテーマ",
+    "Page style": "ページスタイル",
+    "Quiz style": "クイズスタイル",
     "Content elements": "コンテンツ要素",
     "Button": "ボタン",
     "Insert": "挿入",
@@ -124,5 +128,15 @@
     "Edition filltext": "編集テキスト入力",
     "Edition findwords": "編集単語探し",
     "Edition markwords": "編集単語マーク",
-    "Edition sorttheparagraphs": "編集段落並べ替え"
+    "Edition sorttheparagraphs": "編集段落並べ替え",
+    "tpl_demo_content_note": "これはChamilo Studioのデモコンテンツです。開発ではこのファイルを編集せず、代わりにそれを修正して名前を変更してください。",
+    "tpl_start": "開始",
+    "tpl_put_your_title_here": "ここにタイトルを入力",
+    "tpl_title_a": "タイトル A",
+    "tpl_target_audience_and_prerequisites": "対象者と前提条件",
+    "tpl_who_is_this_training_for": "この研修は誰向けですか？",
+    "tpl_objectives_of_the_course": "コースの目標",
+    "tpl_objective_read_and_analyse": "会計および財務文書の読解と分析",
+    "tpl_objective_conducting_project": "業務遂行のためのプロジェクト実施",
+    "tpl_objective_mastering_tools": "ツールの習得"
 }

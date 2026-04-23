@@ -111,6 +111,10 @@
     "Section collapse": "Skrči odsek",
     "Index Table": "Kazalo",
     "fxTools": "fxOrodja",
+    "Tools": "Orodja",
+    "Project theme": "Tema projekta",
+    "Page style": "Slog strani",
+    "Quiz style": "Slog kviza",
     "Content elements": "Vsebinski elementi",
     "Button": "Gumb",
     "Insert": "Vstavi",
@@ -124,5 +128,15 @@
     "Edition filltext": "Urejanje izpolni besedilo",
     "Edition findwords": "Urejanje poišči besede",
     "Edition markwords": "Urejanje označi besede",
-    "Edition sorttheparagraphs": "Urejanje razvrsti odstavke"
+    "Edition sorttheparagraphs": "Urejanje razvrsti odstavke",
+    "tpl_demo_content_note": "To je demonstracijska vsebina za Chamilo Studio. Za razvoj ne smete urejati te datoteke, namesto tega jo lahko spremenite in preimenujete.",
+    "tpl_start": "Začni",
+    "tpl_put_your_title_here": "Vnesite naslov tukaj",
+    "tpl_title_a": "Naslov A",
+    "tpl_target_audience_and_prerequisites": "Ciljna publika in predznanje",
+    "tpl_who_is_this_training_for": "Za koga je to usposabljanje?",
+    "tpl_objectives_of_the_course": "Cilji tečaja",
+    "tpl_objective_read_and_analyse": "Branje in analiza računovodskih in finančnih dokumentov",
+    "tpl_objective_conducting_project": "Izvajanje projekta za opravljanje dela",
+    "tpl_objective_mastering_tools": "Obvladovanje orodij"
 }

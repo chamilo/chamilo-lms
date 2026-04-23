@@ -146,40 +146,28 @@ const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
 const mLpList = ref(null)
 const mItems = computed(() => {
-  const items = []
-
-  items.push({
-    label: t("Create new learning path"),
-    url: lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }),
-  })
-
-  if (canUseAi.value) {
-    items.push({
-      label: t("AI learning path generator"),
-      url: lpService.buildLegacyActionUrl("ai_helper", { ...legacyContext.value }),
-    })
-  }
+  const ctx = legacyContext.value
 
   const uploadParams = new URLSearchParams({
-    cid: legacyContext.value.cid,
-    sid: legacyContext.value.sid,
+    cid: ctx.cid,
+    sid: ctx.sid,
     tool: "learnpath",
     curdirpath: "/",
-    node: legacyContext.value.node,
-    gid: legacyContext.value.gid,
-    gradebook: legacyContext.value.gradebook,
-    origin: legacyContext.value.origin,
+    node: ctx.node,
+    gid: ctx.gid,
+    gradebook: ctx.gradebook,
+    origin: ctx.origin,
   }).toString()
 
-  items.push({ label: t("Import"), url: `/main/upload/index.php?${uploadParams}` })
-  items.push({ label: t("Chamilo RAPID"), url: `/main/upload/upload_ppt.php?${uploadParams}` })
-
-  items.push({
-    label: t("Add category"),
-    url: lpService.buildLegacyActionUrl("add_lp_category", { ...legacyContext.value }),
-  })
-
-  return items
+  return [
+    { label: t("Create new learning path"), url: lpService.buildLegacyActionUrl("add_lp", ctx) },
+    ...(canUseAi.value
+      ? [{ label: t("AI learning path generator"), url: lpService.buildLegacyActionUrl("ai_helper", ctx) }]
+      : []),
+    { label: t("Import"), url: `/main/upload/index.php?${uploadParams}` },
+    { label: t("Chamilo RAPID"), url: `/main/upload/upload_ppt.php?${uploadParams}` },
+    { label: t("Add category"), url: lpService.buildLegacyActionUrl("add_lp_category", ctx) },
+  ]
 })
 
 const { course, session } = storeToRefs(cidReqStore)
@@ -200,28 +188,21 @@ const legacyContext = computed(() => {
   }
 })
 
-const aiHelpersEnabled = computed(() => {
-  const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
-  return v === "true"
-})
-const lpGeneratorEnabled = computed(() => {
-  const v = String(courseSettingsStore?.getSetting?.("learning_path_generator"))
-  return v === "true"
-})
-const canUseAi = computed(() => !!(canEdit.value && aiHelpersEnabled.value && lpGeneratorEnabled.value))
+const canUseAi = computed(
+  () =>
+    canEdit.value &&
+    String(platformConfig.getSetting("ai_helpers.enable_ai_helpers")) === "true" &&
+    String(courseSettingsStore?.getSetting?.("learning_path_generator")) === "true",
+)
 
 const showExportDialog = ref(false)
 const exportTarget = ref(null)
 
-const canExportScorm = computed(() => {
-  const isScormEnabled = platformConfig.getSetting("lp.hide_scorm_export_link") !== "true"
-  return canEdit.value && isScormEnabled
-})
+const canExportScorm = computed(
+  () => canEdit.value && platformConfig.getSetting("lp.hide_scorm_export_link") !== "true",
+)
 
-const canExportPdf = computed(() => {
-  const hidden = platformConfig.getSetting("lp.hide_scorm_pdf_link") === "true"
-  return !hidden
-})
+const canExportPdf = computed(() => platformConfig.getSetting("lp.hide_scorm_pdf_link") !== "true")
 
 // Uses a click handler instead of :to-url so the URL (including cid/sid) is
 // built at click time, when the course store is guaranteed to be populated.
@@ -231,12 +212,16 @@ const goCreateLp = () => {
   window.location.assign(lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }))
 }
 
-// --- Auto-launch enable (course setting) ---
-const enableLpAutoLaunch = computed(() => {
+const canAutoLaunch = computed(() => {
+  if (!canEdit.value) {
+    return false
+  }
+
   const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
+
   return String(val) === "true" || Number(val) === 1
 })
-const canAutoLaunch = computed(() => canEdit.value && enableLpAutoLaunch.value)
+
 const items = ref([])
 const categories = ref([])
 const uncatList = ref([])
@@ -382,9 +367,11 @@ const categorizedGroups = computed(() => {
   const rows = []
 
   for (const cat of cats) {
-    if (!cat) continue
+    if (!cat) {
+      continue
+    }
 
-    const list = catLists.value && cat.iid ? (catLists.value[cat.iid] ?? []) : []
+    const list = cat.iid ? (catLists.value[cat.iid] ?? []) : []
     const safeList = Array.isArray(list) ? list : []
     const isSessionCategory = hasSession(cat)
 

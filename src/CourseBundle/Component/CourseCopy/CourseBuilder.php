@@ -541,8 +541,31 @@ class CourseBuilder
 
                 if ('quizzes' === $toolKey || 'quiz' === $toolKey) {
                     $ids = $this->specific_id_list['quizzes'] ?? $this->specific_id_list['quiz'] ?? [];
-                    $neededQuestionIds = $this->build_quizzes($legacyCourse, $courseEntity, $sessionEntity, $ids);
-                    $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $neededQuestionIds);
+
+                    $discardOrphanQuestions = 'true' === api_get_setting('exercise.quiz_discard_orphan_in_course_export');
+
+                    $neededQuestionIds = $this->build_quizzes(
+                        $legacyCourse,
+                        $courseEntity,
+                        $sessionEntity,
+                        $ids
+                    );
+
+                    if ($discardOrphanQuestions) {
+                        $this->build_quiz_questions(
+                            $legacyCourse,
+                            $courseEntity,
+                            $sessionEntity,
+                            $neededQuestionIds
+                        );
+                    } else {
+                        $this->build_quiz_questions(
+                            $legacyCourse,
+                            $courseEntity,
+                            $sessionEntity,
+                            $this->getAllQuizQuestionIds($courseEntity, $sessionEntity)
+                        );
+                    }
                 }
 
                 if ('quiz_questions' === $toolKey) {
@@ -3878,5 +3901,34 @@ class CourseBuilder
         }
 
         return '';
+    }
+
+    private function getAllQuizQuestionIds(
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): array {
+        if (!$courseEntity) {
+            return [];
+        }
+
+        $qb = $this->createContextQb(
+            CQuizQuestion::class,
+            $courseEntity,
+            $sessionEntity,
+            'qq'
+        );
+
+        /** @var CQuizQuestion[] $questions */
+        $questions = $qb->getQuery()->getResult();
+
+        $ids = [];
+        foreach ($questions as $question) {
+            $qid = (int) $question->getIid();
+            if ($qid > 0) {
+                $ids[$qid] = true;
+            }
+        }
+
+        return array_keys($ids);
     }
 }

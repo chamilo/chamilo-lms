@@ -252,6 +252,7 @@ class PlatformConfigurationController extends AbstractController
             'task_grader' => $courseSettingsManager->getCourseSettingValue('task_grader'),
             'content_analyzer' => $courseSettingsManager->getCourseSettingValue('content_analyzer'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
+            'student_validate_own_attendance' => $courseSettingsManager->getCourseSettingValue('student_validate_own_attendance'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

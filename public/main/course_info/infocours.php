@@ -968,6 +968,27 @@ $form->addPanelOption(
     false
 );
 
+// Attendance
+$group = [
+    $form->createElement('radio', 'student_validate_own_attendance', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'student_validate_own_attendance', null, get_lang('No'), 0),
+];
+
+$myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+$globalGroup = [
+    get_lang('Enable student to validate own attendance') => $group,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'attendance',
+    get_lang('Attendance'),
+    $globalGroup,
+    ToolIcon::ATTENDANCE,
+    false
+);
+
 // Auto-launch settings
 $globalGroup = [];
 $group = [];
@@ -1186,6 +1207,9 @@ $defaultCourseSettings = [
     'show_score' => 0,
     'student_delete_own_publication' => 0,
 
+    // Attendance
+    'student_validate_own_attendance' => 0,
+
     // Auto-launch (UI helper radio)
     'auto_launch_option' => 'disable_auto_launch',
     'show_course_in_user_language' => 2,
@@ -1245,6 +1269,10 @@ foreach ($validQuizNotificationValues as $itemId) {
 // Make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
+}
+
+if (!isset($values['student_validate_own_attendance'])) {
+    $values['student_validate_own_attendance'] = 0;
 }
 
 if (!isset($values['email_alert_student_on_manual_subscription'])) {

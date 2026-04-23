@@ -9191,11 +9191,8 @@ class Exercise
                     $visibleForStudent = $visibleBase;
                 }
 
-                if (!$is_allowedToEdit && !empty($sessionId)) {
-                    $visibilitySetting = ('true' === api_get_setting('lp.show_hidden_exercise_added_to_lp'));
-                    if (!$visibleBase && !$visibilitySetting && $exercise->exercise_was_added_in_lp) {
-                        continue;
-                    }
+                if (!$is_allowedToEdit && $exercise->exercise_was_added_in_lp) {
+                    continue;
                 }
 
                 $isBaseCourseExercise = $visibleBase && ($visibleSess === null || $visibleSess === true);

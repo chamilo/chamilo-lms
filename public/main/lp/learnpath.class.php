@@ -446,6 +446,14 @@ class learnpath
             $exercise->disable();
             $exercise->save();
             $title = $exercise->get_formated_title();
+
+            // Update the ResourceLink visibility to DRAFT so students cannot access the quiz directly
+            $quizRepo = Container::getQuizRepository();
+            $quizEntity = $quizRepo->find($id);
+            if (null !== $quizEntity) {
+                $courseEntity = api_get_course_entity($course_id);
+                $quizRepo->setVisibilityDraft($quizEntity, $courseEntity);
+            }
         }
 
         $lpItem = (new CLpItem())
@@ -7653,7 +7661,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if ('quiz' == $last_item_not_dir_type) {
                             // if previous is quiz, mark its max score as default score to be achieved
                             $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
-                                    WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $last_item_not_dir";
+                                    WHERE lp_id = $lp_id AND iid = $last_item_not_dir";
                             Database::query($sql);
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item

@@ -21,6 +21,7 @@ Feature: Install portal
     And I press "Check database connection"
     And wait for the page to be loaded
     And I press "step4"
+    And I wait for the page to be loaded
     Then I should see "Step 5 - Configuration settings"
     Then I fill in the following:
       | passForm | admin |
@@ -29,6 +30,7 @@ Feature: Install portal
       | mailerFromEmail | noreply@example.com |
       | mailerFromName  | Chamilo Behat install |
     Then I press "step5"
+    And I wait for the page to be loaded
     Then I should see "Step 6 - Last check before install"
     When I wait for the page to be loaded
     And I press "button_step6"

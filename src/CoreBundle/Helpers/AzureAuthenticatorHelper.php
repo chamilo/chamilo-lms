@@ -182,9 +182,6 @@ readonly class AzureAuthenticatorHelper
         );
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function getUserByVerificationOrder(array $azureUserData): ?User
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
@@ -193,16 +190,20 @@ readonly class AzureAuthenticatorHelper
         $azureIdField = $this->getAzureIdField();
         $azureUidField = $this->getAzureUidField();
 
-        /** @var array<int, ExtraFieldValues> $positionsAndFields */
+        /** @var array<int, array<ExtraFieldValues>> $positionsAndFields */
         $positionsAndFields = [
-            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail']),
-            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname']),
-            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id']),
+            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail'], all: true),
+            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname'], all: true),
+            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id'], all: true),
         ];
 
         foreach ($selectedOrder as $position) {
             if (!empty($positionsAndFields[$position])) {
-                return $this->userRepository->find($positionsAndFields[$position]->getItemId());
+                $user = $this->findActiveUserFromExtraFieldValues($positionsAndFields[$position]);
+
+                if (null !== $user) {
+                    return $user;
+                }
             }
         }
 
@@ -314,5 +315,21 @@ readonly class AzureAuthenticatorHelper
                 }
             },
         ];
+    }
+
+    /**
+     * @param array<ExtraFieldValues> $extraFieldValues
+     */
+    private function findActiveUserFromExtraFieldValues(array $extraFieldValues): ?User
+    {
+        foreach ($extraFieldValues as $extraFieldValue) {
+            $user = $this->userRepository->find($extraFieldValue->getItemId());
+
+            if (null !== $user && User::SOFT_DELETED !== $user->getActive()) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

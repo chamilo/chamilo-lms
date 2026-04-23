@@ -23,46 +23,34 @@ const props = defineProps({
 })
 const emit = defineEmits(["export-pdf"])
 
-const isStudentView = computed(() => route.query?.isStudentView === "true")
+const routeCtx = computed(() => ({
+  cid: Number(route.query?.cid ?? 0) || undefined,
+  sid: Number(route.query?.sid ?? 0) || undefined,
+  node: Number(route.params?.node ?? 0) || undefined,
+}))
 
 const openUrl = computed(() =>
   lpService.buildLegacyViewUrl(props.lp.iid, {
-    cid: Number(route.query?.cid ?? 0) || 0,
-    sid: Number(route.query?.sid ?? 0) || 0,
-    isStudentView: isStudentView.value ? "true" : "false",
+    cid: routeCtx.value.cid ?? 0,
+    sid: routeCtx.value.sid ?? 0,
+    isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
   }),
 )
 
-const reportUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "report", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
-  }),
-)
+const reportUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "report", routeCtx.value))
 
-const settingsUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "edit", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
-  }),
-)
+const settingsUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "edit", routeCtx.value))
 
 const buildUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
+    ...routeCtx.value,
     params: { type: "step", isStudentView: "false" },
   }),
 )
 
 const exportScormUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "export", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
+    ...routeCtx.value,
     gid: Number(route.query?.gid ?? 0),
     gradebook: Number(route.query?.gradebook ?? 0),
     origin: String(route.query?.origin ?? ""),
@@ -71,32 +59,23 @@ const exportScormUrl = computed(() =>
 
 const togglePublishUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
+    ...routeCtx.value,
     params: { new_status: props.lp.published === "v" ? "i" : "v" },
   }),
 )
 
 const toggleVisibleUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
+    ...routeCtx.value,
     params: { new_status: typeof props.lp.visible !== "undefined" ? (props.lp.visible ? 0 : 1) : 1 },
   }),
 )
 
-const deleteUrl = computed(() =>
-  lpService.buildLegacyActionUrl(props.lp.iid, "delete", {
-    cid: Number(route.query?.cid ?? 0) || undefined,
-    sid: Number(route.query?.sid ?? 0) || undefined,
-    node: Number(route.params?.node ?? 0) || undefined,
-  }),
-)
+const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", routeCtx.value))
 
 const onDelete = () => {
   const label = (props.lp.title || "").trim() || t("Learning path")
+
   requireConfirmation({
     message: `${t("Are you sure to delete")} ${label}?`,
     accept: () => {
@@ -106,17 +85,16 @@ const onDelete = () => {
 }
 
 const dateText = computed(() => {
-  const v = props.buildDates ? props.buildDates(props.lp) : ""
+  const v = props.buildDates(props.lp)
+
   return typeof v === "string" ? v.trim() : ""
 })
 
-const progressBgClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"
-})
+const progressBgClass = computed(() => (props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"))
 
-const progressTextClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5"
-})
+const progressTextClass = computed(() =>
+  props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5",
+)
 </script>
 
 <template>

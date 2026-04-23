@@ -26,22 +26,22 @@ const props = defineProps({
 
 const emit = defineEmits(["export-pdf"])
 
-const lpType = computed(() => {
+// Only SCORM packages (type = 2 in Chamilo legacy)
+const canUpdateScorm = computed(() => {
+  if (!props.canEdit) {
+    return false
+  }
+
   const v = props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0
 
-  return Number(v) || 0
+  return Number(v) === 2
 })
-
-// Only SCORM packages (type = 2 in Chamilo legacy)
-const canUpdateScorm = computed(() => props.canEdit && lpType.value === 2)
-
-const isStudentView = computed(() => route.query?.isStudentView === "true")
 
 const openUrl = computed(() =>
   lpService.buildLegacyViewUrl(props.lp.iid, {
     cid: props.legacyContext.cid || 0,
     sid: props.legacyContext.sid || 0,
-    isStudentView: isStudentView.value ? "true" : "false",
+    isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
   }),
 )
 
@@ -81,6 +81,7 @@ const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "d
 
 const onDelete = () => {
   const label = (props.lp.title || "").trim() || t("Learning path")
+
   requireConfirmation({
     message: `${t("Are you sure to delete")} ${label}?`,
     accept: () => {
@@ -90,17 +91,15 @@ const onDelete = () => {
 }
 
 const dateText = computed(() => {
-  const v = props.buildDates ? props.buildDates(props.lp) : ""
+  const v = props.buildDates(props.lp)
+
   return typeof v === "string" ? v.trim() : ""
 })
 
-const progressBgClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"
-})
-
-const progressTextClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5"
-})
+const progressBgClass = computed(() => (props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"))
+const progressTextClass = computed(() =>
+  props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5",
+)
 
 const buttonActions = computed(() =>
   [
@@ -166,47 +165,22 @@ const buttonActions = computed(() =>
 )
 
 const mItemActions = ref()
-const itemActions = [
-  {
-    label: t("Publish / Hide"),
-    url: togglePublishUrl.value,
-  },
-  {
-    label: t("Update SCORM"),
-    visible: canUpdateScorm.value,
-    url: updateScormUrl.value,
-  },
-  {
-    label: t("Delete"),
-    command: onDelete,
-  },
-]
+
+const itemActions = computed(() => [
+  { label: t("Publish / Hide"), url: togglePublishUrl.value },
+  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
+  { label: t("Delete"), command: onDelete },
+])
 
 const mItemActionsMobile = ref()
-const itemActionsMobile = [
-  {
-    label: t("Publish / Hide"),
-    url: togglePublishUrl.value,
-  },
-  {
-    label: t("Export as SCORM"),
-    url: exportScormUrl.value,
-    visible: props.canExportScorm,
-  },
-  {
-    label: t("Update SCORM"),
-    visible: canUpdateScorm.value,
-    url: updateScormUrl.value,
-  },
-  {
-    label: t("Settings"),
-    url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext),
-  },
-  {
-    label: t("Delete"),
-    command: onDelete,
-  },
-]
+
+const itemActionsMobile = computed(() => [
+  { label: t("Publish / Hide"), url: togglePublishUrl.value },
+  { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
+  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
+  { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },
+  { label: t("Delete"), command: onDelete },
+])
 </script>
 
 <template>

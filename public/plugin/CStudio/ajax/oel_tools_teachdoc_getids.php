@@ -40,12 +40,8 @@ if (!$VDB->w_api_is_anonymous()) {
 
     $user = $VDB->w_api_get_user_info();
 
-    if (isset($user['status'])) {
-        if (SESSIONADMIN == $user['status']
-        || COURSEMANAGER == $user['status']
-        || PLATFORM_ADMIN == $user['status']) {
-            $lpIdLst = ',canedit'.$lpIdLst;
-        }
+    if ($VDB->w_api_is_allowed_to_edit()) {
+        $lpIdLst = ',canedit'.$lpIdLst;
     }
 
     $_SESSION['teachdocLstIds'] = $lpIdLst;

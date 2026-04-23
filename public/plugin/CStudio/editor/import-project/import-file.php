@@ -63,18 +63,11 @@ if (isset($_GET['id'])) {
     $typefile = isset($_GET['typefile']) ? $VDB->remove_XSS($_GET['typefile']) : '';
     if (!$VDB->w_api_is_anonymous()) {
         $user = $VDB->w_api_get_user_info();
-        if (isset($user['status'])) {
-            if (SESSIONADMIN == $user['status']
-              || COURSEMANAGER == $user['status']
-              || PLATFORM_ADMIN == $user['status']) {
-            } else {
-                if (false == $VDB->w_is_platform_admin()) {
-                    echo "<div style='color:red;' >Status !".$user['status'].'</div>';
-                    echo 'Context status is not valid or has expired. Form submission rejected ! '.$version;
+        if (!$VDB->w_api_is_allowed_to_edit()) {
+            echo "<div style='color:red;' >Status !".$user['status'].'</div>';
+            echo 'Context status is not valid or has expired. Form submission rejected ! '.$version;
 
-                    exit;
-                }
-            }
+            exit;
         }
     }
 } else {

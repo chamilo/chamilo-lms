@@ -1,7 +1,9 @@
 <?php
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Features context. (MinkContext extends BehatContext)
@@ -340,7 +342,7 @@ class FeatureContext extends MinkContext
         }
 
         $this->getSession()->executeScript(
-            "tinymce.get(\"$fieldId\").getBody().innerHTML = \"$value\";"
+            "var ed = tinymce.get(\"$fieldId\"); ed.setContent(\"$value\"); ed.fire('input'); ed.fire('change');"
         );
     }
 
@@ -376,7 +378,7 @@ class FeatureContext extends MinkContext
      */
     public function iFillInSelectInputWithAndSelect($field, $id, $value)
     {
-        $this->getSession()->executeScript("$('$field').select2({data : [{id: $id, text: '$value'}]});");
+        $this->getSession()->executeScript("$('$field').select2({data : [{id: '$id', text: '$value'}]});");
     }
 
     /**
@@ -385,7 +387,7 @@ class FeatureContext extends MinkContext
     public function iFillInAjaxSelectInputWithAndSelect($field, $id, $value)
     {
         $this->getSession()->executeScript("
-            var newOption = new Option('$value', $id, true, true);
+            var newOption = new Option('$value', '$id', true, true);
             $('$field').append(newOption).trigger('change');
         ");
     }
@@ -395,15 +397,15 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-       $session = $this->getSession();
+        $session = $this->getSession();
         // 1) accept_alert() (alert native)
         try {
             $driver = $session->getDriver();
 
-                try {
-                    $driver->getWebDriverSession()->accept_alert();
-                    return;
-                } catch (\Exception $e) {}
+            try {
+                $driver->getWebDriverSession()->accept_alert();
+                return;
+            } catch (\Exception $e) {}
 
         } catch (\Exception $e) {
             // ignore
@@ -527,7 +529,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(4000);
     }
 
     /**
@@ -536,7 +538,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(14000);
+        $this->getSession()->wait(7000);
     }
 
     /**
@@ -546,6 +548,25 @@ class FeatureContext extends MinkContext
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
     }
+
+    /**
+     * @When /^I wait for the element "([^"]*)" to appear$/
+     */
+    public function iWaitForElementToAppear($selector): void
+    {
+        $escaped = addslashes($selector);
+        $this->getSession()->wait(10000, "document.querySelector('{$escaped}') !== null");
+    }
+
+    /**
+     * @When /^I wait up to 20 seconds for the element "([^"]*)" to appear$/
+     */
+    public function iWait20SecondsForElementToAppear($selector): void
+    {
+        $escaped = addslashes($selector);
+        $this->getSession()->wait(20000, "document.querySelector('{$escaped}') !== null");
+    }
+
 
     /**
      * @When /^(?:|I )wait one minute for the page to be loaded$/
@@ -580,7 +601,7 @@ class FeatureContext extends MinkContext
         ");
     }
 
-     /**
+    /**
      * @When /^I press advanced settings$/
      */
     public function iSelectFromSelectWithLabel()
@@ -588,7 +609,7 @@ class FeatureContext extends MinkContext
         $this->pressButton('Advanced settings');
     }
 
-     /**
+    /**
      * Clicks link with specified id|title|alt|text
      * Example: When I follow "Log In"
      * Example: And I follow "Log In"
@@ -780,6 +801,55 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then I should see the :selector element
+     */
+    public function iShouldSeeTheElement($selector)
+    {
+        $this->assertSession()->elementExists('css', $selector);
+    }
+
+    /**
+     * Check all checkboxes whose name contains the given partial name.
+     * Useful for checkbox groups like form[show_tabs][] where IDs are dynamic.
+     *
+     * @Then I check all checkboxes with name containing :partialName
+     */
+    public function iCheckAllCheckboxesWithNameContaining($partialName)
+    {
+        $js = <<<JS
+(function() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name*="$partialName"]');
+    checkboxes.forEach(function(cb) { if (!cb.checked) cb.click(); });
+    return checkboxes.length;
+})();
+JS;
+        $count = $this->getSession()->evaluateScript($js);
+        if ($count === 0) {
+            throw new \Exception(sprintf('No checkboxes found with name containing "%s"', $partialName));
+        }
+    }
+
+    /**
+     * Uncheck all checkboxes whose name contains the given partial name.
+     *
+     * @Then I uncheck all checkboxes with name containing :partialName
+     */
+    public function iUncheckAllCheckboxesWithNameContaining($partialName)
+    {
+        $js = <<<JS
+(function() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name*="$partialName"]');
+    checkboxes.forEach(function(cb) { if (cb.checked) cb.click(); });
+    return checkboxes.length;
+})();
+JS;
+        $count = $this->getSession()->evaluateScript($js);
+        if ($count === 0) {
+            throw new \Exception(sprintf('No checkboxes found with name containing "%s"', $partialName));
+        }
+    }
+
+    /**
      * @Then /^(?:I see|I should see|And I see)\s+"?([^\"]+)"?\s+in the element "([^\"]+)"$/
      */
     public function iSeeInElement($expected, $elementSelector)
@@ -847,6 +917,275 @@ JS;
         $this->getSession()->executeScript($script);
         $this->getSession()->wait(300);
         return true;
+    }
+
+    /**
+     * @When /^I type and select "([^"]*)" in select2 field "([^"]*)"$/
+     */
+    public function iTypeAndSelectInSelect2($value, $fieldId)
+    {
+        $session = $this->getSession();
+        $session->executeScript("$('#" . $fieldId . "').select2('open');");
+        $session->wait(500);
+        $session->executeScript("
+            var input = document.querySelector('.select2-search__field');
+            if (input) {
+                input.value = '" . $value . "';
+                input.dispatchEvent(new Event('input', {bubbles: true}));
+                input.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+            }
+        ");
+        $session->wait(2000);
+        $page = $session->getPage();
+        $result = $page->find('css', '.select2-results__option--highlighted, .select2-results__option');
+        if ($result) {
+            $result->click();
+        }
+        $session->wait(500);
+    }
+
+    /**
+     * @When /^I set hidden field "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetHiddenField($fieldId, $value)
+    {
+        $this->getSession()->executeScript(
+            "document.getElementById('" . $fieldId . "').value = '" . $value . "';"
+        );
+    }
+
+    /**
+     * @When /^I type and select "([^"]*)" in inline select2 "([^"]*)"$/
+     */
+    public function iTypeAndSelectInInlineSelect2($value, $fieldId)
+    {
+        $session = $this->getSession();
+        $session->executeScript("
+            var container = document.getElementById('select2-" . $fieldId . "-container');
+            if (container) {
+                var textarea = container.closest('.select2-selection').querySelector('.select2-search__field');
+                if (textarea) {
+                    textarea.focus();
+                    textarea.value = '" . $value . "';
+                    textarea.dispatchEvent(new Event('input', {bubbles: true}));
+                    textarea.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+                }
+            }
+        ");
+        $session->wait(2000);
+        $page = $session->getPage();
+        $result = $page->find('css', '.select2-results__option--highlighted, .select2-results__option');
+        if ($result) {
+            $result->click();
+        }
+        $session->wait(500);
+    }
+
+    /**
+     * @When /^I select the first option from "([^"]*)"$/
+     */
+    public function iSelectFirstOptionFrom(string $fieldName): void
+    {
+        $js = "var s=document.querySelector('select[name=\"" . $fieldName . "\"],select#" . $fieldName . "');"
+            . "if(s){var f=Array.from(s.options).find(function(o){return o.value!==''});"
+            . "if(f){s.value=f.value;s.dispatchEvent(new Event('change',{bubbles:true}));}}";
+        $this->getSession()->executeScript($js);
+    }
+
+    /**
+     * @AfterStep
+     *
+     * When a step fails, dump the full HTML of the page and a form-summary
+     * into tests/behat/behat_debug/ so Claude (or a developer) can analyse
+     * the real state of the page and find the correct selectors.
+     */
+    public function dumpHtmlOnFailure(AfterStepScope $scope): void
+    {
+        // Only act on failed steps
+        if ($scope->getTestResult()->getResultCode() !== TestResult::FAILED) {
+            return;
+        }
+
+        try {
+            $session = $this->getSession();
+            $page = $session->getPage();
+
+            // Try to get the RENDERED DOM (after JavaScript execution) via Selenium/ChromeDriver.
+            // This captures the final state including Vue.js/PrimeVue dynamic components.
+            // Falls back to getContent() (server-side HTML source) if JS evaluation fails.
+            try {
+                $driver = $session->getDriver();
+                $html = $driver->evaluateScript('return document.documentElement.outerHTML');
+            } catch (\Exception $jsEx) {
+                $html = $page->getContent();
+            }
+
+            if (empty($html)) {
+                $html = $page->getContent();
+            }
+        } catch (\Exception $e) {
+            // If we can't even get the page content, bail out silently
+            return;
+        }
+
+        // Build output directory
+        $debugDir = __DIR__ . '/../../behat_debug';
+        if (!is_dir($debugDir)) {
+            mkdir($debugDir, 0777, true);
+        }
+
+        // Build a unique filename from scenario + step line
+        $feature = basename($scope->getFeature()->getFile(), '.feature');
+        $line = $scope->getStep()->getLine();
+        $timestamp = date('Ymd_His');
+        $baseName = "{$feature}_line{$line}_{$timestamp}";
+
+        // --- 1) Full HTML dump ---
+        file_put_contents("{$debugDir}/{$baseName}_full.html", $html);
+
+        // --- 2) Form-summary: extract all form elements so we can see
+        //         the real field names, types, ids, options, etc. ---
+        $summary = $this->extractFormSummary($html, $session);
+        file_put_contents("{$debugDir}/{$baseName}_form_summary.txt", $summary);
+
+        // --- 3) Current URL ---
+        try {
+            $url = $session->getCurrentUrl();
+        } catch (\Exception $e) {
+            $url = '(unable to retrieve URL)';
+        }
+
+        // --- 4) Meta file with context ---
+        $stepText = $scope->getStep()->getText();
+        $meta = "BEHAT DEBUG — Step failure\n";
+        $meta .= "==========================\n\n";
+        $meta .= "Feature : {$scope->getFeature()->getFile()}\n";
+        $meta .= "Step    : {$stepText}\n";
+        $meta .= "Line    : {$line}\n";
+        $meta .= "URL     : {$url}\n";
+        $meta .= "Time    : {$timestamp}\n\n";
+        $meta .= "Files generated:\n";
+        $meta .= "  - {$baseName}_full.html        (complete page HTML)\n";
+        $meta .= "  - {$baseName}_form_summary.txt (extracted form fields)\n";
+        file_put_contents("{$debugDir}/{$baseName}_meta.txt", $meta);
+    }
+
+    /**
+     * Parse the HTML and extract a human-readable summary of all form fields.
+     * This includes: inputs, selects (with their options), textareas, buttons.
+     */
+    private function extractFormSummary(string $html, $session): string
+    {
+        $lines = [];
+        $lines[] = "=== FORM FIELDS SUMMARY ===";
+        $lines[] = "URL: " . (method_exists($session, 'getCurrentUrl') ? $session->getCurrentUrl() : 'N/A');
+        $lines[] = str_repeat('=', 60);
+        $lines[] = '';
+
+        // Use DOMDocument to parse
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html, LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new \DOMXPath($dom);
+
+        // --- INPUTS ---
+        $inputs = $xpath->query('//input');
+        if ($inputs->length > 0) {
+            $lines[] = "--- INPUT FIELDS ({$inputs->length}) ---";
+            foreach ($inputs as $input) {
+                $type = $input->getAttribute('type') ?: 'text';
+                $name = $input->getAttribute('name');
+                $id = $input->getAttribute('id');
+                $value = $input->getAttribute('value');
+                $checked = $input->getAttribute('checked') ? ' [CHECKED]' : '';
+                $disabled = $input->getAttribute('disabled') ? ' [DISABLED]' : '';
+                $placeholder = $input->getAttribute('placeholder');
+
+                $info = "  <input type=\"{$type}\"";
+                if ($name) $info .= " name=\"{$name}\"";
+                if ($id) $info .= " id=\"{$id}\"";
+                if ($value && strlen($value) < 100) $info .= " value=\"{$value}\"";
+                if ($placeholder) $info .= " placeholder=\"{$placeholder}\"";
+                $info .= "{$checked}{$disabled}>";
+                $lines[] = $info;
+            }
+            $lines[] = '';
+        }
+
+        // --- SELECTS ---
+        $selects = $xpath->query('//select');
+        if ($selects->length > 0) {
+            $lines[] = "--- SELECT FIELDS ({$selects->length}) ---";
+            foreach ($selects as $select) {
+                $name = $select->getAttribute('name');
+                $id = $select->getAttribute('id');
+                $multiple = $select->getAttribute('multiple') ? ' [MULTIPLE]' : '';
+
+                $lines[] = "  <select name=\"{$name}\" id=\"{$id}\"{$multiple}>";
+
+                $options = $xpath->query('.//option', $select);
+                foreach ($options as $option) {
+                    $optValue = $option->getAttribute('value');
+                    $optText = trim($option->textContent);
+                    $selected = $option->getAttribute('selected') ? ' *SELECTED*' : '';
+                    $lines[] = "    <option value=\"{$optValue}\"{$selected}>{$optText}</option>";
+                }
+                $lines[] = "  </select>";
+                $lines[] = '';
+            }
+        }
+
+        // --- TEXTAREAS ---
+        $textareas = $xpath->query('//textarea');
+        if ($textareas->length > 0) {
+            $lines[] = "--- TEXTAREA FIELDS ({$textareas->length}) ---";
+            foreach ($textareas as $ta) {
+                $name = $ta->getAttribute('name');
+                $id = $ta->getAttribute('id');
+                $content = substr(trim($ta->textContent), 0, 200);
+                $lines[] = "  <textarea name=\"{$name}\" id=\"{$id}\">{$content}...</textarea>";
+            }
+            $lines[] = '';
+        }
+
+        // --- BUTTONS ---
+        $buttons = $xpath->query('//button | //input[@type="submit"] | //input[@type="button"]');
+        if ($buttons->length > 0) {
+            $lines[] = "--- BUTTONS ({$buttons->length}) ---";
+            foreach ($buttons as $btn) {
+                $tag = $btn->nodeName;
+                $type = $btn->getAttribute('type') ?: '';
+                $name = $btn->getAttribute('name');
+                $id = $btn->getAttribute('id');
+                $text = trim($btn->textContent);
+                $classes = $btn->getAttribute('class');
+
+                $info = "  <{$tag}";
+                if ($type) $info .= " type=\"{$type}\"";
+                if ($name) $info .= " name=\"{$name}\"";
+                if ($id) $info .= " id=\"{$id}\"";
+                if ($classes) $info .= " class=\"{$classes}\"";
+                $info .= ">";
+                if ($text) $info .= "{$text}</{$tag}>";
+                $lines[] = $info;
+            }
+            $lines[] = '';
+        }
+
+        // --- LABELS (useful to map labels to field IDs) ---
+        $labels = $xpath->query('//label[@for]');
+        if ($labels->length > 0) {
+            $lines[] = "--- LABELS WITH 'for' ATTRIBUTE ({$labels->length}) ---";
+            foreach ($labels as $label) {
+                $for = $label->getAttribute('for');
+                $text = trim($label->textContent);
+                if ($text) {
+                    $lines[] = "  <label for=\"{$for}\">{$text}</label>";
+                }
+            }
+            $lines[] = '';
+        }
+
+        return implode("\n", $lines);
     }
 
     public function visit($page): void

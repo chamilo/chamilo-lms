@@ -224,9 +224,41 @@ const canAutoLaunch = computed(() => {
 
 const items = ref([])
 const categories = ref([])
-const uncatList = ref([])
-const catLists = ref({})
 const visibilityMap = ref({})
+
+const filteredItems = computed(() =>
+  canEdit.value ? items.value : items.value.filter((lp) => !!visibilityMap.value[lp.iid]),
+)
+
+const uncatList = ref([])
+
+watch(
+  filteredItems,
+  (lps) => {
+    if (!draggingUncat.value) {
+      uncatList.value = lps.filter((lp) => !lp.category?.iid)
+    }
+  },
+  { immediate: true },
+)
+
+const catLists = computed(() => {
+  const byCat = {}
+
+  for (const lp of filteredItems.value) {
+    const catId = lp.category?.iid
+
+    if (catId) {
+      if (!byCat[catId]) {
+        byCat[catId] = []
+      }
+
+      byCat[catId].push(lp)
+    }
+  }
+
+  return byCat
+})
 
 onMounted(() => {
   platformConfig.setStudentViewEnabled(route.query?.isStudentView === "true")
@@ -281,13 +313,24 @@ async function loadVisibilityFor(lpIds) {
 }
 
 const withCidSid = (url) => {
-  if (!url) return url
+  if (!url) {
+    return url
+  }
+
   const [withoutHash, hash = ""] = url.split("#")
   const [path, rawQuery = ""] = withoutHash.split("?")
   const sp = new URLSearchParams(rawQuery)
-  if (legacyContext.value.cid) sp.set("cid", legacyContext.value.cid)
-  if (legacyContext.value.sid) sp.set("sid", legacyContext.value.sid)
+
+  if (legacyContext.value.cid) {
+    sp.set("cid", legacyContext.value.cid)
+  }
+
+  if (legacyContext.value.sid) {
+    sp.set("sid", legacyContext.value.sid)
+  }
+
   const qs = sp.toString()
+
   return path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : "")
 }
 
@@ -324,7 +367,6 @@ const load = async () => {
     }))
 
     await loadVisibilityFor(items.value.map((lp) => lp.iid))
-    rebuildListsFromItems()
   } catch (e) {
     showErrorNotification(e)
   } finally {
@@ -377,28 +419,6 @@ const categorizedGroups = computed(() => {
   return rows
 })
 
-function rebuildListsFromItems() {
-  const source = canEdit.value ? items.value : items.value.filter((lp) => !!visibilityMap.value[lp.iid])
-  const uncat = []
-  const byCat = {}
-
-  for (const lp of source) {
-    const catId = lp.category?.iid
-
-    if (!catId) {
-      uncat.push(lp)
-    } else {
-      if (!byCat[catId]) {
-        byCat[catId] = []
-      }
-      byCat[catId].push(lp)
-    }
-  }
-
-  uncatList.value = uncat
-  catLists.value = byCat
-}
-
 const hasAnyVisible = computed(() => {
   if (canEdit.value) {
     return items.value.length > 0
@@ -423,7 +443,6 @@ function applyOrderWithinContext(predicate, orderedIds) {
 
     return originalIndex.get(a.iid) - originalIndex.get(b.iid)
   })
-  rebuildListsFromItems()
 }
 
 async function sendReorder(orderedIds, { categoryId } = {}) {

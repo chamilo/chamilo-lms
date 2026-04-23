@@ -116,12 +116,6 @@ class PlatformConfigurationController extends AbstractController
                 'admin.administrator_surname',
                 'editor.enabled_mathjax',
                 'editor.translate_html',
-                'editor.block_copy_paste_for_students',
-                'editor.youtube_for_students',
-                'editor.enabled_insertHtml',
-                'editor.enable_iframe_inclusion',
-                'editor.enable_uploadimage_editor',
-                'editor.video_context_menu_hidden',
                 'display.show_admin_toolbar',
                 'registration.allow_terms_conditions',
                 'agenda.allow_personal_agenda',
@@ -252,6 +246,7 @@ class PlatformConfigurationController extends AbstractController
             'task_grader' => $courseSettingsManager->getCourseSettingValue('task_grader'),
             'content_analyzer' => $courseSettingsManager->getCourseSettingValue('content_analyzer'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
+            'student_validate_own_attendance' => $courseSettingsManager->getCourseSettingValue('student_validate_own_attendance'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

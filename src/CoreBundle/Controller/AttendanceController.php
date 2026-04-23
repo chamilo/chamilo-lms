@@ -585,6 +585,66 @@ class AttendanceController extends AbstractController
         return $this->json(['message' => $this->translator->trans('Signature saved successfully')]);
     }
 
+    #[Route('/validate-self', name: 'chamilo_core_attendance_validate_self', methods: ['POST'])]
+    public function validateSelf(
+        Request $request,
+        CAttendanceSheetRepository $sheetRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $courseId = isset($data['courseId']) ? (int) $data['courseId'] : null;
+        $entries = $data['entries'] ?? [];
+
+        if (!$courseId || empty($entries)) {
+            return $this->json(['error' => 'Missing required parameters'], 400);
+        }
+
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+
+        $setting = \api_get_course_setting('student_validate_own_attendance', $course);
+        if ('1' !== (string) $setting) {
+            return $this->json(['error' => 'This feature is not enabled for this course'], 403);
+        }
+
+        foreach ($entries as $entry) {
+            $calendarId = isset($entry['calendarId']) ? (int) $entry['calendarId'] : null;
+            $presence = isset($entry['presence']) ? (int) $entry['presence'] : null;
+
+            if (!$calendarId || null === $presence) {
+                continue;
+            }
+
+            $calendar = $this->attendanceCalendarRepository->find($calendarId);
+            if (!$calendar) {
+                continue;
+            }
+
+            $sheet = $sheetRepository->findOneBy([
+                'user' => $user,
+                'attendanceCalendar' => $calendar,
+            ]);
+
+            if (!$sheet) {
+                $sheet = new CAttendanceSheet();
+                $sheet->setUser($user)->setAttendanceCalendar($calendar);
+            }
+
+            $sheet->setPresence($presence);
+            $this->em->persist($sheet);
+        }
+
+        $this->em->flush();
+
+        return $this->json(['message' => $this->translator->trans('Attendance saved successfully')]);
+    }
+
     #[Route('/{id}/student-dates', name: 'attendance_student_dates', methods: ['GET'])]
     public function getStudentDates(int $id): JsonResponse
     {

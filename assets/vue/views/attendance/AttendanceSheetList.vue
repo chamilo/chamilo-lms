@@ -114,7 +114,8 @@
                 type="checkbox"
                 class="mr-2"
                 :checked="attendanceData[`${currentUserId}-${date.id}`] === 1"
-                disabled
+                :disabled="!studentCanValidateOwnAttendance"
+                @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
               />
             </template>
             <span>{{ formatAttendanceDate(date.dateTime) }}</span>
@@ -137,6 +138,19 @@
               @click="openSignatureDialog(currentUserId, date.id)"
             />
           </div>
+        </div>
+
+        <div
+          v-if="studentCanValidateOwnAttendance && filteredDates.length > 0"
+          class="mt-4"
+        >
+          <BaseButton
+            :label="t('Save')"
+            icon="save"
+            type="success"
+            :disabled="isSavingStudentAttendance"
+            @click="saveStudentOwnAttendance"
+          />
         </div>
       </div>
 
@@ -537,6 +551,7 @@ import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceS
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useCourseSettings } from "../../store/courseSettingStore"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
@@ -553,6 +568,7 @@ const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
+const courseSettingsStore = useCourseSettings()
 
 const isTeacherUser = computed(
   () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
@@ -588,6 +604,10 @@ const canEdit = computed(() => {
 })
 
 const canManageLocks = computed(() => canEdit.value)
+
+const studentCanValidateOwnAttendance = computed(
+  () => isStudentUI.value && courseSettingsStore.getSetting("student_validate_own_attendance") === "1",
+)
 
 const signedCount = computed(
   () => filteredDates.value.filter((d) => attendanceData.value[`${currentUserId.value}-${d.id}`] === 1).length,
@@ -634,6 +654,7 @@ const filteredAttendanceSheets = computed(() => {
 })
 
 const isSaving = ref(false)
+const isSavingStudentAttendance = ref(false)
 const attendanceData = ref({})
 
 /**
@@ -693,6 +714,33 @@ const saveAttendanceSheet = async () => {
     alert(t("Failed to save attendance. Please try again."))
   } finally {
     isSaving.value = false
+  }
+}
+
+const onStudentAttendanceChange = (dateId, checked) => {
+  const key = `${currentUserId.value}-${dateId}`
+  attendanceData.value[key] = checked ? 1 : 0
+}
+
+const saveStudentOwnAttendance = async () => {
+  isSavingStudentAttendance.value = true
+  try {
+    const entries = filteredDates.value.map((date) => ({
+      calendarId: date.id,
+      presence: attendanceData.value[`${currentUserId.value}-${date.id}`] ?? 0,
+    }))
+
+    await attendanceService.saveStudentOwnAttendance({
+      courseId: parseInt(cid, 10),
+      entries,
+    })
+
+    alert(t("Attendance saved successfully"))
+  } catch (error) {
+    console.error("Error saving student attendance:", error)
+    alert(t("Failed to save attendance. Please try again."))
+  } finally {
+    isSavingStudentAttendance.value = false
   }
 }
 

@@ -111,6 +111,10 @@
     "Section collapse": "Kollapsa sektion",
     "Index Table": "Innehållsförteckning",
     "fxTools": "fxVerktyg",
+    "Tools": "Verktyg",
+    "Project theme": "Projekt tema",
+    "Page style": "Sidstil",
+    "Quiz style": "Kvizstil",
     "Content elements": "Innehållselement",
     "Button": "Knapp",
     "Insert": "Infoga",
@@ -124,5 +128,15 @@
     "Edition filltext": "Redigering fylltext",
     "Edition findwords": "Redigering hittaord",
     "Edition markwords": "Redigering markeraord",
-    "Edition sorttheparagraphs": "Redigering sorterastyckena"
+    "Edition sorttheparagraphs": "Redigering sorterastyckena",
+    "tpl_demo_content_note": "Detta är demoinnehåll för Chamilo Studio. För utveckling ska du inte redigera denna fil, istället kan du modifiera och byta namn på den.",
+    "tpl_start": "Starta",
+    "tpl_put_your_title_here": "Skriv din titel här",
+    "tpl_title_a": "Titel A",
+    "tpl_target_audience_and_prerequisites": "Målgrupp och förkunskaper",
+    "tpl_who_is_this_training_for": "Vem är denna utbildning för?",
+    "tpl_objectives_of_the_course": "Kursens mål",
+    "tpl_objective_read_and_analyse": "Läs och analysera redovisnings- och finansdokument",
+    "tpl_objective_conducting_project": "Genomföra ett projekt för att utföra arbete",
+    "tpl_objective_mastering_tools": "Bemästra verktygen"
 }

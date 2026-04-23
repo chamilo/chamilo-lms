@@ -111,6 +111,10 @@
     "Section collapse": "Plegar secció",
     "Index Table": "Taula d'índex",
     "fxTools": "fxTools",
+    "Tools": "Eines",
+    "Project theme": "Tema del projecte",
+    "Page style": "Estil de pàgina",
+    "Quiz style": "Estil del qüestionari",
     "Content elements": "Elements de contingut",
     "Button": "Botó",
     "Insert": "Insereix",
@@ -124,5 +128,15 @@
     "Edition filltext": "Edició ompletext",
     "Edition findwords": "Edició trobaparaules",
     "Edition markwords": "Edició marcaparaules",
-    "Edition sorttheparagraphs": "Edició ordenaparàgrafs"
+    "Edition sorttheparagraphs": "Edició ordenaparàgrafs",
+    "tpl_demo_content_note": "Aquest és un contingut de demostració per a Chamilo Studio. Per al desenvolupament, no hauria d'editar aquest fitxer, sinó que pot modificar-lo i canviar-li el nom.",
+    "tpl_start": "Inicia",
+    "tpl_put_your_title_here": "Poseu el vostre títol aquí",
+    "tpl_title_a": "Títol A",
+    "tpl_target_audience_and_prerequisites": "Públic objectiu i requisits previs",
+    "tpl_who_is_this_training_for": "Per a qui és aquesta formació?",
+    "tpl_objectives_of_the_course": "Objectius del curs",
+    "tpl_objective_read_and_analyse": "Llegir i analitzar documents comptables i financers",
+    "tpl_objective_conducting_project": "Realitzar un projecte per dur a terme el treball",
+    "tpl_objective_mastering_tools": "Dominar les eines"
 }

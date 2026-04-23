@@ -99,9 +99,7 @@ readonly class CalendarEventTransformer
         $sessionUrl = null;
 
         if ($course) {
-            $baseUrl = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $sessionUrl = "{$baseUrl}course/{$course->getId()}/home?".http_build_query(['sid' => $object->getId()]);
+            $sessionUrl = "/course/{$course->getId()}/home?".http_build_query(['sid' => $object->getId()]);
         }
 
         return new CalendarEvent(

@@ -85,20 +85,16 @@ if (isset($_GET['id'])) {
     if (!$VDB->w_api_is_anonymous()) {
         $user = $VDB->w_api_get_user_info();
 
-        if (isset($user['status'])) {
-            if (SESSIONADMIN == $user['status']
-              || COURSEMANAGER == $user['status']
-              || PLATFORM_ADMIN == $user['status']) {
-                echo "userStatusCS = '".(int) $user['status']."';";
-                if (isset($_SESSION['idsessionedition'])) {
-                    echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
-                }
-            } else {
-                echo 'Context token is not valid or has expired. User rejected !</br>';
-                echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
-
-                exit;
+        if ($VDB->w_api_is_allowed_to_edit()) {
+            echo "userStatusCS = '".(int) $user['status']."';";
+            if (isset($_SESSION['idsessionedition'])) {
+                echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
             }
+        } else {
+            echo 'Context token is not valid or has expired. User rejected !</br>';
+            echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
+
+            exit;
         }
     } else {
         echo "console.log('api_is_anonymous !');";

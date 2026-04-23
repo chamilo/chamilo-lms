@@ -290,4 +290,12 @@ class VirtualDatabase
 
         return 'en_US';
     }
+    public function w_api_is_allowed_to_edit() {
+        $this->detect_engine();
+
+        if ('chamil' == $this->engine) {
+            return api_is_allowed_to_edit();
+        }
+    }
+
 }

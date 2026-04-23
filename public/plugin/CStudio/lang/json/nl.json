@@ -111,6 +111,10 @@
     "Section collapse": "Sectie inklappen",
     "Index Table": "Inhoudsopgave",
     "fxTools": "fxTools",
+    "Tools": "Gereedschappen",
+    "Project theme": "Projectthema",
+    "Page style": "Paginastijl",
+    "Quiz style": "Quizstijl",
     "Content elements": "Inhoudselementen",
     "Button": "Knop",
     "Insert": "Invoegen",
@@ -124,5 +128,15 @@
     "Edition filltext": "Bewerking vultekst",
     "Edition findwords": "Bewerking zoekwoorden",
     "Edition markwords": "Bewerking markeerwoorden",
-    "Edition sorttheparagraphs": "Bewerking sorteeralinea's"
+    "Edition sorttheparagraphs": "Bewerking sorteeralinea's",
+    "tpl_demo_content_note": "Dit is demo-inhoud voor Chamilo Studio. Voor de ontwikkeling mag u dit bestand niet bewerken, in plaats daarvan kunt u het wijzigen en hernoemen.",
+    "tpl_start": "Start",
+    "tpl_put_your_title_here": "Plaats hier uw titel",
+    "tpl_title_a": "Titel A",
+    "tpl_target_audience_and_prerequisites": "Doelgroep en vereiste voorkennis",
+    "tpl_who_is_this_training_for": "Voor wie is deze training bedoeld?",
+    "tpl_objectives_of_the_course": "Doelstellingen van de cursus",
+    "tpl_objective_read_and_analyse": "Lezen en analyseren van boekhoud- en financiële documenten",
+    "tpl_objective_conducting_project": "Uitvoeren van een project om werk uit te voeren",
+    "tpl_objective_mastering_tools": "Beheersen van de tools"
 }

@@ -111,6 +111,10 @@
     "Section collapse": "فروپاشی بخش",
     "Index Table": "جدول فهرست",
     "fxTools": "ابزارهای fx",
+    "Tools": "ابزارها",
+    "Project theme": "تم پروژه",
+    "Page style": "سبک صفحه",
+    "Quiz style": "سبک آزمون",
     "Content elements": "عناصر محتوا",
     "Button": "دکمه",
     "Insert": "درج",
@@ -124,5 +128,15 @@
     "Edition filltext": "ویرایش پر کردن متن",
     "Edition findwords": "ویرایش پیدا کردن کلمات",
     "Edition markwords": "ویرایش علامت‌گذاری کلمات",
-    "Edition sorttheparagraphs": "ویرایش مرتب کردن پاراگراف‌ها"
+    "Edition sorttheparagraphs": "ویرایش مرتب کردن پاراگراف‌ها",
+    "tpl_demo_content_note": "این محتوای نمایشی برای Chamilo Studio است. برای توسعه، نباید این فایل را ویرایش کنید، بلکه می‌توانید آن را تغییر نام داده و ویرایش کنید.",
+    "tpl_start": "شروع",
+    "tpl_put_your_title_here": "عنوان خود را اینجا قرار دهید",
+    "tpl_title_a": "عنوان A",
+    "tpl_target_audience_and_prerequisites": "مخاطبان هدف و پیش‌نیازها",
+    "tpl_who_is_this_training_for": "این آموزش برای چه کسانی است؟",
+    "tpl_objectives_of_the_course": "اهداف دوره",
+    "tpl_objective_read_and_analyse": "خواندن و تحلیل اسناد حسابداری و مالی",
+    "tpl_objective_conducting_project": "اجرای پروژه برای انجام کار",
+    "tpl_objective_mastering_tools": "تسلط بر ابزارها"
 }

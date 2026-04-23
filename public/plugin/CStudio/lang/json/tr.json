@@ -111,6 +111,10 @@
     "Section collapse": "Bölüm Daralt",
     "Index Table": "İndeks Tablosu",
     "fxTools": "fxAraçlar",
+    "Tools": "Araçlar",
+    "Project theme": "Proje teması",
+    "Page style": "Sayfa stili",
+    "Quiz style": "Test stili",
     "Content elements": "İçerik Öğeleri",
     "Button": "Düğme",
     "Insert": "Ekle",
@@ -124,5 +128,15 @@
     "Edition filltext": "Düzenleme MetinDoldur",
     "Edition findwords": "Düzenleme KelimeBul",
     "Edition markwords": "Düzenleme Kelimeİşaretle",
-    "Edition sorttheparagraphs": "Düzenleme ParagrafSırala"
+    "Edition sorttheparagraphs": "Düzenleme ParagrafSırala",
+    "tpl_demo_content_note": "Bu, Chamilo Studio için bir demo içeriktir. Geliştirme için bu dosyayı düzenlememelisiniz, bunun yerine değiştirebilir ve yeniden adlandırabilirsiniz.",
+    "tpl_start": "Başlat",
+    "tpl_put_your_title_here": "Başlığınızı buraya yazın",
+    "tpl_title_a": "Başlık A",
+    "tpl_target_audience_and_prerequisites": "Hedef kitle ve önkoşullar",
+    "tpl_who_is_this_training_for": "Bu eğitim kime yöneliktir?",
+    "tpl_objectives_of_the_course": "Dersin hedefleri",
+    "tpl_objective_read_and_analyse": "Muhasebe ve finansal belgeleri okuyun ve analiz edin",
+    "tpl_objective_conducting_project": "İşleri yürütmek için bir proje yürütme",
+    "tpl_objective_mastering_tools": "Araçları ustalaşma"
 }

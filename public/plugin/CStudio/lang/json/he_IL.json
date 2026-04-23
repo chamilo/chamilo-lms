@@ -111,6 +111,10 @@
     "Section collapse": "קריסת סעיף",
     "Index Table": "טבלת תוכן",
     "fxTools": "כלי fx",
+    "Tools": "כלים",
+    "Project theme": "ערכת נושא לפרויקט",
+    "Page style": "סגנון עמוד",
+    "Quiz style": "סגנון מבחן",
     "Content elements": "אלמנטי תוכן",
     "Button": "כפתור",
     "Insert": "הכנס",
@@ -124,5 +128,15 @@
     "Edition filltext": "עריכת מילוי טקסט",
     "Edition findwords": "עריכת מצא מילים",
     "Edition markwords": "עריכת סמן מילים",
-    "Edition sorttheparagraphs": "עריכת מיון פסקאות"
+    "Edition sorttheparagraphs": "עריכת מיון פסקאות",
+    "tpl_demo_content_note": "זהו תוכן הדגמה עבור Chamilo Studio. לפיתוח, אין לערוך קובץ זה, במקום זאת ניתן לשנות שמו ולערוך אותו.",
+    "tpl_start": "התחל",
+    "tpl_put_your_title_here": "הכנס כאן את הכותרת שלך",
+    "tpl_title_a": "כותרת א'",
+    "tpl_target_audience_and_prerequisites": "קהל יעד ודרישות מקדימות",
+    "tpl_who_is_this_training_for": "מי מיועד לקורס זה?",
+    "tpl_objectives_of_the_course": "מטרות הקורס",
+    "tpl_objective_read_and_analyse": "קריאה וניתוח מסמכי חשבונאות ופיננסים",
+    "tpl_objective_conducting_project": "ביצוע פרויקט לביצוע עבודה",
+    "tpl_objective_mastering_tools": "שליטה בכלים"
 }

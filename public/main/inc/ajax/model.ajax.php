@@ -229,6 +229,11 @@ if (($search || $forceSearch) && ('false' !== $search)) {
         $filters = json_decode($_REQUEST['filters2']);
     }
 
+    if (!empty($filters) && isset($filters->groupOp)) {
+        $op = strtoupper((string) $filters->groupOp);
+        $filters->groupOp = in_array($op, ['AND', 'OR'], true) ? $op : 'AND';
+    }
+
     if (!empty($filters)) {
         if (in_array(
             $action,

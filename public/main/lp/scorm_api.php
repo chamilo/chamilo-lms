@@ -1745,7 +1745,7 @@ function switch_item(current_item, next_item) {
             olms.lms_view_id,
             currentItemId,
             targetItemId
-        );
+        ).done(function() { updateItemParentNames(); });
 
         // Update nav buttons (best-effort; does not block)
         if (typeof checkCurrentItemPosition === "function") {
@@ -1774,6 +1774,8 @@ function switch_item(current_item, next_item) {
         async: false,
         cache: false
     });
+
+    updateItemParentNames();
 
     var scoSrc = buildLpContentSrc(targetItemId);
     setIframeSrc(scoSrc);

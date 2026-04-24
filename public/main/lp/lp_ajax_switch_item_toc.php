@@ -144,6 +144,17 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         $return .= "update_progress_bar('$completedItems','$totalItems','$progressMode');";
     }
 
+    $lpItemParents = $myLP->getCurrentItemParentNames($newItemId);
+    if (!empty($lpItemParents)) {
+        $escapedParents = array_map(function ($parentTitle) {
+            return htmlspecialchars($parentTitle, ENT_QUOTES, 'UTF-8');
+        }, $lpItemParents);
+        $titleItemParents = json_encode($escapedParents, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT);
+        $return .= "olms.lms_lp_item_parents={$titleItemParents};";
+    } else {
+        $return .= "olms.lms_lp_item_parents=[];";
+    }
+
     $myLP->set_error_msg('');
     $myLP->prerequisites_match($newItemId);
 

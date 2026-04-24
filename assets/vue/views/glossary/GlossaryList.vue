@@ -185,32 +185,16 @@ const canEditGlossary = computed(() => {
   return basePermission && !platform.isStudentViewActive
 })
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) {
-    return
-  }
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Glossary] loadCourseSettings FAILED:", err)
-  }
-}
-
 onMounted(async () => {
   isLoading.value = true
 
-  await loadCourseSettingsIfPossible()
   await fetchGlossaries()
 })
 
 watch(
   () => [course.value?.id, session.value?.id],
   async () => {
-    await loadCourseSettingsIfPossible()
+    await fetchGlossaries()
   },
 )
 

@@ -367,7 +367,6 @@ watch(
   async ([newCourse, newSession]) => {
     if (newCourse && newCourse.id) {
       const sessionId = newSession ? newSession.id : null
-      await courseSettingsStore.loadCourseSettings(newCourse.id, sessionId)
       const setting = courseSettingsStore.getSetting("allow_user_edit_agenda")
       allowUserEditAgenda.value = setting === "1"
       if (allowUserEditAgenda.value) {

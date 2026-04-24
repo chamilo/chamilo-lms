@@ -292,29 +292,6 @@ const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) return
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Assignments] loadCourseSettings FAILED:", err)
-  }
-}
-
-onMounted(async () => {
-  await loadCourseSettingsIfPossible()
-})
-
-watch(
-  () => [course.value?.id, session.value?.id],
-  async () => {
-    await loadCourseSettingsIfPossible()
-  },
-)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))

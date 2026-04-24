@@ -239,7 +239,6 @@ export default {
     }
 
     await this.loadCourseContext()
-    await this.loadCourseSettingsIfPossible()
 
     if (!this.searchEnabled) {
       return
@@ -337,20 +336,6 @@ export default {
         }
       } catch (error) {
         console.warn("[DocumentsForm] Failed to load course context.", error)
-      }
-    },
-    async loadCourseSettingsIfPossible() {
-      const cid = Number(this.$route?.query?.cid || 0)
-      const sid = Number(this.$route?.query?.sid || 0)
-
-      if (!cid) {
-        return
-      }
-
-      try {
-        await this.courseSettingsStore.loadCourseSettings(cid, sid)
-      } catch (error) {
-        console.warn("[DocumentsForm] Failed to load course settings.", error)
       }
     },
     getTinyEditor() {

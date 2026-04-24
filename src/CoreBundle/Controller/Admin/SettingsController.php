@@ -744,8 +744,6 @@ class SettingsController extends BaseController
             'exercise.my_courses_show_pending_exercise_attempts',
             'exercise.quiz_keep_alive_ping_interval',
             'exercise.show_exercise_attempts_in_all_user_sessions',
-            'language.auto_detect_language_custom_pages',
-            'language.template_activate_language_filter',
             'lp.allow_import_scorm_package_in_course_builder',
             'lp.lp_allow_export_to_students',
             'lp.lp_enable_flow',

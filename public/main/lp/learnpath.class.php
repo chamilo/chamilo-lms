@@ -4918,7 +4918,7 @@ class learnpath
                 href="javascript:void(0);"
                 onclick="return deleteItem(this);"
                 class="">';
-                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete section'));
+                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete'));
                 $deleteIcon .= '</a>';
                 $extra = '';
                 if ('dir' === $type && empty($node['__children'])) {

@@ -240,7 +240,7 @@ class BigUpload
      */
     public function postUnsupported($scormid)
     {
-        $name = $_FILES['bigUploadFile']['name'];
+        $name = disable_dangerous_file(api_replace_dangerous_char((string) ($_FILES['bigUploadFile']['name'] ?? '')));
         $tempName = $_FILES['bigUploadFile']['tmp_name'];
 
         if (filesize($tempName) > self::MAX_SIZE) {
@@ -257,6 +257,13 @@ class BigUpload
     }
 }
 
+// Require an authenticated Chamilo session
+if (empty(api_get_user_id())) {
+    http_response_code(403);
+    echo json_encode(['errorStatus' => 1, 'errorText' => 'Forbidden']);
+    exit;
+}
+
 // Instantiate the class
 $bigUpload = new BigUpload();
 
@@ -268,7 +275,25 @@ if (isset($_GET['key'])) {
 if (isset($_POST['key'])) {
     $tempName = $_POST['key'];
 }
+
+if (!empty($tempName)) {
+    $tempName = api_replace_dangerous_char($tempName);
+    $tempName = disable_dangerous_file($tempName);
+}
+
 $bigUpload->setTempName($tempName);
+
+// Register the final filename in session when the first chunk arrives with ?name=
+// so that finish cannot be tricked into using an attacker-controlled POST value.
+$sessionKey = 'cstudio_bigupload';
+if (!isset($_SESSION[$sessionKey])) {
+    $_SESSION[$sessionKey] = [];
+}
+if (isset($_GET['name']) && '' !== $bigUpload->getTempName()) {
+    $_SESSION[$sessionKey][$bigUpload->getTempName()] = disable_dangerous_file(
+        api_replace_dangerous_char((string) $_GET['name'])
+    );
+}
 
 switch ($_GET['action']) {
     case 'upload':
@@ -278,11 +303,14 @@ switch ($_GET['action']) {
 
     case 'abort':
         print $bigUpload->abortUpload();
+        unset($_SESSION[$sessionKey][$bigUpload->getTempName()]);
 
         break;
 
     case 'finish':
-        print $bigUpload->finishUpload($_POST['name'], $_POST['scormid']);
+        $finalName = $_SESSION[$sessionKey][$bigUpload->getTempName()] ?? '';
+        print $bigUpload->finishUpload($finalName, $_POST['scormid']);
+        unset($_SESSION[$sessionKey][$bigUpload->getTempName()]);
 
         break;
 

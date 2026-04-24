@@ -1894,7 +1894,7 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * Upsert course settings for all courses in batches.
      *
-     * @param array<string,string> $varToValue variable => value
+     * @param array<string, string> $varToValue variable => value
      */
     private function upsertCourseSettingsForAllCourses(string $category, array $varToValue, bool $force = false): void
     {
@@ -1907,12 +1907,12 @@ class SettingsManager implements SettingsManagerInterface
         ;
 
         $courseIds = array_map(
-            static fn (array $r): int => (int) ($r['id'] ?? 0),
+            static fn (array $row): int => (int) ($row['id'] ?? 0),
             $courseIdRows
         );
         $courseIds = array_values(array_filter($courseIds, static fn (int $id): bool => $id > 0));
 
-        if (empty($courseIds)) {
+        if (empty($courseIds) || empty($varToValue)) {
             return;
         }
 
@@ -1922,54 +1922,152 @@ class SettingsManager implements SettingsManagerInterface
         for ($offset = 0; $offset < \count($courseIds); $offset += $batchSize) {
             $chunk = \array_slice($courseIds, $offset, $batchSize);
 
-            // Load existing settings for this chunk
+            /*
+             * Include legacy rows with NULL/empty category.
+             * Some course settings were historically stored only by variable.
+             * Ignoring them creates semantic duplicates for the same course and variable.
+             */
             $existing = $this->manager->createQueryBuilder()
                 ->select('cs')
                 ->from(CCourseSetting::class, 'cs')
                 ->where('cs.cId IN (:cids)')
                 ->andWhere('cs.variable IN (:vars)')
-                ->andWhere('cs.category = :cat')
+                ->andWhere('(cs.category = :category OR cs.category IS NULL OR cs.category = :emptyCategory)')
                 ->setParameter('cids', $chunk)
                 ->setParameter('vars', $vars)
-                ->setParameter('cat', $category)
+                ->setParameter('category', $category)
+                ->setParameter('emptyCategory', '')
+                ->orderBy('cs.iid', 'ASC')
                 ->getQuery()
                 ->getResult()
             ;
 
-            /** @var array<int, array<string, CCourseSetting>> $byCourse */
-            $byCourse = [];
+            /** @var array<int, array<string, CCourseSetting[]>> $rowsByCourseAndVariable */
+            $rowsByCourseAndVariable = [];
+
             foreach ($existing as $row) {
                 if (!$row instanceof CCourseSetting) {
                     continue;
                 }
-                $cId = (int) $row->getCId();
-                $var = (string) $row->getVariable();
-                $byCourse[$cId][$var] = $row;
+
+                $courseId = (int) $row->getCId();
+                $variable = (string) $row->getVariable();
+
+                $rowsByCourseAndVariable[$courseId][$variable][] = $row;
             }
 
-            foreach ($chunk as $cId) {
-                foreach ($varToValue as $var => $value) {
-                    $row = $byCourse[$cId][$var] ?? null;
+            foreach ($chunk as $courseId) {
+                foreach ($varToValue as $variable => $value) {
+                    $rows = $rowsByCourseAndVariable[$courseId][$variable] ?? [];
 
-                    if ($row instanceof CCourseSetting) {
-                        if ($force && (string) $row->getValue() !== $value) {
-                            $row->setValue($value);
-                            $this->manager->persist($row);
-                        }
+                    if (empty($rows)) {
+                        $new = new CCourseSetting();
+                        $new
+                            ->setCId($courseId)
+                            ->setVariable($variable)
+                            ->setTitle($variable)
+                            ->setCategory($category)
+                            ->setValue($value)
+                        ;
+
+                        $this->manager->persist($new);
 
                         continue;
                     }
 
-                    $new = new CCourseSetting();
-                    $new
-                        ->setCId($cId)
-                        ->setVariable($var)
-                        ->setTitle($var)
-                        ->setCategory($category)
-                        ->setValue($value)
-                    ;
+                    $canonical = null;
 
-                    $this->manager->persist($new);
+                    /*
+                     * Prefer the row that already has the target category.
+                     * If it does not exist, reuse the oldest legacy row and normalize it.
+                     */
+                    foreach ($rows as $row) {
+                        if ($category === (string) $row->getCategory()) {
+                            $canonical = $row;
+
+                            break;
+                        }
+                    }
+
+                    if (!$canonical instanceof CCourseSetting) {
+                        $canonical = $rows[0];
+                    }
+
+                    /*
+                     * Preserve explicit course-level values when not forced.
+                     * Legacy NULL-category values are treated as existing course decisions.
+                     */
+                    $valueToKeep = null;
+
+                    if (!$force) {
+                        foreach ($rows as $row) {
+                            $rowCategory = (string) $row->getCategory();
+                            $rowValue = $row->getValue();
+
+                            if (
+                                $category !== $rowCategory &&
+                                null !== $rowValue &&
+                                '' !== (string) $rowValue
+                            ) {
+                                $valueToKeep = (string) $rowValue;
+
+                                break;
+                            }
+                        }
+
+                        if (null === $valueToKeep) {
+                            foreach ($rows as $row) {
+                                $rowCategory = (string) $row->getCategory();
+                                $rowValue = $row->getValue();
+
+                                if (
+                                    $category === $rowCategory &&
+                                    null !== $rowValue &&
+                                    '' !== (string) $rowValue
+                                ) {
+                                    $valueToKeep = (string) $rowValue;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if ($force || null === $valueToKeep) {
+                        $valueToKeep = (string) $value;
+                    }
+
+                    $needsPersist = false;
+
+                    if ($category !== (string) $canonical->getCategory()) {
+                        $canonical->setCategory($category);
+                        $needsPersist = true;
+                    }
+
+                    if ('' === trim((string) $canonical->getTitle())) {
+                        $canonical->setTitle($variable);
+                        $needsPersist = true;
+                    }
+
+                    if ((string) ($canonical->getValue() ?? '') !== $valueToKeep) {
+                        $canonical->setValue($valueToKeep);
+                        $needsPersist = true;
+                    }
+
+                    if ($needsPersist) {
+                        $this->manager->persist($canonical);
+                    }
+
+                    /*
+                     * Remove semantic duplicates after preserving the effective value.
+                     */
+                    foreach ($rows as $row) {
+                        if ($row === $canonical) {
+                            continue;
+                        }
+
+                        $this->manager->remove($row);
+                    }
                 }
             }
 

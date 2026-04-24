@@ -2262,27 +2262,192 @@ class DocumentManager
     ) {
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
+
+        global $htmlHeadXtra;
+
+        if (!isset($htmlHeadXtra) || !is_array($htmlHeadXtra)) {
+            $htmlHeadXtra = [];
+        }
+
+        static $lpDocumentTreeAssetsLoaded = false;
+
+        if (false === $lpDocumentTreeAssetsLoaded) {
+            $htmlHeadXtra[] = '<style>
+#doc_list.lp-document-tree-root li {
+    border: 0;
+    background: transparent;
+}
+
+#doc_list.lp-document-tree-root li.lp-document-tree-folder > ul {
+    display: none;
+    margin-top: 4px;
+    margin-left: 22px;
+    padding-left: 10px;
+    border-left: 1px solid #e5e7eb;
+}
+
+#doc_list.lp-document-tree-root li.lp-document-tree-folder.is-expanded > ul {
+    display: block;
+}
+
+#doc_list.lp-document-tree-root .item_data {
+    min-height: 24px;
+    align-items: center;
+}
+
+#doc_list.lp-document-tree-root .item_data:hover {
+    background: #f8fafc;
+    border-radius: 4px;
+}
+
+#doc_list.lp-document-tree-root .lp-document-tree-toggle {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0 6px 0 0;
+    width: 18px;
+    min-width: 18px;
+    height: 18px;
+    cursor: pointer;
+    color: #64748b;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#doc_list.lp-document-tree-root .lp-document-tree-folder-label {
+    color: #111827;
+}
+
+#doc_list.lp-document-tree-root li.lp-document-tree-folder--collapsible > .item_data > .lp-document-tree-folder-label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#doc_list.lp-document-tree-root li.lp-document-tree-file > .item_data > .moved {
+    cursor: move;
+}
+
+#doc_list.lp-document-tree-root .lp-document-tree-file-title {
+    color: #111827;
+    text-decoration: none;
+}
+
+#doc_list.lp-document-tree-root .lp-document-tree-file-title:hover {
+    text-decoration: underline;
+}
+</style>';
+
+            $htmlHeadXtra[] = '<script>
+jQuery(function ($) {
+    var $tree = $("#doc_list.lp-document-tree-root");
+
+    $tree.find("li.lp-document-tree-folder").has("> ul").each(function () {
+        var $item = $(this);
+        var $itemData = $item.children(".item_data").first();
+        var $label = $itemData.children(".lp-document-tree-folder-label").first();
+
+        if ($itemData.length < 1) {
+            return;
+        }
+
+        $item
+            .addClass("lp-document-tree-folder--collapsible")
+            .removeClass("is-expanded");
+
+        if ($itemData.children(".lp-document-tree-toggle").length < 1) {
+            $itemData.prepend(
+                \'<button type="button" class="lp-document-tree-toggle" aria-expanded="false" title="Expand or collapse">+</button>\'
+            );
+        }
+
+        $label.attr({
+            "role": "button",
+            "tabindex": "0"
+        });
+    });
+
+    $(document)
+        .off("click.lpDocumentTreeToggle")
+        .on("click.lpDocumentTreeToggle", "#doc_list.lp-document-tree-root .lp-document-tree-toggle", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var $button = $(this);
+            var $item = $button.closest("li");
+            var expanded = !$item.hasClass("is-expanded");
+
+            $item.toggleClass("is-expanded", expanded);
+            $button
+                .attr("aria-expanded", expanded ? "true" : "false")
+                .text(expanded ? "-" : "+");
+        });
+
+    $(document)
+        .off("click.lpDocumentTreeFolderLabel")
+        .on("click.lpDocumentTreeFolderLabel", "#doc_list.lp-document-tree-root li.lp-document-tree-folder--collapsible > .item_data > .lp-document-tree-folder-label", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            $(this)
+                .siblings(".lp-document-tree-toggle")
+                .first()
+                .trigger("click");
+        });
+
+    $(document)
+        .off("keydown.lpDocumentTreeFolderLabel")
+        .on("keydown.lpDocumentTreeFolderLabel", "#doc_list.lp-document-tree-root li.lp-document-tree-folder--collapsible > .item_data > .lp-document-tree-folder-label", function (event) {
+            if (event.key !== "Enter" && event.key !== " ") {
+                return;
+            }
+
+            event.preventDefault();
+
+            $(this)
+                .siblings(".lp-document-tree-toggle")
+                .first()
+                .trigger("click");
+        });
+});
+</script>';
+
+            $lpDocumentTreeAssetsLoaded = true;
+        }
+
         $move = get_lang('Move');
         $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size:16px;width:16px;height:16px;" title="'.htmlentities($move).'"></i>';
-        $folderIcon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL);
-        $fileIcon = '<i class="mdi-file mdi ch-tool-icon" style="font-size:16px;width:16px;height:16px;" aria-hidden="true" title="'
-            . htmlentities(get_lang('File'))
-            . '"></i>';
 
         $lpItemType = ($filterByFiletype === 'video') ? 'video' : 'document';
         $options = [
             'decorate'   => true,
-            'rootOpen'   => '<ul id="doc_list" class="list-group lp_resource">',
+            'rootOpen'   => '<ul id="doc_list" class="list-group lp_resource lp-document-tree-root">',
             'rootClose'  => '</ul>',
             'childOpen'  => function ($child) {
-                return '<li id="'.$child['id'].'" data-id="'.$child['id'].'" class="list-group-item nested-'.$child['level'].'">';
+                $isFolder = isset($child['document_filetype']) && 'folder' === $child['document_filetype'];
+                $typeClass = $isFolder ? ' lp-document-tree-folder' : ' lp-document-tree-file';
+
+                return '<li id="'.$child['id'].'" data-id="'.$child['id'].'" class="list-group-item nested-'.$child['level'].$typeClass.'">';
             },
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) use ($icon, $fileIcon, $lpItemType) {
+            'nodeDecorator' => function ($node) use ($icon, $lpItemType) {
+                $title = cut(addslashes($node['title']), 150);
+                $isFolder = isset($node['document_filetype']) && 'folder' === $node['document_filetype'];
+
+                if ($isFolder) {
+                    $link  = '<div class="flex flex-row gap-1 h-4 item_data">';
+                    $link .= '<span class="lp-document-tree-folder-label">'.$title.'</span>';
+                    $link .= '</div>';
+
+                    return $link;
+                }
+
                 $link  = '<div class="flex flex-row gap-1 h-4 item_data">';
                 $link .= '<a class="moved ui-sortable-handle" href="#">'.$icon.'</a>';
-                $link .= '<a data_id="'.$node['id'].'" data_type="'.$lpItemType.'" class="moved ui-sortable-handle link_with_id">'.$fileIcon.'&nbsp;</a>';
-                $link .= cut(addslashes($node['title']), 150);
+                $link .= '<a data_id="'.$node['id'].'" data_type="'.$lpItemType.'" class="moved ui-sortable-handle link_with_id lp-document-tree-file-title">';
+                $link .= $title;
+                $link .= '</a>';
                 $link .= '</div>';
 
                 return $link;
@@ -2294,6 +2459,7 @@ class DocumentManager
         $qb = $em
             ->createQueryBuilder()
             ->select('node, files')
+            ->addSelect('doc.filetype AS documentFiletype')
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
@@ -2342,14 +2508,14 @@ class DocumentManager
         if (!empty($filterByExtension)) {
             $orX = $qb->expr()->orX();
             foreach ($filterByExtension as $extension) {
-                $paramName = 'ext_' . $extension;
+                $paramName = 'ext_'.$extension;
                 $orX->add(
                     $qb->expr()->like(
                         'LOWER(files.originalName)',
-                        ':' . $paramName
+                        ':'.$paramName
                     )
                 );
-                $qb->setParameter($paramName, '%.' . strtolower($extension));
+                $qb->setParameter($paramName, '%.'.strtolower($extension));
             }
             $qb->andWhere($orX);
         }
@@ -2359,14 +2525,28 @@ class DocumentManager
                 $qb->andWhere(
                     $qb->expr()->notLike(
                         'LOWER(files.originalName)',
-                        ':exclude_' . $extension
+                        ':exclude_'.$extension
                     )
                 );
-                $qb->setParameter('exclude_' . $extension, '%.' . strtolower($extension));
+                $qb->setParameter('exclude_'.$extension, '%.'.strtolower($extension));
             }
         }
 
-        $items = $qb->getQuery()->getArrayResult();
+        $rawItems = $qb->getQuery()->getArrayResult();
+        $items = [];
+
+        foreach ($rawItems as $rawItem) {
+            if (isset($rawItem[0]) && is_array($rawItem[0])) {
+                $item = $rawItem[0];
+                $item['document_filetype'] = $rawItem['documentFiletype'] ?? 'file';
+                $items[] = $item;
+
+                continue;
+            }
+
+            $rawItem['document_filetype'] = $rawItem['document_filetype'] ?? 'file';
+            $items[] = $rawItem;
+        }
 
         if ($flattenRoot) {
             foreach ($items as &$item) {

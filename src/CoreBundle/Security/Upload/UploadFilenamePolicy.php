@@ -172,6 +172,7 @@ final class UploadFilenamePolicy
             'webm',
             'h5p',
             'zip',
+            'mbz',
         ];
 
         return array_values(array_unique(array_merge($extensions, $builtInSafeExtensions)));

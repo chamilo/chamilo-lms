@@ -30,16 +30,28 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         ?string $title = null,
         ?int $active = null,
         bool $onlyPublished = true,
-        ?int $categoryId = null
+        ?int $categoryId = null,
+        bool $includeDeleted = false
     ): QueryBuilder {
-        $qb = $this->getResourcesByCourse($course, $session, null, null, $onlyPublished);
+        $qb = $this->getResourcesByCourse(
+            $course,
+            $session,
+            null,
+            null,
+            $onlyPublished
+        );
 
         if ($onlyPublished) {
             $this->addDateFilterQueryBuilder(new DateTime(), $qb);
         }
+
         $this->addCategoryQueryBuilder($categoryId, $qb);
         $this->addActiveQueryBuilder($active, $qb);
-        $this->addNotDeletedQueryBuilder($qb);
+
+        if (false === $includeDeleted) {
+            $this->addNotDeletedQueryBuilder($qb);
+        }
+
         if (!empty($title)) {
             $this->addTitleQueryBuilder($title, $qb);
         }
@@ -52,6 +64,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         $params = [
             'exerciseId' => $resource->getResourceIdentifier(),
         ];
+
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }
@@ -59,9 +72,51 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return '/main/exercise/overview.php?'.http_build_query($params);
     }
 
+    public function findAutoLaunchableQuizByCourseAndSession(Course $course, ?Session $session = null): ?int
+    {
+        $qb = $this->getResourcesByCourse($course, $session)
+            ->select('resource.iid')
+            ->andWhere('resource.autoLaunch = 1')
+        ;
+
+        $qb->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result ? $result['iid'] : null;
+    }
+
+    public function findQuizzesUsingQuestion(int $questionId, int $excludeQuizId = 0): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('quiz', 'rn', 'rl', 'course', 'session')
+            ->from(CQuiz::class, 'quiz')
+            ->innerJoin('quiz.questions', 'rel')
+            ->innerJoin('quiz.resourceNode', 'rn')
+            ->leftJoin('rn.resourceLinks', 'rl')
+            ->leftJoin('rl.course', 'course')
+            ->leftJoin('rl.session', 'session')
+            ->where('rel.question = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->groupBy('quiz.iid')
+        ;
+
+        if ($excludeQuizId > 0) {
+            $qb
+                ->andWhere('quiz.iid != :excludeQuizId')
+                ->setParameter('excludeQuizId', $excludeQuizId)
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     private function addDateFilterQueryBuilder(DateTime $dateTime, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
+
         $qb
             ->andWhere('(
                 (
@@ -69,12 +124,22 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
                     resource.startTime < :date AND
                     resource.endTime IS NOT NULL AND
                     resource.endTime > :date
-                )  OR
-                (resource.startTime IS NOT NULL AND resource.startTime < :date AND resource.endTime IS NULL) OR
-                (resource.startTime IS NULL AND resource.endTime IS NOT NULL AND resource.endTime > :date) OR
-                (resource.startTime IS NULL AND resource.endTime IS NULL)
+                ) OR
+                (
+                    resource.startTime IS NOT NULL AND
+                    resource.startTime < :date AND
+                    resource.endTime IS NULL
+                ) OR
+                (
+                    resource.startTime IS NULL AND
+                    resource.endTime IS NOT NULL AND
+                    resource.endTime > :date
+                ) OR
+                (
+                    resource.startTime IS NULL AND
+                    resource.endTime IS NULL
                 )
-            ')
+            )')
             ->setParameter('date', $dateTime)
         ;
 
@@ -84,8 +149,11 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     private function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
-        $qb->andWhere('links.deletedAt IS NULL');
-        $qb->andWhere('links.endVisibilityAt IS NULL');
+
+        $qb
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+        ;
 
         return $qb;
     }
@@ -120,50 +188,5 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         }
 
         return $qb;
-    }
-
-    /**
-     * Finds the auto-launchable quiz for the given course and session.
-     */
-    public function findAutoLaunchableQuizByCourseAndSession(Course $course, ?Session $session = null): ?int
-    {
-        $qb = $this->getResourcesByCourse($course, $session)
-            ->select('resource.iid')
-            ->andWhere('resource.autoLaunch = 1')
-        ;
-
-        $qb->setMaxResults(1);
-
-        $result = $qb->getQuery()->getOneOrNullResult();
-
-        return $result ? $result['iid'] : null;
-    }
-
-    /**
-     * Finds quizzes that are using a given question, optionally excluding one quiz.
-     */
-    public function findQuizzesUsingQuestion(int $questionId, int $excludeQuizId = 0): array
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('quiz', 'rn', 'rl', 'course', 'session')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.questions', 'rel')
-            ->innerJoin('quiz.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'rl')
-            ->leftJoin('rl.course', 'course')
-            ->leftJoin('rl.session', 'session')
-            ->where('rel.question = :questionId')
-            ->setParameter('questionId', $questionId)
-            ->groupBy('quiz.iid')
-        ;
-
-        if ($excludeQuizId > 0) {
-            $qb->andWhere('quiz.iid != :excludeQuizId')
-                ->setParameter('excludeQuizId', $excludeQuizId)
-            ;
-        }
-
-        return $qb->getQuery()->getResult();
     }
 }

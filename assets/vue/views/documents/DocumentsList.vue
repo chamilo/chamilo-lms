@@ -1068,13 +1068,6 @@ onMounted(async () => {
   // course folders and is only needed when the move dialog is opened.
   // openMoveDialog() calls it on demand.
 
-  void courseSettingsStore
-    .loadCourseSettings(cid, sid)
-    .catch((e) => console.error("[AI] loadCourseSettings failed:", e))
-    .finally(() => {
-      void loadAiCapabilities()
-    })
-
   void loadAiCapabilities()
   consumeAiSavedToast()
 })

@@ -699,17 +699,6 @@ const aiCanGenerate = computed(() => {
   return true
 })
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-  if (!courseId) return
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Assignments][AI] loadCourseSettings FAILED:", err)
-  }
-}
 
 async function loadAiProviders() {
   try {
@@ -861,9 +850,6 @@ watch(
 
     comments.value = await cStudentPublicationService.loadComments(props.item.iid)
 
-    // Load settings/providers/prompt only when the modal opens.
-    await loadCourseSettingsIfPossible()
-
     if (canUseAiTaskGrader.value) {
       await loadAiProviders()
       await loadDefaultAiPrompt()
@@ -871,14 +857,6 @@ watch(
   },
 )
 
-// If course/session changes while modal is open, refresh course settings.
-watch(
-  () => [course.value?.id, session.value?.id],
-  async () => {
-    if (!visible.value) return
-    await loadCourseSettingsIfPossible()
-  },
-)
 
 function onHide() {
   emit("update:modelValue", false)

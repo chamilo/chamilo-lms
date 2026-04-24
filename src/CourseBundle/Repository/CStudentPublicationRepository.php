@@ -348,7 +348,14 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
 
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.'.$field, $direction);
+            if ('user.fullName' === $field) {
+                $qb->addOrderBy('user.lastname', $direction);
+                $qb->addOrderBy('user.firstname', $direction);
+            } elseif (str_starts_with($field, 'user.')) {
+                $qb->addOrderBy($field, $direction);
+            } else {
+                $qb->addOrderBy('submission.'.$field, $direction);
+            }
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)

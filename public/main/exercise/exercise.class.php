@@ -10323,7 +10323,20 @@ class Exercise
         $exerciseId = $exercise_stat_info['exe_exo_id'];
         $exercise_result = Exercise::getUserAnswersSavedInExerciseStatic($exeId); // Static helper to avoid $this here
 
-        $content = Display::label(get_lang('Questions without answer'), 'danger');
+        $unansweredIds = [];
+        foreach ($questionList as $questionId) {
+            if (!in_array($questionId, $exercise_result)) {
+                $unansweredIds[] = (int) $questionId;
+            }
+        }
+        $unansweredIdsJson = json_encode($unansweredIds);
+
+        $checkAllIcon = ' <a href="javascript://" onclick="checkUnansweredQuestions();"'
+            .' title="'.get_lang('Check all unanswered questions below').'"'
+            .' style="vertical-align:middle;text-decoration:none;">'
+            .'<span class="mdi mdi-checkbox-marked-outline" style="font-size:1.1em;color:#888;"></span>'
+            .'</a>';
+        $content = Display::label(get_lang('Questions without answer'), 'danger').$checkAllIcon;
         $content .= '<div class="clear"></div><br />';
         $table = '';
         $counter = 0;
@@ -10376,6 +10389,18 @@ class Exercise
             Display::div($table, ['class' => 'question-check-test']);
 
         $content .= '<script>
+    var unansweredIds = '.$unansweredIdsJson.';
+
+    function checkUnansweredQuestions() {
+        unansweredIds.forEach(function(questionId) {
+            var checkbox = document.getElementById("remind_list[" + questionId + "]");
+            if (checkbox && !checkbox.checked) {
+                checkbox.checked = true;
+                save_remind_item(checkbox, questionId);
+            }
+        });
+    }
+
     var lp_data = $.param({
         "learnpath_id": '.$learnpath_id.',
         "learnpath_item_id" : '.$learnpath_item_id.',

@@ -2765,7 +2765,7 @@ class ImportCsv
                     continue;
                 }
 
-                $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
+                $extraData = !empty($userCareerData['extra_data']) ? UnserializeApi::unserialize('not_allowed_classes', $userCareerData['extra_data']) : [];
 
                 //$teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
                 $sql = "SELECT firstname, lastname FROM $userTable

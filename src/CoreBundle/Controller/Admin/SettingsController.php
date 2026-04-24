@@ -744,8 +744,6 @@ class SettingsController extends BaseController
             'exercise.my_courses_show_pending_exercise_attempts',
             'exercise.quiz_keep_alive_ping_interval',
             'exercise.show_exercise_attempts_in_all_user_sessions',
-            'forum.allow_forum_category_language_filter',
-            'forum.subscribe_users_to_forum_notifications_also_in_base_course',
             'gradebook.gradebook_enable_subcategory_skills_independant_assignement',
             'gradebook.gradebook_hide_table',
             'gradebook.my_display_coloring',

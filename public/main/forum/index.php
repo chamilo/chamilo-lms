@@ -152,6 +152,86 @@ $lp_id        = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 
 $forumIndexUrl = 'index.php?'.api_get_cidreq();
 $content       = $_GET['content'] ?? '';
+if (!function_exists('forum_index_normalize_language_filter_value')) {
+    function forum_index_normalize_language_filter_value($value): array
+    {
+        if (is_array($value)) {
+            $values = [];
+
+            foreach ($value as $item) {
+                $values = array_merge(
+                    $values,
+                    forum_index_normalize_language_filter_value($item)
+                );
+            }
+
+            return array_values(array_unique($values));
+        }
+
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            return [];
+        }
+
+        $parts = preg_split('/[;,]/', $value) ?: [];
+        $languages = [];
+
+        foreach ($parts as $part) {
+            $language = trim(Security::remove_XSS((string) $part));
+
+            if ('' === $language) {
+                continue;
+            }
+
+            $languages[] = mb_strtolower($language);
+        }
+
+        return array_values(array_unique($languages));
+    }
+}
+
+if (!function_exists('forum_index_get_language_filter_raw_value')) {
+    function forum_index_get_language_filter_raw_value(string $defaultUserLanguage)
+    {
+        if (array_key_exists('language_filter_applied', $_GET)) {
+            return $_GET['extra_language'] ?? [];
+        }
+
+        return $defaultUserLanguage;
+    }
+}
+
+if (!function_exists('forum_index_category_matches_language_filter')) {
+    function forum_index_category_matches_language_filter(
+        int $categoryId,
+        array $selectedLanguages,
+        ExtraFieldValue $extraFieldValue
+    ): bool {
+        if (empty($selectedLanguages)) {
+            return true;
+        }
+
+        if (empty($categoryId)) {
+            return false;
+        }
+
+        $languageData = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $categoryId,
+            'language'
+        );
+
+        $categoryLanguages = forum_index_normalize_language_filter_value(
+            $languageData['value'] ?? ''
+        );
+
+        if (empty($categoryLanguages)) {
+            return false;
+        }
+
+        return !empty(array_intersect($selectedLanguages, $categoryLanguages));
+    }
+}
 
 // Ensure $interbreadcrumb exists (defensive)
 $interbreadcrumb = $interbreadcrumb ?? [];
@@ -332,10 +412,29 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
     $defaultUserLanguage = ucfirst($value['value']);
 }
 
-// Create a search-box
+// Create a forum category language filter only on the forum list page.
 $searchFilter = '';
-$translate = 'true' === api_get_setting('editor.translate_html');
-if ($translate) {
+
+$showForumCategoryLanguageFilter = !in_array(
+    $action,
+    ['add', 'add_forum', 'add_category', 'edit_forum', 'edit_category'],
+    true
+);
+
+$allowForumCategoryLanguageFilter = $showForumCategoryLanguageFilter
+    && 'true' === api_get_setting('forum.allow_forum_category_language_filter');
+
+$forumCategoryExtraField = new ExtraField('forum_category');
+$forumCategoryLanguageField = $forumCategoryExtraField->get_handler_field_info_by_field_variable('language');
+$hasForumCategoryLanguageField = false !== $forumCategoryLanguageField;
+
+$forumCategoryExtraFieldValue = new ExtraFieldValue('forum_category');
+$forumCategoryLanguageRawValue = forum_index_get_language_filter_raw_value($defaultUserLanguage);
+$forumCategoryLanguageFilterValues = forum_index_normalize_language_filter_value(
+    $forumCategoryLanguageRawValue
+);
+
+if ($allowForumCategoryLanguageFilter && $hasForumCategoryLanguageField) {
     $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
     $htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
     $htmlHeadXtra[] = '<script>
@@ -345,47 +444,98 @@ jQuery(function ($) {
     allowClear: true
   });
 
-  var urlParams = new URLSearchParams(window.location.search);
-  var reloaded = urlParams.get("reloaded");
-
   $("#extra_language").on("change", function () {
-    var selected = $(this).val() || [];
-    // If cleared and not yet reloaded, refresh once to reset state
-    if (selected.length === 0 && !reloaded) {
-      urlParams.set("reloaded", "true");
-      window.location.href = window.location.pathname + "?" + urlParams.toString();
-    }
+    $(this).closest("form").trigger("submit");
   });
-
-  if (reloaded) {
-    urlParams.delete("reloaded");
-    window.history.replaceState(null, null, window.location.pathname + "?" + urlParams.toString());
-  }
 });
 </script>';
 
-    $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null);
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        api_get_self().'?'.api_get_cidreq(),
+        null,
+        null
+    );
+
     $form->addHidden('cid', api_get_course_int_id());
     $form->addHidden('sid', api_get_session_id());
+    $form->addHidden('language_filter_applied', 1);
+
+    $forumCategoryExtraField->addElements(
+        $form,
+        null,
+        [],
+        false,
+        false,
+        ['language'],
+        [],
+        [],
+        false,
+        false,
+        [],
+        [],
+        true
+    );
+
+    if ($form->elementExists('extra_language')) {
+        $form->setDefault('extra_language', $forumCategoryLanguageRawValue);
+        $searchFilter = $form->returnForm();
+    }
+}
+
+$forumCategoryExtraFieldValue = new ExtraFieldValue('forum_category');
+$forumCategoryLanguageRawValue = forum_index_get_language_filter_raw_value($defaultUserLanguage);
+$forumCategoryLanguageFilterValues = forum_index_normalize_language_filter_value(
+    $forumCategoryLanguageRawValue
+);
+
+if ($allowForumCategoryLanguageFilter) {
+    $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
+    $htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
+    $htmlHeadXtra[] = '<script>
+jQuery(function ($) {
+  $("#extra_language").select2({
+    placeholder: "'.get_lang('Please select a language').'",
+    allowClear: true
+  });
+
+  $("#extra_language").on("change", function () {
+    $(this).closest("form").trigger("submit");
+  });
+});
+</script>';
+
+    $form = new FormValidator(
+        'search_simple',
+        'get',
+        api_get_self().'?'.api_get_cidreq(),
+        null,
+        null
+    );
+    $form->addHidden('cid', api_get_course_int_id());
+    $form->addHidden('sid', api_get_session_id());
+    $form->addHidden('language_filter_applied', 1);
 
     $extraField = new ExtraField('forum_category');
     $extraField->addElements(
         $form,
         null,
-        [],            // exclude
-        false,         // filter
-        false,         // tag as select
-        ['language'],  // show only fields
-        [],            // order fields
-        [],            // extra data
+        [],
+        false,
+        false,
+        ['language'],
+        [],
+        [],
         false,
         false,
         [],
         [],
-        true           // $addEmptyOptionSelects = false
+        true
     );
+
     if ($form->elementExists('extra_language')) {
-        $form->setDefault('extra_language', $defaultUserLanguage);
+        $form->setDefault('extra_language', $forumCategoryLanguageRawValue);
     }
 
     $searchFilter = $form->returnForm();
@@ -418,6 +568,18 @@ if (is_array($forumCategories)) {
         $categoryId = is_object($forumCategory) ? $forumCategory->getIid() : (int) ($forumCategory['cat_id'] ?? 0);
 
         if (!empty($forumCategoryId) && $categoryId !== $forumCategoryId) {
+            continue;
+        }
+
+        if (
+            $allowForumCategoryLanguageFilter &&
+            $hasForumCategoryLanguageField &&
+            !forum_index_category_matches_language_filter(
+                $categoryId,
+                $forumCategoryLanguageFilterValues,
+                $forumCategoryExtraFieldValue
+            )
+        ) {
             continue;
         }
 
@@ -563,9 +725,8 @@ if (is_array($forumCategories)) {
             }
         }
 
-        // Category-level extra fields (kept)
-        $extraFieldValue = new ExtraFieldValue('forum_category');
-        $forumCategoryInfo['extra_fields'] = $extraFieldValue->getAllValuesByItem($categoryId);
+        // Category-level extra fields.
+        $forumCategoryInfo['extra_fields'] = $forumCategoryExtraFieldValue->getAllValuesByItem($categoryId);
 
         // Hide empty categories for students
         if (!api_is_allowed_to_edit() && empty($forumsDetailsList)) {

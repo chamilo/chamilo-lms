@@ -180,6 +180,7 @@ class CatForm extends FormValidator
                 'certif_min_score' => $this->category_object->getCertificateMinScore(),
                 'generate_certificates' => $this->category_object->getGenerateCertificates(),
                 'is_requirement' => $this->category_object->getIsRequirement(),
+                'allow_skills_by_subcategory' => $this->category_object->getAllowSkillBySubCategory() ? 1 : 0,
             ]
         );
 
@@ -291,10 +292,9 @@ class CatForm extends FormValidator
             $defaultCertification = $this->category_object->getCertificateMinScore();
         }
 
-        if (!empty($this->category_object) &&
-            0 == $this->category_object->get_parent_id()
-        ) {
+        if (!empty($this->category_object) && 0 == $this->category_object->get_parent_id() ) {
             $model = ExerciseLib::getCourseScoreModel();
+
             if (empty($model)) {
                 $this->addText(
                     'certif_min_score',
@@ -302,6 +302,21 @@ class CatForm extends FormValidator
                     true,
                     ['maxlength' => '5']
                 );
+
+                if ('true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')) {
+                    $allowSkillsBySubCategory = $this->addCheckBox(
+                        'allow_skills_by_subcategory',
+                        [
+                            null,
+                            get_lang('It allows the acquisition of skills by subcategories'),
+                        ],
+                        get_lang('Allow skills by subcategories')
+                    );
+
+                    if ($this->category_object->getAllowSkillBySubCategory()) {
+                        $allowSkillsBySubCategory->setChecked(true);
+                    }
+                }
             } else {
                 $questionWeighting = $value;
                 $defaultCertification = api_number_format($this->category_object->getCertificateMinScore(), 2);
@@ -340,6 +355,38 @@ class CatForm extends FormValidator
                 0
             );
         } else {
+            if ('true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')) {
+                $allowSkillsBySubCategory = $this->category_object->getAllowSkillBySubCategory(
+                    $this->category_object->get_parent_id()
+                );
+
+                if ($allowSkillsBySubCategory) {
+                    $this->addText(
+                        'certif_min_score',
+                        get_lang('Minimum score for skills'),
+                        true,
+                        ['maxlength' => '5']
+                    );
+
+                    $this->addRule(
+                        'certif_min_score',
+                        get_lang('Only numbers'),
+                        'numeric'
+                    );
+
+                    $this->addRule(
+                        'certif_min_score',
+                        get_lang('Negative value'),
+                        'compare',
+                        '>=',
+                        'server',
+                        false,
+                        false,
+                        0
+                    );
+                }
+            }
+
             $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         }
 

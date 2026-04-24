@@ -338,6 +338,7 @@ const canUseAiTaskGrader = computed(() => {
   return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
 
+
 watch(
   loadParams,
   () => {
@@ -489,16 +490,19 @@ async function viewSubmission(item) {
 }
 
 function saveCorrection(item) {
-  if (item?.downloadUrl) {
-    const link = document.createElement("a")
-    link.href = item.downloadUrl
-    link.download = ""
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } else {
+  if (!item?.iid) {
     notification.showErrorNotification(t("No download available"))
+    return
   }
+  const params = new URLSearchParams({
+    cid: course.value?.id ?? 0,
+    sid: session.value?.id ?? 0,
+  })
+  const link = document.createElement("a")
+  link.href = `/assignments/submissions/${item.iid}/download?${params}`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 function editSubmission(item) {

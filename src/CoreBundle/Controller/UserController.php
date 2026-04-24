@@ -71,7 +71,7 @@ class UserController extends AbstractController
     /**
      * Public profile.
      */
-    #[Route(path: '/{username}', methods: ['GET'], name: 'chamilo_core_user_profile')]
+    #[Route(path: '/{username}', name: 'chamilo_core_user_profile', methods: ['GET'])]
     public function profile(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
     {
         $user = $userRepository->findByUsername($username);
@@ -82,9 +82,15 @@ class UserController extends AbstractController
 
         $url = $illustrationRepository->getIllustrationUrl($user);
 
+        $sanitize = static fn (?string $v): string => '' !== ($v ?? '') ? \Security::remove_XSS($v, STUDENT) : '';
+
         return $this->render('@ChamiloCore/User/profile.html.twig', [
             'user' => $user,
             'illustration_url' => $url,
+            'competences' => $sanitize($user->getCompetences()),
+            'openarea' => $sanitize($user->getOpenarea()),
+            'teach' => $sanitize($user->getTeach()),
+            'diplomas' => $sanitize($user->getDiplomas()),
         ]);
     }
 }

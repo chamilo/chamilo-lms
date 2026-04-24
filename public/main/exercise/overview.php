@@ -226,6 +226,7 @@ $attempts = Event::getExerciseResultsByUser(
 $counter = count($attempts);
 $my_attempt_array = [];
 $table_content = '';
+$hideAttemptsTableOnStartPage = ('true' === api_get_setting('exercise.quiz_hide_attempts_table_on_start_page'));
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
@@ -488,11 +489,13 @@ if ($isLimitReached) {
     );
 }
 
-$html .= Display::tag(
-    'div',
-    $table_content,
-    ['class' => 'table-responsive']
-);
+if (!$hideAttemptsTableOnStartPage && !empty($table_content)) {
+    $html .= Display::tag(
+        'div',
+        $table_content,
+        ['class' => 'table-responsive']
+    );
+}
 $html .= '</div>';
 
 if ($certificateBlock) {

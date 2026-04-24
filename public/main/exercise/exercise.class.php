@@ -1747,7 +1747,8 @@ class Exercise
 
     /**
      * deletes the exercise from the database
-     * Notice : leaves the question in the data base.
+     * Notice : leaves the question in the data base unless the automatic
+     * orphan question cleanup setting is enabled.
      *
      * @author Olivier Brouckaert
      */
@@ -1778,6 +1779,34 @@ class Exercise
 
         if ($locked) {
             return false;
+        }
+
+        $questionList = $this->selectQuestionList(true, true);
+        $deleteOrphanQuestions = ('true' === api_get_setting(
+                'exercise.quiz_question_delete_automatically_when_deleting_exercise'
+            ));
+
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $questionId = (int) $questionId;
+                if ($questionId <= 0) {
+                    continue;
+                }
+
+                $question = Question::read($questionId, $this->course);
+                if (!$question) {
+                    continue;
+                }
+
+                if (
+                    $deleteOrphanQuestions &&
+                    !$this->isQuestionUsedInOtherExercises($questionId, $exerciseId)
+                ) {
+                    $question->delete();
+                } else {
+                    $question->removeFromList($exerciseId, $this->course_id);
+                }
+            }
         }
 
         $course = api_get_course_entity();
@@ -1817,6 +1846,25 @@ class Exercise
         }
 
         return true;
+    }
+
+    private function isQuestionUsedInOtherExercises(int $questionId, int $exerciseId): bool
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $questionId = (int) $questionId;
+        $exerciseId = (int) $exerciseId;
+
+        $sql = "SELECT 1
+            FROM $table
+            WHERE
+                question_id = $questionId AND
+                quiz_id <> $exerciseId
+            LIMIT 1";
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 
     /**
@@ -11212,6 +11260,53 @@ class Exercise
         );
     }
 
+    private function shouldUseRelaxedFinishTextFiltering(): bool
+    {
+        return 'true' === api_get_setting('exercise.exercise_result_end_text_html_strict_filtering');
+    }
+
+    private function sanitizeFinishText(string $text): string
+    {
+        $text = trim($text);
+
+        if ('' === $text) {
+            return '';
+        }
+
+        // When the setting is disabled, keep a stricter whitelist.
+        // When the setting is enabled, allow richer HTML but still block active content.
+        $allowedTags = $this->shouldUseRelaxedFinishTextFiltering()
+            ? '<p><br><strong><b><em><i><u><ul><ol><li><a><blockquote><span><div><h1><h2><h3><h4><h5><h6><table><thead><tbody><tr><th><td>>'
+            : '<p><br><strong><b><em><i><u><ul><ol><li><a><blockquote>>';
+
+        // Remove dangerous container tags and their content first.
+        $text = preg_replace(
+            '/<(script|iframe|object|embed|form|input|button|textarea|select)\b[^>]*>.*?<\/\1>/is',
+            '',
+            $text
+        ) ?? $text;
+
+        // Remove self-closing dangerous tags.
+        $text = preg_replace(
+            '/<(script|iframe|object|embed|form|input|button|textarea|select)\b[^>]*\/?>/is',
+            '',
+            $text
+        ) ?? $text;
+
+        // Keep only the allowed tags.
+        $text = strip_tags($text, $allowedTags);
+
+        // Remove inline event handlers and inline styles.
+        $text = preg_replace('/\s+on[a-z]+\s*=\s*("|\').*?\1/isu', '', $text) ?? $text;
+        $text = preg_replace('/\s+style\s*=\s*("|\').*?\1/isu', '', $text) ?? $text;
+
+        // Remove javascript: and data: URLs from common attributes.
+        $text = preg_replace('/\s+href\s*=\s*("|\')\s*(javascript:|data:).*?\1/isu', '', $text) ?? $text;
+        $text = preg_replace('/\s+src\s*=\s*("|\')\s*(javascript:|data:).*?\1/isu', '', $text) ?? $text;
+
+        return $text;
+    }
+
     /**
      * Return the text to display, based on the score and the max score.
      * @param int|float $score
@@ -11227,14 +11322,12 @@ class Exercise
                 1
             );
             if ($percentage >= $passPercentage) {
-                return $this->getTextWhenFinished();
-            } else {
-                return $this->getTextWhenFinishedFailure();
+                return $this->sanitizeFinishText($this->getTextWhenFinished());
             }
-        } else {
-            return $this->getTextWhenFinished();
+
+            return $this->sanitizeFinishText($this->getTextWhenFinishedFailure());
         }
 
-        return '';
+        return $this->sanitizeFinishText($this->getTextWhenFinished());
     }
 }

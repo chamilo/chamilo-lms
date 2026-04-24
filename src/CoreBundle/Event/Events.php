@@ -10,6 +10,7 @@ final class Events
 {
     public const USER_CREATED = 'chamilo.event.user_created';
     public const USER_UPDATED = 'chamilo.event.user_updated';
+    public const USER_DELETED = 'chamilo.event.user_deleted';
 
     public const COURSE_CREATED = 'chamilo.event.course_created';
 

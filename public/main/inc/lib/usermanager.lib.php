@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\UserCreatedEvent;
+use Chamilo\CoreBundle\Event\UserDeletedEvent;
 use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -895,36 +896,43 @@ class UserManager
                 ->execute();
         }
 
+        $deleteType = $destroy ? UserDeletedEvent::DELETE_TYPE_HARD : UserDeletedEvent::DELETE_TYPE_SOFT;
+        $eventDispatcher = Container::getEventDispatcher();
+
+        $eventDispatcher->dispatch(
+            new UserDeletedEvent(
+                ['user' => $user, 'deleteType' => $deleteType],
+                AbstractEvent::TYPE_PRE
+            ),
+            Events::USER_DELETED
+        );
+
+        $deletedUserId = $user->getId();
+        $deletedEmail = $user->getEmail();
+        $deletedUsername = $user->getUsername();
+        $userInfo = $destroy ? api_get_user_info($user_id) : [];
+        $actorId = api_get_user_id();
+
         $repository->deleteUser($user, $destroy);
 
-        if ($destroy) {
-            Event::addEvent(
-                LOG_USER_DELETE,
-                LOG_USER_OBJECT,
-                api_get_user_info($user_id),
-                api_get_utc_datetime(),
-                api_get_user_id()
-            );
+        $postData = ['deleteType' => $deleteType];
 
-            // Log one event per affected user AFTER the deletion
-            if (!empty($affectedIds) && $fallbackId && $fallbackId !== $user_id) {
-                $nowUtc = api_get_utc_datetime();
-                $actor  = api_get_user_id();
-                foreach ($affectedIds as $affectedId) {
-                    Event::addEvent(
-                        LOG_USER_CREATOR_DELETED,
-                        LOG_USER_ID,
-                        [
-                            'user_id'        => $affectedId,
-                            'old_creator_id' => $user_id,
-                            'new_creator_id' => $fallbackId,
-                        ],
-                        $nowUtc,
-                        $actor
-                    );
-                }
-            }
+        if ($destroy) {
+            $postData['userId'] = $deletedUserId;
+            $postData['email'] = $deletedEmail;
+            $postData['username'] = $deletedUsername;
+            $postData['userInfo'] = $userInfo;
+            $postData['affectedIds'] = $affectedIds;
+            $postData['fallbackId'] = $fallbackId;
+            $postData['actorId'] = $actorId;
+        } else {
+            $postData['user'] = $user;
         }
+
+        $eventDispatcher->dispatch(
+            new UserDeletedEvent($postData, AbstractEvent::TYPE_POST),
+            Events::USER_DELETED
+        );
 
         return true;
     }

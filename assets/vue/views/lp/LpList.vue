@@ -165,7 +165,6 @@ const mItems = computed(() => {
       ? [{ label: t("AI learning path generator"), url: lpService.buildLegacyActionUrl("ai_helper", ctx) }]
       : []),
     { label: t("Import"), url: `/main/upload/index.php?${uploadParams}` },
-    { label: t("Chamilo RAPID"), url: `/main/upload/upload_ppt.php?${uploadParams}` },
     { label: t("Add category"), url: lpService.buildLegacyActionUrl("add_lp_category", ctx) },
   ]
 })
@@ -192,7 +191,7 @@ const canUseAi = computed(
   () =>
     canEdit.value &&
     String(platformConfig.getSetting("ai_helpers.enable_ai_helpers")) === "true" &&
-    String(courseSettingsStore?.getSetting?.("learning_path_generator")) === "true",
+    courseSettingsStore.isSettingEnabled("learning_path_generator", "ai_helpers"),
 )
 
 const showExportDialog = ref(false)

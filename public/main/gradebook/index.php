@@ -1020,11 +1020,27 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                     ];
                 }
 
-                $table = $gradebookTable->return_table();
+                $hideGradebookTableForLearners = !$isAllow
+                    && 'true' === api_get_setting('gradebook.gradebook_hide_table')
+                    && 'export_table' !== $action;
+
+                $table = '';
+
+                if (!$hideGradebookTableForLearners) {
+                    $table = $gradebookTable->return_table();
+                }
 
                 $graph = '';
                 if ($allowGraph && empty($model)) {
                     $graph = $gradebookTable->getGraph();
+                }
+
+                if ($hideGradebookTableForLearners) {
+                    echo Display::return_message(
+                        get_lang('The gradebook table is hidden.'),
+                        'normal',
+                        false
+                    );
                 }
 
                 if ('export_table' === $action) {

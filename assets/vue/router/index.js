@@ -57,6 +57,14 @@ import { customVueTemplateEnabled } from "../config/env"
 import { useCourseSettings } from "../store/courseSettingStore"
 import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
 
+function resolveCourseId(to) {
+  if ("CourseHome" === to.name) {
+    return parseInt(to.params?.id ?? 0)
+  }
+
+  return parseInt(to.query?.cid ?? 0)
+}
+
 /**
  * Applies "page-*" marker classes on both the DOM marker and the <body>.
  * This keeps stable theming hooks during SPA navigation (issue #6047).
@@ -361,18 +369,12 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  let cid = parseInt(to.query?.cid ?? 0)
-
-  if ("CourseHome" === to.name) {
-    cid = parseInt(to.params?.id ?? 0)
-  }
+  const cid = resolveCourseId(to)
 
   if (!cid) {
-    for (const key in sessionStorage) {
-      if (key.startsWith("course_autolaunch_")) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    Object.keys(sessionStorage)
+      .filter((k) => k.startsWith("course_autolaunch_"))
+      .forEach((k) => sessionStorage.removeItem(k))
   }
 
   // Determine what the route requires
@@ -453,12 +455,8 @@ router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
 
-  let cid = parseInt(to.query?.cid ?? 0)
+  const cid = resolveCourseId(to)
   const sid = parseInt(to.query?.sid ?? 0)
-
-  if ("CourseHome" === to.name) {
-    cid = parseInt(to.params?.id ?? 0)
-  }
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
@@ -475,7 +473,7 @@ router.beforeResolve(async (to) => {
         securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
       }
     } else {
-      const isTeacher = cidReqStore.course.teachers.some((userSubscription) => {
+      const isTeacher = cidReqStore.course?.teachers?.some((userSubscription) => {
         return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
       })
 

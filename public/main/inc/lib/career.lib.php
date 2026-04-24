@@ -491,8 +491,8 @@ class Career extends Model
         $userResult = [];
         if (!empty($loadUserIdData)) {
             $careerData = UserManager::getUserCareer($loadUserIdData, $careerId);
-            if (isset($careerData['extra_data']) && !empty($careerData['extra_data'])) {
-                $userResult = unserialize($careerData['extra_data']);
+            if (!empty($careerData['extra_data'])) {
+                $userResult = UnserializeApi::unserialize('not_allowed_classes', $careerData['extra_data']);
             }
         }
 

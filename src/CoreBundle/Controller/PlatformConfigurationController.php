@@ -179,6 +179,7 @@ class PlatformConfigurationController extends AbstractController
                 'language.show_different_course_language',
                 'workflows.allow_users_to_create_courses',
                 'work.allow_only_one_student_publication_per_user',
+                'work.add_fullname_in_file_download',
                 'course.course_creation_form_hide_course_code',
                 'course.course_creation_form_set_course_category_mandatory',
                 'display.hide_logout_button',

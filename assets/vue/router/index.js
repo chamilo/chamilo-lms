@@ -177,8 +177,8 @@ const router = createRouter({
         breadcrumb: "Course home",
       },
       beforeEnter: async (to) => {
-        const courseId = to.params.id
-        const sessionId = to.query?.sid
+        const courseId = parseInt(to.params.id)
+        const sessionId = parseInt(to.query?.sid)
         const autoLaunchKey = `course_autolaunch_${courseId}`
         const hasAutoLaunched = sessionStorage.getItem(autoLaunchKey)
 
@@ -194,8 +194,9 @@ const router = createRouter({
             return false
           }
 
-          const course = await courseService.findById(courseId, { sid: sessionId })
-          if (!course) {
+          const cidReqStore = useCidReqStore()
+          await cidReqStore.setCourseAndSessionById(courseId, sessionId)
+          if (!cidReqStore.course) {
             return false
           }
 
@@ -205,14 +206,14 @@ const router = createRouter({
           }
 
           const courseSettingsStore = useCourseSettings()
-          await courseSettingsStore.loadCourseSettings(courseId, sessionId)
 
           // Document auto-launch
           const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
-          if (documentAutoLaunch === 1 && course.resourceNode?.id) {
+          if (documentAutoLaunch === 1 && cidReqStore.course?.resourceNode?.id) {
             sessionStorage.setItem(autoLaunchKey, "true")
             window.location.href =
-              `/resources/document/${course.resourceNode.id}/?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
+              `/resources/document/${cidReqStore.course.resourceNode.id}/?cid=${courseId}` +
+              (sessionId ? `&sid=${sessionId}` : "")
             return false
           }
 

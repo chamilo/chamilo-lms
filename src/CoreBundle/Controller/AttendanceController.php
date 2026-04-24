@@ -608,7 +608,7 @@ class AttendanceController extends AbstractController
             return $this->json(['error' => 'Course not found'], 404);
         }
 
-        $setting = \api_get_course_setting('student_validate_own_attendance', $course);
+        $setting = api_get_course_setting('student_validate_own_attendance', $course);
         if ('1' !== (string) $setting) {
             return $this->json(['error' => 'This feature is not enabled for this course'], 403);
         }

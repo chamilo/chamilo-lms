@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 readonly class LocaleSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        #[Autowire(param: "locale")]
+        #[Autowire(param: 'locale')]
         private string $defaultLocale,
         private SettingsManager $settingsManager,
         private ParameterBagInterface $parameterBag,

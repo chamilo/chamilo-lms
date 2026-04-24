@@ -2612,13 +2612,13 @@ class SessionManager
     }
 
     /**
-     * Subscribe a user to an specific course inside a session.
+     * Subscribe users to a specific course inside a session.
      *
-     * @param array  $user_list
-     * @param int    $session_id
-     * @param string $course_code
-     * @param int    $session_visibility
-     * @param bool   $removeUsersNotInList
+     * @param array|int $user_list
+     * @param int       $session_id
+     * @param string    $course_code
+     * @param int       $session_visibility
+     * @param bool      $removeUsersNotInList
      *
      * @return bool
      */
@@ -2637,12 +2637,18 @@ class SessionManager
         $session_visibility = (int) $session_visibility;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
-        $forums = [];
-        if (1 === $subscribe) {
-            $forums = get_forums($courseId, $session_id);
+
+        if (empty($courseInfo) || empty($courseInfo['real_id'])) {
+            return false;
         }
+
+        $courseId = (int) $courseInfo['real_id'];
+
+        if (!is_array($user_list)) {
+            $user_list = [$user_list];
+        }
+
+        $user_list = array_values(array_unique(array_filter(array_map('intval', $user_list))));
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2672,6 +2678,122 @@ class SessionManager
             true,
             true
         );
+
+        return true;
+    }
+
+    private static function subscribeUsersToCourseForumNotifications(
+        array $studentIds,
+        int $courseId,
+        int $sessionId
+    ): void {
+        $studentIds = array_values(array_unique(array_filter(array_map('intval', $studentIds))));
+
+        if (empty($studentIds) || empty($courseId) || empty($sessionId)) {
+            return;
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        if (empty($courseInfo)) {
+            return;
+        }
+
+        $subscribe = (int) api_get_course_setting(
+            'subscribe_users_to_forum_notifications',
+            $courseInfo
+        );
+
+        if (1 !== $subscribe) {
+            return;
+        }
+
+        $forums = self::getForumsForNotificationSubscription($courseId, $sessionId);
+
+        if (empty($forums)) {
+            return;
+        }
+
+        self::loadForumNotificationFunctions();
+
+        foreach ($studentIds as $studentId) {
+            $userInfo = api_get_user_info($studentId);
+
+            if (empty($userInfo)) {
+                continue;
+            }
+
+            foreach ($forums as $forum) {
+                $forumId = self::getForumIdForNotificationSubscription($forum);
+
+                if (empty($forumId)) {
+                    continue;
+                }
+
+                set_notification('forum', $forumId, true, $userInfo, $courseInfo);
+            }
+        }
+    }
+
+    private static function getForumsForNotificationSubscription(int $courseId, int $sessionId): array
+    {
+        if (empty($courseId) || empty($sessionId)) {
+            return [];
+        }
+
+        self::loadForumNotificationFunctions();
+
+        $forumsById = [];
+
+        foreach (get_forums($courseId, $sessionId) as $forum) {
+            $forumId = self::getForumIdForNotificationSubscription($forum);
+
+            if (empty($forumId)) {
+                continue;
+            }
+
+            $forumsById[$forumId] = $forum;
+        }
+
+        $includeBaseCourseForums = 'true' === api_get_setting(
+                'forum.subscribe_users_to_forum_notifications_also_in_base_course'
+            );
+
+        if ($includeBaseCourseForums) {
+            foreach (get_forums($courseId, 0) as $forum) {
+                $forumId = self::getForumIdForNotificationSubscription($forum);
+
+                if (empty($forumId)) {
+                    continue;
+                }
+
+                $forumsById[$forumId] = $forum;
+            }
+        }
+
+        return array_values($forumsById);
+    }
+
+    private static function getForumIdForNotificationSubscription($forum): int
+    {
+        if (is_object($forum) && method_exists($forum, 'getIid')) {
+            return (int) $forum->getIid();
+        }
+
+        if (is_array($forum)) {
+            return (int) ($forum['iid'] ?? $forum['forum_id'] ?? 0);
+        }
+
+        return 0;
+    }
+
+    private static function loadForumNotificationFunctions(): void
+    {
+        if (function_exists('get_forums') && function_exists('set_notification')) {
+            return;
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
     }
 
     /**
@@ -10357,39 +10479,81 @@ class SessionManager
         bool $updateSession = true,
         bool $sendNotification = false
     ) {
+        $studentIds = array_values(array_unique(array_filter(array_map('intval', $studentIds))));
+
+        if (empty($studentIds) || empty($courseId) || empty($sessionId)) {
+            return;
+        }
+
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
+        if (null === $course || null === $session) {
+            return;
+        }
+
+        $relationInfo = array_merge(
+            [
+                'visibility' => 0,
+                'status' => Session::STUDENT,
+            ],
+            $relationInfo
+        );
 
         $usersToInsert = [];
+
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
-            $session->addUserInCourse($relationInfo['status'], $user, $course)
-                ->setVisibility($relationInfo['visibility']);
+
+            if (null === $user) {
+                continue;
+            }
+
+            $session
+                ->addUserInCourse($relationInfo['status'], $user, $course)
+                ->setVisibility($relationInfo['visibility'])
+            ;
 
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 
-            if ($updateSession) {
-                if (!$session->hasUserInSession($user, Session::STUDENT)) {
-                    $session->addUserInSession(Session::STUDENT, $user);
-                }
+            if ($updateSession && !$session->hasUserInSession($user, Session::STUDENT)) {
+                $session->addUserInSession(Session::STUDENT, $user);
             }
 
             $usersToInsert[] = $studentId;
         }
 
+        if (empty($usersToInsert)) {
+            return;
+        }
+
         $em->persist($session);
         $em->flush();
 
-        if ($sendNotification && !empty($usersToInsert)) {
+        self::subscribeUsersToCourseForumNotifications(
+            $usersToInsert,
+            $courseId,
+            $sessionId
+        );
+
+        if ($sendNotification) {
             foreach ($usersToInsert as $userId) {
                 $user = api_get_user_entity($userId);
+
+                if (null === $user) {
+                    continue;
+                }
+
                 $courseTitle = $course->getTitle();
                 $sessionTitle = $session->getTitle();
 
-                $subject = sprintf(get_lang('You have been enrolled in the course %s for the session %s'), $courseTitle, $sessionTitle);
+                $subject = sprintf(
+                    get_lang('You have been enrolled in the course %s for the session %s'),
+                    $courseTitle,
+                    $sessionTitle
+                );
+
                 $message = sprintf(
                     get_lang('Hello %s, you have been enrolled in the course %s for the session %s.'),
                     UserManager::formatUserFullName($user, true),

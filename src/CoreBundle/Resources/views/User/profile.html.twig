@@ -1,14 +1,12 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-    {% autoescape false %}
-        <h3>{{ user.username }}     {{ user.firstname }}    {{ user.lastname }}</h3>
+    <h3>{{ user.username }} {{ user.firstname }} {{ user.lastname }}</h3>
 
-        {{ user.competences }}
-        {{ user.openarea }}
-        {{ user.teach }}
-        {{ user.diplomas }}
+    {{ competences|raw }}
+    {{ openarea|raw }}
+    {{ teach|raw }}
+    {{ diplomas|raw }}
 
-        <img src="{{ illustration_url }}"/>
-    {% endautoescape %}
+    <img src="{{ illustration_url }}"/>
 {% endblock %}

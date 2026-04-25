@@ -21,6 +21,8 @@ api_protect_admin_script(true);
 $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
+$hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
+    && !api_is_platform_admin();
 $userInfo = api_get_user_info($user_id, null, true);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
@@ -270,16 +272,32 @@ $isUserEditingOwnAccount = ($user_data['id'] === api_get_user_id());
 $hideFields = $isUserEditingOwnAccount || USER_SOFT_DELETED == $user_data['active'];
 if (!$hideFields) {
     // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        ['onchange' => 'javascript: enable_expiration_date();']
-    );
-    $form->addGroup($group, 'max_member_group', null, null, false);
+    if ($hideNeverExpireOption) {
+        $form->addElement('hidden', 'radio_expiration_date', 1);
+
+        $group = [];
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', get_lang('Expiration date'), null, false);
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
+
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', null, null, false);
+    }
 
     // active account or inactive account
     $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
@@ -366,7 +384,17 @@ $user_data['auth_source'] = $userInfo['auth_sources'];
 
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
-    if (empty($expiration_date)) {
+
+    if ($hideNeverExpireOption) {
+        $user_data['radio_expiration_date'] = 1;
+
+        if (empty($expiration_date)) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user_data['expiration_date'] = api_get_local_time('+'.$days.' day');
+        } else {
+            $user_data['expiration_date'] = api_get_local_time($expiration_date);
+        }
+    } elseif (empty($expiration_date)) {
         $user_data['radio_expiration_date'] = 0;
         $user_data['expiration_date'] = api_get_local_time();
     } else {
@@ -395,7 +423,15 @@ $form->setDefaults($user_data);
 $error_drh = false;
 // Validate form
 if ($form->validate()) {
-    $user = $form->getSubmitValues(1);
+    $user = $form->getSubmitValues(true);
+    if ($hideNeverExpireOption && !$hideFields) {
+        $user['radio_expiration_date'] = '1';
+
+        if (empty($user['expiration_date'])) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user['expiration_date'] = api_get_local_time('+'.$days.' day');
+        }
+    }
     $reset_password = (int) $user['reset_password'];
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));

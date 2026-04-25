@@ -23,6 +23,8 @@ $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHel
 $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
+$hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
+    && !api_is_platform_admin();
 
 $message = null;
 $advancedPanelOpen = !empty($_POST);
@@ -239,19 +241,41 @@ $group = [];
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, ['id' => 'send_mail_yes']);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('Send mail to new user'));
+
+
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
-$group = [];
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-$group[] = $form->createElement(
-    'DateTimePicker',
-    'expiration_date',
-    null,
-    [
-        'onchange' => 'javascript: enable_expiration_date();',
-    ]
-);
-$form->addGroup($group, 'max_member_group', null, null, false);
+if ($hideNeverExpireOption) {
+    $form->addElement('hidden', 'radio_expiration_date', 1);
+
+    $group = [];
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+
+    $form->addGroup($group, 'max_member_group', get_lang('Expiration date'), null, false);
+} else {
+    $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
+
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+
+    $form->addGroup($group, 'max_member_group', null, null, false);
+}
+
+
 // active account or inactive account
 $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
 $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
@@ -308,7 +332,7 @@ $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-$defaults['radio_expiration_date'] = 0;
+$defaults['radio_expiration_date'] = $hideNeverExpireOption ? 1 : 0;
 $defaults['status'] = STUDENT;
 $defaults['locale'] = api_get_language_isocode();
 $form->setDefaults($defaults);
@@ -323,6 +347,14 @@ if ($form->validate()) {
     $check = Security::check_token('post');
     if (true) {
         $user = $form->getSubmitValues();
+        if ($hideNeverExpireOption) {
+            $user['radio_expiration_date'] = '1';
+
+            if (empty($user['expiration_date'])) {
+                $days = (int) api_get_setting('account_valid_duration');
+                $user['expiration_date'] = api_get_local_time('+'.$days.' day');
+            }
+        }
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $official_code = $user['official_code'];

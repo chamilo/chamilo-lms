@@ -627,27 +627,27 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'drh_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
-                    'comment' => 'Human resources director autosubscribe - not yet available',
+                    'comment' => 'Course codes separated by "|". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'sessionadmin_autosubscribe',
+                    'title' => 'Session admin autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'student_autosubscribe',
+                    'title' => 'Learner autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002.',
+                ],
+                [
+                    'name' => 'teacher_autosubscribe',
+                    'title' => 'Teacher autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions.',
                 ],
                 [
                     'name' => 'platform_unsubscribe_allowed',
                     'title' => 'Allow unsubscription from platform',
                     'comment' => 'By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation.',
-                ],
-                [
-                    'name' => 'sessionadmin_autosubscribe',
-                    'title' => 'Session admin autosubscribe',
-                    'comment' => 'Session administrator autosubscribe - not available yet',
-                ],
-                [
-                    'name' => 'student_autosubscribe',
-                    'title' => 'Learner autosubscribe',
-                    'comment' => 'Learner autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'teacher_autosubscribe',
-                    'title' => 'Teacher autosubscribe',
-                    'comment' => 'Teacher autosubscribe - not yet available',
                 ],
             ],
             'message' => [

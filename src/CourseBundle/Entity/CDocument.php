@@ -49,6 +49,7 @@ use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Chamilo\CoreBundle\Controller\Api\DownloadDocumentByApiKeyAction;
 
 #[ApiResource(
     shortName: 'Document',
@@ -103,6 +104,17 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(
+            uriTemplate: '/documents/{iid}/download-by-api-key',
+            controller: DownloadDocumentByApiKeyAction::class,
+            openapi: new Operation(
+                summary: 'Download a document file using a user API key.'
+            ),
+            security: "is_granted('ROLE_USER')",
+            deserialize: false,
+            output: false,
+            name: 'api_documents_download_by_api_key'
+        ),
         new Get(
             uriTemplate: '/documents/{iid}/lp-usage',
             controller: DocumentLearningPathUsageAction::class,

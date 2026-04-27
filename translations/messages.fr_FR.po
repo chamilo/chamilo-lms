@@ -35768,3 +35768,23 @@ msgstr "Bienvenue dans Chamilo"
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Si c'est la première fois que vous utilisez Chamilo, assurez-vous de consulter le menu latéral pour découvrir ses nombreuses fonctionnalités. Si vous avez besoin d'aide, <a href=\"https://docs.chamilo.org\">notre documentation officielle</a> peut vous aider pour la documentation standard, tandis que notre <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum en ligne</a> peut vous aider à partager des idées et trouver des réponses auprès d'autres utilisateurs de Chamilo."
 
+msgid "Change password"
+msgstr "Changer de mot de passe"
+
+msgid "Goto current location"
+msgstr "Aller à l'emplacement actuel"
+
+msgid "Find address"
+msgstr "Trouver l'adresse"
+
+msgid "Newest first"
+msgstr "Les plus récents en premier"
+
+msgid "Oldest first"
+msgstr "Les plus anciens en premier"
+
+msgid "Title A–Z"
+msgstr "Titre (A-Z)"
+
+msgid "Title Z–A"
+msgstr "Titre (Z-A)"

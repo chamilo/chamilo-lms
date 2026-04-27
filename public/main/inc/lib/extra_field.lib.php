@@ -1612,7 +1612,11 @@ class ExtraField extends Model
                                     cache: false,
                                     tags: true,
                                     tokenSeparators: [','],
-                                    placeholder: '".get_lang('Start to type, then click on this bar to validate tag')."'
+                                    placeholder: '".get_lang('Start to type, then click on this bar to validate tag')."',
+                                    language: {
+                                        searching: function() { return '".get_lang('Searching')."...'; },
+                                        noResults: function() { return '".get_lang('No results found')."'; }
+                                    }
                                 });
                             ";
                             }

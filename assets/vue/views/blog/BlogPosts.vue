@@ -376,16 +376,16 @@ const loading = ref(false)
 const ratings = ref({}) // { [postId]: { average, count } }
 const attachCount = ref({}) // { [postId]: number }
 
-const sortOptions = [
-  { label: "Newest first", value: "dateCreation:desc" },
-  { label: "Oldest first", value: "dateCreation:asc" },
-  { label: "Title A–Z", value: "title:asc" },
-  { label: "Title Z–A", value: "title:desc" },
-]
-const taskSortOptions = [
-  { label: "Title A–Z", value: "title:asc" },
-  { label: "Title Z–A", value: "title:desc" },
-]
+const sortOptions = computed(() => [
+  { label: t("Newest first"), value: "dateCreation:desc" },
+  { label: t("Oldest first"), value: "dateCreation:asc" },
+  { label: t("Title A–Z"), value: "title:asc" },
+  { label: t("Title Z–A"), value: "title:desc" },
+])
+const taskSortOptions = computed(() => [
+  { label: t("Title A–Z"), value: "title:asc" },
+  { label: t("Title Z–A"), value: "title:desc" },
+])
 const pageSizeOptions = [
   { label: "10 / page", value: 10 },
   { label: "20 / page", value: 20 },

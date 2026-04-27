@@ -239,7 +239,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
     $form->addGroup($group, null, [get_lang('Style sheets')]);
 }
 
-$form->addElement('label', get_lang('Space available'), format_file_size(DocumentManager::get_course_quota()));
+$form->addElement('label', get_lang('Space Available'), format_file_size(DocumentManager::get_course_quota()));
 
 $aiOptions = [
     'learning_path_generator' => 'Enable learning path generator',

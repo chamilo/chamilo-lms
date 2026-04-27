@@ -207,12 +207,12 @@ const renameTitle = ref("")
 const renameSubmitted = ref(false)
 const createDialogKey = ref(0)
 
-const sortOptions = [
-  { label: "Newest first", value: "createdAt:desc" },
-  { label: "Oldest first", value: "createdAt:asc" },
-  { label: "Title (A–Z)", value: "title:asc" },
-  { label: "Title (Z–A)", value: "title:desc" },
-]
+const sortOptions = computed(() => [
+  { label: t("Newest first"), value: "createdAt:desc" },
+  { label: t("Oldest first"), value: "createdAt:asc" },
+  { label: t("Title A–Z"), value: "title:asc" },
+  { label: t("Title Z–A"), value: "title:desc" },
+])
 
 function formatDate(iso) {
   try {

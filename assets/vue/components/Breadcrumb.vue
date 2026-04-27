@@ -328,6 +328,9 @@ function buildManualBreadcrumbIfNeeded() {
     admin: "AdminIndex",
     gdpr: null,
   }
+  const labelOverrides = {
+    email_tester: "E-mail tester",
+  }
   const pathSegments = route.path.split("/").filter(Boolean)
   const baseSegment = pathSegments[0]
 
@@ -365,7 +368,8 @@ function buildManualBreadcrumbIfNeeded() {
   }
 
   pathSegments.forEach((segment, index) => {
-    const label = t(segment.charAt(0).toUpperCase() + segment.slice(1))
+    const rawLabel = labelOverrides[segment] ?? (segment.charAt(0).toUpperCase() + segment.slice(1))
+    const label = t(rawLabel)
     const override = overrides[segment]
 
     if (override === null) {

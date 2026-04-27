@@ -7139,7 +7139,7 @@ msgid "Edit learnpath"
 msgstr "Lernpfad bearbeiten"
 
 msgid "Delete"
-msgstr "Lernpfad löschen"
+msgstr "Löschen"
 
 msgid "do not publish"
 msgstr "nicht veröffentlichen"
@@ -10787,7 +10787,7 @@ msgid "total users online"
 msgstr "Benutzer gesamt online"
 
 msgid "Refresh"
-msgstr "aktualisieren"
+msgstr "Aktualisieren"
 
 msgid "Portal news"
 msgstr "Portal-Ankündigungen"
@@ -17696,7 +17696,7 @@ msgid "Assign a users list to the sessions administrator"
 msgstr "Eine Benutzer-Liste dem Session-Kursleiter zuordnen"
 
 msgid "Class updated."
-msgstr "aktualisiert"
+msgstr "Aktualisiert"
 
 msgid "Class deleted."
 msgstr "Klasse erfolgreich gelöscht"
@@ -35474,3 +35474,6 @@ msgstr "Titel A–Z"
 
 msgid "Title Z–A"
 msgstr "Titel Z–A"
+
+msgid "Send test email"
+msgstr "Senden"

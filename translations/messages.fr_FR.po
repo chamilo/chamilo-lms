@@ -35788,3 +35788,6 @@ msgstr "Titre (A-Z)"
 
 msgid "Title Z–A"
 msgstr "Titre (Z-A)"
+
+msgid "Send test email"
+msgstr "Envoyer"

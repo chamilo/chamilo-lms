@@ -2,7 +2,7 @@
   <component
     :is="layout"
     v-if="!platformConfigurationStore.isLoading"
-    :show-breadcrumb="route.meta.showBreadcrumb"
+    :show-breadcrumb="showBreadcrumb"
   >
     <!-- 403 banner shown INSIDE the layout -->
     <Transition
@@ -127,6 +127,29 @@ const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
 const securityStore = useSecurityStore()
 const notification = useNotification()
 const platformConfigurationStore = usePlatformConfig()
+
+const hideBreadcrumbIfNotAllowed = computed(() => {
+  if (platformConfigurationStore.isLoading) {
+    return false
+  }
+
+  const value = platformConfigurationStore.getSetting?.("security.hide_breadcrumb_if_not_allowed")
+
+  return value === true || value === 1 || value === "true" || value === "1"
+})
+
+const showBreadcrumb = computed(() => {
+  if (route.meta.showBreadcrumb === false) {
+    return false
+  }
+
+  if (hideBreadcrumbIfNotAllowed.value && forbiddenMsg.value) {
+    return false
+  }
+
+  return route.meta.showBreadcrumb
+})
+
 const showAccessUrlChosserLayout = computed(
   () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
 )

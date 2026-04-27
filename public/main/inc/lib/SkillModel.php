@@ -654,6 +654,13 @@ class SkillModel extends Model
                         'argumentation_author_id' => $userId
                     ];
                     $skill_rel_user->save($params);
+
+                    $user = Database::getManager()->find(User::class, (int) $userId);
+                    $skillEntity = Database::getManager()->find(Skill::class, (int) $skillId);
+
+                    if ($user instanceof User && $skillEntity instanceof Skill) {
+                        $this->notifySkillAssignedToUser($user, $skillEntity, (int) $userId);
+                    }
                 }
             }
         }
@@ -2491,7 +2498,72 @@ class SkillModel extends Model
         $entityManager->persist($skillUser);
         $entityManager->flush();
 
+        $this->notifySkillAssignedToUser($user, $skill, $authorId);
+
         return $skillUser;
+    }
+
+    private function notifySkillAssignedToUser(User $user, Skill $skill, int $senderId = 0): void
+    {
+        if (!$this->isSkillAssignmentNotificationEnabled()) {
+            return;
+        }
+
+        $userId = (int) $user->getId();
+        $skillId = (int) $skill->getId();
+
+        if ($userId <= 0 || $skillId <= 0) {
+            return;
+        }
+
+        $skillTitle = trim((string) $skill->getTitle());
+
+        if ('' === $skillTitle) {
+            return;
+        }
+
+        if ($senderId <= 0) {
+            $senderId = api_get_user_id();
+        }
+
+        if ($senderId <= 0) {
+            $senderId = 1;
+        }
+
+        $safeSkillTitle = Security::remove_XSS($skillTitle);
+        $issuedUrl = api_get_path(WEB_CODE_PATH).'skills/issued_all.php?skill='.$skillId.'&user='.$userId;
+        $issuedLink = Display::url($issuedUrl, $issuedUrl);
+
+        $subject = sprintf(
+            get_lang('You have acquired the skill %s'),
+            $safeSkillTitle
+        );
+
+        $content = sprintf(
+            get_lang('You have acquired the skill %s.'),
+            $safeSkillTitle
+        );
+        $content .= '<br /><br />'.$issuedLink;
+
+        MessageManager::send_message_simple(
+            $userId,
+            $subject,
+            $content,
+            $senderId
+        );
+    }
+
+    private function isSkillAssignmentNotificationEnabled(): bool
+    {
+        $value = api_get_setting('skill.badge_assignation_notification');
+
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
     }
 
     public static function setBackPackJs(&$htmlHeadXtra)

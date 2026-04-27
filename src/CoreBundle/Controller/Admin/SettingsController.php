@@ -779,7 +779,6 @@ class SettingsController extends BaseController
             'session.session_days_after_coach_access',
             'session.session_days_before_coach_access',
             'session.show_session_data',
-            'skill.badge_assignation_notification',
             'work.my_courses_show_pending_work',
         ];
     }

@@ -781,11 +781,6 @@ class SettingsController extends BaseController
             'session.show_session_data',
             'skill.badge_assignation_notification',
             'work.my_courses_show_pending_work',
-            'workflows.disable_user_conditions_sender_id',
-            'workflows.drh_allow_access_to_all_students',
-            'workflows.usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe',
-            'workflows.usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
-            'workflows.usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
         ];
     }
 }

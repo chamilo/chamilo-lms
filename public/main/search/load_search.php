@@ -74,7 +74,9 @@ if (!empty($userInfo)) {
                 null,
                 null,
                 null,
-                1
+                1,
+                null,
+                true
             );
             break;
         case STUDENT_BOSS:

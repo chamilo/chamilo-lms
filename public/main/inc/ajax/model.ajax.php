@@ -446,7 +446,9 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
-        $userNotAllowed = !api_is_student_boss() && !api_is_platform_admin(false, true);
+        $userNotAllowed = !api_is_drh()
+            && !api_is_student_boss()
+            && !api_is_platform_admin(false, true);
 
         if ($userNotAllowed) {
             exit;
@@ -481,7 +483,10 @@ switch ($action) {
                     }
                 }
             } else {
-                $userList = UserManager::get_users_followed_by_drh(api_get_user_id());
+                $userList = UserManager::get_users_followed_by_drh(
+                    api_get_user_id(),
+                    applyReportingWorkflowSetting: true
+                );
                 if (!empty($userList)) {
                     $userIdList = array_keys($userList);
                 }

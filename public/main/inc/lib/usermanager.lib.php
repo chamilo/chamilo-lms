@@ -4390,7 +4390,8 @@ class UserManager
         $column = null,
         $direction = null,
         $active = null,
-        $lastConnectionDate = null
+        $lastConnectionDate = null,
+        bool $applyReportingWorkflowSetting = false
     ) {
         return self::getUsersFollowedByUser(
             $userId,
@@ -4404,7 +4405,10 @@ class UserManager
             $direction,
             $active,
             $lastConnectionDate,
-            DRH
+            DRH,
+            null,
+            false,
+            $applyReportingWorkflowSetting
         );
     }
 
@@ -4442,7 +4446,8 @@ class UserManager
         $lastConnectionDate = null,
         $status = null,
         $keyword = null,
-        $checkSessionVisibility = false
+        $checkSessionVisibility = false,
+        bool $applyDrhAllStudentsWorkflowSetting = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -4527,13 +4532,26 @@ class UserManager
         $drhConditions = null;
         $teacherSelect = null;
         $urlId = api_get_current_access_url_id();
+        $allowDrhAccessToAllStudents = self::shouldAllowDrhAccessToAllStudents(
+            $status,
+            $userStatus,
+            $applyDrhAllStudentsWorkflowSetting
+        );
 
         switch ($status) {
             case DRH:
-                $drhConditions .= " AND
-                    friend_user_id = '$userId' AND
-                    relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
-                ";
+                if ($allowDrhAccessToAllStudents) {
+                    $drhConditions = '';
+
+                    if (empty($userStatus)) {
+                        $userConditions .= ' AND u.status = '.STUDENT;
+                    }
+                } else {
+                    $drhConditions .= " AND
+            friend_user_id = '$userId' AND
+            relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
+        ";
+                }
                 break;
             case COURSEMANAGER:
                 $drhConditions .= " AND
@@ -4611,22 +4629,27 @@ class UserManager
         }
 
         $join = null;
-        $sql = " $masterSelect
-                (
-                    (
-                        $select
-                        FROM $tbl_user u
-                        INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.id)
-                        LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
-                        $join
-                        WHERE
-                            access_url_id = ".$urlId."
-                            $drhConditions
-                            $userConditions
-                    )
-                    $teacherSelect
 
-                ) as t1";
+        $userRelationJoin = $allowDrhAccessToAllStudents
+            ? ''
+            : "INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.id)";
+
+        $sql = " $masterSelect
+        (
+            (
+                $select
+                FROM $tbl_user u
+                $userRelationJoin
+                LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
+                $join
+                WHERE
+                    access_url_id = ".$urlId."
+                    $drhConditions
+                    $userConditions
+            )
+            $teacherSelect
+
+        ) as t1";
 
         if ($getSql) {
             return $sql;
@@ -6509,5 +6532,47 @@ SQL;
         }
 
         return [];
+    }
+
+    private static function shouldAllowDrhAccessToAllStudents(
+        $status,
+        $userStatus,
+        bool $applyReportingWorkflowSetting
+    ): bool {
+        if (!$applyReportingWorkflowSetting) {
+            return false;
+        }
+
+        if ((int) $status !== DRH) {
+            return false;
+        }
+
+        if (!self::isWorkflowSettingEnabled('drh_allow_access_to_all_students')) {
+            return false;
+        }
+
+        /*
+         * The setting is limited to students.
+         * If a caller explicitly asks for teachers or another status, keep the
+         * existing assigned-users behavior.
+         */
+        if (!empty($userStatus) && (int) $userStatus !== STUDENT) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function isWorkflowSettingEnabled(string $variable): bool
+    {
+        $value = api_get_setting('workflows.'.$variable);
+
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
     }
 }

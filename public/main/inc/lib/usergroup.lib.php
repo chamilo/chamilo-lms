@@ -1095,8 +1095,12 @@ class UserGroupModel extends Model
 
             // Deleting items
             if (!empty($delete_items)) {
+                $keepUsersInSession = $this->isWorkflowSettingEnabled(
+                    'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'
+                );
+
                 foreach ($delete_items as $session_id) {
-                    if (!empty($user_list)) {
+                    if (!$keepUsersInSession && !empty($user_list)) {
                         foreach ($user_list as $user_id) {
                             SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                         }
@@ -1222,35 +1226,42 @@ class UserGroupModel extends Model
     public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
     {
         $sessionId = (int) $sessionId;
-        // Deleting items.
-        if (!empty($delete_items)) {
-            $user_list = $this->get_users_by_usergroup($usergroup_id);
 
-            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-            foreach ($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);
-                if ($course_info) {
-                    if (!empty($user_list)) {
-                        foreach ($user_list as $user_id) {
-                            CourseManager::unsubscribe_user(
-                                $user_id,
-                                $course_info['code'],
-                                $sessionId
-                            );
-                        }
-                    }
+        if (empty($delete_items)) {
+            return;
+        }
 
-                    Database::delete(
-                        $this->usergroup_rel_course_table,
-                        [
-                            'usergroup_id = ? AND course_id = ?' => [
-                                $usergroup_id,
-                                $course_id,
-                            ],
-                        ]
+        $user_list = $this->get_users_by_usergroup($usergroup_id);
+        $keepUsersInCourse = $this->isWorkflowSettingEnabled(
+            'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe'
+        );
+
+        foreach ($delete_items as $course_id) {
+            $course_info = api_get_course_info_by_id((int) $course_id);
+
+            if (!$course_info) {
+                continue;
+            }
+
+            if (!$keepUsersInCourse && !empty($user_list)) {
+                foreach ($user_list as $user_id) {
+                    CourseManager::unsubscribe_user(
+                        $user_id,
+                        $course_info['code'],
+                        $sessionId
                     );
                 }
             }
+
+            Database::delete(
+                $this->usergroup_rel_course_table,
+                [
+                    'usergroup_id = ? AND course_id = ?' => [
+                        $usergroup_id,
+                        (int) $course_id,
+                    ],
+                ]
+            );
         }
     }
 
@@ -1337,19 +1348,28 @@ class UserGroupModel extends Model
 
         // Deleting items
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
-            foreach ($delete_items as $user_id) {
-                // Remove course subscriptions
-                if (!empty($course_list)) {
-                    foreach ($course_list as $course_id) {
-                        $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
-                    }
-                }
+            $keepUsersInCourseAndSession = $this->isWorkflowSettingEnabled(
+                'usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe'
+            );
 
-                // Remove session subscriptions
-                if (!empty($session_list)) {
-                    foreach ($session_list as $session_id) {
-                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+            foreach ($delete_items as $user_id) {
+                if (!$keepUsersInCourseAndSession) {
+                    // Remove course subscriptions
+                    if (!empty($course_list)) {
+                        foreach ($course_list as $course_id) {
+                            $course_info = api_get_course_info_by_id($course_id);
+
+                            if (!empty($course_info)) {
+                                CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                            }
+                        }
+                    }
+
+                    // Remove session subscriptions
+                    if (!empty($session_list)) {
+                        foreach ($session_list as $session_id) {
+                            SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                        }
                     }
                 }
 
@@ -1510,6 +1530,19 @@ class UserGroupModel extends Model
         $res = Database::query($sql);
 
         return 0 != Database::num_rows($res);
+    }
+
+    private function isWorkflowSettingEnabled(string $variable): bool
+    {
+        $value = api_get_setting('workflows.'.$variable);
+
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
     }
 
     /**

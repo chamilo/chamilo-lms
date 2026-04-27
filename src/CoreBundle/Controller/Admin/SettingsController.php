@@ -765,8 +765,6 @@ class SettingsController extends BaseController
             'platform.use_custom_pages',
             'platform.use_virtual_keyboard',
             'profile.enable_profile_user_address_geolocalization',
-            'security.admins_can_set_users_pass',
-            'security.hide_breadcrumb_if_not_allowed',
             'security.security_session_cookie_samesite_none',
             'session.assignment_base_course_teacher_access_to_all_session',
             'session.career_diagram_disclaimer',

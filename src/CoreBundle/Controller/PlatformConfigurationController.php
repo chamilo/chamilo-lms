@@ -189,6 +189,7 @@ class PlatformConfigurationController extends AbstractController
                 'document.users_copy_files',
                 'agenda.allow_careers_in_global_agenda',
                 'display.display_categories_on_homepage',
+                'security.hide_breadcrumb_if_not_allowed',
             ];
 
             foreach ($variables as $variable) {

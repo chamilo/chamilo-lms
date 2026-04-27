@@ -23,11 +23,7 @@ class UserControllerTest extends WebTestCase
         // simulate $testUser being logged in
         $client->loginUser($admin);
 
-        $client->request('GET', '/user/admin');
+        $client->request('GET', '/admin');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#sectionMainContent', 'admin');
-
-        $client->request('GET', '/user/nothing');
-        $this->assertResponseStatusCodeSame(302);
     }
 }

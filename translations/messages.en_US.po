@@ -17310,7 +17310,7 @@ msgid "Enable this option to show a set of font resize options on the top-right 
 msgstr "Enable this option to show a set of font resize options on the top-right side of your campus. This will allow visually impaired to read their course contents more easily."
 
 msgid "Correct and rate"
-msgstr "Correct and rate"
+msgstr "Correct and grade"
 
 msgid "Upon reception"
 msgstr "Upon reception"

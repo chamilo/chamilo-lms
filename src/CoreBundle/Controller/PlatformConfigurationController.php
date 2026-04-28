@@ -100,6 +100,11 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
         $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
+        $configuration['settings']['platform.institution_address'] = $settingsManager->getSetting('platform.institution_address', true);
+        $configuration['settings']['platform.platform_logo_url'] = $settingsManager->getSetting('platform.platform_logo_url', true);
+        $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);
+        $configuration['settings']['platform.use_virtual_keyboard'] = $settingsManager->getSetting('platform.use_virtual_keyboard', true);
+        $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
         $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
@@ -189,6 +194,7 @@ class PlatformConfigurationController extends AbstractController
                 'document.users_copy_files',
                 'agenda.allow_careers_in_global_agenda',
                 'display.display_categories_on_homepage',
+                'security.hide_breadcrumb_if_not_allowed',
             ];
 
             foreach ($variables as $variable) {

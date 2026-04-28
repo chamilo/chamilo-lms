@@ -23,6 +23,7 @@ api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
     && !api_is_platform_admin();
+$adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
 $userInfo = api_get_user_info($user_id, null, true);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
@@ -211,21 +212,24 @@ if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('Automatically generate a new password'), 1);
-$group = [];
-$group[] = $form->createElement('radio', 'reset_password', null, get_lang('Enter password'), 2);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    [
-        'id' => 'password',
-        'onkeydown' => 'javascript: password_switch_radio_button();',
-        'show_hide' => true,
-    ]
-);
 
-$form->addGroup($group, 'password', null, null, false);
-$form->addPasswordRule('password', 'password');
+if ($adminsCanSetUsersPass) {
+    $group = [];
+    $group[] = $form->createElement('radio', 'reset_password', null, get_lang('Enter password'), 2);
+    $group[] = $form->createElement(
+        'password',
+        'password',
+        null,
+        [
+            'id' => 'password',
+            'onkeydown' => 'javascript: password_switch_radio_button();',
+            'show_hide' => true,
+        ]
+    );
+
+    $form->addGroup($group, 'password', null, null, false);
+    $form->addPasswordRule('password', 'password');
+}
 
 $roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 
@@ -432,7 +436,8 @@ if ($form->validate()) {
             $user['expiration_date'] = api_get_local_time('+'.$days.' day');
         }
     }
-    $reset_password = (int) $user['reset_password'];
+    $reset_password = (int) ($user['reset_password'] ?? 0);
+    $password = (string) ($user['password'] ?? '');
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -473,7 +478,6 @@ if ($form->validate()) {
 
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
-        $password = $user['password'];
         $auth_source = $user['auth_source'] ?? ($userInfo['auth_source'] ?? []);
         $official_code = $user['official_code'];
         $email = $user['email'];

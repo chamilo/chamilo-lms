@@ -25,6 +25,7 @@ $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
     && !api_is_platform_admin();
+$adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
 
 $message = null;
 $advancedPanelOpen = !empty($_POST);
@@ -182,36 +183,33 @@ if (count($extAuthSource) > 0) {
     }
 }
 
-$group[] = $form->createElement(
-    'radio',
-    'password_auto',
-    get_lang('Password'),
-    get_lang('Automatically generate a new password').'<br />',
-    1
-);
-$group[] = $form->createElement(
-    'radio',
-    'password_auto',
-    'id="radio_user_password"',
-    get_lang('Enter password'),
-    0
-);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    [
-        'id' => 'password',
-        'autocomplete' => 'off',
-        'onkeydown' => 'javascript: password_switch_radio_button();',
-        'show_hide' => true,
-        //'required' => 'required'
-    ]
-);
+if ($adminsCanSetUsersPass) {
+    $group[] = $form->createElement(
+        'radio',
+        'password_auto',
+        'id="radio_user_password"',
+        get_lang('Enter password'),
+        0
+    );
+    $group[] = $form->createElement(
+        'password',
+        'password',
+        null,
+        [
+            'id' => 'password',
+            'autocomplete' => 'off',
+            'onkeydown' => 'javascript: password_switch_radio_button();',
+            'show_hide' => true,
+        ]
+    );
+}
 
 $form->addGroup($group, 'password', get_lang('Password'));
-$form->addPasswordRule('password', 'password');
-$form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
+
+if ($adminsCanSetUsersPass) {
+    $form->addPasswordRule('password', 'password');
+    $form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
+}
 
 // Status
 $roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
@@ -370,14 +368,20 @@ if ($form->validate()) {
 
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
-        if (isset($extAuthSource) && count($extAuthSource) > 0 &&
-            '2' == $user['password']['password_auto']
+        $passwordData = $user['password'] ?? [];
+        $passwordAuto = (string) ($passwordData['password_auto'] ?? '1');
+        if (
+            isset($extAuthSource)
+            && count($extAuthSource) > 0
+            && '2' === $passwordAuto
         ) {
-            $auth_source = $user['password']['auth_source'];
+            $auth_source = $passwordData['auth_source'] ?? [];
             $password = 'PLACEHOLDER';
         } else {
             $auth_source = [UserAuthSource::PLATFORM];
-            $password = '1' === $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
+            $password = '1' === $passwordAuto
+                ? api_generate_password()
+                : (string) ($passwordData['password'] ?? '');
         }
 
         $expiration_date = null;

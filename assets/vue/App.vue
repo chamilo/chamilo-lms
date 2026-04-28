@@ -127,6 +127,47 @@ const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
 const securityStore = useSecurityStore()
 const notification = useNotification()
 const platformConfigurationStore = usePlatformConfig()
+const disableCopyPaste = computed(() => {
+  if (platformConfigurationStore.isLoading) {
+    return false
+  }
+
+  const value = platformConfigurationStore.getSetting?.("platform.disable_copy_paste")
+
+  return value === true || value === 1 || value === "true" || value === "1"
+})
+
+const disabledCopyPasteKeys = new Set(["c", "x", "v", "p", "s"])
+
+function shouldBlockCopyPasteShortcut(event) {
+  if (!disableCopyPaste.value) {
+    return false
+  }
+
+  if (!event.ctrlKey && !event.metaKey) {
+    return false
+  }
+
+  return disabledCopyPasteKeys.has(String(event.key || "").toLowerCase())
+}
+
+function blockCopyPasteEvent(event) {
+  if (!disableCopyPaste.value) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+function blockCopyPasteShortcut(event) {
+  if (!shouldBlockCopyPasteShortcut(event)) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+}
 
 const hideBreadcrumbIfNotAllowed = computed(() => {
   if (platformConfigurationStore.isLoading) {
@@ -297,6 +338,12 @@ watch(
 )
 
 onMounted(async () => {
+  document.addEventListener("copy", blockCopyPasteEvent, true)
+  document.addEventListener("cut", blockCopyPasteEvent, true)
+  document.addEventListener("paste", blockCopyPasteEvent, true)
+  document.addEventListener("contextmenu", blockCopyPasteEvent, true)
+  document.addEventListener("keydown", blockCopyPasteShortcut, true)
+
   const { loader } = useMediaElementLoader()
   loader()
 
@@ -404,6 +451,11 @@ onBeforeUnmount(() => {
     forbiddenBannerTimer = null
   }
 
+  document.removeEventListener("copy", blockCopyPasteEvent, true)
+  document.removeEventListener("cut", blockCopyPasteEvent, true)
+  document.removeEventListener("paste", blockCopyPasteEvent, true)
+  document.removeEventListener("contextmenu", blockCopyPasteEvent, true)
+  document.removeEventListener("keydown", blockCopyPasteShortcut, true)
   delete window.chamiloCidReq
 })
 </script>

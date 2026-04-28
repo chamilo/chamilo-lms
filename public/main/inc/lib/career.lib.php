@@ -23,6 +23,64 @@ class Career extends Model
         $this->table = Database::get_main_table(TABLE_CAREER);
     }
 
+    public function getCareerFromId($id): array
+    {
+        if (empty($id)) {
+            return [];
+        }
+
+        if ($this->useCareerExternalIdAsIdentifierInDiagrams()) {
+            return $this->getCareerFromExternalToInternal((string) $id);
+        }
+
+        return $this->get((int) $id);
+    }
+
+    public function getCareerFromExternalToInternal(string $externalCareerId, string $extraFieldVariable = 'external_career_id'): array
+    {
+        $externalCareerId = trim($externalCareerId);
+
+        if ('' === $externalCareerId) {
+            return [];
+        }
+
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $extraFieldVariable,
+            $externalCareerId
+        );
+
+        if (empty($careerValue['item_id'])) {
+            return [];
+        }
+
+        return $this->get((int) $careerValue['item_id']);
+    }
+
+    public function getCareerIdFromInternalToExternal(int $internalCareerId): ?string
+    {
+        if (0 >= $internalCareerId) {
+            return null;
+        }
+
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $externalCareerValue = $careerExtraFieldValue->get_values_by_handler_and_field_variable(
+            $internalCareerId,
+            'external_career_id'
+        );
+
+        if (!empty($externalCareerValue['value'])) {
+            return (string) $externalCareerValue['value'];
+        }
+
+        return null;
+    }
+
+    private function useCareerExternalIdAsIdentifierInDiagrams(): bool
+    {
+        return 'true' === api_get_setting('platform.use_career_external_id_as_identifier_in_diagrams');
+    }
+
     /**
      * Get the count of elements.
      *

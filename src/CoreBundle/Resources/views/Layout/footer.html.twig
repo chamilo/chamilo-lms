@@ -8,12 +8,21 @@
         </button>
     </div>
 
+    {% set institution_address = chamilo_settings_get('platform.institution_address')|default('')|trim %}
+
     <footer class="app-footer">
         <div>
             <a href="{{ url('index')}}" target="_blank">
                 {{ "Chamilo"|trans }}
             </a>&copy; {{ "now"|date("Y") }}
         </div>
+
+        {% if institution_address %}
+            <div class="app-footer__institution-address">
+                {{ institution_address|e }}
+            </div>
+        {% endif %}
+
         <div class="ml-auto">
             {% if administrator_name is defined %}
                 {{ administrator_name }}

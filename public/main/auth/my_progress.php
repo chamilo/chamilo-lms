@@ -107,10 +107,31 @@ if ($show) {
         $table->setHeaderContents(0, 1, get_lang('Diagram'));
 
         $row = 1;
+        $careerModel = new Career();
+        $useExternalCareerId = 'true' === api_get_setting('platform.use_career_external_id_as_identifier_in_diagrams');
+
         foreach ($careers as $careerData) {
             $table->setCellContents($row, 0, $careerData['title']);
-            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
-            $diagram = Display::url(get_lang('Diagram'), $url);
+
+            $careerIdentifier = (string) $careerData['id'];
+
+            if ($useExternalCareerId) {
+                $externalCareerId = $careerModel->getCareerIdFromInternalToExternal((int) $careerData['id']);
+
+                if (!empty($externalCareerId)) {
+                    $careerIdentifier = $externalCareerId;
+                } else {
+                    $careerIdentifier = '';
+                }
+            }
+
+            if ('' !== $careerIdentifier) {
+                $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.urlencode($careerIdentifier);
+                $diagram = Display::url(get_lang('Diagram'), $url);
+            } else {
+                $diagram = get_lang('No data available');
+            }
+
             $table->setCellContents($row, 1, $diagram);
             $row++;
         }

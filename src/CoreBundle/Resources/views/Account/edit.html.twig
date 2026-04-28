@@ -17,6 +17,10 @@
                 cache: false,
                 tags: true,
                 tokenSeparators: [','],
+                language: {
+                  searching: function() { return '{{ 'Searching'|trans }}...'; },
+                  noResults: function() { return '{{ 'No results found'|trans }}'; }
+                }
               });
 
               $(this).on('select2:select', function (e) {

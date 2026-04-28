@@ -2020,7 +2020,7 @@ class SkillModel extends Model
             }
 
             if (!empty($skills)) {
-                $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=update_skill_rel_user&'.api_get_cidreq();
+                $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=update_skill_rel_user&'.api_get_cidreq().'&sec_token='.Security::get_existing_token();
                 $params = [
                     'item_id' => $itemId,
                     'type_id' => $typeId,

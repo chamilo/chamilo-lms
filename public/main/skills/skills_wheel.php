@@ -1,11 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-use Chamilo\CoreBundle\Framework\Container;
+$response = new RedirectResponse(
+    Container::getRouter()->generate('skill_wheel')
+);
+$response->send();
+
+exit;
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -38,7 +46,8 @@ $tpl->assign('skill_id_to_load', $skillId);
 $url = api_get_path(WEB_AJAX_PATH)."skill.ajax.php?a=get_skills_tree_json&load_user=$load_user";
 $tpl->assign('wheel_url', $url);
 
-$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$token = Security::get_token();
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1&sec_token='.$token;
 $tpl->assign('url', $url);
 $tpl->assign('isAdministration', true);
 

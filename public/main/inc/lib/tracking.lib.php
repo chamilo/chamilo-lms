@@ -4595,7 +4595,8 @@ class Tracking
         $extra_params = '',
         $show_courses = true,
         $showAllSessions = true,
-        $returnArray = false
+        $returnArray = false,
+        $showGraph = true
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -5045,11 +5046,13 @@ class Tracking
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
 
-                $main_session_graph = self::generate_session_exercise_graph(
-                    $final_all_exercise_graph_name_list,
-                    $my_results_final,
-                    $final_all_exercise_graph_list
-                );
+                if ($showGraph) {
+                    $main_session_graph = self::generate_session_exercise_graph(
+                        $final_all_exercise_graph_name_list,
+                        $my_results_final,
+                        $final_all_exercise_graph_list
+                    );
+                }
             }
 
             $sessionIcon = Display::getMdiIcon(
@@ -5178,14 +5181,16 @@ class Tracking
             }
             $html .= '</tbody>';
             $html .= '</table></div><br />';
-            $html .= Display::div(
-                $main_session_graph,
-                [
-                    'id' => 'session_graph',
-                    'class' => 'chart-session',
-                    'style' => 'position:relative; text-align: center;',
-                ]
-            );
+            if ($showGraph) {
+                $html .= Display::div(
+                    $main_session_graph,
+                    [
+                        'id' => 'session_graph',
+                        'class' => 'chart-session',
+                        'style' => 'position:relative; text-align: center;',
+                    ]
+                );
+            }
 
             // -----------------------------------------------------------------
             // Checking selected session: course list inside a session

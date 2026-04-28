@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -12,6 +14,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
@@ -47,13 +50,19 @@ switch ($action) {
     case 'move_up':
         SessionManager::moveUp($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
+
         exit;
+
         break;
+
     case 'move_down':
         SessionManager::moveDown($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
+
         exit;
+
         break;
+
     case 'add_user_to_url':
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
@@ -66,7 +75,9 @@ switch ($action) {
                 )
             );
         }
+
         break;
+
     case 'delete':
         // Delete course from session.
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
@@ -92,7 +103,8 @@ switch ($action) {
             Database::query(
                 "UPDATE $tbl_session
                         SET nbr_classes = nbr_classes - $nbr_affected_rows
-                        WHERE id = $sessionId");
+                        WHERE id = $sessionId"
+            );
         }
 
         if (!empty($_GET['user'])) {
@@ -104,6 +116,7 @@ switch ($action) {
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$sessionId);
+
         exit;
 
         break;
@@ -279,7 +292,7 @@ if (0 === $session->getNbrCourses()) {
 $courseListToShow .= '</table><br />';
 
 $url = '&nbsp;'.Display::url(
-        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
+    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
     $codePath."session/add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(
@@ -293,7 +306,8 @@ $url .= Display::url(
 
 $userListToShow = Display::page_subheader(get_lang('User list').$url);
 $sessionRelUsers = Container::getSessionRepository()
-    ->getUsersByAccessUrl($session, api_get_url_entity(), [Session::STUDENT, Session::DRH]);
+    ->getUsersByAccessUrl($session, api_get_url_entity(), [Session::STUDENT, Session::DRH])
+;
 
 if (!empty($sessionRelUsers)) {
     $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'session-user-list']);
@@ -339,6 +353,7 @@ if (!empty($sessionRelUsers)) {
             );
         }*/
         $link = $reportingLink.$courseUserLink.$removeLink.$addUserToUrlLink.$editUrl;
+
         switch ($sessionRelUser->getRelationType()) {
             case Session::DRH:
                 $status = get_lang('Human Resources Manager');
@@ -346,7 +361,9 @@ if (!empty($sessionRelUsers)) {
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, 22, get_lang('Edit')),
                     $codePath.'admin/dashboard_add_sessions_to_user.php?user='.$userId
                 );
+
                 break;
+
             default:
                 $status = get_lang('Learner');
         }
@@ -397,6 +414,7 @@ $tpl->assign('course_list', $courseListToShow);
 $tpl->assign('user_list', $userListToShow);
 $tpl->assign('dependencies', $dependencies);
 $tpl->assign('requirements', $requirements);
+$tpl->assign('show_session_data', 'true' === api_get_setting('session.show_session_data'));
 
 $layout = $tpl->get_template('session/resume_session.tpl');
 $tpl->display($layout);

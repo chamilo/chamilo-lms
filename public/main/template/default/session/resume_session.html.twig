@@ -11,161 +11,178 @@
             </div>
         {% endautoescape %}
 
-        {# Session overview card #}
-        <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
-            <div class="flex items-center gap-2 mb-4">
-                <i class="mdi mdi-information-outline text-primary text-xl" aria-hidden="true"></i>
-                <h3 class="text-gray-90 text-body-1 font-semibold">{{ 'Session overview'|trans }}</h3>
-            </div>
-
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-
-                {# Created by #}
-                <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                    <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Created by'|trans }}</dt>
-                    <dd class="prose prose-sm max-w-none text-gray-90 mt-1">
-                        {% autoescape false %}
-                            {% for session_admin in session.sessionAdmins %}
-                                {{ session_admin | user_complete_name_with_link }}<br>
-                            {% else %}
-                                <span class="text-gray-50">{{ 'None'|trans }}</span>
-                            {% endfor %}
-                        {% endautoescape %}
-                    </dd>
+        {% if show_session_data is not defined or show_session_data %}
+            {# Session overview card #}
+            <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="mdi mdi-information-outline text-primary text-xl" aria-hidden="true"></i>
+                    <h3 class="text-gray-90 text-body-1 font-semibold">{{ 'Session overview'|trans }}</h3>
                 </div>
 
-                {# General coach #}
-                <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                    <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'General coach'|trans }}</dt>
-                    <dd class="prose prose-sm max-w-none text-gray-90 mt-1">
-                        {% autoescape false %}
-                            {% for coach in session.generalCoaches %}
-                                {{ coach | user_complete_name_with_link }}<br>
-                            {% else %}
-                                <span class="text-gray-50">{{ 'None'|trans }}</span>
-                            {% endfor %}
-                        {% endautoescape %}
-                    </dd>
-                </div>
+                <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
 
-                {# Session category #}
-                {% if session.category %}
+                    {# Created by #}
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Session category'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">{{ session.category.title }}</dd>
+                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Created by'|trans }}</dt>
+                        <dd class="prose prose-sm max-w-none text-gray-90 mt-1">
+                            {% autoescape false %}
+                                {% for session_admin in session.sessionAdmins %}
+                                    {{ session_admin | user_complete_name_with_link }}<br>
+                                {% else %}
+                                    <span class="text-gray-50">{{ 'None'|trans }}</span>
+                                {% endfor %}
+                            {% endautoescape %}
+                        </dd>
                     </div>
-                {% endif %}
 
-                {# Duration / Dates #}
-                {% if session.duration > 0 %}
+                    {# General coach #}
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Duration'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">{{ session.duration }} {{ 'Days'|trans }}</dd>
+                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'General coach'|trans }}</dt>
+                        <dd class="prose prose-sm max-w-none text-gray-90 mt-1">
+                            {% autoescape false %}
+                                {% for coach in session.generalCoaches %}
+                                    {{ coach | user_complete_name_with_link }}<br>
+                                {% else %}
+                                    <span class="text-gray-50">{{ 'None'|trans }}</span>
+                                {% endfor %}
+                            {% endautoescape %}
+                        </dd>
                     </div>
-                {% else %}
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Dates shown'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.display }}</dd>
-                    </div>
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for students'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.access }}</dd>
-                    </div>
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for coaches'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.coach }}</dd>
-                    </div>
-                {% endif %}
 
-                {# Visibility #}
-                <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                    <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Visibility after end date'|trans }}</dt>
-                    <dd class="text-gray-90 text-body-2 mt-1">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-full border border-gray-25 bg-white">
-              {{ session_visibility }}
-            </span>
-                    </dd>
-                </div>
+                    {# Session category #}
+                    {% if session.category %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Session category'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">{{ session.category.title }}</dd>
+                        </div>
+                    {% endif %}
 
-                {# Career / Promotion #}
-                {% if session.promotion %}
+                    {# Duration / Dates #}
+                    {% if session.duration > 0 %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Duration'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">{{ session.duration }} {{ 'Days'|trans }}</dd>
+                        </div>
+                    {% else %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Dates shown'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.display }}</dd>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for students'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.access }}</dd>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for coaches'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.coach }}</dd>
+                        </div>
+                    {% endif %}
+
+                    {# Visibility #}
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Career'|trans }}</dt>
+                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Visibility after end date'|trans }}</dt>
                         <dd class="text-gray-90 text-body-2 mt-1">
-                            <a class="text-primary hover:underline"
-                               href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form=">
-                                {{ session.promotion.career.title }}
-                            </a>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full border border-gray-25 bg-white">
+                                {{ session_visibility }}
+                            </span>
                         </dd>
                     </div>
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Promotion'|trans }}</dt>
-                        <dd class="text-gray-90 text-body-2 mt-1">
-                            <a class="text-primary hover:underline"
-                               href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}">
-                                {{ session.promotion.title }}
-                            </a>
-                        </dd>
-                    </div>
-                {% endif %}
 
-                {# URLs #}
-                {% if url_list %}
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25 md:col-span-2">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide mb-2">URL</dt>
-                        <dd class="flex flex-wrap gap-2">
-                            {% for url in url_list %}
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-white border border-gray-25 text-gray-90 text-caption">
-                  {{ url.url }}
-                </span>
-                            {% endfor %}
-                        </dd>
-                    </div>
-                {% endif %}
+                    {# Career / Promotion #}
+                    {% if session.promotion %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Career'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">
+                                <a
+                                        class="text-primary hover:underline"
+                                        href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form="
+                                >
+                                    {{ session.promotion.career.title }}
+                                </a>
+                            </dd>
+                        </div>
 
-                {# Extra fields #}
-                {% if extra_fields is not empty %}
-                    <div class="p-4 rounded-xl bg-support-2 border border-gray-25 md:col-span-2">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide mb-3">{{ 'Extra fields'|trans }}</dt>
-                        <dd class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {% for extra_field in extra_fields %}
-                                <div class="border border-gray-25 rounded-xl p-3 bg-white">
-                                    <div class="text-gray-50 text-tiny uppercase tracking-wide">{{ extra_field.text }}</div>
-                                    <div class="prose prose-sm max-w-none text-gray-90 mt-1 break-words">
-                                        {% if extra_field.value is iterable %}
-                                            {{ extra_field.value.value|raw }}
-                                        {% else %}
-                                            {{ extra_field.value|raw }}
-                                        {% endif %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Promotion'|trans }}</dt>
+                            <dd class="text-gray-90 text-body-2 mt-1">
+                                <a
+                                        class="text-primary hover:underline"
+                                        href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}"
+                                >
+                                    {{ session.promotion.title }}
+                                </a>
+                            </dd>
+                        </div>
+                    {% endif %}
+
+                    {# URLs #}
+                    {% if url_list %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25 md:col-span-2">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide mb-2">URL</dt>
+                            <dd class="flex flex-wrap gap-2">
+                                {% for url in url_list %}
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-white border border-gray-25 text-gray-90 text-caption">
+                                        {{ url.url }}
+                                    </span>
+                                {% endfor %}
+                            </dd>
+                        </div>
+                    {% endif %}
+
+                    {# Extra fields #}
+                    {% if extra_fields is not empty %}
+                        <div class="p-4 rounded-xl bg-support-2 border border-gray-25 md:col-span-2">
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide mb-3">{{ 'Extra fields'|trans }}</dt>
+                            <dd class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {% for extra_field in extra_fields %}
+                                    <div class="border border-gray-25 rounded-xl p-3 bg-white">
+                                        <div class="text-gray-50 text-tiny uppercase tracking-wide">
+                                            {{ extra_field.text }}
+                                        </div>
+
+                                        <div class="prose prose-sm max-w-none text-gray-90 mt-1 break-words">
+                                            {% if extra_field.value is iterable %}
+                                                {{ extra_field.value.value|raw }}
+                                            {% else %}
+                                                {{ extra_field.value|raw }}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </dd>
+                                {% endfor %}
+                            </dd>
+                        </div>
+                    {% endif %}
+                </dl>
+
+                {# Description #}
+                {% if session.description %}
+                    <div class="mt-6">
+                        <h4 class="text-gray-90 text-body-1 font-semibold mb-2">
+                            {{ 'Description'|trans }}
+                        </h4>
+
+                        <div class="prose prose-sm max-w-none text-gray-90 bg-white border border-gray-25 rounded-xl p-4">
+                            {{ session.description|raw }}
+                        </div>
                     </div>
                 {% endif %}
-            </dl>
 
-            {# Description #}
-            {% if session.description %}
-                <div class="mt-6">
-                    <h4 class="text-gray-90 text-body-1 font-semibold mb-2">{{ 'Description'|trans }}</h4>
-                    <div class="prose prose-sm max-w-none text-gray-90 bg-white border border-gray-25 rounded-xl p-4">
-                        {{ session.description|raw }}
+                {# Scheduled announcements #}
+                {% if programmed_announcement %}
+                    <div class="mt-6">
+                        <a
+                                class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-25 hover:shadow-sm hover:bg-gray-10 transition text-gray-90"
+                                href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}"
+                        >
+                            <i class="mdi mdi-bullhorn text-primary" aria-hidden="true"></i>
+                            <span class="text-body-2">{{ 'Scheduled announcements'|trans }}</span>
+                        </a>
                     </div>
-                </div>
-            {% endif %}
-
-            {# Scheduled announcements #}
-            {% if programmed_announcement %}
-                <div class="mt-6">
-                    <a class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-25 hover:shadow-sm hover:bg-gray-10 transition text-gray-90"
-                       href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
-                        <i class="mdi mdi-bullhorn text-primary" aria-hidden="true"></i>
-                        <span class="text-body-2">{{ 'Scheduled announcements'|trans }}</span>
-                    </a>
-                </div>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
+        {% endif %}
 
         {# Course list #}
         <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
@@ -173,6 +190,7 @@
                 <i class="mdi mdi-book-open-page-variant text-primary text-xl" aria-hidden="true"></i>
                 <span class="text-gray-90 font-semibold">{{ 'Course list'|trans }}</span>
             </div>
+
             <div class="overflow-x-auto">
                 <div class="min-w-[720px]">
                     {% autoescape false %}{{ course_list }}{% endautoescape %}
@@ -180,13 +198,14 @@
             </div>
         </div>
 
-        {# User list  #}
+        {# User list #}
         {% if user_list is not empty %}
             <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
                 <div class="flex items-center gap-2 mb-3">
                     <i class="mdi mdi-account-multiple text-primary text-xl" aria-hidden="true"></i>
                     <span class="text-gray-90 font-semibold">{{ 'User list'|trans }}</span>
                 </div>
+
                 <div class="overflow-x-auto">
                     <div class="min-w-[720px]">
                         {% autoescape false %}{{ user_list }}{% endautoescape %}
@@ -201,6 +220,7 @@
                 {% autoescape false %}{{ requirements }}{% endautoescape %}
             </div>
         {% endif %}
+
         {% if dependencies %}
             <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7">
                 {% autoescape false %}{{ dependencies }}{% endautoescape %}

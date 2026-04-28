@@ -95,6 +95,7 @@ $diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId);
 
 if (!empty($diagram)) {
     $html .= $diagram;
+    $html .= Career::renderDiagramFooter();
 } else {
     Display::addFlash(
         Display::return_message(

@@ -761,16 +761,6 @@ class SettingsController extends BaseController
             'profile.enable_profile_user_address_geolocalization',
             'security.security_session_cookie_samesite_none',
             'session.assignment_base_course_teacher_access_to_all_session',
-            'session.career_diagram_disclaimer',
-            'session.career_diagram_legend',
-            'session.email_template_subscription_to_session_confirmation_lost_password',
-            'session.email_template_subscription_to_session_confirmation_username',
-            'session.hide_session_graph_in_my_progress',
-            'session.my_progress_session_show_all_courses',
-            'session.session_course_users_subscription_limited_to_session_users',
-            'session.session_days_after_coach_access',
-            'session.session_days_before_coach_access',
-            'session.show_session_data',
             'work.my_courses_show_pending_work',
         ];
     }

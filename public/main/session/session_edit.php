@@ -200,15 +200,17 @@ $(function() {
         $params = $form->getSubmitValues();
 
         $name = $params['title'];
-        $startDate = $params['access_start_date'];
-        $endDate = $params['access_end_date'];
-        $displayStartDate = $params['display_start_date'];
-        $displayEndDate = $params['display_end_date'];
-        $coachStartDate = $params['coach_access_start_date'];
-        $coachEndDate = $params['coach_access_end_date'];
-        $coachUsername = $params['coach_username'];
-        $id_session_category = $params['session_category'];
-        $id_visibility = $params['session_visibility'];
+        $startDate = $params['access_start_date'] ?? null;
+        $endDate = $params['access_end_date'] ?? null;
+        $displayStartDate = $params['display_start_date'] ?? null;
+        $displayEndDate = $params['display_end_date'] ?? null;
+        $coachStartDate = $params['coach_access_start_date'] ?? null;
+        $coachEndDate = $params['coach_access_end_date'] ?? null;
+        $coachUsername = $params['coach_username'] ?? [];
+        $id_session_category = $params['session_category'] ?? 0;
+        $id_visibility = $params['session_visibility'] ?? 0;
+
+
         $duration = isset($params['duration']) ? $params['duration'] : null;
         if (1 == $params['access']) {
             $duration = null;

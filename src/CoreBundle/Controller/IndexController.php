@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,66 @@ class IndexController extends BaseController
     #[Route('/skill/wheel', name: 'skill_wheel')]
     #[Route('/skill/ranking', name: 'skill_ranking')]
     #[Route('/access-url/auth-sources', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request, PageHelper $pageHelper): Response
     {
+        $customPageResponse = $pageHelper->getCustomAccessPageResponse(
+            $request,
+            null !== $this->getUser()
+        );
+
+        if (null !== $customPageResponse) {
+            return $customPageResponse;
+        }
+
         return $this->render('@ChamiloCore/Layout/no_layout.html.twig', ['content' => '']);
+    }
+
+    #[Route('/registration', name: 'custom_registration', options: ['expose' => true], methods: ['GET'])]
+    public function registration(Request $request, PageHelper $pageHelper): Response
+    {
+        if (!$request->query->has('normal') && null === $this->getUser()) {
+            $customPageResponse = $pageHelper->getCustomPageResponse(
+                PageHelper::CUSTOM_PAGE_REGISTRATION
+            );
+
+            if (null !== $customPageResponse) {
+                return $customPageResponse;
+            }
+        }
+
+        return $this->redirect($request->getBasePath().'/main/auth/registration.php');
+    }
+
+    #[Route('/registration-feedback', name: 'custom_registration_feedback', options: ['expose' => true], methods: ['GET'])]
+    public function registrationFeedback(Request $request, PageHelper $pageHelper): Response
+    {
+        if (!$request->query->has('normal') && null === $this->getUser()) {
+            $customPageResponse = $pageHelper->getCustomPageResponse(
+                PageHelper::CUSTOM_PAGE_REGISTRATION_FEEDBACK
+            );
+
+            if (null !== $customPageResponse) {
+                return $customPageResponse;
+            }
+        }
+
+        return $this->redirect($request->getBasePath().'/login?normal=1');
+    }
+
+    #[Route('/lost-password', name: 'custom_lost_password', options: ['expose' => true], methods: ['GET'])]
+    public function lostPassword(Request $request, PageHelper $pageHelper): Response
+    {
+        if (!$request->query->has('normal') && null === $this->getUser()) {
+            $customPageResponse = $pageHelper->getCustomPageResponse(
+                PageHelper::CUSTOM_PAGE_LOST_PASSWORD
+            );
+
+            if (null !== $customPageResponse) {
+                return $customPageResponse;
+            }
+        }
+
+        return $this->redirect($request->getBasePath().'/main/auth/lostPassword.php');
     }
 
     /**
@@ -57,7 +115,7 @@ class IndexController extends BaseController
         }
 
         // Default to teacher view when not set, then flip to student view on the first click.
-        // This ensures the *first* click really enters Student View.
+        // This ensures the first click really enters Student View.
         $sessionHandler = $request->getSession();
         $current = $sessionHandler->get('studentview', 'teacherview');
 

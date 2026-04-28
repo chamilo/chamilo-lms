@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
@@ -9,6 +12,7 @@ $cidReset = true;
 
 // including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
+
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
 
@@ -22,11 +26,26 @@ if (empty($id_session) || empty($courseId)) {
     api_not_allowed(true);
 }
 
+$xajax->setRequestURI(
+    api_get_self().'?id_session='.$id_session.'&course_id='.$courseId
+);
+
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 $session = api_get_session_entity($id_session);
-SessionManager::protectSession($session);
 $courseInfo = api_get_course_info_by_id($courseId);
+
+if (!$session || empty($courseInfo)) {
+    api_not_allowed(true);
+}
+
+/*
+ * XAJAX requests must be processed before the normal page protection flow.
+ * The search_users() callback performs its own session permission check.
+ */
+$xajax->processRequests();
+
+SessionManager::protectSession($session);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
@@ -84,11 +103,35 @@ function search_users($needle, $type)
     $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
     $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
+    $xajax_response = new xajaxResponse();
+
+    if (empty($id_session) || empty($courseId)) {
+        $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', '');
+        $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', '');
+
+        return $xajax_response;
+    }
+
+    $session = api_get_session_entity($id_session);
+
+    if (!$session) {
+        $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', '');
+        $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', '');
+
+        return $xajax_response;
+    }
+
+    SessionManager::protectSession($session);
+
+    $limitToSessionUsers = SessionManager::isCourseUserSubscriptionLimitedToSessionUsers();
+    $allowedSessionUserIds = $limitToSessionUsers
+        ? SessionManager::getSessionStudentUserIds($id_session)
+        : [];
+
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
     $tableRelSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $xajax_response = new xajaxResponse();
     $return = '';
 
     if (!empty($needle) && !empty($type)) {
@@ -245,7 +288,11 @@ function search_users($needle, $type)
         $rs = Database::query($sql);
         $i = 0;
         if ('single' == $type) {
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
+                if ($limitToSessionUsers && !isset($allowedSessionUserIds[(int) $user['id']])) {
+                    continue;
+                }
+
                 $i++;
                 if ($i <= 10) {
                     $person_name =
@@ -266,7 +313,10 @@ function search_users($needle, $type)
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
+                if ($limitToSessionUsers && !isset($allowedSessionUserIds[(int) $user['id']])) {
+                    continue;
+                }
                 $person_name =
                     $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
@@ -282,8 +332,6 @@ function search_users($needle, $type)
 
     return $xajax_response;
 }
-
-$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
@@ -344,22 +392,76 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if (1 == $form_sent) {
-        // Added a parameter to send emails when registering a user
-        SessionManager::subscribeUsersToSession(
-            $id_session,
-            $UserList,
-            null,
-            false,
-            false
+        $limitToSessionUsers = SessionManager::isCourseUserSubscriptionLimitedToSessionUsers();
+
+        $selectedUserList = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $UserList)
+                )
+            )
         );
 
-        SessionManager::subscribe_users_to_session_course(
-            $UserList,
-            $id_session,
-            $courseInfo['code'],
-            SESSION_VISIBLE_READ_ONLY,
-            true
-        );
+        if ($limitToSessionUsers) {
+            $originalUserList = $selectedUserList;
+            $selectedUserList = SessionManager::filterUsersSubscribedToSession($id_session, $selectedUserList);
+
+            if (count($originalUserList) !== count($selectedUserList)) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('Some users were ignored because they are not subscribed to this session.'),
+                        'warning'
+                    )
+                );
+            }
+        } else {
+            // Keep the legacy/current behavior when the setting is disabled.
+            SessionManager::subscribeUsersToSession(
+                $id_session,
+                $selectedUserList,
+                null,
+                false,
+                false
+            );
+        }
+
+        $currentUserList = [];
+        $sql = "
+        SELECT user_id
+        FROM $tableRelSessionCourseUser
+        WHERE session_id = $id_session
+          AND c_id = $courseId
+          AND status = ".Session::STUDENT;
+
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $currentUserList[] = (int) $row['user_id'];
+        }
+
+        $usersToAdd = array_values(array_diff($selectedUserList, $currentUserList));
+        $usersToRemove = array_values(array_diff($currentUserList, $selectedUserList));
+
+        if (!empty($usersToRemove)) {
+            $usersToRemove = array_map('intval', $usersToRemove);
+
+            Database::query(
+                "DELETE FROM $tableRelSessionCourseUser
+             WHERE session_id = $id_session
+               AND c_id = $courseId
+               AND user_id IN (".implode(',', $usersToRemove).")"
+            );
+        }
+
+        if (!empty($usersToAdd)) {
+            SessionManager::subscribe_users_to_session_course(
+                $usersToAdd,
+                $id_session,
+                $courseInfo['code'],
+                SESSION_VISIBLE_READ_ONLY,
+                true
+            );
+        }
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$id_session);
@@ -371,6 +473,10 @@ $session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = [];
+$limitToSessionUsers = SessionManager::isCourseUserSubscriptionLimitedToSessionUsers();
+$allowedSessionUserIds = $limitToSessionUsers
+    ? SessionManager::getSessionStudentUserIds($id_session)
+    : [];
 $where_filter = null;
 $ajax_search = 'unique' == $add_type ? true : false;
 
@@ -571,8 +677,29 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');
     foreach ($users as $uid => $user) {
+        $userId = (int) $user['id'];
+
+        if ($limitToSessionUsers) {
+            if (!isset($allowedSessionUserIds[$userId])) {
+                unset($users[$uid]);
+
+                continue;
+            }
+
+            $nosessionUsersList[$userId] = [
+                'fn' => $user['firstname'],
+                'ln' => $user['lastname'],
+                'un' => $user['username'],
+                'official_code' => $user['official_code'],
+            ];
+
+            unset($users[$uid]);
+
+            continue;
+        }
+
         if ($user['session_id'] != $id_session) {
-            $nosessionUsersList[$user['id']] = [
+            $nosessionUsersList[$userId] = [
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
                 'un' => $user['username'],
@@ -756,18 +883,37 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
                 <?php
             } ?>
             <?php if ($ajax_search) { ?>
-                <button name="remove_user" class="btn btn--secondary mb-4"
-                        type="button" onclick="remove_item(document.getElementById('destination_users'))">
-                    <em class="pi pi-chevron-left"></em>
+                <button
+                    name="remove_user"
+                    class="btn btn--secondary mb-4"
+                    type="button"
+                    title="<?php echo get_lang('Remove selected user'); ?>"
+                    aria-label="<?php echo get_lang('Remove selected user'); ?>"
+                    onclick="remove_item(document.getElementById('destination_users'))"
+                >
+                    <i class="mdi mdi-chevron-left" aria-hidden="true"></i>
                 </button>
             <?php } else { ?>
-                <button name="add_user" class="btn btn--secondary mb-4"
-                        type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
-                    <em class="pi pi-chevron-right"></em>
+                <button
+                    name="add_user"
+                    class="btn btn--secondary mb-4"
+                    type="button"
+                    title="<?php echo get_lang('Add selected user'); ?>"
+                    aria-label="<?php echo get_lang('Add selected user'); ?>"
+                    onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
+                >
+                    <i class="mdi mdi-chevron-right" aria-hidden="true"></i>
                 </button>
-                <button name="remove_user" class="btn btn--secondary mb-4"
-                        type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
-                    <em class="pi pi-chevron-left"></em>
+
+                <button
+                    name="remove_user"
+                    class="btn btn--secondary mb-4"
+                    type="button"
+                    title="<?php echo get_lang('Remove selected user'); ?>"
+                    aria-label="<?php echo get_lang('Remove selected user'); ?>"
+                    onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
+                >
+                    <i class="mdi mdi-chevron-left" aria-hidden="true"></i>
                 </button>
             <?php } ?>
             <button name="next" class="btn btn--success mb-4" type="button"

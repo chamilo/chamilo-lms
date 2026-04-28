@@ -239,6 +239,13 @@ class SessionManager
                 if (!empty($duration)) {
                     $session->setDuration((int) $duration);
                 } else {
+                    [$coachStartDate, $coachEndDate] = self::applyDefaultCoachAccessDates(
+                        $startDate,
+                        $endDate,
+                        $coachStartDate,
+                        $coachEndDate
+                    );
+
                     $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
                     $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
                     $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
@@ -2203,6 +2210,14 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
+            $showUsername = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_username'
+                );
+            $showLostPasswordLink = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_lost_password'
+                );
+            $lostPasswordUrl = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
+
             foreach ($userList as $user_id) {
                 $tplSubject = new Template(
                     null,
@@ -2216,7 +2231,10 @@ class SessionManager
                     'mail/subject_subscription_to_session_confirmation.tpl'
                 );
                 $subject = $tplSubject->fetch($layoutSubject);
+
                 $user_info = api_get_user_info($user_id);
+
+                $username = $user_info['username'] ?? $user_info['user_name'] ?? '';
 
                 $tplContent = new Template(
                     null,
@@ -2226,19 +2244,29 @@ class SessionManager
                     false,
                     false
                 );
-                // Variables for default template
+
+                // Variables for default template.
                 $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getTitle());
                 $tplContent->assign(
                     'session_coaches',
                     $session->getGeneralCoaches()->map(fn(User $coach) => UserManager::formatUserFullName($coach))
                 );
+
+                // Optional variables controlled by session settings.
+                $tplContent->assign('show_username', $showUsername);
+                $tplContent->assign('username', $username);
+                $tplContent->assign('username_label', get_lang('Username'));
+                $tplContent->assign('show_lost_password_link', $showLostPasswordLink);
+                $tplContent->assign('lost_password_url', $lostPasswordUrl);
+                $tplContent->assign('lost_password_link_label', get_lang('Recover your password'));
+
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
                 $content = $tplContent->fetch($layoutContent);
 
-                // Send email
+                // Send email.
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
@@ -2246,7 +2274,7 @@ class SessionManager
                     $content
                 );
 
-                // Record message in system
+                // Record message in system.
                 MessageManager::send_message_simple(
                     $user_id,
                     $subject,
@@ -11074,5 +11102,131 @@ class SessionManager
         }
 
         return [$csvHeaders, $csvContent];
+    }
+
+    public static function isCourseUserSubscriptionLimitedToSessionUsers(): bool
+    {
+        return 'true' === api_get_setting('session.session_course_users_subscription_limited_to_session_users');
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public static function getSessionStudentUserIds(int $sessionId): array
+    {
+        if (0 >= $sessionId) {
+            return [];
+        }
+
+        $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = "SELECT user_id
+            FROM $tableSessionRelUser
+            WHERE session_id = $sessionId
+              AND relation_type = ".Session::STUDENT;
+
+        $result = Database::query($sql);
+        $userIds = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $userId = (int) $row['user_id'];
+            $userIds[$userId] = $userId;
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * @param array<int|string> $userIds
+     *
+     * @return array<int, int>
+     */
+    public static function filterUsersSubscribedToSession(int $sessionId, array $userIds): array
+    {
+        if (0 >= $sessionId || empty($userIds)) {
+            return [];
+        }
+
+        $userIds = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $userIds)
+                )
+            )
+        );
+
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $sessionUserIds = self::getSessionStudentUserIds($sessionId);
+
+        return array_values(
+            array_intersect($userIds, $sessionUserIds)
+        );
+    }
+
+    /**
+     * Applies default coach access dates when no explicit coach dates were provided.
+     *
+     * @return array{0: ?string, 1: ?string}
+     */
+    private static function applyDefaultCoachAccessDates(
+        ?string $startDate,
+        ?string $endDate,
+        ?string $coachStartDate,
+        ?string $coachEndDate
+    ): array {
+        if (empty($coachStartDate) && !empty($startDate)) {
+            $daysBefore = self::getPositiveIntegerSetting('session.session_days_before_coach_access');
+
+            if (0 < $daysBefore) {
+                $coachStartDate = self::shiftSessionDate($startDate, -$daysBefore);
+            }
+        }
+
+        if (empty($coachEndDate) && !empty($endDate)) {
+            $daysAfter = self::getPositiveIntegerSetting('session.session_days_after_coach_access');
+
+            if (0 < $daysAfter) {
+                $coachEndDate = self::shiftSessionDate($endDate, $daysAfter);
+            }
+        }
+
+        return [$coachStartDate, $coachEndDate];
+    }
+
+    private static function getPositiveIntegerSetting(string $setting): int
+    {
+        $value = (int) api_get_setting($setting);
+
+        return max(0, $value);
+    }
+
+    private static function shiftSessionDate(string $date, int $days): ?string
+    {
+        $date = trim($date);
+
+        if ('' === $date) {
+            return null;
+        }
+
+        $format = str_contains($date, ':') && 19 === strlen($date)
+            ? 'Y-m-d H:i:s'
+            : 'Y-m-d H:i';
+
+        $dateTime = DateTimeImmutable::createFromFormat($format, $date);
+
+        if (!$dateTime instanceof DateTimeImmutable) {
+            return null;
+        }
+
+        if (0 < $days) {
+            $dateTime = $dateTime->modify('+'.$days.' days');
+        } elseif (0 > $days) {
+            $dateTime = $dateTime->modify($days.' days');
+        }
+
+        return $dateTime->format($format);
     }
 }

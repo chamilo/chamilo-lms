@@ -1418,4 +1418,94 @@ class Career extends Model
 
         return $html;
     }
+
+    public static function renderDiagramFooter(): string
+    {
+        $items = [];
+
+        if (self::isTruthy(api_get_setting('session.career_diagram_legend'))) {
+            $legend = self::getCareerDiagramFooterText(
+                'Career diagram legend',
+                'CareerDiagramLegend'
+            );
+
+            if ('' !== $legend) {
+                $items[] = [
+                    'title' => get_lang('Legend'),
+                    'content' => $legend,
+                    'type' => 'info',
+                ];
+            }
+        }
+
+        if (self::isTruthy(api_get_setting('session.career_diagram_disclaimer'))) {
+            $disclaimer = self::getCareerDiagramFooterText(
+                'Career diagram disclaimer',
+                'CareerDiagramDisclaimer'
+            );
+
+            if ('' !== $disclaimer) {
+                $items[] = [
+                    'title' => get_lang('Disclaimer'),
+                    'content' => $disclaimer,
+                    'type' => 'warning',
+                ];
+            }
+        }
+
+        if (empty($items)) {
+            return '';
+        }
+
+        $html = '<div class="mt-6 space-y-4">';
+
+        foreach ($items as $item) {
+            $classes = 'rounded-xl border p-4 text-sm leading-6 shadow-sm';
+
+            if ('warning' === $item['type']) {
+                $classes .= ' border-yellow-200 bg-yellow-50 text-yellow-900';
+            } else {
+                $classes .= ' border-blue-200 bg-blue-50 text-blue-900';
+            }
+
+            $html .= '<section class="'.$classes.'">';
+            $html .= '<h3 class="mb-2 text-base font-semibold">'.htmlspecialchars((string) $item['title'], ENT_QUOTES, 'UTF-8').'</h3>';
+            $html .= '<div>'.Security::remove_XSS($item['content']).'</div>';
+            $html .= '</section>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    private static function getCareerDiagramFooterText(string $key, string $legacyKey): string
+    {
+        $text = trim((string) get_lang($key));
+
+        if ('' !== $text && $key !== $text) {
+            return $text;
+        }
+
+        $legacyText = trim((string) get_lang($legacyKey));
+
+        if ('' !== $legacyText && $legacyKey !== $legacyText) {
+            return $legacyText;
+        }
+
+        return '';
+    }
+
+    private static function isTruthy(mixed $value): bool
+    {
+        if (true === $value || 1 === $value || '1' === $value) {
+            return true;
+        }
+
+        if (!\is_string($value)) {
+            return false;
+        }
+
+        return \in_array(strtolower(trim($value)), ['true', 'yes', 'on'], true);
+    }
 }

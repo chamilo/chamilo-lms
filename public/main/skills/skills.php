@@ -21,7 +21,8 @@ $tree = $skill->getSkillsTree(null, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 $html = $skill_visualizer->return_html();
-$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$token = Security::get_token();
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1&sec_token='.$token;
 
 $tpl = new Template(null, false, false);
 $tpl->assign('url', $url);

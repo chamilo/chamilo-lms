@@ -49,7 +49,6 @@ use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Chamilo\CoreBundle\Controller\Api\DownloadDocumentByApiKeyAction;
 
 #[ApiResource(
     shortName: 'Document',
@@ -104,17 +103,6 @@ use Chamilo\CoreBundle\Controller\Api\DownloadDocumentByApiKeyAction;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Get(
-            uriTemplate: '/documents/{iid}/download-by-api-key',
-            controller: DownloadDocumentByApiKeyAction::class,
-            openapi: new Operation(
-                summary: 'Download a document file using a user API key.'
-            ),
-            security: "is_granted('ROLE_USER')",
-            deserialize: false,
-            output: false,
-            name: 'api_documents_download_by_api_key'
-        ),
         new Get(
             uriTemplate: '/documents/{iid}/lp-usage',
             controller: DocumentLearningPathUsageAction::class,
@@ -176,7 +164,10 @@ use Chamilo\CoreBundle\Controller\Api\DownloadDocumentByApiKeyAction;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
-            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
+            outputFormats: [
+                'zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
+                'bin' => 'application/octet-stream',
+            ],
             controller: DownloadSelectedDocumentsAction::class,
             parameters: [
                 'cid' => new QueryParameter(
@@ -189,20 +180,26 @@ use Chamilo\CoreBundle\Controller\Api\DownloadDocumentByApiKeyAction;
                 ),
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
-                    description: 'Course grou identifier',
+                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(
-                summary: 'Download selected documents as a ZIP file.',
+                summary: 'Download selected documents as a ZIP file or a single original file.',
                 requestBody: new RequestBody(
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
+                                'required' => ['ids'],
                                 'properties' => [
                                     'ids' => [
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
+                                    ],
+                                    'compressed' => [
+                                        'type' => 'boolean',
+                                        'default' => true,
+                                        'description' => 'When false, exactly one document ID is required and the original file is returned.',
                                     ],
                                 ],
                             ],

@@ -35791,3 +35791,9 @@ msgstr "Titre (Z-A)"
 
 msgid "Send test email"
 msgstr "Envoyer"
+
+msgid "Show teachers"
+msgstr "Afficher les enseignants"
+
+msgid "Hide teachers"
+msgstr "Masquer les enseignants"

@@ -33907,3 +33907,9 @@ msgstr "Title Z–A"
 
 msgid "Send test email"
 msgstr "Send test email"
+
+msgid "Show teachers"
+msgstr "Show teachers"
+
+msgid "Hide teachers"
+msgstr "Hide teachers"

@@ -594,6 +594,16 @@ if ($showNonRegistered) {
     $freeUsers = Statistics::getNonRegisteredActiveUsersInCourse($courseId, (int) $sessionId);
 }
 
+$showTeachers = isset($_GET['show_teachers']) ? (int) $_GET['show_teachers'] : 0;
+$teacherUsers = [];
+if ($showTeachers) {
+    if (empty($sessionId)) {
+        $teacherUsers = CourseManager::get_teacher_list_from_course_code($courseCode);
+    } else {
+        $teacherUsers = CourseManager::get_coachs_from_course($sessionId, $courseId);
+    }
+}
+
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
@@ -1056,6 +1066,28 @@ if ($nbStudents > 0) {
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
+    if ($showTeachers && !empty($teacherUsers) && false === $hideReports) {
+        $teacherUserIds = array_column($teacherUsers, 'user_id');
+        if (!empty($teacherUserIds)) {
+            $teacherConditions = ['course_id' => $courseId, 'include_invited_users' => false];
+            $teacherTracking = TrackingCourseLog::getUserData(
+                0,
+                count($teacherUserIds),
+                $trackingColumn,
+                $trackingDirection,
+                $teacherConditions,
+                true,
+                false,
+                null,
+                (int) $sessionId,
+                $export_csv,
+                $teacherUserIds
+            );
+            $usersTracking = array_merge($usersTracking, $teacherTracking);
+            $nbStudents += count($teacherTracking);
+        }
+    }
+
     if (false === $hideReports) {
         $table = new SortableTableFromArray(
             $usersTracking,
@@ -1242,7 +1274,7 @@ if ($nbStudents > 0) {
     $html .= $table->return_table();
     $html .= '</div>';
 } else {
-    if (empty($freeUsers)) {
+    if (empty($freeUsers) && empty($teacherUsers)) {
         $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
     }
 }
@@ -1255,13 +1287,25 @@ echo '</div>';
 
 
 $freeAnchor = 'free-users';
-$toggleUrl  = api_get_self().'?'.api_get_cidreq().'&show_non_registered='.($showNonRegistered ? 0 : 1).'#'.$freeAnchor;
+$toggleUrl  = api_get_self().'?'.api_get_cidreq()
+    .'&show_non_registered='.($showNonRegistered ? 0 : 1)
+    .($showTeachers ? '&show_teachers=1' : '')
+    .'#'.$freeAnchor;
 $toggleLbl  = $showNonRegistered
     ? get_lang('Hide free users (not enrolled)')
     : get_lang('Show free users (not enrolled)');
 
+$toggleTeachersUrl = api_get_self().'?'.api_get_cidreq()
+    .($showNonRegistered ? '&show_non_registered=1' : '')
+    .'&show_teachers='.($showTeachers ? 0 : 1)
+    .'#'.$freeAnchor;
+$toggleTeachersLbl = $showTeachers
+    ? get_lang('Hide teachers')
+    : get_lang('Show teachers');
+
 echo '<div id="'.$freeAnchor.'" class="mb-2" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
     .'<a class="btn btn--info" href="'.$toggleUrl.'">'.Security::remove_XSS($toggleLbl).'</a>'
+    .'<a class="btn btn--info" href="'.$toggleTeachersUrl.'">'.Security::remove_XSS($toggleTeachersLbl).'</a>'
     .'</div>';
 
 $groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);

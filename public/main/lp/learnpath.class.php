@@ -6960,11 +6960,14 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
+        $showInvisibleExerciseInLpToc = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
+        $showInvisibleExerciseInLpList = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_list');
+
+        $setting = $showInvisibleExerciseInLpToc || $showInvisibleExerciseInLpList;
 
         $active = 2;
         if ($setting) {
-            $active = 1;
+            $active = null;
         }
         $keyword = $_REQUEST['keyword'] ?? null;
         $categoryId = $_REQUEST['category_id'] ?? null;

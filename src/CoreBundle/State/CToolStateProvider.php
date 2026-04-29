@@ -138,7 +138,12 @@ final class CToolStateProvider implements ProviderInterface
                     continue;
                 }
 
-                if (ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility()) {
+                $isHiddenLearningPathAllowed = $this->isHiddenLearningPathAllowedInCourseHome($resolvedName);
+
+                if (
+                    ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility()
+                    && !$isHiddenLearningPathAllowed
+                ) {
                     continue;
                 }
             }
@@ -340,5 +345,17 @@ final class CToolStateProvider implements ProviderInterface
         }
 
         return [false, null];
+    }
+
+    private function isHiddenLearningPathAllowedInCourseHome(string $toolName): bool
+    {
+        if ('learnpath' !== $toolName) {
+            return false;
+        }
+
+        return 'true' === $this->settingsManager->getSetting(
+                'lp.show_invisible_lp_in_course_home',
+                true
+            );
     }
 }

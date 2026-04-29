@@ -33824,3 +33824,9 @@ msgstr ""
 
 msgid "Send test email"
 msgstr ""
+
+msgid "Show teachers"
+msgstr ""
+
+msgid "Hide teachers"
+msgstr ""
